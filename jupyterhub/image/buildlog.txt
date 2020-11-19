@@ -1,0 +1,120 @@
+Sending build context to Docker daemon  15.36kB
+Step 1/61 : FROM jupyter/datascience-notebook:7a3e968dd212
+ ---> 7d6ac6188e69
+Step 2/61 : USER root
+ ---> Using cache
+ ---> 51003e72a805
+Step 3/61 : RUN apt-get update && apt-get install -y vim graphviz openssh-client gdebi-core bash-completion libaio1
+ ---> Using cache
+ ---> 1a2de32aae6c
+Step 4/61 : RUN apt-get update &&     curl --silent -L --fail https://download2.rstudio.org/rstudio-server-1.1.419-amd64.deb > /tmp/rstudio.deb &&     echo '24cd11f0405d8372b4168fc9956e0386 /tmp/rstudio.deb' | md5sum -c - &&     apt-get install -y /tmp/rstudio.deb &&     rm /tmp/rstudio.deb &&     apt-get clean
+ ---> Using cache
+ ---> c4f43b6a8949
+Step 5/61 : ENV PATH=$PATH:/usr/lib/rstudio-server/bin
+ ---> Using cache
+ ---> fb462615b8c2
+Step 6/61 : USER $NB_UID
+ ---> Using cache
+ ---> adcf49e5b375
+Step 7/61 : RUN pip install https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v4.12/pip/pgadmin4-4.12-py2.py3-none-any.whl
+ ---> Using cache
+ ---> efb4383d605e
+Step 8/61 : RUN pip install gunicorn
+ ---> Using cache
+ ---> 01b7cad38f26
+Step 9/61 : RUN pip install werkzeug==0.16.1
+ ---> Using cache
+ ---> cdfc3fd0cbb3
+Step 10/61 : COPY pgadmin_config.py ${CONDA_DIR}/lib/python3.7/site-packages/pgadmin4/config_local.py
+ ---> Using cache
+ ---> 3cfaa7b36112
+Step 11/61 : COPY setup_pgadmin.sh /setup_pgadmin.sh
+ ---> Using cache
+ ---> f59011cae325
+Step 12/61 : RUN /setup_pgadmin.sh
+ ---> Using cache
+ ---> 1adf3e99171e
+Step 13/61 : RUN conda install -c conda-forge   cartopy   "dask>=2.8"   distributed   "gdal=2.4.1"   geopandas   intake   intake-parquet   matplotlib   nltk   nodejs   numpy   opencv   osmnx   pandas   pymc3   python-graphviz   r-catools   r-devtools   r-leaflet   r-rgdal   r-rpostgres   r-rjdbc   r-rmysql   r-rpostgres   r-shinydashboard   r-tidytext   r-units   r-usethis   s3fs   scikit-learn   scipy   spacy   statsmodels   tensorflow   xlrd
+ ---> Using cache
+ ---> a129c57838e7
+Step 14/61 : USER root
+ ---> Using cache
+ ---> 348a01b59af4
+Step 15/61 : RUN wget https://download3.rstudio.org/ubuntu-14.04/x86_64/shiny-server-1.5.9.923-amd64.deb -O /tmp/shiny.deb
+ ---> Using cache
+ ---> 32980ed4d58e
+Step 16/61 : RUN gdebi -n /tmp/shiny.deb && fix-permissions /var/log/shiny-server /var/lib/shiny-server
+ ---> Using cache
+ ---> e1ce7b2037a3
+Step 17/61 : RUN rm /tmp/shiny.deb
+ ---> Using cache
+ ---> f65766673b58
+Step 18/61 : USER $NB_UID
+ ---> Using cache
+ ---> 3b22d3fcab0e
+Step 19/61 : USER root
+ ---> Using cache
+ ---> 96078d9a328c
+Step 20/61 : RUN wget https://download.oracle.com/otn_software/linux/instantclient/19600/instantclient-basic-linux.x64-19.6.0.0.0dbru.zip -O instant_client.zip
+ ---> Using cache
+ ---> c3621945a01b
+Step 21/61 : RUN unzip instant_client.zip && mkdir -p /opt/oracle && mv instantclient_19_6 /opt/oracle/
+ ---> Using cache
+ ---> 163823a24084
+Step 22/61 : RUN echo /opt/oracle/instantclient_19_6 > /etc/ld.so.conf.d/oracle-instantclient.conf && ldconfig
+ ---> Using cache
+ ---> 2b8d6dcc0b7d
+Step 23/61 : RUN rm instant_client.zip
+ ---> Using cache
+ ---> 1560e65dad66
+Step 24/61 : USER $NB_UID
+ ---> Using cache
+ ---> 098e61252c8b
+Step 25/61 : ENV TAR="/bin/tar"
+ ---> Using cache
+ ---> 741dfc263664
+Step 26/61 : RUN R -e "install.packages(c('tidycensus'), dependencies=TRUE, repos = 'http://cran.us.r-project.org')"
+ ---> Using cache
+ ---> 6cdefca04156
+Step 27/61 : RUN pip install awscli --ignore-installed
+ ---> Using cache
+ ---> b64ea3004f69
+Step 28/61 : RUN pip install jupyterlab==1.2.6
+ ---> Using cache
+ ---> ede5e63ed146
+Step 29/61 : RUN jupyter labextension install --no-build @jupyter-voila/jupyterlab-preview@0.1.3
+ ---> Using cache
+ ---> 00b86dbd2c6b
+Step 30/61 : RUN jupyter labextension install --no-build @jupyter-widgets/jupyterlab-manager@1.0
+ ---> Using cache
+ ---> 0276dfa14dd7
+Step 31/61 : RUN jupyter labextension install --no-build @jupyterlab/geojson-extension@1.0
+ ---> Using cache
+ ---> f89d8c0b4bc5
+Step 32/61 : RUN jupyter labextension install --no-build @jupyterlab/git@0.7
+ ---> Using cache
+ ---> c7964104b621
+Step 33/61 : RUN jupyter labextension install --no-build @jupyterlab/github@1.0.1
+ ---> Using cache
+ ---> ff774c2aa961
+Step 34/61 : RUN jupyter labextension install --no-build @jupyterlab/toc@1.0
+ ---> Using cache
+ ---> 6c99b6aa354c
+Step 35/61 : RUN jupyter labextension install --no-build bqplot
+ ---> Using cache
+ ---> a3b8b605cdf4
+Step 36/61 : RUN pwd
+ ---> Running in b11b7f1eb2df
+/home/jovyan
+Removing intermediate container b11b7f1eb2df
+ ---> 9735ee77bec4
+Step 37/61 : RUN ls
+ ---> Running in 16990ee693ed
+work
+Removing intermediate container 16990ee693ed
+ ---> 3eb168d29f5a
+Step 38/61 : RUN jupyter labextension install --no-build caltrans-labextension
+ ---> Running in 8bbe127a9b78
+-\|/-\|/-An error occured.
+ValueError: "caltrans-labextension" is not a valid npm package
+See the log file for details:  /tmp/jupyterlab-debug-4b3goq_d.log
