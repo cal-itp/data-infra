@@ -11,7 +11,7 @@ import io
 import pathlib
 import datetime
 
-catalog = intake.open_catalog("./catalog.yml")
+catalog = intake.open_catalog("../catalogs/catalog.yml")
 
 
 def make_gtfs_list():
