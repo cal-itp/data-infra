@@ -19,7 +19,7 @@ mkdir ./dags ./logs ./plugins
 echo -e "AIRFLOW_UID=$(id -u)\nAIRFLOW_GID=0" > .env
 ```
 
-1. Run `docker-compose up airflow init`. This runs the initial database migration and creates a `airflow / airflow` user to debug with.
+1. Run `docker-compose up airflow-init`. This runs the initial database migration and creates a `airflow / airflow` user to debug with.
 
 1. You can now start all services. Run `docker-compose up` to start airflow. To access the webserver, visit `http://localhost:8080`.
 
