@@ -1,29 +1,40 @@
 """
 Download the state of CA GTFS files, async version
 """
-import pandas as pd
 import intake
 import requests
 import logging
-from tqdm import tqdm
 import zipfile
 import io
 import pathlib
 import datetime
+from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
 
-catalog = intake.open_catalog("../catalogs/catalog.yml")
+# TODO: Fix to Pathlib
+catalog = intake.open_catalog("./dags/catalogs/catalog.yml")
 
 
 def make_gtfs_list():
     """
     Read in a list of GTFS urls
     from the main db
+    plus metadata
     """
-    df = catalog.repository.read()
-    urls = (
-        df[df.GTFS.str.startswith("http")].GTFS.str.split(",").apply(pd.Series).stack()
-    )
-    return urls
+    df = catalog.official_list(
+        csv_kwargs={
+            "usecols": ["ITP_ID", "GTFS", "Agency Name"],
+            "dtype": {"ITP_ID": "float64"},
+        }
+    ).read()
+    # TODO: Figure out what to do with Metro
+    # For now, we just take the bus.
+
+    # TODO: Replace URLs with Zip ones.
+    # For now we filter, and then remove ones that don't contain
+    # zip filters
+    df = df[(df.GTFS.str.contains("zip")) & (df.GTFS.notnull())]
+    return df
 
 
 def clean_urls(url):
@@ -31,17 +42,13 @@ def clean_urls(url):
     take the list of urls, clean as needed
     """
     # LA Metro split requires lstrip
-    if (
-        url
-        == "http://www.vta.org/sfc/servlet.shepherd/document/download/069A0000001NUea"
-    ):
-        url = "https://gtfs.vta.org/gtfs_vta.zip"
-    return url.lstrip()
+    return url
 
 
-if __name__ == "__main__":
-    run_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    urls = make_gtfs_list().apply(clean_urls).values
+def download_url(**kwargs):
+    run_time = kwargs["execution_date"]
+    url = kwargs["params"]["url"]
+    itp_id = kwargs["params"]["itp_id"]
     headers = {
         "User-Agent": (
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4)"
@@ -49,18 +56,58 @@ if __name__ == "__main__":
             "Chrome/83.0.4103.97 Safari/537.36"
         )
     }
-    for url in tqdm(urls):
-        try:
-            r = requests.get(url, headers=headers)
-            r.raise_for_status()
-        except requests.exceptions.HTTPError as err:
-            logging.warning(f"No feed found for {url}, {err}")
-        try:
-            z = zipfile.ZipFile(io.BytesIO(r.content))
-            # replace here with s3fs
-            pathlib.Path(f"/tmp/gtfs-data/{run_time}/{url}").mkdir(
-                parents=True, exist_ok=True
-            )
-            z.extractall(f"/tmp/gtfs-data/{run_time}/{url}")
-        except zipfile.BadZipFile:
-            logging.warning(f"failed to zipfile {url}")
+    try:
+        r = requests.get(url, headers=headers)
+        r.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        logging.warning(f"No feed found for {url}, {err}")
+    try:
+        z = zipfile.ZipFile(io.BytesIO(r.content))
+        # replace here with s3fs
+        pathlib.Path(f"/tmp/gtfs-data/{run_time}/{itp_id}").mkdir(
+            parents=True, exist_ok=True
+        )
+        z.extractall(f"/tmp/gtfs-data/{run_time}/{itp_id}")
+    except zipfile.BadZipFile:
+        logging.warning(f"failed to zipfile {url}")
+
+
+default_args = {
+    "owner": "airflow",
+    "depends_on_past": False,
+    "start_date": datetime.datetime(2021, 2, 1),
+    "email": ["hunter.owens@dot.ca.gov"],
+    "email_on_failure": True,
+    "email_on_retry": False,
+    "retries": 1,
+    "retry_delay": datetime.timedelta(minutes=2),
+    "concurrency": 50
+    # 'queue': 'bash_queue',
+    # 'pool': 'backfill',
+    # 'priority_weight': 10,
+    # 'end_date': datetime(2016, 1, 1),
+}
+
+
+dag = DAG(
+    dag_id="gtfs-downloader", default_args=default_args, schedule_interval="@daily"
+)
+
+
+provider_set = make_gtfs_list().apply(clean_urls)
+for t in provider_set.itertuples():
+    clean_name = (
+        getattr(t, "_1")
+        .lower()
+        .replace(" ", "-")
+        .replace("(", "")
+        .replace(")", "")
+        .replace("/", "_slash_")
+        .replace("&", "and")
+    )
+    download_to_gcs_task = PythonOperator(
+        task_id=f"loading_{clean_name}_data",
+        python_callable=download_url,
+        params={"url": getattr(t, "GTFS"), "itp_id": getattr(t, "ITP_ID")},
+        dag=dag,
+    )

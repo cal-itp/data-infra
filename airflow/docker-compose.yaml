@@ -36,10 +36,10 @@
 #
 # Feel free to modify this file to suit your needs.
 ---
-version: '3.3'
+version: '3'
 x-airflow-common:
   &airflow-common
-  image: ${AIRFLOW_IMAGE_NAME:-apache/airflow}
+  build: .
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
