@@ -28,4 +28,4 @@ To run a dag, you can either test it via the web UI or run a one-off dag by runn
 Additional reading about this setup can be found on the [Airflow Docs](https://airflow.apache.org/docs/apache-airflow/stable/start/docker.html)
 
 ## Deploying to production
-TK TK
+All gcs assets are under the project `cal-itp-data-infra`. All assets should be using the `us-west-2` region.
