@@ -1,7 +1,6 @@
 """
 Download the state of CA GTFS files, async version
 """
-import intake
 import requests
 import logging
 import zipfile
@@ -11,14 +10,10 @@ import datetime
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 import gcsfs
-
-# TODO: Fix to Pathlib
-catalog = intake.open_catalog(
-    "gcs://us-west2-calitp-airflow-pro-332827a9-bucket/dags/catalogs/catalog.yml"
-)
+import pandas as pd
 
 
-def make_gtfs_list(catalog=catalog):
+def make_gtfs_list():
     """
     Read in a list of GTFS urls
     from the main db
@@ -26,12 +21,15 @@ def make_gtfs_list(catalog=catalog):
     kwargs:
      catalog = a intake catalog containing an "official_list" item.
     """
-    df = catalog.official_list(
-        csv_kwargs={
-            "usecols": ["ITP_ID", "GTFS", "Agency Name"],
-            "dtype": {"ITP_ID": "float64"},
-        }
-    ).read()
+    df = pd.read_csv(
+        (
+            "https://docs.google.com/spreadsheets/d/"
+            "1qr49azk6p30mp96_7myKoO-Bb_bXMMn5ZzgbL-uPiPw/gviz/"
+            "tq?tqx=out:csv&sheet=Data"
+        ),
+        usecols=["ITP_ID", "GTFS", "Agency Name"],
+        dtype={"ITP_ID": "float64"},
+    )
     # TODO: Figure out what to do with Metro
     # For now, we just take the bus.
 
