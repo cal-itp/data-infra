@@ -49,15 +49,12 @@ def clean_url(url):
     return url
 
 
-def download_url(**kwargs):
+def download_url(url, itp_id, gcs_project, **kwargs):
     """
     Download a URL as a task item
     using airflow. **kwargs are airflow
     """
     run_time = kwargs["execution_date"]
-    url = kwargs["params"]["url"]
-    itp_id = kwargs["params"]["itp_id"]
-    project = kwargs["params"]["gcs_project"]
     headers = {
         "User-Agent": (
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4)"
@@ -73,7 +70,7 @@ def download_url(**kwargs):
     try:
         z = zipfile.ZipFile(io.BytesIO(r.content))
         # replace here with s3fs
-        fs = gcsfs.GCSFileSystem(project=project)
+        fs = gcsfs.GCSFileSystem(project=gcs_project, token="cloud")
         path = f"/tmp/gtfs-data/{run_time}/{itp_id}"
         pathlib.Path(path).mkdir(parents=True, exist_ok=True)
         z.extractall(path)
@@ -85,7 +82,7 @@ def download_url(**kwargs):
 default_args = {
     "owner": "airflow",
     "depends_on_past": False,
-    "start_date": datetime.datetime(2021, 2, 1),
+    "start_date": datetime.datetime(2021, 2, 15),
     "email": ["hunter.owens@dot.ca.gov"],
     "email_on_failure": True,
     "email_on_retry": False,
@@ -104,25 +101,34 @@ dag = DAG(
 )
 
 
-provider_set = make_gtfs_list().apply(clean_url)
-for t in provider_set.itertuples():
-    clean_name = (
-        getattr(t, "_1")
-        .lower()
-        .replace(" ", "-")
-        .replace("(", "")
-        .replace(")", "")
-        .replace("/", "_slash_")
-        .replace("&", "and")
-        .replace("&", "and1")
-    )
-    download_to_gcs_task = PythonOperator(
-        task_id=f"loading_{clean_name}_data",
-        python_callable=download_url,
-        params={
-            "url": getattr(t, "GTFS"),
-            "itp_id": getattr(t, "ITP_ID"),
-            "gcs_project": "cal-itp-data-infra",
-        },
-        dag=dag,
-    )
+def gen_list(**kwargs):
+    """
+    task callable to generate the list and push into
+    xcom
+    """
+    provider_set = make_gtfs_list().apply(clean_url)
+    return provider_set.to_dict("records")
+
+
+generate_provider_list_task = PythonOperator(
+    task_id="generating_provider_list", python_callable=gen_list, dag=dag
+)
+
+
+def downloader(task_instance, **kwargs):
+    provider_set = task_instance.xcom_pull(task_ids="generating_provider_list")
+    for row in provider_set:
+        print(row)
+        try:
+            download_url(row["GTFS"], row["ITP_ID"], "cal-itp-data-infra", **kwargs)
+        except Exception as e:
+            logging.warn(f"error downloading agency {row['Agency Name']}")
+            logging.info(e)
+            continue
+
+
+download_to_gcs_task = PythonOperator(
+    task_id="downloading_data", python_callable=downloader, dag=dag,
+)
+
+generate_provider_list_task >> download_to_gcs_task
