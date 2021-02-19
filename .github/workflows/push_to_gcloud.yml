@@ -29,4 +29,4 @@ jobs:
         destination: us-west2-calitp-airflow-pro-332827a9-bucket
     - id: install-python-dependencies
       name: install-requirements
-      run: gcloud composer environments update calitp-airflow-prod --update-pypi-packages-from-file airflow/requirements.txt --location us-west2
+      run: gcloud composer environments update calitp-airflow-prod --update-pypi-packages-from-file airflow/requirements.txt --location us-west2 --project cal-itp-data-infra
