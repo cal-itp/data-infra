@@ -29,3 +29,7 @@ Additional reading about this setup can be found on the [Airflow Docs](https://a
 
 ## Deploying to production
 All gcs assets are under the project `cal-itp-data-infra`. All assets should be using the `us-west-2` region.
+
+Currently, the project is automatically deploy to a cloud composer managed airflow service named `calitp-airflow-prod`. Cloud Composer excepts a GCS bucket full of DAGs, so we use Github Actions to automatically sync the `dags` folder to the production bucket and update the python dependencies in `requirements.txt`. There is a service user setup using Github Actions Secrets to handle auth.
+
+To view the prod webserver or logs, login to the cloud composer console.
