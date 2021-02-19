@@ -10,6 +10,7 @@ import datetime
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 import gcsfs
+from airflow.operators.email_operator import EmailOperator
 import pandas as pd
 
 
@@ -71,10 +72,12 @@ def download_url(url, itp_id, gcs_project, **kwargs):
         z = zipfile.ZipFile(io.BytesIO(r.content))
         # replace here with s3fs
         fs = gcsfs.GCSFileSystem(project=gcs_project, token="cloud")
-        path = f"/tmp/gtfs-data/{run_time}/{itp_id}"
+        path = f"/tmp/gtfs-data/{run_time}/{int(itp_id)}"
         pathlib.Path(path).mkdir(parents=True, exist_ok=True)
         z.extractall(path)
-        fs.put(path, f"gs://gtfs-data/schedule/{run_time}/{itp_id}", recursive=True)
+        fs.put(
+            path, f"gs://gtfs-data/schedule/{run_time}/{int(itp_id)}", recursive=True
+        )
     except zipfile.BadZipFile:
         logging.warning(f"failed to zipfile {url}")
 
@@ -119,6 +122,7 @@ def downloader(**kwargs):
     provider_set = kwargs["task_instance"].xcom_pull(
         task_ids="generating_provider_list"
     )
+    error_agencies = []
     for row in provider_set:
         print(row)
         try:
@@ -126,7 +130,9 @@ def downloader(**kwargs):
         except Exception as e:
             logging.warn(f"error downloading agency {row['Agency Name']}")
             logging.info(e)
+            error_agencies.append(row["Agency Name"])
             continue
+    return error_agencies
 
 
 download_to_gcs_task = PythonOperator(
@@ -136,4 +142,11 @@ download_to_gcs_task = PythonOperator(
     provide_context=True,
 )
 
-generate_provider_list_task >> download_to_gcs_task
+email_error_agencies_task = EmailOperator(
+    to=["ruth.miller@dot.ca.gov", "hunter.owens@dot.ca.gov"],
+    html_content=(
+        "The follow agencies failed to have GTFS at the url:"
+        "{{ task_instance.xcom_pull(task_ids='download_to_gcs_task')}}"
+    ),
+)
+generate_provider_list_task >> download_to_gcs_task >> email_error_agencies_task
