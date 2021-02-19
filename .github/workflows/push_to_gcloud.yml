@@ -8,8 +8,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./airflow
     steps:
     - name: Check out repo
       uses: actions/checkout@v2
@@ -27,5 +25,5 @@ jobs:
       uses: google-github-actions/upload-cloud-storage@main
       name: upload-the-file
       with:
-        path: dags
+        path: airflow/dags
         destination: us-west2-calitp-airflow-pro-332827a9-bucket
