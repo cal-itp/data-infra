@@ -13,9 +13,7 @@ from airflow.operators.python_operator import PythonOperator
 import gcsfs
 
 # TODO: Fix to Pathlib
-catalog = intake.open_catalog(
-    "gcs://us-west2-calitp-airflow-pro-332827a9-bucket/dags/catalogs/catalog.yml"
-)
+catalog = intake.open_catalog("./dags/catalogs/catalog.yml")
 
 
 def make_gtfs_list(catalog=catalog):
@@ -117,8 +115,10 @@ generate_provider_list_task = PythonOperator(
 )
 
 
-def downloader(task_instance, **kwargs):
-    provider_set = task_instance.xcom_pull(task_ids="generating_provider_list")
+def downloader(**kwargs):
+    provider_set = kwargs["task_instance"].xcom_pull(
+        task_ids="generating_provider_list"
+    )
     for row in provider_set:
         print(row)
         try:
@@ -130,7 +130,10 @@ def downloader(task_instance, **kwargs):
 
 
 download_to_gcs_task = PythonOperator(
-    task_id="downloading_data", python_callable=downloader, dag=dag,
+    task_id="downloading_data",
+    python_callable=downloader,
+    dag=dag,
+    provide_context=True,
 )
 
 generate_provider_list_task >> download_to_gcs_task
