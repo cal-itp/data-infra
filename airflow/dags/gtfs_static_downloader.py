@@ -149,5 +149,7 @@ email_error_agencies_task = EmailOperator(
         "{{ task_instance.xcom_pull(task_ids='download_to_gcs_task')}}"
     ),
     subject="Operator GTFS Failure Update for",
+    task_id="email_error",
+    dag=dag,
 )
 generate_provider_list_task >> download_to_gcs_task >> email_error_agencies_task
