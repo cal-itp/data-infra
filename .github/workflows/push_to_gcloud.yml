@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-
+      - initial-airlfow
 jobs:
   deploy:
     runs-on: ubuntu-latest
