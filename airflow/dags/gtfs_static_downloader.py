@@ -13,7 +13,9 @@ from airflow.operators.python_operator import PythonOperator
 import gcsfs
 
 # TODO: Fix to Pathlib
-catalog = intake.open_catalog("./dags/catalogs/catalog.yml")
+catalog = intake.open_catalog(
+    "gcs://us-west2-calitp-airflow-pro-332827a9-bucket/dags/catalogs/catalog.yml"
+)
 
 
 def make_gtfs_list(catalog=catalog):
