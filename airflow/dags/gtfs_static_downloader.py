@@ -148,8 +148,9 @@ email_error_agencies_task = EmailOperator(
     to=["ruth.miller@dot.ca.gov", "hunter.owens@dot.ca.gov"],
     html_content=(
         "The follow agencies failed to have GTFS at the url:"
-        "{{ task_instance.xcom_pull(key='error_agencies',",
-        "task_ids='download_to_gcs_task') }}" "{{ ds }}",
+        "{{ task_instanc.xcom_pull(key='error_agencies',"
+        "task_ids='download_to_gcs_task') }}"
+        "{{ ds }}"
     ),
     subject="Operator GTFS Failure Update for",
     task_id="email_error",
