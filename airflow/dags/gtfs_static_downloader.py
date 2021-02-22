@@ -132,6 +132,8 @@ def downloader(**kwargs):
             logging.info(e)
             error_agencies.append(row["Agency Name"])
             continue
+    logging.info(f"error agencies: {error_agencies}")
+    kwargs["ti"].xcom_push(key="error_agencies", value=error_agencies)
     return error_agencies
 
 
@@ -146,7 +148,8 @@ email_error_agencies_task = EmailOperator(
     to=["ruth.miller@dot.ca.gov", "hunter.owens@dot.ca.gov"],
     html_content=(
         "The follow agencies failed to have GTFS at the url:"
-        "{{ task_instance.xcom_pull(task_ids='download_to_gcs_task')}}"
+        "{{ task_instance.xcom_pull(key='error_agencies',",
+        "task_ids='download_to_gcs_task') }}" "{{ ds }}",
     ),
     subject="Operator GTFS Failure Update for",
     task_id="email_error",
