@@ -176,6 +176,6 @@ def email_callback(**kwargs):
 
 
 email_error_agencies_task = PythonOperator(
-    task_id="email_error", dag=dag, provide_context=True
+    task_id="email_error", python_callable=email_callback, dag=dag, provide_context=True
 )
 generate_provider_list_task >> download_to_gcs_task >> email_error_agencies_task
