@@ -144,7 +144,17 @@ def downloader(**kwargs):
             error_agencies.append(row["Agency Name"])
             continue
     logging.info(f"error agencies: {error_agencies}")
-    return error_agencies
+    # email out error agencies
+    email_template = (
+        "The follow agencies failed to have GTFS at the url:"
+        f"{error_agencies}"
+        "{{ ds }}"
+    )
+    send_email(
+        to=["ruth.miller@dot.ca.gov", "hunter.owens@dot.ca.gov"],
+        html_content=email_template,
+        subject="Operator GTFS Errors for {{ ds }}",
+    )
 
 
 download_to_gcs_task = PythonOperator(
@@ -154,27 +164,4 @@ download_to_gcs_task = PythonOperator(
     provide_context=True,
 )
 
-
-def email_callback(**kwargs):
-    """
-    Email error agencies to Ruth / Hunter
-    """
-    email_template = (
-        "The follow agencies failed to have GTFS at the url:"
-        f"{kwargs['ti'].xcom_pull(task_ids='download_to_gcs_task', key='return_value')}"
-        "{{ ds }}"
-    )
-    logging.info(
-        f"{kwargs['ti'].xcom_pull(task_ids='download_to_gcs_task', key='return_value')}"
-    )
-    send_email(
-        to=["ruth.miller@dot.ca.gov", "hunter.owens@dot.ca.gov"],
-        html_content=email_template,
-        subject="Operator GTFS Errors for {{ ds }}",
-    )
-
-
-email_error_agencies_task = PythonOperator(
-    task_id="email_error", python_callable=email_callback, dag=dag, provide_context=True
-)
-generate_provider_list_task >> download_to_gcs_task >> email_error_agencies_task
+generate_provider_list_task >> download_to_gcs_task
