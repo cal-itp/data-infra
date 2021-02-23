@@ -50,6 +50,15 @@ def clean_url(url):
     return url
 
 
+class NoFeedError(Exception):
+    """
+    No Feed / Feed Error base
+    class. Placeholder for now.
+    """
+
+    pass
+
+
 def download_url(url, itp_id, gcs_project, **kwargs):
     """
     Download a URL as a task item
@@ -68,6 +77,7 @@ def download_url(url, itp_id, gcs_project, **kwargs):
         r.raise_for_status()
     except requests.exceptions.HTTPError as err:
         logging.warning(f"No feed found for {url}, {err}")
+        raise NoFeedError
     try:
         z = zipfile.ZipFile(io.BytesIO(r.content))
         # replace here with s3fs
@@ -80,6 +90,7 @@ def download_url(url, itp_id, gcs_project, **kwargs):
         )
     except zipfile.BadZipFile:
         logging.warning(f"failed to zipfile {url}")
+        raise NoFeedError
 
 
 default_args = {
@@ -133,7 +144,6 @@ def downloader(**kwargs):
             error_agencies.append(row["Agency Name"])
             continue
     logging.info(f"error agencies: {error_agencies}")
-    kwargs["ti"].xcom_push(key="error_agencies", value=error_agencies)
     return error_agencies
 
 
@@ -148,7 +158,7 @@ email_error_agencies_task = EmailOperator(
     to=["ruth.miller@dot.ca.gov", "hunter.owens@dot.ca.gov"],
     html_content=(
         "The follow agencies failed to have GTFS at the url:"
-        "{{ ti.xcom_pull(task_ids='download_to_gcs_task') }}"
+        "{{ ti.xcom_pull(task_ids='download_to_gcs_task', key='return_value') }}"
         "{{ ds }}"
     ),
     subject="Operator GTFS Failure Update for",
