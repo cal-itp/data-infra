@@ -10,7 +10,7 @@ import datetime
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 import gcsfs
-from airflow.operators.email_operator import EmailOperator
+from airflow.utils.email import send_email
 import pandas as pd
 
 
@@ -154,16 +154,28 @@ download_to_gcs_task = PythonOperator(
     provide_context=True,
 )
 
-email_error_agencies_task = EmailOperator(
-    to=["ruth.miller@dot.ca.gov", "hunter.owens@dot.ca.gov"],
-    html_content=(
+
+def email_callback(**kwargs):
+    """
+    Email error agencies to Ruth / Hunter
+    """
+    email_template = (
         "The follow agencies failed to have GTFS at the url:"
-        "{{ ti.xcom_pull(task_ids='download_to_gcs_task', key='return_value') }}"
+        f"{kwargs['ti'].xcom_pull(task_ids='download_to_gcs_task', key='return_value')}"
         "{{ ds }}"
-    ),
-    subject="Operator GTFS Failure Update for",
-    task_id="email_error",
-    dag=dag,
-    provide_context=True,
+    )
+    logging.info(
+        f"{kwargs['ti'].xcom_pull(task_ids='download_to_gcs_task', key='return_value')}"
+    )
+    send_email(
+        to=["ruth.miller@dot.ca.gov", "hunter.owens@dot.ca.gov"],
+        html_content=email_template,
+        subject="Operator GTFS Errors for {{ ds }}",
+    )
+    return True
+
+
+email_error_agencies_task = PythonOperator(
+    task_id="email_error", dag=dag, provide_context=True
 )
 generate_provider_list_task >> download_to_gcs_task >> email_error_agencies_task
