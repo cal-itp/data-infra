@@ -146,14 +146,15 @@ def downloader(**kwargs):
     logging.info(f"error agencies: {error_agencies}")
     # email out error agencies
     email_template = (
-        "The follow agencies failed to have GTFS at the url:"
+        "The follow agencies failed to have GTFS a GTFS feed at"
+        "the URL or the Zip File Failed to extract:"
         f"{error_agencies}"
         "{{ ds }}"
     )
     send_email(
         to=["ruth.miller@dot.ca.gov", "hunter.owens@dot.ca.gov"],
         html_content=email_template,
-        subject=f"Operator GTFS Errors for { datetime.today().strftime('%Y-%m-%d') }",
+        subject=("Operator GTFS Errors for" f"{datetime.today().strftime('%Y-%m-%d')}"),
     )
 
 
