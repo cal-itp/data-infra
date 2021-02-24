@@ -1,0 +1,27 @@
+name: Update cloud composer requirements
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'airflow/requirements.txt'
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - uses: google-github-actions/setup-gcloud@master
+        with:
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+      - id: install-python-dependencies
+        name: install-requirements
+        run: gcloud composer environments update calitp-airflow-prod --update-pypi-packages-from-file airflow/requirements.txt --location us-west2 --project cal-itp-data-infra

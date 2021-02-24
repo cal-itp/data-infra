@@ -1,0 +1,9 @@
+
+metadata:
+  version: 1
+sources:
+  official_list:
+    driver: csv
+    description: description of url for each active GTFS feed
+    args:
+      urlpath: https://docs.google.com/spreadsheets/d/1qr49azk6p30mp96_7myKoO-Bb_bXMMn5ZzgbL-uPiPw/gviz/tq?tqx=out:csv&sheet=Data
