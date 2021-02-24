@@ -131,5 +131,9 @@ services:
       retries: 5
     restart: always
 
+  airflow:
+    <<: *airflow-common
+    command: airflow
+
 volumes:
   postgres-db-volume:
