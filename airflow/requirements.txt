@@ -1,4 +1,4 @@
-intake
-pandas
-ipdb
-gcsfs
+gcsfs==0.7.2
+intake==0.6.1
+ipdb==0.13.4
+pandas==1.1.4
