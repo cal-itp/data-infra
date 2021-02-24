@@ -24,7 +24,7 @@ echo -e "AIRFLOW_UID=$(id -u)\nAIRFLOW_GID=0" > .env
 Run the initial database migration and create an `airflow / airflow` user to debug with:
 
 ```console
-docker-compose up airflow-init
+docker-compose run airflow db init
 ```
 
 Start all services with:
