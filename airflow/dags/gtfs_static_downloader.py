@@ -155,8 +155,7 @@ def downloader(**kwargs):
         to=["ruth.miller@dot.ca.gov", "hunter.owens@dot.ca.gov"],
         html_content=email_template,
         subject=(
-            "Operator GTFS Errors for"
-            f"{datetime.datetime.today().strftime('%Y-%m-%d')}"
+            "Operator GTFS Errors for" f"{datetime.datetime.now().strftime('%Y-%m-%d')}"
         ),
     )
 
