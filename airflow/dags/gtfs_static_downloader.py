@@ -7,6 +7,8 @@ import zipfile
 import io
 import pathlib
 import datetime
+import yaml
+
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 import gcsfs
@@ -22,22 +24,23 @@ def make_gtfs_list():
     kwargs:
      catalog = a intake catalog containing an "official_list" item.
     """
-    df = pd.read_csv(
-        (
-            "https://docs.google.com/spreadsheets/d/"
-            "1qr49azk6p30mp96_7myKoO-Bb_bXMMn5ZzgbL-uPiPw/gviz/"
-            "tq?tqx=out:csv&sheet=Data"
-        ),
-        usecols=["ITP_ID", "GTFS", "Agency Name"],
-        dtype={"ITP_ID": "float64"},
-    )
+
+    agencies = yaml.safe_load(open("data/agencies.yml"))
+
+    # yaml has form <agency_name>: { agency_name: "", gtfs_schedule_url: [...,] }
+    df = pd.DataFrame.from_dict(agencies, orient="index")
+
+    # TODO: handle multiple urls
+    # currently stores urls as a list, so get first (and hopefully only) entry
+    df["gtfs_schedule_url"] = df["gtfs_schedule_url"].str.get(0)
+
     # TODO: Figure out what to do with Metro
     # For now, we just take the bus.
 
     # TODO: Replace URLs with Zip ones.
     # For now we filter, and then remove ones that don't contain
     # zip filters
-    df = df[(df.GTFS.str.contains("zip")) & (df.GTFS.notnull())]
+    df = df[(df.gtfs_schedule_url.str.contains("zip")) & (df.gtfs_schedule_url.notna())]
     return df
 
 
@@ -137,11 +140,13 @@ def downloader(**kwargs):
     for row in provider_set:
         print(row)
         try:
-            download_url(row["GTFS"], row["ITP_ID"], "cal-itp-data-infra", **kwargs)
+            download_url(
+                row["gtfs_schedule_url"], row["itp_id"], "cal-itp-data-infra", **kwargs
+            )
         except Exception as e:
-            logging.warn(f"error downloading agency {row['Agency Name']}")
+            logging.warn(f"error downloading agency {row['agency_name']}")
             logging.info(e)
-            error_agencies.append(row["Agency Name"])
+            error_agencies.append(row["agency_name"])
             continue
     logging.info(f"error agencies: {error_agencies}")
     # email out error agencies
