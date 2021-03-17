@@ -1,56 +1,23 @@
+# ---
+# python_callable: downloader
+# provide_context: true
+# dependencies:
+#   - generate_provider_list
+# ---
+
 """
 Download the state of CA GTFS files, async version
 """
+
 import requests
 import logging
 import zipfile
 import io
 import pathlib
 import datetime
-import yaml
 
-from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
 import gcsfs
 from airflow.utils.email import send_email
-import pandas as pd
-
-
-def make_gtfs_list():
-    """
-    Read in a list of GTFS urls
-    from the main db
-    plus metadata
-    kwargs:
-     catalog = a intake catalog containing an "official_list" item.
-    """
-
-    agencies = yaml.safe_load(open("data/agencies.yml"))
-
-    # yaml has form <agency_name>: { agency_name: "", gtfs_schedule_url: [...,] }
-    df = pd.DataFrame.from_dict(agencies, orient="index")
-
-    # TODO: handle multiple urls
-    # currently stores urls as a list, so get first (and hopefully only) entry
-    df["gtfs_schedule_url"] = df["gtfs_schedule_url"].str.get(0)
-
-    # TODO: Figure out what to do with Metro
-    # For now, we just take the bus.
-
-    # TODO: Replace URLs with Zip ones.
-    # For now we filter, and then remove ones that don't contain
-    # zip filters
-    df = df[(df.gtfs_schedule_url.str.contains("zip")) & (df.gtfs_schedule_url.notna())]
-    return df
-
-
-def clean_url(url):
-    """
-    take the list of urls, clean as needed.
-    used as a pd.apply, so singleton.
-    """
-    # LA Metro split requires lstrip
-    return url
 
 
 class NoFeedError(Exception):
@@ -96,46 +63,8 @@ def download_url(url, itp_id, gcs_project, **kwargs):
         raise NoFeedError
 
 
-default_args = {
-    "owner": "airflow",
-    "depends_on_past": False,
-    "start_date": datetime.datetime(2021, 2, 15),
-    "email": ["hunter.owens@dot.ca.gov"],
-    "email_on_failure": True,
-    "email_on_retry": False,
-    "retries": 1,
-    "retry_delay": datetime.timedelta(minutes=2),
-    "concurrency": 50
-    # 'queue': 'bash_queue',
-    # 'pool': 'backfill',
-    # 'priority_weight': 10,
-    # 'end_date': datetime(2016, 1, 1),
-}
-
-
-dag = DAG(
-    dag_id="gtfs-downloader", default_args=default_args, schedule_interval="@daily"
-)
-
-
-def gen_list(**kwargs):
-    """
-    task callable to generate the list and push into
-    xcom
-    """
-    provider_set = make_gtfs_list().apply(clean_url)
-    return provider_set.to_dict("records")
-
-
-generate_provider_list_task = PythonOperator(
-    task_id="generating_provider_list", python_callable=gen_list, dag=dag
-)
-
-
 def downloader(**kwargs):
-    provider_set = kwargs["task_instance"].xcom_pull(
-        task_ids="generating_provider_list"
-    )
+    provider_set = kwargs["task_instance"].xcom_pull(task_ids="generate_provider_list")
     error_agencies = []
     for row in provider_set:
         print(row)
@@ -163,13 +92,3 @@ def downloader(**kwargs):
             "Operator GTFS Errors for" f"{datetime.datetime.now().strftime('%Y-%m-%d')}"
         ),
     )
-
-
-download_to_gcs_task = PythonOperator(
-    task_id="downloading_data",
-    python_callable=downloader,
-    dag=dag,
-    provide_context=True,
-)
-
-generate_provider_list_task >> download_to_gcs_task
