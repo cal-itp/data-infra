@@ -23,16 +23,14 @@ def make_gtfs_list():
 
     # TODO: handle multiple urls
     # currently stores urls as a list, so get first (and hopefully only) entry
-    df["gtfs_schedule_url"] = df["gtfs_schedule_url"].str.get(0)
+    df_long = df.explode("gtfs_schedule_url")
+    df_long["url_number"] = df_long.groupby("itp_id").cumcount()
+    # df["gtfs_schedule_url"] = df["gtfs_schedule_url"].str.get(0)
 
     # TODO: Figure out what to do with Metro
     # For now, we just take the bus.
 
-    # TODO: Replace URLs with Zip ones.
-    # For now we filter, and then remove ones that don't contain
-    # zip filters
-    df = df[(df.gtfs_schedule_url.str.contains("zip")) & (df.gtfs_schedule_url.notna())]
-    return df
+    return df_long
 
 
 def clean_url(url):

@@ -13,11 +13,14 @@ import requests
 import logging
 import zipfile
 import io
-import pathlib
-import datetime
 
 import gcsfs
-from airflow.utils.email import send_email
+import pandas as pd
+
+from pathlib import Path
+
+SRC_DIR = "/tmp/gtfs-data/schedule"
+DST_DIR = "gs://gtfs-data/schedule"
 
 
 class NoFeedError(Exception):
@@ -29,12 +32,23 @@ class NoFeedError(Exception):
     pass
 
 
-def download_url(url, itp_id, gcs_project, **kwargs):
+def save_to_gcfs(src_path, dst_path, gcs_project="cal-itp-data-infra", **kwargs):
+    """Convenience function for saving files from disk to google cloud storage."""
+
+    # TODO: this should be moved into a package of utility functions, and
+    #       allow disabling via environment variable, so we can develop against
+    #       airflow without pushing to the cloud
+
+    fs = gcsfs.GCSFileSystem(project=gcs_project, token="cloud")
+    fs.put(str(src_path), str(dst_path), **kwargs)
+
+
+def download_url(url, itp_id, url_number, execution_date):
     """
     Download a URL as a task item
     using airflow. **kwargs are airflow
     """
-    run_time = kwargs["execution_date"]
+
     headers = {
         "User-Agent": (
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4)"
@@ -42,53 +56,67 @@ def download_url(url, itp_id, gcs_project, **kwargs):
             "Chrome/83.0.4103.97 Safari/537.36"
         )
     }
+    if pd.isna(itp_id):
+        raise NoFeedError("missing itp_id")
+
     try:
         r = requests.get(url, headers=headers)
         r.raise_for_status()
     except requests.exceptions.HTTPError as err:
         logging.warning(f"No feed found for {url}, {err}")
-        raise NoFeedError
+        raise NoFeedError("error: HTTPError")
+    except UnicodeError:
+        # this occurs when a misformatted url is given
+        raise NoFeedError("error: UnicodeError")
+
     try:
         z = zipfile.ZipFile(io.BytesIO(r.content))
         # replace here with s3fs
-        fs = gcsfs.GCSFileSystem(project=gcs_project, token="cloud")
-        path = f"/tmp/gtfs-data/{run_time}/{int(itp_id)}"
-        pathlib.Path(path).mkdir(parents=True, exist_ok=True)
-        z.extractall(path)
-        fs.put(
-            path, f"gs://gtfs-data/schedule/{run_time}/{int(itp_id)}", recursive=True
-        )
+        rel_path = Path(f"{execution_date}/{int(itp_id)}/{int(url_number)}")
+        src_path = SRC_DIR / rel_path
+        dst_path = DST_DIR / rel_path
+
+        src_path.mkdir(parents=True, exist_ok=True)
+        z.extractall(src_path)
+
+        save_to_gcfs(src_path, dst_path, recursive=True)
     except zipfile.BadZipFile:
         logging.warning(f"failed to zipfile {url}")
-        raise NoFeedError
+        raise NoFeedError("error: BadZipFile")
 
 
-def downloader(**kwargs):
-    provider_set = kwargs["task_instance"].xcom_pull(task_ids="generate_provider_list")
-    error_agencies = []
+def downloader(task_instance, execution_date, **kwargs):
+    provider_set = task_instance.xcom_pull(task_ids="generate_provider_list")
+    url_status = []
+
     for row in provider_set:
         print(row)
         try:
             download_url(
-                row["gtfs_schedule_url"], row["itp_id"], "cal-itp-data-infra", **kwargs
+                row["gtfs_schedule_url"],
+                row["itp_id"],
+                row["url_number"],
+                execution_date,
             )
-        except Exception as e:
+
+            status = "success"
+        except NoFeedError as e:
             logging.warn(f"error downloading agency {row['agency_name']}")
             logging.info(e)
-            error_agencies.append(row["agency_name"])
-            continue
+
+            status = str(e)
+
+        url_status.append(status)
+
+    df_status = pd.DataFrame(provider_set).assign(status=url_status)
+
+    src_path = Path(SRC_DIR) / f"{execution_date}/status.csv"
+    dst_path = Path(DST_DIR) / f"{execution_date}/status.csv"
+
+    df_status.convert_dtypes().to_csv(src_path)
+    save_to_gcfs(src_path, dst_path)
+
+    error_agencies = df_status[lambda d: d.status != "success"].agency_name.tolist()
     logging.info(f"error agencies: {error_agencies}")
-    # email out error agencies
-    email_template = (
-        "The follow agencies failed to have GTFS a GTFS feed at"
-        "the URL or the Zip File Failed to extract:"
-        f"{error_agencies}"
-        "{{ ds }}"
-    )
-    send_email(
-        to=["ruth.miller@dot.ca.gov", "hunter.owens@dot.ca.gov"],
-        html_content=email_template,
-        subject=(
-            "Operator GTFS Errors for" f"{datetime.datetime.now().strftime('%Y-%m-%d')}"
-        ),
-    )
+
+    return error_agencies
