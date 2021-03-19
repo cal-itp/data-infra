@@ -166,7 +166,7 @@ city-of-lompoc-transit:
 clean-air-express:
   agency_name: Clean Air Express
   gtfs_schedule_url:
-  - http://www.cleanairexpress.com/GTFS7.24%COVID-19%CAE%GTFS.zip
+  - http://www.cleanairexpress.com/GTFS/GTFS.zip
   itp_id: 473
 cloverdale-transit:
   agency_name: Cloverdale Transit
