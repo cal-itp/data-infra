@@ -12,7 +12,7 @@ altamont-corridor-express:
   agency_name: Altamont Corridor Express
   gtfs_schedule_url:
   - https://transitfeeds.com/p/altamont-corridor-express/823/latest/download
-  itp_id:
+  itp_id: 10
 amador-regional-transit-system:
   agency_name: Amador Regional Transit System
   gtfs_schedule_url:
@@ -67,7 +67,7 @@ banning-pass-transit:
   agency_name: Banning Pass Transit
   gtfs_schedule_url:
   - http://data.trilliumtransit.com/gtfs/banning-ca-us/banning-ca-us.zip
-  itp_id:
+  itp_id: 30
 bay-area-rapid-transit:
   agency_name: Bay Area Rapid Transit
   gtfs_schedule_url:
@@ -132,7 +132,7 @@ calaveras-transit:
   agency_name: Calaveras Transit
   gtfs_schedule_url:
   - http://data.trilliumtransit.com/gtfs/calaveras-ca-us/calaveras-ca-us.zip
-  itp_id:
+  itp_id: 50
 caltrain:
   agency_name: Caltrain
   gtfs_schedule_url:
@@ -167,12 +167,12 @@ clean-air-express:
   agency_name: Clean Air Express
   gtfs_schedule_url:
   - http://www.cleanairexpress.com/GTFS7.24%COVID-19%CAE%GTFS.zip
-  itp_id: .nan
+  itp_id: 473
 cloverdale-transit:
   agency_name: Cloverdale Transit
   gtfs_schedule_url:
   - http://data.trilliumtransit.com/gtfs/sonomacounty-ca-us/sonomacounty-ca-us.zip
-  itp_id:
+  itp_id: 70
 clovis-transit-system:
   agency_name: Clovis Transit System
   gtfs_schedule_url:
