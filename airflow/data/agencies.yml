@@ -1,7 +1,7 @@
 ac-transit:
   agency_name: AC Transit
   gtfs_schedule_url:
-  - https://api.actransit.org/transit/gtfs/current?token=2512B8179D2DC44895CDDC6D42
+  - https://api.actransit.org/transit/gtfs/download?token=2512B81107A09D2DC44895CDDC650D47
   itp_id: 4
 alhambra-community-transit:
   agency_name: Alhambra Community Transit
@@ -56,7 +56,7 @@ avocado-heights/bassett/west-valinda-shuttle:
 b-line:
   agency_name: B-Line
   gtfs_schedule_url:
-  - 'http://www.blinetransit.com/documents/google_transit.zip '
+  - http://www.blinetransit.com/documents/Google%20Transit/google_transit.zip
   itp_id: 48
 baldwin-park-transit:
   agency_name: Baldwin Park Transit
@@ -216,7 +216,7 @@ cudahy-area-rapid-transit:
 culver-citybus:
   agency_name: Culver CityBus
   gtfs_schedule_url:
-  - https://www.culvercity.org/home/showdocument?id=169
+  - https://www.culvercity.org/files/assets/public/documents/information-technology/maps/culvercityfeed1_11_2020.zip
   itp_id: 87
 dash:
   agency_name: DASH
@@ -236,7 +236,7 @@ desert-roadrunner:
 dinuba-area-regional-transit-:
   agency_name: 'Dinuba Area Regional Transit '
   gtfs_schedule_url:
-  - https://tularecog.org/tcag/data-gis-modeling/gis-project-and-data/gtfs-data-as-of-june-19-/dart-dinuba-area-regional-transit-gtfs/
+  - https://tularecog.org/tcag/data-gis-modeling/gtfs-data/dinuba-area-regional-transit-gtfs/
   itp_id: 93
 downeylink:
   agency_name: DowneyLINK
@@ -336,7 +336,7 @@ gold-coast-transit:
 gold-country-stage:
   agency_name: Gold Country Stage
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/goldcountrystage-ca-us
+  - http://data.trilliumtransit.com/gtfs/goldcountrystage-ca-us/goldcountrystage-ca-us.zip
   itp_id: 221
 golden-gate-bridge-highway-and-transportation-district:
   agency_name: Golden Gate Bridge Highway and Transportation District
@@ -346,7 +346,7 @@ golden-gate-bridge-highway-and-transportation-district:
 grapeline:
   agency_name: Grapeline
   gtfs_schedule_url:
-  - http://www.mjcaction.com/MJC_GTFS_Public/lodi_google_transit.zip
+  - https://www.lodi.gov/DocumentCenter/View/2453/lodi_gtfs-ZIP
   itp_id: 168
 gtrans:
   agency_name: GTrans
@@ -411,7 +411,7 @@ lawndale-beat:
 long-beach-transit:
   agency_name: Long Beach Transit
   gtfs_schedule_url:
-  - https://lbtransit.box.com/shared/static/aoyeskwmsa9g7pyg78q3xuiolgqe4f.zip
+  - https://lbtransit.box.com/shared/static/aoyeskwmsa9g7pyg78q3xuioi0lgqe4f.zip
   itp_id: 1
 madera-area-express:
   agency_name: Madera Area Express
@@ -461,8 +461,8 @@ merced-the-bus:
 metro:
   agency_name: Metro
   gtfs_schedule_url:
-  - https://gitlab.com/LACMTA/gtfs_bus
-  - ' https://gitlab.com/LACMTA/gtfs_rail'
+  - https://gitlab.com/LACMTA/gtfs_bus/raw/master/gtfs_bus.zip
+  - https://gitlab.com/LACMTA/gtfs_rail/raw/master/gtfs_rail.zip
   itp_id: 182
 metrolink:
   agency_name: Metrolink
@@ -662,7 +662,7 @@ santa-barbara-metropolitan-transit-district:
 santa-clara-valley-transportation-authority:
   agency_name: Santa Clara Valley Transportation Authority
   gtfs_schedule_url:
-  - http://www.vta.org/sfc/servlet.shepherd/document/download6901NUea
+  - https://gtfs.vta.org/gtfs_vta.zip
   itp_id: 294
 santa-clarita-transit:
   agency_name: Santa Clarita Transit
@@ -697,7 +697,7 @@ siskiyou-transit-and-general-express:
 slo-transit:
   agency_name: SLO Transit
   gtfs_schedule_url:
-  - http://app.mecatran.com/urb/ws/feed/c2ZT1zbGcmFuc2O2NsaWVudD1zZWxmO2V4cGlyZ7dHlwZT1ndGZzO2tlezZTMwMzM1OTRiMTE2NzN2IxNjQwNjZjQwMGMzMzdiM2E1MT
+    - https://app.mecatran.com/urb/ws/feed/c2l0ZT1zbG90cmFuc2l0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT0zZTMwMzM1OTRiMTE2NzA0N2IxNjQwNjA0ZjQwMGMzMzdiM2E1MTQ0
   itp_id: 287
 solanoexpress:
   agency_name: SolanoExpress
@@ -827,7 +827,7 @@ trinity-transit:
 tulare-county-area-transit:
   agency_name: Tulare County Area Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/tcat-flex-ca-us
+  - http://data.trilliumtransit.com/gtfs/tcat-flex-ca-us/tcat-ca-us.zip
   itp_id: 346
 turlock-transit:
   agency_name: Turlock Transit
