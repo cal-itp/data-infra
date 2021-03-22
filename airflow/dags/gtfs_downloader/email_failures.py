@@ -20,7 +20,7 @@ def email_failures(task_instance, **kwargs):
         "{{ ds }}"
     )
     send_email(
-        to=["ruth.miller@dot.ca.gov", "hunter.owens@dot.ca.gov"],
+        to=["ruth.miller@dot.ca.gov", "hunter.owens@dot.ca.gov", "michael.c@jarv.us"],
         html_content=email_template,
         subject=(
             "Operator GTFS Errors for" f"{datetime.datetime.now().strftime('%Y-%m-%d')}"
