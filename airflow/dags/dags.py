@@ -7,8 +7,8 @@ from gusty import create_dag
 
 # DAG Directories =============================================================
 
-# point to your dags directory
-dag_parent_dir = Path(os.environ["AIRFLOW_HOME"]) / "dags"
+# point to your dags directory (the one this file lives in)
+dag_parent_dir = Path(__file__).parent
 
 # TODO: catalogs directory is not a dag, which screws up auto loading folders
 # assumes any subdirectories in the dags directory are Gusty DAGs (with METADATA.yml)
