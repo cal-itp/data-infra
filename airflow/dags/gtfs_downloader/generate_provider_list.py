@@ -19,6 +19,9 @@ def make_gtfs_list():
      catalog = a intake catalog containing an "official_list" item.
     """
 
+    print(os.listdir())
+    print(os.getcwd())
+
     fname = Path(os.environ["AIRFLOW_HOME"]) / "data" / "agencies.yml"
     agencies = yaml.safe_load(open(fname))
 
