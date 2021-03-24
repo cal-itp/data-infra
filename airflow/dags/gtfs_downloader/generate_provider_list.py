@@ -19,10 +19,8 @@ def make_gtfs_list():
      catalog = a intake catalog containing an "official_list" item.
     """
 
-    print(os.listdir())
-    print(os.getcwd())
-
-    fname = Path(os.environ["AIRFLOW_HOME"]) / "data" / "agencies.yml"
+    # TODO: add utility function for opening files
+    fname = Path(os.environ["DAGS_FOLDER"]).parent / "data" / "agencies.yml"
     agencies = yaml.safe_load(open(fname))
 
     # yaml has form <agency_name>: { agency_name: "", gtfs_schedule_url: [...,] }
