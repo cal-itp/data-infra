@@ -48,12 +48,19 @@ x-airflow-common:
     AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
     AIRFLOW__CORE__FERNET_KEY: ''
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
-    AIRFLOW__CORE__LOAD_EXAMPLES: 'true'
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    AIRFLOW__CORE__DAGS_FOLDER: /opt/airflow/gcs/dags
+    AIRFLOW__CORE__BASE_LOG_FOLDER: /opt/airflow/gcs/logs
+    AIRFLOW__CORE__PLUGINS_FOLDER: /opt/airflow/gcs/plugins
+    COMPOSER_ENVIRONMENT: "development"
+
   volumes:
-    - ./dags:/opt/airflow/dags
-    - ./logs:/opt/airflow/logs
-    - ./plugins:/opt/airflow/plugins
-    - ./data:/opt/airflow/data
+    # Note that in cloud composer, folders like dags are not in AIRFLOW_HOME
+    # but nested in a folder named gcs
+    - ./dags:/opt/airflow/gcs/dags
+    - ./logs:/opt/airflow/gcs/logs
+    - ./plugins:/opt/airflow/gcs/plugins
+    - ./data:/opt/airflow/gcs/data
     - $HOME/.config/gcloud:/root/.config/gcloud
   user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-50000}"
   depends_on:
