@@ -4,7 +4,10 @@
 
 
 import yaml
+import os
 import pandas as pd
+
+from pathlib import Path
 
 
 def make_gtfs_list():
@@ -16,7 +19,8 @@ def make_gtfs_list():
      catalog = a intake catalog containing an "official_list" item.
     """
 
-    agencies = yaml.safe_load(open("data/agencies.yml"))
+    fname = Path(os.environ["AIRFLOW_HOME"]) / "data" / "agencies.yml"
+    agencies = yaml.safe_load(open(fname))
 
     # yaml has form <agency_name>: { agency_name: "", gtfs_schedule_url: [...,] }
     df = pd.DataFrame.from_dict(agencies, orient="index")
