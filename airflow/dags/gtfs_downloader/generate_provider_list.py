@@ -4,10 +4,9 @@
 
 
 import yaml
-import os
 import pandas as pd
 
-from pathlib import Path
+from calitp import pipe_file_name
 
 
 def make_gtfs_list():
@@ -20,7 +19,7 @@ def make_gtfs_list():
     """
 
     # TODO: add utility function for opening files
-    fname = Path(os.environ["DAGS_FOLDER"]).parent / "data" / "agencies.yml"
+    fname = pipe_file_name("data/agencies.yml")
     agencies = yaml.safe_load(open(fname))
 
     # yaml has form <agency_name>: { agency_name: "", gtfs_schedule_url: [...,] }
