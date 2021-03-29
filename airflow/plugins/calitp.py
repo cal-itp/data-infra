@@ -38,9 +38,11 @@ def save_to_gcfs(src_path, dst_path, gcs_project="cal-itp-data-infra", **kwargs)
     """
 
     if is_development():
-        bucket = Path("gs://gtfs-data-test")
+        # Note: project on dev is set w/ GOOGLE_CLOUD_PROJECT environment var
+        bucket = "gs://gtfs-data-test/"
+        fs = gcsfs.GCSFileSystem(project=gcs_project, token="google_default")
     else:
-        bucket = Path("gs://gtfs-data")
+        bucket = "gs://gtfs-data/"
+        fs = gcsfs.GCSFileSystem(project=gcs_project, token="cloud")
 
-    fs = gcsfs.GCSFileSystem(project=gcs_project, token="cloud")
-    fs.put(str(src_path), str(bucket / dst_path), **kwargs)
+    fs.put(str(src_path), bucket + str(dst_path), **kwargs)
