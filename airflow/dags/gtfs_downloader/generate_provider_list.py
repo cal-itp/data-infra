@@ -4,10 +4,9 @@
 
 
 import yaml
-import os
 import pandas as pd
 
-from pathlib import Path
+from calitp import pipe_file_name
 
 
 def make_gtfs_list():
@@ -19,10 +18,8 @@ def make_gtfs_list():
      catalog = a intake catalog containing an "official_list" item.
     """
 
-    print(os.listdir())
-    print(os.getcwd())
-
-    fname = Path(os.environ["AIRFLOW_HOME"]) / "data" / "agencies.yml"
+    # TODO: add utility function for opening files
+    fname = pipe_file_name("data/agencies.yml")
     agencies = yaml.safe_load(open(fname))
 
     # yaml has form <agency_name>: { agency_name: "", gtfs_schedule_url: [...,] }

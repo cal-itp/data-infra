@@ -14,13 +14,13 @@ import logging
 import zipfile
 import io
 
-import gcsfs
 import pandas as pd
 
 from pathlib import Path
+from calitp import save_to_gcfs
 
 SRC_DIR = "/tmp/gtfs-data/schedule"
-DST_DIR = "gs://gtfs-data/schedule"
+DST_DIR = "schedule"
 
 
 class NoFeedError(Exception):
@@ -30,17 +30,6 @@ class NoFeedError(Exception):
     """
 
     pass
-
-
-def save_to_gcfs(src_path, dst_path, gcs_project="cal-itp-data-infra", **kwargs):
-    """Convenience function for saving files from disk to google cloud storage."""
-
-    # TODO: this should be moved into a package of utility functions, and
-    #       allow disabling via environment variable, so we can develop against
-    #       airflow without pushing to the cloud
-
-    fs = gcsfs.GCSFileSystem(project=gcs_project, token="cloud")
-    fs.put(str(src_path), str(dst_path), **kwargs)
 
 
 def download_url(url, itp_id, url_number, execution_date):

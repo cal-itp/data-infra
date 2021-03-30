@@ -14,14 +14,21 @@ Finally, Airflow plugins can be found in `plugins`.
 
 This project is developed using docker and docker-compose. Before getting started, please make sure you have installed both on your system.
 
-Additionally, if you're on linux, you'll need to make sure that the UID and GID of the container match, to do so, run
+First, if you're on linux, you'll need to make sure that the UID and GID of the container match, to do so, run
 
 ```console
 mkdir ./dags ./logs ./plugins
 echo -e "AIRFLOW_UID=$(id -u)\nAIRFLOW_GID=0" > .env
 ```
 
-Run the initial database migration and create an `airflow / airflow` user to debug with:
+Second, ensure you have a default authentication file, by running
+
+```console
+unset GOOGLE_APPLICATION_CREDENTIALS
+gcloud init
+```
+
+Finally, run the initial database migration and create an `airflow / airflow` user to debug with:
 
 ```console
 docker-compose run airflow db init
