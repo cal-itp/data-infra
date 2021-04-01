@@ -24,7 +24,7 @@ def pipe_file_name(path):
     if is_development():
         root = Path(os.environ["AIRFLOW__CORE__DAGS_FOLDER"]).parent
     else:
-        root = Path(os.environ["DAG_DIRECTORY"]).parent
+        root = Path(os.environ["DAGS_FOLDER"]).parent
 
     return str(root / path)
 
