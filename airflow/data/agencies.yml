@@ -252,8 +252,8 @@ desert-roadrunner:
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/paloverde_valley-ca-us/paloverde_valley-ca-us.zip
   itp_id: 238
-dinuba-area-regional-transit-:
-  agency_name: "Dinuba Area Regional Transit "
+dinuba-area-regional-transit:
+  agency_name: "Dinuba Area Regional Transit"
   gtfs_schedule_url:
     - https://tularecog.org/tcag/data-gis-modeling/gtfs-data/dinuba-area-regional-transit-gtfs/
   itp_id: 93
