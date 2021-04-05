@@ -1,7 +1,7 @@
 ac-transit:
   agency_name: AC Transit
   gtfs_schedule_url:
-  - https://api.actransit.org/transit/gtfs/download?token=2512B81107A09D2DC44895CDDC650D47
+    - https://api.actransit.org/transit/gtfs/download?token=2512B81107A09D2DC44895CDDC650D47
   gtfs_rt_urls:
     vehicle_positions:
       - https://api.actransit.org/gtfsrt/vehicles?token=2512B81107A09D2DC44895CDDC650D47
@@ -13,72 +13,72 @@ ac-transit:
 alhambra-community-transit:
   agency_name: Alhambra Community Transit
   gtfs_schedule_url:
-  - https://data.trilliumtransit.com/gtfs/alhambra-ca-us/alhambra-ca-us.zip
+    - https://data.trilliumtransit.com/gtfs/alhambra-ca-us/alhambra-ca-us.zip
   itp_id: 6
 altamont-corridor-express:
   agency_name: Altamont Corridor Express
   gtfs_schedule_url:
-  - https://transitfeeds.com/p/altamont-corridor-express/823/latest/download
+    - https://transitfeeds.com/p/altamont-corridor-express/823/latest/download
   itp_id: 10
 amador-regional-transit-system:
   agency_name: Amador Regional Transit System
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/amador-ca-us/amador-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/amador-ca-us/amador-ca-us.zip
   itp_id: 11
 anaheim-resort-transportation:
   agency_name: Anaheim Resort Transportation
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/anaheim-ca-us/anaheim-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/anaheim-ca-us/anaheim-ca-us.zip
   itp_id: 14
 arcadia-transit:
   agency_name: Arcadia Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/arcadia-ca-us/arcadia-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/arcadia-ca-us/arcadia-ca-us.zip
   itp_id: 17
 arcata-and-mad-river-transit-system:
   agency_name: Arcata and Mad River Transit System
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/humboldtcounty-ca-us/humboldtcounty-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/humboldtcounty-ca-us/humboldtcounty-ca-us.zip
   itp_id: 18
 arvin-transit:
   agency_name: Arvin Transit
   gtfs_schedule_url:
-  - https://data.trilliumtransit.com/gtfs/arvin-ca-us/arvin-ca-us.zip
+    - https://data.trilliumtransit.com/gtfs/arvin-ca-us/arvin-ca-us.zip
   itp_id: 21
 auburn-transit:
   agency_name: Auburn Transit
   gtfs_schedule_url:
-  - https://data.trilliumtransit.com/gtfs/auburntransit-ca-us/auburntransit-ca-us.zip
+    - https://data.trilliumtransit.com/gtfs/auburntransit-ca-us/auburntransit-ca-us.zip
   itp_id: 23
 avalon-transit:
   agency_name: Avalon Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/avalon-ca-us/avalon-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/avalon-ca-us/avalon-ca-us.zip
   itp_id: 24
 avocado-heights/bassett/west-valinda-shuttle:
   agency_name: Avocado Heights/Bassett/West Valinda Shuttle
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
   itp_id: 171
 b-line:
   agency_name: B-Line
   gtfs_schedule_url:
-  - http://www.blinetransit.com/documents/Google%20Transit/google_transit.zip
+    - http://www.blinetransit.com/documents/Google%20Transit/google_transit.zip
   itp_id: 48
 baldwin-park-transit:
   agency_name: Baldwin Park Transit
   gtfs_schedule_url:
-  - https://data.trilliumtransit.com/gtfs/baldwinpark-ca-us/baldwinpark-ca-us.zip
+    - https://data.trilliumtransit.com/gtfs/baldwinpark-ca-us/baldwinpark-ca-us.zip
   itp_id: 29
 banning-pass-transit:
   agency_name: Banning Pass Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/banning-ca-us/banning-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/banning-ca-us/banning-ca-us.zip
   itp_id: 30
 bay-area-rapid-transit:
   agency_name: Bay Area Rapid Transit
   gtfs_schedule_url:
-  - https://www.bart.gov/dev/schedules/google_transit.zip
+    - https://www.bart.gov/dev/schedules/google_transit.zip
   gtfs_rt_urls:
     trip_updates:
       - http://api.bart.gov/gtfsrt/tripupdate.aspx
@@ -88,665 +88,665 @@ bay-area-rapid-transit:
 beach-cities-transit:
   agency_name: Beach Cities Transit
   gtfs_schedule_url:
-  - https://www.redondo.org/civicax/filebank/blobdload.aspx?BlobID=33555
+    - https://www.redondo.org/civicax/filebank/blobdload.aspx?BlobID=33555
   itp_id: 2
 bear-transit:
   agency_name: Bear Transit
   gtfs_schedule_url:
-  - https://data.trilliumtransit.com/gtfs/beartransit-ca-us/beartransit-ca-us.zip
+    - https://data.trilliumtransit.com/gtfs/beartransit-ca-us/beartransit-ca-us.zip
   itp_id: 33
 beaumont-pass-transit:
   agency_name: Beaumont Pass Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/beaumont-ca-us/beaumont-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/beaumont-ca-us/beaumont-ca-us.zip
   itp_id: 34
 bell-gardens:
   agency_name: Bell Gardens
   gtfs_schedule_url:
-  - https://data.trilliumtransit.com/gtfs/bellgardens-ca-us/bellgardens-ca-us.zip
+    - https://data.trilliumtransit.com/gtfs/bellgardens-ca-us/bellgardens-ca-us.zip
   itp_id: 36
 bellflower-bus:
   agency_name: Bellflower Bus
   gtfs_schedule_url:
-  - https://data.trilliumtransit.com/gtfs/bellflower-ca-us/bellflower-ca-us.zip
+    - https://data.trilliumtransit.com/gtfs/bellflower-ca-us/bellflower-ca-us.zip
   itp_id: 37
 big-blue-bus:
   agency_name: Big Blue Bus
   gtfs_schedule_url:
-  - http://gtfs.bigbluebus.com/current.zip
+    - http://gtfs.bigbluebus.com/current.zip
   gtfs_rt_urls:
-      vehicle_positions:
-        - http://gtfs.bigbluebus.com/vehiclepositions.bin
-      trip_updates:
-        - http://gtfs.bigbluebus.com/tripupdates.bin
-      service_alerts:
-        - http://gtfs.bigbluebus.com/alerts.bin
+    vehicle_positions:
+      - http://gtfs.bigbluebus.com/vehiclepositions.bin
+    trip_updates:
+      - http://gtfs.bigbluebus.com/tripupdates.bin
+    service_alerts:
+      - http://gtfs.bigbluebus.com/alerts.bin
   itp_id: 0
 blossom-express:
   agency_name: Blossom Express
   gtfs_schedule_url:
-  - https://data.trilliumtransit.com/gtfs/blossomexpress-ca-us/blossomexpress-ca-us.zip
+    - https://data.trilliumtransit.com/gtfs/blossomexpress-ca-us/blossomexpress-ca-us.zip
   itp_id: 265
 blue-lake-rancheria:
   agency_name: Blue Lake Rancheria
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/humboldtcounty-ca-us/humboldtcounty-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/humboldtcounty-ca-us/humboldtcounty-ca-us.zip
   itp_id: 42
 burbank-bus:
   agency_name: Burbank Bus
   gtfs_schedule_url:
-  - http://gis.burbankca.gov/files/gtfs/google_transit.zip
+    - http://gis.burbankca.gov/files/gtfs/google_transit.zip
   itp_id: 45
 burney-express:
   agency_name: Burney Express
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/redding-ca-us/redding-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/redding-ca-us/redding-ca-us.zip
   itp_id: 82
 calabasas-transit-system:
   agency_name: Calabasas Transit System
   gtfs_schedule_url:
-  - https://data.trilliumtransit.com/gtfs/calabasas-ca-us/calabasas-ca-us.zip
+    - https://data.trilliumtransit.com/gtfs/calabasas-ca-us/calabasas-ca-us.zip
   itp_id: 49
 calaveras-transit:
   agency_name: Calaveras Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/calaveras-ca-us/calaveras-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/calaveras-ca-us/calaveras-ca-us.zip
   itp_id: 50
 caltrain:
   agency_name: Caltrain
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/caltrain-ca-us/caltrain-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/caltrain-ca-us/caltrain-ca-us.zip
   itp_id: 246
 camarillo-area-transit:
   agency_name: Camarillo Area Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/camarillo-ca-us/camarillo-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/camarillo-ca-us/camarillo-ca-us.zip
   itp_id: 54
 capitol-corridor:
   agency_name: Capitol Corridor
   gtfs_schedule_url:
-  - http://www.capitolcorridor.org/googletransit/google_transit.zip
+    - http://www.capitolcorridor.org/googletransit/google_transit.zip
   itp_id: 56
 carson-circuit:
   agency_name: Carson Circuit
   gtfs_schedule_url:
-  - https://data.trilliumtransit.com/gtfs/carson-ca-us/carson-ca-us.zip
+    - https://data.trilliumtransit.com/gtfs/carson-ca-us/carson-ca-us.zip
   itp_id: 57
 ceres-area-transit:
   agency_name: Ceres Area Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/stanislaus-ca-us/stanislaus-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/stanislaus-ca-us/stanislaus-ca-us.zip
   itp_id: 62
 city-of-lompoc-transit:
   agency_name: City of Lompoc Transit
   gtfs_schedule_url:
-  - https://www.cityoflompoc.com/home/showdocument?id=29896
+    - https://www.cityoflompoc.com/home/showdocument?id=29896
   itp_id: 169
 clean-air-express:
   agency_name: Clean Air Express
   gtfs_schedule_url:
-  - http://www.cleanairexpress.com/GTFS/GTFS.zip
+    - http://www.cleanairexpress.com/GTFS/GTFS.zip
   itp_id: 473
 cloverdale-transit:
   agency_name: Cloverdale Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/sonomacounty-ca-us/sonomacounty-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/sonomacounty-ca-us/sonomacounty-ca-us.zip
   itp_id: 70
 clovis-transit-system:
   agency_name: Clovis Transit System
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/clovistransit-ca-us/clovistransit-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/clovistransit-ca-us/clovistransit-ca-us.zip
   itp_id: 71
 commerce-municipal-bus-lines:
   agency_name: Commerce Municipal Bus Lines
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/cmbl-ca-us/cmbl-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/cmbl-ca-us/cmbl-ca-us.zip
   itp_id: 75
 commuter-express:
   agency_name: Commuter Express
   gtfs_schedule_url:
-  - http://lacitydot.com/gtfs/administrator/gtfszip/ladotgtfs.zip
+    - http://lacitydot.com/gtfs/administrator/gtfszip/ladotgtfs.zip
   itp_id: 3
 compton-renaissance-transit-service:
   agency_name: Compton Renaissance Transit Service
   gtfs_schedule_url:
-  - https://data.trilliumtransit.com/gtfs/compton-ca-us/compton-ca-us.zip
+    - https://data.trilliumtransit.com/gtfs/compton-ca-us/compton-ca-us.zip
   itp_id: 77
 corona-cruiser:
   agency_name: Corona Cruiser
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/corona-ca-us/corona-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/corona-ca-us/corona-ca-us.zip
   itp_id: 79
 county-connection:
   agency_name: County Connection
   gtfs_schedule_url:
-  - http://cccta.org/GTFS/google_transit.zip
+    - http://cccta.org/GTFS/google_transit.zip
   itp_id: 61
 county-express:
   agency_name: County Express
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/sanbenitocounty-ca-us/sanbenitocounty-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/sanbenitocounty-ca-us/sanbenitocounty-ca-us.zip
   itp_id: 274
 cudahy-area-rapid-transit:
   agency_name: Cudahy Area Rapid Transit
   gtfs_schedule_url:
-  - https://data.trilliumtransit.com/gtfs/cudahy-ca-us/cudahy-ca-us.zip
+    - https://data.trilliumtransit.com/gtfs/cudahy-ca-us/cudahy-ca-us.zip
   itp_id: 86
 culver-citybus:
   agency_name: Culver CityBus
   gtfs_schedule_url:
-  - https://www.culvercity.org/files/assets/public/documents/information-technology/maps/culvercityfeed1_11_2020.zip
+    - https://www.culvercity.org/files/assets/public/documents/information-technology/maps/culvercityfeed1_11_2020.zip
   itp_id: 87
 dash:
   agency_name: DASH
   gtfs_schedule_url:
-  - http://lacitydot.com/gtfs/administrator/gtfszip/ladotgtfs.zip
+    - http://lacitydot.com/gtfs/administrator/gtfszip/ladotgtfs.zip
   itp_id: 183
 delano-area-rapid-transit:
   agency_name: Delano Area Rapid Transit
   gtfs_schedule_url:
-  - https://data.trilliumtransit.com/gtfs/delano-ca-us/delano-ca-us.zip
+    - https://data.trilliumtransit.com/gtfs/delano-ca-us/delano-ca-us.zip
   itp_id: 91
 desert-roadrunner:
   agency_name: Desert Roadrunner
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/paloverde_valley-ca-us/paloverde_valley-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/paloverde_valley-ca-us/paloverde_valley-ca-us.zip
   itp_id: 238
 dinuba-area-regional-transit-:
-  agency_name: 'Dinuba Area Regional Transit '
+  agency_name: "Dinuba Area Regional Transit "
   gtfs_schedule_url:
-  - https://tularecog.org/tcag/data-gis-modeling/gtfs-data/dinuba-area-regional-transit-gtfs/
+    - https://tularecog.org/tcag/data-gis-modeling/gtfs-data/dinuba-area-regional-transit-gtfs/
   itp_id: 93
 downeylink:
   agency_name: DowneyLINK
   gtfs_schedule_url:
-  - https://data.trilliumtransit.com/gtfs/downey-ca-us/downey-ca-us.zip
+    - https://data.trilliumtransit.com/gtfs/downey-ca-us/downey-ca-us.zip
   itp_id: 95
 duarte-transit:
   agency_name: Duarte Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/duartetransit-ca-us/duartetransit-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/duartetransit-ca-us/duartetransit-ca-us.zip
   itp_id: 97
 e-tran:
   agency_name: e-Tran
   gtfs_schedule_url:
-  - https://share.elkgrovecity.org/messages/tpLyuetXMvzjM8oongDM5C/attachments/LbeTBVJuC2Eh3QPKIH6k7R/download/ETRAN_GTFS_15.zip
+    - https://share.elkgrovecity.org/messages/tpLyuetXMvzjM8oongDM5C/attachments/LbeTBVJuC2Eh3QPKIH6k7R/download/ETRAN_GTFS_15.zip
   itp_id: 5
 east-los-angeles-shuttle:
   agency_name: East Los Angeles Shuttle
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
   itp_id: 172
 east-valinda-shuttle:
   agency_name: East Valinda Shuttle
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
   itp_id: 173
 eastern-sierra-transit-authority:
   agency_name: Eastern Sierra Transit Authority
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/easternsierra-ca-us/easternsierra-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/easternsierra-ca-us/easternsierra-ca-us.zip
   itp_id: 99
 el-dorado-transit:
   agency_name: El Dorado Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/eldoradotransit-ca-us/eldoradotransit-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/eldoradotransit-ca-us/eldoradotransit-ca-us.zip
   itp_id: 1
 el-monte-transportation-division:
   agency_name: El Monte Transportation Division
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/elmonte-ca-us/elmonte-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/elmonte-ca-us/elmonte-ca-us.zip
   itp_id: 2
 emery-go-round:
   agency_name: Emery Go-Round
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/emerygoround-ca-us/emerygoround-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/emerygoround-ca-us/emerygoround-ca-us.zip
   itp_id: 6
 eureka-transit-service:
   agency_name: Eureka Transit Service
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/humboldtcounty-ca-us/humboldtcounty-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/humboldtcounty-ca-us/humboldtcounty-ca-us.zip
   itp_id: 8
 fairfield-and-suisun-transit:
   agency_name: Fairfield and Suisun Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/fairfield-ca-us/fairfield-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/fairfield-ca-us/fairfield-ca-us.zip
   itp_id: 1
 folsom-stage-line:
   agency_name: Folsom Stage Line
   gtfs_schedule_url:
-  - http://iportal.sacrt.com/gtfs/FSL/google_transit.zip
+    - http://iportal.sacrt.com/gtfs/FSL/google_transit.zip
   itp_id: 111
 foothill-transit:
   agency_name: Foothill Transit
   gtfs_schedule_url:
-  - http://foothilltransit.org/about/developer-resources/gtfs/
+    - http://foothilltransit.org/about/developer-resources/gtfs/
   itp_id: 112
 fresno-area-express:
   agency_name: Fresno Area Express
   gtfs_schedule_url:
-  - https://gis4u.fresno.gov/downloads/zip/fax_gtfs.zip
+    - https://gis4u.fresno.gov/downloads/zip/fax_gtfs.zip
   itp_id: 116
 get-bus:
   agency_name: GET Bus
   gtfs_schedule_url:
-  - http://eta.getbus.org/rtt/public/utility/gtfs.aspx
+    - http://eta.getbus.org/rtt/public/utility/gtfs.aspx
   itp_id: 126
 glendale-beeline:
   agency_name: Glendale Beeline
   gtfs_schedule_url:
-  - http://glendaleca.gov/Home/ShowDocument?id=29549
+    - http://glendaleca.gov/Home/ShowDocument?id=29549
   itp_id: 1
 glendora-transportation-division:
   agency_name: Glendora Transportation Division
   gtfs_schedule_url:
-  - https://data.trilliumtransit.com/gtfs/glendora-ca-us/glendora-ca-us.zip
+    - https://data.trilliumtransit.com/gtfs/glendora-ca-us/glendora-ca-us.zip
   itp_id: 121
 go-west-shuttle:
   agency_name: Go West Shuttle
   gtfs_schedule_url:
-  - https://data.trilliumtransit.com/gtfs/westcovina-ca-us/westcovina-ca-us.zip
+    - https://data.trilliumtransit.com/gtfs/westcovina-ca-us/westcovina-ca-us.zip
   itp_id: 366
 gold-coast-transit:
   agency_name: Gold Coast Transit
   gtfs_schedule_url:
-  - http://www.goldcoasttransit.org/images/GTFS/GTFS.zip
+    - http://www.goldcoasttransit.org/images/GTFS/GTFS.zip
   itp_id: 123
 gold-country-stage:
   agency_name: Gold Country Stage
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/goldcountrystage-ca-us/goldcountrystage-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/goldcountrystage-ca-us/goldcountrystage-ca-us.zip
   itp_id: 221
 golden-gate-bridge-highway-and-transportation-district:
   agency_name: Golden Gate Bridge Highway and Transportation District
   gtfs_schedule_url:
-  - https://realtime.goldengate.org/gtfsstatic/GTFSTransitData.zip
+    - https://realtime.goldengate.org/gtfsstatic/GTFSTransitData.zip
   itp_id: 127
 grapeline:
   agency_name: Grapeline
   gtfs_schedule_url:
-  - https://www.lodi.gov/DocumentCenter/View/2453/lodi_gtfs-ZIP
+    - https://www.lodi.gov/DocumentCenter/View/2453/lodi_gtfs-ZIP
   itp_id: 168
 gtrans:
   agency_name: GTrans
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/gtrans-ca-us/gtrans-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/gtrans-ca-us/gtrans-ca-us.zip
   itp_id: 118
 guadalupe-flyer:
   agency_name: Guadalupe Flyer
   gtfs_schedule_url:
-  - https://data.trilliumtransit.com/gtfs/guadalupeflyer-ca-us/guadalupeflyer-ca-us.zip
+    - https://data.trilliumtransit.com/gtfs/guadalupeflyer-ca-us/guadalupeflyer-ca-us.zip
   itp_id: 129
 humboldt-transit-authority:
   agency_name: Humboldt Transit Authority
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/humboldtcounty-ca-us/humboldtcounty-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/humboldtcounty-ca-us/humboldtcounty-ca-us.zip
   itp_id: 135
 huntington-park-express:
   agency_name: Huntington Park Express
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/huntingtonpark-ca-us/huntingtonpark-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/huntingtonpark-ca-us/huntingtonpark-ca-us.zip
   itp_id: 137
 irvine-shuttle:
   agency_name: Irvine Shuttle
   gtfs_schedule_url:
-  - https://octa.net/current/google_transit.zip
+    - https://octa.net/current/google_transit.zip
   itp_id: 142
 kern-transit:
   agency_name: Kern Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/kerncounty-ca-us/kerncounty-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/kerncounty-ca-us/kerncounty-ca-us.zip
   itp_id: 146
 kings-area-rural-transit:
   agency_name: Kings Area Rural Transit
   gtfs_schedule_url:
-  - http://kart.connexionz.net/rtt/public/utility/gtfs.aspx
+    - http://kart.connexionz.net/rtt/public/utility/gtfs.aspx
   itp_id: 148
 la-campana:
   agency_name: La Campana
   gtfs_schedule_url:
-  - https://data.trilliumtransit.com/gtfs/arvin-ca-us/arvin-ca-us.zip
+    - https://data.trilliumtransit.com/gtfs/arvin-ca-us/arvin-ca-us.zip
   itp_id: 35
 laguna-beach-municipal-transit:
   agency_name: Laguna Beach Municipal Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/lagunabeach-ca-us/lagunabeach-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/lagunabeach-ca-us/lagunabeach-ca-us.zip
   itp_id: 154
 lake-transit:
   agency_name: Lake Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/laketransit-ca-us/laketransit-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/laketransit-ca-us/laketransit-ca-us.zip
   itp_id: 159
 lassen-transit-service-agency:
   agency_name: Lassen Transit Service Agency
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/tehama-ca-us/tehama-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/tehama-ca-us/tehama-ca-us.zip
   itp_id: 162
 lawndale-beat:
   agency_name: Lawndale Beat
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/cityoflawndale-ca-us/cityoflawndale-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/cityoflawndale-ca-us/cityoflawndale-ca-us.zip
   itp_id: 164
 long-beach-transit:
   agency_name: Long Beach Transit
   gtfs_schedule_url:
-  - https://lbtransit.box.com/shared/static/aoyeskwmsa9g7pyg78q3xuioi0lgqe4f.zip
+    - https://lbtransit.box.com/shared/static/aoyeskwmsa9g7pyg78q3xuioi0lgqe4f.zip
   gtfs_rt_urls:
-  vehicle_positions:
-    - http://206.128.158.171/TMGTFSRealTimeWebService/Vehicle/VehiclePositions.pb
-  trip_updates:
-    - http://206.128.158.171/TMGTFSRealTimeWebService/TripUpdate/TripUpdates.pb
-  service_alerts:
-    - http://206.128.158.171/TMGTFSRealTimeWebService/Alert/Alerts.pb
+    vehicle_positions:
+      - http://206.128.158.171/TMGTFSRealTimeWebService/Vehicle/VehiclePositions.pb
+    trip_updates:
+      - http://206.128.158.171/TMGTFSRealTimeWebService/TripUpdate/TripUpdates.pb
+    service_alerts:
+      - http://206.128.158.171/TMGTFSRealTimeWebService/Alert/Alerts.pb
   itp_id: 1
 madera-area-express:
   agency_name: Madera Area Express
   gtfs_schedule_url:
-  - https://data.trilliumtransit.com/gtfs/cityofmadera-ca-us/cityofmadera-ca-us.zip
+    - https://data.trilliumtransit.com/gtfs/cityofmadera-ca-us/cityofmadera-ca-us.zip
   itp_id: 187
 madera-county-connection:
   agency_name: Madera County Connection
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/maderactc-ca-us/maderactc-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/maderactc-ca-us/maderactc-ca-us.zip
   itp_id: 188
 mammoth-lakes-transit-system:
   agency_name: Mammoth Lakes Transit System
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/easternsierra-ca-us/easternsierra-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/easternsierra-ca-us/easternsierra-ca-us.zip
   itp_id: 1
 manteca-transit:
   agency_name: Manteca Transit
   gtfs_schedule_url:
-  - https://www.ci.manteca.ca.us/mantecatransit/googletransit/google_transit.zip
+    - https://www.ci.manteca.ca.us/mantecatransit/googletransit/google_transit.zip
   itp_id: 192
 marguerite-shuttle:
   agency_name: Marguerite Shuttle
   gtfs_schedule_url:
-  - https://transportation-forms.stanford.edu/google/google_transit.zip
+    - https://transportation-forms.stanford.edu/google/google_transit.zip
   itp_id: 324
 marin-transit:
   agency_name: Marin Transit
   gtfs_schedule_url:
-  - http://marintransit.org/data/google_transit.zip
+    - http://marintransit.org/data/google_transit.zip
   itp_id: 194
 mendocino-transit-authority:
   agency_name: Mendocino Transit Authority
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/mendocino-ca-us/mendocino-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/mendocino-ca-us/mendocino-ca-us.zip
   itp_id: 198
 menlo-park-shuttles:
   agency_name: Menlo Park Shuttles
   gtfs_schedule_url:
-  - https://www.menlopark.org/DocumentCenter/View/73/google_transitzip
+    - https://www.menlopark.org/DocumentCenter/View/73/google_transitzip
   itp_id: 199
 merced-the-bus:
   agency_name: Merced The Bus
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/mercedthebus-ca-us/mercedthebus-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/mercedthebus-ca-us/mercedthebus-ca-us.zip
   itp_id: 343
 metro:
   agency_name: Metro
   gtfs_schedule_url:
-  - https://gitlab.com/LACMTA/gtfs_bus/raw/master/gtfs_bus.zip
-  - https://gitlab.com/LACMTA/gtfs_rail/raw/master/gtfs_rail.zip
+    - https://gitlab.com/LACMTA/gtfs_bus/raw/master/gtfs_bus.zip
+    - https://gitlab.com/LACMTA/gtfs_rail/raw/master/gtfs_rail.zip
   itp_id: 182
 metrolink:
   agency_name: Metrolink
   gtfs_schedule_url:
-  - https://www.metrolinktrains.com/globalassets/about/gtfs/gtfs.zip
+    - https://www.metrolinktrains.com/globalassets/about/gtfs/gtfs.zip
   itp_id: 323
 mission-bay-tma:
   agency_name: Mission Bay TMA
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/missionbaytma-ca-us/missionbaytma-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/missionbaytma-ca-us/missionbaytma-ca-us.zip
   itp_id: 1
 modesto-area-express:
   agency_name: Modesto Area Express
   gtfs_schedule_url:
-  - https://www.modestoareaexpress.com/preview-gtfs.zip
+    - https://www.modestoareaexpress.com/preview-gtfs.zip
   gtfs_rt_urls:
-  vehicle_positions:
-    - http://max.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=VehiclePosition
-  trip_updates:
-    - http://max.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=Tripupdate
-  service_alerts:
-    - http://max.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=Alert
+    vehicle_positions:
+      - http://max.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=VehiclePosition
+    trip_updates:
+      - http://max.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=Tripupdate
+    service_alerts:
+      - http://max.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=Alert
   itp_id: 3
 montebello-bus-lines:
   agency_name: Montebello Bus Lines
   gtfs_schedule_url:
-  - https://data.trilliumtransit.com/gtfs/montebello-ca-us/montebello-ca-us.zip
+    - https://data.trilliumtransit.com/gtfs/montebello-ca-us/montebello-ca-us.zip
   itp_id: 6
 monterey-salinas-transit:
   agency_name: Monterey-Salinas Transit
   gtfs_schedule_url:
-  - http://www.mst.org/google/google_transit.zip
+    - http://www.mst.org/google/google_transit.zip
   gtfs_rt_urls:
-  vehicle_positions:
-    - http://206.128.158.191/TMGTFSRealTimeWebService/Vehicle/VehiclePositions.pb
-  trip_updates:
-    - http://206.128.158.191/TMGTFSRealTimeWebService/TripUpdate/TripUpdates.pb
-  service_alerts:
-    - http://206.128.158.191/TMGTFSRealTimeWebService/Alert/Alerts.pb
+    vehicle_positions:
+      - http://206.128.158.191/TMGTFSRealTimeWebService/Vehicle/VehiclePositions.pb
+    trip_updates:
+      - http://206.128.158.191/TMGTFSRealTimeWebService/TripUpdate/TripUpdates.pb
+    service_alerts:
+      - http://206.128.158.191/TMGTFSRealTimeWebService/Alert/Alerts.pb
   itp_id: 8
 moorpark-city-transit:
   agency_name: Moorpark City Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/moorparkcitytransit-ca-us/moorparkcitytransit-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/moorparkcitytransit-ca-us/moorparkcitytransit-ca-us.zip
   itp_id: 2
 morongo-basin-transit-authority:
   agency_name: Morongo Basin Transit Authority
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/morongobasin-ca-us/morongobasin-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/morongobasin-ca-us/morongobasin-ca-us.zip
   itp_id: 212
 morro-bay-transit:
   agency_name: Morro Bay Transit
   gtfs_schedule_url:
-  - http://mjcaction.com/MJC_GTFS_Public/morrobay_google_transit.zip
+    - http://mjcaction.com/MJC_GTFS_Public/morrobay_google_transit.zip
   itp_id: 213
 muni:
   agency_name: MUNI
   gtfs_schedule_url:
-  - https://gtfs.sfmta.com/transitdata/google_transit.zip
+    - https://gtfs.sfmta.com/transitdata/google_transit.zip
   itp_id: 282
 mvgo:
   agency_name: MVGO
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/mountainview-ca-us/mountainview-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/mountainview-ca-us/mountainview-ca-us.zip
   itp_id: 217
 needles-area-transit:
   agency_name: Needles Area Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/needles-ca-us/needles-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/needles-ca-us/needles-ca-us.zip
   itp_id: 2
 north-county-transit-district:
   agency_name: North County Transit District
   gtfs_schedule_url:
-  - http://www.gonctd.com/google_transit.zip
+    - http://www.gonctd.com/google_transit.zip
   itp_id: 226
 norwalk-transit-system:
   agency_name: Norwalk Transit System
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/nts-ca-us/nts-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/nts-ca-us/nts-ca-us.zip
   itp_id: 228
 ojai-trolley:
   agency_name: Ojai Trolley
   gtfs_schedule_url:
-  - https://govcbus.com/gtfs
+    - https://govcbus.com/gtfs
   itp_id: 231
 omnitrans:
   agency_name: OmniTrans
   gtfs_schedule_url:
-  - http://www.omnitrans.org/google/google_transit.zip
+    - http://www.omnitrans.org/google/google_transit.zip
   itp_id: 232
 orange-county-transportation-authority:
   agency_name: Orange County Transportation Authority
   gtfs_schedule_url:
-  - https://octa.net/current/google_transit.zip
+    - https://octa.net/current/google_transit.zip
   gtfs_rt_urls:
-  vehicle_positions:
-    - http://api.octa.net/GTFSRealTime/protoBuf/VehiclePositions.aspx
-  trip_updates:
-    - http://api.octa.net/GTFSRealTime/protoBuf/tripupdates.aspx
-  service_alerts:
-    - http://api.octa.net/GTFSRealTime/protoBuf/servicealerts.aspx
+    vehicle_positions:
+      - http://api.octa.net/GTFSRealTime/protoBuf/VehiclePositions.aspx
+    trip_updates:
+      - http://api.octa.net/GTFSRealTime/protoBuf/tripupdates.aspx
+    service_alerts:
+      - http://api.octa.net/GTFSRealTime/protoBuf/servicealerts.aspx
   itp_id: 235
 palos-verdes-peninsula-transit-authority:
   agency_name: Palos Verdes Peninsula Transit Authority
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/pvpta-ca-us/pvpta-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/pvpta-ca-us/pvpta-ca-us.zip
   itp_id: 239
 pasadena-transit:
   agency_name: Pasadena Transit
   gtfs_schedule_url:
-  - http://rt.pasadenatransit.net/rtt/public/utility/gtfs.aspx
+    - http://rt.pasadenatransit.net/rtt/public/utility/gtfs.aspx
   itp_id: 243
 paso-express:
   agency_name: Paso Express
   gtfs_schedule_url:
-  - http://app.mecatran.com/urb/ws/feed/c2ZT1zbGcmFuc2O2NsaWVudD1zZWxmO2V4cGlyZ7dHlwZT1ndGZzO2tlezZTMwMzM1OTRiMTE2NzN2IxNjQwNjZjQwMGMzMzdiM2E1MT
+    - http://app.mecatran.com/urb/ws/feed/c2ZT1zbGcmFuc2O2NsaWVudD1zZWxmO2V4cGlyZ7dHlwZT1ndGZzO2tlezZTMwMzM1OTRiMTE2NzN2IxNjQwNjZjQwMGMzMzdiM2E1MT
   itp_id: 244
 petaluma-transit:
   agency_name: Petaluma Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/petalumatransit-petaluma-ca-us/petalumatransit-petaluma-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/petalumatransit-petaluma-ca-us/petalumatransit-petaluma-ca-us.zip
   itp_id: 247
 placer-county-transit:
   agency_name: Placer County Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/placercounty-ca-us/placercounty-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/placercounty-ca-us/placercounty-ca-us.zip
   itp_id: 251
 plumas-transit-systems:
   agency_name: Plumas Transit Systems
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/plumas-ca-us/plumas-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/plumas-ca-us/plumas-ca-us.zip
   itp_id: 254
 porterville-transit:
   agency_name: Porterville Transit
   gtfs_schedule_url:
-  - http://demopro.nationalrtap.org/admin/GTFSzipFiles/526/google_transit.zip
+    - http://demopro.nationalrtap.org/admin/GTFSzipFiles/526/google_transit.zip
   itp_id: 256
 redding-area-bus-authority:
   agency_name: Redding Area Bus Authority
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/redding-ca-us/redding-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/redding-ca-us/redding-ca-us.zip
   itp_id: 259
 redwood-coast-transit:
   agency_name: Redwood Coast Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/delnorte-ca-us/delnorte-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/delnorte-ca-us/delnorte-ca-us.zip
   itp_id: 261
 ridgecrest-transit:
   agency_name: Ridgecrest Transit
   gtfs_schedule_url:
-  - https://data.trilliumtransit.com/gtfs/cityofridgecrest-ca-us/cityofridgecrest-ca-us.zip
+    - https://data.trilliumtransit.com/gtfs/cityofridgecrest-ca-us/cityofridgecrest-ca-us.zip
   itp_id: 263
 rio-vista-delta-breeze:
   agency_name: Rio Vista Delta Breeze
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/riovista-ca-us/riovista-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/riovista-ca-us/riovista-ca-us.zip
   itp_id: 264
 riverside-transit-agency:
   agency_name: Riverside Transit Agency
   gtfs_schedule_url:
-  - https://www.riversidetransit.com/google_transit.zip
+    - https://www.riversidetransit.com/google_transit.zip
   gtfs_rt_urls:
-  vehicle_positions:
-    - https://rtabus.com/gtfsrt/vehicles
-  trip_updates:
-    - https://rtabus.com/gtfsrt/trips
-  service_alerts:
-    - https://rtabus.com/gtfsrt/alerts
+    vehicle_positions:
+      - https://rtabus.com/gtfsrt/vehicles
+    trip_updates:
+      - https://rtabus.com/gtfsrt/trips
+    service_alerts:
+      - https://rtabus.com/gtfsrt/alerts
   itp_id: 269
 rosemead-explorer:
   agency_name: Rosemead Explorer
   gtfs_schedule_url:
-  - https://data.trilliumtransit.com/gtfs/rosemead-ca-us/rosemead-ca-us.zip
+    - https://data.trilliumtransit.com/gtfs/rosemead-ca-us/rosemead-ca-us.zip
   itp_id: 2
 roseville-transit:
   agency_name: Roseville Transit
   gtfs_schedule_url:
-  - http://iportal.sacrt.com/GTFS/Roseville/google_transit.zip
+    - http://iportal.sacrt.com/GTFS/Roseville/google_transit.zip
   itp_id: 271
 sacramento-regional-transit-district:
   agency_name: Sacramento Regional Transit District
   gtfs_schedule_url:
-  - http://iportal.sacrt.com/GTFS/SRTD/google_transit.zip
+    - http://iportal.sacrt.com/GTFS/SRTD/google_transit.zip
   itp_id: 273
 sage-stage:
   agency_name: Sage Stage
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/sagestage-ca-us/sagestage-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/sagestage-ca-us/sagestage-ca-us.zip
   itp_id: 4
 samtrans:
   agency_name: SamTrans
   gtfs_schedule_url:
-  - http://www.samtrans.com/Assets/GTFS/samtrans/ST-GTFS.zip?v=1114
+    - http://www.samtrans.com/Assets/GTFS/samtrans/ST-GTFS.zip?v=1114
   itp_id: 2
 san-diego-metropolitan-transit-system:
   agency_name: San Diego Metropolitan Transit System
   gtfs_schedule_url:
-  - https://www.sdmts.com/google_transit_files/google_transit.zip
+    - https://www.sdmts.com/google_transit_files/google_transit.zip
   itp_id: 278
 san-francisco-bay-ferry:
   agency_name: San Francisco Bay Ferry
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/sfbayferry-ca-us/sfbayferry-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/sfbayferry-ca-us/sfbayferry-ca-us.zip
   itp_id: 2
 san-joaquin-regional-transit-district:
   agency_name: San Joaquin Regional Transit District
   gtfs_schedule_url:
-  - http://sanjoaquinrtd.com/RTD-GTFS/RTD-GTFS.zip
+    - http://sanjoaquinrtd.com/RTD-GTFS/RTD-GTFS.zip
   itp_id: 284
 san-juan-capistrano-free-weekend-trolley:
   agency_name: San Juan Capistrano Free Weekend Trolley
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/sanjuancapistrano-ca-us/sanjuancapistrano-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/sanjuancapistrano-ca-us/sanjuancapistrano-ca-us.zip
   itp_id: 394
 san-luis-obispo-regional-transit-authority:
   agency_name: San Luis Obispo Regional Transit Authority
   gtfs_schedule_url:
-  - http://app.mecatran.com/urb/ws/feed/c2ZT1zbGcmFuc2O2NsaWVudD1zZWxmO2V4cGlyZ7dHlwZT1ndGZzO2tlezZTMwMzM1OTRiMTE2NzN2IxNjQwNjZjQwMGMzMzdiM2E1MT
+    - http://app.mecatran.com/urb/ws/feed/c2ZT1zbGcmFuc2O2NsaWVudD1zZWxmO2V4cGlyZ7dHlwZT1ndGZzO2tlezZTMwMzM1OTRiMTE2NzN2IxNjQwNjZjQwMGMzMzdiM2E1MT
   itp_id: 289
 santa-barbara-metropolitan-transit-district:
   agency_name: Santa Barbara Metropolitan Transit District
   gtfs_schedule_url:
-  - http://sbmtd.gov/google_transit/feed.zip
+    - http://sbmtd.gov/google_transit/feed.zip
   itp_id: 293
 santa-clara-valley-transportation-authority:
   agency_name: Santa Clara Valley Transportation Authority
   gtfs_schedule_url:
-  - https://gtfs.vta.org/gtfs_vta.zip
+    - https://gtfs.vta.org/gtfs_vta.zip
   itp_id: 294
 santa-clarita-transit:
   agency_name: Santa Clarita Transit
   gtfs_schedule_url:
-  - http://apps.santaclaritatransit.com/rtt/public/utility/gtfs.aspx
+    - http://apps.santaclaritatransit.com/rtt/public/utility/gtfs.aspx
   itp_id: 295
 santa-cruz-metropolitan-transit-district:
   agency_name: Santa Cruz Metropolitan Transit District
   gtfs_schedule_url:
-  - http://scmtd.com/google_transit/google_transit.zip
+    - http://scmtd.com/google_transit/google_transit.zip
   itp_id: 296
 santa-maria-area-transit:
   agency_name: Santa Maria Area Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/smat-ca-us/smat-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/smat-ca-us/smat-ca-us.zip
   itp_id: 298
 santa-ynez-valley-transit:
   agency_name: Santa Ynez Valley Transit
   gtfs_schedule_url:
-  - http://mjcaction.com/MJC_GTFS_Public/syvt_google_transit.zip
+    - http://mjcaction.com/MJC_GTFS_Public/syvt_google_transit.zip
   itp_id: 312
 simi-valley-transit:
   agency_name: Simi Valley Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/simivalley-ca-us/simivalley-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/simivalley-ca-us/simivalley-ca-us.zip
   itp_id: 8
 siskiyou-transit-and-general-express:
   agency_name: Siskiyou Transit and General Express
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/siskiyou-ca-us/siskiyou-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/siskiyou-ca-us/siskiyou-ca-us.zip
   itp_id: 83
 slo-transit:
   agency_name: SLO Transit
@@ -756,195 +756,195 @@ slo-transit:
 solanoexpress:
   agency_name: SolanoExpress
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/soltrans-ca-us/soltrans-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/soltrans-ca-us/soltrans-ca-us.zip
   itp_id: 381
 soltrans:
   agency_name: SolTrans
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/soltrans-ca-us/soltrans-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/soltrans-ca-us/soltrans-ca-us.zip
   itp_id: 3
 sonoma-county-transit:
   agency_name: Sonoma County Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/sonomacounty-ca-us/sonomacounty-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/sonomacounty-ca-us/sonomacounty-ca-us.zip
   itp_id: 314
 sonoma-marin-area-rail-transit:
   agency_name: Sonoma-Marin Area Rail Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/smart-ca-us/smart-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/smart-ca-us/smart-ca-us.zip
   itp_id: 315
 south-county-area-transit:
   agency_name: South County Area Transit
   gtfs_schedule_url:
-  - http://app.mecatran.com/urb/ws/feed/c2ZT1zbGcmFuc2O2NsaWVudD1zZWxmO2V4cGlyZ7dHlwZT1ndGZzO2tlezZTMwMzM1OTRiMTE2NzN2IxNjQwNjZjQwMGMzMzdiM2E1MT
+    - http://app.mecatran.com/urb/ws/feed/c2ZT1zbGcmFuc2O2NsaWVudD1zZWxmO2V4cGlyZ7dHlwZT1ndGZzO2tlezZTMwMzM1OTRiMTE2NzN2IxNjQwNjZjQwMGMzMzdiM2E1MT
   itp_id: 388
 south-county-transit-link:
   agency_name: South County Transit Link
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/southcountytransitlink-ca-us/southcountytransitlink-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/southcountytransitlink-ca-us/southcountytransitlink-ca-us.zip
   itp_id: 81
 spirit-bus:
   agency_name: Spirit Bus
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/montereypark-ca-us/montereypark-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/montereypark-ca-us/montereypark-ca-us.zip
   itp_id: 7
 stanislaus-regional-transit:
   agency_name: Stanislaus Regional Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/stanislaus-ca-us/stanislaus-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/stanislaus-ca-us/stanislaus-ca-us.zip
   itp_id: 325
 sunline-transit-agency:
   agency_name: SunLine Transit Agency
   gtfs_schedule_url:
-  - https://www.sunline.org/transit/google_transit.zip
+    - https://www.sunline.org/transit/google_transit.zip
   itp_id: 327
 sunshine-bus(south-whittier):
   agency_name: Sunshine Bus(South Whittier)
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
   itp_id: 174
 susanville-indian-rancheria-public-transportation-program:
   agency_name: Susanville Indian Rancheria Public Transportation Program
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/tehama-ca-us/tehama-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/tehama-ca-us/tehama-ca-us.zip
   itp_id: 329
 tahoe-transportation:
   agency_name: Tahoe Transportation
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/laketahoe-ca-us/laketahoe-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/laketahoe-ca-us/laketahoe-ca-us.zip
   itp_id: 331
 tahoe-truckee-area-regional-transportation:
   agency_name: Tahoe Truckee Area Regional Transportation
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/laketahoe-ca-us/laketahoe-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/laketahoe-ca-us/laketahoe-ca-us.zip
   itp_id: 389
 tehama-rural-area-express:
   agency_name: Tehama Rural Area eXpress
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/tehama-ca-us/tehama-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/tehama-ca-us/tehama-ca-us.zip
   itp_id: 334
 the-link-athens:
   agency_name: the Link-Athens
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
   itp_id: 176
 the-link-florence-firestone/walnut-park:
   agency_name: the Link Florence-Firestone/Walnut Park
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
   itp_id: 177
 the-link-king-medical-center:
   agency_name: the Link King Medical Center
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
   itp_id: 178
 the-link-lennox:
   agency_name: the Link Lennox
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
   itp_id: 179
 the-link-willowbrook:
   agency_name: the Link Willowbrook
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
   itp_id: 181
 thousand-oaks-transit:
   agency_name: Thousand Oaks Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/thousandoaks-ca-us/thousandoaks-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/thousandoaks-ca-us/thousandoaks-ca-us.zip
   itp_id: 337
 tideline:
   agency_name: Tideline
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/tidelinewatertaxi-ca-us/tidelinewatertaxi-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/tidelinewatertaxi-ca-us/tidelinewatertaxi-ca-us.zip
   itp_id: 338
 torrance-transit-system:
   agency_name: Torrance Transit System
   gtfs_schedule_url:
-  - https://transit.torranceca.gov/home/showdocument?id=16673
+    - https://transit.torranceca.gov/home/showdocument?id=16673
   itp_id: 339
 tri-delta-transit:
   agency_name: Tri Delta Transit
   gtfs_schedule_url:
-  - http://.232.147.132/rtt/public/utility/gtfs.aspx
+    - http://.232.147.132/rtt/public/utility/gtfs.aspx
   itp_id: 336
 tri-valley-wheels:
   agency_name: Tri-Valley Wheels
   gtfs_schedule_url:
-  - https://www.wheelsbus.com/about/developers/
+    - https://www.wheelsbus.com/about/developers/
   itp_id: 167
 trinity-transit:
   agency_name: Trinity Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/trinity-ca-us/trinity-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/trinity-ca-us/trinity-ca-us.zip
   itp_id: 344
 tulare-county-area-transit:
   agency_name: Tulare County Area Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/tcat-flex-ca-us/tcat-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/tcat-flex-ca-us/tcat-ca-us.zip
   itp_id: 346
 turlock-transit:
   agency_name: Turlock Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/stanislaus-ca-us/stanislaus-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/stanislaus-ca-us/stanislaus-ca-us.zip
   itp_id: 349
 union-city-transit:
   agency_name: Union City Transit
   gtfs_schedule_url:
-  - https://data.trilliumtransit.com/gtfs/unioncity-ca-us/unioncity-ca-us.zip
+    - https://data.trilliumtransit.com/gtfs/unioncity-ca-us/unioncity-ca-us.zip
   itp_id: 3
 unitrans:
   agency_name: Unitrans
   gtfs_schedule_url:
-  - http://iportal.sacrt.com/GTFS/Unitrans/google_transit.zip
+    - http://iportal.sacrt.com/GTFS/Unitrans/google_transit.zip
   itp_id: 351
 vacaville-city-coach:
   agency_name: Vacaville City Coach
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/vacavillecitycoach-ca-us/vacavillecitycoach-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/vacavillecitycoach-ca-us/vacavillecitycoach-ca-us.zip
   itp_id: 356
 ventura-county-transportation-commission:
   agency_name: Ventura County Transportation Commission
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/vctc-ca-us/vctc-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/vctc-ca-us/vctc-ca-us.zip
   itp_id: 3
 victor-valley-transit:
   agency_name: Victor Valley Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/victorville-ca-us/victorville-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/victorville-ca-us/victorville-ca-us.zip
   itp_id: 3
 vine-transit:
   agency_name: Vine Transit
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/vinetransit-ca-us/vinetransit-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/vinetransit-ca-us/vinetransit-ca-us.zip
   itp_id: 218
 visalia-transit:
   agency_name: Visalia Transit
   gtfs_schedule_url:
-  - https://visaliatransit.info/GTFS
+    - https://visaliatransit.info/GTFS
   itp_id: 361
 westcat:
   agency_name: WestCAT
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/westcat-ca-us/westcat-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/westcat-ca-us/westcat-ca-us.zip
   itp_id: 368
 yolobus:
   agency_name: Yolobus
   gtfs_schedule_url:
-  - http://iportal.sacrt.com/GTFS/Yolobus/google_transit.zip
+    - http://iportal.sacrt.com/GTFS/Yolobus/google_transit.zip
   itp_id: 372
 yosemite-area-regional-transportation-system:
   agency_name: Yosemite Area Regional Transportation System
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/yosemite-ca-us/yosemite-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/yosemite-ca-us/yosemite-ca-us.zip
   itp_id: 374
 yuba-sutter-transit-authority:
   agency_name: Yuba-Sutter Transit Authority
   gtfs_schedule_url:
-  - http://data.trilliumtransit.com/gtfs/yubasutter-ca-us/yubasutter-ca-us.zip
+    - http://data.trilliumtransit.com/gtfs/yubasutter-ca-us/yubasutter-ca-us.zip
   itp_id: 376
 yuma-county-area-transit:
   agency_name: Yuma County Area Transit
   gtfs_schedule_url:
-  - https://www.ycipta.org/gtfs/google_transit.zip
+    - https://www.ycipta.org/gtfs/google_transit.zip
   itp_id: 386
