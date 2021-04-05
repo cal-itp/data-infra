@@ -57,7 +57,7 @@ x-airflow-common:
     # Corresponds to GCP_PROJECT on composer, but gauth looks for this name.
     # see https://googleapis.dev/python/google-auth/latest/user-guide.html#using-external-identities
     GOOGLE_CLOUD_PROJECT: cal-itp-data-infra
-    COMPOSER_ENVIRONMENT: "development"
+    AIRFLOW_ENV: "development"
 
   volumes:
     # Note that in cloud composer, folders like dags are not in AIRFLOW_HOME
