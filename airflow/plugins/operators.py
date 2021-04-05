@@ -11,15 +11,14 @@ def pod_operator(*args, **kwargs):
     # note that when in_cluster is true, cluster_name is ignored
     if is_development():
         in_cluster = False
-        project_id = os.environ["GOOGLE_CLOUD_PROJECT"]
-        cluster_name = "us-west2-calitp-airflow-pro-332827a9-gke"
     else:
         in_cluster = True
-        project_id = os.environ["GCP_PROJECT"]
-        cluster_name = None
+
+    project_id = os.environ["GCP_PROJECT"]
+    cluster_name = os.environ["COMPOSER_GKE_NAME"]
+    location = os.environ["COMPOSER_GKE_ZONE"]
 
     # TODO: tune this, and add resource limits
-    location = "us-west2-a"
     namespace = "default"
 
     return GKEPodOperator(

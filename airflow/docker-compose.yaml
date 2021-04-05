@@ -57,6 +57,10 @@ x-airflow-common:
     # Corresponds to GCP_PROJECT on composer, but gauth looks for this name.
     # see https://googleapis.dev/python/google-auth/latest/user-guide.html#using-external-identities
     GOOGLE_CLOUD_PROJECT: cal-itp-data-infra
+    GCP_PROJECT: cal-itp-data-infra
+    # Composer variables for kubernetes
+    COMPOSER_GKE_NAME: "us-west2-calitp-airflow-pro-332827a9-gke"
+    COMPOSER_GKE_ZONE: "us-west2-a"
     AIRFLOW_ENV: "development"
 
   volumes:
