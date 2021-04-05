@@ -9,7 +9,7 @@ from calitp import is_development
 @wraps(KubernetesPodOperator)
 def pod_operator(*args, **kwargs):
     # note that when in_cluster is true, cluster_name is ignored
-    if is_development:
+    if is_development():
         in_cluster = False
         project_id = os.environ["GOOGLE_CLOUD_PROJECT"]
         cluster_name = "us-west2-calitp-airflow-pro-332827a9-gke"
