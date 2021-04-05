@@ -10,7 +10,7 @@ from pathlib import Path
 
 
 def is_development():
-    return os.environ["COMPOSER_ENVIRONMENT"] == "development"
+    return os.environ["AIRFLOW_ENV"] == "development"
 
 
 def pipe_file_name(path):
