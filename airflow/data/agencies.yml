@@ -600,6 +600,11 @@ pasadena-transit:
   agency_name: Pasadena Transit
   gtfs_schedule_url:
     - http://rt.pasadenatransit.net/rtt/public/utility/gtfs.aspx
+  gtfs_rt_urls:
+    trip_updates:
+      - http://rt.pasadenatransit.net/rtt/public/utility/gtfsrealtime.aspx/tripupdate
+    service_alerts:
+      - http://rt.pasadenatransit.net/rtt/public/utility/gtfsrealtime.aspx/alert
   itp_id: 243
 paso-express:
   agency_name: Paso Express
