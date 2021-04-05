@@ -52,6 +52,8 @@ x-airflow-common:
     AIRFLOW__CORE__DAGS_FOLDER: /opt/airflow/gcs/dags
     AIRFLOW__CORE__BASE_LOG_FOLDER: /opt/airflow/gcs/logs
     AIRFLOW__CORE__PLUGINS_FOLDER: /opt/airflow/gcs/plugins
+    # bucket for holding results of extraction tasks
+    AIRFLOW_VAR_EXTRACT_BUCKET: "gs://gtfs-data-test"
     # Corresponds to GCP_PROJECT on composer, but gauth looks for this name.
     # see https://googleapis.dev/python/google-auth/latest/user-guide.html#using-external-identities
     GOOGLE_CLOUD_PROJECT: cal-itp-data-infra
@@ -65,6 +67,7 @@ x-airflow-common:
     - ./plugins:/opt/airflow/gcs/plugins
     - ./data:/opt/airflow/gcs/data
     - $HOME/.config/gcloud:/home/airflow/.config/gcloud
+      #- $HOME/.kube:/home/airflow/.kube
   user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-50000}"
   depends_on:
     redis:

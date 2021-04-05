@@ -1,5 +1,16 @@
 FROM apache/airflow:1.10.14
 
+# install gcloud as root, then switch back to airflow
+USER root
+
+RUN curl https://sdk.cloud.google.com > install.sh \
+    && sudo bash install.sh --disable-prompts --install-dir=/usr/local/
+
+ENV PATH=$PATH:/usr/local/google-cloud-sdk/bin
+
+USER airflow
+
+
 COPY requirements.txt /tmp/requirements.txt
 
 RUN pip install --no-cache-dir --user -r /tmp/requirements.txt
