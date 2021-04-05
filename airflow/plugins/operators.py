@@ -1,7 +1,7 @@
 import os
 from functools import wraps
 
-from gke_pod_operator_shim import GKEPodOperator2
+from airflow.contrib.operators.gcp_container_operator import GKEPodOperator
 from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
 from calitp import is_development
 
@@ -16,7 +16,7 @@ def pod_operator(*args, **kwargs):
     project_id = os.environ["GOOGLE_CLOUD_PROJECT"]
     location = "us-west2-a"
     namespace = "default"
-    return GKEPodOperator2(
+    return GKEPodOperator(
         *args,
         in_cluster=in_cluster,
         project_id=project_id,
