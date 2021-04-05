@@ -9,13 +9,19 @@ from calitp import is_development
 @wraps(KubernetesPodOperator)
 def pod_operator(*args, **kwargs):
     # note that when in_cluster is true, cluster_name is ignored
-    in_cluster = not is_development()
-    cluster_name = "us-west2-calitp-airflow-pro-332827a9-gke"
+    if is_development:
+        in_cluster = False
+        project_id = os.environ["GOOGLE_CLOUD_PROJECT"]
+        cluster_name = "us-west2-calitp-airflow-pro-332827a9-gke"
+    else:
+        in_cluster = True
+        project_id = os.environ["GCP_PROJECT"]
+        cluster_name = None
 
     # TODO: tune this, and add resource limits
-    project_id = os.environ["GOOGLE_CLOUD_PROJECT"]
     location = "us-west2-a"
     namespace = "default"
+
     return GKEPodOperator(
         *args,
         in_cluster=in_cluster,
