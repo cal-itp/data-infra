@@ -23,4 +23,4 @@ def pod_operator(*args, **kwargs):
         )
 
     else:
-        return KubernetesPodOperator(*args, **kwargs)
+        return KubernetesPodOperator(*args, namespace=namespace, **kwargs)
