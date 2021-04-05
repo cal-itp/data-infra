@@ -14,9 +14,9 @@ def pod_operator(*args, **kwargs):
     else:
         in_cluster = True
 
-    project_id = os.environ["GCP_PROJECT"]
-    cluster_name = os.environ["COMPOSER_GKE_NAME"]
-    location = os.environ["COMPOSER_GKE_ZONE"]
+    project_id = os.environ["GOOGLE_CLOUD_PROJECT"]
+    cluster_name = os.environ["POD_CLUSTER_NAME"]
+    location = os.environ["POD_LOCATION"]
 
     # TODO: tune this, and add resource limits
     namespace = "default"

@@ -63,3 +63,5 @@ Note that the following variables were set manually in cloud composer:
 * `AIRFLOW_VAR_EXTRACT_BUCKET` - gcs bucket for data (e.g. `gs://gtfs-data`)
 * `SENDGRID_API_KEY`
 * `SENDGRID_MAIL_FROM`
+* `POD_CLUSTER_NAME` - name of the kubernetes cluster
+* `POD_LOCATION` - location of cluster (e.g. us-west-2a)
