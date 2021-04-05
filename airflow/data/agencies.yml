@@ -2,6 +2,13 @@ ac-transit:
   agency_name: AC Transit
   gtfs_schedule_url:
   - https://api.actransit.org/transit/gtfs/download?token=2512B81107A09D2DC44895CDDC650D47
+  gtfs_rt_urls:
+    vehicle_positions:
+      - https://api.actransit.org/gtfsrt/vehicles?token=2512B81107A09D2DC44895CDDC650D47
+    trip_updates:
+      - https://api.actransit.org/gtfsrt/tripupdates?token=2512B81107A09D2DC44895CDDC650D47
+    service_alerts:
+      - https://api.actransit.org/gtfsrt/alerts?token=2512B81107A09D2DC44895CDDC650D47
   itp_id: 4
 alhambra-community-transit:
   agency_name: Alhambra Community Transit
@@ -72,6 +79,11 @@ bay-area-rapid-transit:
   agency_name: Bay Area Rapid Transit
   gtfs_schedule_url:
   - https://www.bart.gov/dev/schedules/google_transit.zip
+  gtfs_rt_urls:
+    trip_updates:
+      - http://api.bart.gov/gtfsrt/tripupdate.aspx
+    service_alerts:
+      - http://api.bart.gov/gtfsrt/alerts.aspx
   itp_id: 279
 beach-cities-transit:
   agency_name: Beach Cities Transit
@@ -102,6 +114,13 @@ big-blue-bus:
   agency_name: Big Blue Bus
   gtfs_schedule_url:
   - http://gtfs.bigbluebus.com/current.zip
+  gtfs_rt_urls:
+      vehicle_positions:
+        - http://gtfs.bigbluebus.com/vehiclepositions.bin
+      trip_updates:
+        - http://gtfs.bigbluebus.com/tripupdates.bin
+      service_alerts:
+        - http://gtfs.bigbluebus.com/alerts.bin
   itp_id: 0
 blossom-express:
   agency_name: Blossom Express
@@ -412,6 +431,13 @@ long-beach-transit:
   agency_name: Long Beach Transit
   gtfs_schedule_url:
   - https://lbtransit.box.com/shared/static/aoyeskwmsa9g7pyg78q3xuioi0lgqe4f.zip
+  gtfs_rt_urls:
+  vehicle_positions:
+    - http://206.128.158.171/TMGTFSRealTimeWebService/Vehicle/VehiclePositions.pb
+  trip_updates:
+    - http://206.128.158.171/TMGTFSRealTimeWebService/TripUpdate/TripUpdates.pb
+  service_alerts:
+    - http://206.128.158.171/TMGTFSRealTimeWebService/Alert/Alerts.pb
   itp_id: 1
 madera-area-express:
   agency_name: Madera Area Express
@@ -478,6 +504,13 @@ modesto-area-express:
   agency_name: Modesto Area Express
   gtfs_schedule_url:
   - https://www.modestoareaexpress.com/preview-gtfs.zip
+  gtfs_rt_urls:
+  vehicle_positions:
+    - http://max.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=VehiclePosition
+  trip_updates:
+    - http://max.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=Tripupdate
+  service_alerts:
+    - http://max.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=Alert
   itp_id: 3
 montebello-bus-lines:
   agency_name: Montebello Bus Lines
@@ -488,6 +521,13 @@ monterey-salinas-transit:
   agency_name: Monterey-Salinas Transit
   gtfs_schedule_url:
   - http://www.mst.org/google/google_transit.zip
+  gtfs_rt_urls:
+  vehicle_positions:
+    - http://206.128.158.191/TMGTFSRealTimeWebService/Vehicle/VehiclePositions.pb
+  trip_updates:
+    - http://206.128.158.191/TMGTFSRealTimeWebService/TripUpdate/TripUpdates.pb
+  service_alerts:
+    - http://206.128.158.191/TMGTFSRealTimeWebService/Alert/Alerts.pb
   itp_id: 8
 moorpark-city-transit:
   agency_name: Moorpark City Transit
@@ -543,6 +583,13 @@ orange-county-transportation-authority:
   agency_name: Orange County Transportation Authority
   gtfs_schedule_url:
   - https://octa.net/current/google_transit.zip
+  gtfs_rt_urls:
+  vehicle_positions:
+    - http://api.octa.net/GTFSRealTime/protoBuf/VehiclePositions.aspx
+  trip_updates:
+    - http://api.octa.net/GTFSRealTime/protoBuf/tripupdates.aspx
+  service_alerts:
+    - http://api.octa.net/GTFSRealTime/protoBuf/servicealerts.aspx
   itp_id: 235
 palos-verdes-peninsula-transit-authority:
   agency_name: Palos Verdes Peninsula Transit Authority
@@ -603,6 +650,13 @@ riverside-transit-agency:
   agency_name: Riverside Transit Agency
   gtfs_schedule_url:
   - https://www.riversidetransit.com/google_transit.zip
+  gtfs_rt_urls:
+  vehicle_positions:
+    - https://rtabus.com/gtfsrt/vehicles
+  trip_updates:
+    - https://rtabus.com/gtfsrt/trips
+  service_alerts:
+    - https://rtabus.com/gtfsrt/alerts
   itp_id: 269
 rosemead-explorer:
   agency_name: Rosemead Explorer
