@@ -68,25 +68,34 @@ def download_url(url, itp_id, url_number, execution_date):
         src_path.mkdir(parents=True, exist_ok=True)
         z.extractall(src_path)
 
-        save_to_gcfs(src_path, dst_path, recursive=True)
+        full_path = save_to_gcfs(src_path, dst_path, recursive=True)
     except zipfile.BadZipFile:
         logging.warning(f"failed to zipfile {url}")
         raise NoFeedError("error: BadZipFile")
 
+    return full_path
+
 
 def downloader(task_instance, execution_date, **kwargs):
+    """Download gtfs data from agency urls
+
+    Returns dict of form {gtfs_paths, errors}
+    """
+
     provider_set = task_instance.xcom_pull(task_ids="generate_provider_list")
     url_status = []
 
+    gtfs_paths = []
     for row in provider_set:
         print(row)
         try:
-            download_url(
+            res_path = download_url(
                 row["gtfs_schedule_url"],
                 row["itp_id"],
                 row["url_number"],
                 execution_date,
             )
+            gtfs_paths.append(res_path)
 
             status = "success"
         except NoFeedError as e:
@@ -108,4 +117,4 @@ def downloader(task_instance, execution_date, **kwargs):
     error_agencies = df_status[lambda d: d.status != "success"].agency_name.tolist()
     logging.info(f"error agencies: {error_agencies}")
 
-    return error_agencies
+    return {"gtfs_paths": gtfs_paths, "errors": error_agencies}

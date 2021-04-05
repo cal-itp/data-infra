@@ -57,3 +57,9 @@ All gcs assets are under the project `cal-itp-data-infra`. All assets should be 
 Currently, the project is automatically deploy to a cloud composer managed airflow service named `calitp-airflow-prod`. Cloud Composer excepts a GCS bucket full of DAGs, so we use Github Actions to automatically sync the `dags` folder to the production bucket and update the python dependencies in `requirements.txt`. There is a service user setup using Github Actions Secrets to handle auth.
 
 To view the prod webserver or logs, login to the cloud composer console.
+
+Note that the following variables were set manually in cloud composer:
+
+* `AIRFLOW_VAR_EXTRACT_BUCKET` - gcs bucket for data (e.g. `gs://gtfs-data`)
+* `SENDGRID_API_KEY`
+* `SENDGRID_MAIL_FROM`

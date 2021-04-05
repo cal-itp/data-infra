@@ -29,7 +29,9 @@ def pipe_file_name(path):
     return str(root / path)
 
 
-def save_to_gcfs(src_path, dst_path, gcs_project="cal-itp-data-infra", **kwargs):
+def save_to_gcfs(
+    src_path, dst_path, gcs_project="cal-itp-data-infra", bucket=None, **kwargs
+):
     """Convenience function for saving files from disk to google cloud storage.
 
     Arguments:
@@ -37,12 +39,15 @@ def save_to_gcfs(src_path, dst_path, gcs_project="cal-itp-data-infra", **kwargs)
         dst_path: path to bucket subdirectory (e.g. "path/to/dir").
     """
 
+    bucket = os.environ["AIRFLOW_VAR_EXTRACT_BUCKET"] if bucket is None else bucket
+
     if is_development():
         # Note: project on dev is set w/ GOOGLE_CLOUD_PROJECT environment var
-        bucket = "gs://gtfs-data-test/"
         fs = gcsfs.GCSFileSystem(project=gcs_project, token="google_default")
     else:
-        bucket = "gs://gtfs-data/"
         fs = gcsfs.GCSFileSystem(project=gcs_project, token="cloud")
 
-    fs.put(str(src_path), bucket + str(dst_path), **kwargs)
+    full_dst_path = bucket + "/" + str(dst_path)
+    fs.put(str(src_path), full_dst_path, **kwargs)
+
+    return full_dst_path

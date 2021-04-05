@@ -10,7 +10,8 @@ from airflow.utils.email import send_email
 
 
 def email_failures(task_instance, **kwargs):
-    error_agencies = task_instance.xcom_pull(task_ids="download_data")
+    status = task_instance.xcom_pull(task_ids="download_data")
+    error_agencies = status["errors"]
 
     # email out error agencies
     email_template = (
