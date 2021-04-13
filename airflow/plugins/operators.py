@@ -98,6 +98,9 @@ class PythonTaskflowOperator(PythonOperator):
 #       cal-itp package, so few operators are needed, and we don't have to
 #       worry about stiching them together.
 class stage_on_bigquery(SubDagOperator):
+    # TODO: this should be a function that returns an operator, but an issue
+    # in gusty requires using a class with an __init__ method.
+    # see: https://github.com/chriscardillo/gusty/issues/26
     def __new__(
         cls,
         parent_id,
