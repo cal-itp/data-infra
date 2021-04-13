@@ -57,6 +57,8 @@ def download_url(url, itp_id, url_number, execution_date):
     except UnicodeError:
         # this occurs when a misformatted url is given
         raise NoFeedError("error: UnicodeError")
+    except Exception as e:
+        raise NoFeedError(f"error: {e}")
 
     try:
         z = zipfile.ZipFile(io.BytesIO(r.content))
