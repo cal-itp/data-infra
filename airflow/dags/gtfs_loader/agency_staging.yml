@@ -1,0 +1,32 @@
+---
+operator: operators.stage_on_bigquery
+parent_id: gtfs_loader
+dst_dir: "processed"
+gcs_dirs_xcom: valid_agency_paths
+dependencies:
+  - valid_agency_paths
+
+filename: agency.txt
+table_name: "gtfs_schedule.agency"
+schema_fields:
+  - name: agency_id
+    type: STRING
+  - name: agency_name
+    type: STRING
+  - name: agency_url
+    type: STRING
+  - name: agency_timezone
+    type: STRING
+  - name: agency_lang
+    type: STRING
+  - name: agency_phone
+    type: STRING
+  - name: agency_fare_url
+    type: STRING
+  - name: agency_email
+    type: STRING
+  - name: calitp_itp_id
+    type: INTEGER
+  - name: url_number
+    type: INTEGER
+---

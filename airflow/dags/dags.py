@@ -18,7 +18,7 @@ dag_parent_dir = Path(__file__).parent
 #     if child.is_dir() and not str(child).endswith('__'):
 #         dag_directories.append(str(child))
 
-dag_directories = [dag_parent_dir / "gtfs_downloader"]
+dag_directories = [dag_parent_dir / "gtfs_downloader", dag_parent_dir / "gtfs_loader"]
 
 
 # DAG Generation ==============================================================
