@@ -5,9 +5,9 @@
 #   - gtfs_downloader: validate_gcs_bucket
 # ---
 
-from calitp import read_gcfs
+from calitp import read_gcfs, save_to_gcfs
 import json
-import pandas
+import pandas as pd
 
 ERROR_MISSING_FILE = "missing_required_file"
 VALIDATION_FILE = "validation.json"
@@ -22,9 +22,10 @@ def main(execution_date, **kwargs):
     in_path = f"schedule/{execution_date}"
     print(in_path)
 
-    status = pandas.read_csv(read_gcfs(f"{in_path}/status.csv"))
+    status = pd.read_csv(read_gcfs(f"{in_path}/status.csv"))
     success = status[status.status == "success"]
 
+    agency_errors = []
     loadable_agencies = []
     for ii, row in success.iterrows():
         path_agency = f"{in_path}/{row['itp_id']}_{row['url_number']}"
@@ -37,5 +38,14 @@ def main(execution_date, **kwargs):
 
         if ERROR_MISSING_FILE not in unique_codes:
             loadable_agencies.append(path_agency)
+        else:
+            agency = dict(itp_id=row["itp_id"], url_number=row["url_number"])
+            agency_errors.append(agency)
+
+    errors_df = pd.DataFrame(agency_errors)
+    errors_str = errors_df.to_csv(index=False).encode()
+    save_to_gcfs(
+        errors_str, f"{in_path}/processed/agency_load_errors.csv", use_pipe=True
+    )
 
     return loadable_agencies

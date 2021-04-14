@@ -111,7 +111,7 @@ def downloader(task_instance, execution_date, **kwargs):
     src_path = Path(SRC_DIR) / f"{execution_date}/status.csv"
     dst_path = Path(DST_DIR) / f"{execution_date}/status.csv"
 
-    df_status.convert_dtypes().to_csv(src_path)
+    df_status.convert_dtypes().to_csv(src_path, index=False)
     save_to_gcfs(src_path, dst_path)
 
     error_agencies = df_status[lambda d: d.status != "success"].agency_name.tolist()

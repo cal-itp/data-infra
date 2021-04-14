@@ -229,6 +229,54 @@ def _keep_columns(
 # ----
 
 
+class CreateStagingTable(BaseOperator):
+    template_fields = ("src_uris",)
+
+    def __init__(
+        self,
+        src_uris,
+        dst_table_name,
+        bigquery_conn_id="bigquery_default",
+        schema_fields=None,
+        autodetect=True,
+        skip_leading_rows=1,
+        write_disposition="WRITE_TRUNCATE",
+        *args,
+        **kwargs,
+    ):
+        if not isinstance(src_uris, str):
+            raise NotImplementedError("src_uris must be string")
+
+        self.src_uris = src_uris
+        self.dst_table_name = dst_table_name
+        self.bigquery_conn_id = bigquery_conn_id
+        self.schema_fields = schema_fields
+        self.autodetect = autodetect
+        self.skip_leading_rows = skip_leading_rows
+        self.write_disposition = write_disposition
+
+        super().__init__(*args, **kwargs)
+
+    def execute(self, context):
+        dst_table_name = format_table_name(self.dst_table_name, is_staging=True)
+
+        bq_hook = BigQueryHook(bigquery_conn_id=self.bigquery_conn_id)
+        conn = bq_hook.get_conn()
+        cursor = conn.cursor()
+
+        bucket = get_bucket()
+        src_uris = f"{bucket}/{self.src_uris}"
+
+        cursor.run_load(
+            dst_table_name,
+            source_uris=src_uris,
+            schema_fields=self.schema_fields,
+            autodetect=self.autodetect,
+            skip_leading_rows=self.skip_leading_rows,
+            write_disposition=self.write_disposition,
+        )
+
+
 class MoveStagingTablesOperator(BaseOperator):
     # TODO: does composer expose the project id in a non-internal env var?
     #       otherwise, we can define a custom one and use that.
@@ -237,12 +285,14 @@ class MoveStagingTablesOperator(BaseOperator):
         dataset,
         dst_table_names,
         bigquery_conn_id="bigquery_default",
+        write_disposition="WRITE_TRUNCATE",
         *args,
         **kwargs,
     ):
         self.dataset = dataset
         self.dst_table_names = dst_table_names
         self.bigquery_conn_id = bigquery_conn_id
+        self.write_disposition = write_disposition
 
         super().__init__(*args, **kwargs)
 
@@ -261,7 +311,7 @@ class MoveStagingTablesOperator(BaseOperator):
         cursor = conn.cursor()
 
         for src, dst in zip(src_table_names, dst_table_names):
-            cursor.run_copy(src, dst)
+            cursor.run_copy(src, dst, write_disposition=self.write_disposition)
 
         # once all tables moved, then delete staging
         for src in src_table_names:
