@@ -23,6 +23,15 @@ def get_bucket():
     return os.environ["AIRFLOW_VAR_EXTRACT_BUCKET"]
 
 
+def format_table_name(name, is_staging=False):
+    dataset, table_name = name.split(".")
+    staging = "__staging" if is_staging else ""
+    test_prefix = "test_" if is_development() else ""
+
+    # e.g. test_gtfs_schedule__staging.agency
+    return f"{test_prefix}{dataset}.{table_name}{staging}"
+
+
 def pipe_file_name(path):
     """Returns absolute path for a file in the pipeline (e.g. the data folder).
 
@@ -41,7 +50,6 @@ def pipe_file_name(path):
 
 def get_fs(gcs_project="cal-itp-data-infra"):
     if is_development():
-        # Note: project on dev is set w/ GOOGLE_CLOUD_PROJECT environment var
         return gcsfs.GCSFileSystem(project=gcs_project, token="google_default")
     else:
         return gcsfs.GCSFileSystem(project=gcs_project, token="cloud")

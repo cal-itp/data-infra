@@ -6,11 +6,20 @@ from functools import wraps
 from airflow.contrib.operators.gcp_container_operator import GKEPodOperator
 from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
 from airflow.contrib.operators.gcs_to_bq import GoogleCloudStorageToBigQueryOperator
+from airflow.contrib.hooks.bigquery_hook import BigQueryHook
+from airflow.models import BaseOperator
 from airflow.operators import PythonOperator, SubDagOperator
+
 from airflow.utils.decorators import apply_defaults
 from airflow import DAG
 
-from calitp import is_development, get_bucket, save_to_gcfs, read_gcfs
+from calitp import (
+    is_development,
+    get_bucket,
+    format_table_name,
+    save_to_gcfs,
+    read_gcfs,
+)
 
 
 @wraps(KubernetesPodOperator)
@@ -119,6 +128,7 @@ class stage_on_bigquery(SubDagOperator):
         }
 
         bucket = get_bucket().replace("gs://", "", 1)
+        full_table_name = format_table_name(table_name, is_staging=True)
 
         subdag = DAG(dag_id=f"{parent_id}.{task_id}", default_args=args)
 
@@ -149,7 +159,7 @@ class stage_on_bigquery(SubDagOperator):
                 "schedule/{{execution_date}}/*/%s/%s" % (dst_dir, filename)
             ],
             schema_fields=schema_fields,
-            destination_project_dataset_table=table_name,
+            destination_project_dataset_table=full_table_name,
             create_disposition="CREATE_IF_NEEDED",
             write_disposition="WRITE_TRUNCATE",
             # _keep_columns function includes headers in output
@@ -214,3 +224,47 @@ def _keep_columns(
 
         encoded = csv_result.to_csv(index=False).encode()
         save_to_gcfs(encoded, full_dst_path, use_pipe=True)
+
+
+# ----
+
+
+class MoveStagingTablesOperator(BaseOperator):
+    # TODO: does composer expose the project id in a non-internal env var?
+    #       otherwise, we can define a custom one and use that.
+    def __init__(
+        self,
+        dataset,
+        dst_table_names,
+        bigquery_conn_id="bigquery_default",
+        *args,
+        **kwargs,
+    ):
+        self.dataset = dataset
+        self.dst_table_names = dst_table_names
+        self.bigquery_conn_id = bigquery_conn_id
+
+        super().__init__(*args, **kwargs)
+
+    def execute(self, context):
+        if self.dataset:
+            raw_tables = [f"{self.dataset}.{tbl}" for tbl in self.dst_table_names]
+        else:
+            raw_tables = self.dst_table_names
+
+        dst_table_names = [format_table_name(x) for x in raw_tables]
+
+        src_table_names = [format_table_name(x, is_staging=True) for x in raw_tables]
+
+        bq_hook = BigQueryHook(bigquery_conn_id=self.bigquery_conn_id)
+        conn = bq_hook.get_conn()
+        cursor = conn.cursor()
+
+        for src, dst in zip(src_table_names, dst_table_names):
+            cursor.run_copy(src, dst)
+
+        # once all tables moved, then delete staging
+        for src in src_table_names:
+            cursor.run_table_delete(src)
+
+        return dst_table_names
