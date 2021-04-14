@@ -186,29 +186,31 @@ def _keep_columns(
 
         # read csv using object dtype, so pandas does not coerce data
         df = pd.read_csv(read_gcfs(full_src_path), dtype="object")
-        df_cols = set(df.columns)
 
+        # preprocess data to include cal-itp id columns ---
+        # column names: calitp_id, calitp_url_number
+        if prepend_ids:
+            # hacky, but parse /path/.../{itp_id}/{url_number}
+            basename = path.split("/")[-1]
+            itp_id, url_number = map(int, basename.split("_"))
+
+            df = df.assign(calitp_itp_id=itp_id, calitp_url_number=url_number)
+
+        # get specified columns, inserting NA columns where needed ----
+        df_cols = set(df.columns)
         opt_cols_present = [x for x in optional_cols if x in df_cols]
 
-        # get specified columns, inserting NA columns where needed
         df_select = df[[*required_cols, *opt_cols_present]]
 
+        # fill in missing columns ----
         for ii, colname in enumerate(final_header):
             if colname not in df_select:
                 print("INSERTING MISSING COLUMN")
                 df_select.insert(ii, colname, pd.NA)
             print("SHAPE: ", df_select.shape)
 
+        # save result ----
         csv_result = df_select
-
-        if prepend_ids:
-            # hacky, but parse /path/.../{itp_id}/{url_number}
-            basename = path.split("/")[-1]
-            itp_id, url_number = map(int, basename.split("_"))
-
-            csv_result = csv_result.assign(
-                calitp_itp_id=itp_id, calitp_url_number=url_number
-            )
 
         encoded = csv_result.to_csv(index=False).encode()
         save_to_gcfs(encoded, full_dst_path, use_pipe=True)

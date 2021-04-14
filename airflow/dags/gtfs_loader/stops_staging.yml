@@ -9,6 +9,10 @@ dependencies:
 filename: stops.txt
 table_name: "gtfs_schedule.stops"
 schema_fields:
+  - name: calitp_itp_id
+    type: INTEGER
+  - name: calitp_url_number
+    type: INTEGER
   - name: stop_id
     type: STRING
 
