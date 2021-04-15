@@ -52,6 +52,9 @@ x-airflow-common:
     AIRFLOW__CORE__DAGS_FOLDER: /opt/airflow/gcs/dags
     AIRFLOW__CORE__BASE_LOG_FOLDER: /opt/airflow/gcs/logs
     AIRFLOW__CORE__PLUGINS_FOLDER: /opt/airflow/gcs/plugins
+    # connections
+    # see https://stackoverflow.com/a/55064944/1144523
+    AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT: "google-cloud-platform://:@:?extra__google_cloud_platform__project=cal-itp-data-infra"
     # bucket for holding results of extraction tasks
     AIRFLOW_VAR_EXTRACT_BUCKET: "gs://gtfs-data-test"
     # Corresponds to GCP_PROJECT on composer, but gauth looks for this name.

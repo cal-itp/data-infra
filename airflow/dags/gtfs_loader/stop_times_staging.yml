@@ -1,0 +1,44 @@
+---
+operator: operators.stage_on_bigquery
+parent_id: gtfs_loader
+dst_dir: "processed"
+gcs_dirs_xcom: valid_agency_paths
+dependencies:
+  - valid_agency_paths
+
+filename: stop_times.txt
+table_name: "gtfs_schedule.stop_times"
+schema_fields:
+  - name: calitp_itp_id
+    type: INTEGER
+  - name: calitp_url_number
+    type: INTEGER
+  - name: trip_id
+    type: STRING
+  - name: stop_id
+    type: STRING
+  - name: stop_sequence
+    type: STRING
+
+    # conditional
+  - name: arrival_time
+    type: STRING
+  - name: departure_time
+    type: STRING
+
+    # optional
+  - name: stop_headsign
+    type: STRING
+  - name: pickup_type
+    type: STRING
+  - name: drop_off_type
+    type: STRING
+  - name: continuous_pickup
+    type: STRING
+  - name: continuous_drop_off
+    type: STRING
+  - name: shape_dist_traveled
+    type: STRING
+  - name: timepoint
+    type: STRING
+---

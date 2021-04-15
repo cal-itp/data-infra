@@ -1,0 +1,44 @@
+---
+operator: operators.stage_on_bigquery
+parent_id: gtfs_loader
+dst_dir: "processed"
+gcs_dirs_xcom: valid_agency_paths
+dependencies:
+  - valid_agency_paths
+
+filename: routes.txt
+table_name: "gtfs_schedule.routes"
+schema_fields:
+  - name: calitp_itp_id
+    type: INTEGER
+  - name: calitp_url_number
+    type: INTEGER
+  - name: route_id
+    type: STRING
+  - name: route_type
+    type: STRING
+
+    # conditional
+  - name: agency_id
+    type: STRING
+  - name: route_short_name
+    type: STRING
+  - name: route_long_name
+    type: STRING
+  - name: route_desc
+    type: STRING
+
+    # optional
+  - name: route_url
+    type: STRING
+  - name: route_color
+    type: STRING
+  - name: route_text_color
+    type: STRING
+  - name: route_sort_order
+    type: STRING
+  - name: continuous_pickup
+    type: STRING
+  - name: continuous_drop_off
+    type: STRING
+---

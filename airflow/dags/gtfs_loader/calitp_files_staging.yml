@@ -1,0 +1,8 @@
+---
+operator: operators.CreateStagingTable
+src_uris: "schedule/{{execution_date}}/processed/files.csv"
+dst_table_name: "gtfs_schedule.calitp_files"
+autodetect: true
+dependencies:
+  - calitp_files_process
+---

@@ -63,7 +63,7 @@ def download_url(url, itp_id, url_number, execution_date):
     try:
         z = zipfile.ZipFile(io.BytesIO(r.content))
         # replace here with s3fs
-        rel_path = Path(f"{execution_date}/{int(itp_id)}/{int(url_number)}")
+        rel_path = Path(f"{execution_date}/{int(itp_id)}_{int(url_number)}")
         src_path = SRC_DIR / rel_path
         dst_path = DST_DIR / rel_path
 
@@ -113,7 +113,7 @@ def downloader(task_instance, execution_date, **kwargs):
     src_path = Path(SRC_DIR) / f"{execution_date}/status.csv"
     dst_path = Path(DST_DIR) / f"{execution_date}/status.csv"
 
-    df_status.convert_dtypes().to_csv(src_path)
+    df_status.convert_dtypes().to_csv(src_path, index=False)
     save_to_gcfs(src_path, dst_path)
 
     df_errors = df_status[lambda d: d.status != "success"]
