@@ -301,6 +301,14 @@ emery-go-round:
   agency_name: Emery Go-Round
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/emerygoround-ca-us/emerygoround-ca-us.zip
+    - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=EM
+  gtfs_rt_url:
+    service_alerts:
+      - http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
+    trip_updates:
+      - http://api.511.org/transit/tripupdates?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff4&agency=EM
+    vehicle_positions:
+      - http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff4&agency=EM
   itp_id: 6
 eureka-transit-service:
   agency_name: Eureka Transit Service
@@ -311,6 +319,14 @@ fairfield-and-suisun-transit:
   agency_name: Fairfield and Suisun Transit
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/fairfield-ca-us/fairfield-ca-us.zip
+    - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=FS
+  gtfs_rt_url:
+    service_alerts:
+      - http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
+    trip_updates:
+      - http://api.511.org/transit/tripupdates?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff5&agency=FS
+    vehicle_positions:
+      - http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff5&agency=FS
   itp_id: 1
 folsom-stage-line:
   agency_name: Folsom Stage Line
@@ -687,7 +703,15 @@ samtrans:
   agency_name: SamTrans
   gtfs_schedule_url:
     - http://www.samtrans.com/Assets/GTFS/samtrans/ST-GTFS.zip?v=1114
-  itp_id: 2
+    - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=SM
+  gtfs_rt_url:
+    service_alerts:
+      - http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
+    trip_updates:
+      - http://api.511.org/transit/tripupdates?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff8&agency=SM
+    vehicle_positions:
+      - http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff8&agency=SM
+  itp_id: 290
 san-diego-metropolitan-transit-system:
   agency_name: San Diego Metropolitan Transit System
   gtfs_schedule_url:
@@ -697,6 +721,14 @@ san-francisco-bay-ferry:
   agency_name: San Francisco Bay Ferry
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/sfbayferry-ca-us/sfbayferry-ca-us.zip
+    - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=SB
+  gtfs_rt_url:
+    service_alerts:
+      - http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
+    trip_updates:
+      - http://api.511.org/transit/tripupdates?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff6&agency=SB
+    vehicle_positions:
+      - http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff6&agency=SB
   itp_id: 2
 san-joaquin-regional-transit-district:
   agency_name: San Joaquin Regional Transit District
@@ -767,7 +799,15 @@ soltrans:
   agency_name: SolTrans
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/soltrans-ca-us/soltrans-ca-us.zip
-  itp_id: 3
+    - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=ST
+  gtfs_rt_url:
+    service_alerts:
+      - http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
+    trip_updates:
+      - http://api.511.org/transit/tripupdates?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff10&agency=ST
+    vehicle_positions:
+      - http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff10&agency=ST
+  itp_id: 310
 sonoma-county-transit:
   agency_name: Sonoma County Transit
   gtfs_schedule_url:
@@ -872,11 +912,27 @@ tri-delta-transit:
   agency_name: Tri Delta Transit
   gtfs_schedule_url:
     - http://.232.147.132/rtt/public/utility/gtfs.aspx
+    - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=3D
+  gtfs_rt_url:
+    service_alerts:
+      - http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
+    trip_updates:
+      - http://api.511.org/transit/tripupdates?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&agency=3D
+    vehicle_positions:
+      - http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&agency=3D
   itp_id: 336
 tri-valley-wheels:
   agency_name: Tri-Valley Wheels
   gtfs_schedule_url:
-    - https://www.wheelsbus.com/about/developers/
+    - https://www.wheelsbus.com/wp-content/uploads/2020/06/google_transit1.zip?read_comply=
+    - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=WH
+  gtfs_rt_url:
+    service_alerts:
+      - http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
+    trip_updates:
+      - http://api.511.org/transit/tripupdates?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff12&agency=WH
+    vehicle_positions:
+      - http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff12&agency=WH
   itp_id: 167
 trinity-transit:
   agency_name: Trinity Transit
@@ -897,7 +953,15 @@ union-city-transit:
   agency_name: Union City Transit
   gtfs_schedule_url:
     - https://data.trilliumtransit.com/gtfs/unioncity-ca-us/unioncity-ca-us.zip
-  itp_id: 3
+    - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=UC
+  gtfs_rt_url:
+    service_alerts:
+      - http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
+    trip_updates:
+      - http://api.511.org/transit/tripupdates?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff11&agency=UC
+    vehicle_positions:
+      - http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff11&agency=UC
+  itp_id: 350
 unitrans:
   agency_name: Unitrans
   gtfs_schedule_url:
@@ -953,3 +1017,56 @@ yuma-county-area-transit:
   gtfs_schedule_url:
     - https://www.ycipta.org/gtfs/google_transit.zip
   itp_id: 386
+dumbarton-express:
+  agency_name: Dumbarton Express
+  itp_id: 98
+  gtfs_schedule_url:
+    - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=DE
+  gtfs_rt_url:
+    service_alerts:
+      - http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
+    trip_updates:
+      - http://api.511.org/transit/tripupdates?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff3&agency=DE
+    vehicle_positions:
+      - http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff3&agency=DE
+san-fransisco-international-airport:
+  agency_name: San Francisco International Airport
+  itp_id: 281.0
+  gtfs_schedule_url:
+    - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=SI
+  gtfs_rt_url:
+    service_alerts:
+     - http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
+    trip_updates:
+     - http://api.511.org/transit/tripupdates?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff7&agency=SI
+    vehicle_positions:
+     - http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff7&agency=SI
+santa-rosa-citybus:
+  agency_name: Santa Rosa CityBus
+  itp_id: 301.0
+  gtfs_schedule_url:
+    - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=SR
+  gtfs_rt_url:
+    - service_alerts: http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
+    - trip_updates: http://api.511.org/transit/tripupdates?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff9&agency=SR
+    - vehicle_positions: http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff9&agency=SR
+angel-island-tiburon-ferry-company:
+  Agency Name: Angel Island-Tiburon Ferry Company
+  itp_id: 15
+  gtfs_schedule_url:
+    - http://data.trilliumtransit.com/gtfs/bayareaferries-ca-us/bayareaferries-ca-us.zip
+blue-and-gold-fleet:
+  agency_name: Blue and Gold Fleet
+  itp_id: 41
+  gtfs_schedule_url:
+    - http://data.trilliumtransit.com/gtfs/bayareaferries-ca-us/bayareaferries-ca-us.zip
+mission-bay-tma:
+  agency_name: Mission Bay TMA
+  itp_id: 201.0
+  gtfs_schedule_url:
+    - http://data.trilliumtransit.com/gtfs/missionbaytma-ca-us/missionbaytma-ca-us.zip
+menlo-park-shuttles:
+  agency_name: Menlo Park Shuttles
+  itp_id: 199.0
+  gtfs_schedule_url:
+    - https://www.menlopark.org/DocumentCenter/View/7320/google_transit.zip
