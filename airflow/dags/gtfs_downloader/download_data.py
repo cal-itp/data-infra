@@ -116,7 +116,10 @@ def downloader(task_instance, execution_date, **kwargs):
     df_status.convert_dtypes().to_csv(src_path)
     save_to_gcfs(src_path, dst_path)
 
-    error_agencies = df_status[lambda d: d.status != "success"].agency_name.tolist()
-    logging.info(f"error agencies: {error_agencies}")
+    df_errors = df_status[lambda d: d.status != "success"]
+    error_agencies = df_errors[["agency_name", "gtfs_schedule_url", "status"]]
+    error_records = error_agencies.to_dict(orient="record")
 
-    return {"gtfs_paths": gtfs_paths, "errors": error_agencies}
+    logging.info(f"error agencies: {error_agencies.agency_name.tolist()}")
+
+    return {"gtfs_paths": gtfs_paths, "errors": error_records}
