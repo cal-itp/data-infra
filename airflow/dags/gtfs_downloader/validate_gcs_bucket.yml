@@ -1,6 +1,6 @@
 operator: 'operators.pod_operator'
 name: 'pod-ex-minimum2'
-image: 'ghcr.io/cal-itp/gtfs-validator-api:v0.0.3'
+image: 'ghcr.io/cal-itp/gtfs-validator-api:v0.0.4'
 cmds: ["sh", "-c"]
 arguments:
   - >-
