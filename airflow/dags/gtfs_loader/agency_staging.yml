@@ -9,6 +9,10 @@ dependencies:
 filename: agency.txt
 table_name: "gtfs_schedule.agency"
 schema_fields:
+  - name: calitp_itp_id
+    type: INTEGER
+  - name: calitp_url_number
+    type: INTEGER
   - name: agency_id
     type: STRING
   - name: agency_name
@@ -25,8 +29,4 @@ schema_fields:
     type: STRING
   - name: agency_email
     type: STRING
-  - name: calitp_itp_id
-    type: INTEGER
-  - name: url_number
-    type: INTEGER
 ---
