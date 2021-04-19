@@ -1051,7 +1051,7 @@ santa-rosa-citybus:
     - trip_updates: http://api.511.org/transit/tripupdates?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff9&agency=SR
     - vehicle_positions: http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff9&agency=SR
 angel-island-tiburon-ferry-company:
-  Agency Name: Angel Island-Tiburon Ferry Company
+  agency_name: Angel Island-Tiburon Ferry Company
   itp_id: 15
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/bayareaferries-ca-us/bayareaferries-ca-us.zip
