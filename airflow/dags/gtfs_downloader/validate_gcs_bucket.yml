@@ -9,7 +9,7 @@ arguments:
     -v
     -o validation.json
     cal-itp-data-infra cloud {{ ti.xcom_pull(task_ids='download_data')['gtfs_paths'] | join(" ") }}
-is_delete_operator_pod: true
+is_delete_operator_pod: false
 get_logs: true
 provide_context: true
 templates_dict:
