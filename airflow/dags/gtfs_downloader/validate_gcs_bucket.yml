@@ -1,6 +1,6 @@
 operator: 'operators.pod_operator'
 name: 'pod-ex-minimum2'
-image: 'ghcr.io/cal-itp/gtfs-validator-api:v0.0.4'
+image: 'ghcr.io/cal-itp/gtfs-validator-api:v0.0.5'
 cmds: ["sh", "-c"]
 arguments:
   - >-
@@ -9,7 +9,7 @@ arguments:
     -v
     -o validation.json
     cal-itp-data-infra cloud {{ ti.xcom_pull(task_ids='download_data')['gtfs_paths'] | join(" ") }}
-is_delete_operator_pod: false
+is_delete_operator_pod: true
 get_logs: true
 provide_context: true
 templates_dict:
