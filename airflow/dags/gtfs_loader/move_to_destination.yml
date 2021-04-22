@@ -10,6 +10,7 @@ dst_table_names:
   - calitp_status
   - calitp_load_errors
   - calitp_files
+  - validation_report
 dependencies:
   - agency_staging
   - stop_times_staging
@@ -19,4 +20,5 @@ dependencies:
   - calitp_status_staging
   - calitp_load_errors_staging
   - calitp_files_staging
+  - validation_report_staging
 ---
