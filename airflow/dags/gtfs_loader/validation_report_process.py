@@ -58,6 +58,7 @@ def validator_process(execution_date, **kwargs):
         raw_codes = {**validation["data"]["report"]}
         raw_codes["calitp_itp_id"] = row["itp_id"]
         raw_codes["calitp_url_number"] = row["url_number"]
+        raw_codes["calitp_gtfs_validated_by"] = validation["version"]
 
         json_codes = json.dumps(raw_codes).encode()
         # df_notices = process_notices(row["itp_id"], row["url_number"], validation)

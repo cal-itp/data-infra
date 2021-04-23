@@ -12,6 +12,8 @@ schema_fields:
     type: INTEGER
   - name: calitp_url_number
     type: INTEGER
+  - name: calitp_gtfs_validated_by
+    type: STRING
   - name: notices
     type: RECORD
     mode: REPEATED
