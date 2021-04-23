@@ -43,6 +43,9 @@ def validator_process(execution_date, **kwargs):
     success = status[lambda d: d.status == "success"]
 
     # hold on to notices, so we can infer schema after
+    # note that I've commented out the code for inferring schema below,
+    # but it was usefule for generating, then hand-tweaking to load
+    # into bigquery
     # notice_entries = []
     for k, row in success.iterrows():
         agency_path = f"{base_path}/{row['itp_id']}_{row['url_number']}"
