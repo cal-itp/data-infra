@@ -9,13 +9,15 @@ from airflow.contrib.operators.gcs_to_bq import GoogleCloudStorageToBigQueryOper
 from airflow.contrib.hooks.bigquery_hook import BigQueryHook
 from airflow.models import BaseOperator
 from airflow.operators import PythonOperator, SubDagOperator
+from googleapiclient.errors import HttpError
 
 from airflow.utils.decorators import apply_defaults
-from airflow import DAG
+from airflow import DAG, AirflowException
 
 from calitp import (
     is_development,
     get_bucket,
+    get_project_id,
     format_table_name,
     save_to_gcfs,
     read_gcfs,
@@ -31,7 +33,7 @@ def pod_operator(*args, **kwargs):
         return GKEPodOperator(
             *args,
             in_cluster=False,
-            project_id=os.environ["GOOGLE_CLOUD_PROJECT"],
+            project_id=get_project_id(),
             location=os.environ["POD_LOCATION"],
             cluster_name=os.environ["POD_CLUSTER_NAME"],
             namespace=namespace,
@@ -241,6 +243,7 @@ class CreateStagingTable(BaseOperator):
         autodetect=True,
         skip_leading_rows=1,
         write_disposition="WRITE_TRUNCATE",
+        source_format="CSV",
         *args,
         **kwargs,
     ):
@@ -254,6 +257,7 @@ class CreateStagingTable(BaseOperator):
         self.autodetect = autodetect
         self.skip_leading_rows = skip_leading_rows
         self.write_disposition = write_disposition
+        self.source_format = source_format
 
         super().__init__(*args, **kwargs)
 
@@ -274,6 +278,7 @@ class CreateStagingTable(BaseOperator):
             autodetect=self.autodetect,
             skip_leading_rows=self.skip_leading_rows,
             write_disposition=self.write_disposition,
+            source_format=self.source_format,
         )
 
 
@@ -318,3 +323,96 @@ class MoveStagingTablesOperator(BaseOperator):
             cursor.run_table_delete(src)
 
         return dst_table_names
+
+
+class MaterializedViewOperator(BaseOperator):
+    def __init__(
+        self,
+        sql,
+        src_table,
+        bigquery_conn_id="bigquery_default",
+        num_retries=0,
+        **kwargs,
+    ):
+        self.sql = sql
+        self.src_table = src_table
+        self.bigquery_conn_id = bigquery_conn_id
+        self.num_retries = num_retries
+        super().__init__(**kwargs)
+
+    def execute(self, context):
+        full_table_name = format_table_name(self.src_table)
+        dataset_id, table_id = full_table_name.split(".")
+
+        bq_hook = BigQueryHook(bigquery_conn_id=self.bigquery_conn_id)
+        conn = bq_hook.get_conn()
+        cursor = conn.cursor()
+
+        table_resource = {
+            "tableReference": {"table_id": table_id},
+            "materializedView": {"query": self.sql},
+        }
+
+        # bigquery.Table.from_api_repr(table_resource)
+        project_id = get_project_id()
+
+        try:
+            cursor.service.tables().insert(
+                projectId=project_id, datasetId=dataset_id, body=table_resource
+            ).execute(num_retries=self.num_retries)
+
+            self.log.info(
+                "Table created successfully: %s:%s.%s", project_id, dataset_id, table_id
+            )
+        except HttpError as err:
+            raise AirflowException("BigQuery error: %s" % err.content)
+
+
+class SqlToWarehouseOperator(BaseOperator):
+    template_fields = ("sql",)
+
+    def __init__(
+        self,
+        sql,
+        dst_table_name,
+        bigquery_conn_id="bigquery_default",
+        create_disposition="CREATE_IF_NEEDED",
+        **kwargs,
+    ):
+        self.sql = sql
+        self.dst_table_name = dst_table_name
+        self.bigquery_conn_id = bigquery_conn_id
+        self.create_disposition = create_disposition
+        super().__init__(**kwargs)
+
+    def execute(self, context):
+        full_table_name = format_table_name(self.dst_table_name)
+        print(full_table_name)
+
+        bq_hook = BigQueryHook(bigquery_conn_id=self.bigquery_conn_id)
+        conn = bq_hook.get_conn()
+        cursor = conn.cursor()
+
+        print(self.sql)
+
+        # table_resource = {
+        #    "tableReference": {"table_id": table_id},
+        #    "materializedView": {"query": self.sql}
+        # }
+
+        # bigquery.Table.from_api_repr(table_resource)
+
+        try:
+            cursor.run_query(
+                sql=self.sql,
+                destination_dataset_table=full_table_name,
+                write_disposition="WRITE_TRUNCATE",
+                create_disposition=self.create_disposition,
+                use_legacy_sql=False,
+            )
+
+            self.log.info(
+                "Query table as created successfully: {}".format(full_table_name)
+            )
+        except HttpError as err:
+            raise AirflowException("BigQuery error: %s" % err.content)

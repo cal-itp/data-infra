@@ -1,0 +1,111 @@
+---
+operator: operators.CreateStagingTable
+src_uris: "schedule/{{execution_date}}/*/processed/validation_report.json"
+dst_table_name: "gtfs_schedule.validation_report"
+source_format: NEWLINE_DELIMITED_JSON
+
+dependencies:
+  - validation_report_process
+
+schema_fields:
+  - name: calitp_itp_id
+    type: INTEGER
+  - name: calitp_url_number
+    type: INTEGER
+  - name: calitp_gtfs_validated_by
+    type: STRING
+  - name: notices
+    type: RECORD
+    mode: REPEATED
+    fields:
+    - name: code
+      type: STRING
+    - name: severity
+      type: STRING
+    - name: totalNotices
+      type: INTEGER
+    - name: notices
+      type: RECORD
+      mode: REPEATED
+      fields:
+        - name: csvRowNumber
+          type: INTEGER
+        - name: fareId
+          type: STRING
+        - name: previousCsvRowNumber
+          type: INTEGER
+        - name: previousFareId
+          type: STRING
+        - name: filename
+          type: STRING
+        - name: fieldName
+          type: STRING
+        - name: fieldValue
+          type: STRING
+        - name: index
+          type: INTEGER
+        - name: shapeId
+          type: STRING
+        - name: shapeDistTraveled
+          type: BIGNUMERIC
+        - name: shapePtSequence
+          type: INTEGER
+        - name: prevCsvRowNumber
+          type: INTEGER
+        - name: prevShapeDistTraveled
+          type: BIGNUMERIC
+        - name: prevShapePtSequence
+          type: INTEGER
+        - name: duplicatedField
+          type: STRING
+        - name: routeId
+          type: STRING
+        - name: currentDate
+          type: STRING
+        - name: feedEndDate
+          type: STRING
+        - name: suggestedExpirationDate
+          type: RECORD
+          fields:
+            - name: localDate
+              type: RECORD
+              fields:
+                - name: year
+                  type: INTEGER
+                - name: month
+                  type: INTEGER
+                - name: day
+                  type: INTEGER
+        - name: routeColor
+          type: STRING
+        - name: routeTextColor
+          type: STRING
+        - name: tripId
+          type: STRING
+        - name: stopSequence
+          type: INTEGER
+        - name: specifiedField
+          type: STRING
+        - name: routeShortName
+          type: STRING
+        - name: routeLongName
+          type: STRING
+        - name: prevStopTimeDistTraveled
+          type: BIGNUMERIC
+        - name: prevStopSequence
+          type: INTEGER
+        - name: routeDesc
+          type: STRING
+        - name: speedkmh
+          type: BIGNUMERIC
+        - name: firstStopSequence
+          type: INTEGER
+        - name: lastStopSequence
+          type: INTEGER
+        - name: stopId
+          type: STRING
+        - name: stopName
+          type: STRING
+        - name: stopShapeThresholdMeters
+          type: NUMERIC
+---

@@ -4,6 +4,8 @@ import airflow  # noqa
 from pathlib import Path
 from gusty import create_dag
 
+from calitp import user_defined_macros, user_defined_filters
+
 
 # DAG Directories =============================================================
 
@@ -18,7 +20,11 @@ dag_parent_dir = Path(__file__).parent
 #     if child.is_dir() and not str(child).endswith('__'):
 #         dag_directories.append(str(child))
 
-dag_directories = [dag_parent_dir / "gtfs_downloader", dag_parent_dir / "gtfs_loader"]
+dag_directories = [
+    dag_parent_dir / "gtfs_downloader",
+    dag_parent_dir / "gtfs_loader",
+    dag_parent_dir / "gtfs_views",
+]
 
 
 # DAG Generation ==============================================================
@@ -31,4 +37,6 @@ for dag_directory in dag_directories:
         task_group_defaults={"tooltip": "this is a default tooltip"},
         wait_for_defaults={"retries": 10, "check_existence": True},
         latest_only=False,
+        user_defined_macros=user_defined_macros,
+        user_defined_filters=user_defined_filters,
     )

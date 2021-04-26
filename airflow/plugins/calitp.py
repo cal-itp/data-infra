@@ -23,13 +23,19 @@ def get_bucket():
     return os.environ["AIRFLOW_VAR_EXTRACT_BUCKET"]
 
 
-def format_table_name(name, is_staging=False):
+def get_project_id():
+    return "cal-itp-data-infra"
+
+
+def format_table_name(name, is_staging=False, full_name=False):
     dataset, table_name = name.split(".")
     staging = "__staging" if is_staging else ""
     test_prefix = "test_" if is_development() else ""
 
+    project_id = get_project_id() + "." if full_name else ""
     # e.g. test_gtfs_schedule__staging.agency
-    return f"{test_prefix}{dataset}.{table_name}{staging}"
+
+    return f"{project_id}{test_prefix}{dataset}.{table_name}{staging}"
 
 
 def pipe_file_name(path):
@@ -113,3 +119,12 @@ def read_gcfs(
         raise NotImplementedError()
 
     return full_src_path
+
+
+# Macros ----
+
+user_defined_macros = dict(get_project_id=get_project_id, get_bucket=get_bucket)
+
+user_defined_filters = dict(
+    table=lambda x: format_table_name(x, is_staging=False, full_name=True)
+)
