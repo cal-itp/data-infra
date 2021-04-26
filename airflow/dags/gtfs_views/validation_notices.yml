@@ -4,6 +4,7 @@ dst_table_name: "views.validation_notices"
 sql: |
   SELECT
     calitp_itp_id
+    , calitp_url_number
     , code.code
     , code.severity
     notices.*
