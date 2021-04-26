@@ -88,6 +88,8 @@ schema_fields:
           type: STRING
         - name: tripIdA
           type: STRING
+        - name: tripIdB
+          type: STRING          
         - name: stopSequence
           type: INTEGER
         - name: specifiedField
