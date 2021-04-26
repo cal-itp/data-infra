@@ -6,7 +6,7 @@ sql: |
     calitp_itp_id
     , code.code
     , code.severity
-    notices
+    notices.*
   FROM
     `{{ "gtfs_schedule.validation_report" | table }}` AS t
     , UNNEST(t.notices) as code
