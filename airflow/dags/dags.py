@@ -24,6 +24,7 @@ dag_directories = [
     dag_parent_dir / "gtfs_downloader",
     dag_parent_dir / "gtfs_loader",
     dag_parent_dir / "gtfs_views",
+    dag_parent_dir / "gtfs_schedule_history",
 ]
 
 

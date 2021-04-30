@@ -1,13 +1,9 @@
----
-operator: operators.stage_on_bigquery
-parent_id: gtfs_loader
-dst_dir: "processed"
-gcs_dirs_xcom: valid_agency_paths
-dependencies:
-  - valid_agency_paths
-
-filename: trips.txt
-table_name: "gtfs_schedule.trips"
+operator: operators.ExternalTable
+bucket: "gtfs-data-test"
+source_objects:
+  - 'schedule/processed/*/trips.txt'
+destination_project_dataset_table: "test_gtfs_schedule_history.trips"
+skip_leading_rows: 1
 schema_fields:
   - name: calitp_itp_id
     type: INTEGER
@@ -37,4 +33,6 @@ schema_fields:
     type: STRING
   - name: bikes_allowed
     type: STRING
----
+
+  - name: calitp_extracted_at
+    type: DATE

@@ -1,8 +1,0 @@
----
-operator: operators.CreateStagingTable
-src_uris: "schedule/{{execution_date}}/status.csv"
-dst_table_name: "gtfs_schedule.calitp_status"
-autodetect: true
-external_dependencies:
-  - gtfs_downloader: validate_gcs_bucket
----

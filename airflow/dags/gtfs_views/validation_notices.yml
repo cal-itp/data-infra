@@ -4,9 +4,10 @@ dst_table_name: "views.validation_notices"
 sql: |
   SELECT
     calitp_itp_id
-    , code.code
-    , code.severity
-    notices
+    , calitp_url_number
+    , code.code AS code
+    , code.severity AS severity
+    , notices
   FROM
     `{{ "gtfs_schedule.validation_report" | table }}` AS t
     , UNNEST(t.notices) as code

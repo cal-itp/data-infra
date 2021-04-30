@@ -3,3 +3,5 @@ intake==0.6.1
 ipdb==0.13.4
 pandas==1.1.4
 gusty==0.5.1
+pandas-gbq==0.14.1
+git+git://github.com/googleapis/python-bigquery-sqlalchemy.git@0a3151b

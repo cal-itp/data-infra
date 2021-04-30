@@ -1,0 +1,10 @@
+operator: airflow.contrib.operators.bigquery_operator.BigQueryOperator
+use_legacy_sql: false
+sql: |
+    CREATE MATERIALIZED VIEW `{{ "gtfs_schedule_history.calitp_files_updates" | table }}` AS
+        SELECT DISTINCT
+            calitp_itp_id
+            , calitp_url_number
+            , calitp_extracted_at
+        FROM `{{ "gtfs_schedule_history.calitp_files_updates" | table}}`
+        WHERE is_agency_changed

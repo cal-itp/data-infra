@@ -1,0 +1,14 @@
+operator: airflow.contrib.operators.bigquery_operator.BigQueryOperator
+use_legacy_sql: false
+destination_dataset_table: "{{ 'gtfs_schedule_history.calitp_feed_updates' | table }}"
+write_disposition: WRITE_TRUNCATE
+dependencies:
+  - calitp_files_updates_load
+
+sql: |
+    SELECT DISTINCT
+        calitp_itp_id
+        , calitp_url_number
+        , calitp_extracted_at
+    FROM `{{ "gtfs_schedule_history.calitp_files_updates" | table}}`
+    WHERE is_agency_changed

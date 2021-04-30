@@ -1,8 +1,0 @@
----
-operator: operators.CreateStagingTable
-src_uris: "schedule/{{execution_date}}/processed/agency_load_errors.csv"
-dst_table_name: "gtfs_schedule.calitp_load_errors"
-autodetect: true
-dependencies:
-  - valid_agency_paths
----
