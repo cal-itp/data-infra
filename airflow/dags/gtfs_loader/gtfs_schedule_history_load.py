@@ -20,14 +20,12 @@ DATASET = "gtfs_schedule_history"
 
 
 def main(execution_date, ti, **kwargs):
-    tables = get_table(
-        f"{DATASET}.calitp_included_gtfs_tables", as_df=True
-    ).table_name.tolist()
+    tables = get_table(f"{DATASET}.calitp_included_gtfs_tables", as_df=True)
 
     # TODO: replace w/ pybigquery pulling schemas directly from tables
     # pull schemas from external table tasks. these tasks only run once, so their
     # xcom data is stored as a prior date.
-    schemas = [get_table(f"{DATASET}.{t}").columns.keys() for t in tables]
+    schemas = [get_table(f"{DATASET}.{t}").columns.keys() for t in tables.table_name]
     # ti.xcom_pull(
     #     dag_id="gtfs_schedule_history", task_ids=tables, include_prior_dates=True
     # )
@@ -70,9 +68,15 @@ def main(execution_date, ti, **kwargs):
         fs.copy(src_validator, dst_validator)
 
         # process and copy over tables into external table folder ----
-        for table, colnames in zip(tables, schemas):
-            src_path = f"{src_dir}/{table}.txt"
-            dst_path = f"{dst_dir}/{table}.txt"
+        for table_file, colnames in zip(tables.file_name, schemas):
+            # validation report handled above, since it is in a subfolder.
+            # this is a side-effect of it technically not being an extraction,
+            # and we might want to re-create it (and put results in "processed")
+            if table_file == VALIDATION_REPORT:
+                continue
+
+            src_path = f"{src_dir}/{table_file}"
+            dst_path = f"{dst_dir}/{table_file}"
 
             print(f"Copying from {src_path} to {dst_path}")
 

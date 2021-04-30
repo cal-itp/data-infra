@@ -27,4 +27,5 @@ def main():
     df.to_gbq(
         "test_gtfs_schedule_history.calitp_included_gtfs_tables",
         project_id=get_project_id(),
+        if_exists="replace",
     )
