@@ -27,6 +27,10 @@ schema_fields:
       fields:
         - name: csvRowNumber
           type: INTEGER
+        - name: csvRowNumberA
+          type: INTEGER
+        - name: csvRowNumberB
+          type: INTEGER
         - name: fareId
           type: STRING
         - name: previousCsvRowNumber
@@ -79,6 +83,10 @@ schema_fields:
           type: STRING
         - name: tripId
           type: STRING
+        - name: tripIdA
+          type: STRING
+        - name: tripIdB
+          type: STRING
         - name: stopSequence
           type: INTEGER
         - name: specifiedField
@@ -105,3 +113,11 @@ schema_fields:
           type: STRING
         - name: stopShapeThresholdMeters
           type: NUMERIC
+        - name: serviceIdA
+          type: STRING
+        - name: serviceIdB
+          type: STRING
+        - name: blockId
+          type: STRING
+        - name: intersection
+          type: STRING
