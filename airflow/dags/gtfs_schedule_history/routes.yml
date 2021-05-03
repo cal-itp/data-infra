@@ -9,21 +9,31 @@ schema_fields:
     type: INTEGER
   - name: calitp_url_number
     type: INTEGER
+  - name: route_id
+    type: STRING
+  - name: route_type
+    type: STRING
+
+    # conditional
   - name: agency_id
     type: STRING
-  - name: agency_name
+  - name: route_short_name
     type: STRING
-  - name: agency_url
+  - name: route_long_name
     type: STRING
-  - name: agency_timezone
+  - name: route_desc
     type: STRING
-  - name: agency_lang
+
+    # optional
+  - name: route_url
     type: STRING
-  - name: agency_phone
+  - name: route_color
     type: STRING
-  - name: agency_fare_url
+  - name: route_text_color
     type: STRING
-  - name: agency_email
+  - name: route_sort_order
     type: STRING
-  - name: calitp_extracted_at
-    type: DATE
+  - name: continuous_pickup
+    type: STRING
+  - name: continuous_drop_off
+    type: STRING
