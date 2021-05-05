@@ -37,3 +37,6 @@ schema_fields:
     type: STRING
   - name: continuous_drop_off
     type: STRING
+
+  - name: calitp_extracted_at
+    type: DATE
