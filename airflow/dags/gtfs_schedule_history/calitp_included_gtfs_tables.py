@@ -9,17 +9,18 @@ from calitp import get_project_id
 # TODO: this could be data in the data folder
 def main():
     df = pd.DataFrame(
-        {
-            "table_name": [
-                "agency",
-                "routes",
-                "stop_times",
-                "stops",
-                "trips",
-                "validation_report",
-            ],
-            "ext": [".txt"] * 5 + [".json"],
-        }
+        [
+            # required tables ----
+            ("agency", ".txt", True),
+            ("routes", ".txt", True),
+            ("stop_times", ".txt", True),
+            ("stops", ".txt", True),
+            ("trips", ".txt", True),
+            ("validation_report", ".json", True),
+            # optional tables ----
+            ("transfers", ".txt", False),
+        ],
+        columns=["table_name", "ext", "is_required"],
     )
 
     df["file_name"] = df.table_name + df.ext

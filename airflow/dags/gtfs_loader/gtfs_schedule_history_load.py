@@ -68,7 +68,8 @@ def main(execution_date, ti, **kwargs):
         fs.copy(src_validator, dst_validator)
 
         # process and copy over tables into external table folder ----
-        for table_file, colnames in zip(tables.file_name, schemas):
+        table_details = zip(tables.file_name, tables.is_required, schemas)
+        for table_file, is_required, colnames in table_details:
             # validation report handled above, since it is in a subfolder.
             # this is a side-effect of it technically not being an extraction,
             # and we might want to re-create it (and put results in "processed")
@@ -80,14 +81,17 @@ def main(execution_date, ti, **kwargs):
 
             print(f"Copying from {src_path} to {dst_path}")
 
-            _keep_columns(
-                src_path,
-                dst_path,
-                colnames,
-                row["itp_id"],
-                row["url_number"],
-                date_string,
-            )
+            if not is_required and not fs.exists(f"{bucket}/{src_path}"):
+                print(f"Skipping missing optional file: {src_path}")
+            else:
+                _keep_columns(
+                    src_path,
+                    dst_path,
+                    colnames,
+                    row["itp_id"],
+                    row["url_number"],
+                    date_string,
+                )
 
         ttl_feeds_copied += 1
 
