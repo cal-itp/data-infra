@@ -19,6 +19,7 @@ def main():
             ("validation_report", ".json", True),
             # optional tables ----
             ("transfers", ".txt", False),
+            ("feed_info", ".txt", False),
         ],
         columns=["table_name", "ext", "is_required"],
     )
