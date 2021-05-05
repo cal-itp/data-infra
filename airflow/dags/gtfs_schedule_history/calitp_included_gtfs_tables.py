@@ -3,7 +3,7 @@
 # ---
 
 import pandas as pd
-from calitp import get_project_id
+from calitp import get_project_id, format_table_name
 
 
 # TODO: this could be data in the data folder
@@ -26,7 +26,7 @@ def main():
     df["file_name"] = df.table_name + df.ext
 
     df.to_gbq(
-        "test_gtfs_schedule_history.calitp_included_gtfs_tables",
+        format_table_name("gtfs_schedule_history.calitp_included_gtfs_tables"),
         project_id=get_project_id(),
         if_exists="replace",
     )

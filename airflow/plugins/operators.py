@@ -21,6 +21,7 @@ from airflow import AirflowException
 from calitp import (
     is_development,
     get_project_id,
+    get_bucket,
     format_table_name,
     save_to_gcfs,
     read_gcfs,
@@ -198,6 +199,17 @@ class SqlToWarehouseOperator(BaseOperator):
 
 
 class ExternalTable(BigQueryCreateExternalTableOperator):
+    @wraps(BigQueryCreateExternalTableOperator.__init__)
+    def __init__(
+        self, *args, bucket=None, destination_project_dataset_table=None, **kwargs
+    ):
+        bucket = get_bucket() if bucket is None else bucket
+        dst_table = format_table_name(destination_project_dataset_table)
+
+        super().__init__(
+            *args, bucket=bucket, destination_project_dataset_table=dst_table
+        )
+
     def execute(self, context):
         super().execute(context)
 
