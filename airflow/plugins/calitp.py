@@ -12,6 +12,13 @@ from sqlalchemy.sql.expression import Executable, ClauseElement
 from sqlalchemy.ext.compiler import compiles
 from sqlalchemy import create_engine, Table, MetaData, sql
 
+# Manually register pybigquery for now (until it updates on pypi) -------------
+# note that this is equivalent to specifying an entrypoint for sqlalchemy
+
+from sqlalchemy.dialects import registry
+
+registry.register("bigquery", "pybigquery.sqlalchemy_bigquery", "BigQueryDialect")
+
 
 # Config related --------------------------------------------------------------
 
