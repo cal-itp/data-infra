@@ -527,7 +527,7 @@ modesto-area-express:
       - http://max.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=Tripupdate
     service_alerts:
       - http://max.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=Alert
-  itp_id: 3
+  itp_id: 203
 montebello-bus-lines:
   agency_name: Montebello Bus Lines
   gtfs_schedule_url:
