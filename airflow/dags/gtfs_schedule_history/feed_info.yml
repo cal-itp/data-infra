@@ -1,36 +1,32 @@
 operator: operators.ExternalTable
 source_objects:
-  - 'schedule/processed/*/trips.txt'
-destination_project_dataset_table: "gtfs_schedule_history.trips"
+  - 'schedule/processed/*/feed_info.txt'
+destination_project_dataset_table: "gtfs_schedule_history.feed_info"
 skip_leading_rows: 1
 schema_fields:
   - name: calitp_itp_id
     type: INTEGER
   - name: calitp_url_number
     type: INTEGER
-  - name: route_id
+  - name: feed_publisher_name
     type: STRING
-  - name: service_id
+  - name: feed_publisher_url
     type: STRING
-  - name: trip_id
-    type: STRING
-
-    # conditional
-  - name: shape_id
+  - name: feed_lang
     type: STRING
 
     # optional
-  - name: trip_headsign
+  - name: default_lang
     type: STRING
-  - name: trip_short_name
+  - name: feed_start_date
     type: STRING
-  - name: direction_id
+  - name: feed_end_date
     type: STRING
-  - name: block_id
+  - name: feed_version
     type: STRING
-  - name: wheelchair_accessible
+  - name: feed_contact_email
     type: STRING
-  - name: bikes_allowed
+  - name: feed_contact_url
     type: STRING
 
   - name: calitp_extracted_at
