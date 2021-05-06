@@ -3,21 +3,27 @@ import pandas as pd
 
 from functools import wraps
 
+from airflow.utils.db import provide_session
+from airflow.sensors import ExternalTaskSensor
 from airflow.contrib.operators.gcp_container_operator import GKEPodOperator
 from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
-from airflow.contrib.operators.gcs_to_bq import GoogleCloudStorageToBigQueryOperator
+from airflow.contrib.operators.bigquery_operator import (
+    BigQueryCreateExternalTableOperator,
+)
 from airflow.contrib.hooks.bigquery_hook import BigQueryHook
 from airflow.models import BaseOperator
-from airflow.operators import PythonOperator, SubDagOperator
+from airflow.operators import PythonOperator
 from googleapiclient.errors import HttpError
 
+from google.cloud import bigquery
+
 from airflow.utils.decorators import apply_defaults
-from airflow import DAG, AirflowException
+from airflow import AirflowException
 
 from calitp import (
     is_development,
-    get_bucket,
     get_project_id,
+    get_bucket,
     format_table_name,
     save_to_gcfs,
     read_gcfs,
@@ -99,230 +105,6 @@ class PythonTaskflowOperator(PythonOperator):
                 self.op_kwargs[k] = ti.xcom_pull(dag_id=dag_id, task_ids=task_ids)
 
         return super().execute(context)
-
-
-# CsvColumnSelectOperator ----
-
-# Npte: airflow v1 doesn't have task groups, so trying out a SubDag as an
-# alternative. They are not as nice in the UI, and have some other limitations.
-# TODO: in the long run, should pull logic for uploading to bigquery into the
-#       cal-itp package, so few operators are needed, and we don't have to
-#       worry about stiching them together.
-class stage_on_bigquery(SubDagOperator):
-    # TODO: this should be a function that returns an operator, but an issue
-    # in gusty requires using a class with an __init__ method.
-    # see: https://github.com/chriscardillo/gusty/issues/26
-    def __new__(
-        cls,
-        parent_id,
-        gcs_dirs_xcom,
-        dst_dir,
-        filename,
-        schema_fields,
-        table_name,
-        task_id,
-        dag,
-    ):
-        from airflow.utils.dates import days_ago
-
-        args = {
-            "start_date": days_ago(2),
-        }
-
-        bucket = get_bucket().replace("gs://", "", 1)
-        full_table_name = format_table_name(table_name, is_staging=True)
-
-        subdag = DAG(dag_id=f"{parent_id}.{task_id}", default_args=args)
-
-        column_names = [schema["name"] for schema in schema_fields]
-
-        # by convention, preface task names with dag_id
-        op_col_select = PythonTaskflowOperator(
-            task_id="select_cols",
-            python_callable=_keep_columns,
-            # note that this input should have form schedule/{execution_date}/...
-            taskflow={"gcs_dirs": {"dag_id": parent_id, "task_ids": gcs_dirs_xcom}},
-            op_kwargs={
-                "dst_dir": dst_dir,
-                "filename": filename,
-                "required_cols": [],
-                "optional_cols": column_names,
-            },
-            dag=subdag,
-        )
-
-        op_stage_bq = GoogleCloudStorageToBigQueryOperator(
-            task_id="stage_bigquery",
-            bucket=bucket,
-            # note that we can't really pull a list out of xcom without subclassing
-            # operators, so we really on knowing that the task passing in
-            # gcs_dirs_xcom data is using schedule/{execution_date}
-            source_objects=[
-                "schedule/{{execution_date}}/*/%s/%s" % (dst_dir, filename)
-            ],
-            schema_fields=schema_fields,
-            destination_project_dataset_table=full_table_name,
-            create_disposition="CREATE_IF_NEEDED",
-            write_disposition="WRITE_TRUNCATE",
-            # _keep_columns function includes headers in output
-            skip_leading_rows=1,
-            dag=subdag,
-        )
-
-        op_col_select >> op_stage_bq
-
-        return SubDagOperator(subdag=subdag, dag=dag, task_id=task_id)
-
-    def __init__(
-        self,
-        parent_id,
-        gcs_dirs_xcom,
-        dst_dir,
-        filename,
-        schema_fields,
-        table_name,
-        *args,
-        **kwargs,
-    ):
-        pass
-
-
-def _keep_columns(
-    gcs_dirs, dst_dir, filename, required_cols, optional_cols, prepend_ids=True
-):
-    for path in gcs_dirs:
-        full_src_path = f"{path}/{filename}"
-        full_dst_path = f"{path}/{dst_dir}/{filename}"
-
-        final_header = [*required_cols, *optional_cols]
-
-        # read csv using object dtype, so pandas does not coerce data
-        df = pd.read_csv(read_gcfs(full_src_path), dtype="object")
-
-        # preprocess data to include cal-itp id columns ---
-        # column names: calitp_id, calitp_url_number
-        if prepend_ids:
-            # hacky, but parse /path/.../{itp_id}/{url_number}
-            basename = path.split("/")[-1]
-            itp_id, url_number = map(int, basename.split("_"))
-
-            df = df.assign(calitp_itp_id=itp_id, calitp_url_number=url_number)
-
-        # get specified columns, inserting NA columns where needed ----
-        df_cols = set(df.columns)
-        opt_cols_present = [x for x in optional_cols if x in df_cols]
-
-        df_select = df[[*required_cols, *opt_cols_present]]
-
-        # fill in missing columns ----
-        for ii, colname in enumerate(final_header):
-            if colname not in df_select:
-                print("INSERTING MISSING COLUMN")
-                df_select.insert(ii, colname, pd.NA)
-            print("SHAPE: ", df_select.shape)
-
-        # save result ----
-        csv_result = df_select
-
-        encoded = csv_result.to_csv(index=False).encode()
-        save_to_gcfs(encoded, full_dst_path, use_pipe=True)
-
-
-# ----
-
-
-class CreateStagingTable(BaseOperator):
-    template_fields = ("src_uris",)
-
-    def __init__(
-        self,
-        src_uris,
-        dst_table_name,
-        bigquery_conn_id="bigquery_default",
-        schema_fields=None,
-        autodetect=True,
-        skip_leading_rows=1,
-        write_disposition="WRITE_TRUNCATE",
-        source_format="CSV",
-        *args,
-        **kwargs,
-    ):
-        if not isinstance(src_uris, str):
-            raise NotImplementedError("src_uris must be string")
-
-        self.src_uris = src_uris
-        self.dst_table_name = dst_table_name
-        self.bigquery_conn_id = bigquery_conn_id
-        self.schema_fields = schema_fields
-        self.autodetect = autodetect
-        self.skip_leading_rows = skip_leading_rows
-        self.write_disposition = write_disposition
-        self.source_format = source_format
-
-        super().__init__(*args, **kwargs)
-
-    def execute(self, context):
-        dst_table_name = format_table_name(self.dst_table_name, is_staging=True)
-
-        bq_hook = BigQueryHook(bigquery_conn_id=self.bigquery_conn_id)
-        conn = bq_hook.get_conn()
-        cursor = conn.cursor()
-
-        bucket = get_bucket()
-        src_uris = f"{bucket}/{self.src_uris}"
-
-        cursor.run_load(
-            dst_table_name,
-            source_uris=src_uris,
-            schema_fields=self.schema_fields,
-            autodetect=self.autodetect,
-            skip_leading_rows=self.skip_leading_rows,
-            write_disposition=self.write_disposition,
-            source_format=self.source_format,
-        )
-
-
-class MoveStagingTablesOperator(BaseOperator):
-    # TODO: does composer expose the project id in a non-internal env var?
-    #       otherwise, we can define a custom one and use that.
-    def __init__(
-        self,
-        dataset,
-        dst_table_names,
-        bigquery_conn_id="bigquery_default",
-        write_disposition="WRITE_TRUNCATE",
-        *args,
-        **kwargs,
-    ):
-        self.dataset = dataset
-        self.dst_table_names = dst_table_names
-        self.bigquery_conn_id = bigquery_conn_id
-        self.write_disposition = write_disposition
-
-        super().__init__(*args, **kwargs)
-
-    def execute(self, context):
-        if self.dataset:
-            raw_tables = [f"{self.dataset}.{tbl}" for tbl in self.dst_table_names]
-        else:
-            raw_tables = self.dst_table_names
-
-        dst_table_names = [format_table_name(x) for x in raw_tables]
-
-        src_table_names = [format_table_name(x, is_staging=True) for x in raw_tables]
-
-        bq_hook = BigQueryHook(bigquery_conn_id=self.bigquery_conn_id)
-        conn = bq_hook.get_conn()
-        cursor = conn.cursor()
-
-        for src, dst in zip(src_table_names, dst_table_names):
-            cursor.run_copy(src, dst, write_disposition=self.write_disposition)
-
-        # once all tables moved, then delete staging
-        for src in src_table_names:
-            cursor.run_table_delete(src)
-
-        return dst_table_names
 
 
 class MaterializedViewOperator(BaseOperator):
@@ -416,3 +198,81 @@ class SqlToWarehouseOperator(BaseOperator):
             )
         except HttpError as err:
             raise AirflowException("BigQuery error: %s" % err.content)
+
+
+class ExternalTable(BigQueryCreateExternalTableOperator):
+    @wraps(BigQueryCreateExternalTableOperator.__init__)
+    def __init__(
+        self, *args, bucket=None, destination_project_dataset_table=None, **kwargs
+    ):
+        bucket = get_bucket().replace("gs://", "", 1) if bucket is None else bucket
+        dst_table = format_table_name(destination_project_dataset_table)
+
+        super().__init__(
+            *args, bucket=bucket, destination_project_dataset_table=dst_table, **kwargs
+        )
+
+    def execute(self, context):
+        # delete the external table, if it already exists
+        bq_client = bigquery.Client()
+        bq_client.delete_table(
+            self.destination_project_dataset_table, not_found_ok=True
+        )
+
+        super().execute(context)
+
+        return self.schema_fields
+
+
+class OnceOffExternalTaskSensor(ExternalTaskSensor):
+    def __init__(self, external_dag_id, **kwargs):
+        super().__init__(external_dag_id=external_dag_id, **kwargs)
+
+        last_exec = self.get_dag_last_execution_date(self.external_dag_id)
+
+        # a once dag runs only on its start_date (which can be set by users)
+        self.execution_date_fn = lambda crnt_dttm: last_exec
+
+    @provide_session
+    def get_dag_last_execution_date(self, dag_id, session):
+        from airflow.models import DagModel
+
+        q = session.query(DagModel).filter(DagModel.dag_id == self.external_dag_id)
+
+        dag = q.first()
+        return dag.get_last_dagrun().execution_date
+
+
+def _keep_columns(
+    src_path, dst_path, colnames, itp_id=None, url_number=None, extracted_at=None,
+):
+
+    # read csv using object dtype, so pandas does not coerce data
+    df = pd.read_csv(read_gcfs(src_path), dtype="object")
+
+    if itp_id is not None:
+        df["calitp_itp_id"] = itp_id
+
+    if url_number is not None:
+        df["calitp_url_number"] = url_number
+
+    # get specified columns, inserting NA columns where needed ----
+    df_cols = set(df.columns)
+    cols_present = [x for x in colnames if x in df_cols]
+
+    df_select = df.loc[:, cols_present]
+
+    # fill in missing columns ----
+    print("DataFrame missing columns: ", set(df_select.columns) - set(colnames))
+
+    for ii, colname in enumerate(colnames):
+        if colname not in df_select:
+            df_select.insert(ii, colname, pd.NA)
+
+    if extracted_at is not None:
+        df_select["calitp_extracted_at"] = extracted_at
+
+    # save result ----
+    csv_result = df_select.to_csv(index=False).encode()
+
+    save_to_gcfs(csv_result, dst_path, use_pipe=True)

@@ -1,12 +1,8 @@
----
-operator: operators.CreateStagingTable
-src_uris: "schedule/{{execution_date}}/*/processed/validation_report.json"
-dst_table_name: "gtfs_schedule.validation_report"
+operator: operators.ExternalTable
+source_objects:
+  - "schedule/processed/*/validation_report.json"
+destination_project_dataset_table: "gtfs_schedule_history.validation_report"
 source_format: NEWLINE_DELIMITED_JSON
-
-dependencies:
-  - validation_report_process
-
 schema_fields:
   - name: calitp_itp_id
     type: INTEGER
@@ -89,7 +85,7 @@ schema_fields:
         - name: tripIdA
           type: STRING
         - name: tripIdB
-          type: STRING          
+          type: STRING
         - name: stopSequence
           type: INTEGER
         - name: specifiedField
@@ -124,4 +120,3 @@ schema_fields:
           type: STRING
         - name: intersection
           type: STRING
----

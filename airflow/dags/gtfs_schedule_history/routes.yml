@@ -1,13 +1,8 @@
----
-operator: operators.stage_on_bigquery
-parent_id: gtfs_loader
-dst_dir: "processed"
-gcs_dirs_xcom: valid_agency_paths
-dependencies:
-  - valid_agency_paths
-
-filename: routes.txt
-table_name: "gtfs_schedule.routes"
+operator: operators.ExternalTable
+source_objects:
+  - 'schedule/processed/*/routes.txt'
+destination_project_dataset_table: "gtfs_schedule_history.routes"
+skip_leading_rows: 1
 schema_fields:
   - name: calitp_itp_id
     type: INTEGER
@@ -41,4 +36,6 @@ schema_fields:
     type: STRING
   - name: continuous_drop_off
     type: STRING
----
+
+  - name: calitp_extracted_at
+    type: DATE
