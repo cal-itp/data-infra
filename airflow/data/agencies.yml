@@ -647,6 +647,11 @@ porterville-transit:
   gtfs_schedule_url:
     - http://demopro.nationalrtap.org/admin/GTFSzipFiles/526/google_transit.zip
   itp_id: 256
+presidiogo-shuttle:
+  agency_name: PresidioGo Shuttle
+  gtfs_schedule_url:
+    - https://presidiobus.com/gtfs
+  itp_id: 257
 redding-area-bus-authority:
   agency_name: Redding Area Bus Authority
   gtfs_schedule_url:
