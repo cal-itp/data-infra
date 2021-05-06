@@ -651,6 +651,13 @@ presidiogo-shuttle:
   agency_name: PresidioGo Shuttle
   gtfs_schedule_url:
     - https://presidiobus.com/gtfs
+  gtfs_rt_urls:
+    vehicle_positions:
+      - https://presidiobus.com/gtfs-rt/vehiclepositions
+    trip_updates:
+      - https://presidiobus.com/gtfs-rt/tripupdates
+    service_alerts:
+      - https://presidiobus.com/gtfs-rt/alerts
   itp_id: 257
 redding-area-bus-authority:
   agency_name: Redding Area Bus Authority
