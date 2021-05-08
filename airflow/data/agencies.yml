@@ -301,14 +301,18 @@ emery-go-round:
   agency_name: Emery Go-Round
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/emerygoround-ca-us/emerygoround-ca-us.zip
-    - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=EM
+    - https://egrshuttle.com/gtfs
+    - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=FS
   gtfs_rt_urls:
     service_alerts:
+      - https://egrshuttle.com/gtfs-rt/alerts
       - http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
     trip_updates:
-      - http://api.511.org/transit/tripupdates?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff4&agency=EM
+      - https://egrshuttle.com/gtfs-rt/tripupdates
+      - http://api.511.org/transit/tripupdates?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff5&agency=EM
     vehicle_positions:
-      - http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff4&agency=EM
+      - https://egrshuttle.com/gtfs-rt/vehiclepositions
+      - http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff5&agency=EM
   itp_id: 6
 eureka-transit-service:
   agency_name: Eureka Transit Service
@@ -493,7 +497,7 @@ mendocino-transit-authority:
 menlo-park-shuttles:
   agency_name: Menlo Park Shuttles
   gtfs_schedule_url:
-    - https://www.menlopark.org/DocumentCenter/View/73/google_transitzip
+    - https://www.menlopark.org/DocumentCenter/View/7320/google_transit.zip
   itp_id: 199
 merced-the-bus:
   agency_name: Merced The Bus
@@ -569,6 +573,14 @@ mvgo:
   agency_name: MVGO
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/mountainview-ca-us/mountainview-ca-us.zip
+    - https://ridemvgo.org/gtfs
+   gtfs_rt_urls:
+  vehicle_positions:
+    - https://ridemvgo.org/gtfs-rt/vehiclepositions
+  trip_updates:
+    - https://ridemvgo.org/gtfs-rt/tripupdates
+  service_alerts:
+    - https://ridemvgo.org/gtfs-rt/alerts 
   itp_id: 217
 needles-area-transit:
   agency_name: Needles Area Transit
@@ -902,6 +914,13 @@ tideline:
   agency_name: Tideline
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/tidelinewatertaxi-ca-us/tidelinewatertaxi-ca-us.zip
+  gtfs_rt_urls:
+  service_alerts:
+    - http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
+  trip_updates:
+    - http://api.511.org/transit/tripupdates?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&agency=TD
+  vehicle_positions:
+    - http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&agency=TD
   itp_id: 338
 torrance-transit-system:
   agency_name: Torrance Transit System
