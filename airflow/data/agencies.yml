@@ -484,6 +484,13 @@ marin-transit:
   agency_name: Marin Transit
   gtfs_schedule_url:
     - http://marintransit.org/data/google_transit.zip
+  gtfs_rt_urls:
+    vehicle_positions:
+      - https://marintransit.net/gtfs-rt/vehiclepositions
+    trip_updates:
+      - https://marintransit.net/gtfs-rt/tripupdates
+    service_alerts:
+      - https://marintransit.net/gtfs-rt/alerts
   itp_id: 194
 mendocino-transit-authority:
   agency_name: Mendocino Transit Authority
@@ -569,6 +576,13 @@ mvgo:
   agency_name: MVGO
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/mountainview-ca-us/mountainview-ca-us.zip
+  gtfs_rt_urls:
+    vehicle_positions:
+      - https://ridemvgo.net/gtfs-rt/vehiclepositions
+    trip_updates:
+      - https://ridemvgo.net/gtfs-rt/tripupdates
+    service_alerts:
+      - https://ridemvgo.net/gtfs-rt/alerts
   itp_id: 217
 needles-area-transit:
   agency_name: Needles Area Transit
@@ -632,6 +646,18 @@ petaluma-transit:
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/petalumatransit-petaluma-ca-us/petalumatransit-petaluma-ca-us.zip
   itp_id: 247
+presidigo:
+  agency_name: PresidiGo
+  gtfs_schedule_url:
+    - https://presidiobus.com/gtfs 
+  gtfs_rt_urls:
+    vehicle_positions:
+      - https://presidiobus.net/gtfs-rt/vehiclepositions
+    trip_updates:
+      - https://presidiobus.net/gtfs-rt/tripupdates
+    service_alerts:
+      - https://presidiobus.net/gtfs-rt/alerts
+  itp_id: 257
 placer-county-transit:
   agency_name: Placer County Transit
   gtfs_schedule_url:
@@ -754,6 +780,13 @@ santa-clara-valley-transportation-authority:
   agency_name: Santa Clara Valley Transportation Authority
   gtfs_schedule_url:
     - https://gtfs.vta.org/gtfs_vta.zip
+  gtfs_rt_urls:
+    service_alerts:
+  - http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
+   trip_updates:
+  - http://api.511.org/transit/tripupdates?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff5&agency=SC
+   vehicle_positions:
+  - http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff5&agency=SC
   itp_id: 294
 santa-clarita-transit:
   agency_name: Santa Clarita Transit
