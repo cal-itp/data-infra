@@ -1,18 +1,16 @@
----
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.validation_notices"
+dependencies:
+  - warehouse_loaded
+
 sql: |
   SELECT
     calitp_itp_id
-    , code.code
-    , code.severity
-    notices
+    , calitp_url_number
+    , code.code AS code
+    , code.severity AS severity
+    , notices.*
   FROM
     `{{ "gtfs_schedule.validation_report" | table }}` AS t
     , UNNEST(t.notices) as code
     , UNNEST(code.notices) as notices
-external_dependencies:
-  - gtfs_loader: move_to_destination
-
-
----

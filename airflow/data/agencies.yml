@@ -302,7 +302,7 @@ emery-go-round:
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/emerygoround-ca-us/emerygoround-ca-us.zip
     - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=EM
-  gtfs_rt_url:
+  gtfs_rt_urls:
     service_alerts:
       - http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
     trip_updates:
@@ -320,7 +320,7 @@ fairfield-and-suisun-transit:
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/fairfield-ca-us/fairfield-ca-us.zip
     - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=FS
-  gtfs_rt_url:
+  gtfs_rt_urls:
     service_alerts:
       - http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
     trip_updates:
@@ -716,7 +716,7 @@ samtrans:
   gtfs_schedule_url:
     - http://www.samtrans.com/Assets/GTFS/samtrans/ST-GTFS.zip?v=1114
     - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=SM
-  gtfs_rt_url:
+  gtfs_rt_urls:
     service_alerts:
       - http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
     trip_updates:
@@ -734,7 +734,7 @@ san-francisco-bay-ferry:
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/sfbayferry-ca-us/sfbayferry-ca-us.zip
     - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=SB
-  gtfs_rt_url:
+  gtfs_rt_urls:
     service_alerts:
       - http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
     trip_updates:
@@ -812,7 +812,7 @@ soltrans:
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/soltrans-ca-us/soltrans-ca-us.zip
     - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=ST
-  gtfs_rt_url:
+  gtfs_rt_urls:
     service_alerts:
       - http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
     trip_updates:
@@ -925,7 +925,7 @@ tri-delta-transit:
   gtfs_schedule_url:
     - http://.232.147.132/rtt/public/utility/gtfs.aspx
     - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=3D
-  gtfs_rt_url:
+  gtfs_rt_urls:
     service_alerts:
       - http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
     trip_updates:
@@ -938,7 +938,7 @@ tri-valley-wheels:
   gtfs_schedule_url:
     - https://www.wheelsbus.com/wp-content/uploads/2020/06/google_transit1.zip?read_comply=
     - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=WH
-  gtfs_rt_url:
+  gtfs_rt_urls:
     service_alerts:
       - http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
     trip_updates:
@@ -966,7 +966,7 @@ union-city-transit:
   gtfs_schedule_url:
     - https://data.trilliumtransit.com/gtfs/unioncity-ca-us/unioncity-ca-us.zip
     - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=UC
-  gtfs_rt_url:
+  gtfs_rt_urls:
     service_alerts:
       - http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
     trip_updates:
@@ -1034,7 +1034,7 @@ dumbarton-express:
   itp_id: 98
   gtfs_schedule_url:
     - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=DE
-  gtfs_rt_url:
+  gtfs_rt_urls:
     service_alerts:
       - http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
     trip_updates:
@@ -1046,7 +1046,7 @@ san-fransisco-international-airport:
   itp_id: 281.0
   gtfs_schedule_url:
     - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=SI
-  gtfs_rt_url:
+  gtfs_rt_urls:
     service_alerts:
      - http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
     trip_updates:
@@ -1058,7 +1058,7 @@ santa-rosa-citybus:
   itp_id: 301.0
   gtfs_schedule_url:
     - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=SR
-  gtfs_rt_url:
+  gtfs_rt_urls:
     - service_alerts: http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
     - trip_updates: http://api.511.org/transit/tripupdates?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff9&agency=SR
     - vehicle_positions: http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff9&agency=SR

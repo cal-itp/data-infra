@@ -3,6 +3,10 @@ FROM apache/airflow:1.10.14
 # install gcloud as root, then switch back to airflow
 USER root
 
+RUN apt-get update \
+  && apt-get install -y git \
+  && rm -rf /var/lib/apt/lists/*
+
 RUN curl https://sdk.cloud.google.com > install.sh \
     && sudo bash install.sh --disable-prompts --install-dir=/usr/local/
 

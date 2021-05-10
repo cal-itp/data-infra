@@ -8,6 +8,20 @@ import gcsfs
 
 from pathlib import Path
 
+from sqlalchemy.sql.expression import Executable, ClauseElement
+from sqlalchemy.ext.compiler import compiles
+from sqlalchemy import create_engine, Table, MetaData, sql
+
+# Manually register pybigquery for now (until it updates on pypi) -------------
+# note that this is equivalent to specifying an entrypoint for sqlalchemy
+
+from sqlalchemy.dialects import registry
+
+registry.register("bigquery", "pybigquery.sqlalchemy_bigquery", "BigQueryDialect")
+
+
+# Config related --------------------------------------------------------------
+
 
 def is_development():
     options = {"development", "cal-itp-data-infra"}
@@ -36,6 +50,70 @@ def format_table_name(name, is_staging=False, full_name=False):
     # e.g. test_gtfs_schedule__staging.agency
 
     return f"{project_id}{test_prefix}{dataset}.{table_name}{staging}"
+
+
+# SQL related -----------------------------------------------------------------
+# TODO: move into a submodule? (db)
+
+
+class CreateTableAs(Executable, ClauseElement):
+    def __init__(self, name, select, replace=False):
+        self.name = name
+        self.select = select
+        self.replace = replace
+
+
+@compiles(CreateTableAs)
+def visit_insert_from_select(element, compiler, **kw):
+    name = compiler.dialect.identifier_preparer.quote(element.name)
+    select = compiler.process(element.select, **kw)
+    or_replace = " OR REPLACE" if element.replace else ""
+
+    return f"CREATE{or_replace} TABLE {name} AS {select}"
+
+
+def get_engine():
+    return create_engine("bigquery://cal-itp-data-infra")
+
+
+def get_table(table_name, as_df=False):
+    engine = get_engine()
+    src_table = format_table_name(table_name)
+
+    table = Table(src_table, MetaData(bind=engine), autoload=True)
+
+    if as_df:
+        import pandas
+
+        return pandas.read_sql_query(table.select(), engine)
+
+    return table
+
+
+def write_table(
+    sql_stmt, table_name, engine=None, replace=True, simplify=True, verbose=False
+):
+    if engine is None:
+        engine = get_engine()
+
+    if not isinstance(sql_stmt, sql.ClauseElement):
+        sql_stmt = sql.text(sql_stmt)
+
+    create_tbl = CreateTableAs(format_table_name(table_name), sql_stmt, replace=replace)
+
+    compiled = create_tbl.compile(
+        dialect=engine.dialect,
+        # binding literals substitutes in parameters, easier to read
+        compile_kwargs={"literal_binds": True},
+    )
+
+    if verbose:
+        print(compiled)
+
+    return engine.execute(compiled)
+
+
+# Bucket related --------------------------------------------------------------
 
 
 def pipe_file_name(path):
@@ -126,5 +204,6 @@ def read_gcfs(
 user_defined_macros = dict(get_project_id=get_project_id, get_bucket=get_bucket)
 
 user_defined_filters = dict(
-    table=lambda x: format_table_name(x, is_staging=False, full_name=True)
+    table=lambda x: format_table_name(x, is_staging=False, full_name=True),
+    quote=lambda s: '"%s"' % s,
 )
