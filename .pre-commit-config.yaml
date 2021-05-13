@@ -14,3 +14,9 @@ repos:
     rev: 19.10b0
     hooks:
       - id: black
+  - repo: https://github.com/pycqa/bandit
+    rev: 1.7.0
+    hooks:
+      - id: bandit
+        args: ["-ll", "--skip", "B108"]
+        files: .py$
