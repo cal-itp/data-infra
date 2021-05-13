@@ -574,13 +574,13 @@ mvgo:
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/mountainview-ca-us/mountainview-ca-us.zip
     - https://ridemvgo.org/gtfs
-   gtfs_rt_urls:
-  vehicle_positions:
-    - https://ridemvgo.org/gtfs-rt/vehiclepositions
-  trip_updates:
-    - https://ridemvgo.org/gtfs-rt/tripupdates
-  service_alerts:
-    - https://ridemvgo.org/gtfs-rt/alerts 
+  gtfs_rt_urls:
+    vehicle_positions:
+      - https://ridemvgo.org/gtfs-rt/vehiclepositions
+    trip_updates:
+      - https://ridemvgo.org/gtfs-rt/tripupdates
+    service_alerts:
+      - https://ridemvgo.org/gtfs-rt/alerts
   itp_id: 217
 needles-area-transit:
   agency_name: Needles Area Transit
