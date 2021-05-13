@@ -167,11 +167,6 @@ capitol-corridor:
   gtfs_schedule_url:
     - http://www.capitolcorridor.org/googletransit/google_transit.zip
   itp_id: 56
-carson-circuit:
-  agency_name: Carson Circuit
-  gtfs_schedule_url:
-    - https://data.trilliumtransit.com/gtfs/carson-ca-us/carson-ca-us.zip
-  itp_id: 57
 ceres-area-transit:
   agency_name: Ceres Area Transit
   gtfs_schedule_url:
@@ -200,7 +195,14 @@ clovis-transit-system:
 commerce-municipal-bus-lines:
   agency_name: Commerce Municipal Bus Lines
   gtfs_schedule_url:
-    - http://data.trilliumtransit.com/gtfs/cmbl-ca-us/cmbl-ca-us.zip
+    - https://citycommbus.com/gtfs
+  gtfs_rt_urls:
+    vehicle_positions:
+      - https://citycommbus.com/gtfs-rt/vehiclepositions
+    trip_updates:
+      - https://citycommbus.com/gtfs-rt/tripupdates
+    service_alerts:
+      - https://citycommbus.com/gtfs-rt/alerts
   itp_id: 75
 commuter-express:
   agency_name: Commuter Express
