@@ -1060,13 +1060,3 @@ blue-and-gold-fleet:
   itp_id: 41
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/bayareaferries-ca-us/bayareaferries-ca-us.zip
-mission-bay-tma:
-  agency_name: Mission Bay TMA
-  itp_id: 201
-  gtfs_schedule_url:
-    - http://data.trilliumtransit.com/gtfs/missionbaytma-ca-us/missionbaytma-ca-us.zip
-menlo-park-shuttles:
-  agency_name: Menlo Park Shuttles
-  itp_id: 199
-  gtfs_schedule_url:
-    - https://www.menlopark.org/DocumentCenter/View/7320/google_transit.zip
