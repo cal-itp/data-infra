@@ -651,7 +651,7 @@ petaluma-transit:
 presidigo:
   agency_name: PresidiGo
   gtfs_schedule_url:
-    - https://presidiobus.com/gtfs 
+    - https://presidiobus.com/gtfs
   gtfs_rt_urls:
     vehicle_positions:
       - https://presidiobus.net/gtfs-rt/vehiclepositions
