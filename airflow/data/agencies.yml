@@ -763,11 +763,11 @@ santa-clara-valley-transportation-authority:
     - https://gtfs.vta.org/gtfs_vta.zip
   gtfs_rt_urls:
     service_alerts:
-  - http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
-   trip_updates:
-  - http://api.511.org/transit/tripupdates?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff5&agency=SC
-   vehicle_positions:
-  - http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff5&agency=SC
+      - http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
+    trip_updates:
+      - http://api.511.org/transit/tripupdates?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff5&agency=SC
+    vehicle_positions:
+      - http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff5&agency=SC
   itp_id: 294
 santa-clarita-transit:
   agency_name: Santa Clarita Transit
