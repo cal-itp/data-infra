@@ -89,7 +89,7 @@ beach-cities-transit:
   agency_name: Beach Cities Transit
   gtfs_schedule_url:
     - https://www.redondo.org/civicax/filebank/blobdload.aspx?BlobID=33555
-  itp_id: 2
+  itp_id: 260
 bear-transit:
   agency_name: Bear Transit
   gtfs_schedule_url:
@@ -121,7 +121,7 @@ big-blue-bus:
       - http://gtfs.bigbluebus.com/tripupdates.bin
     service_alerts:
       - http://gtfs.bigbluebus.com/alerts.bin
-  itp_id: 0
+  itp_id: 300
 blossom-express:
   agency_name: Blossom Express
   gtfs_schedule_url:
@@ -206,7 +206,7 @@ commuter-express:
   agency_name: Commuter Express
   gtfs_schedule_url:
     - http://lacitydot.com/gtfs/administrator/gtfszip/ladotgtfs.zip
-  itp_id: 3
+  itp_id: 390
 compton-renaissance-transit-service:
   agency_name: Compton Renaissance Transit Service
   gtfs_schedule_url:
@@ -271,7 +271,7 @@ e-tran:
   agency_name: e-Tran
   gtfs_schedule_url:
     - https://share.elkgrovecity.org/messages/tpLyuetXMvzjM8oongDM5C/attachments/LbeTBVJuC2Eh3QPKIH6k7R/download/ETRAN_GTFS_15.zip
-  itp_id: 5
+  itp_id: 105
 east-los-angeles-shuttle:
   agency_name: East Los Angeles Shuttle
   gtfs_schedule_url:
@@ -291,12 +291,12 @@ el-dorado-transit:
   agency_name: El Dorado Transit
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/eldoradotransit-ca-us/eldoradotransit-ca-us.zip
-  itp_id: 1
+  itp_id: 101
 el-monte-transportation-division:
   agency_name: El Monte Transportation Division
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/elmonte-ca-us/elmonte-ca-us.zip
-  itp_id: 2
+  itp_id: 102
 emery-go-round:
   agency_name: Emery Go-Round
   gtfs_schedule_url:
@@ -309,12 +309,12 @@ emery-go-round:
       - http://api.511.org/transit/tripupdates?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff4&agency=EM
     vehicle_positions:
       - http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff4&agency=EM
-  itp_id: 6
+  itp_id: 106
 eureka-transit-service:
   agency_name: Eureka Transit Service
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/humboldtcounty-ca-us/humboldtcounty-ca-us.zip
-  itp_id: 8
+  itp_id: 108
 fairfield-and-suisun-transit:
   agency_name: Fairfield and Suisun Transit
   gtfs_schedule_url:
@@ -327,7 +327,7 @@ fairfield-and-suisun-transit:
       - http://api.511.org/transit/tripupdates?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff5&agency=FS
     vehicle_positions:
       - http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff5&agency=FS
-  itp_id: 1
+  itp_id: 110
 folsom-stage-line:
   agency_name: Folsom Stage Line
   gtfs_schedule_url:
@@ -352,7 +352,7 @@ glendale-beeline:
   agency_name: Glendale Beeline
   gtfs_schedule_url:
     - http://glendaleca.gov/Home/ShowDocument?id=29549
-  itp_id: 1
+  itp_id: 120
 glendora-transportation-division:
   agency_name: Glendora Transportation Division
   gtfs_schedule_url:
@@ -454,7 +454,7 @@ long-beach-transit:
       - http://206.128.158.171/TMGTFSRealTimeWebService/TripUpdate/TripUpdates.pb
     service_alerts:
       - http://206.128.158.171/TMGTFSRealTimeWebService/Alert/Alerts.pb
-  itp_id: 1
+  itp_id: 170
 madera-area-express:
   agency_name: Madera Area Express
   gtfs_schedule_url:
@@ -469,7 +469,7 @@ mammoth-lakes-transit-system:
   agency_name: Mammoth Lakes Transit System
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/easternsierra-ca-us/easternsierra-ca-us.zip
-  itp_id: 1
+  itp_id: 190
 manteca-transit:
   agency_name: Manteca Transit
   gtfs_schedule_url:
@@ -515,7 +515,7 @@ mission-bay-tma:
   agency_name: Mission Bay TMA
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/missionbaytma-ca-us/missionbaytma-ca-us.zip
-  itp_id: 1
+  itp_id: 201
 modesto-area-express:
   agency_name: Modesto Area Express
   gtfs_schedule_url:
@@ -532,7 +532,7 @@ montebello-bus-lines:
   agency_name: Montebello Bus Lines
   gtfs_schedule_url:
     - https://data.trilliumtransit.com/gtfs/montebello-ca-us/montebello-ca-us.zip
-  itp_id: 6
+  itp_id: 206
 monterey-salinas-transit:
   agency_name: Monterey-Salinas Transit
   gtfs_schedule_url:
@@ -544,12 +544,12 @@ monterey-salinas-transit:
       - http://206.128.158.191/TMGTFSRealTimeWebService/TripUpdate/TripUpdates.pb
     service_alerts:
       - http://206.128.158.191/TMGTFSRealTimeWebService/Alert/Alerts.pb
-  itp_id: 8
+  itp_id: 208
 moorpark-city-transit:
   agency_name: Moorpark City Transit
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/moorparkcitytransit-ca-us/moorparkcitytransit-ca-us.zip
-  itp_id: 2
+  itp_id: 210
 morongo-basin-transit-authority:
   agency_name: Morongo Basin Transit Authority
   gtfs_schedule_url:
@@ -574,7 +574,7 @@ needles-area-transit:
   agency_name: Needles Area Transit
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/needles-ca-us/needles-ca-us.zip
-  itp_id: 2
+  itp_id: 220
 north-county-transit-district:
   agency_name: North County Transit District
   gtfs_schedule_url:
@@ -683,7 +683,7 @@ rosemead-explorer:
   agency_name: Rosemead Explorer
   gtfs_schedule_url:
     - https://data.trilliumtransit.com/gtfs/rosemead-ca-us/rosemead-ca-us.zip
-  itp_id: 2
+  itp_id: 270
 roseville-transit:
   agency_name: Roseville Transit
   gtfs_schedule_url:
@@ -698,7 +698,7 @@ sage-stage:
   agency_name: Sage Stage
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/sagestage-ca-us/sagestage-ca-us.zip
-  itp_id: 4
+  itp_id: 204
 samtrans:
   agency_name: SamTrans
   gtfs_schedule_url:
@@ -729,7 +729,7 @@ san-francisco-bay-ferry:
       - http://api.511.org/transit/tripupdates?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff6&agency=SB
     vehicle_positions:
       - http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff6&agency=SB
-  itp_id: 2
+  itp_id: 280
 san-joaquin-regional-transit-district:
   agency_name: San Joaquin Regional Transit District
   gtfs_schedule_url:
@@ -779,7 +779,7 @@ simi-valley-transit:
   agency_name: Simi Valley Transit
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/simivalley-ca-us/simivalley-ca-us.zip
-  itp_id: 8
+  itp_id: 308
 siskiyou-transit-and-general-express:
   agency_name: Siskiyou Transit and General Express
   gtfs_schedule_url:
@@ -832,7 +832,7 @@ spirit-bus:
   agency_name: Spirit Bus
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/montereypark-ca-us/montereypark-ca-us.zip
-  itp_id: 7
+  itp_id: 207
 stanislaus-regional-transit:
   agency_name: Stanislaus Regional Transit
   gtfs_schedule_url:
@@ -976,12 +976,12 @@ ventura-county-transportation-commission:
   agency_name: Ventura County Transportation Commission
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/vctc-ca-us/vctc-ca-us.zip
-  itp_id: 3
+  itp_id: 380
 victor-valley-transit:
   agency_name: Victor Valley Transit
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/victorville-ca-us/victorville-ca-us.zip
-  itp_id: 3
+  itp_id: 360
 vine-transit:
   agency_name: Vine Transit
   gtfs_schedule_url:
@@ -1031,7 +1031,7 @@ dumbarton-express:
       - http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff3&agency=DE
 san-fransisco-international-airport:
   agency_name: San Francisco International Airport
-  itp_id: 281.0
+  itp_id: 281
   gtfs_schedule_url:
     - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=SI
   gtfs_rt_urls:
@@ -1043,7 +1043,7 @@ san-fransisco-international-airport:
      - http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff7&agency=SI
 santa-rosa-citybus:
   agency_name: Santa Rosa CityBus
-  itp_id: 301.0
+  itp_id: 301
   gtfs_schedule_url:
     - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=SR
   gtfs_rt_urls:
