@@ -502,7 +502,7 @@ mendocino-transit-authority:
 menlo-park-shuttles:
   agency_name: Menlo Park Shuttles
   gtfs_schedule_url:
-    - https://www.menlopark.org/DocumentCenter/View/73/google_transitzip
+    - https://www.menlopark.org/DocumentCenter/View/7320/google_transit.zip
   itp_id: 199
 merced-the-bus:
   agency_name: Merced The Bus
