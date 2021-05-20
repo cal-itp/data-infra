@@ -5,3 +5,4 @@ pandas==1.1.4
 gusty==0.5.1
 pandas-gbq==0.14.1
 pybigquery==0.7.0
+google-cloud-bigquery==2.16.1
