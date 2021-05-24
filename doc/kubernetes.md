@@ -25,6 +25,6 @@ Check compute region
 
 ```bash
 gcloud config get-value compute/region
-# region should be uswest2
-# gcloud config set compute/region us-west2
+# region should be us-west1
+# gcloud config set compute/region us-west1
 ```
