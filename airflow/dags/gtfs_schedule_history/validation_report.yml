@@ -8,6 +8,8 @@ schema_fields:
     type: INTEGER
   - name: calitp_url_number
     type: INTEGER
+  - name: calitp_extracted_at
+    type: DATE
   - name: calitp_gtfs_validated_by
     type: STRING
   - name: notices
@@ -26,6 +28,10 @@ schema_fields:
       fields:
         - name: csvRowNumber
           type: INTEGER
+        - name: oldCsvRowNumber
+          type: INTEGER
+        - name: newCsvRowNumber
+          type: INTEGER
         - name: csvRowNumberA
           type: INTEGER
         - name: csvRowNumberB
@@ -40,8 +46,16 @@ schema_fields:
           type: STRING
         - name: fieldName
           type: STRING
+        - name: fieldName1
+          type: STRING
+        - name: fieldName2
+          type: STRING
         - name: fieldValue
           type: STRING
+        - name: fieldValue1
+          type: STRING
+        - name: fieldValue2
+          type: INTEGER
         - name: index
           type: INTEGER
         - name: shapeId
@@ -119,4 +133,8 @@ schema_fields:
         - name: blockId
           type: STRING
         - name: intersection
+          type: STRING
+        - name: departureTime
+          type: STRING
+        - name: arrivalTime
           type: STRING

@@ -6,6 +6,8 @@ dependencies:
 sql: |
   SELECT
     calitp_itp_id
+    , calitp_url_number
+    , calitp_extracted_at
     , code.code
     , code.severity
     , code.totalNotices
