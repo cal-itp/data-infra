@@ -5,7 +5,9 @@
 
 import os
 import gcsfs
+import pandas as pd
 
+from functools import singledispatch
 from pathlib import Path
 
 from sqlalchemy.sql.expression import Executable, ClauseElement
@@ -83,13 +85,12 @@ def get_table(table_name, as_df=False):
     table = Table(src_table, MetaData(bind=engine), autoload=True)
 
     if as_df:
-        import pandas
-
-        return pandas.read_sql_query(table.select(), engine)
+        return pd.read_sql_query(table.select(), engine)
 
     return table
 
 
+@singledispatch
 def write_table(
     sql_stmt, table_name, engine=None, replace=True, simplify=True, verbose=False
 ):
@@ -111,6 +112,14 @@ def write_table(
         print(compiled)
 
     return engine.execute(compiled)
+
+
+@write_table.register(pd.DataFrame)
+def _write_table_df(sql_stmt, table_name, engine=None, replace=True):
+    if_exists = "replace" if replace else "fail"
+    return sql_stmt.to_gbq(
+        format_table_name(table_name), project_id=get_project_id(), if_exists=if_exists
+    )
 
 
 # Bucket related --------------------------------------------------------------
