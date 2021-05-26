@@ -1,0 +1,142 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: database
+  namespace: {{ .Release.Namespace }}
+  labels:
+    name: database
+spec:
+  replicas: {{ .Values.workloads.database.replicas }}
+  selector:
+    matchLabels:
+      name: database
+  serviceName: database
+  template:
+    metadata:
+      labels:
+        name: database
+      {{- with .Values.workloads.database.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+    {{- with .Values.images.database.imagePullSecrets }}
+      imagePullSecrets:
+      {{ toYaml . | nindent 6 }}
+    {{- end }}
+      containers:
+
+      - name: database
+        image: {{ .Values.images.database.src }}
+        {{- if .Values.configs.database }}
+        envFrom:
+        - configMapRef:
+            name: database-config
+        {{- end }}
+        ports:
+        - containerPort: {{ .Values.workloads.database.port }}
+          name: postgresql
+        {{- if .Values.volumes.database }}
+        volumeMounts:
+          {{- if .Values.volumes.database.data }}
+          - name: data
+            mountPath: /var/lib/postgresql/data
+            subPath: postgresql-data
+          {{- end }}
+        {{- end }}
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.workloads.database.port }}
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.workloads.database.port }}
+          initialDelaySeconds: 15
+          periodSeconds: 20
+
+      {{- if .Values.workloads.database.useExporter }}
+      - name: exporter
+        image: {{ .Values.images.databaseExporter.src }}
+        env:
+          - name: DATA_SOURCE_URI
+            value: postgresql://localhost:{{ .Values.workloads.database.port }}
+          - name: DATA_SOURCE_USER
+            valueFrom:
+              configMapKeyRef:
+                key: POSTGRES_USER
+                name: database-config
+          - name: DATA_SOURCE_PASS
+            valueFrom:
+              configMapKeyRef:
+                key: POSTGRES_PASSWORD
+                name: database-config
+
+      {{- end }}
+      {{- with .Values.workloads.database.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.workloads.database.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.workloads.database.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+  {{- if .Values.volumes.database }}
+  volumeClaimTemplates:
+    {{- if .Values.volumes.database.data }}
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        {{- if .Values.volumes.database.data.storageClassName }}
+        storageClassName: {{ .Values.volumes.database.data.storageClassName }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.volumes.database.data.size }}
+    {{- end }}
+  {{- end }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: database
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    name: database
+  type: {{ .Values.services.database.type }}
+  ports:
+  - name: postgresql
+    port: {{ .Values.services.database.port }}
+    targetPort: {{ .Values.workloads.database.port }}
+{{- if .Values.configs.database }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: database-config
+  namespace: {{ .Release.Namespace }}
+data:
+  {{- toYaml .Values.configs.database | nindent 2 }}
+{{- end }}
+{{- if .Values.configs.inputStreamer }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: input-streamer-eventhub
+  namespace: {{ .Release.Namespace }}
+data:
+  {{- toYaml .Values.configs.inputStreamer | nindent 2 }}
+{{- end }}

@@ -1,0 +1,16 @@
+workloads:
+  database:
+    useExporter: false
+
+configs:
+  database:
+    POSTGRES_USER: admin
+    POSTGRES_PASSWORD: admin
+  metabase:
+    MB_DB_USER: admin
+    MB_DB_PASS: admin
+
+volumes:
+  database:
+    data:
+      size: 20Gi
