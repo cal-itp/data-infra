@@ -1506,3 +1506,11 @@ blue-and-gold-fleet:
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 41
+metropolitan-transportation-commission:
+  agency_name: "MTC 511" 
+  itp_id: 511
+  feeds:
+    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=RG
+      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff9&agency=RG
+      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
+      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff9&agency=RG
