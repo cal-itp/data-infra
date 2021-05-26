@@ -1107,3 +1107,8 @@ blue-and-gold-fleet:
   itp_id: 41
   gtfs_schedule_url:
     - http://data.trilliumtransit.com/gtfs/bayareaferries-ca-us/bayareaferries-ca-us.zip
+regional-sf-bay-area-feed:
+  agency_name: SF 511
+  itp_id: 511
+  gtfs_schedule_url:
+    - http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=RG
