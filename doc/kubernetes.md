@@ -79,3 +79,36 @@ Once a new nodepool has been created to replace an active node pool, the old nod
 removed from the `GKE_NODEPOOL_NAMES` array.
 
 Once the old node pool is removed from the array, it can be drained and deleted by running `kubernetes/gke/nodepool-down.sh <nodepool-name>`.
+
+## Deploy Cluster Workloads ##
+
+Cluster workloads are divided into two classes:
+
+1. system
+2. apps
+
+
+Apps are the workloads that users actually care about.
+
+### system workloads ###
+
+```bash
+kubectl apply -k kubernetes/system
+```
+
+System workloads are used to support running applications. This includes items
+such as an ingress controller, monitoring, logging, etc. The system deploy command
+is run at cluster create time, but when new system workloads are added it may need
+to be run again.
+
+### app: metabase ###
+
+First deploy:
+```
+helm install metabase kubernetes/apps/charts/metabase -f kubernetes/apps/values/metabase.yaml -n metabase --create-namespace
+```
+
+Apply changes:
+```
+helm upgrade metabase kubernetes/apps/charts/metabase -f kubernetes/apps/values/metabase.yaml
+```
