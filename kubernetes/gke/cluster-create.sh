@@ -35,3 +35,4 @@ gcloud container clusters create $GKE_NAME     \
 
 test -e "$GKE_KUBECONFIG" ||
 KUBECONFIG=$GKE_KUBECONFIG gcloud container clusters get-credentials $GKE_NAME
+KUBECONFIG=$GKE_KUBECONFIG kubectl apply -k "$SRCDIR/../system"
