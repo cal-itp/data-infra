@@ -144,6 +144,27 @@ def _write_table_df(sql_stmt, table_name, engine=None, replace=True):
     )
 
 
+def query_yaml(fname, write_as=None, replace=False):
+    import yaml
+    from jinja2 import Environment, select_autoescape
+
+    config = yaml.safe_load(open(fname))
+
+    sql_template_raw = config["sql"]
+    env = Environment(autoescape=select_autoescape())
+    env.filters = {**env.filters, **user_defined_filters}
+
+    template = env.from_string(sql_template_raw)
+
+    sql_code = template.render({**user_defined_macros})
+
+    if write_as is not None:
+        return write_table(sql_code, write_as, replace=replace)
+    else:
+        engine = get_engine()
+        return engine.execute(sql_code)
+
+
 # Bucket related --------------------------------------------------------------
 
 
