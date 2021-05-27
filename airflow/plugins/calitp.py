@@ -14,13 +14,6 @@ from sqlalchemy.sql.expression import Executable, ClauseElement
 from sqlalchemy.ext.compiler import compiles
 from sqlalchemy import create_engine, Table, MetaData, sql
 
-# Manually register pybigquery for now (until it updates on pypi) -------------
-# note that this is equivalent to specifying an entrypoint for sqlalchemy
-
-from sqlalchemy.dialects import registry
-
-registry.register("bigquery", "pybigquery.sqlalchemy_bigquery", "BigQueryDialect")
-
 
 # Config related --------------------------------------------------------------
 
@@ -59,10 +52,14 @@ def format_table_name(name, is_staging=False, full_name=False):
 
 
 class CreateTableAs(Executable, ClauseElement):
-    def __init__(self, name, select, replace=False):
+    def __init__(
+        self, name, select, replace=False, if_not_exists=False, partition_by=None
+    ):
         self.name = name
         self.select = select
         self.replace = replace
+        self.if_not_exists = if_not_exists
+        self.partition_by = partition_by
 
 
 @compiles(CreateTableAs)
@@ -70,12 +67,24 @@ def visit_insert_from_select(element, compiler, **kw):
     name = compiler.dialect.identifier_preparer.quote(element.name)
     select = compiler.process(element.select, **kw)
     or_replace = " OR REPLACE" if element.replace else ""
+    if_not_exists = " IF NOT EXISTS" if element.if_not_exists else ""
 
-    return f"CREATE{or_replace} TABLE {name} AS {select}"
+    # TODO: visit partition by clause
+    partition_by = (
+        f" PARTITION BY {element.partition_by}" if element.partition_by else ""
+    )
+
+    return f"""
+        CREATE{or_replace} TABLE{if_not_exists} {name}
+        {partition_by}
+        AS {select}
+        """
 
 
 def get_engine():
-    return create_engine("bigquery://cal-itp-data-infra")
+    return create_engine(
+        "bigquery://cal-itp-data-infra/?maximum_bytes_billed=5000000000"
+    )
 
 
 def get_table(table_name, as_df=False):
@@ -92,7 +101,14 @@ def get_table(table_name, as_df=False):
 
 @singledispatch
 def write_table(
-    sql_stmt, table_name, engine=None, replace=True, simplify=True, verbose=False
+    sql_stmt,
+    table_name,
+    engine=None,
+    replace=True,
+    simplify=True,
+    verbose=False,
+    if_not_exists=False,
+    partition_by=None,
 ):
     if engine is None:
         engine = get_engine()
@@ -100,7 +116,13 @@ def write_table(
     if not isinstance(sql_stmt, sql.ClauseElement):
         sql_stmt = sql.text(sql_stmt)
 
-    create_tbl = CreateTableAs(format_table_name(table_name), sql_stmt, replace=replace)
+    create_tbl = CreateTableAs(
+        format_table_name(table_name),
+        sql_stmt,
+        replace=replace,
+        if_not_exists=if_not_exists,
+        partition_by=partition_by,
+    )
 
     compiled = create_tbl.compile(
         dialect=engine.dialect,
