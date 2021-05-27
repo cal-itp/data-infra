@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# script/docs-server: Launch mkdocs server to preview live work on docs/
+
+set -e
+cd "$(dirname "$0")/.."
+
+
+echo
+echo "Initializing venv..."
+python -m venv .mkdocs-venv
+source .mkdocs-venv/bin/activate
+pip install --upgrade pip
+
+
+echo
+echo "Installing mkdocs and plugins..."
+pip install \
+    mkdocs \
+    mkdocs-material \
+    mkdocs-awesome-pages-plugin \
+    fontawesome_markdown \
+    mdx_truly_sane_lists \
+    mkdocs-macros-plugin
+
+
+echo
+echo "Starting mkdocs server..."
+mkdocs serve --dev-addr "0.0.0.0:8000"
