@@ -132,4 +132,8 @@ def main(**kwargs):
     table_names = create_tables()
 
     for table_name in table_names:
+        # TODO: remove validation report from included tables
+        if table_name == "validation_report":
+            continue
+
         merge_updates(table_name, **kwargs)
