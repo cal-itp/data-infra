@@ -15,4 +15,6 @@ default_args:
     retry_delay: !timedelta 'minutes: 2'
     concurrency: 50
     #sla: !timedelta 'hours: 2'
+wait_for_defaults:
+    timeout: 3600
 latest_only: False
