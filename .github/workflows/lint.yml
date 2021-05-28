@@ -2,9 +2,9 @@ name: Lint and style checks
 
 on:
   push:
-    branches: main
+    branches: [ main ]
   pull_request:
-    branches: main
+    branches: [ main ]
 
 jobs:
   build:
@@ -13,3 +13,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
       - uses: pre-commit/action@v2.0.0
+      - uses: gaurav-nelson/github-action-markdown-link-check@v1
+      - uses: docker://avtodev/markdown-lint:v1
+        with:
+          args: '**/*.md'
