@@ -1,5 +1,7 @@
 [hololens]
 package = "holo/lens-mkdocs"
+
+# optional plugins, list must be matched in script/docs-server
 requirements = [
     "mkdocs-material",
     "mkdocs-awesome-pages-plugin",

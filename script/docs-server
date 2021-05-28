@@ -15,6 +15,8 @@ pip install --upgrade pip
 
 echo
 echo "Installing mkdocs and plugins..."
+# lines after mkdocs and mkdocs-material are optional plugins,
+# must be matched in .holo/branches/docs-site.lenses/mkdocs.toml
 pip install \
     mkdocs \
     mkdocs-material \
