@@ -20,7 +20,6 @@ pip install \
     mkdocs-material \
     mkdocs-awesome-pages-plugin \
     fontawesome_markdown \
-    mdx_truly_sane_lists \
     mkdocs-macros-plugin
 
 
