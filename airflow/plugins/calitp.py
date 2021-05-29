@@ -144,7 +144,7 @@ def _write_table_df(sql_stmt, table_name, engine=None, replace=True):
     )
 
 
-def query_yaml(fname, write_as=None, replace=False):
+def query_yaml(fname, write_as=None, replace=False, dry_run=False):
     import yaml
     from jinja2 import Environment, select_autoescape
 
@@ -158,7 +158,9 @@ def query_yaml(fname, write_as=None, replace=False):
 
     sql_code = template.render({**user_defined_macros})
 
-    if write_as is not None:
+    if dry_run:
+        print(sql_code)
+    elif write_as is not None:
         return write_table(sql_code, write_as, replace=replace)
     else:
         engine = get_engine()
@@ -253,7 +255,11 @@ def read_gcfs(
 
 # Macros ----
 
-user_defined_macros = dict(get_project_id=get_project_id, get_bucket=get_bucket)
+user_defined_macros = dict(
+    get_project_id=get_project_id,
+    get_bucket=get_bucket,
+    THE_FUTURE=lambda: 'DATE("2099-01-01")',
+)
 
 user_defined_filters = dict(
     table=lambda x: format_table_name(x, is_staging=False, full_name=True),
