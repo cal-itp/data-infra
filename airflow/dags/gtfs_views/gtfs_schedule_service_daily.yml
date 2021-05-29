@@ -79,3 +79,5 @@ sql: |
   FROM calendar_daily
   FULL JOIN date_include USING(calitp_itp_id, calitp_url_number, service_id, service_date)
   FULL JOIN date_exclude USING(calitp_itp_id, calitp_url_number, service_id, service_date)
+  # TODO: remove hardcoding--set this to be 1 month in the future, etc..
+  WHERE service_date < "2022-01-01"

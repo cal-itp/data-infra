@@ -22,14 +22,15 @@ DST_SCHEMA = "gtfs_schedule_type2"
 # Task 1: Create tables =======================================================
 
 
-def create_tables():
+def create_tables(names=None):
     """Fetch included gtfs tables. If they don't exist, then create them."""
 
     from calitp import get_table, write_table
 
-    names = get_table(
-        f"{SRC_SCHEMA}.calitp_included_gtfs_tables", as_df=True
-    ).table_name.tolist()
+    if names is None:
+        names = get_table(
+            f"{SRC_SCHEMA}.calitp_included_gtfs_tables", as_df=True
+        ).table_name.tolist()
 
     for src_name in names:
         sql_query = f"""
@@ -77,13 +78,12 @@ USING (
     ),
     feed_ids_today AS (
       SELECT DISTINCT calitp_itp_id, calitp_url_number
-      FROM `{table_feed_updates}`
-      WHERE calitp_extracted_at="{execution_date}"
+      FROM tbl_hash
     ),
     missing_entries AS (
       SELECT t1.calitp_hash AS calitp_hash
       FROM `{target}` t1
-      JOIN feed_ids_today t2
+      FULL JOIN feed_ids_today t2
         ON
             t1.calitp_itp_id=t2.calitp_itp_id
             AND t1.calitp_url_number=t2.calitp_url_number
@@ -91,7 +91,9 @@ USING (
         t1.calitp_deleted_at IS NULL
         AND t2.calitp_itp_id IS NULL
     )
-  SELECT t1.*
+  SELECT
+    t1.* EXCEPT(calitp_hash)
+    , COALESCE(t1.calitp_hash, t2.calitp_hash) AS calitp_hash
   FROM tbl_hash t1
   FULL JOIN missing_entries t2
     USING(calitp_hash)
@@ -102,8 +104,7 @@ WHEN NOT MATCHED BY TARGET THEN
     INSERT ROW
 WHEN NOT MATCHED BY SOURCE AND T.calitp_deleted_at IS NULL THEN
     UPDATE
-        SET calitp_deleted_at = DATE("{execution_date}"),
-            calitp_hash = NULL
+        SET calitp_deleted_at = DATE("{execution_date}")
 
 """
 
