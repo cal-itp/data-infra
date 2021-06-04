@@ -12,7 +12,7 @@
         <link rel="canonical" href="https://cal-itp.github.io/data-infra/">
       
       <link rel="icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.5">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.6">
     
     
       
@@ -20,10 +20,10 @@
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.bde7dde4.min.css">
+      <link rel="stylesheet" href="assets/stylesheets/main.875de78c.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.ef6f36e2.min.css">
+        <link rel="stylesheet" href="assets/stylesheets/palette.f1a3b89f.min.css">
         
           
           
@@ -67,7 +67,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#juniper-documentation" class="md-skip">
+        <a href="#welcome" class="md-skip">
           Skip to content
         </a>
       
@@ -97,7 +97,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Juniper documentation
+              Welcome
             
           </span>
         </div>
@@ -171,7 +171,7 @@
 
   <li class="md-tabs__item">
     <a href="." class="md-tabs__link md-tabs__link--active">
-      Juniper documentation
+      Welcome
     </a>
   </li>
 
@@ -238,12 +238,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Juniper documentation
+          Welcome
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="." class="md-nav__link md-nav__link--active">
-        Juniper documentation
+        Welcome
       </a>
       
         
@@ -263,6 +263,13 @@
         <li class="md-nav__item">
   <a href="#editing-documentation" class="md-nav__link">
     Editing documentation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentation-features" class="md-nav__link">
+    Documentation features
   </a>
   
 </li>
@@ -307,6 +314,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#documentation-features" class="md-nav__link">
+    Documentation features
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -324,12 +338,32 @@
                   </a>
                 
                 
-                <h1 id="juniper-documentation">Juniper documentation<a class="headerlink" href="#juniper-documentation" title="Permanent link"> ¶</a></h1>
-<p>Welcome to the docs!</p>
+                <h1 id="welcome">Welcome<a class="headerlink" href="#welcome" title="Permanent link"> ¶</a></h1>
+<p>This website provides technical documentation for the Juniper codebase.</p>
+<p>Documentation for the <code>main</code> branch is available online at: <a href="https://cal-itp.github.io/data-infra/">https://cal-itp.github.io/data-infra/</a></p>
 <h2 id="editing-documentation">Editing documentation<a class="headerlink" href="#editing-documentation" title="Permanent link"> ¶</a></h2>
 <p>The docs content all lives under <code>docs/</code>, with some top-level configuration for how the docs website gets built under <code>mkdocs.yml</code>. To add new sections/articles, simply create new directories/files under <code>docs/</code> in Markdown format.</p>
 <p>To preview the rendered docs website live while you work, run <code>script/docs-server</code> from your terminal (requires Python 3.5+).</p>
 <p>Changes to docs will be published to the online docs website automatically after they are merged into the <code>main</code> branch.</p>
+<h2 id="documentation-features">Documentation features<a class="headerlink" href="#documentation-features" title="Permanent link"> ¶</a></h2>
+<ul>
+<li>
+<p><a href="https://squidfunk.github.io/mkdocs-material/reference/admonitions/">Material for MkDocs: Reference</a></p>
+<p>See <code>mkdocs.yml</code> for enabled plugins/features</p>
+</li>
+<li>
+<p><a href="https://mermaid-js.github.io/mermaid/">Mermaid</a></p>
+<p>Use code fences with <code>mermaid</code> type to render Mermaid diagrams within docs. For example, this markdown:</p>
+<div class="highlight"><pre><span></span><code><span class="sb">```mermaid</span>
+<span class="s">graph LR</span>
+<span class="s">    Start --&gt; Stop</span>
+<span class="sb">```</span>
+</code></pre></div>
+<p>Yields this diagram:</p>
+<div class="mermaid">graph LR
+    Start --&gt; Stop</div>
+</li>
+</ul>
                 
               
               
@@ -368,7 +402,7 @@
     <script id="__config" type="application/json">{"base": ".", "features": ["navigation.tabs"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "assets/javascripts/workers/search.d351de03.min.js", "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.a1609d9a.min.js"></script>
+      <script src="assets/javascripts/bundle.34eae1b6.min.js"></script>
       
         <script src="https://unpkg.com/mermaid@8.5.0/dist/mermaid.min.js"></script>
       
