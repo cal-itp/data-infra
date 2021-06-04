@@ -18,5 +18,5 @@ repos:
     rev: 1.7.0
     hooks:
       - id: bandit
-        args: ["-ll", "--skip", "B108", "--skip", "B608"]
+        args: ["-ll", "--skip=B108,B608"]
         files: .py$
