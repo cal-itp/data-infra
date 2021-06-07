@@ -1,11 +1,11 @@
-description: "Download the state of CA GTFS files, async version"
+description: "Create type 2 history tables for gtfs schedules"
 schedule_interval: "0 0 * * *"
 tags:
   - all_gusty_features
 default_args:
     owner: airflow
-    depends_on_past: False
-    start_date: !days_ago 1
+    depends_on_past: True
+    start_date: "2021-04-15"
     email:
       - "hunter.owens@dot.ca.gov"
       - "michael.c@jarv.us"
@@ -15,6 +15,4 @@ default_args:
     retry_delay: !timedelta 'minutes: 2'
     concurrency: 50
     #sla: !timedelta 'hours: 2'
-wait_for_defaults:
-    timeout: 3600
 latest_only: False
