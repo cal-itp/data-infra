@@ -53,7 +53,17 @@ configs:
     MB_DB_HOST: database.metabase.svc.cluster.local
 
 ingress:
-  enabled: false
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: metabase.k8s.calitp.jarv.us
+      paths: [ '/' ]
+  tls:
+    - secretName: metabase-tls
+      hosts:
+        - metabase.k8s.calitp.jarv.us
 
 volumes:
   database:
