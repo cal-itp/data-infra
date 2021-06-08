@@ -110,5 +110,5 @@ helm install metabase kubernetes/apps/charts/metabase -f kubernetes/apps/values/
 
 Apply changes:
 ```
-helm upgrade metabase kubernetes/apps/charts/metabase -f kubernetes/apps/values/metabase.yaml
+helm upgrade metabase kubernetes/apps/charts/metabase -f kubernetes/apps/values/metabase.yaml -n metabase
 ```
