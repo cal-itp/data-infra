@@ -113,8 +113,10 @@ def merge_updates(table_name, execution_date, **kwargs):
     from calitp import get_engine, get_bucket, format_table_name
     from sqlalchemy import sql
 
+    date_string = execution_date.to_date_string()
+
     bucket_like_str = (
-        f"{get_bucket()}/schedule/processed/{execution_date}_%/{table_name}.txt"
+        f"{get_bucket()}/schedule/processed/{date_string}_%/{table_name}.txt"
     )
 
     sql_code = SQL_TEMPLATE.format(
@@ -122,7 +124,7 @@ def merge_updates(table_name, execution_date, **kwargs):
         source=format_table_name(f"{SRC_SCHEMA}.{table_name}"),
         table_feed_updates=format_table_name(f"{SRC_SCHEMA}.calitp_feed_updates"),
         bucket_like_str=bucket_like_str,
-        execution_date=execution_date.to_date_string(),
+        execution_date=date_string,
     )
 
     engine = get_engine()
