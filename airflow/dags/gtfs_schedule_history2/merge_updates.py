@@ -122,7 +122,7 @@ def merge_updates(table_name, execution_date, **kwargs):
         source=format_table_name(f"{SRC_SCHEMA}.{table_name}"),
         table_feed_updates=format_table_name(f"{SRC_SCHEMA}.calitp_feed_updates"),
         bucket_like_str=bucket_like_str,
-        execution_date=execution_date,
+        execution_date=execution_date.to_date_string(),
     )
 
     engine = get_engine()
