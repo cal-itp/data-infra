@@ -36,6 +36,10 @@ schema_fields:
           type: INTEGER
         - name: csvRowNumberB
           type: INTEGER
+        - name: rowLength
+          type: INTEGER
+        - name: headerCount
+          type: INTEGER
         - name: fareId
           type: STRING
         - name: previousCsvRowNumber
