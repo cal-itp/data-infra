@@ -1,3 +1,4 @@
 FROM python:3.9
-ADD gtfs-archive.py /
-ADD ./../airflow/data/agencies.yml /
+RUN pip install pyyaml
+ADD gtfs-rt-archive.py /
+ENTRYPOINT [ "python", "/gtfs-rt-archive.py" ]
