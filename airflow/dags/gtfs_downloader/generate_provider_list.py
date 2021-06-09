@@ -9,7 +9,7 @@ import pandas as pd
 from calitp import pipe_file_name
 
 
-def make_gtfs_list():
+def make_gtfs_list(fname=None):
     """
     Read in a list of GTFS urls
     from the main db
@@ -18,23 +18,28 @@ def make_gtfs_list():
      catalog = a intake catalog containing an "official_list" item.
     """
 
-    # TODO: add utility function for opening files
-    fname = pipe_file_name("data/agencies.yml")
+    if fname is None:
+        fname = pipe_file_name("data/agencies.yml")
+
     agencies = yaml.safe_load(open(fname))
 
-    # yaml has form <agency_name>: { agency_name: "", gtfs_schedule_url: [...,] }
+    # has form <handle>: { agency_name: "", feeds: [{gtfs_schedule_url: "", ...}]
     df = pd.DataFrame.from_dict(agencies, orient="index")
 
-    # TODO: handle multiple urls
-    # currently stores urls as a list, so get first (and hopefully only) entry
-    df_long = df.explode("gtfs_schedule_url")
-    df_long["url_number"] = df_long.groupby("itp_id").cumcount()
-    # df["gtfs_schedule_url"] = df["gtfs_schedule_url"].str.get(0)
+    assert df.itp_id.is_unique
 
-    # TODO: Figure out what to do with Metro
-    # For now, we just take the bus.
+    # melt feeds to be in long format
+    df_long = df.explode("feeds").rename_axis(index="agency_handle").reset_index()
 
-    return df_long
+    # make the url feeds into a DataFrame
+    df_feeds = pd.DataFrame(df_long.feeds.tolist())
+    assert df_feeds.index.equals(df_long.index)
+
+    # append columns for feed urls
+    df_final = df_long.join(df_feeds).drop(columns=["feeds"])
+    df_final["url_number"] = df_final.groupby("itp_id").cumcount()
+
+    return df_final
 
 
 def clean_url(url):
