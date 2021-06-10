@@ -18,7 +18,7 @@ echo "Installing mkdocs and plugins..."
 # lines after mkdocs and mkdocs-material are optional plugins,
 # must be matched in .holo/branches/docs-site.lenses/mkdocs.toml
 pip install \
-    mkdocs==1.1.2 \
+    mkdocs \
     mkdocs-material \
     mkdocs-awesome-pages-plugin \
     fontawesome_markdown \
