@@ -37,7 +37,7 @@ for dag_directory in dag_directories:
         dag_directory,
         tags=["default", "tags"],
         task_group_defaults={"tooltip": "this is a default tooltip"},
-        wait_for_defaults={"retries": 12, "check_existence": True, "timeout": 10 * 60},
+        wait_for_defaults={"retries": 24, "check_existence": True, "timeout": 10 * 60},
         latest_only=False,
         user_defined_macros=user_defined_macros,
         user_defined_filters=user_defined_filters,
