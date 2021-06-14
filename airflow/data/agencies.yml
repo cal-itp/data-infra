@@ -498,9 +498,9 @@ get-bus:
   agency_name: GET Bus
   feeds:
     - gtfs_schedule_url: http://eta.getbus.org/rtt/public/utility/gtfs.aspx
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: http://get.connexionz.net/rtt/public/utility/gtfsrealtime.aspx/vehicleposition
+      gtfs_rt_service_alerts_url: http://get.connexionz.net/rtt/public/utility/gtfsrealtime.aspx/alert
+      gtfs_rt_trip_updates_url: http://get.connexionz.net/rtt/public/utility/gtfsrealtime.aspx/tripupdate
   itp_id: 126
 glendale-beeline:
   agency_name: Glendale Beeline
