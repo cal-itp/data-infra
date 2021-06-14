@@ -1422,9 +1422,9 @@ visalia-transit:
   agency_name: Visalia Transit
   feeds:
     - gtfs_schedule_url: https://visaliatransit.info/GTFS
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://visaliatransit.info/gtfs-rt/vehiclepositions
+      gtfs_rt_service_alerts_url: https://visaliatransit.info/gtfs-rt/alerts
+      gtfs_rt_trip_updates_url: https://visaliatransit.info/gtfs-rt/tripupdates
   itp_id: 361
 westcat:
   agency_name: WestCAT
