@@ -122,9 +122,10 @@ beach-cities-transit:
   agency_name: Beach Cities Transit
   feeds:
     - gtfs_schedule_url: https://www.redondo.org/civicax/filebank/blobdload.aspx?BlobID=33555
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+    - gtfs_schedule_url: https://redondobeachbct.com/gtfs
+      gtfs_rt_vehicle_positions_url: https://redondobeachbct.com/gtfs-rt/vehiclepositions
+      gtfs_rt_service_alerts_url: https://redondobeachbct.com/gtfs-rt/alerts
+      gtfs_rt_trip_updates_url: https://redondobeachbct.com/gtfs-rt/tripupdates
   itp_id: 260
 bear-transit:
   agency_name: Bear Transit
@@ -185,10 +186,10 @@ blue-lake-rancheria:
 burbank-bus:
   agency_name: Burbank Bus
   feeds:
-    - gtfs_schedule_url: http://gis.burbankca.gov/files/gtfs/google_transit.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+    - gtfs_schedule_url: https://rideburbankbus.com/gtfs
+      gtfs_rt_vehicle_positions_url: https://rideburbankbus.com/gtfs-rt/vehiclepositions
+      gtfs_rt_service_alerts_url: https://rideburbankbus.com/gtfs-rt/alerts
+      gtfs_rt_trip_updates_url: https://rideburbankbus.com/gtfs-rt/tripupdates
   itp_id: 45
 burney-express:
   agency_name: Burney Express
@@ -790,9 +791,9 @@ moorpark-city-transit:
   agency_name: Moorpark City Transit
   feeds:
     - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/moorparkcitytransit-ca-us/moorparkcitytransit-ca-us.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://govcbus.com/gtfs-rt/vehiclepositions
+      gtfs_rt_service_alerts_url: https://govcbus.com/gtfs-rt/alerts
+      gtfs_rt_trip_updates_url: https://govcbus.com/gtfs-rt/tripupdates
   itp_id: 210
 morongo-basin-transit-authority:
   agency_name: Morongo Basin Transit Authority
@@ -854,9 +855,9 @@ ojai-trolley:
   agency_name: Ojai Trolley
   feeds:
     - gtfs_schedule_url: https://govcbus.com/gtfs
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://govcbus.com/gtfs-rt/vehiclepositions
+      gtfs_rt_service_alerts_url: https://govcbus.com/gtfs-rt/alerts
+      gtfs_rt_trip_updates_url: https://govcbus.com/gtfs-rt/tripupdates
   itp_id: 231
 omnitrans:
   agency_name: OmniTrans
@@ -1118,9 +1119,10 @@ simi-valley-transit:
   agency_name: Simi Valley Transit
   feeds:
     - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/simivalley-ca-us/simivalley-ca-us.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+    - gtfs_schedule_url: https://govcbus.com/gtfs
+      gtfs_rt_vehicle_positions_url: https://govcbus.com/gtfs-rt/vehiclepositions
+      gtfs_rt_service_alerts_url: https://govcbus.com/gtfs-rt/alerts
+      gtfs_rt_trip_updates_url: https://govcbus.com/gtfs-rt/tripupdates
   itp_id: 308
 siskiyou-transit-and-general-express:
   agency_name: Siskiyou Transit and General Express
@@ -1298,9 +1300,10 @@ thousand-oaks-transit:
   agency_name: Thousand Oaks Transit
   feeds:
     - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/thousandoaks-ca-us/thousandoaks-ca-us.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+    - gtfs_schedule_url: https://govcbus.com/gtfs
+      gtfs_rt_vehicle_positions_url: https://govcbus.com/gtfs-rt/vehiclepositions
+      gtfs_rt_service_alerts_url: https://govcbus.com/gtfs-rt/alerts
+      gtfs_rt_trip_updates_url: https://govcbus.com/gtfs-rt/tripupdates
   itp_id: 337
 tideline:
   agency_name: Tideline
