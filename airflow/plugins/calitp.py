@@ -167,6 +167,54 @@ def query_yaml(fname, write_as=None, replace=False, dry_run=False):
         return engine.execute(sql_code)
 
 
+def to_snakecase(df):
+    """Convert DataFrame column names to snakecase.
+
+    Note that this function also strips some non-ascii charactures, such as '"'.
+    """
+
+    return df.rename(
+        columns=lambda s: s.lower()
+        .replace(" ", "_")
+        .replace("&", "_")
+        .replace("(", "_")
+        .replace(")", "_")
+        .replace(".", "_")
+        .replace("-", "_")
+        .replace("/", "_")
+        .replace('"', "")
+        .replace("'", "")
+    ).rename(columns=lambda s: "_%s" % s if s[0].isdigit() else s)
+
+
+def sql_patch_comments(table_name, field_comments, bq_client=None):
+    """Patch an existing table with new column descriptions."""
+
+    if bq_client is None:
+        from google.cloud import bigquery
+
+        bq_client = bigquery.Client()
+
+    tbl = bq_client.get_table(table_name)
+    old_schema = tbl.schema
+
+    # make a copy of old schema, then
+    new_schema = []
+    for col_entry in old_schema:
+        d_entry = col_entry.to_api_repr()
+        comment = field_comments.get(d_entry["name"])
+
+        if comment:
+            # convert entry to dict, change description field, then recreate
+            d_entry["description"] = comment
+
+        # fine to keep as dict, since updating table.schema can handle
+        new_schema.append(d_entry)
+
+    tbl.schema = new_schema
+    bq_client.update_table(tbl, ["schema"])
+
+
 # Bucket related --------------------------------------------------------------
 
 

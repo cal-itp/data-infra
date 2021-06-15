@@ -4,7 +4,7 @@ import pandas_gbq
 from airflow.models import BaseOperator
 from airflow.utils.decorators import apply_defaults
 
-from calitp import save_to_gcfs
+from calitp import save_to_gcfs, to_snakecase
 
 
 def sql_df_to_gbq_schema(df, fields=None):
@@ -21,22 +21,7 @@ def sql_df_to_gbq_schema(df, fields=None):
 
 
 def csv_to_warehouse(src_uri, table_name, fields=None, dst_bucket_dir="csv"):
-    df = (
-        pd.read_csv(src_uri)
-        .rename(
-            columns=lambda s: s.lower()
-            .replace(" ", "_")
-            .replace("&", "_")
-            .replace("(", "_")
-            .replace(")", "_")
-            .replace(".", "_")
-            .replace("-", "_")
-            .replace("/", "_")
-            .replace('"', "")
-            .replace("'", "")
-        )
-        .rename(columns=lambda s: "_%s" % s if s[0].isdigit() else s)
-    )
+    df = to_snakecase(pd.read_csv(src_uri))
 
     table_schema = sql_df_to_gbq_schema(df, fields)
     project_id, table_name = table_name.split(".", 1)
@@ -74,5 +59,5 @@ class CsvToWarehouseOperator(BaseOperator):
 
     def execute(self, context):
         csv_to_warehouse(
-            self.src_uri, self.table_name, self.fields, self.dst_bucekt_dir
+            self.src_uri, self.table_name, self.fields, self.dst_bucket_dir
         )
