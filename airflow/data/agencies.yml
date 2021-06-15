@@ -530,9 +530,11 @@ gold-coast-transit:
   agency_name: Gold Coast Transit
   feeds:
     - gtfs_schedule_url: http://www.goldcoasttransit.org/images/GTFS/GTFS.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+    - gtfs_schedule_url: https://www.goldcoasttransit.org/images/GTFS/GCTD_GTFS.zip
+    -gtfs_schedule_url: https://govcbus.com/gtfs
+      gtfs_rt_vehicle_positions_url: https://govcbus.com/gtfs-rt/vehiclepositions
+      gtfs_rt_service_alerts_url: https://govcbus.com/gtfs-rt/alerts
+      gtfs_rt_trip_updates_url: https://govcbus.com/gtfs-rt/tripupdates
   itp_id: 123
 gold-country-stage:
   agency_name: Gold Country Stage
