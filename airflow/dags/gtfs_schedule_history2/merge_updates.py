@@ -1,6 +1,8 @@
 # ---
 # python_callable: main
 # provide_context: true
+# external_dependencies:
+#   - gtfs_loader: gtfs_schedule_history_load
 # ---
 
 # This task looks up all included gtfs tables, then..
