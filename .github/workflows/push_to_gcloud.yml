@@ -17,6 +17,15 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: 3.8
+    - name: Install python packages
+      run: |
+        pip install jinja2==2.11.3 PyYAML==5.4.1
+    - name: Fill in agencies.yml API keys
+      run: |
+        python script/agencies_convert.py \
+          './airflow/data/agencies.yml' \
+          './airflow/data/agencies.filled.yml' \
+          'https://docs.google.com/spreadsheets/d/1Fp7sesSMS6VOIndTLTKcyyN2qHj6najKAaN-I9_3SFo/export?gid=0&format=csv'
     - uses: google-github-actions/setup-gcloud@master
       with:
         service_account_key: ${{ secrets.GCP_SA_KEY }}
@@ -25,3 +34,5 @@ jobs:
         gsutil -m rsync -d -c -r airflow/dags gs://us-west2-calitp-airflow-pro-332827a9-bucket/dags
         gsutil -m rsync -d -c -r airflow/plugins gs://us-west2-calitp-airflow-pro-332827a9-bucket/plugins
         gsutil -m rsync -d -c -r airflow/data gs://us-west2-calitp-airflow-pro-332827a9-bucket/data
+        # replace agencies.yml with filled in template
+        gsutil -m cp airflow/data/agencies.filled.yml gs://us-west2-calitp-airflow-pro-332827a9-bucket/data/agencies.yml
