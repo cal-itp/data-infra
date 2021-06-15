@@ -617,7 +617,7 @@ kings-area-rural-transit:
 la-campana:
   agency_name: La Campana
   feeds:
-    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/arvin-ca-us/arvin-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/lacampana-ca-us/lacampana-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
