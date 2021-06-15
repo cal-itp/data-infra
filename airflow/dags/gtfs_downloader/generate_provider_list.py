@@ -36,7 +36,14 @@ def make_gtfs_list(fname=None):
     assert df_feeds.index.equals(df_long.index)
 
     # append columns for feed urls
-    df_final = df_long.join(df_feeds).drop(columns=["feeds"])
+    df_final = df_long.join(df_feeds).drop(
+        columns=[
+            "feeds",
+            "gtfs_rt_vehicle_positions",
+            "gtfs_rt_service_alerts_url",
+            "gtfs_rt_trip_updates_url",
+        ]
+    )
     df_final["url_number"] = df_final.groupby("itp_id").cumcount()
 
     return df_final
