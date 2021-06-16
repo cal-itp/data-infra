@@ -886,7 +886,7 @@ pasadena-transit:
   agency_name: Pasadena Transit
   feeds:
     - gtfs_schedule_url: http://rt.pasadenatransit.net/rtt/public/utility/gtfs.aspx
-      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_vehicle_positions_url: http://rt.pasadenatransit.net/rtt/public/utility/gtfsrealtime.aspx/vehicleposition
       gtfs_rt_service_alerts_url: http://rt.pasadenatransit.net/rtt/public/utility/gtfsrealtime.aspx/alert
       gtfs_rt_trip_updates_url: http://rt.pasadenatransit.net/rtt/public/utility/gtfsrealtime.aspx/tripupdate
   itp_id: 243
@@ -1086,9 +1086,9 @@ santa-clarita-transit:
   agency_name: Santa Clarita Transit
   feeds:
     - gtfs_schedule_url: http://apps.santaclaritatransit.com/rtt/public/utility/gtfs.aspx
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: http://apps.santaclaritatransit.com/rtt/public/utility/gtfsrealtime.aspx/vehicleposition
+      gtfs_rt_service_alerts_url: http://apps.santaclaritatransit.com/rtt/public/utility/gtfsrealtime.aspx/alert
+      gtfs_rt_trip_updates_url: http://apps.santaclaritatransit.com/rtt/public/utility/gtfsrealtime.aspx/tripupdate
   itp_id: 295
 santa-cruz-metropolitan-transit-district:
   agency_name: Santa Cruz Metropolitan Transit District
