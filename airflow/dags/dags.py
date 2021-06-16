@@ -26,6 +26,7 @@ dag_directories = [
     dag_parent_dir / "gtfs_views",
     dag_parent_dir / "gtfs_schedule_history",
     dag_parent_dir / "gtfs_schedule_history2",
+    dag_parent_dir / "transitstacks_loader",
 ]
 
 
