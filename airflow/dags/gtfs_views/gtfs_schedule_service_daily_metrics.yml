@@ -1,7 +1,7 @@
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.gtfs_schedule_service_daily_metrics"
 dependencies:
-  - warehouse_loaded
+  - gtfs_schedule_service_daily_trips
 
 sql: |
   WITH service_agg AS (
