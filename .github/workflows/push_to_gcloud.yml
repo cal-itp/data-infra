@@ -35,12 +35,12 @@ jobs:
     # The following only runs on the main branch ----
 
     - uses: google-github-actions/setup-gcloud@master
-      if: ${{ github.ref == 'refs/head/main' }}
+      if: ${{ github.ref == 'refs/heads/main' }}
       with:
         service_account_key: ${{ secrets.GCP_SA_KEY }}
         export_default_credentials: true
     - name: Push to google cloud
-      if: ${{ github.ref == 'refs/head/main' }}
+      if: ${{ github.ref == 'refs/heads/main' }}
       run: |
         gsutil -m rsync -d -c -r airflow/dags gs://us-west2-calitp-airflow-pro-332827a9-bucket/dags
         gsutil -m rsync -d -c -r airflow/plugins gs://us-west2-calitp-airflow-pro-332827a9-bucket/plugins
