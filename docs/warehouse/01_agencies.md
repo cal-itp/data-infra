@@ -35,7 +35,6 @@ ac-transit:
   itp_id: 4
 ```
 
-
 ## Deploying to Pipeline
 
 Every time the main branch of cal-itp/data-infra is updated on github,
