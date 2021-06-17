@@ -1,9 +1,8 @@
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.validation_code_metrics"
 dependencies:
+  - warehouse_loaded
   - dim_date
-external_dependencies:
-  - gtfs_schedule_history2: validation_notices
 
 sql: |
   WITH
