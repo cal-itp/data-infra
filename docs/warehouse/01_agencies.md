@@ -41,4 +41,5 @@ ac-transit:
 Every time the main branch of cal-itp/data-infra is updated on github,
 [this github action][action] swaps in the API keys and pushes to our Cloud Composer's data bucket.
 
+<!-- markdown-link-check-disable-next-line -->
 [action]: (https://github.com/cal-itp/data-infra/blob/main/.github/workflows/update_gcloud_requirements.yml)
