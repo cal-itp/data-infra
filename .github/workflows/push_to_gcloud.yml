@@ -2,10 +2,8 @@ name: move DAGs to GCS folder
 
 on:
   push:
-    branches:
-      - main
     paths:
-      - 'airflow/data/agencies.yml'
+      - 'airflow/**'
 
 jobs:
   deploy:
