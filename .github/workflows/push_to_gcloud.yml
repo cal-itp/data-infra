@@ -37,7 +37,7 @@ jobs:
     # The following only runs on the main branch ----
 
     - uses: google-github-actions/setup-gcloud@master
-      if: github.ref == "refs/head/main"
+      if: ${{ github.ref == 'refs/head/main' }}
       with:
         service_account_key: ${{ secrets.GCP_SA_KEY }}
         export_default_credentials: true
