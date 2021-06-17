@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'airflow/data/agencies.yml'
 
 jobs:
   deploy:
@@ -26,11 +28,17 @@ jobs:
           './airflow/data/agencies.yml' \
           './airflow/data/agencies.filled.yml' \
           'https://docs.google.com/spreadsheets/d/1Fp7sesSMS6VOIndTLTKcyyN2qHj6najKAaN-I9_3SFo/export?gid=0&format=csv'
+
+    # The following only runs on the main branch ----
+
     - uses: google-github-actions/setup-gcloud@master
+      if: github.ref == "refs/head/main"
       with:
         service_account_key: ${{ secrets.GCP_SA_KEY }}
         export_default_credentials: true
-    - run: |
+    - name: Push to google cloud
+      if: github.ref == "refs/head/main"
+      run: |
         gsutil -m rsync -d -c -r airflow/dags gs://us-west2-calitp-airflow-pro-332827a9-bucket/dags
         gsutil -m rsync -d -c -r airflow/plugins gs://us-west2-calitp-airflow-pro-332827a9-bucket/plugins
         gsutil -m rsync -d -c -r airflow/data gs://us-west2-calitp-airflow-pro-332827a9-bucket/data
