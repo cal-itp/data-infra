@@ -1,13 +1,14 @@
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.validation_code_metrics"
 dependencies:
+
   - warehouse_loaded
   - dim_date
 
 sql: |
   WITH
   date_range AS (
-      SELECT 
+      SELECT
           *
           , t2.full_date AS metric_date
       -- TODO: join with agency_names to get name of agency
@@ -17,7 +18,7 @@ sql: |
           AND COALESCE(t1.calitp_deleted_at, DATE("2099-01-01")) > t2.full_date
           AND t2.full_date >= "2021-05-01" AND t2.full_date <= "2021-06-01"
   )
-  SELECT 
+  SELECT
       calitp_itp_id
       , calitp_url_number
       , metric_date
