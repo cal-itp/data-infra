@@ -142,3 +142,15 @@ schema_fields:
           type: STRING
         - name: arrivalTime
           type: STRING
+        - name: expectedLocationType
+          type: INTEGER
+        - name: locationType
+          type: INTEGER
+        - name: parentCsvRowNumber
+          type: INTEGER
+        - name: parentLocationType
+          type: INTEGER
+        - name: parentStation
+          type: STRING
+        - name: parentStopName
+          type: STRING
