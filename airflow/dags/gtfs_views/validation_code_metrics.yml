@@ -18,7 +18,7 @@ sql: |
           AND t2.full_date >= "2021-05-01" AND t2.full_date <= "2021-06-01"
   ),
   unique_codes AS (
-        SELECT DISTINCT code FROM `{{ "cal-itp-data-infra.views.validation_notices" | table }}`
+        SELECT DISTINCT code FROM `{{ "cal-itp-data-infra.gtfs_schedule_type2.validation_notices" | table }}`
     ),
     agency_by_code AS (
         SELECT t3.*, t4.*,
