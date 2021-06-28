@@ -6,7 +6,7 @@
 import yaml
 import pandas as pd
 
-from calitp import pipe_file_name
+from calitp.config import pipe_file_name
 
 
 def make_gtfs_list(fname=None):

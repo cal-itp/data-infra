@@ -3,7 +3,8 @@ from airflow.contrib.hooks.bigquery_hook import BigQueryHook
 from googleapiclient.errors import HttpError
 from airflow import AirflowException
 
-from calitp import format_table_name, sql_patch_comments
+from calitp.config import format_table_name
+from calitp.sql import sql_patch_comments
 
 
 class SqlToWarehouseOperator(BaseOperator):
