@@ -39,4 +39,4 @@ sql: |
    SELECT * EXCEPT (n_notices),
    COALESCE(n_notices, 0) as n_notices
    FROM agency_by_code
-   JOIN `code_metrics_partial` USING (calitp_itp_id,calitp_url_number,code)
+   LEFT JOIN `code_metrics_partial` USING (calitp_itp_id,calitp_url_number,code)
