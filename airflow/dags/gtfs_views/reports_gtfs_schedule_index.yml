@@ -58,6 +58,7 @@ sql: |
             PD.publish_date
             , S.itp_id AS calitp_itp_id
             , S.url_number AS calitp_url_number
+            , S.agency_name
         FROM `{{ "gtfs_schedule_history.calitp_status" | table }}` S
         JOIN publish_dates_crnt PD ON
             S.calitp_extracted_at = PD.date_end
@@ -67,6 +68,7 @@ sql: |
         publish_date
         , calitp_itp_id
         , calitp_url_number
+        , AF.agency_name
         , PD.date_start
         , PD.date_end
         , FI.has_feed_info
