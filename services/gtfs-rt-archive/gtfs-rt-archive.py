@@ -100,26 +100,23 @@ def parse_feeds(logger, feeds_src):
     feeds_src_data = yaml.load(f, Loader=yaml.FullLoader)
     for agency_name, agency_def in feeds_src_data.items():
 
-      if 'gtfs_rt_urls' not in agency_def:
+      if 'feeds' not in agency_def:
+        logger.warning('agency {}: skipped loading invalid definition (missing feeds)'.format(agency_name))
         continue
 
       if 'itp_id' not in agency_def:
         logger.warning('agency {}: skipped loading invalid definition (missing itp_id)'.format(agency_name))
         continue
 
-      agency_itp_id       = agency_def['itp_id']
-      agency_gtfs_rt_urls = agency_def['gtfs_rt_urls']
+      for i, feed_set in enumerate(agency_def['feeds']):
+        for feed_name, feed_url in feed_set.items():
+          if feed_name.startswith('gtfs_rt') and feed_url:
 
-      if not hasattr(agency_gtfs_rt_urls, 'items'):
-        logger.warning('itp_id {} ({}): skipped loading unsupported data format for gtfs_rt_urls'.format(agency_itp_id, agency_name))
-        continue
-
-      for agency_feed_name, agency_feed_urls in agency_gtfs_rt_urls.items():
-        for i, url in enumerate(agency_feed_urls):
-          feeds.append((
-            '{}/{}/{}'.format(agency_itp_id, agency_feed_name, i),
-            url
-          ))
+            agency_itp_id = agency_def['itp_id']
+            feeds.append((
+              '{}/{}/{}'.format(agency_itp_id, i, feed_name),
+              feed_url
+            ))
 
   return feeds
 
