@@ -20,4 +20,11 @@ code_descriptions = (
     .rename(columns={"type": "severity", "name": "code"})
 )
 
+code_descriptions["code"] = (
+    code_descriptions.code.str.replace(r"(?<!^)(?=[A-Z])", "_")
+    .str.lower()
+    .str.replace("_notice$", "")
+    .replace({"i_o_error": "io_error", "u_r_i_syntax_error": "uri_syntax_error"})
+)
+
 write_table(code_descriptions, "views.validation_code_descriptions")
