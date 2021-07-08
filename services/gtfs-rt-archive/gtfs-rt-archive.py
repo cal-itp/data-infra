@@ -296,6 +296,17 @@ class GCPBucketWriter(BaseWriter):
 
     super().__init__(logger, wq, urlstr, secret)
 
+    self.session = None
+
+    if self.secret is not None:
+      from google.oauth2 import service_account
+      from google.auth.transport.requests import AuthorizedSession
+      from google.auth.exceptions import TransportError
+      scopes = [ 'https://www.googleapis.com/auth/devstorage.read_write' ]
+      credentials = service_account.Credentials.from_service_account_file(secret, scopes=scopes)
+      self.session = AuthorizedSession(credentials)
+      self.GoogleAuthTransportError = TransportError
+
     url = urllib.parse.urlparse(urlstr)
 
     self.uploadurl = '{}/{}/o'.format(self.baseurl, url.netloc)
@@ -314,18 +325,23 @@ class GCPBucketWriter(BaseWriter):
       'Content-Type': 'application/octet-stream'
     }
 
-    if self.secret is not None:
-      rqheaders['Authorization'] = 'Bearer {}'.format(self.secret)
+    if self.session is None:
 
-    rq = urllib.request.Request(rqurl, method='POST', headers=rqheaders, data=rstream)
+      rq = urllib.request.Request(rqurl, method='POST', headers=rqheaders, data=rstream)
+      try:
+        rs = urllib.request.urlopen(rq)
+      except (
+        urllib.error.URLError,
+        urllib.error.HTTPError
+      ) as e:
+        self.logger.error('{}: error uploading to bucket {}: {}'.format(self.name, self.urlstr, e))
 
-    try:
-      rs = urllib.request.urlopen(rq)
-    except (
-      urllib.error.URLError,
-      urllib.error.HTTPError
-    ) as e:
-      self.logger.error('{}: error uploading to bucket {}: {}'.format(self.name, self.urlstr, e))
+    else:
+
+      try:
+        rs = self.session.request('POST', rqurl, data=rstream, headers=rqheaders)
+      except self.GoogleAuthTransportError as e:
+        self.logger.error('{}: error uploading to bucket {}: {}'.format(self.name, self.urlstr, e))
 
 if __name__ == '__main__':
   main(sys.argv)
