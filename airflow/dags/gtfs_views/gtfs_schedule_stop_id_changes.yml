@@ -10,7 +10,7 @@ WITH
   date_range AS (
       SELECT
         full_date AS metric_date,
-        DATE_SUB(full_date, INTERVAL 1 MONTH) AS date_start,
+        DATE_SUB(full_date, INTERVAL 1 DAY) AS date_start,
         full_date AS date_end,
       FROM `{{ "views.dim_date" | table }}`
       WHERE full_date BETWEEN '2020-01-01' AND '2021-07-07'
