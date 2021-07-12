@@ -41,7 +41,6 @@ sql: |
     UNNEST(GENERATE_DATE_ARRAY('2001-01-01', '2050-01-01', INTERVAL 1 DAY)) d
 ```
 
-
 ## Testing Changes
 
 ## Walkthrough

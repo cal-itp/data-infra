@@ -5,9 +5,9 @@ It is defined by the three pieces below.
 
 * **The grain**: the business process that each row represents.
 * **Metric date columns**.
-  - `metric_date`: the day the metric describes.
-  - `metric_period`: the period of time the metric spans (e.g. day for a metric
-    that describes data across a single day; week for when `metric_date` describes data across a week.)
+    * `metric_date`: the day the metric describes.
+    * `metric_period`: the period of time the metric spans (e.g. day for a metric
+      that describes data across a single day; week for when `metric_date` describes data across a week.)
 * **Metric value columns**
 
 ## Example: views.validation_code_metrics

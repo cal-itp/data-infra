@@ -11,7 +11,6 @@
 
 ### Using metabase dashboards
 
-
 <div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/1dc0c085b12b4848a52523ef34397f71" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
 
 ### Using siuba
@@ -23,7 +22,6 @@ See the [siuba docs](siuba.readthedocs.io) for more information.
 
 The examples below go through the basics of using siuba, collecting a database query to a local DataFrame,
 and showing SQL queries that siuba code generates.
-
 
 #### Basic query
 
@@ -40,7 +38,7 @@ from siuba import _, filter, count, collect, show_query
 ```
 
 <!-- CODE OUTPUT -->
-```
+```pycon
 # Source: lazy query
 # DB Conn: Engine(bigquery://cal-itp-data-infra/?maximum_bytes_billed=5000000000)
 # Preview:
@@ -53,7 +51,6 @@ from siuba import _, filter, count, collect, show_query
 # .. may have more rows
 ```
 <!-- END CODE OUTPUT -->
-
 
 #### Collect query results
 
@@ -68,7 +65,7 @@ tbl_agency_names.head()
 ```
 
 <!-- CODE OUTPUT -->
-```
+```pycon
    calitp_itp_id  calitp_url_number                 agency_name
 0            256                  0         Porterville Transit
 1            257                  0                   PresidiGo
@@ -91,7 +88,7 @@ SQL code that siuba generates.
 ```
 
 <!-- CODE OUTPUT -->
-```
+```SQL
 SELECT `anon_1`.`calitp_itp_id`, `anon_1`.`calitp_url_number`, `anon_1`.`agency_name`
 FROM (SELECT calitp_itp_id, calitp_url_number, agency_name
 FROM `views.gtfs_agency_names`) AS `anon_1`
