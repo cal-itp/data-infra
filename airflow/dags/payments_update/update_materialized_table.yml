@@ -1,0 +1,5 @@
+operator: operators.SqlToWarehouseOperator
+dst_table_name: "views.mst_ridership_materialized"
+sql: |
+  DROP TABLE IF EXISTS `views.mst_ridership_materalized`;
+  CREATE TABLE `views.mst_ridership_materalized` AS (SELECT * FROM `cal-itp-data-infra.views.mst_ridership`)

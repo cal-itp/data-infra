@@ -1,7 +1,8 @@
 import inspect
 
 from airflow.operators import PythonOperator
-from calitp import format_table_name, sql_patch_comments
+from calitp.config import format_table_name
+from calitp.sql import sql_patch_comments
 
 
 class PythonToWarehouseOperator(PythonOperator):

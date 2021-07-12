@@ -4,7 +4,7 @@ from airflow.contrib.operators.bigquery_operator import (
 from functools import wraps
 from google.cloud import bigquery
 
-from calitp import (
+from calitp.config import (
     get_bucket,
     format_table_name,
 )

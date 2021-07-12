@@ -11,7 +11,8 @@ Process and dump files for gtfs_schedule_history.calitp_files external table.
 This is for the files downloaded for an agency, as well as validator results.
 """
 
-from calitp import read_gcfs, get_bucket, save_to_gcfs
+from calitp import read_gcfs, save_to_gcfs
+from calitp.config import get_bucket
 import pandas as pd
 import gcsfs
 

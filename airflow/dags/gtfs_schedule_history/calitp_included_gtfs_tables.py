@@ -3,7 +3,7 @@
 # ---
 
 import pandas as pd
-from calitp import get_project_id, format_table_name
+from calitp.config import get_project_id, format_table_name
 
 
 # TODO: this could be data in the data folder
