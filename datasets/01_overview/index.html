@@ -9,14 +9,14 @@
       
       
       
-        <link rel="canonical" href="https://docs.calitp.org/data-infra/warehouse/01_agencies/">
+        <link rel="canonical" href="https://docs.calitp.org/data-infra/datasets/01_overview/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.2.1, mkdocs-material-7.1.10">
     
     
       
-        <title>Agency GTFS Feeds - Juniper Documentation</title>
+        <title>Overview - Juniper Documentation</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#agency-gtfs-feeds" class="md-skip">
+        <a href="#overview" class="md-skip">
           Skip to content
         </a>
       
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Agency GTFS Feeds
+              Overview
             
           </span>
         </div>
@@ -212,22 +212,6 @@
         
   
   
-
-
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../../datasets/01_overview/" class="md-tabs__link">
-        Datasets
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
     
   
 
@@ -237,6 +221,22 @@
   
     <li class="md-tabs__item">
       <a href="./" class="md-tabs__link md-tabs__link--active">
+        Datasets
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../warehouse/01_agencies/" class="md-tabs__link">
         Warehouse
       </a>
     </li>
@@ -308,12 +308,14 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
       
       <label class="md-nav__link" for="__nav_2">
         Datasets
@@ -323,98 +325,6 @@
         <label class="md-nav__title" for="__nav_2">
           <span class="md-nav__icon md-icon"></span>
           Datasets
-        </label>
-        <ul class="md-nav__list" data-md-scrollfix>
-          
-            
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../datasets/01_overview/" class="md-nav__link">
-        Overview
-      </a>
-    </li>
-  
-
-          
-            
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../datasets/gtfs_schedule/" class="md-nav__link">
-        GTFS Schedule
-      </a>
-    </li>
-  
-
-          
-            
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../datasets/mst_payments/" class="md-nav__link">
-        MST Payments
-      </a>
-    </li>
-  
-
-          
-            
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../datasets/transitstacks/" class="md-nav__link">
-        Transitstacks
-      </a>
-    </li>
-  
-
-          
-            
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../datasets/views/" class="md-nav__link">
-        Views
-      </a>
-    </li>
-  
-
-          
-        </ul>
-      </nav>
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-    
-  
-  
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
-      
-      
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
-      
-      <label class="md-nav__link" for="__nav_3">
-        Warehouse
-        <span class="md-nav__icon md-icon"></span>
-      </label>
-      <nav class="md-nav" aria-label="Warehouse" data-md-level="1">
-        <label class="md-nav__title" for="__nav_3">
-          <span class="md-nav__icon md-icon"></span>
-          Warehouse
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -433,12 +343,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Agency GTFS Feeds
+          Overview
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Agency GTFS Feeds
+        Overview
       </a>
       
         
@@ -456,23 +366,56 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#finding-the-itp-id" class="md-nav__link">
-    Finding the ITP ID
+  <a href="#querying-data" class="md-nav__link">
+    Querying data
+  </a>
+  
+    <nav class="md-nav" aria-label="Querying data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-metabase-dashboards" class="md-nav__link">
+    Using metabase dashboards
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#including-api-keys" class="md-nav__link">
-    Including API Keys
+        
+          <li class="md-nav__item">
+  <a href="#using-siuba" class="md-nav__link">
+    Using siuba
+  </a>
+  
+    <nav class="md-nav" aria-label="Using siuba">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-query" class="md-nav__link">
+    Basic query
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#deploying-to-pipeline" class="md-nav__link">
-    Deploying to Pipeline
+        
+          <li class="md-nav__item">
+  <a href="#collect-query-results" class="md-nav__link">
+    Collect query results
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#show-query-sql" class="md-nav__link">
+    Show query SQL
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -489,7 +432,97 @@
   
   
     <li class="md-nav__item">
-      <a href="../02_views/" class="md-nav__link">
+      <a href="../gtfs_schedule/" class="md-nav__link">
+        GTFS Schedule
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mst_payments/" class="md-nav__link">
+        MST Payments
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../transitstacks/" class="md-nav__link">
+        Transitstacks
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../views/" class="md-nav__link">
+        Views
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      <label class="md-nav__link" for="__nav_3">
+        Warehouse
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Warehouse" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Warehouse
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../warehouse/01_agencies/" class="md-nav__link">
+        Agency GTFS Feeds
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../warehouse/02_views/" class="md-nav__link">
         Creating New Tables (Views)
       </a>
     </li>
@@ -501,7 +534,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../03_metrics/" class="md-nav__link">
+      <a href="../../warehouse/03_metrics/" class="md-nav__link">
         Metric Views
       </a>
     </li>
@@ -513,7 +546,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../04_sql_snippets/" class="md-nav__link">
+      <a href="../../warehouse/04_sql_snippets/" class="md-nav__link">
         SQL Snippets
       </a>
     </li>
@@ -552,23 +585,56 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#finding-the-itp-id" class="md-nav__link">
-    Finding the ITP ID
+  <a href="#querying-data" class="md-nav__link">
+    Querying data
+  </a>
+  
+    <nav class="md-nav" aria-label="Querying data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-metabase-dashboards" class="md-nav__link">
+    Using metabase dashboards
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#including-api-keys" class="md-nav__link">
-    Including API Keys
+        
+          <li class="md-nav__item">
+  <a href="#using-siuba" class="md-nav__link">
+    Using siuba
+  </a>
+  
+    <nav class="md-nav" aria-label="Using siuba">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-query" class="md-nav__link">
+    Basic query
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#deploying-to-pipeline" class="md-nav__link">
-    Deploying to Pipeline
+        
+          <li class="md-nav__item">
+  <a href="#collect-query-results" class="md-nav__link">
+    Collect query results
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#show-query-sql" class="md-nav__link">
+    Show query SQL
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -584,44 +650,110 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/cal-itp/data-infra/edit/main/docs/warehouse/01_agencies.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/cal-itp/data-infra/edit/main/docs/datasets/01_overview.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
                 
-                <h1 id="agency-gtfs-feeds">Agency GTFS Feeds<a class="headerlink" href="#agency-gtfs-feeds" title="Permanent link"> ¶</a></h1>
-<p>Feed information is stored in <a href="https://github.com/cal-itp/data-infra/blob/main/airflow/data/agencies.yml">airflow/data/agencies.yml</a>.
-This file is then used by our Airflow data pipeline to download feeds, and load them into the warehouse.</p>
-<p>Each agency feed entry includes these fields:</p>
-<ul>
-<li><code>agency_name</code>: Human friendly name for the agency</li>
-<li><code>itp_id</code>: The California Integrated Travel Project ID</li>
-<li>URLs such as <code>gtfs_schedule_url</code>, and those for realtime feeds.</li>
-</ul>
-<h2 id="finding-the-itp-id">Finding the ITP ID<a class="headerlink" href="#finding-the-itp-id" title="Permanent link"> ¶</a></h2>
-<p>Entries must include the correct ITP ID for an agency.
-These can be found on the <a href="https://docs.google.com/spreadsheets/d/105oar4q_Z3yihDeUlP-VnYpJ0N9Mfs7-q4TnribqYLU/edit?usp=sharing">Primary List of California Transit Providers</a>.</p>
-<h2 id="including-api-keys">Including API Keys<a class="headerlink" href="#including-api-keys" title="Permanent link"> ¶</a></h2>
-<p>If the URL for a GTFS feed requires an API key, you can include using these steps:</p>
-<ul>
-<li>Add a unique name, and the key to <a href="https://docs.google.com/spreadsheets/d/1Fp7sesSMS6VOIndTLTKcyyN2qHj6najKAaN-I9_3SFo/edit?usp=sharing">this private spreadsheet</a>.</li>
-<li>Include the API key in your url by using <code>{{ MY_KEY_NAME }}</code>, where <code>MY_KEY_NAME</code>
-  is the unique name used in the spreadsheet.</li>
-</ul>
-<p>Below is an example entry.</p>
-<div class="highlight"><pre><span></span><code><span class="nt">ac-transit</span><span class="p">:</span>
-  <span class="nt">agency_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AC Transit</span>
-  <span class="nt">feeds</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="nt">gtfs_schedule_url</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">https://api.actransit.org/transit/gtfs/download?token={{ AC_TRANSIT_API_KEY }}</span>
-      <span class="nt">gtfs_rt_vehicle_positions_url</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">https://api.actransit.org/gtfsrt/vehicles?token={{ AC_TRANSIT_API_KEY }}</span>
-      <span class="nt">gtfs_rt_service_alerts_url</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">https://api.actransit.org/gtfsrt/alerts?token={{ AC_TRANSIT_API_KEY }}</span>
-      <span class="nt">gtfs_rt_trip_updates_url</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">https://api.actransit.org/gtfsrt/tripupdates?token={{ AC_TRANSIT_API_KEY }}</span>
-  <span class="nt">itp_id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">4</span>
+                <h1 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link"> ¶</a></h1>
+<table>
+<thead>
+<tr>
+<th>page</th>
+<th>description</th>
+<th>datasets</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../gtfs_schedule/">GTFS Schedule</a></td>
+<td>GTFS Schedule data for the current day</td>
+<td><code>gtfs_schedule</code>, <code>gtfs_schedule_history</code>, <code>gtfs_schedule_type2</code></td>
+</tr>
+<tr>
+<td><a href="../mst_payments/">MST Payments</a></td>
+<td>TODO</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td><a href="../transitstacks/">Transitstacks</a></td>
+<td>TODO</td>
+<td><code>transitstacks</code>, <code>views.transitstacks</code></td>
+</tr>
+<tr>
+<td><a href="../views/">Views</a></td>
+<td>End-user friendly data for dashboards and metrics</td>
+<td>E.g. <code>views.validation_*</code>, <code>views.gtfs_schedule_*</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="querying-data">Querying data<a class="headerlink" href="#querying-data" title="Permanent link"> ¶</a></h2>
+<h3 id="using-metabase-dashboards">Using metabase dashboards<a class="headerlink" href="#using-metabase-dashboards" title="Permanent link"> ¶</a></h3>
+<div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/1dc0c085b12b4848a52523ef34397f71" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
+
+<h3 id="using-siuba">Using siuba<a class="headerlink" href="#using-siuba" title="Permanent link"> ¶</a></h3>
+<p>Siuba is a tool that allows the same analysis code to run on a pandas DataFrame,
+as well as generate SQL for different databases.
+It supports most <a href="https://pandas.pydata.org/pandas-docs/stable/reference/series.html">pandas Series methods</a> analysts use.
+See the <a href="siuba.readthedocs.io">siuba docs</a> for more information.</p>
+<p>The examples below go through the basics of using siuba, collecting a database query to a local DataFrame,
+and showing SQL queries that siuba code generates.</p>
+<h4 id="basic-query">Basic query<a class="headerlink" href="#basic-query" title="Permanent link"> ¶</a></h4>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbl</span>
+<span class="kn">from</span> <span class="nn">siuba</span> <span class="kn">import</span> <span class="n">_</span><span class="p">,</span> <span class="nb">filter</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">collect</span><span class="p">,</span> <span class="n">show_query</span>
+
+<span class="c1"># query lastest validation notices, then filter for a single gtfs feed,</span>
+<span class="c1"># and then count how often each code occurs</span>
+<span class="p">(</span><span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">validation_notices</span><span class="p">()</span>
+    <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_itp_id</span> <span class="o">==</span> <span class="mi">10</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">calitp_url_number</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+    <span class="o">&gt;&gt;</span> <span class="n">count</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
+<span class="p">)</span>
 </code></pre></div>
-<h2 id="deploying-to-pipeline">Deploying to Pipeline<a class="headerlink" href="#deploying-to-pipeline" title="Permanent link"> ¶</a></h2>
-<p>Every time the main branch of cal-itp/data-infra is updated on github,
-<a href="(https://github.com/cal-itp/data-infra/blob/main/.github/workflows/update_gcloud_requirements.yml)">this github action</a> swaps in the API keys and pushes to our Cloud Composer&rsquo;s data bucket.</p>
-<!-- markdown-link-check-disable-next-line -->
+<!-- CODE OUTPUT -->
+<div class="highlight"><pre><span></span><code><span class="go"># Source: lazy query</span>
+<span class="go"># DB Conn: Engine(bigquery://cal-itp-data-infra/?maximum_bytes_billed=5000000000)</span>
+<span class="go"># Preview:</span>
+<span class="go">   calitp_itp_id  calitp_url_number                 agency_name</span>
+<span class="go">0            256                  0         Porterville Transit</span>
+<span class="go">1            257                  0                   PresidiGo</span>
+<span class="go">2            259                  0  Redding Area Bus Authority</span>
+<span class="go">3              4                  0                  AC Transit</span>
+<span class="go">4            260                  0        Beach Cities Transit</span>
+<span class="go"># .. may have more rows</span>
+</code></pre></div>
+<!-- END CODE OUTPUT -->
+
+<h4 id="collect-query-results">Collect query results<a class="headerlink" href="#collect-query-results" title="Permanent link"> ¶</a></h4>
+<p>Note that siuba by default prints out a preview of the SQL query results.
+In order to fetch the results of the query as a pandas DataFrame, run <code>collect()</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">tbl_agency_names</span> <span class="o">=</span> <span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_agency_names</span><span class="p">()</span> <span class="o">&gt;&gt;</span> <span class="n">collect</span><span class="p">()</span>
+
+<span class="c1"># Use pandas .head() method to show first 5 rows of data</span>
+<span class="n">tbl_agency_names</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre></div>
+<!-- CODE OUTPUT -->
+<div class="highlight"><pre><span></span><code><span class="go">   calitp_itp_id  calitp_url_number                 agency_name</span>
+<span class="go">0            256                  0         Porterville Transit</span>
+<span class="go">1            257                  0                   PresidiGo</span>
+<span class="go">2            259                  0  Redding Area Bus Authority</span>
+<span class="go">3              4                  0                  AC Transit</span>
+<span class="go">4            260                  0        Beach Cities Transit</span>
+</code></pre></div>
+<h4 id="show-query-sql">Show query SQL<a class="headerlink" href="#show-query-sql" title="Permanent link"> ¶</a></h4>
+<p>While <code>collect()</code> fetches query results, <code>show_query()</code> prints out the
+SQL code that siuba generates.</p>
+<div class="highlight"><pre><span></span><code><span class="p">(</span><span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_agency_names</span><span class="p">()</span>
+  <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">agency_name</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;Metro&quot;</span><span class="p">))</span>
+  <span class="o">&gt;&gt;</span> <span class="n">show_query</span><span class="p">(</span><span class="n">simplify</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="p">)</span>
+</code></pre></div>
+<!-- CODE OUTPUT -->
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span> <span class="o">`</span><span class="n">anon_1</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">calitp_itp_id</span><span class="o">`</span><span class="p">,</span> <span class="o">`</span><span class="n">anon_1</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">calitp_url_number</span><span class="o">`</span><span class="p">,</span> <span class="o">`</span><span class="n">anon_1</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">agency_name</span><span class="o">`</span>
+<span class="k">FROM</span> <span class="p">(</span><span class="k">SELECT</span> <span class="n">calitp_itp_id</span><span class="p">,</span> <span class="n">calitp_url_number</span><span class="p">,</span> <span class="n">agency_name</span>
+<span class="k">FROM</span> <span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">gtfs_agency_names</span><span class="o">`</span><span class="p">)</span> <span class="k">AS</span> <span class="o">`</span><span class="n">anon_1</span><span class="o">`</span>
+<span class="k">WHERE</span> <span class="n">regexp_contains</span><span class="p">(</span><span class="o">`</span><span class="n">anon_1</span><span class="o">`</span><span class="p">.</span><span class="o">`</span><span class="n">agency_name</span><span class="o">`</span><span class="p">,</span> <span class="s1">&#39;Metro&#39;</span><span class="p">)</span>
+</code></pre></div>
+<p>Note that here the pandas Series method <code>str.contains</code> corresponds to <code>regexp_contains</code> in Google BigQuery.</p>
                 
               
               
@@ -641,7 +773,7 @@ These can be found on the <a href="https://docs.google.com/spreadsheets/d/105oar
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../../datasets/views/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Views" rel="prev">
+        <a href="../.." class="md-footer__link md-footer__link--prev" aria-label="Previous: Welcome" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -650,20 +782,20 @@ These can be found on the <a href="https://docs.google.com/spreadsheets/d/105oar
               <span class="md-footer__direction">
                 Previous
               </span>
-              Views
+              Welcome
             </div>
           </div>
         </a>
       
       
         
-        <a href="../02_views/" class="md-footer__link md-footer__link--next" aria-label="Next: Creating New Tables (Views)" rel="next">
+        <a href="../gtfs_schedule/" class="md-footer__link md-footer__link--next" aria-label="Next: GTFS Schedule" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Creating New Tables (Views)
+              GTFS Schedule
             </div>
           </div>
           <div class="md-footer__button md-icon">
