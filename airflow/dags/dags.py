@@ -4,7 +4,7 @@ import airflow  # noqa
 from pathlib import Path
 from gusty import create_dag
 
-from calitp import user_defined_macros, user_defined_filters
+from calitp.templates import user_defined_macros, user_defined_filters
 
 
 # DAG Directories =============================================================

@@ -6,7 +6,8 @@
 # ---
 
 from sqlalchemy import sql
-from calitp import get_bucket, get_table, write_table
+from calitp import get_table, write_table
+from calitp.config import get_bucket
 
 GTFS_DATA_PATH = "{bucket}/schedule/processed/{extracted_at}_{itp_id}_{url_number}"
 

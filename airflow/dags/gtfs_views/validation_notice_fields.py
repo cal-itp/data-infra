@@ -11,7 +11,8 @@ import gcsfs
 import json
 import pandas as pd
 
-from calitp import get_bucket, get_project_id, write_table
+from calitp import write_table
+from calitp.config import get_bucket, get_project_id
 from collections import defaultdict
 
 
