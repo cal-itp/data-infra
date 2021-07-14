@@ -11,6 +11,8 @@ from sqlalchemy import sql
 class SqlQueryOperator(BaseOperator):
     @apply_defaults
     def __init__(self, sql, **kwargs):
+        super().__init__(**kwargs)
+
         self.sql = sql
 
     def execute(self, context):

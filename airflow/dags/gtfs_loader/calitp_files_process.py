@@ -13,13 +13,14 @@ This is for the files downloaded for an agency, as well as validator results.
 
 from calitp import read_gcfs, save_to_gcfs
 from calitp.config import get_bucket
+from calitp.storage import get_fs
+
 import pandas as pd
-import gcsfs
 
 
 def main(execution_date, **kwargs):
     # TODO: remove hard-coded project string
-    fs = gcsfs.GCSFileSystem(project="cal-itp-data-infra")
+    fs = get_fs()
 
     bucket = get_bucket()
 
