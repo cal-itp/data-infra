@@ -4,7 +4,7 @@
 
 This method is suitable for testing
 
-```
+```bash
 gcloud auth print-access-token
 ```
 
