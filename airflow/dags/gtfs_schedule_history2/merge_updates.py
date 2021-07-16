@@ -112,7 +112,8 @@ WHEN NOT MATCHED BY SOURCE AND T.calitp_deleted_at IS NULL THEN
 
 
 def merge_updates(table_name, execution_date, **kwargs):
-    from calitp import get_engine, get_bucket, format_table_name
+    from calitp import get_engine
+    from calitp.config import get_bucket, format_table_name
     from sqlalchemy import sql
 
     date_string = execution_date.to_date_string()

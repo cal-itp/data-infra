@@ -58,6 +58,7 @@ class CsvToWarehouseOperator(BaseOperator):
         self.fields = fields if fields is not None else {}
 
     def execute(self, context):
+        print(self.table_name)
         csv_to_warehouse(
             self.src_uri, self.table_name, self.fields, self.dst_bucket_dir
         )
