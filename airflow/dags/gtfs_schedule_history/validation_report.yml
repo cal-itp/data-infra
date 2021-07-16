@@ -3,6 +3,7 @@ source_objects:
   - "schedule/processed/*/validation_report.json"
 destination_project_dataset_table: "gtfs_schedule_history.validation_report"
 source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
 schema_fields:
   - name: calitp_itp_id
     type: INTEGER
