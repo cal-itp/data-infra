@@ -12,24 +12,12 @@ from calitp.templates import user_defined_macros, user_defined_filters
 # point to your dags directory (the one this file lives in)
 dag_parent_dir = Path(__file__).parent
 
-# TODO: catalogs directory is not a dag, which screws up auto loading folders
 # assumes any subdirectories in the dags directory are Gusty DAGs (with METADATA.yml)
 # (excludes subdirectories like __pycache__)
-# dag_directories = []
-# for child in dag_parent_dir.iterdir():
-#     if child.is_dir() and not str(child).endswith('__'):
-#         dag_directories.append(str(child))
-
-dag_directories = [
-    dag_parent_dir / "gtfs_downloader",
-    dag_parent_dir / "gtfs_loader",
-    dag_parent_dir / "gtfs_views",
-    dag_parent_dir / "gtfs_schedule_history",
-    dag_parent_dir / "gtfs_schedule_history2",
-    dag_parent_dir / "transitstacks_loader",
-    dag_parent_dir / "payments_update",
-]
-
+dag_directories = []
+for child in dag_parent_dir.iterdir():
+    if child.is_dir() and not str(child).endswith("__"):
+        dag_directories.append(str(child))
 
 # DAG Generation ==============================================================
 

@@ -20,6 +20,8 @@ from collections import defaultdict
 def validation_notice_fields():
     bucket = get_bucket()
 
+    print(f"{bucket}/schedule/processed/*/validation_report.json")
+
     fs = gcsfs.GCSFileSystem(project=get_project_id())
     reports = fs.glob(f"{bucket}/schedule/processed/*/validation_report.json")
     reports_json = [json.load(fs.open(fname)) for fname in reports]
