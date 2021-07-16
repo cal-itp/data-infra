@@ -6,7 +6,7 @@ dependencies:
   - dim_date
 
 sql: |
-WITH
+  WITH
   date_range AS (
       SELECT
         full_date AS metric_date,
@@ -17,17 +17,17 @@ WITH
   ),
   table_start AS (
       SELECT calitp_itp_id, calitp_url_number, metric_date, stop_id from `{{ "gtfs_schedule_type2.stops" | table }}`
-      JOIN date_range ON calitp_extracted_at <= date_start 
-      AND COALESCE(calitp_deleted_at, DATE ("2099-01-01")) > date_start   
+      JOIN date_range ON calitp_extracted_at <= date_start
+      AND COALESCE(calitp_deleted_at, DATE ("2099-01-01")) > date_start
   ),
     table_end AS (
       SELECT calitp_itp_id, calitp_url_number, metric_date, stop_id from `{{ "gtfs_schedule_type2.stops" | table }}`
-      JOIN date_range ON calitp_extracted_at <= date_end 
-      AND COALESCE(calitp_deleted_at, DATE ("2099-01-01")) > date_end   
+      JOIN date_range ON calitp_extracted_at <= date_end
+      AND COALESCE(calitp_deleted_at, DATE ("2099-01-01")) > date_end
   ),
 
   table_partial AS (
-      SELECT 
+      SELECT
     * EXCEPT (stop_id)
     , t1.stop_id AS start_table_stop_id
     , t2.stop_id AS stop_table_stop_id
@@ -37,11 +37,11 @@ WITH
         ELSE 'Unchanged'
         END AS stop_id_changed
   FROM table_start t1
-  FULL JOIN table_end t2 USING ( 
-    calitp_itp_id, 
-    calitp_url_number, 
+  FULL JOIN table_end t2 USING (
+    calitp_itp_id,
+    calitp_url_number,
     metric_date,
-    stop_id     
+    stop_id
   ))
 
   SELECT calitp_itp_id, calitp_url_number, metric_date, stop_id_changed, COUNT(*) AS n FROM table_partial GROUP BY 1, 2, 3, 4
