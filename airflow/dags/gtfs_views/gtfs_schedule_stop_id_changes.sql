@@ -1,8 +1,8 @@
 ---
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.schedule_stop_id_changes"
-dependencies:
 
+dependencies:
   - warehouse_loaded
   - dim_date
 ---
@@ -14,7 +14,7 @@ date_range AS (
       DATE_SUB(full_date, INTERVAL 1 DAY) AS date_start,
       full_date AS date_end,
     FROM `views.dim_date`
-    WHERE full_date BETWEEN '2020-01-01' AND '2021-07-07'
+    WHERE full_date BETWEEN '2020-01-01' AND CURRENT_DATE()
 ),
 table_start AS (
     SELECT calitp_itp_id, calitp_url_number, metric_date, stop_id from `gtfs_schedule_type2.stops`
