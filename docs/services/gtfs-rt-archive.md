@@ -4,7 +4,7 @@
 
 See dependencies section below for details on prerequisites
 
-```
+```bash
 export CALITP_LOG_LEVEL=debug
 export CALITP_DATA_DEST=gs://gtfs-data/rt
 export CALITP_DATA_DEST_SECRET=$HOME/Downloads/cal-itp-data-infra-661571285e30.json
