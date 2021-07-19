@@ -4,7 +4,8 @@ import pandas_gbq
 from airflow.models import BaseOperator
 from airflow.utils.decorators import apply_defaults
 
-from calitp import save_to_gcfs, to_snakecase, get_project_id
+from calitp import save_to_gcfs, to_snakecase
+from calitp.config import get_project_id
 
 
 def sql_df_to_gbq_schema(df, fields=None):
