@@ -5,6 +5,7 @@ from airflow.models import BaseOperator
 from airflow.utils.decorators import apply_defaults
 
 from calitp import save_to_gcfs, to_snakecase
+from calitp.config import get_project_id
 
 
 def sql_df_to_gbq_schema(df, fields=None):
@@ -24,7 +25,6 @@ def csv_to_warehouse(src_uri, table_name, fields=None, dst_bucket_dir="csv"):
     df = to_snakecase(pd.read_csv(src_uri))
 
     table_schema = sql_df_to_gbq_schema(df, fields)
-    project_id, table_name = table_name.split(".", 1)
 
     save_to_gcfs(
         df.to_csv(index=False).encode(),
@@ -35,7 +35,7 @@ def csv_to_warehouse(src_uri, table_name, fields=None, dst_bucket_dir="csv"):
     pandas_gbq.to_gbq(
         df,
         table_name,
-        project_id,
+        get_project_id(),
         table_schema=table_schema["fields"],
         if_exists="replace",
     )
