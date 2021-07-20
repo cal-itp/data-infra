@@ -3,6 +3,7 @@ operator: airflow.contrib.operators.bigquery_operator.BigQueryOperator
 destination_dataset_table: "{{ 'gtfs_schedule_history.calitp_files_updates' | table }}"
 use_legacy_sql: false
 write_disposition: WRITE_TRUNCATE
+depends_on_past: true
 dependencies:
   - calitp_files_process
   - latest_only

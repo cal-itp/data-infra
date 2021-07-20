@@ -1,6 +1,6 @@
 site_name: Juniper Documentation
 repo_url: https://github.com/cal-itp/data-infra
-site_url: https://cal-itp.github.io/data-infra
+site_url: https://docs.calitp.org/data-infra
 edit_uri: edit/main/docs
 
 theme:
@@ -8,8 +8,25 @@ theme:
   features:
     - navigation.tabs
   palette:
-    primary: "amber"
-    accent: "blue"
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: amber
+      accent: blue
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: amber
+      accent: blue
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+
+extra:
+  analytics:
+    provider: google
+    property: G-SZB618VNBZ
 
 plugins:
   - search
