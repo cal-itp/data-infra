@@ -342,8 +342,8 @@ culver-citybus:
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 87
-dash:
-  agency_name: DASH
+ladot:
+  agency_name: Los Angeles Department of Transportation
   feeds:
     - gtfs_schedule_url: http://lacitydot.com/gtfs/administrator/gtfszip/ladotgtfs.zip
       gtfs_rt_vehicle_positions_url: null
