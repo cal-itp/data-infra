@@ -6,3 +6,6 @@ MD007:
 
 # No one wants to hard wrap all their paragraphs
 MD013: false
+
+# May inline HTML (e.g. embedding loom videos does this)
+MD033: false

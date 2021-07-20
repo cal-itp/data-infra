@@ -1,0 +1,13 @@
+operator: operators.ExternalTable
+source_objects:
+  - 'sandbox/external_table.csv'
+destination_project_dataset_table: "sandbox.external_table"
+skip_leading_rows: 1
+schema_fields:
+  - name: g
+    type: STRING
+  - name: x
+    type: INTEGER
+dependencies:
+  - save_external_table_data
+  - create_dataset

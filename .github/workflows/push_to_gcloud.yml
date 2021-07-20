@@ -2,8 +2,8 @@ name: move DAGs to GCS folder
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - 'airflow/**'
 
 jobs:
   deploy:
@@ -17,11 +17,34 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: 3.8
+    - name: Install python packages
+      run: |
+        pip install jinja2==2.11.3 PyYAML==5.4.1 jsonschema==3.2.0 pandas==1.1.4
+    - name: Fill in agencies.yml API keys
+      run: |
+        python script/agencies_convert.py \
+          './airflow/data/agencies.yml' \
+          './airflow/data/agencies.filled.yml' \
+          'https://docs.google.com/spreadsheets/d/1Fp7sesSMS6VOIndTLTKcyyN2qHj6najKAaN-I9_3SFo/export?gid=0&format=csv'
+    - name: Validate agencies.yml
+      run: |
+        python script/agencies_validate.py \
+          './airflow/data/agencies.filled.yml' \
+          './airflow/data/schema_agencies_entry.yml'
+
+    # The following only runs on the main branch ----
+
     - uses: google-github-actions/setup-gcloud@master
+      if: ${{ github.ref == 'refs/heads/main' }}
       with:
         service_account_key: ${{ secrets.GCP_SA_KEY }}
         export_default_credentials: true
-    - run: |
+    - name: Push to google cloud
+      if: ${{ github.ref == 'refs/heads/main' }}
+      run: |
         gsutil -m rsync -d -c -r airflow/dags gs://us-west2-calitp-airflow-pro-332827a9-bucket/dags
         gsutil -m rsync -d -c -r airflow/plugins gs://us-west2-calitp-airflow-pro-332827a9-bucket/plugins
         gsutil -m rsync -d -c -r airflow/data gs://us-west2-calitp-airflow-pro-332827a9-bucket/data
+        # replace agencies.yml with filled in template
+        gsutil -m cp airflow/data/agencies.yml gs://us-west2-calitp-airflow-pro-332827a9-bucket/data/agencies_raw.yml
+        gsutil -m cp airflow/data/agencies.filled.yml gs://us-west2-calitp-airflow-pro-332827a9-bucket/data/agencies.yml

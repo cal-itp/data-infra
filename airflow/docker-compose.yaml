@@ -65,6 +65,7 @@ x-airflow-common:
     POD_CLUSTER_NAME: "us-west2-calitp-airflow-pro-332827a9-gke"
     POD_LOCATION: "us-west2-a"
     AIRFLOW_ENV: "development"
+    CALITP_USER: "pipeline"
 
   volumes:
     # Note that in cloud composer, folders like dags are not in AIRFLOW_HOME
