@@ -3,6 +3,9 @@ operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.mst_ridership"
 external_dependencies:
   - payments_loader: all
+  
+dependencies:
+  - mst_transactions_gtfs_enhanced
 ---
 
 SELECT t1.participant_id,
@@ -24,6 +27,6 @@ SELECT t1.participant_id,
        t2.charge_amount
 FROM `views.mst_transactions_gtfs_enhanced` as t1
 LEFT JOIN `payments.micropayment_device_ids_fare_type` as t2
-ON t1.littlepay_transaction_id = t2.littlepay_transaction_id
-WHERE charge_type = 'complete_variable_fare'
+ON t1.littlepay_transaction_id = t2.littlepay_transaction_id 
+WHERE charge_type = 'complete_variable_fare' 
 OR charge_type = 'flat_fare'
