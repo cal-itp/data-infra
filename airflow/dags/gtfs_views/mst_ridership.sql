@@ -3,6 +3,9 @@ operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.mst_ridership"
 external_dependencies:
   - payments_loader: all
+
+dependencies:
+  - mst_transactions_gtfs_enhanced
 ---
 
 SELECT t1.participant_id,
