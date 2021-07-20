@@ -11,13 +11,16 @@ import gcsfs
 import json
 import pandas as pd
 
-from calitp import get_bucket, get_project_id, write_table
+from calitp import write_table
+from calitp.config import get_bucket, get_project_id
 from collections import defaultdict
 
 
 # note that if we upgrade gusty, we don't need to wrap this in a function
 def validation_notice_fields():
     bucket = get_bucket()
+
+    print(f"{bucket}/schedule/processed/*/validation_report.json")
 
     fs = gcsfs.GCSFileSystem(project=get_project_id())
     reports = fs.glob(f"{bucket}/schedule/processed/*/validation_report.json")

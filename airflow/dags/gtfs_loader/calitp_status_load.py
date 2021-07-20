@@ -7,7 +7,7 @@
 #   - gtfs_downloader: download_data
 # ---
 
-from operators import _keep_columns
+from utils import _keep_columns
 from calitp import get_table
 
 

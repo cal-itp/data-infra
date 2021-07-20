@@ -2,7 +2,7 @@
 
 This website provides technical documentation for the Juniper codebase.
 
-Documentation for the `main` branch is available online at: <https://cal-itp.github.io/data-infra/>
+Documentation for the `main` branch is available online at: <https://docs.calitp.org/data-infra>
 
 ## Editing documentation
 

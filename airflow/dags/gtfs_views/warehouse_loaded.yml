@@ -1,3 +1,4 @@
 operator: airflow.operators.dummy_operator.DummyOperator
 external_dependencies:
   - gtfs_loader: gtfs_schedule_tables_load
+  - gtfs_schedule_history2: all
