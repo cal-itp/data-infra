@@ -481,7 +481,7 @@ folsom-stage-line:
 foothill-transit:
   agency_name: Foothill Transit
   feeds:
-    - gtfs_schedule_url: http://foothilltransit.org/about/developer-resources/gtfs/
+    - gtfs_schedule_url: http://foothilltransit.org/gtfs/foothilltransit-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -689,7 +689,7 @@ mammoth-lakes-transit-system:
 manteca-transit:
   agency_name: Manteca Transit
   feeds:
-    - gtfs_schedule_url: https://www.ci.manteca.ca.us/mantecatransit/googletransit/google_transit.zip
+    - gtfs_schedule_url: https://www.ci.manteca.ca.us/CommunityDevelopment/MantecaTransit/googletransit/google_transit.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -890,14 +890,6 @@ pasadena-transit:
       gtfs_rt_service_alerts_url: http://rt.pasadenatransit.net/rtt/public/utility/gtfsrealtime.aspx/alert
       gtfs_rt_trip_updates_url: http://rt.pasadenatransit.net/rtt/public/utility/gtfsrealtime.aspx/tripupdate
   itp_id: 243
-paso-express:
-  agency_name: Paso Express
-  feeds:
-    - gtfs_schedule_url: http://app.mecatran.com/urb/ws/feed/c2ZT1zbGcmFuc2O2NsaWVudD1zZWxmO2V4cGlyZ7dHlwZT1ndGZzO2tlezZTMwMzM1OTRiMTE2NzN2IxNjQwNjZjQwMGMzMzdiM2E1MT
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
-  itp_id: 244
 petaluma-transit:
   agency_name: Petaluma Transit
   feeds:
@@ -1174,14 +1166,6 @@ sonoma-marin-area-rail-transit:
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 315
-south-county-area-transit:
-  agency_name: South County Area Transit
-  feeds:
-    - gtfs_schedule_url: http://app.mecatran.com/urb/ws/feed/c2ZT1zbGcmFuc2O2NsaWVudD1zZWxmO2V4cGlyZ7dHlwZT1ndGZzO2tlezZTMwMzM1OTRiMTE2NzN2IxNjQwNjZjQwMGMzMzdiM2E1MT
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
-  itp_id: 388
 south-county-transit-link:
   agency_name: South County Transit Link
   feeds:
