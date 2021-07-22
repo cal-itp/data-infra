@@ -390,14 +390,6 @@ duarte-transit:
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 97
-e-tran:
-  agency_name: e-Tran
-  feeds:
-    - gtfs_schedule_url: https://share.elkgrovecity.org/messages/tpLyuetXMvzjM8oongDM5C/attachments/LbeTBVJuC2Eh3QPKIH6k7R/download/ETRAN_GTFS_15.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
-  itp_id: 105
 east-los-angeles-shuttle:
   agency_name: East Los Angeles Shuttle
   feeds:
