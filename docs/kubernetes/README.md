@@ -1,5 +1,4 @@
-kubernetes
-==========
+# kubernetes #
 
 ## Cluster Administration ##
 
@@ -87,7 +86,6 @@ Cluster workloads are divided into two classes:
 1. system
 2. apps
 
-
 Apps are the workloads that users actually care about.
 
 ### system workloads ###
@@ -104,11 +102,13 @@ to be run again.
 ### app: metabase ###
 
 First deploy:
-```
+
+```bash
 helm install metabase kubernetes/apps/charts/metabase -f kubernetes/apps/values/metabase.yaml -n metabase --create-namespace
 ```
 
 Apply changes:
-```
+
+```bash
 helm upgrade metabase kubernetes/apps/charts/metabase -f kubernetes/apps/values/metabase.yaml -n metabase
 ```
