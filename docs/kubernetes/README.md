@@ -132,6 +132,13 @@ Apply changes:
 kubectl apply -k kubernetes/apps/manifets/gtfs-rt
 ```
 
+#### new service versions ####
+
+In order to deploy a new version of the service script, a container image of the new version needs to
+be built and pushed to the GCR repository (see the [service documentation](../services/gtfs-rt-archive.md)
+for details). Once there, the image version must be changed in `kubernetes/apps/manifets/gtfs-rt/app.yaml`
+and the manifest change must then be applied (see: "Apply changes" above).
+
 #### agencies data ####
 
 The secret in `kubernetes/secrets/agencies-data.yaml` is a complete base64 encoded version
@@ -143,3 +150,6 @@ steps are required:
    * `kubectl apply -f kubernetes/secrets/agencies-data.yaml`
 3. Restart the kubernetes deployment
    * `kubectl -n gtfs-rt rollout restart deployment/gtfs-rt-archive`
+
+See the [gtfs-rt-archive service documentation](../services/gtfs-rt-archive.md) for details on downloading the
+latest agencies file

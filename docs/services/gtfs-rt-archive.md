@@ -29,3 +29,29 @@ filesystem location of the downloaded key.
 
 A copy of an agencies data file (available at gs://us-west2-calitp-airflow-pro-332827a9-bucket/data/agencies.yml) must be downloaded to the local
 filesystem. The `CALITP_AGENCIES_YML` environment variable must point to the filesystem location of the downloaded data file.
+
+## Container Image
+
+To build a container image of the service:
+
+```bash
+docker build -t us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:${TAG} services/gtfs-rt-archive
+```
+
+The tag `${TAG}` should correspond to a git repository tag. E.g.
+a `${TAG}` value of `1.0` might correspond to a repository tag like
+`gtfs-rt-archive/1.0`
+
+### push to gcr
+
+```bash
+# ensure proper account selected
+# use gcloud auth login as needed
+gcloud auth list
+
+# setup $HOME/.docker/config.json
+gcloud auth configure-docker
+
+# push image
+docker push us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:$TAG
+```
