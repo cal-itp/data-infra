@@ -132,3 +132,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .Rproj.user
+
+# Credentials & Secrets
+/kubernetes/secrets
+/kubernetes/gke/kube
