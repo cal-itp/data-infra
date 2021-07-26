@@ -2,62 +2,67 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://docs.calitp.org/data-infra/</loc>
-         <lastmod>2021-07-22</lastmod>
+         <lastmod>2021-07-26</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.calitp.org/data-infra/datasets/01_overview/</loc>
-         <lastmod>2021-07-22</lastmod>
+         <lastmod>2021-07-26</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.calitp.org/data-infra/datasets/gtfs_schedule/</loc>
-         <lastmod>2021-07-22</lastmod>
+         <lastmod>2021-07-26</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.calitp.org/data-infra/datasets/mst_payments/</loc>
-         <lastmod>2021-07-22</lastmod>
+         <lastmod>2021-07-26</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.calitp.org/data-infra/datasets/transitstacks/</loc>
-         <lastmod>2021-07-22</lastmod>
+         <lastmod>2021-07-26</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.calitp.org/data-infra/datasets/views/</loc>
-         <lastmod>2021-07-22</lastmod>
+         <lastmod>2021-07-26</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://docs.calitp.org/data-infra/kubernetes/</loc>
+         <lastmod>2021-07-26</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.calitp.org/data-infra/services/gtfs-rt-archive/</loc>
-         <lastmod>2021-07-22</lastmod>
+         <lastmod>2021-07-26</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.calitp.org/data-infra/warehouse/01_agencies/</loc>
-         <lastmod>2021-07-22</lastmod>
+         <lastmod>2021-07-26</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.calitp.org/data-infra/warehouse/02_payments/</loc>
-         <lastmod>2021-07-22</lastmod>
+         <lastmod>2021-07-26</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.calitp.org/data-infra/warehouse/02_views/</loc>
-         <lastmod>2021-07-22</lastmod>
+         <lastmod>2021-07-26</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.calitp.org/data-infra/warehouse/03_metrics/</loc>
-         <lastmod>2021-07-22</lastmod>
+         <lastmod>2021-07-26</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.calitp.org/data-infra/warehouse/04_sql_snippets/</loc>
-         <lastmod>2021-07-22</lastmod>
+         <lastmod>2021-07-26</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
