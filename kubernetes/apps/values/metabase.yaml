@@ -14,3 +14,19 @@ volumes:
   database:
     data:
       size: 20Gi
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: metabase.k8s.calitp.jarv.us
+      paths: [ '/' ]
+    - host: dashboards.calitp.org
+      paths: [ '/' ]
+  tls:
+    - secretName: metabase-tls
+      hosts:
+        - metabase.k8s.calitp.jarv.us
+        - dashboards.calitp.org
