@@ -128,7 +128,7 @@ kubectl apply -k kubernetes/apps/manifests/gtfs-rt
 
 Apply changes:
 
-```
+```bash
 kubectl apply -k kubernetes/apps/manifets/gtfs-rt
 ```
 
@@ -140,6 +140,6 @@ steps are required:
 
 1. Update the base64 data in `kubernetes/secrets/agencies-data.yaml` to contain the new agencies.yml contents
 2. Upload the new data to the kubernetes API server
-  * `kubectl apply -f kubernetes/secrets/agencies-data.yaml`
+   * `kubectl apply -f kubernetes/secrets/agencies-data.yaml`
 3. Restart the kubernetes deployment
-  * `kubectl -n gtfs-rt rollout restart deployment/gtfs-rt-archive`
+   * `kubectl -n gtfs-rt rollout restart deployment/gtfs-rt-archive`
