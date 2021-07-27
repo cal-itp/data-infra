@@ -123,20 +123,20 @@ tar xzvf kubernetes-secrets.tar.gz && rm kubernetes-secrets.tar.gz
 
 # Deploy app
 kubectl apply -k kubernetes/secrets
-kubectl apply -k kubernetes/apps/manifests/gtfs-rt
+kubectl apply -k kubernetes/apps/overlays/gtfs-rt-${environment}
 ```
 
 Apply changes:
 
 ```bash
-kubectl apply -k kubernetes/apps/manifets/gtfs-rt
+kubectl apply -k kubernetes/apps/overlays/gtfs-rt-${environment}
 ```
 
 #### new service versions ####
 
 In order to deploy a new version of the service script, a container image of the new version needs to
 be built and pushed to the GCR repository (see the [service documentation](../services/gtfs-rt-archive.md)
-for details). Once there, the image version must be changed in `kubernetes/apps/manifets/gtfs-rt/app.yaml`
+for details). Once there, the image version must be changed in `kubernetes/apps/overlays/gtfs-rt-${environmnt}/kustomization.yaml`
 and the manifest change must then be applied (see: "Apply changes" above).
 
 #### agencies data ####
