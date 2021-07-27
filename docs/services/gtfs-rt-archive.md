@@ -35,12 +35,11 @@ filesystem. The `CALITP_AGENCIES_YML` environment variable must point to the fil
 To build a container image of the service:
 
 ```bash
-docker build -t us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:${TAG} services/gtfs-rt-archive
+dirty=$(git diff-index HEAD)
+test -z "$dirty" || git stash push
+docker build -t us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:$(git rev-parse HEAD) services/gtfs-rt-archive
+test -z "$dirty" || git stash pop
 ```
-
-The tag `${TAG}` should correspond to a git repository tag. E.g.
-a `${TAG}` value of `1.0` might correspond to a repository tag like
-`gtfs-rt-archive/1.0`
 
 ### push to gcr
 
@@ -53,5 +52,5 @@ gcloud auth list
 gcloud auth configure-docker
 
 # push image
-docker push us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:$TAG
+docker push us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:$(git rev-parse HEAD)
 ```
