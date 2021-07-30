@@ -185,10 +185,10 @@ blue-lake-rancheria:
 burbank-bus:
   agency_name: Burbank Bus
   feeds:
-    - gtfs_schedule_url: http://gis.burbankca.gov/files/gtfs/google_transit.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+    - gtfs_schedule_url: https://rideburbankbus.com/gtfs
+      gtfs_rt_vehicle_positions_url: https://rideburbankbus.com/gtfs-rt/vehiclepositions
+      gtfs_rt_service_alerts_url: https://rideburbankbus.com/gtfs-rt/tripupdates
+      gtfs_rt_trip_updates_url: https://rideburbankbus.com/gtfs-rt/alerts
   itp_id: 45
 burney-express:
   agency_name: Burney Express
@@ -1297,14 +1297,10 @@ torrance-transit-system:
 tri-delta-transit:
   agency_name: Tri Delta Transit
   feeds:
-    - gtfs_schedule_url: http://.232.147.132/rtt/public/utility/gtfs.aspx
+    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=3D
       gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=3D
       gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
       gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=3D
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=3D
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
   itp_id: 336
 tri-valley-wheels:
   agency_name: Tri-Valley Wheels
@@ -1486,7 +1482,7 @@ metropolitan-transportation-commission:
   agency_name: "MTC 511"
   itp_id: 200
   feeds:
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2&operator_id=RG
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff9&agency=RG
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff2
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key=0eefcd07-b7d7-4a16-b454-bc7424dd0ff9&agency=RG
+    - gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=RG
+      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=RG
+      gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=RG
