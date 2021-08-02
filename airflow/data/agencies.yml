@@ -1045,7 +1045,7 @@ san-juan-capistrano-free-weekend-trolley:
 san-luis-obispo-regional-transit-authority:
   agency_name: San Luis Obispo Regional Transit Authority
   feeds:
-    - gtfs_schedule_url: http://app.mecatran.com/urb/ws/feed/c2ZT1zbGcmFuc2O2NsaWVudD1zZWxmO2V4cGlyZ7dHlwZT1ndGZzO2tlezZTMwMzM1OTRiMTE2NzN2IxNjQwNjZjQwMGMzMzdiM2E1MT
+    - gtfs_schedule_url: https://app.mecatran.com/urb/ws/feed/c2l0ZT1zbG90cmFuc2l0O2NsaWVudD1zZWxmO2V4cGlyZT07dHlwZT1ndGZzO2tleT0zZTMwMzM1OTRiMTE2NzA0N2IxNjQwNjA0ZjQwMGMzMzdiM2E1MTQ0
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
