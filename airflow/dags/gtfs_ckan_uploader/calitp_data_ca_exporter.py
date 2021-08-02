@@ -1,15 +1,18 @@
 import os
 import requests
+import tempfile
 from calitp import get_table
 
 
 #
 API_ENDPOINT = "https://data.ca.gov/api/3/action/resource_update"
-API_KEY = os.environ.get("someAPIKey")
+API_KEY = os.environ.get("some_key")
 #
 
-agency = get_table("gtfs_schedule.agency", as_df=True)
-agency.to_csv("gtfs_schedule_agency.csv")
+with tempfile.TemporaryDirectory() as tmp_dir:
+    agency = get_table("gtfs_schedule.agency", as_df=True)
+    agency.to_csv(f"{tmp_dir}/gtfs_schedule_agency.csv")
+
 
 r = requests.post(
     API_ENDPOINT,
@@ -19,8 +22,9 @@ r = requests.post(
 )
 
 #
-routes = get_table("gtfs_schedule.routes", as_df=True)
-routes.to_csv("gtfs_schedule_routes.csv")
+with tempfile.TemporaryDirectory() as tmp_dir:
+    routes = get_table("gtfs_schedule.routes", as_df=True)
+    routes.to_csv(f"{tmp_dir}/gtfs_schedule_routes.csv")
 
 r1 = requests.post(
     API_ENDPOINT,
@@ -30,8 +34,9 @@ r1 = requests.post(
 )
 
 #
-stop_times = get_table("gtfs_schedule.stop_times", as_df=True)
-stop_times.to_csv("gtfs_schedule_stop_times.csv")
+with tempfile.TemporaryDirectory() as tmp_dir:
+    stop_times = get_table("gtfs_schedule.stop_times", as_df=True)
+    stop_times.to_csv(f"{tmp_dir}/gtfs_schedule_stop_times.csv")
 
 r2 = requests.post(
     API_ENDPOINT,
@@ -41,9 +46,9 @@ r2 = requests.post(
 )
 
 #
-
-stops = get_table("gtfs_schedule.stops", as_df=True)
-stops.to_csv("gtfs_schedule_stops.csv")
+with tempfile.TemporaryDirectory() as tmp_dir:
+    stops = get_table("gtfs_schedule.stops", as_df=True)
+    stops.to_csv(f"{tmp_dir}/gtfs_schedule_stops.csv")
 
 r3 = requests.post(
     API_ENDPOINT,
@@ -54,9 +59,9 @@ r3 = requests.post(
 
 
 #
-
-trips = get_table("gtfs_schedule.trips", as_df=True)
-trips.to_csv("gtfs_schedule_trips.csv")
+with tempfile.TemporaryDirectory() as tmp_dir:
+    trips = get_table("gtfs_schedule.trips", as_df=True)
+    trips.to_csv(f"{tmp_dir}/gtfs_schedule_trips.csv")
 
 r4 = requests.post(
     API_ENDPOINT,
