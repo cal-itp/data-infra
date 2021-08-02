@@ -1,12 +1,14 @@
 # ---
 # python_callable: gen_list
+# provide_context: true
 # ---
 
 
 import yaml
 import pandas as pd
 
-from calitp import pipe_file_name
+from calitp.config import pipe_file_name
+from calitp import save_to_gcfs
 
 
 def make_gtfs_list(fname=None):
@@ -36,32 +38,46 @@ def make_gtfs_list(fname=None):
     assert df_feeds.index.equals(df_long.index)
 
     # append columns for feed urls
-    df_final = df_long.join(df_feeds).drop(
+    df_feed_urls = df_long.join(df_feeds).drop(columns=["feeds"])
+    df_feed_urls["url_number"] = df_feed_urls.groupby("itp_id").cumcount()
+
+    all_cols = list(df_feed_urls.columns)
+    front_cols = ["itp_id", "url_number"]
+    other_cols = [name for name in all_cols if name not in front_cols]
+    return df_feed_urls[[*front_cols, *other_cols]]
+
+
+def gen_list(execution_date, **kwargs):
+    """
+    task callable to generate the list and push into
+    xcom
+    """
+
+    # get a table of feed urls from agencies.yml
+    # we fetch both the raw and filled w/ API key versions to save
+    feeds_raw = make_gtfs_list(pipe_file_name("data/agencies_raw.yml"))
+    feeds = make_gtfs_list(pipe_file_name("data/agencies.yml"))
+
+    path_metadata = f"schedule/{execution_date}/metadata"
+
+    save_to_gcfs(
+        feeds_raw.to_csv(index=False).encode(),
+        f"{path_metadata}/feeds_raw.csv",
+        use_pipe=True,
+    )
+    save_to_gcfs(
+        feeds.to_csv(index=False).encode(), f"{path_metadata}/feeds.csv", use_pipe=True
+    )
+
+    # note that right now we useairflow's xcom functionality in this dag.
+    # because xcom can only store a small amount of data, we have to drop some
+    # columns. this is the only dag that uses xcom, and we should remove it!
+    df_subset = feeds.drop(
         columns=[
-            "feeds",
             "gtfs_rt_vehicle_positions_url",
             "gtfs_rt_service_alerts_url",
             "gtfs_rt_trip_updates_url",
         ]
     )
-    df_final["url_number"] = df_final.groupby("itp_id").cumcount()
 
-    return df_final
-
-
-def clean_url(url):
-    """
-    take the list of urls, clean as needed.
-    used as a pd.apply, so singleton.
-    """
-    # LA Metro split requires lstrip
-    return url
-
-
-def gen_list(**kwargs):
-    """
-    task callable to generate the list and push into
-    xcom
-    """
-    provider_set = make_gtfs_list().apply(clean_url)
-    return provider_set.to_dict("records")
+    return df_subset.to_dict("records")

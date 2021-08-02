@@ -4,7 +4,7 @@ from functools import wraps
 from airflow.contrib.operators.gcp_container_operator import GKEPodOperator
 from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
 
-from calitp import (
+from calitp.config import (
     is_development,
     get_project_id,
 )

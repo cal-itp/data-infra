@@ -7,7 +7,10 @@
 # ---
 
 import pandas as pd
-from calitp import get_fs, get_bucket, get_table
+
+from calitp.config import get_bucket
+from calitp.storage import get_fs
+from calitp import get_table
 from utils import _keep_columns
 
 # Note that destination includes date in the folder name, so that we can use

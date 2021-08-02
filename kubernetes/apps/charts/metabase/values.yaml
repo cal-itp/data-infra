@@ -1,0 +1,71 @@
+# Default values for metabase.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+images:
+  database:
+    src: postgres:9.6
+    imagePullSecrets:
+    - name: regcred
+  metabase:
+    src: metabase/metabase:v0.38.2
+  databaseExporter:
+    src: quay.io/prometheuscommunity/postgres-exporter:0.9.0
+
+workloads:
+  database:
+    useExporter: true
+    replicas: 1
+    port: 5432
+    podAnnotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/port: '9187'
+    nodeSelector: {}
+    affinity: {}
+    tolerations: []
+  metabase:
+    replicas: 1
+    port: 3000
+    podAnnotations: {}
+    nodeSelector: {}
+    affinity: {}
+    tolerations: []
+
+services:
+  database:
+    type: ClusterIP
+    port: 5432
+  metabase:
+    type: ClusterIP
+    port: 3000
+
+configs:
+  database:
+    POSTGRES_DB: metabase
+    POSTGRES_USER: admin
+    POSTGRES_PASSWORD: admin
+  metabase:
+    MB_DB_TYPE: postgres
+    MB_DB_DBNAME: metabase
+    MB_DB_PORT: "5432"
+    MB_DB_USER: admin
+    MB_DB_PASS: admin
+    MB_DB_HOST: database.metabase.svc.cluster.local
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: metabase.k8s.calitp.jarv.us
+      paths: [ '/' ]
+  tls:
+    - secretName: metabase-tls
+      hosts:
+        - metabase.k8s.calitp.jarv.us
+
+volumes:
+  database:
+    data:
+      size: 10Gi

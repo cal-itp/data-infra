@@ -1,0 +1,18 @@
+GKE_NODEPOOL_NAMES=(
+  'default-pool'
+)
+
+declare -A GKE_NODEPOOL_NODE_COUNTS
+GKE_NODEPOOL_NODE_COUNTS=(
+  ['default-pool']=1
+)
+
+declare -A GKE_NODEPOOL_NODE_LOCATIONS
+GKE_NODEPOOL_NODE_LOCATIONS=(
+  ['default-pool']=$GKE_REGION-a,$GKE_REGION-b,$GKE_REGION-c
+)
+
+declare -A GKE_NODEPOOL_MACHINE_TYPES
+GKE_NODEPOOL_MACHINE_TYPES=(
+  ['default-pool']=n1-standard-4
+)
