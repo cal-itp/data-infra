@@ -12,7 +12,7 @@
         <link rel="canonical" href="https://docs.calitp.org/data-infra/kubernetes/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.1">
+      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.2">
     
     
       
@@ -574,6 +574,33 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#app-gtfs-rt-archive" class="md-nav__link">
+    app: gtfs-rt-archive
+  </a>
+  
+    <nav class="md-nav" aria-label="app: gtfs-rt-archive">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#new-service-versions" class="md-nav__link">
+    new service versions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agencies-data" class="md-nav__link">
+    agencies data
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -833,6 +860,33 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#app-gtfs-rt-archive" class="md-nav__link">
+    app: gtfs-rt-archive
+  </a>
+  
+    <nav class="md-nav" aria-label="app: gtfs-rt-archive">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#new-service-versions" class="md-nav__link">
+    new service versions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agencies-data" class="md-nav__link">
+    agencies data
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -929,6 +983,36 @@ to be run again.</p>
 <p>Apply changes:</p>
 <div class="highlight"><pre><span></span><code>helm upgrade metabase kubernetes/apps/charts/metabase -f kubernetes/apps/values/metabase.yaml -n metabase
 </code></pre></div>
+<h3 id="app-gtfs-rt-archive">app: gtfs-rt-archive<a class="headerlink" href="#app-gtfs-rt-archive" title="Permanent link"> ¶</a></h3>
+<p>First deploy:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Archive url: https://bitwarden.jarv.us//attachments/1ef9cad1-40a3-41f2-963d-f43d64c06efb/09dd10cd528b5f9743f3</span>
+tar xzvf kubernetes-secrets.tar.gz <span class="o">&amp;&amp;</span> rm kubernetes-secrets.tar.gz
+
+<span class="c1"># Deploy app</span>
+kubectl apply -k kubernetes/secrets
+kubectl apply -k kubernetes/apps/overlays/gtfs-rt-<span class="si">${</span><span class="nv">environment</span><span class="si">}</span>
+</code></pre></div>
+<p>Apply changes:</p>
+<div class="highlight"><pre><span></span><code>kubectl apply -k kubernetes/apps/overlays/gtfs-rt-<span class="si">${</span><span class="nv">environment</span><span class="si">}</span>
+</code></pre></div>
+<h4 id="new-service-versions">new service versions<a class="headerlink" href="#new-service-versions" title="Permanent link"> ¶</a></h4>
+<p>In order to deploy a new version of the service script, a container image of the new version needs to
+be built and pushed to the GCR repository (see the <a href="../services/gtfs-rt-archive/">service documentation</a>
+for details). Once there, the image version must be changed in <code>kubernetes/apps/overlays/gtfs-rt-${environmnt}/kustomization.yaml</code>
+and the manifest change must then be applied (see: &ldquo;Apply changes&rdquo; above).</p>
+<h4 id="agencies-data">agencies data<a class="headerlink" href="#agencies-data" title="Permanent link"> ¶</a></h4>
+<p>The secret in <code>kubernetes/secrets/agencies-data.yaml</code> is a complete base64 encoded version
+of the rendered agencies.yml file. When there are changes to the agencies file, the following
+steps are required:</p>
+<ol>
+<li>Update the base64 data in <code>kubernetes/secrets/agencies-data.yaml</code> to contain the new agencies.yml contents</li>
+<li>Upload the new data to the kubernetes API server</li>
+<li><code>kubectl apply -f kubernetes/secrets/agencies-data.yaml</code></li>
+<li>Restart the kubernetes deployment</li>
+<li><code>kubectl -n gtfs-rt rollout restart deployment/gtfs-rt-archive</code></li>
+</ol>
+<p>See the <a href="../services/gtfs-rt-archive/">gtfs-rt-archive service documentation</a> for details on downloading the
+latest agencies file</p>
                 
               
               
@@ -999,10 +1083,10 @@ to be run again.</p>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.53c85856.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.709b4209.min.js", "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.716f8af4.min.js"></script>
+      <script src="../assets/javascripts/bundle.2b46852b.min.js"></script>
       
         <script src="https://unpkg.com/mermaid@8.5.0/dist/mermaid.min.js"></script>
       
