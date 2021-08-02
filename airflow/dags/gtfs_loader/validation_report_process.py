@@ -12,6 +12,10 @@ from calitp import save_to_gcfs, read_gcfs
 
 PANDAS_TYPES_TO_BIGQUERY = {"O": "STRING", "i": "INTEGER", "f": "NUMERIC"}
 
+COERCE_TO_STRING = {
+    "fieldValue",
+}
+
 
 def process_notices(itp_id, url_number, validation):
     raw_codes = validation["data"]["report"]["notices"]
@@ -34,6 +38,14 @@ def infer_notice_schema(notice_entries):
         schema.append(dict(name=k, type=PANDAS_TYPES_TO_BIGQUERY[wide[k].dtype.kind]))
 
     return schema
+
+
+def coerce_notice_values_to_str(raw_codes, str_fields):
+    for code in raw_codes["notices"]:
+        for detail in code["notices"]:
+            for field in detail:
+                if field in str_fields:
+                    detail[field] = str(detail[field])
 
 
 def validator_process(execution_date, **kwargs):
@@ -60,6 +72,9 @@ def validator_process(execution_date, **kwargs):
         raw_codes["calitp_url_number"] = row["url_number"]
         raw_codes["calitp_extracted_at"] = execution_date.to_date_string()
         raw_codes["calitp_gtfs_validated_by"] = validation["version"]
+
+        # coerce types labeled "string" to a string
+        coerce_notice_values_to_str(raw_codes, COERCE_TO_STRING)
 
         json_codes = json.dumps(raw_codes).encode()
         # df_notices = process_notices(row["itp_id"], row["url_number"], validation)
