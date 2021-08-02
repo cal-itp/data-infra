@@ -155,3 +155,7 @@ schema_fields:
           type: STRING
         - name: parentStopName
           type: STRING
+        - name: entityCount
+          type: INTEGER
+        - name: fieldType
+          type: STRING
