@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gtfs-rt-archive
+  namespace: gtfs-rt
+  labels:
+    name: gtfs-rt-archive
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: gtfs-rt-archive
+  template:
+    metadata:
+      labels:
+        name: gtfs-rt-archive
+    spec:
+      containers:
+        - name: app
+          image: us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:1.0
+          env:
+            - name: CALITP_DATA_DEST
+              value: gs://gtfs-data/rt
+            - name: CALITP_LOG_LEVEL
+              value: debug
+            - name: CALITP_DATA_DEST_SECRET
+              value: /secrets/gcs-upload-svcacct/gcs-upload-svcacct.json
+            - name: CALITP_AGENCIES_YML
+              value: /secrets/agencies-data/data_agencies.yaml
+          volumeMounts:
+            - name: agencies-data
+              mountPath: /secrets/agencies-data
+            - name: gcs-upload-svcacct
+              mountPath: /secrets/gcs-upload-svcacct
+      volumes:
+        - name: agencies-data
+          secret:
+            secretName: agencies-data
+        - name: gcs-upload-svcacct
+          secret:
+            secretName: gcs-upload-svcacct

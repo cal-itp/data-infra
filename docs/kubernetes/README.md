@@ -112,3 +112,44 @@ Apply changes:
 ```bash
 helm upgrade metabase kubernetes/apps/charts/metabase -f kubernetes/apps/values/metabase.yaml -n metabase
 ```
+
+### app: gtfs-rt-archive ###
+
+First deploy:
+
+```bash
+# Archive url: https://bitwarden.jarv.us//attachments/1ef9cad1-40a3-41f2-963d-f43d64c06efb/09dd10cd528b5f9743f3
+tar xzvf kubernetes-secrets.tar.gz && rm kubernetes-secrets.tar.gz
+
+# Deploy app
+kubectl apply -k kubernetes/secrets
+kubectl apply -k kubernetes/apps/overlays/gtfs-rt-${environment}
+```
+
+Apply changes:
+
+```bash
+kubectl apply -k kubernetes/apps/overlays/gtfs-rt-${environment}
+```
+
+#### new service versions ####
+
+In order to deploy a new version of the service script, a container image of the new version needs to
+be built and pushed to the GCR repository (see the [service documentation](../services/gtfs-rt-archive.md)
+for details). Once there, the image version must be changed in `kubernetes/apps/overlays/gtfs-rt-${environmnt}/kustomization.yaml`
+and the manifest change must then be applied (see: "Apply changes" above).
+
+#### agencies data ####
+
+The secret in `kubernetes/secrets/agencies-data.yaml` is a complete base64 encoded version
+of the rendered agencies.yml file. When there are changes to the agencies file, the following
+steps are required:
+
+1. Update the base64 data in `kubernetes/secrets/agencies-data.yaml` to contain the new agencies.yml contents
+2. Upload the new data to the kubernetes API server
+   * `kubectl apply -f kubernetes/secrets/agencies-data.yaml`
+3. Restart the kubernetes deployment
+   * `kubectl -n gtfs-rt rollout restart deployment/gtfs-rt-archive`
+
+See the [gtfs-rt-archive service documentation](../services/gtfs-rt-archive.md) for details on downloading the
+latest agencies file
