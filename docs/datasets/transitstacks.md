@@ -6,7 +6,6 @@
 | ------- | ----------- |
 |  |  |
 
-
 ```mermaid
 erDiagram
     Organization }o..o{ Contact : "represented by"
@@ -28,7 +27,6 @@ erDiagram
     OrganizationStackComponentRelationship }o..o{ OrganizationStackComponent: componentA
     OrganizationStackComponentRelationship }o..o{ OrganizationStackComponent: componentB
 ```
-
 
 ## Dashboards
 
