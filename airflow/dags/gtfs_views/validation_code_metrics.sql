@@ -7,7 +7,7 @@ dependencies:
   - dim_date
 ---
 
-WITH
+WWITH
 date_range AS (
     SELECT
         *
@@ -37,8 +37,20 @@ unique_codes AS (
       , COUNT(*) AS n_notices
   FROM date_range
   GROUP BY 1, 2, 3, 4, 5
-    )
- SELECT * EXCEPT (n_notices),
- COALESCE(n_notices, 0) as n_notices
- FROM agency_by_code
- LEFT JOIN `code_metrics_partial` USING (metric_date,calitp_itp_id,calitp_url_number,code)
+    ),
+  code_metrics_full AS (
+    SELECT 
+      * EXCEPT (n_notices)
+      , LAG (n_notices)
+            OVER (PARTITION BY calitp_itp_id, calitp_url_number, severity, code ORDER BY metric_date)
+        AS prev_n_notices
+      ,COALESCE(n_notices, 0) as n_notices
+    FROM code_metrics_partial  
+    LEFT JOIN `agency_by_code` USING (metric_date,calitp_itp_id,calitp_url_number,code)
+
+  )
+    SELECT
+      * EXCEPT(prev_n_notices)
+      , n_notices - prev_n_notices AS diff_n_notices
+
+      FROM code_metrics_full
