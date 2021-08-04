@@ -22,9 +22,10 @@ unique_codes AS (
       SELECT DISTINCT code FROM `gtfs_schedule_type2.validation_notices`
   ),
   agency_by_code AS (
-      SELECT t3.*, t4.*,
+      SELECT t3.calitp_itp_id, t3.calitp_url_number, t4.code, t5.metric_date
       FROM `views.gtfs_agency_names` t3
       CROSS JOIN unique_codes t4
+      CROSS JOIN (SELECT DISTINCT metric_date FROM date_range) t5
   ),
     code_metrics_partial AS (
       SELECT
@@ -40,4 +41,4 @@ unique_codes AS (
  SELECT * EXCEPT (n_notices),
  COALESCE(n_notices, 0) as n_notices
  FROM agency_by_code
- LEFT JOIN `code_metrics_partial` USING (calitp_itp_id,calitp_url_number,code)
+ LEFT JOIN `code_metrics_partial` USING (metric_date,calitp_itp_id,calitp_url_number,code)
