@@ -16,4 +16,4 @@ SELECT feed_key,
   n_notices,
   n_notices - LAG(n_notices)
     OVER (PARTITION BY feed_key, code ORDER BY date ASC) AS n_notices_diff
-FROM `cal-itp-data-infra-staging.sandbox.example_validations`;
+FROM `sandbox.example_validations`;
