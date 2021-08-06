@@ -1,6 +1,6 @@
 ---
 operator: operators.SqlToWarehouseOperator
-dst_table_name: "sandbox.example_validations"
+dst_table_name: "sandbox.example_feeds"
 fields:
   feed_key: The primary key
   feed_name: The name of the origin feed
