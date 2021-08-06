@@ -5,7 +5,6 @@ dependencies:
   - warehouse_loaded
 ---
 
-
-SELECT *, 
+SELECT *,
 FARM_FINGERPRINT(CONCAT(CAST(calitp_hash AS STRING), "___", CAST(calitp_extracted_at AS STRING))) AS trip_key
 FROM `cal-itp-data-infra-staging.gtfs_schedule_type2.trips`

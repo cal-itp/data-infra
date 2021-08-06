@@ -5,7 +5,6 @@ dependencies:
   - warehouse_loaded
 ---
 
-
 SELECT
   * EXCEPT(start_date, end_date),
   PARSE_DATE("%Y%m%d",start_date) AS start_date,
