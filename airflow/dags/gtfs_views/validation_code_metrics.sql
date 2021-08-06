@@ -7,7 +7,7 @@ dependencies:
   - dim_date
 ---
 
-WWITH
+WITH
 date_range AS (
     SELECT
         *
