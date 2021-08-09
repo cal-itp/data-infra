@@ -21,6 +21,8 @@ with tempfile.TemporaryDirectory() as tmp_dir:
         files={"upload": "gtfs_schedule_agency.csv"},
     )
 
+    del agency
+
 #
 with tempfile.TemporaryDirectory() as tmp_dir:
     routes = get_table("gtfs_schedule.routes", as_df=True)
@@ -32,6 +34,8 @@ with tempfile.TemporaryDirectory() as tmp_dir:
         headers={"Authorization": API_KEY},
         files={"upload": "gtfs_schedule_routes.csv"},
     )
+
+    del routes
 
 #
 with tempfile.TemporaryDirectory() as tmp_dir:
@@ -45,6 +49,8 @@ with tempfile.TemporaryDirectory() as tmp_dir:
         files={"upload": "gtfs_schedule_stop_times.csv"},
     )
 
+    del stop_times
+
 #
 with tempfile.TemporaryDirectory() as tmp_dir:
     stops = get_table("gtfs_schedule.stops", as_df=True)
@@ -56,6 +62,8 @@ with tempfile.TemporaryDirectory() as tmp_dir:
         headers={"Authorization": API_KEY},
         files={"upload": "gtfs_schedule_stops.csv"},
     )
+
+    del stops
 
 
 #
@@ -69,3 +77,5 @@ with tempfile.TemporaryDirectory() as tmp_dir:
         headers={"Authorization": API_KEY},
         files={"upload": "gtfs_schedule_trips.csv"},
     )
+
+    del trips
