@@ -6,7 +6,7 @@ from calitp import get_table
 
 #
 API_ENDPOINT = "https://data.ca.gov/api/3/action/resource_update"
-API_KEY = os.environ.get("some_key")
+API_KEY = os.environ.get("CALITP_CKAN_GTFS_SCHEDULE_KEY")
 
 #
 
