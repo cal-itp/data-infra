@@ -1,6 +1,6 @@
 ---
 operator: operators.SqlToWarehouseOperator
-dst_table_name: "views.gtfs_schedule_route_trip_stops_history"
+dst_table_name: "views.gtfs_schedule_feed_route_trips"
 dependencies:
   - warehouse_loaded
 ---
