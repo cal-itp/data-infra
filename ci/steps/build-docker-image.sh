@@ -35,7 +35,7 @@ if [[ $BUILD_DEST =~ ([^/]+\.[^/]+)/(.*)$ ]]; then
 
 fi
 
-docker build -t "$docker_tag" "$(git rev-parse --show-toplevel)"/"$BUILD_DIR"
+docker build -t "$docker_tag" "$BUILD_DIR"
 
 if [[ $want_build_push ]]; then
   docker push "$docker_tag"
