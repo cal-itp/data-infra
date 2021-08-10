@@ -16,6 +16,7 @@ if [[ ${#required_missing[*]} -gt 0 ]]; then
 fi
 
 docker_tag=$BUILD_DEST:$BUILD_ID
+docker_tag_latest=$BUILD_DEST:latest
 
 # setup remote registry
 if [[ $BUILD_DEST =~ ([^/]+\.[^/]+)/(.*)$ ]]; then
@@ -35,8 +36,9 @@ if [[ $BUILD_DEST =~ ([^/]+\.[^/]+)/(.*)$ ]]; then
 
 fi
 
-docker build -t "$docker_tag" "$BUILD_DIR"
+docker build -t "$docker_tag" -t "$docker_tag_latest" "$BUILD_DIR"
 
 if [[ $want_build_push ]]; then
   docker push "$docker_tag"
+  docker push "$docker_tag_latest"
 fi
