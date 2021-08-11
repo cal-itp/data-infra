@@ -4,31 +4,43 @@ dst_table_name: "gtfs_schedule_type2.calitp_feeds"
 dependencies:
   - merge_updates
 ---
+
 With
     gtfs_schedule_feed AS (
-        SELECT itp_id, url_number, gtfs_schedule_url, agency_name
-        FROM `gtfs_schedule_history.tmp_calitp_feeds` T
+        SELECT
+            itp_id, url_number, gtfs_schedule_url, agency_name,
+            REGEXP_SUBSTR(_FILE_NAME, "(\\d+-\\d+-\\d+)")
+              AS calitp_extracted_at
+        FROM `gtfs_schedule_history.calitp_feeds` T
     ),
-    gtfs_schedule_feed_hashed AS (
+
+--Do a concat rather than just md5 on gtfs_schedule_feed as we only want to
+--hash on those 4 columns (i.e dont want to hash on filename)
+
+    gtfs_schedule_feed_snapshot AS (
         SELECT
             *
-            , TO_BASE64(MD5(TO_JSON_STRING(T))) AS calitp_hash
-        FROM `gtfs_schedule_history.tmp_calitp_feeds` T
-    ),
-    gtfs_schedule_feed_snapshot AS (
-        SELECT itp_id, url_number, gtfs_schedule_url, fn, calitp_hash,
-        REGEXP_SUBSTR(fn, "\\d+[-.\\/]\\d+[-.\\/]\\d+") AS calitp_extracted_at
-        FROM gtfs_schedule_feed_hashed
+            , TO_BASE64(MD5(
+                CONCAT(
+                    CAST(itp_id AS STRING), "__", CAST(url_number AS STRING), "__",
+                    CAST(gtfs_schedule_url AS STRING), "__", CAST(agency_name AS STRING)
+                )
+              )) AS calitp_hash
+        FROM
+            `gtfs_schedule_feed`
     ),
     lag_md5_hash AS (
-        SELECT *
-        ,DATE(NULL) as calitp_deleted_at
+        SELECT
+            *
+            , DATE(NULL) as calitp_deleted_at
         , LAG(calitp_hash)
             OVER (PARTITION BY itp_id, url_number ORDER BY calitp_extracted_at) AS prev_calitp_hash
             FROM gtfs_schedule_feed_snapshot
     ),
- # Determine whether file at next extraction has changed md5_hash
- # use coalesce, so that if a file was added, it will be marked as changed
+
+ -- Determine whether file at next extraction has changed md5_hash
+ -- use coalesce, so that if a file was added, it will be marked as changed
+
     hash_check AS (
         SELECT *
         , coalesce(calitp_hash!=prev_calitp_hash, true) AS is_changed
@@ -36,7 +48,10 @@ With
         OVER (PARTITION BY itp_id, url_number) AS is_first_extraction,
         from lag_md5_hash
     )
-SELECT * EXCEPT (calitp_deleted_at),
-    LEAD (calitp_extracted_at)
-    OVER (PARTITION BY itp_id, url_number ORDER BY calitp_extracted_at) AS calitp_deleted_at
+SELECT
+    * EXCEPT (calitp_deleted_at)
+    , LEAD (calitp_extracted_at)
+        OVER (PARTITION BY itp_id, url_number ORDER BY calitp_extracted_at) AS calitp_deleted_at
     FROM hash_check
+    WHERE is_changed
+    ORDER BY itp_id, url_number, calitp_extracted_at
