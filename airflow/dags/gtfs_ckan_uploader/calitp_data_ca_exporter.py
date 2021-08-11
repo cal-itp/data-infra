@@ -18,7 +18,7 @@ with tempfile.TemporaryDirectory() as tmp_dir:
         API_ENDPOINT,
         data={"id": "e8f9d49e-2bb6-400b-b01f-28bc2e0e7df2"},
         headers={"Authorization": API_KEY},
-        files={"upload": "gtfs_schedule_agency.csv"},
+        files={"upload": open(f"{tmp_dir}/gtfs_schedule_agency.csv", "rb")},
     )
 
 #
@@ -30,7 +30,7 @@ with tempfile.TemporaryDirectory() as tmp_dir:
         API_ENDPOINT,
         data={"id": "c6bbb637-988f-431c-8444-aef7277297f8"},
         headers={"Authorization": API_KEY},
-        files={"upload": "gtfs_schedule_routes.csv"},
+        files={"upload": open(f"{tmp_dir}/gtfs_schedule_routes.csv", "rb")},
     )
 
 #
@@ -42,7 +42,7 @@ with tempfile.TemporaryDirectory() as tmp_dir:
         API_ENDPOINT,
         data={"id": "d31eef2f-e223-4ca4-a86b-170acc6b2590"},
         headers={"Authorization": API_KEY},
-        files={"upload": "gtfs_schedule_stop_times.csv"},
+        files={"upload": open(f"{tmp_dir}/gtfs_schedule_stop_times.csv", "rb")},
     )
 
 #
@@ -54,7 +54,7 @@ with tempfile.TemporaryDirectory() as tmp_dir:
         API_ENDPOINT,
         data={"id": "8c876204-e12b-48a2-8299-10f6ae3d4f2b"},
         headers={"Authorization": API_KEY},
-        files={"upload": "gtfs_schedule_stops.csv"},
+        files={"upload": open(f"{tmp_dir}/gtfs_schedule_stops.csv", "rb")},
     )
 
 
@@ -67,5 +67,5 @@ with tempfile.TemporaryDirectory() as tmp_dir:
         API_ENDPOINT,
         data={"id": "0e4da89e-9330-43f8-8de9-305cb7d4918f"},
         headers={"Authorization": API_KEY},
-        files={"upload": "gtfs_schedule_trips.csv"},
+        files={"upload": open(f"{tmp_dir}/gtfs_schedule_trips.csv", "rb")},
     )
