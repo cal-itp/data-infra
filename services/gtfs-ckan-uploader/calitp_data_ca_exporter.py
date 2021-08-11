@@ -6,14 +6,16 @@ from calitp import get_table
 
 #
 API_ENDPOINT = "https://data.ca.gov/api/3/action/resource_update"
-API_KEY = os.environ.get("some_key")
+API_KEY = os.environ.get("CALITP_CKAN_GTFS_SCHEDULE_KEY")
 
 #
 
 with tempfile.TemporaryDirectory() as tmp_dir:
+    print("Downloading agency")
     agency = get_table("gtfs_schedule.agency", as_df=True)
     agency.to_csv(f"{tmp_dir}/gtfs_schedule_agency.csv")
 
+    print("Posting agency")
     r = requests.post(
         API_ENDPOINT,
         data={"id": "e8f9d49e-2bb6-400b-b01f-28bc2e0e7df2"},
@@ -21,11 +23,15 @@ with tempfile.TemporaryDirectory() as tmp_dir:
         files={"upload": open(f"{tmp_dir}/gtfs_schedule_agency.csv", "rb")},
     )
 
+    del agency
+
 #
 with tempfile.TemporaryDirectory() as tmp_dir:
+    print("Downloading routes")
     routes = get_table("gtfs_schedule.routes", as_df=True)
     routes.to_csv(f"{tmp_dir}/gtfs_schedule_routes.csv")
 
+    print("Posting routes")
     r1 = requests.post(
         API_ENDPOINT,
         data={"id": "c6bbb637-988f-431c-8444-aef7277297f8"},
@@ -33,17 +39,26 @@ with tempfile.TemporaryDirectory() as tmp_dir:
         files={"upload": open(f"{tmp_dir}/gtfs_schedule_routes.csv", "rb")},
     )
 
+    del routes
+
 #
 with tempfile.TemporaryDirectory() as tmp_dir:
+    print("Downloading stop times")
+    stop_times = get_table("gtfs_schedule.stop_times", as_df=True)
+
+    print("Saving stop times")
     stop_times = get_table("gtfs_schedule.stop_times", as_df=True)
     stop_times.to_csv(f"{tmp_dir}/gtfs_schedule_stop_times.csv")
 
+    print("Posting stop times")
     r2 = requests.post(
         API_ENDPOINT,
         data={"id": "d31eef2f-e223-4ca4-a86b-170acc6b2590"},
         headers={"Authorization": API_KEY},
         files={"upload": open(f"{tmp_dir}/gtfs_schedule_stop_times.csv", "rb")},
     )
+
+    del stop_times
 
 #
 with tempfile.TemporaryDirectory() as tmp_dir:
@@ -57,6 +72,8 @@ with tempfile.TemporaryDirectory() as tmp_dir:
         files={"upload": open(f"{tmp_dir}/gtfs_schedule_stops.csv", "rb")},
     )
 
+    del stops
+
 
 #
 with tempfile.TemporaryDirectory() as tmp_dir:
@@ -69,3 +86,5 @@ with tempfile.TemporaryDirectory() as tmp_dir:
         headers={"Authorization": API_KEY},
         files={"upload": open(f"{tmp_dir}/gtfs_schedule_trips.csv", "rb")},
     )
+
+    del trips
