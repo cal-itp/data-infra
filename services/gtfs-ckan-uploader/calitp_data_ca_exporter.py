@@ -65,6 +65,7 @@ with tempfile.TemporaryDirectory() as tmp_dir:
     stops = get_table("gtfs_schedule.stops", as_df=True)
     stops.to_csv(f"{tmp_dir}/gtfs_schedule_stops.csv")
 
+    print("Posting stops")
     r3 = requests.post(
         API_ENDPOINT,
         data={"id": "8c876204-e12b-48a2-8299-10f6ae3d4f2b"},
@@ -80,6 +81,7 @@ with tempfile.TemporaryDirectory() as tmp_dir:
     trips = get_table("gtfs_schedule.trips", as_df=True)
     trips.to_csv(f"{tmp_dir}/gtfs_schedule_trips.csv")
 
+    print("Posting trip times")
     r4 = requests.post(
         API_ENDPOINT,
         data={"id": "0e4da89e-9330-43f8-8de9-305cb7d4918f"},
