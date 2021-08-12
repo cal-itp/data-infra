@@ -53,4 +53,3 @@ SELECT
         OVER (PARTITION BY itp_id, url_number ORDER BY calitp_extracted_at) AS calitp_deleted_at
     FROM hash_check
     WHERE is_changed
-    ORDER BY itp_id, url_number, calitp_extracted_at
