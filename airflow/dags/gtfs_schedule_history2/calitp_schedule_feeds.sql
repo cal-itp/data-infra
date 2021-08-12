@@ -5,7 +5,8 @@ dependencies:
   - merge_updates
 ---
 
-With
+WITH
+
     gtfs_schedule_feed AS (
         SELECT
             itp_id, url_number, gtfs_schedule_url, agency_name,
@@ -13,10 +14,17 @@ With
               AS calitp_extracted_at
         FROM `gtfs_schedule_history.calitp_feeds` T
     ),
+    -- cross unique itp_id, url_number with dates we have for calitp_extracted_at
+    -- this will let us detect later on when an entry is missing (e.g. does not exist
+    -- for a certain date)
+    feed_id_cross_date AS (
+        SELECT *
+        FROM (SELECT DISTINCT itp_id, url_number FROM gtfs_schedule_feed) T1
+        CROSS JOIN (SELECT DISTINCT calitp_extracted_at FROM gtfs_schedule_feed) T2
+    ),
 
---Do a concat rather than just md5 on gtfs_schedule_feed as we only want to
---hash on those 4 columns (i.e dont want to hash on filename)
-
+    -- Do a concat rather than just md5 on gtfs_schedule_feed as we only want to
+    -- hash on those 4 columns (i.e dont want to hash on filename)
     gtfs_schedule_feed_snapshot AS (
         SELECT
             *
@@ -26,30 +34,56 @@ With
                     CAST(gtfs_schedule_url AS STRING), "__", CAST(agency_name AS STRING)
                 )
               )) AS calitp_hash
-        FROM
-            `gtfs_schedule_feed`
+        FROM gtfs_schedule_feed
     ),
+
     lag_md5_hash AS (
         SELECT
             *
-        , LAG(calitp_hash)
-            OVER (PARTITION BY itp_id, url_number ORDER BY calitp_extracted_at) AS prev_calitp_hash
-            FROM gtfs_schedule_feed_snapshot
+            , LAG(calitp_hash)
+                OVER (PARTITION BY itp_id, url_number ORDER BY calitp_extracted_at)
+              AS prev_calitp_hash
+            , calitp_hash IS NULL
+              AS is_removed
+            , calitp_extracted_at = MIN(calitp_extracted_at)
+                OVER (PARTITION BY itp_id, url_number)
+              AS is_first_extraction
+        FROM gtfs_schedule_feed_snapshot
+        RIGHT JOIN feed_id_cross_date USING (itp_id, url_number, calitp_extracted_at)
     ),
 
- -- Determine whether file at next extraction has changed md5_hash
- -- use coalesce, so that if a file was added, it will be marked as changed
+    -- Determine whether file at next extraction has changed md5_hash
+    -- use coalesce, so that if a file was added, it will be marked as changed
 
     hash_check AS (
         SELECT *
-        , coalesce(calitp_hash!=prev_calitp_hash, true) AS is_changed
-        , calitp_extracted_at = MIN(calitp_extracted_at)
-        OVER (PARTITION BY itp_id, url_number) AS is_first_extraction,
-        from lag_md5_hash
+            , calitp_hash!=prev_calitp_hash OR is_first_extraction
+              AS is_changed
+        FROM lag_md5_hash
+    ),
+
+    -- mark deleted at dates. note that this keeps removed entries so that their
+    -- created at dates can be used to mark deleted at for the previous entry.
+    feed_snapshot_with_removed AS (
+        SELECT
+            *
+            , LEAD (calitp_extracted_at)
+                OVER (PARTITION BY itp_id, url_number ORDER BY calitp_extracted_at)
+              AS calitp_deleted_at
+
+        FROM hash_check
+        WHERE is_changed OR is_removed
     )
+
 SELECT
-    *
-    , LEAD (calitp_extracted_at)
-        OVER (PARTITION BY itp_id, url_number ORDER BY calitp_extracted_at) AS calitp_deleted_at
-    FROM hash_check
-    WHERE is_changed
+    TO_BASE64(MD5(
+        CONCAT(calitp_hash, "__", CAST(calitp_extracted_at AS STRING))
+        ))
+        AS feed_key
+    , itp_id AS calitp_itp_id
+    , url_number AS calitp_url_number
+    , gtfs_schedule_url
+    , calitp_extracted_at
+    , calitp_deleted_at
+FROM feed_snapshot_with_removed
+WHERE NOT is_removed
