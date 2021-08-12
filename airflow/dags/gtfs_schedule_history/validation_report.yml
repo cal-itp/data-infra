@@ -159,3 +159,9 @@ schema_fields:
           type: INTEGER
         - name: fieldType
           type: STRING
+        - name: childFieldName
+          type: STRING
+        - name: parentFieldName
+          type: STRING
+        - name: parentFilename
+          type: STRING
