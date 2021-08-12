@@ -32,7 +32,6 @@ With
     lag_md5_hash AS (
         SELECT
             *
-            , DATE(NULL) as calitp_deleted_at
         , LAG(calitp_hash)
             OVER (PARTITION BY itp_id, url_number ORDER BY calitp_extracted_at) AS prev_calitp_hash
             FROM gtfs_schedule_feed_snapshot
@@ -49,7 +48,7 @@ With
         from lag_md5_hash
     )
 SELECT
-    * EXCEPT (calitp_deleted_at)
+    *
     , LEAD (calitp_extracted_at)
         OVER (PARTITION BY itp_id, url_number ORDER BY calitp_extracted_at) AS calitp_deleted_at
     FROM hash_check
