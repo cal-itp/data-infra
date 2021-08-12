@@ -2,7 +2,7 @@
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "gtfs_schedule_type2.calitp_feeds"
 dependencies:
-  - merge_updates
+  - type2_loaded
 ---
 
 WITH
@@ -73,17 +73,31 @@ WITH
 
         FROM hash_check
         WHERE is_changed OR is_removed
+    ),
+    final_data AS (
+        SELECT
+            TO_BASE64(MD5(
+                CONCAT(calitp_hash, "__", CAST(calitp_extracted_at AS STRING))
+                ))
+                AS feed_key
+            , itp_id AS calitp_itp_id
+            , url_number AS calitp_url_number
+            , gtfs_schedule_url
+            , calitp_extracted_at
+            , calitp_deleted_at
+        FROM feed_snapshot_with_removed
+        WHERE NOT is_removed
+    ),
+    exists_in_latest AS (
+        SELECT calitp_itp_id, calitp_url_number, true AS exists_in_latest
+        FROM final_data
+        WHERE calitp_deleted_at IS NULL
     )
 
 SELECT
-    TO_BASE64(MD5(
-        CONCAT(calitp_hash, "__", CAST(calitp_extracted_at AS STRING))
-        ))
-        AS feed_key
-    , itp_id AS calitp_itp_id
-    , url_number AS calitp_url_number
-    , gtfs_schedule_url
-    , calitp_extracted_at
-    , calitp_deleted_at
-FROM feed_snapshot_with_removed
-WHERE NOT is_removed
+    T1.*
+    , COALESCE(T2.exists_in_latest, false) as exists_in_latest
+    , CONCAT(CAST(itp_id AS STRING), "__", CAST(url_number AS STRING)) AS feed_id
+    , CONCAT(agency_name, " (", CAST(url_number AS STRING), ")") AS feed_name
+FROM final_data T1
+LEFT JOIN exists_in_latest T2 USING(calitp_itp_id, calitp_url_number)
