@@ -2,7 +2,7 @@
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "gtfs_schedule_type2.routes_clean"
 dependencies:
-  - merge_updates
+  - type2_loaded
 ---
 
 
