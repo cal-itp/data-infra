@@ -1353,7 +1353,7 @@ union-city-transit:
 unitrans:
   agency_name: Unitrans
   feeds:
-    - gtfs_schedule_url: http://iportal.sacrt.com/GTFS/Unitrans/google_transit.zip
+    - gtfs_schedule_url: https://unitrans.ucdavis.edu/media/gtfs/Unitrans_GTFS.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
