@@ -39,13 +39,13 @@ unique_codes AS (
   GROUP BY 1, 2, 3, 4, 5
     ),
   code_metrics_full AS (
-    SELECT 
+    SELECT
       * EXCEPT (n_notices)
       , LAG (n_notices)
             OVER (PARTITION BY calitp_itp_id, calitp_url_number, severity, code ORDER BY metric_date)
         AS prev_n_notices
       ,COALESCE(n_notices, 0) as n_notices
-    FROM code_metrics_partial  
+    FROM code_metrics_partial
     LEFT JOIN `agency_by_code` USING (metric_date,calitp_itp_id,calitp_url_number,code)
 
   )
