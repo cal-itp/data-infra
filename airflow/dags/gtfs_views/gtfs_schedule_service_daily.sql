@@ -12,7 +12,8 @@ dependencies:
 # might be from 2021-04-09 (or even earlier, if it has not been updated recently).
 # Key features:
 #   * There should be one entry per feed x service_date
-#   * service_date may extend far into the future (depending on service_date_end)
+#   * service_date may extend far into the future (depending on service_date_end).
+#     In this case we only extend out to a year from current date.
 #   * is_in_service for service_date(s) past today are not stable. They reflect
 #     what the most recent feed thinks will be in service in e.g. 2050-01-01.
 WITH
@@ -89,4 +90,4 @@ FROM calendar_daily
 FULL JOIN date_include USING(calitp_itp_id, calitp_url_number, service_id, service_date)
 FULL JOIN date_exclude USING(calitp_itp_id, calitp_url_number, service_id, service_date)
 # TODO: remove hardcoding--set this to be 1 month in the future, etc..
-WHERE service_date < "2022-01-01"
+WHERE service_date < DATE_ADD(CURRENT_DATE(), INTERVAL 1 YEAR)
