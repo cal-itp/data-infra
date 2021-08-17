@@ -1,8 +1,9 @@
 ---
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.validation_dim_codes"
-external_dependencies:
-  - gtfs_views_staging: all
+
+dependencies:
+  - dummy_validation_dims
 ---
 
 -- TODO: if a future version of the validator changes a codes severity
