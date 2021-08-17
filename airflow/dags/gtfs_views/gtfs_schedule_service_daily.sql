@@ -2,8 +2,9 @@
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.gtfs_schedule_service_daily"
 dependencies:
-  - gtfs_schedule_history_calendar_long
   - dim_date
+  - gtfs_schedule_dim_trips
+  - gtfs_schedule_stg_calendar_long
 ---
 
 # For a given service_date, find the latest feed describing whether that date
@@ -18,9 +19,9 @@ WITH
   # preprocess calendar dates
   cal_dates AS (
     SELECT
-      *
-      , PARSE_DATE("%Y%m%d", date) AS service_date
-    FROM `gtfs_schedule_type2.calendar_dates`
+      * EXCEPT (date)
+      , date AS service_date
+    FROM `gtfs_schedule_type2.calendar_dates_clean`
   ),
 
   # for each day in our date calendar, get service entries that existed
@@ -31,7 +32,7 @@ WITH
     FROM cal_dates t1
     JOIN `views.dim_date` t2
       ON t1.calitp_extracted_at <= t2.full_date
-        AND COALESCE(t1.calitp_deleted_at, DATE("2099-01-01")) > t2.full_date
+        AND t1.calitp_deleted_at > t2.full_date
         AND t1.service_date = t2.full_date
   ),
 
@@ -66,7 +67,7 @@ WITH
       , t1.start_date AS service_start_date
       , t1.end_date AS service_end_date
       , t2.full_date AS service_date
-    FROM  `views.gtfs_schedule_history_calendar_long` t1
+    FROM  `views.gtfs_schedule_stg_calendar_long` t1
     JOIN `views.dim_date` t2
       ON
         # use full_date to get active schedule on that date, and ensure

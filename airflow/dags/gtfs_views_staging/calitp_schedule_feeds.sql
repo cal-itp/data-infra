@@ -10,7 +10,7 @@ WITH
     gtfs_schedule_feed AS (
         SELECT
             itp_id, url_number, gtfs_schedule_url, agency_name,
-            REGEXP_SUBSTR(_FILE_NAME, "(\\d+-\\d+-\\d+)")
+            PARSE_DATE("%Y-%m-%d", REGEXP_SUBSTR(_FILE_NAME, "(\\d+-\\d+-\\d+)"))
               AS calitp_extracted_at
         FROM `gtfs_schedule_history.calitp_feeds` T
     ),
@@ -82,22 +82,23 @@ WITH
                 AS feed_key
             , itp_id AS calitp_itp_id
             , url_number AS calitp_url_number
-            , gtfs_schedule_url
+            , agency_name AS calitp_agency_name
+            , gtfs_schedule_url AS calitp_gtfs_schedule_url
             , calitp_extracted_at
-            , calitp_deleted_at
+            , COALESCE(calitp_deleted_at, "2099-01-01") AS calitp_deleted_at
         FROM feed_snapshot_with_removed
         WHERE NOT is_removed
     ),
     exists_in_latest AS (
-        SELECT calitp_itp_id, calitp_url_number, true AS exists_in_latest
+        SELECT calitp_itp_id, calitp_url_number, true AS calitp_id_in_latest
         FROM final_data
-        WHERE calitp_deleted_at IS NULL
+        WHERE calitp_deleted_at = "2099-01-01"
     )
 
 SELECT
-    T1.*
-    , COALESCE(T2.exists_in_latest, false) as exists_in_latest
-    , CONCAT(CAST(itp_id AS STRING), "__", CAST(url_number AS STRING)) AS feed_id
-    , CONCAT(agency_name, " (", CAST(url_number AS STRING), ")") AS feed_name
+    T1.* EXCEPT(calitp_id_in_latest)
+    , COALESCE(T2.calitp_id_in_latest, false) AS calitp_id_in_latest
+    , CONCAT(CAST(calitp_itp_id AS STRING), "__", CAST(calitp_url_number AS STRING)) AS calitp_feed_id
+    , CONCAT(calitp_agency_name, " (", CAST(calitp_url_number AS STRING), ")") AS calitp_feed_name
 FROM final_data T1
 LEFT JOIN exists_in_latest T2 USING(calitp_itp_id, calitp_url_number)

@@ -3,7 +3,6 @@ operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.schedule_stop_id_changes"
 
 dependencies:
-  - warehouse_loaded
   - dim_date
 ---
 

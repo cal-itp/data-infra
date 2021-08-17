@@ -1,7 +1,5 @@
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.dim_date"
-dependencies:
-  - warehouse_loaded
 
 sql: |
   # from https://gist.github.com/ewhauser/d7dd635ad2d4b20331c7f18038f04817

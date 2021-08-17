@@ -1,7 +1,7 @@
 # ---
 # python_callable: validation_notice_fields
-# dependencies:
-#   - warehouse_loaded
+# external_dependencies:
+#   - gtfs_schedule_history2: all
 # ---
 
 # Note that in theory we could use a SQL query (maybe with a js UDF), but it

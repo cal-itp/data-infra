@@ -1,4 +1,7 @@
-description: "Download the state of CA GTFS files, async version"
+description: |
+    Pre-process type2 tables by converting any DATE columns, and setting
+    deleted at dates to 2099-01-01.
+
 schedule_interval: "0 0 * * *"
 tags:
   - all_gusty_features
