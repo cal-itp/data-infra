@@ -29,6 +29,12 @@ spec:
           ports:
           - containerPort: {{ .Values.workloads.metabase.port }}
             name: metabase
+          startupProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.workloads.metabase.port }}
+            periodSeconds: 10
+            failureThreshold: 30
           livenessProbe:
             httpGet:
               path: /
