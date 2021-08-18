@@ -9,14 +9,14 @@
       
       
       
-        <link rel="canonical" href="https://docs.calitp.org/data-infra/warehouse/02_views/">
+        <link rel="canonical" href="https://docs.calitp.org/data-infra/services/gtfs-ckan-uploader/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.4">
     
     
       
-        <title>Creating New Tables (Views) - Juniper Documentation</title>
+        <title>GTFS CKAN Uploader - Juniper Documentation</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#creating-new-tables-views" class="md-skip">
+        <a href="#gtfs-ckan-uploader" class="md-skip">
           Skip to content
         </a>
       
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Creating New Tables (Views)
+              GTFS CKAN Uploader
             
           </span>
         </div>
@@ -248,13 +248,15 @@
         
   
   
+    
+  
 
 
   
   
   
     <li class="md-tabs__item">
-      <a href="../../services/gtfs-ckan-uploader/" class="md-tabs__link">
+      <a href="./" class="md-tabs__link md-tabs__link--active">
         Services
       </a>
     </li>
@@ -264,15 +266,13 @@
         
   
   
-    
-  
 
 
   
   
   
     <li class="md-tabs__item">
-      <a href="../01_agencies/" class="md-tabs__link md-tabs__link--active">
+      <a href="../../warehouse/01_agencies/" class="md-tabs__link">
         Warehouse
       </a>
     </li>
@@ -476,12 +476,14 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
       
       <label class="md-nav__link" for="__nav_4">
         Services
@@ -497,11 +499,21 @@
             
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../../services/gtfs-ckan-uploader/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         GTFS CKAN Uploader
       </a>
+      
     </li>
   
 
@@ -511,7 +523,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../services/gtfs-rt-archive/" class="md-nav__link">
+      <a href="../gtfs-rt-archive/" class="md-nav__link">
         gtfs-rt-archive
       </a>
     </li>
@@ -530,14 +542,12 @@
 
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
       
       <label class="md-nav__link" for="__nav_5">
         Warehouse
@@ -555,7 +565,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../01_agencies/" class="md-nav__link">
+      <a href="../../warehouse/01_agencies/" class="md-nav__link">
         Agency GTFS Feeds
       </a>
     </li>
@@ -567,7 +577,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../02_payments/" class="md-nav__link">
+      <a href="../../warehouse/02_payments/" class="md-nav__link">
         Payments Data
       </a>
     </li>
@@ -577,65 +587,11 @@
             
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Creating New Tables (Views)
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../warehouse/02_views/" class="md-nav__link">
         Creating New Tables (Views)
       </a>
-      
-        
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#syntax-overview" class="md-nav__link">
-    Syntax overview
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#testing-changes" class="md-nav__link">
-    Testing Changes
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#walkthrough" class="md-nav__link">
-    Walkthrough
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -645,7 +601,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../03_metrics/" class="md-nav__link">
+      <a href="../../warehouse/03_metrics/" class="md-nav__link">
         Metric Views
       </a>
     </li>
@@ -657,7 +613,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../04_sql_snippets/" class="md-nav__link">
+      <a href="../../warehouse/04_sql_snippets/" class="md-nav__link">
         SQL Snippets
       </a>
     </li>
@@ -689,35 +645,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#syntax-overview" class="md-nav__link">
-    Syntax overview
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#testing-changes" class="md-nav__link">
-    Testing Changes
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#walkthrough" class="md-nav__link">
-    Walkthrough
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -728,75 +655,13 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/cal-itp/data-infra/edit/main/docs/warehouse/02_views.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/cal-itp/data-infra/edit/main/docs/services/gtfs-ckan-uploader.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
                 
-                <h1 id="creating-new-tables-views">Creating New Tables (Views)<a class="headerlink" href="#creating-new-tables-views" title="Permanent link"> ¶</a></h1>
-<table>
-<thead>
-<tr>
-<th>operator</th>
-<th>description</th>
-<th>example</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>CsvToWarehouseOperator</td>
-<td>Load a CSV (or google sheet) from a URL</td>
-<td><a href="https://github.com/cal-itp/data-infra/blob/main/airflow/dags/transitstacks_loader/fares.yml"><code>transitstacks.fares</code></a></td>
-</tr>
-<tr>
-<td>PythonToWarehouseOperator</td>
-<td>Load data using python and the calitp library. This is a very flexible approach. It&rsquo;s useful when you want to do a small amount of processing before loading.</td>
-<td><a href="https://github.com/cal-itp/data-infra/blob/main/airflow/dags/gtfs_views/validation_code_descriptions.py"><code>views.validation_code_descriptions</code></a></td>
-</tr>
-<tr>
-<td>SqlToWarehouseOperator</td>
-<td>Create a new table from a SQL query.</td>
-<td><a href="https://github.com/cal-itp/data-infra/blob/main/airflow/dags/gtfs_views/transitstacks.yml"><code>views.transitstacks</code></a></td>
-</tr>
-<tr>
-<td>SqlQueryOperator</td>
-<td>Run arbitrary SQL (e.g. <code>CREATE EXTERNAL TABLE ...</code>)</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h2 id="syntax-overview">Syntax overview<a class="headerlink" href="#syntax-overview" title="Permanent link"> ¶</a></h2>
-<p>Below is a file similar to the one used to create <code>views.transitstacks</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># What operator to use. This determines the options available, and how the</span>
-<span class="c1"># pipeline executes this task.</span>
-<span class="nt">operator</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">operators.SqlToWarehouseOperator</span>
-
-<span class="c1"># Name of the table to load into the warehouse</span>
-<span class="nt">dst_table_name</span><span class="p">:</span> <span class="s">&quot;views.dim_date&quot;</span>
-
-<span class="c1"># Column descriptions to put into warehouse</span>
-<span class="nt">fields</span><span class="p">:</span>
-  <span class="p p-Indicator">-</span> <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The ID Column</span>
-  <span class="p p-Indicator">-</span> <span class="nt">full_date</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The full date (e.g. &quot;2021-01-01&quot;)</span>
-  <span class="p p-Indicator">-</span> <span class="nt">year</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The year component (e.g. 2021)</span>
-
-<span class="c1"># Other tasks this depends on. For example, if it uses another SQL view, then</span>
-<span class="c1"># that view should be a dependency</span>
-<span class="nt">dependencies</span><span class="p">:</span>
-  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">warehouse_loaded</span>
-
-<span class="c1"># The actual SQL code to be run!</span>
-<span class="nt">sql</span><span class="p">:</span> <span class="p p-Indicator">|</span>
-  <span class="no"># from https://gist.github.com/ewhauser/d7dd635ad2d4b20331c7f18038f04817</span>
-  <span class="no">SELECT</span>
-    <span class="no">FORMAT_DATE(&#39;%F&#39;, d) as id,</span>
-    <span class="no">d AS full_date,</span>
-    <span class="no">EXTRACT(YEAR FROM d) AS year,</span>
-  <span class="no">FROM</span>
-    <span class="no">UNNEST(GENERATE_DATE_ARRAY(&#39;2001-01-01&#39;, &#39;2050-01-01&#39;, INTERVAL 1 DAY)) d</span>
-</code></pre></div>
-<h2 id="testing-changes">Testing Changes<a class="headerlink" href="#testing-changes" title="Permanent link"> ¶</a></h2>
-<h2 id="walkthrough">Walkthrough<a class="headerlink" href="#walkthrough" title="Permanent link"> ¶</a></h2>
+                <h1 id="gtfs-ckan-uploader">GTFS CKAN Uploader<a class="headerlink" href="#gtfs-ckan-uploader" title="Permanent link"> ¶</a></h1>
+<p>See readme in <a href="https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archive/README.md">services/gtfs-ckan-uploader</a>.</p>
                 
               
               
@@ -816,7 +681,7 @@
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../02_payments/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Payments Data" rel="prev">
+        <a href="../../kubernetes/" class="md-footer__link md-footer__link--prev" aria-label="Previous: kubernetes #" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -825,20 +690,20 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              Payments Data
+              kubernetes #
             </div>
           </div>
         </a>
       
       
         
-        <a href="../03_metrics/" class="md-footer__link md-footer__link--next" aria-label="Next: Metric Views" rel="next">
+        <a href="../gtfs-rt-archive/" class="md-footer__link md-footer__link--next" aria-label="Next: gtfs-rt-archive" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Metric Views
+              gtfs-rt-archive
             </div>
           </div>
           <div class="md-footer__button md-icon">
