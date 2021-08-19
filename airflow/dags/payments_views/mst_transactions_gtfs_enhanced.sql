@@ -1,6 +1,6 @@
 ---
 operator: operators.SqlToWarehouseOperator
-dst_table_name: "views.mst_ridership"
+dst_table_name: "views.mst_transactions_gtfs_enhanced"
 external_dependencies:
   - payments_loader: all
 ---
