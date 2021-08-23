@@ -1,8 +1,8 @@
 ---
 operator: operators.SqlToWarehouseOperator
-dst_table_name: "views.gtfs_schedule_service_daily_metrics"
+dst_table_name: "views.gtfs_schedule_fact_daily_service"
 dependencies:
-  - gtfs_schedule_service_daily_trips
+  - gtfs_schedule_fact_daily_trips
 ---
 
 WITH service_agg AS (
@@ -16,7 +16,7 @@ WITH service_agg AS (
     , COUNT(DISTINCT route_id) AS n_routes
     , MIN(trip_first_departure_ts) AS first_departure_ts
     , MAX(trip_last_arrival_ts) AS last_arrival_ts
-  FROM `views.gtfs_schedule_service_daily_trips`
+  FROM `views.gtfs_schedule_fact_daily_trips`
   WHERE is_in_service
   GROUP BY 1, 2, 3, 4
 )

@@ -2,11 +2,9 @@
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.validation_fact_daily_feed_notices"
 
-external_dependencies:
-  - gtfs_views_staging: all
-
 dependencies:
   - gtfs_schedule_dim_feeds
+  - validation_dim_codes
 ---
 
 SELECT

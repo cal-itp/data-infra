@@ -7,34 +7,27 @@ dependencies:
 
 WITH
 
-    gtfs_schedule_feed AS (
-        SELECT
-            itp_id, url_number, gtfs_schedule_url, agency_name,
-            PARSE_DATE("%Y-%m-%d", REGEXP_SUBSTR(_FILE_NAME, "(\\d+-\\d+-\\d+)"))
-              AS calitp_extracted_at
-        FROM `gtfs_schedule_history.calitp_feeds` T
-    ),
-    -- cross unique itp_id, url_number with dates we have for calitp_extracted_at
-    -- this will let us detect later on when an entry is missing (e.g. does not exist
-    -- for a certain date)
-    feed_id_cross_date AS (
-        SELECT *
-        FROM (SELECT DISTINCT itp_id, url_number FROM gtfs_schedule_feed) T1
-        CROSS JOIN (SELECT DISTINCT calitp_extracted_at FROM gtfs_schedule_feed) T2
-    ),
-
-    -- Do a concat rather than just md5 on gtfs_schedule_feed as we only want to
-    -- hash on those 4 columns (i.e dont want to hash on filename)
     gtfs_schedule_feed_snapshot AS (
         SELECT
-            *
+            itp_id, url_number, gtfs_schedule_url, agency_name, status, calitp_extracted_at
+
+            -- Do a concat rather than just md5 on gtfs_schedule_feed as we only want to
+            -- hash on those 5 columns (i.e dont want to hash on extracted at)
             , TO_BASE64(MD5(
                 CONCAT(
                     CAST(itp_id AS STRING), "__", CAST(url_number AS STRING), "__",
                     CAST(gtfs_schedule_url AS STRING), "__", CAST(agency_name AS STRING)
                 )
               )) AS calitp_hash
-        FROM gtfs_schedule_feed
+        FROM `gtfs_schedule_history.calitp_status` T
+    ),
+    -- cross unique itp_id, url_number with dates we have for calitp_extracted_at
+    -- this will let us detect later on when an entry is missing (e.g. does not exist
+    -- for a certain date)
+    feed_id_cross_date AS (
+        SELECT *
+        FROM (SELECT DISTINCT itp_id, url_number FROM gtfs_schedule_feed_snapshot) T1
+        CROSS JOIN (SELECT DISTINCT calitp_extracted_at FROM gtfs_schedule_feed_snapshot) T2
     ),
 
     lag_md5_hash AS (
@@ -96,7 +89,7 @@ WITH
     )
 
 SELECT
-    T1.* EXCEPT(calitp_id_in_latest)
+    T1.*
     , COALESCE(T2.calitp_id_in_latest, false) AS calitp_id_in_latest
     , CONCAT(CAST(calitp_itp_id AS STRING), "__", CAST(calitp_url_number AS STRING)) AS calitp_feed_id
     , CONCAT(calitp_agency_name, " (", CAST(calitp_url_number AS STRING), ")") AS calitp_feed_name

@@ -1,6 +1,6 @@
 ---
 operator: operators.SqlToWarehouseOperator
-dst_table_name: "views.gtfs_schedule_service_daily"
+dst_table_name: "views.gtfs_schedule_stg_daily_service"
 dependencies:
   - dim_date
   - gtfs_schedule_dim_trips

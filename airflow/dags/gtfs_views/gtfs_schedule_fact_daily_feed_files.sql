@@ -1,8 +1,8 @@
 ---
 operator: operators.SqlToWarehouseOperator
-dst_table_name: "views.gtfs_schedule_fact_daily_files"
+dst_table_name: "views.gtfs_schedule_fact_daily_feed_files"
 dependencies:
-  - dummy_gtfs_schedule_dims
+  - gtfs_schedule_dim_feeds
 ---
 
 -- calitp_files_updates tracks daily each file downloaded from a gtfs schedule

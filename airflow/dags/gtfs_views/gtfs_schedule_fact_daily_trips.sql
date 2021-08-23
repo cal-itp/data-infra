@@ -1,8 +1,9 @@
 ---
 operator: operators.SqlToWarehouseOperator
-dst_table_name: "views.gtfs_schedule_service_daily_trips"
+dst_table_name: "views.gtfs_schedule_fact_daily_trips"
 dependencies:
-  - gtfs_schedule_service_daily
+  - gtfs_schedule_stg_daily_service
+  - gtfs_schedule_stg_stop_times
 ---
 
 # Each trip with scheduled service on a date, augmented with route_id, first departure,
@@ -17,7 +18,7 @@ daily_service_trips AS (
     t1.*
     , t2.trip_id
     , t2.route_id
-  FROM `views.gtfs_schedule_service_daily` t1
+  FROM `views.gtfs_schedule_stg_daily_service` t1
   JOIN `gtfs_schedule_type2.trips` t2
     USING (calitp_itp_id, calitp_url_number, service_id)
   WHERE
@@ -26,7 +27,7 @@ daily_service_trips AS (
 ),
 service_dates AS (
   # Each unique value for service_date
-  (SELECT DISTINCT service_date FROM `views.gtfs_schedule_service_daily`)
+  (SELECT DISTINCT service_date FROM `views.gtfs_schedule_stg_daily_service`)
 ),
 trip_summary AS (
   # Trip metrics for each possible service date (e.g. for a given trip that existed
@@ -40,7 +41,7 @@ trip_summary AS (
     , COUNT(*) AS n_stop_times
     , MIN(t1.departure_ts) AS trip_first_departure_ts
     , MAX(t1.arrival_ts) AS trip_last_arrival_ts
-  FROM `views.gtfs_schedule_stop_times` t1
+  FROM `views.gtfs_schedule_dim_stop_times` t1
   JOIN  service_dates t2
   ON t1.calitp_extracted_at <= t2.service_date
     AND COALESCE(t1.calitp_deleted_at, DATE("2099-01-01")) > t2.service_date

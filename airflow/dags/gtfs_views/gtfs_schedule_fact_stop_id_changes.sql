@@ -1,6 +1,6 @@
 ---
 operator: operators.SqlToWarehouseOperator
-dst_table_name: "views.schedule_stop_id_changes"
+dst_table_name: "views.schedule_fact_stop_id_changes"
 
 dependencies:
   - dim_date
@@ -16,14 +16,16 @@ date_range AS (
     WHERE full_date BETWEEN '2020-01-01' AND CURRENT_DATE()
 ),
 table_start AS (
-    SELECT calitp_itp_id, calitp_url_number, metric_date, stop_id from `gtfs_schedule_type2.stops`
+    SELECT calitp_itp_id, calitp_url_number, metric_date, stop_id
+    FROM `gtfs_schedule_type2.stops_clean`
     JOIN date_range ON calitp_extracted_at <= date_start
-    AND COALESCE(calitp_deleted_at, DATE ("2099-01-01")) > date_start
+    AND calitp_deleted_at > date_start
 ),
-  table_end AS (
-    SELECT calitp_itp_id, calitp_url_number, metric_date, stop_id from `gtfs_schedule_type2.stops`
+table_end AS (
+    SELECT calitp_itp_id, calitp_url_number, metric_date, stop_id
+    FROM `gtfs_schedule_type2.stops_clean`
     JOIN date_range ON calitp_extracted_at <= date_end
-    AND COALESCE(calitp_deleted_at, DATE ("2099-01-01")) > date_end
+    AND calitp_deleted_at > date_end
 ),
 
 table_partial AS (
