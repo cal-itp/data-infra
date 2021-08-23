@@ -9,14 +9,14 @@
       
       
       
-        <link rel="canonical" href="https://docs.calitp.org/data-infra/warehouse/02_payments/">
+        <link rel="canonical" href="https://docs.calitp.org/data-infra/warehouse/table_names/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.4">
     
     
       
-        <title>Payments Data - Juniper Documentation</title>
+        <title>Table names - Juniper Documentation</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#payments-data" class="md-skip">
+        <a href="#table-names" class="md-skip">
           Skip to content
         </a>
       
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Payments Data
+              Table names
             
           </span>
         </div>
@@ -565,65 +565,11 @@
             
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Payments Data
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../02_payments/" class="md-nav__link">
         Payments Data
       </a>
-      
-        
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#elt" class="md-nav__link">
-    ELT
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#tables" class="md-nav__link">
-    Tables
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#views" class="md-nav__link">
-    Views
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -667,11 +613,21 @@
             
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../table_names/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Table names
       </a>
+      
     </li>
   
 
@@ -701,35 +657,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#elt" class="md-nav__link">
-    ELT
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#tables" class="md-nav__link">
-    Tables
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#views" class="md-nav__link">
-    Views
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -740,46 +667,31 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/cal-itp/data-infra/edit/main/docs/warehouse/02_payments.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/cal-itp/data-infra/edit/main/docs/warehouse/table_names.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
                 
-                <h1 id="payments-data">Payments Data<a class="headerlink" href="#payments-data" title="Permanent link"> ¶</a></h1>
-<p>Currently, Payments data is hosted by Littlepay, who exposes the &ldquo;Littlepay Data Model&rdquo; as a set of files stored in an S3 bucket. To get a copy of the data docs, email hunter.</p>
-<h2 id="elt">ELT<a class="headerlink" href="#elt" title="Permanent link"> ¶</a></h2>
-<p>The ETL is currently a scheduled Google Data Transfer job that transfers all files to <code>gcs://littlepay-data-extract-prod</code></p>
-<p>From there, tables are loaded into BigQuery as external tables in the <code>transaction_data</code> buclet.</p>
-<p>Finally, there is a operator <code>payments_update</code> that runs nightly to refresh the <code>mst_ridership_materialized</code> table.</p>
-<h2 id="tables">Tables<a class="headerlink" href="#tables" title="Permanent link"> ¶</a></h2>
-<table>
-<thead>
-<tr>
-<th>Tablename</th>
-<th>Description</th>
-<th>Notes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>device_transactions</td>
-<td>A list of every tap on the devices</td>
-<td>* Cannot use for ridership stats because tap on / offs</td>
-</tr>
-<tr>
-<td>micropayments</td>
-<td>A list of every charge to a card</td>
-<td>* T-2 delays because of charing rules</td>
-</tr>
-<tr>
-<td>micropayments_devices_transactions</td>
-<td>Join tables for two prior tables</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h2 id="views">Views<a class="headerlink" href="#views" title="Permanent link"> ¶</a></h2>
-<p>The table best used for caculating ridership is <code>mst_ridership_materialized</code> table.</p>
+                <h1 id="table-names">Table names<a class="headerlink" href="#table-names" title="Permanent link"> ¶</a></h1>
+<p>The warehouse puts tables that are ready for end-users into the <a href="/datasets/views/"><code>views</code> dataset</a>.
+They are named using a convention loosely based off of the Kimball method for modeling data,
+which separates data into underlying dimensions (measurements) and facts (calculations).</p>
+<p>Tables should be named using the following convention: <code>{domain}_{table_type}_{details}</code>.</p>
+<p>For example, take <code>gtfs_schedule_dim_feeds</code>:</p>
+<ul>
+<li>The domain is <code>gtfs_schedule</code>.</li>
+<li>The table type is <code>dim</code> for dimension.</li>
+<li>The details are that it&rsquo;s about <code>feeds</code>.</li>
+</ul>
+<p>There are for common fact table types names currently used in the warehouse:</p>
+<ul>
+<li>fact_daily_* - facts for some dimension represented every day.</li>
+<li>fact_index_* - a &ldquo;bridge&rdquo; table, which can be used to reconstruct data on a given day.
+  For example, gtfs_schedule_fact_index_feed_trip_stops, lets people reconstruct a big join
+  between feeds, trips, stop_times, and stops for any day. This requires filtering on
+  calitp_extracted_at and calitp_deleted_at, then joining on each dimensional key (e.g. feed_key).</li>
+<li>data_* - a bridge table that has been filtered and joined on dimensional keys for a given date.</li>
+</ul>
                 
               
               
@@ -799,7 +711,7 @@
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../01_agencies/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Agency GTFS Feeds" rel="prev">
+        <a href="../04_sql_snippets/" class="md-footer__link md-footer__link--prev" aria-label="Previous: SQL Snippets" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -808,26 +720,11 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              Agency GTFS Feeds
+              SQL Snippets
             </div>
           </div>
         </a>
       
-      
-        
-        <a href="../02_views/" class="md-footer__link md-footer__link--next" aria-label="Next: Creating New Tables (Views)" rel="next">
-          <div class="md-footer__title">
-            <div class="md-ellipsis">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              Creating New Tables (Views)
-            </div>
-          </div>
-          <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
-          </div>
-        </a>
       
     </nav>
   

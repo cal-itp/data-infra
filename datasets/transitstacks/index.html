@@ -677,6 +677,18 @@
   
 
           
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../warehouse/table_names/" class="md-nav__link">
+        Table names
+      </a>
+    </li>
+  
+
+          
         </ul>
       </nav>
     </li>
@@ -775,6 +787,25 @@
 </tr>
 </tbody>
 </table>
+<div class="mermaid">erDiagram
+    Organization }o..o{ Contact : "represented by"
+    Organization }o..o{ Service: "manages"
+    Organization }o..o{ Service: "operates"
+    Organization }o..o{ Contract: "owns"
+    Organization }o..o{ Contract: "holds"
+    Organization }o..o{ Product: "sells"
+    Organization }o..o{ GtfsDataset: "consumes"
+    Organization }o..o{ GtfsDataset: "produces"
+
+    Service }o..o{ GtfsDataset: "contains"
+
+    OrganizationStackComponent }o..o{ Organization: "associates"
+    OrganizationStackComponent }o..o{ Product: "associates"
+    OrganizationStackComponent }o..o{ Component: "associates"
+    OrganizationStackComponent }o..o{ Contracts: "associates"
+
+    OrganizationStackComponentRelationship }o..o{ OrganizationStackComponent: componentA
+    OrganizationStackComponentRelationship }o..o{ OrganizationStackComponent: componentB</div>
 <h2 id="dashboards">Dashboards<a class="headerlink" href="#dashboards" title="Permanent link"> ¶</a></h2>
 <h2 id="maintenance">Maintenance<a class="headerlink" href="#maintenance" title="Permanent link"> ¶</a></h2>
 <h3 id="dags-overview">DAGs overview<a class="headerlink" href="#dags-overview" title="Permanent link"> ¶</a></h3>
