@@ -829,6 +829,10 @@ moorpark-city-transit:
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
+    - gtfs_schedule_url: https://govcbus.com/gtfs
+      gtfs_rt_vehicle_positions_url: https://govcbus.com/gtfs-rt/vehiclepositions
+      gtfs_rt_service_alerts_url: https://govcbus.com/gtfs-rt/alerts
+      gtfs_rt_trip_updates_url: https://govcbus.com/gtfs-rt/tripupdates
   itp_id: 210
 morongo-basin-transit-authority:
   agency_name: Morongo Basin Transit Authority
@@ -902,9 +906,9 @@ ojai-trolley:
   agency_name: Ojai Trolley
   feeds:
     - gtfs_schedule_url: https://govcbus.com/gtfs
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://govcbus.com/gtfs-rt/vehiclepositions
+      gtfs_rt_service_alerts_url: https://govcbus.com/gtfs-rt/alerts
+      gtfs_rt_trip_updates_url: https://govcbus.com/gtfs-rt/tripupdates
   itp_id: 231
 omnitrans:
   agency_name: OmniTrans
@@ -1170,6 +1174,10 @@ simi-valley-transit:
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
+    - gtfs_schedule_url: https://govcbus.com/gtfs
+      gtfs_rt_vehicle_positions_url: https://govcbus.com/gtfs-rt/vehiclepositions
+      gtfs_rt_service_alerts_url: https://govcbus.com/gtfs-rt/alerts
+      gtfs_rt_trip_updates_url: https://govcbus.com/gtfs-rt/tripupdates
   itp_id: 308
 siskiyou-transit-and-general-express:
   agency_name: Siskiyou Transit and General Express
@@ -1350,6 +1358,10 @@ thousand-oaks-transit:
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
+    - gtfs_schedule_url: https://govcbus.com/gtfs
+      gtfs_rt_vehicle_positions_url: https://govcbus.com/gtfs-rt/vehiclepositions
+      gtfs_rt_service_alerts_url: https://govcbus.com/gtfs-rt/alerts
+      gtfs_rt_trip_updates_url: https://govcbus.com/gtfs-rt/tripupdates
   itp_id: 337
 tideline:
   agency_name: Tideline
