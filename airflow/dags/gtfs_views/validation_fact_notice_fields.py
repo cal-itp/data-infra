@@ -1,18 +1,18 @@
 # ---
 # python_callable: validation_notice_fields
 # dependencies:
-#   - warehouse_loaded
+#   - validation_dim_codes
 # ---
 
 # Note that in theory we could use a SQL query (maybe with a js UDF), but it
 # looks kind of crazy: https://stackoverflow.com/q/34890339/1144523
 # instead, just loop over the bucket of validation reports
-import gcsfs
 import json
 import pandas as pd
 
 from calitp import write_table
-from calitp.config import get_bucket, get_project_id
+from calitp.config import get_bucket
+from calitp.storage import get_fs
 from collections import defaultdict
 
 
@@ -22,7 +22,7 @@ def validation_notice_fields():
 
     print(f"{bucket}/schedule/processed/*/validation_report.json")
 
-    fs = gcsfs.GCSFileSystem(project=get_project_id())
+    fs = get_fs()
     reports = fs.glob(f"{bucket}/schedule/processed/*/validation_report.json")
     reports_json = [json.load(fs.open(fname)) for fname in reports]
 

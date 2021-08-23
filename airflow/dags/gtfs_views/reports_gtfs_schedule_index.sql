@@ -18,9 +18,10 @@ fields:
   has_feed_info: Whether the most recent (date_end) feed for a month has feed_info.txt.
   use_for_report: Whether to use to generate a report for this feed on this date.
 
+external_dependencies:
+  - gtfs_views_staging: all
 
 dependencies:
-  - warehouse_loaded
   - dim_date
 ---
 
@@ -46,7 +47,7 @@ has_feed_info_end_date AS (
         , calitp_itp_id
         , calitp_url_number
         , TRUE AS has_feed_info
-    FROM `gtfs_schedule_type2.feed_info` FI
+    FROM `gtfs_schedule_type2.feed_info_clean` FI
     JOIN publish_dates_crnt PD ON
         FI.calitp_extracted_at <= PD.date_end
         AND COALESCE(FI.calitp_deleted_at, "2099-01-01") > PD.date_end

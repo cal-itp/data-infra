@@ -1,8 +1,9 @@
 ---
 operator: operators.SqlToWarehouseOperator
-dst_table_name: "views.gtfs_schedule_history_calendar_long"
-dependencies:
-  - warehouse_loaded
+dst_table_name: "views.gtfs_schedule_stg_calendar_long"
+external_dependencies:
+    - gtfs_views_staging: all
+
 ---
 
 # Note that you can unnest values easily in SQL, but getting the column names
@@ -17,11 +18,11 @@ SELECT
   calitp_itp_id
   , calitp_url_number
   , service_id
-  , PARSE_DATE("%Y%m%d", start_date) AS start_date
-  , PARSE_DATE("%Y%m%d", end_date) AS end_date
+  , start_date
+  , end_date
   , calitp_extracted_at
   , calitp_deleted_at
   , "{{dow | title}}" AS day_name
   , {{dow}} AS service_indicator
-FROM `gtfs_schedule_type2.calendar`
+FROM `gtfs_schedule_type2.calendar_clean`
 {% endfor %}

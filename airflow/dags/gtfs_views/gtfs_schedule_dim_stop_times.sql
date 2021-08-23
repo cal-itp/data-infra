@@ -1,8 +1,8 @@
 ---
 operator: operators.SqlToWarehouseOperator
-dst_table_name: "views.gtfs_schedule_stop_times"
+dst_table_name: "views.gtfs_schedule_dim_stop_times"
 dependencies:
-  - warehouse_loaded
+  - dummy_gtfs_schedule_dims
 ---
 
 WITH
@@ -10,7 +10,7 @@ raw_time_parts AS (
     SELECT *
       , REGEXP_EXTRACT_ALL(arrival_time, "([0-9]+)") AS part_arr
       , REGEXP_EXTRACT_ALL(departure_time, "([0-9]+)") AS part_dep
-      FROM `gtfs_schedule_type2.stop_times`
+      FROM `gtfs_schedule_type2.stop_times_clean`
 ),
 int_time_parts AS (
     SELECT
@@ -29,7 +29,9 @@ array_len_fix AS (
 )
 
 SELECT
- * EXCEPT(part_arr, part_dep)
+ * EXCEPT(continuous_pickup, continuous_drop_off, part_arr, part_dep)
+ , continuous_pickup AS stop_time_continuous_pickup
+ , continuous_drop_off AS stop_time_continuous_drop_off
  , DENSE_RANK()
       OVER (PARTITION BY calitp_itp_id, calitp_url_number, trip_id ORDER BY stop_sequence)
     AS stop_sequence_rank

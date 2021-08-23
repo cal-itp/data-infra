@@ -1,9 +1,10 @@
 ---
 operator: operators.SqlToWarehouseOperator
-dst_table_name: "views.gtfs_schedule_service_daily"
+dst_table_name: "views.gtfs_schedule_stg_daily_service"
 dependencies:
-  - gtfs_schedule_history_calendar_long
   - dim_date
+  - gtfs_schedule_dim_trips
+  - gtfs_schedule_stg_calendar_long
 ---
 
 # For a given service_date, find the latest feed describing whether that date
@@ -11,16 +12,17 @@ dependencies:
 # might be from 2021-04-09 (or even earlier, if it has not been updated recently).
 # Key features:
 #   * There should be one entry per feed x service_date
-#   * service_date may extend far into the future (depending on service_date_end)
+#   * service_date may extend far into the future (depending on service_date_end).
+#     In this case we only extend out to a year from current date.
 #   * is_in_service for service_date(s) past today are not stable. They reflect
 #     what the most recent feed thinks will be in service in e.g. 2050-01-01.
 WITH
   # preprocess calendar dates
   cal_dates AS (
     SELECT
-      *
-      , PARSE_DATE("%Y%m%d", date) AS service_date
-    FROM `gtfs_schedule_type2.calendar_dates`
+      * EXCEPT (date)
+      , date AS service_date
+    FROM `gtfs_schedule_type2.calendar_dates_clean`
   ),
 
   # for each day in our date calendar, get service entries that existed
@@ -31,7 +33,7 @@ WITH
     FROM cal_dates t1
     JOIN `views.dim_date` t2
       ON t1.calitp_extracted_at <= t2.full_date
-        AND COALESCE(t1.calitp_deleted_at, DATE("2099-01-01")) > t2.full_date
+        AND t1.calitp_deleted_at > t2.full_date
         AND t1.service_date = t2.full_date
   ),
 
@@ -66,7 +68,7 @@ WITH
       , t1.start_date AS service_start_date
       , t1.end_date AS service_end_date
       , t2.full_date AS service_date
-    FROM  `views.gtfs_schedule_history_calendar_long` t1
+    FROM  `views.gtfs_schedule_stg_calendar_long` t1
     JOIN `views.dim_date` t2
       ON
         # use full_date to get active schedule on that date, and ensure
@@ -88,4 +90,4 @@ FROM calendar_daily
 FULL JOIN date_include USING(calitp_itp_id, calitp_url_number, service_id, service_date)
 FULL JOIN date_exclude USING(calitp_itp_id, calitp_url_number, service_id, service_date)
 # TODO: remove hardcoding--set this to be 1 month in the future, etc..
-WHERE service_date < "2022-01-01"
+WHERE service_date < DATE_ADD(CURRENT_DATE(), INTERVAL 1 YEAR)
