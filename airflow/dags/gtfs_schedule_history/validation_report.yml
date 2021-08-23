@@ -163,5 +163,7 @@ schema_fields:
           type: STRING
         - name: parentFieldName
           type: STRING
+        - name: childFilename
+          type: STRING
         - name: parentFilename
           type: STRING

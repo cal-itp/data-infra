@@ -39,10 +39,6 @@ and manually add it to airflow:
 
 ```console
 docker-compose exec airflow-scheduler /bin/bash
-
-# run this inside container, and replace json key name in last line
-airflow connections -d --conn_id bigquery_default
-airflow connections -a --conn_id bigquery_default --conn_uri 'google-cloud-platform://:@:?extra__google_cloud_platform__project=cal-itp-data-infra&extra__google_cloud_platform__key_path=/home/airflow/.config/gcloud/cal-itp-data-infra-dcde6f46af07.json'
 ```
 
 Start all services with:
