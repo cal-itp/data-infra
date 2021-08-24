@@ -5,14 +5,14 @@ set -e
 # Defaults
 #
 
-test "$RELEASE_ENV"             || RELEASE_ENV=local
 test "$REPO_TAG"                || REPO_TAG=$(git describe --always --tags)
+test "$RELEASE_CHANNEL"         || RELEASE_CHANNEL=local
 test "$BUILD_APP"               || BUILD_APP=$(awk -F/ '{ print $1 }' <<< "$REPO_TAG")
 test "$BUILD_ID"                || BUILD_ID=$(awk -F/ '{ print $2 }' <<< "$REPO_TAG")
-test "$BUILD_REPO"              || BUILD_REPO=$(git config --default '' "env.$BUILD_APP/$RELEASE_ENV.build-repo")
-test "$RELEASE_GIT_REMOTE_NAME" || RELEASE_GIT_REMOTE_NAME=$(git config --default '' "env.$RELEASE_ENV.git-remote-name")
-test "$RELEASE_GIT_REMOTE_URL"  || RELEASE_GIT_REMOTE_URL=$(git config --default '' "env.$RELEASE_ENV.git-remote-url")
-test "$KUBECONFIG"              || KUBECONFIG=$(git config --default '' "env.$RELEASE_ENV.kubeconfig")
+test "$BUILD_REPO"              || BUILD_REPO=$(git config --default '' "channel.$BUILD_APP/$RELEASE_CHANNEL.build-repo")
+test "$RELEASE_GIT_REMOTE_NAME" || RELEASE_GIT_REMOTE_NAME=$(git config --default '' "channel.$BUILD_APP/$RELEASE_CHANNEL.git-remote-name")
+test "$RELEASE_GIT_REMOTE_URL"  || RELEASE_GIT_REMOTE_URL=$(git config --default '' "channel.$BUILD_APP/$RELEASE_CHANNEL.git-remote-url")
+test "$KUBECONFIG"              || KUBECONFIG=$(git config --default '' "channel.$BUILD_APP/$RELEASE_CHANNEL.kubeconfig")
 
 export KUBECONFIG
 
@@ -21,10 +21,9 @@ export KUBECONFIG
 #
 
 BUILD_DIR=$(git rev-parse --show-toplevel)/services/$BUILD_APP
-RELEASE_CHANNEL=$RELEASE_ENV
 RELEASE_KUBE_BASE=$(git rev-parse --show-toplevel)/kubernetes/apps/manifests/$BUILD_APP
 RELEASE_KUBE_KUSTOMIZATION=$(git rev-parse --show-toplevel)/kubernetes/apps/overlays/$BUILD_APP-release/kustomization.yaml
-RELEASE_KUBE_OVERLAY=$(git rev-parse --show-toplevel)/kubernetes/apps/overlays/$BUILD_APP-$RELEASE_ENV
+RELEASE_KUBE_OVERLAY=$(git rev-parse --show-toplevel)/kubernetes/apps/overlays/$BUILD_APP-$RELEASE_CHANNEL
 RELEASE_GIT_COMMIT_DIRTY=1
 CLEANUP_GIT_CHECKOUT=$(git symbolic-ref HEAD | sed 's,refs/heads/,,')
 
