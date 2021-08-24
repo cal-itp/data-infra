@@ -48,7 +48,7 @@ if [[ $RELEASE_GIT_COMMIT_DIRTY ]]; then
 fi
 
 # Merge topic branch into release branch
-git checkout "$git_ref_local"
+git checkout "$git_branch_name"
 git merge --no-ff --no-edit -m "release($BUILD_APP/$RELEASE_CHANNEL): $BUILD_ID" "$git_ref_topic"
 
 # Push release branch to remote
