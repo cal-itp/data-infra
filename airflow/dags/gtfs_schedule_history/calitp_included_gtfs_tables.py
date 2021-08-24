@@ -25,7 +25,6 @@ def main():
             ("frequencies", ".txt", False),
             ("fare_rules", ".txt", False),
             ("fare_attributes", ".txt", False),
-            ("frequencies", ".txt", False),
             ("shapes", ".txt", False),
         ],
         columns=["table_name", "ext", "is_required"],
