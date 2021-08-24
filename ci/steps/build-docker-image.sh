@@ -5,28 +5,28 @@ required_missing=()
 want_build_push=
 
 test "$BUILD_DIR"         || required_missing+=('BUILD_DIR')
-test "$BUILD_DEST"        || required_missing+=('BUILD_DEST')
+test "$BUILD_REPO"        || required_missing+=('BUILD_REPO')
 test "$BUILD_ID"          || required_missing+=('BUILD_ID')
-test "$BUILD_DEST_USER"   || true
-test "$BUILD_DEST_SECRET" || true
+test "$BUILD_REPO_USER"   || BUILD_REPO_USER=
+test "$BUILD_REPO_SECRET" || BUILD_REPO_SECRET=
 
 if [[ ${#required_missing[*]} -gt 0 ]]; then
   printf 'error: missing required variables: %s\n' "${required_missing[*]}" >&2
   exit 1
 fi
 
-docker_tag=$BUILD_DEST:$BUILD_ID
-docker_tag_latest=$BUILD_DEST:latest
+docker_tag=$BUILD_REPO:$BUILD_ID
+docker_tag_latest=$BUILD_REPO:latest
 
 # setup remote registry
-if [[ $BUILD_DEST =~ ([^/]+\.[^/]+)/(.*)$ ]]; then
+if [[ $BUILD_REPO =~ ([^/]+\.[^/]+)/(.*)$ ]]; then
   want_build_push=1
   registry=${BASH_REMATCH[1]}
 
   if [[ $registry =~ .*\.gcr\.io$ ]]; then
     gcloud auth configure-docker
-  elif [[ $BUILD_DEST_USER && $BUILD_DEST_SECRET ]]; then
-    docker login -u "$BUILD_DEST_USER" --password-stdin "$registry" <<< "$BUILD_DEST_SECRET"
+  elif [[ $BUILD_REPO_USER && $BUILD_REPO_SECRET ]]; then
+    docker login -u "$BUILD_REPO_USER" --password-stdin "$registry" <<< "$BUILD_REPO_SECRET"
   fi
 
   if docker manifest inspect "$docker_tag"; then
