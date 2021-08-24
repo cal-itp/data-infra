@@ -21,11 +21,14 @@ mkdir ./dags ./logs ./plugins
 echo -e "AIRFLOW_UID=$(id -u)\nAIRFLOW_GID=0" > .env
 ```
 
-Second, ensure you have a default authentication file, by running
+Second, ensure you have a default authentication file, by [installing google sdk](https://cloud.google.com/sdk/docs/install) and running
 
 ```console
 unset GOOGLE_APPLICATION_CREDENTIALS
 gcloud init
+
+# may also need to run...
+# gcloud auth application-default login
 ```
 
 Finally, run the initial database migration and create an `airflow / airflow` user to debug with:
