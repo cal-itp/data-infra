@@ -15,10 +15,10 @@ if [[ ${#required_missing[*]} -gt 0 ]]; then
   exit 1
 fi
 
-git_branch_tail=releases/$BUILD_APP/$RELEASE_CHANNEL
-git_branch_remote=refs/remotes/$git_remote/$git_branch_tail
-git_branch_local=refs/heads/$git_branch_tail
-git_branch_topic=$(git symbolic-ref HEAD)
+git_branch_name=releases/$BUILD_APP/$RELEASE_CHANNEL
+git_ref_remote=refs/remotes/$RELEASE_GIT_REMOTE_NAME/$git_branch_name
+git_ref_local=refs/heads/$git_branch_name
+git_ref_topic=$(git symbolic-ref HEAD)
 
 # Fork release branch from remote
 if [[ $RELEASE_GIT_REMOTE_NAME ]]; then
@@ -29,16 +29,16 @@ if [[ $RELEASE_GIT_REMOTE_NAME ]]; then
     git remote set-url "$RELEASE_GIT_REMOTE_NAME" "$RELEASE_GIT_REMOTE_URL"
   fi
 
-  if [[ $(git ls-remote "$RELEASE_GIT_REMOTE_NAME" "$git_branch_local") ]]; then
-    git fetch "$git_remote" "$git_branch_local"
-    git branch -f "$git_branch_remote" "$git_branch_local"
+  if [[ $(git ls-remote "$RELEASE_GIT_REMOTE_NAME" "$git_ref_local") ]]; then
+    git fetch "$RELEASE_GIT_REMOTE_NAME" "$git_ref_local"
+    git branch --no-track -f "$git_branch_name" "$git_ref_remote"
   fi
 
 fi
 
 # Fork release branch from local HEAD
-if ! [[ $(git show-ref "$git_branch_local") ]]; then
-  git branch -f "$git_branch_local"
+if ! [[ $(git show-ref "$git_ref_local") ]]; then
+  git branch -f "$git_branch_name"
 fi
 
 # Commit changes from dirty worktree
@@ -48,10 +48,10 @@ if [[ $RELEASE_GIT_COMMIT_DIRTY ]]; then
 fi
 
 # Merge topic branch into release branch
-git checkout "$git_branch_local"
-git merge --no-ff --no-edit -m "release($BUILD_APP/$RELEASE_CHANNEL): $BUILD_ID" "$git_branch_topic"
+git checkout "$git_ref_local"
+git merge --no-ff --no-edit -m "release($BUILD_APP/$RELEASE_CHANNEL): $BUILD_ID" "$git_ref_topic"
 
 # Push release branch to remote
 if [[ $RELEASE_GIT_REMOTE_NAME ]]; then
-  git push "$RELEASE_GIT_REMOTE_NAME" "$git_branch_local":"$git_branch_local"
+  git push "$RELEASE_GIT_REMOTE_NAME" "$git_ref_local":"$git_ref_local"
 fi
