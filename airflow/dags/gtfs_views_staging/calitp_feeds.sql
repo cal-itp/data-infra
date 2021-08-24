@@ -10,15 +10,18 @@ WITH
     gtfs_schedule_feed_snapshot AS (
         SELECT
             itp_id, url_number, gtfs_schedule_url, agency_name, status, calitp_extracted_at
-
             -- Do a concat rather than just md5 on gtfs_schedule_feed as we only want to
             -- hash on those 5 columns (i.e dont want to hash on extracted at)
             , TO_BASE64(MD5(
                 CONCAT(
                     CAST(itp_id AS STRING), "__", CAST(url_number AS STRING), "__",
-                    CAST(gtfs_schedule_url AS STRING), "__", CAST(agency_name AS STRING)
+                    COALESCE(CAST(gtfs_schedule_url AS STRING), "_NULL_"), "__",
+                    COALESCE(CAST(agency_name AS STRING), "_NULL_")
                 )
               )) AS calitp_hash
+            , calitp_extracted_at = MIN(calitp_extracted_at)
+                OVER (PARTITION BY itp_id, url_number)
+              AS is_first_extraction
         FROM `gtfs_schedule_history.calitp_status` T
     ),
     -- cross unique itp_id, url_number with dates we have for calitp_extracted_at
@@ -38,9 +41,6 @@ WITH
               AS prev_calitp_hash
             , calitp_hash IS NULL
               AS is_removed
-            , calitp_extracted_at = MIN(calitp_extracted_at)
-                OVER (PARTITION BY itp_id, url_number)
-              AS is_first_extraction
         FROM gtfs_schedule_feed_snapshot
         RIGHT JOIN feed_id_cross_date USING (itp_id, url_number, calitp_extracted_at)
     ),
@@ -86,12 +86,15 @@ WITH
         SELECT calitp_itp_id, calitp_url_number, true AS calitp_id_in_latest
         FROM final_data
         WHERE calitp_deleted_at = "2099-01-01"
+    ),
+    final AS (
+        SELECT
+            T1.*
+            , COALESCE(T2.calitp_id_in_latest, false) AS calitp_id_in_latest
+            , CONCAT(CAST(calitp_itp_id AS STRING), "__", CAST(calitp_url_number AS STRING)) AS calitp_feed_id
+            , CONCAT(calitp_agency_name, " (", CAST(calitp_url_number AS STRING), ")") AS calitp_feed_name
+        FROM final_data T1
+        LEFT JOIN exists_in_latest T2 USING(calitp_itp_id, calitp_url_number)
     )
 
-SELECT
-    T1.*
-    , COALESCE(T2.calitp_id_in_latest, false) AS calitp_id_in_latest
-    , CONCAT(CAST(calitp_itp_id AS STRING), "__", CAST(calitp_url_number AS STRING)) AS calitp_feed_id
-    , CONCAT(calitp_agency_name, " (", CAST(calitp_url_number AS STRING), ")") AS calitp_feed_name
-FROM final_data T1
-LEFT JOIN exists_in_latest T2 USING(calitp_itp_id, calitp_url_number)
+SELECT * FROM final
