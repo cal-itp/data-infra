@@ -14,7 +14,7 @@ assignees: ''
   - _ relevant calculations_
   - _here_
 * **View**: E.g. `views.gtfs_schedule_fact_daily_feed_files`. (This can be filled out by the data services team.).
-* **Research**: 
+* **Research**:
   - How should the results be presented?
   - When are they needed by?
 
