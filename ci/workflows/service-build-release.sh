@@ -26,6 +26,7 @@ RELEASE_KUBE_BASE=$(git rev-parse --show-toplevel)/kubernetes/apps/manifests/$BU
 RELEASE_KUBE_KUSTOMIZATION=$(git rev-parse --show-toplevel)/kubernetes/apps/overlays/$BUILD_APP-release/kustomization.yaml
 RELEASE_KUBE_OVERLAY=$(git rev-parse --show-toplevel)/kubernetes/apps/overlays/$BUILD_APP-$RELEASE_ENV
 RELEASE_GIT_COMMIT_DIRTY=1
+CLEANUP_GIT_CHECKOUT=$(git symbolic-ref HEAD | sed 's,refs/heads/,,')
 
 #
 # Steps
@@ -39,6 +40,7 @@ CI_STEPS=(
   template-kustomize-image
   release-git-branch
   release-kube-overlay
+  cleanup-git-checkout
 )
 
 for step in "${CI_STEPS[@]}"; do
