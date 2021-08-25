@@ -21,8 +21,6 @@ The ETL is currently a scheduled Google Data Transfer job that transfers all fil
 
 From there, tables are loaded into BigQuery as external tables in the `transaction_data` buclet.
 
-Finally, there is a operator `payments_update` that runs nightly to refresh the `mst_ridership_materialized` table.
-
 ### DAGs Overview
 
 * ExternalTable operator tasks (e.g. `customer_funding_source`). These define the underlying data.

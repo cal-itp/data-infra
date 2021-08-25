@@ -1,4 +1,3 @@
----
 operator: operators.ExternalTable
 source_objects:
   - "mst/processed/micropayment-device-transactions/*"
@@ -11,4 +10,3 @@ schema_fields:
     type: STRING
   - name: calitp_extracted_at
     type: DATE
----

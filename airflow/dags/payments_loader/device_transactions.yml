@@ -1,4 +1,3 @@
----
 operator: operators.ExternalTable
 source_objects:
   - "gs://littlepay-data-extract-prod/processed/device-transactions/*.psv"
@@ -51,4 +50,3 @@ schema_fields:
      type: STRING
    - name: calitp_extracted_at
      type: DATE
----
