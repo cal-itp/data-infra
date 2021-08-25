@@ -23,10 +23,16 @@ From there, tables are loaded into BigQuery as external tables in the `transacti
 
 ### DAGs Overview
 
+The payments data is loaded and transformed in the payments_loader and payments_views dags.
+
+The payments_loader dag has three kinds of tasks:
+
 * ExternalTable operator tasks (e.g. `customer_funding_source`). These define the underlying data.
 * `calitp_included_payments_data` - a table of underlying payments table names defined in the task above.
 * `preprocessing_columns` - move data from `gs://littlepay-data-extract-prod` to `gs://gtfs-data`,
   then process to keep only columns defined in external tables.
+
+The payments_views is made of SQL queries that transform the loaded tables above.
 
 ### Adding new tables in payments_loader
 
