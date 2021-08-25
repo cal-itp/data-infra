@@ -5,8 +5,8 @@ set -e
 # Defaults
 #
 
+test "$RELEASE_CHANNEL"         || RELEASE_CHANNEL=$(git config --default 'local' "branch.$(git rev-parse --abbrev-ref HEAD).release-channel")
 test "$REPO_TAG"                || REPO_TAG=$(git describe --always --tags)
-test "$RELEASE_CHANNEL"         || RELEASE_CHANNEL=local
 test "$BUILD_APP"               || BUILD_APP=$(awk -F/ '{ print $1 }' <<< "$REPO_TAG")
 test "$BUILD_ID"                || BUILD_ID=$(awk -F/ '{ print $2 }' <<< "$REPO_TAG")
 test "$BUILD_REPO"              || BUILD_REPO=$(git config --default '' "channel.$BUILD_APP/$RELEASE_CHANNEL.build-repo")
