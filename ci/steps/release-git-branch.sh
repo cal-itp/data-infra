@@ -25,7 +25,7 @@ if [[ $RELEASE_GIT_REMOTE_NAME ]]; then
 
   if ! git remote | grep "^$RELEASE_GIT_REMOTE_NAME$"; then
     git remote add "$RELEASE_GIT_REMOTE_NAME" "$RELEASE_GIT_REMOTE_URL"
-  elif [[ $RELEASE_GIT_REMOTE_URL != $(git remote get-url "$RELEASE_GIT_REMOTE_NAME") ]]; then
+  elif [[ $RELEASE_GIT_REMOTE_URL && $RELEASE_GIT_REMOTE_URL != $(git remote get-url "$RELEASE_GIT_REMOTE_NAME") ]]; then
     git remote set-url "$RELEASE_GIT_REMOTE_NAME" "$RELEASE_GIT_REMOTE_URL"
   fi
 
@@ -42,7 +42,7 @@ if ! [[ $(git show-ref "$git_ref_local") ]]; then
 fi
 
 # Commit changes from dirty worktree
-if [[ $RELEASE_GIT_COMMIT_DIRTY ]]; then
+if [[ $(git status --porcelain=v1) && $RELEASE_GIT_COMMIT_DIRTY ]]; then
   git add -A
   git commit -m "rc($BUILD_APP): $BUILD_ID"
 fi
