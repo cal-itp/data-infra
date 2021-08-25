@@ -30,15 +30,17 @@ CLEANUP_GIT_CHECKOUT=$(git rev-parse --abbrev-ref HEAD)
 
 CI_STEPS_DIR=$(git rev-parse --show-toplevel)/ci/steps
 
-CI_STEPS=(
-  validate-clean-worktree
-  build-docker-image
-  release-git-branch
-  release-kube-overlay
-  cleanup-git-checkout
-)
+printf 'BEGIN STEP: validate-clean-worktree\n'
+source "$CI_STEPS_DIR/validate-clean-worktree.sh"
 
-for step in "${CI_STEPS[@]}"; do
-  printf 'BEGIN STEP: %s\n' "$step"
-  source "$CI_STEPS_DIR/$step.sh"
-done
+printf 'BEGIN STEP: build-docker-image\n'
+source "$CI_STEPS_DIR/build-docker-image.sh"
+
+printf 'BEGIN STEP: release-git-branch\n'
+source "$CI_STEPS_DIR/release-git-branch.sh"
+
+printf 'BEGIN STEP: release-kube-overlay\n'
+source "$CI_STEPS_DIR/release-kube-overlay.sh"
+
+printf 'BEGIN STEP: cleanup-git-checkout\n'
+source "$CI_STEPS_DIR/cleanup-git-checkout.sh"

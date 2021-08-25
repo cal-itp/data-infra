@@ -34,15 +34,17 @@ RELEASE_GIT_COMMIT_DIRTY=1
 
 CI_STEPS_DIR=$(git rev-parse --show-toplevel)/ci/steps
 
-CI_STEPS=(
-  validate-clean-worktree
-  configure-git-remote
-  prepare-kustomize-image
-  prepare-git-commit-dirty
-  release-git-tag
-)
+printf 'BEGIN STEP: validate-clean-worktree\n'
+source "$CI_STEPS_DIR/validate-clean-worktree.sh"
 
-for step in "${CI_STEPS[@]}"; do
-  printf 'BEGIN STEP: %s\n' "$step"
-  source "$CI_STEPS_DIR/$step.sh"
-done
+printf 'BEGIN STEP: configure-git-remote\n'
+source "$CI_STEPS_DIR/configure-git-remote.sh"
+
+printf 'BEGIN STEP: prepare-kustomize-image\n'
+source "$CI_STEPS_DIR/prepare-kustomize-image.sh"
+
+printf 'BEGIN STEP: prepare-git-commit-dirty\n'
+source "$CI_STEPS_DIR/prepare-git-commit-dirty.sh"
+
+printf 'BEGIN STEP: release-git-tag\n'
+source "$CI_STEPS_DIR/release-git-tag.sh"
