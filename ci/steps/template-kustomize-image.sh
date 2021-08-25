@@ -3,6 +3,7 @@ set -e
 
 required_missing=()
 
+# FIXME: confusing that RELEASE_KUBE_BASE is relative while RELEASE_KUBE_KUSTOMIZATION and RELEASE_KUBE_OVERLAY are absolute
 test "$BUILD_REPO"                 || required_missing+=('BUILD_REPO')
 test "$BUILD_ID"                   || required_missing+=('BUILD_ID')
 test "$RELEASE_KUBE_BASE"          || required_missing+=('RELEASE_KUBE_BASE')

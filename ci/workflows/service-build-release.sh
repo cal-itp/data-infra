@@ -21,7 +21,7 @@ export KUBECONFIG
 #
 
 BUILD_DIR=$(git rev-parse --show-toplevel)/services/$BUILD_APP
-RELEASE_KUBE_BASE=$(git rev-parse --show-toplevel)/kubernetes/apps/manifests/$BUILD_APP
+RELEASE_KUBE_BASE=../../manifests/$BUILD_APP
 RELEASE_KUBE_KUSTOMIZATION=$(git rev-parse --show-toplevel)/kubernetes/apps/overlays/$BUILD_APP-release/kustomization.yaml
 RELEASE_KUBE_OVERLAY=$(git rev-parse --show-toplevel)/kubernetes/apps/overlays/$BUILD_APP-$RELEASE_CHANNEL
 RELEASE_GIT_COMMIT_DIRTY=1
