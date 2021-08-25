@@ -10,8 +10,8 @@ test "$REPO_TAG"                || REPO_TAG=$(git describe --always --tags)
 test "$BUILD_APP"               || BUILD_APP=$(awk -F/ '{ print $1 }' <<< "$REPO_TAG")
 test "$BUILD_ID"                || BUILD_ID=$(awk -F/ '{ print $2 }' <<< "$REPO_TAG")
 test "$BUILD_REPO"              || BUILD_REPO=$(git config --default '' "channel.$BUILD_APP/$RELEASE_CHANNEL.build-repo")
-test "$RELEASE_GIT_REMOTE_NAME" || RELEASE_GIT_REMOTE_NAME=$(git config --default '' "channel.$BUILD_APP/$RELEASE_CHANNEL.git-remote-name")
-test "$RELEASE_GIT_REMOTE_URL"  || RELEASE_GIT_REMOTE_URL=$(git config --default '' "channel.$BUILD_APP/$RELEASE_CHANNEL.git-remote-url")
+test "$CONFIGURE_GIT_REMOTE_NAME" || CONFIGURE_GIT_REMOTE_NAME=$(git config --default '' "channel.$BUILD_APP/$RELEASE_CHANNEL.git-remote-name")
+test "$CONFIGURE_GIT_REMOTE_URL"  || CONFIGURE_GIT_REMOTE_URL=$(git config --default '' "channel.$BUILD_APP/$RELEASE_CHANNEL.git-remote-url")
 test "$KUBECONFIG"              || KUBECONFIG=$(git config --default '' "channel.$BUILD_APP/$RELEASE_CHANNEL.kubeconfig")
 
 export KUBECONFIG

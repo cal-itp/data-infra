@@ -6,7 +6,7 @@ required_missing=()
 test "$BUILD_APP"                  || required_missing+=('BUILD_APP')
 test "$BUILD_ID"                   || required_missing+=('BUILD_ID')
 test "$BUILD_REPO"                 || required_missing+=('BUILD_REPO')
-test "$RELEASE_GIT_REMOTE_NAME"    || RELEASE_GIT_REMOTE_NAME=
+test "$CONFIGURE_GIT_REMOTE_NAME"  || CONFIGURE_GIT_REMOTE_NAME=
 
 if [[ ${#required_missing[*]} -gt 0 ]]; then
   printf 'error: missing required variables: %s\n' "${required_missing[*]}" >&2
@@ -35,6 +35,6 @@ BUILD_REPO=$BUILD_REPO
 EOF
 
 # Push release tag to remote
-if [[ $RELEASE_GIT_REMOTE_NAME ]]; then
-  git push "$RELEASE_GIT_REMOTE_NAME" "$git_ref_name"
+if [[ $CONFIGURE_GIT_REMOTE_NAME ]]; then
+  git push "$CONFIGURE_GIT_REMOTE_NAME" "$git_ref_name"
 fi
