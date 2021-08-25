@@ -25,7 +25,7 @@ RELEASE_KUBE_BASE=../../manifests/$BUILD_APP
 RELEASE_KUBE_KUSTOMIZATION=$(git rev-parse --show-toplevel)/kubernetes/apps/overlays/$BUILD_APP-release/kustomization.yaml
 RELEASE_KUBE_OVERLAY=$(git rev-parse --show-toplevel)/kubernetes/apps/overlays/$BUILD_APP-$RELEASE_CHANNEL
 RELEASE_GIT_COMMIT_DIRTY=1
-CLEANUP_GIT_CHECKOUT=$(git symbolic-ref HEAD | sed 's,refs/heads/,,')
+CLEANUP_GIT_CHECKOUT=$(git rev-parse --abbrev-ref HEAD)
 
 #
 # Steps
