@@ -37,7 +37,7 @@ CI_STEPS_DIR=$(git rev-parse --show-toplevel)/ci/steps
 CI_STEPS=(
   validate-clean-worktree
   build-docker-image
-  template-kustomize-image
+  prepare-kustomize-image
   prepare-git-commit-dirty
   release-git-branch
   release-kube-overlay
