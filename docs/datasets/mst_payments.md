@@ -16,7 +16,6 @@ The table best used for caculating ridership is `mst_ridership_materialized` tab
 
 ## Maintenance
 
-
 The ETL is currently a scheduled Google Data Transfer job that transfers all files to `gcs://littlepay-data-extract-prod`
 
 From there, tables are loaded into BigQuery as external tables in the `transaction_data` buclet.
@@ -41,8 +40,8 @@ The payments_views is made of SQL queries that transform the loaded tables above
 * Edit `schema_fields` to be the columns in the new table. If you are unsure of a column type,
   specify it as "STRING".
 * In the `calitp_included_payments_data` task,
-  - add a row for this new table.
-  - add a depedency in yaml header to this new table.
+    * add a row for this new table.
+    * add a depedency in yaml header to this new table.
 
 ### Adding a new table to payments_views
 
