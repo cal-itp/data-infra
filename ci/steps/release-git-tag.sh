@@ -21,12 +21,6 @@ if git show-ref "$git_ref_name"; then
   exit 1
 fi
 
-# Commit changes from dirty worktree
-if [[ $(git status --porcelain=v1) && $RELEASE_GIT_COMMIT_DIRTY ]]; then
-  git add -A
-  git commit -m "rc($BUILD_APP): $BUILD_ID"
-fi
-
 # Create annotated tag
 git tag -a -F - "$git_tag_name" <<EOF
 BUILD_APP=$BUILD_APP
