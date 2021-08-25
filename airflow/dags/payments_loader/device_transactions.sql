@@ -1,35 +1,54 @@
 ---
-operator: operators.SqlQueryOperator
+operator: operators.ExternalTable
+source_objects:
+  - "gs://littlepay-data-extract-prod/processed/device-transactions/*.psv"
+destination_project_dataset_table: "payments.device_transactions"
+skip_leading_rows: 1
+schema_fields:
+   - name: participant_id
+     type: STRING
+   - name: customer_id
+     type: STRING
+   - name: device_transaction_id
+     type: STRING
+   - name: littlepay_transaction_id
+     type: STRING
+   - name: device_id
+     type: STRING
+   - name: device_id_issuer
+     type: STRING
+   - name: type
+     type: STRING
+   - name: transaction_outcome
+     type: STRING
+   - name: transction_deny_reason
+     type: STRING
+   - name: transaction_date_time_utc
+     type: STRING
+   - name: location_id
+     type: STRING
+   - name: location_scheme
+     type: STRING
+   - name: location_name
+     type: STRING
+   - name: zone_id
+     type: STRING
+   - name: route_id
+     type: STRING
+   - name: mode
+     type: STRING
+   - name: direction
+     type: STRING
+   - name: latitude
+     type: STRING
+   - name: longitude
+     type: STRING
+   - name: vehicle_id
+     type: STRING
+   - name: granted_zone_ids
+     type: STRING
+   - name: onward_zone_ids
+     type: STRING
+   - name: calitp_extracted_at
+     type: DATE
 ---
-
-
-CREATE OR REPLACE EXTERNAL TABLE `payments.device_transactions` (
-   participant_id STRING,
-   customer_id STRING,
-   device_transaction_id STRING,
-   littlepay_transaction_id STRING,
-   device_id STRING,
-   device_id_issuer STRING,
-   type STRING,
-   transaction_outcome STRING,
-   transction_deny_reason STRING,
-   transaction_date_time_utc STRING,
-   location_id STRING,
-   location_scheme STRING,
-   location_name STRING,
-   zone_id STRING,
-   route_id STRING,
-   mode STRING,
-   direction STRING,
-   latitude STRING,
-   longitude STRING,
-   vehicle_id STRING,
-   granted_zone_ids STRING,
-   onward_zone_ids STRING
-)
-OPTIONS (
-  format = "csv",
-  uris = ["gs://littlepay-data-extract-prod/mst/device-transactions/*.psv"],
-  field_delimiter = "|",
-  skip_leading_rows = 1
-)

@@ -1,14 +1,14 @@
 ---
-operator: operators.SqlQueryOperator
+operator: operators.ExternalTable
+source_objects:
+  - "mst/processed/micropayment-device-transactions/*"
+destination_project_dataset_table: "payments.micropayment_device_transactions"
+skip_leading_rows: 1
+schema_fields:
+  - name: littlepay_transaction_id
+    type: STRING
+  - name: micropayment_id
+    type: STRING
+  - name: calitp_extracted_at
+    type: DATE
 ---
-
-CREATE OR REPLACE EXTERNAL TABLE `payments.micropayment_device_transactions` (
-  littlepay_transaction_id STRING,
-  micropayment_id STRING
-)
-OPTIONS (
-  format = "csv",
-  uris = ["gs://littlepay-data-extract-prod/mst/micropayment-device-transactions/*"],
-  field_delimiter = "|",
-  skip_leading_rows = 1
-)

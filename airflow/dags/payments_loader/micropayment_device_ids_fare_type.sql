@@ -2,8 +2,7 @@
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "payments.micropayment_device_ids_fare_type"
 dependencies:
-  - micropayments
-  - micropayment_device_transactions
+  - preprocess_columns
 ---
 
 SELECT t1.charge_type,

@@ -1,13 +1,26 @@
 import pandas as pd
+
+from pandas.errors import EmptyDataError
 from calitp import read_gcfs, save_to_gcfs
 
 
 def _keep_columns(
-    src_path, dst_path, colnames, itp_id=None, url_number=None, extracted_at=None,
+    src_path,
+    dst_path,
+    colnames,
+    itp_id=None,
+    url_number=None,
+    extracted_at=None,
+    **kwargs
 ):
 
     # read csv using object dtype, so pandas does not coerce data
-    df = pd.read_csv(read_gcfs(src_path), dtype="object")
+    try:
+        df = pd.read_csv(read_gcfs(src_path), dtype="object", **kwargs)
+    except EmptyDataError:
+        # in the rare case of a totally empty data file, create a DataFrame
+        # with no rows, and the target columns
+        df = pd.DataFrame({k: [] for k in colnames})
 
     if itp_id is not None:
         df["calitp_itp_id"] = itp_id
