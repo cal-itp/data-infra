@@ -16,7 +16,7 @@ if [[ ${#required_missing[*]} -gt 0 ]]; then
 fi
 
 docker_tag=$BUILD_REPO:$BUILD_ID
-docker_tag_latest=$BUILD_REPO:latest
+docker_tag_latest=${BUILD_REPO}:latest
 
 # setup remote registry
 if [[ $BUILD_REPO =~ ([^/]+\.[^/]+)/(.*)$ ]]; then
