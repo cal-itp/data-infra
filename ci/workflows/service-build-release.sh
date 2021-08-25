@@ -21,6 +21,7 @@ export KUBECONFIG
 #
 
 BUILD_DIR=$(git rev-parse --show-toplevel)/services/$BUILD_APP
+PREPARE_GIT_COMMIT_MSG="rc($BUILD_APP): $BUILD_ID"
 RELEASE_KUBE_BASE=../../manifests/$BUILD_APP
 RELEASE_KUBE_KUSTOMIZATION=$(git rev-parse --show-toplevel)/kubernetes/apps/overlays/$BUILD_APP-release/kustomization.yaml
 RELEASE_KUBE_OVERLAY=$(git rev-parse --show-toplevel)/kubernetes/apps/overlays/$BUILD_APP-$RELEASE_CHANNEL
@@ -37,6 +38,7 @@ CI_STEPS=(
   validate-clean-worktree
   build-docker-image
   template-kustomize-image
+  prepare-git-commit-dirty
   release-git-branch
   release-kube-overlay
   cleanup-git-checkout
