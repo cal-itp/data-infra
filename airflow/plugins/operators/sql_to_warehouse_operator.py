@@ -48,7 +48,7 @@ class SqlToWarehouseOperator(BaseOperator):
             )
 
             print("Checking test results...")
-            print(tester.get_test_results())
+            print("\n" + repr(tester.get_test_results()))
             assert tester.all_passed(), "Tests failed"
 
             print("Tests passed")
