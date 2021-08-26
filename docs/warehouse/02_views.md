@@ -25,6 +25,16 @@ fields:
   - full_date: The full date (e.g. "2021-01-01")
   - year: The year component (e.g. 2021)
 
+# Specify tests to run over the data
+# e.g. check_null to verify a column contains no nulls
+# e.g. check_unique to verify no duplicate values in a column
+tests:
+  check_null:
+    - id
+  check_unique:
+    - id
+    - full_date
+
 # Other tasks this depends on. For example, if it uses another SQL view, then
 # that view should be a dependency
 dependencies:
