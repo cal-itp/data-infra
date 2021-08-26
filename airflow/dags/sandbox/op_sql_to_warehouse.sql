@@ -7,6 +7,14 @@ fields:
 
 dependencies:
   - create_dataset
+
+tests:
+  check_null:
+    - g
+    - x
+  check_composite_unique:
+    - g
+    - x
 ---
 
 SELECT g, x
