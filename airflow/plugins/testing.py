@@ -86,6 +86,24 @@ def run_test(test_name, conn, fields, table, query_template, composite=False):
     }
 
 
+def handle_tests(engine, table, tests):
+    if tests != {}:
+        with engine.connect() as conn:
+            try:
+                tester = Tester(conn, table)
+                for test, fields in tests.items():
+                    test_func = getattr(tester, test)
+                    test_func(fields)
+            finally:
+                conn.close()
+        return {
+            "all_passed": tester.all_passed(),
+            "test_results": tester.get_test_results(),
+        }
+    else:
+        return {"all_passed": True, "test_results": None}
+
+
 class Tester:
     def __init__(self, conn, table):
         self.conn = conn
