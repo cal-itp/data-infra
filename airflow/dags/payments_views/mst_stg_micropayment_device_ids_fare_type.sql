@@ -1,9 +1,8 @@
 ---
 operator: operators.SqlToWarehouseOperator
-dst_table_name: "payments.micropayment_device_ids_fare_type"
-dependencies:
-  - micropayments
-  - micropayment_device_transactions
+dst_table_name: "views.mst_stg_micropayment_device_ids_fare_type"
+external_dependencies:
+  - payments_loader: all
 ---
 
 SELECT t1.charge_type,

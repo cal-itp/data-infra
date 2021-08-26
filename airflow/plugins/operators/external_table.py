@@ -49,6 +49,7 @@ class ExternalTable(BaseOperator):
         source_objects=[],
         source_format="CSV",
         use_bq_client=False,
+        field_delimiter=",",
         **kwargs,
     ):
         self.bucket = bucket
@@ -60,6 +61,7 @@ class ExternalTable(BaseOperator):
         self.source_objects = list(map(self.fix_prefix, source_objects))
         self.source_format = source_format
         self.use_bq_client = use_bq_client
+        self.field_delimiter = field_delimiter
 
         super().__init__(**kwargs)
 
@@ -89,7 +91,8 @@ CREATE OR REPLACE EXTERNAL TABLE `{self.destination_project_dataset_table}` (
 OPTIONS (
     format = "{self.source_format}",
     skip_leading_rows = {self.skip_leading_rows},
-    uris = {repr(self.source_objects)}
+    uris = {repr(self.source_objects)},
+    field_delimiter = {repr(self.field_delimiter)}
 )
             """
 
