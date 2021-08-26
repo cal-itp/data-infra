@@ -43,7 +43,7 @@ FROM (
 composite_unique_query_template = """
 SELECT
     '{field}' AS field,
-    'check_unique' AS test,
+    'check_composite_unique' AS test,
     n_rows = n_unique AS passed
 FROM (
     SELECT
