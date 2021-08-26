@@ -780,6 +780,16 @@
   <span class="p p-Indicator">-</span> <span class="nt">full_date</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The full date (e.g. &quot;2021-01-01&quot;)</span>
   <span class="p p-Indicator">-</span> <span class="nt">year</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The year component (e.g. 2021)</span>
 
+<span class="c1"># Specify tests to run over the data</span>
+<span class="c1"># e.g. check_null to verify a column contains no nulls</span>
+<span class="c1"># e.g. check_unique to verify no duplicate values in a column</span>
+<span class="nt">tests</span><span class="p">:</span>
+  <span class="nt">check_null</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">id</span>
+  <span class="nt">check_unique</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">id</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">full_date</span>
+
 <span class="c1"># Other tasks this depends on. For example, if it uses another SQL view, then</span>
 <span class="c1"># that view should be a dependency</span>
 <span class="nt">dependencies</span><span class="p">:</span>
