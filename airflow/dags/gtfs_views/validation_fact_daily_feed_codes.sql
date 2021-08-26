@@ -1,6 +1,17 @@
 ---
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.validation_fact_daily_feed_codes"
+
+tests:
+  check_null:
+    - feed_key
+    - code
+    - date
+  check_composite_unique:
+    - feed_key
+    - code
+    - date
+
 dependencies:
   - validation_fact_daily_feed_notices
 
@@ -41,26 +52,29 @@ daily_feed_cross_codes AS (
 final_counts AS (
     SELECT
         feed_key
-        , calitp_feed_id
         , date
         , code
         , COUNT(*) AS n_notices
     FROM daily_validation_notices
-    RIGHT JOIN daily_feed_cross_codes USING (feed_key, code, date)
-    GROUP BY 1, 2, 3, 4
+    GROUP BY 1, 2, 3
 ),
 final_count_lagged AS (
     SELECT
-      * EXCEPT (n_notices, calitp_feed_id)
-      , LAG (n_notices)
-            OVER (PARTITION BY calitp_feed_id, code ORDER BY date)
+      T1.feed_key
+      , T1.code
+      , T1.date
+      , LAG (T2.n_notices)
+            OVER (PARTITION BY T1.calitp_feed_id, code ORDER BY date)
         AS prev_n_notices
-      ,COALESCE(n_notices, 0) as n_notices
-    FROM final_counts
+      ,COALESCE(T2.n_notices, 0) as n_notices
+    FROM daily_feed_cross_codes T1
+    LEFT JOIN final_counts T2 USING (feed_key, code, date)
 
   )
 
 SELECT
   * EXCEPT(prev_n_notices)
   , n_notices - prev_n_notices AS diff_n_notices
+  , (prev_n_notices > 0 AND n_notices = 0) AS is_error_resolved
+  , COALESCE((prev_n_notices = 0 AND n_notices > 0), true) AS is_error_introduced
 FROM final_count_lagged
