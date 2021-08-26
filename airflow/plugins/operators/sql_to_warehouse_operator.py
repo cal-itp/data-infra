@@ -3,7 +3,7 @@ from airflow.models import BaseOperator
 from calitp.config import format_table_name
 from calitp.sql import sql_patch_comments, write_table
 from calitp import get_engine
-from testing import handle_tests
+from testing import Tester
 
 
 class SqlToWarehouseOperator(BaseOperator):
@@ -43,9 +43,12 @@ class SqlToWarehouseOperator(BaseOperator):
         # testing -------------------------------------------------------------
 
         if self.tests != {}:
-            engine = get_engine()
-            testing = handle_tests(engine, format_table_name(table_name), self.tests)
+            tester = Tester.from_tests(
+                get_engine(), format_table_name(table_name), self.tests
+            )
+
             print("Checking test results...")
-            print(testing["test_results"])
-            assert testing["all_passed"], "Tests failed"
+            print(tester.get_test_results())
+            assert tester.all_passed(), "Tests failed"
+
             print("Tests passed")

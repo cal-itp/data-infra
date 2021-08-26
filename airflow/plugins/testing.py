@@ -1,5 +1,7 @@
 import pandas as pd
 
+RESULT_FIELDS = ["field", "test", "passed"]
+
 # check_null
 null_query_template = """
 SELECT
@@ -21,21 +23,9 @@ SELECT
     n_rows = n_unique AS passed
 FROM (
     SELECT
-        SUM(count_n) AS n_rows,
-        SUM(CASE WHEN n = 1 then count_n ELSE 0 END) AS n_unique
-    FROM (
-        SELECT
-            n,
-            COUNT(*) AS count_n
-        FROM (
-            SELECT
-                {field},
-                COUNT(*) AS n
-            FROM {table}
-            GROUP BY 1
-        )
-        GROUP BY 1
-    )
+        COUNT(*) AS n_rows,
+        COUNT(DISTINCT {field}) AS n_unique
+    FROM {table}
 )
 """
 
@@ -86,24 +76,6 @@ def run_test(test_name, conn, fields, table, query_template, composite=False):
     }
 
 
-def handle_tests(engine, table, tests):
-    if tests != {}:
-        with engine.connect() as conn:
-            try:
-                tester = Tester(conn, table)
-                for test, fields in tests.items():
-                    test_func = getattr(tester, test)
-                    test_func(fields)
-            finally:
-                conn.close()
-        return {
-            "all_passed": tester.all_passed(),
-            "test_results": tester.get_test_results(),
-        }
-    else:
-        return {"all_passed": True, "test_results": None}
-
-
 class Tester:
     def __init__(self, conn, table):
         self.conn = conn
@@ -152,6 +124,16 @@ class Tester:
 
     def get_test_results(self):
         if self.test_results == {}:
-            return None
+            return pd.DataFrame(columns=RESULT_FIELDS)
         else:
             return pd.concat([v["results_df"] for k, v in self.test_results.items()])
+
+    @classmethod
+    def from_tests(cls, engine, table, tests):
+        tester = cls(engine, table)
+        if tests != {}:
+            for test, fields in tests.items():
+                test_func = getattr(tester, test)
+                test_func(fields)
+
+        return tester
