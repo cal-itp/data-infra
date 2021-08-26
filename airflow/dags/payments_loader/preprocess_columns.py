@@ -13,7 +13,14 @@ from utils import _keep_columns
 
 DATASET = "payments"
 
-SRC_DIR = "gs://littlepay-data-extract-prod/mst/{table_name}/{date_string_narrow}*.psv"
+# Currently, the littlepay data is small enough that we can fully ingest
+# and re-process daily. Ideally, as the data grows, we work with the
+# provider to remove the need to do pre-processing of their data, and
+# can load it directly in to bigquery.
+# However, if we move to processing only the data for a given day each task,
+# we should change the SRC_DIR glob to use a datetime
+
+SRC_DIR = "gs://littlepay-data-extract-prod/mst/{table_name}/*.psv"
 STAGE_DIR = "mst/{table_name}"
 DST_DIR = "mst/processed/{table_name}"
 
@@ -22,7 +29,10 @@ def main(execution_date, **kwargs):
 
     fs = get_fs()
 
-    # Get high level data on tables we are pre-processing
+    # remove previously processed data, in case they remove any data files ---
+    fs.rm(f"{get_bucket()}/mst/processed/", recursive=True)
+
+    # Get high level data on tables we are pre-processing ----
     tables = get_table("payments.calitp_included_payments_tables", as_df=True)
     schemas = [get_table(f"{DATASET}.{t}").columns.keys() for t in tables.table_name]
 
@@ -31,6 +41,8 @@ def main(execution_date, **kwargs):
     # specific day
     date_string = execution_date.to_date_string()
     date_string_narrow = date_string.replace("-", "")
+
+    # process data for each table ----
 
     for table_name, columns in zip(tables.table_name, schemas):
         stg_dir = STAGE_DIR.format(table_name=table_name)
@@ -43,6 +55,8 @@ def main(execution_date, **kwargs):
         )
 
         print(f"\n\nTable {table_name} has {len(src_files)} new files =========")
+
+        # copy and process each file ----
 
         for fname in src_files:
             basename = fname.split("/")[-1]
