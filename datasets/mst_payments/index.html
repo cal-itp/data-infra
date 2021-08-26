@@ -12,7 +12,7 @@
         <link rel="canonical" href="https://docs.calitp.org/data-infra/datasets/mst_payments/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.4">
+      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.5">
     
     
       
@@ -20,7 +20,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.f7f47774.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.be71726b.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
@@ -426,15 +426,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#data" class="md-nav__link">
-    Data
+  <a href="#tables" class="md-nav__link">
+    Tables
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#dashboards" class="md-nav__link">
-    Dashboards
+  <a href="#views" class="md-nav__link">
+    Views
   </a>
   
 </li>
@@ -449,7 +449,28 @@
         
           <li class="md-nav__item">
   <a href="#dags-overview" class="md-nav__link">
-    DAGs overview
+    DAGs Overview
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-new-tables-in-payments_loader" class="md-nav__link">
+    Adding new tables in payments_loader
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-a-new-table-to-payments_views" class="md-nav__link">
+    Adding a new table to payments_views
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backfilling" class="md-nav__link">
+    Backfilling
   </a>
   
 </li>
@@ -634,18 +655,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../warehouse/02_payments/" class="md-nav__link">
-        Payments Data
-      </a>
-    </li>
-  
-
-          
-            
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../warehouse/02_views/" class="md-nav__link">
         Creating New Tables (Views)
       </a>
@@ -721,15 +730,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#data" class="md-nav__link">
-    Data
+  <a href="#tables" class="md-nav__link">
+    Tables
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#dashboards" class="md-nav__link">
-    Dashboards
+  <a href="#views" class="md-nav__link">
+    Views
   </a>
   
 </li>
@@ -744,7 +753,28 @@
         
           <li class="md-nav__item">
   <a href="#dags-overview" class="md-nav__link">
-    DAGs overview
+    DAGs Overview
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-new-tables-in-payments_loader" class="md-nav__link">
+    Adding new tables in payments_loader
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-a-new-table-to-payments_views" class="md-nav__link">
+    Adding a new table to payments_views
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backfilling" class="md-nav__link">
+    Backfilling
   </a>
   
 </li>
@@ -772,24 +802,70 @@
                 
                 
                 <h1 id="mst-payments">MST Payments<a class="headerlink" href="#mst-payments" title="Permanent link"> ¶</a></h1>
-<h2 id="data">Data<a class="headerlink" href="#data" title="Permanent link"> ¶</a></h2>
+<p>Currently, Payments data is hosted by Littlepay, who exposes the &ldquo;Littlepay Data Model&rdquo; as a set of files stored in an S3 bucket. To get a copy of the data docs, email hunter.</p>
+<h2 id="tables">Tables<a class="headerlink" href="#tables" title="Permanent link"> ¶</a></h2>
 <table>
 <thead>
 <tr>
-<th>dataset</th>
-<th>description</th>
+<th>Tablename</th>
+<th>Description</th>
+<th>Notes</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td></td>
+<td>device_transactions</td>
+<td>A list of every tap on the devices</td>
+<td>* Cannot use for ridership stats because tap on / offs</td>
+</tr>
+<tr>
+<td>micropayments</td>
+<td>A list of every charge to a card</td>
+<td>* T-2 delays because of charing rules</td>
+</tr>
+<tr>
+<td>micropayments_devices_transactions</td>
+<td>Join tables for two prior tables</td>
 <td></td>
 </tr>
 </tbody>
 </table>
-<h2 id="dashboards">Dashboards<a class="headerlink" href="#dashboards" title="Permanent link"> ¶</a></h2>
+<h2 id="views">Views<a class="headerlink" href="#views" title="Permanent link"> ¶</a></h2>
+<p>The table best used for caculating ridership is <code>mst_ridership_materialized</code> table.</p>
 <h2 id="maintenance">Maintenance<a class="headerlink" href="#maintenance" title="Permanent link"> ¶</a></h2>
-<h3 id="dags-overview">DAGs overview<a class="headerlink" href="#dags-overview" title="Permanent link"> ¶</a></h3>
+<p>The ETL is currently a scheduled Google Data Transfer job that transfers all files to <code>gcs://littlepay-data-extract-prod</code></p>
+<p>From there, tables are loaded into BigQuery as external tables in the <code>transaction_data</code> buclet.</p>
+<h3 id="dags-overview">DAGs Overview<a class="headerlink" href="#dags-overview" title="Permanent link"> ¶</a></h3>
+<p>The payments data is loaded and transformed in the payments_loader and payments_views dags.</p>
+<p>The payments_loader dag has three kinds of tasks:</p>
+<ul>
+<li>ExternalTable operator tasks (e.g. <code>customer_funding_source</code>). These define the underlying data.</li>
+<li><code>calitp_included_payments_data</code> - a table of underlying payments table names defined in the task above.</li>
+<li><code>preprocessing_columns</code> - move data from <code>gs://littlepay-data-extract-prod</code> to <code>gs://gtfs-data</code>,
+  then process to keep only columns defined in external tables.</li>
+</ul>
+<p>The payments_views is made of SQL queries that transform the loaded tables above.</p>
+<h3 id="adding-new-tables-in-payments_loader">Adding new tables in payments_loader<a class="headerlink" href="#adding-new-tables-in-payments_loader" title="Permanent link"> ¶</a></h3>
+<ul>
+<li>Copy the <code>customer_funding_source</code> task. The new task name should match the table it creates.</li>
+<li>Alter <code>destination_project_dataset_table</code> and <code>source_objects</code> to match the new table name.</li>
+<li>Edit <code>schema_fields</code> to be the columns in the new table. If you are unsure of a column type,
+  specify it as &ldquo;STRING&rdquo;.</li>
+<li>In the <code>calitp_included_payments_data</code> task,<ul>
+<li>add a row for this new table.</li>
+<li>add a depedency in yaml header to this new table.</li>
+</ul>
+</li>
+</ul>
+<h3 id="adding-a-new-table-to-payments_views">Adding a new table to payments_views<a class="headerlink" href="#adding-a-new-table-to-payments_views" title="Permanent link"> ¶</a></h3>
+<ul>
+<li>Ensure your task is given the same name as the table it creates.</li>
+<li>Be sure to include an <code>external_dependency</code> on payments_loader (see other views in payments_views).</li>
+</ul>
+<h3 id="backfilling">Backfilling<a class="headerlink" href="#backfilling" title="Permanent link"> ¶</a></h3>
+<p>Clear the <code>preprocessing_columns</code> task for every day you want to re-run.
+These tasks do not depend on past. However, because the extracted data in the littlepay bucket
+can be mutated by littlepay, so if you clear a past task, you should clear them all!</p>
                 
               
               
@@ -860,10 +936,10 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.709b4209.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.409db549.min.js", "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.febc23d1.min.js"></script>
+      <script src="../../assets/javascripts/bundle.56a63758.min.js"></script>
       
         <script src="https://unpkg.com/mermaid@8.5.0/dist/mermaid.min.js"></script>
       
