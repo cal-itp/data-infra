@@ -15,7 +15,7 @@ class SqlToWarehouseOperator(BaseOperator):
         dst_table_name,
         create_disposition=None,
         fields=None,
-        tests={},
+        tests=None,
         **kwargs,
     ):
 
@@ -42,7 +42,8 @@ class SqlToWarehouseOperator(BaseOperator):
 
         # testing -------------------------------------------------------------
 
-        if self.tests != {}:
+        print(self.tests)
+        if self.tests is not None:
             tester = Tester.from_tests(
                 get_engine(), format_table_name(table_name), self.tests
             )
