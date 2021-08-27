@@ -1,6 +1,6 @@
 operator: operators.ExternalTable
 source_objects:
-  - "gs://littlepay-data-extract-prod/processed/device-transactions/*.psv"
+  - "mst/processed/device-transactions/*"
 destination_project_dataset_table: "payments.device_transactions"
 skip_leading_rows: 1
 schema_fields:

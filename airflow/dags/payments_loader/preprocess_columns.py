@@ -30,7 +30,12 @@ def main(execution_date, **kwargs):
     fs = get_fs()
 
     # remove previously processed data, in case they remove any data files ---
-    fs.rm(f"{get_bucket()}/mst/processed/", recursive=True)
+    dst_parent_dir = f"{get_bucket()}/mst/processed/"
+
+    if fs.exists(dst_parent_dir):
+        # sanity check that we are deleting something mst related
+        assert "/mst/" in dst_parent_dir
+        fs.rm(dst_parent_dir, recursive=True)
 
     # Get high level data on tables we are pre-processing ----
     tables = get_table("payments.calitp_included_payments_tables", as_df=True)
