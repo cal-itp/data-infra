@@ -2,7 +2,13 @@
 set -e
 
 branch_name=$(git symbolic-ref --short HEAD)
-RELEASE_CHANNEL=$(git config --default '' "branch.${branch_name}.release-channel")
+
+while read param val; do
+  if [[ $val = $branch_name ]]; then
+    RELEASE_CHANNEL=$(cut -d. -f2 <<< "$param")
+    break
+  fi
+done <<< $(git config --get-regexp '^channel\..*\.branch$' || true)
 
 if [[ $RELEASE_CHANNEL ]]; then
 
