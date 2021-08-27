@@ -45,5 +45,5 @@ source "$CI_STEPS_DIR/prepare-kustomize-image.sh"
 printf 'BEGIN STEP: prepare-git-commit-dirty\n'
 source "$CI_STEPS_DIR/prepare-git-commit-dirty.sh"
 
-printf 'BEGIN STEP: release-git-tag\n'
-source "$CI_STEPS_DIR/release-git-tag.sh"
+printf 'BEGIN STEP: build-git-tag\n'
+source "$CI_STEPS_DIR/build-git-tag.sh"
