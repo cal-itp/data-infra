@@ -6,11 +6,11 @@ RELEASE_CHANNEL=$(git config --default '' "branch.${branch_name}.release-channel
 
 if [[ $RELEASE_CHANNEL ]]; then
 
-  REPO_TAG=$(git describe --abbrev=0)
   KUBECONFIG=$(git config --default '' "channel.${RELEASE_CHANNEL}.kubeconfig")
   BUILD_REPO_USER=$(git config --default '' "channel.${RELEASE_CHANNEL}.build-repo-user")
   BUILD_REPO_SECRET=$(git config --default '' "channel.${RELEASE_CHANNEL}.build-repo-secret")
   BUILD_FORCE=$(git config --default '' "channel.${RELEASE_CHANNEL}.build-force")
+  BUILD_GIT_TAG=$(git describe --abbrev=0)
 
   if ! [[ $KUBECONFIG ]]; then
     printf 'error: missing required config channel.%s.kubeconfig\n' >&2 "$RELEASE_CHANNEL"
@@ -19,13 +19,13 @@ if [[ $RELEASE_CHANNEL ]]; then
 
   required_missing=()
 
-  eval "$(git tag -l --format='%(contents)' "$REPO_TAG" | grep '^BUILD_.*=')"
+  eval "$(git tag -l --format='%(contents)' "$BUILD_GIT_TAG" | grep '^BUILD_.*=')"
   test "$BUILD_APP"  || required_missing+=('BUILD_APP')
   test "$BUILD_ID"   || required_missing+=('BUILD_ID')
   test "$BUILD_REPO" || required_missing+=('BUILD_REPO')
 
   if [[ ${#required_missing[*]} -gt 0 ]]; then
-    printf 'error: tag %s description missing required variables: %s\n' "$REPO_TAG" "${required_missing[*]}" >&2
+    printf 'error: tag %s description missing required variables: %s\n' "$BUILD_GIT_TAG" "${required_missing[*]}" >&2
     exit 1
   fi
 
