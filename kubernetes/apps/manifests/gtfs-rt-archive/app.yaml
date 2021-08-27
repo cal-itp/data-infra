@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:1.0
+          image: gtfs-rt-archive:latest
           envFrom:
             - configMapRef:
                 name: archiver-app-vars
