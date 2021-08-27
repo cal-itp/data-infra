@@ -1,0 +1,36 @@
+name: Build service container image
+
+on:
+  pull_request:
+    branches: [ 'releases/*' ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Check out repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+
+      - uses: google-github-actions/setup-gcloud@master
+        with:
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - id: vars
+        name: Setup variables for image build
+        run: |
+          echo "BUILD_GIT_TAG=$(git describe --abbrev=0)" > "$GITHUB_ENV"
+
+      - id: service-build-release
+        name: Validate tag and perform image build
+        shell: bash
+        run: |
+          source "$GITHUB_WORKSPACE/ci/workflows/service-build-release.sh"

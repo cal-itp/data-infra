@@ -1,0 +1,32 @@
+name: Release service build
+
+on:
+  push:
+    branches: [ 'releases/*' ]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Check out repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Configure .kube/config
+        run: |
+          test -e ~/.kube || mkdir ~/.kube
+          echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > ~/.kube/config
+
+      - id: vars
+        name: Setup variables for image build
+        run: |
+          echo "BUILD_GIT_TAG=$(git describe --abbrev=0)"  > "$GITHUB_ENV"
+          echo "RELEASE_CHANNEL=$(basename "$GITHUB_REF")" > "$GITHUB_ENV"
+
+      - id: service-apply-release
+        name: Release build into specified channel
+        shell: bash
+        run: |
+          source "$GITHUB_WORKSPACE/ci/workflows/service-apply-release.sh"
