@@ -6,7 +6,7 @@ RESULT_FIELDS = ["field", "test", "passed"]
 null_query_template = """
 SELECT
     '{field}' AS field,
-    'check_null' AS test,
+    '{test}' AS test,
     n_nulls = 0 AS passed
 FROM (
     SELECT
@@ -19,7 +19,7 @@ FROM (
 unique_query_template = """
 SELECT
     '{field}' AS field,
-    'check_unique' AS test,
+    '{test}' AS test,
     n_rows = n_unique AS passed
 FROM (
     SELECT
@@ -33,7 +33,7 @@ FROM (
 composite_unique_query_template = """
 SELECT
     '{field}' AS field,
-    'check_composite_unique' AS test,
+    '{test}' AS test,
     n_rows = n_unique AS passed
 FROM (
     SELECT
@@ -56,16 +56,21 @@ FROM (
 """
 
 
-def run_test(test_name, conn, fields, table, query_template, composite=False):
+def run_test(test_name, engine, fields, table, query_template, composite=False):
 
     if composite:
-        query = query_template.format(field=", ".join(fields), table=table)
+        query = query_template.format(
+            field=", ".join(fields), table=table, test=test_name
+        )
     else:
         query = "\nUNION ALL\n".join(
-            [query_template.format(field=f, table=table) for f in fields]
+            [
+                query_template.format(field=f, table=table, test=test_name)
+                for f in fields
+            ]
         )
 
-    results = pd.read_sql(con=conn, sql=query)
+    results = pd.read_sql(con=engine, sql=query)
 
     return {
         "test_name": test_name,
@@ -77,15 +82,15 @@ def run_test(test_name, conn, fields, table, query_template, composite=False):
 
 
 class Tester:
-    def __init__(self, conn, table):
-        self.conn = conn
+    def __init__(self, engine, table):
+        self.engine = engine
         self.table = table
         self.test_results = {}
 
     def check_unique(self, fields):
         res = run_test(
             "check_unique",
-            conn=self.conn,
+            engine=self.engine,
             fields=fields,
             table=self.table,
             query_template=unique_query_template,
@@ -96,7 +101,7 @@ class Tester:
     def check_null(self, fields):
         res = run_test(
             "check_null",
-            conn=self.conn,
+            engine=self.engine,
             fields=fields,
             table=self.table,
             query_template=null_query_template,
@@ -107,7 +112,7 @@ class Tester:
     def check_composite_unique(self, fields):
         res = run_test(
             "check_composite_unique",
-            conn=self.conn,
+            engine=self.engine,
             fields=fields,
             table=self.table,
             query_template=composite_unique_query_template,
