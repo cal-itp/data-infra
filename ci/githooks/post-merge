@@ -17,20 +17,8 @@ if [[ $RELEASE_CHANNEL ]]; then
     exit 1
   fi
 
-  required_missing=()
-
-  eval "$(git tag -l --format='%(contents)' "$BUILD_GIT_TAG" | grep '^BUILD_.*=')"
-  test "$BUILD_APP"  || required_missing+=('BUILD_APP')
-  test "$BUILD_ID"   || required_missing+=('BUILD_ID')
-  test "$BUILD_REPO" || required_missing+=('BUILD_REPO')
-
-  if [[ ${#required_missing[*]} -gt 0 ]]; then
-    printf 'error: tag %s description missing required variables: %s\n' "$BUILD_GIT_TAG" "${required_missing[*]}" >&2
-    exit 1
-  fi
-
+  source $(git rev-parse --show-toplevel)/ci/steps/validate-build-git-tag.sh
   printf 'post-merge: releasing into channel %s: BUILD_APP=%s BUILD_ID=%s BUILD_REPO=%s\n' "$RELEASE_CHANNEL" "$BUILD_APP" "$BUILD_ID" "$BUILD_REPO"
-
   source $(git rev-parse --show-toplevel)/ci/workflows/service-apply-release.sh
 
 fi
