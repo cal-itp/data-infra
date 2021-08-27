@@ -10,6 +10,7 @@ dependencies:
 SELECT t1.participant_id,
        t1.littlepay_transaction_id,
        t1.device_id,
+       t2.micropayment_id,
        t1.type,
        t1.transaction_outcome,
        t1.transaction_date_time_utc,
@@ -26,6 +27,7 @@ SELECT t1.participant_id,
        t2.charge_amount
 FROM `views.mst_transactions_gtfs_enhanced` as t1
 LEFT JOIN `views.mst_stg_micropayment_device_ids_fare_type` as t2
-ON t1.littlepay_transaction_id = t2.littlepay_transaction_id
-WHERE charge_type = 'complete_variable_fare'
-OR charge_type = 'flat_fare'
+    ON t1.littlepay_transaction_id = t2.littlepay_transaction_id
+WHERE
+    charge_type = 'complete_variable_fare'
+    OR charge_type = 'flat_fare'
