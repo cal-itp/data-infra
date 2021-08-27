@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+CI_STEPS_DIR=$(git rev-parse --show-toplevel)/ci/steps
+
 #
 # CLI Overrides
 #
@@ -30,8 +32,6 @@ PREPARE_KUBE_KUSTOMIZATION=$(git rev-parse --show-toplevel)/kubernetes/apps/over
 #
 # Steps
 #
-
-CI_STEPS_DIR=$(git rev-parse --show-toplevel)/ci/steps
 
 printf 'BEGIN STEP: validate-clean-worktree\n'
 source "$CI_STEPS_DIR/validate-clean-worktree.sh"

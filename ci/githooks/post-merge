@@ -23,8 +23,8 @@ if [[ $RELEASE_CHANNEL ]]; then
     exit 1
   fi
 
-  source $(git rev-parse --show-toplevel)/ci/steps/validate-build-git-tag.sh
-  printf 'post-merge: releasing into channel %s: BUILD_APP=%s BUILD_ID=%s BUILD_REPO=%s\n' "$RELEASE_CHANNEL" "$BUILD_APP" "$BUILD_ID" "$BUILD_REPO"
+  printf 'post-merge: releasing tag %s into channel %s\n' "$BUILD_GIT_TAG" "$RELEASE_CHANNEL"
+  source $(git rev-parse --show-toplevel)/ci/workflows/service-build-release.sh
   source $(git rev-parse --show-toplevel)/ci/workflows/service-apply-release.sh
 
 fi

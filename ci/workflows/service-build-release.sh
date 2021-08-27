@@ -7,12 +7,11 @@ CI_STEPS_DIR=$(git rev-parse --show-toplevel)/ci/steps
 # Defaults
 #
 
-test "$RELEASE_CHANNEL"         || RELEASE_CHANNEL=$(basename "$(git symbolic-ref HEAD)")
 test "$BUILD_GIT_TAG"           || BUILD_GIT_TAG=$(git describe --abbrev=0)
 
 source "$CI_STEPS_DIR/validate-build-git-tag.sh"
 
-test "$RELEASE_KUBE_OVERLAY"    || RELEASE_KUBE_OVERLAY=$(git rev-parse --show-toplevel)/kubernetes/apps/overlays/$BUILD_APP-$RELEASE_CHANNEL
+test "$BUILD_DIR"               || BUILD_DIR=$(git rev-parse --show-toplevel)/services/$BUILD_APP
 
 #
 # Optional
@@ -22,8 +21,6 @@ test "$BUILD_REPO_USER"         || BUILD_REPO_USER=
 test "$BUILD_REPO_SECRET"       || BUILD_REPO_SECRET=
 test "$BUILD_FORCE"             || BUILD_FORCE=
 
-export KUBECONFIG
-
 #
 # Steps
 #
@@ -31,5 +28,5 @@ export KUBECONFIG
 printf 'BEGIN STEP: validate-clean-worktree\n'
 source "$CI_STEPS_DIR/validate-clean-worktree.sh"
 
-printf 'BEGIN STEP: release-kube-overlay\n'
-source "$CI_STEPS_DIR/release-kube-overlay.sh"
+printf 'BEGIN STEP: build-docker-image\n'
+source "$CI_STEPS_DIR/build-docker-image.sh"
