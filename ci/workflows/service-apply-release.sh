@@ -28,8 +28,5 @@ export KUBECONFIG
 # Steps
 #
 
-printf 'BEGIN STEP: validate-clean-worktree\n'
-source "$CI_STEPS_DIR/validate-clean-worktree.sh"
-
 printf 'BEGIN STEP: release-kube-overlay\n'
 source "$CI_STEPS_DIR/release-kube-overlay.sh"

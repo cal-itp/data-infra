@@ -25,8 +25,5 @@ test "$BUILD_FORCE"             || BUILD_FORCE=
 # Steps
 #
 
-printf 'BEGIN STEP: validate-clean-worktree\n'
-source "$CI_STEPS_DIR/validate-clean-worktree.sh"
-
 printf 'BEGIN STEP: build-docker-image\n'
 source "$CI_STEPS_DIR/build-docker-image.sh"
