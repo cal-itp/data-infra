@@ -38,12 +38,12 @@ export KUBECONFIG
 # Defaults
 #
 
-test "$BUILD_ID"                   || BUILD_ID=$(basename "$(git describe --always --dirty)")
-test "$BUILD_DIR"                  || BUILD_DIR=$(git rev-parse --show-toplevel)/services/$BUILD_APP
-test "$BUILD_FORCE"                || BUILD_FORCE=1
-test "$PREPARE_KUBE_BASE"          || PREPARE_KUBE_BASE=../../manifests/$BUILD_APP
-test "$PREPARE_KUBE_KUSTOMIZATION" || PREPARE_KUBE_KUSTOMIZATION=$(git rev-parse --show-toplevel)/kubernetes/apps/overlays/$BUILD_APP-release/kustomization.yaml
-test "$RELEASE_KUBE_OVERLAY"       || RELEASE_KUBE_OVERLAY=$(git rev-parse --show-toplevel)/kubernetes/apps/overlays/$BUILD_APP-$RELEASE_CHANNEL
+test "$BUILD_ID"                        || BUILD_ID=$(basename "$(git describe --always --dirty)")
+test "$BUILD_DIR"                       || BUILD_DIR=$(git rev-parse --show-toplevel)/services/$BUILD_APP
+test "$BUILD_FORCE"                     || BUILD_FORCE=1
+test "$PREPARE_KUBE_KUSTOMIZATION"      || PREPARE_KUBE_KUSTOMIZATION=$(git rev-parse --show-toplevel)/kubernetes/apps/overlays/$BUILD_APP-release/kustomization.yaml
+test "$PREPARE_KUBE_KUSTOMIZATION_BASE" || PREPARE_KUBE_KUSTOMIZATION_BASE=../../manifests/$BUILD_APP
+test "$RELEASE_KUBE_OVERLAY"            || RELEASE_KUBE_OVERLAY=$(git rev-parse --show-toplevel)/kubernetes/apps/overlays/$BUILD_APP-$RELEASE_CHANNEL
 
 #
 # Steps

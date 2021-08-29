@@ -39,7 +39,7 @@ export KUBECONFIG
 #
 
 PREPARE_GIT_COMMIT_MSG="rc($BUILD_APP): $BUILD_ID"
-PREPARE_KUBE_BASE=../../manifests/$BUILD_APP
+PREPARE_KUBE_KUSTOMIZATION_BASE=../../manifests/$BUILD_APP
 PREPARE_KUBE_KUSTOMIZATION=$(git rev-parse --show-toplevel)/kubernetes/apps/overlays/$BUILD_APP-release/kustomization.yaml
 
 #
