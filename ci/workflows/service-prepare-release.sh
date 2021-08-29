@@ -35,12 +35,12 @@ test "$BUILD_REPO" || { printf 'BUILD_REPO: '; read BUILD_REPO; }
 export KUBECONFIG
 
 #
-# Overrides
+# Defaults
 #
 
-PREPARE_GIT_COMMIT_MSG="rc($BUILD_APP): $BUILD_ID"
-PREPARE_KUBE_KUSTOMIZATION_BASE=../../manifests/$BUILD_APP
-PREPARE_KUBE_KUSTOMIZATION=$(git rev-parse --show-toplevel)/kubernetes/apps/overlays/$BUILD_APP-release/kustomization.yaml
+test "$PREPARE_GIT_COMMIT_MSG"          || PREPARE_GIT_COMMIT_MSG="rc($BUILD_APP): $BUILD_ID"
+test "$PREPARE_KUBE_KUSTOMIZATION"      || PREPARE_KUBE_KUSTOMIZATION=$(git rev-parse --show-toplevel)/kubernetes/apps/overlays/$BUILD_APP-release/kustomization.yaml
+test "$PREPARE_KUBE_KUSTOMIZATION_BASE" || PREPARE_KUBE_KUSTOMIZATION_BASE=../../manifests/$BUILD_APP
 
 #
 # Steps
