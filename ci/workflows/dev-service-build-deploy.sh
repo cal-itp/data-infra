@@ -1,28 +1,28 @@
 #!/bin/bash
 set -e
 
-CI_STEPS_DIR=$(git rev-parse --show-toplevel)/ci/steps
-
 #
 # Env files
 #
 
-for arg in "$@"; do
+for env_file in "$@"; do
 
-  if ! [[ -e "$arg" ]]; then
+  if ! [[ -e "$env_file" ]]; then
     printf 'error: all cli arguments must be paths to environment files\n' >&2
     exit 1
   fi
 
   while read line; do
-    if [[ $line =~ ^[[:alnum:]_]+=.* ]]; then
+    if [[ $line =~ ^([[:alnum:]_]+)=(.*)$ ]] && ! [[ $(declare -p "${BASH_REMATCH[1]}" 2>/dev/null) ]]; then
       declare -x "$line"
     else
       continue
     fi
-  done < "$arg"
+  done < "$env_file"
 
 done
+
+test "$CI_STEPS_DIR" || CI_STEPS_DIR=$(git rev-parse --show-toplevel)/ci/steps
 
 #
 # Required vars
