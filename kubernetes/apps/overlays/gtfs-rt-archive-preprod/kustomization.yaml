@@ -6,3 +6,6 @@ resources:
 - ns.yaml
 - archiver-channel-vars.yaml
 - ../gtfs-rt-archive-release
+
+patches:
+- image-pull-policy.patch.yaml
