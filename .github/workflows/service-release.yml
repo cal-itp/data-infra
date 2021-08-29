@@ -20,7 +20,7 @@ jobs:
           echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > ~/.kube/config
 
       - id: vars
-        name: Setup variables for image build
+        name: Setup variables for build release
         run: |
           echo "BUILD_GIT_TAG=$(git describe --abbrev=0)"  > "$GITHUB_ENV"
           echo "RELEASE_CHANNEL=$(basename "$GITHUB_REF")" > "$GITHUB_ENV"
