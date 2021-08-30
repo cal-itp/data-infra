@@ -19,16 +19,19 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
 
-      - name: Configure .kube/config
-        run: |
-          test -e ~/.kube || mkdir ~/.kube
-          echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 -d > ~/.kube/config
-
       - id: vars
         name: Setup variables for build release
         run: |
           echo "BUILD_GIT_TAG=$(git describe --abbrev=0)"  > "$GITHUB_ENV"
           echo "RELEASE_CHANNEL=$(basename "$GITHUB_REF")" > "$GITHUB_ENV"
+          source "$GITHUB_WORKSPACE/kubernetes/gke/config-cluster.sh"
+          echo "GKE_NAME=$GKE_NAME"                        > "$GITHUB_ENV"
+          echo "GKE_REGION=$GKE_REGION"                    > "$GITHUB_ENV"
+          echo "CLOUDSDK_CORE_PROJECT=cal-itp-data-infra"  > "$GITHUB_ENV"
+
+      - name: Setup kubeconfig
+        run: |
+          gcloud container clusters get-credentials "$GKE_NAME" --region "$GKE_REGION"
 
       - id: service-apply-release
         name: Release build into specified channel
