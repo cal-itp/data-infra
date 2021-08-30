@@ -251,7 +251,9 @@ class BaseWriter(threading.Thread):
         while item is not None:
             evt_ts = item["evt"][2]
             data_name = item["urldef"][0]
-            data_id = "{}/{}".format(datetime.datetime.fromtimestamp(evt_ts).isoformat(), data_name)
+            data_id = "{}/{}".format(
+                datetime.datetime.fromtimestamp(evt_ts).isoformat(), data_name
+            )
             self.write(data_id, item["data"])
             item = self.wq.get()
 
