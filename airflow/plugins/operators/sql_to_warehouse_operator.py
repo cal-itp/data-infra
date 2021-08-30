@@ -1,7 +1,7 @@
 from airflow.models import BaseOperator
 
 from calitp.config import format_table_name
-from calitp.sql import sql_patch_comments, write_table
+from calitp.sql import sql_patch_comments, write_table, get_table
 from calitp import get_engine
 from testing import Tester
 
@@ -15,6 +15,7 @@ class SqlToWarehouseOperator(BaseOperator):
         dst_table_name,
         create_disposition=None,
         fields=None,
+        fields_from=None,
         tests=None,
         **kwargs,
     ):
@@ -22,6 +23,7 @@ class SqlToWarehouseOperator(BaseOperator):
         self.sql = sql
         self.dst_table_name = dst_table_name
         self.fields = fields if fields is not None else {}
+        self.fields_from = fields_from
         self.tests = tests
         super().__init__(**kwargs)
 
@@ -39,6 +41,43 @@ class SqlToWarehouseOperator(BaseOperator):
         # patch in comments ---------------------------------------------------
 
         sql_patch_comments(format_table_name(table_name), self.fields)
+
+        # fields_from ---------------------------------------------------------
+
+        if self.fields_from is not None:
+            # Ensure we are only patching comments for fields
+            # that exist within the destination table
+            dst_table_fields = get_table(format_table_name(table_name)).columns.keys()
+
+            fields_to_add = {}
+            for table in self.fields_from.keys():
+                contents = self.fields_from[table]
+                table_res = get_table(format_table_name(table))
+                if isinstance(contents, list):
+                    table_fields = {
+                        k: table_res.columns[k].comment
+                        for k in table_res.columns.keys()
+                        if k in contents
+                        and k not in fields_to_add.keys()
+                        and k not in self.fields.keys()
+                        and k in dst_table_fields
+                    }
+                elif contents == "any":
+                    table_fields = {
+                        k: table_res.columns[k].comment
+                        for k in table_res.columns.keys()
+                        if k not in fields_to_add.keys()
+                        and k not in self.fields.keys()
+                        and k in dst_table_fields
+                    }
+                else:
+                    raise NotImplementedError(
+                        "This is not an accepted fields_from option: " + repr(contents)
+                    )
+                fields_to_add.update(table_fields)
+            print("Adding fields from existing tables:")
+            print(fields_to_add)
+            sql_patch_comments(format_table_name(table_name), fields_to_add)
 
         # testing -------------------------------------------------------------
 

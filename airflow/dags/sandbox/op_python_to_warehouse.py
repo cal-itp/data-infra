@@ -2,8 +2,8 @@
 # operator: operators.PythonToWarehouseOperator
 # table_name: "sandbox.python_to_warehouse"
 # fields:
-#   g: The g field
-#   x: The x field
+#   g: The g field is excellent
+#   x: The x field is awesome
 # dependencies:
 #   - create_dataset
 # ---
