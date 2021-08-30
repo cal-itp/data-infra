@@ -1,4 +1,5 @@
 from airflow.models import BaseOperator
+from itertools import chain
 
 from calitp.config import format_table_name
 from calitp.sql import sql_patch_comments, write_table, get_table
@@ -40,41 +41,61 @@ class SqlToWarehouseOperator(BaseOperator):
 
         # patch in comments ---------------------------------------------------
 
-        sql_patch_comments(format_table_name(table_name), self.fields)
+        if not self.fields_from:
+            sql_patch_comments(format_table_name(table_name), self.fields)
 
         # fields_from ---------------------------------------------------------
 
-        if self.fields_from is not None:
+        if self.fields_from:
             # Ensure we are only patching comments for fields
             # that exist within the destination table
-            dst_table_fields = get_table(format_table_name(table_name)).columns.keys()
+            dst_table_fields = set(
+                get_table(format_table_name(table_name)).columns.keys()
+            )
 
-            fields_to_add = {}
-            for table in self.fields_from.keys():
-                contents = self.fields_from[table]
-                table_res = get_table(format_table_name(table))
+            # iterate over fields_from tables to inherit additional column descriptions.
+            parent_cols_raw = []
+            for table, contents in self.fields_from.items():
+                parent_table = get_table(format_table_name(table))
+                parent_fields = set(parent_table.columns.keys())
+
+                print("parent fields: %s" % parent_fields)
+                print("dst_table_fields: %s" % dst_table_fields)
+                shared_cols = dst_table_fields & parent_fields
+
                 if isinstance(contents, list):
+                    # check whether columns were specified that are not shared
+                    not_in_dst_table = set(contents) - shared_cols
+                    if not_in_dst_table:
+                        raise KeyError(
+                            "Field description columns not in result: %s"
+                            % not_in_dst_table
+                        )
+
+                    # add specified column comments from parent
                     table_fields = {
-                        k: table_res.columns[k].comment
-                        for k in table_res.columns.keys()
-                        if k in contents
-                        and k not in fields_to_add.keys()
-                        and k not in self.fields.keys()
-                        and k in dst_table_fields
+                        k: parent_table.columns[k].comment for k in contents
                     }
+
                 elif contents == "any":
                     table_fields = {
-                        k: table_res.columns[k].comment
-                        for k in table_res.columns.keys()
-                        if k not in fields_to_add.keys()
-                        and k not in self.fields.keys()
-                        and k in dst_table_fields
+                        k: parent_table.columns[k].comment for k in shared_cols
                     }
+
                 else:
                     raise NotImplementedError(
                         "This is not an accepted fields_from option: " + repr(contents)
                     )
-                fields_to_add.update(table_fields)
+
+                parent_cols_raw.append(table_fields)
+
+            # unpack all parent columns into a dictionary, keeping earliest specified
+            # by creating a list of all items sorted in reverse.
+            parent_rev_items = chain(*reversed([d.items() for d in parent_cols_raw]))
+            parent_fields = dict(parent_rev_items)
+
+            fields_to_add = {**parent_fields, **self.fields}
+
             print("Adding fields from existing tables:")
             print(fields_to_add)
             sql_patch_comments(format_table_name(table_name), fields_to_add)
