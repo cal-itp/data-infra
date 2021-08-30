@@ -22,12 +22,12 @@ jobs:
       - id: vars
         name: Setup variables for build release
         run: |
-          echo "BUILD_GIT_TAG=$(git describe --abbrev=0)"  > "$GITHUB_ENV"
-          echo "RELEASE_CHANNEL=$(basename "$GITHUB_REF")" > "$GITHUB_ENV"
+          echo "BUILD_GIT_TAG=$(git describe --abbrev=0)"  >> "$GITHUB_ENV"
+          echo "RELEASE_CHANNEL=$(basename "$GITHUB_REF")" >> "$GITHUB_ENV"
+          echo "CLOUDSDK_CORE_PROJECT=cal-itp-data-infra"  >> "$GITHUB_ENV"
           source "$GITHUB_WORKSPACE/kubernetes/gke/config-cluster.sh"
-          echo "GKE_NAME=$GKE_NAME"                        > "$GITHUB_ENV"
-          echo "GKE_REGION=$GKE_REGION"                    > "$GITHUB_ENV"
-          echo "CLOUDSDK_CORE_PROJECT=cal-itp-data-infra"  > "$GITHUB_ENV"
+          echo "GKE_NAME=$GKE_NAME"                        >> "$GITHUB_ENV"
+          echo "GKE_REGION=$GKE_REGION"                    >> "$GITHUB_ENV"
 
       - name: Setup kubeconfig
         run: |
