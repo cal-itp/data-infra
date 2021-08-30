@@ -59,8 +59,6 @@ class SqlToWarehouseOperator(BaseOperator):
                 parent_table = get_table(format_table_name(table))
                 parent_fields = set(parent_table.columns.keys())
 
-                print("parent fields: %s" % parent_fields)
-                print("dst_table_fields: %s" % dst_table_fields)
                 shared_cols = dst_table_fields & parent_fields
 
                 if isinstance(contents, list):
