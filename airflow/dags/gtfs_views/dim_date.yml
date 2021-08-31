@@ -19,7 +19,8 @@ sql: |
     DATETIME_TRUNC(d, DAY) = DATETIME_TRUNC(d, QUARTER) AS is_quarter_start,
     d < CURRENT_DATE() AS is_in_past,
     d <= CURRENT_DATE() AS is_in_past_or_present,
-    d > CURRENT_DATE() AS is_in_future
+    d > CURRENT_DATE() AS is_in_future,
+    (d > "2021-04-15" AND d <= CURRENT_DATE()) AS is_gtfs_schedule_range
   FROM (
     SELECT
       *
