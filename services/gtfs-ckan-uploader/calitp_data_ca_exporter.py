@@ -47,7 +47,6 @@ with tempfile.TemporaryDirectory() as tmp_dir:
     stop_times = get_table("gtfs_schedule.stop_times", as_df=True)
 
     print("Saving stop times")
-    stop_times = get_table("gtfs_schedule.stop_times", as_df=True)
     stop_times.to_csv(f"{tmp_dir}/gtfs_schedule_stop_times.csv")
 
     print("Posting stop times")
