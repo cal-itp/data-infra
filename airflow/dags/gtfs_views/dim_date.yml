@@ -17,6 +17,7 @@ sql: |
     FORMAT_DATE('%A', d) AS day_name,
     (CASE WHEN FORMAT_DATE('%A', d) IN ('Sunday', 'Saturday') THEN 0 ELSE 1 END) AS day_is_weekday,
     DATETIME_TRUNC(d, DAY) = DATETIME_TRUNC(d, QUARTER) AS is_quarter_start,
+    DATETIME_TRUNC(d, DAY) = DATETIME_TRUNC(d, MONTH) AS is_month_start,
     d < CURRENT_DATE() AS is_in_past,
     d <= CURRENT_DATE() AS is_in_past_or_present,
     d > CURRENT_DATE() AS is_in_future,
