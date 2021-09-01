@@ -5,7 +5,8 @@ dependencies:
   - gtfs_schedule_fact_daily_trips
 ---
 
-WITH service_agg AS (
+WITH
+service_agg AS (
   SELECT
     calitp_itp_id
     , calitp_url_number
@@ -19,9 +20,20 @@ WITH service_agg AS (
   FROM `views.gtfs_schedule_fact_daily_trips`
   WHERE is_in_service
   GROUP BY 1, 2, 3, 4
+),
+service_agg_keyed AS (
+  SELECT
+    T2.feed_key
+    , *
+  FROM service_agg T1
+  JOIN `views.gtfs_schedule_dim_feeds` T2
+    ON T1.calitp_itp_id = T2.calitp_itp_id
+      AND T1.calitp_url_number = T2.calitp_url_number
+      AND T2.calitp_extracted_at <= service_date
+      AND T2.calitp_deleted_at > service_date
 )
 
 SELECT
   *
   , (last_arrival_ts - first_departure_ts) / 3600 AS service_window
-FROM service_agg
+FROM service_agg_keyed
