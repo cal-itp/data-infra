@@ -5,7 +5,7 @@ dependencies:
   - gtfs_schedule_fact_daily_trips
 ---
 
-WITH 
+WITH
 service_agg AS (
   SELECT
     calitp_itp_id
