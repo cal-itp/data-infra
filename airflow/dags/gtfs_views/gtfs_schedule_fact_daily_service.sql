@@ -24,7 +24,7 @@ service_agg AS (
 service_agg_keyed AS (
   SELECT
     T2.feed_key
-    , *
+    , T1.*
   FROM service_agg T1
   JOIN `views.gtfs_schedule_dim_feeds` T2
     ON T1.calitp_itp_id = T2.calitp_itp_id
