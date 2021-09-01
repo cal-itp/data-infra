@@ -15,11 +15,12 @@ daily_service_trips AS (
   # can have multiple trips associated with it, via the service_id key.
   # (i.e. calendar service to trips is 1-to-many)
   SELECT
-    t1.*
+    t2.trip_key
+    , t1.*
     , t2.trip_id
     , t2.route_id
   FROM `views.gtfs_schedule_stg_daily_service` t1
-  JOIN `gtfs_schedule_type2.trips` t2
+  JOIN `views.gtfs_schedule_dim_trips` t2
     USING (calitp_itp_id, calitp_url_number, service_id)
   WHERE
     t2.calitp_extracted_at <= t1.service_date
