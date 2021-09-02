@@ -1,6 +1,13 @@
 ---
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.gtfs_schedule_dim_stop_times"
+
+tests:
+  check_null:
+    - stop_time_key
+  check_unique:
+    - stop_time_key
+
 dependencies:
   - dummy_gtfs_schedule_dims
 ---
