@@ -36,7 +36,7 @@
 #
 # Feel free to modify this file to suit your needs.
 ---
-version: '3'
+version: '3.8'
 x-airflow-common:
   &airflow-common
   build: .
