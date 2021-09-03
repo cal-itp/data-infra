@@ -37,14 +37,7 @@ Finally, run the initial database migration and create an `airflow / airflow` us
 docker-compose run airflow db init
 ```
 
-Note that in order to get bigquery credentials working, you'll need to [download a service account token](https://cloud.google.com/docs/authentication/getting-started#creating_a_service_account),
-and manually add it to airflow:
-
-```console
-docker-compose exec airflow-scheduler /bin/bash
-```
-
-Start all services with:
+Next, start all services with:
 
 ```console
 docker-compose up
