@@ -37,7 +37,7 @@ daily_feed_routes AS (
         T1.feed_key
         , T1.route_key
         , T2.full_date AS date
-        , * EXCEPT(feed_key, route_key)
+        , T1.* EXCEPT(feed_key, route_key)
     FROM feed_routes T1
     JOIN views.dim_date T2
         ON  T1.calitp_extracted_at <= T2.full_date
