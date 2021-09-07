@@ -44,7 +44,7 @@ Below are some helpful articles from Metabase's learn section:
     * [Best Practices for BI Dashboards](https://www.metabase.com/learn/dashboards/bi-dashboard-best-practices.html)
     * [Linking Filters](https://www.metabase.com/learn/dashboards/linking-filters.html)
 
-## Metabse at Cal-ITP
+## Metabase at Cal-ITP
 
 ### Cal-ITP Collections
 
