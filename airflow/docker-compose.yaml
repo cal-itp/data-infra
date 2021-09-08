@@ -36,7 +36,7 @@
 #
 # Feel free to modify this file to suit your needs.
 ---
-version: '3'
+version: '3.8'
 x-airflow-common:
   &airflow-common
   build: .
@@ -102,7 +102,7 @@ services:
   redis:
     image: redis:latest
     ports:
-      - 6379:6379
+      - 6379
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s

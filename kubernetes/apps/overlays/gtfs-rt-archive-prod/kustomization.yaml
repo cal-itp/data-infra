@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: gtfs-rt
+
+resources:
+- ns.yaml
+- archiver-channel-vars.yaml
+- ../gtfs-rt-archive-release

@@ -22,8 +22,22 @@ daily_feeds AS (
     SELECT
         Feeds.feed_key,
         D.full_date AS date,
+
+        -- is the feed valid on this date?
+        (Feeds.feed_start_date <= full_date AND Feeds.feed_end_date >= full_date)
+          AS is_feed_publish_date_valid,
+
+        -- how long until this feed ends?
+        DATE_DIFF(Feeds.feed_end_date, D.full_date, DAY)
+          AS days_until_feed_end_date,
+
+        -- how long ago did this feed start?
+        DATE_DIFF(D.full_date, Feeds.feed_start_date, DAY)
+          AS days_from_feed_start_date,
+
         calitp_itp_id,
         calitp_url_number
+
     FROM `views.gtfs_schedule_dim_feeds` Feeds
     JOIN `views.dim_date` AS D
         ON

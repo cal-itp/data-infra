@@ -1,4 +1,6 @@
 workloads:
+  metabase:
+    replicas: 3
   database:
     useExporter: false
 
