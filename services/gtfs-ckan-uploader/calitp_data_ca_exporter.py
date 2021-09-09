@@ -1,6 +1,7 @@
 import os
 import requests
 import tempfile
+
 from calitp import get_table
 
 
@@ -22,7 +23,7 @@ with tempfile.TemporaryDirectory() as tmp_dir:
         headers={"Authorization": API_KEY},
         files={"upload": open(f"{tmp_dir}/gtfs_schedule_agency.csv", "rb")},
     )
-
+    r.raise_for_status()
     del agency
 
 #
@@ -38,7 +39,7 @@ with tempfile.TemporaryDirectory() as tmp_dir:
         headers={"Authorization": API_KEY},
         files={"upload": open(f"{tmp_dir}/gtfs_schedule_routes.csv", "rb")},
     )
-
+    r1.raise_for_status()
     del routes
 
 #
@@ -56,7 +57,7 @@ with tempfile.TemporaryDirectory() as tmp_dir:
         headers={"Authorization": API_KEY},
         files={"upload": open(f"{tmp_dir}/gtfs_schedule_stop_times.csv", "rb")},
     )
-
+    r2.raise_for_status()
     del stop_times
 
 #
@@ -71,7 +72,7 @@ with tempfile.TemporaryDirectory() as tmp_dir:
         headers={"Authorization": API_KEY},
         files={"upload": open(f"{tmp_dir}/gtfs_schedule_stops.csv", "rb")},
     )
-
+    r3.raise_for_status()
     del stops
 
 
@@ -87,5 +88,5 @@ with tempfile.TemporaryDirectory() as tmp_dir:
         headers={"Authorization": API_KEY},
         files={"upload": open(f"{tmp_dir}/gtfs_schedule_trips.csv", "rb")},
     )
-
+    r4.raise_for_status()
     del trips
