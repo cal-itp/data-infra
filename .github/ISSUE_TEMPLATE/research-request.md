@@ -7,18 +7,35 @@ assignees: ''
 
 ---
 
-## Explore
+## Question
 
-* **Question**: _FILL IN_
-  - _add any_
-  - _ relevant calculations_
-  - _here_
-* **View**: E.g. `views.gtfs_schedule_fact_daily_feed_files`. (This can be filled out by the data services team.).
+Fill in your question here.
+
+## Metrics
+
+* any specific calculations
+* you think will be needed
+
+## Data sources
+
+* Source A (where is it found?)
+* Source B (where is it found?)
+
+## (Data Servicess Team to Copy and Fill Out Below)
+
+The QuVR MD template below will be filled out by a member of the data services team.
+This allows us to describe the request, in a way that is easy to hand-off for analysis.
+After the research phase, we will sync with the asker to figure out if the metric and dashboard pieces are needed.
+
+Before starting research:
+
+* **Question**: Question written as a single sentence.
+* **View**: E.g. `views.gtfs_schedule_fact_daily_feed_files`.
 * **Research**:
   - How should the results be presented?
   - When are they needed by?
 
-## Publish (if needed)
+After reviewing research with the asker:
 
-* Metric
-* Dashboard
+* **Metric**: what specific calculations are needed?
+* **Dashboard**: where should we put the result?
