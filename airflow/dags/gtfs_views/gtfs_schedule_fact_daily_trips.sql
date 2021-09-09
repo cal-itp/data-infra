@@ -1,6 +1,17 @@
 ---
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.gtfs_schedule_fact_daily_trips"
+
+tests:
+  check_null:
+    - trip_key
+    - service_date
+    - service_id
+  check_composite_unique:
+    - trip_key
+    - service_date
+    - service_id
+
 dependencies:
   - gtfs_schedule_stg_daily_service
   - gtfs_schedule_stg_stop_times
@@ -10,21 +21,38 @@ dependencies:
 # and last arrival timestamps.
 #
 WITH
+
+stg_daily_service_keyed AS (
+
+  SELECT
+    T2.feed_key
+    , T1.*
+  FROM `views.gtfs_schedule_stg_daily_service` T1
+  JOIN `views.gtfs_schedule_dim_feeds` T2
+    ON
+      T1.calitp_itp_id = T2.calitp_itp_id
+      AND T1.calitp_url_number = T2.calitp_url_number
+      AND T2.calitp_extracted_at <= T1.service_date
+      AND T2.calitp_deleted_at > T1.service_date
+
+),
+
 daily_service_trips AS (
   # Daily service for each trip. Note that scheduled service in the calendar
   # can have multiple trips associated with it, via the service_id key.
   # (i.e. calendar service to trips is 1-to-many)
   SELECT
-    t2.trip_key
-    , t1.*
+    t1.feed_key
+    , t2.trip_key
     , t2.trip_id
     , t2.route_id
-  FROM `views.gtfs_schedule_stg_daily_service` t1
+    , t1.* EXCEPT (feed_key)
+  FROM stg_daily_service_keyed t1
   JOIN `views.gtfs_schedule_dim_trips` t2
     USING (calitp_itp_id, calitp_url_number, service_id)
   WHERE
     t2.calitp_extracted_at <= t1.service_date
-    AND COALESCE(t2.calitp_deleted_at, DATE("2099-01-01")) > t1.service_date
+    AND t2.calitp_deleted_at > t1.service_date
 ),
 service_dates AS (
   # Each unique value for service_date

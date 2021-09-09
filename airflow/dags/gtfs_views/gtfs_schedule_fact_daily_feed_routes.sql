@@ -1,6 +1,17 @@
 ---
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.gtfs_schedule_fact_daily_feed_routes"
+
+tests:
+  check_null:
+    - feed_key
+    - route_key
+    - date
+  check_composite_unique:
+    - feed_key
+    - route_key
+    - date
+
 dependencies:
   - gtfs_schedule_dim_feeds
   - gtfs_schedule_dim_routes
@@ -26,7 +37,7 @@ daily_feed_routes AS (
         T1.feed_key
         , T1.route_key
         , T2.full_date AS date
-        , * EXCEPT(feed_key, route_key)
+        , T1.* EXCEPT(feed_key, route_key)
     FROM feed_routes T1
     JOIN views.dim_date T2
         ON  T1.calitp_extracted_at <= T2.full_date

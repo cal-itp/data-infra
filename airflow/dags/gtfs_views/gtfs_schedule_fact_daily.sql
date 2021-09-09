@@ -1,6 +1,13 @@
 ---
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.gtfs_schedule_fact_daily"
+
+tests:
+  check_null:
+    - date
+  check_composite_unique:
+    - date
+
 dependencies:
   - gtfs_schedule_fact_daily_feeds
   - gtfs_schedule_fact_daily_feed_files

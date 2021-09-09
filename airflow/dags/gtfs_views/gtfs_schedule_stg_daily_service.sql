@@ -1,6 +1,14 @@
 ---
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.gtfs_schedule_stg_daily_service"
+
+tests:
+  check_composite_unique:
+    - service_date
+    - service_id
+    - calitp_itp_id
+    - calitp_url_number
+
 dependencies:
   - dim_date
   - gtfs_schedule_dim_trips
@@ -45,8 +53,8 @@ WITH
       , service_id
       , service_date
       , TRUE AS service_inclusion
-    FROM cal_dates
-    WHERE cal_dates.exception_type = "1"
+    FROM cal_dates_daily
+    WHERE cal_dates_daily.exception_type = "1"
   ),
 
   # exclusions from calendar_dates
@@ -57,8 +65,8 @@ WITH
       , service_id
       , service_date
       , TRUE AS service_exclusion
-    FROM cal_dates
-    WHERE cal_dates.exception_type = "2"
+    FROM cal_dates_daily
+    WHERE cal_dates_daily.exception_type = "2"
   ),
   # for the active calendar entries on a each date (e.g. from the latest feed
   # on that date), get the service indicator (0 for out of service, 1 for in).

@@ -1,6 +1,13 @@
 ---
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.gtfs_schedule_dim_feeds"
+
+tests:
+  check_null:
+    - feed_key
+  check_unique:
+    - feed_key
+
 dependencies:
   - dummy_gtfs_schedule_dims
 ---
