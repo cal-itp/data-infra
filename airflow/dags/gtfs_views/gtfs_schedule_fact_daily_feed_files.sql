@@ -1,6 +1,18 @@
 ---
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.gtfs_schedule_fact_daily_feed_files"
+
+tests:
+  check_null:
+    - feed_key
+    - file_key
+    - date
+    - md5_hash
+  check_composite_unique:
+    - feed_key
+    - date
+    - file_key
+
 dependencies:
   - gtfs_schedule_dim_feeds
 ---
@@ -53,4 +65,5 @@ interp_daily_files AS (
             AND COALESCE(Files.tmp_next_date, "2099-01-01") > D.full_date
 )
 
-SELECT * FROM interp_daily_files
+-- SELECT * FROM interp_daily_files
+SELECT * FROM raw_daily_files

@@ -1,6 +1,17 @@
 ---
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.gtfs_schedule_fact_daily_trips"
+
+tests:
+  check_null:
+    - trip_key
+    - service_date
+    - service_id
+  check_composite_unique:
+    - trip_key
+    - service_date
+    - service_id
+
 dependencies:
   - gtfs_schedule_stg_daily_service
   - gtfs_schedule_stg_stop_times

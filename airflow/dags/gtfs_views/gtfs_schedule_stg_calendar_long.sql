@@ -1,6 +1,15 @@
 ---
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.gtfs_schedule_stg_calendar_long"
+
+tests:
+  check_composite_unique:
+    - calitp_itp_id
+    - calitp_url_number
+    - service_id
+    - day_name
+    - calitp_extracted_at
+
 external_dependencies:
     - gtfs_views_staging: all
 
