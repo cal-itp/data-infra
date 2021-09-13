@@ -1,6 +1,6 @@
 ---
 operator: operators.SqlToWarehouseOperator
-dst_table_name: "views.gtfs_schedule_fact_stop_id_changes"
+dst_table_name: "views.gtfs_schedule_fact_route_id_changes"
 
 tests:
   check_null:
@@ -36,7 +36,7 @@ date_range AS (
 
 source_table AS (
 
-    SELECT * FROM `views.gtfs_schedule_dim_stops`
+    SELECT *, route_id AS source_id FROM `views.gtfs_schedule_dim_routes`
 
 ),
 
