@@ -30,6 +30,14 @@ amador-regional-transit-system:
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 11
+amtrak:
+  agency_name: Amtrak
+  feeds:
+    - gtfs_schedule_url: https://storage.cloud.google.com/gtfs-data/sandbox/amtrak_transit_feed20210903-20210914T224053Z-001.zip
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
+  itp_id: 13
 anaheim-resort-transportation:
   agency_name: Anaheim Resort Transportation
   feeds:
