@@ -3,16 +3,16 @@ operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.dim_metric_date"
 
 fields:
-    period: "The specific range of dates used (e.g. rolling_7, rolling_28, day, month, quarter)"
-    period_date: "The date the period describes. For example, rolling_7 goes from period_date to 7 days earlier."
-    period_type: "The category of period (rolling, daily, calendar)."
-    start_date: "The beginning of the period (inclusive). Note that for daily this is NULL, so data for the same day isn't selected twice."
-    end_date: "The end of the period (inclusive). For rolling windows, this is the period_date. For calendar, this is period_date - 1 day (E.g. Jan 1st describes December, etc..)."
+    metric_period: "The specific range of dates used (e.g. rolling_7, rolling_28, day, month, quarter)"
+    metric_date: "The date the metric_period describes. For example, rolling_7 goes from metric_date to 7 days earlier."
+    metric_type: "The category of metric_period (rolling, daily, calendar)."
+    start_date: "The beginning of the metric_period (inclusive). Note that for daily this is NULL, so data for the same day isn't selected twice."
+    end_date: "The end of the metric_period (inclusive). For rolling windows, this is the metric_date. For calendar, this is metric_date - 1 day (E.g. Jan 1st describes December, etc..)."
 
 tests:
     check_composite_unique:
-        - period
-        - period_date
+        - metric_period
+        - metric_date
 
 dependencies:
     - dim_date
@@ -21,7 +21,7 @@ dependencies:
 WITH
 end_dates AS (
     SELECT
-        full_date AS period_date
+        full_date AS metric_date
     FROM `views.dim_date`
 
 ),
@@ -29,17 +29,17 @@ end_dates AS (
 -- rolling ranges (i.e. 7, 28, and 90 day rolling windows)
 rolling_ranges AS (
     SELECT
-        period
-        , period_date
-        , "rolling" AS period_type
-        , DATE_SUB(period_date, INTERVAL tmp_interval - 1 DAY) AS start_date
-        , period_date AS end_date
+        metric_period
+        , metric_date
+        , "rolling" AS metric_type
+        , DATE_SUB(metric_date, INTERVAL tmp_interval - 1 DAY) AS start_date
+        , metric_date AS end_date
     FROM end_dates
     CROSS JOIN UNNEST([
-        STRUCT("rolling_2" AS period, 2 AS tmp_interval),
-        STRUCT("rolling_7" AS period, 7 AS tmp_interval),
-        STRUCT("rolling_28" AS period, 28 AS tmp_interval),
-        STRUCT("rolling_90" AS period, 90 AS tmp_interval)
+        STRUCT("rolling_2" AS metric_period, 2 AS tmp_interval),
+        STRUCT("rolling_7" AS metric_period, 7 AS tmp_interval),
+        STRUCT("rolling_28" AS metric_period, 28 AS tmp_interval),
+        STRUCT("rolling_90" AS metric_period, 90 AS tmp_interval)
         ])
 ),
 
@@ -47,16 +47,16 @@ rolling_ranges AS (
 period_day AS (
 
     SELECT
-        "day" AS period
-        , period_date
-        , "daily" AS period_type
+        "day" AS metric_period
+        , metric_date
+        , "daily" AS metric_type
 
         -- setting start date as NULL allows us to filter by daily periods as
         -- if they were rolling ranges. E.g. get just data as it existed on end
         -- date. This is especially useful if you are doing daily + rolling
         -- distinct calculations
         , DATE(NULL) AS start_date
-        , period_date AS end_date
+        , metric_date AS end_date
     FROM end_dates
 
 ),
@@ -64,11 +64,11 @@ period_day AS (
 -- variable frequency: quarterly
 period_quarter AS (
     SELECT
-        "quarter" AS period
+        "quarter" AS metric_period
 
         -- the next period (i.e. this is not inclusive; Jan 1 marks Q4 of the previous year)
-        , DATE_ADD(full_date, INTERVAL 1 QUARTER) AS period_date
-        , "calendar" AS period_type
+        , DATE_ADD(full_date, INTERVAL 1 QUARTER) AS metric_date
+        , "calendar" AS metric_type
 
         -- range from beginning to end of a quarter
         , full_date AS start_date
@@ -80,11 +80,11 @@ period_quarter AS (
 -- variable frequency: monthly
 period_month AS (
     SELECT
-        "month" AS period
+        "month" AS metric_period
 
         -- the next period (i.e. this is not inclusive; Jan 1 marks Dec of the previous year)
-        , DATE_ADD(full_date, INTERVAL 1 MONTH) AS period_date
-        , "calendar" AS period_type
+        , DATE_ADD(full_date, INTERVAL 1 MONTH) AS metric_date
+        , "calendar" AS metric_type
 
         -- range from beginning to end of a month
         , full_date AS start_date
@@ -109,8 +109,8 @@ all_periods_enhanced AS (
 
     SELECT
         *
-        , period_date < CURRENT_DATE()
-            OR (period_date <= CURRENT_DATE() AND period_type = "calendar")
+        , metric_date < CURRENT_DATE()
+            OR (metric_date <= CURRENT_DATE() AND metric_type = "calendar")
             AS is_in_past_or_present
     FROM all_periods
 
