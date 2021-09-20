@@ -88,27 +88,33 @@ class ParseRtOperator(BaseOperator):
         self,
         source_bucket="gs://gtfs-data/rt/",
         destination_bucket="gtfs-data/rt-processed/vehicle_positions/",
+        limit=None,
         **kwargs,
     ):
 
         self.source_bucket = source_bucket
         self.destination_bucket = destination_bucket
+        self.limit = limit
         super().__init__(**kwargs)
 
     def execute(self, context):
 
         # convert execution date to posix date
         execution_date = context["execution_date"]
-        posix_date = str(time.mktime(execution_date.timetuple()))[:6] + "*"
+        posix_date = str(time.mktime(execution_date.timetuple()))[:6]
 
         # get rt files
         rt_bucket = self.source_bucket
         print("Globbing rt bucket...")
-        print(rt_bucket + posix_date)
+        print(rt_bucket + posix_date + "*")
         fs = get_fs()
-        rt = fs.glob(rt_bucket + posix_date)
+        rt = fs.glob(rt_bucket + posix_date + "*")
         buckets_to_parse = len(rt)
         print("Realtime buckets to parse: {i}".format(i=buckets_to_parse))
+        if self.limit and buckets_to_parse > 0:
+            limit = self.limit if self.limit <= buckets_to_parse else buckets_to_parse
+            rt = rt[:limit]
+            print("Limit enabled. Parsing {i} buckets".format(i=limit))
 
         counter = 0
         for r in rt:
@@ -129,4 +135,10 @@ class ParseRtOperator(BaseOperator):
                     with tempfile.TemporaryDirectory() as tmpdirname:
                         fname = tmpdirname + "/" + r.split("/")[-1] + ".parquet"
                         positions_rectangle.to_parquet(fname, index=False)
-                        fs.put(fname, self.destination_bucket + fname.split("/")[-1])
+                        fs.put(
+                            fname,
+                            self.destination_bucket
+                            + posix_date
+                            + "/"
+                            + fname.split("/")[-1],
+                        )
