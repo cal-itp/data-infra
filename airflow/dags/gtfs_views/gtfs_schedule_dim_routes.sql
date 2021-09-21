@@ -5,6 +5,8 @@ dst_table_name: "views.gtfs_schedule_dim_routes"
 tests:
   check_null:
     - route_key
+    - calitp_extracted_at
+    - calitp_deleted_at
   check_unique:
     - route_key
 
