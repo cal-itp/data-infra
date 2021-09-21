@@ -87,7 +87,6 @@ def rectangle_positions(x):
 
 
 def main(execution_date, **kwargs):
-    limit = 4
     rt_bucket = "gs://gtfs-data/rt/"
     destination_bucket = "gtfs-data/rt-processed/vehicle_positions/"
     posix_date = str(time.mktime(execution_date.timetuple()))[:6]
@@ -101,10 +100,6 @@ def main(execution_date, **kwargs):
 
     buckets_to_parse = len(rt)
     print("Realtime buckets to parse: {i}".format(i=buckets_to_parse))
-    if limit and buckets_to_parse > 0:
-        limit = limit if limit <= buckets_to_parse else buckets_to_parse
-        rt = rt[:limit]
-        print("Limit enabled. Parsing {i} buckets".format(i=limit))
 
     # organize rt files by itpId_urlNumber
     rt_files = []
