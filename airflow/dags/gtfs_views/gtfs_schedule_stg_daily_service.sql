@@ -30,7 +30,11 @@ WITH
     SELECT
       * EXCEPT (date)
       , date AS service_date
-    FROM `gtfs_schedule_type2.calendar_dates_clean`
+    FROM (
+        -- deduplicate calendar_dates, which does not have a unique id column
+        -- and has identical entries in rare cases
+        SELECT DISTINCT * FROM `gtfs_schedule_type2.calendar_dates_clean`
+    )
   ),
 
   # for each day in our date calendar, get service entries that existed
