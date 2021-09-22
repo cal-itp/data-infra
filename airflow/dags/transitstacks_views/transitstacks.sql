@@ -1,6 +1,11 @@
 ---
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.transitstacks"
+
+tests:
+  check_unique:
+    - itp_id
+
 external_dependencies:
   - transitstacks_loader: all
 ---
@@ -16,10 +21,15 @@ provider_county AS (
 
 )
 
-SELECT *
+SELECT
+  PI.itp_id
+  , PI.transit_provider
+  , PI.ntd_id
+  , PI.modes
+  , * EXCEPT(itp_id, transit_provider, ntd_id, modes)
 FROM
-  `transitstacks.provider_info`
-  LEFT JOIN provider_county USING(transit_provider, itp_id, ntd_id,	modes)
-  LEFT JOIN `transitstacks.fares` USING(transit_provider, itp_id, ntd_id,	modes)
-  LEFT JOIN `transitstacks.ntd_finances` USING(transit_provider, itp_id, ntd_id,	modes)
-  LEFT JOIN `transitstacks.ntd_stats` USING(transit_provider, itp_id, ntd_id,	modes)
+  `transitstacks.provider_info` PI
+  LEFT JOIN provider_county USING(itp_id)
+  LEFT JOIN `transitstacks.fares` USING(itp_id)
+  LEFT JOIN `transitstacks.ntd_finances` USING(itp_id)
+  LEFT JOIN `transitstacks.ntd_stats` USING(itp_id)
