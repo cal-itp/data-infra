@@ -18,8 +18,8 @@ provider_county AS (
 
 SELECT *
 FROM
-  `{{ "transitstacks.provider_info" | table }}`
+  `transitstacks.provider_info`
   LEFT JOIN provider_county USING(transit_provider, itp_id, ntd_id,	modes)
-  LEFT JOIN `{{ "transitstacks.fares" | table }}` USING(transit_provider, itp_id, ntd_id,	modes)
-  LEFT JOIN `{{ "transitstacks.ntd_finances" | table }}` USING(transit_provider, itp_id, ntd_id,	modes)
-  LEFT JOIN `{{ "transitstacks.ntd_stats" | table }}` USING(transit_provider, itp_id, ntd_id,	modes)
+  LEFT JOIN `transitstacks.fares` USING(transit_provider, itp_id, ntd_id,	modes)
+  LEFT JOIN `transitstacks.ntd_finances` USING(transit_provider, itp_id, ntd_id,	modes)
+  LEFT JOIN `transitstacks.ntd_stats` USING(transit_provider, itp_id, ntd_id,	modes)
