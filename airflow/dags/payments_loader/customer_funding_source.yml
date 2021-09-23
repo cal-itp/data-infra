@@ -1,6 +1,6 @@
 operator: operators.ExternalTable
 source_objects:
-  - "mst/processed/customer_funding_source/*"
+  - "processed/customer_funding_source/*"
 destination_project_dataset_table: "payments.customer_funding_source"
 skip_leading_rows: 1
 schema_fields:
