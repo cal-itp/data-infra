@@ -43,6 +43,7 @@ The payments_views is made of SQL queries that transform the loaded tables above
 * In the `calitp_included_payments_data` task,
     * add a row for this new table.
     * add a depedency in yaml header to this new table.
+* In the `docs/datasets/mst_payments.md` file, add an entry into the `Tables` table describing the new data set.
 
 ### Adding a new table to payments_views
 
