@@ -9,6 +9,7 @@ Currently, Payments data is hosted by Littlepay, who exposes the "Littlepay Data
 | device_transactions | A list of every tap on the devices | * Cannot use for ridership stats because tap on / offs |
 | micropayments | A list of every charge to a card | * T-2 delays because of charing rules |
 | micropayments_devices_transactions | Join tables for two prior tables | |
+| micropayment_adjustments | A list of amounts deducted from the `nominal_amount` to arrive at the `charge_amount` for a micropayment | A micropayment can include multiple adjustments candidates, but only one should have `applied=true`. |
 
 ## Views
 
@@ -39,9 +40,11 @@ The payments_views is made of SQL queries that transform the loaded tables above
 * Alter `destination_project_dataset_table` and `source_objects` to match the new table name.
 * Edit `schema_fields` to be the columns in the new table. If you are unsure of a column type,
   specify it as "STRING".
+    * Keep a `calitp_extracted_at` column at the end of the table. This column contains the execution date of the load task, and is added automatically by the `preprocess_columns` task.
 * In the `calitp_included_payments_data` task,
     * add a row for this new table.
     * add a depedency in yaml header to this new table.
+* In the `docs/datasets/mst_payments.md` file, add an entry into the `Tables` table describing the new data set.
 
 ### Adding a new table to payments_views
 
