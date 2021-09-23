@@ -20,22 +20,19 @@ DATASET = "payments"
 # However, if we move to processing only the data for a given day each task,
 # we should change the SRC_DIR glob to use a datetime
 
-SRC_DIR = "gs://littlepay-data-extract-prod/mst/{table_name}/*.psv"
-STAGE_DIR = "mst/{table_name}"
-DST_DIR = "mst/processed/{table_name}"
+DEFAULT_SRC_URL_TEMPLATE = "gs://littlepay-data-extract-prod/{provider_name}/{provider_name}/{table_name}/*.psv"
+DEFAULT_STG_DIR_TEMPLATE = "{table_name}"
+DEFAULT_DST_DIR_TEMPLATE = "processed/{table_name}"
 
 
-def main(execution_date, **kwargs):
-
+def preprocess_littlepay_provider_bucket(
+    execution_date,
+    provider_name,
+    src_url_template=DEFAULT_SRC_URL_TEMPLATE,
+    stg_dir_template=DEFAULT_STG_DIR_TEMPLATE,
+    dst_dir_template=DEFAULT_DST_DIR_TEMPLATE,
+):
     fs = get_fs()
-
-    # remove previously processed data, in case they remove any data files ---
-    dst_parent_dir = f"{get_bucket()}/mst/processed/"
-
-    if fs.exists(dst_parent_dir):
-        # sanity check that we are deleting something mst related
-        assert "/mst/" in dst_parent_dir
-        fs.rm(dst_parent_dir, recursive=True)
 
     # Get high level data on tables we are pre-processing ----
     tables = get_table("payments.calitp_included_payments_tables", as_df=True)
@@ -50,10 +47,11 @@ def main(execution_date, **kwargs):
     # process data for each table ----
 
     for table_name, columns in zip(tables.table_name, schemas):
-        stg_dir = STAGE_DIR.format(table_name=table_name)
-        dst_dir = DST_DIR.format(table_name=table_name)
+        stg_dir = stg_dir_template.format(provider_name=provider_name, table_name=table_name)
+        dst_dir = dst_dir_template.format(provider_name=provider_name, table_name=table_name)
         src_files = fs.glob(
-            SRC_DIR.format(
+            src_url_template.format(
+                provider_name=provider_name,
                 table_name=table_name.replace("_", "-"),
                 date_string_narrow=date_string_narrow,
             )
@@ -61,13 +59,22 @@ def main(execution_date, **kwargs):
 
         print(f"\n\nTable {table_name} has {len(src_files)} new files =========")
 
+        # remove previously processed data, in case they remove any data files ---
+
+        dst_old_url = f"{get_bucket()}/{dst_dir}/*_{provider_name}_*"
+        dst_old_files = fs.glob(dst_old_url)
+
+        if dst_old_files:
+            print(f'Deleting {len(dst_old_files)} old file(s) for {provider_name} {table_name}.')
+            fs.rm(dst_old_files)
+
         # copy and process each file ----
 
         for fname in src_files:
             basename = fname.split("/")[-1]
 
-            stg_fname = f"{stg_dir}/{basename}"
-            dst_fname = f"{dst_dir}/{date_string}_{basename}"
+            stg_fname = f"{stg_dir}/{provider_name}_{basename}"
+            dst_fname = f"{dst_dir}/{date_string}_{provider_name}_{basename}"
 
             print(f"copying from payments bucket: {stg_fname} -> {dst_fname}")
             fs.cp(fname, f"{get_bucket()}/{stg_fname}")
@@ -79,3 +86,16 @@ def main(execution_date, **kwargs):
                 extracted_at=date_string,
                 delimiter="|",
             )
+
+
+def main(execution_date, **kwargs):
+    preprocess_littlepay_provider_bucket(
+        execution_date,
+        provider_name="mst",
+        src_url_template="gs://littlepay-data-extract-prod/mst/{table_name}/*.psv",
+    )
+
+    preprocess_littlepay_provider_bucket(
+        execution_date,
+        provider_name="sbmtd",
+    )
