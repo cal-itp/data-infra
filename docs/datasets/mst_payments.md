@@ -40,6 +40,7 @@ The payments_views is made of SQL queries that transform the loaded tables above
 * Alter `destination_project_dataset_table` and `source_objects` to match the new table name.
 * Edit `schema_fields` to be the columns in the new table. If you are unsure of a column type,
   specify it as "STRING".
+    * Keep a `calitp_extracted_at` column at the end of the table. This column contains the execution date of the load task, and is added automatically by the `preprocess_columns` task.
 * In the `calitp_included_payments_data` task,
     * add a row for this new table.
     * add a depedency in yaml header to this new table.

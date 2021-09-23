@@ -26,3 +26,5 @@ schema_fields:
     type: BOOL
   - name: zone_ids_us
     type: STRING
+  - name: calitp_extracted_at
+    type: DATE
