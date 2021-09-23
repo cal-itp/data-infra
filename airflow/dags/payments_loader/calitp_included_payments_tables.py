@@ -3,6 +3,7 @@
 # dependencies:
 #   - customer_funding_source
 #   - device_transactions
+#   - micropayment_adjustments
 #   - micropayment_device_transactions
 #   - micropayments
 # ---
@@ -18,6 +19,7 @@ def main():
             # required tables ----
             ("customer_funding_source", ".psv"),
             ("device_transactions", ".psv"),
+            ("micropayment_adjustments", ".psv"),
             ("micropayment_device_transactions", ".psv"),
             ("micropayments", ".psv"),
         ],
