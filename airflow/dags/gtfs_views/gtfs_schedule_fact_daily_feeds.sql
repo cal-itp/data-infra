@@ -61,8 +61,32 @@ feed_status AS (
             daily_feeds.calitp_itp_id = Status.itp_id
             AND daily_feeds.calitp_url_number = Status.url_number
             AND daily_feeds.date = Status.calitp_extracted_at
+),
+
+-- join in whether or not a feed updated on this day
+
+feed_updated AS (
+
+    SELECT
+        T1.*
+
+        -- Calculate days since update, by forward filling extracted at
+        , DATE_DIFF(
+            T1.date,
+            LAST_VALUE(T2.calitp_extracted_at IGNORE NULLS)
+                OVER (PARTITION BY T1.calitp_itp_id, T1.calitp_url_number ORDER BY T1.date),
+            DAY
+
+        ) AS days_from_last_schedule_update
+    FROM feed_status T1
+    LEFT JOIN `gtfs_schedule_history.calitp_feed_updates` T2
+        ON
+            T1.calitp_itp_id = T2.calitp_itp_id
+            AND T1.calitp_url_number = T2.calitp_url_number
+            AND T1.date = T2.calitp_extracted_at
+
 )
 
 SELECT
     * EXCEPT(calitp_itp_id, calitp_url_number)
-FROM feed_status
+FROM feed_updated
