@@ -19,7 +19,7 @@ schema_fields:
   - name: description
     type: STRING
   - name: amount
-    type: NUMERIC  # SHOULD WE CAP THE PRECISION/SCALE?
+    type: NUMERIC
   - name: time_period_type
     type: STRING  # Peak, Off Peak
   - name: applied
