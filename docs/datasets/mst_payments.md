@@ -9,6 +9,7 @@ Currently, Payments data is hosted by Littlepay, who exposes the "Littlepay Data
 | device_transactions | A list of every tap on the devices | * Cannot use for ridership stats because tap on / offs |
 | micropayments | A list of every charge to a card | * T-2 delays because of charing rules |
 | micropayments_devices_transactions | Join tables for two prior tables | |
+| micropayment_adjustments | A list of amounts deducted from the `nominal_amount` to arrive at the `charge_amount` for a micropayment | A micropayment can include multiple adjustments candidates, but only one should have `applied=true`. |
 
 ## Views
 
