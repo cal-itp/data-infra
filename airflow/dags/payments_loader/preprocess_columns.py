@@ -20,7 +20,10 @@ DATASET = "payments"
 # However, if we move to processing only the data for a given day each task,
 # we should change the SRC_DIR glob to use a datetime
 
-DEFAULT_SRC_URL_TEMPLATE = "gs://littlepay-data-extract-prod/{provider_name}/{provider_name}/{table_name}/*.psv"
+DEFAULT_SRC_URL_TEMPLATE = (
+    "gs://littlepay-data-extract-prod/{provider_name}/"
+    "{provider_name}/{table_name}/*.psv"
+)
 DEFAULT_STG_DIR_TEMPLATE = "{table_name}"
 DEFAULT_DST_DIR_TEMPLATE = "processed/{table_name}"
 
@@ -47,8 +50,12 @@ def preprocess_littlepay_provider_bucket(
     # process data for each table ----
 
     for table_name, columns in zip(tables.table_name, schemas):
-        stg_dir = stg_dir_template.format(provider_name=provider_name, table_name=table_name)
-        dst_dir = dst_dir_template.format(provider_name=provider_name, table_name=table_name)
+        stg_dir = stg_dir_template.format(
+            provider_name=provider_name, table_name=table_name
+        )
+        dst_dir = dst_dir_template.format(
+            provider_name=provider_name, table_name=table_name
+        )
         src_files = fs.glob(
             src_url_template.format(
                 provider_name=provider_name,
@@ -65,7 +72,10 @@ def preprocess_littlepay_provider_bucket(
         dst_old_files = fs.glob(dst_old_url)
 
         if dst_old_files:
-            print(f'Deleting {len(dst_old_files)} old file(s) for {provider_name} {table_name}.')
+            print(
+                f"Deleting {len(dst_old_files)} old file(s) for "
+                f"{provider_name} {table_name}."
+            )
             fs.rm(dst_old_files)
 
         # copy and process each file ----
@@ -95,7 +105,4 @@ def main(execution_date, **kwargs):
         src_url_template="gs://littlepay-data-extract-prod/mst/{table_name}/*.psv",
     )
 
-    preprocess_littlepay_provider_bucket(
-        execution_date,
-        provider_name="sbmtd",
-    )
+    preprocess_littlepay_provider_bucket(execution_date, provider_name="sbmtd")
