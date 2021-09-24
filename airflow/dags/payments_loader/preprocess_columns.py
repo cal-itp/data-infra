@@ -99,10 +99,5 @@ def preprocess_littlepay_provider_bucket(
 
 
 def main(execution_date, **kwargs):
-    preprocess_littlepay_provider_bucket(
-        execution_date,
-        provider_name="mst",
-        src_url_template="gs://littlepay-data-extract-prod/mst/{table_name}/*.psv",
-    )
-
+    preprocess_littlepay_provider_bucket(execution_date, provider_name="mst")
     preprocess_littlepay_provider_bucket(execution_date, provider_name="sbmtd")
