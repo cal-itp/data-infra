@@ -1,6 +1,6 @@
 operator: operators.ExternalTable
 source_objects:
-  - "processed/micropayments/*"
+  - "payments-processed/micropayments/*"
 destination_project_dataset_table: "payments.micropayments"
 skip_leading_rows: 1
 schema_fields:

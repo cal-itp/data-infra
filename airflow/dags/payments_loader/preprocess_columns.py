@@ -24,8 +24,8 @@ DEFAULT_SRC_URL_TEMPLATE = (
     "gs://littlepay-data-extract-prod/{provider_name}/"
     "{provider_name}/{table_name}/*.psv"
 )
-DEFAULT_STG_DIR_TEMPLATE = "{table_name}"
-DEFAULT_DST_DIR_TEMPLATE = "processed/{table_name}"
+DEFAULT_STG_DIR_TEMPLATE = "payments-staging/{table_name}"
+DEFAULT_DST_DIR_TEMPLATE = "payments-processed/{table_name}"
 
 
 def preprocess_littlepay_provider_bucket(
