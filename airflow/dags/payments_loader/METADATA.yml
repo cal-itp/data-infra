@@ -1,4 +1,4 @@
-description: "Update the MST Materialized View"
+description: "Update the Littlepay Ridership Materialized View"
 schedule_interval: "0 0 * * *"
 tags:
   - all_gusty_features
