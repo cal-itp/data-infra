@@ -34,11 +34,11 @@ device_transactions AS (
 )
 
 SELECT
-       t1.*,
-       t2.route_long_name,
-       t2.route_short_name
+    t1.*,
+    t2.route_long_name,
+    t2.route_short_name
 FROM device_transactions as t1
 LEFT JOIN gtfs_routes_with_participant t2
-    USING(participant_id, route_id)
+    USING (participant_id, route_id)
 WHERE
     transaction_outcome = 'allow'
