@@ -5,26 +5,40 @@ external_dependencies:
   - payments_loader: all
 ---
 
-SELECT participant_id,
-       littlepay_transaction_id,
-       device_id, type,
-       transaction_outcome,
-       transaction_date_time_utc,
-       DATETIME(TIMESTAMP(transaction_date_time_utc), "America/Los_Angeles") as transaction_date_time_pacific,
-       location_id,
-       location_name,
-       t1.route_id,
-       latitude,
-       longitude,
-       vehicle_id,
-       t2.route_long_name,
-       t2.route_short_name
-FROM `payments.device_transactions` as t1
- LEFT JOIN
-(SELECT route_id, route_short_name, route_long_name
-FROM `gtfs_schedule.routes`
-WHERE calitp_itp_id = 208) as t2
-ON  t1.route_id = t2.route_id
+WITH
+
+gtfs_routes_with_participant AS (
+    SELECT participant_id, route_id, route_short_name, route_long_name
+    FROM `gtfs_schedule.routes`
+    JOIN `views.payments_feeds` USING (calitp_itp_id, calitp_url_number)
+),
+
+device_transactions AS (
+    SELECT
+        participant_id,
+        littlepay_transaction_id,
+        device_id,
+        type,
+        transaction_outcome,
+        transaction_date_time_utc,
+        DATETIME(TIMESTAMP(transaction_date_time_utc), "America/Los_Angeles") as transaction_date_time_pacific,
+        location_id,
+        location_name,
+        route_id,
+        latitude,
+        longitude,
+        vehicle_id,
+
+    FROM `payments.device_transactions`
+
+)
+
+SELECT
+    t1.*,
+    t2.route_long_name,
+    t2.route_short_name
+FROM device_transactions as t1
+LEFT JOIN gtfs_routes_with_participant t2
+    USING (participant_id, route_id)
 WHERE
-transaction_outcome = 'allow' AND
-participant_id = 'mst'
+    transaction_outcome = 'allow'
