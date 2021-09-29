@@ -1,0 +1,56 @@
+# Introduction to YAML:     https://www.youtube.com/watch?v=cdLNKUoMc6c
+# Chart config reference:   https://zero-to-jupyterhub.readthedocs.io/en/stable/resources/reference.html
+# Chart default values:     https://github.com/jupyterhub/zero-to-jupyterhub-k8s/blob/HEAD/jupyterhub/values.yaml
+# Available chart versions: https://jupyterhub.github.io/helm-chart/
+
+jupyterhub:
+  singleuser:
+    defaultUrl: "/lab"
+    image:
+      name: ghcr.io/cal-itp/calitp-py
+      tag: test1
+    storage:
+      extraVolumes:
+      - name: gcloud-auth
+        projected:
+          sources:
+            - secret:
+                name: jupyterhub-gcloud-service-key
+      extraVolumeMounts:
+        - name: gcloud-auth
+          mountPath: /usr/local/secrets
+  hub:
+    db:
+      pvc:
+        storage: 8Gi
+    config:
+      GitHubOAuthenticator:
+        # client_id:     in existingSecret
+        # client_secret: in existingSecret
+        oauth_callback_url: https://hubtest.k8s.calitp.jarv.us/hub/oauth_callback
+        allowed_organizations:
+          - cal-itp:warehouse-users
+        scope:
+          - read:org
+      JupyterHub:
+        authenticator_class: github
+        Authenticator:
+          admin_users:
+            - ccjarvus
+            - machow
+    # holds github OAuth creds
+    existingSecret: jupyterhub-github-config
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - hubtest.k8s.calitp.jarv.us
+    tls:
+      - secretName: jupyterhub-tls
+        hosts:
+          - hubtest.k8s.calitp.jarv.us
+  proxy:
+    service:
+      type: ClusterIP
