@@ -5,8 +5,7 @@ tags:
 default_args:
     owner: airflow
     depends_on_past: False
-      #start_date: "2021-07-09"
-    start_date: "2021-09-20"
+    start_date: "2021-07-09"
     email:
       - "hunter.owens@dot.ca.gov"
       - "michael.c@jarv.us"
