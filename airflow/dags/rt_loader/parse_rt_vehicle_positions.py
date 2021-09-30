@@ -2,6 +2,8 @@
 # python_callable: main
 # provide_context: true
 #
+# task_concurrency: 4
+#
 # dependencies:
 #   - load_vehicle_positions
 #
@@ -103,13 +105,12 @@ def rectangle_positions(x):
         return None
 
 
-def fetch_bucket_file_names(iso_date):
+def fetch_bucket_file_names(iso_date, fs):
     # posix_date = str(time.mktime(execution_date.timetuple()))[:6]
 
     # get rt files
     print("Globbing rt bucket...")
     print(SRC_PATH + iso_date + "*")
-    fs = get_fs()
     rt = fs.glob(SRC_PATH + iso_date + "*")
 
     buckets_to_parse = len(rt)
@@ -135,13 +136,17 @@ def fetch_bucket_file_names(iso_date):
 
 
 def main(execution_date, **kwargs):
-
     iso_date = str(execution_date).split("T")[0]
 
-    feed_files = fetch_bucket_file_names(iso_date)
-
+    # fetch files ----
+    # for some reason the fs.glob command takes up a fair amount of memory here,
+    # and does not seem to free it after the function returns, so we manually clear
+    # its caches (at lest the ones I could find)
     fs = get_fs()
-    pool = ThreadPoolExecutor(N_THREADS)
+    feed_files = fetch_bucket_file_names(iso_date, fs)
+    fs.dircache.clear()
+
+    # parse feeds ----
     for feed, files in feed_files.items():
         itp_id_url_num = "_".join(map(str, feed))
         file_name = f"vp_{iso_date}_{itp_id_url_num}.parquet"
@@ -150,9 +155,11 @@ def main(execution_date, **kwargs):
 
         if len(files) > 0:
             # partial parse_pb for running async
-            parsed_positions = list(
-                pool.map(lambda f: parse_pb(f, open_with=fs.open), files)
-            )
+            with ThreadPoolExecutor(N_THREADS) as pool:
+                parsed_positions = list(
+                    pool.map(lambda f: parse_pb(f, open_with=fs.open), files)
+                )
+
             positions_dfs = [*map(rectangle_positions, parsed_positions)]
             positions_dfs = [df for df in positions_dfs if df is not None]
 
