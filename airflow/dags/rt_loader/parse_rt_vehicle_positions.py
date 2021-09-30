@@ -18,14 +18,18 @@ from concurrent.futures import ThreadPoolExecutor
 import pandas as pd
 import tempfile
 
-N_THREADS = 30
+
+N_THREADS = 50
+
+SRC_PATH = "gs://gtfs-data/rt/"
+DST_PATH = "gtfs-data/rt-processed/vehicle_positions/"
 
 
 def parse_pb(path, open_with=None):
     """
     Convert pb file to Python dictionary
     """
-    print(f"parsing {path}")
+
     open_func = open_with if open_with is not None else open
     feed = gtfs_realtime_pb2.FeedMessage()
     try:
@@ -86,8 +90,6 @@ def rectangle_positions(x):
     Create a vehicle positions dataframe from parsed pb files
     """
 
-    print("rectangling")
-
     header_details = get_header_details(x)
     entity_details = get_entity_details(x)
     if len(entity_details) > 0:
@@ -100,14 +102,13 @@ def rectangle_positions(x):
 
 
 def fetch_bucket_file_names(iso_date):
-    rt_bucket = "gs://gtfs-data/rt/"
     # posix_date = str(time.mktime(execution_date.timetuple()))[:6]
 
     # get rt files
     print("Globbing rt bucket...")
-    print(rt_bucket + iso_date + "*")
+    print(SRC_PATH + iso_date + "*")
     fs = get_fs()
-    rt = fs.glob(rt_bucket + iso_date + "*")
+    rt = fs.glob(SRC_PATH + iso_date + "*")
 
     buckets_to_parse = len(rt)
     print("Realtime buckets to parse: {i}".format(i=buckets_to_parse))
@@ -139,7 +140,6 @@ def fetch_bucket_file_names(iso_date):
 
 
 def main(execution_date, **kwargs):
-    destination_bucket = "gtfs-data/rt-processed/vehicle_positions/"
 
     iso_date = str(execution_date).split("T")[0]
 
@@ -164,8 +164,8 @@ def main(execution_date, **kwargs):
             if len(positions_dfs) > 0:
                 positions_rectangle = pd.concat(positions_dfs)
                 with tempfile.TemporaryDirectory() as tmpdirname:
-                    fname = tmpdirname + "/" + "IDK" + ".parquet"
+                    fname = tmpdirname + "/" + "temporary" + ".parquet"
                     positions_rectangle.to_parquet(fname, index=False)
                     fs.put(
-                        fname, destination_bucket + file_name,
+                        fname, DST_PATH + file_name,
                     )
