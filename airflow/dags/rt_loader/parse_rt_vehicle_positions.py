@@ -14,6 +14,8 @@ from google.protobuf import json_format
 from google.protobuf.message import DecodeError
 from calitp.storage import get_fs
 from concurrent.futures import ThreadPoolExecutor
+from collections import defaultdict
+
 
 import pandas as pd
 import tempfile
@@ -122,18 +124,11 @@ def fetch_bucket_file_names(iso_date):
         item for sublist in rt_files for item in sublist if "vehicle_positions" in item
     ]
 
-    feed_files = {
-        "{itpId}_{urlNumber}".format(
-            itpId=i.split("/")[-3], urlNumber=i.split("/")[-2]
-        ): []
-        for i in vp_files
-    }
+    feed_files = defaultdict(lambda: [])
 
-    for f in vp_files:
-        id = "{itpId}_{urlNumber}".format(
-            itpId=f.split("/")[-3], urlNumber=f.split("/")[-2]
-        )
-        feed_files[id].append(f)
+    for fname in vp_files:
+        itpId, urlNumber = fname.split("/")[-3:-1]
+        feed_files[(itpId, urlNumber)].append(fname)
 
     # Now our feed files dict has a key of itpId_urlNumber and a list of files to parse
     return feed_files
@@ -148,7 +143,8 @@ def main(execution_date, **kwargs):
     fs = get_fs()
     pool = ThreadPoolExecutor(N_THREADS)
     for feed, files in feed_files.items():
-        file_name = "vp_{date}_{feed}.parquet".format(date=iso_date, feed=feed)
+        itp_id_url_num = "_".join(map(str, feed))
+        file_name = f"vp_{iso_date}_{itp_id_url_num}.parquet"
         print("Creating " + file_name)
         print("  parsing %s files" % len(files))
 
@@ -163,6 +159,9 @@ def main(execution_date, **kwargs):
             print("  %s positions sub dataframes created" % len(positions_dfs))
             if len(positions_dfs) > 0:
                 positions_rectangle = pd.concat(positions_dfs)
+                positions_rectangle.insert(0, "calitp_itp_id", feed[0])
+                positions_rectangle.insert(1, "calitp_url_number", feed[1])
+
                 with tempfile.TemporaryDirectory() as tmpdirname:
                     fname = tmpdirname + "/" + "temporary" + ".parquet"
                     positions_rectangle.to_parquet(fname, index=False)
