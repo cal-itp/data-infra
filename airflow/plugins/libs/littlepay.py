@@ -1,11 +1,3 @@
-# ---
-# python_callable: main
-# provide_context: true
-# dependencies:
-#   - calitp_included_payments_tables
-# ---
-
-
 from calitp.config import get_bucket
 from calitp.storage import get_fs
 from calitp.sql import get_table
@@ -21,8 +13,7 @@ DATASET = "payments"
 # we should change the SRC_DIR glob to use a datetime
 
 DEFAULT_SRC_URL_TEMPLATE = (
-    "gs://littlepay-data-extract-prod/{provider_name}/"
-    "{provider_name}/{table_name}/*.psv"
+    "gs://littlepay-data-extract-prod/{aws_user}/{aws_user}/{table_name}/*.psv"
 )
 DEFAULT_STG_DIR_TEMPLATE = "payments-staging/{table_name}"
 DEFAULT_DST_DIR_TEMPLATE = "payments-processed/{table_name}"
@@ -30,7 +21,7 @@ DEFAULT_DST_DIR_TEMPLATE = "payments-processed/{table_name}"
 
 def preprocess_littlepay_provider_bucket(
     execution_date,
-    provider_name,
+    aws_user,
     src_url_template=DEFAULT_SRC_URL_TEMPLATE,
     stg_dir_template=DEFAULT_STG_DIR_TEMPLATE,
     dst_dir_template=DEFAULT_DST_DIR_TEMPLATE,
@@ -50,15 +41,11 @@ def preprocess_littlepay_provider_bucket(
     # process data for each table ----
 
     for table_name, columns in zip(tables.table_name, schemas):
-        stg_dir = stg_dir_template.format(
-            provider_name=provider_name, table_name=table_name
-        )
-        dst_dir = dst_dir_template.format(
-            provider_name=provider_name, table_name=table_name
-        )
+        stg_dir = stg_dir_template.format(aws_user=aws_user, table_name=table_name)
+        dst_dir = dst_dir_template.format(aws_user=aws_user, table_name=table_name)
         src_files = fs.glob(
             src_url_template.format(
-                provider_name=provider_name,
+                aws_user=aws_user,
                 table_name=table_name.replace("_", "-"),
                 date_string_narrow=date_string_narrow,
             )
@@ -68,13 +55,13 @@ def preprocess_littlepay_provider_bucket(
 
         # remove previously processed data, in case they remove any data files ---
 
-        dst_old_url = f"{get_bucket()}/{dst_dir}/*_{provider_name}_*"
+        dst_old_url = f"{get_bucket()}/{dst_dir}/*_{aws_user}_*"
         dst_old_files = fs.glob(dst_old_url)
 
         if dst_old_files:
             print(
                 f"Deleting {len(dst_old_files)} old file(s) for "
-                f"{provider_name} {table_name}."
+                f"{aws_user} {table_name}."
             )
             fs.rm(dst_old_files)
 
@@ -83,8 +70,8 @@ def preprocess_littlepay_provider_bucket(
         for fname in src_files:
             basename = fname.split("/")[-1]
 
-            stg_fname = f"{stg_dir}/{provider_name}_{basename}"
-            dst_fname = f"{dst_dir}/{date_string}_{provider_name}_{basename}"
+            stg_fname = f"{stg_dir}/{aws_user}_{basename}"
+            dst_fname = f"{dst_dir}/{date_string}_{aws_user}_{basename}"
 
             print(f"copying from payments bucket: {stg_fname} -> {dst_fname}")
             fs.cp(fname, f"{get_bucket()}/{stg_fname}")
@@ -96,8 +83,3 @@ def preprocess_littlepay_provider_bucket(
                 extracted_at=date_string,
                 delimiter="|",
             )
-
-
-def main(execution_date, **kwargs):
-    preprocess_littlepay_provider_bucket(execution_date, provider_name="mst")
-    preprocess_littlepay_provider_bucket(execution_date, provider_name="sbmtd")
