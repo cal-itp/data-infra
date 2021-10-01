@@ -15,11 +15,8 @@ FROM UNNEST(
 
         (208, 0, 'mst'),
         (293, 0, 'sbmtd'),
-
-        -- TODO: we need to double check the participant_ids below once we ingest
-        -- their data
         (273, 0, 'sacrt'),
-        (296, 0, 'scmtd')
+        (473, 0, 'clean-air-express')
 
     ]
     )
