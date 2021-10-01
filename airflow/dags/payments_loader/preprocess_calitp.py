@@ -10,4 +10,4 @@ from libs.littlepay import preprocess_littlepay_provider_bucket
 
 
 def main(execution_date, **kwargs):
-    preprocess_littlepay_provider_bucket(execution_date, provider_name="cal-itp")
+    preprocess_littlepay_provider_bucket(execution_date, aws_user="cal-itp")
