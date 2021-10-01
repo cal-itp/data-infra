@@ -18,6 +18,7 @@ def main():
         [
             # required tables ----
             ("customer_funding_source", ".psv"),
+            ("device_transaction_purchases", ".psv"),
             ("device_transactions", ".psv"),
             ("micropayment_adjustments", ".psv"),
             ("micropayment_device_transactions", ".psv"),
