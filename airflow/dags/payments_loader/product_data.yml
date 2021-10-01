@@ -1,7 +1,7 @@
 operator: operators.ExternalTable
 source_objects:
-  - "payments-processed/productdata/*"
-destination_project_dataset_table: "payments.productdata"
+  - "payments-processed/product_data/*"
+destination_project_dataset_table: "payments.product_data"
 skip_leading_rows: 1
 schema_fields:
   - name: participant_id

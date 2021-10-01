@@ -8,7 +8,7 @@
 #   - micropayment_adjustments
 #   - micropayment_device_transactions
 #   - micropayments
-#   - productdata
+#   - product_data
 #   - refunds
 #   - settlements
 # ---
@@ -29,7 +29,7 @@ def main():
             ("micropayment_adjustments", ".psv"),
             ("micropayment_device_transactions", ".psv"),
             ("micropayments", ".psv"),
-            ("productdata", ".psv"),
+            ("product_data", ".psv"),
             ("refunds", ".psv"),
             ("settlements", ".psv"),
         ],
