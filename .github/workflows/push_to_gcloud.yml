@@ -32,19 +32,51 @@ jobs:
           './airflow/data/agencies.filled.yml' \
           './airflow/data/schema_agencies_entry.yml'
 
-    # The following only runs on the main branch ----
-
     - uses: google-github-actions/setup-gcloud@master
-      if: ${{ github.ref == 'refs/heads/main' }}
       with:
         service_account_key: ${{ secrets.GCP_SA_KEY }}
         export_default_credentials: true
-    - name: Push to google cloud
+
+    - name: Setup kubeconfig
+      env:
+        CLOUDSDK_CORE_PROJECT: cal-itp-data-infra
+      run: |
+        source "$GITHUB_WORKSPACE/kubernetes/gke/config-cluster.sh"
+        gcloud container clusters get-credentials "$GKE_NAME" --region "$GKE_REGION"
+
+    # push to prod services when merging into main branch
+    - name: Push agencies data to google cloud and prod services
       if: ${{ github.ref == 'refs/heads/main' }}
       run: |
         gsutil -m rsync -d -c -r airflow/dags gs://us-west2-calitp-airflow-pro-332827a9-bucket/dags
         gsutil -m rsync -d -c -r airflow/plugins gs://us-west2-calitp-airflow-pro-332827a9-bucket/plugins
         gsutil -m rsync -d -c -r airflow/data gs://us-west2-calitp-airflow-pro-332827a9-bucket/data
-        # replace agencies.yml with filled in template
+        # replace agencies.yml with filled in template for airflow
         gsutil -m cp airflow/data/agencies.yml gs://us-west2-calitp-airflow-pro-332827a9-bucket/data/agencies_raw.yml
         gsutil -m cp airflow/data/agencies.filled.yml gs://us-west2-calitp-airflow-pro-332827a9-bucket/data/agencies.yml
+        # replace agencies.yml with filled in template for gtfs rt extract service
+        kubectl apply -f - <<EOF
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: agencies-data
+          namespace: gtfs-rt
+        data:
+          data_agencies.yaml: $(base64 -w0 airflow/data/agencies.filled.yml)
+        EOF
+        kubectl -n gtfs-rt rollout restart deployments/gtfs-rt-archive
+
+    # push to preprod services when merging to other branches
+    - name: Push agencies data to preprod services
+      if: ${{ github.ref != 'refs/heads/main' }}
+      run: |
+        kubectl apply -f - <<EOF
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: agencies-data
+          namespace: gtfs-rt-preprod
+        data:
+          data_agencies.yaml: $(base64 -w0 airflow/data/agencies.filled.yml)
+        EOF
+        kubectl -n gtfs-rt-preprod rollout restart deployments/gtfs-rt-archive
