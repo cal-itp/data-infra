@@ -35,7 +35,7 @@ def main():
     print("fetching timestamp files to rename")
 
     # fetching may take 5 minutes or more, so we poll / log that we're waiting
-    all_fnames = poll_task(lambda: fs.glob("gs://gtfs-data/rt/1*"), 8 * 60)
+    all_fnames = poll_task(lambda: fs.glob("gs://gtfs-data/rt/1*", use_listings_cache=False), 8 * 60)
 
     def move(entry):
         print("moving: %s" % str(entry))
