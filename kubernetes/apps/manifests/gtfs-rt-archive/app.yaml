@@ -7,6 +7,8 @@ metadata:
     name: gtfs-rt-archive
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       name: gtfs-rt-archive
