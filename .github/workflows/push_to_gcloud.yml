@@ -51,9 +51,10 @@ jobs:
         gsutil -m rsync -d -c -r airflow/dags gs://us-west2-calitp-airflow-pro-332827a9-bucket/dags
         gsutil -m rsync -d -c -r airflow/plugins gs://us-west2-calitp-airflow-pro-332827a9-bucket/plugins
         gsutil -m rsync -d -c -r airflow/data gs://us-west2-calitp-airflow-pro-332827a9-bucket/data
-        # replace agencies.yml with filled in template
+        # replace agencies.yml with filled in template for airflow
         gsutil -m cp airflow/data/agencies.yml gs://us-west2-calitp-airflow-pro-332827a9-bucket/data/agencies_raw.yml
         gsutil -m cp airflow/data/agencies.filled.yml gs://us-west2-calitp-airflow-pro-332827a9-bucket/data/agencies.yml
+        # replace agencies.yml with filled in template for gtfs rt extract service
         kubectl apply -f - <<EOF
         apiVersion: v1
         kind: Secret
