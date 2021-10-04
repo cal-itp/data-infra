@@ -19,6 +19,9 @@ jupyterhub:
       extraVolumeMounts:
         - name: gcloud-auth
           mountPath: /usr/local/secrets
+  scheduling:
+    userScheduler:
+      enabled: false
   hub:
     db:
       pvc:
