@@ -14,5 +14,5 @@ GKE_NODEPOOL_NODE_LOCATIONS=(
 
 declare -A GKE_NODEPOOL_MACHINE_TYPES
 GKE_NODEPOOL_MACHINE_TYPES=(
-  ['default-pool']=n1-standard-4
+  ['default-pool']=e2-medium
 )
