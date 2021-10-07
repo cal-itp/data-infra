@@ -65,5 +65,5 @@ interp_daily_files AS (
             AND COALESCE(Files.tmp_next_date, "2099-01-01") > D.full_date
 )
 
--- SELECT * FROM interp_daily_files
-SELECT * FROM raw_daily_files
+SELECT * FROM interp_daily_files
+-- SELECT * FROM raw_daily_files
