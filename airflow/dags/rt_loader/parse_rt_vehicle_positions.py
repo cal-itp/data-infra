@@ -2,7 +2,7 @@
 # python_callable: main
 # provide_context: true
 #
-# task_concurrency: 1
+# task_concurrency: 3
 #
 # dependencies:
 #   - load_vehicle_positions
