@@ -3,6 +3,24 @@ operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.sbmtd_transactions"
 external_dependencies:
   - payments_loader: all
+
+fields:
+  littlepay_transaction_id: "From payments.device_transactions.littlepay_transaction_id"
+  micropayment_id: "From payments.micropayments.micropayment_id"
+  customer_id: "From payments.device_transactions.customer_id"
+  location_name: "From payments.device_transactions.location_name"
+  location_id: "From payments.device_transactions.location_id"
+  is_shared_stop: "True if more than one route is served by the stop; else false"
+  all_route_ids: "Comma-separated list of routes served by the stop"
+  likely_route_name: "Name of the route that the transaction most likely performed on, based on the routes served by the stop and the routes that are part of the demonstration"
+  likely_route_id:  "ID of the route that the transaction most likely performed on, based on the routes served by the stop and the routes that are part of the demonstration"
+  vehicle_id: "From payments.device_transactions.vehicle_id"
+  transaction_date_time_utc: "From payments.device_transactions.transaction_date_time_utc"
+
+tests:
+  check_unique:
+    - littlepay_transaction_id
+    - micropayment_id
 ---
 
 with
