@@ -53,6 +53,10 @@ docker-compose run airflow dags trigger <dag_id>
 
 Additional reading about this setup can be found on the [Airflow Docs](https://airflow.apache.org/docs/apache-airflow/stable/start/docker.html)
 
+### Common Issues
+
+* `docker-compose up` exits with code 137 - Check that your docker has enough RAM (e.g. 8Gbs). See [this post](https://stackoverflow.com/questions/44533319/how-to-assign-more-memory-to-docker-container) on how to increase its resources.
+
 ## Deploying to production
 
 All gcs assets are under the project `cal-itp-data-infra`. All assets should be using the `us-west-2` region.
