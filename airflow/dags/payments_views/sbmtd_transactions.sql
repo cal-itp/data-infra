@@ -14,9 +14,9 @@ route_stops as (
     select distinct
         route_id,
         stop_id
-    from `cal-itp-data-infra.gtfs_schedule.stop_times` as st
-    join `cal-itp-data-infra.gtfs_schedule.trips` as t using (calitp_itp_id, trip_id)
-    join `cal-itp-data-infra.gtfs_schedule.routes` as r using (calitp_itp_id, route_id)
+    from gtfs_schedule.stop_times as st
+    join gtfs_schedule.trips as t using (calitp_itp_id, trip_id)
+    join gtfs_schedule.routes as r using (calitp_itp_id, route_id)
     where calitp_itp_id = 293
 ),
 
@@ -59,10 +59,10 @@ transactions as (
         dt.latitude,
         dt.longitude,
         dt.transaction_date_time_utc
-    from `cal-itp-data-infra.payments.micropayments` as m
-    join `cal-itp-data-infra.payments.micropayment_device_transactions` using (micropayment_id)
-    join `cal-itp-data-infra.payments.device_transactions` as dt using (littlepay_transaction_id, customer_id, participant_id)
-    join `cal-itp-data-infra.gtfs_schedule.stops` as s on (s.stop_id = dt.location_id)
+    from payments.micropayments as m
+    join payments.micropayment_device_transactions using (micropayment_id)
+    join payments.device_transactions as dt using (littlepay_transaction_id, customer_id, participant_id)
+    join gtfs_schedule.stops as s on (s.stop_id = dt.location_id)
     join stop_stats as stat using (stop_id)
     where participant_id = 'sbmtd'
     and s.calitp_itp_id = 293
@@ -81,6 +81,6 @@ select
     t.vehicle_id,
     t.transaction_date_time_utc
 from transactions as t
-left join `cal-itp-data-infra.gtfs_schedule.routes` as r
+left join gtfs_schedule.routes as r
     on r.calitp_itp_id = 293 and r.route_id = t.likely_route_id
 order by t.likely_route_id nulls last
