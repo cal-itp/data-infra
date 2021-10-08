@@ -27,6 +27,8 @@ Second, ensure you have a default authentication file, by [installing google sdk
 unset GOOGLE_APPLICATION_CREDENTIALS
 gcloud init
 
+# When selecting the project, pick `cal-itp-data-infra`
+
 # may also need to run...
 # gcloud auth application-default login
 ```
