@@ -21,9 +21,9 @@ dst_table_name: "views.dim_date"
 
 # Column descriptions to put into warehouse
 fields:
-  - id: The ID Column
-  - full_date: The full date (e.g. "2021-01-01")
-  - year: The year component (e.g. 2021)
+  id: The ID Column
+  full_date: The full date (e.g. "2021-01-01")
+  year: The year component (e.g. 2021)
 
 # Specify tests to run over the data
 # e.g. check_null to verify a column contains no nulls
