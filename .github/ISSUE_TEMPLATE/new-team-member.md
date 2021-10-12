@@ -1,6 +1,6 @@
 ---
 name: New Team Member
-about: Create an issue from this template to kickoff the oboarding process.
+about: Kick off the onboarding process.
 title: New Team Member - [Name]
 labels: ''
 assignees: charlie-costanzo
