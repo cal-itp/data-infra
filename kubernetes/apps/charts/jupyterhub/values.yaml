@@ -8,7 +8,7 @@ jupyterhub:
     defaultUrl: "/lab"
     image:
       name: ghcr.io/cal-itp/calitp-py
-      tag: test1
+      tag: v0.0.6
     storage:
       extraVolumes:
       - name: gcloud-auth
@@ -39,8 +39,9 @@ jupyterhub:
         authenticator_class: github
         Authenticator:
           admin_users:
-            - ccjarvus
             - machow
+            - themightchris
+            - lottspot
     # holds github OAuth creds
     existingSecret: jupyterhub-github-config
   ingress:
