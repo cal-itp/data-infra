@@ -9,21 +9,21 @@
       
       
       
-        <link rel="canonical" href="https://docs.calitp.org/data-infra/">
+        <link rel="canonical" href="https://docs.calitp.org/data-infra/warehouse/02_views/">
       
-      <link rel="icon" href="assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.3.2">
     
     
       
-        <title>Juniper Documentation</title>
+        <title>Creating New Tables (Views) - Juniper Documentation</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.24c991ad.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.24c991ad.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.3f5d1f46.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
         
       
     
@@ -70,7 +70,7 @@
     <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="amber" data-md-color-accent="blue">
   
     
-    <script>function __prefix(e){return new URL(".",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
     
       <script>var palette=__get("__palette");if(null!==palette&&"object"==typeof palette.color)for(var key in palette.color)document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#welcome" class="md-skip">
+        <a href="#creating-new-tables-views" class="md-skip">
           Skip to content
         </a>
       
@@ -93,7 +93,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="Juniper Documentation" class="md-header__button md-logo" aria-label="Juniper Documentation" data-md-component="logo">
+    <a href="../.." title="Juniper Documentation" class="md-header__button md-logo" aria-label="Juniper Documentation" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Welcome
+              Creating New Tables (Views)
             
           </span>
         </div>
@@ -208,12 +208,10 @@
         
   
   
-    
-  
 
 
   <li class="md-tabs__item">
-    <a href="." class="md-tabs__link md-tabs__link--active">
+    <a href="../.." class="md-tabs__link">
       Welcome
     </a>
   </li>
@@ -228,7 +226,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="datasets/01_overview/" class="md-tabs__link">
+      <a href="../../datasets/01_overview/" class="md-tabs__link">
         Datasets
       </a>
     </li>
@@ -244,7 +242,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="kubernetes/" class="md-tabs__link">
+      <a href="../../kubernetes/" class="md-tabs__link">
         Kubernetes
       </a>
     </li>
@@ -260,7 +258,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="services/gtfs-ckan-uploader/" class="md-tabs__link">
+      <a href="../../services/gtfs-ckan-uploader/" class="md-tabs__link">
         Services
       </a>
     </li>
@@ -270,13 +268,15 @@
         
   
   
+    
+  
 
 
   
   
   
     <li class="md-tabs__item">
-      <a href="warehouse/01_agencies/" class="md-tabs__link">
+      <a href="../01_agencies/" class="md-tabs__link md-tabs__link--active">
         Warehouse
       </a>
     </li>
@@ -304,7 +304,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="Juniper Documentation" class="md-nav__button md-logo" aria-label="Juniper Documentation" data-md-component="logo">
+    <a href="../.." title="Juniper Documentation" class="md-nav__button md-logo" aria-label="Juniper Documentation" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
@@ -334,58 +334,11 @@
 
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Welcome
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="." class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
         Welcome
       </a>
-      
-        
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#editing-documentation" class="md-nav__link">
-    Editing documentation
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#documentation-features" class="md-nav__link">
-    Documentation features
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -424,7 +377,7 @@
   
   
     <li class="md-nav__item">
-      <a href="datasets/01_overview/" class="md-nav__link">
+      <a href="../../datasets/01_overview/" class="md-nav__link">
         Overview
       </a>
     </li>
@@ -438,7 +391,7 @@
   
   
     <li class="md-nav__item">
-      <a href="datasets/gtfs_schedule/" class="md-nav__link">
+      <a href="../../datasets/gtfs_schedule/" class="md-nav__link">
         GTFS Schedule
       </a>
     </li>
@@ -452,7 +405,7 @@
   
   
     <li class="md-nav__item">
-      <a href="datasets/mst_payments/" class="md-nav__link">
+      <a href="../../datasets/mst_payments/" class="md-nav__link">
         MST Payments
       </a>
     </li>
@@ -466,7 +419,7 @@
   
   
     <li class="md-nav__item">
-      <a href="datasets/transitstacks/" class="md-nav__link">
+      <a href="../../datasets/transitstacks/" class="md-nav__link">
         Transitstacks
       </a>
     </li>
@@ -480,7 +433,7 @@
   
   
     <li class="md-nav__item">
-      <a href="datasets/views/" class="md-nav__link">
+      <a href="../../datasets/views/" class="md-nav__link">
         Views
       </a>
     </li>
@@ -528,7 +481,7 @@
   
   
     <li class="md-nav__item">
-      <a href="kubernetes/" class="md-nav__link">
+      <a href="../../kubernetes/" class="md-nav__link">
         kubernetes #
       </a>
     </li>
@@ -576,7 +529,7 @@
   
   
     <li class="md-nav__item">
-      <a href="services/gtfs-ckan-uploader/" class="md-nav__link">
+      <a href="../../services/gtfs-ckan-uploader/" class="md-nav__link">
         GTFS CKAN Uploader
       </a>
     </li>
@@ -590,7 +543,7 @@
   
   
     <li class="md-nav__item">
-      <a href="services/gtfs-rt-archive/" class="md-nav__link">
+      <a href="../../services/gtfs-rt-archive/" class="md-nav__link">
         gtfs-rt-archive
       </a>
     </li>
@@ -610,12 +563,14 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
       
       
       
@@ -638,7 +593,7 @@
   
   
     <li class="md-nav__item">
-      <a href="warehouse/01_agencies/" class="md-nav__link">
+      <a href="../01_agencies/" class="md-nav__link">
         Agency GTFS Feeds
       </a>
     </li>
@@ -650,11 +605,65 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="warehouse/02_views/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Creating New Tables (Views)
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Creating New Tables (Views)
       </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#syntax-overview" class="md-nav__link">
+    Syntax overview
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-changes" class="md-nav__link">
+    Testing Changes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#walkthrough" class="md-nav__link">
+    Walkthrough
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -666,7 +675,7 @@
   
   
     <li class="md-nav__item">
-      <a href="warehouse/03_metrics/" class="md-nav__link">
+      <a href="../03_metrics/" class="md-nav__link">
         Metric Views
       </a>
     </li>
@@ -680,7 +689,7 @@
   
   
     <li class="md-nav__item">
-      <a href="warehouse/04_sql_snippets/" class="md-nav__link">
+      <a href="../04_sql_snippets/" class="md-nav__link">
         SQL Snippets
       </a>
     </li>
@@ -694,7 +703,7 @@
   
   
     <li class="md-nav__item">
-      <a href="warehouse/05_using_metabase/" class="md-nav__link">
+      <a href="../05_using_metabase/" class="md-nav__link">
         Using Metabase
       </a>
     </li>
@@ -708,7 +717,7 @@
   
   
     <li class="md-nav__item">
-      <a href="warehouse/table_names/" class="md-nav__link">
+      <a href="../table_names/" class="md-nav__link">
         Table names
       </a>
     </li>
@@ -748,15 +757,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#editing-documentation" class="md-nav__link">
-    Editing documentation
+  <a href="#syntax-overview" class="md-nav__link">
+    Syntax overview
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#documentation-features" class="md-nav__link">
-    Documentation features
+  <a href="#testing-changes" class="md-nav__link">
+    Testing Changes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#walkthrough" class="md-nav__link">
+    Walkthrough
   </a>
   
 </li>
@@ -773,37 +789,85 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/cal-itp/data-infra/edit/main/docs/README.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/cal-itp/data-infra/edit/main/docs/warehouse/02_views.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
                 
-                <h1 id="welcome">Welcome<a class="headerlink" href="#welcome" title="Permanent link"> ¶</a></h1>
-<p>This website provides technical documentation for the Juniper codebase.</p>
-<p>Documentation for the <code>main</code> branch is available online at: <a href="https://docs.calitp.org/data-infra">https://docs.calitp.org/data-infra</a></p>
-<h2 id="editing-documentation">Editing documentation<a class="headerlink" href="#editing-documentation" title="Permanent link"> ¶</a></h2>
-<p>The docs content all lives under <code>docs/</code>, with some top-level configuration for how the docs website gets built under <code>mkdocs.yml</code>. To add new sections/articles, simply create new directories/files under <code>docs/</code> in Markdown format.</p>
-<p>To preview the rendered docs website live while you work, run <code>script/docs-server</code> from your terminal (requires Python 3.5+).</p>
-<p>Changes to docs will be published to the online docs website automatically after they are merged into the <code>main</code> branch.</p>
-<h2 id="documentation-features">Documentation features<a class="headerlink" href="#documentation-features" title="Permanent link"> ¶</a></h2>
-<ul>
-<li>
-<p><a href="https://squidfunk.github.io/mkdocs-material/reference/admonitions/">Material for MkDocs: Reference</a></p>
-<p>See <code>mkdocs.yml</code> for enabled plugins/features</p>
-</li>
-<li>
-<p><a href="https://mermaid-js.github.io/mermaid/">Mermaid</a></p>
-<p>Use code fences with <code>mermaid</code> type to render Mermaid diagrams within docs. For example, this markdown:</p>
-<div class="highlight"><pre><span></span><code><span class="sb">```mermaid</span>
-<span class="s">graph LR</span>
-<span class="s">    Start --&gt; Stop</span>
-<span class="sb">```</span>
+                <h1 id="creating-new-tables-views">Creating New Tables (Views)<a class="headerlink" href="#creating-new-tables-views" title="Permanent link"> ¶</a></h1>
+<table>
+<thead>
+<tr>
+<th>operator</th>
+<th>description</th>
+<th>example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CsvToWarehouseOperator</td>
+<td>Load a CSV (or google sheet) from a URL</td>
+<td><a href="https://github.com/cal-itp/data-infra/blob/main/airflow/dags/transitstacks_loader/fares.yml"><code>transitstacks.fares</code></a></td>
+</tr>
+<tr>
+<td>PythonToWarehouseOperator</td>
+<td>Load data using python and the calitp library. This is a very flexible approach. It&rsquo;s useful when you want to do a small amount of processing before loading.</td>
+<td><a href="https://github.com/cal-itp/data-infra/blob/main/airflow/dags/gtfs_views/validation_code_descriptions.py"><code>views.validation_code_descriptions</code></a></td>
+</tr>
+<tr>
+<td>SqlToWarehouseOperator</td>
+<td>Create a new table from a SQL query.</td>
+<td><a href="https://github.com/cal-itp/data-infra/blob/main/airflow/dags/gtfs_views/transitstacks.yml"><code>views.transitstacks</code></a></td>
+</tr>
+<tr>
+<td>SqlQueryOperator</td>
+<td>Run arbitrary SQL (e.g. <code>CREATE EXTERNAL TABLE ...</code>)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="syntax-overview">Syntax overview<a class="headerlink" href="#syntax-overview" title="Permanent link"> ¶</a></h2>
+<p>Below is a file similar to the one used to create <code>views.transitstacks</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># What operator to use. This determines the options available, and how the</span>
+<span class="c1"># pipeline executes this task.</span>
+<span class="nt">operator</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">operators.SqlToWarehouseOperator</span>
+
+<span class="c1"># Name of the table to load into the warehouse</span>
+<span class="nt">dst_table_name</span><span class="p">:</span> <span class="s">&quot;views.dim_date&quot;</span>
+
+<span class="c1"># Column descriptions to put into warehouse</span>
+<span class="nt">fields</span><span class="p">:</span>
+  <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The ID Column</span>
+  <span class="nt">full_date</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The full date (e.g. &quot;2021-01-01&quot;)</span>
+  <span class="nt">year</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The year component (e.g. 2021)</span>
+
+<span class="c1"># Specify tests to run over the data</span>
+<span class="c1"># e.g. check_null to verify a column contains no nulls</span>
+<span class="c1"># e.g. check_unique to verify no duplicate values in a column</span>
+<span class="nt">tests</span><span class="p">:</span>
+  <span class="nt">check_null</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">id</span>
+  <span class="nt">check_unique</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">id</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">full_date</span>
+
+<span class="c1"># Other tasks this depends on. For example, if it uses another SQL view, then</span>
+<span class="c1"># that view should be a dependency</span>
+<span class="nt">dependencies</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">warehouse_loaded</span>
+
+<span class="c1"># The actual SQL code to be run!</span>
+<span class="nt">sql</span><span class="p">:</span> <span class="p p-Indicator">|</span>
+  <span class="no"># from https://gist.github.com/ewhauser/d7dd635ad2d4b20331c7f18038f04817</span>
+  <span class="no">SELECT</span>
+    <span class="no">FORMAT_DATE(&#39;%F&#39;, d) as id,</span>
+    <span class="no">d AS full_date,</span>
+    <span class="no">EXTRACT(YEAR FROM d) AS year,</span>
+  <span class="no">FROM</span>
+    <span class="no">UNNEST(GENERATE_DATE_ARRAY(&#39;2001-01-01&#39;, &#39;2050-01-01&#39;, INTERVAL 1 DAY)) d</span>
 </code></pre></div>
-<p>Yields this diagram:</p>
-<div class="mermaid">graph LR
-    Start --&gt; Stop</div>
-</li>
-</ul>
+<h2 id="testing-changes">Testing Changes<a class="headerlink" href="#testing-changes" title="Permanent link"> ¶</a></h2>
+<h2 id="walkthrough">Walkthrough<a class="headerlink" href="#walkthrough" title="Permanent link"> ¶</a></h2>
                 
               
               
@@ -822,15 +886,30 @@
   
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
+        
+        <a href="../01_agencies/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Agency GTFS Feeds" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Agency GTFS Feeds
+            </div>
+          </div>
+        </a>
+      
       
         
-        <a href="datasets/01_overview/" class="md-footer__link md-footer__link--next" aria-label="Next: Overview" rel="next">
+        <a href="../03_metrics/" class="md-footer__link md-footer__link--next" aria-label="Next: Metric Views" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Overview
+              Metric Views
             </div>
           </div>
           <div class="md-footer__button md-icon">
@@ -861,10 +940,10 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.tabs"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "assets/javascripts/workers/search.e99e714c.min.js", "version": null}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.e99e714c.min.js", "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.bc35569b.min.js"></script>
+      <script src="../../assets/javascripts/bundle.bc35569b.min.js"></script>
       
         <script src="https://unpkg.com/mermaid@8.5.0/dist/mermaid.min.js"></script>
       
