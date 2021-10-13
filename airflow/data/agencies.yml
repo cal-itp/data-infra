@@ -33,7 +33,7 @@ amador-regional-transit-system:
 amtrak:
   agency_name: Amtrak
   feeds:
-    - gtfs_schedule_url: https://storage.cloud.google.com/gtfs-data/schedule-assets/amtrak_transit_feed20210903-20210914T224053Z-001.zip
+    - gtfs_schedule_url: https://storage.googleapis.com/gtfs-data/schedule-assets/amtrak_transit_feed2021-09-03-20211013T204324Z-001.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
