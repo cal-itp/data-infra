@@ -5,3 +5,7 @@ format: jb-book
 root: intro
 chapters:
 - file: markdown
+- file: datasets
+- file: kubernetes
+- file: services
+- file: warehouse
