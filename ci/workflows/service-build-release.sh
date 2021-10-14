@@ -46,5 +46,8 @@ test "$BUILD_FORCE"             || BUILD_FORCE=
 # Steps
 #
 
+printf 'BEGIN STEP: configure-docker-login\n'
+source "$CI_STEPS_DIR/configure-docker-login.sh"
+
 printf 'BEGIN STEP: build-docker-image\n'
 source "$CI_STEPS_DIR/build-docker-image.sh"
