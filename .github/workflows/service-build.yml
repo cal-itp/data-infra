@@ -1,8 +1,8 @@
 name: Build service container image
 
 on:
-  pull_request:
-    branches: [ 'releases/*' ]
+  push:
+    tags: [ '*/*' ]
 
 jobs:
   build:
@@ -24,19 +24,23 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
 
-      - id: vars
-        name: Setup variables for image build
+      - id: eval_vars
+        name: Evaluate dynamic variables
         run: |
-          echo "CONFIGURE_GIT_REMOTE_NAME=origin"                        >> "$GITHUB_ENV"
-          echo "BUILD_GIT_TAG=$(git describe --abbrev=0)"                >> "$GITHUB_ENV"
-          echo "BUILD_REPO=us.gcr.io/cal-itp-data-infra/gtfs-rt-archive" >> "$GITHUB_ENV"
-          echo "GIT_AUTHOR_NAME=Github Action ${{ github.job }}"         >> "$GITHUB_ENV"
-          echo "GIT_AUTHOR_EMAIL=general+cal-itp@jarv.us"                >> "$GITHUB_ENV"
-          echo "GIT_COMITTER_NAME=Github Action ${{ github.job }}"       >> "$GITHUB_ENV"
-          echo "GIT_COMITTER_EMAIL=general+cal-itp@jarv.us"              >> "$GITHUB_ENV"
+          set -e
+          git_tag=$(git describe --exact-match)
+          echo "::set-output name=git_tag::$git_tag"
 
       - id: service-build-release
         name: Validate tag and perform image build
         shell: bash
+        env:
+          CONFIGURE_GIT_REMOTE_NAME: origin
+          BUILD_REPO: us.gcr.io/cal-itp-data-infra/gtfs-rt-archive
+          BUILD_GIT_TAG: ${{ steps.eval_vars.outputs.git_tag }}
+          GIT_AUTHOR_NAME: 'Github Action ${{ github.job }}'
+          GIT_AUTHOR_EMAIL: general+cal-itp@jarv.us
+          GIT_COMITTER_NAME: 'Github Action ${{ github.job }}'
+          GIT_COMITTER_EMAIL: general+cal-itp@jarv.us
         run: |
           source "$GITHUB_WORKSPACE/ci/workflows/service-build-release.sh"
