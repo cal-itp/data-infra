@@ -25,11 +25,16 @@ done
 test "$CI_STEPS_DIR" || CI_STEPS_DIR=$(git rev-parse --show-toplevel)/ci/steps
 
 #
+# Required
+#
+
+test "$BUILD_APP"               || { printf 'BUILD_APP: '; read BUILD_APP; }
+
+#
 # Defaults
 #
 
 test "$RELEASE_CHANNEL"         || RELEASE_CHANNEL=$(basename "$(git symbolic-ref HEAD)")
-test "$BUILD_GIT_TAG"           || BUILD_GIT_TAG=$(git describe --abbrev=0)
 test "$RELEASE_KUBE_OVERLAY"    || RELEASE_KUBE_OVERLAY=$(git rev-parse --show-toplevel)/kubernetes/apps/overlays/$BUILD_APP-$RELEASE_CHANNEL
 
 #
@@ -45,15 +50,6 @@ export KUBECONFIG
 #
 # Steps
 #
-
-printf 'BEGIN STEP: validate-build-git-tag\n'
-source "$CI_STEPS_DIR/validate-build-git-tag.sh"
-
-printf 'BEGIN STEP: configure-git-remote\n'
-source "$CI_STEPS_DIR/configure-git-remote.sh"
-
-printf 'BEGIN STEP: configure-build-git-notes\n'
-source "$CI_STEPS_DIR/configure-build-git-notes.sh"
 
 printf 'BEGIN STEP: release-kube-overlay\n'
 source "$CI_STEPS_DIR/release-kube-overlay.sh"
