@@ -901,7 +901,7 @@ placer-county-transit:
 plumas-transit-systems:
   agency_name: Plumas Transit Systems
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/plumas-ca-us/plumas-ca-us.zip
+    - gtfs_schedule_url: null
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
