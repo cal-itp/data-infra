@@ -6,7 +6,7 @@ required_missing=()
 test "$BUILD_APP"                 || required_missing+=('BUILD_APP')
 test "$BUILD_ID"                  || required_missing+=('BUILD_ID')
 test "$BUILD_REPO"                || required_missing+=('BUILD_REPO')
-test "$BUILD_GIT_TAG"             || BUILD_GIT_TAG=$BUILD_ID
+test "$BUILD_GIT_TAG"             || required_missing+=('BUILD_GIT_TAG')
 test "$CONFIGURE_GIT_REMOTE_NAME" || CONFIGURE_GIT_REMOTE_NAME=
 test "$GIT_NOTES_REF"             || GIT_NOTES_REF=refs/notes/builds
 
