@@ -6,5 +6,5 @@ resources:
 
 images:
 - name: 'gtfs-rt-archive'
-  newName: 'us.gcr.io/cal-itp-data-infra/gtfs-rt-archive'
-  newTag: '1.1'
+  newName: 'us.gcr.io/cal-itp-data-infra/gtfs-rt-archive-test'
+  newTag: '1.1-jlott.1'
