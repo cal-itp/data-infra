@@ -25,10 +25,18 @@ done
 test "$CI_STEPS_DIR" || CI_STEPS_DIR=$(git rev-parse --show-toplevel)/ci/steps
 
 #
+# Required
+#
+
+test "$BUILD_REPO"              || { printf 'BUILD_REPO: '; read BUILD_REPO; }
+
+#
 # Defaults
 #
 
 test "$BUILD_GIT_TAG"           || BUILD_GIT_TAG=$(git describe --abbrev=0)
+test "$BUILD_APP"               || BUILD_APP=$(dirname "$BUILD_GIT_TAG")
+test "$BUILD_ID"                || BUILD_ID=$(basename "$BUILD_GIT_TAG")
 test "$BUILD_DIR"               || BUILD_DIR=$(git rev-parse --show-toplevel)/services/$BUILD_APP
 
 #
