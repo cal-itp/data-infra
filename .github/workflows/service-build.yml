@@ -27,7 +27,8 @@ jobs:
       - id: vars
         name: Setup variables for image build
         run: |
-          echo "BUILD_GIT_TAG=$(git describe --abbrev=0)" >> "$GITHUB_ENV"
+          echo "BUILD_GIT_TAG=$(git describe --abbrev=0)"                >> "$GITHUB_ENV"
+          echo "BUILD_REPO=us.gcr.io/cal-itp-data-infra/gtfs-rt-archive" >> "$GITHUB_ENV"
 
       - id: service-build-release
         name: Validate tag and perform image build
