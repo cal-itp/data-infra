@@ -22,6 +22,7 @@ jobs:
       - id: vars
         name: Setup variables for build release
         run: |
+          echo "CONFIGURE_GIT_REMOTE_NAME=origin"          >> "$GITHUB_ENV"
           echo "BUILD_GIT_TAG=$(git describe --abbrev=0)"  >> "$GITHUB_ENV"
           echo "RELEASE_CHANNEL=$(basename "$GITHUB_REF")" >> "$GITHUB_ENV"
           echo "CLOUDSDK_CORE_PROJECT=cal-itp-data-infra"  >> "$GITHUB_ENV"
