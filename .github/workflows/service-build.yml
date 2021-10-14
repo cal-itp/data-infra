@@ -29,6 +29,10 @@ jobs:
         run: |
           echo "BUILD_GIT_TAG=$(git describe --abbrev=0)"                >> "$GITHUB_ENV"
           echo "BUILD_REPO=us.gcr.io/cal-itp-data-infra/gtfs-rt-archive" >> "$GITHUB_ENV"
+          echo "GIT_AUTHOR_NAME=Github Action ${{ github.job }}"         >> "$GITHUB_ENV"
+          echo "GIT_AUTHOR_EMAIL=general+cal-itp@jarv.us"                >> "$GITHUB_ENV"
+          echo "GIT_COMITTER_NAME=Github Action ${{ github.job }}"       >> "$GITHUB_ENV"
+          echo "GIT_COMITTER_EMAIL=general+cal-itp@jarv.us"              >> "$GITHUB_ENV"
 
       - id: service-build-release
         name: Validate tag and perform image build
