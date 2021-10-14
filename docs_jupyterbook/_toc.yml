@@ -4,8 +4,21 @@
 format: jb-book
 root: intro
 chapters:
-- file: markdown
-- file: datasets
-- file: kubernetes
-- file: services
-- file: warehouse
+  - file: datasets/overview
+    sections:
+    - file: datasets/gtfs_schedule
+    - file: datasets/mst_payments
+    - file: datasets/transitstacks
+    - file: datasets/views
+  - file: kubernetes/overview
+  - file: services/overview
+    sections:
+    - file: services/gtfs-ckan-uploader
+    - file: services/gtfs-rt-archive
+  - file: warehouse/overview
+    sections:
+    - file: warehouse/agencies
+    - file: warehouse/views
+    - file: warehouse/metrics
+    - file: warehouse/sql_snippets
+    - file: warehouse/using_metabase

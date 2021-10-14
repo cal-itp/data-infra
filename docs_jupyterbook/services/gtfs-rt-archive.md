@@ -1,25 +1,6 @@
----
-jupytext:
-  cell_metadata_filter: -all
-  formats: md:myst
-  text_representation:
-    extension: .md
-    format_name: myst
-    format_version: 0.13
-    jupytext_version: 1.10.3
-kernelspec:
-  display_name: Python 3 (ipykernel)
-  language: python
-  name: python3
----
+# gtfs-rt-archive
 
-## GTFS CKAN Uploader
-
-See readme in [services/gtfs-ckan-uploader](https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archive/README.md).
-
-## gtfs-rt-archive
-
-### Quickstart
+## Quickstart
 
 See dependencies section below for details on prerequisites
 
@@ -31,7 +12,7 @@ export CALITP_AGENCIES_YML=$HOME/Downloads/data_agencies.yml
 python services/gtfs-rt-archive/gtfs-rt-archive.py
 ```
 
-### Dependencies
+## Dependencies
 
 ### python
 
