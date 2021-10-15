@@ -24,23 +24,23 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
 
-      - id: eval_vars
-        name: Evaluate dynamic variables
-        run: |
-          set -e
-          git_tag=$(git describe --exact-match)
-          echo "::set-output name=git_tag::$git_tag"
-
       - id: service-build
         name: Validate tag and perform image build
         shell: bash
         env:
           CONFIGURE_GIT_REMOTE_NAME: origin
           BUILD_REPO: us.gcr.io/cal-itp-data-infra/gtfs-rt-archive
-          BUILD_GIT_TAG: ${{ steps.eval_vars.outputs.git_tag }}
-          GIT_AUTHOR_NAME: 'Github Action ${{ github.job }}'
-          GIT_AUTHOR_EMAIL: general+cal-itp@jarv.us
-          GIT_COMITTER_NAME: 'Github Action ${{ github.job }}'
-          GIT_COMITTER_EMAIL: general+cal-itp@jarv.us
         run: |
+          # For reasons I will surely never fathom, the ections environment
+          # does not fetch the real (annotated) tag from the remote, instead
+          # creating a lightweight tag of the same name on top of HEAD
+          for tag in $(git tag -l); do
+            git tag -d "$tag"
+          done
+          git fetch --tags
+          # GITHUB_JOB is not populated until the job is running
+          git config user.name "Github Action $GITHUB_JOB"
+          git config user.email "$(whoami)@$(uname -n)"
+          # Setting BUILT_GIT_TAG in the shell allows us to remove the refs/tags/ prefix
+          export BUILD_GIT_TAG=${GITHUB_REF#refs/tags/}
           source "$GITHUB_WORKSPACE/ci/workflows/service-build.sh"
