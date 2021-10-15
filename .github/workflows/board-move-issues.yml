@@ -8,7 +8,7 @@ jobs:
     steps:
 
     - name: add-new-issues-to-repository-based-project-column
-      uses: docker://takanabe/github-actions-automate-projects:v0.0.2
+      uses: takanabe/github-actions-automate-projects@v0.0.2
       if: github.event_name == 'issues' && github.event.action == 'labeled' && github.event.label.name == 'analytics research'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
