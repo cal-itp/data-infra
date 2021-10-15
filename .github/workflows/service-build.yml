@@ -31,7 +31,7 @@ jobs:
           git_tag=$(git describe --exact-match)
           echo "::set-output name=git_tag::$git_tag"
 
-      - id: service-build-release
+      - id: service-build
         name: Validate tag and perform image build
         shell: bash
         env:
@@ -43,4 +43,4 @@ jobs:
           GIT_COMITTER_NAME: 'Github Action ${{ github.job }}'
           GIT_COMITTER_EMAIL: general+cal-itp@jarv.us
         run: |
-          source "$GITHUB_WORKSPACE/ci/workflows/service-build-release.sh"
+          source "$GITHUB_WORKSPACE/ci/workflows/service-build.sh"
