@@ -169,7 +169,7 @@ bellflower-bus:
 big-blue-bus:
   agency_name: Big Blue Bus
   feeds:
-    - gtfs_schedule_url: http://gtfs.bigbluebus.com/current.zip
+    - gtfs_schedule_url: http://gtfs.bigbluebus.com/gtfs.zip
       gtfs_rt_vehicle_positions_url: http://gtfs.bigbluebus.com/vehiclepositions.bin
       gtfs_rt_service_alerts_url: http://gtfs.bigbluebus.com/alerts.bin
       gtfs_rt_trip_updates_url: http://gtfs.bigbluebus.com/tripupdates.bin
