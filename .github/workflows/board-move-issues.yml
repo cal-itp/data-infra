@@ -1,6 +1,10 @@
 name: Board wrangling
 
-on: [issues, pull_request]
+on:
+  - issues:
+      - labeled
+      - opened
+  - pull_request:
 
 jobs:
   github-actions-automate-projects:
