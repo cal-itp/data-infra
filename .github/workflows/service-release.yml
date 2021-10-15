@@ -26,7 +26,7 @@ jobs:
           source "$GITHUB_WORKSPACE/kubernetes/gke/config-cluster.sh"
           gcloud container clusters get-credentials "$GKE_NAME" --region "$GKE_REGION"
 
-      - id: service-apply-release
+      - id: service-release
         name: Release updated apps into branch channel
         shell: bash
         run: |
@@ -52,6 +52,6 @@ jobs:
           for app in "${!release_apps[@]}"; do
             export BUILD_APP=$app
             export RELEASE_CHANNEL=$(basename "$GITHUB_REF")
-            printf 'WORKFLOW: service-apply-release; BUILD_APP=%s\n' "$BUILD_APP"
-            source "$GITHUB_WORKSPACE/ci/workflows/service-apply-release.sh"
+            printf 'WORKFLOW: service-release; BUILD_APP=%s\n' "$BUILD_APP"
+            source "$GITHUB_WORKSPACE/ci/workflows/service-release.sh"
           done

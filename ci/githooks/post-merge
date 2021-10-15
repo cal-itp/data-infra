@@ -26,6 +26,6 @@ if [[ $RELEASE_CHANNEL ]]; then
   printf 'post-merge: releasing tag %s into channel %s\n' "$BUILD_GIT_TAG" "$RELEASE_CHANNEL"
   source $(git rev-parse --show-toplevel)/ci/steps/validate-clean-worktree.sh
   source $(git rev-parse --show-toplevel)/ci/workflows/service-build-release.sh
-  source $(git rev-parse --show-toplevel)/ci/workflows/service-apply-release.sh
+  source $(git rev-parse --show-toplevel)/ci/workflows/service-release.sh
 
 fi
