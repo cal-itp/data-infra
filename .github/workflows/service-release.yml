@@ -46,7 +46,7 @@ jobs:
             elif [[ $path =~ ^kubernetes/apps/overlays/([^/])+-[^-]+/.*$ ]]; then
               release_apps[${BASH_REMATCH[1]}]=1
             fi
-          done <<< "$(git diff-tree -r --name-only ${parents[*]})"
+          done <<< $(git diff-tree -r --name-only ${parents[*]})
 
           # run release workflow for each app with changed manifest
           for app in "${!release_apps[@]}"; do
