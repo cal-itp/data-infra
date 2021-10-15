@@ -2,8 +2,7 @@ name: Board wrangling
 
 on:
   - issues:
-      - labeled
-      - opened
+      types: [labeled, opened]
   - pull_request:
 
 jobs:
