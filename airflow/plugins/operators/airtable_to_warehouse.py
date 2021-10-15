@@ -20,6 +20,12 @@ def airtable_to_df(
 
     Note that airtable records have rows structured as follows:
         [{"id", "fields": {colname: value, ...}, ...]
+
+    This function applies renames in the following order.
+
+        1. rename id
+        2. rename fields
+        3. apply column prefix (to columns not renamed by 1 or 2)
     """
 
     api_key = os.environ["CALITP_AIRTABLE_API_KEY"] if not api_key else api_key
