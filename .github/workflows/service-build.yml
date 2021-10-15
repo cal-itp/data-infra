@@ -24,23 +24,18 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
 
-      - id: eval_vars
-        name: Evaluate dynamic variables
-        run: |
-          set -e
-          git_tag=$(git describe --exact-match)
-          echo "::set-output name=git_tag::$git_tag"
-
       - id: service-build
         name: Validate tag and perform image build
         shell: bash
         env:
           CONFIGURE_GIT_REMOTE_NAME: origin
           BUILD_REPO: us.gcr.io/cal-itp-data-infra/gtfs-rt-archive
-          BUILD_GIT_TAG: ${{ steps.eval_vars.outputs.git_tag }}
-          GIT_AUTHOR_NAME: 'Github Action ${{ github.job }}'
           GIT_AUTHOR_EMAIL: general+cal-itp@jarv.us
-          GIT_COMITTER_NAME: 'Github Action ${{ github.job }}'
           GIT_COMITTER_EMAIL: general+cal-itp@jarv.us
         run: |
+          # GITHUB_JOB is not populated until the job is running
+          export GIT_AUTHOR_NAME="Github Action $GITHUB_JOB"
+          export GIT_COMITTER_NAME="Github Action $GITHUB_JOB"
+          # Setting BUILT_GIT_TAG in the shell allows us to remove the refs/tags/ prefix
+          export BUILD_GIT_TAG=${GITHUB_REF#refs/tags/}
           source "$GITHUB_WORKSPACE/ci/workflows/service-build.sh"
