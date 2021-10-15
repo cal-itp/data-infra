@@ -7,10 +7,16 @@ assignees: charlie-costanzo
 
 ---
 
-**Name**
+**Name:**
 
-**Role**
+**Role:**
 
-**Google Workspace Email Address**
+**Google Workspace Email Address:**
 
-**Github Username**
+**Github Username:**
+
+**Account Set-up:**
+- [ ] Google Cloud Console / BigQuery
+- [ ] Metabase
+- [ ] Github
+- [ ] Jupyter Lab
