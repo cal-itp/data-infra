@@ -1,9 +1,9 @@
 name: Board wrangling
 
 on:
-  - issues:
-      types: [labeled, opened]
-  - pull_request:
+  issues:
+    types: [labeled, opened]
+  pull_request:
 
 jobs:
   github-actions-automate-projects:
