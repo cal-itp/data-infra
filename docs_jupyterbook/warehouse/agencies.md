@@ -1,3 +1,18 @@
+---
+jupytext:
+  cell_metadata_filter: -all
+  formats: md:myst
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.10.3
+kernelspec:
+  display_name: Python 3 (ipykernel)
+  language: python
+  name: python3
+---
+
 # Agency GTFS Feeds
 
 Feed information is stored in [airflow/data/agencies.yml](https://github.com/cal-itp/data-infra/blob/main/airflow/data/agencies.yml).

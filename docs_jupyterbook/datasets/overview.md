@@ -18,10 +18,10 @@ kernelspec:
 
 | page | description | datasets |
 | ---- | ----------- | -------- |
-| [GTFS Schedule](../gtfs_schedule/) | GTFS Schedule data for the current day | `gtfs_schedule`, `gtfs_schedule_history`, `gtfs_schedule_type2` |
-| [MST Payments](../mst_payments/) | TODO | TODO |
-| [Transitstacks](../transitstacks/) | TODO | `transitstacks`, `views.transitstacks` |
-| [Views](../views/) | End-user friendly data for dashboards and metrics | E.g. `views.validation_*`, `views.gtfs_schedule_*` |
+| [GTFS Schedule](./gtfs_schedule.md) | GTFS Schedule data for the current day | `gtfs_schedule`, `gtfs_schedule_history`, `gtfs_schedule_type2` |
+| [MST Payments](./mst_payments.md) | TODO | TODO |
+| [Transitstacks](./transitstacks.md) | TODO | `transitstacks`, `views.transitstacks` |
+| [Views](./views.md) | End-user friendly data for dashboards and metrics | E.g. `views.validation_*`, `views.gtfs_schedule_*` |
 
 ### Querying data
 #### Using metabase dashboards
@@ -34,10 +34,11 @@ It supports most [pandas Series methods](https://pandas.pydata.org/pandas-docs/s
 See the [siuba docs](https://siuba.readthedocs.io) for more information.
 
 The examples below go through the basics of using siuba, collecting a database query to a local DataFrame,
-and showing SQL queries that siuba code generates.
+and showing SQL test queries that siuba code generates.
 
 ##### Basic Query
-```python
+```{code-cell}
+from myst_nb import glue
 from calitp.tables import tbl
 from siuba import _, filter, count, collect, show_query
 
@@ -48,17 +49,31 @@ from siuba import _, filter, count, collect, show_query
     >> count(_.code)
 )
 ```
+
+
+
 ##### Collect Query Results
 Note that siuba by default prints out a preview of the SQL query results.
 In order to fetch the results of the query as a pandas DataFrame, run `collect()`.
 
-````
-code
-````
+```{code-cell}
+tbl_agency_names = tbl.views.gtfs_agency_names() >> collect()
+
+# Use pandas .head() method to show first 5 rows of data
+tbl_agency_names.head()
+
+```
+
+
+
 ##### Show Query SQL
-While `collect()` fetches query results, `show_query()` prints out the
-SQL code that siuba generates.
-````
-code
-````
+While `collect()` fetches query results, `show_query()` prints out the SQL code that siuba generates.
+
+```{code-cell}
+(tbl.views.gtfs_agency_names()
+  >> filter(_.agency_name.str.contains("Metro"))
+  >> show_query(simplify=True)
+)
+
+```
 Note that here the pandas Series method `str.contains` corresponds to `regexp_contains` in Google BigQuery.

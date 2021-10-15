@@ -15,7 +15,7 @@ kernelspec:
 
 # Warehouse
 
-# Agency GTFS Feeds
+## Agency GTFS Feeds
 
 Feed information is stored in [airflow/data/agencies.yml](https://github.com/cal-itp/data-infra/blob/main/airflow/data/agencies.yml).
 This file is then used by our Airflow data pipeline to download feeds, and load them into the warehouse.
@@ -41,7 +41,7 @@ If the URL for a GTFS feed requires an API key, you can include using these step
 
 Below is an example entry.
 
-```yaml
+```
 ac-transit:
   agency_name: AC Transit
   feeds:
@@ -57,5 +57,6 @@ ac-transit:
 Every time the main branch of cal-itp/data-infra is updated on github,
 [this github action][action] swaps in the API keys and pushes to our Cloud Composer's data bucket.
 
-<!-- markdown-link-check-disable-next-line -->
+```
 [action]: (https://github.com/cal-itp/data-infra/blob/main/.github/workflows/update_gcloud_requirements.yml)
+```
