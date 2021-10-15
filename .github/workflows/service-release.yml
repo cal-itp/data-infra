@@ -48,6 +48,11 @@ jobs:
             fi
           done <<< "$(git diff-tree -r --name-only ${parents[*]})"
 
+          if [[ ${#release_apps[*]} -eq 0 ]]; then
+            printf 'No manifests changes found; skipping release\n'
+            exit 0
+          fi
+
           # run release workflow for each app with changed manifest
           for app in "${!release_apps[@]}"; do
             export BUILD_APP=$app
