@@ -41,10 +41,10 @@ jobs:
 
           # find all apps with changed manifests
           while read path; do
-            if [[ $path =~ ^kubernetes/apps/manifests/([^/])+/.*$ ]]; then
-              release_apps[${BASH_REMATCH[1]]=1
-            elif [[ $path =~ ^kubernetes/apps/overlays/([^/])+-[^-]+/.*$ ]]; then
-              release_apps[${BASH_REMATCH[1]]=1
+            if [[ $path =~ ^kubernetes/apps/manifests/([^/]+)/.*$ ]]; then
+              release_apps[${BASH_REMATCH[1]}]=1
+            elif [[ $path =~ ^kubernetes/apps/overlays/([^/]+)-[^-]+/.*$ ]]; then
+              release_apps[${BASH_REMATCH[1]}]=1
             fi
           done <<< "$(git diff-tree -r --name-only ${parents[*]})"
 
