@@ -27,13 +27,13 @@ jobs:
       run: jb build docs_jupyterbook
 
     - name: Save docs as artifact
-      use: actions/checkout@v2
+      uses: actions/checkout@v2
       with:
         name: docs-build
         path: docs_jupyterbook/_build/html
 
     - name: Deploy docs
-      use: peaceiris/actions-gh-pages@v3
+      uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: docs_jupyterbook/_build/html
