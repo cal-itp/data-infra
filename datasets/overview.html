@@ -411,26 +411,50 @@ and showing SQL test queries that siuba code generates.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
-<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_1810</span><span class="o">/</span><span class="mf">299587592.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="c1"># query lastest validation notices, then filter for a single gtfs feed,</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="c1"># and then count how often each code occurs</span>
-<span class="ne">----&gt; </span><span class="mi">7</span> <span class="p">(</span><span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">validation_notices</span><span class="p">()</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span>     <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_itp_id</span> <span class="o">==</span> <span class="mi">10</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">calitp_url_number</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span>     <span class="o">&gt;&gt;</span> <span class="n">count</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
+<div class="output text_html"><div><pre># Source: lazy query
+# DB Conn: Engine(bigquery://cal-itp-data-infra/?maximum_bytes_billed=5000000000)
+# Preview:
+</pre><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-<span class="nn">/opt/hostedtoolcache/Python/3.8.12/x64/lib/python3.8/site-packages/calitp/tables.py</span> in <span class="ni">__getattr__</span><span class="nt">(self, k)</span>
-<span class="g g-Whitespace">     </span><span class="mi">34</span>             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_accessors</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-<span class="g g-Whitespace">     </span><span class="mi">35</span> 
-<span class="ne">---&gt; </span><span class="mi">36</span>         <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;No such attribute </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">k</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">37</span> 
-<span class="g g-Whitespace">     </span><span class="mi">38</span>     <span class="k">def</span> <span class="fm">__dir__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
 
-<span class="ne">AttributeError</span>: No such attribute views
-</pre></div>
-</div>
-</div>
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>code</th>
+      <th>n</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>unknown_file</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>decreasing_or_equal_shape_distance</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>unused_shape</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div><p># .. may have more rows</p></div></div></div>
 </div>
 </div>
 <div class="section" id="collect-query-results">
@@ -446,6 +470,64 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>calitp_itp_id</th>
+      <th>calitp_url_number</th>
+      <th>agency_name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>256</td>
+      <td>0</td>
+      <td>Porterville Transit</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>257</td>
+      <td>0</td>
+      <td>PresidiGo</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>259</td>
+      <td>0</td>
+      <td>Redding Area Bus Authority</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>0</td>
+      <td>AC Transit</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>260</td>
+      <td>0</td>
+      <td>Beach Cities Transit</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 </div>
 <div class="section" id="show-query-sql">
@@ -460,6 +542,73 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SELECT `anon_1`.`calitp_itp_id`, `anon_1`.`calitp_url_number`, `anon_1`.`agency_name` 
+FROM (SELECT calitp_itp_id, calitp_url_number, agency_name 
+FROM `views.gtfs_agency_names`) AS `anon_1` 
+WHERE regexp_contains(`anon_1`.`agency_name`, &#39;Metro&#39;)
+</pre></div>
+</div>
+<div class="output text_html"><div><pre># Source: lazy query
+# DB Conn: Engine(bigquery://cal-itp-data-infra/?maximum_bytes_billed=5000000000)
+# Preview:
+</pre><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>calitp_itp_id</th>
+      <th>calitp_url_number</th>
+      <th>agency_name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>278</td>
+      <td>0</td>
+      <td>San Diego Metropolitan Transit System</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>293</td>
+      <td>0</td>
+      <td>Santa Barbara Metropolitan Transit District</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>296</td>
+      <td>0</td>
+      <td>Santa Cruz Metropolitan Transit District</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>323</td>
+      <td>0</td>
+      <td>Metrolink</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>182</td>
+      <td>1</td>
+      <td>Metro</td>
+    </tr>
+  </tbody>
+</table>
+</div><p># .. may have more rows</p></div></div></div>
 </div>
 <p>Note that here the pandas Series method <code class="docutils literal notranslate"><span class="pre">str.contains</span></code> corresponds to <code class="docutils literal notranslate"><span class="pre">regexp_contains</span></code> in Google BigQuery.</p>
 </div>
