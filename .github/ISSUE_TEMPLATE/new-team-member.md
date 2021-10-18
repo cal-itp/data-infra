@@ -24,3 +24,4 @@ assignees: charlie-costanzo
 - [ ] Jupyter Lab
 - [ ] Technical Onboarding Call Scheduled
 - [ ] Added to Daily Stand-ups
+- [ ] Added to Slack: #data-analyses
