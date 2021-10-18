@@ -15,8 +15,12 @@ assignees: charlie-costanzo
 
 **Github Username:**
 
-**Account Set-up:**
+**Slack Username**
+
+**Set-up:**
 - [ ] Google Cloud Console / BigQuery
 - [ ] Metabase
 - [ ] Github
 - [ ] Jupyter Lab
+- [ ] Technical Onboarding Call Scheduled
+- [ ] Added to Daily Stand-ups
