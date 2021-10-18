@@ -4,5 +4,5 @@ table_name: "payments.calitp_internal_misc_tap_checkpoints"
 src_uri: "https://docs.google.com/spreadsheets/d/1SJNyiyplZlJnD_uXuvERZFjzJ6qZw3lXh8WoxqtY20s/export?gid=1217203632&format=csv"
 fields:
   participant_id: ID of the agency with payments
-  go_live_date: Go live date in format YYYY-MM-DD
-  number_of_taps_to_date: Total number of taps as of last manual data entry
+  checkpoint_date: Checkpoint date in format YYYY-MM-DD
+  number_of_taps_to_date: Total number of taps as of noted checkpoint date
