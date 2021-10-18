@@ -21,7 +21,11 @@ jobs:
       run: |
         pip install -r airflow/requirements.txt
         pip install git+https://github.com/machow/siuba.git@stable
-        pip install jupyterbook==0.12.0
+        pip install jupyter-book==0.12.0
+    - uses: google-github-actions/setup-gcloud@master
+      with:
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        export_default_credentials: true
 
     - name: Build docs
       run: jb build docs_jupyterbook
