@@ -1,9 +1,0 @@
-{
-    "recommendations": [
-        "ms-python.python",
-        "ms-python.vscode-pylance",
-        "davidanson.vscode-markdownlint",
-        "bierner.markdown-mermaid",
-        "mhutchie.git-graph"
-    ]
-}

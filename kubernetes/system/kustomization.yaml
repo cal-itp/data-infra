@@ -1,3 +1,0 @@
-resources:
-- https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.46.0/deploy/static/provider/cloud/deploy.yaml
-- https://github.com/jetstack/cert-manager/releases/download/v1.3.1/cert-manager.yaml

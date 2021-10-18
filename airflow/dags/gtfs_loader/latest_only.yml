@@ -1,1 +1,0 @@
-operator: airflow.operators.latest_only_operator.LatestOnlyOperator
