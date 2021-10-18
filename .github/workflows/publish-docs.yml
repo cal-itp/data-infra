@@ -2,19 +2,39 @@ name: Publish docs to gh-pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [ jupyterbook-documentation ]
 
 
 jobs:
-  publish-docs:
+  build-docs:
     runs-on: ubuntu-latest
     steps:
-
-    - name: 'Project gh-pages holobranch'
-      uses: JarvusInnovations/hologit@actions/projector/v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        HAB_LICENSE: accept
+    - name: Check out repo
+      uses: actions/checkout@v2
       with:
-        holobranch: docs-site
-        commit-to: gh-pages
+        fetch-depth: 0
+    - name: Set up Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+    - name: Install python packages
+      run: |
+        pip install -r airflow/requirements.txt
+        pip install git+https://github.com/machow/siuba.git@stable
+        pip install jupyterbook==0.12.0
+
+    - name: Build docs
+      run: jb build docs_jupyterbook
+
+    - name: Save docs as artifact
+      use: actions/checkout@v2
+      with:
+        name: docs-build
+        path: docs_jupyterbook/_build/html
+
+    - name: Deploy docs
+      use: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: docs_jupyterbook/_build/html
+        publish_branch: dev-docs-jupyterbook
