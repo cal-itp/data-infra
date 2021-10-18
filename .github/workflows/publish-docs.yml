@@ -28,17 +28,17 @@ jobs:
         export_default_credentials: true
 
     - name: Build docs
-      run: jb build docs_jupyterbook
+      run: jb build docs
 
     - name: Save docs as artifact
       uses: actions/upload-artifact@v2
       with:
         name: docs-build
-        path: docs_jupyterbook/_build/html
+        path: docs/_build/html
 
     - name: Deploy docs
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: docs_jupyterbook/_build/html
+        publish_dir: docs/_build/html
         publish_branch: dev-docs-jupyterbook
