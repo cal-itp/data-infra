@@ -1,0 +1,13 @@
+operator: airflow.contrib.operators.bigquery_operator.BigQueryOperator
+use_legacy_sql: false
+destination_dataset_table: "{{ 'gtfs_schedule_history.calitp_feed_latest' | table }}"
+write_disposition: WRITE_TRUNCATE
+dependencies:
+  - calitp_feed_updates
+sql: |
+      SELECT
+          calitp_itp_id
+          , calitp_url_number
+          , MAX(calitp_extracted_at) as calitp_extracted_at
+      FROM `{{ "gtfs_schedule_history.calitp_feed_updates" | table }}`
+      GROUP BY 1, 2

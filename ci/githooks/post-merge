@@ -1,0 +1,31 @@
+#!/bin/bash
+set -e
+
+branch_name=$(git symbolic-ref --short HEAD)
+
+while read param val; do
+  if [[ $val = $branch_name ]]; then
+    RELEASE_CHANNEL=$(cut -d. -f2 <<< "$param")
+    break
+  fi
+done <<< $(git config --get-regexp '^channel\..*\.branch$' || true)
+
+if [[ $RELEASE_CHANNEL ]]; then
+
+  KUBECONFIG=$(git config --default '' "channel.${RELEASE_CHANNEL}.kubeconfig")
+  BUILD_REPO_USER=$(git config --default '' "channel.${RELEASE_CHANNEL}.build-repo-user")
+  BUILD_REPO_SECRET=$(git config --default '' "channel.${RELEASE_CHANNEL}.build-repo-secret")
+  BUILD_FORCE=$(git config --default '' "channel.${RELEASE_CHANNEL}.build-force")
+  BUILD_GIT_TAG=$(git describe --abbrev=0)
+
+  if ! [[ $KUBECONFIG ]]; then
+    printf 'error: missing required config channel.%s.kubeconfig\n' >&2 "$RELEASE_CHANNEL"
+    exit 1
+  fi
+
+  printf 'post-merge: releasing tag %s into channel %s\n' "$BUILD_GIT_TAG" "$RELEASE_CHANNEL"
+  source $(git rev-parse --show-toplevel)/ci/steps/validate-clean-worktree.sh
+  source $(git rev-parse --show-toplevel)/ci/workflows/service-build-release.sh
+  source $(git rev-parse --show-toplevel)/ci/workflows/service-apply-release.sh
+
+fi

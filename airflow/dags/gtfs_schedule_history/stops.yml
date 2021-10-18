@@ -1,0 +1,48 @@
+operator: operators.ExternalTable
+source_objects:
+  - 'schedule/processed/*/stops.txt'
+destination_project_dataset_table: "gtfs_schedule_history.stops"
+skip_leading_rows: 1
+schema_fields:
+  - name: calitp_itp_id
+    type: INTEGER
+  - name: calitp_url_number
+    type: INTEGER
+  - name: stop_id
+    type: STRING
+
+    # conditional
+  - name: tts_stop_name
+    type: STRING
+  - name: stop_lat
+    type: NUMERIC
+  - name: stop_lon
+    type: NUMERIC
+
+  - name: zone_id
+    type: STRING
+  - name: parent_station
+    type: STRING
+
+    # optional
+  - name: stop_code
+    type: STRING
+  - name: stop_name
+    type: STRING
+  - name: stop_desc
+    type: STRING
+  - name: stop_url
+    type: STRING
+  - name: location_type
+    type: STRING
+  - name: stop_timezone
+    type: STRING
+  - name: wheelchair_boarding
+    type: STRING
+  - name: level_id
+    type: STRING
+  - name: platform_code
+    type: STRING
+
+  - name: calitp_extracted_at
+    type: DATE
