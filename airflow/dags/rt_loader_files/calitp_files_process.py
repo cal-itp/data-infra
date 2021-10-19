@@ -70,5 +70,3 @@ def main(execution_date, **kwargs):
         f"rt-processed/calitp_files/{date_string}.csv",
         use_pipe=True,
     )
-
-    return res
