@@ -7,14 +7,14 @@ tests:
     - feed_key
     - file_key
     - date
-    - md5_hash
   check_composite_unique:
     - feed_key
-    - date
     - file_key
+    - date
 
 dependencies:
   - gtfs_schedule_dim_feeds
+  - dim_date
 ---
 
 WITH
@@ -34,6 +34,7 @@ raw_daily_files AS (
         , T1.is_validation
         , T1.is_agency_changed
         , T1.full_path
+        , FALSE AS is_interpolated
 
         -- calculate the leading date, so we can fill in missing rows, where
         -- extraction failed to run.
@@ -57,13 +58,19 @@ date_range AS (
 
 interp_daily_files AS (
     SELECT
-        * EXCEPT(tmp_next_date)
+        feed_key
+        , file_key
+        , date AS date_original
+        , full_date AS date
         , Files.date != D.full_date AS is_interpolated
     FROM raw_daily_files Files
-    JOIN date_range D
-        ON Files.date <= D.full_date
-            AND COALESCE(Files.tmp_next_date, "2099-01-01") > D.full_date
+    CROSS JOIN date_range D
+    WHERE Files.date <= D.full_date
+        AND COALESCE(Files.tmp_next_date, "2099-01-01") > D.full_date
 )
 
-SELECT * FROM interp_daily_files
--- SELECT * FROM raw_daily_files
+SELECT * EXCEPT(date_original, tmp_next_date)
+FROM interp_daily_files
+FULL OUTER JOIN raw_daily_files
+    USING(feed_key, file_key, date, is_interpolated)
+ORDER BY feed_key, file_key, date
