@@ -9,14 +9,14 @@
       
       
       
-        <link rel="canonical" href="https://docs.calitp.org/data-infra/datasets/gtfs_schedule/">
+        <link rel="canonical" href="https://docs.calitp.org/data-infra/kubernetes/JupyterHub/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.4">
     
     
       
-        <title>GTFS Schedule - Juniper Documentation</title>
+        <title>JupyterHub - Juniper Documentation</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#gtfs-schedule" class="md-skip">
+        <a href="#jupyterhub" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              GTFS Schedule
+              JupyterHub
             
           </span>
         </div>
@@ -220,15 +220,13 @@
         
   
   
-    
-  
 
 
   
   
   
     <li class="md-tabs__item">
-      <a href="../01_overview/" class="md-tabs__link md-tabs__link--active">
+      <a href="../../datasets/01_overview/" class="md-tabs__link">
         Datasets
       </a>
     </li>
@@ -238,13 +236,15 @@
         
   
   
+    
+  
 
 
   
   
   
     <li class="md-tabs__item">
-      <a href="../../kubernetes/" class="md-tabs__link">
+      <a href="../" class="md-tabs__link md-tabs__link--active">
         Kubernetes
       </a>
     </li>
@@ -349,14 +349,12 @@
 
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
       
       
       
@@ -379,7 +377,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../01_overview/" class="md-nav__link">
+      <a href="../../datasets/01_overview/" class="md-nav__link">
         Overview
       </a>
     </li>
@@ -391,92 +389,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          GTFS Schedule
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../datasets/gtfs_schedule/" class="md-nav__link">
         GTFS Schedule
       </a>
-      
-        
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#data" class="md-nav__link">
-    Data
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#dashboards" class="md-nav__link">
-    Dashboards
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#maintenance" class="md-nav__link">
-    Maintenance
-  </a>
-  
-    <nav class="md-nav" aria-label="Maintenance">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#dags-overview" class="md-nav__link">
-    DAGs overview
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#common-issues" class="md-nav__link">
-    common issues
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#backfilling" class="md-nav__link">
-    backfilling
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -488,7 +405,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../mst_payments/" class="md-nav__link">
+      <a href="../../datasets/mst_payments/" class="md-nav__link">
         MST Payments
       </a>
     </li>
@@ -502,7 +419,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../transitstacks/" class="md-nav__link">
+      <a href="../../datasets/transitstacks/" class="md-nav__link">
         Transitstacks
       </a>
     </li>
@@ -516,7 +433,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../views/" class="md-nav__link">
+      <a href="../../datasets/views/" class="md-nav__link">
         Views
       </a>
     </li>
@@ -536,12 +453,14 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
       
       
       
@@ -564,7 +483,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../kubernetes/" class="md-nav__link">
+      <a href="../" class="md-nav__link">
         kubernetes #
       </a>
     </li>
@@ -576,11 +495,180 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../../kubernetes/JupyterHub/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          JupyterHub
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         JupyterHub
       </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-create-the-namespace" class="md-nav__link">
+    1. Create the Namespace
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-add-secrets-to-namespace" class="md-nav__link">
+    2. Add Secrets to Namespace
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Add Secrets to Namespace">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jupyterhub-gcloud-service-key" class="md-nav__link">
+    jupyterhub-gcloud-service-key
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jupyterhub-github-config" class="md-nav__link">
+    jupyterhub-github-config
+  </a>
+  
+    <nav class="md-nav" aria-label="jupyterhub-github-config">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-a-temporary-file" class="md-nav__link">
+    Create a Temporary File
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fill-the-file-with-chart-formatted-secrets" class="md-nav__link">
+    Fill the File with Chart-Formatted Secrets
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#encode-the-file-contents" class="md-nav__link">
+    Encode the File Contents
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#add-the-encoding-to-your-secret" class="md-nav__link">
+    Add the Encoding to Your Secret
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clean-up" class="md-nav__link">
+    Clean up
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reminder-apply-the-secrets-file" class="md-nav__link">
+    Reminder - Apply the secrets file!
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-install-the-helm-chart" class="md-nav__link">
+    3. Install the Helm Chart
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#updating" class="md-nav__link">
+    Updating
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#domain-name-changes" class="md-nav__link">
+    Domain Name Changes
+  </a>
+  
+    <nav class="md-nav" aria-label="Domain Name Changes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#changes-in-github-oauth" class="md-nav__link">
+    Changes in GitHub OAuth
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changes-in-the-helm-chart" class="md-nav__link">
+    Changes in the Helm Chart
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -798,44 +886,132 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#data" class="md-nav__link">
-    Data
+  <a href="#installation" class="md-nav__link">
+    Installation
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#dashboards" class="md-nav__link">
-    Dashboards
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#maintenance" class="md-nav__link">
-    Maintenance
-  </a>
-  
-    <nav class="md-nav" aria-label="Maintenance">
+    <nav class="md-nav" aria-label="Installation">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#dags-overview" class="md-nav__link">
-    DAGs overview
+  <a href="#1-create-the-namespace" class="md-nav__link">
+    1. Create the Namespace
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#common-issues" class="md-nav__link">
-    common issues
+  <a href="#2-add-secrets-to-namespace" class="md-nav__link">
+    2. Add Secrets to Namespace
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Add Secrets to Namespace">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jupyterhub-gcloud-service-key" class="md-nav__link">
+    jupyterhub-gcloud-service-key
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#backfilling" class="md-nav__link">
-    backfilling
+  <a href="#jupyterhub-github-config" class="md-nav__link">
+    jupyterhub-github-config
+  </a>
+  
+    <nav class="md-nav" aria-label="jupyterhub-github-config">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-a-temporary-file" class="md-nav__link">
+    Create a Temporary File
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fill-the-file-with-chart-formatted-secrets" class="md-nav__link">
+    Fill the File with Chart-Formatted Secrets
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#encode-the-file-contents" class="md-nav__link">
+    Encode the File Contents
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#add-the-encoding-to-your-secret" class="md-nav__link">
+    Add the Encoding to Your Secret
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clean-up" class="md-nav__link">
+    Clean up
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reminder-apply-the-secrets-file" class="md-nav__link">
+    Reminder - Apply the secrets file!
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-install-the-helm-chart" class="md-nav__link">
+    3. Install the Helm Chart
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#updating" class="md-nav__link">
+    Updating
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#domain-name-changes" class="md-nav__link">
+    Domain Name Changes
+  </a>
+  
+    <nav class="md-nav" aria-label="Domain Name Changes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#changes-in-github-oauth" class="md-nav__link">
+    Changes in GitHub OAuth
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#changes-in-the-helm-chart" class="md-nav__link">
+    Changes in the Helm Chart
   </a>
   
 </li>
@@ -857,40 +1033,128 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/cal-itp/data-infra/edit/main/docs/datasets/gtfs_schedule.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/cal-itp/data-infra/edit/main/docs/kubernetes/JupyterHub.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
                 
-                <h1 id="gtfs-schedule">GTFS Schedule<a class="headerlink" href="#gtfs-schedule" title="Permanent link"> ¶</a></h1>
-<h2 id="data">Data<a class="headerlink" href="#data" title="Permanent link"> ¶</a></h2>
-<table>
-<thead>
-<tr>
-<th>dataset</th>
-<th>description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>gtfs_schedule</td>
-<td>Latest warehouse data for GTFS Static feeds. See the <a href="https://developers.google.com/transit/gtfs/reference">GTFS static reference</a>.</td>
-</tr>
-<tr>
-<td>gtfs_schedule_type2</td>
-<td>Tables with GTFS Static feeds across history (going back to April 15<sup>th</sup>, 2021). These are stored as type 2 slowly changing dimensions. They have <code>calitp_extracted_at</code>, and <code>calitp_deleted_at</code> fields.</td>
-</tr>
-<tr>
-<td>(internal) gtfs_schedule_history</td>
-<td>External tables with all new feed data across history.</td>
-</tr>
-</tbody>
-</table>
-<h2 id="dashboards">Dashboards<a class="headerlink" href="#dashboards" title="Permanent link"> ¶</a></h2>
-<h2 id="maintenance">Maintenance<a class="headerlink" href="#maintenance" title="Permanent link"> ¶</a></h2>
-<h3 id="dags-overview">DAGs overview<a class="headerlink" href="#dags-overview" title="Permanent link"> ¶</a></h3>
-<h3 id="common-issues">common issues<a class="headerlink" href="#common-issues" title="Permanent link"> ¶</a></h3>
-<h3 id="backfilling">backfilling<a class="headerlink" href="#backfilling" title="Permanent link"> ¶</a></h3>
+                <h1 id="jupyterhub">JupyterHub<a class="headerlink" href="#jupyterhub" title="Permanent link"> ¶</a></h1>
+<p>This page outlines how to deploy JupyterHub to Cal-ITP&rsquo;s Kubernetes cluster.</p>
+<p>As we are not yet able to commit encrypted secrets to the cluster, we&rsquo;ll have to do some work ahead of a <code>helm install</code>.</p>
+<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link"> ¶</a></h2>
+<h3 id="1-create-the-namespace">1. Create the Namespace<a class="headerlink" href="#1-create-the-namespace" title="Permanent link"> ¶</a></h3>
+<div class="highlight"><pre><span></span><code>kubectl create ns jupyterhub
+</code></pre></div>
+<h3 id="2-add-secrets-to-namespace">2. Add Secrets to Namespace<a class="headerlink" href="#2-add-secrets-to-namespace" title="Permanent link"> ¶</a></h3>
+<p>Two base64-encoded secrets must be added to the <code>jupyterhub</code> namespace before installing the Helm chart.</p>
+<p>We&rsquo;ll cover the purpose of each secret in the subsections below.</p>
+<p>We&rsquo;ll put both of these secrets in a local file, <code>jupyterhub-secrets.yaml</code>, which will contain something that looks like this:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">data</span><span class="p">:</span>
+  <span class="nt">service-key.json</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-base64-encoded-service-key-here&gt;</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Secret</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyterhub-gcloud-service-key</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyterhub</span>
+<span class="nn">---</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">data</span><span class="p">:</span>
+  <span class="nt">values.yaml</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-base64-encoded-github-oauth-config-here&gt;</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Secret</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyterhub-github-config</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyterhub</span>
+</code></pre></div>
+<p>With the above configured, we can go ahead and apply:</p>
+<div class="highlight"><pre><span></span><code>kubectl apply -f jupyterhub-secrets.yaml
+</code></pre></div>
+<p><strong>This file should never be committed!!!</strong></p>
+<h4 id="jupyterhub-gcloud-service-key">jupyterhub-gcloud-service-key<a class="headerlink" href="#jupyterhub-gcloud-service-key" title="Permanent link"> ¶</a></h4>
+<p>The GCloud service key, a .json file, is used to authenticate users to GCloud.</p>
+<p>Currently, the secret <code>jupyterhub-gcloud-service-key</code> is mounted to every JupyterHub user&rsquo;s running container at <code>/usr/local/secrets/service-key.json</code>. As we refine our authentication approach, this secret may become obsolete and may be removed from this process, but for now the process of volume mounting this secret is required for authentication.</p>
+<p>To create the base64 encoded string from your terminal:</p>
+<div class="highlight"><pre><span></span><code>cat the-service-key.json | base64 -w 0
+</code></pre></div>
+<p>Then add the terminal&rsquo;s output to the <code>jupyterhub-secrets.yaml</code> outlined above.</p>
+<h4 id="jupyterhub-github-config">jupyterhub-github-config<a class="headerlink" href="#jupyterhub-github-config" title="Permanent link"> ¶</a></h4>
+<p>Because we use <a href="https://zero-to-jupyterhub.readthedocs.io/en/latest/administrator/authentication.html?highlight=oauth#github">Github OAuth</a> for user authentication in JupyterHub, we have to provide a client-id and client-secret to the JupyterHub Helm chart. We also have to provide a bunch of non-sensitive information to the chart, as well, for GitHub OAuth to function.</p>
+<p>For context, here is what the full configuration for the GitHub OAuth in our JupyterHub Helm chart&rsquo;s <code>values.yaml</code> might look like:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">hub</span><span class="p">:</span>
+  <span class="nt">config</span><span class="p">:</span>
+    <span class="nt">GitHubOAuthenticator</span><span class="p">:</span>
+      <span class="nt">client_id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-client-id-here&gt;</span>
+      <span class="nt">client_secret</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-client-secret-here&gt;</span>
+      <span class="nt">oauth_callback_url</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">https://your-jupyterhub-domain/hub/oauth_callback</span>
+      <span class="nt">allowed_organizations</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cal-itp:warehouse-users</span>
+      <span class="nt">scope</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">read:org</span>
+    <span class="nt">JupyterHub</span><span class="p">:</span>
+      <span class="nt">authenticator_class</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">github</span>
+      <span class="nt">Authenticator</span><span class="p">:</span>
+        <span class="nt">admin_users</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">machow</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">themightchris</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">lottspot</span>
+</code></pre></div>
+<p>Fortunately, we don&rsquo;t have to store all of this information in the secret! The JupyterHub chart affords us the ability to use the <code>hub.existingSecret</code> parameter to pass in the sensitive information, so we can mix-and-match parts of the configuration.</p>
+<p>This means that we can leave parameters like <code>hub.config.GitHubOAuthenticator.oauth_callback_url</code> and <code>hub.config.GitHubOAuthenticator.allowed_organizations</code> in plain text in our <code>values.yaml</code>, and place sensitive information like <code>hub.config.GitHubOAuthenticator.client_id</code> and <code>hub.config.GitHubOAuthenticator.client_secret</code> in our <code>jupyterhub-secrets.yaml</code>.</p>
+<p>So, what format must our base64 encoded string take in order for the JuptyerHub chart to accept it?</p>
+<h5 id="create-a-temporary-file">Create a Temporary File<a class="headerlink" href="#create-a-temporary-file" title="Permanent link"> ¶</a></h5>
+<div class="highlight"><pre><span></span><code>touch github-secrets.yaml
+</code></pre></div>
+<h5 id="fill-the-file-with-chart-formatted-secrets">Fill the File with Chart-Formatted Secrets<a class="headerlink" href="#fill-the-file-with-chart-formatted-secrets" title="Permanent link"> ¶</a></h5>
+<p>Your <code>github-secrets.yaml</code> should look like this:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">hub</span><span class="p">:</span>
+  <span class="nt">config</span><span class="p">:</span>
+    <span class="nt">GitHubOAuthenticator</span><span class="p">:</span>
+      <span class="nt">client_id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-client-id-here&gt;</span>
+      <span class="nt">client_secret</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-client-secret-here&gt;</span>
+</code></pre></div>
+<h5 id="encode-the-file-contents">Encode the File Contents<a class="headerlink" href="#encode-the-file-contents" title="Permanent link"> ¶</a></h5>
+<p>From your terminal:</p>
+<div class="highlight"><pre><span></span><code>cat github-secrets.yaml | base64 -w 0
+</code></pre></div>
+<h5 id="add-the-encoding-to-your-secret">Add the Encoding to Your Secret<a class="headerlink" href="#add-the-encoding-to-your-secret" title="Permanent link"> ¶</a></h5>
+<p>Add the terminal output from above to your <code>jupyterhub-secrets.yaml</code> file.</p>
+<h5 id="clean-up">Clean up<a class="headerlink" href="#clean-up" title="Permanent link"> ¶</a></h5>
+<p>From your terminal:</p>
+<div class="highlight"><pre><span></span><code>rm github-secrets.yaml
+</code></pre></div>
+<h4 id="reminder-apply-the-secrets-file">Reminder - Apply the secrets file!<a class="headerlink" href="#reminder-apply-the-secrets-file" title="Permanent link"> ¶</a></h4>
+<p>This was a long section, don&rsquo;t forget to apply the following before proceeding.</p>
+<div class="highlight"><pre><span></span><code>kubectl apply -f jupyterhub-secrets.yaml
+</code></pre></div>
+<p>After you apply it - you should delete it or keep it somewhere very safe!</p>
+<h3 id="3-install-the-helm-chart">3. Install the Helm Chart<a class="headerlink" href="#3-install-the-helm-chart" title="Permanent link"> ¶</a></h3>
+<p>You are now ready to install the chart to your cluster using Helm.</p>
+<div class="highlight"><pre><span></span><code>helm dependency update  kubernetes/apps/charts/jupyterhub
+helm install jupyterhub kubernetes/apps/charts/jupyterhub -n jupyterhub
+</code></pre></div>
+<h2 id="updating">Updating<a class="headerlink" href="#updating" title="Permanent link"> ¶</a></h2>
+<p>In general, any non-secret changes to the chart can be added to / adjusted in the chart&rsquo;s <code>values.yaml</code>.</p>
+<p>Upgrade with:</p>
+<div class="highlight"><pre><span></span><code># On changes to dependencies in Chart.yaml, remember to re-run:
+# helm dependency update kubernetes/apps/charts/jupyterhub
+helm upgrade jupyterhub kubernetes/apps/charts/jupyterhub -n jupyterhub
+</code></pre></div>
+<h2 id="domain-name-changes">Domain Name Changes<a class="headerlink" href="#domain-name-changes" title="Permanent link"> ¶</a></h2>
+<p>At the time of this writing, a JupyterHub deployment is available at <code>https://hubtest.k8s.calitp.jarv.us</code>.</p>
+<p>If, in the future, the domain name were to change to something more permanent, some configuration would have to change. Fortunately, though, none of the secrets we covered above are affected by these configuration changes!</p>
+<p>It is advised the below changes are planned and executed in a coordinated effort.</p>
+<h3 id="changes-in-github-oauth">Changes in GitHub OAuth<a class="headerlink" href="#changes-in-github-oauth" title="Permanent link"> ¶</a></h3>
+<p>Within the GitHub OAuth application, in Github, the homepage and callback URLs would need to be changed. Cal-ITP owns the Github OAUth application in GitHub, and <a href="https://github.com/cal-itp/data-infra/issues/367">this Cal-ITP Github issue</a> can be referenced for individual contributors who may be able to helm adjusting the Github OAUth application&rsquo;s homepage and callback URLs.</p>
+<h3 id="changes-in-the-helm-chart">Changes in the Helm Chart<a class="headerlink" href="#changes-in-the-helm-chart" title="Permanent link"> ¶</a></h3>
+<p>After the changes have been made to the GitHub OAuth application, the following portions of the JupyterHub chart&rsquo;s <code>values.yaml</code> must be changed:</p>
+<ul>
+<li><code>hub.config.GitHubOAuthenticator.oauth_callback_url</code></li>
+<li><code>ingress.hosts</code></li>
+<li><code>ingress.tls.hosts</code></li>
+</ul>
+<p>Apply these chart changes with:</p>
+<div class="highlight"><pre><span></span><code>helm upgrade jupyterhub kubernetes/apps/charts/jupyterhub -n jupyterhub
+</code></pre></div>
                 
               
               
@@ -910,7 +1174,7 @@
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../01_overview/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Overview" rel="prev">
+        <a href="../" class="md-footer__link md-footer__link--prev" aria-label="Previous: kubernetes #" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -919,20 +1183,20 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              Overview
+              kubernetes #
             </div>
           </div>
         </a>
       
       
         
-        <a href="../mst_payments/" class="md-footer__link md-footer__link--next" aria-label="Next: MST Payments" rel="next">
+        <a href="../../services/gtfs-ckan-uploader/" class="md-footer__link md-footer__link--next" aria-label="Next: GTFS CKAN Uploader" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              MST Payments
+              GTFS CKAN Uploader
             </div>
           </div>
           <div class="md-footer__button md-icon">
