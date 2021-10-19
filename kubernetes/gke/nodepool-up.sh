@@ -30,6 +30,6 @@ for GKE_NODEPOOL_NAME in "${GKE_NODEPOOL_NAMES[@]}"; do
     --region  "$GKE_REGION"                               \
     --cluster "$GKE_NAME"                                 \
     --num-nodes      "$GKE_NODEPOOL_NODE_COUNT"           \
+    --machine-type "$GKE_NODEPOOL_MACHINE_TYPE"           \
     --node-locations "$GKE_NODEPOOL_NODE_LOCATION"
-#    --machine-type "$GKE_NODEPOOL_MACHINE_TYPE"           \
 done

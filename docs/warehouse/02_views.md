@@ -21,9 +21,9 @@ dst_table_name: "views.dim_date"
 
 # Column descriptions to put into warehouse
 fields:
-  - id: The ID Column
-  - full_date: The full date (e.g. "2021-01-01")
-  - year: The year component (e.g. 2021)
+  id: The ID Column
+  full_date: The full date (e.g. "2021-01-01")
+  year: The year component (e.g. 2021)
 
 # Specify tests to run over the data
 # e.g. check_null to verify a column contains no nulls
@@ -53,4 +53,14 @@ sql: |
 
 ## Testing Changes
 
+As shown in the above section, you can specify tests in your task files, by adding a `tests` field.
+
+Note that there are currently 3 options for testing.
+
+* check_null: test that each column listed does not have NULL values.
+* check_unique: test that each column listed has all unique values.
+* check_composite_unique: test that the combination of all columns listed is unique.
+
 ## Walkthrough
+
+<div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/8873e9e3d01746e280e575898795d49f" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>

@@ -33,7 +33,7 @@ amador-regional-transit-system:
 amtrak:
   agency_name: Amtrak
   feeds:
-    - gtfs_schedule_url: https://storage.cloud.google.com/gtfs-data/schedule-assets/amtrak_transit_feed20210903-20210914T224053Z-001.zip
+    - gtfs_schedule_url: https://storage.googleapis.com/gtfs-data/schedule-assets/amtrak_transit_feed2021-09-03-20211013T204324Z-001.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -337,7 +337,7 @@ cudahy-area-rapid-transit:
 culver-citybus:
   agency_name: Culver CityBus
   feeds:
-    - gtfs_schedule_url: https://www.culvercity.org/files/assets/public/documents/information-technology/maps/culvercityfeed1_11_2020.zip
+    - gtfs_schedule_url: https://www.culvercity.org/files/assets/public/documents/information-technology/maps/cc_bus_09132021.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -382,14 +382,6 @@ downeylink:
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 95
-duarte-transit:
-  agency_name: Duarte Transit
-  feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/duartetransit-ca-us/duartetransit-ca-us.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
-  itp_id: 97
 east-los-angeles-shuttle:
   agency_name: East Los Angeles Shuttle
   feeds:
@@ -553,7 +545,7 @@ grapeline:
 gtrans:
   agency_name: GTrans
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/gtrans-ca-us/gtrans-ca-us.zip
+    - gtfs_schedule_url: http://ridegtrans.com/gtfs.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -837,7 +829,7 @@ north-county-transit-district:
 norwalk-transit-system:
   agency_name: Norwalk Transit System
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/nts-ca-us/nts-ca-us.zip
+    - gtfs_schedule_url: https://www.norwalktransit.com/s/GTFS_Data.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null

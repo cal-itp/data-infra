@@ -25,14 +25,16 @@ done
 test "$CI_STEPS_DIR" || CI_STEPS_DIR=$(git rev-parse --show-toplevel)/ci/steps
 
 #
+# Required
+#
+
+test "$BUILD_APP"               || { printf 'BUILD_APP: '; read BUILD_APP; }
+
+#
 # Defaults
 #
 
 test "$RELEASE_CHANNEL"         || RELEASE_CHANNEL=$(basename "$(git symbolic-ref HEAD)")
-test "$BUILD_GIT_TAG"           || BUILD_GIT_TAG=$(git describe --abbrev=0)
-
-source "$CI_STEPS_DIR/validate-build-git-tag.sh"
-
 test "$RELEASE_KUBE_OVERLAY"    || RELEASE_KUBE_OVERLAY=$(git rev-parse --show-toplevel)/kubernetes/apps/overlays/$BUILD_APP-$RELEASE_CHANNEL
 
 #

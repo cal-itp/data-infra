@@ -20,19 +20,12 @@ fi
 docker_tag=$BUILD_REPO:$BUILD_ID
 docker_tag_latest=${BUILD_REPO}:latest
 
-# setup remote registry
+# skip build for existing images
 if [[ $BUILD_REPO =~ ([^/]+\.[^/]+)/(.*)$ ]]; then
   want_build_push=1
-  registry=${BASH_REMATCH[1]}
-
-  if [[ $registry =~ .*\.gcr\.io$ ]]; then
-    gcloud auth configure-docker
-  elif [[ $BUILD_REPO_USER && $BUILD_REPO_SECRET ]]; then
-    docker login -u "$BUILD_REPO_USER" --password-stdin "$registry" <<< "$BUILD_REPO_SECRET"
-  fi
 
   if docker manifest inspect "$docker_tag" && ! [[ $BUILD_FORCE ]]; then
-    printf 'info: skipping build %s: already exists in registry %s\n' "$docker_tag" "$registry" >&2
+    printf 'info: skipping build %s: already exists in registry\n' "$docker_tag" >&2
     skip_build=1
   fi
 
