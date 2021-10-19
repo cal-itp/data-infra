@@ -146,6 +146,7 @@ After you apply it - you should delete it or keep it somewhere very safe!
 You are now ready to install the chart to your cluster using Helm.
 
 ```
+helm dependency update  kubernetes/apps/charts/jupyterhub
 helm install jupyterhub kubernetes/apps/charts/jupyterhub -n jupyterhub
 ```
 
@@ -156,6 +157,8 @@ In general, any non-secret changes to the chart can be added to / adjusted in th
 Upgrade with:
 
 ```
+# On changes to dependencies in Chart.yaml, remember to re-run:
+# helm dependency update kubernetes/apps/charts/jupyterhub
 helm upgrade jupyterhub kubernetes/apps/charts/jupyterhub -n jupyterhub
 ```
 
