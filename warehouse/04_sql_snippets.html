@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Creating New Tables (Views) &#8212; Juniper Documentation</title>
+    <title>SQL Snippets &#8212; Juniper Documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet" />
   <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -51,8 +51,8 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Metric Views" href="metrics.html" />
-    <link rel="prev" title="Agency GTFS Feeds" href="agencies.html" />
+    <link rel="next" title="Using Metabase" href="05_using_metabase.html" />
+    <link rel="prev" title="Metric Views" href="03_metrics.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
     
@@ -90,7 +90,7 @@
 </ul>
 <ul class="current nav bd-sidenav">
  <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../datasets/overview.html">
+  <a class="reference internal" href="../datasets/01_overview.html">
    DataSets
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
@@ -122,7 +122,7 @@
   </ul>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../kubernetes/overview.html">
+  <a class="reference internal" href="../kubernetes/README.html">
    Kubernetes
   </a>
  </li>
@@ -159,32 +159,32 @@
   </label>
   <ul class="current">
    <li class="toctree-l2">
-    <a class="reference internal" href="agencies.html">
+    <a class="reference internal" href="01_agencies.html">
      Agency GTFS Feeds
     </a>
    </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
+   <li class="toctree-l2">
+    <a class="reference internal" href="02_views.html">
      Creating New Tables (Views)
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="metrics.html">
+    <a class="reference internal" href="03_metrics.html">
      Metric Views
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="sql_snippets.html">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
      SQL Snippets
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="using_metabase.html">
+    <a class="reference internal" href="05_using_metabase.html">
      Using Metabase
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="table_names.html">
+    <a class="reference internal" href="06_table_names.html">
      Table names
     </a>
    </li>
@@ -231,7 +231,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/warehouse/views.md"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/warehouse/04_sql_snippets.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -251,7 +251,7 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fwarehouse/views.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fwarehouse/04_sql_snippets.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
         
@@ -278,18 +278,18 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#syntax-overview">
-   Syntax overview
+  <a class="reference internal nav-link" href="#fetching-historical-data-for-specific-dates">
+   Fetching historical data for specific dates
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#testing-changes">
-   Testing Changes
+  <a class="reference internal nav-link" href="#a-single-date">
+   A single date
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#walkthrough">
-   Walkthrough
+  <a class="reference internal nav-link" href="#multiple-dates">
+   Multiple dates
   </a>
  </li>
 </ul>
@@ -303,82 +303,47 @@
         
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="creating-new-tables-views">
-<h1>Creating New Tables (Views)<a class="headerlink" href="#creating-new-tables-views" title="Permalink to this headline">¶</a></h1>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>operator</p></th>
-<th class="head"><p>description</p></th>
-<th class="head"><p>example</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>CsvToWarehouseOperator</p></td>
-<td><p>Load a CSV (or google sheet) from a URL</p></td>
-<td><p><a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/airflow/dags/transitstacks_loader/fares.yml"><code class="docutils literal notranslate"><span class="pre">transitstacks.fares</span></code></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>PythonToWarehouseOperator</p></td>
-<td><p>Load data using python and the calitp library. This is a very flexible approach. It’s useful when you want to do a small amount of processing before loading.</p></td>
-<td><p><a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/airflow/dags/gtfs_views/validation_code_descriptions.py"><code class="docutils literal notranslate"><span class="pre">views.validation_code_descriptions</span></code></a></p></td>
-</tr>
-<tr class="row-even"><td><p>SqlToWarehouseOperator</p></td>
-<td><p>Create a new table from a SQL query.</p></td>
-<td><p><a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/airflow/dags/gtfs_views/transitstacks.yml"><code class="docutils literal notranslate"><span class="pre">views.transitstacks</span></code></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>SqlQueryOperator</p></td>
-<td><p>Run arbitrary SQL (e.g. <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">EXTERNAL</span> <span class="pre">TABLE</span> <span class="pre">...</span></code>)</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-<div class="section" id="syntax-overview">
-<h2>Syntax overview<a class="headerlink" href="#syntax-overview" title="Permalink to this headline">¶</a></h2>
-<p>Below is a file similar to the one used to create <code class="docutils literal notranslate"><span class="pre">views.transitstacks</span></code>.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># What operator to use. This determines the options available, and how the</span>
-<span class="c1"># pipeline executes this task.</span>
-<span class="nt">operator</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">operators.SqlToWarehouseOperator</span>
-
-<span class="c1"># Name of the table to load into the warehouse</span>
-<span class="nt">dst_table_name</span><span class="p">:</span> <span class="s">&quot;views.dim_date&quot;</span>
-
-<span class="c1"># Column descriptions to put into warehouse</span>
-<span class="nt">fields</span><span class="p">:</span>
-  <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The ID Column</span>
-  <span class="nt">full_date</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The full date (e.g. &quot;2021-01-01&quot;)</span>
-  <span class="nt">year</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The year component (e.g. 2021)</span>
-
-<span class="c1"># Specify tests to run over the data</span>
-<span class="c1"># e.g. check_null to verify a column contains no nulls</span>
-<span class="c1"># e.g. check_unique to verify no duplicate values in a column</span>
-<span class="nt">tests</span><span class="p">:</span>
-  <span class="nt">check_null</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">id</span>
-  <span class="nt">check_unique</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">id</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">full_date</span>
-
-<span class="c1"># Other tasks this depends on. For example, if it uses another SQL view, then</span>
-<span class="c1"># that view should be a dependency</span>
-<span class="nt">dependencies</span><span class="p">:</span>
-  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">warehouse_loaded</span>
-
-<span class="c1"># The actual SQL code to be run!</span>
-<span class="nt">sql</span><span class="p">:</span> <span class="p p-Indicator">|</span>
-  <span class="no"># from https://gist.github.com/ewhauser/d7dd635ad2d4b20331c7f18038f04817</span>
-  <span class="no">SELECT</span>
-    <span class="no">FORMAT_DATE(&#39;%F&#39;, d) as id,</span>
-    <span class="no">d AS full_date,</span>
-    <span class="no">EXTRACT(YEAR FROM d) AS year,</span>
-  <span class="no">FROM</span>
-    <span class="no">UNNEST(GENERATE_DATE_ARRAY(&#39;2001-01-01&#39;, &#39;2050-01-01&#39;, INTERVAL 1 DAY)) d</span>
+  <div class="tex2jax_ignore mathjax_ignore section" id="sql-snippets">
+<h1>SQL Snippets<a class="headerlink" href="#sql-snippets" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="fetching-historical-data-for-specific-dates">
+<h2>Fetching historical data for specific dates<a class="headerlink" href="#fetching-historical-data-for-specific-dates" title="Permalink to this headline">¶</a></h2>
+<p>Some tables in the warehouse–like those in <code class="docutils literal notranslate"><span class="pre">gtfs_schedule_type2</span></code>–capture the full
+history of data, as it existed every day in the past. In order to do this, they
+don’t save copies of the full data every day, but log changes to the data using
+a <code class="docutils literal notranslate"><span class="pre">calitp_extracted_at</span></code>, and <code class="docutils literal notranslate"><span class="pre">calitp_deleted_at</span></code> column.</p>
+<p>In order to get the data for a given day, you need to filter to keep data where..</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">calitp_extracted_at</span></code> was earlier than or on the target date.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">calitp_deleted_at</span></code> is later than the target date.</p></li>
+</ul>
+</div>
+<div class="section" id="a-single-date">
+<h2>A single date<a class="headerlink" href="#a-single-date" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="o">`</span><span class="n">gtfs_schedule_type2</span><span class="p">.</span><span class="n">feed_info</span><span class="o">`</span>
+<span class="k">WHERE</span>
+    <span class="n">calitp_extracted_at</span> <span class="o">&gt;=</span> <span class="ss">&quot;2021-06-01&quot;</span>
+    <span class="k">AND</span> <span class="k">COALESCE</span><span class="p">(</span><span class="n">calitp_deleted_at</span><span class="p">,</span> <span class="ss">&quot;2099-01-01&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="ss">&quot;2021-06-01&quot;</span>
 </pre></div>
 </div>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">COALESCE</span></code> lets us fill in NULL deleted at values to be far in the future.
+This is used because when deleted at is missing, it reflects the most recent data
+(i.e. data that hasn’t been deleted yet).
+Because <code class="docutils literal notranslate"><span class="pre">NULL</span> <span class="pre">&lt;</span> <span class="pre">&quot;2021-06-01&quot;</span></code> is <code class="docutils literal notranslate"><span class="pre">false</span></code>, we need to fill it in with a far-future date,
+so it evaluates to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
 </div>
-<div class="section" id="testing-changes">
-<h2>Testing Changes<a class="headerlink" href="#testing-changes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="multiple-dates">
+<h2>Multiple dates<a class="headerlink" href="#multiple-dates" title="Permalink to this headline">¶</a></h2>
+<p>In order to do it for a range of dates, you can use a JOIN. This is shown below.</p>
+<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="o">`</span><span class="n">gtfs_schedule_type2</span><span class="p">.</span><span class="n">feed_info</span><span class="o">`</span> <span class="n">FI</span>
+<span class="k">JOIN</span> <span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">dim_date</span><span class="o">`</span> <span class="n">D</span>
+    <span class="k">ON</span> <span class="n">FI</span><span class="p">.</span><span class="n">calitp_extracted_at</span> <span class="o">&lt;=</span> <span class="n">D</span><span class="p">.</span><span class="n">full_date</span>
+        <span class="k">AND</span> <span class="k">COALESCE</span><span class="p">(</span><span class="n">FI</span><span class="p">.</span><span class="n">calitp_deleted_at</span><span class="p">,</span> <span class="ss">&quot;2099-01-01&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">D</span><span class="p">.</span><span class="n">full_date</span>
+<span class="k">WHERE</span>
+    <span class="n">D</span><span class="p">.</span><span class="n">full_date</span> <span class="k">BETWEEN</span> <span class="p">(</span><span class="ss">&quot;2021-06-01&quot;</span><span class="p">,</span> <span class="ss">&quot;2021-06-07&quot;</span><span class="p">)</span>
+</pre></div>
 </div>
-<div class="section" id="walkthrough">
-<h2>Walkthrough<a class="headerlink" href="#walkthrough" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -412,19 +377,19 @@
 <div class='prev-next-bottom'>
     
     <div id="prev">
-        <a class="left-prev" href="agencies.html" title="previous page">
+        <a class="left-prev" href="03_metrics.html" title="previous page">
             <i class="prevnext-label fas fa-angle-left"></i>
             <div class="prevnext-info">
                 <p class="prevnext-label">previous</p>
-                <p class="prevnext-title">Agency GTFS Feeds</p>
+                <p class="prevnext-title">Metric Views</p>
             </div>
         </a>
     </div>
      <div id="next">
-        <a class="right-next" href="metrics.html" title="next page">
+        <a class="right-next" href="05_using_metabase.html" title="next page">
             <div class="prevnext-info">
                 <p class="prevnext-label">next</p>
-                <p class="prevnext-title">Metric Views</p>
+                <p class="prevnext-title">Using Metabase</p>
             </div>
             <i class="prevnext-label fas fa-angle-right"></i>
         </a>

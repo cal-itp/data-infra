@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SQL Snippets &#8212; Juniper Documentation</title>
+    <title>Using Metabase &#8212; Juniper Documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet" />
   <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -51,8 +51,8 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Using Metabase" href="using_metabase.html" />
-    <link rel="prev" title="Metric Views" href="metrics.html" />
+    <link rel="next" title="Table names" href="06_table_names.html" />
+    <link rel="prev" title="SQL Snippets" href="04_sql_snippets.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
     
@@ -90,7 +90,7 @@
 </ul>
 <ul class="current nav bd-sidenav">
  <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../datasets/overview.html">
+  <a class="reference internal" href="../datasets/01_overview.html">
    DataSets
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
@@ -122,7 +122,7 @@
   </ul>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../kubernetes/overview.html">
+  <a class="reference internal" href="../kubernetes/README.html">
    Kubernetes
   </a>
  </li>
@@ -159,32 +159,32 @@
   </label>
   <ul class="current">
    <li class="toctree-l2">
-    <a class="reference internal" href="agencies.html">
+    <a class="reference internal" href="01_agencies.html">
      Agency GTFS Feeds
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="views.html">
+    <a class="reference internal" href="02_views.html">
      Creating New Tables (Views)
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="metrics.html">
+    <a class="reference internal" href="03_metrics.html">
      Metric Views
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="04_sql_snippets.html">
+     SQL Snippets
     </a>
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     SQL Snippets
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="using_metabase.html">
      Using Metabase
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="table_names.html">
+    <a class="reference internal" href="06_table_names.html">
      Table names
     </a>
    </li>
@@ -229,9 +229,12 @@
 
     <div class="dropdown-buttons">
         <!-- ipynb file if we had a myst markdown file -->
-        
+        <a class="dropdown-buttons"
+            href="../_sources/warehouse/05_using_metabase.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/warehouse/sql_snippets.md"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/warehouse/05_using_metabase.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -251,7 +254,7 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fwarehouse/sql_snippets.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fwarehouse/05_using_metabase.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
         
@@ -267,6 +270,23 @@
 
             <!-- Launch buttons -->
 
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/cal-itp/data-infra/master?urlpath=tree/docs/warehouse/05_using_metabase.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
         </div>
 
         <!-- Table of contents -->
@@ -278,19 +298,50 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#fetching-historical-data-for-specific-dates">
-   Fetching historical data for specific dates
+  <a class="reference internal nav-link" href="#what-is-metabase">
+   What is Metabase?
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#overview">
+     Overview
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#general-metabase-resources">
+     General Metabase Resources
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#a-single-date">
-   A single date
+  <a class="reference internal nav-link" href="#metabase-at-cal-itp">
+   Metabase at Cal-ITP
   </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#multiple-dates">
-   Multiple dates
-  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cal-itp-collections">
+     Cal-ITP Collections
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cal-itp-dashboards-conventions">
+     Cal-ITP Dashboards Conventions
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#hierarchy">
+       Hierarchy
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#question-title-format">
+       Question Title Format
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -303,46 +354,112 @@
         
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="sql-snippets">
-<h1>SQL Snippets<a class="headerlink" href="#sql-snippets" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="fetching-historical-data-for-specific-dates">
-<h2>Fetching historical data for specific dates<a class="headerlink" href="#fetching-historical-data-for-specific-dates" title="Permalink to this headline">¶</a></h2>
-<p>Some tables in the warehouse–like those in <code class="docutils literal notranslate"><span class="pre">gtfs_schedule_type2</span></code>–capture the full
-history of data, as it existed every day in the past. In order to do this, they
-don’t save copies of the full data every day, but log changes to the data using
-a <code class="docutils literal notranslate"><span class="pre">calitp_extracted_at</span></code>, and <code class="docutils literal notranslate"><span class="pre">calitp_deleted_at</span></code> column.</p>
-<p>In order to get the data for a given day, you need to filter to keep data where..</p>
+  <div class="tex2jax_ignore mathjax_ignore section" id="using-metabase">
+<h1>Using Metabase<a class="headerlink" href="#using-metabase" title="Permalink to this headline">¶</a></h1>
+<p>Metabase is Cal-ITP’s dashboarding tool, and it’s where data generated by Cal-ITP’s data
+pipeline can be turned in to graphs, tables, and robust dashboards.</p>
+<p>This page will provide you with some general Metabase resources, as well as guidance on how
+Metabase is best utilized for the Cal-ITP project.</p>
+<div class="section" id="what-is-metabase">
+<h2>What is Metabase?<a class="headerlink" href="#what-is-metabase" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h3>
+<p>If you have never used Metabase before, there are a few important terms:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">calitp_extracted_at</span></code> was earlier than or on the target date.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">calitp_deleted_at</span></code> is later than the target date.</p></li>
+<li><p><strong>Question:</strong> A single table or graph, created by you with either SQL or Metabase’s point-and-click UI.</p></li>
+<li><p><strong>Dashboard:</strong> A group of questions that work together to support holistic data exploration and help inform decisions.</p></li>
+<li><p><strong>Collection:</strong> Essentially, a “folder” for us to put relevant questions and dashboards into.</p></li>
+</ul>
+<p>You can also incorporate filters into your questions and dashboards, specify custom
+click behavior in your dashboards, and more.</p>
+</div>
+<div class="section" id="general-metabase-resources">
+<h3>General Metabase Resources<a class="headerlink" href="#general-metabase-resources" title="Permalink to this headline">¶</a></h3>
+<p>One reason Metabase is awesome is because of its <a class="reference external" href="https://www.metabase.com/learn/">learn</a> section,
+which is full of useful tutorials on how to work with Metabase questions, dashboards, and more.</p>
+<p>Below are some helpful articles from Metabase’s learn section:</p>
+<ul class="simple">
+<li><p>Getting Started</p>
+<ul>
+<li><p><a class="reference external" href="https://www.metabase.com/learn/getting-started/getting-started.html">Getting Started with Metabase</a> (Video included!)</p></li>
+<li><p><a class="reference external" href="https://www.metabase.com/learn/getting-started/tour-of-metabase.html">A Tour of Metabase</a></p></li>
+</ul>
+</li>
+<li><p>Asking Questions</p>
+<ul>
+<li><p><a class="reference external" href="https://www.metabase.com/learn/questions/drill-through.html">Create Charts with Explorable Data</a></p></li>
+<li><p><a class="reference external" href="https://www.metabase.com/learn/questions/custom-expressions.html">Custom Expressions in the Notebook Editor</a></p></li>
+</ul>
+</li>
+<li><p>Working with SQL</p>
+<ul>
+<li><p><a class="reference external" href="https://www.metabase.com/learn/sql-questions/sql-best-practices.html">Best Practices for Writing SQL Queries</a></p></li>
+<li><p><a class="reference external" href="https://www.metabase.com/learn/sql-questions/sql-variables.html">Create Filter Widgets for Charts Using SQL Variables</a> (Video included!)</p></li>
+<li><p><a class="reference external" href="https://www.metabase.com/learn/sql-questions/field-filters.html">Field Filters</a></p></li>
+</ul>
+</li>
+<li><p>Visualizing Data</p>
+<ul>
+<li><p><a class="reference external" href="https://www.metabase.com/learn/visualization/chart-guide.html">Which Chart Should You Use?</a></p></li>
+<li><p><a class="reference external" href="https://www.metabase.com/learn/visualization/table.html">Everything You Can Do with the Table Visualization</a></p></li>
+<li><p><a class="reference external" href="https://www.metabase.com/learn/visualization/maps.html">Visualizing Data with Maps</a> (Video included!)</p></li>
+</ul>
+</li>
+<li><p>Building Dashboards</p>
+<ul>
+<li><p><a class="reference external" href="https://www.metabase.com/learn/dashboards/bi-dashboard-best-practices.html">Best Practices for BI Dashboards</a></p></li>
+<li><p><a class="reference external" href="https://www.metabase.com/learn/dashboards/linking-filters.html">Linking Filters</a></p></li>
+</ul>
+</li>
 </ul>
 </div>
-<div class="section" id="a-single-date">
-<h2>A single date<a class="headerlink" href="#a-single-date" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span>
-<span class="k">FROM</span> <span class="o">`</span><span class="n">gtfs_schedule_type2</span><span class="p">.</span><span class="n">feed_info</span><span class="o">`</span>
-<span class="k">WHERE</span>
-    <span class="n">calitp_extracted_at</span> <span class="o">&gt;=</span> <span class="ss">&quot;2021-06-01&quot;</span>
-    <span class="k">AND</span> <span class="k">COALESCE</span><span class="p">(</span><span class="n">calitp_deleted_at</span><span class="p">,</span> <span class="ss">&quot;2099-01-01&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="ss">&quot;2021-06-01&quot;</span>
-</pre></div>
 </div>
-<p>Note that <code class="docutils literal notranslate"><span class="pre">COALESCE</span></code> lets us fill in NULL deleted at values to be far in the future.
-This is used because when deleted at is missing, it reflects the most recent data
-(i.e. data that hasn’t been deleted yet).
-Because <code class="docutils literal notranslate"><span class="pre">NULL</span> <span class="pre">&lt;</span> <span class="pre">&quot;2021-06-01&quot;</span></code> is <code class="docutils literal notranslate"><span class="pre">false</span></code>, we need to fill it in with a far-future date,
-so it evaluates to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+<div class="section" id="metabase-at-cal-itp">
+<h2>Metabase at Cal-ITP<a class="headerlink" href="#metabase-at-cal-itp" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="cal-itp-collections">
+<h3>Cal-ITP Collections<a class="headerlink" href="#cal-itp-collections" title="Permalink to this headline">¶</a></h3>
+<p>Cal-ITP’s Metabase instance makes use of collections to keep questions and dashboards
+organized. Additionally, these collections have specific read/write permissions, in order
+to ensure only certain users are able to edit certain questions. This approach helps separate
+concerns of question/dashboard ownership and responsibility. As of this writing, there are
+three primary collections:</p>
+<ul class="simple">
+<li><p><strong>Cal-ITP Dashboards:</strong> Read-only dashboards, editable only by Cal-ITP analysts</p></li>
+<li><p><strong>Cal-ITP Commons:</strong> Permission-less sharing of questions and dashboards</p></li>
+<li><p><strong>Cal-ITP Development:</strong> Analyst-only collection for works in progress</p></li>
+</ul>
+<p>In general, the <strong>Cal-ITP Dashboards</strong> collection is used for what we might consider
+“complete” or “official” sources of truth for the work done by Cal-ITP analysts.</p>
+<p>If you are analyst, the 2x2 matrix below should help you understand which
+collection you should be operating in for a given piece of work:</p>
+<p><img alt="Collection Matrix" src="https://raw.githubusercontent.com/cal-itp/data-infra/main/docs/warehouse/assets/which_collection_to_use.png" /></p>
 </div>
-<div class="section" id="multiple-dates">
-<h2>Multiple dates<a class="headerlink" href="#multiple-dates" title="Permalink to this headline">¶</a></h2>
-<p>In order to do it for a range of dates, you can use a JOIN. This is shown below.</p>
-<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span>
-<span class="k">FROM</span> <span class="o">`</span><span class="n">gtfs_schedule_type2</span><span class="p">.</span><span class="n">feed_info</span><span class="o">`</span> <span class="n">FI</span>
-<span class="k">JOIN</span> <span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">dim_date</span><span class="o">`</span> <span class="n">D</span>
-    <span class="k">ON</span> <span class="n">FI</span><span class="p">.</span><span class="n">calitp_extracted_at</span> <span class="o">&lt;=</span> <span class="n">D</span><span class="p">.</span><span class="n">full_date</span>
-        <span class="k">AND</span> <span class="k">COALESCE</span><span class="p">(</span><span class="n">FI</span><span class="p">.</span><span class="n">calitp_deleted_at</span><span class="p">,</span> <span class="ss">&quot;2099-01-01&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">D</span><span class="p">.</span><span class="n">full_date</span>
-<span class="k">WHERE</span>
-    <span class="n">D</span><span class="p">.</span><span class="n">full_date</span> <span class="k">BETWEEN</span> <span class="p">(</span><span class="ss">&quot;2021-06-01&quot;</span><span class="p">,</span> <span class="ss">&quot;2021-06-07&quot;</span><span class="p">)</span>
-</pre></div>
+<div class="section" id="cal-itp-dashboards-conventions">
+<h3>Cal-ITP Dashboards Conventions<a class="headerlink" href="#cal-itp-dashboards-conventions" title="Permalink to this headline">¶</a></h3>
+<p>The Cal-ITP Dashboards collection has a few specific conventions that you
+should follow in order to help keep your work maintainable and navigable
+by your teammates.</p>
+<div class="section" id="hierarchy">
+<h4>Hierarchy<a class="headerlink" href="#hierarchy" title="Permalink to this headline">¶</a></h4>
+<p>In the Cal-ITP Dashboards collection, you will notice that all of the dashboards
+are pinned.</p>
+<p>Within this collection, there are sub-collections - one sub-collection for each
+dashboard. For sub-collection naming, if the dashboard is called “GTFS Schedule
+Dashboard”, the sub-collection should be called “GTFS Schedule Dashboard Questions”.
+Keeping with this example, all of the questions that power the GTFS Schedule Dashboard
+should be kept in the GTFS Schedule Dashboard sub-collection.</p>
+</div>
+<div class="section" id="question-title-format">
+<h4>Question Title Format<a class="headerlink" href="#question-title-format" title="Permalink to this headline">¶</a></h4>
+<p>Dashboards can feature a lot of questions! In order to keep questions organized in
+their sub-collections, we use a double pipe (<code class="docutils literal notranslate"><span class="pre">||</span></code>) to separate the section of the
+dashboard from the question name. Having both the dashboard section and the question
+name available available in the title of the question makes for a manageable rendering
+of all questions in a dashboard’s sub-collection of questions.</p>
+<p>A question naming example would be something like this: if there was a “Summary” section
+of your dashboard, and you had a question that specified the start date of that dashboard,
+then your title would be something like <code class="docutils literal notranslate"><span class="pre">Summary</span> <span class="pre">||</span> <span class="pre">Dashboard</span> <span class="pre">Start</span> <span class="pre">Date</span></code>.</p>
+</div>
 </div>
 </div>
 </div>
@@ -377,19 +494,19 @@ so it evaluates to <code class="docutils literal notranslate"><span class="pre">
 <div class='prev-next-bottom'>
     
     <div id="prev">
-        <a class="left-prev" href="metrics.html" title="previous page">
+        <a class="left-prev" href="04_sql_snippets.html" title="previous page">
             <i class="prevnext-label fas fa-angle-left"></i>
             <div class="prevnext-info">
                 <p class="prevnext-label">previous</p>
-                <p class="prevnext-title">Metric Views</p>
+                <p class="prevnext-title">SQL Snippets</p>
             </div>
         </a>
     </div>
      <div id="next">
-        <a class="right-next" href="using_metabase.html" title="next page">
+        <a class="right-next" href="06_table_names.html" title="next page">
             <div class="prevnext-info">
                 <p class="prevnext-label">next</p>
-                <p class="prevnext-title">Using Metabase</p>
+                <p class="prevnext-title">Table names</p>
             </div>
             <i class="prevnext-label fas fa-angle-right"></i>
         </a>

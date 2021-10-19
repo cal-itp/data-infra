@@ -90,7 +90,7 @@
 </ul>
 <ul class="current nav bd-sidenav">
  <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="overview.html">
+  <a class="reference internal" href="01_overview.html">
    DataSets
   </a>
   <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
@@ -122,7 +122,7 @@
   </ul>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../kubernetes/overview.html">
+  <a class="reference internal" href="../kubernetes/README.html">
    Kubernetes
   </a>
  </li>
@@ -159,32 +159,32 @@
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/agencies.html">
+    <a class="reference internal" href="../warehouse/01_agencies.html">
      Agency GTFS Feeds
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/views.html">
+    <a class="reference internal" href="../warehouse/02_views.html">
      Creating New Tables (Views)
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/metrics.html">
+    <a class="reference internal" href="../warehouse/03_metrics.html">
      Metric Views
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/sql_snippets.html">
+    <a class="reference internal" href="../warehouse/04_sql_snippets.html">
      SQL Snippets
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/using_metabase.html">
+    <a class="reference internal" href="../warehouse/05_using_metabase.html">
      Using Metabase
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/table_names.html">
+    <a class="reference internal" href="../warehouse/06_table_names.html">
      Table names
     </a>
    </li>
@@ -314,39 +314,7 @@
 <h1>Transitstacks<a class="headerlink" href="#transitstacks" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="data">
 <h2>Data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h2>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>dataset</p></th>
-<th class="head"><p>description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p></p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-<div class="highlight-mermaid notranslate"><div class="highlight"><pre><span></span>erDiagram
-    Organization }o--o{ Contact : &quot;represented by&quot;
-    Organization }o--o{ Service: &quot;manages&quot;
-    Organization }o--o{ Service: &quot;operates&quot;
-    Organization }o--o{ Contract: &quot;owns&quot;
-    Organization }o--o{ Contract: &quot;holds&quot;
-    Organization }o--o{ Product: &quot;sells&quot;
-    Organization }o--o{ GtfsDataset: &quot;consumes&quot;
-    Organization }o--o{ GtfsDataset: &quot;produces&quot;
-
-    Service }o--o{ GtfsDataset: &quot;reflected by&quot;
-
-    OrganizationStackComponent }o..o{ Organization: &quot;associates&quot;
-    OrganizationStackComponent }o..o{ Product: &quot;associates&quot;
-    OrganizationStackComponent }o..o{ Component: &quot;associates&quot;
-    OrganizationStackComponent }o..o{ Contract: &quot;associates&quot;
-
-    OrganizationStackComponentRelationship }o..o{ OrganizationStackComponent: componentA
-    OrganizationStackComponentRelationship }o..o{ OrganizationStackComponent: componentB
-</pre></div>
-</div>
+<p><a class="reference external" href="https://mermaid-js.github.io/mermaid-live-editor/edit/#eyJjb2RlIjoiZXJEaWFncmFtXG4gICAgT3JnYW5pemF0aW9uIH1vLS1veyBDb250YWN0IDogXCJyZXByZXNlbnRlZCBieVwiXG4gICAgT3JnYW5pemF0aW9uIH1vLS1veyBTZXJ2aWNlOiBcIm1hbmFnZXNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgU2VydmljZTogXCJvcGVyYXRlc1wiXG4gICAgT3JnYW5pemF0aW9uIH1vLS1veyBDb250cmFjdDogXCJvd25zXCJcbiAgICBPcmdhbml6YXRpb24gfW8tLW97IENvbnRyYWN0OiBcImhvbGRzXCJcbiAgICBPcmdhbml6YXRpb24gfW8tLW97IFByb2R1Y3Q6IFwic2VsbHNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgR3Rmc0RhdGFzZXQ6IFwiY29uc3VtZXNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgR3Rmc0RhdGFzZXQ6IFwicHJvZHVjZXNcIlxuXG4gICAgU2VydmljZSB9by0tb3sgR3Rmc0RhdGFzZXQ6IFwicmVmbGVjdGVkIGJ5XCJcblxuICAgIE9yZ2FuaXphdGlvblN0YWNrQ29tcG9uZW50IH1vLi5veyBPcmdhbml6YXRpb246IFwiYXNzb2NpYXRlc1wiXG4gICAgT3JnYW5pemF0aW9uU3RhY2tDb21wb25lbnQgfW8uLm97IFByb2R1Y3Q6IFwiYXNzb2NpYXRlc1wiXG4gICAgT3JnYW5pemF0aW9uU3RhY2tDb21wb25lbnQgfW8uLm97IENvbXBvbmVudDogXCJhc3NvY2lhdGVzXCJcbiAgICBPcmdhbml6YXRpb25TdGFja0NvbXBvbmVudCB9by4ub3sgQ29udHJhY3Q6IFwiYXNzb2NpYXRlc1wiXG5cbiAgICBPcmdhbml6YXRpb25TdGFja0NvbXBvbmVudFJlbGF0aW9uc2hpcCB9by4ub3sgT3JnYW5pemF0aW9uU3RhY2tDb21wb25lbnQ6IGNvbXBvbmVudEFcbiAgICBPcmdhbml6YXRpb25TdGFja0NvbXBvbmVudFJlbGF0aW9uc2hpcCB9by4ub3sgT3JnYW5pemF0aW9uU3RhY2tDb21wb25lbnQ6IGNvbXBvbmVudEIiLCJtZXJtYWlkIjoie1xuICBcInRoZW1lXCI6IFwiZGVmYXVsdFwiXG59IiwidXBkYXRlRWRpdG9yIjpmYWxzZSwiYXV0b1N5bmMiOnRydWUsInVwZGF0ZURpYWdyYW0iOnRydWV9"><img alt="" src="https://mermaid.ink/img/eyJjb2RlIjoiZXJEaWFncmFtXG4gICAgT3JnYW5pemF0aW9uIH1vLS1veyBDb250YWN0IDogXCJyZXByZXNlbnRlZCBieVwiXG4gICAgT3JnYW5pemF0aW9uIH1vLS1veyBTZXJ2aWNlOiBcIm1hbmFnZXNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgU2VydmljZTogXCJvcGVyYXRlc1wiXG4gICAgT3JnYW5pemF0aW9uIH1vLS1veyBDb250cmFjdDogXCJvd25zXCJcbiAgICBPcmdhbml6YXRpb24gfW8tLW97IENvbnRyYWN0OiBcImhvbGRzXCJcbiAgICBPcmdhbml6YXRpb24gfW8tLW97IFByb2R1Y3Q6IFwic2VsbHNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgR3Rmc0RhdGFzZXQ6IFwiY29uc3VtZXNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgR3Rmc0RhdGFzZXQ6IFwicHJvZHVjZXNcIlxuXG4gICAgU2VydmljZSB9by0tb3sgR3Rmc0RhdGFzZXQ6IFwicmVmbGVjdGVkIGJ5XCJcblxuICAgIE9yZ2FuaXphdGlvblN0YWNrQ29tcG9uZW50IH1vLi5veyBPcmdhbml6YXRpb246IFwiYXNzb2NpYXRlc1wiXG4gICAgT3JnYW5pemF0aW9uU3RhY2tDb21wb25lbnQgfW8uLm97IFByb2R1Y3Q6IFwiYXNzb2NpYXRlc1wiXG4gICAgT3JnYW5pemF0aW9uU3RhY2tDb21wb25lbnQgfW8uLm97IENvbXBvbmVudDogXCJhc3NvY2lhdGVzXCJcbiAgICBPcmdhbml6YXRpb25TdGFja0NvbXBvbmVudCB9by4ub3sgQ29udHJhY3Q6IFwiYXNzb2NpYXRlc1wiXG5cbiAgICBPcmdhbml6YXRpb25TdGFja0NvbXBvbmVudFJlbGF0aW9uc2hpcCB9by4ub3sgT3JnYW5pemF0aW9uU3RhY2tDb21wb25lbnQ6IGNvbXBvbmVudEFcbiAgICBPcmdhbml6YXRpb25TdGFja0NvbXBvbmVudFJlbGF0aW9uc2hpcCB9by4ub3sgT3JnYW5pemF0aW9uU3RhY2tDb21wb25lbnQ6IGNvbXBvbmVudEIiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9LCJ1cGRhdGVFZGl0b3IiOmZhbHNlLCJhdXRvU3luYyI6dHJ1ZSwidXBkYXRlRGlhZ3JhbSI6dHJ1ZX0" /></a></p>
 </div>
 <div class="section" id="dashboards">
 <h2>Dashboards<a class="headerlink" href="#dashboards" title="Permalink to this headline">¶</a></h2>
