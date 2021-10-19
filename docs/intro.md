@@ -1,8 +1,5 @@
 # Juniper Documentation
 
-> \"Welcome.\" -- Natalya Diaz
-
-
 ## Welcome
 
 This website provides technical documentation for the Juniper codebase. Documentation for the `main` branch is available online at [Calitp](https://docs.calitp.org/data-infra)
@@ -20,4 +17,10 @@ Changes to docs will be published to the online docs website automatically after
 - see `mkdocs.yml` for enabled plugins/features
 
 [Mermaid](https://mermaid-js.github.io/mermaid/#/)
-- use code fences with mermade type to render Mermaid diagrams within docs. for example this markdown:
+- use code fences with mermaid type to render Mermaid diagrams within docs. for example this markdown:
+
+```mermaid
+    graph LR
+        Start --> Stop
+```
+Yields this diagram:
