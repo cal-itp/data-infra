@@ -92,8 +92,9 @@ These tables compliment the fact tables by providing additional descriptive attr
 *Importing Relevant Python Libraries*
 
 
-```python
+```{code-cell}
 from calitp.tables import tbl
+from myst_nb import glue
 from calitp import query_sql
 from siuba import *
 import pandas as pd
@@ -113,8 +114,7 @@ pd.set_option("display.max_rows", 20)
 *Geography* → **route_key** (the unique identifier for each record, to *COUNT* by)
 *Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*)
 
-```python
-query_sql("""
+```{code-cell}
 SELECT
     calitp_feed_name,
     date,
@@ -123,27 +123,23 @@ FROM `views.gtfs_schedule_fact_daily_feed_routes`
 JOIN `views.gtfs_schedule_dim_feeds` USING (feed_key)
 WHERE
     calitp_feed_name = "Unitrans (0)"
-GROUP BY
-    1, 2
+GROUP BY 1, 2
 ORDER BY
     date DESC
 LIMIT 10
-""")
 ```
 
 ### Metabase
 
-
-### Primary Fact Table** → Gtfs Schedule Fact Daily Feed Routes
-### Secondary Table** → Gtfs Schedule Dim Feeds
+### Example 1:
+#### Primary Fact Table → Gtfs Schedule Fact Daily Feed Routes
+#### Secondary Table → Gtfs Schedule Dim Feeds
 
 *Time* → **Date** (*FILTER*)
 *Geography* → **Route Key** (the unique identifier for each record, to *COUNT* by)
 *Agency* → Metabase automatically joins with table **Gtfs Schedule Dim Feeds** on variable **Feed Key** to get **Calitp Feed Name** (*FILTER*)
 
-
-<img src="assets/routes_agency_over_time.png" alt="Metabase Configuration Screenshots" style="width: 700px;"/>
-
+![Collection Matrix](assets/routes_agency_over_time.png)
 
 #### Siuba
 
@@ -157,7 +153,7 @@ LIMIT 10
 *Geography* → **route_key** (the unique identifier for each record)
 *Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*FILTER* by)
 
-```python
+```{code-cell}
 # Join to get CalITP Feed Names
 # Count routes by date and CalITP Feed Names, order by date, filter by specific calitp_feed_name
 (
@@ -170,17 +166,12 @@ LIMIT 10
 ```
 
 
-### metabase	### 2. Number of Stops for a Given Agency Over Time
+### metabase
+### Example 2. Number of Stops for a Given Agency Over Time
 
 
-
-
-![](assets/issue_329.png)	#### SQL
-
-
-
-
-### siuba	**Primary Fact Table** → views.gtfs_schedule_fact_daily_feed_stops
+### SQL
+**Primary Fact Table** → views.gtfs_schedule_fact_daily_feed_stops
 **Secondary Table** →  views.gtfs_schedule_dim_feeds
 
 *Time* → **date** (*GROUP BY*)
@@ -188,7 +179,7 @@ LIMIT 10
 *Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*)
 
 
-```python
+```{code-cell}
 tbl.gtfs_schedule.agency()	query_sql("""
 SELECT
     calitp_feed_name,
@@ -207,7 +198,7 @@ LIMIT 10
 ```
 
 
-### sql	#### Metabase
+### Metabase
 
 <!-- #region -->
 **Primary Fact Table** → Gtfs Schedule Fact Daily Feed Stops
@@ -219,8 +210,7 @@ LIMIT 10
 *Agency* → Metabase automatically joins with table **Gtfs Schedule Dim Feeds** on variable **Feed Key** to get **Calitp Feed Name** (*FILTER* by)
 <!-- #endregion -->
 
-<img src="assets/stops_agency_over_time.png" alt="Metabase Configuration Screenshots" style="width: 700px;"/>
-
+![Collection Matrix](assets/stops_agency_over_time.png)
 
 #### Siuba
 
@@ -232,7 +222,7 @@ LIMIT 10
 *Geography* → **stop_key** (the unique identifier for each record, to *COUNT* by)
 *Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*)
 
-```python
+```{code-cell}
 ## Join to get CalITP Feed Names
 ## Count stops by date and CalITP Feed Names, order by date, filter by specific calitp_feed_name
 (
@@ -257,21 +247,19 @@ LIMIT 10
 *Agency* → **calitp_feed_name** (*GROUP BY*)
 
 
-```python
-query_sql("""
+```{code-cell}
 SELECT COUNT(*) AS n
 SELECT
 FROM gtfs_schedule.agency
-calitp_feed_name,
-    count(*) AS n_trip_stops,
-    count(distinct(trip_id)) AS n_trips,
-    count(distinct(stop_id)) AS n_stops
+    calitp_feed_name,
+        count(*) AS n_trip_stops,
+        count(distinct(trip_id)) AS n_trips,
+        count(distinct(stop_id)) AS n_stops
 FROM `views.gtfs_schedule_data_feed_trip_stops_latest`
 WHERE
     calitp_feed_name = "Unitrans (0)"
 GROUP BY
     calitp_feed_name
-""")
 ```
 
 #### Metabase
@@ -288,19 +276,15 @@ GROUP BY
 ***Count of Trip Stops Made Across all Trips for an Agency***
 
 
-<img src="assets/count_trip_stops.png" alt="Metabase Configuration Screenshots" style="width: 700px;"/>
-
+![Collection Matrix](assets/count_trip_stops.png)
 
 ***Distinct Trips in Trip Stops***
 
-
-<img src="assets/distinct_trips_in_trip_stops.png" alt="Metabase Configuration Screenshots" style="width: 700px;"/>
-
+![Collection Matrix](assets/distinct_trips_in_trip_stops.png)
 
 ***Distinct Stops in Trip Stops***
 
-
-<img src="assets/distinct_stops_in_trip_stops.png" alt="Metabase Configuration Screenshots" style="width: 700px;"/>
+![Collection Matrix](assets/distinct_stops_in_trip_stops.png)
 
 
 #### Siuba
@@ -312,7 +296,7 @@ GROUP BY
 *Geography* → **stop_time_key** (the unique identifier for each record, to *COUNT* by)
 *Agency* → **calitp_feed_name** (*GROUP BY*)
 
-```python
+```{code-cell}
 (
     tbl.views.gtfs_schedule_data_feed_trip_stops_latest()
     >> filter(_.calitp_feed_name == "Unitrans (0)")
@@ -335,8 +319,7 @@ GROUP BY
 *Measure* → **days_until_feed_end_date**
 *Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*)
 
-```python
-query_sql("""
+```{code-cell}
 SELECT
     calitp_feed_name,
     date,
@@ -346,7 +329,6 @@ FROM views.gtfs_schedule_fact_daily_feeds
 JOIN views.gtfs_schedule_dim_feeds USING (feed_key)
 WHERE
     date = "2021-09-01" AND calitp_feed_name = "Unitrans (0)"
-""")
 ```
 
 #### Metabase
@@ -368,8 +350,7 @@ WHERE
     * Feed End Date
 
 
-<img src="assets/days_until_agency_feed_expires.png" alt="Metabase Configuration Screenshots" style="width: 700px;"/>
-
+![Collection Matrix](assets/days_until_agency_feed_expires.png)
 
 #### Siuba
 
@@ -381,7 +362,7 @@ WHERE
 *Measure* → **days_until_feed_end_date**
 *Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*FILTER* by)
 
-```python
+```{code-cell}
 (
     tbl.views.gtfs_schedule_fact_daily_feeds()
     >> left_join(_, tbl.views.gtfs_schedule_dim_feeds(), "feed_key")
@@ -403,10 +384,8 @@ WHERE
 *Geography* → **trip_id** (the unique identifier for each record, to *GROUP BY*)
 *Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*)
 
-```python
-query_sql("""
-WITH
-counting_stop_times AS (
+```{code-cell}
+WITH counting_stop_times AS (
     -- count the number of stops each trip in each feed makes
     SELECT
         trip_id,
@@ -427,7 +406,6 @@ WHERE
      calitp_feed_name = "Unitrans (0)"
 GROUP BY
     calitp_feed_name
-""")
 ```
 
 #### Metabase
@@ -441,8 +419,7 @@ GROUP BY
 *Agency* → Metabase automatically joins with table **Gtfs Schedule Dim Feeds** on variable **Feed Key** to get **Calitp Feed Name** (*COUNT* by)
 
 
-<img src="assets/max_stops_per_trip_by_agency.png" alt="Metabase Configuration Screenshots" style="width: 700px;"/>
-
+![Collection Matrix](assets/max_stops_per_trip_by_agency.png)
 
 #### Siuba
 
@@ -454,7 +431,7 @@ GROUP BY
 *Geography* → **trip_id** (the unique identifier for each record, to *GROUP BY*)
 *Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*)
 
-``` python
+```{code-cell}
 (
     tbl.views.gtfs_schedule_data_feed_trip_stops_latest()
     >> count(_.trip_id, _.calitp_feed_name)
