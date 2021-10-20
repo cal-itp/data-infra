@@ -31,7 +31,7 @@ array_len_fix AS (
     SELECT
       * EXCEPT(part_arr, part_dep)
       , CASE WHEN ARRAY_LENGTH(part_arr) = 0 THEN [NULL, NULL, NULL] ELSE part_arr END AS part_arr
-      , CASE WHEN ARRAY_LENGTH(part_dep) = 0 THEN [NULL, NULL, NULL] ELSE part_arr END AS part_dep
+      , CASE WHEN ARRAY_LENGTH(part_dep) = 0 THEN [NULL, NULL, NULL] ELSE part_dep END AS part_dep
     FROM int_time_parts
 )
 
