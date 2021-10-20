@@ -1,0 +1,25 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: intro
+chapters:
+  - file: datasets/01_overview
+    sections:
+    - file: datasets/gtfs_schedule
+    - file: datasets/mst_payments
+    - file: datasets/transitstacks
+    - file: datasets/views
+  - file: kubernetes/README
+  - file: services/overview
+    sections:
+    - file: services/gtfs-ckan-uploader
+    - file: services/gtfs-rt-archive
+  - file: warehouse/overview
+    sections:
+    - file: warehouse/01_agencies
+    - file: warehouse/02_views
+    - file: warehouse/03_metrics
+    - file: warehouse/04_sql_snippets
+    - file: warehouse/05_using_metabase
+    - file: warehouse/06_table_names

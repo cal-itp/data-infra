@@ -1,0 +1,5 @@
+# Distribution / packaging
+_build/
+
+# Sphinx documentation
+docs_jupyterbook/_build/

@@ -12,7 +12,7 @@ In order to get the data for a given day, you need to filter to keep data where.
 * `calitp_extracted_at` was earlier than or on the target date.
 * `calitp_deleted_at` is later than the target date.
 
-### A single date
+## A single date
 
 ```SQL
 SELECT *
@@ -28,7 +28,7 @@ This is used because when deleted at is missing, it reflects the most recent dat
 Because `NULL < "2021-06-01"` is `false`, we need to fill it in with a far-future date,
 so it evaluates to `true`.
 
-### Multiple dates
+## Multiple dates
 
 In order to do it for a range of dates, you can use a JOIN. This is shown below.
 
