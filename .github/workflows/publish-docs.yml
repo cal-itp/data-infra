@@ -2,8 +2,6 @@ name: Publish docs to gh-pages
 
 on:
   push:
-    branches:
-      - main
     paths:
       - 'docs/**'
   workflow_dispatch:
