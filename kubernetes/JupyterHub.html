@@ -1,0 +1,596 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JupyterHub &#8212; Juniper Documentation</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet" />
+  <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Juniper Documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Juniper Documentation
+  </a>
+ </li>
+</ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../datasets/01_overview.html">
+   Overview
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets/gtfs_schedule.html">
+     GTFS Schedule
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets/mst_payments.html">
+     MST Payments
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets/transitstacks.html">
+     Transitstacks
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets/views.html">
+     Views
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="README.html">
+   Kubernetes
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../services/overview.html">
+   Services
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../services/gtfs-ckan-uploader.html">
+     GTFS CKAN Uploader
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../services/gtfs-rt-archive.html">
+     gtfs-rt-archive
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../warehouse/overview.html">
+   Warehouse
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/01_agencies.html">
+     Agency GTFS Feeds
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/02_views.html">
+     Creating New Tables (Views)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/03_metrics.html">
+     Metric Views
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/04_sql_snippets.html">
+     SQL Snippets
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/05_using_metabase.html">
+     Using Metabase
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/06_table_names.html">
+     Table names
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/kubernetes/JupyterHub.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/cal-itp/data-infra/"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fkubernetes/JupyterHub.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#installation">
+   Installation
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#create-the-namespace">
+     1. Create the Namespace
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#add-secrets-to-namespace">
+     2. Add Secrets to Namespace
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#jupyterhub-gcloud-service-key">
+       jupyterhub-gcloud-service-key
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#jupyterhub-github-config">
+       jupyterhub-github-config
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#create-a-temporary-file">
+         Create a Temporary File
+        </a>
+       </li>
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#fill-the-file-with-chart-formatted-secrets">
+         Fill the File with Chart-Formatted Secrets
+        </a>
+       </li>
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#encode-the-file-contents">
+         Encode the File Contents
+        </a>
+       </li>
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#add-the-encoding-to-your-secret">
+         Add the Encoding to Your Secret
+        </a>
+       </li>
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#clean-up">
+         Clean up
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#reminder-apply-the-secrets-file">
+       Reminder - Apply the secrets file!
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#install-the-helm-chart">
+     3. Install the Helm Chart
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#updating">
+   Updating
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#domain-name-changes">
+   Domain Name Changes
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#changes-in-github-oauth">
+     Changes in GitHub OAuth
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#changes-in-the-helm-chart">
+     Changes in the Helm Chart
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="tex2jax_ignore mathjax_ignore section" id="jupyterhub">
+<h1>JupyterHub<a class="headerlink" href="#jupyterhub" title="Permalink to this headline">¶</a></h1>
+<p>This page outlines how to deploy JupyterHub to Cal-ITP’s Kubernetes cluster.</p>
+<p>As we are not yet able to commit encrypted secrets to the cluster, we’ll have to do some work ahead of a <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">install</span></code>.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="create-the-namespace">
+<h3>1. Create the Namespace<a class="headerlink" href="#create-the-namespace" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">kubectl</span> <span class="n">create</span> <span class="n">ns</span> <span class="n">jupyterhub</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="add-secrets-to-namespace">
+<h3>2. Add Secrets to Namespace<a class="headerlink" href="#add-secrets-to-namespace" title="Permalink to this headline">¶</a></h3>
+<p>Two base64-encoded secrets must be added to the <code class="docutils literal notranslate"><span class="pre">jupyterhub</span></code> namespace before installing the Helm chart.</p>
+<p>We’ll cover the purpose of each secret in the subsections below.</p>
+<p>We’ll put both of these secrets in a local file, <code class="docutils literal notranslate"><span class="pre">jupyterhub-secrets.yaml</span></code>, which will contain something that looks like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">data</span><span class="p">:</span>
+  <span class="nt">service-key.json</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-base64-encoded-service-key-here&gt;</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Secret</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyterhub-gcloud-service-key</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyterhub</span>
+<span class="nn">---</span>
+
+<span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">data</span><span class="p">:</span>
+  <span class="nt">values.yaml</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-base64-encoded-github-oauth-config-here&gt;</span>
+<span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Secret</span>
+<span class="nt">metadata</span><span class="p">:</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyterhub-github-config</span>
+  <span class="nt">namespace</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyterhub</span>
+</pre></div>
+</div>
+<p>With the above configured, we can go ahead and apply:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">kubectl</span> <span class="n">apply</span> <span class="o">-</span><span class="n">f</span> <span class="n">jupyterhub</span><span class="o">-</span><span class="n">secrets</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+<p><strong>This file should never be committed!!!</strong></p>
+<div class="section" id="jupyterhub-gcloud-service-key">
+<h4>jupyterhub-gcloud-service-key<a class="headerlink" href="#jupyterhub-gcloud-service-key" title="Permalink to this headline">¶</a></h4>
+<p>The GCloud service key, a .json file, is used to authenticate users to GCloud.</p>
+<p>Currently, the secret <code class="docutils literal notranslate"><span class="pre">jupyterhub-gcloud-service-key</span></code> is mounted to every JupyterHub user’s running container at <code class="docutils literal notranslate"><span class="pre">/usr/local/secrets/service-key.json</span></code>. As we refine our authentication approach, this secret may become obsolete and may be removed from this process, but for now the process of volume mounting this secret is required for authentication.</p>
+<p>To create the base64 encoded string from your terminal:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cat</span> <span class="n">the</span><span class="o">-</span><span class="n">service</span><span class="o">-</span><span class="n">key</span><span class="o">.</span><span class="n">json</span> <span class="o">|</span> <span class="n">base64</span> <span class="o">-</span><span class="n">w</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>Then add the terminal’s output to the <code class="docutils literal notranslate"><span class="pre">jupyterhub-secrets.yaml</span></code> outlined above.</p>
+</div>
+<div class="section" id="jupyterhub-github-config">
+<h4>jupyterhub-github-config<a class="headerlink" href="#jupyterhub-github-config" title="Permalink to this headline">¶</a></h4>
+<p>Because we use <a class="reference external" href="https://zero-to-jupyterhub.readthedocs.io/en/latest/administrator/authentication.html?highlight=oauth#github">Github OAuth</a> for user authentication in JupyterHub, we have to provide a client-id and client-secret to the JupyterHub Helm chart. We also have to provide a bunch of non-sensitive information to the chart, as well, for GitHub OAuth to function.</p>
+<p>For context, here is what the full configuration for the GitHub OAuth in our JupyterHub Helm chart’s <code class="docutils literal notranslate"><span class="pre">values.yaml</span></code> might look like:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hub</span><span class="p">:</span>
+  <span class="nt">config</span><span class="p">:</span>
+    <span class="nt">GitHubOAuthenticator</span><span class="p">:</span>
+      <span class="nt">client_id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-client-id-here&gt;</span>
+      <span class="nt">client_secret</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-client-secret-here&gt;</span>
+      <span class="nt">oauth_callback_url</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">https://your-jupyterhub-domain/hub/oauth_callback</span>
+      <span class="nt">allowed_organizations</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cal-itp:warehouse-users</span>
+      <span class="nt">scope</span><span class="p">:</span>
+        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">read:org</span>
+    <span class="nt">JupyterHub</span><span class="p">:</span>
+      <span class="nt">authenticator_class</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">github</span>
+      <span class="nt">Authenticator</span><span class="p">:</span>
+        <span class="nt">admin_users</span><span class="p">:</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">machow</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">themightchris</span>
+          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">lottspot</span>
+</pre></div>
+</div>
+<p>Fortunately, we don’t have to store all of this information in the secret! The JupyterHub chart affords us the ability to use the <code class="docutils literal notranslate"><span class="pre">hub.existingSecret</span></code> parameter to pass in the sensitive information, so we can mix-and-match parts of the configuration.</p>
+<p>This means that we can leave parameters like <code class="docutils literal notranslate"><span class="pre">hub.config.GitHubOAuthenticator.oauth_callback_url</span></code> and <code class="docutils literal notranslate"><span class="pre">hub.config.GitHubOAuthenticator.allowed_organizations</span></code> in plain text in our <code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>, and place sensitive information like <code class="docutils literal notranslate"><span class="pre">hub.config.GitHubOAuthenticator.client_id</span></code> and <code class="docutils literal notranslate"><span class="pre">hub.config.GitHubOAuthenticator.client_secret</span></code> in our <code class="docutils literal notranslate"><span class="pre">jupyterhub-secrets.yaml</span></code>.</p>
+<p>So, what format must our base64 encoded string take in order for the JuptyerHub chart to accept it?</p>
+<div class="section" id="create-a-temporary-file">
+<h5>Create a Temporary File<a class="headerlink" href="#create-a-temporary-file" title="Permalink to this headline">¶</a></h5>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">touch</span> <span class="n">github</span><span class="o">-</span><span class="n">secrets</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fill-the-file-with-chart-formatted-secrets">
+<h5>Fill the File with Chart-Formatted Secrets<a class="headerlink" href="#fill-the-file-with-chart-formatted-secrets" title="Permalink to this headline">¶</a></h5>
+<p>Your <code class="docutils literal notranslate"><span class="pre">github-secrets.yaml</span></code> should look like this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hub</span><span class="p">:</span>
+  <span class="nt">config</span><span class="p">:</span>
+    <span class="nt">GitHubOAuthenticator</span><span class="p">:</span>
+      <span class="nt">client_id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-client-id-here&gt;</span>
+      <span class="nt">client_secret</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-client-secret-here&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="encode-the-file-contents">
+<h5>Encode the File Contents<a class="headerlink" href="#encode-the-file-contents" title="Permalink to this headline">¶</a></h5>
+<p>From your terminal:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cat</span> <span class="n">github</span><span class="o">-</span><span class="n">secrets</span><span class="o">.</span><span class="n">yaml</span> <span class="o">|</span> <span class="n">base64</span> <span class="o">-</span><span class="n">w</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="add-the-encoding-to-your-secret">
+<h5>Add the Encoding to Your Secret<a class="headerlink" href="#add-the-encoding-to-your-secret" title="Permalink to this headline">¶</a></h5>
+<p>Add the terminal output from above to your <code class="docutils literal notranslate"><span class="pre">jupyterhub-secrets.yaml</span></code> file.</p>
+</div>
+<div class="section" id="clean-up">
+<h5>Clean up<a class="headerlink" href="#clean-up" title="Permalink to this headline">¶</a></h5>
+<p>From your terminal:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rm</span> <span class="n">github</span><span class="o">-</span><span class="n">secrets</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="reminder-apply-the-secrets-file">
+<h4>Reminder - Apply the secrets file!<a class="headerlink" href="#reminder-apply-the-secrets-file" title="Permalink to this headline">¶</a></h4>
+<p>This was a long section, don’t forget to apply the following before proceeding.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">kubectl</span> <span class="n">apply</span> <span class="o">-</span><span class="n">f</span> <span class="n">jupyterhub</span><span class="o">-</span><span class="n">secrets</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+<p>After you apply it - you should delete it or keep it somewhere very safe!</p>
+</div>
+</div>
+<div class="section" id="install-the-helm-chart">
+<h3>3. Install the Helm Chart<a class="headerlink" href="#install-the-helm-chart" title="Permalink to this headline">¶</a></h3>
+<p>You are now ready to install the chart to your cluster using Helm.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">helm</span> <span class="n">dependency</span> <span class="n">update</span>  <span class="n">kubernetes</span><span class="o">/</span><span class="n">apps</span><span class="o">/</span><span class="n">charts</span><span class="o">/</span><span class="n">jupyterhub</span>
+<span class="n">helm</span> <span class="n">install</span> <span class="n">jupyterhub</span> <span class="n">kubernetes</span><span class="o">/</span><span class="n">apps</span><span class="o">/</span><span class="n">charts</span><span class="o">/</span><span class="n">jupyterhub</span> <span class="o">-</span><span class="n">n</span> <span class="n">jupyterhub</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="updating">
+<h2>Updating<a class="headerlink" href="#updating" title="Permalink to this headline">¶</a></h2>
+<p>In general, any non-secret changes to the chart can be added to / adjusted in the chart’s <code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>.</p>
+<p>Upgrade with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># On changes to dependencies in Chart.yaml, remember to re-run:</span>
+<span class="c1"># helm dependency update kubernetes/apps/charts/jupyterhub</span>
+<span class="n">helm</span> <span class="n">upgrade</span> <span class="n">jupyterhub</span> <span class="n">kubernetes</span><span class="o">/</span><span class="n">apps</span><span class="o">/</span><span class="n">charts</span><span class="o">/</span><span class="n">jupyterhub</span> <span class="o">-</span><span class="n">n</span> <span class="n">jupyterhub</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="domain-name-changes">
+<h2>Domain Name Changes<a class="headerlink" href="#domain-name-changes" title="Permalink to this headline">¶</a></h2>
+<p>At the time of this writing, a JupyterHub deployment is available at <code class="docutils literal notranslate"><span class="pre">https://hubtest.k8s.calitp.jarv.us</span></code>.</p>
+<p>If, in the future, the domain name were to change to something more permanent, some configuration would have to change. Fortunately, though, none of the secrets we covered above are affected by these configuration changes!</p>
+<p>It is advised the below changes are planned and executed in a coordinated effort.</p>
+<div class="section" id="changes-in-github-oauth">
+<h3>Changes in GitHub OAuth<a class="headerlink" href="#changes-in-github-oauth" title="Permalink to this headline">¶</a></h3>
+<p>Within the GitHub OAuth application, in Github, the homepage and callback URLs would need to be changed. Cal-ITP owns the Github OAUth application in GitHub, and <a class="reference external" href="https://github.com/cal-itp/data-infra/issues/367">this Cal-ITP Github issue</a> can be referenced for individual contributors who may be able to helm adjusting the Github OAUth application’s homepage and callback URLs.</p>
+</div>
+<div class="section" id="changes-in-the-helm-chart">
+<h3>Changes in the Helm Chart<a class="headerlink" href="#changes-in-the-helm-chart" title="Permalink to this headline">¶</a></h3>
+<p>After the changes have been made to the GitHub OAuth application, the following portions of the JupyterHub chart’s <code class="docutils literal notranslate"><span class="pre">values.yaml</span></code> must be changed:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hub.config.GitHubOAuthenticator.oauth_callback_url</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ingress.hosts</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ingress.tls.hosts</span></code></p></li>
+</ul>
+<p>Apply these chart changes with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">helm</span> <span class="n">upgrade</span> <span class="n">jupyterhub</span> <span class="n">kubernetes</span><span class="o">/</span><span class="n">apps</span><span class="o">/</span><span class="n">charts</span><span class="o">/</span><span class="n">jupyterhub</span> <span class="o">-</span><span class="n">n</span> <span class="n">jupyterhub</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./kubernetes"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            
+
+
+
+<div class='prev-next-bottom'>
+    
+
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By Jarv.us<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+  </body>
+</html>
