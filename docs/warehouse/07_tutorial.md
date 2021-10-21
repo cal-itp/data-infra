@@ -115,6 +115,8 @@ pd.set_option("display.max_rows", 20)
 *Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*)
 
 ```{code-cell}
+query_sql("""
+
 SELECT
     calitp_feed_name,
     date,
@@ -123,11 +125,15 @@ FROM `views.gtfs_schedule_fact_daily_feed_routes`
 JOIN `views.gtfs_schedule_dim_feeds` USING (feed_key)
 WHERE
     calitp_feed_name = "Unitrans (0)"
-GROUP BY 1, 2
+GROUP BY
+    1, 2
 ORDER BY
     date DESC
 LIMIT 10
+
+""")
 ```
+
 
 ### Metabase
 
@@ -167,7 +173,7 @@ LIMIT 10
 
 
 ### metabase
-### Example 2. Number of Stops for a Given Agency Over Time
+### 2. Number of Stops for a Given Agency Over Time
 
 
 ### SQL
@@ -180,20 +186,20 @@ LIMIT 10
 
 
 ```{code-cell}
-tbl.gtfs_schedule.agency()	query_sql("""
-SELECT
-    calitp_feed_name,
-    date,
-    count(*) AS count_stops
-FROM `views.gtfs_schedule_fact_daily_feed_stops`
-JOIN `views.gtfs_schedule_dim_feeds` USING (feed_key)
-WHERE
-    calitp_feed_name = "Unitrans (0)"
-GROUP BY
-    1, 2
-ORDER BY
-    date
-LIMIT 10
+query_sql("""
+    SELECT
+        calitp_feed_name,
+        date,
+        count(*) AS count_stops
+    FROM `views.gtfs_schedule_fact_daily_feed_stops`
+    JOIN `views.gtfs_schedule_dim_feeds` USING (feed_key)
+    WHERE
+        calitp_feed_name = "Unitrans (0)"
+    GROUP BY
+        1, 2
+    ORDER BY
+        date
+    LIMIT 10
 """)
 ```
 
@@ -248,18 +254,21 @@ LIMIT 10
 
 
 ```{code-cell}
-SELECT COUNT(*) AS n
+query_sql("""
+
 SELECT
-FROM gtfs_schedule.agency
     calitp_feed_name,
-        count(*) AS n_trip_stops,
-        count(distinct(trip_id)) AS n_trips,
-        count(distinct(stop_id)) AS n_stops
+
+    count(*) AS n_trip_stops,
+    count(distinct(trip_id)) AS n_trips,
+    count(distinct(stop_id)) AS n_stops
 FROM `views.gtfs_schedule_data_feed_trip_stops_latest`
 WHERE
     calitp_feed_name = "Unitrans (0)"
 GROUP BY
     calitp_feed_name
+
+""")
 ```
 
 #### Metabase
@@ -320,6 +329,8 @@ GROUP BY
 *Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*)
 
 ```{code-cell}
+query_sql("""
+
 SELECT
     calitp_feed_name,
     date,
@@ -329,6 +340,8 @@ FROM views.gtfs_schedule_fact_daily_feeds
 JOIN views.gtfs_schedule_dim_feeds USING (feed_key)
 WHERE
     date = "2021-09-01" AND calitp_feed_name = "Unitrans (0)"
+
+""")
 ```
 
 #### Metabase
@@ -385,7 +398,12 @@ WHERE
 *Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*)
 
 ```{code-cell}
-WITH counting_stop_times AS (
+query_sql("""
+
+WITH
+
+counting_stop_times AS (
+
     -- count the number of stops each trip in each feed makes
     SELECT
         trip_id,
@@ -395,6 +413,7 @@ WITH counting_stop_times AS (
     GROUP BY
         1, 2
 )
+
 -- calculate the max number of stops made by a feed's trip
 -- we filter to keep only the Unitrans feed for this example
 SELECT
@@ -406,6 +425,9 @@ WHERE
      calitp_feed_name = "Unitrans (0)"
 GROUP BY
     calitp_feed_name
+
+
+""")
 ```
 
 #### Metabase
