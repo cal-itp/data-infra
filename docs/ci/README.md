@@ -5,6 +5,11 @@ pipelines. The pipelines framework is delivered as embedded bash scripts to
 simplify the process of providing remote/local parity and platform independence
 for pipeline runs.
 
+This document covers high level concepts and certain concrete descriptions of
+the ci pipeline framework. For a higher level guide on utilizing git flows
+powered by this framework, see
+[the "Git Flow for Services" documentation](./Git-Flow-Services.md)
+
 ## 1.0 Concepts
 
 This section breaks down the conceptual design of pipelines built with the
