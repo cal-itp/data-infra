@@ -1,0 +1,41 @@
+# table definition for static GTFS attributions.txt table.
+# See https://gtfs.org/reference/static/#attributionstxt
+operator: operators.ExternalTable
+source_objects:
+  - 'schedule/processed/*/attributions.txt'
+destination_project_dataset_table: "gtfs_schedule_history.attributions"
+skip_leading_rows: 1
+schema_fields:
+  # cal-itp internal
+  - name: calitp_itp_id
+    type: INTEGER
+  - name: calitp_url_number
+    type: INTEGER
+  - name: calitp_extracted_at
+    type: DATE
+
+  # required
+  - name: organization_name
+    type: STRING
+
+  # optional
+  - name: attribution_id
+    type: STRING
+  - name: agency_id
+    type: STRING
+  - name: route_id
+    type: STRING
+  - name: trip_id
+    type: STRING
+  - name: is_producer
+    type: INTEGER
+  - name: is_operator
+    type: INTEGER
+  - name: is_authority
+    type: INTEGER
+  - name: attribution_url
+    type: STRING
+  - name: attribution_email
+    type: STRING
+  - name: attribution_phone
+    type: STRING

@@ -17,15 +17,20 @@ def main():
             ("stops", ".txt", True),
             ("trips", ".txt", True),
             ("validation_report", ".json", True),
+            # conditional tables ----
+            ("calendar", ".txt", False),
+            ("calendar_dates", ".txt", False),
             # optional tables ----
             ("transfers", ".txt", False),
             ("feed_info", ".txt", False),
-            ("calendar", ".txt", False),
-            ("calendar_dates", ".txt", False),
             ("frequencies", ".txt", False),
             ("fare_rules", ".txt", False),
             ("fare_attributes", ".txt", False),
             ("shapes", ".txt", False),
+            ("attributions", ".txt", False),
+            ("levels", ".txt", False),
+            ("pathways", ".txt", False),
+            ("translations", ".txt", False),
         ],
         columns=["table_name", "ext", "is_required"],
     )
