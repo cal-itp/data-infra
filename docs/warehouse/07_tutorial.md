@@ -98,6 +98,7 @@ from myst_nb import glue
 from calitp import query_sql
 from siuba import *
 import pandas as pd
+import calitp.magics
 pd.set_option("display.max_rows", 20)
 ```
 
@@ -115,7 +116,7 @@ pd.set_option("display.max_rows", 20)
 *Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*)
 
 ```{code-cell}
-query_sql("""
+%%sql
 
 SELECT
     calitp_feed_name,
@@ -131,7 +132,6 @@ ORDER BY
     date DESC
 LIMIT 10
 
-""")
 ```
 
 
@@ -186,7 +186,7 @@ LIMIT 10
 
 
 ```{code-cell}
-query_sql("""
+%%sql
     SELECT
         calitp_feed_name,
         date,
@@ -200,9 +200,7 @@ query_sql("""
     ORDER BY
         date
     LIMIT 10
-""")
 ```
-
 
 ### Metabase
 
@@ -254,7 +252,7 @@ query_sql("""
 
 
 ```{code-cell}
-query_sql("""
+%%sql
 
 SELECT
     calitp_feed_name,
@@ -268,7 +266,6 @@ WHERE
 GROUP BY
     calitp_feed_name
 
-""")
 ```
 
 #### Metabase
@@ -329,7 +326,6 @@ GROUP BY
 *Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*)
 
 ```{code-cell}
-query_sql("""
 
 SELECT
     calitp_feed_name,
@@ -341,7 +337,6 @@ JOIN views.gtfs_schedule_dim_feeds USING (feed_key)
 WHERE
     date = "2021-09-01" AND calitp_feed_name = "Unitrans (0)"
 
-""")
 ```
 
 #### Metabase
@@ -398,8 +393,7 @@ WHERE
 *Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*)
 
 ```{code-cell}
-query_sql("""
-
+%%sql
 WITH
 
 counting_stop_times AS (
@@ -426,8 +420,6 @@ WHERE
 GROUP BY
     calitp_feed_name
 
-
-""")
 ```
 
 #### Metabase
