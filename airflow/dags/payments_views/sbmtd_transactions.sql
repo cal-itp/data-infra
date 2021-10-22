@@ -16,6 +16,7 @@ fields:
   likely_route_id:  "ID of the route that the transaction most likely performed on, based on the routes served by the stop and the routes that are part of the demonstration"
   vehicle_id: "From payments.device_transactions.vehicle_id"
   transaction_date_time_utc: "From payments.device_transactions.transaction_date_time_utc"
+  transaction_date_time_pacific: "transaction_date_time_utc converted to pacific time"
 
 tests:
   check_unique:
@@ -96,7 +97,8 @@ select
     r.route_long_name as likely_route_name,
     t.likely_route_id,
     t.vehicle_id,
-    t.transaction_date_time_utc
+    t.transaction_date_time_utc,
+    DATETIME(TIMESTAMP(transaction_date_time_utc), "America/Los_Angeles") as transaction_date_time_pacific
 from transactions as t
 left join gtfs_schedule.routes as r
     on r.calitp_itp_id = 293
