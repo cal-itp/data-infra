@@ -21,7 +21,7 @@ app_version=$(whoami).$(date +%Y-%M-%d@%H%M)
 git_remote=origin
 
 # an annotated tag is a requirement; lightweight tags are not accepted
-# see below for details on using the more convenient build-git-tag intaerface
+# see below for details on using the more convenient build-git-tag interface
 git tag -a "${app_name}/${app_version}"
 
 # push the annotated tag; this triggers the image build which is then pushed to
