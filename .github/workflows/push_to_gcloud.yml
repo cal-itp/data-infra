@@ -4,6 +4,10 @@ on:
   push:
     paths:
       - 'airflow/**'
+  pull_request:
+    paths:
+      - 'airflow/**'
+
 
 jobs:
   deploy:
