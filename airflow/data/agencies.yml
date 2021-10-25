@@ -1478,3 +1478,13 @@ metropolitan-transportation-commission:
       gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
       gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=RG
       gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=RG
+glenn-transit:
+  agency_name: Glenn County Transit
+  feeds:
+  - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/glenn-ca-us/glenn-ca-us.zip
+  itp_id: 122
+tcrta:
+  agency_name: Tulare County Regional Transit Agency
+  feeds:
+  - gtfs_schedule_url: https://tularecog.org/tcag/data-gis-modeling/gtfs-data/tulare-county-regional-transit-agency-tcrta-gtfs
+  itp_id: 474
