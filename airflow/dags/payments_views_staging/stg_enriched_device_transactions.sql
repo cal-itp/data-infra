@@ -11,7 +11,7 @@ external_dependencies:
   sql_enrich_duplicates(
     "payments.device_transactions",
     ["littlepay_transaction_id"],
-    ["transaction_date_time_utc"]
+    ["calitp_file_name desc", "transaction_date_time_utc desc"]
   )
 
 }}
