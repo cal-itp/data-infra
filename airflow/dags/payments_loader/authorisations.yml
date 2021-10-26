@@ -17,7 +17,7 @@ schema_fields:
    - name: currency_code
      type: INTEGER  # ISO 4217 Numeric Code
    - name: retrieval_reference_number
-     type: INTEGER
+     type: STRING
    - name: response_code
      type: STRING
    - name: status
