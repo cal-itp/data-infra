@@ -1,0 +1,640 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CI &#8212; Juniper Documentation</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet" />
+  <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Juniper Documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Juniper Documentation
+  </a>
+ </li>
+</ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../datasets/01_overview.html">
+   Overview
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets/gtfs_schedule.html">
+     GTFS Schedule
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets/mst_payments.html">
+     MST Payments
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets/transitstacks.html">
+     Transitstacks
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets/views.html">
+     Views
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../kubernetes/README.html">
+   Kubernetes
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../services/overview.html">
+   Services
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../services/gtfs-ckan-uploader.html">
+     GTFS CKAN Uploader
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../services/gtfs-rt-archive.html">
+     gtfs-rt-archive
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../warehouse/overview.html">
+   Warehouse
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/01_agencies.html">
+     Agency GTFS Feeds
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/02_views.html">
+     Creating New Tables (Views)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/03_metrics.html">
+     Metric Views
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/04_sql_snippets.html">
+     SQL Snippets
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/05_using_metabase.html">
+     Using Metabase
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/06_table_names.html">
+     Table names
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/ci/README.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/cal-itp/data-infra/"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fci/README.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#concepts">
+   1.0 Concepts
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#steps">
+     1.1 steps
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#phases">
+     1.2 phases
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#variables">
+     1.3 variables
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#workflows">
+     1.4 workflows
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#subtree-contents">
+   2.0 Subtree Contents
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#githooks">
+     2.1 githooks
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     2.2 steps
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id2">
+     2.3 workflows
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#script-conventions">
+   3.0.0 Script Conventions
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id3">
+     3.1.0 steps
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#naming-and-header">
+       3.1.1 naming and header
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#variable-declaration">
+       3.1.2 variable declaration
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#idempotency">
+       3.1.3 idempotency
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id4">
+     3.2.0 workflows
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id5">
+       3.2.1 naming and header
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#environment-files">
+       3.2.3 environment files
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id6">
+       3.2.3 variable declaration
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#step-execution">
+       3.2.4 step execution
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="tex2jax_ignore mathjax_ignore section" id="ci">
+<h1>CI<a class="headerlink" href="#ci" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">ci</span></code> tree contains bash scripts which provide a framework for automation
+pipelines. The pipelines framework is delivered as embedded bash scripts to
+simplify the process of providing remote/local parity and platform independence
+for pipeline runs.</p>
+<p>This document covers high level concepts and certain concrete descriptions of
+the ci pipeline framework. For a higher level guide on utilizing git flows
+powered by this framework, see
+<a class="reference internal" href="Git-Flow-Services.html"><span class="doc std std-doc">the “Git Flow for Services” documentation</span></a></p>
+<div class="section" id="concepts">
+<h2>1.0 Concepts<a class="headerlink" href="#concepts" title="Permalink to this headline">¶</a></h2>
+<p>This section breaks down the conceptual design of pipelines built with the
+embedded ci framework.</p>
+<div class="section" id="steps">
+<h3>1.1 steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h3>
+<p>A step is a discrete, atomic task within a pipeline. Each step can be loosely
+thought of as being part of a <em>phase</em> and will consume zero or more <em>variables</em>.</p>
+</div>
+<div class="section" id="phases">
+<h3>1.2 phases<a class="headerlink" href="#phases" title="Permalink to this headline">¶</a></h3>
+<p>Each pipeline can be thought of as being conceptually divided into a series of
+phases, though not every pipeline will necessarily need to run steps in every
+phase. These phases are loose organizational concepts and are in no way depended
+on at any sort of technical implementation level.</p>
+<ul class="simple">
+<li><p><em>validate</em>: steps which check the contents of variables for the existence of
+a value, properly formed values, or any other acceptability criteria.</p></li>
+<li><p><em>configure</em>: steps which apply configurations to the execution environment of
+the pipeline based on input variables OR steps which populate variables from
+external sources, e.g., commands that query remote APIs or git commands</p></li>
+<li><p><em>build</em>: steps which produce or contribute to the production of an artifact.</p></li>
+<li><p><em>release</em>: steps which perform or contribute to the performance of deploying a
+build artifact.</p></li>
+</ul>
+<p>These phases will generally follow the above sequence, but the sequencing is by
+no means strict. E.g., there may be plenty of instances where a <em>validate</em> step
+is executed after a <em>configure</em> step, and perhaps even additional <em>configure</em>
+steps are run after that.</p>
+</div>
+<div class="section" id="variables">
+<h3>1.3 variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h3>
+<p>Each pipeline is driven by a set of variables which may be provided from the
+environment (i.e., values are interpretd without shell features such as array
+syntax, interpolation, etc). Variables conceptually exist within a global
+pipeline namespace; one variable may be consumed by multiple steps, but the same
+variable will always be used to describe the same object or property across all
+steps which consume it. By convention, every pipeline variable is named with one
+of the following prefixes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CI_</span></code>: Control variables for configuring the pipeline run itself.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CONFIGURE_</span></code>: Variables which describe desired configuration within the
+pipeline execution environment, such as git config parameters, <code class="docutils literal notranslate"><span class="pre">ssh_config</span></code>
+parameters, kubeconfig data, etc.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BUILD_</span></code>: Variables which describe a build artifact or contain required
+information to produce, package, or publish such an artifact.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RELEASE_</span></code>: Variables which describe a target environment, deployment
+configuration, or other required information to deploy an artifact or
+application (which is not already described by an existing <code class="docutils literal notranslate"><span class="pre">BUILD_</span></code> variable).</p></li>
+</ul>
+</div>
+<div class="section" id="workflows">
+<h3>1.4 workflows<a class="headerlink" href="#workflows" title="Permalink to this headline">¶</a></h3>
+<p>A workflow is a sequence of steps. There is no reason a workflow could not
+include other workflows in place of or addition to individual steps. A complete
+pipeline will generally consist of one or more workflows.</p>
+</div>
+</div>
+<div class="section" id="subtree-contents">
+<h2>2.0 Subtree Contents<a class="headerlink" href="#subtree-contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="githooks">
+<h3>2.1 githooks<a class="headerlink" href="#githooks" title="Permalink to this headline">¶</a></h3>
+<p>This subtree contains hooks which can be symlinked into a <code class="docutils literal notranslate"><span class="pre">$GIT_DIR/hooks</span></code>
+directory tp execute local automation workflows. These symlinks may be installed
+by hand, or by executing a <code class="docutils literal notranslate"><span class="pre">make</span></code> command from within the subtree. Though these
+hooks will generally attempt to replicate the git flow of a canonical remote,
+the limitations of git hooks available in local environments typically make
+perfect parity unreasonable to achieve.</p>
+</div>
+<div class="section" id="id1">
+<h3>2.2 steps<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Each script in the <code class="docutils literal notranslate"><span class="pre">steps</span></code> subtree is an implementation of a single pipeline
+step. Each step can be executed directly on a command line or included within a
+workflow. It is not recommended to source these steps into a user shell as any
+errors will force exit the shell.</p>
+</div>
+<div class="section" id="id2">
+<h3>2.3 workflows<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>Each script within the <code class="docutils literal notranslate"><span class="pre">workflows</span></code> subtree executes a sequence of one or more
+steps. Workflows can be executed directly as commands or can be sourced into
+the shell. The latter mode of operation is only recommended within CI systems,
+as any errors will cause a force exit of the shell. When executed as a command,
+each argument passed to the workflow is processed as an environment file which
+provides variables to the workflow. The files are processed in argument order
+with the first found definition of a variable taking precedence over any later
+definition. Variable values are not evaluated using shell syntax; all values are
+interpreted literally.</p>
+</div>
+</div>
+<div class="section" id="script-conventions">
+<h2>3.0.0 Script Conventions<a class="headerlink" href="#script-conventions" title="Permalink to this headline">¶</a></h2>
+<p>The following conventions are relevant to writing new workflow or step scripts
+or to parsing existing ones.</p>
+<div class="section" id="id3">
+<h3>3.1.0 steps<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="naming-and-header">
+<h4>3.1.1 naming and header<a class="headerlink" href="#naming-and-header" title="Permalink to this headline">¶</a></h4>
+<p>The name of each step script should be prefixed with the name of the phase which
+it belongs to. E.g., <code class="docutils literal notranslate"><span class="pre">configure-*</span></code> for <em>configure</em> phase steps, <code class="docutils literal notranslate"><span class="pre">build-*</span></code> for
+<em>build</em> phase steps, etc.</p>
+<p>Every step script should be made executable and MUST use <code class="docutils literal notranslate"><span class="pre">#!/bin/bash</span></code>, NOT
+<code class="docutils literal notranslate"><span class="pre">#!/bin/sh</span></code>.</p>
+<p>Every step script MUST apply <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">-e</span></code> in the script header.</p>
+</div>
+<div class="section" id="variable-declaration">
+<h4>3.1.2 variable declaration<a class="headerlink" href="#variable-declaration" title="Permalink to this headline">¶</a></h4>
+<p>Pipeline variables (as described in section 1.3) consumed by a step MUST be
+declared at the top of the script using the <code class="docutils literal notranslate"><span class="pre">test</span> <span class="pre">&quot;$VAR_NAME&quot;</span></code> convention in
+order to test whether the variable is defined. If the variable is optional, the
+test statement should be followed by an empty assignment using the <code class="docutils literal notranslate"><span class="pre">||</span> <span class="pre">VAR_NAME=</span></code> convention in order to clearly denote its optional nature. A sensible
+default may also be set instead where relevant. If the variable is required, it
+should be added to the conventional <code class="docutils literal notranslate"><span class="pre">required_missing</span></code> array. After the variable
+declaration block, the step MUST evaluate the <code class="docutils literal notranslate"><span class="pre">required_missing</span></code> array and exit
+with code 1 and the conventional error message if the array contains any
+elements. See existing steps for examples of this convention.</p>
+<p>Variables which are localized to the step itself should be named in all lower
+case and should always be initialized to some starting value, as previous steps
+within the same workflow may have used localized variables of the same name.</p>
+</div>
+<div class="section" id="idempotency">
+<h4>3.1.3 idempotency<a class="headerlink" href="#idempotency" title="Permalink to this headline">¶</a></h4>
+<p>Step scripts should be implemented idempotently– that is, if the desired end
+state of any work being performed by the step has already been achieved, that
+work should be skipped. Step scripts should not ever, without exceptionally good
+reason, cause errors in cases where the desired end state has already been
+achieved. Step scripts are encouraged to provide helpful info messages whenever
+work is skipped.</p>
+</div>
+</div>
+<div class="section" id="id4">
+<h3>3.2.0 workflows<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id5">
+<h4>3.2.1 naming and header<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<p>Workflows names may generally follow the form <code class="docutils literal notranslate"><span class="pre">{object}-{action}</span></code> where
+<code class="docutils literal notranslate"><span class="pre">{object}</span></code> is any domain-relevant entity and <code class="docutils literal notranslate"><span class="pre">{action}</span></code> describes the high level
+task the workflow performs on that entity. This should be considered a loose
+convention– workflow names should truly take whatever form they need to in
+order to plainly and usefully describe their purpose.</p>
+<p>Every workflow script should be made executable and MUST use <code class="docutils literal notranslate"><span class="pre">#!/bin/bash</span></code>, NOT
+<code class="docutils literal notranslate"><span class="pre">#!/bin/sh</span></code>.</p>
+<p>Every workflow script MUST apply <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">-e</span></code> in the script header.</p>
+</div>
+<div class="section" id="environment-files">
+<h4>3.2.3 environment files<a class="headerlink" href="#environment-files" title="Permalink to this headline">¶</a></h4>
+<p>The first thing every workflow script MUST do is evaluate all environment files
+passed as command line arguments. Refer to existing workflow scripts to see how
+to conventionally process and evaluate these environment file arguments.</p>
+<p>Values assigned from declarations in these files MUST NOT be evaluated by the
+shell, as this violates the tenets of an environment file as well as the user
+contract.</p>
+</div>
+<div class="section" id="id6">
+<h4>3.2.3 variable declaration<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
+<p>Workflows should include a default declaration for every pipeline variable
+declared within every included step. This allows operators to easily determine
+the variables available to drive a workflow without having to open and read each
+individually included step, and further allows them to easily determine which
+variables they are required to provide and the default values for variables
+which they are not.</p>
+<p>Any pipeline variable which is required by the workflow and not provided at
+runtime should be prompted for. See existing workflow scripts for how to
+conventionally prompt for required variables.</p>
+<p>All pipeline variables should be declared with default or prompted values prior
+to the execution of the first step.</p>
+</div>
+<div class="section" id="step-execution">
+<h4>3.2.4 step execution<a class="headerlink" href="#step-execution" title="Permalink to this headline">¶</a></h4>
+<p>Each step should be executed using a <code class="docutils literal notranslate"><span class="pre">source</span></code> statement, and the <code class="docutils literal notranslate"><span class="pre">source</span></code>
+statement should be preceded by an info message which prints the name of the
+step which will execute next.</p>
+<p>Pipeline variables may be changed/redeclared in between steps, but evaluation of
+logic between steps is generally discouraged. E.g., conditional execution should
+be avoidable in most cases where steps are properly idempotent and explicitly
+listing multiple instances of a step should be preferred in cases where a step
+will be re-executed a determinitic number of times. Where there is good reason
+to do so however, the full power of bash logic and evaluation may be employed to
+wrap step execution.</p>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./ci"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            
+
+
+
+<div class='prev-next-bottom'>
+    
+
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By Jarv.us<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+  </body>
+</html>
