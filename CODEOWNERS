@@ -1,0 +1,11 @@
+# repo owners
+*                  @hunterowens @machow @themightychris
+
+# devops components
+/kubernetes        @lottspot @themightychris
+/ci                @lottspot
+/services          @lottspot
+
+# devops GitHub workflows
+/.github/workflows/service-build.yml    @lottspot
+/.github/workflows/service-release.yml  @lottspot
