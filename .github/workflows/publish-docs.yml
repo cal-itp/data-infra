@@ -2,8 +2,9 @@ name: Publish docs to gh-pages
 
 on:
   push:
-    branches: [ jupyterbook-documentation ]
-
+    paths:
+      - 'docs/**'
+  workflow_dispatch:
 
 jobs:
   build-docs:
@@ -38,7 +39,8 @@ jobs:
 
     - name: Deploy docs
       uses: peaceiris/actions-gh-pages@v3
+      if: ${{ github.ref == 'refs/heads/main' }}
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: docs/_build/html
-        publish_branch: dev-docs-jupyterbook
+        publish_branch: gh-pages

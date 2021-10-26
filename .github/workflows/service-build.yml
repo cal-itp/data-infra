@@ -1,8 +1,8 @@
 name: Build service container image
 
 on:
-  pull_request:
-    branches: [ 'releases/*' ]
+  push:
+    tags: [ '*/*' ]
 
 jobs:
   build:
@@ -24,13 +24,23 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
 
-      - id: vars
-        name: Setup variables for image build
-        run: |
-          echo "BUILD_GIT_TAG=$(git describe --abbrev=0)" >> "$GITHUB_ENV"
-
-      - id: service-build-release
+      - id: service-build
         name: Validate tag and perform image build
         shell: bash
+        env:
+          CONFIGURE_GIT_REMOTE_NAME: origin
+          BUILD_REPO: us.gcr.io/cal-itp-data-infra/gtfs-rt-archive
         run: |
-          source "$GITHUB_WORKSPACE/ci/workflows/service-build-release.sh"
+          # For reasons I will surely never fathom, the ections environment
+          # does not fetch the real (annotated) tag from the remote, instead
+          # creating a lightweight tag of the same name on top of HEAD
+          for tag in $(git tag -l); do
+            git tag -d "$tag"
+          done
+          git fetch --tags
+          # GITHUB_JOB is not populated until the job is running
+          git config user.name "Github Action $GITHUB_JOB"
+          git config user.email "$(whoami)@$(uname -n)"
+          # Setting BUILT_GIT_TAG in the shell allows us to remove the refs/tags/ prefix
+          export BUILD_GIT_TAG=${GITHUB_REF#refs/tags/}
+          source "$GITHUB_WORKSPACE/ci/workflows/service-build.sh"

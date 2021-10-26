@@ -47,7 +47,7 @@ schema_fields:
   - name: capping_duration
     type: FLOAT64
   - name: number_of_transfer
-    type: INTEGER
+    type: FLOAT64
   - name: capping_time_zone
     type: STRING
   - name: capping_overlap
