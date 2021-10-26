@@ -36,12 +36,14 @@ jobs:
           './airflow/data/agencies.filled.yml' \
           './airflow/data/schema_agencies_entry.yml'
 
-    - uses: google-github-actions/setup-gcloud@master
+    - if: ${{ env.GITHUB_ACTOR == 'cal-itp' }}
+      uses: google-github-actions/setup-gcloud@master
       with:
         service_account_key: ${{ secrets.GCP_SA_KEY }}
         export_default_credentials: true
 
-    - name: Setup kubeconfig
+    - if: ${{ env.GITHUB_ACTOR == 'cal-itp' }}
+      name: Setup kubeconfig
       env:
         CLOUDSDK_CORE_PROJECT: cal-itp-data-infra
       run: |
@@ -50,7 +52,7 @@ jobs:
 
     # push to prod services when merging into main branch
     - name: Push agencies data to google cloud and prod services
-      if: ${{ github.ref == 'refs/heads/main' }}
+      if: ${{ env.GITHUB_ACTOR == 'cal-itp' && github.ref == 'refs/heads/main' }}
       run: |
         gsutil -m rsync -d -c -r airflow/dags gs://us-west2-calitp-airflow-pro-332827a9-bucket/dags
         gsutil -m rsync -d -c -r airflow/plugins gs://us-west2-calitp-airflow-pro-332827a9-bucket/plugins
@@ -72,7 +74,7 @@ jobs:
 
     # push to preprod services when merging to other branches
     - name: Push agencies data to preprod services
-      if: ${{ github.ref != 'refs/heads/main' }}
+      if: ${{ env.GITHUB_ACTOR == 'cal-itp' && github.ref != 'refs/heads/main' }}
       run: |
         kubectl apply -f - <<EOF
         apiVersion: v1
