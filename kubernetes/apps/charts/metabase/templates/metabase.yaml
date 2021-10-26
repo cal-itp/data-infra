@@ -88,5 +88,8 @@ metadata:
   name: metabase-config
   namespace: {{ .Release.Namespace }}
 data:
-  {{- toYaml .Values.configs.metabase | nindent 2 }}
+  {{- $defaultHost := get (index (default (list (dict "host" "")) .Values.ingress.hosts) 0) "host" }}
+  {{- $emptyDict := dict }}
+  {{- $siteUrlDict := dict "MB_SITE_URL" (print "https://" $defaultHost) }}
+  {{- ne $defaultHost "" | ternary $siteUrlDict $emptyDict | merge .Values.configs.metabase | toYaml | nindent 2 }}
 {{- end }}
