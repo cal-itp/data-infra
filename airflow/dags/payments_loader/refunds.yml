@@ -17,7 +17,7 @@ schema_fields:
   - name: settlement_id
     type: STRING
   - name: retrieval_reference_number
-    type: INTEGER
+    type: STRING
   - name: transaction_date
     type: DATE
   - name: transaction_amount
