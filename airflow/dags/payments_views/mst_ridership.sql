@@ -24,7 +24,8 @@ SELECT t1.participant_id,
        t1.route_long_name,
        t1.route_short_name,
        t2.charge_type,
-       t2.charge_amount
+       t2.charge_amount,
+       t2.nominal_amount
 FROM `views.mst_transactions_gtfs_enhanced` as t1
 LEFT JOIN `views.mst_stg_micropayment_device_ids_fare_type` as t2
     ON t1.littlepay_transaction_id = t2.littlepay_transaction_id
