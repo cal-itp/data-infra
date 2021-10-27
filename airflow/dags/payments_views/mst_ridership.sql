@@ -5,6 +5,10 @@ dst_table_name: "views.mst_ridership"
 dependencies:
   - mst_transactions_gtfs_enhanced
   - mst_stg_micropayment_device_ids_fare_type
+
+tests:
+  check_unique:
+    - littlepay_transaction_id
 ---
 
 SELECT t1.participant_id,

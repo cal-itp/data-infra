@@ -1,4 +1,5 @@
 ---
+description: "This task makes the assumption that, in the case of duplicated micropayment_id values, the one with the latest transaction_time in the latest export file takes precedence."
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "payments.stg_enriched_micropayments"
 

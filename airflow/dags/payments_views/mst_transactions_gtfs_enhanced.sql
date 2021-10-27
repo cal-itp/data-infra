@@ -2,7 +2,7 @@
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.mst_transactions_gtfs_enhanced"
 external_dependencies:
-  - payments_loader: all
+  - payments_views_staging: all
 dependencies:
   - payments_feeds
 ---
@@ -31,7 +31,7 @@ device_transactions AS (
         longitude,
         vehicle_id,
 
-    FROM `payments.device_transactions`
+    FROM `payments.stg_cleaned_device_transactions`
 
 )
 

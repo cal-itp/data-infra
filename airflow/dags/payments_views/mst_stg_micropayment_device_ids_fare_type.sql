@@ -2,7 +2,7 @@
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.mst_stg_micropayment_device_ids_fare_type"
 external_dependencies:
-  - payments_loader: all
+  - payments_views_staging: all
 ---
 
 SELECT t1.charge_type,
@@ -11,7 +11,6 @@ SELECT t1.charge_type,
        t1.charge_amount,
        t1.nominal_amount,
        t2.littlepay_transaction_id
-FROM `payments.micropayments` as t1
-LEFT JOIN `payments.micropayment_device_transactions` as t2
-ON
-t1.micropayment_id = t2.micropayment_id
+FROM `payments.stg_cleaned_micropayments` as t1
+LEFT JOIN `payments.stg_cleaned_micropayment_device_transactions` as t2
+ON t1.micropayment_id = t2.micropayment_id
