@@ -1317,7 +1317,7 @@ trinity-transit:
 tulare-county-area-transit:
   agency_name: Tulare County Area Transit
   feeds:
-    - gtfs_schedule_url:  http://data.trilliumtransit.com/gtfs/tcat-flex-ca-us/tcat-ca-us.zip
+    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/tcat-flex-ca-us/tcat-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
