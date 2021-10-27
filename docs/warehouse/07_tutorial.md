@@ -116,7 +116,8 @@ pd.set_option("display.max_rows", 20)
 *Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*)
 
 ```{code-cell}
-%%sql
+:tags: [remove-input]
+%%sql -m
 
 SELECT
     calitp_feed_name,
@@ -184,9 +185,9 @@ LIMIT 10
 *Geography* → **stop_key** (the unique identifier for each record, to *COUNT* by)
 *Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*)
 
-
 ```{code-cell}
-%%sql
+:tags: [remove-input]
+%%sql -m
     SELECT
         calitp_feed_name,
         date,
@@ -250,9 +251,9 @@ LIMIT 10
 *Geography* → **stop_time_key** (the unique identifier for each record, to *COUNT* by)
 *Agency* → **calitp_feed_name** (*GROUP BY*)
 
-
 ```{code-cell}
-%%sql
+:tags: [remove-input]
+%%sql -m
 
 SELECT
     calitp_feed_name,
@@ -326,6 +327,8 @@ GROUP BY
 *Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*)
 
 ```{code-cell}
+:tags: [remove-input]
+%%sql -m
 
 SELECT
     calitp_feed_name,
@@ -393,7 +396,8 @@ WHERE
 *Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*)
 
 ```{code-cell}
-%%sql
+:tags: [remove-input]
+%%sql -m
 WITH
 
 counting_stop_times AS (
