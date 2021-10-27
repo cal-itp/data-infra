@@ -1,8 +1,8 @@
 ---
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.sbmtd_transactions"
-external_dependencies:
-  - payments_loader: all
+dependencies:
+  - dummy_staging
 
 fields:
   littlepay_transaction_id: "From payments.device_transactions.littlepay_transaction_id"
@@ -27,6 +27,25 @@ tests:
 ---
 
 with
+
+/*
+  De-deuplicate source tables
+*/
+
+micropayments_dedupe AS (
+    SELECT * FROM payments.stg_enriched_micropayments
+    WHERE calitp_dupe_number = 1
+),
+
+device_transactions_dedupe AS (
+    SELECT * FROM payments.stg_enriched_device_transactions
+    WHERE calitp_dupe_number = 1
+),
+
+micropayment_device_transactions_dedupe AS (
+    SELECT * FROM payments.stg_enriched_micropayment_device_transactions
+    WHERE calitp_dupe_number = 1
+),
 
 /*
   All the unique routes and stops across SBMTD
@@ -83,9 +102,9 @@ transactions as (
         dt.latitude,
         dt.longitude,
         dt.transaction_date_time_utc
-    from payments.micropayments as m
-    join payments.micropayment_device_transactions using (micropayment_id)
-    join payments.device_transactions as dt using (littlepay_transaction_id, customer_id, participant_id)
+    from micropayments_dedupe as m
+    join micropayment_device_transactions_dedupe using (micropayment_id)
+    join device_transactions_dedupe as dt using (littlepay_transaction_id, customer_id, participant_id)
     join stop_stats as stat on stat.stop_id = dt.location_id
     where participant_id = 'sbmtd'
 )
