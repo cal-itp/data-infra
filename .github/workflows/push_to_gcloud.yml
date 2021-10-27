@@ -36,13 +36,13 @@ jobs:
           './airflow/data/agencies.filled.yml' \
           './airflow/data/schema_agencies_entry.yml'
 
-    - if: ${{ env.GITHUB_ACTOR == 'cal-itp' }}
+    - if: ${{ github.repository == 'cal-itp/data-infra' }}
       uses: google-github-actions/setup-gcloud@master
       with:
         service_account_key: ${{ secrets.GCP_SA_KEY }}
         export_default_credentials: true
 
-    - if: ${{ env.GITHUB_ACTOR == 'cal-itp' }}
+    - if: ${{ github.repository == 'cal-itp/data-infra' }}
       name: Setup kubeconfig
       env:
         CLOUDSDK_CORE_PROJECT: cal-itp-data-infra
@@ -74,7 +74,7 @@ jobs:
 
     # push to preprod services when merging to other branches
     - name: Push agencies data to preprod services
-      if: ${{ github.repository == 'cal-itp/data-infra' && github.ref != 'refs/heads/development' }}
+      if: ${{ github.repository == 'cal-itp/data-infra' && github.ref != 'refs/heads/main' }}
       run: |
         kubectl apply -f - <<EOF
         apiVersion: v1
