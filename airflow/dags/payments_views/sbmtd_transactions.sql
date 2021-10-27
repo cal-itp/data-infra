@@ -12,8 +12,10 @@ fields:
   location_id: "From payments.device_transactions.location_id"
   is_shared_stop: "True if more than one route is served by the stop; else false"
   all_route_ids: "Comma-separated list of routes served by the stop"
-  likely_route_name: "Name of the route that the transaction most likely performed on, based on the routes served by the stop and the routes that are part of the demonstration"
+  route_id_from_device: "From payments.device_transactions.route_id"
   likely_route_id:  "ID of the route that the transaction most likely performed on, based on the routes served by the stop and the routes that are part of the demonstration"
+  likely_route_long_name: "Long name of the route that the transaction most likely performed on, based on the routes served by the stop and the routes that are part of the demonstration"
+  likely_route_short_name: "Short name of the route that the transaction most likely performed on, based on the routes served by the stop and the routes that are part of the demonstration"
   vehicle_id: "From payments.device_transactions.vehicle_id"
   transaction_date_time_utc: "From payments.device_transactions.transaction_date_time_utc"
   transaction_date_time_pacific: "transaction_date_time_utc converted to pacific time"
@@ -69,7 +71,9 @@ transactions as (
         dt.location_id,
         stat.num_routes_for_stop > 1 as is_shared_stop,
         stat.all_route_ids,
+        dt.route_id as route_id_from_device,
         case
+            when dt.route_id is not null then dt.route_id
             when stat.num_routes_for_stop = 1 then stat.all_route_ids
             when stat.serves_12x and not stat.serves_24x then '12X'
             when stat.serves_24x and not stat.serves_12x then '24X'
@@ -94,8 +98,10 @@ select
     t.location_id,
     t.is_shared_stop,
     t.all_route_ids,
-    r.route_long_name as likely_route_name,
+    t.route_id_from_device,
     t.likely_route_id,
+    r.route_long_name as likely_route_long_name,
+    r.route_short_name as likely_route_short_name,
     t.vehicle_id,
     t.transaction_date_time_utc,
     DATETIME(TIMESTAMP(transaction_date_time_utc), "America/Los_Angeles") as transaction_date_time_pacific
