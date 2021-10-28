@@ -60,3 +60,10 @@ Every time the main branch of cal-itp/data-infra is updated on github,
 ```
 [action]: (https://github.com/cal-itp/data-infra/blob/main/.github/workflows/update_gcloud_requirements.yml)
 ```
+## Doing something cool
+
+this is how to do something coool
+
+```{code-cell}
+1 + 1
+```
