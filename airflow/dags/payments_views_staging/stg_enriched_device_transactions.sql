@@ -1,4 +1,5 @@
 ---
+description: "This task makes the assumption that, in the case of duplicated littlepay_transaction_id values, the one with the latest transaction_date_time_utc in the latest export file takes precedence."
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "payments.stg_enriched_device_transactions"
 

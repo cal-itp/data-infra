@@ -31,7 +31,7 @@ device_transactions AS (
         longitude,
         vehicle_id,
 
-    FROM `payments.device_transactions`
+    FROM `payments.stg_cleaned_device_transactions`
 
 )
 
