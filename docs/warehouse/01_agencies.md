@@ -57,3 +57,11 @@ Every time the main branch of cal-itp/data-infra is updated on github,
 
 <!-- markdown-link-check-disable-next-line -->
 [action]: (https://github.com/cal-itp/data-infra/blob/main/.github/workflows/update_gcloud_requirements.yml)
+
+## Extra section
+
+Do something cool
+
+```{code-cell}
+1 + 1
+```
