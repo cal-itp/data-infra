@@ -24,12 +24,16 @@ jobs:
     - name: Install python packages
       run: |
         pip install jinja2==2.11.3 PyYAML==5.4.1 jsonschema==3.2.0 pandas==1.1.4
+    - name: Create csv file with API keys
+      run: echo $AGENCY_SECRETS > ./airflow/data/secrets.csv
+      env:
+        AGENCY_SECRETS: ${{ secrets.AGENCY_SECRETS }}
     - name: Fill in agencies.yml API keys
       run: |
         python script/agencies_convert.py \
           './airflow/data/agencies.yml' \
           './airflow/data/agencies.filled.yml' \
-          'https://docs.google.com/spreadsheets/d/1Fp7sesSMS6VOIndTLTKcyyN2qHj6najKAaN-I9_3SFo/export?gid=0&format=csv'
+          './airflow/data/secrets.csv'
     - name: Validate agencies.yml
       run: |
         python script/agencies_validate.py \

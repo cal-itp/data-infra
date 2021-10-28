@@ -33,7 +33,15 @@ gcloud init
 # gcloud auth application-default login
 ```
 
-Finally, run the initial database migration and create an `airflow / airflow` user to debug with:
+To run the gtfs_downloader dags, it is required to generate a yml file of the agencies with various
+secrets filled in. To run this, do the following:
+
+1. Setup a virtual environment within the `script` folder by running `python -m venv .venv` in the `script` folder.
+2. Install the needed requirements via `pip install -r requirements.txt`
+3. Copy `airflow/data/example-secrets.csv` to `airflow/data/secrets.csv` and fill in the secret keys as needed
+4. run `python agencies_convert.py ../airflow/data/agencies.yml ../airflow/data/agencies.filled.yml ../airflow/data/secrets.csv`
+
+Next, run the initial database migration and create an `airflow / airflow` user to debug with:
 
 ```console
 docker-compose run airflow db init
