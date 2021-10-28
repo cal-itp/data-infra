@@ -2,7 +2,7 @@
 # python_callable: main
 # dependencies:
 #   - authorisations
-#   - customer_funding_source
+#   - customer_funding_sources
 #   - device_transaction_purchases
 #   - device_transactions
 #   - micropayment_adjustments

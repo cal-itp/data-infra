@@ -1,7 +1,7 @@
 operator: operators.ExternalTable
 source_objects:
   - "payments-processed/customer_funding_source/*"
-destination_project_dataset_table: "payments.customer_funding_source"
+destination_project_dataset_table: "payments.customer_funding_sources"
 skip_leading_rows: 1
 schema_fields:
   - name: funding_source_id

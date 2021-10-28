@@ -27,7 +27,7 @@ The payments data is loaded and transformed in the payments_loader and payments_
 
 The payments_loader dag has three kinds of tasks:
 
-* ExternalTable operator tasks (e.g. `customer_funding_source`). These define the underlying data.
+* ExternalTable operator tasks (e.g. `customer_funding_sources`). These define the underlying data.
 * `calitp_included_payments_data` - a table of underlying payments table names defined in the task above.
 * `preprocessing_columns` - move data from `gs://littlepay-data-extract-prod` to `gs://gtfs-data`,
   then process to keep only columns defined in external tables.
@@ -36,7 +36,7 @@ The payments_views is made of SQL queries that transform the loaded tables above
 
 ### Adding new tables in payments_loader
 
-* Copy the `customer_funding_source` task. The new task name should match the table it creates.
+* Copy the `customer_funding_sources` task. The new task name should match the table it creates.
 * Alter `destination_project_dataset_table` and `source_objects` to match the new table name.
 * Edit `schema_fields` to be the columns in the new table. If you are unsure of a column type,
   specify it as "STRING".
