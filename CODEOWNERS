@@ -1,11 +1,31 @@
 # repo owners
-*                  @hunterowens @machow @themightychris
+*                                       @hunterowens @machow @themightychris
 
 # devops components
-/kubernetes        @lottspot @themightychris
-/ci                @lottspot
-/services          @lottspot
+/kubernetes                             @lottspot @themightychris
+/ci                                     @lottspot
+/services                               @lottspot
+
+# project documentation
+/docs                                   @charlie-costanzo
+
+# payments data
+/airflow/dags/payments*/*               @mjumbewu @evansiroky
+
+# gtfs data
+/airflow/data/agencies.yml              @Nkdiaz @machow @evansiroky
 
 # devops GitHub workflows
 /.github/workflows/service-build.yml    @lottspot
 /.github/workflows/service-release.yml  @lottspot
+
+# publish GitHub workflows
+/.github/workflows/publish-docs.yml     @Nkdiaz @machow
+/.github/workflows/push_to_gcloud.yml   @machow @lottspot
+
+# qa GitHub workflows
+/.github/workflows/lint.yml             @machow @hunterowens @themightychris
+
+# misc GitHub workflows
+/.github/workflows/board-move-issues.yml          @machow
+/.github/workflows/update_gcloud_requirements.yml @hunterowens
