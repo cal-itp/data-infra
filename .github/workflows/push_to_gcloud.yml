@@ -24,10 +24,14 @@ jobs:
     - name: Install python packages
       run: |
         pip install jinja2==2.11.3 PyYAML==5.4.1 jsonschema==3.2.0 pandas==1.1.4
+    # Create the secrets.csv from the contents of the `AGENCY_SECRETS` environment variable / GitHub
+    # repository secret. The contents of this environment variable should be directly copied from
+    # the contents of a filled-out ./airflow/data/example-secrets.csv file.
     - name: Create csv file with API keys
-      run: echo $AGENCY_SECRETS > ./airflow/data/secrets.csv
+      run: echo -e "$AGENCY_SECRETS" > ./airflow/data/secrets.csv
       env:
         AGENCY_SECRETS: ${{ secrets.AGENCY_SECRETS }}
+    # Populate the secrets within the agencies.yml file
     - name: Fill in agencies.yml API keys
       run: |
         python script/agencies_convert.py \
