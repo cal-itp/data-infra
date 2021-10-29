@@ -41,4 +41,4 @@ chapters:
     - file: warehouse/07_tutorial
   - file: contributing/overview
     sections:
-    - file: contributing/editing_doc
+    - file:  contributing/editing_doc
