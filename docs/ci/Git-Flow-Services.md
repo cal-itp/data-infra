@@ -8,7 +8,7 @@ defined in the `kubernetes/apps` tree.
 ## 1.0 Build
 
 This flow is powered by:
-[`.github/workflows/service-build.yml`](../../.github/workflows/service-build.yml)
+[`.github/workflows/service-build.yml`](https://github.com/cal-itp/data-infra/blob/main/.github/workflows/service-build.yml)
 
 ### 1.1 quick start
 
@@ -65,7 +65,7 @@ Using this build step to create a service tag offers a few conveniences:
 ## 2.0 Deploy
 
 This flow is powered by:
-[`.github/workflows/service-release.yml`](../../.github/workflows/service-release.yml)
+[`.github/workflows/service-release.yml`](https://github.com/cal-itp/data-infra/blob/main/.github/workflows/service-release.yml)
 
 ### 2.1 quick start
 

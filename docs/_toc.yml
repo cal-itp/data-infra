@@ -11,6 +11,21 @@ chapters:
     - file: datasets/transitstacks
     - file: datasets/views
   - file: kubernetes/README
+    sections:
+    - file: kubernetes/JupyterHub
+  - file: ci/README
+    sections:
+    - file: ci/Git-Flow-Services
+    - file: ci/Pipeline-Variables
+    - file: ci/steps/build-docker-image
+    - file: ci/steps/build-git-notes
+    - file: ci/steps/build-git-tag
+    - file: ci/steps/configure-build-git-notes
+    - file: ci/steps/configure-docker-login
+    - file: ci/steps/configure-git-remote
+    - file: ci/steps/release-kube-overlay
+    - file: ci/steps/validate-build-git-tag
+    - file: ci/steps/validate-clean-worktree
   - file: services/overview
     sections:
     - file: services/gtfs-ckan-uploader
@@ -27,4 +42,4 @@ chapters:
     - file: warehouse/07_tutorial
   - file: contributing/overview
     sections:
-    - file: contributing/editing_doc
+    - file:  contributing/editing_doc

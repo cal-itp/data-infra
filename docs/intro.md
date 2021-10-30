@@ -19,7 +19,7 @@ Changes to docs will be published to the online docs website automatically after
 [Mermaid](https://mermaid-js.github.io/mermaid/#/)
 - use code fences with mermaid type to render Mermaid diagrams within docs. for example this markdown:
 
-```mermaid
+```
     graph LR
         Start --> Stop
 ```
