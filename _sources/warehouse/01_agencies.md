@@ -24,6 +24,12 @@ Each agency feed entry includes these fields:
 * `itp_id`: The California Integrated Travel Project ID
 * URLs such as `gtfs_schedule_url`, and those for realtime feeds.
 
+## Walkthrough of adding a feed
+
+The screencast below walks through the process of adding a new feed.
+
+<div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/39f0100b43c4457db81b62249f162128" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
+
 ## Finding the ITP ID
 
 Entries must include the correct ITP ID for an agency.

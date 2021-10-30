@@ -52,7 +52,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Contribute" href="../contributing/overview.html" />
-    <link rel="prev" title="Table names" href="06_table_names.html" />
+    <link rel="prev" title="Using Jupyterhub" href="jupyterhub.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
     
@@ -186,6 +186,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="06_table_names.html">
      Table names
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="jupyterhub.html">
+     Using Jupyterhub
     </a>
    </li>
    <li class="toctree-l2 current active">
@@ -625,19 +630,6 @@
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_1906</span><span class="o">/</span><span class="mf">4003098136.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span> <span class="nn">siuba</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="ne">----&gt; </span><span class="mi">6</span> <span class="kn">import</span> <span class="nn">calitp.magics</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;display.max_rows&quot;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;calitp.magics&#39;
-</pre></div>
-</div>
-</div>
 </div>
 <div class="section" id="number-of-routes-for-a-given-agency-over-time">
 <h3>1. Number of Routes for a Given Agency Over Time<a class="headerlink" href="#number-of-routes-for-a-given-agency-over-time" title="Permalink to this headline">¶</a></h3>
@@ -650,6 +642,109 @@
 <em>Geography</em> → <strong>route_key</strong> (the unique identifier for each record, to <em>COUNT</em> by)
 <em>Agency</em> → Join with table <strong>views.gtfs_schedule_dim_feeds</strong> on variable <strong>feed_key</strong> for <strong>calitp_feed_name</strong> (<em>GROUP BY</em>)</p>
 <div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span>
+    <span class="n">calitp_feed_name</span><span class="p">,</span>
+    <span class="nb">date</span><span class="p">,</span>
+    <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">AS</span> <span class="n">count_feeds</span>
+<span class="k">FROM</span> <span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_fact_daily_feed_routes</span><span class="o">`</span>
+<span class="k">JOIN</span> <span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_dim_feeds</span><span class="o">`</span> <span class="k">USING</span> <span class="p">(</span><span class="n">feed_key</span><span class="p">)</span>
+<span class="k">WHERE</span>
+    <span class="n">calitp_feed_name</span> <span class="o">=</span> <span class="ss">&quot;Unitrans (0)&quot;</span>
+<span class="k">GROUP</span> <span class="k">BY</span>
+    <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+<span class="k">ORDER</span> <span class="k">BY</span>
+    <span class="nb">date</span> <span class="k">DESC</span>
+<span class="k">LIMIT</span> <span class="mi">10</span>
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>calitp_feed_name</th>
+      <th>date</th>
+      <th>count_feeds</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Unitrans (0)</td>
+      <td>2021-10-29</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Unitrans (0)</td>
+      <td>2021-10-28</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Unitrans (0)</td>
+      <td>2021-10-27</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Unitrans (0)</td>
+      <td>2021-10-26</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Unitrans (0)</td>
+      <td>2021-10-25</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Unitrans (0)</td>
+      <td>2021-10-24</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Unitrans (0)</td>
+      <td>2021-10-23</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Unitrans (0)</td>
+      <td>2021-10-22</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Unitrans (0)</td>
+      <td>2021-10-21</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Unitrans (0)</td>
+      <td>2021-10-20</td>
+      <td>18</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 </div>
 <div class="section" id="metabase">
@@ -688,6 +783,61 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div><pre># Source: lazy query
+# DB Conn: Engine(bigquery://cal-itp-data-infra/?maximum_bytes_billed=5000000000)
+# Preview:
+</pre><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>date</th>
+      <th>n</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2021-04-15</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2021-04-16</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2021-04-17</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2021-04-18</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2021-04-19</td>
+      <td>20</td>
+    </tr>
+  </tbody>
+</table>
+</div><p># .. may have more rows</p></div></div></div>
 </div>
 </div>
 </div>
@@ -705,6 +855,109 @@
 <em>Geography</em> → <strong>stop_key</strong> (the unique identifier for each record, to <em>COUNT</em> by)
 <em>Agency</em> → Join with table <strong>views.gtfs_schedule_dim_feeds</strong> on variable <strong>feed_key</strong> for <strong>calitp_feed_name</strong> (<em>GROUP BY</em>)</p>
 <div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span>    <span class="k">SELECT</span>
+        <span class="n">calitp_feed_name</span><span class="p">,</span>
+        <span class="nb">date</span><span class="p">,</span>
+        <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">AS</span> <span class="n">count_stops</span>
+    <span class="k">FROM</span> <span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_fact_daily_feed_stops</span><span class="o">`</span>
+    <span class="k">JOIN</span> <span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_dim_feeds</span><span class="o">`</span> <span class="k">USING</span> <span class="p">(</span><span class="n">feed_key</span><span class="p">)</span>
+    <span class="k">WHERE</span>
+        <span class="n">calitp_feed_name</span> <span class="o">=</span> <span class="ss">&quot;Unitrans (0)&quot;</span>
+    <span class="k">GROUP</span> <span class="k">BY</span>
+        <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+    <span class="k">ORDER</span> <span class="k">BY</span>
+        <span class="nb">date</span>
+    <span class="k">LIMIT</span> <span class="mi">10</span>
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>calitp_feed_name</th>
+      <th>date</th>
+      <th>count_stops</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Unitrans (0)</td>
+      <td>2021-04-15</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Unitrans (0)</td>
+      <td>2021-04-16</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Unitrans (0)</td>
+      <td>2021-04-17</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Unitrans (0)</td>
+      <td>2021-04-18</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Unitrans (0)</td>
+      <td>2021-04-19</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Unitrans (0)</td>
+      <td>2021-04-20</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Unitrans (0)</td>
+      <td>2021-04-21</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Unitrans (0)</td>
+      <td>2021-04-22</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Unitrans (0)</td>
+      <td>2021-04-23</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Unitrans (0)</td>
+      <td>2021-04-24</td>
+      <td>298</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 </div>
 <div class="section" id="id3">
@@ -738,6 +991,67 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div><pre># Source: lazy query
+# DB Conn: Engine(bigquery://cal-itp-data-infra/?maximum_bytes_billed=5000000000)
+# Preview:
+</pre><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>date</th>
+      <th>calitp_feed_name</th>
+      <th>n</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2021-04-15</td>
+      <td>Unitrans (0)</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2021-04-16</td>
+      <td>Unitrans (0)</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2021-04-17</td>
+      <td>Unitrans (0)</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2021-04-18</td>
+      <td>Unitrans (0)</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2021-04-19</td>
+      <td>Unitrans (0)</td>
+      <td>298</td>
+    </tr>
+  </tbody>
+</table>
+</div><p># .. may have more rows</p></div></div></div>
 </div>
 </div>
 </div>
@@ -750,6 +1064,55 @@
 <em>Geography</em> → <strong>stop_time_key</strong> (the unique identifier for each record, to <em>COUNT</em> by)
 <em>Agency</em> → <strong>calitp_feed_name</strong> (<em>GROUP BY</em>)</p>
 <div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span>
+    <span class="n">calitp_feed_name</span><span class="p">,</span>
+
+    <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">AS</span> <span class="n">n_trip_stops</span><span class="p">,</span>
+    <span class="k">count</span><span class="p">(</span><span class="k">distinct</span><span class="p">(</span><span class="n">trip_id</span><span class="p">))</span> <span class="k">AS</span> <span class="n">n_trips</span><span class="p">,</span>
+    <span class="k">count</span><span class="p">(</span><span class="k">distinct</span><span class="p">(</span><span class="n">stop_id</span><span class="p">))</span> <span class="k">AS</span> <span class="n">n_stops</span>
+<span class="k">FROM</span> <span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_data_feed_trip_stops_latest</span><span class="o">`</span>
+<span class="k">WHERE</span>
+    <span class="n">calitp_feed_name</span> <span class="o">=</span> <span class="ss">&quot;Unitrans (0)&quot;</span>
+<span class="k">GROUP</span> <span class="k">BY</span>
+    <span class="n">calitp_feed_name</span>
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>calitp_feed_name</th>
+      <th>n_trip_stops</th>
+      <th>n_trips</th>
+      <th>n_stops</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Unitrans (0)</td>
+      <td>46026</td>
+      <td>3262</td>
+      <td>275</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 </div>
 <div class="section" id="id6">
@@ -784,6 +1147,43 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div><pre># Source: lazy query
+# DB Conn: Engine(bigquery://cal-itp-data-infra/?maximum_bytes_billed=5000000000)
+# Preview:
+</pre><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>n_trips</th>
+      <th>n_stops</th>
+      <th>n</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>3262</td>
+      <td>275</td>
+      <td>46026</td>
+    </tr>
+  </tbody>
+</table>
+</div><p># .. may have more rows</p></div></div></div>
 </div>
 </div>
 </div>
@@ -797,6 +1197,53 @@
 <em>Measure</em> → <strong>days_until_feed_end_date</strong>
 <em>Agency</em> → Join with table <strong>views.gtfs_schedule_dim_feeds</strong> on variable <strong>feed_key</strong> for <strong>calitp_feed_name</strong> (<em>GROUP BY</em>)</p>
 <div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span>
+    <span class="n">calitp_feed_name</span><span class="p">,</span>
+    <span class="nb">date</span><span class="p">,</span>
+    <span class="n">days_until_feed_end_date</span><span class="p">,</span>
+    <span class="n">feed_end_date</span>
+<span class="k">FROM</span> <span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_fact_daily_feeds</span>
+<span class="k">JOIN</span> <span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_dim_feeds</span> <span class="k">USING</span> <span class="p">(</span><span class="n">feed_key</span><span class="p">)</span>
+<span class="k">WHERE</span>
+    <span class="nb">date</span> <span class="o">=</span> <span class="ss">&quot;2021-09-01&quot;</span> <span class="k">AND</span> <span class="n">calitp_feed_name</span> <span class="o">=</span> <span class="ss">&quot;Unitrans (0)&quot;</span>
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>calitp_feed_name</th>
+      <th>date</th>
+      <th>days_until_feed_end_date</th>
+      <th>feed_end_date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Unitrans (0)</td>
+      <td>2021-09-01</td>
+      <td>20</td>
+      <td>2021-09-21</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 </div>
 <div class="section" id="id9">
@@ -841,6 +1288,45 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div><pre># Source: lazy query
+# DB Conn: Engine(bigquery://cal-itp-data-infra/?maximum_bytes_billed=5000000000)
+# Preview:
+</pre><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>calitp_feed_name</th>
+      <th>date</th>
+      <th>days_until_feed_end_date</th>
+      <th>feed_end_date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Unitrans (0)</td>
+      <td>2021-09-01</td>
+      <td>20</td>
+      <td>2021-09-21</td>
+    </tr>
+  </tbody>
+</table>
+</div><p># .. may have more rows</p></div></div></div>
 </div>
 </div>
 </div>
@@ -854,6 +1340,65 @@
 <em>Geography</em> → <strong>trip_id</strong> (the unique identifier for each record, to <em>GROUP BY</em>)
 <em>Agency</em> → Join with table <strong>views.gtfs_schedule_dim_feeds</strong> on variable <strong>feed_key</strong> for <strong>calitp_feed_name</strong> (<em>GROUP BY</em>)</p>
 <div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">WITH</span>
+
+<span class="n">counting_stop_times</span> <span class="k">AS</span> <span class="p">(</span>
+
+    <span class="c1">-- count the number of stops each trip in each feed makes</span>
+    <span class="k">SELECT</span>
+        <span class="n">trip_id</span><span class="p">,</span>
+        <span class="n">calitp_feed_name</span><span class="p">,</span>
+        <span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">AS</span> <span class="n">n_trip_stop_times</span>
+    <span class="k">FROM</span> <span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_data_feed_trip_stops_latest</span><span class="o">`</span>
+    <span class="k">GROUP</span> <span class="k">BY</span>
+        <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+<span class="p">)</span>
+
+<span class="c1">-- calculate the max number of stops made by a feed&#39;s trip</span>
+<span class="c1">-- we filter to keep only the Unitrans feed for this example</span>
+<span class="k">SELECT</span>
+    <span class="n">calitp_feed_name</span><span class="p">,</span>
+    <span class="k">MAX</span><span class="p">(</span><span class="n">n_trip_stop_times</span><span class="p">)</span> <span class="k">AS</span> <span class="n">max_n_trip_stop_times</span>
+<span class="k">FROM</span>
+    <span class="n">counting_stop_times</span>
+<span class="k">WHERE</span>
+     <span class="n">calitp_feed_name</span> <span class="o">=</span> <span class="ss">&quot;Unitrans (0)&quot;</span>
+<span class="k">GROUP</span> <span class="k">BY</span>
+    <span class="n">calitp_feed_name</span>
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>calitp_feed_name</th>
+      <th>max_n_trip_stop_times</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Unitrans (0)</td>
+      <td>43</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 </div>
 <div class="section" id="id12">
@@ -883,6 +1428,39 @@
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div><pre># Source: lazy query
+# DB Conn: Engine(bigquery://cal-itp-data-infra/?maximum_bytes_billed=5000000000)
+# Preview:
+</pre><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>n_max</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>43</td>
+    </tr>
+  </tbody>
+</table>
+</div><p># .. may have more rows</p></div></div></div>
 </div>
 </div>
 </div>
@@ -919,11 +1497,11 @@
 <div class='prev-next-bottom'>
     
     <div id="prev">
-        <a class="left-prev" href="06_table_names.html" title="previous page">
+        <a class="left-prev" href="jupyterhub.html" title="previous page">
             <i class="prevnext-label fas fa-angle-left"></i>
             <div class="prevnext-info">
                 <p class="prevnext-label">previous</p>
-                <p class="prevnext-title">Table names</p>
+                <p class="prevnext-title">Using Jupyterhub</p>
             </div>
         </a>
     </div>
