@@ -51,6 +51,8 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Git Flow for Services" href="Git-Flow-Services.html" />
+    <link rel="prev" title="JupyterHub" href="../kubernetes/JupyterHub.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
     
@@ -86,7 +88,7 @@
   </a>
  </li>
 </ul>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../datasets/01_overview.html">
    Datasets
@@ -119,17 +121,96 @@
    </li>
   </ul>
  </li>
- <li class="toctree-l1">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="../kubernetes/README.html">
    Kubernetes
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../kubernetes/JupyterHub.html">
+     JupyterHub
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="current reference internal" href="#">
+   CI
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Git-Flow-Services.html">
+     Git Flow for Services
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Pipeline-Variables.html">
+     Pipeline Variables
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="steps/build-docker-image.html">
+     build-docker-image
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="steps/build-git-notes.html">
+     build-git-notes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="steps/build-git-tag.html">
+     build-git-tag
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="steps/configure-build-git-notes.html">
+     configure-build-git-notes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="steps/configure-docker-login.html">
+     configure-docker-login
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="steps/configure-git-remote.html">
+     configure-git-remote
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="steps/release-kube-overlay.html">
+     release-kube-overlay
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="steps/validate-build-git-tag.html">
+     validate-build-git-tag
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="steps/validate-clean-worktree.html">
+     validate-clean-worktree
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../services/overview.html">
    Services
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -150,8 +231,8 @@
   <a class="reference internal" href="../warehouse/overview.html">
    Warehouse
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-  <label for="toctree-checkbox-3">
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -202,8 +283,8 @@
   <a class="reference internal" href="../contributing/overview.html">
    Contribute
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
-  <label for="toctree-checkbox-4">
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -610,6 +691,8 @@ wrap step execution.</p>
 </div>
 </div>
 </div>
+<div class="toctree-wrapper compound">
+</div>
 </div>
 
     <script type="text/x-thebe-config">
@@ -641,6 +724,24 @@ wrap step execution.</p>
 
 <div class='prev-next-bottom'>
     
+    <div id="prev">
+        <a class="left-prev" href="../kubernetes/JupyterHub.html" title="previous page">
+            <i class="prevnext-label fas fa-angle-left"></i>
+            <div class="prevnext-info">
+                <p class="prevnext-label">previous</p>
+                <p class="prevnext-title">JupyterHub</p>
+            </div>
+        </a>
+    </div>
+     <div id="next">
+        <a class="right-next" href="Git-Flow-Services.html" title="next page">
+            <div class="prevnext-info">
+                <p class="prevnext-label">next</p>
+                <p class="prevnext-title">Git Flow for Services</p>
+            </div>
+            <i class="prevnext-label fas fa-angle-right"></i>
+        </a>
+     </div>
 
 </div>
         

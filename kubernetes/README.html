@@ -51,7 +51,7 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Services" href="../services/overview.html" />
+    <link rel="next" title="JupyterHub" href="JupyterHub.html" />
     <link rel="prev" title="Views" href="../datasets/views.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -121,17 +121,96 @@
    </li>
   </ul>
  </li>
- <li class="toctree-l1 current active">
+ <li class="toctree-l1 current active has-children">
   <a class="current reference internal" href="#">
    Kubernetes
   </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="JupyterHub.html">
+     JupyterHub
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ci/README.html">
+   CI
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/Git-Flow-Services.html">
+     Git Flow for Services
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/Pipeline-Variables.html">
+     Pipeline Variables
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/build-docker-image.html">
+     build-docker-image
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/build-git-notes.html">
+     build-git-notes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/build-git-tag.html">
+     build-git-tag
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/configure-build-git-notes.html">
+     configure-build-git-notes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/configure-docker-login.html">
+     configure-docker-login
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/configure-git-remote.html">
+     configure-git-remote
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/release-kube-overlay.html">
+     release-kube-overlay
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/validate-build-git-tag.html">
+     validate-build-git-tag
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/validate-clean-worktree.html">
+     validate-clean-worktree
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../services/overview.html">
    Services
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -152,8 +231,8 @@
   <a class="reference internal" href="../warehouse/overview.html">
    Warehouse
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-  <label for="toctree-checkbox-3">
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -204,8 +283,8 @@
   <a class="reference internal" href="../contributing/overview.html">
    Contribute
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
-  <label for="toctree-checkbox-4">
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -448,10 +527,10 @@ kubectl cluster-info
 <h3>cluster lifecycle<a class="headerlink" href="#cluster-lifecycle" title="Permalink to this headline">¶</a></h3>
 <p>Create the cluster by running <code class="docutils literal notranslate"><span class="pre">kubernetes/gke/cluster-create.sh</span></code>.</p>
 <p>The cluster level configuration parameters are stored in
-<span class="xref myst"><code class="docutils literal notranslate"><span class="pre">kubernetes/gke/config-cluster.sh</span></code></span>.
+<a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/kubernetes/gke/config-cluster.sh"><code class="docutils literal notranslate"><span class="pre">kubernetes/gke/config-cluster.sh</span></code></a>.
 Creating the cluster also requires configuring parameters for a node pool
 named “default-pool” (unconfigurable name defined by GKE) in
-<span class="xref myst"><code class="docutils literal notranslate"><span class="pre">kubernetes/gke/config-nodepool.sh</span></code></span>.
+<a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/kubernetes/gke/config-nodepool.sh"><code class="docutils literal notranslate"><span class="pre">kubernetes/gke/config-nodepool.sh</span></code></a>.
 Any additional node pools configured in this file are also stood up at cluster
 creation time.</p>
 <p>Once the cluster is created, it can be managed by pointing the <code class="docutils literal notranslate"><span class="pre">KUBECONFIG</span></code>
@@ -467,7 +546,7 @@ The node pool lifecycle scripts help simplify this process.</p>
 <div class="section" id="create-a-new-node-pool">
 <h4>create a new node pool<a class="headerlink" href="#create-a-new-node-pool" title="Permalink to this headline">¶</a></h4>
 <p>Configure a new node pool by adding its name to the <code class="docutils literal notranslate"><span class="pre">GKE_NODEPOOL_NAMES</span></code> array
-in <span class="xref myst"><code class="docutils literal notranslate"><span class="pre">kubernetes/gke/config-nodepool.sh</span></code></span>.
+in <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/kubernetes/gke/config-nodepool.sh"><code class="docutils literal notranslate"><span class="pre">kubernetes/gke/config-nodepool.sh</span></code></a>.
 For each nodepool property (<code class="docutils literal notranslate"><span class="pre">GKE_NODEPOOL_NODE_COUNT</span></code>, <code class="docutils literal notranslate"><span class="pre">GKE_NODEPOOL_NODE_LOCATIONS</span></code>, etc)
 it is required to add an entry to the array which is mapped to the nodepool name.</p>
 <p>Once the new nodepool is configured, it can be stood up by running <code class="docutils literal notranslate"><span class="pre">kubernetes/gke/nodepool-up.sh</span> <span class="pre">[nodepool-name]</span></code>,
@@ -556,6 +635,8 @@ latest agencies file</p>
 </div>
 </div>
 </div>
+<div class="toctree-wrapper compound">
+</div>
 </div>
 
     <script type="text/x-thebe-config">
@@ -597,10 +678,10 @@ latest agencies file</p>
         </a>
     </div>
      <div id="next">
-        <a class="right-next" href="../services/overview.html" title="next page">
+        <a class="right-next" href="JupyterHub.html" title="next page">
             <div class="prevnext-info">
                 <p class="prevnext-label">next</p>
-                <p class="prevnext-title">Services</p>
+                <p class="prevnext-title">JupyterHub</p>
             </div>
             <i class="prevnext-label fas fa-angle-right"></i>
         </a>
