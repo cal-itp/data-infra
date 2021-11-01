@@ -1,5 +1,6 @@
-# Meetings
+# How We Work
+## Meetings
 -To-Do
-# Communication Channels
+## Communication Channels
 
-# Introduction to Project Management
+## Introduction to Project Management

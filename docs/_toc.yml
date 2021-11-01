@@ -52,6 +52,8 @@ chapters:
     - file: analytics/08_intro_datasets
     - file: analytics/09_analysis_examples
     - file: analytics/10_how_to_publish
+    - file: analytics/11_project_leads
+    - file: analytics/12_data_consumers
   - file: contributing/overview
     sections:
     - file:  contributing/editing_doc
