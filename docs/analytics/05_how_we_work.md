@@ -1,2 +1,5 @@
-# I am a subsection
+# Meetings
 -To-Do
+# Communication Channels
+
+# Introduction to Project Management

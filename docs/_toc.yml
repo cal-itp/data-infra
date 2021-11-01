@@ -48,9 +48,10 @@ chapters:
     - file: analytics/04_about_our_team
     - file: analytics/05_how_we_work
     - file: analytics/06_tools_quick_links
-    - file: analytics/07_intro_tools_datasets
-    - file: analytics/08_analysis_examples
-    - file: analytics/09_how_to_publish
+    - file: analytics/07_intro_tools
+    - file: analytics/08_intro_datasets
+    - file: analytics/09_analysis_examples
+    - file: analytics/10_how_to_publish
   - file: contributing/overview
     sections:
     - file:  contributing/editing_doc
