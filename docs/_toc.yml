@@ -42,7 +42,15 @@ chapters:
     - file: warehouse/07_tutorial
   - file: analytics/overview
     sections:
-    - file: analytics/01_sample
+    - file: analytics/01_welcome_analysts
+    - file: analytics/02_what_is_calitp
+    - file: analytics/03_onboarding
+    - file: analytics/04_about_our_team
+    - file: analytics/05_how_we_work
+    - file: analytics/06_tools_quick_links
+    - file: analytics/07_intro_tools_datasets
+    - file: analytics/08_analysis_examples
+    - file: analytics/09_how_to_publish
   - file: contributing/overview
     sections:
     - file:  contributing/editing_doc
