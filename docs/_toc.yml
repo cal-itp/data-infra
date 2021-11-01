@@ -40,6 +40,9 @@ chapters:
     - file: warehouse/06_table_names
     - file: warehouse/jupyterhub
     - file: warehouse/07_tutorial
+  - file: analytics/overview
+    sections:
+    - file: analytics/01_sample
   - file: contributing/overview
     sections:
     - file:  contributing/editing_doc
