@@ -35,6 +35,3 @@ Reference: [gtfs.org](http://gtfs.org/reference/static)
 | transfers | Rules for making connections at transfer points between routes. |
 ### GTFS RT
 ### Payments
-## How to Store External Data
-### intakify
-### GCS

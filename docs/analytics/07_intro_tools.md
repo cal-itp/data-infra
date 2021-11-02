@@ -8,7 +8,10 @@
 ### Github Teams
 ### Github Repos
 ## Python
-###Jupyter Lab
+### Jupyter Lab
+#### How to Store External Data
+intakify
+### GCS
 ### Libraries
 #### Siuba
 #### calitp

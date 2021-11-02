@@ -1,10 +1,10 @@
 # Tools Quick Links
-# data-analyses
-Place for sharing quick reports, and works in progress
 
-## Using this Repo
+## Get Started in Data Analysis
 
-* Clone this repository: `git clone https://github.com/cal-itp/[REPO_NAME].git`
+### Using the data-analyses Repo
+A place for sharing quick reports, and works in progress
+* Clone the repository: `git clone https://github.com/cal-itp/[REPO_NAME].git`
 * Make a new folder and code your analyses in it.
 * Make new branches or push directly to the main branch.
     * Create a [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) (PAT) to successfully push to `origin/main`
@@ -14,8 +14,6 @@ Place for sharing quick reports, and works in progress
 This repository is for quick sharing of works in progress and simple analyses.
 For collaborative short-term tasks, create a new folder and work off a separate branch.
 For longer-term projects, consider making a new repository!
-
-## Quick Links - Get Started in Data Analysis
 
 ### Metabase
 
