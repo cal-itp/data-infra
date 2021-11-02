@@ -19,7 +19,7 @@ kernelspec:
 | ---- | ----------- | -------- |
 | [GTFS Schedule](./gtfs_schedule.md) | GTFS Schedule data for the current day | `gtfs_schedule`, `gtfs_schedule_history`, `gtfs_schedule_type2` |
 | [MST Payments](./mst_payments.md) | TODO | TODO |
-| [Transitstacks](./transitstacks.md) | TODO | `transitstacks`, `views.transitstacks` |
+| [Transitstacks](./transitdatabase.md) | TODO | `transitstacks`, `views.transitstacks` |
 | [Views](./views.md) | End-user friendly data for dashboards and metrics | E.g. `views.validation_*`, `views.gtfs_schedule_*` |
 
 ## Querying data
