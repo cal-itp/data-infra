@@ -19,7 +19,7 @@ def PodOperator(*args, **kwargs):
         return GKEPodOperator(
             *args,
             in_cluster=False,
-            project_id=get_project_id(),
+            project_id="cal-itp-data-infra",  # there currently isn't a staging cluster
             location=os.environ["POD_LOCATION"],
             cluster_name=os.environ["POD_CLUSTER_NAME"],
             namespace=namespace,
