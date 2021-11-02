@@ -451,8 +451,19 @@
 <div class="section" id="connecting-to-the-warehouse">
 <h2>Connecting to the Warehouse<a class="headerlink" href="#connecting-to-the-warehouse" title="Permalink to this headline">¶</a></h2>
 <p>Connecting to the warehouse requires a bit of setup after logging in to Jupyterhub.
-Users need to download and install the gcloud commandline tool from the app.
-See the screencast below for a full walkthrough.</p>
+Users need to download and install the gcloud commandline tool from the app.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># initial setup (in terminal) ----</span>
+<span class="n">curl</span> <span class="o">-</span><span class="n">O</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">dl</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">dl</span><span class="o">/</span><span class="n">cloudsdk</span><span class="o">/</span><span class="n">channels</span><span class="o">/</span><span class="n">rapid</span><span class="o">/</span><span class="n">downloads</span><span class="o">/</span><span class="n">google</span><span class="o">-</span><span class="n">cloud</span><span class="o">-</span><span class="n">sdk</span><span class="o">-</span><span class="mf">361.0.0</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">tar</span> <span class="o">-</span><span class="n">zxvf</span> <span class="n">google</span><span class="o">-</span><span class="n">cloud</span><span class="o">-</span><span class="n">sdk</span><span class="o">-</span><span class="mf">361.0.0</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<span class="o">./</span><span class="n">google</span><span class="o">-</span><span class="n">cloud</span><span class="o">-</span><span class="n">sdk</span><span class="o">/</span><span class="n">install</span><span class="o">.</span><span class="n">sh</span>
+<span class="o">./</span><span class="n">google</span><span class="o">-</span><span class="n">cloud</span><span class="o">-</span><span class="n">sdk</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">gcloud</span> <span class="n">init</span>
+
+<span class="c1"># log in to project ----</span>
+<span class="n">gcloud</span> <span class="n">auth</span> <span class="n">login</span>
+<span class="n">gcloud</span> <span class="n">auth</span> <span class="n">application</span><span class="o">-</span><span class="n">default</span> <span class="n">login</span>
+</pre></div>
+</div>
+<p>See the screencast below for a full walkthrough.</p>
 <div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/6883b0bf9c8b4547a93d00bc6ba45b6d" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
 </div>
 <div class="section" id="uploading-data">
@@ -469,11 +480,29 @@ See the screencast below for a full walkthrough.</p>
 <h3>Uploading data from a notebook<a class="headerlink" href="#uploading-data-from-a-notebook" title="Permalink to this headline">¶</a></h3>
 <p>The code below shows how to copy a file from jupyterhub to the data bucket.
 Be sure to replace <code class="docutils literal notranslate"><span class="pre">&lt;FILE</span> <span class="pre">NAME&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;ANALYSIS</span> <span class="pre">FOLDER&gt;</span></code> with the appropriate names.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp.storage</span> <span class="kn">import</span> <span class="n">get_fs</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using the `calitp` package</span>
+<span class="kn">from</span> <span class="nn">calitp.storage</span> <span class="kn">import</span> <span class="n">get_fs</span>
 
 <span class="n">fs</span> <span class="o">=</span> <span class="n">get_fs</span><span class="p">()</span>
 
 <span class="n">fs</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;&lt;FILE NAME&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;gs://calitp-analytics-data/data-analyses/&lt;ANALYSIS FOLDER&gt;/&lt;FILE NAME&gt;&quot;</span><span class="p">)</span>
+
+<span class="c1"># Using the `gcsfs` package</span>
+<span class="kn">import</span> <span class="nn">gcsfs</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># CSV</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;gs://calitp-analytics-data/data-analyses/&lt;ANALYSIS FOLDER&gt;/&lt;FILE NAME&gt;&quot;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;gs://calitp-analytics-data/data-analyses/&lt;ANALYSIS FOLDER&gt;/&lt;FILE NAME&gt;&quot;</span><span class="p">)</span>
+
+<span class="c1"># Parquet</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">&quot;gs://calitp-analytics-data/data-analyses/&lt;ANALYSIS FOLDER&gt;/&lt;FILE NAME&gt;&quot;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s2">&quot;gs://calitp-analytics-data/data-analyses/&lt;ANALYSIS FOLDER&gt;/&lt;FILE NAME&gt;&quot;</span><span class="p">)</span>
+
+<span class="c1"># Geoparquet</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">&quot;gs://calitp-analytics-data/data-analyses/&lt;ANALYSIS FOLDER&gt;/&lt;FILE NAME&gt;&quot;</span><span class="p">)</span>
+<span class="n">gdf</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s2">&quot;gs://calitp-analytics-data/data-analyses/&lt;ANALYSIS FOLDER&gt;/&lt;FILE NAME&gt;&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
