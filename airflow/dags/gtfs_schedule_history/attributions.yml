@@ -11,8 +11,6 @@ schema_fields:
     type: INTEGER
   - name: calitp_url_number
     type: INTEGER
-  - name: calitp_extracted_at
-    type: DATE
 
   # required
   - name: organization_name
@@ -39,3 +37,7 @@ schema_fields:
     type: STRING
   - name: attribution_phone
     type: STRING
+
+  # cal-itp internal columns required to be at the end
+  - name: calitp_extracted_at
+    type: DATE
