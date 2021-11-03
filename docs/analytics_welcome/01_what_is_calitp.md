@@ -1,4 +1,4 @@
-# Cal-ITP Program Information
+# Cal-ITP Project Information
 
 ## Project Domains
 Mobility Services Data
