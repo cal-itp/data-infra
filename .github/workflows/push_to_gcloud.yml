@@ -35,7 +35,6 @@ jobs:
         python script/agencies_validate.py \
           './airflow/data/agencies.filled.yml' \
           './airflow/data/schema_agencies_entry.yml'
-
     - if: ${{ github.repository == 'cal-itp/data-infra' }}
       uses: google-github-actions/setup-gcloud@master
       with:

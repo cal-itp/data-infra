@@ -30,6 +30,11 @@ def _bq_client_create_external_table(
     # the fully qualified table name when initializing a Table..
     full_table_name = f"{get_project_id()}.{table_name}"
 
+    # First delete table if it exists
+    print(f"Deleting external table: {full_table_name}")
+    client.delete_table(full_table_name)
+
+    # (re)create table
     print(f"Creating external table: {full_table_name}")
 
     tbl = bigquery.Table(full_table_name, schema_fields)

@@ -7,7 +7,7 @@
 import yaml
 import pandas as pd
 
-from calitp.config import pipe_file_name
+from calitp.config import is_development, pipe_file_name
 from calitp import save_to_gcfs
 
 
@@ -55,8 +55,11 @@ def gen_list(execution_date, **kwargs):
 
     # get a table of feed urls from agencies.yml
     # we fetch both the raw and filled w/ API key versions to save
+    filled_agencies_file = (
+        "data/agencies.filled.yml" if is_development() else "data/agencies.yml"
+    )
     feeds_raw = make_gtfs_list(pipe_file_name("data/agencies_raw.yml"))
-    feeds = make_gtfs_list(pipe_file_name("data/agencies.yml"))
+    feeds = make_gtfs_list(pipe_file_name(filled_agencies_file))
 
     path_metadata = f"schedule/{execution_date}/metadata"
 
