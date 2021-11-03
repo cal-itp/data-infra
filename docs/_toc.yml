@@ -39,9 +39,9 @@ parts:
         - file: analytics_data_consumers/01_data_consumers
   - caption: Developers
     chapters:
-      - file: juniper/01_overview
+      - file: developers_welcome/overview
         sections:
-        - file: juniper/02_intro
+        - file: developers_welcome/01_intro
     chapters:
       - file: datasets/01_overview
         sections:
