@@ -43,7 +43,7 @@ parts:
         - file: warehouse/jupyterhub
       - file: analytics_examples/overview
         sections:
-        - file: warehouse/01_analysis_examples
+        - file: analytics_examples/01_analysis_examples
       - file: analytics_publishing/overview
         sections:
         - file: analytics_publishing/01_how_to_publish
