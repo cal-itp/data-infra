@@ -17,7 +17,11 @@ parts:
       - file: analytics_tools/overview
         sections:
         - file: analytics_tools/01_tools_quick_links
-        - file: analytics_tools/02_intro_tools
+        - file: analytics_tools/02_querying
+        - file: analytics_tools/03_bi_dashboards
+        - file: analytics_tools/04_notebooks
+        - file: analytics_tools/05_saving_code
+        - file: analytics_tools/06_storing_data
       - file: analytics_data/overview
         sections:
         - file: analytics_data/01_intro_datasets
@@ -27,6 +31,7 @@ parts:
       - file: analytics_publishing/overview
         sections:
         - file: analytics_publishing/01_how_to_publish
+        - file: analytics_publishing/02_where_reports_live
   - caption: Project Leads
     chapters:
       - file: analytics_project_leads/overview
@@ -81,5 +86,3 @@ parts:
   - caption: Contribute!
     chapters:
       - file: contributing/overview
-        sections:
-        - file:  contributing/editing_doc

@@ -1,9 +1,6 @@
-# Conducting Analyses - Tools
-Congratulations, you're ready to start your analyses! Use the section below to walk thrugh the various stages of conducting work as an analyst.
-Before getting started, see the prerequisites
-Should we have an email address that is avilable to reach out to if they face problems?
-## Querying
-### Google BigQuery
+# Querying
+
+## Google BigQuery
 To query our data warehouse we use Google BigQuery (link to onboarding info) within the Google Cloud Platform.
 Make sure you're set-up with BigQuery here
 Quick link - BigQuery
