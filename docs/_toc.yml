@@ -3,73 +3,81 @@
 
 format: jb-book
 root: intro
-chapters:
-  - file: analytics_welcome/overview
-    sections:
-    - file: analytics_welcome/01_what_is_calitp
-    - file: analytics_welcome/02_about_our_team
-    - file: analytics_welcome/03_how_we_work
-  - file: analytics_onboarding/overview
-    sections:
-    - file: analytics_onboarding/01_technical_onboarding
-  - file: analytics_tools/overview
-    sections:
-    - file: analytics_tools/01_tools_quick_links
-    - file: analytics_tools/02_intro_tools
-  - file: analytics_data/overview
-    sections:
-    - file: analytics_data/01_intro_datasets
-  - file: analytics_examples/overview
-    sections:
-    - file: analytics_examples/01_analysis_examples
-  - file: analytics_publishing/overview
-    sections:
-    - file: analytics_publishing/01_how_to_publish
-  - file: analytics_project_leads/overview
-    sections:
-    - file: analytics_project_leads/01_project_leads
-  - file: analytics_data_consumers/overview
-    sections:
-    - file: analytics_data_consumers/01_data_consumers
-  - file: datasets/01_overview
-    sections:
-    - file: datasets/gtfs_schedule
-    - file: datasets/mst_payments
-    - file: datasets/transitstacks
-    - file: datasets/views
-  - file: warehouse/overview
-    sections:
-    - file: warehouse/01_agencies
-    - file: warehouse/02_views
-    - file: warehouse/03_metrics
-    - file: warehouse/04_sql_snippets
-    - file: warehouse/05_using_metabase
-    - file: warehouse/06_table_names
-    - file: warehouse/jupyterhub
-    - file: warehouse/07_tutorial
-  - file: contributing/overview
-    sections:
-    - file:  contributing/editing_doc
-  - file: juniper/01_overview
-    sections:
-    - file: juniper/02_intro
-  - file: kubernetes/README
-    sections:
-    - file: kubernetes/JupyterHub
-  - file: ci/README
-    sections:
-    - file: ci/Git-Flow-Services
-    - file: ci/Pipeline-Variables
-    - file: ci/steps/build-docker-image
-    - file: ci/steps/build-git-notes
-    - file: ci/steps/build-git-tag
-    - file: ci/steps/configure-build-git-notes
-    - file: ci/steps/configure-docker-login
-    - file: ci/steps/configure-git-remote
-    - file: ci/steps/release-kube-overlay
-    - file: ci/steps/validate-build-git-tag
-    - file: ci/steps/validate-clean-worktree
-  - file: services/overview
-    sections:
-    - file: services/gtfs-ckan-uploader
-    - file: services/gtfs-rt-archive
+parts:
+  - caption: Analysts
+    chapters:
+      - file: analytics_welcome/overview
+        sections:
+        - file: analytics_welcome/01_what_is_calitp
+        - file: analytics_welcome/02_about_our_team
+        - file: analytics_welcome/03_how_we_work
+      - file: analytics_onboarding/overview
+        sections:
+        - file: analytics_onboarding/01_technical_onboarding
+      - file: analytics_tools/overview
+        sections:
+        - file: analytics_tools/01_tools_quick_links
+        - file: analytics_tools/02_intro_tools
+      - file: analytics_data/overview
+        sections:
+        - file: analytics_data/01_intro_datasets
+      - file: analytics_examples/overview
+        sections:
+        - file: analytics_examples/01_analysis_examples
+      - file: analytics_publishing/overview
+        sections:
+        - file: analytics_publishing/01_how_to_publish
+  - caption: Project Leads
+    chapters:
+      - file: analytics_project_leads/overview
+        sections:
+        - file: analytics_project_leads/01_project_leads
+  - caption: Data Consumers
+    chapters:
+      - file: analytics_data_consumers/overview
+        sections:
+        - file: analytics_data_consumers/01_data_consumers
+  - caption: Developers
+    chapters:
+      - file: datasets/01_overview
+        sections:
+        - file: datasets/gtfs_schedule
+        - file: datasets/mst_payments
+        - file: datasets/transitstacks
+        - file: datasets/views
+      - file: warehouse/overview
+        sections:
+        - file: warehouse/01_agencies
+        - file: warehouse/02_views
+        - file: warehouse/03_metrics
+        - file: warehouse/04_sql_snippets
+        - file: warehouse/05_using_metabase
+        - file: warehouse/06_table_names
+        - file: warehouse/jupyterhub
+        - file: warehouse/07_tutorial
+      - file: contributing/overview
+        sections:
+        - file:  contributing/editing_doc
+      - file: juniper/01_overview
+        sections:
+        - file: juniper/02_intro
+      - file: kubernetes/README
+        sections:
+        - file: kubernetes/JupyterHub
+      - file: ci/README
+        sections:
+        - file: ci/Git-Flow-Services
+        - file: ci/Pipeline-Variables
+        - file: ci/steps/build-docker-image
+        - file: ci/steps/build-git-notes
+        - file: ci/steps/build-git-tag
+        - file: ci/steps/configure-build-git-notes
+        - file: ci/steps/configure-docker-login
+        - file: ci/steps/configure-git-remote
+        - file: ci/steps/release-kube-overlay
+        - file: ci/steps/validate-build-git-tag
+        - file: ci/steps/validate-clean-worktree
+      - file: services/overview
+        sections:
+        - file: services/gtfs-ckan-uploader
+        - file: services/gtfs-rt-archive
