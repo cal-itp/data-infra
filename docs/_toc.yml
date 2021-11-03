@@ -39,6 +39,10 @@ parts:
         - file: analytics_data_consumers/01_data_consumers
   - caption: Developers
     chapters:
+      - file: juniper/01_overview
+        sections:
+        - file: juniper/02_intro
+    chapters:
       - file: datasets/01_overview
         sections:
         - file: datasets/gtfs_schedule
@@ -55,12 +59,6 @@ parts:
         - file: warehouse/06_table_names
         - file: warehouse/jupyterhub
         - file: warehouse/07_tutorial
-      - file: contributing/overview
-        sections:
-        - file:  contributing/editing_doc
-      - file: juniper/01_overview
-        sections:
-        - file: juniper/02_intro
       - file: kubernetes/README
         sections:
         - file: kubernetes/JupyterHub
@@ -81,3 +79,8 @@ parts:
         sections:
         - file: services/gtfs-ckan-uploader
         - file: services/gtfs-rt-archive
+  - caption: Contribute!
+    chapters:
+      - file: contributing/overview
+        sections:
+        - file:  contributing/editing_doc
