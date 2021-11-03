@@ -8,7 +8,7 @@ chapters:
     sections:
     - file: datasets/gtfs_schedule
     - file: datasets/mst_payments
-    - file: datasets/transitstacks
+    - file: datasets/transitdatabase
     - file: datasets/views
   - file: kubernetes/README
     sections:
