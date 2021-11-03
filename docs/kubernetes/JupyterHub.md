@@ -187,3 +187,21 @@ Apply these chart changes with:
 ```
 helm upgrade jupyterhub kubernetes/apps/charts/jupyterhub -n jupyterhub
 ```
+
+
+### How to pull and push to github from jupyterhub
+
+#### Working with git-versioned scripts/notebooks in jupyter lab:
+Clone your repository to your home directory on Jupyter Lab
+  - Open Terminal window: Files -> New Launcher -> Terminal
+  - type `git clone <url of your repository>` (get the url from the CALITP Github/GitLab repository page)
+  - In terminal, type cd <name_of_your_repository> tp mavigate into your repository
+  - For this aspect of the project, will be using the data-analyses repo
+  - Type `git pull origin main` to get current version of repo from Github
+  - In the terminal, type `Jupyterlab <name_of_your_repository>`, a jupyterlab notebook should open in a browser
+  - Do your work in your script or notebook file, and save it
+  - In terminal, type `git status` to check the status of your repository. You should see that your file(s) is now listed as modified under the section "Changes not staged for commit"
+  - stage your changes with git add <filename>
+  - commit your changes with git commit -m "feat: associated_feature- your_commit_message_here"
+  - pull down current version of repo from Github `git pull origin main`, make sure there are no merge conflicts
+  - push your changes to the repo with `git push origin main`. For data-analyses, if is ok to push to main, for the other repositories it is better practice to first checkout a new branch and then merge to main.
