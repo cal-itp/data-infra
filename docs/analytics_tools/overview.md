@@ -4,4 +4,4 @@ After reading this section, you should be able to:
 * y
 * z
 
-Something not right? [Message Charlie by using this link to his Slack profile.](https://cal-itp.slack.com/team/U027GAVHFST)
+<a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">Message Charlie by using this link to his Slack profile.</a>
