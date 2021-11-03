@@ -6,11 +6,12 @@ root: intro
 chapters:
   - file: analytics_welcome/overview
     sections:
-    - file: analytics_welcome/01_welcome_analysts
-    - file: analytics_welcome/02_what_is_calitp
-    - file: analytics_welcome/03_onboarding
-    - file: analytics_welcome/04_about_our_team
-    - file: analytics_welcome/05_how_we_work
+    - file: analytics_welcome/01_what_is_calitp
+    - file: analytics_welcome/02_about_our_team
+    - file: analytics_welcome/03_how_we_work
+  - file: analytics_onboarding/overview
+    sections:
+    - file: analytics_onboarding/01_technical_onboarding
   - file: analytics_tools/overview
     sections:
     - file: analytics_tools/01_tools_quick_links
