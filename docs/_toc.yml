@@ -42,7 +42,6 @@ parts:
       - file: developers_welcome/overview
         sections:
         - file: developers_welcome/01_intro
-    chapters:
       - file: datasets/01_overview
         sections:
         - file: datasets/gtfs_schedule
