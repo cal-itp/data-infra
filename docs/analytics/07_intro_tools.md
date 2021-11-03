@@ -1,19 +1,36 @@
-# Tool Documentation
-## Metabase
-## Google Cloud Console
+# Conducting Analyses - Tools
+Congratulations, you're ready to start your analyses! Use the section below to walk thrugh the various stages of conducting work as an analyst.
+Before getting started, see the prerequisites
+Should we have an email address that is avilable to reach out to if they face problems?
+## Querying
 ### Google BigQuery
-### Google Cloud Storage
-## Github
-### Github Organization
-### Github Teams
-### Github Repos
-## Python
-### Jupyter Lab
-#### How to Store External Data
-intakify
-### GCS
+To query our data warehouse we use Google BigQuery (link to onboarding info) within the Google Cloud Platform.
+Make sure you're set-up with BigQuery here
+Quick link - BigQuery
+## Notebooks
+### JupyterLab
+For Python users, we have deployed a cloud-based instance of JupyterLab to creating, using, and sharing notebooks easy. This avoids the need to set up a local environment, provides dedicated storage, and allows you to push to Github.
+Make sure you're set-up with JupyterLab here
+Quick link - JupyterLab
+See pushing from JupyterLab below
 ### Libraries
-#### Siuba
+The following libraries are available and recommended for use by Cal-ITP data analysts.
 #### calitp
-## Version Control
-### Drag and Drop
+#### siuba
+#### plotnine
+#### mapping
+## Dashboards
+### Metabase
+We use Metabase as our business insights / dashboarding tool.
+Make sure you're set-up with Metabase here
+Quick link - Metabase
+## Storing Data
+### intakify
+In order to use and save external data sources for analyses we have deployed a service called intakify.
+## Saving Code
+### Pushing in Github - Drag and Drop
+### Pushing from JupyterLab
+See JupyterLab section above
+### Pushing from the Command Line
+## Publishing Reports
+See this section
