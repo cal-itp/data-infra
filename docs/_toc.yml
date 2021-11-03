@@ -4,29 +4,54 @@
 format: jb-book
 root: intro
 chapters:
-  - file: analytics/overview
+  - file: analytics_welcome/overview
     sections:
-    - file: analytics/01_welcome_analysts
-    - file: analytics/02_what_is_calitp
-    - file: analytics/03_onboarding
-    - file: analytics/04_about_our_team
-    - file: analytics/05_how_we_work
-    - file: analytics/06_tools_quick_links
-    - file: analytics/07_intro_tools
-    - file: analytics/08_intro_datasets
-    - file: analytics/09_analysis_examples
-    - file: analytics/10_how_to_publish
-    - file: analytics/11_project_leads
-    - file: analytics/12_data_consumers
-  - file: juniper/01_overview
+    - file: analytics_welcome/01_welcome_analysts
+    - file: analytics_welcome/02_what_is_calitp
+    - file: analytics_welcome/03_onboarding
+    - file: analytics_welcome/04_about_our_team
+    - file: analytics_welcome/05_how_we_work
+  - file: analytics_tools/overview
     sections:
-    - file: juniper/02_intro
+    - file: analytics_tools/01_tools_quick_links
+    - file: analytics_tools/02_intro_tools
+  - file: analytics_data/overview
+    sections:
+    - file: analytics_data/01_intro_datasets
+  - file: analytics_examples/overview
+    sections:
+    - file: analytics_examples/01_analysis_examples
+  - file: analytics_publishing/overview
+    sections:
+    - file: analytics_publishing/01_how_to_publish
+  - file: analytics_project_leads/overview
+    sections:
+    - file: analytics_project_leads/01_project_leads
+  - file: analytics_data_consumers/overview
+    sections:
+    - file: analytics_data_consumers/01_data_consumers
   - file: datasets/01_overview
     sections:
     - file: datasets/gtfs_schedule
     - file: datasets/mst_payments
     - file: datasets/transitstacks
     - file: datasets/views
+  - file: warehouse/overview
+    sections:
+    - file: warehouse/01_agencies
+    - file: warehouse/02_views
+    - file: warehouse/03_metrics
+    - file: warehouse/04_sql_snippets
+    - file: warehouse/05_using_metabase
+    - file: warehouse/06_table_names
+    - file: warehouse/jupyterhub
+    - file: warehouse/07_tutorial
+  - file: contributing/overview
+    sections:
+    - file:  contributing/editing_doc
+  - file: juniper/01_overview
+    sections:
+    - file: juniper/02_intro
   - file: kubernetes/README
     sections:
     - file: kubernetes/JupyterHub
@@ -47,16 +72,3 @@ chapters:
     sections:
     - file: services/gtfs-ckan-uploader
     - file: services/gtfs-rt-archive
-  - file: warehouse/overview
-    sections:
-    - file: warehouse/01_agencies
-    - file: warehouse/02_views
-    - file: warehouse/03_metrics
-    - file: warehouse/04_sql_snippets
-    - file: warehouse/05_using_metabase
-    - file: warehouse/06_table_names
-    - file: warehouse/jupyterhub
-    - file: warehouse/07_tutorial
-  - file: contributing/overview
-    sections:
-    - file:  contributing/editing_doc
