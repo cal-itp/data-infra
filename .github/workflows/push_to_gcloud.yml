@@ -24,26 +24,17 @@ jobs:
     - name: Install python packages
       run: |
         pip install jinja2==2.11.3 PyYAML==5.4.1 jsonschema==3.2.0 pandas==1.1.4
-    # Create the secrets.csv from the contents of the `AGENCY_SECRETS` environment variable / GitHub
-    # repository secret. The contents of this environment variable should be directly copied from
-    # the contents of a filled-out ./airflow/data/example-secrets.csv file.
-    - name: Create csv file with API keys
-      run: echo -e "$AGENCY_SECRETS" > ./airflow/data/secrets.csv
-      env:
-        AGENCY_SECRETS: ${{ secrets.AGENCY_SECRETS }}
-    # Populate the secrets within the agencies.yml file
     - name: Fill in agencies.yml API keys
       run: |
         python script/agencies_convert.py \
           './airflow/data/agencies.yml' \
           './airflow/data/agencies.filled.yml' \
-          './airflow/data/secrets.csv'
+          'https://docs.google.com/spreadsheets/d/1Fp7sesSMS6VOIndTLTKcyyN2qHj6najKAaN-I9_3SFo/export?gid=0&format=csv'
     - name: Validate agencies.yml
       run: |
         python script/agencies_validate.py \
           './airflow/data/agencies.filled.yml' \
           './airflow/data/schema_agencies_entry.yml'
-
     - if: ${{ github.repository == 'cal-itp/data-infra' }}
       uses: google-github-actions/setup-gcloud@master
       with:
