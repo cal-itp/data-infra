@@ -15,7 +15,7 @@ def email_failures(task_instance, ds, **kwargs):
     if is_development():
         print("Skipping since in development mode!")
         return
-        
+
     status = task_instance.xcom_pull(task_ids="download_data")
     error_agencies = status["errors"]
 
