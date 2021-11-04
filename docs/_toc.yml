@@ -27,10 +27,11 @@ parts:
         sections:
         - file: analytics_data/01_intro_datasets
         - file: analytics_data/02_table_names
-        - file: analytics_data/03_agencies
-        - file: analytics_data/04_views
-        - file: analytics_data/05_metrics
-        - file: analytics_data/06_old_warehouse_overview
+        - file: analytics_data/03_tables
+        - file: analytics_data/04_agencies
+        - file: analytics_data/05_views
+        - file: analytics_data/06_metrics
+        - file: analytics_data/07_old_warehouse_overview
       - file: analytics_examples/overview
         sections:
         - file: analytics_examples/01_analysis_examples
