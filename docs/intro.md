@@ -1,4 +1,4 @@
-# Analytics Documentation
+# Documentation
 
 To-do
 This page should cover:
