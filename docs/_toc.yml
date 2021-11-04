@@ -26,24 +26,21 @@ parts:
       - file: analytics_data/overview
         sections:
         - file: analytics_data/01_intro_datasets
+        - file: analytics_data/02_table_names
+        - file: analytics_data/03_agencies
+        - file: analytics_data/04_views
+        - file: analytics_data/05_metrics
+        - file: analytics_data/06_old_warehouse_overview
       - file: datasets/01_overview
         sections:
         - file: datasets/gtfs_schedule
         - file: datasets/mst_payments
         - file: datasets/transitstacks
         - file: datasets/views
-      - file: warehouse/overview
-        sections:
-        - file: warehouse/01_agencies
-        - file: warehouse/02_views
-        - file: warehouse/03_metrics
-        - file: warehouse/04_sql_snippets
-        - file: warehouse/05_using_metabase
-        - file: warehouse/06_table_names
-        - file: warehouse/jupyterhub
       - file: analytics_examples/overview
         sections:
         - file: analytics_examples/01_analysis_examples
+        - file: analytics_examples/02_sql_snippets
       - file: analytics_publishing/overview
         sections:
         - file: analytics_publishing/01_how_to_publish
