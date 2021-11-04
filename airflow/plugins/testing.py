@@ -55,6 +55,19 @@ FROM (
 )
 """
 
+# check_empty
+empty_query_template = """
+SELECT
+    '{field}' AS field,
+    '{test}' AS test,
+    n_rows = 0 AS passed
+FROM (
+    SELECT
+        COUNT(*) AS n_rows
+    FROM {table}
+)
+"""
+
 
 def run_test(test_name, engine, fields, table, query_template, composite=False):
 
@@ -120,6 +133,18 @@ class Tester:
         )
 
         self.test_results["check_composite_unique"] = res
+
+    def check_empty(self, fields):
+        res = run_test(
+            "check_empty",
+            engine=self.engine,
+            fields=fields,
+            table=self.table,
+            query_template=empty_query_template,
+            composite=False,
+        )
+
+        self.test_results["check_empty"] = res
 
     def all_passed(self):
         if self.test_results == {}:
