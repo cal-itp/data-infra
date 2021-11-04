@@ -3,7 +3,7 @@
 
 title: Cal-ITP Analytics
 author: Jarv.us
-#logo: logo.png
+logo: calitp_logo_MAIN.png
 
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
