@@ -191,17 +191,33 @@ helm upgrade jupyterhub kubernetes/apps/charts/jupyterhub -n jupyterhub
 
 ### How to pull and push to github from jupyterhub
 
-#### Working with git-versioned scripts/notebooks in jupyter lab:
-Clone your repository to your home directory on Jupyter Lab
-  - Open Terminal window: Files -> New Launcher -> Terminal
-  - type `git clone <url of your repository>` (get the url from the CALITP Github/GitLab repository page)
-  - In terminal, type cd <name_of_your_repository> tp mavigate into your repository
-  - For this aspect of the project, will be using the data-analyses repo
-  - Type `git pull origin main` to get current version of repo from Github
-  - In the terminal, type `Jupyterlab <name_of_your_repository>`, a jupyterlab notebook should open in a browser
-  - Do your work in your script or notebook file, and save it
+## How to pull from github
+Within jupyterhub open a new terminal
+While in the parent directory, clone the github calitp repository:
+  - `git clone https://github.com/cal-itp/data-analyses.git`
+A new folder with the data-analysis should appear in your table of contents
+ - Type `git pull origin main` to get current version of repo from Github
+To checkout a new branch, type `git checkout -b YOUR_BRANCH_NAME`
+Do your work in your script or notebook file, and save it
   - In terminal, type `git status` to check the status of your repository. You should see that your file(s) is now listed as modified under the section "Changes not staged for commit"
-  - stage your changes with git add <filename>
-  - commit your changes with git commit -m "feat: associated_feature- your_commit_message_here"
-  - pull down current version of repo from Github `git pull origin main`, make sure there are no merge conflicts
-  - push your changes to the repo with `git push origin main`. For data-analyses, if is ok to push to main, for the other repositories it is better practice to first checkout a new branch and then merge to main.
+## How to push to github
+  - stage your changes with `git add <filename>`
+  - commit your changes with `git commit -m "feat: associated_feature- your_commit_message_here"`
+  - push your changes with `git push origin YOUR_BRANCH_NAME`
+The terminal will prompt you for your Username and Password github
+
+### Username and password for Github
+Your github username is the username you selected when you signed up for github, if you click in the top right corner by your profile icon it will list your username.
+#### To generate new github access tokens
+Tokens are used to access the Github API. Personal access tokens function like ordinary OAuth access tokens. They can be used instead of a password for Git over HTTPS, or can be used to authenticate to the API over Basic Authentication.
+
+- Click on profile icon, select settings in the dropdown
+- on the left hand side in the personal account section, navigate down to Developer settings
+- Go to Personal access tokens and select generate new token, It is optional to wirte a note on what the purpose of this token is, Expiration is normally 30 days
+You must select the scope of the token for it to be used. Scopes define the access for personal tokens (url)
+- select the checkbox by the repo to give full control of private repositories, clicking the parent checkbox will select children option
+- scroll down to the bottom of the page and click generate token
+- Copy your personal access token in the light green box. Is is important to copy it now as you will not visibily see it again
+
+Navigate back to the jupyterhub terminal and paste your copied personal access token into the prompt for github password
+You will recieve confirmation that you have pushed your code changes to your required branch in github.
