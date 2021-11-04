@@ -1,4 +1,4 @@
-# Checklist
+# Checklist (WIP)
 **Meetings to Expect:**
 
 - [ ]  Day 1: Introduction / Technical Onboarding

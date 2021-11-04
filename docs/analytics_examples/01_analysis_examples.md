@@ -13,7 +13,7 @@ kernelspec:
   name: python3
 ---
 
-# Tutorial - Querying the Data Warehouse
+# Tutorial - Querying the Data Warehouse (WIP)
 
 
 ## Introduction

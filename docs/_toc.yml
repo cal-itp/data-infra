@@ -54,8 +54,6 @@ parts:
   - caption: Developers
     chapters:
       - file: developers_welcome/overview
-        sections:
-        - file: developers_welcome/01_intro
       - file: kubernetes/README
         sections:
         - file: kubernetes/JupyterHub
@@ -76,7 +74,7 @@ parts:
         sections:
         - file: services/gtfs-ckan-uploader
         - file: services/gtfs-rt-archive
-  - caption: Contribute!
+  - caption: Contribute to the Docs!
     chapters:
       - file: contribute/overview
         sections:

@@ -13,7 +13,7 @@ kernelspec:
   name: python3
 ---
 
-# Python Libraries
+# Python Libraries (WIP)
 The following libraries are available and recommended for use by Cal-ITP data analysts.
 ## calitp
 ## siuba

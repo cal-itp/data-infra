@@ -1,4 +1,4 @@
-# Introduction to Analytics Tools
+# Introduction to Analytics Tools (WIP)
 Congratulations, you're ready to start your analyses! Use the section below to walk thrugh the various stages of conducting work as an analyst.
 
 Before getting started, see the prerequisites *here*

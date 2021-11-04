@@ -1,4 +1,4 @@
-# Types of Content
+# Types of Content (WIP)
 ## What kinds of content can I put in the documentation?
 
 ### Images

@@ -1,5 +1,4 @@
-# Documentation
+# Documentation (WIP)
 
-To-do
-This page should cover:
+To-do, this page should cover:
 * What this book is for, who it is for

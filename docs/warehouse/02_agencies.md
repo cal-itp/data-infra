@@ -13,7 +13,7 @@ kernelspec:
   name: python3
 ---
 
-# Agency GTFS Feeds
+# Agency GTFS Feeds (WIP)
 
 Feed information is stored in [airflow/data/agencies.yml](https://github.com/cal-itp/data-infra/blob/main/airflow/data/agencies.yml).
 This file is then used by our Airflow data pipeline to download feeds, and load them into the warehouse.
@@ -61,4 +61,6 @@ ac-transit:
 Every time the main branch of cal-itp/data-infra is updated on github,
 [this github action][action] swaps in the API keys and pushes to our Cloud Composer's data bucket.
 
-['action']: (https://github.com/cal-itp/data-infra/blob/main/.github/workflows/update_gcloud_requirements.yml)
+```
+[action]: (https://github.com/cal-itp/data-infra/blob/main/.github/workflows/update_gcloud_requirements.yml)
+```
