@@ -13,7 +13,7 @@ kernelspec:
   name: python3
 ---
 
-# Tutorial - Querying the Cal-ITP Data Warehouse
+# Tutorial - Querying the Data Warehouse
 
 
 ## Introduction
