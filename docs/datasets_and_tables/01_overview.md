@@ -19,5 +19,5 @@ kernelspec:
 | ---- | ----------- | -------- |
 | [GTFS Schedule](./gtfs_schedule.md) | GTFS Schedule data for the current day | `gtfs_schedule`, `gtfs_schedule_history`, `gtfs_schedule_type2` |
 | [MST Payments](./mst_payments.md) | TODO | TODO |
-| [Transitstacks](./transitdatabase.md) | TODO | `transitstacks`, `views.transitstacks` |
+| [Transitstacks](./transitdatabase.md) | A representation of Cal-ITPs internal knowledge about our Transit Operators in CA and various pieces of National Transit Database statistics for ease of use | `transitstacks`, `views.transitstacks` |
 | [Views](./views.md) | End-user friendly data for dashboards and metrics | E.g. `views.validation_*`, `views.gtfs_schedule_*` |
