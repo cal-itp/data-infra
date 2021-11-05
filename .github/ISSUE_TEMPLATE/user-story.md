@@ -1,3 +1,12 @@
+---
+name: User Story
+about: Submit a user story
+title: 'User Story:'
+labels: ''
+assignees: ''
+
+---
+
 ## User stories
 
 A user story is implemented as well as it is communicated.
