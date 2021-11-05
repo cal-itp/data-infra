@@ -46,7 +46,7 @@ SELECT
     m.nominal_amount,
 
     -- Common transaction info
-    r.route_id,
+    t1.route_id,
     r.route_long_name,
     r.route_short_name,
     t1.direction,
@@ -78,5 +78,5 @@ SELECT
 
 FROM `payments.stg_cleaned_micropayments` AS m
 JOIN initial_transactions AS t1 USING (participant_id, micropayment_id)
-JOIN gtfs_routes_with_participant AS r USING (participant_id, route_id)
+LEFT JOIN gtfs_routes_with_participant AS r USING (participant_id, route_id)
 LEFT JOIN second_transactions AS t2 USING (participant_id, micropayment_id)
