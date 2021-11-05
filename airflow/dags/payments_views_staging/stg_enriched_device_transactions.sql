@@ -7,12 +7,20 @@ external_dependencies:
   - payments_loader: all
 ---
 
-{{
+WITH
 
-  sql_enrich_duplicates(
-    "payments.device_transactions",
-    ["littlepay_transaction_id"],
-    ["calitp_file_name desc", "transaction_date_time_utc desc"]
-  )
+enriched AS (
+    {{
 
-}}
+      sql_enrich_duplicates(
+        "payments.device_transactions",
+        ["littlepay_transaction_id"],
+        ["calitp_file_name desc", "transaction_date_time_utc desc"]
+      )
+
+    }}
+)
+
+SELECT *,
+       DATETIME(TIMESTAMP(transaction_date_time_utc), "America/Los_Angeles") AS transaction_date_time_pacific,
+FROM enriched

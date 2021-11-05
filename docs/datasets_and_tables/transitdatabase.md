@@ -1,4 +1,4 @@
-# TransitDatabase (WIP)
+# TransitDatabase
 
 ## Data
 
