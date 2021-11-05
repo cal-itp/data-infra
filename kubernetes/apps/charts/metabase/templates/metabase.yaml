@@ -88,5 +88,10 @@ metadata:
   name: metabase-config
   namespace: {{ .Release.Namespace }}
 data:
-  {{- toYaml .Values.configs.metabase | nindent 2 }}
+  {{- /* select first hostname from the ingress hosts list (if it exists; empty string otherwise) */}}
+  {{- /* to use as the default value of the MB_SITE_URL environment variable                      */}}
+  {{- $defaultHost := get (index (default (list (dict "host" "")) .Values.ingress.hosts) 0) "host" }}
+  {{- $emptyDict := dict }}
+  {{- $siteUrlDict := dict "MB_SITE_URL" (print "https://" $defaultHost) }}
+  {{- ne $defaultHost "" | ternary $siteUrlDict $emptyDict | merge .Values.configs.metabase | toYaml | nindent 2 }}
 {{- end }}
