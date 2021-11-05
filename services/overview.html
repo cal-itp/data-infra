@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Services &#8212; Juniper Documentation</title>
+    <title>Services &#8212; Cal-ITP Data Services</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet" />
   <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -71,9 +71,14 @@
         <div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="../index.html">
       
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
       
       
-      <h1 class="site-logo" id="site-title">Juniper Documentation</h1>
+      <img src="../_static/calitp_logo_MAIN.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Cal-ITP Data Services</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
@@ -84,14 +89,19 @@
         <ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../intro.html">
-   Juniper Documentation
+   Documentation (WIP)
   </a>
  </li>
 </ul>
-<ul class="current nav bd-sidenav">
+<p class="caption" role="heading">
+ <span class="caption-text">
+  Analysts
+ </span>
+</p>
+<ul class="nav bd-sidenav">
  <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../datasets/01_overview.html">
-   Datasets
+  <a class="reference internal" href="../analytics_welcome/overview.html">
+   Welcome! (WIP)
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
   <label for="toctree-checkbox-1">
@@ -100,33 +110,236 @@
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../datasets/gtfs_schedule.html">
-     GTFS Schedule
+    <a class="reference internal" href="../analytics_welcome/01_what_is_calitp.html">
+     Cal-ITP Project Information (WIP)
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../datasets/mst_payments.html">
-     MST Payments
+    <a class="reference internal" href="../analytics_welcome/02_about_our_team.html">
+     Team Members (WIP)
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../datasets/transitdatabase.html">
-     TransitDatabase
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../datasets/views.html">
-     Views
+    <a class="reference internal" href="../analytics_welcome/03_how_we_work.html">
+     How We Work (WIP)
     </a>
    </li>
   </ul>
  </li>
  <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../kubernetes/README.html">
-   Kubernetes
+  <a class="reference internal" href="../analytics_onboarding/overview.html">
+   Technical Onboarding (WIP)
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
   <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_onboarding/01_technical_onboarding.html">
+     Checklist (WIP)
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../analytics_tools/overview.html">
+   Introduction to Analytics Tools (WIP)
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/01_tools_quick_links.html">
+     Tools Quick Links (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/02_querying.html">
+     Querying with SQL (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/03_bi_dashboards.html">
+     Business Insights &amp; Dashboards (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/04_notebooks.html">
+     Notebooks (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/05_python_libraries.html">
+     Python Libraries (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/06_saving_code.html">
+     Saving Code (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/07_storing_data.html">
+     Storing Data (WIP)
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../warehouse/overview.html">
+   Introduction to the Warehouse (WIP)
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/01_table_naming.html">
+     Table Naming
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/02_agencies.html">
+     Agency GTFS Feeds
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/03_views.html">
+     Creating New Tables (Views)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/04_metrics.html">
+     Metric Views
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_examples/02_sql_snippets.html">
+     SQL Snippets (WIP)
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../datasets_and_tables/01_overview.html">
+   Datasets and Tables (WIP)
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets_and_tables/gtfs_schedule.html">
+     GTFS Schedule (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets_and_tables/mst_payments.html">
+     MST Payments (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets_and_tables/transitdatabase.html">
+     TransitDatabase
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets_and_tables/views.html">
+     Views (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets_and_tables/tables.html">
+     Tables (WIP)
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../analytics_examples/overview.html">
+   Analysis Examples (WIP)
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_examples/01_analysis_examples.html">
+     Tutorial - Querying the Data Warehouse (WIP)
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../analytics_publishing/overview.html">
+   How to Publish Analyses (WIP)
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_publishing/01_how_to_publish.html">
+     Publishing Reports with Pull Requests (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_publishing/02_where_reports_live.html">
+     Where Reports Live (WIP)
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p class="caption" role="heading">
+ <span class="caption-text">
+  Project Leads
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../analytics_project_leads/overview.html">
+   For Project Leads (WIP)
+  </a>
+ </li>
+</ul>
+<p class="caption" role="heading">
+ <span class="caption-text">
+  Data Consumers
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../analytics_data_consumers/overview.html">
+   For Data Consumers (WIP)
+  </a>
+ </li>
+</ul>
+<p class="caption" role="heading">
+ <span class="caption-text">
+  Developers
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../kubernetes/README.html">
+   Kubernetes
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <label for="toctree-checkbox-8">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -142,8 +355,8 @@
   <a class="reference internal" href="../ci/README.html">
    CI
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-  <label for="toctree-checkbox-3">
+  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -209,8 +422,8 @@
   <a class="current reference internal" href="#">
    Services
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
-  <label for="toctree-checkbox-4">
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+  <label for="toctree-checkbox-10">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -227,88 +440,31 @@
    </li>
   </ul>
  </li>
+</ul>
+<p class="caption" role="heading">
+ <span class="caption-text">
+  Contribute to the Docs!
+ </span>
+</p>
+<ul class="nav bd-sidenav">
  <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../warehouse/overview.html">
-   Warehouse
+  <a class="reference internal" href="../contribute/overview.html">
+   Editing Documentation
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
-  <label for="toctree-checkbox-5">
+  <input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
+  <label for="toctree-checkbox-11">
    <i class="fas fa-chevron-down">
    </i>
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/01_agencies.html">
-     Agency GTFS Feeds
+    <a class="reference internal" href="../contribute/01_content_types.html">
+     Types of Content
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/02_views.html">
-     Creating New Tables (Views)
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/03_metrics.html">
-     Metric Views
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/04_sql_snippets.html">
-     SQL Snippets
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/05_using_metabase.html">
-     Using Metabase
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/06_table_names.html">
-     Table names
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/jupyterhub.html">
-     Using Jupyterhub
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/07_tutorial.html">
-     Tutorial - Querying the CALITP Data Warehouse
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../analytics/overview.html">
-   Analytics
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
-  <label for="toctree-checkbox-6">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics/01_sample.html">
-     I am a subsection
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../contributing/overview.html">
-   Contribute
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
-  <label for="toctree-checkbox-7">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../contributing/editing_doc.html">
-     Editing Documentation
+    <a class="reference internal" href="../contribute/02_submitting_changes.html">
+     Submitting Changes
     </a>
    </li>
   </ul>

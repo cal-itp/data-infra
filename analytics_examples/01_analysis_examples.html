@@ -1,0 +1,1796 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tutorial - Querying the Data Warehouse (WIP) &#8212; Cal-ITP Data Services</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet" />
+  <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="How to Publish Analyses (WIP)" href="../analytics_publishing/overview.html" />
+    <link rel="prev" title="Analysis Examples (WIP)" href="overview.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/calitp_logo_MAIN.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Cal-ITP Data Services</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Documentation (WIP)
+  </a>
+ </li>
+</ul>
+<p class="caption" role="heading">
+ <span class="caption-text">
+  Analysts
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../analytics_welcome/overview.html">
+   Welcome! (WIP)
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_welcome/01_what_is_calitp.html">
+     Cal-ITP Project Information (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_welcome/02_about_our_team.html">
+     Team Members (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_welcome/03_how_we_work.html">
+     How We Work (WIP)
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../analytics_onboarding/overview.html">
+   Technical Onboarding (WIP)
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_onboarding/01_technical_onboarding.html">
+     Checklist (WIP)
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../analytics_tools/overview.html">
+   Introduction to Analytics Tools (WIP)
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/01_tools_quick_links.html">
+     Tools Quick Links (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/02_querying.html">
+     Querying with SQL (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/03_bi_dashboards.html">
+     Business Insights &amp; Dashboards (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/04_notebooks.html">
+     Notebooks (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/05_python_libraries.html">
+     Python Libraries (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/06_saving_code.html">
+     Saving Code (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/07_storing_data.html">
+     Storing Data (WIP)
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../warehouse/overview.html">
+   Introduction to the Warehouse (WIP)
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/01_table_naming.html">
+     Table Naming
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/02_agencies.html">
+     Agency GTFS Feeds
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/03_views.html">
+     Creating New Tables (Views)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/04_metrics.html">
+     Metric Views
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="02_sql_snippets.html">
+     SQL Snippets (WIP)
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../datasets_and_tables/01_overview.html">
+   Datasets and Tables (WIP)
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets_and_tables/gtfs_schedule.html">
+     GTFS Schedule (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets_and_tables/mst_payments.html">
+     MST Payments (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets_and_tables/transitdatabase.html">
+     TransitDatabase
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets_and_tables/views.html">
+     Views (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets_and_tables/tables.html">
+     Tables (WIP)
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="overview.html">
+   Analysis Examples (WIP)
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Tutorial - Querying the Data Warehouse (WIP)
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../analytics_publishing/overview.html">
+   How to Publish Analyses (WIP)
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_publishing/01_how_to_publish.html">
+     Publishing Reports with Pull Requests (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_publishing/02_where_reports_live.html">
+     Where Reports Live (WIP)
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p class="caption" role="heading">
+ <span class="caption-text">
+  Project Leads
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../analytics_project_leads/overview.html">
+   For Project Leads (WIP)
+  </a>
+ </li>
+</ul>
+<p class="caption" role="heading">
+ <span class="caption-text">
+  Data Consumers
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../analytics_data_consumers/overview.html">
+   For Data Consumers (WIP)
+  </a>
+ </li>
+</ul>
+<p class="caption" role="heading">
+ <span class="caption-text">
+  Developers
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../kubernetes/README.html">
+   Kubernetes
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <label for="toctree-checkbox-8">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../kubernetes/JupyterHub.html">
+     JupyterHub
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ci/README.html">
+   CI
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/Git-Flow-Services.html">
+     Git Flow for Services
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/Pipeline-Variables.html">
+     Pipeline Variables
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/build-docker-image.html">
+     build-docker-image
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/build-git-notes.html">
+     build-git-notes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/build-git-tag.html">
+     build-git-tag
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/configure-build-git-notes.html">
+     configure-build-git-notes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/configure-docker-login.html">
+     configure-docker-login
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/configure-git-remote.html">
+     configure-git-remote
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/release-kube-overlay.html">
+     release-kube-overlay
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/validate-build-git-tag.html">
+     validate-build-git-tag
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/validate-clean-worktree.html">
+     validate-clean-worktree
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../services/overview.html">
+   Services
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+  <label for="toctree-checkbox-10">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../services/gtfs-ckan-uploader.html">
+     GTFS CKAN Uploader
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../services/gtfs-rt-archive.html">
+     gtfs-rt-archive
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p class="caption" role="heading">
+ <span class="caption-text">
+  Contribute to the Docs!
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../contribute/overview.html">
+   Editing Documentation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
+  <label for="toctree-checkbox-11">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../contribute/01_content_types.html">
+     Types of Content
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../contribute/02_submitting_changes.html">
+     Submitting Changes
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        <a class="dropdown-buttons"
+            href="../_sources/analytics_examples/01_analysis_examples.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/analytics_examples/01_analysis_examples.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/cal-itp/data-infra/"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fanalytics_examples/01_analysis_examples.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/analytics_examples/01_analysis_examples.md"><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/cal-itp/data-infra/main?urlpath=tree/docs/analytics_examples/01_analysis_examples.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#example-queries">
+     Example Queries
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#available-tools">
+     Available Tools
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#relevant-tables">
+     Relevant Tables
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#fact-tables">
+       Fact Tables
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#dimensional-tables">
+       Dimensional Tables
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#important-column-types-and-columns">
+     Important Column Types and Columns
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#query-examples">
+   Query Examples
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#number-of-routes-for-a-given-agency-over-time">
+     1. Number of Routes for a Given Agency Over Time
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sql">
+     SQL
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#metabase">
+     Metabase
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#example-1">
+     Example 1:
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#primary-fact-table-gtfs-schedule-fact-daily-feed-routes">
+       Primary Fact Table → Gtfs Schedule Fact Daily Feed Routes
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#secondary-table-gtfs-schedule-dim-feeds">
+       Secondary Table → Gtfs Schedule Dim Feeds
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#siuba">
+       Siuba
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     metabase
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#number-of-stops-for-a-given-agency-over-time">
+     2. Number of Stops for a Given Agency Over Time
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id2">
+     SQL
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id3">
+     Metabase
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id4">
+       Siuba
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#number-of-stops-made-across-all-trips-for-an-agency">
+     3. Number of Stops Made Across all Trips for an Agency
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id5">
+       SQL
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id6">
+       Metabase
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id7">
+       Siuba
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#for-a-given-agency-on-each-day-days-until-the-feed-expires">
+     4. For a Given Agency, on Each Day, Days Until the Feed Expires
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id8">
+       SQL
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id9">
+       Metabase
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id10">
+       Siuba
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#max-number-of-stops-a-trip-can-have-per-agency">
+     5. Max Number of Stops a Trip Can Have, Per Agency
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id11">
+       SQL
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id12">
+       Metabase
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id13">
+       Siuba
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="tex2jax_ignore mathjax_ignore section" id="tutorial-querying-the-data-warehouse-wip">
+<h1>Tutorial - Querying the Data Warehouse (WIP)<a class="headerlink" href="#tutorial-querying-the-data-warehouse-wip" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The following content represents a tutorial introduction to simple queries that can be made to the calitp data warehouse, and the methods that can be used to perform them.</p>
+<div class="section" id="example-queries">
+<h3>Example Queries<a class="headerlink" href="#example-queries" title="Permalink to this headline">¶</a></h3>
+<p>The queries represented in the following tutorial are as follows:</p>
+<ul class="simple">
+<li><p><strong>Number of Routes for a Given Agency Over Time</strong> - observing a change in route numbers per agency across time</p></li>
+<li><p><strong>Number of Stops for a Given Agency Over Time</strong></p></li>
+<li><p><strong>Number of Stops Made Across all Trips for an Agency</strong></p></li>
+<li><p><strong>For a Given Agency, on Each Day, Days Until the Feed Expires</strong></p></li>
+<li><p><strong>Max Number of Stops a Trip Can Have, Per Agency</strong></p></li>
+</ul>
+</div>
+<div class="section" id="available-tools">
+<h3>Available Tools<a class="headerlink" href="#available-tools" title="Permalink to this headline">¶</a></h3>
+<p>The tools that we can use to answer them are:</p>
+<ul class="simple">
+<li><p><strong>SQL</strong> - Using the BigQuery Browser</p></li>
+<li><p><strong>Python</strong></p>
+<ul>
+<li><p><em>siuba</em> - a convenient data analysis library in Python</p></li>
+<li><p><em>calitp</em> - a personalized package incorporating calitp’s unique needs</p></li>
+<li><p><em>pandas</em> - a useful data analysis library, used sparsely in the examples below</p></li>
+</ul>
+</li>
+<li><p><strong>Metabase</strong> - our business insights visualization tool</p></li>
+</ul>
+</div>
+<div class="section" id="relevant-tables">
+<h3>Relevant Tables<a class="headerlink" href="#relevant-tables" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="fact-tables">
+<h4>Fact Tables<a class="headerlink" href="#fact-tables" title="Permalink to this headline">¶</a></h4>
+<p>These tables contain measurements, metrics, and facts used to answer the questions from the following perspectives:</p>
+<p><strong>Feeds</strong></p>
+<ul class="simple">
+<li><p>views.<strong>gtfs_schedule_fact_daily_feeds</strong></p>
+<ul>
+<li><p>(<strong>Gtfs Schedule Fact Daily Feeds</strong> in Metabase)</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Routes</strong></p>
+<ul class="simple">
+<li><p>views.<strong>gtfs_schedule_fact_daily_feed_routes</strong></p>
+<ul>
+<li><p>(<strong>Gtfs Schedule Fact Daily Feed Routes</strong> in Metabase)</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Stops</strong></p>
+<ul class="simple">
+<li><p>views.<strong>gtfs_schedule_fact_daily_feed_stops</strong></p>
+<ul>
+<li><p>(<strong>Gtfs Schedule Fact Daily Feed Stops</strong> in Metabase)</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Trips</strong></p>
+<ul class="simple">
+<li><p>views.<strong>gtfs_schedule_data_feed_trip_stops_latest</strong></p>
+<ul>
+<li><p>(<strong>Gtfs Schedule Data Feed Trip Stops Latest</strong> in Metabase)</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="dimensional-tables">
+<h4>Dimensional Tables<a class="headerlink" href="#dimensional-tables" title="Permalink to this headline">¶</a></h4>
+<p>These tables compliment the fact tables by providing additional descriptive attributes:</p>
+<ul class="simple">
+<li><p>views.<strong>gtfs_schedule_dim_feeds</strong> - joining with this table is the most common way to append calitp_feed_name (our primary agency identifier) to fact tables</p>
+<ul>
+<li><p>(<strong>Gtfs Schedule Dim Feeds</strong> in Metabase)</p></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="important-column-types-and-columns">
+<h3>Important Column Types and Columns<a class="headerlink" href="#important-column-types-and-columns" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Agency</strong></p>
+<ul>
+<li><p><strong>calitp_feed_name</strong></p>
+<ul>
+<li><p>(<strong>Calitp Feed Name</strong> in Metabase)</p></li>
+<li><p>Our primary agency identifier</p></li>
+<li><p>In most of the examples below, this is gathered from the table: views.<strong>gtfs_schedule_dim_feeds</strong></p>
+<ul>
+<li><p>(<strong>Gtfs Schedule Dim Feeds</strong> in Metabase)</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Time</strong></p></li>
+<li><p><strong>Geography</strong></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="query-examples">
+<h2>Query Examples<a class="headerlink" href="#query-examples" title="Permalink to this headline">¶</a></h2>
+<p><em>Importing Relevant Python Libraries</em></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbl</span>
+<span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
+<span class="kn">from</span> <span class="nn">calitp</span> <span class="kn">import</span> <span class="n">query_sql</span>
+<span class="kn">from</span> <span class="nn">siuba</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">calitp.magics</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;display.max_rows&quot;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="number-of-routes-for-a-given-agency-over-time">
+<h3>1. Number of Routes for a Given Agency Over Time<a class="headerlink" href="#number-of-routes-for-a-given-agency-over-time" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="sql">
+<h3>SQL<a class="headerlink" href="#sql" title="Permalink to this headline">¶</a></h3>
+<p><strong>Primary Fact Table</strong> → views.gtfs_schedule_fact_daily_feed_routes
+<strong>Secondary Table</strong> →  views.gtfs_schedule_dim_feeds</p>
+<p><em>Time</em> → <strong>date</strong> (<em>GROUP BY</em>)
+<em>Geography</em> → <strong>route_key</strong> (the unique identifier for each record, to <em>COUNT</em> by)
+<em>Agency</em> → Join with table <strong>views.gtfs_schedule_dim_feeds</strong> on variable <strong>feed_key</strong> for <strong>calitp_feed_name</strong> (<em>GROUP BY</em>)</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span>
+    <span class="n">calitp_feed_name</span><span class="p">,</span>
+    <span class="nb">date</span><span class="p">,</span>
+    <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">AS</span> <span class="n">count_feeds</span>
+<span class="k">FROM</span> <span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_fact_daily_feed_routes</span><span class="o">`</span>
+<span class="k">JOIN</span> <span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_dim_feeds</span><span class="o">`</span> <span class="k">USING</span> <span class="p">(</span><span class="n">feed_key</span><span class="p">)</span>
+<span class="k">WHERE</span>
+    <span class="n">calitp_feed_name</span> <span class="o">=</span> <span class="ss">&quot;Unitrans (0)&quot;</span>
+<span class="k">GROUP</span> <span class="k">BY</span>
+    <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+<span class="k">ORDER</span> <span class="k">BY</span>
+    <span class="nb">date</span> <span class="k">DESC</span>
+<span class="k">LIMIT</span> <span class="mi">10</span>
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>calitp_feed_name</th>
+      <th>date</th>
+      <th>count_feeds</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Unitrans (0)</td>
+      <td>2021-11-05</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Unitrans (0)</td>
+      <td>2021-11-04</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Unitrans (0)</td>
+      <td>2021-11-03</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Unitrans (0)</td>
+      <td>2021-11-02</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Unitrans (0)</td>
+      <td>2021-11-01</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Unitrans (0)</td>
+      <td>2021-10-31</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Unitrans (0)</td>
+      <td>2021-10-30</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Unitrans (0)</td>
+      <td>2021-10-29</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Unitrans (0)</td>
+      <td>2021-10-28</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Unitrans (0)</td>
+      <td>2021-10-27</td>
+      <td>18</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</div>
+<div class="section" id="metabase">
+<h3>Metabase<a class="headerlink" href="#metabase" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="example-1">
+<h3>Example 1:<a class="headerlink" href="#example-1" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="primary-fact-table-gtfs-schedule-fact-daily-feed-routes">
+<h4>Primary Fact Table → Gtfs Schedule Fact Daily Feed Routes<a class="headerlink" href="#primary-fact-table-gtfs-schedule-fact-daily-feed-routes" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="secondary-table-gtfs-schedule-dim-feeds">
+<h4>Secondary Table → Gtfs Schedule Dim Feeds<a class="headerlink" href="#secondary-table-gtfs-schedule-dim-feeds" title="Permalink to this headline">¶</a></h4>
+<p><em>Time</em> → <strong>Date</strong> (<em>FILTER</em>)
+<em>Geography</em> → <strong>Route Key</strong> (the unique identifier for each record, to <em>COUNT</em> by)
+<em>Agency</em> → Metabase automatically joins with table <strong>Gtfs Schedule Dim Feeds</strong> on variable <strong>Feed Key</strong> to get <strong>Calitp Feed Name</strong> (<em>FILTER</em>)</p>
+<p><img alt="Collection Matrix" src="../_images/routes_agency_over_time.png" /></p>
+</div>
+<div class="section" id="siuba">
+<h4>Siuba<a class="headerlink" href="#siuba" title="Permalink to this headline">¶</a></h4>
+<p><strong>Primary Fact Table</strong> → views.gtfs_schedule_fact_daily_feed_routes
+<strong>Secondary Table</strong> →  views.gtfs_schedule_dim_feeds</p>
+<p><em>Time</em> → <strong>date</strong> (<em>COUNT</em> by)
+<em>Geography</em> → <strong>route_key</strong> (the unique identifier for each record)
+<em>Agency</em> → Join with table <strong>views.gtfs_schedule_dim_feeds</strong> on variable <strong>feed_key</strong> for <strong>calitp_feed_name</strong> (<em>FILTER</em> by)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Join to get CalITP Feed Names</span>
+<span class="c1"># Count routes by date and CalITP Feed Names, order by date, filter by specific calitp_feed_name</span>
+<span class="p">(</span>
+    <span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_fact_daily_feed_routes</span><span class="p">()</span>
+    <span class="o">&gt;&gt;</span> <span class="n">left_join</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_dim_feeds</span><span class="p">(),</span> <span class="s2">&quot;feed_key&quot;</span><span class="p">)</span>
+    <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_feed_name</span> <span class="o">==</span> <span class="s2">&quot;Unitrans (0)&quot;</span><span class="p">)</span>
+    <span class="o">&gt;&gt;</span> <span class="n">count</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">date</span><span class="p">)</span>
+    <span class="o">&gt;&gt;</span> <span class="n">arrange</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">date</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div><pre># Source: lazy query
+# DB Conn: Engine(bigquery://cal-itp-data-infra/?maximum_bytes_billed=5000000000)
+# Preview:
+</pre><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>date</th>
+      <th>n</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2021-04-15</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2021-04-16</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2021-04-17</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2021-04-18</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2021-04-19</td>
+      <td>20</td>
+    </tr>
+  </tbody>
+</table>
+</div><p># .. may have more rows</p></div></div></div>
+</div>
+</div>
+</div>
+<div class="section" id="id1">
+<h3>metabase<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="number-of-stops-for-a-given-agency-over-time">
+<h3>2. Number of Stops for a Given Agency Over Time<a class="headerlink" href="#number-of-stops-for-a-given-agency-over-time" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="id2">
+<h3>SQL<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p><strong>Primary Fact Table</strong> → views.gtfs_schedule_fact_daily_feed_stops
+<strong>Secondary Table</strong> →  views.gtfs_schedule_dim_feeds</p>
+<p><em>Time</em> → <strong>date</strong> (<em>GROUP BY</em>)
+<em>Geography</em> → <strong>stop_key</strong> (the unique identifier for each record, to <em>COUNT</em> by)
+<em>Agency</em> → Join with table <strong>views.gtfs_schedule_dim_feeds</strong> on variable <strong>feed_key</strong> for <strong>calitp_feed_name</strong> (<em>GROUP BY</em>)</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span>    <span class="k">SELECT</span>
+        <span class="n">calitp_feed_name</span><span class="p">,</span>
+        <span class="nb">date</span><span class="p">,</span>
+        <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">AS</span> <span class="n">count_stops</span>
+    <span class="k">FROM</span> <span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_fact_daily_feed_stops</span><span class="o">`</span>
+    <span class="k">JOIN</span> <span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_dim_feeds</span><span class="o">`</span> <span class="k">USING</span> <span class="p">(</span><span class="n">feed_key</span><span class="p">)</span>
+    <span class="k">WHERE</span>
+        <span class="n">calitp_feed_name</span> <span class="o">=</span> <span class="ss">&quot;Unitrans (0)&quot;</span>
+    <span class="k">GROUP</span> <span class="k">BY</span>
+        <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+    <span class="k">ORDER</span> <span class="k">BY</span>
+        <span class="nb">date</span>
+    <span class="k">LIMIT</span> <span class="mi">10</span>
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>calitp_feed_name</th>
+      <th>date</th>
+      <th>count_stops</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Unitrans (0)</td>
+      <td>2021-04-15</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Unitrans (0)</td>
+      <td>2021-04-16</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Unitrans (0)</td>
+      <td>2021-04-17</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Unitrans (0)</td>
+      <td>2021-04-18</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Unitrans (0)</td>
+      <td>2021-04-19</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Unitrans (0)</td>
+      <td>2021-04-20</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Unitrans (0)</td>
+      <td>2021-04-21</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Unitrans (0)</td>
+      <td>2021-04-22</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Unitrans (0)</td>
+      <td>2021-04-23</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Unitrans (0)</td>
+      <td>2021-04-24</td>
+      <td>298</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h3>Metabase<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<!-- #region -->
+<p><strong>Primary Fact Table</strong> → Gtfs Schedule Fact Daily Feed Stops
+<strong>Secondary Table</strong> → Gtfs Schedule Dim Feeds</p>
+<p><em>Time</em> → <strong>Date</strong> (<em>COUNT</em> by)
+<em>Geography</em> → <strong>Stop Key</strong> (the unique identifier for each record, to <em>COUNT</em> by)
+<em>Agency</em> → Metabase automatically joins with table <strong>Gtfs Schedule Dim Feeds</strong> on variable <strong>Feed Key</strong> to get <strong>Calitp Feed Name</strong> (<em>FILTER</em> by)</p>
+<!-- #endregion -->
+<p><img alt="Collection Matrix" src="../_images/stops_agency_over_time.png" /></p>
+<div class="section" id="id4">
+<h4>Siuba<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<p><strong>Primary Fact Table</strong> → views.gtfs_schedule_fact_daily_feed_stops
+<strong>Secondary Table</strong> →  views.gtfs_schedule_dim_feeds</p>
+<p><em>Time</em> → <strong>date</strong> (<em>GROUP BY</em>)
+<em>Geography</em> → <strong>stop_key</strong> (the unique identifier for each record, to <em>COUNT</em> by)
+<em>Agency</em> → Join with table <strong>views.gtfs_schedule_dim_feeds</strong> on variable <strong>feed_key</strong> for <strong>calitp_feed_name</strong> (<em>GROUP BY</em>)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Join to get CalITP Feed Names</span>
+<span class="c1">## Count stops by date and CalITP Feed Names, order by date, filter by specific calitp_feed_name</span>
+<span class="p">(</span>
+    <span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_fact_daily_feed_stops</span><span class="p">()</span>
+    <span class="o">&gt;&gt;</span> <span class="n">left_join</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_dim_feeds</span><span class="p">(),</span> <span class="s2">&quot;feed_key&quot;</span><span class="p">)</span>
+    <span class="o">&gt;&gt;</span> <span class="n">count</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">calitp_feed_name</span><span class="p">)</span>
+    <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_feed_name</span> <span class="o">==</span> <span class="s2">&quot;Unitrans (0)&quot;</span><span class="p">)</span>
+    <span class="o">&gt;&gt;</span> <span class="n">arrange</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">date</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div><pre># Source: lazy query
+# DB Conn: Engine(bigquery://cal-itp-data-infra/?maximum_bytes_billed=5000000000)
+# Preview:
+</pre><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>date</th>
+      <th>calitp_feed_name</th>
+      <th>n</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2021-04-15</td>
+      <td>Unitrans (0)</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2021-04-16</td>
+      <td>Unitrans (0)</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2021-04-17</td>
+      <td>Unitrans (0)</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2021-04-18</td>
+      <td>Unitrans (0)</td>
+      <td>298</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2021-04-19</td>
+      <td>Unitrans (0)</td>
+      <td>298</td>
+    </tr>
+  </tbody>
+</table>
+</div><p># .. may have more rows</p></div></div></div>
+</div>
+</div>
+</div>
+<div class="section" id="number-of-stops-made-across-all-trips-for-an-agency">
+<h3>3. Number of Stops Made Across all Trips for an Agency<a class="headerlink" href="#number-of-stops-made-across-all-trips-for-an-agency" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id5">
+<h4>SQL<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<p><strong>Primary Fact Table</strong> → views.gtfs_schedule_data_feed_trip_stops_latest</p>
+<p><em>Time</em> → <strong>no variable</strong> - this table only has information for the current day
+<em>Geography</em> → <strong>stop_time_key</strong> (the unique identifier for each record, to <em>COUNT</em> by)
+<em>Agency</em> → <strong>calitp_feed_name</strong> (<em>GROUP BY</em>)</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span>
+    <span class="n">calitp_feed_name</span><span class="p">,</span>
+
+    <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">AS</span> <span class="n">n_trip_stops</span><span class="p">,</span>
+    <span class="k">count</span><span class="p">(</span><span class="k">distinct</span><span class="p">(</span><span class="n">trip_id</span><span class="p">))</span> <span class="k">AS</span> <span class="n">n_trips</span><span class="p">,</span>
+    <span class="k">count</span><span class="p">(</span><span class="k">distinct</span><span class="p">(</span><span class="n">stop_id</span><span class="p">))</span> <span class="k">AS</span> <span class="n">n_stops</span>
+<span class="k">FROM</span> <span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_data_feed_trip_stops_latest</span><span class="o">`</span>
+<span class="k">WHERE</span>
+    <span class="n">calitp_feed_name</span> <span class="o">=</span> <span class="ss">&quot;Unitrans (0)&quot;</span>
+<span class="k">GROUP</span> <span class="k">BY</span>
+    <span class="n">calitp_feed_name</span>
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>calitp_feed_name</th>
+      <th>n_trip_stops</th>
+      <th>n_trips</th>
+      <th>n_stops</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Unitrans (0)</td>
+      <td>33400</td>
+      <td>2354</td>
+      <td>275</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</div>
+<div class="section" id="id6">
+<h4>Metabase<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
+<p><strong>Primary Fact Table</strong> → Gtfs Schedule Data Feed Trip Stops Latest
+<strong>Secondary Table</strong> → Gtfs Schedule Dim Feeds</p>
+<p><em>Time</em> → <strong>no variable</strong> - this table only has information for the current day
+<em>Geography</em> → <strong>Stop Time Key</strong> (the unique identifier for each record, to <em>COUNT</em> by)
+<em>Agency</em> → Metabase automatically joins with table <strong>Gtfs Schedule Dim Feeds</strong> on variable <strong>Feed Key</strong> to get <strong>Calitp Feed Name</strong> (<em>FILTER</em> by)</p>
+<p><em><strong>Count of Trip Stops Made Across all Trips for an Agency</strong></em></p>
+<p><img alt="Collection Matrix" src="../_images/count_trip_stops.png" /></p>
+<p><em><strong>Distinct Trips in Trip Stops</strong></em></p>
+<p><img alt="Collection Matrix" src="../_images/distinct_trips_in_trip_stops.png" /></p>
+<p><em><strong>Distinct Stops in Trip Stops</strong></em></p>
+<p><img alt="Collection Matrix" src="../_images/distinct_stops_in_trip_stops.png" /></p>
+</div>
+<div class="section" id="id7">
+<h4>Siuba<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h4>
+<p><strong>Primary Fact Table</strong> → views.gtfs_schedule_data_feed_trip_stops_latest</p>
+<p><em>Time</em> → <strong>no variable</strong> - this table only has information for the current day
+<em>Geography</em> → <strong>stop_time_key</strong> (the unique identifier for each record, to <em>COUNT</em> by)
+<em>Agency</em> → <strong>calitp_feed_name</strong> (<em>GROUP BY</em>)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>
+    <span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_data_feed_trip_stops_latest</span><span class="p">()</span>
+    <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_feed_name</span> <span class="o">==</span> <span class="s2">&quot;Unitrans (0)&quot;</span><span class="p">)</span>
+    <span class="o">&gt;&gt;</span> <span class="n">summarize</span><span class="p">(</span>
+        <span class="n">n_trips</span><span class="o">=</span><span class="n">_</span><span class="o">.</span><span class="n">trip_id</span><span class="o">.</span><span class="n">nunique</span><span class="p">(),</span> <span class="n">n_stops</span><span class="o">=</span><span class="n">_</span><span class="o">.</span><span class="n">stop_id</span><span class="o">.</span><span class="n">nunique</span><span class="p">(),</span> <span class="n">n</span><span class="o">=</span><span class="n">_</span><span class="o">.</span><span class="n">trip_id</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div><pre># Source: lazy query
+# DB Conn: Engine(bigquery://cal-itp-data-infra/?maximum_bytes_billed=5000000000)
+# Preview:
+</pre><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>n_trips</th>
+      <th>n_stops</th>
+      <th>n</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2354</td>
+      <td>275</td>
+      <td>33400</td>
+    </tr>
+  </tbody>
+</table>
+</div><p># .. may have more rows</p></div></div></div>
+</div>
+</div>
+</div>
+<div class="section" id="for-a-given-agency-on-each-day-days-until-the-feed-expires">
+<h3>4. For a Given Agency, on Each Day, Days Until the Feed Expires<a class="headerlink" href="#for-a-given-agency-on-each-day-days-until-the-feed-expires" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id8">
+<h4>SQL<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h4>
+<p><strong>Primary Fact Table</strong> → views.gtfs_schedule_fact_daily_feeds
+<strong>Secondary Table</strong> → views.gtfs_schedule_dim_feeds</p>
+<p><em>Time</em> → <strong>date</strong>, <strong>feed_end_date</strong>
+<em>Measure</em> → <strong>days_until_feed_end_date</strong>
+<em>Agency</em> → Join with table <strong>views.gtfs_schedule_dim_feeds</strong> on variable <strong>feed_key</strong> for <strong>calitp_feed_name</strong> (<em>GROUP BY</em>)</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span>
+    <span class="n">calitp_feed_name</span><span class="p">,</span>
+    <span class="nb">date</span><span class="p">,</span>
+    <span class="n">days_until_feed_end_date</span><span class="p">,</span>
+    <span class="n">feed_end_date</span>
+<span class="k">FROM</span> <span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_fact_daily_feeds</span>
+<span class="k">JOIN</span> <span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_dim_feeds</span> <span class="k">USING</span> <span class="p">(</span><span class="n">feed_key</span><span class="p">)</span>
+<span class="k">WHERE</span>
+    <span class="nb">date</span> <span class="o">=</span> <span class="ss">&quot;2021-09-01&quot;</span> <span class="k">AND</span> <span class="n">calitp_feed_name</span> <span class="o">=</span> <span class="ss">&quot;Unitrans (0)&quot;</span>
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>calitp_feed_name</th>
+      <th>date</th>
+      <th>days_until_feed_end_date</th>
+      <th>feed_end_date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Unitrans (0)</td>
+      <td>2021-09-01</td>
+      <td>20</td>
+      <td>2021-09-21</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</div>
+<div class="section" id="id9">
+<h4>Metabase<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h4>
+<p><strong>Primary Fact Table</strong> → Gtfs Schedule Fact Daily Feeds
+<strong>Secondary Table</strong> → Join: Gtfs Schedule Dim Feeds</p>
+<p><em>Time</em> → <strong>Date</strong>, <strong>Feed End Date</strong>
+<em>Measure</em> → <strong>Days Until Feed End Date</strong>
+<em>Agency</em> → Join with table <strong>Gtfs Schedule Dim Feeds</strong> on variable <strong>feed_key</strong> for <strong>Calitp Feed Name</strong> (<em>FILTER</em> by) and <strong>Feed End Date</strong></p>
+<p><strong>Columns to Select:</strong></p>
+<ul class="simple">
+<li><p>Gtfs Schedule Fact Daily Feeds</p>
+<ul>
+<li><p>Date</p></li>
+<li><p>Days Until Feed End Date</p></li>
+</ul>
+</li>
+<li><p>Gtfs Schedule Dim Feeds</p>
+<ul>
+<li><p>Calitp Feed Name</p></li>
+<li><p>Feed End Date</p></li>
+</ul>
+</li>
+</ul>
+<p><img alt="Collection Matrix" src="../_images/days_until_agency_feed_expires.png" /></p>
+</div>
+<div class="section" id="id10">
+<h4>Siuba<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h4>
+<p><strong>Primary Fact Table</strong> → views.gtfs_schedule_fact_daily_feeds
+<strong>Secondary Table</strong> → views.gtfs_schedule_dim_feeds</p>
+<p><em>Time</em> → <strong>date</strong> (<em>FILTER</em> by), <strong>feed_end_date</strong>
+<em>Measure</em> → <strong>days_until_feed_end_date</strong>
+<em>Agency</em> → Join with table <strong>views.gtfs_schedule_dim_feeds</strong> on variable <strong>feed_key</strong> for <strong>calitp_feed_name</strong> (<em>FILTER</em> by)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>
+    <span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_fact_daily_feeds</span><span class="p">()</span>
+    <span class="o">&gt;&gt;</span> <span class="n">left_join</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_dim_feeds</span><span class="p">(),</span> <span class="s2">&quot;feed_key&quot;</span><span class="p">)</span>
+    <span class="o">&gt;&gt;</span> <span class="n">select</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_feed_name</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">days_until_feed_end_date</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">feed_end_date</span><span class="p">)</span>
+    <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">date</span> <span class="o">==</span> <span class="s2">&quot;2021-09-01&quot;</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">calitp_feed_name</span> <span class="o">==</span> <span class="s2">&quot;Unitrans (0)&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div><pre># Source: lazy query
+# DB Conn: Engine(bigquery://cal-itp-data-infra/?maximum_bytes_billed=5000000000)
+# Preview:
+</pre><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>calitp_feed_name</th>
+      <th>date</th>
+      <th>days_until_feed_end_date</th>
+      <th>feed_end_date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Unitrans (0)</td>
+      <td>2021-09-01</td>
+      <td>20</td>
+      <td>2021-09-21</td>
+    </tr>
+  </tbody>
+</table>
+</div><p># .. may have more rows</p></div></div></div>
+</div>
+</div>
+</div>
+<div class="section" id="max-number-of-stops-a-trip-can-have-per-agency">
+<h3>5. Max Number of Stops a Trip Can Have, Per Agency<a class="headerlink" href="#max-number-of-stops-a-trip-can-have-per-agency" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id11">
+<h4>SQL<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h4>
+<p><strong>Primary Fact Table</strong> →  views.gtfs_schedule_data_feed_trip_stops_latest
+<strong>Secondary Table</strong> →  views.gtfs_schedule_dim_feeds</p>
+<p><em>Time</em> → <strong>no variable</strong>, finding max across all days
+<em>Geography</em> → <strong>trip_id</strong> (the unique identifier for each record, to <em>GROUP BY</em>)
+<em>Agency</em> → Join with table <strong>views.gtfs_schedule_dim_feeds</strong> on variable <strong>feed_key</strong> for <strong>calitp_feed_name</strong> (<em>GROUP BY</em>)</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">WITH</span>
+
+<span class="n">counting_stop_times</span> <span class="k">AS</span> <span class="p">(</span>
+
+    <span class="c1">-- count the number of stops each trip in each feed makes</span>
+    <span class="k">SELECT</span>
+        <span class="n">trip_id</span><span class="p">,</span>
+        <span class="n">calitp_feed_name</span><span class="p">,</span>
+        <span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">AS</span> <span class="n">n_trip_stop_times</span>
+    <span class="k">FROM</span> <span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_data_feed_trip_stops_latest</span><span class="o">`</span>
+    <span class="k">GROUP</span> <span class="k">BY</span>
+        <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+<span class="p">)</span>
+
+<span class="c1">-- calculate the max number of stops made by a feed&#39;s trip</span>
+<span class="c1">-- we filter to keep only the Unitrans feed for this example</span>
+<span class="k">SELECT</span>
+    <span class="n">calitp_feed_name</span><span class="p">,</span>
+    <span class="k">MAX</span><span class="p">(</span><span class="n">n_trip_stop_times</span><span class="p">)</span> <span class="k">AS</span> <span class="n">max_n_trip_stop_times</span>
+<span class="k">FROM</span>
+    <span class="n">counting_stop_times</span>
+<span class="k">WHERE</span>
+     <span class="n">calitp_feed_name</span> <span class="o">=</span> <span class="ss">&quot;Unitrans (0)&quot;</span>
+<span class="k">GROUP</span> <span class="k">BY</span>
+    <span class="n">calitp_feed_name</span>
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>calitp_feed_name</th>
+      <th>max_n_trip_stop_times</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Unitrans (0)</td>
+      <td>43</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</div>
+<div class="section" id="id12">
+<h4>Metabase<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h4>
+<p><strong>Primary Fact Table</strong> → Gtfs Schedule Data Feed Trip Stops Latest
+<strong>Secondary Table</strong> → Gtfs Schedule Dim Feeds</p>
+<p><em>Time</em> → <strong>no variable</strong>, finding max across all days
+<em>Geography</em> → <strong>Trip ID</strong> (the unique identifier for each record, to <em>COUNT</em> by)
+<em>Agency</em> → Metabase automatically joins with table <strong>Gtfs Schedule Dim Feeds</strong> on variable <strong>Feed Key</strong> to get <strong>Calitp Feed Name</strong> (<em>COUNT</em> by)</p>
+<p><img alt="Collection Matrix" src="../_images/max_stops_per_trip_by_agency.png" /></p>
+</div>
+<div class="section" id="id13">
+<h4>Siuba<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h4>
+<p><strong>Primary Fact Table</strong> →  views.gtfs_schedule_data_feed_trip_stops_latest
+<strong>Secondary Table</strong> →  views.gtfs_schedule_dim_feeds</p>
+<p><em>Time</em> → <strong>no variable</strong>, finding max across all days
+<em>Geography</em> → <strong>trip_id</strong> (the unique identifier for each record, to <em>GROUP BY</em>)
+<em>Agency</em> → Join with table <strong>views.gtfs_schedule_dim_feeds</strong> on variable <strong>feed_key</strong> for <strong>calitp_feed_name</strong> (<em>GROUP BY</em>)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>
+    <span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_data_feed_trip_stops_latest</span><span class="p">()</span>
+    <span class="o">&gt;&gt;</span> <span class="n">count</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">trip_id</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">calitp_feed_name</span><span class="p">)</span>
+    <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_feed_name</span> <span class="o">==</span> <span class="s2">&quot;Unitrans (0)&quot;</span><span class="p">)</span>
+    <span class="o">&gt;&gt;</span> <span class="n">summarize</span><span class="p">(</span><span class="n">n_max</span><span class="o">=</span><span class="n">_</span><span class="o">.</span><span class="n">n</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div><pre># Source: lazy query
+# DB Conn: Engine(bigquery://cal-itp-data-infra/?maximum_bytes_billed=5000000000)
+# Preview:
+</pre><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>n_max</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>43</td>
+    </tr>
+  </tbody>
+</table>
+</div><p># .. may have more rows</p></div></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./analytics_examples"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            
+
+
+
+<div class='prev-next-bottom'>
+    
+    <div id="prev">
+        <a class="left-prev" href="overview.html" title="previous page">
+            <i class="prevnext-label fas fa-angle-left"></i>
+            <div class="prevnext-info">
+                <p class="prevnext-label">previous</p>
+                <p class="prevnext-title">Analysis Examples (WIP)</p>
+            </div>
+        </a>
+    </div>
+     <div id="next">
+        <a class="right-next" href="../analytics_publishing/overview.html" title="next page">
+            <div class="prevnext-info">
+                <p class="prevnext-label">next</p>
+                <p class="prevnext-title">How to Publish Analyses (WIP)</p>
+            </div>
+            <i class="prevnext-label fas fa-angle-right"></i>
+        </a>
+     </div>
+
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By Jarv.us<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+  </body>
+</html>
