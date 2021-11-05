@@ -18,6 +18,8 @@ tests:
 
 dependencies:
   - dim_metric_date
+  - gtfs_schedule_dim_feeds
+  - gtfs_schedule_dim_stops
 ---
 
 WITH
