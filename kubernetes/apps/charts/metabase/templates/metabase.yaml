@@ -88,6 +88,8 @@ metadata:
   name: metabase-config
   namespace: {{ .Release.Namespace }}
 data:
+  {{- /* select first hostname from the ingress hosts list (if it exists; empty string otherwise) */}}
+  {{- /* to use as the default value of the MB_SITE_URL environment variable                      */}}
   {{- $defaultHost := get (index (default (list (dict "host" "")) .Values.ingress.hosts) 0) "host" }}
   {{- $emptyDict := dict }}
   {{- $siteUrlDict := dict "MB_SITE_URL" (print "https://" $defaultHost) }}
