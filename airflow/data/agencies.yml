@@ -1325,7 +1325,7 @@ tulare-county-area-transit:
 turlock-transit:
   agency_name: Turlock Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/stanislaus-ca-us/stanislaus-ca-us.zip
+    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/turlock-ca-us/turlock-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1494,3 +1494,11 @@ tcrta:
     gtfs_rt_service_alerts_url: null
     gtfs_rt_trip_updates_url: null
   itp_id: 474
+tracer:
+  agency_name: TRACER
+  feeds:
+  - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/tracy-ca-us/tracy-ca-us.zip
+    gtfs_rt_vehicle_positions_url: null
+    gtfs_rt_service_alerts_url: null
+    gtfs_rt_trip_updates_url: null
+  itp_id: 341
