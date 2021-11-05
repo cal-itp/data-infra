@@ -41,9 +41,9 @@ second_transactions AS (
 SELECT
     m.participant_id,
     m.micropayment_id,
-    m.charge_type,
     m.charge_amount,
     m.nominal_amount,
+    m.charge_type,
 
     -- Common transaction info
     t1.route_id,
