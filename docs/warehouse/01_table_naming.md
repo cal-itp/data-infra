@@ -13,8 +13,8 @@ kernelspec:
   name: python3
 ---
 
-# Table Naming (WIP)
-The warehouse puts tables that are ready for end-users into the [`views` dataset](/datasets/views/).
+# Table Naming
+The warehouse puts tables that are ready for end-users into the [`views` dataset](/datasets_and_tables/views/).
 They are named using a convention loosely based off of the Kimball method for modeling data,
 which separates data into underlying dimensions (measurements) and facts (calculations).
 

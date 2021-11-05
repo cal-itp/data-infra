@@ -1,4 +1,4 @@
-# Creating New Tables (Views) (WIP)
+# Creating New Tables (Views)
 
 | operator | description | example |
 | -------- | ----------- | ------- |

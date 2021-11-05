@@ -29,7 +29,7 @@ parts:
         - file: warehouse/02_agencies
         - file: warehouse/03_views
         - file: warehouse/04_metrics
-        - file: warehouse/05_old_warehouse_overview
+        - file: analytics_examples/02_sql_snippets
       - file: datasets_and_tables/01_overview
         sections:
         - file: datasets_and_tables/gtfs_schedule
@@ -40,7 +40,6 @@ parts:
       - file: analytics_examples/overview
         sections:
         - file: analytics_examples/01_analysis_examples
-        - file: analytics_examples/02_sql_snippets
       - file: analytics_publishing/overview
         sections:
         - file: analytics_publishing/01_how_to_publish
@@ -53,7 +52,6 @@ parts:
       - file: analytics_data_consumers/overview
   - caption: Developers
     chapters:
-      - file: developers_welcome/overview
       - file: kubernetes/README
         sections:
         - file: kubernetes/JupyterHub

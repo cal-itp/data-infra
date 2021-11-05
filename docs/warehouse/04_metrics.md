@@ -13,7 +13,7 @@ kernelspec:
   name: python3
 ---
 
-# Metric Views (WIP)
+# Metric Views
 
 A metric table (or view) is a table that calculates meaningful measures across time.
 It is defined by the three pieces below.

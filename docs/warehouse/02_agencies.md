@@ -13,7 +13,7 @@ kernelspec:
   name: python3
 ---
 
-# Agency GTFS Feeds (WIP)
+# Agency GTFS Feeds
 
 Feed information is stored in [airflow/data/agencies.yml](https://github.com/cal-itp/data-infra/blob/main/airflow/data/agencies.yml).
 This file is then used by our Airflow data pipeline to download feeds, and load them into the warehouse.

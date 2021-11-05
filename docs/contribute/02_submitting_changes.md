@@ -1,4 +1,4 @@
-# Submitting Changes (WIP)
+# Submitting Changes
 
 ## Commits and Pull Requests (PR)
 

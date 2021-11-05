@@ -1,7 +1,7 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
-title: Cal-ITP Analytics
+title: Cal-ITP Data Services
 author: Jarv.us
 logo: calitp_logo_MAIN.png
 
@@ -9,7 +9,7 @@ logo: calitp_logo_MAIN.png
 # See https://jupyterbook.org/content/execute.html
 execute:
   execute_notebooks: force
-  allow_errors: true
+  allow_errors: false
 
 # Define the name of the latex output file for PDF builds
 latex:
