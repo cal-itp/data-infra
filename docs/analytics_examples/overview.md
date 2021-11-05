@@ -1,4 +1,4 @@
-# Introduction to the Warehouse (WIP)
+# Analysis Examples (WIP)
 After reading this section, you should be able to:
 * x
 * y

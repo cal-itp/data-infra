@@ -1,15 +1,15 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
-title: Juniper Documentation
+title: Cal-ITP Data Services
 author: Jarv.us
-#logo: logo.png
+logo: calitp_logo_MAIN.png
 
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
 execute:
   execute_notebooks: force
-  allow_errors: true
+  allow_errors: false
 
 # Define the name of the latex output file for PDF builds
 latex:

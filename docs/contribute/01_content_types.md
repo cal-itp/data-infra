@@ -1,19 +1,4 @@
-# Editing Documentation
-
-## How do I preview my documentation change?
-You can preview it in the github pages or run the jupyterbook locally using the following command:
-```
-jb build docs
-```
-if no code has been altered, to force jupyterbook to rebuild use the following command:
-
-```
-jb build docs --all
-```
-## How is the documentation gh action triggered?
-The action is triggered on push, meaning the github action is triggered when code is pushed the the main branch in respository
-
-
+# Types of Content
 ## What kinds of content can I put in the documentation?
 
 ### Images

@@ -1,3 +1,10 @@
+# Business Insights & Dashboards (WIP)
+
+# Metabase
+We use Metabase as our business insights / dashboarding tool.
+Make sure you're set-up with Metabase here
+Quick link - Metabase
+
 ---
 jupytext:
   cell_metadata_filter: -all
@@ -109,3 +116,7 @@ of all questions in a dashboard's sub-collection of questions.
 A question naming example would be something like this: if there was a "Summary" section
 of your dashboard, and you had a question that specified the start date of that dashboard,
 then your title would be something like `Summary || Dashboard Start Date`.
+
+#### Using Metabase Dashboards
+
+<div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/1dc0c085b12b4848a52523ef34397f71" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>

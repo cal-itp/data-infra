@@ -1,6 +1,20 @@
-# Table names
+---
+jupytext:
+  cell_metadata_filter: -all
+  formats: md:myst
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.10.3
+kernelspec:
+  display_name: Python 3 (ipykernel)
+  language: python
+  name: python3
+---
 
-The warehouse puts tables that are ready for end-users into the [`views` dataset](/datasets/views/).
+# Table Naming
+The warehouse puts tables that are ready for end-users into the [`views` dataset](/datasets_and_tables/views/).
 They are named using a convention loosely based off of the Kimball method for modeling data,
 which separates data into underlying dimensions (measurements) and facts (calculations).
 
