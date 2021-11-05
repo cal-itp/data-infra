@@ -2,7 +2,7 @@
 name: New Team Member
 about: Kick off the onboarding process.
 title: New Team Member - [Name]
-labels: 'new team member'
+labels: ''
 assignees: charlie-costanzo
 
 ---
