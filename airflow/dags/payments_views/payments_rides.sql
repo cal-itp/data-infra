@@ -44,6 +44,11 @@ SELECT
     m.charge_amount,
     m.nominal_amount,
     m.charge_type,
+    a.adjustment_id,
+    a.type AS adjustment_type,
+    a.time_period_type AS adjustment_time_period_type,
+    a.description AS adjustment_description,
+    a.amount AS adjustment_amount,
 
     -- Common transaction info
     t1.route_id,
@@ -80,3 +85,5 @@ FROM `payments.stg_cleaned_micropayments` AS m
 JOIN initial_transactions AS t1 USING (participant_id, micropayment_id)
 LEFT JOIN gtfs_routes_with_participant AS r USING (participant_id, route_id)
 LEFT JOIN second_transactions AS t2 USING (participant_id, micropayment_id)
+LEFT JOIN `payments.stg_cleaned_micropayment_adjustments` AS a USING (participant_id, micropayment_id)
+WHERE a.applied = True
