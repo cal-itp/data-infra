@@ -6,7 +6,7 @@ dependencies:
   - stg_enriched_micropayment_adjustments
 
 tests:
-  check_unique_together:
+  check_composite_unique:
     - micropayment_id
     - adjustment_id
 ---
