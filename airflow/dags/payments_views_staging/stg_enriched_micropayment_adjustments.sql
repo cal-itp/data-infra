@@ -10,7 +10,7 @@ external_dependencies:
 
   sql_enrich_duplicates(
     "payments.micropayment_adjustments",
-    ["adjustment_id"],
+    ["calitp_hash"],
     ["calitp_file_name desc"]
   )
 
