@@ -14,7 +14,7 @@ tests:
     - "*"
 ---
 
-SELECT micropayment_id, count(*)
+SELECT micropayment_id, count(*) AS num_applied_adjustments
 FROM payments.stg_cleaned_micropayment_adjustments
 WHERE applied IS True
 GROUP BY micropayment_id
