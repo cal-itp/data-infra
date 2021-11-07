@@ -17,7 +17,8 @@ WITH
 single_device_transaction_ids AS (
     SELECT littlepay_transaction_id
     FROM `payments.stg_cleaned_micropayments` AS m
-    JOIN `payments.stg_cleaned_micropayment_device_transactions` AS t USING (micropayment_id)
+    JOIN `payments.stg_cleaned_micropayment_device_transactions` AS mt USING (micropayment_id)
+    JOIN `payments.stg_cleaned_device_transactions` AS t USING (littlepay_transaction_id)
     WHERE m.charge_type = 'flat_fare'
 ),
 
@@ -25,6 +26,7 @@ pending_device_transaction_ids AS (
     SELECT littlepay_transaction_id
     FROM `payments.stg_cleaned_micropayments` AS m
     JOIN `payments.stg_cleaned_micropayment_device_transactions` AS mt USING (micropayment_id)
+    JOIN `payments.stg_cleaned_device_transactions` AS t USING (littlepay_transaction_id)
     WHERE m.charge_type = 'pending_charge_fare'
 ),
 
