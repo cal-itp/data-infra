@@ -1,0 +1,42 @@
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: postgresql-backup
+  namespace: {{ .Release.Namespace }}
+  labels:
+    name: database-backup
+spec:
+  schedule: {{ .Values.cronjob.schedule }}
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 86400 # one day
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 7200 # two hours
+      template:
+        spec:
+          restartPolicy: never
+          volumes:
+            {{- range secrets.volumeMounts }}
+            - name: {{ .name }}
+              secret:
+                secretName: {{ .name }}
+            {{- end }}
+          containers:
+            - name: client
+              image: {{ .Values.cronjob.image }}
+              envFrom:
+              {{- if .Values.configs.database }}
+              - configMapRef:
+                  name: database-config
+              {{- end }}
+              {{- range secrets.database.envFrom }}
+              - secretRef: {{ toYaml . }}
+              {{- end }}
+              {{- range secrets.databaseBackup.envFrom }}
+              - secretRef: {{ toYaml . }}
+              {{- end }}
+              volumeMounts:
+              {{- range secrets.databaseBackup.volumeMounts }}
+              - {{ toYaml . }}
+              {{- end }}
