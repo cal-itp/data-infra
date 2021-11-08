@@ -2,7 +2,7 @@
 # Learn more at https://jupyterbook.org/customize/config.html
 
 title: Cal-ITP Data Services
-author: Jarv.us
+author: Cal-ITP
 logo: calitp_logo_MAIN.png
 
 # Force re-execution of notebooks on each build.
