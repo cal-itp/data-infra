@@ -1,0 +1,8 @@
+cronjob:
+  schedule: "15 * * * *"
+
+secretMounts: []
+
+config:
+  envFrom: []
+  env: []

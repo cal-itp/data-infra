@@ -1,0 +1,34 @@
+secretMounts:
+  - name: gcs-upload-svcacct
+    mountPath: /secrets/gcs-upload-svcacct
+
+config:
+  envFrom:
+    - secretRef:
+        name: database-backup
+  env:
+    - name: RESTIC_REPOSITORY
+      value: gs:calitp-infra-backups:/metabase-database
+    - name: GOOGLE_PROJECT_ID
+      value: '1005246706141'
+    - name: GOOGLE_APPLICATION_CREDENTIALS
+      value: /secrets/gcs-upload-svcacct/gcs-upload-svcacct.json
+    - name: PGHOST
+      value: database.metabase.svc.cluster.local
+    - name: PGPORT
+      value: '5432'
+    - name: PGDATABASE
+      valueFrom:
+        configMapKeyRef:
+          name: database-config
+          key: POSTGRES_DB
+    - name: PGUSER
+      valueFrom:
+        configMapKeyRef:
+          name: database-config
+          key: POSTGRES_USER
+    - name: PGPASSWORD
+      valueFrom:
+        configMapKeyRef:
+          name: database-config
+          key: POSTGRES_PASSWORD
