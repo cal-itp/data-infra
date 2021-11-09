@@ -10,7 +10,7 @@ external_dependencies:
 
   sql_enrich_duplicates(
     "payments.product_data",
-    ["calitp_hash"],
+    ["product_id"],
     ["calitp_file_name desc"]
   )
 
