@@ -1,4 +1,12 @@
 # Technical Onboarding (WIP)
+Analysts -
+* See below for beginning entrypoints into our Cal-ITP analytics resources. These include introductions to early meetings, collaboration tools, and analysis tools.
+* Below you can find links out to the resources themselves, as well as links to our internal support documents.
+* Refer back to this page any time you need to quickly find team resources.
+* Privileges have been added to allow you access to the resources below. If you're still having access troubles, use the information at the bottom of this page to [get help]().
+Non-Analyst Team Members -
+* You can access any of the tools below as well!
+* If you still need access any tools listed below, use the information at the bottom of this page to [get help]().
 
 **Meetings to Expect - Analysts:**
 
