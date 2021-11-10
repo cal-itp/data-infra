@@ -14,7 +14,7 @@
 ### Github Analytics Repo
 ## Introduction to Project Management
 (analytics-project-board)=
-###Analytics Project Board
+### Analytics Project Board
 #### How to use
 #### Who should use?
 #### Stages
