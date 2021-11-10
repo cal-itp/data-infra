@@ -10,8 +10,6 @@
 - [ ]  Google Cloud Console / Big Query
 - [ ]  Metabase
 - [ ]  Github
-    - [ ]  Organization
-    - [ ]  Teams
 
 **Team Resources - Python Users:**
 
