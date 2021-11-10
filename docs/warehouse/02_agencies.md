@@ -37,11 +37,14 @@ These can be found on the [Primary List of California Transit Providers](https:/
 
 ## Including API Keys
 
-If the URL for a GTFS feed requires an API key, you can include using these steps:
+If the URL for a GTFS feed requires an API key or other sensitive information, you can include that using these steps:
 
-* Add a unique name, and the key to [this private spreadsheet](https://docs.google.com/spreadsheets/d/1Fp7sesSMS6VOIndTLTKcyyN2qHj6najKAaN-I9_3SFo/edit?usp=sharing).
-* Include the API key in your url by using `{{ MY_KEY_NAME }}`, where `MY_KEY_NAME`
-  is the unique name used in the spreadsheet.
+1. Add a unique name, and the key or value to a private airtable. Ask on internal chat for access to this.
+2. Include the API key in your url by using `{{ MY_KEY_NAME }}`, where `MY_KEY_NAME`
+  is the unique name used in the airtable.
+3. Export this table as a CSV file and copy the raw contents of the CSV file.
+4. Paste the raw contents into the `AGENCY_SECRETS` GitHub secret.
+5. Add the appropriate key name in the text of a URL entry in the [airflow/data/agencies.yml](https://github.com/cal-itp/data-infra/blob/main/airflow/data/agencies.yml) file.
 
 Below is an example entry.
 
@@ -59,8 +62,4 @@ ac-transit:
 ## Deploying to Pipeline
 
 Every time the main branch of cal-itp/data-infra is updated on github,
-[this github action][action] swaps in the API keys and pushes to our Cloud Composer's data bucket.
-
-```
-[action]: (https://github.com/cal-itp/data-infra/blob/main/.github/workflows/update_gcloud_requirements.yml)
-```
+the [push_to_gcloud](https://github.com/cal-itp/data-infra/blob/main/.github/workflows/push_to_gcloud.yml) github action swaps in the API keys and pushes to our Cloud Composer's data bucket.
