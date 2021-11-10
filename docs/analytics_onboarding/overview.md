@@ -16,5 +16,4 @@
 - [ ]  Jupyter Labs
 - [ ]  calitp-py
 
-
 <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">Need access? DM Charlie on Slack anytime</a>
