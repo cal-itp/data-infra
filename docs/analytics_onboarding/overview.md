@@ -1,19 +1,24 @@
 # Technical Onboarding (WIP)
 
-**Meetings to Expect:**
+**Meetings to Expect - Analysts:**
 
-- [ ]  Day 1: Introduction / Technical Onboarding
-- [ ]  Daily Stand-Ups
+- [ ]  [Week 1:  Technical Onboarding / Analytics Tools Introduction]() (60 Mins)
+- [ ]  [Daily Stand-Ups]() (15 Mins)
 
-**Team Resources- All Analysts:**
+**Collaboration Tools:**
 
-- [ ]  Google Cloud Console / Big Query
-- [ ]  Metabase
-- [ ]  Github
+- [ ]  [Github Analytics Repo]() - [More information here]().
+- [ ]  [Github Analyst Project Board]()  - [More information here]().
 
-**Team Resources - Python Users:**
+**Querying & Dashboards:**
 
-- [ ]  Jupyter Labs
-- [ ]  calitp-py
+- [ ]  [Big Query]() - Querying the warehouse with SQL. [More information here]().
+- [ ]  [Metabase]() - Dashboards and Business Insights. [More information here]().
 
-<a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">Need access? DM Charlie on Slack anytime</a>
+**Python Users:**
+
+- [ ]  [JupyterHub]() - Cloud-based notebooks. [More information here]().
+- [ ]  [calitp-py]() - Cal-ITP's internal Python library. [More information here]().
+- [ ]  [siuba]() - Cal-ITP recommended data analysis library. [More information here]().
+
+Still need access to a tool above? <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">DM Charlie on Cal-ITP Slack anytime</a>, or <a href = "mailto: charlie.c@jarv.us"?subject = Cal-ITP Access Issues&body = I need access to:>by email</a>.
