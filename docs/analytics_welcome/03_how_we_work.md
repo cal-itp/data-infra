@@ -1,17 +1,24 @@
 # How We Work (WIP)
 ## Meetings
-Data Services All-Hands
-Daily Analyst Standups
+(week-one-meeting)=
+### Week 1:  Technical Onboarding / Analytics Tools Introduction
+(weekly-data-services)=
+### Data Services All-Hands
+(daily-stand-ups)=
+### Daily Analyst Standups
 ## Communication Channels
-data-analyses
-data-analyses-notify
+### data-analyses
+### data-analyses-notify
+## Collaboration Tools
+(analytics-repo)=
+### Github Analytics Repo
 ## Introduction to Project Management
-Analytics Project Board
-Link
-How to use
-Who should use?
-Stages
-Issue Templates
-What makes a good issue?
-Tags
-Assignees
+(analytics-project-board)=
+###Analytics Project Board
+#### How to use
+#### Who should use?
+#### Stages
+#### Issue Templates
+#### What makes a good issue?
+#### Tags
+#### Assignees

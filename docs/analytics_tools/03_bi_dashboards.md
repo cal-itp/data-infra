@@ -1,5 +1,5 @@
 # Business Insights & Dashboards (WIP)
-
+(metabase)=
 # Metabase
 We use Metabase as our business insights / dashboarding tool.
 Make sure you're set-up with Metabase here
