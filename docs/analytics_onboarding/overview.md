@@ -1,3 +1,4 @@
+(technical-onboarding)=
 # Technical Onboarding (WIP)
 :::{admonition} How to use this page
 :class: tip

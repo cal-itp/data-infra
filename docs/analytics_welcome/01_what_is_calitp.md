@@ -1,5 +1,4 @@
 # Cal-ITP Project Information (WIP)
-
 ## Project Domains
 Mobility Services Data
 Payments
