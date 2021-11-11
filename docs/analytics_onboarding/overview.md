@@ -1,22 +1,16 @@
 # Technical Onboarding (WIP)
-:::{admonition} Migrate to the new Table of Contents structure
-:class: warning
-A new Table of Contents structure was introduced in `v0.11`.
-To migrate your old TOC structure to the new structure, you have a few options:
+:::{admonition} How to use this page
+:class: tip
+This page serves as a beginning entry-point into our Cal-ITP analytics resources for both new analysts and non-analyst team members. Refer back to this page any time you need to quickly find team resources.
 
-- **Manually migrate your TOC**. See [this blog post](https://executablebooks.org/en/latest/updates/2021-06-18-update-toc.html) for one example migration from an old TOC structure.
-- **Use the migration tool**. This automatically generates a new TOC from your old one, though may alter the formatting slightly.
+- **Analysts**
+* See below for an introduction to team meetings as well as our collaboration and analysis tools.
+* Below you can find links to the resources themselves, as well as relevant support documents.
+* Privileges have already been created for you to access the resources below. If you're still having access trouble use the information at the bottom of this page to [get help](get-help).
+- **Non-Analyst Team Members**
+* See below for a list of our analytics tools. You can access any of the them as well!
+* If you need access any tools listed below, use the information at the bottom of this page to [get help](get-help).
 :::
-
-## Analysts -
-* See below for beginning entrypoints into our Cal-ITP analytics resources. These include introductions to early meetings, collaboration tools, and analysis tools.
-* Below you can find links out to the resources themselves, as well as links to our internal support documents.
-* Refer back to this page any time you need to quickly find team resources.
-* Privileges have been added to allow you access to the resources below. If you're still having access troubles, use the information at the bottom of this page to [get help](get-help).
-
-## Non-Analyst Team Members -
-* You can access any of the tools below as well!
-* If you still need access any tools listed below, use the information at the bottom of this page to [get help](get-help).
 
 **Meetings to Expect - Analysts:**
 Look out for these meetings to be added to your calendar.
