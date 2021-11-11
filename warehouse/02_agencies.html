@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Agency GTFS Feeds &#8212; Cal-ITP Data Services</title>
     
-  <link href="../_static/css/theme.css" rel="stylesheet" />
-  <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -31,7 +31,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
     <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.1c5a1a01449ed65a7b51.js">
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -54,8 +54,19 @@
     <link rel="next" title="Creating New Tables (Views)" href="03_views.html" />
     <link rel="prev" title="Table Naming" href="01_table_naming.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="en" />
+    <meta name="docsearch:language" content="None">
     
+
+    <!-- Google Analytics -->
+    
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-SZB618VNBZ"></script>
+<script>
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){ dataLayer.push(arguments); }
+                    gtag('js', new Date());
+                    gtag('config', 'G-SZB618VNBZ');
+                </script>
+
   </head>
   <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
     
@@ -93,7 +104,7 @@
   </a>
  </li>
 </ul>
-<p class="caption" role="heading">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Analysts
  </span>
@@ -304,7 +315,7 @@
   </ul>
  </li>
 </ul>
-<p class="caption" role="heading">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Project Leads
  </span>
@@ -316,7 +327,7 @@
   </a>
  </li>
 </ul>
-<p class="caption" role="heading">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Data Consumers
  </span>
@@ -328,7 +339,7 @@
   </a>
  </li>
 </ul>
-<p class="caption" role="heading">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Developers
  </span>
@@ -441,7 +452,7 @@
   </ul>
  </li>
 </ul>
-<p class="caption" role="heading">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Contribute to the Docs!
  </span>
@@ -631,12 +642,15 @@ These can be found on the <a class="reference external" href="https://docs.googl
 </div>
 <div class="section" id="including-api-keys">
 <h2>Including API Keys<a class="headerlink" href="#including-api-keys" title="Permalink to this headline">¶</a></h2>
-<p>If the URL for a GTFS feed requires an API key, you can include using these steps:</p>
-<ul class="simple">
-<li><p>Add a unique name, and the key to <a class="reference external" href="https://docs.google.com/spreadsheets/d/1Fp7sesSMS6VOIndTLTKcyyN2qHj6najKAaN-I9_3SFo/edit?usp=sharing">this private spreadsheet</a>.</p></li>
+<p>If the URL for a GTFS feed requires an API key or other sensitive information, you can include that using these steps:</p>
+<ol class="simple">
+<li><p>Add a unique name, and the key or value to a private airtable. Ask on internal chat for access to this.</p></li>
 <li><p>Include the API key in your url by using <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">MY_KEY_NAME</span> <span class="pre">}}</span></code>, where <code class="docutils literal notranslate"><span class="pre">MY_KEY_NAME</span></code>
-is the unique name used in the spreadsheet.</p></li>
-</ul>
+is the unique name used in the airtable.</p></li>
+<li><p>Export this table as a CSV file and copy the raw contents of the CSV file.</p></li>
+<li><p>Paste the raw contents into the <code class="docutils literal notranslate"><span class="pre">AGENCY_SECRETS</span></code> GitHub secret.</p></li>
+<li><p>Add the appropriate key name in the text of a URL entry in the <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/airflow/data/agencies.yml">airflow/data/agencies.yml</a> file.</p></li>
+</ol>
 <p>Below is an example entry.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">ac-transit</span><span class="p">:</span>
   <span class="nt">agency_name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AC Transit</span>
@@ -652,10 +666,7 @@ is the unique name used in the spreadsheet.</p></li>
 <div class="section" id="deploying-to-pipeline">
 <h2>Deploying to Pipeline<a class="headerlink" href="#deploying-to-pipeline" title="Permalink to this headline">¶</a></h2>
 <p>Every time the main branch of cal-itp/data-infra is updated on github,
-[this github action][action] swaps in the API keys and pushes to our Cloud Composer’s data bucket.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">action</span><span class="p">]:</span> <span class="p">(</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">cal</span><span class="o">-</span><span class="n">itp</span><span class="o">/</span><span class="n">data</span><span class="o">-</span><span class="n">infra</span><span class="o">/</span><span class="n">blob</span><span class="o">/</span><span class="n">main</span><span class="o">/.</span><span class="n">github</span><span class="o">/</span><span class="n">workflows</span><span class="o">/</span><span class="n">update_gcloud_requirements</span><span class="o">.</span><span class="n">yml</span><span class="p">)</span>
-</pre></div>
-</div>
+the <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/.github/workflows/push_to_gcloud.yml">push_to_gcloud</a> github action swaps in the API keys and pushes to our Cloud Composer’s data bucket.</p>
 </div>
 </div>
 
@@ -727,15 +738,7 @@ is the unique name used in the spreadsheet.</p></li>
       </div>
     </div>
   
-  <script src="../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
-
-  
-<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-SZB618VNBZ"></script>
-<script>
-                    window.dataLayer = window.dataLayer || [];
-                    function gtag(){ dataLayer.push(arguments); }
-                    gtag('config', 'G-SZB618VNBZ');
-                </script>
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
 
   </body>
 </html>
