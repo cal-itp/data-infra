@@ -40,5 +40,5 @@ Look out for these meetings to be added to your calendar.
 
 (get-help)=
 ```{admonition} Still need access to a tool above?
-<a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">DM Charlie on Cal-ITP Slack anytime</a>, or <a href="mailto: charlie.c@jarv.us?subject=Cal-ITP Access Issues&body=I need access to:" target="_blank">by email</a>.
+<a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">DM Charlie on Cal-ITP Slack anytime</a>, or <a href="mailto: charlie.c@jarv.us?subject=Cal-ITP Access Issues&body=I need access to:" target="blank">by email</a>.
 ```
