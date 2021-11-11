@@ -1,4 +1,4 @@
-# Tools Quick Links (WIP)
+# Tools Quick Links
 Lost a link? Find quick access to our tools below.
 
 * [Analytics Repo - GitHub](https://github.com/cal-itp/data-analyses)
