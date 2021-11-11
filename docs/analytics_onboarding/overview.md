@@ -42,4 +42,4 @@ Look out for these meetings to be added to your calendar.
 - [ ]  calitp-py - Cal-ITP's internal Python library. [More information here](calitp).
 - [ ]  siuba - Cal-ITP recommended data analysis library. [More information here](siuba).
 (get-help)=
-Still need access to a tool above? <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">DM Charlie on Cal-ITP Slack anytime</a>, or <a href = "mailto: charlie.c@jarv.us?subject=Cal-ITP Access Issues&body=I need access to:" target="_blank">by email</a>.
+Still need access to a tool above? <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">DM Charlie on Cal-ITP Slack anytime</a>, or <a href="mailto: charlie.c@jarv.us?subject=Cal-ITP Access Issues&body=I need access to:" target="_blank">by email</a>.
