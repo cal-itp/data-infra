@@ -1,10 +1,3 @@
-# Business Insights & Dashboards (WIP)
-(metabase)=
-# Metabase
-We use Metabase as our business insights / dashboarding tool.
-Make sure you're set-up with Metabase here
-Quick link - Metabase
-
 ---
 jupytext:
   cell_metadata_filter: -all
@@ -19,6 +12,13 @@ kernelspec:
   language: python
   name: python3
 ---
+
+# Business Insights & Dashboards (WIP)
+(metabase)=
+# Metabase
+We use Metabase as our business insights / dashboarding tool.
+Make sure you're set-up with Metabase here
+Quick link - Metabase
 
 # Using Metabase
 
