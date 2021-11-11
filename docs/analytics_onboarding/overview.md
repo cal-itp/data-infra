@@ -1,17 +1,3 @@
----
-jupytext:
-  formats: md:myst
-  text_representation:
-    extension: .md
-    format_name: myst
-    format_version: 0.12
-    jupytext_version: 1.6.0
-kernelspec:
-  display_name: Python 3
-  language: python
-  name: python3
----
-
 # Technical Onboarding (WIP)
 :::{admonition} Migrate to the new Table of Contents structure
 :class: warning
@@ -20,12 +6,6 @@ To migrate your old TOC structure to the new structure, you have a few options:
 
 - **Manually migrate your TOC**. See [this blog post](https://executablebooks.org/en/latest/updates/2021-06-18-update-toc.html) for one example migration from an old TOC structure.
 - **Use the migration tool**. This automatically generates a new TOC from your old one, though may alter the formatting slightly.
-  To do so, use the following command:
-
-  ```shell
-  jupyter-book toc migrate path/to/_toc.yml -o path/to/_toc.yml
-  ```
-
 :::
 
 ## Analysts -
