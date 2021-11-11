@@ -11,6 +11,6 @@ GTFS Flex
 
 Number of Validators
 
-Etc,etc
+Etc.
 ## How to Share Reports
 Open PR for your branch
