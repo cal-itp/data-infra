@@ -23,6 +23,9 @@ jobs:
         pip install -r airflow/requirements.txt
         pip install git+https://github.com/machow/siuba.git@stable
         pip install jupyter-book==0.12.0
+        # Temporary pinning of pydata-sphinx-theme to workaround Sphinx 4.3.0 error
+        # https://github.com/pydata/pydata-sphinx-theme/issues/508
+        pip install pydata-sphinx-theme==0.7.2
     - uses: google-github-actions/setup-gcloud@master
       with:
         service_account_key: ${{ secrets.GCP_SA_KEY }}
