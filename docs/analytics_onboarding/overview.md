@@ -18,7 +18,7 @@ Look out for these meetings to be added to your calendar.
 
 **Collaboration Tools:**
 
-- [ ] [Cal-ITP Slack](cal-itp.slack.com)
+- [ ] [Cal-ITP Slack](https://cal-itp.slack.com)
 - [ ] [Github Analytics Repo](https://github.com/cal-itp/data-analyses) - [More information here](analytics-repo).
 - [ ]  [Github Analyst Project Board](https://github.com/cal-itp/data-infra/projects/6)  - [More information here](analytics-project-board).
 
