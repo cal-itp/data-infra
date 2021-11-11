@@ -8,6 +8,7 @@ Below you can find links to the resources themselves, as well as relevant suppor
 * See below for an introduction to team meetings as well as our collaboration and analysis tools.
 
 * Privileges have already been created for you to access the resources below. If you're still having access trouble use the information at the bottom of this page to [get help](get-help).
+
 **Non-Analyst Team Members**
 * You can access any of the tools below as well!
 * If you need help with access, use the information at the bottom of this page to [get help](get-help).
@@ -40,5 +41,5 @@ Look out for these meetings to be added to your calendar.
 
 (get-help)=
 ```{admonition} Still need access to a tool above?
-<a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">DM Charlie on Cal-ITP Slack anytime</a>, or <a href="mailto: charlie.c@jarv.us?subject=Cal-ITP Access Issues&body=I need access to:" target="blank">by email</a>.
+DM Charlie <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">on Cal-ITP Slack using this link</a>, or <a href="mailto: charlie.c@jarv.us?subject=Cal-ITP Access Issues&body=I need access to:" target="blank">by email</a>.
 ```
