@@ -42,5 +42,7 @@ SELECT
         T.feed_key, "___",
         IFNULL(CAST(T.feed_info_key AS STRING), "NULL")
     )) AS feed_key
+    , calitp_feed_id
+    , calitp_feed_name
     , * EXCEPT(feed_key, feed_info_key)
 FROM feed_feed_info T
