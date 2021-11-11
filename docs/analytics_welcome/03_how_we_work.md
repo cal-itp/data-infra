@@ -9,8 +9,10 @@
 (daily-stand-ups)=
 #### Daily Analyst Standups
 ## Communication Channels
-### data-analyses
-### data-analyses-notify
+### Discussion
+#### data-analysis
+### Repo Notifications
+#### data-analysis-notify
 ## Collaboration Tools
 (analytics-repo)=
 ### Github Analytics Repo
