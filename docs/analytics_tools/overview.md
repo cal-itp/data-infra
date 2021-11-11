@@ -1,7 +1,10 @@
 # Introduction to Analytics Tools (WIP)
 Congratulations, you're ready to start your analyses!
+
 Use the sections below to walk through the various stages of conducting an analysis.
+
 Before getting started, see the full list of our tools [here](technical-onboarding).
+
 After reading this section, you should be able to:
 * x
 * y

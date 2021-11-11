@@ -1,10 +1,9 @@
 # Notebooks (WIP)
 (jupyterhub)=
 ## Introduction to JupyterHub
-For Python users, we have deployed a cloud-based instance of JupyterLab to creating, using, and sharing notebooks easy. This avoids the need to set up a local environment, provides dedicated storage, and allows you to push to Github.
-Make sure you're set-up with JupyterLab here
-Quick link - JupyterLab
-See pushing from JupyterLab below
+For Python users, we have deployed a cloud-based instance of JupyterHub to creating, using, and sharing notebooks easy. This avoids the need to set up a local environment, provides dedicated storage, and allows you to push to GitHub.
+
+Make sure you have access to JupyterHub [here](https://hubtest.k8s.calitp.jarv.us/)
 
 ## Using JupyterHub
 Jupyterhub is a web application that allows users to analyze and create reports on warehouse data (or a number of data sources).
@@ -83,4 +82,5 @@ gdf.to_parquet("gs://calitp-analytics-data/data-analyses/<ANALYSIS FOLDER>/<FILE
 #### Uploading from google cloud storage
 
 You can access the cloud bucket from the web from https://console.cloud.google.com/storage/browser/calitp-analytics-data.
+
 See the above screencast for a walkthrough of using the bucket.

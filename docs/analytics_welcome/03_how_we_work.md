@@ -2,7 +2,7 @@
 ## Meetings
 ### Week 1
 (week-one-meeting)=
-#### Technical Onboarding / Analytics Tools Introduction
+#### Technical Onboarding - Analytics Tools Introduction
 ### Recurring
 (weekly-data-services)=
 #### Data Services All-Hands
@@ -24,7 +24,9 @@ A place for sharing quick reports, and works in progress
     * To cache your token, use the [GitHub CLI or Git Credential Manager Core](https://docs.github.com/en/get-started/getting-started-with-git/caching-your-github-credentials-in-git)
 
 This repository is for quick sharing of works in progress and simple analyses.
+
 For collaborative short-term tasks, create a new folder and work off a separate branch.
+
 For longer-term projects, consider making a new repository!
 ## Introduction to Project Management
 (analytics-project-board)=
