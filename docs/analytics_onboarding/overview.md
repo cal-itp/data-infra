@@ -2,16 +2,17 @@
 :::{admonition} How to use this page
 :class: tip
 This page serves as a beginning entry-point into our Cal-ITP analytics resources for both new analysts and non-analyst team members.
+
 Below you can find links to the resources themselves, as well as relevant support documents.
 
 **Analysts**
 * See below for an introduction to team meetings as well as our collaboration and analysis tools.
-
-* Privileges have already been created for you to access the resources below. If you're still having access trouble use the information at the bottom of this page to [get help](get-help).
+* Privileges have already been created for you to access the resources below.
 
 **Non-Analyst Team Members**
 * You can access any of the tools below as well!
-* If you need help with access, use the information at the bottom of this page to [get help](get-help).
+
+**If you still need help with access**, use the information at the bottom of this page to [get help](get-help).
 :::
 
 **Meetings to Expect - Analysts:**
