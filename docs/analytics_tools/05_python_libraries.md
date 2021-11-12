@@ -12,11 +12,11 @@ kernelspec:
   language: python
   name: python3
 ---
-
-<<<<<<< HEAD:docs/analytics_tools/05_python_libraries.md
 # Python Libraries (WIP)
 The following libraries are available and recommended for use by Cal-ITP data analysts.
-## calitp
+(calitp)=
+## cal-itp
+(siuba)=
 ## siuba
 Siuba is a tool that allows the same analysis code to run on a pandas DataFrame,
 as well as generate SQL for different databases.
