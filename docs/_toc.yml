@@ -11,6 +11,7 @@ parts:
         - file: analytics_welcome/01_what_is_calitp
         - file: analytics_welcome/02_about_our_team
         - file: analytics_welcome/03_how_we_work
+        - file: analytics_welcome/test_page
       - file: analytics_onboarding/overview
       - file: analytics_tools/overview
         sections:
