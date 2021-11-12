@@ -1,5 +1,4 @@
 # Saving Code (WIP)
-## Pushing in Github - Drag and Drop
-## Pushing from JupyterLab
-See JupyterLab section above
+## Pushing in GitHub - Drag and Drop
+## Pushing from JupyterHub
 ## Pushing from the Command Line

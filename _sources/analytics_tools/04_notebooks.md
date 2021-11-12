@@ -1,22 +1,24 @@
-# Notebooks (WIP)
+# Notebooks
+(jupyterhub)=
 ## Introduction to JupyterHub
-For Python users, we have deployed a cloud-based instance of JupyterLab to creating, using, and sharing notebooks easy. This avoids the need to set up a local environment, provides dedicated storage, and allows you to push to Github.
-Make sure you're set-up with JupyterLab here
-Quick link - JupyterLab
-See pushing from JupyterLab below
+For Python users, we have deployed a cloud-based instance of JupyterHub to creating, using, and sharing notebooks easy.
+
+This avoids the need to set up a local environment, provides dedicated storage, and allows you to push to GitHub.
+
+Make sure you have access to JupyterHub [here](https://hubtest.k8s.calitp.jarv.us/).
 
 ## Using JupyterHub
 Jupyterhub is a web application that allows users to analyze and create reports on warehouse data (or a number of data sources).
 
 Analyses on jupyterhub are done using notebooks, which allow users to mix narrative with analysis code.
 
-### Logging in to Jupyterhub
+### Logging in to JupyterHub
 
-Jupyterhub currently lives at https://hubtest.k8s.calitp.jarv.us/hub/. In order to be added to the Cal-ITP Jupyterhub, please [open an issue using this link](https://github.com/cal-itp/data-infra/issues/new?assignees=charlie-costanzo&labels=new+team+member&template=new-team-member.md&title=New+Team+Member+-+%5BName%5D).
+JupyterHub currently lives at https://hubtest.k8s.calitp.jarv.us/hub/. In order to be added to the Cal-ITP JupyterHub, please [open an issue using this link](https://github.com/cal-itp/data-infra/issues/new?assignees=charlie-costanzo&labels=new+team+member&template=new-team-member.md&title=New+Team+Member+-+%5BName%5D).
 
 ### Connecting to the Warehouse
 
-Connecting to the warehouse requires a bit of setup after logging in to Jupyterhub.
+Connecting to the warehouse requires a bit of setup after logging in to JupyterHub.
 Users need to download and install the gcloud commandline tool from the app.
 
 ```python
@@ -50,7 +52,7 @@ These are demonstrated in the screencast below.
 
 #### Uploading data from a notebook
 
-The code below shows how to copy a file from jupyterhub to the data bucket.
+The code below shows how to copy a file from JupyterHub to the data bucket.
 Be sure to replace `<FILE NAME>` and `<ANALYSIS FOLDER>` with the appropriate names.
 
 ```python
@@ -82,4 +84,5 @@ gdf.to_parquet("gs://calitp-analytics-data/data-analyses/<ANALYSIS FOLDER>/<FILE
 #### Uploading from google cloud storage
 
 You can access the cloud bucket from the web from https://console.cloud.google.com/storage/browser/calitp-analytics-data.
+
 See the above screencast for a walkthrough of using the bucket.

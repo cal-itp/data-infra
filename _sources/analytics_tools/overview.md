@@ -1,11 +1,15 @@
 # Introduction to Analytics Tools (WIP)
-Congratulations, you're ready to start your analyses! Use the section below to walk thrugh the various stages of conducting work as an analyst.
+Congratulations, you're ready to start your analyses!
 
-Before getting started, see the prerequisites *here*
+Use the sections below to walk through the various stages of conducting an analysis.
+
+Before getting started, see the full list of our tools [here](technical-onboarding).
 
 After reading this section, you should be able to:
 * x
 * y
 * z
 
-<a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">If you're still having access issues or would like a 1:1 walkthrough of these tools use this link to DM Charlie on Slack anytime!</a>
+```{admonition} Still need access to a tool in this section?
+DM Charlie <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">on Cal-ITP Slack using this link</a>, or <a href="mailto: charlie.c@jarv.us?subject=Cal-ITP Access Issues&body=I need access to:" target="_blank">by email</a>.
+```
