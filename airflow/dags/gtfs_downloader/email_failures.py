@@ -29,11 +29,11 @@ The following agency GTFS feeds could not be extracted on {ds}:
 
     send_email(
         to=[
-            "ruth.miller@dot.ca.gov",
             "hunter.owens@dot.ca.gov",
             "michael.c@jarv.us",
             "juliet@trilliumtransit.com",
             "aaron@trilliumtransit.com",
+            "evan.siroky@dot.ca.gov",
         ],
         html_content=html_content,
         subject=(
