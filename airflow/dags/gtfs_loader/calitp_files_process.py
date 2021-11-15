@@ -11,26 +11,23 @@ Process and dump files for gtfs_schedule_history.calitp_files external table.
 This is for the files downloaded for an agency, as well as validator results.
 """
 
-from calitp import read_gcfs, save_to_gcfs
+import pandas as pd
+
+from calitp import save_to_gcfs
 from calitp.config import get_bucket
 from calitp.storage import get_fs
 
-import pandas as pd
+from utils import get_successfully_downloaded_feeds
 
 
 def main(execution_date, **kwargs):
-    # TODO: remove hard-coded project string
     fs = get_fs()
-
     bucket = get_bucket()
 
-    f = read_gcfs(f"schedule/{execution_date}/status.csv")
-    status = pd.read_csv(f)
-
-    success = status[lambda d: d.status == "success"]
+    successes = get_successfully_downloaded_feeds(execution_date)
 
     gtfs_file = []
-    for ii, row in success.iterrows():
+    for ii, row in successes.iterrows():
         agency_folder = f"{row.itp_id}_{row.url_number}"
         agency_url = f"{bucket}/schedule/{execution_date}/{agency_folder}"
 
