@@ -1,7 +1,7 @@
 import pandas as pd
 
-from pandas.errors import EmptyDataError
 from calitp import read_gcfs, save_to_gcfs
+from pandas.errors import EmptyDataError
 
 
 def _keep_columns(
@@ -11,7 +11,7 @@ def _keep_columns(
     itp_id=None,
     url_number=None,
     extracted_at=None,
-    **kwargs
+    **kwargs,
 ):
 
     # read csv using object dtype, so pandas does not coerce data
@@ -48,3 +48,13 @@ def _keep_columns(
     csv_result = df_select.to_csv(index=False).encode()
 
     save_to_gcfs(csv_result, dst_path, use_pipe=True)
+
+
+def get_successfully_downloaded_feeds(execution_date):
+    """Get a list of feeds that were successfully downloaded (as noted in a
+    `schedule/{execution_date}/status.csv/` file) for a given execution date.
+    """
+    f = read_gcfs(f"schedule/{execution_date}/status.csv")
+    status = pd.read_csv(f)
+
+    return status[lambda d: d.status == "success"]

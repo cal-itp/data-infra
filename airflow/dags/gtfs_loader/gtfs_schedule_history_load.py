@@ -3,21 +3,16 @@
 # provide_context: true
 # dependencies:
 #   - calitp_feed_updates
-#   - validation_report_process
 # ---
 
 import pandas as pd
 
+from calitp import get_table
 from calitp.config import get_bucket
 from calitp.storage import get_fs
-from calitp import get_table
-from utils import _keep_columns
 
-# Note that destination includes date in the folder name, so that we can use
-# a single wildcard to in the external table source url
-SRC_DIR = "schedule/{execution_date}/{itp_id}_{url_number}"
-DST_DIR = "schedule/processed/{date_string}_{itp_id}_{url_number}"
-VALIDATION_REPORT = "validation_report.json"
+import constants
+from utils import _keep_columns
 
 DATASET = "gtfs_schedule_history"
 
@@ -45,42 +40,29 @@ def main(execution_date, ti, **kwargs):
         .convert_dtypes()
     )
 
+    table_details = zip(tables.file_name, tables.is_required, schemas)
+    fs = get_fs()
+    bucket = get_bucket()
+
     # load new feeds ----
     print(f"Number of feeds being loaded: {df_latest_updates.shape[0]}")
 
     ttl_feeds_copied = 0
     for k, row in df_latest_updates.iterrows():
-
-        src_dir = SRC_DIR.format(execution_date=execution_date, **row)
-        dst_dir = DST_DIR.format(date_string=date_string, **row)
-
-        # only handle today's updated data (backfill dag to run all) ----
-
-        # if fs.exists(f"{bucket}/dst_dir)
-        #    continue
-
-        # copy processed validator results ----
-        fs = get_fs()
-        bucket = get_bucket()
-
-        src_validator = f"{bucket}/{src_dir}/processed/{VALIDATION_REPORT}"
-        dst_validator = f"{bucket}/{dst_dir}/{VALIDATION_REPORT}"
-
-        print(f"Copying from {src_validator} to {dst_validator}")
-
-        fs.copy(src_validator, dst_validator)
-
         # process and copy over tables into external table folder ----
-        table_details = zip(tables.file_name, tables.is_required, schemas)
         for table_file, is_required, colnames in table_details:
-            # validation report handled above, since it is in a subfolder.
-            # this is a side-effect of it technically not being an extraction,
-            # and we might want to re-create it (and put results in "processed")
-            if table_file == VALIDATION_REPORT:
+            # validation report handled in a separate task, since it is in a subfolder
+            # and should be ran separately in case the feed is unparseable.
+            if table_file == constants.VALIDATION_REPORT:
                 continue
 
-            src_path = f"{src_dir}/{table_file}"
-            dst_path = f"{dst_dir}/{table_file}"
+            id_and_url = f"{row['itp_id']}_{row['url_number']}"
+            src_path = "/".join(
+                ["schedule", str(execution_date), id_and_url, table_file]
+            )
+            dst_path = "/".join(
+                ["schedule", "processed", f"{date_string}_{id_and_url}", table_file]
+            )
 
             print(f"Copying from {src_path} to {dst_path}")
 
