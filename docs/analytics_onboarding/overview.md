@@ -19,10 +19,10 @@ Below you can find links to the resources themselves, as well as relevant suppor
 **Meetings to Expect - Analysts:**
 Look out for these meetings to be added to your calendar.
 
-- [ ]  Week 1:  Analytics Introduction + Technical Onboarding ([Docs](week-one-meeting))
-- [ ]  Weekly Data Services All-Hands ([Docs](weekly-data-services))
-- [ ]  Daily Stand-Ups ([Docs](daily-stand-ups))
-- [ ]  Lunch & Learn | ([Docs](lunch-and-learn))
+- [ ]  Week 1:  Analytics Introduction + Technical Onboarding ([Docs](meetings))
+- [ ]  Weekly Data Services All-Hands ([Docs](meetings))
+- [ ]  Daily Stand-Ups ([Docs](meetings))
+- [ ]  Lunch & Learn | ([Docs](meetings))
 
 **Collaboration Tools:**
 
