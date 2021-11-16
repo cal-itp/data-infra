@@ -507,7 +507,10 @@
 
     <div class="dropdown-buttons">
         <!-- ipynb file if we had a myst markdown file -->
-        
+        <a class="dropdown-buttons"
+            href="../_sources/analytics_examples/02_sql_snippets.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
         <!-- Download raw file -->
         <a class="dropdown-buttons" href="../_sources/analytics_examples/02_sql_snippets.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
@@ -546,6 +549,23 @@
             class="fas fa-expand"></i></button></a>
 
             <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/cal-itp/data-infra/main?urlpath=tree/docs/analytics_examples/02_sql_snippets.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
 
         </div>
 
@@ -599,12 +619,243 @@ a <code class="docutils literal notranslate"><span class="pre">calitp_extracted_
 </div>
 <div class="section" id="a-single-date">
 <h2>A single date<a class="headerlink" href="#a-single-date" title="Permalink to this headline">¶</a></h2>
+<div class="cell tag_remove-input docutils container">
+</div>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
 <div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span>
 <span class="k">FROM</span> <span class="o">`</span><span class="n">gtfs_schedule_type2</span><span class="p">.</span><span class="n">feed_info</span><span class="o">`</span>
 <span class="k">WHERE</span>
     <span class="n">calitp_extracted_at</span> <span class="o">&gt;=</span> <span class="ss">&quot;2021-06-01&quot;</span>
-    <span class="k">AND</span> <span class="k">COALESCE</span><span class="p">(</span><span class="n">calitp_deleted_at</span><span class="p">,</span> <span class="ss">&quot;2099-01-01&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="ss">&quot;2021-06-01&quot;</span>
+    <span class="k">AND</span> <span class="k">COALESCE</span><span class="p">(</span><span class="n">calitp_deleted_at</span><span class="p">,</span> <span class="ss">&quot;2099-01-01&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="ss">&quot;2021-06-01&quot;</span>
 </pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>calitp_itp_id</th>
+      <th>calitp_url_number</th>
+      <th>feed_publisher_name</th>
+      <th>feed_publisher_url</th>
+      <th>feed_lang</th>
+      <th>default_lang</th>
+      <th>feed_start_date</th>
+      <th>feed_end_date</th>
+      <th>feed_version</th>
+      <th>feed_contact_email</th>
+      <th>feed_contact_url</th>
+      <th>calitp_extracted_at</th>
+      <th>calitp_deleted_at</th>
+      <th>calitp_hash</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>200</td>
+      <td>0</td>
+      <td>511 SF Bay</td>
+      <td>https://511.org/open-data/transit</td>
+      <td>en</td>
+      <td>None</td>
+      <td>20210829</td>
+      <td>20220101</td>
+      <td>20210828</td>
+      <td>None</td>
+      <td>None</td>
+      <td>2021-08-29</td>
+      <td>2021-09-13</td>
+      <td>UdQt0KWgXlYvMPYgJwF6HQ==</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>108</td>
+      <td>0</td>
+      <td>Trillium Solutions, Inc.</td>
+      <td>http://www.trilliumtransit.com</td>
+      <td>en</td>
+      <td>None</td>
+      <td>20210909</td>
+      <td>20220701</td>
+      <td>UTC: 09-Sep-2021 19:45</td>
+      <td>support+test+humboldtcounty-ca-us@trilliumtran...</td>
+      <td>http://support.trilliumtransit.com</td>
+      <td>2021-09-09</td>
+      <td>2021-09-13</td>
+      <td>AS9JK2VI09QWpc9MKCwL7w==</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>135</td>
+      <td>0</td>
+      <td>Trillium Solutions, Inc.</td>
+      <td>http://www.trilliumtransit.com</td>
+      <td>en</td>
+      <td>None</td>
+      <td>20210909</td>
+      <td>20220701</td>
+      <td>UTC: 09-Sep-2021 19:45</td>
+      <td>support+test+humboldtcounty-ca-us@trilliumtran...</td>
+      <td>http://support.trilliumtransit.com</td>
+      <td>2021-09-09</td>
+      <td>2021-09-13</td>
+      <td>6ALSwmDgitkbDzWbxQ0Qww==</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>42</td>
+      <td>0</td>
+      <td>Trillium Solutions, Inc.</td>
+      <td>http://www.trilliumtransit.com</td>
+      <td>en</td>
+      <td>None</td>
+      <td>20210909</td>
+      <td>20220701</td>
+      <td>UTC: 09-Sep-2021 19:45</td>
+      <td>support+test+humboldtcounty-ca-us@trilliumtran...</td>
+      <td>http://support.trilliumtransit.com</td>
+      <td>2021-09-09</td>
+      <td>2021-09-13</td>
+      <td>vlaYTVImTjaV3Nr0Aatkeg==</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>18</td>
+      <td>0</td>
+      <td>Trillium Solutions, Inc.</td>
+      <td>http://www.trilliumtransit.com</td>
+      <td>en</td>
+      <td>None</td>
+      <td>20210909</td>
+      <td>20220701</td>
+      <td>UTC: 09-Sep-2021 19:45</td>
+      <td>support+test+humboldtcounty-ca-us@trilliumtran...</td>
+      <td>http://support.trilliumtransit.com</td>
+      <td>2021-09-09</td>
+      <td>2021-09-13</td>
+      <td>ddtlovwoER2lcB5+ndaUIg==</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>653</th>
+      <td>218</td>
+      <td>0</td>
+      <td>Trillium Solutions, Inc.</td>
+      <td>http://www.trilliumtransit.com</td>
+      <td>en</td>
+      <td>None</td>
+      <td>20210820</td>
+      <td>20220601</td>
+      <td>UTC: 20-Aug-2021 20:26</td>
+      <td>support+test+vinetransit-ca-us@trilliumtransit...</td>
+      <td>http://support.trilliumtransit.com</td>
+      <td>2021-08-20</td>
+      <td>2021-11-03</td>
+      <td>cWL48eRINEOFPTuVA8Eb+A==</td>
+    </tr>
+    <tr>
+      <th>654</th>
+      <td>23</td>
+      <td>0</td>
+      <td>Trillium Solutions, Inc.</td>
+      <td>http://www.trilliumtransit.com</td>
+      <td>en</td>
+      <td>None</td>
+      <td>20211007</td>
+      <td>20221001</td>
+      <td>UTC: 07-Oct-2021 21:23</td>
+      <td>support+test+auburntransit-ca-us@trilliumtrans...</td>
+      <td>http://support.trilliumtransit.com</td>
+      <td>2021-10-07</td>
+      <td>2021-11-03</td>
+      <td>671nnZsjUDsfXMlxpblxuQ==</td>
+    </tr>
+    <tr>
+      <th>655</th>
+      <td>278</td>
+      <td>0</td>
+      <td>MTS</td>
+      <td>http://www.sdmts.com</td>
+      <td>EN</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>v1 - Sept 5. 2021 svc change merged file</td>
+      <td>None</td>
+      <td>None</td>
+      <td>2021-08-23</td>
+      <td>2021-08-28</td>
+      <td>RdEZ6rQsk2F36zca38stOA==</td>
+    </tr>
+    <tr>
+      <th>656</th>
+      <td>200</td>
+      <td>0</td>
+      <td>511 SF Bay</td>
+      <td>https://511.org/open-data/transit</td>
+      <td>en</td>
+      <td>None</td>
+      <td>20210614</td>
+      <td>20210911</td>
+      <td>20210812</td>
+      <td>None</td>
+      <td>None</td>
+      <td>2021-08-13</td>
+      <td>2021-08-28</td>
+      <td>IwFAPEtcEwZhlexkQ4v2ng==</td>
+    </tr>
+    <tr>
+      <th>657</th>
+      <td>200</td>
+      <td>0</td>
+      <td>511 SF Bay</td>
+      <td>https://511.org/open-data/transit</td>
+      <td>en</td>
+      <td>None</td>
+      <td>20210614</td>
+      <td>20211010</td>
+      <td>20210806</td>
+      <td>None</td>
+      <td>None</td>
+      <td>2021-08-07</td>
+      <td>2021-08-28</td>
+      <td>NzmQixF96iqrMyFmQRr4zA==</td>
+    </tr>
+  </tbody>
+</table>
+<p>658 rows × 14 columns</p>
+</div></div></div>
 </div>
 <p>Note that <code class="docutils literal notranslate"><span class="pre">COALESCE</span></code> lets us fill in NULL deleted at values to be far in the future.
 This is used because when deleted at is missing, it reflects the most recent data
@@ -615,14 +866,327 @@ so it evaluates to <code class="docutils literal notranslate"><span class="pre">
 <div class="section" id="multiple-dates">
 <h2>Multiple dates<a class="headerlink" href="#multiple-dates" title="Permalink to this headline">¶</a></h2>
 <p>In order to do it for a range of dates, you can use a JOIN. This is shown below.</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
 <div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span>
 <span class="k">FROM</span> <span class="o">`</span><span class="n">gtfs_schedule_type2</span><span class="p">.</span><span class="n">feed_info</span><span class="o">`</span> <span class="n">FI</span>
 <span class="k">JOIN</span> <span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">dim_date</span><span class="o">`</span> <span class="n">D</span>
     <span class="k">ON</span> <span class="n">FI</span><span class="p">.</span><span class="n">calitp_extracted_at</span> <span class="o">&lt;=</span> <span class="n">D</span><span class="p">.</span><span class="n">full_date</span>
         <span class="k">AND</span> <span class="k">COALESCE</span><span class="p">(</span><span class="n">FI</span><span class="p">.</span><span class="n">calitp_deleted_at</span><span class="p">,</span> <span class="ss">&quot;2099-01-01&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">D</span><span class="p">.</span><span class="n">full_date</span>
 <span class="k">WHERE</span>
-    <span class="n">D</span><span class="p">.</span><span class="n">full_date</span> <span class="k">BETWEEN</span> <span class="p">(</span><span class="ss">&quot;2021-06-01&quot;</span><span class="p">,</span> <span class="ss">&quot;2021-06-07&quot;</span><span class="p">)</span>
+    <span class="n">D</span><span class="p">.</span><span class="n">full_date</span> <span class="k">BETWEEN</span> <span class="ss">&quot;2021-06-01&quot;</span> <span class="k">AND</span> <span class="ss">&quot;2021-06-07&quot;</span>
 </pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>calitp_itp_id</th>
+      <th>calitp_url_number</th>
+      <th>feed_publisher_name</th>
+      <th>feed_publisher_url</th>
+      <th>feed_lang</th>
+      <th>default_lang</th>
+      <th>feed_start_date</th>
+      <th>feed_end_date</th>
+      <th>feed_version</th>
+      <th>feed_contact_email</th>
+      <th>...</th>
+      <th>month_name</th>
+      <th>week_day</th>
+      <th>day_name</th>
+      <th>day_is_weekday</th>
+      <th>is_quarter_start</th>
+      <th>is_month_start</th>
+      <th>is_in_past</th>
+      <th>is_in_past_or_present</th>
+      <th>is_in_future</th>
+      <th>is_gtfs_schedule_range</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>337</td>
+      <td>0</td>
+      <td>Trillium Solutions, Inc.</td>
+      <td>http://www.trilliumtransit.com</td>
+      <td>en</td>
+      <td>None</td>
+      <td>20201214</td>
+      <td>20210701</td>
+      <td>UTC: 15-Dec-2020 00:41</td>
+      <td>support+test+thousandoaks-ca-us@trilliumtransi...</td>
+      <td>...</td>
+      <td>June</td>
+      <td>0</td>
+      <td>Sunday</td>
+      <td>0</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>337</td>
+      <td>0</td>
+      <td>Trillium Solutions, Inc.</td>
+      <td>http://www.trilliumtransit.com</td>
+      <td>en</td>
+      <td>None</td>
+      <td>20201214</td>
+      <td>20210701</td>
+      <td>UTC: 15-Dec-2020 00:41</td>
+      <td>support+test+thousandoaks-ca-us@trilliumtransi...</td>
+      <td>...</td>
+      <td>June</td>
+      <td>1</td>
+      <td>Monday</td>
+      <td>1</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>337</td>
+      <td>0</td>
+      <td>Trillium Solutions, Inc.</td>
+      <td>http://www.trilliumtransit.com</td>
+      <td>en</td>
+      <td>None</td>
+      <td>20201214</td>
+      <td>20210701</td>
+      <td>UTC: 15-Dec-2020 00:41</td>
+      <td>support+test+thousandoaks-ca-us@trilliumtransi...</td>
+      <td>...</td>
+      <td>June</td>
+      <td>2</td>
+      <td>Tuesday</td>
+      <td>1</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>337</td>
+      <td>0</td>
+      <td>Trillium Solutions, Inc.</td>
+      <td>http://www.trilliumtransit.com</td>
+      <td>en</td>
+      <td>None</td>
+      <td>20201214</td>
+      <td>20210701</td>
+      <td>UTC: 15-Dec-2020 00:41</td>
+      <td>support+test+thousandoaks-ca-us@trilliumtransi...</td>
+      <td>...</td>
+      <td>June</td>
+      <td>4</td>
+      <td>Thursday</td>
+      <td>1</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>337</td>
+      <td>0</td>
+      <td>Trillium Solutions, Inc.</td>
+      <td>http://www.trilliumtransit.com</td>
+      <td>en</td>
+      <td>None</td>
+      <td>20201214</td>
+      <td>20210701</td>
+      <td>UTC: 15-Dec-2020 00:41</td>
+      <td>support+test+thousandoaks-ca-us@trilliumtransi...</td>
+      <td>...</td>
+      <td>June</td>
+      <td>6</td>
+      <td>Saturday</td>
+      <td>0</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>1304</th>
+      <td>42</td>
+      <td>0</td>
+      <td>Trillium Solutions, Inc.</td>
+      <td>http://www.trilliumtransit.com</td>
+      <td>en</td>
+      <td>None</td>
+      <td>20210308</td>
+      <td>20210630</td>
+      <td>UTC: 09-Mar-2021 00:34</td>
+      <td>support+test+humboldtcounty-ca-us@trilliumtran...</td>
+      <td>...</td>
+      <td>June</td>
+      <td>2</td>
+      <td>Tuesday</td>
+      <td>1</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>True</td>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>1305</th>
+      <td>42</td>
+      <td>0</td>
+      <td>Trillium Solutions, Inc.</td>
+      <td>http://www.trilliumtransit.com</td>
+      <td>en</td>
+      <td>None</td>
+      <td>20210308</td>
+      <td>20210630</td>
+      <td>UTC: 09-Mar-2021 00:34</td>
+      <td>support+test+humboldtcounty-ca-us@trilliumtran...</td>
+      <td>...</td>
+      <td>June</td>
+      <td>4</td>
+      <td>Thursday</td>
+      <td>1</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>1306</th>
+      <td>42</td>
+      <td>0</td>
+      <td>Trillium Solutions, Inc.</td>
+      <td>http://www.trilliumtransit.com</td>
+      <td>en</td>
+      <td>None</td>
+      <td>20210308</td>
+      <td>20210630</td>
+      <td>UTC: 09-Mar-2021 00:34</td>
+      <td>support+test+humboldtcounty-ca-us@trilliumtran...</td>
+      <td>...</td>
+      <td>June</td>
+      <td>6</td>
+      <td>Saturday</td>
+      <td>0</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>1307</th>
+      <td>42</td>
+      <td>0</td>
+      <td>Trillium Solutions, Inc.</td>
+      <td>http://www.trilliumtransit.com</td>
+      <td>en</td>
+      <td>None</td>
+      <td>20210308</td>
+      <td>20210630</td>
+      <td>UTC: 09-Mar-2021 00:34</td>
+      <td>support+test+humboldtcounty-ca-us@trilliumtran...</td>
+      <td>...</td>
+      <td>June</td>
+      <td>3</td>
+      <td>Wednesday</td>
+      <td>1</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>1308</th>
+      <td>42</td>
+      <td>0</td>
+      <td>Trillium Solutions, Inc.</td>
+      <td>http://www.trilliumtransit.com</td>
+      <td>en</td>
+      <td>None</td>
+      <td>20210308</td>
+      <td>20210630</td>
+      <td>UTC: 09-Mar-2021 00:34</td>
+      <td>support+test+humboldtcounty-ca-us@trilliumtran...</td>
+      <td>...</td>
+      <td>June</td>
+      <td>5</td>
+      <td>Friday</td>
+      <td>1</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>True</td>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+  </tbody>
+</table>
+<p>1309 rows × 32 columns</p>
+</div></div></div>
 </div>
 </div>
 </div>
