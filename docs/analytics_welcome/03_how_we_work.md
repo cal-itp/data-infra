@@ -3,12 +3,12 @@
 ## Meetings
 
 (meetings)=
-| meeting | cadence | description |
+| Meeting | Cadence | Description |
 | -------- | -------- | -------- |
-| Analytics Introduction + Technical Onboarding | Once | Ensure access to tools, go over best practices. Week one, one hour. |
-| Data Services All-Hands | Recurring | Team-wide data services sync. Every Monday, 1 hour. |
-| Analyst Stand-ups | Recurring | A short sync to share yesterdays work, today's work, and any blockers. Tuesday - Friday, 15 minutes. |
-| Lunch & Learn | Recurring | An opportunity to ask questions and share information with the team. Weekly, TBD. |
+| Analytics Introduction & Technical Onboarding | Once <br/> Week one, one hour | To ensure access to tools and go over best practices. |
+| Data Services All-Hands | Recurring <br/> Every Monday, 1 hour | A team-wide data services sync. |
+| Analyst Stand-ups | Recurring <br/> Tuesday - Friday, 15 minutes | A short sync to share yesterdays work, today's work, and any blockers. |
+| Lunch & Learn | Recurring <br/> Weekly, TBD | An opportunity to ask questions and share information with the team. |
 
 ### Meeting Standards
 
@@ -19,11 +19,11 @@
 (slack-intro)=
 ## Communication Channels
 
-| channel | purpose | description |
+| Channel | Purpose | Description |
 | -------- | -------- | -------- |
 | #data-analysis | Discussion | For sharing and collaborating on Cal-ITP data analyses. |
 | #data-office-hours | Discussion | A place to bring questions, issues, and observations for team discussion. |
-| #data-analysis-notify | Repo Notifications | A notifications channel for updates to the data-analyses repo. |
+| #data-analysis-notify | Notifications | A notifications channel for updates to the data-analyses repo. |
 
 ## Collaboration Tools
 
