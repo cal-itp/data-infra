@@ -114,7 +114,7 @@ def main(execution_date, ti, **kwargs):
 
         print("total feeds copied:", ttl_feeds_copied)
 
-    # save feed and feed table process results
+    # save feed and feed table process results to external tables
     save_to_gcfs(
         pd.DataFrame(feed_process_resuls).to_csv(index=False).encode(),
         f"schedule/{execution_date}/processed/feed_parse_result.csv",
