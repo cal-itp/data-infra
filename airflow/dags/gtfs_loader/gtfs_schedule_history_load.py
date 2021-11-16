@@ -6,10 +6,10 @@
 # ---
 
 import pandas as pd
-
 from calitp import get_table, save_to_gcfs
 from calitp.config import get_bucket
 from calitp.storage import get_fs
+from pandas.errors import ParserError
 
 import constants
 from utils import _keep_columns
@@ -75,19 +75,22 @@ def main(execution_date, ti, **kwargs):
             if not is_required and not fs.exists(f"{bucket}/{src_path}"):
                 print(f"Skipping missing optional file: {src_path}")
             else:
-                parse_error_encountered = _keep_columns(
-                    src_path,
-                    dst_path,
-                    colnames,
-                    row["itp_id"],
-                    row["url_number"],
-                    date_string,
-                )
-                if parse_error_encountered:
+                parse_error_encountered = False
+                try:
+                    _keep_columns(
+                        src_path,
+                        dst_path,
+                        colnames,
+                        row["itp_id"],
+                        row["url_number"],
+                        date_string,
+                    )
+                except ParserError:
                     print(
                         f"Fatal parsing error encountered in {table_file} for id and "
                         "URL: {id_and_url}."
                     )
+                    parse_error_encountered = True
                     parse_error_encountered_in_this_feed = True
 
                 feed_tables_process_results.append(

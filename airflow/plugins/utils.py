@@ -1,7 +1,7 @@
 import pandas as pd
 
 from calitp import read_gcfs, save_to_gcfs
-from pandas.errors import EmptyDataError, ParserError
+from pandas.errors import EmptyDataError
 
 
 def _keep_columns(
@@ -26,24 +26,21 @@ def _keep_columns(
         extracted_at (string, optional): date string of extraction time. Defaults to
             None.
 
-    Returns:
-        bool: True if a ParserError was encountered when parsing the input CSV file.
+    Raises:
+        pandas.errors.ParserError: Can be thrown when the given input file is not a
+            valid CSV file. Ex: a single row could have too many columns.
     """
 
-    parse_error_occurred = False
-
-    # read csv using object dtype, so pandas does not coerce data
+    # Read csv using object dtype, so pandas does not coerce data.
+    # The following line of code inside the try block can throw a
+    # pandas.errors.ParserError, but the responsibility to catch this error is assumed
+    # to be implemented in the code that calls this method.
     try:
         df = pd.read_csv(read_gcfs(src_path), dtype="object", **kwargs)
     except EmptyDataError:
         # in the rare case of a totally empty data file, create a DataFrame
         # with no rows, and the target columns
         df = pd.DataFrame({k: [] for k in colnames})
-    except ParserError:
-        # In cases with a ParserError, create an DataFrame with no rows. Also, note that
-        # there was a fatal error when parsing the error.
-        df = pd.DataFrame({k: [] for k in colnames})
-        parse_error_occurred = True
 
     if itp_id is not None:
         df["calitp_itp_id"] = itp_id
@@ -71,8 +68,6 @@ def _keep_columns(
     csv_result = df_select.to_csv(index=False).encode()
 
     save_to_gcfs(csv_result, dst_path, use_pipe=True)
-
-    return parse_error_occurred
 
 
 def get_successfully_downloaded_feeds(execution_date):
