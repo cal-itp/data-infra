@@ -1,11 +1,11 @@
 (technical-onboarding)=
 # Technical Onboarding (WIP)
-:::{admonition} How to use this page
-:class: tip
 This page serves as a beginning entry-point into our Cal-ITP analytics resources for both new analysts and non-analyst team members.
 
 Below you can find links to the resources themselves, as well as relevant support documents.
 
+:::{admonition} How to use this page
+:class: tip
 **Analysts**
 * See below for an introduction to team meetings as well as our collaboration and analysis tools.
 * Privileges have already been created for you to access the resources below.
@@ -17,9 +17,11 @@ Below you can find links to the resources themselves, as well as relevant suppor
 :::
 
 **Meetings to Expect - Analysts:**
-Look out for these meetings to be added to your calendar. More information on them can be found [in the 'How We Work' section](meetings).
+Look out for these meetings to be added to your calendar.
 
-- [ ]  Week 1:  Analytics Introduction + Technical Onboarding
+More information on them can be found in the  ['How We Work' section](meetings).
+
+- [ ]  Week One:  Analytics Introduction + Technical Onboarding
 - [ ]  Weekly Data Services All-Hands
 - [ ]  Daily Stand-Ups
 - [ ]  Lunch & Learn
