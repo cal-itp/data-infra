@@ -11,7 +11,7 @@ Below you can find links to the resources themselves, as well as relevant suppor
 * Privileges have already been created for you to access the resources below.
 
 **Non-Analyst Team Members**
-* You can access any of the tools below as well!
+* Any of the tools below are available to you as well!
 
 **If you still need help with access**, use the information at the bottom of this page to [get help](get-help).
 :::
