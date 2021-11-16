@@ -7,7 +7,7 @@
 
 import pandas as pd
 
-from calitp import get_table
+from calitp import get_table, save_to_gcfs
 from calitp.config import get_bucket
 from calitp.storage import get_fs
 
@@ -48,7 +48,14 @@ def main(execution_date, ti, **kwargs):
     print(f"Number of feeds being loaded: {df_latest_updates.shape[0]}")
 
     ttl_feeds_copied = 0
+    feed_tables_process_results = []
+    feed_process_resuls = []
     for k, row in df_latest_updates.iterrows():
+        # initialize variable to track whether a parsing error occurred and which tables
+        # were loaded so far
+        parse_error_encountered_in_this_feed = False
+        id_and_url = f"{row['itp_id']}_{row['url_number']}"
+
         # process and copy over tables into external table folder ----
         for table_file, is_required, colnames in table_details:
             # validation report handled in a separate task, since it is in a subfolder
@@ -56,7 +63,6 @@ def main(execution_date, ti, **kwargs):
             if table_file == constants.VALIDATION_REPORT:
                 continue
 
-            id_and_url = f"{row['itp_id']}_{row['url_number']}"
             src_path = "/".join(
                 ["schedule", str(execution_date), id_and_url, table_file]
             )
@@ -69,7 +75,7 @@ def main(execution_date, ti, **kwargs):
             if not is_required and not fs.exists(f"{bucket}/{src_path}"):
                 print(f"Skipping missing optional file: {src_path}")
             else:
-                _keep_columns(
+                parse_error_encountered = _keep_columns(
                     src_path,
                     dst_path,
                     colnames,
@@ -77,7 +83,45 @@ def main(execution_date, ti, **kwargs):
                     row["url_number"],
                     date_string,
                 )
+                if parse_error_encountered:
+                    print(
+                        f"Fatal parsing error encountered in {table_file} for id and "
+                        "URL: {id_and_url}."
+                    )
+                    parse_error_encountered_in_this_feed = True
+
+                feed_tables_process_results.append(
+                    {
+                        "calitp_itp_id": row["itp_id"],
+                        "calitp_url_number": row["url_number"],
+                        "calitp_extracted_at": execution_date.to_date_string(),
+                        "filename": table_file,
+                        "parse_error_encountered": parse_error_encountered,
+                    }
+                )
+
+        # note the parse result for this feed
+        feed_process_resuls.append(
+            {
+                "calitp_itp_id": row["itp_id"],
+                "calitp_url_number": row["url_number"],
+                "calitp_extracted_at": execution_date.to_date_string(),
+                "parse_error_encountered": parse_error_encountered_in_this_feed,
+            }
+        )
 
         ttl_feeds_copied += 1
 
         print("total feeds copied:", ttl_feeds_copied)
+
+    # save feed and feed table process results
+    save_to_gcfs(
+        pd.DataFrame(feed_process_resuls).to_csv(index=False).encode(),
+        f"schedule/{execution_date}/processed/feed_parse_result.csv",
+        use_pipe=True,
+    )
+    save_to_gcfs(
+        pd.DataFrame(feed_tables_process_results).to_csv(index=False).encode(),
+        f"schedule/{execution_date}/processed/feed_tables_parse_result.csv",
+        use_pipe=True,
+    )

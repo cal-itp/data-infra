@@ -1,7 +1,7 @@
 import pandas as pd
 
 from calitp import read_gcfs, save_to_gcfs
-from pandas.errors import EmptyDataError
+from pandas.errors import EmptyDataError, ParserError
 
 
 def _keep_columns(
@@ -13,6 +13,24 @@ def _keep_columns(
     extracted_at=None,
     **kwargs,
 ):
+    """Save a CSV file with only the needed columns for a particular table.
+
+    Args:
+        src_path (string): Location of the input CSV file
+        dst_path (string): Location of the output CSV file
+        colnames (list): List of the colnames that should be included in output CSV
+            file.
+        itp_id (string, optional): itp_id to use when saving record. Defaults to None.
+        url_number (string, optional): url_number to use when saving record. Defaults to
+            None.
+        extracted_at (string, optional): date string of extraction time. Defaults to
+            None.
+
+    Returns:
+        bool: True if a ParserError was encountered when parsing the input CSV file.
+    """
+
+    parse_error_occurred = False
 
     # read csv using object dtype, so pandas does not coerce data
     try:
@@ -21,6 +39,11 @@ def _keep_columns(
         # in the rare case of a totally empty data file, create a DataFrame
         # with no rows, and the target columns
         df = pd.DataFrame({k: [] for k in colnames})
+    except ParserError:
+        # In cases with a ParserError, create an DataFrame with no rows. Also, note that
+        # there was a fatal error when parsing the error.
+        df = pd.DataFrame({k: [] for k in colnames})
+        parse_error_occurred = True
 
     if itp_id is not None:
         df["calitp_itp_id"] = itp_id
@@ -48,6 +71,8 @@ def _keep_columns(
     csv_result = df_select.to_csv(index=False).encode()
 
     save_to_gcfs(csv_result, dst_path, use_pipe=True)
+
+    return parse_error_occurred
 
 
 def get_successfully_downloaded_feeds(execution_date):
