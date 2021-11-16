@@ -2,32 +2,24 @@
 
 ## Meetings
 
-### Existing Meetings
-
-#### Week 1
-
 (meetings)=
-##### Analytics Introduction + Technical Onboarding (1 hour)
-
-#### Recurring
-
-(weekly-data-services)=
-##### Data Services All-Hands (Weekly, 1 hour)
-
-(daily-stand-ups)=
-##### Analyst Standups (Tuesday - Friday, 15 minutes)
-
-(lunch-and-learn)=
-##### Lunch & Learn (Weekly, TBD)
+| meeting | cadence | description |
+| -------- | -------- | -------- |
+| Analytics Introduction + Technical Onboarding | Once | Ensure access to tools, go over best practices. Week one, one hour. |
+| Data Services All-Hands | Recurring | Team-wide data services sync. Every Monday, 1 hour. |
+| Analyst Stand-ups | Recurring | A short sync to share yesterdays work, today's work, and any blockers. Tuesday - Friday, 15 minutes. |
+| Lunch & Learn | Recurring | An opportunity to ask questions and share information with the team. Weekly, TBD. |
 
 ### Meeting Standards
 
-#### Meeting Preparation
+#### Agendas
+
+#### Daily Stand-ups
 
 (slack-intro)=
 ## Communication Channels
 
-| channel | purpose | description
+| channel | purpose | description |
 | -------- | -------- | -------- |
 | #data-analysis | Discussion | For sharing and collaborating on Cal-ITP data analyses. |
 | #data-office-hours | Discussion | A place to bring questions, issues, and observations for team discussion. |
