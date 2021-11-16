@@ -6,7 +6,7 @@
 
 #### Week 1
 
-(week-one-meeting)=
+(meetings)=
 ##### Analytics Introduction + Technical Onboarding (1 hour)
 
 #### Recurring
@@ -27,15 +27,11 @@
 (slack-intro)=
 ## Communication Channels
 
-### Discussion
-
-#### data-analysis
-
-#### data-office-hours
-
-### Repo Notifications
-
-#### data-analysis-notify
+| channel | purpose | description
+| -------- | -------- | -------- |
+| #data-analysis | Discussion | For sharing and collaborating on Cal-ITP data analyses. |
+| #data-office-hours | Discussion | A place to bring questions, issues, and observations for team discussion. |
+| #data-analysis-notify | Repo Notifications | A notifications channel for updates to the data-analyses repo. |
 
 ## Collaboration Tools
 
