@@ -10,6 +10,8 @@ import json
 
 from calitp import save_to_gcfs, read_gcfs
 
+from utils import get_successfully_downloaded_feeds
+
 PANDAS_TYPES_TO_BIGQUERY = {"O": "STRING", "i": "INTEGER", "f": "NUMERIC"}
 
 COERCE_TO_STRING = {
@@ -50,16 +52,14 @@ def coerce_notice_values_to_str(raw_codes, str_fields):
 
 def validator_process(execution_date, **kwargs):
     base_path = f"schedule/{execution_date}"
-
-    status = pd.read_csv(read_gcfs(f"{base_path}/status.csv"))
-    success = status[lambda d: d.status == "success"]
+    successes = get_successfully_downloaded_feeds(execution_date)
 
     # hold on to notices, so we can infer schema after
     # note that I've commented out the code for inferring schema below,
     # but it was usefule for generating, then hand-tweaking to load
     # into bigquery
     # notice_entries = []
-    for k, row in success.iterrows():
+    for k, row in successes.iterrows():
         agency_path = f"{base_path}/{row['itp_id']}_{row['url_number']}"
         url = f"{agency_path}/validation.json"
         dst_path = f"{agency_path}/processed/validation_report.json"
