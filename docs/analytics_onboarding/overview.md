@@ -17,12 +17,12 @@ Below you can find links to the resources themselves, as well as relevant suppor
 :::
 
 **Meetings to Expect - Analysts:**
-Look out for these meetings to be added to your calendar.
+Look out for these meetings to be added to your calendar. More information on them can be found [in the 'How We Work' section](meetings).
 
-- [ ]  Week 1:  Analytics Introduction + Technical Onboarding ([Docs](meetings))
-- [ ]  Weekly Data Services All-Hands ([Docs](meetings))
-- [ ]  Daily Stand-Ups ([Docs](meetings))
-- [ ]  Lunch & Learn | ([Docs](meetings))
+- [ ]  Week 1:  Analytics Introduction + Technical Onboarding
+- [ ]  Weekly Data Services All-Hands
+- [ ]  Daily Stand-Ups
+- [ ]  Lunch & Learn
 
 **Collaboration Tools:**
 
