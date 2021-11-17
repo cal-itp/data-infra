@@ -7,8 +7,8 @@ Doing work locally and pushing directly from the command line is a similar workf
 ## Table of Contents
 1. [Onboarding Setup](#onboarding-setup)
 1. What's a typical [project workflow](#project-workflow)?
-1. Someone is collaborating on my branch, how do we [stay in sync](#pulling-and-pushing-changes)? 
-1. The `main` branch is ahead, and I want to sync my branch with `main` 
+1. Someone is collaborating on my branch, how do we [stay in sync](#pulling-and-pushing-changes)?
+1. The `main` branch is ahead, and I want to sync my branch with `main`
     * [Rebase](#rebase)
     * [Merge](#merge)
     * Differences between `merge` and `rebase`: [Atlassian tutorial](https://www.atlassian.com/git/tutorials/merging-vs-rebasing), [GitKraken](https://www.gitkraken.com/learn/git/problems/git-rebase-vs-merge), [Hackernoon](https://hackernoon.com/git-merge-vs-rebase-whats-the-diff-76413c117333), and [StackOverflow](https://stackoverflow.com/questions/59622140/git-merge-vs-git-rebase-for-merge-conflict-scenarios).
@@ -24,10 +24,10 @@ We'll work through getting set up with GitHub on JupyterHub and cloning one GitH
 1. Create a GitHub username, get added to the various Cal-ITP teams. You'll be committing directly into the Cal-ITP repos!
 1. Create a Personal Access Token (PAT) by following these [directions](https://github.com/cal-itp/data-infra/blob/main/docs/analytics_welcome/03_how_we_work.md#using-the-data-analyses-repo)
 1. Navigate to the GitHub repository to clone. We'll work our way throught he `data-analyses` [repo here](https://github.com/cal-itp/data-analyses). Click on the green `Code` button and grab the `HTTPS` URL.
-1. Open a terminal in JupyterHub. All our commands will be typed in this terminal. 
+1. Open a terminal in JupyterHub. All our commands will be typed in this terminal.
 1. Configure your Git username and email: `git config --global user.name MY_USERNAME` and `git config --global user.name MYEMAIL@EMAIL.COM`
 1. Clone the Git repo: `git clone https://github.com/cal-itp/data-analyses.git`
-1. Double check  with`ls` to list and see that the remote repo was successfully cloned into your "local" (cloud-based) filesystem.  
+1. Double check  with`ls` to list and see that the remote repo was successfully cloned into your "local" (cloud-based) filesystem.
 1. Change into the `data-analyses` directory: `cd data-analyses`
 1. Point to the remote repo: `git remote add origin https://github.com/cal-itp/data-analyses.git`. Double check it's set with: `git remote -v`
 1. Pull from the `main` branch and sync your remote and local repos: `git pull origin main`
@@ -46,7 +46,7 @@ In the `data-analyses` repo, separate analysis tasks live in their own directori
 1. Once you are ready to commit, add a commit message to associate with all the changes: `git commit -m "exploratory work" `
 1. Push those changes from local to remote branch (note: branch is `my-new-branch` and not `main`): `git push origin my-new-branch` and enter your username and **personal access token as the password**.
 1. To review a log of past commits: `git log`
-1. When you are ready to merge all the commits into `main`, open a pull request on the remote repository. 
+1. When you are ready to merge all the commits into `main`, open a pull request on the remote repository.
 
 
 ### Pulling and Pushing Changes
@@ -62,7 +62,7 @@ Especially when you have a collaborator working on the same branch, you want to 
 
 A rebase might be preferred, especially if all your work is contained on your branch, within your task's folder, and lots of activity is happening on `main`. You'd like to plop all your commits onto the most recent `main` branch, and have it appear as if all your work took place *after* those PRs were merged in.
 
-1. At this point, you've either stashed or added commits on `my-new-branch`. 
+1. At this point, you've either stashed or added commits on `my-new-branch`.
 1. Check out the `main` branch: `git checkout main`
 1. Pull from origin: `git pull origin main`
 1. Check out your current branch: `git checkout my-new-branch`
@@ -77,7 +77,7 @@ A rebase might be preferred, especially if all your work is contained on your br
 1. Pull from origin: `git checkout main` and `git pull origin main`
 1. Go back to your branch: `git checkout my-new-branch`
 1. Complete the merge of `my-new-branch` with `main` and create a new commit: `git merge my-new-branch main`
-SOMEONE WHO PREFERS MERGE PROCESS TO FILL THIS IN...is there a commit after? 
+SOMEONE WHO PREFERS MERGE PROCESS TO FILL THIS IN...is there a commit after?
 
 ### Helpful Hints
 
