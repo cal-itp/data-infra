@@ -17,7 +17,7 @@ kernelspec:
 
 One major difficulty with conducting reproducible analyses is the location of data. If a data scientist downloads a CSV on their local system, but does not document its provenance or access, the analysis becomes very difficult to reproduce.
 
-One strategy to deal with this is to create data catalogs for projects, which describe the data sources used and how to access them. Our team uses open data sources, database, and any other dataset that needs to be versioned must be stored in Google Cloud Storage (GCS) buckets. A data catalog that documents these heterogeneous sources simplifies and streamlines the "read" side of reading and writing data. 
+One strategy to deal with this is to create data catalogs for projects, which describe the data sources used and how to access them. Our team uses open data sources, database, and any other dataset that needs to be versioned must be stored in Google Cloud Storage (GCS) buckets. A data catalog that documents these heterogeneous sources simplifies and streamlines the "read" side of reading and writing data.
 
 ## Table of Contents
 
@@ -30,17 +30,17 @@ One strategy to deal with this is to create data catalogs for projects, which de
 
 ### Intake
 
-Data scientists tend to load their data from many heterogeneous sources (Databases, CSVs, JSON, etc), but at the end of the day, they often end up with the data in dataframes or numpy arrays. One tool for managing that in Python is the relatively new project `intake`. Intake provides a way to make data catalogs can then be used load sources into dataframes and arrays. These catalogs are plain text and can then be versioned and published, allowing for more ergonomic documentation of the data sources used for a project. 
+Data scientists tend to load their data from many heterogeneous sources (Databases, CSVs, JSON, etc), but at the end of the day, they often end up with the data in dataframes or numpy arrays. One tool for managing that in Python is the relatively new project `intake`. Intake provides a way to make data catalogs can then be used load sources into dataframes and arrays. These catalogs are plain text and can then be versioned and published, allowing for more ergonomic documentation of the data sources used for a project.
 
 `intake-dcat` is a tool for allowing intake to more easily interact with DCAT catalogs commonly found on open data portals.
 
-Refer to this [sample-catalog.yml](./sample-catalog.yml) to see how various data sources and file types are documented. 
+Refer to this [sample-catalog.yml](./sample-catalog.yml) to see how various data sources and file types are documented. Each dataset is given a human-readable name, with optional metadata associated.
 
 File types that work within GCS buckets, URLs, or DCATs (open data catalogs):
 * Tabular: CSV, parquet
 * Geospatial: zipped shapefile, GeoJSON, geoparquet
 
-To open the catalog in a Jupyter Notebook: 
+To open the catalog in a Jupyter Notebook:
 
 ```{code-cell}
 import intake
@@ -66,11 +66,11 @@ ca_open_data:
 driver: dcat
 args:
   url: https://data.ca.gov/data.json
-  items: 
+  items:
       cdcr_population_covid_tracking: 4a9a896a-e64e-48c2-bb35-5589f80e7c52
 ```
 
-To import this dataset as a dataframe within the notebook: 
+To import this dataset as a dataframe within the notebook:
 
 ```{code-cell}
 df = catalog.ca_open_data.cdcr_population_covid_tracking.read()

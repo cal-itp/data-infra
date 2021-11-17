@@ -72,7 +72,7 @@ Note that here the pandas Series method `str.contains` corresponds to `regexp_co
 ## mapping
 
 ## shared utils
-A set of shared utility functions can also be installed, similarly to any Python library. The [shared_utils](https://github.com/cal-itp/data-analyses/shared_utils) are stored here; functions are added as collaborative work evolves so we aren't constantly reinventing the wheel.
+A set of shared utility functions can also be installed, similarly to any Python library. The [shared_utils](https://github.com/cal-itp/data-analyses/shared_utils) are stored here. Generalized functions for analysis are added as collaborative work evolves so we aren't constantly reinventing the wheel.
 
 ```{code-cell}
 # In terminal:
