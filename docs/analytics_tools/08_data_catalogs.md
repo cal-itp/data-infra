@@ -28,8 +28,6 @@ Each task sub-folder within the `data-analyses` repo should come with its own da
 1. [Google Cloud Storage](#google-cloud-storage) (GCS) Buckets
 1. [Examples](#examples)
 
-???WHERE DOES THE GOOGLE CLOUD AUTH PORTION LIVE? NEED TO LINK THERE.
-
 ### Intake
 
 Data analysts tend to load their data from many heterogeneous sources (Databases, CSVs, JSON, etc), but at the end of the day, they often end up with the data in dataframes or numpy arrays. One tool for managing that in Python is the relatively new project `intake`. Intake provides a way to make data catalogs can then be used load sources into dataframes and arrays. These catalogs are plain text and can then be versioned and published, allowing for more ergonomic documentation of the data sources used for a project.
@@ -44,7 +42,7 @@ File types that work within GCS buckets, URLs, or DCATs (open data catalogs):
 
 To open the catalog in a Jupyter Notebook:
 
-```{code-cell}
+```python
 import intake
 
 catalog = intake.open_catalog("./sample-catalog.yml")
@@ -82,7 +80,7 @@ df = catalog.ca_open_data.cdcr_population_covid_tracking.read()
 
 When putting GCS files into the catalog, note that geospatial datasets (zipped shapefiles, GeoJSONs) require the additional `use_fsspec: true` argument compared to tabular datasets (parquets, CSVs). Geoparquets, the exception, are catalogued like tabular datasets.
 
-Opening geospatial datasets through `intake` is the easiest way to import these datasets within a Jupyter Notebook. Otherwise, `geopandas` can read the geospatial datasets that are locally saved or downloaded first from the bucket, but not directly with a GCS file path.
+Opening geospatial datasets through `intake` is the easiest way to import these datasets within a Jupyter Notebook. Otherwise, `geopandas` can read the geospatial datasets that are locally saved or downloaded first from the bucket, but not directly with a GCS file path. Refer to [07_storing_data](./07_storing_data.md#setting-up-google-authentication) to set up your Google authentication.
 
 ```yaml
 lehd_federal_jobs_by_tract:
