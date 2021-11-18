@@ -1,13 +1,13 @@
 # How We Work (WIP)
 
 ## Meetings
-
+New analysts - look out for these meetings to be added to your calendar.
 (meetings)=
-| Meeting | Cadence | Description |
+| Name | Cadence | Description |
 | -------- | -------- | -------- |
 | Analytics Introduction & Technical Onboarding | Week One  <br/> One Hour | To ensure access to tools and go over best practices. |
 | Data Services All-Hands | Every Monday <br/> 1 Hour | A team-wide data services sync. |
-| Analyst Stand-ups | Every Tuesday - Friday <br/> 15 Minutes | A short sync to share yesterdays work, today's work, and any blockers. |
+| Analyst Stand-ups | Every Tues - Fri <br/> 15 Minutes | A short sync to share yesterdays work, today's work, and any blockers. |
 | Lunch & Learn | Weekly <br/> TBD | An opportunity to ask questions and share information with the team. |
 
 ### Meeting Standards
