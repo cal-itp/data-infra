@@ -42,7 +42,7 @@ import calitp.magics
 
 ```{code-cell}
 :tags: [remove-input]
-%%sql -m
+%%sql -m -o * --quiet
 SELECT *
 FROM `gtfs_schedule_type2.feed_info`
 WHERE
@@ -62,7 +62,7 @@ In order to do it for a range of dates, you can use a JOIN. This is shown below.
 
 ```{code-cell}
 :tags: [remove-input]
-%%sql -m
+%%sql -m -o * --quiet
 SELECT *
 FROM `gtfs_schedule_type2.feed_info` FI
 JOIN `views.dim_date` D
