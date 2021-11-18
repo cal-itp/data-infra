@@ -1,5 +1,5 @@
 # repo owners
-*                                       @hunterowens @machow @themightychris
+*                                       @evansiroky @machow
 
 # devops components
 /kubernetes                             @lottspot @themightychris
@@ -24,8 +24,8 @@
 /.github/workflows/push_to_gcloud.yml   @machow @lottspot
 
 # qa GitHub workflows
-/.github/workflows/lint.yml             @machow @hunterowens @themightychris
+/.github/workflows/lint.yml             @machow @themightychris
 
 # misc GitHub workflows
 /.github/workflows/board-move-issues.yml          @machow
-/.github/workflows/update_gcloud_requirements.yml @hunterowens
+/.github/workflows/update_gcloud_requirements.yml @evansiroky
