@@ -1,32 +1,35 @@
 (technical-onboarding)=
 # Technical Onboarding (WIP)
-:::{admonition} How to use this page
-:class: tip
 This page serves as a beginning entry-point into our Cal-ITP analytics resources for both new analysts and non-analyst team members.
 
+Below you can find links to the resources themselves, as well as relevant support documents.
+
+:::{admonition} How to use this page
+:class: tip
 **Analysts**
 * See below for an introduction to team meetings as well as our collaboration and analysis tools.
 * Privileges have already been created for you to access the resources below.
 
 **Non-Analyst Team Members**
-* You can access any of the tools below as well!
+* Any of the tools below are available to you as well!
 
 **If you still need help with access**, use the information at the bottom of this page to [get help](get-help).
 :::
 
-Below, find links to our analytics resources as well as their relevant support documents.
-
 **Meetings to Expect - Analysts:**
 Look out for these meetings to be added to your calendar.
 
-- [ ]  Week 1:  Technical Onboarding - Analytics Tools Introduction | ([Docs](week-one-meeting))
-- [ ]  Weekly Data Services All-Hands | ([Docs](weekly-data-services))
-- [ ]  Daily Stand-Ups | ([Docs](daily-stand-ups))
+More information on them can be found in the  ['How We Work' section](meetings).
+
+- [ ]  Week One:  Analytics Introduction & Technical Onboarding
+- [ ]  Weekly Data Services All-Hands
+- [ ]  Daily Stand-Ups
+- [ ]  Lunch & Learn
 
 **Collaboration Tools:**
 
-- [ ] [Cal-ITP Slack](https://cal-itp.slack.com)
-- [ ] [GitHub Analytics Repo](https://github.com/cal-itp/data-analyses) | ([Docs](analytics-repo))
+- [ ]  [Cal-ITP Slack](https://cal-itp.slack.com) | ([Docs](slack-intro))
+- [ ]  [GitHub Analytics Repo](https://github.com/cal-itp/data-analyses) | ([Docs](analytics-repo))
 - [ ]  [GitHub Analyst Project Board](https://github.com/cal-itp/data-infra/projects/6) | ([Docs](analytics-project-board))
 
 **Querying & Dashboards:**
