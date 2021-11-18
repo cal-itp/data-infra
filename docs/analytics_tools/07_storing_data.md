@@ -29,7 +29,7 @@ from calitp.storage import get_fs
 fs = get_fs()
 ```
 
-### Table of Contents
+## Table of Contents
 1. [Tabular Data](#tabular-data)
 <br> - [Parquet](#parquet)
 <br>- [CSV](#csv)
