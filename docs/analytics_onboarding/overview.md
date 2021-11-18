@@ -31,7 +31,7 @@ Below you can find links to the resources themselves, as well as relevant suppor
 
 - [ ]  [JupyterHub](https://hubtest.k8s.calitp.jarv.us/): Cloud-based notebooks | ([Docs](jupyterhub))
 - [ ]  calitp-py: Cal-ITP's internal Python library | ([Docs](calitp))
-- [ ]  siuba: Cal-ITP recommended data analysis library | ([Docs](siuba))
+- [ ]  siuba: Recommended data analysis library | ([Docs](siuba))
 
 
 (get-help)=
