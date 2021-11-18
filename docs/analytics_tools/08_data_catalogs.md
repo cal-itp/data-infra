@@ -15,9 +15,11 @@ kernelspec:
 
 # Data Catalogs
 
-One major difficulty with conducting reproducible analyses is the location of data. If a data scientist downloads a CSV on their local system, but does not document its provenance or access, the analysis becomes very difficult to reproduce.
+One major difficulty with conducting reproducible analyses is the location of data. If a data analyst downloads a CSV on their local system, but does not document its provenance or access, the analysis becomes very difficult to reproduce.
 
 One strategy to deal with this is to create data catalogs for projects, which describe the data sources used and how to access them. Our team uses open data sources, database, and any other dataset that needs to be versioned must be stored in Google Cloud Storage (GCS) buckets. A data catalog that documents these heterogeneous sources simplifies and streamlines the "read" side of reading and writing data.
+
+Each task sub-folder within the `data-analyses` repo should come with its own data catalog, documenting the data sources used within the notebooks and scripts.
 
 ## Table of Contents
 
@@ -30,7 +32,7 @@ One strategy to deal with this is to create data catalogs for projects, which de
 
 ### Intake
 
-Data scientists tend to load their data from many heterogeneous sources (Databases, CSVs, JSON, etc), but at the end of the day, they often end up with the data in dataframes or numpy arrays. One tool for managing that in Python is the relatively new project `intake`. Intake provides a way to make data catalogs can then be used load sources into dataframes and arrays. These catalogs are plain text and can then be versioned and published, allowing for more ergonomic documentation of the data sources used for a project.
+Data analysts tend to load their data from many heterogeneous sources (Databases, CSVs, JSON, etc), but at the end of the day, they often end up with the data in dataframes or numpy arrays. One tool for managing that in Python is the relatively new project `intake`. Intake provides a way to make data catalogs can then be used load sources into dataframes and arrays. These catalogs are plain text and can then be versioned and published, allowing for more ergonomic documentation of the data sources used for a project.
 
 `intake-dcat` is a tool for allowing intake to more easily interact with DCAT catalogs commonly found on open data portals.
 
@@ -60,7 +62,7 @@ Open data portals (such as the CA Open Data Portal and CA Geoportal) usually pro
 * Navigate to the corresponding `data.json` file at https://data.ca.gov/data.json
 * Each dataset has associated metadata, including `accessURL`, `landingPage`, etc. Find the dataset's `identifier`, and input that as the catalog item.
 
-```{code-cell}
+```yaml
 # Catalog item
 ca_open_data:
 driver: dcat
@@ -78,11 +80,11 @@ df = catalog.ca_open_data.cdcr_population_covid_tracking.read()
 
 ### Google Cloud Storage
 
-When putting GCS files into the catalog, note that geospatial datasets (zipped shapefiles, GeoJSONs) require the additional `use_fsspec: true` argument compared to tabular datasets (parquets, CSVs). Geoparquets, are the exception, and are catalogued like tabular datasets.
+When putting GCS files into the catalog, note that geospatial datasets (zipped shapefiles, GeoJSONs) require the additional `use_fsspec: true` argument compared to tabular datasets (parquets, CSVs). Geoparquets, the exception, are catalogued like tabular datasets.
 
-Opening geospatial datasets through `intake` is the easiest way to import these datasets within a Jupyter Notebook.
+Opening geospatial datasets through `intake` is the easiest way to import these datasets within a Jupyter Notebook. Otherwise, `geopandas` can read the geospatial datasets that are locally saved or downloaded first from the bucket, but not directly with a GCS file path.
 
-```{code-cell}
+```yaml
 lehd_federal_jobs_by_tract:
     driver: parquet
     description: LEHD Workplace Area Characteristics (WAC) federal jobs by census tract.
@@ -109,7 +111,7 @@ test_geoparquet:
 
 To import each of these files as dataframes or geodataframes:
 
-```{code-cell}
+```python
 df1 = catalog.lehd_federal_jobs_by_tract.read()
 
 df2 = catalog.test_csv.read()

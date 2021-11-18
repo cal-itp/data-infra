@@ -23,6 +23,7 @@ parts:
         - file: analytics_tools/07_storing_data
         - file: analytics_tools/08_data_catalogs
         - file: analytics_tools/sample-catalog.yml
+        - file: analytics_tools/sample-catalog-viewer.md
       - file: warehouse/overview
         sections:
         - file: warehouse/01_table_naming
