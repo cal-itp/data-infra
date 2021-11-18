@@ -18,13 +18,13 @@ Below you can find links to the resources themselves, as well as relevant suppor
 
 **Collaboration Tools:**
 
-- [ ]  Cal-ITP [Slack](https://cal-itp.slack.com) | ([Docs](slack-intro))
-- [ ]  GitHub [Analytics Repo](https://github.com/cal-itp/data-analyses) | ([Docs](analytics-repo))
-- [ ]  GitHub [Analyst Project Board](https://github.com/cal-itp/data-infra/projects/6) | ([Docs](analytics-project-board))
+- [ ]  [Slack](https://cal-itp.slack.com) | ([Docs](slack-intro))
+- [ ]  [Analytics Repo](https://github.com/cal-itp/data-analyses) | ([Docs](analytics-repo))
+- [ ]  [Analyst Project Board](https://github.com/cal-itp/data-infra/projects/6) | ([Docs](analytics-project-board))
 
 **Querying & Dashboards:**
 
-- [ ]  [Big Query](https://console.cloud.google.com/bigquery/): Querying the warehouse with SQL | ([Docs](big-query))
+- [ ]  [BigQuery](https://console.cloud.google.com/bigquery/): Querying the warehouse with SQL | ([Docs](big-query))
 - [ ]  [Metabase](https://dashboards.calitp.org/): Dashboards and Business Insights | ([Docs](metabase))
 
 **Python Users:**
