@@ -16,21 +16,11 @@ Below you can find links to the resources themselves, as well as relevant suppor
 **If you still need help with access**, use the information at the bottom of this page to [get help](get-help).
 :::
 
-**Meetings to Expect - Analysts:**
-Look out for these meetings to be added to your calendar.
-
-More information on them can be found in the  ['How We Work' section](meetings).
-
-- [ ]  Week One:  Analytics Introduction & Technical Onboarding
-- [ ]  Weekly Data Services All-Hands
-- [ ]  Daily Stand-Ups
-- [ ]  Lunch & Learn
-
 **Collaboration Tools:**
 
-- [ ]  [Cal-ITP Slack](https://cal-itp.slack.com) | ([Docs](slack-intro))
-- [ ]  [GitHub Analytics Repo](https://github.com/cal-itp/data-analyses) | ([Docs](analytics-repo))
-- [ ]  [GitHub Analyst Project Board](https://github.com/cal-itp/data-infra/projects/6) | ([Docs](analytics-project-board))
+- [ ]  Cal-ITP [Slack](https://cal-itp.slack.com) | ([Docs](slack-intro))
+- [ ]  GitHub [Analytics Repo](https://github.com/cal-itp/data-analyses) | ([Docs](analytics-repo))
+- [ ]  GitHub [Analyst Project Board](https://github.com/cal-itp/data-infra/projects/6) | ([Docs](analytics-project-board))
 
 **Querying & Dashboards:**
 
