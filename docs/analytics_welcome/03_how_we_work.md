@@ -6,7 +6,7 @@ The section below outlines our team's primary meetings and their purposes, as we
 **New analysts**, look out for these meetings to be added to your calendar.
 | Name | Cadence | Description |
 | -------- | -------- | -------- |
-| Technical Onboarding | Week One  <br/> 1 Hour | To ensure access to tools and go over best practices. |
+| Technical Onboarding | Week 1 <br/> 1 Hour | To ensure access to tools and go over best practices. |
 | Data Services All-Hands | Mondays <br/> 1 Hour | A team-wide data services sync. |
 | Analyst Stand-ups | Tues-Fri <br/> 15 Mins | A short sync to share yesterdays work, today's work, and any blockers. |
 ### Meeting Standards
