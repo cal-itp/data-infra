@@ -1,6 +1,10 @@
 # How We Work (WIP)
 
-## Meetings
+## Team Meetings
+
+The section below outlines our team's primary meetings and their purposes, as well as our our team's shared meeting standards.
+
+### Current Meetings
 **New analysts**, look out for these meetings to be added to your calendar.
 (meetings)=
 | Name | Cadence | Description |
@@ -8,7 +12,6 @@
 | Analytics Introduction & Technical Onboarding | Week One  <br/> One Hour | To ensure access to tools and go over best practices. |
 | Data Services All-Hands | Mondays <br/> 1 Hour | A team-wide data services sync. |
 | Analyst Stand-ups | Tues-Fri <br/> 15 Minutes | A short sync to share yesterdays work, today's work, and any blockers. |
-| Lunch & Learn | Weekly <br/> TBD | An opportunity to ask questions and share information with the team. |
 
 ### Meeting Standards
 
