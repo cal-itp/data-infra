@@ -16,32 +16,22 @@ Below you can find links to the resources themselves, as well as relevant suppor
 **If you still need help with access**, use the information at the bottom of this page to [get help](get-help).
 :::
 
-**Meetings to Expect - Analysts:**
-Look out for these meetings to be added to your calendar.
-
-More information on them can be found in the  ['How We Work' section](meetings).
-
-- [ ]  Week One:  Analytics Introduction & Technical Onboarding
-- [ ]  Weekly Data Services All-Hands
-- [ ]  Daily Stand-Ups
-- [ ]  Lunch & Learn
-
 **Collaboration Tools:**
 
-- [ ]  [Cal-ITP Slack](https://cal-itp.slack.com) | ([Docs](slack-intro))
-- [ ]  [GitHub Analytics Repo](https://github.com/cal-itp/data-analyses) | ([Docs](analytics-repo))
-- [ ]  [GitHub Analyst Project Board](https://github.com/cal-itp/data-infra/projects/6) | ([Docs](analytics-project-board))
+- [ ]  [Slack](https://cal-itp.slack.com) | ([Docs](slack-intro))
+- [ ]  [Analytics Repo](https://github.com/cal-itp/data-analyses) | ([Docs](analytics-repo))
+- [ ]  [Analyst Project Board](https://github.com/cal-itp/data-infra/projects/6) | ([Docs](analytics-project-board))
 
 **Querying & Dashboards:**
 
-- [ ]  [Big Query](https://console.cloud.google.com/bigquery/): Querying the warehouse with SQL | ([Docs](big-query))
+- [ ]  [BigQuery](https://console.cloud.google.com/bigquery/): Querying the warehouse with SQL | ([Docs](big-query))
 - [ ]  [Metabase](https://dashboards.calitp.org/): Dashboards and Business Insights | ([Docs](metabase))
 
 **Python Users:**
 
 - [ ]  [JupyterHub](https://hubtest.k8s.calitp.jarv.us/): Cloud-based notebooks | ([Docs](jupyterhub))
 - [ ]  calitp-py: Cal-ITP's internal Python library | ([Docs](calitp))
-- [ ]  siuba: Cal-ITP recommended data analysis library | ([Docs](siuba))
+- [ ]  siuba: Recommended data analysis library | ([Docs](siuba))
 
 
 (get-help)=
