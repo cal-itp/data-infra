@@ -1,5 +1,5 @@
 # Tools Quick Links
-Lost a link? Find quick access to our tools below.
+**Lost a link?** Find quick access to our tools below.
 
 | Tool | Purpose |
 | -------- | -------- |
