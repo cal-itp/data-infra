@@ -32,7 +32,7 @@ Below you can find links to the resources themselves, as well as relevant suppor
 - [ ]  **calitp-py** - Cal-ITP's internal Python library | ([Docs](calitp))
 - [ ]  **siuba** - Recommended data analysis library | ([Docs](siuba))
 
-
+<br/>
 (get-help)=
 ```{admonition} Still need access to a tool above?
 DM Charlie <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">on Cal-ITP Slack using this link</a>, or <a href="mailto: charlie.c@jarv.us?subject=Cal-ITP Access Issues&body=I need access to:" target="_blank">by email</a>.
