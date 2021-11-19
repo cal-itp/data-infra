@@ -72,7 +72,7 @@ args:
 
 To import this dataset as a dataframe within the notebook:
 
-```{code-cell}
+```python
 df = catalog.ca_open_data.cdcr_population_covid_tracking.read()
 ```
 
