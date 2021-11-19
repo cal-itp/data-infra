@@ -22,14 +22,13 @@ Below you can find links to the resources themselves, as well as relevant suppor
 - [ ]  [Analytics Repo](https://github.com/cal-itp/data-analyses) | ([Docs](analytics-repo))
 - [ ]  [Analyst Project Board](https://github.com/cal-itp/data-infra/projects/6) | ([Docs](analytics-project-board))
 
-**Querying & Dashboards:**
-
-- [ ]  [BigQuery](https://console.cloud.google.com/bigquery/): Querying the warehouse with SQL | ([Docs](big-query))
-- [ ]  [Metabase](https://dashboards.calitp.org/): Dashboards and Business Insights | ([Docs](metabase))
-
-**Python Users:**
+**Dashboards & Notebooks:**
 
 - [ ]  [JupyterHub](https://hubtest.k8s.calitp.jarv.us/): Cloud-based notebooks | ([Docs](jupyterhub))
+- [ ]  [Metabase](https://dashboards.calitp.org/): Dashboards and Business Insights | ([Docs](metabase))
+
+**Python Libraries:**
+
 - [ ]  calitp-py: Cal-ITP's internal Python library | ([Docs](calitp))
 - [ ]  siuba: Recommended data analysis library | ([Docs](siuba))
 
