@@ -41,6 +41,18 @@ jobs:
         name: docs-build
         path: docs/_build/html
 
+    # docs preview ----
+    - name: Netlify docs preview
+      if: ${{ github.ref != 'refs/heads/main' }}
+      run: |
+        npm install -g netlify-cli
+        netlify deploy --dir=docs/_build/html
+      env:
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+
+
+    # docs deploy ----
     - name: Deploy docs
       uses: peaceiris/actions-gh-pages@v3
       if: ${{ github.ref == 'refs/heads/main' }}
