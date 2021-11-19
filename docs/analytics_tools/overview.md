@@ -10,6 +10,7 @@ After reading this section, you should be able to:
 * y
 * z
 
+&nbsp;
 ```{admonition} Still need access to a tool in this section?
 DM Charlie <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">on Cal-ITP Slack using this link</a>, or <a href="mailto: charlie.c@jarv.us?subject=Cal-ITP Access Issues&body=I need access to:" target="_blank">by email</a>.
 ```
