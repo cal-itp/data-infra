@@ -1,8 +1,6 @@
 (technical-onboarding)=
-# Technical Onboarding (WIP)
+# Technical Onboarding
 This page serves as a beginning entry-point into our Cal-ITP analytics resources for both new analysts and non-analyst team members.
-
-Below you can find links to the resources themselves, as well as relevant support documents.
 
 :::{admonition} How to use this page
 :class: tip
@@ -15,6 +13,8 @@ Below you can find links to the resources themselves, as well as relevant suppor
 
 **If you still need help with access**, use the information at the bottom of this page to [get help](get-help).
 :::
+
+Below you can find links to the resources themselves, as well as relevant support documents.
 
 **Collaboration Tools:**
 
