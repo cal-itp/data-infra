@@ -15,7 +15,6 @@ parts:
       - file: analytics_tools/overview
         sections:
         - file: analytics_tools/01_tools_quick_links
-        - file: analytics_tools/02_querying
         - file: analytics_tools/03_bi_dashboards
         - file: analytics_tools/04_notebooks
         - file: analytics_tools/05_python_libraries
