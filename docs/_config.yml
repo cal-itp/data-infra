@@ -10,7 +10,7 @@ logo: calitp_logo_MAIN.png
 execute:
   execute_notebooks: force
   allow_errors: false
-  exclude_patterns: [docs/analytics_tools/*.yml, docs/analytics_tools/08_data_catalogs.md]
+  exclude_patterns: [analytics_tools/*.yml, analytics_tools/08_data_catalogs.md]
 
 # Define the name of the latex output file for PDF builds
 latex:
