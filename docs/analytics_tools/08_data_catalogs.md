@@ -13,7 +13,7 @@ kernelspec:
   name: python3
 ---
 
-# Data Catalogs
+# Using Data Catalogs
 
 One major difficulty with conducting reproducible analyses is the location of data. If a data analyst downloads a CSV on their local system, but does not document its provenance or access, the analysis becomes very difficult to reproduce.
 
@@ -26,7 +26,6 @@ Each task sub-folder within the `data-analyses` repo should come with its own da
 1. Data Catalogs with [Intake](#intake)
 1. [Open Data Portals](#open-data-portals)
 1. [Google Cloud Storage](#google-cloud-storage) (GCS) Buckets
-1. [Examples](#examples)
 
 ### Intake
 
@@ -34,7 +33,7 @@ Data analysts tend to load their data from many heterogeneous sources (Databases
 
 `intake-dcat` is a tool for allowing intake to more easily interact with DCAT catalogs commonly found on open data portals.
 
-Refer to this [sample-catalog.yml](sample-catalog) to see how various data sources and file types are documented. Each dataset is given a human-readable name, with optional metadata associated.
+Refer to this [sample-catalog.yml](./sample-catalog.yml) to see how various data sources and file types are documented. Each dataset is given a human-readable name, with optional metadata associated.
 
 File types that work within GCS buckets, URLs, or DCATs (open data catalogs):
 * Tabular: CSV, parquet
