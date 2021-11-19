@@ -51,7 +51,7 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Storing New Data (WIP)" href="07_storing_data.html" />
+    <link rel="next" title="Storing New Data" href="07_storing_data.html" />
     <link rel="prev" title="Python Libraries (WIP)" href="05_python_libraries.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -184,7 +184,17 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="07_storing_data.html">
-     Storing New Data (WIP)
+     Storing New Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="08_data_catalogs.html">
+     Using Data Catalogs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="sample-catalog-viewer.html">
+     Sample Catalog
     </a>
    </li>
   </ul>
@@ -585,13 +595,50 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#pushing-in-github-drag-and-drop">
-   Pushing in GitHub - Drag and Drop
+  <a class="reference internal nav-link" href="#table-of-contents">
+   Table of Contents
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#pushing-from-jupyterhub">
    Pushing from JupyterHub
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#onboarding-setup">
+     Onboarding Setup
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#project-workflow">
+     Project Workflow
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pulling-and-pushing-changes">
+     Pulling and Pushing Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#rebase">
+     Rebase
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#merge">
+     Merge
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#helpful-hints">
+     Helpful Hints
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pushing-in-github-drag-and-drop">
+   Pushing in GitHub - Drag and Drop
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -612,11 +659,105 @@
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="saving-code-wip">
 <h1>Saving Code (WIP)<a class="headerlink" href="#saving-code-wip" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="pushing-in-github-drag-and-drop">
-<h2>Pushing in GitHub - Drag and Drop<a class="headerlink" href="#pushing-in-github-drag-and-drop" title="Permalink to this headline">¶</a></h2>
+<p>Most Cal-ITP analysts should opt for working directly from JupyterHub. Leveraging this cloud-based, standardized environment should alleviate many of the pain points associated with creating reproducible, collaborative work.</p>
+<p>Doing work locally and pushing directly from the command line is a similar workflow, but replace the JupyterHub terminal with your local terminal.</p>
+<div class="section" id="table-of-contents">
+<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
+<ol class="simple">
+<li><p><a class="reference external" href="#onboarding-setup">Onboarding Setup</a></p></li>
+<li><p>What’s a typical <a class="reference external" href="#project-workflow">project workflow</a>?</p></li>
+<li><p>Someone is collaborating on my branch, how do we <a class="reference external" href="#pulling-and-pushing-changes">stay in sync</a>?</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">main</span></code> branch is ahead, and I want to sync my branch with <code class="docutils literal notranslate"><span class="pre">main</span></code></p>
+<ul class="simple">
+<li><p><a class="reference external" href="#rebase">Rebase</a></p></li>
+<li><p><a class="reference external" href="#merge">Merge</a></p></li>
+<li><p>Differences between <code class="docutils literal notranslate"><span class="pre">merge</span></code> and <code class="docutils literal notranslate"><span class="pre">rebase</span></code>: <a class="reference external" href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing">Atlassian tutorial</a>, <a class="reference external" href="https://www.gitkraken.com/learn/git/problems/git-rebase-vs-merge">GitKraken</a>, <a class="reference external" href="https://hackernoon.com/git-merge-vs-rebase-whats-the-diff-76413c117333">Hackernoon</a>, and <a class="reference external" href="https://stackoverflow.com/questions/59622140/git-merge-vs-git-rebase-for-merge-conflict-scenarios">StackOverflow</a>.</p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="#helpful-hints">Helpful Hints</a></p></li>
+</ol>
 </div>
 <div class="section" id="pushing-from-jupyterhub">
 <h2>Pushing from JupyterHub<a class="headerlink" href="#pushing-from-jupyterhub" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="onboarding-setup">
+<h3>Onboarding Setup<a class="headerlink" href="#onboarding-setup" title="Permalink to this headline">¶</a></h3>
+<p>We’ll work through getting set up with GitHub on JupyterHub and cloning one GitHub repo. Repeat steps 6-10 for other repos.</p>
+<ol class="simple">
+<li><p>Create a GitHub username, get added to the various Cal-ITP teams. You’ll be committing directly into the Cal-ITP repos!</p></li>
+<li><p>Create a Personal Access Token (PAT) by following these <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/docs/analytics_welcome/03_how_we_work.md#using-the-data-analyses-repo">directions</a></p></li>
+<li><p>Navigate to the GitHub repository to clone. We’ll work our way throught he <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code> <a class="reference external" href="https://github.com/cal-itp/data-analyses">repo here</a>. Click on the green <code class="docutils literal notranslate"><span class="pre">Code</span></code> button and grab the <code class="docutils literal notranslate"><span class="pre">HTTPS</span></code> URL.</p></li>
+<li><p>Open a terminal in JupyterHub. All our commands will be typed in this terminal.</p></li>
+<li><p>Configure your Git username and email: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">config</span> <span class="pre">--global</span> <span class="pre">user.name</span> <span class="pre">MY_USERNAME</span></code> and <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">config</span> <span class="pre">--global</span> <span class="pre">user.name</span> <span class="pre">MYEMAIL&#64;EMAIL.COM</span></code></p></li>
+<li><p>Clone the Git repo: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/cal-itp/data-analyses.git</span></code></p></li>
+<li><p>Double check  with<code class="docutils literal notranslate"><span class="pre">ls</span></code> to list and see that the remote repo was successfully cloned into your “local” (cloud-based) filesystem.</p></li>
+<li><p>Change into the <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code> directory: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">data-analyses</span></code></p></li>
+<li><p>Point to the remote repo: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">remote</span> <span class="pre">add</span> <span class="pre">origin</span> <span class="pre">https://github.com/cal-itp/data-analyses.git</span></code>. Double check it’s set with: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">remote</span> <span class="pre">-v</span></code></p></li>
+<li><p>Pull from the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch and sync your remote and local repos: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span> <span class="pre">origin</span> <span class="pre">main</span></code></p></li>
+</ol>
+</div>
+<div class="section" id="project-workflow">
+<h3>Project Workflow<a class="headerlink" href="#project-workflow" title="Permalink to this headline">¶</a></h3>
+<p>It is best practice to do have a dedicated branch for your task. A commit in GitHub is similar to saving your work. It allows the system to capture the changes you have made and offers checkpoints through IDs that both show the progress of your work and can be referenced for particular tasks.</p>
+<p>In the <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code> repo, separate analysis tasks live in their own directories, such as <code class="docutils literal notranslate"><span class="pre">data-analyses/gtfs_report_emails</span></code>.</p>
+<ol class="simple">
+<li><p>Start from the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span> <span class="pre">origin</span> <span class="pre">main</span></code></p></li>
+<li><p>Check out a new branch to do your work: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">-b</span> <span class="pre">my-new-branch</span></code></p></li>
+<li><p>Do some work…add, delete, rename files, etc</p></li>
+<li><p>See all the status changes to your files: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">status</span></code></p></li>
+<li><p>When you’re ready to save some of that work, stage the files you want to commit with <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span> <span class="pre">foldername/notebook1.ipynb</span> <span class="pre">foldername/script1.py</span></code>. To stage all the files, use <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span> <span class="pre">.</span></code>.</p></li>
+<li><p>Once you are ready to commit, add a commit message to associate with all the changes: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span> <span class="pre">-m</span> <span class="pre">&quot;exploratory</span> <span class="pre">work&quot;</span> </code></p></li>
+<li><p>Push those changes from local to remote branch (note: branch is <code class="docutils literal notranslate"><span class="pre">my-new-branch</span></code> and not <code class="docutils literal notranslate"><span class="pre">main</span></code>): <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">origin</span> <span class="pre">my-new-branch</span></code> and enter your username and <strong>personal access token as the password</strong>.</p></li>
+<li><p>To review a log of past commits: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">log</span></code></p></li>
+<li><p>When you are ready to merge all the commits into <code class="docutils literal notranslate"><span class="pre">main</span></code>, open a pull request (PR) on the remote repository, and merge it in!</p></li>
+<li><p>Go back to <code class="docutils literal notranslate"><span class="pre">main</span></code> and update your local to match the remote: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">main</span></code>, <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span> <span class="pre">origin</span> <span class="pre">main</span></code></p></li>
+</ol>
+</div>
+<div class="section" id="pulling-and-pushing-changes">
+<h3>Pulling and Pushing Changes<a class="headerlink" href="#pulling-and-pushing-changes" title="Permalink to this headline">¶</a></h3>
+<p>Especially when you have a collaborator working on the same branch, you want to regularly sync your work with what’s been committed by your collaborator. Doing this frequently allows you to stay in sync, and avoid unncessary merge conflicts.</p>
+<ol class="simple">
+<li><p>Stash your changes temporarily: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">stash</span></code></p></li>
+<li><p>Pull from the remote to bring the local branch up-to-date (and pull any changes your collaborator made): <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span> <span class="pre">origin</span> <span class="pre">my-new-branch</span></code></p></li>
+<li><p>Pop your changes: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">stash</span> <span class="pre">pop</span></code></p></li>
+<li><p>Stage and push your commit with <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span></code> and <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span></code> and <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">origin</span> <span class="pre">my-new-branch</span></code></p></li>
+</ol>
+</div>
+<div class="section" id="rebase">
+<h3>Rebase<a class="headerlink" href="#rebase" title="Permalink to this headline">¶</a></h3>
+<p>A rebase might be preferred, especially if all your work is contained on your branch, within your task’s folder, and lots of activity is happening on <code class="docutils literal notranslate"><span class="pre">main</span></code>. You’d like to plop all your commits onto the most recent <code class="docutils literal notranslate"><span class="pre">main</span></code> branch, and have it appear as if all your work took place <em>after</em> those PRs were merged in.</p>
+<ol class="simple">
+<li><p>At this point, you’ve either stashed or added commits on <code class="docutils literal notranslate"><span class="pre">my-new-branch</span></code>.</p></li>
+<li><p>Check out the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">main</span></code></p></li>
+<li><p>Pull from origin: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span> <span class="pre">origin</span> <span class="pre">main</span></code></p></li>
+<li><p>Check out your current branch: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">my-new-branch</span></code></p></li>
+<li><p>Rebase and rewrite history so that your commits come <em>after</em> everything on main: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">rebase</span> <span class="pre">main</span></code></p></li>
+<li><p>At this point, the rebase may be successful, or you will have to address any conflicts! If you want to abort, use <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">rebase</span> <span class="pre">--abort</span></code>. Changes in scripts will be easy to resolve, but notebook conflicts are difficult. If conflicts are easily resolved, open the file, make the changes, then <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span></code> the file(s), and <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">rebase</span> <span class="pre">--continue</span></code>.</p></li>
+<li><p>Make any commits you want (from step 1) with <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span></code>, <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span> <span class="pre">-m</span> <span class="pre">&quot;commit</span> <span class="pre">message&quot;</span></code></p></li>
+<li><p>Force-push those changes to complete the rebase and rewrite the commit history: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">origin</span> <span class="pre">my-new-branch</span> <span class="pre">-f</span></code></p></li>
+</ol>
+</div>
+<div class="section" id="merge">
+<h3>Merge<a class="headerlink" href="#merge" title="Permalink to this headline">¶</a></h3>
+<ol class="simple">
+<li><p>At this point, you’ve either stashed or added commits on <code class="docutils literal notranslate"><span class="pre">my-new-branch</span></code>.</p></li>
+<li><p>Pull from origin: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">main</span></code> and <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span> <span class="pre">origin</span> <span class="pre">main</span></code></p></li>
+<li><p>Go back to your branch: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">my-new-branch</span></code></p></li>
+<li><p>Complete the merge of <code class="docutils literal notranslate"><span class="pre">my-new-branch</span></code> with <code class="docutils literal notranslate"><span class="pre">main</span></code> and create a new commit: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">merge</span> <span class="pre">my-new-branch</span> <span class="pre">main</span></code>
+SOMEONE WHO PREFERS MERGE PROCESS TO FILL THIS IN…is there a commit after?</p></li>
+</ol>
+</div>
+<div class="section" id="helpful-hints">
+<h3>Helpful Hints<a class="headerlink" href="#helpful-hints" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>To discard the changes you made to a file, <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">my-notebook.ipynb</span></code>, and you can revert back to the version that was last committed.</p></li>
+<li><p>Temporarily stash changes, move to a different branch, and come back and retain those changes: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">stash</span></code>, <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">some-other-branch</span></code>, do stuff on the other branch, <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">original-branch</span></code>, <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">stash</span> <span class="pre">pop</span></code></p></li>
+<li><p>Rename files and retain the version history associated: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">mv</span> <span class="pre">old-notebook.ipynb</span> <span class="pre">new-notebook.ipynb</span></code></p></li>
+<li><p>Once you’ve merged your branch into <code class="docutils literal notranslate"><span class="pre">main</span></code>, you can delete your branch locally: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">branch</span> <span class="pre">-d</span> <span class="pre">my-new-branch</span></code></p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="pushing-in-github-drag-and-drop">
+<h2>Pushing in GitHub - Drag and Drop<a class="headerlink" href="#pushing-in-github-drag-and-drop" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="pushing-from-the-command-line">
 <h2>Pushing from the Command Line<a class="headerlink" href="#pushing-from-the-command-line" title="Permalink to this headline">¶</a></h2>
@@ -658,7 +799,7 @@
     <a class='right-next' id="next-link" href="07_storing_data.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Storing New Data (WIP)</p>
+        <p class="prev-next-title">Storing New Data</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

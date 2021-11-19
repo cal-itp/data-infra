@@ -184,7 +184,17 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="07_storing_data.html">
-     Storing New Data (WIP)
+     Storing New Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="08_data_catalogs.html">
+     Using Data Catalogs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="sample-catalog-viewer.html">
+     Sample Catalog
     </a>
    </li>
   </ul>
@@ -641,6 +651,11 @@
    mapping
   </a>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#shared-utils">
+   shared utils
+  </a>
+ </li>
 </ul>
 
             </nav>
@@ -891,6 +906,19 @@ WHERE regexp_contains(`anon_1`.`agency_name`, &#39;Metro&#39;)
 </div>
 <div class="section" id="mapping">
 <h2>mapping<a class="headerlink" href="#mapping" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="shared-utils">
+<h2>shared utils<a class="headerlink" href="#shared-utils" title="Permalink to this headline">¶</a></h2>
+<p>A set of shared utility functions can also be installed, similarly to any Python library. The <a class="reference external" href="https://github.com/cal-itp/data-analyses/shared_utils">shared_utils</a> are stored here. Generalized functions for analysis are added as collaborative work evolves so we aren’t constantly reinventing the wheel.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># In terminal:</span>
+<span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+
+<span class="c1"># In notebook:</span>
+<span class="kn">import</span> <span class="nn">shared_utils</span>
+
+<span class="n">shared_utils</span><span class="o">.</span><span class="n">geography_utils</span><span class="o">.</span><span class="n">WGS84</span>
+</pre></div>
+</div>
 </div>
 </div>
 

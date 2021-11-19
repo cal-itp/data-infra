@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Storing New Data (WIP) &#8212; Cal-ITP Data Services</title>
+    <title>Storing New Data &#8212; Cal-ITP Data Services</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -51,7 +51,7 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Introduction to the Warehouse (WIP)" href="../warehouse/overview.html" />
+    <link rel="next" title="Using Data Catalogs" href="08_data_catalogs.html" />
     <link rel="prev" title="Saving Code (WIP)" href="06_saving_code.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -184,7 +184,17 @@
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     Storing New Data (WIP)
+     Storing New Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="08_data_catalogs.html">
+     Using Data Catalogs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="sample-catalog-viewer.html">
+     Sample Catalog
     </a>
    </li>
   </ul>
@@ -534,7 +544,10 @@
 
     <div class="dropdown-buttons">
         <!-- ipynb file if we had a myst markdown file -->
-        
+        <a class="dropdown-buttons"
+            href="../_sources/analytics_tools/07_storing_data.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
         <!-- Download raw file -->
         <a class="dropdown-buttons" href="../_sources/analytics_tools/07_storing_data.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
@@ -574,6 +587,23 @@
 
             <!-- Launch buttons -->
 
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/cal-itp/data-infra/main?urlpath=tree/docs/analytics_tools/07_storing_data.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
         </div>
 
         <!-- Table of contents -->
@@ -585,9 +615,53 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#intakify">
-   intakify
+  <a class="reference internal nav-link" href="#table-of-contents">
+   Table of Contents
   </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#setting-up-google-authentication">
+   Setting Up Google Authentication
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#tabular-data">
+   Tabular Data
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#parquet">
+     Parquet
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#csv">
+     CSV
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#geospatial-data">
+   Geospatial Data
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#geoparquet">
+     Geoparquet
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#zipped-shapefile">
+     Zipped Shapefile
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#geojson">
+     GeoJSON
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -600,11 +674,110 @@
         
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="storing-new-data-wip">
-<h1>Storing New Data (WIP)<a class="headerlink" href="#storing-new-data-wip" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="intakify">
-<h2>intakify<a class="headerlink" href="#intakify" title="Permalink to this headline">¶</a></h2>
-<p>In order to use and save external data sources for analyses we have deployed a service called intakify.</p>
+  <div class="tex2jax_ignore mathjax_ignore section" id="storing-new-data">
+<h1>Storing New Data<a class="headerlink" href="#storing-new-data" title="Permalink to this headline">¶</a></h1>
+<p>Our team uses Google Cloud Storage (GCS) buckets, specifically the <code class="docutils literal notranslate"><span class="pre">calitp-analytics-data</span></code> bucket, to store other datasets for analyses. GCS can store anything, of arbitrary object size and shape. It’s like a giant folder in the cloud. You can use it to store CSVs, parquets, pickles, videos, etc. Within the bucket, the <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code> folder with its sub-folders corresponds to the <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code>  GitHub repo with its sub-folders. Versioned data for a task should live within the correct folders.</p>
+<p>To access GCS, make sure you have your authentication set up in JupyterHub.
+GOOGLE AUTH STUFF, LINK TO THAT PAGE, EMBED THAT HERE.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">gcsfs</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">calitp.storage</span> <span class="kn">import</span> <span class="n">get_fs</span>
+<span class="n">fs</span> <span class="o">=</span> <span class="n">get_fs</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="section" id="table-of-contents">
+<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
+<ol class="simple">
+<li><p><a class="reference external" href="#setting-up-google-authentication">Setting up Google Authentication</a></p></li>
+<li><p><a class="reference external" href="#tabular-data">Tabular Data</a>
+<br> - <a class="reference external" href="#parquet">Parquet</a>
+<br>- <a class="reference external" href="#csv">CSV</a></p></li>
+<li><p><a class="reference external" href="#geospatial-data">Geospatial Data</a>
+<br> - <a class="reference external" href="#geoparquet">Geoparquet</a>
+<br> - <a class="reference external" href="#zipped-shapefile">Zipped shapefile</a>
+<br> - <a class="reference external" href="#geojson">GeoJSON</a></p></li>
+</ol>
+</div>
+<div class="section" id="setting-up-google-authentication">
+<h2>Setting Up Google Authentication<a class="headerlink" href="#setting-up-google-authentication" title="Permalink to this headline">¶</a></h2>
+<p>Currently, report data can be stored in the <code class="docutils literal notranslate"><span class="pre">calitp-analytics-data</span></code> bucket.</p>
+<p>In order to save data being used in a report, you can use two methods:</p>
+<ul class="simple">
+<li><p>Using code in your notebook to upload the data.</p></li>
+<li><p>Using the Google Cloud Storage web UI to manually upload.</p></li>
+</ul>
+<p>To push a dataset with code from a Jupyter Notebook or script, run these commands in the terminal to set up your Google authentication.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># initial setup ----</span>
+<span class="n">curl</span> <span class="o">-</span><span class="n">O</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">dl</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">dl</span><span class="o">/</span><span class="n">cloudsdk</span><span class="o">/</span><span class="n">channels</span><span class="o">/</span><span class="n">rapid</span><span class="o">/</span><span class="n">downloads</span><span class="o">/</span><span class="n">google</span><span class="o">-</span><span class="n">cloud</span><span class="o">-</span><span class="n">sdk</span><span class="o">-</span><span class="mf">361.0.0</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">tar</span> <span class="o">-</span><span class="n">zxvf</span> <span class="n">google</span><span class="o">-</span><span class="n">cloud</span><span class="o">-</span><span class="n">sdk</span><span class="o">-</span><span class="mf">361.0.0</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<span class="o">./</span><span class="n">google</span><span class="o">-</span><span class="n">cloud</span><span class="o">-</span><span class="n">sdk</span><span class="o">/</span><span class="n">install</span><span class="o">.</span><span class="n">sh</span>
+<span class="o">./</span><span class="n">google</span><span class="o">-</span><span class="n">cloud</span><span class="o">-</span><span class="n">sdk</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">gcloud</span> <span class="n">init</span>
+
+<span class="c1"># log in to project ----</span>
+<span class="n">gcloud</span> <span class="n">auth</span> <span class="n">login</span>
+<span class="n">gcloud</span> <span class="n">auth</span> <span class="n">application</span><span class="o">-</span><span class="n">default</span> <span class="n">login</span>
+</pre></div>
+</div>
+<p>These are demonstrated in the screencast below.</p>
+<div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/51d22876ab6d4d35a39f18e8f6d5f11d" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
+</div>
+<div class="section" id="tabular-data">
+<h2>Tabular Data<a class="headerlink" href="#tabular-data" title="Permalink to this headline">¶</a></h2>
+<p>While GCS can store CSVs, parquets, Excel spreadsheets, etc, parquets are the preferred file type. Interacting with tabular datasets in GCS is fairly straightforward and is handled well by <code class="docutils literal notranslate"><span class="pre">pandas</span></code>.</p>
+<div class="section" id="parquet">
+<h3>Parquet<a class="headerlink" href="#parquet" title="Permalink to this headline">¶</a></h3>
+<p>Parquet is an “open source columnar storage format for use in data analysis systems.” Columnar storage is more efficient as it is easily compressed and the data is more homogenous. CSV files utilize a row-based storage format which is harder to compress, a reason why Parquets files are preferable for larger datasets. Parquet files are faster to read than CSVs, as they have a higher querying speed and preserve datatypes (ie, Number, Timestamps, Points). They are best for intermediate data storage and large datasets (1GB+) on most any on-disk storage. This file format is also good for passing dataframes between Python and R. A similar option is feather.</p>
+<p>One of the downsides to Parquet files is the inability to quickly look at the dataset in GUI based (Excel, QGIS, etc.) programs. Parquet files also lack built-in support for categorical data.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/task-subfolder/test.parquet&#39;</span><span class="p">)</span>
+
+<span class="n">df</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/task-subfolder/test.parquet&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="csv">
+<h3>CSV<a class="headerlink" href="#csv" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/task-subfolder/test.csv&#39;</span><span class="p">)</span>
+
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/task-subfolder/test.parquet&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="geospatial-data">
+<h2>Geospatial Data<a class="headerlink" href="#geospatial-data" title="Permalink to this headline">¶</a></h2>
+<p>Geospatial data may require a little extra work, due to how <code class="docutils literal notranslate"><span class="pre">geopandas</span></code> and GCS interacts.</p>
+<div class="section" id="geoparquet">
+<h3>Geoparquet<a class="headerlink" href="#geoparquet" title="Permalink to this headline">¶</a></h3>
+<p>Importing geoparquets directly from GCS works with <code class="docutils literal notranslate"><span class="pre">geopandas</span></code>, but exporting geoparquets into GCS requires an extra step of uploading.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">&quot;gs://calitp-analytics-data/data-analyses/task-subfolder/my-geoparquet.parquet&quot;</span><span class="p">)</span>
+
+<span class="c1"># Save the geodataframe to your local filesystem</span>
+<span class="n">gdf</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s2">&quot;./my-geoparqet.parquet&quot;</span><span class="p">)</span>
+
+<span class="c1"># Put the local file into the GCS bucket</span>
+<span class="n">fs</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;./my-geoparquet.parquet&quot;</span><span class="p">,</span> <span class="s2">&quot;gs://calitp-analytics-data/data-analyses/task-subfolder/my-geoparquet.parquet&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Or, use the <code class="docutils literal notranslate"><span class="pre">shared_utils</span></code> package.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">shared_utils</span>
+
+<span class="n">shared_utils</span><span class="o">.</span><span class="n">geoparquet_gcs_export</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="s2">&quot;my-geoparquet&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="zipped-shapefile">
+<h3>Zipped Shapefile<a class="headerlink" href="#zipped-shapefile" title="Permalink to this headline">¶</a></h3>
+<p>Refer to the <a class="reference external" href="./08_data_catalogs.md#google-cloud-storage">data catalogs doc</a> to list a zipped shapefile, and read in the zipped shapefile with the <code class="docutils literal notranslate"><span class="pre">intake</span></code> method. Zipped shapefiles saved in GCS cannot be read in directly using <code class="docutils literal notranslate"><span class="pre">geopandas</span></code>.</p>
+<p>??IS THERE WAY TO READ FROM CALITP.STORAGE?</p>
+</div>
+<div class="section" id="geojson">
+<h3>GeoJSON<a class="headerlink" href="#geojson" title="Permalink to this headline">¶</a></h3>
+<p>Refer to the <a class="reference external" href="./08_data_catalogs.md#google-cloud-storage">data catalogs doc</a> to list a GeoJSON, and read in the GeoJSON with the <code class="docutils literal notranslate"><span class="pre">intake</span></code> method. GeoJSONs saved in GCS cannot be read in directly using <code class="docutils literal notranslate"><span class="pre">geopandas</span></code>.</p>
+<p>??IS THERE WAY TO READ FROM CALITP.STORAGE?</p>
+</div>
 </div>
 </div>
 
@@ -640,10 +813,10 @@
             <p class="prev-next-title">Saving Code (WIP)</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../warehouse/overview.html" title="next page">
+    <a class='right-next' id="next-link" href="08_data_catalogs.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Introduction to the Warehouse (WIP)</p>
+        <p class="prev-next-title">Using Data Catalogs</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
