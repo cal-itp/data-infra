@@ -18,19 +18,19 @@ Below you can find links to the resources themselves, as well as relevant suppor
 
 **Collaboration Tools:**
 
-- [ ]  [Slack](https://cal-itp.slack.com) | ([Docs](slack-intro))
-- [ ]  [Analytics Repo](https://github.com/cal-itp/data-analyses) | ([Docs](analytics-repo))
-- [ ]  [Analyst Project Board](https://github.com/cal-itp/data-infra/projects/6) | ([Docs](analytics-project-board))
+- [ ]  [**Slack**](https://cal-itp.slack.com) | ([Docs](slack-intro))
+- [ ]  [**Analytics Repo**](https://github.com/cal-itp/data-analyses) | ([Docs](analytics-repo))
+- [ ]  [**Analyst Project Board**](https://github.com/cal-itp/data-infra/projects/6) | ([Docs](analytics-project-board))
 
 **Dashboards & Notebooks:**
 
-- [ ]  [JupyterHub](https://hubtest.k8s.calitp.jarv.us/): Cloud-based notebooks | ([Docs](jupyterhub))
-- [ ]  [Metabase](https://dashboards.calitp.org/): Dashboards and Business Insights | ([Docs](metabase))
+- [ ]  [**Metabase**](https://dashboards.calitp.org/) - Dashboards and Business Insights | ([Docs](metabase))
+- [ ]  [**JupyterHub**](https://hubtest.k8s.calitp.jarv.us/) - Cloud-based notebooks | ([Docs](jupyterhub))
 
 **Python Libraries:**
 
-- [ ]  calitp-py: Cal-ITP's internal Python library | ([Docs](calitp))
-- [ ]  siuba: Recommended data analysis library | ([Docs](siuba))
+- [ ]  **calitp-py** - Cal-ITP's internal Python library | ([Docs](calitp))
+- [ ]  **siuba** - Recommended data analysis library | ([Docs](siuba))
 
 
 (get-help)=
