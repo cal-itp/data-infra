@@ -66,7 +66,7 @@ jobs:
             issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body: "Preview url: https://" + context.repo.repo + "-" + env.PR_NUMBER + suffix
+            body: "Preview url: https://" + context.repo.repo + "-" + process.env.PR_NUMBER + suffix
           })
       env:
         PR_NUMBER: ${{ github.event.number }}
