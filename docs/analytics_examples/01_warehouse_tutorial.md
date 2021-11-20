@@ -88,6 +88,7 @@ from myst_nb import glue
 
 ```{code-cell}
 :tags: [remove-cell]
+joshua =
 %%sql -m
 
 SELECT
