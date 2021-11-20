@@ -68,8 +68,8 @@ jobs:
             repo: context.repo.repo,
             body: "Preview url: https://" + context.repo.repo + "-" + env.PR_NUMBER + suffix
           })
-        env:
-          PR_NUMBER: ${{ github.event.number }}
+      env:
+        PR_NUMBER: ${{ github.event.number }}
 
 
     # docs deploy ----
