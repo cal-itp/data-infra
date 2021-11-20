@@ -69,7 +69,6 @@ These tables compliment the fact tables by providing additional descriptive attr
 
 ```{code-cell}
 from calitp.tables import tbl
-from myst_nb import glue
 from calitp import query_sql
 from siuba import *
 import pandas as pd
@@ -87,7 +86,26 @@ from myst_nb import glue
 (routes-agency-time)=
 ### 1. Number of Routes for a Given Agency Over Time
 
-
+```{code-cell}
+:tags: [remove-cell]
+%%sql -m
+jamestaylor = (
+SELECT
+    calitp_feed_name,
+    date,
+    count(*) AS count_feeds
+FROM `views.gtfs_schedule_fact_daily_feed_routes`
+JOIN `views.gtfs_schedule_dim_feeds` USING (feed_key)
+WHERE
+    calitp_feed_name = "Unitrans (0)"
+GROUP BY
+    1, 2
+ORDER BY
+    date DESC
+LIMIT 10
+)
+glue("johnprine", jamestaylor)
+```
 
 ```{code-cell}
 :tags: [remove-cell]
