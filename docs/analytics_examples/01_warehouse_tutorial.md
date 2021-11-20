@@ -11,6 +11,8 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
+---
+---
 substitutions:
   key1: |
     ```{code-cell}
