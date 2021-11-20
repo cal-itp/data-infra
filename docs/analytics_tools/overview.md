@@ -5,7 +5,7 @@ This section dives deeper into the details of our tools and how they are used, a
 
 **What you should know after reading**:
 * [How to use our BI & dashboarding tool](metabase)
-* [How to use our cloud notebook, JupyterHub](jupyterhub)
+* [How to use our cloud notebook](jupyterhub)
 * How to query the warehouse with SQL
 * [What Python libraries are suggested](python-libraries)
 * [Where code is kept](saving-code)
