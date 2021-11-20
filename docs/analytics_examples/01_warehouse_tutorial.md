@@ -45,23 +45,23 @@ These tables contain measurements, metrics, and facts used to answer the questio
 
 | Table Type | Location |
 | -------- | -------- |
-| **Feeds** | views.**gtfs_schedule_fact_daily_feeds** <br/> (in Metabase: **Gtfs Schedule Fact Daily Feeds**) |
-| **Routes** | views.**gtfs_schedule_fact_daily_feed_routes** <br/> (in Metabase: **Gtfs Schedule Fact Daily Feed Routes**) |
-| **Stops** | views.**gtfs_schedule_fact_daily_feed_stops** <br/> (in Metabase: **Gtfs Schedule Fact Daily Feed Stops**) |
-| **Trips** | views.**gtfs_schedule_data_feed_trip_stops_latest** <br/> (in Metabase: **Gtfs Schedule Data Feed Trip Stops Latest**) |
+| **Feeds** | Warehouse: views.**gtfs_schedule_fact_daily_feeds** <br/> Metabase: **Gtfs Schedule Fact Daily Feeds** |
+| **Routes** | Warehouse: views.**gtfs_schedule_fact_daily_feed_routes** <br/> Metabase: **Gtfs Schedule Fact Daily Feed Routes** |
+| **Stops** | Warehouse: views.**gtfs_schedule_fact_daily_feed_stops** <br/> Metabase: **Gtfs Schedule Fact Daily Feed Stops** |
+| **Trips** | Warehouse: views.**gtfs_schedule_data_feed_trip_stops_latest** <br/> Metabase: **Gtfs Schedule Data Feed Trip Stops Latest** |
 
 #### Dimensional Tables
 These tables compliment the fact tables by providing additional descriptive attributes:
 
 | Table | Location | Description |
 | -------- | -------- | -------- |
-| **Dim Feeds** | views.**gtfs_schedule_dim_feeds** <br/> (in Metabase: **Gtfs Schedule Dim Feeds**) | Joining with this table is the most common way to append calitp_feed_name (our primary agency identifier) to fact tables. |
+| **Dim Feeds** | Warehouse: views.**gtfs_schedule_dim_feeds** <br/> Metabase: **Gtfs Schedule Dim Feeds** | * Joining with this table is the most common way to append calitp_feed_name to fact tables <br/> * calitp_feed_name is our primary agency identifier |
 
 ### Important Column Types
 
 | Column Type | Notable Columns | Description |
 | -------- | -------- | -------- |
-| **Agency** | **calitp_feed_name** <br/> (in Metabase: **Calitp Feed Name**) | Our primary agency identifier <br/> In most of the examples below, this is gathered from the table: views.**gtfs_schedule_dim_feeds** <br/> (in Metabase: **Gtfs Schedule Dim Feeds**) |
+| **Agency** | Warehouse: **calitp_feed_name** <br/> Metabase: **Calitp Feed Name** | * Our primary agency identifier <br/> * In most of the examples below, this is gathered from the table: views.**gtfs_schedule_dim_feeds** <br/> * Metabase: **Gtfs Schedule Dim Feeds** |
 | **Time** | | |
 | **Geography** | | |
 
@@ -88,7 +88,7 @@ from myst_nb import glue
 
 ```{code-cell}
 :tags: [remove-cell]
-dataframe = query_sql("""
+routes_dataframe = query_sql("""
 SELECT
     calitp_feed_name,
     date,
@@ -102,7 +102,7 @@ GROUP BY
 ORDER BY
     date DESC
 LIMIT 10""", as_df=True)
-glue("pleasegod", dataframe)
+glue("routes_sql_output", routes_dataframe)
 ```
 
 ```{code-cell}
@@ -119,28 +119,34 @@ glue("examplep1", pythonroutesexample)
 ```
 
 ````{tabbed} Metabase
-**Primary Fact Table** → Gtfs Schedule Fact Daily Feed Routes
+Tables
+| Name | Use |
+| -------- | -------- |
+| **Gtfs Schedule Fact Daily Feed Routes** | Primary Fact Table |
+| **Gtfs Schedule Dim Feeds** | Secondary Dimensional Table |
 
-**Secondary Table** → Gtfs Schedule Dim Feeds
-
-*Time* → **Date** (*FILTER*)
-
-*Geography* → **Route Key** (the unique identifier for each record, to *COUNT* by)
-
-*Agency* → Metabase automatically joins with table **Gtfs Schedule Dim Feeds** on variable **Feed Key** to get **Calitp Feed Name** (*FILTER*)
+Columns
+| Type | Column | Use |
+| -------- | -------- |
+| *Time* | **Date** | (*FILTER*) |
+| *Geography* | **Route Key** | (the unique identifier for each record, to *COUNT* by) |
+| *Agency* | **Calitp Feed Name** | Metabase automatically joins with table **Gtfs Schedule Dim Feeds** on variable **Feed Key** to get **Calitp Feed Name** (*FILTER*) |
 
 ![Collection Matrix](assets/routes_agency_over_time.png)
 ````
 ````{tabbed} SQL
-**Primary Fact Table** → views.gtfs_schedule_fact_daily_feed_routes
+Tables
+| Name | Use |
+| -------- | -------- |
+| views.**gtfs_schedule_fact_daily_feed_routes** | Primary Fact Table |
+| views.**gtfs_schedule_dim_feeds** | Secondary Table |
 
-**Secondary Table** →  views.gtfs_schedule_dim_feeds
-
-*Time* → **date** (*GROUP BY*)
-
-*Geography* → **route_key** (the unique identifier for each record, to *COUNT* by)
-
-*Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*)
+Columns
+| Type | Column | Use |
+| -------- | -------- |
+| *Time* | **date** | *GROUP BY* |
+| *Geography* | **route_key** | The unique identifier for each record, to *COUNT* by |
+| *Agency* | **calitp_feed_name** | Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*) |
 
 ```sql
 SELECT
@@ -157,19 +163,22 @@ ORDER BY
     date DESC
 LIMIT 10
 ```
-```{glue:figure} pleasegod
+```{glue:figure} routes_sql_output
 ```
 ````
 ````{tabbed} siuba
-**Primary Fact Table** → views.gtfs_schedule_fact_daily_feed_routes
+Tables
+| Name | Use |
+| -------- | -------- |
+| views.**gtfs_schedule_fact_daily_feed_routes** | Primary Fact Table |
+| views.**gtfs_schedule_dim_feeds** | Secondary Table |
 
-**Secondary Table** →  views.gtfs_schedule_dim_feeds
-
-*Time* → **date** (*COUNT* by)
-
-*Geography* → **route_key** (the unique identifier for each record)
-
-*Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*FILTER* by)
+Columns
+| Type | Column | Use |
+| -------- | -------- |
+| *Time* | **date** | *count* by |
+| *Geography* | **route_key** | The unique identifier for each record |
+| *Agency* | **calitp_feed_name** | Join with table views.**gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*filter* by) |
 
 ```python
 # Join to get CalITP Feed Names
