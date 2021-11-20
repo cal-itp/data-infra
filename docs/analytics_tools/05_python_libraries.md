@@ -12,6 +12,7 @@ kernelspec:
   language: python
   name: python3
 ---
+(python-libraries)=
 # Python Libraries (WIP)
 The following libraries are available and recommended for use by Cal-ITP data analysts.
 (calitp)=

@@ -4,12 +4,12 @@ Welcome to the Analytics Tools section! If you're here, you're ready to begin co
 This section dives deeper into the details of our tools and how they are used, and is laid out in the progressive form of an anlaysis. When used in combination with the ['Introduction to the Warehouse'](intro-warehouse), ['Datasets & Tables'](datasets-tables), and ['How to Publish Analyses'](publish-analyses) sections you should be prepared to conduct an analysis from end-to-end.
 
 **What you should know after reading**:
-* Where are our dashboards?
-* How do I use our cloud notebook, JupyterHub?
-* How do I query the warehouse with SQL?
-* What Python libraries are suggested?
-* Where do I keep my code?
-* How do I store and use new data?
+* [How to use our BI & dashboarding tool](metabase)
+* [How to use our cloud notebook, JupyterHub](jupyterhub)
+* How to query the warehouse with SQL
+* [What Python libraries are suggested](python-libraries)
+* [Where code is kept](saving-code)
+* [How to store new data](storing-data), and [best practices](data-catalogs).
 
 &nbsp;
 :::{admonition} Missing something?
