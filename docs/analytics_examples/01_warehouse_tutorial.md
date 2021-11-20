@@ -164,7 +164,7 @@ LIMIT 10
     >> arrange(_.date)
 )
 ```
-```{glue:figure}'examplep1'
+```{glue:figure} examplep1
 ```
 ````
 
