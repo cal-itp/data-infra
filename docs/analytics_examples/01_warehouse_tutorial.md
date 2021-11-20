@@ -89,7 +89,7 @@ from myst_nb import glue
 ```{code-cell}
 :tags: [remove-cell]
 jamestaylor =
-%sql
+%%sql -m
 SELECT
     calitp_feed_name,
     date,
@@ -103,8 +103,6 @@ GROUP BY
 ORDER BY
     date DESC
 LIMIT 10
-
-glue("johnprine", jamestaylor)
 ```
 
 ```{code-cell}
@@ -116,6 +114,10 @@ pythonroutesexample = (
     >> count(_.date)
     >> arrange(_.date)
 )
+```
+
+```{code-cell}
+glue("johnprine", jamestaylor)
 glue("examplep1", pythonroutesexample)
 ```
 
