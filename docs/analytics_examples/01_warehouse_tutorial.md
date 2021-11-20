@@ -88,8 +88,8 @@ from myst_nb import glue
 
 ```{code-cell}
 :tags: [remove-cell]
+joshua = (
 %%sql -m
-WITH joshua AS (
 SELECT
     calitp_feed_name,
     date,
@@ -102,8 +102,8 @@ GROUP BY
     1, 2
 ORDER BY
     date DESC
-LIMIT 10
-)
+LIMIT 10)
+
 ```
 
 ```{code-cell}
