@@ -96,37 +96,12 @@ pd.set_option("display.max_rows", 20)
 ![Collection Matrix](assets/routes_agency_over_time.png)
 ````
 ````{tabbed} SQL
-**Primary Fact Table** → views.gtfs_schedule_fact_daily_feed_routes
-
-**Secondary Table** →  views.gtfs_schedule_dim_feeds
-
-*Time* → **date** (*GROUP BY*)
-
-*Geography* → **route_key** (the unique identifier for each record, to *COUNT* by)
-
-*Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*)
-
-```{code-cell}
-:tags: [remove-input]
-%%sql -m
-
-SELECT
-    calitp_feed_name,
-    date,
-    count(*) AS count_feeds
-FROM `views.gtfs_schedule_fact_daily_feed_routes`
-JOIN `views.gtfs_schedule_dim_feeds` USING (feed_key)
-WHERE
-    calitp_feed_name = "Unitrans (0)"
-GROUP BY
-    1, 2
-ORDER BY
-    date DESC
-LIMIT 10
+added something
 ```
 ````
 ````{tabbed} siuba
-added something again
+```{glue:figure} what_are_names
+```
 ````
 
 #### Metabase
