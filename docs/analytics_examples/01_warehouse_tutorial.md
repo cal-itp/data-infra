@@ -104,7 +104,6 @@ ORDER BY
     date DESC
 LIMIT 10
 )
-glue("johnprine", joshua)
 ```
 
 ```{code-cell}
