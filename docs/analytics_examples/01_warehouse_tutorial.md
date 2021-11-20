@@ -87,26 +87,7 @@ from myst_nb import glue
 (routes-agency-time)=
 ### 1. Number of Routes for a Given Agency Over Time
 
-```{code-cell}
-:tags: [remove-cell]
-%%sql -m
-jamestaylor = (
-SELECT
-    calitp_feed_name,
-    date,
-    count(*) AS count_feeds
-FROM `views.gtfs_schedule_fact_daily_feed_routes`
-JOIN `views.gtfs_schedule_dim_feeds` USING (feed_key)
-WHERE
-    calitp_feed_name = "Unitrans (0)"
-GROUP BY
-    1, 2
-ORDER BY
-    date DESC
-LIMIT 10
-)
-glue("johnprine", jamestaylor)
-```
+
 
 ```{code-cell}
 :tags: [remove-cell]
@@ -144,7 +125,7 @@ glue("examplep1", pythonroutesexample)
 
 *Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*)
 
-```SQL
+```sql
 SELECT
     calitp_feed_name,
     date,
@@ -159,7 +140,7 @@ ORDER BY
     date DESC
 LIMIT 10
 ```
-{glue:figure}'johnprine'
+
 ````
 ````{tabbed} siuba
 **Primary Fact Table** → views.gtfs_schedule_fact_daily_feed_routes
