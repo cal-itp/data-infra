@@ -82,6 +82,26 @@ pd.set_option("display.max_rows", 20)
 (routes-agency-time)=
 ### 1. Number of Routes for a Given Agency Over Time
 
+````{tabbed} Metabase
+**Primary Fact Table** → Gtfs Schedule Fact Daily Feed Routes
+
+**Secondary Table** → Gtfs Schedule Dim Feeds
+
+*Time* → **Date** (*FILTER*)
+
+*Geography* → **Route Key** (the unique identifier for each record, to *COUNT* by)
+
+*Agency* → Metabase automatically joins with table **Gtfs Schedule Dim Feeds** on variable **Feed Key** to get **Calitp Feed Name** (*FILTER*)
+
+![Collection Matrix](assets/routes_agency_over_time.png)
+````
+````{tabbed} SQL
+
+````
+````{tabbed} siuba
+
+````
+
 #### Metabase
 **Primary Fact Table** → Gtfs Schedule Fact Daily Feed Routes
 
