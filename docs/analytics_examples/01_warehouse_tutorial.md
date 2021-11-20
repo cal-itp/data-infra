@@ -86,8 +86,10 @@ from myst_nb import glue
 (routes-agency-time)=
 ### 1. Number of Routes for a Given Agency Over Time
 
-```{code-cell} sql
+```{code-cell}
 :tags: [remove-cell]
+%%sql -m
+
 SELECT
     calitp_feed_name,
     date,
@@ -101,6 +103,7 @@ GROUP BY
 ORDER BY
     date DESC
 LIMIT 10
+
 ```
 
 ```{code-cell}
