@@ -77,10 +77,27 @@ import calitp.magics
 pd.set_option("display.max_rows", 20)
 ```
 
+```{code-cell}
+:tags: [remove-cell]
+from myst_nb import glue
+```
+
 ## Query Examples
 
 (routes-agency-time)=
 ### 1. Number of Routes for a Given Agency Over Time
+
+```{code-cell}
+:tags: [remove-cell]
+routesexample = (
+    tbl.views.gtfs_schedule_fact_daily_feed_routes()
+    >> left_join(_, tbl.views.gtfs_schedule_dim_feeds(), "feed_key")
+    >> filter(_.calitp_feed_name == "Unitrans (0)")
+    >> count(_.date)
+    >> arrange(_.date)
+)
+glue("what_are_names", routesexample)
+```
 
 ````{tabbed} Metabase
 **Primary Fact Table** → Gtfs Schedule Fact Daily Feed Routes
