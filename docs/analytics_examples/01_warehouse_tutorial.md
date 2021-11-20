@@ -119,29 +119,29 @@ glue("examplep1", pythonroutesexample)
 ```
 
 ````{tabbed} Metabase
-Tables
+**Tables Used**
 | Name | Use |
 | -------- | -------- |
 | **Gtfs Schedule Fact Daily Feed Routes** | Primary Fact Table |
 | **Gtfs Schedule Dim Feeds** | Secondary Dimensional Table |
 
-Columns
+**Columns Used**
 | Type | Column | Use |
 | -------- | -------- | -------- |
-| *Time* | **Date** | (*FILTER*) |
-| *Geography* | **Route Key** | (the unique identifier for each record, to *COUNT* by) |
+| *Time* | **Date** | *FILTER* |
+| *Geography* | **Route Key** | The unique identifier for each record, to *COUNT* by |
 | *Agency* | **Calitp Feed Name** | Metabase automatically joins with table **Gtfs Schedule Dim Feeds** on variable **Feed Key** to get **Calitp Feed Name** (*FILTER*) |
 
 ![Collection Matrix](assets/routes_agency_over_time.png)
 ````
 ````{tabbed} SQL
-Tables
+**Tables Used**
 | Name | Use |
 | -------- | -------- |
 | **views.gtfs_schedule_fact_daily_feed_routes** | Primary Fact Table |
 | **views.gtfs_schedule_dim_feeds** | Secondary Table |
 
-Columns
+**Columns Used**
 | Type | Column | Use |
 | -------- | -------- | -------- |
 | *Time* | **date** | *GROUP BY* |
@@ -167,13 +167,13 @@ LIMIT 10
 ```
 ````
 ````{tabbed} siuba
-Tables
+**Tables Used**
 | Name | Use |
 | -------- | -------- |
 | **views.gtfs_schedule_fact_daily_feed_routes** | Primary Fact Table |
 | **views.gtfs_schedule_dim_feeds** | Secondary Table |
 
-Columns
+**Columns Used**
 | Type | Column | Use |
 | -------- | -------- | -------- |
 | *Time* | **date** | *count* by |
