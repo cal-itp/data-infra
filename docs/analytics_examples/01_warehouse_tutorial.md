@@ -89,7 +89,7 @@ from myst_nb import glue
 ```{code-cell}
 :tags: [remove-cell]
 jamestaylor =
-%sql -m
+%sql
 SELECT
     calitp_feed_name,
     date,
