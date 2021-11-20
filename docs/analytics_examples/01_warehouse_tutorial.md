@@ -45,23 +45,23 @@ These tables contain measurements, metrics, and facts used to answer the questio
 
 | Table Type | Location |
 | -------- | -------- |
-| **Feeds** | Warehouse: views.**gtfs_schedule_fact_daily_feeds** <br/> Metabase: **Gtfs Schedule Fact Daily Feeds** |
-| **Routes** | Warehouse: views.**gtfs_schedule_fact_daily_feed_routes** <br/> Metabase: **Gtfs Schedule Fact Daily Feed Routes** |
-| **Stops** | Warehouse: views.**gtfs_schedule_fact_daily_feed_stops** <br/> Metabase: **Gtfs Schedule Fact Daily Feed Stops** |
-| **Trips** | Warehouse: views.**gtfs_schedule_data_feed_trip_stops_latest** <br/> Metabase: **Gtfs Schedule Data Feed Trip Stops Latest** |
+| **Feeds** | Warehouse: **views.gtfs_schedule_fact_daily_feeds** <br/> Metabase: **Gtfs Schedule Fact Daily Feeds** |
+| **Routes** | Warehouse: **views.gtfs_schedule_fact_daily_feed_routes** <br/> Metabase: **Gtfs Schedule Fact Daily Feed Routes** |
+| **Stops** | Warehouse: **views.gtfs_schedule_fact_daily_feed_stops** <br/> Metabase: **Gtfs Schedule Fact Daily Feed Stops** |
+| **Trips** | Warehouse: **views.gtfs_schedule_data_feed_trip_stops_latest** <br/> Metabase: **Gtfs Schedule Data Feed Trip Stops Latest** |
 
 #### Dimensional Tables
 These tables compliment the fact tables by providing additional descriptive attributes:
 
 | Table | Location | Description |
 | -------- | -------- | -------- |
-| **Dim Feeds** | Warehouse: views.**gtfs_schedule_dim_feeds** <br/> Metabase: **Gtfs Schedule Dim Feeds** | * Joining with this table is the most common way to append calitp_feed_name to fact tables <br/> * calitp_feed_name is our primary agency identifier |
+| **Dim Feeds** | Warehouse: **views.gtfs_schedule_dim_feeds** <br/> Metabase: **Gtfs Schedule Dim Feeds** | - Joining with this table is the most common way to append calitp_feed_name to fact tables <br/> - calitp_feed_name is our primary agency identifier |
 
 ### Important Column Types
 
 | Column Type | Notable Columns | Description |
 | -------- | -------- | -------- |
-| **Agency** | Warehouse: **calitp_feed_name** <br/> Metabase: **Calitp Feed Name** | * Our primary agency identifier <br/> * In most of the examples below, this is gathered from the table: views.**gtfs_schedule_dim_feeds** <br/> * Metabase: **Gtfs Schedule Dim Feeds** |
+| **Agency** | Warehouse: **calitp_feed_name** <br/> Metabase: **Calitp Feed Name** | - Our primary agency identifier <br/> - In most of the examples below, this is gathered from the table: **views.gtfs_schedule_dim_feeds** <br/> - Metabase: **Gtfs Schedule Dim Feeds** |
 | **Time** | | |
 | **Geography** | | |
 
@@ -127,7 +127,7 @@ Tables
 
 Columns
 | Type | Column | Use |
-| -------- | -------- |
+| -------- | -------- | -------- |
 | *Time* | **Date** | (*FILTER*) |
 | *Geography* | **Route Key** | (the unique identifier for each record, to *COUNT* by) |
 | *Agency* | **Calitp Feed Name** | Metabase automatically joins with table **Gtfs Schedule Dim Feeds** on variable **Feed Key** to get **Calitp Feed Name** (*FILTER*) |
@@ -138,12 +138,12 @@ Columns
 Tables
 | Name | Use |
 | -------- | -------- |
-| views.**gtfs_schedule_fact_daily_feed_routes** | Primary Fact Table |
-| views.**gtfs_schedule_dim_feeds** | Secondary Table |
+| **views.gtfs_schedule_fact_daily_feed_routes** | Primary Fact Table |
+| **views.gtfs_schedule_dim_feeds** | Secondary Table |
 
 Columns
 | Type | Column | Use |
-| -------- | -------- |
+| -------- | -------- | -------- |
 | *Time* | **date** | *GROUP BY* |
 | *Geography* | **route_key** | The unique identifier for each record, to *COUNT* by |
 | *Agency* | **calitp_feed_name** | Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*) |
@@ -170,12 +170,12 @@ LIMIT 10
 Tables
 | Name | Use |
 | -------- | -------- |
-| views.**gtfs_schedule_fact_daily_feed_routes** | Primary Fact Table |
-| views.**gtfs_schedule_dim_feeds** | Secondary Table |
+| **views.gtfs_schedule_fact_daily_feed_routes** | Primary Fact Table |
+| **views.gtfs_schedule_dim_feeds** | Secondary Table |
 
 Columns
 | Type | Column | Use |
-| -------- | -------- |
+| -------- | -------- | -------- |
 | *Time* | **date** | *count* by |
 | *Geography* | **route_key** | The unique identifier for each record |
 | *Agency* | **calitp_feed_name** | Join with table views.**gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*filter* by) |
