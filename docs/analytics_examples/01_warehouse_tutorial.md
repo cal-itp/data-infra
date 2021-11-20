@@ -102,6 +102,7 @@ GROUP BY
 ORDER BY
     date DESC
 LIMIT 10""", as_df=True)
+glue("pleasegod", dataframe)
 ```
 
 ```{code-cell}
@@ -155,6 +156,8 @@ GROUP BY
 ORDER BY
     date DESC
 LIMIT 10
+```
+```{glue:figure} pleasegod
 ```
 ````
 ````{tabbed} siuba
