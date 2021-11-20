@@ -105,7 +105,7 @@ ORDER BY
     date DESC
 LIMIT 10
 )
-glue("sql_routes", sqlroutesexample)
+glue("examples1", sqlroutesexample)
 ```
 
 ```{code-cell}
@@ -117,7 +117,7 @@ pythonroutesexample = (
     >> count(_.date)
     >> arrange(_.date)
 )
-glue("python_routes", pythonroutesexample)
+glue("examplep1", pythonroutesexample)
 ```
 
 ````{tabbed} Metabase
@@ -159,7 +159,7 @@ ORDER BY
     date DESC
 LIMIT 10
 ```
-```{glue:figure} sql_routes
+```{glue:figure} examples1
 ```
 ```
 ````
@@ -185,7 +185,7 @@ LIMIT 10
     >> arrange(_.date)
 )
 ```
-```{glue:figure} python_routes
+```{glue:figure} examplep1
 ```
 ````
 
