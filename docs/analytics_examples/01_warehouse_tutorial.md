@@ -90,7 +90,7 @@ from myst_nb import glue
 ```{code-cell}
 :tags: [remove-cell]
 %%sql -m
-sqlroutesexample = (
+jamestaylor = (
 SELECT
     calitp_feed_name,
     date,
@@ -105,7 +105,7 @@ ORDER BY
     date DESC
 LIMIT 10
 )
-glue("examples1", sqlroutesexample)
+glue("johnprine", jamestaylor)
 ```
 
 ```{code-cell}
@@ -159,8 +159,7 @@ ORDER BY
     date DESC
 LIMIT 10
 ```
-```{glue:figure} examples1
-```
+```{glue:figure} johnprine
 ```
 ````
 ````{tabbed} siuba
