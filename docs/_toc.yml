@@ -37,7 +37,7 @@ parts:
         - file: datasets_and_tables/tables
       - file: analytics_examples/overview
         sections:
-        - file: analytics_examples/01_analysis_examples
+        - file: analytics_examples/01_warehouse_tutorial
         - file: analytics_examples/sample-catalog-viewer
       - file: analytics_publishing/overview
         sections:

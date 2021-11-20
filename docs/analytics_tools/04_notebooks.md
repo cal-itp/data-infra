@@ -5,7 +5,7 @@ For Python users, we have deployed a cloud-based instance of JupyterHub to creat
 
 This avoids the need to set up a local environment, provides dedicated storage, and allows you to push to GitHub.
 
-Make sure you have access to JupyterHub [here](https://hubtest.k8s.calitp.jarv.us/).
+**You can access JuypterHub [using this link](https://hubtest.k8s.calitp.jarv.us/)**.
 
 ## Using JupyterHub
 Jupyterhub is a web application that allows users to analyze and create reports on warehouse data (or a number of data sources).
