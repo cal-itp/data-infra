@@ -89,14 +89,35 @@ from myst_nb import glue
 
 ```{code-cell}
 :tags: [remove-cell]
-routesexample = (
+%%sql -m
+sqlroutesexample = ()
+SELECT
+    calitp_feed_name,
+    date,
+    count(*) AS count_feeds
+FROM `views.gtfs_schedule_fact_daily_feed_routes`
+JOIN `views.gtfs_schedule_dim_feeds` USING (feed_key)
+WHERE
+    calitp_feed_name = "Unitrans (0)"
+GROUP BY
+    1, 2
+ORDER BY
+    date DESC
+LIMIT 10
+)
+glue("sql_routes", sqlroutesexample)
+```
+
+```{code-cell}
+:tags: [remove-cell]
+pythonroutesexample = (
     tbl.views.gtfs_schedule_fact_daily_feed_routes()
     >> left_join(_, tbl.views.gtfs_schedule_dim_feeds(), "feed_key")
     >> filter(_.calitp_feed_name == "Unitrans (0)")
     >> count(_.date)
     >> arrange(_.date)
 )
-glue("what_are_names", routesexample)
+glue("python_routes", pythonroutesexample)
 ```
 
 ````{tabbed} Metabase
@@ -113,29 +134,6 @@ glue("what_are_names", routesexample)
 ![Collection Matrix](assets/routes_agency_over_time.png)
 ````
 ````{tabbed} SQL
-added something
-```
-````
-````{tabbed} siuba
-```{glue:figure} what_are_names
-```
-````
-
-#### Metabase
-**Primary Fact Table** → Gtfs Schedule Fact Daily Feed Routes
-
-**Secondary Table** → Gtfs Schedule Dim Feeds
-
-*Time* → **Date** (*FILTER*)
-
-*Geography* → **Route Key** (the unique identifier for each record, to *COUNT* by)
-
-*Agency* → Metabase automatically joins with table **Gtfs Schedule Dim Feeds** on variable **Feed Key** to get **Calitp Feed Name** (*FILTER*)
-
-![Collection Matrix](assets/routes_agency_over_time.png)
-
-#### SQL
-
 **Primary Fact Table** → views.gtfs_schedule_fact_daily_feed_routes
 
 **Secondary Table** →  views.gtfs_schedule_dim_feeds
@@ -146,10 +144,7 @@ added something
 
 *Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*)
 
-```{code-cell}
-:tags: [remove-input]
-%%sql -m
-
+```SQL
 SELECT
     calitp_feed_name,
     date,
@@ -163,10 +158,12 @@ GROUP BY
 ORDER BY
     date DESC
 LIMIT 10
-
 ```
-
-#### siuba
+```{glue:figure} sqlroutesexample
+```
+```
+````
+````{tabbed} siuba
 **Primary Fact Table** → views.gtfs_schedule_fact_daily_feed_routes
 
 **Secondary Table** →  views.gtfs_schedule_dim_feeds
@@ -177,7 +174,7 @@ LIMIT 10
 
 *Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*FILTER* by)
 
-```{code-cell}
+```python
 # Join to get CalITP Feed Names
 # Count routes by date and CalITP Feed Names, order by date, filter by specific calitp_feed_name
 (
@@ -188,6 +185,9 @@ LIMIT 10
     >> arrange(_.date)
 )
 ```
+```{glue:figure} python_routes
+```
+````
 
 (stops-agency-time)=
 ### 2. Number of Stops for a Given Agency Over Time
