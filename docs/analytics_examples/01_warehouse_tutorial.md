@@ -12,26 +12,6 @@ kernelspec:
   language: python
   name: python3
 ---
----
-substitutions:
-  key1: |
-    ```{code-cell}
-    %%sql -m
-    SELECT
-        calitp_feed_name,
-        date,
-        count(*) AS count_feeds
-    FROM `views.gtfs_schedule_fact_daily_feed_routes`
-    JOIN `views.gtfs_schedule_dim_feeds` USING (feed_key)
-    WHERE
-        calitp_feed_name = "Unitrans (0)"
-    GROUP BY
-        1, 2
-    ORDER BY
-        date DESC
-    LIMIT 10
-    ```
----
 (warehouse-tutorial)=
 # Tutorial - Querying the Data Warehouse (WIP)
 
@@ -108,6 +88,24 @@ from myst_nb import glue
 
 ```{code-cell}
 :tags: [remove-cell]
+%%sql -m
+SELECT
+    calitp_feed_name,
+    date,
+    count(*) AS count_feeds
+FROM `views.gtfs_schedule_fact_daily_feed_routes`
+JOIN `views.gtfs_schedule_dim_feeds` USING (feed_key)
+WHERE
+    calitp_feed_name = "Unitrans (0)"
+GROUP BY
+    1, 2
+ORDER BY
+    date DESC
+LIMIT 10
+```
+
+```{code-cell}
+:tags: [remove-cell]
 pythonroutesexample = (
     tbl.views.gtfs_schedule_fact_daily_feed_routes()
     >> left_join(_, tbl.views.gtfs_schedule_dim_feeds(), "feed_key")
@@ -158,7 +156,6 @@ ORDER BY
     date DESC
 LIMIT 10
 ```
-{{ key1 }}
 ````
 ````{tabbed} siuba
 **Primary Fact Table** → views.gtfs_schedule_fact_daily_feed_routes
