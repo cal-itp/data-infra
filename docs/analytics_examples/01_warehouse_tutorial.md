@@ -88,7 +88,6 @@ from myst_nb import glue
 
 ```{code-cell} sql
 :tags: [remove-cell]
-jamestaylor =
 SELECT
     calitp_feed_name,
     date,
@@ -113,11 +112,7 @@ pythonroutesexample = (
     >> count(_.date)
     >> arrange(_.date)
 )
-```
 
-```{code-cell}
-:tags: [remove-cell]
-glue("johnprine", jamestaylor)
 glue("examplep1", pythonroutesexample)
 ```
 
