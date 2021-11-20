@@ -43,35 +43,27 @@ The tools that we can use to answer them are:
 #### Fact Tables
 These tables contain measurements, metrics, and facts used to answer the questions from the following perspectives:
 
-**Feeds**
-* views.**gtfs_schedule_fact_daily_feeds**
-    * (**Gtfs Schedule Fact Daily Feeds** in Metabase)
-
-**Routes**
-* views.**gtfs_schedule_fact_daily_feed_routes**
-    * (**Gtfs Schedule Fact Daily Feed Routes** in Metabase)
-
-**Stops**
-* views.**gtfs_schedule_fact_daily_feed_stops**
-    * (**Gtfs Schedule Fact Daily Feed Stops** in Metabase)
-
-**Trips**
-* views.**gtfs_schedule_data_feed_trip_stops_latest**
-    * (**Gtfs Schedule Data Feed Trip Stops Latest** in Metabase)
+| Table Type | Location |
+| -------- | -------- |
+| **Feeds** | views.**gtfs_schedule_fact_daily_feeds** <br/> (in Metabase: **Gtfs Schedule Fact Daily Feeds**) |
+| **Routes** | views.**gtfs_schedule_fact_daily_feed_routes** <br/> (in Metabase: **Gtfs Schedule Fact Daily Feed Routes**) |
+| **Stops** | views.**gtfs_schedule_fact_daily_feed_stops** <br/> (in Metabase: **Gtfs Schedule Fact Daily Feed Stops**) |
+| **Trips** | views.**gtfs_schedule_data_feed_trip_stops_latest** <br/> (in Metabase: **Gtfs Schedule Data Feed Trip Stops Latest**) |
 
 #### Dimensional Tables
 These tables compliment the fact tables by providing additional descriptive attributes:
-* views.**gtfs_schedule_dim_feeds** - joining with this table is the most common way to append calitp_feed_name (our primary agency identifier) to fact tables
-    * (**Gtfs Schedule Dim Feeds** in Metabase)
 
-### Important Column Types and Columns
+| Table | Location | Description |
+| -------- | -------- | -------- |
+| **Dim Feeds** | views.**gtfs_schedule_dim_feeds** <br/> (in Metabase: **Gtfs Schedule Dim Feeds**) | Joining with this table is the most common way to append calitp_feed_name (our primary agency identifier) to fact tables. |
 
-- **Agency**
-    * **calitp_feed_name** (in Metabase: **Calitp Feed Name**)
-        * Our primary agency identifier
-        * In most of the examples below, this is gathered from the table: views.**gtfs_schedule_dim_feeds** (in Metabase: **Gtfs Schedule Dim Feeds**)
-- **Time**
-- **Geography**
+### Important Column Types
+
+| Column Type | Notable Columns | Description |
+| -------- | -------- | -------- |
+| **Agency** | **calitp_feed_name** <br/> (in Metabase: **Calitp Feed Name**) | Our primary agency identifier <br/> In most of the examples below, this is gathered from the table: views.**gtfs_schedule_dim_feeds** <br/> (in Metabase: **Gtfs Schedule Dim Feeds**) |
+| **Time** | | |
+| **Geography** | | |
 
 ### Python Libraries to Import
 
