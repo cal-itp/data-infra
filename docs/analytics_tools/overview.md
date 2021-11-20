@@ -12,7 +12,7 @@ This section dives deeper into the details of our tools and how they are used, a
 * How do I store and use new data?
 
 &nbsp;
-:::{admonition}
+:::{admonition} Missing something?
 :class: tip
-If you still need to know more about our team and how we work, visit the ['Welcome'](welcome) section. If you still need to identify and confirm access to our team's tools, go to the ['Technical Onboarding'](technical-onboarding) section.
+If you still need to know more about our team and how we work, visit the ['Welcome'](welcome) section. If you still need to confirm access to our team's tools, go to the ['Technical Onboarding'](technical-onboarding) section.
 :::
