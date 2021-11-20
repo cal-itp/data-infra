@@ -86,10 +86,9 @@ from myst_nb import glue
 (routes-agency-time)=
 ### 1. Number of Routes for a Given Agency Over Time
 
-```{code-cell}
+```{code-cell} sql
 :tags: [remove-cell]
 jamestaylor =
-%%sql -m
 SELECT
     calitp_feed_name,
     date,
@@ -117,6 +116,7 @@ pythonroutesexample = (
 ```
 
 ```{code-cell}
+:tags: [remove-cell]
 glue("johnprine", jamestaylor)
 glue("examplep1", pythonroutesexample)
 ```
