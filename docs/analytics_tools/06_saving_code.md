@@ -87,6 +87,6 @@ SOMEONE WHO PREFERS MERGE PROCESS TO FILL THIS IN...is there a commit after?
 * Rename files and retain the version history associated: `git mv old-notebook.ipynb new-notebook.ipynb`
 * Once you've merged your branch into `main`, you can delete your branch locally: `git branch -d my-new-branch`
 
-## Pushing in GitHub - Drag and Drop
+## [WIP] Pushing in GitHub - Drag and Drop
 
-## Pushing from the Command Line
+## [WIP] Pushing from the Command Line
