@@ -51,7 +51,7 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Sample Catalog" href="sample-catalog-viewer.html" />
+    <link rel="next" title="Introduction to the Warehouse (WIP)" href="../warehouse/overview.html" />
     <link rel="prev" title="Storing New Data" href="07_storing_data.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -139,7 +139,7 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../analytics_onboarding/overview.html">
-   Technical Onboarding (WIP)
+   Technical Onboarding
   </a>
  </li>
  <li class="toctree-l1 current active has-children">
@@ -155,11 +155,6 @@
    <li class="toctree-l2">
     <a class="reference internal" href="01_tools_quick_links.html">
      Tools Quick Links
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="02_querying.html">
-     Querying with SQL (WIP)
     </a>
    </li>
    <li class="toctree-l2">
@@ -190,11 +185,6 @@
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      Using Data Catalogs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="sample-catalog-viewer.html">
-     Sample Catalog
     </a>
    </li>
   </ul>
@@ -230,7 +220,7 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_examples/02_sql_snippets.html">
+    <a class="reference internal" href="../warehouse/02_sql_snippets.html">
      SQL Snippets (WIP)
     </a>
    </li>
@@ -286,6 +276,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../analytics_examples/01_analysis_examples.html">
      Tutorial - Querying the Data Warehouse (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_examples/sample-catalog-viewer.html">
+     Sample Data Catalog
     </a>
    </li>
   </ul>
@@ -663,7 +658,7 @@
 <h3>Intake<a class="headerlink" href="#intake" title="Permalink to this headline">¶</a></h3>
 <p>Data analysts tend to load their data from many heterogeneous sources (Databases, CSVs, JSON, etc), but at the end of the day, they often end up with the data in dataframes or numpy arrays. One tool for managing that in Python is the relatively new project <code class="docutils literal notranslate"><span class="pre">intake</span></code>. Intake provides a way to make data catalogs can then be used load sources into dataframes and arrays. These catalogs are plain text and can then be versioned and published, allowing for more ergonomic documentation of the data sources used for a project.</p>
 <p><code class="docutils literal notranslate"><span class="pre">intake-dcat</span></code> is a tool for allowing intake to more easily interact with DCAT catalogs commonly found on open data portals.</p>
-<p>Refer to this <a class="reference internal" href="sample-catalog-viewer.html#sample-catalog"><span class="std std-ref">sample-catalog.yml</span></a> to see how various data sources and file types are documented. Each dataset is given a human-readable name, with optional metadata associated.</p>
+<p>Refer to this <a class="reference internal" href="../analytics_examples/sample-catalog-viewer.html#sample-catalog"><span class="std std-ref">sample-catalog.yml</span></a> to see how various data sources and file types are documented. Each dataset is given a human-readable name, with optional metadata associated.</p>
 <p>File types that work within GCS buckets, URLs, or DCATs (open data catalogs):</p>
 <ul class="simple">
 <li><p>Tabular: CSV, parquet</p></li>
@@ -776,10 +771,10 @@
             <p class="prev-next-title">Storing New Data</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="sample-catalog-viewer.html" title="next page">
+    <a class='right-next' id="next-link" href="../warehouse/overview.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Sample Catalog</p>
+        <p class="prev-next-title">Introduction to the Warehouse (WIP)</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

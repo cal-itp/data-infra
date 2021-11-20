@@ -1,4 +1,4 @@
 (sample-catalog)=
-# Sample Catalog
+# Sample Data Catalog
 ```{literalinclude} sample-catalog.yml
 ```

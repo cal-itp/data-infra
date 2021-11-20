@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sample Catalog &#8212; Cal-ITP Data Services</title>
+    <title>SQL Snippets (WIP) &#8212; Cal-ITP Data Services</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -51,8 +51,8 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Introduction to the Warehouse (WIP)" href="../warehouse/overview.html" />
-    <link rel="prev" title="Using Data Catalogs" href="08_data_catalogs.html" />
+    <link rel="next" title="Datasets and Tables (WIP)" href="../datasets_and_tables/01_overview.html" />
+    <link rel="prev" title="Metric Views" href="04_metrics.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -139,98 +139,88 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../analytics_onboarding/overview.html">
-   Technical Onboarding (WIP)
+   Technical Onboarding
   </a>
- </li>
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="overview.html">
-   Introduction to Analytics Tools (WIP)
-  </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul class="current">
-   <li class="toctree-l2">
-    <a class="reference internal" href="01_tools_quick_links.html">
-     Tools Quick Links
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="02_querying.html">
-     Querying with SQL (WIP)
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="03_bi_dashboards.html">
-     Business Insights &amp; Dashboards
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="04_notebooks.html">
-     Notebooks
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="05_python_libraries.html">
-     Python Libraries (WIP)
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="06_saving_code.html">
-     Saving Code (WIP)
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="07_storing_data.html">
-     Storing New Data
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="08_data_catalogs.html">
-     Using Data Catalogs
-    </a>
-   </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Sample Catalog
-    </a>
-   </li>
-  </ul>
  </li>
  <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../warehouse/overview.html">
-   Introduction to the Warehouse (WIP)
+  <a class="reference internal" href="../analytics_tools/overview.html">
+   Introduction to Analytics Tools (WIP)
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-  <label for="toctree-checkbox-3">
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
    <i class="fas fa-chevron-down">
    </i>
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/01_table_naming.html">
+    <a class="reference internal" href="../analytics_tools/01_tools_quick_links.html">
+     Tools Quick Links
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/03_bi_dashboards.html">
+     Business Insights &amp; Dashboards
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/04_notebooks.html">
+     Notebooks
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/05_python_libraries.html">
+     Python Libraries (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/06_saving_code.html">
+     Saving Code (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/07_storing_data.html">
+     Storing New Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/08_data_catalogs.html">
+     Using Data Catalogs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="overview.html">
+   Introduction to the Warehouse (WIP)
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="01_table_naming.html">
      Table Naming
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/02_agencies.html">
+    <a class="reference internal" href="02_agencies.html">
      Agency GTFS Feeds
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/03_views.html">
+    <a class="reference internal" href="03_views.html">
      Creating New Tables (Views)
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/04_metrics.html">
+    <a class="reference internal" href="04_metrics.html">
      Metric Views
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_examples/02_sql_snippets.html">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
      SQL Snippets (WIP)
     </a>
    </li>
@@ -286,6 +276,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../analytics_examples/01_analysis_examples.html">
      Tutorial - Querying the Data Warehouse (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_examples/sample-catalog-viewer.html">
+     Sample Data Catalog
     </a>
    </li>
   </ul>
@@ -544,9 +539,12 @@
 
     <div class="dropdown-buttons">
         <!-- ipynb file if we had a myst markdown file -->
-        
+        <a class="dropdown-buttons"
+            href="../_sources/warehouse/02_sql_snippets.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/analytics_tools/sample-catalog-viewer.md"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/warehouse/02_sql_snippets.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -566,10 +564,10 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fanalytics_tools/sample-catalog-viewer.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fwarehouse/02_sql_snippets.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/analytics_tools/sample-catalog-viewer.md"><button
+        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/warehouse/02_sql_snippets.md"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -584,11 +582,51 @@
 
             <!-- Launch buttons -->
 
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/cal-itp/data-infra/main?urlpath=tree/docs/warehouse/02_sql_snippets.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
         </div>
 
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fetching-historical-data-for-specific-dates">
+   Fetching historical data for specific dates
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#a-single-date">
+   A single date
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#multiple-dates">
+   Multiple dates
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -597,60 +635,57 @@
         
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="sample-catalog">
-<span id="id1"></span><h1>Sample Catalog<a class="headerlink" href="#sample-catalog" title="Permalink to this headline">¶</a></h1>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">metadata</span><span class="p">:</span>
-  <span class="n">version</span><span class="p">:</span> <span class="mi">1</span>
-<span class="n">sources</span><span class="p">:</span>
-  <span class="c1"># Open Data Portals</span>
-  <span class="n">la_geohub</span><span class="p">:</span>
-    <span class="n">driver</span><span class="p">:</span> <span class="n">dcat</span>
-    <span class="n">args</span><span class="p">:</span>
-      <span class="n">url</span><span class="p">:</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">geohub</span><span class="o">.</span><span class="n">lacity</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">data</span><span class="o">.</span><span class="n">json</span>
-      <span class="n">items</span><span class="p">:</span>
-        <span class="n">city_boundary</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">geohub</span><span class="o">.</span><span class="n">lacity</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="mi">09</span><span class="n">f503229d37414a8e67a7b6ceb9ec43_7</span>
-  <span class="n">ca_open_data</span><span class="p">:</span>
-    <span class="n">driver</span><span class="p">:</span> <span class="n">dcat</span>
-    <span class="n">args</span><span class="p">:</span>
-      <span class="n">url</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">data</span><span class="o">.</span><span class="n">ca</span><span class="o">.</span><span class="n">gov</span><span class="o">/</span><span class="n">data</span><span class="o">.</span><span class="n">json</span>
-      <span class="n">items</span><span class="p">:</span>
-          <span class="n">cdcr_population_covid_tracking</span><span class="p">:</span> <span class="mi">4</span><span class="n">a9a896a</span><span class="o">-</span><span class="n">e64e</span><span class="o">-</span><span class="mi">48</span><span class="n">c2</span><span class="o">-</span><span class="n">bb35</span><span class="o">-</span><span class="mi">5589</span><span class="n">f80e7c52</span>
-  <span class="n">ca_geoportal</span><span class="p">:</span>
-    <span class="n">driver</span><span class="p">:</span> <span class="n">dcat</span>
-    <span class="n">args</span><span class="p">:</span>
-      <span class="n">url</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">gis</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ca</span><span class="o">.</span><span class="n">gov</span><span class="o">/</span><span class="n">data</span><span class="o">.</span><span class="n">json</span>
-      <span class="n">items</span><span class="p">:</span>
-          <span class="n">calenviroscreen</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">gis</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ca</span><span class="o">.</span><span class="n">gov</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="mi">9</span><span class="n">ad42487196c4ea8aa2dce707a3f986b_0</span>
-  <span class="c1"># General</span>
-  <span class="n">lehd_federal_jobs_by_tract</span><span class="p">:</span>
-    <span class="n">driver</span><span class="p">:</span> <span class="n">parquet</span>
-    <span class="n">description</span><span class="p">:</span> <span class="n">LEHD</span> <span class="n">Workplace</span> <span class="n">Area</span> <span class="n">Characteristics</span> <span class="p">(</span><span class="n">WAC</span><span class="p">)</span> <span class="n">federal</span> <span class="n">jobs</span> <span class="n">by</span> <span class="n">census</span> <span class="n">tract</span><span class="o">.</span>
-    <span class="n">args</span><span class="p">:</span>
-      <span class="n">urlpath</span><span class="p">:</span> <span class="n">gs</span><span class="p">:</span><span class="o">//</span><span class="n">calitp</span><span class="o">-</span><span class="n">analytics</span><span class="o">-</span><span class="n">data</span><span class="o">/</span><span class="n">data</span><span class="o">-</span><span class="n">analyses</span><span class="o">/</span><span class="n">bus_service_increase</span><span class="o">/</span><span class="n">wac_fed_tract</span><span class="o">.</span><span class="n">parquet</span>
-      <span class="n">engine</span><span class="p">:</span> <span class="n">pyarrow</span>
-  <span class="n">test_zipped_shapefile</span><span class="p">:</span>
-    <span class="n">driver</span><span class="p">:</span> <span class="n">shapefile</span>
-    <span class="n">description</span><span class="p">:</span> <span class="n">LA</span> <span class="n">Metro</span> <span class="n">rail</span> <span class="n">lines</span>
-    <span class="n">args</span><span class="p">:</span>
-      <span class="n">urlpath</span><span class="p">:</span> <span class="n">gs</span><span class="p">:</span><span class="o">//</span><span class="n">calitp</span><span class="o">-</span><span class="n">analytics</span><span class="o">-</span><span class="n">data</span><span class="o">/</span><span class="n">test_zipped_shapefile</span><span class="o">.</span><span class="n">zip</span>
-      <span class="n">use_fsspec</span><span class="p">:</span> <span class="n">true</span>
-  <span class="n">test_geojson</span><span class="p">:</span>
-    <span class="n">driver</span><span class="p">:</span> <span class="n">geojson</span>
-    <span class="n">description</span><span class="p">:</span> <span class="n">Description</span>
-    <span class="n">args</span><span class="p">:</span>
-      <span class="n">urlpath</span><span class="p">:</span> <span class="n">gs</span><span class="p">:</span><span class="o">//</span><span class="n">calitp</span><span class="o">-</span><span class="n">analytics</span><span class="o">-</span><span class="n">data</span><span class="o">/</span><span class="n">test_geojson_file</span><span class="o">.</span><span class="n">geojson</span>
-      <span class="n">use_fsspec</span><span class="p">:</span> <span class="n">true</span>
-  <span class="n">test_csv</span><span class="p">:</span>
-    <span class="n">driver</span><span class="p">:</span> <span class="n">csv</span>
-    <span class="n">description</span><span class="p">:</span> <span class="n">Description</span>
-    <span class="n">args</span><span class="p">:</span>
-      <span class="n">urlpath</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">raw</span><span class="o">.</span><span class="n">githubusercontent</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">CityOfLosAngeles</span><span class="o">/</span><span class="n">covid19</span><span class="o">-</span><span class="n">indicators</span><span class="o">/</span><span class="n">master</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">ca_county_pop_crosswalk</span><span class="o">.</span><span class="n">csv</span>
-  <span class="n">test_geoparquet</span><span class="p">:</span>
-    <span class="n">driver</span><span class="p">:</span> <span class="n">geoparquet</span>
-    <span class="n">description</span><span class="p">:</span> <span class="n">Description</span>
-    <span class="n">args</span><span class="p">:</span>
-      <span class="n">urlpath</span><span class="p">:</span> <span class="n">gs</span><span class="p">:</span><span class="o">//</span><span class="n">calitp</span><span class="o">-</span><span class="n">analytics</span><span class="o">-</span><span class="n">data</span><span class="o">/</span><span class="n">test_geoparquet</span><span class="o">.</span><span class="n">parquet</span>
+  <div class="tex2jax_ignore mathjax_ignore section" id="sql-snippets-wip">
+<h1>SQL Snippets (WIP)<a class="headerlink" href="#sql-snippets-wip" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="fetching-historical-data-for-specific-dates">
+<h2>Fetching historical data for specific dates<a class="headerlink" href="#fetching-historical-data-for-specific-dates" title="Permalink to this headline">¶</a></h2>
+<p>Some tables in the warehouse–like those in <code class="docutils literal notranslate"><span class="pre">gtfs_schedule_type2</span></code>–capture the full
+history of data, as it existed every day in the past. In order to do this, they
+don’t save copies of the full data every day, but log changes to the data using
+a <code class="docutils literal notranslate"><span class="pre">calitp_extracted_at</span></code>, and <code class="docutils literal notranslate"><span class="pre">calitp_deleted_at</span></code> column.</p>
+<p>In order to get the data for a given day, you need to filter to keep data where..</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">calitp_extracted_at</span></code> was earlier than or on the target date.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">calitp_deleted_at</span></code> is later than the target date.</p></li>
+</ul>
+</div>
+<div class="section" id="a-single-date">
+<h2>A single date<a class="headerlink" href="#a-single-date" title="Permalink to this headline">¶</a></h2>
+<div class="cell tag_remove-input docutils container">
+</div>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="o">`</span><span class="n">gtfs_schedule_type2</span><span class="p">.</span><span class="n">feed_info</span><span class="o">`</span>
+<span class="k">WHERE</span>
+    <span class="n">calitp_extracted_at</span> <span class="o">&gt;=</span> <span class="ss">&quot;2021-06-01&quot;</span>
+    <span class="k">AND</span> <span class="k">COALESCE</span><span class="p">(</span><span class="n">calitp_deleted_at</span><span class="p">,</span> <span class="ss">&quot;2099-01-01&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="ss">&quot;2021-06-01&quot;</span>
 </pre></div>
+</div>
+</div>
+</div>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">COALESCE</span></code> lets us fill in NULL deleted at values to be far in the future.
+This is used because when deleted at is missing, it reflects the most recent data
+(i.e. data that hasn’t been deleted yet).
+Because <code class="docutils literal notranslate"><span class="pre">NULL</span> <span class="pre">&lt;</span> <span class="pre">&quot;2021-06-01&quot;</span></code> is <code class="docutils literal notranslate"><span class="pre">false</span></code>, we need to fill it in with a far-future date,
+so it evaluates to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+</div>
+<div class="section" id="multiple-dates">
+<h2>Multiple dates<a class="headerlink" href="#multiple-dates" title="Permalink to this headline">¶</a></h2>
+<p>In order to do it for a range of dates, you can use a JOIN. This is shown below.</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="o">`</span><span class="n">gtfs_schedule_type2</span><span class="p">.</span><span class="n">feed_info</span><span class="o">`</span> <span class="n">FI</span>
+<span class="k">JOIN</span> <span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">dim_date</span><span class="o">`</span> <span class="n">D</span>
+    <span class="k">ON</span> <span class="n">FI</span><span class="p">.</span><span class="n">calitp_extracted_at</span> <span class="o">&lt;=</span> <span class="n">D</span><span class="p">.</span><span class="n">full_date</span>
+        <span class="k">AND</span> <span class="k">COALESCE</span><span class="p">(</span><span class="n">FI</span><span class="p">.</span><span class="n">calitp_deleted_at</span><span class="p">,</span> <span class="ss">&quot;2099-01-01&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">D</span><span class="p">.</span><span class="n">full_date</span>
+<span class="k">WHERE</span>
+    <span class="n">D</span><span class="p">.</span><span class="n">full_date</span> <span class="k">BETWEEN</span> <span class="ss">&quot;2021-06-01&quot;</span> <span class="k">AND</span> <span class="ss">&quot;2021-06-07&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 </div>
 
@@ -667,7 +702,7 @@
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./analytics_tools"
+            path: "./warehouse"
         },
         predefinedOutput: true
     }
@@ -679,17 +714,17 @@
         
             <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="08_data_catalogs.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="04_metrics.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Using Data Catalogs</p>
+            <p class="prev-next-title">Metric Views</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../warehouse/overview.html" title="next page">
+    <a class='right-next' id="next-link" href="../datasets_and_tables/01_overview.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Introduction to the Warehouse (WIP)</p>
+        <p class="prev-next-title">Datasets and Tables (WIP)</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
