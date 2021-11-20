@@ -159,8 +159,7 @@ ORDER BY
     date DESC
 LIMIT 10
 ```
-```{glue:figure} johnprine
-```
+{glue:figure}'johnprine'
 ````
 ````{tabbed} siuba
 **Primary Fact Table** → views.gtfs_schedule_fact_daily_feed_routes
@@ -184,8 +183,7 @@ LIMIT 10
     >> arrange(_.date)
 )
 ```
-```{glue:figure} examplep1
-```
+{glue:figure}'examplep1'
 ````
 
 (stops-agency-time)=
