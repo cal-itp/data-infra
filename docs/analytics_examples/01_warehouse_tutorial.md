@@ -88,7 +88,7 @@ from myst_nb import glue
 
 ```{code-cell}
 :tags: [remove-cell]
-%%sql -m
+dataframe = query_sql("""
 SELECT
     calitp_feed_name,
     date,
@@ -101,7 +101,7 @@ GROUP BY
     1, 2
 ORDER BY
     date DESC
-LIMIT 10
+LIMIT 10""", as_df=True)
 ```
 
 ```{code-cell}
