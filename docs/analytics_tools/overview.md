@@ -14,8 +14,5 @@ This section dives deeper into the details of our tools and how they are used, a
 &nbsp;
 :::{admonition}
 :class: tip
-If you still need to know more about our team and how we work, Visit the ['Welcome'](welcome) section. if you still need to identify and confirm access to our team's tools, go to the ['Technical Onboarding'](technical-onboarding) section.
+If you still need to know more about our team and how we work, visit the ['Welcome'](welcome) section. If you still need to identify and confirm access to our team's tools, go to the ['Technical Onboarding'](technical-onboarding) section.
 :::
-```{admonition} Still need access to a tool in this section?
-DM Charlie <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">on Cal-ITP Slack using this link</a>, or <a href="mailto: charlie.c@jarv.us?subject=Cal-ITP Access Issues&body=I need access to:" target="_blank">by email</a>.
-```
