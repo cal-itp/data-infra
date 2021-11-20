@@ -12,7 +12,7 @@ kernelspec:
   language: python
   name: python3
 ---
-(storing-data)=
+(storing-new-data)=
 # Storing New Data
 
 Our team uses Google Cloud Storage (GCS) buckets, specifically the `calitp-analytics-data` bucket, to store other datasets for analyses. GCS can store anything, of arbitrary object size and shape. It’s like a giant folder in the cloud. You can use it to store CSVs, parquets, pickles, videos, etc. Within the bucket, the `data-analyses` folder with its sub-folders corresponds to the `data-analyses`  GitHub repo with its sub-folders. Versioned data for a task should live within the correct folders.

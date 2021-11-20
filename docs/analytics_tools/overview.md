@@ -11,7 +11,7 @@ When used in combination with the [Introduction to the Warehouse](intro-warehous
 * How to query the warehouse with SQL
 * [What Python libraries are suggested](python-libraries)
 * [Where code is kept](saving-code)
-* [How to store new data](storing-data), and [best practices](data-catalogs).
+* [How to store new data](storing-new-data), and [best practices](data-catalogs).
 
 &nbsp;
 :::{admonition} Missing something?
