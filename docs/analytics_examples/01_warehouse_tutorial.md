@@ -139,7 +139,7 @@ glue("siuba_routes_output", siuba_routes)
 | Name | Use |
 | -------- | -------- |
 | **views.gtfs_schedule_fact_daily_feed_routes** | Primary Fact Table |
-| **views.gtfs_schedule_dim_feeds** | Secondary Table |
+| **views.gtfs_schedule_dim_feeds** | Secondary Dimensional Table |
 
 **Important Columns**
 | Type | Column | Use |
@@ -172,7 +172,7 @@ LIMIT 10
 | Name | Use |
 | -------- | -------- |
 | **views.gtfs_schedule_fact_daily_feed_routes** | Primary Fact Table |
-| **views.gtfs_schedule_dim_feeds** | Secondary Table |
+| **views.gtfs_schedule_dim_feeds** | Secondary Dimensional Table |
 
 **Important Columns**
 | Type | Column | Use |
@@ -252,7 +252,7 @@ glue("siuba_stops_output", siuba_stops)
 | Name | Use |
 | -------- | -------- |
 | **views.gtfs_schedule_fact_daily_feed_stops** | Primary Fact Table |
-| **views.gtfs_schedule_dim_feeds** | Secondary Table |
+| **views.gtfs_schedule_dim_feeds** | Secondary Dimensional Table |
 
 **Important Columns**
 | Type | Column | Use |
@@ -287,7 +287,7 @@ LIMIT 10
 | Name | Use |
 | -------- | -------- |
 | **views.gtfs_schedule_fact_daily_feed_stops** | Primary Fact Table |
-| **views.gtfs_schedule_dim_feeds** | Secondary Table |
+| **views.gtfs_schedule_dim_feeds** | Secondary Dimensional Table |
 
 **Important Columns**
 | Type | Column | Use |
@@ -433,42 +433,9 @@ LIMIT 10
 (days-feed-expires)=
 ### 4. For a Given Agency, on Each Day, Days Until the Feed Expires
 
-#### Metabase
-**Primary Fact Table** → Gtfs Schedule Fact Daily Feeds
-
-**Secondary Table** → Join: Gtfs Schedule Dim Feeds
-
-*Time* → **Date**, **Feed End Date**
-
-*Measure* → **Days Until Feed End Date**
-
-*Agency* → Join with table **Gtfs Schedule Dim Feeds** on variable **feed_key** for **Calitp Feed Name** (*FILTER* by) and **Feed End Date**
-
-**Columns to Select:**
-* Gtfs Schedule Fact Daily Feeds
-    * Date
-    * Days Until Feed End Date
-* Gtfs Schedule Dim Feeds
-    * Calitp Feed Name
-    * Feed End Date
-
-![Collection Matrix](assets/days_until_agency_feed_expires.png)
-
-#### SQL
-**Primary Fact Table** → views.gtfs_schedule_fact_daily_feeds
-
-**Secondary Table** → views.gtfs_schedule_dim_feeds
-
-*Time* → **date**, **feed_end_date**
-
-*Measure* → **days_until_feed_end_date**
-
-*Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*)
-
 ```{code-cell}
-:tags: [remove-input]
-%%sql -m
-
+:tags: [remove-cell]
+df_feed_expires = query_sql("""
 SELECT
     calitp_feed_name,
     date,
@@ -478,21 +445,96 @@ FROM views.gtfs_schedule_fact_daily_feeds
 JOIN views.gtfs_schedule_dim_feeds USING (feed_key)
 WHERE
     date = "2021-09-01" AND calitp_feed_name = "Unitrans (0)"
+LIMIT 10""", as_df=True)
+glue("df_feed_expires_output", df_feed_expires)
 ```
 
-#### siuba
-
-**Primary Fact Table** → views.gtfs_schedule_fact_daily_feeds
-
-**Secondary Table** → views.gtfs_schedule_dim_feeds
-
-*Time* → **date** (*FILTER* by), **feed_end_date**
-
-*Measure* → **days_until_feed_end_date**
-
-*Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*FILTER* by)
-
 ```{code-cell}
+:tags: [remove-cell]
+siuba_feed_expires = (
+    tbl.views.gtfs_schedule_fact_daily_feeds()
+    >> left_join(_, tbl.views.gtfs_schedule_dim_feeds(), "feed_key")
+    >> select(_.calitp_feed_name, _.date, _.days_until_feed_end_date, _.feed_end_date)
+    >> filter(_.date == "2021-09-01", _.calitp_feed_name == "Unitrans (0)")
+)
+glue("siuba_feed_expires_output", siuba_feed_expires)
+```
+
+````{tabbed} Metabase
+| Name | Use |
+| -------- | -------- |
+| **Gtfs Schedule Fact Daily Feeds** | Primary Fact Table |
+| **Gtfs Schedule Dim Feeds** | Secondary Dimensional Table |
+
+**Important Columns**
+| Type | Column | Use |
+| -------- | -------- | -------- |
+| *Time* | **Date** | The date that we are looking to learn more about, to *Filter* by |
+| *Time* | **Feed End Date** | The date that the particular feed expires |
+| *Measure* | **Days Until Feed End Date** | The value we are trying to find for the particular date |
+| *Agency* | **Calitp Feed Name** | *Join data* with table **Gtfs Schedule Dim Feeds** on variable **Feed Key** to get variables **Calitp Feed Name** (*Filter* by) and **Feed End Date** |
+
+
+**Columns to Select (pulled out in image below):**
+* Table **Gtfs Schedule Fact Daily Feeds**
+    * Date
+    * Days Until Feed End Date
+* Table **Gtfs Schedule Dim Feeds**
+    * Calitp Feed Name
+    * Feed End Date
+
+![Collection Matrix](assets/days_until_agency_feed_expires.png)
+````
+````{tabbed} SQL
+**Tables Used**
+| Name | Use |
+| -------- | -------- |
+| **views.gtfs_schedule_fact_daily_feeds** | Primary Fact Table |
+| **views.gtfs_schedule_dim_feeds** | Secondary Dimensional Table |
+
+**Important Columns**
+| Type | Column | Use |
+| -------- | -------- | -------- |
+| *Time* | **date** | The date that we are looking to learn more about, to isolate with *WHERE* |
+| *Time* | **feed_end_date** | The date that the particular feed expires |
+| *Measure* | **days_until_feed_end_date** | The value we are trying to find for the particular date |
+| *Agency* | **calitp_feed_name** | *JOIN* with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** to get variables **calitp_feed_name** (isolated with *WHERE*) and **feed_end_date** |
+
+```sql
+%%sql
+SELECT
+    calitp_feed_name,
+    date,
+    days_until_feed_end_date,
+    feed_end_date
+FROM views.gtfs_schedule_fact_daily_feeds
+JOIN views.gtfs_schedule_dim_feeds USING (feed_key)
+WHERE
+    date = "2021-09-01" AND calitp_feed_name = "Unitrans (0)"
+LIMIT 10
+```
+
+```{glue:figure} df_feed_expires_output
+```
+````
+
+````{tabbed} siuba
+#### siuba
+**Tables Used**
+| Name | Use |
+| -------- | -------- |
+| **views.gtfs_schedule_fact_daily_feeds** | Primary Fact Table |
+| **views.gtfs_schedule_dim_feeds** | Secondary Dimensional Table |
+
+**Important Columns**
+| Type | Column | Use |
+| -------- | -------- | -------- |
+| *Time* | **date** | *select*, *filter* by |
+| *Time* | **feed_end_date** | The date that the particular feed expires, to *select* |
+| *Measure* | **days_until_feed_end_date** | The value we are trying to find for the particular date, to *select* |
+| *Agency* | **calitp_feed_name** | *left_join* with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name**, to *select* and *filter* by |
+
+```python
 (
     tbl.views.gtfs_schedule_fact_daily_feeds()
     >> left_join(_, tbl.views.gtfs_schedule_dim_feeds(), "feed_key")
@@ -501,6 +543,9 @@ WHERE
 )
 ```
 
+```{glue:figure} siuba_feed_expires_output
+```
+````
 ### 5. Max Number of Stops a Trip Can Have, Per Agency
 
 (max-number-stops)=
