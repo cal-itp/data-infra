@@ -519,7 +519,6 @@ LIMIT 10
 ````
 
 ````{tabbed} siuba
-#### siuba
 **Tables Used**
 | Name | Use |
 | -------- | -------- |
