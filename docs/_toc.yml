@@ -45,10 +45,10 @@ parts:
         - file: analytics_publishing/02_where_reports_live
   - caption: Project Leads
     chapters:
-      - file: analytics_project_leads/overview
+      - file: project_leads/overview
   - caption: Data Consumers
     chapters:
-      - file: analytics_data_consumers/overview
+      - file: data_consumers/overview
   - caption: Developers
     chapters:
       - file: airflow/overview

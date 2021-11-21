@@ -13,7 +13,7 @@ kernelspec:
   name: python3
 ---
 (warehouse-tutorial)=
-# Tutorial - Querying the Data Warehouse (WIP)
+# Tutorial - Querying the Data Warehouse
 
 ## Introduction
 
@@ -40,7 +40,7 @@ The tools that we can use to answer them are:
 
 ### Relevant Tables
 
-#### Fact Tables
+````{tabbed} Fact Tables
 These tables contain measurements, metrics, and facts used to answer the questions from the following perspectives:
 
 | Table Type | Location |
@@ -49,13 +49,15 @@ These tables contain measurements, metrics, and facts used to answer the questio
 | **Routes** | Warehouse: **views.gtfs_schedule_fact_daily_feed_routes** <br/> Metabase: **Gtfs Schedule Fact Daily Feed Routes** |
 | **Stops** | Warehouse: **views.gtfs_schedule_fact_daily_feed_stops** <br/> Metabase: **Gtfs Schedule Fact Daily Feed Stops** |
 | **Trips** | Warehouse: **views.gtfs_schedule_data_feed_trip_stops_latest** <br/> Metabase: **Gtfs Schedule Data Feed Trip Stops Latest** |
+````
 
-#### Dimensional Tables
+````{tabbed} Dimensional Tables
 These tables compliment the fact tables by providing additional descriptive attributes:
 
 | Table | Location | Description |
 | -------- | -------- | -------- |
 | **Dim Feeds** | Warehouse: **views.gtfs_schedule_dim_feeds** <br/> Metabase: **Gtfs Schedule Dim Feeds** | - Joining with this table is the most common way to append calitp_feed_name to fact tables <br/> - calitp_feed_name is our primary agency identifier |
+````
 
 ### Important Column Types
 
@@ -414,8 +416,8 @@ LIMIT 10
 | -------- | -------- | -------- |
 | *Time* | **No variable** | This table only has information for the current day |
 | *Geography* | **stop_time_key** | The unique identifier for each record, what we are effectively counting by |
-| *Geography* | **trip_id** | The unique identifier for each trip, summarized by *.size* and *.nunique* |
-| *Geography* | **stop_id** | The unique identifier for each stop, summarized by *.nunique* |
+| *Geography* | **trip_id** | The unique identifier for each trip, summarized by *.size()* and *.nunique()* |
+| *Geography* | **stop_id** | The unique identifier for each stop, summarized by *.nunique()* |
 | *Agency* | **calitp_feed_name** | *filter*) |
 
 ```python
@@ -461,6 +463,7 @@ glue("siuba_feed_expires_output", siuba_feed_expires)
 ```
 
 ````{tabbed} Metabase
+**Tables Used**
 | Name | Use |
 | -------- | -------- |
 | **Gtfs Schedule Fact Daily Feeds** | Primary Fact Table |
@@ -541,41 +544,16 @@ LIMIT 10
     >> filter(_.date == "2021-09-01", _.calitp_feed_name == "Unitrans (0)")
 )
 ```
-
 ```{glue:figure} siuba_feed_expires_output
 ```
 ````
-### 5. Max Number of Stops a Trip Can Have, Per Agency
 
 (max-number-stops)=
-#### Metabase
-**Primary Fact Table** → Gtfs Schedule Data Feed Trip Stops Latest
-
-**Secondary Table** → Gtfs Schedule Dim Feeds
-
-*Time* → **no variable**, finding max across all days
-
-*Geography* → **Trip ID** (the unique identifier for each record, to *COUNT* by)
-
-*Agency* → Metabase automatically joins with table **Gtfs Schedule Dim Feeds** on variable **Feed Key** to get **Calitp Feed Name** (*COUNT* by)
-
-
-![Collection Matrix](assets/max_stops_per_trip_by_agency.png)
-
-#### SQL
-**Primary Fact Table** →  views.gtfs_schedule_data_feed_trip_stops_latest
-
-**Secondary Table** →  views.gtfs_schedule_dim_feeds
-
-*Time* → **no variable**, finding max across all days
-
-*Geography* → **trip_id** (the unique identifier for each record, to *GROUP BY*)
-
-*Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*)
+### 5. Max Number of Stops a Trip Can Have, Per Agency
 
 ```{code-cell}
-:tags: [remove-input]
-%%sql -m
+:tags: [remove-cell]
+df_max_stops = query_sql("""
 WITH
 
 counting_stop_times AS (
@@ -601,21 +579,102 @@ WHERE
      calitp_feed_name = "Unitrans (0)"
 GROUP BY
     calitp_feed_name
-
+LIMIT 10""", as_df=True)
+glue("df_max_stops_output", df_max_stops)
 ```
 
-#### siuba
-**Primary Fact Table** →  views.gtfs_schedule_data_feed_trip_stops_latest
-
-**Secondary Table** →  views.gtfs_schedule_dim_feeds
-
-*Time* → **no variable**, finding max across all days
-
-*Geography* → **trip_id** (the unique identifier for each record, to *GROUP BY*)
-
-*Agency* → Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*)
-
 ```{code-cell}
+:tags: [remove-cell]
+siuba_max_stops = (
+    tbl.views.gtfs_schedule_data_feed_trip_stops_latest()
+    >> count(_.trip_id, _.calitp_feed_name)
+    >> filter(_.calitp_feed_name == "Unitrans (0)")
+    >> summarize(n_max=_.n.max())
+)
+glue("siuba_max_stops_output", siuba_max_stops)
+```
+
+````{tabbed} Metabase
+**Tables Used**
+| Name | Use |
+| -------- | -------- |
+| **Gtfs Schedule Data Feed Trip Stops Latest** | Primary Fact Table |
+| **Gtfs Schedule Dim Feeds** | Secondary Dimensional Table |
+
+**Important Columns**
+| Type | Column | Use |
+| -------- | -------- | -------- |
+| *Time* | **No variable** | We're finding the *Max* across all days (using *Summarize* -> *Max of Count*) |
+| *Geography* | **Trip ID** | The unique identifier for each record, to *Summarize* -> *Count* by |
+| *Agency* | **Calitp Feed Name** | Metabase automatically joins with table **Gtfs Schedule Dim Feeds** on variable **Feed Key** to get **Calitp Feed Name**, to *Summarize* -> *Count* by |
+
+![Collection Matrix](assets/max_stops_per_trip_by_agency.png)
+````
+
+````{tabbed} SQL
+**Tables Used**
+| Name | Use |
+| -------- | -------- |
+| **views.gtfs_schedule_data_feed_trip_stops_latest** | Primary Fact Table |
+| **views.gtfs_schedule_dim_feeds** | Secondary Dimensional Table |
+
+**Important Columns**
+| Type | Column | Use |
+| -------- | -------- | -------- |
+| *Time* | **No variable** | We're finding the *MAX* across all days  |
+| *Geography* | **trip_id** | The unique identifier for each record, what we effectively *COUNT* by |
+| *Agency* | **calitp_feed_name** | The primary agency identifier, used with *GROUP BY*, isolated with *WHERE* |
+
+```sql
+%%sql
+WITH
+
+counting_stop_times AS (
+
+    -- count the number of stops each trip in each feed makes
+    SELECT
+        trip_id,
+        calitp_feed_name,
+        COUNT(*) AS n_trip_stop_times
+    FROM `views.gtfs_schedule_data_feed_trip_stops_latest`
+    GROUP BY
+        1, 2
+)
+
+-- calculate the max number of stops made by a feed's trip
+-- we filter to keep only the Unitrans feed for this example
+SELECT
+    calitp_feed_name,
+    MAX(n_trip_stop_times) AS max_n_trip_stop_times
+FROM
+    counting_stop_times
+WHERE
+     calitp_feed_name = "Unitrans (0)"
+GROUP BY
+    calitp_feed_name
+LIMIT 10
+```
+
+```{glue:figure} df_max_stops_output
+```
+
+````
+
+````{tabbed} siuba
+**Tables Used**
+| Name | Use |
+| -------- | -------- |
+| **views.gtfs_schedule_data_feed_trip_stops_latest** | Primary Fact Table |
+
+**Important Columns**
+| Type | Column | Use |
+| -------- | -------- | -------- |
+| *Time* | **No variable** | We're using *summarize* to find the *.max()* across all days |
+| *Geography* | **trip_id** | The unique identifier for each record, what we *count* by |
+| *Agency* | **calitp_feed_name** | The primary agency identifier, what we *count* and *filter* by |
+
+
+```python
 (
     tbl.views.gtfs_schedule_data_feed_trip_stops_latest()
     >> count(_.trip_id, _.calitp_feed_name)
@@ -623,3 +682,8 @@ GROUP BY
     >> summarize(n_max=_.n.max())
 )
 ```
+
+```{glue:figure} siuba_max_stops_output
+```
+
+````

@@ -1,3 +1,4 @@
+(analysts-welcome)=
 # Welcome! (WIP)
 Welcome analysts!
 

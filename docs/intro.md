@@ -1,7 +1,10 @@
-# Data Services Documentation (WIP)
+# Data Services Documentation
 
-Welcome to our data services documentation!
+Welcome to Cal-ITP's data services documentation! This resource serves as an opportunity to learn more about how the data services team works.
 
-Browse and suggest edits to the content below as necessary.
+Us the links below to access dedicated chapters for the following users:
 
-Much of this is still a work in progress, so thank you for bearing with us!
+* [Analysts](analysts-welcome)
+* [[WIP] Project Leads](project-leads)
+* [[WIP] Data Consumers](data-consumers)
+* [Developers](airflow)
