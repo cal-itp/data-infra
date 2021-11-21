@@ -125,12 +125,12 @@ glue("siuba_routes_output", siuba_routes)
 | **Gtfs Schedule Fact Daily Feed Routes** | Primary Fact Table |
 | **Gtfs Schedule Dim Feeds** | Secondary Dimensional Table |
 
-**Columns Used**
+**Important Columns**
 | Type | Column | Use |
 | -------- | -------- | -------- |
-| *Time* | **Date** | *FILTER* |
-| *Geography* | **Route Key** | The unique identifier for each record, to *COUNT* by |
-| *Agency* | **Calitp Feed Name** | Metabase automatically joins with table **Gtfs Schedule Dim Feeds** on variable **Feed Key** to get **Calitp Feed Name** (*FILTER* by) |
+| *Time* | **Date** | *Filter* by |
+| *Geography* | **Route Key** | The unique identifier for each record, what we effectively *Count* by |
+| *Agency* | **Calitp Feed Name** | Metabase automatically joins with table **Gtfs Schedule Dim Feeds** on variable **Feed Key** to get **Calitp Feed Name** (*Filter* by) |
 
 ![Collection Matrix](assets/routes_agency_over_time.png)
 ````
@@ -141,12 +141,12 @@ glue("siuba_routes_output", siuba_routes)
 | **views.gtfs_schedule_fact_daily_feed_routes** | Primary Fact Table |
 | **views.gtfs_schedule_dim_feeds** | Secondary Table |
 
-**Columns Used**
+**Important Columns**
 | Type | Column | Use |
 | -------- | -------- | -------- |
 | *Time* | **date** | *GROUP BY* |
-| *Geography* | **route_key** | The unique identifier for each record, to *COUNT* by |
-| *Agency* | **calitp_feed_name** | Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*) |
+| *Geography* | **route_key** | The unique identifier for each record, what we effectively *COUNT* by |
+| *Agency* | **calitp_feed_name** | *JOIN* with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*, isolate with *WHERE*) |
 
 ```sql
 %% sql
@@ -174,12 +174,12 @@ LIMIT 10
 | **views.gtfs_schedule_fact_daily_feed_routes** | Primary Fact Table |
 | **views.gtfs_schedule_dim_feeds** | Secondary Table |
 
-**Columns Used**
+**Important Columns**
 | Type | Column | Use |
 | -------- | -------- | -------- |
 | *Time* | **date** | *count* by |
 | *Geography* | **route_key** | The unique identifier for each record |
-| *Agency* | **calitp_feed_name** | Join with table views.**gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*filter* by) |
+| *Agency* | **calitp_feed_name** | *left_join* with table views.**gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*filter* by) |
 
 ```python
 # Join to get CalITP Feed Names
@@ -237,12 +237,12 @@ glue("siuba_stops_output", siuba_stops)
 | **Gtfs Schedule Fact Daily Feed Stops** | Primary Fact Table |
 | **Gtfs Schedule Dim Feeds** | Secondary Dimensional Table |
 
-**Columns Used**
+**Important Columns**
 | Type | Column | Use |
 | -------- | -------- | -------- |
-| *Time* | **Date** | *COUNT* by |
-| *Geography* | **Stop Key** | the unique identifier for each record, to *COUNT* by |
-| *Agency* | **Calitp Feed Name** | Metabase automatically joins with table **Gtfs Schedule Dim Feeds** on variable **Feed Key** to get **Calitp Feed Name** (*FILTER* by) |
+| *Time* | **Date** | *Count* by |
+| *Geography* | **Stop Key** | The unique identifier for each record, what we effectively *COUNT* by |
+| *Agency* | **Calitp Feed Name** | Metabase automatically joins with table **Gtfs Schedule Dim Feeds** on variable **Feed Key** to get **Calitp Feed Name** (*Filter* by) |
 
 ![Collection Matrix](assets/stops_agency_over_time.png)
 ````
@@ -254,12 +254,12 @@ glue("siuba_stops_output", siuba_stops)
 | **views.gtfs_schedule_fact_daily_feed_stops** | Primary Fact Table |
 | **views.gtfs_schedule_dim_feeds** | Secondary Table |
 
-**Columns Used**
+**Important Columns**
 | Type | Column | Use |
 | -------- | -------- | -------- |
 | *Time* | **date** | *GROUP BY* |
-| *Geography* | **stop_key** | The unique identifier for each record, to *COUNT* by |
-| *Agency* | **calitp_feed_name** | Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*) |
+| *Geography* | **stop_key** | The unique identifier for each record, what we effectively *COUNT* by |
+| *Agency* | **calitp_feed_name** | *JOIN* with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*, isolate with *WHERE*) |
 
 ```sql
 %% sql
@@ -289,12 +289,12 @@ LIMIT 10
 | **views.gtfs_schedule_fact_daily_feed_stops** | Primary Fact Table |
 | **views.gtfs_schedule_dim_feeds** | Secondary Table |
 
-**Columns Used**
+**Important Columns**
 | Type | Column | Use |
 | -------- | -------- | -------- |
 | *Time* | **date** | *count* by |
-| *Geography* | **stop_key** | The unique identifier for each record |
-| *Agency* | **calitp_feed_name** | Join with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*count* by, *filter*) |
+| *Geography* | **stop_key** | The unique identifier for each record, what we are effectively counting by |
+| *Agency* | **calitp_feed_name** | *left_join* with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*count* by, *filter*) |
 
 ```python
 ## Join to get CalITP Feed Names
@@ -315,16 +315,49 @@ LIMIT 10
 (stops-all-trips)=
 ### 3. Number of Stops Made Across all Trips for an Agency
 
-#### Metabase
-**Primary Fact Table** → Gtfs Schedule Data Feed Trip Stops Latest
+```{code-cell}
+:tags: [remove-cell]
+df_stops_trips = query_sql("""
+SELECT
+    calitp_feed_name,
+    count(*) AS n_trip_stops,
+    count(distinct(trip_id)) AS n_trips,
+    count(distinct(stop_id)) AS n_stops
+FROM `views.gtfs_schedule_data_feed_trip_stops_latest`
+WHERE
+    calitp_feed_name = "Unitrans (0)"
+GROUP BY
+    calitp_feed_name
+LIMIT 10""", as_df=True)
+glue("df_stops_trips_output", df_stops_trips)
+```
 
-**Secondary Table** → Gtfs Schedule Dim Feeds
+```{code-cell}
+:tags: [remove-cell]
+siuba_stops_trips = (
+    tbl.views.gtfs_schedule_data_feed_trip_stops_latest()
+    >> filter(_.calitp_feed_name == "Unitrans (0)")
+    >> summarize(
+        n_trips=_.trip_id.nunique(), n_stops=_.stop_id.nunique(), n=_.trip_id.size()
+    )
+)
+glue("siuba_stops_trips_output", siuba_stops_trips)
+```
 
-*Time* → **no variable** - this table only has information for the current day
+````{tabbed} Metabase
+**Tables Used**
+| Name | Use |
+| -------- | -------- |
+| **Gtfs Schedule Data Feed Trip Stops Latest** | Primary Fact Table |
 
-*Geography* → **Stop Time Key** (the unique identifier for each record, to *COUNT* by)
-
-*Agency* → Metabase automatically joins with table **Gtfs Schedule Dim Feeds** on variable **Feed Key** to get **Calitp Feed Name** (*FILTER* by)
+**Important Columns**
+| Type | Column | Use |
+| -------- | -------- | -------- |
+| *Time* | **No column** | This table only has information for the current day |
+| *Geography* | **Stop Time Key** | The unique identifier for each record, what we effectively *Count* by |
+| *Geography* | **Trip ID** | The unique identifier for each trip, counted by *Distinct values* |
+| *Geography* | **Stop ID** | The unique identifier for each stop, counted by *Distinct values* |
+| *Agency* | **Calitp Feed Name** | *Filter* by |
 
 ***Count of Trip Stops Made Across all Trips for an Agency***
 
@@ -337,43 +370,55 @@ LIMIT 10
 ***Distinct Stops in Trip Stops***
 
 ![Collection Matrix](assets/distinct_stops_in_trip_stops.png)
+````
+````{tabbed} SQL
+**Tables Used**
+| Name | Use |
+| -------- | -------- |
+| **views.gtfs_schedule_data_feed_trip_stops_latest** | Primary Fact Table |
 
-#### SQL
-**Primary Fact Table** → views.gtfs_schedule_data_feed_trip_stops_latest
+**Important Columns**
+| Type | Column | Use |
+| -------- | -------- | -------- |
+| *Time* | **No variable** | This table only has information for the current day |
+| *Geography* | **stop_time_key** | The unique identifier for each record, what we effectively *COUNT* by |
+| *Geography* | **trip_id** | The unique identifier for each trip, used to *COUNT* *DISTINCT* |
+| *Geography* | **stop_id** | The unique identifier for each stop, used to *COUNT* *DISTINCT* |
+| *Agency* | **calitp_feed_name** | *GROUP BY*, isolate with *WHERE* |
 
-*Time* → **no variable** - this table only has information for the current day
-
-*Geography* → **stop_time_key** (the unique identifier for each record, to *COUNT* by)
-
-*Agency* → **calitp_feed_name** (*GROUP BY*)
-
-```{code-cell}
-:tags: [remove-input]
-%%sql -m
-
+```sql
+%%sql
 SELECT
     calitp_feed_name,
-
-    count(*) AS n_trip_stops,
-    count(distinct(trip_id)) AS n_trips,
-    count(distinct(stop_id)) AS n_stops
+    COUNT(*) AS n_trip_stops,
+    COUNT(DISTINCT(trip_id)) AS n_trips,
+    COUNT(DISTINCT(stop_id)) AS n_stops
 FROM `views.gtfs_schedule_data_feed_trip_stops_latest`
 WHERE
     calitp_feed_name = "Unitrans (0)"
 GROUP BY
     calitp_feed_name
+LIMIT 10
 ```
+```{glue:figure} df_stops_trips_output
+```
+````
+````{tabbed} siuba
+**Tables Used**
+| Name | Use |
+| -------- | -------- |
+| **views.gtfs_schedule_data_feed_trip_stops_latest** | Primary Fact Table |
 
-#### siuba
-**Primary Fact Table** → views.gtfs_schedule_data_feed_trip_stops_latest
+**Important Columns**
+| Type | Column | Use |
+| -------- | -------- | -------- |
+| *Time* | **No variable** | This table only has information for the current day |
+| *Geography* | **stop_time_key** | The unique identifier for each record, what we are effectively counting by |
+| *Geography* | **trip_id** | The unique identifier for each trip, summarized by *.size* and *.nunique* |
+| *Geography* | **stop_id** | The unique identifier for each stop, summarized by *.nunique* |
+| *Agency* | **calitp_feed_name** | *filter*) |
 
-*Time* → **no variable** - this table only has information for the current day
-
-*Geography* → **stop_time_key** (the unique identifier for each record, to *COUNT* by)
-
-*Agency* → **calitp_feed_name** (*GROUP BY*)
-
-```{code-cell}
+```python
 (
     tbl.views.gtfs_schedule_data_feed_trip_stops_latest()
     >> filter(_.calitp_feed_name == "Unitrans (0)")
@@ -382,7 +427,9 @@ GROUP BY
     )
 )
 ```
-
+```{glue:figure} siuba_stops_trips_output
+```
+````
 (days-feed-expires)=
 ### 4. For a Given Agency, on Each Day, Days Until the Feed Expires
 
