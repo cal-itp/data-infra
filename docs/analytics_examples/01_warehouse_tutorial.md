@@ -88,7 +88,7 @@ from myst_nb import glue
 
 ```{code-cell}
 :tags: [remove-cell]
-routes_dataframe = query_sql("""
+df_routes = query_sql("""
 SELECT
     calitp_feed_name,
     date,
@@ -102,12 +102,12 @@ GROUP BY
 ORDER BY
     date DESC
 LIMIT 10""", as_df=True)
-glue("routes_sql_output", routes_dataframe)
+glue("df_routes_output", df_routes)
 ```
 
 ```{code-cell}
 :tags: [remove-cell]
-pythonroutesexample = (
+siuba_routes = (
     tbl.views.gtfs_schedule_fact_daily_feed_routes()
     >> left_join(_, tbl.views.gtfs_schedule_dim_feeds(), "feed_key")
     >> filter(_.calitp_feed_name == "Unitrans (0)")
@@ -115,7 +115,7 @@ pythonroutesexample = (
     >> arrange(_.date)
 )
 
-glue("examplep1", pythonroutesexample)
+glue("siuba_routes_output", siuba_routes)
 ```
 
 ````{tabbed} Metabase
@@ -163,7 +163,7 @@ ORDER BY
     date DESC
 LIMIT 10
 ```
-```{glue:figure} routes_sql_output
+```{glue:figure} df_routes_output
 ```
 ````
 ````{tabbed} siuba
@@ -191,7 +191,7 @@ LIMIT 10
     >> arrange(_.date)
 )
 ```
-```{glue:figure} examplep1
+```{glue:figure} siuba_routes_output
 ```
 ````
 
