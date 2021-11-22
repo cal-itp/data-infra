@@ -32,12 +32,19 @@ broadly useful across the org should live in `views`.
 
 ### Extraction
 
-Extraction of GTFS RT feeds is handled by the [gtfs-rt-archive service](../sevices/gtfs-rt-archive.md).
+Extraction of GTFS RT feeds is handled by the [gtfs-rt-archive service](../services/gtfs-rt-archive.md).
 
 ### Validation
 
 Validation of GTFS RT uses the [gtfs-rt-validator-api](https://github.com/cal-itp/gtfs-rt-validator-api).
 This repo publishes a docker image on every release, so that it can used from a KubernetesPodOperator.
+It allows for fetching GTFS RT and schedule data from our cloud storage, validating, and putting the results
+back into cloud storage.
+
+Note that the validation process requires two pieces per feed:
+
+* a zipped GTFS Schedule
+* realtime feed data (e.g. vehicle positions, trip updates, service alerts)
 
 ### Backfilling
 
