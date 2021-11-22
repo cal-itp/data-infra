@@ -5,7 +5,7 @@
 # task_concurrency: 3
 #
 # dependencies:
-#   - load_vehicle_positions
+#   - external_vehicle_positions
 #
 # external_dependencies:
 #   - rt_timestamp_fix: rename_timestamp_to_datetime
