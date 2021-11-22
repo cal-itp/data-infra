@@ -14,6 +14,7 @@ Currently, Payments data is hosted by Littlepay, who exposes the "Littlepay Data
 
 | Tablename | Description | Notes |
 |----- | -------- | -------|
+| | | |
 
 ## Maintenance
 
