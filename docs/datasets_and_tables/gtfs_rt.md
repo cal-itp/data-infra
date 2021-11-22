@@ -19,6 +19,7 @@ Currently, Payments data is hosted by Littlepay, who exposes the "Littlepay Data
 ## Internal Tables
 
 | Tablename | Description | Notes |
+| --------- | ----------- | ----- |
 | `calitp_files` | Metadata on each RT feed file we sample every 20 seconds (e.g. vehicle positions) | |
 | `vehicle_positions` | One row per feed individual vehicle position reported every 20 seconds | Sampling times occur in 20 second intervals, but not on specific points in time. |
 | `validation_service_alerts` | Each row is the contents of an individual results file from the GTFS RT validator | |
