@@ -1,3 +1,7 @@
+images:
+  metabase:
+    src: metabase/metabase:v0.41.1
+
 workloads:
   metabase:
     replicas: 3

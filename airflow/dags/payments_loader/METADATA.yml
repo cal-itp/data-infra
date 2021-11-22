@@ -9,6 +9,7 @@ default_args:
   email:
     - "hunter.owens@dot.ca.gov"
     - "michael.c@jarv.us"
+    - "mjumbe.p@jarv.us"
   email_on_failure: True
   email_on_retry: False
   retries: 1

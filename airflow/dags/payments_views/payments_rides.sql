@@ -2,6 +2,47 @@
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.payments_rides"
 
+fields:
+  participant_id: "Littlepay-assigned Participant ID"
+  micropayment_id: "From payments.micropayments.micropayment_id"
+  charge_amount: "From payments.micropayments.charge_amount"
+  nominal_amount: "From payments.micropayments.nominal_amount"
+  charge_type: "From payments.micropayments.charge_type"
+  adjustment_id: "From payments.micropayments.adjustment_id"
+  adjustment_type: "From payments.micropayment_adjustments.type"
+  adjustment_time_period_type: "From payments.micropayment_adjustments.time_period_type"
+  adjustment_description: "From payments.micropayment_adjustments.description"
+  adjustment_amount: "From payments.micropayment_adjustments.amount"
+  product_id: "From payments.micropayment_adjustments.product_id"
+  product_code: "From payments.product_data.product_code"
+  product_description: "From payments.product_data.product_description"
+  product_type: "From payments.product_data.product_type"
+  route_id: "The route_id of the first tap transaction"
+  route_long_name: "The route_long_name of the first tap transaction"
+  route_short_name: "The route_short_name of the first tap transaction"
+  direction: "The direction of the first tap transaction"
+  vehicle_id: "The vehicle_id of the first tap transaction"
+  littlepay_transaction_id: "The littlepay_transaction_id of the first tap transaction"
+  device_id: "The device_id of the first tap transaction"
+  transaction_type: "The transaction_type of the first tap transaction"
+  transaction_outcome: "The transaction_outcome of the first tap transaction"
+  transaction_date_time_utc: "The transaction_date_time_utc of the first tap transaction"
+  transaction_date_time_pacific: "The transaction_date_time_pacific of the first tap transaction"
+  location_id: "The location_id of the first tap transaction"
+  location_name: "The location_name of the first tap transaction"
+  latitude: "The latitude of the first tap transaction"
+  longitude: "The longitude of the first tap transaction"
+  off_littlepay_transaction_id: "The littlepay_transaction_id of the second tap transaction (if there is one)"
+  off_device_id: "The device_id of the second tap transaction (if there is one)"
+  off_transaction_type: "The transaction_type of the second tap transaction (if there is one)"
+  off_transaction_outcome: "The transaction_outcome of the second tap transaction (if there is one)"
+  off_transaction_date_time_utc: "The transaction_date_time_utc of the second tap transaction (if there is one)"
+  off_transaction_date_time_pacific: "The transaction_date_time_pacific of the second tap transaction (if there is one)"
+  off_location_id: "The location_id of the second tap transaction (if there is one)"
+  off_location_name: "The location_name of the second tap transaction (if there is one)"
+  off_latitude: "The latitude of the second tap transaction (if there is one)"
+  off_longitude: "The longitude of the second tap transaction (if there is one)"
+
 dependencies:
   - payments_feeds
 
@@ -20,6 +61,12 @@ gtfs_routes_with_participant AS (
     SELECT participant_id, route_id, route_short_name, route_long_name
     FROM `gtfs_schedule.routes`
     JOIN `views.payments_feeds` USING (calitp_itp_id, calitp_url_number)
+),
+
+applied_adjustments AS (
+    SELECT participant_id, micropayment_id, product_id, adjustment_id, type, time_period_type, description, amount
+    FROM `payments.stg_cleaned_micropayment_adjustments`
+    WHERE applied IS True
 ),
 
 initial_transactions AS (
@@ -44,6 +91,15 @@ SELECT
     m.charge_amount,
     m.nominal_amount,
     m.charge_type,
+    a.adjustment_id,
+    a.type AS adjustment_type,
+    a.time_period_type AS adjustment_time_period_type,
+    a.description AS adjustment_description,
+    a.amount AS adjustment_amount,
+    p.product_id,
+    p.product_code,
+    p.product_description,
+    p.product_type,
 
     -- Common transaction info
     t1.route_id,
@@ -80,3 +136,5 @@ FROM `payments.stg_cleaned_micropayments` AS m
 JOIN initial_transactions AS t1 USING (participant_id, micropayment_id)
 LEFT JOIN gtfs_routes_with_participant AS r USING (participant_id, route_id)
 LEFT JOIN second_transactions AS t2 USING (participant_id, micropayment_id)
+LEFT JOIN applied_adjustments AS a USING (participant_id, micropayment_id)
+LEFT JOIN `payments.stg_cleaned_product_data` AS p USING (participant_id, product_id)

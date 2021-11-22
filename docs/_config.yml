@@ -1,15 +1,18 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
-title: Juniper Documentation
-author: Jarv.us
-#logo: logo.png
+title: Cal-ITP Data Services
+author: Cal-ITP
+logo: calitp_logo_MAIN.png
 
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
 execute:
   execute_notebooks: force
-  allow_errors: true
+  allow_errors: false
+  exclude_patterns:
+      - 'analytics_tools/*.yml'
+      - 'analytics_tools/08_data_catalogs.md'
 
 # Define the name of the latex output file for PDF builds
 latex:
@@ -28,3 +31,4 @@ html:
   use_issues_button: true
   use_repository_button: true
   use_edit_page_button: true
+  google_analytics_id: G-SZB618VNBZ

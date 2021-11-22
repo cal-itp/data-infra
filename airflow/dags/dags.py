@@ -86,11 +86,11 @@ def sql_enrich_duplicates(schema_tbl, key_columns, order_by_columns):
                 _FILE_NAME AS calitp_file_name,
                 REGEXP_EXTRACT(
                     _FILE_NAME,
-                    '.*/[0-9]{4}-[0-9]{2}-[0-9]{2}_(.*)_[0-9]{12}_.*'
+                    '.*/[0-9]{{4}}-[0-9]{{2}}-[0-9]{{2}}_(.*)_[0-9]{{12}}_.*'
                 ) AS calitp_export_account,
                 PARSE_DATETIME(
                     '%Y%m%d%H%M',
-                    REGEXP_EXTRACT(_FILE_NAME, '.*_([0-9]{12})_.*')
+                    REGEXP_EXTRACT(_FILE_NAME, '.*_([0-9]{{12}})_.*')
                 ) AS calitp_export_datetime
             FROM {schema_tbl} T
         ),

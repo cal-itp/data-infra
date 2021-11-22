@@ -3,46 +3,82 @@
 
 format: jb-book
 root: intro
-chapters:
-  - file: datasets/01_overview
-    sections:
-    - file: datasets/gtfs_schedule
-    - file: datasets/mst_payments
-    - file: datasets/transitdatabase
-    - file: datasets/views
-  - file: kubernetes/README
-    sections:
-    - file: kubernetes/JupyterHub
-  - file: ci/README
-    sections:
-    - file: ci/Git-Flow-Services
-    - file: ci/Pipeline-Variables
-    - file: ci/steps/build-docker-image
-    - file: ci/steps/build-git-notes
-    - file: ci/steps/build-git-tag
-    - file: ci/steps/configure-build-git-notes
-    - file: ci/steps/configure-docker-login
-    - file: ci/steps/configure-git-remote
-    - file: ci/steps/release-kube-overlay
-    - file: ci/steps/validate-build-git-tag
-    - file: ci/steps/validate-clean-worktree
-  - file: services/overview
-    sections:
-    - file: services/gtfs-ckan-uploader
-    - file: services/gtfs-rt-archive
-  - file: warehouse/overview
-    sections:
-    - file: warehouse/01_agencies
-    - file: warehouse/02_views
-    - file: warehouse/03_metrics
-    - file: warehouse/04_sql_snippets
-    - file: warehouse/05_using_metabase
-    - file: warehouse/06_table_names
-    - file: warehouse/jupyterhub
-    - file: warehouse/07_tutorial
-  - file: analytics/overview
-    sections:
-    - file: analytics/01_sample
-  - file: contributing/overview
-    sections:
-    - file:  contributing/editing_doc
+parts:
+  - caption:  Analysts
+    chapters:
+      - file: analytics_welcome/overview
+        sections:
+        - file: analytics_welcome/01_what_is_calitp
+        - file: analytics_welcome/02_about_our_team
+        - file: analytics_welcome/03_how_we_work
+      - file: analytics_onboarding/overview
+      - file: analytics_tools/overview
+        sections:
+        - file: analytics_tools/01_tools_quick_links
+        - file: analytics_tools/03_bi_dashboards
+        - file: analytics_tools/04_notebooks
+        - file: analytics_tools/05_python_libraries
+        - file: analytics_tools/06_saving_code
+        - file: analytics_tools/07_storing_data
+        - file: analytics_tools/08_data_catalogs
+      - file: warehouse/overview
+        sections:
+        - file: warehouse/01_table_naming
+        - file: warehouse/02_agencies
+        - file: warehouse/03_views
+        - file: warehouse/04_metrics
+        - file: warehouse/02_sql_snippets
+      - file: datasets_and_tables/01_overview
+        sections:
+        - file: datasets_and_tables/gtfs_schedule
+        - file: datasets_and_tables/mst_payments
+        - file: datasets_and_tables/transitdatabase
+        - file: datasets_and_tables/views
+        - file: datasets_and_tables/tables
+      - file: analytics_examples/overview
+        sections:
+        - file: analytics_examples/01_analysis_examples
+        - file: analytics_examples/sample-catalog-viewer
+      - file: analytics_publishing/overview
+        sections:
+        - file: analytics_publishing/01_how_to_publish
+        - file: analytics_publishing/02_where_reports_live
+  - caption: Project Leads
+    chapters:
+      - file: analytics_project_leads/overview
+  - caption: Data Consumers
+    chapters:
+      - file: analytics_data_consumers/overview
+  - caption: Developers
+    chapters:
+      - file: airflow/overview
+        sections:
+        - file: airflow/static-schedule-pipeline
+        - file: airflow/local-setup
+        - file: airflow/production-maintenance
+      - file: kubernetes/README
+        sections:
+        - file: kubernetes/JupyterHub
+      - file: ci/README
+        sections:
+        - file: ci/Git-Flow-Services
+        - file: ci/Pipeline-Variables
+        - file: ci/steps/build-docker-image
+        - file: ci/steps/build-git-notes
+        - file: ci/steps/build-git-tag
+        - file: ci/steps/configure-build-git-notes
+        - file: ci/steps/configure-docker-login
+        - file: ci/steps/configure-git-remote
+        - file: ci/steps/release-kube-overlay
+        - file: ci/steps/validate-build-git-tag
+        - file: ci/steps/validate-clean-worktree
+      - file: services/overview
+        sections:
+        - file: services/gtfs-ckan-uploader
+        - file: services/gtfs-rt-archive
+  - caption: Contribute to the Docs!
+    chapters:
+      - file: contribute/overview
+        sections:
+        - file: contribute/01_content_types
+        - file: contribute/02_submitting_changes
