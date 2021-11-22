@@ -144,7 +144,7 @@
  </li>
  <li class="toctree-l1 current active has-children">
   <a class="reference internal" href="overview.html">
-   Introduction to Analytics Tools (WIP)
+   Introduction to Analytics Tools
   </a>
   <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
   <label for="toctree-checkbox-2">
@@ -228,7 +228,7 @@
  </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../datasets_and_tables/01_overview.html">
-   Datasets and Tables (WIP)
+   Datasets &amp; Tables (WIP)
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
   <label for="toctree-checkbox-4">
@@ -643,7 +643,7 @@
               <div>
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="using-data-catalogs">
-<h1>Using Data Catalogs<a class="headerlink" href="#using-data-catalogs" title="Permalink to this headline">¶</a></h1>
+<span id="data-catalogs"></span><h1>Using Data Catalogs<a class="headerlink" href="#using-data-catalogs" title="Permalink to this headline">¶</a></h1>
 <p>One major difficulty with conducting reproducible analyses is the location of data. If a data analyst downloads a CSV on their local system, but does not document its provenance or access, the analysis becomes very difficult to reproduce.</p>
 <p>One strategy to deal with this is to create data catalogs for projects, which describe the data sources used and how to access them. Our team uses open data sources, database, and any other dataset that needs to be versioned must be stored in Google Cloud Storage (GCS) buckets. A data catalog that documents these heterogeneous sources simplifies and streamlines the “read” side of reading and writing data.</p>
 <p>Each task sub-folder within the <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code> repo should come with its own data catalog, documenting the data sources used within the notebooks and scripts.</p>

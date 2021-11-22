@@ -1,5 +1,5 @@
-# Notebooks
 (jupyterhub)=
+# Notebooks
 ## Introduction to JupyterHub
 For Python users, we have deployed a cloud-based instance of JupyterHub to creating, using, and sharing notebooks easy.
 
