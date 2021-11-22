@@ -1,16 +1,23 @@
-# Introduction to Analytics Tools (WIP)
-Congratulations, you're ready to start your analyses!
+# Introduction to Analytics Tools
+Welcome to the Analytics Tools section! If you're here, you're ready to begin conducting analyses.
 
-Use the sections below to walk through the various stages of conducting an analysis.
+This section dives deeper into the details of our tools and how they are used, and is laid out in the progressive form of an anlaysis.
 
-Before getting started, see the full list of our tools [here](technical-onboarding).
+When used in combination with the [Introduction to the Warehouse](intro-warehouse), [Datasets & Tables](datasets-tables), and [How to Publish Analyses](publish-analyses) sections you should be prepared to conduct an analysis from end-to-end.
 
-After reading this section, you should be able to:
-* x
-* y
-* z
+**What you should know after reading**:
+* [How to use our BI & dashboarding tool](metabase)
+* [How to use our cloud notebook](jupyterhub)
+* How to query the warehouse with SQL
+* [What Python libraries are suggested](python-libraries)
+* [Where code is kept](saving-code)
+* [How to store new data](storing-new-data), and [best practices](data-catalogs).
 
 &nbsp;
-```{admonition} Still need access to a tool in this section?
-DM Charlie <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">on Cal-ITP Slack using this link</a>, or <a href="mailto: charlie.c@jarv.us?subject=Cal-ITP Access Issues&body=I need access to:" target="_blank">by email</a>.
-```
+:::{seealso} Missing something?
+:class: tip
+Still need to know more about our team and how we work?
+Visit the [Welcome](welcome) section.
+Still need to confirm access to our team's tools?
+Go to the [Technical Onboarding](technical-onboarding) section.
+:::
