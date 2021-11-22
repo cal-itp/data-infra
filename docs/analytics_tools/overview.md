@@ -14,7 +14,10 @@ When used in combination with the [Introduction to the Warehouse](intro-warehous
 * [How to store new data](storing-new-data), and [best practices](data-catalogs).
 
 &nbsp;
-:::{admonition} Missing something?
+:::{seealso} Missing something?
 :class: tip
-If you still need to know more about our team and how we work, visit the [Welcome](welcome) section. If you still need to confirm access to our team's tools, go to the [Technical Onboarding](technical-onboarding) section.
+Still need to know more about our team and how we work?
+Visit the [Welcome](welcome) section.
+Still need to confirm access to our team's tools?
+Go to the [Technical Onboarding](technical-onboarding) section.
 :::
