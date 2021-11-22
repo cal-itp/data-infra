@@ -6,9 +6,6 @@
 #
 # dependencies:
 #   - external_vehicle_positions
-#
-# external_dependencies:
-#   - rt_timestamp_fix: rename_timestamp_to_datetime
 # ---
 
 from google.transit import gtfs_realtime_pb2
