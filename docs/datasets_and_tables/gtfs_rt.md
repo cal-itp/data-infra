@@ -14,10 +14,6 @@ Currently, Payments data is hosted by Littlepay, who exposes the "Littlepay Data
 
 | Tablename | Description | Notes |
 |----- | -------- | -------|
-|  | A list of every tap on the devices | * Cannot use for ridership stats because tap on / offs |
-| micropayments | A list of every charge to a card | * T-2 delays because of charing rules |
-| micropayments_devices_transactions | Join tables for two prior tables | |
-| micropayment_adjustments | A list of amounts deducted from the `nominal_amount` to arrive at the `charge_amount` for a micropayment | A micropayment can include multiple adjustments candidates, but only one should have `applied=true`. |
 
 ## Maintenance
 
@@ -35,7 +31,12 @@ broadly useful across the org should live in `views`.
 
 ### Extraction
 
-Extraction of GTFS RT feeds is handled by the [gtfs-rt-archive service](../sevices/gtfs-rt-archive).
+Extraction of GTFS RT feeds is handled by the [gtfs-rt-archive service](../sevices/gtfs-rt-archive.md).
+
+### Validation
+
+Validation of GTFS RT uses the [gtfs-rt-validator-api](https://github.com/cal-itp/gtfs-rt-validator-api).
+This repo publishes a docker image on every release, so that it can used from a KubernetesPodOperator.
 
 ### Backfilling
 
