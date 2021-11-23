@@ -17,7 +17,7 @@ When used in combination with the [Introduction to the Warehouse](intro-warehous
 :::{seealso} Missing something?
 :class: tip
 Still need to know more about our team and how we work?
-Visit the [Welcome](welcome) section.
+Visit the [Welcome](analysts-welcome) section.
 Still need to confirm access to our team's tools?
 Go to the [Technical Onboarding](technical-onboarding) section.
 :::
