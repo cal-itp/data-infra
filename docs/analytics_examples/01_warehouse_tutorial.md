@@ -549,7 +549,7 @@ LIMIT 10
 ````
 
 (max-number-stops)=
-### 5. Max Number of Stops a Trip Can Have, Per Agency
+### 5. Find the Trip With the Most Number of Stops, Per Agency
 
 ```{code-cell}
 :tags: [remove-cell]
