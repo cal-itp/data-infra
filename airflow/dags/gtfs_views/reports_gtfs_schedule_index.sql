@@ -62,9 +62,15 @@ agency_feeds_on_end_date AS (
         , S.itp_id AS calitp_itp_id
         , S.url_number AS calitp_url_number
         , S.agency_name
+        , COALESCE(FI.has_feed_info, FALSE)
+            AS has_feed_info
     FROM `gtfs_schedule_history.calitp_status` S
     JOIN publish_dates_crnt PD ON
         S.calitp_extracted_at = PD.date_end
+    LEFT JOIN has_feed_info_end_date FI
+      ON S.itp_id = FI.calitp_itp_id
+         AND S.url_number = FI.calitp_url_number
+         AND PD.publish_date = FI.publish_date
 )
 
 SELECT
@@ -74,10 +80,8 @@ SELECT
     , AF.agency_name
     , PD.date_start
     , PD.date_end
-    , FI.has_feed_info
-    , (calitp_url_number = 0 AND FI.has_feed_info) AS use_for_report
+    , has_feed_info
+    , (calitp_url_number = 0 AND has_feed_info) AS use_for_report
 FROM agency_feeds_on_end_date AF
-JOIN has_feed_info_end_date FI
-    USING(calitp_itp_id, calitp_url_number, publish_date)
 JOIN publish_dates_crnt PD
   USING (publish_date)
