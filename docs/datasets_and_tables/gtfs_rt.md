@@ -1,6 +1,8 @@
 # GTFS Realtime
 
-Currently, Payments data is hosted by Littlepay, who exposes the "Littlepay Data Model" as a set of files stored in an S3 bucket. To get a copy of the data docs, email hunter.
+We collect realtime data every 20 seconds for feeds listed in [agencies.yml](../warehouse/02_agencies.md).
+This data is processed and validated daily.
+
 
 ## Data
 
@@ -11,6 +13,8 @@ Currently, Payments data is hosted by Littlepay, who exposes the "Littlepay Data
 | `views.validation_rt_*` | User-friendly tables for analyzing GTFS RT validation data |
 
 ## View Tables
+
+Note that this data is still a work in progress, so no views have been created yet.
 
 | Tablename | Description | Notes |
 |----- | -------- | -------|
