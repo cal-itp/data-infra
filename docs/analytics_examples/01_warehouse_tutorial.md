@@ -155,7 +155,7 @@ glue("siuba_routes_output", siuba_routes)
 SELECT
     calitp_feed_name,
     date,
-    count(*) AS count_feeds
+    count(*) AS count_routes
 FROM `views.gtfs_schedule_fact_daily_feed_routes`
 JOIN `views.gtfs_schedule_dim_feeds` USING (feed_key)
 WHERE
