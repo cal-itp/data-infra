@@ -21,7 +21,7 @@ pipeline can be turned in to graphs, tables, and robust dashboards.
 This page will provide you with some general Metabase resources, as well as guidance on how
 Metabase is best utilized for the Cal-ITP project.
 
-Make sure you have access to Metabase [here](https://dashboards.calitp.org/).
+**You can access Metabase [using this link](https://dashboards.calitp.org/)**.
 
 ### Overview
 

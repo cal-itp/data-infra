@@ -37,7 +37,7 @@ parts:
         - file: datasets_and_tables/tables
       - file: analytics_examples/overview
         sections:
-        - file: analytics_examples/01_analysis_examples
+        - file: analytics_examples/01_warehouse_tutorial
         - file: analytics_examples/sample-catalog-viewer
       - file: analytics_publishing/overview
         sections:
@@ -45,10 +45,10 @@ parts:
         - file: analytics_publishing/02_where_reports_live
   - caption: Project Leads
     chapters:
-      - file: analytics_project_leads/overview
+      - file: project_leads/overview
   - caption: Data Consumers
     chapters:
-      - file: analytics_data_consumers/overview
+      - file: data_consumers/overview
   - caption: Developers
     chapters:
       - file: airflow/overview
