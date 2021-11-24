@@ -45,9 +45,7 @@ raw_daily_files AS (
 
     FROM `gtfs_schedule_history.calitp_files_updates` T1
     JOIN `views.gtfs_schedule_dim_feeds` T2
-        ON
-            T1.calitp_itp_id = T2.calitp_itp_id
-            AND T1.calitp_url_number = T2.calitp_url_number
+        USING(calitp_itp_id, calitp_url_number)
     LEFT JOIN `gtfs_schedule_history.calitp_feed_tables_parse_result` T3
         ON
             T1.calitp_itp_id = T3.calitp_itp_id
