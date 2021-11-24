@@ -35,16 +35,23 @@ raw_daily_files AS (
         , T1.is_agency_changed
         , T1.full_path
         , FALSE AS is_interpolated
+        , T3.parse_error_encountered
 
         -- calculate the leading date, so we can fill in missing rows, where
         -- extraction failed to run.
         , LEAD(T1.calitp_extracted_at)
-            OVER (PARTITION BY calitp_itp_id, calitp_url_number ORDER BY T1.calitp_extracted_at)
+            OVER (PARTITION BY T1.calitp_itp_id, T1.calitp_url_number ORDER BY T1.calitp_extracted_at)
             AS tmp_next_date
 
     FROM `gtfs_schedule_history.calitp_files_updates` T1
     JOIN `views.gtfs_schedule_dim_feeds` T2
-        USING (calitp_itp_id, calitp_url_number)
+        USING(calitp_itp_id, calitp_url_number)
+    LEFT JOIN `gtfs_schedule_history.calitp_feed_tables_parse_result` T3
+        ON
+            T1.calitp_itp_id = T3.calitp_itp_id
+            AND T1.calitp_url_number = T3.calitp_url_number
+            AND T1.calitp_extracted_at = T3.calitp_extracted_at
+            AND T1.name = T3.filename
     WHERE
         T1.calitp_extracted_at >= T2.calitp_extracted_at
         AND T1.calitp_extracted_at < T2.calitp_deleted_at
