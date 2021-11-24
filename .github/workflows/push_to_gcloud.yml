@@ -62,12 +62,22 @@ jobs:
     - name: Push agencies data to google cloud and prod services
       if: ${{ github.repository == 'cal-itp/data-infra' && github.ref == 'refs/heads/main' }}
       run: |
+        # BEGIN AIRFLOW1 ENVIRONMENT
         gsutil -m rsync -d -c -r airflow/dags gs://us-west2-calitp-airflow-pro-332827a9-bucket/dags
         gsutil -m rsync -d -c -r airflow/plugins gs://us-west2-calitp-airflow-pro-332827a9-bucket/plugins
         gsutil -m rsync -d -c -r airflow/data gs://us-west2-calitp-airflow-pro-332827a9-bucket/data
         # replace agencies.yml with filled in template for airflow
         gsutil -m cp airflow/data/agencies.yml gs://us-west2-calitp-airflow-pro-332827a9-bucket/data/agencies_raw.yml
         gsutil -m cp airflow/data/agencies.filled.yml gs://us-west2-calitp-airflow-pro-332827a9-bucket/data/agencies.yml
+        # END AIRFLOW1 ENVIRONMENT
+        # BEGIN AIRFLOW2 ENVIRONMENT
+        gsutil -m rsync -d -c -r airflow/dags gs://us-west2-calitp-airflow2-pr-91e4038b-bucket/dags
+        gsutil -m rsync -d -c -r airflow/plugins gs://us-west2-calitp-airflow2-pr-91e4038b-bucket/plugins
+        gsutil -m rsync -d -c -r airflow/data gs://us-west2-calitp-airflow2-pr-91e4038b-bucket/data
+        # replace agencies.yml with filled in template for airflow
+        gsutil -m cp airflow/data/agencies.yml gs://us-west2-calitp-airflow2-pr-91e4038b-bucket/data/agencies_raw.yml
+        gsutil -m cp airflow/data/agencies.filled.yml gs://us-west2-calitp-airflow2-pr-91e4038b-bucket/data/agencies.yml
+        # END AIRFLOW2 ENVIRONMENT
         # replace agencies.yml with filled in template for gtfs rt extract service
         kubectl apply -f - <<EOF
         apiVersion: v1
