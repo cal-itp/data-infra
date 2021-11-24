@@ -1,3 +1,4 @@
+# Note that this task currently only validates feed 126 as a proof of concept.
 operator: 'operators.PodOperator'
 name: 'gtfs-rt-validation'
 image: 'ghcr.io/cal-itp/gtfs-rt-api:v0.0.1'
