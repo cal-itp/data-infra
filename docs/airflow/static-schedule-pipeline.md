@@ -17,6 +17,8 @@ kernelspec:
 
 The Static Schedule Pipeline is a collection of the following DAGs
 
+![DAG Diagram](assets/static-schedule-dags-diagram.png)
+
 DAG name | DAGs depended on | Run Frequency | Depends on Past DAG runs | Description
 --|--|--|--|--
 gtfs_downloader | | Daily | No | Downloads static GTFS Feeds

@@ -50,17 +50,23 @@ daily_feeds AS (
 
 feed_status AS (
     SELECT
-        daily_feeds.*
-        , CASE WHEN Status.status = "success" THEN "success" ELSE "error"
+        daily_feeds.*,
+        CASE WHEN download_status.status = "success" THEN "success" ELSE "error"
             END
-            AS extraction_status
+            AS extraction_status,
+        parse_result.parse_error_encountered
 
     FROM daily_feeds
-    LEFT JOIN `gtfs_schedule_history.calitp_status` Status
+    LEFT JOIN `gtfs_schedule_history.calitp_status` download_status
         ON
-            daily_feeds.calitp_itp_id = Status.itp_id
-            AND daily_feeds.calitp_url_number = Status.url_number
-            AND daily_feeds.date = Status.calitp_extracted_at
+            daily_feeds.calitp_itp_id = download_status.itp_id
+            AND daily_feeds.calitp_url_number = download_status.url_number
+            AND daily_feeds.date = download_status.calitp_extracted_at
+    LEFT JOIN `gtfs_schedule_history.calitp_feed_parse_result` parse_result
+        ON
+            daily_feeds.calitp_itp_id = parse_result.calitp_itp_id
+            AND daily_feeds.calitp_url_number = parse_result.calitp_url_number
+            AND daily_feeds.date = parse_result.calitp_extracted_at
 )
 
 SELECT
