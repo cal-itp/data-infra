@@ -18,7 +18,6 @@ kernelspec:
 Our team uses Google Cloud Storage (GCS) buckets, specifically the `calitp-analytics-data` bucket, to store other datasets for analyses. GCS can store anything, of arbitrary object size and shape. It’s like a giant folder in the cloud. You can use it to store CSVs, parquets, pickles, videos, etc. Within the bucket, the `data-analyses` folder with its sub-folders corresponds to the `data-analyses`  GitHub repo with its sub-folders. Versioned data for a task should live within the correct folders.
 
 To access GCS, make sure you have your authentication set up in JupyterHub.
-GOOGLE AUTH STUFF, LINK TO THAT PAGE, EMBED THAT HERE.
 
 ```python
 import geopandas as gpd
@@ -114,17 +113,13 @@ Or, use the `shared_utils` package.
 ```python
 import shared_utils
 
-shared_utils.geoparquet_gcs_export(gdf, "my-geoparquet")
+shared_utils.utils.geoparquet_gcs_export(gdf, "my-geoparquet")
 ```
 
 ### Zipped Shapefile
 
 Refer to the [data catalogs doc](./08_data_catalogs.md#google-cloud-storage) to list a zipped shapefile, and read in the zipped shapefile with the `intake` method. Zipped shapefiles saved in GCS cannot be read in directly using `geopandas`.
 
-??IS THERE WAY TO READ FROM CALITP.STORAGE?
-
 ### GeoJSON
 
 Refer to the [data catalogs doc](./08_data_catalogs.md#google-cloud-storage) to list a GeoJSON, and read in the GeoJSON with the `intake` method. GeoJSONs saved in GCS cannot be read in directly using `geopandas`.
-
-??IS THERE WAY TO READ FROM CALITP.STORAGE?
