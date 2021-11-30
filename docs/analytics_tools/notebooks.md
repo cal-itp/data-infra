@@ -12,6 +12,15 @@ Jupyterhub is a web application that allows users to analyze and create reports 
 
 Analyses on jupyterhub are done using notebooks, which allow users to mix narrative with analysis code.
 
+## Table of Contents
+1. [Logging in to JupyterHub](#logging-in-to-jupyterhub)
+1. [Connecting to the Warehouse](#connecting-to-the-warehouse)
+1. [Uploading Data](#uploading-data)
+<br> - [Uploading data from a notebook](#uploading-data-from-a-notebook)
+<br> - [Uploading from google cloud storage](#uploading-from-google-cloud-storage)
+1. [Environment Variables](#environment-variables)
+
+
 ### Logging in to JupyterHub
 
 JupyterHub currently lives at https://hubtest.k8s.calitp.jarv.us/hub/. In order to be added to the Cal-ITP JupyterHub, please [open an issue using this link](https://github.com/cal-itp/data-infra/issues/new?assignees=charlie-costanzo&labels=new+team+member&template=new-team-member.md&title=New+Team+Member+-+%5BName%5D).
@@ -86,3 +95,33 @@ gdf.to_parquet("gs://calitp-analytics-data/data-analyses/<ANALYSIS FOLDER>/<FILE
 You can access the cloud bucket from the web from https://console.cloud.google.com/storage/browser/calitp-analytics-data.
 
 See the above screencast for a walkthrough of using the bucket.
+
+### Environment Variables
+
+Sometimes if data access is expensive, or if there is sensitive data, then accessing it will require some sort of credentials (which may take the form of passwords or tokens).
+
+There is a fundamental tension between data access restrictions and analysis reproducibility. If credentials are required, then an analysis is not reproducible out-of-the-box. However, including these credentials in scripts and notebooks is a security risk.
+
+Most projects should store the authentication credentials in environment variables, which can then be read by scripts and notebooks. The environment variables that are required for an analysis to work should be clearly documented.
+
+Analysts should store their credentials in a `_env` file, a slight variation of the typical `.env` file, since the `.env` won't show up in the JupyterHub filesystem.
+
+Some credentials that need to be stored within the `_env` file may include GitHub API key, Census API key, Airtable API key, etc. Store them in this format:
+
+```python
+GITHUB_API_KEY=ABCDEFG123456789
+CENSUS_API_KEY=ABCDEFG123456789
+AIRTABLE_API_KEY=ABCDEFG123456789
+```
+
+To pass these credentials in a Jupyter Notebook:
+```python
+import dotenv
+import os
+
+# Load the env file
+dotenv.load_dotenv("_env")
+
+# Import the credential (without exposing the password!)
+GITHUB_API_KEY = os.environ["GITHUB_API_KEY"]
+```
