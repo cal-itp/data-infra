@@ -98,7 +98,7 @@ SELECT
 FROM `views.gtfs_schedule_fact_daily_feed_routes`
 JOIN `views.gtfs_schedule_dim_feeds` USING (feed_key)
 WHERE
-    calitp_feed_name = "Unitrans (0)"
+    calitp_feed_name = "AC Transit (0)"
 GROUP BY
     1, 2
 ORDER BY
@@ -112,7 +112,7 @@ glue("df_routes_output", df_routes)
 siuba_routes = (
     tbl.views.gtfs_schedule_fact_daily_feed_routes()
     >> left_join(_, tbl.views.gtfs_schedule_dim_feeds(), "feed_key")
-    >> filter(_.calitp_feed_name == "Unitrans (0)")
+    >> filter(_.calitp_feed_name == "AC Transit (0)")
     >> count(_.date)
     >> arrange(_.date)
 )
@@ -128,13 +128,13 @@ glue("siuba_routes_output", siuba_routes)
 %% sql
 SELECT
     -- The first two columns are the ones we will group by for the count
-    calitp_feed_name,               # agency info
-    date,                           # time info
+    calitp_feed_name,               -- agency info
+    date,                           -- time info
 
     -- The aggregation itself
     count(*) AS count_routes
 
--- Primary fact table, we need this because it contains information for
+-- Primary fact table, we need this because it contains route information for
 -- each agency on each day
 FROM `views.gtfs_schedule_fact_daily_feed_routes`
 
@@ -144,7 +144,7 @@ JOIN `views.gtfs_schedule_dim_feeds` USING (feed_key)
 
 -- Filtering for agency, this column comes from the dimensional table above
 WHERE
-    calitp_feed_name = "Unitrans (0)"
+    calitp_feed_name = "AC Transit (0)"
 
 GROUP BY
 -- Note that 1, 2 refer to the first two columns of the select
@@ -160,8 +160,8 @@ LIMIT 10
 ````{tabbed} siuba
 ```python
 (
-    # Primary fact table, we need this because it contains information for each
-    # agency on each day
+    # Primary fact table, we need this because it contains route information
+    # for each agency on each day
     tbl.views.gtfs_schedule_fact_daily_feed_routes()
 
     # Enriching with information about feeds from dimensional table
@@ -169,7 +169,7 @@ LIMIT 10
     >> left_join(_, tbl.views.gtfs_schedule_dim_feeds(), "feed_key")
 
     # Filtering for agency, this column comes from the dimensional table above
-    >> filter(_.calitp_feed_name == "Unitrans (0)")
+    >> filter(_.calitp_feed_name == "AC Transit (0)")
 
     # Group and count rows by date, effectively counting the number of routes
     # for a given agency over time
@@ -195,7 +195,7 @@ SELECT
 FROM `views.gtfs_schedule_fact_daily_feed_stops`
 JOIN `views.gtfs_schedule_dim_feeds` USING (feed_key)
 WHERE
-    calitp_feed_name = "Unitrans (0)"
+    calitp_feed_name = "AC Transit (0)"
 GROUP BY
     1, 2
 ORDER BY
@@ -210,7 +210,7 @@ siuba_stops = (
     tbl.views.gtfs_schedule_fact_daily_feed_stops()
     >> left_join(_, tbl.views.gtfs_schedule_dim_feeds(), "feed_key")
     >> count(_.date, _.calitp_feed_name)
-    >> filter(_.calitp_feed_name == "Unitrans (0)")
+    >> filter(_.calitp_feed_name == "AC Transit (0)")
     >> arrange(_.date)
 )
 glue("siuba_stops_output", siuba_stops)
@@ -256,7 +256,7 @@ SELECT
 FROM `views.gtfs_schedule_fact_daily_feed_stops`
 JOIN `views.gtfs_schedule_dim_feeds` USING (feed_key)
 WHERE
-    calitp_feed_name = "Unitrans (0)"
+    calitp_feed_name = "AC Transit (0)"
 GROUP BY
     1, 2
 ORDER BY
@@ -289,7 +289,7 @@ LIMIT 10
     tbl.views.gtfs_schedule_fact_daily_feed_stops()
     >> left_join(_, tbl.views.gtfs_schedule_dim_feeds(), "feed_key")
     >> count(_.date, _.calitp_feed_name)
-    >> filter(_.calitp_feed_name == "Unitrans (0)")
+    >> filter(_.calitp_feed_name == "AC Transit (0)")
     >> arrange(_.date)
 )
 ```
@@ -311,7 +311,7 @@ SELECT
     count(distinct(stop_id)) AS n_stops
 FROM `views.gtfs_schedule_data_feed_trip_stops_latest`
 WHERE
-    calitp_feed_name = "Unitrans (0)"
+    calitp_feed_name = "AC Transit (0)"
 GROUP BY
     calitp_feed_name
 LIMIT 10""", as_df=True)
@@ -322,7 +322,7 @@ glue("df_stops_trips_output", df_stops_trips)
 :tags: [remove-cell]
 siuba_stops_trips = (
     tbl.views.gtfs_schedule_data_feed_trip_stops_latest()
-    >> filter(_.calitp_feed_name == "Unitrans (0)")
+    >> filter(_.calitp_feed_name == "AC Transit (0)")
     >> summarize(
         n_trips=_.trip_id.nunique(), n_stops=_.stop_id.nunique(), n=_.trip_id.size()
     )
@@ -358,56 +358,48 @@ glue("siuba_stops_trips_output", siuba_stops_trips)
 ![Collection Matrix](assets/distinct_stops_in_trip_stops.png)
 ````
 ````{tabbed} SQL
-**Tables Used**
-| Name | Use |
-| -------- | -------- |
-| **views.gtfs_schedule_data_feed_trip_stops_latest** | Primary Fact Table |
-
-**Important Columns**
-| Type | Column | Use |
-| -------- | -------- | -------- |
-| *Time* | **No variable** | This table only has information for the current day |
-| *Geography* | **stop_time_key** | The unique identifier for each record, what we effectively *COUNT* by |
-| *Geography* | **trip_id** | The unique identifier for each trip, used to *COUNT* *DISTINCT* |
-| *Geography* | **stop_id** | The unique identifier for each stop, used to *COUNT* *DISTINCT* |
-| *Agency* | **calitp_feed_name** | *GROUP BY*, isolate with *WHERE* |
-
 ```sql
 %%sql
 SELECT
-    calitp_feed_name,
+    -- The first column is what we will group by
+    calitp_feed_name,               -- agency info
+
+    -- Counting the total number of trip stops
     COUNT(*) AS n_trip_stops,
+    -- Counting the number of unique trips
     COUNT(DISTINCT(trip_id)) AS n_trips,
+    -- Counting the number of unique stops
     COUNT(DISTINCT(stop_id)) AS n_stops
+
+-- Primary fact table, we need this because it contains trip stop information
+-- for each agency on each day
 FROM `views.gtfs_schedule_data_feed_trip_stops_latest`
+
+-- Filtering for each agency
 WHERE
-    calitp_feed_name = "Unitrans (0)"
+    calitp_feed_name = "AC Transit (0)"
+
+-- The column we need to group by
 GROUP BY
     calitp_feed_name
+
 LIMIT 10
 ```
 ```{glue:figure} df_stops_trips_output
 ```
 ````
 ````{tabbed} siuba
-**Tables Used**
-| Name | Use |
-| -------- | -------- |
-| **views.gtfs_schedule_data_feed_trip_stops_latest** | Primary Fact Table |
-
-**Important Columns**
-| Type | Column | Use |
-| -------- | -------- | -------- |
-| *Time* | **No variable** | This table only has information for the current day |
-| *Geography* | **stop_time_key** | The unique identifier for each record, what we are effectively counting by |
-| *Geography* | **trip_id** | The unique identifier for each trip, summarized by *.size()* and *.nunique()* |
-| *Geography* | **stop_id** | The unique identifier for each stop, summarized by *.nunique()* |
-| *Agency* | **calitp_feed_name** | *filter*) |
-
 ```python
 (
+    # Primary fact table, we need this because it contains trip stop
+    # information for each agency on each day
     tbl.views.gtfs_schedule_data_feed_trip_stops_latest()
-    >> filter(_.calitp_feed_name == "Unitrans (0)")
+
+    # Filtering for agency
+    >> filter(_.calitp_feed_name == "AC Transit (0)")
+
+    # using siuba and pandas to determine number of unique trips, number of
+    # unique stops, and the total number of trip stops
     >> summarize(
         n_trips=_.trip_id.nunique(), n_stops=_.stop_id.nunique(), n=_.trip_id.size()
     )
@@ -430,7 +422,7 @@ SELECT
 FROM views.gtfs_schedule_fact_daily_feeds
 JOIN views.gtfs_schedule_dim_feeds USING (feed_key)
 WHERE
-    date = "2021-09-01" AND calitp_feed_name = "Unitrans (0)"
+    date = "2021-09-01" AND calitp_feed_name = "AC Transit (0)"
 LIMIT 10""", as_df=True)
 glue("df_feed_expires_output", df_feed_expires)
 ```
@@ -441,7 +433,7 @@ siuba_feed_expires = (
     tbl.views.gtfs_schedule_fact_daily_feeds()
     >> left_join(_, tbl.views.gtfs_schedule_dim_feeds(), "feed_key")
     >> select(_.calitp_feed_name, _.date, _.days_until_feed_end_date, _.feed_end_date)
-    >> filter(_.date == "2021-09-01", _.calitp_feed_name == "Unitrans (0)")
+    >> filter(_.date == "2021-09-01", _.calitp_feed_name == "AC Transit (0)")
 )
 glue("siuba_feed_expires_output", siuba_feed_expires)
 ```
@@ -497,7 +489,7 @@ SELECT
 FROM views.gtfs_schedule_fact_daily_feeds
 JOIN views.gtfs_schedule_dim_feeds USING (feed_key)
 WHERE
-    date = "2021-09-01" AND calitp_feed_name = "Unitrans (0)"
+    date = "2021-09-01" AND calitp_feed_name = "AC Transit (0)"
 LIMIT 10
 ```
 
@@ -525,7 +517,7 @@ LIMIT 10
     tbl.views.gtfs_schedule_fact_daily_feeds()
     >> left_join(_, tbl.views.gtfs_schedule_dim_feeds(), "feed_key")
     >> select(_.calitp_feed_name, _.date, _.days_until_feed_end_date, _.feed_end_date)
-    >> filter(_.date == "2021-09-01", _.calitp_feed_name == "Unitrans (0)")
+    >> filter(_.date == "2021-09-01", _.calitp_feed_name == "AC Transit (0)")
 )
 ```
 ```{glue:figure} siuba_feed_expires_output
@@ -560,7 +552,7 @@ SELECT
 FROM
     counting_stop_times
 WHERE
-     calitp_feed_name = "Unitrans (0)"
+     calitp_feed_name = "AC Transit (0)"
 GROUP BY
     calitp_feed_name
 LIMIT 10""", as_df=True)
@@ -572,7 +564,7 @@ glue("df_max_stops_output", df_max_stops)
 siuba_max_stops = (
     tbl.views.gtfs_schedule_data_feed_trip_stops_latest()
     >> count(_.trip_id, _.calitp_feed_name)
-    >> filter(_.calitp_feed_name == "Unitrans (0)")
+    >> filter(_.calitp_feed_name == "AC Transit (0)")
     >> summarize(n_max=_.n.max())
 )
 glue("siuba_max_stops_output", siuba_max_stops)
@@ -633,7 +625,7 @@ SELECT
 FROM
     counting_stop_times
 WHERE
-     calitp_feed_name = "Unitrans (0)"
+     calitp_feed_name = "AC Transit (0)"
 GROUP BY
     calitp_feed_name
 LIMIT 10
@@ -662,7 +654,7 @@ LIMIT 10
 (
     tbl.views.gtfs_schedule_data_feed_trip_stops_latest()
     >> count(_.trip_id, _.calitp_feed_name)
-    >> filter(_.calitp_feed_name == "Unitrans (0)")
+    >> filter(_.calitp_feed_name == "AC Transit (0)")
     >> summarize(n_max=_.n.max())
 )
 ```
