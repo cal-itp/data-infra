@@ -31,6 +31,7 @@ parts:
       - file: datasets_and_tables/overview
         sections:
         - file: datasets_and_tables/gtfs_schedule
+        - file: datasets_and_tables/gtfs_rt
         - file: datasets_and_tables/mst_payments
         - file: datasets_and_tables/transitdatabase
         - file: datasets_and_tables/views

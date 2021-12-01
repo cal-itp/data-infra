@@ -5,16 +5,14 @@
 # task_concurrency: 3
 #
 # dependencies:
-#   - load_vehicle_positions
-#
-# external_dependencies:
-#   - rt_timestamp_fix: rename_timestamp_to_datetime
+#   - external_vehicle_positions
 # ---
 
 from google.transit import gtfs_realtime_pb2
 from google.protobuf import json_format
 from google.protobuf.message import DecodeError
 from calitp.storage import get_fs
+from calitp.config import get_bucket
 from concurrent.futures import ThreadPoolExecutor
 from collections import defaultdict
 
@@ -25,8 +23,10 @@ import tempfile
 
 N_THREADS = 50
 
+# Note that all RT extraction is stored in the prod bucket, since it is very large,
+# but we can still output processed results to the staging bucket
 SRC_PATH = "gs://gtfs-data/rt/"
-DST_PATH = "gtfs-data/rt-processed/vehicle_positions/"
+DST_PATH = f"{get_bucket()}/rt-processed/vehicle_positions/"
 
 
 def parse_pb(path, open_with=None):
