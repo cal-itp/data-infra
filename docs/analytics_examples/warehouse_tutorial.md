@@ -36,7 +36,7 @@ The tools that we can use to answer them are:
 * [**Python**](jupyterhub) - using JupyterHub cloud notebooks
     * *siuba* - a Cal-ITP recommended data analysis library in Python
     * *cal-itp* - Cal-ITP's internal Python library
-    * *pandas* - a commonly used data analysis library in Python (used sparsely in the examples below)
+    * *pandas* - a commonly used data analysis library in Python
 
 ### Relevant Tables
 
@@ -45,10 +45,10 @@ These tables contain measurements, metrics, and facts used to answer the questio
 
 | Table Type | Location |
 | -------- | -------- |
-| **Feeds** | Warehouse: **views.gtfs_schedule_fact_daily_feeds** <br/> Metabase: **Gtfs Schedule Fact Daily Feeds** |
-| **Routes** | Warehouse: **views.gtfs_schedule_fact_daily_feed_routes** <br/> Metabase: **Gtfs Schedule Fact Daily Feed Routes** |
-| **Stops** | Warehouse: **views.gtfs_schedule_fact_daily_feed_stops** <br/> Metabase: **Gtfs Schedule Fact Daily Feed Stops** |
-| **Trips** | Warehouse: **views.gtfs_schedule_data_feed_trip_stops_latest** <br/> Metabase: **Gtfs Schedule Data Feed Trip Stops Latest** |
+| **Feeds** | Warehouse: `views.gtfs_schedule_fact_daily_feeds` <br/> Metabase: `Gtfs Schedule Fact Daily Feeds` |
+| **Routes** | Warehouse: `views.gtfs_schedule_fact_daily_feed_routes` <br/> Metabase: `Gtfs Schedule Fact Daily Feed Routes` |
+| **Stops** | Warehouse: `views.gtfs_schedule_fact_daily_feed_stops` <br/> Metabase: `Gtfs Schedule Fact Daily Feed Stops` |
+| **Trips** | Warehouse: `views.gtfs_schedule_data_feed_trip_stops_latest` <br/> Metabase: `Gtfs Schedule Data Feed Trip Stops Latest` |
 ````
 
 ````{tabbed} Dimensional Tables
@@ -56,7 +56,7 @@ These tables compliment the fact tables by providing additional descriptive attr
 
 | Table | Location | Description |
 | -------- | -------- | -------- |
-| **Dim Feeds** | Warehouse: **views.gtfs_schedule_dim_feeds** <br/> Metabase: **Gtfs Schedule Dim Feeds** | - Joining with this table is the most common way to append calitp_feed_name to fact tables <br/> - calitp_feed_name is our primary agency identifier |
+| **Dim Feeds** | Warehouse: `views.gtfs_schedule_dim_feeds` <br/> Metabase: `Gtfs Schedule Dim Feeds` | - Joining with this table is the most common way to append `calitp_feed_name` to fact tables <br/> - `calitp_feed_name` is our primary agency identifier |
 ````
 
 ### Important Column Types
