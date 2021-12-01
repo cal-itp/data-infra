@@ -35,6 +35,36 @@ feed_feed_info AS (
             AND T1.calitp_extracted_at < T2.calitp_deleted_at
             AND T2.calitp_extracted_at < T1.calitp_deleted_at
             AND T2.calitp_itp_id != 200
+),
+
+raw_feed_with_extract_date AS (
+  SELECT
+    *,
+    PARSE_DATE(
+      '%Y-%m-%d',
+      REGEXP_EXTRACT(_FILE_NAME, ".*/([0-9]+-[0-9]+-[0-9]+)")
+    ) AS extract_date
+  FROM gtfs_schedule_history.calitp_feeds_raw
+),
+
+final_feed_info AS (
+  SELECT
+    T1.*
+    , T2.gtfs_schedule_url AS raw_gtfs_schedule_url
+    ,	T2.gtfs_rt_vehicle_positions_url AS raw_gtfs_rt_vehicle_positions_url
+    , T2.gtfs_rt_service_alerts_url AS raw_gtfs_rt_service_alerts_url
+    , T2.gtfs_rt_trip_updates_url AS raw_gtfs_rt_trip_updates_url
+  FROM feed_feed_info T1
+  LEFT JOIN raw_feed_with_extract_date T2
+    ON
+      T1.calitp_itp_id = T2.itp_id
+      AND T1.calitp_url_number = T2.url_number
+      -- FIXME: this last join condition doesn't properly capture all records since the
+      -- data in gtfs_schedule_history.calitp_feeds_raw isn't populate since the
+      -- beginning of Cal-ITP downloading time. Ex: for a feed that has been the same
+      -- since May 2021, the earliest feeds_raw extraction date is in July, so it won't
+      -- be matched.
+      AND T1.calitp_extracted_at = T2.extract_date
 )
 
 SELECT
@@ -43,4 +73,4 @@ SELECT
         IFNULL(CAST(T.feed_info_key AS STRING), "NULL")
     )) AS feed_key
     , * EXCEPT(feed_key, feed_info_key)
-FROM feed_feed_info T
+FROM final_feed_info T
