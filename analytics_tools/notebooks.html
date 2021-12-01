@@ -598,6 +598,11 @@
   <a class="reference internal nav-link" href="#using-jupyterhub">
    Using JupyterHub
   </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#table-of-contents">
+   Table of Contents
+  </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#logging-in-to-jupyterhub">
@@ -626,6 +631,11 @@
      </li>
     </ul>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#environment-variables">
+     Environment Variables
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -651,6 +661,17 @@
 <h2>Using JupyterHub<a class="headerlink" href="#using-jupyterhub" title="Permalink to this headline">¶</a></h2>
 <p>Jupyterhub is a web application that allows users to analyze and create reports on warehouse data (or a number of data sources).</p>
 <p>Analyses on jupyterhub are done using notebooks, which allow users to mix narrative with analysis code.</p>
+</div>
+<div class="section" id="table-of-contents">
+<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
+<ol class="simple">
+<li><p><a class="reference external" href="#logging-in-to-jupyterhub">Logging in to JupyterHub</a></p></li>
+<li><p><a class="reference external" href="#connecting-to-the-warehouse">Connecting to the Warehouse</a></p></li>
+<li><p><a class="reference external" href="#uploading-data">Uploading Data</a>
+<br> - <a class="reference external" href="#uploading-data-from-a-notebook">Uploading data from a notebook</a>
+<br> - <a class="reference external" href="#uploading-from-google-cloud-storage">Uploading from google cloud storage</a></p></li>
+<li><p><a class="reference external" href="#environment-variables">Environment Variables</a></p></li>
+</ol>
 <div class="section" id="logging-in-to-jupyterhub">
 <h3>Logging in to JupyterHub<a class="headerlink" href="#logging-in-to-jupyterhub" title="Permalink to this headline">¶</a></h3>
 <p>JupyterHub currently lives at <a class="reference external" href="https://hubtest.k8s.calitp.jarv.us/hub/">https://hubtest.k8s.calitp.jarv.us/hub/</a>. In order to be added to the Cal-ITP JupyterHub, please <a class="reference external" href="https://github.com/cal-itp/data-infra/issues/new?assignees=charlie-costanzo&amp;labels=new+team+member&amp;template=new-team-member.md&amp;title=New+Team+Member+-+%5BName%5D">open an issue using this link</a>.</p>
@@ -717,6 +738,30 @@ Be sure to replace <code class="docutils literal notranslate"><span class="pre">
 <h4>Uploading from google cloud storage<a class="headerlink" href="#uploading-from-google-cloud-storage" title="Permalink to this headline">¶</a></h4>
 <p>You can access the cloud bucket from the web from <a class="reference external" href="https://console.cloud.google.com/storage/browser/calitp-analytics-data">https://console.cloud.google.com/storage/browser/calitp-analytics-data</a>.</p>
 <p>See the above screencast for a walkthrough of using the bucket.</p>
+</div>
+</div>
+<div class="section" id="environment-variables">
+<h3>Environment Variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes if data access is expensive, or if there is sensitive data, then accessing it will require some sort of credentials (which may take the form of passwords or tokens).</p>
+<p>There is a fundamental tension between data access restrictions and analysis reproducibility. If credentials are required, then an analysis is not reproducible out-of-the-box. However, including these credentials in scripts and notebooks is a security risk.</p>
+<p>Most projects should store the authentication credentials in environment variables, which can then be read by scripts and notebooks. The environment variables that are required for an analysis to work should be clearly documented.</p>
+<p>Analysts should store their credentials in a <code class="docutils literal notranslate"><span class="pre">_env</span></code> file, a slight variation of the typical <code class="docutils literal notranslate"><span class="pre">.env</span></code> file, since the <code class="docutils literal notranslate"><span class="pre">.env</span></code> won’t show up in the JupyterHub filesystem.</p>
+<p>Some credentials that need to be stored within the <code class="docutils literal notranslate"><span class="pre">_env</span></code> file may include GitHub API key, Census API key, Airtable API key, etc. Store them in this format:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">GITHUB_API_KEY</span><span class="o">=</span><span class="n">ABCDEFG123456789</span>
+<span class="n">CENSUS_API_KEY</span><span class="o">=</span><span class="n">ABCDEFG123456789</span>
+<span class="n">AIRTABLE_API_KEY</span><span class="o">=</span><span class="n">ABCDEFG123456789</span>
+</pre></div>
+</div>
+<p>To pass these credentials in a Jupyter Notebook:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dotenv</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="c1"># Load the env file</span>
+<span class="n">dotenv</span><span class="o">.</span><span class="n">load_dotenv</span><span class="p">(</span><span class="s2">&quot;_env&quot;</span><span class="p">)</span>
+
+<span class="c1"># Import the credential (without exposing the password!)</span>
+<span class="n">GITHUB_API_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;GITHUB_API_KEY&quot;</span><span class="p">]</span>
+</pre></div>
 </div>
 </div>
 </div>

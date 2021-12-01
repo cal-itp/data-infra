@@ -610,6 +610,16 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#table-of-contents">
+   Table of Contents
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#add-new-packages">
+   Add New Packages
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#cal-itp">
    cal-itp
   </a>
@@ -637,16 +647,6 @@
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#plotnine">
-   plotnine
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#mapping">
-   mapping
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#shared-utils">
    shared utils
   </a>
@@ -665,6 +665,27 @@
   <div class="tex2jax_ignore mathjax_ignore section" id="python-libraries-wip">
 <span id="python-libraries"></span><h1>Python Libraries (WIP)<a class="headerlink" href="#python-libraries-wip" title="Permalink to this headline">¶</a></h1>
 <p>The following libraries are available and recommended for use by Cal-ITP data analysts.</p>
+<div class="section" id="table-of-contents">
+<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
+<ol class="simple">
+<li><p><a class="reference external" href="#add-new-packages">Add New Packages</a></p></li>
+<li><p><a class="reference external" href="#cal-itp">Cal-ITP</a></p></li>
+<li><p><a class="reference external" href="#siuba">siuba</a>
+<br> - <a class="reference external" href="#basic-query">Basic Query</a>
+<br> - <a class="reference external" href="#collect-query-results">Collect Query Results</a>
+<br> - <a class="reference external" href="#show-query-sql">Show Query SQL</a></p></li>
+<li><p><a class="reference external" href="#shared-utils">shared utils</a></p></li>
+</ol>
+</div>
+<div class="section" id="add-new-packages">
+<h2>Add New Packages<a class="headerlink" href="#add-new-packages" title="Permalink to this headline">¶</a></h2>
+<p>While most Python packages an analyst uses comes in JupyterHub, there may be additional packages you’ll want to use in your analysis.</p>
+<ul class="simple">
+<li><p>Install <a class="reference external" href="#shared-utils">shared utility functions</a></p></li>
+<li><p>Change directory into the project task’s subfolder and add <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> and/or <code class="docutils literal notranslate"><span class="pre">conda-requirements.txt</span></code></p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code> and/or <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">--yes</span> <span class="pre">-c</span> <span class="pre">conda-forge</span> <span class="pre">--file</span> <span class="pre">conda-requirements.txt</span></code></p></li>
+</ul>
+</div>
 <div class="section" id="cal-itp">
 <span id="calitp"></span><h2>cal-itp<a class="headerlink" href="#cal-itp" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -896,17 +917,14 @@ WHERE regexp_contains(`anon_1`.`agency_name`, &#39;Metro&#39;)
 <p>Note that here the pandas Series method <code class="docutils literal notranslate"><span class="pre">str.contains</span></code> corresponds to <code class="docutils literal notranslate"><span class="pre">regexp_contains</span></code> in Google BigQuery.</p>
 </div>
 </div>
-<div class="section" id="plotnine">
-<h2>plotnine<a class="headerlink" href="#plotnine" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="mapping">
-<h2>mapping<a class="headerlink" href="#mapping" title="Permalink to this headline">¶</a></h2>
-</div>
 <div class="section" id="shared-utils">
 <h2>shared utils<a class="headerlink" href="#shared-utils" title="Permalink to this headline">¶</a></h2>
 <p>A set of shared utility functions can also be installed, similarly to any Python library. The <a class="reference external" href="https://github.com/cal-itp/data-analyses/shared_utils">shared_utils</a> are stored here. Generalized functions for analysis are added as collaborative work evolves so we aren’t constantly reinventing the wheel.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># In terminal:</span>
-<span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+<span class="n">cd</span> <span class="n">data</span><span class="o">-</span><span class="n">analyses</span><span class="o">/</span><span class="n">_shared_utils</span>
+
+<span class="c1"># Use the make command to run through conda install and pip install</span>
+<span class="n">make</span> <span class="n">setup_env</span>
 
 <span class="c1"># In notebook:</span>
 <span class="kn">import</span> <span class="nn">shared_utils</span>
@@ -914,6 +932,7 @@ WHERE regexp_contains(`anon_1`.`agency_name`, &#39;Metro&#39;)
 <span class="n">shared_utils</span><span class="o">.</span><span class="n">geography_utils</span><span class="o">.</span><span class="n">WGS84</span>
 </pre></div>
 </div>
+<p>See <a class="reference external" href="https://github.com/cal-itp/data-analyses/tree/main/example_report">data-analyses/example_reports</a> for examples in how to use <code class="docutils literal notranslate"><span class="pre">shared_utils</span></code> for <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/example_report/shared_utils_examples.ipynb">general functions</a>, <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/example_report/example_charts.ipynb">charts</a>, and <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/example_report/example_maps.ipynb">maps</a>.</p>
 </div>
 </div>
 

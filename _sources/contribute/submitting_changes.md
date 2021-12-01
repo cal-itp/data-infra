@@ -4,6 +4,9 @@
 
 * Follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) standard for all commits
 * Use Conventional Commit format for PR titles
+    * Install pre-commit hooks
+    * `pip install pre-commit`, `pre-commit install`
+    * If needed, run `pre-commit run --all-files` to run the hooks on all files, not just those staged for changes.
 * Use GitHub's *draft* status to indicate PRs that are not ready for review/merging
 * Do not use GitHub's "update branch" button or merge the `main` branch back into a PR branch to update it. Instead, rebase PR branches to update them and resolve any merge conflicts.
 

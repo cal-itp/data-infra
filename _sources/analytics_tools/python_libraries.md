@@ -15,6 +15,25 @@ kernelspec:
 (python-libraries)=
 # Python Libraries (WIP)
 The following libraries are available and recommended for use by Cal-ITP data analysts.
+
+## Table of Contents
+1. [Add New Packages](#add-new-packages)
+1. [Cal-ITP](#cal-itp)
+1. [siuba](#siuba)
+<br> - [Basic Query](#basic-query)
+<br> - [Collect Query Results](#collect-query-results)
+<br> - [Show Query SQL](#show-query-sql)
+1. [shared utils](#shared-utils)
+
+## Add New Packages
+
+While most Python packages an analyst uses comes in JupyterHub, there may be additional packages you'll want to use in your analysis.
+
+* Install [shared utility functions](#shared-utils)
+* Change directory into the project task's subfolder and add `requirements.txt` and/or `conda-requirements.txt`
+* Run `pip install -r requirements.txt` and/or `conda install --yes -c conda-forge --file conda-requirements.txt`
+
+
 (calitp)=
 ## cal-itp
 (siuba)=
@@ -69,18 +88,21 @@ While `collect()` fetches query results, `show_query()` prints out the SQL code 
 
 ```
 Note that here the pandas Series method `str.contains` corresponds to `regexp_contains` in Google BigQuery.
-## plotnine
-## mapping
 
 ## shared utils
 A set of shared utility functions can also be installed, similarly to any Python library. The [shared_utils](https://github.com/cal-itp/data-analyses/shared_utils) are stored here. Generalized functions for analysis are added as collaborative work evolves so we aren't constantly reinventing the wheel.
 
 ```python
 # In terminal:
-python setup.py install
+cd data-analyses/_shared_utils
+
+# Use the make command to run through conda install and pip install
+make setup_env
 
 # In notebook:
 import shared_utils
 
 shared_utils.geography_utils.WGS84
 ```
+
+See [data-analyses/example_reports](https://github.com/cal-itp/data-analyses/tree/main/example_report) for examples in how to use `shared_utils` for [general functions](https://github.com/cal-itp/data-analyses/blob/main/example_report/shared_utils_examples.ipynb), [charts](https://github.com/cal-itp/data-analyses/blob/main/example_report/example_charts.ipynb), and [maps](https://github.com/cal-itp/data-analyses/blob/main/example_report/example_maps.ipynb).

@@ -672,8 +672,7 @@
   <div class="tex2jax_ignore mathjax_ignore section" id="storing-new-data">
 <span id="id1"></span><h1>Storing New Data<a class="headerlink" href="#storing-new-data" title="Permalink to this headline">¶</a></h1>
 <p>Our team uses Google Cloud Storage (GCS) buckets, specifically the <code class="docutils literal notranslate"><span class="pre">calitp-analytics-data</span></code> bucket, to store other datasets for analyses. GCS can store anything, of arbitrary object size and shape. It’s like a giant folder in the cloud. You can use it to store CSVs, parquets, pickles, videos, etc. Within the bucket, the <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code> folder with its sub-folders corresponds to the <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code>  GitHub repo with its sub-folders. Versioned data for a task should live within the correct folders.</p>
-<p>To access GCS, make sure you have your authentication set up in JupyterHub.
-GOOGLE AUTH STUFF, LINK TO THAT PAGE, EMBED THAT HERE.</p>
+<p>To access GCS, make sure you have your authentication set up in JupyterHub.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
 <span class="kn">import</span> <span class="nn">gcsfs</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -759,19 +758,17 @@ GOOGLE AUTH STUFF, LINK TO THAT PAGE, EMBED THAT HERE.</p>
 <p>Or, use the <code class="docutils literal notranslate"><span class="pre">shared_utils</span></code> package.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">shared_utils</span>
 
-<span class="n">shared_utils</span><span class="o">.</span><span class="n">geoparquet_gcs_export</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="s2">&quot;my-geoparquet&quot;</span><span class="p">)</span>
+<span class="n">shared_utils</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">geoparquet_gcs_export</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="s2">&quot;my-geoparquet&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="zipped-shapefile">
 <h3>Zipped Shapefile<a class="headerlink" href="#zipped-shapefile" title="Permalink to this headline">¶</a></h3>
 <p>Refer to the <a class="reference external" href="./08_data_catalogs.md#google-cloud-storage">data catalogs doc</a> to list a zipped shapefile, and read in the zipped shapefile with the <code class="docutils literal notranslate"><span class="pre">intake</span></code> method. Zipped shapefiles saved in GCS cannot be read in directly using <code class="docutils literal notranslate"><span class="pre">geopandas</span></code>.</p>
-<p>??IS THERE WAY TO READ FROM CALITP.STORAGE?</p>
 </div>
 <div class="section" id="geojson">
 <h3>GeoJSON<a class="headerlink" href="#geojson" title="Permalink to this headline">¶</a></h3>
 <p>Refer to the <a class="reference external" href="./08_data_catalogs.md#google-cloud-storage">data catalogs doc</a> to list a GeoJSON, and read in the GeoJSON with the <code class="docutils literal notranslate"><span class="pre">intake</span></code> method. GeoJSONs saved in GCS cannot be read in directly using <code class="docutils literal notranslate"><span class="pre">geopandas</span></code>.</p>
-<p>??IS THERE WAY TO READ FROM CALITP.STORAGE?</p>
 </div>
 </div>
 </div>

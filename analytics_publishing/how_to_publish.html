@@ -595,21 +595,31 @@
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#analysis-data-science-products">
-     Analysis &amp; Data Science Products
+    <a class="reference internal nav-link" href="#static-visualizations">
+     Static Visualizations
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#one-off-analysis-reports-recommendations">
-     One-off Analysis, Reports, Recommendations
+    <a class="reference internal nav-link" href="#html-visualizations">
+     HTML Visualizations
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dashboards">
+     Dashboards
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#publishing-reports">
+     Publishing Reports
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#scheduling-reports">
+     Scheduling Reports
     </a>
    </li>
   </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#how-to-share-reports">
-   How to Share Reports
-  </a>
  </li>
 </ul>
 
@@ -624,24 +634,146 @@
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="publishing-reports-with-pull-requests-wip">
 <h1>Publishing Reports with Pull Requests (WIP)<a class="headerlink" href="#publishing-reports-with-pull-requests-wip" title="Permalink to this headline">¶</a></h1>
+<p>Analysts have a variety of tools available to publish their final deliverables. With iterative work, analysts can implement certain best practices within these bounds to do as much as is programmatically practical. The workflow will look different depending on these factors:</p>
+<ul class="simple">
+<li><p>Are visualizations static or interactive?</p></li>
+<li><p>Does the deliverable need to be updated on a specified frequency or a one-off analysis?</p></li>
+<li><p>Is the deliverable format PDF, HTML, interactive dashboard, or a slide deck?</p></li>
+</ul>
+<p>Analysts can string together a combination of these solutions:</p>
+<ul class="simple">
+<li><p>Static visualizations can be inserted direclty into the slide deck</p></li>
+<li><p>HTML visualizations can be rendered in GitHub Pages and embedded as a URL into slide deck</p></li>
+<li><p>Static, HTML reports can be rendered in GitHub Pages.</p></li>
+<li><p>Reports can be rendered as PDFs and emailed to stakeholders.</p></li>
+<li><p>Interactive dashboards should be hosted in Metabase to share with external stakeholders.</p></li>
+<li><p>Use Airflow to schedule publishing reports, pushing data backing a dashboard, or emailing PDFs.</p></li>
+</ul>
 <div class="section" id="types-of-reports">
 <h2>Types of Reports<a class="headerlink" href="#types-of-reports" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="analysis-data-science-products">
-<h3>Analysis &amp; Data Science Products<a class="headerlink" href="#analysis-data-science-products" title="Permalink to this headline">¶</a></h3>
-<p>Reports Cal-ITP</p>
-<p>Payments Dashboard</p>
-<p>HQTA Map</p>
+<div class="section" id="static-visualizations">
+<h3>Static Visualizations<a class="headerlink" href="#static-visualizations" title="Permalink to this headline">¶</a></h3>
+<p>Static visualizations should be created in a Jupyter Notebook, saved locally (in JupyterHub), and checked into GitHub.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="c1"># matplotlib or seaborn</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plot</span>
+<span class="kn">import</span> <span class="nn">seaborn</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;../my-visualization.png&quot;</span><span class="p">)</span>
+
+<span class="c1"># altair</span>
+<span class="kn">import</span> <span class="nn">altair</span> <span class="k">as</span> <span class="nn">alt</span>
+<span class="kn">import</span> <span class="nn">altair_saver</span>
+<span class="n">chart</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;../my-visualization.png&quot;</span><span class="p">)</span>
+
+<span class="c1"># plotnine</span>
+<span class="kn">from</span> <span class="nn">plotnine</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">chart</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;../my-visualization.png&#39;</span><span class="p">)</span>
+</pre></div>
 </div>
-<div class="section" id="one-off-analysis-reports-recommendations">
-<h3>One-off Analysis, Reports, Recommendations<a class="headerlink" href="#one-off-analysis-reports-recommendations" title="Permalink to this headline">¶</a></h3>
-<p>GTFS Flex</p>
-<p>Number of Validators</p>
-<p>Etc.</p>
+</div>
+<div class="section" id="html-visualizations">
+<h3>HTML Visualizations<a class="headerlink" href="#html-visualizations" title="Permalink to this headline">¶</a></h3>
+<p>Visualizations that benefit from limited interactivity, such as displaying tooltips on hover or zooming in / out and scrolling can be rendered within GitHub pages.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">folium</span></code> map can be saved as a local HTML file and checked into GitHub (<code class="docutils literal notranslate"><span class="pre">ipyleaflet</span></code> must be rendered directly in the notebook). Many chart packages, including <code class="docutils literal notranslate"><span class="pre">altair</span></code>, <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>, and <code class="docutils literal notranslate"><span class="pre">plotly</span></code> allow you to export as HTML.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># altair</span>
+<span class="kn">import</span> <span class="nn">altair</span> <span class="k">as</span> <span class="nn">alt</span>
+<span class="n">chart</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;../my-visualization.html&quot;</span><span class="p">)</span>
+
+<span class="c1"># matplotlib (by encoding it)</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">base64</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">BytesIO</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+
+<span class="n">tmpfile</span> <span class="o">=</span> <span class="n">BytesIO</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">tmpfile</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>
+<span class="n">encoded</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">tmpfile</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+
+<span class="n">html</span> <span class="o">=</span> <span class="s1">&#39;Some html head&#39;</span> <span class="o">+</span> <span class="s1">&#39;&lt;img src=</span><span class="se">\&#39;</span><span class="s1">data:image/png;base64,</span><span class="si">{}</span><span class="se">\&#39;</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">encoded</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;Some more html&#39;</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;test.html&#39;</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+
+<span class="c1"># plotly</span>
+<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="s2">&quot;../my-visualization.html&quot;</span><span class="p">)</span>
+
+<span class="c1"># folium</span>
+<span class="kn">import</span> <span class="nn">folium</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;../my-visualization.html&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Use GitHub pages to display these HTML pages.</p>
+<ol class="simple">
+<li><p>Go to the repo’s <a class="reference external" href="https://github.com/cal-itp/data-analyses/settings">settings</a></p></li>
+<li><p>Navigate to <code class="docutils literal notranslate"><span class="pre">Pages</span></code> on the left</p></li>
+<li><p>Change the branch GH pages is sourcing from: <code class="docutils literal notranslate"><span class="pre">main</span></code> to <code class="docutils literal notranslate"><span class="pre">my-current-branch</span></code></p></li>
+<li><p>Embed the URL into the slides. Example URL: <a class="reference external" href="https://docs.calitp.org/data-analyses/PROJECT-FOLDER/MY-VISUALIZATION.html">https://docs.calitp.org/data-analyses/PROJECT-FOLDER/MY-VISUALIZATION.html</a></p></li>
+<li><p>Once a PR is ready and merged, the GH pages can be changed back to source from <code class="docutils literal notranslate"><span class="pre">main</span></code>. The URL is preserved within the slide deck.</p></li>
+<li><p>Note: If analysts working on different branches want to display GH pages, one of them needs to merge in <code class="docutils literal notranslate"><span class="pre">main</span></code>, the other needs to do a <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">rebase</span></code>, and then can choose <code class="docutils literal notranslate"><span class="pre">my-other-branch</span></code> as the GH pages source.</p></li>
+</ol>
+<p>Ex: <a class="reference external" href="https://docs.calitp.org/data-analyses/bus_service_increase/img/arrivals_pc_high.html">Service Density Map</a></p>
+</div>
+<div class="section" id="dashboards">
+<h3>Dashboards<a class="headerlink" href="#dashboards" title="Permalink to this headline">¶</a></h3>
+<p>Interactive charts should be displayed in Metabase. Using Voila on Jupyter Notebooks works locally, but doesn’t allow for sharing with external stakeholders. The data cleaning and processing should still be done within Python scripts or Jupyter notebooks. The processed dataset backing the dashboard should be exported to a Google Cloud Storage bucket.</p>
+<p>An <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/airflow/dags">Airflow DAG</a> needs to be set up to copy the processed dataset into the data warehouse. Metabase can only source data from the data warehouse. The dashboard visualizations can be set up in Metabase, remain interactive, and easily shared to external stakeholders.</p>
+<p>Any tweaks to the data processing steps are easily done in scripts and notebooks, and it ensures that the visualizations in the dashboard remain updated with little friction.</p>
+<p>Ex: <a class="reference external" href="https://dashboards.calitp.org/dashboard/3-payments-performance-dashboard?transit_provider=mst">Payments Dashboard</a></p>
+</div>
+<div class="section" id="publishing-reports">
+<h3>Publishing Reports<a class="headerlink" href="#publishing-reports" title="Permalink to this headline">¶</a></h3>
+<p>Reports can be shared as HTML webpages or PDFs.</p>
+<p>A Jupyter Notebook can be converted to HTML with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">papermill</span> <span class="k">as</span> <span class="nn">pm</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+
+<span class="n">OUTPUT_FILENAME</span> <span class="o">=</span> <span class="s2">&quot;sample-report&quot;</span>
+
+<span class="n">pm</span><span class="o">.</span><span class="n">execute_notebook</span><span class="p">(</span>
+    <span class="c1"># notebook to execute</span>
+    <span class="s1">&#39;../my-notebook.ipynb&#39;</span><span class="p">,</span>
+    <span class="c1"># if needed, rename the notebook as something different</span>
+    <span class="c1"># this will be the filename that is used when converting to HTML or PDF</span>
+    <span class="sa">f</span><span class="s1">&#39;../</span><span class="si">{</span><span class="n">OUTPUT_FILENAME</span><span class="si">}</span><span class="s1">.ipynb&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># shell out, run NB Convert</span>
+<span class="n">OUTPUT_FORMAT</span> <span class="o">=</span> <span class="s1">&#39;html&#39;</span>
+<span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span>
+    <span class="s2">&quot;jupyter&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;nbconvert&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;--to&quot;</span><span class="p">,</span>
+    <span class="n">OUTPUT_FORMAT</span><span class="p">,</span>
+    <span class="s2">&quot;--no-input&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;--no-prompt&quot;</span><span class="p">,</span>
+    <span class="sa">f</span><span class="s2">&quot;../</span><span class="si">{</span><span class="n">OUTPUT_FILENAME</span><span class="si">}</span><span class="s2">.ipynb&quot;</span><span class="p">,</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+<p>A Jupyter Notebook can be converted to PDF for email distribution with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Similar as converting to HTML, but change the output_format</span>
+<span class="c1"># shell out, run NB Convert</span>
+<span class="n">OUTPUT_FORMAT</span> <span class="o">=</span> <span class="s1">&#39;PDFviaHTML&#39;</span>
+<span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span>
+    <span class="s2">&quot;jupyter&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;nbconvert&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;--to&quot;</span><span class="p">,</span>
+    <span class="n">OUTPUT_FORMAT</span><span class="p">,</span>
+    <span class="s2">&quot;--no-input&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;--no-prompt&quot;</span><span class="p">,</span>
+    <span class="sa">f</span><span class="s2">&quot;../</span><span class="si">{</span><span class="n">OUTPUT_FILENAME</span><span class="si">}</span><span class="s2">.ipynb&quot;</span><span class="p">,</span>
+<span class="p">])</span>
+
+</pre></div>
 </div>
 </div>
-<div class="section" id="how-to-share-reports">
-<h2>How to Share Reports<a class="headerlink" href="#how-to-share-reports" title="Permalink to this headline">¶</a></h2>
-<p>Open PR for your branch</p>
+<div class="section" id="scheduling-reports">
+<h3>Scheduling Reports<a class="headerlink" href="#scheduling-reports" title="Permalink to this headline">¶</a></h3>
+<p>Use Airflow to schedule publishing reports at some specified frequency. Run a Python script that uses <code class="docutils literal notranslate"><span class="pre">papermill</span></code> to execute a notebook and convert to HTML or PDF.</p>
+<p>Ex: Reports Cal-ITP</p>
+</div>
 </div>
 </div>
 
