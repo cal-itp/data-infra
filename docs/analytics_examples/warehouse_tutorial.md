@@ -121,47 +121,34 @@ glue("siuba_routes_output", siuba_routes)
 ```
 
 ````{tabbed} Metabase
-**Tables Used**
-| Name | Use |
-| -------- | -------- |
-| **Gtfs Schedule Fact Daily Feed Routes** | Primary Fact Table |
-| **Gtfs Schedule Dim Feeds** | Secondary Dimensional Table |
-
-**Important Columns**
-| Type | Column | Use |
-| -------- | -------- | -------- |
-| *Time* | **Date** | *Filter* by |
-| *Geography* | **Route Key** | The unique identifier for each record, what we effectively *Count* by |
-| *Agency* | **Calitp Feed Name** | Metabase automatically joins with table **Gtfs Schedule Dim Feeds** on variable **Feed Key** to get **Calitp Feed Name** (*Filter* by) |
-
-![Collection Matrix](assets/routes_agency_over_time.png)
+![Collection Matrix](assets/count_trip_stops_test.png)
 ````
 ````{tabbed} SQL
-**Tables Used**
-| Name | Use |
-| -------- | -------- |
-| **views.gtfs_schedule_fact_daily_feed_routes** | Primary Fact Table |
-| **views.gtfs_schedule_dim_feeds** | Secondary Dimensional Table |
-
-**Important Columns**
-| Type | Column | Use |
-| -------- | -------- | -------- |
-| *Time* | **date** | *GROUP BY* |
-| *Geography* | **route_key** | The unique identifier for each record, what we effectively *COUNT* by |
-| *Agency* | **calitp_feed_name** | *JOIN* with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*, isolate with *WHERE*) |
-
 ```sql
 %% sql
 SELECT
-    calitp_feed_name,
-    date,
+    # The first two columns are the ones we will group by for the count
+    calitp_feed_name,               # agency info
+    date,                           # time info
+
+    # The aggregation itself
     count(*) AS count_routes
+
+# Primary fact table, we need this because it contains information for each
+# agency on each day
 FROM `views.gtfs_schedule_fact_daily_feed_routes`
+
+# Enriching with information about feeds from dimensional table
+# This will include columns such as calitp_feed_name, etc..
 JOIN `views.gtfs_schedule_dim_feeds` USING (feed_key)
+
 WHERE
+    # Filtering for agency, this column comes from the dimensional table above
     calitp_feed_name = "Unitrans (0)"
 GROUP BY
+    # Note that 1, 2 refer to the first two columns of the select
     1, 2
+
 ORDER BY
     date DESC
 LIMIT 10
@@ -170,27 +157,23 @@ LIMIT 10
 ```
 ````
 ````{tabbed} siuba
-**Tables Used**
-| Name | Use |
-| -------- | -------- |
-| **views.gtfs_schedule_fact_daily_feed_routes** | Primary Fact Table |
-| **views.gtfs_schedule_dim_feeds** | Secondary Dimensional Table |
-
-**Important Columns**
-| Type | Column | Use |
-| -------- | -------- | -------- |
-| *Time* | **date** | *count* by |
-| *Geography* | **route_key** | The unique identifier for each record |
-| *Agency* | **calitp_feed_name** | *left_join* with table views.**gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*filter* by) |
-
 ```python
-# Join to get CalITP Feed Names
-# Count routes by date and CalITP Feed Names, order by date, filter by specific calitp_feed_name
 (
+    # Primary fact table, we need this because it contains information for each
+    # agency on each day
     tbl.views.gtfs_schedule_fact_daily_feed_routes()
+
+    # Enriching with information about feeds from dimensional table
+    # This will include columns such as calitp_feed_name, etc..
     >> left_join(_, tbl.views.gtfs_schedule_dim_feeds(), "feed_key")
+
+    # Filtering for agency, this column comes from the dimensional table above
     >> filter(_.calitp_feed_name == "Unitrans (0)")
+
+    # Group and count rows by date, effectively counting the number of routes
+    # for a given agency over time
     >> count(_.date)
+
     >> arrange(_.date)
 )
 ```
