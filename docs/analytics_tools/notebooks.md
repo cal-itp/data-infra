@@ -15,6 +15,7 @@ Analyses on jupyterhub are done using notebooks, which allow users to mix narrat
 ## Table of Contents
 1. [Logging in to JupyterHub](#logging-in-to-jupyterhub)
 1. [Connecting to the Warehouse](#connecting-to-the-warehouse)
+1. [Increasing the Query Limit](#increasing-the-query-limit)
 1. [Uploading Data](#uploading-data)
 <br> - [Uploading data from a notebook](#uploading-data-from-a-notebook)
 <br> - [Uploading from google cloud storage](#uploading-from-google-cloud-storage)
@@ -45,6 +46,19 @@ gcloud auth application-default login
 See the screencast below for a full walkthrough.
 
 <div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/6883b0bf9c8b4547a93d00bc6ba45b6d" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
+
+### Increasing the Query Limit
+
+By default, there is a query limit set within the Jupyter Notebook. Most queries should be within that limit, and running into `DatabaseError: 500 Query exceeded limit for bytes billed` should be a red flag to investigate whether such a large query is needed for the analysis. To increase the query limit:
+
+```python
+from calitp.tables import tbl
+
+import os
+os.environ["CALITP_BQ_MAX_BYTES"] = str(20_000_000_000)
+
+tbl._init()
+```
 
 ### Uploading Data
 
