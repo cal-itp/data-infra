@@ -63,7 +63,7 @@ These tables compliment the fact tables by providing additional descriptive attr
 
 | Column Type | Notable Columns | Description |
 | -------- | -------- | -------- |
-| **Agency** | Warehouse: **calitp_feed_name** <br/> Metabase: **Calitp Feed Name** | - Our primary agency identifier <br/> - In most of the examples below, this is gathered from the table: **views.gtfs_schedule_dim_feeds** <br/> - Metabase: **Gtfs Schedule Dim Feeds** |
+| **Agency** | Warehouse: `calitp_feed_name` <br/> Metabase: `Calitp Feed Name` | - Our primary agency identifier <br/> - In most of the examples below, this is gathered from the table: `views.gtfs_schedule_dim_feeds` <br/> - Metabase: `Gtfs Schedule Dim Feeds` |
 | **Time** | | |
 | **Geography** | | |
 
@@ -331,20 +331,6 @@ glue("siuba_stops_trips_output", siuba_stops_trips)
 ```
 
 ````{tabbed} Metabase
-**Tables Used**
-| Name | Use |
-| -------- | -------- |
-| **Gtfs Schedule Data Feed Trip Stops Latest** | Primary Fact Table |
-
-**Important Columns**
-| Type | Column | Use |
-| -------- | -------- | -------- |
-| *Time* | **No column** | This table only has information for the current day |
-| *Geography* | **Stop Time Key** | The unique identifier for each record, what we effectively *Count* by |
-| *Geography* | **Trip ID** | The unique identifier for each trip, counted by *Distinct values* |
-| *Geography* | **Stop ID** | The unique identifier for each stop, counted by *Distinct values* |
-| *Agency* | **Calitp Feed Name** | *Filter* by |
-
 ***Count of Trip Stops Made Across all Trips for an Agency***
 
 ![Collection Matrix](assets/count_trip_stops.png)
