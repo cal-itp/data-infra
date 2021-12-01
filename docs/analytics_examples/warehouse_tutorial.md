@@ -134,18 +134,20 @@ SELECT
     -- The aggregation itself
     count(*) AS count_routes
 
--- Primary fact table, we need this because it contains information for each agency on each day
+-- Primary fact table, we need this because it contains information for
+-- each agency on each day
 FROM `views.gtfs_schedule_fact_daily_feed_routes`
 
 -- Enriching with information about feeds from dimensional table
 -- This will include columns such as calitp_feed_name, etc..
 JOIN `views.gtfs_schedule_dim_feeds` USING (feed_key)
 
+-- Filtering for agency, this column comes from the dimensional table above
 WHERE
-    -- Filtering for agency, this column comes from the dimensional table above
     calitp_feed_name = "Unitrans (0)"
+
 GROUP BY
-    -- Note that 1, 2 refer to the first two columns of the select
+-- Note that 1, 2 refer to the first two columns of the select
     1, 2
 
 ORDER BY
