@@ -125,7 +125,10 @@ glue("siuba_routes_output", siuba_routes)
 ````
 ````{tabbed} SQL
 ```sql
-%% sql
+-- In combination with importing `calitp.magics`, this allows us to
+-- query SQL in the JupyterLab notebook
+%%sql
+
 SELECT
     -- The first two columns are the ones we will group by for the count
     calitp_feed_name,               -- agency info
@@ -175,6 +178,7 @@ LIMIT 10
     # for a given agency over time
     >> count(_.date)
 
+    # Sort by date
     >> arrange(_.date)
 )
 ```
@@ -217,79 +221,68 @@ glue("siuba_stops_output", siuba_stops)
 ```
 
 ````{tabbed} Metabase
-**Tables Used**
-| Name | Use |
-| -------- | -------- |
-| **Gtfs Schedule Fact Daily Feed Stops** | Primary Fact Table |
-| **Gtfs Schedule Dim Feeds** | Secondary Dimensional Table |
-
-**Important Columns**
-| Type | Column | Use |
-| -------- | -------- | -------- |
-| *Time* | **Date** | *Count* by |
-| *Geography* | **Stop Key** | The unique identifier for each record, what we effectively *COUNT* by |
-| *Agency* | **Calitp Feed Name** | Metabase automatically joins with table **Gtfs Schedule Dim Feeds** on variable **Feed Key** to get **Calitp Feed Name** (*Filter* by) |
-
 ![Collection Matrix](assets/stops_agency_over_time.png)
 ````
 
 ````{tabbed} SQL
-**Tables Used**
-| Name | Use |
-| -------- | -------- |
-| **views.gtfs_schedule_fact_daily_feed_stops** | Primary Fact Table |
-| **views.gtfs_schedule_dim_feeds** | Secondary Dimensional Table |
-
-**Important Columns**
-| Type | Column | Use |
-| -------- | -------- | -------- |
-| *Time* | **date** | *GROUP BY* |
-| *Geography* | **stop_key** | The unique identifier for each record, what we effectively *COUNT* by |
-| *Agency* | **calitp_feed_name** | *JOIN* with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*GROUP BY*, isolate with *WHERE*) |
-
 ```sql
-%% sql
+-- In combination with importing `calitp.magics`, this allows us to
+-- query SQL in the JupyterLab notebook
+%%sql
+
 SELECT
-    calitp_feed_name,
-    date,
+    -- The first two columns are the ones we will group by for the count
+    calitp_feed_name,               -- agency info
+    date,                           -- time info
+
+    -- The aggregation itself
     count(*) AS count_stops
+
+-- Primary fact table, we need this because it contains stops information for
+-- each agency on each day
 FROM `views.gtfs_schedule_fact_daily_feed_stops`
+
+-- Enriching with information about feeds from dimensional table
+-- This will include columns such as calitp_feed_name, etc..
 JOIN `views.gtfs_schedule_dim_feeds` USING (feed_key)
+
+-- Filtering for agency, this column comes from the dimensional table above
 WHERE
     calitp_feed_name = "AC Transit (0)"
+
 GROUP BY
+    -- Note that 1, 2 refer to the first two columns of the select
     1, 2
+
 ORDER BY
     date
 LIMIT 10
 ```
-
 ```{glue:figure} df_stops_output
 ```
 ````
 
 ````{tabbed} siuba
-**Tables Used**
-| Name | Use |
-| -------- | -------- |
-| **views.gtfs_schedule_fact_daily_feed_stops** | Primary Fact Table |
-| **views.gtfs_schedule_dim_feeds** | Secondary Dimensional Table |
-
-**Important Columns**
-| Type | Column | Use |
-| -------- | -------- | -------- |
-| *Time* | **date** | *count* by |
-| *Geography* | **stop_key** | The unique identifier for each record, what we are effectively counting by |
-| *Agency* | **calitp_feed_name** | *left_join* with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name** (*count* by, *filter*) |
-
 ```python
 ## Join to get CalITP Feed Names
 ## Count stops by date and CalITP Feed Names, order by date, filter by specific calitp_feed_name
 (
+    # Primary fact table, we need this because it contains stop information
+    # for each agency on each day
     tbl.views.gtfs_schedule_fact_daily_feed_stops()
+
+    # Enriching with information about feeds from dimensional table
+    # This will include columns such as calitp_feed_name, etc..
     >> left_join(_, tbl.views.gtfs_schedule_dim_feeds(), "feed_key")
-    >> count(_.date, _.calitp_feed_name)
+
+    # Filtering for agency, this column comes from the dimensional table above
     >> filter(_.calitp_feed_name == "AC Transit (0)")
+
+    # Group and count rows by date and agency, effectively counting the number
+    # of stops for a given agency over time
+    >> count(_.date, _.calitp_feed_name)
+
+    # Sort by date
     >> arrange(_.date)
 )
 ```
@@ -345,7 +338,10 @@ glue("siuba_stops_trips_output", siuba_stops_trips)
 ````
 ````{tabbed} SQL
 ```sql
+-- In combination with importing `calitp.magics`, this allows us to
+-- query SQL in the JupyterLab notebook
 %%sql
+
 SELECT
     -- The first column is what we will group by
     calitp_feed_name,               -- agency info
@@ -358,7 +354,7 @@ SELECT
     COUNT(DISTINCT(stop_id)) AS n_stops
 
 -- Primary fact table, we need this because it contains trip stop information
--- for each agency on each day
+-- for each agency on each day in the latest feed
 FROM `views.gtfs_schedule_data_feed_trip_stops_latest`
 
 -- Filtering for each agency
@@ -377,8 +373,8 @@ LIMIT 10
 ````{tabbed} siuba
 ```python
 (
-    # Primary fact table, we need this because it contains trip stop
-    # information for each agency on each day
+    # Primary fact table, we need this because it contains trip stop information
+    # for each agency on each day in the latest feed
     tbl.views.gtfs_schedule_data_feed_trip_stops_latest()
 
     # Filtering for agency
@@ -425,21 +421,6 @@ glue("siuba_feed_expires_output", siuba_feed_expires)
 ```
 
 ````{tabbed} Metabase
-**Tables Used**
-| Name | Use |
-| -------- | -------- |
-| **Gtfs Schedule Fact Daily Feeds** | Primary Fact Table |
-| **Gtfs Schedule Dim Feeds** | Secondary Dimensional Table |
-
-**Important Columns**
-| Type | Column | Use |
-| -------- | -------- | -------- |
-| *Time* | **Date** | The date that we are looking to learn more about, to *Filter* by |
-| *Time* | **Feed End Date** | The date that the particular feed expires |
-| *Measure* | **Days Until Feed End Date** | The value we are trying to find for the particular date |
-| *Agency* | **Calitp Feed Name** | *Join data* with table **Gtfs Schedule Dim Feeds** on variable **Feed Key** to get variables **Calitp Feed Name** (*Filter* by) and **Feed End Date** |
-
-
 **Columns to Select (pulled out in image below):**
 * Table **Gtfs Schedule Fact Daily Feeds**
     * Date
@@ -451,58 +432,51 @@ glue("siuba_feed_expires_output", siuba_feed_expires)
 ![Collection Matrix](assets/days_until_agency_feed_expires.png)
 ````
 ````{tabbed} SQL
-**Tables Used**
-| Name | Use |
-| -------- | -------- |
-| **views.gtfs_schedule_fact_daily_feeds** | Primary Fact Table |
-| **views.gtfs_schedule_dim_feeds** | Secondary Dimensional Table |
-
-**Important Columns**
-| Type | Column | Use |
-| -------- | -------- | -------- |
-| *Time* | **date** | The date that we are looking to learn more about, to isolate with *WHERE* |
-| *Time* | **feed_end_date** | The date that the particular feed expires |
-| *Measure* | **days_until_feed_end_date** | The value we are trying to find for the particular date |
-| *Agency* | **calitp_feed_name** | *JOIN* with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** to get variables **calitp_feed_name** (isolated with *WHERE*) and **feed_end_date** |
-
 ```sql
+-- In combination with importing `calitp.magics`, this allows us to
+-- query SQL in the JupyterLab notebook
 %%sql
+
 SELECT
-    calitp_feed_name,
-    date,
-    days_until_feed_end_date,
-    feed_end_date
+    calitp_feed_name,               -- agency info
+    date,                           -- time info
+    days_until_feed_end_date,       -- time until feed expires, for a given day
+    feed_end_date                   -- the day the feed expires
+
+-- Primary fact table, we need this because it contains information on
+-- agency feeds
 FROM views.gtfs_schedule_fact_daily_feeds
+
+-- Enriching with information about feeds from dimensional table
+-- This will include columns such as calitp_feed_name, etc..
 JOIN views.gtfs_schedule_dim_feeds USING (feed_key)
+
+-- Filtering for our particular day and agency
+-- The agency info column comes from the dimensional table above
 WHERE
     date = "2021-09-01" AND calitp_feed_name = "AC Transit (0)"
+
 LIMIT 10
 ```
-
 ```{glue:figure} df_feed_expires_output
 ```
 ````
 
 ````{tabbed} siuba
-**Tables Used**
-| Name | Use |
-| -------- | -------- |
-| **views.gtfs_schedule_fact_daily_feeds** | Primary Fact Table |
-| **views.gtfs_schedule_dim_feeds** | Secondary Dimensional Table |
-
-**Important Columns**
-| Type | Column | Use |
-| -------- | -------- | -------- |
-| *Time* | **date** | *select*, *filter* by |
-| *Time* | **feed_end_date** | The date that the particular feed expires, to *select* |
-| *Measure* | **days_until_feed_end_date** | The value we are trying to find for the particular date, to *select* |
-| *Agency* | **calitp_feed_name** | *left_join* with table **views.gtfs_schedule_dim_feeds** on variable **feed_key** for **calitp_feed_name**, to *select* and *filter* by |
-
 ```python
 (
+    # Primary fact table, we need this because it contains information on
+    # agency feeds
     tbl.views.gtfs_schedule_fact_daily_feeds()
+
+    # Enriching with information about feeds from dimensional table
+    # This will include columns such as calitp_feed_name, etc..
     >> left_join(_, tbl.views.gtfs_schedule_dim_feeds(), "feed_key")
+
+    # Keeping the columns that we need for this query
     >> select(_.calitp_feed_name, _.date, _.days_until_feed_end_date, _.feed_end_date)
+
+    # Filtering for our particular day and agency
     >> filter(_.date == "2021-09-01", _.calitp_feed_name == "AC Transit (0)")
 )
 ```
@@ -557,90 +531,78 @@ glue("siuba_max_stops_output", siuba_max_stops)
 ```
 
 ````{tabbed} Metabase
-**Tables Used**
-| Name | Use |
-| -------- | -------- |
-| **Gtfs Schedule Data Feed Trip Stops Latest** | Primary Fact Table |
-| **Gtfs Schedule Dim Feeds** | Secondary Dimensional Table |
-
-**Important Columns**
-| Type | Column | Use |
-| -------- | -------- | -------- |
-| *Time* | **No variable** | We're finding the *Max* across all days (using *Summarize* -> *Max of Count*) |
-| *Geography* | **Trip ID** | The unique identifier for each record, to *Summarize* -> *Count* by |
-| *Agency* | **Calitp Feed Name** | Metabase automatically joins with table **Gtfs Schedule Dim Feeds** on variable **Feed Key** to get **Calitp Feed Name**, to *Summarize* -> *Count* by |
-
 ![Collection Matrix](assets/max_stops_per_trip_by_agency.png)
 ````
 
 ````{tabbed} SQL
-**Tables Used**
-| Name | Use |
-| -------- | -------- |
-| **views.gtfs_schedule_data_feed_trip_stops_latest** | Primary Fact Table |
-| **views.gtfs_schedule_dim_feeds** | Secondary Dimensional Table |
-
-**Important Columns**
-| Type | Column | Use |
-| -------- | -------- | -------- |
-| *Time* | **No variable** | We're finding the *MAX* across all days  |
-| *Geography* | **trip_id** | The unique identifier for each record, what we effectively *COUNT* by |
-| *Agency* | **calitp_feed_name** | The primary agency identifier, used with *GROUP BY*, isolated with *WHERE* |
-
 ```sql
+-- In combination with importing `calitp.magics`, this allows us to
+-- query SQL in the JupyterLab notebook
 %%sql
+
+-- Using a WITH clause to create a sub-query counting the number of stops each
+-- trip in each feed makes, to be referenced later in the query
 WITH
 
+-- The name of the sub-query block to be referenced later
 counting_stop_times AS (
 
-    -- count the number of stops each trip in each feed makes
     SELECT
-        trip_id,
-        calitp_feed_name,
+        -- The first two columns are the ones we will group by for the count
+        trip_id,                        -- unique trip identifier
+        calitp_feed_name,               -- agency info
+
+        -- The aggregation itself
         COUNT(*) AS n_trip_stop_times
+
+    -- Primary fact table, we need this because it contains trip stop
+    -- information for each agency on each day in the latest feed
     FROM `views.gtfs_schedule_data_feed_trip_stops_latest`
+
+    -- Note that 1, 2 refer to the first two columns of the select
     GROUP BY
         1, 2
 )
 
--- calculate the max number of stops made by a feed's trip
--- we filter to keep only the Unitrans feed for this example
 SELECT
-    calitp_feed_name,
-    MAX(n_trip_stop_times) AS max_n_trip_stop_times
+    -- The first columns is the one we will group by for the count
+    -- These columns come from the sub-query above
+    calitp_feed_name,               -- agency info
+    MAX(n_trip_stop_times) AS max_n_trip_stop_times -- trip with most stops
+
+-- The sub-query block we created above
 FROM
     counting_stop_times
+
+-- Filtering for agency
 WHERE
      calitp_feed_name = "AC Transit (0)"
+
+-- The column we need to group by
 GROUP BY
     calitp_feed_name
 LIMIT 10
 ```
-
 ```{glue:figure} df_max_stops_output
 ```
 
 ````
 
 ````{tabbed} siuba
-**Tables Used**
-| Name | Use |
-| -------- | -------- |
-| **views.gtfs_schedule_data_feed_trip_stops_latest** | Primary Fact Table |
-
-**Important Columns**
-| Type | Column | Use |
-| -------- | -------- | -------- |
-| *Time* | **No variable** | We're using *summarize* to find the *.max()* across all days |
-| *Geography* | **trip_id** | The unique identifier for each record, what we *count* by |
-| *Agency* | **calitp_feed_name** | The primary agency identifier, what we *count* and *filter* by |
-
-
 ```python
 (
+    # Primary fact table, we need this because it contains trip stop information
+    # for each agency on each day in the latest feed
     tbl.views.gtfs_schedule_data_feed_trip_stops_latest()
+
+    # Group and count rows by trip ID and agency, effectively counting the
+    # number of stops for a given trip by agency in the latest feed
     >> count(_.trip_id, _.calitp_feed_name)
+
+    # Filtering for agency
     >> filter(_.calitp_feed_name == "AC Transit (0)")
+
+    # Find the trip with the largest number of stops
     >> summarize(n_max=_.n.max())
 )
 ```
