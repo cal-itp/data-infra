@@ -1,6 +1,6 @@
 # Transit Database
 
-The [Cal-ITP Airtable Transit Database](https://airtable.com/invite/l?inviteId=inv8dI3hjKNB0vgHy&inviteToken=340c60a044c231debc2b80d244d6b78d2eeaea6a459600d19b80751fecd2419f) stores key relationships about how transit services are organized and operated in California as well as how well they are performing.
+The Cal-ITP Airtable Transit Database stores key relationships about how transit services are organized and operated in California as well as how well they are performing. See Evan or Hunter to get a link and gain access.
 
 We have chosen to group and maintain the tables in the Database as follows:
 
@@ -19,6 +19,10 @@ While `organizations` and `services` are central to many of the tables, we have 
 Airtable forces the use of the left-most field as the primary key of the database: the field that must be referenced in other tables, similar to a VLOOKUP in a spreadsheet. Unlike many databases, Airtable doesn't enforce uniqueness in the values of the primary key field.  Instead, it assigns it an underlying and mostly hidden unique [`RECORD ID`](https://support.airtable.com/hc/en-us/articles/360051564873-Record-ID), which can be exposed by creating a formula field to reference it.
 
 For the sake of this documentation, we've noted the [`Primary Field`](https://support.airtable.com/hc/en-us/articles/202624179-The-primary-field), which is not guaranteed to be unique. Some tables additionally expose the unique [`RECORD ID`](https://support.airtable.com/hc/en-us/articles/360051564873-Record-ID) as well.
+
+### Full Documentation of Fields
+
+AirTable does not currently have an effective mechanism to programmaticaly download your data schema (they have currently paused issuing keys to their metadata API). Rather than manually type-out and export each individual field definition from AirTable, please see the [AirTable-based documentation of fields](https://airtable.com/appPnJWrQ7ui4UmIl/api/docs) which is produced as a part of their API documentation. Note that you must be authenticated with access to the base to reach this link.
 
 ## Related Data
 
