@@ -22,7 +22,7 @@ The queries represented in the following tutorial are as follows:
 * [**All the Stops and Arrival Times for an Operator on a Given Day*](stop-arrivals-operator)
 * [**Assemble a Route Shapefile**](#assemble-a-route-shapefile)
 
-(stop-arrivals-operator)
+(stop-arrivals-operator)=
 ### All the Stops and Arrival Times for an Operator on a Given Day
 
 As a simple example, we will filter to just the San Diego Metropolitan Transit System and grab 1 day's worth of data. We want all the trips, stops, arrival times, and stop geometry (lat/lon).
@@ -91,7 +91,10 @@ glue("daily_stops_output", daily_stops)
 
 Transit stops are given as lat/lon (point geometry), but what if we want to get the line geometry? We will demonstrate on one route for San Diego Metropolitan Transit System.
 
-all_routes = gpd.GeoDataFrame()
+Tables used:
+1. `tbl.gtfs_schedule.shapes`: stops with stop sequence, lat/lon, and associated `shape_id`
+
+
 ```{code-cell}
 # Grab the shapes for this operator
 shapes = (tbl.gtfs_schedule.shapes()
