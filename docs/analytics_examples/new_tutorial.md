@@ -16,12 +16,12 @@ kernelspec:
 
 ## Introduction
 
-SHOULD THIS ONE GET FOLDED INTO EARLIER ONE?
+SHOULD THIS ONE GET FOLDED INTO EARLIER ONE..BUT NEED SQL AND METABASE EQUIVALENT?
 
 The queries represented in the following tutorial are as follows:
-* [**All the Stops and Arrival Times for an Operator on a Given Day*](stop-arrivals-operator)
+* [**All the Stops and Arrival Times for an Operator on a Given Day**](stop-arrivals-operator)
 * [**Assemble a Route Shapefile**](#assemble-a-route-shapefile)
-* [**Filter with Lists and Dicts**](#filter-with-lists-and-dicts)
+* [**Filter with Lists and Unpacking**](#filter-with-lists-and-unpacking)
 
 ## Python Libraries to Import
 
@@ -88,7 +88,7 @@ daily_stops = (
     >> collect()
     )
 
-glue("daily_stops_output", daily_stops)
+daily_stops
 ```
 
 ### Assemble a Route Shapefile
@@ -137,7 +137,7 @@ single_route['geometry'] = route_line
 # Convert to gdf
 single_route = gpd.GeoDataFrame(single_route, crs="EPSG:4326")
 
-glue("single_route", single_route)
+single_route
 ```
 
 ### Filter with Lists and Unpacking
@@ -146,7 +146,7 @@ Queries can use the `isin` and take lists, as well as unpack lists. This nifty t
 
 Tables used:
 1. `view.transitstacks`: some NTD related data, with each row being an operator
-1. `gtfs_schedule_fact_daily_feed_stops`: stops associated with daily feed, subset to particular day
+1. `gtfs_schedule_fact_daily_feed_stops`:
 1. `views.gtfs_schedule_dim_stops`: lat/lon for all stops, need to subset to interested stops
 
 Here, the `transitstacks` table is filtered down to interested counties and certain columns. Using `isin` and unpacking a list (asterisk) is a quick way to do this.
@@ -176,7 +176,7 @@ lossan_df = (tbl.views.transitstacks()
              >> select(*(info_cols + vehicle_cols + paratransit_cols))
             )
 
-glue("lossan_df", lossan_df)
+lossan_df
 ```
 
 Next, we can query the `gtfs_schedule_fat_daily_feed_stops` to grab the stops for a particular day's feed. Those stops are then joined to `gtfs_schedule_dim_stops` to get the lat/lon attached. Use `isin` to further filter the dataframe and only keep operators in the counties of interest.
@@ -199,5 +199,5 @@ lossan_stops = (tbl.views.gtfs_schedule_fact_daily_feed_stops()
                 >> arrange(_.calitp_itp_id, _.stop_id)
                ).reset_index(drop=True)
 
-glue("lossan_stops", lossan_stops)
+lossan_stops
 ```
