@@ -23,17 +23,7 @@ The queries represented in the following tutorial are as follows:
 * [**Assemble a Route Shapefile**](#assemble-a-route-shapefile)
 * [**Filter with Lists and Dicts**](#filter-with-lists-and-dicts)
 
-(stop-arrivals-operator)=
-### All the Stops and Arrival Times for an Operator on a Given Day
-
-As a simple example, we will filter to just the San Diego Metropolitan Transit System and grab 1 day's worth of data. We want all the trips, stops, arrival times, and stop geometry (lat/lon).
-
-Tables used:
-1. `tbl.views.gtfs_schedule_dim_stop_times`: all stop arrival times for all operators, need to subset to particular date
-1. `tbl.views.gtfs_schedule_fact_daily_trips`: all trips for all operators, need to subset to particular date
-1. `tbl.views.gtfs_schedule_dim_stops`: lat/lon for all stops, need to subset to interested stops
-
-Some of the variables used for the rest of this tutorial.
+## Python Libraries to Import
 
 ```{code-cell}
 import geopandas as gpd
@@ -52,6 +42,16 @@ pd.set_option("display.max_rows", 10)
 SELECTED_DATE = "2021-09-01"
 ITP_ID = 278 # San Diego Metropolitan Transit System
 ```
+
+(stop-arrivals-operator)=
+### All the Stops and Arrival Times for an Operator on a Given Day
+
+As a simple example, we will filter to just the San Diego Metropolitan Transit System and grab 1 day's worth of data. We want all the trips, stops, arrival times, and stop geometry (lat/lon).
+
+Tables used:
+1. `views.gtfs_schedule_dim_stop_times`: all stop arrival times for all operators, need to subset to particular date
+1. `views.gtfs_schedule_fact_daily_trips`: all trips for all operators, need to subset to particular date
+1. `views.gtfs_schedule_dim_stops`: lat/lon for all stops, need to subset to interested stops
 
 Here, all the trips for one operator, for a particular day, is joined with all the stops that occur on all the trips. Then, the stops have their lat/lon information attached.
 
@@ -96,7 +96,7 @@ glue("daily_stops_output", daily_stops)
 Transit stops are given as lat/lon (point geometry), but what if we want to get the line geometry? We will demonstrate on one route for San Diego Metropolitan Transit System.
 
 Tables used:
-1. `tbl.gtfs_schedule.shapes`: stops with stop sequence, lat/lon, and associated `shape_id`
+1. `gtfs_schedule.shapes`: stops with stop sequence, lat/lon, and associated `shape_id`
 
 ```{code-cell}
 # Grab the shapes for this operator
@@ -145,8 +145,9 @@ glue("single_route", single_route)
 Queries can use the `isin` and take lists, as well as unpack lists. This nifty trick can keep the code clean.
 
 Tables used:
-1. `tbl.view.transitstacks`: some NTD related data, with each row being an operator
-1.
+1. `view.transitstacks`: some NTD related data, with each row being an operator
+1. `gtfs_schedule_fact_daily_feed_stops`: stops associated with daily feed, subset to particular day
+1. `views.gtfs_schedule_dim_stops`: lat/lon for all stops, need to subset to interested stops
 
 Here, the `transitstacks` table is filtered down to interested counties and certain columns. Using `isin` and unpacking a list (asterisk) is a quick way to do this.
 
