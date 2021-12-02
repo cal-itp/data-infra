@@ -22,11 +22,11 @@ The following content represents a tutorial introduction to simple queries that 
 ### Example Queries
 
 The queries represented in the following tutorial are as follows:
-* [**Number of Routes for a Given Agency Over Time**](routes-agency-time)
-* [**Number of Stops for a Given Agency Over Time**](stops-agency-time)
-* [**Number of Stops Made Across all Trips for an Agency**](stops-all-trips)
-* [**For a Given Agency, on Each Day, Days Until the Feed Expires**](days-feed-expires)
-* [**Max Number of Stops a Trip Can Have, Per Agency**](max-number-stops)
+1. [**Number of Routes for a Given Agency Over Time**](routes-agency-time)
+2. [**Number of Stops for a Given Agency Over Time**](stops-agency-time)
+3. [**Number of Stops Made Across all Trips for an Agency**](stops-all-trips)
+4. [**For a Given Agency, on Each Day, Days Until the Feed Expires**](days-feed-expires)
+5. [**Max Number of Stops a Trip Can Have, Per Agency**](max-number-stops)
 
 ### Available Tools
 
