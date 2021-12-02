@@ -146,7 +146,7 @@ Queries can use the `isin` and take lists, as well as unpack lists. This nifty t
 
 Tables used:
 1. `view.transitstacks`: some NTD related data, with each row being an operator
-1. `gtfs_schedule_fact_daily_feed_stops`:
+1. `gtfs_schedule_fact_daily_feed_stops`: stops associated with daily feed, subset to a particular date
 1. `views.gtfs_schedule_dim_stops`: lat/lon for all stops, need to subset to interested stops
 
 Here, the `transitstacks` table is filtered down to interested counties and certain columns. Using `isin` and unpacking a list (asterisk) is a quick way to do this.
