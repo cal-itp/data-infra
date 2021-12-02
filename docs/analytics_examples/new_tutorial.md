@@ -21,6 +21,7 @@ SHOULD THIS ONE GET FOLDED INTO EARLIER ONE?
 The queries represented in the following tutorial are as follows:
 * [**All the Stops and Arrival Times for an Operator on a Given Day*](stop-arrivals-operator)
 * [**Assemble a Route Shapefile**](#assemble-a-route-shapefile)
+* [**Filter with Lists and Dicts**](#filter-with-lists-and-dicts)
 
 (stop-arrivals-operator)=
 ### All the Stops and Arrival Times for an Operator on a Given Day
@@ -28,9 +29,11 @@ The queries represented in the following tutorial are as follows:
 As a simple example, we will filter to just the San Diego Metropolitan Transit System and grab 1 day's worth of data. We want all the trips, stops, arrival times, and stop geometry (lat/lon).
 
 Tables used:
-1. `tbl.views.gtfs_schedule_dim_stop_times()`: all stop arrival times for all operators, need to subset to particular date
-1. `tbl.views.gtfs_schedule_fact_daily_trips()`: all trips for all operators, need to subset to particular date
-1. `tbl.views.gtfs_schedule_dim_stops()`: lat/lon for all stops, need to subset to interested stops
+1. `tbl.views.gtfs_schedule_dim_stop_times`: all stop arrival times for all operators, need to subset to particular date
+1. `tbl.views.gtfs_schedule_fact_daily_trips`: all trips for all operators, need to subset to particular date
+1. `tbl.views.gtfs_schedule_dim_stops`: lat/lon for all stops, need to subset to interested stops
+
+Some of the variables used for the rest of this tutorial.
 
 ```{code-cell}
 import geopandas as gpd
@@ -50,6 +53,7 @@ SELECTED_DATE = "2021-09-01"
 ITP_ID = 278 # San Diego Metropolitan Transit System
 ```
 
+Here, all the trips for one operator, for a particular day, is joined with all the stops that occur on all the trips. Then, the stops have their lat/lon information attached.
 
 ```{code-cell}
 ## Get trips for operator for one day and join with stop times for all trips
@@ -94,7 +98,6 @@ Transit stops are given as lat/lon (point geometry), but what if we want to get 
 Tables used:
 1. `tbl.gtfs_schedule.shapes`: stops with stop sequence, lat/lon, and associated `shape_id`
 
-
 ```{code-cell}
 # Grab the shapes for this operator
 shapes = (tbl.gtfs_schedule.shapes()
@@ -134,7 +137,66 @@ single_route['geometry'] = route_line
 # Convert to gdf
 single_route = gpd.GeoDataFrame(single_route, crs="EPSG:4326")
 
-
 glue("single_route", single_route)
+```
 
+### Filter with Lists and Unpacking
+
+Queries can use the `isin` and take lists, as well as unpack lists. This nifty trick can keep the code clean.
+
+Tables used:
+1. `tbl.view.transitstacks`: some NTD related data, with each row being an operator
+1.
+
+Here, the `transitstacks` table is filtered down to interested counties and certain columns. Using `isin` and unpacking a list (asterisk) is a quick way to do this.
+
+```{code-cell}
+# Subset to counties of interest
+lossan_counties = ['San Luis Obispo', 'Santa Barbara', 'Ventura',
+                  'Los Angeles', 'San Diego', 'Orange']
+
+# List the columns to keep
+info_cols = ['itp_id', 'transit_provider', 'ntd_id',
+             'modes', 'county', 'legacy_ntd_id']
+
+vehicle_cols = ['bus', 'articulated_bus', 'over_the_road_bus',
+                'school_bus', 'trolleybus', 'vintage_historic_trolley',
+                'streetcar']
+
+paratransit_cols = ['van', 'cutaway', 'automobile',
+                     'minivan', 'sport_utility_vehicle']
+
+# transitstacks has a lot of columns, and we want to keep a fairly large subset of them
+lossan_df = (tbl.views.transitstacks()
+             # Collect to turn into pandas.DataFrame earlier for isin to work
+             >> collect()
+             >> filter(_.county.isin(lossan_counties))
+             # Nifty way to unpack large list of columns
+             >> select(*(info_cols + vehicle_cols + paratransit_cols))
+            )
+
+glue("lossan_df", lossan_df)
+```
+
+Next, we can query the `gtfs_schedule_fat_daily_feed_stops` to grab the stops for a particular day's feed. Those stops are then joined to `gtfs_schedule_dim_stops` to get the lat/lon attached. Use `isin` to further filter the dataframe and only keep operators in the counties of interest.
+
+```{code-cell}
+# Grab stops for that day
+lossan_stops = (tbl.views.gtfs_schedule_fact_daily_feed_stops()
+                >> filter(_.date == SELECTED_DATE)
+                >> select(_.stop_key, _.date)
+                # Merge with stop geom using stop_key
+                >> inner_join(_,
+                              (tbl.views.gtfs_schedule_dim_stops()
+                               >> select(_.calitp_itp_id, _.stop_key, _.stop_id,
+                                         _.stop_lat, _.stop_lon)
+                              ), on='stop_key')
+                >> collect()
+                # Only grab the ITP IDs we're interested in
+                >> filter(_.calitp_itp_id.isin(lossan_df.itp_id))
+                # This is to sort in order for ITP_ID and stop_id
+                >> arrange(_.calitp_itp_id, _.stop_id)
+               ).reset_index(drop=True)
+
+glue("lossan_stops", lossan_stops)
 ```
