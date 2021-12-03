@@ -26,7 +26,7 @@ The section below outlines our team's primary meetings and their purposes, as we
 
 (analytics-project-board)=
 ### GitHub Analytics Project Board
-
+**You can access The Analytics Project Board [using this link](https://github.com/cal-itp/data-infra/projects/6)**.
 #### How We Track Work
 
 ##### Who should use the board?
