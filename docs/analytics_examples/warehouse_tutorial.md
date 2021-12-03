@@ -28,7 +28,7 @@ The queries represented in the following tutorial are as follows:
 4. [**For a Given Agency, on Each Day, Days Until the Feed Expires**](days-feed-expires)
 5. [**Max Number of Stops a Trip Can Have, Per Agency**](max-number-stops)
 
-### Available Tools
+### Tools Used
 
 The tools that we can use to answer them are:
 * [**Metabase**](metabase) - our business insights and dashboarding tool
@@ -67,7 +67,7 @@ These tables compliment the fact tables by providing additional descriptive attr
 | **Time** | | |
 | **Geography** | | |
 
-### Python Libraries to Import
+### Python Libraries Used
 
 ```{code-cell}
 from calitp.tables import tbl
@@ -87,6 +87,7 @@ from myst_nb import glue
 
 (routes-agency-time)=
 ### 1. Number of Routes for a Given Agency Over Time
+This example query uses a fact table describing routes joined with a dimensional table which enriches our data with agency information. We then count the number of routes an agency has published over time.
 
 ```{code-cell}
 :tags: [remove-cell]
@@ -121,6 +122,7 @@ glue("siuba_routes_output", siuba_routes)
 ```
 
 ````{tabbed} Metabase
+**You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/215-1-number-of-routes-for-a-given-agency-over-time/notebook)**
 ![Collection Matrix](assets/routes_agency_over_time.png)
 ````
 ````{tabbed} SQL
@@ -188,6 +190,7 @@ LIMIT 10
 
 (stops-agency-time)=
 ### 2. Number of Stops for a Given Agency Over Time
+This example query is very similar to the previous query, except that it substitutes the routes fact table with the stops fact table to count the number of stops an agency has published over time.
 
 ```{code-cell}
 :tags: [remove-cell]
@@ -221,6 +224,7 @@ glue("siuba_stops_output", siuba_stops)
 ```
 
 ````{tabbed} Metabase
+**You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/216-2-number-of-stops-for-a-given-agency-over-time/notebook)**
 ![Collection Matrix](assets/stops_agency_over_time.png)
 ````
 
@@ -293,6 +297,9 @@ LIMIT 10
 
 (stops-all-trips)=
 ### 3. Number of Stops Made Across all Trips for an Agency
+Instead of using fact or dimensional tables as in the examples above, this query uses a wide convenience table that was created to aggregate trip stops information from only the most recent feeds extracted. Information for the latest day can be found in this table.
+
+We use this table to query an agency's most recent feed published and count the total number of trip stops, as well as the number of distinct trips and stops that compose them.
 
 ```{code-cell}
 :tags: [remove-cell]
@@ -324,16 +331,17 @@ glue("siuba_stops_trips_output", siuba_stops_trips)
 ```
 
 ````{tabbed} Metabase
-***Count of Trip Stops Made Across all Trips for an Agency***
 
+***Count of Trip Stops Made Across all Trips for an Agency***
+**You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/224-3a-count-of-trip-stops-made-across-all-trips-for-an-agency/notebook)**
 ![Collection Matrix](assets/count_trip_stops.png)
 
 ***Distinct Trips in Trip Stops***
-
+**You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/225-3b-distinct-trips-in-trip-stops-for-an-agency/notebook)**
 ![Collection Matrix](assets/distinct_trips_in_trip_stops.png)
 
 ***Distinct Stops in Trip Stops***
-
+**You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/226-3c-distinct-stops-in-trip-stops-for-an-agency/notebook)**
 ![Collection Matrix](assets/distinct_stops_in_trip_stops.png)
 ````
 ````{tabbed} SQL
@@ -392,6 +400,7 @@ LIMIT 10
 ````
 (days-feed-expires)=
 ### 4. For a Given Agency, on Each Day, Days Until the Feed Expires
+This query uses a fact table as we did in queries one and two. However, instead of counting we pull out previously calculated table columns as important pieces of information.
 
 ```{code-cell}
 :tags: [remove-cell]
@@ -428,7 +437,7 @@ glue("siuba_feed_expires_output", siuba_feed_expires)
 * Table **Gtfs Schedule Dim Feeds**
     * Calitp Feed Name
     * Feed End Date
-
+**You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/227-4-for-a-given-agency-on-each-day-days-until-the-feed-expires/notebook)**
 ![Collection Matrix](assets/days_until_agency_feed_expires.png)
 ````
 ````{tabbed} SQL
@@ -486,6 +495,7 @@ LIMIT 10
 
 (max-number-stops)=
 ### 5. Find the Trip With the Most Number of Stops, Per Agency
+Similar to the third query, this example uses the same wide convenience table. We use this table here to determine the trip that contains the most number of stops in the latest feed, by agency.
 
 ```{code-cell}
 :tags: [remove-cell]
@@ -531,7 +541,8 @@ glue("siuba_max_stops_output", siuba_max_stops)
 ```
 
 ````{tabbed} Metabase
-![Collection Matrix](assets/max_stops_per_trip_by_agency.png)
+**You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/223-5-find-the-trip-with-the-most-number-of-stops-per-agency/notebook)**
+![Collection Matrix](assets/most_stops_per_trip_by_agency.png)
 ````
 
 ````{tabbed} SQL
