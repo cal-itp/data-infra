@@ -23,10 +23,10 @@ The following content represents a tutorial introduction to simple queries that 
 
 The queries represented in the following tutorial are as follows:
 1. [**Number of Routes for a Given Agency Over Time**](routes-agency-time)
-2. [**Number of Stops for a Given Agency Over Time**](stops-agency-time)
-3. [**Number of Stops Made Across all Trips for an Agency**](stops-all-trips)
-4. [**For a Given Agency, on Each Day, Days Until the Feed Expires**](days-feed-expires)
-5. [**Max Number of Stops a Trip Can Have, Per Agency**](max-number-stops)
+1. [**Number of Stops for a Given Agency Over Time**](stops-agency-time)
+1. [**Number of Stops Made Across all Trips for an Agency**](stops-all-trips)
+1. [**For a Given Agency, on Each Day, Days Until the Feed Expires**](days-feed-expires)
+1. [**Max Number of Stops a Trip Can Have, Per Agency**](max-number-stops)
 
 ### Tools Used
 
@@ -35,8 +35,15 @@ The tools that we can use to answer them are:
 * **SQL** - using JupyterHub cloud notebooks
 * [**Python**](jupyterhub) - using JupyterHub cloud notebooks
     * *siuba* - a Cal-ITP recommended data analysis library in Python
-    * *cal-itp* - Cal-ITP's internal Python library
-    * *pandas* - a commonly used data analysis library in Python
+    * *calitp* - Cal-ITP's internal Python library
+
+```{code-cell}
+:tags: [remove-cell]
+from myst_nb import glue
+from calitp.tables import tbl
+from siuba import *
+import calitp.magics
+```
 
 ### Relevant Tables
 
@@ -66,22 +73,6 @@ These tables compliment the fact tables by providing additional descriptive attr
 | **Agency** | Warehouse: `calitp_feed_name` <br/> Metabase: `Calitp Feed Name` | - Our primary agency identifier <br/> - In most of the examples below, this is gathered from the table: `views.gtfs_schedule_dim_feeds` <br/> - Metabase: `Gtfs Schedule Dim Feeds` |
 | **Time** | | |
 | **Geography** | | |
-
-### Python Libraries Used
-
-```{code-cell}
-from calitp.tables import tbl
-from calitp import query_sql
-from siuba import *
-import pandas as pd
-import calitp.magics
-pd.set_option("display.max_rows", 20)
-```
-
-```{code-cell}
-:tags: [remove-cell]
-from myst_nb import glue
-```
 
 ## Query Examples
 
@@ -127,10 +118,15 @@ glue("siuba_routes_output", siuba_routes)
 ![Collection Matrix](assets/routes_agency_over_time.png)
 ````
 ````{tabbed} SQL
+```python
+# allows us to query SQL in the JupyterLab notebook
+# use this in combination with '%%sql', as seen below
+import calitp.magics
+```
 ```sql
--- In combination with importing `calitp.magics`, this allows us to
--- query SQL in the JupyterLab notebook
 %%sql
+-- ^ In combination with importing `calitp.magics`, this allows us to
+-- query SQL in the JupyterLab notebook
 
 SELECT
     -- The first two columns are the ones we will group by for the count
@@ -164,6 +160,13 @@ LIMIT 10
 ```
 ````
 ````{tabbed} siuba
+```python
+# allows us to query tables in the warehosue
+from calitp.tables import tbl
+
+# the data analysis library used
+from siuba import *
+```
 ```python
 (
     # Primary fact table, we need this because it contains route information
@@ -231,6 +234,11 @@ glue("siuba_stops_output", siuba_stops)
 ````
 
 ````{tabbed} SQL
+```python
+# allows us to query SQL in the JupyterLab notebook
+# use this in combination with '%%sql', as seen below
+import calitp.magics
+```
 ```sql
 -- In combination with importing `calitp.magics`, this allows us to
 -- query SQL in the JupyterLab notebook
@@ -269,6 +277,13 @@ LIMIT 10
 ````
 
 ````{tabbed} siuba
+```python
+# allows us to query tables in the warehosue
+from calitp.tables import tbl
+
+# the data analysis library used
+from siuba import *
+```
 ```python
 ## Join to get CalITP Feed Names
 ## Count stops by date and CalITP Feed Names, order by date, filter by specific calitp_feed_name
@@ -333,7 +348,6 @@ glue("siuba_stops_trips_output", siuba_stops_trips)
 ```
 
 ````{tabbed} Metabase
-
 ***Count of Trip Stops Made Across all Trips for an Agency***
 
 *You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/224-3a-count-of-trip-stops-made-across-all-trips-for-an-agency/notebook)*
@@ -353,6 +367,11 @@ glue("siuba_stops_trips_output", siuba_stops_trips)
 ![Collection Matrix](assets/distinct_stops_in_trip_stops.png)
 ````
 ````{tabbed} SQL
+```python
+# allows us to query SQL in the JupyterLab notebook
+# use this in combination with '%%sql', as seen below
+import calitp.magics
+```
 ```sql
 -- In combination with importing `calitp.magics`, this allows us to
 -- query SQL in the JupyterLab notebook
@@ -387,6 +406,13 @@ LIMIT 10
 ```
 ````
 ````{tabbed} siuba
+```python
+# allows us to query tables in the warehosue
+from calitp.tables import tbl
+
+# the data analysis library used
+from siuba import *
+```
 ```python
 (
     # Primary fact table, we need this because it contains trip stop information
@@ -443,6 +469,11 @@ glue("siuba_feed_expires_output", siuba_feed_expires)
 ![Collection Matrix](assets/days_until_agency_feed_expires.png)
 ````
 ````{tabbed} SQL
+```python
+# allows us to query SQL in the JupyterLab notebook
+# use this in combination with '%%sql', as seen below
+import calitp.magics
+```
 ```sql
 -- In combination with importing `calitp.magics`, this allows us to
 -- query SQL in the JupyterLab notebook
@@ -474,6 +505,13 @@ LIMIT 10
 ````
 
 ````{tabbed} siuba
+```python
+# allows us to query tables in the warehosue
+from calitp.tables import tbl
+
+# the data analysis library used
+from siuba import *
+```
 ```python
 (
     # Primary fact table, we need this because it contains information on
@@ -549,6 +587,11 @@ glue("siuba_max_stops_output", siuba_max_stops)
 ````
 
 ````{tabbed} SQL
+```python
+# allows us to query SQL in the JupyterLab notebook
+# use this in combination with '%%sql', as seen below
+import calitp.magics
+```
 ```sql
 -- In combination with importing `calitp.magics`, this allows us to
 -- query SQL in the JupyterLab notebook
@@ -599,10 +642,15 @@ LIMIT 10
 ```
 ```{glue:figure} df_max_stops_output
 ```
-
 ````
-
 ````{tabbed} siuba
+```python
+# allows us to query tables in the warehosue
+from calitp.tables import tbl
+
+# the data analysis library used
+from siuba import *
+```
 ```python
 (
     # Primary fact table, we need this because it contains trip stop information
