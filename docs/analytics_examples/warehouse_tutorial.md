@@ -120,14 +120,12 @@ glue("siuba_routes_output", siuba_routes)
 ````
 ````{tabbed} SQL
 ```python
-# allows us to query SQL in the JupyterLab notebook
-# use this in combination with '%%sql', as seen below
+# Allows us to query SQL in the JupyterLab notebook
+# Use this in combination with '%%sql', as seen below
 import calitp.magics
 ```
 ```sql
 %%sql
--- ^ In combination with importing `calitp.magics`, this allows us to
--- query SQL in the JupyterLab notebook
 
 SELECT
     -- The first two columns are the ones we will group by for the count
@@ -162,10 +160,10 @@ LIMIT 10
 ````
 ````{tabbed} siuba
 ```python
-# allows us to query tables in the warehosue
+# Allows us to query tables in the warehouse
 from calitp.tables import tbl
 
-# the data analysis library used
+# The data analysis library used
 from siuba import *
 ```
 ```python
@@ -236,13 +234,11 @@ glue("siuba_stops_output", siuba_stops)
 
 ````{tabbed} SQL
 ```python
-# allows us to query SQL in the JupyterLab notebook
-# use this in combination with '%%sql', as seen below
+# Allows us to query SQL in the JupyterLab notebook
+# Use this in combination with '%%sql', as seen below
 import calitp.magics
 ```
 ```sql
--- In combination with importing `calitp.magics`, this allows us to
--- query SQL in the JupyterLab notebook
 %%sql
 
 SELECT
@@ -279,10 +275,10 @@ LIMIT 10
 
 ````{tabbed} siuba
 ```python
-# allows us to query tables in the warehosue
+# Allows us to query tables in the warehouse
 from calitp.tables import tbl
 
-# the data analysis library used
+# The data analysis library used
 from siuba import *
 ```
 ```python
@@ -369,13 +365,11 @@ glue("siuba_stops_trips_output", siuba_stops_trips)
 ````
 ````{tabbed} SQL
 ```python
-# allows us to query SQL in the JupyterLab notebook
-# use this in combination with '%%sql', as seen below
+# Allows us to query SQL in the JupyterLab notebook
+# Use this in combination with '%%sql', as seen below
 import calitp.magics
 ```
 ```sql
--- In combination with importing `calitp.magics`, this allows us to
--- query SQL in the JupyterLab notebook
 %%sql
 
 SELECT
@@ -408,10 +402,10 @@ LIMIT 10
 ````
 ````{tabbed} siuba
 ```python
-# allows us to query tables in the warehosue
+# Allows us to query tables in the warehouse
 from calitp.tables import tbl
 
-# the data analysis library used
+# The data analysis library used
 from siuba import *
 ```
 ```python
@@ -471,13 +465,11 @@ glue("siuba_feed_expires_output", siuba_feed_expires)
 ````
 ````{tabbed} SQL
 ```python
-# allows us to query SQL in the JupyterLab notebook
-# use this in combination with '%%sql', as seen below
+# Allows us to query SQL in the JupyterLab notebook
+# Use this in combination with '%%sql', as seen below
 import calitp.magics
 ```
 ```sql
--- In combination with importing `calitp.magics`, this allows us to
--- query SQL in the JupyterLab notebook
 %%sql
 
 SELECT
@@ -507,10 +499,10 @@ LIMIT 10
 
 ````{tabbed} siuba
 ```python
-# allows us to query tables in the warehosue
+# Allows us to query tables in the warehouse
 from calitp.tables import tbl
 
-# the data analysis library used
+# The data analysis library used
 from siuba import *
 ```
 ```python
@@ -589,13 +581,11 @@ glue("siuba_max_stops_output", siuba_max_stops)
 
 ````{tabbed} SQL
 ```python
-# allows us to query SQL in the JupyterLab notebook
-# use this in combination with '%%sql', as seen below
+# Allows us to query SQL in the JupyterLab notebook
+# Use this in combination with '%%sql', as seen below
 import calitp.magics
 ```
 ```sql
--- In combination with importing `calitp.magics`, this allows us to
--- query SQL in the JupyterLab notebook
 %%sql
 
 -- Using a WITH clause to create a sub-query counting the number of stops each
@@ -646,10 +636,10 @@ LIMIT 10
 ````
 ````{tabbed} siuba
 ```python
-# allows us to query tables in the warehosue
+# Allows us to query tables in the warehouse
 from calitp.tables import tbl
 
-# the data analysis library used
+# The data analysis library used
 from siuba import *
 ```
 ```python
