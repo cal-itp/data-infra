@@ -43,6 +43,7 @@ from myst_nb import glue
 from calitp.tables import tbl
 from siuba import *
 import calitp.magics
+from calitp import query_sql
 ```
 
 ### Relevant Tables
