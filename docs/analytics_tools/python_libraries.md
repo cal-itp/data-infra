@@ -18,7 +18,7 @@ The following libraries are available and recommended for use by Cal-ITP data an
 
 ## Table of Contents
 1. [Add New Packages](#add-new-packages)
-1. [Cal-ITP](#cal-itp)
+1. [calitp](#calitp)
 1. [siuba](#siuba)
 <br> - [Basic Query](#basic-query)
 <br> - [Collect Query Results](#collect-query-results)
@@ -35,7 +35,7 @@ While most Python packages an analyst uses comes in JupyterHub, there may be add
 
 
 (calitp)=
-## cal-itp
+## calitp
 (siuba)=
 ## siuba
 Siuba is a tool that allows the same analysis code to run on a pandas DataFrame,

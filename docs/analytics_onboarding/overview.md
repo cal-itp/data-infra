@@ -29,7 +29,7 @@ Below you can find links to the tools themselves, as well as relevant support do
 
 **Python Libraries:**
 
-- [ ]  **calitp-py** - Cal-ITP's internal Python library | ([Docs](calitp))
+- [ ]  **calitp** - Cal-ITP's internal Python library | ([Docs](calitp))
 - [ ]  **siuba** - Recommended data analysis library | ([Docs](siuba))
 
 &nbsp;
