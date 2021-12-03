@@ -713,6 +713,7 @@ Users need to download and install the gcloud commandline tool from the app.</p>
 <h4>Uploading data from a notebook<a class="headerlink" href="#uploading-data-from-a-notebook" title="Permalink to this headline">¶</a></h4>
 <p>The code below shows how to copy a file from JupyterHub to the data bucket.
 Be sure to replace <code class="docutils literal notranslate"><span class="pre">&lt;FILE</span> <span class="pre">NAME&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;ANALYSIS</span> <span class="pre">FOLDER&gt;</span></code> with the appropriate names.</p>
+<p>For additional details, including options for reading/writing geospatial data using <code class="docutils literal notranslate"><span class="pre">geopandas</span></code>, see <a class="reference internal" href="storing_data.html#storing-new-data"><span class="std std-ref">Storing New Data</span></a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using the `calitp` package</span>
 <span class="kn">from</span> <span class="nn">calitp.storage</span> <span class="kn">import</span> <span class="n">get_fs</span>
 
@@ -732,10 +733,6 @@ Be sure to replace <code class="docutils literal notranslate"><span class="pre">
 <span class="c1"># Parquet</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">&quot;gs://calitp-analytics-data/data-analyses/&lt;ANALYSIS FOLDER&gt;/&lt;FILE NAME&gt;&quot;</span><span class="p">)</span>
 <span class="n">df</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s2">&quot;gs://calitp-analytics-data/data-analyses/&lt;ANALYSIS FOLDER&gt;/&lt;FILE NAME&gt;&quot;</span><span class="p">)</span>
-
-<span class="c1"># Geoparquet</span>
-<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">&quot;gs://calitp-analytics-data/data-analyses/&lt;ANALYSIS FOLDER&gt;/&lt;FILE NAME&gt;&quot;</span><span class="p">)</span>
-<span class="n">gdf</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s2">&quot;gs://calitp-analytics-data/data-analyses/&lt;ANALYSIS FOLDER&gt;/&lt;FILE NAME&gt;&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
