@@ -102,7 +102,7 @@ SELECT
     p.product_type,
 
     -- Common transaction info
-    t1.route_id,
+    CASE WHEN t1.route_id <> 'Route Z' THEN t1.route_id ELSE COALESCE(t2.route_id, 'Route Z') END AS route_id,
     r.route_long_name,
     r.route_short_name,
     t1.direction,
@@ -134,7 +134,9 @@ SELECT
 
 FROM `payments.stg_cleaned_micropayments` AS m
 JOIN initial_transactions AS t1 USING (participant_id, micropayment_id)
-LEFT JOIN gtfs_routes_with_participant AS r USING (participant_id, route_id)
 LEFT JOIN second_transactions AS t2 USING (participant_id, micropayment_id)
 LEFT JOIN applied_adjustments AS a USING (participant_id, micropayment_id)
 LEFT JOIN `payments.stg_cleaned_product_data` AS p USING (participant_id, product_id)
+LEFT JOIN gtfs_routes_with_participant AS r
+    ON r.participant_id = m.participant_id
+    AND r.route_id = (CASE WHEN t1.route_id <> 'Route Z' THEN t1.route_id ELSE COALESCE(t2.route_id, 'Route Z') END)
