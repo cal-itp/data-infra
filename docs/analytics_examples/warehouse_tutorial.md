@@ -122,7 +122,8 @@ glue("siuba_routes_output", siuba_routes)
 ```
 
 ````{tabbed} Metabase
-**You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/215-1-number-of-routes-for-a-given-agency-over-time/notebook)**
+*You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/215-1-number-of-routes-for-a-given-agency-over-time/notebook)*
+
 ![Collection Matrix](assets/routes_agency_over_time.png)
 ````
 ````{tabbed} SQL
@@ -224,7 +225,8 @@ glue("siuba_stops_output", siuba_stops)
 ```
 
 ````{tabbed} Metabase
-**You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/216-2-number-of-stops-for-a-given-agency-over-time/notebook)**
+*You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/216-2-number-of-stops-for-a-given-agency-over-time/notebook)*
+
 ![Collection Matrix](assets/stops_agency_over_time.png)
 ````
 
@@ -333,15 +335,21 @@ glue("siuba_stops_trips_output", siuba_stops_trips)
 ````{tabbed} Metabase
 
 ***Count of Trip Stops Made Across all Trips for an Agency***
-**You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/224-3a-count-of-trip-stops-made-across-all-trips-for-an-agency/notebook)**
+
+*You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/224-3a-count-of-trip-stops-made-across-all-trips-for-an-agency/notebook)*
+
 ![Collection Matrix](assets/count_trip_stops.png)
 
 ***Distinct Trips in Trip Stops***
-**You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/225-3b-distinct-trips-in-trip-stops-for-an-agency/notebook)**
+
+*You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/225-3b-distinct-trips-in-trip-stops-for-an-agency/notebook)*
+
 ![Collection Matrix](assets/distinct_trips_in_trip_stops.png)
 
 ***Distinct Stops in Trip Stops***
-**You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/226-3c-distinct-stops-in-trip-stops-for-an-agency/notebook)**
+
+*You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/226-3c-distinct-stops-in-trip-stops-for-an-agency/notebook)*
+
 ![Collection Matrix](assets/distinct_stops_in_trip_stops.png)
 ````
 ````{tabbed} SQL
@@ -430,14 +438,8 @@ glue("siuba_feed_expires_output", siuba_feed_expires)
 ```
 
 ````{tabbed} Metabase
-**Columns to Select (pulled out in image below):**
-* Table **Gtfs Schedule Fact Daily Feeds**
-    * Date
-    * Days Until Feed End Date
-* Table **Gtfs Schedule Dim Feeds**
-    * Calitp Feed Name
-    * Feed End Date
-**You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/227-4-for-a-given-agency-on-each-day-days-until-the-feed-expires/notebook)**
+*You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/227-4-for-a-given-agency-on-each-day-days-until-the-feed-expires/notebook)*
+
 ![Collection Matrix](assets/days_until_agency_feed_expires.png)
 ````
 ````{tabbed} SQL
@@ -541,7 +543,8 @@ glue("siuba_max_stops_output", siuba_max_stops)
 ```
 
 ````{tabbed} Metabase
-**You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/223-5-find-the-trip-with-the-most-number-of-stops-per-agency/notebook)**
+*You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/223-5-find-the-trip-with-the-most-number-of-stops-per-agency/notebook)*
+
 ![Collection Matrix](assets/most_stops_per_trip_by_agency.png)
 ````
 
