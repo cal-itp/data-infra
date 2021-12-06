@@ -1,7 +1,5 @@
 (technical-onboarding)=
 # Technical Onboarding
-This page serves as a beginning entry-point into our Cal-ITP analytics resources for both new analysts and non-analyst team members.
-
 :::{admonition} How to use this page
 :class: tip
 **Analysts**
@@ -13,9 +11,6 @@ This page serves as a beginning entry-point into our Cal-ITP analytics resources
 
 **If you still need help with access**, use the information at the bottom of this page to [**get help**](get-help).
 :::
-
-Below you can find links to the tools themselves, as well as relevant support documents.
-
 **Collaboration Tools:**
 
 - [ ]  [**Slack**](https://cal-itp.slack.com) | ([Docs](slack-intro))
