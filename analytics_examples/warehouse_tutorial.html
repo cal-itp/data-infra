@@ -112,7 +112,7 @@
 <ul class="current nav bd-sidenav">
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../analytics_welcome/overview.html">
-   Welcome! (WIP)
+   Welcome!
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
   <label for="toctree-checkbox-1">
@@ -625,8 +625,8 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#available-tools">
-     Available Tools
+    <a class="reference internal nav-link" href="#tools-used">
+     Tools Used
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
@@ -637,11 +637,6 @@
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#important-column-types">
      Important Column Types
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#python-libraries-to-import">
-     Python Libraries to Import
     </a>
    </li>
   </ul>
@@ -697,16 +692,16 @@
 <div class="section" id="example-queries">
 <h3>Example Queries<a class="headerlink" href="#example-queries" title="Permalink to this headline">¶</a></h3>
 <p>The queries represented in the following tutorial are as follows:</p>
-<ul class="simple">
+<ol class="simple">
 <li><p><a class="reference internal" href="#routes-agency-time"><span class="std std-ref"><strong>Number of Routes for a Given Agency Over Time</strong></span></a></p></li>
 <li><p><a class="reference internal" href="#stops-agency-time"><span class="std std-ref"><strong>Number of Stops for a Given Agency Over Time</strong></span></a></p></li>
 <li><p><a class="reference internal" href="#stops-all-trips"><span class="std std-ref"><strong>Number of Stops Made Across all Trips for an Agency</strong></span></a></p></li>
 <li><p><a class="reference internal" href="#days-feed-expires"><span class="std std-ref"><strong>For a Given Agency, on Each Day, Days Until the Feed Expires</strong></span></a></p></li>
 <li><p><a class="reference internal" href="#max-number-stops"><span class="std std-ref"><strong>Max Number of Stops a Trip Can Have, Per Agency</strong></span></a></p></li>
-</ul>
+</ol>
 </div>
-<div class="section" id="available-tools">
-<h3>Available Tools<a class="headerlink" href="#available-tools" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="tools-used">
+<h3>Tools Used<a class="headerlink" href="#tools-used" title="Permalink to this headline">¶</a></h3>
 <p>The tools that we can use to answer them are:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="../analytics_tools/bi_dashboards.html#metabase"><span class="std std-ref"><strong>Metabase</strong></span></a> - our business insights and dashboarding tool</p></li>
@@ -714,8 +709,7 @@
 <li><p><a class="reference internal" href="../analytics_tools/notebooks.html#jupyterhub"><span class="std std-ref"><strong>Python</strong></span></a> - using JupyterHub cloud notebooks</p>
 <ul>
 <li><p><em>siuba</em> - a Cal-ITP recommended data analysis library in Python</p></li>
-<li><p><em>cal-itp</em> - Cal-ITP’s internal Python library</p></li>
-<li><p><em>pandas</em> - a commonly used data analysis library in Python (used sparsely in the examples below)</p></li>
+<li><p><em>calitp</em> - Cal-ITP’s internal Python library</p></li>
 </ul>
 </li>
 </ul>
@@ -723,8 +717,8 @@
 <div class="section" id="relevant-tables">
 <h3>Relevant Tables<a class="headerlink" href="#relevant-tables" title="Permalink to this headline">¶</a></h3>
 <div class="tabbed-set docutils">
-<input checked="checked" id="3f128cc9-f540-46dd-b751-4b7d6df49fa4" name="147e8b21-1ae7-4dcb-88f9-a3e917ab92dd" type="radio">
-</input><label class="tabbed-label" for="3f128cc9-f540-46dd-b751-4b7d6df49fa4">
+<input checked="checked" id="979adf31-476c-46a9-afb5-a3682f5b1dd2" name="83122e92-6b23-45fe-944e-1082adf5d350" type="radio">
+</input><label class="tabbed-label" for="979adf31-476c-46a9-afb5-a3682f5b1dd2">
 Fact Tables</label><div class="tabbed-content docutils">
 <p>These tables contain measurements, metrics, and facts used to answer the questions from the following perspectives:</p>
 <table class="colwidths-auto table">
@@ -735,22 +729,22 @@ Fact Tables</label><div class="tabbed-content docutils">
 </thead>
 <tbody>
 <tr class="row-even"><td><p><strong>Feeds</strong></p></td>
-<td><p>Warehouse: <strong>views.gtfs_schedule_fact_daily_feeds</strong> <br/> Metabase: <strong>Gtfs Schedule Fact Daily Feeds</strong></p></td>
+<td><p>Warehouse: <code class="docutils literal notranslate"><span class="pre">views.gtfs_schedule_fact_daily_feeds</span></code> <br/> Metabase: <code class="docutils literal notranslate"><span class="pre">Gtfs</span> <span class="pre">Schedule</span> <span class="pre">Fact</span> <span class="pre">Daily</span> <span class="pre">Feeds</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>Routes</strong></p></td>
-<td><p>Warehouse: <strong>views.gtfs_schedule_fact_daily_feed_routes</strong> <br/> Metabase: <strong>Gtfs Schedule Fact Daily Feed Routes</strong></p></td>
+<td><p>Warehouse: <code class="docutils literal notranslate"><span class="pre">views.gtfs_schedule_fact_daily_feed_routes</span></code> <br/> Metabase: <code class="docutils literal notranslate"><span class="pre">Gtfs</span> <span class="pre">Schedule</span> <span class="pre">Fact</span> <span class="pre">Daily</span> <span class="pre">Feed</span> <span class="pre">Routes</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p><strong>Stops</strong></p></td>
-<td><p>Warehouse: <strong>views.gtfs_schedule_fact_daily_feed_stops</strong> <br/> Metabase: <strong>Gtfs Schedule Fact Daily Feed Stops</strong></p></td>
+<td><p>Warehouse: <code class="docutils literal notranslate"><span class="pre">views.gtfs_schedule_fact_daily_feed_stops</span></code> <br/> Metabase: <code class="docutils literal notranslate"><span class="pre">Gtfs</span> <span class="pre">Schedule</span> <span class="pre">Fact</span> <span class="pre">Daily</span> <span class="pre">Feed</span> <span class="pre">Stops</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>Trips</strong></p></td>
-<td><p>Warehouse: <strong>views.gtfs_schedule_data_feed_trip_stops_latest</strong> <br/> Metabase: <strong>Gtfs Schedule Data Feed Trip Stops Latest</strong></p></td>
+<td><p>Warehouse: <code class="docutils literal notranslate"><span class="pre">views.gtfs_schedule_data_feed_trip_stops_latest</span></code> <br/> Metabase: <code class="docutils literal notranslate"><span class="pre">Gtfs</span> <span class="pre">Schedule</span> <span class="pre">Data</span> <span class="pre">Feed</span> <span class="pre">Trip</span> <span class="pre">Stops</span> <span class="pre">Latest</span></code></p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<input id="5cc80797-11d5-4bdf-aa73-bae028411524" name="147e8b21-1ae7-4dcb-88f9-a3e917ab92dd" type="radio">
-</input><label class="tabbed-label" for="5cc80797-11d5-4bdf-aa73-bae028411524">
+<input id="8e986283-012a-4877-bf3c-afbbfbe1c569" name="83122e92-6b23-45fe-944e-1082adf5d350" type="radio">
+</input><label class="tabbed-label" for="8e986283-012a-4877-bf3c-afbbfbe1c569">
 Dimensional Tables</label><div class="tabbed-content docutils">
 <p>These tables compliment the fact tables by providing additional descriptive attributes:</p>
 <table class="colwidths-auto table">
@@ -762,8 +756,8 @@ Dimensional Tables</label><div class="tabbed-content docutils">
 </thead>
 <tbody>
 <tr class="row-even"><td><p><strong>Dim Feeds</strong></p></td>
-<td><p>Warehouse: <strong>views.gtfs_schedule_dim_feeds</strong> <br/> Metabase: <strong>Gtfs Schedule Dim Feeds</strong></p></td>
-<td><p>- Joining with this table is the most common way to append calitp_feed_name to fact tables <br/> - calitp_feed_name is our primary agency identifier</p></td>
+<td><p>Warehouse: <code class="docutils literal notranslate"><span class="pre">views.gtfs_schedule_dim_feeds</span></code> <br/> Metabase: <code class="docutils literal notranslate"><span class="pre">Gtfs</span> <span class="pre">Schedule</span> <span class="pre">Dim</span> <span class="pre">Feeds</span></code></p></td>
+<td><p>- Joining with this table is the most common way to append <code class="docutils literal notranslate"><span class="pre">calitp_feed_name</span></code> to fact tables <br/> - <code class="docutils literal notranslate"><span class="pre">calitp_feed_name</span></code> is our primary agency identifier</p></td>
 </tr>
 </tbody>
 </table>
@@ -781,8 +775,8 @@ Dimensional Tables</label><div class="tabbed-content docutils">
 </thead>
 <tbody>
 <tr class="row-even"><td><p><strong>Agency</strong></p></td>
-<td><p>Warehouse: <strong>calitp_feed_name</strong> <br/> Metabase: <strong>Calitp Feed Name</strong></p></td>
-<td><p>- Our primary agency identifier <br/> - In most of the examples below, this is gathered from the table: <strong>views.gtfs_schedule_dim_feeds</strong> <br/> - Metabase: <strong>Gtfs Schedule Dim Feeds</strong></p></td>
+<td><p>Warehouse: <code class="docutils literal notranslate"><span class="pre">calitp_feed_name</span></code> <br/> Metabase: <code class="docutils literal notranslate"><span class="pre">Calitp</span> <span class="pre">Feed</span> <span class="pre">Name</span></code></p></td>
+<td><p>- Our primary agency identifier <br/> - In most of the examples below, this is gathered from the table: <code class="docutils literal notranslate"><span class="pre">views.gtfs_schedule_dim_feeds</span></code> <br/> - Metabase: <code class="docutils literal notranslate"><span class="pre">Gtfs</span> <span class="pre">Schedule</span> <span class="pre">Dim</span> <span class="pre">Feeds</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>Time</strong></p></td>
 <td><p></p></td>
@@ -795,124 +789,53 @@ Dimensional Tables</label><div class="tabbed-content docutils">
 </tbody>
 </table>
 </div>
-<div class="section" id="python-libraries-to-import">
-<h3>Python Libraries to Import<a class="headerlink" href="#python-libraries-to-import" title="Permalink to this headline">¶</a></h3>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbl</span>
-<span class="kn">from</span> <span class="nn">calitp</span> <span class="kn">import</span> <span class="n">query_sql</span>
-<span class="kn">from</span> <span class="nn">siuba</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">calitp.magics</span>
-<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;display.max_rows&quot;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
 </div>
 <div class="section" id="query-examples">
 <h2>Query Examples<a class="headerlink" href="#query-examples" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="number-of-routes-for-a-given-agency-over-time">
 <span id="routes-agency-time"></span><h3>1. Number of Routes for a Given Agency Over Time<a class="headerlink" href="#number-of-routes-for-a-given-agency-over-time" title="Permalink to this headline">¶</a></h3>
+<p>This example query uses a fact table describing routes joined with a dimensional table which enriches our data with agency information. We then count the number of routes an agency has published over time.</p>
 <div class="tabbed-set docutils">
-<input checked="checked" id="5964254f-4214-44b4-bca7-3419656b4256" name="4483671c-6c2b-4b1b-94d6-964fb543390b" type="radio">
-</input><label class="tabbed-label" for="5964254f-4214-44b4-bca7-3419656b4256">
+<input checked="checked" id="0a43c871-eddd-478a-bcf4-9b2e16f39701" name="cbb08558-88cb-4fda-b46c-13e99b5777b7" type="radio">
+</input><label class="tabbed-label" for="0a43c871-eddd-478a-bcf4-9b2e16f39701">
 Metabase</label><div class="tabbed-content docutils">
-<p><strong>Tables Used</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Name</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><strong>Gtfs Schedule Fact Daily Feed Routes</strong></p></td>
-<td><p>Primary Fact Table</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>Gtfs Schedule Dim Feeds</strong></p></td>
-<td><p>Secondary Dimensional Table</p></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Important Columns</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Type</p></th>
-<th class="head"><p>Column</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><em>Time</em></p></td>
-<td><p><strong>Date</strong></p></td>
-<td><p><em>Filter</em> by</p></td>
-</tr>
-<tr class="row-odd"><td><p><em>Geography</em></p></td>
-<td><p><strong>Route Key</strong></p></td>
-<td><p>The unique identifier for each record, what we effectively <em>Count</em> by</p></td>
-</tr>
-<tr class="row-even"><td><p><em>Agency</em></p></td>
-<td><p><strong>Calitp Feed Name</strong></p></td>
-<td><p>Metabase automatically joins with table <strong>Gtfs Schedule Dim Feeds</strong> on variable <strong>Feed Key</strong> to get <strong>Calitp Feed Name</strong> (<em>Filter</em> by)</p></td>
-</tr>
-</tbody>
-</table>
+<p><em>You can view this query in Metabase <a class="reference external" href="https://dashboards.calitp.org/question/215-1-number-of-routes-for-a-given-agency-over-time/notebook">using this link</a></em></p>
 <p><img alt="Collection Matrix" src="../_images/routes_agency_over_time.png" /></p>
 </div>
-<input id="2b126bf7-02d7-492a-a18e-7a22d1702d15" name="4483671c-6c2b-4b1b-94d6-964fb543390b" type="radio">
-</input><label class="tabbed-label" for="2b126bf7-02d7-492a-a18e-7a22d1702d15">
+<input id="816ef366-00a9-4046-917e-db2d30358907" name="cbb08558-88cb-4fda-b46c-13e99b5777b7" type="radio">
+</input><label class="tabbed-label" for="816ef366-00a9-4046-917e-db2d30358907">
 SQL</label><div class="tabbed-content docutils">
-<p><strong>Tables Used</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Name</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><strong>views.gtfs_schedule_fact_daily_feed_routes</strong></p></td>
-<td><p>Primary Fact Table</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>views.gtfs_schedule_dim_feeds</strong></p></td>
-<td><p>Secondary Dimensional Table</p></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Important Columns</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Type</p></th>
-<th class="head"><p>Column</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><em>Time</em></p></td>
-<td><p><strong>date</strong></p></td>
-<td><p><em>GROUP BY</em></p></td>
-</tr>
-<tr class="row-odd"><td><p><em>Geography</em></p></td>
-<td><p><strong>route_key</strong></p></td>
-<td><p>The unique identifier for each record, what we effectively <em>COUNT</em> by</p></td>
-</tr>
-<tr class="row-even"><td><p><em>Agency</em></p></td>
-<td><p><strong>calitp_feed_name</strong></p></td>
-<td><p><em>JOIN</em> with table <strong>views.gtfs_schedule_dim_feeds</strong> on variable <strong>feed_key</strong> for <strong>calitp_feed_name</strong> (<em>GROUP BY</em>, isolate with <em>WHERE</em>)</p></td>
-</tr>
-</tbody>
-</table>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span> <span class="k">sql</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Allows us to query SQL in the JupyterLab notebook</span>
+<span class="c1"># Use this in combination with &#39;%%sql&#39;, as seen below</span>
+<span class="kn">import</span> <span class="nn">calitp.magics</span>
+</pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">sql</span>
+
 <span class="k">SELECT</span>
-    <span class="n">calitp_feed_name</span><span class="p">,</span>
-    <span class="nb">date</span><span class="p">,</span>
+    <span class="c1">-- The first two columns are the ones we will group by for the count</span>
+    <span class="n">calitp_feed_name</span><span class="p">,</span>               <span class="c1">-- agency info</span>
+    <span class="nb">date</span><span class="p">,</span>                           <span class="c1">-- time info</span>
+
+    <span class="c1">-- The aggregation itself</span>
     <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">AS</span> <span class="n">count_routes</span>
+
+<span class="c1">-- Primary fact table, we need this because it contains route information for</span>
+<span class="c1">-- each agency on each day</span>
 <span class="k">FROM</span> <span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_fact_daily_feed_routes</span><span class="o">`</span>
+
+<span class="c1">-- Enriching with information about feeds from dimensional table</span>
+<span class="c1">-- This will include columns such as calitp_feed_name, etc..</span>
 <span class="k">JOIN</span> <span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_dim_feeds</span><span class="o">`</span> <span class="k">USING</span> <span class="p">(</span><span class="n">feed_key</span><span class="p">)</span>
+
+<span class="c1">-- Filtering for agency, this column comes from the dimensional table above</span>
 <span class="k">WHERE</span>
-    <span class="n">calitp_feed_name</span> <span class="o">=</span> <span class="ss">&quot;Unitrans (0)&quot;</span>
+    <span class="n">calitp_feed_name</span> <span class="o">=</span> <span class="ss">&quot;AC Transit (0)&quot;</span>
+
 <span class="k">GROUP</span> <span class="k">BY</span>
+<span class="c1">-- Note that 1, 2 refer to the first two columns of the select</span>
     <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+
 <span class="k">ORDER</span> <span class="k">BY</span>
     <span class="nb">date</span> <span class="k">DESC</span>
 <span class="k">LIMIT</span> <span class="mi">10</span>
@@ -946,118 +869,96 @@ SQL</label><div class="tabbed-content docutils">
   <tbody>
     <tr>
       <th>0</th>
-      <td>Unitrans (0)</td>
-      <td>2021-12-03</td>
-      <td>18</td>
+      <td>AC Transit (0)</td>
+      <td>2021-12-06</td>
+      <td>129</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>Unitrans (0)</td>
-      <td>2021-12-02</td>
-      <td>18</td>
+      <td>AC Transit (0)</td>
+      <td>2021-12-05</td>
+      <td>129</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>Unitrans (0)</td>
-      <td>2021-12-01</td>
-      <td>18</td>
+      <td>AC Transit (0)</td>
+      <td>2021-12-04</td>
+      <td>129</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>Unitrans (0)</td>
-      <td>2021-11-30</td>
-      <td>18</td>
+      <td>AC Transit (0)</td>
+      <td>2021-12-03</td>
+      <td>128</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>Unitrans (0)</td>
-      <td>2021-11-29</td>
-      <td>18</td>
+      <td>AC Transit (0)</td>
+      <td>2021-12-02</td>
+      <td>128</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>Unitrans (0)</td>
-      <td>2021-11-28</td>
-      <td>18</td>
+      <td>AC Transit (0)</td>
+      <td>2021-12-01</td>
+      <td>128</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>Unitrans (0)</td>
-      <td>2021-11-27</td>
-      <td>18</td>
+      <td>AC Transit (0)</td>
+      <td>2021-11-30</td>
+      <td>128</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>Unitrans (0)</td>
-      <td>2021-11-26</td>
-      <td>18</td>
+      <td>AC Transit (0)</td>
+      <td>2021-11-29</td>
+      <td>128</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>Unitrans (0)</td>
-      <td>2021-11-25</td>
-      <td>18</td>
+      <td>AC Transit (0)</td>
+      <td>2021-11-28</td>
+      <td>128</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>Unitrans (0)</td>
-      <td>2021-11-24</td>
-      <td>18</td>
+      <td>AC Transit (0)</td>
+      <td>2021-11-27</td>
+      <td>128</td>
     </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
 </div>
-<input id="451db7e7-cb89-402d-b7cd-c22c32a71c5d" name="4483671c-6c2b-4b1b-94d6-964fb543390b" type="radio">
-</input><label class="tabbed-label" for="451db7e7-cb89-402d-b7cd-c22c32a71c5d">
+<input id="e1ea2911-362b-4718-bbd6-3a2a33f0942b" name="cbb08558-88cb-4fda-b46c-13e99b5777b7" type="radio">
+</input><label class="tabbed-label" for="e1ea2911-362b-4718-bbd6-3a2a33f0942b">
 siuba</label><div class="tabbed-content docutils">
-<p><strong>Tables Used</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Name</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><strong>views.gtfs_schedule_fact_daily_feed_routes</strong></p></td>
-<td><p>Primary Fact Table</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>views.gtfs_schedule_dim_feeds</strong></p></td>
-<td><p>Secondary Dimensional Table</p></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Important Columns</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Type</p></th>
-<th class="head"><p>Column</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><em>Time</em></p></td>
-<td><p><strong>date</strong></p></td>
-<td><p><em>count</em> by</p></td>
-</tr>
-<tr class="row-odd"><td><p><em>Geography</em></p></td>
-<td><p><strong>route_key</strong></p></td>
-<td><p>The unique identifier for each record</p></td>
-</tr>
-<tr class="row-even"><td><p><em>Agency</em></p></td>
-<td><p><strong>calitp_feed_name</strong></p></td>
-<td><p><em>left_join</em> with table views.<strong>gtfs_schedule_dim_feeds</strong> on variable <strong>feed_key</strong> for <strong>calitp_feed_name</strong> (<em>filter</em> by)</p></td>
-</tr>
-</tbody>
-</table>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Join to get CalITP Feed Names</span>
-<span class="c1"># Count routes by date and CalITP Feed Names, order by date, filter by specific calitp_feed_name</span>
-<span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Allows us to query tables in the warehouse</span>
+<span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbl</span>
+
+<span class="c1"># The data analysis library used</span>
+<span class="kn">from</span> <span class="nn">siuba</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>
+    <span class="c1"># Primary fact table, we need this because it contains route information</span>
+    <span class="c1"># for each agency on each day</span>
     <span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_fact_daily_feed_routes</span><span class="p">()</span>
+
+    <span class="c1"># Enriching with information about feeds from dimensional table</span>
+    <span class="c1"># This will include columns such as calitp_feed_name, etc..</span>
     <span class="o">&gt;&gt;</span> <span class="n">left_join</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_dim_feeds</span><span class="p">(),</span> <span class="s2">&quot;feed_key&quot;</span><span class="p">)</span>
-    <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_feed_name</span> <span class="o">==</span> <span class="s2">&quot;Unitrans (0)&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Filtering for agency, this column comes from the dimensional table above</span>
+    <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_feed_name</span> <span class="o">==</span> <span class="s2">&quot;AC Transit (0)&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Group and count rows by date, effectively counting the number of routes</span>
+    <span class="c1"># for a given agency over time</span>
     <span class="o">&gt;&gt;</span> <span class="n">count</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">date</span><span class="p">)</span>
+
+    <span class="c1"># Sort by date</span>
     <span class="o">&gt;&gt;</span> <span class="n">arrange</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">date</span><span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
@@ -1092,28 +993,28 @@ siuba</label><div class="tabbed-content docutils">
   <tbody>
     <tr>
       <th>0</th>
-      <td>2021-04-15</td>
-      <td>20</td>
+      <td>2021-12-04</td>
+      <td>129</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>2021-04-16</td>
-      <td>20</td>
+      <td>2021-12-05</td>
+      <td>129</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>2021-04-17</td>
-      <td>20</td>
+      <td>2021-12-06</td>
+      <td>129</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>2021-04-18</td>
-      <td>20</td>
+      <td>2021-08-07</td>
+      <td>128</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>2021-04-19</td>
-      <td>20</td>
+      <td>2021-08-08</td>
+      <td>128</td>
     </tr>
   </tbody>
 </table>
@@ -1124,104 +1025,48 @@ siuba</label><div class="tabbed-content docutils">
 </div>
 <div class="section" id="number-of-stops-for-a-given-agency-over-time">
 <span id="stops-agency-time"></span><h3>2. Number of Stops for a Given Agency Over Time<a class="headerlink" href="#number-of-stops-for-a-given-agency-over-time" title="Permalink to this headline">¶</a></h3>
+<p>This example query is very similar to the previous query, except that it substitutes the routes fact table with the stops fact table to count the number of stops an agency has published over time.</p>
 <div class="tabbed-set docutils">
-<input checked="checked" id="fbe52230-fc1f-4a98-bcbf-5a02f45c1416" name="2e80841e-7e78-4463-9131-2577081e0b16" type="radio">
-</input><label class="tabbed-label" for="fbe52230-fc1f-4a98-bcbf-5a02f45c1416">
+<input checked="checked" id="27a69a43-fdc6-4258-97b9-13113b5c631e" name="9ef1b351-0856-4f73-bb91-aa01cc2a3a16" type="radio">
+</input><label class="tabbed-label" for="27a69a43-fdc6-4258-97b9-13113b5c631e">
 Metabase</label><div class="tabbed-content docutils">
-<p><strong>Tables Used</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Name</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><strong>Gtfs Schedule Fact Daily Feed Stops</strong></p></td>
-<td><p>Primary Fact Table</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>Gtfs Schedule Dim Feeds</strong></p></td>
-<td><p>Secondary Dimensional Table</p></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Important Columns</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Type</p></th>
-<th class="head"><p>Column</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><em>Time</em></p></td>
-<td><p><strong>Date</strong></p></td>
-<td><p><em>Count</em> by</p></td>
-</tr>
-<tr class="row-odd"><td><p><em>Geography</em></p></td>
-<td><p><strong>Stop Key</strong></p></td>
-<td><p>The unique identifier for each record, what we effectively <em>COUNT</em> by</p></td>
-</tr>
-<tr class="row-even"><td><p><em>Agency</em></p></td>
-<td><p><strong>Calitp Feed Name</strong></p></td>
-<td><p>Metabase automatically joins with table <strong>Gtfs Schedule Dim Feeds</strong> on variable <strong>Feed Key</strong> to get <strong>Calitp Feed Name</strong> (<em>Filter</em> by)</p></td>
-</tr>
-</tbody>
-</table>
+<p><em>You can view this query in Metabase <a class="reference external" href="https://dashboards.calitp.org/question/216-2-number-of-stops-for-a-given-agency-over-time/notebook">using this link</a></em></p>
 <p><img alt="Collection Matrix" src="../_images/stops_agency_over_time.png" /></p>
 </div>
-<input id="e41c9404-75ea-44ad-b4e9-b124dd9b5dd7" name="2e80841e-7e78-4463-9131-2577081e0b16" type="radio">
-</input><label class="tabbed-label" for="e41c9404-75ea-44ad-b4e9-b124dd9b5dd7">
+<input id="69dc3628-c1f5-4b3c-89b5-5ae1a53b42be" name="9ef1b351-0856-4f73-bb91-aa01cc2a3a16" type="radio">
+</input><label class="tabbed-label" for="69dc3628-c1f5-4b3c-89b5-5ae1a53b42be">
 SQL</label><div class="tabbed-content docutils">
-<p><strong>Tables Used</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Name</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><strong>views.gtfs_schedule_fact_daily_feed_stops</strong></p></td>
-<td><p>Primary Fact Table</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>views.gtfs_schedule_dim_feeds</strong></p></td>
-<td><p>Secondary Dimensional Table</p></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Important Columns</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Type</p></th>
-<th class="head"><p>Column</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><em>Time</em></p></td>
-<td><p><strong>date</strong></p></td>
-<td><p><em>GROUP BY</em></p></td>
-</tr>
-<tr class="row-odd"><td><p><em>Geography</em></p></td>
-<td><p><strong>stop_key</strong></p></td>
-<td><p>The unique identifier for each record, what we effectively <em>COUNT</em> by</p></td>
-</tr>
-<tr class="row-even"><td><p><em>Agency</em></p></td>
-<td><p><strong>calitp_feed_name</strong></p></td>
-<td><p><em>JOIN</em> with table <strong>views.gtfs_schedule_dim_feeds</strong> on variable <strong>feed_key</strong> for <strong>calitp_feed_name</strong> (<em>GROUP BY</em>, isolate with <em>WHERE</em>)</p></td>
-</tr>
-</tbody>
-</table>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span> <span class="k">sql</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Allows us to query SQL in the JupyterLab notebook</span>
+<span class="c1"># Use this in combination with &#39;%%sql&#39;, as seen below</span>
+<span class="kn">import</span> <span class="nn">calitp.magics</span>
+</pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">sql</span>
+
 <span class="k">SELECT</span>
-    <span class="n">calitp_feed_name</span><span class="p">,</span>
-    <span class="nb">date</span><span class="p">,</span>
+    <span class="c1">-- The first two columns are the ones we will group by for the count</span>
+    <span class="n">calitp_feed_name</span><span class="p">,</span>               <span class="c1">-- agency info</span>
+    <span class="nb">date</span><span class="p">,</span>                           <span class="c1">-- time info</span>
+
+    <span class="c1">-- The aggregation itself</span>
     <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">AS</span> <span class="n">count_stops</span>
+
+<span class="c1">-- Primary fact table, we need this because it contains stops information for</span>
+<span class="c1">-- each agency on each day</span>
 <span class="k">FROM</span> <span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_fact_daily_feed_stops</span><span class="o">`</span>
+
+<span class="c1">-- Enriching with information about feeds from dimensional table</span>
+<span class="c1">-- This will include columns such as calitp_feed_name, etc..</span>
 <span class="k">JOIN</span> <span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_dim_feeds</span><span class="o">`</span> <span class="k">USING</span> <span class="p">(</span><span class="n">feed_key</span><span class="p">)</span>
+
+<span class="c1">-- Filtering for agency, this column comes from the dimensional table above</span>
 <span class="k">WHERE</span>
-    <span class="n">calitp_feed_name</span> <span class="o">=</span> <span class="ss">&quot;Unitrans (0)&quot;</span>
+    <span class="n">calitp_feed_name</span> <span class="o">=</span> <span class="ss">&quot;AC Transit (0)&quot;</span>
+
 <span class="k">GROUP</span> <span class="k">BY</span>
+    <span class="c1">-- Note that 1, 2 refer to the first two columns of the select</span>
     <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+
 <span class="k">ORDER</span> <span class="k">BY</span>
     <span class="nb">date</span>
 <span class="k">LIMIT</span> <span class="mi">10</span>
@@ -1255,118 +1100,98 @@ SQL</label><div class="tabbed-content docutils">
   <tbody>
     <tr>
       <th>0</th>
-      <td>Unitrans (0)</td>
+      <td>AC Transit (0)</td>
       <td>2021-04-15</td>
-      <td>298</td>
+      <td>4226</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>Unitrans (0)</td>
+      <td>AC Transit (0)</td>
       <td>2021-04-16</td>
-      <td>298</td>
+      <td>4226</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>Unitrans (0)</td>
+      <td>AC Transit (0)</td>
       <td>2021-04-17</td>
-      <td>298</td>
+      <td>4226</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>Unitrans (0)</td>
+      <td>AC Transit (0)</td>
       <td>2021-04-18</td>
-      <td>298</td>
+      <td>4226</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>Unitrans (0)</td>
+      <td>AC Transit (0)</td>
       <td>2021-04-19</td>
-      <td>298</td>
+      <td>4226</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>Unitrans (0)</td>
+      <td>AC Transit (0)</td>
       <td>2021-04-20</td>
-      <td>298</td>
+      <td>4226</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>Unitrans (0)</td>
+      <td>AC Transit (0)</td>
       <td>2021-04-21</td>
-      <td>298</td>
+      <td>4226</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>Unitrans (0)</td>
+      <td>AC Transit (0)</td>
       <td>2021-04-22</td>
-      <td>298</td>
+      <td>4226</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>Unitrans (0)</td>
+      <td>AC Transit (0)</td>
       <td>2021-04-23</td>
-      <td>298</td>
+      <td>4579</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>Unitrans (0)</td>
+      <td>AC Transit (0)</td>
       <td>2021-04-24</td>
-      <td>298</td>
+      <td>4579</td>
     </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
 </div>
-<input id="0844a777-c979-4de9-825d-4a64d8d429f4" name="2e80841e-7e78-4463-9131-2577081e0b16" type="radio">
-</input><label class="tabbed-label" for="0844a777-c979-4de9-825d-4a64d8d429f4">
+<input id="60e7b667-2a62-448c-80b1-596bc7ddf858" name="9ef1b351-0856-4f73-bb91-aa01cc2a3a16" type="radio">
+</input><label class="tabbed-label" for="60e7b667-2a62-448c-80b1-596bc7ddf858">
 siuba</label><div class="tabbed-content docutils">
-<p><strong>Tables Used</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Name</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><strong>views.gtfs_schedule_fact_daily_feed_stops</strong></p></td>
-<td><p>Primary Fact Table</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>views.gtfs_schedule_dim_feeds</strong></p></td>
-<td><p>Secondary Dimensional Table</p></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Important Columns</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Type</p></th>
-<th class="head"><p>Column</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><em>Time</em></p></td>
-<td><p><strong>date</strong></p></td>
-<td><p><em>count</em> by</p></td>
-</tr>
-<tr class="row-odd"><td><p><em>Geography</em></p></td>
-<td><p><strong>stop_key</strong></p></td>
-<td><p>The unique identifier for each record, what we are effectively counting by</p></td>
-</tr>
-<tr class="row-even"><td><p><em>Agency</em></p></td>
-<td><p><strong>calitp_feed_name</strong></p></td>
-<td><p><em>left_join</em> with table <strong>views.gtfs_schedule_dim_feeds</strong> on variable <strong>feed_key</strong> for <strong>calitp_feed_name</strong> (<em>count</em> by, <em>filter</em>)</p></td>
-</tr>
-</tbody>
-</table>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Allows us to query tables in the warehouse</span>
+<span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbl</span>
+
+<span class="c1"># The data analysis library used</span>
+<span class="kn">from</span> <span class="nn">siuba</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">## Join to get CalITP Feed Names</span>
 <span class="c1">## Count stops by date and CalITP Feed Names, order by date, filter by specific calitp_feed_name</span>
 <span class="p">(</span>
+    <span class="c1"># Primary fact table, we need this because it contains stop information</span>
+    <span class="c1"># for each agency on each day</span>
     <span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_fact_daily_feed_stops</span><span class="p">()</span>
+
+    <span class="c1"># Enriching with information about feeds from dimensional table</span>
+    <span class="c1"># This will include columns such as calitp_feed_name, etc..</span>
     <span class="o">&gt;&gt;</span> <span class="n">left_join</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_dim_feeds</span><span class="p">(),</span> <span class="s2">&quot;feed_key&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Filtering for agency, this column comes from the dimensional table above</span>
+    <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_feed_name</span> <span class="o">==</span> <span class="s2">&quot;AC Transit (0)&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Group and count rows by date and agency, effectively counting the number</span>
+    <span class="c1"># of stops for a given agency over time</span>
     <span class="o">&gt;&gt;</span> <span class="n">count</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">calitp_feed_name</span><span class="p">)</span>
-    <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_feed_name</span> <span class="o">==</span> <span class="s2">&quot;Unitrans (0)&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Sort by date</span>
     <span class="o">&gt;&gt;</span> <span class="n">arrange</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">date</span><span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
@@ -1403,32 +1228,32 @@ siuba</label><div class="tabbed-content docutils">
     <tr>
       <th>0</th>
       <td>2021-04-15</td>
-      <td>Unitrans (0)</td>
-      <td>298</td>
+      <td>AC Transit (0)</td>
+      <td>4226</td>
     </tr>
     <tr>
       <th>1</th>
       <td>2021-04-16</td>
-      <td>Unitrans (0)</td>
-      <td>298</td>
+      <td>AC Transit (0)</td>
+      <td>4226</td>
     </tr>
     <tr>
       <th>2</th>
       <td>2021-04-17</td>
-      <td>Unitrans (0)</td>
-      <td>298</td>
+      <td>AC Transit (0)</td>
+      <td>4226</td>
     </tr>
     <tr>
       <th>3</th>
       <td>2021-04-18</td>
-      <td>Unitrans (0)</td>
-      <td>298</td>
+      <td>AC Transit (0)</td>
+      <td>4226</td>
     </tr>
     <tr>
       <th>4</th>
       <td>2021-04-19</td>
-      <td>Unitrans (0)</td>
-      <td>298</td>
+      <td>AC Transit (0)</td>
+      <td>4226</td>
     </tr>
   </tbody>
 </table>
@@ -1439,119 +1264,55 @@ siuba</label><div class="tabbed-content docutils">
 </div>
 <div class="section" id="number-of-stops-made-across-all-trips-for-an-agency">
 <span id="stops-all-trips"></span><h3>3. Number of Stops Made Across all Trips for an Agency<a class="headerlink" href="#number-of-stops-made-across-all-trips-for-an-agency" title="Permalink to this headline">¶</a></h3>
+<p>Instead of using fact or dimensional tables as in the examples above, this query uses a wide convenience table that was created to aggregate trip stops information from only the most recent feeds extracted. Information for the latest day can be found in this table.</p>
+<p>We use this table to query an agency’s most recent feed published and count the total number of trip stops, as well as the number of distinct trips and stops that compose them.</p>
 <div class="tabbed-set docutils">
-<input checked="checked" id="9ec44612-6fd4-46a0-b88b-01261adde7f9" name="edea61b7-e5d5-45a0-b0c9-9b8f0e61171b" type="radio">
-</input><label class="tabbed-label" for="9ec44612-6fd4-46a0-b88b-01261adde7f9">
+<input checked="checked" id="479512bf-e33a-4171-9007-27f549bdd8b3" name="433b2e51-40a1-4ced-a5ec-1985716693ee" type="radio">
+</input><label class="tabbed-label" for="479512bf-e33a-4171-9007-27f549bdd8b3">
 Metabase</label><div class="tabbed-content docutils">
-<p><strong>Tables Used</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Name</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><strong>Gtfs Schedule Data Feed Trip Stops Latest</strong></p></td>
-<td><p>Primary Fact Table</p></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Important Columns</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Type</p></th>
-<th class="head"><p>Column</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><em>Time</em></p></td>
-<td><p><strong>No column</strong></p></td>
-<td><p>This table only has information for the current day</p></td>
-</tr>
-<tr class="row-odd"><td><p><em>Geography</em></p></td>
-<td><p><strong>Stop Time Key</strong></p></td>
-<td><p>The unique identifier for each record, what we effectively <em>Count</em> by</p></td>
-</tr>
-<tr class="row-even"><td><p><em>Geography</em></p></td>
-<td><p><strong>Trip ID</strong></p></td>
-<td><p>The unique identifier for each trip, counted by <em>Distinct values</em></p></td>
-</tr>
-<tr class="row-odd"><td><p><em>Geography</em></p></td>
-<td><p><strong>Stop ID</strong></p></td>
-<td><p>The unique identifier for each stop, counted by <em>Distinct values</em></p></td>
-</tr>
-<tr class="row-even"><td><p><em>Agency</em></p></td>
-<td><p><strong>Calitp Feed Name</strong></p></td>
-<td><p><em>Filter</em> by</p></td>
-</tr>
-</tbody>
-</table>
 <p><em><strong>Count of Trip Stops Made Across all Trips for an Agency</strong></em></p>
+<p><em>You can view this query in Metabase <a class="reference external" href="https://dashboards.calitp.org/question/224-3a-count-of-trip-stops-made-across-all-trips-for-an-agency/notebook">using this link</a></em></p>
 <p><img alt="Collection Matrix" src="../_images/count_trip_stops.png" /></p>
 <p><em><strong>Distinct Trips in Trip Stops</strong></em></p>
+<p><em>You can view this query in Metabase <a class="reference external" href="https://dashboards.calitp.org/question/225-3b-distinct-trips-in-trip-stops-for-an-agency/notebook">using this link</a></em></p>
 <p><img alt="Collection Matrix" src="../_images/distinct_trips_in_trip_stops.png" /></p>
 <p><em><strong>Distinct Stops in Trip Stops</strong></em></p>
+<p><em>You can view this query in Metabase <a class="reference external" href="https://dashboards.calitp.org/question/226-3c-distinct-stops-in-trip-stops-for-an-agency/notebook">using this link</a></em></p>
 <p><img alt="Collection Matrix" src="../_images/distinct_stops_in_trip_stops.png" /></p>
 </div>
-<input id="6ed14aad-0ed8-47f7-8c52-2e8060f4754d" name="edea61b7-e5d5-45a0-b0c9-9b8f0e61171b" type="radio">
-</input><label class="tabbed-label" for="6ed14aad-0ed8-47f7-8c52-2e8060f4754d">
+<input id="f983280a-0159-4bc6-816b-e7e56e04de30" name="433b2e51-40a1-4ced-a5ec-1985716693ee" type="radio">
+</input><label class="tabbed-label" for="f983280a-0159-4bc6-816b-e7e56e04de30">
 SQL</label><div class="tabbed-content docutils">
-<p><strong>Tables Used</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Name</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><strong>views.gtfs_schedule_data_feed_trip_stops_latest</strong></p></td>
-<td><p>Primary Fact Table</p></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Important Columns</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Type</p></th>
-<th class="head"><p>Column</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><em>Time</em></p></td>
-<td><p><strong>No variable</strong></p></td>
-<td><p>This table only has information for the current day</p></td>
-</tr>
-<tr class="row-odd"><td><p><em>Geography</em></p></td>
-<td><p><strong>stop_time_key</strong></p></td>
-<td><p>The unique identifier for each record, what we effectively <em>COUNT</em> by</p></td>
-</tr>
-<tr class="row-even"><td><p><em>Geography</em></p></td>
-<td><p><strong>trip_id</strong></p></td>
-<td><p>The unique identifier for each trip, used to <em>COUNT</em> <em>DISTINCT</em></p></td>
-</tr>
-<tr class="row-odd"><td><p><em>Geography</em></p></td>
-<td><p><strong>stop_id</strong></p></td>
-<td><p>The unique identifier for each stop, used to <em>COUNT</em> <em>DISTINCT</em></p></td>
-</tr>
-<tr class="row-even"><td><p><em>Agency</em></p></td>
-<td><p><strong>calitp_feed_name</strong></p></td>
-<td><p><em>GROUP BY</em>, isolate with <em>WHERE</em></p></td>
-</tr>
-</tbody>
-</table>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Allows us to query SQL in the JupyterLab notebook</span>
+<span class="c1"># Use this in combination with &#39;%%sql&#39;, as seen below</span>
+<span class="kn">import</span> <span class="nn">calitp.magics</span>
+</pre></div>
+</div>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">sql</span>
+
 <span class="k">SELECT</span>
-    <span class="n">calitp_feed_name</span><span class="p">,</span>
+    <span class="c1">-- The first column is what we will group by</span>
+    <span class="n">calitp_feed_name</span><span class="p">,</span>               <span class="c1">-- agency info</span>
+
+    <span class="c1">-- Counting the total number of trip stops</span>
     <span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">AS</span> <span class="n">n_trip_stops</span><span class="p">,</span>
+    <span class="c1">-- Counting the number of unique trips</span>
     <span class="k">COUNT</span><span class="p">(</span><span class="k">DISTINCT</span><span class="p">(</span><span class="n">trip_id</span><span class="p">))</span> <span class="k">AS</span> <span class="n">n_trips</span><span class="p">,</span>
+    <span class="c1">-- Counting the number of unique stops</span>
     <span class="k">COUNT</span><span class="p">(</span><span class="k">DISTINCT</span><span class="p">(</span><span class="n">stop_id</span><span class="p">))</span> <span class="k">AS</span> <span class="n">n_stops</span>
+
+<span class="c1">-- Primary fact table, we need this because it contains trip stop information</span>
+<span class="c1">-- for each agency on each day in the latest feed</span>
 <span class="k">FROM</span> <span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_data_feed_trip_stops_latest</span><span class="o">`</span>
+
+<span class="c1">-- Filtering for each agency</span>
 <span class="k">WHERE</span>
-    <span class="n">calitp_feed_name</span> <span class="o">=</span> <span class="ss">&quot;Unitrans (0)&quot;</span>
+    <span class="n">calitp_feed_name</span> <span class="o">=</span> <span class="ss">&quot;AC Transit (0)&quot;</span>
+
+<span class="c1">-- The column we need to group by</span>
 <span class="k">GROUP</span> <span class="k">BY</span>
     <span class="n">calitp_feed_name</span>
+
 <span class="k">LIMIT</span> <span class="mi">10</span>
 </pre></div>
 </div>
@@ -1584,66 +1345,36 @@ SQL</label><div class="tabbed-content docutils">
   <tbody>
     <tr>
       <th>0</th>
-      <td>Unitrans (0)</td>
-      <td>33400</td>
-      <td>2354</td>
-      <td>275</td>
+      <td>AC Transit (0)</td>
+      <td>588083</td>
+      <td>13677</td>
+      <td>4730</td>
     </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
 </div>
-<input id="7f338e77-67af-4df1-b7b9-d72181db690d" name="edea61b7-e5d5-45a0-b0c9-9b8f0e61171b" type="radio">
-</input><label class="tabbed-label" for="7f338e77-67af-4df1-b7b9-d72181db690d">
+<input id="75f28ea5-5e95-493a-b024-25f35fb7fe45" name="433b2e51-40a1-4ced-a5ec-1985716693ee" type="radio">
+</input><label class="tabbed-label" for="75f28ea5-5e95-493a-b024-25f35fb7fe45">
 siuba</label><div class="tabbed-content docutils">
-<p><strong>Tables Used</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Name</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><strong>views.gtfs_schedule_data_feed_trip_stops_latest</strong></p></td>
-<td><p>Primary Fact Table</p></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Important Columns</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Type</p></th>
-<th class="head"><p>Column</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><em>Time</em></p></td>
-<td><p><strong>No variable</strong></p></td>
-<td><p>This table only has information for the current day</p></td>
-</tr>
-<tr class="row-odd"><td><p><em>Geography</em></p></td>
-<td><p><strong>stop_time_key</strong></p></td>
-<td><p>The unique identifier for each record, what we are effectively counting by</p></td>
-</tr>
-<tr class="row-even"><td><p><em>Geography</em></p></td>
-<td><p><strong>trip_id</strong></p></td>
-<td><p>The unique identifier for each trip, summarized by <em>.size()</em> and <em>.nunique()</em></p></td>
-</tr>
-<tr class="row-odd"><td><p><em>Geography</em></p></td>
-<td><p><strong>stop_id</strong></p></td>
-<td><p>The unique identifier for each stop, summarized by <em>.nunique()</em></p></td>
-</tr>
-<tr class="row-even"><td><p><em>Agency</em></p></td>
-<td><p><strong>calitp_feed_name</strong></p></td>
-<td><p><em>filter</em>)</p></td>
-</tr>
-</tbody>
-</table>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Allows us to query tables in the warehouse</span>
+<span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbl</span>
+
+<span class="c1"># The data analysis library used</span>
+<span class="kn">from</span> <span class="nn">siuba</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>
+    <span class="c1"># Primary fact table, we need this because it contains trip stop information</span>
+    <span class="c1"># for each agency on each day in the latest feed</span>
     <span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_data_feed_trip_stops_latest</span><span class="p">()</span>
-    <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_feed_name</span> <span class="o">==</span> <span class="s2">&quot;Unitrans (0)&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Filtering for agency</span>
+    <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_feed_name</span> <span class="o">==</span> <span class="s2">&quot;AC Transit (0)&quot;</span><span class="p">)</span>
+
+    <span class="c1"># using siuba and pandas to determine number of unique trips, number of</span>
+    <span class="c1"># unique stops, and the total number of trip stops</span>
     <span class="o">&gt;&gt;</span> <span class="n">summarize</span><span class="p">(</span>
         <span class="n">n_trips</span><span class="o">=</span><span class="n">_</span><span class="o">.</span><span class="n">trip_id</span><span class="o">.</span><span class="n">nunique</span><span class="p">(),</span> <span class="n">n_stops</span><span class="o">=</span><span class="n">_</span><span class="o">.</span><span class="n">stop_id</span><span class="o">.</span><span class="n">nunique</span><span class="p">(),</span> <span class="n">n</span><span class="o">=</span><span class="n">_</span><span class="o">.</span><span class="n">trip_id</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
     <span class="p">)</span>
@@ -1681,9 +1412,9 @@ siuba</label><div class="tabbed-content docutils">
   <tbody>
     <tr>
       <th>0</th>
-      <td>2354</td>
-      <td>275</td>
-      <td>33400</td>
+      <td>13677</td>
+      <td>4730</td>
+      <td>588083</td>
     </tr>
   </tbody>
 </table>
@@ -1694,126 +1425,43 @@ siuba</label><div class="tabbed-content docutils">
 </div>
 <div class="section" id="for-a-given-agency-on-each-day-days-until-the-feed-expires">
 <span id="days-feed-expires"></span><h3>4. For a Given Agency, on Each Day, Days Until the Feed Expires<a class="headerlink" href="#for-a-given-agency-on-each-day-days-until-the-feed-expires" title="Permalink to this headline">¶</a></h3>
+<p>This query uses a fact table as we did in queries one and two. However, instead of counting we pull out previously calculated table columns as important pieces of information.</p>
 <div class="tabbed-set docutils">
-<input checked="checked" id="8f5ee9ab-aa4e-4a5d-b46f-0b75486236d9" name="033157b5-239a-4b5b-994b-40ef84ee2b0c" type="radio">
-</input><label class="tabbed-label" for="8f5ee9ab-aa4e-4a5d-b46f-0b75486236d9">
+<input checked="checked" id="b3dc87ec-d7c4-4b38-8a50-76b76efbfde6" name="e2e5589c-05e7-41f1-88ec-de1d53ab2a7a" type="radio">
+</input><label class="tabbed-label" for="b3dc87ec-d7c4-4b38-8a50-76b76efbfde6">
 Metabase</label><div class="tabbed-content docutils">
-<p><strong>Tables Used</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Name</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><strong>Gtfs Schedule Fact Daily Feeds</strong></p></td>
-<td><p>Primary Fact Table</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>Gtfs Schedule Dim Feeds</strong></p></td>
-<td><p>Secondary Dimensional Table</p></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Important Columns</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Type</p></th>
-<th class="head"><p>Column</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><em>Time</em></p></td>
-<td><p><strong>Date</strong></p></td>
-<td><p>The date that we are looking to learn more about, to <em>Filter</em> by</p></td>
-</tr>
-<tr class="row-odd"><td><p><em>Time</em></p></td>
-<td><p><strong>Feed End Date</strong></p></td>
-<td><p>The date that the particular feed expires</p></td>
-</tr>
-<tr class="row-even"><td><p><em>Measure</em></p></td>
-<td><p><strong>Days Until Feed End Date</strong></p></td>
-<td><p>The value we are trying to find for the particular date</p></td>
-</tr>
-<tr class="row-odd"><td><p><em>Agency</em></p></td>
-<td><p><strong>Calitp Feed Name</strong></p></td>
-<td><p><em>Join data</em> with table <strong>Gtfs Schedule Dim Feeds</strong> on variable <strong>Feed Key</strong> to get variables <strong>Calitp Feed Name</strong> (<em>Filter</em> by) and <strong>Feed End Date</strong></p></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Columns to Select (pulled out in image below):</strong></p>
-<ul class="simple">
-<li><p>Table <strong>Gtfs Schedule Fact Daily Feeds</strong></p>
-<ul>
-<li><p>Date</p></li>
-<li><p>Days Until Feed End Date</p></li>
-</ul>
-</li>
-<li><p>Table <strong>Gtfs Schedule Dim Feeds</strong></p>
-<ul>
-<li><p>Calitp Feed Name</p></li>
-<li><p>Feed End Date</p></li>
-</ul>
-</li>
-</ul>
+<p><em>You can view this query in Metabase <a class="reference external" href="https://dashboards.calitp.org/question/227-4-for-a-given-agency-on-each-day-days-until-the-feed-expires/notebook">using this link</a></em></p>
 <p><img alt="Collection Matrix" src="../_images/days_until_agency_feed_expires.png" /></p>
 </div>
-<input id="82b83919-49e7-4952-9692-faca0f9d178e" name="033157b5-239a-4b5b-994b-40ef84ee2b0c" type="radio">
-</input><label class="tabbed-label" for="82b83919-49e7-4952-9692-faca0f9d178e">
+<input id="8c1eb567-bdce-43be-ad19-574923f51bea" name="e2e5589c-05e7-41f1-88ec-de1d53ab2a7a" type="radio">
+</input><label class="tabbed-label" for="8c1eb567-bdce-43be-ad19-574923f51bea">
 SQL</label><div class="tabbed-content docutils">
-<p><strong>Tables Used</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Name</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><strong>views.gtfs_schedule_fact_daily_feeds</strong></p></td>
-<td><p>Primary Fact Table</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>views.gtfs_schedule_dim_feeds</strong></p></td>
-<td><p>Secondary Dimensional Table</p></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Important Columns</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Type</p></th>
-<th class="head"><p>Column</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><em>Time</em></p></td>
-<td><p><strong>date</strong></p></td>
-<td><p>The date that we are looking to learn more about, to isolate with <em>WHERE</em></p></td>
-</tr>
-<tr class="row-odd"><td><p><em>Time</em></p></td>
-<td><p><strong>feed_end_date</strong></p></td>
-<td><p>The date that the particular feed expires</p></td>
-</tr>
-<tr class="row-even"><td><p><em>Measure</em></p></td>
-<td><p><strong>days_until_feed_end_date</strong></p></td>
-<td><p>The value we are trying to find for the particular date</p></td>
-</tr>
-<tr class="row-odd"><td><p><em>Agency</em></p></td>
-<td><p><strong>calitp_feed_name</strong></p></td>
-<td><p><em>JOIN</em> with table <strong>views.gtfs_schedule_dim_feeds</strong> on variable <strong>feed_key</strong> to get variables <strong>calitp_feed_name</strong> (isolated with <em>WHERE</em>) and <strong>feed_end_date</strong></p></td>
-</tr>
-</tbody>
-</table>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Allows us to query SQL in the JupyterLab notebook</span>
+<span class="c1"># Use this in combination with &#39;%%sql&#39;, as seen below</span>
+<span class="kn">import</span> <span class="nn">calitp.magics</span>
+</pre></div>
+</div>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">sql</span>
+
 <span class="k">SELECT</span>
-    <span class="n">calitp_feed_name</span><span class="p">,</span>
-    <span class="nb">date</span><span class="p">,</span>
-    <span class="n">days_until_feed_end_date</span><span class="p">,</span>
-    <span class="n">feed_end_date</span>
+    <span class="n">calitp_feed_name</span><span class="p">,</span>               <span class="c1">-- agency info</span>
+    <span class="nb">date</span><span class="p">,</span>                           <span class="c1">-- time info</span>
+    <span class="n">days_until_feed_end_date</span><span class="p">,</span>       <span class="c1">-- time until feed expires, for a given day</span>
+    <span class="n">feed_end_date</span>                   <span class="c1">-- the day the feed expires</span>
+
+<span class="c1">-- Primary fact table, we need this because it contains information on</span>
+<span class="c1">-- agency feeds</span>
 <span class="k">FROM</span> <span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_fact_daily_feeds</span>
+
+<span class="c1">-- Enriching with information about feeds from dimensional table</span>
+<span class="c1">-- This will include columns such as calitp_feed_name, etc..</span>
 <span class="k">JOIN</span> <span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_dim_feeds</span> <span class="k">USING</span> <span class="p">(</span><span class="n">feed_key</span><span class="p">)</span>
+
+<span class="c1">-- Filtering for our particular day and agency</span>
+<span class="c1">-- The agency info column comes from the dimensional table above</span>
 <span class="k">WHERE</span>
-    <span class="nb">date</span> <span class="o">=</span> <span class="ss">&quot;2021-09-01&quot;</span> <span class="k">AND</span> <span class="n">calitp_feed_name</span> <span class="o">=</span> <span class="ss">&quot;Unitrans (0)&quot;</span>
+    <span class="nb">date</span> <span class="o">=</span> <span class="ss">&quot;2021-09-01&quot;</span> <span class="k">AND</span> <span class="n">calitp_feed_name</span> <span class="o">=</span> <span class="ss">&quot;AC Transit (0)&quot;</span>
+
 <span class="k">LIMIT</span> <span class="mi">10</span>
 </pre></div>
 </div>
@@ -1846,67 +1494,40 @@ SQL</label><div class="tabbed-content docutils">
   <tbody>
     <tr>
       <th>0</th>
-      <td>Unitrans (0)</td>
+      <td>AC Transit (0)</td>
       <td>2021-09-01</td>
-      <td>20</td>
-      <td>2021-09-21</td>
+      <td>108</td>
+      <td>2021-12-18</td>
     </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
 </div>
-<input id="875aa703-9f1c-4836-a20c-becdac000884" name="033157b5-239a-4b5b-994b-40ef84ee2b0c" type="radio">
-</input><label class="tabbed-label" for="875aa703-9f1c-4836-a20c-becdac000884">
+<input id="9c841443-4d76-4e4f-9f36-573557c46c36" name="e2e5589c-05e7-41f1-88ec-de1d53ab2a7a" type="radio">
+</input><label class="tabbed-label" for="9c841443-4d76-4e4f-9f36-573557c46c36">
 siuba</label><div class="tabbed-content docutils">
-<p><strong>Tables Used</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Name</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><strong>views.gtfs_schedule_fact_daily_feeds</strong></p></td>
-<td><p>Primary Fact Table</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>views.gtfs_schedule_dim_feeds</strong></p></td>
-<td><p>Secondary Dimensional Table</p></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Important Columns</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Type</p></th>
-<th class="head"><p>Column</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><em>Time</em></p></td>
-<td><p><strong>date</strong></p></td>
-<td><p><em>select</em>, <em>filter</em> by</p></td>
-</tr>
-<tr class="row-odd"><td><p><em>Time</em></p></td>
-<td><p><strong>feed_end_date</strong></p></td>
-<td><p>The date that the particular feed expires, to <em>select</em></p></td>
-</tr>
-<tr class="row-even"><td><p><em>Measure</em></p></td>
-<td><p><strong>days_until_feed_end_date</strong></p></td>
-<td><p>The value we are trying to find for the particular date, to <em>select</em></p></td>
-</tr>
-<tr class="row-odd"><td><p><em>Agency</em></p></td>
-<td><p><strong>calitp_feed_name</strong></p></td>
-<td><p><em>left_join</em> with table <strong>views.gtfs_schedule_dim_feeds</strong> on variable <strong>feed_key</strong> for <strong>calitp_feed_name</strong>, to <em>select</em> and <em>filter</em> by</p></td>
-</tr>
-</tbody>
-</table>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Allows us to query tables in the warehouse</span>
+<span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbl</span>
+
+<span class="c1"># The data analysis library used</span>
+<span class="kn">from</span> <span class="nn">siuba</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>
+    <span class="c1"># Primary fact table, we need this because it contains information on</span>
+    <span class="c1"># agency feeds</span>
     <span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_fact_daily_feeds</span><span class="p">()</span>
+
+    <span class="c1"># Enriching with information about feeds from dimensional table</span>
+    <span class="c1"># This will include columns such as calitp_feed_name, etc..</span>
     <span class="o">&gt;&gt;</span> <span class="n">left_join</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_dim_feeds</span><span class="p">(),</span> <span class="s2">&quot;feed_key&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Keeping the columns that we need for this query</span>
     <span class="o">&gt;&gt;</span> <span class="n">select</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_feed_name</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">date</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">days_until_feed_end_date</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">feed_end_date</span><span class="p">)</span>
-    <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">date</span> <span class="o">==</span> <span class="s2">&quot;2021-09-01&quot;</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">calitp_feed_name</span> <span class="o">==</span> <span class="s2">&quot;Unitrans (0)&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Filtering for our particular day and agency</span>
+    <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">date</span> <span class="o">==</span> <span class="s2">&quot;2021-09-01&quot;</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">calitp_feed_name</span> <span class="o">==</span> <span class="s2">&quot;AC Transit (0)&quot;</span><span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -1942,10 +1563,10 @@ siuba</label><div class="tabbed-content docutils">
   <tbody>
     <tr>
       <th>0</th>
-      <td>Unitrans (0)</td>
+      <td>AC Transit (0)</td>
       <td>2021-09-01</td>
-      <td>20</td>
-      <td>2021-09-21</td>
+      <td>108</td>
+      <td>2021-12-18</td>
     </tr>
   </tbody>
 </table>
@@ -1956,117 +1577,63 @@ siuba</label><div class="tabbed-content docutils">
 </div>
 <div class="section" id="find-the-trip-with-the-most-number-of-stops-per-agency">
 <span id="max-number-stops"></span><h3>5. Find the Trip With the Most Number of Stops, Per Agency<a class="headerlink" href="#find-the-trip-with-the-most-number-of-stops-per-agency" title="Permalink to this headline">¶</a></h3>
+<p>Similar to the third query, this example uses the same wide convenience table. We use this table here to determine the trip that contains the most number of stops in the latest feed, by agency.</p>
 <div class="tabbed-set docutils">
-<input checked="checked" id="e79519f6-f4e8-4c5c-abc3-f7985e90d5e4" name="b4559d2f-a8f1-4af4-a6b3-18c1339047ab" type="radio">
-</input><label class="tabbed-label" for="e79519f6-f4e8-4c5c-abc3-f7985e90d5e4">
+<input checked="checked" id="2306ffec-c4e6-4867-bd76-f14ab1298767" name="694ef8a9-138b-4683-9146-aa021cfeaf2a" type="radio">
+</input><label class="tabbed-label" for="2306ffec-c4e6-4867-bd76-f14ab1298767">
 Metabase</label><div class="tabbed-content docutils">
-<p><strong>Tables Used</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Name</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><strong>Gtfs Schedule Data Feed Trip Stops Latest</strong></p></td>
-<td><p>Primary Fact Table</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>Gtfs Schedule Dim Feeds</strong></p></td>
-<td><p>Secondary Dimensional Table</p></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Important Columns</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Type</p></th>
-<th class="head"><p>Column</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><em>Time</em></p></td>
-<td><p><strong>No variable</strong></p></td>
-<td><p>We’re finding the <em>Max</em> across all days (using <em>Summarize</em> -&gt; <em>Max of Count</em>)</p></td>
-</tr>
-<tr class="row-odd"><td><p><em>Geography</em></p></td>
-<td><p><strong>Trip ID</strong></p></td>
-<td><p>The unique identifier for each record, to <em>Summarize</em> -&gt; <em>Count</em> by</p></td>
-</tr>
-<tr class="row-even"><td><p><em>Agency</em></p></td>
-<td><p><strong>Calitp Feed Name</strong></p></td>
-<td><p>Metabase automatically joins with table <strong>Gtfs Schedule Dim Feeds</strong> on variable <strong>Feed Key</strong> to get <strong>Calitp Feed Name</strong>, to <em>Summarize</em> -&gt; <em>Count</em> by</p></td>
-</tr>
-</tbody>
-</table>
-<p><img alt="Collection Matrix" src="../_images/max_stops_per_trip_by_agency.png" /></p>
+<p><em>You can view this query in Metabase <a class="reference external" href="https://dashboards.calitp.org/question/223-5-find-the-trip-with-the-most-number-of-stops-per-agency/notebook">using this link</a></em></p>
+<p><img alt="Collection Matrix" src="../_images/most_stops_per_trip_by_agency.png" /></p>
 </div>
-<input id="c52c1646-ff88-4dbf-b801-2442d1d6d5c3" name="b4559d2f-a8f1-4af4-a6b3-18c1339047ab" type="radio">
-</input><label class="tabbed-label" for="c52c1646-ff88-4dbf-b801-2442d1d6d5c3">
+<input id="c7dc5a7b-d936-4134-905f-ebb4c12bde21" name="694ef8a9-138b-4683-9146-aa021cfeaf2a" type="radio">
+</input><label class="tabbed-label" for="c7dc5a7b-d936-4134-905f-ebb4c12bde21">
 SQL</label><div class="tabbed-content docutils">
-<p><strong>Tables Used</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Name</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><strong>views.gtfs_schedule_data_feed_trip_stops_latest</strong></p></td>
-<td><p>Primary Fact Table</p></td>
-</tr>
-<tr class="row-odd"><td><p><strong>views.gtfs_schedule_dim_feeds</strong></p></td>
-<td><p>Secondary Dimensional Table</p></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Important Columns</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Type</p></th>
-<th class="head"><p>Column</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><em>Time</em></p></td>
-<td><p><strong>No variable</strong></p></td>
-<td><p>We’re finding the <em>MAX</em> across all days</p></td>
-</tr>
-<tr class="row-odd"><td><p><em>Geography</em></p></td>
-<td><p><strong>trip_id</strong></p></td>
-<td><p>The unique identifier for each record, what we effectively <em>COUNT</em> by</p></td>
-</tr>
-<tr class="row-even"><td><p><em>Agency</em></p></td>
-<td><p><strong>calitp_feed_name</strong></p></td>
-<td><p>The primary agency identifier, used with <em>GROUP BY</em>, isolated with <em>WHERE</em></p></td>
-</tr>
-</tbody>
-</table>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Allows us to query SQL in the JupyterLab notebook</span>
+<span class="c1"># Use this in combination with &#39;%%sql&#39;, as seen below</span>
+<span class="kn">import</span> <span class="nn">calitp.magics</span>
+</pre></div>
+</div>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">sql</span>
+
+<span class="c1">-- Using a WITH clause to create a sub-query counting the number of stops each</span>
+<span class="c1">-- trip in each feed makes, to be referenced later in the query</span>
 <span class="k">WITH</span>
 
+<span class="c1">-- The name of the sub-query block to be referenced later</span>
 <span class="n">counting_stop_times</span> <span class="k">AS</span> <span class="p">(</span>
 
-    <span class="c1">-- count the number of stops each trip in each feed makes</span>
     <span class="k">SELECT</span>
-        <span class="n">trip_id</span><span class="p">,</span>
-        <span class="n">calitp_feed_name</span><span class="p">,</span>
+        <span class="c1">-- The first two columns are the ones we will group by for the count</span>
+        <span class="n">trip_id</span><span class="p">,</span>                        <span class="c1">-- unique trip identifier</span>
+        <span class="n">calitp_feed_name</span><span class="p">,</span>               <span class="c1">-- agency info</span>
+
+        <span class="c1">-- The aggregation itself</span>
         <span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">AS</span> <span class="n">n_trip_stop_times</span>
+
+    <span class="c1">-- Primary fact table, we need this because it contains trip stop</span>
+    <span class="c1">-- information for each agency on each day in the latest feed</span>
     <span class="k">FROM</span> <span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_data_feed_trip_stops_latest</span><span class="o">`</span>
+
+    <span class="c1">-- Note that 1, 2 refer to the first two columns of the select</span>
     <span class="k">GROUP</span> <span class="k">BY</span>
         <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
 <span class="p">)</span>
 
-<span class="c1">-- calculate the max number of stops made by a feed&#39;s trip</span>
-<span class="c1">-- we filter to keep only the Unitrans feed for this example</span>
 <span class="k">SELECT</span>
-    <span class="n">calitp_feed_name</span><span class="p">,</span>
-    <span class="k">MAX</span><span class="p">(</span><span class="n">n_trip_stop_times</span><span class="p">)</span> <span class="k">AS</span> <span class="n">max_n_trip_stop_times</span>
+    <span class="c1">-- The first columns is the one we will group by for the count</span>
+    <span class="c1">-- These columns come from the sub-query above</span>
+    <span class="n">calitp_feed_name</span><span class="p">,</span>               <span class="c1">-- agency info</span>
+    <span class="k">MAX</span><span class="p">(</span><span class="n">n_trip_stop_times</span><span class="p">)</span> <span class="k">AS</span> <span class="n">max_n_trip_stop_times</span> <span class="c1">-- trip with most stops</span>
+
+<span class="c1">-- The sub-query block we created above</span>
 <span class="k">FROM</span>
     <span class="n">counting_stop_times</span>
+
+<span class="c1">-- Filtering for agency</span>
 <span class="k">WHERE</span>
-     <span class="n">calitp_feed_name</span> <span class="o">=</span> <span class="ss">&quot;Unitrans (0)&quot;</span>
+     <span class="n">calitp_feed_name</span> <span class="o">=</span> <span class="ss">&quot;AC Transit (0)&quot;</span>
+
+<span class="c1">-- The column we need to group by</span>
 <span class="k">GROUP</span> <span class="k">BY</span>
     <span class="n">calitp_feed_name</span>
 <span class="k">LIMIT</span> <span class="mi">10</span>
@@ -2099,57 +1666,37 @@ SQL</label><div class="tabbed-content docutils">
   <tbody>
     <tr>
       <th>0</th>
-      <td>Unitrans (0)</td>
-      <td>43</td>
+      <td>AC Transit (0)</td>
+      <td>92</td>
     </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
 </div>
-<input id="79190811-dc50-45fb-a3f4-aa5a2abb0fb9" name="b4559d2f-a8f1-4af4-a6b3-18c1339047ab" type="radio">
-</input><label class="tabbed-label" for="79190811-dc50-45fb-a3f4-aa5a2abb0fb9">
+<input id="e1d0be7c-6a5e-414e-9bd5-9d92dc488cc0" name="694ef8a9-138b-4683-9146-aa021cfeaf2a" type="radio">
+</input><label class="tabbed-label" for="e1d0be7c-6a5e-414e-9bd5-9d92dc488cc0">
 siuba</label><div class="tabbed-content docutils">
-<p><strong>Tables Used</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Name</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><strong>views.gtfs_schedule_data_feed_trip_stops_latest</strong></p></td>
-<td><p>Primary Fact Table</p></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Important Columns</strong></p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Type</p></th>
-<th class="head"><p>Column</p></th>
-<th class="head"><p>Use</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><em>Time</em></p></td>
-<td><p><strong>No variable</strong></p></td>
-<td><p>We’re using <em>summarize</em> to find the <em>.max()</em> across all days</p></td>
-</tr>
-<tr class="row-odd"><td><p><em>Geography</em></p></td>
-<td><p><strong>trip_id</strong></p></td>
-<td><p>The unique identifier for each record, what we <em>count</em> by</p></td>
-</tr>
-<tr class="row-even"><td><p><em>Agency</em></p></td>
-<td><p><strong>calitp_feed_name</strong></p></td>
-<td><p>The primary agency identifier, what we <em>count</em> and <em>filter</em> by</p></td>
-</tr>
-</tbody>
-</table>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Allows us to query tables in the warehouse</span>
+<span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbl</span>
+
+<span class="c1"># The data analysis library used</span>
+<span class="kn">from</span> <span class="nn">siuba</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>
+    <span class="c1"># Primary fact table, we need this because it contains trip stop information</span>
+    <span class="c1"># for each agency on each day in the latest feed</span>
     <span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_data_feed_trip_stops_latest</span><span class="p">()</span>
+
+    <span class="c1"># Group and count rows by trip ID and agency, effectively counting the</span>
+    <span class="c1"># number of stops for a given trip by agency in the latest feed</span>
     <span class="o">&gt;&gt;</span> <span class="n">count</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">trip_id</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">calitp_feed_name</span><span class="p">)</span>
-    <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_feed_name</span> <span class="o">==</span> <span class="s2">&quot;Unitrans (0)&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Filtering for agency</span>
+    <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_feed_name</span> <span class="o">==</span> <span class="s2">&quot;AC Transit (0)&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Find the trip with the largest number of stops</span>
     <span class="o">&gt;&gt;</span> <span class="n">summarize</span><span class="p">(</span><span class="n">n_max</span><span class="o">=</span><span class="n">_</span><span class="o">.</span><span class="n">n</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
 <span class="p">)</span>
 </pre></div>
@@ -2183,7 +1730,7 @@ siuba</label><div class="tabbed-content docutils">
   <tbody>
     <tr>
       <th>0</th>
-      <td>43</td>
+      <td>92</td>
     </tr>
   </tbody>
 </table>
