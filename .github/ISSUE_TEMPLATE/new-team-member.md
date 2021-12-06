@@ -6,17 +6,16 @@ labels: 'new team member'
 assignees: charlie-costanzo
 
 ---
+Name:
+Role:
+Reports to:
 
-Name:  
-Role:  
-Reports to:  
-
-Google Workspace Email Address:  
-GitHub Username:  
-Slack Username:  
+Google Workspace Email Address:
+GitHub Username:
+Slack Username:
 
 **Set-up:**
-- [ ] Technical Onboarding Call Scheduled
+- [ ] Technical Onboarding call scheduled
 
 - [ ] Added to tools:
   - [ ] Github
@@ -29,7 +28,7 @@ Slack Username:
   - [ ] Daily Stand-ups
   - [ ] Lunch n' Learn
 
-- [ ] Added to Slack channels: 
+- [ ] Added to Slack channels:
   - [ ] #data-analyses
   - [ ] #data-office-hours
   - [ ] #lunch-n-learn
