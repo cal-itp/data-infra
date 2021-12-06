@@ -1,3 +1,4 @@
+(how-we-work)=
 # How We Work (WIP)
 ## Team Meetings
 The section below outlines our team's primary meetings and their purposes, as well as our our team's shared meeting standards.
