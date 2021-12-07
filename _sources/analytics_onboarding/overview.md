@@ -19,8 +19,9 @@
 
 **Dashboards & Notebooks:**
 
-- [ ]  [**Metabase**](https://dashboards.calitp.org/) - Dashboards and Business Insights | ([Docs](metabase))
-- [ ]  [**JupyterHub**](https://hubtest.k8s.calitp.jarv.us/) - Cloud-based notebooks | ([Docs](jupyterhub))
+- [ ]  [**Metabase**](https://dashboards.calitp.org/) - Business Insights & Dashboards | ([Docs](metabase))
+- [ ]  [**JupyterHub**](https://hubtest.k8s.calitp.jarv.us/) - Cloud-based notebooks for querying  Python, SQL, R | ([Docs](jupyterhub))
+- [ ]  [**BigQuery**](https://console.cloud.google.com/bigquery) - Convenient way to view the data warehouse
 
 **Python Libraries:**
 

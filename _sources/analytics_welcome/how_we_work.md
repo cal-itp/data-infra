@@ -7,9 +7,10 @@ The section below outlines our team's primary meetings and their purposes, as we
 **New analysts**, look out for these meetings to be added to your calendar.
 | Name | Cadence | Description |
 | -------- | -------- | -------- |
-| Technical Onboarding | Week 1 <br/> 1 Hour | To ensure access to tools and go over best practices. |
+| Technical Onboarding | Week 1 <br/> 40 Mins | To ensure access to tools and go over best practices. |
 | Data Services All-Hands | Mondays <br/> 1 Hour | A team-wide data services sync. |
 | Analyst Stand-ups | Tues-Fri <br/> 15 Mins | A short sync to share yesterdays work, today's work, and any blockers. |
+| Lunch n' Learn | Tuesdays <br/> 1 Hour | A weekly opportunity to cover a specific topic, learn something new, and gain visibility into projects and across teams. |
 ### Meeting Standards
 #### Agendas
 #### Daily Stand-ups
@@ -21,7 +22,7 @@ The section below outlines our team's primary meetings and their purposes, as we
 | -------- | -------- | -------- |
 | #data-analysis | Discussion | For sharing and collaborating on Cal-ITP data analyses. |
 | #data-office-hours | Discussion | A place to bring questions, issues, and observations for team discussion. |
-| #data-analysis-notify | Notifications | A notifications channel for updates to the data-analyses repo. |
+| #lunch-n-learn | Discussion | A channel for discussions around our weekly Lunch n' Learns. |
 
 ## Collaboration Tools
 
@@ -29,8 +30,6 @@ The section below outlines our team's primary meetings and their purposes, as we
 ### GitHub Analytics Project Board
 **You can access The Analytics Project Board [using this link](https://github.com/cal-itp/data-infra/projects/6)**.
 #### How We Track Work
-
-##### Who should use the board?
 
 ##### Screencast - Navigating the Board
 The screencast below introduces:
@@ -59,6 +58,7 @@ The screencast below introduces:
 A place for sharing quick reports, and works in progress
 * Clone the repository: `git clone https://github.com/cal-itp/[REPO_NAME].git`
 * Make a new folder and code your analyses in it.
+(personal-access-token)=
 * Make new branches or push directly to the main branch.
     * Create a [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) (PAT) to successfully push to `origin/main`
     * When pushing a commit to `origin`, use your PAT, instead of your password.
