@@ -7,7 +7,7 @@
 /services                               @lottspot
 
 # project documentation
-/docs                                   @charlie-costanzo
+/docs                                   @charlie-costanzo @holly-g
 
 # payments data
 /airflow/dags/payments*/*               @mjumbewu @evansiroky
