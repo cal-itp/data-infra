@@ -5,18 +5,16 @@
 # task_concurrency: 3
 #
 # dependencies:
-#   - load_vehicle_positions
-#
-# external_dependencies:
-#   - rt_timestamp_fix: rename_timestamp_to_datetime
+#   - external_vehicle_positions
 # ---
 
 from google.transit import gtfs_realtime_pb2
 from google.protobuf import json_format
 from google.protobuf.message import DecodeError
 from calitp.storage import get_fs
-from concurrent.futures import ThreadPoolExecutor
+from calitp.config import get_bucket
 from collections import defaultdict
+from pathlib import Path
 
 
 import pandas as pd
@@ -25,8 +23,10 @@ import tempfile
 
 N_THREADS = 50
 
+# Note that all RT extraction is stored in the prod bucket, since it is very large,
+# but we can still output processed results to the staging bucket
 SRC_PATH = "gs://gtfs-data/rt/"
-DST_PATH = "gtfs-data/rt-processed/vehicle_positions/"
+DST_PATH = f"{get_bucket()}/rt-processed/vehicle_positions/"
 
 
 def parse_pb(path, open_with=None):
@@ -154,24 +154,40 @@ def main(execution_date, **kwargs):
         print("  parsing %s files" % len(files))
 
         if len(files) > 0:
-            # partial parse_pb for running async
-            with ThreadPoolExecutor(N_THREADS) as pool:
-                parsed_positions = list(
-                    pool.map(lambda f: parse_pb(f, open_with=fs.open), files)
-                )
+            # fetch and parse RT files from bucket
+            with tempfile.TemporaryDirectory() as tmp_dir:
+                fs.get(files, tmp_dir)
+                all_files = [x for x in Path(tmp_dir).rglob("*") if not x.is_dir()]
 
+                parsed_positions = [parse_pb(fn, open_with=open) for fn in all_files]
+
+            # convert protobuff objects to DataFrames
             positions_dfs = [*map(rectangle_positions, parsed_positions)]
             positions_dfs = [df for df in positions_dfs if df is not None]
 
             print("  %s positions sub dataframes created" % len(positions_dfs))
             if len(positions_dfs) > 0:
                 positions_rectangle = pd.concat(positions_dfs)
-                positions_rectangle.insert(0, "calitp_itp_id", feed[0])
-                positions_rectangle.insert(1, "calitp_url_number", feed[1])
+                positions_rectangle.insert(0, "calitp_itp_id", int(feed[0]))
+                positions_rectangle.insert(1, "calitp_url_number", int(feed[1]))
+
+                # cast fields that may get screwed up.
+                # e.g. timestamps are strings, and latitude may be inferred as an int
+                # note that due to a pandas bug, we first convert timestamps to
+                # a float, and then to an integer.
+                # see: https://stackoverflow.com/a/60024263
+                casted = positions_rectangle.astype(
+                    {
+                        "header_timestamp": float,
+                        "vehicle_timestamp": float,
+                        "vehicle_position_latitude": float,
+                        "vehicle_position_longitude": float,
+                    }
+                ).astype({"header_timestamp": "Int64", "vehicle_timestamp": "Int64"})
 
                 with tempfile.TemporaryDirectory() as tmpdirname:
                     fname = tmpdirname + "/" + "temporary" + ".parquet"
-                    positions_rectangle.to_parquet(fname, index=False)
+                    casted.to_parquet(fname, index=False)
                     fs.put(
                         fname, DST_PATH + file_name,
                     )

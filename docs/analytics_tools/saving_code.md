@@ -23,7 +23,7 @@ Doing work locally and pushing directly from the command line is a similar workf
 We'll work through getting set up with GitHub on JupyterHub and cloning one GitHub repo. Repeat steps 6-10 for other repos.
 
 1. Create a GitHub username, get added to the various Cal-ITP teams. You'll be committing directly into the Cal-ITP repos!
-1. Create a Personal Access Token (PAT) by following these [directions](https://github.com/cal-itp/data-infra/blob/main/docs/analytics_welcome/03_how_we_work.md#using-the-data-analyses-repo)
+1. Create a Personal Access Token (PAT) by following these [directions](personal-access-token)
 1. Navigate to the GitHub repository to clone. We'll work our way throught he `data-analyses` [repo here](https://github.com/cal-itp/data-analyses). Click on the green `Code` button and grab the `HTTPS` URL.
 1. Open a terminal in JupyterHub. All our commands will be typed in this terminal.
 1. Configure your Git username and email: `git config --global user.name MY_USERNAME` and `git config --global user.name MYEMAIL@EMAIL.COM`

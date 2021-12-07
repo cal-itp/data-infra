@@ -78,6 +78,8 @@ These are demonstrated in the screencast below.
 The code below shows how to copy a file from JupyterHub to the data bucket.
 Be sure to replace `<FILE NAME>` and `<ANALYSIS FOLDER>` with the appropriate names.
 
+For additional details, including options for reading/writing geospatial data using `geopandas`, see [](storing-new-data).
+
 ```python
 # Using the `calitp` package
 from calitp.storage import get_fs
@@ -98,10 +100,6 @@ df.to_csv("gs://calitp-analytics-data/data-analyses/<ANALYSIS FOLDER>/<FILE NAME
 # Parquet
 df = pd.read_parquet("gs://calitp-analytics-data/data-analyses/<ANALYSIS FOLDER>/<FILE NAME>")
 df.to_parquet("gs://calitp-analytics-data/data-analyses/<ANALYSIS FOLDER>/<FILE NAME>")
-
-# Geoparquet
-gdf = gpd.read_parquet("gs://calitp-analytics-data/data-analyses/<ANALYSIS FOLDER>/<FILE NAME>")
-gdf.to_parquet("gs://calitp-analytics-data/data-analyses/<ANALYSIS FOLDER>/<FILE NAME>")
 ```
 
 #### Uploading from google cloud storage

@@ -1,7 +1,5 @@
 (technical-onboarding)=
 # Technical Onboarding
-This page serves as a beginning entry-point into our Cal-ITP analytics resources for both new analysts and non-analyst team members.
-
 :::{admonition} How to use this page
 :class: tip
 **Analysts**
@@ -13,9 +11,6 @@ This page serves as a beginning entry-point into our Cal-ITP analytics resources
 
 **If you still need help with access**, use the information at the bottom of this page to [**get help**](get-help).
 :::
-
-Below you can find links to the tools themselves, as well as relevant support documents.
-
 **Collaboration Tools:**
 
 - [ ]  [**Slack**](https://cal-itp.slack.com) | ([Docs](slack-intro))
@@ -24,12 +19,13 @@ Below you can find links to the tools themselves, as well as relevant support do
 
 **Dashboards & Notebooks:**
 
-- [ ]  [**Metabase**](https://dashboards.calitp.org/) - Dashboards and Business Insights | ([Docs](metabase))
-- [ ]  [**JupyterHub**](https://hubtest.k8s.calitp.jarv.us/) - Cloud-based notebooks | ([Docs](jupyterhub))
+- [ ]  [**Metabase**](https://dashboards.calitp.org/) - Business Insights & Dashboards | ([Docs](metabase))
+- [ ]  [**JupyterHub**](https://hubtest.k8s.calitp.jarv.us/) - Cloud-based notebooks for querying  Python, SQL, R | ([Docs](jupyterhub))
+- [ ]  [**BigQuery**](https://console.cloud.google.com/bigquery) - Convenient way to view the data warehouse
 
 **Python Libraries:**
 
-- [ ]  **calitp-py** - Cal-ITP's internal Python library | ([Docs](calitp))
+- [ ]  **calitp** - Cal-ITP's internal Python library | ([Docs](calitp))
 - [ ]  **siuba** - Recommended data analysis library | ([Docs](siuba))
 
 &nbsp;
