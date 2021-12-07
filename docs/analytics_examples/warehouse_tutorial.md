@@ -24,8 +24,8 @@ The following content represents a tutorial introduction to simple queries that 
 The queries represented in the following tutorial are as follows:
 1. [**Number of Routes for a Given Agency Over Time**](routes-agency-time)
 1. [**Number of Stops for a Given Agency Over Time**](stops-agency-time)
-1. [**Number of Stops Made Across all Trips for an Agency**](stops-all-trips)
 1. [**For a Given Agency, on Each Day, Days Until the Feed Expires**](days-feed-expires)
+1. [**Number of Stops Made Across all Trips for an Agency**](stops-all-trips)
 1. [**Max Number of Stops a Trip Can Have, Per Agency**](max-number-stops)
 
 ### Tools Used
@@ -308,128 +308,9 @@ from siuba import *
 ```{glue:figure} siuba_stops_output
 ```
 ````
-
-(stops-all-trips)=
-### 3. Number of Stops Made Across all Trips for an Agency
-Instead of using fact or dimensional tables as in the examples above, this query uses a wide convenience table that was created to aggregate trip stops information from only the most recent feeds extracted. Information for the latest day can be found in this table.
-
-We use this table to query an agency's most recent feed published and count the total number of trip stops, as well as the number of distinct trips and stops that compose them.
-
-```{code-cell}
-:tags: [remove-cell]
-df_stops_trips = query_sql("""
-SELECT
-    calitp_feed_name,
-    count(*) AS n_trip_stops,
-    count(distinct(trip_id)) AS n_trips,
-    count(distinct(stop_id)) AS n_stops
-FROM `views.gtfs_schedule_data_feed_trip_stops_latest`
-WHERE
-    calitp_feed_name = "AC Transit (0)"
-GROUP BY
-    calitp_feed_name
-LIMIT 10""", as_df=True)
-glue("df_stops_trips_output", df_stops_trips)
-```
-
-```{code-cell}
-:tags: [remove-cell]
-siuba_stops_trips = (
-    tbl.views.gtfs_schedule_data_feed_trip_stops_latest()
-    >> filter(_.calitp_feed_name == "AC Transit (0)")
-    >> summarize(
-        n_trips=_.trip_id.nunique(), n_stops=_.stop_id.nunique(), n=_.trip_id.size()
-    )
-)
-glue("siuba_stops_trips_output", siuba_stops_trips)
-```
-
-````{tabbed} Metabase
-***Count of Trip Stops Made Across all Trips for an Agency***
-
-*You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/224-3a-count-of-trip-stops-made-across-all-trips-for-an-agency/notebook)*
-
-![Collection Matrix](assets/count_trip_stops.png)
-
-***Distinct Trips in Trip Stops***
-
-*You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/225-3b-distinct-trips-in-trip-stops-for-an-agency/notebook)*
-
-![Collection Matrix](assets/distinct_trips_in_trip_stops.png)
-
-***Distinct Stops in Trip Stops***
-
-*You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/226-3c-distinct-stops-in-trip-stops-for-an-agency/notebook)*
-
-![Collection Matrix](assets/distinct_stops_in_trip_stops.png)
-````
-````{tabbed} SQL
-```python
-# Allows us to query SQL in the JupyterLab notebook
-# Use this in combination with '%%sql', as seen below
-import calitp.magics
-```
-```sql
-%%sql
-
-SELECT
-    -- The first column is what we will group by
-    calitp_feed_name,               -- agency info
-
-    -- Counting the total number of trip stops
-    COUNT(*) AS n_trip_stops,
-    -- Counting the number of unique trips
-    COUNT(DISTINCT(trip_id)) AS n_trips,
-    -- Counting the number of unique stops
-    COUNT(DISTINCT(stop_id)) AS n_stops
-
--- Primary fact table, we need this because it contains trip stop information
--- for each agency on each day in the latest feed
-FROM `views.gtfs_schedule_data_feed_trip_stops_latest`
-
--- Filtering for each agency
-WHERE
-    calitp_feed_name = "AC Transit (0)"
-
--- The column we need to group by
-GROUP BY
-    calitp_feed_name
-
-LIMIT 10
-```
-```{glue:figure} df_stops_trips_output
-```
-````
-````{tabbed} siuba
-```python
-# Allows us to query tables in the warehouse
-from calitp.tables import tbl
-
-# The data analysis library used
-from siuba import *
-```
-```python
-(
-    # Primary fact table, we need this because it contains trip stop information
-    # for each agency on each day in the latest feed
-    tbl.views.gtfs_schedule_data_feed_trip_stops_latest()
-
-    # Filtering for agency
-    >> filter(_.calitp_feed_name == "AC Transit (0)")
-
-    # using siuba and pandas to determine number of unique trips, number of
-    # unique stops, and the total number of trip stops
-    >> summarize(
-        n_trips=_.trip_id.nunique(), n_stops=_.stop_id.nunique(), n=_.trip_id.size()
-    )
-)
-```
-```{glue:figure} siuba_stops_trips_output
-```
-````
 (days-feed-expires)=
-### 4. For a Given Agency, on Each Day, Days Until the Feed Expires
-This query uses a fact table as we did in queries one and two. However, instead of counting we pull out previously calculated table columns as important pieces of information.
+### 3. For a Given Agency, on Each Day, Days Until the Feed Expires
+This query uses a fact table as we did in queries the previous two queries. However, instead of counting we pull out previously calculated table columns as important pieces of information.
 
 ```{code-cell}
 :tags: [remove-cell]
@@ -525,10 +406,127 @@ from siuba import *
 ```{glue:figure} siuba_feed_expires_output
 ```
 ````
+(stops-all-trips)=
+### 4. Number of Stops Made Across all Trips for an Agency
+Instead of using fact or dimensional tables as in the examples above, this query and the next use a wide convenience table that was created to aggregate trip stops information from only the most recent feeds extracted. Information for the latest day can be found in this table.
 
+We use this table to query an agency's most recent feed published and count the total number of trip stops, as well as the number of distinct trips and stops that compose them.
+
+```{code-cell}
+:tags: [remove-cell]
+df_stops_trips = query_sql("""
+SELECT
+    calitp_feed_name,
+    count(*) AS n_trip_stops,
+    count(distinct(trip_id)) AS n_trips,
+    count(distinct(stop_id)) AS n_stops
+FROM `views.gtfs_schedule_data_feed_trip_stops_latest`
+WHERE
+    calitp_feed_name = "AC Transit (0)"
+GROUP BY
+    calitp_feed_name
+LIMIT 10""", as_df=True)
+glue("df_stops_trips_output", df_stops_trips)
+```
+
+```{code-cell}
+:tags: [remove-cell]
+siuba_stops_trips = (
+    tbl.views.gtfs_schedule_data_feed_trip_stops_latest()
+    >> filter(_.calitp_feed_name == "AC Transit (0)")
+    >> summarize(
+        n_trips=_.trip_id.nunique(), n_stops=_.stop_id.nunique(), n=_.trip_id.size()
+    )
+)
+glue("siuba_stops_trips_output", siuba_stops_trips)
+```
+
+````{tabbed} Metabase
+***4A. Count of Trip Stops Made Across all Trips for an Agency***
+
+*You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/224-3a-count-of-trip-stops-made-across-all-trips-for-an-agency/notebook)*
+
+![Collection Matrix](assets/count_trip_stops.png)
+
+***4B. Distinct Trips in Trip Stops***
+
+*You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/225-3b-distinct-trips-in-trip-stops-for-an-agency/notebook)*
+
+![Collection Matrix](assets/distinct_trips_in_trip_stops.png)
+
+***4C. Distinct Stops in Trip Stops***
+
+*You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/226-3c-distinct-stops-in-trip-stops-for-an-agency/notebook)*
+
+![Collection Matrix](assets/distinct_stops_in_trip_stops.png)
+````
+````{tabbed} SQL
+```python
+# Allows us to query SQL in the JupyterLab notebook
+# Use this in combination with '%%sql', as seen below
+import calitp.magics
+```
+```sql
+%%sql
+
+SELECT
+    -- The first column is what we will group by
+    calitp_feed_name,               -- agency info
+
+    -- Counting the total number of trip stops
+    COUNT(*) AS n_trip_stops,
+    -- Counting the number of unique trips
+    COUNT(DISTINCT(trip_id)) AS n_trips,
+    -- Counting the number of unique stops
+    COUNT(DISTINCT(stop_id)) AS n_stops
+
+-- Primary fact table, we need this because it contains trip stop information
+-- for each agency on each day in the latest feed
+FROM `views.gtfs_schedule_data_feed_trip_stops_latest`
+
+-- Filtering for each agency
+WHERE
+    calitp_feed_name = "AC Transit (0)"
+
+-- The column we need to group by
+GROUP BY
+    calitp_feed_name
+
+LIMIT 10
+```
+```{glue:figure} df_stops_trips_output
+```
+````
+````{tabbed} siuba
+```python
+# Allows us to query tables in the warehouse
+from calitp.tables import tbl
+
+# The data analysis library used
+from siuba import *
+```
+```python
+(
+    # Primary fact table, we need this because it contains trip stop information
+    # for each agency on each day in the latest feed
+    tbl.views.gtfs_schedule_data_feed_trip_stops_latest()
+
+    # Filtering for agency
+    >> filter(_.calitp_feed_name == "AC Transit (0)")
+
+    # using siuba and pandas to determine number of unique trips, number of
+    # unique stops, and the total number of trip stops
+    >> summarize(
+        n_trips=_.trip_id.nunique(), n_stops=_.stop_id.nunique(), n=_.trip_id.size()
+    )
+)
+```
+```{glue:figure} siuba_stops_trips_output
+```
+````
 (max-number-stops)=
 ### 5. Find the Trip With the Most Number of Stops, Per Agency
-Similar to the third query, this example uses the same wide convenience table. We use this table here to determine the trip that contains the most number of stops in the latest feed, by agency.
+Similar to the previous query, this example uses the same wide convenience table. We use this table here to determine the trip that contains the most number of stops in the latest feed, by agency.
 
 ```{code-cell}
 :tags: [remove-cell]
