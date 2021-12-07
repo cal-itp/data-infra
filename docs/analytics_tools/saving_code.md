@@ -23,14 +23,14 @@ Doing work locally and pushing directly from the command line is a similar workf
 We'll work through getting set up with GitHub on JupyterHub and cloning one GitHub repo. Repeat steps 6-10 for other repos.
 
 1. Create a GitHub username, get added to the various Cal-ITP teams. You'll be committing directly into the Cal-ITP repos!
-1. Create a Personal Access Token (PAT) by following these [directions](https://github.com/cal-itp/data-infra/blob/main/docs/analytics_welcome/03_how_we_work.md#using-the-data-analyses-repo)
-1. Navigate to the GitHub repository to clone. We'll work our way throught he `data-analyses` [repo here](https://github.com/cal-itp/data-analyses). Click on the green `Code` button and grab the `HTTPS` URL.
+1. Set up SSH by following these [directions](https://docs.github.com/en/authentication/connecting-to-github-with-ssh). 
+1. After you've added your SSH key to your GitHub account, you can test your connection: `ssh -T git@github.com`
+1. Navigate to the GitHub repository to clone. We'll work our way through the `data-analyses` [repo here](https://github.com/cal-itp/data-analyses). Click on the green `Code` button, select "SSH" and copy the URL.
 1. Open a terminal in JupyterHub. All our commands will be typed in this terminal.
-1. Configure your Git username and email: `git config --global user.name MY_USERNAME` and `git config --global user.name MYEMAIL@EMAIL.COM`
-1. Clone the Git repo: `git clone https://github.com/cal-itp/data-analyses.git`
+1. Clone the Git repo: `git clone git@github.com:cal-itp/data-analyses.git`
 1. Double check  with`ls` to list and see that the remote repo was successfully cloned into your "local" (cloud-based) filesystem.
 1. Change into the `data-analyses` directory: `cd data-analyses`
-1. Point to the remote repo: `git remote add origin https://github.com/cal-itp/data-analyses.git`. Double check it's set with: `git remote -v`
+1. Point to the remote repo: `git remote add origin git@github.com:cal-itp/data-analyses.git`. Double check it's set with: `git remote -v`
 1. Pull from the `main` branch and sync your remote and local repos: `git pull origin main`
 
 ### Project Workflow
