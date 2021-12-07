@@ -58,6 +58,7 @@ The screencast below introduces:
 A place for sharing quick reports, and works in progress
 * Clone the repository: `git clone https://github.com/cal-itp/[REPO_NAME].git`
 * Make a new folder and code your analyses in it.
+(personal-access-token)=
 * Make new branches or push directly to the main branch.
     * Create a [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) (PAT) to successfully push to `origin/main`
     * When pushing a commit to `origin`, use your PAT, instead of your password.
