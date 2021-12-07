@@ -55,16 +55,9 @@ The screencast below introduces:
 ### GitHub Analytics Repo
 
 #### Using the data-analyses Repo
-A place for sharing quick reports, and works in progress
-* Clone the repository: `git clone https://github.com/cal-itp/[REPO_NAME].git`
-* Make a new folder and code your analyses in it.
-(personal-access-token)=
-* Make new branches or push directly to the main branch.
-    * Create a [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) (PAT) to successfully push to `origin/main`
-    * When pushing a commit to `origin`, use your PAT, instead of your password.
-    * To cache your token, use the [GitHub CLI or Git Credential Manager Core](https://docs.github.com/en/get-started/getting-started-with-git/caching-your-github-credentials-in-git)
+This is our main data analysis repository, for sharing quick reports and works in progress.
 
-This repository is for quick sharing of works in progress and simple analyses.
+Get set up on GitHub and clone the data-analyses repository [using this link](github-setup).
 
 For collaborative short-term tasks, create a new folder and work off a separate branch.
 
