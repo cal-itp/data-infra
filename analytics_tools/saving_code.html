@@ -637,13 +637,13 @@
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#wip-pushing-in-github-drag-and-drop">
-   [WIP] Pushing in GitHub - Drag and Drop
+  <a class="reference internal nav-link" href="#wip-pushing-from-the-command-line">
+   [WIP] Pushing from the Command Line
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#wip-pushing-from-the-command-line">
-   [WIP] Pushing from the Command Line
+  <a class="reference internal nav-link" href="#wip-pushing-in-github-drag-and-drop">
+   [WIP] Pushing in GitHub - Drag and Drop
   </a>
  </li>
 </ul>
@@ -682,16 +682,16 @@
 <div class="section" id="onboarding-setup">
 <h3>Onboarding Setup<a class="headerlink" href="#onboarding-setup" title="Permalink to this headline">¶</a></h3>
 <p>We’ll work through getting set up with GitHub on JupyterHub and cloning one GitHub repo. Repeat steps 6-10 for other repos.</p>
-<ol class="simple">
+<ol class="simple" id="github-setup">
 <li><p>Create a GitHub username, get added to the various Cal-ITP teams. You’ll be committing directly into the Cal-ITP repos!</p></li>
-<li><p>Create a Personal Access Token (PAT) by following these <a class="reference internal" href="../analytics_welcome/how_we_work.html#personal-access-token"><span class="std std-ref">directions</span></a></p></li>
-<li><p>Navigate to the GitHub repository to clone. We’ll work our way throught he <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code> <a class="reference external" href="https://github.com/cal-itp/data-analyses">repo here</a>. Click on the green <code class="docutils literal notranslate"><span class="pre">Code</span></code> button and grab the <code class="docutils literal notranslate"><span class="pre">HTTPS</span></code> URL.</p></li>
+<li><p>Set up SSH by following these <a class="reference external" href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh">directions</a>.</p></li>
+<li><p>After you’ve added your SSH key to your GitHub account, you can test your connection: <code class="docutils literal notranslate"><span class="pre">ssh</span> <span class="pre">-T</span> <span class="pre">git&#64;github.com</span></code></p></li>
+<li><p>Navigate to the GitHub repository to clone. We’ll work our way through the <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code> <a class="reference external" href="https://github.com/cal-itp/data-analyses">repo here</a>. Click on the green <code class="docutils literal notranslate"><span class="pre">Code</span></code> button, select “SSH” and copy the URL.</p></li>
 <li><p>Open a terminal in JupyterHub. All our commands will be typed in this terminal.</p></li>
-<li><p>Configure your Git username and email: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">config</span> <span class="pre">--global</span> <span class="pre">user.name</span> <span class="pre">MY_USERNAME</span></code> and <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">config</span> <span class="pre">--global</span> <span class="pre">user.name</span> <span class="pre">MYEMAIL&#64;EMAIL.COM</span></code></p></li>
-<li><p>Clone the Git repo: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/cal-itp/data-analyses.git</span></code></p></li>
-<li><p>Double check  with<code class="docutils literal notranslate"><span class="pre">ls</span></code> to list and see that the remote repo was successfully cloned into your “local” (cloud-based) filesystem.</p></li>
+<li><p>Clone the Git repo: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">git&#64;github.com:cal-itp/data-analyses.git</span></code></p></li>
+<li><p>Double check  with <code class="docutils literal notranslate"><span class="pre">ls</span></code> to list and see that the remote repo was successfully cloned into your “local” (cloud-based) filesystem.</p></li>
 <li><p>Change into the <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code> directory: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">data-analyses</span></code></p></li>
-<li><p>Point to the remote repo: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">remote</span> <span class="pre">add</span> <span class="pre">origin</span> <span class="pre">https://github.com/cal-itp/data-analyses.git</span></code>. Double check it’s set with: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">remote</span> <span class="pre">-v</span></code></p></li>
+<li><p>Point to the remote repo: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">remote</span> <span class="pre">add</span> <span class="pre">origin</span> <span class="pre">git&#64;github.com:cal-itp/data-analyses.git</span></code>. Double check it’s set with: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">remote</span> <span class="pre">-v</span></code></p></li>
 <li><p>Pull from the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch and sync your remote and local repos: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span> <span class="pre">origin</span> <span class="pre">main</span></code></p></li>
 </ol>
 </div>
@@ -714,7 +714,7 @@
 </div>
 <div class="section" id="pulling-and-pushing-changes">
 <h3>Pulling and Pushing Changes<a class="headerlink" href="#pulling-and-pushing-changes" title="Permalink to this headline">¶</a></h3>
-<p>Especially when you have a collaborator working on the same branch, you want to regularly sync your work with what’s been committed by your collaborator. Doing this frequently allows you to stay in sync, and avoid unncessary merge conflicts.</p>
+<p>Especially when you have a collaborator working on the same branch, you want to regularly sync your work with what’s been committed by your collaborator. Doing this frequently allows you to stay in sync, and avoid unnecessary merge conflicts.</p>
 <ol class="simple">
 <li><p>Stash your changes temporarily: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">stash</span></code></p></li>
 <li><p>Pull from the remote to bring the local branch up-to-date (and pull any changes your collaborator made): <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span> <span class="pre">origin</span> <span class="pre">my-new-branch</span></code></p></li>
@@ -756,11 +756,11 @@ SOMEONE WHO PREFERS MERGE PROCESS TO FILL THIS IN…is there a commit after?</p>
 </ul>
 </div>
 </div>
-<div class="section" id="wip-pushing-in-github-drag-and-drop">
-<h2>[WIP] Pushing in GitHub - Drag and Drop<a class="headerlink" href="#wip-pushing-in-github-drag-and-drop" title="Permalink to this headline">¶</a></h2>
-</div>
 <div class="section" id="wip-pushing-from-the-command-line">
 <h2>[WIP] Pushing from the Command Line<a class="headerlink" href="#wip-pushing-from-the-command-line" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="wip-pushing-in-github-drag-and-drop">
+<h2>[WIP] Pushing in GitHub - Drag and Drop<a class="headerlink" href="#wip-pushing-in-github-drag-and-drop" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
