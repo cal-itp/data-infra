@@ -40,7 +40,7 @@ raw_daily_files AS (
         -- calculate the leading date, so we can fill in missing rows, where
         -- extraction failed to run.
         , LEAD(T1.calitp_extracted_at)
-            OVER (PARTITION BY T1.calitp_itp_id, T1.calitp_url_number ORDER BY T1.calitp_extracted_at)
+            OVER (PARTITION BY T1.calitp_itp_id, T1.calitp_url_number, T1.name ORDER BY T1.calitp_extracted_at)
             AS tmp_next_date
 
     FROM `gtfs_schedule_history.calitp_files_updates` T1
