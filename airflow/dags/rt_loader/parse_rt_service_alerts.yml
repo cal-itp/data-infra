@@ -1,0 +1,6 @@
+operator: operator.RectangleRealtimeDataOperator
+provide_context: true
+
+realtime_data_type: service_alerts
+dependencies:
+  - external_service_alerts
