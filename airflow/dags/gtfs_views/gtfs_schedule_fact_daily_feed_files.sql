@@ -12,6 +12,11 @@ tests:
     - file_key
     - date
 
+description: |>
+  Each row of this table is a file extracted from a feed on a given day. Note that on days where
+  the extractor failed to download files for a feed, we interpolate by using the previous day's files.
+  This is tracked using the is_interpolated column.
+
 dependencies:
   - gtfs_schedule_dim_feeds
   - dim_date
