@@ -9,7 +9,7 @@ logo: calitp_logo_MAIN.png
 # See https://jupyterbook.org/content/execute.html
 execute:
   execute_notebooks: force
-  allow_errors: false
+  allow_errors: true
   exclude_patterns:
       - 'analytics_tools/*.yml'
       - 'analytics_tools/08_data_catalogs.md'
