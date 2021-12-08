@@ -25,7 +25,23 @@ The queries represented in the following tutorial are as follows:
 
 ## Python Libraries to Import
 
-**CODE CELL HERE**
+```{code-cell}
+import geopandas as gpd
+import os
+import pandas as pd
+import shapely
+
+os.environ["CALITP_BQ_MAX_BYTES"] = str(50_000_000_000)
+
+import calitp
+from calitp.tables import tbl
+from siuba import *
+
+pd.set_option("display.max_rows", 10)
+
+SELECTED_DATE = "2021-09-01"
+ITP_ID = 278 # San Diego Metropolitan Transit System
+```
 
 (stop-arrivals-operator)=
 ### All the Stops and Arrival Times for an Operator on a Given Day
