@@ -8,11 +8,8 @@ logo: calitp_logo_MAIN.png
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
 execute:
-  execute_notebooks: force
+  execute_notebooks: auto
   allow_errors: true
-  exclude_patterns:
-      - 'analytics_tools/*.yml'
-      - 'analytics_tools/08_data_catalogs.md'
 
 # Define the name of the latex output file for PDF builds
 latex:
