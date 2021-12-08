@@ -16,8 +16,6 @@ kernelspec:
 
 ## Introduction
 
-SHOULD THIS ONE GET FOLDED INTO EARLIER ONE..BUT NEED SQL AND METABASE EQUIVALENT?
-
 The queries represented in the following tutorial are as follows:
 * [**All the Stops and Arrival Times for an Operator on a Given Day**](stop-arrivals-operator)
 * [**Assemble a Route Shapefile**](#assemble-a-route-shapefile)
@@ -88,7 +86,7 @@ daily_stops = (
     >> collect()
     )
 
-daily_stops
+daily_stops.head()
 ```
 
 ### Assemble a Route Shapefile
@@ -176,7 +174,7 @@ lossan_df = (tbl.views.transitstacks()
              >> select(*(info_cols + vehicle_cols + paratransit_cols))
             )
 
-lossan_df
+lossan_df.head()
 ```
 
 Next, we can query the `gtfs_schedule_fat_daily_feed_stops` to grab the stops for a particular day's feed. Those stops are then joined to `gtfs_schedule_dim_stops` to get the lat/lon attached. Use `isin` to further filter the dataframe and only keep operators in the counties of interest.
@@ -199,5 +197,5 @@ lossan_stops = (tbl.views.gtfs_schedule_fact_daily_feed_stops()
                 >> arrange(_.calitp_itp_id, _.stop_id)
                ).reset_index(drop=True)
 
-lossan_stops
+lossan_stops.head()
 ```
