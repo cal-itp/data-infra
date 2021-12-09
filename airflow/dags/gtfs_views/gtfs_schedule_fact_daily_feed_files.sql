@@ -12,6 +12,11 @@ tests:
     - file_key
     - date
 
+description: |
+  Each row of this table is a file extracted from a feed on a given day. Note that on days where
+  the extractor failed to download files for a feed, we interpolate by using the previous day's files.
+  This is tracked using the is_interpolated column.
+
 dependencies:
   - gtfs_schedule_dim_feeds
   - dim_date
@@ -40,7 +45,7 @@ raw_daily_files AS (
         -- calculate the leading date, so we can fill in missing rows, where
         -- extraction failed to run.
         , LEAD(T1.calitp_extracted_at)
-            OVER (PARTITION BY T1.calitp_itp_id, T1.calitp_url_number ORDER BY T1.calitp_extracted_at)
+            OVER (PARTITION BY T1.calitp_itp_id, T1.calitp_url_number, T1.name ORDER BY T1.calitp_extracted_at)
             AS tmp_next_date
 
     FROM `gtfs_schedule_history.calitp_files_updates` T1
