@@ -159,11 +159,14 @@ def main(execution_date, **kwargs):
                 fs.get(files, tmp_dir)
                 all_files = [x for x in Path(tmp_dir).rglob("*") if not x.is_dir()]
 
-                parsed_positions = [parse_pb(fn, open_with=open) for fn in all_files]
+                positions_dfs = []
+                for fname in all_files:
+                    # convert protobuff objects to DataFrames
+                    rectangle = rectangle_positions(parse_pb(fname, open_with=open))
 
-            # convert protobuff objects to DataFrames
-            positions_dfs = [*map(rectangle_positions, parsed_positions)]
-            positions_dfs = [df for df in positions_dfs if df is not None]
+                    # append results that were parseable and non-empty
+                    if rectangle is not None:
+                        positions_dfs.append(rectangle)
 
             print("  %s positions sub dataframes created" % len(positions_dfs))
             if len(positions_dfs) > 0:
