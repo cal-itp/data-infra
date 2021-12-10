@@ -1,9 +1,7 @@
-from airflow.operators import PythonOperator
-from airflow.utils.decorators import apply_defaults
+from airflow.operators.python import PythonOperator
 
 
 class PythonTaskflowOperator(PythonOperator):
-    @apply_defaults
     def __init__(
         self,
         python_callable,
