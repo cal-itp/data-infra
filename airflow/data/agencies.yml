@@ -1322,6 +1322,14 @@ tulare-county-area-transit:
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 346
+tuolumne-transit:
+  agency_name: Tuolumne County Transit Agency
+  feeds:
+    - gtfs_schedule_url: https://drive.google.com/file/d/1qyFpp5A_DeMkVjSV-dANyLNCSFZ9b-Zx/view?usp=sharing
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
+  itp_id: 482
 turlock-transit:
   agency_name: Turlock Transit
   feeds:
