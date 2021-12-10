@@ -1329,7 +1329,7 @@ tuolumne-transit:
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
-  itp_id: 475
+  itp_id: 482
 turlock-transit:
   agency_name: Turlock Transit
   feeds:
