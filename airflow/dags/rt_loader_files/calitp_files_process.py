@@ -46,8 +46,8 @@ def main(execution_date, **kwargs):
 
     ser_id = raw_res["name"].str.split("/")
 
-    raw_res["calitp_itp_id"] = ser_id.str.get(-3)
-    raw_res["calitp_url_number"] = ser_id.str.get(-2)
+    raw_res["calitp_itp_id"] = int(ser_id.str.get(-3))
+    raw_res["calitp_url_number"] = int(ser_id.str.get(-2))
     raw_res["calitp_extracted_at"] = ser_id.str.get(-4)
 
     raw_res["full_path"] = raw_res["name"]
