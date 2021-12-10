@@ -1,0 +1,1283 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>More Complex Queries &#8212; Cal-ITP Data Services</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Sample Data Catalog" href="sample-catalog-viewer.html" />
+    <link rel="prev" title="Tutorial - Querying the Data Warehouse" href="warehouse_tutorial.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-SZB618VNBZ"></script>
+<script>
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){ dataLayer.push(arguments); }
+                    gtag('js', new Date());
+                    gtag('config', 'G-SZB618VNBZ');
+                </script>
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/calitp_logo_MAIN.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Cal-ITP Data Services</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Data Services Documentation
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Analysts
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../analytics_welcome/overview.html">
+   Welcome!
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_welcome/what_is_calitp.html">
+     Cal-ITP Project Information (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_welcome/about_our_team.html">
+     Team Members (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_welcome/how_we_work.html">
+     How We Work (WIP)
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../analytics_onboarding/overview.html">
+   Technical Onboarding
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../analytics_tools/overview.html">
+   Introduction to Analytics Tools
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/tools_quick_links.html">
+     Tools Quick Links
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/bi_dashboards.html">
+     Business Insights &amp; Dashboards
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/notebooks.html">
+     Notebooks
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/python_libraries.html">
+     Python Libraries (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/saving_code.html">
+     Saving Code (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/storing_data.html">
+     Storing New Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/data_catalogs.html">
+     Using Data Catalogs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../warehouse/overview.html">
+   Introduction to the Warehouse (WIP)
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/table_naming.html">
+     Table Naming
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/agencies.html">
+     Agency GTFS Feeds
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/views.html">
+     Creating New Tables (Views)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/metrics.html">
+     Metric Views
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/sql_snippets.html">
+     SQL Snippets (WIP)
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../datasets_and_tables/overview.html">
+   Datasets &amp; Tables (WIP)
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets_and_tables/gtfs_schedule.html">
+     GTFS Schedule (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets_and_tables/gtfs_rt.html">
+     GTFS Realtime
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets_and_tables/mst_payments.html">
+     MST Payments (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets_and_tables/transitdatabase.html">
+     TransitDatabase
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets_and_tables/views.html">
+     Views (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets_and_tables/tables.html">
+     Tables (WIP)
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="overview.html">
+   Analysis Examples
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="warehouse_tutorial.html">
+     Tutorial - Querying the Data Warehouse
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     More Complex Queries
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="sample-catalog-viewer.html">
+     Sample Data Catalog
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../analytics_publishing/overview.html">
+   How to Publish Analyses (WIP)
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_publishing/how_to_publish.html">
+     Publishing Reports with Pull Requests (WIP)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_publishing/where_reports_live.html">
+     Where Reports Live (WIP)
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Project Leads
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../project_leads/overview.html">
+   For Project Leads (WIP)
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Data Consumers
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../data_consumers/overview.html">
+   For Data Consumers (WIP)
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Developers
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../airflow/overview.html">
+   Airflow
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../airflow/static-schedule-pipeline.html">
+     Static Schedule Pipeline
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../airflow/local-setup.html">
+     Local Setup
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../airflow/production-maintenance.html">
+     Production Maintenance
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../kubernetes/README.html">
+   Kubernetes
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <label for="toctree-checkbox-8">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../kubernetes/JupyterHub.html">
+     JupyterHub
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../ci/README.html">
+   CI
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/Git-Flow-Services.html">
+     Git Flow for Services
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/Pipeline-Variables.html">
+     Pipeline Variables
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/build-docker-image.html">
+     build-docker-image
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/build-git-notes.html">
+     build-git-notes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/build-git-tag.html">
+     build-git-tag
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/configure-build-git-notes.html">
+     configure-build-git-notes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/configure-docker-login.html">
+     configure-docker-login
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/configure-git-remote.html">
+     configure-git-remote
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/release-kube-overlay.html">
+     release-kube-overlay
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/validate-build-git-tag.html">
+     validate-build-git-tag
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../ci/steps/validate-clean-worktree.html">
+     validate-clean-worktree
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../services/overview.html">
+   Services
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+  <label for="toctree-checkbox-10">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../services/gtfs-ckan-uploader.html">
+     GTFS CKAN Uploader
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../services/gtfs-rt-archive.html">
+     gtfs-rt-archive
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Contribute to the Docs!
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../contribute/overview.html">
+   Editing Documentation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
+  <label for="toctree-checkbox-11">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../contribute/content_types.html">
+     Types of Content
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../contribute/submitting_changes.html">
+     Submitting Changes
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        <a class="dropdown-buttons"
+            href="../_sources/analytics_examples/new_tutorial.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/analytics_examples/new_tutorial.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/cal-itp/data-infra/"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fanalytics_examples/new_tutorial.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/analytics_examples/new_tutorial.md"><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/cal-itp/data-infra/main?urlpath=tree/docs/analytics_examples/new_tutorial.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#python-libraries-to-import">
+   Python Libraries to Import
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#all-the-stops-and-arrival-times-for-an-operator-on-a-given-day">
+     All the Stops and Arrival Times for an Operator on a Given Day
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#assemble-a-route-shapefile">
+     Assemble a Route Shapefile
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#filter-with-lists-and-unpacking">
+     Filter with Lists and Unpacking
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="tex2jax_ignore mathjax_ignore section" id="more-complex-queries">
+<h1>More Complex Queries<a class="headerlink" href="#more-complex-queries" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The queries represented in the following tutorial are as follows:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#stop-arrivals-operator"><span class="std std-ref"><strong>All the Stops and Arrival Times for an Operator on a Given Day</strong></span></a></p></li>
+<li><p><a class="reference external" href="#assemble-a-route-shapefile"><strong>Assemble a Route Shapefile</strong></a></p></li>
+<li><p><a class="reference external" href="#filter-with-lists-and-unpacking"><strong>Filter with Lists and Unpacking</strong></a></p></li>
+</ul>
+</div>
+<div class="section" id="python-libraries-to-import">
+<h2>Python Libraries to Import<a class="headerlink" href="#python-libraries-to-import" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">shapely</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CALITP_BQ_MAX_BYTES&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="mi">50_000_000_000</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">calitp</span>
+<span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbl</span>
+<span class="kn">from</span> <span class="nn">siuba</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;display.max_rows&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="n">SELECTED_DATE</span> <span class="o">=</span> <span class="s2">&quot;2021-09-01&quot;</span>
+<span class="n">ITP_ID</span> <span class="o">=</span> <span class="mi">278</span> <span class="c1"># San Diego Metropolitan Transit System</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="all-the-stops-and-arrival-times-for-an-operator-on-a-given-day">
+<span id="stop-arrivals-operator"></span><h3>All the Stops and Arrival Times for an Operator on a Given Day<a class="headerlink" href="#all-the-stops-and-arrival-times-for-an-operator-on-a-given-day" title="Permalink to this headline">¶</a></h3>
+<p>As a simple example, we will filter to just the San Diego Metropolitan Transit System and grab 1 day’s worth of data. We want all the trips, stops, arrival times, and stop geometry (lat/lon).</p>
+<p>Tables used:</p>
+<ol class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">views.gtfs_schedule_dim_stop_times</span></code>: all stop arrival times for all operators, need to subset to particular date</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">views.gtfs_schedule_fact_daily_trips</span></code>: all trips for all operators, need to subset to particular date</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">views.gtfs_schedule_dim_stops</span></code>: lat/lon for all stops, need to subset to interested stops</p></li>
+</ol>
+<p>Here, all the trips for one operator, for a particular day, is joined with all the stops that occur on all the trips. Then, the stops have their lat/lon information attached.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Get trips for operator for one day and join with stop times for all trips</span>
+
+<span class="c1"># Grab the stop times for a given date for just 1 agency</span>
+<span class="n">tbl_stop_times</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_dim_stop_times</span><span class="p">()</span>
+    <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_extracted_at</span> <span class="o">&lt;=</span> <span class="n">SELECTED_DATE</span><span class="p">,</span>
+              <span class="n">_</span><span class="o">.</span><span class="n">calitp_deleted_at</span> <span class="o">&gt;</span> <span class="n">SELECTED_DATE</span><span class="p">,</span>
+              <span class="n">_</span><span class="o">.</span><span class="n">calitp_itp_id</span> <span class="o">==</span> <span class="n">ITP_ID</span>
+             <span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># Grab the trips done on that day, for that agency</span>
+<span class="n">daily_stops</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_fact_daily_trips</span><span class="p">()</span>
+    <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_itp_id</span> <span class="o">==</span> <span class="n">ITP_ID</span><span class="p">,</span>
+              <span class="n">_</span><span class="o">.</span><span class="n">service_date</span> <span class="o">==</span> <span class="n">SELECTED_DATE</span><span class="p">,</span>
+              <span class="n">_</span><span class="o">.</span><span class="n">is_in_service</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># Join the trip to the stop time</span>
+    <span class="c1"># For a given bus route (left df), attach all the stops (right df)</span>
+    <span class="o">&gt;&gt;</span> <span class="n">left_join</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">tbl_stop_times</span><span class="p">,</span>
+              <span class="c1"># also added url number to the join keys ----</span>
+             <span class="p">[</span><span class="s2">&quot;calitp_itp_id&quot;</span><span class="p">,</span> <span class="s2">&quot;calitp_url_number&quot;</span><span class="p">,</span> <span class="s2">&quot;trip_id&quot;</span><span class="p">])</span>
+    <span class="o">&gt;&gt;</span> <span class="n">inner_join</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_dim_stops</span><span class="p">(),</span>
+                 <span class="p">[</span><span class="s2">&quot;calitp_itp_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stop_id&quot;</span><span class="p">])</span>
+    <span class="o">&gt;&gt;</span> <span class="n">select</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">itp_id</span> <span class="o">==</span> <span class="n">_</span><span class="o">.</span><span class="n">calitp_itp_id</span><span class="p">,</span>
+              <span class="n">_</span><span class="o">.</span><span class="n">date</span> <span class="o">==</span> <span class="n">_</span><span class="o">.</span><span class="n">service_date</span><span class="p">,</span>
+              <span class="n">_</span><span class="o">.</span><span class="n">trip_key</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">trip_id</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">stop_id</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">arrival_time</span><span class="p">,</span>
+              <span class="n">_</span><span class="o">.</span><span class="n">stop_lat</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">stop_lon</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">stop_name</span><span class="p">,</span>
+             <span class="p">)</span>
+    <span class="o">&gt;&gt;</span> <span class="n">collect</span><span class="p">()</span>
+    <span class="p">)</span>
+
+<span class="n">daily_stops</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>itp_id</th>
+      <th>date</th>
+      <th>trip_key</th>
+      <th>trip_id</th>
+      <th>stop_id</th>
+      <th>arrival_time</th>
+      <th>stop_lat</th>
+      <th>stop_lon</th>
+      <th>stop_name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>278</td>
+      <td>2021-09-01</td>
+      <td>4344705296637583926</td>
+      <td>15452325</td>
+      <td>60203</td>
+      <td>08:08:00</td>
+      <td>32.573745</td>
+      <td>-117.050168</td>
+      <td>Del Sol Bl &amp; Piccard Av</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>278</td>
+      <td>2021-09-01</td>
+      <td>4344705296637583926</td>
+      <td>15452325</td>
+      <td>60203</td>
+      <td>08:08:00</td>
+      <td>32.573745</td>
+      <td>-117.050168</td>
+      <td>Del Sol Bl &amp; Piccard Av</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>278</td>
+      <td>2021-09-01</td>
+      <td>4344705296637583926</td>
+      <td>15452325</td>
+      <td>60203</td>
+      <td>08:08:00</td>
+      <td>32.573745</td>
+      <td>-117.050168</td>
+      <td>Del Sol Bl &amp; Piccard Av</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>278</td>
+      <td>2021-09-01</td>
+      <td>4344705296637583926</td>
+      <td>15452325</td>
+      <td>60203</td>
+      <td>08:08:00</td>
+      <td>32.573745</td>
+      <td>-117.050168</td>
+      <td>Del Sol Bl &amp; Piccard Av</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>278</td>
+      <td>2021-09-01</td>
+      <td>4344705296637583926</td>
+      <td>15452325</td>
+      <td>60203</td>
+      <td>08:08:00</td>
+      <td>32.573745</td>
+      <td>-117.050168</td>
+      <td>Del Sol Bl &amp; Piccard Av</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</div>
+<div class="section" id="assemble-a-route-shapefile">
+<h3>Assemble a Route Shapefile<a class="headerlink" href="#assemble-a-route-shapefile" title="Permalink to this headline">¶</a></h3>
+<p>Transit stops are given as lat/lon (point geometry), but what if we want to get the line geometry? We will demonstrate on one route for San Diego Metropolitan Transit System.</p>
+<p>Tables used:</p>
+<ol class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule.shapes</span></code>: stops with stop sequence, lat/lon, and associated <code class="docutils literal notranslate"><span class="pre">shape_id</span></code></p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Grab the shapes for this operator</span>
+<span class="n">shapes</span> <span class="o">=</span> <span class="p">(</span><span class="n">tbl</span><span class="o">.</span><span class="n">gtfs_schedule</span><span class="o">.</span><span class="n">shapes</span><span class="p">()</span>
+          <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_itp_id</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">ITP_ID</span><span class="p">))</span>
+          <span class="o">&gt;&gt;</span> <span class="n">collect</span><span class="p">()</span>
+<span class="p">)</span>
+
+<span class="c1"># Make a gdf</span>
+<span class="n">shapes</span> <span class="o">=</span> <span class="p">(</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">shapes</span><span class="p">,</span>
+                      <span class="n">geometry</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">points_from_xy</span>
+                      <span class="p">(</span><span class="n">shapes</span><span class="o">.</span><span class="n">shape_pt_lon</span><span class="p">,</span> <span class="n">shapes</span><span class="o">.</span><span class="n">shape_pt_lat</span><span class="p">),</span>
+                      <span class="n">crs</span> <span class="o">=</span> <span class="s1">&#39;EPSG:4326&#39;</span><span class="p">)</span>
+     <span class="p">)</span>
+
+<span class="n">MY_ROUTE</span> <span class="o">=</span> <span class="s2">&quot;1_2_156&quot;</span>
+
+<span class="c1"># Now, combine all the stops by stop sequence, and create linestring</span>
+<span class="n">single_shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">shapes</span>
+                <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">shape_id</span> <span class="o">==</span> <span class="n">MY_ROUTE</span><span class="p">)</span>
+                <span class="o">&gt;&gt;</span> <span class="n">mutate</span><span class="p">(</span><span class="n">shape_pt_sequence</span> <span class="o">=</span> <span class="n">_</span><span class="o">.</span><span class="n">shape_pt_sequence</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
+                <span class="c1"># arrange in the order of stop sequence</span>
+                <span class="o">&gt;&gt;</span> <span class="n">arrange</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">shape_pt_sequence</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># Convert from a bunch of points to a line (for a route, there are multiple points)</span>
+<span class="n">route_line</span> <span class="o">=</span> <span class="n">shapely</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">LineString</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">single_shape</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]))</span>
+
+<span class="c1"># Create a df that will hold this new line geometry</span>
+<span class="n">single_route</span> <span class="o">=</span> <span class="p">(</span><span class="n">single_shape</span>
+               <span class="p">[[</span><span class="s1">&#39;calitp_itp_id&#39;</span><span class="p">,</span> <span class="s1">&#39;shape_id&#39;</span><span class="p">,</span> <span class="s1">&#39;calitp_extracted_at&#39;</span><span class="p">]]</span>
+               <span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">]]</span>
+              <span class="p">)</span> <span class="c1">##preserve info cols</span>
+
+<span class="c1"># Set the geometry column values</span>
+<span class="n">single_route</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">route_line</span>
+
+<span class="c1"># Convert to gdf</span>
+<span class="n">single_route</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">single_route</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">)</span>
+
+<span class="n">single_route</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>calitp_itp_id</th>
+      <th>shape_id</th>
+      <th>calitp_extracted_at</th>
+      <th>geometry</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>46410</th>
+      <td>278</td>
+      <td>1_2_156</td>
+      <td>2021-11-24</td>
+      <td>LINESTRING (-117.16894 32.76556, -117.17043 32...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</div>
+<div class="section" id="filter-with-lists-and-unpacking">
+<h3>Filter with Lists and Unpacking<a class="headerlink" href="#filter-with-lists-and-unpacking" title="Permalink to this headline">¶</a></h3>
+<p>Queries can use the <code class="docutils literal notranslate"><span class="pre">isin</span></code> and take lists, as well as unpack lists. This nifty trick can keep the code clean.</p>
+<p>Tables used:</p>
+<ol class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">view.transitstacks</span></code>: some NTD related data, with each row being an operator</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule_fact_daily_feed_stops</span></code>: stops associated with daily feed, subset to a particular date</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">views.gtfs_schedule_dim_stops</span></code>: lat/lon for all stops, need to subset to interested stops</p></li>
+</ol>
+<p>Here, the <code class="docutils literal notranslate"><span class="pre">transitstacks</span></code> table is filtered down to interested counties and certain columns. Using <code class="docutils literal notranslate"><span class="pre">isin</span></code> and unpacking a list (asterisk) is a quick way to do this.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Subset to counties of interest</span>
+<span class="n">lossan_counties</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;San Luis Obispo&#39;</span><span class="p">,</span> <span class="s1">&#39;Santa Barbara&#39;</span><span class="p">,</span> <span class="s1">&#39;Ventura&#39;</span><span class="p">,</span>
+                  <span class="s1">&#39;Los Angeles&#39;</span><span class="p">,</span> <span class="s1">&#39;San Diego&#39;</span><span class="p">,</span> <span class="s1">&#39;Orange&#39;</span><span class="p">]</span>
+
+<span class="c1"># List the columns to keep</span>
+<span class="n">info_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;itp_id&#39;</span><span class="p">,</span> <span class="s1">&#39;transit_provider&#39;</span><span class="p">,</span> <span class="s1">&#39;ntd_id&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;modes&#39;</span><span class="p">,</span> <span class="s1">&#39;county&#39;</span><span class="p">,</span> <span class="s1">&#39;legacy_ntd_id&#39;</span><span class="p">]</span>
+
+<span class="n">vehicle_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;bus&#39;</span><span class="p">,</span> <span class="s1">&#39;articulated_bus&#39;</span><span class="p">,</span> <span class="s1">&#39;over_the_road_bus&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;school_bus&#39;</span><span class="p">,</span> <span class="s1">&#39;trolleybus&#39;</span><span class="p">,</span> <span class="s1">&#39;vintage_historic_trolley&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;streetcar&#39;</span><span class="p">]</span>
+
+<span class="n">paratransit_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;van&#39;</span><span class="p">,</span> <span class="s1">&#39;cutaway&#39;</span><span class="p">,</span> <span class="s1">&#39;automobile&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;minivan&#39;</span><span class="p">,</span> <span class="s1">&#39;sport_utility_vehicle&#39;</span><span class="p">]</span>
+
+<span class="c1"># transitstacks has a lot of columns, and we want to keep a fairly large subset of them</span>
+<span class="n">lossan_df</span> <span class="o">=</span> <span class="p">(</span><span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">transitstacks</span><span class="p">()</span>
+             <span class="c1"># Collect to turn into pandas.DataFrame earlier for isin to work</span>
+             <span class="o">&gt;&gt;</span> <span class="n">collect</span><span class="p">()</span>
+             <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">county</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">lossan_counties</span><span class="p">))</span>
+             <span class="c1"># Nifty way to unpack large list of columns</span>
+             <span class="o">&gt;&gt;</span> <span class="n">select</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">info_cols</span> <span class="o">+</span> <span class="n">vehicle_cols</span> <span class="o">+</span> <span class="n">paratransit_cols</span><span class="p">))</span>
+            <span class="p">)</span>
+
+<span class="n">lossan_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>itp_id</th>
+      <th>transit_provider</th>
+      <th>ntd_id</th>
+      <th>modes</th>
+      <th>county</th>
+      <th>legacy_ntd_id</th>
+      <th>bus</th>
+      <th>articulated_bus</th>
+      <th>over_the_road_bus</th>
+      <th>school_bus</th>
+      <th>trolleybus</th>
+      <th>vintage_historic_trolley</th>
+      <th>streetcar</th>
+      <th>van</th>
+      <th>cutaway</th>
+      <th>automobile</th>
+      <th>minivan</th>
+      <th>sport_utility_vehicle</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>353</td>
+      <td>USC Transportation</td>
+      <td>None</td>
+      <td>MB</td>
+      <td>Los Angeles</td>
+      <td>None</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>352</td>
+      <td>UC San Diego Campus Shuttles</td>
+      <td>None</td>
+      <td>MB</td>
+      <td>San Diego</td>
+      <td>None</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>165</td>
+      <td>LAX FlyAway</td>
+      <td>None</td>
+      <td>CB</td>
+      <td>Los Angeles</td>
+      <td>None</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>43</td>
+      <td>Brea Shuttle Express</td>
+      <td>None</td>
+      <td>MB,DR,DT</td>
+      <td>Orange</td>
+      <td>None</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>305</td>
+      <td>Sierra Madre Gateway Coach</td>
+      <td>None</td>
+      <td>DR,MB</td>
+      <td>Los Angeles</td>
+      <td>None</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Next, we can query the <code class="docutils literal notranslate"><span class="pre">gtfs_schedule_fat_daily_feed_stops</span></code> to grab the stops for a particular day’s feed. Those stops are then joined to <code class="docutils literal notranslate"><span class="pre">gtfs_schedule_dim_stops</span></code> to get the lat/lon attached. Use <code class="docutils literal notranslate"><span class="pre">isin</span></code> to further filter the dataframe and only keep operators in the counties of interest.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Grab stops for that day</span>
+<span class="n">lossan_stops</span> <span class="o">=</span> <span class="p">(</span><span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_fact_daily_feed_stops</span><span class="p">()</span>
+                <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">date</span> <span class="o">==</span> <span class="n">SELECTED_DATE</span><span class="p">)</span>
+                <span class="o">&gt;&gt;</span> <span class="n">select</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">stop_key</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">date</span><span class="p">)</span>
+                <span class="c1"># Merge with stop geom using stop_key</span>
+                <span class="o">&gt;&gt;</span> <span class="n">inner_join</span><span class="p">(</span><span class="n">_</span><span class="p">,</span>
+                              <span class="p">(</span><span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_dim_stops</span><span class="p">()</span>
+                               <span class="o">&gt;&gt;</span> <span class="n">select</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_itp_id</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">stop_key</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">stop_id</span><span class="p">,</span>
+                                         <span class="n">_</span><span class="o">.</span><span class="n">stop_lat</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">stop_lon</span><span class="p">)</span>
+                              <span class="p">),</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;stop_key&#39;</span><span class="p">)</span>
+                <span class="o">&gt;&gt;</span> <span class="n">collect</span><span class="p">()</span>
+                <span class="c1"># Only grab the ITP IDs we&#39;re interested in</span>
+                <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_itp_id</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">lossan_df</span><span class="o">.</span><span class="n">itp_id</span><span class="p">))</span>
+                <span class="c1"># This is to sort in order for ITP_ID and stop_id</span>
+                <span class="o">&gt;&gt;</span> <span class="n">arrange</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_itp_id</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">stop_id</span><span class="p">)</span>
+               <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">lossan_stops</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>stop_key</th>
+      <th>date</th>
+      <th>stop_lon</th>
+      <th>stop_lat</th>
+      <th>calitp_itp_id</th>
+      <th>stop_id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-3465164382055991093</td>
+      <td>2021-09-01</td>
+      <td>-118.117346</td>
+      <td>34.079011</td>
+      <td>6</td>
+      <td>2619783</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-4388330883484799862</td>
+      <td>2021-09-01</td>
+      <td>-118.111602</td>
+      <td>34.079282</td>
+      <td>6</td>
+      <td>2619784</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-3890148245714116244</td>
+      <td>2021-09-01</td>
+      <td>-118.114294</td>
+      <td>34.080835</td>
+      <td>6</td>
+      <td>2619785</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3725728967761887153</td>
+      <td>2021-09-01</td>
+      <td>-118.116863</td>
+      <td>34.085540</td>
+      <td>6</td>
+      <td>2619787</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-6069710332211186970</td>
+      <td>2021-09-01</td>
+      <td>-118.117052</td>
+      <td>34.085874</td>
+      <td>6</td>
+      <td>2619788</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./analytics_examples"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="warehouse_tutorial.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Tutorial - Querying the Data Warehouse</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="sample-catalog-viewer.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Sample Data Catalog</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By Cal-ITP<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

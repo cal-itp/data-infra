@@ -284,6 +284,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_examples/new_tutorial.html">
+     More Complex Queries
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../analytics_examples/sample-catalog-viewer.html">
      Sample Data Catalog
     </a>
@@ -705,7 +710,7 @@
 <div class="section" id="google-cloud-storage">
 <h3>Google Cloud Storage<a class="headerlink" href="#google-cloud-storage" title="Permalink to this headline">¶</a></h3>
 <p>When putting GCS files into the catalog, note that geospatial datasets (zipped shapefiles, GeoJSONs) require the additional <code class="docutils literal notranslate"><span class="pre">use_fsspec:</span> <span class="pre">true</span></code> argument compared to tabular datasets (parquets, CSVs). Geoparquets, the exception, are catalogued like tabular datasets.</p>
-<p>Opening geospatial datasets through <code class="docutils literal notranslate"><span class="pre">intake</span></code> is the easiest way to import these datasets within a Jupyter Notebook. Otherwise, <code class="docutils literal notranslate"><span class="pre">geopandas</span></code> can read the geospatial datasets that are locally saved or downloaded first from the bucket, but not directly with a GCS file path. Refer to <a class="reference external" href="./07_storing_data.md#setting-up-google-authentication">07_storing_data</a> to set up your Google authentication.</p>
+<p>Opening geospatial datasets through <code class="docutils literal notranslate"><span class="pre">intake</span></code> is the easiest way to import these datasets within a Jupyter Notebook. Otherwise, <code class="docutils literal notranslate"><span class="pre">geopandas</span></code> can read the geospatial datasets that are locally saved or downloaded first from the bucket, but not directly with a GCS file path. Refer to <a class="reference external" href="./storing_data.md#setting-up-google-authentication">storing data</a> to set up your Google authentication.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">lehd_federal_jobs_by_tract</span><span class="p">:</span>
     <span class="nt">driver</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">parquet</span>
     <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">LEHD Workplace Area Characteristics (WAC) federal jobs by census tract.</span>
