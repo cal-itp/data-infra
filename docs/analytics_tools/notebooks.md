@@ -1,9 +1,7 @@
 (jupyterhub)=
 # Notebooks
 ## Introduction to JupyterHub
-For Python users, we have deployed a cloud-based instance of JupyterHub to creating, using, and sharing notebooks easy.
-
-This avoids the need to set up a local environment, provides dedicated storage, and allows you to push to GitHub.
+For Python users, we have deployed a cloud-based instance of JupyterHub to creating, using, and sharing notebooks easy. This avoids the need to set up a local environment, provides dedicated storage, and allows you to push to GitHub.
 
 **You can access JuypterHub [using this link](https://hubtest.k8s.calitp.jarv.us/)**.
 
