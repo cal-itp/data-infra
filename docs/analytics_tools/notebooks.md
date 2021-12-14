@@ -17,20 +17,27 @@ Analyses on jupyterhub are done using notebooks, which allow users to mix narrat
 <br> - [Uploading from google cloud storage](#uploading-from-google-cloud-storage)
 1. [Environment Variables](#environment-variables)
 
-## Using JupyterHub
+### Using JupyterHub
 For Python users, we have deployed a cloud-based instance of JupyterHub to creating, using, and sharing notebooks easy.
 
 This avoids the need to set up a local environment, provides dedicated storage, and allows you to push to GitHub.
 
 ### Logging in to JupyterHub
 
-JupyterHub currently lives at https://hubtest.k8s.calitp.jarv.us/hub/. In order to be added to the Cal-ITP JupyterHub, please [open an issue using this link](https://github.com/cal-itp/data-infra/issues/new?assignees=charlie-costanzo&labels=new+team+member&template=new-team-member.md&title=New+Team+Member+-+%5BName%5D).
+JupyterHub currently lives at [hubtest.k8s.calitp.jarv.us/hub](https://hubtest.k8s.calitp.jarv.us/hub/).
+
+Note: you will need to have been added to the Cal-ITP organization on GitHub to obtain access. If you have yet to be added to the organization and need to be, DM Charlie on Cal-ITP Slack <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">using this link</a>.
 
 ### Connecting to the Warehouse
 
 Connecting to the warehouse requires a bit of setup after logging in to JupyterHub.
 Users need to download and install the gcloud commandline tool from the app.
 
+See the screencast below for a full walkthrough.
+
+<div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/6883b0bf9c8b4547a93d00bc6ba45b6d" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
+
+The commands required:
 ```python
 # initial setup (in terminal) ----
 curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-361.0.0-linux-x86_64.tar.gz
@@ -42,10 +49,6 @@ tar -zxvf google-cloud-sdk-361.0.0-linux-x86_64.tar.gz
 gcloud auth login
 gcloud auth application-default login
 ```
-
-See the screencast below for a full walkthrough.
-
-<div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/6883b0bf9c8b4547a93d00bc6ba45b6d" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
 
 ### Increasing the Query Limit
 
