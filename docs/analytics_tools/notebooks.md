@@ -1,16 +1,14 @@
 (jupyterhub)=
 # Notebooks
 ## Introduction to JupyterHub
-For Python users, we have deployed a cloud-based instance of JupyterHub to creating, using, and sharing notebooks easy. This avoids the need to set up a local environment, provides dedicated storage, and allows you to push to GitHub.
-
-**You can access JuypterHub [using this link](https://hubtest.k8s.calitp.jarv.us/)**.
-
-## Using JupyterHub
 Jupyterhub is a web application that allows users to analyze and create reports on warehouse data (or a number of data sources).
 
 Analyses on jupyterhub are done using notebooks, which allow users to mix narrative with analysis code.
 
+**You can access JuypterHub [using this link](https://hubtest.k8s.calitp.jarv.us/)**.
+
 ## Table of Contents
+1. [Using JupyterHub](#using-jupyterhub)
 1. [Logging in to JupyterHub](#logging-in-to-jupyterhub)
 1. [Connecting to the Warehouse](#connecting-to-the-warehouse)
 1. [Increasing the Query Limit](#increasing-the-query-limit)
@@ -19,6 +17,10 @@ Analyses on jupyterhub are done using notebooks, which allow users to mix narrat
 <br> - [Uploading from google cloud storage](#uploading-from-google-cloud-storage)
 1. [Environment Variables](#environment-variables)
 
+## Using JupyterHub
+For Python users, we have deployed a cloud-based instance of JupyterHub to creating, using, and sharing notebooks easy.
+
+This avoids the need to set up a local environment, provides dedicated storage, and allows you to push to GitHub.
 
 ### Logging in to JupyterHub
 
