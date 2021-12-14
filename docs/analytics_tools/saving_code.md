@@ -6,15 +6,17 @@ Most Cal-ITP analysts should opt for working directly from JupyterHub. Leveragin
 Doing work locally and pushing directly from the command line is a similar workflow, but replace the JupyterHub terminal with your local terminal.
 
 ## Table of Contents
-1. [Onboarding Setup](#onboarding-setup)
-1. What's a typical [project workflow](#project-workflow)?
-1. Someone is collaborating on my branch, how do we [stay in sync](#pulling-and-pushing-changes)?
-1. The `main` branch is ahead, and I want to sync my branch with `main`
-    * [Rebase](#rebase)
-    * [Merge](#merge)
-    * Differences between `merge` and `rebase`: [Atlassian tutorial](https://www.atlassian.com/git/tutorials/merging-vs-rebasing), [GitKraken](https://www.gitkraken.com/learn/git/problems/git-rebase-vs-merge), [Hackernoon](https://hackernoon.com/git-merge-vs-rebase-whats-the-diff-76413c117333), and [StackOverflow](https://stackoverflow.com/questions/59622140/git-merge-vs-git-rebase-for-merge-conflict-scenarios).
-1. [Helpful Hints](#helpful-hints)
-
+1. [Pushing from JupyterHub](#pushing-from-jupyterhub)
+<br> * [Onboarding Setup](#onboarding-setup)
+<br> * What's a typical [project workflow](#project-workflow)?
+<br> * Someone is collaborating on my branch, how do we [stay in sync](#pulling-and-pushing-changes)?
+<br> * The `main` branch is ahead, and I want to sync my branch with `main`
+  <br> * [Rebase](#rebase)
+  <br> * [Merge](#merge)
+  <br> * Differences between `merge` and `rebase`: [Atlassian tutorial](https://www.atlassian.com/git/tutorials/merging-vs-rebasing), [GitKraken](https://www.gitkraken.com/learn/git/problems/git-rebase-vs-merge), [Hackernoon](https://hackernoon.com/git-merge-vs-rebase-whats-the-diff-76413c117333), and [StackOverflow](https://stackoverflow.com/questions/59622140/git-merge-vs-git-rebase-for-merge-conflict-scenarios).
+<br> * [Helpful Hints](#helpful-hints)
+1. [Pushing from the Command Line](pushing-command-line)
+1. [Pushing in the Github User Interface](#pushing-drag-drop)
 
 ## Pushing from JupyterHub
 
@@ -88,6 +90,20 @@ SOMEONE WHO PREFERS MERGE PROCESS TO FILL THIS IN...is there a commit after?
 * Rename files and retain the version history associated: `git mv old-notebook.ipynb new-notebook.ipynb`
 * Once you've merged your branch into `main`, you can delete your branch locally: `git branch -d my-new-branch`
 
+(pushing-command-line)=
 ## [WIP] Pushing from the Command Line
 
-## [WIP] Pushing in GitHub - Drag and Drop
+(pushing-drag-drop)=
+## Pushing in the Github User Interface
+
+If you would like to push directly from the Github User Interface:
+
+1. Navigate the Github repository and folder that you would like to add your work, and locate the file on your computer that you would like to add
+
+(Note: if you would like to add your file to a folder that does not yet exist, <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">message Charlie on Cal-ITP Slack</a> to add it for you)
+
+![Collection Matrix](assets/step-1-gh-drag-drop.png)
+
+2. 'Click and Drag' your file from your computer into the Github screen
+
+![Collection Matrix](assets/step-2-gh-drag-drop.png)
