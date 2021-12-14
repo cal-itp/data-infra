@@ -7,11 +7,11 @@ Doing work locally and pushing directly from the command line is a similar workf
 
 ## Table of Contents
 1. [Pushing from JupyterHub](#pushing-from-jupyterhub)
-* [Onboarding Setup](#onboarding-setup)
-* What's a typical [project workflow](#project-workflow)?
-* Someone is collaborating on my branch, how do we [stay in sync](#pulling-and-pushing-changes)?
-* The `main` branch is ahead, and I want to [sync my branch with `main`](rebase-and-merge)
-* [Helpful Hints](#helpful-hints)
+  * [Onboarding Setup](#onboarding-setup)
+  * What's a typical [project workflow](#project-workflow)?
+  * Someone is collaborating on my branch, how do we [stay in sync](#pulling-and-pushing-changes)?
+  * The `main` branch is ahead, and I want to [sync my branch with `main`](rebase-and-merge)
+  * [Helpful Hints](#helpful-hints)
 2. [Pushing in the Github User Interface](#pushing-drag-drop)
 
 ## Pushing from JupyterHub
@@ -59,13 +59,13 @@ Especially when you have a collaborator working on the same branch, you want to 
 1. Stage and push your commit with `git add` and `git commit` and `git push origin my-new-branch`
 
 (rebase-and-merge)=
-### Syncing My Branch With Main
+### Syncing my Branch with Main
 If you find that the `main` branch is ahead, and you want to sync your branch with `main` you'll need to use one of the below commands:
 
 * [Rebase](#rebase)
 * [Merge](#merge)
 
-Read more about the differences between `merge` and `rebase`:
+Read more about the differences between `rebase` and `merge`:
 * [Atlassian tutorial](https://www.atlassian.com/git/tutorials/merging-vs-rebasing)
 * [GitKraken](https://www.gitkraken.com/learn/git/problems/git-rebase-vs-merge)
 * [Hackernoon](https://hackernoon.com/git-merge-vs-rebase-whats-the-diff-76413c117333)
@@ -105,12 +105,12 @@ SOMEONE WHO PREFERS MERGE PROCESS TO FILL THIS IN...is there a commit after?
 
 If you would like to push directly from the Github User Interface:
 
-  1. Navigate the Github repository and folder that you would like to add your work, and locate the file on your computer that you would like to add
+1. Navigate the Github repository and folder that you would like to add your work, and locate the file on your computer that you would like to add
 
-(Note: if you would like to add your file to a folder that does not yet exist, <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">message Charlie on Cal-ITP Slack</a> to add it for you)
+    (Note: if you would like to add your file to a folder that does not yet exist, <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">message Charlie on Cal-ITP Slack</a> to add it for you)
 
-![Collection Matrix](assets/step-1-gh-drag-drop.png)
+    ![Collection Matrix](assets/step-1-gh-drag-drop.png)
 
-  2. 'Click and Drag' your file from your computer into the Github screen
+1. 'Click and Drag' your file from your computer into the Github screen
 
-![Collection Matrix](assets/step-2-gh-drag-drop.png)
+    ![Collection Matrix](assets/step-2-gh-drag-drop.png)
