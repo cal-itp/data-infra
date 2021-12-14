@@ -7,13 +7,16 @@ Doing work locally and pushing directly from the command line is a similar workf
 
 ## Table of Contents
 1. [Pushing from JupyterHub](#pushing-from-jupyterhub)
-<br> * [Onboarding Setup](#onboarding-setup)
-<br> * What's a typical [project workflow](#project-workflow)?
-<br> * Someone is collaborating on my branch, how do we [stay in sync](#pulling-and-pushing-changes)?
-<br> * The `main` branch is ahead, and I want to sync my branch with `main`
-  <br> * [Rebase](#rebase)
-  <br> * [Merge](#merge)
-  <br> * Differences between `merge` and `rebase`: [Atlassian tutorial](https://www.atlassian.com/git/tutorials/merging-vs-rebasing), [GitKraken](https://www.gitkraken.com/learn/git/problems/git-rebase-vs-merge), [Hackernoon](https://hackernoon.com/git-merge-vs-rebase-whats-the-diff-76413c117333), and [StackOverflow](https://stackoverflow.com/questions/59622140/git-merge-vs-git-rebase-for-merge-conflict-scenarios).
+* [Onboarding Setup](#onboarding-setup)
+* What's a typical [project workflow](#project-workflow)?
+* Someone is collaborating on my branch, how do we [stay in sync](#pulling-and-pushing-changes)?
+* The `main` branch is ahead, and I want to sync my branch with `main`
+  * [Rebase](#rebase)
+  * [Merge](#merge)
+  * Differences between `merge` and `rebase`:
+    * [Atlassian tutorial](https://www.atlassian.com/git/tutorials/merging-vs-rebasing)
+    * [GitKraken](https://www.gitkraken.com/learn/git/problems/git-rebase-vs-merge)
+    * [Hackernoon](https://hackernoon.com/git-merge-vs-rebase-whats-the-diff-76413c117333), and [StackOverflow](https://stackoverflow.com/questions/59622140/git-merge-vs-git-rebase-for-merge-conflict-scenarios).
 <br> * [Helpful Hints](#helpful-hints)
 1. [Pushing from the Command Line](pushing-command-line)
 1. [Pushing in the Github User Interface](#pushing-drag-drop)
