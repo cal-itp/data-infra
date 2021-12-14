@@ -1,5 +1,5 @@
 (saving-code)=
-# Saving Code (WIP)
+# Saving Code
 
 Most Cal-ITP analysts should opt for working directly from JupyterHub. Leveraging this cloud-based, standardized environment should alleviate many of the pain points associated with creating reproducible, collaborative work.
 
