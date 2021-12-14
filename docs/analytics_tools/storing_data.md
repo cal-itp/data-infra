@@ -48,7 +48,7 @@ In order to save data being used in a report, you can use two methods:
 * Using code in your notebook to upload the data.
 * Using the Google Cloud Storage web UI to manually upload.
 
-To push a dataset with code from a Jupyter Notebook or script, run these commands in the terminal to set up your Google authentication.
+You will need to have set up your Google authentication in order too push a dataset with code from a Jupyter Notebook or script. If you have yet to do so, [follow these instructions](connecting-to-warehouse).
 
 ```
 # initial setup ----
