@@ -98,12 +98,12 @@ SOMEONE WHO PREFERS MERGE PROCESS TO FILL THIS IN...is there a commit after?
 
 If you would like to push directly from the Github User Interface:
 
-1. Navigate the Github repository and folder that you would like to add your work, and locate the file on your computer that you would like to add
+  1. Navigate the Github repository and folder that you would like to add your work, and locate the file on your computer that you would like to add
 
 (Note: if you would like to add your file to a folder that does not yet exist, <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">message Charlie on Cal-ITP Slack</a> to add it for you)
 
 ![Collection Matrix](assets/step-1-gh-drag-drop.png)
 
-2. 'Click and Drag' your file from your computer into the Github screen
+  2. 'Click and Drag' your file from your computer into the Github screen
 
 ![Collection Matrix](assets/step-2-gh-drag-drop.png)
