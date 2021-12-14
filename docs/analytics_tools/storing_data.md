@@ -17,17 +17,6 @@ kernelspec:
 
 Our team uses Google Cloud Storage (GCS) buckets, specifically the `calitp-analytics-data` bucket, to store other datasets for analyses. GCS can store anything, of arbitrary object size and shape. It’s like a giant folder in the cloud. You can use it to store CSVs, parquets, pickles, videos, etc. Within the bucket, the `data-analyses` folder with its sub-folders corresponds to the `data-analyses`  GitHub repo with its sub-folders. Versioned data for a task should live within the correct folders.
 
-To access GCS, make sure you have your authentication set up in JupyterHub.
-
-```python
-import geopandas as gpd
-import gcsfs
-import pandas as pd
-
-from calitp.storage import get_fs
-fs = get_fs()
-```
-
 ## Table of Contents
 1. [Introduction](#introduction)
 1. [Storing New Data - Screencast](storing-new-data-screencast)
@@ -44,7 +33,7 @@ fs = get_fs()
 
 ## Introduction
 
-Currently, report data can be stored in the `calitp-analytics-data` bucket.
+Currently, report data can be stored in the `calitp-analytics-data` bucket in Google Cloud Storage.
 
 In order to save data being used in a report, you can use two methods:
 
@@ -53,7 +42,7 @@ In order to save data being used in a report, you can use two methods:
 
 Watch the screencast below and read the additional information to begin.
 
-Note: You will need to have set up your Google authentication in order to push a dataset with code from a Jupyter Notebook or script. If you have yet to do so, [follow these instructions](connecting-to-warehouse).
+**Note**: To access Google Cloud Storage you will need to have set up your Google authentication. If you have yet to do so, [follow these instructions](connecting-to-warehouse).
 
 (storing-new-data-screencast)=
 ## Storing New Data - Screencast
@@ -63,6 +52,16 @@ Note: You will need to have set up your Google authentication in order to push a
 (uploading-from-notebook)=
 ## Uploading Data from a Notebook
 
+In order to begin, import the following libraries in your notebook and set the `fs` variable
+
+```python
+import geopandas as gpd
+import gcsfs
+import pandas as pd
+
+from calitp.storage import get_fs
+fs = get_fs()
+```
 ### Tabular Data
 
 While GCS can store CSVs, parquets, Excel spreadsheets, etc, parquets are the preferred file type. Interacting with tabular datasets in GCS is fairly straightforward and is handled well by `pandas`.

@@ -7,11 +7,11 @@ Doing work locally and pushing directly from the command line is a similar workf
 
 ## Table of Contents
 1. [Pushing from JupyterHub](#pushing-from-jupyterhub)
-  * [Onboarding Setup](#onboarding-setup)
-  * What's a typical [project workflow](#project-workflow)?
-  * Someone is collaborating on my branch, how do we [stay in sync](#pulling-and-pushing-changes)?
-  * The `main` branch is ahead, and I want to [sync my branch with `main`](rebase-and-merge)
-  * [Helpful Hints](#helpful-hints)
+    * [Onboarding Setup](#onboarding-setup)
+    * What's a typical [project workflow](#project-workflow)?
+    * Someone is collaborating on my branch, how do we [stay in sync](#pulling-and-pushing-changes)?
+    * The `main` branch is ahead, and I want to [sync my branch with `main`](rebase-and-merge)
+    * [Helpful Hints](#helpful-hints)
 2. [Pushing in the Github User Interface](#pushing-drag-drop)
 
 ## Pushing from JupyterHub
@@ -69,7 +69,7 @@ Read more about the differences between `rebase` and `merge`:
 * [Atlassian tutorial](https://www.atlassian.com/git/tutorials/merging-vs-rebasing)
 * [GitKraken](https://www.gitkraken.com/learn/git/problems/git-rebase-vs-merge)
 * [Hackernoon](https://hackernoon.com/git-merge-vs-rebase-whats-the-diff-76413c117333)
-* [StackOverflow](https://stackoverflow.com/questions/59622140/git-merge-vs-git-rebase-for-merge-conflict-scenarios).
+* [StackOverflow](https://stackoverflow.com/questions/59622140/git-merge-vs-git-rebase-for-merge-conflict-scenarios)
 <br>
 
 #### Rebase
@@ -109,8 +109,13 @@ If you would like to push directly from the Github User Interface:
 
     (Note: if you would like to add your file to a folder that does not yet exist, <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">message Charlie on Cal-ITP Slack</a> to add it for you)
 
+
+
     ![Collection Matrix](assets/step-1-gh-drag-drop.png)
 
+
 1. 'Click and Drag' your file from your computer into the Github screen
+
+
 
     ![Collection Matrix](assets/step-2-gh-drag-drop.png)
