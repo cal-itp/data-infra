@@ -116,16 +116,9 @@ import calitp.magics
 %%sql
 
 SELECT
-    calitp_feed_name,
-    date,
-    count(*) AS count_routes
-FROM `views.gtfs_schedule_fact_daily_feed_routes`
-JOIN `views.gtfs_schedule_dim_feeds` USING (feed_key)
+    COUNT(*)
+FROM `views.gtfs_schedule_dim_feeds`
 WHERE
     calitp_feed_name = "AC Transit (0)"
-GROUP BY
-    1, 2
-ORDER BY
-    date DESC
 LIMIT 10
 ```
