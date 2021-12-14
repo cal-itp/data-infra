@@ -12,8 +12,7 @@ Doing work locally and pushing directly from the command line is a similar workf
 * Someone is collaborating on my branch, how do we [stay in sync](#pulling-and-pushing-changes)?
 * The `main` branch is ahead, and I want to [sync my branch with `main`](rebase-and-merge)
 * [Helpful Hints](#helpful-hints)
-2. [Pushing from the Command Line](pushing-command-line)
-3. [Pushing in the Github User Interface](#pushing-drag-drop)
+2. [Pushing in the Github User Interface](#pushing-drag-drop)
 
 ## Pushing from JupyterHub
 
@@ -100,9 +99,6 @@ SOMEONE WHO PREFERS MERGE PROCESS TO FILL THIS IN...is there a commit after?
 * Temporarily stash changes, move to a different branch, and come back and retain those changes: `git stash`, `git checkout some-other-branch`, do stuff on the other branch, `git checkout original-branch`, `git stash pop`
 * Rename files and retain the version history associated: `git mv old-notebook.ipynb new-notebook.ipynb`
 * Once you've merged your branch into `main`, you can delete your branch locally: `git branch -d my-new-branch`
-
-(pushing-command-line)=
-## [WIP] Pushing from the Command Line
 
 (pushing-drag-drop)=
 ## Pushing in the Github User Interface
