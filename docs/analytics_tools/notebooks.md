@@ -96,6 +96,7 @@ GITHUB_API_KEY = os.environ["GITHUB_API_KEY"]
 
 (querying-sql-jupyterhub)=
 ### Querying with SQL in JupyterHub
+
 JupyterHub makes it easy to query SQL in the notebooks.
 
 To query SQL, simply import the library below at the top of your notebook:
