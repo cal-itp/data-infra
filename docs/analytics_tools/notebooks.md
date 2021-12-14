@@ -1,5 +1,6 @@
 (jupyterhub)=
 # Notebooks
+
 ## Introduction to JupyterHub
 Jupyterhub is a web application that allows users to analyze and create reports on warehouse data (or a number of data sources).
 
