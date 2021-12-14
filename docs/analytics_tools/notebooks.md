@@ -27,7 +27,7 @@ This avoids the need to set up a local environment, provides dedicated storage, 
 JupyterHub currently lives at [hubtest.k8s.calitp.jarv.us/hub](https://hubtest.k8s.calitp.jarv.us/hub/).
 
 Note: you will need to have been added to the Cal-ITP organization on GitHub to obtain access. If you have yet to be added to the organization and need to be, DM Charlie on Cal-ITP Slack <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">using this link</a>.
-
+(connecting-to-warehouse)=
 ### Connecting to the Warehouse
 
 Connecting to the warehouse requires a bit of setup after logging in to JupyterHub.
