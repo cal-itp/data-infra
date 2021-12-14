@@ -29,7 +29,8 @@ fs = get_fs()
 ```
 
 ## Table of Contents
-1. [Setting up Google Authentication](#setting-up-google-authentication)
+1. [Introduction](#introduction)
+1. [Storing New Data - Screencast](storing-new-data-screencast)
 1. [Tabular Data](#tabular-data)
 <br> - [Parquet](#parquet)
 <br>- [CSV](#csv)
@@ -39,7 +40,7 @@ fs = get_fs()
 <br> - [GeoJSON](#geojson)
 
 
-## Setting Up Google Authentication
+## Introduction
 
 Currently, report data can be stored in the `calitp-analytics-data` bucket.
 
@@ -48,20 +49,12 @@ In order to save data being used in a report, you can use two methods:
 * Using code in your notebook to upload the data.
 * Using the Google Cloud Storage web UI to manually upload.
 
-You will need to have set up your Google authentication in order too push a dataset with code from a Jupyter Notebook or script. If you have yet to do so, [follow these instructions](connecting-to-warehouse).
+Watch the screencast below and read the additional information to begin.
 
-```
-# initial setup ----
-curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-361.0.0-linux-x86_64.tar.gz
-tar -zxvf google-cloud-sdk-361.0.0-linux-x86_64.tar.gz
-./google-cloud-sdk/install.sh
-./google-cloud-sdk/bin/gcloud init
+Note: You will need to have set up your Google authentication in order to push a dataset with code from a Jupyter Notebook or script. If you have yet to do so, [follow these instructions](connecting-to-warehouse).
 
-# log in to project ----
-gcloud auth login
-gcloud auth application-default login
-```
-These are demonstrated in the screencast below.
+(storing-new-data-screencast)=
+## Storing New Data - Screencast
 
 <div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/51d22876ab6d4d35a39f18e8f6d5f11d" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
 
