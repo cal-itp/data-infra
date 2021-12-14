@@ -58,11 +58,13 @@ Note: You will need to have set up your Google authentication in order to push a
 
 <div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/51d22876ab6d4d35a39f18e8f6d5f11d" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
 
-## Tabular Data
+## Uploading Data from a Notebook
+
+### Tabular Data
 
 While GCS can store CSVs, parquets, Excel spreadsheets, etc, parquets are the preferred file type. Interacting with tabular datasets in GCS is fairly straightforward and is handled well by `pandas`.
 
-### Parquet
+#### Parquet
 
 Parquet is an “open source columnar storage format for use in data analysis systems.” Columnar storage is more efficient as it is easily compressed and the data is more homogenous. CSV files utilize a row-based storage format which is harder to compress, a reason why Parquets files are preferable for larger datasets. Parquet files are faster to read than CSVs, as they have a higher querying speed and preserve datatypes (ie, Number, Timestamps, Points). They are best for intermediate data storage and large datasets (1GB+) on most any on-disk storage. This file format is also good for passing dataframes between Python and R. A similar option is feather.
 
@@ -74,7 +76,7 @@ df = pd.read_parquet('gs://calitp-analytics-data/data-analyses/task-subfolder/te
 df.to_parquet('gs://calitp-analytics-data/data-analyses/task-subfolder/test.parquet')
 ```
 
-### CSV
+#### CSV
 
 ```python
 df = pd.read_csv('gs://calitp-analytics-data/data-analyses/task-subfolder/test.csv')
@@ -82,11 +84,11 @@ df = pd.read_csv('gs://calitp-analytics-data/data-analyses/task-subfolder/test.c
 df.to_csv('gs://calitp-analytics-data/data-analyses/task-subfolder/test.parquet')
 ```
 
-## Geospatial Data
+### Geospatial Data
 
 Geospatial data may require a little extra work, due to how `geopandas` and GCS interacts.
 
-### Geoparquet
+#### Geoparquet
 
 Importing geoparquets directly from GCS works with `geopandas`, but exporting geoparquets into GCS requires an extra step of uploading.
 
@@ -109,10 +111,16 @@ import shared_utils
 shared_utils.utils.geoparquet_gcs_export(gdf, "my-geoparquet")
 ```
 
-### Zipped Shapefile
+#### Zipped Shapefile
 
 Refer to the [data catalogs doc](./08_data_catalogs.md#google-cloud-storage) to list a zipped shapefile, and read in the zipped shapefile with the `intake` method. Zipped shapefiles saved in GCS cannot be read in directly using `geopandas`.
 
-### GeoJSON
+#### GeoJSON
 
 Refer to the [data catalogs doc](./08_data_catalogs.md#google-cloud-storage) to list a GeoJSON, and read in the GeoJSON with the `intake` method. GeoJSONs saved in GCS cannot be read in directly using `geopandas`.
+
+## Uploading data in Google Cloud Storage
+
+You can access the cloud bucket from the web from https://console.cloud.google.com/storage/browser/calitp-analytics-data.
+
+See the above screencast for a walkthrough of using the bucket.
