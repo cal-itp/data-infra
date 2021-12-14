@@ -13,6 +13,7 @@ Analyses on jupyterhub are done using notebooks, which allow users to mix narrat
 1. [Connecting to the Warehouse](#connecting-to-the-warehouse)
 1. [Increasing the Query Limit](#increasing-the-query-limit)
 1. [Environment Variables](#environment-variables)
+1. [Querying with SQL in JupyterHub](querying-sql-jupyterhub)
 
 ### Using JupyterHub
 For Python users, we have deployed a cloud-based instance of JupyterHub to creating, using, and sharing notebooks easy.
@@ -92,6 +93,7 @@ dotenv.load_dotenv("_env")
 GITHUB_API_KEY = os.environ["GITHUB_API_KEY"]
 ```
 
+(querying-sql-jupyterhub)=
 ### Querying with SQL in JupyterHub
 JupyterHub makes it easy to query SQL in the notebooks.
 
