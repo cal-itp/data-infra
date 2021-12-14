@@ -4,7 +4,7 @@
 ## Introduction to JupyterHub
 Jupyterhub is a web application that allows users to analyze and create reports on warehouse data (or a number of data sources).
 
-Analyses on jupyterhub are done using notebooks, which allow users to mix narrative with analysis code.
+Analyses on JupyterHub are done using notebooks, which allow users to mix narrative with analysis code.
 
 **You can access JuypterHub [using this link](https://hubtest.k8s.calitp.jarv.us/)**.
 
