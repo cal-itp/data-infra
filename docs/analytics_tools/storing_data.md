@@ -31,13 +31,15 @@ fs = get_fs()
 ## Table of Contents
 1. [Introduction](#introduction)
 1. [Storing New Data - Screencast](storing-new-data-screencast)
-1. [Tabular Data](#tabular-data)
-<br> - [Parquet](#parquet)
-<br>- [CSV](#csv)
-1. [Geospatial Data](#geospatial-data)
-<br> - [Geoparquet](#geoparquet)
-<br> - [Zipped shapefile](#zipped-shapefile)
-<br> - [GeoJSON](#geojson)
+1. [Uploading Data from a Notebook](uploading-from-notebook)
+<br> - [Tabular Data](#tabular-data)
+  <br> - [Parquet](#parquet)
+  <br>- [CSV](#csv)
+<br> -[Geospatial Data](#geospatial-data)
+  <br> - [Geoparquet](#geoparquet)
+  <br> - [Zipped shapefile](#zipped-shapefile)
+  <br> - [GeoJSON](#geojson)
+1. [Uploading data in Google Cloud Storage](in-gcs)
 
 
 ## Introduction
@@ -58,6 +60,7 @@ Note: You will need to have set up your Google authentication in order to push a
 
 <div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/51d22876ab6d4d35a39f18e8f6d5f11d" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
 
+(uploading-from-notebook)=
 ## Uploading Data from a Notebook
 
 ### Tabular Data
@@ -119,6 +122,7 @@ Refer to the [data catalogs doc](./08_data_catalogs.md#google-cloud-storage) to 
 
 Refer to the [data catalogs doc](./08_data_catalogs.md#google-cloud-storage) to list a GeoJSON, and read in the GeoJSON with the `intake` method. GeoJSONs saved in GCS cannot be read in directly using `geopandas`.
 
+(in-gcs)=
 ## Uploading data in Google Cloud Storage
 
 You can access the cloud bucket from the web from https://console.cloud.google.com/storage/browser/calitp-analytics-data.
