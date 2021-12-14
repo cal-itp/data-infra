@@ -63,54 +63,6 @@ os.environ["CALITP_BQ_MAX_BYTES"] = str(20_000_000_000)
 tbl._init()
 ```
 
-### Uploading Data
-
-Currently, report data can be stored in the `calitp-analytics-data` bucket.
-
-In order to save data being used in a report, you can use two methods:
-
-* Using code in your notebook to upload the data.
-* Using the google cloud storage web UI to manually upload.
-
-These are demonstrated in the screencast below.
-
-<div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/51d22876ab6d4d35a39f18e8f6d5f11d" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
-
-#### Uploading data from a notebook
-
-The code below shows how to copy a file from JupyterHub to the data bucket.
-Be sure to replace `<FILE NAME>` and `<ANALYSIS FOLDER>` with the appropriate names.
-
-For additional details, including options for reading/writing geospatial data using `geopandas`, see [](storing-new-data).
-
-```python
-# Using the `calitp` package
-from calitp.storage import get_fs
-
-fs = get_fs()
-
-fs.put("<FILE NAME>", "gs://calitp-analytics-data/data-analyses/<ANALYSIS FOLDER>/<FILE NAME>")
-
-# Using the `gcsfs` package
-import gcsfs
-import geopandas as gpd
-import pandas as pd
-
-# CSV
-df = pd.read_csv("gs://calitp-analytics-data/data-analyses/<ANALYSIS FOLDER>/<FILE NAME>")
-df.to_csv("gs://calitp-analytics-data/data-analyses/<ANALYSIS FOLDER>/<FILE NAME>")
-
-# Parquet
-df = pd.read_parquet("gs://calitp-analytics-data/data-analyses/<ANALYSIS FOLDER>/<FILE NAME>")
-df.to_parquet("gs://calitp-analytics-data/data-analyses/<ANALYSIS FOLDER>/<FILE NAME>")
-```
-
-#### Uploading from google cloud storage
-
-You can access the cloud bucket from the web from https://console.cloud.google.com/storage/browser/calitp-analytics-data.
-
-See the above screencast for a walkthrough of using the bucket.
-
 ### Environment Variables
 
 Sometimes if data access is expensive, or if there is sensitive data, then accessing it will require some sort of credentials (which may take the form of passwords or tokens).
