@@ -15,7 +15,7 @@ Analyses on jupyterhub are done using notebooks, which allow users to mix narrat
 1. [Environment Variables](#environment-variables)
 1. [Querying with SQL in JupyterHub](querying-sql-jupyterhub)
 
-### Using JupyterHub
+## Using JupyterHub
 For Python users, we have deployed a cloud-based instance of JupyterHub to creating, using, and sharing notebooks easy.
 
 This avoids the need to set up a local environment, provides dedicated storage, and allows you to push to GitHub.
