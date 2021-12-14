@@ -12,9 +12,6 @@ Analyses on jupyterhub are done using notebooks, which allow users to mix narrat
 1. [Logging in to JupyterHub](#logging-in-to-jupyterhub)
 1. [Connecting to the Warehouse](#connecting-to-the-warehouse)
 1. [Increasing the Query Limit](#increasing-the-query-limit)
-1. [Uploading Data](#uploading-data)
-<br> - [Uploading data from a notebook](#uploading-data-from-a-notebook)
-<br> - [Uploading from google cloud storage](#uploading-from-google-cloud-storage)
 1. [Environment Variables](#environment-variables)
 
 ### Using JupyterHub
@@ -27,6 +24,7 @@ This avoids the need to set up a local environment, provides dedicated storage, 
 JupyterHub currently lives at [hubtest.k8s.calitp.jarv.us/hub](https://hubtest.k8s.calitp.jarv.us/hub/).
 
 Note: you will need to have been added to the Cal-ITP organization on GitHub to obtain access. If you have yet to be added to the organization and need to be, DM Charlie on Cal-ITP Slack <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">using this link</a>.
+
 (connecting-to-warehouse)=
 ### Connecting to the Warehouse
 
@@ -92,3 +90,5 @@ dotenv.load_dotenv("_env")
 # Import the credential (without exposing the password!)
 GITHUB_API_KEY = os.environ["GITHUB_API_KEY"]
 ```
+
+### Querying with SQL in JupyterHub
