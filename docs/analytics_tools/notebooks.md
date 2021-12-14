@@ -100,8 +100,6 @@ JupyterHub makes it easy to query SQL in the notebooks.
 To query SQL, simply import the library below at the top of your notebook:
 
 ```python
-# Allows us to query SQL in the JupyterLab notebook
-# Use this in combination with '%%sql', as seen below
 import calitp.magics
 ```
 And add the following to the top of any cell block that you would like to query SQL in:
