@@ -92,3 +92,40 @@ GITHUB_API_KEY = os.environ["GITHUB_API_KEY"]
 ```
 
 ### Querying with SQL in JupyterHub
+JupyterHub makes it easy to query SQL in the notebooks.
+
+To query SQL, simply import the library below at the top of your notebook:
+
+```python
+# Allows us to query SQL in the JupyterLab notebook
+# Use this in combination with '%%sql', as seen below
+import calitp.magics
+```
+And add the following to the top of any cell block that you would like to query SQL in:
+
+```sql
+%%sql
+```
+
+Example:
+
+```python
+import calitp.magics
+```
+```sql
+%%sql
+
+SELECT
+    calitp_feed_name,
+    date,
+    count(*) AS count_routes
+FROM `views.gtfs_schedule_fact_daily_feed_routes`
+JOIN `views.gtfs_schedule_dim_feeds` USING (feed_key)
+WHERE
+    calitp_feed_name = "AC Transit (0)"
+GROUP BY
+    1, 2
+ORDER BY
+    date DESC
+LIMIT 10
+```
