@@ -44,7 +44,7 @@ In the `data-analyses` repo, separate analysis tasks live in their own directori
 1. See all the status changes to your files: `git status`
 1. When you're ready to save some of that work, stage the files you want to commit with `git add foldername/notebook1.ipynb foldername/script1.py`. To stage all the files, use `git add .`.
 1. Once you are ready to commit, add a commit message to associate with all the changes: `git commit -m "exploratory work" `
-1. Push those changes from local to remote branch (note: branch is `my-new-branch` and not `main`): `git push origin my-new-branch` and enter your username and **personal access token as the password**.
+1. Push those changes from local to remote branch (note: branch is `my-new-branch` and not `main`): `git push origin my-new-branch`.
 1. To review a log of past commits: `git log`
 1. When you are ready to merge all the commits into `main`, open a pull request (PR) on the remote repository, and merge it in!
 1. Go back to `main` and update your local to match the remote: `git checkout main`, `git pull origin main`
