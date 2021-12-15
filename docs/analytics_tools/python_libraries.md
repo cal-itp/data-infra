@@ -38,14 +38,14 @@ While most Python packages an analyst uses comes in JupyterHub, there may be add
 ## calitp
 `calitp` is an internal library of utility functions used to access our warehouse data.
 
-Most notably, you can use the following function to import a `tbl` from the warehouse:
+Most notably, you can import the following function at the top of your notebook to import a `tbl` from the warehouse:
 
 ```python
 from calitp.tables import tbl
 ```
 
 Example:
-```code-cell
+```{code-cell}
 from calitp.tables import tbl
 
 tbl.views.gtfs_schedule_fact_daily_feed_routes()
