@@ -4,7 +4,7 @@
 | -------- | ----------- | ------- |
 | CsvToWarehouseOperator  | Load a CSV (or google sheet) from a URL | [`transitstacks.fares`](https://github.com/cal-itp/data-infra/blob/main/airflow/dags/transitstacks_loader/fares.yml) |
 | PythonToWarehouseOperator | Load data using python and the calitp library. This is a very flexible approach. It's useful when you want to do a small amount of processing before loading. | [`views.validation_code_descriptions`](https://github.com/cal-itp/data-infra/blob/main/airflow/dags/gtfs_views/validation_code_descriptions.py) |
-| SqlToWarehouseOperator | Create a new table from a SQL query. | [`views.transitstacks`](https://github.com/cal-itp/data-infra/blob/main/airflow/dags/gtfs_views/transitstacks.yml) |
+| SqlToWarehouseOperator | Create a new table from a SQL query. | [`views.gtfs_schedule_fact_daily_stops`](https://github.com/cal-itp/data-infra/blob/main/airflow/dags/gtfs_views/gtfs_schedule_fact_daily_stops.sql) |
 | SqlQueryOperator | Run arbitrary SQL (e.g. `CREATE EXTERNAL TABLE ...`) | |
 
 ## Syntax overview
