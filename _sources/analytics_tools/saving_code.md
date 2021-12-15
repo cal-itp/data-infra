@@ -1,20 +1,18 @@
 (saving-code)=
-# Saving Code (WIP)
+# Saving Code
 
 Most Cal-ITP analysts should opt for working directly from JupyterHub. Leveraging this cloud-based, standardized environment should alleviate many of the pain points associated with creating reproducible, collaborative work.
 
 Doing work locally and pushing directly from the command line is a similar workflow, but replace the JupyterHub terminal with your local terminal.
 
 ## Table of Contents
-1. [Onboarding Setup](#onboarding-setup)
-1. What's a typical [project workflow](#project-workflow)?
-1. Someone is collaborating on my branch, how do we [stay in sync](#pulling-and-pushing-changes)?
-1. The `main` branch is ahead, and I want to sync my branch with `main`
-    * [Rebase](#rebase)
-    * [Merge](#merge)
-    * Differences between `merge` and `rebase`: [Atlassian tutorial](https://www.atlassian.com/git/tutorials/merging-vs-rebasing), [GitKraken](https://www.gitkraken.com/learn/git/problems/git-rebase-vs-merge), [Hackernoon](https://hackernoon.com/git-merge-vs-rebase-whats-the-diff-76413c117333), and [StackOverflow](https://stackoverflow.com/questions/59622140/git-merge-vs-git-rebase-for-merge-conflict-scenarios).
-1. [Helpful Hints](#helpful-hints)
-
+1. [Pushing from JupyterHub](#pushing-from-jupyterhub)
+    * [Onboarding Setup](#onboarding-setup)
+    * What's a typical [project workflow](#project-workflow)?
+    * Someone is collaborating on my branch, how do we [stay in sync](#pulling-and-pushing-changes)?
+    * The `main` branch is ahead, and I want to [sync my branch with `main`](rebase-and-merge)
+    * [Helpful Hints](#helpful-hints)
+2. [Pushing in the Github User Interface](#pushing-drag-drop)
 
 ## Pushing from JupyterHub
 
@@ -45,7 +43,7 @@ In the `data-analyses` repo, separate analysis tasks live in their own directori
 1. See all the status changes to your files: `git status`
 1. When you're ready to save some of that work, stage the files you want to commit with `git add foldername/notebook1.ipynb foldername/script1.py`. To stage all the files, use `git add .`.
 1. Once you are ready to commit, add a commit message to associate with all the changes: `git commit -m "exploratory work" `
-1. Push those changes from local to remote branch (note: branch is `my-new-branch` and not `main`): `git push origin my-new-branch` and enter your username and **personal access token as the password**.
+1. Push those changes from local to remote branch (note: branch is `my-new-branch` and not `main`): `git push origin my-new-branch`.
 1. To review a log of past commits: `git log`
 1. When you are ready to merge all the commits into `main`, open a pull request (PR) on the remote repository, and merge it in!
 1. Go back to `main` and update your local to match the remote: `git checkout main`, `git pull origin main`
@@ -60,7 +58,21 @@ Especially when you have a collaborator working on the same branch, you want to 
 1. Pop your changes: `git stash pop`
 1. Stage and push your commit with `git add` and `git commit` and `git push origin my-new-branch`
 
-### Rebase
+(rebase-and-merge)=
+### Syncing my Branch with Main
+If you find that the `main` branch is ahead, and you want to sync your branch with `main` you'll need to use one of the below commands:
+
+* [Rebase](#rebase)
+* [Merge](#merge)
+
+Read more about the differences between `rebase` and `merge`:
+* [Atlassian tutorial](https://www.atlassian.com/git/tutorials/merging-vs-rebasing)
+* [GitKraken](https://www.gitkraken.com/learn/git/problems/git-rebase-vs-merge)
+* [Hackernoon](https://hackernoon.com/git-merge-vs-rebase-whats-the-diff-76413c117333)
+* [StackOverflow](https://stackoverflow.com/questions/59622140/git-merge-vs-git-rebase-for-merge-conflict-scenarios)
+<br>
+
+#### Rebase
 
 A rebase might be preferred, especially if all your work is contained on your branch, within your task's folder, and lots of activity is happening on `main`. You'd like to plop all your commits onto the most recent `main` branch, and have it appear as if all your work took place *after* those PRs were merged in.
 
@@ -73,7 +85,7 @@ A rebase might be preferred, especially if all your work is contained on your br
 1. Make any commits you want (from step 1) with `git add`, `git commit -m "commit message"`
 1. Force-push those changes to complete the rebase and rewrite the commit history: `git push origin my-new-branch -f`
 
-### Merge
+#### Merge
 
 1. At this point, you've either stashed or added commits on `my-new-branch`.
 1. Pull from origin: `git checkout main` and `git pull origin main`
@@ -88,6 +100,22 @@ SOMEONE WHO PREFERS MERGE PROCESS TO FILL THIS IN...is there a commit after?
 * Rename files and retain the version history associated: `git mv old-notebook.ipynb new-notebook.ipynb`
 * Once you've merged your branch into `main`, you can delete your branch locally: `git branch -d my-new-branch`
 
-## [WIP] Pushing from the Command Line
+(pushing-drag-drop)=
+## Pushing in the Github User Interface
 
-## [WIP] Pushing in GitHub - Drag and Drop
+If you would like to push directly from the Github User Interface:
+
+1. Navigate the Github repository and folder that you would like to add your work, and locate the file on your computer that you would like to add
+
+    (Note: if you would like to add your file to a folder that does not yet exist, <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">message Charlie on Cal-ITP Slack</a> to add it for you)
+
+
+
+    ![Collection Matrix](assets/step-1-gh-drag-drop.png)
+
+
+1. 'Click and Drag' your file from your computer into the Github screen
+
+
+
+    ![Collection Matrix](assets/step-2-gh-drag-drop.png)

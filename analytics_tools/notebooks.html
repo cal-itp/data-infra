@@ -174,7 +174,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="saving_code.html">
-     Saving Code (WIP)
+     Saving Code
     </a>
    </li>
    <li class="toctree-l2">
@@ -605,13 +605,13 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#using-jupyterhub">
-   Using JupyterHub
+  <a class="reference internal nav-link" href="#table-of-contents">
+   Table of Contents
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#table-of-contents">
-   Table of Contents
+  <a class="reference internal nav-link" href="#using-jupyterhub">
+   Using JupyterHub
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
@@ -630,25 +630,13 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#uploading-data">
-     Uploading Data
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#uploading-data-from-a-notebook">
-       Uploading data from a notebook
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#uploading-from-google-cloud-storage">
-       Uploading from google cloud storage
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#environment-variables">
      Environment Variables
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#querying-with-sql-in-jupyterhub">
+     Querying with SQL in JupyterHub
     </a>
    </li>
   </ul>
@@ -668,34 +656,37 @@
 <span id="jupyterhub"></span><h1>Notebooks<a class="headerlink" href="#notebooks" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction-to-jupyterhub">
 <h2>Introduction to JupyterHub<a class="headerlink" href="#introduction-to-jupyterhub" title="Permalink to this headline">¶</a></h2>
-<p>For Python users, we have deployed a cloud-based instance of JupyterHub to creating, using, and sharing notebooks easy.</p>
-<p>This avoids the need to set up a local environment, provides dedicated storage, and allows you to push to GitHub.</p>
-<p><strong>You can access JuypterHub <a class="reference external" href="https://hubtest.k8s.calitp.jarv.us/">using this link</a></strong>.</p>
-</div>
-<div class="section" id="using-jupyterhub">
-<h2>Using JupyterHub<a class="headerlink" href="#using-jupyterhub" title="Permalink to this headline">¶</a></h2>
 <p>Jupyterhub is a web application that allows users to analyze and create reports on warehouse data (or a number of data sources).</p>
-<p>Analyses on jupyterhub are done using notebooks, which allow users to mix narrative with analysis code.</p>
+<p>Analyses on JupyterHub are done using notebooks, which allow users to mix narrative with analysis code.</p>
+<p><strong>You can access JuypterHub <a class="reference external" href="https://hubtest.k8s.calitp.jarv.us/">using this link</a></strong>.</p>
 </div>
 <div class="section" id="table-of-contents">
 <h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
 <ol class="simple">
+<li><p><a class="reference external" href="#using-jupyterhub">Using JupyterHub</a></p></li>
 <li><p><a class="reference external" href="#logging-in-to-jupyterhub">Logging in to JupyterHub</a></p></li>
 <li><p><a class="reference external" href="#connecting-to-the-warehouse">Connecting to the Warehouse</a></p></li>
 <li><p><a class="reference external" href="#increasing-the-query-limit">Increasing the Query Limit</a></p></li>
-<li><p><a class="reference external" href="#uploading-data">Uploading Data</a>
-<br> - <a class="reference external" href="#uploading-data-from-a-notebook">Uploading data from a notebook</a>
-<br> - <a class="reference external" href="#uploading-from-google-cloud-storage">Uploading from google cloud storage</a></p></li>
 <li><p><a class="reference external" href="#environment-variables">Environment Variables</a></p></li>
+<li><p><a class="reference internal" href="#querying-sql-jupyterhub"><span class="std std-ref">Querying with SQL in JupyterHub</span></a></p></li>
 </ol>
+</div>
+<div class="section" id="using-jupyterhub">
+<h2>Using JupyterHub<a class="headerlink" href="#using-jupyterhub" title="Permalink to this headline">¶</a></h2>
+<p>For Python users, we have deployed a cloud-based instance of JupyterHub to creating, using, and sharing notebooks easy.</p>
+<p>This avoids the need to set up a local environment, provides dedicated storage, and allows you to push to GitHub.</p>
 <div class="section" id="logging-in-to-jupyterhub">
 <h3>Logging in to JupyterHub<a class="headerlink" href="#logging-in-to-jupyterhub" title="Permalink to this headline">¶</a></h3>
-<p>JupyterHub currently lives at <a class="reference external" href="https://hubtest.k8s.calitp.jarv.us/hub/">https://hubtest.k8s.calitp.jarv.us/hub/</a>. In order to be added to the Cal-ITP JupyterHub, please <a class="reference external" href="https://github.com/cal-itp/data-infra/issues/new?assignees=charlie-costanzo&amp;labels=new+team+member&amp;template=new-team-member.md&amp;title=New+Team+Member+-+%5BName%5D">open an issue using this link</a>.</p>
+<p>JupyterHub currently lives at <a class="reference external" href="https://hubtest.k8s.calitp.jarv.us/hub/">hubtest.k8s.calitp.jarv.us/hub</a>.</p>
+<p>Note: you will need to have been added to the Cal-ITP organization on GitHub to obtain access. If you have yet to be added to the organization and need to be, DM Charlie on Cal-ITP Slack <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">using this link</a>.</p>
 </div>
 <div class="section" id="connecting-to-the-warehouse">
-<h3>Connecting to the Warehouse<a class="headerlink" href="#connecting-to-the-warehouse" title="Permalink to this headline">¶</a></h3>
+<span id="connecting-to-warehouse"></span><h3>Connecting to the Warehouse<a class="headerlink" href="#connecting-to-the-warehouse" title="Permalink to this headline">¶</a></h3>
 <p>Connecting to the warehouse requires a bit of setup after logging in to JupyterHub.
 Users need to download and install the gcloud commandline tool from the app.</p>
+<p>See the screencast below for a full walkthrough.</p>
+<div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/6883b0bf9c8b4547a93d00bc6ba45b6d" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
+<p>The commands required:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># initial setup (in terminal) ----</span>
 <span class="n">curl</span> <span class="o">-</span><span class="n">O</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">dl</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">dl</span><span class="o">/</span><span class="n">cloudsdk</span><span class="o">/</span><span class="n">channels</span><span class="o">/</span><span class="n">rapid</span><span class="o">/</span><span class="n">downloads</span><span class="o">/</span><span class="n">google</span><span class="o">-</span><span class="n">cloud</span><span class="o">-</span><span class="n">sdk</span><span class="o">-</span><span class="mf">361.0.0</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
 <span class="n">tar</span> <span class="o">-</span><span class="n">zxvf</span> <span class="n">google</span><span class="o">-</span><span class="n">cloud</span><span class="o">-</span><span class="n">sdk</span><span class="o">-</span><span class="mf">361.0.0</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
@@ -707,8 +698,6 @@ Users need to download and install the gcloud commandline tool from the app.</p>
 <span class="n">gcloud</span> <span class="n">auth</span> <span class="n">application</span><span class="o">-</span><span class="n">default</span> <span class="n">login</span>
 </pre></div>
 </div>
-<p>See the screencast below for a full walkthrough.</p>
-<div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/6883b0bf9c8b4547a93d00bc6ba45b6d" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
 </div>
 <div class="section" id="increasing-the-query-limit">
 <h3>Increasing the Query Limit<a class="headerlink" href="#increasing-the-query-limit" title="Permalink to this headline">¶</a></h3>
@@ -720,49 +709,6 @@ Users need to download and install the gcloud commandline tool from the app.</p>
 
 <span class="n">tbl</span><span class="o">.</span><span class="n">_init</span><span class="p">()</span>
 </pre></div>
-</div>
-</div>
-<div class="section" id="uploading-data">
-<h3>Uploading Data<a class="headerlink" href="#uploading-data" title="Permalink to this headline">¶</a></h3>
-<p>Currently, report data can be stored in the <code class="docutils literal notranslate"><span class="pre">calitp-analytics-data</span></code> bucket.</p>
-<p>In order to save data being used in a report, you can use two methods:</p>
-<ul class="simple">
-<li><p>Using code in your notebook to upload the data.</p></li>
-<li><p>Using the google cloud storage web UI to manually upload.</p></li>
-</ul>
-<p>These are demonstrated in the screencast below.</p>
-<div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/51d22876ab6d4d35a39f18e8f6d5f11d" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
-<div class="section" id="uploading-data-from-a-notebook">
-<h4>Uploading data from a notebook<a class="headerlink" href="#uploading-data-from-a-notebook" title="Permalink to this headline">¶</a></h4>
-<p>The code below shows how to copy a file from JupyterHub to the data bucket.
-Be sure to replace <code class="docutils literal notranslate"><span class="pre">&lt;FILE</span> <span class="pre">NAME&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;ANALYSIS</span> <span class="pre">FOLDER&gt;</span></code> with the appropriate names.</p>
-<p>For additional details, including options for reading/writing geospatial data using <code class="docutils literal notranslate"><span class="pre">geopandas</span></code>, see <a class="reference internal" href="storing_data.html#storing-new-data"><span class="std std-ref">Storing New Data</span></a>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using the `calitp` package</span>
-<span class="kn">from</span> <span class="nn">calitp.storage</span> <span class="kn">import</span> <span class="n">get_fs</span>
-
-<span class="n">fs</span> <span class="o">=</span> <span class="n">get_fs</span><span class="p">()</span>
-
-<span class="n">fs</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;&lt;FILE NAME&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;gs://calitp-analytics-data/data-analyses/&lt;ANALYSIS FOLDER&gt;/&lt;FILE NAME&gt;&quot;</span><span class="p">)</span>
-
-<span class="c1"># Using the `gcsfs` package</span>
-<span class="kn">import</span> <span class="nn">gcsfs</span>
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-
-<span class="c1"># CSV</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;gs://calitp-analytics-data/data-analyses/&lt;ANALYSIS FOLDER&gt;/&lt;FILE NAME&gt;&quot;</span><span class="p">)</span>
-<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;gs://calitp-analytics-data/data-analyses/&lt;ANALYSIS FOLDER&gt;/&lt;FILE NAME&gt;&quot;</span><span class="p">)</span>
-
-<span class="c1"># Parquet</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s2">&quot;gs://calitp-analytics-data/data-analyses/&lt;ANALYSIS FOLDER&gt;/&lt;FILE NAME&gt;&quot;</span><span class="p">)</span>
-<span class="n">df</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s2">&quot;gs://calitp-analytics-data/data-analyses/&lt;ANALYSIS FOLDER&gt;/&lt;FILE NAME&gt;&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="uploading-from-google-cloud-storage">
-<h4>Uploading from google cloud storage<a class="headerlink" href="#uploading-from-google-cloud-storage" title="Permalink to this headline">¶</a></h4>
-<p>You can access the cloud bucket from the web from <a class="reference external" href="https://console.cloud.google.com/storage/browser/calitp-analytics-data">https://console.cloud.google.com/storage/browser/calitp-analytics-data</a>.</p>
-<p>See the above screencast for a walkthrough of using the bucket.</p>
 </div>
 </div>
 <div class="section" id="environment-variables">
@@ -786,6 +732,32 @@ Be sure to replace <code class="docutils literal notranslate"><span class="pre">
 
 <span class="c1"># Import the credential (without exposing the password!)</span>
 <span class="n">GITHUB_API_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;GITHUB_API_KEY&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="querying-with-sql-in-jupyterhub">
+<span id="querying-sql-jupyterhub"></span><h3>Querying with SQL in JupyterHub<a class="headerlink" href="#querying-with-sql-in-jupyterhub" title="Permalink to this headline">¶</a></h3>
+<p>JupyterHub makes it easy to query SQL in the notebooks.</p>
+<p>To query SQL, simply import the library below at the top of your notebook:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">calitp.magics</span>
+</pre></div>
+</div>
+<p>And add the following to the top of any cell block that you would like to query SQL in:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">sql</span>
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">calitp.magics</span>
+</pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">sql</span>
+
+<span class="k">SELECT</span>
+    <span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+<span class="k">FROM</span> <span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">gtfs_schedule_dim_feeds</span><span class="o">`</span>
+<span class="k">WHERE</span>
+    <span class="n">calitp_feed_name</span> <span class="o">=</span> <span class="ss">&quot;AC Transit (0)&quot;</span>
+<span class="k">LIMIT</span> <span class="mi">10</span>
 </pre></div>
 </div>
 </div>

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Saving Code (WIP) &#8212; Cal-ITP Data Services</title>
+    <title>Saving Code &#8212; Cal-ITP Data Services</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -174,7 +174,7 @@
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     Saving Code (WIP)
+     Saving Code
     </a>
    </li>
    <li class="toctree-l2">
@@ -625,14 +625,21 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#rebase">
-     Rebase
+    <a class="reference internal nav-link" href="#syncing-my-branch-with-main">
+     Syncing my Branch with Main
     </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#merge">
-     Merge
-    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#rebase">
+       Rebase
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#merge">
+       Merge
+      </a>
+     </li>
+    </ul>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#helpful-hints">
@@ -642,13 +649,8 @@
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#wip-pushing-from-the-command-line">
-   [WIP] Pushing from the Command Line
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#wip-pushing-in-github-drag-and-drop">
-   [WIP] Pushing in GitHub - Drag and Drop
+  <a class="reference internal nav-link" href="#pushing-in-the-github-user-interface">
+   Pushing in the Github User Interface
   </a>
  </li>
 </ul>
@@ -662,24 +664,23 @@
         
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="saving-code-wip">
-<span id="saving-code"></span><h1>Saving Code (WIP)<a class="headerlink" href="#saving-code-wip" title="Permalink to this headline">¶</a></h1>
+  <div class="tex2jax_ignore mathjax_ignore section" id="saving-code">
+<span id="id1"></span><h1>Saving Code<a class="headerlink" href="#saving-code" title="Permalink to this headline">¶</a></h1>
 <p>Most Cal-ITP analysts should opt for working directly from JupyterHub. Leveraging this cloud-based, standardized environment should alleviate many of the pain points associated with creating reproducible, collaborative work.</p>
 <p>Doing work locally and pushing directly from the command line is a similar workflow, but replace the JupyterHub terminal with your local terminal.</p>
 <div class="section" id="table-of-contents">
 <h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
 <ol class="simple">
+<li><p><a class="reference external" href="#pushing-from-jupyterhub">Pushing from JupyterHub</a></p>
+<ul class="simple">
 <li><p><a class="reference external" href="#onboarding-setup">Onboarding Setup</a></p></li>
 <li><p>What’s a typical <a class="reference external" href="#project-workflow">project workflow</a>?</p></li>
 <li><p>Someone is collaborating on my branch, how do we <a class="reference external" href="#pulling-and-pushing-changes">stay in sync</a>?</p></li>
-<li><p>The <code class="docutils literal notranslate"><span class="pre">main</span></code> branch is ahead, and I want to sync my branch with <code class="docutils literal notranslate"><span class="pre">main</span></code></p>
-<ul class="simple">
-<li><p><a class="reference external" href="#rebase">Rebase</a></p></li>
-<li><p><a class="reference external" href="#merge">Merge</a></p></li>
-<li><p>Differences between <code class="docutils literal notranslate"><span class="pre">merge</span></code> and <code class="docutils literal notranslate"><span class="pre">rebase</span></code>: <a class="reference external" href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing">Atlassian tutorial</a>, <a class="reference external" href="https://www.gitkraken.com/learn/git/problems/git-rebase-vs-merge">GitKraken</a>, <a class="reference external" href="https://hackernoon.com/git-merge-vs-rebase-whats-the-diff-76413c117333">Hackernoon</a>, and <a class="reference external" href="https://stackoverflow.com/questions/59622140/git-merge-vs-git-rebase-for-merge-conflict-scenarios">StackOverflow</a>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">main</span></code> branch is ahead, and I want to <a class="reference internal" href="#rebase-and-merge"><span class="std std-ref">sync my branch with <code class="docutils literal notranslate"><span class="pre">main</span></code></span></a></p></li>
+<li><p><a class="reference external" href="#helpful-hints">Helpful Hints</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference external" href="#helpful-hints">Helpful Hints</a></p></li>
+<li><p><a class="reference external" href="#pushing-drag-drop">Pushing in the Github User Interface</a></p></li>
 </ol>
 </div>
 <div class="section" id="pushing-from-jupyterhub">
@@ -711,7 +712,7 @@
 <li><p>See all the status changes to your files: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">status</span></code></p></li>
 <li><p>When you’re ready to save some of that work, stage the files you want to commit with <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span> <span class="pre">foldername/notebook1.ipynb</span> <span class="pre">foldername/script1.py</span></code>. To stage all the files, use <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span> <span class="pre">.</span></code>.</p></li>
 <li><p>Once you are ready to commit, add a commit message to associate with all the changes: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span> <span class="pre">-m</span> <span class="pre">&quot;exploratory</span> <span class="pre">work&quot;</span> </code></p></li>
-<li><p>Push those changes from local to remote branch (note: branch is <code class="docutils literal notranslate"><span class="pre">my-new-branch</span></code> and not <code class="docutils literal notranslate"><span class="pre">main</span></code>): <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">origin</span> <span class="pre">my-new-branch</span></code> and enter your username and <strong>personal access token as the password</strong>.</p></li>
+<li><p>Push those changes from local to remote branch (note: branch is <code class="docutils literal notranslate"><span class="pre">my-new-branch</span></code> and not <code class="docutils literal notranslate"><span class="pre">main</span></code>): <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">origin</span> <span class="pre">my-new-branch</span></code>.</p></li>
 <li><p>To review a log of past commits: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">log</span></code></p></li>
 <li><p>When you are ready to merge all the commits into <code class="docutils literal notranslate"><span class="pre">main</span></code>, open a pull request (PR) on the remote repository, and merge it in!</p></li>
 <li><p>Go back to <code class="docutils literal notranslate"><span class="pre">main</span></code> and update your local to match the remote: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">main</span></code>, <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span> <span class="pre">origin</span> <span class="pre">main</span></code></p></li>
@@ -727,8 +728,23 @@
 <li><p>Stage and push your commit with <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span></code> and <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span></code> and <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">origin</span> <span class="pre">my-new-branch</span></code></p></li>
 </ol>
 </div>
+<div class="section" id="syncing-my-branch-with-main">
+<span id="rebase-and-merge"></span><h3>Syncing my Branch with Main<a class="headerlink" href="#syncing-my-branch-with-main" title="Permalink to this headline">¶</a></h3>
+<p>If you find that the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch is ahead, and you want to sync your branch with <code class="docutils literal notranslate"><span class="pre">main</span></code> you’ll need to use one of the below commands:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="#rebase">Rebase</a></p></li>
+<li><p><a class="reference external" href="#merge">Merge</a></p></li>
+</ul>
+<p>Read more about the differences between <code class="docutils literal notranslate"><span class="pre">rebase</span></code> and <code class="docutils literal notranslate"><span class="pre">merge</span></code>:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing">Atlassian tutorial</a></p></li>
+<li><p><a class="reference external" href="https://www.gitkraken.com/learn/git/problems/git-rebase-vs-merge">GitKraken</a></p></li>
+<li><p><a class="reference external" href="https://hackernoon.com/git-merge-vs-rebase-whats-the-diff-76413c117333">Hackernoon</a></p></li>
+<li><p><a class="reference external" href="https://stackoverflow.com/questions/59622140/git-merge-vs-git-rebase-for-merge-conflict-scenarios">StackOverflow</a>
+<br></p></li>
+</ul>
 <div class="section" id="rebase">
-<h3>Rebase<a class="headerlink" href="#rebase" title="Permalink to this headline">¶</a></h3>
+<h4>Rebase<a class="headerlink" href="#rebase" title="Permalink to this headline">¶</a></h4>
 <p>A rebase might be preferred, especially if all your work is contained on your branch, within your task’s folder, and lots of activity is happening on <code class="docutils literal notranslate"><span class="pre">main</span></code>. You’d like to plop all your commits onto the most recent <code class="docutils literal notranslate"><span class="pre">main</span></code> branch, and have it appear as if all your work took place <em>after</em> those PRs were merged in.</p>
 <ol class="simple">
 <li><p>At this point, you’ve either stashed or added commits on <code class="docutils literal notranslate"><span class="pre">my-new-branch</span></code>.</p></li>
@@ -742,7 +758,7 @@
 </ol>
 </div>
 <div class="section" id="merge">
-<h3>Merge<a class="headerlink" href="#merge" title="Permalink to this headline">¶</a></h3>
+<h4>Merge<a class="headerlink" href="#merge" title="Permalink to this headline">¶</a></h4>
 <ol class="simple">
 <li><p>At this point, you’ve either stashed or added commits on <code class="docutils literal notranslate"><span class="pre">my-new-branch</span></code>.</p></li>
 <li><p>Pull from origin: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">main</span></code> and <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span> <span class="pre">origin</span> <span class="pre">main</span></code></p></li>
@@ -750,6 +766,7 @@
 <li><p>Complete the merge of <code class="docutils literal notranslate"><span class="pre">my-new-branch</span></code> with <code class="docutils literal notranslate"><span class="pre">main</span></code> and create a new commit: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">merge</span> <span class="pre">my-new-branch</span> <span class="pre">main</span></code>
 SOMEONE WHO PREFERS MERGE PROCESS TO FILL THIS IN…is there a commit after?</p></li>
 </ol>
+</div>
 </div>
 <div class="section" id="helpful-hints">
 <h3>Helpful Hints<a class="headerlink" href="#helpful-hints" title="Permalink to this headline">¶</a></h3>
@@ -761,11 +778,18 @@ SOMEONE WHO PREFERS MERGE PROCESS TO FILL THIS IN…is there a commit after?</p>
 </ul>
 </div>
 </div>
-<div class="section" id="wip-pushing-from-the-command-line">
-<h2>[WIP] Pushing from the Command Line<a class="headerlink" href="#wip-pushing-from-the-command-line" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="wip-pushing-in-github-drag-and-drop">
-<h2>[WIP] Pushing in GitHub - Drag and Drop<a class="headerlink" href="#wip-pushing-in-github-drag-and-drop" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="pushing-in-the-github-user-interface">
+<span id="pushing-drag-drop"></span><h2>Pushing in the Github User Interface<a class="headerlink" href="#pushing-in-the-github-user-interface" title="Permalink to this headline">¶</a></h2>
+<p>If you would like to push directly from the Github User Interface:</p>
+<ol>
+<li><p>Navigate the Github repository and folder that you would like to add your work, and locate the file on your computer that you would like to add</p>
+<p>(Note: if you would like to add your file to a folder that does not yet exist, <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">message Charlie on Cal-ITP Slack</a> to add it for you)</p>
+<p><img alt="Collection Matrix" src="../_images/step-1-gh-drag-drop.png" /></p>
+</li>
+<li><p>‘Click and Drag’ your file from your computer into the Github screen</p>
+<p><img alt="Collection Matrix" src="../_images/step-2-gh-drag-drop.png" /></p>
+</li>
+</ol>
 </div>
 </div>
 
