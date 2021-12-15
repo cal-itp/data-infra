@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Python Libraries (WIP) &#8212; Cal-ITP Data Services</title>
+    <title>Python Libraries &#8212; Cal-ITP Data Services</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -169,7 +169,7 @@
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     Python Libraries (WIP)
+     Python Libraries
     </a>
    </li>
    <li class="toctree-l2">
@@ -672,8 +672,8 @@
         
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="python-libraries-wip">
-<span id="python-libraries"></span><h1>Python Libraries (WIP)<a class="headerlink" href="#python-libraries-wip" title="Permalink to this headline">¶</a></h1>
+  <div class="tex2jax_ignore mathjax_ignore section" id="python-libraries">
+<span id="id1"></span><h1>Python Libraries<a class="headerlink" href="#python-libraries" title="Permalink to this headline">¶</a></h1>
 <p>The following libraries are available and recommended for use by Cal-ITP data analysts.</p>
 <div class="section" id="table-of-contents">
 <h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
@@ -697,11 +697,99 @@
 </ul>
 </div>
 <div class="section" id="calitp">
-<span id="id1"></span><h2>calitp<a class="headerlink" href="#calitp" title="Permalink to this headline">¶</a></h2>
+<span id="id2"></span><h2>calitp<a class="headerlink" href="#calitp" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">calitp</span></code> is an internal library of utility functions used to access our warehouse data.</p>
+<p>Most notably, you can include the following function at the top of your notebook to import a <code class="docutils literal notranslate"><span class="pre">tbl</span></code> from the warehouse:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbl</span>
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbl</span>
+
+<span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_fact_daily_feed_routes</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div><pre># Source: lazy query
+# DB Conn: Engine(bigquery://cal-itp-data-infra/?maximum_bytes_billed=5000000000)
+# Preview:
+</pre><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>feed_key</th>
+      <th>route_key</th>
+      <th>date</th>
+      <th>calitp_extracted_at</th>
+      <th>calitp_deleted_at</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-1830378221579909888</td>
+      <td>7477465053737566765</td>
+      <td>2021-04-19</td>
+      <td>2021-04-15</td>
+      <td>2021-04-29</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-1830378221579909888</td>
+      <td>7477465053737566765</td>
+      <td>2021-04-28</td>
+      <td>2021-04-15</td>
+      <td>2021-04-29</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-1830378221579909888</td>
+      <td>7477465053737566765</td>
+      <td>2021-04-21</td>
+      <td>2021-04-15</td>
+      <td>2021-04-29</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-1830378221579909888</td>
+      <td>7477465053737566765</td>
+      <td>2021-04-27</td>
+      <td>2021-04-15</td>
+      <td>2021-04-29</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-1830378221579909888</td>
+      <td>7477465053737566765</td>
+      <td>2021-04-18</td>
+      <td>2021-04-15</td>
+      <td>2021-04-29</td>
+    </tr>
+  </tbody>
+</table>
+</div><p># .. may have more rows</p></div></div></div>
+</div>
 </div>
 <div class="section" id="siuba">
-<span id="id2"></span><h2>siuba<a class="headerlink" href="#siuba" title="Permalink to this headline">¶</a></h2>
-<p>Siuba is a tool that allows the same analysis code to run on a pandas DataFrame,
+<span id="id3"></span><h2>siuba<a class="headerlink" href="#siuba" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">siuba</span></code> is a tool that allows the same analysis code to run on a pandas DataFrame,
 as well as generate SQL for different databases.
 It supports most <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/series.html">pandas Series methods</a> analysts use.
 See the <a class="reference external" href="https://siuba.readthedocs.io">siuba docs</a> for more information.</p>
