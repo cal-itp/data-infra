@@ -46,6 +46,14 @@ anaheim-resort-transportation:
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 14
+antelope-valley-transit-authority:
+  agency_name: Antelope Valley Transit Authority
+  feeds:
+    - gtfs_schedule_url: https://www.avta.com/userfiles/files/AVTA%20GTFS.zip
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
+  itp_id: 16
 arcadia-transit:
   agency_name: Arcadia Transit
   feeds:
@@ -294,6 +302,14 @@ commerce-municipal-bus-lines:
       gtfs_rt_service_alerts_url: https://citycommbus.com/gtfs-rt/alerts
       gtfs_rt_trip_updates_url: https://citycommbus.com/gtfs-rt/tripupdates
   itp_id: 75
+commute-org-shuttles:
+  agency_name: Commute.org Shuttles
+  feeds:
+    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/commute-ca-us/commute-ca-us.zip
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
+  itp_id: 76
 compton-renaissance-transit-service:
   agency_name: Compton Renaissance Transit Service
   feeds:
@@ -794,6 +810,14 @@ morro-bay-transit:
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 213
+mountain-transit:
+  agency_name: Mountain Transit
+  feeds:
+    - gtfs_schedule_url: https://api.transloc.com/gtfs/mountaintransit.zip
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
+  itp_id: 214
 muni:
   agency_name: MUNI
   feeds:
@@ -1409,7 +1433,7 @@ westcat:
 yolobus:
   agency_name: Yolobus
   feeds:
-    - gtfs_schedule_url: http://iportal.sacrt.com/GTFS/Yolobus/google_transit.zip
+    - gtfs_schedule_url: http://www.yolobus.com/GTFS/google_transit.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
