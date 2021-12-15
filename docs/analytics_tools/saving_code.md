@@ -21,10 +21,12 @@ Doing work locally and pushing directly from the command line is a similar workf
 We'll work through getting set up with GitHub on JupyterHub and cloning one GitHub repo. Repeat steps 6-10 for other repos.
 (github-setup)=
 1. Create a GitHub username, get added to the various Cal-ITP teams. You'll be committing directly into the Cal-ITP repos!
+1. Open a terminal in JupyterHub. All our commands will be typed in this terminal.
 1. Set up SSH by following these [directions](https://docs.github.com/en/authentication/connecting-to-github-with-ssh).
+    * Follow the Linux directions for each step
+    * The key may be created with permissions too open for the ssh client. Run `chmod 600 /home/jovyan/.ssh/id_ed25519` (default key file location, change if necessary) to avoid future issues
 1. After you've added your SSH key to your GitHub account, you can test your connection: `ssh -T git@github.com`
 1. Navigate to the GitHub repository to clone. We'll work our way through the `data-analyses` [repo here](https://github.com/cal-itp/data-analyses). Click on the green `Code` button, select "SSH" and copy the URL.
-1. Open a terminal in JupyterHub. All our commands will be typed in this terminal.
 1. Clone the Git repo: `git clone git@github.com:cal-itp/data-analyses.git`
 1. Double check  with `ls` to list and see that the remote repo was successfully cloned into your "local" (cloud-based) filesystem.
 1. Change into the `data-analyses` directory: `cd data-analyses`
