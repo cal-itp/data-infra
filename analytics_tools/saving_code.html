@@ -690,10 +690,15 @@
 <p>We’ll work through getting set up with GitHub on JupyterHub and cloning one GitHub repo. Repeat steps 6-10 for other repos.</p>
 <ol class="simple" id="github-setup">
 <li><p>Create a GitHub username, get added to the various Cal-ITP teams. You’ll be committing directly into the Cal-ITP repos!</p></li>
-<li><p>Set up SSH by following these <a class="reference external" href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh">directions</a>.</p></li>
+<li><p>Open a terminal in JupyterHub. All our commands will be typed in this terminal.</p></li>
+<li><p>Set up SSH by following these <a class="reference external" href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh">directions</a>.</p>
+<ul class="simple">
+<li><p>Follow the Linux directions for each step</p></li>
+<li><p>The key may be created with permissions too open for the ssh client. Run <code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">600</span> <span class="pre">/home/jovyan/.ssh/id_ed25519</span></code> (default key file location, change if necessary) to avoid future issues</p></li>
+</ul>
+</li>
 <li><p>After you’ve added your SSH key to your GitHub account, you can test your connection: <code class="docutils literal notranslate"><span class="pre">ssh</span> <span class="pre">-T</span> <span class="pre">git&#64;github.com</span></code></p></li>
 <li><p>Navigate to the GitHub repository to clone. We’ll work our way through the <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code> <a class="reference external" href="https://github.com/cal-itp/data-analyses">repo here</a>. Click on the green <code class="docutils literal notranslate"><span class="pre">Code</span></code> button, select “SSH” and copy the URL.</p></li>
-<li><p>Open a terminal in JupyterHub. All our commands will be typed in this terminal.</p></li>
 <li><p>Clone the Git repo: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">git&#64;github.com:cal-itp/data-analyses.git</span></code></p></li>
 <li><p>Double check  with <code class="docutils literal notranslate"><span class="pre">ls</span></code> to list and see that the remote repo was successfully cloned into your “local” (cloud-based) filesystem.</p></li>
 <li><p>Change into the <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code> directory: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">data-analyses</span></code></p></li>
