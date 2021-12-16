@@ -40,7 +40,10 @@ def main(execution_date, ti, **kwargs):
         .convert_dtypes()
     )
 
-    table_details = zip(tables.file_name, tables.is_required, schemas)
+    # this zip needs to be converted to a list in order to be iterated through multiple
+    # times in an inner loop per each feed update below. This resolves a regression as
+    # described in https://github.com/cal-itp/data-infra/issues/848.
+    table_details = list(zip(tables.file_name, tables.is_required, schemas))
     fs = get_fs()
     bucket = get_bucket()
 
