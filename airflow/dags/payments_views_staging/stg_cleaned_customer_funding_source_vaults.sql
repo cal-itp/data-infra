@@ -1,6 +1,6 @@
 ---
 operator: operators.SqlToWarehouseOperator
-dst_table_name: "payments.stg_cleaned_customer_funding_sources"
+dst_table_name: "payments.stg_cleaned_funding_source_vaults"
 
 dependencies:
   - stg_enriched_customer_funding_source
@@ -36,6 +36,6 @@ SELECT
 FROM payments.stg_enriched_customer_funding_source
 WHERE calitp_dupe_number = 1
 WINDOW unique_ids AS (
-    PARTITION BY funding_source_vault_id, customer_id
+    PARTITION BY funding_source_vault_id
     ORDER BY calitp_customer_id_rank)
-ORDER BY customer_id, calitp_valid_at DESC
+ORDER BY funding_source_vault_id, calitp_valid_at DESC
