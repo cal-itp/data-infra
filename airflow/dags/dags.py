@@ -1,5 +1,6 @@
 import os
 import airflow  # noqa
+import requests
 
 from pathlib import Path
 from gusty import create_dag
@@ -114,6 +115,21 @@ def sql_enrich_duplicates(schema_tbl, key_columns, order_by_columns):
     """
 
 
+def email_failure(context):
+    print("EMAILING FAILURE ----\n\n\n")
+    ti = context["ti"]
+    message = f"""
+Task Failed: {ti.dag_id}.{ti.task_id}
+Execution Date: {ti.execution_date}
+Try {ti.try_number} of {ti.max_tries}
+
+<{ti.log_url}| Check Log >
+"""
+    requests.post(
+        os.environ["CALITP_SLACK_URL"], json={"text": message},
+    )
+
+
 for dag_directory in dag_directories:
     dag_id = os.path.basename(dag_directory)
     globals()[dag_id] = create_dag(
@@ -128,4 +144,8 @@ for dag_directory in dag_directories:
             "sql_enrich_duplicates": sql_enrich_duplicates,
         },
         user_defined_filters=user_defined_filters,
+        default_args={
+            "on_failure_callback": email_failure,
+            "on_retry_callback": email_failure,
+        },
     )
