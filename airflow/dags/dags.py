@@ -116,7 +116,10 @@ def sql_enrich_duplicates(schema_tbl, key_columns, order_by_columns):
 
 
 def email_failure(context):
-    print("EMAILING FAILURE ----\n\n\n")
+    slack_url = os.environ.get("CALITP_SLACK_URL")
+    if slack_url is None:
+        print("Skipping email to slack channel. No CALITP_SLACK_URL in environment")
+
     ti = context["ti"]
     message = f"""
 Task Failed: {ti.dag_id}.{ti.task_id}
