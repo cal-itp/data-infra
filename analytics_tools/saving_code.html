@@ -745,7 +745,7 @@
 <li><p><a class="reference external" href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing">Atlassian tutorial</a></p></li>
 <li><p><a class="reference external" href="https://www.gitkraken.com/learn/git/problems/git-rebase-vs-merge">GitKraken</a></p></li>
 <li><p><a class="reference external" href="https://hackernoon.com/git-merge-vs-rebase-whats-the-diff-76413c117333">Hackernoon</a></p></li>
-<li><p><a class="reference external" href="https://stackoverflow.com/questions/59622140/git-merge-vs-git-rebase-for-merge-conflict-scenarios">StackOverflow</a>
+<li><p><a class="reference external" href="https://stackoverflow.com/questions/59622140/git-merge-vs-git-rebase-for-merge-conflict-scenarios">Stack Overflow</a>
 <br></p></li>
 </ul>
 <div class="section" id="rebase">
@@ -768,18 +768,24 @@
 <li><p>At this point, you’ve either stashed or added commits on <code class="docutils literal notranslate"><span class="pre">my-new-branch</span></code>.</p></li>
 <li><p>Pull from origin: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">main</span></code> and <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span> <span class="pre">origin</span> <span class="pre">main</span></code></p></li>
 <li><p>Go back to your branch: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">my-new-branch</span></code></p></li>
-<li><p>Complete the merge of <code class="docutils literal notranslate"><span class="pre">my-new-branch</span></code> with <code class="docutils literal notranslate"><span class="pre">main</span></code> and create a new commit: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">merge</span> <span class="pre">my-new-branch</span> <span class="pre">main</span></code>
-SOMEONE WHO PREFERS MERGE PROCESS TO FILL THIS IN…is there a commit after?</p></li>
+<li><p>Complete the merge of <code class="docutils literal notranslate"><span class="pre">my-new-branch</span></code> with <code class="docutils literal notranslate"><span class="pre">main</span></code> and create a new commit: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">merge</span> <span class="pre">my-new-branch</span> <span class="pre">main</span></code></p></li>
+<li><p>A merge commit window opens up. Type <code class="docutils literal notranslate"><span class="pre">:wq</span></code> to exit and complete the merge.</p></li>
+<li><p>Type <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">log</span></code> to see that the merge commit was created.</p></li>
 </ol>
 </div>
 </div>
 <div class="section" id="helpful-hints">
 <h3>Helpful Hints<a class="headerlink" href="#helpful-hints" title="Permalink to this headline">¶</a></h3>
+<p>These are helpful Git commands an analyst might need, listed in no particular order.</p>
 <ul class="simple">
+<li><p>During collaboration, if another analyst already created a remote branch, and you want to work off of the same branch: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">-b</span> <span class="pre">our-project-branch</span> <span class="pre">origin/our-project-branch</span></code></p></li>
 <li><p>To discard the changes you made to a file, <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">my-notebook.ipynb</span></code>, and you can revert back to the version that was last committed.</p></li>
 <li><p>Temporarily stash changes, move to a different branch, and come back and retain those changes: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">stash</span></code>, <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">some-other-branch</span></code>, do stuff on the other branch, <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">original-branch</span></code>, <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">stash</span> <span class="pre">pop</span></code></p></li>
-<li><p>Rename files and retain the version history associated: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">mv</span> <span class="pre">old-notebook.ipynb</span> <span class="pre">new-notebook.ipynb</span></code></p></li>
+<li><p>Rename files and retain the version history associated (<code class="docutils literal notranslate"><span class="pre">mv</span></code> is move, and renaming is moving the file path): <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">mv</span> <span class="pre">old-notebook.ipynb</span> <span class="pre">new-notebook.ipynb</span></code></p></li>
 <li><p>Once you’ve merged your branch into <code class="docutils literal notranslate"><span class="pre">main</span></code>, you can delete your branch locally: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">branch</span> <span class="pre">-d</span> <span class="pre">my-new-branch</span></code></p></li>
+<li><p>Set your local <code class="docutils literal notranslate"><span class="pre">main</span></code> branch to be the same as the remote branch: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">fetch</span> <span class="pre">origin</span> <span class="pre">git</span> <span class="pre">reset</span> <span class="pre">--hard</span> <span class="pre">origin/main</span></code></p></li>
+<li><p>To delete a file that’s been added in a previous commit: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">rm</span> <span class="pre">notebooks/my-notebook.ipynb</span></code></p></li>
+<li><p>Cherry pick a commit and apply it to your branch: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">cherry-pick</span> <span class="pre">COMMIT_HASH</span></code>. Read more from <a class="reference external" href="https://stackoverflow.com/questions/9339429/what-does-cherry-picking-a-commit-with-git-mean">Stack Overflow</a> and <a class="reference external" href="https://www.atlassian.com/git/tutorials/cherry-pick">Atlassian</a>.</p></li>
 </ul>
 </div>
 </div>
