@@ -1,6 +1,7 @@
 ---
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "payments.stg_cleaned_funding_source_vaults"
+dst_table_name: "payments.stg_cleaned_customer_funding_source_vaults"
 
 dependencies:
   - stg_enriched_customer_funding_source
