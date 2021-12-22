@@ -99,7 +99,7 @@ A rebase might be preferred, especially if all your work is contained on your br
 
 ### Helpful Hints
 
-These are helpful Git commands an analyst might run need, but are listed in no particular order.
+These are helpful Git commands an analyst might need, listed in no particular order.
 
 * During collaboration, if another analyst already created a remote branch, and you want to work off of the same branch: `git checkout -b our-project-branch origin/our-project-branch`
 * To discard the changes you made to a file, `git checkout my-notebook.ipynb`, and you can revert back to the version that was last committed.
