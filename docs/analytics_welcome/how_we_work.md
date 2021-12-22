@@ -11,6 +11,9 @@ The section below outlines our team's primary meetings and their purposes, as we
 | Data Services All-Hands | Mondays <br/> 1 Hour | A team-wide data services sync. |
 | Analyst Stand-ups | Tues-Fri <br/> 15 Mins | A short sync to share yesterdays work, today's work, and any blockers. |
 | Lunch n' Learn | Tuesdays <br/> 1 Hour | A weekly opportunity to cover a specific topic, learn something new, and gain visibility into projects and across teams. |
+
+Access recordings of previous Lunch n' Learns at this link.
+
 ### Meeting Standards
 #### Agendas
 #### Daily Stand-ups
