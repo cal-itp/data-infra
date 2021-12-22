@@ -71,7 +71,7 @@ Read more about the differences between `rebase` and `merge`:
 * [Atlassian tutorial](https://www.atlassian.com/git/tutorials/merging-vs-rebasing)
 * [GitKraken](https://www.gitkraken.com/learn/git/problems/git-rebase-vs-merge)
 * [Hackernoon](https://hackernoon.com/git-merge-vs-rebase-whats-the-diff-76413c117333)
-* [StackOverflow](https://stackoverflow.com/questions/59622140/git-merge-vs-git-rebase-for-merge-conflict-scenarios)
+* [Stack Overflow](https://stackoverflow.com/questions/59622140/git-merge-vs-git-rebase-for-merge-conflict-scenarios)
 <br>
 
 #### Rebase
@@ -93,14 +93,23 @@ A rebase might be preferred, especially if all your work is contained on your br
 1. Pull from origin: `git checkout main` and `git pull origin main`
 1. Go back to your branch: `git checkout my-new-branch`
 1. Complete the merge of `my-new-branch` with `main` and create a new commit: `git merge my-new-branch main`
-SOMEONE WHO PREFERS MERGE PROCESS TO FILL THIS IN...is there a commit after?
+1. A merge commit window opens up. Type `:wq` to exit and complete the merge.
+1. Type `git log` to see that the merge commit was created.
+
 
 ### Helpful Hints
 
+These are helpful Git commands an analyst might need, listed in no particular order.
+
+* During collaboration, if another analyst already created a remote branch, and you want to work off of the same branch: `git checkout -b our-project-branch origin/our-project-branch`
 * To discard the changes you made to a file, `git checkout my-notebook.ipynb`, and you can revert back to the version that was last committed.
 * Temporarily stash changes, move to a different branch, and come back and retain those changes: `git stash`, `git checkout some-other-branch`, do stuff on the other branch, `git checkout original-branch`, `git stash pop`
-* Rename files and retain the version history associated: `git mv old-notebook.ipynb new-notebook.ipynb`
+* Rename files and retain the version history associated (`mv` is move, and renaming is moving the file path): `git mv old-notebook.ipynb new-notebook.ipynb`
 * Once you've merged your branch into `main`, you can delete your branch locally: `git branch -d my-new-branch`
+* Set your local `main` branch to be the same as the remote branch: `git fetch origin
+git reset --hard origin/main`
+* To delete a file that's been added in a previous commit: `git rm notebooks/my-notebook.ipynb`
+* Cherry pick a commit and apply it to your branch: `git cherry-pick COMMIT_HASH`. Read more from [Stack Overflow](https://stackoverflow.com/questions/9339429/what-does-cherry-picking-a-commit-with-git-mean) and [Atlassian](https://www.atlassian.com/git/tutorials/cherry-pick).
 
 (pushing-drag-drop)=
 ## Pushing in the Github User Interface
