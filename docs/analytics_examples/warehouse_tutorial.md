@@ -497,6 +497,8 @@ LIMIT 10
 ```{glue:figure} df_stops_trips_output
 ```
 ````
+
+Incorporate Tiffany's tutorial here
 ````{tabbed} siuba
 ```python
 # Allows us to query tables in the warehouse
