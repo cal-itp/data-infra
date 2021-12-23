@@ -5,6 +5,15 @@ dst_table_name: "views.payments_rides"
 fields:
   participant_id: "Littlepay-assigned Participant ID"
   micropayment_id: "From payments.micropayments.micropayment_id"
+  funding_source_vault_id: "From payments.micropayments.funding_source_vault_id"
+  customer_id: "From payments.micropayments.customer_id"
+  principal_customer_id: "From payments.customer_funding_source.principal_customer_id"
+  bin: "From payments.customer_funding_source.bin"
+  masked_pan: "From payments.customer_funding_source.masked_pan"
+  card_scheme: "From payments.customer_funding_source.card_scheme"
+  issuer: "From payments.customer_funding_source.issuer"
+  issuer_country: "From payments.customer_funding_source.issuer_country"
+  form_factor: "From payments.customer_funding_source.form_factor"
   charge_amount: "From payments.micropayments.charge_amount"
   nominal_amount: "From payments.micropayments.nominal_amount"
   charge_type: "From payments.micropayments.charge_type"
@@ -88,6 +97,18 @@ second_transactions AS (
 SELECT
     m.participant_id,
     m.micropayment_id,
+
+    -- Customer and funding source information
+    m.funding_source_vault_id,
+    m.customer_id,
+    c.principal_customer_id,
+    v.bin,
+    v.masked_pan,
+    v.card_scheme,
+    v.issuer,
+    v.issuer_country,
+    v.form_factor,
+
     m.charge_amount,
     m.nominal_amount,
     m.charge_type,
@@ -133,6 +154,11 @@ SELECT
     t2.longitude AS off_longitude
 
 FROM `payments.stg_cleaned_micropayments` AS m
+JOIN `payments.stg_cleaned_customers` AS c USING (customer_id)
+LEFT JOIN `payments.stg_cleaned_customer_funding_source_vaults` AS v
+    ON m.funding_source_vault_id = v.funding_source_vault_id
+    AND m.transaction_time >= v.calitp_valid_at
+    AND m.transaction_time < v.calitp_invalid_at
 JOIN initial_transactions AS t1 USING (participant_id, micropayment_id)
 LEFT JOIN second_transactions AS t2 USING (participant_id, micropayment_id)
 LEFT JOIN applied_adjustments AS a USING (participant_id, micropayment_id)
