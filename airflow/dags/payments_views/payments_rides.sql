@@ -157,8 +157,8 @@ FROM `payments.stg_cleaned_micropayments` AS m
 JOIN `payments.stg_cleaned_customers` AS c USING (customer_id)
 LEFT JOIN `payments.stg_cleaned_customer_funding_source_vaults` AS v
     ON m.funding_source_vault_id = v.funding_source_vault_id
-    AND m.transaction_time >= CAST(v.calitp_valid_at AS TIMESTAMP)
-    AND m.transaction_time < CAST(v.calitp_invalid_at AS TIMESTAMP)
+    AND m.transaction_time >= v.calitp_valid_at
+    AND m.transaction_time < v.calitp_invalid_at
 JOIN initial_transactions AS t1 USING (participant_id, micropayment_id)
 LEFT JOIN second_transactions AS t2 USING (participant_id, micropayment_id)
 LEFT JOIN applied_adjustments AS a USING (participant_id, micropayment_id)

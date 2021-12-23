@@ -24,15 +24,15 @@ SELECT
     -- the file was exported.
     CASE
         WHEN LEAD(calitp_export_datetime) OVER unique_ids IS NULL
-        THEN DATETIME(TIMESTAMP '1899-01-01 00:00:00+00:00')
-        ELSE calitp_export_datetime END AS calitp_valid_at,
+        THEN TIMESTAMP('1899-01-01 00:00:00+00:00')
+        ELSE TIMESTAMP(calitp_export_datetime, 'UTC') END AS calitp_valid_at,
 
     -- If there is no record lagging this one over the specified window, then
     -- assume that this record will be valid forever. Otherwise assume it is
     -- invalid at the time that the next record was exported.
     COALESCE(
-        LAG(calitp_export_datetime) OVER unique_ids,
-        DATETIME(TIMESTAMP '2099-01-01 00:00:00+00:00')) AS calitp_invalid_at
+        TIMESTAMP(LAG(calitp_export_datetime) OVER unique_ids, 'UTC'),
+        TIMESTAMP('2099-01-01 00:00:00+00:00')) AS calitp_invalid_at
 
 FROM payments.stg_enriched_customer_funding_source
 WHERE calitp_dupe_number = 1
