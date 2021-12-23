@@ -60,7 +60,7 @@ jobs:
 
     # push to prod services when merging into main branch
     - name: Push agencies data to google cloud and prod services
-      if: ${{ github.repository == 'cal-itp/data-infra' && github.ref == 'refs/pull/851/merge' }}
+      if: ${{ github.repository == 'cal-itp/data-infra' && github.ref == 'refs/heads/main' }}
       run: |
         # replace agencies.yml with filled in template for gtfs rt extract service
         gsutil -m rsync -d -c -r airflow/dags gs://$AIRFLOW_BUCKET/dags
