@@ -32,7 +32,7 @@ The queries represented in the following tutorial are as follows:
 
 The tools that we can use to answer them are:
 * [**Metabase**](metabase) - our business insights and dashboarding tool
-* **SQL** - using JupyterHub cloud notebooks
+* [**SQL**](querying-sql-jupyterhub) - using JupyterHub cloud notebooks
 * [**Python**](jupyterhub) - using JupyterHub cloud notebooks
     * *siuba* - a Cal-ITP recommended data analysis library in Python
     * *calitp* - Cal-ITP's internal Python library
