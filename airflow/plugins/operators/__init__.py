@@ -1,6 +1,4 @@
 # flake8: noqa
-# TODO: after upgrading airflow, using a relative import raises the error
-# "attempted relative import with no known parent package"
 from operators.external_table import ExternalTable
 from operators.once_off_external_task_sensor import OnceOffExternalTaskSensor
 from operators.pod_operator import PodOperator
