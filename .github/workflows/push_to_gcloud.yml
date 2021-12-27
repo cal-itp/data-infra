@@ -62,13 +62,14 @@ jobs:
     - name: Push agencies data to google cloud and prod services
       if: ${{ github.repository == 'cal-itp/data-infra' && github.ref == 'refs/heads/main' }}
       run: |
-        gsutil -m rsync -d -c -r airflow/dags gs://us-west2-calitp-airflow-pro-332827a9-bucket/dags
-        gsutil -m rsync -d -c -r airflow/plugins gs://us-west2-calitp-airflow-pro-332827a9-bucket/plugins
-        gsutil -m rsync -d -c -r airflow/data gs://us-west2-calitp-airflow-pro-332827a9-bucket/data
-        # replace agencies.yml with filled in template for airflow
-        gsutil -m cp airflow/data/agencies.yml gs://us-west2-calitp-airflow-pro-332827a9-bucket/data/agencies_raw.yml
-        gsutil -m cp airflow/data/agencies.filled.yml gs://us-west2-calitp-airflow-pro-332827a9-bucket/data/agencies.yml
         # replace agencies.yml with filled in template for gtfs rt extract service
+        gsutil -m rsync -d -c -r airflow/dags gs://$AIRFLOW_BUCKET/dags
+        gsutil -m rsync -d -c -r airflow/plugins gs://$AIRFLOW_BUCKET/plugins
+        gsutil -m rsync -d -c -r airflow/data gs://$AIRFLOW_BUCKET/data
+        # replace agencies.yml with filled in template for airflow
+        gsutil -m cp airflow/data/agencies.yml gs://$AIRFLOW_BUCKET/data/agencies_raw.yml
+        gsutil -m cp airflow/data/agencies.filled.yml gs://$AIRFLOW_BUCKET/data/agencies.yml
+
         kubectl apply -f - <<EOF
         apiVersion: v1
         kind: Secret
@@ -79,6 +80,8 @@ jobs:
           data_agencies.yaml: $(base64 -w0 airflow/data/agencies.filled.yml)
         EOF
         kubectl -n gtfs-rt rollout restart deployments/gtfs-rt-archive
+      env:
+        AIRFLOW_BUCKET: "us-west2-calitp-airflow2-pr-171e4e47-bucket"
 
     # push to preprod services when merging to other branches
     - name: Push agencies data to preprod services
