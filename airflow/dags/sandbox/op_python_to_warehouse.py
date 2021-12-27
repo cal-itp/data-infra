@@ -4,6 +4,9 @@
 # fields:
 #   g: The g field python
 #   x: The x field python
+# doc_md: |
+#   This is an example of the PythonOperator.
+#
 # dependencies:
 #   - create_dataset
 # ---
