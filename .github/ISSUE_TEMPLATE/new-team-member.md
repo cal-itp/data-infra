@@ -6,24 +6,24 @@ labels: 'new team member'
 assignees: charlie-costanzo
 
 ---
-Name:  
-Role:  
-Reports to:  
+Name:
+Role:
+Reports to:
 
-Google Workspace Email Address:  
-GitHub Username:  
-Slack Username:  
+Google Workspace Email Address:
+GitHub Username:
+Slack Username:
 
 **Set-up:**
 - [ ] Technical Onboarding call scheduled
 
 - [ ] Added to tools:
   - [ ] Github
-    - [ ] Organization: Cal-ITP 
+    - [ ] Organization: Cal-ITP
     - [ ] Team: jarvus
     - [ ] Team: warehouse-users
   - [ ] JupyterLab
-  - [ ] Google Cloud Console (BigQuery, GCS)
+  - [ ] Google Cloud Console
   - [ ] Metabase
   - [ ] Slack
 
