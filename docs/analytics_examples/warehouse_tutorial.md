@@ -498,7 +498,6 @@ LIMIT 10
 ```
 ````
 
-Incorporate Tiffany's tutorial here
 ````{tabbed} siuba
 ```python
 # Allows us to query tables in the warehouse
@@ -571,6 +570,143 @@ siuba_max_stops = (
     >> summarize(n_max=_.n.max())
 )
 glue("siuba_max_stops_output", siuba_max_stops)
+```
+
+````{tabbed} Metabase
+*You can view this query in Metabase [using this link](https://dashboards.calitp.org/question/223-5-find-the-trip-with-the-most-number-of-stops-per-agency/notebook)*
+
+![Collection Matrix](assets/most_stops_per_trip_by_agency.png)
+````
+
+````{tabbed} SQL
+```python
+# Allows us to query SQL in the JupyterLab notebook
+# Use this in combination with '%%sql', as seen below
+import calitp.magics
+```
+```sql
+%%sql
+
+-- Using a WITH clause to create a sub-query counting the number of stops each
+-- trip in each feed makes, to be referenced later in the query
+WITH
+
+-- The name of the sub-query block to be referenced later
+counting_stop_times AS (
+
+    SELECT
+        -- The first two columns are the ones we will group by for the count
+        trip_id,                        -- unique trip identifier
+        calitp_feed_name,               -- agency info
+
+        -- The aggregation itself
+        COUNT(*) AS n_trip_stop_times
+
+    -- Primary fact table, we need this because it contains trip stop
+    -- information for each agency on each day in the latest feed
+    FROM `views.gtfs_schedule_data_feed_trip_stops_latest`
+
+    -- Note that 1, 2 refer to the first two columns of the select
+    GROUP BY
+        1, 2
+)
+
+SELECT
+    -- The first columns is the one we will group by for the count
+    -- These columns come from the sub-query above
+    calitp_feed_name,               -- agency info
+    MAX(n_trip_stop_times) AS max_n_trip_stop_times -- trip with most stops
+
+-- The sub-query block we created above
+FROM
+    counting_stop_times
+
+-- Filtering for agency
+WHERE
+     calitp_feed_name = "AC Transit (0)"
+
+-- The column we need to group by
+GROUP BY
+    calitp_feed_name
+LIMIT 10
+```
+```{glue:figure} df_max_stops_output
+```
+````
+````{tabbed} siuba
+```python
+# Allows us to query tables in the warehouse
+from calitp.tables import tbl
+
+# The data analysis library used
+from siuba import *
+```
+```python
+(
+    # Primary fact table, we need this because it contains trip stop information
+    # for each agency on each day in the latest feed
+    tbl.views.gtfs_schedule_data_feed_trip_stops_latest()
+
+    # Group and count rows by trip ID and agency, effectively counting the
+    # number of stops for a given trip by agency in the latest feed
+    >> count(_.trip_id, _.calitp_feed_name)
+
+    # Filtering for agency
+    >> filter(_.calitp_feed_name == "AC Transit (0)")
+
+    # Find the trip with the largest number of stops
+    >> summarize(n_max=_.n.max())
+)
+```
+
+```{glue:figure} siuba_max_stops_output
+```
+
+````
+
+## More Complex Query Examples
+
+(max-number-stops)=
+### 6. All the Stops and Arrival Times for an Operator on a Given Day
+As a simple example, we will filter to just the San Diego Metropolitan Transit System and grab 1 day’s worth of data. We want all the trips, stops, arrival times, and stop geometry (lat/lon).
+
+```{code-cell}
+:tags: [remove-cell]
+df_max_fillitin = query_sql("""
+""", as_df=True)
+glue("df_max_fillitin_output", df_max_fillitin)
+```
+
+```{code-cell}
+:tags: [remove-cell]
+tbl_stop_times = (
+    tbl.views.gtfs_schedule_dim_stop_times()
+    >> filter(_.calitp_extracted_at <= SELECTED_DATE,
+              _.calitp_deleted_at > SELECTED_DATE,
+              _.calitp_itp_id == ITP_ID
+             )
+)
+
+daily_stops = (
+    tbl.views.gtfs_schedule_fact_daily_trips()
+    >> filter(_.calitp_itp_id == ITP_ID,
+              _.service_date == SELECTED_DATE,
+              _.is_in_service == True)
+    >> left_join(_, tbl_stop_times,
+             ["calitp_itp_id", "calitp_url_number", "trip_id"])
+    >> inner_join(_, tbl.views.gtfs_schedule_dim_stops(),
+                 ["calitp_itp_id", "stop_id"])
+    >> select(_.itp_id == _.calitp_itp_id,
+              _.date == _.service_date,
+              _.trip_key, _.trip_id, _.stop_id, _.arrival_time,
+              _.stop_lat, _.stop_lon, _.stop_name,
+             )
+    >> collect()
+    )
+
+daily_stops.head()
+)
+glue("daily_stops_output", daily_stops)
 ```
 
 ````{tabbed} Metabase
