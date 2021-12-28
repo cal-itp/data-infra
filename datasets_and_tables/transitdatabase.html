@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TransitDatabase &#8212; Cal-ITP Data Services</title>
+    <title>Transit Database &#8212; Cal-ITP Data Services</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -253,7 +253,7 @@
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     TransitDatabase
+     Transit Database
     </a>
    </li>
    <li class="toctree-l2">
@@ -600,18 +600,59 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#data">
-   Data
+  <a class="reference internal nav-link" href="#airtable-things">
+   Airtable things
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#assessments">
-     Assessments
+    <a class="reference internal nav-link" href="#primary-keys">
+     Primary Keys
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#transit-stacks">
-     Transit Stacks
+    <a class="reference internal nav-link" href="#full-documentation-of-fields">
+     Full Documentation of Fields
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#related-data">
+   Related Data
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#transit-services-tables">
+   Transit Services Tables
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#transit-services-entity-relationship-diagram">
+     Transit Services: Entity Relationship Diagram
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#transit-data-assessment-tables">
+   Transit Data Assessment Tables
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#transit-data-assessments-entity-relationship-diagram">
+     Transit Data Assessments: Entity Relationship Diagram
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#transit-stack-tables">
+   Transit Stack Tables
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#transit-stacks-entity-relationship-diagram">
+     Transit Stacks: Entity Relationship Diagram
     </a>
    </li>
   </ul>
@@ -644,17 +685,180 @@
         
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="transitdatabase">
-<h1>TransitDatabase<a class="headerlink" href="#transitdatabase" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="data">
-<h2>Data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h2>
+  <div class="tex2jax_ignore mathjax_ignore section" id="transit-database">
+<h1>Transit Database<a class="headerlink" href="#transit-database" title="Permalink to this headline">¶</a></h1>
+<p>The Cal-ITP Airtable Transit Database stores key relationships about how transit services are organized and operated in California as well as how well they are performing. See Evan or Hunter to get a link and gain access.</p>
+<p>We have chosen to group and maintain the tables in the Database as follows:</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="text-align:left head"><p><strong>Table Set</strong></p></th>
+<th class="text-align:left head"><p><strong>Description</strong></p></th>
+<th class="text-align:left head"><p><strong>Data Maintainer</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-align:left"><p><a class="reference external" href="#transit-services-tables"><strong>Transit Services Tables</strong></a></p></td>
+<td class="text-align:left"><p>Defines key organizational relationships and properties. Organizations, geography, funding programs,  transit services, service characteristics, transit datasets such as GTFS, and the intersection between transit datasets and services.</p></td>
+<td class="text-align:left"><p><em>Elizabeth</em><br>Evan handling uptake to warehouse</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:left"><p><a class="reference external" href="#transit-data-assessment-tables"><strong>Transit Data Assessment Tables</strong></a></p></td>
+<td class="text-align:left"><p>Articulates data performance metrics and assessments. Structure still a <code class="docutils literal notranslate"><span class="pre">WIP</span></code></p></td>
+<td class="text-align:left"><p><em>Elizabeth</em><br><em>Evan</em> handling uptake to warehouse<br><em>Olivia</em> a key User Advocate.</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:left"><p><a class="reference external" href="#transit-stack-tables"><strong>Transit Stack Tables</strong></a></p></td>
+<td class="text-align:left"><p>Defines operational setups at transit provider organizations. Defines relationships between vendor organizations, transit provider and operator organizations, products, contracts to provide products, transit stack components, and how they relate to one-another. Structure still a <code class="docutils literal notranslate"><span class="pre">WIP</span></code> and needs to catch up with the above.</p></td>
+<td class="text-align:left"><p><em>Elizabeth</em><br>No warehouse uptake for time being.</p></td>
+</tr>
+</tbody>
+</table>
+<p>While <code class="docutils literal notranslate"><span class="pre">organizations</span></code> and <code class="docutils literal notranslate"><span class="pre">services</span></code> are central to many of the tables, we have chosen to maintain them as part of the Transit Services Tables cluster which will be referenced by the other two.</p>
+<div class="section" id="airtable-things">
+<h2>Airtable things<a class="headerlink" href="#airtable-things" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="primary-keys">
+<h3>Primary Keys<a class="headerlink" href="#primary-keys" title="Permalink to this headline">¶</a></h3>
+<p>Airtable forces the use of the left-most field as the primary key of the database: the field that must be referenced in other tables, similar to a VLOOKUP in a spreadsheet. Unlike many databases, Airtable doesn’t enforce uniqueness in the values of the primary key field.  Instead, it assigns it an underlying and mostly hidden unique <a class="reference external" href="https://support.airtable.com/hc/en-us/articles/360051564873-Record-ID"><code class="docutils literal notranslate"><span class="pre">RECORD</span> <span class="pre">ID</span></code></a>, which can be exposed by creating a formula field to reference it.</p>
+<p>For the sake of this documentation, we’ve noted the <a class="reference external" href="https://support.airtable.com/hc/en-us/articles/202624179-The-primary-field"><code class="docutils literal notranslate"><span class="pre">Primary</span> <span class="pre">Field</span></code></a>, which is not guaranteed to be unique. Some tables additionally expose the unique <a class="reference external" href="https://support.airtable.com/hc/en-us/articles/360051564873-Record-ID"><code class="docutils literal notranslate"><span class="pre">RECORD</span> <span class="pre">ID</span></code></a> as well.</p>
+</div>
+<div class="section" id="full-documentation-of-fields">
+<h3>Full Documentation of Fields<a class="headerlink" href="#full-documentation-of-fields" title="Permalink to this headline">¶</a></h3>
+<p>AirTable does not currently have an effective mechanism to programmaticaly download your data schema (they have currently paused issuing keys to their metadata API). Rather than manually type-out and export each individual field definition from AirTable, please see the <a class="reference external" href="https://airtable.com/appPnJWrQ7ui4UmIl/api/docs">AirTable-based documentation of fields</a> which is produced as a part of their API documentation. Note that you must be authenticated with access to the base to reach this link.</p>
+</div>
+</div>
+<div class="section" id="related-data">
+<h2>Related Data<a class="headerlink" href="#related-data" title="Permalink to this headline">¶</a></h2>
+<p>The data in the Airtable Transit Database is distinct but related to the following data:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../airflow/static-schedule-pipeline.html"><span class="doc std std-doc">GTFS Schedule Quality Assessment Airflow pipelines</span></a> results in the <a class="reference internal" href="../warehouse/overview.html"><span class="doc std std-doc">warehouse</span></a></p></li>
+<li><p><a class="reference internal" href="gtfs_schedule.html"><span class="doc std std-doc">GTFS Schedules Datasets</span></a></p></li>
+</ul>
+<p>Currently neither of the above processes or datasets either rely on or contribute back to the Airflow Transit Database – this is a work in progress.  Rather, they rely on the list of transit datasets in the file <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/airflow/data/agencies.yml"><code class="docutils literal notranslate"><span class="pre">agencies.yml</span></code></a> to dictate what datasets to download and assess.</p>
+</div>
+<div class="section" id="transit-services-tables">
+<h2>Transit Services Tables<a class="headerlink" href="#transit-services-tables" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="text-align:left head"><p><strong>Name</strong><br><em>Key(s)</em></p></th>
+<th class="text-align:left head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">organizations</span></code><br><br><em>Primary Field</em>: <code class="docutils literal notranslate"><span class="pre">Name</span></code></p></td>
+<td class="text-align:left"><p>Records are legal organizations, including companies, governmental bodies, or non-profits. <br><br>Table includes information on organizational properties (i.e. locale, type) as well as summarizations of its various relationships (e.g. <code class="docutils literal notranslate"><span class="pre">services</span></code> for a transit provider, or <code class="docutils literal notranslate"><span class="pre">products</span></code> for a vendor). <br> <br>An organization MAY:<br><ul><li><em>manage</em> one more more <code class="docutils literal notranslate"><span class="pre">services</span></code></li><li><em>operate</em> one more <code class="docutils literal notranslate"><span class="pre">services</span></code></li><li><em>own</em> one more <code class="docutils literal notranslate"><span class="pre">contracts</span></code></li><li><em>hold</em> one more <code class="docutils literal notranslate"><span class="pre">contracts</span></code></li><li><em>sell</em> one more <code class="docutils literal notranslate"><span class="pre">products</span></code></li><li><em>consume</em> one more <code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">datasets</span></code></li><li><em>produce</em> one more <code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">datasets</span></code></li></ul></p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">services</span></code><br><br><em>Primary Field</em>: <code class="docutils literal notranslate"><span class="pre">Name</span></code></p></td>
+<td class="text-align:left"><p>Each record defines a transit service and its properties.<br><br>While there are a small number of exceptions (e.g. Solano Express, which is jointly managed by Solano and Napa), generally each transit service is managed by a single organization. Transit services are differentiated from each other by variation (or the potentiality of variation) in one or more of the following:<ul><li>operator <code class="docutils literal notranslate"><span class="pre">organization</span></code> such as City Staff vs a contracted service,<li><code class="docutils literal notranslate"><span class="pre">rider</span> <span class="pre">requirements</span></code> such as ADA Paratransit eligibility, senior status, school trips, etc.</li><li>Operational characteristics such as reservations, on-demand vs fixed-route, service frequencies, and mode</li>Business processes such as transit technology stacks or personnel</li><li>Funding type, which can effect longevity of the service and how well integrated it is with other services managed by the same organization.</li><li>Rider-facing branding, which is often an indicator of one of the above.</li></ul><br>Services MAY:<ul><li>be <em>reflected by</em> a <code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">service</span> <span class="pre">data</span></code> record</li><li>be <em>subject to</em> one or more <code class="docutils literal notranslate"><span class="pre">rider</span> <span class="pre">requirements</span></code></li><li>be <em>funded by</em> one or more <code class="docutils literal notranslate"><span class="pre">funding</span> <span class="pre">programs</span></code></li><li><em>operated by</em> one or more <code class="docutils literal notranslate"><span class="pre">organizations</span></code></li><li><em>managed by</em> one or more organizations</li><li>be <em>operated in</em> one or more <code class="docutils literal notranslate"><span class="pre">place</span> <span class="pre">geography</span></code></li><li><em>use</em> one or more <code class="docutils literal notranslate"><span class="pre">products</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">datasets</span></code><br><br><em>Primary Field</em>: <code class="docutils literal notranslate"><span class="pre">gtfs_dataset_id</span></code></p></td>
+<td class="text-align:left"><p>Each record represents a gtfs dataset (feed) that is either a type of GTFS Schedule, Trip Updates, Vehicle Locations or Alerts.  A gtfs dataset MAY:<ul><li>be <em>disaggregated into</em> one or more <code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">service</span> <span class="pre">data</span></code> records.</li><li>be <em>produced</em> by one or more <code class="docutils literal notranslate"><span class="pre">organizations</span></code></li><li>be <em>published</em> by an <code class="docutils literal notranslate"><span class="pre">organizations</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">contracts</span></code><br><br> <em>Primary Field</em>: <code class="docutils literal notranslate"><span class="pre">Name</span></code></p></td>
+<td class="text-align:left"><p>Each record is a contract between <code class="docutils literal notranslate"><span class="pre">organizations</span></code> to either provide one or more <code class="docutils literal notranslate"><span class="pre">products</span></code> or operate one or more <code class="docutils literal notranslate"><span class="pre">services</span></code>.  Each contract has propreties such as execution date, expiration, and renewals.</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">service</span> <span class="pre">data</span></code> <br><br> <em>Primary Field</em>: <code class="docutils literal notranslate"><span class="pre">Name</span></code>, a combination of a set of <code class="docutils literal notranslate"><span class="pre">Services</span></code> record(s) and a single <code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">datasets</span></code> record.</p></td>
+<td class="text-align:left"><p>Each record links together a single <code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">dataset</span></code> and one (if possible) or more <code class="docutils literal notranslate"><span class="pre">services</span></code>.  Additional fields define how to isolate the service within the <code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">dataset</span></code>.  <br><br>Many services have more than one GTFS dataset which describes their service. Often these are either precursors to <em>final</em> datasets (e.g. AC Transit’s GTFS dataset is a precursor to the Bay Area 511 dataset) or artifacts produced in other processes such as creating GTFS Realtime (e.g. <a class="reference external" href="https://airtable.com/appPnJWrQ7ui4UmIl/tblnVt5FZ2FZmDjDx/viw3NtcDP3Qm0BYyG/recJhrNj21mYVETJG?blocks=hide">the VCTC GTFS produced by GMV</a>). The property <code class="docutils literal notranslate"><span class="pre">Category</span></code> indicates if this is the <code class="docutils literal notranslate"><span class="pre">primary</span></code> dataset, a <code class="docutils literal notranslate"><span class="pre">precursor</span></code> or <code class="docutils literal notranslate"><span class="pre">unknown</span></code> in order to distinguish which should be used.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">place</span> <span class="pre">geography</span></code> <br><br> <em>Primary Field</em>: <code class="docutils literal notranslate"><span class="pre">Name</span></code></p></td>
+<td class="text-align:left"><p>Each place is a Census recognized Place with a FIPS code.  Additional properties include County and Caltrans District.</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">fare</span> <span class="pre">systems</span></code>  <br><br> <em>Primary Field</em>: <code class="docutils literal notranslate"><span class="pre">Fare</span> <span class="pre">System</span></code></p></td>
+<td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">WIP</span></code> A list of fare systems and their properties. Fare systems apply to one or more Organization which manages a service.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">funding</span> <span class="pre">programs</span></code> <br><br><em>Primary Field</em>: <code class="docutils literal notranslate"><span class="pre">Program</span></code></p></td>
+<td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">WIP</span></code> A very broad list of funding programs for <code class="docutils literal notranslate"><span class="pre">services</span></code> such that we are able to identify which <code class="docutils literal notranslate"><span class="pre">services</span></code> may be subject to various requirements and/or to better classify <code class="docutils literal notranslate"><span class="pre">services</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">rider</span> <span class="pre">requirements</span></code> <br><br> <em>Primary Field</em>: <code class="docutils literal notranslate"><span class="pre">Requirement</span></code></p></td>
+<td class="text-align:left"><p>A very broad list of rider requirements to categorize and analyze <code class="docutils literal notranslate"><span class="pre">services</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">eligibility</span> <span class="pre">programs</span></code> <br><br> <em>Primary Field</em>: <code class="docutils literal notranslate"><span class="pre">Program</span></code></p></td>
+<td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">WIP</span></code> Each record is a program/process which riders must use to become eligible to ride one or more <code class="docutils literal notranslate"><span class="pre">services</span></code>.  Each program is operated by an <code class="docutils literal notranslate"><span class="pre">organization</span></code> and evaluates one or more <code class="docutils literal notranslate"><span class="pre">rider</span> <span class="pre">requirements</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">NTD</span> <span class="pre">Agency</span> <span class="pre">Info</span></code></p></td>
+<td class="text-align:left"><p>2018 NTD Agency Info Table imported 10/6/2021 from <a class="reference external" href="https://www7.fta.dot.gov/ntd/data-product/2018-annual-database-agency-information">https://www7.fta.dot.gov/ntd/data-product/2018-annual-database-agency-information</a></p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">API</span> <span class="pre">Keys</span></code></p></td>
+<td class="text-align:left"><p>Storage of API keys for accessing <code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">datasets</span></code> via a keyed API</p></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="transit-services-entity-relationship-diagram">
+<h3>Transit Services: Entity Relationship Diagram<a class="headerlink" href="#transit-services-entity-relationship-diagram" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference external" href="https://mermaid-js.github.io/mermaid-live-editor/edit/#eyJjb2RlIjoiZXJEaWFncmFtXG4gICAgT3JnYW5pemF0aW9uIH1vLS1veyBTZXJ2aWNlOiBcIm1hbmFnZXNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgU2VydmljZTogXCJvcGVyYXRlc1wiXG4gICAgT3JnYW5pemF0aW9uIH1vLS1veyBDb250cmFjdDogXCJvd25zXCJcbiAgICBPcmdhbml6YXRpb24gfW8tLW97IENvbnRyYWN0OiBcImhvbGRzXCJcbiAgICBPcmdhbml6YXRpb24gfW8tLW97IFByb2R1Y3Q6IFwic2VsbHNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgR3Rmc0RhdGFzZXQ6IFwiY29uc3VtZXNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgR3Rmc0RhdGFzZXQ6IFwicHJvZHVjZXNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgR3Rmc0RhdGFzZXQ6IFwicHVibGlzaGVzXCJcbiAgICBPcmdhbml6YXRpb24gfXwtLW97IENvdW50aWVzOiBcInJlc3BvbnNpYmxlIGZvciByZWdpb25hbCBwbGFubmluZyBpblwiXG5cbiAgICBTZXJ2aWNlIHx8LS18eyBQbGFjZXM6IFwib3BlcmF0ZXMgaW5cIlxuICAgIFBsYWNlcyB9by0tfHsgQ291bnRpZXM6IFwiYXJlIGNvbnRhaW5lZCBpblwiXG4gICAgQ291bnRpZXMgfW8tLXx7IENhbHRyYW5zRGlzdHJpY3RzOiBcImFyZSBjb250YWluZWQgaW5cIlxuXG4gICAgRmFyZVN5c3RlbSB8fC0tfHsgT3JnYW5pemF0aW9uOiBcImFwcGxpZXMgdG9cIlxuXG4gICAgRnVuZGluZ1Byb2dyYW0gfXwtLXx7IFNlcnZpY2U6IFwiZnVuZHNcIlxuICAgIFJpZGVyUmVxdWlyZW1lbnQgfW8tLW97IFNlcnZpY2U6IFwiYXBwbGllcyB0b1wiXG4gICAgRWxpZ2libGl0eVByb2dyYW0gfW8tLW97IFNlcnZpY2U6IFwibGljZW5zZXMgZWxpZ2liaWxpdHkgZm9yXCJcblxuICAgIFNlcnZpY2UgfW8tLW97IEd0ZnNEYXRhc2V0U2VydmljZUNvbXBvbmVudDogXCJyZWZsZWN0ZWQgYnlcIlxuICAgIFNlcnZpY2UgfW8tLW97IEd0ZnNEYXRhc2V0OiBcInJlZmxlY3RlZCBieVwiXG4gICAgR3Rmc0RhdGFzZXRTZXJ2aWNlQ29tcG9uZW50IH1vLS1veyBHdGZzRGF0YXNldDogXCJhZ2dyZWdhdGVkIHRvXCIiLCJtZXJtYWlkIjoie1xuICBcInRoZW1lXCI6IFwiZGFya1wiXG59IiwidXBkYXRlRWRpdG9yIjpmYWxzZSwiYXV0b1N5bmMiOnRydWUsInVwZGF0ZURpYWdyYW0iOmZhbHNlfQ"><img alt="" src="https://mermaid.ink/img/eyJjb2RlIjoiZXJEaWFncmFtXG4gICAgT3JnYW5pemF0aW9uIH1vLS1veyBTZXJ2aWNlOiBcIm1hbmFnZXNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgU2VydmljZTogXCJvcGVyYXRlc1wiXG4gICAgT3JnYW5pemF0aW9uIH1vLS1veyBDb250cmFjdDogXCJvd25zXCJcbiAgICBPcmdhbml6YXRpb24gfW8tLW97IENvbnRyYWN0OiBcImhvbGRzXCJcbiAgICBPcmdhbml6YXRpb24gfW8tLW97IFByb2R1Y3Q6IFwic2VsbHNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgR3Rmc0RhdGFzZXQ6IFwiY29uc3VtZXNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgR3Rmc0RhdGFzZXQ6IFwicHJvZHVjZXNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgR3Rmc0RhdGFzZXQ6IFwicHVibGlzaGVzXCJcbiAgICBPcmdhbml6YXRpb24gfXwtLW97IENvdW50aWVzOiBcInJlc3BvbnNpYmxlIGZvciByZWdpb25hbCBwbGFubmluZyBpblwiXG5cbiAgICBTZXJ2aWNlIHx8LS18eyBQbGFjZXM6IFwib3BlcmF0ZXMgaW5cIlxuICAgIFBsYWNlcyB9by0tfHsgQ291bnRpZXM6IFwiYXJlIGNvbnRhaW5lZCBpblwiXG4gICAgQ291bnRpZXMgfW8tLXx7IENhbHRyYW5zRGlzdHJpY3RzOiBcImFyZSBjb250YWluZWQgaW5cIlxuXG4gICAgRmFyZVN5c3RlbSB8fC0tfHsgT3JnYW5pemF0aW9uOiBcImFwcGxpZXMgdG9cIlxuXG4gICAgRnVuZGluZ1Byb2dyYW0gfXwtLXx7IFNlcnZpY2U6IFwiZnVuZHNcIlxuICAgIFJpZGVyUmVxdWlyZW1lbnQgfW8tLW97IFNlcnZpY2U6IFwiYXBwbGllcyB0b1wiXG4gICAgRWxpZ2libGl0eVByb2dyYW0gfW8tLW97IFNlcnZpY2U6IFwibGljZW5zZXMgZWxpZ2liaWxpdHkgZm9yXCJcblxuICAgIFNlcnZpY2UgfW8tLW97IEd0ZnNEYXRhc2V0U2VydmljZUNvbXBvbmVudDogXCJyZWZsZWN0ZWQgYnlcIlxuICAgIFNlcnZpY2UgfW8tLW97IEd0ZnNEYXRhc2V0OiBcInJlZmxlY3RlZCBieVwiXG4gICAgR3Rmc0RhdGFzZXRTZXJ2aWNlQ29tcG9uZW50IH1vLS1veyBHdGZzRGF0YXNldDogXCJhZ2dyZWdhdGVkIHRvXCIiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGFyayJ9LCJ1cGRhdGVFZGl0b3IiOmZhbHNlLCJhdXRvU3luYyI6dHJ1ZSwidXBkYXRlRGlhZ3JhbSI6ZmFsc2V9" /></a></p>
-<div class="section" id="assessments">
-<h3>Assessments<a class="headerlink" href="#assessments" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="transit-data-assessment-tables">
+<h2>Transit Data Assessment Tables<a class="headerlink" href="#transit-data-assessment-tables" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="text-align:left head"><p><strong>Name</strong><br><em>Key(s)</em></p></th>
+<th class="text-align:left head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">checks</span></code></p></td>
+<td class="text-align:left"><p>Each record represents a check that can be performed on either a(n):<ul><li><code class="docutils literal notranslate"><span class="pre">organization</span></code> (who manages a transit service)</li><li><code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">dataset</span></code> as a whole, or </li><li>a <code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">service</span> <span class="pre">data</span></code> record within that <code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">dataset</span></code>. Each check has a score type of either:<ul><li><code class="docutils literal notranslate"><span class="pre">Boolean</span></code>: yes or no</li><li><code class="docutils literal notranslate"><span class="pre">Nominal</span></code>: with defined scores for specific criteria levels as defined in the <code class="docutils literal notranslate"><span class="pre">Scoring</span> <span class="pre">Criteria</span></code> field, or</li><li><code class="docutils literal notranslate"><span class="pre">Continuous</span></code>: as defined by the <code class="docutils literal notranslate"><span class="pre">Scoring</span> <span class="pre">Criteria</span></code> column and the <code class="docutils literal notranslate"><span class="pre">Max</span> <span class="pre">Score</span></code> field.</li></ul>Further, scores for each check can be sourced by one of <ul><li><code class="docutils literal notranslate"><span class="pre">human</span></code>: manual work</li><li><code class="docutils literal notranslate"><span class="pre">auto</span></code>: programmable</li><li><code class="docutils literal notranslate"><span class="pre">gtfs-trained-human</span></code>: a huma with necessary technical training, or </li><li><code class="docutils literal notranslate"><span class="pre">combo</span></code>: of these.</li></ul>These sources are indicated in their current, near-future, and goal states in the columns <code class="docutils literal notranslate"><span class="pre">Source</span></code>, <code class="docutils literal notranslate"><span class="pre">Source:</span> <span class="pre">medium-term</span></code>, and <code class="docutils literal notranslate"><span class="pre">Source:</span> <span class="pre">goal</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">gtfs-service</span> <span class="pre">check</span> <span class="pre">data</span></code></p></td>
+<td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">WIP</span></code> Each record is a specific assessment of a single <code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">checks</span></code> for a single <code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">service</span> <span class="pre">data</span></code> record at a specific point in time.</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">gtfs-dataset</span> <span class="pre">check</span> <span class="pre">data</span></code></p></td>
+<td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">WIP</span></code> Each record is a specific assessment of a single <code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">checks</span></code> for a single <code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">dataset</span></code> record at a specific point in time.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">provider</span> <span class="pre">check</span> <span class="pre">data</span></code></p></td>
+<td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">WIP</span></code> Each record is a specific assessment of a single <code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">checks</span></code> for a single <code class="docutils literal notranslate"><span class="pre">organizations</span></code> which <em>manages</em> one or more <code class="docutils literal notranslate"><span class="pre">services</span></code> at a specific point in time.</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">grading</span> <span class="pre">scheme</span></code></p></td>
+<td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">WIP</span></code> Each record is a specific check that can be done on a <code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">service</span> <span class="pre">data</span></code> for a specific GTFS Grading Scheme version. Scoring for the check should be based on the field <code class="docutils literal notranslate"><span class="pre">Scoring</span> <span class="pre">Criteria</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">grades</span></code></p></td>
+<td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">WIP</span></code> Each record is a specific assessment of a single datapoint within a <code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">service</span> <span class="pre">data</span></code> for a specific <code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">grading</span> <span class="pre">scheme</span></code> check at a specific point in time. The <code class="docutils literal notranslate"><span class="pre">Score</span></code> field is backed up by <code class="docutils literal notranslate"><span class="pre">comments</span> <span class="pre">supporting</span> <span class="pre">score</span></code> and <code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">dataset</span> <span class="pre">text</span></code>, <code class="docutils literal notranslate"><span class="pre">official</span> <span class="pre">reference</span></code> and <code class="docutils literal notranslate"><span class="pre">official</span> <span class="pre">reference</span> <span class="pre">attach.</span></code> (for screen shots) so that identified issues can be more easily remedied by transit providers.</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">provider</span> <span class="pre">gtfs</span> <span class="pre">assessments</span></code></p></td>
+<td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">WIP</span></code> Each record is an aggregated assessment for a single <code class="docutils literal notranslate"><span class="pre">organizations</span></code> which manages one or more <code class="docutils literal notranslate"><span class="pre">services</span></code> conducted using a specific set of <code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">checks</span></code> at a specific point in time. Each record has a <code class="docutils literal notranslate"><span class="pre">Reviewer</span></code>, <code class="docutils literal notranslate"><span class="pre">Status</span></code>, and a link to the document sent to the <code class="docutils literal notranslate"><span class="pre">organizations</span></code> (if applicable)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">improvement</span> <span class="pre">strategy</span></code></p></td>
+<td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">WIP</span></code> Each record is a single data improvement strategy for a single <code class="docutils literal notranslate"><span class="pre">Organizations</span></code> which responds to a single <code class="docutils literal notranslate"><span class="pre">provider</span> <span class="pre">gtfs</span> <span class="pre">assessments</span></code>.  Fields includes links to the documents, <code class="docutils literal notranslate"><span class="pre">Status</span></code>, and dates.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="transit-data-assessments-entity-relationship-diagram">
+<h3>Transit Data Assessments: Entity Relationship Diagram<a class="headerlink" href="#transit-data-assessments-entity-relationship-diagram" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference external" href="https://mermaid-js.github.io/mermaid-live-editor/edit/#eyJjb2RlIjoiZXJEaWFncmFtXG4gICAgT3JnYW5pemF0aW9uIH1vLS1veyBTZXJ2aWNlOiBtYW5hZ2VzIFxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgR3Rmc0RhdGFzZXQ6IHByb2R1Y2VzXG4gICAgT3JnYW5pemF0aW9uIH1vLS1veyBHdGZzRGF0YXNldDogcHVibGlzaGVzXG5cbiAgICBHdGZzQXNzZXNzbWVudFByb3ZpZGVyQ2hlY2tEYXRhIH1vLS1vfCBHdGZzQXNzZXNzbWVudENoZWNrczogXCJ1c2VzIGNyaXRlcmlhIGZyb20gYVwiXG4gICAgR3Rmc0Fzc2Vzc21lbnREYXRhc2V0Q2hlY2tEYXRhIH1vLS1vfCBHdGZzQXNzZXNzbWVudENoZWNrczogXCJ1c2VzIGNyaXRlcmlhIGZyb20gYVwiXG4gICAgR3Rmc0Fzc2Vzc21lbnREYXRhc2V0U2VydmljZUNoZWNrRGF0YSB9by0tb3wgR3Rmc0Fzc2Vzc21lbnRDaGVja3M6IFwidXNlcyBjcml0ZXJpYSBmcm9tIGFcIlxuXG4gICAgR3Rmc0Fzc2Vzc21lbnRQcm92aWRlckNoZWNrRGF0YSB9fC0tfHsgT3JnYW5pemF0aW9uOiBcImV2YWx1YXRlcyBhdCBhIHBvaW50IGluIHRpbWVcIlxuICAgIEd0ZnNBc3Nlc3NtZW50RGF0YXNldENoZWNrRGF0YSB9by0tfHsgR3Rmc0RhdGFzZXQ6IGV2YWx1YXRlc1xuICAgIEd0ZnNBc3Nlc3NtZW50RGF0YXNldFNlcnZpY2VDaGVja0RhdGEgfW8tLXx7IEd0ZnNEYXRhc2V0U2VydmljZUNvbXBvbmVudDogZXZhbHVhdGVzXG5cbiAgICBHdGZzQXNzZXNzbWVudFByb3ZpZGVyQ2hlY2tEYXRhIH18LS18eyBHdGZzUHJvdmlkZXJBc3Nlc3NtZW50OiBcImNvbnRhaW5zIGluZm8gZnJvbVwiXG4gICAgR3Rmc0Fzc2Vzc21lbnREYXRhc2V0Q2hlY2tEYXRhIH1vLS18eyBHdGZzUHJvdmlkZXJBc3Nlc3NtZW50OiBcImNvbnRhaW5zIGluZm8gZnJvbVwiXG4gICAgR3Rmc0Fzc2Vzc21lbnREYXRhc2V0U2VydmljZUNoZWNrRGF0YSB9by0tb3sgR3Rmc1Byb3ZpZGVyQXNzZXNzbWVudDogXCJjb250YWlucyBpbmZvIGZyb21cIlxuXG4gICAgR3Rmc0Fzc2Vzc21lbnREYXRhc2V0Q2hlY2tEYXRhIH1vLS18eyBHdGZzRGF0YXNldEFzc2Vzc21lbnQ6IFwiY29udGFpbnMgaW5mbyBmcm9tXCJcbiAgICBHdGZzQXNzZXNzbWVudERhdGFzZXRTZXJ2aWNlQ2hlY2tEYXRhIH1vLS18eyBHdGZzRGF0YXNldEFzc2Vzc21lbnQ6IFwiY29udGFpbnMgaW5mbyBmcm9tXCJcblxuICAgIFNlcnZpY2UgfW8tLW97IEd0ZnNEYXRhc2V0U2VydmljZUNvbXBvbmVudDogXCJyZWZsZWN0ZWQgYnlcIlxuICAgIFNlcnZpY2UgfW8tLW97IEd0ZnNEYXRhc2V0OiBcInJlZmxlY3RlZCBieVwiXG4gICAgR3Rmc0RhdGFzZXRTZXJ2aWNlQ29tcG9uZW50IH1vLS1veyBHdGZzRGF0YXNldDogXCJhZ2dyZWdhdGVkIHRvXCJcbiIsIm1lcm1haWQiOiJ7XG4gIFwidGhlbWVcIjogXCJkYXJrXCJcbn0iLCJ1cGRhdGVFZGl0b3IiOmZhbHNlLCJhdXRvU3luYyI6dHJ1ZSwidXBkYXRlRGlhZ3JhbSI6ZmFsc2V9"><img alt="" src="https://mermaid.ink/img/eyJjb2RlIjoiZXJEaWFncmFtXG4gICAgT3JnYW5pemF0aW9uIH1vLS1veyBTZXJ2aWNlOiBtYW5hZ2VzIFxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgR3Rmc0RhdGFzZXQ6IHByb2R1Y2VzXG4gICAgT3JnYW5pemF0aW9uIH1vLS1veyBHdGZzRGF0YXNldDogcHVibGlzaGVzXG5cbiAgICBHdGZzQXNzZXNzbWVudFByb3ZpZGVyQ2hlY2tEYXRhIH1vLS1vfCBHdGZzQXNzZXNzbWVudENoZWNrczogXCJ1c2VzIGNyaXRlcmlhIGZyb20gYVwiXG4gICAgR3Rmc0Fzc2Vzc21lbnREYXRhc2V0Q2hlY2tEYXRhIH1vLS1vfCBHdGZzQXNzZXNzbWVudENoZWNrczogXCJ1c2VzIGNyaXRlcmlhIGZyb20gYVwiXG4gICAgR3Rmc0Fzc2Vzc21lbnREYXRhc2V0U2VydmljZUNoZWNrRGF0YSB9by0tb3wgR3Rmc0Fzc2Vzc21lbnRDaGVja3M6IFwidXNlcyBjcml0ZXJpYSBmcm9tIGFcIlxuXG4gICAgR3Rmc0Fzc2Vzc21lbnRQcm92aWRlckNoZWNrRGF0YSB9fC0tfHsgT3JnYW5pemF0aW9uOiBcImV2YWx1YXRlcyBhdCBhIHBvaW50IGluIHRpbWVcIlxuICAgIEd0ZnNBc3Nlc3NtZW50RGF0YXNldENoZWNrRGF0YSB9by0tfHsgR3Rmc0RhdGFzZXQ6IGV2YWx1YXRlc1xuICAgIEd0ZnNBc3Nlc3NtZW50RGF0YXNldFNlcnZpY2VDaGVja0RhdGEgfW8tLXx7IEd0ZnNEYXRhc2V0U2VydmljZUNvbXBvbmVudDogZXZhbHVhdGVzXG5cbiAgICBHdGZzQXNzZXNzbWVudFByb3ZpZGVyQ2hlY2tEYXRhIH18LS18eyBHdGZzUHJvdmlkZXJBc3Nlc3NtZW50OiBcImNvbnRhaW5zIGluZm8gZnJvbVwiXG4gICAgR3Rmc0Fzc2Vzc21lbnREYXRhc2V0Q2hlY2tEYXRhIH1vLS18eyBHdGZzUHJvdmlkZXJBc3Nlc3NtZW50OiBcImNvbnRhaW5zIGluZm8gZnJvbVwiXG4gICAgR3Rmc0Fzc2Vzc21lbnREYXRhc2V0U2VydmljZUNoZWNrRGF0YSB9by0tb3sgR3Rmc1Byb3ZpZGVyQXNzZXNzbWVudDogXCJjb250YWlucyBpbmZvIGZyb21cIlxuXG4gICAgR3Rmc0Fzc2Vzc21lbnREYXRhc2V0Q2hlY2tEYXRhIH1vLS18eyBHdGZzRGF0YXNldEFzc2Vzc21lbnQ6IFwiY29udGFpbnMgaW5mbyBmcm9tXCJcbiAgICBHdGZzQXNzZXNzbWVudERhdGFzZXRTZXJ2aWNlQ2hlY2tEYXRhIH1vLS18eyBHdGZzRGF0YXNldEFzc2Vzc21lbnQ6IFwiY29udGFpbnMgaW5mbyBmcm9tXCJcblxuICAgIFNlcnZpY2UgfW8tLW97IEd0ZnNEYXRhc2V0U2VydmljZUNvbXBvbmVudDogXCJyZWZsZWN0ZWQgYnlcIlxuICAgIFNlcnZpY2UgfW8tLW97IEd0ZnNEYXRhc2V0OiBcInJlZmxlY3RlZCBieVwiXG4gICAgR3Rmc0RhdGFzZXRTZXJ2aWNlQ29tcG9uZW50IH1vLS1veyBHdGZzRGF0YXNldDogXCJhZ2dyZWdhdGVkIHRvXCJcbiIsIm1lcm1haWQiOnsidGhlbWUiOiJkYXJrIn0sInVwZGF0ZUVkaXRvciI6ZmFsc2UsImF1dG9TeW5jIjp0cnVlLCJ1cGRhdGVEaWFncmFtIjpmYWxzZX0" /></a></p>
 </div>
-<div class="section" id="transit-stacks">
-<h3>Transit Stacks<a class="headerlink" href="#transit-stacks" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="transit-stack-tables">
+<h2>Transit Stack Tables<a class="headerlink" href="#transit-stack-tables" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="text-align:left head"><p><strong>Name</strong><br><em>Key(s)</em></p></th>
+<th class="text-align:left head"><p><strong>Description</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">organizations</span></code></p></td>
+<td class="text-align:left"><p>See above for definition.  Within Transit Stacks context, each organization MAY: <ul><li><em>sell</em> one more <code class="docutils literal notranslate"><span class="pre">products</span></code></li><li><em>own</em> one or more <code class="docutils literal notranslate"><span class="pre">contracts</span></code> which license the use of one or more <code class="docutils literal notranslate"><span class="pre">products</span></code> to one or more <code class="docutils literal notranslate"><span class="pre">organizations</span></code>.</li><li><em>hold</em> one or more <code class="docutils literal notranslate"><span class="pre">contracts</span></code> with another <code class="docutils literal notranslate"><span class="pre">organization</span></code> to use one or more <code class="docutils literal notranslate"><span class="pre">products</span></code> with a <code class="docutils literal notranslate"><span class="pre">service</span></code> that they <em>manage</em> or <em>operate</em>.</li><li><em>consume</em> one or more <code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">datasets</span></code></li><li><em>produce</em> one or more <code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">datasets</span></code></li><li><em>publish</em> one or more <code class="docutils literal notranslate"><span class="pre">gtfs</span> <span class="pre">datsets</span></code></li><li><em>use</em> one or more <code class="docutils literal notranslate"><span class="pre">products</span></code> as a <code class="docutils literal notranslate"><span class="pre">organization</span> <span class="pre">stack</span> <span class="pre">component</span></code> for a <code class="docutils literal notranslate"><span class="pre">service</span></code> that they <em>manage</em> or <em>operate</em></li></ul></p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">products</span></code><br><br>  <em>Primary Field</em>: <code class="docutils literal notranslate"><span class="pre">Name</span></code></p></td>
+<td class="text-align:left"><p>Each record is a product used in a transit technology stack at another organization (e.g. fixed-route scheduling software) or by riders (e.g. Google Maps).  Products have properties such as input/output capabilities. <br><br>Products MAY:<ul><li><em>function as</em> one or more <code class="docutils literal notranslate"><span class="pre">stack</span> <span class="pre">components</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">contracts</span></code><br><br> <em>Primary Field</em>: <code class="docutils literal notranslate"><span class="pre">Name</span></code></p></td>
+<td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">WIP</span></code> Each record is a contract between <code class="docutils literal notranslate"><span class="pre">organizations</span></code> to either provide one or more <code class="docutils literal notranslate"><span class="pre">products</span></code> or operate one or more <code class="docutils literal notranslate"><span class="pre">services</span></code>.  Each contract has properties such as execution date, expiration, and renewals.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">stack</span> <span class="pre">components</span></code></p></td>
+<td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">WIP</span></code> Each component represents a single <em>lego</em> in a transit technology stack.  It is part of a single <code class="docutils literal notranslate"><span class="pre">Component</span> <span class="pre">Group</span></code> (e.g. CAD/AVL) which are often bundled together, which in turn is part of a <code class="docutils literal notranslate"><span class="pre">Function</span> <span class="pre">Group</span></code> (e.g. Fare collection ,scheduling, etc) and is operated in physical space defined in <code class="docutils literal notranslate"><span class="pre">Location</span></code> (e.g. Cloud, Vehicle, etc.)</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">organization</span> <span class="pre">stack</span> <span class="pre">components</span></code></p></td>
+<td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">WIP</span></code> Each record is an association between one or more <code class="docutils literal notranslate"><span class="pre">Services</span></code>, a <code class="docutils literal notranslate"><span class="pre">Product</span></code>, and one or more <code class="docutils literal notranslate"><span class="pre">stack</span> <span class="pre">components</span></code> which that product is serving as.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">organization</span> <span class="pre">stack</span> <span class="pre">relationships</span></code></p></td>
+<td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">WIP</span></code> Each record is an one-way association between two <code class="docutils literal notranslate"><span class="pre">organization</span> <span class="pre">stack</span> <span class="pre">components</span></code> (<code class="docutils literal notranslate"><span class="pre">Component</span> <span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">Component</span> <span class="pre">B</span></code>) using a <code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">schemas</span></code> and <code class="docutils literal notranslate"><span class="pre">Mechanism</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">auto-triggered</span> <span class="pre">pull</span></code>, <code class="docutils literal notranslate"><span class="pre">intra-product</span></code>, <code class="docutils literal notranslate"><span class="pre">human</span> <span class="pre">transaction</span></code>, etc.)</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:left"><p><code class="docutils literal notranslate"><span class="pre">data</span> <span class="pre">schemas</span></code></p></td>
+<td class="text-align:left"><p>Each record indicates a data schema which  can nbe used in one or more <code class="docutils literal notranslate"><span class="pre">organization</span> <span class="pre">stack</span> <span class="pre">relationships</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="transit-stacks-entity-relationship-diagram">
+<h3>Transit Stacks: Entity Relationship Diagram<a class="headerlink" href="#transit-stacks-entity-relationship-diagram" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference external" href="https://mermaid-js.github.io/mermaid-live-editor/edit/#eyJjb2RlIjoiZXJEaWFncmFtXG4gICAgT3JnYW5pemF0aW9uIH1vLS1veyBTZXJ2aWNlOiBcIm1hbmFnZXNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgU2VydmljZTogXCJvcGVyYXRlc1wiXG4gICAgT3JnYW5pemF0aW9uIH1vLS1veyBDb250cmFjdDogXCJvd25zXCJcbiAgICBPcmdhbml6YXRpb24gfW8tLW97IENvbnRyYWN0OiBcImhvbGRzXCJcbiAgICBPcmdhbml6YXRpb24gfW8tLW97IFByb2R1Y3Q6IFwic2VsbHNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgR3Rmc0RhdGFzZXQ6IFwiY29uc3VtZXNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgR3Rmc0RhdGFzZXQ6IFwicHJvZHVjZXNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgR3Rmc0RhdGFzZXQ6IFwicHVibGlzaGVzXCJcblxuICAgIE9yZ2FuaXphdGlvblN0YWNrQ29tcG9uZW50IH1vLi5veyBPcmdhbml6YXRpb246IFwiYXNzb2NpYXRlc1wiXG4gICAgT3JnYW5pemF0aW9uU3RhY2tDb21wb25lbnQgfW8uLm97IFByb2R1Y3Q6IFwiYXNzb2NpYXRlc1wiXG4gICAgT3JnYW5pemF0aW9uU3RhY2tDb21wb25lbnQgfW8uLm97IENvbXBvbmVudDogXCJhc3NvY2lhdGVzXCJcbiAgICBPcmdhbml6YXRpb25TdGFja0NvbXBvbmVudCB9by4ub3sgQ29udHJhY3Q6IFwiYXNzb2NpYXRlc1wiXG5cbiAgICBPcmdhbml6YXRpb25TdGFja0NvbXBvbmVudFJlbGF0aW9uc2hpcCB9by4ub3sgT3JnYW5pemF0aW9uU3RhY2tDb21wb25lbnQ6IGNvbXBvbmVudEFcbiAgICBPcmdhbml6YXRpb25TdGFja0NvbXBvbmVudFJlbGF0aW9uc2hpcCB9by4ub3sgT3JnYW5pemF0aW9uU3RhY2tDb21wb25lbnQ6IGNvbXBvbmVudEIiLCJtZXJtYWlkIjoie1xuICBcInRoZW1lXCI6IFwiZGFya1wiXG59IiwidXBkYXRlRWRpdG9yIjpmYWxzZSwiYXV0b1N5bmMiOnRydWUsInVwZGF0ZURpYWdyYW0iOmZhbHNlfQ"><img alt="" src="https://mermaid.ink/img/eyJjb2RlIjoiZXJEaWFncmFtXG4gICAgT3JnYW5pemF0aW9uIH1vLS1veyBTZXJ2aWNlOiBcIm1hbmFnZXNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgU2VydmljZTogXCJvcGVyYXRlc1wiXG4gICAgT3JnYW5pemF0aW9uIH1vLS1veyBDb250cmFjdDogXCJvd25zXCJcbiAgICBPcmdhbml6YXRpb24gfW8tLW97IENvbnRyYWN0OiBcImhvbGRzXCJcbiAgICBPcmdhbml6YXRpb24gfW8tLW97IFByb2R1Y3Q6IFwic2VsbHNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgR3Rmc0RhdGFzZXQ6IFwiY29uc3VtZXNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgR3Rmc0RhdGFzZXQ6IFwicHJvZHVjZXNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgR3Rmc0RhdGFzZXQ6IFwicHVibGlzaGVzXCJcblxuICAgIE9yZ2FuaXphdGlvblN0YWNrQ29tcG9uZW50IH1vLi5veyBPcmdhbml6YXRpb246IFwiYXNzb2NpYXRlc1wiXG4gICAgT3JnYW5pemF0aW9uU3RhY2tDb21wb25lbnQgfW8uLm97IFByb2R1Y3Q6IFwiYXNzb2NpYXRlc1wiXG4gICAgT3JnYW5pemF0aW9uU3RhY2tDb21wb25lbnQgfW8uLm97IENvbXBvbmVudDogXCJhc3NvY2lhdGVzXCJcbiAgICBPcmdhbml6YXRpb25TdGFja0NvbXBvbmVudCB9by4ub3sgQ29udHJhY3Q6IFwiYXNzb2NpYXRlc1wiXG5cbiAgICBPcmdhbml6YXRpb25TdGFja0NvbXBvbmVudFJlbGF0aW9uc2hpcCB9by4ub3sgT3JnYW5pemF0aW9uU3RhY2tDb21wb25lbnQ6IGNvbXBvbmVudEFcbiAgICBPcmdhbml6YXRpb25TdGFja0NvbXBvbmVudFJlbGF0aW9uc2hpcCB9by4ub3sgT3JnYW5pemF0aW9uU3RhY2tDb21wb25lbnQ6IGNvbXBvbmVudEIiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGFyayJ9LCJ1cGRhdGVFZGl0b3IiOmZhbHNlLCJhdXRvU3luYyI6dHJ1ZSwidXBkYXRlRGlhZ3JhbSI6ZmFsc2V9" /></a></p>
 </div>
 </div>
