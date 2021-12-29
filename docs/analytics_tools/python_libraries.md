@@ -121,7 +121,8 @@ make setup_env
 # In notebook:
 import shared_utils
 
-# Note: you may need to select 'Kernel' -> 'Restart Kernel' from the top menu in order to successfully `import shared_utils` after `make`
+# Note: you may need to select 'Kernel' -> 'Restart Kernel' from the top menu
+# in order to successfully `import shared_utils` after `make`
 
 shared_utils.geography_utils.WGS84
 ```
