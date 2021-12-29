@@ -12,6 +12,7 @@ Doing work locally and pushing directly from the command line is a similar workf
     * Someone is collaborating on my branch, how do we [stay in sync](#pulling-and-pushing-changes)?
     * The `main` branch is ahead, and I want to [sync my branch with `main`](rebase-and-merge)
     * [Helpful Hints](#helpful-hints)
+    * [External Git Resources](external-git-resources)
 2. [Pushing in the Github User Interface](#pushing-drag-drop)
 
 ## Pushing from JupyterHub
@@ -110,6 +111,7 @@ git reset --hard origin/main`
 * To delete a file that's been added in a previous commit: `git rm notebooks/my-notebook.ipynb`
 * Cherry pick a commit and apply it to your branch: `git cherry-pick COMMIT_HASH`. Read more from [Stack Overflow](https://stackoverflow.com/questions/9339429/what-does-cherry-picking-a-commit-with-git-mean) and [Atlassian](https://www.atlassian.com/git/tutorials/cherry-pick).
 
+(external-git-resources)=
 ### External Resources
 * [Git Terminal Cheat Sheet](https://gist.github.com/cferdinandi/ef665330286fd5d7127d)
 * [Git Decision Tree - 'So you have a mess on your hands'](http://justinhileman.info/article/git-pretty/full/)
