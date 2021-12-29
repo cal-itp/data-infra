@@ -30,7 +30,6 @@ We'll work through getting set up with GitHub on JupyterHub and cloning one GitH
 1. Clone the Git repo: `git clone git@github.com:cal-itp/data-analyses.git`
 1. Double check  with `ls` to list and see that the remote repo was successfully cloned into your "local" (cloud-based) filesystem.
 1. Change into the `data-analyses` directory: `cd data-analyses`
-1. Point to the remote repo: `git remote add origin git@github.com:cal-itp/data-analyses.git`. Double check it's set with: `git remote -v`
 1. Pull from the `main` branch and sync your remote and local repos: `git pull origin main`
 
 ### Project Workflow
