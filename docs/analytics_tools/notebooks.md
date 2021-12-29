@@ -130,6 +130,6 @@ LIMIT 10
 (notebook-shortcuts)=
 ### Jupyter Notebook Best Practices
 
-External resources providing shortcuts and best practices:
+External resources:
 * [Cheat Sheet - Jupyter Notebook ](https://defkey.com/jupyter-notebook-shortcuts?pdf=true&modifiedDate=20200909T053706)
 * [Using Markdown in Jupyter Notebook](https://www.datacamp.com/community/tutorials/markdown-in-jupyter-notebook)
