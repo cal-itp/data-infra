@@ -12,5 +12,6 @@ CREATE OR REPLACE EXTERNAL TABLE `gtfs_rt.calitp_files` (
 )
 OPTIONS (
     format = "CSV",
-    uris = ["{{get_bucket()}}/rt-processed/calitp_files/*.csv"]
+    uris = ["{{get_bucket()}}/rt-processed/calitp_files/*.csv"],
+    skip_leading_rows = 1
 )

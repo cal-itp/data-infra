@@ -13,7 +13,7 @@ kernelspec:
   name: python3
 ---
 (python-libraries)=
-# Python Libraries (WIP)
+# Python Libraries
 The following libraries are available and recommended for use by Cal-ITP data analysts.
 
 ## Table of Contents
@@ -36,9 +36,24 @@ While most Python packages an analyst uses comes in JupyterHub, there may be add
 
 (calitp)=
 ## calitp
+`calitp` is an internal library of utility functions used to access our warehouse data.
+
+Most notably, you can include the following function at the top of your notebook to import a `tbl` from the warehouse:
+
+```python
+from calitp.tables import tbl
+```
+
+Example:
+```{code-cell}
+from calitp.tables import tbl
+
+tbl.views.gtfs_schedule_fact_daily_feed_routes()
+```
+
 (siuba)=
 ## siuba
-Siuba is a tool that allows the same analysis code to run on a pandas DataFrame,
+`siuba` is a tool that allows the same analysis code to run on a pandas DataFrame,
 as well as generate SQL for different databases.
 It supports most [pandas Series methods](https://pandas.pydata.org/pandas-docs/stable/reference/series.html) analysts use.
 See the [siuba docs](https://siuba.readthedocs.io) for more information.
