@@ -110,6 +110,10 @@ git reset --hard origin/main`
 * To delete a file that's been added in a previous commit: `git rm notebooks/my-notebook.ipynb`
 * Cherry pick a commit and apply it to your branch: `git cherry-pick COMMIT_HASH`. Read more from [Stack Overflow](https://stackoverflow.com/questions/9339429/what-does-cherry-picking-a-commit-with-git-mean) and [Atlassian](https://www.atlassian.com/git/tutorials/cherry-pick).
 
+### External Resources
+* [Git Terminal Cheat Sheet](https://gist.github.com/cferdinandi/ef665330286fd5d7127d)
+* [Git Decision Tree - 'So you have a mess on your hands'](http://justinhileman.info/article/git-pretty/full/)
+
 (pushing-drag-drop)=
 ## Pushing in the Github User Interface
 
