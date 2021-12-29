@@ -1,0 +1,13 @@
+operator: operators.AirtableToWarehouseOperator
+
+air_base_id: apphcwzP8cR82NeJo
+air_table_name: parent
+table_name: sandbox.airtable_parent
+
+id_name: "parent_id"
+rename_fields:
+  child_id: child
+column_prefix: "parent_"
+
+dependencies:
+  - create_dataset

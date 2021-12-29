@@ -7,3 +7,4 @@ from operators.sql_to_warehouse_operator import SqlToWarehouseOperator
 from operators.csv_to_warehouse_operator import CsvToWarehouseOperator
 from operators.python_to_warehouse_operator import PythonToWarehouseOperator
 from operators.sql_query_operator import SqlQueryOperator
+from operators.airtable_to_warehouse import AirtableToWarehouseOperator
