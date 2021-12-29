@@ -23,6 +23,7 @@ The following libraries are available and recommended for use by Cal-ITP data an
 <br> - [Basic Query](#basic-query)
 <br> - [Collect Query Results](#collect-query-results)
 <br> - [Show Query SQL](#show-query-sql)
+<br> - [More siuba Resources](more-siuba-resources)
 1. [shared utils](#shared-utils)
 1. [pandas](pandas-resources)
 
@@ -56,11 +57,7 @@ tbl.views.gtfs_schedule_fact_daily_feed_routes()
 ## siuba
 `siuba` is a tool that allows the same analysis code to run on a pandas DataFrame,
 as well as generate SQL for different databases.
-It supports most [pandas Series methods](https://pandas.pydata.org/pandas-docs/stable/reference/series.html) analysts use.
-
-siuba Resources:
-* [siuba docs](https://siuba.readthedocs.io)
-* ['Tidy Tuesday' live analyses with siuba](https://www.youtube.com/playlist?list=PLiQdjX20rXMHc43KqsdIowHI3ouFnP_Sf)
+It supports most [pandas Series methods](https://pandas.pydata.org/pandas-docs/stable/reference/series.html) analysts use. See the [siuba docs](https://siuba.readthedocs.io) for more information.
 
 The examples below go through the basics of using siuba, collecting a database query to a local DataFrame,
 and showing SQL test queries that siuba code generates.
@@ -107,6 +104,11 @@ While `collect()` fetches query results, `show_query()` prints out the SQL code 
 
 ```
 Note that here the pandas Series method `str.contains` corresponds to `regexp_contains` in Google BigQuery.
+
+(more-siuba-resources)=
+### More siuba Resources:
+* [siuba docs](https://siuba.readthedocs.io)
+* ['Tidy Tuesday' live analyses with siuba](https://www.youtube.com/playlist?list=PLiQdjX20rXMHc43KqsdIowHI3ouFnP_Sf)
 
 ## shared utils
 A set of shared utility functions can also be installed, similarly to any Python library. The [shared_utils](https://github.com/cal-itp/data-analyses/shared_utils) are stored here. Generalized functions for analysis are added as collaborative work evolves so we aren't constantly reinventing the wheel.
