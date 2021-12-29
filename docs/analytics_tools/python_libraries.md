@@ -125,8 +125,8 @@ import shared_utils
 
 shared_utils.geography_utils.WGS84
 
-# Note: you may need to select 'Kernel' -> 'Restart Kernel' from the top menu
-# in order to successfully `import shared_utils` after `make`
+# Note: you may need to select Kernel -> Restart Kernel from the top menu
+# after make setup_env in order to successfully import shared_utils
 ```
 
 See [data-analyses/example_reports](https://github.com/cal-itp/data-analyses/tree/main/example_report) for examples in how to use `shared_utils` for [general functions](https://github.com/cal-itp/data-analyses/blob/main/example_report/shared_utils_examples.ipynb), [charts](https://github.com/cal-itp/data-analyses/blob/main/example_report/example_charts.ipynb), and [maps](https://github.com/cal-itp/data-analyses/blob/main/example_report/example_maps.ipynb).
