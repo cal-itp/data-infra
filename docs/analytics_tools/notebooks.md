@@ -15,6 +15,7 @@ Analyses on JupyterHub are done using notebooks, which allow users to mix narrat
 1. [Increasing the Query Limit](#increasing-the-query-limit)
 1. [Environment Variables](#environment-variables)
 1. [Querying with SQL in JupyterHub](querying-sql-jupyterhub)
+1. [Jupyter Notebook Best Practices](notebook-shortcuts)
 
 ## Using JupyterHub
 For Python users, we have deployed a cloud-based instance of JupyterHub to creating, using, and sharing notebooks easy.
@@ -125,3 +126,10 @@ WHERE
     calitp_feed_name = "AC Transit (0)"
 LIMIT 10
 ```
+
+(notebook-shortcuts)=
+### Jupyter Notebook Best Practices
+
+External resources providing shortcuts and best practices:
+* [Jupyter Notebook Cheat Sheet](https://defkey.com/jupyter-notebook-shortcuts?pdf=true&modifiedDate=20200909T053706)
+* [Markdown in Jupyter Notebook](https://www.datacamp.com/community/tutorials/markdown-in-jupyter-notebook)
