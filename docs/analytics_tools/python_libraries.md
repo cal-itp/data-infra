@@ -133,4 +133,4 @@ See [data-analyses/example_reports](https://github.com/cal-itp/data-analyses/tre
 ## pandas
 The library pandas is very commonly used in data analysis, and the external resources below provide a brief overview of it's use.
 
-* [pandas Cheat Sheet](https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf)
+* [Cheat Sheet - pandas](https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf)
