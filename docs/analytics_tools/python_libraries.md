@@ -24,6 +24,7 @@ The following libraries are available and recommended for use by Cal-ITP data an
 <br> - [Collect Query Results](#collect-query-results)
 <br> - [Show Query SQL](#show-query-sql)
 1. [shared utils](#shared-utils)
+1. [pandas](pandas-resources)
 
 ## Add New Packages
 
@@ -56,7 +57,10 @@ tbl.views.gtfs_schedule_fact_daily_feed_routes()
 `siuba` is a tool that allows the same analysis code to run on a pandas DataFrame,
 as well as generate SQL for different databases.
 It supports most [pandas Series methods](https://pandas.pydata.org/pandas-docs/stable/reference/series.html) analysts use.
-See the [siuba docs](https://siuba.readthedocs.io) for more information.
+
+siuba Resources:
+* [siuba docs](https://siuba.readthedocs.io)
+* ['Tidy Tuesday' live analyses with siuba](https://www.youtube.com/playlist?list=PLiQdjX20rXMHc43KqsdIowHI3ouFnP_Sf)
 
 The examples below go through the basics of using siuba, collecting a database query to a local DataFrame,
 and showing SQL test queries that siuba code generates.
@@ -123,3 +127,9 @@ shared_utils.geography_utils.WGS84
 ```
 
 See [data-analyses/example_reports](https://github.com/cal-itp/data-analyses/tree/main/example_report) for examples in how to use `shared_utils` for [general functions](https://github.com/cal-itp/data-analyses/blob/main/example_report/shared_utils_examples.ipynb), [charts](https://github.com/cal-itp/data-analyses/blob/main/example_report/example_charts.ipynb), and [maps](https://github.com/cal-itp/data-analyses/blob/main/example_report/example_maps.ipynb).
+
+(pandas-resources)=
+## pandas
+pandas is a very commonly used library in data analysis, and the external resources below provide a brief overview of it's use.
+
+* [pandas Cheat Sheet](https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf)
