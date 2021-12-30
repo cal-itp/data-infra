@@ -914,9 +914,9 @@ orange-county-transportation-authority:
   agency_name: Orange County Transportation Authority
   feeds:
     - gtfs_schedule_url: https://octa.net/current/google_transit.zip
-      gtfs_rt_vehicle_positions_url: http://api.octa.net/GTFSRealTime/protoBuf/VehiclePositions.aspx
-      gtfs_rt_service_alerts_url: http://api.octa.net/GTFSRealTime/protoBuf/servicealerts.aspx
-      gtfs_rt_trip_updates_url: http://api.octa.net/GTFSRealTime/protoBuf/tripupdates.aspx
+      gtfs_rt_vehicle_positions_url: https://api.octa.net/GTFSRealTime/protoBuf/VehiclePositions.aspx
+      gtfs_rt_service_alerts_url: https://api.octa.net/GTFSRealTime/protoBuf/servicealerts.aspx
+      gtfs_rt_trip_updates_url: https://api.octa.net/GTFSRealTime/protoBuf/tripupdates.aspx
   itp_id: 235
 palos-verdes-peninsula-transit-authority:
   agency_name: Palos Verdes Peninsula Transit Authority
