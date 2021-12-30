@@ -46,7 +46,7 @@ broadly useful across the org should live in `views`.
 
 ### Extraction
 
-Extraction of GTFS RT feeds is handled by the [gtfs-rt-archive service](../services/gtfs-rt-archive.md).
+Extraction of GTFS RT feeds is handled by the [gtfs-rt-archive service](../services/gtfs-rt-archive.md). For Logs, we are using google cloud logger with a user-definited metric as a sink to output to BigQuery. The metric used is 'gtfs-rt-url-errors' and it filters for logName='stdout', namespace_name="gtfs-rt", and severity="INFO". Currently all the url-errors are treated as severity="INFO".The destination is bigquery and because the table names are not changable (gtfs_rt.stdout), they were put in their own dataset (gtfs_rt_logs).
 
 ### Validation
 
