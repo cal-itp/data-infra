@@ -1,4 +1,4 @@
-description: "Update the MST Materialized View"
+description: "Update the Littlepay Ridership Materialized View"
 schedule_interval: "0 0 * * *"
 tags:
   - all_gusty_features
@@ -9,6 +9,7 @@ default_args:
   email:
     - "hunter.owens@dot.ca.gov"
     - "michael.c@jarv.us"
+    - "mjumbe.p@jarv.us"
   email_on_failure: True
   email_on_retry: False
   retries: 1

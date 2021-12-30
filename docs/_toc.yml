@@ -1,0 +1,86 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: intro
+parts:
+  - caption:  Analysts
+    chapters:
+      - file: analytics_welcome/overview
+        sections:
+        - file: analytics_welcome/what_is_calitp
+        - file: analytics_welcome/about_our_team
+        - file: analytics_welcome/how_we_work
+      - file: analytics_onboarding/overview
+      - file: analytics_tools/overview
+        sections:
+        - file: analytics_tools/tools_quick_links
+        - file: analytics_tools/bi_dashboards
+        - file: analytics_tools/notebooks
+        - file: analytics_tools/python_libraries
+        - file: analytics_tools/saving_code
+        - file: analytics_tools/storing_data
+        - file: analytics_tools/data_catalogs
+      - file: warehouse/overview
+        sections:
+        - file: warehouse/table_naming
+        - file: warehouse/agencies
+        - file: warehouse/views
+        - file: warehouse/metrics
+        - file: warehouse/sql_snippets
+      - file: datasets_and_tables/overview
+        sections:
+        - file: datasets_and_tables/gtfs_schedule
+        - file: datasets_and_tables/gtfs_rt
+        - file: datasets_and_tables/mst_payments
+        - file: datasets_and_tables/transitdatabase
+        - file: datasets_and_tables/views
+        - file: datasets_and_tables/tables
+      - file: analytics_examples/overview
+        sections:
+        - file: analytics_examples/warehouse_tutorial
+        - file: analytics_examples/new_tutorial
+        - file: analytics_examples/sample-catalog-viewer
+      - file: analytics_publishing/overview
+        sections:
+        - file: analytics_publishing/how_to_publish
+        - file: analytics_publishing/where_reports_live
+  - caption: Project Leads
+    chapters:
+      - file: project_leads/overview
+  - caption: Data Consumers
+    chapters:
+      - file: data_consumers/overview
+  - caption: Developers
+    chapters:
+      - file: airflow/overview
+        sections:
+        - file: airflow/static-schedule-pipeline
+        - file: airflow/local-setup
+        - file: airflow/production-maintenance
+      - file: kubernetes/README
+        sections:
+        - file: kubernetes/JupyterHub
+      - file: ci/README
+        sections:
+        - file: ci/Git-Flow-Services
+        - file: ci/Pipeline-Variables
+        - file: ci/steps/build-docker-image
+        - file: ci/steps/build-git-notes
+        - file: ci/steps/build-git-tag
+        - file: ci/steps/configure-build-git-notes
+        - file: ci/steps/configure-docker-login
+        - file: ci/steps/configure-git-remote
+        - file: ci/steps/release-kube-overlay
+        - file: ci/steps/validate-build-git-tag
+        - file: ci/steps/validate-clean-worktree
+      - file: services/overview
+        sections:
+        - file: services/gtfs-ckan-uploader
+        - file: services/gtfs-rt-archive
+  - caption: Contribute to the Docs!
+    chapters:
+      - file: contribute/overview
+        sections:
+        - file: contribute/content_types
+        - file: contribute/submitting_changes

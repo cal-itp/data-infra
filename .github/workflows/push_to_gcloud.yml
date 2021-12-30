@@ -4,6 +4,10 @@ on:
   push:
     paths:
       - 'airflow/**'
+  pull_request:
+    paths:
+      - 'airflow/**'
+
 
 jobs:
   deploy:
@@ -20,31 +24,76 @@ jobs:
     - name: Install python packages
       run: |
         pip install jinja2==2.11.3 PyYAML==5.4.1 jsonschema==3.2.0 pandas==1.1.4
+    # Create the secrets.csv from the contents of the `AGENCY_SECRETS` environment variable / GitHub
+    # repository secret. The contents of this environment variable should be directly copied from
+    # the contents of a filled-out ./airflow/data/example-secrets.csv file.
+    - name: Create csv file with API keys
+      run: echo -e "$AGENCY_SECRETS" > ./airflow/data/secrets.csv
+      env:
+        AGENCY_SECRETS: ${{ secrets.AGENCY_SECRETS }}
+    # Populate the secrets within the agencies.yml file
     - name: Fill in agencies.yml API keys
       run: |
         python script/agencies_convert.py \
           './airflow/data/agencies.yml' \
           './airflow/data/agencies.filled.yml' \
-          'https://docs.google.com/spreadsheets/d/1Fp7sesSMS6VOIndTLTKcyyN2qHj6najKAaN-I9_3SFo/export?gid=0&format=csv'
+          './airflow/data/secrets.csv'
     - name: Validate agencies.yml
       run: |
         python script/agencies_validate.py \
           './airflow/data/agencies.filled.yml' \
           './airflow/data/schema_agencies_entry.yml'
 
-    # The following only runs on the main branch ----
-
-    - uses: google-github-actions/setup-gcloud@master
-      if: ${{ github.ref == 'refs/heads/main' }}
+    - if: ${{ github.repository == 'cal-itp/data-infra' }}
+      uses: google-github-actions/setup-gcloud@master
       with:
         service_account_key: ${{ secrets.GCP_SA_KEY }}
         export_default_credentials: true
-    - name: Push to google cloud
-      if: ${{ github.ref == 'refs/heads/main' }}
+
+    - if: ${{ github.repository == 'cal-itp/data-infra' }}
+      name: Setup kubeconfig
+      env:
+        CLOUDSDK_CORE_PROJECT: cal-itp-data-infra
       run: |
-        gsutil -m rsync -d -c -r airflow/dags gs://us-west2-calitp-airflow-pro-332827a9-bucket/dags
-        gsutil -m rsync -d -c -r airflow/plugins gs://us-west2-calitp-airflow-pro-332827a9-bucket/plugins
-        gsutil -m rsync -d -c -r airflow/data gs://us-west2-calitp-airflow-pro-332827a9-bucket/data
-        # replace agencies.yml with filled in template
-        gsutil -m cp airflow/data/agencies.yml gs://us-west2-calitp-airflow-pro-332827a9-bucket/data/agencies_raw.yml
-        gsutil -m cp airflow/data/agencies.filled.yml gs://us-west2-calitp-airflow-pro-332827a9-bucket/data/agencies.yml
+        source "$GITHUB_WORKSPACE/kubernetes/gke/config-cluster.sh"
+        gcloud container clusters get-credentials "$GKE_NAME" --region "$GKE_REGION"
+
+    # push to prod services when merging into main branch
+    - name: Push agencies data to google cloud and prod services
+      if: ${{ github.repository == 'cal-itp/data-infra' && github.ref == 'refs/heads/main' }}
+      run: |
+        # replace agencies.yml with filled in template for gtfs rt extract service
+        gsutil -m rsync -d -c -r airflow/dags gs://$AIRFLOW_BUCKET/dags
+        gsutil -m rsync -d -c -r airflow/plugins gs://$AIRFLOW_BUCKET/plugins
+        gsutil -m rsync -d -c -r airflow/data gs://$AIRFLOW_BUCKET/data
+        # replace agencies.yml with filled in template for airflow
+        gsutil -m cp airflow/data/agencies.yml gs://$AIRFLOW_BUCKET/data/agencies_raw.yml
+        gsutil -m cp airflow/data/agencies.filled.yml gs://$AIRFLOW_BUCKET/data/agencies.yml
+
+        kubectl apply -f - <<EOF
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: agencies-data
+          namespace: gtfs-rt
+        data:
+          data_agencies.yaml: $(base64 -w0 airflow/data/agencies.filled.yml)
+        EOF
+        kubectl -n gtfs-rt rollout restart deployments/gtfs-rt-archive
+      env:
+        AIRFLOW_BUCKET: "us-west2-calitp-airflow2-pr-171e4e47-bucket"
+
+    # push to preprod services when merging to other branches
+    - name: Push agencies data to preprod services
+      if: ${{ github.repository == 'cal-itp/data-infra' && github.ref != 'refs/heads/main' }}
+      run: |
+        kubectl apply -f - <<EOF
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: agencies-data
+          namespace: gtfs-rt-preprod
+        data:
+          data_agencies.yaml: $(base64 -w0 airflow/data/agencies.filled.yml)
+        EOF
+        kubectl -n gtfs-rt-preprod rollout restart deployments/gtfs-rt-archive

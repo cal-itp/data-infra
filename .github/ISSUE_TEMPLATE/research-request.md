@@ -2,7 +2,7 @@
 name: Research request
 about: Submit a question that requires data analysis
 title: 'Research: '
-labels: research
+labels: ''
 assignees: ''
 
 ---

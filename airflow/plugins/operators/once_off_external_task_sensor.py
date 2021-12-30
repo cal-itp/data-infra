@@ -1,4 +1,4 @@
-from airflow.sensors import ExternalTaskSensor
+from airflow.sensors.external_task_sensor import ExternalTaskSensor
 from airflow.utils.db import provide_session
 
 

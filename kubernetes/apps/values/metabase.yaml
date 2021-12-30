@@ -1,3 +1,7 @@
+images:
+  metabase:
+    src: metabase/metabase:v0.41.1
+
 workloads:
   metabase:
     replicas: 3
@@ -23,9 +27,9 @@ ingress:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: letsencrypt-prod
   hosts:
-    - host: metabase.k8s.calitp.jarv.us
-      paths: [ '/' ]
     - host: dashboards.calitp.org
+      paths: [ '/' ]
+    - host: metabase.k8s.calitp.jarv.us
       paths: [ '/' ]
   tls:
     - secretName: metabase-tls

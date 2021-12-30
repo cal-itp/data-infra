@@ -27,11 +27,22 @@ Second, ensure you have a default authentication file, by [installing google sdk
 unset GOOGLE_APPLICATION_CREDENTIALS
 gcloud init
 
+# When selecting the project, pick `cal-itp-data-infra`
+
 # may also need to run...
 # gcloud auth application-default login
 ```
 
-Finally, run the initial database migration and create an `airflow / airflow` user to debug with:
+To run the gtfs_downloader dags, it is required to generate a yml file of the agencies with various
+secrets filled in. To run this, do the following:
+
+1. Setup a virtual environment within the `script` folder by running `python -m venv .venv` in the `script` folder.
+2. Install the needed requirements via `pip install -r requirements.txt`
+3. Copy `airflow/data/example-secrets.csv` to `airflow/data/secrets.csv` and fill in the secret keys as needed
+4. run `python agencies_convert.py ../airflow/data/agencies.yml ../airflow/data/agencies.filled.yml ../airflow/data/secrets.csv`
+5. Copy `/airflow/data/agencies.yml` to `/airflow/data/agencies_raw.yml`
+
+Next, run the initial database migration and create an `airflow / airflow` user to debug with:
 
 ```console
 docker-compose run airflow db init
@@ -52,6 +63,10 @@ docker-compose run airflow dags trigger <dag_id>
 ```
 
 Additional reading about this setup can be found on the [Airflow Docs](https://airflow.apache.org/docs/apache-airflow/stable/start/docker.html)
+
+### Common Issues
+
+* `docker-compose up` exits with code 137 - Check that your docker has enough RAM (e.g. 8Gbs). See [this post](https://stackoverflow.com/questions/44533319/how-to-assign-more-memory-to-docker-container) on how to increase its resources.
 
 ## Deploying to production
 

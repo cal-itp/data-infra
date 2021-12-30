@@ -1,11 +1,16 @@
 # ---
 # python_callable: main
 # dependencies:
+#   - authorisations
 #   - customer_funding_source
+#   - device_transaction_purchases
 #   - device_transactions
 #   - micropayment_adjustments
 #   - micropayment_device_transactions
 #   - micropayments
+#   - product_data
+#   - refunds
+#   - settlements
 # ---
 
 import pandas as pd
@@ -17,11 +22,16 @@ def main():
     df = pd.DataFrame(
         [
             # required tables ----
+            ("authorisations", ".psv"),
             ("customer_funding_source", ".psv"),
+            ("device_transaction_purchases", ".psv"),
             ("device_transactions", ".psv"),
             ("micropayment_adjustments", ".psv"),
             ("micropayment_device_transactions", ".psv"),
             ("micropayments", ".psv"),
+            ("product_data", ".psv"),
+            ("refunds", ".psv"),
+            ("settlements", ".psv"),
         ],
         columns=["table_name", "ext"],
     )

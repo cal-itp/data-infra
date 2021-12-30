@@ -1,7 +1,7 @@
 import pandas as pd
 
-from pandas.errors import EmptyDataError
 from calitp import read_gcfs, save_to_gcfs
+from pandas.errors import EmptyDataError
 
 
 def _keep_columns(
@@ -11,10 +11,30 @@ def _keep_columns(
     itp_id=None,
     url_number=None,
     extracted_at=None,
-    **kwargs
+    **kwargs,
 ):
+    """Save a CSV file with only the needed columns for a particular table.
 
-    # read csv using object dtype, so pandas does not coerce data
+    Args:
+        src_path (string): Location of the input CSV file
+        dst_path (string): Location of the output CSV file
+        colnames (list): List of the colnames that should be included in output CSV
+            file.
+        itp_id (string, optional): itp_id to use when saving record. Defaults to None.
+        url_number (string, optional): url_number to use when saving record. Defaults to
+            None.
+        extracted_at (string, optional): date string of extraction time. Defaults to
+            None.
+
+    Raises:
+        pandas.errors.ParserError: Can be thrown when the given input file is not a
+            valid CSV file. Ex: a single row could have too many columns.
+    """
+
+    # Read csv using object dtype, so pandas does not coerce data.
+    # The following line of code inside the try block can throw a
+    # pandas.errors.ParserError, but the responsibility to catch this error is assumed
+    # to be implemented in the code that calls this method.
     try:
         df = pd.read_csv(read_gcfs(src_path), dtype="object", **kwargs)
     except EmptyDataError:
@@ -48,3 +68,13 @@ def _keep_columns(
     csv_result = df_select.to_csv(index=False).encode()
 
     save_to_gcfs(csv_result, dst_path, use_pipe=True)
+
+
+def get_successfully_downloaded_feeds(execution_date):
+    """Get a list of feeds that were successfully downloaded (as noted in a
+    `schedule/{execution_date}/status.csv/` file) for a given execution date.
+    """
+    f = read_gcfs(f"schedule/{execution_date}/status.csv")
+    status = pd.read_csv(f)
+
+    return status[lambda d: d.status == "success"]

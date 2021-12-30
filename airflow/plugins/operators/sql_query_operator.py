@@ -2,14 +2,14 @@
 # flake8: noqa
 
 from airflow.models import BaseOperator
-from airflow.utils.decorators import apply_defaults
-
 from calitp import get_engine
 from sqlalchemy import sql
 
 
 class SqlQueryOperator(BaseOperator):
-    @apply_defaults
+
+    template_fields = ("sql",)
+
     def __init__(self, sql, **kwargs):
         super().__init__(**kwargs)
 

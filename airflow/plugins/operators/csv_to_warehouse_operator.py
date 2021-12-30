@@ -2,7 +2,6 @@ import pandas as pd
 import pandas_gbq
 
 from airflow.models import BaseOperator
-from airflow.utils.decorators import apply_defaults
 
 from calitp import save_to_gcfs, to_snakecase
 from calitp.config import get_project_id
@@ -44,7 +43,6 @@ def csv_to_warehouse(src_uri, table_name, fields=None, dst_bucket_dir="csv"):
 class CsvToWarehouseOperator(BaseOperator):
     template_fields = ("src_uri", "table_name")
 
-    @apply_defaults
     def __init__(
         self, src_uri, table_name, fields=None, dst_bucket_dir="csv", *args, **kwargs
     ):

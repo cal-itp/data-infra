@@ -1,0 +1,32 @@
+# Book settings
+# Learn more at https://jupyterbook.org/customize/config.html
+
+title: Cal-ITP Data Services
+author: Cal-ITP
+logo: calitp_logo_MAIN.png
+
+# Force re-execution of notebooks on each build.
+# See https://jupyterbook.org/content/execute.html
+execute:
+  execute_notebooks: force
+  allow_errors: true
+  timeout: -1
+
+# Define the name of the latex output file for PDF builds
+latex:
+  latex_documents:
+    targetname: book.tex
+
+# Information about where the book exists on the web
+repository:
+  url: https://github.com/cal-itp/data-infra/  # Online location of your book
+  path_to_book: docs  # Optional path to your book, relative to the repository root
+  branch: main  # Which branch of the repository should be used when creating links (optional)
+
+# Add GitHub buttons to your book
+# See https://jupyterbook.org/customize/config.html#add-a-link-to-your-repository
+html:
+  use_issues_button: true
+  use_repository_button: true
+  use_edit_page_button: true
+  google_analytics_id: G-SZB618VNBZ

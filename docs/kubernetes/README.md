@@ -1,7 +1,20 @@
-# kubernetes #
+---
+jupytext:
+  cell_metadata_filter: -all
+  formats: md:myst
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.10.3
+kernelspec:
+  display_name: Python 3 (ipykernel)
+  language: python
+  name: python3
+---
 
+# Kubernetes
 ## Cluster Administration ##
-
 ### preflight ###
 
 Check logged in user
@@ -42,10 +55,10 @@ kubectl cluster-info
 Create the cluster by running `kubernetes/gke/cluster-create.sh`.
 
 The cluster level configuration parameters are stored in
-[`kubernetes/gke/config-cluster.sh`](../kubernetes/gke/config-cluster.sh).
+[`kubernetes/gke/config-cluster.sh`](https://github.com/cal-itp/data-infra/blob/main/kubernetes/gke/config-cluster.sh).
 Creating the cluster also requires configuring parameters for a node pool
 named "default-pool" (unconfigurable name defined by GKE) in
-[`kubernetes/gke/config-nodepool.sh`](../kubernetes/gke/config-nodepool.sh).
+[`kubernetes/gke/config-nodepool.sh`](https://github.com/cal-itp/data-infra/blob/main/kubernetes/gke/config-nodepool.sh).
 Any additional node pools configured in this file are also stood up at cluster
 creation time.
 
@@ -64,7 +77,7 @@ The node pool lifecycle scripts help simplify this process.
 #### create a new node pool ####
 
 Configure a new node pool by adding its name to the `GKE_NODEPOOL_NAMES` array
-in [`kubernetes/gke/config-nodepool.sh`](../kubernetes/gke/config-nodepool.sh).
+in [`kubernetes/gke/config-nodepool.sh`](https://github.com/cal-itp/data-infra/blob/main/kubernetes/gke/config-nodepool.sh).
 For each nodepool property (`GKE_NODEPOOL_NODE_COUNT`, `GKE_NODEPOOL_NODE_LOCATIONS`, etc)
 it is required to add an entry to the array which is mapped to the nodepool name.
 

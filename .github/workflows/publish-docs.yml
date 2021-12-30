@@ -2,19 +2,81 @@ name: Publish docs to gh-pages
 
 on:
   push:
-    branches: [ main ]
-
+    paths:
+      - 'docs/**'
+  pull_request:
+    paths:
+      - 'docs/**'
+  workflow_dispatch:
 
 jobs:
-  publish-docs:
+  build-docs:
     runs-on: ubuntu-latest
     steps:
-
-    - name: 'Project gh-pages holobranch'
-      uses: JarvusInnovations/hologit@actions/projector/v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        HAB_LICENSE: accept
+    - name: Check out repo
+      uses: actions/checkout@v2
       with:
-        holobranch: docs-site
-        commit-to: gh-pages
+        fetch-depth: 0
+    - name: Set up Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+    - name: Install python packages
+      run: |
+        pip install -r airflow/requirements.txt
+        pip install git+https://github.com/machow/siuba.git@stable
+        pip install jupyter-book==0.12.0
+        # Temporary pinning of pydata-sphinx-theme to workaround Sphinx 4.3.0 error
+        # https://github.com/pydata/pydata-sphinx-theme/issues/508
+        pip install pydata-sphinx-theme==0.7.2
+    - uses: google-github-actions/setup-gcloud@master
+      with:
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        export_default_credentials: true
+
+    - name: Build docs
+      run: jb build docs --warningiserror --keep-going
+      # set doc to fail on any sphinx warning
+
+    - name: Save docs as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: docs-build
+        path: docs/_build/html
+
+    # docs preview ----
+    - name: Netlify docs preview
+      if: ${{ github.ref != 'refs/heads/main' }}
+      run: |
+        npm install -g netlify-cli
+        netlify deploy --dir=docs/_build/html --alias=${GITHUB_REPOSITORY#*/}-${PR_NUMBER}
+      env:
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        PR_NUMBER: ${{ github.event.number }}
+
+    - name: Add netlify link PR comment
+      uses: actions/github-script@v3
+      if: ${{ github.event_name == 'pull_request' }}
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          const suffix = "--cal-itp-previews.netlify.app"
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: "Preview url: https://" + context.repo.repo + "-" + process.env.PR_NUMBER + suffix
+          })
+      env:
+        PR_NUMBER: ${{ github.event.number }}
+
+
+    # docs deploy ----
+    - name: Deploy docs
+      uses: peaceiris/actions-gh-pages@v3
+      if: ${{ github.ref == 'refs/heads/main' }}
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: docs/_build/html
+        publish_branch: gh-pages
