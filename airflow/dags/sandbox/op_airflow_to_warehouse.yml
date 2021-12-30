@@ -2,6 +2,7 @@ operator: operators.AirtableToWarehouseOperator
 
 air_base_id: apphcwzP8cR82NeJo
 air_table_name: parent
+gcs_path: sandbox/airtable
 table_name: sandbox.airtable_parent
 
 id_name: "parent_id"

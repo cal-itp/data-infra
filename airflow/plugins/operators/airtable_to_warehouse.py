@@ -2,10 +2,9 @@ import pandas as pd
 import os
 
 from pyairtable import Table
-from calitp import write_table, to_snakecase
+from calitp import save_to_gcfs, to_snakecase, write_table
 
 from airflow.models import BaseOperator
-from airflow.utils.decorators import apply_defaults
 
 
 def airtable_to_df(
@@ -36,6 +35,7 @@ def airtable_to_df(
     else:
         rename_fields = {}
 
+    print(f"Downloading airtable data for {air_base_id}.{air_table_name}")
     all_rows = Table(api_key, air_base_id, air_table_name).all()
     raw_df = pd.DataFrame([{id_name: row["id"], **row["fields"]} for row in all_rows])
 
@@ -55,13 +55,13 @@ def airtable_to_df(
 
 
 class AirtableToWarehouseOperator(BaseOperator):
-    @apply_defaults
     def __init__(
         self,
         air_base_id,
         air_table_name,
         table_name,
         id_name="__id",
+        gcs_path=None,
         rename_fields=None,
         column_prefix=None,
         api_key=None,
@@ -74,6 +74,7 @@ class AirtableToWarehouseOperator(BaseOperator):
         self.rename_fields = rename_fields
         self.column_prefix = column_prefix
         self.api_key = api_key
+        self.gcs_path = gcs_path
 
         super().__init__(**kwargs)
 
@@ -87,5 +88,13 @@ class AirtableToWarehouseOperator(BaseOperator):
             self.api_key,
         )
 
-        print(f"Loading table with shape: {df.shape}")
-        write_table(df, self.table_name)
+        if self.table_name:
+            print(f"Writing table with shape: {df.shape}")
+            write_table(df, self.table_name)
+
+        if self.gcs_path:
+            gcs_file = (
+                f"{self.gcs_path}/{context['execution_date']}/{self.table_name}.csv"
+            )
+            print(f"Uploading to gcs at {gcs_file}")
+            save_to_gcfs(df.to_csv(index=False).encode(), f"{gcs_file}", use_pipe=True)
