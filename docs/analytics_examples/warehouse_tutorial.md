@@ -731,9 +731,6 @@ daily_stops = (
               _.stop_lat, _.stop_lon, _.stop_name,
              )
     >> collect()
-    )
-
-daily_stops.head()
 )
 glue("daily_stops_output", daily_stops)
 ```
@@ -747,9 +744,6 @@ blank block
 # Allows us to query SQL in the JupyterLab notebook
 # Use this in combination with '%%sql', as seen below
 import calitp.magics
-```
-```sql
-blank block
 ```
 ````
 ````{tabbed} siuba
@@ -785,8 +779,6 @@ daily_stops = (
              )
     >> collect()
     )
-
-daily_stops.head()
 ```
 
 ```{glue:figure} daily_stops_output
