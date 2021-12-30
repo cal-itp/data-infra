@@ -704,12 +704,7 @@ Tables used:
 
 Here, all the trips for one operator, for a particular day, is joined with all the stops that occur on all the trips. Then, the stops have their lat/lon information attached.
 
-```{code-cell}
-# :tags: [remove-cell]
-# df_max_fillitin = query_sql("""
-# """, as_df=True)
-# glue("df_max_fillitin_output", df_max_fillitin)
-```
+COPY SQL CODE CELL FROM ABOVE HERE
 
 ```{code-cell}
 :tags: [remove-cell]
@@ -756,6 +751,8 @@ import calitp.magics
 ```sql
 blank block
 ```
+````
+````{tabbed} siuba
 ```python
 ## Get trips for operator for one day and join with stop times for all trips
 
