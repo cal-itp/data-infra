@@ -744,7 +744,7 @@ glue("daily_stops_output", daily_stops)
 ```
 
 ````{tabbed} Metabase
-
+blank block
 ````
 
 ````{tabbed} SQL
@@ -754,8 +754,7 @@ glue("daily_stops_output", daily_stops)
 import calitp.magics
 ```
 ```sql
-%%sql
-
+blank block
 ```
 ```python
 ## Get trips for operator for one day and join with stop times for all trips
