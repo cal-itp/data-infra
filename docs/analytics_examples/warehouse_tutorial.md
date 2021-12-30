@@ -732,7 +732,7 @@ daily_stops = (
              )
     >> collect()
 )
-glue("daily_stops_output", daily_stops)
+glue("what_the_fuck", daily_stops)
 ```
 
 ````{tabbed} Metabase
@@ -781,7 +781,7 @@ daily_stops = (
     )
 ```
 
-```{glue:figure} daily_stops_output
+```{glue:figure} what_the_fuck
 ```
 
 ````
