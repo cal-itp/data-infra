@@ -4,6 +4,8 @@
 #   - validation_dim_codes
 # ---
 
+"""Fetch all fields associated to a validator code. Load a table with code, field columns."""
+
 # Note that in theory we could use a SQL query (maybe with a js UDF), but it
 # looks kind of crazy: https://stackoverflow.com/q/34890339/1144523
 # instead, just loop over the bucket of validation reports
@@ -24,10 +26,10 @@ def validation_notice_fields():
 
     fs = get_fs()
     reports = fs.glob(f"{bucket}/schedule/processed/*/validation_report.json")
-    reports_json = [json.load(fs.open(fname)) for fname in reports]
 
     code_fields = defaultdict(lambda: set())
-    for report in reports_json:
+    for fname in reports:
+        report = json.load(fs.open(fname))
         # one entry per code (e.g. the code: invalid phone number)
         for notice in report["notices"]:
             # one entry per specific code violation (e.g. each invalid phone number)
