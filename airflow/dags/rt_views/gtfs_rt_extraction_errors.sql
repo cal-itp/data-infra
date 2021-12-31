@@ -1,6 +1,15 @@
 ---
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.gtfs_rt_extraction_errors"
+
+description: |
+  TODO
+
+fields:
+  textPayload: TODO
+  timestamp: TODO
+  calitp_itp_id: Feed ITP ID.
+  calitp_url_number: Feed URL number.
 ---
 
 WITH
