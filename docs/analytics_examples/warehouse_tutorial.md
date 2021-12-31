@@ -676,7 +676,7 @@ The queries represented in the following tutorial are as follows:
 ### Python Libraries to Import
 
 ```{code-cell}
-# import geopandas as gpd
+import geopandas as gpd
 import os
 import pandas as pd
 import shapely
@@ -780,6 +780,5 @@ daily_stops = (
     >> collect()
     )
 ```
-```{glue:figure} daily_stops_output
-```
+{glue:}`daily_stops_output`
 ````
