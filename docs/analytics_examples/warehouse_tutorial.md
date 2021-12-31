@@ -728,7 +728,7 @@ daily_stops = (
     >> select(_.itp_id == _.calitp_itp_id,
               _.date == _.service_date,
               _.trip_key, _.trip_id, _.stop_id, _.arrival_time,
-              _.stop_lat, _.stop_lon, _.stop_name,
+              _.stop_lat, _.stop_lon, _.stop_name
              )
     >> collect()
 )
