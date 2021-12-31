@@ -780,5 +780,5 @@ daily_stops = (
     >> collect()
     )
 ```
-{glue:}`daily_stops_output`
+{glue:figure} daily_stops_output
 ````
