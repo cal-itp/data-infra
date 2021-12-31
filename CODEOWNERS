@@ -6,6 +6,9 @@
 /ci                                     @lottspot
 /services                               @lottspot
 
+# jupyter service, e.g. updating the image
+/kubernetes/apps/charts/jupyterhub      @lottspot @charlie-costanzo
+
 # project documentation
 /docs                                   @charlie-costanzo @holly-g
 
