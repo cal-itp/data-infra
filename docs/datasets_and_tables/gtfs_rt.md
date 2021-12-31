@@ -9,16 +9,17 @@ This data is processed and validated daily.
 | dataset | description |
 | ------- | ----------- |
 | `gtfs_rt` | Internal warehouse dataset for preparing GTFS RT views |
+| `gtfs_rt_logs` | Internal warehouse dataset for GTFS RT extraction logs |
 | `views.gtfs_rt_*` | User-friendly tables for analyzing GTFS RT data  |
 | `views.validation_rt_*` | User-friendly tables for analyzing GTFS RT validation data |
 
 ## View Tables
 
-Note that this data is still a work in progress, so no views have been created yet.
+Note that this data is still a work in progress, so many tables are still internal.
 
 | Tablename | Description | Notes |
 |----- | -------- | -------|
-| | | |
+| `gtfs_rt_extraction_errors` | Each feed per timepoint that failed to download. | Records go back to `2021-12-13`. |
 
 ## Internal Tables
 
@@ -46,7 +47,14 @@ broadly useful across the org should live in `views`.
 
 ### Extraction
 
-Extraction of GTFS RT feeds is handled by the [gtfs-rt-archive service](../services/gtfs-rt-archive.md). For Logs, we are using google cloud logger with a user-definited metric as a sink to output to BigQuery. The metric used is 'gtfs-rt-url-errors' and it filters for logName='stdout', namespace_name="gtfs-rt", and severity="INFO". Currently all the url-errors are treated as severity="INFO".The destination is bigquery and because the table names are not changable (gtfs_rt.stdout), they were put in their own dataset (gtfs_rt_logs).
+Extraction of GTFS RT feeds is handled by the [gtfs-rt-archive service](../services/gtfs-rt-archive.md). 
+
+### Logging
+
+All GTFS RT feed logs are loaded to Bigquery via a [Google Logger Router called `rt-extract-to-bigquery`](https://console.cloud.google.com/logs/router?project=cal-itp-data-infra). Note that this data is saved to its own dataset (`gtfs_rt_logs`), since routers do not allow table names to be customized.
+
+See [Google Cloud Log Router docs](https://cloud.google.com/logging/docs/routing/overview) for more information.
+The raw logs may be browsed in the [Logs Explorer](https://console.cloud.google.com/logs/query?project=cal-itp-data-infra).
 
 ### Validation
 
