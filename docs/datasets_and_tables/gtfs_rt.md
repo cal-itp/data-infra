@@ -47,7 +47,7 @@ broadly useful across the org should live in `views`.
 
 ### Extraction
 
-Extraction of GTFS RT feeds is handled by the [gtfs-rt-archive service](../services/gtfs-rt-archive.md). 
+Extraction of GTFS RT feeds is handled by the [gtfs-rt-archive service](../services/gtfs-rt-archive.md).
 
 ### Logging
 
