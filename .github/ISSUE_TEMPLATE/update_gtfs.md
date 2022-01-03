@@ -20,6 +20,6 @@ Update the following gtfs datsets:
 
 ## Checklist
 
-- [ ] Made sure any new feeds have `itp_id`s that are not duplicative
-- [ ] Confirmed URIs are valid  
+- [ ] Manually made sure any new feeds have `itp_id`s that are not duplicative
+- [ ] Mannually confirmed URIs are valid (to be automated in future per #908)  
 - [ ] Made sure the Airtable database has consistent information
