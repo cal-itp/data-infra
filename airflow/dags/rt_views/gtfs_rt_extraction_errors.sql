@@ -3,8 +3,8 @@ operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.gtfs_rt_extraction_errors"
 
 description: |
-Each row is a unique error message of a feed that failed to fetch the feed url used in agency.yml 
-  
+Each row is a unique error message of a feed that failed to fetch the feed url used in agency.yml
+
 
 fields:
   textPayload: error message that contains error severity, calitp id, Feed URL number, and feed file name that generated error
