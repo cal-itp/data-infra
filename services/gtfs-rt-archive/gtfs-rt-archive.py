@@ -117,13 +117,18 @@ def parse_feeds(logger, feeds_src):
                 )
                 continue
 
+            headers = agency_def.get("headers", {})
             for i, feed_set in enumerate(agency_def["feeds"]):
                 for feed_name, feed_url in feed_set.items():
                     if feed_name.startswith("gtfs_rt") and feed_url:
 
                         agency_itp_id = agency_def["itp_id"]
                         feeds.append(
-                            ("{}/{}/{}".format(agency_itp_id, i, feed_name), feed_url)
+                            (
+                                "{}/{}/{}".format(agency_itp_id, i, feed_name),
+                                feed_url,
+                                headers,
+                            )
                         )
 
     return feeds
@@ -209,9 +214,12 @@ class Fetcher(threading.Thread):
 
     def fetch(self):
         url = self.urldef[1]
+        headers = self.urldef[2]
         try:
-            rs = urllib.request.urlopen(url)
-            return rs
+            request = urllib.request.Request(url)
+            for key, value in headers.items():
+                request.add_header(key, value)
+            return urllib.request.urlopen(request)
         except (urllib.error.URLError, urllib.error.HTTPError) as e:
             self.logger.info("{}: error fetching url {}: {}".format(self.name, url, e))
 
