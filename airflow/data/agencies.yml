@@ -13,7 +13,7 @@ ac-transit:
 alhambra-community-transit:
   agency_name: Alhambra Community Transit
   feeds:
-    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/alhambra-ca-us/alhambra-ca-us.zip
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/alhambra-ca-us/alhambra-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -65,7 +65,7 @@ antelope-valley-transit-authority:
 arcadia-transit:
   agency_name: Arcadia Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/arcadia-ca-us/arcadia-ca-us.zip
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/arcadia-ca-us/arcadia-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -121,7 +121,7 @@ b-line:
 baldwin-park-transit:
   agency_name: Baldwin Park Transit
   feeds:
-    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/baldwinpark-ca-us/baldwinpark-ca-us.zip
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/baldwinpark-ca-us/baldwinpark-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -173,7 +173,7 @@ beaumont-pass-transit:
 bell-gardens:
   agency_name: Bell Gardens
   feeds:
-    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/bellgardens-ca-us/bellgardens-ca-us.zip
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/bellgardens-ca-us/bellgardens-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -181,7 +181,7 @@ bell-gardens:
 bellflower-bus:
   agency_name: Bellflower Bus
   feeds:
-    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/bellflower-ca-us/bellflower-ca-us.zip
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/bellflower-ca-us/bellflower-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -229,7 +229,7 @@ burney-express:
 calabasas-transit-system:
   agency_name: Calabasas Transit System
   feeds:
-    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/calabasas-ca-us/calabasas-ca-us.zip
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/calabasas-ca-us/calabasas-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -333,7 +333,7 @@ commute-org-shuttles:
 compton-renaissance-transit-service:
   agency_name: Compton Renaissance Transit Service
   feeds:
-    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/compton-ca-us/compton-ca-us.zip
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/compton-ca-us/compton-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -369,7 +369,7 @@ county-express:
 cudahy-area-rapid-transit:
   agency_name: Cudahy Area Rapid Transit
   feeds:
-    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/cudahy-ca-us/cudahy-ca-us.zip
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/cudahy-ca-us/cudahy-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -417,7 +417,7 @@ dinuba-area-regional-transit:
 downeylink:
   agency_name: DowneyLINK
   feeds:
-    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/downey-ca-us/downey-ca-us.zip
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/downey-ca-us/downey-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -537,7 +537,7 @@ glendale-beeline:
 glendora-transportation-division:
   agency_name: Glendora Transportation Division
   feeds:
-    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/glendora-ca-us/glendora-ca-us.zip
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/glendora-ca-us/glendora-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -545,7 +545,7 @@ glendora-transportation-division:
 go-west-shuttle:
   agency_name: Go West Shuttle
   feeds:
-    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/westcovina-ca-us/westcovina-ca-us.zip
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/westcovina-ca-us/westcovina-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -613,7 +613,7 @@ humboldt-transit-authority:
 huntington-park-express:
   agency_name: Huntington Park Express
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/huntingtonpark-ca-us/huntingtonpark-ca-us.zip
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/huntingtonpark-ca-us/huntingtonpark-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -645,7 +645,7 @@ kings-area-rural-transit:
 la-campana:
   agency_name: La Campana
   feeds:
-    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/lacampana-ca-us/lacampana-ca-us.zip
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/lacampana-ca-us/lacampana-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -805,7 +805,7 @@ modesto-area-express:
 montebello-bus-lines:
   agency_name: Montebello Bus Lines
   feeds:
-    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/montebello-ca-us/montebello-ca-us.zip
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/montebello-ca-us/montebello-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1025,7 +1025,7 @@ riverside-transit-agency:
 rosemead-explorer:
   agency_name: Rosemead Explorer
   feeds:
-    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/rosemead-ca-us/rosemead-ca-us.zip
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/rosemead-ca-us/rosemead-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1162,6 +1162,14 @@ santa-ynez-valley-transit:
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 312
+sierra-madre:
+  agency_name: City of Sierra Madre
+  feeds:
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/sierramadre-ca-us/sierramadre-ca-us.zip
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
+  itp_id: 305
 simi-valley-transit:
   agency_name: Simi Valley Transit
   feeds:
@@ -1238,6 +1246,14 @@ south-county-transit-link:
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 81
+southgate:
+  agency_name: City of South Gate
+  feeds:
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/getaroundtownexpress-ca-us/getaroundtownexpress-ca-us.zip
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
+  itp_id: 320
 spirit-bus:
   agency_name: Spirit Bus
   feeds:
