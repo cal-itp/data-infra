@@ -27,8 +27,7 @@ download_issues AS (
             AS INT
         ) AS calitp_url_number
     -- note that we've moved the logs to gtfs_rt_logs.stdout, since the table name can't be changed
-    -- but using this table for now, since it holds full data for Dec 14th
-    FROM `cal-itp-data-infra.gtfs_rt.stdout`
+    FROM `cal-itp-data-infra.gtfs_rt_logs.stdout`
     WHERE textPayload LIKE "%error fetching url%"
 )
 
