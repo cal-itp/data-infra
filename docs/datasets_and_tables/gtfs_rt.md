@@ -47,11 +47,11 @@ broadly useful across the org should live in `views`.
 
 ### Extraction
 
-Extraction of GTFS RT feeds is handled by the [gtfs-rt-archive service](../services/gtfs-rt-archive.md).
+Extraction of GTFS RT feeds is handled by the [gtfs-rt-archive service](../services/gtfs-rt-archive.md).Within this service is some basic logging functionality that exports the logs to an external table 'std.out' that reads the data in this bucket.
 
 ### Logging
 
-All GTFS RT feed logs are loaded to Bigquery via a [Google Logger Router called `rt-extract-to-bigquery`](https://console.cloud.google.com/logs/router?project=cal-itp-data-infra). Note that this data is saved to its own dataset (`gtfs_rt_logs`), since routers do not allow table names to be customized.
+All GTFS RT feed logs are loaded directly to Bigquery via a [Google Logger Router called `rt-extract-to-bigquery`](https://console.cloud.google.com/logs/router?project=cal-itp-data-infra). Note that this data is saved to its own dataset (`gtfs_rt_logs`), since routers do not allow table names to be customized. Within `gtfs_rt_logs`, the data specific to URL feeds failing to download is stored in `stdout`.
 
 See [Google Cloud Log Router docs](https://cloud.google.com/logging/docs/routing/overview) for more information.
 The raw logs may be browsed in the [Logs Explorer](https://console.cloud.google.com/logs/query?project=cal-itp-data-infra).
