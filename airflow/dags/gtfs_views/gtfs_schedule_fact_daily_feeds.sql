@@ -2,6 +2,20 @@
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.gtfs_schedule_fact_daily_feeds"
 
+fields:
+    feed_key: "Unique key for this GTFS static feed -- can change when feed content changes, so a unique calitp_itp_id, calitp_url_number pair can have multiple feed_key values"
+    date: "Feed extraction date"
+    is_feed_publish_date_valid: "Whether the feed is valid (active) on this date"
+    days_until_feed_end_date: "Number of days between date and feed end date (ex. if date is 2022-01-05 and feed end date is 2022-01-06, this value will be 1); if is_feed_publish_date_valid is False, this may be negative indicating that feed is no longer valid as of date"
+    days_from_feed_start_date: "Number of days between feed start date and date (ex. if feed start date is 2022-01-05 and date is 2022-01-06, this value will be 1); if is_feed_publish_date_valid is False, this may be negative indicating that feed is not yet active as of date"
+    extraction_status: "Indicates whether extraction was successful ('success') or not ('error')"
+    parse_error_encountered: "Whether a fatal error was encountered while parsing the feed"
+    raw_gtfs_schedule_url: "URL from which this feed's GTFS schedule data is pulled"
+    raw_gtfs_rt_vehicle_positions_url: "URL for this feed's GTFS realtime vehicle positions data, if available"
+    raw_gtfs_rt_service_alerts_url: "URL for this feed's GTFS realtime service alerts data, if available"
+    raw_gtfs_rt_trip_updates_url: "URL for this feed's GTFS realtime trip updates data, if available"
+    days_from_last_schedule_update: "Days since the feed's contents have changed, relative to date"
+
 tests:
   check_null:
     - feed_key
