@@ -41,7 +41,7 @@
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
     <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
     <script>
         const thebe_selector = ".thebe"
@@ -556,7 +556,7 @@
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
     </div>
 </div>
 
@@ -592,7 +592,7 @@
         </div>
 
         <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
             <div class="tocsection onthispage pt-5 pb-3">
                 <i class="fas fa-list"></i> Contents
@@ -630,6 +630,11 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#logging">
+     Logging
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#validation">
      Validation
     </a>
@@ -649,7 +654,72 @@
 </div>
     <div id="main-content" class="row">
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-        
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>GTFS Realtime</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#data">
+   Data
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#view-tables">
+   View Tables
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#internal-tables">
+   Internal Tables
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#maintenance">
+   Maintenance
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dags-overview">
+     DAGs Overview
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#extraction">
+     Extraction
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#logging">
+     Logging
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#validation">
+     Validation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#backfilling">
+     Backfilling
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
               <div>
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="gtfs-realtime">
@@ -668,10 +738,13 @@ This data is processed and validated daily.</p>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_rt</span></code></p></td>
 <td><p>Internal warehouse dataset for preparing GTFS RT views</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">views.gtfs_rt_*</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_rt_logs</span></code></p></td>
+<td><p>Internal warehouse dataset for GTFS RT extraction logs</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">views.gtfs_rt_*</span></code></p></td>
 <td><p>User-friendly tables for analyzing GTFS RT data</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">views.validation_rt_*</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">views.validation_rt_*</span></code></p></td>
 <td><p>User-friendly tables for analyzing GTFS RT validation data</p></td>
 </tr>
 </tbody>
@@ -679,7 +752,7 @@ This data is processed and validated daily.</p>
 </div>
 <div class="section" id="view-tables">
 <h2>View Tables<a class="headerlink" href="#view-tables" title="Permalink to this headline">¶</a></h2>
-<p>Note that this data is still a work in progress, so no views have been created yet.</p>
+<p>Note that this data is still a work in progress, so many tables are still internal.</p>
 <table class="colwidths-auto table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Tablename</p></th>
@@ -688,9 +761,9 @@ This data is processed and validated daily.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_rt_extraction_errors</span></code></p></td>
+<td><p>Each feed per timepoint that failed to download.</p></td>
+<td><p>Records go back to <code class="docutils literal notranslate"><span class="pre">2021-12-13</span></code>.</p></td>
 </tr>
 </tbody>
 </table>
@@ -744,7 +817,13 @@ broadly useful across the org should live in <code class="docutils literal notra
 </div>
 <div class="section" id="extraction">
 <h3>Extraction<a class="headerlink" href="#extraction" title="Permalink to this headline">¶</a></h3>
-<p>Extraction of GTFS RT feeds is handled by the <a class="reference internal" href="../services/gtfs-rt-archive.html"><span class="doc std std-doc">gtfs-rt-archive service</span></a>.</p>
+<p>Extraction of GTFS RT feeds is handled by the <a class="reference internal" href="../services/gtfs-rt-archive.html"><span class="doc std std-doc">gtfs-rt-archive service</span></a>.Within this service is some basic logging functionality that exports the logs to an external table ‘std.out’ that reads the data in this bucket.</p>
+</div>
+<div class="section" id="logging">
+<h3>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h3>
+<p>All GTFS RT feed logs are loaded directly to Bigquery via a <a class="reference external" href="https://console.cloud.google.com/logs/router?project=cal-itp-data-infra">Google Logger Router called <code class="docutils literal notranslate"><span class="pre">rt-extract-to-bigquery</span></code></a>. Note that this data is saved to its own dataset (<code class="docutils literal notranslate"><span class="pre">gtfs_rt_logs</span></code>), since routers do not allow table names to be customized. Within <code class="docutils literal notranslate"><span class="pre">gtfs_rt_logs</span></code>, the data specific to URL feeds failing to download is stored in <code class="docutils literal notranslate"><span class="pre">stdout</span></code>.</p>
+<p>See <a class="reference external" href="https://cloud.google.com/logging/docs/routing/overview">Google Cloud Log Router docs</a> for more information.
+The raw logs may be browsed in the <a class="reference external" href="https://console.cloud.google.com/logs/query?project=cal-itp-data-infra">Logs Explorer</a>.</p>
 </div>
 <div class="section" id="validation">
 <h3>Validation<a class="headerlink" href="#validation" title="Permalink to this headline">¶</a></h3>
@@ -788,8 +867,8 @@ clear and re-run tasks as needed.</p>
 
               </div>
               
-        
-            <!-- Previous / next buttons -->
+            
+                <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
     <a class='left-prev' id="prev-link" href="gtfs_schedule.html" title="previous page">
         <i class="fas fa-angle-left"></i>
@@ -806,19 +885,17 @@ clear and re-run tasks as needed.</p>
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-        
+            
         </div>
     </div>
     <footer class="footer">
-    <div class="container">
-      <p>
-        
-          By Cal-ITP<br/>
-        
-            &copy; Copyright 2021.<br/>
-      </p>
-    </div>
-  </footer>
+  <p>
+    
+      By Cal-ITP<br/>
+    
+        &copy; Copyright 2021.<br/>
+  </p>
+</footer>
 </main>
 
 

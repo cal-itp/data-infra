@@ -41,7 +41,7 @@
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
     <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
     <script>
         const thebe_selector = ".thebe"
@@ -556,7 +556,7 @@
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
     </div>
 </div>
 
@@ -592,7 +592,7 @@
         </div>
 
         <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
             <div class="tocsection onthispage pt-5 pb-3">
                 <i class="fas fa-list"></i> Contents
@@ -622,7 +622,40 @@
 </div>
     <div id="main-content" class="row">
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-        
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Creating New Tables (Views)</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#syntax-overview">
+   Syntax overview
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#testing-changes">
+   Testing Changes
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#walkthrough">
+   Walkthrough
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
               <div>
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="creating-new-tables-views">
@@ -656,43 +689,43 @@
 <div class="section" id="syntax-overview">
 <h2>Syntax overview<a class="headerlink" href="#syntax-overview" title="Permalink to this headline">¶</a></h2>
 <p>Below is a file similar to the one used to create <code class="docutils literal notranslate"><span class="pre">views.transitstacks</span></code>.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># What operator to use. This determines the options available, and how the</span>
-<span class="c1"># pipeline executes this task.</span>
-<span class="nt">operator</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">operators.SqlToWarehouseOperator</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># What operator to use. This determines the options available, and how the</span><span class="w"></span>
+<span class="c1"># pipeline executes this task.</span><span class="w"></span>
+<span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">operators.SqlToWarehouseOperator</span><span class="w"></span>
 
-<span class="c1"># Name of the table to load into the warehouse</span>
-<span class="nt">dst_table_name</span><span class="p">:</span> <span class="s">&quot;views.dim_date&quot;</span>
+<span class="c1"># Name of the table to load into the warehouse</span><span class="w"></span>
+<span class="nt">dst_table_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;views.dim_date&quot;</span><span class="w"></span>
 
-<span class="c1"># Column descriptions to put into warehouse</span>
-<span class="nt">fields</span><span class="p">:</span>
-  <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The ID Column</span>
-  <span class="nt">full_date</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The full date (e.g. &quot;2021-01-01&quot;)</span>
-  <span class="nt">year</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The year component (e.g. 2021)</span>
+<span class="c1"># Column descriptions to put into warehouse</span><span class="w"></span>
+<span class="nt">fields</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">The ID Column</span><span class="w"></span>
+<span class="w">  </span><span class="nt">full_date</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">The full date (e.g. &quot;2021-01-01&quot;)</span><span class="w"></span>
+<span class="w">  </span><span class="nt">year</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">The year component (e.g. 2021)</span><span class="w"></span>
 
-<span class="c1"># Specify tests to run over the data</span>
-<span class="c1"># e.g. check_null to verify a column contains no nulls</span>
-<span class="c1"># e.g. check_unique to verify no duplicate values in a column</span>
-<span class="nt">tests</span><span class="p">:</span>
-  <span class="nt">check_null</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">id</span>
-  <span class="nt">check_unique</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">id</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">full_date</span>
+<span class="c1"># Specify tests to run over the data</span><span class="w"></span>
+<span class="c1"># e.g. check_null to verify a column contains no nulls</span><span class="w"></span>
+<span class="c1"># e.g. check_unique to verify no duplicate values in a column</span><span class="w"></span>
+<span class="nt">tests</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">check_null</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">id</span><span class="w"></span>
+<span class="w">  </span><span class="nt">check_unique</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">id</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">full_date</span><span class="w"></span>
 
-<span class="c1"># Other tasks this depends on. For example, if it uses another SQL view, then</span>
-<span class="c1"># that view should be a dependency</span>
-<span class="nt">dependencies</span><span class="p">:</span>
-  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">warehouse_loaded</span>
+<span class="c1"># Other tasks this depends on. For example, if it uses another SQL view, then</span><span class="w"></span>
+<span class="c1"># that view should be a dependency</span><span class="w"></span>
+<span class="nt">dependencies</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">warehouse_loaded</span><span class="w"></span>
 
-<span class="c1"># The actual SQL code to be run!</span>
-<span class="nt">sql</span><span class="p">:</span> <span class="p p-Indicator">|</span>
-  <span class="no"># from https://gist.github.com/ewhauser/d7dd635ad2d4b20331c7f18038f04817</span>
-  <span class="no">SELECT</span>
-    <span class="no">FORMAT_DATE(&#39;%F&#39;, d) as id,</span>
-    <span class="no">d AS full_date,</span>
-    <span class="no">EXTRACT(YEAR FROM d) AS year,</span>
-  <span class="no">FROM</span>
-    <span class="no">UNNEST(GENERATE_DATE_ARRAY(&#39;2001-01-01&#39;, &#39;2050-01-01&#39;, INTERVAL 1 DAY)) d</span>
+<span class="c1"># The actual SQL code to be run!</span><span class="w"></span>
+<span class="nt">sql</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">  </span><span class="no"># from https://gist.github.com/ewhauser/d7dd635ad2d4b20331c7f18038f04817</span><span class="w"></span>
+<span class="w">  </span><span class="no">SELECT</span><span class="w"></span>
+<span class="w">    </span><span class="no">FORMAT_DATE(&#39;%F&#39;, d) as id,</span><span class="w"></span>
+<span class="w">    </span><span class="no">d AS full_date,</span><span class="w"></span>
+<span class="w">    </span><span class="no">EXTRACT(YEAR FROM d) AS year,</span><span class="w"></span>
+<span class="w">  </span><span class="no">FROM</span><span class="w"></span>
+<span class="w">    </span><span class="no">UNNEST(GENERATE_DATE_ARRAY(&#39;2001-01-01&#39;, &#39;2050-01-01&#39;, INTERVAL 1 DAY)) d</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -734,8 +767,8 @@
 
               </div>
               
-        
-            <!-- Previous / next buttons -->
+            
+                <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
     <a class='left-prev' id="prev-link" href="agencies.html" title="previous page">
         <i class="fas fa-angle-left"></i>
@@ -752,19 +785,17 @@
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-        
+            
         </div>
     </div>
     <footer class="footer">
-    <div class="container">
-      <p>
-        
-          By Cal-ITP<br/>
-        
-            &copy; Copyright 2021.<br/>
-      </p>
-    </div>
-  </footer>
+  <p>
+    
+      By Cal-ITP<br/>
+    
+        &copy; Copyright 2021.<br/>
+  </p>
+</footer>
 </main>
 
 

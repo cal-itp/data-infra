@@ -41,7 +41,7 @@
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
     <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
     <script>
         const thebe_selector = ".thebe"
@@ -556,7 +556,7 @@
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
     </div>
 </div>
 
@@ -592,7 +592,7 @@
         </div>
 
         <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
             <div class="tocsection onthispage pt-5 pb-3">
                 <i class="fas fa-list"></i> Contents
@@ -695,7 +695,113 @@
 </div>
     <div id="main-content" class="row">
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-        
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>JupyterHub</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#installation">
+   Installation
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#create-the-namespace">
+     1. Create the Namespace
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#add-secrets-to-namespace">
+     2. Add Secrets to Namespace
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#jupyterhub-gcloud-service-key">
+       jupyterhub-gcloud-service-key
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#jupyterhub-github-config">
+       jupyterhub-github-config
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#create-a-temporary-file">
+         Create a Temporary File
+        </a>
+       </li>
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#fill-the-file-with-chart-formatted-secrets">
+         Fill the File with Chart-Formatted Secrets
+        </a>
+       </li>
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#encode-the-file-contents">
+         Encode the File Contents
+        </a>
+       </li>
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#add-the-encoding-to-your-secret">
+         Add the Encoding to Your Secret
+        </a>
+       </li>
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#clean-up">
+         Clean up
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#reminder-apply-the-secrets-file">
+       Reminder - Apply the secrets file!
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#install-the-helm-chart">
+     3. Install the Helm Chart
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#updating">
+   Updating
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#domain-name-changes">
+   Domain Name Changes
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#changes-in-github-oauth">
+     Changes in GitHub OAuth
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#changes-in-the-helm-chart">
+     Changes in the Helm Chart
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
               <div>
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="jupyterhub">
@@ -715,22 +821,22 @@
 <p>Two base64-encoded secrets must be added to the <code class="docutils literal notranslate"><span class="pre">jupyterhub</span></code> namespace before installing the Helm chart.</p>
 <p>We’ll cover the purpose of each secret in the subsections below.</p>
 <p>We’ll put both of these secrets in a local file, <code class="docutils literal notranslate"><span class="pre">jupyterhub-secrets.yaml</span></code>, which will contain something that looks like this:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">v1</span>
-<span class="nt">data</span><span class="p">:</span>
-  <span class="nt">service-key.json</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-base64-encoded-service-key-here&gt;</span>
-<span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Secret</span>
-<span class="nt">metadata</span><span class="p">:</span>
-  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyterhub-gcloud-service-key</span>
-  <span class="nt">namespace</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyterhub</span>
-<span class="nn">---</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
+<span class="nt">data</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">service-key.json</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;your-base64-encoded-service-key-here&gt;</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jupyterhub-gcloud-service-key</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jupyterhub</span><span class="w"></span>
+<span class="nn">---</span><span class="w"></span>
 
-<span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">v1</span>
-<span class="nt">data</span><span class="p">:</span>
-  <span class="nt">values.yaml</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-base64-encoded-github-oauth-config-here&gt;</span>
-<span class="nt">kind</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Secret</span>
-<span class="nt">metadata</span><span class="p">:</span>
-  <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyterhub-github-config</span>
-  <span class="nt">namespace</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">jupyterhub</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span><span class="w"></span>
+<span class="nt">data</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">values.yaml</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;your-base64-encoded-github-oauth-config-here&gt;</span><span class="w"></span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Secret</span><span class="w"></span>
+<span class="nt">metadata</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jupyterhub-github-config</span><span class="w"></span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jupyterhub</span><span class="w"></span>
 </pre></div>
 </div>
 <p>With the above configured, we can go ahead and apply:</p>
@@ -752,23 +858,23 @@
 <h4>jupyterhub-github-config<a class="headerlink" href="#jupyterhub-github-config" title="Permalink to this headline">¶</a></h4>
 <p>Because we use <a class="reference external" href="https://zero-to-jupyterhub.readthedocs.io/en/latest/administrator/authentication.html?highlight=oauth#github">Github OAuth</a> for user authentication in JupyterHub, we have to provide a client-id and client-secret to the JupyterHub Helm chart. We also have to provide a bunch of non-sensitive information to the chart, as well, for GitHub OAuth to function.</p>
 <p>For context, here is what the full configuration for the GitHub OAuth in our JupyterHub Helm chart’s <code class="docutils literal notranslate"><span class="pre">values.yaml</span></code> might look like:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hub</span><span class="p">:</span>
-  <span class="nt">config</span><span class="p">:</span>
-    <span class="nt">GitHubOAuthenticator</span><span class="p">:</span>
-      <span class="nt">client_id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-client-id-here&gt;</span>
-      <span class="nt">client_secret</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-client-secret-here&gt;</span>
-      <span class="nt">oauth_callback_url</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">https://your-jupyterhub-domain/hub/oauth_callback</span>
-      <span class="nt">allowed_organizations</span><span class="p">:</span>
-        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">cal-itp:warehouse-users</span>
-      <span class="nt">scope</span><span class="p">:</span>
-        <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">read:org</span>
-    <span class="nt">JupyterHub</span><span class="p">:</span>
-      <span class="nt">authenticator_class</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">github</span>
-      <span class="nt">Authenticator</span><span class="p">:</span>
-        <span class="nt">admin_users</span><span class="p">:</span>
-          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">machow</span>
-          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">themightchris</span>
-          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">lottspot</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hub</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">config</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">GitHubOAuthenticator</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">client_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;your-client-id-here&gt;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">client_secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;your-client-secret-here&gt;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">oauth_callback_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://your-jupyterhub-domain/hub/oauth_callback</span><span class="w"></span>
+<span class="w">      </span><span class="nt">allowed_organizations</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cal-itp:warehouse-users</span><span class="w"></span>
+<span class="w">      </span><span class="nt">scope</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">read:org</span><span class="w"></span>
+<span class="w">    </span><span class="nt">JupyterHub</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">authenticator_class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github</span><span class="w"></span>
+<span class="w">      </span><span class="nt">Authenticator</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">admin_users</span><span class="p">:</span><span class="w"></span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">machow</span><span class="w"></span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">themightchris</span><span class="w"></span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lottspot</span><span class="w"></span>
 </pre></div>
 </div>
 <p>Fortunately, we don’t have to store all of this information in the secret! The JupyterHub chart affords us the ability to use the <code class="docutils literal notranslate"><span class="pre">hub.existingSecret</span></code> parameter to pass in the sensitive information, so we can mix-and-match parts of the configuration.</p>
@@ -783,11 +889,11 @@
 <div class="section" id="fill-the-file-with-chart-formatted-secrets">
 <h5>Fill the File with Chart-Formatted Secrets<a class="headerlink" href="#fill-the-file-with-chart-formatted-secrets" title="Permalink to this headline">¶</a></h5>
 <p>Your <code class="docutils literal notranslate"><span class="pre">github-secrets.yaml</span></code> should look like this:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hub</span><span class="p">:</span>
-  <span class="nt">config</span><span class="p">:</span>
-    <span class="nt">GitHubOAuthenticator</span><span class="p">:</span>
-      <span class="nt">client_id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-client-id-here&gt;</span>
-      <span class="nt">client_secret</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">&lt;your-client-secret-here&gt;</span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">hub</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">config</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">GitHubOAuthenticator</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">client_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;your-client-id-here&gt;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">client_secret</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;your-client-secret-here&gt;</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -885,8 +991,8 @@
 
               </div>
               
-        
-            <!-- Previous / next buttons -->
+            
+                <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
     <a class='left-prev' id="prev-link" href="README.html" title="previous page">
         <i class="fas fa-angle-left"></i>
@@ -903,19 +1009,17 @@
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-        
+            
         </div>
     </div>
     <footer class="footer">
-    <div class="container">
-      <p>
-        
-          By Cal-ITP<br/>
-        
-            &copy; Copyright 2021.<br/>
-      </p>
-    </div>
-  </footer>
+  <p>
+    
+      By Cal-ITP<br/>
+    
+        &copy; Copyright 2021.<br/>
+  </p>
+</footer>
 </main>
 
 

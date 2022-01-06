@@ -41,7 +41,7 @@
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
     <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
     <script>
         const thebe_selector = ".thebe"
@@ -559,7 +559,7 @@
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
     </div>
 </div>
 
@@ -612,7 +612,7 @@
         </div>
 
         <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
             <div class="tocsection onthispage pt-5 pb-3">
                 <i class="fas fa-list"></i> Contents
@@ -654,7 +654,52 @@
 </div>
     <div id="main-content" class="row">
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-        
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>More Complex Queries</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#python-libraries-to-import">
+   Python Libraries to Import
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#all-the-stops-and-arrival-times-for-an-operator-on-a-given-day">
+     All the Stops and Arrival Times for an Operator on a Given Day
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#assemble-a-route-shapefile">
+     Assemble a Route Shapefile
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#filter-with-lists-and-unpacking">
+     Filter with Lists and Unpacking
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
               <div>
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="more-complex-queries">
@@ -774,61 +819,61 @@
       <th>0</th>
       <td>278</td>
       <td>2021-09-01</td>
-      <td>-5522549189337269946</td>
-      <td>a-15365466</td>
-      <td>90002</td>
-      <td>14:24:00</td>
-      <td>32.732</td>
-      <td>-117.198122</td>
-      <td>Terminal 1 Rental Car Shuttle</td>
+      <td>-302722232727408810</td>
+      <td>a-15412559</td>
+      <td>75085</td>
+      <td>09:03:00</td>
+      <td>32.716627</td>
+      <td>-117.168814</td>
+      <td>America Plaza Station</td>
     </tr>
     <tr>
       <th>1</th>
       <td>278</td>
       <td>2021-09-01</td>
-      <td>-5522549189337269946</td>
-      <td>a-15365466</td>
-      <td>90002</td>
-      <td>14:24:00</td>
-      <td>32.732</td>
-      <td>-117.198122</td>
-      <td>Terminal 1 Rental Car Shuttle</td>
+      <td>-302722232727408810</td>
+      <td>a-15412559</td>
+      <td>75085</td>
+      <td>09:03:00</td>
+      <td>32.716627</td>
+      <td>-117.168814</td>
+      <td>America Plaza Station</td>
     </tr>
     <tr>
       <th>2</th>
       <td>278</td>
       <td>2021-09-01</td>
-      <td>-5522549189337269946</td>
-      <td>a-15365466</td>
-      <td>90002</td>
-      <td>14:24:00</td>
-      <td>32.732</td>
-      <td>-117.198122</td>
-      <td>Terminal 1 Rental Car Shuttle</td>
+      <td>-302722232727408810</td>
+      <td>a-15412559</td>
+      <td>75085</td>
+      <td>09:03:00</td>
+      <td>32.716627</td>
+      <td>-117.168814</td>
+      <td>America Plaza Station</td>
     </tr>
     <tr>
       <th>3</th>
       <td>278</td>
       <td>2021-09-01</td>
-      <td>-5522549189337269946</td>
-      <td>a-15365466</td>
-      <td>90002</td>
-      <td>14:24:00</td>
-      <td>32.732</td>
-      <td>-117.198122</td>
-      <td>Terminal 1 Rental Car Shuttle</td>
+      <td>-302722232727408810</td>
+      <td>a-15412559</td>
+      <td>75085</td>
+      <td>09:03:00</td>
+      <td>32.716627</td>
+      <td>-117.168814</td>
+      <td>America Plaza Station</td>
     </tr>
     <tr>
       <th>4</th>
       <td>278</td>
       <td>2021-09-01</td>
-      <td>-5522549189337269946</td>
-      <td>a-15365466</td>
-      <td>90002</td>
-      <td>14:24:00</td>
-      <td>32.732</td>
-      <td>-117.198122</td>
-      <td>Terminal 1 Rental Car Shuttle</td>
+      <td>-302722232727408810</td>
+      <td>a-15412559</td>
+      <td>75085</td>
+      <td>09:03:00</td>
+      <td>32.716627</td>
+      <td>-117.168814</td>
+      <td>America Plaza Station</td>
     </tr>
   </tbody>
 </table>
@@ -913,7 +958,7 @@
   </thead>
   <tbody>
     <tr>
-      <th>43736</th>
+      <th>77297</th>
       <td>278</td>
       <td>1_2_156</td>
       <td>2021-12-23</td>
@@ -1006,27 +1051,6 @@
   <tbody>
     <tr>
       <th>0</th>
-      <td>353</td>
-      <td>USC Transportation</td>
-      <td>None</td>
-      <td>MB</td>
-      <td>Los Angeles</td>
-      <td>None</td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <th>2</th>
       <td>352</td>
       <td>UC San Diego Campus Shuttles</td>
       <td>None</td>
@@ -1047,12 +1071,12 @@
       <td></td>
     </tr>
     <tr>
-      <th>6</th>
-      <td>88</td>
-      <td>Cuyama Valley Transit</td>
+      <th>2</th>
+      <td>353</td>
+      <td>USC Transportation</td>
       <td>None</td>
       <td>MB</td>
-      <td>Santa Barbara</td>
+      <td>Los Angeles</td>
       <td>None</td>
       <td></td>
       <td></td>
@@ -1068,7 +1092,7 @@
       <td></td>
     </tr>
     <tr>
-      <th>9</th>
+      <th>5</th>
       <td>393</td>
       <td>Dana Point Trolley</td>
       <td>None</td>
@@ -1089,11 +1113,32 @@
       <td></td>
     </tr>
     <tr>
-      <th>11</th>
-      <td>152</td>
-      <td>La Puente LINK</td>
+      <th>10</th>
+      <td>43</td>
+      <td>Brea Shuttle Express</td>
       <td>None</td>
-      <td>MB.DR</td>
+      <td>MB,DR,DT</td>
+      <td>Orange</td>
+      <td>None</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>305</td>
+      <td>Sierra Madre Gateway Coach</td>
+      <td>None</td>
+      <td>DR,MB</td>
       <td>Los Angeles</td>
       <td>None</td>
       <td></td>
@@ -1158,10 +1203,10 @@
       <th></th>
       <th>stop_key</th>
       <th>date</th>
-      <th>stop_lat</th>
       <th>stop_id</th>
-      <th>stop_lon</th>
       <th>calitp_itp_id</th>
+      <th>stop_lon</th>
+      <th>stop_lat</th>
     </tr>
   </thead>
   <tbody>
@@ -1169,46 +1214,46 @@
       <th>0</th>
       <td>-3465164382055991093</td>
       <td>2021-09-01</td>
-      <td>34.079011</td>
       <td>2619783</td>
-      <td>-118.117346</td>
       <td>6</td>
+      <td>-118.117346</td>
+      <td>34.079011</td>
     </tr>
     <tr>
       <th>1</th>
       <td>-4388330883484799862</td>
       <td>2021-09-01</td>
-      <td>34.079282</td>
       <td>2619784</td>
-      <td>-118.111602</td>
       <td>6</td>
+      <td>-118.111602</td>
+      <td>34.079282</td>
     </tr>
     <tr>
       <th>2</th>
       <td>-3890148245714116244</td>
       <td>2021-09-01</td>
-      <td>34.080835</td>
       <td>2619785</td>
-      <td>-118.114294</td>
       <td>6</td>
+      <td>-118.114294</td>
+      <td>34.080835</td>
     </tr>
     <tr>
       <th>3</th>
       <td>3725728967761887153</td>
       <td>2021-09-01</td>
-      <td>34.085540</td>
       <td>2619787</td>
-      <td>-118.116863</td>
       <td>6</td>
+      <td>-118.116863</td>
+      <td>34.085540</td>
     </tr>
     <tr>
       <th>4</th>
       <td>-6069710332211186970</td>
       <td>2021-09-01</td>
-      <td>34.085874</td>
       <td>2619788</td>
-      <td>-118.117052</td>
       <td>6</td>
+      <td>-118.117052</td>
+      <td>34.085874</td>
     </tr>
   </tbody>
 </table>
@@ -1240,8 +1285,8 @@
 
               </div>
               
-        
-            <!-- Previous / next buttons -->
+            
+                <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
     <a class='left-prev' id="prev-link" href="warehouse_tutorial.html" title="previous page">
         <i class="fas fa-angle-left"></i>
@@ -1258,19 +1303,17 @@
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-        
+            
         </div>
     </div>
     <footer class="footer">
-    <div class="container">
-      <p>
-        
-          By Cal-ITP<br/>
-        
-            &copy; Copyright 2021.<br/>
-      </p>
-    </div>
-  </footer>
+  <p>
+    
+      By Cal-ITP<br/>
+    
+        &copy; Copyright 2021.<br/>
+  </p>
+</footer>
 </main>
 
 

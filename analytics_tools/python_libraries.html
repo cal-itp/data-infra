@@ -41,7 +41,7 @@
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
     <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
     <script>
         const thebe_selector = ".thebe"
@@ -559,7 +559,7 @@
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
     </div>
 </div>
 
@@ -612,7 +612,7 @@
         </div>
 
         <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
             <div class="tocsection onthispage pt-5 pb-3">
                 <i class="fas fa-list"></i> Contents
@@ -669,7 +669,67 @@
 </div>
     <div id="main-content" class="row">
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-        
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Python Libraries</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#table-of-contents">
+   Table of Contents
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#add-new-packages">
+   Add New Packages
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#calitp">
+   calitp
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#siuba">
+   siuba
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#basic-query">
+     Basic query
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#collect-query-results">
+     Collect query results
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#show-query-sql">
+     Show query SQL
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#shared-utils">
+   shared utils
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
               <div>
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="python-libraries">
@@ -746,7 +806,7 @@
       <th>0</th>
       <td>7355377336956013324</td>
       <td>-6224866760289025024</td>
-      <td>2021-08-16</td>
+      <td>2021-09-07</td>
       <td>2021-08-12</td>
       <td>2021-09-08</td>
     </tr>
@@ -754,7 +814,7 @@
       <th>1</th>
       <td>7355377336956013324</td>
       <td>-6224866760289025024</td>
-      <td>2021-08-15</td>
+      <td>2021-08-25</td>
       <td>2021-08-12</td>
       <td>2021-09-08</td>
     </tr>
@@ -762,7 +822,7 @@
       <th>2</th>
       <td>7355377336956013324</td>
       <td>-6224866760289025024</td>
-      <td>2021-09-01</td>
+      <td>2021-09-05</td>
       <td>2021-08-12</td>
       <td>2021-09-08</td>
     </tr>
@@ -778,7 +838,7 @@
       <th>4</th>
       <td>7355377336956013324</td>
       <td>-6224866760289025024</td>
-      <td>2021-08-13</td>
+      <td>2021-08-26</td>
       <td>2021-08-12</td>
       <td>2021-09-08</td>
     </tr>
@@ -875,7 +935,7 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
-<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_2088</span><span class="o">/</span><span class="mf">1489530560.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_2100</span><span class="o">/</span><span class="mf">1489530560.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">tbl_agency_names</span> <span class="o">=</span> <span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_agency_names</span><span class="p">()</span> <span class="o">&gt;&gt;</span> <span class="n">collect</span><span class="p">()</span>
 <span class="g g-Whitespace">      </span><span class="mi">2</span> 
 <span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1"># Use pandas .head() method to show first 5 rows of data</span>
@@ -909,7 +969,7 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
-<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_2088</span><span class="o">/</span><span class="mf">3782778571.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_2100</span><span class="o">/</span><span class="mf">3782778571.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="p">(</span><span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_agency_names</span><span class="p">()</span>
 <span class="g g-Whitespace">      </span><span class="mi">2</span>   <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">agency_name</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;Metro&quot;</span><span class="p">))</span>
 <span class="g g-Whitespace">      </span><span class="mi">3</span>   <span class="o">&gt;&gt;</span> <span class="n">show_query</span><span class="p">(</span><span class="n">simplify</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -971,8 +1031,8 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
 
               </div>
               
-        
-            <!-- Previous / next buttons -->
+            
+                <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
     <a class='left-prev' id="prev-link" href="notebooks.html" title="previous page">
         <i class="fas fa-angle-left"></i>
@@ -989,19 +1049,17 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-        
+            
         </div>
     </div>
     <footer class="footer">
-    <div class="container">
-      <p>
-        
-          By Cal-ITP<br/>
-        
-            &copy; Copyright 2021.<br/>
-      </p>
-    </div>
-  </footer>
+  <p>
+    
+      By Cal-ITP<br/>
+    
+        &copy; Copyright 2021.<br/>
+  </p>
+</footer>
 </main>
 
 
