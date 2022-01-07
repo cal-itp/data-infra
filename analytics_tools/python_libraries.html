@@ -654,11 +654,21 @@
      Show query SQL
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#more-siuba-resources">
+     More siuba Resources:
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#shared-utils">
    shared utils
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pandas">
+   pandas
   </a>
  </li>
 </ul>
@@ -716,11 +726,21 @@
      Show query SQL
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#more-siuba-resources">
+     More siuba Resources:
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#shared-utils">
    shared utils
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pandas">
+   pandas
   </a>
  </li>
 </ul>
@@ -743,8 +763,10 @@
 <li><p><a class="reference external" href="#siuba">siuba</a>
 <br> - <a class="reference external" href="#basic-query">Basic Query</a>
 <br> - <a class="reference external" href="#collect-query-results">Collect Query Results</a>
-<br> - <a class="reference external" href="#show-query-sql">Show Query SQL</a></p></li>
+<br> - <a class="reference external" href="#show-query-sql">Show Query SQL</a>
+<br> - <a class="reference internal" href="#more-siuba-resources"><span class="std std-ref">More siuba Resources</span></a></p></li>
 <li><p><a class="reference external" href="#shared-utils">shared utils</a></p></li>
+<li><p><a class="reference internal" href="#pandas-resources"><span class="std std-ref">pandas</span></a></p></li>
 </ol>
 </div>
 <div class="section" id="add-new-packages">
@@ -851,8 +873,7 @@
 <span id="id3"></span><h2>siuba<a class="headerlink" href="#siuba" title="Permalink to this headline">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">siuba</span></code> is a tool that allows the same analysis code to run on a pandas DataFrame,
 as well as generate SQL for different databases.
-It supports most <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/series.html">pandas Series methods</a> analysts use.
-See the <a class="reference external" href="https://siuba.readthedocs.io">siuba docs</a> for more information.</p>
+It supports most <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/series.html">pandas Series methods</a> analysts use. See the <a class="reference external" href="https://siuba.readthedocs.io">siuba docs</a> for more information.</p>
 <p>The examples below go through the basics of using siuba, collecting a database query to a local DataFrame,
 and showing SQL test queries that siuba code generates.</p>
 <div class="section" id="basic-query">
@@ -935,7 +956,7 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
-<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_2063</span><span class="o">/</span><span class="mf">1489530560.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_2015</span><span class="o">/</span><span class="mf">1489530560.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">tbl_agency_names</span> <span class="o">=</span> <span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_agency_names</span><span class="p">()</span> <span class="o">&gt;&gt;</span> <span class="n">collect</span><span class="p">()</span>
 <span class="g g-Whitespace">      </span><span class="mi">2</span> 
 <span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1"># Use pandas .head() method to show first 5 rows of data</span>
@@ -969,7 +990,7 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
-<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_2063</span><span class="o">/</span><span class="mf">3782778571.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_2015</span><span class="o">/</span><span class="mf">3782778571.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="p">(</span><span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_agency_names</span><span class="p">()</span>
 <span class="g g-Whitespace">      </span><span class="mi">2</span>   <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">agency_name</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;Metro&quot;</span><span class="p">))</span>
 <span class="g g-Whitespace">      </span><span class="mi">3</span>   <span class="o">&gt;&gt;</span> <span class="n">show_query</span><span class="p">(</span><span class="n">simplify</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -989,6 +1010,13 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
 </div>
 <p>Note that here the pandas Series method <code class="docutils literal notranslate"><span class="pre">str.contains</span></code> corresponds to <code class="docutils literal notranslate"><span class="pre">regexp_contains</span></code> in Google BigQuery.</p>
 </div>
+<div class="section" id="more-siuba-resources">
+<span id="id4"></span><h3>More siuba Resources:<a class="headerlink" href="#more-siuba-resources" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://siuba.readthedocs.io">siuba docs</a></p></li>
+<li><p><a class="reference external" href="https://www.youtube.com/playlist?list=PLiQdjX20rXMHc43KqsdIowHI3ouFnP_Sf">‘Tidy Tuesday’ live analyses with siuba</a></p></li>
+</ul>
+</div>
 </div>
 <div class="section" id="shared-utils">
 <h2>shared utils<a class="headerlink" href="#shared-utils" title="Permalink to this headline">¶</a></h2>
@@ -1003,9 +1031,19 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
 <span class="kn">import</span> <span class="nn">shared_utils</span>
 
 <span class="n">shared_utils</span><span class="o">.</span><span class="n">geography_utils</span><span class="o">.</span><span class="n">WGS84</span>
+
+<span class="c1"># Note: you may need to select Kernel -&gt; Restart Kernel from the top menu</span>
+<span class="c1"># after make setup_env in order to successfully import shared_utils</span>
 </pre></div>
 </div>
 <p>See <a class="reference external" href="https://github.com/cal-itp/data-analyses/tree/main/example_report">data-analyses/example_reports</a> for examples in how to use <code class="docutils literal notranslate"><span class="pre">shared_utils</span></code> for <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/example_report/shared_utils_examples.ipynb">general functions</a>, <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/example_report/example_charts.ipynb">charts</a>, and <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/example_report/example_maps.ipynb">maps</a>.</p>
+</div>
+<div class="section" id="pandas">
+<span id="pandas-resources"></span><h2>pandas<a class="headerlink" href="#pandas" title="Permalink to this headline">¶</a></h2>
+<p>The library pandas is very commonly used in data analysis, and the external resources below provide a brief overview of it’s use.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf">Cheat Sheet - pandas</a></p></li>
+</ul>
 </div>
 </div>
 

@@ -646,6 +646,11 @@
      Helpful Hints
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#external-resources">
+     External Resources
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -720,6 +725,11 @@
      Helpful Hints
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#external-resources">
+     External Resources
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -750,6 +760,7 @@
 <li><p>Someone is collaborating on my branch, how do we <a class="reference external" href="#pulling-and-pushing-changes">stay in sync</a>?</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">main</span></code> branch is ahead, and I want to <a class="reference internal" href="#rebase-and-merge"><span class="std std-ref">sync my branch with <code class="docutils literal notranslate"><span class="pre">main</span></code></span></a></p></li>
 <li><p><a class="reference external" href="#helpful-hints">Helpful Hints</a></p></li>
+<li><p><a class="reference internal" href="#external-git-resources"><span class="std std-ref">External Git Resources</span></a></p></li>
 </ul>
 </li>
 <li><p><a class="reference external" href="#pushing-drag-drop">Pushing in the Github User Interface</a></p></li>
@@ -774,7 +785,6 @@
 <li><p>Clone the Git repo: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">git&#64;github.com:cal-itp/data-analyses.git</span></code></p></li>
 <li><p>Double check  with <code class="docutils literal notranslate"><span class="pre">ls</span></code> to list and see that the remote repo was successfully cloned into your “local” (cloud-based) filesystem.</p></li>
 <li><p>Change into the <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code> directory: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">data-analyses</span></code></p></li>
-<li><p>Point to the remote repo: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">remote</span> <span class="pre">add</span> <span class="pre">origin</span> <span class="pre">git&#64;github.com:cal-itp/data-analyses.git</span></code>. Double check it’s set with: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">remote</span> <span class="pre">-v</span></code></p></li>
 <li><p>Pull from the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch and sync your remote and local repos: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span> <span class="pre">origin</span> <span class="pre">main</span></code></p></li>
 </ol>
 </div>
@@ -858,6 +868,13 @@
 <li><p>Set your local <code class="docutils literal notranslate"><span class="pre">main</span></code> branch to be the same as the remote branch: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">fetch</span> <span class="pre">origin</span> <span class="pre">git</span> <span class="pre">reset</span> <span class="pre">--hard</span> <span class="pre">origin/main</span></code></p></li>
 <li><p>To delete a file that’s been added in a previous commit: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">rm</span> <span class="pre">notebooks/my-notebook.ipynb</span></code></p></li>
 <li><p>Cherry pick a commit and apply it to your branch: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">cherry-pick</span> <span class="pre">COMMIT_HASH</span></code>. Read more from <a class="reference external" href="https://stackoverflow.com/questions/9339429/what-does-cherry-picking-a-commit-with-git-mean">Stack Overflow</a> and <a class="reference external" href="https://www.atlassian.com/git/tutorials/cherry-pick">Atlassian</a>.</p></li>
+</ul>
+</div>
+<div class="section" id="external-resources">
+<span id="external-git-resources"></span><h3>External Resources<a class="headerlink" href="#external-resources" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://gist.github.com/cferdinandi/ef665330286fd5d7127d">Git Terminal Cheat Sheet</a></p></li>
+<li><p><a class="reference external" href="http://justinhileman.info/article/git-pretty/full/">Git Decision Tree - ‘So you have a mess on your hands’</a></p></li>
 </ul>
 </div>
 </div>

@@ -12,6 +12,7 @@ Doing work locally and pushing directly from the command line is a similar workf
     * Someone is collaborating on my branch, how do we [stay in sync](#pulling-and-pushing-changes)?
     * The `main` branch is ahead, and I want to [sync my branch with `main`](rebase-and-merge)
     * [Helpful Hints](#helpful-hints)
+    * [External Git Resources](external-git-resources)
 2. [Pushing in the Github User Interface](#pushing-drag-drop)
 
 ## Pushing from JupyterHub
@@ -30,7 +31,6 @@ We'll work through getting set up with GitHub on JupyterHub and cloning one GitH
 1. Clone the Git repo: `git clone git@github.com:cal-itp/data-analyses.git`
 1. Double check  with `ls` to list and see that the remote repo was successfully cloned into your "local" (cloud-based) filesystem.
 1. Change into the `data-analyses` directory: `cd data-analyses`
-1. Point to the remote repo: `git remote add origin git@github.com:cal-itp/data-analyses.git`. Double check it's set with: `git remote -v`
 1. Pull from the `main` branch and sync your remote and local repos: `git pull origin main`
 
 ### Project Workflow
@@ -110,6 +110,11 @@ These are helpful Git commands an analyst might need, listed in no particular or
 git reset --hard origin/main`
 * To delete a file that's been added in a previous commit: `git rm notebooks/my-notebook.ipynb`
 * Cherry pick a commit and apply it to your branch: `git cherry-pick COMMIT_HASH`. Read more from [Stack Overflow](https://stackoverflow.com/questions/9339429/what-does-cherry-picking-a-commit-with-git-mean) and [Atlassian](https://www.atlassian.com/git/tutorials/cherry-pick).
+
+(external-git-resources)=
+### External Resources
+* [Git Terminal Cheat Sheet](https://gist.github.com/cferdinandi/ef665330286fd5d7127d)
+* [Git Decision Tree - 'So you have a mess on your hands'](http://justinhileman.info/article/git-pretty/full/)
 
 (pushing-drag-drop)=
 ## Pushing in the Github User Interface

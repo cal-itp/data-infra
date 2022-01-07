@@ -7,7 +7,7 @@ Analysts have a variety of tools available to publish their final deliverables. 
 * Is the deliverable format PDF, HTML, interactive dashboard, or a slide deck?
 
 Analysts can string together a combination of these solutions:
-* Static visualizations can be inserted direclty into the slide deck
+* Static visualizations can be inserted directly into the slide deck
 * HTML visualizations can be rendered in GitHub Pages and embedded as a URL into slide deck
 * Static, HTML reports can be rendered in GitHub Pages.
 * Reports can be rendered as PDFs and emailed to stakeholders.
