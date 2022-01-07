@@ -770,13 +770,13 @@ metro:
   agency_name: Metro
   feeds:
     - gtfs_schedule_url: https://gitlab.com/LACMTA/gtfs_bus/raw/master/gtfs_bus.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/lametro/gtfs-rt-vehicle-positions
+      gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/lametro/gtfs-rt-alerts
+      gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/lametro/gtfs-rt-trip-updates
     - gtfs_schedule_url: https://gitlab.com/LACMTA/gtfs_rail/raw/master/gtfs_rail.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/lametro-rail/gtfs-rt-vehicle-positions
+      gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/lametro-rail/gtfs-rt-alerts
+      gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/lametro-rail/gtfs-rt-trip-updates
   itp_id: 182
 metrolink:
   agency_name: Metrolink
