@@ -42,17 +42,16 @@ Also, secret values can be substituted at build time using `{{ DOUBLE_BRACES }}`
 airtable and are shared with the `CALITP_AGENCIES_YML` file.
 
 ```yml
-headers:
-  - header-data:
-      authorization: {{ SWIFTLY_AUTHORIZATION_KEY }}
-      content-type: application/json
-    URLs:
-      - itp_id: 123 # itp_id specified in the agencies.yml file
-        url_number: 0 # index in the feeds list
-        rt_urls: # url keys of the feed
-          - gtfs_rt_vehicle_positions_url
-          - gtfs_rt_service_alerts_url
-          - gtfs_rt_trip_updates_url
+- header-data:
+    authorization: {{ SWIFTLY_AUTHORIZATION_KEY }}
+    content-type: application/json
+  URLs:
+    - itp_id: 123 # itp_id specified in the agencies.yml file
+      url_number: 0 # index in the feeds list
+      rt_urls: # url keys of the feed
+        - gtfs_rt_vehicle_positions_url
+        - gtfs_rt_service_alerts_url
+        - gtfs_rt_trip_updates_url
 ```
 
 ## Container Image
