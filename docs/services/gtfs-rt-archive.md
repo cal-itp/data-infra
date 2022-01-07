@@ -41,7 +41,7 @@ header data file.
 Also, secret values can be substituted at build time using `{{ DOUBLE_BRACES }}` as in the example below. These secret values are built from
 airtable and are shared with the `CALITP_AGENCIES_YML` file.
 
-```yml
+```yaml
 - header-data:
     authorization: {{ SWIFTLY_AUTHORIZATION_KEY }}
     content-type: application/json
