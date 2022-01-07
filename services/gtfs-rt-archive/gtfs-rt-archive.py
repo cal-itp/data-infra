@@ -65,7 +65,7 @@ def main(argv):
 
     # Load data
 
-    headers = parse_headers(headers_path)
+    headers = parse_headers(logger, headers_path)
     feeds = parse_feeds(logger, agencies_path, headers)
 
     # Instantiate threads
@@ -101,7 +101,7 @@ def main(argv):
     ticker.join()
 
 
-def parse_headers(headers_src):
+def parse_headers(logger, headers_src):
 
     headers = {}
 
@@ -119,6 +119,7 @@ def parse_headers(headers_src):
                         )
                     headers[key] = item["header-data"]
 
+    logger.info(f"Header file successfully parsed with {len(headers)} entries")
     return headers
 
 
@@ -243,7 +244,11 @@ class Fetcher(threading.Thread):
                 request.add_header(key, value)
             return urllib.request.urlopen(request)
         except (urllib.error.URLError, urllib.error.HTTPError) as e:
-            self.logger.info("{}: error fetching url {}: {}".format(self.name, url, e))
+            self.logger.info(
+                "{} {}: error fetching url {}: {}".format(
+                    self.name, len(headers), url, e
+                )
+            )
 
     def run(self):
 
