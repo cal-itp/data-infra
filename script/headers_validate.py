@@ -15,15 +15,17 @@ print(f"There are {len(headers)} headers")
 
 print("Checking agency entries formatted correctly")
 
-for i, header in enumerate(headers["headers"]):
+i = 0
+for header in headers:
     try:
         validate(instance=header, schema=schema)
     except ValidationError as err:
         raise Exception(f"Error validating header #{i}: {str(err)}")
+    i += 1
 
 print("Running parse_headers on headers file to ensure ids are unique.")
 used = {}
-for header in headers["headers"]:
+for header in headers:
     for url_set in header["URLs"]:
         itp_id = url_set["itp_id"]
         url_number = url_set["url_number"]
