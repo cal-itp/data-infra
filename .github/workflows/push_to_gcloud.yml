@@ -80,6 +80,9 @@ jobs:
         # replace agencies.yml with filled in template for airflow
         gsutil -m cp airflow/data/agencies.yml gs://$AIRFLOW_BUCKET/data/agencies_raw.yml
         gsutil -m cp airflow/data/agencies.filled.yml gs://$AIRFLOW_BUCKET/data/agencies.yml
+        # replace headers.yml with filled in template for airflow
+        gsutil -m cp airflow/data/headers.yml gs://$AIRFLOW_BUCKET/data/headers_raw.yml
+        gsutil -m cp airflow/data/headers.filled.yml gs://$AIRFLOW_BUCKET/data/headers.yml
 
         kubectl apply -f - <<EOF
         apiVersion: v1
@@ -89,6 +92,7 @@ jobs:
           namespace: gtfs-rt
         data:
           data_agencies.yaml: $(base64 -w0 airflow/data/agencies.filled.yml)
+          data_headers.yaml: $(base64 -w0 airflow/data/headers.filled.yml)
         EOF
         kubectl -n gtfs-rt rollout restart deployments/gtfs-rt-archive
       env:
@@ -106,5 +110,6 @@ jobs:
           namespace: gtfs-rt-preprod
         data:
           data_agencies.yaml: $(base64 -w0 airflow/data/agencies.filled.yml)
+          data_headers.yaml: $(base64 -w0 airflow/data/headers.filled.yml)
         EOF
         kubectl -n gtfs-rt-preprod rollout restart deployments/gtfs-rt-archive
