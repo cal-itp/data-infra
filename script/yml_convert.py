@@ -28,6 +28,6 @@ try:
 except yaml.ParserError:
     raise Exception("Filled out agencies.yml is not valid yaml")
 
-print("Saving filled out agencies.yml to %s" % FNAME_OUT)
+print("Saving filled out %s to %s" % (FNAME_IN, FNAME_OUT))
 
 Path(FNAME_OUT).write_text(new_agencies)
