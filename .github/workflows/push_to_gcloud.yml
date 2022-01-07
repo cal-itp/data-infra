@@ -34,7 +34,7 @@ jobs:
     # Populate the secrets within the agencies.yml file
     - name: Fill in agencies.yml API keys
       run: |
-        python script/agencies_convert.py \
+        python script/yml_convert.py \
           './airflow/data/agencies.yml' \
           './airflow/data/agencies.filled.yml' \
           './airflow/data/secrets.csv'
@@ -45,7 +45,7 @@ jobs:
           './airflow/data/schema_agencies_entry.yml'
     - name: Fill in headers.yml API keys
       run: |
-        python script/agencies_convert.py \
+        python script/yml_convert.py \
           './airflow/data/headers.yml' \
           './airflow/data/headers.filled.yml' \
           './airflow/data/secrets.csv'
