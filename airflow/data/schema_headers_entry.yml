@@ -1,23 +1,18 @@
 type: object
 properties:
-  headers:
+  header-data:
+    type: object
+  URLS:
     type: array
     items:
       type: object
       properties:
-        header-data:
-          type: object
-        URLS:
+        itp_id:
+          type: integer
+        url:
+          type: integer
+        rt_urls:
           type: array
           items:
-            type: object
-            properties:
-              itp_id:
-                type: integer
-              url:
-                type: integer
-              rt_urls:
-                type: array
-                items:
-                  type: string
-            required: ["itp_id", "url", "rt_urls"]
+            type: string
+      required: ["itp_id", "url", "rt_urls"]

@@ -107,7 +107,7 @@ def parse_headers(headers_src):
 
     with headers_src.open() as f:
         headers_src_data = yaml.load(f, Loader=yaml.SafeLoader)
-        for item in headers_src_data["headers"]:
+        for item in headers_src_data:
             for url_set in item["URLs"]:
                 itp_id = url_set["itp_id"]
                 url_number = url_set["url_number"]
