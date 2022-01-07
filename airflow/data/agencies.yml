@@ -606,9 +606,9 @@ humboldt-transit-authority:
   agency_name: Humboldt Transit Authority
   feeds:
     - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/humboldtcounty-ca-us/humboldtcounty-ca-us.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/redwood/gtfs-rt-vehicle-positions
+      gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/redwood/gtfs-rt-alerts
+      gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/redwood/gtfs-rt-trip-updates
   itp_id: 135
 huntington-park-express:
   agency_name: Huntington Park Express
@@ -994,9 +994,9 @@ redwood-coast-transit:
   agency_name: Redwood Coast Transit
   feeds:
     - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/delnorte-ca-us/delnorte-ca-us.zip
-      gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/redwood/gtfs-rt-vehicle-positions
-      gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/redwood/gtfs-rt-alerts
-      gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/redwood/gtfs-rt-trip-updates
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
   itp_id: 261
 ridgecrest-transit:
   agency_name: Ridgecrest Transit
