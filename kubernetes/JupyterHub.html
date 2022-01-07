@@ -943,6 +943,12 @@
 <span class="n">helm</span> <span class="n">upgrade</span> <span class="n">jupyterhub</span> <span class="n">kubernetes</span><span class="o">/</span><span class="n">apps</span><span class="o">/</span><span class="n">charts</span><span class="o">/</span><span class="n">jupyterhub</span> <span class="o">-</span><span class="n">n</span> <span class="n">jupyterhub</span>
 </pre></div>
 </div>
+<p>Note that if you haven’t yet connected to the kubernetes cluster, you may need to run the following.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>source kubernetes/gke/config-cluster.sh
+export KUBECONFIG=$HOME/.kube/data-infra-apps.yaml
+gcloud container clusters get-credentials &quot;$GKE_NAME&quot; --region &quot;$GKE_REGION&quot;
+</pre></div>
+</div>
 </div>
 <div class="section" id="domain-name-changes">
 <h2>Domain Name Changes<a class="headerlink" href="#domain-name-changes" title="Permalink to this headline">¶</a></h2>
