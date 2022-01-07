@@ -47,7 +47,7 @@ broadly useful across the org should live in `views`.
 
 ### Extraction
 
-Extraction of GTFS RT feeds is handled by the [gtfs-rt-archive service](../services/gtfs-rt-archive.md).Within the service, agencies.yml is read into seperate threads and each RT feed is uploaded to a GCPBucketWriter via a post request. This data is stored in a kubernetes cluster 'data-infra-apps'.
+Extraction of GTFS RT feeds is handled by the [gtfs-rt-archive service](../services/gtfs-rt-archive.md).Within the service, agencies.yml is read into separate threads and each RT feed is uploaded to a GCPBucketWriter via a post request. This data is stored in a kubernetes cluster 'data-infra-apps'.
 
 ### Logging
 
