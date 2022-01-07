@@ -10,7 +10,10 @@ The section below outlines our team's primary meetings and their purposes, as we
 | Technical Onboarding | Week 1 <br/> 40 Mins | To ensure access to tools and go over best practices. |
 | Data Services All-Hands | Mondays <br/> 1 Hour | A team-wide data services sync. |
 | Analyst Stand-ups | Tues-Fri <br/> 15 Mins | A short sync to share yesterdays work, today's work, and any blockers. |
-| Lunch n' Learn | Tuesdays <br/> 1 Hour | A weekly opportunity to cover a specific topic, learn something new, and gain visibility into projects and across teams. |
+| Lunch n' Learn | Tuesdays <br/> 1 Hour | A weekly opportunity to cover a specific topic, learn something new, and gain visibility into projects and across teams. <br/> Access **recordings of previous Lunch n' Learns** [at this link](https://docs.google.com/spreadsheets/d/17rlex4h2OPKK3KwUY_lUZbA1avJ2o_PLyRD6w04iN0o/edit?usp=sharing). |
+
+Access recordings of previous Lunch n' Learns [at this link](https://docs.google.com/spreadsheets/d/17rlex4h2OPKK3KwUY_lUZbA1avJ2o_PLyRD6w04iN0o/edit?usp=sharing).
+
 ### Meeting Standards
 #### Agendas
 #### Daily Stand-ups
