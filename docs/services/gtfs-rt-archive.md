@@ -80,6 +80,8 @@ docker push us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:$(git rev-parse HEAD)
 ```
 ## Updating and restarting preprod and prod services
 
+If any code changes occurred, maybe do the docker push thing above?
+
 The gtfs-rt-archive service gets restarted during the `move DAGs to GCS folder` GitHub action defined in the [push_to_gcloud.yml](https://github.com/cal-itp/data-infra/blob/main/.github/workflows/push_to_gcloud.yml) file. During the restart any updated information from the agencies.yml and headers.yml will be updated in the preprod or production environment. In affected pull requests, the preprod service gets restarted on each commit. Once merged to main, the production service gets restarted.
 
 If adding a new environment variable to the script, additional editing of the kubernetes config will need to be done and some editing of the config in the Kubernetes Engine console may need to occur prior to restarting a service.
