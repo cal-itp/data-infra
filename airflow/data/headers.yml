@@ -64,3 +64,15 @@
         - gtfs_rt_vehicle_positions_url
         - gtfs_rt_service_alerts_url
         - gtfs_rt_trip_updates_url
+    - itp_id: 182 # Metro (Bus)
+      url_number: 0
+      rt_urls:
+        - gtfs_rt_vehicle_positions_url
+        - gtfs_rt_service_alerts_url
+        - gtfs_rt_trip_updates_url
+    - itp_id: 182 # Metro (Rail)
+      url_number: 1
+      rt_urls:
+        - gtfs_rt_vehicle_positions_url
+        - gtfs_rt_service_alerts_url
+        - gtfs_rt_trip_updates_url
