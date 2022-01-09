@@ -4,7 +4,7 @@ set -e
 required_missing=()
 
 test "$RELEASE_CHANNEL" || required_missing+=('RELEASE_CHANNEL')
-test "$RELEASE_BASE"    || RELEASE_BASE=$(git rev-list --max-parents=0 HEAD)
+test "$RELEASE_BASE"    || RELEASE_BASE='HEAD@{1}^{}'
 
 export KUBECONFIG
 
