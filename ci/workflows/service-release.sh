@@ -36,7 +36,6 @@ test "$RELEASE_CHANNEL"         || RELEASE_CHANNEL=$(basename "$(git symbolic-re
 
 test "$CONFIGURE_GIT_REMOTE_NAME" || CONFIGURE_GIT_REMOTE_NAME=
 test "$CONFIGURE_GIT_REMOTE_URL"  || CONFIGURE_GIT_REMOTE_URL=
-test "$RELEASE_BASE"              || RELEASE_BASE=
 
 export KUBECONFIG
 
@@ -46,12 +45,6 @@ export KUBECONFIG
 
 printf 'BEGIN STEP: configure-git-remote\n'
 source "$CI_STEPS_DIR/configure-git-remote.sh"
-
-printf 'BEGIN STEP: configure-release-base-merge-commit\n'
-source "$CI_STEPS_DIR/configure-release-base-merge-commit.sh"
-
-printf 'BEGIN STEP: configure-release-base-git-notes\n'
-source "$CI_STEPS_DIR/configure-release-base-git-notes.sh"
 
 printf 'BEGIN STEP: release-changed-overlays\n'
 source "$CI_STEPS_DIR/release-changed-overlays.sh"

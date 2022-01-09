@@ -3,6 +3,7 @@ set -e
 
 required_missing=()
 
+test "$RELEASE_NOTES"             || RELEASE_NOTES=
 test "$CONFIGURE_GIT_REMOTE_NAME" || CONFIGURE_GIT_REMOTE_NAME=
 test "$GIT_NOTES_REF"             || GIT_NOTES_REF=refs/notes/releases/$RELEASE_CHANNEL
 
@@ -15,14 +16,14 @@ fi
 
 git_notes_remote_ref=refs/notes/remotes/$CONFIGURE_GIT_REMOTE_NAME/${GIT_NOTES_REF#refs/notes/}
 
-if [[ ${#release_apps[*]} -gt 0 ]]; then
+if [[ $RELEASE_NOTES ]]; then
 
-  # Record deployed apps
+  # Capture release notes
   git notes add -f --file - <<-EOF
-	$(for app in "${!release_apps[@]}"; do printf 'Released-App-Name: %s\n' "$app"; done )
+	$RELEASE_NOTES
 	EOF
 
-  # Push deployment notes
+  # Push release notes
   if [[ $CONFIGURE_GIT_REMOTE_NAME ]]; then
 
     if [[ $(git ls-remote "$CONFIGURE_GIT_REMOTE_NAME" "$GIT_NOTES_REF") ]]; then

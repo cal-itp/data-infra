@@ -35,5 +35,7 @@ jobs:
           git config user.email "$(whoami)@$(uname -n)"
           export RELEASE_CHANNEL=${GITHUB_REF#refs/heads/releases/}
           printf 'WORKFLOW: service-release; BUILD_APP=%s\n' "$BUILD_APP"
-          set -- "$GITHUB_WORKSPACE/ci/vars/project.env"
+          set --                                    \
+            "$GITHUB_WORKSPACE/ci/vars/release.env" \
+            "$GITHUB_WORKSPACE/ci/vars/project.env"
           source "$GITHUB_WORKSPACE/ci/workflows/service-release.sh"
