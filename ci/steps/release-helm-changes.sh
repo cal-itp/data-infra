@@ -33,7 +33,6 @@ fi
 
 if [[ ! $(helm status "$RELEASE_HELM_NAME" "${helm_opts[@]}" 2>/dev/null) ]]; then
   helm_verb=install
-  helm_opts+=('--create-namespace')
 fi
 
 for relpath in "${values_relpaths[@]}"; do
@@ -61,7 +60,7 @@ diff_contents=$(helm template "$RELEASE_HELM_NAME" "$chart_path" "${helm_opts[@]
 
 if [[ $diff_contents ]]; then
   printf 'release: %s: helm %s\n' "$RELEASE_HELM_NAME" "$helm_verb"
-  helm "$helm_verb" "$RELEASE_HELM_CHART" "$chart_path" "${helm_opts[@]}"
+  helm "$helm_verb" "$RELEASE_HELM_NAME" "$chart_path" "${helm_opts[@]}"
   test -z "$RELEASE_NOTES" || RELEASE_NOTES+=$'\n'
   RELEASE_NOTES+=$(printf '[helm:%s=%s]\n\n%s\n' "$RELEASE_HELM_NAME" "$RELEASE_HELM_CHART" "$diff_contents")
 else
