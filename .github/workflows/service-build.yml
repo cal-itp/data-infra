@@ -27,9 +27,6 @@ jobs:
       - id: service-build
         name: Validate tag and perform image build
         shell: bash
-        env:
-          CONFIGURE_GIT_REMOTE_NAME: origin
-          BUILD_REPO: us.gcr.io/cal-itp-data-infra/gtfs-rt-archive
         run: |
           # For reasons I will surely never fathom, the ections environment
           # does not fetch the real (annotated) tag from the remote, instead
@@ -41,6 +38,8 @@ jobs:
           # GITHUB_JOB is not populated until the job is running
           git config user.name "Github Action $GITHUB_JOB"
           git config user.email "$(whoami)@$(uname -n)"
-          # Setting BUILT_GIT_TAG in the shell allows us to remove the refs/tags/ prefix
           export BUILD_GIT_TAG=${GITHUB_REF#refs/tags/}
+          set --                                                               \
+            "$GITHUB_WORKSPACE/services/$(dirname "$BUILD_GIT_TAG")/build.env" \
+            "$GITHUB_WORKSPACE/ci/vars/project.env"
           source "$GITHUB_WORKSPACE/ci/workflows/service-build.sh"
