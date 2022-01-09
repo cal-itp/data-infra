@@ -47,6 +47,9 @@ export KUBECONFIG
 printf 'BEGIN STEP: configure-git-remote\n'
 source "$CI_STEPS_DIR/configure-git-remote.sh"
 
+printf 'BEGIN STEP: configure-release-base-merge-commit\n'
+source "$CI_STEPS_DIR/configure-release-base-merge-commit.sh"
+
 printf 'BEGIN STEP: configure-release-base-git-notes\n'
 source "$CI_STEPS_DIR/configure-release-base-git-notes.sh"
 
