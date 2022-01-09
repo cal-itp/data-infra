@@ -43,11 +43,30 @@ export KUBECONFIG
 # Steps
 #
 
+release_vars_root=$(git rev-parse --show-toplevel)/ci/vars/releases
+
 printf 'BEGIN STEP: configure-git-remote\n'
 source "$CI_STEPS_DIR/configure-git-remote.sh"
 
-printf 'BEGIN STEP: release-changed-overlays\n'
-source "$CI_STEPS_DIR/release-changed-overlays.sh"
+for env_file in "$release_vars_root"/*-"$RELEASE_CHANNEL".env; do
+  #
+  # Per-app variable overrides
+  #
+  # CAUTION: these vars are not being loaded within a subshell, which means each
+  #  app's variables are loaded into the global pipeline scope. The reason a
+  #  subshell is avoided here is to allow each step to cumulatively modify the
+  #  RELEASE_NOTES variable.
+  while read line; do
+    if [[ $line =~ ^([[:alnum:]_]+)=(.*)$ ]]; then
+      declare -x "$line"
+    else
+      continue
+    fi
+  done < "$env_file"
+  app_name=$(basename "$env_file" | sed 's/\.env$//')
+  printf 'BEGIN STEP: %s: release-%s-changes\n' "$RELEASE_DRIVER" "$app_name"
+  source "$CI_STEPS_DIR/release-$RELEASE_DRIVER-changes.sh"
+done
 
 printf 'BEGIN STEP: release-git-notes\n'
 source "$CI_STEPS_DIR/release-git-notes.sh"
