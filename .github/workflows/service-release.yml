@@ -30,33 +30,6 @@ jobs:
         name: Release updated apps into branch channel
         shell: bash
         run: |
-          parents=($(git show -s --pretty=format:%p $GITHUB_REF))
-
-          if [[ ${#parents[*]} -lt 2 ]]; then
-            printf 'HEAD (%s) is not a merge commit; skipping release\n' "$(git rev-parse --short $(git rev-list -1 "$GITHUB_REF"))"
-            exit 0
-          fi
-
-          declare -A release_apps
-
-          # find all apps with changed manifests
-          while read path; do
-            if [[ $path =~ ^kubernetes/apps/manifests/([^/]+)/.*$ ]]; then
-              release_apps[${BASH_REMATCH[1]}]=1
-            elif [[ $path =~ ^kubernetes/apps/overlays/([^/]+)-[^-]+/.*$ ]]; then
-              release_apps[${BASH_REMATCH[1]}]=1
-            fi
-          done <<< "$(git diff-tree -r --name-only ${parents[*]})"
-
-          if [[ ${#release_apps[*]} -eq 0 ]]; then
-            printf 'No manifests changes found; skipping release\n'
-            exit 0
-          fi
-
-          # run release workflow for each app with changed manifest
-          for app in "${!release_apps[@]}"; do
-            export BUILD_APP=$app
-            export RELEASE_CHANNEL=$(basename "$GITHUB_REF")
-            printf 'WORKFLOW: service-release; BUILD_APP=%s\n' "$BUILD_APP"
-            source "$GITHUB_WORKSPACE/ci/workflows/service-release.sh"
-          done
+          export RELEASE_CHANNEL=$(basename "$GITHUB_REF")
+          printf 'WORKFLOW: service-release; BUILD_APP=%s\n' "$BUILD_APP"
+          source "$GITHUB_WORKSPACE/ci/workflows/service-release.sh"
