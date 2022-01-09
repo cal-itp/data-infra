@@ -3,8 +3,10 @@ set -e
 
 required_missing=()
 
-test "$RELEASE_CHANNEL" || required_missing+=('RELEASE_CHANNEL')
-test "$RELEASE_BASE"    || RELEASE_BASE='HEAD@{1}^{}'
+test "$RELEASE_CHANNEL"        || required_missing+=('RELEASE_CHANNEL')
+test "$RELEASE_MANIFESTS_ROOT" || required_missing+=('RELEASE_MANIFESTS_ROOT')
+test "$RELEASE_OVERLAYS_ROOT"  || required_missing+=('RELEASE_OVERLAYS_ROOT')
+test "$RELEASE_BASE"           || RELEASE_BASE='HEAD@{1}^{}'
 
 export KUBECONFIG
 
@@ -14,32 +16,17 @@ if [[ ${#required_missing[*]} -gt 0 ]]; then
 fi
 
 work_tree=$(git rev-parse --show-toplevel)
-declare -A release_apps
 
-# find all apps with changed manifests
-while read path; do
-  if [[ $path =~ ^kubernetes/apps/manifests/([^/]+)/.*$ ]]; then
-    release_apps[${BASH_REMATCH[1]}]=1
-  elif [[ $path =~ ^kubernetes/apps/overlays/([^/]+)-[^-/]+/.*$ ]]; then
-    release_apps[${BASH_REMATCH[1]}]=1
+for app in "$RELEASE_MANIFESTS_ROOT"/*; do
+  overlay_path=$work_tree/kubernetes/apps/overlays/$app-$RELEASE_CHANNEL
+  if [[ -e "$overlay_path" ]]; then
+    diff_contents=$(kubectl diff -k "$overlay_path" || true)
+    test "$diff_contents" || continue
+    printf 'app: %s\n' "$app"
+    kubectl apply -k "$overlay_path"
+    test ! "$RELEASE_NOTES" || RELEASE_NOTES+=$'\n'
+    RELEASE_NOTES+=$(printf '[%s]\n%s\n' "$app" "$diff_contents")
+  else
+    printf 'skipping app %s: no release for channel %s\n' "$app" "$RELEASE_CHANNEL"
   fi
-done <<< "$(git diff-tree -r --name-only "$RELEASE_BASE" HEAD -- kubernetes/apps)"
-
-if [[ ${#release_apps[*]} -eq 0 ]]; then
-  printf 'No manifest changes found; skipping release\n'
-else
-
-  printf 'Releasing into channel: %s\n' "$RELEASE_CHANNEL"
-
-  for app in "${!release_apps[@]}"; do
-    overlay_path=$work_tree/kubernetes/apps/overlays/$app-$RELEASE_CHANNEL
-    if [[ -e "$overlay_path" ]]; then
-      printf 'app: %s\n' "$app"
-      kubectl apply -k "$overlay_path"
-    else
-      printf '(skipping: %s)\n' "$app"
-    fi
-  done
-
-fi
-
+done
