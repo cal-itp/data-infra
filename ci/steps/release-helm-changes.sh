@@ -44,6 +44,7 @@ for relpath in "${values_relpaths[@]}"; do
 done
 
 while read dep_name dep_version dep_repo dep_status; do
+  test "$dep_status" || continue
   if [[ $dep_status != ok ]]; then
     printf 'chart %s: dependency update\n' "$RELEASE_HELM_CHART"
     helm dependency update "$chart_path"
