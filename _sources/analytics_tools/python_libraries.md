@@ -70,9 +70,9 @@ from siuba import _, filter, count, collect, show_query
 
 # query lastest validation notices, then filter for a single gtfs feed,
 # and then count how often each code occurs
-(tbl.views.validation_notices()
+(tbl.views.gtfs_schedule_dim_feeds()
     >> filter(_.calitp_itp_id == 10, _.calitp_url_number==0)
-    >> count(_.code)
+    >> count(_.feed_key)
 )
 ```
 
@@ -83,7 +83,7 @@ Note that siuba by default prints out a preview of the SQL query results.
 In order to fetch the results of the query as a pandas DataFrame, run `collect()`.
 
 ```{code-cell}
-tbl_agency_names = tbl.views.gtfs_agency_names() >> collect()
+tbl_agency_names = tbl.views.gtfs_schedule_dim_feeds() >> collect()
 
 # Use pandas .head() method to show first 5 rows of data
 tbl_agency_names.head()
@@ -97,8 +97,8 @@ tbl_agency_names.head()
 While `collect()` fetches query results, `show_query()` prints out the SQL code that siuba generates.
 
 ```{code-cell}
-(tbl.views.gtfs_agency_names()
-  >> filter(_.agency_name.str.contains("Metro"))
+(tbl.views.gtfs_schedule_dim_feeds()
+  >> filter(_.calitp_agency_name.str.contains("Metro"))
   >> show_query(simplify=True)
 )
 
