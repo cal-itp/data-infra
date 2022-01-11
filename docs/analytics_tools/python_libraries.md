@@ -61,7 +61,7 @@ tbl.views.gtfs_schedule_fact_daily_feed_routes()
 
 As an example, in a notebook:
 ```{code-cell}
-from calitp.tables import query_sql
+from calitp import query_sql
 ```
 ```{code-cell}
 df_routes = query_sql(“”"
