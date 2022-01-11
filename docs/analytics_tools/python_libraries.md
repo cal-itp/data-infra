@@ -67,18 +67,13 @@ from calitp import query_sql
 ```{code-cell}
 df_routes = query_sql("""
 SELECT
-    calitp_feed_name,
-    date,
-    count(*) AS count_routes
-FROM `views.gtfs_schedule_fact_daily_feed_routes`
-JOIN `views.gtfs_schedule_dim_feeds` USING (feed_key)
-WHERE
-    calitp_feed_name = "AC Transit (0)"
-GROUP BY
-    1, 2
-ORDER BY
-    date DESC
+    *
+FROM `views.gtfs_schedule_dim_feeds`
 LIMIT 10""", as_df=True)
+```
+
+```{code-cell}
+df_routes
 ```
 (siuba)=
 ## siuba
