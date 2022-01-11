@@ -12,6 +12,93 @@ import urllib.error
 import urllib.parse
 
 
+class Runner:
+    def __init__(self, logger, evtbus, wq):
+        self.logger = logger
+        self.evtbus = evtbus
+        self.wq = wq
+        self.fetchers = []
+        self.feeds = []
+
+        self.agencies_path = os.getenv("CALITP_AGENCIES_YML", "agencies.yml")
+        self.headers_path = os.getenv("CALITP_HEADERS_YML", "headers.yml")
+        self.feeds_src = pathlib.Path(self.agencies_path)
+        self.headers_src = pathlib.Path(self.headers_path)
+
+    def tick(self):
+        self.headers = self.parse_headers()
+        feeds = self.parse_feeds()
+        if self.feeds != feeds:
+            self.feeds = feeds
+            self.reset()
+
+    def reset(self):
+        fetchers = len(self.fetchers)
+        feeds = len(self.feeds)
+        self.logger.info(f"Removing {fetchers} old feeds and adding {feeds} new feeds")
+        for fetcher in self.fetchers:
+            fetcher.stop()
+
+        self.fetchers = []
+        for feed in self.feeds:
+            fetcher = Fetcher(self.logger, self.evtbus, self.wq, feed)
+            fetcher.start()
+            self.fetchers.append(fetcher)
+
+    def parse_headers(self):
+
+        headers = {}
+
+        with self.headers_src.open() as f:
+            headers_src_data = yaml.load(f, Loader=yaml.SafeLoader)
+            for item in headers_src_data:
+                for url_set in item["URLs"]:
+                    itp_id = url_set["itp_id"]
+                    url_number = url_set["url_number"]
+                    for rt_url in url_set["rt_urls"]:
+                        key = f"{itp_id}/{url_number}/{rt_url}"
+                        if key in headers:
+                            raise ValueError(
+                                f"Duplicate header data for url with key: {key}"
+                            )
+                        headers[key] = item["header-data"]
+
+        return headers
+
+    def parse_feeds(self):
+
+        feeds = []
+
+        with self.feeds_src.open() as f:
+
+            feeds_src_data = yaml.load(f, Loader=yaml.SafeLoader)
+            for agency_name, agency_def in feeds_src_data.items():
+
+                if "feeds" not in agency_def:
+                    self.logger.warning(
+                        "agency {}: skipped loading "
+                        "invalid definition (missing feeds)".format(agency_name)
+                    )
+                    continue
+
+                if "itp_id" not in agency_def:
+                    self.logger.warning(
+                        "agency {}: skipped loading "
+                        "invalid definition (missing itp_id)".format(agency_name)
+                    )
+                    continue
+
+                for i, feed_set in enumerate(agency_def["feeds"]):
+                    for feed_name, feed_url in feed_set.items():
+                        if feed_name.startswith("gtfs_rt") and feed_url:
+
+                            agency_itp_id = agency_def["itp_id"]
+                            key = "{}/{}/{}".format(agency_itp_id, i, feed_name)
+                            feeds.append((key, feed_url, self.headers.get(key, {}),))
+
+        return feeds
+
+
 def main(argv):
 
     # Config tables
@@ -39,21 +126,9 @@ def main(argv):
 
     # Parse environment
 
-    agencies_path = os.getenv("CALITP_AGENCIES_YML")
-    headers_path = os.getenv("CALITP_HEADERS_YML")
     tickint = os.getenv("CALITP_TICK_INT")
     data_dest = os.getenv("CALITP_DATA_DEST")
     secret = os.getenv("CALITP_DATA_DEST_SECRET")
-
-    if agencies_path:
-        agencies_path = pathlib.Path(agencies_path)
-    else:
-        agencies_path = pathlib.Path(os.getcwd(), "agencies.yml")
-
-    if headers_path:
-        headers_path = pathlib.Path(headers_path)
-    else:
-        headers_path = pathlib.Path(os.getcwd(), "headers.yml")
 
     if tickint:
         tickint = int(tickint)
@@ -62,11 +137,6 @@ def main(argv):
 
     if not data_dest:
         data_dest = "file:///dev/null"
-
-    # Load data
-
-    headers = parse_headers(logger, headers_path)
-    feeds = parse_feeds(logger, agencies_path, headers)
 
     # Instantiate threads
 
@@ -88,73 +158,11 @@ def main(argv):
         )
         writer = FSWriter(logger, wq, "file:///dev/null")
 
-    fetchers = []
-    for feed in feeds:
-        fetchers.append(Fetcher(logger, evtbus, wq, feed))
-
     # Run
-
+    ticker.runner = Runner(logger, evtbus, wq)
     writer.start()
-    for fetcher in fetchers:
-        fetcher.start()
     ticker.start()
     ticker.join()
-
-
-def parse_headers(logger, headers_src):
-
-    headers = {}
-
-    with headers_src.open() as f:
-        headers_src_data = yaml.load(f, Loader=yaml.SafeLoader)
-        for item in headers_src_data:
-            for url_set in item["URLs"]:
-                itp_id = url_set["itp_id"]
-                url_number = url_set["url_number"]
-                for rt_url in url_set["rt_urls"]:
-                    key = f"{itp_id}/{url_number}/{rt_url}"
-                    if key in headers:
-                        raise ValueError(
-                            f"Duplicate header data for url with key: {key}"
-                        )
-                    headers[key] = item["header-data"]
-
-    logger.info(f"Header file successfully parsed with {len(headers)} entries")
-    return headers
-
-
-def parse_feeds(logger, feeds_src, headers):
-
-    feeds = []
-
-    with feeds_src.open() as f:
-
-        feeds_src_data = yaml.load(f, Loader=yaml.SafeLoader)
-        for agency_name, agency_def in feeds_src_data.items():
-
-            if "feeds" not in agency_def:
-                logger.warning(
-                    "agency {}: skipped loading "
-                    "invalid definition (missing feeds)".format(agency_name)
-                )
-                continue
-
-            if "itp_id" not in agency_def:
-                logger.warning(
-                    "agency {}: skipped loading "
-                    "invalid definition (missing itp_id)".format(agency_name)
-                )
-                continue
-
-            for i, feed_set in enumerate(agency_def["feeds"]):
-                for feed_name, feed_url in feed_set.items():
-                    if feed_name.startswith("gtfs_rt") and feed_url:
-
-                        agency_itp_id = agency_def["itp_id"]
-                        key = "{}/{}/{}".format(agency_itp_id, i, feed_name)
-                        feeds.append((key, feed_url, headers.get(key, {}),))
-
-    return feeds
 
 
 class EventBus(object):
@@ -213,6 +221,7 @@ class Ticker(threading.Thread):
         self.logger.debug("{}: emit: {}".format(self.name, evt))
         self.evtbus.emit(evt)
         self.tickid += 1
+        self.runner.tick()
 
     def run(self):
 
@@ -227,13 +236,13 @@ class Fetcher(threading.Thread):
     def __init__(self, logger, evtbus, wq, urldef):
 
         super().__init__()
-
         self.logger = logger
         self.evtbus = evtbus
         self.wq = wq
         self.urldef = urldef
         self.name = "fetcher {}".format(urldef[0])
         self.evtq = queue.Queue()
+        self.stopped = False
 
     def fetch(self):
         url = self.urldef[1]
@@ -255,7 +264,7 @@ class Fetcher(threading.Thread):
         self.evtbus.add_listener(self.name, "tick", self.evtq)
 
         evt = self.evtq.get()
-        while evt is not None:
+        while evt is not None and not self.stopped:
 
             evt_name = evt[0]
             if evt_name == "tick":
@@ -266,6 +275,9 @@ class Fetcher(threading.Thread):
             evt = self.evtq.get()
 
         self.logger.debug("{}: finalized".format(self.name))
+
+    def stop(self):
+        self.stopped = True
 
 
 class BaseWriter(threading.Thread):
@@ -281,7 +293,6 @@ class BaseWriter(threading.Thread):
         raise NotImplementedError
 
     def run(self):
-
         item = self.wq.get()
         while item is not None:
             evt_ts = item["evt"][2]
