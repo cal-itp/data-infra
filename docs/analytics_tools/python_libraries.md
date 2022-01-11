@@ -65,7 +65,7 @@ from calitp import query_sql
 ```
 
 ```{code-cell}
-df_routes = query_sql("""
+df_dim_feeds = query_sql("""
 SELECT
     *
 FROM `views.gtfs_schedule_dim_feeds`
@@ -73,7 +73,7 @@ LIMIT 10""", as_df=True)
 ```
 
 ```{code-cell}
-df_routes
+df_dim_feeds.head()
 ```
 (siuba)=
 ## siuba
