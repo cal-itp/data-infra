@@ -40,6 +40,8 @@ While most Python packages an analyst uses comes in JupyterHub, there may be add
 ## calitp
 `calitp` is an internal library of utility functions used to access our warehouse data.
 
+### import tbl
+
 Most notably, you can include the following function at the top of your notebook to import a `tbl` from the warehouse:
 
 ```python
@@ -53,6 +55,33 @@ from calitp.tables import tbl
 tbl.views.gtfs_schedule_fact_daily_feed_routes()
 ```
 
+### query_sql
+
+`query_sql` is another useful function to use inside of JupyterHub notebooks to turn a SQL query into a pandas DataFrame.
+
+As an example, in a notebook:
+```{code-cell}
+from calitp.tables import query_sql
+```
+```{code-cell}
+df_routes = query_sql(“”"
+SELECT
+    calitp_feed_name,
+    date,
+    count(*) AS count_routes
+FROM `views.gtfs_schedule_fact_daily_feed_routes`
+JOIN `views.gtfs_schedule_dim_feeds` USING (feed_key)
+WHERE
+    calitp_feed_name = “AC Transit (0)”
+GROUP BY
+    1, 2
+ORDER BY
+    date DESC
+LIMIT 10"“”, as_df=True)
+```
+```{code-cell}
+df_routes
+```
 (siuba)=
 ## siuba
 `siuba` is a tool that allows the same analysis code to run on a pandas DataFrame,
