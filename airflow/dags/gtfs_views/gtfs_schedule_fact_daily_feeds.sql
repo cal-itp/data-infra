@@ -14,7 +14,7 @@ fields:
     raw_gtfs_rt_vehicle_positions_url: "URL for this feed's GTFS realtime vehicle positions data, if available"
     raw_gtfs_rt_service_alerts_url: "URL for this feed's GTFS realtime service alerts data, if available"
     raw_gtfs_rt_trip_updates_url: "URL for this feed's GTFS realtime trip updates data, if available"
-    days_from_last_schedule_update: "Days since the feed's contents (the contents of any file within the feed) have changed, relative to date"
+    days_from_last_schedule_update: "Days since the feed's contents (the contents of any loadable file within the feed) have changed, relative to date"
 
 tests:
   check_null:
