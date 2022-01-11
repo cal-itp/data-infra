@@ -17,7 +17,6 @@ kernelspec:
 The following libraries are available and recommended for use by Cal-ITP data analysts.
 
 ## Table of Contents
-1. [Add New Packages](#add-new-packages)
 1. [calitp](#calitp)
 1. [siuba](#siuba)
 <br> - [Basic Query](#basic-query)
@@ -26,21 +25,15 @@ The following libraries are available and recommended for use by Cal-ITP data an
 <br> - [More siuba Resources](more-siuba-resources)
 1. [shared utils](#shared-utils)
 1. [pandas](pandas-resources)
-
-## Add New Packages
-
-While most Python packages an analyst uses comes in JupyterHub, there may be additional packages you'll want to use in your analysis.
-
-* Install [shared utility functions](#shared-utils)
-* Change directory into the project task's subfolder and add `requirements.txt` and/or `conda-requirements.txt`
-* Run `pip install -r requirements.txt` and/or `conda install --yes -c conda-forge --file conda-requirements.txt`
-
+1. [Add New Packages](#add-new-packages)
 
 (calitp)=
 ## calitp
 `calitp` is an internal library of utility functions used to access our warehouse data.
 
-Most notably, you can include the following function at the top of your notebook to import a `tbl` from the warehouse:
+### import tbl
+
+Most notably, you can include `import tbl` at the top of your notebook to import a table from the warehouse in the form of a `tbl`:
 
 ```python
 from calitp.tables import tbl
@@ -53,6 +46,26 @@ from calitp.tables import tbl
 tbl.views.gtfs_schedule_fact_daily_feed_routes()
 ```
 
+### query_sql
+
+`query_sql` is another useful function to use inside of JupyterHub notebooks to turn a SQL query into a pandas DataFrame.
+
+As an example, in a notebook:
+```{code-cell}
+from calitp import query_sql
+```
+
+```{code-cell}
+df_dim_feeds = query_sql("""
+SELECT
+    *
+FROM `views.gtfs_schedule_dim_feeds`
+LIMIT 10""", as_df=True)
+```
+
+```{code-cell}
+df_dim_feeds.head()
+```
 (siuba)=
 ## siuba
 `siuba` is a tool that allows the same analysis code to run on a pandas DataFrame,
@@ -136,3 +149,11 @@ See [data-analyses/example_reports](https://github.com/cal-itp/data-analyses/tre
 The library pandas is very commonly used in data analysis, and the external resources below provide a brief overview of it's use.
 
 * [Cheat Sheet - pandas](https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf)
+
+## Add New Packages
+
+While most Python packages an analyst uses come in JupyterHub, there may be additional packages you'll want to use in your analysis.
+
+* Install [shared utility functions](#shared-utils)
+* Change directory into the project task's subfolder and add `requirements.txt` and/or `conda-requirements.txt`
+* Run `pip install -r requirements.txt` and/or `conda install --yes -c conda-forge --file conda-requirements.txt`
