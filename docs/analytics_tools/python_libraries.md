@@ -33,7 +33,7 @@ The following libraries are available and recommended for use by Cal-ITP data an
 
 ### import tbl
 
-Most notably, you can include the following function at the top of your notebook to import a `tbl` from the warehouse:
+Most notably, you can include `import tbl` at the top of your notebook to import a table from the warehouse in the form of a `tbl`:
 
 ```python
 from calitp.tables import tbl
