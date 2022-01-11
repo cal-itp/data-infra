@@ -60,10 +60,10 @@ tbl.views.gtfs_schedule_fact_daily_feed_routes()
 `query_sql` is another useful function to use inside of JupyterHub notebooks to turn a SQL query into a pandas DataFrame.
 
 As an example, in a notebook:
+
 ```{code-cell}
 from calitp import query_sql
-```
-```{code-cell}
+
 df_routes = query_sql(“”"
 SELECT
     calitp_feed_name,
