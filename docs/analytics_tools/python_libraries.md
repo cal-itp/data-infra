@@ -17,7 +17,6 @@ kernelspec:
 The following libraries are available and recommended for use by Cal-ITP data analysts.
 
 ## Table of Contents
-1. [Add New Packages](#add-new-packages)
 1. [calitp](#calitp)
 1. [siuba](#siuba)
 <br> - [Basic Query](#basic-query)
@@ -26,15 +25,7 @@ The following libraries are available and recommended for use by Cal-ITP data an
 <br> - [More siuba Resources](more-siuba-resources)
 1. [shared utils](#shared-utils)
 1. [pandas](pandas-resources)
-
-## Add New Packages
-
-While most Python packages an analyst uses comes in JupyterHub, there may be additional packages you'll want to use in your analysis.
-
-* Install [shared utility functions](#shared-utils)
-* Change directory into the project task's subfolder and add `requirements.txt` and/or `conda-requirements.txt`
-* Run `pip install -r requirements.txt` and/or `conda install --yes -c conda-forge --file conda-requirements.txt`
-
+1. [Add New Packages](#add-new-packages)
 
 (calitp)=
 ## calitp
@@ -158,3 +149,11 @@ See [data-analyses/example_reports](https://github.com/cal-itp/data-analyses/tre
 The library pandas is very commonly used in data analysis, and the external resources below provide a brief overview of it's use.
 
 * [Cheat Sheet - pandas](https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf)
+
+## Add New Packages
+
+While most Python packages an analyst uses come in JupyterHub, there may be additional packages you'll want to use in your analysis.
+
+* Install [shared utility functions](#shared-utils)
+* Change directory into the project task's subfolder and add `requirements.txt` and/or `conda-requirements.txt`
+* Run `pip install -r requirements.txt` and/or `conda install --yes -c conda-forge --file conda-requirements.txt`
