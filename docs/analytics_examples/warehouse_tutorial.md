@@ -731,6 +731,7 @@ daily_stops = (
               _.stop_lat, _.stop_lon, _.stop_name)
     >> collect()
 )
+
 glue("daily_stops_output", daily_stops)
 ```
 
@@ -778,5 +779,6 @@ daily_stops = (
     >> collect()
 )
 ```
-{glue:figure} daily_stops_output
+```{glue:figure} daily_stops_output
+```
 ````
