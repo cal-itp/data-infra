@@ -79,9 +79,6 @@ ORDER BY
     date DESC
 LIMIT 10"“”, as_df=True)
 ```
-```{code-cell}
-df_routes
-```
 (siuba)=
 ## siuba
 `siuba` is a tool that allows the same analysis code to run on a pandas DataFrame,
