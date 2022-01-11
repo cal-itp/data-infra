@@ -1,0 +1,16 @@
+version: '3'
+services:
+  gtfs-rt-archive:
+    build: .
+    environment:
+      CALITP_LOG_LEVEL    : ${CALITP_LOG_LEVEL:-debug}
+      CALITP_DATA_DEST    : ${CALITP_DATA_DEST:-file:///dev/null}
+      CALITP_AGENCIES_YML : /data/agencies.yaml
+      CALITP_HEADERS_YML  : /data/headers.yaml
+    volumes:
+      - type: bind
+        source: ${CALITP_AGENCIES_YML}
+        target: /data/agencies.yaml
+      - type: bind
+        source: ${CALITP_HEADERS_YML}
+        target: /data/headers.yaml
