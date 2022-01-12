@@ -717,7 +717,7 @@ tbl_stop_times = (
 )
 
 # Grab the trips done on that day, for that agency
-daily_stops = (
+a = (
     tbl.views.gtfs_schedule_fact_daily_trips()
     >> filter(_.calitp_itp_id == ITP_ID,
               _.service_date == SELECTED_DATE,
@@ -739,7 +739,7 @@ daily_stops = (
 
 daily_stops.head()
 
-glue("daily_stops_output", daily_stops)
+glue("my_variable", a)
 ```
 
 ````{tabbed} Metabase
@@ -786,6 +786,6 @@ daily_stops = (
 
 daily_stops.head()
 ```
-```{glue:figure} daily_stops_output
-```
+
+{glue:}`my_variable`
 ````
