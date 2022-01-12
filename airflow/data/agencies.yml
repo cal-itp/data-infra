@@ -130,9 +130,9 @@ banning-pass-transit:
   agency_name: Banning Pass Transit
   feeds:
     - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/banning-ca-us/banning-ca-us.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/banning/gtfs-rt-vehicle-positions
+      gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/banning/gtfs-rt-alerts
+      gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/banning/gtfs-rt-trip-updates
   itp_id: 30
 bay-area-rapid-transit:
   agency_name: Bay Area Rapid Transit
@@ -442,9 +442,9 @@ eastern-sierra-transit-authority:
   agency_name: Eastern Sierra Transit Authority
   feeds:
     - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/easternsierra-ca-us/easternsierra-ca-us.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/esta/gtfs-rt-vehicle-positions
+      gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/esta/gtfs-rt-alerts
+      gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/esta/gtfs-rt-trip-updates
   itp_id: 99
 el-dorado-transit:
   agency_name: El Dorado Transit
@@ -562,9 +562,9 @@ gold-country-stage:
   agency_name: Gold Country Stage
   feeds:
     - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/goldcountrystage-ca-us/goldcountrystage-ca-us.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/gold-country-stage/gtfs-rt-vehicle-positions
+      gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/gold-country-stage/gtfs-rt-alerts
+      gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/gold-country-stage/gtfs-rt-trip-updates
   itp_id: 221
 golden-gate-bridge-highway-and-transportation-district:
   agency_name: Golden Gate Bridge Highway and Transportation District
@@ -606,9 +606,9 @@ humboldt-transit-authority:
   agency_name: Humboldt Transit Authority
   feeds:
     - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/humboldtcounty-ca-us/humboldtcounty-ca-us.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/redwood/gtfs-rt-vehicle-positions
+      gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/redwood/gtfs-rt-alerts
+      gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/redwood/gtfs-rt-trip-updates
   itp_id: 135
 huntington-park-express:
   agency_name: Huntington Park Express
@@ -662,9 +662,9 @@ lake-transit:
   agency_name: Lake Transit
   feeds:
     - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/laketransit-ca-us/laketransit-ca-us.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/lake-county/gtfs-rt-vehicle-positions
+      gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/lake-county/gtfs-rt-alerts
+      gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/lake-county/gtfs-rt-trip-updates
   itp_id: 159
 lassen-transit-service-agency:
   agency_name: Lassen Transit Service Agency
@@ -702,9 +702,9 @@ madera-county-connection:
   agency_name: Madera County Connection
   feeds:
     - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/maderactc-ca-us/maderactc-ca-us.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/madera/gtfs-rt-vehicle-positions
+      gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/madera/gtfs-rt-alerts
+      gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/madera/gtfs-rt-trip-updates
   itp_id: 188
 mammoth-lakes-transit-system:
   agency_name: Mammoth Lakes Transit System
@@ -770,13 +770,13 @@ metro:
   agency_name: Metro
   feeds:
     - gtfs_schedule_url: https://gitlab.com/LACMTA/gtfs_bus/raw/master/gtfs_bus.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/lametro/gtfs-rt-vehicle-positions
+      gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/lametro/gtfs-rt-alerts
+      gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/lametro/gtfs-rt-trip-updates
     - gtfs_schedule_url: https://gitlab.com/LACMTA/gtfs_rail/raw/master/gtfs_rail.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/lametro-rail/gtfs-rt-vehicle-positions
+      gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/lametro-rail/gtfs-rt-alerts
+      gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/lametro-rail/gtfs-rt-trip-updates
   itp_id: 182
 metrolink:
   agency_name: Metrolink
@@ -882,9 +882,9 @@ north-county-transit-district:
   agency_name: North County Transit District
   feeds:
     - gtfs_schedule_url: http://www.gonctd.com/google_transit.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/nctd/gtfs-rt-vehicle-positions
+      gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/nctd/gtfs-rt-alerts
+      gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/nctd/gtfs-rt-trip-updates
   itp_id: 226
 norwalk-transit-system:
   agency_name: Norwalk Transit System
@@ -917,6 +917,10 @@ orange-county-transportation-authority:
       gtfs_rt_vehicle_positions_url: https://api.octa.net/GTFSRealTime/protoBuf/VehiclePositions.aspx
       gtfs_rt_service_alerts_url: https://api.octa.net/GTFSRealTime/protoBuf/servicealerts.aspx
       gtfs_rt_trip_updates_url: https://api.octa.net/GTFSRealTime/protoBuf/tripupdates.aspx
+    - gtfs_schedule_url: https://octa.net/current/google_transit.zip
+      gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/octa/gtfs-rt-vehicle-positions
+      gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/octa/gtfs-rt-alerts
+      gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/octa/gtfs-rt-trip-updates
   itp_id: 235
 palos-verdes-peninsula-transit-authority:
   agency_name: Palos Verdes Peninsula Transit Authority
@@ -982,9 +986,9 @@ redding-area-bus-authority:
   agency_name: Redding Area Bus Authority
   feeds:
     - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/redding-ca-us/redding-ca-us.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/redding/gtfs-rt-vehicle-positions
+      gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/redding/gtfs-rt-alerts
+      gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/redding/gtfs-rt-trip-updates
   itp_id: 259
 redwood-coast-transit:
   agency_name: Redwood Coast Transit
@@ -1434,9 +1438,9 @@ turlock-transit:
   agency_name: Turlock Transit
   feeds:
     - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/turlock-ca-us/turlock-ca-us.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/turlock/gtfs-rt-vehicle-positions
+      gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/turlock/gtfs-rt-alerts
+      gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/turlock/gtfs-rt-trip-updates
   itp_id: 349
 union-city-transit:
   agency_name: Union City Transit

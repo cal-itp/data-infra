@@ -34,7 +34,7 @@ jobs:
     # Populate the secrets within the agencies.yml file
     - name: Fill in agencies.yml API keys
       run: |
-        python script/agencies_convert.py \
+        python script/yml_convert.py \
           './airflow/data/agencies.yml' \
           './airflow/data/agencies.filled.yml' \
           './airflow/data/secrets.csv'
@@ -43,6 +43,17 @@ jobs:
         python script/agencies_validate.py \
           './airflow/data/agencies.filled.yml' \
           './airflow/data/schema_agencies_entry.yml'
+    - name: Fill in headers.yml API keys
+      run: |
+        python script/yml_convert.py \
+          './airflow/data/headers.yml' \
+          './airflow/data/headers.filled.yml' \
+          './airflow/data/secrets.csv'
+    - name: Validate headers.yml
+      run: |
+        python script/headers_validate.py \
+          './airflow/data/headers.filled.yml' \
+          './airflow/data/schema_headers_entry.yml'
 
     - if: ${{ github.repository == 'cal-itp/data-infra' }}
       uses: google-github-actions/setup-gcloud@master
@@ -69,6 +80,9 @@ jobs:
         # replace agencies.yml with filled in template for airflow
         gsutil -m cp airflow/data/agencies.yml gs://$AIRFLOW_BUCKET/data/agencies_raw.yml
         gsutil -m cp airflow/data/agencies.filled.yml gs://$AIRFLOW_BUCKET/data/agencies.yml
+        # replace headers.yml with filled in template for airflow
+        gsutil -m cp airflow/data/headers.yml gs://$AIRFLOW_BUCKET/data/headers_raw.yml
+        gsutil -m cp airflow/data/headers.filled.yml gs://$AIRFLOW_BUCKET/data/headers.yml
 
         kubectl apply -f - <<EOF
         apiVersion: v1
@@ -78,6 +92,7 @@ jobs:
           namespace: gtfs-rt
         data:
           data_agencies.yaml: $(base64 -w0 airflow/data/agencies.filled.yml)
+          data_headers.yaml: $(base64 -w0 airflow/data/headers.filled.yml)
         EOF
         kubectl -n gtfs-rt rollout restart deployments/gtfs-rt-archive
       env:
@@ -95,5 +110,6 @@ jobs:
           namespace: gtfs-rt-preprod
         data:
           data_agencies.yaml: $(base64 -w0 airflow/data/agencies.filled.yml)
+          data_headers.yaml: $(base64 -w0 airflow/data/headers.filled.yml)
         EOF
         kubectl -n gtfs-rt-preprod rollout restart deployments/gtfs-rt-archive

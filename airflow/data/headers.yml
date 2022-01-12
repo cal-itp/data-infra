@@ -1,0 +1,78 @@
+- header-data:
+    authorization: {{ SWIFTLY_AUTHORIZATION_KEY_CALTRANS }}
+  URLs:
+    - itp_id: 235 # OCTA
+      url_number: 1
+      rt_urls:
+        - gtfs_rt_vehicle_positions_url
+        - gtfs_rt_service_alerts_url
+        - gtfs_rt_trip_updates_url
+    - itp_id: 221 # Gold Country Stage
+      url_number: 0
+      rt_urls:
+        - gtfs_rt_vehicle_positions_url
+        - gtfs_rt_service_alerts_url
+        - gtfs_rt_trip_updates_url
+- header-data:
+    authorization: {{ SWIFTLY_AUTHORIZATION_KEY_CALITP }}
+  URLs:
+    - itp_id: 30 # Banning Pass Transit
+      url_number: 0
+      rt_urls:
+        - gtfs_rt_vehicle_positions_url
+        - gtfs_rt_service_alerts_url
+        - gtfs_rt_trip_updates_url
+    - itp_id: 99 # Eastern Sierra Transit Authority
+      url_number: 0
+      rt_urls:
+        - gtfs_rt_vehicle_positions_url
+        - gtfs_rt_service_alerts_url
+        - gtfs_rt_trip_updates_url
+    - itp_id: 135 # Humboldt Transit Authority
+      url_number: 0
+      rt_urls:
+        - gtfs_rt_vehicle_positions_url
+        - gtfs_rt_service_alerts_url
+        - gtfs_rt_trip_updates_url
+    - itp_id: 159 # Lake Transit
+      url_number: 0
+      rt_urls:
+        - gtfs_rt_vehicle_positions_url
+        - gtfs_rt_service_alerts_url
+        - gtfs_rt_trip_updates_url
+    - itp_id: 226 # North County Transit District
+      url_number: 0
+      rt_urls:
+        - gtfs_rt_vehicle_positions_url
+        - gtfs_rt_service_alerts_url
+        - gtfs_rt_trip_updates_url
+    - itp_id: 259 # Redding Area Bus Authority
+      url_number: 0
+      rt_urls:
+        - gtfs_rt_vehicle_positions_url
+        - gtfs_rt_service_alerts_url
+        - gtfs_rt_trip_updates_url
+    - itp_id: 349 # Turlock Transit
+      url_number: 0
+      rt_urls:
+        - gtfs_rt_vehicle_positions_url
+        - gtfs_rt_service_alerts_url
+        - gtfs_rt_trip_updates_url
+    - itp_id: 188 # Madera County Connection
+      url_number: 0
+      rt_urls:
+        - gtfs_rt_vehicle_positions_url
+        - gtfs_rt_service_alerts_url
+        - gtfs_rt_trip_updates_url
+    - itp_id: 182 # Metro (Bus)
+      url_number: 0
+      rt_urls:
+        - gtfs_rt_vehicle_positions_url
+        - gtfs_rt_service_alerts_url
+        - gtfs_rt_trip_updates_url
+    - itp_id: 182 # Metro (Rail)
+      url_number: 1
+      rt_urls:
+        - gtfs_rt_vehicle_positions_url
+        - gtfs_rt_service_alerts_url
+        - gtfs_rt_trip_updates_url
