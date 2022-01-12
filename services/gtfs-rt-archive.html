@@ -624,6 +624,11 @@
      agencies data
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#header-data">
+     header data
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -637,6 +642,11 @@
     </a>
    </li>
   </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#updating-and-restarting-preprod-and-prod-services">
+   Updating and restarting preprod and prod services
+  </a>
  </li>
 </ul>
 
@@ -683,6 +693,11 @@
      agencies data
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#header-data">
+     header data
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -696,6 +711,11 @@
     </a>
    </li>
   </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#updating-and-restarting-preprod-and-prod-services">
+   Updating and restarting preprod and prod services
+  </a>
  </li>
 </ul>
 
@@ -715,6 +735,7 @@
 <span class="nb">export</span> <span class="nv">CALITP_DATA_DEST</span><span class="o">=</span>gs://gtfs-data/rt
 <span class="nb">export</span> <span class="nv">CALITP_DATA_DEST_SECRET</span><span class="o">=</span><span class="nv">$HOME</span>/Downloads/cal-itp-data-infra-661571285e30.json
 <span class="nb">export</span> <span class="nv">CALITP_AGENCIES_YML</span><span class="o">=</span><span class="nv">$HOME</span>/Downloads/data_agencies.yml
+<span class="nb">export</span> <span class="nv">CALITP_HEADERS_YML</span><span class="o">=</span><span class="nv">$HOME</span>/Downloads/data_headers.yml
 python services/gtfs-rt-archive/gtfs-rt-archive.py
 </pre></div>
 </div>
@@ -736,6 +757,27 @@ filesystem location of the downloaded key.</p>
 <h3>agencies data<a class="headerlink" href="#agencies-data" title="Permalink to this headline">¶</a></h3>
 <p>A copy of an agencies data file (available at gs://us-west2-calitp-airflow-pro-332827a9-bucket/data/agencies.yml) must be downloaded to the local
 filesystem. The <code class="docutils literal notranslate"><span class="pre">CALITP_AGENCIES_YML</span></code> environment variable must point to the filesystem location of the downloaded data file.</p>
+</div>
+<div class="section" id="header-data">
+<h3>header data<a class="headerlink" href="#header-data" title="Permalink to this headline">¶</a></h3>
+<p>Additional HTTP Headers can be provided in the yaml file specified in the <code class="docutils literal notranslate"><span class="pre">CALITP_HEADERS_YML</span></code> env variable. This file should be a list of
+objects specifying the <code class="docutils literal notranslate"><span class="pre">headers-data</span></code> (headers to be applied to each request) and the URLs (a map indicating which urls the headers apply to).
+If duplicate headers are specified for a url (matched via <code class="docutils literal notranslate"><span class="pre">f'{itp_id}/{url_number}/{rt_url}</span></code>), a value error will be thrown when parsing the
+header data file.</p>
+<p>Also, secret values can be substituted at build time using <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">DOUBLE_BRACES</span> <span class="pre">}}</span></code> as in the example below. These secret values are built from
+airtable and are shared with the <code class="docutils literal notranslate"><span class="pre">CALITP_AGENCIES_YML</span></code> file.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">header-data</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">authorization</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">SWIFTLY_AUTHORIZATION_KEY</span><span class="w"> </span><span class="p p-Indicator">}}</span><span class="w"></span>
+<span class="w">    </span><span class="nt">content-type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">application/json</span><span class="w"></span>
+<span class="w">  </span><span class="nt">URLs</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">itp_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">123</span><span class="w"> </span><span class="c1"># itp_id specified in the agencies.yml file</span><span class="w"></span>
+<span class="w">      </span><span class="nt">url_number</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span><span class="w"> </span><span class="c1"># index in the feeds list</span><span class="w"></span>
+<span class="w">      </span><span class="nt">rt_urls</span><span class="p">:</span><span class="w"> </span><span class="c1"># url keys of the feed</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gtfs_rt_vehicle_positions_url</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gtfs_rt_service_alerts_url</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gtfs_rt_trip_updates_url</span><span class="w"></span>
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="container-image">
@@ -761,6 +803,12 @@ docker push us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:<span class="k">$(</spa
 </pre></div>
 </div>
 </div>
+</div>
+<div class="section" id="updating-and-restarting-preprod-and-prod-services">
+<h2>Updating and restarting preprod and prod services<a class="headerlink" href="#updating-and-restarting-preprod-and-prod-services" title="Permalink to this headline">¶</a></h2>
+<p>If any code changes occurred, maybe do the docker push thing above?</p>
+<p>The gtfs-rt-archive service gets restarted during the <code class="docutils literal notranslate"><span class="pre">move</span> <span class="pre">DAGs</span> <span class="pre">to</span> <span class="pre">GCS</span> <span class="pre">folder</span></code> GitHub action defined in the <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/.github/workflows/push_to_gcloud.yml">push_to_gcloud.yml</a> file. During the restart any updated information from the agencies.yml and headers.yml will be updated in the preprod or production environment. In affected pull requests, the preprod service gets restarted on each commit. Once merged to main, the production service gets restarted.</p>
+<p>If adding a new environment variable to the script, additional editing of the kubernetes config will need to be done and some editing of the config in the Kubernetes Engine console may need to occur prior to restarting a service.</p>
 </div>
 </div>
 
