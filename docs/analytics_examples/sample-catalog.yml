@@ -1,0 +1,51 @@
+metadata:
+  version: 1
+sources:
+  # Open Data Portals
+  la_geohub:
+    driver: dcat
+    args:
+      url: http://geohub.lacity.org/data.json
+      items:
+        city_boundary: https://geohub.lacity.org/datasets/09f503229d37414a8e67a7b6ceb9ec43_7
+  ca_open_data:
+    driver: dcat
+    args:
+      url: https://data.ca.gov/data.json
+      items:
+          cdcr_population_covid_tracking: 4a9a896a-e64e-48c2-bb35-5589f80e7c52
+  ca_geoportal:
+    driver: dcat
+    args:
+      url: https://gis.data.ca.gov/data.json
+      items:
+          calenviroscreen: https://gis.data.ca.gov/datasets/9ad42487196c4ea8aa2dce707a3f986b_0
+  # General
+  lehd_federal_jobs_by_tract:
+    driver: parquet
+    description: LEHD Workplace Area Characteristics (WAC) federal jobs by census tract.
+    args:
+      urlpath: gs://calitp-analytics-data/data-analyses/bus_service_increase/wac_fed_tract.parquet
+      engine: pyarrow
+  test_zipped_shapefile:
+    driver: shapefile
+    description: LA Metro rail lines
+    args:
+      urlpath: gs://calitp-analytics-data/test_zipped_shapefile.zip
+      use_fsspec: true
+  test_geojson:
+    driver: geojson
+    description: Description
+    args:
+      urlpath: gs://calitp-analytics-data/test_geojson_file.geojson
+      use_fsspec: true
+  test_csv:
+    driver: csv
+    description: Description
+    args:
+      urlpath: https://raw.githubusercontent.com/CityOfLosAngeles/covid19-indicators/master/data/ca_county_pop_crosswalk.csv
+  test_geoparquet:
+    driver: geoparquet
+    description: Description
+    args:
+      urlpath: gs://calitp-analytics-data/test_geoparquet.parquet

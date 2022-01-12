@@ -19,21 +19,25 @@ def email_failures(task_instance, ds, **kwargs):
     status = task_instance.xcom_pull(task_ids="download_data")
     error_agencies = status["errors"]
 
-    html_report = pd.DataFrame(error_agencies).to_html(border=False)
+    if len(error_agencies) > 0:
+        html_report = pd.DataFrame(error_agencies).to_html(border=False)
 
-    html_content = f"""\
+        html_content = f"""\
 The following agency GTFS feeds could not be extracted on {ds}:
 
 {html_report}
 """
+    else:
+        html_content = "All feeds were downloaded successfully!"
 
     send_email(
         to=[
-            "ruth.miller@dot.ca.gov",
             "hunter.owens@dot.ca.gov",
             "michael.c@jarv.us",
             "juliet@trilliumtransit.com",
             "aaron@trilliumtransit.com",
+            "evan.siroky@dot.ca.gov",
+            "olivia.ramacier@dot.ca.gov",
         ],
         html_content=html_content,
         subject=(

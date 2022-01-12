@@ -1,0 +1,24 @@
+# Note that this task currently only validates feed 126 as a proof of concept.
+operator: 'operators.PodOperator'
+name: 'gtfs-rt-validation'
+image: 'ghcr.io/cal-itp/gtfs-rt-api:v0.0.1'
+cmds:
+  - gtfs-rt-validator-api
+
+arguments:
+  - validate-gcs-bucket
+  - cal-itp-data-infra
+  - cloud
+  - "gs://calitp-py-ci/gtfs-rt-validator-api/gtfs_schedule_126"
+  - "--gtfs-rt-glob-path"
+  - "gs://calitp-py-ci/gtfs-rt-validator-api/gtfs_rt_126/2021*/126/0/*"
+  - "--results-bucket"
+  - "gs://gtfs-data/rt-processed/validation"
+
+is_delete_operator_pod: true
+get_logs: true
+
+dependencies:
+  - external_validation_service_alerts
+  - external_validation_trip_updates
+  - external_validation_vehicle_positions

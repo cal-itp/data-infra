@@ -8,7 +8,7 @@ jupyterhub:
     defaultUrl: "/lab"
     image:
       name: ghcr.io/cal-itp/calitp-py
-      tag: v0.0.6
+      tag: hub-v2
     storage:
       extraVolumes:
       - name: gcloud-auth
@@ -51,6 +51,7 @@ jupyterhub:
     annotations:
       kubernetes.io/ingress.class: nginx
       cert-manager.io/cluster-issuer: letsencrypt-prod
+      ingress.kubernetes.io/proxy-body-size: 64m
     hosts:
       - hubtest.k8s.calitp.jarv.us
     tls:

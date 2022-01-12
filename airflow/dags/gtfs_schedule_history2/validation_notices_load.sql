@@ -1,8 +1,8 @@
 ---
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "gtfs_schedule_type2.validation_notices"
-dependencies:
-  - gtfs_schedule_history_load
+external_dependencies:
+  - gtfs_loader: gtfs_validation_history_load
 ---
 
 WITH

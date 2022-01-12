@@ -9,6 +9,8 @@ from calitp import read_gcfs, save_to_gcfs
 import json
 import pandas as pd
 
+from utils import get_successfully_downloaded_feeds
+
 ERROR_MISSING_FILE = "missing_required_file"
 VALIDATION_FILE = "validation.json"
 
@@ -22,12 +24,11 @@ def main(execution_date, **kwargs):
     in_path = f"schedule/{execution_date}"
     print(in_path)
 
-    status = pd.read_csv(read_gcfs(f"{in_path}/status.csv"))
-    success = status[status.status == "success"]
+    successes = get_successfully_downloaded_feeds(execution_date)
 
     agency_errors = []
     loadable_agencies = []
-    for ii, row in success.iterrows():
+    for ii, row in successes.iterrows():
         path_agency = f"{in_path}/{row['itp_id']}_{row['url_number']}"
         path_validation = f"{path_agency}/{VALIDATION_FILE}"
 

@@ -6,22 +6,32 @@ labels: 'new team member'
 assignees: charlie-costanzo
 
 ---
+Name:
+Role:
+Reports to:
 
-**Name:**
-
-**Role:**
-
-**Google Workspace Email Address:**
-
-**Github Username:**
-
-**Slack Username**
+Google Workspace Email Address:
+GitHub Username:
+Slack Username:
 
 **Set-up:**
-- [ ] Google Cloud Console / BigQuery
-- [ ] Metabase
-- [ ] Github
-- [ ] Jupyter Lab
-- [ ] Technical Onboarding Call Scheduled
-- [ ] Added to Daily Stand-ups
-- [ ] Added to Slack: #data-analyses
+- [ ] Technical Onboarding call scheduled
+
+- [ ] Added to tools:
+  - [ ] Github
+    - [ ] Organization: Cal-ITP
+    - [ ] Team: jarvus
+    - [ ] Team: warehouse-users
+  - [ ] JupyterLab
+  - [ ] Google Cloud Console
+  - [ ] Metabase
+  - [ ] Slack
+
+- [ ] Added to meetings:
+  - [ ] Daily Stand-ups
+  - [ ] Lunch n' Learn
+
+- [ ] Added to Slack channels:
+  - [ ] #data-analyses
+  - [ ] #data-office-hours
+  - [ ] #lunch-n-learn

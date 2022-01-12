@@ -54,7 +54,7 @@ has_feed_info_end_date AS (
 ),
 # For each publish date, get the agencies listed in agencies.yml
 # on that date. These will be used to generate the reports for that
-# month. Critically this won't change over time (whereas using the
+# month. Critically this will not change over time (whereas using the
 # most recent agencies.yml file data would).
 agency_feeds_on_end_date AS (
     SELECT
@@ -62,9 +62,17 @@ agency_feeds_on_end_date AS (
         , S.itp_id AS calitp_itp_id
         , S.url_number AS calitp_url_number
         , S.agency_name
+        , COALESCE(FI.has_feed_info, FALSE)
+            AS has_feed_info
+        # Hardcode certain feeds as private to make sure reports are not generated
+        , S.itp_id IN (13, 346) AS is_private_feed
     FROM `gtfs_schedule_history.calitp_status` S
     JOIN publish_dates_crnt PD ON
         S.calitp_extracted_at = PD.date_end
+    LEFT JOIN has_feed_info_end_date FI
+      ON S.itp_id = FI.calitp_itp_id
+         AND S.url_number = FI.calitp_url_number
+         AND PD.publish_date = FI.publish_date
 )
 
 SELECT
@@ -74,10 +82,12 @@ SELECT
     , AF.agency_name
     , PD.date_start
     , PD.date_end
-    , FI.has_feed_info
-    , (calitp_url_number = 0 AND FI.has_feed_info) AS use_for_report
+    , has_feed_info
+    , is_private_feed
+    , (calitp_url_number = 0
+      AND has_feed_info
+      AND NOT is_private_feed
+      ) AS use_for_report
 FROM agency_feeds_on_end_date AF
-JOIN has_feed_info_end_date FI
-    USING(calitp_itp_id, calitp_url_number, publish_date)
 JOIN publish_dates_crnt PD
   USING (publish_date)

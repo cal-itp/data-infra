@@ -40,6 +40,7 @@ def main(argv):
     # Parse environment
 
     agencies_path = os.getenv("CALITP_AGENCIES_YML")
+    headers_path = os.getenv("CALITP_HEADERS_YML")
     tickint = os.getenv("CALITP_TICK_INT")
     data_dest = os.getenv("CALITP_DATA_DEST")
     secret = os.getenv("CALITP_DATA_DEST_SECRET")
@@ -48,6 +49,11 @@ def main(argv):
         agencies_path = pathlib.Path(agencies_path)
     else:
         agencies_path = pathlib.Path(os.getcwd(), "agencies.yml")
+
+    if headers_path:
+        headers_path = pathlib.Path(headers_path)
+    else:
+        headers_path = pathlib.Path(os.getcwd(), "headers.yml")
 
     if tickint:
         tickint = int(tickint)
@@ -59,7 +65,8 @@ def main(argv):
 
     # Load data
 
-    feeds = parse_feeds(logger, agencies_path)
+    headers = parse_headers(logger, headers_path)
+    feeds = parse_feeds(logger, agencies_path, headers)
 
     # Instantiate threads
 
@@ -94,7 +101,29 @@ def main(argv):
     ticker.join()
 
 
-def parse_feeds(logger, feeds_src):
+def parse_headers(logger, headers_src):
+
+    headers = {}
+
+    with headers_src.open() as f:
+        headers_src_data = yaml.load(f, Loader=yaml.SafeLoader)
+        for item in headers_src_data:
+            for url_set in item["URLs"]:
+                itp_id = url_set["itp_id"]
+                url_number = url_set["url_number"]
+                for rt_url in url_set["rt_urls"]:
+                    key = f"{itp_id}/{url_number}/{rt_url}"
+                    if key in headers:
+                        raise ValueError(
+                            f"Duplicate header data for url with key: {key}"
+                        )
+                    headers[key] = item["header-data"]
+
+    logger.info(f"Header file successfully parsed with {len(headers)} entries")
+    return headers
+
+
+def parse_feeds(logger, feeds_src, headers):
 
     feeds = []
 
@@ -122,9 +151,8 @@ def parse_feeds(logger, feeds_src):
                     if feed_name.startswith("gtfs_rt") and feed_url:
 
                         agency_itp_id = agency_def["itp_id"]
-                        feeds.append(
-                            ("{}/{}/{}".format(agency_itp_id, i, feed_name), feed_url)
-                        )
+                        key = "{}/{}/{}".format(agency_itp_id, i, feed_name)
+                        feeds.append((key, feed_url, headers.get(key, {}),))
 
     return feeds
 
@@ -209,11 +237,18 @@ class Fetcher(threading.Thread):
 
     def fetch(self):
         url = self.urldef[1]
+        headers = self.urldef[2]
         try:
-            rs = urllib.request.urlopen(url)
-            return rs
+            request = urllib.request.Request(url)
+            for key, value in headers.items():
+                request.add_header(key, value)
+            return urllib.request.urlopen(request)
         except (urllib.error.URLError, urllib.error.HTTPError) as e:
-            self.logger.info("{}: error fetching url {}: {}".format(self.name, url, e))
+            self.logger.info(
+                "{} {}: error fetching url {}: {}".format(
+                    self.name, len(headers), url, e
+                )
+            )
 
     def run(self):
 

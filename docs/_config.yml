@@ -10,6 +10,7 @@ logo: calitp_logo_MAIN.png
 execute:
   execute_notebooks: force
   allow_errors: false
+  timeout: -1
 
 # Define the name of the latex output file for PDF builds
 latex:
