@@ -69,7 +69,6 @@ daily_stops = (
     >> collect()
     )
 
-daily_stops.head()
 glue("daily_stops_output", daily_stops)
 ```
 
@@ -127,8 +126,6 @@ daily_stops = (
              )
     >> collect()
     )
-
-daily_stops.head()
 ```
 
 ```{glue:figure} daily_stops_output
