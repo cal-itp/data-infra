@@ -462,6 +462,14 @@ el-monte-transportation-division:
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 102
+el-segundo:
+  agency_name: El Segundo
+  feeds:
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/elsegundo-ca-us/elsegundo-ca-us.zip
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
+  itp_id: 103
 emery-go-round:
   agency_name: Emery Go-Round
   feeds:
