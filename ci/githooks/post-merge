@@ -2,7 +2,9 @@
 set -e
 
 branch_name=$(git symbolic-ref --short HEAD)
+work_tree=$(git rev-parse --show-toplevel)
 
+# find release channel for current branch
 while read param val; do
   if [[ $val = $branch_name ]]; then
     RELEASE_CHANNEL=$(cut -d. -f2 <<< "$param")
@@ -10,22 +12,39 @@ while read param val; do
   fi
 done <<< $(git config --get-regexp '^channel\..*\.branch$' || true)
 
+# deploy to channel
 if [[ $RELEASE_CHANNEL ]]; then
 
-  KUBECONFIG=$(git config --default '' "channel.${RELEASE_CHANNEL}.kubeconfig")
-  BUILD_REPO_USER=$(git config --default '' "channel.${RELEASE_CHANNEL}.build-repo-user")
-  BUILD_REPO_SECRET=$(git config --default '' "channel.${RELEASE_CHANNEL}.build-repo-secret")
-  BUILD_FORCE=$(git config --default '' "channel.${RELEASE_CHANNEL}.build-force")
-  BUILD_GIT_TAG=$(git describe --abbrev=0)
+  # load environment files
+  for envfile in $(git config --get-all "channel.${RELEASE_CHANNEL}.envfile" || printf ''); do
+
+    envfile_path=$work_tree/$envfile
+    if ! [[ -e $envfile_path ]]; then
+      printf 'error: %s envfile not found: %s\n' "$RELEASE_CHANNEL" "$envfile_path" >&2
+      exit 1
+    fi
+
+    while read line; do
+      if [[ $line =~ ^([[:alnum:]_]+)=(.*)$ ]] && ! [[ $(declare -p "${BASH_REMATCH[1]}" 2>/dev/null) ]]; then
+        declare -x "$line"
+      else
+        continue
+      fi
+    done < "$envfile_path"
+
+  done
 
   if ! [[ $KUBECONFIG ]]; then
-    printf 'error: missing required config channel.%s.kubeconfig\n' >&2 "$RELEASE_CHANNEL"
+    printf 'post-merge: error releasing into %s: missing required variable: KUBECONFIG\n' "$RELEASE_CHANNEL" >&2
     exit 1
   fi
 
-  printf 'post-merge: releasing tag %s into channel %s\n' "$BUILD_GIT_TAG" "$RELEASE_CHANNEL"
-  source $(git rev-parse --show-toplevel)/ci/steps/validate-clean-worktree.sh
-  source $(git rev-parse --show-toplevel)/ci/workflows/service-build.sh
-  source $(git rev-parse --show-toplevel)/ci/workflows/service-release.sh
+  # prevent workflows from interpreting arguments
+  set --
+
+  # release workflows
+  printf 'post-merge: releasing into channel %s\n' "$RELEASE_CHANNEL"
+  source $work_tree/ci/steps/validate-clean-worktree.sh
+  source $work_tree/ci/workflows/service-release.sh
 
 fi
