@@ -720,7 +720,7 @@ daily_stops = (
     >> collect()
     )
 df_daily_stops = pd.DataFrame(daily_stops)
-glue("daily_stops_output", df_daily_stops)
+glue("df_daily_stops_output", df_daily_stops)
 ```
 
 ````{tabbed} Metabase
@@ -779,7 +779,7 @@ daily_stops = (
     )
 ```
 
-```{glue:figure} daily_stops_output
+```{glue:figure} df_daily_stops_output
 ```
 
 ````
