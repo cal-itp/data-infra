@@ -5,8 +5,8 @@ jupytext:
   text_representation:
     extension: .md
     format_name: myst
-    format_version: 0.13.1
-    jupytext_version: 1.13.6
+    format_version: 0.13
+    jupytext_version: 1.13.3
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -719,8 +719,8 @@ daily_stops = (
              )
     >> collect()
     )
-
-glue("daily_stops_output", daily_stops)
+df_daily_stops = pd.DataFrame(daily_stops)
+glue("daily_stops_output", df_daily_stops)
 ```
 
 ````{tabbed} Metabase
