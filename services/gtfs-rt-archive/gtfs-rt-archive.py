@@ -45,56 +45,60 @@ class Runner:
             fetcher.start()
             self.fetchers.append(fetcher)
 
+    def get_headers_yml(self):
+        with self.headers_src.open() as f:
+            return yaml.load(f, Loader=yaml.SafeLoader)
+
+    def get_agencies_yml(self):
+        with self.feeds_src.open() as f:
+            return yaml.load(f, Loader=yaml.SafeLoader)
+
     def parse_headers(self):
 
         headers = {}
 
-        with self.headers_src.open() as f:
-            headers_src_data = yaml.load(f, Loader=yaml.SafeLoader)
-            for item in headers_src_data:
-                for url_set in item["URLs"]:
-                    itp_id = url_set["itp_id"]
-                    url_number = url_set["url_number"]
-                    for rt_url in url_set["rt_urls"]:
-                        key = f"{itp_id}/{url_number}/{rt_url}"
-                        if key in headers:
-                            raise ValueError(
-                                f"Duplicate header data for url with key: {key}"
-                            )
-                        headers[key] = item["header-data"]
+        headers_yml = self.get_headers_yml()
+        for item in headers_yml:
+            for url_set in item["URLs"]:
+                itp_id = url_set["itp_id"]
+                url_number = url_set["url_number"]
+                for rt_url in url_set["rt_urls"]:
+                    key = f"{itp_id}/{url_number}/{rt_url}"
+                    if key in headers:
+                        raise ValueError(
+                            f"Duplicate header data for url with key: {key}"
+                        )
+                    headers[key] = item["header-data"]
 
         return headers
 
     def parse_feeds(self):
 
         feeds = []
+        agencies_yml = self.get_agencies_yml()
+        for agency_name, agency_def in agencies_yml.items():
 
-        with self.feeds_src.open() as f:
+            if "feeds" not in agency_def:
+                self.logger.warning(
+                    "agency {}: skipped loading "
+                    "invalid definition (missing feeds)".format(agency_name)
+                )
+                continue
 
-            feeds_src_data = yaml.load(f, Loader=yaml.SafeLoader)
-            for agency_name, agency_def in feeds_src_data.items():
+            if "itp_id" not in agency_def:
+                self.logger.warning(
+                    "agency {}: skipped loading "
+                    "invalid definition (missing itp_id)".format(agency_name)
+                )
+                continue
 
-                if "feeds" not in agency_def:
-                    self.logger.warning(
-                        "agency {}: skipped loading "
-                        "invalid definition (missing feeds)".format(agency_name)
-                    )
-                    continue
+            for i, feed_set in enumerate(agency_def["feeds"]):
+                for feed_name, feed_url in feed_set.items():
+                    if feed_name.startswith("gtfs_rt") and feed_url:
 
-                if "itp_id" not in agency_def:
-                    self.logger.warning(
-                        "agency {}: skipped loading "
-                        "invalid definition (missing itp_id)".format(agency_name)
-                    )
-                    continue
-
-                for i, feed_set in enumerate(agency_def["feeds"]):
-                    for feed_name, feed_url in feed_set.items():
-                        if feed_name.startswith("gtfs_rt") and feed_url:
-
-                            agency_itp_id = agency_def["itp_id"]
-                            key = "{}/{}/{}".format(agency_itp_id, i, feed_name)
-                            feeds.append((key, feed_url, self.headers.get(key, {}),))
+                        agency_itp_id = agency_def["itp_id"]
+                        key = "{}/{}/{}".format(agency_itp_id, i, feed_name)
+                        feeds.append((key, feed_url, self.headers.get(key, {}),))
 
         return feeds
 
