@@ -40,7 +40,7 @@ import calitp.magics
 ```{code-cell}
 :tags: [remove-cell]
 
-df_tbl_stop_times = (
+tbl_stop_times = (
     tbl.views.gtfs_schedule_dim_stop_times()
     >> filter(_.calitp_extracted_at <= SELECTED_DATE,
               _.calitp_deleted_at > SELECTED_DATE,
@@ -48,9 +48,9 @@ df_tbl_stop_times = (
              )
     >> collect()
 )
-glue("df_tbl_stop_times_output", df_tbl_stop_times)
+glue("tbl_stop_times_output", tbl_stop_times)
 ```
 
 
-```{glue:} df_tbl_stop_times_output
+```{glue:} tbl_stop_times_output
 ```
