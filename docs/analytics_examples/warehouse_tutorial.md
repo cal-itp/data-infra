@@ -5,8 +5,8 @@ jupytext:
   text_representation:
     extension: .md
     format_name: myst
-    format_version: 0.13
-    jupytext_version: 1.10.3
+    format_version: 0.13.1
+    jupytext_version: 1.13.6
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -155,7 +155,7 @@ ORDER BY
     date DESC
 LIMIT 10
 ```
-```{glue:figure} df_routes_output
+```{glue:} df_routes_output
 ```
 ````
 ````{tabbed} siuba
@@ -187,7 +187,7 @@ from siuba import *
     >> arrange(_.date)
 )
 ```
-```{glue:figure} siuba_routes_output
+```{glue:} siuba_routes_output
 ```
 ````
 
@@ -269,7 +269,7 @@ ORDER BY
     date
 LIMIT 10
 ```
-```{glue:figure} df_stops_output
+```{glue:} df_stops_output
 ```
 ````
 
@@ -305,7 +305,7 @@ from siuba import *
 )
 ```
 
-```{glue:figure} siuba_stops_output
+```{glue:} siuba_stops_output
 ```
 ````
 (days-feed-expires)=
@@ -374,7 +374,7 @@ WHERE
 
 LIMIT 10
 ```
-```{glue:figure} df_feed_expires_output
+```{glue:} df_feed_expires_output
 ```
 ````
 
@@ -403,7 +403,7 @@ from siuba import *
     >> filter(_.date == "2021-09-01", _.calitp_feed_name == "AC Transit (0)")
 )
 ```
-```{glue:figure} siuba_feed_expires_output
+```{glue:} siuba_feed_expires_output
 ```
 ````
 (stops-all-trips)=
@@ -494,7 +494,7 @@ GROUP BY
 
 LIMIT 10
 ```
-```{glue:figure} df_stops_trips_output
+```{glue:} df_stops_trips_output
 ```
 ````
 ````{tabbed} siuba
@@ -521,7 +521,7 @@ from siuba import *
     )
 )
 ```
-```{glue:figure} siuba_stops_trips_output
+```{glue:} siuba_stops_trips_output
 ```
 ````
 (max-number-stops)=
@@ -629,7 +629,7 @@ GROUP BY
     calitp_feed_name
 LIMIT 10
 ```
-```{glue:figure} df_max_stops_output
+```{glue:} df_max_stops_output
 ```
 ````
 ````{tabbed} siuba
@@ -658,7 +658,7 @@ from siuba import *
 )
 ```
 
-```{glue:figure} siuba_max_stops_output
+```{glue:} siuba_max_stops_output
 ```
 
 ````
