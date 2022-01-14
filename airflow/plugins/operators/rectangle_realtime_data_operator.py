@@ -1,3 +1,4 @@
+from fileinput import filename
 from airflow.models import BaseOperator
 from airflow.utils.decorators import apply_defaults
 from google.transit import gtfs_realtime_pb2
@@ -11,16 +12,35 @@ from pathlib import Path
 import pandas as pd
 import tempfile
 
-
 # Note that all RT extraction is stored in the prod bucket, since it is very large,
 # but we can still output processed results to the staging bucket
 SRC_PATH = "gs://gtfs-data/rt/"
+DST_PATH = "gs://gtfs-data/rt-processed/"
 
 
-class BaseRealtimeProcessor:
-    def __init__(self, execution_date):
+class RealtimeProcessor(BaseOperator):
+    def __init__(
+        self,
+        execution_date,
+        header_details,
+        entity_details,
+        filename_prefix,
+        rt_file_substring,
+        cast={},
+        is_timestamp=[],
+        **kwargs,
+    ):
+        super().__init__(**kwargs)
+
         self.fs = get_fs()
         self.iso_date = str(execution_date).split("T")[0]
+        self.header_details = header_details
+        self.entity_details = entity_details
+        self.filename_prefix = filename_prefix
+        self.rt_file_substring = rt_file_substring
+        self.cast = cast
+        self.time_float_cast = {col: "float" for col in is_timestamp}
+        self.dst_path = f"{get_bucket()}/rt-processed/" + self.rt_file_substring + "/"
 
     def parse_pb(self, path):
         """
@@ -54,15 +74,16 @@ class BaseRealtimeProcessor:
         """
         Returns a dictionary of header values to be added to a dataframe
         """
-        return {
-            "header_timestamp": self.pull_value(x, "header.timestamp"),
+        parsed_header_details = {
+            col: self.pull_value(x, source)
+            for col, source in self.header_details.items()
         }
+        return parsed_header_details
 
     def rectangle_entities(self, x):
         """
         Create a dataframe from parsed pb files
         """
-
         header_details = self.get_header_details(x)
         entity_details = self.get_entity_details(x)
         if len(entity_details) > 0:
@@ -108,10 +129,36 @@ class BaseRealtimeProcessor:
 
     def get_google_cloud_filename(self, feed):
         itp_id_url_num = "_".join(map(str, feed))
-        prefix = self.get_google_cloud_filename_prefix()
+        prefix = self.filename_prefix
         return f"{prefix}_{self.iso_date}_{itp_id_url_num}.parquet"
 
-    def run(self):
+    def cast_entities(self, entities):
+        # parse any information provided about fields that need to have dtype changed
+        # e.g. timestamps are strings, and latitude may be inferred as an int.
+        # note that due to a pandas bug, we first convert timestamps to
+        # a float, and then to an integer (hence the separate time_float_cast check)
+        # see: https://stackoverflow.com/a/60024263
+
+        return entities.astype(self.time_float_cast).astype(self.cast)
+
+    def get_entity_details(self, x):
+        """
+        Returns a list of dicts containing entity values to be added to a dataframe.
+        See https://gtfs.org/reference/realtime/v2/ for list of possible
+        entity values by message type.
+        """
+        entity = x.get("entity")
+        parsed_entity_details = []
+        if entity is not None:
+            for e in entity:
+                e_details = {
+                    col: self.pull_value(e, source)
+                    for col, source in self.entity_details.items()
+                }
+                parsed_entity_details.append(e_details)
+        return parsed_entity_details
+
+    def execute(self):
         """Process a RT feed of the given type
 
         Args:
@@ -150,164 +197,13 @@ class BaseRealtimeProcessor:
                     entities_rectangle.insert(0, "calitp_itp_id", int(feed[0]))
                     entities_rectangle.insert(1, "calitp_url_number", int(feed[1]))
 
-                    # cast fields that may get screwed up.
-                    # e.g. timestamps are strings, and latitude may be inferred as an
-                    # int.
-                    # note that due to a pandas bug, we first convert timestamps to
-                    # a float, and then to an integer.
-                    # see: https://stackoverflow.com/a/60024263
+                    # cast fields that may get screwed up
                     casted = self.cast_entities(entities_rectangle)
 
                     with tempfile.TemporaryDirectory() as tmpdirname:
                         fname = tmpdirname + "/" + "temporary" + ".parquet"
                         casted.to_parquet(fname, index=False)
                         self.fs.put(
-                            fname, self.get_dst_path() + google_cloud_file_name,
+                            fname,
+                            self.get_dst_path() + google_cloud_file_name,
                         )
-
-
-class AlertsProcessor(BaseRealtimeProcessor):
-    def cast_entities(self, entities):
-        return entities.astype(
-            {"header_timestamp": float, "start_time": float, "end_time": float}
-        ).astype(
-            {"header_timestamp": "Int64", "start_time": "Int64", "end_time": "Int64"}
-        )
-
-    def get_dst_path(self):
-        return f"{get_bucket()}/rt-processed/alerts/"
-
-    def get_entity_details(self, x):
-        """
-        Returns a list of dicts containing entity values to be added to a dataframe.
-        See https://gtfs.org/reference/realtime/v2/#message-alert for list of possible
-        entity values.
-        """
-        entity = x.get("entity")
-        details = []
-        if entity is not None:
-            for e in entity:
-                d = {
-                    "entity_id": self.pull_value(e, "id"),
-                    "start_time": self.pull_value(e, "alert.active_period.start"),
-                    "end_time": self.pull_value(e, "alert.active_period.end"),
-                }
-                details.append(d)
-        return details
-
-    def get_google_cloud_filename_prefix(self):
-        return "al"
-
-    def get_rt_file_substr(self):
-        return "service_alerts"
-
-
-class TripUpdatesProcessor(BaseRealtimeProcessor):
-    def cast_entities(self, entities):
-        return entities.astype(
-            {"header_timestamp": float, "trip_timestamp": float, "trip_delay": float}
-        ).astype(
-            {
-                "header_timestamp": "Int64",
-                "trip_timestamp": "Int64",
-                "trip_delay": "Int32",
-            }
-        )
-
-    def get_dst_path(self):
-        return f"{get_bucket()}/rt-processed/trip_updates/"
-
-    def get_entity_details(self, x):
-        """
-        Returns a list of dicts containing entity values to be added to a dataframe.
-        See https://gtfs.org/reference/realtime/v2/#message-tripupdate for list of
-        possible entity values.
-        """
-        entity = x.get("entity")
-        details = []
-        if entity is not None:
-            for e in entity:
-                d = {
-                    "entity_id": self.pull_value(e, "id"),
-                    "trip_id": self.pull_value(e, "trip_update.trip.trip_id"),
-                    "trip_schedule_update": self.pull_value(
-                        e, "trip_update.trip.schedule_relationship"
-                    ),
-                    "trip_vehicle_id": self.pull_value(e, "trip_update.vehicle.id"),
-                    "trip_timestamp": self.pull_value(e, "trip_update.timestamp"),
-                    "trip_delay": self.pull_value(e, "trip_update.delay"),
-                }
-                details.append(d)
-        return details
-
-    def get_google_cloud_filename_prefix(self):
-        return "tu"
-
-    def get_rt_file_substr(self):
-        return "trip_updates"
-
-
-class VehiclePositionsProcessor(BaseRealtimeProcessor):
-    def cast_entities(self, entities):
-        return entities.astype(
-            {
-                "header_timestamp": float,
-                "vehicle_timestamp": float,
-                "vehicle_position_latitude": float,
-                "vehicle_position_longitude": float,
-            }
-        ).astype({"header_timestamp": "Int64", "vehicle_timestamp": "Int64"})
-
-    def get_dst_path(self):
-        return f"{get_bucket()}/rt-processed/vehicle_positions/"
-
-    def get_entity_details(self, x):
-        """
-        Returns a list of dicts containing entity values to be added to a dataframe.
-        See https://gtfs.org/reference/realtime/v2/#message-vehicleposition for list of
-        possible entity values.
-        """
-        entity = x.get("entity")
-        details = []
-        if entity is not None:
-            for e in entity:
-                d = {
-                    "entity_id": self.pull_value(e, "id"),
-                    "vehicle_id": self.pull_value(e, "vehicle.vehicle.id"),
-                    "vehicle_trip_id": self.pull_value(e, "vehicle.trip.tripId"),
-                    "vehicle_timestamp": self.pull_value(e, "vehicle.timestamp"),
-                    "vehicle_position_latitude": self.pull_value(
-                        e, "vehicle.position.latitude"
-                    ),
-                    "vehicle_position_longitude": self.pull_value(
-                        e, "vehicle.position.longitude"
-                    ),
-                }
-                details.append(d)
-        return details
-
-    def get_google_cloud_filename_prefix(self):
-        return "rt"
-
-    def get_rt_file_substr(self):
-        return "vehicle_positions"
-
-
-class RectangleRealtimeDataOperator(BaseOperator):
-    @apply_defaults
-    def __init__(self, realtime_data_type, **kwargs):
-        super().__init__(**kwargs)
-
-        self.realtime_data_type = realtime_data_type
-
-    def execute(self, context):
-        if self.realtime_data_type == "alerts":
-            processor = AlertsProcessor(self.execution_date)
-        elif self.realtime_data_type == "trip_updates":
-            processor = TripUpdatesProcessor(self.execution_date)
-        elif self.realtime_data_type == "vehicle_positions":
-            processor = VehiclePositionsProcessor(self.execution_date)
-        else:
-            raise NameError(f"Invalid realtime data type: '{self.realtime_data_type}'")
-
-        processor.run()

@@ -1,6 +1,29 @@
 operator: operator.RectangleRealtimeDataOperator
 provide_context: true
 
-realtime_data_type: trip_updates
+header_details:
+  header_timestamp: header.timestamp
+
+entity_details:
+  entity_id: id
+  trip_id: trip_update.trip.trip_id
+  trip_schedule_update: trip_update.trip.schedule_relationship
+  trip_vehicle_id: trip_update.vehicle.id
+  trip_timestamp: trip_update.timestamp
+  trip_delay: trip_update.delay
+
+cast: 
+  header_timestamp: Int64
+  trip_timestamp: Int64
+  trip_delay: Int32
+
+is_timestamp:
+  - header_timestamp
+  - trip_timestamp
+  - trip_delay
+
+filename_prefix: tu
+rt_file_substr: trip_updates
+
 dependencies:
   - external_trip_updates
