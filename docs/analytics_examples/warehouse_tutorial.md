@@ -713,7 +713,8 @@ tbl_stop_times = (
               _.calitp_itp_id == ITP_ID
              )
 )
-
+```
+```{code-cell}
 # Grab the trips done on that day, for that agency
 df_daily_stops = (
     tbl.views.gtfs_schedule_fact_daily_trips()
