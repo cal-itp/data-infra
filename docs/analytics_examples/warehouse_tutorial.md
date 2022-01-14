@@ -735,9 +735,6 @@ df_daily_stops = (
     >> collect()
     )
 
-daily_stops.head()
-```
-
 glue("df_daily_stops_output", df_daily_stops)
 ```
 
