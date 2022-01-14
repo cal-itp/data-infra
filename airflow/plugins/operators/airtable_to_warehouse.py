@@ -1,4 +1,5 @@
 import pandas as pd
+import re
 import os
 
 from pyairtable import Table
@@ -40,14 +41,15 @@ def airtable_to_df(
     raw_df = pd.DataFrame([{id_name: row["id"], **row["fields"]} for row in all_rows])
 
     # rename fields follows format new_name: old_name
-    final_df = raw_df.rename(columns={v: k for k, v in rename_fields.items()}).pipe(
+    final_df = raw_df.rename(columns={k: v for k, v in rename_fields.items()}).pipe(
         to_snakecase
     )
 
     if column_prefix:
+        new_field_names = rename_fields.values()
         return final_df.rename(
             columns=lambda s: s
-            if (s in rename_fields or s == id_name)
+            if (s in new_field_names or s == id_name)
             else f"{column_prefix}{s}"
         )
 
@@ -81,9 +83,8 @@ class AirtableToWarehouseOperator(BaseOperator):
                 to GCS will occur. The resulting item gets saved to GCS at the following
                 path:
                     `{base_calitp_bucket}/{gcs_path}/{execution_date}/{table_name}.csv`.
-            rename_fields (list, optional): A list of objects where each object consists
-                of a string key and value representing the new desired column name and
-                airtable column name respectively. Defaults to None.
+            rename_fields (dict, optional): A mapping new desired column name (string)
+                to current airtable column name (string) respectively. Defaults to None.
             column_prefix (str, optional): A string prefix to rename all columns with.
                 This prefix is not applied to columns affected by a rename triggered
                 from providing either `id_name` or `rename_fields`. Defaults to None.
@@ -117,8 +118,9 @@ class AirtableToWarehouseOperator(BaseOperator):
             write_table(df, self.table_name)
 
         if self.gcs_path:
+            clean_gcs_path = re.sub(r"\/+$", "", self.gcs_path)
             gcs_file = (
-                f"{self.gcs_path}/{context['execution_date']}/{self.table_name}.csv"
+                f"{clean_gcs_path}/{context['execution_date']}/{self.table_name}.csv"
             )
             print(f"Uploading to gcs at {gcs_file}")
             save_to_gcfs(df.to_csv(index=False).encode(), f"{gcs_file}", use_pipe=True)

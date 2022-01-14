@@ -7,7 +7,7 @@ table_name: sandbox.airtable_parent
 
 id_name: "parent_id"
 rename_fields:
-  child_id: child
+  child: child_id
 column_prefix: "parent_"
 
 dependencies:
