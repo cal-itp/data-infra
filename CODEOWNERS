@@ -4,7 +4,7 @@
 # devops components
 /kubernetes                             @lottspot @themightychris
 /ci                                     @lottspot
-/services                               @lottspot
+/services                               @lottspot @chriscauley
 
 # jupyter service, e.g. updating the image
 /kubernetes/apps/charts/jupyterhub      @lottspot @charlie-costanzo
@@ -17,6 +17,10 @@
 
 # gtfs data
 /airflow/data/agencies.yml              @Nkdiaz @evansiroky
+
+# gtfs rt
+/airflow/dags/gtfs*/*                   @lauriemerrell @Nkdiaz
+/airflow/dags/rt*/*                     @lauriemerrell @evansiroky
 
 # devops GitHub workflows
 /.github/workflows/service-build.yml    @lottspot
