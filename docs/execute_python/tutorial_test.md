@@ -22,7 +22,7 @@ import os
 import pandas as pd
 import shapely
 
-os.environ["CALITP_BQ_MAX_BYTES"] = str(50_000_000_000)
+os.environ["CALITP_BQ_MAX_BYTES"] = str(100_000_000_000)
 
 import calitp
 from calitp.tables import tbl
