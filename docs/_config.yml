@@ -11,7 +11,8 @@ execute:
   execute_notebooks: force
   allow_errors: false
   timeout: -1
-  exclude_patterns: [execute_python/*]
+
+exclude_patterns: [execute_python/*, docs/execute_python/tutorial_test.md]
 
 # Define the name of the latex output file for PDF builds
 latex:
