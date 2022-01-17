@@ -12,7 +12,7 @@ execute:
   allow_errors: false
   timeout: -1
 
-exclude_patterns: [execute_python/tutorial_test.md]
+exclude_patterns: [analytics_examples/tutorial_test.md]
 # Define the name of the latex output file for PDF builds
 latex:
   latex_documents:
