@@ -36,8 +36,6 @@ from myst_nb import glue
 import calitp.magics
 ```
 
-### 6.
-Code for #6
 
 ```{code-cell}
 ## Get trips for operator for one day and join with stop times for all trips
