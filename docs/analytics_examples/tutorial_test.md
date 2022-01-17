@@ -47,6 +47,7 @@ df_tbl_stop_times = (
               _.calitp_deleted_at > SELECTED_DATE,
               _.calitp_itp_id == ITP_ID
              )
+    >> collect()
 )
 
 glue("df_tbl_stop_times_output", df_tbl_stop_times)
