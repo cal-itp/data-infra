@@ -14,14 +14,11 @@ import tempfile
 
 # Note that all RT extraction is stored in the prod bucket, since it is very large,
 # but we can still output processed results to the staging bucket
-SRC_PATH = "gs://gtfs-data/rt/"
-DST_PATH = "gs://gtfs-data/rt-processed/"
 
-
-class RealtimeProcessor(BaseOperator):
+class RectangleRealtimeDataOperator(BaseOperator):
+    @apply_defaults
     def __init__(
         self,
-        execution_date,
         header_details,
         entity_details,
         filename_prefix,
@@ -32,22 +29,22 @@ class RealtimeProcessor(BaseOperator):
     ):
         super().__init__(**kwargs)
 
-        self.fs = get_fs()
-        self.iso_date = str(execution_date).split("T")[0]
+        # could not just set self.fs here - ran into this issue: 
+        # https://stackoverflow.com/questions/69532715/google-cloud-functions-using-gcsfs-runtimeerror-this-class-is-not-fork-safe
+        # self.fs = get_fs()
         self.header_details = header_details
         self.entity_details = entity_details
         self.filename_prefix = filename_prefix
         self.rt_file_substring = rt_file_substring
         self.cast = cast
         self.time_float_cast = {col: "float" for col in is_timestamp}
-        self.dst_path = f"{get_bucket()}/rt-processed/" + self.rt_file_substring + "/"
+        self.src_path = f"{get_bucket()}/rt/" 
+        self.dst_path = f"{get_bucket()}/rt-processed/TEST_2022-01-19/" + self.rt_file_substring + "/"
 
-    def parse_pb(self, path):
+    def parse_pb(self, path, open_with = None):
         """
         Convert pb file to Python dictionary
         """
-
-        open_with = self.fs.open
         open_func = open_with if open_with is not None else open
         feed = gtfs_realtime_pb2.FeedMessage()
         try:
@@ -94,13 +91,13 @@ class RealtimeProcessor(BaseOperator):
         else:
             return None
 
-    def fetch_bucket_file_names(self):
+    def fetch_bucket_file_names(self, iso_date):
         # posix_date = str(time.mktime(execution_date.timetuple()))[:6]
-
+        fs = get_fs()
         # get rt files
         print("Globbing rt bucket...")
-        print(SRC_PATH + self.iso_date + "*")
-        rt = self.fs.glob(SRC_PATH + self.iso_date + "*")
+        print(self.src_path + iso_date + "*")
+        rt = fs.glob(self.src_path + iso_date + "*")
 
         buckets_to_parse = len(rt)
         print("Realtime buckets to parse: {i}".format(i=buckets_to_parse))
@@ -108,13 +105,13 @@ class RealtimeProcessor(BaseOperator):
         # organize rt files by itpId_urlNumber
         rt_files = []
         for r in rt:
-            rt_files.append(self.fs.ls(r))
+            rt_files.append(fs.ls(r))
 
         entity_files = [
             item
             for sublist in rt_files
             for item in sublist
-            if self.get_rt_file_substr() in item
+            if self.rt_file_substring in item
         ]
 
         feed_files = defaultdict(lambda: [])
@@ -123,14 +120,19 @@ class RealtimeProcessor(BaseOperator):
             itpId, urlNumber = fname.split("/")[-3:-1]
             feed_files[(itpId, urlNumber)].append(fname)
 
+        # for some reason the fs.glob command takes up a fair amount of memory here,
+        # and does not seem to free it after the function returns, so we manually clear
+        # its caches (at least the ones I could find)
+        fs.dircache.clear()
+
         # Now our feed files dict has a key of itpId_urlNumber and a list of files to
         # parse
         return feed_files
 
-    def get_google_cloud_filename(self, feed):
+    def get_google_cloud_filename(self, feed, iso_date):
         itp_id_url_num = "_".join(map(str, feed))
         prefix = self.filename_prefix
-        return f"{prefix}_{self.iso_date}_{itp_id_url_num}.parquet"
+        return f"{prefix}_{iso_date}_{itp_id_url_num}.parquet"
 
     def cast_entities(self, entities):
         # parse any information provided about fields that need to have dtype changed
@@ -158,33 +160,33 @@ class RealtimeProcessor(BaseOperator):
                 parsed_entity_details.append(e_details)
         return parsed_entity_details
 
-    def execute(self):
+    def execute(self, context):
         """Process a RT feed of the given type
 
         Args:
             rt_type (string): One of "alerts", "trip_updates", "vehicle_positions"
             execution_date (date): The execution date being processed
         """
+        fs = get_fs()
+
+        # get execution_date from context:
+        # https://stackoverflow.com/questions/59982700/airflow-how-can-i-access-execution-date-on-my-custom-operator
+        iso_date = str(context["execution_date"]).split("T")[0]
 
         # fetch files ----
-        # for some reason the fs.glob command takes up a fair amount of memory here,
-        # and does not seem to free it after the function returns, so we manually clear
-        # its caches (at lest the ones I could find)
-        feed_files = self.fetch_bucket_file_names(self.fs)
-        self.fs.dircache.clear()
+        feed_files = self.fetch_bucket_file_names(iso_date)
 
         # parse feeds ----
         for feed, files in feed_files.items():
-            google_cloud_file_name = self.get_google_cloud_filename(feed)
+            google_cloud_file_name = self.get_google_cloud_filename(feed, iso_date)
             print("Creating " + google_cloud_file_name)
             print("  parsing %s files" % len(files))
 
             if len(files) > 0:
                 # fetch and parse RT files from bucket
                 with tempfile.TemporaryDirectory() as tmp_dir:
-                    self.fs.get(files, tmp_dir)
+                    fs.get(files, tmp_dir)
                     all_files = [x for x in Path(tmp_dir).rglob("*") if not x.is_dir()]
-
                     parsed_entities = [self.parse_pb(fn) for fn in all_files]
 
                 # convert protobuff objects to DataFrames
@@ -203,7 +205,7 @@ class RealtimeProcessor(BaseOperator):
                     with tempfile.TemporaryDirectory() as tmpdirname:
                         fname = tmpdirname + "/" + "temporary" + ".parquet"
                         casted.to_parquet(fname, index=False)
-                        self.fs.put(
+                        fs.put(
                             fname,
-                            self.get_dst_path() + google_cloud_file_name,
+                            self.dst_path + google_cloud_file_name,
                         )

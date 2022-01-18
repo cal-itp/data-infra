@@ -1,4 +1,4 @@
-operator: operator.RectangleRealtimeDataOperator
+operator: operators.RectangleRealtimeDataOperator
 provide_context: true
 
 header_details:
@@ -6,11 +6,10 @@ header_details:
 
 entity_details:
   entity_id: id
-  trip_id: trip_update.trip.trip_id
-  trip_schedule_update: trip_update.trip.schedule_relationship
-  trip_vehicle_id: trip_update.vehicle.id
-  trip_timestamp: trip_update.timestamp
-  trip_delay: trip_update.delay
+  trip_id: tripUpdate.trip.tripId
+  trip_vehicle_id: tripUpdate.vehicle.id
+  trip_timestamp: tripUpdate.timestamp
+  trip_delay: tripUpdate.delay
 
 cast: 
   header_timestamp: Int64
@@ -23,7 +22,7 @@ is_timestamp:
   - trip_delay
 
 filename_prefix: tu
-rt_file_substr: trip_updates
+rt_file_substring: trip_updates
 
 dependencies:
   - external_trip_updates
