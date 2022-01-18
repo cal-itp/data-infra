@@ -45,7 +45,7 @@ from siuba import *
 import calitp.magics
 from calitp import query_sql
 
-import geopandas as gpd
+# import geopandas as gpd
 import os
 import pandas as pd
 import shapely
