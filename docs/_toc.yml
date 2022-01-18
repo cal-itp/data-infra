@@ -41,6 +41,7 @@ parts:
         - file: analytics_examples/warehouse_tutorial
         - file: analytics_examples/new_tutorial
         - file: analytics_examples/sample-catalog-viewer
+        - file: analytics_examples/tutorial_test
       - file: analytics_publishing/overview
         sections:
         - file: analytics_publishing/how_to_publish
