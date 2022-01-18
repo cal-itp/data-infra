@@ -49,5 +49,24 @@ df_tbl_stop_times = (
              )
 )
 
-glue("df_tbl_stop_times_output", df_tbl_stop_times)
+df_daily_stops = (
+    tbl.views.gtfs_schedule_fact_daily_trips()
+    >> filter(_.calitp_itp_id == ITP_ID,
+              _.service_date == SELECTED_DATE,
+              _.is_in_service == True)
+    # Join the trip to the stop time
+    # For a given bus route (left df), attach all the stops (right df)
+    >> left_join(_, tbl_stop_times,
+              # also added url number to the join keys ----
+             ["calitp_itp_id", "calitp_url_number", "trip_id"])
+    >> inner_join(_, tbl.views.gtfs_schedule_dim_stops(),
+                 ["calitp_itp_id", "stop_id"])
+    >> select(_.itp_id == _.calitp_itp_id,
+              _.date == _.service_date,
+              _.trip_key, _.trip_id, _.stop_id, _.arrival_time,
+              _.stop_lat, _.stop_lon, _.stop_name,
+             )
+    )
+
+glue("df_df_daily_stops_output", df_daily_stops)
 ```
