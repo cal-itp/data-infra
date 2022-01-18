@@ -1,4 +1,4 @@
-operator: operator.RectangleRealtimeDataOperator
+operator: operators.RectangleRealtimeDataOperator
 provide_context: true
 
 header_details:
@@ -23,7 +23,7 @@ is_timestamp:
   - vehicle_timestamp
 
 filename_prefix: rt
-rt_file_substr: vehicle_positions
+rt_file_substring: vehicle_positions
 
 dependencies:
   - external_vehicle_positions

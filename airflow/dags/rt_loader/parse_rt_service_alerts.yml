@@ -1,4 +1,4 @@
-operator: operator.RectangleRealtimeDataOperator
+operator: operators.RectangleRealtimeDataOperator
 provide_context: true
 
 header_details:
@@ -6,20 +6,14 @@ header_details:
 
 entity_details:
   entity_id: id
-  start_time: alert.active_period.start
-  end_time: alert.active_period.end
 
 cast: 
   header_timestamp: Int64
-  start_time: Int64
-  end_time: Int64
-
+  
 is_timestamp:
   - header_timestamp
-  - start_time
-  - end_time
 
 filename_prefix: al
-rt_file_substr: service_alerts
+rt_file_substring: service_alerts
 dependencies:
   - external_service_alerts
