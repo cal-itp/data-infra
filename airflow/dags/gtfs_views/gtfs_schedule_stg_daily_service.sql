@@ -56,6 +56,8 @@ WITH
       , calitp_url_number
       , service_id
       , service_date
+      , calitp_extracted_at
+      , calitp_deleted_at
       , TRUE AS service_inclusion
     FROM cal_dates_daily
     WHERE cal_dates_daily.exception_type = "1"
@@ -68,6 +70,8 @@ WITH
       , calitp_url_number
       , service_id
       , service_date
+      , calitp_extracted_at
+      , calitp_deleted_at
       , TRUE AS service_exclusion
     FROM cal_dates_daily
     WHERE cal_dates_daily.exception_type = "2"
@@ -99,7 +103,7 @@ SELECT
       OR COALESCE(service_inclusion, FALSE)
       AS is_in_service
 FROM calendar_daily
-FULL JOIN date_include USING(calitp_itp_id, calitp_url_number, service_id, service_date)
-FULL JOIN date_exclude USING(calitp_itp_id, calitp_url_number, service_id, service_date)
+FULL JOIN date_include USING(calitp_itp_id, calitp_url_number, service_id, service_date, calitp_extracted_at, calitp_deleted_at)
+FULL JOIN date_exclude USING(calitp_itp_id, calitp_url_number, service_id, service_date, calitp_extracted_at, calitp_deleted_at)
 # TODO: remove hardcoding--set this to be 1 month in the future, etc..
 WHERE service_date < DATE_ADD(CURRENT_DATE(), INTERVAL 1 YEAR)
