@@ -682,7 +682,6 @@ Description
 
 
 ```{code-cell}
-:tags: [remove-cell]
 ## Get trips for operator for one day and join with stop times for all trips
 
 # Grab the stop times for a given date for just 1 agency
