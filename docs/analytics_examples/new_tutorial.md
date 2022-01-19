@@ -22,7 +22,7 @@ import os
 import pandas as pd
 import shapely
 
-os.environ["CALITP_BQ_MAX_BYTES"] = str(50_000_000_000)
+os.environ["CALITP_BQ_MAX_BYTES"] = str(500_000_000_000)
 
 import calitp
 from calitp.tables import tbl
@@ -66,7 +66,6 @@ siuba_daily_stops = (
               _.trip_key, _.trip_id, _.stop_id, _.arrival_time,
               _.stop_lat, _.stop_lon, _.stop_name,
              )
-    >> collect()
     )
 
 glue("siuba_daily_stops_output", siuba_daily_stops)
@@ -119,7 +118,7 @@ stop_lat,
 stop_lon,
 stop_name
 FROM
-stops_table
+stops_table""", as_df=True)
 glue("sql_stops_table_output", sql_stops_table)
 ```
 
