@@ -11,9 +11,6 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
-jupyter:
-  nbsphinx:
-    orphan: true
 ---
 
 # Tutorial Test

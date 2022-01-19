@@ -4,7 +4,7 @@
 title: Cal-ITP Data Services
 author: Cal-ITP
 logo: calitp_logo_MAIN.png
-only_build_toc_files        : false
+only_build_toc_files: false
 
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
@@ -14,6 +14,7 @@ execute:
   timeout: -1
 
 #exclude_patterns: [analytics_examples/tutorial_test.md]
+
 # Define the name of the latex output file for PDF builds
 latex:
   latex_documents:
