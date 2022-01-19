@@ -15,8 +15,7 @@ kernelspec:
 
 # Tutorial Test
 
-```{code-cell}
-:tags: [remove-cell]
+```python
 # import geopandas as gpd
 import os
 import pandas as pd
@@ -37,7 +36,7 @@ import calitp.magics
 ```
 
 
-```{code-cell}
+```python
 ## Get trips for operator for one day and join with stop times for all trips
 
 # Grab the stop times for a given date for just 1 agency
@@ -68,5 +67,5 @@ df_daily_stops = (
              )
     )
 
-glue("df_daily_stops_output", df_daily_stops)
+#glue("df_daily_stops_output", df_daily_stops)
 ```

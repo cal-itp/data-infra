@@ -681,7 +681,8 @@ from siuba import *
 Description
 
 
-```python
+```{code-cell}
+:tags: [remove-cell]
 ## Get trips for operator for one day and join with stop times for all trips
 
 # Grab the stop times for a given date for just 1 agency
@@ -712,6 +713,8 @@ df_daily_stops = (
               _.stop_lat, _.stop_lon, _.stop_name,
              )
     )
+
+glue("df_daily_stops_output", df_daily_stops)
 ```
 
 
