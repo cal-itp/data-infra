@@ -2,6 +2,9 @@ import os
 import sys
 import time
 import datetime
+from google.auth.transport.requests import AuthorizedSession
+from google.cloud import storage
+from google.oauth2 import service_account
 import logging
 import pathlib
 import threading
@@ -13,17 +16,30 @@ import urllib.parse
 
 
 class Runner:
-    def __init__(self, logger, evtbus, wq):
+    def __init__(self, logger, evtbus, wq, secret):
         self.logger = logger
         self.evtbus = evtbus
         self.wq = wq
+        self.secret = secret
         self.fetchers = []
         self.feeds = []
 
+        if self.secret:
+            scopes = ["https://www.googleapis.com/auth/devstorage.read_write"]
+            credentials = service_account.Credentials.from_service_account_file(
+                secret, scopes=scopes
+            )
+            self.storage_client = storage.Client(credentials=credentials)
+
         self.agencies_path = os.getenv("CALITP_AGENCIES_YML", "agencies.yml")
         self.headers_path = os.getenv("CALITP_HEADERS_YML", "headers.yml")
-        self.feeds_src = pathlib.Path(self.agencies_path)
-        self.headers_src = pathlib.Path(self.headers_path)
+        if self.agencies_path.startswith("gs://") or self.headers_path.startswith(
+            "gs://"
+        ):
+            if not self.secret:
+                raise ValueError(
+                    "In order to use google storage, a secert must be specified."
+                )
 
     def tick(self):
         self.headers = self.parse_headers()
@@ -45,13 +61,28 @@ class Runner:
             fetcher.start()
             self.fetchers.append(fetcher)
 
+    def get_file(self, path):
+        if path.startswith("gs://"):
+            # if path is from google cloud storage, path is directory
+            # return latest file in path
+            parse_result = urllib.parse.urlparse(path)
+            bucket_name = parse_result.netloc
+            prefix = parse_result.path
+            while prefix.startswith("/"):
+                prefix = prefix[1:]
+            blobs = list(self.storage_client.list_blobs(bucket_name, prefix=prefix))
+
+            # blobs are named %Y-%m-%d-%H:%M so the last one by name is the newest
+            blob = sorted(blobs, key=lambda b: b.name)[-1]
+            return blob.download_as_text()
+        with open(path, "r") as f:
+            return f.read()
+
     def get_headers_yml(self):
-        with self.headers_src.open() as f:
-            return yaml.load(f, Loader=yaml.SafeLoader)
+        return yaml.load(self.get_file(self.headers_path), Loader=yaml.SafeLoader)
 
     def get_agencies_yml(self):
-        with self.feeds_src.open() as f:
-            return yaml.load(f, Loader=yaml.SafeLoader)
+        return yaml.load(self.get_file(self.agencies_path), Loader=yaml.SafeLoader)
 
     def parse_headers(self):
 
@@ -163,7 +194,7 @@ def main(argv):
         writer = FSWriter(logger, wq, "file:///dev/null")
 
     # Run
-    ticker.runner = Runner(logger, evtbus, wq)
+    ticker.runner = Runner(logger, evtbus, wq, secret)
     writer.start()
     ticker.start()
     ticker.join()
@@ -354,8 +385,6 @@ class GCPBucketWriter(BaseWriter):
         self.session = None
 
         if self.secret is not None:
-            from google.oauth2 import service_account
-            from google.auth.transport.requests import AuthorizedSession
             from google.auth.exceptions import TransportError
 
             scopes = ["https://www.googleapis.com/auth/devstorage.read_write"]

@@ -80,9 +80,11 @@ jobs:
         # replace agencies.yml with filled in template for airflow
         gsutil -m cp airflow/data/agencies.yml gs://$AIRFLOW_BUCKET/data/agencies_raw.yml
         gsutil -m cp airflow/data/agencies.filled.yml gs://$AIRFLOW_BUCKET/data/agencies.yml
+        gsutil -m cp airflow/data/agencies.filled.yml gs://$PROD_BUCKET/rt-agencies/$DATE_agencies.yml
         # replace headers.yml with filled in template for airflow
         gsutil -m cp airflow/data/headers.yml gs://$AIRFLOW_BUCKET/data/headers_raw.yml
         gsutil -m cp airflow/data/headers.filled.yml gs://$AIRFLOW_BUCKET/data/headers.yml
+        gsutil -m cp airflow/data/headers.filled.yml gs://$PROD_BUCKET/rt-headers/$DATE_headers.yml
 
         kubectl apply -f - <<EOF
         apiVersion: v1
@@ -97,11 +99,16 @@ jobs:
         kubectl -n gtfs-rt rollout restart deployments/gtfs-rt-archive
       env:
         AIRFLOW_BUCKET: "us-west2-calitp-airflow2-pr-171e4e47-bucket"
+        DATE: "$(date +'%Y-%m-%d-%H:%M')"
+        PROD_BUCKET: "gtfs-data"
 
     # push to preprod services when merging to other branches
     - name: Push agencies data to preprod services
       if: ${{ github.repository == 'cal-itp/data-infra' && github.ref != 'refs/heads/main' }}
       run: |
+        gsutil -m cp airflow/data/agencies.filled.yml gs://$PREPROD_BUCKET/rt-agencies/$DATE_agencies.yml
+        gsutil -m cp airflow/data/headers.filled.yml gs://$PREPROD_BUCKET/rt-headers/$DATE_headers.yml
+
         kubectl apply -f - <<EOF
         apiVersion: v1
         kind: Secret
@@ -113,3 +120,6 @@ jobs:
           data_headers.yaml: $(base64 -w0 airflow/data/headers.filled.yml)
         EOF
         kubectl -n gtfs-rt-preprod rollout restart deployments/gtfs-rt-archive
+      env:
+        DATE: "$(date +'%Y-%m-%d-%H:%M')"
+        PREPROD_BUCKET: "gtfs-data-test"
