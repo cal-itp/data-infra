@@ -17,6 +17,10 @@ kernelspec:
 ## Python Libraries to Import
 
 ```{code-cell}
+from myst_nb import glue
+import calitp.magics
+from calitp import query_sql
+
 import geopandas as gpd
 import os
 import pandas as pd
