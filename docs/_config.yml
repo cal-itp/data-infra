@@ -4,7 +4,7 @@
 title: Cal-ITP Data Services
 author: Cal-ITP
 logo: calitp_logo_MAIN.png
-only_build_toc_files: false
+#only_build_toc_files: false
 
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
