@@ -39,7 +39,6 @@ parts:
       - file: analytics_examples/overview
         sections:
         - file: analytics_examples/warehouse_tutorial
-        - file: analytics_examples/new_tutorial
         - file: analytics_examples/sample-catalog-viewer
       - file: analytics_publishing/overview
         sections:

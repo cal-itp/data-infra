@@ -12,14 +12,7 @@ kernelspec:
   language: python
   name: python3
 ---
-# More Complex Queries
-
-## Introduction
-
-The queries represented in the following tutorial are as follows:
-* [**All the Stops and Arrival Times for an Operator on a Given Day**](stop-arrivals-operator)
-* [**Assemble a Route Shapefile**](#assemble-a-route-shapefile)
-* [**Filter with Lists and Unpacking**](#filter-with-lists-and-unpacking)
+# File for Glue
 
 ## Python Libraries to Import
 
@@ -41,17 +34,7 @@ SELECTED_DATE = "2021-09-01"
 ITP_ID = 278 # San Diego Metropolitan Transit System
 ```
 
-(stop-arrivals-operator)=
-### All the Stops and Arrival Times for an Operator on a Given Day
-
-As a simple example, we will filter to just the San Diego Metropolitan Transit System and grab 1 day's worth of data. We want all the trips, stops, arrival times, and stop geometry (lat/lon).
-
-Tables used:
-1. `views.gtfs_schedule_dim_stop_times`: all stop arrival times for all operators, need to subset to particular date
-1. `views.gtfs_schedule_fact_daily_trips`: all trips for all operators, need to subset to particular date
-1. `views.gtfs_schedule_dim_stops`: lat/lon for all stops, need to subset to interested stops
-
-Here, all the trips for one operator, for a particular day, is joined with all the stops that occur on all the trips. Then, the stops have their lat/lon information attached.
+### 1. All the Stops and Arrival Times for an Operator on a Given Day
 
 ```{code-cell}
 ## Get trips for operator for one day and join with stop times for all trips
@@ -66,7 +49,7 @@ tbl_stop_times = (
 )
 
 # Grab the trips done on that day, for that agency
-daily_stops = (
+siuba_daily_stops = (
     tbl.views.gtfs_schedule_fact_daily_trips()
     >> filter(_.calitp_itp_id == ITP_ID,
               _.service_date == SELECTED_DATE,
@@ -86,15 +69,61 @@ daily_stops = (
     >> collect()
     )
 
-daily_stops.head()
+glue("siuba_daily_stops_output", siuba_daily_stops)
 ```
 
-### Assemble a Route Shapefile
+```{code-cell}
+:tags: [remove-cell]
+sql_stops_table = query_sql("""
+WITH
+  tbl_stop_times AS (
+  SELECT
+    *
+  FROM
+    `views.gtfs_schedule_dim_stop_times`
+  WHERE
+    `calitp_extracted_at` <= '2021-09-01'
+    AND `calitp_deleted_at` > '2021-09-01'
+    AND `calitp_itp_id` = 278),
 
-Transit stops are given as lat/lon (point geometry), but what if we want to get the line geometry? We will demonstrate on one route for San Diego Metropolitan Transit System.
+trips_table AS (
+SELECT
+  *
+FROM
+  `views.gtfs_schedule_fact_daily_trips` AS table1
+LEFT JOIN
+  tbl_stop_times AS table2
+USING (calitp_itp_id, calitp_url_number, trip_id)
+WHERE
+  `calitp_itp_id` = 278
+  AND `service_date` = '2021-09-01'),
 
-Tables used:
-1. `gtfs_schedule.shapes`: stops with stop sequence, lat/lon, and associated `shape_id`
+stops_table AS (
+SELECT
+*
+FROM
+trips_table AS table3
+INNER JOIN
+`views.gtfs_schedule_dim_stops`
+USING (calitp_itp_id, stop_id)
+)
+
+SELECT
+calitp_itp_id,
+service_date,
+trip_key,
+trip_id,
+stop_id,
+arrival_time,
+stop_lat,
+stop_lon,
+stop_name
+FROM
+stops_table
+glue("sql_stops_table_output", sql_stops_table)
+```
+
+### 2. Assemble a Route Shapefile
 
 ```{code-cell}
 # Grab the shapes for this operator
@@ -133,21 +162,13 @@ single_route = (single_shape
 single_route['geometry'] = route_line
 
 # Convert to gdf
-single_route = gpd.GeoDataFrame(single_route, crs="EPSG:4326")
+siuba_single_route = gpd.GeoDataFrame(single_route, crs="EPSG:4326")
 
-single_route
+
+glue("single_route_output", siuba_single_route)
 ```
 
-### Filter with Lists and Unpacking
-
-Queries can use the `isin` and take lists, as well as unpack lists. This nifty trick can keep the code clean.
-
-Tables used:
-1. `view.transitstacks`: some NTD related data, with each row being an operator
-1. `gtfs_schedule_fact_daily_feed_stops`: stops associated with daily feed, subset to a particular date
-1. `views.gtfs_schedule_dim_stops`: lat/lon for all stops, need to subset to interested stops
-
-Here, the `transitstacks` table is filtered down to interested counties and certain columns. Using `isin` and unpacking a list (asterisk) is a quick way to do this.
+### 3. Filter with Lists and Unpacking
 
 ```{code-cell}
 # Subset to counties of interest
@@ -181,7 +202,7 @@ Next, we can query the `gtfs_schedule_fat_daily_feed_stops` to grab the stops fo
 
 ```{code-cell}
 # Grab stops for that day
-lossan_stops = (tbl.views.gtfs_schedule_fact_daily_feed_stops()
+siuba_lossan_stops = (tbl.views.gtfs_schedule_fact_daily_feed_stops()
                 >> filter(_.date == SELECTED_DATE)
                 >> select(_.stop_key, _.date)
                 # Merge with stop geom using stop_key
@@ -197,5 +218,5 @@ lossan_stops = (tbl.views.gtfs_schedule_fact_daily_feed_stops()
                 >> arrange(_.calitp_itp_id, _.stop_id)
                ).reset_index(drop=True)
 
-lossan_stops.head()
+glue("siuba_lossan_stops_output", siuba_lossan_stops)
 ```
