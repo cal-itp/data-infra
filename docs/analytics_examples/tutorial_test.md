@@ -37,10 +37,10 @@ import calitp.magics
 
 
 ```python
-## Get trips for operator for one day and join with stop times for all trips
+# Get trips for operator for one day and join with stop times for all trips
 
 # Grab the stop times for a given date for just 1 agency
-#tbl_stop_times = (
+# tbl_stop_times = (
     tbl.views.gtfs_schedule_dim_stop_times()
     >> filter(_.calitp_extracted_at <= SELECTED_DATE,
               _.calitp_deleted_at > SELECTED_DATE,
@@ -48,7 +48,7 @@ import calitp.magics
              )
 )
 
-#df_daily_stops = (
+# df_daily_stops = (
     tbl.views.gtfs_schedule_fact_daily_trips()
     >> filter(_.calitp_itp_id == ITP_ID,
               _.service_date == SELECTED_DATE,
@@ -67,5 +67,5 @@ import calitp.magics
              )
     )
 
-#glue("df_daily_stops_output", df_daily_stops)
+# glue("df_daily_stops_output", df_daily_stops)
 ```
