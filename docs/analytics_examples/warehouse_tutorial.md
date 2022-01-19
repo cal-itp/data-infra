@@ -789,8 +789,6 @@ stop_name
 FROM
 stops_table
 ```
-```{glue:figure} sql_stops_table_output
-```
 ````
 ### 2. Assemble a Route Shapefile
 

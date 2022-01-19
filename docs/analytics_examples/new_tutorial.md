@@ -75,7 +75,7 @@ siuba_daily_stops = (
 glue("siuba_daily_stops_output", siuba_daily_stops)
 ```
 
-```{code-cell}
+```python
 :tags: [remove-cell]
 sql_stops_table = query_sql("""
 WITH
