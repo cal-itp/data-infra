@@ -35,8 +35,8 @@ jobs:
         export_default_credentials: true
 
     - name: Build docs
-#      run: jb build docs --warningiserror --keep-going
-      run: jb build docs --keep-going
+      run: jb build docs --warningiserror --keep-going
+#      run: jb build docs --keep-going
       # set doc to fail on any sphinx warning
 
     - name: Save docs as artifact
