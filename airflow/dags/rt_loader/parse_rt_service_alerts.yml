@@ -7,9 +7,9 @@ header_details:
 entity_details:
   entity_id: id
 
-cast: 
+cast:
   header_timestamp: Int64
-  
+
 is_timestamp:
   - header_timestamp
 
