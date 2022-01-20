@@ -11,7 +11,7 @@ entity_details:
   trip_timestamp: tripUpdate.timestamp
   trip_delay: tripUpdate.delay
 
-cast: 
+cast:
   header_timestamp: Int64
   trip_timestamp: Int64
   trip_delay: Int32

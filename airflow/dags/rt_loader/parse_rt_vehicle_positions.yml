@@ -18,7 +18,7 @@ cast:
   vehicle_position_latitude: float
   vehicle_position_longitude: float
 
-is_timestamp: 
+is_timestamp:
   - header_timestamp
   - vehicle_timestamp
 

@@ -1,4 +1,3 @@
-from fileinput import filename
 from airflow.models import BaseOperator
 from airflow.utils.decorators import apply_defaults
 from google.transit import gtfs_realtime_pb2
@@ -15,6 +14,7 @@ import tempfile
 # Note that all RT extraction is stored in the prod bucket, since it is very large,
 # but we can still output processed results to the staging bucket
 
+
 class RectangleRealtimeDataOperator(BaseOperator):
     @apply_defaults
     def __init__(
@@ -29,7 +29,7 @@ class RectangleRealtimeDataOperator(BaseOperator):
     ):
         super().__init__(**kwargs)
 
-        # could not just set self.fs here - ran into this issue: 
+        # could not just set self.fs here - ran into this issue:
         # https://stackoverflow.com/questions/69532715/google-cloud-functions-using-gcsfs-runtimeerror-this-class-is-not-fork-safe
         # self.fs = get_fs()
         self.header_details = header_details
@@ -38,10 +38,14 @@ class RectangleRealtimeDataOperator(BaseOperator):
         self.rt_file_substring = rt_file_substring
         self.cast = cast
         self.time_float_cast = {col: "float" for col in is_timestamp}
-        self.src_path = f"{get_bucket()}/rt/" 
-        self.dst_path = f"{get_bucket()}/rt-processed/TEST_2022-01-19/" + self.rt_file_substring + "/"
+        self.src_path = f"{get_bucket()}/rt/"
+        self.dst_path = (
+            f"{get_bucket()}/rt-processed/TEST_2022-01-19/"
+            + self.rt_file_substring
+            + "/"
+        )
 
-    def parse_pb(self, path, open_with = None):
+    def parse_pb(self, path, open_with=None):
         """
         Convert pb file to Python dictionary
         """
@@ -206,6 +210,5 @@ class RectangleRealtimeDataOperator(BaseOperator):
                         fname = tmpdirname + "/" + "temporary" + ".parquet"
                         casted.to_parquet(fname, index=False)
                         fs.put(
-                            fname,
-                            self.dst_path + google_cloud_file_name,
+                            fname, self.dst_path + google_cloud_file_name,
                         )
