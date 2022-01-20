@@ -1,0 +1,48 @@
+import threading
+import queue
+import urllib.request
+import urllib.error
+
+class Fetcher(threading.Thread):
+    def __init__(self, logger, evtbus, wq, urldef):
+
+        super().__init__()
+
+        self.logger = logger
+        self.evtbus = evtbus
+        self.wq = wq
+        self.urldef = urldef
+        self.name = "fetcher {}".format(urldef[0])
+        self.evtq = queue.Queue()
+
+    def fetch(self):
+        url = self.urldef[1]
+        headers = self.urldef[2]
+        try:
+            request = urllib.request.Request(url)
+            for key, value in headers.items():
+                request.add_header(key, value)
+            return urllib.request.urlopen(request)
+        except (urllib.error.URLError, urllib.error.HTTPError) as e:
+            self.logger.info(
+                "{} {}: error fetching url {}: {}".format(
+                    self.name, len(headers), url, e
+                )
+            )
+
+    def run(self):
+
+        self.evtbus.add_listener(self.name, "tick", self.evtq)
+
+        evt = self.evtq.get()
+        while evt is not None:
+
+            evt_name = evt[0]
+            if evt_name == "tick":
+                rs = self.fetch()
+                if hasattr(rs, "read"):
+                    self.wq.put({"evt": evt, "urldef": self.urldef, "data": rs})
+
+            evt = self.evtq.get()
+
+        self.logger.debug("{}: finalized".format(self.name))
