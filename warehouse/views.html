@@ -668,19 +668,23 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>CsvToWarehouseOperator</p></td>
+<tr class="row-even"><td><p>AirtableToWarehouseOperator</p></td>
+<td><p>Extract the contents of a table in Airtable into a new Big Query dataset and optionally also archiving as a CSV in Google Cloud Storage.</p></td>
+<td><p>(<a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/airflow/dags/sandbox/op_airflow_to_warehouse.yml">https://github.com/cal-itp/data-infra/blob/main/airflow/dags/sandbox/op_airflow_to_warehouse.yml</a>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>CsvToWarehouseOperator</p></td>
 <td><p>Load a CSV (or google sheet) from a URL</p></td>
 <td><p><a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/airflow/dags/transitstacks_loader/fares.yml"><code class="docutils literal notranslate"><span class="pre">transitstacks.fares</span></code></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>PythonToWarehouseOperator</p></td>
+<tr class="row-even"><td><p>PythonToWarehouseOperator</p></td>
 <td><p>Load data using python and the calitp library. This is a very flexible approach. It’s useful when you want to do a small amount of processing before loading.</p></td>
 <td><p><a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/airflow/dags/gtfs_views/validation_code_descriptions.py"><code class="docutils literal notranslate"><span class="pre">views.validation_code_descriptions</span></code></a></p></td>
 </tr>
-<tr class="row-even"><td><p>SqlToWarehouseOperator</p></td>
+<tr class="row-odd"><td><p>SqlToWarehouseOperator</p></td>
 <td><p>Create a new table from a SQL query.</p></td>
 <td><p><a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/airflow/dags/gtfs_views/gtfs_schedule_fact_daily_stops.sql"><code class="docutils literal notranslate"><span class="pre">views.gtfs_schedule_fact_daily_stops</span></code></a></p></td>
 </tr>
-<tr class="row-odd"><td><p>SqlQueryOperator</p></td>
+<tr class="row-even"><td><p>SqlQueryOperator</p></td>
 <td><p>Run arbitrary SQL (e.g. <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">EXTERNAL</span> <span class="pre">TABLE</span> <span class="pre">...</span></code>)</p></td>
 <td><p></p></td>
 </tr>
@@ -688,12 +692,12 @@
 </table>
 <div class="section" id="syntax-overview">
 <h2>Syntax overview<a class="headerlink" href="#syntax-overview" title="Permalink to this headline">¶</a></h2>
-<p>Below is a file similar to the one used to create <code class="docutils literal notranslate"><span class="pre">views.transitstacks</span></code>.</p>
+<p>Below is an example file for the SqlToWarehouseOperator that uses gusty syntax. This file is similar to the one used to create <code class="docutils literal notranslate"><span class="pre">views.transitstacks</span></code>. A number of other operators have variations on this that is currently best learned about by either looking at examples or the underlying operator source code.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># What operator to use. This determines the options available, and how the</span><span class="w"></span>
 <span class="c1"># pipeline executes this task.</span><span class="w"></span>
 <span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">operators.SqlToWarehouseOperator</span><span class="w"></span>
 
-<span class="c1"># Name of the table to load into the warehouse</span><span class="w"></span>
+<span class="c1"># Name of the table to load into the warehouse. For some operators this might be `table_name`.</span><span class="w"></span>
 <span class="nt">dst_table_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;views.dim_date&quot;</span><span class="w"></span>
 
 <span class="c1"># Column descriptions to put into warehouse</span><span class="w"></span>
