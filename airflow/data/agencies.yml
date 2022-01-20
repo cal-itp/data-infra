@@ -1111,7 +1111,7 @@ san-joaquin-regional-transit-district:
   feeds:
     - gtfs_schedule_url: http://sanjoaquinrtd.com/RTD-GTFS/RTD-GTFS.zip
       gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/san-joaquin/gtfs-rt-vehicle-positions
-      gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/san-joaquin/gtfs-rt-alerts
+      gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/san-joaquin/gtfs-rt-trip-updates
   itp_id: 284
 san-juan-capistrano-free-weekend-trolley:
