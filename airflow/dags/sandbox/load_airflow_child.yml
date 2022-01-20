@@ -1,0 +1,11 @@
+operator: operators.AirtableToWarehouseOperator
+
+air_base_id: apphcwzP8cR82NeJo
+air_table_name: child
+table_name: sandbox.airtable_child
+
+id_name: "child_id"
+column_prefix: "child_"
+
+dependencies:
+  - op_airflow_to_warehouse

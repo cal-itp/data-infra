@@ -2,6 +2,7 @@
 
 | operator | description | example |
 | -------- | ----------- | ------- |
+| AirtableToWarehouseOperator | Extract the contents of a table in Airtable into a new Big Query dataset and optionally also archiving as a CSV in Google Cloud Storage. | (https://github.com/cal-itp/data-infra/blob/main/airflow/dags/sandbox/op_airflow_to_warehouse.yml) |
 | CsvToWarehouseOperator  | Load a CSV (or google sheet) from a URL | [`transitstacks.fares`](https://github.com/cal-itp/data-infra/blob/main/airflow/dags/transitstacks_loader/fares.yml) |
 | PythonToWarehouseOperator | Load data using python and the calitp library. This is a very flexible approach. It's useful when you want to do a small amount of processing before loading. | [`views.validation_code_descriptions`](https://github.com/cal-itp/data-infra/blob/main/airflow/dags/gtfs_views/validation_code_descriptions.py) |
 | SqlToWarehouseOperator | Create a new table from a SQL query. | [`views.gtfs_schedule_fact_daily_stops`](https://github.com/cal-itp/data-infra/blob/main/airflow/dags/gtfs_views/gtfs_schedule_fact_daily_stops.sql) |
@@ -9,14 +10,14 @@
 
 ## Syntax overview
 
-Below is a file similar to the one used to create `views.transitstacks`.
+Below is an example file for the SqlToWarehouseOperator that uses gusty syntax. This file is similar to the one used to create `views.transitstacks`. A number of other operators have variations on this that is currently best learned about by either looking at examples or the underlying operator source code.
 
 ```yaml
 # What operator to use. This determines the options available, and how the
 # pipeline executes this task.
 operator: operators.SqlToWarehouseOperator
 
-# Name of the table to load into the warehouse
+# Name of the table to load into the warehouse. For some operators this might be `table_name`.
 dst_table_name: "views.dim_date"
 
 # Column descriptions to put into warehouse
