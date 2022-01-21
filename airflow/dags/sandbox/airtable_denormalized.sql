@@ -4,7 +4,7 @@ operator: operators.SqlToWarehouseOperator
 dst_table_name: sandbox.airtable_denormalized
 
 dependencies:
-  - load_airflow_child
+  - load_airtable_child
 ---
 
 WITH

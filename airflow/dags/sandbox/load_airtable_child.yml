@@ -8,4 +8,4 @@ id_name: "child_id"
 column_prefix: "child_"
 
 dependencies:
-  - op_airflow_to_warehouse
+  - op_airtable_to_warehouse

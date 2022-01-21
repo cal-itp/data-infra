@@ -56,7 +56,7 @@ x-airflow-common:
     CALITP_BQ_MAX_BYTES: 10000000000
 
     # API keys
-    CALITP_AIRTABLE_API_KEY: "${CALITP_AIRFLOW_API_KEY}"
+    CALITP_AIRTABLE_API_KEY: "${CALITP_AIRTABLE_API_KEY}"
 
     # bucket for holding results of extraction tasks
     AIRFLOW_VAR_EXTRACT_BUCKET: "gs://gtfs-data-test"
