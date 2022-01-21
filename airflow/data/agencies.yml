@@ -1090,9 +1090,9 @@ san-diego-metropolitan-transit-system:
   agency_name: San Diego Metropolitan Transit System
   feeds:
     - gtfs_schedule_url: https://www.sdmts.com/google_transit_files/google_transit.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://realtime.sdmts.com/api/api/gtfs_realtime/vehicle-positions-for-agency/MTS.pb?key={{ MTS_API_KEY}}
+      gtfs_rt_service_alerts_url: http://app.mecatran.com/utw/ws/gtfsfeed/alerts/sdmts?apiKey=78161d20210d221e242d3f62056b1e764469525a
+      gtfs_rt_trip_updates_url: https://realtime.sdmts.com/api/api/gtfs_realtime/trip-updates-for-agency/MTS.pb?key={{ MTS_API_KEY}}
   itp_id: 278
 san-francisco-bay-ferry:
   agency_name: San Francisco Bay Ferry
