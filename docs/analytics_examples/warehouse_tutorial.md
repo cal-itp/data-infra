@@ -734,7 +734,6 @@ a = (
               _.trip_key, _.trip_id, _.stop_id, _.arrival_time,
               _.stop_lat, _.stop_lon, _.stop_name,
              )
-    >> collect()
     )
 
 daily_stops.head()
