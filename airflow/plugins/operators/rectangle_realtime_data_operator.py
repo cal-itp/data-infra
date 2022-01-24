@@ -40,7 +40,7 @@ class RectangleRealtimeDataOperator(BaseOperator):
         self.time_float_cast = {col: "float" for col in is_timestamp}
         self.src_path = f"{get_bucket()}/rt/"
         self.dst_path = (
-            f"{get_bucket()}/rt-processed/TEST_2022-01-19/"
+            f"{get_bucket()}/rt-processed_test_2022-01-24/"
             + self.rt_file_substring
             + "/"
         )
@@ -191,11 +191,16 @@ class RectangleRealtimeDataOperator(BaseOperator):
                 with tempfile.TemporaryDirectory() as tmp_dir:
                     fs.get(files, tmp_dir)
                     all_files = [x for x in Path(tmp_dir).rglob("*") if not x.is_dir()]
-                    parsed_entities = [self.parse_pb(fn) for fn in all_files]
 
-                # convert protobuff objects to DataFrames
-                entities_dfs = [*map(self.rectangle_entities, parsed_entities)]
-                entities_dfs = [df for df in entities_dfs if df is not None]
+                    entities_dfs = []
+                    for fname in all_files:
+                        # convert protobuff objects to DataFrames
+                        rectangle = self.rectangle_entities(
+                            self.parse_pb(fname, open_with=open)
+                        )
+                        # append results that were parseable and non-empty
+                        if rectangle is not None:
+                            entities_dfs.append(rectangle)
 
                 print("  %s entities sub dataframes created" % len(entities_dfs))
                 if len(entities_dfs) > 0:
