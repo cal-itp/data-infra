@@ -30,8 +30,9 @@ jupyterhub:
             - >
               cp /tmp/custom.sh /home/jovyan/.profile;
   scheduling:
-    userScheduler:
-      enabled: false
+    userPods:
+      nodeAffinity:
+        matchNodePurpose: require
   hub:
     db:
       pvc:
