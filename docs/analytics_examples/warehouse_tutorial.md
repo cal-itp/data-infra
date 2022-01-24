@@ -702,7 +702,7 @@ Tables used:
 
 Here, all the trips for one operator, for a particular day, are joined with all the stops that occur on all the trips. Then, the stops have their lat/lon information attached.
 
-````{tabbed} siuba
+````{tabbed} siubA
 ```python
 ## Get trips for operator for one day and join with stop times for all trips
 
