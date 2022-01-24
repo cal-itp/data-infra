@@ -5,10 +5,12 @@ import pathlib
 import queue
 import yaml
 from .threads.ticker import Ticker
-from .threads.fetcher import Fetcher
+from .threads.fetcher import PoolFetcher
 from .threads.writer import FSWriter, GCPBucketWriter
+from .threads.datacontainer import DataContainer
 from .eventbus import EventBus
-
+from .threadpool import ThreadPool
+from .parsers import parse_agencies_urls, parse_headers
 
 def main(argv):
 
@@ -61,22 +63,22 @@ def main(argv):
     if not data_dest:
         data_dest = "file:///dev/null"
 
-    # Load data
-
-    headers = parse_headers(logger, headers_path)
-    feeds = parse_feeds(logger, agencies_path, headers)
-
     # Instantiate threads
 
-    wq = queue.Queue()
+    qmap = { 'write': queue.Queue() }
     evtbus = EventBus(logger)
+    threadcfg_map = {
+      'agencies': DataContainer(logger, evtbus, agencies_path, parse_agencies_urls),
+      'headers': DataContainer(logger, evtbus, headers_path, parse_headers)
+    }
+    pool = ThreadPool(logger, evtbus, qmap, PoolFetcher, threadcfg_map)
     ticker = Ticker(logger, evtbus, tickint)
     writer = None
 
     for scheme in backends_table:
         if data_dest.startswith(scheme):
             writercls = backends_table[scheme]
-            writer = writercls(logger, wq, data_dest, secret)
+            writer = writercls(logger, qmap['write'], data_dest, secret)
             break
 
     if writer is None:
@@ -84,72 +86,13 @@ def main(argv):
             "unsupported CALITP_DATA_DEST: "
             "{}: using default value file:///dev/null".format(data_dest)
         )
-        writer = FSWriter(logger, wq, "file:///dev/null")
-
-    fetchers = []
-    for feed in feeds:
-        fetchers.append(Fetcher(logger, evtbus, wq, feed))
+        writer = FSWriter(logger, qmap['write'], "file:///dev/null")
 
     # Run
 
     writer.start()
-    for fetcher in fetchers:
-        fetcher.start()
+    pool.start()
+    for cfg_container in threadcfg_map.values():
+      cfg_container.start()
     ticker.start()
     ticker.join()
-
-
-def parse_headers(logger, headers_src):
-
-    headers = {}
-
-    with headers_src.open() as f:
-        headers_src_data = yaml.load(f, Loader=yaml.SafeLoader)
-        for item in headers_src_data:
-            for url_set in item["URLs"]:
-                itp_id = url_set["itp_id"]
-                url_number = url_set["url_number"]
-                for rt_url in url_set["rt_urls"]:
-                    key = f"{itp_id}/{url_number}/{rt_url}"
-                    if key in headers:
-                        raise ValueError(
-                            f"Duplicate header data for url with key: {key}"
-                        )
-                    headers[key] = item["header-data"]
-
-    logger.info(f"Header file successfully parsed with {len(headers)} entries")
-    return headers
-
-
-def parse_feeds(logger, feeds_src, headers):
-
-    feeds = []
-
-    with feeds_src.open() as f:
-
-        feeds_src_data = yaml.load(f, Loader=yaml.SafeLoader)
-        for agency_name, agency_def in feeds_src_data.items():
-
-            if "feeds" not in agency_def:
-                logger.warning(
-                    "agency {}: skipped loading "
-                    "invalid definition (missing feeds)".format(agency_name)
-                )
-                continue
-
-            if "itp_id" not in agency_def:
-                logger.warning(
-                    "agency {}: skipped loading "
-                    "invalid definition (missing itp_id)".format(agency_name)
-                )
-                continue
-
-            for i, feed_set in enumerate(agency_def["feeds"]):
-                for feed_name, feed_url in feed_set.items():
-                    if feed_name.startswith("gtfs_rt") and feed_url:
-
-                        agency_itp_id = agency_def["itp_id"]
-                        key = "{}/{}/{}".format(agency_itp_id, i, feed_name)
-                        feeds.append((key, feed_url, headers.get(key, {}),))
-
-    return feeds
