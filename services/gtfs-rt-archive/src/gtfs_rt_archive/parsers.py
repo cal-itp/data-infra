@@ -23,3 +23,21 @@ def parse_agencies_urls(logger, datasrc_data):
                     agency_itp_id = agency_def["itp_id"]
                     data_name = "{}/{}/{}".format(agency_itp_id, i, feed_name)
                     yield ( data_name, feed_url )
+
+def parse_headers(logger, datasrc_data):
+
+    seen = set()
+    for item in datasrc_data:
+        for url_set in item["URLs"]:
+            itp_id = url_set["itp_id"]
+            url_number = url_set["url_number"]
+            for rt_url in url_set["rt_urls"]:
+                data_name = f"{itp_id}/{url_number}/{rt_url}"
+                if data_name in seen:
+                    raise ValueError(
+                        f"Duplicate header data for url with key: {key}"
+                    )
+                seen.add(data_name)
+                yield data_name, item["header-data"]
+
+    logger.info(f"Header file successfully parsed with {len(seen)} entries")
