@@ -1,7 +1,9 @@
 # Editing Documentation
 
-These documents are currently editable on github.
-Click the github icon in the top right, and "suggest edit" to edit a page.
+The pages in this section explain the conventions we follow for making changes to our,
+and the different options for including features like executable code.
 
-The pages in this section explain the conventions we follow for making changes,
-and the different options for including things like code in the docs.
+Contribution to our docs is encouraged! If you see content that needs updating or
+recognize missing content that is needed please use the information below to contribute.
+* [Submitting changes](submitting-changes)
+* [Common Markdown formatting](content-types)
