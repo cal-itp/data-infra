@@ -52,7 +52,7 @@ tbl_stop_times = (
              )
 )
 
-# Grab the trips done on that day, for that agency
+# Grab the trips done on that day, for that agencY
 siuba_daily_stops = (
     tbl.views.gtfs_schedule_fact_daily_trips()
     >> filter(_.calitp_itp_id == ITP_ID,
