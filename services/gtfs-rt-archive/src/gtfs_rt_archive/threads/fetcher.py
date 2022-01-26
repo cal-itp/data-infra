@@ -55,6 +55,7 @@ class PoolFetcher(threading.Thread):
                 rs = self.fetch()
                 if hasattr(rs, "read"):
                     # FIXME: the writer thread still expects a urldef
+                    # TODO: create and pass through a txn id to better trace related reads & writes
                     self.wq.put({"evt": evt, "urldef": (self.cfg_name,), "data": rs})
 
             evt = self.evtq.get()
