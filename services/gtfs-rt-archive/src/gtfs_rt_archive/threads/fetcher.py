@@ -21,7 +21,7 @@ class PoolFetcher(threading.Thread):
         url_cfg = self.gettermap['agencies'](self.cfg_name)
         if url_cfg is None:
           # shutdown when there is no URL to fetch
-          self.logger.debug("{}: no url for {}: queue shutdown".format(self.name, self.cfg_name)
+          self.logger.debug("{}: no url for {}: queue shutdown".format(self.name, self.cfg_name))
           self.evtq.put(None)
           return
         url_datasrc_id = url_cfg[0]
