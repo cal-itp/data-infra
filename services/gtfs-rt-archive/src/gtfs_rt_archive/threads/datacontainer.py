@@ -64,7 +64,6 @@ class DataContainer(threading.Thread):
             self.map_writable.wait()
           self.data_map = data_map
           self.datasrc_id = datasrc_id
-          self.logger.info("data file {}: loaded new datasrc_id {}".format(self.datasrc_path, self.datasrc_id))
 
         evt = ("reload", "{} {}".format(self.datasrc_path, self.datasrc_id), int(time.time()))
         self.logger.info("{}: emit: {}".format(self.name, evt))
