@@ -22,6 +22,7 @@ class BaseWriter(threading.Thread):
             data_id = "{}/{}".format(
                 datetime.datetime.fromtimestamp(evt_ts).isoformat(), data_name
             )
+            self.logger.debug('{}: write data_id={} urlstr={}'.format(self.name, data_id, self.urlstr))
             self.write(data_id, item["data"])
             item = self.wq.get()
 
