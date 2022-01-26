@@ -12,7 +12,7 @@ from .eventbus import EventBus
 from .threadpool import ThreadPool
 from .parsers import parse_agencies_urls, parse_headers
 
-def main(argv):
+def main():
 
     # Config tables
 
@@ -28,7 +28,7 @@ def main(argv):
 
     # Setup logging channel
 
-    logger = logging.getLogger(argv[0])
+    logger = logging.getLogger('gtfs-rt-archive')
 
     level_name = os.getenv("CALITP_LOG_LEVEL")
     if hasattr(level_name, "lower"):
