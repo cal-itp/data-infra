@@ -37,7 +37,7 @@ class PoolFetcher(threading.Thread):
                 request.add_header(key, value)
             return urllib.request.urlopen(request)
         except (urllib.error.URLError, urllib.error.HTTPError) as e:
-            self.logger.info(
+            self.logger.warning(
                 "{} {}: error fetching url {}: {}".format(
                     self.name, len(headers), url, e
                 )
@@ -82,7 +82,7 @@ class Fetcher(threading.Thread):
                 request.add_header(key, value)
             return urllib.request.urlopen(request)
         except (urllib.error.URLError, urllib.error.HTTPError) as e:
-            self.logger.info(
+            self.logger.warning(
                 "{} {}: error fetching url {}: {}".format(
                     self.name, len(headers), url, e
                 )
