@@ -24,7 +24,7 @@ class BaseWriter(threading.Thread):
             )
             self.logger.debug('{}: [txn {}] begin write: data_id={} urlstr={}'.format(self.name, txn["id"], data_id, self.urlstr))
             self.write(data_id, txn["input_stream"])
-            self.logger.debug('{}: [txn {}] complete write: data_id={} urlstr={}'.format(self.name, txn["id"], data_id, self.urlstr))
+            self.logger.debug('{}: [txn {}] completed write: data_id={} urlstr={}'.format(self.name, txn["id"], data_id, self.urlstr))
             txn = self.wq.get()
 
         self.logger.debug("{}: finalized".format(self.name))

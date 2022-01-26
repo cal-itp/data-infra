@@ -31,7 +31,7 @@ class PoolFetcher(threading.Thread):
         if headers_cfg is not None:
           headers_datasrc_id = headers_cfg[0]
           headers = headers_cfg[1]
-        self.logger.debug("{}: [txn {}] fetch datasrc_id={} url={}".format(self.name, txn["id"], url_datasrc_id, url))
+        self.logger.debug("{}: [txn {}] start fetch datasrc_id={} url={}".format(self.name, txn["id"], url_datasrc_id, url))
         try:
             request = urllib.request.Request(url)
             for key, value in headers.items():
@@ -55,10 +55,11 @@ class PoolFetcher(threading.Thread):
             if evt_name == "tick":
                 txn = {"evt": evt, "input_name": self.cfg_name, "id": uuid.uuid4(), "input_stream": None}
                 rs = self.fetch(txn)
+                self.logger.debug("{}: [txn {}] completed fetch")
                 if hasattr(txn["input_stream"], "read"):
                     self.wq.put(txn)
                 else:
-                  self.logger.warn("{}: [txn {}] {}: no data".format(self.name, txn["id"], txn["input_name"]))
+                  self.logger.warn("{}: [txn {}] no data fetched".format(self.name, txn["id"], txn["input_name"]))
 
             evt = self.evtq.get()
 
