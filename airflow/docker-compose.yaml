@@ -65,7 +65,7 @@ x-airflow-common:
     GOOGLE_CLOUD_PROJECT: cal-itp-data-infra
 
     # Composer variables for kubernetes
-    POD_CLUSTER_NAME: "us-west2-calitp-airflow-pro-332827a9-gke"
+    POD_CLUSTER_NAME: "us-west2-calitp-airflow2-pr-171e4e47-gke"
     POD_LOCATION: "us-west2-a"
     AIRFLOW_ENV: "development"
     CALITP_USER: "pipeline"
