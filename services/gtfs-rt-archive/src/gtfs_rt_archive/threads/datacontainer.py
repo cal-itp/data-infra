@@ -47,7 +47,7 @@ class DataContainer(threading.Thread):
           with self.datasrc_path.open('rb') as f:
             datasrc_data = yaml.load(f, Loader=yaml.SafeLoader)
         else:
-          self.logger.warning("data file {}: skipped loading: unsupported file type".format(self.datasrc_path))
+          self.logger.error("data file {}: skipped loading: unsupported file type".format(self.datasrc_path))
           return
 
         data_map = {}

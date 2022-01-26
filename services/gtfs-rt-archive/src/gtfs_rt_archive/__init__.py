@@ -83,7 +83,7 @@ def main():
             break
 
     if writer is None:
-        logger.warning(
+        logger.error(
             "unsupported CALITP_DATA_DEST: "
             "{}: using default value file:///dev/null".format(data_dest)
         )

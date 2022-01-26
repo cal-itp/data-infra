@@ -3,14 +3,14 @@ def parse_agencies_urls(logger, datasrc_data):
     for agency_name, agency_def in datasrc_data.items():
 
         if "feeds" not in agency_def:
-            logger.warning(
+            logger.error(
                 "agency {}: skipped loading "
                 "invalid definition (missing feeds)".format(agency_name)
             )
             continue
 
         if "itp_id" not in agency_def:
-            logger.warning(
+            logger.error(
                 "agency {}: skipped loading "
                 "invalid definition (missing itp_id)".format(agency_name)
             )
