@@ -25,14 +25,14 @@ class FSWriter(BaseWriter):
         try:
             dest.parent.mkdir(parents=True, exist_ok=True)
         except OSError as e:
-            self.logger.error("{}: mkdir: {}: {}".format(self.name, dest.parent, e))
+            self.logger.critical("{}: mkdir: {}: {}".format(self.name, dest.parent, e))
             return
 
         try:
             with dest.open(mode="wb") as f:
                 f.write(rstream.read())
         except OSError as e:
-            self.logger.error("{}: write: {}: {}".format(self.name, dest, e))
+            self.logger.critical("{}: write: {}: {}".format(self.name, dest, e))
             return
 
 
@@ -85,7 +85,7 @@ class GCPBucketWriter(BaseWriter):
             try:
                 urllib.request.urlopen(rq)
             except (urllib.error.URLError, urllib.error.HTTPError) as e:
-                self.logger.error(
+                self.logger.critical(
                     "{}: error uploading to bucket {}: {}".format(
                         self.name, self.urlstr, e
                     )
@@ -96,7 +96,7 @@ class GCPBucketWriter(BaseWriter):
             try:
                 self.session.request("POST", rqurl, data=rstream, headers=rqheaders)
             except self.GoogleAuthTransportError as e:
-                self.logger.error(
+                self.logger.critical(
                     "{}: error uploading to bucket {}: {}".format(
                         self.name, self.urlstr, e
                     )
