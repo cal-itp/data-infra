@@ -21,6 +21,7 @@ class PoolFetcher(threading.Thread):
         url_cfg = self.gettermap['agencies'](self.cfg_name)
         if url_cfg is None:
           # shutdown when there is no URL to fetch
+          self.logger.debug("{}: no url for {}: queue shutdown".format(self.name, self.cfg_name)
           self.evtq.put(None)
           return
         url_datasrc_id = url_cfg[0]
@@ -31,7 +32,7 @@ class PoolFetcher(threading.Thread):
         if headers_cfg is not None:
           headers_datasrc_id = headers_cfg[0]
           headers = headers_cfg[1]
-        self.logger.debug("{}: [txn {}] start fetch datasrc_id={} url={}".format(self.name, txn["id"], url_datasrc_id, url))
+        self.logger.debug("[txn {}] start fetch url_name={} url={} datasrc_id={}".format(txn["id"], self.cfg_name, url, url_datasrc_id))
         try:
             request = urllib.request.Request(url)
             for key, value in headers.items():
@@ -39,8 +40,8 @@ class PoolFetcher(threading.Thread):
             txn["input_stream"] = urllib.request.urlopen(request)
         except (urllib.error.URLError, urllib.error.HTTPError) as e:
             self.logger.warning(
-                "{} {}: [txn {}] error fetching url {}: {}".format(
-                    self.name, len(headers), txn["id"], url, e
+                "[txn {}] len(headers)={} error fetching url {}: {}".format(
+                    txn["id"], len(headers), url, e
                 )
             )
 
@@ -55,11 +56,11 @@ class PoolFetcher(threading.Thread):
             if evt_name == "tick":
                 txn = {"evt": evt, "input_name": self.cfg_name, "id": uuid.uuid4(), "input_stream": None}
                 rs = self.fetch(txn)
-                self.logger.debug("{}: [txn {}] completed fetch")
+                self.logger.debug("[txn {}] completed fetch".format(txn["id"]))
                 if hasattr(txn["input_stream"], "read"):
                     self.wq.put(txn)
                 else:
-                  self.logger.warn("{}: [txn {}] no data fetched".format(self.name, txn["id"], txn["input_name"]))
+                  self.logger.warn("[txn {}] no data fetched".format(txn["id"]))
 
             evt = self.evtq.get()
 
