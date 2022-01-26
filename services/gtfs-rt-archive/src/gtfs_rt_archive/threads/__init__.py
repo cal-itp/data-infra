@@ -22,9 +22,9 @@ class BaseWriter(threading.Thread):
             data_id = "{}/{}".format(
                 datetime.datetime.fromtimestamp(evt_ts).isoformat(), data_name
             )
-            self.logger.debug('{}: [txn {}] begin write: data_id={} urlstr={}'.format(self.name, txn["id"], data_id, self.urlstr))
-            self.write(data_id, txn["input_stream"])
-            self.logger.debug('{}: [txn {}] completed write: data_id={} urlstr={}'.format(self.name, txn["id"], data_id, self.urlstr))
+            self.logger.debug('[txn {}] begin write: data_id={} urlstr={}'.format(txn["id"], data_id, self.urlstr))
+            self.write(data_id, txn)
+            self.logger.debug('[txn {}] completed write'.format(txn["id"]))
             txn = self.wq.get()
 
         self.logger.debug("{}: finalized".format(self.name))
