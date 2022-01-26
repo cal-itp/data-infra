@@ -42,6 +42,7 @@ class ThreadPool(threading.Thread):
     def run(self):
       self.evtbus.add_listener(self.name, "reload", self.evtq)
 
+      self.reconcile()
       evt = self.evtq.get()
       while evt is not None:
 
