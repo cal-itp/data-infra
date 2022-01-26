@@ -30,7 +30,7 @@ class FSWriter(BaseWriter):
 
         try:
             with dest.open(mode="wb") as f:
-                f.write(txn["input_stream"]).read())
+                f.write(txn["input_stream"].read())
         except OSError as e:
             self.logger.critical("[txn {}] write: {}: {}".format(txn["id"], dest, e))
             return
