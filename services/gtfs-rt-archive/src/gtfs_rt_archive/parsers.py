@@ -40,4 +40,4 @@ def parse_headers(logger, datasrc_data):
                 seen.add(data_name)
                 yield data_name, item["header-data"]
 
-    logger.info(f"Header file successfully parsed with {len(seen)} entries")
+    logger.debug(f"Header file successfully parsed with {len(seen)} entries")
