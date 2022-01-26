@@ -462,6 +462,14 @@ el-monte-transportation-division:
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 102
+el-segundo:
+  agency_name: El Segundo
+  feeds:
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/elsegundo-ca-us/elsegundo-ca-us.zip
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
+  itp_id: 103
 emery-go-round:
   agency_name: Emery Go-Round
   feeds:
@@ -682,6 +690,14 @@ lawndale-beat:
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 164
+la-puente:
+  agency_name: City of la-Puente
+  feeds:
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/lapuente-ca-us/lapuente-ca-us.zip
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
+  itp_id: 152
 long-beach-transit:
   agency_name: Long Beach Transit
   feeds:
@@ -1094,9 +1110,9 @@ san-joaquin-regional-transit-district:
   agency_name: San Joaquin Regional Transit District
   feeds:
     - gtfs_schedule_url: http://sanjoaquinrtd.com/RTD-GTFS/RTD-GTFS.zip
-      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/san-joaquin/gtfs-rt-vehicle-positions
       gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/san-joaquin/gtfs-rt-trip-updates
   itp_id: 284
 san-juan-capistrano-free-weekend-trolley:
   agency_name: San Juan Capistrano Free Weekend Trolley

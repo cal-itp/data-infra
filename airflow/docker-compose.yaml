@@ -54,14 +54,16 @@ x-airflow-common:
     AIRFLOW__CORE__PLUGINS_FOLDER: /opt/airflow/gcs/plugins
     AIRFLOW__WEBSERVER__RELOAD_ON_PLUGIN_CHANGE: 'true'
     CALITP_BQ_MAX_BYTES: 10000000000
-    # connections
-    # see https://stackoverflow.com/a/55064944/1144523
-    AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT: "google-cloud-platform://:@:?extra__google_cloud_platform__project=cal-itp-data-infra"
+
+    # API keys
+    CALITP_AIRTABLE_API_KEY: "${CALITP_AIRTABLE_API_KEY}"
+
     # bucket for holding results of extraction tasks
     AIRFLOW_VAR_EXTRACT_BUCKET: "gs://gtfs-data-test"
     # Corresponds to GCP_PROJECT on composer, but gauth looks for this name.
     # see https://googleapis.dev/python/google-auth/latest/user-guide.html#using-external-identities
     GOOGLE_CLOUD_PROJECT: cal-itp-data-infra
+
     # Composer variables for kubernetes
     POD_CLUSTER_NAME: "us-west2-calitp-airflow-pro-332827a9-gke"
     POD_LOCATION: "us-west2-a"
