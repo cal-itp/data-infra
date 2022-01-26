@@ -3,6 +3,7 @@ import sys
 import logging
 import pathlib
 import queue
+import time
 import yaml
 from .threads.ticker import Ticker
 from .threads.fetcher import PoolFetcher
@@ -98,5 +99,7 @@ def main():
     pool.start()
     for cfg_container in threadcfg_map.values():
       cfg_container.start()
+    # wait on thread startup
+    time.sleep(0.5)
     ticker.start()
     ticker.join()
