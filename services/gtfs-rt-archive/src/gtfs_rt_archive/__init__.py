@@ -88,6 +88,10 @@ def main():
         )
         writer = FSWriter(logger, qmap['write'], "file:///dev/null")
 
+    # Load data
+    for cfg_container in threadcfg_map.values():
+      cfg_container.load_datasrc()
+
     # Run
 
     writer.start()
