@@ -1,3 +1,5 @@
+(airflow)=
+
 # Airtable
 
 ## Primary Keys
@@ -15,6 +17,6 @@ AirTable does not currently have an effective mechanism to programmaticaly downl
 The data in the Airtable Transit Database is distinct but related to the following data:
 
 - [GTFS Schedule Quality Assessment Airflow pipelines](/airflow/static-schedule-pipeline) results in the [warehouse](/warehouse/overview)
-- [GTFS Schedules Datasets](datasets_and_tables/gtfs_schedule)
+- [GTFS Schedules Datasets](/datasets_and_tables/gtfs_schedule)
 
 Currently neither of the above processes or datasets either rely on or contribute back to the Airflow Transit Database – this is a work in progress.  Rather, they rely on the list of transit datasets in the file [`agencies.yml`](https://github.com/cal-itp/data-infra/tree/main/airflow/data/agencies.yml) to dictate what datasets to download and assess.
