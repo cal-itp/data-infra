@@ -2,12 +2,12 @@ import datetime
 import threading
 
 class BaseWriter(threading.Thread):
-    def __init__(self, logger, wq, urlstr, secret=None):
+    def __init__(self, logger, wq, desturl, secret=None):
         super().__init__()
 
         self.logger = logger
         self.wq = wq
-        self.urlstr = urlstr
+        self.desturl = desturl
         self.secret = secret
 
     def write(self, name, rstream):
@@ -15,15 +15,16 @@ class BaseWriter(threading.Thread):
 
     def run(self):
 
-        item = self.wq.get()
-        while item is not None:
-            evt_ts = item["evt"][2]
-            data_name = item["urldef"][0]
-            data_id = "{}/{}".format(
+        txn = self.wq.get()
+        while txn is not None:
+            evt_ts = txn["evt"][2]
+            data_name = txn["input_name"]
+            write_name = "{}/{}".format(
                 datetime.datetime.fromtimestamp(evt_ts).isoformat(), data_name
             )
-            self.logger.debug('{}: write data_id={} urlstr={}'.format(self.name, data_id, self.urlstr))
-            self.write(data_id, item["data"])
-            item = self.wq.get()
+            self.logger.debug('[txn {}] start write: name={} desturl={}'.format(txn["id"], write_name, self.desturl))
+            self.write(write_name, txn)
+            self.logger.debug('[txn {}] completed write'.format(txn["id"]))
+            txn = self.wq.get()
 
         self.logger.debug("{}: finalized".format(self.name))

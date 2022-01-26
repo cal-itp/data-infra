@@ -8,14 +8,14 @@ class FSWriter(BaseWriter):
 
     name = "filewriter"
 
-    def __init__(self, logger, wq, urlstr, secret=None):
+    def __init__(self, logger, wq, desturl, secret=None):
 
-        super().__init__(logger, wq, urlstr, secret)
+        super().__init__(logger, wq, desturl, secret)
 
-        url = urllib.parse.urlparse(urlstr)
+        url = urllib.parse.urlparse(desturl)
         self.basepath = pathlib.Path(url.path)
 
-    def write(self, name, rstream):
+    def write(self, name, txn):
 
         dest = pathlib.Path(self.basepath, name)
 
@@ -30,9 +30,9 @@ class FSWriter(BaseWriter):
 
         try:
             with dest.open(mode="wb") as f:
-                f.write(rstream.read())
+                f.write(txn["input_stream"].read())
         except OSError as e:
-            self.logger.critical("{}: write: {}: {}".format(self.name, dest, e))
+            self.logger.critical("[txn {}] write: {}: {}".format(txn["id"], dest, e))
             return
 
 
@@ -41,9 +41,9 @@ class GCPBucketWriter(BaseWriter):
     name = "gswriter"
     baseurl = "https://storage.googleapis.com/upload/storage/v1/b"
 
-    def __init__(self, logger, wq, urlstr, secret=None):
+    def __init__(self, logger, wq, desturl, secret=None):
 
-        super().__init__(logger, wq, urlstr, secret)
+        super().__init__(logger, wq, desturl, secret)
 
         self.session = None
 
@@ -59,7 +59,7 @@ class GCPBucketWriter(BaseWriter):
             self.session = AuthorizedSession(credentials)
             self.GoogleAuthTransportError = TransportError
 
-        url = urllib.parse.urlparse(urlstr)
+        url = urllib.parse.urlparse(desturl)
 
         self.uploadurl = "{}/{}/o".format(self.baseurl, url.netloc)
         self.basepath = url.path
@@ -70,7 +70,7 @@ class GCPBucketWriter(BaseWriter):
         if self.basepath and not self.basepath.endswith("/"):
             self.basepath += "/"
 
-    def write(self, name, rstream):
+    def write(self, name, txn):
 
         rqurl = "{}?uploadType=media&name={}{}".format(
             self.uploadurl, self.basepath, name
@@ -80,25 +80,25 @@ class GCPBucketWriter(BaseWriter):
         if self.session is None:
 
             rq = urllib.request.Request(
-                rqurl, method="POST", headers=rqheaders, data=rstream
+                rqurl, method="POST", headers=rqheaders, data=txn["input_stream"]
             )
             try:
                 urllib.request.urlopen(rq)
             except (urllib.error.URLError, urllib.error.HTTPError) as e:
                 self.logger.critical(
-                    "{}: error uploading to bucket {}: {}".format(
-                        self.name, self.urlstr, e
+                    "[txn {}] error uploading to bucket {}: {}".format(
+                        txn["id"], self.desturl, e
                     )
                 )
 
         else:
 
             try:
-                self.session.request("POST", rqurl, data=rstream, headers=rqheaders)
+                self.session.request("POST", rqurl, data=txn["input_stream"], headers=rqheaders)
             except self.GoogleAuthTransportError as e:
                 self.logger.critical(
-                    "{}: error uploading to bucket {}: {}".format(
-                        self.name, self.urlstr, e
+                    "[txn {}] error uploading to bucket {}: {}".format(
+                        txn["id"], self.desturl, e
                     )
                 )
 
