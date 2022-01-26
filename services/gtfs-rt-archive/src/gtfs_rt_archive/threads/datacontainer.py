@@ -64,7 +64,10 @@ class DataContainer(threading.Thread):
             self.map_writable.wait()
           self.data_map = data_map
           self.datasrc_id = datasrc_id
-          self.logger.info("data file {}: loaded new datasrc_id {}".format(self.datasrc_path, self.datasrc_id))
+
+        evt = ("reload", "{} {}".format(self.datasrc_path, self.datasrc_id), int(time.time()))
+        self.logger.debug("{}: emit: {}".format(self.name, evt))
+        self.evtbus.emit(evt)
 
     def get_data(self, name):
 
@@ -109,14 +112,7 @@ class DataContainer(threading.Thread):
 
           evt_name = evt[0]
           if evt_name == "tick":
-              old_id = self.datasrc_id
               self.load_datasrc()
-              new_id = self.datasrc_id
-              if old_id != new_id:
-                evt = ("reload", "{} {}".format(self.datasrc_path, new_id), int(time.time()))
-                self.logger.debug("{}: emit: {}".format(self.name, evt))
-                self.evtbus.emit(evt)
-
           evt = self.evtq.get()
 
       self.logger.debug("{}: finalized".format(self.name))
