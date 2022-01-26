@@ -38,4 +38,4 @@ class EventBus(object):
                 try:
                     evt_q.put_nowait(evt)
                 except queue.Full:
-                    self.logger.warning("{}: event dropped: {}".format(t_name, evt))
+                    self.logger.critical("{}: event dropped: {}".format(t_name, evt))
