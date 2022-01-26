@@ -15,15 +15,16 @@ class BaseWriter(threading.Thread):
 
     def run(self):
 
-        item = self.wq.get()
-        while item is not None:
-            evt_ts = item["evt"][2]
-            data_name = item["urldef"][0]
+        txn = self.wq.get()
+        while txn is not None:
+            evt_ts = txn["evt"][2]
+            data_name = txn["input_name"]
             data_id = "{}/{}".format(
                 datetime.datetime.fromtimestamp(evt_ts).isoformat(), data_name
             )
-            self.logger.debug('{}: write data_id={} urlstr={}'.format(self.name, data_id, self.urlstr))
-            self.write(data_id, item["data"])
-            item = self.wq.get()
+            self.logger.debug('{}: [txn {}] begin write: data_id={} urlstr={}'.format(self.name, txn["id"], data_id, self.urlstr))
+            self.write(data_id, txn["input_stream"])
+            self.logger.debug('{}: [txn {}] complete write: data_id={} urlstr={}'.format(self.name, txn["id"], data_id, self.urlstr))
+            txn = self.wq.get()
 
         self.logger.debug("{}: finalized".format(self.name))

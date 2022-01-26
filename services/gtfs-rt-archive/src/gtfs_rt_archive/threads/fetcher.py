@@ -1,5 +1,6 @@
 import threading
 import queue
+import uuid
 import urllib.request
 import urllib.error
 
@@ -16,7 +17,7 @@ class PoolFetcher(threading.Thread):
         self.name = "fetcher {}".format(cfg_name)
         self.evtq = queue.Queue()
 
-    def fetch(self):
+    def fetch(self, txn):
         url_cfg = self.gettermap['agencies'](self.cfg_name)
         if url_cfg is None:
           # shutdown when there is no URL to fetch
@@ -30,16 +31,16 @@ class PoolFetcher(threading.Thread):
         if headers_cfg is not None:
           headers_datasrc_id = headers_cfg[0]
           headers = headers_cfg[1]
-        self.logger.debug("{}: fetch datasrc_id={} url={}".format(self.name, url_datasrc_id, url))
+        self.logger.debug("{}: [txn {}] fetch datasrc_id={} url={}".format(self.name, txn["id"], url_datasrc_id, url))
         try:
             request = urllib.request.Request(url)
             for key, value in headers.items():
                 request.add_header(key, value)
-            return urllib.request.urlopen(request)
+            txn["input_stream"] = urllib.request.urlopen(request)
         except (urllib.error.URLError, urllib.error.HTTPError) as e:
             self.logger.warning(
-                "{} {}: error fetching url {}: {}".format(
-                    self.name, len(headers), url, e
+                "{} {}: [txn {}] error fetching url {}: {}".format(
+                    self.name, len(headers), txn["id"], url, e
                 )
             )
 
@@ -52,11 +53,12 @@ class PoolFetcher(threading.Thread):
 
             evt_name = evt[0]
             if evt_name == "tick":
-                rs = self.fetch()
-                if hasattr(rs, "read"):
-                    # FIXME: the writer thread still expects a urldef
-                    # TODO: create and pass through a txn id to better trace related reads & writes
-                    self.wq.put({"evt": evt, "urldef": (self.cfg_name,), "data": rs})
+                txn = {"evt": evt, "input_name": self.cfg_name, "id": uuid.uuid4(), "input_stream": None}
+                rs = self.fetch(txn)
+                if hasattr(txn["input_stream"], "read"):
+                    self.wq.put(txn)
+                else:
+                  self.logger.warn("{}: [txn {}] {}: no data".format(self.name, txn["id"], txn["input_name"]))
 
             evt = self.evtq.get()
 
