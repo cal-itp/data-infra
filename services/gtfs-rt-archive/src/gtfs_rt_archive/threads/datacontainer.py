@@ -66,7 +66,7 @@ class DataContainer(threading.Thread):
           self.datasrc_id = datasrc_id
 
         evt = ("reload", "{} {}".format(self.datasrc_path, self.datasrc_id), int(time.time()))
-        self.logger.debug("{}: emit: {}".format(self.name, evt))
+        self.logger.info("{}: emit: {}".format(self.name, evt))
         self.evtbus.emit(evt)
 
     def get_data(self, name):
