@@ -32,8 +32,9 @@ class FSWriter(BaseWriter):
         try:
             with dest.open(mode="wb") as f:
                 f.write(txn["input_stream"].read())
+                self.logger.debug('[txn {}] completed write'.format(txn["id"]))
         except OSError as e:
-            self.logger.critical("[txn {}] write: {}: {}".format(txn["id"], dest, e))
+            self.logger.critical("[txn {}] write error: {}: {}".format(txn["id"], dest, e))
             return
 
 
@@ -80,6 +81,7 @@ class GCPBucketWriter(BaseWriter):
       def _urllib_requester(rq):
         try:
             urllib.request.urlopen(rq)
+            logger.debug('[txn {}] completed write'.format(txn["id"]))
         except (urllib.error.URLError, urllib.error.HTTPError) as e:
             logger.critical(
                 "[txn {}] error uploading to bucket {}: {}".format(
@@ -91,6 +93,7 @@ class GCPBucketWriter(BaseWriter):
       def _googleauth_requester(url, headers):
         try:
             session.request("POST", url, data=txn["input_stream"], headers=headers)
+            logger.debug('[txn {}] completed write'.format(txn["id"]))
         except GoogleAuthTransportError as e:
             logger.critical(
                 "[txn {}] error uploading to bucket {}: {}".format(
