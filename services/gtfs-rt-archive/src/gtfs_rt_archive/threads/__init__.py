@@ -22,7 +22,7 @@ class BaseWriter(threading.Thread):
             write_name = "{}/{}".format(
                 datetime.datetime.fromtimestamp(evt_ts).isoformat(), data_name
             )
-            self.logger.debug('[txn {}] begin write: name={} desturl={}'.format(txn["id"], write_name, self.desturl))
+            self.logger.debug('[txn {}] start write: name={} desturl={}'.format(txn["id"], write_name, self.desturl))
             self.write(write_name, txn)
             self.logger.debug('[txn {}] completed write'.format(txn["id"]))
             txn = self.wq.get()
