@@ -32,7 +32,7 @@ class PoolFetcher(threading.Thread):
         if headers_cfg is not None:
           headers_datasrc_id = headers_cfg[0]
           headers = headers_cfg[1]
-        self.logger.debug("[txn {}] start fetch url_name={} url={} datasrc_id={}".format(txn["id"], self.cfg_name, url, url_datasrc_id))
+        self.logger.debug("[txn {}] start fetch: url_name={} url={} datasrc_id={}".format(txn["id"], self.cfg_name, url, url_datasrc_id))
         try:
             request = urllib.request.Request(url)
             for key, value in headers.items():
