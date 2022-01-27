@@ -11,7 +11,7 @@ from .threads.writer import FSWriter, GCPBucketWriter
 from .threads.yamlmapper import YamlMapper
 from .eventbus import EventBus
 from .threadpool import ThreadPool
-from .parsers import parse_agencies_urls, parse_headers
+from .mapperfns import map_agencies_urls, map_headers
 
 def main():
 
@@ -69,8 +69,8 @@ def main():
     qmap = { 'write': queue.Queue() }
     evtbus = EventBus(logger)
     threadcfg_map = {
-      'agencies': YamlMapper(logger, evtbus, agencies_path, parse_agencies_urls),
-      'headers': YamlMapper(logger, evtbus, headers_path, parse_headers)
+      'agencies': YamlMapper(logger, evtbus, agencies_path, map_agencies_urls),
+      'headers': YamlMapper(logger, evtbus, headers_path, map_headers)
     }
     pool = ThreadPool(logger, evtbus, qmap, PoolFetcher, threadcfg_map)
     ticker = Ticker(logger, evtbus, tickint)
