@@ -1,4 +1,4 @@
-def parse_agencies_urls(logger, datasrc_data):
+def map_agencies_urls(logger, yaml_data):
 
     for agency_name, agency_def in datasrc_data.items():
 
@@ -24,7 +24,7 @@ def parse_agencies_urls(logger, datasrc_data):
                     data_name = "{}/{}/{}".format(agency_itp_id, i, feed_name)
                     yield data_name, feed_url
 
-def parse_headers(logger, datasrc_data):
+def map_headers(logger, yaml_data):
 
     seen = set()
     for item in datasrc_data:
