@@ -19,11 +19,11 @@ class BaseWriter(threading.Thread):
         while txn is not None:
             evt_ts = txn["evt"][2]
             data_name = txn["input_name"]
-            data_id = "{}/{}".format(
+            write_name = "{}/{}".format(
                 datetime.datetime.fromtimestamp(evt_ts).isoformat(), data_name
             )
-            self.logger.debug('[txn {}] begin write: data_id={} urlstr={}'.format(txn["id"], data_id, self.urlstr))
-            self.write(data_id, txn)
+            self.logger.debug('[txn {}] begin write: name={} urlstr={}'.format(txn["id"], write_name, self.urlstr))
+            self.write(write_name, txn)
             self.logger.debug('[txn {}] completed write'.format(txn["id"]))
             txn = self.wq.get()
 
