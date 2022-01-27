@@ -8,11 +8,11 @@ class FSWriter(BaseWriter):
 
     name = "filewriter"
 
-    def __init__(self, logger, wq, urlstr, secret=None):
+    def __init__(self, logger, wq, desturl, secret=None):
 
-        super().__init__(logger, wq, urlstr, secret)
+        super().__init__(logger, wq, desturl, secret)
 
-        url = urllib.parse.urlparse(urlstr)
+        url = urllib.parse.urlparse(desturl)
         self.basepath = pathlib.Path(url.path)
 
     def write(self, name, txn):
@@ -41,9 +41,9 @@ class GCPBucketWriter(BaseWriter):
     name = "gswriter"
     baseurl = "https://storage.googleapis.com/upload/storage/v1/b"
 
-    def __init__(self, logger, wq, urlstr, secret=None):
+    def __init__(self, logger, wq, desturl, secret=None):
 
-        super().__init__(logger, wq, urlstr, secret)
+        super().__init__(logger, wq, desturl, secret)
 
         self.session = None
 
@@ -59,7 +59,7 @@ class GCPBucketWriter(BaseWriter):
             self.session = AuthorizedSession(credentials)
             self.GoogleAuthTransportError = TransportError
 
-        url = urllib.parse.urlparse(urlstr)
+        url = urllib.parse.urlparse(desturl)
 
         self.uploadurl = "{}/{}/o".format(self.baseurl, url.netloc)
         self.basepath = url.path
@@ -87,7 +87,7 @@ class GCPBucketWriter(BaseWriter):
             except (urllib.error.URLError, urllib.error.HTTPError) as e:
                 self.logger.critical(
                     "[txn {}] error uploading to bucket {}: {}".format(
-                        txn["id"], self.urlstr, e
+                        txn["id"], self.desturl, e
                     )
                 )
 
@@ -98,7 +98,7 @@ class GCPBucketWriter(BaseWriter):
             except self.GoogleAuthTransportError as e:
                 self.logger.critical(
                     "[txn {}] error uploading to bucket {}: {}".format(
-                        txn["id"], self.urlstr, e
+                        txn["id"], self.desturl, e
                     )
                 )
 

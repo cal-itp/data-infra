@@ -2,12 +2,12 @@ import datetime
 import threading
 
 class BaseWriter(threading.Thread):
-    def __init__(self, logger, wq, urlstr, secret=None):
+    def __init__(self, logger, wq, desturl, secret=None):
         super().__init__()
 
         self.logger = logger
         self.wq = wq
-        self.urlstr = urlstr
+        self.desturl = desturl
         self.secret = secret
 
     def write(self, name, rstream):
@@ -22,7 +22,7 @@ class BaseWriter(threading.Thread):
             write_name = "{}/{}".format(
                 datetime.datetime.fromtimestamp(evt_ts).isoformat(), data_name
             )
-            self.logger.debug('[txn {}] begin write: name={} urlstr={}'.format(txn["id"], write_name, self.urlstr))
+            self.logger.debug('[txn {}] begin write: name={} desturl={}'.format(txn["id"], write_name, self.desturl))
             self.write(write_name, txn)
             self.logger.debug('[txn {}] completed write'.format(txn["id"]))
             txn = self.wq.get()
