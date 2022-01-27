@@ -3,7 +3,7 @@ import queue
 
 class ThreadPool(threading.Thread):
     '''
-    Binds a thread class (e.g., a Fetcher) to one or more DataContainers which
+    Binds a thread class (e.g., a Fetcher) to one or more YamlMappers which
     provide config for each instance of the thread
     '''
     def __init__(self, logger, evtbus, qmap, threadcls, threadcfg_container_map):
