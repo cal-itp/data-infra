@@ -68,11 +68,11 @@ def main():
 
     qmap = { 'write': queue.Queue() }
     evtbus = EventBus(logger)
-    threadcfg_map = {
-      'agencies': YamlMapper(logger, evtbus, agencies_path, map_agencies_urls),
+    mappers = {
+      'urls': YamlMapper(logger, evtbus, agencies_path, map_agencies_urls),
       'headers': YamlMapper(logger, evtbus, headers_path, map_headers)
     }
-    pool = ThreadPool(logger, evtbus, qmap, PoolFetcher, threadcfg_map)
+    pool = ThreadPool(logger, evtbus, qmap, PoolFetcher, mappers)
     ticker = Ticker(logger, evtbus, tickint)
     writer = None
 
@@ -90,15 +90,15 @@ def main():
         writer = FSWriter(logger, qmap['write'], "file:///dev/null")
 
     # Load data
-    for cfg_container in threadcfg_map.values():
-      cfg_container.load_datasrc()
+    for mapper in mappers.values():
+      mapper.load_map()
 
     # Run
 
     writer.start()
     pool.start()
-    for cfg_container in threadcfg_map.values():
-      cfg_container.start()
+    for mapper in mappers.values():
+      mapper.start()
     # wait on thread startup
     time.sleep(0.5)
     ticker.start()
