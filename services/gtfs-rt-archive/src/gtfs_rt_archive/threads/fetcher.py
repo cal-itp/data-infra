@@ -1,3 +1,10 @@
+"""fetcher.py: Fetcher implementations
+
+A Fetcher is a thread which retrieves a data file from a remote location, beginning the
+data file transaction. Each Fetcher should implement a fetch() method which accepts a
+txn object (dict) and maps a readable I/O stream into the txn object under the
+"input_stream" key.
+"""
 import threading
 import queue
 import uuid
@@ -6,6 +13,13 @@ import urllib.error
 
 
 class PoolFetcher(threading.Thread):
+    """A Fetcher implementation intended to be spawned by a ThreadPool
+
+    Expected to be instantiated with getters named 'urls' and 'headers' in order to
+    retrieve the data it requires to perform a request. Shuts itself down if it cannot
+    get a url from the 'urls' getter.
+    """
+
     def __init__(self, logger, evtbus, qmap, mapper_getters, mapper_key):
 
         super().__init__()
