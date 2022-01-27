@@ -8,7 +8,7 @@ import yaml
 from .threads.ticker import Ticker
 from .threads.fetcher import PoolFetcher
 from .threads.writer import FSWriter, GCPBucketWriter
-from .threads.yamlmapper import YamlMapper
+from .threads.mappers import YamlMapper
 from .eventbus import EventBus
 from .threadpool import ThreadPool
 from .mapperfns import map_agencies_urls, map_headers
