@@ -1,5 +1,6 @@
 import pathlib
 import threading
+import logging
 import urllib.request
 import urllib.error
 import urllib.parse
@@ -71,6 +72,8 @@ class GCPBucketWriter(BaseWriter):
 
         if self.basepath and not self.basepath.endswith("/"):
             self.basepath += "/"
+
+        logging.getLogger("urllib3.connectionpool").setLevel(logging.ERROR)
 
     def _get_requester(self, name, txn):
 
