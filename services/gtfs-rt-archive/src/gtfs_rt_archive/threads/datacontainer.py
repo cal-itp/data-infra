@@ -45,7 +45,7 @@ class DataContainer(threading.Thread):
         try:
           with self.datasrc_path.open('rb') as f:
             datasrc_data = yaml.load(f, Loader=yaml.SafeLoader)
-        except OSError yaml.YAMLError as e:
+        except (OSError, yaml.YAMLError) as e:
           self.logger.error("data file {}: load error: {}".format(self.datasrc_path, e))
           return
 
