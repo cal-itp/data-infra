@@ -30,24 +30,23 @@ class DataContainer(threading.Thread):
         each ( data_name, data ) pair yielded by the datasrc_parser
         '''
 
-        with self.datasrc_path.open('rb') as f:
+        try:
+          with self.datasrc_path.open('rb') as f:
 
-          datasrc_sha1 = hashlib.sha1()
-          datasrc_sha1.update(f.read())
-          datasrc_id = datasrc_sha1.hexdigest()
-          if datasrc_id == self.datasrc_id:
-            return
+            datasrc_sha1 = hashlib.sha1()
+            datasrc_sha1.update(f.read())
+            datasrc_id = datasrc_sha1.hexdigest()
+            if datasrc_id == self.datasrc_id:
+              return
+        except OSError as e:
+          self.logger.error("data file {}: load error: {}".format(self.datasrc_path, e))
+          return
 
-        datasrc_ext = str(self.datasrc_path).rsplit('.', 1)[-1]
-
-        if datasrc_ext == str(self.datasrc_path):
-          datasrc_ext = ''
-
-        if datasrc_ext in ['yml', 'yaml']:
+        try:
           with self.datasrc_path.open('rb') as f:
             datasrc_data = yaml.load(f, Loader=yaml.SafeLoader)
-        else:
-          self.logger.error("data file {}: skipped loading: unsupported file type".format(self.datasrc_path))
+        except (OSError, yaml.YAMLError) as e:
+          self.logger.error("data file {}: load error: {}".format(self.datasrc_path, e))
           return
 
         data_map = {}
