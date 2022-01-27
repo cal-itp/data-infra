@@ -1,6 +1,6 @@
 def map_agencies_urls(logger, yaml_data):
 
-    for agency_name, agency_def in datasrc_data.items():
+    for agency_name, agency_def in yaml_data.items():
 
         if "feeds" not in agency_def:
             logger.error(
@@ -21,23 +21,23 @@ def map_agencies_urls(logger, yaml_data):
                 if feed_name.startswith("gtfs_rt") and feed_url:
 
                     agency_itp_id = agency_def["itp_id"]
-                    data_name = "{}/{}/{}".format(agency_itp_id, i, feed_name)
-                    yield data_name, feed_url
+                    feed_id = "{}/{}/{}".format(agency_itp_id, i, feed_name)
+                    yield feed_id, feed_url
 
 def map_headers(logger, yaml_data):
 
     seen = set()
-    for item in datasrc_data:
+    for item in yaml_data:
         for url_set in item["URLs"]:
             itp_id = url_set["itp_id"]
             url_number = url_set["url_number"]
             for rt_url in url_set["rt_urls"]:
-                data_name = f"{itp_id}/{url_number}/{rt_url}"
-                if data_name in seen:
+                feed_id = f"{itp_id}/{url_number}/{rt_url}"
+                if feed_id in seen:
                     raise ValueError(
-                        f"Duplicate header data for url with key: {key}"
+                        f"Duplicate header data for url with feed_id: {feed_id}"
                     )
-                seen.add(data_name)
-                yield data_name, item["header-data"]
+                seen.add(feed_id)
+                yield feed_id, item["header-data"]
 
-    logger.debug(f"Header file successfully parsed with {len(seen)} entries")
+    logger.debug(f"Header file successfully mapped with {len(seen)} entries")

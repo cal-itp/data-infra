@@ -6,7 +6,7 @@ class ThreadPool(threading.Thread):
     Binds a thread class (e.g., a Fetcher) to one or more YamlMappers which
     provide config for each instance of the thread
     '''
-    def __init__(self, logger, evtbus, qmap, threadcls, threadcfg_container_map):
+    def __init__(self, logger, evtbus, qmap, threadcls, mappers):
 
         super().__init__()
 
@@ -14,20 +14,20 @@ class ThreadPool(threading.Thread):
         self.evtbus = evtbus
         self.qmap = qmap
         self.threadcls = threadcls
-        self.threadcfg_container_map = threadcfg_container_map
+        self.mappers = mappers
         self.poolmap = {}
         self.evtq = queue.Queue()
 
     def spawn(self, name):
-      cfg_getter_map = { name: getattr(self.threadcfg_container_map[name], 'get_data') for name in self.threadcfg_container_map }
-      self.poolmap[name] = self.threadcls(self.logger, self.evtbus, self.qmap, cfg_getter_map, name)
+      mapper_getters = { name: getattr(self.mappers[name], 'get') for name in self.mappers }
+      self.poolmap[name] = self.threadcls(self.logger, self.evtbus, self.qmap, mapper_getters, name)
       self.poolmap[name].start()
 
     def reconcile(self):
 
       threadnames = set()
-      for container in self.threadcfg_container_map.values():
-        threadnames.update(set(container.get_names()))
+      for mapper in self.mappers.values():
+        threadnames.update(set(mapper.keys()))
 
       for name in threadnames:
         if name in self.poolmap:

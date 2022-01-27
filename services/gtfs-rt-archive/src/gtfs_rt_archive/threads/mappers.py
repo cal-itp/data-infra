@@ -6,69 +6,69 @@ import time
 import yaml
 
 class YamlMapper(threading.Thread):
-    def __init__(self, logger, evtbus, datasrc_path, datasrc_parser):
+    def __init__(self, logger, evtbus, yaml_path, mapperfn):
 
         super().__init__()
 
         self.logger = logger
         self.evtbus = evtbus
-        self.datasrc_path = datasrc_path
-        # datasrc_parser is a function which accepts the arguments (logger, datasrc_data)
-        # and yields zero or more ( data_name, data ) tuples
-        self.datasrc_parser = datasrc_parser
-        self.datasrc_id = ''
-        self.name = "data {}".format(datasrc_path)
-        self.data_map = {}
+        self.yaml_path = yaml_path
+        # mapperfn is a function which accepts the arguments (logger, yaml_data)
+        # and yields zero or more ( map_key, data ) tuples
+        self.mapperfn = mapperfn
+        self.yaml_id = ''
+        self.name = "data {}".format(yaml_path)
+        self.yaml_map = {}
         self.map_writable = threading.Condition(threading.Lock())
         self.map_nreaders = 0
         self.evtq = queue.Queue()
 
-    def load_datasrc(self):
+    def load_map(self):
         '''
-        Opens the datasrc file and checks if it matches the currently loaded data.
-        If the datasrc file is changed, this method rebuilds the data_map by iterating
-        each ( data_name, data ) pair yielded by the datasrc_parser
+        Opens the yaml file and checks if it matches the currently mapped data.
+        If the yaml file is changed, this method rebuilds the yaml_map by iterating
+        each map_key, map_data pair yielded by the mapperfn
         '''
 
         try:
-          with self.datasrc_path.open('rb') as f:
+          with self.yaml_path.open('rb') as f:
 
-            datasrc_sha1 = hashlib.sha1()
-            datasrc_sha1.update(f.read())
-            datasrc_id = datasrc_sha1.hexdigest()
-            if datasrc_id == self.datasrc_id:
+            yaml_sha1 = hashlib.sha1()
+            yaml_sha1.update(f.read())
+            yaml_id = yaml_sha1.hexdigest()
+            if yaml_id == self.yaml_id:
               return
         except OSError as e:
-          self.logger.error("data file {}: load error: {}".format(self.datasrc_path, e))
+          self.logger.error("data file {}: load error: {}".format(self.yaml_path, e))
           return
 
         try:
-          with self.datasrc_path.open('rb') as f:
-            datasrc_data = yaml.load(f, Loader=yaml.SafeLoader)
+          with self.yaml_path.open('rb') as f:
+            yaml_data = yaml.load(f, Loader=yaml.SafeLoader)
         except (OSError, yaml.YAMLError) as e:
-          self.logger.error("data file {}: load error: {}".format(self.datasrc_path, e))
+          self.logger.error("data file {}: load error: {}".format(self.yaml_path, e))
           return
 
-        data_map = {}
-        for data_name, data in self.datasrc_parser(self.logger, datasrc_data):
-          if data_name not in data_map:
-            data_map[data_name] = ( datasrc_id, data )
+        yaml_map = {}
+        for map_key, map_data in self.mapperfn(self.logger, yaml_data):
+          if map_key not in yaml_map:
+            yaml_map[map_key] = ( yaml_id, map_data )
           else:
-            map_item = data_map[data_name]
-            map_item[1].update(data)
+            map_item = yaml_map[map_key]
+            map_item[1].update(map_data)
 
         # acquire an exclusive lock
         with self.map_writable:
           while self.map_nreaders > 0:
             self.map_writable.wait()
-          self.data_map = data_map
-          self.datasrc_id = datasrc_id
+          self.yaml_map = yaml_map
+          self.yaml_id = yaml_id
 
-        evt = ("reload", "{} {}".format(self.datasrc_path, self.datasrc_id), int(time.time()))
+        evt = ("reload", "{} {}".format(self.yaml_path, self.yaml_id), int(time.time()))
         self.logger.info("{}: emit: {}".format(self.name, evt))
         self.evtbus.emit(evt)
 
-    def get_data(self, name):
+    def get(self, name, default=None):
 
       # TODO: abstract these semantics under context mgmt
       # acquire a shared lock
@@ -77,9 +77,9 @@ class YamlMapper(threading.Thread):
 
       # work with the shared lock
       try:
-        data = self.data_map.get(name)
+        data = self.yaml_map.get(name)
         if data is None:
-          return None
+          return default
         else:
           return copy.deepcopy(data)
       # release the shared lock
@@ -89,19 +89,27 @@ class YamlMapper(threading.Thread):
           if self.map_nreaders == 0:
             self.map_writable.notify_all()
 
-    def get_names(self):
+    def keys(self):
       # acquire a shared lock
       with self.map_writable:
         self.map_nreaders+=1
       # work with the shared lock
       try:
-        return tuple(self.data_map.keys())
+        return tuple(self.yaml_map.keys())
       # release the shared lock
       finally:
         with self.map_writable:
           self.map_nreaders-=1
           if self.map_nreaders == 0:
             self.map_writable.notify_all()
+
+    def __iter__(self):
+      return iter(self.keys())
+
+    def __getitem__(self, key):
+      if key not in self:
+        raise KeyError(key)
+      return self.get(key)
 
     def run(self):
       self.evtbus.add_listener(self.name, "tick", self.evtq)
@@ -111,7 +119,7 @@ class YamlMapper(threading.Thread):
 
           evt_name = evt[0]
           if evt_name == "tick":
-              self.load_datasrc()
+              self.load_map()
           evt = self.evtq.get()
 
       self.logger.debug("{}: finalized".format(self.name))
