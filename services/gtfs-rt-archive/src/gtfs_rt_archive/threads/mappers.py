@@ -1,3 +1,12 @@
+"""mappers.py: Location for implementations of Mapper threads
+
+Mapper threads are responsible for loading data from an external source (most thread
+loops will want to do so on every tick event), iterating over k/v pairs of the data
+yielded by a mapperfn, and building an internal map (dict) of the k/v pairs.
+
+The get() method of a mapper instance can then safely called from other threads in order
+to retrieve data from the internal map.
+"""
 import threading
 import queue
 import hashlib
@@ -7,6 +16,11 @@ import yaml
 
 
 class YamlMapper(threading.Thread):
+    """Loads and remapse a yaml file on every tick
+
+    Skips remapping the yaml file if it hasn't changed since the last time it was mapped
+    """
+
     def __init__(self, logger, evtbus, yaml_path, mapperfn):
 
         super().__init__()
@@ -70,6 +84,7 @@ class YamlMapper(threading.Thread):
         self.evtbus.emit(evt)
 
     def get(self, name, default=None):
+        """Thread-safe method for retrieving the data mapped to a map_key"""
 
         # TODO: abstract these semantics under context mgmt
         # acquire a shared lock
@@ -91,6 +106,8 @@ class YamlMapper(threading.Thread):
                     self.map_writable.notify_all()
 
     def keys(self):
+        """Thread-safe method for retrieving all map_key names from the internal map"""
+
         # acquire a shared lock
         with self.map_writable:
             self.map_nreaders += 1
