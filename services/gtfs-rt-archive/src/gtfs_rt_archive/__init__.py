@@ -4,7 +4,6 @@ import logging
 import pathlib
 import queue
 import time
-import yaml
 from .threads.ticker import Ticker
 from .threads.fetcher import PoolFetcher
 from .threads.writer import FSWriter, GCPBucketWriter
@@ -12,6 +11,7 @@ from .threads.mappers import YamlMapper
 from .eventbus import EventBus
 from .threadpool import ThreadPool
 from .mapperfns import map_agencies_urls, map_headers
+
 
 def main():
 
@@ -29,7 +29,7 @@ def main():
 
     # Setup logging channel
 
-    logger = logging.getLogger('gtfs-rt-archive')
+    logger = logging.getLogger("gtfs-rt-archive")
 
     level_name = os.getenv("CALITP_LOG_LEVEL")
     if hasattr(level_name, "lower"):
@@ -66,11 +66,11 @@ def main():
 
     # Instantiate threads
 
-    qmap = { 'write': queue.Queue() }
+    qmap = {"write": queue.Queue()}
     evtbus = EventBus(logger)
     mappers = {
-      'urls': YamlMapper(logger, evtbus, agencies_path, map_agencies_urls),
-      'headers': YamlMapper(logger, evtbus, headers_path, map_headers)
+        "urls": YamlMapper(logger, evtbus, agencies_path, map_agencies_urls),
+        "headers": YamlMapper(logger, evtbus, headers_path, map_headers),
     }
     pool = ThreadPool(logger, evtbus, qmap, PoolFetcher, mappers)
     ticker = Ticker(logger, evtbus, tickint)
@@ -79,7 +79,7 @@ def main():
     for scheme in backends_table:
         if data_dest.startswith(scheme):
             writercls = backends_table[scheme]
-            writer = writercls(logger, qmap['write'], data_dest, secret)
+            writer = writercls(logger, qmap["write"], data_dest, secret)
             break
 
     if writer is None:
@@ -87,18 +87,18 @@ def main():
             "unsupported CALITP_DATA_DEST: "
             "{}: using default value file:///dev/null".format(data_dest)
         )
-        writer = FSWriter(logger, qmap['write'], "file:///dev/null")
+        writer = FSWriter(logger, qmap["write"], "file:///dev/null")
 
     # Load data
     for mapper in mappers.values():
-      mapper.load_map()
+        mapper.load_map()
 
     # Run
 
     writer.start()
     pool.start()
     for mapper in mappers.values():
-      mapper.start()
+        mapper.start()
     # wait on thread startup
     time.sleep(0.5)
     ticker.start()

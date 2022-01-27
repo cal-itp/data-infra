@@ -1,6 +1,7 @@
 import time
 import threading
 
+
 class Ticker(threading.Thread):
     def __init__(self, logger, evtbus, tickint):
 

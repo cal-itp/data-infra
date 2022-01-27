@@ -1,6 +1,7 @@
 import datetime
 import threading
 
+
 class BaseWriter(threading.Thread):
     def __init__(self, logger, wq, desturl, secret=None):
         super().__init__()
@@ -22,7 +23,11 @@ class BaseWriter(threading.Thread):
             write_name = "{}/{}".format(
                 datetime.datetime.fromtimestamp(evt_ts).isoformat(), data_name
             )
-            self.logger.debug('[txn {}] start write: name={} desturl={}'.format(txn["id"], write_name, self.desturl))
+            self.logger.debug(
+                "[txn {}] start write: name={} desturl={}".format(
+                    txn["id"], write_name, self.desturl
+                )
+            )
             self.write(write_name, txn)
             txn = self.wq.get()
 

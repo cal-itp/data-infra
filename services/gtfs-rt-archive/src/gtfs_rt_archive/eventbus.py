@@ -1,6 +1,7 @@
 import threading
 import queue
 
+
 class EventBus(object):
     def __init__(self, logger):
 

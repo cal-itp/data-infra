@@ -6,6 +6,7 @@ import urllib.error
 import urllib.parse
 from . import BaseWriter
 
+
 class FSWriter(BaseWriter):
 
     name = "filewriter"
@@ -33,9 +34,11 @@ class FSWriter(BaseWriter):
         try:
             with dest.open(mode="wb") as f:
                 f.write(txn["input_stream"].read())
-                self.logger.debug('[txn {}] completed write'.format(txn["id"]))
+                self.logger.debug("[txn {}] completed write".format(txn["id"]))
         except OSError as e:
-            self.logger.critical("[txn {}] write error: {}: {}".format(txn["id"], dest, e))
+            self.logger.critical(
+                "[txn {}] write error: {}: {}".format(txn["id"], dest, e)
+            )
             return
 
 
@@ -77,39 +80,38 @@ class GCPBucketWriter(BaseWriter):
 
     def _get_requester(self, name, txn):
 
-      logger = self.logger
-      GoogleAuthTransportError = self.GoogleAuthTransportError
-      session = self.session
+        logger = self.logger
+        GoogleAuthTransportError = self.GoogleAuthTransportError
+        session = self.session
 
-      def _urllib_requester(rq):
-        try:
-            urllib.request.urlopen(rq)
-            logger.debug('[txn {}] completed write'.format(txn["id"]))
-        except (urllib.error.URLError, urllib.error.HTTPError) as e:
-            logger.critical(
-                "[txn {}] error uploading to bucket {}: {}".format(
-                    txn["id"], rq.full_url, e
+        def _urllib_requester(rq):
+            try:
+                urllib.request.urlopen(rq)
+                logger.debug("[txn {}] completed write".format(txn["id"]))
+            except (urllib.error.URLError, urllib.error.HTTPError) as e:
+                logger.critical(
+                    "[txn {}] error uploading to bucket {}: {}".format(
+                        txn["id"], rq.full_url, e
+                    )
                 )
-            )
 
-
-      def _googleauth_requester(url, headers):
-        try:
-            session.request("POST", url, data=txn["input_stream"], headers=headers)
-            logger.debug('[txn {}] completed write'.format(txn["id"]))
-        except GoogleAuthTransportError as e:
-            logger.critical(
-                "[txn {}] error uploading to bucket {}: {}".format(
-                    txn["id"], url, e
+        def _googleauth_requester(url, headers):
+            try:
+                session.request("POST", url, data=txn["input_stream"], headers=headers)
+                logger.debug("[txn {}] completed write".format(txn["id"]))
+            except GoogleAuthTransportError as e:
+                logger.critical(
+                    "[txn {}] error uploading to bucket {}: {}".format(
+                        txn["id"], url, e
+                    )
                 )
-            )
 
-      if name == "urllib":
-        return _urllib_requester
-      elif name == "googleauth":
-        return _googleauth_requester
-      else:
-        raise ValueError(name)
+        if name == "urllib":
+            return _urllib_requester
+        elif name == "googleauth":
+            return _googleauth_requester
+        else:
+            raise ValueError(name)
 
     def write(self, name, txn):
 
@@ -130,7 +132,3 @@ class GCPBucketWriter(BaseWriter):
 
             rqer = self._get_requester("googleauth", txn)
             threading.Thread(target=rqer, args=(rqurl, rqheaders)).start()
-
-
-if __name__ == "__main__":
-    main(sys.argv)

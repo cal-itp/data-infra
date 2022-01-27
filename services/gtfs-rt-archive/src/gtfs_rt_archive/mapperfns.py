@@ -24,6 +24,7 @@ def map_agencies_urls(logger, yaml_data):
                     feed_id = "{}/{}/{}".format(agency_itp_id, i, feed_name)
                     yield feed_id, feed_url
 
+
 def map_headers(logger, yaml_data):
 
     seen = set()

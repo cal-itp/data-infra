@@ -4,6 +4,7 @@ import uuid
 import urllib.request
 import urllib.error
 
+
 class PoolFetcher(threading.Thread):
     def __init__(self, logger, evtbus, qmap, mapper_getters, mapper_key):
 
@@ -11,28 +12,40 @@ class PoolFetcher(threading.Thread):
 
         self.logger = logger
         self.evtbus = evtbus
-        self.wq = qmap['write']
+        self.wq = qmap["write"]
         self.mapper_getters = mapper_getters
         self.mapper_key = mapper_key
         self.name = "fetcher {}".format(mapper_key)
         self.evtq = queue.Queue()
 
     def fetch(self, txn):
-        url_mapval = self.mapper_getters['urls'](self.mapper_key)
+        url_mapval = self.mapper_getters["urls"](self.mapper_key)
         if url_mapval is None:
-          # shutdown when there is no URL to fetch
-          self.logger.debug("{}: no url for {}: queue shutdown".format(self.name, self.mapper_key))
-          self.evtq.put(None)
-          return
+            # shutdown when there is no URL to fetch
+            self.logger.debug(
+                "{}: no url for {}: queue shutdown".format(self.name, self.mapper_key)
+            )
+            self.evtq.put(None)
+            return
         url_yaml_id = url_mapval[0]
         url = url_mapval[1]
-        headers_mapval = self.mapper_getters['headers'](self.mapper_key)
-        headers_yaml_id = ''
+        headers_mapval = self.mapper_getters["headers"](self.mapper_key)
+        headers_yaml_id = ""
         headers = {}
         if headers_mapval is not None:
-          headers_yaml_id = headers_mapval[0]
-          headers = headers_mapval[1]
-        self.logger.debug("[txn {}] start fetch: mapper_key={} url={} len(headers)={} url_yaml_id={} headers_yaml_id={}".format(txn["id"], self.mapper_key, url, len(headers), url_yaml_id, headers_yaml_id))
+            headers_yaml_id = headers_mapval[0]
+            headers = headers_mapval[1]
+        self.logger.debug(
+            "[txn {}] start fetch: mapper_key={} url={} len(headers)={} url_yaml_id={} "
+            "headers_yaml_id={}".format(
+                txn["id"],
+                self.mapper_key,
+                url,
+                len(headers),
+                url_yaml_id,
+                headers_yaml_id,
+            )
+        )
         try:
             request = urllib.request.Request(url)
             for key, value in headers.items():
@@ -54,17 +67,23 @@ class PoolFetcher(threading.Thread):
 
             evt_name = evt[0]
             if evt_name == "tick":
-                txn = {"evt": evt, "input_name": self.mapper_key, "id": uuid.uuid4(), "input_stream": None}
-                rs = self.fetch(txn)
+                txn = {
+                    "evt": evt,
+                    "input_name": self.mapper_key,
+                    "id": uuid.uuid4(),
+                    "input_stream": None,
+                }
+                self.fetch(txn)
                 self.logger.debug("[txn {}] completed fetch".format(txn["id"]))
                 if hasattr(txn["input_stream"], "read"):
                     self.wq.put(txn)
                 else:
-                  self.logger.warn("[txn {}] no data fetched".format(txn["id"]))
+                    self.logger.warn("[txn {}] no data fetched".format(txn["id"]))
 
             evt = self.evtq.get()
 
         self.logger.debug("{}: finalized".format(self.name))
+
 
 class Fetcher(threading.Thread):
     def __init__(self, logger, evtbus, wq, urldef):
