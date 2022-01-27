@@ -8,6 +8,7 @@ from . import BaseWriter
 
 
 class FSWriter(BaseWriter):
+    """Writes each name to the local filesystem directory specified by basepath"""
 
     name = "filewriter"
 
@@ -43,6 +44,12 @@ class FSWriter(BaseWriter):
 
 
 class GCPBucketWriter(BaseWriter):
+    """Writes each name to the gcp bucket specified by desturl
+
+    The HTTP request which performs each write is dispatched in an async
+    thread. This behavior is added because the main program loop is hard coded to only
+    ever spawn a single writer thread for the process.
+    """
 
     name = "gswriter"
     baseurl = "https://storage.googleapis.com/upload/storage/v1/b"
