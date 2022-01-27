@@ -5,7 +5,7 @@ import copy
 import time
 import yaml
 
-class DataContainer(threading.Thread):
+class YamlMapper(threading.Thread):
     def __init__(self, logger, evtbus, datasrc_path, datasrc_parser):
 
         super().__init__()
