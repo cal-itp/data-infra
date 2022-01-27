@@ -5,19 +5,25 @@
 See dependencies section below for details on prerequisites
 
 ```bash
+# The expectation is that Downloads will have files named agencies.yaml
+# and heders.yaml
 cat <<EOF > services/gtfs-rt-archive/.env
-CALITP_AGENCIES_YML=$HOME/Downloads/data_agencies.yml
-CALITP_HEADERS_YML=$HOME/Downloads/data_headers.yml
+HOST_YML_DIR=$HOME/Downloads
 EOF
 docker-compose -f services/gtfs-rt-archive/docker-compose.yml up
 ```
 
 ## Dependencies
 
+These dependencies are for running the script in a generic CLI environment. Most
+will want to use the docker-compose project
+
 ### docker-compose
 
 A docker stack is the simplest way to automatically build the script & its
-required environment
+required environment. The number one requirement is to set an environment
+variable named `HOST_YML_DIR` which points to a directory on your host machine
+which contains `agencies.yml` and `headers.yml` (See below for details).
 
 ### GCP service account
 
@@ -63,6 +69,10 @@ registry directly by end users.
 
 ## Updating and restarting preprod and prod services
 
-The gtfs-rt-archive service gets restarted during the `move DAGs to GCS folder` GitHub action defined in the [push_to_gcloud.yml](https://github.com/cal-itp/data-infra/blob/main/.github/workflows/push_to_gcloud.yml) file. During the restart any updated information from the agencies.yml and headers.yml will be updated in the preprod or production environment. In affected pull requests, the preprod service gets restarted on each commit. Once merged to main, the production service gets restarted.
+The gtfs-rt-archive service gets receives new data files pushed to it be the
+GitHub action defined in the
+[push_to_gcloud.yml](https://github.com/cal-itp/data-infra/blob/main/.github/workflows/push_to_gcloud.yml)
+file. The service should take steps to automatically reload these data files
+when they arrive.
 
 If adding a new environment variable to the script, additional editing of the kubernetes config will need to be done and some editing of the config in the Kubernetes Engine console may need to occur prior to restarting a service.
