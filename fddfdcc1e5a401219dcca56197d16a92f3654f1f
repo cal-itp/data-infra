@@ -1,0 +1,46 @@
+[/home/runner/work/data-infra/data-infra/kubernetes/apps/overlays/gtfs-rt-archive-preprod]
+
+diff -u -N /tmp/LIVE-3809322279/apps.v1.Deployment.gtfs-rt-preprod.gtfs-rt-archive /tmp/MERGED-493227654/apps.v1.Deployment.gtfs-rt-preprod.gtfs-rt-archive
+--- /tmp/LIVE-3809322279/apps.v1.Deployment.gtfs-rt-preprod.gtfs-rt-archive	2022-01-09 21:53:40.297848847 +0000
++++ /tmp/MERGED-493227654/apps.v1.Deployment.gtfs-rt-preprod.gtfs-rt-archive	2022-01-09 21:53:40.297848847 +0000
+@@ -6,7 +6,7 @@
+     kubectl.kubernetes.io/last-applied-configuration: |
+       {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"name":"gtfs-rt-archive"},"name":"gtfs-rt-archive","namespace":"gtfs-rt-preprod"},"spec":{"replicas":1,"selector":{"matchLabels":{"name":"gtfs-rt-archive"}},"strategy":{"type":"Recreate"},"template":{"metadata":{"labels":{"name":"gtfs-rt-archive"}},"spec":{"containers":[{"envFrom":[{"configMapRef":{"name":"archiver-app-vars"}},{"configMapRef":{"name":"archiver-channel-vars"}}],"image":"us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:1.1-jlott.10","imagePullPolicy":"Always","name":"app","volumeMounts":[{"mountPath":"/secrets/agencies-data","name":"agencies-data"},{"mountPath":"/secrets/gcs-upload-svcacct","name":"gcs-upload-svcacct"}]}],"volumes":[{"name":"agencies-data","secret":{"secretName":"agencies-data"}},{"name":"gcs-upload-svcacct","secret":{"secretName":"gcs-upload-svcacct"}}]}}}}
+   creationTimestamp: "2021-08-27T15:19:49Z"
+-  generation: 301
++  generation: 302
+   labels:
+     name: gtfs-rt-archive
+   managedFields:
+@@ -153,7 +153,7 @@
+             name: archiver-app-vars
+         - configMapRef:
+             name: archiver-channel-vars
+-        image: us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:1.1-jlott.10
++        image: us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:1.1
+         imagePullPolicy: Always
+         name: app
+         resources: {}
+[/home/runner/work/data-infra/data-infra/kubernetes/apps/overlays/gtfs-rt-archive-prod]
+
+diff -u -N /tmp/LIVE-3988060412/apps.v1.Deployment.gtfs-rt.gtfs-rt-archive /tmp/MERGED-4034989007/apps.v1.Deployment.gtfs-rt.gtfs-rt-archive
+--- /tmp/LIVE-3988060412/apps.v1.Deployment.gtfs-rt.gtfs-rt-archive	2022-01-09 21:53:43.725879790 +0000
++++ /tmp/MERGED-4034989007/apps.v1.Deployment.gtfs-rt.gtfs-rt-archive	2022-01-09 21:53:43.729879826 +0000
+@@ -6,7 +6,7 @@
+     kubectl.kubernetes.io/last-applied-configuration: |
+       {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"name":"gtfs-rt-archive"},"name":"gtfs-rt-archive","namespace":"gtfs-rt"},"spec":{"replicas":1,"selector":{"matchLabels":{"name":"gtfs-rt-archive"}},"strategy":{"type":"Recreate"},"template":{"metadata":{"labels":{"name":"gtfs-rt-archive"}},"spec":{"containers":[{"envFrom":[{"configMapRef":{"name":"archiver-app-vars"}},{"configMapRef":{"name":"archiver-channel-vars"}}],"image":"us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:1.1-jlott.10","name":"app","volumeMounts":[{"mountPath":"/secrets/agencies-data","name":"agencies-data"},{"mountPath":"/secrets/gcs-upload-svcacct","name":"gcs-upload-svcacct"}]}],"volumes":[{"name":"agencies-data","secret":{"secretName":"agencies-data"}},{"name":"gcs-upload-svcacct","secret":{"secretName":"gcs-upload-svcacct"}}]}}}}
+   creationTimestamp: "2021-07-26T20:39:07Z"
+-  generation: 78
++  generation: 79
+   labels:
+     name: gtfs-rt-archive
+   managedFields:
+@@ -160,7 +160,7 @@
+             name: archiver-app-vars
+         - configMapRef:
+             name: archiver-channel-vars
+-        image: us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:1.1-jlott.10
++        image: us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:1.1
+         imagePullPolicy: IfNotPresent
+         name: app
+         resources: {}
