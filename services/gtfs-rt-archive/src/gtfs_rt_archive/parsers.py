@@ -22,7 +22,7 @@ def parse_agencies_urls(logger, datasrc_data):
 
                     agency_itp_id = agency_def["itp_id"]
                     data_name = "{}/{}/{}".format(agency_itp_id, i, feed_name)
-                    yield ( data_name, feed_url )
+                    yield data_name, feed_url
 
 def parse_headers(logger, datasrc_data):
 
