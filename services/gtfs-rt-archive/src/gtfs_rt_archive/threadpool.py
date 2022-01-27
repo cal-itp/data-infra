@@ -4,8 +4,8 @@ import queue
 
 class ThreadPool(threading.Thread):
     """
-    Binds a thread class (e.g., a Fetcher) to one or more YamlMappers which
-    provide config for each instance of the thread
+    Binds a thread class (e.g., a PoolFetcher) to one or more YamlMappers, each of which
+    provides input data to instances of the thread class (i.e., threads in the pool)
     """
 
     def __init__(self, logger, evtbus, qmap, threadcls, mappers):
@@ -21,6 +21,13 @@ class ThreadPool(threading.Thread):
         self.evtq = queue.Queue()
 
     def spawn(self, name):
+        """Spawn a new instance of threadcls
+
+        Passes a map of mapper_name, mapper_getter pairs to the new thread and passes
+        the name parameter to the thread as its map_key it will use to retrieve data
+        from each mapper_getter
+        """
+
         mapper_getters = {
             name: getattr(self.mappers[name], "get") for name in self.mappers
         }
@@ -30,6 +37,7 @@ class ThreadPool(threading.Thread):
         self.poolmap[name].start()
 
     def reconcile(self):
+        """Ensures a thread is spawned for each map_key in each mapper"""
 
         threadnames = set()
         for mapper in self.mappers.values():
@@ -46,6 +54,7 @@ class ThreadPool(threading.Thread):
                 self.spawn(name)
 
     def run(self):
+        """Perform a reconcile() on each reload event emitted by a YamlMapper"""
         self.evtbus.add_listener(self.name, "reload", self.evtq)
 
         self.reconcile()
