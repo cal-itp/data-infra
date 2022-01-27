@@ -3,6 +3,12 @@ import threading
 
 
 class Ticker(threading.Thread):
+    """Emits a 'tick' event every <tickint> seconds
+
+    Ticks are the primary event that drives the program. Most program threads iterate
+    their main loop once for each tick which is emitted.
+    """
+
     def __init__(self, logger, evtbus, tickint):
 
         super().__init__()
