@@ -1,4 +1,5 @@
 import pathlib
+import threading
 import urllib.request
 import urllib.error
 import urllib.parse
@@ -70,6 +71,40 @@ class GCPBucketWriter(BaseWriter):
         if self.basepath and not self.basepath.endswith("/"):
             self.basepath += "/"
 
+    def _get_requester(self, name, txn):
+
+      logger = self.logger
+      GoogleAuthTransportError = self.GoogleAuthTransportError
+      session = self.session
+
+      def _urllib_requester(rq):
+        try:
+            urllib.request.urlopen(rq)
+        except (urllib.error.URLError, urllib.error.HTTPError) as e:
+            logger.critical(
+                "[txn {}] error uploading to bucket {}: {}".format(
+                    txn["id"], rq.full_url, e
+                )
+            )
+
+
+      def _googleauth_requester(url, headers):
+        try:
+            session.request("POST", url, data=txn["input_stream"], headers=headers)
+        except GoogleAuthTransportError as e:
+            logger.critical(
+                "[txn {}] error uploading to bucket {}: {}".format(
+                    txn["id"], url, e
+                )
+            )
+
+      if name == "urllib":
+        return _urllib_requester
+      elif name == "googleauth":
+        return _googleauth_requester
+      else:
+        raise ValueError(name)
+
     def write(self, name, txn):
 
         rqurl = "{}?uploadType=media&name={}{}".format(
@@ -82,25 +117,13 @@ class GCPBucketWriter(BaseWriter):
             rq = urllib.request.Request(
                 rqurl, method="POST", headers=rqheaders, data=txn["input_stream"]
             )
-            try:
-                urllib.request.urlopen(rq)
-            except (urllib.error.URLError, urllib.error.HTTPError) as e:
-                self.logger.critical(
-                    "[txn {}] error uploading to bucket {}: {}".format(
-                        txn["id"], self.desturl, e
-                    )
-                )
+            rqer = self._get_requester("urllib", txn)
+            threading.Thread(target=rqer, args=(rq,)).start()
 
         else:
 
-            try:
-                self.session.request("POST", rqurl, data=txn["input_stream"], headers=rqheaders)
-            except self.GoogleAuthTransportError as e:
-                self.logger.critical(
-                    "[txn {}] error uploading to bucket {}: {}".format(
-                        txn["id"], self.desturl, e
-                    )
-                )
+            rqer = self._get_requester("googleauth", txn)
+            threading.Thread(target=rqer, args=(rqurl, rqheaders)).start()
 
 
 if __name__ == "__main__":
