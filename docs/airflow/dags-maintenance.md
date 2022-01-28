@@ -1,4 +1,4 @@
-# DAGs maintenance
+# DAGs Maintenance
 Use this page to find information on maintenance of the DAGs that support our data pipelines.
 
 1. [GTFS Schedule DAGs](gtfs-schedule-dags)
@@ -10,11 +10,11 @@ Use this page to find information on maintenance of the DAGs that support our da
 (gtfs-schedule-dags)=
 ## GTFS Schedule - DAGs Maintenance
 
-### DAGs overview
+### DAGs Overview
 
-### common issues
+### Common Issues
 
-### backfilling
+### Backfilling
 
 (gtfs-realtime-dags)=
 ## GTFS Realtime - DAGs Maintenance
@@ -86,7 +86,7 @@ The payments_loader dag has three kinds of tasks:
 
 The payments_views is made of SQL queries that transform the loaded tables above.
 
-### Adding new tables in payments_loader
+### Adding New Tables in payments_loader
 
 * Copy the `customer_funding_source` task. The new task name should match the table it creates.
 * Alter `destination_project_dataset_table` and `source_objects` to match the new table name.
@@ -98,7 +98,7 @@ The payments_views is made of SQL queries that transform the loaded tables above
     * add a depedency in yaml header to this new table.
 * In the `docs/datasets/mst_payments.md` file, add an entry into the `Tables` table describing the new data set.
 
-### Adding a new table to payments_views
+### Adding a New Table to payments_views
 
 * Ensure your task is given the same name as the table it creates.
 * Be sure to include an `external_dependency` on payments_loader (see other views in payments_views).
@@ -117,6 +117,4 @@ can be mutated by littlepay, so if you clear a past task, you should clear them 
 (views-dags)=
 ## Views - DAGs Maintenance
 
-### DAGs overview
-
-Views are held in the [`gtfs_views`](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/gtfs_views) DAG.
+### DAGs Overview
