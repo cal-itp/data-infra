@@ -84,7 +84,6 @@ WITH
       , t1.start_date AS service_start_date
       , t1.end_date AS service_end_date
       , t2.full_date AS service_date
-      , COALESCE(GREATEST(t1))
     FROM  `views.gtfs_schedule_stg_calendar_long` t1
     JOIN `views.dim_date` t2
       ON
