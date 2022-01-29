@@ -1,6 +1,9 @@
 # Vim
 .*.sw[po]
 
+# PyCharm, etc.
+.idea/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
