@@ -4,11 +4,12 @@ from google.transit import gtfs_realtime_pb2
 from google.protobuf import json_format
 from google.protobuf.message import DecodeError
 from calitp.storage import get_fs
-from calitp.config import get_bucket
+from calitp.config import get_bucket, is_development
 from collections import defaultdict
 from pathlib import Path
 
 import pandas as pd
+import structlog
 import tempfile
 
 # Note that all RT extraction is stored in the prod bucket, since it is very large,
@@ -171,6 +172,7 @@ class RectangleRealtimeDataOperator(BaseOperator):
             rt_type (string): One of "alerts", "trip_updates", "vehicle_positions"
             execution_date (date): The execution date being processed
         """
+        logger = structlog.get_logger()
         fs = get_fs()
 
         # get execution_date from context:
@@ -181,14 +183,17 @@ class RectangleRealtimeDataOperator(BaseOperator):
         feed_files = self.fetch_bucket_file_names(iso_date)
 
         # parse feeds ----
-        for feed, files in feed_files.items():
+        for i, (feed, files) in enumerate(feed_files.items()):
+            loop_logger = logger.bind(feed=feed, feed_i=i, total=len(feed_files))
+
             google_cloud_file_name = self.get_google_cloud_filename(feed, iso_date)
-            print("Creating " + google_cloud_file_name)
-            print("  parsing %s files" % len(files))
+            loop_logger.info("Creating " + google_cloud_file_name)
+            loop_logger.info("  parsing %s files" % len(files))
 
             if len(files) > 0:
                 # fetch and parse RT files from bucket
                 with tempfile.TemporaryDirectory() as tmp_dir:
+                    loop_logger.info(f"downloading {len(files)} files to {tmp_dir}")
                     fs.get(files, tmp_dir)
                     all_files = [x for x in Path(tmp_dir).rglob("*") if not x.is_dir()]
 
@@ -202,7 +207,9 @@ class RectangleRealtimeDataOperator(BaseOperator):
                         if rectangle is not None:
                             entities_dfs.append(rectangle)
 
-                print("  %s entities sub dataframes created" % len(entities_dfs))
+                loop_logger.info(
+                    "  %s entities sub dataframes created" % len(entities_dfs)
+                )
                 if len(entities_dfs) > 0:
                     entities_rectangle = pd.concat(entities_dfs)
                     entities_rectangle.insert(0, "calitp_itp_id", int(feed[0]))
@@ -214,6 +221,9 @@ class RectangleRealtimeDataOperator(BaseOperator):
                     with tempfile.TemporaryDirectory() as tmpdirname:
                         fname = tmpdirname + "/" + "temporary" + ".parquet"
                         casted.to_parquet(fname, index=False)
+                        loop_logger.info(
+                            f"writing {fname} to {self.dst_path + google_cloud_file_name}"
+                        )
                         fs.put(
                             fname, self.dst_path + google_cloud_file_name,
                         )
