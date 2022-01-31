@@ -373,6 +373,11 @@
      Production Maintenance
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../airflow/dags-maintenance.html">
+     DAGs Maintenance
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toctree-l1 has-children">
@@ -615,36 +620,9 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#maintenance">
-   Maintenance
+  <a class="reference internal nav-link" href="#dags-maintenance">
+   DAGs Maintenance
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dags-overview">
-     DAGs Overview
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#extraction">
-     Extraction
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#logging">
-     Logging
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#validation">
-     Validation
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#backfilling">
-     Backfilling
-    </a>
-   </li>
-  </ul>
  </li>
 </ul>
 
@@ -682,36 +660,9 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#maintenance">
-   Maintenance
+  <a class="reference internal nav-link" href="#dags-maintenance">
+   DAGs Maintenance
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dags-overview">
-     DAGs Overview
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#extraction">
-     Extraction
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#logging">
-     Logging
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#validation">
-     Validation
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#backfilling">
-     Backfilling
-    </a>
-   </li>
-  </ul>
  </li>
 </ul>
 
@@ -801,54 +752,9 @@ This data is processed and validated daily.</p>
 </tbody>
 </table>
 </div>
-<div class="section" id="maintenance">
-<h2>Maintenance<a class="headerlink" href="#maintenance" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="dags-overview">
-<h3>DAGs Overview<a class="headerlink" href="#dags-overview" title="Permalink to this headline">¶</a></h3>
-<p>Currently, 3 DAGs are used with GTFS RT data:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">rt_loader_files</span></code>: Populates a table called <code class="docutils literal notranslate"><span class="pre">gtfs_rt.calitp_files</span></code> that has one row per
-sample of GTFS RT data. For example, a vehicle positions file downloaded at a specific point in time.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">rt_loader</span></code>: handles the rectangling and loading of GTFS RT and validation data.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">rt_views</span></code>: exposes user-friendly views for analysis.</p></li>
-</ul>
-<p>Internal data should live in the <code class="docutils literal notranslate"><span class="pre">gtfs_rt</span></code> dataset on bigquery, while those that are
-broadly useful across the org should live in <code class="docutils literal notranslate"><span class="pre">views</span></code>.</p>
-</div>
-<div class="section" id="extraction">
-<h3>Extraction<a class="headerlink" href="#extraction" title="Permalink to this headline">¶</a></h3>
-<p>Extraction of GTFS RT feeds is handled by the <a class="reference internal" href="../services/gtfs-rt-archive.html"><span class="doc std std-doc">gtfs-rt-archive service</span></a>. Within the service, <code class="docutils literal notranslate"><span class="pre">agencies.yml</span></code> is read into separate threads and each RT feed is uploaded to a GCPBucketWriter via a post request. This data is stored in a kubernetes cluster <code class="docutils literal notranslate"><span class="pre">data-infra-apps</span></code>.</p>
-</div>
-<div class="section" id="logging">
-<h3>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h3>
-<p>Within the gtfs-rt-archive service, A logger channel is set up with the <code class="docutils literal notranslate"><span class="pre">logging</span></code> facility for Python. If an error is raised within the service, the log messages are also uploaded and stored in the cluster <code class="docutils literal notranslate"><span class="pre">data-infra-apps</span></code>. Within this logger object some of the errors we are currently logging and their associated error levels:</p>
-<ul class="simple">
-<li><p>missing feeds (Warning)</p></li>
-<li><p>missing itp_id (Warning)</p></li>
-<li><p>event dropped (Warning)</p></li>
-<li><p>ticker (Debug)</p></li>
-<li><p>error fetching URL (Info)</p></li>
-</ul>
-<p>Google cloud automatically creates specific buckets called ‘logging buckets’ when a kubernetes cluster is stood up, these are called <code class="docutils literal notranslate"><span class="pre">_Default</span></code> and <code class="docutils literal notranslate"><span class="pre">_Required</span></code>. Cloud Logging provides these two predefined sinks for each Cloud Project. All logs that are generated in a resource are automatically processed through those two sinks and then are stored either in the <code class="docutils literal notranslate"><span class="pre">_Required</span></code> or <code class="docutils literal notranslate"><span class="pre">_Default</span></code> Buckets. <code class="docutils literal notranslate"><span class="pre">_Required</span></code> has retention for 400 days and appears to have mostly audit log functionality for data compliance. We are mostly using _Default which has a retention of 30 days to log all of our cloud services. <code class="docutils literal notranslate"><span class="pre">_Default</span></code> gets updated from the kubernetes cluster in hourly batches. We created a log sink called <code class="docutils literal notranslate"><span class="pre">rt-extract-to-bigquery</span></code> that filters the logs within <code class="docutils literal notranslate"><span class="pre">_Default</span></code> for the namespace <code class="docutils literal notranslate"><span class="pre">resource.labels.namespace_name=&quot;gtfs-rt&quot;</span></code>. To reliably route logs, the log router stores the logs temporarily, which buffers against temporary disruptions on any sink. According to this documentation, the log logging frequency between Cloud Logging and Bigquery is <a class="reference external" href="https://cloud.google.com/logging/docs/export/using_exported_logs#bigquery-frequency">near real-time</a>.</p>
-<p>Within The BigQuery table, the error messages are stored within the stdout table. The table names are generated automatically through the cloud router and cannot be renamed. The stout table is a partitioned table that does not have any limits on storage size currently. See <a class="reference external" href="https://cloud.google.com/logging/docs/routing/overview">Google Cloud Log Router docs</a> for more information. The raw logs may be browsed in the <a class="reference external" href="https://console.cloud.google.com/logs/query?project=cal-itp-data-infra">Logs Explorer</a>.</p>
-</div>
-<div class="section" id="validation">
-<h3>Validation<a class="headerlink" href="#validation" title="Permalink to this headline">¶</a></h3>
-<p>Validation of GTFS RT uses the <a class="reference external" href="https://github.com/cal-itp/gtfs-rt-validator-api">gtfs-rt-validator-api</a>.
-This repo publishes a docker image on every release, so that it can used from a KubernetesPodOperator.
-It allows for fetching GTFS RT and schedule data from our cloud storage, validating, and putting the results
-back into cloud storage.</p>
-<p>Note that the validation process requires two pieces per feed:</p>
-<ul class="simple">
-<li><p>a zipped GTFS Schedule</p></li>
-<li><p>realtime feed data (e.g. vehicle positions, trip updates, service alerts)</p></li>
-</ul>
-</div>
-<div class="section" id="backfilling">
-<h3>Backfilling<a class="headerlink" href="#backfilling" title="Permalink to this headline">¶</a></h3>
-<p>This DAG does not have any tasks that <code class="docutils literal notranslate"><span class="pre">depends_on_past</span></code>, so you should be able to
-clear and re-run tasks as needed.</p>
-</div>
+<div class="section" id="dags-maintenance">
+<h2>DAGs Maintenance<a class="headerlink" href="#dags-maintenance" title="Permalink to this headline">¶</a></h2>
+<p>You can find further information on DAGs maintenance for GTFS Realtime data <a class="reference internal" href="../airflow/dags-maintenance.html#gtfs-realtime-dags"><span class="std std-ref">on this page</span></a>.</p>
 </div>
 </div>
 

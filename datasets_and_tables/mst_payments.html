@@ -373,6 +373,11 @@
      Production Maintenance
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../airflow/dags-maintenance.html">
+     DAGs Maintenance
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toctree-l1 has-children">
@@ -610,31 +615,9 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#maintenance">
-   Maintenance
+  <a class="reference internal nav-link" href="#dags-maintenance">
+   DAGs Maintenance
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dags-overview">
-     DAGs Overview
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#adding-new-tables-in-payments-loader">
-     Adding new tables in payments_loader
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#adding-a-new-table-to-payments-views">
-     Adding a new table to payments_views
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#backfilling">
-     Backfilling
-    </a>
-   </li>
-  </ul>
  </li>
 </ul>
 
@@ -667,31 +650,9 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#maintenance">
-   Maintenance
+  <a class="reference internal nav-link" href="#dags-maintenance">
+   DAGs Maintenance
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dags-overview">
-     DAGs Overview
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#adding-new-tables-in-payments-loader">
-     Adding new tables in payments_loader
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#adding-a-new-table-to-payments-views">
-     Adding a new table to payments_views
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#backfilling">
-     Backfilling
-    </a>
-   </li>
-  </ul>
  </li>
 </ul>
 
@@ -738,55 +699,9 @@
 <h2>Views<a class="headerlink" href="#views" title="Permalink to this headline">¶</a></h2>
 <p>The table best used for caculating ridership is <code class="docutils literal notranslate"><span class="pre">mst_ridership_materialized</span></code> table.</p>
 </div>
-<div class="section" id="maintenance">
-<h2>Maintenance<a class="headerlink" href="#maintenance" title="Permalink to this headline">¶</a></h2>
-<p>The ETL is currently a scheduled Google Data Transfer job that transfers all files to <code class="docutils literal notranslate"><span class="pre">gcs://littlepay-data-extract-prod</span></code></p>
-<p>From there, tables are loaded into BigQuery as external tables in the <code class="docutils literal notranslate"><span class="pre">transaction_data</span></code> buclet.</p>
-<div class="section" id="dags-overview">
-<h3>DAGs Overview<a class="headerlink" href="#dags-overview" title="Permalink to this headline">¶</a></h3>
-<p>The payments data is loaded and transformed in the payments_loader and payments_views dags.</p>
-<p>The payments_loader dag has three kinds of tasks:</p>
-<ul class="simple">
-<li><p>ExternalTable operator tasks (e.g. <code class="docutils literal notranslate"><span class="pre">customer_funding_source</span></code>). These define the underlying data.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">calitp_included_payments_data</span></code> - a table of underlying payments table names defined in the task above.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">preprocessing_columns</span></code> - move data from <code class="docutils literal notranslate"><span class="pre">gs://littlepay-data-extract-prod</span></code> to <code class="docutils literal notranslate"><span class="pre">gs://gtfs-data</span></code>,
-then process to keep only columns defined in external tables.</p></li>
-</ul>
-<p>The payments_views is made of SQL queries that transform the loaded tables above.</p>
-</div>
-<div class="section" id="adding-new-tables-in-payments-loader">
-<h3>Adding new tables in payments_loader<a class="headerlink" href="#adding-new-tables-in-payments-loader" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li><p>Copy the <code class="docutils literal notranslate"><span class="pre">customer_funding_source</span></code> task. The new task name should match the table it creates.</p></li>
-<li><p>Alter <code class="docutils literal notranslate"><span class="pre">destination_project_dataset_table</span></code> and <code class="docutils literal notranslate"><span class="pre">source_objects</span></code> to match the new table name.</p></li>
-<li><p>Edit <code class="docutils literal notranslate"><span class="pre">schema_fields</span></code> to be the columns in the new table. If you are unsure of a column type,
-specify it as “STRING”.</p>
-<ul>
-<li><p>Keep a <code class="docutils literal notranslate"><span class="pre">calitp_extracted_at</span></code> column at the end of the table. This column contains the execution date of the load task, and is added automatically by the <code class="docutils literal notranslate"><span class="pre">preprocess_columns</span></code> task.</p></li>
-</ul>
-</li>
-<li><p>In the <code class="docutils literal notranslate"><span class="pre">calitp_included_payments_data</span></code> task,</p>
-<ul>
-<li><p>add a row for this new table.</p></li>
-<li><p>add a depedency in yaml header to this new table.</p></li>
-</ul>
-</li>
-<li><p>In the <code class="docutils literal notranslate"><span class="pre">docs/datasets/mst_payments.md</span></code> file, add an entry into the <code class="docutils literal notranslate"><span class="pre">Tables</span></code> table describing the new data set.</p></li>
-</ul>
-</div>
-<div class="section" id="adding-a-new-table-to-payments-views">
-<h3>Adding a new table to payments_views<a class="headerlink" href="#adding-a-new-table-to-payments-views" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li><p>Ensure your task is given the same name as the table it creates.</p></li>
-<li><p>Be sure to include an <code class="docutils literal notranslate"><span class="pre">external_dependency</span></code> on payments_loader (see other views in payments_views).</p></li>
-</ul>
-</div>
-<div class="section" id="backfilling">
-<h3>Backfilling<a class="headerlink" href="#backfilling" title="Permalink to this headline">¶</a></h3>
-<p>Clear the <code class="docutils literal notranslate"><span class="pre">preprocessing_columns</span></code> task for every day you want to re-run.
-These tasks do not depend on past. However, because the extracted data in the littlepay bucket
-can be mutated by littlepay, so if you clear a past task, you should clear them all!</p>
-</div>
+<div class="section" id="dags-maintenance">
+<h2>DAGs Maintenance<a class="headerlink" href="#dags-maintenance" title="Permalink to this headline">¶</a></h2>
+<p>You can find further information on DAGs maintenance for MST Payments data <a class="reference internal" href="../airflow/dags-maintenance.html#mst-payments-dags"><span class="std std-ref">on this page</span></a>.</p>
 </div>
 </div>
 
