@@ -15,9 +15,9 @@ spec:
       activeDeadlineSeconds: 7200 # two hours
       template:
         spec:
-          restartPolicy: never
+          restartPolicy: Never
           volumes:
-            {{- range secrets.volumeMounts }}
+            {{- range .Values.secretMounts }}
             - name: {{ .name }}
               secret:
                 secretName: {{ .name }}
@@ -25,18 +25,38 @@ spec:
           containers:
             - name: client
               image: {{ .Values.cronjob.image }}
+              {{- if .Values.config.envFrom }}
               envFrom:
-              {{- if .Values.configs.database }}
-              - configMapRef:
-                  name: database-config
+                {{- toYaml .Values.config.envFrom | nindent 16 }}
               {{- end }}
-              {{- range secrets.database.envFrom }}
-              - secretRef: {{ toYaml . }}
-              {{- end }}
-              {{- range secrets.databaseBackup.envFrom }}
-              - secretRef: {{ toYaml . }}
+              {{- if .Values.config.env }}
+              env:
+                {{- toYaml .Values.config.env | nindent 16 }}
+                {{- if .Values.config.envAppend }}
+                  {{- toYaml .Values.config.envAppend | nindent 16 }}
+                {{- end }}
               {{- end }}
               volumeMounts:
-              {{- range secrets.databaseBackup.volumeMounts }}
-              - {{ toYaml . }}
+              {{- range .Values.secretMounts }}
+              - {{ toJson . }}
               {{- end }}
+              command: ['/bin/bash', '-c']
+              args:
+                - |
+
+                  # snapshot current database
+                  echo "Snapshotting Database"
+                  pg_dumpall --clean \
+                    | gzip --rsyncable \
+                    | restic backup \
+                      --host {{ .Release.Namespace }}:{{ .Release.Name }} \
+                      --stdin \
+                      --stdin-filename pg_dumpall.sql.gz
+
+                  # prune aged snapshots
+                  echo "Pruning aged snapshots"
+                  restic forget \
+                    --host {{ .Release.Namespace }}:{{ .Release.Name }} \
+                    --keep-last 36 \
+                    --keep-daily 7 \
+                    --keep-weekly 52
