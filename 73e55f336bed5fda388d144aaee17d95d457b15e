@@ -1,0 +1,99 @@
+[helm:postgresql-backup=kubernetes/apps/charts/postgresql-backup]
+
+diff -u -N /tmp/LIVE-4127372921/batch.v1beta1.CronJob.metabase-preprod.postgresql-backup /tmp/MERGED-1213149609/batch.v1beta1.CronJob.metabase-preprod.postgresql-backup
+--- /tmp/LIVE-4127372921/batch.v1beta1.CronJob.metabase-preprod.postgresql-backup	2022-01-31 20:38:04.278337165 +0000
++++ /tmp/MERGED-1213149609/batch.v1beta1.CronJob.metabase-preprod.postgresql-backup	2022-01-31 20:38:04.278337165 +0000
+@@ -89,6 +89,63 @@
+     manager: kube-controller-manager
+     operation: Update
+     time: "2022-01-31T20:15:05Z"
++  - apiVersion: batch/v1beta1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:spec:
++        f:jobTemplate:
++          f:spec:
++            f:template:
++              f:spec:
++                f:containers:
++                  k:{"name":"client"}:
++                    f:env:
++                      k:{"name":"GOOGLE_APPLICATION_CREDENTIALS"}:
++                        .: {}
++                        f:name: {}
++                        f:value: {}
++                      k:{"name":"GOOGLE_PROJECT_ID"}:
++                        .: {}
++                        f:name: {}
++                        f:value: {}
++                      k:{"name":"PGDATABASE"}:
++                        .: {}
++                        f:name: {}
++                        f:valueFrom:
++                          .: {}
++                          f:configMapKeyRef:
++                            .: {}
++                            f:key: {}
++                            f:name: {}
++                      k:{"name":"PGHOST"}:
++                        .: {}
++                        f:name: {}
++                        f:value: {}
++                      k:{"name":"PGPASSWORD"}:
++                        .: {}
++                        f:name: {}
++                        f:valueFrom:
++                          .: {}
++                          f:configMapKeyRef:
++                            .: {}
++                            f:key: {}
++                            f:name: {}
++                      k:{"name":"PGPORT"}:
++                        .: {}
++                        f:name: {}
++                        f:value: {}
++                      k:{"name":"PGUSER"}:
++                        .: {}
++                        f:name: {}
++                        f:valueFrom:
++                          .: {}
++                          f:configMapKeyRef:
++                            .: {}
++                            f:key: {}
++                            f:name: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-01-31T20:38:04Z"
+   name: postgresql-backup
+   namespace: metabase-preprod
+   resourceVersion: "176685628"
+@@ -133,6 +190,29 @@
+             - /bin/bash
+             - -c
+             env:
++            - name: GOOGLE_PROJECT_ID
++              value: "1005246706141"
++            - name: GOOGLE_APPLICATION_CREDENTIALS
++              value: /secrets/gcs-upload-svcacct/gcs-upload-svcacct.json
++            - name: PGHOST
++              value: database.metabase.svc.cluster.local
++            - name: PGPORT
++              value: "5432"
++            - name: PGDATABASE
++              valueFrom:
++                configMapKeyRef:
++                  key: POSTGRES_DB
++                  name: database-config
++            - name: PGUSER
++              valueFrom:
++                configMapKeyRef:
++                  key: POSTGRES_USER
++                  name: database-config
++            - name: PGPASSWORD
++              valueFrom:
++                configMapKeyRef:
++                  key: POSTGRES_PASSWORD
++                  name: database-config
+             - name: RESTIC_REPOSITORY
+               value: gs:calitp-infra-backups:/metabase-database-preprod
+             envFrom:
