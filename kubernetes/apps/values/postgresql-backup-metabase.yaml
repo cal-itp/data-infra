@@ -11,8 +11,6 @@ config:
       value: '1005246706141'
     - name: GOOGLE_APPLICATION_CREDENTIALS
       value: /secrets/gcs-upload-svcacct/gcs-upload-svcacct.json
-    - name: PGHOST
-      value: database.metabase.svc.cluster.local
     - name: PGPORT
       value: '5432'
     - name: PGDATABASE
