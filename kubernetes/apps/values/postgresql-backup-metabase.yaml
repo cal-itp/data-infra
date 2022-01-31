@@ -7,8 +7,6 @@ config:
     - secretRef:
         name: database-backup
   env:
-    - name: RESTIC_REPOSITORY
-      value: gs:calitp-infra-backups:/metabase-database
     - name: GOOGLE_PROJECT_ID
       value: '1005246706141'
     - name: GOOGLE_APPLICATION_CREDENTIALS
