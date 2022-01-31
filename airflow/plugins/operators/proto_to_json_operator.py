@@ -1,19 +1,22 @@
+"""
+Parses binary RT feeds and writes them back to GCS as gzipped newline-delimited JSON
+"""
 import gzip
 import json
-from concurrent.futures import ThreadPoolExecutor
-
-from airflow.models import BaseOperator
-from airflow.utils.decorators import apply_defaults
-from google.transit import gtfs_realtime_pb2
-from google.protobuf import json_format
-from google.protobuf.message import DecodeError
-from calitp.storage import get_fs
-from calitp.config import get_bucket, is_development
+import tempfile
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import structlog
-import tempfile
+from airflow.models import BaseOperator
+from airflow.utils.decorators import apply_defaults
+from calitp.config import get_bucket
+from calitp.storage import get_fs
+from google.protobuf import json_format
+from google.protobuf.message import DecodeError
+from google.transit import gtfs_realtime_pb2
+
 
 # Note that all RT extraction is stored in the prod bucket, since it is very large,
 # but we can still output processed results to the staging bucket
@@ -68,6 +71,7 @@ def fetch_bucket_file_names(src_path, rt_file_substring, iso_date):
 
     # Now our feed files dict has a key of itpId_urlNumber and a list of files to
     # parse
+    print("found {} feeds to process".format(len(feed_files.keys())))
     return feed_files
 
 
@@ -78,10 +82,17 @@ def get_google_cloud_filename(filename_prefix, feed, iso_date):
 
 
 def handle_one_feed(i, feed, files, filename_prefix, iso_date, dst_path):
-    fs = get_fs()
     logger = structlog.get_logger().bind(
-        i=i, feed=feed, len_files=len(files), iso_date=iso_date, dst_path=dst_path
+        i=i,
+        feed=feed,
+        len_files=len(files),
+        filename_prefix=filename_prefix,
+        iso_date=iso_date,
+        dst_path=dst_path,
     )
+    logger.info("entering handle_one_feed")
+
+    fs = get_fs()
 
     if not files:
         logger.warn("got no files, returning early")
@@ -132,7 +143,8 @@ def execute(context, filename_prefix, rt_file_substring, src_path, dst_path):
     # fetch files ----
     feed_files = fetch_bucket_file_names(src_path, rt_file_substring, iso_date)
 
-    # parse feeds ----
+    # gcfs does not seem to play nicely with multiprocessing right now
+    # https://github.com/fsspec/gcsfs/issues/379
     with ThreadPoolExecutor(max_workers=4) as pool:
         args = [
             (i, feed, files, filename_prefix, iso_date, dst_path)
@@ -165,10 +177,12 @@ class RealtimeToFlattenedJSONOperator(BaseOperator):
         self.cast = cast
         self.time_float_cast = {col: "float" for col in is_timestamp}
         self.src_path = f"{get_bucket()}/rt/"
-        self.dst_path = (
-            f"{get_bucket()}/rt-processed_test_2022-01-24/"
-            + self.rt_file_substring
-            + "/"
+        self.dst_path = "".join(
+            [
+                f"{get_bucket()}/rt-processed_test_2022-01-24/",
+                self.rt_file_substring,
+                "/",
+            ]
         )
 
     def execute(self, context):
