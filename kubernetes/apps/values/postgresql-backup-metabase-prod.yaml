@@ -1,0 +1,4 @@
+config:
+  envAppend:
+    - name: RESTIC_REPOSITORY
+      value: gs:calitp-backups-metabase:/
