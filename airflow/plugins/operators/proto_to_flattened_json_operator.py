@@ -3,9 +3,11 @@ Parses binary RT feeds and writes them back to GCS as gzipped newline-delimited 
 """
 import gzip
 import json
+import os
 import tempfile
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime
 from pathlib import Path
 
 import structlog
@@ -22,7 +24,7 @@ from google.transit import gtfs_realtime_pb2
 # but we can still output processed results to the staging bucket
 
 
-def parse_pb(path, open_func=open) -> dict:
+def parse_pb(path, logger, open_func=open) -> dict:
     """
     Convert pb file to Python dictionary
     """
@@ -34,7 +36,7 @@ def parse_pb(path, open_func=open) -> dict:
         d.update({"calitp_filepath": path})
         return d
     except DecodeError:
-        print("WARN: got DecodeError for {}".format(path))
+        logger.warn("WARN: got DecodeError for {}".format(path))
         return {}
 
 
@@ -82,6 +84,7 @@ def get_google_cloud_filename(filename_prefix, feed, iso_date):
 
 
 def handle_one_feed(i, feed, files, filename_prefix, iso_date, dst_path):
+    start = datetime.now()
     logger = structlog.get_logger().bind(
         i=i,
         feed=feed,
@@ -112,7 +115,7 @@ def handle_one_feed(i, feed, files, filename_prefix, iso_date, dst_path):
         with gzip.open(gzip_fname, "w") as gzipfile:
             for feed_fname in all_files:
                 # convert protobuff objects to DataFrames
-                parsed = parse_pb(feed_fname)
+                parsed = parse_pb(feed_fname, logger=logger)
 
                 if parsed and "entity" in parsed:
                     for record in parsed["entity"]:
@@ -127,11 +130,17 @@ def handle_one_feed(i, feed, files, filename_prefix, iso_date, dst_path):
             logger.warning("did not parse any entities, skipping upload")
             return
 
+        num_bytes = os.stat(gzip_fname).st_size
         logger.info(
-            f"writing {written} lines from {gzip_fname} to {dst_path + google_cloud_file_name}"
+            f"writing {written} lines ({num_bytes} bytes) from {gzip_fname} to {dst_path + google_cloud_file_name}"
         )
         fs.put(
             gzip_fname, dst_path + google_cloud_file_name,
+        )
+        logger.info(
+            "took {} seconds to process {} files".format(
+                (datetime.now() - start).total_seconds(), len(all_files)
+            )
         )
 
 

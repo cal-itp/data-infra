@@ -1,4 +1,4 @@
-operator: operators.RectangleRealtimeDataOperator
+operator: operators.RealtimeToFlattenedJSONOperator
 provide_context: true
 
 header_details:
