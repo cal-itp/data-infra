@@ -136,3 +136,6 @@ dmypy.json
 # Credentials & Secrets
 /kubernetes/secrets
 /kubernetes/gke/kube
+
+#.DS_Store files that Macs create
+.DS_Store

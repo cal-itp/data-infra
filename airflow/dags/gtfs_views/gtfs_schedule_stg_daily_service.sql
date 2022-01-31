@@ -56,6 +56,8 @@ WITH
       , calitp_url_number
       , service_id
       , service_date
+      , calitp_extracted_at
+      , calitp_deleted_at
       , TRUE AS service_inclusion
     FROM cal_dates_daily
     WHERE cal_dates_daily.exception_type = "1"
@@ -68,6 +70,8 @@ WITH
       , calitp_url_number
       , service_id
       , service_date
+      , calitp_extracted_at
+      , calitp_deleted_at
       , TRUE AS service_exclusion
     FROM cal_dates_daily
     WHERE cal_dates_daily.exception_type = "2"
@@ -94,12 +98,25 @@ WITH
         AND COALESCE(t1.end_date, DATE("2099-01-01")) >= t2.full_date
   )
 SELECT
-  *
+  * EXCEPT(calitp_extracted_at, calitp_deleted_at)
   , (service_indicator="1" AND NOT COALESCE(service_exclusion, FALSE))
       OR COALESCE(service_inclusion, FALSE)
       AS is_in_service
-FROM calendar_daily
-FULL JOIN date_include USING(calitp_itp_id, calitp_url_number, service_id, service_date)
-FULL JOIN date_exclude USING(calitp_itp_id, calitp_url_number, service_id, service_date)
+# Need to coalesce by each individual column of calendar_daily, date_include, and date_exclude tables to account for null values,
+# then select the greatest/least to populate extracted/deleted at. Cannot have it as one coalesce because it selects sequentially.
+# Chose to use latest extracted date/ earliest deleted date for the most conservative option.
+  , GREATEST(
+        COALESCE(t1.calitp_extracted_at, DATE("1900-01-01"))
+        , COALESCE(t2.calitp_extracted_at, DATE("1900-01-01"))
+        , COALESCE(t3.calitp_extracted_at, DATE("1900-01-01")))
+        AS calitp_extracted_at
+  , LEAST(
+        COALESCE(t1.calitp_deleted_at, DATE("2100-01-01"))
+        , COALESCE(t2.calitp_deleted_at, DATE("2100-01-01"))
+        , COALESCE(t3.calitp_deleted_at, DATE("2100-01-01")))
+        AS calitp_deleted_at
+FROM calendar_daily t1
+FULL JOIN date_include t2 USING(calitp_itp_id, calitp_url_number, service_id, service_date)
+FULL JOIN date_exclude t3 USING(calitp_itp_id, calitp_url_number, service_id, service_date)
 # TODO: remove hardcoding--set this to be 1 month in the future, etc..
 WHERE service_date < DATE_ADD(CURRENT_DATE(), INTERVAL 1 YEAR)

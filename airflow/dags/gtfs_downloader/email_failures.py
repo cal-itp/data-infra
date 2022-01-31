@@ -37,6 +37,7 @@ The following agency GTFS feeds could not be extracted on {ds}:
             "juliet@trilliumtransit.com",
             "aaron@trilliumtransit.com",
             "evan.siroky@dot.ca.gov",
+            "olivia.ramacier@dot.ca.gov",
         ],
         html_content=html_content,
         subject=(

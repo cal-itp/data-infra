@@ -39,7 +39,7 @@ secrets filled in. To run this, do the following:
 1. Setup a virtual environment within the `script` folder by running `python -m venv .venv` in the `script` folder.
 2. Install the needed requirements via `pip install -r requirements.txt`
 3. Copy `airflow/data/example-secrets.csv` to `airflow/data/secrets.csv` and fill in the secret keys as needed
-4. run `python agencies_convert.py ../airflow/data/agencies.yml ../airflow/data/agencies.filled.yml ../airflow/data/secrets.csv`
+4. run `python yml_convert.py ../airflow/data/agencies.yml ../airflow/data/agencies.filled.yml ../airflow/data/secrets.csv`
 5. Copy `/airflow/data/agencies.yml` to `/airflow/data/agencies_raw.yml`
 
 Next, run the initial database migration and create an `airflow / airflow` user to debug with:

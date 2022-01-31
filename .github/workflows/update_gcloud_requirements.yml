@@ -24,4 +24,4 @@ jobs:
           export_default_credentials: true
       - id: install-python-dependencies
         name: install-requirements
-        run: gcloud composer environments update calitp-airflow-prod --update-pypi-packages-from-file airflow/requirements.txt --location us-west2 --project cal-itp-data-infra
+        run: gcloud composer environments update calitp-airflow2-prod --update-pypi-packages-from-file airflow/requirements.txt --location us-west2 --project cal-itp-data-infra

@@ -1,0 +1,35 @@
+images:
+  metabase:
+    src: metabase/metabase:v0.41.1
+
+workloads:
+  metabase:
+    replicas: 1
+  database:
+    useExporter: false
+
+configs:
+  database:
+    POSTGRES_USER: admin
+    POSTGRES_PASSWORD: admin
+  metabase:
+    MB_DB_USER: admin
+    MB_DB_PASS: admin
+
+volumes:
+  database:
+    data:
+      size: 10Gi
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: metabase-preprod.k8s.calitp.jarv.us
+      paths: [ '/' ]
+  tls:
+    - secretName: metabase-tls
+      hosts:
+        - metabase-preprod.k8s.calitp.jarv.us

@@ -10,6 +10,7 @@ default_args:
       - "hunter.owens@dot.ca.gov"
       - "michael.c@jarv.us"
       - "mjumbe.p@jarv.us"
+      - "evan.siroky@dot.ca.gov"
     email_on_failure: True
     email_on_retry: False
     retries: 1

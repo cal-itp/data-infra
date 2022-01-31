@@ -162,6 +162,14 @@ Upgrade with:
 helm upgrade jupyterhub kubernetes/apps/charts/jupyterhub -n jupyterhub
 ```
 
+Note that if you haven't yet connected to the kubernetes cluster, you may need to run the following.
+
+```
+source kubernetes/gke/config-cluster.sh
+export KUBECONFIG=$HOME/.kube/data-infra-apps.yaml
+gcloud container clusters get-credentials "$GKE_NAME" --region "$GKE_REGION"
+```
+
 ## Domain Name Changes
 
 At the time of this writing, a JupyterHub deployment is available at `https://hubtest.k8s.calitp.jarv.us`.

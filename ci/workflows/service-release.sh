@@ -25,25 +25,17 @@ done
 test "$CI_STEPS_DIR" || CI_STEPS_DIR=$(git rev-parse --show-toplevel)/ci/steps
 
 #
-# Required
-#
-
-test "$BUILD_APP"               || { printf 'BUILD_APP: '; read BUILD_APP; }
-
-#
 # Defaults
 #
 
 test "$RELEASE_CHANNEL"         || RELEASE_CHANNEL=$(basename "$(git symbolic-ref HEAD)")
-test "$RELEASE_KUBE_OVERLAY"    || RELEASE_KUBE_OVERLAY=$(git rev-parse --show-toplevel)/kubernetes/apps/overlays/$BUILD_APP-$RELEASE_CHANNEL
 
 #
 # Optional
 #
 
-test "$BUILD_REPO_USER"         || BUILD_REPO_USER=
-test "$BUILD_REPO_SECRET"       || BUILD_REPO_SECRET=
-test "$BUILD_FORCE"             || BUILD_FORCE=
+test "$CONFIGURE_GIT_REMOTE_NAME" || CONFIGURE_GIT_REMOTE_NAME=
+test "$CONFIGURE_GIT_REMOTE_URL"  || CONFIGURE_GIT_REMOTE_URL=
 
 export KUBECONFIG
 
@@ -51,5 +43,30 @@ export KUBECONFIG
 # Steps
 #
 
-printf 'BEGIN STEP: release-kube-overlay\n'
-source "$CI_STEPS_DIR/release-kube-overlay.sh"
+release_vars_root=$(git rev-parse --show-toplevel)/ci/vars/releases
+
+printf 'BEGIN STEP: configure-git-remote\n'
+source "$CI_STEPS_DIR/configure-git-remote.sh"
+
+for env_file in "$release_vars_root"/*-"$RELEASE_CHANNEL".env; do
+  #
+  # Per-app variable overrides
+  #
+  # CAUTION: these vars are not being loaded within a subshell, which means each
+  #  app's variables are loaded into the global pipeline scope. The reason a
+  #  subshell is avoided here is to allow each step to cumulatively modify the
+  #  RELEASE_NOTES variable.
+  while read line; do
+    if [[ $line =~ ^([[:alnum:]_]+)=(.*)$ ]]; then
+      declare -x "$line"
+    else
+      continue
+    fi
+  done < "$env_file"
+  app_name=$(basename "$env_file" | sed 's/\.env$//')
+  printf 'BEGIN STEP: release-%s-changes: %s\n' "$RELEASE_DRIVER" "$app_name"
+  source "$CI_STEPS_DIR/release-$RELEASE_DRIVER-changes.sh"
+done
+
+printf 'BEGIN STEP: release-git-notes\n'
+source "$CI_STEPS_DIR/release-git-notes.sh"
