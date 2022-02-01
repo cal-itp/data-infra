@@ -615,8 +615,8 @@
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#python">
-     python
+    <a class="reference internal nav-link" href="#docker-compose">
+     docker-compose
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
@@ -640,13 +640,6 @@
   <a class="reference internal nav-link" href="#container-image">
    Container Image
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#push-to-gcr">
-     push to gcr
-    </a>
-   </li>
-  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#updating-and-restarting-preprod-and-prod-services">
@@ -684,8 +677,8 @@
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#python">
-     python
+    <a class="reference internal nav-link" href="#docker-compose">
+     docker-compose
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
@@ -709,13 +702,6 @@
   <a class="reference internal nav-link" href="#container-image">
    Container Image
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#push-to-gcr">
-     push to gcr
-    </a>
-   </li>
-  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#updating-and-restarting-preprod-and-prod-services">
@@ -736,20 +722,25 @@
 <div class="section" id="quickstart">
 <h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
 <p>See dependencies section below for details on prerequisites</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">CALITP_LOG_LEVEL</span><span class="o">=</span>debug
-<span class="nb">export</span> <span class="nv">CALITP_DATA_DEST</span><span class="o">=</span>gs://gtfs-data/rt
-<span class="nb">export</span> <span class="nv">CALITP_DATA_DEST_SECRET</span><span class="o">=</span><span class="nv">$HOME</span>/Downloads/cal-itp-data-infra-661571285e30.json
-<span class="nb">export</span> <span class="nv">CALITP_AGENCIES_YML</span><span class="o">=</span><span class="nv">$HOME</span>/Downloads/data_agencies.yml
-<span class="nb">export</span> <span class="nv">CALITP_HEADERS_YML</span><span class="o">=</span><span class="nv">$HOME</span>/Downloads/data_headers.yml
-python services/gtfs-rt-archive/gtfs-rt-archive.py
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># The expectation is that Downloads will have files named agencies.yaml</span>
+<span class="c1"># and heders.yaml</span>
+cat <span class="s">&lt;&lt;EOF &gt; services/gtfs-rt-archive/.env</span>
+<span class="s">HOST_YML_DIR=$HOME/Downloads</span>
+<span class="s">EOF</span>
+docker-compose -f services/gtfs-rt-archive/docker-compose.yml up
 </pre></div>
 </div>
 </div>
 <div class="section" id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="python">
-<h3>python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h3>
-<p>See <code class="docutils literal notranslate"><span class="pre">services/gtfs-rt-archive/Dockerfile</span></code> for an authoritative list of required pyhon libraries</p>
+<p>These dependencies are for running the script in a generic CLI environment. Most
+will want to use the docker-compose project</p>
+<div class="section" id="docker-compose">
+<h3>docker-compose<a class="headerlink" href="#docker-compose" title="Permalink to this headline">¶</a></h3>
+<p>A docker stack is the simplest way to automatically build the script &amp; its
+required environment. The number one requirement is to set an environment
+variable named <code class="docutils literal notranslate"><span class="pre">HOST_YML_DIR</span></code> which points to a directory on your host machine
+which contains <code class="docutils literal notranslate"><span class="pre">agencies.yml</span></code> and <code class="docutils literal notranslate"><span class="pre">headers.yml</span></code> (See below for details).</p>
 </div>
 <div class="section" id="gcp-service-account">
 <h3>GCP service account<a class="headerlink" href="#gcp-service-account" title="Permalink to this headline">¶</a></h3>
@@ -787,32 +778,18 @@ airtable and are shared with the <code class="docutils literal notranslate"><spa
 </div>
 <div class="section" id="container-image">
 <h2>Container Image<a class="headerlink" href="#container-image" title="Permalink to this headline">¶</a></h2>
-<p>To build a container image of the service:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">dirty</span><span class="o">=</span><span class="k">$(</span>git diff-index HEAD<span class="k">)</span>
-<span class="nb">test</span> -z <span class="s2">&quot;</span><span class="nv">$dirty</span><span class="s2">&quot;</span> <span class="o">||</span> git stash push
-docker build -t us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:<span class="k">$(</span>git rev-parse HEAD<span class="k">)</span> services/gtfs-rt-archive
-<span class="nb">test</span> -z <span class="s2">&quot;</span><span class="nv">$dirty</span><span class="s2">&quot;</span> <span class="o">||</span> git stash pop
-</pre></div>
-</div>
-<div class="section" id="push-to-gcr">
-<h3>push to gcr<a class="headerlink" href="#push-to-gcr" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># ensure proper account selected</span>
-<span class="c1"># use gcloud auth login as needed</span>
-gcloud auth list
-
-<span class="c1"># setup $HOME/.docker/config.json</span>
-gcloud auth configure-docker
-
-<span class="c1"># push image</span>
-docker push us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:<span class="k">$(</span>git rev-parse HEAD<span class="k">)</span>
-</pre></div>
-</div>
-</div>
+<p>Local builds can be managed using the <code class="docutils literal notranslate"><span class="pre">docker-compose</span> <span class="pre">build</span></code> command. Builds
+which are pushed to the central registry are managed by a
+<a class="reference internal" href="../ci/Git-Flow-Services.html"><span class="doc std std-doc">git flow</span></a>; they should not be pushed to the
+registry directly by end users.</p>
 </div>
 <div class="section" id="updating-and-restarting-preprod-and-prod-services">
 <h2>Updating and restarting preprod and prod services<a class="headerlink" href="#updating-and-restarting-preprod-and-prod-services" title="Permalink to this headline">¶</a></h2>
-<p>If any code changes occurred, maybe do the docker push thing above?</p>
-<p>The gtfs-rt-archive service gets restarted during the <code class="docutils literal notranslate"><span class="pre">move</span> <span class="pre">DAGs</span> <span class="pre">to</span> <span class="pre">GCS</span> <span class="pre">folder</span></code> GitHub action defined in the <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/.github/workflows/push_to_gcloud.yml">push_to_gcloud.yml</a> file. During the restart any updated information from the agencies.yml and headers.yml will be updated in the preprod or production environment. In affected pull requests, the preprod service gets restarted on each commit. Once merged to main, the production service gets restarted.</p>
+<p>The gtfs-rt-archive service gets receives new data files pushed to it be the
+GitHub action defined in the
+<a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/.github/workflows/push_to_gcloud.yml">push_to_gcloud.yml</a>
+file. The service should take steps to automatically reload these data files
+when they arrive.</p>
 <p>If adding a new environment variable to the script, additional editing of the kubernetes config will need to be done and some editing of the config in the Kubernetes Engine console may need to occur prior to restarting a service.</p>
 </div>
 </div>
