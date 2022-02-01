@@ -58,7 +58,6 @@ def map_headers(logger, yaml_data):
     """
     seen = set()
     for item in yaml_data:
-        print(yaml_data)
         for url_set in item["URLs"]:
             itp_id = url_set["itp_id"]
             url_number = url_set["url_number"]
