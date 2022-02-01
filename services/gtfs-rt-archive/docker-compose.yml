@@ -1,0 +1,14 @@
+version: '3'
+services:
+  gtfs-rt-archive:
+    build: .
+    environment:
+      HOST_YML_DIR        : ${HOST_YML_DIR}
+      CALITP_LOG_LEVEL    : ${CALITP_LOG_LEVEL:-debug}
+      CALITP_DATA_DEST    : ${CALITP_DATA_DEST:-file:///dev/null}
+      CALITP_AGENCIES_YML : /data/agencies.yaml
+      CALITP_HEADERS_YML  : /data/headers.yaml
+    volumes:
+      - type: bind
+        source: ${HOST_YML_DIR}
+        target: /data

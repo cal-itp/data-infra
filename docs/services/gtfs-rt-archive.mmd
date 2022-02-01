@@ -1,0 +1,122 @@
+flowchart TB
+
+  %% nodes
+
+  start([Start])
+  spawn-threads[Spawn Threads]
+  tickevt[/Emit Tick/]
+  reloadevt[/Emit Reload/]
+  writeq[/Queue txn for write/]
+
+  %% pre-subgraph flow
+
+  pool-spawn-children --> fetcher-spawn
+
+  %% subgraphs
+
+  subgraph ticker [Ticker]
+
+    %% nodes
+
+    ticker-spawn([Spawn])
+    ticker-sleep[Sleep CALITP_TICK_INT seconds]
+
+  end
+
+  subgraph mapper [YamlMapper]
+
+    %% nodes
+
+    mapper-spawn([Spawn])
+    mapper-evtq[Wait for tick]
+    mapper-hash[check agencies.yaml sha1]
+    mapper-hash-changed{sha1 changed?}
+    mapper-load[Load agencies.yml]
+    mapper-map[Map URLs from agencies.yml]
+
+    %% flow
+
+    mapper-spawn -->
+    mapper-evtq -->
+    mapper-hash -->
+    mapper-hash-changed -- yes --> mapper-load
+    mapper-hash-changed -- no  --> mapper-evtq
+    mapper-load -->
+    mapper-map -->
+    mapper-evtq
+  end
+
+  subgraph pool [ThreadPool]
+
+    %% nodes
+
+    pool-spawn([Spawn])
+    pool-evtq[Wait for agencies.yml reload]
+    pool-list-mapkeys[Get mapped urls]
+    pool-new-mapkeys{new urls?}
+    pool-spawn-children[Spawn thread for each new url]
+
+    %% flow
+
+    pool-spawn --> pool-list-mapkeys
+    pool-evtq -->
+    pool-list-mapkeys -->
+    pool-new-mapkeys -- yes --> pool-spawn-children
+    pool-new-mapkeys -- no  --> pool-evtq
+    pool-spawn-children --> pool-evtq
+
+  end
+
+  subgraph writer [BaseWriter]
+
+    %% nodes
+
+    writer-spawn([Spawn])
+    writer-q[Wait for write txns]
+    writer-write[Write txn]
+
+    %% flow
+
+    writer-spawn -->
+    writer-q -->
+    writer-write -->
+    writer-q
+
+  end
+
+  subgraph fetcher [PoolFetcher]
+
+    %% nodes
+
+    fetcher-spawn([Spawn])
+    fetcher-evtq[Wait for tick]
+    fetcher-url[Get download url]
+    fetcher-url-exists{have url?}
+    fetcher-shutdown([Shutdown])
+    fetcher-fetch[Download data point]
+
+    %% flow
+
+    fetcher-spawn -->
+    fetcher-evtq -->
+    fetcher-url -->
+    fetcher-url-exists -- no  --> fetcher-shutdown
+    fetcher-url-exists -- yes --> fetcher-fetch -->
+    fetcher-evtq
+
+  end
+
+
+  %% post-subgraph flow
+
+  start --> spawn-threads
+  spawn-threads --> ticker-spawn & mapper-spawn & pool-spawn & writer-spawn
+  tickevt --> mapper-evtq
+  tickevt --> fetcher-evtq
+  tickevt --> ticker-sleep
+  reloadevt --> pool-evtq
+  ticker-spawn --> tickevt
+  ticker-sleep --> tickevt
+  mapper-map --> reloadevt
+  fetcher-fetch --> writeq
+  writeq --> writer-q

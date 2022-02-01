@@ -94,7 +94,6 @@ jobs:
           data_agencies.yaml: $(base64 -w0 airflow/data/agencies.filled.yml)
           data_headers.yaml: $(base64 -w0 airflow/data/headers.filled.yml)
         EOF
-        kubectl -n gtfs-rt rollout restart deployments/gtfs-rt-archive
       env:
         AIRFLOW_BUCKET: "us-west2-calitp-airflow2-pr-171e4e47-bucket"
 
@@ -112,4 +111,3 @@ jobs:
           data_agencies.yaml: $(base64 -w0 airflow/data/agencies.filled.yml)
           data_headers.yaml: $(base64 -w0 airflow/data/headers.filled.yml)
         EOF
-        kubectl -n gtfs-rt-preprod rollout restart deployments/gtfs-rt-archive

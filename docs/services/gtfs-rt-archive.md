@@ -5,19 +5,25 @@
 See dependencies section below for details on prerequisites
 
 ```bash
-export CALITP_LOG_LEVEL=debug
-export CALITP_DATA_DEST=gs://gtfs-data/rt
-export CALITP_DATA_DEST_SECRET=$HOME/Downloads/cal-itp-data-infra-661571285e30.json
-export CALITP_AGENCIES_YML=$HOME/Downloads/data_agencies.yml
-export CALITP_HEADERS_YML=$HOME/Downloads/data_headers.yml
-python services/gtfs-rt-archive/gtfs-rt-archive.py
+# The expectation is that Downloads will have files named agencies.yaml
+# and heders.yaml
+cat <<EOF > services/gtfs-rt-archive/.env
+HOST_YML_DIR=$HOME/Downloads
+EOF
+docker-compose -f services/gtfs-rt-archive/docker-compose.yml up
 ```
 
 ## Dependencies
 
-### python
+These dependencies are for running the script in a generic CLI environment. Most
+will want to use the docker-compose project
 
-See `services/gtfs-rt-archive/Dockerfile` for an authoritative list of required pyhon libraries
+### docker-compose
+
+A docker stack is the simplest way to automatically build the script & its
+required environment. The number one requirement is to set an environment
+variable named `HOST_YML_DIR` which points to a directory on your host machine
+which contains `agencies.yml` and `headers.yml` (See below for details).
 
 ### GCP service account
 
@@ -56,32 +62,17 @@ airtable and are shared with the `CALITP_AGENCIES_YML` file.
 
 ## Container Image
 
-To build a container image of the service:
+Local builds can be managed using the `docker-compose build` command. Builds
+which are pushed to the central registry are managed by a
+[git flow](../ci/Git-Flow-Services.md); they should not be pushed to the
+registry directly by end users.
 
-```bash
-dirty=$(git diff-index HEAD)
-test -z "$dirty" || git stash push
-docker build -t us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:$(git rev-parse HEAD) services/gtfs-rt-archive
-test -z "$dirty" || git stash pop
-```
-
-### push to gcr
-
-```bash
-# ensure proper account selected
-# use gcloud auth login as needed
-gcloud auth list
-
-# setup $HOME/.docker/config.json
-gcloud auth configure-docker
-
-# push image
-docker push us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:$(git rev-parse HEAD)
-```
 ## Updating and restarting preprod and prod services
 
-If any code changes occurred, maybe do the docker push thing above?
-
-The gtfs-rt-archive service gets restarted during the `move DAGs to GCS folder` GitHub action defined in the [push_to_gcloud.yml](https://github.com/cal-itp/data-infra/blob/main/.github/workflows/push_to_gcloud.yml) file. During the restart any updated information from the agencies.yml and headers.yml will be updated in the preprod or production environment. In affected pull requests, the preprod service gets restarted on each commit. Once merged to main, the production service gets restarted.
+The gtfs-rt-archive service gets receives new data files pushed to it be the
+GitHub action defined in the
+[push_to_gcloud.yml](https://github.com/cal-itp/data-infra/blob/main/.github/workflows/push_to_gcloud.yml)
+file. The service should take steps to automatically reload these data files
+when they arrive.
 
 If adding a new environment variable to the script, additional editing of the kubernetes config will need to be done and some editing of the config in the Kubernetes Engine console may need to occur prior to restarting a service.
