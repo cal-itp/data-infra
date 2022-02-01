@@ -3,7 +3,7 @@
 ## What kinds of content can I put in the documentation?
 Keep reading below to find some of the common content types used in the Cal-ITP Data Services Documentation.
 
-If you haven't yet, navigate to the [Best Practices](contribute-best-practices) section of the documentation for more background on documentation structure and how to contribute.
+If you haven't yet, navigate to the [Best Practices](bp-reference) section of the documentation for more background on documentation structure and how to contribute.
 
 ### Images
 Images are currently being stored in the assets folder within each docs folder. Preference is for .Png file extension and no larger than 500kb. Images can be loaded into Jupyter Book by using the following syntax:

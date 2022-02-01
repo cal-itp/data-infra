@@ -1,4 +1,4 @@
-(contribute-best-practices)=
+(bp-reference)=
 # Best Practices
 This page aggregates best practices and helpful information for use when contributing to our documentation.
 
