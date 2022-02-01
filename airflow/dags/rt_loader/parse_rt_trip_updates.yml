@@ -1,25 +1,5 @@
-operator: operators.RectangleRealtimeDataOperator
+operator: operators.RealtimeToFlattenedJSONOperator
 provide_context: true
-
-header_details:
-  header_timestamp: header.timestamp
-
-entity_details:
-  entity_id: id
-  trip_id: tripUpdate.trip.tripId
-  trip_vehicle_id: tripUpdate.vehicle.id
-  trip_timestamp: tripUpdate.timestamp
-  trip_delay: tripUpdate.delay
-
-cast:
-  header_timestamp: Int64
-  trip_timestamp: Int64
-  trip_delay: Int32
-
-is_timestamp:
-  - header_timestamp
-  - trip_timestamp
-  - trip_delay
 
 filename_prefix: tu
 rt_file_substring: trip_updates
