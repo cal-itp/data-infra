@@ -1,7 +1,6 @@
 import logging
 import requests
 import sys
-import urllib
 import yaml
 
 sys.path.append("services/gtfs-rt-archive/src/gtfs_rt_archive/")
@@ -23,7 +22,7 @@ def main():
     logger = logging.getLogger("gtfs-rt-archive")
     successes = []
     fails = []
-    changed_domains = None
+    changed_urls = None
 
     with open(sys.argv[1], "r") as f:
         agencies = map_agencies_urls(logger, yaml.load(f, Loader=yaml.SafeLoader))
@@ -34,13 +33,9 @@ def main():
             lines = f.readlines()
             lines = [line for line in lines if line.startswith("+") and "http" in line]
             changed_urls = ["http" + line.strip().split("http")[-1] for line in lines]
-            changed_domains = [
-                urllib.parse.urlparse(url).netloc for url in changed_urls
-            ]
 
     for key, url in list(agencies):
-        domain = urllib.parse.urlparse(url).netloc
-        if changed_domains is not None and domain not in changed_domains:
+        if changed_urls is not None and url not in changed_urls:
             continue
         try:
             result = requests.get(url, headers=headers.get(key, {}))

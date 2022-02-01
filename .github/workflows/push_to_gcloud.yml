@@ -23,7 +23,7 @@ jobs:
         python-version: 3.8
     - name: Install python packages
       run: |
-        pip install -r scripts/requirements.txt
+        pip install -r script/requirements.txt
     # Create the secrets.csv from the contents of the `AGENCY_SECRETS` environment variable / GitHub
     # repository secret. The contents of this environment variable should be directly copied from
     # the contents of a filled-out ./airflow/data/example-secrets.csv file.
@@ -57,6 +57,11 @@ jobs:
     - name: Verify urls from agencies.yml
       run: |
         git diff ${{ github.event.pull_request.base.sha }} './airflow/data/agencies.yml' > AGENCIES_DIFF
+        python script/yml_convert.py \
+          AGENCIES_DIFF \
+          AGENCIES_DIFF \
+          './airflow/data/secrets.csv' \
+          --unsafe
         python script/agencies_verify.py \
           './airflow/data/agencies.filled.yml' \
           './airflow/data/headers.filled.yml' \

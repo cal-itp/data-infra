@@ -1,5 +1,5 @@
 ac-transit:
-  agency_name: AC Transit
+  agency_name: AC Transit (testing)
   feeds:
     - gtfs_schedule_url: https://api.actransit.org/transit/gtfs/download?token={{ AC_TRANSIT_API_KEY }}
       gtfs_rt_vehicle_positions_url: https://api.actransit.org/gtfsrt/vehicles?token={{ AC_TRANSIT_API_KEY }}
