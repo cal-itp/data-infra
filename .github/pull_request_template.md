@@ -50,6 +50,7 @@ Updates the following DAG tasks:
 ## Docs changes checklist
 
 - [ ] Include this section whenever any change in the `docs` folder occurs, otherwise please omit this section.
+- [ ] **If you haven't already, review the [Contribute to the Docs](https://docs.calitp.org/data-infra/contribute/overview.html) section of the data services documentation for best practices, common formatting, and more**
 - [ ] Make sure the preview website was able to be generated
 - [ ] Fill out the following section describing what docs were added/updated
 
