@@ -7,6 +7,7 @@ from gusty import create_dag
 
 from calitp.templates import user_defined_macros, user_defined_filters
 
+# pointed at #data-infra-notify as of 2022-02-01
 CALITP_SLACK_URL_KEY = "CALITP_SLACK_URL"
 
 # DAG Directories =============================================================
