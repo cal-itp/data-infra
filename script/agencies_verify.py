@@ -45,8 +45,9 @@ def main():
         try:
             result = requests.get(url, headers=headers.get(key, {}))
             result.raise_for_status()
-        except requests.HTTPError:
-            print(f"HTTP{result.status_code}: {url}")
+        except Exception as e:
+            print(f"Failed to download {url}")
+            print(f"Reason: {e}")
             fails.append(url)
             continue
         successes.append(url)
