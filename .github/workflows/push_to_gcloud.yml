@@ -23,8 +23,7 @@ jobs:
         python-version: 3.8
     - name: Verify urls from agencies.yml
       run: |
-        git rev-list --all
-        git fetch origin main ${{ github.event.pull_request.base.sha }}
+        git rev-list --all | grep ${{ github.event.pull_request.base.sha }}
         git diff './airflow/data/agencies.yml' \
           ${{ github.event.pull_request.base.sha }} \
           ${{ github.sha }} > AGENCIES_DIFF
