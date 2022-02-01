@@ -23,7 +23,7 @@ jobs:
         python-version: 3.8
     - name: Install python packages
       run: |
-        pip install jinja2==2.11.3 PyYAML==5.4.1 jsonschema==3.2.0 pandas==1.1.4 requests==2.22.0
+        pip install -r scripts/requirements.txt
     # Create the secrets.csv from the contents of the `AGENCY_SECRETS` environment variable / GitHub
     # repository secret. The contents of this environment variable should be directly copied from
     # the contents of a filled-out ./airflow/data/example-secrets.csv file.
