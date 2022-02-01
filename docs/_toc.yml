@@ -58,6 +58,7 @@ parts:
         - file: airflow/static-schedule-pipeline
         - file: airflow/local-setup
         - file: airflow/production-maintenance
+        - file: airflow/dags-maintenance
       - file: kubernetes/README
         sections:
         - file: kubernetes/JupyterHub

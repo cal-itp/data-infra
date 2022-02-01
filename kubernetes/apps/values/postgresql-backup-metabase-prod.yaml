@@ -1,0 +1,6 @@
+config:
+  envAppend:
+    - name: RESTIC_REPOSITORY
+      value: gs:calitp-backups-metabase:/
+    - name: PGHOST
+      value: database.metabase.svc.cluster.local

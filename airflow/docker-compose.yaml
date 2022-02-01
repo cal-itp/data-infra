@@ -55,6 +55,10 @@ x-airflow-common:
     AIRFLOW__WEBSERVER__RELOAD_ON_PLUGIN_CHANGE: 'true'
     CALITP_BQ_MAX_BYTES: 10000000000
 
+    # connections - required to allow local testing of pod operators
+    # see https://stackoverflow.com/a/55064944/1144523
+    AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT: "google-cloud-platform://:@:?extra__google_cloud_platform__project=cal-itp-data-infra"
+
     # API keys
     CALITP_AIRTABLE_API_KEY: "${CALITP_AIRTABLE_API_KEY}"
 
@@ -65,7 +69,7 @@ x-airflow-common:
     GOOGLE_CLOUD_PROJECT: cal-itp-data-infra
 
     # Composer variables for kubernetes
-    POD_CLUSTER_NAME: "us-west2-calitp-airflow-pro-332827a9-gke"
+    POD_CLUSTER_NAME: "us-west2-calitp-airflow2-pr-171e4e47-gke"
     POD_LOCATION: "us-west2-a"
     AIRFLOW_ENV: "development"
     CALITP_USER: "pipeline"

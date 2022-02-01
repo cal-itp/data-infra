@@ -10,10 +10,6 @@
 
 ## Dashboards
 
-## Maintenance
+## DAGs Maintenance
 
-### DAGs overview
-
-### common issues
-
-### backfilling
+You can find further information on DAGs maintenance for GTFS Schedule data [on this page](gtfs-schedule-dags).
