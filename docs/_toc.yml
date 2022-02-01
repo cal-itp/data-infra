@@ -45,12 +45,6 @@ parts:
         sections:
         - file: analytics_publishing/how_to_publish
         - file: analytics_publishing/where_reports_live
-  - caption: Project Leads
-    chapters:
-      - file: project_leads/overview
-  - caption: Data Consumers
-    chapters:
-      - file: data_consumers/overview
   - caption: Developers
     chapters:
       - file: airflow/overview
@@ -82,5 +76,12 @@ parts:
     chapters:
       - file: contribute/overview
         sections:
+        - file: contribute/contribute-best-practices
         - file: contribute/content_types
         - file: contribute/submitting_changes
+  - caption: Project Leads
+    chapters:
+      - file: project_leads/overview
+  - caption: Data Consumers
+    chapters:
+      - file: data_consumers/overview

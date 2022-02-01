@@ -1,13 +1,13 @@
 (content-types)=
 # Types of Content
 ## What kinds of content can I put in the documentation?
-Our documentation uses Markdown syntax for formatting, and MyST is the particular flavor of Markdown that we are using.
+Keep reading below to find some of the common content types used in the Cal-ITP Data Services Documentation.
 
-Use this [MyST Syntax Cheat Sheet](https://jupyterbook.org/reference/cheatsheet.html) as
-a reference for using Markdown, and keep reading below to find some of the more common content types used at Cal-ITP.
+If you haven't yet, navigate to the [Best Practices](contribute-best-practices) section of the documentation for more background on documentation structure and how to contribute.
 
 ### Images
-Images are currently being stored in the assetts folder within each docs folder. Preference is for .Png file extension and no larger than 500kb. Images can be loaded into jupyterbook by using the following syntax:
+Images are currently being stored in the assets folder within each docs folder. Preference is for .Png file extension and no larger than 500kb. Images can be loaded into Jupyter Book by using the following syntax:
+
 ```
 ![Collection Matrix](XXX.png)
 ```
@@ -42,7 +42,7 @@ kernelspec:
 
 **For SQL**
 #### Cell Magics
-To run sql within the jupyterbook we are using an Ipython wrapper called cell magics.
+To run sql within the jupyterbook we are using an iPython wrapper called cell magics.
 
 #### Syntax:
 ```
