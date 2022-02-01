@@ -1,8 +1,8 @@
 operator: operators.RealtimeToFlattenedJSONOperator
 provide_context: true
 
-filename_prefix: tu
-rt_file_substring: trip_updates
+filename_prefix: rt
+rt_file_substring: vehicle_positions
 
 dependencies:
-  - external_trip_updates
+  - external_vehicle_positions
