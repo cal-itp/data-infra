@@ -1,0 +1,231 @@
+[kustomize:kubernetes/apps/overlays/gtfs-rt-archive-prod]
+
+diff -u -N /tmp/LIVE-984658025/apps.v1.Deployment.gtfs-rt.gtfs-rt-archive /tmp/MERGED-1512726328/apps.v1.Deployment.gtfs-rt.gtfs-rt-archive
+--- /tmp/LIVE-984658025/apps.v1.Deployment.gtfs-rt.gtfs-rt-archive	2022-02-01 18:27:50.818382481 +0000
++++ /tmp/MERGED-1512726328/apps.v1.Deployment.gtfs-rt.gtfs-rt-archive	2022-02-01 18:27:50.822382514 +0000
+@@ -6,7 +6,7 @@
+     kubectl.kubernetes.io/last-applied-configuration: |
+       {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"name":"gtfs-rt-archive"},"name":"gtfs-rt-archive","namespace":"gtfs-rt"},"spec":{"replicas":1,"selector":{"matchLabels":{"name":"gtfs-rt-archive"}},"strategy":{"type":"Recreate"},"template":{"metadata":{"labels":{"name":"gtfs-rt-archive"}},"spec":{"containers":[{"envFrom":[{"configMapRef":{"name":"archiver-app-vars"}},{"configMapRef":{"name":"archiver-channel-vars"}}],"image":"us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:1.2-r2","name":"app","resources":{"limits":{"memory":"6.5Gi"},"requests":{"memory":"6.5Gi"}},"volumeMounts":[{"mountPath":"/secrets/agencies-data","name":"agencies-data"},{"mountPath":"/secrets/gcs-upload-svcacct","name":"gcs-upload-svcacct"}]}],"volumes":[{"name":"agencies-data","secret":{"secretName":"agencies-data"}},{"name":"gcs-upload-svcacct","secret":{"secretName":"gcs-upload-svcacct"}}]}}}}
+   creationTimestamp: "2021-07-26T20:39:07Z"
+-  generation: 97
++  generation: 98
+   labels:
+     name: gtfs-rt-archive
+   managedFields:
+@@ -167,7 +167,7 @@
+             name: archiver-app-vars
+         - configMapRef:
+             name: archiver-channel-vars
+-        image: us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:1.2-r2
++        image: us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:2.0
+         imagePullPolicy: IfNotPresent
+         name: app
+         resources:
+[helm:postgresql-backup=kubernetes/apps/charts/postgresql-backup]
+
+diff -u -N /tmp/LIVE-1107034212/batch.v1beta1.CronJob.metabase.postgresql-backup /tmp/MERGED-292849184/batch.v1beta1.CronJob.metabase.postgresql-backup
+--- /tmp/LIVE-1107034212/batch.v1beta1.CronJob.metabase.postgresql-backup	2022-02-01 18:27:55.082416821 +0000
++++ /tmp/MERGED-292849184/batch.v1beta1.CronJob.metabase.postgresql-backup	2022-02-01 18:27:55.082416821 +0000
+@@ -0,0 +1,202 @@
++apiVersion: batch/v1beta1
++kind: CronJob
++metadata:
++  creationTimestamp: "2022-02-01T18:27:55Z"
++  labels:
++    name: database-backup
++  managedFields:
++  - apiVersion: batch/v1beta1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:name: {}
++      f:spec:
++        f:concurrencyPolicy: {}
++        f:failedJobsHistoryLimit: {}
++        f:jobTemplate:
++          f:spec:
++            f:activeDeadlineSeconds: {}
++            f:template:
++              f:spec:
++                f:containers:
++                  k:{"name":"client"}:
++                    .: {}
++                    f:args: {}
++                    f:command: {}
++                    f:env:
++                      .: {}
++                      k:{"name":"GOOGLE_APPLICATION_CREDENTIALS"}:
++                        .: {}
++                        f:name: {}
++                        f:value: {}
++                      k:{"name":"GOOGLE_PROJECT_ID"}:
++                        .: {}
++                        f:name: {}
++                        f:value: {}
++                      k:{"name":"PGDATABASE"}:
++                        .: {}
++                        f:name: {}
++                        f:valueFrom:
++                          .: {}
++                          f:configMapKeyRef:
++                            .: {}
++                            f:key: {}
++                            f:name: {}
++                      k:{"name":"PGHOST"}:
++                        .: {}
++                        f:name: {}
++                        f:value: {}
++                      k:{"name":"PGPASSWORD"}:
++                        .: {}
++                        f:name: {}
++                        f:valueFrom:
++                          .: {}
++                          f:configMapKeyRef:
++                            .: {}
++                            f:key: {}
++                            f:name: {}
++                      k:{"name":"PGPORT"}:
++                        .: {}
++                        f:name: {}
++                        f:value: {}
++                      k:{"name":"PGUSER"}:
++                        .: {}
++                        f:name: {}
++                        f:valueFrom:
++                          .: {}
++                          f:configMapKeyRef:
++                            .: {}
++                            f:key: {}
++                            f:name: {}
++                      k:{"name":"RESTIC_REPOSITORY"}:
++                        .: {}
++                        f:name: {}
++                        f:value: {}
++                    f:envFrom: {}
++                    f:image: {}
++                    f:imagePullPolicy: {}
++                    f:name: {}
++                    f:resources: {}
++                    f:terminationMessagePath: {}
++                    f:terminationMessagePolicy: {}
++                    f:volumeMounts:
++                      .: {}
++                      k:{"mountPath":"/secrets/gcs-upload-svcacct"}:
++                        .: {}
++                        f:mountPath: {}
++                        f:name: {}
++                f:dnsPolicy: {}
++                f:restartPolicy: {}
++                f:schedulerName: {}
++                f:securityContext: {}
++                f:terminationGracePeriodSeconds: {}
++                f:volumes:
++                  .: {}
++                  k:{"name":"gcs-upload-svcacct"}:
++                    .: {}
++                    f:name: {}
++                    f:secret:
++                      .: {}
++                      f:defaultMode: {}
++                      f:secretName: {}
++        f:schedule: {}
++        f:startingDeadlineSeconds: {}
++        f:successfulJobsHistoryLimit: {}
++        f:suspend: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-01T18:27:55Z"
++  name: postgresql-backup
++  namespace: metabase
++  selfLink: /apis/batch/v1beta1/namespaces/metabase/cronjobs/postgresql-backup
++  uid: 4d8560fb-389d-4061-836b-84bbe257ee6f
++spec:
++  concurrencyPolicy: Forbid
++  failedJobsHistoryLimit: 1
++  jobTemplate:
++    metadata:
++      creationTimestamp: null
++    spec:
++      activeDeadlineSeconds: 7200
++      template:
++        metadata:
++          creationTimestamp: null
++        spec:
++          containers:
++          - args:
++            - |2
++
++              # snapshot current database
++              echo "Snapshotting Database"
++              pg_dumpall --clean \
++                | gzip --rsyncable \
++                | restic backup \
++                  --host metabase:postgresql-backup \
++                  --stdin \
++                  --stdin-filename pg_dumpall.sql.gz
++
++              # prune aged snapshots
++              echo "Pruning aged snapshots"
++              restic forget \
++                --host metabase:postgresql-backup \
++                --keep-last 36 \
++                --keep-daily 7 \
++                --keep-weekly 52
++            command:
++            - /bin/bash
++            - -c
++            env:
++            - name: GOOGLE_PROJECT_ID
++              value: "1005246706141"
++            - name: GOOGLE_APPLICATION_CREDENTIALS
++              value: /secrets/gcs-upload-svcacct/gcs-upload-svcacct.json
++            - name: PGPORT
++              value: "5432"
++            - name: PGDATABASE
++              valueFrom:
++                configMapKeyRef:
++                  key: POSTGRES_DB
++                  name: database-config
++            - name: PGUSER
++              valueFrom:
++                configMapKeyRef:
++                  key: POSTGRES_USER
++                  name: database-config
++            - name: PGPASSWORD
++              valueFrom:
++                configMapKeyRef:
++                  key: POSTGRES_PASSWORD
++                  name: database-config
++            - name: RESTIC_REPOSITORY
++              value: gs:calitp-backups-metabase:/
++            - name: PGHOST
++              value: database.metabase.svc.cluster.local
++            envFrom:
++            - secretRef:
++                name: database-backup
++            image: ghcr.io/jarvusinnovations/restic-toolkit:latest
++            imagePullPolicy: Always
++            name: client
++            resources: {}
++            terminationMessagePath: /dev/termination-log
++            terminationMessagePolicy: File
++            volumeMounts:
++            - mountPath: /secrets/gcs-upload-svcacct
++              name: gcs-upload-svcacct
++          dnsPolicy: ClusterFirst
++          restartPolicy: Never
++          schedulerName: default-scheduler
++          securityContext: {}
++          terminationGracePeriodSeconds: 30
++          volumes:
++          - name: gcs-upload-svcacct
++            secret:
++              defaultMode: 420
++              secretName: gcs-upload-svcacct
++  schedule: 15 * * * *
++  startingDeadlineSeconds: 86400
++  successfulJobsHistoryLimit: 3
++  suspend: false
++status: {}
