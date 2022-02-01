@@ -21,17 +21,16 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: 3.8
+    - name: Install python packages
+      run: |
+        pip install jinja2==2.11.3 PyYAML==5.4.1 jsonschema==3.2.0 pandas==1.1.4 requests==2.22.0
     - name: Verify urls from agencies.yml
       run: |
-        git rev-list --all | grep ${{ github.event.pull_request.base.sha }}
         git diff ${{ github.event.pull_request.base.sha }} './airflow/data/agencies.yml' > AGENCIES_DIFF
         python script/agencies_verify.py \
           './airflow/data/headers.filled.yml' \
           './airflow/data/agencies.filled.yml' \
           AGENCIES_DIFF
-    - name: Install python packages
-      run: |
-        pip install jinja2==2.11.3 PyYAML==5.4.1 jsonschema==3.2.0 pandas==1.1.4
     # Create the secrets.csv from the contents of the `AGENCY_SECRETS` environment variable / GitHub
     # repository secret. The contents of this environment variable should be directly copied from
     # the contents of a filled-out ./airflow/data/example-secrets.csv file.
