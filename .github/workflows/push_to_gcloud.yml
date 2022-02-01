@@ -24,9 +24,7 @@ jobs:
     - name: Verify urls from agencies.yml
       run: |
         git rev-list --all | grep ${{ github.event.pull_request.base.sha }}
-        git diff './airflow/data/agencies.yml' \
-          ${{ github.event.pull_request.base.sha }} \
-          ${{ github.sha }} > AGENCIES_DIFF
+        git diff ${{ github.event.pull_request.base.sha }} './airflow/data/agencies.yml' > AGENCIES_DIFF
         python script/agencies_verify.py \
           './airflow/data/headers.filled.yml' \
           './airflow/data/agencies.filled.yml' \
