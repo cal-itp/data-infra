@@ -7,6 +7,7 @@ from gusty import create_dag
 
 from calitp.templates import user_defined_macros, user_defined_filters
 
+CALITP_SLACK_URL_KEY = "CALITP_SLACK_URL"
 
 # DAG Directories =============================================================
 
@@ -116,21 +117,25 @@ def sql_enrich_duplicates(schema_tbl, key_columns, order_by_columns):
 
 
 def email_failure(context):
-    slack_url = os.environ.get("CALITP_SLACK_URL")
-    if slack_url is None:
+    slack_url = os.environ.get(CALITP_SLACK_URL_KEY)
+    if not slack_url:
         print("Skipping email to slack channel. No CALITP_SLACK_URL in environment")
+        return
 
-    ti = context["ti"]
-    message = f"""
-Task Failed: {ti.dag_id}.{ti.task_id}
-Execution Date: {ti.execution_date}
-Try {ti.try_number} of {ti.max_tries}
+    try:
+        ti = context["ti"]
+        message = f"""
+    Task Failed: {ti.dag_id}.{ti.task_id}
+    Execution Date: {ti.execution_date}
+    Try {ti.try_number} of {ti.max_tries}
 
-<{ti.log_url}| Check Log >
-"""
-    requests.post(
-        os.environ["CALITP_SLACK_URL"], json={"text": message},
-    )
+    <{ti.log_url}| Check Log >
+    """
+        requests.post(slack_url, json={"text": message})
+
+    # This is very broad but we want to try to log _any_ exception to slack
+    except Exception as e:
+        requests.post(slack_url, json={"text": f"failed to log {type(e)} to slack"})
 
 
 for dag_directory in dag_directories:
