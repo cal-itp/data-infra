@@ -21,6 +21,17 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: 3.8
+    - name: Verify urls from agencies.yml
+      run: |
+        git rev-list --all
+        git fetch origin main ${{ github.event.pull_request.base.sha }}
+        git diff './airflow/data/agencies.yml' \
+          ${{ github.event.pull_request.base.sha }} \
+          ${{ github.sha }} > AGENCIES_DIFF
+        python script/agencies_verify.py \
+          './airflow/data/headers.filled.yml' \
+          './airflow/data/agencies.filled.yml' \
+          AGENCIES_DIFF
     - name: Install python packages
       run: |
         pip install jinja2==2.11.3 PyYAML==5.4.1 jsonschema==3.2.0 pandas==1.1.4
@@ -54,16 +65,6 @@ jobs:
         python script/headers_validate.py \
           './airflow/data/headers.filled.yml' \
           './airflow/data/schema_headers_entry.yml'
-    - name: Verify urls from agencies.yml
-      run: |
-        git fetch origin main ${{ github.event.pull_request.base.sha }}
-        git diff './airflow/data/agencies.yml' \
-          ${{ github.event.pull_request.base.sha }} \
-          ${{ github.sha }} > AGENCIES_DIFF
-        python script/agencies_verify.py \
-          './airflow/data/headers.filled.yml' \
-          './airflow/data/agencies.filled.yml' \
-          AGENCIES_DIFF
 
     - if: ${{ github.repository == 'cal-itp/data-infra' }}
       uses: google-github-actions/setup-gcloud@master
