@@ -17,7 +17,7 @@ When you are ready to make changes, visit the [Submitting Changes](submitting-ch
 If you haven't yet, navigate to the [Common Content](content-types) section of the documentation for further information on adding specific types of content.
 
 ### Small Changes
-For small changes such as typos, clarification, changes within existing content, or other small additions you can reference the [Common Content](content-types) section as needed.
+For small changes such as typos, clarification, or changes within existing content you can reference the [Common Content](content-types) section as needed.
 
 ### New Sections (Headers)
 If you feel a new section is warranted, make sure you follow Jupyter Book's guidelines on headers:
@@ -27,7 +27,7 @@ If you feel a new section is warranted, make sure you follow Jupyter Book's guid
 ### New Pages and Chapters
 Add new pages and chapters only as truly needed. If you're unsure of whether a new page or chapter is necessary, reach out to `@Charlie Costanzo` on `Cal-ITP Slack`.
 
-If you are adding new pages or chapters, you will need to also update the `_toc.yml` file. You can find more information at [Structure and organize content](https://jupyterbook.org/basics/organize.html).
+If you are adding new pages or chapters, you will need to also update the `_toc.yml` file. You can find more information at Jupyter Book's resource [Structure and organize content](https://jupyterbook.org/basics/organize.html).
 
 You will also need to follow Jupyter Book's guidelines for when adding files:
 >**Files must have a title.** Generally this means that they must begin with a line that starts with a single #
