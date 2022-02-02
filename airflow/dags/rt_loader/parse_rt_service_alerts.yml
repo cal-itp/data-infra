@@ -3,6 +3,3 @@ provide_context: true
 
 filename_prefix: al
 rt_file_substring: service_alerts
-
-dependencies:
-  - external_service_alerts

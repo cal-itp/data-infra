@@ -1,5 +1,8 @@
 ---
 operator: operators.SqlQueryOperator
+
+dependencies:
+  - parse_rt_trip_updates
 ---
 
 CREATE OR REPLACE EXTERNAL TABLE `gtfs_rt.trip_updates`

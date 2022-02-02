@@ -14,3 +14,4 @@ shapely
 pyairtable==1.0.0
 structlog==21.5.0
 typer==0.4.0
+humanize==3.14.0

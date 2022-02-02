@@ -1,5 +1,8 @@
 ---
 operator: operators.SqlQueryOperator
+
+dependencies:
+  - parse_rt_service_alerts
 ---
 
 CREATE OR REPLACE EXTERNAL TABLE `gtfs_rt.service_alerts`

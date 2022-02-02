@@ -3,6 +3,3 @@ provide_context: true
 
 filename_prefix: rt
 rt_file_substring: vehicle_positions
-
-dependencies:
-  - external_vehicle_positions

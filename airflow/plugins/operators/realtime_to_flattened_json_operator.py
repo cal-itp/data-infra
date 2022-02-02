@@ -10,6 +10,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from pathlib import Path
 
+import humanize
 import structlog
 import typer
 from airflow.models import BaseOperator
@@ -84,7 +85,7 @@ def get_google_cloud_filename(filename_prefix, feed, iso_date):
     return f"{prefix}_{iso_date}_{itp_id_url_num}.gz"
 
 
-def handle_one_feed(i, feed, files, filename_prefix, iso_date, dst_path):
+def handle_one_feed(i, feed, files, filename_prefix, iso_date, dst_path, total_feeds):
     start = datetime.now()
     logger = structlog.get_logger().bind(
         i=i,
@@ -93,6 +94,7 @@ def handle_one_feed(i, feed, files, filename_prefix, iso_date, dst_path):
         filename_prefix=filename_prefix,
         iso_date=iso_date,
         dst_path=dst_path,
+        total_feeds=total_feeds,
     )
     logger.info("entering handle_one_feed")
 
@@ -131,9 +133,9 @@ def handle_one_feed(i, feed, files, filename_prefix, iso_date, dst_path):
             logger.warning("did not parse any entities, skipping upload")
             return
 
-        num_bytes = os.stat(gzip_fname).st_size
+        filesize = humanize.naturalsize(os.stat(gzip_fname).st_size)
         logger.info(
-            f"writing {written} lines ({num_bytes} bytes) from {gzip_fname} to {dst_path + google_cloud_file_name}"
+            f"writing {written} lines ({filesize}) from {gzip_fname} to {dst_path + google_cloud_file_name}"
         )
         fs.put(
             gzip_fname, dst_path + google_cloud_file_name,
@@ -157,7 +159,7 @@ def execute(context, filename_prefix, rt_file_substring, src_path, dst_path):
     # https://github.com/fsspec/gcsfs/issues/379
     with ThreadPoolExecutor(max_workers=4) as pool:
         args = [
-            (i, feed, files, filename_prefix, iso_date, dst_path)
+            (i, feed, files, filename_prefix, iso_date, dst_path, len(feed_files))
             for i, (feed, files) in enumerate(feed_files.items())
         ]
         list(pool.map(handle_one_feed, *zip(*args)))

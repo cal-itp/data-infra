@@ -1,5 +1,8 @@
 ---
 operator: operators.SqlQueryOperator
+
+dependencies:
+  - parse_rt_vehicle_positions
 ---
 
 CREATE OR REPLACE EXTERNAL TABLE `gtfs_rt.vehicle_positions`
