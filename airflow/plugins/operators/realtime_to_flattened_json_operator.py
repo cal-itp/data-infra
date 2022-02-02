@@ -11,6 +11,7 @@ from datetime import datetime
 from pathlib import Path
 
 import structlog
+import typer
 from airflow.models import BaseOperator
 from airflow.utils.decorators import apply_defaults
 from calitp.config import get_bucket
@@ -165,33 +166,18 @@ def execute(context, filename_prefix, rt_file_substring, src_path, dst_path):
 class RealtimeToFlattenedJSONOperator(BaseOperator):
     @apply_defaults
     def __init__(
-        self,
-        header_details,
-        entity_details,
-        filename_prefix,
-        rt_file_substring,
-        cast={},
-        is_timestamp=[],
-        **kwargs,
+        self, filename_prefix, rt_file_substring, **kwargs,
     ):
         super().__init__(**kwargs)
 
         # could not just set self.fs here - ran into this issue:
         # https://stackoverflow.com/questions/69532715/google-cloud-functions-using-gcsfs-runtimeerror-this-class-is-not-fork-safe
         # self.fs = get_fs()
-        self.header_details = header_details
-        self.entity_details = entity_details
         self.filename_prefix = filename_prefix
         self.rt_file_substring = rt_file_substring
-        self.cast = cast
-        self.time_float_cast = {col: "float" for col in is_timestamp}
         self.src_path = f"{get_bucket()}/rt/"
         self.dst_path = "".join(
-            [
-                f"{get_bucket()}/rt-processed_test_2022-01-24/",
-                self.rt_file_substring,
-                "/",
-            ]
+            [f"{get_bucket()}/rt-processed/", self.rt_file_substring, "/"]
         )
 
     def execute(self, context):
@@ -201,18 +187,30 @@ class RealtimeToFlattenedJSONOperator(BaseOperator):
             rt_type (string): One of "alerts", "trip_updates", "vehicle_positions"
             execution_date (date): The execution date being processed
         """
-        execute(context)
+        execute(
+            context=context,
+            filename_prefix=self.filename_prefix,
+            rt_file_substring=self.rt_file_substring,
+            src_path=self.src_path,
+            dst_path=self.dst_path,
+        )
+
+
+def main(
+    execution_date=datetime.combine(datetime.today(), datetime.min.time()).isoformat(),
+    filename_prefix="tu",
+    rt_file_substring="trip_updates",
+    src_path=f"{get_bucket()}/rt/",
+    dst_path=f"{get_bucket()}/rt-processed_test_2022-01-27/trip_updates/",
+):
+    execute(
+        {"execution_date": execution_date},
+        filename_prefix,
+        rt_file_substring,
+        src_path,
+        dst_path,
+    )
 
 
 if __name__ == "__main__":
-    filename_prefix = "tu"
-    rt_file_substring = "trip_updates"
-    execute(
-        context={"execution_date": "2022-01-27T00:00:00Z"},
-        filename_prefix=filename_prefix,
-        rt_file_substring=rt_file_substring,
-        src_path=f"{get_bucket()}/rt/",
-        dst_path=(
-            f"{get_bucket()}/rt-processed_test_2022-01-27/" + rt_file_substring + "/"
-        ),
-    )
+    typer.run(main)
