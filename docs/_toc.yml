@@ -79,9 +79,3 @@ parts:
         - file: contribute/contribute-best-practices
         - file: contribute/content_types
         - file: contribute/submitting_changes
-  - caption: Project Leads
-    chapters:
-      - file: project_leads/overview
-  - caption: Data Consumers
-    chapters:
-      - file: data_consumers/overview

@@ -1,18 +1,18 @@
 (content-types)=
 # Types of Content
 ## What kinds of content can I put in the documentation?
-Keep reading below to find some of the common content types used in the Cal-ITP Data Services Documentation.
+On this page you can find some of the common content types used in the Cal-ITP Data Services Documentation.
 
 If you haven't yet, navigate to the [Best Practices](bp-reference) section of the documentation for more background on documentation structure and how to contribute.
 
 ### Images
-Images are currently being stored in the assets folder within each docs folder. Preference is for .Png file extension and no larger than 500kb. Images can be loaded into Jupyter Book by using the following syntax:
+Images are currently being stored in the assets folder within each docs folder. Preference is for `.png` file extension and no larger than 500kb. Images can be loaded into Jupyter Book by using the following syntax:
 
 ```
 ![Collection Matrix](XXX.png)
 ```
 ### Running Code
-To include code that will run within the jupyterbook documentation, use the following sytax:
+To include code that will run within a `.md` file, place the following sytax at the top of a `.md` document:
 
 ```
 ---
@@ -31,20 +31,21 @@ kernelspec:
 ---
 ```
 
-#### for the actual code block:
-**For Python**
-#### Syntax:
+#### Then, to create the actual code block:
+##### Python
+**Syntax**:
 ```
     ```{code-cell}
     Sample Code
     ```
 ```
 
-**For SQL**
-#### Cell Magics
-To run sql within the jupyterbook we are using an iPython wrapper called cell magics.
-
-#### Syntax:
+##### SQL
+**Syntax:** Cell Magics:
+To run sql within the Jupyter Book we are using an iPython wrapper called Cell Magics.
+```python
+import calitp.magics
+```
 ```
     ```{code-cell}
     %%sql
@@ -64,3 +65,18 @@ Non-executing code is formatted similarly to the executing code above, but repla
     Sample Code
     ```
 ```
+
+### Internal References and Cross-References
+Referencing within the documentation can be accomplished quickly with `labels` and `markdown link syntax`.
+
+Labels can be added before major elements of a page,
+such as titles or figures. To add a label, use the following pattern **before** the element you wish to label:
+
+```md
+(my-label)=
+# The thing to label
+```
+
+You can then insert cross-references to labels in your content with this syntax:
+
+- `[](label-text)`
