@@ -4,7 +4,7 @@ dst_table_name: "gtfs_schedule_type2.trips_clean"
 dependencies:
   - type2_loaded
 ---
-
+-- Trim service_id for 273, 271 specific issue
 SELECT
     * EXCEPT(calitp_deleted_at, service_id)
     , TRIM(service_id) as service_id
