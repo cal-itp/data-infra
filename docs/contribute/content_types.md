@@ -16,16 +16,14 @@ If you haven't yet, navigate to the [Best Practices](bp-reference) section of th
 
 ### Content Types
 1. [Executing Code](executing-code)
-  * [Python](executing-code-python)
-  * [SQL](executing-code-sql)
-1. [Non-executing Code](non-executing-code)
-1. [Images](adding-images)
-1. [Internal References and Cross References](internal-refs)
+    * [Python](executing-code-python)
+    * [SQL](executing-code-sql)
+2. [Non-executing Code](non-executing-code)
+3. [Images](adding-images)
+4. [Internal References and Cross References](internal-refs)
 (executing-code)=
 #### Executing Code
 Place the following sytax at the top of a `.md` document to include code that will execute.
-
-You can visit [this page](https://jupyterbook.org/content/code-outputs.html) for more information on how to format code outputs.
 ```
 ---
 jupytext:
@@ -43,16 +41,16 @@ kernelspec:
 ---
 ```
 
-##### To create the actual code block:
+To create the actual code block:
 (executing-code-python)=
-###### Python
+**Python**
 ```
     ```{code-cell}
     Sample Code
     ```
 ```
 (executing-code-sql)=
-###### SQL
+**SQL**
 To run SQL within the Jupyter Book we are using an iPython wrapper called `cell Magics` with `%%sql`.
 ```python
 import calitp.magics
@@ -63,6 +61,8 @@ import calitp.magics
     Sample SQL Here
     ```
 ```
+You can visit [this page](https://jupyterbook.org/content/code-outputs.html) for more information on how to format code outputs.
+
 (non-executing-code)=
 #### Non-Executing Code
 Non-executing code is formatted similarly to the executing code above, but replaces
