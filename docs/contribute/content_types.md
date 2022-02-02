@@ -1,19 +1,32 @@
 (content-types)=
-# Types of Content
-## What kinds of content can I put in the documentation?
+# Common Content
+1. [Executing Code](executing-code)
+  1. [Python](executing-code-python)
+  1. [SQL](executing-code-sql)
+1. [Non-executing Code](non-executing-code)
+1. [Images](adding-images)
+1. [Internal References and Cross References](internal-refs)
+## What can I put in the documentation?
 On this page you can find some of the common content types used in the Cal-ITP Data Services Documentation.
 
-If you haven't yet, navigate to the [Best Practices](bp-reference) section of the documentation for more background on documentation structure and how to contribute.
+Although Jupyter Book allows flexibility, the pages in our docs are typically generated in the formats below.
 
-### Images
-Images are currently being stored in the assets folder within each docs folder. Preference is for `.png` file extension and no larger than 500kb. Images can be loaded into Jupyter Book by using the following syntax:
+If you haven't yet, navigate to the [Best Practices](bp-reference) section of the documentation for more context on the Cal-ITP docs, and the [Submitting Changes](submitting-changes) section for how to contribute.
+## Cal-ITP Typical Contributions
 
-```
-![Collection Matrix](XXX.png)
-```
-### Running Code
-To include code that will run within a `.md` file, place the following sytax at the top of a `.md` document:
+### File Types
+* Markdown (`.md`)
+* Jupyter Notebooks (`.ipynb`)
+* Images less than 500kb (`.png` preferred)
 
+### Content Types
+* [MyST](https://jupyterbook.org/reference/cheatsheet.html) (a flavor of Markdown used by Jupyter Book)
+* [Jupyter Notebook Markdown](https://jupyterbook.org/file-types/notebooks.html)
+(executing-code)=
+### Executing Code
+Place the following sytax at the top of a `.md` document to include code that will execute.
+
+You can visit [this page](https://jupyterbook.org/content/code-outputs.html) for more information on how to format code outputs.
 ```
 ---
 jupytext:
@@ -31,27 +44,27 @@ kernelspec:
 ---
 ```
 
-#### Then, to create the actual code block:
+#### To create the actual code block:
+(executing-code-python)=
 ##### Python
-**Syntax**:
 ```
     ```{code-cell}
     Sample Code
     ```
 ```
-
+(executing-code-sql)=
 ##### SQL
-**Syntax:** Cell Magics:
-To run sql within the Jupyter Book we are using an iPython wrapper called Cell Magics.
+To run SQL within the Jupyter Book we are using an iPython wrapper called `cell Magics` with `%%sql`.
 ```python
 import calitp.magics
 ```
 ```
     ```{code-cell}
     %%sql
-    Sample SQL
+    Sample SQL Here
     ```
 ```
+(non-executing-code)=
 ### Non-Executing Code
 Non-executing code is formatted similarly to the executing code above, but replaces
 `{code-cell}` with the name of the language you would like to represent, as seen below.
@@ -65,7 +78,14 @@ Non-executing code is formatted similarly to the executing code above, but repla
     Sample Code
     ```
 ```
+(adding-images)=
+### Images
+Images are currently being stored in an `assets` folder within each `docs` folder. Preference is for `.png` file extension and no larger than `500kb`. Images can be loaded into Jupyter Book by using the following syntax:
 
+```
+![Collection Matrix](XXX.png)
+```
+(internal-refs)=
 ### Internal References and Cross-References
 Referencing within the documentation can be accomplished quickly with `labels` and `markdown link syntax`.
 

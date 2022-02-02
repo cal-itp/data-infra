@@ -4,19 +4,7 @@ This page aggregates best practices and helpful information for use when contrib
 
 Our Cal-ITP Data Services Documentation uses the Jupyter Book ecosystem to generate our docs. You can find their full documentation at this link: [Jupyter Book Documentation](https://jupyterbook.org/intro.html).
 
-## Cal-ITP Typical Contributions
-Although Jupyter Book allows flexibility, the pages in our docs are typically generated in the formats below. You can find more information in our [Content Types](content-types) section.
-
-### File Types
-* Markdown (`.md`)
-* Jupyter Notebooks (`.ipynb`)
-* Images less than 500kb (`.png` preferred)
-
-### Content Types
-* [MyST](https://jupyterbook.org/reference/cheatsheet.html) (a flavor of Markdown used by Jupyter Book)
-* [Jupyter Notebook Markdown](https://jupyterbook.org/file-types/notebooks.html)
-
-### Universal Rules
+## Universal Rules
 There are a few things that are true for all files and content types. Here is a short list:
 * **Files must have a title.** Generally this means that they must begin with a line that starts with a single #
 * **Use only one top-level header.** Because each page must have a clear title, it must also only have one top-level header. You cannot have multiple headers with single # tag in them.
@@ -24,10 +12,12 @@ There are a few things that are true for all files and content types. Here is a 
 
 
 ## Guidelines by Contribution Type
-### Small Changes
-Such as typos, clarification, changes within existing content, or other small additions.
+When you are ready to make changes, visit the [Submitting Changes](submitting-changes) section for how to contribute.
 
-Reference the above Markdown resources as needed.
+If you haven't yet, navigate to the [Common Content](content-types) section of the documentation for further information on adding specific types of content.
+
+### Small Changes
+For small changes such as typos, clarification, changes within existing content, or other small additions you can reference the [Common Content](content-types) section as needed.
 
 ### New Sections (Headers)
 If you feel a new section is warranted, make sure you follow Jupyter Book's guidelines on headers:
