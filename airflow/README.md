@@ -84,3 +84,5 @@ Note that the following variables were set manually in cloud composer:
 * `SENDGRID_MAIL_FROM`
 * `POD_CLUSTER_NAME` - name of the kubernetes cluster
 * `POD_LOCATION` - location of cluster (e.g. us-west-2a)
+* `CALITP_SLACK_URL` - slack webhook api url, for posting errors to a channel.
+  This variable can be set in your .env file when developing locally.

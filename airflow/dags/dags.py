@@ -1,11 +1,14 @@
 import os
 import airflow  # noqa
+import requests
 
 from pathlib import Path
 from gusty import create_dag
 
 from calitp.templates import user_defined_macros, user_defined_filters
 
+# pointed at #data-infra-notify as of 2022-02-01
+CALITP_SLACK_URL_KEY = "CALITP_SLACK_URL"
 
 # DAG Directories =============================================================
 
@@ -114,6 +117,28 @@ def sql_enrich_duplicates(schema_tbl, key_columns, order_by_columns):
     """
 
 
+def email_failure(context):
+    slack_url = os.environ.get(CALITP_SLACK_URL_KEY)
+    if not slack_url:
+        print("Skipping email to slack channel. No CALITP_SLACK_URL in environment")
+        return
+
+    try:
+        ti = context["ti"]
+        message = f"""
+    Task Failed: {ti.dag_id}.{ti.task_id}
+    Execution Date: {ti.execution_date}
+    Try {ti.try_number} of {ti.max_tries}
+
+    <{ti.log_url}| Check Log >
+    """
+        requests.post(slack_url, json={"text": message})
+
+    # This is very broad but we want to try to log _any_ exception to slack
+    except Exception as e:
+        requests.post(slack_url, json={"text": f"failed to log {type(e)} to slack"})
+
+
 for dag_directory in dag_directories:
     dag_id = os.path.basename(dag_directory)
     globals()[dag_id] = create_dag(
@@ -128,4 +153,8 @@ for dag_directory in dag_directories:
             "sql_enrich_duplicates": sql_enrich_duplicates,
         },
         user_defined_filters=user_defined_filters,
+        default_args={
+            "on_failure_callback": email_failure,
+            "on_retry_callback": email_failure,
+        },
     )
