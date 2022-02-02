@@ -26,7 +26,7 @@ These documents are currently editable on GitHub's website. To use the GitHub we
 * (2) Select the second option `Create a new branch...` and add a short but descriptive name for this new branch.
 * Select `Commit Changes`. This will take you to a new page to create a `Pull Request`, the mechanism that will allow your new work to be added to the docs.
 #### Create a Pull Request for review and merging
-![Collection Matrix](pr-screenshot.png)
+![Collection Matrix](assets/pr-intro.png)
 * After committing your changes you will be brought to another page, creating a PR.
 * (1) Give your PR a descriptive title that has a prefix of `docs(subject-area):`, as according to the Conventional Commits standard.
 * (2) You will find there is already an existing template in the description area. Scroll to the bottom and use only the portion beneath `Docs changes checklist`. Add description where requested.
