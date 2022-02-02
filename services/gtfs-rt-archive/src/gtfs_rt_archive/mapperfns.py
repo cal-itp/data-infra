@@ -18,7 +18,7 @@ map_data : object
 """
 
 
-def map_agencies_urls(logger, yaml_data):
+def map_agencies_urls(logger, yaml_data, key_prefix="gtfs_rt"):
     """Maps unique identifiers to GTFS-RT feed urls from an agencies.yml
 
     Each URL is mapped to an identifier which is a combination of its agency id, its
@@ -43,7 +43,7 @@ def map_agencies_urls(logger, yaml_data):
 
         for i, feed_set in enumerate(agency_def["feeds"]):
             for feed_name, feed_url in feed_set.items():
-                if feed_name.startswith("gtfs_rt") and feed_url:
+                if feed_name.startswith(key_prefix) and feed_url:
 
                     agency_itp_id = agency_def["itp_id"]
                     feed_id = "{}/{}/{}".format(agency_itp_id, i, feed_name)

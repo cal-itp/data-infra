@@ -25,7 +25,8 @@ def main():
     changed_urls = None
 
     with open(sys.argv[1], "r") as f:
-        agencies = map_agencies_urls(logger, yaml.load(f, Loader=yaml.SafeLoader))
+        agencies_yaml = yaml.load(f, Loader=yaml.SafeLoader)
+        agencies = map_agencies_urls(logger, agencies_yaml, key_prefix="gtfs_")
     with open(sys.argv[2], "r") as f:
         headers = dict(list(map_headers(logger, yaml.load(f, Loader=yaml.SafeLoader))))
     if len(sys.argv) > 3:
