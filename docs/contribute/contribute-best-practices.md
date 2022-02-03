@@ -17,10 +17,11 @@ There are a few things that are true for all files and content types. Here is a 
 * **Headers should increase linearly.** If you’re inside of a section with one #, then the next nested section should start with ##. Avoid jumping straight from # to ###.
 
 (guidelines-by-contribution)=
-## Guidelines by Contribution Type
-When you are ready to make changes, visit the [Submitting Changes](submitting-changes) section for how to contribute.
+## Guidelines by Contribution Size
+Read below for guidance based on the size of your contribution.
 
-If you haven't yet, navigate to the [Common Content](content-types) section of the documentation for further information on adding specific types of content.
+When you are ready to make changes, visit the [Submitting Changes](submitting-changes) section for how to contribute, and utilize the [Common Content](content-types) section for information on adding specific types of content.
+
 (small-changes)=
 ### Small Changes
 For small changes such as typos, clarification, or changes within existing content you can reference the [Common Content](content-types) section as needed.

@@ -10,11 +10,11 @@ If you haven't yet, navigate to the [Best Practices](bp-reference) section of th
 * Images less than 500kb (`.png` preferred)
 
 ## Allowable Syntax - Resources
-* [MyST](https://jupyterbook.org/reference/cheatsheet.html) - a flavor of Markdown used by Jupyter Book
-* [Jupyter Notebook Markdown](https://jupyterbook.org/file-types/notebooks.html)
+* [MyST](https://jupyterbook.org/reference/cheatsheet.html) - a flavor of Markdown used by Jupyter Book for `md` documents
+* [Jupyter Notebook Markdown](https://jupyterbook.org/file-types/notebooks.html) - Markdown for use in `.ipynb` documents
 
 ## Commonly Used Content - Examples
-Below we've provided some examples of commons types of content for quick use. To find more detailed information and extended examples use the links above under `Content Syntax`
+Below we've provided some examples of commons types of content for quick use. To find more detailed information and extended examples use the links above under `Allowable Syntax - Resources`
 1. [Executing Code](executing-code)
     * [Python](executing-code-python)
     * [SQL](executing-code-sql)
