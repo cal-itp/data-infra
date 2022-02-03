@@ -82,7 +82,7 @@ Non-executing code is formatted similarly to the executing code above, but repla
 Images are currently being stored in an `assets` folder within each `docs` folder. Preference is for `.png` file extension and no larger than `500kb`. Images can be loaded into Jupyter Book by using the following syntax:
 
 ```
-![Collection Matrix](XXX.png)
+![Collection Matrix](assets/your-file-name.png)
 ```
 (internal-refs)=
 ### Internal References and Cross-References

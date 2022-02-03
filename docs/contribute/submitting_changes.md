@@ -26,7 +26,7 @@ There are two common ways to make changes to the docs. For those not used to usi
     * **Affix the label** `documentation` to more easily keep track of this work.
   * If this work is ready for review, select 'Create pull request'. If more work is required, select 'Create draft pull request' from the dropdown  **(4)**.
 ![Collection Matrix](assets/pr-intro.png)
-* Do not use GitHub's "update branch" button or merge the `main` branch back into a PR branch to update it. Instead, rebase PR branches to update them and resolve any merge conflicts.
+  * Do not use GitHub's "update branch" button or merge the `main` branch back into a PR branch to update it. Instead, rebase PR branches to update them and resolve any merge conflicts.
 * Once you have created a PR and it has been reviewed and approved, beyond any requested changes, you will be notified that your work has been merged into the live documentation!
 (docs-changes-github)=
 ### Using the GitHub User Interface (Website)
@@ -47,8 +47,8 @@ These documents are currently editable on GitHub's website. Read the instruction
 * Give your PR a descriptive title that has a prefix of `docs(subject-area):` as according to the Conventional Commits standard  **(1)**.
 * You will find there is already a template populated in the description area. Scroll to the bottom and use only the portion beneath `Docs changes checklist`. Add description where requested  **(2)**.
 * In the right-hand sidebar add the following **(3)**:
-  * **Reviewers**: This is the person or people who will review and approve your edits to be added to the main codebase. If no one is selected, the docs `CODEOWNER` will be flagged for review. Beyond that, request those who will be affected by changes or those with expertise in relevant subject areas.
-  * **Assignees**: If you're responsible for this work tag yourself here. Also tag any collaborators that you may have.
+  * **Reviewers** This is the person or people who will review and approve your edits to be added to the main codebase. If no one is selected, the docs `CODEOWNER` will be flagged for review. Beyond that, request those who will be affected by changes or those with expertise in relevant subject areas.
+  * **Assignees** If you're responsible for this work tag yourself here. Also tag any collaborators that you may have.
   * **Affix the label** `documentation` to more easily keep track of this work.
 * If this work is ready for review, select 'Create pull request'. If more work is required, select 'Create draft pull request' from the dropdown  **(4)**.
 ![Collection Matrix](assets/pr-intro.png)
