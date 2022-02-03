@@ -3,7 +3,7 @@
 1. [Making Changes and Merging PRs](docs-changes)
     * [Using Git (Command Line)](docs-changes-git)
     * [Using the GitHub User Interface (Website)](docs-changes-github)
-2. [How is the docs GitHub action triggered?](docs-gh-action)
+2. [GitHub Docs Action](docs-gh-action)
 3. [How do I preview my docs change?](docs-preview)
 (docs-changes)=
 ## Making Changes and Merging PRs
@@ -54,10 +54,14 @@ These documents are currently editable on GitHub's website. Read the instruction
 ![Collection Matrix](assets/pr-intro.png)
 * Once you have created a PR and it has been reviewed and approved, beyond any requested changes, you will be notified that your work has been merged into the live documentation!
 (docs-gh-action)=
-## How is the docs GitHub action triggered?
-A GitHub action is triggered on pushes to the `data-infra` repository from the `docs` directory. This action verifies proper syntax for any changes and generates a preview of your docs. You can see if this action was successful from the bottom of your PR.
-
+## GitHub Docs Action
+### What is the GitHub Docs Action?
+The action is an automated service provided by GitHub that ensures suggested additions are in the proper syntax and facilitates the [preview of your changes]((docs-preview)). You can see if this action was successful at the bottom of your docs PR.
 ![Collection Matrix](assets/gh-action.png)
+
+### How is the docs GitHub action triggered?
+Our GitHub action is triggered on pushes to the `data-infra` repository related to the `docs` directory.
+
 (docs-preview)=
 ## How do I preview my docs change?
 Once the GitHub action has run and all tests have passed a 'Netlify' preview link will be generated. You can find this link in the comments of your PR. Follow that link to preview your changes.

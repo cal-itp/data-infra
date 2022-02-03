@@ -51,6 +51,7 @@ To create the actual code block:
 ```
 (executing-code-sql)=
 **SQL**
+
 To run SQL within the Jupyter Book we are using an iPython wrapper called `cell Magics` with `%%sql`.
 ```python
 import calitp.magics
