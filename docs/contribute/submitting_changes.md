@@ -3,11 +3,11 @@
 1. [Making Changes and Merging PRs](docs-changes)
     * [Using Git (Command Line)](docs-changes-git)
     * [Using the GitHub User Interface (Website)](docs-changes-github)
-2. [How is the documentation GitHub action triggered?](docs-gh-action)
-3. [How do I preview my documentation change?](docs-preview)
+2. [How is the docs GitHub action triggered?](docs-gh-action)
+3. [How do I preview my docs change?](docs-preview)
 (docs-changes)=
 ## Making Changes and Merging PRs
-There are two common ways to make changes to the docs. For those not used to using Git or the command line, use the instructions for the [GitHub website](docs-changes-github).
+There are two common ways to make changes to the docs. For those not used to using Git or the command line use the instructions for the [GitHub website](docs-changes-github).
 (docs-changes-git)=
 ### Using Git (Command Line)
 
@@ -16,21 +16,21 @@ There are two common ways to make changes to the docs. For those not used to usi
 * Install pre-commit hooks
   * `pip install pre-commit`, `pre-commit install`
   * If needed, run `pre-commit run --all-files` to run the hooks on all files, not just those staged for changes.
-* open a PR
+* Open a PR
   * Use GitHub's *draft* status to indicate PRs that are not ready for review/merging
   * Give your PR a descriptive title that has a prefix of `docs(subject-area):` as according to the Conventional Commits standard  **(1)**.
   * You will find there is already a template populated in the description area. Scroll to the bottom and use only the portion beneath `Docs changes checklist`. Add description where requested  **(2)**.
   * In the right-hand sidebar add the following **(3)**:
-    * **Reviewers**: This is the person or people who will review and approve your edits to be added to the main codebase. If no one is selected, the docs `CODEOWNER` will be flagged for review. Beyond that, request those who will be affected by changes or those with expertise in relevant subject areas.
-    * **Assignees**: If you're responsible for this work tag yourself here. Also tag any collaborators that you may have.
+    * **Reviewers** This is the person or people who will review and approve your edits to be added to the main codebase. If no one is selected, the docs `CODEOWNER` will be flagged for review. Beyond that, request those who will be affected by changes or those with expertise in relevant subject areas.
+    * **Assignees** If you're responsible for this work tag yourself here. Also tag any collaborators that you may have.
     * **Affix the label** `documentation` to more easily keep track of this work.
   * If this work is ready for review, select 'Create pull request'. If more work is required, select 'Create draft pull request' from the dropdown  **(4)**.
-  * Once you have created a PR and it has been reviewed and approved, beyond any requested changes, you will be notified that your work has been merged into the live documentation!
 ![Collection Matrix](assets/pr-intro.png)
 * Do not use GitHub's "update branch" button or merge the `main` branch back into a PR branch to update it. Instead, rebase PR branches to update them and resolve any merge conflicts.
+* Once you have created a PR and it has been reviewed and approved, beyond any requested changes, you will be notified that your work has been merged into the live documentation!
 (docs-changes-github)=
 ### Using the GitHub User Interface (Website)
-These documents are currently editable on GitHub's website. To use the GitHub website to make changes:
+These documents are currently editable on GitHub's website. Read the instructions below to use the GitHub website to make changes.
 #### Navigate to GitHub and make changes
 * Click the GitHub icon in the top right corner of the page you'd like to edit and choose `Suggest Edit`.
 * Make changes on that page with your desired [content types](content-types).
@@ -51,14 +51,14 @@ These documents are currently editable on GitHub's website. To use the GitHub we
   * **Assignees**: If you're responsible for this work tag yourself here. Also tag any collaborators that you may have.
   * **Affix the label** `documentation` to more easily keep track of this work.
 * If this work is ready for review, select 'Create pull request'. If more work is required, select 'Create draft pull request' from the dropdown  **(4)**.
-* Once you have created a PR and it has been reviewed and approved, beyond any requested changes, you will be notified that your work has been merged into the live documentation!
 ![Collection Matrix](assets/pr-intro.png)
+* Once you have created a PR and it has been reviewed and approved, beyond any requested changes, you will be notified that your work has been merged into the live documentation!
 (docs-gh-action)=
-## How is the documentation GitHub action triggered?
+## How is the docs GitHub action triggered?
 A GitHub action is triggered on pushes to the `data-infra` repository from the `docs` directory. This action verifies proper syntax for any changes and generates a preview of your docs. You can see if this action was successful from the bottom of your PR.
 
 ![Collection Matrix](assets/gh-action.png)
 (docs-preview)=
-## How do I preview my documentation change?
+## How do I preview my docs change?
 Once the GitHub action has run and all tests have passed a 'Netlify' preview link will be generated. You can find this link in the comments of your PR. Follow that link to preview your changes.
 ![Collection Matrix](assets/netlify-link.png)

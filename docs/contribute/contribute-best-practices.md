@@ -2,10 +2,10 @@
 # Best Practices
 This page aggregates best practices and helpful information for use when contributing to our documentation.
 
-Our Cal-ITP Data Services Documentation uses the Jupyter Book ecosystem to generate our docs. You can find their full documentation at this link: [Jupyter Book Documentation](https://jupyterbook.org/intro.html).
+Our Cal-ITP Data Services Documentation uses the Jupyter Book ecosystem to generate our docs. You can find their full resources at this link: [Jupyter Book Documentation](https://jupyterbook.org/intro.html).
 1. [Universal Rules](universal-rules)
 2. [Guidelines by Contribution Type](guidelines-by-contribution)
-    * [Small Changes)](small-changes)
+    * [Small Changes](small-changes)
     * [New Sections (Headers)](new-sections)
     * [New Pages and Chapters](new-pages)
 
