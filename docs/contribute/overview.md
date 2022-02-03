@@ -8,4 +8,4 @@ recognize missing information please use the information found in this chapter t
 
 * [Best practices](bp-reference)
 * [Submitting changes](submitting-changes)
-* [Common Markdown formatting](content-types)
+* [Common Content](content-types)
