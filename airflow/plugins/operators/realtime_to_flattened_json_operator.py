@@ -147,7 +147,9 @@ def handle_one_feed(i, feed, files, filename_prefix, iso_date, dst_path, total_f
         )
 
 
-def execute(context, filename_prefix, rt_file_substring, src_path, dst_path):
+def execute(
+    context, filename_prefix, rt_file_substring, src_path, dst_path, limit=None
+):
     # get execution_date from context:
     # https://stackoverflow.com/questions/59982700/airflow-how-can-i-access-execution-date-on-my-custom-operator
     iso_date = str(context["execution_date"]).split("T")[0]
@@ -155,12 +157,18 @@ def execute(context, filename_prefix, rt_file_substring, src_path, dst_path):
     # fetch files ----
     feed_files = fetch_bucket_file_names(src_path, rt_file_substring, iso_date)
 
+    enumerated = enumerate(feed_files.items())
+
+    if limit:
+        structlog.get_logger().warn(f"limit of {limit} feeds was set")
+        enumerated = enumerated[:limit]
+
     # gcfs does not seem to play nicely with multiprocessing right now
     # https://github.com/fsspec/gcsfs/issues/379
     with ThreadPoolExecutor(max_workers=4) as pool:
         args = [
             (i, feed, files, filename_prefix, iso_date, dst_path, len(feed_files))
-            for i, (feed, files) in enumerate(feed_files.items())
+            for i, (feed, files) in enumerated
         ]
         list(pool.map(handle_one_feed, *zip(*args)))
 
@@ -168,7 +176,7 @@ def execute(context, filename_prefix, rt_file_substring, src_path, dst_path):
 class RealtimeToFlattenedJSONOperator(BaseOperator):
     @apply_defaults
     def __init__(
-        self, filename_prefix, rt_file_substring, **kwargs,
+        self, filename_prefix, rt_file_substring, subfolder=None, limit=None, **kwargs,
     ):
         super().__init__(**kwargs)
 
@@ -178,9 +186,11 @@ class RealtimeToFlattenedJSONOperator(BaseOperator):
         self.filename_prefix = filename_prefix
         self.rt_file_substring = rt_file_substring
         self.src_path = f"{get_bucket()}/rt/"
+        subfolder = subfolder or "rt-processed"
         self.dst_path = "".join(
-            [f"{get_bucket()}/rt-processed/", self.rt_file_substring, "/"]
+            [f"{get_bucket()}/{subfolder}/", self.rt_file_substring, "/"]
         )
+        self.limit = limit
 
     def execute(self, context):
         """Process a RT feed of the given type
@@ -195,6 +205,7 @@ class RealtimeToFlattenedJSONOperator(BaseOperator):
             rt_file_substring=self.rt_file_substring,
             src_path=self.src_path,
             dst_path=self.dst_path,
+            limit=self.limit,
         )
 
 
