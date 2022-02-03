@@ -176,7 +176,12 @@ def execute(
 class RealtimeToFlattenedJSONOperator(BaseOperator):
     @apply_defaults
     def __init__(
-        self, filename_prefix, rt_file_substring, subfolder=None, limit=None, **kwargs,
+        self,
+        filename_prefix,
+        rt_file_substring,
+        subfolder="rt-processed",
+        limit=None,
+        **kwargs,
     ):
         super().__init__(**kwargs)
 
@@ -186,7 +191,6 @@ class RealtimeToFlattenedJSONOperator(BaseOperator):
         self.filename_prefix = filename_prefix
         self.rt_file_substring = rt_file_substring
         self.src_path = f"{get_bucket()}/rt/"
-        subfolder = subfolder or "rt-processed"
         self.dst_path = "".join(
             [f"{get_bucket()}/{subfolder}/", self.rt_file_substring, "/"]
         )
