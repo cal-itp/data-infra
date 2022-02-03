@@ -66,6 +66,7 @@ jobs:
             issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
+            unique: true,
             body: "Preview url: https://" + context.repo.repo + "-" + process.env.PR_NUMBER + suffix
           })
       env:
