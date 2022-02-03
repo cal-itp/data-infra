@@ -3,7 +3,7 @@ repos:
     rev: v2.4.0
     hooks:
       - id: flake8
-        args: ["--ignore=E501,W503"]
+        args: ["--ignore=E501,W503"] # line too long and line before binary operator (black is ok with these)
         types:
           - python
       - id: trailing-whitespace
