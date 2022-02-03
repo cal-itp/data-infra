@@ -2,6 +2,7 @@
 Parses binary RT feeds and writes them back to GCS as gzipped newline-delimited JSON
 """
 import gzip
+import itertools
 import json
 import os
 import tempfile
@@ -161,7 +162,7 @@ def execute(
 
     if limit:
         structlog.get_logger().warn(f"limit of {limit} feeds was set")
-        enumerated = enumerated[:limit]
+        enumerated = itertools.islice(enumerated, limit)
 
     # gcfs does not seem to play nicely with multiprocessing right now
     # https://github.com/fsspec/gcsfs/issues/379
