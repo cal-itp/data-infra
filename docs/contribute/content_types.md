@@ -3,18 +3,18 @@
 On this page you can find some of the common content types used in the Cal-ITP Data Services Documentation. Although the ecosystem we use, Jupyter Book, allows flexibility, the pages in our docs are typically generated in the formats below.
 
 If you haven't yet, navigate to the [Best Practices](bp-reference) section of the documentation for more context on our docs management, and the [Submitting Changes](submitting-changes) section for how to contribute.
-## Cal-ITP Typical Contributions
 
-### File Types
+## File Types
 * Markdown (`.md`)
 * Jupyter Notebooks (`.ipynb`)
 * Images less than 500kb (`.png` preferred)
 
-### Content Syntax
-* [MyST](https://jupyterbook.org/reference/cheatsheet.html) (a flavor of Markdown used by Jupyter Book)
+## Allowable Syntax - Resources
+* [MyST](https://jupyterbook.org/reference/cheatsheet.html) - a flavor of Markdown used by Jupyter Book
 * [Jupyter Notebook Markdown](https://jupyterbook.org/file-types/notebooks.html)
 
-### Content Types
+## Commonly Used Content - Examples
+Below we've provided some examples of commons types of content for quick use. To find more detailed information and extended examples use the links above under `Content Syntax`
 1. [Executing Code](executing-code)
     * [Python](executing-code-python)
     * [SQL](executing-code-sql)
@@ -22,7 +22,7 @@ If you haven't yet, navigate to the [Best Practices](bp-reference) section of th
 3. [Images](adding-images)
 4. [Internal References and Cross References](internal-refs)
 (executing-code)=
-#### Executing Code
+### Executing Code
 Place the following sytax at the top of a `.md` document to include code that will execute.
 ```
 ---
@@ -64,9 +64,8 @@ import calitp.magics
 You can visit [this page](https://jupyterbook.org/content/code-outputs.html) for more information on how to format code outputs.
 
 (non-executing-code)=
-#### Non-Executing Code
-Non-executing code is formatted similarly to the executing code above, but replaces
-`{code-cell}` with the name of the language you would like to represent, as seen below.
+### Non-Executing Code
+Non-executing code is formatted similarly to the executing code above, but replaces `{code-cell}` with the name of the language you would like to represent, as seen below, to provide syntax highlighting.
 ```
     ```python
     Sample Code
@@ -78,14 +77,14 @@ Non-executing code is formatted similarly to the executing code above, but repla
     ```
 ```
 (adding-images)=
-#### Images
+### Images
 Images are currently being stored in an `assets` folder within each `docs` folder. Preference is for `.png` file extension and no larger than `500kb`. Images can be loaded into Jupyter Book by using the following syntax:
 
 ```
 ![Collection Matrix](XXX.png)
 ```
 (internal-refs)=
-#### Internal References and Cross-References
+### Internal References and Cross-References
 Referencing within the documentation can be accomplished quickly with `labels` and `markdown link syntax`.
 
 Labels can be added before major elements of a page,
@@ -98,4 +97,4 @@ such as titles or figures. To add a label, use the following pattern **before** 
 
 You can then insert cross-references to labels in your content with this syntax:
 
-- `[](label-text)`
+`[Link Text](my-label)`
