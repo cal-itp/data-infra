@@ -56,7 +56,7 @@ These documents are currently editable on GitHub's website. Read the instruction
 (docs-gh-action)=
 ## GitHub Docs Action
 ### What is the GitHub Docs Action?
-The action is an automated service provided by GitHub that ensures suggested additions are in the proper syntax and facilitates the [preview of your changes]((docs-preview)). You can see if this action was successful at the bottom of your docs PR.
+The action is an automated service provided by GitHub that ensures suggested additions are in the proper syntax and facilitates the [preview of your changes](docs-preview). You can see if this action was successful at the bottom of your docs PR.
 ![Collection Matrix](assets/gh-action.png)
 
 ### How is the docs GitHub action triggered?
