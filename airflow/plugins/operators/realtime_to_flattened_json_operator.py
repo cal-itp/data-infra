@@ -27,6 +27,9 @@ from google.transit import gtfs_realtime_pb2
 # but we can still output processed results to the staging bucket
 
 
+EXTENSION = ".jsonl.gz"
+
+
 def parse_pb(path, logger, open_func=open) -> dict:
     """
     Convert pb file to Python dictionary
@@ -83,7 +86,7 @@ def fetch_bucket_file_names(src_path, rt_file_substring, iso_date):
 def get_google_cloud_filename(filename_prefix, feed, iso_date):
     itp_id_url_num = "_".join(map(str, feed))
     prefix = filename_prefix
-    return f"{prefix}_{iso_date}_{itp_id_url_num}.gz"
+    return f"{prefix}_{iso_date}_{itp_id_url_num}{EXTENSION}"
 
 
 def handle_one_feed(i, feed, files, filename_prefix, iso_date, dst_path, total_feeds):
@@ -113,7 +116,7 @@ def handle_one_feed(i, feed, files, filename_prefix, iso_date, dst_path, total_f
         fs.get(files, tmp_dir)
         all_files = [x for x in Path(tmp_dir).rglob("*") if not x.is_dir()]
 
-        gzip_fname = str(tmp_dir + "/" + "temporary" + ".gz")
+        gzip_fname = str(tmp_dir + "/" + "temporary" + EXTENSION)
         written = 0
 
         with gzip.open(gzip_fname, "w") as gzipfile:
