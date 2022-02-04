@@ -1,14 +1,29 @@
-# Types of Content
-## What kinds of content can I put in the documentation?
+(content-types)=
+# Common Content
+On this page you can find some of the common content types used in the Cal-ITP Data Services Documentation. Although the ecosystem we use, Jupyter Book, allows flexibility, the pages in our docs are typically generated in the formats below.
 
-### Images
-Images are currently being stored in the assetts folder within each docs folder. Preference is for .Png file extension and no larger than 500kb. Images can be loaded into jupyterbook by using the following syntax:
-```
-![Collection Matrix](XXX.png)
-```
-### Running Code
-To include code that will run within the jupyterbook documentation, use the following sytax:
+If you haven't yet, navigate to the [Best Practices](bp-reference) section of the documentation for more context on our docs management, and the [Submitting Changes](submitting-changes) section for how to contribute.
 
+## File Types
+* Markdown (`.md`)
+* Jupyter Notebooks (`.ipynb`)
+* Images less than 500kb (`.png` preferred)
+
+## Content Syntax - Resources
+* [MyST](https://jupyterbook.org/reference/cheatsheet.html) - a flavor of Markdown used by Jupyter Book for `md` documents
+* [Jupyter Notebook Markdown](https://jupyterbook.org/file-types/notebooks.html) - Markdown for use in `.ipynb` documents
+
+## Common Content - Examples
+Below we've provided some examples of commons types of content for quick use. To find more detailed information and extended examples use the links above under `Allowable Syntax - Resources`
+1. [Images](adding-images)
+2. [Executing Code](executing-code)
+    * [Python](executing-code-python)
+    * [SQL](executing-code-sql)
+3. [Non-executing Code](non-executing-code)
+4. [Internal References and Cross References](internal-refs)
+(executing-code)=
+### Executing Code
+Place the following sytax at the top of a `.md` document to include code that will execute.
 ```
 ---
 jupytext:
@@ -26,23 +41,61 @@ kernelspec:
 ---
 ```
 
-#### for the actual code block:
-**For Python**
-#### Syntax:
+To create the actual code block:
+(executing-code-python)=
+**Python**
 ```
     ```{code-cell}
     Sample Code
     ```
 ```
+(executing-code-sql)=
+**SQL**
 
-**For SQL**
-#### Cell Magics
-To run sql within the jupyterbook we are using an Ipython wrapper called cell magics.
-
-#### Syntax:
+To run SQL within the Jupyter Book we are using an iPython wrapper called `cell Magics` with `%%sql`.
+```python
+import calitp.magics
+```
 ```
     ```{code-cell}
     %%sql
-    Sample SQL
+    Sample SQL Here
     ```
 ```
+You can visit [this page](https://jupyterbook.org/content/code-outputs.html) for more information on how to format code outputs.
+
+(non-executing-code)=
+### Non-Executing Code
+Non-executing code is formatted similarly to the executing code above, but replaces `{code-cell}` with the name of the language you would like to represent, as seen below, to provide syntax highlighting.
+```
+    ```python
+    Sample Code
+    ```
+```
+```
+    ```sql
+    Sample Code
+    ```
+```
+(adding-images)=
+### Images
+Images are currently being stored in an `assets` folder within each `docs` folder. Preference is for `.png` file extension and no larger than `500kb`. Images can be loaded into Jupyter Book by using the following syntax:
+
+```
+![Collection Matrix](assets/your-file-name.png)
+```
+(internal-refs)=
+### Internal References and Cross-References
+Referencing within the documentation can be accomplished quickly with `labels` and `markdown link syntax`.
+
+Labels can be added before major elements of a page,
+such as titles or figures. To add a label, use the following pattern **before** the element you wish to label:
+
+```md
+(my-label)=
+# The thing to label
+```
+
+You can then insert cross-references to labels in your content with this syntax:
+
+`[Link Text](my-label)`

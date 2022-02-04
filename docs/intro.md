@@ -7,6 +7,5 @@ This resource serves as an opportunity to learn more about how the data services
 Use the links below to access dedicated chapters for the following users:
 
 * [Analysts](analysts-welcome)
-* [[WIP] Project Leads](project-leads)
-* [[WIP] Data Consumers](data-consumers)
 * [Developers](airflow)
+* [Contribute to the Docs!](contribute-overview)
