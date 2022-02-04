@@ -17,7 +17,6 @@ This project is developed using docker and docker-compose. Before getting starte
 First, if you're on linux, you'll need to make sure that the UID and GID of the container match, to do so, run
 
 ```console
-cd airflow (if you are not already in the airflow directory)
 mkdir ./dags ./logs ./plugins
 echo -e "AIRFLOW_UID=$(id -u)\nAIRFLOW_GID=0" > .env
 ```
@@ -38,7 +37,7 @@ To run the gtfs_downloader dags, it is required to generate a yml file of the ag
 secrets filled in. To run this, do the following:
 
 1. Setup a virtual environment within the `script` folder by running `python -m venv .venv` in the `script` folder.
-2. Install the needed requirements via `pip install -r requirements.txt` (the requirements in `script`)
+2. Install the needed requirements via `pip install -r requirements.txt`
 3. Copy `airflow/data/example-secrets.csv` to `airflow/data/secrets.csv` and fill in the secret keys as needed
 4. run `python yml_convert.py ../airflow/data/agencies.yml ../airflow/data/agencies.filled.yml ../airflow/data/secrets.csv`
 5. Copy `/airflow/data/agencies.yml` to `/airflow/data/agencies_raw.yml`
