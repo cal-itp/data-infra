@@ -51,7 +51,8 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="Types of Content" href="content_types.html" />
+    <link rel="next" title="Common Content" href="content_types.html" />
+    <link rel="prev" title="Best Practices" href="contribute-best-practices.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -319,30 +320,6 @@
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
-  Project Leads
- </span>
-</p>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../project_leads/overview.html">
-   For Project Leads (WIP)
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Data Consumers
- </span>
-</p>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../data_consumers/overview.html">
-   For Data Consumers (WIP)
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
   Developers
  </span>
 </p>
@@ -494,7 +471,7 @@
 <ul class="current nav bd-sidenav">
  <li class="toctree-l1 current active has-children">
   <a class="reference internal" href="overview.html">
-   Editing Documentation
+   Getting Started
   </a>
   <input checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
   <label for="toctree-checkbox-11">
@@ -503,13 +480,18 @@
   </label>
   <ul class="current">
    <li class="toctree-l2">
-    <a class="reference internal" href="content_types.html">
-     Types of Content
+    <a class="reference internal" href="contribute-best-practices.html">
+     Best Practices
     </a>
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      Submitting Changes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="content_types.html">
+     Common Content
     </a>
    </li>
   </ul>
@@ -604,18 +586,59 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#commits-and-pull-requests-pr">
-   Commits and Pull Requests (PR)
+  <a class="reference internal nav-link" href="#making-changes-and-merging-prs">
+   Making Changes and Merging PRs
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#using-git-command-line">
+     Using Git (Command Line)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#using-the-github-user-interface-website">
+     Using the GitHub User Interface (Website)
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#navigate-to-github-and-make-changes">
+       Navigate to GitHub and make changes
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#commit-your-changes-and-create-a-new-branch">
+       Commit your changes and create a new branch
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#create-a-pull-request-for-review-and-merging">
+       Create a Pull Request for review and merging
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#how-do-i-preview-my-documentation-change">
-   How do I preview my documentation change?
+  <a class="reference internal nav-link" href="#github-docs-action">
+   GitHub Docs Action
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#what-is-the-github-docs-action">
+     What is the GitHub Docs Action?
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#how-is-the-docs-github-action-triggered">
+     How is the docs GitHub action triggered?
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#how-is-the-documentation-gh-action-triggered">
-   How is the documentation gh action triggered?
+  <a class="reference internal nav-link" href="#how-do-i-preview-my-docs-change">
+   How do I preview my docs change?
   </a>
  </li>
 </ul>
@@ -639,18 +662,59 @@
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#commits-and-pull-requests-pr">
-   Commits and Pull Requests (PR)
+  <a class="reference internal nav-link" href="#making-changes-and-merging-prs">
+   Making Changes and Merging PRs
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#using-git-command-line">
+     Using Git (Command Line)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#using-the-github-user-interface-website">
+     Using the GitHub User Interface (Website)
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#navigate-to-github-and-make-changes">
+       Navigate to GitHub and make changes
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#commit-your-changes-and-create-a-new-branch">
+       Commit your changes and create a new branch
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#create-a-pull-request-for-review-and-merging">
+       Create a Pull Request for review and merging
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#how-do-i-preview-my-documentation-change">
-   How do I preview my documentation change?
+  <a class="reference internal nav-link" href="#github-docs-action">
+   GitHub Docs Action
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#what-is-the-github-docs-action">
+     What is the GitHub Docs Action?
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#how-is-the-docs-github-action-triggered">
+     How is the docs GitHub action triggered?
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#how-is-the-documentation-gh-action-triggered">
-   How is the documentation gh action triggered?
+  <a class="reference internal nav-link" href="#how-do-i-preview-my-docs-change">
+   How do I preview my docs change?
   </a>
  </li>
 </ul>
@@ -663,36 +727,115 @@
               <div>
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="submitting-changes">
-<h1>Submitting Changes<a class="headerlink" href="#submitting-changes" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="commits-and-pull-requests-pr">
-<h2>Commits and Pull Requests (PR)<a class="headerlink" href="#commits-and-pull-requests-pr" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h1>Submitting Changes<a class="headerlink" href="#submitting-changes" title="Permalink to this headline">¶</a></h1>
+<ol class="simple">
+<li><p><a class="reference internal" href="#docs-changes"><span class="std std-ref">Making Changes and Merging PRs</span></a></p>
 <ul class="simple">
-<li><p>Follow the <a class="reference external" href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a> standard for all commits</p></li>
-<li><p>Use Conventional Commit format for PR titles</p>
+<li><p><a class="reference internal" href="#docs-changes-git"><span class="std std-ref">Using Git (Command Line)</span></a></p></li>
+<li><p><a class="reference internal" href="#docs-changes-github"><span class="std std-ref">Using the GitHub User Interface (Website)</span></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#docs-gh-action"><span class="std std-ref">GitHub Docs Action</span></a></p></li>
+<li><p><a class="reference internal" href="#docs-preview"><span class="std std-ref">How do I preview my docs change?</span></a></p></li>
+</ol>
+<div class="section" id="making-changes-and-merging-prs">
+<span id="docs-changes"></span><h2>Making Changes and Merging PRs<a class="headerlink" href="#making-changes-and-merging-prs" title="Permalink to this headline">¶</a></h2>
+<p>There are two common ways to make changes to the docs. For those not used to using Git or the command line use the instructions for the <a class="reference internal" href="#docs-changes-github"><span class="std std-ref">GitHub website</span></a>.</p>
+<div class="section" id="using-git-command-line">
+<span id="docs-changes-git"></span><h3>Using Git (Command Line)<a class="headerlink" href="#using-git-command-line" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Follow the <a class="reference external" href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a> standard for all commits and PR titles</p>
 <ul>
-<li><p>Install pre-commit hooks</p></li>
+<li><p>Prefix docs commits and PR titles with <code class="docutils literal notranslate"><span class="pre">docs(subject-area):</span></code></p></li>
+</ul>
+</li>
+<li><p>Install pre-commit hooks</p>
+<ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pre-commit</span></code>, <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">install</span></code></p></li>
 <li><p>If needed, run <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">run</span> <span class="pre">--all-files</span></code> to run the hooks on all files, not just those staged for changes.</p></li>
 </ul>
 </li>
+<li><p>Open a PR</p>
+<ul>
 <li><p>Use GitHub’s <em>draft</em> status to indicate PRs that are not ready for review/merging</p></li>
+<li><p>Give your PR a descriptive title that has a prefix of <code class="docutils literal notranslate"><span class="pre">docs(subject-area):</span></code> as according to the Conventional Commits standard  <strong>(1)</strong>.</p></li>
+<li><p>You will find there is already a template populated in the description area. Scroll to the bottom and use only the portion beneath <code class="docutils literal notranslate"><span class="pre">Docs</span> <span class="pre">changes</span> <span class="pre">checklist</span></code>. Add description where requested  <strong>(2)</strong>.</p></li>
+<li><p>In the right-hand sidebar add the following <strong>(3)</strong>:</p>
+<ul>
+<li><p><strong>Reviewers</strong> This is the person or people who will review and approve your edits to be added to the main codebase. If no one is selected, the docs <code class="docutils literal notranslate"><span class="pre">CODEOWNER</span></code> will be flagged for review. Beyond that, request those who will be affected by changes or those with expertise in relevant subject areas.</p></li>
+<li><p><strong>Assignees</strong> If you’re responsible for this work tag yourself here. Also tag any collaborators that you may have.</p></li>
+<li><p><strong>Affix the label</strong> <code class="docutils literal notranslate"><span class="pre">documentation</span></code> to more easily keep track of this work.</p></li>
+</ul>
+</li>
+<li><p>If this work is ready for review, select ‘Create pull request’. If more work is required, select ‘Create draft pull request’ from the dropdown  <strong>(4)</strong>.
+<img alt="Collection Matrix" src="../_images/pr-intro.png" /></p></li>
 <li><p>Do not use GitHub’s “update branch” button or merge the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch back into a PR branch to update it. Instead, rebase PR branches to update them and resolve any merge conflicts.</p></li>
 </ul>
+</li>
+<li><p>Once you have created a PR and it has been reviewed and approved, beyond any requested changes, you will be notified that your work has been merged into the live documentation!</p></li>
+</ul>
 </div>
-<div class="section" id="how-do-i-preview-my-documentation-change">
-<h2>How do I preview my documentation change?<a class="headerlink" href="#how-do-i-preview-my-documentation-change" title="Permalink to this headline">¶</a></h2>
-<p>You can preview it in the github pages or run the jupyterbook locally using the following command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jb</span> <span class="n">build</span> <span class="n">docs</span>
-</pre></div>
+<div class="section" id="using-the-github-user-interface-website">
+<span id="docs-changes-github"></span><h3>Using the GitHub User Interface (Website)<a class="headerlink" href="#using-the-github-user-interface-website" title="Permalink to this headline">¶</a></h3>
+<p>These documents are currently editable on GitHub’s website. Read the instructions below to use the GitHub website to make changes.</p>
+<div class="section" id="navigate-to-github-and-make-changes">
+<h4>Navigate to GitHub and make changes<a class="headerlink" href="#navigate-to-github-and-make-changes" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>Click the GitHub icon in the top right corner of the page you’d like to edit and choose <code class="docutils literal notranslate"><span class="pre">Suggest</span> <span class="pre">Edit</span></code>.</p></li>
+<li><p>Make changes on that page with your desired <a class="reference internal" href="content_types.html#content-types"><span class="std std-ref">content types</span></a>.
+<img alt="Collection Matrix" src="../_images/suggest-edit.png" /></p></li>
+</ul>
 </div>
-<p>if no code has been altered, to force jupyterbook to rebuild use the following command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jb</span> <span class="n">build</span> <span class="n">docs</span> <span class="o">--</span><span class="nb">all</span>
-</pre></div>
+<div class="section" id="commit-your-changes-and-create-a-new-branch">
+<h4>Commit your changes and create a new branch<a class="headerlink" href="#commit-your-changes-and-create-a-new-branch" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>On the page that you’ve edited, navigate to the bottom and find where it says <code class="docutils literal notranslate"><span class="pre">Commit</span> <span class="pre">changes</span></code>.</p></li>
+<li><p>Add a short title and description for your changes <strong>(1)</strong>.</p>
+<ul>
+<li><p>Make sure to prefix the title with <code class="docutils literal notranslate"><span class="pre">docs(subject-area):</span></code> as according to the Conventional Commits standard.</p></li>
+</ul>
+</li>
+<li><p>Select the second option <code class="docutils literal notranslate"><span class="pre">Create</span> <span class="pre">a</span> <span class="pre">new</span> <span class="pre">branch...</span></code> and add a short but descriptive name for this new branch <strong>(2)</strong>.</p></li>
+<li><p>Select <code class="docutils literal notranslate"><span class="pre">Commit</span> <span class="pre">Changes</span></code>. This will take you to a new page to create a <code class="docutils literal notranslate"><span class="pre">Pull</span> <span class="pre">Request</span></code>, the mechanism that will allow your new work to be added to the docs.
+<img alt="Collection Matrix" src="../_images/commit-screenshot.png" /></p></li>
+</ul>
+</div>
+<div class="section" id="create-a-pull-request-for-review-and-merging">
+<h4>Create a Pull Request for review and merging<a class="headerlink" href="#create-a-pull-request-for-review-and-merging" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>After committing your changes you will be brought to another page to create a PR.</p></li>
+<li><p>Give your PR a descriptive title that has a prefix of <code class="docutils literal notranslate"><span class="pre">docs(subject-area):</span></code> as according to the Conventional Commits standard  <strong>(1)</strong>.</p></li>
+<li><p>You will find there is already a template populated in the description area. Scroll to the bottom and use only the portion beneath <code class="docutils literal notranslate"><span class="pre">Docs</span> <span class="pre">changes</span> <span class="pre">checklist</span></code>. Add description where requested  <strong>(2)</strong>.</p></li>
+<li><p>In the right-hand sidebar add the following <strong>(3)</strong>:</p>
+<ul>
+<li><p><strong>Reviewers</strong> This is the person or people who will review and approve your edits to be added to the main codebase. If no one is selected, the docs <code class="docutils literal notranslate"><span class="pre">CODEOWNER</span></code> will be flagged for review. Beyond that, request those who will be affected by changes or those with expertise in relevant subject areas.</p></li>
+<li><p><strong>Assignees</strong> If you’re responsible for this work tag yourself here. Also tag any collaborators that you may have.</p></li>
+<li><p><strong>Affix the label</strong> <code class="docutils literal notranslate"><span class="pre">documentation</span></code> to more easily keep track of this work.</p></li>
+</ul>
+</li>
+<li><p>If this work is ready for review, select ‘Create pull request’. If more work is required, select ‘Create draft pull request’ from the dropdown  <strong>(4)</strong>.
+<img alt="Collection Matrix" src="../_images/pr-intro.png" /></p></li>
+<li><p>Once you have created a PR and it has been reviewed and approved, beyond any requested changes, you will be notified that your work has been merged into the live documentation!</p></li>
+</ul>
 </div>
 </div>
-<div class="section" id="how-is-the-documentation-gh-action-triggered">
-<h2>How is the documentation gh action triggered?<a class="headerlink" href="#how-is-the-documentation-gh-action-triggered" title="Permalink to this headline">¶</a></h2>
-<p>The action is triggered on push, meaning the github action is triggered when code is pushed the the main branch in respository</p>
+</div>
+<div class="section" id="github-docs-action">
+<span id="docs-gh-action"></span><h2>GitHub Docs Action<a class="headerlink" href="#github-docs-action" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="what-is-the-github-docs-action">
+<h3>What is the GitHub Docs Action?<a class="headerlink" href="#what-is-the-github-docs-action" title="Permalink to this headline">¶</a></h3>
+<p>The action is an automated service provided by GitHub that ensures suggested additions are in the proper syntax and facilitates the <a class="reference internal" href="#docs-preview"><span class="std std-ref">preview of your changes</span></a>. You can see if this action was successful at the bottom of your docs PR.
+<img alt="Collection Matrix" src="../_images/gh-action.png" /></p>
+</div>
+<div class="section" id="how-is-the-docs-github-action-triggered">
+<h3>How is the docs GitHub action triggered?<a class="headerlink" href="#how-is-the-docs-github-action-triggered" title="Permalink to this headline">¶</a></h3>
+<p>Our GitHub action is triggered on pushes to the <code class="docutils literal notranslate"><span class="pre">data-infra</span></code> repository related to the <code class="docutils literal notranslate"><span class="pre">docs</span></code> directory.</p>
+</div>
+</div>
+<div class="section" id="how-do-i-preview-my-docs-change">
+<span id="docs-preview"></span><h2>How do I preview my docs change?<a class="headerlink" href="#how-do-i-preview-my-docs-change" title="Permalink to this headline">¶</a></h2>
+<p>Once the GitHub action has run and all tests have passed a ‘Netlify’ preview link will be generated. You can find this link in the comments of your PR. Follow that link to preview your changes.
+<img alt="Collection Matrix" src="../_images/netlify-link.png" /></p>
 </div>
 </div>
 
@@ -721,12 +864,19 @@
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="content_types.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="contribute-best-practices.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Types of Content</p>
+            <p class="prev-next-title">Best Practices</p>
         </div>
+    </a>
+    <a class='right-next' id="next-link" href="content_types.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Common Content</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
     </a>
 </div>
             

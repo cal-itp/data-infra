@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>For Project Leads (WIP) &#8212; Cal-ITP Data Services</title>
+    <title>Best Practices &#8212; Cal-ITP Data Services</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -51,8 +51,8 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="For Data Consumers (WIP)" href="../data_consumers/overview.html" />
-    <link rel="prev" title="Where Reports Live (WIP)" href="../analytics_publishing/where_reports_live.html" />
+    <link rel="next" title="Submitting Changes" href="submitting_changes.html" />
+    <link rel="prev" title="Getting Started" href="overview.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -320,30 +320,6 @@
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
-  Project Leads
- </span>
-</p>
-<ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   For Project Leads (WIP)
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Data Consumers
- </span>
-</p>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../data_consumers/overview.html">
-   For Data Consumers (WIP)
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
   Developers
  </span>
 </p>
@@ -492,25 +468,30 @@
   Contribute to the Docs!
  </span>
 </p>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../contribute/overview.html">
-   Editing Documentation
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="overview.html">
+   Getting Started
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
   <label for="toctree-checkbox-11">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../contribute/content_types.html">
-     Types of Content
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Best Practices
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../contribute/submitting_changes.html">
+    <a class="reference internal" href="submitting_changes.html">
      Submitting Changes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="content_types.html">
+     Common Content
     </a>
    </li>
   </ul>
@@ -556,7 +537,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/project_leads/overview.md"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/contribute/contribute-best-practices.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -576,10 +557,10 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fproject_leads/overview.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fcontribute/contribute-best-practices.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/project_leads/overview.md"><button
+        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/contribute/contribute-best-practices.md"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -599,6 +580,41 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#universal-rules">
+   Universal Rules
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#guidelines-by-contribution-size">
+   Guidelines by Contribution Size
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#small-changes">
+     Small Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#new-sections-headers">
+     New Sections (Headers)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#new-pages-and-chapters">
+     New Pages and Chapters
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -606,25 +622,103 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>For Project Leads (WIP)</h1>
+                <h1>Best Practices</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#universal-rules">
+   Universal Rules
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#guidelines-by-contribution-size">
+   Guidelines by Contribution Size
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#small-changes">
+     Small Changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#new-sections-headers">
+     New Sections (Headers)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#new-pages-and-chapters">
+     New Pages and Chapters
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="for-project-leads-wip">
-<span id="project-leads"></span><h1>For Project Leads (WIP)<a class="headerlink" href="#for-project-leads-wip" title="Permalink to this headline">¶</a></h1>
-<p>After reading this section, you should be able to:</p>
+  <div class="tex2jax_ignore mathjax_ignore section" id="best-practices">
+<span id="bp-reference"></span><h1>Best Practices<a class="headerlink" href="#best-practices" title="Permalink to this headline">¶</a></h1>
+<p>This page aggregates best practices and helpful information for use when contributing to our documentation.</p>
+<p>Our Cal-ITP Data Services Documentation uses the Jupyter Book ecosystem to generate our docs. You can find their full resources at this link: <a class="reference external" href="https://jupyterbook.org/intro.html">Jupyter Book Documentation</a>.</p>
+<ol class="simple">
+<li><p><a class="reference internal" href="#universal-rules"><span class="std std-ref">Universal Rules</span></a></p></li>
+<li><p><a class="reference internal" href="#guidelines-by-contribution"><span class="std std-ref">Guidelines by Contribution Type</span></a></p>
 <ul class="simple">
-<li><p>x</p></li>
-<li><p>y</p></li>
-<li><p>z</p></li>
+<li><p><a class="reference internal" href="#small-changes"><span class="std std-ref">Small Changes</span></a></p></li>
+<li><p><a class="reference internal" href="#new-sections"><span class="std std-ref">New Sections (Headers)</span></a></p></li>
+<li><p><a class="reference internal" href="#new-pages"><span class="std std-ref">New Pages and Chapters</span></a></p></li>
 </ul>
+</li>
+</ol>
+<div class="section" id="universal-rules">
+<span id="id1"></span><h2>Universal Rules<a class="headerlink" href="#universal-rules" title="Permalink to this headline">¶</a></h2>
+<p>There are a few things that are true for all files and content types. Here is a short list:</p>
+<ul class="simple">
+<li><p><strong>Files must have a title.</strong> Generally this means that they must begin with a line that starts with a single #</p></li>
+<li><p><strong>Use only one top-level header.</strong> Because each page must have a clear title, it must also only have one top-level header. You cannot have multiple headers with single # tag in them.</p></li>
+<li><p><strong>Headers should increase linearly.</strong> If you’re inside of a section with one #, then the next nested section should start with ##. Avoid jumping straight from # to ###.</p></li>
+</ul>
+</div>
+<div class="section" id="guidelines-by-contribution-size">
+<span id="guidelines-by-contribution"></span><h2>Guidelines by Contribution Size<a class="headerlink" href="#guidelines-by-contribution-size" title="Permalink to this headline">¶</a></h2>
+<p>Read below for guidance based on the size of your contribution.</p>
+<p>When you are ready to make changes, visit the <a class="reference internal" href="submitting_changes.html#submitting-changes"><span class="std std-ref">Submitting Changes</span></a> section for how to contribute, and utilize the <a class="reference internal" href="content_types.html#content-types"><span class="std std-ref">Common Content</span></a> section for information on adding specific types of content.</p>
+<div class="section" id="small-changes">
+<span id="id2"></span><h3>Small Changes<a class="headerlink" href="#small-changes" title="Permalink to this headline">¶</a></h3>
+<p>For small changes such as typos, clarification, or changes within existing content you can reference the <a class="reference internal" href="content_types.html#content-types"><span class="std std-ref">Common Content</span></a> section as needed.</p>
+</div>
+<div class="section" id="new-sections-headers">
+<span id="new-sections"></span><h3>New Sections (Headers)<a class="headerlink" href="#new-sections-headers" title="Permalink to this headline">¶</a></h3>
+<p>If you feel a new section is warranted, make sure you follow Jupyter Book’s guidelines on headers:</p>
+<blockquote>
+<div><p><strong>Headers should increase linearly.</strong> If you’re inside of a section with one #, then the next nested section should start with ##. Avoid jumping straight from # to ###.</p>
+</div></blockquote>
+</div>
+<div class="section" id="new-pages-and-chapters">
+<span id="new-pages"></span><h3>New Pages and Chapters<a class="headerlink" href="#new-pages-and-chapters" title="Permalink to this headline">¶</a></h3>
+<p>Add new pages and chapters only as truly needed. If you’re unsure of whether a new page or chapter is necessary, reach out to <code class="docutils literal notranslate"><span class="pre">&#64;Charlie</span> <span class="pre">Costanzo</span></code> on <code class="docutils literal notranslate"><span class="pre">Cal-ITP</span> <span class="pre">Slack</span></code>.</p>
+<p>If you are adding new pages or chapters, you will need to also update the <code class="docutils literal notranslate"><span class="pre">_toc.yml</span></code> file. You can find more information at Jupyter Book’s resource <a class="reference external" href="https://jupyterbook.org/basics/organize.html">Structure and organize content</a>.</p>
+<p>You will also need to follow Jupyter Book’s guidelines for when adding files:</p>
+<blockquote>
+<div><p><strong>Files must have a title.</strong> Generally this means that they must begin with a line that starts with a single #</p>
+</div></blockquote>
+<blockquote>
+<div><p><strong>Use only one top-level header.</strong> Because each page must have a clear title, it must also only have one top-level header. You cannot have multiple headers with single # tag in them.</p>
+</div></blockquote>
+</div>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
@@ -640,7 +734,7 @@
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./project_leads"
+            path: "./contribute"
         },
         predefinedOutput: true
     }
@@ -652,17 +746,17 @@
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="../analytics_publishing/where_reports_live.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="overview.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Where Reports Live (WIP)</p>
+            <p class="prev-next-title">Getting Started</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../data_consumers/overview.html" title="next page">
+    <a class='right-next' id="next-link" href="submitting_changes.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">For Data Consumers (WIP)</p>
+        <p class="prev-next-title">Submitting Changes</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

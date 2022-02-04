@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Types of Content &#8212; Cal-ITP Data Services</title>
+    <title>Common Content &#8212; Cal-ITP Data Services</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -51,8 +51,7 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Submitting Changes" href="submitting_changes.html" />
-    <link rel="prev" title="Editing Documentation" href="overview.html" />
+    <link rel="prev" title="Submitting Changes" href="submitting_changes.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -320,30 +319,6 @@
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
-  Project Leads
- </span>
-</p>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../project_leads/overview.html">
-   For Project Leads (WIP)
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Data Consumers
- </span>
-</p>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../data_consumers/overview.html">
-   For Data Consumers (WIP)
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
   Developers
  </span>
 </p>
@@ -495,7 +470,7 @@
 <ul class="current nav bd-sidenav">
  <li class="toctree-l1 current active has-children">
   <a class="reference internal" href="overview.html">
-   Editing Documentation
+   Getting Started
   </a>
   <input checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
   <label for="toctree-checkbox-11">
@@ -503,14 +478,19 @@
    </i>
   </label>
   <ul class="current">
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Types of Content
+   <li class="toctree-l2">
+    <a class="reference internal" href="contribute-best-practices.html">
+     Best Practices
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="submitting_changes.html">
      Submitting Changes
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Common Content
     </a>
    </li>
   </ul>
@@ -605,41 +585,39 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#what-kinds-of-content-can-i-put-in-the-documentation">
-   What kinds of content can I put in the documentation?
+  <a class="reference internal nav-link" href="#file-types">
+   File Types
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#content-syntax-resources">
+   Content Syntax - Resources
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#common-content-examples">
+   Common Content - Examples
   </a>
   <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#executing-code">
+     Executing Code
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#non-executing-code">
+     Non-Executing Code
+    </a>
+   </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#images">
      Images
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#running-code">
-     Running Code
+    <a class="reference internal nav-link" href="#internal-references-and-cross-references">
+     Internal References and Cross-References
     </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#for-the-actual-code-block">
-       for the actual code block:
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#syntax">
-       Syntax:
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#cell-magics">
-       Cell Magics
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#id1">
-       Syntax:
-      </a>
-     </li>
-    </ul>
    </li>
   </ul>
  </li>
@@ -653,7 +631,7 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Types of Content</h1>
+                <h1>Common Content</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -664,41 +642,39 @@
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#what-kinds-of-content-can-i-put-in-the-documentation">
-   What kinds of content can I put in the documentation?
+  <a class="reference internal nav-link" href="#file-types">
+   File Types
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#content-syntax-resources">
+   Content Syntax - Resources
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#common-content-examples">
+   Common Content - Examples
   </a>
   <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#executing-code">
+     Executing Code
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#non-executing-code">
+     Non-Executing Code
+    </a>
+   </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#images">
      Images
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#running-code">
-     Running Code
+    <a class="reference internal nav-link" href="#internal-references-and-cross-references">
+     Internal References and Cross-References
     </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#for-the-actual-code-block">
-       for the actual code block:
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#syntax">
-       Syntax:
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#cell-magics">
-       Cell Magics
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#id1">
-       Syntax:
-      </a>
-     </li>
-    </ul>
    </li>
   </ul>
  </li>
@@ -711,20 +687,42 @@
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="types-of-content">
-<h1>Types of Content<a class="headerlink" href="#types-of-content" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="what-kinds-of-content-can-i-put-in-the-documentation">
-<h2>What kinds of content can I put in the documentation?<a class="headerlink" href="#what-kinds-of-content-can-i-put-in-the-documentation" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="images">
-<h3>Images<a class="headerlink" href="#images" title="Permalink to this headline">¶</a></h3>
-<p>Images are currently being stored in the assetts folder within each docs folder. Preference is for .Png file extension and no larger than 500kb. Images can be loaded into jupyterbook by using the following syntax:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>![Collection Matrix](XXX.png)
-</pre></div>
+  <div class="tex2jax_ignore mathjax_ignore section" id="common-content">
+<span id="content-types"></span><h1>Common Content<a class="headerlink" href="#common-content" title="Permalink to this headline">¶</a></h1>
+<p>On this page you can find some of the common content types used in the Cal-ITP Data Services Documentation. Although the ecosystem we use, Jupyter Book, allows flexibility, the pages in our docs are typically generated in the formats below.</p>
+<p>If you haven’t yet, navigate to the <a class="reference internal" href="contribute-best-practices.html#bp-reference"><span class="std std-ref">Best Practices</span></a> section of the documentation for more context on our docs management, and the <a class="reference internal" href="submitting_changes.html#submitting-changes"><span class="std std-ref">Submitting Changes</span></a> section for how to contribute.</p>
+<div class="section" id="file-types">
+<h2>File Types<a class="headerlink" href="#file-types" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Markdown (<code class="docutils literal notranslate"><span class="pre">.md</span></code>)</p></li>
+<li><p>Jupyter Notebooks (<code class="docutils literal notranslate"><span class="pre">.ipynb</span></code>)</p></li>
+<li><p>Images less than 500kb (<code class="docutils literal notranslate"><span class="pre">.png</span></code> preferred)</p></li>
+</ul>
 </div>
+<div class="section" id="content-syntax-resources">
+<h2>Content Syntax - Resources<a class="headerlink" href="#content-syntax-resources" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://jupyterbook.org/reference/cheatsheet.html">MyST</a> - a flavor of Markdown used by Jupyter Book for <code class="docutils literal notranslate"><span class="pre">md</span></code> documents</p></li>
+<li><p><a class="reference external" href="https://jupyterbook.org/file-types/notebooks.html">Jupyter Notebook Markdown</a> - Markdown for use in <code class="docutils literal notranslate"><span class="pre">.ipynb</span></code> documents</p></li>
+</ul>
 </div>
-<div class="section" id="running-code">
-<h3>Running Code<a class="headerlink" href="#running-code" title="Permalink to this headline">¶</a></h3>
-<p>To include code that will run within the jupyterbook documentation, use the following sytax:</p>
+<div class="section" id="common-content-examples">
+<h2>Common Content - Examples<a class="headerlink" href="#common-content-examples" title="Permalink to this headline">¶</a></h2>
+<p>Below we’ve provided some examples of commons types of content for quick use. To find more detailed information and extended examples use the links above under <code class="docutils literal notranslate"><span class="pre">Allowable</span> <span class="pre">Syntax</span> <span class="pre">-</span> <span class="pre">Resources</span></code></p>
+<ol class="simple">
+<li><p><a class="reference internal" href="#adding-images"><span class="std std-ref">Images</span></a></p></li>
+<li><p><a class="reference internal" href="#executing-code"><span class="std std-ref">Executing Code</span></a></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#executing-code-python"><span class="std std-ref">Python</span></a></p></li>
+<li><p><a class="reference internal" href="#executing-code-sql"><span class="std std-ref">SQL</span></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#non-executing-code"><span class="std std-ref">Non-executing Code</span></a></p></li>
+<li><p><a class="reference internal" href="#internal-refs"><span class="std std-ref">Internal References and Cross References</span></a></p></li>
+</ol>
+<div class="section" id="executing-code">
+<span id="id1"></span><h3>Executing Code<a class="headerlink" href="#executing-code" title="Permalink to this headline">¶</a></h3>
+<p>Place the following sytax at the top of a <code class="docutils literal notranslate"><span class="pre">.md</span></code> document to include code that will execute.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
 <span class="n">jupytext</span><span class="p">:</span>
   <span class="n">cell_metadata_filter</span><span class="p">:</span> <span class="o">-</span><span class="nb">all</span>
@@ -741,32 +739,58 @@
 <span class="o">---</span>
 </pre></div>
 </div>
-<div class="section" id="for-the-actual-code-block">
-<h4>for the actual code block:<a class="headerlink" href="#for-the-actual-code-block" title="Permalink to this headline">¶</a></h4>
-<p><strong>For Python</strong></p>
-</div>
-<div class="section" id="syntax">
-<h4>Syntax:<a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h4>
+<p>To create the actual code block:</p>
+<p id="executing-code-python"><strong>Python</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    ```{code-cell}
     Sample Code
     ```
 </pre></div>
 </div>
-<p><strong>For SQL</strong></p>
+<p id="executing-code-sql"><strong>SQL</strong></p>
+<p>To run SQL within the Jupyter Book we are using an iPython wrapper called <code class="docutils literal notranslate"><span class="pre">cell</span> <span class="pre">Magics</span></code> with <code class="docutils literal notranslate"><span class="pre">%%sql</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">calitp.magics</span>
+</pre></div>
 </div>
-<div class="section" id="cell-magics">
-<h4>Cell Magics<a class="headerlink" href="#cell-magics" title="Permalink to this headline">¶</a></h4>
-<p>To run sql within the jupyterbook we are using an Ipython wrapper called cell magics.</p>
-</div>
-<div class="section" id="id1">
-<h4>Syntax:<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    ```{code-cell}
     %%sql
-    Sample SQL
+    Sample SQL Here
+    ```
+</pre></div>
+</div>
+<p>You can visit <a class="reference external" href="https://jupyterbook.org/content/code-outputs.html">this page</a> for more information on how to format code outputs.</p>
+</div>
+<div class="section" id="non-executing-code">
+<span id="id2"></span><h3>Non-Executing Code<a class="headerlink" href="#non-executing-code" title="Permalink to this headline">¶</a></h3>
+<p>Non-executing code is formatted similarly to the executing code above, but replaces <code class="docutils literal notranslate"><span class="pre">{code-cell}</span></code> with the name of the language you would like to represent, as seen below, to provide syntax highlighting.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    ```python
+    Sample Code
+    ```
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    ```sql
+    Sample Code
     ```
 </pre></div>
 </div>
 </div>
+<div class="section" id="images">
+<span id="adding-images"></span><h3>Images<a class="headerlink" href="#images" title="Permalink to this headline">¶</a></h3>
+<p>Images are currently being stored in an <code class="docutils literal notranslate"><span class="pre">assets</span></code> folder within each <code class="docutils literal notranslate"><span class="pre">docs</span></code> folder. Preference is for <code class="docutils literal notranslate"><span class="pre">.png</span></code> file extension and no larger than <code class="docutils literal notranslate"><span class="pre">500kb</span></code>. Images can be loaded into Jupyter Book by using the following syntax:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>![Collection Matrix](assets/your-file-name.png)
+</pre></div>
+</div>
+</div>
+<div class="section" id="internal-references-and-cross-references">
+<span id="internal-refs"></span><h3>Internal References and Cross-References<a class="headerlink" href="#internal-references-and-cross-references" title="Permalink to this headline">¶</a></h3>
+<p>Referencing within the documentation can be accomplished quickly with <code class="docutils literal notranslate"><span class="pre">labels</span></code> and <code class="docutils literal notranslate"><span class="pre">markdown</span> <span class="pre">link</span> <span class="pre">syntax</span></code>.</p>
+<p>Labels can be added before major elements of a page,
+such as titles or figures. To add a label, use the following pattern <strong>before</strong> the element you wish to label:</p>
+<div class="highlight-md notranslate"><div class="highlight"><pre><span></span>(my-label)=
+<span class="gh"># The thing to label</span>
+</pre></div>
+</div>
+<p>You can then insert cross-references to labels in your content with this syntax:</p>
+<p><code class="docutils literal notranslate"><span class="pre">[Link</span> <span class="pre">Text](my-label)</span></code></p>
 </div>
 </div>
 </div>
@@ -796,19 +820,12 @@
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="overview.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="submitting_changes.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Editing Documentation</p>
+            <p class="prev-next-title">Submitting Changes</p>
         </div>
-    </a>
-    <a class='right-next' id="next-link" href="submitting_changes.html" title="next page">
-    <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Submitting Changes</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
     </a>
 </div>
             
