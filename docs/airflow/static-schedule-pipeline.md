@@ -27,3 +27,4 @@ gtfs_loader | gtfs_downloader, gtfs_schedule_history | Daily | No | Loads and pa
 gtfs_schedule_history2 | gtfs_loader | Daily | Yes | Analyzes the current day's result and creates data about any changes in feed contents
 gtfs_views_staging | gtfs_schedule_history2 | Daily | No | Creates staging tables for various view (Dimension and Fact) tables
 gtfs_views | gtfs_views_staging | Daily | No | Creates view (Dimension and Fact) tables
+rt_loader | | Daily | No | Parses and loads GTFS RT data

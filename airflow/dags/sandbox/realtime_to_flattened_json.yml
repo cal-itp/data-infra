@@ -1,0 +1,7 @@
+operator: operators.RealtimeToFlattenedJSONOperator
+provide_context: true
+
+filename_prefix: tu
+rt_file_substring: trip_updates
+subfolder: rt-processed-sandbox
+limit: 5
