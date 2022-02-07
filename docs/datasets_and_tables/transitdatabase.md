@@ -41,7 +41,7 @@ Currently neither of the above processes or datasets either rely on or contribut
 | `services`<br><br>*Primary Field*: `Name` | Each record defines a transit service and its properties.<br><br>While there are a small number of exceptions (e.g. Solano Express, which is jointly managed by Solano and Napa), generally each transit service is managed by a single organization. Transit services are differentiated from each other by variation (or the potentiality of variation) in one or more of the following:<ul><li>operator `organization` such as City Staff vs a contracted service,<li>`rider requirements` such as ADA Paratransit eligibility, senior status, school trips, etc.</li><li>Operational characteristics such as reservations, on-demand vs fixed-route, service frequencies, and mode</li>Business processes such as transit technology stacks or personnel</li><li>Funding type, which can effect longevity of the service and how well integrated it is with other services managed by the same organization.</li><li>Rider-facing branding, which is often an indicator of one of the above.</li></ul><br>Services MAY:<ul><li>be *reflected by* a `gtfs service data` record</li><li>be *subject to* one or more `rider requirements`</li><li>be *funded by* one or more `funding programs`</li><li>*operated by* one or more `organizations`</li><li>*managed by* one or more organizations</li><li>be *operated in* one or more `place geography`</li><li>*use* one or more `products`. |
 | `tasks`<br><br> *Primary Field*: `Name` | Each record defines an action we are either undertaking or tracking to meet our OKRs and quarterly milestones.  These tasks are helpful for crosswalking "what we are doing" with each GTFS-entity. |
 | `gtfs datasets`<br><br>*Primary Field*: `gtfs_dataset_id` | Each record represents a gtfs dataset (feed) that is either a type of GTFS Schedule, Trip Updates, Vehicle Locations or Alerts.  A gtfs dataset MAY:<ul><li>be *disaggregated into* one or more `gtfs service data` records.</li><li>be *produced* by one or more `organizations`</li><li>be *published* by an `organizations`. |
-| `gtfs service data` <br><br> *Primary Field*: `Name`, a combination of a set of `Services` record(s) and a single `gtfs datasets` record. | Each record links together a single `gtfs dataset` and one (if possible) or more `services`.  Additional fields define how to isolate the service within the `gtfs dataset`.  <br><br>Many services have more than one GTFS dataset which describes their service. Often these are either precursors to *final* datasets (e.g. AC Transit's GTFS dataset is a precursor to the Bay Area 511 dataset) or artifacts produced in other processes such as creating GTFS Realtime (e.g. [the VCTC GTFS produced by GMV](https://airtable.com/appPnJWrQ7ui4UmIl/tblnVt5FZ2FZmDjDx/viw3NtcDP3Qm0BYyG/recJhrNj21mYVETJG?blocks=hide)). The property `Category` indicates if this is the `primary` dataset, a `precursor` or `unknown` in order to distinguish which should be used. |
+| `gtfs service data` <br><br> *Primary Field*: `Name`, a combination of a set of `Services` record(s) and a single `gtfs datasets` record. | Each record links together a single `gtfs dataset` and one (if possible) or more `services`.  Additional fields define how to isolate the service within the `gtfs dataset`.  <br><br>Many services have more than one GTFS dataset which describes their service. Often these are either precursors to *final* datasets (e.g. AC Transit's GTFS dataset is a precursor to the Bay Area 511 dataset) or artifacts produced in other processes such as creating GTFS Realtime (e.g. [the VCTC GTFS produced by GMV](https://airtable.com/appPnJWrQ7ui4UmIl/tblnVt5FZ2FZmDjDx/viw3NtcDP3Qm0BYyG/recJhrNj21mYVETJG?blocks=hide)). The property `Category` indicates if this is the `primary` dataset, a `precursor` or `unknown` in order to distinguish which should be used. See |
 | `place geography` <br><br> *Primary Field*: `Name` | Each place is a Census recognized Place with a FIPS code.  Additional properties include County and Caltrans District. |
 | `county geography` <br><br> *Primary Field*: `Name` | Each record is a county and has fields to lookup key information about that county such as Caltrans District. |
 | `fare systems`  <br><br> *Primary Field*: `Fare System` | `WIP` A list of fare systems and their properties. Fare systems apply to one or more Organization which manages a service. |
@@ -52,6 +52,27 @@ Currently neither of the above processes or datasets either rely on or contribut
 | `feed metrics` | Metrics (i.e. service area, population, etc. ) that are calculated by Data Analysts using data warehouse that are useful for planning and strategy.  **Not necessarily up-to-date; should be used as back of the envelope numbers onl; not for presentation.** |
 | `NTD Agency Info` | 2018 NTD Agency Info Table imported 10/6/2021 from https://www7.fta.dot.gov/ntd/data-product/2018-annual-database-agency-information |
 | `API Keys` | Storage of API keys for accessing `gtfs datasets` via a keyed API |
+
+### Additional Field Documentation
+
+Because fields are documented in the Airtable GUI itself and its associated API documentation, this section only contains additional information that cannot be appropriately documented in those places or is specific to the needs of the Data Services team.
+
+#### `gtfs service data` notation for isolating GTFS Services within GTFS Datasets
+
+Context: `gtfs service data` is an association table between `services` and subsets (or entire) `GTFS Datasets`.
+
+Summary:
+
+- Selection levels are in following order `agency_id`, `network_id`, `route_id` 
+- `BLANK` indicates ALL records  
+- Comma-separated list for values that should be selected at that selection level
+- `*` indicates remaining records after other selections at that selection level
+
+Relevant Fields:
+
+- `gtfs service data.agency_id`: if only a selection of `agency.agency_id` within the GTFS Dataset should be selected to represent a specific `services` record, list them here.  If all `agency_id` should be selected, leave blank.  Indicate if the "leftover" `agency_id` from other `agency_id` selections for the same `GTFS dataset` should be selected with `*`.  
+- `gtfs service data.network_id`: if only a selection of `routes.network_id` within the GTFS Dataset should be selected to represent a specific `services` record, list them here.  If all `network_id` within the `agency_id` selection should be selected, leave blank.  Indicate if the "leftover" `network_id` from other `network_id` selections for the same `GTFS dataset` should be selected with `*`.  
+- `gtfs service data.route_id`: if only a selection of `routes.route_id` within the GTFS Dataset should be selected to represent a specific `services` record, list them here.  If all `route_id` within the `agency_id` and `network_id` selection should be selected, leave blank.  Indicate if the "leftover" `route_id` from other `route_id` selections for the same `GTFS dataset` should be selected with `*`.  
 
 ### Transit Services: Entity Relationship Diagram
 
