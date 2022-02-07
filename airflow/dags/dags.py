@@ -117,7 +117,7 @@ def sql_enrich_duplicates(schema_tbl, key_columns, order_by_columns):
     """
 
 
-def email_failure(context):
+def log_failure_to_slack(context):
     slack_url = os.environ.get(CALITP_SLACK_URL_KEY)
     if not slack_url:
         print("Skipping email to slack channel. No CALITP_SLACK_URL in environment")
@@ -154,7 +154,7 @@ for dag_directory in dag_directories:
         },
         user_defined_filters=user_defined_filters,
         default_args={
-            "on_failure_callback": email_failure,
-            "on_retry_callback": email_failure,
+            "on_failure_callback": log_failure_to_slack,
+            # "on_retry_callback": log_failure_to_slack,
         },
     )
