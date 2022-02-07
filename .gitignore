@@ -1,9 +1,6 @@
 # Vim
 .*.sw[po]
 
-# JetBrains
-.idea/
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
