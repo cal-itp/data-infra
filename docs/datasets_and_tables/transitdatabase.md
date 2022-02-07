@@ -63,16 +63,16 @@ Context: `gtfs service data` is an association table between `services` and subs
 
 Summary:
 
-- Selection levels are in following order `agency_id`, `network_id`, `route_id` 
-- `BLANK` indicates ALL records  
+- Selection levels are in following order `agency_id`, `network_id`, `route_id`
+- `BLANK` indicates ALL records
 - Comma-separated list for values that should be selected at that selection level
 - `*` indicates remaining records after other selections at that selection level
 
 Relevant Fields:
 
-- `gtfs service data.agency_id`: if only a selection of `agency.agency_id` within the GTFS Dataset should be selected to represent a specific `services` record, list them here.  If all `agency_id` should be selected, leave blank.  Indicate if the "leftover" `agency_id` from other `agency_id` selections for the same `GTFS dataset` should be selected with `*`.  
-- `gtfs service data.network_id`: if only a selection of `routes.network_id` within the GTFS Dataset should be selected to represent a specific `services` record, list them here.  If all `network_id` within the `agency_id` selection should be selected, leave blank.  Indicate if the "leftover" `network_id` from other `network_id` selections for the same `GTFS dataset` should be selected with `*`.  
-- `gtfs service data.route_id`: if only a selection of `routes.route_id` within the GTFS Dataset should be selected to represent a specific `services` record, list them here.  If all `route_id` within the `agency_id` and `network_id` selection should be selected, leave blank.  Indicate if the "leftover" `route_id` from other `route_id` selections for the same `GTFS dataset` should be selected with `*`.  
+- `gtfs service data.agency_id`: if only a selection of `agency.agency_id` within the GTFS Dataset should be selected to represent a specific `services` record, list them here.  If all `agency_id` should be selected, leave blank.  Indicate if the "leftover" `agency_id` from other `agency_id` selections for the same `GTFS dataset` should be selected with `*`.
+- `gtfs service data.network_id`: if only a selection of `routes.network_id` within the GTFS Dataset should be selected to represent a specific `services` record, list them here.  If all `network_id` within the `agency_id` selection should be selected, leave blank.  Indicate if the "leftover" `network_id` from other `network_id` selections for the same `GTFS dataset` should be selected with `*`.
+- `gtfs service data.route_id`: if only a selection of `routes.route_id` within the GTFS Dataset should be selected to represent a specific `services` record, list them here.  If all `route_id` within the `agency_id` and `network_id` selection should be selected, leave blank.  Indicate if the "leftover" `route_id` from other `route_id` selections for the same `GTFS dataset` should be selected with `*`.
 
 ### Transit Services: Entity Relationship Diagram
 
