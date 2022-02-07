@@ -13,6 +13,8 @@ Please write out a short description of what this pull request does. Also, pleas
 - [ ] Manually made sure any new feeds have `itp_id`s that are not duplicative
 - [ ] Confirmed URIs are valid (the `move DAGs to GCS folder` GitHub action should successfully pass)
 - [ ] Made sure the Airtable database has consistent information
+- [ ] Added all relevant API keys to GitHub Action secrets. Ask a repository admin such as @evansiroky to do this. (only required if API key required to make request)
+- [ ] Added template of all relevant API keys to airflow/data/example-secrets.csv file (only required if API key required to make request)
 - [ ] Fill out the following section describing what feeds were added/updated
 
 This PR updates `agencies.yml` in order to....
