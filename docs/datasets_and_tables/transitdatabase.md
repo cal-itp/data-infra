@@ -6,7 +6,7 @@ We have chosen to group and maintain the tables into the following Airbases as f
 
 | **Table Set** | **Description** | **Data Maintainer** |
 | :------------ | :-------------- | :------------------ |
-| [**Transit Services**](#transit-services) | Defines key organizational relationships and properties. Organizations, geography, funding programs,  transit services, service characteristics, transit datasets such as GTFS, and the intersection between transit datasets and services. | *Elizabeth*<br>Evan handling uptake to warehouse |
+| [**California Transit**](#california-transit) | Defines key organizational relationships and properties. Organizations, geography, funding programs,  transit services, service characteristics, transit datasets such as GTFS, and the intersection between transit datasets and services. | *Elizabeth*<br>Evan handling uptake to warehouse |
 | [**Transit Data Assessments**](#transit-data-assessments) | Articulates data performance metrics and assessments.| *Elizabeth*<br>*Evan* handling uptake to warehouse<br>*Olivia* a key User Advocate. |
 | [**Transit Technology Stacks**](#transit-technology-stacks) | Defines operational setups at transit provider organizations. Defines relationships between vendor organizations, transit provider and operator organizations, products, contracts to provide products, transit stack components, and how they relate to one-another. Structure still somewhat a `WIP`. | *Elizabeth*<br>No warehouse uptake for time being. |
 
@@ -33,7 +33,7 @@ The data in the Airtable Transit Database is distinct but related to the followi
 
 Currently neither of the above processes or datasets either rely on or contribute back to the Airflow Transit Database – this is a work in progress.  Rather, they rely on the list of transit datasets in the file [`agencies.yml`](https://github.com/cal-itp/data-infra/tree/main/airflow/data/agencies.yml) to dictate what datasets to download and assess.
 
-## Transit Services
+## California Transit
 
 | **Name**<br>*Key(s)*| **Description** |
 | :------------- |  :-------------- |
@@ -74,7 +74,7 @@ Relevant Fields:
 - `gtfs service data.network_id`: if only a selection of `routes.network_id` within the GTFS Dataset should be selected to represent a specific `services` record, list them here.  If all `network_id` within the `agency_id` selection should be selected, leave blank.  Indicate if the "leftover" `network_id` from other `network_id` selections for the same `GTFS dataset` should be selected with `*`.
 - `gtfs service data.route_id`: if only a selection of `routes.route_id` within the GTFS Dataset should be selected to represent a specific `services` record, list them here.  If all `route_id` within the `agency_id` and `network_id` selection should be selected, leave blank.  Indicate if the "leftover" `route_id` from other `route_id` selections for the same `GTFS dataset` should be selected with `*`.
 
-### Transit Services: Entity Relationship Diagram
+### California Transit: Entity Relationship Diagram
 
 [![](https://mermaid.ink/img/eyJjb2RlIjoiZXJEaWFncmFtXG4gICAgT3JnYW5pemF0aW9uIH1vLS1veyBTZXJ2aWNlOiBcIm1hbmFnZXNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgU2VydmljZTogXCJvcGVyYXRlc1wiXG4gICAgT3JnYW5pemF0aW9uIH1vLS1veyBDb250cmFjdDogXCJvd25zXCJcbiAgICBPcmdhbml6YXRpb24gfW8tLW97IENvbnRyYWN0OiBcImhvbGRzXCJcbiAgICBPcmdhbml6YXRpb24gfW8tLW97IFByb2R1Y3Q6IFwic2VsbHNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgR3Rmc0RhdGFzZXQ6IFwiY29uc3VtZXNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgR3Rmc0RhdGFzZXQ6IFwicHJvZHVjZXNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgR3Rmc0RhdGFzZXQ6IFwicHVibGlzaGVzXCJcbiAgICBPcmdhbml6YXRpb24gfXwtLW97IENvdW50aWVzOiBcInJlc3BvbnNpYmxlIGZvciByZWdpb25hbCBwbGFubmluZyBpblwiXG5cbiAgICBTZXJ2aWNlIHx8LS18eyBQbGFjZXM6IFwib3BlcmF0ZXMgaW5cIlxuICAgIFBsYWNlcyB9by0tfHsgQ291bnRpZXM6IFwiYXJlIGNvbnRhaW5lZCBpblwiXG4gICAgQ291bnRpZXMgfW8tLXx7IENhbHRyYW5zRGlzdHJpY3RzOiBcImFyZSBjb250YWluZWQgaW5cIlxuXG4gICAgRmFyZVN5c3RlbSB8fC0tfHsgT3JnYW5pemF0aW9uOiBcImFwcGxpZXMgdG9cIlxuXG4gICAgRnVuZGluZ1Byb2dyYW0gfXwtLXx7IFNlcnZpY2U6IFwiZnVuZHNcIlxuICAgIFJpZGVyUmVxdWlyZW1lbnQgfW8tLW97IFNlcnZpY2U6IFwiYXBwbGllcyB0b1wiXG4gICAgRWxpZ2libGl0eVByb2dyYW0gfW8tLW97IFNlcnZpY2U6IFwibGljZW5zZXMgZWxpZ2liaWxpdHkgZm9yXCJcblxuICAgIFNlcnZpY2UgfW8tLW97IEd0ZnNEYXRhc2V0U2VydmljZUNvbXBvbmVudDogXCJyZWZsZWN0ZWQgYnlcIlxuICAgIFNlcnZpY2UgfW8tLW97IEd0ZnNEYXRhc2V0OiBcInJlZmxlY3RlZCBieVwiXG4gICAgR3Rmc0RhdGFzZXRTZXJ2aWNlQ29tcG9uZW50IH1vLS1veyBHdGZzRGF0YXNldDogXCJhZ2dyZWdhdGVkIHRvXCIiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGFyayJ9LCJ1cGRhdGVFZGl0b3IiOmZhbHNlLCJhdXRvU3luYyI6dHJ1ZSwidXBkYXRlRGlhZ3JhbSI6ZmFsc2V9)](https://mermaid-js.github.io/mermaid-live-editor/edit/#eyJjb2RlIjoiZXJEaWFncmFtXG4gICAgT3JnYW5pemF0aW9uIH1vLS1veyBTZXJ2aWNlOiBcIm1hbmFnZXNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgU2VydmljZTogXCJvcGVyYXRlc1wiXG4gICAgT3JnYW5pemF0aW9uIH1vLS1veyBDb250cmFjdDogXCJvd25zXCJcbiAgICBPcmdhbml6YXRpb24gfW8tLW97IENvbnRyYWN0OiBcImhvbGRzXCJcbiAgICBPcmdhbml6YXRpb24gfW8tLW97IFByb2R1Y3Q6IFwic2VsbHNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgR3Rmc0RhdGFzZXQ6IFwiY29uc3VtZXNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgR3Rmc0RhdGFzZXQ6IFwicHJvZHVjZXNcIlxuICAgIE9yZ2FuaXphdGlvbiB9by0tb3sgR3Rmc0RhdGFzZXQ6IFwicHVibGlzaGVzXCJcbiAgICBPcmdhbml6YXRpb24gfXwtLW97IENvdW50aWVzOiBcInJlc3BvbnNpYmxlIGZvciByZWdpb25hbCBwbGFubmluZyBpblwiXG5cbiAgICBTZXJ2aWNlIHx8LS18eyBQbGFjZXM6IFwib3BlcmF0ZXMgaW5cIlxuICAgIFBsYWNlcyB9by0tfHsgQ291bnRpZXM6IFwiYXJlIGNvbnRhaW5lZCBpblwiXG4gICAgQ291bnRpZXMgfW8tLXx7IENhbHRyYW5zRGlzdHJpY3RzOiBcImFyZSBjb250YWluZWQgaW5cIlxuXG4gICAgRmFyZVN5c3RlbSB8fC0tfHsgT3JnYW5pemF0aW9uOiBcImFwcGxpZXMgdG9cIlxuXG4gICAgRnVuZGluZ1Byb2dyYW0gfXwtLXx7IFNlcnZpY2U6IFwiZnVuZHNcIlxuICAgIFJpZGVyUmVxdWlyZW1lbnQgfW8tLW97IFNlcnZpY2U6IFwiYXBwbGllcyB0b1wiXG4gICAgRWxpZ2libGl0eVByb2dyYW0gfW8tLW97IFNlcnZpY2U6IFwibGljZW5zZXMgZWxpZ2liaWxpdHkgZm9yXCJcblxuICAgIFNlcnZpY2UgfW8tLW97IEd0ZnNEYXRhc2V0U2VydmljZUNvbXBvbmVudDogXCJyZWZsZWN0ZWQgYnlcIlxuICAgIFNlcnZpY2UgfW8tLW97IEd0ZnNEYXRhc2V0OiBcInJlZmxlY3RlZCBieVwiXG4gICAgR3Rmc0RhdGFzZXRTZXJ2aWNlQ29tcG9uZW50IH1vLS1veyBHdGZzRGF0YXNldDogXCJhZ2dyZWdhdGVkIHRvXCIiLCJtZXJtYWlkIjoie1xuICBcInRoZW1lXCI6IFwiZGFya1wiXG59IiwidXBkYXRlRWRpdG9yIjpmYWxzZSwiYXV0b1N5bmMiOnRydWUsInVwZGF0ZURpYWdyYW0iOmZhbHNlfQ)
 
@@ -107,8 +107,8 @@ Relevant Fields:
 | `service-components` | Each record is an association between one or more `services`, a `product`, and one or more `components` which that product is serving as. |
 | `relationships service-components` | Each record is an one-way association between two `organization stack components` (`Component A` and `Component B`) using a `data schemas` and `Mechanism` (e.g. `auto-triggered pull`, `intra-product`, `human transaction`, etc.) |
 | `data schemas` | Each record indicates a data schema which  can be used in one or more `relationships service-components`. |
-| `organizations` | Imported from [Transit Services Base](#transit-services-base).|
-| `services` | Imported from [Transit Services Base](#transit-services-base).|
+| `organizations` | Imported from [California Transit Base](#california-transit).|
+| `services` | Imported from [California Transit Base](#california-transit).|
 
 ### Transit Stacks: Entity Relationship Diagram
 
