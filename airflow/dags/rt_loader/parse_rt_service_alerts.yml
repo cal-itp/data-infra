@@ -1,0 +1,5 @@
+operator: operators.RealtimeToFlattenedJSONOperator
+provide_context: true
+
+filename_prefix: al
+rt_file_substring: service_alerts
