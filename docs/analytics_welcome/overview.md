@@ -11,3 +11,11 @@ After reading the 'Welcome' section, you will be more familiar with:
 * [Meetings, communication channels, and other forms of collaboration](how-we-work)
 
 After you've read through this section, continue reading through the remaining sections of this chapter for further introduction to the various technical elements required to conduct an end-to-end analysis.
+
+Other Sections:
+* [Technical Onboarding](technical-onboarding)
+* [Introduction to Analytics Tools](intro-analytics-tools)
+* [Introduction to the Warehouse](intro-warehouse)
+* [Datasets & Tables](datasets-tables)
+* [Analysis Examples](analysis-examples-overview)
+* [How to Publish Analyses](publish-analyses)
