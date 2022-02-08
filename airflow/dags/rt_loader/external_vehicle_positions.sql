@@ -5,8 +5,48 @@ dependencies:
   - parse_rt_vehicle_positions
 ---
 
-CREATE OR REPLACE EXTERNAL TABLE `gtfs_rt.vehicle_positions`
+CREATE OR REPLACE EXTERNAL TABLE `gtfs_rt.vehicle_positions` (
+    header STRUCT<
+      timestamp INT64,
+      incrementality STRING,
+      gtfsRealtimeVersion STRING
+    >,
+    id STRING,
+    vehicle STRUCT<
+      vehicle STRUCT <
+        licensePlate STRING,
+        label STRING,
+        id STRING
+      >,
+      trip STRUCT <
+        tripId STRING,
+        routeId STRING,
+        directionId INT64,
+        startTime STRING,
+        startDate STRING,
+        scheduleRelationship STRING
+      >,
+      position STRUCT <
+        latitude NUMERIC,
+        longitude NUMERIC,
+        bearing NUMERIC,
+        odometer INT64,
+        speed NUMERIC
+      >,
+      currentStopSequence INT64,
+      stopId STRING,
+      currentStatus STRING,
+      timestamp INT64,
+      congestionLevel STRING,
+      occupancyStatus STRING,
+      occupancyPercentage INT64
+    >,
+    calitp_itp_id INT64,
+    calitp_url_number INT64,
+    calitp_filepath STRING
+)
 OPTIONS (
     format = "JSON",
-    uris = ["{{get_bucket()}}/rt-processed/vehicle_positions/*.jsonl.gz"]
+    uris = ["{{get_bucket()}}/rt-processed/vehicle_positions/*.jsonl.gz"],
+    ignore_unknown_values = True
 )
