@@ -142,11 +142,11 @@ def handle_one_feed(feed, files, filename_prefix, iso_date, dst_path, logger):
         fs.put(
             gzip_fname, dst_path + google_cloud_file_name,
         )
-    logger.info(
-        "took {} seconds to process {} files".format(
-            (datetime.now() - start).total_seconds(), len(all_files)
+        logger.info(
+            "took {} seconds to process {} files".format(
+                (datetime.now() - start).total_seconds(), len(all_files)
+            )
         )
-    )
 
 
 def try_handle_one_feed(
