@@ -10,7 +10,10 @@ from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from pathlib import Path
+from typing import Optional
 
+import aiohttp
+import backoff
 import humanize
 import structlog
 import typer
@@ -89,17 +92,12 @@ def get_google_cloud_filename(filename_prefix, feed, iso_date):
     return f"{prefix}_{iso_date}_{itp_id_url_num}{EXTENSION}"
 
 
-def handle_one_feed(i, feed, files, filename_prefix, iso_date, dst_path, total_feeds):
+@backoff.on_exception(
+    backoff.expo, aiohttp.client_exceptions.ClientResponseError, max_tries=2
+)
+def handle_one_feed(feed, files, filename_prefix, iso_date, dst_path, logger):
     start = datetime.now()
-    logger = structlog.get_logger().bind(
-        i=i,
-        feed=feed,
-        len_files=len(files),
-        filename_prefix=filename_prefix,
-        iso_date=iso_date,
-        dst_path=dst_path,
-        total_feeds=total_feeds,
-    )
+
     logger.info("entering handle_one_feed")
 
     fs = get_fs()
@@ -144,11 +142,30 @@ def handle_one_feed(i, feed, files, filename_prefix, iso_date, dst_path, total_f
         fs.put(
             gzip_fname, dst_path + google_cloud_file_name,
         )
-        logger.info(
-            "took {} seconds to process {} files".format(
-                (datetime.now() - start).total_seconds(), len(all_files)
-            )
+    logger.info(
+        "took {} seconds to process {} files".format(
+            (datetime.now() - start).total_seconds(), len(all_files)
         )
+    )
+
+
+def try_handle_one_feed(
+    i, feed, files, filename_prefix, iso_date, dst_path, total_feeds
+) -> Optional[Exception]:
+    logger = structlog.get_logger().bind(
+        i=i,
+        feed=feed,
+        len_files=len(files),
+        filename_prefix=filename_prefix,
+        iso_date=iso_date,
+        dst_path=dst_path,
+        total_feeds=total_feeds,
+    )
+    try:
+        handle_one_feed(feed, files, filename_prefix, iso_date, dst_path, logger)
+    except Exception as e:
+        logger.error(f"got exception while handling feed: {str(e)}")
+        return e
 
 
 def execute(
@@ -162,10 +179,10 @@ def execute(
     feed_files = fetch_bucket_file_names(src_path, rt_file_substring, iso_date)
 
     enumerated = enumerate(feed_files.items())
-
     if limit:
         structlog.get_logger().warn(f"limit of {limit} feeds was set")
         enumerated = itertools.islice(enumerated, limit)
+    enumerated = list(enumerated)
 
     # gcfs does not seem to play nicely with multiprocessing right now
     # https://github.com/fsspec/gcsfs/issues/379
@@ -174,7 +191,12 @@ def execute(
             (i, feed, files, filename_prefix, iso_date, dst_path, len(feed_files))
             for i, (feed, files) in enumerated
         ]
-        list(pool.map(handle_one_feed, *zip(*args)))
+        exceptions = [ret for ret in pool.map(try_handle_one_feed, *zip(*args)) if ret]
+
+    if exceptions:
+        raise RuntimeError(
+            f"got {len(exceptions)} exceptions from processing {len(enumerated)} feeds: {exceptions}"
+        )
 
 
 class RealtimeToFlattenedJSONOperator(BaseOperator):
@@ -230,6 +252,7 @@ def main(
         rt_file_substring,
         src_path,
         dst_path,
+        limit=5,
     )
 
 
