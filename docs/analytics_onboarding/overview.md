@@ -1,6 +1,6 @@
 (technical-onboarding)=
 # Technical Onboarding
-:::{admonition} Bookmark this Page for Quick Access to Team Resources
+:::{admonition} Bookmark this page for quick access to team resources
 :class: tip
 **Analysts**
 * See below for list of our collaboration and analysis tools.
