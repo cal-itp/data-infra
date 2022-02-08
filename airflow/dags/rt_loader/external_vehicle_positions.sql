@@ -6,12 +6,15 @@ dependencies:
 ---
 
 CREATE OR REPLACE EXTERNAL TABLE `gtfs_rt.vehicle_positions` (
+    calitp_itp_id INT64,
+    calitp_url_number INT64,
+    calitp_filepath STRING,
+    id STRING,
     header STRUCT<
       timestamp INT64,
       incrementality STRING,
       gtfsRealtimeVersion STRING
     >,
-    id STRING,
     vehicle STRUCT<
       vehicle STRUCT <
         licensePlate STRING,
@@ -40,10 +43,7 @@ CREATE OR REPLACE EXTERNAL TABLE `gtfs_rt.vehicle_positions` (
       congestionLevel STRING,
       occupancyStatus STRING,
       occupancyPercentage INT64
-    >,
-    calitp_itp_id INT64,
-    calitp_url_number INT64,
-    calitp_filepath STRING
+    >
 )
 OPTIONS (
     format = "JSON",
