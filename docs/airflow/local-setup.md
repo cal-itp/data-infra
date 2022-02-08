@@ -9,8 +9,8 @@ To pull pod logs for PodOperator DAG tasks during a local airflow run,
 2. Run the following query, substituting the name of the pod with the pod whose logs you would like to retrieve:
 
 `resource.labels.pod_name="pod.name"`
-ex.
-`resource.labels.pod_name="gtfs-rt-validation.85d1bfec8223489d886be905ff234a03"`
+
+ex. `resource.labels.pod_name="gtfs-rt-validation.85d1bfec8223489d886be905ff234a03"`
 
 If you're unsure of the name of a pod, in your local Airflow UI:
 1. Navigate to the logs section for an individual PodOperator DAG task
