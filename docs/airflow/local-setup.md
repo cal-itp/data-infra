@@ -1,10 +1,7 @@
 # Local Airflow
 
 ## Running Airflow Locally
-You can run an instance of airflow locally using `docker-compose`. To do so,
-* In the `data-infra` repo, within the `airflow` directory, run:
-
-`docker-compose up`.
+You can run an instance of airflow locally using `docker-compose`. To do so, in the `data-infra` repo, within the `airflow` directory, run: `docker-compose up`.
 
 ## Pulling Pod Logs for PodOperator DAG Tasks
 To pull pod logs for PodOperator DAG tasks during a local airflow run,
@@ -13,6 +10,7 @@ To pull pod logs for PodOperator DAG tasks during a local airflow run,
 
 `resource.labels.pod_name="pod.name"`
 ex.
+
 `resource.labels.pod_name="gtfs-rt-validation.85d1bfec8223489d886be905ff234a03"`
 
 If you're unsure of the name of a pod, in your local Airflow UI:
