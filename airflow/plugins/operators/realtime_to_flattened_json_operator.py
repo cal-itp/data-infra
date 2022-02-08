@@ -92,6 +92,7 @@ def get_google_cloud_filename(filename_prefix, feed, iso_date):
     return f"{prefix}_{iso_date}_{itp_id_url_num}{EXTENSION}"
 
 
+# Try twice in the event we get a ClientResponseError; doesn't have much of a delay (like 0.01s)
 @backoff.on_exception(
     backoff.expo, aiohttp.client_exceptions.ClientResponseError, max_tries=2
 )
