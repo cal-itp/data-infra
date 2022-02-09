@@ -1,10 +1,10 @@
 (technical-onboarding)=
 # Technical Onboarding
-:::{admonition} How to use this page
+:::{admonition} Bookmark this page for quick access to team resources
 :class: tip
 **Analysts**
 * See below for list of our collaboration and analysis tools.
-* Privileges have already been created for you to access the resources below.
+* As part of your onboarding, privileges have already been created for you to access the resources below.
 
 **Non-Analyst Team Members**
 * Any of the tools below are available to you as well!

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Local Setup &#8212; Cal-ITP Data Services</title>
+    <title>Local Airflow &#8212; Cal-ITP Data Services</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -51,8 +51,8 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Production Maintenance" href="production-maintenance.html" />
-    <link rel="prev" title="Static Schedule Pipeline" href="static-schedule-pipeline.html" />
+    <link rel="next" title="Static Schedule Pipeline" href="static-schedule-pipeline.html" />
+    <link rel="prev" title="Airflow" href="overview.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -334,14 +334,14 @@
    </i>
   </label>
   <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Local Airflow
+    </a>
+   </li>
    <li class="toctree-l2">
     <a class="reference internal" href="static-schedule-pipeline.html">
      Static Schedule Pipeline
-    </a>
-   </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Local Setup
     </a>
    </li>
    <li class="toctree-l2">
@@ -580,6 +580,24 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#running-airflow-locally">
+   Running Airflow Locally
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pulling-pod-logs-for-podoperator-dag-tasks">
+   Pulling Pod Logs for PodOperator DAG Tasks
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -587,21 +605,57 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Local Setup</h1>
+                <h1>Local Airflow</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#running-airflow-locally">
+   Running Airflow Locally
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pulling-pod-logs-for-podoperator-dag-tasks">
+   Pulling Pod Logs for PodOperator DAG Tasks
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="local-setup">
-<h1>Local Setup<a class="headerlink" href="#local-setup" title="Permalink to this headline">¶</a></h1>
-<p>It is possible to run airflow locally using <code class="docutils literal notranslate"><span class="pre">docker-compose</span></code>.</p>
-<p>Within the <code class="docutils literal notranslate"><span class="pre">airflow</span></code> directory run: <code class="docutils literal notranslate"><span class="pre">docker-compose</span> <span class="pre">up</span></code>.</p>
+  <div class="tex2jax_ignore mathjax_ignore section" id="local-airflow">
+<h1>Local Airflow<a class="headerlink" href="#local-airflow" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="running-airflow-locally">
+<h2>Running Airflow Locally<a class="headerlink" href="#running-airflow-locally" title="Permalink to this headline">¶</a></h2>
+<p>You can run an instance of airflow locally using <code class="docutils literal notranslate"><span class="pre">docker-compose</span></code>. To do so, in the <code class="docutils literal notranslate"><span class="pre">data-infra</span></code> repo, within the <code class="docutils literal notranslate"><span class="pre">airflow</span></code> directory, run: <code class="docutils literal notranslate"><span class="pre">docker-compose</span> <span class="pre">up</span></code>.</p>
+</div>
+<div class="section" id="pulling-pod-logs-for-podoperator-dag-tasks">
+<h2>Pulling Pod Logs for PodOperator DAG Tasks<a class="headerlink" href="#pulling-pod-logs-for-podoperator-dag-tasks" title="Permalink to this headline">¶</a></h2>
+<p>To pull pod logs for PodOperator DAG tasks during a local airflow run,</p>
+<ol class="simple">
+<li><p>Navigate to <code class="docutils literal notranslate"><span class="pre">GCP</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">Operations</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">Logging</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">Logs</span> <span class="pre">Explorer</span></code> &gt; <em>the query field</em></p></li>
+<li><p>Run the following query, substituting the name of the pod with the pod whose logs you would like to retrieve:</p></li>
+</ol>
+<p><code class="docutils literal notranslate"><span class="pre">resource.labels.pod_name=&quot;pod.name&quot;</span></code></p>
+<p>ex. <code class="docutils literal notranslate"><span class="pre">resource.labels.pod_name=&quot;gtfs-rt-validation.85d1bfec8223489d886be905ff234a03&quot;</span></code></p>
+<p>If you’re unsure of the name of a pod, in your local Airflow UI:</p>
+<ol class="simple">
+<li><p>Navigate to the logs section for an individual PodOperator DAG task</p></li>
+<li><p>Search for log messages similar to this, which will provide the name of the pod:</p></li>
+</ol>
+<p><code class="docutils literal notranslate"><span class="pre">Pod</span> <span class="pre">not</span> <span class="pre">yet</span> <span class="pre">started:</span> <span class="pre">gtfs-rt-validation.87a693a129d64ccdb3d9d21bf29c2f46</span></code></p>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
@@ -629,17 +683,17 @@
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="static-schedule-pipeline.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="overview.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Static Schedule Pipeline</p>
+            <p class="prev-next-title">Airflow</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="production-maintenance.html" title="next page">
+    <a class='right-next' id="next-link" href="static-schedule-pipeline.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Production Maintenance</p>
+        <p class="prev-next-title">Static Schedule Pipeline</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
