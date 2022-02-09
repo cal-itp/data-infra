@@ -98,10 +98,7 @@ operator: operators.SqlToWarehouseOperator
 
 dst_table_name: views.airtable_{table_name}
 
-description: Mapping table for the GTFS {table1} table, {table1_col}
-column and the {table2} table, {table2_col} column in the
-California Transit Airtable base. Each row represents a
-relationship between a {table1} record and a {table2} record.
+description: Mapping table for the GTFS {table1} table, {table1_col} column and the {table2} table, {table2_col} column in the California Transit Airtable base. Each row represents a relationship between a {table1} record and a {table2} record.
 
 fields:
   {id1}: Internal Airtable ID for a {table1} record
@@ -156,9 +153,7 @@ operator: operators.SqlToWarehouseOperator
 
 dst_table_name: views.airtable_{table_name}
 
-description: Self-join mapping table for the GTFS {table} table, {col}
-column in the California Transit Airtable base. Each row represents a
-relationship between two {table} records.
+description: Self-join mapping table for the GTFS {table} table, {col} column in the California Transit Airtable base. Each row represents a relationship between two {table} records.
 
 fields:
   {id1}: Internal Airtable ID for a {table} record
