@@ -3,9 +3,7 @@ operator: operators.SqlToWarehouseOperator
 
 dst_table_name: views.airtable_california_transit_map_gtfs_datasets_aggregated_to_x_self
 
-description: | Self-join mapping table for the GTFS gtfs_datasets table,
-aggregated_to column in the California Transit Airtable base.
-Each row represents a relationship between two gtfs_datasets records.
+description: Self-join mapping table for the GTFS gtfs_datasets table, aggregated_to column in the California Transit Airtable base. Each row represents a relationship between two gtfs_datasets records.
 
 fields:
   gtfs_dataset_id: Internal Airtable ID for a gtfs_datasets record
@@ -24,7 +22,7 @@ tests:
     - aggregated_to_id
 
 external_dependencies:
-- airtable_loader: california_transit_gtfs_datasets
+  - airtable_loader: california_transit_gtfs_datasets
 ---
 
 -- follow the sandbox example for unnesting airtable data

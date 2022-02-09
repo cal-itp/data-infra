@@ -3,9 +3,7 @@ operator: operators.SqlToWarehouseOperator
 
 dst_table_name: views.airtable_california_transit_map_gtfs_service_data_reference_static_gtfs_service_x_self
 
-description: | Self-join mapping table for the GTFS gtfs_service_data table,
-reference_static_gtfs_service column in the California Transit Airtable base.
-Each row represents a relationship between two gtfs_service_data records.
+description: Self-join mapping table for the GTFS gtfs_service_data table, reference_static_gtfs_service column in the California Transit Airtable base. Each row represents a relationship between two gtfs_service_data records.
 
 fields:
   gtfs_service_data_id: Internal Airtable ID for a gtfs_service_data record
@@ -24,7 +22,7 @@ tests:
     - reference_static_gtfs_service_id
 
 external_dependencies:
-- airtable_loader: california_transit_gtfs_service_data
+  - airtable_loader: california_transit_gtfs_service_data
 ---
 
 -- follow the sandbox example for unnesting airtable data

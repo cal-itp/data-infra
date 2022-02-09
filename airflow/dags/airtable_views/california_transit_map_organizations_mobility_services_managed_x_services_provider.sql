@@ -3,11 +3,7 @@ operator: operators.SqlToWarehouseOperator
 
 dst_table_name: views.airtable_california_transit_map_organizations_mobility_services_managed_x_services_provider
 
-description: |
-Mapping table for the GTFS organizations table, mobility_services_managed column
-and the services table, provider column in the California Transit
-Airtable base. Each row represents a relationship between a organizations
-record and a services record.
+description: Mapping table for the GTFS organizations table, mobility_services_managed column and the services table, provider column in the California Transit Airtable base. Each row represents a relationship between a organizations record and a services record.
 
 fields:
   organization_id: Internal Airtable ID for a organizations record
@@ -26,8 +22,8 @@ tests:
     - service_id
 
 external_dependencies:
-- airtable_loader: california_transit_organizations
-- airtable_loader: california_transit_services
+  - airtable_loader: california_transit_organizations
+  - airtable_loader: california_transit_services
 ---
 
 -- follow the sandbox example for unnesting airtable data

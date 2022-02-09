@@ -3,9 +3,7 @@ operator: operators.SqlToWarehouseOperator
 
 dst_table_name: views.airtable_california_transit_map_organizations_parent_organization_x_self
 
-description: | Self-join mapping table for the GTFS organizations table,
-parent_organization column in the California Transit Airtable base.
-Each row represents a relationship between two organizations records.
+description: Self-join mapping table for the GTFS organizations table, parent_organization column in the California Transit Airtable base. Each row represents a relationship between two organizations records.
 
 fields:
   organization_id: Internal Airtable ID for a organizations record
@@ -24,7 +22,7 @@ tests:
     - parent_organization_id
 
 external_dependencies:
-- airtable_loader: california_transit_organizations
+  - airtable_loader: california_transit_organizations
 ---
 
 -- follow the sandbox example for unnesting airtable data

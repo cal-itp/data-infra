@@ -117,8 +117,8 @@ tests:
     - {id2}
 
 external_dependencies:
-- airtable_loader: california_transit_{table1}
-- airtable_loader: california_transit_{table2}
+  - airtable_loader: california_transit_{table1}
+  - airtable_loader: california_transit_{table2}
 ---
 
 -- follow the sandbox example for unnesting airtable data
@@ -172,7 +172,7 @@ tests:
     - {id2}
 
 external_dependencies:
-- airtable_loader: california_transit_{table}
+  - airtable_loader: california_transit_{table}
 ---
 
 -- follow the sandbox example for unnesting airtable data

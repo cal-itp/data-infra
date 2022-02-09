@@ -3,11 +3,7 @@ operator: operators.SqlToWarehouseOperator
 
 dst_table_name: views.airtable_california_transit_map_gtfs_datasets_dataset_publisher_x_organizations_gtfs_datasets
 
-description: |
-Mapping table for the GTFS gtfs_datasets table, dataset_publisher column
-and the organizations table, gtfs_datasets column in the California Transit
-Airtable base. Each row represents a relationship between a gtfs_datasets
-record and a organizations record.
+description: Mapping table for the GTFS gtfs_datasets table, dataset_publisher column and the organizations table, gtfs_datasets column in the California Transit Airtable base. Each row represents a relationship between a gtfs_datasets record and a organizations record.
 
 fields:
   gtfs_dataset_id: Internal Airtable ID for a gtfs_datasets record
@@ -26,8 +22,8 @@ tests:
     - organization_id
 
 external_dependencies:
-- airtable_loader: california_transit_gtfs_datasets
-- airtable_loader: california_transit_organizations
+  - airtable_loader: california_transit_gtfs_datasets
+  - airtable_loader: california_transit_organizations
 ---
 
 -- follow the sandbox example for unnesting airtable data
