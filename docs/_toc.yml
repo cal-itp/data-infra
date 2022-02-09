@@ -49,8 +49,8 @@ parts:
     chapters:
       - file: airflow/overview
         sections:
-        - file: airflow/static-schedule-pipeline
         - file: airflow/local-setup
+        - file: airflow/static-schedule-pipeline
         - file: airflow/production-maintenance
         - file: airflow/dags-maintenance
       - file: kubernetes/README
