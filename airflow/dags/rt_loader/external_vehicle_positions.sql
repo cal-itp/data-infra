@@ -30,11 +30,11 @@ CREATE OR REPLACE EXTERNAL TABLE `gtfs_rt.vehicle_positions` (
         scheduleRelationship STRING
       >,
       position STRUCT <
-        latitude NUMERIC,
-        longitude NUMERIC,
-        bearing NUMERIC,
-        odometer INT64,
-        speed NUMERIC
+        latitude FLOAT64,
+        longitude FLOAT64,
+        bearing FLOAT64,
+        odometer FLOAT64,
+        speed FLOAT64
       >,
       currentStopSequence INT64,
       stopId STRING,
