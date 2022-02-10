@@ -9,6 +9,7 @@ parts:
       - file: analytics_welcome/overview
         sections:
         - file: analytics_welcome/what_is_calitp
+        - file: analytics_welcome/about_our_team
         - file: analytics_welcome/how_we_work
       - file: analytics_onboarding/overview
       - file: analytics_tools/overview
