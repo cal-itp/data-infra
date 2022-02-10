@@ -24,28 +24,10 @@ tests:
 external_dependencies:
   - airtable_loader: california_transit_gtfs_service_data
 ---
+{{
 
--- follow the sandbox example for unnesting airtable data
+  sql_airtable_mapping(
+    table1 = "gtfs_service_data",table2 = "", col1 = "reference_static_gtfs_service", col2 = ""
+  )
 
-WITH
-
-unnested_t1 AS (
-    SELECT
-        T1.gtfs_service_data_id as gtfs_service_data_id
-        , T1.name as gtfs_service_data_name
-        , CAST(reference_static_gtfs_service AS STRING) AS reference_static_gtfs_service_id
-    FROM
-        `airtable.california_transit_gtfs_service_data` T1
-        , UNNEST(JSON_VALUE_ARRAY(reference_static_gtfs_service)) reference_static_gtfs_service
-),
-t2 AS (
-    SELECT
-        T2.gtfs_service_data_id as reference_static_gtfs_service_id
-        , T2.name as reference_static_gtfs_service_name
-    FROM
-        `airtable.california_transit_gtfs_service_data` T2
-)
-
-SELECT *
-FROM unnested_t1
-LEFT JOIN t2 USING(reference_static_gtfs_service_id)
+}}

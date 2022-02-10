@@ -24,28 +24,10 @@ tests:
 external_dependencies:
   - airtable_loader: california_transit_services
 ---
+{{
 
--- follow the sandbox example for unnesting airtable data
+  sql_airtable_mapping(
+    table1 = "services",table2 = "", col1 = "paratransit_for", col2 = ""
+  )
 
-WITH
-
-unnested_t1 AS (
-    SELECT
-        T1.service_id as service_id
-        , T1.name as service_name
-        , CAST(paratransit_for AS STRING) AS paratransit_for_id
-    FROM
-        `airtable.california_transit_services` T1
-        , UNNEST(JSON_VALUE_ARRAY(paratransit_for)) paratransit_for
-),
-t2 AS (
-    SELECT
-        T2.service_id as paratransit_for_id
-        , T2.name as paratransit_for_name
-    FROM
-        `airtable.california_transit_services` T2
-)
-
-SELECT *
-FROM unnested_t1
-LEFT JOIN t2 USING(paratransit_for_id)
+}}

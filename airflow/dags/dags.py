@@ -6,6 +6,7 @@ from pathlib import Path
 from gusty import create_dag
 
 from calitp.templates import user_defined_macros, user_defined_filters
+import __macros__.generate_airtable_mapping_table
 
 # pointed at #data-infra-notify as of 2022-02-01
 CALITP_SLACK_URL_KEY = "CALITP_SLACK_URL"
@@ -151,6 +152,7 @@ for dag_directory in dag_directories:
             **user_defined_macros,
             "scd_join": scd_join,
             "sql_enrich_duplicates": sql_enrich_duplicates,
+            "sql_airtable_mapping": __macros__.generate_airtable_mapping_table.generate_sql,
         },
         user_defined_filters=user_defined_filters,
         default_args={

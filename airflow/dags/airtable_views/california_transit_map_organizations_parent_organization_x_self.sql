@@ -24,28 +24,10 @@ tests:
 external_dependencies:
   - airtable_loader: california_transit_organizations
 ---
+{{
 
--- follow the sandbox example for unnesting airtable data
+  sql_airtable_mapping(
+    table1 = "organizations",table2 = "", col1 = "parent_organization", col2 = ""
+  )
 
-WITH
-
-unnested_t1 AS (
-    SELECT
-        T1.organization_id as organization_id
-        , T1.name as organization_name
-        , CAST(parent_organization AS STRING) AS parent_organization_id
-    FROM
-        `airtable.california_transit_organizations` T1
-        , UNNEST(JSON_VALUE_ARRAY(parent_organization)) parent_organization
-),
-t2 AS (
-    SELECT
-        T2.organization_id as parent_organization_id
-        , T2.name as parent_organization_name
-    FROM
-        `airtable.california_transit_organizations` T2
-)
-
-SELECT *
-FROM unnested_t1
-LEFT JOIN t2 USING(parent_organization_id)
+}}
