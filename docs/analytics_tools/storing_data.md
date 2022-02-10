@@ -24,7 +24,7 @@ Our team uses Google Cloud Storage (GCS) buckets, specifically the `calitp-analy
 <br> - [Tabular Data](#tabular-data)
   <br> - [Parquet](#parquet)
   <br>- [CSV](#csv)
-<br> -[Geospatial Data](#geospatial-data)
+<br> - [Geospatial Data](#geospatial-data)
   <br> - [Geoparquet](#geoparquet)
   <br> - [Zipped shapefile](#zipped-shapefile)
   <br> - [GeoJSON](#geojson)
@@ -115,11 +115,11 @@ shared_utils.utils.geoparquet_gcs_export(gdf, "my-geoparquet")
 
 #### Zipped Shapefile
 
-Refer to the [data catalogs doc](./08_data_catalogs.md#google-cloud-storage) to list a zipped shapefile, and read in the zipped shapefile with the `intake` method. Zipped shapefiles saved in GCS cannot be read in directly using `geopandas`.
+Refer to the [data catalogs doc](catalogue-cloud-storage) to list a zipped shapefile, and read in the zipped shapefile with the `intake` method. Zipped shapefiles saved in GCS cannot be read in directly using `geopandas`.
 
 #### GeoJSON
 
-Refer to the [data catalogs doc](./08_data_catalogs.md#google-cloud-storage) to list a GeoJSON, and read in the GeoJSON with the `intake` method. GeoJSONs saved in GCS cannot be read in directly using `geopandas`.
+Refer to the [data catalogs doc](catalogue-cloud-storage) to list a GeoJSON, and read in the GeoJSON with the `intake` method. GeoJSONs saved in GCS cannot be read in directly using `geopandas`.
 
 (in-gcs)=
 ## Uploading data in Google Cloud Storage

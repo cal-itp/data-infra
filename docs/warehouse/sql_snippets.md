@@ -12,9 +12,8 @@ kernelspec:
   language: python
   name: python3
 ---
-
-
-# SQL Snippets (WIP)
+(helpful-sql-snippets)=
+# Helpful SQL Snippets
 
 ## Fetching historical data for specific dates
 

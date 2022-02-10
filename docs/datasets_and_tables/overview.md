@@ -13,8 +13,8 @@ kernelspec:
   name: python3
 ---
 (datasets-tables)=
-# Datasets & Tables (WIP)
-
+# Datasets & Tables
+Use the links below to navigate to pages that provide more information on individual datasets and tables.
 | page | description | datasets |
 | ---- | ----------- | -------- |
 | [GTFS Schedule](./gtfs_schedule.md) | GTFS Schedule data for the current day | `gtfs_schedule`, `gtfs_schedule_history`, `gtfs_schedule_type2` |

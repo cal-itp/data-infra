@@ -12,7 +12,7 @@ kernelspec:
   language: python
   name: python3
 ---
-
+(metric-views)=
 # Metric Views
 
 A metric table (or view) is a table that calculates meaningful measures across time.
