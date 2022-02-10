@@ -32,7 +32,9 @@ def main(execution_date, **kwargs):
     # Note that raw RT data is currently stored in the production bucket,
     # and not copied to the staging bucket
     prefix_path_schedule = f"{get_bucket()}/schedule/{execution_date}"
-    prefix_path_rt = f"gtfs-data/rt/{date_string}T00:00:*"
+
+    # This prefix limits the validation to only 1 hour of data currently
+    prefix_path_rt = f"gtfs-data/rt/{date_string}T00:*"
 
     params = raw_params.assign(
         gtfs_schedule_path=lambda d: prefix_path_schedule
@@ -48,8 +50,8 @@ def main(execution_date, **kwargs):
         + "/*",
     )
 
+    path = f"rt-processed/calitp_validation_params/{date_string}.csv"
+    print(f"saving {params.shape[0]} validation params to {path}")
     save_to_gcfs(
-        params.to_csv(index=False).encode(),
-        f"rt-processed/calitp_validation_params/{date_string}.csv",
-        use_pipe=True,
+        params.to_csv(index=False).encode(), path, use_pipe=True,
     )

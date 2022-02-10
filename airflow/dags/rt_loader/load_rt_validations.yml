@@ -1,4 +1,3 @@
-# Note that this task currently only validates feed 126 as a proof of concept.
 operator: 'operators.PodOperator'
 name: 'gtfs-rt-validation'
 image: 'ghcr.io/cal-itp/gtfs-rt-validator-api:v0.0.2'
@@ -10,13 +9,13 @@ arguments:
   - |
     from gtfs_rt_validator_api import validate_gcs_bucket_many
     validate_gcs_bucket_many(
-        "cal-itp-data-infra",
-        "cloud",
-        "gs://{{get_bucket()}}/rt-processed/calitp_validation_params/{{execution_date.to_date_string()}}.csv",
+        project_id="cal-itp-data-infra",
+        token="cloud",
+        param_csv="gs://{{get_bucket()}}/rt-processed/calitp_validation_params/{{execution_date.to_date_string()}}.csv",
         results_bucket="gs://calitp-py-ci/gtfs-rt-validator-api/test-pipeline",
         verbose=True,
         aggregate_counts=True,
-        status_result_path="gs://calitp-py-ci/gtfs-rt-validator-api/test-pipeline/status.json"
+        status_result_path="gs://calitp-py-ci/gtfs-rt-validator-api/test-pipeline/status.json",
     )
 
 is_delete_operator_pod: true
