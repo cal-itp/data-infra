@@ -28,7 +28,7 @@ external_dependencies:
     -- service and gtfs_dataset are 1:1 foreign key fields
     -- but they export as an array from airtable
     -- turn them into a string for joining
-    REPLACE(REPLACE(REPLACE(services, "'",""), "[", ""), "]", "") services,
-    REPLACE(REPLACE(REPLACE(gtfs_dataset, "'",""), "[", ""), "]", "") gtfs_dataset,
+    JSON_VALUE_ARRAY(services) services,
+    JSON_VALUE_ARRAY(gtfs_dataset) gtfs_dataset,
     category
   FROM `airtable.california_transit_gtfs_service_data`
