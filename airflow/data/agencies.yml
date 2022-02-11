@@ -514,9 +514,9 @@ foothill-transit:
   agency_name: Foothill Transit
   feeds:
     - gtfs_schedule_url: https://foothilltransit.rideralerts.com/myStop/GTFS-Zip.ashx
-      gtfs_rt_vehicle_positions_url: https://foothilltransit.rideralerts.com/myStop/GTFS-Realtime.ashx?Type=VehiclePosition
-      gtfs_rt_service_alerts_url: https://foothilltransit.rideralerts.com/myStop/GTFS-Realtime.ashx?Type=Alert
-      gtfs_rt_trip_updates_url: https://foothilltransit.rideralerts.com/myStop/GTFS-Realtime.ashx?Type=TripUpdate
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
   itp_id: 112
 fresno-area-express:
   agency_name: Fresno Area Express
