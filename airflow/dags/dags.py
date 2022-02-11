@@ -6,9 +6,7 @@ from pathlib import Path
 from gusty import create_dag
 
 from calitp.templates import user_defined_macros, user_defined_filters
-import __macros__.sql_airtable_generate_mapping_table
-import __macros__.sql_gtfs_schedule_scd_join
-import __macros__.sql_payments_enrich_duplicates
+import macros
 
 # pointed at #data-infra-notify as of 2022-02-01
 CALITP_SLACK_URL_KEY = "CALITP_SLACK_URL"
@@ -58,12 +56,7 @@ for dag_directory in dag_directories:
         task_group_defaults={"tooltip": "this is a default tooltip"},
         wait_for_defaults={"retries": 24, "check_existence": True, "timeout": 10 * 60},
         latest_only=False,
-        user_defined_macros={
-            **user_defined_macros,
-            "scd_join": __macros__.sql_gtfs_schedule_scd_join.scd_join,
-            "sql_enrich_duplicates": __macros__.sql_payments_enrich_duplicates.sql_enrich_duplicates,
-            "sql_airtable_mapping": __macros__.sql_airtable_generate_mapping_table.generate_sql,
-        },
+        user_defined_macros={**user_defined_macros, **macros.data_infra_macros},
         user_defined_filters=user_defined_filters,
         default_args={
             "on_failure_callback": log_failure_to_slack,
