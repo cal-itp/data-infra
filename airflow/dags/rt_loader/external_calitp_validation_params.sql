@@ -11,7 +11,7 @@ fields:
     every individual RT file we store.
 ---
 
-CREATE OR REPLACE EXTERNAL TABLE gtfs_rt.validation_service_alerts (
+CREATE OR REPLACE EXTERNAL TABLE gtfs_rt.calitp_validation_params (
     calitp_itp_id INT64,
     calitp_url_number INT64,
     calitp_extracted_at DATE,
