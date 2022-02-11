@@ -1,8 +1,0 @@
-operator: operators.AirtableToWarehouseOperator
-
-air_base_id: appPnJWrQ7ui4UmIl
-air_table_name: "Service - Component"
-gcs_path: airtable/california-transit/
-table_name: airtable.california_transit_service_component
-
-id_name: service_component_id
