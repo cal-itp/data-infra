@@ -513,7 +513,7 @@ folsom-stage-line:
 foothill-transit:
   agency_name: Foothill Transit
   feeds:
-    - gtfs_schedule_url: http://foothilltransit.org/gtfs/foothilltransit-ca-us.zip
+    - gtfs_schedule_url: https://foothilltransit.rideralerts.com/myStop/GTFS-Zip.ashx
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
