@@ -20,7 +20,10 @@
 
 # gtfs rt
 /airflow/dags/gtfs*/*                   @lauriemerrell @atvaccaro
-/airflow/dags/rt*/*                     @lauriemerrell @evansiroky
+/airflow/dags/rt*/*                     @lauriemerrell @evansiroky @atvaccaro
+
+# airtable
+/airflow/dags/airtable*/*               @lauriemerrell
 
 # devops GitHub workflows
 /.github/workflows/service-build.yml    @lottspot @atvaccaro
