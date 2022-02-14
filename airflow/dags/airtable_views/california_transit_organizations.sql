@@ -19,8 +19,8 @@ tests:
   check_unique:
     - organization_id
 
-external_dependencies:
-  - airtable_loader: california_transit_organizations
+dependencies:
+  - dummy_airtable_loader
 ---
 -- roles is a multi-select field in airtable
 -- turn it into a string that's comma-delimited

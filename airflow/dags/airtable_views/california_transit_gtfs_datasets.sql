@@ -15,8 +15,8 @@ tests:
   check_unique:
     - gtfs_dataset_id
 
-external_dependencies:
-  - airtable_loader: california_transit_gtfs_datasets
+dependencies:
+  - dummy_airtable_loader
 ---
 
 SELECT

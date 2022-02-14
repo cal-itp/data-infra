@@ -1,0 +1,4 @@
+operator: airflow.operators.dummy_operator.DummyOperator
+
+external_dependencies:
+  - airtable_loader: all
