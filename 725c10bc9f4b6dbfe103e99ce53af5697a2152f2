@@ -1,0 +1,44 @@
+[helm:monitoring=kubernetes/apps/charts/prometheus]
+
+diff -u -N /tmp/LIVE-3992018764/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-prometheus-alertmanager /tmp/MERGED-3391522384/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-prometheus-alertmanager
+--- /tmp/LIVE-3992018764/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-prometheus-alertmanager	2022-02-15 15:02:03.053612695 +0000
++++ /tmp/MERGED-3391522384/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-prometheus-alertmanager	2022-02-15 15:02:03.053612695 +0000
+@@ -29,10 +29,16 @@
+           f:component: {}
+           f:heritage: {}
+           f:release: {}
+-      f:rules: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-15T14:55:01Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:02:03Z"
+   name: monitoring-prometheus-alertmanager
+   resourceVersion: "186867147"
+   uid: 2e37813c-ae0a-4369-99a0-31b3cad4034f
+diff -u -N /tmp/LIVE-3992018764/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-prometheus-pushgateway /tmp/MERGED-3391522384/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-prometheus-pushgateway
+--- /tmp/LIVE-3992018764/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-prometheus-pushgateway	2022-02-15 15:02:03.285623468 +0000
++++ /tmp/MERGED-3391522384/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-prometheus-pushgateway	2022-02-15 15:02:03.285623468 +0000
+@@ -29,10 +29,16 @@
+           f:component: {}
+           f:heritage: {}
+           f:release: {}
+-      f:rules: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-15T14:55:01Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:02:03Z"
+   name: monitoring-prometheus-pushgateway
+   resourceVersion: "186867145"
+   uid: 5eb591b2-40c4-4f76-928d-0a8454c54d95
