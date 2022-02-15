@@ -56,6 +56,7 @@ docker-compose up
 ```
 
 To access the web UI, visit `http://localhost:8080`.
+The default login and password for airflow's image are both "airflow".
 
 To run a DAG, you can either test it via the web UI or run a one-off with:
 

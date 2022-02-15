@@ -1,19 +1,22 @@
-# Note that this task currently only validates feed 126 as a proof of concept.
 operator: 'operators.PodOperator'
 name: 'gtfs-rt-validation'
-image: 'ghcr.io/cal-itp/gtfs-rt-api:v0.0.1'
+image: 'ghcr.io/cal-itp/gtfs-rt-validator-api:v0.0.3'
 cmds:
-  - gtfs-rt-validator-api
+  - python3
 
 arguments:
-  - validate-gcs-bucket
-  - cal-itp-data-infra
-  - cloud
-  - "gs://calitp-py-ci/gtfs-rt-validator-api/gtfs_schedule_126"
-  - "--gtfs-rt-glob-path"
-  - "gs://calitp-py-ci/gtfs-rt-validator-api/gtfs_rt_126/2021*/126/0/*"
-  - "--results-bucket"
-  - "gs://gtfs-data/rt-processed/validation"
+  - "-c"
+  - |
+    from gtfs_rt_validator_api import validate_gcs_bucket_many
+    validate_gcs_bucket_many(
+        project_id="cal-itp-data-infra",
+        token="cloud",
+        param_csv="gs://{{get_bucket()}}/rt-processed/calitp_validation_params/{{execution_date.to_date_string()}}.csv",
+        results_bucket="gs://{{get_bucket()}}/gtfs-rt-validator-api/test-pipeline",
+        verbose=True,
+        aggregate_counts=True,
+        status_result_path="gs://{{get_bucket()}}/gtfs-rt-validator-api/test-pipeline/status.json",
+    )
 
 is_delete_operator_pod: true
 get_logs: true
@@ -22,3 +25,4 @@ dependencies:
   - external_validation_service_alerts
   - external_validation_trip_updates
   - external_validation_vehicle_positions
+  - create_validation_params
