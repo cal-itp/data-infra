@@ -6,7 +6,7 @@
 # external_dependencies:
 #   - gtfs_loader: calitp_feed_status
 # ---
-
+import pandas as pd
 from calitp import query_sql, save_to_gcfs
 from calitp.config import get_bucket
 
@@ -36,18 +36,24 @@ def main(execution_date, **kwargs):
     # This prefix limits the validation to only 1 hour of data currently
     prefix_path_rt = f"gtfs-data/rt/{date_string}T00:*"
 
-    params = raw_params.assign(
-        gtfs_schedule_path=lambda d: prefix_path_schedule
-        + "/"
-        + d.calitp_itp_id.astype(str)
-        + "_"
-        + d.calitp_url_number.astype(str),
-        gtfs_rt_glob_path=lambda d: prefix_path_rt
-        + "/"
-        + d.calitp_itp_id.astype(str)
-        + "/"
-        + d.calitp_url_number.astype(str)
-        + "/*",
+    raw_params["entity"] = [
+        ("service_alerts", "trip_updates", "vehicle_positions")
+    ] * len(raw_params)
+    params = raw_params.explode("entity").reset_index(drop=True)
+
+    params = pd.concat(
+        [
+            params,
+            params.apply(
+                lambda row: {
+                    "gtfs_schedule_path": f"{prefix_path_schedule}/{row.calitp_itp_id}_{row.calitp_url_number}",
+                    "gtfs_rt_glob_path": f"{prefix_path_rt}/{row.calitp_itp_id}/{row.calitp_url_number}/*{row.entity}*",
+                },
+                axis="columns",
+                result_type="expand",
+            ),
+        ],
+        axis="columns",
     )
 
     path = f"rt-processed/calitp_validation_params/{date_string}.csv"
