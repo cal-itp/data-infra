@@ -1,0 +1,4 @@
+[holomapping]
+holosource = "jarvus-cluster-template=>k8s-blueprint"
+root       = "loki-stack/helm-chart"
+files      = "**"
