@@ -13,7 +13,8 @@ kernelspec:
   name: python3
 ---
 (datasets-tables)=
-# Datasets & Tables (WIP)
+# Datasets & Tables
+Use the links below to navigate to pages that provide more information on individual datasets and tables.
 
 | page | description | datasets |
 | ---- | ----------- | -------- |
