@@ -1,0 +1,45 @@
+[helm:postgresql-backup=kubernetes/apps/charts/postgresql-backup]
+
+diff -u -N /tmp/LIVE-106805948/batch.v1beta1.CronJob.metabase-preprod.postgresql-backup /tmp/MERGED-379911415/batch.v1beta1.CronJob.metabase-preprod.postgresql-backup
+--- /tmp/LIVE-106805948/batch.v1beta1.CronJob.metabase-preprod.postgresql-backup	2022-01-31 21:19:12.812806246 +0000
++++ /tmp/MERGED-379911415/batch.v1beta1.CronJob.metabase-preprod.postgresql-backup	2022-01-31 21:19:12.812806246 +0000
+@@ -90,7 +90,6 @@
+                       k:{"name":"RESTIC_REPOSITORY"}:
+                         .: {}
+                         f:name: {}
+-                        f:value: {}
+                     f:envFrom: {}
+                     f:image: {}
+                     f:imagePullPolicy: {}
+@@ -133,6 +132,22 @@
+     manager: kube-controller-manager
+     operation: Update
+     time: "2022-01-31T21:15:02Z"
++  - apiVersion: batch/v1beta1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:spec:
++        f:jobTemplate:
++          f:spec:
++            f:template:
++              f:spec:
++                f:containers:
++                  k:{"name":"client"}:
++                    f:env:
++                      k:{"name":"RESTIC_REPOSITORY"}:
++                        f:value: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-01-31T21:19:12Z"
+   name: postgresql-backup
+   namespace: metabase-preprod
+   resourceVersion: "176711043"
+@@ -201,7 +216,7 @@
+                   key: POSTGRES_PASSWORD
+                   name: database-config
+             - name: RESTIC_REPOSITORY
+-              value: gs:calitp-infra-backups:/metabase-database-preprod
++              value: gs:calitp-backups-preprod:/metabase
+             envFrom:
+             - secretRef:
+                 name: database-backup
