@@ -74,12 +74,12 @@ To import this dataset as a dataframe within the notebook:
 ```python
 df = catalog.ca_open_data.cdcr_population_covid_tracking.read()
 ```
-
+(catalogue-cloud-storage)=
 ### Google Cloud Storage
 
 When putting GCS files into the catalog, note that geospatial datasets (zipped shapefiles, GeoJSONs) require the additional `use_fsspec: true` argument compared to tabular datasets (parquets, CSVs). Geoparquets, the exception, are catalogued like tabular datasets.
 
-Opening geospatial datasets through `intake` is the easiest way to import these datasets within a Jupyter Notebook. Otherwise, `geopandas` can read the geospatial datasets that are locally saved or downloaded first from the bucket, but not directly with a GCS file path. Refer to [storing data](./storing_data.md#setting-up-google-authentication) to set up your Google authentication.
+Opening geospatial datasets through `intake` is the easiest way to import these datasets within a Jupyter Notebook. Otherwise, `geopandas` can read the geospatial datasets that are locally saved or downloaded first from the bucket, but not directly with a GCS file path. Refer to [storing data](connecting-to-warehouse) to set up your Google authentication.
 
 ```yaml
 lehd_federal_jobs_by_tract:
