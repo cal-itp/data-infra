@@ -1,0 +1,106 @@
+[helm:postgresql-backup=kubernetes/apps/charts/postgresql-backup]
+
+diff -u -N /tmp/LIVE-567279973/batch.v1beta1.CronJob.metabase-preprod.postgresql-backup /tmp/MERGED-1775920980/batch.v1beta1.CronJob.metabase-preprod.postgresql-backup
+--- /tmp/LIVE-567279973/batch.v1beta1.CronJob.metabase-preprod.postgresql-backup	2022-01-31 19:31:27.648703276 +0000
++++ /tmp/MERGED-1775920980/batch.v1beta1.CronJob.metabase-preprod.postgresql-backup	2022-01-31 19:31:27.648703276 +0000
+@@ -0,0 +1,100 @@
++apiVersion: batch/v1beta1
++kind: CronJob
++metadata:
++  creationTimestamp: "2022-01-31T19:31:27Z"
++  labels:
++    name: database-backup
++  managedFields:
++  - apiVersion: batch/v1beta1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:name: {}
++      f:spec:
++        f:concurrencyPolicy: {}
++        f:failedJobsHistoryLimit: {}
++        f:jobTemplate:
++          f:spec:
++            f:activeDeadlineSeconds: {}
++            f:template:
++              f:spec:
++                f:containers:
++                  k:{"name":"client"}:
++                    .: {}
++                    f:args: {}
++                    f:command: {}
++                    f:image: {}
++                    f:imagePullPolicy: {}
++                    f:name: {}
++                    f:resources: {}
++                    f:terminationMessagePath: {}
++                    f:terminationMessagePolicy: {}
++                f:dnsPolicy: {}
++                f:restartPolicy: {}
++                f:schedulerName: {}
++                f:securityContext: {}
++                f:terminationGracePeriodSeconds: {}
++        f:schedule: {}
++        f:startingDeadlineSeconds: {}
++        f:successfulJobsHistoryLimit: {}
++        f:suspend: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-01-31T19:31:27Z"
++  name: postgresql-backup
++  namespace: metabase-preprod
++  selfLink: /apis/batch/v1beta1/namespaces/metabase-preprod/cronjobs/postgresql-backup
++  uid: e61f24d0-9ca2-4a8f-9291-db068e9ed48e
++spec:
++  concurrencyPolicy: Forbid
++  failedJobsHistoryLimit: 1
++  jobTemplate:
++    metadata:
++      creationTimestamp: null
++    spec:
++      activeDeadlineSeconds: 7200
++      template:
++        metadata:
++          creationTimestamp: null
++        spec:
++          containers:
++          - args:
++            - |2
++
++              # snapshot current database
++              echo "Snapshotting Database"
++              pg_dumpall --clean \
++                | gzip --rsyncable \
++                | restic backup \
++                  --host metabase-preprod:postgresql-backup \
++                  --stdin \
++                  --stdin-filename pg_dumpall.sql.gz
++
++              # prune aged snapshots
++              echo "Pruning aged snapshots"
++              restic forget \
++                --host metabase-preprod:postgresql-backup \
++                --keep-last 36 \
++                --keep-daily 7 \
++                --keep-weekly 52
++            command:
++            - /bin/bash
++            - -c
++            image: ghcr.io/jarvusinnovations/restic-toolkit:latest
++            imagePullPolicy: Always
++            name: client
++            resources: {}
++            terminationMessagePath: /dev/termination-log
++            terminationMessagePolicy: File
++          dnsPolicy: ClusterFirst
++          restartPolicy: Never
++          schedulerName: default-scheduler
++          securityContext: {}
++          terminationGracePeriodSeconds: 30
++  schedule: 15 * * * *
++  startingDeadlineSeconds: 86400
++  successfulJobsHistoryLimit: 3
++  suspend: false
++status: {}
