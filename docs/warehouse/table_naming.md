@@ -12,7 +12,7 @@ kernelspec:
   language: python
   name: python3
 ---
-
+(warehouse-table-naming)=
 # Table Naming
 The warehouse puts tables that are ready for end-users into the [`views` dataset](/datasets_and_tables/views/).
 They are named using a convention loosely based off of the Kimball method for modeling data,
