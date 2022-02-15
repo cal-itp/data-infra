@@ -1,0 +1,44 @@
+[helm:postgresql-backup=kubernetes/apps/charts/postgresql-backup]
+
+diff -u -N /tmp/LIVE-1458180305/batch.v1beta1.CronJob.metabase-preprod.postgresql-backup /tmp/MERGED-1655639714/batch.v1beta1.CronJob.metabase-preprod.postgresql-backup
+--- /tmp/LIVE-1458180305/batch.v1beta1.CronJob.metabase-preprod.postgresql-backup	2022-01-31 20:07:59.908044704 +0000
++++ /tmp/MERGED-1655639714/batch.v1beta1.CronJob.metabase-preprod.postgresql-backup	2022-01-31 20:07:59.912044707 +0000
+@@ -48,7 +48,6 @@
+                 f:containers:
+                   k:{"name":"client"}:
+                     .: {}
+-                    f:args: {}
+                     f:command: {}
+                     f:env:
+                       .: {}
+@@ -89,6 +88,20 @@
+     manager: helm
+     operation: Update
+     time: "2022-01-31T19:58:24Z"
++  - apiVersion: batch/v1beta1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:spec:
++        f:jobTemplate:
++          f:spec:
++            f:template:
++              f:spec:
++                f:containers:
++                  k:{"name":"client"}:
++                    f:args: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-01-31T20:07:59Z"
+   name: postgresql-backup
+   namespace: metabase-preprod
+   resourceVersion: "176671461"
+@@ -110,6 +123,9 @@
+           - args:
+             - |2
+
++              echo printenv
++              printenv
++
+               # snapshot current database
+               echo "Snapshotting Database"
+               pg_dumpall --clean \
