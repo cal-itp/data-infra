@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CLOUDSDK_CORE_PROJECT: cal-itp-data-infra
+      GKE_NAME: data-infra-apps
+      GKE_REGION: us-west1
     steps:
 
       - name: Check out repo
@@ -23,7 +25,6 @@ jobs:
 
       - name: Setup kubeconfig
         run: |
-          source "$GITHUB_WORKSPACE/kubernetes/gke/config-cluster.sh"
           gcloud container clusters get-credentials "$GKE_NAME" --region "$GKE_REGION"
 
       - id: service-release
