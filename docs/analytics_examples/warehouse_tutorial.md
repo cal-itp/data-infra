@@ -708,7 +708,7 @@ tbl_stop_times = (
              )
 )
 # Grab the trips done on that day, for that agency
-siuba_all_day_stops = (
+siuba_all_day_stops_equation = (
     tbl.views.gtfs_schedule_fact_daily_trips()
     >> filter(_.calitp_itp_id == ITP_ID,
               _.service_date == SELECTED_DATE,
@@ -725,8 +725,8 @@ siuba_all_day_stops = (
               _.trip_key, _.trip_id, _.stop_id, _.arrival_time,
               _.stop_lat, _.stop_lon, _.stop_name,
              )
-    >> collect()
     )
+siuba_all_day_stops = siuba_all_day_stops_equation
 glue("siuba_all_day_stops_output", siuba_all_day_stops)
 ```
 
@@ -768,10 +768,7 @@ daily_stops = (
               _.trip_key, _.trip_id, _.stop_id, _.arrival_time,
               _.stop_lat, _.stop_lon, _.stop_name,
              )
-    >> collect()
     )
-daily_stops.head()
 ```
-```{glue:figure} siuba_all_day_stops_output
-```
+{glue:}`siuba_all_day_stops_output`
 ````
