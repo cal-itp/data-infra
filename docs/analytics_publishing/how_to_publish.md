@@ -1,4 +1,5 @@
-# Publishing Reports with Pull Requests (WIP)
+(publishing-with-pull-requests)=
+# Publishing Reports with Pull Requests
 
 Analysts have a variety of tools available to publish their final deliverables. With iterative work, analysts can implement certain best practices within these bounds to do as much as is programmatically practical. The workflow will look different depending on these factors:
 
