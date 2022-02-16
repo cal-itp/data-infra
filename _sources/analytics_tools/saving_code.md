@@ -75,6 +75,9 @@ Read more about the differences between `rebase` and `merge`:
 <br>
 
 #### Rebase
+Rebasing is an important tool to be familiar with and introduce into your workflow. The video and instructions below help to provide information on how to begin using it in your collaborations with the team.
+
+[Youtube - A Better Git Workflow with Rebase](https://www.youtube.com/watch?v=f1wnYdLEpgI)
 
 A rebase might be preferred, especially if all your work is contained on your branch, within your task's folder, and lots of activity is happening on `main`. You'd like to plop all your commits onto the most recent `main` branch, and have it appear as if all your work took place *after* those PRs were merged in.
 

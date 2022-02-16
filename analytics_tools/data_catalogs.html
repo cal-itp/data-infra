@@ -54,7 +54,7 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Introduction to the Warehouse (WIP)" href="../warehouse/overview.html" />
+    <link rel="next" title="Introduction to the Warehouse" href="../warehouse/overview.html" />
     <link rel="prev" title="Storing New Data" href="storing_data.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -125,17 +125,12 @@
   <ul>
    <li class="toctree-l2">
     <a class="reference internal" href="../analytics_welcome/what_is_calitp.html">
-     Cal-ITP Project Information (WIP)
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../analytics_welcome/about_our_team.html">
-     Team Members (WIP)
+     Cal-ITP Project Information
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../analytics_welcome/how_we_work.html">
-     How We Work (WIP)
+     How We Work
     </a>
    </li>
   </ul>
@@ -194,7 +189,7 @@
  </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../warehouse/overview.html">
-   Introduction to the Warehouse (WIP)
+   Introduction to the Warehouse
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
   <label for="toctree-checkbox-3">
@@ -224,14 +219,14 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../warehouse/sql_snippets.html">
-     SQL Snippets (WIP)
+     Helpful SQL Snippets
     </a>
    </li>
   </ul>
  </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../datasets_and_tables/overview.html">
-   Datasets &amp; Tables (WIP)
+   Datasets &amp; Tables
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
   <label for="toctree-checkbox-4">
@@ -300,7 +295,7 @@
  </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../analytics_publishing/overview.html">
-   How to Publish Analyses (WIP)
+   How to Publish Analyses
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
   <label for="toctree-checkbox-6">
@@ -310,7 +305,7 @@
   <ul>
    <li class="toctree-l2">
     <a class="reference internal" href="../analytics_publishing/how_to_publish.html">
-     Publishing Reports with Pull Requests (WIP)
+     Publishing Reports with Pull Requests
     </a>
    </li>
    <li class="toctree-l2">
@@ -737,9 +732,9 @@
 </div>
 </div>
 <div class="section" id="google-cloud-storage">
-<h3>Google Cloud Storage<a class="headerlink" href="#google-cloud-storage" title="Permalink to this headline">¶</a></h3>
+<span id="catalogue-cloud-storage"></span><h3>Google Cloud Storage<a class="headerlink" href="#google-cloud-storage" title="Permalink to this headline">¶</a></h3>
 <p>When putting GCS files into the catalog, note that geospatial datasets (zipped shapefiles, GeoJSONs) require the additional <code class="docutils literal notranslate"><span class="pre">use_fsspec:</span> <span class="pre">true</span></code> argument compared to tabular datasets (parquets, CSVs). Geoparquets, the exception, are catalogued like tabular datasets.</p>
-<p>Opening geospatial datasets through <code class="docutils literal notranslate"><span class="pre">intake</span></code> is the easiest way to import these datasets within a Jupyter Notebook. Otherwise, <code class="docutils literal notranslate"><span class="pre">geopandas</span></code> can read the geospatial datasets that are locally saved or downloaded first from the bucket, but not directly with a GCS file path. Refer to <a class="reference external" href="./storing_data.md#setting-up-google-authentication">storing data</a> to set up your Google authentication.</p>
+<p>Opening geospatial datasets through <code class="docutils literal notranslate"><span class="pre">intake</span></code> is the easiest way to import these datasets within a Jupyter Notebook. Otherwise, <code class="docutils literal notranslate"><span class="pre">geopandas</span></code> can read the geospatial datasets that are locally saved or downloaded first from the bucket, but not directly with a GCS file path. Refer to <a class="reference internal" href="notebooks.html#connecting-to-warehouse"><span class="std std-ref">storing data</span></a> to set up your Google authentication.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">lehd_federal_jobs_by_tract</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">parquet</span><span class="w"></span>
 <span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LEHD Workplace Area Characteristics (WAC) federal jobs by census tract.</span><span class="w"></span>
@@ -813,7 +808,7 @@
     <a class='right-next' id="next-link" href="../warehouse/overview.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Introduction to the Warehouse (WIP)</p>
+        <p class="prev-next-title">Introduction to the Warehouse</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
