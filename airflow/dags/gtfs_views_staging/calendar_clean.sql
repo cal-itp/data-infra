@@ -4,9 +4,10 @@ dst_table_name: "gtfs_schedule_type2.calendar_clean"
 dependencies:
   - type2_loaded
 ---
-
+-- Trim service_id for 273, 271 specific issue
 SELECT
-    * EXCEPT(start_date, end_date, calitp_deleted_at),
+    * EXCEPT(start_date, end_date, calitp_deleted_at, service_id),
+    TRIM(service_id) as service_id,
     PARSE_DATE("%Y%m%d",start_date) AS start_date,
     PARSE_DATE("%Y%m%d",end_date) AS end_date,
     FARM_FINGERPRINT(CONCAT(CAST(calitp_hash AS STRING), "___", CAST(calitp_extracted_at AS STRING)))

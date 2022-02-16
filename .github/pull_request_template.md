@@ -11,7 +11,7 @@ Please write out a short description of what this pull request does. Also, pleas
 
 - [ ] Include this section whenever any change to the `airflow/data/agencies.yml` file occurs, otherwise please omit this section.
 - [ ] Manually made sure any new feeds have `itp_id`s that are not duplicative
-- [ ] Mannually confirmed URIs are valid (to be automated in future per #908)
+- [ ] Confirmed URIs are valid (the `move DAGs to GCS folder` GitHub action should successfully pass)
 - [ ] Made sure the Airtable database has consistent information
 - [ ] Fill out the following section describing what feeds were added/updated
 

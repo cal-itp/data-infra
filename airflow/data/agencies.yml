@@ -5,10 +5,10 @@ ac-transit:
       gtfs_rt_vehicle_positions_url: https://api.actransit.org/gtfsrt/vehicles?token={{ AC_TRANSIT_API_KEY }}
       gtfs_rt_service_alerts_url: https://api.actransit.org/gtfsrt/alerts?token={{ AC_TRANSIT_API_KEY }}
       gtfs_rt_trip_updates_url: https://api.actransit.org/gtfsrt/tripupdates?token={{ AC_TRANSIT_API_KEY }}
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=AM
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=AM
+    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=AC
+      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=AC
       gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=AM
+      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=AC
   itp_id: 4
 alhambra-community-transit:
   agency_name: Alhambra Community Transit
@@ -513,7 +513,7 @@ folsom-stage-line:
 foothill-transit:
   agency_name: Foothill Transit
   feeds:
-    - gtfs_schedule_url: http://foothilltransit.org/gtfs/foothilltransit-ca-us.zip
+    - gtfs_schedule_url: https://foothilltransit.rideralerts.com/myStop/GTFS-Zip.ashx
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1090,9 +1090,11 @@ san-diego-metropolitan-transit-system:
   agency_name: San Diego Metropolitan Transit System
   feeds:
     - gtfs_schedule_url: https://www.sdmts.com/google_transit_files/google_transit.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://realtime.sdmts.com/api/api/gtfs_realtime/vehicle-positions-for-agency/MTS.pb?key={{ SD_MTS_VP_TU_API_KEY}}
+      gtfs_rt_service_alerts_url: http://app.mecatran.com/utw/ws/gtfsfeed/alerts/sdmts?apiKey={{ SD_MTS_SA_API_KEY}}
+      # This is commented out because we think we are getting 500 errors from the sdmts.com API when there are two simultaneous HTTP connections with the same API key
+      # We want vehicle positions to keep going
+      gtfs_rt_trip_updates_url: null # https://realtime.sdmts.com/api/api/gtfs_realtime/trip-updates-for-agency/MTS.pb?key={{ SD_MTS_VP_TU_API_KEY}}
   itp_id: 278
 san-francisco-bay-ferry:
   agency_name: San Francisco Bay Ferry

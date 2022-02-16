@@ -17,6 +17,7 @@ This project is developed using docker and docker-compose. Before getting starte
 First, if you're on linux, you'll need to make sure that the UID and GID of the container match, to do so, run
 
 ```console
+cd airflow (if you are not already in the airflow directory)
 mkdir ./dags ./logs ./plugins
 echo -e "AIRFLOW_UID=$(id -u)\nAIRFLOW_GID=0" > .env
 ```
@@ -37,7 +38,7 @@ To run the gtfs_downloader dags, it is required to generate a yml file of the ag
 secrets filled in. To run this, do the following:
 
 1. Setup a virtual environment within the `script` folder by running `python -m venv .venv` in the `script` folder.
-2. Install the needed requirements via `pip install -r requirements.txt`
+2. Install the needed requirements via `pip install -r requirements.txt` (the requirements in `script`)
 3. Copy `airflow/data/example-secrets.csv` to `airflow/data/secrets.csv` and fill in the secret keys as needed
 4. run `python yml_convert.py ../airflow/data/agencies.yml ../airflow/data/agencies.filled.yml ../airflow/data/secrets.csv`
 5. Copy `/airflow/data/agencies.yml` to `/airflow/data/agencies_raw.yml`
@@ -55,6 +56,7 @@ docker-compose up
 ```
 
 To access the web UI, visit `http://localhost:8080`.
+The default login and password for airflow's image are both "airflow".
 
 To run a DAG, you can either test it via the web UI or run a one-off with:
 
@@ -83,3 +85,5 @@ Note that the following variables were set manually in cloud composer:
 * `SENDGRID_MAIL_FROM`
 * `POD_CLUSTER_NAME` - name of the kubernetes cluster
 * `POD_LOCATION` - location of cluster (e.g. us-west-2a)
+* `CALITP_SLACK_URL` - slack webhook api url, for posting errors to a channel.
+  This variable can be set in your .env file when developing locally.

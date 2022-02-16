@@ -1,3 +1,4 @@
+(intro-analytics-tools)=
 # Introduction to Analytics Tools
 Welcome to the Analytics Tools section! If you're here, you're ready to begin conducting analyses.
 

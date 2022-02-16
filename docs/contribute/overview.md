@@ -1,7 +1,11 @@
-# Editing Documentation
+(contribute-overview)=
+# Getting Started
 
-These documents are currently editable on github.
-Click the github icon in the top right, and "suggest edit" to edit a page.
+The pages in this section outline the conventions we follow for making changes to our documentation as well as options for including various forms of content.
 
-The pages in this section explain the conventions we follow for making changes,
-and the different options for including things like code in the docs.
+Contributing to our docs is encouraged! If you see content that needs updating or
+recognize missing information please use the information found in this chapter to contribute.
+
+* [Best Practices](bp-reference)
+* [Submitting Changes](submitting-changes)
+* [Common Content](content-types)

@@ -53,7 +53,16 @@ x-airflow-common:
     AIRFLOW__CORE__BASE_LOG_FOLDER: /opt/airflow/gcs/logs
     AIRFLOW__CORE__PLUGINS_FOLDER: /opt/airflow/gcs/plugins
     AIRFLOW__WEBSERVER__RELOAD_ON_PLUGIN_CHANGE: 'true'
+
+    # this option prevents a DAG from trying to run all dagruns back to its
+    # start date. this lets you it spin up docker, unpause a dag, and just
+    # get the latest run. Or pause a DAG for a long time, and not have it
+    # try to run on a million dates when unpaused.
+    AIRFLOW__SCHEDULER__CATCHUP_BY_DEFAULT: 'false'
+
+
     CALITP_BQ_MAX_BYTES: 10000000000
+    CALITP_SLACK_URL: ${CALITP_SLACK_URL}
 
     # connections - required to allow local testing of pod operators
     # see https://stackoverflow.com/a/55064944/1144523

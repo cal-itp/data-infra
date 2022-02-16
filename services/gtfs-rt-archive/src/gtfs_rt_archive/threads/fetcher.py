@@ -66,6 +66,7 @@ class PoolFetcher(threading.Thread):
                 request.add_header(key, value)
             txn["input_stream"] = urllib.request.urlopen(request)
         except (urllib.error.URLError, urllib.error.HTTPError) as e:
+            txn["input_stream"] = None
             self.logger.warning(
                 "[txn {}] len(headers)={} error fetching url {}: {}".format(
                     txn["id"], len(headers), url, e

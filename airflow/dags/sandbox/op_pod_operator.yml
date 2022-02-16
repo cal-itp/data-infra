@@ -1,0 +1,7 @@
+operator: 'operators.PodOperator'
+name: 'pod-sandbox-op'
+image: 'docker/whalesay'
+cmds: ["cowsay", "boo"]
+is_delete_operator_pod: true
+get_logs: true
+provide_context: true
