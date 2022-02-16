@@ -54,15 +54,16 @@ class ThreadPool(threading.Thread):
                 self.spawn(name)
 
     def run(self):
-        """Perform a reconcile() on each reload event emitted by a YamlMapper"""
+        """Perform a reconcile() on every reload and tick event"""
         self.evtbus.add_listener(self.name, "reload", self.evtq)
+        self.evtbus.add_listener(self.name, "tick", self.evtq)
 
         self.reconcile()
         evt = self.evtq.get()
         while evt is not None:
 
             evt_name = evt[0]
-            if evt_name == "reload":
+            if evt_name in ("tick", "reload"):
                 self.reconcile()
             evt = self.evtq.get()
 
