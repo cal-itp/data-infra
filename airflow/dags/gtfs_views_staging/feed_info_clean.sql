@@ -5,7 +5,9 @@ dependencies:
   - type2_loaded
 ---
 
-SELECT
+-- select distinct because of Foothill Transit feed with exact duplicates
+-- duplicates here result in duplicate feed_keys downstream
+SELECT DISTINCT
     * EXCEPT(feed_start_date, feed_end_date, calitp_deleted_at),
     PARSE_DATE("%Y%m%d",feed_start_date) AS feed_start_date,
     PARSE_DATE("%Y%m%d",feed_end_date) AS feed_end_date,
