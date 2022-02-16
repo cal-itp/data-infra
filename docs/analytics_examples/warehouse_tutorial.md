@@ -662,3 +662,118 @@ from siuba import *
 ```
 
 ````
+
+## More Complex Query Examples
+
+### Introduction
+
+The queries represented in the following tutorial are as follows:
+* [**All the Stops and Arrival Times for an Operator on a Given Day**](stop-arrivals-operator)
+* [**Assemble a Route Shapefile**](#assemble-a-route-shapefile)
+* [**Filter with Lists and Unpacking**](#filter-with-lists-and-unpacking)
+
+### Python Libraries to Import
+
+```{code-cell}
+import geopandas as gpd
+import os
+import pandas as pd
+import shapely
+os.environ["CALITP_BQ_MAX_BYTES"] = str(50_000_000_000)
+import calitp
+from calitp.tables import tbl
+from siuba import *
+pd.set_option("display.max_rows", 10)
+SELECTED_DATE = "2021-09-01"
+ITP_ID = 278 # San Diego Metropolitan Transit System
+```
+
+(all-stops-arrivals)=
+### 6. All the Stops and Arrival Times for an Operator on a Given Day
+As a simple example, we will filter to just the San Diego Metropolitan Transit System and grab 1 day’s worth of data. We want all the trips, stops, arrival times, and stop geometry (lat/lon).
+
+Tables used:
+1. `views.gtfs_schedule_dim_stop_times`: all stop arrival times for all operators, need to subset to particular date
+1. `views.gtfs_schedule_fact_daily_trips`: all trips for all operators, need to subset to particular date
+1. `views.gtfs_schedule_dim_stops`: lat/lon for all stops, need to subset to interested stops
+
+Here, all the trips for one operator, for a particular day, is joined with all the stops that occur on all the trips. Then, the stops have their lat/lon information attached.
+
+COPY SQL CODE CELL FROM ABOVE HERE
+
+```{code-cell}
+:tags: [remove-cell]
+tbl_stop_times = (
+    tbl.views.gtfs_schedule_dim_stop_times()
+    >> filter(_.calitp_extracted_at <= SELECTED_DATE,
+              _.calitp_deleted_at > SELECTED_DATE,
+              _.calitp_itp_id == ITP_ID
+             )
+)
+# Grab the trips done on that day, for that agency
+a = (
+    tbl.views.gtfs_schedule_fact_daily_trips()
+    >> filter(_.calitp_itp_id == ITP_ID,
+              _.service_date == SELECTED_DATE,
+              _.is_in_service == True)
+    # Join the trip to the stop time
+    # For a given bus route (left df), attach all the stops (right df)
+    >> left_join(_, tbl_stop_times,
+              # also added url number to the join keys ----
+             ["calitp_itp_id", "calitp_url_number", "trip_id"])
+    >> inner_join(_, tbl.views.gtfs_schedule_dim_stops(),
+                 ["calitp_itp_id", "stop_id"])
+    >> select(_.itp_id == _.calitp_itp_id,
+              _.date == _.service_date,
+              _.trip_key, _.trip_id, _.stop_id, _.arrival_time,
+              _.stop_lat, _.stop_lon, _.stop_name,
+             )
+    )
+daily_stops.head()
+glue("my_variable", a)
+```
+
+````{tabbed} Metabase
+blank block
+````
+
+````{tabbed} SQL
+```python
+# Allows us to query SQL in the JupyterLab notebook
+# Use this in combination with '%%sql', as seen below
+import calitp.magics
+```
+````
+````{tabbed} siuba
+```python
+tbl_stop_times = (
+    tbl.views.gtfs_schedule_dim_stop_times()
+    >> filter(_.calitp_extracted_at <= SELECTED_DATE,
+              _.calitp_deleted_at > SELECTED_DATE,
+              _.calitp_itp_id == ITP_ID
+             )
+)
+# Grab the trips done on that day, for that agency
+daily_stops = (
+    tbl.views.gtfs_schedule_fact_daily_trips()
+    >> filter(_.calitp_itp_id == ITP_ID,
+              _.service_date == SELECTED_DATE,
+              _.is_in_service == True)
+    # Join the trip to the stop time
+    # For a given bus route (left df), attach all the stops (right df)
+    >> left_join(_, tbl_stop_times,
+              # also added url number to the join keys ----
+             ["calitp_itp_id", "calitp_url_number", "trip_id"])
+    >> inner_join(_, tbl.views.gtfs_schedule_dim_stops(),
+                 ["calitp_itp_id", "stop_id"])
+    >> select(_.itp_id == _.calitp_itp_id,
+              _.date == _.service_date,
+              _.trip_key, _.trip_id, _.stop_id, _.arrival_time,
+              _.stop_lat, _.stop_lon, _.stop_name,
+             )
+    >> collect()
+    )
+daily_stops.head()
+```
+{glue:}`my_variable`
+````
