@@ -726,7 +726,7 @@ siuba_all_day_stops = (
               _.stop_lat, _.stop_lon, _.stop_name,
              )
     )
-glue("df_siuba_all_day_stops", siuba_all_day_stops)
+glue("siuba_all_day_stops_output", siuba_all_day_stops)
 ```
 
 ````{tabbed} Metabase
@@ -771,5 +771,6 @@ daily_stops = (
     )
 daily_stops.head()
 ```
-{glue:}`df_siuba_all_day_stops`
+```{glue:figure} siuba_all_day_stops_output
+```
 ````
