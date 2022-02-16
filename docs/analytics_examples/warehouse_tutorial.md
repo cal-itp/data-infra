@@ -770,6 +770,6 @@ daily_stops = (
              )
     )
 ```
-```{glue:}`siuba_all_day_stops_output`
+```{glue:} siuba_all_day_stops_output
 ```
 ````
