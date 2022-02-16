@@ -725,6 +725,7 @@ siuba_all_day_stops = (
               _.trip_key, _.trip_id, _.stop_id, _.arrival_time,
               _.stop_lat, _.stop_lon, _.stop_name,
              )
+    >> collect()
     )
 glue("siuba_all_day_stops_output", siuba_all_day_stops)
 ```
