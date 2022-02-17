@@ -1,0 +1,67 @@
+name: Push release candidate into preprod
+
+on:
+  workflow_dispatch:
+
+env:
+  BIO_RELEASE: 1.6.372
+  CLOUDSDK_CORE_PROJECT: cal-itp-data-infra
+
+jobs:
+  push-release-candidate:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Check out repo
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - uses: google-github-actions/setup-gcloud@master
+      with:
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        export_default_credentials: true
+
+    - name: Setup kubeconfig
+      run: |
+        source "$GITHUB_WORKSPACE/kubernetes/gke/config-cluster.sh"
+        gcloud container clusters get-credentials "$GKE_NAME" --region "$GKE_REGION"
+
+    - name: 'Build & push release candidate'
+      env:
+        DISPATCH_SENDER_USER: ${{ github.actor }}
+        DISPATCH_SENDER_URL: ${{ format('{0}/users/{1}', github.api_url, github.actor) }}
+      run: |
+
+        # identity setup
+        DISPATCH_SENDER_NAME=$(curl -s "$DISPATCH_SENDER_URL" | jq -r .name)
+        DISPATCH_SENDER_EMAIL=$(curl -s "$DISPATCH_SENDER_URL" | jq -r .html_url)
+        test "$DISPATCH_SENDER_NAME" != 'null' || DISPATCH_SENDER_NAME=$DISPATCH_SENDER_USER
+        git config user.name "$DISPATCH_SENDER_NAME"
+        git config user.email "$DISPATCH_SENDER_EMAIL"
+
+
+        # dependency setup
+        curl -LO "https://github.com/biome-sh/biome/releases/download/v1.6.372/bio-$BIO_RELEASE-x86_64-linux.tar.gz"
+        tar xzvf "bio-$BIO_RELEASE-x86_64-linux.tar.gz"
+        sudo mv bio /usr/local/bin/bio
+        sudo bio pkg install --binlink jarvus/hologit
+
+
+        # branch setup
+        [[ ! $(git status --porcelain=v1) ]] || git stash -u
+        if [[ $(git ls-remote origin refs/heads/releases/preprod) ]] && [[ ! $(git show-ref refs/remotes/origin/releases/preprod) ]]; then
+          git fetch origin releases/preprod
+          if [[ ! $(git show-ref refs/heads/releases/preprod) ]]; then
+            git branch releases/preprod origin/releases/preprod
+          fi
+        fi
+
+        # build & push
+        git holo project releases/candidate --commit-to releases/preprod --commit-message "Release $GITHUB_REF into preprod"
+        git switch releases/preprod
+        export RELEASE_CHANNEL=preprod
+        printf 'WORKFLOW: service-release: %s\n' "$RELEASE_CHANNEL"
+        set -- "$GITHUB_WORKSPACE/ci/vars/project.env"
+        source "$GITHUB_WORKSPACE/ci/workflows/service-release.sh"
+        git push -f origin releases/preprod
