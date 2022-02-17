@@ -2,6 +2,9 @@ name: Push release candidate into preprod
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - workflow-dispatch
 
 env:
   BIO_RELEASE: 1.6.372
