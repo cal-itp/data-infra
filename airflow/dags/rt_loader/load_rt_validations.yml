@@ -11,11 +11,11 @@ arguments:
     validate_gcs_bucket_many(
         project_id="cal-itp-data-infra",
         token="cloud",
-        param_csv="gs://{{get_bucket()}}/rt-processed/calitp_validation_params/{{execution_date.to_date_string()}}.csv",
-        results_bucket="gs://{{get_bucket()}}/gtfs-rt-validator-api/test-pipeline",
+        param_csv="{{get_bucket()}}/rt-processed/calitp_validation_params/{{execution_date.to_date_string()}}.csv",
+        results_bucket="{{get_bucket()}}/gtfs-rt-validator-api/test-pipeline",
         verbose=True,
         aggregate_counts=True,
-        status_result_path="gs://{{get_bucket()}}/gtfs-rt-validator-api/test-pipeline/status.json",
+        status_result_path="{{get_bucket()}}/gtfs-rt-validator-api/test-pipeline/status.json",
     )
 
 is_delete_operator_pod: true
