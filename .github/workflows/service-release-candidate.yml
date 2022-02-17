@@ -1,0 +1,56 @@
+name: Build release candidate
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.holo/config.toml'
+      - '.holo/sources/jarvus-cluster-template.toml'
+      - '.holo/branches/releases/**'
+      - '.github/workflows/service-*'
+      - 'ci/**'
+      - 'kubernetes/apps/**'
+      - 'kubernetes/system/**'
+
+
+env:
+  GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+  BIO_RELEASE: 1.6.372
+
+
+jobs:
+  build-release-candidate:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Check out repo
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: 'Build branch: releases/candidate'
+      run: |
+
+        # dependency setup
+        curl -LO "https://github.com/biome-sh/biome/releases/download/v1.6.372/bio-$BIO_RELEASE-x86_64-linux.tar.gz"
+        tar xzvf "bio-$BIO_RELEASE-x86_64-linux.tar.gz"
+        sudo mv bio /usr/local/bin/bio
+        sudo bio pkg install --binlink jarvus/hologit
+
+        # environment setup
+        [[ ! $(git status --porcelain=v1) ]] || git stash -u
+        git config user.name "Github Action $GITHUB_JOB"
+        git config user.email "$(whoami)@$(uname -n)"
+
+        # branch setup
+        if [[ $(git ls-remote origin refs/heads/releases/candidate) ]] && [[ ! $(git show-ref refs/remotes/origin/releases/candidate) ]]; then
+          git fetch origin releases/candidate
+          if [[ ! $(git show-ref refs/heads/releases/candidate) ]]; then
+            git branch releases/candidate origin/releases/candidate
+          fi
+        fi
+
+        # build & push
+        git holo project releases/candidate --commit-to releases/candidate --commit-message "Release candidate: $(git describe --always)"
+        git push origin releases/candidate
