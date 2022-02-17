@@ -1,7 +1,10 @@
 <template>
-<div>Hello world</div>
+  <div class="app-wrapper">
+    <router-view />
+  </div>
 </template>
 
 <script>
-export default {}
+export default {
+}
 </script>

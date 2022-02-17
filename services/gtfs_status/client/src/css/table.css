@@ -1,0 +1,18 @@
+.table {
+  td, th {
+    @apply border-t p-3;
+  }
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  @apply bg-gray-300;
+}
+
+.table td {
+  &.-yellow {
+    @apply bg-yellow-300;
+  }
+  &.-red {
+    @apply bg-red-300;
+  }
+}

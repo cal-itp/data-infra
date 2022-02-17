@@ -3,6 +3,6 @@ module.exports = {
     lintOnSave: false,
     devServer: {
         host: 'gtfs-client.localhost',
-        proxy: 'http://localhost:4000'
+        proxy: 'http://localhost:8000'
     }
 }
