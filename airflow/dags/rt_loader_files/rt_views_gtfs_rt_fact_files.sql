@@ -29,7 +29,7 @@ SELECT
   calitp_url_number,
   -- turn name from a file path like gtfs_rt_<file_type>_url
   -- to just file_type
-  REPLACE(REPLACE(name, "gtfs_rt_", ""), "_url", "") as name,
+  REGEXP_EXTRACT(name, r"gtfs_rt_(.*)_url") as name,
   size,
   md5_hash,
   DATE(calitp_extracted_at) as date_extracted,
