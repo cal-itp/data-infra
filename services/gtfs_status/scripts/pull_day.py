@@ -6,14 +6,15 @@ import sys
 from main.models import Bucket, BucketHour, Feed, FeedHour
 
 
-def pull_day(bucket_name, date_string):
+def pull_day(bucket_name, date_string, hours=None):
+    hours = hours or range(24)
     bucket, new = Bucket.objects.get_or_create(name=bucket_name)
 
     if new:
         print("Bucket created:", bucket)
 
     storage_client = storage.Client()
-    for hour in range(24):
+    for hour in hours:
         times = set()
         times_by_key = defaultdict(list)
         for ten_m in range(6):
