@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>Feeds for {{ $route.params.bucket_name }} on {{ $route.params.date }}</h1>
     <table class="table">
       <thead>
         <tr>

@@ -1,0 +1,6 @@
+.health-nav {
+  @apply bg-white border border-double bottom-0 fixed p-2 right-0;
+  &__date .fa {
+    @apply cursor-pointer text-blue-400 px-2;
+  }
+}
