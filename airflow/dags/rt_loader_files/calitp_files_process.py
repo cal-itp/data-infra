@@ -2,8 +2,6 @@
 # python_callable: main
 # provide_context: true
 # task_concurrency: 4
-# dependencies:
-#   - external_calitp_files
 # ---
 
 """
