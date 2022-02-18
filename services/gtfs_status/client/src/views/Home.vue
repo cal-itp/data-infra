@@ -1,5 +1,5 @@
 <template>
-  <div class="app-wrapper">
+  <div class="health-wrapper">
     <day-table v-if="raw_feeds" :feed_groups="feed_groups" @click-feed="clickFeed" />
     <div class="health-nav">
       <select v-model="bucket_name">
@@ -9,6 +9,13 @@
         <i class="fa fa-angle-double-left" @click="gotoDate(-1)" />
         {{ date }}
         <i class="fa fa-angle-double-right" @click="gotoDate(1)" />
+      </div>
+      <div class="health-nav__timezone">
+        <select v-model="tz">
+          <option v-for="[value, name] in timezones" :key="name" :value="value">
+            {{ name }}
+          </option>
+        </select>
       </div>
     </div>
   </div>
@@ -20,6 +27,7 @@ import { sortBy } from 'lodash'
 
 import DayTable from '@/components/DayTable.vue'
 import { getDay } from '@/store/data'
+import config from '@/store/config'
 
 const routeParam = (param_name) => ({
   get() {
@@ -40,7 +48,15 @@ const routeParam = (param_name) => ({
 export default {
   components: { DayTable },
   data() {
-    return { bucket_names: ['gtfs-data', 'gtfs-data-test'] }
+    const timezones = [
+      [0, 'UTC'],
+      [-5, 'EST'],
+      [-6, 'CST'],
+      [-7, 'MST'],
+      [-8, 'PST'],
+    ]
+    const bucket_names = ['gtfs-data', 'gtfs-data-test']
+    return { bucket_names, timezones }
   },
   computed: {
     selected_ids() {
@@ -56,6 +72,10 @@ export default {
       const top = all_feeds.filter(f => this.selected_ids.includes(f.itp_id))
       const bottom = all_feeds.filter(f => !this.selected_ids.includes(f.itp_id))
       return [top, bottom]
+    },
+    tz: {
+      get: () => config.tz,
+      set: (value) => config.tz = value,
     },
     bucket_name: routeParam('bucket_name'),
     date: routeParam('date'),

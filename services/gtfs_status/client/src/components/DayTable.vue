@@ -4,7 +4,7 @@
       <thead>
         <tr>
           <th>Key</th>
-          <td>Total</td>
+          <td>Total for day</td>
           <th v-for="hour in hours" :key="hour">{{ hour }}</th>
         </tr>
       </thead>
@@ -34,6 +34,7 @@
 
 <script>
 import { range, sum } from 'lodash'
+import config from '@/store/config'
 
 export default {
   emits: ['click-feed'],
@@ -42,7 +43,8 @@ export default {
   },
   computed: {
     hours() {
-      return range(24).map(h => `${h}:00`)
+      const { tz } = config
+      return range(24).map(h => `${(h+tz)%24}:00`)
     }
   },
   methods: {
