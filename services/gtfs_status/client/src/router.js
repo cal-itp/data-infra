@@ -6,6 +6,7 @@ const routes = [
   {
     path: '/health/:bucket_name/:date/',
     component: Home,
+    name: 'day-health',
   },
 ]
 

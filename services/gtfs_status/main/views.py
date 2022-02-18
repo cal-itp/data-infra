@@ -14,8 +14,12 @@ def date_health(request, bucket_name=None, date=None):
     feedhours = FeedHour.objects.filter(feed__in=feeds, buckethour__in=buckethours)
     feedhours = feedhours.select_related("buckethour")
 
+    _keys = ["id", "key", "itp_id"]
+
     def _todict(feed):
-        return {"id": feed.id, "key": feed.key, "counts_by_hour": [0] * 24}
+        data = {k: getattr(feed, k) for k in _keys}
+        data["counts_by_hour"] = [0] * 24
+        return data
 
     feeds = {f.id: _todict(f) for f in feeds}
     for fh in feedhours:
