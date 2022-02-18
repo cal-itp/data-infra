@@ -2,21 +2,25 @@
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.gtfs_rt_thread_errors"
 
-description: |
+description: | Each row is a unique file_hash of a feed that generated an exception within GCP logger
 
 
 fields:
-  file_hash:
-  calitp_itp_id:
-  calitp_url_number:
-  feed_file
-  start_fetch_time:
-  completed_fetch_time:
-  start_write_time:
-  completed_fetch_time:
-  error_time:
-  error_message:
+  file_hash: unique identifier for each feed download attempt.
+  calitp_itp_id: Feed ITP ID.
+  calitp_url_number: Feed URL number.
+  feed_file: Combination calitp_itp_id, URL number, and feed URL name.
+  feed_file_name: feed url name.
+  start_fetch_time: timestamp of start_fetch thread as logged by archiver.
+  completed_fetch_time: timestamp of completed_fetch thread as logged by archiver.
+  start_write_time: timestamp of start_write thread as logged by archiver.
+  completed_write_time: timestamp of completed_write thread as logged by archiver.
+  error_time: timestamp when thread exception occured.
+  error_message: error message contained within the exception.
 ---
+
+-- note that archiver will log a completed write time regardless if fetch was successful due to them being on separate threads
+-- this will be changed in future iterations
 
 With
 start_fetch AS (
