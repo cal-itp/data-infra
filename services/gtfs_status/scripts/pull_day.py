@@ -6,7 +6,7 @@ import sys
 from main.models import Bucket, BucketHour, Feed, FeedHour
 
 
-def main(bucket_name, date_string):
+def pull_day(bucket_name, date_string):
     bucket, new = Bucket.objects.get_or_create(name=bucket_name)
 
     if new:
@@ -35,7 +35,7 @@ def main(bucket_name, date_string):
         for key, times in times_by_key.items():
             itp_id, url_index, url_type = key.split("/")
             feed, new = Feed.objects.get_or_create(
-                itp_id=itp_id, url_index=url_index, url_type=url_type,
+                bucket=bucket, itp_id=itp_id, url_index=url_index, url_type=url_type,
             )
             if new:
                 print("new feed:", feed)
@@ -48,4 +48,4 @@ def main(bucket_name, date_string):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2])
+    pull_day(sys.argv[1], sys.argv[2])
