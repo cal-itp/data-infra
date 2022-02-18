@@ -1,5 +1,8 @@
 ---
 operator: operators.SqlQueryOperator
+
+dependencies:
+  - calitp_files_process
 ---
 
 CREATE OR REPLACE EXTERNAL TABLE `gtfs_rt.calitp_files` (
