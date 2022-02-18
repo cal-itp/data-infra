@@ -93,4 +93,4 @@ t2.error_time,
 t2.textpayload AS error_message
 FROM log_table t1
 JOIN stderr_table t2 ON t1.feed_file = t2.feed_file
-AND t2.error_time >= t1.start_fetch_time
+AND t2.error_time >= t1.start_fetch_time AND t2.error_time < t1.completed_write_time
