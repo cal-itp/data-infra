@@ -3,8 +3,16 @@ operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.gtfs_rt_extraction_html_errors"
 
 description: |
+  Each row is a unique text payload returned for a HTTP Error for the calitp RT_archiver
 
 fields:
+  calitp_itp_id: Feed ITP ID.
+  calitp_url_number: Feed URL number.
+  textPayload: Error message that contains feed key, header length, download url, and error response.
+  download_url: Feed url extracted from textPayload.
+  http_error: Extracted HTTP error code.
+  n_count: Count of each row, distinct text textPayload.
+  max_date: Max timestamp.
 
 ---
 
@@ -33,7 +41,7 @@ WITH
   WHERE
     textPayload LIKE "%error fetching %"
     ),
-
+--- have to join the two tables as the textPayload that is returned upon HTTP error does not contain the calitp_id and url number
   join_table AS (
   SELECT
     *
