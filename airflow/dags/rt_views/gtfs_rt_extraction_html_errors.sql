@@ -34,7 +34,8 @@ WITH
     textPayload,
     timestamp,
     REGEXP_EXTRACT(textPayload, r'\[txn (.*?)\]') AS file_hash,
-    REGEXP_EXTRACT(textpayload,r'error fetching url ([a-zA-Z].*): HTTP Error') AS download_url,
+    REGEXP_EXTRACT(textpayload,r'error fetching url ([a-zA-Z].*)?=') AS download_url,
+    --- trim API tokens because sensitive info
     REGEXP_EXTRACT(textpayload,"(HTTP Error [0-9]+.*)") AS http_error,
   FROM
     `cal-itp-data-infra.gtfs_rt_logs.stdout`
