@@ -2,6 +2,13 @@
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "payments.stg_cleaned_micropayments"
 
+description: >
+  A micropayment represents a debit or credit that should be made against the
+  customer's funding source for a trip. Multiple micropayments can be aggregated
+  and settled together. Credit micropayments can be created if a refund is
+  requested for the travel associated with a debit micropayment before the
+  aggregation containing the debit micropayment is settled.
+
 dependencies:
   - stg_enriched_micropayments
 

@@ -15,6 +15,7 @@ fields:
   issuer_country: "From payments.customer_funding_source.issuer_country"
   form_factor: "From payments.customer_funding_source.form_factor"
   charge_amount: "From payments.micropayments.charge_amount"
+  refund_amount: "If there is a refund micropayment associated with the trip, the charge_amount on that refund"
   nominal_amount: "From payments.micropayments.nominal_amount"
   charge_type: "From payments.micropayments.charge_type"
   adjustment_id: "From payments.micropayments.adjustment_id"
@@ -72,6 +73,23 @@ gtfs_routes_with_participant AS (
     JOIN `views.payments_feeds` USING (calitp_itp_id, calitp_url_number)
 ),
 
+debited_micropayments AS (
+    SELECT *
+    FROM `payments.stg_cleaned_micropayments`
+    WHERE type = 'DEBIT'
+),
+
+refunded_micropayments AS (
+    SELECT m_debit.micropayment_id, m_credit.charge_amount AS refund_amount
+    FROM debited_micropayments m_debit
+    JOIN `payments.stg_cleaned_micropayment_device_transactions` dt_debit USING (micropayment_id)
+    JOIN `payments.stg_cleaned_micropayment_device_transactions` dt_credit USING (littlepay_transaction_id)
+    JOIN `payments.stg_cleaned_micropayments` m_credit ON
+        dt_credit.micropayment_id = m_credit.micropayment_id
+    WHERE m_credit.type = 'CREDIT'
+      AND m_credit.charge_type = 'refund'
+),
+
 applied_adjustments AS (
     SELECT participant_id, micropayment_id, product_id, adjustment_id, type, time_period_type, description, amount
     FROM `payments.stg_cleaned_micropayment_adjustments`
@@ -110,6 +128,7 @@ SELECT
     v.form_factor,
 
     m.charge_amount,
+    mr.refund_amount,
     m.nominal_amount,
     m.charge_type,
     a.adjustment_id,
@@ -153,7 +172,8 @@ SELECT
     t2.latitude AS off_latitude,
     t2.longitude AS off_longitude
 
-FROM `payments.stg_cleaned_micropayments` AS m
+FROM debited_micropayments AS m
+LEFT JOIN refunded_micropayments AS mr USING (micropayment_id)
 JOIN `payments.stg_cleaned_customers` AS c USING (customer_id)
 LEFT JOIN `payments.stg_cleaned_customer_funding_source_vaults` AS v
     ON m.funding_source_vault_id = v.funding_source_vault_id
