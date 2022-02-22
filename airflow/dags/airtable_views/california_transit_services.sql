@@ -18,8 +18,8 @@ tests:
   check_unique:
     - service_id
 
-external_dependencies:
-  - airtable_loader: california_transit_services
+dependencies:
+  - dummy_airtable_loader
 ---
 
   SELECT
