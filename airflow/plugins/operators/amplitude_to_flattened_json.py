@@ -1,9 +1,7 @@
 """Module for exporting data from Amplitude and adding to the data warehouse"""
 import os
-import functools
 import gzip
 import zipfile
-from datetime import datetime, timedelta
 from io import BytesIO, StringIO
 
 import requests
