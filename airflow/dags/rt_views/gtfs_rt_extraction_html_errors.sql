@@ -26,7 +26,7 @@ WITH
     textPayload,
     timestamp,
     REGEXP_EXTRACT(textPayload, r'\[txn (.*?)\]') AS file_hash,
-    REGEXP_EXTRACT(textpayload,r'error fetching url ([a-zA-Z].*): HTTP Error') AS url_name,
+    REGEXP_EXTRACT(textpayload,r'error fetching url ([a-zA-Z].*): HTTP Error') AS download_url,
     REGEXP_EXTRACT(textpayload,"(HTTP Error [0-9]+.*)") AS http_error,
   FROM
     `cal-itp-data-infra.gtfs_rt_logs.stdout`
@@ -50,7 +50,7 @@ SELECT
   calitp_itp_id,
   calitp_url_number,
   textPayload,
-  url_name,
+  download_url,
   http_error,
   COUNT(*) AS n_count,
   MAX(timestamp) AS max_date
