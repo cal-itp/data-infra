@@ -1,6 +1,6 @@
 operator: 'operators.PodOperator'
 name: 'gtfs-rt-validation'
-image: 'ghcr.io/cal-itp/gtfs-rt-validator-api:v0.0.3'
+image: 'ghcr.io/cal-itp/gtfs-rt-validator-api:v0.0.4'
 cmds:
   - python3
 
@@ -12,17 +12,15 @@ arguments:
         project_id="cal-itp-data-infra",
         token="cloud",
         param_csv="{{get_bucket()}}/rt-processed/calitp_validation_params/{{execution_date.to_date_string()}}.csv",
-        results_bucket="{{get_bucket()}}/gtfs-rt-validator-api/test-pipeline",
+        results_bucket="{{get_bucket()}}/rt-processed/validation/{{execution_date.to_date_string()}}",
+        summary_path="{{get_bucket()}}/rt-processed/validation/{{execution_date.to_date_string()}}/status.json",
         verbose=True,
         aggregate_counts=True,
-        status_result_path="{{get_bucket()}}/gtfs-rt-validator-api/test-pipeline/status.json",
+        threads=4,
     )
 
 is_delete_operator_pod: true
 get_logs: true
 
 dependencies:
-  - external_validation_service_alerts
-  - external_validation_trip_updates
-  - external_validation_vehicle_positions
   - create_validation_params
