@@ -25,10 +25,6 @@ def main(execution_date, **kwargs):
 
     date_string = execution_date.to_date_string()
 
-    # note that we will only use the prod bucket, even on staging, since the RT
-    #
-    # bucket = get_bucket()
-
     # <datetime>/<itp_id>/<url_number>/<filename>
     all_files = fs.glob(f"{get_bucket()}/rt/{date_string}*/*/*/*", detail=True)
     fs.dircache.clear()
