@@ -11,6 +11,7 @@ This is for the rt files extracted per feed every 20 seconds.
 
 from calitp import save_to_gcfs
 from calitp.storage import get_fs
+from calitp.config import get_bucket
 
 import pandas as pd
 
@@ -29,7 +30,7 @@ def main(execution_date, **kwargs):
     # bucket = get_bucket()
 
     # <datetime>/<itp_id>/<url_number>/<filename>
-    all_files = fs.glob(f"gs://gtfs-data/rt/{date_string}*/*/*/*", detail=True)
+    all_files = fs.glob(f"{get_bucket()}/rt/{date_string}*/*/*/*", detail=True)
     fs.dircache.clear()
 
     raw_res = pd.DataFrame(all_files.values())
