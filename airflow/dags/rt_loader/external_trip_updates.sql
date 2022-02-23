@@ -29,21 +29,22 @@ CREATE OR REPLACE EXTERNAL TABLE `gtfs_rt.trip_updates` (
       label STRING,
       id STRING
       >,
-    stopTimeUpdate ARRAY<STRUCT<
-    stopSequence INT64,
-      stopId STRING,
-      arrival STRUCT <
-        delay INT64,
-        time INT64,
-        uncertainty INT64
-        >,
-      departure STRUCT <
-        delay INT64,
-        time INT64,
-        uncertainty INT64
-        >,
-      scheduleRelationship STRING
-      >
+    stopTimeUpdate ARRAY<
+      STRUCT<
+        stopSequence INT64,
+        stopId STRING,
+        arrival STRUCT <
+          delay INT64,
+          time INT64,
+          uncertainty INT64
+          >,
+        departure STRUCT <
+          delay INT64,
+          time INT64,
+          uncertainty INT64
+          >,
+        scheduleRelationship STRING
+        >
       >,
     timestamp INT64,
     delay INT64
