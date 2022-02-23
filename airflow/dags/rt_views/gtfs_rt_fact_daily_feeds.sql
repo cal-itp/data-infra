@@ -32,8 +32,8 @@ tests:
         - date
         - type
 
-dependencies:
-  - gtfs_schedule_fact_daily_feeds
+external_dependencies:
+  - gtfs_views: gtfs_schedule_fact_daily_feeds
 ---
 
 -- note that for realtime we do not (yet) have a feed_key-type identifier
