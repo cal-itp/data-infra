@@ -107,6 +107,7 @@ transactions as (
     join device_transactions_dedupe as dt using (littlepay_transaction_id, customer_id, participant_id)
     join stop_stats as stat on stat.stop_id = dt.location_id
     where participant_id = 'sbmtd'
+      and m.type = 'DEBIT'
 )
 
 select

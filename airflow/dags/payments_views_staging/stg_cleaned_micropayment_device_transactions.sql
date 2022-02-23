@@ -2,14 +2,19 @@
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "payments.stg_cleaned_micropayment_device_transactions"
 
+description: >
+  Creates a *:* relationship between transactions and micropayments. One
+  micropayment may be linked to multiple transactions in the case where one
+  transaction is a tap on and another is a tap off. One transaction may be
+  linked to multiple transactions when, e.g. the transaction is charged in one
+  micropayment and refunded later in another micropayment.
+
 dependencies:
   - stg_enriched_micropayment_device_transactions
 
 tests:
   check_composite_unique:
     - micropayment_id
-    - littlepay_transaction_id
-  check_unique:
     - littlepay_transaction_id
 ---
 
@@ -25,8 +30,8 @@ deduped_micropayment_device_transaction_ids as (
 
 ),
 
--- Some transactions are associated with more than one micropayment. This should
--- not happen. In the query below, we identify the micropayment_id of the
+-- Some transactions are associated with more than one DEBIT micropayment. This
+-- should not happen. In the query below, we identify the micropayment_id of the
 -- pending micropayment records that are no longer valid because they've been
 -- superceded by a completed micropayment.
 --
