@@ -1,0 +1,570 @@
+[helm:metabase-preprod=kubernetes/apps/charts/metabase]
+
+diff -u -N /tmp/LIVE-1882745872/apps.v1.Deployment.metabase-preprod.metabase /tmp/MERGED-3516293851/apps.v1.Deployment.metabase-preprod.metabase
+--- /tmp/LIVE-1882745872/apps.v1.Deployment.metabase-preprod.metabase	2022-01-09 23:50:45.731831789 +0000
++++ /tmp/MERGED-3516293851/apps.v1.Deployment.metabase-preprod.metabase	2022-01-09 23:50:45.731831789 +0000
+@@ -0,0 +1,166 @@
++apiVersion: apps/v1
++kind: Deployment
++metadata:
++  creationTimestamp: "2022-01-09T23:50:45Z"
++  generation: 1
++  labels:
++    name: metabase
++  managedFields:
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:name: {}
++      f:spec:
++        f:progressDeadlineSeconds: {}
++        f:replicas: {}
++        f:revisionHistoryLimit: {}
++        f:selector:
++          f:matchLabels:
++            .: {}
++            f:name: {}
++        f:strategy:
++          f:rollingUpdate:
++            .: {}
++            f:maxSurge: {}
++            f:maxUnavailable: {}
++          f:type: {}
++        f:template:
++          f:metadata:
++            f:labels:
++              .: {}
++              f:name: {}
++          f:spec:
++            f:containers:
++              k:{"name":"metabase"}:
++                .: {}
++                f:envFrom: {}
++                f:image: {}
++                f:imagePullPolicy: {}
++                f:livenessProbe:
++                  .: {}
++                  f:failureThreshold: {}
++                  f:httpGet:
++                    .: {}
++                    f:path: {}
++                    f:port: {}
++                    f:scheme: {}
++                  f:initialDelaySeconds: {}
++                  f:periodSeconds: {}
++                  f:successThreshold: {}
++                  f:timeoutSeconds: {}
++                f:name: {}
++                f:ports:
++                  .: {}
++                  k:{"containerPort":3000,"protocol":"TCP"}:
++                    .: {}
++                    f:containerPort: {}
++                    f:name: {}
++                    f:protocol: {}
++                f:readinessProbe:
++                  .: {}
++                  f:failureThreshold: {}
++                  f:httpGet:
++                    .: {}
++                    f:path: {}
++                    f:port: {}
++                    f:scheme: {}
++                  f:initialDelaySeconds: {}
++                  f:periodSeconds: {}
++                  f:successThreshold: {}
++                  f:timeoutSeconds: {}
++                f:resources: {}
++                f:startupProbe:
++                  .: {}
++                  f:failureThreshold: {}
++                  f:httpGet:
++                    .: {}
++                    f:path: {}
++                    f:port: {}
++                    f:scheme: {}
++                  f:periodSeconds: {}
++                  f:successThreshold: {}
++                  f:timeoutSeconds: {}
++                f:terminationMessagePath: {}
++                f:terminationMessagePolicy: {}
++            f:dnsPolicy: {}
++            f:restartPolicy: {}
++            f:schedulerName: {}
++            f:securityContext: {}
++            f:terminationGracePeriodSeconds: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-01-09T23:50:45Z"
++  name: metabase
++  namespace: metabase-preprod
++  selfLink: /apis/apps/v1/namespaces/metabase-preprod/deployments/metabase
++  uid: 786c9841-1525-4ac7-b3f8-ab4e51dd9afc
++spec:
++  progressDeadlineSeconds: 600
++  replicas: 1
++  revisionHistoryLimit: 10
++  selector:
++    matchLabels:
++      name: metabase
++  strategy:
++    rollingUpdate:
++      maxSurge: 25%
++      maxUnavailable: 25%
++    type: RollingUpdate
++  template:
++    metadata:
++      creationTimestamp: null
++      labels:
++        name: metabase
++    spec:
++      containers:
++      - envFrom:
++        - configMapRef:
++            name: metabase-config
++        image: metabase/metabase:v0.41.1
++        imagePullPolicy: IfNotPresent
++        livenessProbe:
++          failureThreshold: 3
++          httpGet:
++            path: /
++            port: 3000
++            scheme: HTTP
++          initialDelaySeconds: 5
++          periodSeconds: 10
++          successThreshold: 1
++          timeoutSeconds: 1
++        name: metabase
++        ports:
++        - containerPort: 3000
++          name: metabase
++          protocol: TCP
++        readinessProbe:
++          failureThreshold: 3
++          httpGet:
++            path: /
++            port: 3000
++            scheme: HTTP
++          initialDelaySeconds: 30
++          periodSeconds: 10
++          successThreshold: 1
++          timeoutSeconds: 1
++        resources: {}
++        startupProbe:
++          failureThreshold: 30
++          httpGet:
++            path: /
++            port: 3000
++            scheme: HTTP
++          periodSeconds: 10
++          successThreshold: 1
++          timeoutSeconds: 1
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++      dnsPolicy: ClusterFirst
++      restartPolicy: Always
++      schedulerName: default-scheduler
++      securityContext: {}
++      terminationGracePeriodSeconds: 30
++status: {}
+diff -u -N /tmp/LIVE-1882745872/apps.v1.StatefulSet.metabase-preprod.database /tmp/MERGED-3516293851/apps.v1.StatefulSet.metabase-preprod.database
+--- /tmp/LIVE-1882745872/apps.v1.StatefulSet.metabase-preprod.database	2022-01-09 23:50:45.983833147 +0000
++++ /tmp/MERGED-3516293851/apps.v1.StatefulSet.metabase-preprod.database	2022-01-09 23:50:45.983833147 +0000
+@@ -0,0 +1,180 @@
++apiVersion: apps/v1
++kind: StatefulSet
++metadata:
++  creationTimestamp: "2022-01-09T23:50:45Z"
++  generation: 1
++  labels:
++    name: database
++  managedFields:
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:name: {}
++      f:spec:
++        f:podManagementPolicy: {}
++        f:replicas: {}
++        f:revisionHistoryLimit: {}
++        f:selector:
++          f:matchLabels:
++            .: {}
++            f:name: {}
++        f:serviceName: {}
++        f:template:
++          f:metadata:
++            f:annotations:
++              .: {}
++              f:prometheus.io/port: {}
++              f:prometheus.io/scrape: {}
++            f:labels:
++              .: {}
++              f:name: {}
++          f:spec:
++            f:containers:
++              k:{"name":"database"}:
++                .: {}
++                f:envFrom: {}
++                f:image: {}
++                f:imagePullPolicy: {}
++                f:livenessProbe:
++                  .: {}
++                  f:failureThreshold: {}
++                  f:initialDelaySeconds: {}
++                  f:periodSeconds: {}
++                  f:successThreshold: {}
++                  f:tcpSocket:
++                    .: {}
++                    f:port: {}
++                  f:timeoutSeconds: {}
++                f:name: {}
++                f:ports:
++                  .: {}
++                  k:{"containerPort":5432,"protocol":"TCP"}:
++                    .: {}
++                    f:containerPort: {}
++                    f:name: {}
++                    f:protocol: {}
++                f:readinessProbe:
++                  .: {}
++                  f:failureThreshold: {}
++                  f:initialDelaySeconds: {}
++                  f:periodSeconds: {}
++                  f:successThreshold: {}
++                  f:tcpSocket:
++                    .: {}
++                    f:port: {}
++                  f:timeoutSeconds: {}
++                f:resources: {}
++                f:terminationMessagePath: {}
++                f:terminationMessagePolicy: {}
++                f:volumeMounts:
++                  .: {}
++                  k:{"mountPath":"/var/lib/postgresql/data"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                    f:subPath: {}
++            f:dnsPolicy: {}
++            f:imagePullSecrets:
++              .: {}
++              k:{"name":"regcred"}:
++                .: {}
++                f:name: {}
++            f:restartPolicy: {}
++            f:schedulerName: {}
++            f:securityContext: {}
++            f:terminationGracePeriodSeconds: {}
++        f:updateStrategy:
++          f:rollingUpdate:
++            .: {}
++            f:partition: {}
++          f:type: {}
++        f:volumeClaimTemplates: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-01-09T23:50:45Z"
++  name: database
++  namespace: metabase-preprod
++  selfLink: /apis/apps/v1/namespaces/metabase-preprod/statefulsets/database
++  uid: ace1bf2e-f171-4891-af4c-6fcb605e92ac
++spec:
++  podManagementPolicy: OrderedReady
++  replicas: 1
++  revisionHistoryLimit: 10
++  selector:
++    matchLabels:
++      name: database
++  serviceName: database
++  template:
++    metadata:
++      annotations:
++        prometheus.io/port: "9187"
++        prometheus.io/scrape: "true"
++      creationTimestamp: null
++      labels:
++        name: database
++    spec:
++      containers:
++      - envFrom:
++        - configMapRef:
++            name: database-config
++        image: postgres:9.6
++        imagePullPolicy: IfNotPresent
++        livenessProbe:
++          failureThreshold: 3
++          initialDelaySeconds: 15
++          periodSeconds: 20
++          successThreshold: 1
++          tcpSocket:
++            port: 5432
++          timeoutSeconds: 1
++        name: database
++        ports:
++        - containerPort: 5432
++          name: postgresql
++          protocol: TCP
++        readinessProbe:
++          failureThreshold: 3
++          initialDelaySeconds: 5
++          periodSeconds: 10
++          successThreshold: 1
++          tcpSocket:
++            port: 5432
++          timeoutSeconds: 1
++        resources: {}
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++        volumeMounts:
++        - mountPath: /var/lib/postgresql/data
++          name: data
++          subPath: postgresql-data
++      dnsPolicy: ClusterFirst
++      imagePullSecrets:
++      - name: regcred
++      restartPolicy: Always
++      schedulerName: default-scheduler
++      securityContext: {}
++      terminationGracePeriodSeconds: 30
++  updateStrategy:
++    rollingUpdate:
++      partition: 0
++    type: RollingUpdate
++  volumeClaimTemplates:
++  - apiVersion: v1
++    kind: PersistentVolumeClaim
++    metadata:
++      creationTimestamp: null
++      name: data
++    spec:
++      accessModes:
++      - ReadWriteOnce
++      resources:
++        requests:
++          storage: 10Gi
++      volumeMode: Filesystem
++    status:
++      phase: Pending
++status:
++  replicas: 0
+diff -u -N /tmp/LIVE-1882745872/networking.k8s.io.v1beta1.Ingress.metabase-preprod.metabase-preprod /tmp/MERGED-3516293851/networking.k8s.io.v1beta1.Ingress.metabase-preprod.metabase-preprod
+--- /tmp/LIVE-1882745872/networking.k8s.io.v1beta1.Ingress.metabase-preprod.metabase-preprod	2022-01-09 23:50:46.315834936 +0000
++++ /tmp/MERGED-3516293851/networking.k8s.io.v1beta1.Ingress.metabase-preprod.metabase-preprod	2022-01-09 23:50:46.315834936 +0000
+@@ -0,0 +1,56 @@
++apiVersion: networking.k8s.io/v1beta1
++kind: Ingress
++metadata:
++  annotations:
++    cert-manager.io/cluster-issuer: letsencrypt-prod
++    kubernetes.io/ingress.class: nginx
++  creationTimestamp: "2022-01-09T23:50:46Z"
++  generation: 1
++  labels:
++    app.kubernetes.io/instance: metabase-preprod
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: metabase
++    app.kubernetes.io/version: 1.16.0
++    helm.sh/chart: metabase-0.1.0
++  managedFields:
++  - apiVersion: networking.k8s.io/v1beta1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:annotations:
++          .: {}
++          f:cert-manager.io/cluster-issuer: {}
++          f:kubernetes.io/ingress.class: {}
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++      f:spec:
++        f:rules: {}
++        f:tls: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-01-09T23:50:46Z"
++  name: metabase-preprod
++  namespace: metabase-preprod
++  selfLink: /apis/networking.k8s.io/v1beta1/namespaces/metabase-preprod/ingresses/metabase-preprod
++  uid: 84b0f6d3-84ca-4a63-a7ec-d90fe1008160
++spec:
++  rules:
++  - host: metabase-preprod.k8s.calitp.jarv.us
++    http:
++      paths:
++      - backend:
++          serviceName: metabase
++          servicePort: 3000
++        path: /
++        pathType: ImplementationSpecific
++  tls:
++  - hosts:
++    - metabase-preprod.k8s.calitp.jarv.us
++    secretName: metabase-tls
++status:
++  loadBalancer: {}
+diff -u -N /tmp/LIVE-1882745872/v1.ConfigMap.metabase-preprod.database-config /tmp/MERGED-3516293851/v1.ConfigMap.metabase-preprod.database-config
+--- /tmp/LIVE-1882745872/v1.ConfigMap.metabase-preprod.database-config	2022-01-09 23:50:44.771826616 +0000
++++ /tmp/MERGED-3516293851/v1.ConfigMap.metabase-preprod.database-config	2022-01-09 23:50:44.771826616 +0000
+@@ -0,0 +1,24 @@
++apiVersion: v1
++data:
++  POSTGRES_DB: metabase
++  POSTGRES_PASSWORD: admin
++  POSTGRES_USER: admin
++kind: ConfigMap
++metadata:
++  creationTimestamp: "2022-01-09T23:50:44Z"
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:data:
++        .: {}
++        f:POSTGRES_DB: {}
++        f:POSTGRES_PASSWORD: {}
++        f:POSTGRES_USER: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-01-09T23:50:44Z"
++  name: database-config
++  namespace: metabase-preprod
++  selfLink: /api/v1/namespaces/metabase-preprod/configmaps/database-config
++  uid: 179ee636-45fe-4ea6-970c-49bbdfeb8dd9
+diff -u -N /tmp/LIVE-1882745872/v1.ConfigMap.metabase-preprod.metabase-config /tmp/MERGED-3516293851/v1.ConfigMap.metabase-preprod.metabase-config
+--- /tmp/LIVE-1882745872/v1.ConfigMap.metabase-preprod.metabase-config	2022-01-09 23:50:44.999827844 +0000
++++ /tmp/MERGED-3516293851/v1.ConfigMap.metabase-preprod.metabase-config	2022-01-09 23:50:45.003827866 +0000
+@@ -0,0 +1,32 @@
++apiVersion: v1
++data:
++  MB_DB_DBNAME: metabase
++  MB_DB_HOST: database.metabase.svc.cluster.local
++  MB_DB_PASS: admin
++  MB_DB_PORT: "5432"
++  MB_DB_TYPE: postgres
++  MB_DB_USER: admin
++  MB_SITE_URL: https://metabase-preprod.k8s.calitp.jarv.us
++kind: ConfigMap
++metadata:
++  creationTimestamp: "2022-01-09T23:50:44Z"
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:data:
++        .: {}
++        f:MB_DB_DBNAME: {}
++        f:MB_DB_HOST: {}
++        f:MB_DB_PASS: {}
++        f:MB_DB_PORT: {}
++        f:MB_DB_TYPE: {}
++        f:MB_DB_USER: {}
++        f:MB_SITE_URL: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-01-09T23:50:44Z"
++  name: metabase-config
++  namespace: metabase-preprod
++  selfLink: /api/v1/namespaces/metabase-preprod/configmaps/metabase-config
++  uid: 4e3d4fa6-3ef8-4760-ad08-762542727f1c
+diff -u -N /tmp/LIVE-1882745872/v1.Service.metabase-preprod.database /tmp/MERGED-3516293851/v1.Service.metabase-preprod.database
+--- /tmp/LIVE-1882745872/v1.Service.metabase-preprod.database	2022-01-09 23:50:45.247829181 +0000
++++ /tmp/MERGED-3516293851/v1.Service.metabase-preprod.database	2022-01-09 23:50:45.247829181 +0000
+@@ -0,0 +1,41 @@
++apiVersion: v1
++kind: Service
++metadata:
++  creationTimestamp: "2022-01-09T23:50:45Z"
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:spec:
++        f:ports:
++          .: {}
++          k:{"port":5432,"protocol":"TCP"}:
++            .: {}
++            f:name: {}
++            f:port: {}
++            f:protocol: {}
++            f:targetPort: {}
++        f:selector:
++          .: {}
++          f:name: {}
++        f:sessionAffinity: {}
++        f:type: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-01-09T23:50:45Z"
++  name: database
++  namespace: metabase-preprod
++  selfLink: /api/v1/namespaces/metabase-preprod/services/database
++  uid: 372c2728-3b37-464b-a8ec-36e809a9cc3f
++spec:
++  ports:
++  - name: postgresql
++    port: 5432
++    protocol: TCP
++    targetPort: 5432
++  selector:
++    name: database
++  sessionAffinity: None
++  type: ClusterIP
++status:
++  loadBalancer: {}
+diff -u -N /tmp/LIVE-1882745872/v1.Service.metabase-preprod.metabase /tmp/MERGED-3516293851/v1.Service.metabase-preprod.metabase
+--- /tmp/LIVE-1882745872/v1.Service.metabase-preprod.metabase	2022-01-09 23:50:45.475830409 +0000
++++ /tmp/MERGED-3516293851/v1.Service.metabase-preprod.metabase	2022-01-09 23:50:45.475830409 +0000
+@@ -0,0 +1,41 @@
++apiVersion: v1
++kind: Service
++metadata:
++  creationTimestamp: "2022-01-09T23:50:45Z"
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:spec:
++        f:ports:
++          .: {}
++          k:{"port":3000,"protocol":"TCP"}:
++            .: {}
++            f:name: {}
++            f:port: {}
++            f:protocol: {}
++            f:targetPort: {}
++        f:selector:
++          .: {}
++          f:name: {}
++        f:sessionAffinity: {}
++        f:type: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-01-09T23:50:45Z"
++  name: metabase
++  namespace: metabase-preprod
++  selfLink: /api/v1/namespaces/metabase-preprod/services/metabase
++  uid: d3ef8415-0290-40b3-88f6-edad7f1bbdd4
++spec:
++  ports:
++  - name: metabase-http
++    port: 3000
++    protocol: TCP
++    targetPort: 3000
++  selector:
++    name: metabase
++  sessionAffinity: None
++  type: ClusterIP
++status:
++  loadBalancer: {}
