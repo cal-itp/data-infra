@@ -1,0 +1,873 @@
+[helm:grafana=kubernetes/apps/charts/grafana]
+
+diff -u -N /tmp/LIVE-2993898618/apps.v1.Deployment.monitoring.grafana /tmp/MERGED-3100281028/apps.v1.Deployment.monitoring.grafana
+--- /tmp/LIVE-2993898618/apps.v1.Deployment.monitoring.grafana	2022-02-23 14:24:45.141353387 +0000
++++ /tmp/MERGED-3100281028/apps.v1.Deployment.monitoring.grafana	2022-02-23 14:24:45.145353392 +0000
+@@ -6,13 +6,13 @@
+     meta.helm.sh/release-name: grafana
+     meta.helm.sh/release-namespace: monitoring
+   creationTimestamp: "2022-02-15T16:18:57Z"
+-  generation: 1
++  generation: 2
+   labels:
+     app.kubernetes.io/instance: grafana
+     app.kubernetes.io/managed-by: Helm
+     app.kubernetes.io/name: grafana
+-    app.kubernetes.io/version: 8.1.2
+-    helm.sh/chart: grafana-6.16.6
++    app.kubernetes.io/version: 8.3.6
++    helm.sh/chart: grafana-6.22.0
+   managedFields:
+   - apiVersion: apps/v1
+     fieldsType: FieldsV1
+@@ -27,8 +27,6 @@
+           f:app.kubernetes.io/instance: {}
+           f:app.kubernetes.io/managed-by: {}
+           f:app.kubernetes.io/name: {}
+-          f:app.kubernetes.io/version: {}
+-          f:helm.sh/chart: {}
+       f:spec:
+         f:progressDeadlineSeconds: {}
+         f:replicas: {}
+@@ -40,8 +38,6 @@
+           f:metadata:
+             f:annotations:
+               .: {}
+-              f:checksum/config: {}
+-              f:checksum/dashboards-json-config: {}
+               f:checksum/sc-dashboard-provider-config: {}
+             f:labels:
+               .: {}
+@@ -88,7 +84,6 @@
+                         .: {}
+                         f:key: {}
+                         f:name: {}
+-                f:image: {}
+                 f:imagePullPolicy: {}
+                 f:livenessProbe:
+                   .: {}
+@@ -262,6 +257,26 @@
+     manager: kube-controller-manager
+     operation: Update
+     time: "2022-02-15T16:29:48Z"
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++      f:spec:
++        f:template:
++          f:metadata:
++            f:annotations:
++              f:checksum/config: {}
++              f:checksum/dashboards-json-config: {}
++          f:spec:
++            f:containers:
++              k:{"name":"grafana"}:
++                f:image: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:24:45Z"
+   name: grafana
+   namespace: monitoring
+   resourceVersion: "186910924"
+@@ -279,8 +294,8 @@
+   template:
+     metadata:
+       annotations:
+-        checksum/config: f9fc8e7369d6c97f3e594ba0239620afddec3235a32ddd75e13ec39d47e9d60f
+-        checksum/dashboards-json-config: 472d0d88ccf1529e5b64a69f2f996a8fecb786ac3b2e1609b2fb9e61ec571bc8
++        checksum/config: c8408167f714134437e61a11f8e52a66a093b08dd449ecfb7bfb920fa12f2aca
++        checksum/dashboards-json-config: 6a22ea944a539d85f8442dec3b6645e7fb0c3ff4177708d70c26f552cab9497d
+         checksum/sc-dashboard-provider-config: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
+       creationTimestamp: null
+       labels:
+@@ -308,7 +323,7 @@
+           value: /var/lib/grafana/plugins
+         - name: GF_PATHS_PROVISIONING
+           value: /etc/grafana/provisioning
+-        image: grafana/grafana:8.1.2
++        image: grafana/grafana:8.3.6
+         imagePullPolicy: IfNotPresent
+         livenessProbe:
+           failureThreshold: 10
+diff -u -N /tmp/LIVE-2993898618/networking.k8s.io.v1.Ingress.monitoring.grafana /tmp/MERGED-3100281028/networking.k8s.io.v1.Ingress.monitoring.grafana
+--- /tmp/LIVE-2993898618/networking.k8s.io.v1.Ingress.monitoring.grafana	2022-02-23 14:24:45.493353825 +0000
++++ /tmp/MERGED-3100281028/networking.k8s.io.v1.Ingress.monitoring.grafana	2022-02-23 14:24:45.493353825 +0000
+@@ -12,8 +12,8 @@
+     app.kubernetes.io/instance: grafana
+     app.kubernetes.io/managed-by: Helm
+     app.kubernetes.io/name: grafana
+-    app.kubernetes.io/version: 8.1.2
+-    helm.sh/chart: grafana-6.16.6
++    app.kubernetes.io/version: 8.3.6
++    helm.sh/chart: grafana-6.22.0
+   managedFields:
+   - apiVersion: networking.k8s.io/v1
+     fieldsType: FieldsV1
+@@ -30,8 +30,6 @@
+           f:app.kubernetes.io/instance: {}
+           f:app.kubernetes.io/managed-by: {}
+           f:app.kubernetes.io/name: {}
+-          f:app.kubernetes.io/version: {}
+-          f:helm.sh/chart: {}
+       f:spec:
+         f:rules: {}
+         f:tls: {}
+@@ -47,6 +45,16 @@
+     manager: nginx-ingress-controller
+     operation: Update
+     time: "2022-02-15T16:35:03Z"
++  - apiVersion: networking.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:24:45Z"
+   name: grafana
+   namespace: monitoring
+   resourceVersion: "186913300"
+diff -u -N /tmp/LIVE-2993898618/policy.v1beta1.PodSecurityPolicy..grafana /tmp/MERGED-3100281028/policy.v1beta1.PodSecurityPolicy..grafana
+--- /tmp/LIVE-2993898618/policy.v1beta1.PodSecurityPolicy..grafana	2022-02-23 14:24:42.829350509 +0000
++++ /tmp/MERGED-3100281028/policy.v1beta1.PodSecurityPolicy..grafana	2022-02-23 14:24:42.829350509 +0000
+@@ -13,8 +13,8 @@
+     app.kubernetes.io/instance: grafana
+     app.kubernetes.io/managed-by: Helm
+     app.kubernetes.io/name: grafana
+-    app.kubernetes.io/version: 8.1.2
+-    helm.sh/chart: grafana-6.16.6
++    app.kubernetes.io/version: 8.3.6
++    helm.sh/chart: grafana-6.22.0
+   managedFields:
+   - apiVersion: policy/v1beta1
+     fieldsType: FieldsV1
+@@ -33,8 +33,6 @@
+           f:app.kubernetes.io/instance: {}
+           f:app.kubernetes.io/managed-by: {}
+           f:app.kubernetes.io/name: {}
+-          f:app.kubernetes.io/version: {}
+-          f:helm.sh/chart: {}
+       f:spec:
+         f:allowPrivilegeEscalation: {}
+         f:fsGroup:
+@@ -52,6 +50,16 @@
+     manager: helm
+     operation: Update
+     time: "2022-02-15T16:18:57Z"
++  - apiVersion: policy/v1beta1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:24:42Z"
+   name: grafana
+   resourceVersion: "186905965"
+   uid: 6d4d1e1e-4fed-475b-91c3-750c2dc09d0d
+diff -u -N /tmp/LIVE-2993898618/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole /tmp/MERGED-3100281028/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole
+--- /tmp/LIVE-2993898618/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole	2022-02-23 14:24:43.933351883 +0000
++++ /tmp/MERGED-3100281028/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole	2022-02-23 14:24:43.933351883 +0000
+@@ -9,8 +9,8 @@
+     app.kubernetes.io/instance: grafana
+     app.kubernetes.io/managed-by: Helm
+     app.kubernetes.io/name: grafana
+-    app.kubernetes.io/version: 8.1.2
+-    helm.sh/chart: grafana-6.16.6
++    app.kubernetes.io/version: 8.3.6
++    helm.sh/chart: grafana-6.22.0
+   managedFields:
+   - apiVersion: rbac.authorization.k8s.io/v1
+     fieldsType: FieldsV1
+@@ -25,12 +25,20 @@
+           f:app.kubernetes.io/instance: {}
+           f:app.kubernetes.io/managed-by: {}
+           f:app.kubernetes.io/name: {}
++    manager: helm
++    operation: Update
++    time: "2022-02-15T16:18:57Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
+           f:app.kubernetes.io/version: {}
+           f:helm.sh/chart: {}
+       f:rules: {}
+-    manager: helm
++    manager: kubectl-client-side-apply
+     operation: Update
+-    time: "2022-02-15T16:18:57Z"
++    time: "2022-02-23T14:24:43Z"
+   name: grafana-clusterrole
+   resourceVersion: "186905980"
+   uid: a8e8113a-5c61-422e-8c6f-a9299c02a1f3
+diff -u -N /tmp/LIVE-2993898618/rbac.authorization.k8s.io.v1.ClusterRoleBinding..grafana-clusterrolebinding /tmp/MERGED-3100281028/rbac.authorization.k8s.io.v1.ClusterRoleBinding..grafana-clusterrolebinding
+--- /tmp/LIVE-2993898618/rbac.authorization.k8s.io.v1.ClusterRoleBinding..grafana-clusterrolebinding	2022-02-23 14:24:44.169352177 +0000
++++ /tmp/MERGED-3100281028/rbac.authorization.k8s.io.v1.ClusterRoleBinding..grafana-clusterrolebinding	2022-02-23 14:24:44.169352177 +0000
+@@ -9,8 +9,8 @@
+     app.kubernetes.io/instance: grafana
+     app.kubernetes.io/managed-by: Helm
+     app.kubernetes.io/name: grafana
+-    app.kubernetes.io/version: 8.1.2
+-    helm.sh/chart: grafana-6.16.6
++    app.kubernetes.io/version: 8.3.6
++    helm.sh/chart: grafana-6.22.0
+   managedFields:
+   - apiVersion: rbac.authorization.k8s.io/v1
+     fieldsType: FieldsV1
+@@ -25,8 +25,6 @@
+           f:app.kubernetes.io/instance: {}
+           f:app.kubernetes.io/managed-by: {}
+           f:app.kubernetes.io/name: {}
+-          f:app.kubernetes.io/version: {}
+-          f:helm.sh/chart: {}
+       f:roleRef:
+         f:apiGroup: {}
+         f:kind: {}
+@@ -35,6 +33,16 @@
+     manager: helm
+     operation: Update
+     time: "2022-02-15T16:18:57Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:24:44Z"
+   name: grafana-clusterrolebinding
+   resourceVersion: "186905981"
+   uid: d2684d3a-00a4-4af2-9226-7593c0c841c7
+diff -u -N /tmp/LIVE-2993898618/rbac.authorization.k8s.io.v1.Role.monitoring.grafana /tmp/MERGED-3100281028/rbac.authorization.k8s.io.v1.Role.monitoring.grafana
+--- /tmp/LIVE-2993898618/rbac.authorization.k8s.io.v1.Role.monitoring.grafana	2022-02-23 14:24:44.465352546 +0000
++++ /tmp/MERGED-3100281028/rbac.authorization.k8s.io.v1.Role.monitoring.grafana	2022-02-23 14:24:44.465352546 +0000
+@@ -9,8 +9,8 @@
+     app.kubernetes.io/instance: grafana
+     app.kubernetes.io/managed-by: Helm
+     app.kubernetes.io/name: grafana
+-    app.kubernetes.io/version: 8.1.2
+-    helm.sh/chart: grafana-6.16.6
++    app.kubernetes.io/version: 8.3.6
++    helm.sh/chart: grafana-6.22.0
+   managedFields:
+   - apiVersion: rbac.authorization.k8s.io/v1
+     fieldsType: FieldsV1
+@@ -25,12 +25,20 @@
+           f:app.kubernetes.io/instance: {}
+           f:app.kubernetes.io/managed-by: {}
+           f:app.kubernetes.io/name: {}
+-          f:app.kubernetes.io/version: {}
+-          f:helm.sh/chart: {}
+       f:rules: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-15T16:18:57Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:24:44Z"
+   name: grafana
+   namespace: monitoring
+   resourceVersion: "186905982"
+diff -u -N /tmp/LIVE-2993898618/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.grafana /tmp/MERGED-3100281028/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.grafana
+--- /tmp/LIVE-2993898618/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.grafana	2022-02-23 14:24:44.697352834 +0000
++++ /tmp/MERGED-3100281028/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.grafana	2022-02-23 14:24:44.697352834 +0000
+@@ -9,8 +9,8 @@
+     app.kubernetes.io/instance: grafana
+     app.kubernetes.io/managed-by: Helm
+     app.kubernetes.io/name: grafana
+-    app.kubernetes.io/version: 8.1.2
+-    helm.sh/chart: grafana-6.16.6
++    app.kubernetes.io/version: 8.3.6
++    helm.sh/chart: grafana-6.22.0
+   managedFields:
+   - apiVersion: rbac.authorization.k8s.io/v1
+     fieldsType: FieldsV1
+@@ -25,8 +25,6 @@
+           f:app.kubernetes.io/instance: {}
+           f:app.kubernetes.io/managed-by: {}
+           f:app.kubernetes.io/name: {}
+-          f:app.kubernetes.io/version: {}
+-          f:helm.sh/chart: {}
+       f:roleRef:
+         f:apiGroup: {}
+         f:kind: {}
+@@ -35,6 +33,16 @@
+     manager: helm
+     operation: Update
+     time: "2022-02-15T16:18:57Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:24:44Z"
+   name: grafana
+   namespace: monitoring
+   resourceVersion: "186905983"
+diff -u -N /tmp/LIVE-2993898618/v1.ConfigMap.monitoring.grafana /tmp/MERGED-3100281028/v1.ConfigMap.monitoring.grafana
+--- /tmp/LIVE-2993898618/v1.ConfigMap.monitoring.grafana	2022-02-23 14:24:43.257351042 +0000
++++ /tmp/MERGED-3100281028/v1.ConfigMap.monitoring.grafana	2022-02-23 14:24:43.257351042 +0000
+@@ -79,8 +79,8 @@
+     app.kubernetes.io/instance: grafana
+     app.kubernetes.io/managed-by: Helm
+     app.kubernetes.io/name: grafana
+-    app.kubernetes.io/version: 8.1.2
+-    helm.sh/chart: grafana-6.16.6
++    app.kubernetes.io/version: 8.3.6
++    helm.sh/chart: grafana-6.22.0
+   managedFields:
+   - apiVersion: v1
+     fieldsType: FieldsV1
+@@ -101,11 +101,19 @@
+           f:app.kubernetes.io/instance: {}
+           f:app.kubernetes.io/managed-by: {}
+           f:app.kubernetes.io/name: {}
+-          f:app.kubernetes.io/version: {}
+-          f:helm.sh/chart: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-15T16:18:57Z"
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:24:43Z"
+   name: grafana
+   namespace: monitoring
+   resourceVersion: "186905975"
+diff -u -N /tmp/LIVE-2993898618/v1.ConfigMap.monitoring.grafana-dashboards-default /tmp/MERGED-3100281028/v1.ConfigMap.monitoring.grafana-dashboards-default
+--- /tmp/LIVE-2993898618/v1.ConfigMap.monitoring.grafana-dashboards-default	2022-02-23 14:24:43.473351311 +0000
++++ /tmp/MERGED-3100281028/v1.ConfigMap.monitoring.grafana-dashboards-default	2022-02-23 14:24:43.473351311 +0000
+@@ -9,9 +9,9 @@
+     app.kubernetes.io/instance: grafana
+     app.kubernetes.io/managed-by: Helm
+     app.kubernetes.io/name: grafana
+-    app.kubernetes.io/version: 8.1.2
++    app.kubernetes.io/version: 8.3.6
+     dashboard-provider: default
+-    helm.sh/chart: grafana-6.16.6
++    helm.sh/chart: grafana-6.22.0
+   managedFields:
+   - apiVersion: v1
+     fieldsType: FieldsV1
+@@ -26,12 +26,20 @@
+           f:app.kubernetes.io/instance: {}
+           f:app.kubernetes.io/managed-by: {}
+           f:app.kubernetes.io/name: {}
+-          f:app.kubernetes.io/version: {}
+           f:dashboard-provider: {}
+-          f:helm.sh/chart: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-15T16:18:57Z"
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:24:43Z"
+   name: grafana-dashboards-default
+   namespace: monitoring
+   resourceVersion: "186905976"
+diff -u -N /tmp/LIVE-2993898618/v1.PersistentVolumeClaim.monitoring.grafana /tmp/MERGED-3100281028/v1.PersistentVolumeClaim.monitoring.grafana
+--- /tmp/LIVE-2993898618/v1.PersistentVolumeClaim.monitoring.grafana	2022-02-23 14:24:43.689351580 +0000
++++ /tmp/MERGED-3100281028/v1.PersistentVolumeClaim.monitoring.grafana	2022-02-23 14:24:43.689351580 +0000
+@@ -14,8 +14,8 @@
+     app.kubernetes.io/instance: grafana
+     app.kubernetes.io/managed-by: Helm
+     app.kubernetes.io/name: grafana
+-    app.kubernetes.io/version: 8.1.2
+-    helm.sh/chart: grafana-6.16.6
++    app.kubernetes.io/version: 8.3.6
++    helm.sh/chart: grafana-6.22.0
+   managedFields:
+   - apiVersion: v1
+     fieldsType: FieldsV1
+@@ -33,8 +33,6 @@
+           f:app.kubernetes.io/instance: {}
+           f:app.kubernetes.io/managed-by: {}
+           f:app.kubernetes.io/name: {}
+-          f:app.kubernetes.io/version: {}
+-          f:helm.sh/chart: {}
+       f:spec:
+         f:accessModes: {}
+         f:resources:
+@@ -64,6 +62,16 @@
+     manager: kube-controller-manager
+     operation: Update
+     time: "2022-02-15T16:18:58Z"
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:24:43Z"
+   name: grafana
+   namespace: monitoring
+   resourceVersion: "186906010"
+diff -u -N /tmp/LIVE-2993898618/v1.Service.monitoring.grafana /tmp/MERGED-3100281028/v1.Service.monitoring.grafana
+--- /tmp/LIVE-2993898618/v1.Service.monitoring.grafana	2022-02-23 14:24:44.921353113 +0000
++++ /tmp/MERGED-3100281028/v1.Service.monitoring.grafana	2022-02-23 14:24:44.921353113 +0000
+@@ -9,8 +9,8 @@
+     app.kubernetes.io/instance: grafana
+     app.kubernetes.io/managed-by: Helm
+     app.kubernetes.io/name: grafana
+-    app.kubernetes.io/version: 8.1.2
+-    helm.sh/chart: grafana-6.16.6
++    app.kubernetes.io/version: 8.3.6
++    helm.sh/chart: grafana-6.22.0
+   managedFields:
+   - apiVersion: v1
+     fieldsType: FieldsV1
+@@ -25,8 +25,6 @@
+           f:app.kubernetes.io/instance: {}
+           f:app.kubernetes.io/managed-by: {}
+           f:app.kubernetes.io/name: {}
+-          f:app.kubernetes.io/version: {}
+-          f:helm.sh/chart: {}
+       f:spec:
+         f:ports:
+           .: {}
+@@ -45,6 +43,16 @@
+     manager: helm
+     operation: Update
+     time: "2022-02-15T16:18:57Z"
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:24:44Z"
+   name: grafana
+   namespace: monitoring
+   resourceVersion: "186905987"
+diff -u -N /tmp/LIVE-2993898618/v1.ServiceAccount.monitoring.grafana /tmp/MERGED-3100281028/v1.ServiceAccount.monitoring.grafana
+--- /tmp/LIVE-2993898618/v1.ServiceAccount.monitoring.grafana	2022-02-23 14:24:43.041350773 +0000
++++ /tmp/MERGED-3100281028/v1.ServiceAccount.monitoring.grafana	2022-02-23 14:24:43.045350778 +0000
+@@ -9,8 +9,8 @@
+     app.kubernetes.io/instance: grafana
+     app.kubernetes.io/managed-by: Helm
+     app.kubernetes.io/name: grafana
+-    app.kubernetes.io/version: 8.1.2
+-    helm.sh/chart: grafana-6.16.6
++    app.kubernetes.io/version: 8.3.6
++    helm.sh/chart: grafana-6.22.0
+   managedFields:
+   - apiVersion: v1
+     fieldsType: FieldsV1
+@@ -25,8 +25,6 @@
+           f:app.kubernetes.io/instance: {}
+           f:app.kubernetes.io/managed-by: {}
+           f:app.kubernetes.io/name: {}
+-          f:app.kubernetes.io/version: {}
+-          f:helm.sh/chart: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-15T16:18:57Z"
+@@ -41,6 +39,16 @@
+     manager: kube-controller-manager
+     operation: Update
+     time: "2022-02-15T16:18:57Z"
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:24:43Z"
+   name: grafana
+   namespace: monitoring
+   resourceVersion: "186905974"
+[helm:loki=kubernetes/apps/charts/loki-stack]
+
+diff -u -N /tmp/LIVE-2588370827/apps.v1.StatefulSet.monitoring.loki /tmp/MERGED-1769463450/apps.v1.StatefulSet.monitoring.loki
+--- /tmp/LIVE-2588370827/apps.v1.StatefulSet.monitoring.loki	2022-02-23 14:25:02.577374874 +0000
++++ /tmp/MERGED-1769463450/apps.v1.StatefulSet.monitoring.loki	2022-02-23 14:25:02.581374879 +0000
+@@ -5,11 +5,11 @@
+     meta.helm.sh/release-name: loki
+     meta.helm.sh/release-namespace: monitoring
+   creationTimestamp: "2022-02-17T21:39:44Z"
+-  generation: 1
++  generation: 2
+   labels:
+     app: loki
+     app.kubernetes.io/managed-by: Helm
+-    chart: loki-2.9.2
++    chart: loki-2.10.1
+     heritage: Helm
+     release: loki
+   managedFields:
+@@ -25,7 +25,6 @@
+           .: {}
+           f:app: {}
+           f:app.kubernetes.io/managed-by: {}
+-          f:chart: {}
+           f:heritage: {}
+           f:release: {}
+       f:spec:
+@@ -38,7 +37,6 @@
+           f:metadata:
+             f:annotations:
+               .: {}
+-              f:checksum/config: {}
+               f:prometheus.io/port: {}
+               f:prometheus.io/scrape: {}
+             f:labels:
+@@ -155,6 +153,20 @@
+     manager: kube-controller-manager
+     operation: Update
+     time: "2022-02-17T21:41:02Z"
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:chart: {}
++      f:spec:
++        f:template:
++          f:metadata:
++            f:annotations:
++              f:checksum/config: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:25:02Z"
+   name: loki
+   namespace: monitoring
+   resourceVersion: "188353141"
+@@ -171,7 +183,7 @@
+   template:
+     metadata:
+       annotations:
+-        checksum/config: 84ad776864cda9c75387db352798ee8d06d97867baff7c90d19d495538f6de8f
++        checksum/config: e2abcb4d89d37286130f2f1de576b97f1854c2900641e0e7737b372dee62a13e
+         prometheus.io/port: http-metrics
+         prometheus.io/scrape: "true"
+       creationTimestamp: null
+diff -u -N /tmp/LIVE-2588370827/policy.v1beta1.PodSecurityPolicy..loki /tmp/MERGED-1769463450/policy.v1beta1.PodSecurityPolicy..loki
+--- /tmp/LIVE-2588370827/policy.v1beta1.PodSecurityPolicy..loki	2022-02-23 14:24:59.777371426 +0000
++++ /tmp/MERGED-1769463450/policy.v1beta1.PodSecurityPolicy..loki	2022-02-23 14:24:59.777371426 +0000
+@@ -8,7 +8,7 @@
+   labels:
+     app: loki
+     app.kubernetes.io/managed-by: Helm
+-    chart: loki-2.9.2
++    chart: loki-2.10.1
+     heritage: Helm
+     release: loki
+   managedFields:
+@@ -24,7 +24,6 @@
+           .: {}
+           f:app: {}
+           f:app.kubernetes.io/managed-by: {}
+-          f:chart: {}
+           f:heritage: {}
+           f:release: {}
+       f:spec:
+@@ -45,6 +44,15 @@
+     manager: helm
+     operation: Update
+     time: "2022-02-17T21:39:43Z"
++  - apiVersion: policy/v1beta1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:24:59Z"
+   name: loki
+   resourceVersion: "188352450"
+   uid: 8cbf7131-f582-494f-83aa-9d88c4059c5c
+diff -u -N /tmp/LIVE-2588370827/rbac.authorization.k8s.io.v1.Role.monitoring.loki /tmp/MERGED-1769463450/rbac.authorization.k8s.io.v1.Role.monitoring.loki
+--- /tmp/LIVE-2588370827/rbac.authorization.k8s.io.v1.Role.monitoring.loki	2022-02-23 14:25:01.281373278 +0000
++++ /tmp/MERGED-1769463450/rbac.authorization.k8s.io.v1.Role.monitoring.loki	2022-02-23 14:25:01.281373278 +0000
+@@ -8,7 +8,7 @@
+   labels:
+     app: loki
+     app.kubernetes.io/managed-by: Helm
+-    chart: loki-2.9.2
++    chart: loki-2.10.1
+     heritage: Helm
+     release: loki
+   managedFields:
+@@ -24,13 +24,21 @@
+           .: {}
+           f:app: {}
+           f:app.kubernetes.io/managed-by: {}
+-          f:chart: {}
+           f:heritage: {}
+           f:release: {}
+       f:rules: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-17T21:39:43Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:25:01Z"
+   name: loki
+   namespace: monitoring
+   resourceVersion: "188352462"
+diff -u -N /tmp/LIVE-2588370827/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.loki /tmp/MERGED-1769463450/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.loki
+--- /tmp/LIVE-2588370827/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.loki	2022-02-23 14:25:01.601373672 +0000
++++ /tmp/MERGED-1769463450/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.loki	2022-02-23 14:25:01.601373672 +0000
+@@ -8,7 +8,7 @@
+   labels:
+     app: loki
+     app.kubernetes.io/managed-by: Helm
+-    chart: loki-2.9.2
++    chart: loki-2.10.1
+     heritage: Helm
+     release: loki
+   managedFields:
+@@ -24,7 +24,6 @@
+           .: {}
+           f:app: {}
+           f:app.kubernetes.io/managed-by: {}
+-          f:chart: {}
+           f:heritage: {}
+           f:release: {}
+       f:roleRef:
+@@ -35,6 +34,15 @@
+     manager: helm
+     operation: Update
+     time: "2022-02-17T21:39:44Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:25:01Z"
+   name: loki
+   namespace: monitoring
+   resourceVersion: "188352465"
+diff -u -N /tmp/LIVE-2588370827/v1.ConfigMap.monitoring.loki-loki-stack /tmp/MERGED-1769463450/v1.ConfigMap.monitoring.loki-loki-stack
+--- /tmp/LIVE-2588370827/v1.ConfigMap.monitoring.loki-loki-stack	2022-02-23 14:25:00.849372746 +0000
++++ /tmp/MERGED-1769463450/v1.ConfigMap.monitoring.loki-loki-stack	2022-02-23 14:25:00.849372746 +0000
+@@ -17,7 +17,7 @@
+   labels:
+     app: loki-stack
+     app.kubernetes.io/managed-by: Helm
+-    chart: loki-stack-2.4.1
++    chart: loki-stack-2.6.1
+     grafana_datasource: "1"
+     heritage: Helm
+     release: loki
+@@ -37,13 +37,21 @@
+           .: {}
+           f:app: {}
+           f:app.kubernetes.io/managed-by: {}
+-          f:chart: {}
+           f:grafana_datasource: {}
+           f:heritage: {}
+           f:release: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-17T21:39:43Z"
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:25:00Z"
+   name: loki-loki-stack
+   namespace: monitoring
+   resourceVersion: "188352459"
+diff -u -N /tmp/LIVE-2588370827/v1.Secret.monitoring.loki /tmp/MERGED-1769463450/v1.Secret.monitoring.loki
+--- /tmp/LIVE-2588370827/v1.Secret.monitoring.loki	2022-02-23 14:25:00.545372372 +0000
++++ /tmp/MERGED-1769463450/v1.Secret.monitoring.loki	2022-02-23 14:25:00.545372372 +0000
+@@ -10,7 +10,7 @@
+   labels:
+     app: loki
+     app.kubernetes.io/managed-by: Helm
+-    chart: loki-2.9.2
++    chart: loki-2.10.1
+     heritage: Helm
+     release: loki
+   managedFields:
+@@ -29,13 +29,21 @@
+           .: {}
+           f:app: {}
+           f:app.kubernetes.io/managed-by: {}
+-          f:chart: {}
+           f:heritage: {}
+           f:release: {}
+       f:type: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-17T21:39:43Z"
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:25:00Z"
+   name: loki
+   namespace: monitoring
+   resourceVersion: "188352457"
+diff -u -N /tmp/LIVE-2588370827/v1.Service.monitoring.loki /tmp/MERGED-1769463450/v1.Service.monitoring.loki
+--- /tmp/LIVE-2588370827/v1.Service.monitoring.loki	2022-02-23 14:25:02.105374293 +0000
++++ /tmp/MERGED-1769463450/v1.Service.monitoring.loki	2022-02-23 14:25:02.105374293 +0000
+@@ -8,7 +8,7 @@
+   labels:
+     app: loki
+     app.kubernetes.io/managed-by: Helm
+-    chart: loki-2.9.2
++    chart: loki-2.10.1
+     heritage: Helm
+     release: loki
+   managedFields:
+@@ -24,7 +24,6 @@
+           .: {}
+           f:app: {}
+           f:app.kubernetes.io/managed-by: {}
+-          f:chart: {}
+           f:heritage: {}
+           f:release: {}
+       f:spec:
+@@ -45,6 +44,15 @@
+     manager: helm
+     operation: Update
+     time: "2022-02-17T21:39:44Z"
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:25:02Z"
+   name: loki
+   namespace: monitoring
+   resourceVersion: "188352470"
+diff -u -N /tmp/LIVE-2588370827/v1.Service.monitoring.loki-headless /tmp/MERGED-1769463450/v1.Service.monitoring.loki-headless
+--- /tmp/LIVE-2588370827/v1.Service.monitoring.loki-headless	2022-02-23 14:25:01.909374051 +0000
++++ /tmp/MERGED-1769463450/v1.Service.monitoring.loki-headless	2022-02-23 14:25:01.909374051 +0000
+@@ -8,7 +8,7 @@
+   labels:
+     app: loki
+     app.kubernetes.io/managed-by: Helm
+-    chart: loki-2.9.2
++    chart: loki-2.10.1
+     heritage: Helm
+     release: loki
+     variant: headless
+@@ -25,7 +25,6 @@
+           .: {}
+           f:app: {}
+           f:app.kubernetes.io/managed-by: {}
+-          f:chart: {}
+           f:heritage: {}
+           f:release: {}
+           f:variant: {}
+@@ -48,6 +47,15 @@
+     manager: helm
+     operation: Update
+     time: "2022-02-17T21:39:44Z"
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:25:01Z"
+   name: loki-headless
+   namespace: monitoring
+   resourceVersion: "188352468"
+diff -u -N /tmp/LIVE-2588370827/v1.ServiceAccount.monitoring.loki /tmp/MERGED-1769463450/v1.ServiceAccount.monitoring.loki
+--- /tmp/LIVE-2588370827/v1.ServiceAccount.monitoring.loki	2022-02-23 14:25:00.193371938 +0000
++++ /tmp/MERGED-1769463450/v1.ServiceAccount.monitoring.loki	2022-02-23 14:25:00.193371938 +0000
+@@ -9,7 +9,7 @@
+   labels:
+     app: loki
+     app.kubernetes.io/managed-by: Helm
+-    chart: loki-2.9.2
++    chart: loki-2.10.1
+     heritage: Helm
+     release: loki
+   managedFields:
+@@ -26,7 +26,6 @@
+           .: {}
+           f:app: {}
+           f:app.kubernetes.io/managed-by: {}
+-          f:chart: {}
+           f:heritage: {}
+           f:release: {}
+     manager: helm
+@@ -43,6 +42,15 @@
+     manager: kube-controller-manager
+     operation: Update
+     time: "2022-02-17T21:39:43Z"
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          f:chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:25:00Z"
+   name: loki
+   namespace: monitoring
+   resourceVersion: "188352455"
