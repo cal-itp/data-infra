@@ -1,0 +1,1480 @@
+[helm:grafana=kubernetes/apps/charts/grafana]
+
+diff -u -N /tmp/LIVE-170848877/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole /tmp/MERGED-3562356932/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole
+--- /tmp/LIVE-170848877/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole	2022-02-17 21:39:20.565649364 +0000
++++ /tmp/MERGED-3562356932/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole	2022-02-17 21:39:20.565649364 +0000
+@@ -27,10 +27,16 @@
+           f:app.kubernetes.io/name: {}
+           f:app.kubernetes.io/version: {}
+           f:helm.sh/chart: {}
+-      f:rules: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-15T16:18:57Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-17T21:39:20Z"
+   name: grafana-clusterrole
+   resourceVersion: "186905980"
+   uid: a8e8113a-5c61-422e-8c6f-a9299c02a1f3
+[kustomize:kubernetes/apps/overlays/gtfs-rt-archive-preprod]
+
+diff -u -N /tmp/LIVE-2961137114/apps.v1.Deployment.gtfs-rt-preprod.gtfs-rt-archive /tmp/MERGED-622793558/apps.v1.Deployment.gtfs-rt-preprod.gtfs-rt-archive
+--- /tmp/LIVE-2961137114/apps.v1.Deployment.gtfs-rt-preprod.gtfs-rt-archive	2022-02-17 21:39:29.193753296 +0000
++++ /tmp/MERGED-622793558/apps.v1.Deployment.gtfs-rt-preprod.gtfs-rt-archive	2022-02-17 21:39:29.193753296 +0000
+@@ -6,7 +6,7 @@
+     kubectl.kubernetes.io/last-applied-configuration: |
+       {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"name":"gtfs-rt-archive"},"name":"gtfs-rt-archive","namespace":"gtfs-rt-preprod"},"spec":{"replicas":1,"selector":{"matchLabels":{"name":"gtfs-rt-archive"}},"strategy":{"type":"Recreate"},"template":{"metadata":{"labels":{"name":"gtfs-rt-archive"}},"spec":{"containers":[{"envFrom":[{"configMapRef":{"name":"archiver-app-vars"}},{"configMapRef":{"name":"archiver-channel-vars"}}],"image":"us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:2.1","imagePullPolicy":"Always","name":"app","resources":{"limits":{"memory":"6.5Gi"},"requests":{"memory":"6.5Gi"}},"volumeMounts":[{"mountPath":"/secrets/agencies-data","name":"agencies-data"},{"mountPath":"/secrets/gcs-upload-svcacct","name":"gcs-upload-svcacct"}]}],"volumes":[{"name":"agencies-data","secret":{"secretName":"agencies-data"}},{"name":"gcs-upload-svcacct","secret":{"secretName":"gcs-upload-svcacct"}}]}}}}
+   creationTimestamp: "2021-08-27T15:19:49Z"
+-  generation: 402
++  generation: 403
+   labels:
+     name: gtfs-rt-archive
+   managedFields:
+@@ -156,7 +156,7 @@
+             name: archiver-app-vars
+         - configMapRef:
+             name: archiver-channel-vars
+-        image: us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:2.1
++        image: us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:2.0
+         imagePullPolicy: Always
+         name: app
+         resources:
+[helm:loki=kubernetes/apps/charts/loki-stack]
+
+diff -u -N /tmp/LIVE-3161488211/apps.v1.DaemonSet.monitoring.loki-promtail /tmp/MERGED-3948693554/apps.v1.DaemonSet.monitoring.loki-promtail
+--- /tmp/LIVE-3161488211/apps.v1.DaemonSet.monitoring.loki-promtail	2022-02-17 21:39:40.573852976 +0000
++++ /tmp/MERGED-3948693554/apps.v1.DaemonSet.monitoring.loki-promtail	2022-02-17 21:39:40.573852976 +0000
+@@ -0,0 +1,256 @@
++apiVersion: apps/v1
++kind: DaemonSet
++metadata:
++  annotations:
++    deprecated.daemonset.template.generation: "1"
++  creationTimestamp: "2022-02-17T21:39:40Z"
++  generation: 1
++  labels:
++    app: promtail
++    chart: promtail-2.2.0
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:annotations:
++          .: {}
++          f:deprecated.daemonset.template.generation: {}
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++      f:spec:
++        f:revisionHistoryLimit: {}
++        f:selector: {}
++        f:template:
++          f:metadata:
++            f:annotations:
++              .: {}
++              f:checksum/config: {}
++              f:prometheus.io/port: {}
++              f:prometheus.io/scrape: {}
++            f:labels:
++              .: {}
++              f:app: {}
++              f:release: {}
++          f:spec:
++            f:affinity: {}
++            f:containers:
++              k:{"name":"promtail"}:
++                .: {}
++                f:args: {}
++                f:env:
++                  .: {}
++                  k:{"name":"HOSTNAME"}:
++                    .: {}
++                    f:name: {}
++                    f:valueFrom:
++                      .: {}
++                      f:fieldRef:
++                        .: {}
++                        f:apiVersion: {}
++                        f:fieldPath: {}
++                f:image: {}
++                f:imagePullPolicy: {}
++                f:name: {}
++                f:ports:
++                  .: {}
++                  k:{"containerPort":3101,"protocol":"TCP"}:
++                    .: {}
++                    f:containerPort: {}
++                    f:name: {}
++                    f:protocol: {}
++                f:readinessProbe:
++                  .: {}
++                  f:failureThreshold: {}
++                  f:httpGet:
++                    .: {}
++                    f:path: {}
++                    f:port: {}
++                    f:scheme: {}
++                  f:initialDelaySeconds: {}
++                  f:periodSeconds: {}
++                  f:successThreshold: {}
++                  f:timeoutSeconds: {}
++                f:resources: {}
++                f:securityContext:
++                  .: {}
++                  f:readOnlyRootFilesystem: {}
++                  f:runAsGroup: {}
++                  f:runAsUser: {}
++                f:terminationMessagePath: {}
++                f:terminationMessagePolicy: {}
++                f:volumeMounts:
++                  .: {}
++                  k:{"mountPath":"/etc/promtail"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                  k:{"mountPath":"/run/promtail"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                  k:{"mountPath":"/var/lib/docker/containers"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                    f:readOnly: {}
++                  k:{"mountPath":"/var/log/pods"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                    f:readOnly: {}
++            f:dnsPolicy: {}
++            f:restartPolicy: {}
++            f:schedulerName: {}
++            f:securityContext: {}
++            f:serviceAccount: {}
++            f:serviceAccountName: {}
++            f:terminationGracePeriodSeconds: {}
++            f:tolerations: {}
++            f:volumes:
++              .: {}
++              k:{"name":"config"}:
++                .: {}
++                f:configMap:
++                  .: {}
++                  f:defaultMode: {}
++                  f:name: {}
++                f:name: {}
++              k:{"name":"docker"}:
++                .: {}
++                f:hostPath:
++                  .: {}
++                  f:path: {}
++                  f:type: {}
++                f:name: {}
++              k:{"name":"pods"}:
++                .: {}
++                f:hostPath:
++                  .: {}
++                  f:path: {}
++                  f:type: {}
++                f:name: {}
++              k:{"name":"run"}:
++                .: {}
++                f:hostPath:
++                  .: {}
++                  f:path: {}
++                  f:type: {}
++                f:name: {}
++        f:updateStrategy:
++          f:rollingUpdate:
++            .: {}
++            f:maxUnavailable: {}
++          f:type: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-17T21:39:40Z"
++  name: loki-promtail
++  namespace: monitoring
++  uid: 4a4047fa-9e2a-4296-ae06-7b8491c1b2c9
++spec:
++  revisionHistoryLimit: 10
++  selector:
++    matchLabels:
++      app: promtail
++      release: loki
++  template:
++    metadata:
++      annotations:
++        checksum/config: c690cb3101a04ebc0a437bac338fc23960f68f8363b3204b9308d0e6ba077f3d
++        prometheus.io/port: http-metrics
++        prometheus.io/scrape: "true"
++      creationTimestamp: null
++      labels:
++        app: promtail
++        release: loki
++    spec:
++      affinity: {}
++      containers:
++      - args:
++        - -config.file=/etc/promtail/promtail.yaml
++        - -client.url=http://loki:3100/loki/api/v1/push
++        env:
++        - name: HOSTNAME
++          valueFrom:
++            fieldRef:
++              apiVersion: v1
++              fieldPath: spec.nodeName
++        image: grafana/promtail:2.1.0
++        imagePullPolicy: IfNotPresent
++        name: promtail
++        ports:
++        - containerPort: 3101
++          name: http-metrics
++          protocol: TCP
++        readinessProbe:
++          failureThreshold: 5
++          httpGet:
++            path: /ready
++            port: http-metrics
++            scheme: HTTP
++          initialDelaySeconds: 10
++          periodSeconds: 10
++          successThreshold: 1
++          timeoutSeconds: 1
++        resources: {}
++        securityContext:
++          readOnlyRootFilesystem: true
++          runAsGroup: 0
++          runAsUser: 0
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++        volumeMounts:
++        - mountPath: /etc/promtail
++          name: config
++        - mountPath: /run/promtail
++          name: run
++        - mountPath: /var/lib/docker/containers
++          name: docker
++          readOnly: true
++        - mountPath: /var/log/pods
++          name: pods
++          readOnly: true
++      dnsPolicy: ClusterFirst
++      restartPolicy: Always
++      schedulerName: default-scheduler
++      securityContext: {}
++      serviceAccount: loki-promtail
++      serviceAccountName: loki-promtail
++      terminationGracePeriodSeconds: 30
++      tolerations:
++      - effect: NoSchedule
++        key: node-role.kubernetes.io/master
++        operator: Exists
++      volumes:
++      - configMap:
++          defaultMode: 420
++          name: loki-promtail
++        name: config
++      - hostPath:
++          path: /run/promtail
++          type: ""
++        name: run
++      - hostPath:
++          path: /var/lib/docker/containers
++          type: ""
++        name: docker
++      - hostPath:
++          path: /var/log/pods
++          type: ""
++        name: pods
++  updateStrategy:
++    rollingUpdate:
++      maxUnavailable: 1
++    type: RollingUpdate
++status:
++  currentNumberScheduled: 0
++  desiredNumberScheduled: 0
++  numberMisscheduled: 0
++  numberReady: 0
+diff -u -N /tmp/LIVE-3161488211/apps.v1.StatefulSet.monitoring.loki /tmp/MERGED-3948693554/apps.v1.StatefulSet.monitoring.loki
+--- /tmp/LIVE-3161488211/apps.v1.StatefulSet.monitoring.loki	2022-02-17 21:39:40.861856569 +0000
++++ /tmp/MERGED-3948693554/apps.v1.StatefulSet.monitoring.loki	2022-02-17 21:39:40.861856569 +0000
+@@ -0,0 +1,224 @@
++apiVersion: apps/v1
++kind: StatefulSet
++metadata:
++  creationTimestamp: "2022-02-17T21:39:40Z"
++  generation: 1
++  labels:
++    app: loki
++    chart: loki-2.9.2
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++      f:spec:
++        f:podManagementPolicy: {}
++        f:replicas: {}
++        f:revisionHistoryLimit: {}
++        f:selector: {}
++        f:serviceName: {}
++        f:template:
++          f:metadata:
++            f:annotations:
++              .: {}
++              f:checksum/config: {}
++              f:prometheus.io/port: {}
++              f:prometheus.io/scrape: {}
++            f:labels:
++              .: {}
++              f:app: {}
++              f:name: {}
++              f:release: {}
++          f:spec:
++            f:affinity: {}
++            f:containers:
++              k:{"name":"loki"}:
++                .: {}
++                f:args: {}
++                f:image: {}
++                f:imagePullPolicy: {}
++                f:livenessProbe:
++                  .: {}
++                  f:failureThreshold: {}
++                  f:httpGet:
++                    .: {}
++                    f:path: {}
++                    f:port: {}
++                    f:scheme: {}
++                  f:initialDelaySeconds: {}
++                  f:periodSeconds: {}
++                  f:successThreshold: {}
++                  f:timeoutSeconds: {}
++                f:name: {}
++                f:ports:
++                  .: {}
++                  k:{"containerPort":3100,"protocol":"TCP"}:
++                    .: {}
++                    f:containerPort: {}
++                    f:name: {}
++                    f:protocol: {}
++                f:readinessProbe:
++                  .: {}
++                  f:failureThreshold: {}
++                  f:httpGet:
++                    .: {}
++                    f:path: {}
++                    f:port: {}
++                    f:scheme: {}
++                  f:initialDelaySeconds: {}
++                  f:periodSeconds: {}
++                  f:successThreshold: {}
++                  f:timeoutSeconds: {}
++                f:resources: {}
++                f:securityContext:
++                  .: {}
++                  f:readOnlyRootFilesystem: {}
++                f:terminationMessagePath: {}
++                f:terminationMessagePolicy: {}
++                f:volumeMounts:
++                  .: {}
++                  k:{"mountPath":"/data"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                  k:{"mountPath":"/etc/loki"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                  k:{"mountPath":"/tmp"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++            f:dnsPolicy: {}
++            f:restartPolicy: {}
++            f:schedulerName: {}
++            f:securityContext:
++              .: {}
++              f:fsGroup: {}
++              f:runAsGroup: {}
++              f:runAsNonRoot: {}
++              f:runAsUser: {}
++            f:serviceAccount: {}
++            f:serviceAccountName: {}
++            f:terminationGracePeriodSeconds: {}
++            f:volumes:
++              .: {}
++              k:{"name":"config"}:
++                .: {}
++                f:name: {}
++                f:secret:
++                  .: {}
++                  f:defaultMode: {}
++                  f:secretName: {}
++              k:{"name":"storage"}:
++                .: {}
++                f:emptyDir: {}
++                f:name: {}
++              k:{"name":"tmp"}:
++                .: {}
++                f:emptyDir: {}
++                f:name: {}
++        f:updateStrategy:
++          f:type: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-17T21:39:40Z"
++  name: loki
++  namespace: monitoring
++  uid: 72f40709-1678-410d-8f32-fd37f80dfe9d
++spec:
++  podManagementPolicy: OrderedReady
++  replicas: 1
++  revisionHistoryLimit: 10
++  selector:
++    matchLabels:
++      app: loki
++      release: loki
++  serviceName: loki-headless
++  template:
++    metadata:
++      annotations:
++        checksum/config: 84ad776864cda9c75387db352798ee8d06d97867baff7c90d19d495538f6de8f
++        prometheus.io/port: http-metrics
++        prometheus.io/scrape: "true"
++      creationTimestamp: null
++      labels:
++        app: loki
++        name: loki
++        release: loki
++    spec:
++      affinity: {}
++      containers:
++      - args:
++        - -config.file=/etc/loki/loki.yaml
++        image: grafana/loki:2.4.2
++        imagePullPolicy: IfNotPresent
++        livenessProbe:
++          failureThreshold: 3
++          httpGet:
++            path: /ready
++            port: http-metrics
++            scheme: HTTP
++          initialDelaySeconds: 45
++          periodSeconds: 10
++          successThreshold: 1
++          timeoutSeconds: 1
++        name: loki
++        ports:
++        - containerPort: 3100
++          name: http-metrics
++          protocol: TCP
++        readinessProbe:
++          failureThreshold: 3
++          httpGet:
++            path: /ready
++            port: http-metrics
++            scheme: HTTP
++          initialDelaySeconds: 45
++          periodSeconds: 10
++          successThreshold: 1
++          timeoutSeconds: 1
++        resources: {}
++        securityContext:
++          readOnlyRootFilesystem: true
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++        volumeMounts:
++        - mountPath: /tmp
++          name: tmp
++        - mountPath: /etc/loki
++          name: config
++        - mountPath: /data
++          name: storage
++      dnsPolicy: ClusterFirst
++      restartPolicy: Always
++      schedulerName: default-scheduler
++      securityContext:
++        fsGroup: 10001
++        runAsGroup: 10001
++        runAsNonRoot: true
++        runAsUser: 10001
++      serviceAccount: loki
++      serviceAccountName: loki
++      terminationGracePeriodSeconds: 4800
++      volumes:
++      - emptyDir: {}
++        name: tmp
++      - name: config
++        secret:
++          defaultMode: 420
++          secretName: loki
++      - emptyDir: {}
++        name: storage
++  updateStrategy:
++    type: RollingUpdate
++status:
++  replicas: 0
+diff -u -N /tmp/LIVE-3161488211/policy.v1beta1.PodSecurityPolicy..loki /tmp/MERGED-3948693554/policy.v1beta1.PodSecurityPolicy..loki
+--- /tmp/LIVE-3161488211/policy.v1beta1.PodSecurityPolicy..loki	2022-02-17 21:39:36.465801723 +0000
++++ /tmp/MERGED-3948693554/policy.v1beta1.PodSecurityPolicy..loki	2022-02-17 21:39:36.465801723 +0000
+@@ -0,0 +1,66 @@
++apiVersion: policy/v1beta1
++kind: PodSecurityPolicy
++metadata:
++  creationTimestamp: "2022-02-17T21:39:36Z"
++  labels:
++    app: loki
++    chart: loki-2.9.2
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: policy/v1beta1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++      f:spec:
++        f:allowPrivilegeEscalation: {}
++        f:fsGroup:
++          f:ranges: {}
++          f:rule: {}
++        f:readOnlyRootFilesystem: {}
++        f:requiredDropCapabilities: {}
++        f:runAsUser:
++          f:rule: {}
++        f:seLinux:
++          f:rule: {}
++        f:supplementalGroups:
++          f:ranges: {}
++          f:rule: {}
++        f:volumes: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-17T21:39:36Z"
++  name: loki
++  uid: 01032698-0929-44c2-8e37-980b99574f71
++spec:
++  allowPrivilegeEscalation: false
++  fsGroup:
++    ranges:
++    - max: 65535
++      min: 1
++    rule: MustRunAs
++  readOnlyRootFilesystem: true
++  requiredDropCapabilities:
++  - ALL
++  runAsUser:
++    rule: MustRunAsNonRoot
++  seLinux:
++    rule: RunAsAny
++  supplementalGroups:
++    ranges:
++    - max: 65535
++      min: 1
++    rule: MustRunAs
++  volumes:
++  - configMap
++  - emptyDir
++  - persistentVolumeClaim
++  - secret
++  - projected
++  - downwardAPI
+diff -u -N /tmp/LIVE-3161488211/policy.v1beta1.PodSecurityPolicy..loki-promtail /tmp/MERGED-3948693554/policy.v1beta1.PodSecurityPolicy..loki-promtail
+--- /tmp/LIVE-3161488211/policy.v1beta1.PodSecurityPolicy..loki-promtail	2022-02-17 21:39:36.649804019 +0000
++++ /tmp/MERGED-3948693554/policy.v1beta1.PodSecurityPolicy..loki-promtail	2022-02-17 21:39:36.649804019 +0000
+@@ -0,0 +1,58 @@
++apiVersion: policy/v1beta1
++kind: PodSecurityPolicy
++metadata:
++  creationTimestamp: "2022-02-17T21:39:36Z"
++  labels:
++    app: promtail
++    chart: promtail-2.2.0
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: policy/v1beta1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++      f:spec:
++        f:allowPrivilegeEscalation: {}
++        f:fsGroup:
++          f:rule: {}
++        f:readOnlyRootFilesystem: {}
++        f:requiredDropCapabilities: {}
++        f:runAsUser:
++          f:rule: {}
++        f:seLinux:
++          f:rule: {}
++        f:supplementalGroups:
++          f:rule: {}
++        f:volumes: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-17T21:39:36Z"
++  name: loki-promtail
++  uid: c804227f-74e2-4424-8f7b-6a1503ede8de
++spec:
++  allowPrivilegeEscalation: false
++  fsGroup:
++    rule: RunAsAny
++  readOnlyRootFilesystem: true
++  requiredDropCapabilities:
++  - ALL
++  runAsUser:
++    rule: RunAsAny
++  seLinux:
++    rule: RunAsAny
++  supplementalGroups:
++    rule: RunAsAny
++  volumes:
++  - secret
++  - configMap
++  - hostPath
++  - projected
++  - downwardAPI
++  - emptyDir
+diff -u -N /tmp/LIVE-3161488211/rbac.authorization.k8s.io.v1.ClusterRole..loki-promtail-clusterrole /tmp/MERGED-3948693554/rbac.authorization.k8s.io.v1.ClusterRole..loki-promtail-clusterrole
+--- /tmp/LIVE-3161488211/rbac.authorization.k8s.io.v1.ClusterRole..loki-promtail-clusterrole	2022-02-17 21:39:38.313824779 +0000
++++ /tmp/MERGED-3948693554/rbac.authorization.k8s.io.v1.ClusterRole..loki-promtail-clusterrole	2022-02-17 21:39:38.313824779 +0000
+@@ -0,0 +1,39 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: ClusterRole
++metadata:
++  creationTimestamp: "2022-02-17T21:39:38Z"
++  labels:
++    app: promtail
++    chart: promtail-2.2.0
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-17T21:39:38Z"
++  name: loki-promtail-clusterrole
++  uid: a2bd25b9-b633-41dd-9d47-1d546b61964b
++rules:
++- apiGroups:
++  - ""
++  resources:
++  - nodes
++  - nodes/proxy
++  - services
++  - endpoints
++  - pods
++  verbs:
++  - get
++  - watch
++  - list
+diff -u -N /tmp/LIVE-3161488211/rbac.authorization.k8s.io.v1.ClusterRoleBinding..loki-promtail-clusterrolebinding /tmp/MERGED-3948693554/rbac.authorization.k8s.io.v1.ClusterRoleBinding..loki-promtail-clusterrolebinding
+--- /tmp/LIVE-3161488211/rbac.authorization.k8s.io.v1.ClusterRoleBinding..loki-promtail-clusterrolebinding	2022-02-17 21:39:38.541827624 +0000
++++ /tmp/MERGED-3948693554/rbac.authorization.k8s.io.v1.ClusterRoleBinding..loki-promtail-clusterrolebinding	2022-02-17 21:39:38.541827624 +0000
+@@ -0,0 +1,38 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: ClusterRoleBinding
++metadata:
++  creationTimestamp: "2022-02-17T21:39:38Z"
++  labels:
++    app: promtail
++    chart: promtail-2.2.0
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++      f:roleRef:
++        f:apiGroup: {}
++        f:kind: {}
++        f:name: {}
++      f:subjects: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-17T21:39:38Z"
++  name: loki-promtail-clusterrolebinding
++  uid: 703d7af5-53fb-424c-afeb-44d2d7ad5492
++roleRef:
++  apiGroup: rbac.authorization.k8s.io
++  kind: ClusterRole
++  name: loki-promtail-clusterrole
++subjects:
++- kind: ServiceAccount
++  name: loki-promtail
++  namespace: monitoring
+diff -u -N /tmp/LIVE-3161488211/rbac.authorization.k8s.io.v1.Role.monitoring.loki /tmp/MERGED-3948693554/rbac.authorization.k8s.io.v1.Role.monitoring.loki
+--- /tmp/LIVE-3161488211/rbac.authorization.k8s.io.v1.Role.monitoring.loki	2022-02-17 21:39:38.841831367 +0000
++++ /tmp/MERGED-3948693554/rbac.authorization.k8s.io.v1.Role.monitoring.loki	2022-02-17 21:39:38.841831367 +0000
+@@ -0,0 +1,36 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: Role
++metadata:
++  creationTimestamp: "2022-02-17T21:39:38Z"
++  labels:
++    app: loki
++    chart: loki-2.9.2
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-17T21:39:38Z"
++  name: loki
++  namespace: monitoring
++  uid: 3111d8c6-c2f8-442b-a5d5-b23a9bce75ff
++rules:
++- apiGroups:
++  - extensions
++  resourceNames:
++  - loki
++  resources:
++  - podsecuritypolicies
++  verbs:
++  - use
+diff -u -N /tmp/LIVE-3161488211/rbac.authorization.k8s.io.v1.Role.monitoring.loki-promtail /tmp/MERGED-3948693554/rbac.authorization.k8s.io.v1.Role.monitoring.loki-promtail
+--- /tmp/LIVE-3161488211/rbac.authorization.k8s.io.v1.Role.monitoring.loki-promtail	2022-02-17 21:39:39.157835309 +0000
++++ /tmp/MERGED-3948693554/rbac.authorization.k8s.io.v1.Role.monitoring.loki-promtail	2022-02-17 21:39:39.157835309 +0000
+@@ -0,0 +1,36 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: Role
++metadata:
++  creationTimestamp: "2022-02-17T21:39:39Z"
++  labels:
++    app: promtail
++    chart: promtail-2.2.0
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-17T21:39:39Z"
++  name: loki-promtail
++  namespace: monitoring
++  uid: b0dd5761-9159-42b8-b461-733a6ce2f2e8
++rules:
++- apiGroups:
++  - extensions
++  resourceNames:
++  - loki-promtail
++  resources:
++  - podsecuritypolicies
++  verbs:
++  - use
+diff -u -N /tmp/LIVE-3161488211/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.loki /tmp/MERGED-3948693554/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.loki
+--- /tmp/LIVE-3161488211/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.loki	2022-02-17 21:39:39.461839102 +0000
++++ /tmp/MERGED-3948693554/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.loki	2022-02-17 21:39:39.461839102 +0000
+@@ -0,0 +1,38 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: RoleBinding
++metadata:
++  creationTimestamp: "2022-02-17T21:39:39Z"
++  labels:
++    app: loki
++    chart: loki-2.9.2
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++      f:roleRef:
++        f:apiGroup: {}
++        f:kind: {}
++        f:name: {}
++      f:subjects: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-17T21:39:39Z"
++  name: loki
++  namespace: monitoring
++  uid: 4055b8be-a35d-4d72-85c7-811409feb193
++roleRef:
++  apiGroup: rbac.authorization.k8s.io
++  kind: Role
++  name: loki
++subjects:
++- kind: ServiceAccount
++  name: loki
+diff -u -N /tmp/LIVE-3161488211/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.loki-promtail /tmp/MERGED-3948693554/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.loki-promtail
+--- /tmp/LIVE-3161488211/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.loki-promtail	2022-02-17 21:39:39.745842646 +0000
++++ /tmp/MERGED-3948693554/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.loki-promtail	2022-02-17 21:39:39.745842646 +0000
+@@ -0,0 +1,38 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: RoleBinding
++metadata:
++  creationTimestamp: "2022-02-17T21:39:39Z"
++  labels:
++    app: promtail
++    chart: promtail-2.2.0
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++      f:roleRef:
++        f:apiGroup: {}
++        f:kind: {}
++        f:name: {}
++      f:subjects: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-17T21:39:39Z"
++  name: loki-promtail
++  namespace: monitoring
++  uid: e0231b9a-5a1c-4e8b-ba13-f9dfea3a7236
++roleRef:
++  apiGroup: rbac.authorization.k8s.io
++  kind: Role
++  name: loki-promtail
++subjects:
++- kind: ServiceAccount
++  name: loki-promtail
+diff -u -N /tmp/LIVE-3161488211/v1.ConfigMap.monitoring.loki-loki-stack /tmp/MERGED-3948693554/v1.ConfigMap.monitoring.loki-loki-stack
+--- /tmp/LIVE-3161488211/v1.ConfigMap.monitoring.loki-loki-stack	2022-02-17 21:39:38.085821935 +0000
++++ /tmp/MERGED-3948693554/v1.ConfigMap.monitoring.loki-loki-stack	2022-02-17 21:39:38.085821935 +0000
+@@ -0,0 +1,40 @@
++apiVersion: v1
++data:
++  loki-stack-datasource.yaml: |-
++    apiVersion: 1
++    datasources:
++    - name: Loki
++      type: loki
++      access: proxy
++      url: http://loki:3100
++      version: 1
++kind: ConfigMap
++metadata:
++  creationTimestamp: "2022-02-17T21:39:38Z"
++  labels:
++    app: loki-stack
++    chart: loki-stack-2.4.1
++    grafana_datasource: "1"
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:data:
++        .: {}
++        f:loki-stack-datasource.yaml: {}
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:grafana_datasource: {}
++          f:heritage: {}
++          f:release: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-17T21:39:38Z"
++  name: loki-loki-stack
++  namespace: monitoring
++  uid: cff8ff99-2b8c-4086-8e97-6f5e5e7f8771
+diff -u -N /tmp/LIVE-3161488211/v1.ConfigMap.monitoring.loki-promtail /tmp/MERGED-3948693554/v1.ConfigMap.monitoring.loki-promtail
+--- /tmp/LIVE-3161488211/v1.ConfigMap.monitoring.loki-promtail	2022-02-17 21:39:37.817818591 +0000
++++ /tmp/MERGED-3948693554/v1.ConfigMap.monitoring.loki-promtail	2022-02-17 21:39:37.821818641 +0000
+@@ -0,0 +1,293 @@
++apiVersion: v1
++data:
++  promtail.yaml: |
++    client:
++      backoff_config:
++        max_period: 5m
++        max_retries: 10
++        min_period: 500ms
++      batchsize: 1048576
++      batchwait: 1s
++      external_labels: {}
++      timeout: 10s
++    positions:
++      filename: /run/promtail/positions.yaml
++    server:
++      http_listen_port: 3101
++    target_config:
++      sync_period: 10s
++    scrape_configs:
++    - job_name: kubernetes-pods-name
++      pipeline_stages:
++        - docker: {}
++      kubernetes_sd_configs:
++      - role: pod
++      relabel_configs:
++      - source_labels:
++        - __meta_kubernetes_pod_label_name
++        target_label: __service__
++      - source_labels:
++        - __meta_kubernetes_pod_node_name
++        target_label: __host__
++      - action: drop
++        regex: ''
++        source_labels:
++        - __service__
++      - action: labelmap
++        regex: __meta_kubernetes_pod_label_(.+)
++      - action: replace
++        replacement: $1
++        separator: /
++        source_labels:
++        - __meta_kubernetes_namespace
++        - __service__
++        target_label: job
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_namespace
++        target_label: namespace
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_name
++        target_label: pod
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_container_name
++        target_label: container
++      - replacement: /var/log/pods/*$1/*.log
++        separator: /
++        source_labels:
++        - __meta_kubernetes_pod_uid
++        - __meta_kubernetes_pod_container_name
++        target_label: __path__
++    - job_name: kubernetes-pods-app
++      pipeline_stages:
++        - docker: {}
++      kubernetes_sd_configs:
++      - role: pod
++      relabel_configs:
++      - action: drop
++        regex: .+
++        source_labels:
++        - __meta_kubernetes_pod_label_name
++      - source_labels:
++        - __meta_kubernetes_pod_label_app
++        target_label: __service__
++      - source_labels:
++        - __meta_kubernetes_pod_node_name
++        target_label: __host__
++      - action: drop
++        regex: ''
++        source_labels:
++        - __service__
++      - action: labelmap
++        regex: __meta_kubernetes_pod_label_(.+)
++      - action: replace
++        replacement: $1
++        separator: /
++        source_labels:
++        - __meta_kubernetes_namespace
++        - __service__
++        target_label: job
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_namespace
++        target_label: namespace
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_name
++        target_label: pod
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_container_name
++        target_label: container
++      - replacement: /var/log/pods/*$1/*.log
++        separator: /
++        source_labels:
++        - __meta_kubernetes_pod_uid
++        - __meta_kubernetes_pod_container_name
++        target_label: __path__
++    - job_name: kubernetes-pods-direct-controllers
++      pipeline_stages:
++        - docker: {}
++      kubernetes_sd_configs:
++      - role: pod
++      relabel_configs:
++      - action: drop
++        regex: .+
++        separator: ''
++        source_labels:
++        - __meta_kubernetes_pod_label_name
++        - __meta_kubernetes_pod_label_app
++      - action: drop
++        regex: '[0-9a-z-.]+-[0-9a-f]{8,10}'
++        source_labels:
++        - __meta_kubernetes_pod_controller_name
++      - source_labels:
++        - __meta_kubernetes_pod_controller_name
++        target_label: __service__
++      - source_labels:
++        - __meta_kubernetes_pod_node_name
++        target_label: __host__
++      - action: drop
++        regex: ''
++        source_labels:
++        - __service__
++      - action: labelmap
++        regex: __meta_kubernetes_pod_label_(.+)
++      - action: replace
++        replacement: $1
++        separator: /
++        source_labels:
++        - __meta_kubernetes_namespace
++        - __service__
++        target_label: job
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_namespace
++        target_label: namespace
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_name
++        target_label: pod
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_container_name
++        target_label: container
++      - replacement: /var/log/pods/*$1/*.log
++        separator: /
++        source_labels:
++        - __meta_kubernetes_pod_uid
++        - __meta_kubernetes_pod_container_name
++        target_label: __path__
++    - job_name: kubernetes-pods-indirect-controller
++      pipeline_stages:
++        - docker: {}
++      kubernetes_sd_configs:
++      - role: pod
++      relabel_configs:
++      - action: drop
++        regex: .+
++        separator: ''
++        source_labels:
++        - __meta_kubernetes_pod_label_name
++        - __meta_kubernetes_pod_label_app
++      - action: keep
++        regex: '[0-9a-z-.]+-[0-9a-f]{8,10}'
++        source_labels:
++        - __meta_kubernetes_pod_controller_name
++      - action: replace
++        regex: '([0-9a-z-.]+)-[0-9a-f]{8,10}'
++        source_labels:
++        - __meta_kubernetes_pod_controller_name
++        target_label: __service__
++      - source_labels:
++        - __meta_kubernetes_pod_node_name
++        target_label: __host__
++      - action: drop
++        regex: ''
++        source_labels:
++        - __service__
++      - action: labelmap
++        regex: __meta_kubernetes_pod_label_(.+)
++      - action: replace
++        replacement: $1
++        separator: /
++        source_labels:
++        - __meta_kubernetes_namespace
++        - __service__
++        target_label: job
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_namespace
++        target_label: namespace
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_name
++        target_label: pod
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_container_name
++        target_label: container
++      - replacement: /var/log/pods/*$1/*.log
++        separator: /
++        source_labels:
++        - __meta_kubernetes_pod_uid
++        - __meta_kubernetes_pod_container_name
++        target_label: __path__
++    - job_name: kubernetes-pods-static
++      pipeline_stages:
++        - docker: {}
++      kubernetes_sd_configs:
++      - role: pod
++      relabel_configs:
++      - action: drop
++        regex: ''
++        source_labels:
++        - __meta_kubernetes_pod_annotation_kubernetes_io_config_mirror
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_label_component
++        target_label: __service__
++      - source_labels:
++        - __meta_kubernetes_pod_node_name
++        target_label: __host__
++      - action: drop
++        regex: ''
++        source_labels:
++        - __service__
++      - action: labelmap
++        regex: __meta_kubernetes_pod_label_(.+)
++      - action: replace
++        replacement: $1
++        separator: /
++        source_labels:
++        - __meta_kubernetes_namespace
++        - __service__
++        target_label: job
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_namespace
++        target_label: namespace
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_name
++        target_label: pod
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_container_name
++        target_label: container
++      - replacement: /var/log/pods/*$1/*.log
++        separator: /
++        source_labels:
++        - __meta_kubernetes_pod_annotation_kubernetes_io_config_mirror
++        - __meta_kubernetes_pod_container_name
++        target_label: __path__
++kind: ConfigMap
++metadata:
++  creationTimestamp: "2022-02-17T21:39:37Z"
++  labels:
++    app: promtail
++    chart: promtail-2.2.0
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:data:
++        .: {}
++        f:promtail.yaml: {}
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-17T21:39:37Z"
++  name: loki-promtail
++  namespace: monitoring
++  uid: a50d1105-51e1-4754-b816-67c4f367a9a7
+diff -u -N /tmp/LIVE-3161488211/v1.Secret.monitoring.loki /tmp/MERGED-3948693554/v1.Secret.monitoring.loki
+--- /tmp/LIVE-3161488211/v1.Secret.monitoring.loki	2022-02-17 21:39:37.529814998 +0000
++++ /tmp/MERGED-3948693554/v1.Secret.monitoring.loki	2022-02-17 21:39:37.529814998 +0000
+@@ -1 +1,33 @@
+-null
++apiVersion: v1
++data:
++  loki.yaml: '***'
++kind: Secret
++metadata:
++  creationTimestamp: "2022-02-17T21:39:37Z"
++  labels:
++    app: loki
++    chart: loki-2.9.2
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:data:
++        .: {}
++        f:loki.yaml: {}
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++      f:type: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-17T21:39:37Z"
++  name: loki
++  namespace: monitoring
++  uid: 49b700a7-01df-43b9-ba91-5cd2f11f3d1e
++type: Opaque
+diff -u -N /tmp/LIVE-3161488211/v1.Service.monitoring.loki /tmp/MERGED-3948693554/v1.Service.monitoring.loki
+--- /tmp/LIVE-3161488211/v1.Service.monitoring.loki	2022-02-17 21:39:40.289849433 +0000
++++ /tmp/MERGED-3948693554/v1.Service.monitoring.loki	2022-02-17 21:39:40.293849483 +0000
+@@ -0,0 +1,54 @@
++apiVersion: v1
++kind: Service
++metadata:
++  creationTimestamp: "2022-02-17T21:39:40Z"
++  labels:
++    app: loki
++    chart: loki-2.9.2
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++      f:spec:
++        f:ports:
++          .: {}
++          k:{"port":3100,"protocol":"TCP"}:
++            .: {}
++            f:name: {}
++            f:port: {}
++            f:protocol: {}
++            f:targetPort: {}
++        f:selector:
++          .: {}
++          f:app: {}
++          f:release: {}
++        f:sessionAffinity: {}
++        f:type: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-17T21:39:40Z"
++  name: loki
++  namespace: monitoring
++  uid: 5d9d2b66-cc45-4933-a184-293e20b5d0b8
++spec:
++  ports:
++  - name: http-metrics
++    port: 3100
++    protocol: TCP
++    targetPort: http-metrics
++  selector:
++    app: loki
++    release: loki
++  sessionAffinity: None
++  type: ClusterIP
++status:
++  loadBalancer: {}
+diff -u -N /tmp/LIVE-3161488211/v1.Service.monitoring.loki-headless /tmp/MERGED-3948693554/v1.Service.monitoring.loki-headless
+--- /tmp/LIVE-3161488211/v1.Service.monitoring.loki-headless	2022-02-17 21:39:40.029846189 +0000
++++ /tmp/MERGED-3948693554/v1.Service.monitoring.loki-headless	2022-02-17 21:39:40.029846189 +0000
+@@ -0,0 +1,60 @@
++apiVersion: v1
++kind: Service
++metadata:
++  creationTimestamp: "2022-02-17T21:39:39Z"
++  labels:
++    app: loki
++    chart: loki-2.9.2
++    heritage: Helm
++    release: loki
++    variant: headless
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++          f:variant: {}
++      f:spec:
++        f:clusterIP: {}
++        f:ports:
++          .: {}
++          k:{"port":3100,"protocol":"TCP"}:
++            .: {}
++            f:name: {}
++            f:port: {}
++            f:protocol: {}
++            f:targetPort: {}
++        f:selector:
++          .: {}
++          f:app: {}
++          f:release: {}
++        f:sessionAffinity: {}
++        f:type: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-17T21:39:39Z"
++  name: loki-headless
++  namespace: monitoring
++  uid: a8c268de-f97f-4647-9442-2e3b819066bd
++spec:
++  clusterIP: None
++  clusterIPs:
++  - None
++  ports:
++  - name: http-metrics
++    port: 3100
++    protocol: TCP
++    targetPort: http-metrics
++  selector:
++    app: loki
++    release: loki
++  sessionAffinity: None
++  type: ClusterIP
++status:
++  loadBalancer: {}
+diff -u -N /tmp/LIVE-3161488211/v1.ServiceAccount.monitoring.loki /tmp/MERGED-3948693554/v1.ServiceAccount.monitoring.loki
+--- /tmp/LIVE-3161488211/v1.ServiceAccount.monitoring.loki	2022-02-17 21:39:36.989808261 +0000
++++ /tmp/MERGED-3948693554/v1.ServiceAccount.monitoring.loki	2022-02-17 21:39:36.993808310 +0000
+@@ -0,0 +1,28 @@
++apiVersion: v1
++automountServiceAccountToken: true
++kind: ServiceAccount
++metadata:
++  creationTimestamp: "2022-02-17T21:39:36Z"
++  labels:
++    app: loki
++    chart: loki-2.9.2
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:automountServiceAccountToken: {}
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-17T21:39:36Z"
++  name: loki
++  namespace: monitoring
++  uid: 83ee7492-9d00-4128-825b-3669c3bfbee5
+diff -u -N /tmp/LIVE-3161488211/v1.ServiceAccount.monitoring.loki-promtail /tmp/MERGED-3948693554/v1.ServiceAccount.monitoring.loki-promtail
+--- /tmp/LIVE-3161488211/v1.ServiceAccount.monitoring.loki-promtail	2022-02-17 21:39:37.265811704 +0000
++++ /tmp/MERGED-3948693554/v1.ServiceAccount.monitoring.loki-promtail	2022-02-17 21:39:37.265811704 +0000
+@@ -0,0 +1,26 @@
++apiVersion: v1
++kind: ServiceAccount
++metadata:
++  creationTimestamp: "2022-02-17T21:39:37Z"
++  labels:
++    app: promtail
++    chart: promtail-2.2.0
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-17T21:39:37Z"
++  name: loki-promtail
++  namespace: monitoring
++  uid: 24760869-e04a-4c79-abac-50dc0f6174e6
