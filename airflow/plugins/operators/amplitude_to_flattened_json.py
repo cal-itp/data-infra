@@ -38,7 +38,7 @@ def amplitude_to_df(
     return pd.concat(df_list)
 
 
-class AmplitudeToWarehouseOperator(BaseOperator):
+class AmplitudeToFlattenedJSONOperator(BaseOperator):
     """
     An operator that will download data from Amplitude and load it into
     the CalITP data warehouse.
