@@ -6,6 +6,6 @@ dependencies:
 
 CREATE OR REPLACE EXTERNAL TABLE gtfs_rt.validation_service_alerts
 OPTIONS (
-    uris=["{{get_bucket()}}/rt-processed/validation/*/validation_results/*/*/service_alerts.parquet"],
+    uris=["{{get_bucket()}}/rt-processed/validation/*/service_alerts.parquet"],
     format="PARQUET"
 )
