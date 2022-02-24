@@ -1062,9 +1062,9 @@ sacramento-regional-transit-district:
   agency_name: Sacramento Regional Transit District
   feeds:
     - gtfs_schedule_url: http://iportal.sacrt.com/GTFS/SRTD/google_transit.zip
-      gtfs_rt_vehicle_positions_url: http://gtfsrt.sacrt.com/apps/gtfsrt/SRTD/vehiclepositions
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: http://gtfsrt.sacrt.com/apps/gtfsrt/SRTD/tripupdates
+      gtfs_rt_vehicle_positions_url: https://bustime.sacrt.com/gtfsrt/vehicles
+      gtfs_rt_service_alerts_url: https://bustime.sacrt.com/gtfsrt/alerts
+      gtfs_rt_trip_updates_url: https://bustime.sacrt.com/gtfsrt/trips
   itp_id: 273
 sage-stage:
   agency_name: Sage Stage
