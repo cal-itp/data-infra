@@ -8,7 +8,7 @@ description: |
 fields:
   calitp_itp_id: Feed ITP ID.
   calitp_url_number: Feed URL number.
-  textPayload: Error message that contains feed key, header length, download url, and error response.
+  token_cleaned_textPayload: Error message that contains feed key, header length, download url, and error response. API Tokens are replaced in the string with API_TOKEN
   download_url: Feed url extracted from textPayload.
   http_error: Extracted HTTP error code.
   n_count: Count of each row, distinct text textPayload.
@@ -17,7 +17,6 @@ fields:
 ---
 
 WITH
-
   start_fetch_table AS (
   SELECT
     REGEXP_EXTRACT(textPayload, r'\[txn (.*?)\]') AS file_hash,
@@ -31,10 +30,10 @@ WITH
 
   error_fetch_table AS (
   SELECT
-    textPayload,
     timestamp,
     REGEXP_EXTRACT(textPayload, r'\[txn (.*?)\]') AS file_hash,
     REGEXP_EXTRACT(textpayload,r'error fetching url ([a-zA-Z].*)?=') AS download_url,
+    REGEXP_REPLACE(textpayload,'token=([0-9]+.*?:)', "API_TOKEN") AS token_cleaned_textpayload,
     --- trim API tokens because sensitive info
     REGEXP_EXTRACT(textpayload,"(HTTP Error [0-9]+.*)") AS http_error,
   FROM
@@ -58,7 +57,7 @@ WITH
 SELECT
   calitp_itp_id,
   calitp_url_number,
-  textPayload,
+  token_cleaned_textpayload,
   download_url,
   http_error,
   COUNT(*) AS n_count,
