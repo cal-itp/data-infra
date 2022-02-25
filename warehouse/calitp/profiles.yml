@@ -1,0 +1,23 @@
+calitp:
+  target: prod
+  outputs:
+    prod:
+      schema: staging
+      fixed_retries: 1
+      location: US
+      method: oauth
+      priority: interactive
+      project: cal-itp-data-infra-staging
+      threads: 4
+      timeout_seconds: 300
+      type: bigquery
+    ci:
+      schema: ci
+      fixed_retries: 1
+      location: US
+      method: oauth
+      priority: interactive
+      project: cal-itp-data-infra-staging
+      threads: 4
+      timeout_seconds: 300
+      type: bigquery
