@@ -68,14 +68,14 @@ write_join_table AS (
 ),
 log_table AS (
     SELECT
-t1. file_hash,
-t1.calitp_itp_id,
-t1.calitp_url_number,
-t1.feed_file,
-t1. start_fetch_time,
-t1.completed_fetch_time,
-t2.start_write_time,
-t2.completed_write_time,
+        t1.file_hash,
+        t1.calitp_itp_id,
+        t1.calitp_url_number,
+        t1.feed_file,
+        t1.start_fetch_time,
+        t1.completed_fetch_time,
+        t2.start_write_time,
+        t2.completed_write_time,
  FROM fetch_join_table t1 JOIN write_join_table t2 ON t1.file_hash = t2.file_hash
 ),
 stderr_table AS (
@@ -85,16 +85,16 @@ stderr_table AS (
     WHERE textPayload LIKE "%fetcher%"
 )
 SELECT
-t1. file_hash,
-t1.calitp_itp_id,
-t1.calitp_url_number,
-t1.feed_file,
-t1. start_fetch_time,
-t1.completed_fetch_time,
-t1. start_write_time,
-t1.completed_write_time,
-t2.error_time,
-t2.textpayload AS error_message
+    t1.file_hash,
+    t1.calitp_itp_id,
+    t1.calitp_url_number,
+    t1.feed_file,
+    t1.start_fetch_time,
+    t1.completed_fetch_time,
+    t1.start_write_time,
+    t1.completed_write_time,
+    t2.error_time,
+    t2.textpayload AS error_message
 FROM log_table t1
 JOIN stderr_table t2 ON t1.feed_file = t2.feed_file
 AND t2.error_time >= t1.start_fetch_time AND t2.error_time < t1.completed_write_time
