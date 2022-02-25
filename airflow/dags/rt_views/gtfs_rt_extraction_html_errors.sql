@@ -57,7 +57,7 @@ WITH
 SELECT
   calitp_itp_id,
   calitp_url_number,
-  token_cleaned_textpayload,
+  token_cleaned_text_payload,
   download_url,
   http_error,
   COUNT(*) AS n_count,
