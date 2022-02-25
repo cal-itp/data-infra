@@ -1,6 +1,6 @@
 ---
 operator: operators.SqlToWarehouseOperator
-dst_table_name: "views.gtfs_rt_extraction_html_errors"
+dst_table_name: "views.gtfs_rt_extraction_http_errors"
 
 description: |
   Each row is a unique text payload returned for a HTTP Error for the calitp RT_archiver
