@@ -46,14 +46,6 @@ amtrak:
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 13
-anaheim-resort-transportation:
-  agency_name: Anaheim Resort Transportation
-  feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/anaheim-ca-us/anaheim-ca-us.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
-  itp_id: 14
 antelope-valley-transit-authority:
   agency_name: Antelope Valley Transit Authority
   feeds:
@@ -274,14 +266,6 @@ capitol-corridor:
       gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
       gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=AM
   itp_id: 56
-ceres-area-transit:
-  agency_name: Ceres Area Transit
-  feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/stanislaus-ca-us/stanislaus-ca-us.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
-  itp_id: 62
 city-of-lompoc-transit:
   agency_name: City of Lompoc Transit
   feeds:
@@ -377,7 +361,7 @@ cudahy-area-rapid-transit:
 culver-citybus:
   agency_name: Culver CityBus
   feeds:
-    - gtfs_schedule_url: https://www.culvercity.org/files/assets/public/documents/information-technology/maps/cc_bus_09132021.zip
+    - gtfs_schedule_url: https://www.culvercity.org/files/assets/public/documents/information-technology/maps/gtfsexport12-28-21.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -502,14 +486,6 @@ fairfield-and-suisun-transit:
       gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
       gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=FS
   itp_id: 110
-folsom-stage-line:
-  agency_name: Folsom Stage Line
-  feeds:
-    - gtfs_schedule_url: http://iportal.sacrt.com/gtfs/FSL/google_transit.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
-  itp_id: 111
 foothill-transit:
   agency_name: Foothill Transit
   feeds:
@@ -682,14 +658,6 @@ lassen-transit-service-agency:
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 162
-lawndale-beat:
-  agency_name: Lawndale Beat
-  feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/cityoflawndale-ca-us/cityoflawndale-ca-us.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
-  itp_id: 164
 la-puente:
   agency_name: City of la-Puente
   feeds:
@@ -905,7 +873,7 @@ north-county-transit-district:
 norwalk-transit-system:
   agency_name: Norwalk Transit System
   feeds:
-    - gtfs_schedule_url: https://www.norwalktransit.com/s/GTFS_Data.zip
+    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/nts-ca-us/nts-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -993,7 +961,7 @@ plumas-transit-systems:
 porterville-transit:
   agency_name: Porterville Transit
   feeds:
-    - gtfs_schedule_url: http://demopro.nationalrtap.org/admin/GTFSzipFiles/526/google_transit.zip
+    - gtfs_schedule_url: https://tularecog.org/tcag/data-gis-modeling/gtfs-data/porterville-transit-gtfs/
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1431,7 +1399,7 @@ tri-valley-wheels:
 trinity-transit:
   agency_name: Trinity Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/trinity-ca-us/trinity-ca-us.zip
+    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/weaverville-ca-us/weaverville-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
