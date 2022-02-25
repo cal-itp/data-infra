@@ -1,6 +1,6 @@
 ---
 operator: operators.SqlToWarehouseOperator
-dst_table_name: "views.gtfs_rt_extraction_http_errors"
+dst_table_name: "views.gtfs_rt_http_log_errors"
 
 description: |
   Each row is a unique text payload returned for a HTTP Error for the calitp RT_archiver
@@ -8,7 +8,7 @@ description: |
 fields:
   calitp_itp_id: Feed ITP ID.
   calitp_url_number: Feed URL number.
-  token_cleaned_text_payload: Error message that contains feed key, header length, download url, and error response. API Tokens are replaced in the string with API_TOKEN
+  token_cleaned_text_payload: Error message that contains transaction id, header length, download url, and error response. API Tokens are replaced in the string with API_TOKEN
   download_url: Feed url extracted from textPayload.
   http_error: Extracted HTTP error code.
   n_count: Count of each row, distinct text textPayload.
@@ -19,7 +19,7 @@ fields:
 WITH
   start_fetch_table AS (
   SELECT
-    REGEXP_EXTRACT(textPayload, r'\[txn (.*?)\]') AS file_hash,
+    REGEXP_EXTRACT(textPayload, r'\[txn (.*?)\]') AS transaction_id,
     REGEXP_EXTRACT(textPayload, "mapper_key=([0-9]+)")AS calitp_itp_id,
     REGEXP_EXTRACT(textPayload, "mapper_key=[0-9]+/([0-9]+)")AS calitp_url_number,
   FROM
@@ -31,7 +31,7 @@ WITH
   error_fetch_table AS (
   SELECT
     timestamp,
-    REGEXP_EXTRACT(textPayload, r'\[txn (.*?)\]') AS file_hash,
+    REGEXP_EXTRACT(textPayload, r'\[txn (.*?)\]') AS transaction_id,
     REGEXP_EXTRACT(textPayload,r'error fetching url ([a-zA-Z].*)?=') AS download_url,
     REGEXP_REPLACE(textPayload,'token=([0-9]+.*?:)', "API_TOKEN") AS token_cleaned_text_payload,
     --- trim API tokens because sensitive info
@@ -50,7 +50,7 @@ WITH
   JOIN
     error_fetch_table t2
   ON
-    t1.file_hash = t2.file_hash
+    t1.transaction_id = t2.transaction_id
   ORDER BY
     calitp_itp_id DESC )
 
