@@ -27,7 +27,7 @@ start_fetch AS (
     SELECT
         textPayload,
         timestamp AS start_fetch_time,
-        REGEXP_EXTRACT(textPayload, r'\[txn (.*?)\]') AS transaction_id,
+        REGEXP_EXTRACT(textPayload, "txn (.*?)]") AS transaction_id,
         REGEXP_EXTRACT(textPayload, "mapper_key=([0-9]+)")AS calitp_itp_id,
         REGEXP_EXTRACT(textPayload, "mapper_key=[0-9]+/([0-9]+)")AS calitp_url_number,
         REGEXP_EXTRACT(textpayload,"mapper_key=[0-9]+/[0-9]+/?([a-zA-Z0-9\\.\\_\\-]+)?") AS feed_file_name,
@@ -39,7 +39,7 @@ start_fetch AS (
 complete_fetch AS (
     SELECT
         timestamp as completed_fetch_time,
-        REGEXP_EXTRACT(textPayload, r'\[txn (.*?)\]') AS c_transaction_id,
+        REGEXP_EXTRACT(textPayload, "txn (.*?)]") AS c_transaction_id,
     FROM `cal-itp-data-infra.gtfs_rt_logs.stdout`
     WHERE textPayload like "%completed fetch%"
 ),
@@ -51,14 +51,14 @@ start_write AS (
     SELECT
         textPayload,
         timestamp AS start_write_time,
-        REGEXP_EXTRACT(textPayload, r'\[txn (.*?)\]') AS transaction_id,
+        REGEXP_EXTRACT(textPayload, "txn (.*?)]") AS transaction_id,
     FROM `cal-itp-data-infra.gtfs_rt_logs.stdout`
     WHERE textPayload like "%start write%"
 ),
 complete_write AS (
     SELECT
         timestamp AS completed_write_time,
-        REGEXP_EXTRACT(textPayload, r'\[txn (.*?)\]') AS c_transaction_id
+        REGEXP_EXTRACT(textPayload, "txn (.*?)]") AS c_transaction_id
     FROM `cal-itp-data-infra.gtfs_rt_logs.stdout`
     WHERE textPayload like "%completed write%"
 ),
@@ -78,6 +78,10 @@ log_table AS (
         t2.completed_write_time,
  FROM fetch_join_table t1 JOIN write_join_table t2 ON t1.transaction_id = t2.transaction_id
 ),
+
+-- logger currently has two tables stdout and stderr,
+-- stdout contains most of the debug statements which may contain exceptions and stderr contains the logs tagged as severity error
+
 stderr_table AS (
     SELECT textPayload, timestamp AS error_time,
     REGEXP_EXTRACT(textPayload,"fetcher ([0-9]+/[0-9]+/?[a-zA-Z0-9\\.\\_\\-]+)?") AS feed_file,
@@ -96,5 +100,5 @@ SELECT
     t2.error_time,
     t2.textPayload AS error_message
 FROM log_table t1
-JOIN stderr_table t2 ON t1.transaction_id = t2.transaction_id
+JOIN stderr_table t2 ON t1.feed_file = t2.feed_file
 AND t2.error_time >= t1.start_fetch_time AND t2.error_time < t1.completed_write_time
