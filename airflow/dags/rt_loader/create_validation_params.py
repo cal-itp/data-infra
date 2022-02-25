@@ -48,6 +48,7 @@ def main(execution_date, **kwargs):
                 lambda row: {
                     "gtfs_schedule_path": f"{prefix_path_schedule}/{row.calitp_itp_id}_{row.calitp_url_number}",
                     "gtfs_rt_glob_path": f"{prefix_path_rt}/{row.calitp_itp_id}/{row.calitp_url_number}/*{row.entity}*",
+                    "output_filename": row.entity,
                 },
                 axis="columns",
                 result_type="expand",

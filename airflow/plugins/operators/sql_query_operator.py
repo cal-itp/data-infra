@@ -17,4 +17,6 @@ class SqlQueryOperator(BaseOperator):
 
     def execute(self, context):
         engine = get_engine()
+
+        print(f"{engine}\n{self.sql}")
         engine.execute(sql.text(self.sql))
