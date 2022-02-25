@@ -25,7 +25,7 @@ fields:
 With
 start_fetch AS (
     SELECT
-        textpayload,
+        textPayload,
         timestamp AS start_fetch_time,
         REGEXP_EXTRACT(textPayload, r'\[txn (.*?)\]') AS transaction_id,
         REGEXP_EXTRACT(textPayload, "mapper_key=([0-9]+)")AS calitp_itp_id,
@@ -49,7 +49,7 @@ fetch_join_table AS (
 ),
 start_write AS (
     SELECT
-        textpayload,
+        textPayload,
         timestamp AS start_write_time,
         REGEXP_EXTRACT(textPayload, r'\[txn (.*?)\]') AS transaction_id,
     FROM `cal-itp-data-infra.gtfs_rt_logs.stdout`
@@ -80,7 +80,7 @@ log_table AS (
 ),
 stderr_table AS (
     SELECT textPayload, timestamp AS error_time,
-    REGEXP_EXTRACT(textpayload,"fetcher ([0-9]+/[0-9]+/?[a-zA-Z0-9\\.\\_\\-]+)?") AS feed_file,
+    REGEXP_EXTRACT(textPayload,"fetcher ([0-9]+/[0-9]+/?[a-zA-Z0-9\\.\\_\\-]+)?") AS feed_file,
     FROM `cal-itp-data-infra.gtfs_rt_logs.stderr`
     WHERE textPayload LIKE "%fetcher%"
 )
@@ -94,7 +94,7 @@ SELECT
     t1.start_write_time,
     t1.completed_write_time,
     t2.error_time,
-    t2.textpayload AS error_message
+    t2.textPayload AS error_message
 FROM log_table t1
 JOIN stderr_table t2 ON t1.transaction_id = t2.transaction_id
 AND t2.error_time >= t1.start_fetch_time AND t2.error_time < t1.completed_write_time
