@@ -1,6 +1,6 @@
 ---
 operator: operators.SqlToWarehouseOperator
-dst_table_name: "views.gtfs_rt_thread_errors"
+dst_table_name: "views.gtfs_rt_log_errors"
 
 description: | Each row is a unique file_hash of a feed that generated an exception within GCP logger
 
