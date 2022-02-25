@@ -17,7 +17,6 @@ arguments:
         verbose=True,
         aggregate_counts=True,
         threads=4,
-        limit=8,
     )
 
 is_delete_operator_pod: true
