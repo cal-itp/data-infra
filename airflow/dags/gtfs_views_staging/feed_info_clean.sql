@@ -1,6 +1,6 @@
 ---
 operator: operators.SqlToWarehouseOperator
-dst_table_name: "gtfs_schedule_type2.feed_info_clean"
+dst_table_name: "gtfs_views_staging.feed_info_clean"
 dependencies:
   - type2_loaded
 ---
@@ -8,7 +8,9 @@ dependencies:
 -- Trim all string fields
 -- Incoming schema explicitly defined in gtfs_schedule_history external table definition
 
-SELECT
+-- select distinct because of Foothill Transit feed with exact duplicates
+-- duplicates here result in duplicate feed_keys downstream
+SELECT DISTINCT
     calitp_itp_id
     , calitp_url_number
     , TRIM(feed_publisher_name) as feed_publisher_name
