@@ -4,7 +4,7 @@ calitp:
     prod:
       schema: staging
       fixed_retries: 1
-      location: US
+      location: us-west2
       method: oauth
       priority: interactive
       project: cal-itp-data-infra-staging
@@ -14,7 +14,7 @@ calitp:
     ci:
       schema: ci
       fixed_retries: 1
-      location: US
+      location: us-west2
       method: oauth
       priority: interactive
       project: cal-itp-data-infra-staging
