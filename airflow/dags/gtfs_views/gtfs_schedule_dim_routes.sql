@@ -27,8 +27,8 @@ route_agencies AS (
         , T2.* EXCEPT(calitp_itp_id, calitp_url_number, agency_id, calitp_extracted_at, calitp_deleted_at, calitp_hash)
         , COALESCE(GREATEST(T1.calitp_extracted_at, T2.calitp_extracted_at), T1.calitp_extracted_at) AS calitp_extracted_at
         , COALESCE(LEAST(T1.calitp_deleted_at, T2.calitp_deleted_at), T1.calitp_deleted_at) AS calitp_deleted_at
-    FROM `gtfs_schedule_type2.routes_clean` T1
-    LEFT JOIN `gtfs_schedule_type2.agency_clean` T2
+    FROM `gtfs_views_staging.routes_clean` T1
+    LEFT JOIN `gtfs_views_staging.agency_clean` T2
         ON T1.calitp_itp_id = T2.calitp_itp_id
         AND T1.calitp_url_number = T2.calitp_url_number
         AND T1.agency_id = T2.agency_id

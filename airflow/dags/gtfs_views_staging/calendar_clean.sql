@@ -1,6 +1,6 @@
 ---
 operator: operators.SqlToWarehouseOperator
-dst_table_name: "gtfs_schedule_type2.calendar_clean"
+dst_table_name: "gtfs_views_staging.calendar_clean"
 dependencies:
   - type2_loaded
 ---

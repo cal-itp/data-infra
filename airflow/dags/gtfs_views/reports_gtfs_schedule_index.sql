@@ -47,7 +47,7 @@ has_feed_info_end_date AS (
         , calitp_itp_id
         , calitp_url_number
         , TRUE AS has_feed_info
-    FROM `gtfs_schedule_type2.feed_info_clean` FI
+    FROM `gtfs_views_staging.feed_info_clean` FI
     JOIN publish_dates_crnt PD ON
         FI.calitp_extracted_at <= PD.date_end
         AND COALESCE(FI.calitp_deleted_at, "2099-01-01") > PD.date_end

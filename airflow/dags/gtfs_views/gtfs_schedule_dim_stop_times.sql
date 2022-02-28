@@ -17,7 +17,7 @@ raw_time_parts AS (
     SELECT *
       , REGEXP_EXTRACT_ALL(arrival_time, "([0-9]+)") AS part_arr
       , REGEXP_EXTRACT_ALL(departure_time, "([0-9]+)") AS part_dep
-      FROM `gtfs_schedule_type2.stop_times_clean`
+      FROM `gtfs_views_staging.stop_times_clean`
 ),
 int_time_parts AS (
     SELECT

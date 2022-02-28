@@ -12,4 +12,4 @@ dependencies:
   - dummy_gtfs_schedule_dims
 ---
 
-  SELECT * FROM `gtfs_schedule_type2.pathways_clean`
+  SELECT * FROM `gtfs_views_staging.pathways_clean`

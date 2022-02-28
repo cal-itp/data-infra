@@ -33,5 +33,5 @@ SELECT
   , calitp_deleted_at
   , "{{dow | title}}" AS day_name
   , {{dow}} AS service_indicator
-FROM `gtfs_schedule_type2.calendar_clean`
+FROM `gtfs_views_staging.calendar_clean`
 {% endfor %}

@@ -1,6 +1,6 @@
 ---
 operator: operators.SqlToWarehouseOperator
-dst_table_name: "gtfs_schedule_type2.stop_times_clean"
+dst_table_name: "gtfs_views_staging.stop_times_clean"
 dependencies:
   - type2_loaded
 ---

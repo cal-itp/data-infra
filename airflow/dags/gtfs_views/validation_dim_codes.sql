@@ -10,4 +10,4 @@ dependencies:
 --       we will end up with multiple entries for code (our primary key)
 --       we either need to change track this table, or use only the most recent
 --       levels of code x severity
-SELECT DISTINCT code, severity FROM `gtfs_schedule_type2.validation_notices_clean`
+SELECT DISTINCT code, severity FROM `gtfs_views_staging.validation_notices_clean`
