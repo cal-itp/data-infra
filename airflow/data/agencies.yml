@@ -390,14 +390,6 @@ desert-roadrunner:
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 238
-dinuba-area-regional-transit:
-  agency_name: Dinuba Area Regional Transit
-  feeds:
-    - gtfs_schedule_url:  https://tularecog.org/tcag/data-gis-modeling/gtfs-data/dinuba-area-regional-transit-gtfs/
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
-  itp_id: 93
 downeylink:
   agency_name: DowneyLINK
   feeds:
@@ -958,14 +950,6 @@ plumas-transit-systems:
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 254
-porterville-transit:
-  agency_name: Porterville Transit
-  feeds:
-    - gtfs_schedule_url: https://tularecog.org/tcag/data-gis-modeling/gtfs-data/porterville-transit-gtfs/
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
-  itp_id: 256
 redding-area-bus-authority:
   agency_name: Redding Area Bus Authority
   feeds:
@@ -1408,9 +1392,9 @@ tulare-county-area-transit:
   agency_name: Tulare County Area Transit
   feeds:
     - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/tcat-flex-ca-us/tcat-ca-us.zip
-      gtfs_rt_vehicle_positions_url: https://tularetransit.com/gtfs-rt/vehiclepositions
-      gtfs_rt_service_alerts_url: https://tularetransit.com/gtfs-rt/alerts
-      gtfs_rt_trip_updates_url: https://tularetransit.com/gtfs-rt/tripupdates
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
   itp_id: 346
 tuolumne-transit:
   agency_name: Tuolumne County Transit Agency
@@ -1612,3 +1596,11 @@ tracer:
     gtfs_rt_service_alerts_url: null
     gtfs_rt_trip_updates_url: null
   itp_id: 341
+time:
+  agency_name: Tulare InterModal Express
+  feeds:
+  - gtfs_schedule_url: https://tularetransit.com/gtfs
+    gtfs_rt_vehicle_positions_url: https://tularetransit.com/gtfs-rt/vehiclepositions
+    gtfs_rt_service_alerts_url: https://tularetransit.com/gtfs-rt/alerts
+    gtfs_rt_trip_updates_url: https://tularetransit.com/gtfs-rt/tripupdates
+  itp_id: 483
