@@ -33,7 +33,7 @@ WITH
     FROM (
         -- deduplicate calendar_dates, which does not have a unique id column
         -- and has identical entries in rare cases
-        SELECT DISTINCT * FROM `gtfs_schedule_type2.calendar_dates_clean`
+        SELECT DISTINCT * FROM `gtfs_views_staging.calendar_dates_clean`
     )
   ),
 

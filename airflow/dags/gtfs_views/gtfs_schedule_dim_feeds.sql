@@ -27,8 +27,8 @@ feed_feed_info AS (
             AS is_composite_feed
         , COALESCE(GREATEST(T1.calitp_extracted_at, T2.calitp_extracted_at), T1.calitp_extracted_at) AS calitp_extracted_at
         , COALESCE(LEAST(T1.calitp_deleted_at, T2.calitp_deleted_at), T1.calitp_deleted_at) AS calitp_deleted_at
-    FROM `gtfs_schedule_type2.calitp_feeds` T1
-    LEFT JOIN `gtfs_schedule_type2.feed_info_clean` T2
+    FROM `gtfs_views_staging.calitp_feeds` T1
+    LEFT JOIN `gtfs_views_staging.feed_info_clean` T2
         ON
             T1.calitp_itp_id = T2.calitp_itp_id
             AND T1.calitp_url_number = T2.calitp_url_number
