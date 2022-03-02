@@ -101,6 +101,17 @@ def scd_join(
 """
 
 
+def get_latest_schedule_data(table):
+
+    return f"""
+        SELECT
+            * EXCEPT(calitp_deleted_at)
+        FROM {table}
+        WHERE
+            calitp_deleted_at = "2099-01-01"
+"""
+
+
 # Airtable =============================================================
 
 # This is a helper to generate SqlToWarehouse operator tasks
