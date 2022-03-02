@@ -88,7 +88,7 @@ def main(**kwargs):
     table_names = create_tables()
 
     for table_name in table_names:
-        logger.info("Processing {}".format(table_name))
+        logger.info("Processing table", table_name=table_name)
         # TODO: remove validation report from included tables
         if table_name == "validation_report":
             continue
