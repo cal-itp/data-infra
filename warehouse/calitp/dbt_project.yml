@@ -35,3 +35,6 @@ models:
   calitp:
     schema: staging
     +materialized: view
+
+    gtfs_rt:
+      schema: rt_staging

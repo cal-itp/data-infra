@@ -1,6 +1,6 @@
-
 with source as (
     select * from {{ source('gtfs_rt_raw', 'vehicle_positions') }}
+    limit 100
 )
 
 , stg_gtfs_rt__vehicle_positions as (
