@@ -13,8 +13,8 @@ SELECT
     , calitp_url_number
     , TRIM(stop_id) as stop_id
     , TRIM(tts_stop_name) as tts_stop_name
-    , stop_lat
-    , stop_lon
+    , SAFE_CAST(TRIM(stop_lat) AS FLOAT64) as stop_lat
+    , SAFE_CAST(TRIM(stop_lon) AS FLOAT64) as stop_lon
     , TRIM(zone_id) as zone_id
     , TRIM(parent_station) as parent_station
     , TRIM(stop_code) as stop_code
