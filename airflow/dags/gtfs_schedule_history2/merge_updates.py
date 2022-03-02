@@ -18,6 +18,7 @@
 # TODO: split out operators.py into submodules and move logic into there.
 
 from merge_sql import SQL_TEMPLATE
+import structlog
 
 SRC_SCHEMA = "gtfs_schedule_history"
 DST_SCHEMA = "gtfs_schedule_type2"
@@ -83,9 +84,11 @@ def merge_updates(table_name, execution_date, **kwargs):
 
 
 def main(**kwargs):
+    logger = structlog.get_logger()
     table_names = create_tables()
 
     for table_name in table_names:
+        logger.info("Processing {}".format(table_name))
         # TODO: remove validation report from included tables
         if table_name == "validation_report":
             continue
