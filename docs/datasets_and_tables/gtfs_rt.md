@@ -34,3 +34,11 @@ Note that this data is still a work in progress, so many tables are still intern
 ## DAGs Maintenance
 
 You can find further information on DAGs maintenance for GTFS Realtime data [on this page](gtfs-realtime-dags).
+
+## Raw Protobuff files
+
+Raw RT files are stored in google cloud at gs://gtfs-data/rt/ISODATE/CALITP_ID/URL_NUMBER/FEED_NAME. If data for a given feed is missing, tracking down the raw files for inspection can be tedious. The `random-protobuff` command in [calitp-py](https://github.com/cal-itp/calitp-py#random-protobuff) makes it easy to verify that the source data exists in the archive. More usage examples can be found [here](https://github.com/cal-itp/calitp-py#random-protobuff).
+
+```
+python -m calitp random-protobuff 295/0/gtfs_rt_service_alerts_url --date 2022-02-23T16:01:24
+```
