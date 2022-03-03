@@ -106,7 +106,7 @@ def get_latest_schedule_data(table):
     return f"""
         SELECT
             * EXCEPT(calitp_deleted_at)
-        FROM {table}
+        FROM gtfs_views_staging.{table}_clean
         WHERE
             calitp_deleted_at = "2099-01-01"
 """
@@ -228,4 +228,5 @@ data_infra_macros = {
     "scd_join": scd_join,
     "sql_enrich_duplicates": sql_enrich_duplicates,
     "sql_airtable_mapping": airtable_mapping_generate_sql,
+    "get_latest_schedule_data": get_latest_schedule_data,
 }
