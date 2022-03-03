@@ -23,4 +23,6 @@ SELECT
   gtfs_dataset_id,
   name,
   data,
+  uri,
+  future_uri,
 FROM `airtable.california_transit_gtfs_datasets`
