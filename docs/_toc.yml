@@ -46,6 +46,7 @@ parts:
         - file: analytics_publishing/where_reports_live
   - caption: Developers
     chapters:
+      - file: architecture/architecture_overview
       - file: airflow/overview
         sections:
         - file: airflow/local-setup
