@@ -18,8 +18,8 @@ tests:
   check_unique:
     - gtfs_service_data_id
 
-external_dependencies:
-  - airtable_loader: california_transit_gtfs_service_data
+dependencies:
+  - dummy_airtable_loader
 ---
 
   SELECT

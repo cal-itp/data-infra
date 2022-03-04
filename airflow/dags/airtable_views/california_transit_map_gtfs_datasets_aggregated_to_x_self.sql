@@ -21,8 +21,8 @@ tests:
     - gtfs_dataset_id
     - aggregated_to_id
 
-external_dependencies:
-  - airtable_loader: california_transit_gtfs_datasets
+dependencies:
+  - dummy_airtable_loader
 ---
 
 {{

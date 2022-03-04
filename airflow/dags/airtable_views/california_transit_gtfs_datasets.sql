@@ -15,12 +15,14 @@ tests:
   check_unique:
     - gtfs_dataset_id
 
-external_dependencies:
-  - airtable_loader: california_transit_gtfs_datasets
+dependencies:
+  - dummy_airtable_loader
 ---
 
 SELECT
   gtfs_dataset_id,
   name,
   data,
+  uri,
+  future_uri,
 FROM `airtable.california_transit_gtfs_datasets`

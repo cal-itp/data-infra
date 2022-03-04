@@ -21,9 +21,8 @@ tests:
     - service_id
     - gtfs_service_data_id
 
-external_dependencies:
-  - airtable_loader: california_transit_services
-  - airtable_loader: california_transit_gtfs_service_data
+dependencies:
+  - dummy_airtable_loader
 ---
 {{
 

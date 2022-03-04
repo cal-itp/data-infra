@@ -21,8 +21,8 @@ tests:
     - organization_id
     - parent_organization_id
 
-external_dependencies:
-  - airtable_loader: california_transit_organizations
+dependencies:
+  - dummy_airtable_loader
 ---
 {{
 
