@@ -1,7 +1,7 @@
-import logging
 import requests
 import sys
 import yaml
+import structlog
 
 sys.path.append("services/gtfs-rt-archive/src/gtfs_rt_archive/")
 
@@ -19,7 +19,7 @@ DIFF - optional git diff between two hashes (will check all urls if not provided
 
 
 def main():
-    logger = logging.getLogger("gtfs-rt-archive")
+    logger = structlog.get_logger("gtfs-rt-archive")
     successes = []
     fails = []
     changed_urls = None
