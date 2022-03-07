@@ -6,7 +6,7 @@ gusty==0.6.0
 pandas-gbq==0.14.1
 pybigquery==0.7.0
 google-cloud-bigquery==2.16.1
-calitp==0.0.8
+calitp==0.0.12
 google-auth==1.32.1
 gtfs-realtime-bindings==0.0.7
 geopandas
