@@ -8,6 +8,7 @@ parts:
     chapters:
       - file: analytics_welcome/overview
         sections:
+        - file: analytics_welcome/merman
         - file: analytics_welcome/what_is_calitp
         - file: analytics_welcome/how_we_work
       - file: analytics_onboarding/overview
