@@ -30,7 +30,6 @@ jobs:
         # https://github.com/pydata/pydata-sphinx-theme/issues/508
         pip install pydata-sphinx-theme==0.7.2
         pip install sphinxcontrib-mermaid
-        pip install myst-parser
     - uses: google-github-actions/setup-gcloud@master
       with:
         service_account_key: ${{ secrets.GCP_SA_KEY }}
