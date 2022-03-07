@@ -1,4 +1,4 @@
-# Merman
+# I'm a MerMAN, Pa!
 
 ```{mermaid}
 
