@@ -29,6 +29,7 @@ jobs:
         # Temporary pinning of pydata-sphinx-theme to workaround Sphinx 4.3.0 error
         # https://github.com/pydata/pydata-sphinx-theme/issues/508
         pip install pydata-sphinx-theme==0.7.2
+        pip install sphinxcontrib-mermaid
     - uses: google-github-actions/setup-gcloud@master
       with:
         service_account_key: ${{ secrets.GCP_SA_KEY }}
