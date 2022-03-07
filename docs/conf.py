@@ -22,8 +22,7 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx_panels",
     "sphinx_book_theme",
-    "sphinxcontrib_mermaid",
-    "myst_parser",
+    "sphinxcontrib.mermaid",
     "sphinx_jupyterbook_latex",
 ]
 external_toc_exclude_missing = False
