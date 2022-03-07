@@ -30,7 +30,3 @@ html:
   use_repository_button: true
   use_edit_page_button: true
   google_analytics_id: G-SZB618VNBZ
-
-sphinx:
-  extra_extensions:
-  - myst_parser
