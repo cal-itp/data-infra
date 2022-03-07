@@ -33,5 +33,4 @@ html:
 
 sphinx:
   extra_extensions:
-  - sphinxcontrib_mermaid
   - myst_parser
