@@ -17,5 +17,3 @@ structlog==21.5.0
 typer==0.4.0
 humanize==3.14.0
 backoff==1.11.1
-sphinxcontrib-mermaid==0.7.1
-myst-parser==0.17.0
