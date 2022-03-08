@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GTFS CKAN Uploader &#8212; Cal-ITP Data Services</title>
+    <title>Architecture Overview &#8212; Cal-ITP Data Services</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -56,8 +56,8 @@
     <script>mermaid.initialize({startOnLoad:true});</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="gtfs-rt-archive" href="gtfs-rt-archive.html" />
-    <link rel="prev" title="Services" href="overview.html" />
+    <link rel="next" title="Airflow" href="../airflow/overview.html" />
+    <link rel="prev" title="Where Reports Live (WIP)" href="../analytics_publishing/where_reports_live.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -324,8 +324,8 @@
  </span>
 </p>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../architecture/architecture_overview.html">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    Architecture Overview
   </a>
  </li>
@@ -445,23 +445,23 @@
    </li>
   </ul>
  </li>
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="overview.html">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../services/overview.html">
    Services
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
   <label for="toctree-checkbox-10">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul class="current">
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../services/gtfs-ckan-uploader.html">
      GTFS CKAN Uploader
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="gtfs-rt-archive.html">
+    <a class="reference internal" href="../services/gtfs-rt-archive.html">
      gtfs-rt-archive
     </a>
    </li>
@@ -542,7 +542,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/services/gtfs-ckan-uploader.md"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/architecture/architecture_overview.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -562,10 +562,10 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fservices/gtfs-ckan-uploader.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Farchitecture/architecture_overview.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/services/gtfs-ckan-uploader.md"><button
+        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/architecture/architecture_overview.md"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -585,6 +585,44 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#production-environment">
+   “Production environment”
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#testing-environment">
+   “Testing environment”
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#airflow-data-production">
+   Airflow data production:
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#airflow-data-consumption">
+   Airflow data consumption:
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#bigquery-data-consumption">
+   BigQuery data consumption:
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#bigquery-data-production">
+   BigQuery data production:
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -592,20 +630,208 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>GTFS CKAN Uploader</h1>
+                <h1>Architecture Overview</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#production-environment">
+   “Production environment”
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#testing-environment">
+   “Testing environment”
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#airflow-data-production">
+   Airflow data production:
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#airflow-data-consumption">
+   Airflow data consumption:
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#bigquery-data-consumption">
+   BigQuery data consumption:
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#bigquery-data-production">
+   BigQuery data production:
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="gtfs-ckan-uploader">
-<h1>GTFS CKAN Uploader<a class="headerlink" href="#gtfs-ckan-uploader" title="Permalink to this headline">¶</a></h1>
-<p>See readme in <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/services/gtfs-ckan-uploader/README.md">services/gtfs-ckan-uploader</a>.</p>
+  <div class="tex2jax_ignore mathjax_ignore section" id="architecture-overview">
+<h1>Architecture Overview<a class="headerlink" href="#architecture-overview" title="Permalink to this headline">¶</a></h1>
+<p>Here is a high-level summary of the Cal-ITP data services architecture.</p>
+<div class="mermaid">
+            flowchart TD
+%% note that you seemingly cannot have a subgraph that only contains other subgraphs
+%% so I am using &quot;label&quot; nodes to make sure each subgraph has at least one direct child
+    subgraph key[Key]
+        empty3[ ]--Manual--&gt;empty4[ ]
+        test[Test/staging/dev]
+    end
+    subgraph data_sources[ ]
+        data_sources_label[Data Sources]
+        raw_gtfs[Raw GTFS schedule data]
+        airtable[&lt;a href='https://airtable.com/'&gt;Airtable&lt;/a&gt;]
+        raw_payment[Raw fare payment]
+        raw_rt[Raw GTFS RT feeds]
+    end
+    subgraph airflow[ ]
+        airflow_label[Airflow]
+        airflow_prod[Production Airflow &lt;br&gt;&lt;i&gt;&lt;a href='https://console.cloud.google.com/composer/environments?project=cal-itp-data-infra&amp;supportedpurview=project'&gt;Composer&lt;/a&gt;&lt;/i&gt;]
+        airflow_local[Local Airflow &lt;br&gt;&lt;i&gt;&lt;a href='https://github.com/cal-itp/data-infra/blob/main/airflow/README.md'&gt;Setup&lt;/a&gt;&lt;/i&gt;]
+    end
+    subgraph data_storage[ ]
+        data_storage_label[Data Storage]
+        subgraph bq[&lt;a href='https://console.cloud.google.com/bigquery'&gt;BigQuery&lt;/a&gt; - projects]
+            bq_prod[BigQuery prod project]
+            bq_stage[BigQuery staging project]
+        end
+        subgraph gcs[&lt;a href='https://console.cloud.google.com/storage/browser'&gt;GCS&lt;/a&gt; - buckets]
+            gcs_other[Metabase, GCP logs, etc.]
+            gcs_payment[Payment buckets]
+            gcs_gtfs[gtfs-data]
+            gcs_gtfs_test[gtfs-data-test]
+        end
+    end
+    subgraph rt_archiver[ ]
+        rt_archiver_label[&lt;a href='https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archive'&gt;RT archiver&lt;/a&gt;]
+        prod_rt_archiver[Prod archiver]
+        prepod_rt_archiver[Preprod archiver]
+    end
+    subgraph reports[ ]
+        reports_label[Reports]
+        reports_website[&lt;a href='https://reports.calitp.org'&gt;reports.calitp.org&lt;/a&gt;]
+    end
+    subgraph docs[ ]
+        docs_label[Docs]
+        docs_website[&lt;a href='https://docs.calitp.org'&gt;docs.calitp.org&lt;/a&gt;]
+    end
+    subgraph analysis_tools[ ]
+        analysis_tools_label[Analysis]
+        jupyterhub[&lt;a href='https://hubtest.k8s.calitp.jarv.us/hub/'&gt;JupyterHub&lt;/a&gt;]
+        metabase[&lt;a href='https://dashboards.calitp.org/'&gt;Metabase - dashboards.calitp.org&lt;/a&gt;]
+    end
+%% links from data sources
+raw_payment --&gt; data_transfer[Data Transfer]
+raw_rt --&gt; rt_archiver
+raw_gtfs --&gt; airflow
+airtable --&gt; airflow
+raw_gtfs -.-&gt; schedule_validator
+raw_gtfs -.-&gt; rt_validator
+raw_rt -.-&gt; rt_validator
+%% links from data storage
+bq --&gt; metabase
+bq --&gt; jupyterhub
+bq --&gt; reports
+gcs &lt;--&gt; jupyterhub
+%% links from ungrouped items
+data_transfer --&gt; gcs
+rt_archiver --&gt; gcs
+airflow &lt;--&gt; data_storage
+airflow --&gt; schedule_validator[GTFS Schedule validator  &lt;br&gt; &lt;i&gt;externally maintained&lt;/i&gt;]
+airflow --&gt; rt_validator[GTFS RT validator &lt;br&gt; &lt;i&gt;externally maintained&lt;/i&gt;]
+schedule_validator --&gt; gcs
+rt_validator --&gt; gcs
+%% define styles
+classDef default fill:white, color:black, stroke:black, stroke-width:1px
+%% yellow for testing / staging versions
+classDef teststyle fill:#fdfcd8, color:#000000
+%% styling for groups &amp; their labels
+classDef group_labelstyle fill:#cde6ef, color:black, stroke-width:0px
+%% styling for subgroups
+classDef subgroupstyle fill:#14A6E0, color:white
+%% styling for the key
+classDef keystyle fill:#1e1e19, color: white
+%% apply test styles
+class prepod_rt_archiver,bq_stage,gcs_gtfs_test,airflow_local,test teststyle
+%% apply label styles
+class data_storage_label,data_sources_label,reports_label,docs_label,analysis_tools_label,airflow_label,rt_archiver_label group_labelstyle
+%% apply group styles
+class data_storage,data_sources,reports,docs,analysis_tools,airflow,rt_archiver group_labelstyle
+%% apply subgroup styles
+class gcs,bq subgroupstyle
+%% style the key
+class key keystyle
+%% default arrow style
+linkStyle default stroke:black, stroke-width:4px
+%% manual connection arrow style
+linkStyle 0,9,10,11 stroke:orange, stroke-width:4px
+        </div><div class="section" id="production-environment">
+<h2>“Production environment”<a class="headerlink" href="#production-environment" title="Permalink to this headline">¶</a></h2>
+<p>The “production” (“prod”) environment consists of:</p>
+<ul class="simple">
+<li><p>RT Archiver</p></li>
+<li><p>Airflow as run through Composer</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra</span></code> project in Google Cloud Platform (BigQuery and Google Cloud Storage)</p>
+<ul>
+<li><p>Specifically, the <code class="docutils literal notranslate"><span class="pre">gtfs-data</span></code> and <code class="docutils literal notranslate"><span class="pre">littlepay-data-extract-prod</span></code> buckets in Google Cloud Storage</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="testing-environment">
+<h2>“Testing environment”<a class="headerlink" href="#testing-environment" title="Permalink to this headline">¶</a></h2>
+<p>The “testing”/”staging”/”dev” environment consists of:</p>
+<ul class="simple">
+<li><p>RT Archiver pre-prod</p></li>
+<li><p>Airflow as run locally</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra-staging</span></code> project in BigQuery</p>
+<ul>
+<li><p>Note that this project also exists in Google Cloud Storage (since it’s a Google Cloud Platform project) but it is not used in GCS</p></li>
+</ul>
+</li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">gtfs-data-test</span></code> bucket in Google Cloud Storage (which is inside the <em>production</em> <code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra</span></code> <em>project</em>)</p></li>
+</ul>
+</div>
+<div class="section" id="airflow-data-production">
+<h2>Airflow data production:<a class="headerlink" href="#airflow-data-production" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Downloads GTFS Schedule data</p></li>
+<li><p>Consumes raw RT data and produces parsed RT data</p></li>
+<li><p>Runs the validators to produce validation data for both Schedule and RT</p></li>
+</ul>
+</div>
+<div class="section" id="airflow-data-consumption">
+<h2>Airflow data consumption:<a class="headerlink" href="#airflow-data-consumption" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Consumes raw Schedule and RT data</p></li>
+<li><p>Consumes BigQuery data for job configuration</p></li>
+</ul>
+</div>
+<div class="section" id="bigquery-data-consumption">
+<h2>BigQuery data consumption:<a class="headerlink" href="#bigquery-data-consumption" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Reads GCS – see the <a class="reference external" href="https://cloud.google.com/bigquery/external-data-cloud-storage">Querying Cloud Storage data</a> documentation</p></li>
+</ul>
+</div>
+<div class="section" id="bigquery-data-production">
+<h2>BigQuery data production:<a class="headerlink" href="#bigquery-data-production" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Some tables are read by Airflow for job configuration (for example, <code class="docutils literal notranslate"><span class="pre">gtfs_schedule_history.calitp_feed_status</span></code>)</p></li>
+</ul>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
@@ -621,7 +847,7 @@
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./services"
+            path: "./architecture"
         },
         predefinedOutput: true
     }
@@ -633,17 +859,17 @@
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="overview.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="../analytics_publishing/where_reports_live.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Services</p>
+            <p class="prev-next-title">Where Reports Live (WIP)</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="gtfs-rt-archive.html" title="next page">
+    <a class='right-next' id="next-link" href="../airflow/overview.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">gtfs-rt-archive</p>
+        <p class="prev-next-title">Airflow</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
