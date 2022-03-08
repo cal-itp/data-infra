@@ -90,7 +90,7 @@ x-airflow-common:
     - ./logs:/opt/airflow/gcs/logs
     - ./plugins:/opt/airflow/gcs/plugins
     - ./data:/opt/airflow/gcs/data
-    - $HOME/.config/gcloud:/home/airflow/.config/gcloud
+    - $HOME/.config/gcloud:/home/airflow/.config/gcloud # Windows users: replace $HOME/.config with ${APPDATA}
       #- $HOME/.kube:/home/airflow/.kube
   user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-50000}"
   depends_on:
