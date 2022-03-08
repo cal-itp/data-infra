@@ -37,12 +37,9 @@ external_dependencies:
 -- so use calitp_itp_id plus calitp_url_number as identifier
 
 with unioned as (
-    -- TODO: re-enable this when we've had a service alert validation error message, if ever
-    -- Without any files, bigquery just has a single default "index" column and you can't
-    -- specify a schema for parquet format external tables
---     select *
---     from `cal-itp-data-infra.gtfs_rt.validation_service_alerts`
---     union all
+    select *
+    from `cal-itp-data-infra.gtfs_rt.validation_service_alerts`
+    union all
     select *
     from `cal-itp-data-infra.gtfs_rt.validation_trip_updates`
     union all
