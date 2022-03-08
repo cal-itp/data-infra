@@ -13,6 +13,10 @@ for GKE_NODEPOOL_NAME in "${GKE_NODEPOOL_NAMES[@]}"; do
   GKE_NODEPOOL_NODE_COUNT=${GKE_NODEPOOL_NODE_COUNTS[$GKE_NODEPOOL_NAME]}
   GKE_NODEPOOL_NODE_LOCATION=${GKE_NODEPOOL_NODE_LOCATIONS[$GKE_NODEPOOL_NAME]}
   GKE_NODEPOOL_MACHINE_TYPE=${GKE_NODEPOOL_MACHINE_TYPES[$GKE_NODEPOOL_NAME]}
+  GKE_NODEPOOL_TAINT=${GKE_NODEPOOL_TAINTS[$GKE_NODEPOOL_NAME]}
+  GKE_NODEPOOL_LABEL=${GKE_NODEPOOL_LABELS[$GKE_NODEPOOL_NAME]}
+
+  GKE_NODEPOOL_EXTRA_ARGS=()
 
   if ! [ "$GKE_NODEPOOL_NODE_COUNT"    ] ||
      ! [ "$GKE_NODEPOOL_NODE_LOCATION" ] ||
@@ -25,11 +29,20 @@ for GKE_NODEPOOL_NAME in "${GKE_NODEPOOL_NAMES[@]}"; do
     exit 1
   fi
 
+  if [ "$GKE_NODEPOOL_TAINT" ]; then
+    GKE_NODEPOOL_EXTRA_ARGS+=( --node-taints "$GKE_NODEPOOL_TAINT" )
+  fi
+
+  if [ "$GKE_NODEPOOL_LABEL" ]; then
+    GKE_NODEPOOL_EXTRA_ARGS+=( --node-labels "$GKE_NODEPOOL_LABEL" )
+  fi
+
   gcloud container node-pools describe "$GKE_NODEPOOL_NAME" --region "$GKE_REGION" --cluster "$GKE_NAME" >/dev/null ||
   gcloud container node-pools create "$GKE_NODEPOOL_NAME" \
     --region  "$GKE_REGION"                               \
     --cluster "$GKE_NAME"                                 \
     --num-nodes      "$GKE_NODEPOOL_NODE_COUNT"           \
     --machine-type "$GKE_NODEPOOL_MACHINE_TYPE"           \
-    --node-locations "$GKE_NODEPOOL_NODE_LOCATION"
+    --node-locations "$GKE_NODEPOOL_NODE_LOCATION"        \
+    "${GKE_NODEPOOL_EXTRA_ARGS[@]}"
 done
