@@ -79,11 +79,11 @@ classDef default fill:white, color:black, stroke:black, stroke-width:1px
 %% yellow for testing / staging versions
 classDef teststyle fill:#fdfcd8, color:#000000
 %% styling for groups & their labels
-classDef group_labelstyle fill:#5a5a56, color:white, stroke-width:0px
+classDef group_labelstyle fill:#cde6ef, color:black, stroke-width:0px
 %% styling for subgroups
-classDef subgroupstyle fill:#c9c9c3, color:black
+classDef subgroupstyle fill:#14A6E0, color:white
 %% styling for the key
-classDef keystyle fill:#1e1e19
+classDef keystyle fill:#1e1e19, color: white
 %% apply test styles
 class prepod_rt_archiver,bq_stage,gcs_gtfs_test,airflow_local,test teststyle
 %% apply label styles
@@ -95,7 +95,7 @@ class gcs,bq subgroupstyle
 %% style the key
 class key keystyle
 %% default arrow style
-linkStyle default stroke:white, stroke-width:4px
+linkStyle default stroke:black, stroke-width:4px
 %% manual connection arrow style
 linkStyle 0,9,10,11 stroke:orange, stroke-width:4px
 ```
