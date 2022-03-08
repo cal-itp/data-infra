@@ -15,9 +15,9 @@ schema_fields:
   - name: tts_stop_name
     type: STRING
   - name: stop_lat
-    type: FLOAT64
+    type: STRING
   - name: stop_lon
-    type: FLOAT64
+    type: STRING
 
   - name: zone_id
     type: STRING

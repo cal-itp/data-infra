@@ -1,29 +1,27 @@
 ---
 operator: operators.SqlQueryOperator
+description: |
+  GTFS RT validation errors as returned by the validator. Each row corresponds to
+  the number of occurrences of a given error for a single itp_id/url/tick/entity combination.
+fields:
+  calitp_itp_id: |
+    The ITP ID associated with the vehicle position.
+  calitp_url_number: |
+    The URL number associated with the vehicle position.
+  calitp_extracted_at: |
+    When the original file was downloaded.
+  rt_feed_type: |
+    The type of RT feed entity; will always be vehicle positions.
+  error_id: |
+    An error ID as defined in the GTFS RT validator repo.
+  n_occurrences: |
+    The number of occurrences of this error.
+dependencies:
+    - load_rt_validations
 ---
 
-CREATE OR REPLACE EXTERNAL TABLE gtfs_rt.validation_vehicle_positions (
-    errorMessage STRUCT<
-      messageId INT64,
-      gtfsRTFeedIterationModel STRING,
-      validationRule STRUCT<
-        errorId STRING,
-        severity STRING,
-        title STRING,
-        errorDescription STRING,
-        occurrenceSuffix STRING
-      >,
-      errorDetails STRING
-    >,
-    occurrenceList ARRAY<
-      STRUCT<
-        occurrenceId INT64,
-        messageLogModel STRING,
-        prefix STRING
-      >
-    >
-)
+CREATE OR REPLACE EXTERNAL TABLE gtfs_rt.validation_vehicle_positions
 OPTIONS (
-    uris=["gs://calitp-py-ci/gtfs-rt-validator-api/test_output_full/*gtfs_rt_vehicle_positions_url"],
-    format="JSON"
+    uris=["{{get_bucket()}}/rt-processed/validation/*/vehicle_positions.parquet"],
+    format="PARQUET"
 )

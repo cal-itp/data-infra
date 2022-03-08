@@ -8,7 +8,7 @@ jupyterhub:
     defaultUrl: "/lab"
     image:
       name: ghcr.io/cal-itp/calitp-py
-      tag: hub-v3
+      tag: hub-v5
     storage:
       extraVolumes:
       - name: gcloud-auth
