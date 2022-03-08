@@ -2,7 +2,7 @@
 
 Here is a high-level summary of the Cal-ITP data services architecture.
 
-```mermaid
+```{mermaid}
 flowchart TD
 %% note that you seemingly cannot have a subgraph that only contains other subgraphs
 %% so I am using "label" nodes to make sure each subgraph has at least one direct child
