@@ -11,3 +11,4 @@ from operators.airtable_to_warehouse import AirtableToWarehouseOperator
 from operators.realtime_to_flattened_json_operator import (
     RealtimeToFlattenedJSONOperator,
 )
+from operators.amplitude_to_flattened_json import AmplitudeToFlattenedJSONOperator

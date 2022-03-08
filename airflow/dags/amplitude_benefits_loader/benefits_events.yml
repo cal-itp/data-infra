@@ -1,0 +1,3 @@
+operator: operators.AmplitudeToFlattenedJSONOperator
+
+app_name: "benefits"
