@@ -47,7 +47,7 @@ SELECT
     -- turn type from a label like gtfs_rt_<file_type>_url
     -- to just file_type
     REGEXP_EXTRACT(type, r"gtfs_rt_(.*)_url") as type
-FROM `cal-itp-data-infra.views.gtfs_schedule_fact_daily_feeds`
+FROM `views.gtfs_schedule_fact_daily_feeds`
 -- in fact_daily_feeds, there are columns for each RT type
 -- UNPIVOT to transform this into one column with all types
 -- UNPIVOT has EXCLUDE_NULL set to true by default so this returns only urls that are present
@@ -58,5 +58,5 @@ UNPIVOT(
         raw_gtfs_rt_service_alerts_url)
     )
 -- join so that we have calitp_itp_id and calitp_url_number
-LEFT JOIN `cal-itp-data-infra.views.gtfs_schedule_dim_feeds`
+LEFT JOIN `views.gtfs_schedule_dim_feeds`
     USING(feed_key)
