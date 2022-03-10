@@ -30,29 +30,39 @@ tests:
         - date
 
 external_dependencies:
-  - rt_loader: external_validation_service_alerts
+  - rt_loader: all
+  - gtfs_views: gtfs_schedule_dim_feeds
 ---
-
--- note that for realtime we do not (yet) have a feed_key-type identifier
--- so use calitp_itp_id plus calitp_url_number as identifier
 
 with unioned as (
     select *
-    from `cal-itp-data-infra.gtfs_rt.validation_service_alerts`
+    from `gtfs_rt.validation_service_alerts`
     union all
     select *
-    from `cal-itp-data-infra.gtfs_rt.validation_trip_updates`
+    from `gtfs_rt.validation_trip_updates`
     union all
     select *
-    from `cal-itp-data-infra.gtfs_rt.validation_vehicle_positions`
-)
-SELECT
+    from `gtfs_rt.validation_vehicle_positions`
+),
+error_counts as (
+  SELECT
       calitp_itp_id
     , calitp_url_number
     , rt_feed_type
     , error_id
     , DATE(calitp_extracted_at) as date
     , sum(n_occurrences) as occurrences
-
 FROM unioned
 GROUP BY calitp_itp_id, calitp_url_number, rt_feed_type, error_id, date
+)
+-- join with schedule dim feeds to get feed key
+-- note that this matching is imperfect; the schedule that is used for validation
+-- is actually pulled from gtfs_schedule_history.calitp_feed_status
+SELECT t1.*,
+    t2.feed_key
+FROM error_counts t1
+LEFT JOIN `views.gtfs_schedule_dim_feeds` t2
+    ON t1.date >= t2.calitp_extracted_at
+      AND t1.date < t2.calitp_deleted_at
+      AND t1.calitp_itp_id = t2.calitp_itp_id
+      AND t1.calitp_url_number = t2.calitp_url_number
