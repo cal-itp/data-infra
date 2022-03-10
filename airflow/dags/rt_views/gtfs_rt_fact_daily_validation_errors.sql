@@ -46,7 +46,7 @@ with unioned as (
     union all
     select *
     from `gtfs_rt.validation_vehicle_positions`
-)
+),
 error_counts as (
   SELECT
       calitp_itp_id
