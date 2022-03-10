@@ -40,7 +40,10 @@ def amplitude_to_df(start: str, end: str, api_key: str = None, secret_key: str =
     url = "https://amplitude.com/api/2/export"
     params = {"start": start, "end": end}
 
-    validate_arguments(api_key, api_key_env, secret_key, secret_key_env)
+    if not any([api_key, api_key_env]):
+        raise ValueError("api_key or api_key_env is required.")
+    if not any([secret_key, secret_key_env]):
+        raise ValueError("secret_key or secret_key_env is required.")
 
     api_key = api_key or os.environ[api_key_env]
     secret_key = secret_key or os.environ[secret_key_env]
@@ -59,18 +62,6 @@ def amplitude_to_df(start: str, end: str, api_key: str = None, secret_key: str =
                 df_list.append(temp_df)
 
     return pd.concat(df_list)
-
-
-def validate_arguments(api_key, api_key_env, secret_key, secret_key_env):
-    api_key_missing = not any([api_key, api_key_env])
-    secret_key_missing = not any([secret_key, secret_key_env])
-
-    if api_key_missing or secret_key_missing:
-        message = "Missing required arguments. You must provide:"
-        message += "\n - 'api_key' or 'api_key_env'" if api_key_missing else ""
-        message += "\n - 'secret_key' or 'secret_key_env'" if secret_key_missing else ""
-
-        raise ValueError(message)
 
 
 class AmplitudeToFlattenedJSONOperator(BaseOperator):
