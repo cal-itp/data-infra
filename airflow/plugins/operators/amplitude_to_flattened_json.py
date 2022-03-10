@@ -14,14 +14,7 @@ from airflow.models import BaseOperator
 DATE_FORMAT = "%Y%m%dT%H"
 
 
-def amplitude_to_df(
-    start: str,
-    end: str,
-    api_key: str = None,
-    secret_key: str = None,
-    api_key_env: str = None,
-    secret_key_env: str = None,
-):
+def amplitude_to_df(start: str, end: str, api_key: str = None, secret_key: str = None, api_key_env: str = None, secret_key_env: str = None):
     """
     Export zipped JSON data from Amplitude API and returns as a pandas dataframe.
 
