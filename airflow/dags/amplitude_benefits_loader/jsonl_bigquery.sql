@@ -68,7 +68,7 @@ CREATE OR REPLACE EXTERNAL TABLE `amplitude.benefits_events` (
   processed_time DATETIME
 )
 OPTIONS (
-    format = "JSON"
-    uris = ["{{bucket-name()}}/amplitude/{project}/*.jsonl"],
+    format = "JSON",
+    uris = ["{{get_bucket()}}/amplitude/benefits/*.jsonl"],
     ignore_unknown_values = True
 )
