@@ -1,5 +1,5 @@
 ---
-operator: operators.AmplitudeToFlattenedJSONOperator
+operator: operators.SqlQueryOperator
 
 dependencies:
   - benefits_events
