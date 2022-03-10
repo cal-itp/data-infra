@@ -18,7 +18,7 @@ fields:
   file_count_hr_0: Count of files extracted during hour 0 UTC
 
 dependencies:
-  - rt_views_gtfs_rt_fact_files
+  - gtfs_rt_fact_files
 ---
 
 WITH
