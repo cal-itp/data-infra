@@ -20,10 +20,11 @@ def amplitude_to_df(
     end: str,
     api_key: str = None,
     secret_key: str = None,
-    app_name: str = None,
+    api_key_env: str = None,
+    secret_key_env: str = None,
 ):
     """
-    Export zipped JSON data from Amplitude API and returns as a panda dataframe.
+    Export zipped JSON data from Amplitude API and returns as a pandas dataframe.
 
     Args:
         start: Start date as a string, first hour included in data series, formatted
@@ -31,19 +32,24 @@ def amplitude_to_df(
         end: End date as a string, same format as start.
         api_key: API key from Amplitude API.
         secret_key: Secret key from Amplitude API.
-        app_name: An identifier for the Amplitude app. This string will be used in the
-            uploaded-file path and as part of the environment-variable name for the API/secret keys.
+        api_key_env: Name of environment variable containing API key from Amplitude API.
+        secret_key_env: Name of environment variable containing secret key from Amplitude API.
 
     Returns:
-        A panda dataframe which has all the events within the date range.
+        A pandas dataframe which has all the events within the date range.
+
+    Raises:
+        ValueError: neither 'api_key' nor 'api_key_env' was provided, and/or neither
+            'secret_key' nor 'secret_key_env' was provided
     """
 
     url = "https://amplitude.com/api/2/export"
     params = {"start": start, "end": end}
-    api_key = api_key or os.environ.get(f"CALITP_AMPLITUDE_{app_name.upper()}_API_KEY")
-    secret_key = secret_key or os.environ.get(
-        f"CALITP_AMPLITUDE_{app_name.upper()}_SECRET_KEY"
-    )
+
+    validate_arguments(api_key, api_key_env, secret_key, secret_key_env)
+
+    api_key = api_key or os.environ.get(api_key_env)
+    secret_key = secret_key or os.environ.get(secret_key_env)
 
     response = requests.get(url, params=params, auth=(api_key, secret_key), stream=True)
 
@@ -61,14 +67,29 @@ def amplitude_to_df(
     return pd.concat(df_list)
 
 
+def validate_arguments(api_key, api_key_env, secret_key, secret_key_env):
+    api_key_missing = not any([api_key, api_key_env])
+    secret_key_missing = not any([secret_key, secret_key_env])
+
+    if api_key_missing or secret_key_missing:
+        message = "Missing required arguments. You must provide:"
+        message += "\n - 'api_key' or 'api_key_env'" if api_key_missing else ""
+        message += "\n - 'secret_key' or 'secret_key_env'" if secret_key_missing else ""
+
+        raise ValueError(message)
+
+
 class AmplitudeToFlattenedJSONOperator(BaseOperator):
     """
     An operator that will download data from Amplitude and upload the
     resulting flattened JSON to GCS.
     """
 
-    def __init__(self, app_name, **kwargs):
+    def __init__(self, app_name, api_key_env, secret_key_env, **kwargs):
         self.app_name = app_name
+        self.api_key_env = api_key_env
+        self.secret_key_env = secret_key_env
+
         super().__init__(**kwargs)
 
     def execute(self, context):
@@ -77,7 +98,9 @@ class AmplitudeToFlattenedJSONOperator(BaseOperator):
         start = start_datetime.strftime(DATE_FORMAT)
         end = (start_datetime + timedelta(hours=23)).strftime(DATE_FORMAT)
 
-        events_df = amplitude_to_df(start, end, app_name=self.app_name)
+        events_df = amplitude_to_df(
+            start, end, api_key_env=self.api_key_env, secret_key_env=self.secret_key_env
+        )
 
         events_jsonl = "\n".join(
             [
