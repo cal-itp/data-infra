@@ -1,7 +1,6 @@
 """Module for exporting data from Amplitude and adding to the data warehouse"""
 import os
 import gzip
-import json
 import zipfile
 from io import BytesIO, StringIO
 from datetime import timedelta
@@ -104,13 +103,7 @@ class AmplitudeToFlattenedJSONOperator(BaseOperator):
             start, end, api_key_env=self.api_key_env, secret_key_env=self.secret_key_env
         )
 
-        events_jsonl = "\n".join(
-            [
-                json.dumps(event)
-                for event in json.loads(events_df.to_json(orient="records"))
-            ]
-        )
-
+        events_jsonl = events_df.to_json(orient="records", lines=True)
         gcs_file_path = f"amplitude/{self.app_name}/{start}-{end}.jsonl"
 
         # if a file already exists at `gcs_file_path`, GCS will overwrite the existing file
