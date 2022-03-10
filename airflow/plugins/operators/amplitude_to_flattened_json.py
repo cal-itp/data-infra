@@ -41,6 +41,8 @@ def amplitude_to_df(
     Raises:
         ValueError: neither 'api_key' nor 'api_key_env' was provided, and/or neither
             'secret_key' nor 'secret_key_env' was provided
+        KeyError: 'api_key_env'/'secret_key_env' were provided, but the environment variables
+            are not defined
     """
 
     url = "https://amplitude.com/api/2/export"
@@ -48,8 +50,8 @@ def amplitude_to_df(
 
     validate_arguments(api_key, api_key_env, secret_key, secret_key_env)
 
-    api_key = api_key or os.environ.get(api_key_env)
-    secret_key = secret_key or os.environ.get(secret_key_env)
+    api_key = api_key or os.environ[api_key_env]
+    secret_key = secret_key or os.environ[secret_key_env]
 
     response = requests.get(url, params=params, auth=(api_key, secret_key), stream=True)
 
