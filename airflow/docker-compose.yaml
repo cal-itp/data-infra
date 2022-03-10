@@ -70,6 +70,8 @@ x-airflow-common:
 
     # API keys
     CALITP_AIRTABLE_API_KEY: "${CALITP_AIRTABLE_API_KEY}"
+    CALITP_AMPLITUDE_BENEFITS_API_KEY: "${CALITP_AMPLITUDE_BENEFITS_API_KEY}"
+    CALITP_AMPLITUDE_BENEFITS_SECRET_KEY: "${CALITP_AMPLITUDE_BENEFITS_SECRET_KEY}"
 
     # bucket for holding results of extraction tasks
     AIRFLOW_VAR_EXTRACT_BUCKET: "gs://gtfs-data-test"
