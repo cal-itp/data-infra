@@ -94,8 +94,12 @@ class AmplitudeToFlattenedJSONOperator(BaseOperator):
         super().__init__(**kwargs)
 
     def execute(self, context):
-        start_datetime = context.get("execution_date").set(hour=0, minute=0, second=0)
+        # use the DAG's logical date as the data interval start,
+        # and ensure the 'start' hour is 0 no matter what the 'schedule_interval' is.
+        start_datetime = context.get("execution_date").set(hour=0)
 
+        # add 23 hours to the start date to make the total range equal to 24 hours.
+        # (the 'end' parameter is inclusive: https://developers.amplitude.com/docs/export-api#export-api-parameters)
         start = start_datetime.strftime(DATE_FORMAT)
         end = (start_datetime + timedelta(hours=23)).strftime(DATE_FORMAT)
 
