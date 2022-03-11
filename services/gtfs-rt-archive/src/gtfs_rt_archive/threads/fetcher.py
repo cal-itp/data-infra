@@ -49,7 +49,7 @@ class PoolFetcher(threading.Thread):
         if headers_mapval is not None:
             headers_yaml_id = headers_mapval[0]
             headers = headers_mapval[1]
-        self.logger.debug(
+        self.logger.info(
             "[txn {}] start fetch: mapper_key={} url={} len(headers)={} url_yaml_id={} "
             "headers_yaml_id={}".format(
                 txn["id"],
