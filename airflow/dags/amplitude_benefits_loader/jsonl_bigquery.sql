@@ -5,11 +5,11 @@ dependencies:
   - benefits_events
 ---
 
-CREATE OR REPLACE EXTERNAL TABLE `amplitude.benefits_events` (
+ CREATE OR REPLACE EXTERNAL TABLE `amplitude.benefits_events` (
   app INT64,
   device_id STRING,
   user_id STRING,
-  client_event_time DATETIME,
+  client_event_time TIMESTAMP,
   event_id INT64,
   session_id INT64,
   event_type STRING,
@@ -42,30 +42,30 @@ CREATE OR REPLACE EXTERNAL TABLE `amplitude.benefits_events` (
     user_agent STRING,
     referrer STRING
     >,
-  global_user_properties {},
-  group_properties {},
+  -- global_user_properties {},
+  -- group_properties {},
   event_time STRING,
-  client_upload_time DATETIME,
-  server_upload_time DATETIME,
-  server_received_time DATETIME,
+  client_upload_time TIMESTAMP,
+  server_upload_time TIMESTAMP,
+  server_received_time TIMESTAMP,
   amplitude_id INT64,
   idfa STRING,
   adid STRING,
-  data {},
+  -- data {},
   paying STRING,
   start_version STRING,
   user_creation_time STRING,
   uuid STRING,
-  groups {},
+  -- groups {},
   sample_rate STRING,
-  $insert_id STRING,
-  $insert_key STRING,
+  insert_id STRING,
+  insert_key STRING,
   is_attribution_event BOOL,
   amplitude_attribution_ids STRING,
-  plan {},
+  -- plan {},
   partner_id STRING,
   schema INT64,
-  processed_time DATETIME
+  processed_time TIMESTAMP
 )
 OPTIONS (
     format = "JSON",

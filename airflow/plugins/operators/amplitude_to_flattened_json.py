@@ -98,7 +98,9 @@ class AmplitudeToFlattenedJSONOperator(BaseOperator):
             start, end, api_key_env=self.api_key_env, secret_key_env=self.secret_key_env
         )
 
-        events_jsonl = events_df.to_json(orient="records", lines=True)
+        events_jsonl = events_df.to_json(
+            orient="records", lines=True, date_format="iso"
+        )
         gcs_file_path = f"amplitude/{self.app_name}/{start}-{end}.jsonl"
 
         # if a file already exists at `gcs_file_path`, GCS will overwrite the existing file
