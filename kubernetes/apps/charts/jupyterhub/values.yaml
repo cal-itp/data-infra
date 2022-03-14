@@ -8,7 +8,7 @@ jupyterhub:
     defaultUrl: "/lab"
     image:
       name: ghcr.io/cal-itp/calitp-py
-      tag: hub-v5
+      tag: hub-v6
     storage:
       extraVolumes:
       - name: gcloud-auth
@@ -21,6 +21,14 @@ jupyterhub:
           mountPath: /usr/local/secrets
     extraEnv:
       CALITP_SERVICE_KEY_PATH: /usr/local/secrets/service-key.json
+    lifecycleHooks:
+      postStart:
+        exec:
+          command:
+            - "sh"
+            - "-c"
+            - >
+              cp /tmp/custom.sh /home/jovyan/.profile;
   scheduling:
     userScheduler:
       enabled: false
