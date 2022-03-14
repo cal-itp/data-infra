@@ -12,3 +12,5 @@ rename_fields:
   "# TripUpdates": num_trip_updates
   "# Alerts": num_service_alerts
   "# VehiclePositions": num_vehicle_positions
+  "Product: GRaaS": "product_graas"
+  "Product: Payments": "product_payments"
