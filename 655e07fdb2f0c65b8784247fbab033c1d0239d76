@@ -1,0 +1,3 @@
+BUILD_APP=gtfs-rt-archive
+BUILD_ID=2.4
+BUILD_REPO=us.gcr.io/cal-itp-data-infra/gtfs-rt-archive
