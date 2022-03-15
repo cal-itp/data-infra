@@ -4,6 +4,7 @@ import logging
 import pathlib
 import queue
 import time
+import structlog
 from .threads.ticker import Ticker
 from .threads.fetcher import PoolFetcher
 from .threads.writer import FSWriter, GCPBucketWriter
@@ -15,28 +16,43 @@ from .mapperfns import map_agencies_urls, map_headers
 
 def main():
 
-    # Config tables
+    logging.basicConfig(format="%(messages)s", stream=sys.stdout, level=logging.warning)
 
-    level_table = {
-        "debug": logging.DEBUG,
-        "info": logging.INFO,
-        "warning": logging.WARNING,
-        "error": logging.ERROR,
-        "critical": logging.CRITICAL,
-    }
+    structlog.configure(
+        processors=[
+            structlog.stdlib.filter_by_level,
+            # Adds logger=module_name (e.g __main__)
+            structlog.stdlib.add_logger_name,
+            # Adds level=info, debug, etc.
+            structlog.stdlib.add_log_level,
+            # Performs the % string interpolation as expected
+            structlog.stdlib.PositionalArgumentsFormatter(),
+            # Include the stack when stack_info=True
+            structlog.processors.StackInfoRenderer(),
+            # Include the exception when exc_info=True
+            # e.g log.exception() or log.warning(exc_info=True)'s behavior
+            structlog.processors.format_exc_info,
+            # timestamp is UTC
+            structlog.processors.TimeStamper(),
+            # render final event dict as json
+            structlog.processors.JSONRenderer(),
+        ],
+        # maybe below is not needed?
+        context_class=dict,
+        # Provides the logging.Logger for the underlaying log call
+        logger_factory=structlog.stdlib.LoggerFactory(),
+        # Provides predefined methods - log.debug(), log.info(), etc.
+        wrapper_class=structlog.stdlib.BoundLogger,
+        # Caching of our logger
+        cache_logger_on_first_use=True,
+    )
 
     backends_table = {"file://": FSWriter, "gs://": GCPBucketWriter}
 
     # Setup logging channel
 
-    logger = logging.getLogger("gtfs-rt-archive")
-
-    level_name = os.getenv("CALITP_LOG_LEVEL")
-    if hasattr(level_name, "lower"):
-        level_name = level_name.lower()
-    level = level_table.get(level_name, logging.WARNING)
-
-    logging.basicConfig(stream=sys.stdout, level=level)
+    # logger = logging.getLogger("gtfs-rt-archive")
+    logger = structlog.getLogger("gtfs-rt-archive")
 
     # Parse environment
 
