@@ -34,13 +34,15 @@ dependencies:
   region STRING,
   dma STRING,
   event_properties STRUCT<
-      provider_name STRING,
-      path STRING
-      >,
+    provider_name STRING,
+    path STRING,
+    language STRING
+    >,
   user_properties STRUCT<
+    provider_name STRING,
     referring_domain STRING,
-    user_agent STRING,
-    referrer STRING
+    referrer STRING,
+    user_agent STRING
     >,
   event_time STRING,
   client_upload_time TIMESTAMP,
