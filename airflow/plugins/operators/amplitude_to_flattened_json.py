@@ -21,6 +21,7 @@ def amplitude_to_df(
     secret_key: str = None,
     api_key_env: str = None,
     secret_key_env: str = None,
+    rename_fields: dict = None,
 ):
     """
     Export zipped JSON data from Amplitude API and returns as a pandas dataframe.
@@ -33,6 +34,7 @@ def amplitude_to_df(
         secret_key: Secret key from Amplitude API.
         api_key_env: Name of environment variable containing API key from Amplitude API.
         secret_key_env: Name of environment variable containing secret key from Amplitude API.
+        rename_fields: Dict that specifies fields to rename.
 
     Returns:
         A pandas dataframe which has all the events within the date range.
@@ -68,7 +70,14 @@ def amplitude_to_df(
                 temp_df = pd.read_json(StringIO(events), lines=True)
                 df_list.append(temp_df)
 
-    return pd.concat(df_list)
+    raw_df = pd.concat(df_list)
+
+    if rename_fields:
+        final_df = raw_df.rename(columns={k: v for k, v in rename_fields.items()})
+    else:
+        final_df = raw_df
+
+    return final_df
 
 
 class AmplitudeToFlattenedJSONOperator(BaseOperator):
@@ -77,10 +86,13 @@ class AmplitudeToFlattenedJSONOperator(BaseOperator):
     resulting flattened JSON to GCS.
     """
 
-    def __init__(self, app_name, api_key_env, secret_key_env, **kwargs):
+    def __init__(
+        self, app_name, api_key_env, secret_key_env, rename_fields=None, **kwargs
+    ):
         self.app_name = app_name
         self.api_key_env = api_key_env
         self.secret_key_env = secret_key_env
+        self.rename_fields = rename_fields
 
         super().__init__(**kwargs)
 
@@ -95,10 +107,16 @@ class AmplitudeToFlattenedJSONOperator(BaseOperator):
         end = (start_datetime + timedelta(hours=23)).strftime(DATE_FORMAT)
 
         events_df = amplitude_to_df(
-            start, end, api_key_env=self.api_key_env, secret_key_env=self.secret_key_env
+            start,
+            end,
+            api_key_env=self.api_key_env,
+            secret_key_env=self.secret_key_env,
+            rename_fields=self.rename_fields,
         )
 
-        events_jsonl = events_df.to_json(orient="records", lines=True)
+        events_jsonl = events_df.to_json(
+            orient="records", lines=True, date_format="iso"
+        )
         gcs_file_path = f"amplitude/{self.app_name}/{start}-{end}.jsonl"
 
         # if a file already exists at `gcs_file_path`, GCS will overwrite the existing file
