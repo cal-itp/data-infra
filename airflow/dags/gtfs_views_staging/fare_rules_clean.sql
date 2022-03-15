@@ -3,6 +3,12 @@ operator: operators.SqlToWarehouseOperator
 dst_table_name: "gtfs_views_staging.fare_rules_clean"
 dependencies:
   - type2_loaded
+tests:
+  check_null:
+    - calitp_hash
+    - fare_rule_key
+  check_unique:
+    - fare_rule_key
 ---
 
 -- Trim all string fields

@@ -3,6 +3,13 @@ operator: operators.SqlToWarehouseOperator
 dst_table_name: "gtfs_views_staging.routes_clean"
 dependencies:
   - type2_loaded
+
+tests:
+  check_null:
+    - calitp_hash
+    - route_key
+  check_unique:
+    - route_key
 ---
 
 -- Trim all string fields

@@ -3,6 +3,13 @@ operator: operators.SqlToWarehouseOperator
 dst_table_name: "gtfs_views_staging.stop_times_clean"
 dependencies:
   - type2_loaded
+
+tests:
+  check_null:
+    - calitp_hash
+    - stop_time_key
+  check_unique:
+    - stop_time_key
 ---
 
 SELECT

@@ -3,6 +3,13 @@ operator: operators.SqlToWarehouseOperator
 dst_table_name: "gtfs_views_staging.calendar_clean"
 dependencies:
   - type2_loaded
+
+tests:
+  check_null:
+    - calitp_hash
+    - calendar_key
+  check_unique:
+    - calendar_key
 ---
 
 -- Trim all string fields

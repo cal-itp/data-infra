@@ -3,6 +3,12 @@ operator: operators.SqlToWarehouseOperator
 dst_table_name: "gtfs_views_staging.trips_clean"
 dependencies:
   - type2_loaded
+tests:
+  check_null:
+    - calitp_hash
+    - trip_key
+  check_unique:
+    - trip_key
 ---
 
 -- Trim all string fields

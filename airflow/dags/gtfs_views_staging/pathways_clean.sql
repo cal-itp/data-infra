@@ -3,6 +3,12 @@ operator: operators.SqlToWarehouseOperator
 dst_table_name: "gtfs_views_staging.pathways_clean"
 dependencies:
   - type2_loaded
+tests:
+  check_null:
+    - calitp_hash
+    - pathway_key
+  check_unique:
+    - pathway_key
 ---
 
 -- Trim all string fields

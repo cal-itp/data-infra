@@ -3,6 +3,13 @@ operator: operators.SqlToWarehouseOperator
 dst_table_name: "gtfs_views_staging.attributions_clean"
 dependencies:
   - type2_loaded
+
+tests:
+  check_null:
+    - calitp_hash
+    - attribution_key
+  check_unique:
+    - attribution_key
 ---
 
 -- Trim all string fields
