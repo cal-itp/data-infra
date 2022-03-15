@@ -5,7 +5,7 @@ dependencies:
   - benefits_events
 ---
 
- CREATE OR REPLACE EXTERNAL TABLE `amplitude.benefits_events` (
+CREATE OR REPLACE EXTERNAL TABLE `amplitude.benefits_events` (
   app INT64,
   device_id STRING,
   user_id STRING,
