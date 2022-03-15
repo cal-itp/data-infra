@@ -44,7 +44,7 @@ dependencies:
     referrer STRING,
     user_agent STRING
     >,
-  event_time STRING,
+  event_time TIMESTAMP,
   client_upload_time TIMESTAMP,
   server_upload_time TIMESTAMP,
   server_received_time TIMESTAMP,
@@ -53,7 +53,7 @@ dependencies:
   adid STRING,
   paying STRING,
   start_version STRING,
-  user_creation_time STRING,
+  user_creation_time TIMESTAMP,
   uuid STRING,
   sample_rate STRING,
   insert_id STRING,
