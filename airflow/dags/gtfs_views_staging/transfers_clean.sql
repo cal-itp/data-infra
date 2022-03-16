@@ -16,7 +16,7 @@ tests:
 
 -- SELECT DISTINCT because there are many fully identical dups in feed ITP ID 279, URL 0
 
-SELECT
+SELECT DISTINCT
     calitp_itp_id
     , calitp_url_number
     , TRIM(from_stop_id) as from_stop_id
