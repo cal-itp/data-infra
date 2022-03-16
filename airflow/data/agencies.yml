@@ -1604,3 +1604,11 @@ time:
     gtfs_rt_service_alerts_url: https://tularetransit.com/gtfs-rt/alerts
     gtfs_rt_trip_updates_url: https://tularetransit.com/gtfs-rt/tripupdates
   itp_id: 483
+elk-grove:
+  agency_name: Elk Grove Transit
+  feeds:
+  - gtfs_schedule_url: https://elkgrovetransit.com/gtfs
+    gtfs_rt_vehicle_positions_url: https://elkgrovetransit.com/gtfs-rt/vehiclepositions
+    gtfs_rt_service_alerts_url: https://elkgrovetransit.com/gtfs-rt/alerts
+    gtfs_rt_trip_updates_url: https://elkgrovetransit.com/gtfs-rt/tripupdates
+  itp_id: 105
