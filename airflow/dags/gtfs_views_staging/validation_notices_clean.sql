@@ -7,7 +7,6 @@ dependencies:
 
 -- Must trim string fields that come from raw GTFS tables that we clean & load into views
 -- (To allow joining with the cleaned data after this is run)
--- Don't trim stopId because we don't load stops into views
 -- This table has over 70 columns, so even though EXCEPT is a bit messy it still seems cleaner
 
 SELECT
@@ -15,6 +14,7 @@ SELECT
       calitp_deleted_at
       , fareId
       , previousFareId
+      , shapeId
       , routeId
       , currentDate
       , feedEndDate
@@ -37,6 +37,7 @@ SELECT
     , COALESCE(calitp_deleted_at, "2099-01-01") AS calitp_deleted_at
     , TRIM(fareId) as fareId
     , TRIM(previousFareId) as previousFareId
+    , TRIM(shapeId) as shapeId
     , TRIM(routeId) as routeId
     , TRIM(currentDate) as currentDate
     , TRIM(feedEndDate) as feedEndDate
