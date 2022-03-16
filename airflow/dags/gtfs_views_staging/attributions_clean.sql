@@ -16,9 +16,9 @@ SELECT
     , TRIM(agency_id) as agency_id
     , TRIM(route_id) as route_id
     , TRIM(trip_id) as trip_id
-    , is_producer
-    , is_operator
-    , is_authority
+    , CAST(TRIM(is_producer) AS INT64) as is_producer
+    , CAST(TRIM(is_operator) AS INT64) as is_operator
+    , CAST(TRIM(is_authority) AS INT64) as is_authority
     , TRIM(attribution_url) as attribution_url
     , TRIM(attribution_email) as attribution_email
     , TRIM(attribution_phone) as attribution_phone
