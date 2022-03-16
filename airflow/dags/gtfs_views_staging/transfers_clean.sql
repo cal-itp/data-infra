@@ -14,6 +14,8 @@ tests:
 -- Trim all string fields
 -- Incoming schema explicitly defined in gtfs_schedule_history external table definition
 
+-- SELECT DISTINCT because there are many fully identical dups in feed ITP ID 279, URL 0
+
 SELECT
     calitp_itp_id
     , calitp_url_number

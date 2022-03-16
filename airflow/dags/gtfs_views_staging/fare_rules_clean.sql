@@ -14,7 +14,9 @@ tests:
 -- Trim all string fields
 -- Incoming schema explicitly defined in gtfs_schedule_history external table definition
 
-SELECT
+-- SELECT DISTINCT because there are identical dups in multiple feeds
+
+SELECT DISTINCT
     calitp_itp_id
     , calitp_url_number
     , TRIM(fare_id) as fare_id

@@ -14,7 +14,9 @@ tests:
 -- Trim all string fields
 -- Incoming schema explicitly defined in gtfs_schedule_history external table definition
 
-SELECT
+-- SELECT DISTINCT because of full duplicates in feeds with ITP IDs 45 and 75
+
+SELECT DISTINCT
     calitp_itp_id
     , calitp_url_number
     , TRIM(route_id) as route_id
