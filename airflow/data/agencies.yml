@@ -1182,7 +1182,7 @@ soltrans:
     - gtfs_schedule_url: https://soltrans.connexionz.net/rtt/public/resource/gtfs.zip
       gtfs_rt_vehicle_positions_url: https://soltrans.connexionz.net/rtt/public/utility/gtfsrealtime.aspx/vehicleposition
       gtfs_rt_service_alerts_url: https://soltrans.connexionz.net/rtt/public/utility/gtfsrealtime.aspx/alert
-      gtfs_rt_trip_updates_url: https://soltrans.connexionz.net/rtt/public/utility/gtfsrealtime.aspx/tripupdate
+      gtfs_rt_trip_updates_url: https://soltrans.connexionz.net/rtt/public/utility/gtfsrealtime.aspx/tripupdate2
     - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=ST
       gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=ST
       gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
