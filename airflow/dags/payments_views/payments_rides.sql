@@ -68,8 +68,8 @@ tests:
 WITH
 
 gtfs_routes_with_participant AS (
-    SELECT participant_id, route_id, route_short_name, route_long_name
-    FROM `gtfs_schedule.routes`
+    SELECT participant_id, route_id, route_short_name, route_long_name, calitp_extracted_at, calitp_deleted_at
+    FROM `views.gtfs_schedule_dim_routes`
     JOIN `views.payments_feeds` USING (calitp_itp_id, calitp_url_number)
 ),
 
@@ -97,7 +97,8 @@ applied_adjustments AS (
 ),
 
 initial_transactions AS (
-    SELECT *
+    SELECT * EXCEPT(route_id),
+        TRIM(route_id) AS route_id
     FROM `payments.stg_cleaned_micropayment_device_transactions`
     JOIN `payments.stg_cleaned_device_transactions` USING (littlepay_transaction_id)
     JOIN `payments.stg_cleaned_device_transaction_types` USING (littlepay_transaction_id)
@@ -105,7 +106,8 @@ initial_transactions AS (
 ),
 
 second_transactions AS (
-    SELECT *
+    SELECT * EXCEPT(route_id),
+        TRIM(route_id) AS route_id
     FROM `payments.stg_cleaned_micropayment_device_transactions`
     JOIN `payments.stg_cleaned_device_transactions` USING (littlepay_transaction_id)
     JOIN `payments.stg_cleaned_device_transaction_types` USING (littlepay_transaction_id)
