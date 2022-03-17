@@ -3,6 +3,12 @@ operator: operators.SqlToWarehouseOperator
 dst_table_name: "gtfs_views_staging.validation_notices_clean"
 dependencies:
   - type2_loaded
+tests:
+  check_null:
+    - calitp_itp_id
+    - calitp_url_number
+    - calitp_extracted_at
+    - code
 ---
 
 -- Must trim string fields that come from raw GTFS tables that we clean & load into views

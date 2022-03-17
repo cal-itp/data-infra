@@ -3,6 +3,12 @@ operator: operators.SqlToWarehouseOperator
 dst_table_name: "gtfs_views_staging.calitp_feeds"
 dependencies:
   - type2_loaded
+
+tests:
+  check_null:
+    - feed_key
+  check_unique:
+    - feed_key
 ---
 
 WITH
