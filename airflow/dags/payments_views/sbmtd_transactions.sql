@@ -158,7 +158,7 @@ select
     t.is_shared_stop,
     t.all_route_ids,
     t.route_id_from_device,
-    t.likely_route_id,
+    trim(t.likely_route_id) as likely_route_id,
     r.route_long_name as likely_route_long_name,
     r.route_short_name as likely_route_short_name,
     t.vehicle_id,
