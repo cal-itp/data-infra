@@ -97,8 +97,7 @@ applied_adjustments AS (
 ),
 
 initial_transactions AS (
-    SELECT * EXCEPT(route_id),
-        TRIM(route_id) AS route_id
+    SELECT *
     FROM `payments.stg_cleaned_micropayment_device_transactions`
     JOIN `payments.stg_cleaned_device_transactions` USING (littlepay_transaction_id)
     JOIN `payments.stg_cleaned_device_transaction_types` USING (littlepay_transaction_id)

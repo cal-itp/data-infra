@@ -142,7 +142,7 @@ transactions as (
     join micropayment_device_transactions_dedupe using (micropayment_id)
     join device_transactions_dedupe as dt using (littlepay_transaction_id, customer_id, participant_id)
     join stop_stats as stat
-      on stat.stop_id = trim(dt.location_id)
+      on stat.stop_id = dt.location_id
       and datetime(timestamp(dt.transaction_date_time_utc)) >= stat.calitp_extracted_at
       and datetime(timestamp(dt.transaction_date_time_utc)) < stat.calitp_deleted_at
     where participant_id = 'sbmtd'
@@ -158,7 +158,7 @@ select
     t.is_shared_stop,
     t.all_route_ids,
     t.route_id_from_device,
-    trim(t.likely_route_id) as likely_route_id,
+    t.likely_route_id as likely_route_id,
     r.route_long_name as likely_route_long_name,
     r.route_short_name as likely_route_short_name,
     t.vehicle_id,
@@ -168,7 +168,7 @@ from transactions as t
 left join views.gtfs_schedule_dim_routes as r
     on r.calitp_itp_id = 293
         and r.calitp_url_number = 0
-        and r.route_id = trim(t.likely_route_id)
+        and r.route_id = t.likely_route_id
         and datetime(timestamp(t.transaction_date_time_utc)) >= r.calitp_extracted_at
         and datetime(timestamp(t.transaction_date_time_utc)) < r.calitp_extracted_at
 order by t.likely_route_id nulls last

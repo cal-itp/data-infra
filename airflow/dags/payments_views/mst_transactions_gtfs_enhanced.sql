@@ -26,7 +26,7 @@ device_transactions AS (
         DATETIME(TIMESTAMP(transaction_date_time_utc), "America/Los_Angeles") as transaction_date_time_pacific,
         location_id,
         location_name,
-        TRIM(route_id) as route_id,
+        route_id,
         latitude,
         longitude,
         vehicle_id,
