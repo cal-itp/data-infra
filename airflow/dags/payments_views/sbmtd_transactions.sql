@@ -54,31 +54,16 @@ dated_route_stops as (
     select distinct
         route_id,
         stop_id,
-        case
-          when ((st.calitp_extracted_at >= t.calitp_extracted_at) and
-            (st.calitp_extracted_at >= r.calitp_extracted_at))
-            then st.calitp_extracted_at
-          when ((t.calitp_extracted_at >= st.calitp_extracted_at) and
-            (t.calitp_extracted_at >= r.calitp_extracted_at))
-            then t.calitp_extracted_at
-          when ((r.calitp_extracted_at >= st.calitp_extracted_at) and
-            (r.calitp_extracted_at >= t.calitp_extracted_at))
-            then r.calitp_extracted_at
-        end
-        as calitp_extracted_at,
-
-        case
-          when ((st.calitp_deleted_at <= t.calitp_deleted_at) and
-            (st.calitp_deleted_at <= r.calitp_deleted_at))
-            then st.calitp_deleted_at
-          when ((t.calitp_deleted_at <= st.calitp_deleted_at) and
-            (t.calitp_deleted_at <= r.calitp_deleted_at))
-            then t.calitp_deleted_at
-          when ((r.calitp_deleted_at <= st.calitp_deleted_at) and
-            (r.calitp_deleted_at <= t.calitp_deleted_at))
-            then r.calitp_deleted_at
-        end
-        as calitp_deleted_at
+        greatest(
+          st.calitp_extracted_at,
+          r.calitp_extracted_at,
+          t.calitp_extracted_at
+          ) as calitp_extracted_at,
+        least(
+          st.calitp_deleted_at,
+          r.calitp_deleted_at,
+          t.calitp_deleted_at
+        ) as calitp_deleted_at
     from views.gtfs_schedule_dim_stop_times as st
     join views.gtfs_schedule_dim_trips as t using (calitp_itp_id, calitp_url_number, trip_id)
     join views.gtfs_schedule_dim_routes as r using (calitp_itp_id, calitp_url_number, route_id)
