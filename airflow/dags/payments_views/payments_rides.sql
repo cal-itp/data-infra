@@ -27,7 +27,7 @@ fields:
   product_code: "From payments.product_data.product_code"
   product_description: "From payments.product_data.product_description"
   product_type: "From payments.product_data.product_type"
-  route_id: "The route_id of the first tap transaction"
+  route_id: "The route_id of the first tap transaction with a non-unknown route_id, else unknown ('Route Z')"
   route_long_name: "The route_long_name of the first tap transaction"
   route_short_name: "The route_short_name of the first tap transaction"
   direction: "The direction of the first tap transaction"
@@ -188,3 +188,7 @@ LEFT JOIN `payments.stg_cleaned_product_data` AS p USING (participant_id, produc
 LEFT JOIN gtfs_routes_with_participant AS r
     ON r.participant_id = m.participant_id
     AND r.route_id = (CASE WHEN t1.route_id <> 'Route Z' THEN t1.route_id ELSE COALESCE(t2.route_id, 'Route Z') END)
+    -- here, can just use t1 because transaction date will be populated
+    -- (don't have to handle unkowns the way we do with route_id)
+    AND r.calitp_extracted_at <= DATETIME(TIMESTAMP(t1.transaction_date_time_utc))
+    AND r.calitp_deleted_at > DATETIME(TIMESTAMP(t1.transaction_date_time_utc))
