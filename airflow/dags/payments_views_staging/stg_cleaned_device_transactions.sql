@@ -17,6 +17,8 @@ select distinct * except (
     calitp_dupe_number,
     route_id,
     location_id),
+    -- trim to align with gtfs cleaning steps
+    -- since these fields are used to join with gtfs data
     trim(route_id) as route_id,
     trim(location_id) as location_id
 from payments.stg_enriched_device_transactions
