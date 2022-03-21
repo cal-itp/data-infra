@@ -1,8 +1,10 @@
-name: Release service build
+name: Deploy into release channel
 
 on:
   push:
-    branches: [ 'releases/*' ]
+    branches:
+      - '!releases/candidate'
+      - 'releases/*'
 
 jobs:
   release:
