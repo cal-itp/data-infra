@@ -32,9 +32,9 @@ spec:
               mountPath: /secrets/gcs-upload-svcacct
           resources:
             requests:
-              memory: 6.5Gi
+              memory: 5.0Gi
             limits:
-              memory: 6.5Gi
+              memory: 5.0Gi
       volumes:
         - name: agencies-data
           secret:
@@ -42,3 +42,17 @@ spec:
         - name: gcs-upload-svcacct
           secret:
             secretName: gcs-upload-svcacct
+      tolerations:
+        - key: resource-domain
+          operator: Equal
+          value: gtfsrt
+          effect: NoSchedule
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: resource-domain
+                operator: In
+                values:
+                - gtfsrt

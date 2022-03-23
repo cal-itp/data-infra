@@ -68,7 +68,11 @@ jobs:
           AGENCIES_DIFF
 
     - if: ${{ github.repository == 'cal-itp/data-infra' }}
+<<<<<<< HEAD
       uses: google-github-actions/setup-gcloud@main
+=======
+      uses: google-github-actions/setup-gcloud@v0
+>>>>>>> main
       with:
         service_account_key: ${{ secrets.GCP_SA_KEY }}
         export_default_credentials: true
