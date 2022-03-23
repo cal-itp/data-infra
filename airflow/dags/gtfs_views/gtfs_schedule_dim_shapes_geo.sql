@@ -35,8 +35,8 @@ WITH lat_long as (
               CAST(shape_pt_lat as FLOAT64)
             ) as pt_geom
         FROM `views.gtfs_schedule_dim_shapes`
-    )
-
+    ),
+  initial_pt_array AS (
     SELECT
         calitp_itp_id,
         calitp_url_number,
@@ -47,7 +47,13 @@ WITH lat_long as (
         -- https://stackoverflow.com/questions/58234223/st-makeline-discarding-duplicate-points-even-if-not-consecutive
         -- also: https://gis.stackexchange.com/questions/426188/can-i-represent-a-route-that-doubles-back-on-itself-in-bigquery-with-a-linestrin
         -- so instead this is just an array of WKT points
-        ARRAY_AGG(pt_geom ORDER BY shape_pt_sequence) as pt_array
+        ARRAY_AGG(
+          -- ignore nulls so it doesn't error out if there's a null point
+          pt_geom IGNORE NULLS
+          ORDER BY shape_pt_sequence)
+          as pt_array,
+        -- count number of rows so we can check for drops later
+        count(1) as ct
     FROM lat_long
     GROUP BY
         calitp_itp_id,
@@ -55,3 +61,8 @@ WITH lat_long as (
         calitp_extracted_at,
         calitp_deleted_at,
         shape_id
+  )
+  SELECT * EXCEPT(ct)
+  FROM initial_pt_array
+  -- drop shapes that had nulls
+  WHERE ARRAY_LENGTH(pt_array) = ct
