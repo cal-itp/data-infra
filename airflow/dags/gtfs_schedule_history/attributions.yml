@@ -26,11 +26,11 @@ schema_fields:
   - name: trip_id
     type: STRING
   - name: is_producer
-    type: INTEGER
+    type: STRING
   - name: is_operator
-    type: INTEGER
+    type: STRING
   - name: is_authority
-    type: INTEGER
+    type: STRING
   - name: attribution_url
     type: STRING
   - name: attribution_email

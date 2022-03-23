@@ -19,7 +19,7 @@ WITH trip_dupes AS (
     SELECT
         *
         , ROW_NUMBER() OVER (PARTITION BY trip_key) calitp_dupe_number
-    FROM `gtfs_schedule_type2.trips_clean` T
+    FROM `gtfs_views_staging.trips_clean` T
 
 )
 

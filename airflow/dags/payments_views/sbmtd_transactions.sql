@@ -50,15 +50,31 @@ micropayment_device_transactions_dedupe AS (
 /*
   All the unique routes and stops across SBMTD
 */
-route_stops as (
+dated_route_stops as (
     select distinct
         route_id,
-        stop_id
-    from gtfs_schedule.stop_times as st
-    join gtfs_schedule.trips as t using (calitp_itp_id, calitp_url_number, trip_id)
-    join gtfs_schedule.routes as r using (calitp_itp_id, calitp_url_number, route_id)
+        stop_id,
+        greatest(
+          st.calitp_extracted_at,
+          r.calitp_extracted_at,
+          t.calitp_extracted_at
+          ) as calitp_extracted_at,
+        least(
+          st.calitp_deleted_at,
+          r.calitp_deleted_at,
+          t.calitp_deleted_at
+        ) as calitp_deleted_at
+    from views.gtfs_schedule_dim_stop_times as st
+    join views.gtfs_schedule_dim_trips as t using (calitp_itp_id, calitp_url_number, trip_id)
+    join views.gtfs_schedule_dim_routes as r using (calitp_itp_id, calitp_url_number, route_id)
     where calitp_itp_id = 293
     and calitp_url_number = 0
+),
+
+route_stops as (
+  select *
+  from dated_route_stops
+  where calitp_extracted_at < calitp_deleted_at
 ),
 
 /*
@@ -70,12 +86,17 @@ route_stops as (
 stop_stats as (
     select
         stop_id,
+        calitp_extracted_at,
+        calitp_deleted_at,
         count(*) as num_routes_for_stop,
         string_agg(route_id, ', ') as all_route_ids,
         '12X' in unnest(array_agg(route_id)) as serves_12x,
         '24X' in unnest(array_agg(route_id)) as serves_24x
     from route_stops
-    group by 1
+    group by
+      stop_id,
+      calitp_extracted_at,
+      calitp_deleted_at
 ),
 
 /*
@@ -105,7 +126,10 @@ transactions as (
     from micropayments_dedupe as m
     join micropayment_device_transactions_dedupe using (micropayment_id)
     join device_transactions_dedupe as dt using (littlepay_transaction_id, customer_id, participant_id)
-    join stop_stats as stat on stat.stop_id = dt.location_id
+    join stop_stats as stat
+      on stat.stop_id = dt.location_id
+      and datetime(timestamp(dt.transaction_date_time_utc)) >= stat.calitp_extracted_at
+      and datetime(timestamp(dt.transaction_date_time_utc)) < stat.calitp_deleted_at
     where participant_id = 'sbmtd'
       and m.type = 'DEBIT'
 )
@@ -119,15 +143,17 @@ select
     t.is_shared_stop,
     t.all_route_ids,
     t.route_id_from_device,
-    t.likely_route_id,
+    t.likely_route_id as likely_route_id,
     r.route_long_name as likely_route_long_name,
     r.route_short_name as likely_route_short_name,
     t.vehicle_id,
     t.transaction_date_time_utc,
     DATETIME(TIMESTAMP(transaction_date_time_utc), "America/Los_Angeles") as transaction_date_time_pacific
 from transactions as t
-left join gtfs_schedule.routes as r
+left join views.gtfs_schedule_dim_routes as r
     on r.calitp_itp_id = 293
         and r.calitp_url_number = 0
         and r.route_id = t.likely_route_id
+        and datetime(timestamp(t.transaction_date_time_utc)) >= r.calitp_extracted_at
+        and datetime(timestamp(t.transaction_date_time_utc)) < r.calitp_extracted_at
 order by t.likely_route_id nulls last
