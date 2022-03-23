@@ -19,8 +19,8 @@ fields:
   hour_extracted: Hour extracted from calitp_extracted_at
   minute_extracted: Minute extracted from calitp_extracted_at
 
-dependencies:
-  - external_calitp_files
+external_dependencies:
+  - rt_loader_files: external_calitp_files
 ---
 
 SELECT

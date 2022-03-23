@@ -28,7 +28,6 @@ class Ticker(threading.Thread):
     def run(self):
 
         self.tickid = 0
-        self.tick()
 
-        while time.sleep(self.tickint) is None:
+        while time.sleep(self.tickint - (time.time() % self.tickint)) is None:
             self.tick()

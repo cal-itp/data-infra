@@ -30,7 +30,7 @@ jobs:
         # https://github.com/pydata/pydata-sphinx-theme/issues/508
         pip install pydata-sphinx-theme==0.7.2
         pip install sphinxcontrib-mermaid
-    - uses: google-github-actions/setup-gcloud@master
+    - uses: google-github-actions/setup-gcloud@v0
       with:
         service_account_key: ${{ secrets.GCP_SA_KEY }}
         export_default_credentials: true
