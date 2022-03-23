@@ -1,6 +1,5 @@
 ---
 operator: operators.SqlToWarehouseOperator
--- TODO: views.amplitude.benefits_events or amplitude.benefits_events or views.amplitude_benefits_events
 dst_table_name: "views.amplitude_benefits_events"
 
 description: |

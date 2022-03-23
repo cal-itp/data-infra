@@ -1,4 +1,4 @@
-description: "Load events from Amplitude to GCS and then from GCS to BigQuery"
+description: "Load events from BigQuery to view"
 schedule_interval: "0 0 * * *"
 catchup: True
 default_args:
