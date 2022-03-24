@@ -5,8 +5,8 @@ dst_table_name: gtfs_schedule.translations
 
 description: Latest-only table for translations
 
-external_dependencies:
-  - gtfs_views_staging: translations_clean
+dependencies:
+  - dummy_views_staging
 ---
 {{
 
