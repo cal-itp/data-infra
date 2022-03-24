@@ -5,8 +5,8 @@ dst_table_name: gtfs_schedule.attributions
 
 description: Latest-only table for attributions
 
-external_dependencies:
-  - gtfs_views_staging: attributions_clean
+dependencies:
+  - dummy_views_staging
 ---
 {{
 

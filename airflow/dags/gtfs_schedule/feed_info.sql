@@ -5,8 +5,8 @@ dst_table_name: gtfs_schedule.feed_info
 
 description: Latest-only table for feed_info
 
-external_dependencies:
-  - gtfs_views_staging: feed_info_clean
+dependencies:
+  - dummy_views_staging
 ---
 {{
 
