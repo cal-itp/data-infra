@@ -9,7 +9,7 @@ The section below outlines our team's primary meetings and their purposes, as we
 | -------- | -------- | -------- |
 | **Technical Onboarding** | Week 1 <br/> 40 Mins | To ensure access to tools and go over best practices. |
 | **Data Services All-Hands** | Every Other Monday <br/> 1 Hour | A team-wide data services sync. |
-| **Analyst Stand-ups** | Tues & Thurs <br/> 45 Mins | An opportunity to share your screen and discuss what you've been working on. |
+| **Analyst Roundtable** | Tues & Thurs <br/> 45 Mins | An opportunity to share your screen and discuss what you've been working on. |
 | **Lunch n' Learn** | Tuesdays <br/> 1 Hour | A weekly opportunity to cover a specific topic, learn something new, and gain visibility into projects and across teams. <br/> Access recordings of **previous Lunch n' Learns** [at this link](https://youtube.com/playlist?list=PLJA3syyg1ijm36JFZ95v79zAuv-5c8hfZ). |
 
 (slack-intro)=
