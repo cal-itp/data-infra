@@ -65,38 +65,99 @@ Using this build step to create a service tag offers a few conveniences:
 ## 2.0 Deploy
 
 This flow is powered by:
-[`.github/workflows/service-release.yml`](https://github.com/cal-itp/data-infra/blob/main/.github/workflows/service-release.yml)
+
+- [`.github/workflows/service-release-candidate.yml`](https://github.com/cal-itp/data-infra/blob/main/.github/workflows/service-release-candidate.yml)
+- [`.github/workflows/service-release-channel.yml`](https://github.com/cal-itp/data-infra/blob/main/.github/workflows/service-release-channel.yml)
 
 ### 2.1 quick start
 
 ```bash
-# this is a path under kubernetes/apps/manifests/$app_name
+# this can be determined from a release config under ci/vars/releases
 app_name=gtfs-rt-archive
-# this should be the $app_version part of the most recent tag for $app_name
-app_version=$(basename "$(git describe --abbrev=0)")
 # choose your appropriate remote name if different
 git_remote=origin
+topic_branch=$(git branch --show-current)
+# load the helm or kustomize specific parameters
+source ci/vars/releases/prod-$app_name.env
 
-# bump the newTag version to match the newly pushed $app_version
-$EDITOR kubernetes/apps/overlays/$app_name-release/kustomization.yaml
+if   [[ $RELEASE_DRIVER == 'kustomize' ]]; then
+  # bump the newTag version to match the newly pushed app version
+  $EDITOR kubernetes/apps/overlays/$app_name-release/kustomization.yaml
+elif [[ $RELEASE_DRIVER == 'helm'      ]]; then
+  # update the tag part of the image parameter; how to do this may vary from app to app
+  # the RELEASE_HELM_VALUES parameter in the release config points to the values file which should be changed
+  $EDITOR $RELEASE_HELM_VALUES
+fi
 
 # commit the change
-git commit -am "ops($app_name): release $app_version"
+git commit -am "ops($app_name): release new version"
 
-# after the push, open a PR into the releases/preprod branch.
-# the release will be auto-deployed after merge
-git push $git_remote $(git symbolic-ref HEAD)
-# after it looks good in preprod, open a PR from releases/preprod into the
-# releases/prod branch. The release will be auto-deployed after merge.
+# trigger a release candidate build
+git push $git_remote
+
+# fetch the release candidate
+git fetch $git_remote candidates/$topic_branch
+
+# deploy to preprod
+git push -f $git_remote $git_remote/candidates/$topic_branch:releases/preprod
+
+# after it looks good in preprod, merge your changes into main.
+# Once merged into main, open a PR from candidates/main into releases/prod
 ```
 
-### 2.2 details
+### 2.2.0 details
 
-The automated deploy process essentially consists of modifying any yaml files
-associated with a kubernetes deployment as desired, pushing those files to the
-GitHub repository, and merging those changes into a release branch. Each release
-branch is tied to a specific "release channel", which is simply a less ambiguous
-term used to describe an "environment" (e.g., "production", "staging", etc).
+The automated deploy process essentially consists of:
+
+1. Modifying yaml files associated with an app as desired
+2. Push those files to the GitHub repository
+3. Wait for a release candidate to build
+4. Merge or push the release candidate into a release branch
+
+#### 2.2.1 apps
+
+App configurations for kubernetes deployed apps are organized under
+`kubernetes/apps`. There are two deployment patterns which are supported for
+kubertnetes:
+
+1. kustomize
+2. helm
+
+
+##### kustomize
+
+There are two locations where kustomize manifests are stored:
+
+- `kubernetes/apps/manifests`: holds base kubernetes manifests. These should be
+ suiltable to be directly applied using `kubectl apply -f`, but will generally
+ be applied using `kubectl apply -k`.
+- `kubernetes/apps/overlays`: holds overlays which are based on manifests in
+ `kubernetes/apps/manifests`. These are only ever expected be suitable for
+ application using `kubectl apply -k`.
+
+When deploying changed kustomize manifests, the ci pipeline will essentially
+execute the command:
+
+```bash
+kubectl apply -k kubernetes/apps/overlays/$app_name-$release_channel
+```
+
+##### helm
+
+There are separate locations for storing embedded helm charts and helm values
+files. Not all values files will necessarily have a corresponding chart; some
+charts are pulled from external sources.
+
+- charts location: `kubernetes/apps/charts`
+- values location: `kubernetes/apps/values`
+
+The pipeline will run a `helm install` or `helm upgrade` command as appropriate
+when deploying these applications.
+
+#### 2.2.2 release channels
+
+Each release branch is tied to a specific "release channel", which is simply a
+less ambiguous term used to describe an "environment" (e.g., "production", "staging", etc).
 There are currently two release branches:
 
 1. `releases/preprod`
@@ -105,11 +166,24 @@ There are currently two release branches:
 The basename of the branch (i.e., the name after the last "/" character) is used
 to determine the name of the release channel being deployed into.
 
-Currently, only kustomize based manifests
-(`kubernetes/apps/{manifests,overlays}`) are automatically deployed into
-release channels. When an update to a kustomize manifest is detected after a
-merge into a release branch, the ci pipeline will execute the command:
+#### 2.2.3 release candidates
 
-```bash
-kubectl apply -k kubernetes/apps/manifests/$app_name-$release_channel
-```
+Whenever changes to deployment-relevant files (mostly kubernetes yaml files or
+ci scripts) are pushed up to a topic branch, it triggers the build of a "release
+candidate" branch. This is a special branch which is pruned down to include only
+the files which are relevant to performing deployments into release channels. A
+deployment should be triggered by pushing or merging a release candidate branch
+into a release channel branch.
+
+The release candidate for each topic branch is pushed to
+`candidates/$topic_branch_name`.
+
+The release candidate `candidates/main` is the only candidate which should ever
+be merged into `releases/prod` and this must be done via PRs.
+
+#### 2.2.4 release configs
+
+Each app has a channel-specific release configuration stored at
+`ci/vars/releases/$release_channel-$app_name.env`. This config file informs the
+ci pipeline which deployment pattern the app is using and provides helm or
+kustomize specific parameters for the deployment.
