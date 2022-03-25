@@ -1,0 +1,9 @@
+ingress:
+
+  enabled: true
+  hosts:
+    - monitoring.k8s.calitp.jarv.us
+  tls:
+    - secretName: grafana-tls
+      hosts:
+        - monitoring.k8s.calitp.jarv.us

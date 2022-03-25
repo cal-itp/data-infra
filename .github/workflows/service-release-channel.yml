@@ -1,14 +1,17 @@
-name: Release service build
+name: Deploy into release channel
 
 on:
   push:
-    branches: [ 'releases/*' ]
+    branches:
+      - 'releases/*'
 
 jobs:
   release:
     runs-on: ubuntu-latest
     env:
       CLOUDSDK_CORE_PROJECT: cal-itp-data-infra
+      GKE_NAME: data-infra-apps
+      GKE_REGION: us-west1
     steps:
 
       - name: Check out repo
@@ -23,17 +26,16 @@ jobs:
 
       - name: Setup kubeconfig
         run: |
-          source "$GITHUB_WORKSPACE/kubernetes/gke/config-cluster.sh"
           gcloud container clusters get-credentials "$GKE_NAME" --region "$GKE_REGION"
 
       - id: service-release
-        name: Release updated apps into branch channel
+        name: Run ci/workflows/service-release.sh
         shell: bash
         run: |
           # GITHUB_JOB is not populated until the job is running
           git config user.name "Github Action $GITHUB_JOB"
           git config user.email "$(whoami)@$(uname -n)"
           export RELEASE_CHANNEL=${GITHUB_REF#refs/heads/releases/}
-          printf 'WORKFLOW: service-release; BUILD_APP=%s\n' "$BUILD_APP"
+          printf 'WORKFLOW: service-release; RELEASE_CHANNEL=%s\n' "$RELEASE_CHANNEL"
           set -- "$GITHUB_WORKSPACE/ci/vars/project.env"
           source "$GITHUB_WORKSPACE/ci/workflows/service-release.sh"
