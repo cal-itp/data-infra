@@ -56,5 +56,5 @@ jobs:
         fi
 
         # build & push
-        git holo project releases/candidate --commit-to "$candidate_branch" --commit-message "Release candidate: $(git describe --always)"
+        git holo project release-candidate --commit-to "$candidate_branch" --commit-message "Release candidate: $(git describe --always)"
         git push "$remote_name" "$candidate_branch"
