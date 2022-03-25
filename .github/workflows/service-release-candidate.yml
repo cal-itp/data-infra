@@ -43,18 +43,20 @@ jobs:
         git config user.name "Github Action $GITHUB_JOB"
         git config user.email "$(whoami)@$(uname -n)"
         remote_name=origin
-        candidate_branch=candidates/${GITHUB_REF#refs/heads/}
-        candidate_local_ref=refs/heads/$candidate_branch
+        source_branch=${GITHUB_REF#refs/heads/}
+        candidate_branch=candidates/$source_branch
+        candidate_ref=refs/heads/$candidate_branch
         candidate_remote_ref=refs/remotes/$remote_name/$candidate_branch
 
         # branch setup
-        if [[ $(git ls-remote "$remote_name" "$candidate_local_ref") ]] && [[ ! $(git show-ref "$candidate_remote_ref") ]]; then
-          git fetch "$remote_name" "$candidate_branch"
-          if [[ ! $(git show-ref "$candidate_local_ref") ]]; then
-            git branch "$candidate_branch" "$remote_name/$candidate_branch"
-          fi
-        fi
+        git update-ref -d "$candidate_remote_ref"
+        git fetch "$remote_name" "$candidate_ref"
 
         # build & push
-        git holo project release-candidate --commit-to "$candidate_branch" --commit-message "Release candidate: $(git describe --always)"
-        git push "$remote_name" "$candidate_branch"
+        commit_msg="Release candidate: $source_branch
+
+        Source-holobranch: release-candidate
+        Source-commit: $(git rev-list HEAD -1)"
+
+        git holo project release-candidate --commit-to "$candidate_remote_ref" --commit-message "$commit_msg"
+        git push "$remote_name" "$candidate_remote_ref":"$candidate_ref"
