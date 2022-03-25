@@ -3,7 +3,6 @@ name: Deploy into release channel
 on:
   push:
     branches:
-      - '!releases/candidate'
       - 'releases/*'
 
 jobs:
@@ -30,7 +29,7 @@ jobs:
           gcloud container clusters get-credentials "$GKE_NAME" --region "$GKE_REGION"
 
       - id: service-release
-        name: Release updated apps into branch channel
+        name: Run ci/workflows/service-release.sh
         shell: bash
         run: |
           # GITHUB_JOB is not populated until the job is running

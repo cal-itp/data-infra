@@ -3,7 +3,7 @@ name: Build release candidate
 on:
   push:
     branches:
-      - main
+      - '*'
     paths:
       - '.holo/config.toml'
       - '.holo/sources/jarvus-cluster-template.toml'
@@ -29,7 +29,7 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: 'Build branch: releases/candidate'
+    - name: 'Build release candidate branch'
       run: |
 
         # dependency setup
@@ -42,15 +42,19 @@ jobs:
         [[ ! $(git status --porcelain=v1) ]] || git stash -u
         git config user.name "Github Action $GITHUB_JOB"
         git config user.email "$(whoami)@$(uname -n)"
+        remote_name=origin
+        candidate_branch=candidates/${GITHUB_REF#refs/heads/}
+        candidate_local_ref=refs/heads/$candidate_branch
+        candidate_remote_ref=refs/remotes/$remote_name/$candidate_branch
 
         # branch setup
-        if [[ $(git ls-remote origin refs/heads/releases/candidate) ]] && [[ ! $(git show-ref refs/remotes/origin/releases/candidate) ]]; then
-          git fetch origin releases/candidate
-          if [[ ! $(git show-ref refs/heads/releases/candidate) ]]; then
-            git branch releases/candidate origin/releases/candidate
+        if [[ $(git ls-remote "$remote_name" "$candidate_local_ref") ]] && [[ ! $(git show-ref "$candidate_remote_ref") ]]; then
+          git fetch "$remote_name" "$candidate_branch"
+          if [[ ! $(git show-ref "$candidate_local_ref") ]]; then
+            git branch "$candidate_branch" "$remote_name/$candidate_branch"
           fi
         fi
 
         # build & push
-        git holo project releases/candidate --commit-to releases/candidate --commit-message "Release candidate: $(git describe --always)"
-        git push origin releases/candidate
+        git holo project releases/candidate --commit-to "$candidate_branch" --commit-message "Release candidate: $(git describe --always)"
+        git push "$remote_name" "$candidate_branch"
