@@ -2,7 +2,7 @@ GKE_NODEPOOL_NAMES=(
   'apps-v2'
   'gtfsrt-v1'
   'jupyterhub-users'
-  'jobs-v1',
+  'jobs-v1'
 )
 
 declare -A GKE_NODEPOOL_NODE_COUNTS
