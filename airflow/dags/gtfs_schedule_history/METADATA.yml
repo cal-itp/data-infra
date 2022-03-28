@@ -7,9 +7,10 @@ default_args:
     depends_on_past: False
     start_date: "2021-01-01"
     email:
-      - "hunter.owens@dot.ca.gov"
-      - "michael.c@jarv.us"
+      - "blake.f@jarv.us"
       - "evan.siroky@dot.ca.gov"
+      - "hunter.owens@dot.ca.gov"
+      - "jameelah.y@jarv.us"
     email_on_failure: True
     email_on_retry: False
     retries: 1
