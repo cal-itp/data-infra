@@ -62,7 +62,7 @@ fi
 # helm template output cannot be passed directly to kubectl diff.
 # this workaround wraps the output of helm template in a kustomize directory to allow
 # native diffing.
-diff_tmpdir=$(mktemp -d)
+diff_tmpdir=$(mktemp -d -t "$RELEASE_HELM_CHART")
 trap "rm -rf $diff_tmpdir" EXIT
 helm template "$RELEASE_HELM_NAME" "$chart_path" "${helm_opts[@]}" > "$diff_tmpdir/manifest.yaml"
 cat <<EOF > "$diff_tmpdir/kustomization.yaml"
