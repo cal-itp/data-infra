@@ -15,6 +15,7 @@ fields:
   city: The current city of the user,
   client_event_time: Client event timestamp
   client_upload_time: Client upload time,
+  country: The current country of the user,
   device_brand: The device brand that the user is using.
   device_carrier: The carrier that the user is using.
   device_family: The device family that the user is using.
@@ -28,8 +29,8 @@ fields:
   event_time: Event time (e.g. "2021-12-09 00:45:29.430000"),
   event_type: The unique identifier for your event.
   language: The language set by the user,
-  location_lat: The current Latitude of the user,
-  location_lng: The current Longitude of the user,
+  location_lat: The current latitude of the user,
+  location_lng: The current longitude of the user,
   processed_time: Processed time,
   schema: Schema,
   server_received_time: Server received time,
