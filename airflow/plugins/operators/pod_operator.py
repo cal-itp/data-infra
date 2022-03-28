@@ -14,7 +14,9 @@ def PodOperator(*args, **kwargs):
     # TODO: tune this, and add resource limits
     namespace = "default"
 
-    if is_development() or kwargs.pop("is_gke", False):
+    is_gke = kwargs.pop("is_gke", False)  # we want to always pop()
+
+    if is_development() or is_gke:
         return GKEPodOperator(
             *args,
             in_cluster=False,
