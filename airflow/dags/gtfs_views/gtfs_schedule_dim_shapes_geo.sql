@@ -46,7 +46,7 @@ WITH lat_long as (
     FROM lat_long
   ),
   versioned_shapes AS (
-    -- get all the times that any points changed
+    -- say that the *shape* changed any time its points changed
     SELECT
       calitp_itp_id,
       calitp_url_number,
@@ -66,7 +66,9 @@ WITH lat_long as (
   ),
 
   versioned_lat_long AS (
-    SELECT l.*
+    SELECT l.* EXCEPT(calitp_extracted_at, calitp_deleted_at),
+      s.calitp_extracted_at,
+      s.calitp_deleted_at
     FROM versioned_shapes AS s
     LEFT JOIN lat_long AS l
       ON s.calitp_itp_id = l.calitp_itp_id
