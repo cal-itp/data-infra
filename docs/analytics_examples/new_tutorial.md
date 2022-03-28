@@ -38,7 +38,7 @@ from siuba import *
 pd.set_option("display.max_rows", 10)
 
 SELECTED_DATE = "2021-09-01"
-ITP_ID = 278 # San Diego Metropolitan Transit System
+ITP_ID = 208 # Monterey-Salinas Transit
 ```
 
 (stop-arrivals-operator)=
@@ -110,7 +110,7 @@ shapes = (gpd.GeoDataFrame(shapes,
                       crs = 'EPSG:4326')
      )
 
-MY_ROUTE = "1_2_156"
+MY_ROUTE = "41089"
 
 # Now, combine all the stops by stop sequence, and create linestring
 single_shape = (shapes
