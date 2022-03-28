@@ -1,6 +1,0 @@
-description: "Load events from BigQuery to view"
-schedule_interval: "0 0 * * *"
-catchup: False
-default_args:
-    owner: airflow
-    start_date: "2021-12-08"

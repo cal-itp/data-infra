@@ -2,7 +2,7 @@
 operator: operators.SqlQueryOperator
 
 dependencies:
-  - benefits_events
+  - api_to_jsonl
 ---
 
 CREATE OR REPLACE EXTERNAL TABLE `amplitude.benefits_events` (
