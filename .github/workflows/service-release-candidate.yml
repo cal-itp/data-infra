@@ -50,7 +50,9 @@ jobs:
 
         # branch setup
         git update-ref -d "$candidate_remote_ref"
-        git fetch "$remote_name" "$candidate_ref"
+        if [[ $(git ls-remote "$remote_name" "$candidate_ref") ]]; then
+          git fetch "$remote_name" "$candidate_ref"
+        fi
 
         # build & push
         commit_msg="Release candidate: $source_branch
