@@ -1,4 +1,4 @@
-description: "Load events from Amplitude to GCS, GCS to BigQuery, BigQuery to view"
+description: "Load events from Amplitude API to Google Cloud Storage as flattened JSON, move JSONL to BigQuery table, move BigQuery table to view"
 schedule_interval: "0 0 * * *"
 tags:
   - all_gusty_features
