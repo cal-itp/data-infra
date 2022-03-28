@@ -18,24 +18,14 @@ fields:
   event_type: The unique identifier for your event.
   amplitude_event_type: Name of Amplitude event.
   version_name: Version name.
-  platform: Platform of the device.
-  os_name: The name of the mobile operating system or browser that the user is using.
-  os_version: The version of the mobile operating system or browser the user is using.
   device_brand: The device brand that the user is using.
-  device_manufacturer: The device manufacturer that the user is using.
-  device_model: The device model that the user is using.
   device_family: The device family that the user is using.
   device_type: The device type that the user is using.
   device_carrier: The carrier that the user is using.
   location_lat: The current Latitude of the user.
   location_lng: The current Longitude of the user.
-  ip_address: The IP address of the user.
-  country: The current country of the user.
   language: The language set by the user.
-  library: HTTP 2.0
   city: The current city of the user.
-  region: The current state of the user.
-  dma: The current Designated Market Area of the user.
   event_properties: Event properties with transit provider_name, path, language
   user_properties: User properties with referring_domain, referrer, user_agent
   event_time: Event time (e.g. "2021-12-09 00:45:29.430000"),
@@ -43,18 +33,8 @@ fields:
   server_upload_time: Server upload time,
   server_received_time: Server received time,
   amplitude_id: INT64,
-  idfa: (iOS) Identifier for Advertiser.,
-  adid: (Android) Google Play Services advertising ID,
-  paying: STRING,
-  start_version: Start version,
   user_creation_time: User creation time,
   uuid: UUID,
-  sample_rate: Sample rate,
-  insert_id: A unique identifier for the event. ,
-  insert_key: A unique identifer key for the event,
-  is_attribution_event: Is Amplitude Attribution,
-  amplitude_attribution_ids: Amplitude Attribution IDs,
-  partner_id: Partner ID,
   schema: Schema,
   processed_time: Processed time
 ---
