@@ -1,4 +1,0 @@
-operator: airflow.operators.dummy_operator.DummyOperator
-
-external_dependencies:
-  - amplitude_benefits_loader: all
