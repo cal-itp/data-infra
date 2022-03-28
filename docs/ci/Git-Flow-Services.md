@@ -62,14 +62,16 @@ Using this build step to create a service tag offers a few conveniences:
 - The tag is auto-pushed to the git remote after creation, triggering the build
  process.
 
-## 2.0 Deploy
+## 2.0.0 Deploy
 
 This flow is powered by:
 
 - [`.github/workflows/service-release-candidate.yml`](https://github.com/cal-itp/data-infra/blob/main/.github/workflows/service-release-candidate.yml)
 - [`.github/workflows/service-release-channel.yml`](https://github.com/cal-itp/data-infra/blob/main/.github/workflows/service-release-channel.yml)
 
-### 2.1 quick start
+### 2.1.0 quick start
+
+#### 2.1.1 deploy your topic branch to preprod
 
 ```bash
 # this can be determined from a release config under ci/vars/releases
@@ -102,8 +104,16 @@ git fetch $git_remote candidates/$topic_branch
 git push -f $git_remote $git_remote/candidates/$topic_branch:releases/preprod
 
 # after it looks good in preprod, merge your changes into main.
-# Once merged into main, open a PR from candidates/main into releases/prod
 ```
+
+#### 2.1.2 Deploy your changes to prod
+
+In GitHub:
+
+1. Go through the typical PR process to merge your topic branch into `main`
+2. Open a PR from `candidates/main` into `releases/prod`
+3. Receive an approval
+4. Merge the change
 
 ### 2.2.0 details
 
