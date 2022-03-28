@@ -36,6 +36,46 @@ WITH lat_long as (
             ) as pt_geom
         FROM `views.gtfs_schedule_dim_shapes`
     ),
+  unique_extracts AS (
+    -- get all the times that any points changed
+    SELECT DISTINCT
+      calitp_itp_id,
+      calitp_url_number,
+      shape_id,
+      calitp_extracted_at
+    FROM lat_long
+  ),
+  versioned_shapes AS (
+    -- get all the times that any points changed
+    SELECT
+      calitp_itp_id,
+      calitp_url_number,
+      calitp_extracted_at,
+      COALESCE(
+        LEAD(calitp_extracted_at)
+          OVER(
+            PARTITION BY
+              calitp_itp_id,
+              calitp_url_number,
+              shape_id
+            ORDER BY calitp_extracted_at
+          )
+        , "2099-01-01") AS calitp_deleted_at,
+      shape_id
+    FROM unique_extracts
+  ),
+
+  versioned_lat_long AS (
+    SELECT l.*
+    FROM versioned_shapes AS s
+    LEFT JOIN lat_long AS l
+      ON s.calitp_itp_id = l.calitp_itp_id
+      AND s.calitp_url_number = l.calitp_url_number
+      AND s.shape_id = l.shape_id
+      AND s.calitp_extracted_at >= l.calitp_extracted_at
+      AND s.calitp_deleted_at <= l.calitp_deleted_at
+  ),
+
   initial_pt_array AS (
     SELECT
         calitp_itp_id,
@@ -54,7 +94,7 @@ WITH lat_long as (
           as pt_array,
         -- count number of rows so we can check for drops later
         count(1) as ct
-    FROM lat_long
+    FROM versioned_lat_long
     GROUP BY
         calitp_itp_id,
         calitp_url_number,
