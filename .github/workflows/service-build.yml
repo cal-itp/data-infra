@@ -1,0 +1,45 @@
+name: Build service container image
+
+on:
+  push:
+    tags: [ '*/*' ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Check out repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+
+      - uses: google-github-actions/setup-gcloud@v0
+        with:
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - id: service-build
+        name: Validate tag and perform image build
+        shell: bash
+        run: |
+          # For reasons I will surely never fathom, the ections environment
+          # does not fetch the real (annotated) tag from the remote, instead
+          # creating a lightweight tag of the same name on top of HEAD
+          for tag in $(git tag -l); do
+            git tag -d "$tag"
+          done
+          git fetch --tags
+          # GITHUB_JOB is not populated until the job is running
+          git config user.name "Github Action $GITHUB_JOB"
+          git config user.email "$(whoami)@$(uname -n)"
+          export BUILD_GIT_TAG=${GITHUB_REF#refs/tags/}
+          set --                                                               \
+            "$GITHUB_WORKSPACE/services/$(dirname "$BUILD_GIT_TAG")/build.env" \
+            "$GITHUB_WORKSPACE/ci/vars/project.env"
+          source "$GITHUB_WORKSPACE/ci/workflows/service-build.sh"

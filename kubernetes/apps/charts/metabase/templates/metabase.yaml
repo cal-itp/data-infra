@@ -1,0 +1,97 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metabase
+  namespace: {{ .Release.Namespace }}
+  labels:
+    name: metabase
+spec:
+  replicas: {{ .Values.workloads.metabase.replicas }}
+  selector:
+    matchLabels:
+      name: metabase
+  template:
+    metadata:
+      labels:
+        name: metabase
+    spec:
+    {{- with .Values.images.metabase.imagePullSecrets }}
+      imagePullSecrets:
+      {{ toYaml . | nindent 6 }}
+    {{- end }}
+      containers:
+        - name: metabase
+          image: {{ .Values.images.metabase.src }}
+          envFrom:
+            - configMapRef:
+                name: metabase-config
+          ports:
+          - containerPort: {{ .Values.workloads.metabase.port }}
+            name: metabase
+          startupProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.workloads.metabase.port }}
+            periodSeconds: 10
+            failureThreshold: 30
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.workloads.metabase.port }}
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.workloads.metabase.port }}
+            initialDelaySeconds: 30
+            timeoutSeconds: 1
+            periodSeconds: 10
+            failureThreshold: 3
+
+      {{- with .Values.workloads.metabase.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.workloads.metabase.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with .Values.workloads.metabase.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: metabase
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    name: metabase
+  type: {{ .Values.services.metabase.type }}
+  ports:
+    - name: metabase-http
+      port: {{ .Values.services.metabase.port }}
+      targetPort: {{ .Values.workloads.metabase.port }}
+{{- if .Values.configs.metabase }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: metabase-config
+  namespace: {{ .Release.Namespace }}
+data:
+  {{- /* select first hostname from the ingress hosts list (if it exists; empty string otherwise) */}}
+  {{- /* to use as the default value of the MB_SITE_URL environment variable                      */}}
+  {{- $defaultHost := get (index (default (list (dict "host" "")) .Values.ingress.hosts) 0) "host" }}
+  {{- $emptyDict := dict }}
+  {{- $siteUrlDict := dict "MB_SITE_URL" (print "https://" $defaultHost) }}
+  {{- ne $defaultHost "" | ternary $siteUrlDict $emptyDict | merge .Values.configs.metabase | toYaml | nindent 2 }}
+{{- end }}

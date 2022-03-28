@@ -1,0 +1,34 @@
+# These values as applied first as template-provided defaults
+
+server:
+  global:
+
+    # to ensure the gtfs-rt-archiver is scraped every tick
+    scrape_interval: 20s
+
+  strategy:
+    type: Recreate
+
+alertmanager:
+  strategy:
+    type: Recreate
+
+  persistentVolume:
+    size: 10Gi
+
+server:
+
+  persistentVolume:
+    size: 100Gi
+
+pushgateway:
+
+  persistentVolume:
+    size: 10Gi
+
+nodeExporter:
+
+   # allow exporter to run on all tainted nodes by default
+   tolerations:
+   - operator: Exists
+     effect: NoSchedule

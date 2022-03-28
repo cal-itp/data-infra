@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: archiver-app-vars
+data:
+  CALITP_LOG_LEVEL: info
+  CALITP_DATA_DEST_SECRET: /secrets/gcs-upload-svcacct/gcs-upload-svcacct.json
+  CALITP_AGENCIES_YML: /secrets/agencies-data/data_agencies.yaml
+  CALITP_HEADERS_YML: /secrets/agencies-data/data_headers.yaml
