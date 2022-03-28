@@ -1,0 +1,32 @@
+version: 2
+
+sources:
+  - name: gtfs_rt_raw
+    database: cal-itp-data-infra
+    schema: gtfs_rt
+    tables:
+      - name: vehicle_positions
+
+models:
+  - name: stg_gtfs_rt__vehicle_positions
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - calitp_filepath
+            - id
+    columns:
+      - name: calitp_itp_id
+        tests:
+          - not_null
+      - name: calitp_url_number
+        tests:
+          - not_null
+      - name: calitp_filepath
+        tests:
+          - not_null
+      - name: id
+        tests:
+          - not_null
+      - name: header_timestamp
+        tests:
+          - not_null
