@@ -19,9 +19,9 @@ fields:
   device_id: A device-specific identifier such as the Identifier for Vendor on iOS
   device_type: The device type that the user is using
   event_id: An incrementing counter to distinguish events with the same user_id and timestamp from each other
-  event_properties_language: Event property language
-  event_properties_path: Event property path
-  event_properties_provider_name: Event property provider name
+  event_properties_language: Event property language - Application language
+  event_properties_path: Event property path - Application path
+  event_properties_provider_name: Event property provider name - Transit provider name
   event_properties_status: Eligibility check event property status - cancel, fail or success
   event_time: Event time (e.g. "2021-12-09 00:45:29.430000")
   event_type: The unique identifier for your event
