@@ -1,5 +1,5 @@
 operator: 'operators.PodOperator'
-name: 'gtfs-rt-validation'
+name: 'dbt-run-and-upload-artifacts'
 image: 'ghcr.io/cal-itp/data-infra/warehouse:latest'
 cmds:
   - python3
@@ -10,11 +10,30 @@ arguments:
 is_delete_operator_pod: true
 get_logs: true
 
+is_gke: true
+pod_location: us-west1
+cluster_name: data-infra-apps
+
 secrets:
   - deploy_type: volume
-    deploy_target: /secrets/bq-transform-svcacct/
-    secret: service-account
+    deploy_target: /secrets/jobs-data/
+    secret: jobs-data
     key: service-account.json
+
+tolerations:
+  - key: pod-role
+    operator: Equal
+    value: computetask
+    effect: NoSchedule
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: pod-role
+          operator: In
+          values:
+          - computetask
 
 dependencies:
   - create_validation_params
