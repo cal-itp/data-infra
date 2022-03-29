@@ -9,15 +9,12 @@ description: |
   Benefits application event data from Amplitude, via Google Cloud Services and BigQuery. See more details of data schema here https://developers.amplitude.com/docs/http-api-v2#properties-1
 
 fields:
-  amplitude_event_type: Name of Amplitude event.
   amplitude_id: INT64,
   app: App name,
   city: The current city of the user,
   client_event_time: Client event timestamp
   client_upload_time: Client upload time,
   country: The current country of the user,
-  device_brand: The device brand that the user is using.
-  device_carrier: The carrier that the user is using.
   device_family: The device family that the user is using.
   device_id: A device-specific identifier, such as the Identifier for Vendor on iOS.
   device_type: The device type that the user is using.
@@ -29,8 +26,6 @@ fields:
   event_time: Event time (e.g. "2021-12-09 00:45:29.430000"),
   event_type: The unique identifier for your event.
   language: The language set by the user,
-  location_lat: The current latitude of the user,
-  location_lng: The current longitude of the user,
   processed_time: Processed time,
   schema: Schema,
   server_received_time: Server received time,
