@@ -120,11 +120,13 @@ class AmplitudeToFlattenedJSONOperator(BaseOperator):
         )
         gcs_file_path = f"{self.app_name}/{start}-{end}.jsonl"
 
-        bucket_name = "ingest_amplitude_raw_dev" if is_development() else "ingest_amplitude_raw_prod"
+        bucket_name = (
+            "ingest_amplitude_raw_dev"
+            if is_development()
+            else "ingest_amplitude_raw_prod"
+        )
 
         # if a file already exists at `gcs_file_path`, GCS will overwrite the existing file
         calitp.save_to_gcfs(
-            events_jsonl.encode(),
-            gcs_file_path,
-            bucket=bucket_name,
-            use_pipe=True)
+            events_jsonl.encode(), gcs_file_path, bucket=bucket_name, use_pipe=True
+        )
