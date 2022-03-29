@@ -30,7 +30,6 @@ tests:
         - date
 
 external_dependencies:
-  - rt_loader: all
   - gtfs_views: gtfs_schedule_dim_feeds
 ---
 

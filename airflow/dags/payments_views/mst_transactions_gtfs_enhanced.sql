@@ -10,8 +10,8 @@ dependencies:
 WITH
 
 gtfs_routes_with_participant AS (
-    SELECT participant_id, route_id, route_short_name, route_long_name
-    FROM `gtfs_schedule.routes`
+    SELECT participant_id, route_id, route_short_name, route_long_name, calitp_extracted_at, calitp_deleted_at
+    FROM `views.gtfs_schedule_dim_routes`
     JOIN `views.payments_feeds` USING (calitp_itp_id, calitp_url_number)
 ),
 
@@ -41,6 +41,9 @@ SELECT
     t2.route_short_name
 FROM device_transactions as t1
 LEFT JOIN gtfs_routes_with_participant t2
-    USING (participant_id, route_id)
+    ON t1.participant_id = t2.participant_id
+    AND t1.route_id = t2.route_id
+    AND DATETIME(TIMESTAMP(transaction_date_time_utc)) >= t2.calitp_extracted_at
+    AND DATETIME(TIMESTAMP(transaction_date_time_utc)) < t2.calitp_deleted_at
 WHERE
     transaction_outcome = 'allow'

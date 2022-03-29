@@ -21,6 +21,7 @@ helm_opts=()
 chart_path=$(git rev-parse --show-toplevel)/$RELEASE_HELM_CHART
 
 IFS=: values_relpaths=( $RELEASE_HELM_VALUES )
+IFS=$' \t\n'
 
 if [[ ! -e $chart_path ]]; then
   printf 'error: chart not found: %s\n' "$RELASE_HELM_CHART" >&2

@@ -108,6 +108,18 @@ def scd_join(
 """
 
 
+def get_latest_schedule_data(table):
+
+    return f"""
+        SELECT
+            t1.* EXCEPT(calitp_deleted_at)
+        FROM gtfs_views_staging.{table}_clean t1
+        -- inner join to only get the ones that are latest load
+        INNER JOIN gtfs_schedule_history.calitp_feed_latest t2
+            USING(calitp_itp_id, calitp_url_number, calitp_extracted_at)
+"""
+
+
 # Airtable =============================================================
 
 # This is a helper to generate SqlToWarehouse operator tasks
@@ -224,5 +236,6 @@ data_infra_macros = {
     "scd_join": scd_join,
     "sql_enrich_duplicates": sql_enrich_duplicates,
     "sql_airtable_mapping": airtable_mapping_generate_sql,
-    "is_development": is_development_macro
+    "is_development": is_development_macro,
+    "get_latest_schedule_data": get_latest_schedule_data,
 }

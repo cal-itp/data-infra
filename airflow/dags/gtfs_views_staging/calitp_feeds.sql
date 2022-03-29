@@ -1,6 +1,6 @@
 ---
 operator: operators.SqlToWarehouseOperator
-dst_table_name: "gtfs_schedule_type2.calitp_feeds"
+dst_table_name: "gtfs_views_staging.calitp_feeds"
 dependencies:
   - type2_loaded
 ---

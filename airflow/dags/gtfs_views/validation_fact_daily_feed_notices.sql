@@ -14,7 +14,7 @@ SELECT
     , T1.calitp_deleted_at AS validation_deleted_at
     , T1.* EXCEPT (calitp_extracted_at, calitp_deleted_at)
 
-FROM `gtfs_schedule_type2.validation_notices_clean` T1
+FROM `gtfs_views_staging.validation_notices_clean` T1
 JOIN `views.dim_date` D
     ON T1.calitp_extracted_at <= D.full_date
         AND T1.calitp_deleted_at > D.full_date

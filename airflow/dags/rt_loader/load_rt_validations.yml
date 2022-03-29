@@ -22,5 +22,24 @@ arguments:
 is_delete_operator_pod: true
 get_logs: true
 
+is_gke: true
+pod_location: us-west1
+cluster_name: data-infra-apps
+
+tolerations:
+  - key: pod-role
+    operator: Equal
+    value: computetask
+    effect: NoSchedule
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: pod-role
+          operator: In
+          values:
+          - computetask
+
 dependencies:
   - create_validation_params

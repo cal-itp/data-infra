@@ -48,7 +48,7 @@ release_vars_root=$(git rev-parse --show-toplevel)/ci/vars/releases
 printf 'BEGIN STEP: configure-git-remote\n'
 source "$CI_STEPS_DIR/configure-git-remote.sh"
 
-for env_file in "$release_vars_root"/*-"$RELEASE_CHANNEL".env; do
+for env_file in "$release_vars_root"/"$RELEASE_CHANNEL"-*.env; do
   #
   # Per-app variable overrides
   #
