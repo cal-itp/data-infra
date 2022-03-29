@@ -38,13 +38,13 @@ from siuba import *
 pd.set_option("display.max_rows", 10)
 
 SELECTED_DATE = "2021-09-01"
-ITP_ID = 278 # San Diego Metropolitan Transit System
+ITP_ID = 208 # Monterey-Salinas Transit
 ```
 
 (stop-arrivals-operator)=
 ### All the Stops and Arrival Times for an Operator on a Given Day
 
-As a simple example, we will filter to just the San Diego Metropolitan Transit System and grab 1 day's worth of data. We want all the trips, stops, arrival times, and stop geometry (lat/lon).
+As a simple example, we will filter to just Monterey-Salinas Transit and grab 1 day's worth of data. We want all the trips, stops, arrival times, and stop geometry (lat/lon).
 
 Tables used:
 1. `views.gtfs_schedule_dim_stop_times`: all stop arrival times for all operators, need to subset to particular date
@@ -91,7 +91,7 @@ daily_stops.head()
 
 ### Assemble a Route Shapefile
 
-Transit stops are given as lat/lon (point geometry), but what if we want to get the line geometry? We will demonstrate on one route for San Diego Metropolitan Transit System.
+Transit stops are given as lat/lon (point geometry), but what if we want to get the line geometry? We will demonstrate on one route for Monterey-Salinas Transit.
 
 Tables used:
 1. `gtfs_schedule.shapes`: stops with stop sequence, lat/lon, and associated `shape_id`
@@ -110,7 +110,7 @@ shapes = (gpd.GeoDataFrame(shapes,
                       crs = 'EPSG:4326')
      )
 
-MY_ROUTE = "1_2_156"
+MY_ROUTE = "41089"
 
 # Now, combine all the stops by stop sequence, and create linestring
 single_shape = (shapes
