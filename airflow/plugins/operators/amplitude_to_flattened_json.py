@@ -10,6 +10,7 @@ import requests
 import pandas as pd
 
 from airflow.models import BaseOperator
+from calitp.config import is_development
 
 DATE_FORMAT = "%Y%m%dT%H"
 
@@ -119,5 +120,11 @@ class AmplitudeToFlattenedJSONOperator(BaseOperator):
         )
         gcs_file_path = f"amplitude/{self.app_name}/{start}-{end}.jsonl"
 
+        bucket_name = "ingest_amplitude_raw_dev" if is_development() else "ingest_amplitude_raw_prod"
+
         # if a file already exists at `gcs_file_path`, GCS will overwrite the existing file
-        calitp.save_to_gcfs(events_jsonl.encode(), gcs_file_path, use_pipe=True)
+        calitp.save_to_gcfs(
+            events_jsonl.encode(),
+            gcs_file_path,
+            bucket=bucket_name,
+            use_pipe=True)

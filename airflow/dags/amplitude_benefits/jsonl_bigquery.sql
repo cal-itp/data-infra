@@ -67,6 +67,6 @@ CREATE OR REPLACE EXTERNAL TABLE `amplitude.benefits_events` (
 )
 OPTIONS (
     format = "JSON",
-    uris = ["{{get_bucket()}}/amplitude/benefits/*.jsonl"],
+    uris = ["gs://ingest_amplitude_raw_dev/amplitude/benefits/*.jsonl"],
     ignore_unknown_values = True
 )
