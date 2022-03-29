@@ -609,18 +609,64 @@
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#deploy">
-   2.0 Deploy
+   2.0.0 Deploy
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#id1">
-     2.1 quick start
+     2.1.0 quick start
     </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#deploy-your-topic-branch-to-preprod">
+       2.1.1 deploy your topic branch to preprod
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#deploy-your-changes-to-prod">
+       2.1.2 Deploy your changes to prod
+      </a>
+     </li>
+    </ul>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#id2">
-     2.2 details
+     2.2.0 details
     </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#apps">
+       2.2.1 apps
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#kustomize">
+         kustomize
+        </a>
+       </li>
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#helm">
+         helm
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#release-channels">
+       2.2.2 release channels
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#release-candidates">
+       2.2.3 release candidates
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#release-configs">
+       2.2.4 release configs
+      </a>
+     </li>
+    </ul>
    </li>
   </ul>
  </li>
@@ -663,18 +709,64 @@
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#deploy">
-   2.0 Deploy
+   2.0.0 Deploy
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#id1">
-     2.1 quick start
+     2.1.0 quick start
     </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#deploy-your-topic-branch-to-preprod">
+       2.1.1 deploy your topic branch to preprod
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#deploy-your-changes-to-prod">
+       2.1.2 Deploy your changes to prod
+      </a>
+     </li>
+    </ul>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#id2">
-     2.2 details
+     2.2.0 details
     </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#apps">
+       2.2.1 apps
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#kustomize">
+         kustomize
+        </a>
+       </li>
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#helm">
+         helm
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#release-channels">
+       2.2.2 release channels
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#release-candidates">
+       2.2.3 release candidates
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#release-configs">
+       2.2.4 release configs
+      </a>
+     </li>
+    </ul>
    </li>
   </ul>
  </li>
@@ -746,39 +838,112 @@ process.</p></li>
 </div>
 </div>
 <div class="section" id="deploy">
-<h2>2.0 Deploy<a class="headerlink" href="#deploy" title="Permalink to this headline">¶</a></h2>
-<p>This flow is powered by:
-<a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/.github/workflows/service-release.yml"><code class="docutils literal notranslate"><span class="pre">.github/workflows/service-release.yml</span></code></a></p>
+<h2>2.0.0 Deploy<a class="headerlink" href="#deploy" title="Permalink to this headline">¶</a></h2>
+<p>This flow is powered by:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/.github/workflows/service-release-candidate.yml"><code class="docutils literal notranslate"><span class="pre">.github/workflows/service-release-candidate.yml</span></code></a></p></li>
+<li><p><a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/.github/workflows/service-release-channel.yml"><code class="docutils literal notranslate"><span class="pre">.github/workflows/service-release-channel.yml</span></code></a></p></li>
+</ul>
 <div class="section" id="id1">
-<h3>2.1 quick start<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># this is a path under kubernetes/apps/manifests/$app_name</span>
+<h3>2.1.0 quick start<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="deploy-your-topic-branch-to-preprod">
+<h4>2.1.1 deploy your topic branch to preprod<a class="headerlink" href="#deploy-your-topic-branch-to-preprod" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># this can be determined from a release config under ci/vars/releases</span>
 <span class="nv">app_name</span><span class="o">=</span>gtfs-rt-archive
-<span class="c1"># this should be the $app_version part of the most recent tag for $app_name</span>
-<span class="nv">app_version</span><span class="o">=</span><span class="k">$(</span>basename <span class="s2">&quot;</span><span class="k">$(</span>git describe --abbrev<span class="o">=</span><span class="m">0</span><span class="k">)</span><span class="s2">&quot;</span><span class="k">)</span>
 <span class="c1"># choose your appropriate remote name if different</span>
 <span class="nv">git_remote</span><span class="o">=</span>origin
+<span class="nv">topic_branch</span><span class="o">=</span><span class="k">$(</span>git branch --show-current<span class="k">)</span>
+<span class="c1"># load the helm or kustomize specific parameters</span>
+<span class="nb">source</span> ci/vars/releases/prod-<span class="nv">$app_name</span>.env
 
-<span class="c1"># bump the newTag version to match the newly pushed $app_version</span>
-<span class="nv">$EDITOR</span> kubernetes/apps/overlays/<span class="nv">$app_name</span>-release/kustomization.yaml
+<span class="k">if</span>   <span class="o">[[</span> <span class="nv">$RELEASE_DRIVER</span> <span class="o">==</span> <span class="s1">&#39;kustomize&#39;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+  <span class="c1"># bump the newTag version to match the newly pushed app version</span>
+  <span class="nv">$EDITOR</span> kubernetes/apps/overlays/<span class="nv">$app_name</span>-release/kustomization.yaml
+<span class="k">elif</span> <span class="o">[[</span> <span class="nv">$RELEASE_DRIVER</span> <span class="o">==</span> <span class="s1">&#39;helm&#39;</span>      <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+  <span class="c1"># update the tag part of the image parameter; how to do this may vary from app to app</span>
+  <span class="c1"># the RELEASE_HELM_VALUES parameter in the release config points to the values file which should be changed</span>
+  <span class="nv">$EDITOR</span> <span class="nv">$RELEASE_HELM_VALUES</span>
+<span class="k">fi</span>
 
 <span class="c1"># commit the change</span>
-git commit -am <span class="s2">&quot;ops(</span><span class="nv">$app_name</span><span class="s2">): release </span><span class="nv">$app_version</span><span class="s2">&quot;</span>
+git commit -am <span class="s2">&quot;ops(</span><span class="nv">$app_name</span><span class="s2">): release new version&quot;</span>
 
-<span class="c1"># after the push, open a PR into the releases/preprod branch.</span>
-<span class="c1"># the release will be auto-deployed after merge</span>
-git push <span class="nv">$git_remote</span> <span class="k">$(</span>git symbolic-ref HEAD<span class="k">)</span>
-<span class="c1"># after it looks good in preprod, open a PR from releases/preprod into the</span>
-<span class="c1"># releases/prod branch. The release will be auto-deployed after merge.</span>
+<span class="c1"># trigger a release candidate build</span>
+git push <span class="nv">$git_remote</span>
+
+<span class="c1"># fetch the release candidate</span>
+git fetch <span class="nv">$git_remote</span> candidates/<span class="nv">$topic_branch</span>
+
+<span class="c1"># deploy to preprod</span>
+git push -f <span class="nv">$git_remote</span> <span class="nv">$git_remote</span>/candidates/<span class="nv">$topic_branch</span>:releases/preprod
+
+<span class="c1"># after it looks good in preprod, merge your changes into main.</span>
 </pre></div>
 </div>
 </div>
+<div class="section" id="deploy-your-changes-to-prod">
+<h4>2.1.2 Deploy your changes to prod<a class="headerlink" href="#deploy-your-changes-to-prod" title="Permalink to this headline">¶</a></h4>
+<p>In GitHub:</p>
+<ol class="simple">
+<li><p>Go through the typical PR process to merge your topic branch into <code class="docutils literal notranslate"><span class="pre">main</span></code></p></li>
+<li><p>Open a PR from <code class="docutils literal notranslate"><span class="pre">candidates/main</span></code> into <code class="docutils literal notranslate"><span class="pre">releases/prod</span></code></p></li>
+<li><p>Receive an approval</p></li>
+<li><p>Merge the change</p></li>
+</ol>
+</div>
+</div>
 <div class="section" id="id2">
-<h3>2.2 details<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<p>The automated deploy process essentially consists of modifying any yaml files
-associated with a kubernetes deployment as desired, pushing those files to the
-GitHub repository, and merging those changes into a release branch. Each release
-branch is tied to a specific “release channel”, which is simply a less ambiguous
-term used to describe an “environment” (e.g., “production”, “staging”, etc).
+<h3>2.2.0 details<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>The automated deploy process essentially consists of:</p>
+<ol class="simple">
+<li><p>Modifying yaml files associated with an app as desired</p></li>
+<li><p>Push those files to the GitHub repository</p></li>
+<li><p>Wait for a release candidate to build</p></li>
+<li><p>Merge or push the release candidate into a release branch</p></li>
+</ol>
+<div class="section" id="apps">
+<h4>2.2.1 apps<a class="headerlink" href="#apps" title="Permalink to this headline">¶</a></h4>
+<p>App configurations for kubernetes deployed apps are organized under
+<code class="docutils literal notranslate"><span class="pre">kubernetes/apps</span></code>. There are two deployment patterns which are supported for
+kubertnetes:</p>
+<ol class="simple">
+<li><p>kustomize</p></li>
+<li><p>helm</p></li>
+</ol>
+<div class="section" id="kustomize">
+<h5>kustomize<a class="headerlink" href="#kustomize" title="Permalink to this headline">¶</a></h5>
+<p>There are two locations where kustomize manifests are stored:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">kubernetes/apps/manifests</span></code>: holds base kubernetes manifests. These should be
+suiltable to be directly applied using <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">apply</span> <span class="pre">-f</span></code>, but will generally
+be applied using <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">apply</span> <span class="pre">-k</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kubernetes/apps/overlays</span></code>: holds overlays which are based on manifests in
+<code class="docutils literal notranslate"><span class="pre">kubernetes/apps/manifests</span></code>. These are only ever expected be suitable for
+application using <code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">apply</span> <span class="pre">-k</span></code>.</p></li>
+</ul>
+<p>When deploying changed kustomize manifests, the ci pipeline will essentially
+execute the command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl apply -k kubernetes/apps/overlays/<span class="nv">$app_name</span>-<span class="nv">$release_channel</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="helm">
+<h5>helm<a class="headerlink" href="#helm" title="Permalink to this headline">¶</a></h5>
+<p>There are separate locations for storing embedded helm charts and helm values
+files. Not all values files will necessarily have a corresponding chart; some
+charts are pulled from external sources.</p>
+<ul class="simple">
+<li><p>charts location: <code class="docutils literal notranslate"><span class="pre">kubernetes/apps/charts</span></code></p></li>
+<li><p>values location: <code class="docutils literal notranslate"><span class="pre">kubernetes/apps/values</span></code></p></li>
+</ul>
+<p>The pipeline will run a <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">install</span></code> or <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">upgrade</span></code> command as appropriate
+when deploying these applications.</p>
+</div>
+</div>
+<div class="section" id="release-channels">
+<h4>2.2.2 release channels<a class="headerlink" href="#release-channels" title="Permalink to this headline">¶</a></h4>
+<p>Each release branch is tied to a specific “release channel”, which is simply a
+less ambiguous term used to describe an “environment” (e.g., “production”, “staging”, etc).
 There are currently two release branches:</p>
 <ol class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">releases/preprod</span></code></p></li>
@@ -786,12 +951,26 @@ There are currently two release branches:</p>
 </ol>
 <p>The basename of the branch (i.e., the name after the last “/” character) is used
 to determine the name of the release channel being deployed into.</p>
-<p>Currently, only kustomize based manifests
-(<code class="docutils literal notranslate"><span class="pre">kubernetes/apps/{manifests,overlays}</span></code>) are automatically deployed into
-release channels. When an update to a kustomize manifest is detected after a
-merge into a release branch, the ci pipeline will execute the command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl apply -k kubernetes/apps/manifests/<span class="nv">$app_name</span>-<span class="nv">$release_channel</span>
-</pre></div>
+</div>
+<div class="section" id="release-candidates">
+<h4>2.2.3 release candidates<a class="headerlink" href="#release-candidates" title="Permalink to this headline">¶</a></h4>
+<p>Whenever changes to deployment-relevant files (mostly kubernetes yaml files or
+ci scripts) are pushed up to a topic branch, it triggers the build of a “release
+candidate” branch. This is a special branch which is pruned down to include only
+the files which are relevant to performing deployments into release channels. A
+deployment should be triggered by pushing or merging a release candidate branch
+into a release channel branch.</p>
+<p>The release candidate for each topic branch is pushed to
+<code class="docutils literal notranslate"><span class="pre">candidates/$topic_branch_name</span></code>.</p>
+<p>The release candidate <code class="docutils literal notranslate"><span class="pre">candidates/main</span></code> is the only candidate which should ever
+be merged into <code class="docutils literal notranslate"><span class="pre">releases/prod</span></code> and this must be done via PRs.</p>
+</div>
+<div class="section" id="release-configs">
+<h4>2.2.4 release configs<a class="headerlink" href="#release-configs" title="Permalink to this headline">¶</a></h4>
+<p>Each app has a channel-specific release configuration stored at
+<code class="docutils literal notranslate"><span class="pre">ci/vars/releases/$release_channel-$app_name.env</span></code>. This config file informs the
+ci pipeline which deployment pattern the app is using and provides helm or
+kustomize specific parameters for the deployment.</p>
 </div>
 </div>
 </div>
