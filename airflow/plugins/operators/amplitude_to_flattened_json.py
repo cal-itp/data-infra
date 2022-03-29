@@ -118,7 +118,7 @@ class AmplitudeToFlattenedJSONOperator(BaseOperator):
         events_jsonl = events_df.to_json(
             orient="records", lines=True, date_format="iso"
         )
-        gcs_file_path = f"amplitude/{self.app_name}/{start}-{end}.jsonl"
+        gcs_file_path = f"{self.app_name}/{start}-{end}.jsonl"
 
         bucket_name = "ingest_amplitude_raw_dev" if is_development() else "ingest_amplitude_raw_prod"
 
