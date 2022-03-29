@@ -1,0 +1,6 @@
+description: "Load events from Amplitude to GCS and then from GCS to BigQuery"
+schedule_interval: "0 0 * * *"
+catchup: True
+default_args:
+    owner: airflow
+    start_date: "2021-12-08"
