@@ -10,4 +10,4 @@ ENV PATH="${PATH}:/root/.poetry/bin"
 RUN poetry export -f requirements.txt --output requirements.txt \
     && pip install -r requirements.txt
 
-ENTRYPOINT ["dbt", "run", "--project-dir", "/app", "--profiles-dir", "/app"]
+CMD ["dbt", "run", "--project-dir", "/app", "--profiles-dir", "/app"]

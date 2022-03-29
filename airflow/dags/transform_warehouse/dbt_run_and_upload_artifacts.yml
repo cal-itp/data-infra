@@ -1,0 +1,14 @@
+operator: 'operators.PodOperator'
+name: 'gtfs-rt-validation'
+image: 'ghcr.io/cal-itp/data-infra:latest'
+cmds:
+  - python3
+
+arguments:
+  - '/app/scripts/run_and_upload.py'
+
+is_delete_operator_pod: true
+get_logs: true
+
+dependencies:
+  - create_validation_params
