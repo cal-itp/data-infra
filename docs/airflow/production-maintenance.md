@@ -8,7 +8,7 @@ Sometimes DAGs will fail in production. Below are considerations to take into ac
 
 Summary of key considerations:
 * **Safe after 24h** - some DAGs scrape data and then label that data based on execution date (i.e., if they are run more than 24h after they were scheduled, they will pull data from one day and label it as having come from a prior day.) Long-term we will work to break this pattern, but until those changes are made, **these DAGs must not be re-run 24 hours after originally scheduled (including backfills)**.
-    * If **⛔ no**: **DO NOT RUN OR CLEAR IF IT IS MORE THAN 24h AFTER ORIGINALLY SCHEDULED EXECUTION**
+    * If **⛔ no**: **DO NOT RUN OR CLEAR IF IT IS MORE THAN 24h AFTER ORIGINALLY SCHEDULED EXECUTION; this consideration trumps all other considerations in the other attributes**
     * If yes: Safe to re-run any time
 * **`depends_on_past`** - Some DAGs depend on a prior day's run having completed successfully, denoted by the `depends_on_past` flag. This means that if the DAG fails for multiple days, each day must be re-run in order.
     * If no, this will run even if prior days have failed
