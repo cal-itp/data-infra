@@ -107,9 +107,7 @@ def get_latest_schedule_data(table):
         SELECT
             t1.* EXCEPT(calitp_deleted_at)
         FROM gtfs_views_staging.{table}_clean t1
-        -- inner join to only get the ones that are latest load
-        INNER JOIN gtfs_schedule_history.calitp_feed_latest t2
-            USING(calitp_itp_id, calitp_url_number, calitp_extracted_at)
+        WHERE calitp_deleted_at = '2099-01-01'
 """
 
 
