@@ -1,0 +1,8 @@
+operator: operators.AmplitudeToFlattenedJSONOperator
+
+app_name: "benefits"
+api_key_env: "CALITP_AMPLITUDE_BENEFITS_API_KEY"
+secret_key_env: "CALITP_AMPLITUDE_BENEFITS_SECRET_KEY"
+rename_fields:
+  "$insert_id": "insert_id"
+  "$insert_key": "insert_key"
