@@ -34,6 +34,7 @@ CREATE OR REPLACE EXTERNAL TABLE `amplitude.benefits_events` (
   region STRING,
   dma STRING,
   event_properties STRUCT<
+    status STRING,
     provider_name STRING,
     path STRING,
     language STRING

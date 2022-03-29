@@ -22,7 +22,7 @@ fields:
   event_properties_language: Event property language
   event_properties_path: Event property path,
   event_properties_provider_name: Event property provider name,
-  event_properties: Event properties with transit provider_name, path, language
+  event_properties_status: Event property status, success or fail
   event_time: Event time (e.g. "2021-12-09 00:45:29.430000"),
   event_type: The unique identifier for your event.
   language: The language set by the user,
@@ -42,15 +42,12 @@ fields:
 ---
 
 SELECT
-  amplitude_event_type,
   amplitude_id,
   app,
   city,
   client_event_time,
   client_upload_time,
   country,
-  device_brand,
-  device_carrier,
   device_family,
   device_id,
   device_type,
@@ -58,11 +55,10 @@ SELECT
   event_properties.language AS event_properties_language,
   event_properties.path AS event_properties_path,
   event_properties.provider_name AS event_properties_provider_name,
+  event_properties.status AS event_properties_status,
   event_time,
   event_type,
   language,
-  location_lat,
-  location_lng,
   processed_time
   schema,
   server_received_time,
