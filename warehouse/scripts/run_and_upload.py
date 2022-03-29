@@ -38,10 +38,11 @@ def run(
         for artifact in artifacts:
             if upload:
                 _from = str(project_dir / Path("target") / artifact)
-                _to = str(Path(f"gs://{BUCKET}") / Path("latest"))
+                _to = f"gs://{BUCKET}/latest/{artifact}"
+                typer.echo(f"writing {_from} to {_to}")
                 fs.put(lpath=_from, rpath=_to)
             else:
-                print(f"skipping upload of {artifact}")
+                typer.echo(f"skipping upload of {artifact}")
 
 
 if __name__ == "__main__":
