@@ -1,6 +1,6 @@
 operator: 'operators.PodOperator'
 name: 'gtfs-rt-validation'
-image: 'ghcr.io/cal-itp/data-infra:latest'
+image: 'ghcr.io/cal-itp/data-infra/warehouse:latest'
 cmds:
   - python3
 
@@ -9,6 +9,12 @@ arguments:
 
 is_delete_operator_pod: true
 get_logs: true
+
+secrets:
+  - deploy_type: volume
+    deploy_target: /secrets/bq-transform-svcacct/
+    secret: service-account
+    key: service-account.json
 
 dependencies:
   - create_validation_params

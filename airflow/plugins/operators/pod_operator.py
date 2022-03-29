@@ -5,6 +5,7 @@ from functools import wraps
 
 from airflow.contrib.operators.gcp_container_operator import GKEPodOperator
 from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
+from airflow.kubernetes.secret import Secret
 
 from calitp.config import is_development
 
@@ -15,6 +16,9 @@ def PodOperator(*args, **kwargs):
     namespace = "default"
 
     is_gke = kwargs.pop("is_gke", False)  # we want to always pop()
+
+    if "secrets" in kwargs:
+        kwargs["secrets"] = map(lambda d: Secret(**d), kwargs["secrets"])
 
     if is_development() or is_gke:
         return GKEPodOperator(
