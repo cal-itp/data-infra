@@ -12,7 +12,7 @@ from calitp.config import is_development
 @wraps(KubernetesPodOperator)
 def PodOperator(*args, **kwargs):
     # TODO: tune this, and add resource limits
-    namespace = "default"
+    namespace = kwargs.pop('namespace', "default")
 
     is_gke = kwargs.pop("is_gke", False)  # we want to always pop()
 
