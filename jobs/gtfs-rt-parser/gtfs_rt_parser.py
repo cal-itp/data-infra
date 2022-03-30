@@ -196,13 +196,14 @@ def main(
     rt_file_substring: RTFileType,
     iso_date: str = yesterday,
     src_path=f"{get_bucket()}/rt/",
-    dst_path=f"{get_bucket()}/rt-processed/{yesterday}/",
+    dst_path=f"{get_bucket()}/rt-processed/",
     limit: int = 0,
     progress: bool = False,
 ):
     # get execution_date from context:
     # https://stackoverflow.com/questions/59982700/airflow-how-can-i-access-execution-date-on-my-custom-operator
 
+    actual_dst_path = dst_path + "/" + rt_file_substring.name + "/"
     # fetch files ----
     feed_files = fetch_bucket_file_names(
         src_path, rt_file_substring, iso_date, progress=progress
@@ -218,7 +219,15 @@ def main(
     # https://github.com/fsspec/gcsfs/issues/379
     with ThreadPoolExecutor(max_workers=4) as pool:
         args = [
-            (i, feed, files, filename_prefix, iso_date, dst_path, len(feed_files))
+            (
+                i,
+                feed,
+                files,
+                filename_prefix,
+                iso_date,
+                actual_dst_path,
+                len(feed_files),
+            )
             for i, (feed, files) in enumerated
         ]
         exceptions = [ret for ret in pool.map(try_handle_one_feed, *zip(*args)) if ret]
