@@ -80,7 +80,7 @@ app_name=gtfs-rt-archive
 git_remote=origin
 topic_branch=$(git branch --show-current)
 # load the helm or kustomize specific parameters
-source ci/vars/releases/prod-$app_name.env
+source ci/vars/releases/preprod-$app_name.env
 
 if   [[ $RELEASE_DRIVER == 'kustomize' ]]; then
   # bump the newTag version to match the newly pushed app version
