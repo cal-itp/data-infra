@@ -24,4 +24,4 @@ jobs:
         with:
           context: warehouse
           push: true
-          tags: ghcr.io/${{github.repository}}:latest
+          tags: ghcr.io/${{github.repository}}/warehouse:latest
