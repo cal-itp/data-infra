@@ -15,18 +15,28 @@ artifacts = map(
 
 
 def run(
-    project_dir: Path = os.getcwd(),
-    profiles_dir: Path = os.getcwd(),
+    project_dir: Path = os.environ.get('DBT_PROJECT_DIR', os.getcwd()),
+    profiles_dir: Path = os.environ.get('DBT_PROFILES_DIR', os.getcwd()),
+    target: str = os.environ.get('DBT_TARGET'),
     docs: bool = False,
     upload: bool = False,
 ) -> None:
     def get_command(*args) -> List[str]:
-        return [
+        cmd = [
             "dbt",
             *args,
             "--project-dir",
             project_dir,
+            "--profiles-dir",
+            profiles_dir,
         ]
+
+        if target:
+            cmd.extend([
+                "--target",
+                target,
+            ])
+        return cmd
 
     subprocess.run(get_command("run"))
 
