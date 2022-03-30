@@ -53,5 +53,5 @@ These guidelines are meant to provide a foundation for collaboration in Cal-ITP'
    * The main exception is changes to `agencies.yml`. Reviewers are encouraged to merge changes to `agencies.yml` as soon as their approving review is complete since these changes are usually time-sensitive to make sure data is scraped (and these changes are usually not risky from a code perspective).
 
 
-General:
+## General:
 * Keep conversations in GitHub when possible, and expect that people will see them when you tag them.
