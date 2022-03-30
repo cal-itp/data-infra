@@ -97,6 +97,10 @@ git commit -am "ops($app_name): release new version"
 # trigger a release candidate build
 git push $git_remote
 
+#
+# wait for the "Build release candidate" action to complete in GitHub
+#
+
 # fetch the release candidate
 git fetch $git_remote candidates/$topic_branch
 
