@@ -23,6 +23,7 @@ from calitp.storage import get_fs
 from google.protobuf import json_format
 from google.protobuf.message import DecodeError
 from google.transit import gtfs_realtime_pb2
+from tqdm import tqdm
 
 
 # Note that all RT extraction is stored in the prod bucket, since it is very large,
@@ -47,28 +48,32 @@ def parse_pb(path, logger, open_func=open) -> dict:
         return {}
 
 
-def fetch_bucket_file_names(src_path, rt_file_substring, iso_date):
+def fetch_bucket_file_names(src_path, rt_file_substring, iso_date, progress=False):
     # posix_date = str(time.mktime(execution_date.timetuple()))[:6]
     fs = get_fs()
     # get rt files
     glob = src_path + iso_date + "*"
     print("Globbing rt bucket {}".format(glob))
+    before = datetime.now()
     rt = fs.glob(glob)
+    print(f"globbing took {(datetime.now() - before).total_seconds()} seconds")
 
     buckets_to_parse = len(rt)
     print("Realtime buckets to parse: {i}".format(i=buckets_to_parse))
 
     # organize rt files by itpId_urlNumber
-    rt_files = []
-    for r in rt:
-        rt_files.append(fs.ls(r))
+    if progress:
+        rt = tqdm(rt)
+    rt_files = [fs.ls(r) for r in rt]
 
     entity_files = [
         item
         for sublist in rt_files
         for item in sublist
-        if str(rt_file_substring) in item
+        if rt_file_substring.name in item
     ]
+
+    print(f"entity files len {len(entity_files)}")
 
     feed_files = defaultdict(lambda: [])
 
@@ -142,7 +147,8 @@ def handle_one_feed(feed, files, filename_prefix, iso_date, dst_path, logger):
             f"writing {written} lines ({filesize}) from {gzip_fname} to {dst_path + google_cloud_file_name}"
         )
         fs.put(
-            gzip_fname, dst_path + google_cloud_file_name,
+            gzip_fname,
+            dst_path + google_cloud_file_name,
         )
         logger.info(
             "took {} seconds to process {} files".format(
@@ -192,12 +198,15 @@ def main(
     src_path=f"{get_bucket()}/rt/",
     dst_path=f"{get_bucket()}/rt-processed/{yesterday}/",
     limit: int = 0,
+    progress: bool = False,
 ):
     # get execution_date from context:
     # https://stackoverflow.com/questions/59982700/airflow-how-can-i-access-execution-date-on-my-custom-operator
 
     # fetch files ----
-    feed_files = fetch_bucket_file_names(src_path, rt_file_substring, iso_date)
+    feed_files = fetch_bucket_file_names(
+        src_path, rt_file_substring, iso_date, progress=progress
+    )
 
     enumerated = enumerate(feed_files.items())
     if limit:
