@@ -21,5 +21,5 @@ Use the links below to navigate to pages that provide more information on indivi
 | [GTFS Schedule](./gtfs_schedule.md) | GTFS Schedule data for the current day | `gtfs_schedule`, `gtfs_schedule_history`, `gtfs_schedule_type2` |
 | [GTFS Realtime](./gtfs_rt.md) | GTFS Realtime data, collected every 20 seconds | `gtfs_rt`, `views.gtfs_rt_*` |
 | [MST Payments](./mst_payments.md) | TODO | TODO |
-| [Transitstacks](./transitdatabase.md) | A representation of Cal-ITPs internal knowledge about our Transit Operators in CA and various pieces of National Transit Database statistics for ease of use | `transitstacks`, `views.transitstacks` |
+| [Transit Database](./transitdatabase.md) | A representation of Cal-ITP's internal knowledge about our Transit Operators in CA and various pieces of National Transit Database statistics for ease of use | `airtable` (internal access only), `views.airtable_*` |
 | [Views](./views.md) | End-user friendly data for dashboards and metrics | E.g. `views.validation_*`, `views.gtfs_schedule_*` |
