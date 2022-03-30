@@ -61,7 +61,9 @@ def glob_daily_files(date_string, fs, logger):
     ]
     output_path = f"rt-processed/calitp_files/{date_string}.csv"
     save_to_gcfs(
-        res.to_csv(index=False).encode(), output_path, use_pipe=True,
+        res.to_csv(index=False).encode(),
+        output_path,
+        use_pipe=True,
     )
 
 

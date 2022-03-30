@@ -141,7 +141,8 @@ def handle_one_feed(feed, files, filename_prefix, iso_date, dst_path, logger):
             f"writing {written} lines ({filesize}) from {gzip_fname} to {dst_path + google_cloud_file_name}"
         )
         fs.put(
-            gzip_fname, dst_path + google_cloud_file_name,
+            gzip_fname,
+            dst_path + google_cloud_file_name,
         )
         logger.info(
             "took {} seconds to process {} files".format(
