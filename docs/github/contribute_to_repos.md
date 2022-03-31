@@ -43,8 +43,9 @@ These guidelines are meant to provide a foundation for collaboration in Cal-ITP'
 
 
 ## Code Reviews - Reviewer:
+* Google provides a [How to do a code review reference](https://google.github.io/eng-practices/review/reviewer/) that reviewers may find helpful.
 * Reviewers should not submit comments on PRs that are still in draft status unless specifically requested by the PR author.
-* Practice [conventional comments](https://conventionalcomments.org/) to make it clear to recipients of review what notes require what action, and what’s just feedback.
+* Reviewers should be explicit about the intention of their comments and what type of response is required. [Conventional comments](https://conventionalcomments.org/) are one way to make it clear to recipients of review what notes require what action and what’s just feedback.
 * If you are approving a PR and leave a comment with your approval, the PR author should understand that that comment is **optional** to address.
    * If you have a change that you think should be **required** before the change is merged, please request changes on the PR rather than approving.
 * When your review is requested, you should submit a review within 2 business days.
