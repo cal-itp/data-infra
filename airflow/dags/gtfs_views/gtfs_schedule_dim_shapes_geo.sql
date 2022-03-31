@@ -15,6 +15,20 @@ fields:
 
 dependencies:
   - gtfs_schedule_dim_shapes
+
+tests:
+  check_null:
+    - calitp_itp_id
+    - calitp_url_number
+    - calitp_extracted_at
+    - calitp_deleted_at
+    - shape_id
+    - pt_array
+  check_composite_unique:
+    - calitp_itp_id
+    - calitp_url_number
+    - shape_id
+    - calitp_extracted_at
 ---
 
 -- note that we can't just use shape_key
