@@ -854,7 +854,7 @@ process.</p></li>
 <span class="nv">git_remote</span><span class="o">=</span>origin
 <span class="nv">topic_branch</span><span class="o">=</span><span class="k">$(</span>git branch --show-current<span class="k">)</span>
 <span class="c1"># load the helm or kustomize specific parameters</span>
-<span class="nb">source</span> ci/vars/releases/prod-<span class="nv">$app_name</span>.env
+<span class="nb">source</span> ci/vars/releases/preprod-<span class="nv">$app_name</span>.env
 
 <span class="k">if</span>   <span class="o">[[</span> <span class="nv">$RELEASE_DRIVER</span> <span class="o">==</span> <span class="s1">&#39;kustomize&#39;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
   <span class="c1"># bump the newTag version to match the newly pushed app version</span>
@@ -870,6 +870,10 @@ git commit -am <span class="s2">&quot;ops(</span><span class="nv">$app_name</spa
 
 <span class="c1"># trigger a release candidate build</span>
 git push <span class="nv">$git_remote</span>
+
+<span class="c1">#</span>
+<span class="c1"># wait for the &quot;Build release candidate&quot; action to complete in GitHub</span>
+<span class="c1">#</span>
 
 <span class="c1"># fetch the release candidate</span>
 git fetch <span class="nv">$git_remote</span> candidates/<span class="nv">$topic_branch</span>
