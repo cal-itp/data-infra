@@ -1,11 +1,11 @@
 # Adding One-Off Datasets
-To work with data in our BI tool (Metabase) we first have to add the data to our warehouse (BigQuery). To add data to BigQuery for use in Metabase follow the instructions below.
+To work with data in our BI tool ([Metabase](https://dashboards.calitp.org/)) we first have to add the data to our warehouse ([BigQuery](https://console.cloud.google.com/bigquery)). To add data to BigQuery for use in Metabase follow the instructions below.
 
 Not sure if you have the appropriate permissions to write tables in BigQuery? Reach out to Charlie <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">on Cal-ITP Slack using this link</a>.
 
 When uploading data to the warehouse we will make use of the `uploaded_data` dataset in Big Query as our destination. To write data here we will first add the data to a Google Cloud Storage bucket and then input the command below in the BigQuery terminal.
 
-1. First, upload your data to a Google Cloud Storage bucket and make note of the path.
+1. First, upload your data to a [Google Cloud Storage](https://console.cloud.google.com/storage/browser/calitp-analytics-data) bucket and make note of the path.
 
 2. Next, navigate to the Bigquery console in the GCP platform. From here you will select the terminal (shown in the image below).
 ![Collection Matrix](assets/open_bq_terminal_border.png)
