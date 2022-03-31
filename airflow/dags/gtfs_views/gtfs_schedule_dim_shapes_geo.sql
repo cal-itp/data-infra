@@ -22,6 +22,7 @@ dependencies:
 -- so we have to use itp id + url num + extracted + deleted + shape ID as unique ID
 -- TODO: make a better identifier here
 
+-- first, cast lat/long to geography
 WITH lat_long as (
         SELECT
             calitp_itp_id,
@@ -31,40 +32,67 @@ WITH lat_long as (
             shape_id,
             shape_pt_sequence,
             ST_GEOGPOINT(
-              CAST(shape_pt_lon as FLOAT64),
-              CAST(shape_pt_lat as FLOAT64)
+              shape_pt_lon,
+              shape_pt_lat
             ) as pt_geom
         FROM `views.gtfs_schedule_dim_shapes`
     ),
+  -- get all the times that any point in the shape was extracted
   unique_extracts AS (
-    -- get all the times that any points changed
     SELECT DISTINCT
       calitp_itp_id,
       calitp_url_number,
       shape_id,
-      calitp_extracted_at
+      calitp_extracted_at as event_date
     FROM lat_long
   ),
-  versioned_shapes AS (
-    -- say that the *shape* changed any time its points changed
-    SELECT
+   -- get all the times that any point in the shape was deleted
+  unique_deletions AS (
+    SELECT DISTINCT
       calitp_itp_id,
       calitp_url_number,
-      calitp_extracted_at,
-      COALESCE(
-        LEAD(calitp_extracted_at)
-          OVER(
-            PARTITION BY
-              calitp_itp_id,
-              calitp_url_number,
-              shape_id
-            ORDER BY calitp_extracted_at
-          )
-        , "2099-01-01") AS calitp_deleted_at,
-      shape_id
-    FROM unique_extracts
+      shape_id,
+      calitp_deleted_at as event_date
+    FROM lat_long
   ),
-
+  -- at the shape level, any time that a point changes (addition or deletion)
+  -- we need to treat that as the shape being re-extracted
+  -- so, combine all point extractions + deletions into one table
+  all_events AS (
+      SELECT *
+      FROM unique_extracts
+      UNION ALL
+      SELECT *
+      FROM unique_deletions
+  ),
+  -- create a shape-level log of extractions + deletions
+  -- this will have rows where extracted date = deleted date
+  -- and the final row has deleted = null
+  first_versioning AS (
+    SELECT
+      * EXCEPT(event_date),
+      event_date as calitp_extracted_at,
+      LEAD(event_date)
+        OVER(
+            PARTITION BY
+                calitp_itp_id,
+                calitp_url_number,
+                shape_id
+            ORDER BY
+                event_date
+        ) as calitp_deleted_at
+    FROM all_events
+  ),
+  -- remove the rows noted above
+  -- where extracted date = deleted date or deleted is null
+  versioned_shapes AS (
+    SELECT *
+    FROM first_versioning
+    WHERE calitp_extracted_at <> calitp_deleted_at
+        AND calitp_deleted_at IS NOT NULL
+  ),
+  -- now that we have shape-level extraction/deletion log
+  -- re-join with the individual points
   versioned_lat_long AS (
     SELECT l.* EXCEPT(calitp_extracted_at, calitp_deleted_at),
       s.calitp_extracted_at,
@@ -74,10 +102,13 @@ WITH lat_long as (
       ON s.calitp_itp_id = l.calitp_itp_id
       AND s.calitp_url_number = l.calitp_url_number
       AND s.shape_id = l.shape_id
+      -- do not use strict equality here
+      -- because with point-level versioning
+      -- points can persist across shape-level extraction/deletion
       AND s.calitp_extracted_at >= l.calitp_extracted_at
       AND s.calitp_deleted_at <= l.calitp_deleted_at
   ),
-
+  -- collect points into an array
   initial_pt_array AS (
     SELECT
         calitp_itp_id,
@@ -94,7 +125,7 @@ WITH lat_long as (
           pt_geom IGNORE NULLS
           ORDER BY shape_pt_sequence)
           as pt_array,
-        -- count number of rows so we can check for drops later
+        -- count number of rows so we can check for nulls (drops) later
         count(1) as ct
     FROM versioned_lat_long
     GROUP BY
@@ -104,6 +135,7 @@ WITH lat_long as (
         calitp_deleted_at,
         shape_id
   )
+
   SELECT * EXCEPT(ct)
   FROM initial_pt_array
   -- drop shapes that had nulls
