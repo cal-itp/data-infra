@@ -44,14 +44,15 @@ jobs:
         git config user.email "$(whoami)@$(uname -n)"
         remote_name=origin
         source_branch=${GITHUB_REF#refs/heads/}
-        candidate_branch=candidates/$source_branch
-        candidate_ref=refs/heads/$candidate_branch
-        candidate_remote_ref=refs/remotes/$remote_name/$candidate_branch
+        candidate_ref=refs/heads/candidates/$source_branch
+        prod_ref=refs/heads/releases/prod
+        prod_remote_ref=refs/remotes/$remote_name/${prod_ref#refs/heads/}
 
         # branch setup
-        git update-ref -d "$candidate_remote_ref"
-        if [[ $(git ls-remote "$remote_name" "$candidate_ref") ]]; then
-          git fetch "$remote_name" "$candidate_ref"
+        git update-ref -d "$prod_remote_ref"
+        git update-ref -d "$candidate_ref"
+        if [[ $(git ls-remote "$remote_name" "$prod_ref") ]]; then
+          git fetch "$remote_name" "$prod_ref"
         fi
 
         # build & push
@@ -60,5 +61,6 @@ jobs:
         Source-holobranch: release-candidate
         Source-commit: $(git rev-list HEAD -1)"
 
-        git holo project release-candidate --commit-to "$candidate_remote_ref" --commit-message "$commit_msg"
-        git push "$remote_name" "$candidate_remote_ref":"$candidate_ref"
+        git holo project release-candidate --commit-to "$prod_remote_ref" --commit-message "$commit_msg"
+        git update-ref "$candidate_ref" "$prod_remote_ref"
+        git push -f "$remote_name" "$candidate_ref"
