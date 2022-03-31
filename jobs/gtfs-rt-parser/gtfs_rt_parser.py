@@ -53,13 +53,13 @@ def fetch_bucket_file_names(src_path, rt_file_substring, iso_date, progress=Fals
     fs = get_fs()
     # get rt files
     glob = src_path + iso_date + "*"
-    print("Globbing rt bucket {}".format(glob))
+    typer.echo("Globbing rt bucket {}".format(glob))
     before = datetime.now()
     rt = fs.glob(glob)
-    print(f"globbing took {(datetime.now() - before).total_seconds()} seconds")
+    typer.echo(f"globbing took {(datetime.now() - before).total_seconds()} seconds")
 
     buckets_to_parse = len(rt)
-    print("Realtime buckets to parse: {i}".format(i=buckets_to_parse))
+    typer.echo("Realtime buckets to parse: {i}".format(i=buckets_to_parse))
 
     # organize rt files by itpId_urlNumber
     if progress:
@@ -73,7 +73,7 @@ def fetch_bucket_file_names(src_path, rt_file_substring, iso_date, progress=Fals
         if rt_file_substring.name in item
     ]
 
-    print(f"entity files len {len(entity_files)}")
+    typer.echo(f"entity files len {len(entity_files)}")
 
     feed_files = defaultdict(lambda: [])
 
@@ -88,7 +88,7 @@ def fetch_bucket_file_names(src_path, rt_file_substring, iso_date, progress=Fals
 
     # Now our feed files dict has a key of itpId_urlNumber and a list of files to
     # parse
-    print("found {} feeds to process".format(len(feed_files.keys())))
+    typer.echo("found {} feeds to process".format(len(feed_files.keys())))
     return feed_files
 
 
