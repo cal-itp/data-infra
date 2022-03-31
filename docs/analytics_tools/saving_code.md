@@ -120,13 +120,13 @@ git reset --hard origin/main`
 * [Git Decision Tree - 'So you have a mess on your hands'](http://justinhileman.info/article/git-pretty/full/)
 
 (pushing-drag-drop)=
-## Pushing in the Github User Interface
+## Committing in the Github User Interface
 
-If you would like to push directly from the Github User Interface:
+If you would like to commit directly from the Github User Interface:
 
-1. Navigate the Github repository and folder that you would like to add your work, and locate the file on your computer that you would like to add
+1. Navigate the Github repository and folder that you would like to add your work, and locate the file on your computer that you would like to commit
 
-    (Note: if you would like to add your file to a folder that does not yet exist, <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">message Charlie on Cal-ITP Slack</a> to add it for you)
+    (Note: if you would like to commit your file to a directory that does not yet exist, <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">message Charlie on Cal-ITP Slack</a> to add it for you)
 
 
 
