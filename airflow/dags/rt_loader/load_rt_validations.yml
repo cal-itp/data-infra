@@ -34,7 +34,7 @@ secrets:
   - deploy_type: volume
     deploy_target: /secrets/jobs-data/
     secret: jobs-data
-    key: service-account.json
+    key: service_account.json
 
 tolerations:
   - key: pod-role
