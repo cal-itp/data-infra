@@ -203,7 +203,12 @@ def main(
     # get execution_date from context:
     # https://stackoverflow.com/questions/59982700/airflow-how-can-i-access-execution-date-on-my-custom-operator
 
-    actual_dst_path = dst_path + "/" + rt_file_substring.name + "/"
+    actual_dst_path = os.path.join(dst_path, rt_file_substring.name, "")
+
+    typer.echo(
+        f"Parsing {filename_prefix}/{rt_file_substring} from {os.path.join(src_path, iso_date)} to {actual_dst_path}"
+    )
+
     # fetch files ----
     feed_files = fetch_bucket_file_names(
         src_path, rt_file_substring, iso_date, progress=progress
