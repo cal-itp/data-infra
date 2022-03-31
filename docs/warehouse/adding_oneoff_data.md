@@ -9,7 +9,7 @@ When uploading data to the warehouse we will make use of the `uploaded_data` dat
 
 2. Next, navigate to the Bigquery console in the GCP platform. From here you will select the terminal (shown in the image below).
 
-![Collection Matrix](assets/open_bq_terminal.png)
+![Collection Matrix](assets/open_bq_terminal_border.png)
 
 3. Once in the terminal, input the following command based on the following structure:
 ```
