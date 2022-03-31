@@ -1,0 +1,79 @@
+[helm:postgresql-backup=kubernetes/apps/charts/postgresql-backup]
+
+diff -u -N /tmp/LIVE-394853521/batch.v1beta1.CronJob.metabase-preprod.postgresql-backup /tmp/MERGED-1745239609/batch.v1beta1.CronJob.metabase-preprod.postgresql-backup
+--- /tmp/LIVE-394853521/batch.v1beta1.CronJob.metabase-preprod.postgresql-backup	2022-01-31 19:58:22.034460605 +0000
++++ /tmp/MERGED-1745239609/batch.v1beta1.CronJob.metabase-preprod.postgresql-backup	2022-01-31 19:58:22.038460609 +0000
+@@ -67,6 +67,41 @@
+     manager: helm
+     operation: Update
+     time: "2022-01-31T19:53:29Z"
++  - apiVersion: batch/v1beta1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:spec:
++        f:jobTemplate:
++          f:spec:
++            f:template:
++              f:spec:
++                f:containers:
++                  k:{"name":"client"}:
++                    f:env:
++                      .: {}
++                      k:{"name":"RESTIC_REPOSITORY"}:
++                        .: {}
++                        f:name: {}
++                        f:value: {}
++                    f:envFrom: {}
++                    f:volumeMounts:
++                      .: {}
++                      k:{"mountPath":"/secrets/gcs-upload-svcacct"}:
++                        .: {}
++                        f:mountPath: {}
++                        f:name: {}
++                f:volumes:
++                  .: {}
++                  k:{"name":"gcs-upload-svcacct"}:
++                    .: {}
++                    f:name: {}
++                    f:secret:
++                      .: {}
++                      f:defaultMode: {}
++                      f:secretName: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-01-31T19:58:21Z"
+   name: postgresql-backup
+   namespace: metabase-preprod
+   resourceVersion: "176668947"
+@@ -107,17 +142,31 @@
+             command:
+             - /bin/bash
+             - -c
++            env:
++            - name: RESTIC_REPOSITORY
++              value: gs:calitp-infra-backups:/metabase-database-preprod
++            envFrom:
++            - secretRef:
++                name: database-backup
+             image: ghcr.io/jarvusinnovations/restic-toolkit:latest
+             imagePullPolicy: Always
+             name: client
+             resources: {}
+             terminationMessagePath: /dev/termination-log
+             terminationMessagePolicy: File
++            volumeMounts:
++            - mountPath: /secrets/gcs-upload-svcacct
++              name: gcs-upload-svcacct
+           dnsPolicy: ClusterFirst
+           restartPolicy: Never
+           schedulerName: default-scheduler
+           securityContext: {}
+           terminationGracePeriodSeconds: 30
++          volumes:
++          - name: gcs-upload-svcacct
++            secret:
++              defaultMode: 420
++              secretName: gcs-upload-svcacct
+   schedule: 15 * * * *
+   startingDeadlineSeconds: 86400
+   successfulJobsHistoryLimit: 3
