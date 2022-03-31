@@ -23,8 +23,6 @@ parts:
       - file: warehouse/overview
         sections:
         - file: warehouse/table_naming
-        - file: warehouse/agencies
-        - file: warehouse/views
         - file: warehouse/adding_oneoff_data
         - file: warehouse/metrics
         - file: warehouse/sql_snippets
@@ -54,6 +52,8 @@ parts:
         - file: airflow/static-schedule-pipeline
         - file: airflow/production-maintenance
         - file: airflow/dags-maintenance
+        - file: airflow/agencies
+        - file: airflow/views
       - file: kubernetes/README
         sections:
         - file: kubernetes/JupyterHub
