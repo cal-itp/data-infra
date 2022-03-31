@@ -1,5 +1,5 @@
 operator: operators.PodOperator
-name: 'parse-rt-service-alerts'
+name: 'parse-rt-trip-updates'
 image: 'ghcr.io/cal-itp/data-infra/gtfs-rt-parser:latest'
 
 cmds:
