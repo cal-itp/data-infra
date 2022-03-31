@@ -80,7 +80,7 @@ app_name=gtfs-rt-archive
 git_remote=origin
 topic_branch=$(git branch --show-current)
 # load the helm or kustomize specific parameters
-source ci/vars/releases/prod-$app_name.env
+source ci/vars/releases/preprod-$app_name.env
 
 if   [[ $RELEASE_DRIVER == 'kustomize' ]]; then
   # bump the newTag version to match the newly pushed app version
@@ -96,6 +96,10 @@ git commit -am "ops($app_name): release new version"
 
 # trigger a release candidate build
 git push $git_remote
+
+#
+# wait for the "Build release candidate" action to complete in GitHub
+#
 
 # fetch the release candidate
 git fetch $git_remote candidates/$topic_branch
