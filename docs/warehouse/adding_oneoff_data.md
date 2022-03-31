@@ -8,7 +8,7 @@ When looking to add one-off datasets to the warehouse, for use in applications l
 ![Collection Matrix](assets/open_bq_terminal.png)
 
 3. Once in the terminal, you will input the following command:
-```{code-cell}
+```
 bq --location=us-west2 load <source_format> --autodetect --allow_quoted_newlines <destination_table> <source>
 ```
 
@@ -19,7 +19,7 @@ bq --location=us-west2 load <source_format> --autodetect --allow_quoted_newlines
 * The `<source>` argument is the path to the Google Cloud Storage bucket you are sourcing from.
 
 Ex.
-```{code-cell}
+```
 bq --location=us-west2 load --source_format=CSV --autodetect --allow_quoted_newlines uploaded_data.tircp_with_temporary_expenditure_sol_copy gs://calitp-analytics-data/data-analyses/tircp/tircp.csv
 ```
 
