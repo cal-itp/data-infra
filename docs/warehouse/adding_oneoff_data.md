@@ -31,5 +31,5 @@ If you are looking to create a new table:
 If you are looking to append to existing data:
 If you are looking to replace an existing table:
 
-:::{admonition} More information on the BQ CLI [can be found here](https://cloud.google.com/bigquery/docs/reference/bq-cli-reference)
-:class: tip
+```{admonition} More information on the BQ CLI [can be found here](https://cloud.google.com/bigquery/docs/reference/bq-cli-reference)
+```
