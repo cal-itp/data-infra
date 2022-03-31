@@ -3,13 +3,14 @@ When looking to add one-off datasets to the warehouse, for use in applications l
 
 1. First, upload the data to a Google Cloud Storage bucket and make note of the path.
 
-1. Next, navigate to the Bigquery console in the GCP platform. From here you will select the terminal (image below).
+2. Next, navigate to the Bigquery console in the GCP platform. From here you will select the terminal (image below).
 
 ![Collection Matrix](assets/open_bq_terminal.png)
 
-1. Once in the terminal, you will input the following command:
-
-`bq --location=us-west2 load <source_format> --autodetect --allow_quoted_newlines <destination_table> <source>`
+3. Once in the terminal, you will input the following command:
+```{code-cell}
+bq --location=us-west2 load <source_format> --autodetect --allow_quoted_newlines <destination_table> <source>
+```
 
 * The `<source_format>` specifies the type of file you would like to use. An example of this flag's use is `--source-format=CSV`. Other options include `PARQUET` and `NEWLINE_DELIMITED_JSON`
 
@@ -18,6 +19,8 @@ When looking to add one-off datasets to the warehouse, for use in applications l
 * The `<source>` argument is the path to the Google Cloud Storage bucket you are sourcing from.
 
 Ex.
-`bq --location=us-west2 load --source_format=CSV --autodetect --allow_quoted_newlines uploaded_data.tircp_with_temporary_expenditure_sol_copy gs://calitp-analytics-data/data-analyses/tircp/tircp.csv`
+```{code-cell}
+bq --location=us-west2 load --source_format=CSV --autodetect --allow_quoted_newlines uploaded_data.tircp_with_temporary_expenditure_sol_copy gs://calitp-analytics-data/data-analyses/tircp/tircp.csv
+```
 
 More information on the BQ CLI [can be found here](https://cloud.google.com/bigquery/docs/reference/bq-cli-reference)
