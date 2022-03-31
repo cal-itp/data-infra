@@ -199,6 +199,7 @@ def main(
     dst_path=f"{get_bucket()}/rt-processed/",
     limit: int = 0,
     progress: bool = False,
+    threads: int = 4,
 ):
     # get execution_date from context:
     # https://stackoverflow.com/questions/59982700/airflow-how-can-i-access-execution-date-on-my-custom-operator
@@ -222,7 +223,7 @@ def main(
 
     # gcfs does not seem to play nicely with multiprocessing right now
     # https://github.com/fsspec/gcsfs/issues/379
-    with ThreadPoolExecutor(max_workers=4) as pool:
+    with ThreadPoolExecutor(max_workers=threads) as pool:
         args = [
             (
                 i,
