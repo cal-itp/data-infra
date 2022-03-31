@@ -1,0 +1,14 @@
+[kustomize:kubernetes/apps/overlays/gtfs-rt-archive-prod]
+
+diff -u -N /tmp/LIVE-4013823922/v1.ConfigMap.gtfs-rt.archiver-app-vars /tmp/MERGED-1208730412/v1.ConfigMap.gtfs-rt.archiver-app-vars
+--- /tmp/LIVE-4013823922/v1.ConfigMap.gtfs-rt.archiver-app-vars	2022-03-04 15:50:35.320105921 +0000
++++ /tmp/MERGED-1208730412/v1.ConfigMap.gtfs-rt.archiver-app-vars	2022-03-04 15:50:35.320105921 +0000
+@@ -3,7 +3,7 @@
+   CALITP_AGENCIES_YML: /secrets/agencies-data/data_agencies.yaml
+   CALITP_DATA_DEST_SECRET: /secrets/gcs-upload-svcacct/gcs-upload-svcacct.json
+   CALITP_HEADERS_YML: /secrets/agencies-data/data_headers.yaml
+-  CALITP_LOG_LEVEL: debug
++  CALITP_LOG_LEVEL: info
+ kind: ConfigMap
+ metadata:
+   annotations:
