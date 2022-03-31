@@ -16,13 +16,13 @@
 - [ ]  [**Slack**](https://cal-itp.slack.com) | ([Docs](slack-intro))
 - [ ]  [**Analytics Repo**](https://github.com/cal-itp/data-analyses) | ([Docs](analytics-repo))
 - [ ]  [**Analyst Project Board**](https://github.com/cal-itp/data-infra/projects/6) | ([Docs](analytics-project-board))
-- [ ]  [**Google Cloud Storage**](https://console.cloud.google.com/storage/browser/calitp-analytics-data) - Cloud-based file storage
+- [ ]  [**Google Cloud Storage**](https://console.cloud.google.com/storage/browser/calitp-analytics-data) | Cloud-based file storage
 
 **Dashboards & Notebooks:**
 
 - [ ]  [**Metabase**](https://dashboards.calitp.org/) - Business Insights & Dashboards | ([Docs](metabase))
-- [ ]  [**JupyterHub**](https://hubtest.k8s.calitp.jarv.us/) - Cloud-based notebooks for querying  Python, SQL, R | ([Docs](jupyterhub))
-- [ ]  [**Google BigQuery**](https://console.cloud.google.com/bigquery) - Convenient way to view the data warehouse and query SQL
+- [ ]  [**JupyterHub**](https://hubtest.k8s.calitp.jarv.us/) - Cloud-based notebooks for querying Python, SQL, R | ([Docs](jupyterhub))
+- [ ]  [**Google BigQuery**](https://console.cloud.google.com/bigquery) - Viewing the data warehouse and querying SQL
 
 **Python Libraries:**
 
