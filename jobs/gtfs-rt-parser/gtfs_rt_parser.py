@@ -239,9 +239,9 @@ def main(
         exceptions = [ret for ret in pool.map(try_handle_one_feed, *zip(*args)) if ret]
 
     if exceptions:
-        raise RuntimeError(
-            f"got {len(exceptions)} exceptions from processing {len(enumerated)} feeds: {exceptions}"
-        )
+        msg = f"got {len(exceptions)} exceptions from processing {len(enumerated)} feeds: {exceptions}"
+        typer.echo(msg, err=True)
+        raise RuntimeError(msg)
 
 
 if __name__ == "__main__":
