@@ -57,7 +57,22 @@ if [[ $RELEASE_NAMESPACE ]] && [[ ! $(kubectl get ns "$RELEASE_NAMESPACE" 2>/dev
   kubectl create ns "$RELEASE_NAMESPACE"
 fi
 
-diff_contents=$(helm template "$RELEASE_HELM_NAME" "$chart_path" "${helm_opts[@]}" | kubectl diff -f - || true)
+# helm does not have a native diff command and the output of helm template does
+# not attach the namespace passed using -n to resulting resources. this means
+# helm template output cannot be passed directly to kubectl diff.
+# this workaround wraps the output of helm template in a kustomize directory to allow
+# native diffing.
+diff_tmpdir=$(mktemp -d -t "$RELEASE_HELM_NAME.XXXXXX")
+trap "rm -rf $diff_tmpdir" EXIT
+helm template "$RELEASE_HELM_NAME" "$chart_path" "${helm_opts[@]}" > "$diff_tmpdir/manifest.yaml"
+cat <<EOF > "$diff_tmpdir/kustomization.yaml"
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: $RELEASE_NAMESPACE
+resources:
+- manifest.yaml
+EOF
+diff_contents=$(kubectl diff -k "$diff_tmpdir" || true)
 
 if [[ $diff_contents ]]; then
   printf 'release: %s: helm %s\n' "$RELEASE_HELM_NAME" "$helm_verb"
