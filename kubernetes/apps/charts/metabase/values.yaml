@@ -4,7 +4,7 @@
 
 images:
   database:
-    src: postgres:9.6
+    src: postgres:13.5
     imagePullSecrets:
     - name: regcred
   metabase:
