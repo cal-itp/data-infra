@@ -10,6 +10,7 @@ sources:
 
 models:
   - name: gtfs_rt_fact_files
+    description: '{{ doc("gtfs_rt_fact_files") }}'
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
