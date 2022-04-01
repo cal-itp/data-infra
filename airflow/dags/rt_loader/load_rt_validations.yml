@@ -10,7 +10,7 @@ arguments:
     from gtfs_rt_validator_api import validate_gcs_bucket_many
     validate_gcs_bucket_many(
         project_id="cal-itp-data-infra",
-        token="cloud",
+        token="/secrets/jobs-data/service_account.json",
         param_csv="{{get_bucket()}}/rt-processed/calitp_validation_params/{{execution_date.to_date_string()}}.csv",
         results_bucket="{{get_bucket()}}/rt-processed/validation/{{execution_date.to_date_string()}}",
         summary_path="{{get_bucket()}}/rt-processed/validation/{{execution_date.to_date_string()}}/status.json",
@@ -25,6 +25,16 @@ get_logs: true
 is_gke: true
 pod_location: us-west1
 cluster_name: data-infra-apps
+namespace: airflow-jobs
+
+env_vars:
+  GOOGLE_APPLICATION_CREDENTIALS: /secrets/jobs-data/service_account.json
+
+secrets:
+  - deploy_type: volume
+    deploy_target: /secrets/jobs-data/
+    secret: jobs-data
+    key: service_account.json
 
 tolerations:
   - key: pod-role
