@@ -119,9 +119,7 @@ def get_latest_schedule_data(table):
         SELECT
             t1.* EXCEPT(calitp_deleted_at)
         FROM gtfs_views_staging.{table}_clean t1
-        -- inner join to only get the ones that are latest load
-        INNER JOIN gtfs_schedule_history.calitp_feed_latest t2
-            USING(calitp_itp_id, calitp_url_number, calitp_extracted_at)
+        WHERE calitp_deleted_at = '2099-01-01'
 """
 
 
@@ -152,7 +150,12 @@ def airtable_mapping_generate_sql(table1, table2, col1, col2):
             name2 = col1 + "_name"
             id2 = col1 + "_id"
         sql = SELF_JOIN_SQL_TEMPLATE.format(
-            table=table1, col=col1, name1=name1, id1=id1, name2=name2, id2=id2,
+            table=table1,
+            col=col1,
+            name1=name1,
+            id1=id1,
+            name2=name2,
+            id2=id2,
         )
     else:
         if table2[-1:] == "s":
