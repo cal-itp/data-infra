@@ -15,6 +15,7 @@ configs:
   metabase:
     MB_DB_USER: admin
     MB_DB_PASS: admin
+    MB_DB_HOST: database.metabase-preprod.svc.cluster.local
 
 volumes:
   database:
