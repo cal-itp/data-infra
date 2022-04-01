@@ -10,7 +10,9 @@ sources:
 
 models:
   - name: gtfs_rt_fact_files
-    description: '{{ doc("gtfs_rt_fact_files") }}'
+    description: |
+      Each row is a GTFS realtime file that was downloaded.
+      Note that presence of a file is not a guarantee that the downloaded file is complete or valid.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -24,7 +26,7 @@ models:
         tests:
           - not_null
       - name: calitp_itp_id
-        description: Feed ITP ID
+        description: '{{ doc("field_calitp_itp_id") }}'
         tests:
           - not_null
       - name: calitp_url_number
