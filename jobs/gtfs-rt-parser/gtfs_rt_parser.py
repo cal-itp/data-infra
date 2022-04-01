@@ -179,7 +179,7 @@ def try_handle_one_feed(
         # a lot of these are thrown by tmpdir, and are potentially flakes; but if they were thrown during
         # handling of another exception, we want that exception still
         if isinstance(e, OSError) and e.errno == 39:
-            return e.__cause__
+            return e.__cause__ or e.__context__
         return e
 
 
