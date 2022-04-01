@@ -12,11 +12,11 @@ models:
   - name: gtfs_rt_fact_files
     tests:
       - dbt_utils.unique_combination_of_columns:
-        combination_of_columns:
-          - calitp_extracted_at
-          - calitp_itp_id
-          - calitp_url_number
-          - name
+          combination_of_columns:
+            - calitp_extracted_at
+            - calitp_itp_id
+            - calitp_url_number
+            - name
     columns:
       - name: calitp_extracted_at
         description: Timestamp when this file was extracted
