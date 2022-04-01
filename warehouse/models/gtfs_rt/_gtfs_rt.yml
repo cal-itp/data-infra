@@ -30,7 +30,7 @@ models:
         tests:
           - not_null
       - name: calitp_url_number
-        description: Feed URL number
+        description: '{{ doc("field_calitp_url_number") }}'
         tests:
           - not_null
       - name: name
