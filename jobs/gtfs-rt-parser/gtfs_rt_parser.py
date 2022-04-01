@@ -6,6 +6,7 @@ import itertools
 import json
 import os
 import tempfile
+import traceback
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, date
@@ -172,7 +173,13 @@ def try_handle_one_feed(
     try:
         handle_one_feed(feed, files, filename_prefix, iso_date, dst_path, logger)
     except Exception as e:
-        logger.error(f"got exception while handling feed: {str(e)}")
+        logger.error(
+            f"got exception while handling feed: {str(e)} from {str(e.__cause__)} {traceback.format_exc()}"
+        )
+        # a lot of these are thrown by tmpdir, and are potentially flakes; but if they were thrown during
+        # handling of another exception, we want that exception still
+        if isinstance(e, OSError) and e.errno == 39:
+            return e.__cause__ or e.__context__
         return e
 
 
