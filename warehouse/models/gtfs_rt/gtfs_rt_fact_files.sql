@@ -1,3 +1,5 @@
+{{ config(materialized='table') }}
+
 WITH source as (
     select *
     from {{ source('gtfs_rt_raw', 'calitp_files') }}
