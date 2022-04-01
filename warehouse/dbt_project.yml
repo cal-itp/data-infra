@@ -38,4 +38,4 @@ models:
     +materialized: view
 
     gtfs_rt:
-      schema: rt_staging
+      schema: views

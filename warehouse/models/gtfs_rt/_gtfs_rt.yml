@@ -5,28 +5,52 @@ sources:
     database: cal-itp-data-infra
     schema: gtfs_rt
     tables:
-      - name: vehicle_positions
+      - name: calitp_files
+
 
 models:
-  - name: stg_gtfs_rt__vehicle_positions
+  - name: gtfs_rt_fact_files
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - calitp_filepath
-            - id
+        combination_of_columns:
+          - calitp_extracted_at
+          - calitp_itp_id
+          - calitp_url_number
+          - name
     columns:
+      - name: calitp_extracted_at
+        description: Timestamp when this file was extracted
+        tests:
+          - not_null
       - name: calitp_itp_id
+        description: Feed ITP ID
         tests:
           - not_null
       - name: calitp_url_number
+        description: Feed URL number
         tests:
           - not_null
-      - name: calitp_filepath
+      - name: name
+        description: File type (service_alerts, trip_updates, or vehicle_positions)
         tests:
           - not_null
-      - name: id
+      - name: size
+        description: File size in bytes
         tests:
           - not_null
-      - name: header_timestamp
+      - name: md5_hash
+        description: Hash of file contents
+        tests:
+          - not_null
+      - name: date_extracted
+        description: Date extracted from calitp_extracted_at
+        tests:
+          - not_null
+      - name: hour_extracted
+        description: Hour extracted from calitp_extracted_at
+        tests:
+          - not_null
+      - name: minute_extracted
+        description: Minute extracted from calitp_extracted_at
         tests:
           - not_null
