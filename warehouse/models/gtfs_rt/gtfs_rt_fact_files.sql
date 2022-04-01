@@ -1,6 +1,6 @@
 WITH source as (
     select *
-    from {{ source('gtfs_rt_raw', 'vehicle_positions') }}
+    from {{ source('gtfs_rt_raw', 'calitp_files') }}
 )
 
 , gtfs_rt_fact_files as (
