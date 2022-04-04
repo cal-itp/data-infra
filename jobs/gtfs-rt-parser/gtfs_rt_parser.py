@@ -101,8 +101,21 @@ def get_google_cloud_filename(filename_prefix, feed, iso_date):
 
 # Try twice in the event we get a ClientResponseError; doesn't have much of a delay (like 0.01s)
 @backoff.on_exception(
-    backoff.expo, aiohttp.client_exceptions.ClientResponseError, max_tries=2
+    backoff.expo, exception=aiohttp.client_exceptions.ClientResponseError, max_tries=3
 )
+def get_with_retry(fs, *args, **kwargs):
+    return fs.get(*args, **kwargs)
+
+
+@backoff.on_exception(
+    backoff.expo, exception=aiohttp.client_exceptions.ClientResponseError, max_tries=3
+)
+def put_with_retry(fs, *args, **kwargs):
+    return fs.put(*args, **kwargs)
+
+
+# Originally this whole function was retried, but tmpdir flakiness will throw
+# exceptions in backoff's context, which ruins things
 def handle_one_feed(feed, files, filename_prefix, iso_date, dst_path, logger):
     start = datetime.now()
 
@@ -119,7 +132,7 @@ def handle_one_feed(feed, files, filename_prefix, iso_date, dst_path, logger):
     # fetch and parse RT files from bucket
     with tempfile.TemporaryDirectory() as tmp_dir:
         logger.info(f"downloading {len(files)} files to {tmp_dir}")
-        fs.get(files, tmp_dir)
+        get_with_retry(fs, files, tmp_dir)
         all_files = [x for x in Path(tmp_dir).rglob("*") if not x.is_dir()]
 
         gzip_fname = str(tmp_dir + "/" + "temporary" + EXTENSION)
@@ -147,10 +160,7 @@ def handle_one_feed(feed, files, filename_prefix, iso_date, dst_path, logger):
         logger.info(
             f"writing {written} lines ({filesize}) from {gzip_fname} to {dst_path + google_cloud_file_name}"
         )
-        fs.put(
-            gzip_fname,
-            dst_path + google_cloud_file_name,
-        )
+        put_with_retry(fs, gzip_fname, dst_path + google_cloud_file_name)
         logger.info(
             "took {} seconds to process {} files".format(
                 (datetime.now() - start).total_seconds(), len(all_files)
@@ -174,7 +184,7 @@ def try_handle_one_feed(
         handle_one_feed(feed, files, filename_prefix, iso_date, dst_path, logger)
     except Exception as e:
         logger.error(
-            f"got exception while handling feed: {str(e)} from {str(e.__cause__)} {traceback.format_exc()}"
+            f"got exception while handling feed: {str(e)} from {str(e.__cause__ or e.__context__)} {traceback.format_exc()}"
         )
         # a lot of these are thrown by tmpdir, and are potentially flakes; but if they were thrown during
         # handling of another exception, we want that exception still

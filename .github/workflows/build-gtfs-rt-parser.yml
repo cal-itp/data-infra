@@ -3,7 +3,7 @@ name: Docker image
 on:
   push:
     branches:
-      - 'master'
+      - 'main'
     paths:
       - 'jobs/gtfs-rt-parser/**'
 
