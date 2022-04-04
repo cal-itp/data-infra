@@ -1,15 +1,8 @@
-Welcome to your new dbt project!
+This dbt project is intended to be the source of truth for the data-infra-cal-itp BigQuery warehouse.
 
-### Using the starter project
+### Executing the project
+1. Configure your profiles.yml as described in the [dbt docs](https://docs.getdbt.com/dbt-cli/configure-your-profile).
+2. Install poetry as described in the [poetry docs](https://python-poetry.org/docs/#osx--linux--bashonwindows-install-instructions).
+3. Execute `poetry install` (just the first time) and `poetry run dbt run` to run the dbt project.
 
-Try running the following commands:
-- dbt run
-- dbt test
-
-
-### Resources:
-- Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
-- Check out [Discourse](https://discourse.getdbt.com/) for commonly asked questions and answers
-- Join the [chat](https://community.getdbt.com/) on Slack for live discussions and support
-- Find [dbt events](https://events.getdbt.com) near you
-- Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
+TODO: project standards and organization
