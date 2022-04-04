@@ -48,7 +48,7 @@ DAGs are listed in alphabetical order, as they appear in the Airflow UI.
 
 In addition to the tabular view above, here is a diagram representing DAG dependencies.
 
-```mermaid
+```{mermaid}
   graph TD;
       airtable_loader-->airtable_views;
       gtfs_downloader-->gtfs_loader;
