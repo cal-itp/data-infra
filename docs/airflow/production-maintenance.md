@@ -28,7 +28,7 @@ DAGs are listed in alphabetical order, as they appear in the Airflow UI.
 `airtable_loader` | **⛔ No** | No | **🔂 No** | N/A | |
 `airtable_views` | Yes | No | Yes* | `airtable_loader` | Latest-only data |
 `gtfs_downloader` | **⛔ No** | No | **🔂 No** | N/A | |
-`gtfs_loader` | Yes | No | **🔂 No** | `gtfs_downloader` | |
+`gtfs_loader` | Yes | No | **🔂 No** | `gtfs_downloader`* | Technically also depends on `gtfs_schedule_history`, not usually an issue |
 `gtfs_schedule` | Yes | No | Yes* | `gtfs_views_staging` | Latest-only data (but depends on `gtfs_views_staging` for data cleaning) |
 `gtfs_schedule_history` | N/A | N/A | N/A | N/A | Once-only (defines external tables); does not generally need to be re-run |
 `gtfs_schedule_history2` | Yes | **📆 Yes** | **🔂 No** | `gtfs_loader` | |
@@ -37,10 +37,10 @@ DAGs are listed in alphabetical order, as they appear in the Airflow UI.
 `payments_loader` | Yes | No | Yes | N/A | |
 `payments_views` | Yes | No | Yes | `payments_views_staging`| |
 `payments_views_staging` | Yes | No | Yes | `payments_loader` | |
-`rt_loader` | Yes | No | **🔂 No** | N/A | |
+`rt_loader` | Yes | No | **🔂 No** | `gtfs_loader` | |
 `rt_loader_files` | Yes | No | **🔂 No** | N/A | |
 `rt_timestamp_fix` | N/A | N/A | N/A | N/A | DAG is deprecated but still appears in Airflow UI |
-`rt_views` | Yes | No | Yes | `rt_loader` | Also depends on `gtfs_views` |
+`rt_views` | Yes | No | Yes | `rt_loader`, `gtfs_views` | |
 `sandbox` | N/A | N/A | N/A | N/A | Testing only; does not need to be re-run |
 
 
