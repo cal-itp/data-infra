@@ -3,7 +3,7 @@
 These guidelines are meant to provide a foundation for collaboration in Cal-ITP's data services repos (primarily [#data-infra](https://github.com/cal-itp/data-infra).)
 
 ## Issues:
-* When submitting an issue, please make it clear what the acceptance criteria are; i.e., what is sufficient to consider a fix “done” for the issue.
+* When submitting an issue, please make it clear what the acceptance criteria are; i.e., what is sufficient to consider a fix “done” for the issue. The purpose of this expectation is to ensure that issues represent actionable pieces of work that can be accurately prioritized and assigned for resolution.
     * For example: The following issue is vague and could fall victim to an unhelpful cycle of swirl and scope creep:
       > Add best practices to reports
 
