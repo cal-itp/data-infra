@@ -8,3 +8,7 @@ from operators.csv_to_warehouse_operator import CsvToWarehouseOperator
 from operators.python_to_warehouse_operator import PythonToWarehouseOperator
 from operators.sql_query_operator import SqlQueryOperator
 from operators.airtable_to_warehouse import AirtableToWarehouseOperator
+from operators.realtime_to_flattened_json_operator import (
+    RealtimeToFlattenedJSONOperator,
+)
+from operators.amplitude_to_flattened_json import AmplitudeToFlattenedJSONOperator

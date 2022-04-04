@@ -1,7 +1,19 @@
+"""Macros for Operators"""
+
 import pandas as pd
+from calitp.config import is_development
 
 # To add a macro, add its definition in the appropriate section
 # And then add it to the dictionary at the bottom of this file
+
+# Is Development ======================================================
+
+
+def is_development_macro():
+    """Make calitp-py's is_development function available via macro"""
+
+    return is_development()
+
 
 # Payments =============================================================
 
@@ -233,4 +245,5 @@ data_infra_macros = {
     "sql_enrich_duplicates": sql_enrich_duplicates,
     "sql_airtable_mapping": airtable_mapping_generate_sql,
     "get_latest_schedule_data": get_latest_schedule_data,
+    "is_development": is_development_macro,
 }
