@@ -3,6 +3,8 @@ import os
 
 from functools import wraps
 
+# FYI, one day we may need to add apache-airflow-providers-cncf-kubernetes==3.0.0 to requirements.txt if we self-host
+# But it's already installed in the Composer environment
 from airflow.contrib.operators.gcp_container_operator import GKEPodOperator
 from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
 from airflow.kubernetes.secret import Secret
