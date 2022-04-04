@@ -27,6 +27,7 @@ DAGs are listed in alphabetical order, as they appear in the Airflow UI.
 | --- | --- | --- | --- | --- | --- |
 `airtable_loader` | **⛔ No (all tasks)** | No | **🔂 No** | N/A | |
 `airtable_views` | Yes | No | Yes* | `airtable_loader` | Latest-only data |
+`amplitude_benefits` | Yes | No | No | N/A | |
 `gtfs_downloader` | **⛔ No (`generate_provider_list` and `download_data` tasks specifically)** | No | **🔂 No** | N/A | Tasks downstream of `download_data` can safely be rerun after 24 hours |
 `gtfs_loader` | Yes | No | **🔂 No** | `gtfs_downloader`* | Technically also depends on `gtfs_schedule_history`, not usually an issue |
 `gtfs_schedule` | Yes | No | Yes* | `gtfs_views_staging` | Latest-only data (but depends on `gtfs_views_staging` for data cleaning) |
