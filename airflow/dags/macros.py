@@ -116,10 +116,21 @@ def scd_join(
 def get_latest_schedule_data(table):
 
     return f"""
+
+        WITH is_in_latest AS (
+            SELECT DISTINCT
+                calitp_itp_id,
+                calitp_url_number,
+                calitp_id_in_latest
+            FROM gtfs_views_staging.calitp_feeds
+            WHERE calitp_id_in_latest
+        )
+
         SELECT
             t1.* EXCEPT(calitp_deleted_at)
         FROM gtfs_views_staging.{table}_clean t1
-        LEFT JOIN gtfs_views_staging.calitp_feeds t2 USING(calitp_itp_id, calitp_url_number)
+        LEFT JOIN is_in_latest t2
+            USING(calitp_itp_id, calitp_url_number)
         WHERE t1.calitp_deleted_at = '2099-01-01'
         AND t2.calitp_id_in_latest
 """
