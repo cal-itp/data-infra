@@ -69,6 +69,7 @@ parts:
         - file: ci/steps/release-kube-overlay
         - file: ci/steps/validate-build-git-tag
         - file: ci/steps/validate-clean-worktree
+      - file: github/contribute_to_repos.md
       - file: services/overview
         sections:
         - file: services/gtfs-ckan-uploader
