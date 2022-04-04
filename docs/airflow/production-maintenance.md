@@ -47,7 +47,7 @@ DAGs are listed in alphabetical order, as they appear in the Airflow UI.
 
 Some tasks have unique considerations, beyond the requirements of their overall DAG.
 
-* **`PodOperators`**: When restarting a failed `PodOperator` run, check the logs before restarting. If the logs show any indication that the prior run's pod was not killed (for example, if the logs cut off abruptly without showing an explicit task failure), you should check that the pod associated with the failed run task has in fact been killed before clearing or restarting the Airflow task.
+* **`PodOperators`**: When restarting a failed `PodOperator` run, check the logs before restarting. If the logs show any indication that the prior run's pod was not killed (for example, if the logs cut off abruptly without showing an explicit task failure), you should check that the pod associated with the failed run task has in fact been killed before clearing or restarting the Airflow task. If you don't know how to check a pod status, please ask in the `#data-infra` channel on Slack before proceeding.
 
 ## Backfilling from the command line
 
