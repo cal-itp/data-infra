@@ -41,7 +41,7 @@ DAGs are listed in alphabetical order, as they appear in the Airflow UI.
 `rt_loader` | Yes | No | **🔂 No** | `gtfs_loader` | |
 `rt_loader_files` | Yes | No | **🔂 No** | N/A | |
 `rt_timestamp_fix` | N/A | N/A | N/A | N/A | DAG is deprecated but still appears in Airflow UI |
-`rt_views` | Yes | No | Yes | `rt_loader`, `gtfs_views` | |
+`rt_views` | Yes | No | Yes | `rt_loader_files`, `gtfs_views` | |
 `sandbox` | N/A | N/A | N/A | N/A | Testing only; does not need to be re-run |
 
 ## Task-level considerations
