@@ -1,9 +1,6 @@
 name: Publish docs to gh-pages
 
 on:
-  push:
-    paths:
-      - 'docs/**'
   pull_request:
     paths:
       - 'docs/**'
