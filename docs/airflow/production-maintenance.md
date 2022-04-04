@@ -51,6 +51,7 @@ In addition to the tabular view above, here is a diagram representing DAG depend
 ```{mermaid}
   graph TD;
       airtable_loader-->airtable_views;
+      amplitude_benefits;
       gtfs_downloader-->gtfs_loader;
       gtfs_schedule_history-->gtfs_loader;
       gtfs_loader-->gtfs_schedule_history2;
