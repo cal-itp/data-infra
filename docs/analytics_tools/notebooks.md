@@ -97,6 +97,9 @@ WHERE
 LIMIT 10
 ```
 
+### Saving Code in Jupyter Notebooks with Github
+Use [this link](committing-from-jupyterhub) to navigate to the `Saving Code` section of the docs to learn how to commit code to GitHub from the Jupyter terminal.
+
 ### Environment Variables
 
 Sometimes if data access is expensive, or if there is sensitive data, then accessing it will require some sort of credentials (which may take the form of passwords or tokens).
