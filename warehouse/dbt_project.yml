@@ -34,6 +34,9 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   calitp_warehouse:
     schema: staging
+    +persist_docs:
+      relation: true
+      columns: true
     # Config indicated by + and applies to all files under models/example/
     +materialized: view
 
