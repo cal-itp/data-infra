@@ -25,10 +25,10 @@ DAGs are listed in alphabetical order, as they appear in the Airflow UI.
 
 | DAG | Safe after 24h | `depends_ on_past` | All of history | Depends on | Notes |
 | --- | --- | --- | --- | --- | --- |
-`airtable_loader` | **⛔ No (all tasks)** | No | **🔂 No** | N/A | |
+`airtable_loader` | **⛔ No*** | No | **🔂 No** | N/A | All tasks are unsafe after 24 hours |
 `airtable_views` | Yes | No | Yes* | `airtable_loader` | Latest-only data |
 `amplitude_benefits` | Yes | No | **🔂 No** | N/A | |
-`gtfs_downloader` | **⛔ No (`generate_provider_list` and `download_data` tasks specifically)** | No | **🔂 No** | N/A | Tasks downstream of `download_data` can safely be rerun after 24 hours |
+`gtfs_downloader` | **⛔ No*** | No | **🔂 No** | N/A | Tasks downstream of `download_data` can safely be rerun after 24 hours |
 `gtfs_loader` | Yes | No | **🔂 No** | `gtfs_downloader`* | Technically also depends on `gtfs_schedule_history`, not usually an issue |
 `gtfs_schedule` | Yes | No | Yes* | `gtfs_views_staging` | Latest-only data (but depends on `gtfs_views_staging` for data cleaning) |
 `gtfs_schedule_history` | N/A | N/A | N/A | N/A | Once-only (defines external tables); does not generally need to be re-run |
@@ -43,6 +43,27 @@ DAGs are listed in alphabetical order, as they appear in the Airflow UI.
 `rt_timestamp_fix` | N/A | N/A | N/A | N/A | DAG is deprecated but still appears in Airflow UI |
 `rt_views` | Yes | No | Yes | `rt_loader`, `gtfs_views` | |
 `sandbox` | N/A | N/A | N/A | N/A | Testing only; does not need to be re-run |
+
+## Dependency diagram
+
+In addition to the tabular view above, here is a diagram representing DAG dependencies.
+
+```mermaid
+  graph TD;
+      airtable_loader-->airtable_views;
+      gtfs_downloader-->gtfs_loader;
+      gtfs_schedule_history-->gtfs_loader;
+      gtfs_loader-->gtfs_schedule_history2;
+      gtfs_schedule_history2-->gtfs_views_staging;
+      gtfs_views_staging-->gtfs_views;
+      gtfs_views_staging-->gtfs_schedule;
+      payments_loader-->payments_views_staging;
+      payments_views_staging-->payments_views;
+      gtfs_loader-->rt_loader;
+      rt_loader_files-->rt_views;
+      gtfs_views-->rt_views;
+      sandbox;
+```
 
 ## Task-level considerations
 
