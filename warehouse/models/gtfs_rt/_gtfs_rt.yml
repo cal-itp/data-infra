@@ -2,10 +2,12 @@ version: 2
 
 sources:
   - name: gtfs_rt_raw
+    description: Data in the gtfs_rt dataset in BigQuery, generally produced by the rt_loader and rt_loader_files Airflow DAGs.
     database: cal-itp-data-infra
     schema: gtfs_rt
     tables:
       - name: calitp_files
+        description: List of RT files produced by rt_loader_files.calitp_files_process Airflow DAG task, loaded into BigQuery via rt_loader_files.external_calitp_files DAG task (defines external table).
 
 
 models:
