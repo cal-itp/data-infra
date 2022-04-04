@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GTFS Schedule (WIP) &#8212; Cal-ITP Data Services</title>
+    <title>Contributing to data services repos &#8212; Cal-ITP Data Services</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -56,8 +56,8 @@
     <script>mermaid.initialize({startOnLoad:true});</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="GTFS Realtime" href="gtfs_rt.html" />
-    <link rel="prev" title="Datasets &amp; Tables" href="overview.html" />
+    <link rel="next" title="Services" href="../services/overview.html" />
+    <link rel="prev" title="validate-clean-worktree" href="../ci/steps/validate-clean-worktree.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -114,7 +114,7 @@
   Analysts
  </span>
 </p>
-<ul class="current nav bd-sidenav">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../analytics_welcome/overview.html">
    Welcome!
@@ -226,43 +226,43 @@
    </li>
   </ul>
  </li>
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="overview.html">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../datasets_and_tables/overview.html">
    Datasets &amp; Tables
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
   <label for="toctree-checkbox-4">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul class="current">
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets_and_tables/gtfs_schedule.html">
      GTFS Schedule (WIP)
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="gtfs_rt.html">
+    <a class="reference internal" href="../datasets_and_tables/gtfs_rt.html">
      GTFS Realtime
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="mst_payments.html">
+    <a class="reference internal" href="../datasets_and_tables/mst_payments.html">
      MST Payments (WIP)
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="transitdatabase.html">
+    <a class="reference internal" href="../datasets_and_tables/transitdatabase.html">
      Transit Database
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="views.html">
+    <a class="reference internal" href="../datasets_and_tables/views.html">
      Views (WIP)
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="tables.html">
+    <a class="reference internal" href="../datasets_and_tables/tables.html">
      Tables (WIP)
     </a>
    </li>
@@ -323,7 +323,7 @@
   Developers
  </span>
 </p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../architecture/architecture_overview.html">
    Architecture Overview
@@ -445,8 +445,8 @@
    </li>
   </ul>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../github/contribute_to_repos.html">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    Contributing to data services repos
   </a>
  </li>
@@ -547,7 +547,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/datasets_and_tables/gtfs_schedule.md"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/github/contribute_to_repos.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -567,10 +567,10 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fdatasets_and_tables/gtfs_schedule.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fgithub/contribute_to_repos.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/datasets_and_tables/gtfs_schedule.md"><button
+        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/github/contribute_to_repos.md"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -596,18 +596,28 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#data">
-   Data
+  <a class="reference internal nav-link" href="#issues">
+   Issues:
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#dashboards">
-   Dashboards
+  <a class="reference internal nav-link" href="#working-on-branches-creating-pull-requests">
+   Working on Branches &amp; Creating Pull Requests:
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#dags-maintenance">
-   DAGs Maintenance
+  <a class="reference internal nav-link" href="#code-reviews-pr-author">
+   Code Reviews - PR Author:
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#code-reviews-reviewer">
+   Code Reviews - Reviewer:
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#general">
+   General:
   </a>
  </li>
 </ul>
@@ -620,7 +630,7 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>GTFS Schedule (WIP)</h1>
+                <h1>Contributing to data services repos</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -631,18 +641,28 @@
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#data">
-   Data
+  <a class="reference internal nav-link" href="#issues">
+   Issues:
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#dashboards">
-   Dashboards
+  <a class="reference internal nav-link" href="#working-on-branches-creating-pull-requests">
+   Working on Branches &amp; Creating Pull Requests:
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#dags-maintenance">
-   DAGs Maintenance
+  <a class="reference internal nav-link" href="#code-reviews-pr-author">
+   Code Reviews - PR Author:
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#code-reviews-reviewer">
+   Code Reviews - Reviewer:
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#general">
+   General:
   </a>
  </li>
 </ul>
@@ -654,35 +674,97 @@
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="gtfs-schedule-wip">
-<h1>GTFS Schedule (WIP)<a class="headerlink" href="#gtfs-schedule-wip" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="data">
-<h2>Data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h2>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>dataset</p></th>
-<th class="head"><p>description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>gtfs_schedule</p></td>
-<td><p>Latest warehouse data for GTFS Static feeds. See the <a class="reference external" href="https://developers.google.com/transit/gtfs/reference">GTFS static reference</a>.</p></td>
-</tr>
-<tr class="row-odd"><td><p>gtfs_schedule_type2</p></td>
-<td><p>Tables with GTFS Static feeds across history (going back to April 15th, 2021). These are stored as type 2 slowly changing dimensions. They have <code class="docutils literal notranslate"><span class="pre">calitp_extracted_at</span></code>, and <code class="docutils literal notranslate"><span class="pre">calitp_deleted_at</span></code> fields.</p></td>
-</tr>
-<tr class="row-even"><td><p>(internal) gtfs_schedule_history</p></td>
-<td><p>External tables with all new feed data across history.</p></td>
-</tr>
-</tbody>
-</table>
+  <div class="tex2jax_ignore mathjax_ignore section" id="contributing-to-data-services-repos">
+<h1>Contributing to data services repos<a class="headerlink" href="#contributing-to-data-services-repos" title="Permalink to this headline">¶</a></h1>
+<p>These guidelines are meant to provide a foundation for collaboration in Cal-ITP’s data services repos (primarily <a class="reference external" href="https://github.com/cal-itp/data-infra">#data-infra</a>.)</p>
+<div class="section" id="issues">
+<h2>Issues:<a class="headerlink" href="#issues" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>When submitting an issue, please make it clear what the acceptance criteria are; i.e., what is sufficient to consider a fix “done” for the issue. The purpose of this expectation is to ensure that issues represent actionable pieces of work that can be accurately prioritized and assigned for resolution.</p>
+<ul>
+<li><p>For example: The following issue is vague and could fall victim to an unhelpful cycle of swirl and scope creep:</p>
+<blockquote>
+<div><p>Add best practices to reports</p>
+</div></blockquote>
+</li>
+<li><p>The following issue is clearer. If scope were to increase (for example, the author realizes that they also want a chart), it would be clearer that that should be created as a new, follow-up request.</p>
+<blockquote>
+<div><p>Add a new section to reports called ‘Best Practices Violations’. It should be inserted immediately after and appear just like the existing critical validation errors table and include validation notices W1, W2, and W3.</p>
+</div></blockquote>
+</li>
+<li><p>If you have a request that you want help scoping before submitting as an issue, posting on the Cal-ITP Slack (for example in the <code class="docutils literal notranslate"><span class="pre">#data-infra</span></code>, <code class="docutils literal notranslate"><span class="pre">#data</span></code>, or <code class="docutils literal notranslate"><span class="pre">#gtfs-quality</span></code> channels, depending on the nature of the request) is one way to ask for assistance. Depending on the size of the request, a Slack conversation may be enough to scope it sufficiently. For large requests, a meeting or larger design process may be needed before submission.</p></li>
+</ul>
+</li>
+<li><p>When closing an issue without a merged PR, please indicate one of the following (they provide a paper trail for reporting and indicate lessons learned):</p>
+<ul class="simple">
+<li><p>What non-PR actions were taken to resolve the issue</p></li>
+<li><p>Why no action is necessary</p></li>
+<li><p>Why it is no longer an issue at this time</p></li>
+</ul>
+</li>
+</ul>
 </div>
-<div class="section" id="dashboards">
-<h2>Dashboards<a class="headerlink" href="#dashboards" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="working-on-branches-creating-pull-requests">
+<h2>Working on Branches &amp; Creating Pull Requests:<a class="headerlink" href="#working-on-branches-creating-pull-requests" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>Organize your work into <a class="reference external" href="https://www.conventionalcommits.org/en/v1.0.0/">conventional commits</a>.</p></li>
+<li><p>Commit and push early and often for team visibility.</p></li>
+<li><p>Split up a large PR if it’s getting too big (code reviews should ideally take no more than 10 minutes).</p></li>
+<li><p>PR description is required and should document the purpose of the PR in a way that someone who was not involved at the time can understand later.</p>
+<ul>
+<li><p>For example, the following description is not sufficient as persistent PR documentation (though it may be sufficient very temporarily while a critical fix is in flight with multiple people collaborating closely and reviewing each others’ work).</p>
+<blockquote>
+<div><p>Hotfix - type2</p>
+</div></blockquote>
+</li>
+<li><p>The persistent description should generally be at least as detailed as:</p>
+<blockquote>
+<div><p>Hotfix for issue where merge_updates.py throws a MadeUpError exception on files containing the number 7 (issue was identified on ITP ID 1 URL 1, feed_info file extracted on 2022-03-22).
+Fix was to add a try/except block to catch the number 7 and cast it to string before running the merge SQL. More investigation information is documented in [link to Slack thread].</p>
+</div></blockquote>
+</li>
+</ul>
+</li>
+<li><p>PRs should be linked to any issues that they close. <a class="reference external" href="https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword">Keywords</a> are one good way to do this.</p></li>
+</ul>
 </div>
-<div class="section" id="dags-maintenance">
-<h2>DAGs Maintenance<a class="headerlink" href="#dags-maintenance" title="Permalink to this headline">¶</a></h2>
-<p>You can find further information on DAGs maintenance for GTFS Schedule data <a class="reference internal" href="../airflow/dags-maintenance.html#gtfs-schedule-dags"><span class="std std-ref">on this page</span></a>.</p>
+<div class="section" id="code-reviews-pr-author">
+<h2>Code Reviews - PR Author:<a class="headerlink" href="#code-reviews-pr-author" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>All PRs should get one approving review before being merged.</p></li>
+<li><p>Move your PR out of draft status when it’s ready for review and merging.</p></li>
+<li><p>Maintain responsibility for all PRs you open until they are merged, keeping an eye out for comments and merging promptly after approval is received.</p></li>
+<li><p>PR authors should merge PRs once approval is received.</p></li>
+</ul>
+</div>
+<div class="section" id="code-reviews-reviewer">
+<h2>Code Reviews - Reviewer:<a class="headerlink" href="#code-reviews-reviewer" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Google provides a <a class="reference external" href="https://google.github.io/eng-practices/review/reviewer/">How to do a code review reference</a> that reviewers may find helpful.</p></li>
+<li><p>Reviewers should not submit comments on PRs that are still in draft status unless specifically requested by the PR author.</p></li>
+<li><p>Reviewers should be explicit about the intention of their comments and what type of response is required. <a class="reference external" href="https://conventionalcomments.org/">Conventional comments</a> are one way to make it clear to recipients of review what notes require what action and what’s just feedback.</p></li>
+<li><p>If you are approving a PR and leave a comment with your approval, the PR author should understand that that comment is <strong>optional</strong> to address.</p>
+<ul>
+<li><p>If you have a change that you think should be <strong>required</strong> before the change is merged, please request changes on the PR rather than approving.</p></li>
+</ul>
+</li>
+<li><p>When your review is requested, you should submit a review within 2 business days.</p>
+<ul>
+<li><p>Recommendation: You can configure <a class="reference external" href="https://github.com/settings/reminders">GitHub’s Scheduled Reminders</a> to send you through Slack a list of review requests assigned to you near the start of your regular workdays.</p></li>
+</ul>
+</li>
+<li><p>Reviewers should not generally merge PRs themselves and should instead let the author merge, since authors will have the most context about merge considerations (for example, whether additional reviews are still needed, or whether any communication is needed about the impacts of the PR when it merges).</p>
+<ul>
+<li><p>The main exception is changes to <code class="docutils literal notranslate"><span class="pre">agencies.yml</span></code>. Reviewers are encouraged to merge changes to <code class="docutils literal notranslate"><span class="pre">agencies.yml</span></code> as soon as their approving review is complete since these changes are usually time-sensitive to make sure data is scraped (and these changes are usually not risky from a code perspective).</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="general">
+<h2>General:<a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Keep conversations in GitHub when possible, and expect that people will see them when you tag them.</p></li>
+</ul>
 </div>
 </div>
 
@@ -699,7 +781,7 @@
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./datasets_and_tables"
+            path: "./github"
         },
         predefinedOutput: true
     }
@@ -711,17 +793,17 @@
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="overview.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="../ci/steps/validate-clean-worktree.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Datasets &amp; Tables</p>
+            <p class="prev-next-title">validate-clean-worktree</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="gtfs_rt.html" title="next page">
+    <a class='right-next' id="next-link" href="../services/overview.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">GTFS Realtime</p>
+        <p class="prev-next-title">Services</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
