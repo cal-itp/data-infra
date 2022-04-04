@@ -105,10 +105,6 @@ The payments_views is made of SQL queries that transform the loaded tables above
 
 ### Backfilling
 
-Clear the `preprocessing_columns` task for every day you want to re-run.
-These tasks do not depend on past. However, because the extracted data in the littlepay bucket
-can be mutated by littlepay, so if you clear a past task, you should clear them all!
-
 (transit-database-dags)=
 ## Transit Database - DAGs Maintenance
 
