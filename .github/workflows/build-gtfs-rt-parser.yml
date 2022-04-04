@@ -1,4 +1,4 @@
-name: Docker image
+name: Build and push gtfs-rt-parser image
 
 on:
   push:
