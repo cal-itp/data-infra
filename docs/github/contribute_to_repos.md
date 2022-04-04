@@ -10,6 +10,8 @@ These guidelines are meant to provide a foundation for collaboration in Cal-ITP'
     * The following issue is clearer. If scope were to increase (for example, the author realizes that they also want a chart), it would be clearer that that should be created as a new, follow-up request.
        > Add a new section to reports called ‘Best Practices Violations’. It should be inserted immediately after and appear just like the existing critical validation errors table and include validation notices W1, W2, and W3.
 
+   * If you have a request that you want help scoping before submitting as an issue, posting on the Cal-ITP Slack (for example in the `#data-infra`, `#data`, or `#gtfs-quality` channels, depending on the nature of the request) is one way to ask for assistance. Depending on the size of the request, a Slack conversation may be enough to scope it sufficiently. For large requests, a meeting or larger design process may be needed before submission.
+
 * When closing an issue without a merged PR, please indicate one of the following (they provide a paper trail for reporting and indicate lessons learned):
    * What non-PR actions were taken to resolve the issue
    * Why no action is necessary
