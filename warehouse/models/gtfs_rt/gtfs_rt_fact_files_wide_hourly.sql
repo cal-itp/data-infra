@@ -11,7 +11,7 @@ daily_tot as (
     calitp_url_number,
     name,
     count(calitp_extracted_at) as file_count_day
-  FROM `views.gtfs_rt_fact_files`
+  FROM gtfs_rt_fact_files
   GROUP BY
     date_extracted,
     calitp_itp_id,
@@ -28,7 +28,7 @@ wide_hourly as (
           name,
           calitp_extracted_at,
           hour_extracted
-      FROM `views.gtfs_rt_fact_files`)
+      FROM gtfs_rt_fact_files)
   PIVOT(
       count(calitp_extracted_at) file_count_hr
       FOR hour_extracted in
