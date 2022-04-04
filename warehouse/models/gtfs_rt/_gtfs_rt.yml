@@ -59,6 +59,7 @@ models:
         description: Minute extracted from calitp_extracted_at
         tests:
           - not_null
+
   - name: gtfs_rt_fact_files_wide_hourly
     description: |
       Each row is one day of realtime data for a given feed (ITP ID + URL number + realtime type), with count of files downloaded by hour.
