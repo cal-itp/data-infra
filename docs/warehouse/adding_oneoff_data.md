@@ -18,15 +18,15 @@ bq --location=us-west2 load <source_format> --autodetect <destination_table> <so
 
 * The **`<destination_table>`** is the table you would like to create, or append to if the table already exists. Your uploaded table destination should always be the `uploaded_data` dataset in BigQuery (e.g. the `destination_table` name should always have the format `uploaded_data.your_new_table_name`).
 
-  * If you are looking to **create a new table**: use a new table name for `<destination_table>`
+  * If you are looking to **create a new table**: use a new table name
 
-  * If you are looking to **append to existing data**: use the table name of the existing `<destination_table>`
+  * If you are looking to **append to existing data**: use the name of the existing table
 
-  * If you are looking to **replace an existing table**: the existing table will need to be deleted in BigQuery and re-uploaded with the previous `<destination_table>` name
+  * If you are looking to **replace an existing table**: use the `--replace==true` flag
 
 * The **`<source>`** argument is the `gsutil URI` (the path to the Google Cloud Storage bucket you are sourcing from).
 
-* If you run into upload errors related to the source file format, you may need to include the flag `--allow_quoted_newlines`. This may be helpful in resolving errors related to file conversions from Excel to CSV.
+* If you run into upload errors related to the source file format, you may need to include the flag `--allow_quoted_newlines`. This may be helpful in resolving errors related to newline-delimited text, which may be present in file conversions from Excel to CSV.
 
 Ex.
 ```
