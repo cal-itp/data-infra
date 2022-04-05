@@ -1,5 +1,5 @@
 calitp_warehouse:
-  target: prod
+  target: staging
   outputs:
     prod:
       &prod
