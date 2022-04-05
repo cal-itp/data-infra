@@ -1,11 +1,11 @@
 calitp_warehouse:
-  target: staging
+  target: prod
   outputs:
     prod:
       &prod
       execution_project: cal-itp-data-infra
       database: cal-itp-data-infra
-      schema: staging
+      schema: views
       fixed_retries: 1
       location: us-west2
       method: oauth
