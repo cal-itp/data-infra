@@ -5,7 +5,7 @@ To work with data in our BI tool ([Metabase](https://dashboards.calitp.org/)) we
 
 When uploading data to the warehouse we will use the `uploaded_data` dataset in Big Query as our destination. To write data here we will first add the data to a Google Cloud Storage bucket and then input the command below in the BigQuery terminal.
 
-1. First, upload your data to a [Google Cloud Storage](https://console.cloud.google.com/storage/browser/calitp-analytics-data) bucket in the `calitp-analytics-data/data-analyses` directory and make note of the `gsutil URI` (file path).
+1. First, upload your data to a [Google Cloud Storage](https://console.cloud.google.com/storage/browser/calitp-analytics-data) bucket in the `gs://calitp-analytics-data/data-analyses/` directory and make note of the `gsutil URI` (file path).
 
 2. Next, navigate to a JupyterLab terminal window.
 
@@ -14,7 +14,7 @@ When uploading data to the warehouse we will use the `uploaded_data` dataset in 
 bq --location=us-west2 load <source_format> --autodetect <destination_table> <source>
 ```
 
-* The `<source_format>` specifies the type of file you would like to use. An example of this flag's use is `--source-format=CSV`. Other options include `PARQUET` and `NEWLINE_DELIMITED_JSON`
+* The **`<source_format>`** specifies the type of file you would like to use. An example of this flag's use is `--source-format=CSV`. Other options include `PARQUET` and `NEWLINE_DELIMITED_JSON`
 
 * The `<destination_table>` is the table you would like to create, or append to if the table already exists. Your uploaded table destination should always be the `uploaded_data` dataset in BigQuery (e.g. the `destination_table` name should always have the format `uploaded_data.your_new_table_name`).
 
