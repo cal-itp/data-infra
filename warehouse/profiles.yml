@@ -5,7 +5,7 @@ calitp_warehouse:
       &prod
       execution_project: cal-itp-data-infra
       database: cal-itp-data-infra
-      schema: views
+      schema: staging
       fixed_retries: 1
       location: us-west2
       method: oauth
