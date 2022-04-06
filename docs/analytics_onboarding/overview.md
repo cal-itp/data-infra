@@ -15,7 +15,7 @@
 
 - [ ]  [**Slack**](https://cal-itp.slack.com) | ([Docs](slack-intro))
 - [ ]  [**Analytics Repo**](https://github.com/cal-itp/data-analyses) | ([Docs](analytics-repo))
-- [ ]  [**Analyst Project Board**](https://github.com/cal-itp/data-infra/projects/6) | ([Docs](analytics-project-board))
+- [ ]  [**Analyst Project Board**](https://github.com/cal-itp/data-analyses/projects/1) | ([Docs](analytics-project-board))
 - [ ]  [**Google Cloud Storage**](https://console.cloud.google.com/storage/browser/calitp-analytics-data) | Cloud-based file storage
 
 **Dashboards & Notebooks:**
