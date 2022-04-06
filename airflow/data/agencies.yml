@@ -774,9 +774,9 @@ stanislaus-regional-transit-authority:
   agency_name: Stanislaus Regional Transit Authority
   feeds:
     - gtfs_schedule_url: https://www.stanrta.org/DocumentCenter/View/609/preview-gtfs.zip
-      gtfs_rt_vehicle_positions_url: http://max.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=VehiclePosition
-      gtfs_rt_service_alerts_url: http://max.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=Alert
-      gtfs_rt_trip_updates_url: http://max.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=Tripupdate
+      gtfs_rt_vehicle_positions_url: https://max.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=VehiclePosition
+      gtfs_rt_service_alerts_url: https://max.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=Alert
+      gtfs_rt_trip_updates_url: https://max.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=Tripupdate
   itp_id: 484
 montebello-bus-lines:
   agency_name: Montebello Bus Lines
