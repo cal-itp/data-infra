@@ -770,14 +770,14 @@ mission-bay-tma:
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 201
-modesto-area-express:
-  agency_name: Modesto Area Express
+stanislaus-regional-transit-authority:
+  agency_name: Stanislaus Regional Transit Authority
   feeds:
-    - gtfs_schedule_url: https://www.modestoareaexpress.com/preview-gtfs.zip
-      gtfs_rt_vehicle_positions_url: http://max.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=VehiclePosition
-      gtfs_rt_service_alerts_url: http://max.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=Alert
-      gtfs_rt_trip_updates_url: http://max.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=Tripupdate
-  itp_id: 203
+    - gtfs_schedule_url: https://www.stanrta.org/DocumentCenter/View/609/preview-gtfs.zip
+      gtfs_rt_vehicle_positions_url: https://max.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=VehiclePosition
+      gtfs_rt_service_alerts_url: https://max.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=Alert
+      gtfs_rt_trip_updates_url: https://max.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=Tripupdate
+  itp_id: 484
 montebello-bus-lines:
   agency_name: Montebello Bus Lines
   feeds:
@@ -1236,14 +1236,6 @@ spirit-bus:
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 207
-stanislaus-regional-transit:
-  agency_name: Stanislaus Regional Transit
-  feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/stanislaus-ca-us/stanislaus-ca-us.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
-  itp_id: 325
 sunline-transit-agency:
   agency_name: SunLine Transit Agency
   feeds:
