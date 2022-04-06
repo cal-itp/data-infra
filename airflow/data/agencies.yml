@@ -649,7 +649,7 @@ lake-transit:
 lassen-transit-service-agency:
   agency_name: Lassen Transit Service Agency
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/tehama-ca-us/tehama-ca-us.zip
+    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/lassen-ca-us/lassen-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1628,3 +1628,27 @@ elk-grove:
     gtfs_rt_service_alerts_url: https://elkgrovetransit.com/gtfs-rt/alerts
     gtfs_rt_trip_updates_url: https://elkgrovetransit.com/gtfs-rt/tripupdates
   itp_id: 105
+fresno-county:
+  agency_name: Fresno County Rural Transit Agency
+  feeds:
+  - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/fresnocounty-ca-us/fresnocounty-ca-us.zip
+    gtfs_rt_vehicle_positions_url: null
+    gtfs_rt_service_alerts_url: null
+    gtfs_rt_trip_updates_url: null
+  itp_id: 117
+lynwood-breeze:
+  agency_name: Lynwood Breeze
+  feeds:
+    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/lynwood-ca-us/lynwood-ca-us.zip
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
+  itp_id: 186
+west-berkeley-shuttle:
+  agency_name: West Berkeley Shuttle
+  feeds:
+    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/westberkeleyshuttle-ca-us/westberkeleyshuttle-ca-us.zip
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
+  itp_id: 365
