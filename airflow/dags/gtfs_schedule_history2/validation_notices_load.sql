@@ -21,7 +21,12 @@ marked_deleted AS (
    SELECT
      *
      , LEAD(calitp_extracted_at)
-         OVER (PARTITION BY calitp_itp_id ORDER BY calitp_extracted_at)
+         OVER (
+          PARTITION BY
+            calitp_itp_id,
+            calitp_url_number
+          ORDER BY
+            calitp_extracted_at)
          AS calitp_deleted_at
    FROM fixed_extracted
 ),
