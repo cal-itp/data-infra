@@ -14,6 +14,7 @@ Analyses on JupyterHub are done using notebooks, which allow users to mix narrat
 1. [Connecting to the Warehouse](#connecting-to-the-warehouse)
 1. [Increasing the Query Limit](#increasing-the-query-limit)
 1. [Querying with SQL in JupyterHub](querying-sql-jupyterhub)
+1. [Saving Code to Github](saving-code-jupyter)
 1. [Environment Variables](#environment-variables)
 1. [Jupyter Notebook Best Practices](notebook-shortcuts)
 
@@ -96,8 +97,8 @@ WHERE
     calitp_feed_name = "AC Transit (0)"
 LIMIT 10
 ```
-
-### Saving Code in Jupyter Notebooks with Github
+(saving-code-jupyter)=
+### Saving Code to Github
 Use [this link](committing-from-jupyterhub) to navigate to the `Saving Code` section of the docs to learn how to commit code to GitHub from the Jupyter terminal.
 
 ### Environment Variables
