@@ -1,0 +1,2053 @@
+[helm:grafana=kubernetes/apps/charts/grafana]
+
+diff -u -N /tmp/LIVE-3367264805/apps.v1.Deployment.monitoring.grafana /tmp/MERGED-3632008629/apps.v1.Deployment.monitoring.grafana
+--- /tmp/LIVE-3367264805/apps.v1.Deployment.monitoring.grafana	2022-02-23 14:35:41.651674898 +0000
++++ /tmp/MERGED-3632008629/apps.v1.Deployment.monitoring.grafana	2022-02-23 14:35:41.655674930 +0000
+@@ -0,0 +1,371 @@
++apiVersion: apps/v1
++kind: Deployment
++metadata:
++  creationTimestamp: "2022-02-23T14:35:41Z"
++  generation: 1
++  labels:
++    app.kubernetes.io/instance: grafana
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: grafana
++    app.kubernetes.io/version: 8.3.6
++    helm.sh/chart: grafana-6.22.0
++  managedFields:
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++      f:spec:
++        f:progressDeadlineSeconds: {}
++        f:replicas: {}
++        f:revisionHistoryLimit: {}
++        f:selector: {}
++        f:strategy:
++          f:type: {}
++        f:template:
++          f:metadata:
++            f:annotations:
++              .: {}
++              f:checksum/config: {}
++              f:checksum/dashboards-json-config: {}
++              f:checksum/sc-dashboard-provider-config: {}
++            f:labels:
++              .: {}
++              f:app.kubernetes.io/instance: {}
++              f:app.kubernetes.io/name: {}
++          f:spec:
++            f:automountServiceAccountToken: {}
++            f:containers:
++              k:{"name":"grafana"}:
++                .: {}
++                f:env:
++                  .: {}
++                  k:{"name":"GF_PATHS_DATA"}:
++                    .: {}
++                    f:name: {}
++                    f:value: {}
++                  k:{"name":"GF_PATHS_LOGS"}:
++                    .: {}
++                    f:name: {}
++                    f:value: {}
++                  k:{"name":"GF_PATHS_PLUGINS"}:
++                    .: {}
++                    f:name: {}
++                    f:value: {}
++                  k:{"name":"GF_PATHS_PROVISIONING"}:
++                    .: {}
++                    f:name: {}
++                    f:value: {}
++                  k:{"name":"GF_SECURITY_ADMIN_PASSWORD"}:
++                    .: {}
++                    f:name: {}
++                    f:valueFrom:
++                      .: {}
++                      f:secretKeyRef:
++                        .: {}
++                        f:key: {}
++                        f:name: {}
++                  k:{"name":"GF_SECURITY_ADMIN_USER"}:
++                    .: {}
++                    f:name: {}
++                    f:valueFrom:
++                      .: {}
++                      f:secretKeyRef:
++                        .: {}
++                        f:key: {}
++                        f:name: {}
++                f:image: {}
++                f:imagePullPolicy: {}
++                f:livenessProbe:
++                  .: {}
++                  f:failureThreshold: {}
++                  f:httpGet:
++                    .: {}
++                    f:path: {}
++                    f:port: {}
++                    f:scheme: {}
++                  f:initialDelaySeconds: {}
++                  f:periodSeconds: {}
++                  f:successThreshold: {}
++                  f:timeoutSeconds: {}
++                f:name: {}
++                f:ports:
++                  .: {}
++                  k:{"containerPort":80,"protocol":"TCP"}:
++                    .: {}
++                    f:containerPort: {}
++                    f:name: {}
++                    f:protocol: {}
++                  k:{"containerPort":3000,"protocol":"TCP"}:
++                    .: {}
++                    f:containerPort: {}
++                    f:name: {}
++                    f:protocol: {}
++                f:readinessProbe:
++                  .: {}
++                  f:failureThreshold: {}
++                  f:httpGet:
++                    .: {}
++                    f:path: {}
++                    f:port: {}
++                    f:scheme: {}
++                  f:periodSeconds: {}
++                  f:successThreshold: {}
++                  f:timeoutSeconds: {}
++                f:resources: {}
++                f:terminationMessagePath: {}
++                f:terminationMessagePolicy: {}
++                f:volumeMounts:
++                  .: {}
++                  k:{"mountPath":"/etc/grafana/grafana.ini"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                    f:subPath: {}
++                  k:{"mountPath":"/etc/grafana/provisioning/dashboards/dashboardproviders.yaml"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                    f:subPath: {}
++                  k:{"mountPath":"/etc/grafana/provisioning/datasources/datasources.yaml"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                    f:subPath: {}
++                  k:{"mountPath":"/var/lib/grafana"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++            f:dnsPolicy: {}
++            f:enableServiceLinks: {}
++            f:initContainers:
++              .: {}
++              k:{"name":"download-dashboards"}:
++                .: {}
++                f:args: {}
++                f:command: {}
++                f:image: {}
++                f:imagePullPolicy: {}
++                f:name: {}
++                f:resources: {}
++                f:terminationMessagePath: {}
++                f:terminationMessagePolicy: {}
++                f:volumeMounts:
++                  .: {}
++                  k:{"mountPath":"/etc/grafana/download_dashboards.sh"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                    f:subPath: {}
++                  k:{"mountPath":"/var/lib/grafana"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++              k:{"name":"init-chown-data"}:
++                .: {}
++                f:command: {}
++                f:image: {}
++                f:imagePullPolicy: {}
++                f:name: {}
++                f:resources: {}
++                f:securityContext:
++                  .: {}
++                  f:runAsNonRoot: {}
++                  f:runAsUser: {}
++                f:terminationMessagePath: {}
++                f:terminationMessagePolicy: {}
++                f:volumeMounts:
++                  .: {}
++                  k:{"mountPath":"/var/lib/grafana"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++            f:restartPolicy: {}
++            f:schedulerName: {}
++            f:securityContext:
++              .: {}
++              f:fsGroup: {}
++              f:runAsGroup: {}
++              f:runAsUser: {}
++            f:serviceAccount: {}
++            f:serviceAccountName: {}
++            f:terminationGracePeriodSeconds: {}
++            f:volumes:
++              .: {}
++              k:{"name":"config"}:
++                .: {}
++                f:configMap:
++                  .: {}
++                  f:defaultMode: {}
++                  f:name: {}
++                f:name: {}
++              k:{"name":"dashboards-default"}:
++                .: {}
++                f:configMap:
++                  .: {}
++                  f:defaultMode: {}
++                  f:name: {}
++                f:name: {}
++              k:{"name":"storage"}:
++                .: {}
++                f:name: {}
++                f:persistentVolumeClaim:
++                  .: {}
++                  f:claimName: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:35:41Z"
++  name: grafana
++  namespace: monitoring
++  uid: 088e6daa-8808-4690-8913-67d52735c25d
++spec:
++  progressDeadlineSeconds: 600
++  replicas: 1
++  revisionHistoryLimit: 10
++  selector:
++    matchLabels:
++      app.kubernetes.io/instance: grafana
++      app.kubernetes.io/name: grafana
++  strategy:
++    type: Recreate
++  template:
++    metadata:
++      annotations:
++        checksum/config: c8408167f714134437e61a11f8e52a66a093b08dd449ecfb7bfb920fa12f2aca
++        checksum/dashboards-json-config: 6a22ea944a539d85f8442dec3b6645e7fb0c3ff4177708d70c26f552cab9497d
++        checksum/sc-dashboard-provider-config: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
++      creationTimestamp: null
++      labels:
++        app.kubernetes.io/instance: grafana
++        app.kubernetes.io/name: grafana
++    spec:
++      automountServiceAccountToken: true
++      containers:
++      - env:
++        - name: GF_SECURITY_ADMIN_USER
++          valueFrom:
++            secretKeyRef:
++              key: admin-user
++              name: grafana-initial-admin
++        - name: GF_SECURITY_ADMIN_PASSWORD
++          valueFrom:
++            secretKeyRef:
++              key: admin-password
++              name: grafana-initial-admin
++        - name: GF_PATHS_DATA
++          value: /var/lib/grafana/
++        - name: GF_PATHS_LOGS
++          value: /var/log/grafana
++        - name: GF_PATHS_PLUGINS
++          value: /var/lib/grafana/plugins
++        - name: GF_PATHS_PROVISIONING
++          value: /etc/grafana/provisioning
++        image: grafana/grafana:8.3.6
++        imagePullPolicy: IfNotPresent
++        livenessProbe:
++          failureThreshold: 10
++          httpGet:
++            path: /api/health
++            port: 3000
++            scheme: HTTP
++          initialDelaySeconds: 60
++          periodSeconds: 10
++          successThreshold: 1
++          timeoutSeconds: 30
++        name: grafana
++        ports:
++        - containerPort: 80
++          name: service
++          protocol: TCP
++        - containerPort: 3000
++          name: grafana
++          protocol: TCP
++        readinessProbe:
++          failureThreshold: 3
++          httpGet:
++            path: /api/health
++            port: 3000
++            scheme: HTTP
++          periodSeconds: 10
++          successThreshold: 1
++          timeoutSeconds: 1
++        resources: {}
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++        volumeMounts:
++        - mountPath: /etc/grafana/grafana.ini
++          name: config
++          subPath: grafana.ini
++        - mountPath: /var/lib/grafana
++          name: storage
++        - mountPath: /etc/grafana/provisioning/datasources/datasources.yaml
++          name: config
++          subPath: datasources.yaml
++        - mountPath: /etc/grafana/provisioning/dashboards/dashboardproviders.yaml
++          name: config
++          subPath: dashboardproviders.yaml
++      dnsPolicy: ClusterFirst
++      enableServiceLinks: true
++      initContainers:
++      - command:
++        - chown
++        - -R
++        - 472:472
++        - /var/lib/grafana
++        image: busybox:1.31.1
++        imagePullPolicy: IfNotPresent
++        name: init-chown-data
++        resources: {}
++        securityContext:
++          runAsNonRoot: false
++          runAsUser: 0
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++        volumeMounts:
++        - mountPath: /var/lib/grafana
++          name: storage
++      - args:
++        - -c
++        - mkdir -p /var/lib/grafana/dashboards/default && /bin/sh -x /etc/grafana/download_dashboards.sh
++        command:
++        - /bin/sh
++        image: curlimages/curl:7.73.0
++        imagePullPolicy: IfNotPresent
++        name: download-dashboards
++        resources: {}
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++        volumeMounts:
++        - mountPath: /etc/grafana/download_dashboards.sh
++          name: config
++          subPath: download_dashboards.sh
++        - mountPath: /var/lib/grafana
++          name: storage
++      restartPolicy: Always
++      schedulerName: default-scheduler
++      securityContext:
++        fsGroup: 472
++        runAsGroup: 472
++        runAsUser: 472
++      serviceAccount: grafana
++      serviceAccountName: grafana
++      terminationGracePeriodSeconds: 30
++      volumes:
++      - configMap:
++          defaultMode: 420
++          name: grafana
++        name: config
++      - configMap:
++          defaultMode: 420
++          name: grafana-dashboards-default
++        name: dashboards-default
++      - name: storage
++        persistentVolumeClaim:
++          claimName: grafana
++status: {}
+diff -u -N /tmp/LIVE-3367264805/networking.k8s.io.v1.Ingress.monitoring.grafana /tmp/MERGED-3632008629/networking.k8s.io.v1.Ingress.monitoring.grafana
+--- /tmp/LIVE-3367264805/networking.k8s.io.v1.Ingress.monitoring.grafana	2022-02-23 14:35:42.003677685 +0000
++++ /tmp/MERGED-3632008629/networking.k8s.io.v1.Ingress.monitoring.grafana	2022-02-23 14:35:42.003677685 +0000
+@@ -0,0 +1,57 @@
++apiVersion: networking.k8s.io/v1
++kind: Ingress
++metadata:
++  annotations:
++    cert-manager.io/cluster-issuer: letsencrypt-prod
++    kubernetes.io/ingress.class: nginx
++  creationTimestamp: "2022-02-23T14:35:41Z"
++  generation: 1
++  labels:
++    app.kubernetes.io/instance: grafana
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: grafana
++    app.kubernetes.io/version: 8.3.6
++    helm.sh/chart: grafana-6.22.0
++  managedFields:
++  - apiVersion: networking.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:annotations:
++          .: {}
++          f:cert-manager.io/cluster-issuer: {}
++          f:kubernetes.io/ingress.class: {}
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++      f:spec:
++        f:rules: {}
++        f:tls: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:35:41Z"
++  name: grafana
++  namespace: monitoring
++  uid: cd00ca48-a193-4f04-9188-0642d33fa6d9
++spec:
++  rules:
++  - host: monitoring.k8s.calitp.jarv.us
++    http:
++      paths:
++      - backend:
++          service:
++            name: grafana
++            port:
++              number: 80
++        path: /
++        pathType: Prefix
++  tls:
++  - hosts:
++    - monitoring.k8s.calitp.jarv.us
++    secretName: grafana-tls
++status:
++  loadBalancer: {}
+diff -u -N /tmp/LIVE-3367264805/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole /tmp/MERGED-3632008629/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole
+--- /tmp/LIVE-3367264805/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole	2022-02-23 14:35:40.523665967 +0000
++++ /tmp/MERGED-3632008629/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole	2022-02-23 14:35:40.523665967 +0000
+@@ -27,10 +27,16 @@
+           f:app.kubernetes.io/name: {}
+           f:app.kubernetes.io/version: {}
+           f:helm.sh/chart: {}
+-      f:rules: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-15T16:18:57Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:35:40Z"
+   name: grafana-clusterrole
+   resourceVersion: "192058923"
+   uid: a8e8113a-5c61-422e-8c6f-a9299c02a1f3
+diff -u -N /tmp/LIVE-3367264805/rbac.authorization.k8s.io.v1.Role.monitoring.grafana /tmp/MERGED-3632008629/rbac.authorization.k8s.io.v1.Role.monitoring.grafana
+--- /tmp/LIVE-3367264805/rbac.authorization.k8s.io.v1.Role.monitoring.grafana	2022-02-23 14:35:40.887668849 +0000
++++ /tmp/MERGED-3632008629/rbac.authorization.k8s.io.v1.Role.monitoring.grafana	2022-02-23 14:35:40.887668849 +0000
+@@ -0,0 +1,38 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: Role
++metadata:
++  creationTimestamp: "2022-02-23T14:35:40Z"
++  labels:
++    app.kubernetes.io/instance: grafana
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: grafana
++    app.kubernetes.io/version: 8.3.6
++    helm.sh/chart: grafana-6.22.0
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:35:40Z"
++  name: grafana
++  namespace: monitoring
++  uid: 9118987c-6b8c-4b6e-92cc-d3e3e315576f
++rules:
++- apiGroups:
++  - extensions
++  resourceNames:
++  - grafana
++  resources:
++  - podsecuritypolicies
++  verbs:
++  - use
+diff -u -N /tmp/LIVE-3367264805/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.grafana /tmp/MERGED-3632008629/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.grafana
+--- /tmp/LIVE-3367264805/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.grafana	2022-02-23 14:35:41.155670971 +0000
++++ /tmp/MERGED-3632008629/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.grafana	2022-02-23 14:35:41.155670971 +0000
+@@ -0,0 +1,41 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: RoleBinding
++metadata:
++  creationTimestamp: "2022-02-23T14:35:41Z"
++  labels:
++    app.kubernetes.io/instance: grafana
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: grafana
++    app.kubernetes.io/version: 8.3.6
++    helm.sh/chart: grafana-6.22.0
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++      f:roleRef:
++        f:apiGroup: {}
++        f:kind: {}
++        f:name: {}
++      f:subjects: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:35:41Z"
++  name: grafana
++  namespace: monitoring
++  uid: d1ea91ab-4b5a-40fd-abb2-c54781853c52
++roleRef:
++  apiGroup: rbac.authorization.k8s.io
++  kind: Role
++  name: grafana
++subjects:
++- kind: ServiceAccount
++  name: grafana
++  namespace: monitoring
+diff -u -N /tmp/LIVE-3367264805/v1.ConfigMap.monitoring.grafana /tmp/MERGED-3632008629/v1.ConfigMap.monitoring.grafana
+--- /tmp/LIVE-3367264805/v1.ConfigMap.monitoring.grafana	2022-02-23 14:35:39.779660076 +0000
++++ /tmp/MERGED-3632008629/v1.ConfigMap.monitoring.grafana	2022-02-23 14:35:39.779660076 +0000
+@@ -0,0 +1,104 @@
++apiVersion: v1
++data:
++  dashboardproviders.yaml: |
++    apiVersion: 1
++    providers:
++    - disableDeletion: false
++      editable: true
++      folder: ""
++      name: default
++      options:
++        path: /var/lib/grafana/dashboards/default
++      orgId: 1
++      type: file
++  datasources.yaml: |
++    apiVersion: 1
++    datasources:
++    - isDefault: true
++      name: Prometheus
++      type: prometheus
++      url: http://monitoring-prometheus-server.monitoring.svc.cluster.local
++  download_dashboards.sh: |
++    #!/usr/bin/env sh
++    set -euf
++    mkdir -p /var/lib/grafana/dashboards/default
++    curl -skf \
++    --connect-timeout 60 \
++    --max-time 60 \
++    -H "Accept: application/json" \
++    -H "Content-Type: application/json;charset=UTF-8" \
++      "https://grafana.com/api/dashboards/7249/revisions/1/download" | sed '/-- .* --/! s/"datasource":.*,/"datasource": "Prometheus",/g'\
++    > "/var/lib/grafana/dashboards/default/cluster-view.json"
++    curl -skf \
++    --connect-timeout 60 \
++    --max-time 60 \
++    -H "Accept: application/json" \
++    -H "Content-Type: application/json;charset=UTF-8" \
++      "https://grafana.com/api/dashboards/9614/revisions/1/download" | sed '/-- .* --/! s/"datasource":.*,/"datasource": "Prometheus",/g'\
++    > "/var/lib/grafana/dashboards/default/ingress-nginx.json"
++    curl -skf \
++    --connect-timeout 60 \
++    --max-time 60 \
++    -H "Accept: application/json" \
++    -H "Content-Type: application/json;charset=UTF-8" \
++      "https://grafana.com/api/dashboards/13736/revisions/1/download" | sed '/-- .* --/! s/"datasource":.*,/"datasource": "Prometheus",/g'\
++    > "/var/lib/grafana/dashboards/default/ingress-nginx-daemonset.json"
++    curl -skf \
++    --connect-timeout 60 \
++    --max-time 60 \
++    -H "Accept: application/json" \
++    -H "Content-Type: application/json;charset=UTF-8" \
++      "https://grafana.com/api/dashboards/1860/revisions/22/download" | sed '/-- .* --/! s/"datasource":.*,/"datasource": "Prometheus",/g'\
++    > "/var/lib/grafana/dashboards/default/node-exporter.json"
++    curl -skf \
++    --connect-timeout 60 \
++    --max-time 60 \
++    -H "Accept: application/json" \
++    -H "Content-Type: application/json;charset=UTF-8" \
++      "https://grafana.com/api/dashboards/8588/revisions/1/download" | sed '/-- .* --/! s/"datasource":.*,/"datasource": "Prometheus",/g'\
++    > "/var/lib/grafana/dashboards/default/workload-view.json"
++  grafana.ini: |
++    [analytics]
++    check_for_updates = true
++    [grafana_net]
++    url = https://grafana.net
++    [log]
++    mode = console
++    [paths]
++    data = /var/lib/grafana/
++    logs = /var/log/grafana
++    plugins = /var/lib/grafana/plugins
++    provisioning = /etc/grafana/provisioning
++kind: ConfigMap
++metadata:
++  creationTimestamp: "2022-02-23T14:35:39Z"
++  labels:
++    app.kubernetes.io/instance: grafana
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: grafana
++    app.kubernetes.io/version: 8.3.6
++    helm.sh/chart: grafana-6.22.0
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:data:
++        .: {}
++        f:dashboardproviders.yaml: {}
++        f:datasources.yaml: {}
++        f:download_dashboards.sh: {}
++        f:grafana.ini: {}
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:35:39Z"
++  name: grafana
++  namespace: monitoring
++  uid: 19a3e2ad-3a40-4ddc-8243-b0b0f9a903fa
+diff -u -N /tmp/LIVE-3367264805/v1.ConfigMap.monitoring.grafana-dashboards-default /tmp/MERGED-3632008629/v1.ConfigMap.monitoring.grafana-dashboards-default
+--- /tmp/LIVE-3367264805/v1.ConfigMap.monitoring.grafana-dashboards-default	2022-02-23 14:35:40.011661913 +0000
++++ /tmp/MERGED-3632008629/v1.ConfigMap.monitoring.grafana-dashboards-default	2022-02-23 14:35:40.011661913 +0000
+@@ -0,0 +1,30 @@
++apiVersion: v1
++kind: ConfigMap
++metadata:
++  creationTimestamp: "2022-02-23T14:35:39Z"
++  labels:
++    app.kubernetes.io/instance: grafana
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: grafana
++    app.kubernetes.io/version: 8.3.6
++    dashboard-provider: default
++    helm.sh/chart: grafana-6.22.0
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:dashboard-provider: {}
++          f:helm.sh/chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:35:39Z"
++  name: grafana-dashboards-default
++  namespace: monitoring
++  uid: 463899e0-4d36-4803-b5d3-d9a7bc04bc2d
+diff -u -N /tmp/LIVE-3367264805/v1.PersistentVolumeClaim.monitoring.grafana /tmp/MERGED-3632008629/v1.PersistentVolumeClaim.monitoring.grafana
+--- /tmp/LIVE-3367264805/v1.PersistentVolumeClaim.monitoring.grafana	2022-02-23 14:35:40.275664003 +0000
++++ /tmp/MERGED-3632008629/v1.PersistentVolumeClaim.monitoring.grafana	2022-02-23 14:35:40.275664003 +0000
+@@ -0,0 +1,52 @@
++apiVersion: v1
++kind: PersistentVolumeClaim
++metadata:
++  creationTimestamp: "2022-02-23T14:35:40Z"
++  finalizers:
++  - kubernetes.io/pvc-protection
++  labels:
++    app.kubernetes.io/instance: grafana
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: grafana
++    app.kubernetes.io/version: 8.3.6
++    helm.sh/chart: grafana-6.22.0
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:finalizers:
++          .: {}
++          v:"kubernetes.io/pvc-protection": {}
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++      f:spec:
++        f:accessModes: {}
++        f:resources:
++          f:requests:
++            .: {}
++            f:storage: {}
++        f:volumeMode: {}
++      f:status:
++        f:phase: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:35:40Z"
++  name: grafana
++  namespace: monitoring
++  uid: 871c5d68-bd3b-4329-98c0-58351978ed5a
++spec:
++  accessModes:
++  - ReadWriteOnce
++  resources:
++    requests:
++      storage: 10Gi
++  storageClassName: standard
++  volumeMode: Filesystem
++status:
++  phase: Pending
+diff -u -N /tmp/LIVE-3367264805/v1.Service.monitoring.grafana /tmp/MERGED-3632008629/v1.Service.monitoring.grafana
+--- /tmp/LIVE-3367264805/v1.Service.monitoring.grafana	2022-02-23 14:35:41.403672934 +0000
++++ /tmp/MERGED-3632008629/v1.Service.monitoring.grafana	2022-02-23 14:35:41.403672934 +0000
+@@ -0,0 +1,56 @@
++apiVersion: v1
++kind: Service
++metadata:
++  creationTimestamp: "2022-02-23T14:35:41Z"
++  labels:
++    app.kubernetes.io/instance: grafana
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: grafana
++    app.kubernetes.io/version: 8.3.6
++    helm.sh/chart: grafana-6.22.0
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++      f:spec:
++        f:ports:
++          .: {}
++          k:{"port":80,"protocol":"TCP"}:
++            .: {}
++            f:name: {}
++            f:port: {}
++            f:protocol: {}
++            f:targetPort: {}
++        f:selector:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/name: {}
++        f:sessionAffinity: {}
++        f:type: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:35:41Z"
++  name: grafana
++  namespace: monitoring
++  uid: 670f9b09-30a1-438e-806c-c0a744ab889e
++spec:
++  ports:
++  - name: service
++    port: 80
++    protocol: TCP
++    targetPort: 3000
++  selector:
++    app.kubernetes.io/instance: grafana
++    app.kubernetes.io/name: grafana
++  sessionAffinity: None
++  type: ClusterIP
++status:
++  loadBalancer: {}
+diff -u -N /tmp/LIVE-3367264805/v1.ServiceAccount.monitoring.grafana /tmp/MERGED-3632008629/v1.ServiceAccount.monitoring.grafana
+--- /tmp/LIVE-3367264805/v1.ServiceAccount.monitoring.grafana	2022-02-23 14:35:39.515657986 +0000
++++ /tmp/MERGED-3632008629/v1.ServiceAccount.monitoring.grafana	2022-02-23 14:35:39.515657986 +0000
+@@ -0,0 +1,28 @@
++apiVersion: v1
++kind: ServiceAccount
++metadata:
++  creationTimestamp: "2022-02-23T14:35:39Z"
++  labels:
++    app.kubernetes.io/instance: grafana
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: grafana
++    app.kubernetes.io/version: 8.3.6
++    helm.sh/chart: grafana-6.22.0
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:35:39Z"
++  name: grafana
++  namespace: monitoring
++  uid: 6df3bfde-3717-4931-842a-ae7fade9f8f3
+[helm:loki=kubernetes/apps/charts/loki-stack]
+
+diff -u -N /tmp/LIVE-1960734110/apps.v1.DaemonSet.monitoring.loki-promtail /tmp/MERGED-4061861190/apps.v1.DaemonSet.monitoring.loki-promtail
+--- /tmp/LIVE-1960734110/apps.v1.DaemonSet.monitoring.loki-promtail	2022-02-23 14:35:58.455977563 +0000
++++ /tmp/MERGED-4061861190/apps.v1.DaemonSet.monitoring.loki-promtail	2022-02-23 14:35:58.455977563 +0000
+@@ -0,0 +1,256 @@
++apiVersion: apps/v1
++kind: DaemonSet
++metadata:
++  annotations:
++    deprecated.daemonset.template.generation: "1"
++  creationTimestamp: "2022-02-23T14:35:58Z"
++  generation: 1
++  labels:
++    app: promtail
++    chart: promtail-2.2.0
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:annotations:
++          .: {}
++          f:deprecated.daemonset.template.generation: {}
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++      f:spec:
++        f:revisionHistoryLimit: {}
++        f:selector: {}
++        f:template:
++          f:metadata:
++            f:annotations:
++              .: {}
++              f:checksum/config: {}
++              f:prometheus.io/port: {}
++              f:prometheus.io/scrape: {}
++            f:labels:
++              .: {}
++              f:app: {}
++              f:release: {}
++          f:spec:
++            f:affinity: {}
++            f:containers:
++              k:{"name":"promtail"}:
++                .: {}
++                f:args: {}
++                f:env:
++                  .: {}
++                  k:{"name":"HOSTNAME"}:
++                    .: {}
++                    f:name: {}
++                    f:valueFrom:
++                      .: {}
++                      f:fieldRef:
++                        .: {}
++                        f:apiVersion: {}
++                        f:fieldPath: {}
++                f:image: {}
++                f:imagePullPolicy: {}
++                f:name: {}
++                f:ports:
++                  .: {}
++                  k:{"containerPort":3101,"protocol":"TCP"}:
++                    .: {}
++                    f:containerPort: {}
++                    f:name: {}
++                    f:protocol: {}
++                f:readinessProbe:
++                  .: {}
++                  f:failureThreshold: {}
++                  f:httpGet:
++                    .: {}
++                    f:path: {}
++                    f:port: {}
++                    f:scheme: {}
++                  f:initialDelaySeconds: {}
++                  f:periodSeconds: {}
++                  f:successThreshold: {}
++                  f:timeoutSeconds: {}
++                f:resources: {}
++                f:securityContext:
++                  .: {}
++                  f:readOnlyRootFilesystem: {}
++                  f:runAsGroup: {}
++                  f:runAsUser: {}
++                f:terminationMessagePath: {}
++                f:terminationMessagePolicy: {}
++                f:volumeMounts:
++                  .: {}
++                  k:{"mountPath":"/etc/promtail"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                  k:{"mountPath":"/run/promtail"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                  k:{"mountPath":"/var/lib/docker/containers"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                    f:readOnly: {}
++                  k:{"mountPath":"/var/log/pods"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                    f:readOnly: {}
++            f:dnsPolicy: {}
++            f:restartPolicy: {}
++            f:schedulerName: {}
++            f:securityContext: {}
++            f:serviceAccount: {}
++            f:serviceAccountName: {}
++            f:terminationGracePeriodSeconds: {}
++            f:tolerations: {}
++            f:volumes:
++              .: {}
++              k:{"name":"config"}:
++                .: {}
++                f:configMap:
++                  .: {}
++                  f:defaultMode: {}
++                  f:name: {}
++                f:name: {}
++              k:{"name":"docker"}:
++                .: {}
++                f:hostPath:
++                  .: {}
++                  f:path: {}
++                  f:type: {}
++                f:name: {}
++              k:{"name":"pods"}:
++                .: {}
++                f:hostPath:
++                  .: {}
++                  f:path: {}
++                  f:type: {}
++                f:name: {}
++              k:{"name":"run"}:
++                .: {}
++                f:hostPath:
++                  .: {}
++                  f:path: {}
++                  f:type: {}
++                f:name: {}
++        f:updateStrategy:
++          f:rollingUpdate:
++            .: {}
++            f:maxUnavailable: {}
++          f:type: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:35:58Z"
++  name: loki-promtail
++  namespace: monitoring
++  uid: fbb73d69-584f-4652-a965-11bad17b2ce5
++spec:
++  revisionHistoryLimit: 10
++  selector:
++    matchLabels:
++      app: promtail
++      release: loki
++  template:
++    metadata:
++      annotations:
++        checksum/config: c690cb3101a04ebc0a437bac338fc23960f68f8363b3204b9308d0e6ba077f3d
++        prometheus.io/port: http-metrics
++        prometheus.io/scrape: "true"
++      creationTimestamp: null
++      labels:
++        app: promtail
++        release: loki
++    spec:
++      affinity: {}
++      containers:
++      - args:
++        - -config.file=/etc/promtail/promtail.yaml
++        - -client.url=http://loki:3100/loki/api/v1/push
++        env:
++        - name: HOSTNAME
++          valueFrom:
++            fieldRef:
++              apiVersion: v1
++              fieldPath: spec.nodeName
++        image: grafana/promtail:2.1.0
++        imagePullPolicy: IfNotPresent
++        name: promtail
++        ports:
++        - containerPort: 3101
++          name: http-metrics
++          protocol: TCP
++        readinessProbe:
++          failureThreshold: 5
++          httpGet:
++            path: /ready
++            port: http-metrics
++            scheme: HTTP
++          initialDelaySeconds: 10
++          periodSeconds: 10
++          successThreshold: 1
++          timeoutSeconds: 1
++        resources: {}
++        securityContext:
++          readOnlyRootFilesystem: true
++          runAsGroup: 0
++          runAsUser: 0
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++        volumeMounts:
++        - mountPath: /etc/promtail
++          name: config
++        - mountPath: /run/promtail
++          name: run
++        - mountPath: /var/lib/docker/containers
++          name: docker
++          readOnly: true
++        - mountPath: /var/log/pods
++          name: pods
++          readOnly: true
++      dnsPolicy: ClusterFirst
++      restartPolicy: Always
++      schedulerName: default-scheduler
++      securityContext: {}
++      serviceAccount: loki-promtail
++      serviceAccountName: loki-promtail
++      terminationGracePeriodSeconds: 30
++      tolerations:
++      - effect: NoSchedule
++        key: node-role.kubernetes.io/master
++        operator: Exists
++      volumes:
++      - configMap:
++          defaultMode: 420
++          name: loki-promtail
++        name: config
++      - hostPath:
++          path: /run/promtail
++          type: ""
++        name: run
++      - hostPath:
++          path: /var/lib/docker/containers
++          type: ""
++        name: docker
++      - hostPath:
++          path: /var/log/pods
++          type: ""
++        name: pods
++  updateStrategy:
++    rollingUpdate:
++      maxUnavailable: 1
++    type: RollingUpdate
++status:
++  currentNumberScheduled: 0
++  desiredNumberScheduled: 0
++  numberMisscheduled: 0
++  numberReady: 0
+diff -u -N /tmp/LIVE-1960734110/apps.v1.StatefulSet.monitoring.loki /tmp/MERGED-4061861190/apps.v1.StatefulSet.monitoring.loki
+--- /tmp/LIVE-1960734110/apps.v1.StatefulSet.monitoring.loki	2022-02-23 14:35:58.687979270 +0000
++++ /tmp/MERGED-4061861190/apps.v1.StatefulSet.monitoring.loki	2022-02-23 14:35:58.687979270 +0000
+@@ -0,0 +1,224 @@
++apiVersion: apps/v1
++kind: StatefulSet
++metadata:
++  creationTimestamp: "2022-02-23T14:35:58Z"
++  generation: 1
++  labels:
++    app: loki
++    chart: loki-2.10.1
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++      f:spec:
++        f:podManagementPolicy: {}
++        f:replicas: {}
++        f:revisionHistoryLimit: {}
++        f:selector: {}
++        f:serviceName: {}
++        f:template:
++          f:metadata:
++            f:annotations:
++              .: {}
++              f:checksum/config: {}
++              f:prometheus.io/port: {}
++              f:prometheus.io/scrape: {}
++            f:labels:
++              .: {}
++              f:app: {}
++              f:name: {}
++              f:release: {}
++          f:spec:
++            f:affinity: {}
++            f:containers:
++              k:{"name":"loki"}:
++                .: {}
++                f:args: {}
++                f:image: {}
++                f:imagePullPolicy: {}
++                f:livenessProbe:
++                  .: {}
++                  f:failureThreshold: {}
++                  f:httpGet:
++                    .: {}
++                    f:path: {}
++                    f:port: {}
++                    f:scheme: {}
++                  f:initialDelaySeconds: {}
++                  f:periodSeconds: {}
++                  f:successThreshold: {}
++                  f:timeoutSeconds: {}
++                f:name: {}
++                f:ports:
++                  .: {}
++                  k:{"containerPort":3100,"protocol":"TCP"}:
++                    .: {}
++                    f:containerPort: {}
++                    f:name: {}
++                    f:protocol: {}
++                f:readinessProbe:
++                  .: {}
++                  f:failureThreshold: {}
++                  f:httpGet:
++                    .: {}
++                    f:path: {}
++                    f:port: {}
++                    f:scheme: {}
++                  f:initialDelaySeconds: {}
++                  f:periodSeconds: {}
++                  f:successThreshold: {}
++                  f:timeoutSeconds: {}
++                f:resources: {}
++                f:securityContext:
++                  .: {}
++                  f:readOnlyRootFilesystem: {}
++                f:terminationMessagePath: {}
++                f:terminationMessagePolicy: {}
++                f:volumeMounts:
++                  .: {}
++                  k:{"mountPath":"/data"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                  k:{"mountPath":"/etc/loki"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                  k:{"mountPath":"/tmp"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++            f:dnsPolicy: {}
++            f:restartPolicy: {}
++            f:schedulerName: {}
++            f:securityContext:
++              .: {}
++              f:fsGroup: {}
++              f:runAsGroup: {}
++              f:runAsNonRoot: {}
++              f:runAsUser: {}
++            f:serviceAccount: {}
++            f:serviceAccountName: {}
++            f:terminationGracePeriodSeconds: {}
++            f:volumes:
++              .: {}
++              k:{"name":"config"}:
++                .: {}
++                f:name: {}
++                f:secret:
++                  .: {}
++                  f:defaultMode: {}
++                  f:secretName: {}
++              k:{"name":"storage"}:
++                .: {}
++                f:emptyDir: {}
++                f:name: {}
++              k:{"name":"tmp"}:
++                .: {}
++                f:emptyDir: {}
++                f:name: {}
++        f:updateStrategy:
++          f:type: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:35:58Z"
++  name: loki
++  namespace: monitoring
++  uid: 741e6506-78dd-4f70-93a7-7cb7d4f7582e
++spec:
++  podManagementPolicy: OrderedReady
++  replicas: 1
++  revisionHistoryLimit: 10
++  selector:
++    matchLabels:
++      app: loki
++      release: loki
++  serviceName: loki-headless
++  template:
++    metadata:
++      annotations:
++        checksum/config: e2abcb4d89d37286130f2f1de576b97f1854c2900641e0e7737b372dee62a13e
++        prometheus.io/port: http-metrics
++        prometheus.io/scrape: "true"
++      creationTimestamp: null
++      labels:
++        app: loki
++        name: loki
++        release: loki
++    spec:
++      affinity: {}
++      containers:
++      - args:
++        - -config.file=/etc/loki/loki.yaml
++        image: grafana/loki:2.4.2
++        imagePullPolicy: IfNotPresent
++        livenessProbe:
++          failureThreshold: 3
++          httpGet:
++            path: /ready
++            port: http-metrics
++            scheme: HTTP
++          initialDelaySeconds: 45
++          periodSeconds: 10
++          successThreshold: 1
++          timeoutSeconds: 1
++        name: loki
++        ports:
++        - containerPort: 3100
++          name: http-metrics
++          protocol: TCP
++        readinessProbe:
++          failureThreshold: 3
++          httpGet:
++            path: /ready
++            port: http-metrics
++            scheme: HTTP
++          initialDelaySeconds: 45
++          periodSeconds: 10
++          successThreshold: 1
++          timeoutSeconds: 1
++        resources: {}
++        securityContext:
++          readOnlyRootFilesystem: true
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++        volumeMounts:
++        - mountPath: /tmp
++          name: tmp
++        - mountPath: /etc/loki
++          name: config
++        - mountPath: /data
++          name: storage
++      dnsPolicy: ClusterFirst
++      restartPolicy: Always
++      schedulerName: default-scheduler
++      securityContext:
++        fsGroup: 10001
++        runAsGroup: 10001
++        runAsNonRoot: true
++        runAsUser: 10001
++      serviceAccount: loki
++      serviceAccountName: loki
++      terminationGracePeriodSeconds: 4800
++      volumes:
++      - emptyDir: {}
++        name: tmp
++      - name: config
++        secret:
++          defaultMode: 420
++          secretName: loki
++      - emptyDir: {}
++        name: storage
++  updateStrategy:
++    type: RollingUpdate
++status:
++  replicas: 0
+diff -u -N /tmp/LIVE-1960734110/rbac.authorization.k8s.io.v1.Role.monitoring.loki /tmp/MERGED-4061861190/rbac.authorization.k8s.io.v1.Role.monitoring.loki
+--- /tmp/LIVE-1960734110/rbac.authorization.k8s.io.v1.Role.monitoring.loki	2022-02-23 14:35:57.187968234 +0000
++++ /tmp/MERGED-4061861190/rbac.authorization.k8s.io.v1.Role.monitoring.loki	2022-02-23 14:35:57.187968234 +0000
+@@ -0,0 +1,36 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: Role
++metadata:
++  creationTimestamp: "2022-02-23T14:35:57Z"
++  labels:
++    app: loki
++    chart: loki-2.10.1
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:35:57Z"
++  name: loki
++  namespace: monitoring
++  uid: bbfb3eda-cdad-4ce1-9e32-81b514e9feb1
++rules:
++- apiGroups:
++  - extensions
++  resourceNames:
++  - loki
++  resources:
++  - podsecuritypolicies
++  verbs:
++  - use
+diff -u -N /tmp/LIVE-1960734110/rbac.authorization.k8s.io.v1.Role.monitoring.loki-promtail /tmp/MERGED-4061861190/rbac.authorization.k8s.io.v1.Role.monitoring.loki-promtail
+--- /tmp/LIVE-1960734110/rbac.authorization.k8s.io.v1.Role.monitoring.loki-promtail	2022-02-23 14:35:57.375969617 +0000
++++ /tmp/MERGED-4061861190/rbac.authorization.k8s.io.v1.Role.monitoring.loki-promtail	2022-02-23 14:35:57.375969617 +0000
+@@ -0,0 +1,36 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: Role
++metadata:
++  creationTimestamp: "2022-02-23T14:35:57Z"
++  labels:
++    app: promtail
++    chart: promtail-2.2.0
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:35:57Z"
++  name: loki-promtail
++  namespace: monitoring
++  uid: e8e41e1c-cea0-4af7-a804-630c100d37bd
++rules:
++- apiGroups:
++  - extensions
++  resourceNames:
++  - loki-promtail
++  resources:
++  - podsecuritypolicies
++  verbs:
++  - use
+diff -u -N /tmp/LIVE-1960734110/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.loki /tmp/MERGED-4061861190/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.loki
+--- /tmp/LIVE-1960734110/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.loki	2022-02-23 14:35:57.599971265 +0000
++++ /tmp/MERGED-4061861190/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.loki	2022-02-23 14:35:57.599971265 +0000
+@@ -0,0 +1,38 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: RoleBinding
++metadata:
++  creationTimestamp: "2022-02-23T14:35:57Z"
++  labels:
++    app: loki
++    chart: loki-2.10.1
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++      f:roleRef:
++        f:apiGroup: {}
++        f:kind: {}
++        f:name: {}
++      f:subjects: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:35:57Z"
++  name: loki
++  namespace: monitoring
++  uid: 208bdcb8-ae42-4673-a347-7b21fb1e5f42
++roleRef:
++  apiGroup: rbac.authorization.k8s.io
++  kind: Role
++  name: loki
++subjects:
++- kind: ServiceAccount
++  name: loki
+diff -u -N /tmp/LIVE-1960734110/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.loki-promtail /tmp/MERGED-4061861190/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.loki-promtail
+--- /tmp/LIVE-1960734110/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.loki-promtail	2022-02-23 14:35:57.799972737 +0000
++++ /tmp/MERGED-4061861190/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.loki-promtail	2022-02-23 14:35:57.799972737 +0000
+@@ -0,0 +1,38 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: RoleBinding
++metadata:
++  creationTimestamp: "2022-02-23T14:35:57Z"
++  labels:
++    app: promtail
++    chart: promtail-2.2.0
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++      f:roleRef:
++        f:apiGroup: {}
++        f:kind: {}
++        f:name: {}
++      f:subjects: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:35:57Z"
++  name: loki-promtail
++  namespace: monitoring
++  uid: a99323ce-1b61-41ac-8615-e6d4a69d56dd
++roleRef:
++  apiGroup: rbac.authorization.k8s.io
++  kind: Role
++  name: loki-promtail
++subjects:
++- kind: ServiceAccount
++  name: loki-promtail
+diff -u -N /tmp/LIVE-1960734110/v1.ConfigMap.monitoring.loki-loki-stack /tmp/MERGED-4061861190/v1.ConfigMap.monitoring.loki-loki-stack
+--- /tmp/LIVE-1960734110/v1.ConfigMap.monitoring.loki-loki-stack	2022-02-23 14:35:56.779957221 +0000
++++ /tmp/MERGED-4061861190/v1.ConfigMap.monitoring.loki-loki-stack	2022-02-23 14:35:56.779957221 +0000
+@@ -0,0 +1,40 @@
++apiVersion: v1
++data:
++  loki-stack-datasource.yaml: |-
++    apiVersion: 1
++    datasources:
++    - name: Loki
++      type: loki
++      access: proxy
++      url: http://loki:3100
++      version: 1
++kind: ConfigMap
++metadata:
++  creationTimestamp: "2022-02-23T14:35:56Z"
++  labels:
++    app: loki-stack
++    chart: loki-stack-2.6.1
++    grafana_datasource: "1"
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:data:
++        .: {}
++        f:loki-stack-datasource.yaml: {}
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:grafana_datasource: {}
++          f:heritage: {}
++          f:release: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:35:56Z"
++  name: loki-loki-stack
++  namespace: monitoring
++  uid: b92bf5ed-cc74-4dc4-b9a0-415df37c8f19
+diff -u -N /tmp/LIVE-1960734110/v1.ConfigMap.monitoring.loki-promtail /tmp/MERGED-4061861190/v1.ConfigMap.monitoring.loki-promtail
+--- /tmp/LIVE-1960734110/v1.ConfigMap.monitoring.loki-promtail	2022-02-23 14:35:56.587948901 +0000
++++ /tmp/MERGED-4061861190/v1.ConfigMap.monitoring.loki-promtail	2022-02-23 14:35:56.587948901 +0000
+@@ -0,0 +1,293 @@
++apiVersion: v1
++data:
++  promtail.yaml: |
++    client:
++      backoff_config:
++        max_period: 5m
++        max_retries: 10
++        min_period: 500ms
++      batchsize: 1048576
++      batchwait: 1s
++      external_labels: {}
++      timeout: 10s
++    positions:
++      filename: /run/promtail/positions.yaml
++    server:
++      http_listen_port: 3101
++    target_config:
++      sync_period: 10s
++    scrape_configs:
++    - job_name: kubernetes-pods-name
++      pipeline_stages:
++        - docker: {}
++      kubernetes_sd_configs:
++      - role: pod
++      relabel_configs:
++      - source_labels:
++        - __meta_kubernetes_pod_label_name
++        target_label: __service__
++      - source_labels:
++        - __meta_kubernetes_pod_node_name
++        target_label: __host__
++      - action: drop
++        regex: ''
++        source_labels:
++        - __service__
++      - action: labelmap
++        regex: __meta_kubernetes_pod_label_(.+)
++      - action: replace
++        replacement: $1
++        separator: /
++        source_labels:
++        - __meta_kubernetes_namespace
++        - __service__
++        target_label: job
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_namespace
++        target_label: namespace
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_name
++        target_label: pod
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_container_name
++        target_label: container
++      - replacement: /var/log/pods/*$1/*.log
++        separator: /
++        source_labels:
++        - __meta_kubernetes_pod_uid
++        - __meta_kubernetes_pod_container_name
++        target_label: __path__
++    - job_name: kubernetes-pods-app
++      pipeline_stages:
++        - docker: {}
++      kubernetes_sd_configs:
++      - role: pod
++      relabel_configs:
++      - action: drop
++        regex: .+
++        source_labels:
++        - __meta_kubernetes_pod_label_name
++      - source_labels:
++        - __meta_kubernetes_pod_label_app
++        target_label: __service__
++      - source_labels:
++        - __meta_kubernetes_pod_node_name
++        target_label: __host__
++      - action: drop
++        regex: ''
++        source_labels:
++        - __service__
++      - action: labelmap
++        regex: __meta_kubernetes_pod_label_(.+)
++      - action: replace
++        replacement: $1
++        separator: /
++        source_labels:
++        - __meta_kubernetes_namespace
++        - __service__
++        target_label: job
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_namespace
++        target_label: namespace
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_name
++        target_label: pod
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_container_name
++        target_label: container
++      - replacement: /var/log/pods/*$1/*.log
++        separator: /
++        source_labels:
++        - __meta_kubernetes_pod_uid
++        - __meta_kubernetes_pod_container_name
++        target_label: __path__
++    - job_name: kubernetes-pods-direct-controllers
++      pipeline_stages:
++        - docker: {}
++      kubernetes_sd_configs:
++      - role: pod
++      relabel_configs:
++      - action: drop
++        regex: .+
++        separator: ''
++        source_labels:
++        - __meta_kubernetes_pod_label_name
++        - __meta_kubernetes_pod_label_app
++      - action: drop
++        regex: '[0-9a-z-.]+-[0-9a-f]{8,10}'
++        source_labels:
++        - __meta_kubernetes_pod_controller_name
++      - source_labels:
++        - __meta_kubernetes_pod_controller_name
++        target_label: __service__
++      - source_labels:
++        - __meta_kubernetes_pod_node_name
++        target_label: __host__
++      - action: drop
++        regex: ''
++        source_labels:
++        - __service__
++      - action: labelmap
++        regex: __meta_kubernetes_pod_label_(.+)
++      - action: replace
++        replacement: $1
++        separator: /
++        source_labels:
++        - __meta_kubernetes_namespace
++        - __service__
++        target_label: job
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_namespace
++        target_label: namespace
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_name
++        target_label: pod
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_container_name
++        target_label: container
++      - replacement: /var/log/pods/*$1/*.log
++        separator: /
++        source_labels:
++        - __meta_kubernetes_pod_uid
++        - __meta_kubernetes_pod_container_name
++        target_label: __path__
++    - job_name: kubernetes-pods-indirect-controller
++      pipeline_stages:
++        - docker: {}
++      kubernetes_sd_configs:
++      - role: pod
++      relabel_configs:
++      - action: drop
++        regex: .+
++        separator: ''
++        source_labels:
++        - __meta_kubernetes_pod_label_name
++        - __meta_kubernetes_pod_label_app
++      - action: keep
++        regex: '[0-9a-z-.]+-[0-9a-f]{8,10}'
++        source_labels:
++        - __meta_kubernetes_pod_controller_name
++      - action: replace
++        regex: '([0-9a-z-.]+)-[0-9a-f]{8,10}'
++        source_labels:
++        - __meta_kubernetes_pod_controller_name
++        target_label: __service__
++      - source_labels:
++        - __meta_kubernetes_pod_node_name
++        target_label: __host__
++      - action: drop
++        regex: ''
++        source_labels:
++        - __service__
++      - action: labelmap
++        regex: __meta_kubernetes_pod_label_(.+)
++      - action: replace
++        replacement: $1
++        separator: /
++        source_labels:
++        - __meta_kubernetes_namespace
++        - __service__
++        target_label: job
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_namespace
++        target_label: namespace
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_name
++        target_label: pod
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_container_name
++        target_label: container
++      - replacement: /var/log/pods/*$1/*.log
++        separator: /
++        source_labels:
++        - __meta_kubernetes_pod_uid
++        - __meta_kubernetes_pod_container_name
++        target_label: __path__
++    - job_name: kubernetes-pods-static
++      pipeline_stages:
++        - docker: {}
++      kubernetes_sd_configs:
++      - role: pod
++      relabel_configs:
++      - action: drop
++        regex: ''
++        source_labels:
++        - __meta_kubernetes_pod_annotation_kubernetes_io_config_mirror
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_label_component
++        target_label: __service__
++      - source_labels:
++        - __meta_kubernetes_pod_node_name
++        target_label: __host__
++      - action: drop
++        regex: ''
++        source_labels:
++        - __service__
++      - action: labelmap
++        regex: __meta_kubernetes_pod_label_(.+)
++      - action: replace
++        replacement: $1
++        separator: /
++        source_labels:
++        - __meta_kubernetes_namespace
++        - __service__
++        target_label: job
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_namespace
++        target_label: namespace
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_name
++        target_label: pod
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_container_name
++        target_label: container
++      - replacement: /var/log/pods/*$1/*.log
++        separator: /
++        source_labels:
++        - __meta_kubernetes_pod_annotation_kubernetes_io_config_mirror
++        - __meta_kubernetes_pod_container_name
++        target_label: __path__
++kind: ConfigMap
++metadata:
++  creationTimestamp: "2022-02-23T14:35:56Z"
++  labels:
++    app: promtail
++    chart: promtail-2.2.0
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:data:
++        .: {}
++        f:promtail.yaml: {}
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:35:56Z"
++  name: loki-promtail
++  namespace: monitoring
++  uid: cec810d0-6666-487d-b56e-d45df5588c7e
+diff -u -N /tmp/LIVE-1960734110/v1.Secret.monitoring.loki /tmp/MERGED-4061861190/v1.Secret.monitoring.loki
+--- /tmp/LIVE-1960734110/v1.Secret.monitoring.loki	2022-02-23 14:35:56.375939715 +0000
++++ /tmp/MERGED-4061861190/v1.Secret.monitoring.loki	2022-02-23 14:35:56.375939715 +0000
+@@ -1 +1,33 @@
+-null
++apiVersion: v1
++data:
++  loki.yaml: '***'
++kind: Secret
++metadata:
++  creationTimestamp: "2022-02-23T14:35:56Z"
++  labels:
++    app: loki
++    chart: loki-2.10.1
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:data:
++        .: {}
++        f:loki.yaml: {}
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++      f:type: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:35:56Z"
++  name: loki
++  namespace: monitoring
++  uid: 035d79fa-af98-4787-b184-bbf618028c49
++type: Opaque
+diff -u -N /tmp/LIVE-1960734110/v1.Service.monitoring.loki /tmp/MERGED-4061861190/v1.Service.monitoring.loki
+--- /tmp/LIVE-1960734110/v1.Service.monitoring.loki	2022-02-23 14:35:58.243976004 +0000
++++ /tmp/MERGED-4061861190/v1.Service.monitoring.loki	2022-02-23 14:35:58.243976004 +0000
+@@ -0,0 +1,54 @@
++apiVersion: v1
++kind: Service
++metadata:
++  creationTimestamp: "2022-02-23T14:35:58Z"
++  labels:
++    app: loki
++    chart: loki-2.10.1
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++      f:spec:
++        f:ports:
++          .: {}
++          k:{"port":3100,"protocol":"TCP"}:
++            .: {}
++            f:name: {}
++            f:port: {}
++            f:protocol: {}
++            f:targetPort: {}
++        f:selector:
++          .: {}
++          f:app: {}
++          f:release: {}
++        f:sessionAffinity: {}
++        f:type: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:35:58Z"
++  name: loki
++  namespace: monitoring
++  uid: 2f268715-0a2f-461c-a5d2-20ed9cc37674
++spec:
++  ports:
++  - name: http-metrics
++    port: 3100
++    protocol: TCP
++    targetPort: http-metrics
++  selector:
++    app: loki
++    release: loki
++  sessionAffinity: None
++  type: ClusterIP
++status:
++  loadBalancer: {}
+diff -u -N /tmp/LIVE-1960734110/v1.Service.monitoring.loki-headless /tmp/MERGED-4061861190/v1.Service.monitoring.loki-headless
+--- /tmp/LIVE-1960734110/v1.Service.monitoring.loki-headless	2022-02-23 14:35:58.003974238 +0000
++++ /tmp/MERGED-4061861190/v1.Service.monitoring.loki-headless	2022-02-23 14:35:58.003974238 +0000
+@@ -0,0 +1,60 @@
++apiVersion: v1
++kind: Service
++metadata:
++  creationTimestamp: "2022-02-23T14:35:57Z"
++  labels:
++    app: loki
++    chart: loki-2.10.1
++    heritage: Helm
++    release: loki
++    variant: headless
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++          f:variant: {}
++      f:spec:
++        f:clusterIP: {}
++        f:ports:
++          .: {}
++          k:{"port":3100,"protocol":"TCP"}:
++            .: {}
++            f:name: {}
++            f:port: {}
++            f:protocol: {}
++            f:targetPort: {}
++        f:selector:
++          .: {}
++          f:app: {}
++          f:release: {}
++        f:sessionAffinity: {}
++        f:type: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:35:57Z"
++  name: loki-headless
++  namespace: monitoring
++  uid: 226c317f-651c-4682-a482-baa55b0d0719
++spec:
++  clusterIP: None
++  clusterIPs:
++  - None
++  ports:
++  - name: http-metrics
++    port: 3100
++    protocol: TCP
++    targetPort: http-metrics
++  selector:
++    app: loki
++    release: loki
++  sessionAffinity: None
++  type: ClusterIP
++status:
++  loadBalancer: {}
+diff -u -N /tmp/LIVE-1960734110/v1.ServiceAccount.monitoring.loki /tmp/MERGED-4061861190/v1.ServiceAccount.monitoring.loki
+--- /tmp/LIVE-1960734110/v1.ServiceAccount.monitoring.loki	2022-02-23 14:35:55.955921515 +0000
++++ /tmp/MERGED-4061861190/v1.ServiceAccount.monitoring.loki	2022-02-23 14:35:55.955921515 +0000
+@@ -0,0 +1,28 @@
++apiVersion: v1
++automountServiceAccountToken: true
++kind: ServiceAccount
++metadata:
++  creationTimestamp: "2022-02-23T14:35:55Z"
++  labels:
++    app: loki
++    chart: loki-2.10.1
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:automountServiceAccountToken: {}
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:35:55Z"
++  name: loki
++  namespace: monitoring
++  uid: c0810880-ea2c-467a-9d2c-9605de72b732
+diff -u -N /tmp/LIVE-1960734110/v1.ServiceAccount.monitoring.loki-promtail /tmp/MERGED-4061861190/v1.ServiceAccount.monitoring.loki-promtail
+--- /tmp/LIVE-1960734110/v1.ServiceAccount.monitoring.loki-promtail	2022-02-23 14:35:56.139929488 +0000
++++ /tmp/MERGED-4061861190/v1.ServiceAccount.monitoring.loki-promtail	2022-02-23 14:35:56.139929488 +0000
+@@ -0,0 +1,26 @@
++apiVersion: v1
++kind: ServiceAccount
++metadata:
++  creationTimestamp: "2022-02-23T14:35:56Z"
++  labels:
++    app: promtail
++    chart: promtail-2.2.0
++    heritage: Helm
++    release: loki
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:heritage: {}
++          f:release: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-23T14:35:56Z"
++  name: loki-promtail
++  namespace: monitoring
++  uid: b9a91448-ff98-4991-9485-9581346eb81f
