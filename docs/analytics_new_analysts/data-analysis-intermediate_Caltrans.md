@@ -1,6 +1,6 @@
 # Data Analysis: Intermediate
 
-After polishing off the [intro tutorial](./data-analysis-intro.md), you're ready to devour some more techniques to simplify your life as a data analyst. 
+After polishing off the [intro tutorial](./data-analysis-intro.md), you're ready to devour some more techniques to simplify your life as a data analyst.
 
 * [Create a new column using a dictionary to map the values](#create-a-new-column-using-a-dictionary-to-map-the-values)
 * [Loop over columns with a dictionary](#loop-over-columns-with-a-dictionary)
@@ -20,12 +20,12 @@ Sometimes, you want to create a new column by converting one set of values into 
 
 `df`: person and birthplace
 
-| Person | Birthplace |  
-| ---| ---- |  
-| Leslie Knope | Eagleton, Indiana 
-| Tom Haverford | South Carolina | 
+| Person | Birthplace |
+| ---| ---- |
+| Leslie Knope | Eagleton, Indiana
+| Tom Haverford | South Carolina |
 | Ann Perkins | Michigan |
-| Ben Wyatt | Partridge, Minnesota | 
+| Ben Wyatt | Partridge, Minnesota |
 
 
 ### **Write a Function**
@@ -63,11 +63,11 @@ df['State'] = df.Birthplace.map(state_abbrev1)
 But, if we wanted to avoid writing out all the possible combinations, we would first extract the *state* portion of the city-state text. Then we could map the state's full name with its abbreviation.
 
 ```
-# The split function splits at the comma and expand the columns. 
+# The split function splits at the comma and expand the columns.
 # Everything is stored in a new df called 'fullname'.
-fullname = df['Birthplace'].str.split(",", expand = True) 
+fullname = df['Birthplace'].str.split(",", expand = True)
 
-# Add the City column into our df by extracting the first column (0) from fullname. 
+# Add the City column into our df by extracting the first column (0) from fullname.
 df['City'] = fullname[0]
 
 # Add the State column by extracting the second column (1) from fullname.
@@ -79,7 +79,7 @@ df['State_full'] = fullname[1]
 # the State would say None.
 # Fix these so the Nones actually display the state information correctly.
 
-df['State_full'] = df.apply(lambda row: row.City if row.State == None else 
+df['State_full'] = df.apply(lambda row: row.City if row.State == None else
                     row.State_full, axis = 1)
 
 # Now, use a dictionary to map the values.
@@ -91,7 +91,7 @@ df['State'] = df.Birthplace.map(state_abbrev2)
 
 All 3 methods would give us this `df`:
 
-| Person | Birthplace | State | 
+| Person | Birthplace | State |
 | ---| ---- | --- |
 | Leslie Knope | Eagleton, Indiana | IN |
 | Tom Haverford | South Carolina | SC |
@@ -114,38 +114,38 @@ for c in columns:
 ```
 
 ## Loop over Dataframes with a Dictionary
-It's easier and more efficient to use a loop to do the same operations over the different dataframes (df). Here, we want to find the number of Pawnee businesses and Tom Haverford businesses located in each Council District. 
+It's easier and more efficient to use a loop to do the same operations over the different dataframes (df). Here, we want to find the number of Pawnee businesses and Tom Haverford businesses located in each Council District.
 
-This type of question is perfect for a loop. Each df will be spatially joined to the geodataframe `council_district`, followed by some aggregation. 
+This type of question is perfect for a loop. Each df will be spatially joined to the geodataframe `council_district`, followed by some aggregation.
 
-`business`: list of Pawnee stores 
+`business`: list of Pawnee stores
 
 | Business | longitude | latitude | Sales_millions | geometry
-| ---| ---- | --- | ---| ---| 
+| ---| ---- | --- | ---| ---|
 | Paunch Burger | x1 | y1 | 5 | Point(x1, y1)
 | Sweetums | x2 | y2 | 30 | Point(x2, y2)
-| Jurassic Fork | x3 | y3 | 2 | Point(x3, y3) 
+| Jurassic Fork | x3 | y3 | 2 | Point(x3, y3)
 | Gryzzl | x4 | y4 | 40 | Point(x4, y4)
 
 
 `tom`: list of Tom Haverford businesses
 
 | Business | longitude | latitude | Sales_millions | geometry
-| ---| ---- | --- | ---| ---| 
+| ---| ---- | --- | ---| ---|
 | Tom's Bistro | x1 | y1 |30 | Point(x1, y1)
 | Entertainment 720 | x2 | y2 | 1 | Point(x2, y2)
-| Rent-A-Swag | x3 | y3 | 4 | Point(x3, y3) 
+| Rent-A-Swag | x3 | y3 | 4 | Point(x3, y3)
 
 
 ```
-# Save our existing dfs into a dictionary. The business df is named 
-# 'pawnee"; the tom df is named 'tom'. 
+# Save our existing dfs into a dictionary. The business df is named
+# 'pawnee"; the tom df is named 'tom'.
 dfs = {'pawnee': business, 'tom': tom}
 
 # Create an empty dictionary called summary_dfs to hold the results
 summary_dfs = {}
 
-# Loop over key-value pairs 
+# Loop over key-value pairs
 ## Keys: pawnee, tom (names given to dataframes)
 ## Values: business, tom (dataframes)
 
@@ -155,13 +155,13 @@ for key, value in dfs.items():
     join_df = "join_{key}"
     # Spatial join
     join_df = gpd.sjoin(value, council_district, how = 'inner', op = 'intersects')
-    # Calculate summary stats with groupby, agg, then save it into summary_dfs, 
+    # Calculate summary stats with groupby, agg, then save it into summary_dfs,
     # naming it 'pawnee' or 'tom'.
     summary_dfs[key] = join.groupby('ID').agg(
         {'Business': 'count', 'Sales_millions': 'sum'})
 ```
 
-Now, our `summary_dfs` dictionary contains 2 items, which are the 2 dataframes with everything aggregated. 
+Now, our `summary_dfs` dictionary contains 2 items, which are the 2 dataframes with everything aggregated.
 
 ```
 # To view the contents of this dictionary
@@ -185,10 +185,10 @@ summary_dfs["tom"]
 
 `summary_dfs["tom"]`: result of the counting number of Tom's businesses by CD
 
-| ID | Business | Sales_millions  
+| ID | Business | Sales_millions
 | ---| ---- | --- |
-| 1 | 1 | 30 
-| 3 | 2 | 5 
+| 1 | 1 | 30
+| 3 | 2 | 5
 
 
 

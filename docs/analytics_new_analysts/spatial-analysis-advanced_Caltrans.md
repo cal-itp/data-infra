@@ -1,13 +1,13 @@
 # Working with Geospatial Data: Advanced
 
-Place matters. After covering the [intermediate tutorial](./spatial-analysis-intermediate.md), you're ready to cover some advanced spatial analysis topics. 
+Place matters. After covering the [intermediate tutorial](./spatial-analysis-intermediate.md), you're ready to cover some advanced spatial analysis topics.
 
-Below are more detailed explanations for dealing with geometry in Python. 
+Below are more detailed explanations for dealing with geometry in Python.
 * [Types of geometric shapes](#types-of-geometric-shapes)
 * [Geometry in-memory and in databases](#geometry-in-memory-and-in-databases)
 
 
-## Getting Started 
+## Getting Started
 
 ```
 # Import Python packages
@@ -36,16 +36,16 @@ Databases often store geospatial information as well-known text (WKT) or its bin
 
 The spatial referencing system identifier (SRID) is the **geographic coordinate system** of the latitude and longitude coordinates. As you are writing the coordinates into WKT/WKB, don't forget to set the SRID. WGS84 is a commonly used geographic coordinate system; it provides latitude and longitude in decimal degrees. The SRID for WGS84 is 4326. [Refresher on geographic coordinated system vs projected coordinated system.](./spatial-analysis-basics.md#setting-and-projecting-coordinate-reference-system)
 
-*Shapely* is the Python package used to create the `geometry` column when you're working with the gdf in-memory. *Geoalchemy* is the Python package used to write the `geometry` column into geospatial databases. Unless you're writing the geospatial data into a database, you're most likely sticking with *shapely* rather than *geoalchemy*.  
+*Shapely* is the Python package used to create the `geometry` column when you're working with the gdf in-memory. *Geoalchemy* is the Python package used to write the `geometry` column into geospatial databases. Unless you're writing the geospatial data into a database, you're most likely sticking with *shapely* rather than *geoalchemy*.
 
 To summarize:
 
-| Data is used / sourced from... | Python Package | Geometry column | SRID/EPSG 
+| Data is used / sourced from... | Python Package | Geometry column | SRID/EPSG
 | ---| ---- | --- | --- |
 | Local Python session, in-memory | shapely | shapely object: Point, LineString, Polygon and Multi equivalents | CRS is usually set, but most likely will still need to re-project your CRS using EPSG
-| Database (PostGIS, SpatiaLite, etc) | geoalchemy | WKT or WKB | define the SRID  
+| Database (PostGIS, SpatiaLite, etc) | geoalchemy | WKT or WKB | define the SRID
 
-``` 
+```
 # Set the SRID
 srid = 4326
 df = df.dropna(subset=['lat', 'lon'])

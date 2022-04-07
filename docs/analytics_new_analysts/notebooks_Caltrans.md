@@ -1,6 +1,6 @@
 # Working with Jupyter notebooks
 
-Jupyter notebooks are ubiquitous in the fields of data analysis, data science, and education. 
+Jupyter notebooks are ubiquitous in the fields of data analysis, data science, and education.
 There are a number of reasons for their popularity, some of which are (in no particular order):
 
 * They are user-friendly.
@@ -23,7 +23,7 @@ This document is meant to outline some recommendations for how to best use noteb
 * [Data Access](#data-access)
 
 
-### Notebooks and Reproducibility 
+### Notebooks and Reproducibility
 
 [Scientific](https://arxiv.org/abs/1605.04339)
 [software](http://gael-varoquaux.info/programming/software-for-reproducible-science-lets-not-have-a-misunderstanding.html)
@@ -117,4 +117,3 @@ Tools like [intake](https://intake.readthedocs.io/en/latest/) can help here.
 3. Credentials to access private data sources should be read from environment variables,
 and never stored in code repositories or saved to notebooks.
 The environment variables needed to access the data for an analysis should be documented in the project `README`.
-
