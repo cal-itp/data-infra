@@ -1,6 +1,6 @@
 operator: 'operators.PodOperator'
 name: 'gtfs-rt-validation'
-image: 'ghcr.io/cal-itp/gtfs-rt-validator-api:v0.0.4'
+image: 'ghcr.io/cal-itp/gtfs-rt-validator-api:v0.0.5'
 cmds:
   - python3
 
