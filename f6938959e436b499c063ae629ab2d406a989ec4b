@@ -1,0 +1,50 @@
+[helm:metabase-preprod=kubernetes/apps/charts/metabase]
+
+diff -u -N /tmp/LIVE-1650848205/apps.v1.Deployment.metabase-preprod.metabase /tmp/MERGED-1017801217/apps.v1.Deployment.metabase-preprod.metabase
+--- /tmp/LIVE-1650848205/apps.v1.Deployment.metabase-preprod.metabase	2022-04-07 18:46:03.460598780 +0000
++++ /tmp/MERGED-1017801217/apps.v1.Deployment.metabase-preprod.metabase	2022-04-07 18:46:03.464598832 +0000
+@@ -6,7 +6,7 @@
+     meta.helm.sh/release-name: metabase-preprod
+     meta.helm.sh/release-namespace: metabase-preprod
+   creationTimestamp: "2022-01-09T23:50:48Z"
+-  generation: 4
++  generation: 5
+   labels:
+     app.kubernetes.io/managed-by: Helm
+     name: metabase
+@@ -44,7 +44,6 @@
+               k:{"name":"metabase"}:
+                 .: {}
+                 f:envFrom: {}
+-                f:image: {}
+                 f:imagePullPolicy: {}
+                 f:livenessProbe:
+                   .: {}
+@@ -133,6 +132,18 @@
+     manager: kube-controller-manager
+     operation: Update
+     time: "2022-03-31T22:05:25Z"
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:spec:
++        f:template:
++          f:spec:
++            f:containers:
++              k:{"name":"metabase"}:
++                f:image: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-04-07T18:46:03Z"
+   name: metabase
+   namespace: metabase-preprod
+   resourceVersion: "216361585"
+@@ -159,7 +170,7 @@
+       - envFrom:
+         - configMapRef:
+             name: metabase-config
+-        image: metabase/metabase:v0.41.1
++        image: metabase/metabase:v0.42.3
+         imagePullPolicy: IfNotPresent
+         livenessProbe:
+           failureThreshold: 3
