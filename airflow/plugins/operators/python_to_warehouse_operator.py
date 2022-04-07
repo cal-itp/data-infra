@@ -15,7 +15,10 @@ class PythonToWarehouseOperator(PythonOperator):
     )
 
     def __init__(
-        self, table_name, fields=None, **kwargs,
+        self,
+        table_name,
+        fields=None,
+        **kwargs,
     ):
         super().__init__(**kwargs)
 

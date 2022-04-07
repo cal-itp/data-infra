@@ -60,5 +60,7 @@ def main(execution_date, **kwargs):
     path = f"rt-processed/calitp_validation_params/{date_string}.csv"
     print(f"saving {params.shape[0]} validation params to {path}")
     save_to_gcfs(
-        params.to_csv(index=False).encode(), path, use_pipe=True,
+        params.to_csv(index=False).encode(),
+        path,
+        use_pipe=True,
     )

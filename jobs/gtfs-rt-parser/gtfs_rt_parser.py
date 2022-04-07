@@ -6,9 +6,11 @@ import itertools
 import json
 import os
 import tempfile
+import traceback
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime
+from datetime import datetime, timedelta, date
+from enum import Enum
 from pathlib import Path
 from typing import Optional
 
@@ -17,18 +19,16 @@ import backoff
 import humanize
 import structlog
 import typer
-from airflow.models import BaseOperator
-from airflow.utils.decorators import apply_defaults
 from calitp.config import get_bucket
 from calitp.storage import get_fs
 from google.protobuf import json_format
 from google.protobuf.message import DecodeError
 from google.transit import gtfs_realtime_pb2
+from tqdm import tqdm
 
 
 # Note that all RT extraction is stored in the prod bucket, since it is very large,
 # but we can still output processed results to the staging bucket
-
 
 EXTENSION = ".jsonl.gz"
 
@@ -49,25 +49,32 @@ def parse_pb(path, logger, open_func=open) -> dict:
         return {}
 
 
-def fetch_bucket_file_names(src_path, rt_file_substring, iso_date):
+def fetch_bucket_file_names(src_path, rt_file_substring, iso_date, progress=False):
     # posix_date = str(time.mktime(execution_date.timetuple()))[:6]
     fs = get_fs()
     # get rt files
     glob = src_path + iso_date + "*"
-    print("Globbing rt bucket {}".format(glob))
+    typer.echo("Globbing rt bucket {}".format(glob))
+    before = datetime.now()
     rt = fs.glob(glob)
+    typer.echo(f"globbing took {(datetime.now() - before).total_seconds()} seconds")
 
     buckets_to_parse = len(rt)
-    print("Realtime buckets to parse: {i}".format(i=buckets_to_parse))
+    typer.echo("Realtime buckets to parse: {i}".format(i=buckets_to_parse))
 
     # organize rt files by itpId_urlNumber
-    rt_files = []
-    for r in rt:
-        rt_files.append(fs.ls(r))
+    if progress:
+        rt = tqdm(rt)
+    rt_files = [fs.ls(r) for r in rt]
 
     entity_files = [
-        item for sublist in rt_files for item in sublist if rt_file_substring in item
+        item
+        for sublist in rt_files
+        for item in sublist
+        if rt_file_substring.name in item
     ]
+
+    typer.echo(f"entity files len {len(entity_files)}")
 
     feed_files = defaultdict(lambda: [])
 
@@ -82,7 +89,7 @@ def fetch_bucket_file_names(src_path, rt_file_substring, iso_date):
 
     # Now our feed files dict has a key of itpId_urlNumber and a list of files to
     # parse
-    print("found {} feeds to process".format(len(feed_files.keys())))
+    typer.echo("found {} feeds to process".format(len(feed_files.keys())))
     return feed_files
 
 
@@ -94,8 +101,21 @@ def get_google_cloud_filename(filename_prefix, feed, iso_date):
 
 # Try twice in the event we get a ClientResponseError; doesn't have much of a delay (like 0.01s)
 @backoff.on_exception(
-    backoff.expo, aiohttp.client_exceptions.ClientResponseError, max_tries=2
+    backoff.expo, exception=aiohttp.client_exceptions.ClientResponseError, max_tries=3
 )
+def get_with_retry(fs, *args, **kwargs):
+    return fs.get(*args, **kwargs)
+
+
+@backoff.on_exception(
+    backoff.expo, exception=aiohttp.client_exceptions.ClientResponseError, max_tries=3
+)
+def put_with_retry(fs, *args, **kwargs):
+    return fs.put(*args, **kwargs)
+
+
+# Originally this whole function was retried, but tmpdir flakiness will throw
+# exceptions in backoff's context, which ruins things
 def handle_one_feed(feed, files, filename_prefix, iso_date, dst_path, logger):
     start = datetime.now()
 
@@ -112,7 +132,7 @@ def handle_one_feed(feed, files, filename_prefix, iso_date, dst_path, logger):
     # fetch and parse RT files from bucket
     with tempfile.TemporaryDirectory() as tmp_dir:
         logger.info(f"downloading {len(files)} files to {tmp_dir}")
-        fs.get(files, tmp_dir)
+        get_with_retry(fs, files, tmp_dir)
         all_files = [x for x in Path(tmp_dir).rglob("*") if not x.is_dir()]
 
         gzip_fname = str(tmp_dir + "/" + "temporary" + EXTENSION)
@@ -140,9 +160,7 @@ def handle_one_feed(feed, files, filename_prefix, iso_date, dst_path, logger):
         logger.info(
             f"writing {written} lines ({filesize}) from {gzip_fname} to {dst_path + google_cloud_file_name}"
         )
-        fs.put(
-            gzip_fname, dst_path + google_cloud_file_name,
-        )
+        put_with_retry(fs, gzip_fname, dst_path + google_cloud_file_name)
         logger.info(
             "took {} seconds to process {} files".format(
                 (datetime.now() - start).total_seconds(), len(all_files)
@@ -165,19 +183,54 @@ def try_handle_one_feed(
     try:
         handle_one_feed(feed, files, filename_prefix, iso_date, dst_path, logger)
     except Exception as e:
-        logger.error(f"got exception while handling feed: {str(e)}")
+        logger.error(
+            f"got exception while handling feed: {str(e)} from {str(e.__cause__ or e.__context__)} {traceback.format_exc()}"
+        )
+        # a lot of these are thrown by tmpdir, and are potentially flakes; but if they were thrown during
+        # handling of another exception, we want that exception still
+        if isinstance(e, OSError) and e.errno == 39:
+            return e.__cause__ or e.__context__
         return e
 
 
-def execute(
-    context, filename_prefix, rt_file_substring, src_path, dst_path, limit=None
+class Prefix(str, Enum):
+    al = "al"
+    tu = "tu"
+    rt = "rt"
+
+
+class RTFileType(str, Enum):
+    service_alerts = "service_alerts"
+    trip_updates = "trip_updates"
+    vehicle_positions = "vehicle_positions"
+
+
+yesterday = (date.today() - timedelta(days=1)).isoformat()
+
+
+def main(
+    filename_prefix: Prefix,
+    rt_file_substring: RTFileType,
+    iso_date: str = yesterday,
+    src_path=f"{get_bucket()}/rt/",
+    dst_path=f"{get_bucket()}/rt-processed/",
+    limit: int = 0,
+    progress: bool = False,
+    threads: int = 4,
 ):
     # get execution_date from context:
     # https://stackoverflow.com/questions/59982700/airflow-how-can-i-access-execution-date-on-my-custom-operator
-    iso_date = str(context["execution_date"]).split("T")[0]
+
+    actual_dst_path = os.path.join(dst_path, rt_file_substring.name, "")
+
+    typer.echo(
+        f"Parsing {filename_prefix}/{rt_file_substring} from {os.path.join(src_path, iso_date)} to {actual_dst_path}"
+    )
 
     # fetch files ----
-    feed_files = fetch_bucket_file_names(src_path, rt_file_substring, iso_date)
+    feed_files = fetch_bucket_file_names(
+        src_path, rt_file_substring, iso_date, progress=progress
+    )
 
     enumerated = enumerate(feed_files.items())
     if limit:
@@ -187,74 +240,25 @@ def execute(
 
     # gcfs does not seem to play nicely with multiprocessing right now
     # https://github.com/fsspec/gcsfs/issues/379
-    with ThreadPoolExecutor(max_workers=4) as pool:
+    with ThreadPoolExecutor(max_workers=threads) as pool:
         args = [
-            (i, feed, files, filename_prefix, iso_date, dst_path, len(feed_files))
+            (
+                i,
+                feed,
+                files,
+                filename_prefix,
+                iso_date,
+                actual_dst_path,
+                len(feed_files),
+            )
             for i, (feed, files) in enumerated
         ]
         exceptions = [ret for ret in pool.map(try_handle_one_feed, *zip(*args)) if ret]
 
     if exceptions:
-        raise RuntimeError(
-            f"got {len(exceptions)} exceptions from processing {len(enumerated)} feeds: {exceptions}"
-        )
-
-
-class RealtimeToFlattenedJSONOperator(BaseOperator):
-    @apply_defaults
-    def __init__(
-        self,
-        filename_prefix,
-        rt_file_substring,
-        subfolder="rt-processed",
-        limit=None,
-        **kwargs,
-    ):
-        super().__init__(**kwargs)
-
-        # could not just set self.fs here - ran into this issue:
-        # https://stackoverflow.com/questions/69532715/google-cloud-functions-using-gcsfs-runtimeerror-this-class-is-not-fork-safe
-        # self.fs = get_fs()
-        self.filename_prefix = filename_prefix
-        self.rt_file_substring = rt_file_substring
-        self.src_path = f"{get_bucket()}/rt/"
-        self.dst_path = "".join(
-            [f"{get_bucket()}/{subfolder}/", self.rt_file_substring, "/"]
-        )
-        self.limit = limit
-
-    def execute(self, context):
-        """Process a RT feed of the given type
-
-        Args:
-            rt_type (string): One of "alerts", "trip_updates", "vehicle_positions"
-            execution_date (date): The execution date being processed
-        """
-        execute(
-            context=context,
-            filename_prefix=self.filename_prefix,
-            rt_file_substring=self.rt_file_substring,
-            src_path=self.src_path,
-            dst_path=self.dst_path,
-            limit=self.limit,
-        )
-
-
-def main(
-    execution_date=datetime.combine(datetime.today(), datetime.min.time()).isoformat(),
-    filename_prefix="tu",
-    rt_file_substring="trip_updates",
-    src_path=f"{get_bucket()}/rt/",
-    dst_path=f"{get_bucket()}/rt-processed_test_2022-01-27/trip_updates/",
-):
-    execute(
-        {"execution_date": execution_date},
-        filename_prefix,
-        rt_file_substring,
-        src_path,
-        dst_path,
-        limit=5,
-    )
+        msg = f"got {len(exceptions)} exceptions from processing {len(enumerated)} feeds: {exceptions}"
+        typer.echo(msg, err=True)
+        raise RuntimeError(msg)
 
 
 if __name__ == "__main__":

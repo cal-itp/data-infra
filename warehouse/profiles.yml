@@ -1,0 +1,29 @@
+calitp_warehouse:
+  target: staging
+  outputs:
+    prod:
+      &prod
+      execution_project: cal-itp-data-infra
+      database: cal-itp-data-infra
+      schema: staging
+      fixed_retries: 1
+      location: us-west2
+      method: oauth
+      priority: interactive
+      threads: 4
+      timeout_seconds: 300
+      type: bigquery
+    prod_service_account:
+      <<: *prod
+      method: service-account
+      keyfile: "{{ env_var('BIGQUERY_KEYFILE_LOCATION', '/secrets/jobs-data/service-account.json') }}"
+    staging:
+      &staging
+      <<: *prod
+      execution_project: cal-itp-data-infra-staging
+      database: cal-itp-data-infra-staging
+      schema: staging
+    staging_service_account:
+      <<: *staging
+      method: service-account
+      keyfile: "{{ env_var('BIGQUERY_KEYFILE_LOCATION', '/secrets/jobs-data/service-account.json') }}"

@@ -1,0 +1,8 @@
+description: "Load events from Amplitude API to Google Cloud Storage as flattened JSON, move JSONL to BigQuery table, move BigQuery table to view"
+schedule_interval: "0 0 * * *"
+tags:
+  - all_gusty_features
+catchup: True
+default_args:
+    owner: airflow
+    start_date: "2021-12-08"

@@ -29,6 +29,7 @@ parts:
         - file: warehouse/sql_snippets
       - file: datasets_and_tables/overview
         sections:
+        - file: datasets_and_tables/amplitude
         - file: datasets_and_tables/gtfs_schedule
         - file: datasets_and_tables/gtfs_rt
         - file: datasets_and_tables/mst_payments
@@ -69,6 +70,7 @@ parts:
         - file: ci/steps/release-kube-overlay
         - file: ci/steps/validate-build-git-tag
         - file: ci/steps/validate-clean-worktree
+      - file: github/contribute_to_repos.md
       - file: services/overview
         sections:
         - file: services/gtfs-ckan-uploader

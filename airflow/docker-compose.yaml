@@ -70,6 +70,8 @@ x-airflow-common:
 
     # API keys
     CALITP_AIRTABLE_API_KEY: "${CALITP_AIRTABLE_API_KEY}"
+    CALITP_AMPLITUDE_BENEFITS_API_KEY: "${CALITP_AMPLITUDE_BENEFITS_API_KEY}"
+    CALITP_AMPLITUDE_BENEFITS_SECRET_KEY: "${CALITP_AMPLITUDE_BENEFITS_SECRET_KEY}"
 
     # bucket for holding results of extraction tasks
     AIRFLOW_VAR_EXTRACT_BUCKET: "gs://gtfs-data-test"
@@ -90,7 +92,7 @@ x-airflow-common:
     - ./logs:/opt/airflow/gcs/logs
     - ./plugins:/opt/airflow/gcs/plugins
     - ./data:/opt/airflow/gcs/data
-    - $HOME/.config/gcloud:/home/airflow/.config/gcloud
+    - $HOME/.config/gcloud:/home/airflow/.config/gcloud # Windows users: replace $HOME/.config with ${APPDATA}
       #- $HOME/.kube:/home/airflow/.kube
   user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-50000}"
   depends_on:

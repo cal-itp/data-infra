@@ -1,7 +1,19 @@
+"""Macros for Operators"""
+
 import pandas as pd
+from calitp.config import is_development
 
 # To add a macro, add its definition in the appropriate section
 # And then add it to the dictionary at the bottom of this file
+
+# Is Development ======================================================
+
+
+def is_development_macro():
+    """Make calitp-py's is_development function available via macro"""
+
+    return is_development()
+
 
 # Payments =============================================================
 
@@ -104,10 +116,23 @@ def scd_join(
 def get_latest_schedule_data(table):
 
     return f"""
+
+        WITH is_in_latest AS (
+            SELECT DISTINCT
+                calitp_itp_id,
+                calitp_url_number,
+                calitp_id_in_latest
+            FROM gtfs_views_staging.calitp_feeds
+            WHERE calitp_id_in_latest
+        )
+
         SELECT
             t1.* EXCEPT(calitp_deleted_at)
         FROM gtfs_views_staging.{table}_clean t1
-        WHERE calitp_deleted_at = '2099-01-01'
+        LEFT JOIN is_in_latest t2
+            USING(calitp_itp_id, calitp_url_number)
+        WHERE t1.calitp_deleted_at = '2099-01-01'
+        AND t2.calitp_id_in_latest
 """
 
 
@@ -138,7 +163,12 @@ def airtable_mapping_generate_sql(table1, table2, col1, col2):
             name2 = col1 + "_name"
             id2 = col1 + "_id"
         sql = SELF_JOIN_SQL_TEMPLATE.format(
-            table=table1, col=col1, name1=name1, id1=id1, name2=name2, id2=id2,
+            table=table1,
+            col=col1,
+            name1=name1,
+            id1=id1,
+            name2=name2,
+            id2=id2,
         )
     else:
         if table2[-1:] == "s":
@@ -228,4 +258,5 @@ data_infra_macros = {
     "sql_enrich_duplicates": sql_enrich_duplicates,
     "sql_airtable_mapping": airtable_mapping_generate_sql,
     "get_latest_schedule_data": get_latest_schedule_data,
+    "is_development": is_development_macro,
 }
