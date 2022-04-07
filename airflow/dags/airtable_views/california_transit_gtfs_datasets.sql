@@ -8,6 +8,8 @@ fields:
   gtfs_dataset_id: Internal Airtable ID for this GTFS dataset record, used for joining with other Airtable views tables
   name: GTFS dataset name
   data: Single-select categorical choice imported as a string; example values "GTFS Alerts"; "GTFS Schedule"
+  uri: The URI where the GTFS Schedule or GTFS Realtime feed that references currently scheduled service can be downloaded from
+  future_uri: The URI where the GTFS Schedule or GTFS Realtime feed that references future scheduled service can be downloaded from
 
 tests:
   check_null:
