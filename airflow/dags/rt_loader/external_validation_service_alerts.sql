@@ -1,5 +1,6 @@
 ---
 operator: operators.SqlQueryOperator
+
 description: |
   GTFS RT validation errors as returned by the validator. Each row corresponds to
   the number of occurrences of a given error for a single itp_id/url/tick/entity combination.
@@ -16,6 +17,10 @@ fields:
     An error ID as defined in the GTFS RT validator repo.
   n_occurrences: |
     The number of occurrences of this error.
+
+post_hooks:
+    - "select calitp_itp_id from gtfs_rt.validation_service_alerts limit 1"
+
 dependencies:
     - load_rt_validations
 ---
