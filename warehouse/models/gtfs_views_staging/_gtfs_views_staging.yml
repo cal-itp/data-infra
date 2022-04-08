@@ -22,7 +22,44 @@ models:
             - calitp_extracted_at
             - calitp_itp_id
             - calitp_url_number
-            - name
+            - agency_id
+    columns:
+      - name: calitp_itp_id
+        description: '{{ doc("field_calitp_itp_id") }}'
+        tests:
+          - not_null
+      - name: calitp_url_number
+        description: '{{ doc("field_calitp_url_number") }}'
+        tests:
+          - not_null
+      - name: calitp_extracted_at
+        description: '{{ doc("field_schedule_calitp_extracted_at") }}'
+        tests:
+          - not_null
+      - name: calitp_hash
+        description: '{{ doc("field_schedule_calitp_hash") }}'
+        tests:
+          - not_null
+      - name: agency_key
+        description: '{{ doc("field_schedule_file_key") }}'
+        tests:
+          - not_null
+      - name: calitp_deleted_at
+        description: '{{ doc("field_schedule_calitp_deleted_at") }}'
+        tests:
+          - not_null
+  - name: attributions_clean
+    description: |
+      Each row is a row from an attributions.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#attributionstxt.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - calitp_extracted_at
+            - calitp_itp_id
+            - calitp_url_number
+            - attribution_id
     columns:
       - name: calitp_itp_id
         description: '{{ doc("field_calitp_itp_id") }}'
