@@ -8,6 +8,9 @@ sources:
     tables:
       - name: agency
       - name: attributions
+      - name: calendar
+      - name: calendar_dates
+      - name:
 
 
 models:
