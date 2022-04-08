@@ -36,3 +36,6 @@ models:
 
     gtfs_rt:
       schema: views
+
+    gtfs_views_staging:
+      schema: gtfs_views_staging
