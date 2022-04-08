@@ -7,6 +7,7 @@ sources:
     schema: gtfs_schedule_type2
     tables:
       - name: agency
+      - name: attributions
 
 
 models:
