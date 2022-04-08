@@ -12,12 +12,12 @@ The date that the schedule data was deleted; data can be deleted because a new v
 
 {% docs field_schedule_calitp_hash %}
 
-Hashed value of all fields except calitp_extracted_at (i.e., unversioned hash)
+Hashed value of all GTFS fields plus calitp_itp_id and calitp_url_number (i.e., unversioned hash)
 
 {% enddocs %}
 
 {% docs field_schedule_file_key %}
 
-Hashed value of all fields including calitp_extracted_at (i.e., versioned hash)
+Hashed value of all GTFS fields plus calitp_itp_id, calitp_url_number, and calitp_extracted_at (i.e., versioned hash)
 
 {% enddocs %}
