@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Static Schedule Pipeline &#8212; Cal-ITP Data Services</title>
+    <title>Amplitude &#8212; Cal-ITP Data Services</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -56,8 +56,8 @@
     <script>mermaid.initialize({startOnLoad:true});</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Production Maintenance" href="production-maintenance.html" />
-    <link rel="prev" title="Local Airflow" href="local-setup.html" />
+    <link rel="next" title="GTFS Schedule (WIP)" href="gtfs_schedule.html" />
+    <link rel="prev" title="Datasets &amp; Tables" href="overview.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -114,7 +114,7 @@
   Analysts
  </span>
 </p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../analytics_welcome/overview.html">
    Welcome!
@@ -226,48 +226,48 @@
    </li>
   </ul>
  </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../datasets_and_tables/overview.html">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="overview.html">
    Datasets &amp; Tables
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
   <label for="toctree-checkbox-4">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../datasets_and_tables/amplitude.html">
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
      Amplitude
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../datasets_and_tables/gtfs_schedule.html">
+    <a class="reference internal" href="gtfs_schedule.html">
      GTFS Schedule (WIP)
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../datasets_and_tables/gtfs_rt.html">
+    <a class="reference internal" href="gtfs_rt.html">
      GTFS Realtime
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../datasets_and_tables/mst_payments.html">
+    <a class="reference internal" href="mst_payments.html">
      MST Payments (WIP)
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../datasets_and_tables/transitdatabase.html">
+    <a class="reference internal" href="transitdatabase.html">
      Transit Database
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../datasets_and_tables/views.html">
+    <a class="reference internal" href="views.html">
      Views (WIP)
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../datasets_and_tables/tables.html">
+    <a class="reference internal" href="tables.html">
      Tables (WIP)
     </a>
    </li>
@@ -328,39 +328,39 @@
   Developers
  </span>
 </p>
-<ul class="current nav bd-sidenav">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../architecture/architecture_overview.html">
    Architecture Overview
   </a>
  </li>
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="overview.html">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../airflow/overview.html">
    Airflow
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
   <label for="toctree-checkbox-7">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul class="current">
+  <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="local-setup.html">
+    <a class="reference internal" href="../airflow/local-setup.html">
      Local Airflow
     </a>
    </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../airflow/static-schedule-pipeline.html">
      Static Schedule Pipeline
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="production-maintenance.html">
+    <a class="reference internal" href="../airflow/production-maintenance.html">
      Production Maintenance
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="dags-maintenance.html">
+    <a class="reference internal" href="../airflow/dags-maintenance.html">
      DAGs Maintenance
     </a>
    </li>
@@ -550,12 +550,9 @@
 
     <div class="dropdown-buttons">
         <!-- ipynb file if we had a myst markdown file -->
-        <a class="dropdown-buttons"
-            href="../_sources/airflow/static-schedule-pipeline.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
-                data-placement="left">.ipynb</button></a>
+        
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/airflow/static-schedule-pipeline.md"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/datasets_and_tables/amplitude.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -575,10 +572,10 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fairflow/static-schedule-pipeline.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fdatasets_and_tables/amplitude.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/airflow/static-schedule-pipeline.md"><button
+        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/datasets_and_tables/amplitude.md"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -593,28 +590,29 @@
 
             <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/cal-itp/data-infra/main?urlpath=tree/docs/airflow/static-schedule-pipeline.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="../_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
         </div>
 
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#data-schema">
+   Data Schema
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#view-table">
+   View Table
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -622,69 +620,159 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Static Schedule Pipeline</h1>
+                <h1>Amplitude</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#data-schema">
+   Data Schema
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#view-table">
+   View Table
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="static-schedule-pipeline">
-<h1>Static Schedule Pipeline<a class="headerlink" href="#static-schedule-pipeline" title="Permalink to this headline">¶</a></h1>
-<p>The Static Schedule Pipeline is a collection of the following DAGs</p>
-<p><img alt="DAG Diagram" src="../_images/static-schedule-dags-diagram.png" /></p>
+  <div class="tex2jax_ignore mathjax_ignore section" id="amplitude">
+<h1>Amplitude<a class="headerlink" href="#amplitude" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://amplitude.com/">Amplitude</a> is used to track key user events in the <a class="reference external" href="https://github.com/cal-itp/benefits">Benefits</a> application. Data from the Amplitude API is ingested into the <code class="docutils literal notranslate"><span class="pre">ingest_amplitude_raw_dev</span></code> and <code class="docutils literal notranslate"><span class="pre">ingest_amplitude_raw_prod</span></code> bucket, in a folder called <code class="docutils literal notranslate"><span class="pre">/benefits/</span></code>. The view makes the data available to users in Metabase.</p>
+<p>The DAG loads events from Amplitude API to Google Cloud Storage as flattened JSON, moves JSONL to BigQuery table and moves BigQuery table to a view.</p>
+<div class="section" id="data-schema">
+<h2>Data Schema<a class="headerlink" href="#data-schema" title="Permalink to this headline">¶</a></h2>
 <table class="colwidths-auto table">
 <thead>
-<tr class="row-odd"><th class="head"><p>DAG name</p></th>
-<th class="head"><p>DAGs depended on</p></th>
-<th class="head"><p>Run Frequency</p></th>
-<th class="head"><p>Depends on Past DAG runs</p></th>
-<th class="head"><p>Description</p></th>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>description</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>gtfs_downloader</p></td>
-<td><p></p></td>
-<td><p>Daily</p></td>
-<td><p>No</p></td>
-<td><p>Downloads static GTFS Feeds</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">amplitude_id</span></code></p></td>
+<td><p>ID</p></td>
 </tr>
-<tr class="row-odd"><td><p>gtfs_schedule_history</p></td>
-<td><p></p></td>
-<td><p>Once</p></td>
-<td><p>No</p></td>
-<td><p>Creates datasets for use in BigQuery</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">app</span></code></p></td>
+<td><p>App name</p></td>
 </tr>
-<tr class="row-even"><td><p>gtfs_loader</p></td>
-<td><p>gtfs_downloader, gtfs_schedule_history</p></td>
-<td><p>Daily</p></td>
-<td><p>No</p></td>
-<td><p>Loads and parses the raw contents of downloaded GTFS Feeds</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">city</span></code></p></td>
+<td><p>The current city of the user</p></td>
 </tr>
-<tr class="row-odd"><td><p>gtfs_schedule_history2</p></td>
-<td><p>gtfs_loader</p></td>
-<td><p>Daily</p></td>
-<td><p>Yes</p></td>
-<td><p>Analyzes the current day’s result and creates data about any changes in feed contents</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">client_event_time</span></code></p></td>
+<td><p>Client event timestamp</p></td>
 </tr>
-<tr class="row-even"><td><p>gtfs_views_staging</p></td>
-<td><p>gtfs_schedule_history2</p></td>
-<td><p>Daily</p></td>
-<td><p>No</p></td>
-<td><p>Creates staging tables for various view (Dimension and Fact) tables</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">client_upload_time</span></code></p></td>
+<td><p>Client upload time</p></td>
 </tr>
-<tr class="row-odd"><td><p>gtfs_views</p></td>
-<td><p>gtfs_views_staging</p></td>
-<td><p>Daily</p></td>
-<td><p>No</p></td>
-<td><p>Creates view (Dimension and Fact) tables</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">country</span></code></p></td>
+<td><p>The current country of the user</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">device_family</span></code></p></td>
+<td><p>The device family that the user is using</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">device_id</span></code></p></td>
+<td><p>A device-specific identifier such as the Identifier for Vendor on iOS</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">device_type</span></code></p></td>
+<td><p>The device type that the user is using</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">event_id</span></code></p></td>
+<td><p>An incrementing counter to distinguish events with the same user_id and</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">event_properties_language</span></code></p></td>
+<td><p>Event property language - Application language</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">event_properties_path</span></code></p></td>
+<td><p>Event property path - Application path</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">event_properties_provider_name</span></code></p></td>
+<td><p>Event property provider name - Transit provider name</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">event_properties_status</span></code></p></td>
+<td><p>Eligibility check event property status - cancel, fail or</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">event_time</span></code></p></td>
+<td><p>Event time (e.g. “2021-12-09 00:45:29.430000”)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">event_type</span></code></p></td>
+<td><p>The unique identifier for your event</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">language</span></code></p></td>
+<td><p>The language set by the user</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">processed_time</span></code></p></td>
+<td><p>Processed time</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">schema</span></code></p></td>
+<td><p>Schema</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">server_received_time</span></code></p></td>
+<td><p>Server received time</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">server_upload_time</span></code></p></td>
+<td><p>Server upload time</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">session_id</span></code></p></td>
+<td><p>The start time of the session in milliseconds since epoch</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">user_creation_time</span></code></p></td>
+<td><p>User creation time</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">user_id</span></code></p></td>
+<td><p>A readable ID specified by you</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">user_properties_provider_name</span></code></p></td>
+<td><p>User property provider name</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">user_properties_referrer</span></code></p></td>
+<td><p>User property preferrer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">user_properties_referring_domain</span></code></p></td>
+<td><p>User property referring domain</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">user_properties_user_agent</span></code></p></td>
+<td><p>User property user agent</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">uuid</span></code></p></td>
+<td><p>UUID</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">version_name</span></code></p></td>
+<td><p>Version name</p></td>
 </tr>
 </tbody>
 </table>
+<p>See more details of data schema from the <a class="reference external" href="https://developers.amplitude.com/docs/http-api-v2#properties-1">Amplitude HTTP API V2 docs</a>.</p>
+</div>
+<div class="section" id="view-table">
+<h2>View Table<a class="headerlink" href="#view-table" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>dataset</p></th>
+<th class="head"><p>description</p></th>
+<th class="head"><p>notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">views.amplitude_benefits_events</span></code></p></td>
+<td><p>One row per event</p></td>
+<td><p>Records go back to <code class="docutils literal notranslate"><span class="pre">2021-12-08</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
@@ -700,7 +788,7 @@
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./airflow"
+            path: "./datasets_and_tables"
         },
         predefinedOutput: true
     }
@@ -712,17 +800,17 @@
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="local-setup.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="overview.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Local Airflow</p>
+            <p class="prev-next-title">Datasets &amp; Tables</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="production-maintenance.html" title="next page">
+    <a class='right-next' id="next-link" href="gtfs_schedule.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Production Maintenance</p>
+        <p class="prev-next-title">GTFS Schedule (WIP)</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

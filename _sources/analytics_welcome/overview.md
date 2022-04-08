@@ -1,7 +1,7 @@
 (analysts-welcome)=
 # Welcome!
 
-Welcome to the Analysts chapter of our Cal-ITP Data Services documentation!
+Welcome to the Analysts section of our Cal-ITP Data Services documentation!
 
 Here you will be introduced to the resources and best practices that make our analytics team work.
 

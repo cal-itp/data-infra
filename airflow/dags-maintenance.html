@@ -237,6 +237,11 @@
   </label>
   <ul>
    <li class="toctree-l2">
+    <a class="reference internal" href="../datasets_and_tables/amplitude.html">
+     Amplitude
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../datasets_and_tables/gtfs_schedule.html">
      GTFS Schedule (WIP)
     </a>
@@ -950,9 +955,6 @@ specify it as “STRING”.</p>
 </div>
 <div class="section" id="id4">
 <h3>Backfilling<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
-<p>Clear the <code class="docutils literal notranslate"><span class="pre">preprocessing_columns</span></code> task for every day you want to re-run.
-These tasks do not depend on past. However, because the extracted data in the littlepay bucket
-can be mutated by littlepay, so if you clear a past task, you should clear them all!</p>
 </div>
 </div>
 <div class="section" id="transit-database-dags-maintenance">

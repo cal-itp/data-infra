@@ -237,6 +237,11 @@
   </label>
   <ul>
    <li class="toctree-l2">
+    <a class="reference internal" href="../datasets_and_tables/amplitude.html">
+     Amplitude
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../datasets_and_tables/gtfs_schedule.html">
      GTFS Schedule (WIP)
     </a>
@@ -590,6 +595,34 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#re-running-or-clearing-dags">
+   Re-running or clearing DAGs
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dependency-diagram">
+   Dependency diagram
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#task-level-considerations">
+   Task-level considerations
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#backfilling-from-the-command-line">
+   Backfilling from the command line
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -602,6 +635,34 @@
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#re-running-or-clearing-dags">
+   Re-running or clearing DAGs
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dependency-diagram">
+   Dependency diagram
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#task-level-considerations">
+   Task-level considerations
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#backfilling-from-the-command-line">
+   Backfilling from the command line
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -610,10 +671,212 @@
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="production-maintenance">
 <h1>Production Maintenance<a class="headerlink" href="#production-maintenance" title="Permalink to this headline">¶</a></h1>
+<p><em>Edited March 2022</em></p>
+<div class="section" id="re-running-or-clearing-dags">
+<h2>Re-running or clearing DAGs<a class="headerlink" href="#re-running-or-clearing-dags" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes DAGs will fail in production. Below are considerations to take into account when re-running or clearing DAGs to address failures.</p>
+<p>Summary of key considerations:</p>
+<ul class="simple">
+<li><p><strong>Safe after 24h</strong> - some DAGs scrape data and then label that data based on execution date (i.e., if they are run more than 24h after they were scheduled, they will pull data from one day and label it as having come from a prior day.) Long-term we will work to break this pattern, but until those changes are made, <strong>these DAGs must not be re-run 24 hours after originally scheduled (including backfills)</strong>.</p>
+<ul>
+<li><p>If <strong>⛔ no</strong>: <strong>DO NOT RUN OR CLEAR IF IT IS MORE THAN 24h AFTER ORIGINALLY SCHEDULED EXECUTION; this consideration trumps all other considerations in the other attributes</strong></p></li>
+<li><p>If yes: Safe to re-run any time</p></li>
+</ul>
+</li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">depends_on_past</span></code></strong> - Some DAGs depend on a prior day’s run having completed successfully, denoted by the <code class="docutils literal notranslate"><span class="pre">depends_on_past</span></code> flag. This means that if the DAG fails for multiple days, each day must be re-run in order.</p>
+<ul>
+<li><p>If no, this will run even if prior days have failed</p></li>
+<li><p>If <strong>📆 yes</strong>, this will wait for prior days to succeed before current day can succeed</p></li>
+</ul>
+</li>
+<li><p><strong>All of history</strong> - Some DAGs contain only operations that cover all of history, even when only for one day (i.e., none of their tasks do anything that is specific to their <code class="docutils literal notranslate"><span class="pre">execution_date</span></code>.) So if these DAGs fail for multiple days in a row, only the latest day needs to be re-run to refresh all the data.</p>
+<ul>
+<li><p>If <strong>🔂 no</strong>, must re-run this DAG for each day that failed to ensure that all data is captured</p></li>
+<li><p>If yes, can re-run only the most recent date</p></li>
+</ul>
+</li>
+<li><p><strong>Depends on</strong> - The information in the table below is a high-level summary indicating general DAG execution order and explicit inter-DAG dependencies; there may be additional dependencies for individual tasks within a DAG, and there may be cases where a DAG task depends on <strong>data</strong> generated by another DAG task but the task-task dependency is not formally specified.</p>
+<ul>
+<li><p>If N/A, this DAG is the bottom of the dependency ladder and can run independently.</p></li>
+<li><p>If populated, this DAG has upstream dependencies that must complete before it will run</p></li>
+</ul>
+</li>
+</ul>
+<p>DAGs are listed in alphabetical order, as they appear in the Airflow UI.</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>DAG</p></th>
+<th class="head"><p>Safe after 24h</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">depends_</span> <span class="pre">on_past</span></code></p></th>
+<th class="head"><p>All of history</p></th>
+<th class="head"><p>Depends on</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">airtable_loader</span></code></p></td>
+<td><p><strong>⛔ No</strong>*</p></td>
+<td><p>No</p></td>
+<td><p><strong>🔂 No</strong></p></td>
+<td><p>N/A</p></td>
+<td><p>All tasks are unsafe after 24 hours</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">airtable_views</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>Yes*</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">airtable_loader</span></code></p></td>
+<td><p>Latest-only data</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">amplitude_benefits</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p><strong>🔂 No</strong></p></td>
+<td><p>N/A</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_downloader</span></code></p></td>
+<td><p><strong>⛔ No</strong>*</p></td>
+<td><p>No</p></td>
+<td><p><strong>🔂 No</strong></p></td>
+<td><p>N/A</p></td>
+<td><p>Tasks downstream of <code class="docutils literal notranslate"><span class="pre">download_data</span></code> can safely be rerun after 24 hours</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_loader</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p><strong>🔂 No</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">gtfs_downloader</span></code>*</p></td>
+<td><p>Technically also depends on <code class="docutils literal notranslate"><span class="pre">gtfs_schedule_history</span></code>, not usually an issue</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>Yes*</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">gtfs_views_staging</span></code></p></td>
+<td><p>Latest-only data (but depends on <code class="docutils literal notranslate"><span class="pre">gtfs_views_staging</span></code> for data cleaning)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule_history</span></code></p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>Once-only (defines external tables); does not generally need to be re-run</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule_history2</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p><strong>📆 Yes</strong></p></td>
+<td><p><strong>🔂 No</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">gtfs_loader</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_views</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">gtfs_views_staging</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_views_staging</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule_history2</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">payments_loader</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>N/A</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">payments_views</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">payments_views_staging</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">payments_views_staging</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">payments_loader</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt_loader</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p><strong>🔂 No</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">gtfs_loader</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt_loader_files</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p><strong>🔂 No</strong></p></td>
+<td><p>N/A</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt_timestamp_fix</span></code></p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>DAG is deprecated but still appears in Airflow UI</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt_views</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rt_loader_files</span></code>, <code class="docutils literal notranslate"><span class="pre">gtfs_views</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sandbox</span></code></p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>Testing only; does not need to be re-run</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="dependency-diagram">
+<h2>Dependency diagram<a class="headerlink" href="#dependency-diagram" title="Permalink to this headline">¶</a></h2>
+<p>In addition to the tabular view above, here is a diagram representing DAG dependencies.</p>
+<div class="mermaid">
+              graph TD;
+      airtable_loader--&gt;airtable_views;
+      amplitude_benefits;
+      gtfs_downloader--&gt;gtfs_loader;
+      gtfs_schedule_history--&gt;gtfs_loader;
+      gtfs_loader--&gt;gtfs_schedule_history2;
+      gtfs_schedule_history2--&gt;gtfs_views_staging;
+      gtfs_views_staging--&gt;gtfs_views;
+      gtfs_views_staging--&gt;gtfs_schedule;
+      payments_loader--&gt;payments_views_staging;
+      payments_views_staging--&gt;payments_views;
+      gtfs_loader--&gt;rt_loader;
+      rt_loader_files--&gt;rt_views;
+      gtfs_views--&gt;rt_views;
+      sandbox;
+        </div></div>
+<div class="section" id="task-level-considerations">
+<h2>Task-level considerations<a class="headerlink" href="#task-level-considerations" title="Permalink to this headline">¶</a></h2>
+<p>Some tasks have unique considerations, beyond the requirements of their overall DAG.</p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">PodOperators</span></code></strong>: When restarting a failed <code class="docutils literal notranslate"><span class="pre">PodOperator</span></code> run, check the logs before restarting. If the logs show any indication that the prior run’s pod was not killed (for example, if the logs cut off abruptly without showing an explicit task failure), you should check that the pod associated with the failed run task has in fact been killed before clearing or restarting the Airflow task. If you don’t know how to check a pod status, please ask in the <code class="docutils literal notranslate"><span class="pre">#data-infra</span></code> channel on Slack before proceeding.</p></li>
+</ul>
+</div>
+<div class="section" id="backfilling-from-the-command-line">
+<h2>Backfilling from the command line<a class="headerlink" href="#backfilling-from-the-command-line" title="Permalink to this headline">¶</a></h2>
 <p>From time-to-time some DAGs may need to be re-ran in order to populate new data.</p>
-<p>More will be added later, but whenever backfilling of DAG tasks need to happen, the following command can be ran:</p>
+<p>More will be added later, but whenever backfilling of DAG tasks need to happen, the following command can be ran, subject to the considerations outlined above:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>gcloud composer environments run calitp-airflow-prod --location<span class="o">=</span>us-west2 backfill -- --start_date <span class="m">2021</span>-04-18 --end_date <span class="m">2021</span>-11-03 -x --reset_dagruns -y -t <span class="s2">&quot;gtfs_schedule_history_load&quot;</span> -i gtfs_loader
 </pre></div>
+</div>
 </div>
 </div>
 

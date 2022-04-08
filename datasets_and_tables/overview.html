@@ -56,7 +56,7 @@
     <script>mermaid.initialize({startOnLoad:true});</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="GTFS Schedule (WIP)" href="gtfs_schedule.html" />
+    <link rel="next" title="Amplitude" href="amplitude.html" />
     <link rel="prev" title="Helpful SQL Snippets" href="../warehouse/sql_snippets.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -236,6 +236,11 @@
    </i>
   </label>
   <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="amplitude.html">
+     Amplitude
+    </a>
+   </li>
    <li class="toctree-l2">
     <a class="reference internal" href="gtfs_schedule.html">
      GTFS Schedule (WIP)
@@ -639,23 +644,27 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="reference internal" href="gtfs_schedule.html"><span class="doc std std-doc">GTFS Schedule</span></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="amplitude.html"><span class="doc std std-doc">Amplitude</span></a></p></td>
+<td><p>Data from Amplitude API for Benefits app</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">amplitude.benefits_events</span> </code>, <code class="docutils literal notranslate"><span class="pre">views.amplitude_benefits_events</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="gtfs_schedule.html"><span class="doc std std-doc">GTFS Schedule</span></a></p></td>
 <td><p>GTFS Schedule data for the current day</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule</span></code>, <code class="docutils literal notranslate"><span class="pre">gtfs_schedule_history</span></code>, <code class="docutils literal notranslate"><span class="pre">gtfs_schedule_type2</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="gtfs_rt.html"><span class="doc std std-doc">GTFS Realtime</span></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="gtfs_rt.html"><span class="doc std std-doc">GTFS Realtime</span></a></p></td>
 <td><p>GTFS Realtime data, collected every 20 seconds</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">gtfs_rt</span></code>, <code class="docutils literal notranslate"><span class="pre">views.gtfs_rt_*</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="mst_payments.html"><span class="doc std std-doc">MST Payments</span></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="mst_payments.html"><span class="doc std std-doc">MST Payments</span></a></p></td>
 <td><p>TODO</p></td>
 <td><p>TODO</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="transitdatabase.html"><span class="doc std std-doc">Transit Database</span></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="transitdatabase.html"><span class="doc std std-doc">Transit Database</span></a></p></td>
 <td><p>A representation of Cal-ITP’s internal knowledge about our Transit Operators in CA and various pieces of National Transit Database statistics for ease of use</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">airtable</span></code> (internal access only), <code class="docutils literal notranslate"><span class="pre">views.airtable_*</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="views.html"><span class="doc std std-doc">Views</span></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="views.html"><span class="doc std std-doc">Views</span></a></p></td>
 <td><p>End-user friendly data for dashboards and metrics</p></td>
 <td><p>E.g. <code class="docutils literal notranslate"><span class="pre">views.validation_*</span></code>, <code class="docutils literal notranslate"><span class="pre">views.gtfs_schedule_*</span></code></p></td>
 </tr>
@@ -697,10 +706,10 @@
             <p class="prev-next-title">Helpful SQL Snippets</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="gtfs_schedule.html" title="next page">
+    <a class='right-next' id="next-link" href="amplitude.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">GTFS Schedule (WIP)</p>
+        <p class="prev-next-title">Amplitude</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
