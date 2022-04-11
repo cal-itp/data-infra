@@ -10,7 +10,20 @@ sources:
       - name: attributions
       - name: calendar
       - name: calendar_dates
-      - name:
+      - name: fare_attributes
+      - name: fare_rules
+      - name: feed_info
+      - name: frequencies
+      - name: levels
+      - name: pathways
+      - name: routes
+      - name: shapes
+      - name: stop_times
+      - name: stops
+      - name: transfers
+      - name: translations
+      - name: trips
+      - name: validation_notices
 
 
 models:
