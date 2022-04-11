@@ -18,8 +18,10 @@ def run(
     project_dir: Path = os.environ.get("DBT_PROJECT_DIR", os.getcwd()),
     profiles_dir: Path = os.environ.get("DBT_PROFILES_DIR", os.getcwd()),
     target: str = os.environ.get("DBT_TARGET"),
+    only_compile: bool = False,
     docs: bool = False,
     upload: bool = False,
+    sync_metabase: bool = False,
 ) -> None:
     def get_command(*args) -> List[str]:
         cmd = [
@@ -40,10 +42,14 @@ def run(
             )
         return cmd
 
-    subprocess.run(get_command("run"))
+    if only_compile:
+        typer.echo("skipping run, only compiling")
+        subprocess.run(get_command("compile")).check_returncode()
+    else:
+        subprocess.run(get_command("run")).check_returncode()
 
     if docs:
-        subprocess.run(get_command("docs", "generate"))
+        subprocess.run(get_command("docs", "generate")).check_returncode()
 
         fs = gcsfs.GCSFileSystem(
             project="cal-itp-data-infra", token=os.getenv("BIGQUERY_KEYFILE_LOCATION")
@@ -57,6 +63,26 @@ def run(
                 fs.put(lpath=_from, rpath=_to)
             else:
                 typer.echo(f"skipping upload of {artifact}")
+
+    if sync_metabase:
+        subprocess.run(
+            [
+                "dbt-metabase",
+                "models",
+                "--dbt_manifest_path",
+                "./target/manifest.json",
+                "--dbt_database",
+                "cal-itp-data-infra",
+                "--metabase_host",
+                "dashboards.calitp.org",
+                "--metabase_user",
+                os.environ["METABASE_USER"],
+                "--metabase_password",
+                os.environ["METABASE_PASSWORD"],
+                "--metabase_database",
+                "Warehouse Views",
+            ]
+        )
 
 
 if __name__ == "__main__":
