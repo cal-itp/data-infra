@@ -1,3 +1,4 @@
+(pandas-intro)=
 # Data Analysis: Intro
 
 Below are Python tutorials covering the basics of data cleaning and wrangling. [Chris Albon's guide](https://chrisalbon.com/#python) is particularly helpful. Rather than reinventing the wheel, this tutorial instead highlights specific methods and operations that might make your life easier as a data analyst.
@@ -127,7 +128,7 @@ Lambda functions are quick and dirty. You don't even have to name the function! 
 | Jet Black Pope | 4
 | Nothing Rhymes with Orange | 6
 
-### *If-Else Statements*
+### **If-Else Statements**
 
 ```
 # Create column called duration. If Songs > 10, duration is 'long'.

@@ -1,3 +1,4 @@
+(pandas-intermediate)=
 # Data Analysis: Intermediate
 
 After polishing off the [intro tutorial](./data-analysis-intro.md), you're ready to devour some more techniques to simplify your life as a data analyst.

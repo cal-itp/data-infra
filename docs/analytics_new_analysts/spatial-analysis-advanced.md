@@ -1,3 +1,4 @@
+(geo-advanced)=
 # Working with Geospatial Data: Advanced
 
 Place matters. After covering the [intermediate tutorial](./spatial-analysis-intermediate.md), you're ready to cover some advanced spatial analysis topics.

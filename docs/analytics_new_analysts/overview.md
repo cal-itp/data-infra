@@ -3,14 +3,14 @@
 This section is geared towards data analysts who are new to Python. The tutorials highlight the most relevant Python skills used at Cal ITP - use them to guide you through completing [practice exercises #1-6](https://github.com/cal-itp/data-analyses/tree/main/example_report).
 
 ## Content:
-* [Data Analysis: Introduction](Change)
-* [Data Analysis: Intermediate](Change)
-* [Data Management](Change)
-* [Best Practices for Jupyter Notebooks](Change)
-* [Working with Geospatial Data: Basics](Change)
-* [Working with Geospatial Data: Intro](Change)
-* [Working with Geospatial Data: Intermediate](Change)
-* [Working with Geospatial Data: Advance](Change)
+* [Data Analysis: Introduction](pandas-intro)
+* [Data Analysis: Intermediate](pandas-intermediate)
+* [Data Management](data-management)
+* [Best Practices for Jupyter Notebooks](nb-best-practices)
+* [Working with Geospatial Data: Basics](geo-basics)
+* [Working with Geospatial Data: Intro](geo-intro)
+* [Working with Geospatial Data: Intermediate](geo-intermediate)
+* [Working with Geospatial Data: Advanced](geo-advanced)
 
 ## Additional Resources
 Looking for more resources to aid you on your Python journey? 

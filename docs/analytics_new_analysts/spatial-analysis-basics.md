@@ -1,3 +1,4 @@
+(geo-basics)=
 # Working with Geospatial Data: Basics
 
 Place matters. That's why data analysis often includes a geospatial or geographic component. Before we wrangle with our data, let's go over the basics and make sure we're properly set up.

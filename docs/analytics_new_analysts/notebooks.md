@@ -1,3 +1,4 @@
+(nb-best-practices)=
 # Working with Jupyter notebooks
 
 Jupyter notebooks are ubiquitous in the fields of data analysis, data science, and education.
@@ -23,7 +24,7 @@ This document is meant to outline some recommendations for how to best use noteb
 * [Data Access](#data-access)
 
 
-### Notebooks and Reproducibility
+## Notebooks and Reproducibility
 
 [Scientific](https://arxiv.org/abs/1605.04339)
 [software](http://gael-varoquaux.info/programming/software-for-reproducible-science-lets-not-have-a-misunderstanding.html)
@@ -55,7 +56,7 @@ if a notebook analysis cannot be run without human intervention, it is not repro
 
 This all can be summarized as "restart and run all, or it didn't happen."
 
-### Notebooks and Version Control
+## Notebooks and Version Control
 
 Jupyter notebooks are stored as JSON documents.
 While this is a rich format for storing things like
@@ -81,7 +82,7 @@ Examples include code for cleaning and preprocessing data.
 Often such code is best removed from the interactive notebook environment and put in plain-text scripts,
 where it can be more easily automated and tracked.
 
-### Prose and Documentation
+## Prose and Documentation
 
 One of the best features about notebooks is that they allow for richer content than normal scripts.
 In addition to code comments, they allow for images, equations, and markdown cells.
@@ -98,7 +99,7 @@ One of the most remarkable findings of this study was just how many notebooks in
 Over a quarter of notebooks include no prose.
 We should endeavor to *not* be in that first bin.
 
-### Data Access
+## Data Access
 
 Many attempts to reproduce data analyses fail quickly.
 
