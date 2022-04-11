@@ -68,7 +68,7 @@ models:
       Note that presence of a file is not a guarantee that the downloaded file is complete or valid.
       Hours here are in UTC.
     meta:
-      metabase.display_name: GTFS RT Fact Files - Wide Hourly
+      metabase.display_name: GTFS RT Fact Files - Wide by Hour
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
