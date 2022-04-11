@@ -1,3 +1,0 @@
-operator: airflow.operators.dummy_operator.DummyOperator
-external_dependencies:
-  - gtfs_schedule_history2: all
