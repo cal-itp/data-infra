@@ -10,8 +10,6 @@ WITH type2 as (
     -- Trim all string fields
     -- Incoming schema explicitly defined in gtfs_schedule_history external table definition
 
-    -- select distinct because of Foothill Transit feed with exact duplicates
-    -- duplicates here result in duplicate feed_keys downstream
     SELECT
         calitp_itp_id
         , calitp_url_number
