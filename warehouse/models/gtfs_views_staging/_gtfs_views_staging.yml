@@ -35,7 +35,7 @@ sources:
 models:
   - name: agency_clean
     description: |
-      Each row is a row from an agency.txt file.
+      Each row is a cleaned row from an agency.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#agencytxt.
     columns:
@@ -66,7 +66,7 @@ models:
           - not_null
   - name: attributions_clean
     description: |
-      Each row is a row from an attributions.txt file.
+      Each row is a cleaned row from an attributions.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#attributionstxt.
     columns:
@@ -97,7 +97,7 @@ models:
           - not_null
   - name: calendar_clean
     description: |
-      Each row is a row from a calendar.txt file.
+      Each row is a cleaned row from a calendar.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#calendartxt.
     columns:
@@ -128,7 +128,7 @@ models:
           - not_null
   - name: calendar_dates_clean
     description: |
-      Each row is a row from a calendar_dates.txt file.
+      Each row is a Each row is a cleaned rowrow from a calendar_dates.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#calendar_datestxt.
     columns:
@@ -154,7 +154,7 @@ models:
           - not_null
   - name: fare_attributes_clean
     description: |
-      Each row is a row from aß fare_attributes.txt file.
+      Each row is a cleaned row from aß fare_attributes.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#fare_attributestxt.
     columns:
@@ -185,7 +185,7 @@ models:
           - not_null
   - name: fare_rules_clean
     description: |
-      Each row is a row from a fare_rules.txt file.
+      Each row is a cleaned row from a fare_rules.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#fare_rulestxt.
     columns:
@@ -216,7 +216,7 @@ models:
           - not_null
   - name: feed_info_clean
     description: |
-      Each row is a row from a feed_info.txt file.
+      Each row is a cleaned row from a feed_info.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#feed_infotxt.
     columns:
@@ -247,7 +247,7 @@ models:
           - not_null
   - name: frequencies_clean
     description: |
-      Each row is a row from a frequencies.txt file.
+      Each row is a cleaned row from a frequencies.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#frequenciestxt.
     columns:
@@ -278,7 +278,7 @@ models:
           - not_null
   - name: levels_clean
     description: |
-      Each row is a row from a levels.txt file.
+      Each row is a cleaned row from a levels.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#levelstxt.
     columns:
@@ -309,7 +309,7 @@ models:
           - not_null
   - name: pathways_clean
     description: |
-      Each row is a row from a pathways.txt file.
+      Each row is a cleaned row from a pathways.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#pathwaystxt.
     columns:
@@ -340,7 +340,7 @@ models:
           - not_null
   - name: routes_clean
     description: |
-      Each row is a row from a routes.txt file.
+      Each row is a cleaned row from a routes.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#routestxt.
     columns:
@@ -371,7 +371,7 @@ models:
           - not_null
   - name: stop_times_clean
     description: |
-      Each row is a row from a stop_times.txt file.
+      Each row is a cleaned row from a stop_times.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#stop_timestxt.
     columns:
@@ -402,7 +402,7 @@ models:
           - not_null
   - name: stops_clean
     description: |
-      Each row is a row from a stops.txt file.
+      Each row is a cleaned row from a stops.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#stopstxt.
     columns:
@@ -433,7 +433,7 @@ models:
           - not_null
   - name: transfers_clean
     description: |
-      Each row is a row from a transfers.txt file.
+      Each row is a cleaned row from a transfers.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#transferstxt.
     columns:
@@ -464,7 +464,7 @@ models:
           - not_null
   - name: translations_clean
     description: |
-      Each row is a row from a translations.txt file.
+      Each row is a cleaned row from a translations.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#translationstxt.
     columns:
@@ -495,7 +495,7 @@ models:
           - not_null
   - name: trips_clean
     description: |
-      Each row is a row from a trips.txt file.
+      Each row is a cleaned row from a trips.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#tripstxt.
     columns:
