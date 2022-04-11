@@ -9,8 +9,8 @@ WITH type2 as (
 
     -- Trim all string fields
     -- Incoming schema explicitly defined in gtfs_schedule_history external table definition
-
-    SELECT
+    -- select distinct because of multiple duplicates, including from ITP ID 300 URL 0 on 2022-04-6
+    SELECT DISTINCT
         calitp_itp_id
         , calitp_url_number
         , TRIM(route_id) as route_id
