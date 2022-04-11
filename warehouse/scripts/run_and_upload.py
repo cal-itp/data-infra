@@ -45,7 +45,9 @@ def run(
     if docs:
         subprocess.run(get_command("docs", "generate"))
 
-        fs = gcsfs.GCSFileSystem(project="cal-itp-data-infra")
+        fs = gcsfs.GCSFileSystem(
+            project="cal-itp-data-infra", token=os.getenv("BIGQUERY_KEYFILE_LOCATION")
+        )
 
         for artifact in artifacts:
             if upload:
