@@ -2,10 +2,10 @@
 
 WITH type2 as (
     select *
-    from {{ source('gtfs_type2', 'calendar') }}
+    from {{ source('gtfs_type2', 'calendar_dates') }}
 )
 
-, calendar_clean as (
+, calendar_dates_clean as (
 
     -- Trim all string fields
     -- Incoming schema explicitly defined in gtfs_schedule_history external table definition
@@ -14,21 +14,12 @@ WITH type2 as (
         calitp_itp_id
         , calitp_url_number
         , TRIM(service_id) as service_id
-        , TRIM(monday) as monday
-        , TRIM(tuesday) as tuesday
-        , TRIM(wednesday) as wednesday
-        , TRIM(thursday) as thursday
-        , TRIM(friday) as friday
-        , TRIM(saturday) as saturday
-        , TRIM(sunday) as sunday
-        , PARSE_DATE("%Y%m%d", TRIM(start_date)) AS start_date
-        , PARSE_DATE("%Y%m%d", TRIM(end_date)) AS end_date
+        , TRIM(exception_type) as exception_type
         , calitp_extracted_at
         , calitp_hash
-        , FARM_FINGERPRINT(CONCAT(CAST(calitp_hash AS STRING), "___", CAST(calitp_extracted_at AS STRING)))
-            AS calendar_key
+        , PARSE_DATE("%Y%m%d", TRIM(date)) AS date
         , COALESCE(calitp_deleted_at, "2099-01-01") AS calitp_deleted_at
     FROM type2
 )
 
-SELECT * FROM calendar_clean
+SELECT * FROM calendar_dates_clean
