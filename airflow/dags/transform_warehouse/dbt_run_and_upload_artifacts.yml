@@ -6,6 +6,8 @@ cmds:
 
 arguments:
   - '/app/scripts/run_and_upload.py'
+  - '--docs'
+  - '--upload'
 
 is_delete_operator_pod: true
 get_logs: true
