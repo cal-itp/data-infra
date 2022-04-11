@@ -1,3 +1,5 @@
+Docs macros that apply to GTFS schedule data only
+
 {% docs field_schedule_calitp_extracted_at %}
 
 The date that the schedule data was downloaded

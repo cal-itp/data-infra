@@ -1,3 +1,5 @@
+Docs macros that apply to all GTFS data (schedule and RT)
+
 {% docs field_calitp_itp_id %}
 
 Feed ITP ID
