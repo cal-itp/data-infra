@@ -34,7 +34,7 @@ models:
     # Config indicated by + and applies to all files under models/example/
     +materialized: view
 
-    gtfs_rt:
+    rt_views:
       schema: views
 
     gtfs_views_staging:
