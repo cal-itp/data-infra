@@ -9,6 +9,12 @@ jupyterhub:
     image:
       name: ghcr.io/cal-itp/calitp-py
       tag: hub-v9
+    memory:
+      limit: 10G
+      guarantee: 4G
+    cpu:
+      limit: 1
+      guarantee: 1
     storage:
       extraVolumes:
       - name: gcloud-auth
