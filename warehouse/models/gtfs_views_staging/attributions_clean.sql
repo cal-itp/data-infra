@@ -9,8 +9,8 @@ WITH type2 as (
 
     -- Trim all string fields
     -- Incoming schema explicitly defined in gtfs_schedule_history external table definition
-
-    SELECT
+    -- select distinct because of duplicates in MTC 511 feed on 2022-03-23
+    SELECT DISTINCT
         calitp_itp_id
         , calitp_url_number
         , TRIM(organization_name) as organization_name
