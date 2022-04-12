@@ -1,13 +1,11 @@
----
-operator: operators.SqlToWarehouseOperator
-dst_table_name: "gtfs_views_staging.calitp_feeds"
-dependencies:
-  - type2_loaded
----
+{{ config(materialized='table') }}
 
-WITH
+WITH calitp_status as (
+    select *
+    from {{ source('gtfs_schedule_history', 'calitp_status') }}
+)
 
-    gtfs_schedule_feed_snapshot AS (
+,  gtfs_schedule_feed_snapshot AS (
         SELECT
             itp_id, url_number, gtfs_schedule_url, agency_name, status, calitp_extracted_at
             -- Do a concat rather than just md5 on gtfs_schedule_feed as we only want to
@@ -19,10 +17,11 @@ WITH
                     COALESCE(CAST(agency_name AS STRING), "_NULL_")
                 )
               )) AS calitp_hash
+            -- TODO: refactor to use ROW_NUMBER or RANK = 1 instead of MIN
             , calitp_extracted_at = MIN(calitp_extracted_at)
                 OVER (PARTITION BY itp_id, url_number)
               AS is_first_extraction
-        FROM `gtfs_schedule_history.calitp_status` T
+        FROM calitp_status T
     ),
     -- cross unique itp_id, url_number with dates we have for calitp_extracted_at
     -- this will let us detect later on when an entry is missing (e.g. does not exist
@@ -87,7 +86,7 @@ WITH
         FROM final_data
         WHERE calitp_deleted_at = "2099-01-01"
     ),
-    final AS (
+    calitp_feeds AS (
         SELECT
             T1.*
             , COALESCE(T2.calitp_id_in_latest, false) AS calitp_id_in_latest
@@ -97,4 +96,4 @@ WITH
         LEFT JOIN exists_in_latest T2 USING(calitp_itp_id, calitp_url_number)
     )
 
-SELECT * FROM final
+SELECT * FROM calitp_feeds
