@@ -1,6 +1,6 @@
 {{ config(materialized='table') }}
 
-WITH type2 as (
+WITH calendar as (
     select *
     from {{ source('gtfs_type2', 'calendar') }}
 )
@@ -28,7 +28,7 @@ WITH type2 as (
         , FARM_FINGERPRINT(CONCAT(CAST(calitp_hash AS STRING), "___", CAST(calitp_extracted_at AS STRING)))
             AS calendar_key
         , COALESCE(calitp_deleted_at, "2099-01-01") AS calitp_deleted_at
-    FROM type2
+    FROM calendar
 )
 
 SELECT * FROM calendar_clean
