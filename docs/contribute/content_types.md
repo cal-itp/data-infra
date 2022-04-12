@@ -88,8 +88,9 @@ Images are currently being stored in an `assets` folder within each `docs` folde
 ### Internal References and Cross-References
 Referencing within the documentation can be accomplished quickly with `labels` and `markdown link syntax`.
 
-Labels can be added before major elements of a page,
-such as titles or figures. To add a label, use the following pattern **before** the element you wish to label:
+**Note**: be sure to make reference names unique. If a reference has the same name as a file name, for example, the build process will fail.
+
+Labels can be added before major elements of a page, such as titles or figures. To add a label, use the following pattern **before** the element you wish to label:
 
 ```md
 (my-label)=
