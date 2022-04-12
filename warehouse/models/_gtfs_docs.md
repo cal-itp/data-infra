@@ -1,12 +1,12 @@
 Docs macros that apply to all GTFS data (schedule and RT)
 
-{% docs field_calitp_itp_id %}
+{% docs column_calitp_itp_id %}
 
 Feed ITP ID
 
 {% enddocs %}
 
-{% docs field_calitp_url_number %}
+{% docs column_calitp_url_number %}
 
 Feed URL number
 
