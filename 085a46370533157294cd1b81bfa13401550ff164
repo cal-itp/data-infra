@@ -1,0 +1,177 @@
+[kustomize:kubernetes/apps/overlays/gtfs-rt-archive-prod]
+
+diff -u -N /tmp/LIVE-1290314585/apps.v1.Deployment.gtfs-rt.gtfs-rt-archive /tmp/MERGED-4220999570/apps.v1.Deployment.gtfs-rt.gtfs-rt-archive
+--- /tmp/LIVE-1290314585/apps.v1.Deployment.gtfs-rt.gtfs-rt-archive	2022-02-16 16:38:58.309808227 +0000
++++ /tmp/MERGED-4220999570/apps.v1.Deployment.gtfs-rt.gtfs-rt-archive	2022-02-16 16:38:58.313808405 +0000
+@@ -6,13 +6,68 @@
+     kubectl.kubernetes.io/last-applied-configuration: |
+       {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"name":"gtfs-rt-archive"},"name":"gtfs-rt-archive","namespace":"gtfs-rt"},"spec":{"replicas":1,"selector":{"matchLabels":{"name":"gtfs-rt-archive"}},"strategy":{"type":"Recreate"},"template":{"metadata":{"labels":{"name":"gtfs-rt-archive"}},"spec":{"containers":[{"envFrom":[{"configMapRef":{"name":"archiver-app-vars"}},{"configMapRef":{"name":"archiver-channel-vars"}}],"image":"us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:2.0","name":"app","resources":{"limits":{"memory":"6.5Gi"},"requests":{"memory":"6.5Gi"}},"volumeMounts":[{"mountPath":"/secrets/agencies-data","name":"agencies-data"},{"mountPath":"/secrets/gcs-upload-svcacct","name":"gcs-upload-svcacct"}]}],"volumes":[{"name":"agencies-data","secret":{"secretName":"agencies-data"}},{"name":"gcs-upload-svcacct","secret":{"secretName":"gcs-upload-svcacct"}}]}}}}
+   creationTimestamp: "2021-07-26T20:39:07Z"
+-  generation: 98
++  generation: 99
+   labels:
+     name: gtfs-rt-archive
+   managedFields:
+   - apiVersion: apps/v1
+     fieldsType: FieldsV1
+     fieldsV1:
++      f:spec:
++        f:replicas: {}
++        f:strategy:
++          f:type: {}
++    manager: kubectl-edit
++    operation: Update
++    time: "2022-01-27T15:01:51Z"
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:spec:
++        f:template:
++          f:metadata:
++            f:annotations:
++              .: {}
++              f:kubectl.kubernetes.io/restartedAt: {}
++    manager: kubectl-rollout
++    operation: Update
++    time: "2022-01-28T20:22:57Z"
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:annotations:
++          f:deployment.kubernetes.io/revision: {}
++      f:status:
++        f:availableReplicas: {}
++        f:conditions:
++          .: {}
++          k:{"type":"Available"}:
++            .: {}
++            f:lastTransitionTime: {}
++            f:lastUpdateTime: {}
++            f:message: {}
++            f:reason: {}
++            f:status: {}
++            f:type: {}
++          k:{"type":"Progressing"}:
++            .: {}
++            f:lastTransitionTime: {}
++            f:lastUpdateTime: {}
++            f:message: {}
++            f:reason: {}
++            f:status: {}
++            f:type: {}
++        f:observedGeneration: {}
++        f:readyReplicas: {}
++        f:replicas: {}
++        f:updatedReplicas: {}
++    manager: kube-controller-manager
++    operation: Update
++    time: "2022-02-01T18:28:56Z"
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
+       f:metadata:
+         f:annotations:
+           .: {}
+@@ -23,10 +78,7 @@
+       f:spec:
+         f:progressDeadlineSeconds: {}
+         f:revisionHistoryLimit: {}
+-        f:selector:
+-          f:matchLabels:
+-            .: {}
+-            f:name: {}
++        f:selector: {}
+         f:template:
+           f:metadata:
+             f:labels:
+@@ -83,62 +135,7 @@
+                   f:secretName: {}
+     manager: kubectl-client-side-apply
+     operation: Update
+-    time: "2022-01-26T17:54:46Z"
+-  - apiVersion: apps/v1
+-    fieldsType: FieldsV1
+-    fieldsV1:
+-      f:spec:
+-        f:replicas: {}
+-        f:strategy:
+-          f:type: {}
+-    manager: kubectl-edit
+-    operation: Update
+-    time: "2022-01-27T15:01:51Z"
+-  - apiVersion: apps/v1
+-    fieldsType: FieldsV1
+-    fieldsV1:
+-      f:spec:
+-        f:template:
+-          f:metadata:
+-            f:annotations:
+-              .: {}
+-              f:kubectl.kubernetes.io/restartedAt: {}
+-    manager: kubectl-rollout
+-    operation: Update
+-    time: "2022-01-28T20:22:57Z"
+-  - apiVersion: apps/v1
+-    fieldsType: FieldsV1
+-    fieldsV1:
+-      f:metadata:
+-        f:annotations:
+-          f:deployment.kubernetes.io/revision: {}
+-      f:status:
+-        f:availableReplicas: {}
+-        f:conditions:
+-          .: {}
+-          k:{"type":"Available"}:
+-            .: {}
+-            f:lastTransitionTime: {}
+-            f:lastUpdateTime: {}
+-            f:message: {}
+-            f:reason: {}
+-            f:status: {}
+-            f:type: {}
+-          k:{"type":"Progressing"}:
+-            .: {}
+-            f:lastTransitionTime: {}
+-            f:lastUpdateTime: {}
+-            f:message: {}
+-            f:reason: {}
+-            f:status: {}
+-            f:type: {}
+-        f:observedGeneration: {}
+-        f:readyReplicas: {}
+-        f:replicas: {}
+-        f:updatedReplicas: {}
+-    manager: kube-controller-manager
+-    operation: Update
+-    time: "2022-02-01T18:28:56Z"
++    time: "2022-02-16T16:38:58Z"
+   name: gtfs-rt-archive
+   namespace: gtfs-rt
+   resourceVersion: "177362560"
+@@ -166,7 +163,7 @@
+             name: archiver-app-vars
+         - configMapRef:
+             name: archiver-channel-vars
+-        image: us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:2.0
++        image: us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:2.1
+         imagePullPolicy: IfNotPresent
+         name: app
+         resources:
+[helm:metabase=kubernetes/apps/charts/metabase]
+
+diff -u -N /tmp/LIVE-3759017700/apps.v1.StatefulSet.metabase.database /tmp/MERGED-102315402/apps.v1.StatefulSet.metabase.database
+--- /tmp/LIVE-3759017700/apps.v1.StatefulSet.metabase.database	2022-02-16 16:39:01.853965456 +0000
++++ /tmp/MERGED-102315402/apps.v1.StatefulSet.metabase.database	2022-02-16 16:39:01.853965456 +0000
+@@ -26,10 +26,7 @@
+         f:podManagementPolicy: {}
+         f:replicas: {}
+         f:revisionHistoryLimit: {}
+-        f:selector:
+-          f:matchLabels:
+-            .: {}
+-            f:name: {}
++        f:selector: {}
+         f:serviceName: {}
+         f:template:
+           f:metadata:
