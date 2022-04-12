@@ -14,6 +14,7 @@ gcsfs = "^2022.2.0"
 typer = "^0.4.0"
 # pin click until https://github.com/tiangolo/typer/issues/377 is fixed
 click = "8.0.0"
+# Point at the JarvusInnovations fork for new features; long-term we may be able to point at the pypi version
 dbt-metabase = { git = "https://github.com/JarvusInnovations/dbt-metabase" }
 
 [tool.poetry.dev-dependencies]
