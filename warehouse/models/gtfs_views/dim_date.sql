@@ -6,9 +6,8 @@ WITH raw_dates AS (
     SELECT
       *
     FROM
-      UNNEST(GENERATE_DATE_ARRAY('2021-01-01', '2031-01-01', INTERVAL 1 DAY)) AS d )
-)
-, dim_date AS (
+      UNNEST(GENERATE_DATE_ARRAY('2021-01-01', '2031-01-01', INTERVAL 1 DAY)) AS d
+), dim_date AS (
     SELECT
         FORMAT_DATE('%F', d) as id,
         d AS full_date,

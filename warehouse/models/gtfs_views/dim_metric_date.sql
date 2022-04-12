@@ -2,9 +2,12 @@
 
 -- from https://gist.github.com/ewhauser/d7dd635ad2d4b20331c7f18038f04817
 
-WITH end_dates as (
-    select *
-    from {{ ref('gtfs_rt_fact_files') }}
+WITH
+end_dates AS (
+    SELECT
+        full_date AS metric_date
+    FROM {{ ref('dim_date') }}
+
 ),
 -- rolling ranges (i.e. 7, 28, and 90 day rolling windows)
 rolling_ranges AS (
@@ -90,7 +93,7 @@ all_periods_enhanced AS (
     FROM all_periods
 
 ),
-dim_metric_date (
+dim_metric_date AS (
   SELECT
     *
     , is_in_past_or_present AND COALESCE(start_date, "2021-04-15") > "2021-04-15"

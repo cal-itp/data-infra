@@ -23,7 +23,7 @@ models:
         tests:
           - not_null
       - name: Day number within the year (integer between 1 and 366)
-        description: '{{ doc("field_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_file_key") }}'
         tests:
           - not_null
           - unique
