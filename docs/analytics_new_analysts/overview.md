@@ -5,7 +5,7 @@ This section is geared towards data analysts who are new to Python. The tutorial
 ## Content:
 * [Data Analysis: Introduction](pandas-intro)
 * [Data Analysis: Intermediate](pandas-intermediate)
-* [Data Management](data-management)
+* [Data Management](data-management-page)
 * [Best Practices for Jupyter Notebooks](nb-best-practices)
 * [Working with Geospatial Data: Basics](geo-basics)
 * [Working with Geospatial Data: Intro](geo-intro)
