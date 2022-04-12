@@ -4,7 +4,7 @@
 ## Introduction to JupyterHub
 Jupyterhub is a web application that allows users to analyze and create reports on warehouse data (or a number of data sources).
 
-Analyses on JupyterHub are done using notebooks, which allow users to mix narrative with analysis code.
+Analyses on JupyterHub are accomplished using notebooks, which allow users to mix narrative with analysis code.
 
 **You can access JuypterHub [using this link](https://hubtest.k8s.calitp.jarv.us/)**.
 
@@ -19,7 +19,7 @@ Analyses on JupyterHub are done using notebooks, which allow users to mix narrat
 1. [Jupyter Notebook Best Practices](notebook-shortcuts)
 
 ## Using JupyterHub
-For Python users, we have deployed a cloud-based instance of JupyterHub to creating, using, and sharing notebooks easy.
+For Python users, we have deployed a cloud-based instance of JupyterHub to make creating, using, and sharing notebooks easy.
 
 This avoids the need to set up a local environment, provides dedicated storage, and allows you to push to GitHub.
 
@@ -32,8 +32,8 @@ Note: you will need to have been added to the Cal-ITP organization on GitHub to 
 (connecting-to-warehouse)=
 ### Connecting to the Warehouse
 
-Connecting to the warehouse requires a bit of setup after logging in to JupyterHub.
-Users need to download and install the gcloud commandline tool from the app.
+Connecting to the warehouse requires a bit of setup after logging in to JupyterHub, but allows users to query data in the warehouse directly.
+To do this, you will need to download and install the gcloud commandline tool from the app.
 
 See the screencast below for a full walkthrough.
 
@@ -55,7 +55,7 @@ gcloud auth application-default login
 
 ### Increasing the Query Limit
 
-By default, there is a query limit set within the Jupyter Notebook. Most queries should be within that limit, and running into `DatabaseError: 500 Query exceeded limit for bytes billed` should be a red flag to investigate whether such a large query is needed for the analysis. To increase the query limit:
+By default, there is a query limit set within the Jupyter Notebook. Most queries should be within that limit, and running into `DatabaseError: 500 Query exceeded limit for bytes billed` should be a red flag to investigate whether such a large query is needed for the analysis. To increase the query limit, add and execute the following in your notebook:
 
 ```python
 from calitp.tables import tbl
@@ -71,7 +71,7 @@ tbl._init()
 
 JupyterHub makes it easy to query SQL in the notebooks.
 
-To query SQL, simply import the library below at the top of your notebook:
+To query SQL, simply import the below at the top of your notebook:
 
 ```python
 import calitp.magics
@@ -99,7 +99,10 @@ LIMIT 10
 ```
 (saving-code-jupyter)=
 ### Saving Code to Github
-Use [this link](committing-from-jupyterhub) to navigate to the `Saving Code` section of the docs to learn how to commit code to GitHub from the Jupyter terminal.
+Use [this link](committing-from-jupyterhub) to navigate to the `Saving Code` section of the docs to learn how to commit code to GitHub from the Jupyter terminal. You will need to complete the following sections to begin:
+    * [Adding a GitHub SSH Key to Jupyter](adding-ssh-to-jupyter)
+    * [Persisting your SSH Key and Enabling Extensions](persisting-ssh-and-extensions)
+    * [Cloning a Repository](cloning-a-repository)
 
 ### Environment Variables
 
