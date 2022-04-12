@@ -17,6 +17,7 @@ WITH calitp_status as (
                     COALESCE(CAST(agency_name AS STRING), "_NULL_")
                 )
               )) AS calitp_hash
+            -- TODO: refactor to use ROW_NUMBER or RANK = 1 instead of MIN
             , calitp_extracted_at = MIN(calitp_extracted_at)
                 OVER (PARTITION BY itp_id, url_number)
               AS is_first_extraction
