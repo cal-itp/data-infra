@@ -32,9 +32,9 @@ spec:
               mountPath: /secrets/gcs-upload-svcacct
           resources:
             requests:
-              memory: 5.0Gi
+              memory: 2.0Gi
             limits:
-              memory: 5.0Gi
+              memory: 2.0Gi
       volumes:
         - name: agencies-data
           secret:

@@ -8,7 +8,15 @@ jupyterhub:
     defaultUrl: "/lab"
     image:
       name: ghcr.io/cal-itp/calitp-py
-      tag: hub-v9
+      tag: hub-v10
+    memory:
+      # Much more than 10 and we risk bumping up against the actual capacity of e2-highmem-2
+      limit: 10G
+      # Very roughly I have seen most usage in the 2-3GB range
+      guarantee: 3G
+    cpu:
+      limit: 1
+      guarantee: 0.5
     storage:
       extraVolumes:
       - name: gcloud-auth
@@ -30,8 +38,9 @@ jupyterhub:
             - >
               cp /tmp/custom.sh /home/jovyan/.profile;
   scheduling:
-    userScheduler:
-      enabled: false
+    userPods:
+      nodeAffinity:
+        matchNodePurpose: require
   hub:
     db:
       pvc:
