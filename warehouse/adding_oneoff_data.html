@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Agency GTFS Feeds &#8212; Cal-ITP Data Services</title>
+    <title>Adding Data to the Warehouse &#8212; Cal-ITP Data Services</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -56,7 +56,7 @@
     <script>mermaid.initialize({startOnLoad:true});</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Creating New Tables (Views)" href="views.html" />
+    <link rel="next" title="Metric Views" href="metrics.html" />
     <link rel="prev" title="Table Naming" href="table_naming.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -179,7 +179,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../analytics_tools/storing_data.html">
-     Storing New Data
+     Storing Data During Analysis
     </a>
    </li>
    <li class="toctree-l2">
@@ -206,12 +206,7 @@
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     Agency GTFS Feeds
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="views.html">
-     Creating New Tables (Views)
+     Adding Data to the Warehouse
     </a>
    </li>
    <li class="toctree-l2">
@@ -362,6 +357,16 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../airflow/dags-maintenance.html">
      DAGs Maintenance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../airflow/agencies.html">
+     Agency GTFS Feeds
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../airflow/views.html">
+     Creating New Tables (Views)
     </a>
    </li>
   </ul>
@@ -550,12 +555,9 @@
 
     <div class="dropdown-buttons">
         <!-- ipynb file if we had a myst markdown file -->
-        <a class="dropdown-buttons"
-            href="../_sources/warehouse/agencies.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
-                data-placement="left">.ipynb</button></a>
+        
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/warehouse/agencies.md"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/warehouse/adding_oneoff_data.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -575,10 +577,10 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fwarehouse/agencies.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fwarehouse/adding_oneoff_data.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/warehouse/agencies.md"><button
+        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/warehouse/adding_oneoff_data.md"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -593,56 +595,11 @@
 
             <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/cal-itp/data-infra/main?urlpath=tree/docs/warehouse/agencies.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="../_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
         </div>
 
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
-            </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#walkthrough-of-adding-a-feed">
-   Walkthrough of adding a feed
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#finding-the-itp-id">
-   Finding the ITP ID
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#including-api-keys">
-   Including API Keys
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#deploying-to-pipeline">
-   Deploying to Pipeline
-  </a>
- </li>
-</ul>
-
-            </nav>
         </div>
     </div>
 </div>
@@ -650,92 +607,52 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Agency GTFS Feeds</h1>
+                <h1>Adding Data to the Warehouse</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#walkthrough-of-adding-a-feed">
-   Walkthrough of adding a feed
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#finding-the-itp-id">
-   Finding the ITP ID
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#including-api-keys">
-   Including API Keys
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#deploying-to-pipeline">
-   Deploying to Pipeline
-  </a>
- </li>
-</ul>
-
-                        </nav>
                     </div>
                 </div>
             </div>
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="agency-gtfs-feeds">
-<span id="id1"></span><h1>Agency GTFS Feeds<a class="headerlink" href="#agency-gtfs-feeds" title="Permalink to this headline">¶</a></h1>
-<p>Feed information is stored in <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/airflow/data/agencies.yml">airflow/data/agencies.yml</a>.
-This file is then used by our Airflow data pipeline to download feeds, and load them into the warehouse.</p>
-<p>Each agency feed entry includes these fields:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">agency_name</span></code>: Human friendly name for the agency</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">itp_id</span></code>: The California Integrated Travel Project ID</p></li>
-<li><p>URLs such as <code class="docutils literal notranslate"><span class="pre">gtfs_schedule_url</span></code>, and those for realtime feeds.</p></li>
-</ul>
-<div class="section" id="walkthrough-of-adding-a-feed">
-<h2>Walkthrough of adding a feed<a class="headerlink" href="#walkthrough-of-adding-a-feed" title="Permalink to this headline">¶</a></h2>
-<p>The screencast below walks through the process of adding a new feed.</p>
-<div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/39f0100b43c4457db81b62249f162128" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
+  <div class="tex2jax_ignore mathjax_ignore section" id="adding-data-to-the-warehouse">
+<h1>Adding Data to the Warehouse<a class="headerlink" href="#adding-data-to-the-warehouse" title="Permalink to this headline">¶</a></h1>
+<p>To work with data in our BI tool (<a class="reference external" href="https://dashboards.calitp.org/">Metabase</a>) we first have to add the data to our warehouse (<a class="reference external" href="https://console.cloud.google.com/bigquery">BigQuery</a>). To add data to BigQuery for use in Metabase follow the instructions below.</p>
+<div class="admonition-note admonition">
+<p class="admonition-title">Note</p>
+<p><strong>Not sure if you have the appropriate permissions to write tables in BigQuery?</strong> Reach out to Charlie on Cal-ITP Slack <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">using this link</a>.</p>
 </div>
-<div class="section" id="finding-the-itp-id">
-<h2>Finding the ITP ID<a class="headerlink" href="#finding-the-itp-id" title="Permalink to this headline">¶</a></h2>
-<p>Entries must include the correct ITP ID for an agency.
-These can be found on the <a class="reference external" href="https://docs.google.com/spreadsheets/d/105oar4q_Z3yihDeUlP-VnYpJ0N9Mfs7-q4TnribqYLU/edit?usp=sharing">Primary List of California Transit Providers</a>.</p>
-</div>
-<div class="section" id="including-api-keys">
-<h2>Including API Keys<a class="headerlink" href="#including-api-keys" title="Permalink to this headline">¶</a></h2>
-<p>If the URL for a GTFS feed requires an API key or other sensitive information, you can include that using these steps:</p>
+<p>When uploading data to the warehouse we will use the <code class="docutils literal notranslate"><span class="pre">uploaded_data</span></code> dataset in Big Query as our destination. To write data here we will first add the data to a Google Cloud Storage bucket and then input the command below in the BigQuery terminal.</p>
 <ol class="simple">
-<li><p>Add a unique name, and the key or value to a private airtable. Ask on internal chat for access to this.</p></li>
-<li><p>Include the API key in your url by using <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">MY_KEY_NAME</span> <span class="pre">}}</span></code>, where <code class="docutils literal notranslate"><span class="pre">MY_KEY_NAME</span></code>
-is the unique name used in the airtable.</p></li>
-<li><p>Export this table as a CSV file and copy the raw contents of the CSV file.</p></li>
-<li><p>Paste the raw contents into the <code class="docutils literal notranslate"><span class="pre">AGENCY_SECRETS</span></code> GitHub secret.</p></li>
-<li><p>Add the appropriate key name in the text of a URL entry in the <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/airflow/data/agencies.yml">airflow/data/agencies.yml</a> file.</p></li>
+<li><p>First, upload your data to a <a class="reference external" href="https://console.cloud.google.com/storage/browser/calitp-analytics-data">Google Cloud Storage</a> bucket in the <code class="docutils literal notranslate"><span class="pre">gs://calitp-analytics-data/data-analyses/</span></code> directory and make note of the <code class="docutils literal notranslate"><span class="pre">gsutil</span> <span class="pre">URI</span></code> (file path).</p></li>
+<li><p>Next, navigate to a JupyterLab terminal window.</p></li>
+<li><p>Once in the terminal, input the following command with the appropriate structure:</p></li>
 </ol>
-<p>Below is an example entry.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">ac-transit</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">agency_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AC Transit</span><span class="w"></span>
-<span class="w">  </span><span class="nt">feeds</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">gtfs_schedule_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://api.actransit.org/transit/gtfs/download?token={{ AC_TRANSIT_API_KEY }}</span><span class="w"></span>
-<span class="w">      </span><span class="nt">gtfs_rt_vehicle_positions_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://api.actransit.org/gtfsrt/vehicles?token={{ AC_TRANSIT_API_KEY }}</span><span class="w"></span>
-<span class="w">      </span><span class="nt">gtfs_rt_service_alerts_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://api.actransit.org/gtfsrt/alerts?token={{ AC_TRANSIT_API_KEY }}</span><span class="w"></span>
-<span class="w">      </span><span class="nt">gtfs_rt_trip_updates_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://api.actransit.org/gtfsrt/tripupdates?token={{ AC_TRANSIT_API_KEY }}</span><span class="w"></span>
-<span class="w">  </span><span class="nt">itp_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w"></span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bq</span> <span class="o">--</span><span class="n">location</span><span class="o">=</span><span class="n">us</span><span class="o">-</span><span class="n">west2</span> <span class="n">load</span> <span class="o">&lt;</span><span class="n">source_format</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">autodetect</span> <span class="o">&lt;</span><span class="n">destination_table</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">source</span><span class="o">&gt;</span>
 </pre></div>
 </div>
+<ul class="simple">
+<li><p>The <strong><code class="docutils literal notranslate"><span class="pre">&lt;source_format&gt;</span></code></strong> specifies the type of file you would like to use. An example of this flag’s use is <code class="docutils literal notranslate"><span class="pre">--source-format=CSV</span></code>. Other options include <code class="docutils literal notranslate"><span class="pre">PARQUET</span></code> and <code class="docutils literal notranslate"><span class="pre">NEWLINE_DELIMITED_JSON</span></code></p></li>
+<li><p>The <strong><code class="docutils literal notranslate"><span class="pre">&lt;destination_table&gt;</span></code></strong> is the table you would like to create, or append to if the table already exists. Your uploaded table destination should always be the <code class="docutils literal notranslate"><span class="pre">uploaded_data</span></code> dataset in BigQuery (e.g. the <code class="docutils literal notranslate"><span class="pre">destination_table</span></code> name should always have the format <code class="docutils literal notranslate"><span class="pre">uploaded_data.your_new_table_name</span></code>).</p>
+<ul>
+<li><p>If you are looking to <strong>create a new table</strong>: use a new table name</p></li>
+<li><p>If you are looking to <strong>append to existing data</strong>: re-use the name of the existing table</p></li>
+<li><p>If you are looking to <strong>replace an existing table</strong>: use the <code class="docutils literal notranslate"><span class="pre">--replace</span></code> flag after the <code class="docutils literal notranslate"><span class="pre">load</span></code> command</p></li>
+</ul>
+</li>
+<li><p>The <strong><code class="docutils literal notranslate"><span class="pre">&lt;source&gt;</span></code></strong> argument is the <code class="docutils literal notranslate"><span class="pre">gsutil</span> <span class="pre">URI</span></code> (the path to the Google Cloud Storage bucket you are sourcing from).</p></li>
+<li><p>If you run into upload errors related to the source file format, you may need to include the flag <code class="docutils literal notranslate"><span class="pre">--allow_quoted_newlines</span></code>. This may be helpful in resolving errors related to newline-delimited text, which may be present in file conversions from Excel to CSV.</p></li>
+</ul>
+<p>Ex.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bq</span> <span class="o">--</span><span class="n">location</span><span class="o">=</span><span class="n">us</span><span class="o">-</span><span class="n">west2</span> <span class="n">load</span> <span class="o">--</span><span class="n">source_format</span><span class="o">=</span><span class="n">CSV</span> <span class="o">--</span><span class="n">autodetect</span> <span class="o">--</span><span class="n">allow_quoted_newlines</span> <span class="n">uploaded_data</span><span class="o">.</span><span class="n">tircp_with_temporary_expenditure_sol_copy</span> <span class="n">gs</span><span class="p">:</span><span class="o">//</span><span class="n">calitp</span><span class="o">-</span><span class="n">analytics</span><span class="o">-</span><span class="n">data</span><span class="o">/</span><span class="n">data</span><span class="o">-</span><span class="n">analyses</span><span class="o">/</span><span class="n">tircp</span><span class="o">/</span><span class="n">tircp</span><span class="o">.</span><span class="n">csv</span>
+</pre></div>
 </div>
-<div class="section" id="deploying-to-pipeline">
-<h2>Deploying to Pipeline<a class="headerlink" href="#deploying-to-pipeline" title="Permalink to this headline">¶</a></h2>
-<p>Every time the main branch of cal-itp/data-infra is updated on github,
-the <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/.github/workflows/push_to_gcloud.yml">push_to_gcloud</a> github action swaps in the API keys and pushes to our Cloud Composer’s data bucket.</p>
+<div class="admonition-looking-for-more-information admonition">
+<p class="admonition-title">Looking for more information?</p>
+<p>More information on the BigQuery Command Line Interface (CLI) <a class="reference external" href="https://cloud.google.com/bigquery/docs/reference/bq-cli-reference">can be found here</a></p>
 </div>
 </div>
 
@@ -771,10 +688,10 @@ the <a class="reference external" href="https://github.com/cal-itp/data-infra/bl
             <p class="prev-next-title">Table Naming</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="views.html" title="next page">
+    <a class='right-next' id="next-link" href="metrics.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Creating New Tables (Views)</p>
+        <p class="prev-next-title">Metric Views</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

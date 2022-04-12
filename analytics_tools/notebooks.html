@@ -179,7 +179,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="storing_data.html">
-     Storing New Data
+     Storing Data During Analysis
     </a>
    </li>
    <li class="toctree-l2">
@@ -205,13 +205,8 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/agencies.html">
-     Agency GTFS Feeds
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/views.html">
-     Creating New Tables (Views)
+    <a class="reference internal" href="../warehouse/adding_oneoff_data.html">
+     Adding Data to the Warehouse
     </a>
    </li>
    <li class="toctree-l2">
@@ -362,6 +357,16 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../airflow/dags-maintenance.html">
      DAGs Maintenance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../airflow/agencies.html">
+     Agency GTFS Feeds
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../airflow/views.html">
+     Creating New Tables (Views)
     </a>
    </li>
   </ul>
@@ -631,13 +636,18 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#environment-variables">
-     Environment Variables
+    <a class="reference internal nav-link" href="#querying-with-sql-in-jupyterhub">
+     Querying with SQL in JupyterHub
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#querying-with-sql-in-jupyterhub">
-     Querying with SQL in JupyterHub
+    <a class="reference internal nav-link" href="#saving-code-to-github">
+     Saving Code to Github
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#environment-variables">
+     Environment Variables
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
@@ -698,13 +708,18 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#environment-variables">
-     Environment Variables
+    <a class="reference internal nav-link" href="#querying-with-sql-in-jupyterhub">
+     Querying with SQL in JupyterHub
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#querying-with-sql-in-jupyterhub">
-     Querying with SQL in JupyterHub
+    <a class="reference internal nav-link" href="#saving-code-to-github">
+     Saving Code to Github
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#environment-variables">
+     Environment Variables
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
@@ -738,8 +753,9 @@
 <li><p><a class="reference external" href="#logging-in-to-jupyterhub">Logging in to JupyterHub</a></p></li>
 <li><p><a class="reference external" href="#connecting-to-the-warehouse">Connecting to the Warehouse</a></p></li>
 <li><p><a class="reference external" href="#increasing-the-query-limit">Increasing the Query Limit</a></p></li>
-<li><p><a class="reference external" href="#environment-variables">Environment Variables</a></p></li>
 <li><p><a class="reference internal" href="#querying-sql-jupyterhub"><span class="std std-ref">Querying with SQL in JupyterHub</span></a></p></li>
+<li><p><a class="reference internal" href="#saving-code-jupyter"><span class="std std-ref">Saving Code to Github</span></a></p></li>
+<li><p><a class="reference external" href="#environment-variables">Environment Variables</a></p></li>
 <li><p><a class="reference internal" href="#notebook-shortcuts"><span class="std std-ref">Jupyter Notebook Best Practices</span></a></p></li>
 </ol>
 </div>
@@ -783,30 +799,6 @@ Users need to download and install the gcloud commandline tool from the app.</p>
 </pre></div>
 </div>
 </div>
-<div class="section" id="environment-variables">
-<h3>Environment Variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h3>
-<p>Sometimes if data access is expensive, or if there is sensitive data, then accessing it will require some sort of credentials (which may take the form of passwords or tokens).</p>
-<p>There is a fundamental tension between data access restrictions and analysis reproducibility. If credentials are required, then an analysis is not reproducible out-of-the-box. However, including these credentials in scripts and notebooks is a security risk.</p>
-<p>Most projects should store the authentication credentials in environment variables, which can then be read by scripts and notebooks. The environment variables that are required for an analysis to work should be clearly documented.</p>
-<p>Analysts should store their credentials in a <code class="docutils literal notranslate"><span class="pre">_env</span></code> file, a slight variation of the typical <code class="docutils literal notranslate"><span class="pre">.env</span></code> file, since the <code class="docutils literal notranslate"><span class="pre">.env</span></code> won’t show up in the JupyterHub filesystem.</p>
-<p>Some credentials that need to be stored within the <code class="docutils literal notranslate"><span class="pre">_env</span></code> file may include GitHub API key, Census API key, Airtable API key, etc. Store them in this format:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">GITHUB_API_KEY</span><span class="o">=</span><span class="n">ABCDEFG123456789</span>
-<span class="n">CENSUS_API_KEY</span><span class="o">=</span><span class="n">ABCDEFG123456789</span>
-<span class="n">AIRTABLE_API_KEY</span><span class="o">=</span><span class="n">ABCDEFG123456789</span>
-</pre></div>
-</div>
-<p>To pass these credentials in a Jupyter Notebook:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dotenv</span>
-<span class="kn">import</span> <span class="nn">os</span>
-
-<span class="c1"># Load the env file</span>
-<span class="n">dotenv</span><span class="o">.</span><span class="n">load_dotenv</span><span class="p">(</span><span class="s2">&quot;_env&quot;</span><span class="p">)</span>
-
-<span class="c1"># Import the credential (without exposing the password!)</span>
-<span class="n">GITHUB_API_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;GITHUB_API_KEY&quot;</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
 <div class="section" id="querying-with-sql-in-jupyterhub">
 <span id="querying-sql-jupyterhub"></span><h3>Querying with SQL in JupyterHub<a class="headerlink" href="#querying-with-sql-in-jupyterhub" title="Permalink to this headline">¶</a></h3>
 <p>JupyterHub makes it easy to query SQL in the notebooks.</p>
@@ -830,6 +822,34 @@ Users need to download and install the gcloud commandline tool from the app.</p>
 <span class="k">WHERE</span><span class="w"></span>
 <span class="w">    </span><span class="n">calitp_feed_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ss">&quot;AC Transit (0)&quot;</span><span class="w"></span>
 <span class="k">LIMIT</span><span class="w"> </span><span class="mi">10</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="saving-code-to-github">
+<span id="saving-code-jupyter"></span><h3>Saving Code to Github<a class="headerlink" href="#saving-code-to-github" title="Permalink to this headline">¶</a></h3>
+<p>Use <a class="reference internal" href="saving_code.html#committing-from-jupyterhub"><span class="std std-ref">this link</span></a> to navigate to the <code class="docutils literal notranslate"><span class="pre">Saving</span> <span class="pre">Code</span></code> section of the docs to learn how to commit code to GitHub from the Jupyter terminal.</p>
+</div>
+<div class="section" id="environment-variables">
+<h3>Environment Variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes if data access is expensive, or if there is sensitive data, then accessing it will require some sort of credentials (which may take the form of passwords or tokens).</p>
+<p>There is a fundamental tension between data access restrictions and analysis reproducibility. If credentials are required, then an analysis is not reproducible out-of-the-box. However, including these credentials in scripts and notebooks is a security risk.</p>
+<p>Most projects should store the authentication credentials in environment variables, which can then be read by scripts and notebooks. The environment variables that are required for an analysis to work should be clearly documented.</p>
+<p>Analysts should store their credentials in a <code class="docutils literal notranslate"><span class="pre">_env</span></code> file, a slight variation of the typical <code class="docutils literal notranslate"><span class="pre">.env</span></code> file, since the <code class="docutils literal notranslate"><span class="pre">.env</span></code> won’t show up in the JupyterHub filesystem.</p>
+<p>Some credentials that need to be stored within the <code class="docutils literal notranslate"><span class="pre">_env</span></code> file may include GitHub API key, Census API key, Airtable API key, etc. Store them in this format:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">GITHUB_API_KEY</span><span class="o">=</span><span class="n">ABCDEFG123456789</span>
+<span class="n">CENSUS_API_KEY</span><span class="o">=</span><span class="n">ABCDEFG123456789</span>
+<span class="n">AIRTABLE_API_KEY</span><span class="o">=</span><span class="n">ABCDEFG123456789</span>
+</pre></div>
+</div>
+<p>To pass these credentials in a Jupyter Notebook:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dotenv</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="c1"># Load the env file</span>
+<span class="n">dotenv</span><span class="o">.</span><span class="n">load_dotenv</span><span class="p">(</span><span class="s2">&quot;_env&quot;</span><span class="p">)</span>
+
+<span class="c1"># Import the credential (without exposing the password!)</span>
+<span class="n">GITHUB_API_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;GITHUB_API_KEY&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>

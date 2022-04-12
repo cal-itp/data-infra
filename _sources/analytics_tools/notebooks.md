@@ -13,8 +13,9 @@ Analyses on JupyterHub are done using notebooks, which allow users to mix narrat
 1. [Logging in to JupyterHub](#logging-in-to-jupyterhub)
 1. [Connecting to the Warehouse](#connecting-to-the-warehouse)
 1. [Increasing the Query Limit](#increasing-the-query-limit)
-1. [Environment Variables](#environment-variables)
 1. [Querying with SQL in JupyterHub](querying-sql-jupyterhub)
+1. [Saving Code to Github](saving-code-jupyter)
+1. [Environment Variables](#environment-variables)
 1. [Jupyter Notebook Best Practices](notebook-shortcuts)
 
 ## Using JupyterHub
@@ -65,36 +66,6 @@ os.environ["CALITP_BQ_MAX_BYTES"] = str(20_000_000_000)
 tbl._init()
 ```
 
-### Environment Variables
-
-Sometimes if data access is expensive, or if there is sensitive data, then accessing it will require some sort of credentials (which may take the form of passwords or tokens).
-
-There is a fundamental tension between data access restrictions and analysis reproducibility. If credentials are required, then an analysis is not reproducible out-of-the-box. However, including these credentials in scripts and notebooks is a security risk.
-
-Most projects should store the authentication credentials in environment variables, which can then be read by scripts and notebooks. The environment variables that are required for an analysis to work should be clearly documented.
-
-Analysts should store their credentials in a `_env` file, a slight variation of the typical `.env` file, since the `.env` won't show up in the JupyterHub filesystem.
-
-Some credentials that need to be stored within the `_env` file may include GitHub API key, Census API key, Airtable API key, etc. Store them in this format:
-
-```python
-GITHUB_API_KEY=ABCDEFG123456789
-CENSUS_API_KEY=ABCDEFG123456789
-AIRTABLE_API_KEY=ABCDEFG123456789
-```
-
-To pass these credentials in a Jupyter Notebook:
-```python
-import dotenv
-import os
-
-# Load the env file
-dotenv.load_dotenv("_env")
-
-# Import the credential (without exposing the password!)
-GITHUB_API_KEY = os.environ["GITHUB_API_KEY"]
-```
-
 (querying-sql-jupyterhub)=
 ### Querying with SQL in JupyterHub
 
@@ -125,6 +96,39 @@ FROM `views.gtfs_schedule_dim_feeds`
 WHERE
     calitp_feed_name = "AC Transit (0)"
 LIMIT 10
+```
+(saving-code-jupyter)=
+### Saving Code to Github
+Use [this link](committing-from-jupyterhub) to navigate to the `Saving Code` section of the docs to learn how to commit code to GitHub from the Jupyter terminal.
+
+### Environment Variables
+
+Sometimes if data access is expensive, or if there is sensitive data, then accessing it will require some sort of credentials (which may take the form of passwords or tokens).
+
+There is a fundamental tension between data access restrictions and analysis reproducibility. If credentials are required, then an analysis is not reproducible out-of-the-box. However, including these credentials in scripts and notebooks is a security risk.
+
+Most projects should store the authentication credentials in environment variables, which can then be read by scripts and notebooks. The environment variables that are required for an analysis to work should be clearly documented.
+
+Analysts should store their credentials in a `_env` file, a slight variation of the typical `.env` file, since the `.env` won't show up in the JupyterHub filesystem.
+
+Some credentials that need to be stored within the `_env` file may include GitHub API key, Census API key, Airtable API key, etc. Store them in this format:
+
+```python
+GITHUB_API_KEY=ABCDEFG123456789
+CENSUS_API_KEY=ABCDEFG123456789
+AIRTABLE_API_KEY=ABCDEFG123456789
+```
+
+To pass these credentials in a Jupyter Notebook:
+```python
+import dotenv
+import os
+
+# Load the env file
+dotenv.load_dotenv("_env")
+
+# Import the credential (without exposing the password!)
+GITHUB_API_KEY = os.environ["GITHUB_API_KEY"]
 ```
 
 (notebook-shortcuts)=

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Storing New Data &#8212; Cal-ITP Data Services</title>
+    <title>Storing Data During Analysis &#8212; Cal-ITP Data Services</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -179,7 +179,7 @@
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     Storing New Data
+     Storing Data During Analysis
     </a>
    </li>
    <li class="toctree-l2">
@@ -205,13 +205,8 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/agencies.html">
-     Agency GTFS Feeds
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/views.html">
-     Creating New Tables (Views)
+    <a class="reference internal" href="../warehouse/adding_oneoff_data.html">
+     Adding Data to the Warehouse
     </a>
    </li>
    <li class="toctree-l2">
@@ -362,6 +357,16 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../airflow/dags-maintenance.html">
      DAGs Maintenance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../airflow/agencies.html">
+     Agency GTFS Feeds
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../airflow/views.html">
+     Creating New Tables (Views)
     </a>
    </li>
   </ul>
@@ -696,7 +701,7 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Storing New Data</h1>
+                <h1>Storing Data During Analysis</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -781,9 +786,9 @@
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="storing-new-data">
-<span id="id1"></span><h1>Storing New Data<a class="headerlink" href="#storing-new-data" title="Permalink to this headline">¶</a></h1>
-<p>Our team uses Google Cloud Storage (GCS) buckets, specifically the <code class="docutils literal notranslate"><span class="pre">calitp-analytics-data</span></code> bucket, to store other datasets for analyses. GCS can store anything, of arbitrary object size and shape. It’s like a giant folder in the cloud. You can use it to store CSVs, parquets, pickles, videos, etc. Within the bucket, the <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code> folder with its sub-folders corresponds to the <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code>  GitHub repo with its sub-folders. Versioned data for a task should live within the correct folders.</p>
+  <div class="tex2jax_ignore mathjax_ignore section" id="storing-data-during-analysis">
+<span id="storing-new-data"></span><h1>Storing Data During Analysis<a class="headerlink" href="#storing-data-during-analysis" title="Permalink to this headline">¶</a></h1>
+<p>Our team uses Google Cloud Storage (GCS) buckets, specifically the <code class="docutils literal notranslate"><span class="pre">calitp-analytics-data</span></code> bucket, to store other datasets for analyses. GCS can store anything, of arbitrary object size and shape. It’s like a giant folder in the cloud. You can use it to store CSVs, parquets, pickles, videos, etc. Within the bucket, the <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code> folder with its sub-folders corresponds to the <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code> GitHub repo with its sub-folders. Versioned data for a task should live within the correct folders.</p>
 <div class="section" id="table-of-contents">
 <h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
 <ol class="simple">
@@ -812,7 +817,7 @@
 <p><strong>Note</strong>: To access Google Cloud Storage you will need to have set up your Google authentication. If you have yet to do so, <a class="reference internal" href="notebooks.html#connecting-to-warehouse"><span class="std std-ref">follow these instructions</span></a>.</p>
 </div>
 <div class="section" id="storing-new-data-screencast">
-<span id="id2"></span><h2>Storing New Data - Screencast<a class="headerlink" href="#storing-new-data-screencast" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h2>Storing New Data - Screencast<a class="headerlink" href="#storing-new-data-screencast" title="Permalink to this headline">¶</a></h2>
 <div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/51d22876ab6d4d35a39f18e8f6d5f11d" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
 </div>
 <div class="section" id="uploading-data-from-a-notebook">

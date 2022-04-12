@@ -56,7 +56,7 @@
     <script>mermaid.initialize({startOnLoad:true});</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Metric Views" href="metrics.html" />
+    <link rel="next" title="Kubernetes" href="../kubernetes/README.html" />
     <link rel="prev" title="Agency GTFS Feeds" href="agencies.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -114,7 +114,7 @@
   Analysts
  </span>
 </p>
-<ul class="current nav bd-sidenav">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../analytics_welcome/overview.html">
    Welcome!
@@ -179,7 +179,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../analytics_tools/storing_data.html">
-     Storing New Data
+     Storing Data During Analysis
     </a>
    </li>
    <li class="toctree-l2">
@@ -189,38 +189,33 @@
    </li>
   </ul>
  </li>
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="overview.html">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../warehouse/overview.html">
    Introduction to the Warehouse
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
   <label for="toctree-checkbox-3">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul class="current">
+  <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="table_naming.html">
+    <a class="reference internal" href="../warehouse/table_naming.html">
      Table Naming
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="agencies.html">
-     Agency GTFS Feeds
-    </a>
-   </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Creating New Tables (Views)
+    <a class="reference internal" href="../warehouse/adding_oneoff_data.html">
+     Adding Data to the Warehouse
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="metrics.html">
+    <a class="reference internal" href="../warehouse/metrics.html">
      Metric Views
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="sql_snippets.html">
+    <a class="reference internal" href="../warehouse/sql_snippets.html">
      Helpful SQL Snippets
     </a>
    </li>
@@ -328,40 +323,50 @@
   Developers
  </span>
 </p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../architecture/architecture_overview.html">
    Architecture Overview
   </a>
  </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../airflow/overview.html">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="overview.html">
    Airflow
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
   <label for="toctree-checkbox-7">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul>
+  <ul class="current">
    <li class="toctree-l2">
-    <a class="reference internal" href="../airflow/local-setup.html">
+    <a class="reference internal" href="local-setup.html">
      Local Airflow
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../airflow/static-schedule-pipeline.html">
+    <a class="reference internal" href="static-schedule-pipeline.html">
      Static Schedule Pipeline
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../airflow/production-maintenance.html">
+    <a class="reference internal" href="production-maintenance.html">
      Production Maintenance
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../airflow/dags-maintenance.html">
+    <a class="reference internal" href="dags-maintenance.html">
      DAGs Maintenance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="agencies.html">
+     Agency GTFS Feeds
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Creating New Tables (Views)
     </a>
    </li>
   </ul>
@@ -552,7 +557,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/warehouse/views.md"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/airflow/views.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -572,10 +577,10 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fwarehouse/views.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fairflow/views.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/warehouse/views.md"><button
+        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/airflow/views.md"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -763,7 +768,7 @@
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./warehouse"
+            path: "./airflow"
         },
         predefinedOutput: true
     }
@@ -782,10 +787,10 @@
             <p class="prev-next-title">Agency GTFS Feeds</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="metrics.html" title="next page">
+    <a class='right-next' id="next-link" href="../kubernetes/README.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Metric Views</p>
+        <p class="prev-next-title">Kubernetes</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
