@@ -22,9 +22,9 @@ bq --location=us-west2 load <source_format> --autodetect <destination_table> <so
 
   * If you are looking to **create a new table**: use a new table name
 
-  * If you are looking to **append to existing data**: use the name of the existing table
+  * If you are looking to **append to existing data**: re-use the name of the existing table
 
-  * If you are looking to **replace an existing table**: use the `--replace==true` flag
+  * If you are looking to **replace an existing table**: use the `--replace` flag after the `load` command
 
 * The **`<source>`** argument is the `gsutil URI` (the path to the Google Cloud Storage bucket you are sourcing from).
 
