@@ -51,7 +51,7 @@ utils.geoparquet_gcs_export(gdf, GCS_FILE_PATH, FILE_NAME)
 
 ```
 
-Additional general information about various file types can be found in the [Data Management section](./data-management.md).
+Additional general information about various file types can be found in the [Data Management section](./data-management-basics.md).
 
 
 ## Setting and Projecting Coordinate Reference System
@@ -87,7 +87,7 @@ gdf.crs
 gdf = gdf.to_crs('epsg:2229')
 ```
 
-Sometimes, the gdf does not have a CRS set and you will need to be manually set it. This might occur if you create the `geometry` column from latitude and longitude points. More on this in the [intermediate tutorial](./spatial-analysis-intermediate.md#Create-geometry-column-from-latitude-and-longitude-coordinates):
+Sometimes, the gdf does not have a CRS set and you will need to be manually set it. This might occur if you create the `geometry` column from latitude and longitude points. More on this in the [intermediate tutorial](./spatial-analysis-intermediate.md):
 
 There are [lots of different CRS available](https://epsg.io). The most common ones used for California are:
 

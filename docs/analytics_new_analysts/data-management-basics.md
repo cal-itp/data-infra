@@ -8,21 +8,20 @@ Below is a series of tips, tricks and use-cases for managing data throughout the
 * [Reading and Writing Data](#reading-and-writing-data)
     * [GCS](#GCS)
     * [Local Folders](#local-folders)
-    * [Databases](#databases)
 * [Formats and Use-Cases](#formats-and-use-cases)
     * [CSVs](#csvs)
-    * [Excel / XLSX](#excel--xlsx)
+    * [Excel / XLSX](#excel/xlsx)
     * [Parquet](#parquet)
     * [Feather Files](#feather-files)
     * [GeoJSON](#geojson)
     * [Shapefiles](#shapefiles)
     * [PBF (Protocolbuffer Binary Format)](#pbf-protocolbuffer-binary-format)
-    * [Databases](#databases-1)
+    * [Databases](#databases)
     * [Pickles](#pickles)
 
 ## Reading and Writing Data
 ### GCS
-Our team often uses Google Cloud Storage (GCS) for object storage. For a walkthrough of how to use GCS buckets, read here [documentation](https://docs.calitp.org/data-infra/analytics_tools/storing_data.html#in-gcs).
+Our team often uses Google Cloud Storage (GCS) for object storage. For a walkthrough of how to use GCS buckets, go here [documentation](https://docs.calitp.org/data-infra/analytics_tools/storing_data.html#in-gcs).
 
 By putting data on GCS, anybody on the team can use/access/replicate the data without having to transfer data files between machines.
 
@@ -31,9 +30,20 @@ To write and read a pandas dataframe as a CSV to GCS:
 ```
 import pandas as pd
 
-df.to_csv('gs://calitp-analytics-data/data-analyses/bucket-name/df_csv')
+df.to_csv('gs://calitp-analytics-data/data-analyses/bucket-name/my_csv.csv')
 
-pd.read_csv('gs://calitp-analytics-data/data-analyses/bucket-name/df_csv')
+pd.read_csv('gs://calitp-analytics-data/data-analyses/bucket-name/my_csv.csv')
+
+```
+### Local Folders
+Sometimes, it is easiest to simply use your local file system to store data. 
+
+```
+import pandas as pd
+
+df.to_csv('./my_csv.csv')
+
+pd.read_csv('./my_csv.csv')
 
 ```
 
