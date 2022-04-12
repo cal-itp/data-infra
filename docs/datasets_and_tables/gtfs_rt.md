@@ -1,6 +1,6 @@
 # GTFS Realtime
 
-We collect realtime data every 20 seconds for feeds listed in [agencies.yml](../warehouse/agencies.md).
+We collect realtime data every 20 seconds for feeds listed in [agencies.yml](../airflow/agencies.md).
 This data is processed and validated daily.
 
 
