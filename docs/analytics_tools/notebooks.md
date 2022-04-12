@@ -99,7 +99,7 @@ LIMIT 10
 ```
 (saving-code-jupyter)=
 ### Saving Code to Github
-Use [this link](committing-from-jupyterhub) to navigate to the `Saving Code` section of the docs to learn how to commit code to GitHub from the Jupyter terminal. You will need to complete the following sections to begin:
+Use [this link](committing-from-jupyterhub) to navigate to the `Saving Code` section of the docs to learn how to commit code to GitHub from the Jupyter terminal. Once there, you will need to complete the instructions in the following sections:
 * [Adding a GitHub SSH Key to Jupyter](adding-ssh-to-jupyter)
 * [Persisting your SSH Key and Enabling Extensions](persisting-ssh-and-extensions)
 * [Cloning a Repository](cloning-a-repository)
