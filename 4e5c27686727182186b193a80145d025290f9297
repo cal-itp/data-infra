@@ -1,0 +1,3371 @@
+[helm:monitoring=kubernetes/apps/charts/grafana]
+
+diff -u -N /tmp/LIVE-619288902/apps.v1.Deployment.monitoring.monitoring-grafana /tmp/MERGED-591983637/apps.v1.Deployment.monitoring.monitoring-grafana
+--- /tmp/LIVE-619288902/apps.v1.Deployment.monitoring.monitoring-grafana	2022-02-15 15:44:54.424281297 +0000
++++ /tmp/MERGED-591983637/apps.v1.Deployment.monitoring.monitoring-grafana	2022-02-15 15:44:54.428281350 +0000
+@@ -0,0 +1,371 @@
++apiVersion: apps/v1
++kind: Deployment
++metadata:
++  creationTimestamp: "2022-02-15T15:44:54Z"
++  generation: 1
++  labels:
++    app.kubernetes.io/instance: monitoring
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: grafana
++    app.kubernetes.io/version: 8.1.2
++    helm.sh/chart: grafana-6.16.6
++  managedFields:
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++      f:spec:
++        f:progressDeadlineSeconds: {}
++        f:replicas: {}
++        f:revisionHistoryLimit: {}
++        f:selector: {}
++        f:strategy:
++          f:type: {}
++        f:template:
++          f:metadata:
++            f:annotations:
++              .: {}
++              f:checksum/config: {}
++              f:checksum/dashboards-json-config: {}
++              f:checksum/sc-dashboard-provider-config: {}
++            f:labels:
++              .: {}
++              f:app.kubernetes.io/instance: {}
++              f:app.kubernetes.io/name: {}
++          f:spec:
++            f:automountServiceAccountToken: {}
++            f:containers:
++              k:{"name":"grafana"}:
++                .: {}
++                f:env:
++                  .: {}
++                  k:{"name":"GF_PATHS_DATA"}:
++                    .: {}
++                    f:name: {}
++                    f:value: {}
++                  k:{"name":"GF_PATHS_LOGS"}:
++                    .: {}
++                    f:name: {}
++                    f:value: {}
++                  k:{"name":"GF_PATHS_PLUGINS"}:
++                    .: {}
++                    f:name: {}
++                    f:value: {}
++                  k:{"name":"GF_PATHS_PROVISIONING"}:
++                    .: {}
++                    f:name: {}
++                    f:value: {}
++                  k:{"name":"GF_SECURITY_ADMIN_PASSWORD"}:
++                    .: {}
++                    f:name: {}
++                    f:valueFrom:
++                      .: {}
++                      f:secretKeyRef:
++                        .: {}
++                        f:key: {}
++                        f:name: {}
++                  k:{"name":"GF_SECURITY_ADMIN_USER"}:
++                    .: {}
++                    f:name: {}
++                    f:valueFrom:
++                      .: {}
++                      f:secretKeyRef:
++                        .: {}
++                        f:key: {}
++                        f:name: {}
++                f:image: {}
++                f:imagePullPolicy: {}
++                f:livenessProbe:
++                  .: {}
++                  f:failureThreshold: {}
++                  f:httpGet:
++                    .: {}
++                    f:path: {}
++                    f:port: {}
++                    f:scheme: {}
++                  f:initialDelaySeconds: {}
++                  f:periodSeconds: {}
++                  f:successThreshold: {}
++                  f:timeoutSeconds: {}
++                f:name: {}
++                f:ports:
++                  .: {}
++                  k:{"containerPort":80,"protocol":"TCP"}:
++                    .: {}
++                    f:containerPort: {}
++                    f:name: {}
++                    f:protocol: {}
++                  k:{"containerPort":3000,"protocol":"TCP"}:
++                    .: {}
++                    f:containerPort: {}
++                    f:name: {}
++                    f:protocol: {}
++                f:readinessProbe:
++                  .: {}
++                  f:failureThreshold: {}
++                  f:httpGet:
++                    .: {}
++                    f:path: {}
++                    f:port: {}
++                    f:scheme: {}
++                  f:periodSeconds: {}
++                  f:successThreshold: {}
++                  f:timeoutSeconds: {}
++                f:resources: {}
++                f:terminationMessagePath: {}
++                f:terminationMessagePolicy: {}
++                f:volumeMounts:
++                  .: {}
++                  k:{"mountPath":"/etc/grafana/grafana.ini"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                    f:subPath: {}
++                  k:{"mountPath":"/etc/grafana/provisioning/dashboards/dashboardproviders.yaml"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                    f:subPath: {}
++                  k:{"mountPath":"/etc/grafana/provisioning/datasources/datasources.yaml"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                    f:subPath: {}
++                  k:{"mountPath":"/var/lib/grafana"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++            f:dnsPolicy: {}
++            f:enableServiceLinks: {}
++            f:initContainers:
++              .: {}
++              k:{"name":"download-dashboards"}:
++                .: {}
++                f:args: {}
++                f:command: {}
++                f:image: {}
++                f:imagePullPolicy: {}
++                f:name: {}
++                f:resources: {}
++                f:terminationMessagePath: {}
++                f:terminationMessagePolicy: {}
++                f:volumeMounts:
++                  .: {}
++                  k:{"mountPath":"/etc/grafana/download_dashboards.sh"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                    f:subPath: {}
++                  k:{"mountPath":"/var/lib/grafana"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++              k:{"name":"init-chown-data"}:
++                .: {}
++                f:command: {}
++                f:image: {}
++                f:imagePullPolicy: {}
++                f:name: {}
++                f:resources: {}
++                f:securityContext:
++                  .: {}
++                  f:runAsNonRoot: {}
++                  f:runAsUser: {}
++                f:terminationMessagePath: {}
++                f:terminationMessagePolicy: {}
++                f:volumeMounts:
++                  .: {}
++                  k:{"mountPath":"/var/lib/grafana"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++            f:restartPolicy: {}
++            f:schedulerName: {}
++            f:securityContext:
++              .: {}
++              f:fsGroup: {}
++              f:runAsGroup: {}
++              f:runAsUser: {}
++            f:serviceAccount: {}
++            f:serviceAccountName: {}
++            f:terminationGracePeriodSeconds: {}
++            f:volumes:
++              .: {}
++              k:{"name":"config"}:
++                .: {}
++                f:configMap:
++                  .: {}
++                  f:defaultMode: {}
++                  f:name: {}
++                f:name: {}
++              k:{"name":"dashboards-default"}:
++                .: {}
++                f:configMap:
++                  .: {}
++                  f:defaultMode: {}
++                  f:name: {}
++                f:name: {}
++              k:{"name":"storage"}:
++                .: {}
++                f:name: {}
++                f:persistentVolumeClaim:
++                  .: {}
++                  f:claimName: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:44:54Z"
++  name: monitoring-grafana
++  namespace: monitoring
++  uid: 7f6abc86-493a-43bc-b61e-d78275629014
++spec:
++  progressDeadlineSeconds: 600
++  replicas: 1
++  revisionHistoryLimit: 10
++  selector:
++    matchLabels:
++      app.kubernetes.io/instance: monitoring
++      app.kubernetes.io/name: grafana
++  strategy:
++    type: Recreate
++  template:
++    metadata:
++      annotations:
++        checksum/config: 808927711266ac1f3fd826b4aedae87e4b40af3aeb76c83b1aa48842509eb336
++        checksum/dashboards-json-config: 0794e052a9b5487fe181fa4aee3f65158d14afdffcd122dde7d52057f677c485
++        checksum/sc-dashboard-provider-config: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
++      creationTimestamp: null
++      labels:
++        app.kubernetes.io/instance: monitoring
++        app.kubernetes.io/name: grafana
++    spec:
++      automountServiceAccountToken: true
++      containers:
++      - env:
++        - name: GF_SECURITY_ADMIN_USER
++          valueFrom:
++            secretKeyRef:
++              key: admin-user
++              name: grafana-initial-admin
++        - name: GF_SECURITY_ADMIN_PASSWORD
++          valueFrom:
++            secretKeyRef:
++              key: admin-password
++              name: grafana-initial-admin
++        - name: GF_PATHS_DATA
++          value: /var/lib/grafana/
++        - name: GF_PATHS_LOGS
++          value: /var/log/grafana
++        - name: GF_PATHS_PLUGINS
++          value: /var/lib/grafana/plugins
++        - name: GF_PATHS_PROVISIONING
++          value: /etc/grafana/provisioning
++        image: grafana/grafana:8.1.2
++        imagePullPolicy: IfNotPresent
++        livenessProbe:
++          failureThreshold: 10
++          httpGet:
++            path: /api/health
++            port: 3000
++            scheme: HTTP
++          initialDelaySeconds: 60
++          periodSeconds: 10
++          successThreshold: 1
++          timeoutSeconds: 30
++        name: grafana
++        ports:
++        - containerPort: 80
++          name: service
++          protocol: TCP
++        - containerPort: 3000
++          name: grafana
++          protocol: TCP
++        readinessProbe:
++          failureThreshold: 3
++          httpGet:
++            path: /api/health
++            port: 3000
++            scheme: HTTP
++          periodSeconds: 10
++          successThreshold: 1
++          timeoutSeconds: 1
++        resources: {}
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++        volumeMounts:
++        - mountPath: /etc/grafana/grafana.ini
++          name: config
++          subPath: grafana.ini
++        - mountPath: /var/lib/grafana
++          name: storage
++        - mountPath: /etc/grafana/provisioning/datasources/datasources.yaml
++          name: config
++          subPath: datasources.yaml
++        - mountPath: /etc/grafana/provisioning/dashboards/dashboardproviders.yaml
++          name: config
++          subPath: dashboardproviders.yaml
++      dnsPolicy: ClusterFirst
++      enableServiceLinks: true
++      initContainers:
++      - command:
++        - chown
++        - -R
++        - 472:472
++        - /var/lib/grafana
++        image: busybox:1.31.1
++        imagePullPolicy: IfNotPresent
++        name: init-chown-data
++        resources: {}
++        securityContext:
++          runAsNonRoot: false
++          runAsUser: 0
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++        volumeMounts:
++        - mountPath: /var/lib/grafana
++          name: storage
++      - args:
++        - -c
++        - mkdir -p /var/lib/grafana/dashboards/default && /bin/sh -x /etc/grafana/download_dashboards.sh
++        command:
++        - /bin/sh
++        image: curlimages/curl:7.73.0
++        imagePullPolicy: IfNotPresent
++        name: download-dashboards
++        resources: {}
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++        volumeMounts:
++        - mountPath: /etc/grafana/download_dashboards.sh
++          name: config
++          subPath: download_dashboards.sh
++        - mountPath: /var/lib/grafana
++          name: storage
++      restartPolicy: Always
++      schedulerName: default-scheduler
++      securityContext:
++        fsGroup: 472
++        runAsGroup: 472
++        runAsUser: 472
++      serviceAccount: monitoring-grafana
++      serviceAccountName: monitoring-grafana
++      terminationGracePeriodSeconds: 30
++      volumes:
++      - configMap:
++          defaultMode: 420
++          name: monitoring-grafana
++        name: config
++      - configMap:
++          defaultMode: 420
++          name: monitoring-grafana-dashboards-default
++        name: dashboards-default
++      - name: storage
++        persistentVolumeClaim:
++          claimName: monitoring-grafana
++status: {}
+diff -u -N /tmp/LIVE-619288902/policy.v1beta1.PodSecurityPolicy..monitoring-grafana /tmp/MERGED-591983637/policy.v1beta1.PodSecurityPolicy..monitoring-grafana
+--- /tmp/LIVE-619288902/policy.v1beta1.PodSecurityPolicy..monitoring-grafana	2022-02-15 15:44:52.392254534 +0000
++++ /tmp/MERGED-591983637/policy.v1beta1.PodSecurityPolicy..monitoring-grafana	2022-02-15 15:44:52.392254534 +0000
+@@ -0,0 +1,78 @@
++apiVersion: policy/v1beta1
++kind: PodSecurityPolicy
++metadata:
++  annotations:
++    apparmor.security.beta.kubernetes.io/allowedProfileNames: runtime/default
++    apparmor.security.beta.kubernetes.io/defaultProfileName: runtime/default
++    seccomp.security.alpha.kubernetes.io/allowedProfileNames: docker/default,runtime/default
++    seccomp.security.alpha.kubernetes.io/defaultProfileName: docker/default
++  creationTimestamp: "2022-02-15T15:44:52Z"
++  labels:
++    app.kubernetes.io/instance: monitoring
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: grafana
++    app.kubernetes.io/version: 8.1.2
++    helm.sh/chart: grafana-6.16.6
++  managedFields:
++  - apiVersion: policy/v1beta1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:annotations:
++          .: {}
++          f:apparmor.security.beta.kubernetes.io/allowedProfileNames: {}
++          f:apparmor.security.beta.kubernetes.io/defaultProfileName: {}
++          f:seccomp.security.alpha.kubernetes.io/allowedProfileNames: {}
++          f:seccomp.security.alpha.kubernetes.io/defaultProfileName: {}
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++      f:spec:
++        f:allowPrivilegeEscalation: {}
++        f:fsGroup:
++          f:ranges: {}
++          f:rule: {}
++        f:requiredDropCapabilities: {}
++        f:runAsUser:
++          f:rule: {}
++        f:seLinux:
++          f:rule: {}
++        f:supplementalGroups:
++          f:ranges: {}
++          f:rule: {}
++        f:volumes: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:44:52Z"
++  name: monitoring-grafana
++  uid: c9e870fa-fcaf-4f8b-9e87-e84bb238c1ca
++spec:
++  allowPrivilegeEscalation: false
++  fsGroup:
++    ranges:
++    - max: 65535
++      min: 1
++    rule: MustRunAs
++  requiredDropCapabilities:
++  - ALL
++  runAsUser:
++    rule: RunAsAny
++  seLinux:
++    rule: RunAsAny
++  supplementalGroups:
++    ranges:
++    - max: 65535
++      min: 1
++    rule: MustRunAs
++  volumes:
++  - configMap
++  - emptyDir
++  - projected
++  - csi
++  - secret
++  - downwardAPI
++  - persistentVolumeClaim
+diff -u -N /tmp/LIVE-619288902/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-grafana-clusterrole /tmp/MERGED-591983637/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-grafana-clusterrole
+--- /tmp/LIVE-619288902/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-grafana-clusterrole	2022-02-15 15:44:53.368267389 +0000
++++ /tmp/MERGED-591983637/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-grafana-clusterrole	2022-02-15 15:44:53.368267389 +0000
+@@ -0,0 +1,29 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: ClusterRole
++metadata:
++  creationTimestamp: "2022-02-15T15:44:53Z"
++  labels:
++    app.kubernetes.io/instance: monitoring
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: grafana
++    app.kubernetes.io/version: 8.1.2
++    helm.sh/chart: grafana-6.16.6
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:44:53Z"
++  name: monitoring-grafana-clusterrole
++  uid: f8f62f2e-f464-4b5c-965c-e97aa44097b9
++rules: null
+diff -u -N /tmp/LIVE-619288902/rbac.authorization.k8s.io.v1.ClusterRoleBinding..monitoring-grafana-clusterrolebinding /tmp/MERGED-591983637/rbac.authorization.k8s.io.v1.ClusterRoleBinding..monitoring-grafana-clusterrolebinding
+--- /tmp/LIVE-619288902/rbac.authorization.k8s.io.v1.ClusterRoleBinding..monitoring-grafana-clusterrolebinding	2022-02-15 15:44:53.540269654 +0000
++++ /tmp/MERGED-591983637/rbac.authorization.k8s.io.v1.ClusterRoleBinding..monitoring-grafana-clusterrolebinding	2022-02-15 15:44:53.540269654 +0000
+@@ -0,0 +1,40 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: ClusterRoleBinding
++metadata:
++  creationTimestamp: "2022-02-15T15:44:53Z"
++  labels:
++    app.kubernetes.io/instance: monitoring
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: grafana
++    app.kubernetes.io/version: 8.1.2
++    helm.sh/chart: grafana-6.16.6
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++      f:roleRef:
++        f:apiGroup: {}
++        f:kind: {}
++        f:name: {}
++      f:subjects: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:44:53Z"
++  name: monitoring-grafana-clusterrolebinding
++  uid: e3c42076-8eaf-4c3b-ac6f-8d8547a67321
++roleRef:
++  apiGroup: rbac.authorization.k8s.io
++  kind: ClusterRole
++  name: monitoring-grafana-clusterrole
++subjects:
++- kind: ServiceAccount
++  name: monitoring-grafana
++  namespace: monitoring
+diff -u -N /tmp/LIVE-619288902/rbac.authorization.k8s.io.v1.Role.monitoring.monitoring-grafana /tmp/MERGED-591983637/rbac.authorization.k8s.io.v1.Role.monitoring.monitoring-grafana
+--- /tmp/LIVE-619288902/rbac.authorization.k8s.io.v1.Role.monitoring.monitoring-grafana	2022-02-15 15:44:53.776272762 +0000
++++ /tmp/MERGED-591983637/rbac.authorization.k8s.io.v1.Role.monitoring.monitoring-grafana	2022-02-15 15:44:53.776272762 +0000
+@@ -0,0 +1,38 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: Role
++metadata:
++  creationTimestamp: "2022-02-15T15:44:53Z"
++  labels:
++    app.kubernetes.io/instance: monitoring
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: grafana
++    app.kubernetes.io/version: 8.1.2
++    helm.sh/chart: grafana-6.16.6
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:44:53Z"
++  name: monitoring-grafana
++  namespace: monitoring
++  uid: c23b3f0a-1731-4409-83ad-97b00ca36947
++rules:
++- apiGroups:
++  - extensions
++  resourceNames:
++  - monitoring-grafana
++  resources:
++  - podsecuritypolicies
++  verbs:
++  - use
+diff -u -N /tmp/LIVE-619288902/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.monitoring-grafana /tmp/MERGED-591983637/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.monitoring-grafana
+--- /tmp/LIVE-619288902/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.monitoring-grafana	2022-02-15 15:44:54.012275871 +0000
++++ /tmp/MERGED-591983637/rbac.authorization.k8s.io.v1.RoleBinding.monitoring.monitoring-grafana	2022-02-15 15:44:54.012275871 +0000
+@@ -0,0 +1,41 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: RoleBinding
++metadata:
++  creationTimestamp: "2022-02-15T15:44:53Z"
++  labels:
++    app.kubernetes.io/instance: monitoring
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: grafana
++    app.kubernetes.io/version: 8.1.2
++    helm.sh/chart: grafana-6.16.6
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++      f:roleRef:
++        f:apiGroup: {}
++        f:kind: {}
++        f:name: {}
++      f:subjects: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:44:53Z"
++  name: monitoring-grafana
++  namespace: monitoring
++  uid: a66359c6-af4e-4a13-bae0-9976d1566a4c
++roleRef:
++  apiGroup: rbac.authorization.k8s.io
++  kind: Role
++  name: monitoring-grafana
++subjects:
++- kind: ServiceAccount
++  name: monitoring-grafana
++  namespace: monitoring
+diff -u -N /tmp/LIVE-619288902/v1.ConfigMap.monitoring.monitoring-grafana /tmp/MERGED-591983637/v1.ConfigMap.monitoring.monitoring-grafana
+--- /tmp/LIVE-619288902/v1.ConfigMap.monitoring.monitoring-grafana	2022-02-15 15:44:52.800259908 +0000
++++ /tmp/MERGED-591983637/v1.ConfigMap.monitoring.monitoring-grafana	2022-02-15 15:44:52.800259908 +0000
+@@ -0,0 +1,104 @@
++apiVersion: v1
++data:
++  dashboardproviders.yaml: |
++    apiVersion: 1
++    providers:
++    - disableDeletion: false
++      editable: true
++      folder: ""
++      name: default
++      options:
++        path: /var/lib/grafana/dashboards/default
++      orgId: 1
++      type: file
++  datasources.yaml: |
++    apiVersion: 1
++    datasources:
++    - isDefault: true
++      name: Prometheus
++      type: prometheus
++      url: http://monitoring-prometheus-server.monitoring.svc.cluster.local
++  download_dashboards.sh: |
++    #!/usr/bin/env sh
++    set -euf
++    mkdir -p /var/lib/grafana/dashboards/default
++    curl -skf \
++    --connect-timeout 60 \
++    --max-time 60 \
++    -H "Accept: application/json" \
++    -H "Content-Type: application/json;charset=UTF-8" \
++      "https://grafana.com/api/dashboards/7249/revisions/1/download" | sed '/-- .* --/! s/"datasource":.*,/"datasource": "Prometheus",/g'\
++    > "/var/lib/grafana/dashboards/default/cluster-view.json"
++    curl -skf \
++    --connect-timeout 60 \
++    --max-time 60 \
++    -H "Accept: application/json" \
++    -H "Content-Type: application/json;charset=UTF-8" \
++      "https://grafana.com/api/dashboards/9614/revisions/1/download" | sed '/-- .* --/! s/"datasource":.*,/"datasource": "Prometheus",/g'\
++    > "/var/lib/grafana/dashboards/default/ingress-nginx.json"
++    curl -skf \
++    --connect-timeout 60 \
++    --max-time 60 \
++    -H "Accept: application/json" \
++    -H "Content-Type: application/json;charset=UTF-8" \
++      "https://grafana.com/api/dashboards/13736/revisions/1/download" | sed '/-- .* --/! s/"datasource":.*,/"datasource": "Prometheus",/g'\
++    > "/var/lib/grafana/dashboards/default/ingress-nginx-daemonset.json"
++    curl -skf \
++    --connect-timeout 60 \
++    --max-time 60 \
++    -H "Accept: application/json" \
++    -H "Content-Type: application/json;charset=UTF-8" \
++      "https://grafana.com/api/dashboards/1860/revisions/22/download" | sed '/-- .* --/! s/"datasource":.*,/"datasource": "Prometheus",/g'\
++    > "/var/lib/grafana/dashboards/default/node-exporter.json"
++    curl -skf \
++    --connect-timeout 60 \
++    --max-time 60 \
++    -H "Accept: application/json" \
++    -H "Content-Type: application/json;charset=UTF-8" \
++      "https://grafana.com/api/dashboards/8588/revisions/1/download" | sed '/-- .* --/! s/"datasource":.*,/"datasource": "Prometheus",/g'\
++    > "/var/lib/grafana/dashboards/default/workload-view.json"
++  grafana.ini: |
++    [analytics]
++    check_for_updates = true
++    [grafana_net]
++    url = https://grafana.net
++    [log]
++    mode = console
++    [paths]
++    data = /var/lib/grafana/
++    logs = /var/log/grafana
++    plugins = /var/lib/grafana/plugins
++    provisioning = /etc/grafana/provisioning
++kind: ConfigMap
++metadata:
++  creationTimestamp: "2022-02-15T15:44:52Z"
++  labels:
++    app.kubernetes.io/instance: monitoring
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: grafana
++    app.kubernetes.io/version: 8.1.2
++    helm.sh/chart: grafana-6.16.6
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:data:
++        .: {}
++        f:dashboardproviders.yaml: {}
++        f:datasources.yaml: {}
++        f:download_dashboards.sh: {}
++        f:grafana.ini: {}
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:44:52Z"
++  name: monitoring-grafana
++  namespace: monitoring
++  uid: 0741d55d-75b5-464c-99cb-9dd4704b311f
+diff -u -N /tmp/LIVE-619288902/v1.ConfigMap.monitoring.monitoring-grafana-dashboards-default /tmp/MERGED-591983637/v1.ConfigMap.monitoring.monitoring-grafana-dashboards-default
+--- /tmp/LIVE-619288902/v1.ConfigMap.monitoring.monitoring-grafana-dashboards-default	2022-02-15 15:44:52.984262331 +0000
++++ /tmp/MERGED-591983637/v1.ConfigMap.monitoring.monitoring-grafana-dashboards-default	2022-02-15 15:44:52.984262331 +0000
+@@ -0,0 +1,30 @@
++apiVersion: v1
++kind: ConfigMap
++metadata:
++  creationTimestamp: "2022-02-15T15:44:52Z"
++  labels:
++    app.kubernetes.io/instance: monitoring
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: grafana
++    app.kubernetes.io/version: 8.1.2
++    dashboard-provider: default
++    helm.sh/chart: grafana-6.16.6
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:dashboard-provider: {}
++          f:helm.sh/chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:44:52Z"
++  name: monitoring-grafana-dashboards-default
++  namespace: monitoring
++  uid: d519b4b8-2698-47d4-8f22-777aca9305ee
+diff -u -N /tmp/LIVE-619288902/v1.PersistentVolumeClaim.monitoring.monitoring-grafana /tmp/MERGED-591983637/v1.PersistentVolumeClaim.monitoring.monitoring-grafana
+--- /tmp/LIVE-619288902/v1.PersistentVolumeClaim.monitoring.monitoring-grafana	2022-02-15 15:44:53.192265071 +0000
++++ /tmp/MERGED-591983637/v1.PersistentVolumeClaim.monitoring.monitoring-grafana	2022-02-15 15:44:53.192265071 +0000
+@@ -0,0 +1,52 @@
++apiVersion: v1
++kind: PersistentVolumeClaim
++metadata:
++  creationTimestamp: "2022-02-15T15:44:53Z"
++  finalizers:
++  - kubernetes.io/pvc-protection
++  labels:
++    app.kubernetes.io/instance: monitoring
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: grafana
++    app.kubernetes.io/version: 8.1.2
++    helm.sh/chart: grafana-6.16.6
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:finalizers:
++          .: {}
++          v:"kubernetes.io/pvc-protection": {}
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++      f:spec:
++        f:accessModes: {}
++        f:resources:
++          f:requests:
++            .: {}
++            f:storage: {}
++        f:volumeMode: {}
++      f:status:
++        f:phase: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:44:53Z"
++  name: monitoring-grafana
++  namespace: monitoring
++  uid: eb6d6f29-471c-4f81-8d74-2172524fd339
++spec:
++  accessModes:
++  - ReadWriteOnce
++  resources:
++    requests:
++      storage: 10Gi
++  storageClassName: standard
++  volumeMode: Filesystem
++status:
++  phase: Pending
+diff -u -N /tmp/LIVE-619288902/v1.Service.monitoring.monitoring-grafana /tmp/MERGED-591983637/v1.Service.monitoring.monitoring-grafana
+--- /tmp/LIVE-619288902/v1.Service.monitoring.monitoring-grafana	2022-02-15 15:44:54.216278557 +0000
++++ /tmp/MERGED-591983637/v1.Service.monitoring.monitoring-grafana	2022-02-15 15:44:54.216278557 +0000
+@@ -0,0 +1,56 @@
++apiVersion: v1
++kind: Service
++metadata:
++  creationTimestamp: "2022-02-15T15:44:54Z"
++  labels:
++    app.kubernetes.io/instance: monitoring
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: grafana
++    app.kubernetes.io/version: 8.1.2
++    helm.sh/chart: grafana-6.16.6
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++      f:spec:
++        f:ports:
++          .: {}
++          k:{"port":80,"protocol":"TCP"}:
++            .: {}
++            f:name: {}
++            f:port: {}
++            f:protocol: {}
++            f:targetPort: {}
++        f:selector:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/name: {}
++        f:sessionAffinity: {}
++        f:type: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:44:54Z"
++  name: monitoring-grafana
++  namespace: monitoring
++  uid: d1b65ae3-b008-48ce-a85a-e87cb627274e
++spec:
++  ports:
++  - name: service
++    port: 80
++    protocol: TCP
++    targetPort: 3000
++  selector:
++    app.kubernetes.io/instance: monitoring
++    app.kubernetes.io/name: grafana
++  sessionAffinity: None
++  type: ClusterIP
++status:
++  loadBalancer: {}
+diff -u -N /tmp/LIVE-619288902/v1.ServiceAccount.monitoring.monitoring-grafana /tmp/MERGED-591983637/v1.ServiceAccount.monitoring.monitoring-grafana
+--- /tmp/LIVE-619288902/v1.ServiceAccount.monitoring.monitoring-grafana	2022-02-15 15:44:52.592257168 +0000
++++ /tmp/MERGED-591983637/v1.ServiceAccount.monitoring.monitoring-grafana	2022-02-15 15:44:52.592257168 +0000
+@@ -0,0 +1,28 @@
++apiVersion: v1
++kind: ServiceAccount
++metadata:
++  creationTimestamp: "2022-02-15T15:44:52Z"
++  labels:
++    app.kubernetes.io/instance: monitoring
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: grafana
++    app.kubernetes.io/version: 8.1.2
++    helm.sh/chart: grafana-6.16.6
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:44:52Z"
++  name: monitoring-grafana
++  namespace: monitoring
++  uid: 211a29e9-fd9f-4a9f-91a0-b473da5206d7
+[helm:monitoring=kubernetes/apps/charts/prometheus]
+
+diff -u -N /tmp/LIVE-4165467310/apps.v1.DaemonSet.monitoring.monitoring-prometheus-node-exporter /tmp/MERGED-1121172563/apps.v1.DaemonSet.monitoring.monitoring-prometheus-node-exporter
+--- /tmp/LIVE-4165467310/apps.v1.DaemonSet.monitoring.monitoring-prometheus-node-exporter	2022-02-15 15:45:14.376526936 +0000
++++ /tmp/MERGED-1121172563/apps.v1.DaemonSet.monitoring.monitoring-prometheus-node-exporter	2022-02-15 15:45:14.376526936 +0000
+@@ -0,0 +1,205 @@
++apiVersion: apps/v1
++kind: DaemonSet
++metadata:
++  annotations:
++    deprecated.daemonset.template.generation: "1"
++  creationTimestamp: "2022-02-15T15:45:14Z"
++  generation: 1
++  labels:
++    app: prometheus
++    chart: prometheus-14.6.1
++    component: node-exporter
++    heritage: Helm
++    release: monitoring
++  managedFields:
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:annotations:
++          .: {}
++          f:deprecated.daemonset.template.generation: {}
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:release: {}
++      f:spec:
++        f:revisionHistoryLimit: {}
++        f:selector: {}
++        f:template:
++          f:metadata:
++            f:labels:
++              .: {}
++              f:app: {}
++              f:chart: {}
++              f:component: {}
++              f:heritage: {}
++              f:release: {}
++          f:spec:
++            f:containers:
++              k:{"name":"prometheus-node-exporter"}:
++                .: {}
++                f:args: {}
++                f:image: {}
++                f:imagePullPolicy: {}
++                f:name: {}
++                f:ports:
++                  .: {}
++                  k:{"containerPort":9100,"protocol":"TCP"}:
++                    .: {}
++                    f:containerPort: {}
++                    f:hostPort: {}
++                    f:name: {}
++                    f:protocol: {}
++                f:resources: {}
++                f:terminationMessagePath: {}
++                f:terminationMessagePolicy: {}
++                f:volumeMounts:
++                  .: {}
++                  k:{"mountPath":"/host/proc"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                    f:readOnly: {}
++                  k:{"mountPath":"/host/root"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:mountPropagation: {}
++                    f:name: {}
++                    f:readOnly: {}
++                  k:{"mountPath":"/host/sys"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                    f:readOnly: {}
++            f:dnsPolicy: {}
++            f:hostNetwork: {}
++            f:hostPID: {}
++            f:restartPolicy: {}
++            f:schedulerName: {}
++            f:securityContext:
++              .: {}
++              f:fsGroup: {}
++              f:runAsGroup: {}
++              f:runAsNonRoot: {}
++              f:runAsUser: {}
++            f:serviceAccount: {}
++            f:serviceAccountName: {}
++            f:terminationGracePeriodSeconds: {}
++            f:volumes:
++              .: {}
++              k:{"name":"proc"}:
++                .: {}
++                f:hostPath:
++                  .: {}
++                  f:path: {}
++                  f:type: {}
++                f:name: {}
++              k:{"name":"root"}:
++                .: {}
++                f:hostPath:
++                  .: {}
++                  f:path: {}
++                  f:type: {}
++                f:name: {}
++              k:{"name":"sys"}:
++                .: {}
++                f:hostPath:
++                  .: {}
++                  f:path: {}
++                  f:type: {}
++                f:name: {}
++        f:updateStrategy:
++          f:rollingUpdate:
++            .: {}
++            f:maxUnavailable: {}
++          f:type: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:14Z"
++  name: monitoring-prometheus-node-exporter
++  namespace: monitoring
++  uid: 15cdc8b2-e880-48ae-8f05-0bf9697e3e07
++spec:
++  revisionHistoryLimit: 10
++  selector:
++    matchLabels:
++      app: prometheus
++      component: node-exporter
++      release: monitoring
++  template:
++    metadata:
++      creationTimestamp: null
++      labels:
++        app: prometheus
++        chart: prometheus-14.6.1
++        component: node-exporter
++        heritage: Helm
++        release: monitoring
++    spec:
++      containers:
++      - args:
++        - --path.procfs=/host/proc
++        - --path.sysfs=/host/sys
++        - --path.rootfs=/host/root
++        - --web.listen-address=:9100
++        image: quay.io/prometheus/node-exporter:v1.1.2
++        imagePullPolicy: IfNotPresent
++        name: prometheus-node-exporter
++        ports:
++        - containerPort: 9100
++          hostPort: 9100
++          name: metrics
++          protocol: TCP
++        resources: {}
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++        volumeMounts:
++        - mountPath: /host/proc
++          name: proc
++          readOnly: true
++        - mountPath: /host/sys
++          name: sys
++          readOnly: true
++        - mountPath: /host/root
++          mountPropagation: HostToContainer
++          name: root
++          readOnly: true
++      dnsPolicy: ClusterFirst
++      hostNetwork: true
++      hostPID: true
++      restartPolicy: Always
++      schedulerName: default-scheduler
++      securityContext:
++        fsGroup: 65534
++        runAsGroup: 65534
++        runAsNonRoot: true
++        runAsUser: 65534
++      serviceAccount: monitoring-prometheus-node-exporter
++      serviceAccountName: monitoring-prometheus-node-exporter
++      terminationGracePeriodSeconds: 30
++      volumes:
++      - hostPath:
++          path: /proc
++          type: ""
++        name: proc
++      - hostPath:
++          path: /sys
++          type: ""
++        name: sys
++      - hostPath:
++          path: /
++          type: ""
++        name: root
++  updateStrategy:
++    rollingUpdate:
++      maxUnavailable: 1
++    type: RollingUpdate
++status:
++  currentNumberScheduled: 0
++  desiredNumberScheduled: 0
++  numberMisscheduled: 0
++  numberReady: 0
+diff -u -N /tmp/LIVE-4165467310/apps.v1.Deployment.monitoring.monitoring-kube-state-metrics /tmp/MERGED-1121172563/apps.v1.Deployment.monitoring.monitoring-kube-state-metrics
+--- /tmp/LIVE-4165467310/apps.v1.Deployment.monitoring.monitoring-kube-state-metrics	2022-02-15 15:45:14.600529604 +0000
++++ /tmp/MERGED-1121172563/apps.v1.Deployment.monitoring.monitoring-kube-state-metrics	2022-02-15 15:45:14.600529604 +0000
+@@ -0,0 +1,162 @@
++apiVersion: apps/v1
++kind: Deployment
++metadata:
++  creationTimestamp: "2022-02-15T15:45:14Z"
++  generation: 1
++  labels:
++    app.kubernetes.io/instance: monitoring
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: kube-state-metrics
++    app.kubernetes.io/version: 2.1.1
++    helm.sh/chart: kube-state-metrics-3.4.2
++  managedFields:
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:app.kubernetes.io/version: {}
++          f:helm.sh/chart: {}
++      f:spec:
++        f:progressDeadlineSeconds: {}
++        f:replicas: {}
++        f:revisionHistoryLimit: {}
++        f:selector: {}
++        f:strategy:
++          f:rollingUpdate:
++            .: {}
++            f:maxSurge: {}
++            f:maxUnavailable: {}
++          f:type: {}
++        f:template:
++          f:metadata:
++            f:labels:
++              .: {}
++              f:app.kubernetes.io/instance: {}
++              f:app.kubernetes.io/name: {}
++          f:spec:
++            f:containers:
++              k:{"name":"kube-state-metrics"}:
++                .: {}
++                f:args: {}
++                f:image: {}
++                f:imagePullPolicy: {}
++                f:livenessProbe:
++                  .: {}
++                  f:failureThreshold: {}
++                  f:httpGet:
++                    .: {}
++                    f:path: {}
++                    f:port: {}
++                    f:scheme: {}
++                  f:initialDelaySeconds: {}
++                  f:periodSeconds: {}
++                  f:successThreshold: {}
++                  f:timeoutSeconds: {}
++                f:name: {}
++                f:ports:
++                  .: {}
++                  k:{"containerPort":8080,"protocol":"TCP"}:
++                    .: {}
++                    f:containerPort: {}
++                    f:protocol: {}
++                f:readinessProbe:
++                  .: {}
++                  f:failureThreshold: {}
++                  f:httpGet:
++                    .: {}
++                    f:path: {}
++                    f:port: {}
++                    f:scheme: {}
++                  f:initialDelaySeconds: {}
++                  f:periodSeconds: {}
++                  f:successThreshold: {}
++                  f:timeoutSeconds: {}
++                f:resources: {}
++                f:terminationMessagePath: {}
++                f:terminationMessagePolicy: {}
++            f:dnsPolicy: {}
++            f:restartPolicy: {}
++            f:schedulerName: {}
++            f:securityContext:
++              .: {}
++              f:fsGroup: {}
++              f:runAsGroup: {}
++              f:runAsUser: {}
++            f:serviceAccount: {}
++            f:serviceAccountName: {}
++            f:terminationGracePeriodSeconds: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:14Z"
++  name: monitoring-kube-state-metrics
++  namespace: monitoring
++  uid: 1758f2f2-6c38-4972-8127-c432b1aa7683
++spec:
++  progressDeadlineSeconds: 600
++  replicas: 1
++  revisionHistoryLimit: 10
++  selector:
++    matchLabels:
++      app.kubernetes.io/name: kube-state-metrics
++  strategy:
++    rollingUpdate:
++      maxSurge: 25%
++      maxUnavailable: 25%
++    type: RollingUpdate
++  template:
++    metadata:
++      creationTimestamp: null
++      labels:
++        app.kubernetes.io/instance: monitoring
++        app.kubernetes.io/name: kube-state-metrics
++    spec:
++      containers:
++      - args:
++        - --port=8080
++        - --resources=certificatesigningrequests,configmaps,cronjobs,daemonsets,deployments,endpoints,horizontalpodautoscalers,ingresses,jobs,limitranges,mutatingwebhookconfigurations,namespaces,networkpolicies,nodes,persistentvolumeclaims,persistentvolumes,poddisruptionbudgets,pods,replicasets,replicationcontrollers,resourcequotas,secrets,services,statefulsets,storageclasses,validatingwebhookconfigurations,volumeattachments
++        - --telemetry-port=8081
++        image: k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.1.1
++        imagePullPolicy: IfNotPresent
++        livenessProbe:
++          failureThreshold: 3
++          httpGet:
++            path: /healthz
++            port: 8080
++            scheme: HTTP
++          initialDelaySeconds: 5
++          periodSeconds: 10
++          successThreshold: 1
++          timeoutSeconds: 5
++        name: kube-state-metrics
++        ports:
++        - containerPort: 8080
++          protocol: TCP
++        readinessProbe:
++          failureThreshold: 3
++          httpGet:
++            path: /
++            port: 8080
++            scheme: HTTP
++          initialDelaySeconds: 5
++          periodSeconds: 10
++          successThreshold: 1
++          timeoutSeconds: 5
++        resources: {}
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++      dnsPolicy: ClusterFirst
++      restartPolicy: Always
++      schedulerName: default-scheduler
++      securityContext:
++        fsGroup: 65534
++        runAsGroup: 65534
++        runAsUser: 65534
++      serviceAccount: monitoring-kube-state-metrics
++      serviceAccountName: monitoring-kube-state-metrics
++      terminationGracePeriodSeconds: 30
++status: {}
+diff -u -N /tmp/LIVE-4165467310/apps.v1.Deployment.monitoring.monitoring-prometheus-alertmanager /tmp/MERGED-1121172563/apps.v1.Deployment.monitoring.monitoring-prometheus-alertmanager
+--- /tmp/LIVE-4165467310/apps.v1.Deployment.monitoring.monitoring-prometheus-alertmanager	2022-02-15 15:45:14.784531795 +0000
++++ /tmp/MERGED-1121172563/apps.v1.Deployment.monitoring.monitoring-prometheus-alertmanager	2022-02-15 15:45:14.784531795 +0000
+@@ -0,0 +1,228 @@
++apiVersion: apps/v1
++kind: Deployment
++metadata:
++  creationTimestamp: "2022-02-15T15:45:14Z"
++  generation: 1
++  labels:
++    app: prometheus
++    chart: prometheus-14.6.1
++    component: alertmanager
++    heritage: Helm
++    release: monitoring
++  managedFields:
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:release: {}
++      f:spec:
++        f:progressDeadlineSeconds: {}
++        f:replicas: {}
++        f:revisionHistoryLimit: {}
++        f:selector: {}
++        f:strategy:
++          f:type: {}
++        f:template:
++          f:metadata:
++            f:labels:
++              .: {}
++              f:app: {}
++              f:chart: {}
++              f:component: {}
++              f:heritage: {}
++              f:release: {}
++          f:spec:
++            f:containers:
++              k:{"name":"prometheus-alertmanager"}:
++                .: {}
++                f:args: {}
++                f:env:
++                  .: {}
++                  k:{"name":"POD_IP"}:
++                    .: {}
++                    f:name: {}
++                    f:valueFrom:
++                      .: {}
++                      f:fieldRef:
++                        .: {}
++                        f:apiVersion: {}
++                        f:fieldPath: {}
++                f:image: {}
++                f:imagePullPolicy: {}
++                f:name: {}
++                f:ports:
++                  .: {}
++                  k:{"containerPort":9093,"protocol":"TCP"}:
++                    .: {}
++                    f:containerPort: {}
++                    f:protocol: {}
++                f:readinessProbe:
++                  .: {}
++                  f:failureThreshold: {}
++                  f:httpGet:
++                    .: {}
++                    f:path: {}
++                    f:port: {}
++                    f:scheme: {}
++                  f:initialDelaySeconds: {}
++                  f:periodSeconds: {}
++                  f:successThreshold: {}
++                  f:timeoutSeconds: {}
++                f:resources: {}
++                f:terminationMessagePath: {}
++                f:terminationMessagePolicy: {}
++                f:volumeMounts:
++                  .: {}
++                  k:{"mountPath":"/data"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                  k:{"mountPath":"/etc/config"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++              k:{"name":"prometheus-alertmanager-configmap-reload"}:
++                .: {}
++                f:args: {}
++                f:image: {}
++                f:imagePullPolicy: {}
++                f:name: {}
++                f:resources: {}
++                f:terminationMessagePath: {}
++                f:terminationMessagePolicy: {}
++                f:volumeMounts:
++                  .: {}
++                  k:{"mountPath":"/etc/config"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                    f:readOnly: {}
++            f:dnsPolicy: {}
++            f:restartPolicy: {}
++            f:schedulerName: {}
++            f:securityContext:
++              .: {}
++              f:fsGroup: {}
++              f:runAsGroup: {}
++              f:runAsNonRoot: {}
++              f:runAsUser: {}
++            f:serviceAccount: {}
++            f:serviceAccountName: {}
++            f:terminationGracePeriodSeconds: {}
++            f:volumes:
++              .: {}
++              k:{"name":"config-volume"}:
++                .: {}
++                f:configMap:
++                  .: {}
++                  f:defaultMode: {}
++                  f:name: {}
++                f:name: {}
++              k:{"name":"storage-volume"}:
++                .: {}
++                f:name: {}
++                f:persistentVolumeClaim:
++                  .: {}
++                  f:claimName: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:14Z"
++  name: monitoring-prometheus-alertmanager
++  namespace: monitoring
++  uid: a23b3d2a-103b-419a-bffa-ef11e56c9a82
++spec:
++  progressDeadlineSeconds: 600
++  replicas: 1
++  revisionHistoryLimit: 10
++  selector:
++    matchLabels:
++      app: prometheus
++      component: alertmanager
++      release: monitoring
++  strategy:
++    type: Recreate
++  template:
++    metadata:
++      creationTimestamp: null
++      labels:
++        app: prometheus
++        chart: prometheus-14.6.1
++        component: alertmanager
++        heritage: Helm
++        release: monitoring
++    spec:
++      containers:
++      - args:
++        - --config.file=/etc/config/alertmanager.yml
++        - --storage.path=/data
++        - --cluster.advertise-address=[$(POD_IP)]:6783
++        - --web.external-url=http://localhost:9093
++        env:
++        - name: POD_IP
++          valueFrom:
++            fieldRef:
++              apiVersion: v1
++              fieldPath: status.podIP
++        image: quay.io/prometheus/alertmanager:v0.21.0
++        imagePullPolicy: IfNotPresent
++        name: prometheus-alertmanager
++        ports:
++        - containerPort: 9093
++          protocol: TCP
++        readinessProbe:
++          failureThreshold: 3
++          httpGet:
++            path: /-/ready
++            port: 9093
++            scheme: HTTP
++          initialDelaySeconds: 30
++          periodSeconds: 10
++          successThreshold: 1
++          timeoutSeconds: 30
++        resources: {}
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++        volumeMounts:
++        - mountPath: /etc/config
++          name: config-volume
++        - mountPath: /data
++          name: storage-volume
++      - args:
++        - --volume-dir=/etc/config
++        - --webhook-url=http://127.0.0.1:9093/-/reload
++        image: jimmidyson/configmap-reload:v0.5.0
++        imagePullPolicy: IfNotPresent
++        name: prometheus-alertmanager-configmap-reload
++        resources: {}
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++        volumeMounts:
++        - mountPath: /etc/config
++          name: config-volume
++          readOnly: true
++      dnsPolicy: ClusterFirst
++      restartPolicy: Always
++      schedulerName: default-scheduler
++      securityContext:
++        fsGroup: 65534
++        runAsGroup: 65534
++        runAsNonRoot: true
++        runAsUser: 65534
++      serviceAccount: monitoring-prometheus-alertmanager
++      serviceAccountName: monitoring-prometheus-alertmanager
++      terminationGracePeriodSeconds: 30
++      volumes:
++      - configMap:
++          defaultMode: 420
++          name: monitoring-prometheus-alertmanager
++        name: config-volume
++      - name: storage-volume
++        persistentVolumeClaim:
++          claimName: monitoring-prometheus-alertmanager
++status: {}
+diff -u -N /tmp/LIVE-4165467310/apps.v1.Deployment.monitoring.monitoring-prometheus-pushgateway /tmp/MERGED-1121172563/apps.v1.Deployment.monitoring.monitoring-prometheus-pushgateway
+--- /tmp/LIVE-4165467310/apps.v1.Deployment.monitoring.monitoring-prometheus-pushgateway	2022-02-15 15:45:14.972534034 +0000
++++ /tmp/MERGED-1121172563/apps.v1.Deployment.monitoring.monitoring-prometheus-pushgateway	2022-02-15 15:45:14.976534082 +0000
+@@ -0,0 +1,163 @@
++apiVersion: apps/v1
++kind: Deployment
++metadata:
++  creationTimestamp: "2022-02-15T15:45:14Z"
++  generation: 1
++  labels:
++    app: prometheus
++    chart: prometheus-14.6.1
++    component: pushgateway
++    heritage: Helm
++    release: monitoring
++  managedFields:
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:release: {}
++      f:spec:
++        f:progressDeadlineSeconds: {}
++        f:replicas: {}
++        f:revisionHistoryLimit: {}
++        f:selector: {}
++        f:strategy:
++          f:rollingUpdate:
++            .: {}
++            f:maxSurge: {}
++            f:maxUnavailable: {}
++          f:type: {}
++        f:template:
++          f:metadata:
++            f:labels:
++              .: {}
++              f:app: {}
++              f:chart: {}
++              f:component: {}
++              f:heritage: {}
++              f:release: {}
++          f:spec:
++            f:containers:
++              k:{"name":"prometheus-pushgateway"}:
++                .: {}
++                f:image: {}
++                f:imagePullPolicy: {}
++                f:livenessProbe:
++                  .: {}
++                  f:failureThreshold: {}
++                  f:httpGet:
++                    .: {}
++                    f:path: {}
++                    f:port: {}
++                    f:scheme: {}
++                  f:initialDelaySeconds: {}
++                  f:periodSeconds: {}
++                  f:successThreshold: {}
++                  f:timeoutSeconds: {}
++                f:name: {}
++                f:ports:
++                  .: {}
++                  k:{"containerPort":9091,"protocol":"TCP"}:
++                    .: {}
++                    f:containerPort: {}
++                    f:protocol: {}
++                f:readinessProbe:
++                  .: {}
++                  f:failureThreshold: {}
++                  f:httpGet:
++                    .: {}
++                    f:path: {}
++                    f:port: {}
++                    f:scheme: {}
++                  f:initialDelaySeconds: {}
++                  f:periodSeconds: {}
++                  f:successThreshold: {}
++                  f:timeoutSeconds: {}
++                f:resources: {}
++                f:terminationMessagePath: {}
++                f:terminationMessagePolicy: {}
++            f:dnsPolicy: {}
++            f:restartPolicy: {}
++            f:schedulerName: {}
++            f:securityContext:
++              .: {}
++              f:runAsNonRoot: {}
++              f:runAsUser: {}
++            f:serviceAccount: {}
++            f:serviceAccountName: {}
++            f:terminationGracePeriodSeconds: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:14Z"
++  name: monitoring-prometheus-pushgateway
++  namespace: monitoring
++  uid: 2be31e23-2dac-4ec4-b23a-6796f7ad55ab
++spec:
++  progressDeadlineSeconds: 600
++  replicas: 1
++  revisionHistoryLimit: 10
++  selector:
++    matchLabels:
++      app: prometheus
++      component: pushgateway
++      release: monitoring
++  strategy:
++    rollingUpdate:
++      maxSurge: 25%
++      maxUnavailable: 25%
++    type: RollingUpdate
++  template:
++    metadata:
++      creationTimestamp: null
++      labels:
++        app: prometheus
++        chart: prometheus-14.6.1
++        component: pushgateway
++        heritage: Helm
++        release: monitoring
++    spec:
++      containers:
++      - image: prom/pushgateway:v1.3.1
++        imagePullPolicy: IfNotPresent
++        livenessProbe:
++          failureThreshold: 3
++          httpGet:
++            path: /-/healthy
++            port: 9091
++            scheme: HTTP
++          initialDelaySeconds: 10
++          periodSeconds: 10
++          successThreshold: 1
++          timeoutSeconds: 10
++        name: prometheus-pushgateway
++        ports:
++        - containerPort: 9091
++          protocol: TCP
++        readinessProbe:
++          failureThreshold: 3
++          httpGet:
++            path: /-/ready
++            port: 9091
++            scheme: HTTP
++          initialDelaySeconds: 10
++          periodSeconds: 10
++          successThreshold: 1
++          timeoutSeconds: 10
++        resources: {}
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++      dnsPolicy: ClusterFirst
++      restartPolicy: Always
++      schedulerName: default-scheduler
++      securityContext:
++        runAsNonRoot: true
++        runAsUser: 65534
++      serviceAccount: monitoring-prometheus-pushgateway
++      serviceAccountName: monitoring-prometheus-pushgateway
++      terminationGracePeriodSeconds: 30
++status: {}
+diff -u -N /tmp/LIVE-4165467310/apps.v1.Deployment.monitoring.monitoring-prometheus-server /tmp/MERGED-1121172563/apps.v1.Deployment.monitoring.monitoring-prometheus-server
+--- /tmp/LIVE-4165467310/apps.v1.Deployment.monitoring.monitoring-prometheus-server	2022-02-15 15:45:15.176536464 +0000
++++ /tmp/MERGED-1121172563/apps.v1.Deployment.monitoring.monitoring-prometheus-server	2022-02-15 15:45:15.188536607 +0000
+@@ -0,0 +1,237 @@
++apiVersion: apps/v1
++kind: Deployment
++metadata:
++  creationTimestamp: "2022-02-15T15:45:15Z"
++  generation: 1
++  labels:
++    app: prometheus
++    chart: prometheus-14.6.1
++    component: server
++    heritage: Helm
++    release: monitoring
++  managedFields:
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:release: {}
++      f:spec:
++        f:progressDeadlineSeconds: {}
++        f:replicas: {}
++        f:revisionHistoryLimit: {}
++        f:selector: {}
++        f:strategy:
++          f:type: {}
++        f:template:
++          f:metadata:
++            f:labels:
++              .: {}
++              f:app: {}
++              f:chart: {}
++              f:component: {}
++              f:heritage: {}
++              f:release: {}
++          f:spec:
++            f:containers:
++              k:{"name":"prometheus-server"}:
++                .: {}
++                f:args: {}
++                f:image: {}
++                f:imagePullPolicy: {}
++                f:livenessProbe:
++                  .: {}
++                  f:failureThreshold: {}
++                  f:httpGet:
++                    .: {}
++                    f:path: {}
++                    f:port: {}
++                    f:scheme: {}
++                  f:initialDelaySeconds: {}
++                  f:periodSeconds: {}
++                  f:successThreshold: {}
++                  f:timeoutSeconds: {}
++                f:name: {}
++                f:ports:
++                  .: {}
++                  k:{"containerPort":9090,"protocol":"TCP"}:
++                    .: {}
++                    f:containerPort: {}
++                    f:protocol: {}
++                f:readinessProbe:
++                  .: {}
++                  f:failureThreshold: {}
++                  f:httpGet:
++                    .: {}
++                    f:path: {}
++                    f:port: {}
++                    f:scheme: {}
++                  f:initialDelaySeconds: {}
++                  f:periodSeconds: {}
++                  f:successThreshold: {}
++                  f:timeoutSeconds: {}
++                f:resources: {}
++                f:terminationMessagePath: {}
++                f:terminationMessagePolicy: {}
++                f:volumeMounts:
++                  .: {}
++                  k:{"mountPath":"/data"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                  k:{"mountPath":"/etc/config"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++              k:{"name":"prometheus-server-configmap-reload"}:
++                .: {}
++                f:args: {}
++                f:image: {}
++                f:imagePullPolicy: {}
++                f:name: {}
++                f:resources: {}
++                f:terminationMessagePath: {}
++                f:terminationMessagePolicy: {}
++                f:volumeMounts:
++                  .: {}
++                  k:{"mountPath":"/etc/config"}:
++                    .: {}
++                    f:mountPath: {}
++                    f:name: {}
++                    f:readOnly: {}
++            f:dnsPolicy: {}
++            f:enableServiceLinks: {}
++            f:restartPolicy: {}
++            f:schedulerName: {}
++            f:securityContext:
++              .: {}
++              f:fsGroup: {}
++              f:runAsGroup: {}
++              f:runAsNonRoot: {}
++              f:runAsUser: {}
++            f:serviceAccount: {}
++            f:serviceAccountName: {}
++            f:terminationGracePeriodSeconds: {}
++            f:volumes:
++              .: {}
++              k:{"name":"config-volume"}:
++                .: {}
++                f:configMap:
++                  .: {}
++                  f:defaultMode: {}
++                  f:name: {}
++                f:name: {}
++              k:{"name":"storage-volume"}:
++                .: {}
++                f:name: {}
++                f:persistentVolumeClaim:
++                  .: {}
++                  f:claimName: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:15Z"
++  name: monitoring-prometheus-server
++  namespace: monitoring
++  uid: 65e97c6c-dabb-42d2-967a-2deff0426062
++spec:
++  progressDeadlineSeconds: 600
++  replicas: 1
++  revisionHistoryLimit: 10
++  selector:
++    matchLabels:
++      app: prometheus
++      component: server
++      release: monitoring
++  strategy:
++    type: Recreate
++  template:
++    metadata:
++      creationTimestamp: null
++      labels:
++        app: prometheus
++        chart: prometheus-14.6.1
++        component: server
++        heritage: Helm
++        release: monitoring
++    spec:
++      containers:
++      - args:
++        - --volume-dir=/etc/config
++        - --webhook-url=http://127.0.0.1:9090/-/reload
++        image: jimmidyson/configmap-reload:v0.5.0
++        imagePullPolicy: IfNotPresent
++        name: prometheus-server-configmap-reload
++        resources: {}
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++        volumeMounts:
++        - mountPath: /etc/config
++          name: config-volume
++          readOnly: true
++      - args:
++        - --storage.tsdb.retention.time=15d
++        - --config.file=/etc/config/prometheus.yml
++        - --storage.tsdb.path=/data
++        - --web.console.libraries=/etc/prometheus/console_libraries
++        - --web.console.templates=/etc/prometheus/consoles
++        - --web.enable-lifecycle
++        image: quay.io/prometheus/prometheus:v2.26.0
++        imagePullPolicy: IfNotPresent
++        livenessProbe:
++          failureThreshold: 3
++          httpGet:
++            path: /-/healthy
++            port: 9090
++            scheme: HTTP
++          initialDelaySeconds: 30
++          periodSeconds: 15
++          successThreshold: 1
++          timeoutSeconds: 10
++        name: prometheus-server
++        ports:
++        - containerPort: 9090
++          protocol: TCP
++        readinessProbe:
++          failureThreshold: 3
++          httpGet:
++            path: /-/ready
++            port: 9090
++            scheme: HTTP
++          initialDelaySeconds: 30
++          periodSeconds: 5
++          successThreshold: 1
++          timeoutSeconds: 4
++        resources: {}
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++        volumeMounts:
++        - mountPath: /etc/config
++          name: config-volume
++        - mountPath: /data
++          name: storage-volume
++      dnsPolicy: ClusterFirst
++      enableServiceLinks: true
++      restartPolicy: Always
++      schedulerName: default-scheduler
++      securityContext:
++        fsGroup: 65534
++        runAsGroup: 65534
++        runAsNonRoot: true
++        runAsUser: 65534
++      serviceAccount: monitoring-prometheus-server
++      serviceAccountName: monitoring-prometheus-server
++      terminationGracePeriodSeconds: 300
++      volumes:
++      - configMap:
++          defaultMode: 420
++          name: monitoring-prometheus-server
++        name: config-volume
++      - name: storage-volume
++        persistentVolumeClaim:
++          claimName: monitoring-prometheus-server
++status: {}
+diff -u -N /tmp/LIVE-4165467310/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-kube-state-metrics /tmp/MERGED-1121172563/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-kube-state-metrics
+--- /tmp/LIVE-4165467310/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-kube-state-metrics	2022-02-15 15:45:12.132500211 +0000
++++ /tmp/MERGED-1121172563/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-kube-state-metrics	2022-02-15 15:45:12.132500211 +0000
+@@ -0,0 +1,220 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: ClusterRole
++metadata:
++  creationTimestamp: "2022-02-15T15:45:12Z"
++  labels:
++    app.kubernetes.io/instance: monitoring
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: kube-state-metrics
++    helm.sh/chart: kube-state-metrics-3.4.2
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:helm.sh/chart: {}
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:12Z"
++  name: monitoring-kube-state-metrics
++  uid: cac7e27a-2d5e-4245-9a59-b82722484474
++rules:
++- apiGroups:
++  - certificates.k8s.io
++  resources:
++  - certificatesigningrequests
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - ""
++  resources:
++  - configmaps
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - batch
++  resources:
++  - cronjobs
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - extensions
++  - apps
++  resources:
++  - daemonsets
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - extensions
++  - apps
++  resources:
++  - deployments
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - ""
++  resources:
++  - endpoints
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - autoscaling
++  resources:
++  - horizontalpodautoscalers
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - extensions
++  - networking.k8s.io
++  resources:
++  - ingresses
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - batch
++  resources:
++  - jobs
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - ""
++  resources:
++  - limitranges
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - admissionregistration.k8s.io
++  resources:
++  - mutatingwebhookconfigurations
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - ""
++  resources:
++  - namespaces
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - networking.k8s.io
++  resources:
++  - networkpolicies
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - ""
++  resources:
++  - nodes
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - ""
++  resources:
++  - persistentvolumeclaims
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - ""
++  resources:
++  - persistentvolumes
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - policy
++  resources:
++  - poddisruptionbudgets
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - ""
++  resources:
++  - pods
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - extensions
++  - apps
++  resources:
++  - replicasets
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - ""
++  resources:
++  - replicationcontrollers
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - ""
++  resources:
++  - resourcequotas
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - ""
++  resources:
++  - secrets
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - ""
++  resources:
++  - services
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - apps
++  resources:
++  - statefulsets
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - storage.k8s.io
++  resources:
++  - storageclasses
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - admissionregistration.k8s.io
++  resources:
++  - validatingwebhookconfigurations
++  verbs:
++  - list
++  - watch
++- apiGroups:
++  - storage.k8s.io
++  resources:
++  - volumeattachments
++  verbs:
++  - list
++  - watch
+diff -u -N /tmp/LIVE-4165467310/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-prometheus-alertmanager /tmp/MERGED-1121172563/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-prometheus-alertmanager
+--- /tmp/LIVE-4165467310/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-prometheus-alertmanager	2022-02-15 15:45:12.264501783 +0000
++++ /tmp/MERGED-1121172563/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-prometheus-alertmanager	2022-02-15 15:45:12.264501783 +0000
+@@ -0,0 +1,29 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: ClusterRole
++metadata:
++  creationTimestamp: "2022-02-15T15:45:12Z"
++  labels:
++    app: prometheus
++    chart: prometheus-14.6.1
++    component: alertmanager
++    heritage: Helm
++    release: monitoring
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:release: {}
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:12Z"
++  name: monitoring-prometheus-alertmanager
++  uid: dce81822-ad73-4965-b15d-87375e10ce8d
++rules: null
+diff -u -N /tmp/LIVE-4165467310/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-prometheus-pushgateway /tmp/MERGED-1121172563/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-prometheus-pushgateway
+--- /tmp/LIVE-4165467310/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-prometheus-pushgateway	2022-02-15 15:45:12.396503355 +0000
++++ /tmp/MERGED-1121172563/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-prometheus-pushgateway	2022-02-15 15:45:12.396503355 +0000
+@@ -0,0 +1,29 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: ClusterRole
++metadata:
++  creationTimestamp: "2022-02-15T15:45:12Z"
++  labels:
++    app: prometheus
++    chart: prometheus-14.6.1
++    component: pushgateway
++    heritage: Helm
++    release: monitoring
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:release: {}
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:12Z"
++  name: monitoring-prometheus-pushgateway
++  uid: c28a66c2-9604-4afb-8418-fa89ee90c58b
++rules: null
+diff -u -N /tmp/LIVE-4165467310/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-prometheus-server /tmp/MERGED-1121172563/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-prometheus-server
+--- /tmp/LIVE-4165467310/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-prometheus-server	2022-02-15 15:45:12.528504927 +0000
++++ /tmp/MERGED-1121172563/rbac.authorization.k8s.io.v1.ClusterRole..monitoring-prometheus-server	2022-02-15 15:45:12.528504927 +0000
+@@ -0,0 +1,58 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: ClusterRole
++metadata:
++  creationTimestamp: "2022-02-15T15:45:12Z"
++  labels:
++    app: prometheus
++    chart: prometheus-14.6.1
++    component: server
++    heritage: Helm
++    release: monitoring
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:release: {}
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:12Z"
++  name: monitoring-prometheus-server
++  uid: 0cee6cfd-7d52-45b3-861b-a23ccc2072fa
++rules:
++- apiGroups:
++  - ""
++  resources:
++  - nodes
++  - nodes/proxy
++  - nodes/metrics
++  - services
++  - endpoints
++  - pods
++  - ingresses
++  - configmaps
++  verbs:
++  - get
++  - list
++  - watch
++- apiGroups:
++  - extensions
++  - networking.k8s.io
++  resources:
++  - ingresses/status
++  - ingresses
++  verbs:
++  - get
++  - list
++  - watch
++- nonResourceURLs:
++  - /metrics
++  verbs:
++  - get
+diff -u -N /tmp/LIVE-4165467310/rbac.authorization.k8s.io.v1.ClusterRoleBinding..monitoring-kube-state-metrics /tmp/MERGED-1121172563/rbac.authorization.k8s.io.v1.ClusterRoleBinding..monitoring-kube-state-metrics
+--- /tmp/LIVE-4165467310/rbac.authorization.k8s.io.v1.ClusterRoleBinding..monitoring-kube-state-metrics	2022-02-15 15:45:12.700506975 +0000
++++ /tmp/MERGED-1121172563/rbac.authorization.k8s.io.v1.ClusterRoleBinding..monitoring-kube-state-metrics	2022-02-15 15:45:12.700506975 +0000
+@@ -0,0 +1,38 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: ClusterRoleBinding
++metadata:
++  creationTimestamp: "2022-02-15T15:45:12Z"
++  labels:
++    app.kubernetes.io/instance: monitoring
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: kube-state-metrics
++    helm.sh/chart: kube-state-metrics-3.4.2
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:helm.sh/chart: {}
++      f:roleRef:
++        f:apiGroup: {}
++        f:kind: {}
++        f:name: {}
++      f:subjects: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:12Z"
++  name: monitoring-kube-state-metrics
++  uid: 2db2db67-8c45-45dd-be38-79c104a668ac
++roleRef:
++  apiGroup: rbac.authorization.k8s.io
++  kind: ClusterRole
++  name: monitoring-kube-state-metrics
++subjects:
++- kind: ServiceAccount
++  name: monitoring-kube-state-metrics
++  namespace: monitoring
+diff -u -N /tmp/LIVE-4165467310/rbac.authorization.k8s.io.v1.ClusterRoleBinding..monitoring-prometheus-alertmanager /tmp/MERGED-1121172563/rbac.authorization.k8s.io.v1.ClusterRoleBinding..monitoring-prometheus-alertmanager
+--- /tmp/LIVE-4165467310/rbac.authorization.k8s.io.v1.ClusterRoleBinding..monitoring-prometheus-alertmanager	2022-02-15 15:45:12.860508881 +0000
++++ /tmp/MERGED-1121172563/rbac.authorization.k8s.io.v1.ClusterRoleBinding..monitoring-prometheus-alertmanager	2022-02-15 15:45:12.860508881 +0000
+@@ -0,0 +1,40 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: ClusterRoleBinding
++metadata:
++  creationTimestamp: "2022-02-15T15:45:12Z"
++  labels:
++    app: prometheus
++    chart: prometheus-14.6.1
++    component: alertmanager
++    heritage: Helm
++    release: monitoring
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:release: {}
++      f:roleRef:
++        f:apiGroup: {}
++        f:kind: {}
++        f:name: {}
++      f:subjects: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:12Z"
++  name: monitoring-prometheus-alertmanager
++  uid: dbcfbe5b-24ad-470e-a569-bc7ba94b1290
++roleRef:
++  apiGroup: rbac.authorization.k8s.io
++  kind: ClusterRole
++  name: monitoring-prometheus-alertmanager
++subjects:
++- kind: ServiceAccount
++  name: monitoring-prometheus-alertmanager
++  namespace: monitoring
+diff -u -N /tmp/LIVE-4165467310/rbac.authorization.k8s.io.v1.ClusterRoleBinding..monitoring-prometheus-pushgateway /tmp/MERGED-1121172563/rbac.authorization.k8s.io.v1.ClusterRoleBinding..monitoring-prometheus-pushgateway
+--- /tmp/LIVE-4165467310/rbac.authorization.k8s.io.v1.ClusterRoleBinding..monitoring-prometheus-pushgateway	2022-02-15 15:45:13.016510739 +0000
++++ /tmp/MERGED-1121172563/rbac.authorization.k8s.io.v1.ClusterRoleBinding..monitoring-prometheus-pushgateway	2022-02-15 15:45:13.016510739 +0000
+@@ -0,0 +1,40 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: ClusterRoleBinding
++metadata:
++  creationTimestamp: "2022-02-15T15:45:12Z"
++  labels:
++    app: prometheus
++    chart: prometheus-14.6.1
++    component: pushgateway
++    heritage: Helm
++    release: monitoring
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:release: {}
++      f:roleRef:
++        f:apiGroup: {}
++        f:kind: {}
++        f:name: {}
++      f:subjects: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:12Z"
++  name: monitoring-prometheus-pushgateway
++  uid: 5c4b90e2-5064-4e94-9096-802d874b72a7
++roleRef:
++  apiGroup: rbac.authorization.k8s.io
++  kind: ClusterRole
++  name: monitoring-prometheus-pushgateway
++subjects:
++- kind: ServiceAccount
++  name: monitoring-prometheus-pushgateway
++  namespace: monitoring
+diff -u -N /tmp/LIVE-4165467310/rbac.authorization.k8s.io.v1.ClusterRoleBinding..monitoring-prometheus-server /tmp/MERGED-1121172563/rbac.authorization.k8s.io.v1.ClusterRoleBinding..monitoring-prometheus-server
+--- /tmp/LIVE-4165467310/rbac.authorization.k8s.io.v1.ClusterRoleBinding..monitoring-prometheus-server	2022-02-15 15:45:13.176512644 +0000
++++ /tmp/MERGED-1121172563/rbac.authorization.k8s.io.v1.ClusterRoleBinding..monitoring-prometheus-server	2022-02-15 15:45:13.176512644 +0000
+@@ -0,0 +1,40 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: ClusterRoleBinding
++metadata:
++  creationTimestamp: "2022-02-15T15:45:13Z"
++  labels:
++    app: prometheus
++    chart: prometheus-14.6.1
++    component: server
++    heritage: Helm
++    release: monitoring
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:release: {}
++      f:roleRef:
++        f:apiGroup: {}
++        f:kind: {}
++        f:name: {}
++      f:subjects: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:13Z"
++  name: monitoring-prometheus-server
++  uid: 6023053c-4819-4f95-b7a6-20954f3e99c2
++roleRef:
++  apiGroup: rbac.authorization.k8s.io
++  kind: ClusterRole
++  name: monitoring-prometheus-server
++subjects:
++- kind: ServiceAccount
++  name: monitoring-prometheus-server
++  namespace: monitoring
+diff -u -N /tmp/LIVE-4165467310/v1.ConfigMap.monitoring.monitoring-prometheus-alertmanager /tmp/MERGED-1121172563/v1.ConfigMap.monitoring.monitoring-prometheus-alertmanager
+--- /tmp/LIVE-4165467310/v1.ConfigMap.monitoring.monitoring-prometheus-alertmanager	2022-02-15 15:45:11.456491971 +0000
++++ /tmp/MERGED-1121172563/v1.ConfigMap.monitoring.monitoring-prometheus-alertmanager	2022-02-15 15:45:11.456491971 +0000
+@@ -0,0 +1,41 @@
++apiVersion: v1
++data:
++  alertmanager.yml: |
++    global: {}
++    receivers:
++    - name: default-receiver
++    route:
++      group_interval: 5m
++      group_wait: 10s
++      receiver: default-receiver
++      repeat_interval: 3h
++kind: ConfigMap
++metadata:
++  creationTimestamp: "2022-02-15T15:45:11Z"
++  labels:
++    app: prometheus
++    chart: prometheus-14.6.1
++    component: alertmanager
++    heritage: Helm
++    release: monitoring
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:data:
++        .: {}
++        f:alertmanager.yml: {}
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:release: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:11Z"
++  name: monitoring-prometheus-alertmanager
++  namespace: monitoring
++  uid: 0ab53819-6182-4329-85a7-a02947e05827
+diff -u -N /tmp/LIVE-4165467310/v1.ConfigMap.monitoring.monitoring-prometheus-server /tmp/MERGED-1121172563/v1.ConfigMap.monitoring.monitoring-prometheus-server
+--- /tmp/LIVE-4165467310/v1.ConfigMap.monitoring.monitoring-prometheus-server	2022-02-15 15:45:11.652494365 +0000
++++ /tmp/MERGED-1121172563/v1.ConfigMap.monitoring.monitoring-prometheus-server	2022-02-15 15:45:11.652494365 +0000
+@@ -0,0 +1,330 @@
++apiVersion: v1
++data:
++  alerting_rules.yml: |
++    {}
++  alerts: |
++    {}
++  prometheus.yml: |
++    global:
++      evaluation_interval: 1m
++      scrape_interval: 20s
++      scrape_timeout: 10s
++    rule_files:
++    - /etc/config/recording_rules.yml
++    - /etc/config/alerting_rules.yml
++    - /etc/config/rules
++    - /etc/config/alerts
++    scrape_configs:
++    - job_name: prometheus
++      static_configs:
++      - targets:
++        - localhost:9090
++    - bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
++      job_name: kubernetes-apiservers
++      kubernetes_sd_configs:
++      - role: endpoints
++      relabel_configs:
++      - action: keep
++        regex: default;kubernetes;https
++        source_labels:
++        - __meta_kubernetes_namespace
++        - __meta_kubernetes_service_name
++        - __meta_kubernetes_endpoint_port_name
++      scheme: https
++      tls_config:
++        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
++        insecure_skip_verify: true
++    - bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
++      job_name: kubernetes-nodes
++      kubernetes_sd_configs:
++      - role: node
++      relabel_configs:
++      - action: labelmap
++        regex: __meta_kubernetes_node_label_(.+)
++      - replacement: kubernetes.default.svc:443
++        target_label: __address__
++      - regex: (.+)
++        replacement: /api/v1/nodes/$1/proxy/metrics
++        source_labels:
++        - __meta_kubernetes_node_name
++        target_label: __metrics_path__
++      scheme: https
++      tls_config:
++        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
++        insecure_skip_verify: true
++    - bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
++      job_name: kubernetes-nodes-cadvisor
++      kubernetes_sd_configs:
++      - role: node
++      relabel_configs:
++      - action: labelmap
++        regex: __meta_kubernetes_node_label_(.+)
++      - replacement: kubernetes.default.svc:443
++        target_label: __address__
++      - regex: (.+)
++        replacement: /api/v1/nodes/$1/proxy/metrics/cadvisor
++        source_labels:
++        - __meta_kubernetes_node_name
++        target_label: __metrics_path__
++      scheme: https
++      tls_config:
++        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
++        insecure_skip_verify: true
++    - job_name: kubernetes-service-endpoints
++      kubernetes_sd_configs:
++      - role: endpoints
++      relabel_configs:
++      - action: keep
++        regex: true
++        source_labels:
++        - __meta_kubernetes_service_annotation_prometheus_io_scrape
++      - action: replace
++        regex: (https?)
++        source_labels:
++        - __meta_kubernetes_service_annotation_prometheus_io_scheme
++        target_label: __scheme__
++      - action: replace
++        regex: (.+)
++        source_labels:
++        - __meta_kubernetes_service_annotation_prometheus_io_path
++        target_label: __metrics_path__
++      - action: replace
++        regex: ([^:]+)(?::\d+)?;(\d+)
++        replacement: $1:$2
++        source_labels:
++        - __address__
++        - __meta_kubernetes_service_annotation_prometheus_io_port
++        target_label: __address__
++      - action: labelmap
++        regex: __meta_kubernetes_service_label_(.+)
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_namespace
++        target_label: kubernetes_namespace
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_service_name
++        target_label: kubernetes_name
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_node_name
++        target_label: kubernetes_node
++    - job_name: kubernetes-service-endpoints-slow
++      kubernetes_sd_configs:
++      - role: endpoints
++      relabel_configs:
++      - action: keep
++        regex: true
++        source_labels:
++        - __meta_kubernetes_service_annotation_prometheus_io_scrape_slow
++      - action: replace
++        regex: (https?)
++        source_labels:
++        - __meta_kubernetes_service_annotation_prometheus_io_scheme
++        target_label: __scheme__
++      - action: replace
++        regex: (.+)
++        source_labels:
++        - __meta_kubernetes_service_annotation_prometheus_io_path
++        target_label: __metrics_path__
++      - action: replace
++        regex: ([^:]+)(?::\d+)?;(\d+)
++        replacement: $1:$2
++        source_labels:
++        - __address__
++        - __meta_kubernetes_service_annotation_prometheus_io_port
++        target_label: __address__
++      - action: labelmap
++        regex: __meta_kubernetes_service_label_(.+)
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_namespace
++        target_label: kubernetes_namespace
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_service_name
++        target_label: kubernetes_name
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_node_name
++        target_label: kubernetes_node
++      scrape_interval: 5m
++      scrape_timeout: 30s
++    - honor_labels: true
++      job_name: prometheus-pushgateway
++      kubernetes_sd_configs:
++      - role: service
++      relabel_configs:
++      - action: keep
++        regex: pushgateway
++        source_labels:
++        - __meta_kubernetes_service_annotation_prometheus_io_probe
++    - job_name: kubernetes-services
++      kubernetes_sd_configs:
++      - role: service
++      metrics_path: /probe
++      params:
++        module:
++        - http_2xx
++      relabel_configs:
++      - action: keep
++        regex: true
++        source_labels:
++        - __meta_kubernetes_service_annotation_prometheus_io_probe
++      - source_labels:
++        - __address__
++        target_label: __param_target
++      - replacement: blackbox
++        target_label: __address__
++      - source_labels:
++        - __param_target
++        target_label: instance
++      - action: labelmap
++        regex: __meta_kubernetes_service_label_(.+)
++      - source_labels:
++        - __meta_kubernetes_namespace
++        target_label: kubernetes_namespace
++      - source_labels:
++        - __meta_kubernetes_service_name
++        target_label: kubernetes_name
++    - job_name: kubernetes-pods
++      kubernetes_sd_configs:
++      - role: pod
++      relabel_configs:
++      - action: keep
++        regex: true
++        source_labels:
++        - __meta_kubernetes_pod_annotation_prometheus_io_scrape
++      - action: replace
++        regex: (https?)
++        source_labels:
++        - __meta_kubernetes_pod_annotation_prometheus_io_scheme
++        target_label: __scheme__
++      - action: replace
++        regex: (.+)
++        source_labels:
++        - __meta_kubernetes_pod_annotation_prometheus_io_path
++        target_label: __metrics_path__
++      - action: replace
++        regex: ([^:]+)(?::\d+)?;(\d+)
++        replacement: $1:$2
++        source_labels:
++        - __address__
++        - __meta_kubernetes_pod_annotation_prometheus_io_port
++        target_label: __address__
++      - action: labelmap
++        regex: __meta_kubernetes_pod_label_(.+)
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_namespace
++        target_label: kubernetes_namespace
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_name
++        target_label: kubernetes_pod_name
++      - action: drop
++        regex: Pending|Succeeded|Failed|Completed
++        source_labels:
++        - __meta_kubernetes_pod_phase
++    - job_name: kubernetes-pods-slow
++      kubernetes_sd_configs:
++      - role: pod
++      relabel_configs:
++      - action: keep
++        regex: true
++        source_labels:
++        - __meta_kubernetes_pod_annotation_prometheus_io_scrape_slow
++      - action: replace
++        regex: (https?)
++        source_labels:
++        - __meta_kubernetes_pod_annotation_prometheus_io_scheme
++        target_label: __scheme__
++      - action: replace
++        regex: (.+)
++        source_labels:
++        - __meta_kubernetes_pod_annotation_prometheus_io_path
++        target_label: __metrics_path__
++      - action: replace
++        regex: ([^:]+)(?::\d+)?;(\d+)
++        replacement: $1:$2
++        source_labels:
++        - __address__
++        - __meta_kubernetes_pod_annotation_prometheus_io_port
++        target_label: __address__
++      - action: labelmap
++        regex: __meta_kubernetes_pod_label_(.+)
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_namespace
++        target_label: kubernetes_namespace
++      - action: replace
++        source_labels:
++        - __meta_kubernetes_pod_name
++        target_label: kubernetes_pod_name
++      - action: drop
++        regex: Pending|Succeeded|Failed|Completed
++        source_labels:
++        - __meta_kubernetes_pod_phase
++      scrape_interval: 5m
++      scrape_timeout: 30s
++    alerting:
++      alertmanagers:
++      - kubernetes_sd_configs:
++          - role: pod
++        tls_config:
++          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
++        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
++        relabel_configs:
++        - source_labels: [__meta_kubernetes_namespace]
++          regex: monitoring
++          action: keep
++        - source_labels: [__meta_kubernetes_pod_label_app]
++          regex: prometheus
++          action: keep
++        - source_labels: [__meta_kubernetes_pod_label_component]
++          regex: alertmanager
++          action: keep
++        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_probe]
++          regex: .*
++          action: keep
++        - source_labels: [__meta_kubernetes_pod_container_port_number]
++          regex: "9093"
++          action: keep
++  recording_rules.yml: |
++    {}
++  rules: |
++    {}
++kind: ConfigMap
++metadata:
++  creationTimestamp: "2022-02-15T15:45:11Z"
++  labels:
++    app: prometheus
++    chart: prometheus-14.6.1
++    component: server
++    heritage: Helm
++    release: monitoring
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:data:
++        .: {}
++        f:alerting_rules.yml: {}
++        f:alerts: {}
++        f:prometheus.yml: {}
++        f:recording_rules.yml: {}
++        f:rules: {}
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:release: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:11Z"
++  name: monitoring-prometheus-server
++  namespace: monitoring
++  uid: b8916820-f944-4c04-8d73-ca71c12280b5
+diff -u -N /tmp/LIVE-4165467310/v1.PersistentVolumeClaim.monitoring.monitoring-prometheus-server /tmp/MERGED-1121172563/v1.PersistentVolumeClaim.monitoring.monitoring-prometheus-server
+--- /tmp/LIVE-4165467310/v1.PersistentVolumeClaim.monitoring.monitoring-prometheus-server	2022-02-15 15:45:11.952498031 +0000
++++ /tmp/MERGED-1121172563/v1.PersistentVolumeClaim.monitoring.monitoring-prometheus-server	2022-02-15 15:45:11.952498031 +0000
+@@ -0,0 +1,49 @@
++apiVersion: v1
++kind: PersistentVolumeClaim
++metadata:
++  creationTimestamp: "2022-02-15T15:45:11Z"
++  finalizers:
++  - kubernetes.io/pvc-protection
++  labels:
++    app: prometheus
++    chart: prometheus-14.6.1
++    component: server
++    heritage: Helm
++    release: monitoring
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:release: {}
++      f:spec:
++        f:accessModes: {}
++        f:resources:
++          f:requests:
++            .: {}
++            f:storage: {}
++        f:volumeMode: {}
++      f:status:
++        f:phase: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:11Z"
++  name: monitoring-prometheus-server
++  namespace: monitoring
++  uid: d7eeb2e9-df44-4621-9905-2a615a12aa38
++spec:
++  accessModes:
++  - ReadWriteOnce
++  resources:
++    requests:
++      storage: 8Gi
++  storageClassName: standard
++  volumeMode: Filesystem
++status:
++  phase: Pending
+diff -u -N /tmp/LIVE-4165467310/v1.Service.monitoring.monitoring-kube-state-metrics /tmp/MERGED-1121172563/v1.Service.monitoring.monitoring-kube-state-metrics
+--- /tmp/LIVE-4165467310/v1.Service.monitoring.monitoring-kube-state-metrics	2022-02-15 15:45:13.388515169 +0000
++++ /tmp/MERGED-1121172563/v1.Service.monitoring.monitoring-kube-state-metrics	2022-02-15 15:45:13.388515169 +0000
+@@ -0,0 +1,59 @@
++apiVersion: v1
++kind: Service
++metadata:
++  annotations:
++    prometheus.io/scrape: "true"
++  creationTimestamp: "2022-02-15T15:45:13Z"
++  labels:
++    app.kubernetes.io/instance: monitoring
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: kube-state-metrics
++    helm.sh/chart: kube-state-metrics-3.4.2
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:annotations:
++          .: {}
++          f:prometheus.io/scrape: {}
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:helm.sh/chart: {}
++      f:spec:
++        f:ports:
++          .: {}
++          k:{"port":8080,"protocol":"TCP"}:
++            .: {}
++            f:name: {}
++            f:port: {}
++            f:protocol: {}
++            f:targetPort: {}
++        f:selector:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/name: {}
++        f:sessionAffinity: {}
++        f:type: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:13Z"
++  name: monitoring-kube-state-metrics
++  namespace: monitoring
++  uid: 4d2c7817-42a6-474d-a240-51fffb8a78d8
++spec:
++  ports:
++  - name: http
++    port: 8080
++    protocol: TCP
++    targetPort: 8080
++  selector:
++    app.kubernetes.io/instance: monitoring
++    app.kubernetes.io/name: kube-state-metrics
++  sessionAffinity: None
++  type: ClusterIP
++status:
++  loadBalancer: {}
+diff -u -N /tmp/LIVE-4165467310/v1.Service.monitoring.monitoring-prometheus-alertmanager /tmp/MERGED-1121172563/v1.Service.monitoring.monitoring-prometheus-alertmanager
+--- /tmp/LIVE-4165467310/v1.Service.monitoring.monitoring-prometheus-alertmanager	2022-02-15 15:45:13.576517408 +0000
++++ /tmp/MERGED-1121172563/v1.Service.monitoring.monitoring-prometheus-alertmanager	2022-02-15 15:45:13.576517408 +0000
+@@ -0,0 +1,58 @@
++apiVersion: v1
++kind: Service
++metadata:
++  creationTimestamp: "2022-02-15T15:45:13Z"
++  labels:
++    app: prometheus
++    chart: prometheus-14.6.1
++    component: alertmanager
++    heritage: Helm
++    release: monitoring
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:release: {}
++      f:spec:
++        f:ports:
++          .: {}
++          k:{"port":80,"protocol":"TCP"}:
++            .: {}
++            f:name: {}
++            f:port: {}
++            f:protocol: {}
++            f:targetPort: {}
++        f:selector:
++          .: {}
++          f:app: {}
++          f:component: {}
++          f:release: {}
++        f:sessionAffinity: {}
++        f:type: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:13Z"
++  name: monitoring-prometheus-alertmanager
++  namespace: monitoring
++  uid: fc33f9c0-cbef-491b-bdba-9fc584a73a3e
++spec:
++  ports:
++  - name: http
++    port: 80
++    protocol: TCP
++    targetPort: 9093
++  selector:
++    app: prometheus
++    component: alertmanager
++    release: monitoring
++  sessionAffinity: None
++  type: ClusterIP
++status:
++  loadBalancer: {}
+diff -u -N /tmp/LIVE-4165467310/v1.Service.monitoring.monitoring-prometheus-node-exporter /tmp/MERGED-1121172563/v1.Service.monitoring.monitoring-prometheus-node-exporter
+--- /tmp/LIVE-4165467310/v1.Service.monitoring.monitoring-prometheus-node-exporter	2022-02-15 15:45:13.768519695 +0000
++++ /tmp/MERGED-1121172563/v1.Service.monitoring.monitoring-prometheus-node-exporter	2022-02-15 15:45:13.768519695 +0000
+@@ -0,0 +1,67 @@
++apiVersion: v1
++kind: Service
++metadata:
++  annotations:
++    prometheus.io/scrape: "true"
++  creationTimestamp: "2022-02-15T15:45:13Z"
++  labels:
++    app: prometheus
++    chart: prometheus-14.6.1
++    component: node-exporter
++    heritage: Helm
++    release: monitoring
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:annotations:
++          .: {}
++          f:prometheus.io/scrape: {}
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:release: {}
++      f:spec:
++        f:clusterIP: {}
++        f:ports:
++          .: {}
++          k:{"port":9100,"protocol":"TCP"}:
++            .: {}
++            f:name: {}
++            f:port: {}
++            f:protocol: {}
++            f:targetPort: {}
++        f:selector:
++          .: {}
++          f:app: {}
++          f:component: {}
++          f:release: {}
++        f:sessionAffinity: {}
++        f:type: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:13Z"
++  name: monitoring-prometheus-node-exporter
++  namespace: monitoring
++  uid: e06f1c19-a2fd-4b49-8d2e-9bc226e4d883
++spec:
++  clusterIP: None
++  clusterIPs:
++  - None
++  ports:
++  - name: metrics
++    port: 9100
++    protocol: TCP
++    targetPort: 9100
++  selector:
++    app: prometheus
++    component: node-exporter
++    release: monitoring
++  sessionAffinity: None
++  type: ClusterIP
++status:
++  loadBalancer: {}
+diff -u -N /tmp/LIVE-4165467310/v1.Service.monitoring.monitoring-prometheus-pushgateway /tmp/MERGED-1121172563/v1.Service.monitoring.monitoring-prometheus-pushgateway
+--- /tmp/LIVE-4165467310/v1.Service.monitoring.monitoring-prometheus-pushgateway	2022-02-15 15:45:13.960521982 +0000
++++ /tmp/MERGED-1121172563/v1.Service.monitoring.monitoring-prometheus-pushgateway	2022-02-15 15:45:13.960521982 +0000
+@@ -0,0 +1,63 @@
++apiVersion: v1
++kind: Service
++metadata:
++  annotations:
++    prometheus.io/probe: pushgateway
++  creationTimestamp: "2022-02-15T15:45:13Z"
++  labels:
++    app: prometheus
++    chart: prometheus-14.6.1
++    component: pushgateway
++    heritage: Helm
++    release: monitoring
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:annotations:
++          .: {}
++          f:prometheus.io/probe: {}
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:release: {}
++      f:spec:
++        f:ports:
++          .: {}
++          k:{"port":9091,"protocol":"TCP"}:
++            .: {}
++            f:name: {}
++            f:port: {}
++            f:protocol: {}
++            f:targetPort: {}
++        f:selector:
++          .: {}
++          f:app: {}
++          f:component: {}
++          f:release: {}
++        f:sessionAffinity: {}
++        f:type: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:13Z"
++  name: monitoring-prometheus-pushgateway
++  namespace: monitoring
++  uid: 266e780f-a322-4b70-a12d-3269a09b1ac2
++spec:
++  ports:
++  - name: http
++    port: 9091
++    protocol: TCP
++    targetPort: 9091
++  selector:
++    app: prometheus
++    component: pushgateway
++    release: monitoring
++  sessionAffinity: None
++  type: ClusterIP
++status:
++  loadBalancer: {}
+diff -u -N /tmp/LIVE-4165467310/v1.Service.monitoring.monitoring-prometheus-server /tmp/MERGED-1121172563/v1.Service.monitoring.monitoring-prometheus-server
+--- /tmp/LIVE-4165467310/v1.Service.monitoring.monitoring-prometheus-server	2022-02-15 15:45:14.152524268 +0000
++++ /tmp/MERGED-1121172563/v1.Service.monitoring.monitoring-prometheus-server	2022-02-15 15:45:14.156524316 +0000
+@@ -0,0 +1,58 @@
++apiVersion: v1
++kind: Service
++metadata:
++  creationTimestamp: "2022-02-15T15:45:14Z"
++  labels:
++    app: prometheus
++    chart: prometheus-14.6.1
++    component: server
++    heritage: Helm
++    release: monitoring
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:release: {}
++      f:spec:
++        f:ports:
++          .: {}
++          k:{"port":80,"protocol":"TCP"}:
++            .: {}
++            f:name: {}
++            f:port: {}
++            f:protocol: {}
++            f:targetPort: {}
++        f:selector:
++          .: {}
++          f:app: {}
++          f:component: {}
++          f:release: {}
++        f:sessionAffinity: {}
++        f:type: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:14Z"
++  name: monitoring-prometheus-server
++  namespace: monitoring
++  uid: 16bbd0a3-9da6-4724-9cee-2955a3216cc9
++spec:
++  ports:
++  - name: http
++    port: 80
++    protocol: TCP
++    targetPort: 9090
++  selector:
++    app: prometheus
++    component: server
++    release: monitoring
++  sessionAffinity: None
++  type: ClusterIP
++status:
++  loadBalancer: {}
+diff -u -N /tmp/LIVE-4165467310/v1.ServiceAccount.monitoring.monitoring-kube-state-metrics /tmp/MERGED-1121172563/v1.ServiceAccount.monitoring.monitoring-kube-state-metrics
+--- /tmp/LIVE-4165467310/v1.ServiceAccount.monitoring.monitoring-kube-state-metrics	2022-02-15 15:45:10.496480242 +0000
++++ /tmp/MERGED-1121172563/v1.ServiceAccount.monitoring.monitoring-kube-state-metrics	2022-02-15 15:45:10.496480242 +0000
+@@ -0,0 +1,26 @@
++apiVersion: v1
++kind: ServiceAccount
++metadata:
++  creationTimestamp: "2022-02-15T15:45:10Z"
++  labels:
++    app.kubernetes.io/instance: monitoring
++    app.kubernetes.io/managed-by: Helm
++    app.kubernetes.io/name: kube-state-metrics
++    helm.sh/chart: kube-state-metrics-3.4.2
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app.kubernetes.io/instance: {}
++          f:app.kubernetes.io/managed-by: {}
++          f:app.kubernetes.io/name: {}
++          f:helm.sh/chart: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:10Z"
++  name: monitoring-kube-state-metrics
++  namespace: monitoring
++  uid: f7293ec0-0da1-4c9f-9170-1df9317561de
+diff -u -N /tmp/LIVE-4165467310/v1.ServiceAccount.monitoring.monitoring-prometheus-alertmanager /tmp/MERGED-1121172563/v1.ServiceAccount.monitoring.monitoring-prometheus-alertmanager
+--- /tmp/LIVE-4165467310/v1.ServiceAccount.monitoring.monitoring-prometheus-alertmanager	2022-02-15 15:45:10.680482490 +0000
++++ /tmp/MERGED-1121172563/v1.ServiceAccount.monitoring.monitoring-prometheus-alertmanager	2022-02-15 15:45:10.680482490 +0000
+@@ -0,0 +1,28 @@
++apiVersion: v1
++kind: ServiceAccount
++metadata:
++  creationTimestamp: "2022-02-15T15:45:10Z"
++  labels:
++    app: prometheus
++    chart: prometheus-14.6.1
++    component: alertmanager
++    heritage: Helm
++    release: monitoring
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:release: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:10Z"
++  name: monitoring-prometheus-alertmanager
++  namespace: monitoring
++  uid: 7fe4a570-9aaa-4914-b41b-efa228832091
+diff -u -N /tmp/LIVE-4165467310/v1.ServiceAccount.monitoring.monitoring-prometheus-node-exporter /tmp/MERGED-1121172563/v1.ServiceAccount.monitoring.monitoring-prometheus-node-exporter
+--- /tmp/LIVE-4165467310/v1.ServiceAccount.monitoring.monitoring-prometheus-node-exporter	2022-02-15 15:45:10.868484787 +0000
++++ /tmp/MERGED-1121172563/v1.ServiceAccount.monitoring.monitoring-prometheus-node-exporter	2022-02-15 15:45:10.868484787 +0000
+@@ -0,0 +1,28 @@
++apiVersion: v1
++kind: ServiceAccount
++metadata:
++  creationTimestamp: "2022-02-15T15:45:10Z"
++  labels:
++    app: prometheus
++    chart: prometheus-14.6.1
++    component: node-exporter
++    heritage: Helm
++    release: monitoring
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:release: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:10Z"
++  name: monitoring-prometheus-node-exporter
++  namespace: monitoring
++  uid: 824c5038-12ce-42fd-90d1-9cb3e7d071c4
+diff -u -N /tmp/LIVE-4165467310/v1.ServiceAccount.monitoring.monitoring-prometheus-pushgateway /tmp/MERGED-1121172563/v1.ServiceAccount.monitoring.monitoring-prometheus-pushgateway
+--- /tmp/LIVE-4165467310/v1.ServiceAccount.monitoring.monitoring-prometheus-pushgateway	2022-02-15 15:45:11.056487084 +0000
++++ /tmp/MERGED-1121172563/v1.ServiceAccount.monitoring.monitoring-prometheus-pushgateway	2022-02-15 15:45:11.056487084 +0000
+@@ -0,0 +1,28 @@
++apiVersion: v1
++kind: ServiceAccount
++metadata:
++  creationTimestamp: "2022-02-15T15:45:11Z"
++  labels:
++    app: prometheus
++    chart: prometheus-14.6.1
++    component: pushgateway
++    heritage: Helm
++    release: monitoring
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:release: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:11Z"
++  name: monitoring-prometheus-pushgateway
++  namespace: monitoring
++  uid: 7f2253cb-59c7-4277-8e0a-49300d15c938
+diff -u -N /tmp/LIVE-4165467310/v1.ServiceAccount.monitoring.monitoring-prometheus-server /tmp/MERGED-1121172563/v1.ServiceAccount.monitoring.monitoring-prometheus-server
+--- /tmp/LIVE-4165467310/v1.ServiceAccount.monitoring.monitoring-prometheus-server	2022-02-15 15:45:11.236489283 +0000
++++ /tmp/MERGED-1121172563/v1.ServiceAccount.monitoring.monitoring-prometheus-server	2022-02-15 15:45:11.236489283 +0000
+@@ -0,0 +1,28 @@
++apiVersion: v1
++kind: ServiceAccount
++metadata:
++  creationTimestamp: "2022-02-15T15:45:11Z"
++  labels:
++    app: prometheus
++    chart: prometheus-14.6.1
++    component: server
++    heritage: Helm
++    release: monitoring
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:release: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-02-15T15:45:11Z"
++  name: monitoring-prometheus-server
++  namespace: monitoring
++  uid: 85284792-df22-4fd5-92eb-8a08c4c26aa1
