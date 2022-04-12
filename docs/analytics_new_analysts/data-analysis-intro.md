@@ -38,7 +38,7 @@ df = pd.read_csv('gs://calitp-analytics-data/data-analyses/bucket-name/df_csv')
 df.to_csv('gs://calitp-analytics-data/data-analyses/bucket-name/df_csv')
 ```
 
-Refer to the [Data Management best practices](./data-management.md) and [Basics of Working with Geospatial Data](./spatial-analysis-basics.md) for additional information on importing various file types.
+Refer to the [Data Management best practices](data-management) and [Basics of Working with Geospatial Data](./spatial-analysis-basics.md) for additional information on importing various file types.
 
 
 ## Merge Tabular and Geospatial Data

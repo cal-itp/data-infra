@@ -51,7 +51,7 @@ utils.geoparquet_gcs_export(gdf, GCS_FILE_PATH, FILE_NAME)
 
 ```
 
-Additional general information about various file types can be found in the [Data Management section](./data-management.md).
+Additional general information about various file types can be found in the [Data Management section](data-management).
 
 
 ## Setting and Projecting Coordinate Reference System

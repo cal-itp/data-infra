@@ -92,7 +92,7 @@ Markdown cells allow for especially good documentation of what a notebook is doi
 They allow for nested headings, lists, links, and references.
 Such documentation can make a huge difference when sharing notebooks within and between teams.
 
-[Adam Rule](www.adamrule.com) performed a study of all  the Jupyter notebooks publicly available on GitHub.
+[Adam Rule](https://www.adamrule.com) performed a study of all  the Jupyter notebooks publicly available on GitHub.
 One of the most remarkable findings of this study was just how many notebooks include no markdown cells at all, as seen in the third panel:
 ![nbstats](https://cdn-images-1.medium.com/max/1600/1*0O1x_D0FTRUwX-6qdo1whA.png)
 
