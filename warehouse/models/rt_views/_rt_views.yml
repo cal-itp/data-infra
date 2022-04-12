@@ -30,11 +30,11 @@ models:
         tests:
           - not_null
       - name: calitp_itp_id
-        description: '{{ doc("field_calitp_itp_id") }}'
+        description: '{{ doc("column_calitp_itp_id") }}'
         tests:
           - not_null
       - name: calitp_url_number
-        description: '{{ doc("field_calitp_url_number") }}'
+        description: '{{ doc("column_calitp_url_number") }}'
         tests:
           - not_null
       - name: name
@@ -82,11 +82,11 @@ models:
         tests:
           - not_null
       - name: calitp_itp_id
-        description: '{{ doc("field_calitp_itp_id") }}'
+        description: '{{ doc("column_calitp_itp_id") }}'
         tests:
           - not_null
       - name: calitp_url_number
-        description: '{{ doc("field_calitp_url_number") }}'
+        description: '{{ doc("column_calitp_url_number") }}'
         tests:
           - not_null
       - name: name
