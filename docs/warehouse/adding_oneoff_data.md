@@ -1,4 +1,4 @@
-# Adding One-Off Datasets
+# Adding Data to the Warehouse
 To work with data in our BI tool ([Metabase](https://dashboards.calitp.org/)) we first have to add the data to our warehouse ([BigQuery](https://console.cloud.google.com/bigquery)). To add data to BigQuery for use in Metabase follow the instructions below.
 
 **Not sure if you have the appropriate permissions to write tables in BigQuery?** Reach out to Charlie on Cal-ITP Slack <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">using this link</a>.
