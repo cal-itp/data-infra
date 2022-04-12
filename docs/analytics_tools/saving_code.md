@@ -33,23 +33,25 @@ For more information on what's below, you can naviagte to the GitHub [directions
 1. Open a terminal in JupyterHub. All of our commands will be typed in this terminal.
 1. Set up SSH by following these directions:
     * Run the following command in the terminal, replacing what's inside the quotes with the email address your GitHub account is associated with
-    `ssh-keygen -t ed25519 -C "your_email@example.com"`
+        * `ssh-keygen -t ed25519 -C "your_email@example.com"`
     * Select `enter` to store it in the default location, and select `enter` twice more to bypass creating a passphrase
     * Run the following command to "start" ssh key in the background
-    `eval "$(ssh-agent -s)"`
+        * `eval "$(ssh-agent -s)"`
     Which should return a response similar to this: `Agent pid 258`
     * Add the ssh key to ssh agent with this command
-    `ssh-add ~/.ssh/id_ed25519`
+        * `ssh-add ~/.ssh/id_ed25519`
     * From here we will copy the contents of your public ssh file, which we will first do by viewing it's contents. To view:
-    `cat ~/.ssh/id_ed25519.pub`
+        * `cat ~/.ssh/id_ed25519.pub`
     Now select and copy the entire contents of the file that display, which should begin with `ssh-ed25519` and end with your GitHub email address (beware of copyting white spaces which may cause an issue)
+
 
     * Once copied, navigate to GitHub
     * In the top right corner, select settings and find `SSH and GPC Keys` in the left sidebar
     * Select `Add New SSH Key`
-        * For the title add something like ‘jupyter lab’
+        * For the title add something like ‘JupyterHub’
         * Paste the key that you copied into key field
     * Click add ssh key and if necessary enter password
+
 
     * After you've added your SSH key to your GitHub account, open a new Jupyter terminal window and you'll be able to test your connection with: `ssh -T git@github.com`
 
@@ -58,11 +60,12 @@ After completing the steps above, be sure to complete the section below to persi
 (persisting-ssh-and-extensions)=
 #### Persisting your SSH Key and Enabling Extensions
 To ensure that your SSH key settings persist between your sessions, run the following commands in the Jupyter terminal.
-`echo "source .profile" >> .bashrc`
+* `echo "source .profile" >> .bashrc`
 Restart your Jupyter server by selecting:
-`File` -> `Hub Control Panel` -> `Stop Server` + `Start Server`
+* `File` -> `Hub Control Panel` -> `Stop Server` + `Start Server`
 Now, when you open a new Jupyter terminal you should see the notification:
-`ssh-add: Identities added: /home/jovyan/.ssh/id_ed25519`
+* `ssh-add: Identities added: /home/jovyan/.ssh/id_ed25519`
+
 
 If the above doesn't work, try:
 * Closing your terminal and opening a new one
