@@ -93,3 +93,30 @@ models:
           earlier than or equal to the date on which the table was last generated.
         tests:
           - not_null
+  - name: dim_metric_date
+    description: |
+      Each row is a date range (for example, daily, monthly, rolling 7 day period) over which a metric can be calculated.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - metric_period
+            - metric_date
+    columns:
+      - name: metric_period
+        description: The specific range of dates used (e.g. rolling_7, rolling_28, day, month, quarter)
+        tests:
+          - not_null
+      - name: metric_date
+        description: The date the metric_period describes. For example, rolling_7 goes from metric_date to 7 days earlier.
+        tests:
+          - not_null
+      - name: metric_type
+        description: The category of metric_period (rolling, daily, calendar)
+        tests:
+          - not_null
+      - name: start_date
+        description: The beginning of the metric_period (inclusive). Note that for daily this is NULL, so data for the same day isn't selected twice
+      - name: end_date
+        description: The end of the metric_period (inclusive). For rolling windows, this is the metric_date. For calendar, this is metric_date - 1 day (E.g. Jan 1st describes December, etc..)
+        tests:
+          - not_null
