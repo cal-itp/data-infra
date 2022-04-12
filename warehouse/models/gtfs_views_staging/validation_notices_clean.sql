@@ -1,6 +1,6 @@
 {{ config(materialized='table') }}
 
-WITH type2 as (
+WITH validation_notices as (
     select *
     from {{ source('gtfs_type2', 'validation_notices') }}
 )
@@ -59,7 +59,7 @@ WITH type2 as (
         , TRIM(arrivalTime) as arrivalTime
         , TRIM(parentStation) as parentStation
         , TRIM(parentStopName) as parentStopName
-    FROM type2
+    FROM validation_notices
 )
 
 SELECT * FROM validation_notices_clean

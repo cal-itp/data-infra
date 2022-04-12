@@ -1,6 +1,6 @@
 {{ config(materialized='table') }}
 
-WITH type2 as (
+WITH frequencies as (
     select *
     from {{ source('gtfs_type2', 'frequencies') }}
 )
@@ -22,7 +22,7 @@ WITH type2 as (
         , calitp_hash
         , FARM_FINGERPRINT(CONCAT(CAST(calitp_hash AS STRING), "___", CAST(calitp_extracted_at AS STRING))) AS frequency_key
         , COALESCE(calitp_deleted_at, "2099-01-01") AS calitp_deleted_at
-    FROM type2
+    FROM frequencies
 )
 
 SELECT * FROM frequencies_clean

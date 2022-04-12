@@ -1,6 +1,6 @@
 {{ config(materialized='table') }}
 
-WITH type2 as (
+WITH calendar_dates as (
     select *
     from {{ source('gtfs_type2', 'calendar_dates') }}
 )
@@ -19,7 +19,7 @@ WITH type2 as (
         , calitp_hash
         , PARSE_DATE("%Y%m%d", TRIM(date)) AS date
         , COALESCE(calitp_deleted_at, "2099-01-01") AS calitp_deleted_at
-    FROM type2
+    FROM calendar_dates
 )
 
 SELECT * FROM calendar_dates_clean

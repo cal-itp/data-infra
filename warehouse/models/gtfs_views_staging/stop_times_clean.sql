@@ -1,6 +1,6 @@
 {{ config(materialized='table') }}
 
-WITH type2 as (
+WITH stop_times as (
     select *
     from {{ source('gtfs_type2', 'stop_times') }}
 )
@@ -30,7 +30,7 @@ WITH type2 as (
         , FARM_FINGERPRINT(CONCAT(CAST(calitp_hash AS STRING), "___", CAST(calitp_extracted_at AS STRING)))
             AS stop_time_key
         , COALESCE(calitp_deleted_at, "2099-01-01") AS calitp_deleted_at
-    FROM type2
+    FROM stop_times
 )
 
 SELECT * FROM stop_times_clean

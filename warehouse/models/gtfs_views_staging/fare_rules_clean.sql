@@ -1,6 +1,6 @@
 {{ config(materialized='table') }}
 
-WITH type2 as (
+WITH fare_rules as (
     select *
     from {{ source('gtfs_type2', 'fare_rules') }}
 )
@@ -25,7 +25,7 @@ WITH type2 as (
             CAST(calitp_extracted_at AS STRING)))
             AS fare_rule_key
         , COALESCE(calitp_deleted_at, "2099-01-01") AS calitp_deleted_at
-    FROM type2
+    FROM fare_rules
 )
 
 SELECT * FROM fare_rules_clean
