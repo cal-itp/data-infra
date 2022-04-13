@@ -743,7 +743,7 @@
 <div class="section" id="introduction-to-jupyterhub">
 <h2>Introduction to JupyterHub<a class="headerlink" href="#introduction-to-jupyterhub" title="Permalink to this headline">¶</a></h2>
 <p>Jupyterhub is a web application that allows users to analyze and create reports on warehouse data (or a number of data sources).</p>
-<p>Analyses on JupyterHub are done using notebooks, which allow users to mix narrative with analysis code.</p>
+<p>Analyses on JupyterHub are accomplished using notebooks, which allow users to mix narrative with analysis code.</p>
 <p><strong>You can access JuypterHub <a class="reference external" href="https://hubtest.k8s.calitp.jarv.us/">using this link</a></strong>.</p>
 </div>
 <div class="section" id="table-of-contents">
@@ -761,7 +761,7 @@
 </div>
 <div class="section" id="using-jupyterhub">
 <h2>Using JupyterHub<a class="headerlink" href="#using-jupyterhub" title="Permalink to this headline">¶</a></h2>
-<p>For Python users, we have deployed a cloud-based instance of JupyterHub to creating, using, and sharing notebooks easy.</p>
+<p>For Python users, we have deployed a cloud-based instance of JupyterHub to make creating, using, and sharing notebooks easy.</p>
 <p>This avoids the need to set up a local environment, provides dedicated storage, and allows you to push to GitHub.</p>
 <div class="section" id="logging-in-to-jupyterhub">
 <h3>Logging in to JupyterHub<a class="headerlink" href="#logging-in-to-jupyterhub" title="Permalink to this headline">¶</a></h3>
@@ -770,8 +770,8 @@
 </div>
 <div class="section" id="connecting-to-the-warehouse">
 <span id="connecting-to-warehouse"></span><h3>Connecting to the Warehouse<a class="headerlink" href="#connecting-to-the-warehouse" title="Permalink to this headline">¶</a></h3>
-<p>Connecting to the warehouse requires a bit of setup after logging in to JupyterHub.
-Users need to download and install the gcloud commandline tool from the app.</p>
+<p>Connecting to the warehouse requires a bit of setup after logging in to JupyterHub, but allows users to query data in the warehouse directly.
+To do this, you will need to download and install the gcloud commandline tool from the app.</p>
 <p>See the screencast below for a full walkthrough.</p>
 <div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/6883b0bf9c8b4547a93d00bc6ba45b6d" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
 <p>The commands required:</p>
@@ -789,7 +789,7 @@ Users need to download and install the gcloud commandline tool from the app.</p>
 </div>
 <div class="section" id="increasing-the-query-limit">
 <h3>Increasing the Query Limit<a class="headerlink" href="#increasing-the-query-limit" title="Permalink to this headline">¶</a></h3>
-<p>By default, there is a query limit set within the Jupyter Notebook. Most queries should be within that limit, and running into <code class="docutils literal notranslate"><span class="pre">DatabaseError:</span> <span class="pre">500</span> <span class="pre">Query</span> <span class="pre">exceeded</span> <span class="pre">limit</span> <span class="pre">for</span> <span class="pre">bytes</span> <span class="pre">billed</span></code> should be a red flag to investigate whether such a large query is needed for the analysis. To increase the query limit:</p>
+<p>By default, there is a query limit set within the Jupyter Notebook. Most queries should be within that limit, and running into <code class="docutils literal notranslate"><span class="pre">DatabaseError:</span> <span class="pre">500</span> <span class="pre">Query</span> <span class="pre">exceeded</span> <span class="pre">limit</span> <span class="pre">for</span> <span class="pre">bytes</span> <span class="pre">billed</span></code> should be a red flag to investigate whether such a large query is needed for the analysis. To increase the query limit, add and execute the following in your notebook:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbl</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
@@ -802,7 +802,7 @@ Users need to download and install the gcloud commandline tool from the app.</p>
 <div class="section" id="querying-with-sql-in-jupyterhub">
 <span id="querying-sql-jupyterhub"></span><h3>Querying with SQL in JupyterHub<a class="headerlink" href="#querying-with-sql-in-jupyterhub" title="Permalink to this headline">¶</a></h3>
 <p>JupyterHub makes it easy to query SQL in the notebooks.</p>
-<p>To query SQL, simply import the library below at the top of your notebook:</p>
+<p>To query SQL, simply import the below at the top of your notebook:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">calitp.magics</span>
 </pre></div>
 </div>
@@ -827,7 +827,12 @@ Users need to download and install the gcloud commandline tool from the app.</p>
 </div>
 <div class="section" id="saving-code-to-github">
 <span id="saving-code-jupyter"></span><h3>Saving Code to Github<a class="headerlink" href="#saving-code-to-github" title="Permalink to this headline">¶</a></h3>
-<p>Use <a class="reference internal" href="saving_code.html#committing-from-jupyterhub"><span class="std std-ref">this link</span></a> to navigate to the <code class="docutils literal notranslate"><span class="pre">Saving</span> <span class="pre">Code</span></code> section of the docs to learn how to commit code to GitHub from the Jupyter terminal.</p>
+<p>Use <a class="reference internal" href="saving_code.html#committing-from-jupyterhub"><span class="std std-ref">this link</span></a> to navigate to the <code class="docutils literal notranslate"><span class="pre">Saving</span> <span class="pre">Code</span></code> section of the docs to learn how to commit code to GitHub from the Jupyter terminal. Once there, you will need to complete the instructions in the following sections:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="saving_code.html#adding-ssh-to-jupyter"><span class="std std-ref">Adding a GitHub SSH Key to Jupyter</span></a></p></li>
+<li><p><a class="reference internal" href="saving_code.html#persisting-ssh-and-extensions"><span class="std std-ref">Persisting your SSH Key and Enabling Extensions</span></a></p></li>
+<li><p><a class="reference internal" href="saving_code.html#cloning-a-repository"><span class="std std-ref">Cloning a Repository</span></a></p></li>
+</ul>
 </div>
 <div class="section" id="environment-variables">
 <h3>Environment Variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h3>

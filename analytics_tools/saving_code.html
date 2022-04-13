@@ -619,6 +619,23 @@
     <a class="reference internal nav-link" href="#onboarding-setup">
      Onboarding Setup
     </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#adding-a-github-ssh-key-to-jupyter">
+       Adding a GitHub SSH Key to Jupyter
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#persisting-your-ssh-key-and-enabling-extensions">
+       Persisting your SSH Key and Enabling Extensions
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#cloning-a-repository">
+       Cloning a Repository
+      </a>
+     </li>
+    </ul>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#project-workflow">
@@ -698,6 +715,23 @@
     <a class="reference internal nav-link" href="#onboarding-setup">
      Onboarding Setup
     </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#adding-a-github-ssh-key-to-jupyter">
+       Adding a GitHub SSH Key to Jupyter
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#persisting-your-ssh-key-and-enabling-extensions">
+       Persisting your SSH Key and Enabling Extensions
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#cloning-a-repository">
+       Cloning a Repository
+      </a>
+     </li>
+    </ul>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#project-workflow">
@@ -754,14 +788,20 @@
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="saving-code">
 <span id="id1"></span><h1>Saving Code<a class="headerlink" href="#saving-code" title="Permalink to this headline">¶</a></h1>
-<p>Most Cal-ITP analysts should opt for working directly from JupyterHub. Leveraging this cloud-based, standardized environment should alleviate many of the pain points associated with creating reproducible, collaborative work.</p>
+<p>Most Cal-ITP analysts should opt for working and committing code directly from JupyterHub. Leveraging this cloud-based, standardized environment should alleviate many of the pain points associated with creating reproducible, collaborative work.</p>
 <p>Doing work locally and pushing directly from the command line is a similar workflow, but replace the JupyterHub terminal with your local terminal.</p>
 <div class="section" id="table-of-contents">
 <h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
 <ol class="simple">
 <li><p><a class="reference external" href="#pushing-from-jupyterhub">Committing from JupyterHub</a></p>
 <ul class="simple">
-<li><p><a class="reference external" href="#onboarding-setup">Onboarding Setup</a></p></li>
+<li><p><a class="reference external" href="#onboarding-setup">Onboarding Setup</a></p>
+<ul>
+<li><p><a class="reference internal" href="#adding-ssh-to-jupyter"><span class="std std-ref">Adding a GitHub SSH Key to Jupyter</span></a></p></li>
+<li><p><a class="reference internal" href="#persisting-ssh-and-extensions"><span class="std std-ref">Persisting your SSH Key and Enabling Extensions</span></a></p></li>
+<li><p><a class="reference internal" href="#cloning-a-repository"><span class="std std-ref">Cloning a Repository</span></a></p></li>
+</ul>
+</li>
 <li><p>What’s a typical <a class="reference external" href="#project-workflow">project workflow</a>?</p></li>
 <li><p>Someone is collaborating on my branch, how do we <a class="reference external" href="#pulling-and-pushing-changes">stay in sync</a>?</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">main</span></code> branch is ahead, and I want to <a class="reference internal" href="#rebase-and-merge"><span class="std std-ref">sync my branch with <code class="docutils literal notranslate"><span class="pre">main</span></code></span></a></p></li>
@@ -776,23 +816,101 @@
 <span id="id2"></span><h2>Committing from JupyterHub<a class="headerlink" href="#committing-from-jupyterhub" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="onboarding-setup">
 <h3>Onboarding Setup<a class="headerlink" href="#onboarding-setup" title="Permalink to this headline">¶</a></h3>
-<p>We’ll work through getting set up with GitHub on JupyterHub and cloning one GitHub repo. Repeat steps 6-10 for other repos.</p>
-<ol class="simple" id="github-setup">
-<li><p>Create a GitHub username, get added to the various Cal-ITP teams. You’ll be committing directly into the Cal-ITP repos!</p></li>
-<li><p>Open a terminal in JupyterHub. All our commands will be typed in this terminal.</p></li>
-<li><p>Set up SSH by following these <a class="reference external" href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh">directions</a>.</p>
+<p>We’ll work through getting set up with SSH and GitHub on JupyterHub and cloning one GitHub repo. Repeat the steps in <a class="reference internal" href="#cloning-a-repository"><span class="std std-ref">Cloning a Repository</span></a> for other repos</p>
+<div class="section" id="adding-a-github-ssh-key-to-jupyter">
+<span id="adding-ssh-to-jupyter"></span><h4>Adding a GitHub SSH Key to Jupyter<a class="headerlink" href="#adding-a-github-ssh-key-to-jupyter" title="Permalink to this headline">¶</a></h4>
+<p id="github-setup">For more information on what’s below, you can navigate to the <a class="reference external" href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh">GitHub directions</a> and follow the Linux instructions for each step.</p>
+<ol class="simple">
+<li><p>Create a GitHub username if necessary and ensure you’re added to the appropriate Cal-ITP teams on GitHub. You’ll be committing directly into the Cal-ITP repos!</p></li>
+<li><p>Open a terminal in JupyterHub. All of our commands will be typed in this terminal.</p></li>
+<li><p>Set up SSH by following these directions:</p>
 <ul class="simple">
-<li><p>Follow the Linux directions for each step</p></li>
-<li><p>The key may be created with permissions too open for the ssh client. Run <code class="docutils literal notranslate"><span class="pre">chmod</span> <span class="pre">600</span> <span class="pre">/home/jovyan/.ssh/id_ed25519</span></code> (default key file location, change if necessary) to avoid future issues</p></li>
+<li><p>Run the following command in the terminal, replacing what’s inside the quotes with the email address your GitHub account is associated with:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ssh-keygen</span> <span class="pre">-t</span> <span class="pre">ed25519</span> <span class="pre">-C</span> <span class="pre">&quot;your_email&#64;example.com&quot;</span></code></p></li>
 </ul>
 </li>
-<li><p>After you’ve added your SSH key to your GitHub account, you can test your connection: <code class="docutils literal notranslate"><span class="pre">ssh</span> <span class="pre">-T</span> <span class="pre">git&#64;github.com</span></code></p></li>
+<li><p>After that, select <code class="docutils literal notranslate"><span class="pre">enter</span></code> to store it in the default location, and select <code class="docutils literal notranslate"><span class="pre">enter</span></code> twice more to bypass creating a passphrase</p></li>
+<li><p>Run the following command to “start” ssh key in the background, which should return a response similar to <code class="docutils literal notranslate"><span class="pre">Agent</span> <span class="pre">pid</span> <span class="pre">258</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">eval</span> <span class="pre">&quot;$(ssh-agent</span> <span class="pre">-s)&quot;</span></code></p></li>
+</ul>
+</li>
+<li><p>Add the ssh key to the ssh agent with this command</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ssh-add</span> <span class="pre">~/.ssh/id_ed25519</span></code></p></li>
+</ul>
+</li>
+<li><p>From here we will copy the contents of your public ssh file, which we will first do by viewing it’s contents.</p>
+<ul>
+<li><p>To view:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">~/.ssh/id_ed25519.pub</span></code></p></li>
+</ul>
+</li>
+<li><p>Then, select and copy the entire contents of the file that display</p>
+<ul>
+<li><p>The text should begin with <code class="docutils literal notranslate"><span class="pre">ssh-ed25519</span></code> and end with your GitHub email address</p></li>
+<li><p>Beware of copying white spaces, which may cause errors in the following steps</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Once copied, navigate to GitHub</p></li>
+<li><p>In the top right corner, select <code class="docutils literal notranslate"><span class="pre">Settings</span></code> and then select <code class="docutils literal notranslate"><span class="pre">SSH</span> <span class="pre">and</span> <span class="pre">GPC</span> <span class="pre">Keys</span></code> in the left sidebar</p></li>
+<li><p>Select <code class="docutils literal notranslate"><span class="pre">New</span> <span class="pre">SSH</span> <span class="pre">Key</span></code></p>
+<ul>
+<li><p>For the title add something like ‘JupyterHub’</p></li>
+<li><p>Paste the key that you copied into key field</p></li>
+</ul>
+</li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Add</span> <span class="pre">SSH</span> <span class="pre">Key</span></code>, and, if necessary, enter password</p></li>
+<li><p>After you’ve added your SSH key to your GitHub account, open a new Jupyter terminal window and you’ll be able to test your connection with:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ssh</span> <span class="pre">-T</span> <span class="pre">git&#64;github.com</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>After completing the steps above be sure to complete the section below to persist your SSH key between sessions and enable extensions.</p>
+</div>
+<div class="section" id="persisting-your-ssh-key-and-enabling-extensions">
+<span id="persisting-ssh-and-extensions"></span><h4>Persisting your SSH Key and Enabling Extensions<a class="headerlink" href="#persisting-your-ssh-key-and-enabling-extensions" title="Permalink to this headline">¶</a></h4>
+<p>To ensure that your SSH key settings persist between your sessions, run the following command in the Jupyter terminal.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">echo</span> <span class="pre">&quot;source</span> <span class="pre">.profile&quot;</span> <span class="pre">&gt;&gt;</span> <span class="pre">.bashrc</span></code></p></li>
+</ul>
+<p>Now, restart your Jupyter server by selecting:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">File</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">Hub</span> <span class="pre">Control</span> <span class="pre">Panel</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">Stop</span> <span class="pre">Server</span></code>, then <code class="docutils literal notranslate"><span class="pre">Start</span> <span class="pre">Server</span></code></p></li>
+</ul>
+<p>From here, after opening a new Jupyter terminal you should see the notification:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ssh-add:</span> <span class="pre">Identities</span> <span class="pre">added:</span> <span class="pre">/home/jovyan/.ssh/id_ed25519</span></code></p></li>
+</ul>
+<p>If the above doesn’t work, try:</p>
+<ul class="simple">
+<li><p>Closing your terminal and opening a new one</p></li>
+<li><p>Following the instructions to restart your Jupyter server above</p></li>
+<li><p>Substituting the following for the <code class="docutils literal notranslate"><span class="pre">echo</span></code> command above and re-attempting:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">echo</span> <span class="pre">&quot;source</span> <span class="pre">.profile&quot;</span> <span class="pre">&gt;&gt;</span> <span class="pre">.bash_profile</span></code></p></li>
+</ul>
+</li>
+</ul>
+<p>After completing this section, you will also enjoy various extensions in Jupyter, such as <code class="docutils literal notranslate"><span class="pre">black</span></code> hotkey auto-formatting with <code class="docutils literal notranslate"><span class="pre">ctrl+shft+k</span></code>, and the ability to see your current git branch in the Jupyter terminal.</p>
+</div>
+<div class="section" id="cloning-a-repository">
+<span id="id3"></span><h4>Cloning a Repository<a class="headerlink" href="#cloning-a-repository" title="Permalink to this headline">¶</a></h4>
+<ol class="simple">
 <li><p>Navigate to the GitHub repository to clone. We’ll work our way through the <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code> <a class="reference external" href="https://github.com/cal-itp/data-analyses">repo here</a>. Click on the green <code class="docutils literal notranslate"><span class="pre">Code</span></code> button, select “SSH” and copy the URL.</p></li>
 <li><p>Clone the Git repo: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">git&#64;github.com:cal-itp/data-analyses.git</span></code></p></li>
 <li><p>Double check  with <code class="docutils literal notranslate"><span class="pre">ls</span></code> to list and see that the remote repo was successfully cloned into your “local” (cloud-based) filesystem.</p></li>
 <li><p>Change into the <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code> directory: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">data-analyses</span></code></p></li>
 <li><p>Pull from the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch and sync your remote and local repos: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">pull</span> <span class="pre">origin</span> <span class="pre">main</span></code></p></li>
 </ol>
+</div>
 </div>
 <div class="section" id="project-workflow">
 <h3>Project Workflow<a class="headerlink" href="#project-workflow" title="Permalink to this headline">¶</a></h3>
