@@ -34,19 +34,22 @@ For more information on what's below, you can navigate to the [GitHub directions
 1. Set up SSH by following these directions:
     * Run the following command in the terminal, replacing what's inside the quotes with the email address your GitHub account is associated with:
         * `ssh-keygen -t ed25519 -C "your_email@example.com"`
-    * Select `enter` to store it in the default location, and select `enter` twice more to bypass creating a passphrase
+    * After that, select `enter` to store it in the default location, and select `enter` twice more to bypass creating a passphrase
     * Run the following command to "start" ssh key in the background, which should return a response similar to `Agent pid 258`
         * `eval "$(ssh-agent -s)"`
     * Add the ssh key to the ssh agent with this command
         * `ssh-add ~/.ssh/id_ed25519`
-    * From here we will copy the contents of your public ssh file, which we will first do by viewing it's contents. To view:
-        * `cat ~/.ssh/id_ed25519.pub`
-    * Now select and copy the entire contents of the file that display, which should begin with `ssh-ed25519` and end with your GitHub email address (beware of copying white spaces, which may cause errors in the following steps)
+    * From here we will copy the contents of your public ssh file, which we will first do by viewing it's contents.
+        * To view:
+            * `cat ~/.ssh/id_ed25519.pub`
+        * Then, select and copy the entire contents of the file that display
+            * The text should begin with `ssh-ed25519` and end with your GitHub email address
+            * Beware of copying white spaces, which may cause errors in the following steps
 
 
     * Once copied, navigate to GitHub
-    * In the top right corner, select `settings` and find `SSH and GPC Keys` in the left sidebar
-    * Select `Add New SSH Key`
+    * In the top right corner, select `Settings` and then select `SSH and GPC Keys` in the left sidebar
+    * Select `New SSH Key`
         * For the title add something like ‘JupyterHub’
         * Paste the key that you copied into key field
     * Click `Add SSH Key`, and, if necessary, enter password
@@ -64,17 +67,17 @@ To ensure that your SSH key settings persist between your sessions, run the foll
 
 
 Now, restart your Jupyter server by selecting:
-* `File` -> `Hub Control Panel` -> `Stop Server` + `Start Server`
+* `File` -> `Hub Control Panel` -> `Stop Server`, then `Start Server`
 
 
-From here, wwhen you open a new Jupyter terminal you should see the notification:
+From here, after opening a new Jupyter terminal you should see the notification:
 * `ssh-add: Identities added: /home/jovyan/.ssh/id_ed25519`
 
 
 If the above doesn't work, try:
 * Closing your terminal and opening a new one
 * Following the instructions to restart your Jupyter server above
-* Substituting the following for the command above:
+* Substituting the following for the `echo` command above and re-attempting:
     * `echo "source .profile" >> .bash_profile`
 
 After completing this section, you will also enjoy various extensions in Jupyter, such as `black` hotkey auto-formatting with `ctrl+shft+k`, and the ability to see your current git branch in the Jupyter terminal.
