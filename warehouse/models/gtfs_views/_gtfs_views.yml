@@ -130,3 +130,11 @@ models:
         tests:
           - not_null
           - unique
+  - name: gtfs_schedule_dim_files
+    description: |
+      Dimension table of all files that have been encountered
+    columns:
+      - name: feed_key
+        tests:
+          - not_null
+          - unique
