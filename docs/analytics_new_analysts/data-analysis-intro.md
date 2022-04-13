@@ -32,10 +32,10 @@ The data we use outside of the warehouse can be stored in GCS buckets.
 
 ```
 # Read from GCS
-df = pd.read_csv('gs://calitp-analytics-data/data-analyses/bucket-name/df_csv')
+df = pd.read_csv('gs://calitp-analytics-data/data-analyses/bucket-name/df_csv.csv')
 
 #Write to GCS
-df.to_csv('gs://calitp-analytics-data/data-analyses/bucket-name/df_csv')
+df.to_csv('gs://calitp-analytics-data/data-analyses/bucket-name/df_csv.csv')
 ```
 
 Refer to the [Data Management best practices](data-management-page) and [Basics of Working with Geospatial Data](./spatial-analysis-basics.md) for additional information on importing various file types.
@@ -88,7 +88,7 @@ merge1 = pd.merge(paunch_locations, council_population, on = 'CD',
 # paunch_locations, but only once in council_population.
 ```
 
-Next, merge `merge1` and `council_boundaries`. Columns don't have to have the same names to be matched on, as long as they hold the same values. Below, CD and District hold the same information.
+Next, merge `merge1` and `council_boundaries`. Columns don't have to have the same names to be matched on, as long as they hold the same values.
 
 ```
 merge2 = pd.merge(merge1, council_boundaries, left_on = 'CD',
