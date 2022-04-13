@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "gtfs-aggregator-checker"
+version = "1.0.1"
+description = ""
+authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+beautifulsoup4 = "^4.11.1"
+pre-commit = "^2.18.1"
+python-dotenv = "^0.20.0"
+PyYAML = "^6.0"
+requests = "^2.27.1"
+typer = "^0.4.1"
+tqdm = "^4.64.0"
+calitp = "^0.0.15"
+jsonlines = "^3.0.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
