@@ -36,6 +36,6 @@ gtfs_schedule_dim_feeds AS (
         )) AS feed_key
         , * EXCEPT(feed_key, feed_info_key)
     FROM feed_feed_info T
-),
+)
 
 SELECT * FROM gtfs_schedule_dim_feeds
