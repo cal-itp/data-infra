@@ -17,7 +17,7 @@ is_in_latest AS (
 {{ table_name }} AS (
     SELECT
         t1.* EXCEPT(calitp_deleted_at)
-    FROM gtfs_views_staging.{{ clean_table_name }} t1
+    FROM {{ clean_table_name }} t1
     LEFT JOIN is_in_latest t2
         USING(calitp_itp_id, calitp_url_number)
     WHERE t1.calitp_deleted_at = '2099-01-01'
