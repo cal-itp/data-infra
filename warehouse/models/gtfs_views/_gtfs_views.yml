@@ -1,5 +1,14 @@
 version: 2
 
+sources:
+  - name: gtfs_schedule_history
+    description: Data in the gtfs_schedule_history dataset in BigQuery
+    database: cal-itp-data-infra
+    schema: gtfs_schedule_history
+    tables:
+      - name: calitp_files_updates
+      - name: calitp_included_gtfs_tables
+
 models:
   - name: dim_date
     description: |
@@ -132,9 +141,12 @@ models:
           - unique
   - name: gtfs_schedule_dim_files
     description: |
-      Dimension table of all files that have been encountered
+      Dimension table of all files that have been encountered in Cal-ITP
+      GTFS downloads, with indicators for whether they are loaded into a
+      table in the warehouse and whether they are required by the GTFS
+      specification.
     columns:
-      - name: feed_key
+      - name: file_key
         tests:
           - not_null
           - unique
