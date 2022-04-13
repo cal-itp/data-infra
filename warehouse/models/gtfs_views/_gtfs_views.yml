@@ -127,6 +127,6 @@ models:
       data from feed_info.txt.
     columns:
       - name: feed_key
-      - tests:
-        - not_null
-        - unique
+        tests:
+          - not_null
+          - unique
