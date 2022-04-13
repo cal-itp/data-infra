@@ -29,7 +29,10 @@ def main(
     progress: bool = typer.Option(False, help="Display progress bars"),
 ):
     results = check_feeds(
-        yml_file=yml_file, csv_file=csv_file, url=url, progress=progress
+        yml_file=yml_file,
+        csv_file=csv_file,
+        url=url,
+        progress=progress,
     )
 
     missing = []
