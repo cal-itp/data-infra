@@ -26,8 +26,11 @@ def main(
     output_format: OutputFormat = typer.Option(
         OutputFormat.JSONL, help="Output file format."
     ),
+    progress: bool = typer.Option(False, help="Display progress bars"),
 ):
-    results = check_feeds(yml_file=yml_file, csv_file=csv_file, url=url)
+    results = check_feeds(
+        yml_file=yml_file, csv_file=csv_file, url=url, progress=progress
+    )
 
     missing = []
     for url, data in results.items():
@@ -39,14 +42,15 @@ def main(
             missing.append(url)
 
     if missing:
-        print(f"Unable to find {len(missing)}/{len(results)} urls:")
+        typer.echo(f"Unable to find {len(missing)}/{len(results)} urls:")
         for url in missing:
-            print(url)
+            typer.echo(url)
     else:
         matched = len(results) - len(missing)
-        print(f"Found {matched}/{len(results)} urls were found")
+        typer.echo(f"Found {matched}/{len(results)} urls were found")
 
     if output:
+        typer.echo(f"saving results to {output}")
         if output_format is OutputFormat.JSON:
             content = json.dumps(results, indent=4)
         elif output_format is OutputFormat.JSONL:
@@ -62,7 +66,7 @@ def main(
         else:
             with open(output, "w") as f:
                 f.write(content)
-        print(f"Results saved to {output}")
+        typer.echo(f"Results saved to {output}")
 
 
 typer.run(main)

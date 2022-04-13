@@ -9,7 +9,7 @@ arguments:
   - "-m"
   - "gtfs_aggregator_checker"
   - "/secrets/agencies-data/data_agencies.yaml"
-  - "--output=gs://gtfs-data-test/aggregation_test.jsonl"
+  - "--output={{get_bucket()}}/feed_aggregator_checks/dt={{execution_date.to_date_string()}}/checks.jsonl"
   - "--output-format=JSONL"
 
 is_delete_operator_pod: true

@@ -32,7 +32,7 @@ def get_feeds(after=None):
     return list(results), after
 
 
-def get_transitland_urls() -> List[Tuple[str, str]]:
+def get_transitland_urls(progress=False) -> List[Tuple[str, str]]:
     print("fetching transitland URLs")
     if not API_KEY:
         raise RuntimeError("TRANSITLAND_API_KEY must be set")
@@ -41,7 +41,12 @@ def get_transitland_urls() -> List[Tuple[str, str]]:
     after = None
     urls = []
 
-    for _ in tqdm(range(max_requests), desc=f"paging up to {max_requests} times"):
+    rng = range(max_requests)
+
+    if progress:
+        rng = tqdm(rng, desc=f"paging up to {max_requests} times")
+
+    for _ in rng:
         new_urls, after = get_feeds(after)
         urls += new_urls
         if not after:

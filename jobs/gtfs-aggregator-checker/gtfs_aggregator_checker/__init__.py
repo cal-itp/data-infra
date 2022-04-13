@@ -25,7 +25,7 @@ def clean_url(url):
     return urllib.parse.urlunparse(url)
 
 
-def check_feeds(yml_file=None, csv_file=None, url=None):
+def check_feeds(yml_file=None, csv_file=None, url=None, progress=False):
     results = {}
 
     if url:
@@ -60,7 +60,7 @@ def check_feeds(yml_file=None, csv_file=None, url=None):
                             "transitland": {"status": "missing"},
                         }
 
-    for public_web_url, url in get_transitland_urls():
+    for public_web_url, url in get_transitland_urls(progress=progress):
         if not url:
             continue
         url = clean_url(url)
@@ -70,7 +70,7 @@ def check_feeds(yml_file=None, csv_file=None, url=None):
                 "public_web_url": public_web_url,
             }
 
-    for public_web_url, url in get_transitfeeds_urls():
+    for public_web_url, url in get_transitfeeds_urls(progress=progress):
         if not url:
             continue
         url = clean_url(url)
