@@ -6,7 +6,6 @@ calitp_included_gtfs_tables AS(
     SELECT *
     FROM {{ source('gtfs_schedule_history', 'calitp_files_updates') }}
 ),
-WITH
 
 uniq_files AS (
     SELECT DISTINCT name as file_name
