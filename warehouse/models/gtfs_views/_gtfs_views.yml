@@ -156,3 +156,12 @@ models:
       Each row is a cleaned row from a pathways.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#pathwaystxt.
+  - name: gtfs_schedule_dim_routes
+    description: |
+      Slowly-changing dimension table of routes.txt data with
+      some agency.txt data appended.
+      Each row is a cleaned row from a routes.txt file with cleaned data
+      from agency.txt appended.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#routestxt and
+      https://gtfs.org/reference/static#agencytxt.
