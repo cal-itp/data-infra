@@ -6,9 +6,10 @@ sources:
     database: cal-itp-data-infra
     schema: gtfs_schedule_history
     tables:
+      - name: calitp_feed_parse_result
+      - name: calitp_feed_tables_parse_result
+      - name: calitp_feed_updates
+      - name: calitp_feeds_raw
       - name: calitp_files_updates
       - name: calitp_included_gtfs_tables
-      - name: calitp_feed_parse_result
-      - name: calitp_feed_updates
       - name: calitp_status
-      - name: calitp_feeds_raw
