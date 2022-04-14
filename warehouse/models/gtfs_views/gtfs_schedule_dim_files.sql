@@ -4,7 +4,7 @@ WITH calitp_files_updates AS (
 ),
 calitp_included_gtfs_tables AS(
     SELECT *
-    FROM {{ source('gtfs_schedule_history', 'calitp_files_updates') }}
+    FROM {{ source('gtfs_schedule_history', 'calitp_included_gtfs_tables') }}
 ),
 
 uniq_files AS (
