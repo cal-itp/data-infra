@@ -1,16 +1,16 @@
 operator: 'operators.PodOperator'
-name: 'dbt-run-and-upload-artifacts'
+name: 'dbt-test'
 image: 'ghcr.io/cal-itp/data-infra/warehouse:latest'
 
 cmds:
   - python3
 arguments:
   - '/app/scripts/run_and_upload.py'
-  - '--no-dbt-test'
-  - '--dbt-docs'
-  - '--save-artifacts'
-  - '--deploy-docs'
-  - '--sync-metabase'
+  - '--no-dbt-run'
+  - '--dbt-test'
+
+dependencies:
+  - dbt_run_and_upload_artifacts
 
 is_delete_operator_pod: true
 get_logs: true
@@ -37,6 +37,10 @@ secrets:
     deploy_target: METABASE_PASSWORD
     secret: jobs-data
     key: metabase-password
+  - deploy_type: env
+    deploy_target: NETLIFY_AUTH_TOKEN
+    secret: jobs-data
+    key: netlify-auth-token
 
 tolerations:
   - key: pod-role
