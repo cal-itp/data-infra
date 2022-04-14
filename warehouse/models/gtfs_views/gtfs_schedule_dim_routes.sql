@@ -6,7 +6,7 @@ WITH routes_clean AS (
 ),
 agency_clean AS (
   SELECT *
-  FROM {{ ref('agencies_clean') }}
+  FROM {{ ref('agency_clean') }}
 ),
 -- combine route and agency information. note that agency may be missing from
 -- a feed's gtfs data, so we need to take care that the route data makes it
