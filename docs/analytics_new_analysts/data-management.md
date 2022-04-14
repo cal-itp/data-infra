@@ -37,7 +37,7 @@ pd.read_csv('gs://calitp-analytics-data/data-analyses/bucket-name/my_csv.csv')
 ```
 
 ### Local Folders
-Sometimes, it is easiest to simply use your local file system to store data. 
+Sometimes, it is easiest to simply use your local file system to store data.
 
 ```
 import pandas as pd
