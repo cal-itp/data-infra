@@ -236,3 +236,9 @@ models:
           departure_time as a count of seconds starting from midnight.
           For example, departure_time "00:01:30" corresponds to
           departure_ts of "90".
+  - name: gtfs_schedule_dim_stops
+    description: |
+      Slowly-changing dimension table of stops.txt data.
+      Each row is a cleaned row from a stops.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#stopstxt.

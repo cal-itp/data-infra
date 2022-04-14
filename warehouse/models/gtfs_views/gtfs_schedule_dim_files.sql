@@ -1,3 +1,5 @@
+{{ config(materialized='table') }}
+
 WITH calitp_files_updates AS (
     SELECT *
     FROM {{ source('gtfs_schedule_history', 'calitp_files_updates') }}
