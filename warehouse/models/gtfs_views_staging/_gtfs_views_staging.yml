@@ -24,12 +24,6 @@ sources:
       - name: translations
       - name: trips
       - name: validation_notices
-  - name: gtfs_schedule_history
-    description: Data in the gtfs_schedule_history dataset in BigQuery
-    database: cal-itp-data-infra
-    schema: gtfs_schedule_history
-    tables:
-      - name: calitp_status
 
 
 models:

@@ -1,0 +1,14 @@
+version: 2
+
+sources:
+  - name: gtfs_schedule_history
+    description: Data in the gtfs_schedule_history dataset in BigQuery
+    database: cal-itp-data-infra
+    schema: gtfs_schedule_history
+    tables:
+      - name: calitp_files_updates
+      - name: calitp_included_gtfs_tables
+      - name: calitp_feed_parse_result
+      - name: calitp_feed_updates
+      - name: calitp_status
+      - name: calitp_feeds_raw

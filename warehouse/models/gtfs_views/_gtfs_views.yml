@@ -1,14 +1,5 @@
 version: 2
 
-sources:
-  - name: gtfs_schedule_history
-    description: Data in the gtfs_schedule_history dataset in BigQuery
-    database: cal-itp-data-infra
-    schema: gtfs_schedule_history
-    tables:
-      - name: calitp_files_updates
-      - name: calitp_included_gtfs_tables
-
 models:
   - name: dim_date
     description: |
@@ -248,3 +239,55 @@ models:
       Each row is a cleaned row from a trips.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#tripstxt.
+  - name: gtfs_schedule_fact_daily_feeds
+    description: |
+      Each row is a feed + day pair, indicating information about that feed
+      version's status on that date. Primary key is composite of feed_key
+      and date.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - date
+    columns:
+      - name: feed_key
+        description: '{{ doc("column_schedule_file_key") }}'
+        tests:
+          - not_null
+      - name: date
+        description: Feed extraction date
+        tests:
+          - not_null
+      - name: is_feed_publish_date_valid
+        description: Whether the feed is valid (active) on this date (boolean)
+      - name: days_until_feed_end_date
+        description: |
+          Number of days between date and feed end date from feed_info.txt (if available)
+          (ex. if date is 2022-01-05 and feed end date is 2022-01-06, this value
+          will be 1); if is_feed_publish_date_valid is False, this may be negative
+          indicating that feed is no longer valid as of date
+      - name: days_from_feed_start_date
+        description: |
+          Number of days between date and feed start date from feed_info.txt (if available)
+          (ex. if date is 2022-01-05 and feed start date is 2022-01-06, this value
+          will be 1); if is_feed_publish_date_valid is False, this may be negative
+          indicating that feed is not yet valid as of date
+      - name: extraction_status
+        description: Indicates whether extraction was successful ('success') or not ('error')
+      - name: parse_error_encountered
+        description: |
+          Whether a fatal error occurred while parsing the feed; only populated
+          for dates where feed updates were parsed (null for dates where no feed
+          updates occurred)
+      - name: raw_gtfs_schedule_url
+        description: URL from which this feed's GTFS schedule data is pulled
+      - name: raw_gtfs_rt_vehicle_positions_url
+        description: URL for this feed's GTFS realtime vehicle positions data, if available
+      - name: raw_gtfs_rt_service_alerts_url
+        description: URL for this feed's GTFS realtime service alerts data, if available
+      - name: raw_gtfs_rt_trip_updates_url
+        description: URL for this feed's GTFS realtime trip updates data, if available
+      - name: days_from_last_schedule_update
+        description: |
+          Days since the feed's contents (the contents of any loadable file
+          within the feed) have changed, relative to date
