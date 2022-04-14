@@ -212,3 +212,27 @@ models:
         description: Ordered array of WKT points that make up the shape.
         tests:
           - not_null
+  - name: gtfs_schedule_dim_stop_times
+    description: |
+      Slowly-changing dimension table of stop_times.txt data.
+      Each row is a cleaned row from a stop_times.txt file,
+      with a few additional transformed columns added.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#shapestxt.
+    columns:
+      - name: stop_sequence_rank
+        description: |
+          Rank within the stop sequence, starting from 1 and increasing
+          with step size 1. So while the raw stop_sequence values may be discontinuous
+          (ex. 1, 10, 15), the stop_sequence_rank values will increase
+          continuously (ex. 1, 2, 3).
+      - name: arrival_ts
+        description: |
+          arrival_time as a count of seconds starting from midnight.
+          For example, arrival_time "00:01:30" corresponds to
+          arrival_ts of "90".
+      - name: departure_ts
+        description: |
+          departure_time as a count of seconds starting from midnight.
+          For example, departure_time "00:01:30" corresponds to
+          departure_ts of "90".
