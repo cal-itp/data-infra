@@ -1,3 +1,5 @@
+{{ config(materialized='table') }}
+
 WITH calitp_feeds AS (
     SELECT *
     FROM {{ ref('calitp_feeds') }}
