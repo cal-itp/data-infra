@@ -150,3 +150,9 @@ models:
         tests:
           - not_null
           - unique
+  - name: gtfs_schedule_dim_pathways
+    description: |
+      Slowly-changing dimension table of pathways.txt data.
+      Each row is a cleaned row from a pathways.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#pathwaystxt.
