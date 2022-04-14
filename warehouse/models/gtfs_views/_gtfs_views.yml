@@ -324,3 +324,27 @@ models:
         tests:
           - not_null
           - unique
+  - name: gtfs_schedule_fact_daily_feed_routes
+    description: |
+      Each row of this table is a feed/route/day combination, showing
+      when each feed/route combination was active. Primary key is
+      composite of feed_key, route_key, and date.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - route_key
+            - date
+    columns:
+      - name: feed_key
+        description: '{{ doc("column_schedule_file_key") }}'
+        tests:
+          - not_null
+      - name: route_key
+        description: '{{ doc("column_schedule_file_key") }}'
+        tests:
+          - not_null
+      - name: date
+        description: Date on which this feed/route combination was active
+        tests:
+          - not_null
