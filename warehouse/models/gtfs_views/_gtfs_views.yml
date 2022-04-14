@@ -242,3 +242,9 @@ models:
       Each row is a cleaned row from a stops.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#stopstxt.
+  - name: gtfs_schedule_dim_trips
+    description: |
+      Slowly-changing dimension table of trips.txt data.
+      Each row is a cleaned row from a trips.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#tripstxt.
