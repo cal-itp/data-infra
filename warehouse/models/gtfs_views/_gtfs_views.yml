@@ -165,3 +165,17 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#routestxt and
       https://gtfs.org/reference/static#agencytxt.
+    columns:
+      - name: route_key
+        description: |
+          This route_key is different from the route_key in
+          gtfs_schedule; it is actually a composite route-agency key.
+        tests:
+          - not_null
+          - unique
+  - name: gtfs_schedule_dim_shapes
+    description: |
+      Slowly-changing dimension table of shapes.txt data.
+      Each row is a cleaned row from a shapes.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#shapestxt.
