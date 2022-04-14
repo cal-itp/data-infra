@@ -22,11 +22,10 @@ models:
         description: Week number within the year (integer between 0 and 53 -- see BigQuery date function EXTRACT WEEK documentation for details)
         tests:
           - not_null
-      - name: Day number within the year (integer between 1 and 366)
-        description: '{{ doc("column_schedule_file_key") }}'
+      - name: year_day
+        description: Day number within the year (integer between 1 and 366)
         tests:
           - not_null
-          - unique
       - name: fiscal_year
         description: Year portion of date as an integer, ex. 2022.
         tests:
@@ -291,3 +290,28 @@ models:
         description: |
           Days since the feed's contents (the contents of any loadable file
           within the feed) have changed, relative to date
+  - name: gtfs_schedule_fact_daily_feed_files
+    description: |
+      Each row of this table is a file extracted from a feed on a given day. Note that on days where
+      the extractor failed to download files for a feed, we interpolate by using the previous day's files.
+      This is tracked using the is_interpolated column. Primary key is composite of
+      feed_key, file_key, and date.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - file_key
+            - date
+    columns:
+      - name: feed_key
+        description: '{{ doc("column_schedule_file_key") }}'
+        tests:
+          - not_null
+      - name: file_key
+        description: GTFS file name (like "agency.txt")
+        tests:
+          - not_null
+      - name: date
+        description: Feed extraction date
+        tests:
+          - not_null
