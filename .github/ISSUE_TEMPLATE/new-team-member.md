@@ -20,7 +20,6 @@ Slack Username:
 - [ ] Added to tools:
   - [ ] Github
     - [ ] Organization: Cal-ITP
-    - [ ] Team: jarvus
     - [ ] Team: warehouse-users
   - [ ] JupyterLab
   - [ ] Google Cloud Console
