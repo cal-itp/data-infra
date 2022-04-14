@@ -6,5 +6,5 @@ WITH pathways_clean AS (
 ),
 gtfs_schedule_dim_pathways AS (
   SELECT * FROM pathways_clean
-),
+)
 SELECT * FROM gtfs_schedule_dim_pathways
