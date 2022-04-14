@@ -372,3 +372,45 @@ models:
         description: Date on which this feed/pathway combination was active
         tests:
           - not_null
+  - name: gtfs_schedule_stg_calendar_long
+    description: |
+      Each row is a cleaned row from calendar.txt made long based on the
+      day of week columns (so for each feed version, instead of one row
+      per service_id, there is one row per service_id / day_name combination).
+      Primary key is composite of calitp_itp_id, calitp_url_number,
+      service_id, day_name, and calitp_extracted_at.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - calitp_itp_id
+            - calitp_url_number
+            - service_id
+            - day_name
+            - calitp_extracted_at
+    columns:
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+        tests:
+          - not_null
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+        tests:
+          - not_null
+      - name: service_id
+        description: service_id value from calendar.txt
+        tests:
+          - not_null
+      - name: day_name
+        description: |
+          monday, tuesday, wednesday, thursday, friday, saturday, sunday
+          (from calendar.txt columns)
+        tests:
+          - not_null
+      - name: calitp_extracted_at
+        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
+        tests:
+          - not_null
+      - name: calitp_deleted_at
+        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
+        tests:
+          - not_null
