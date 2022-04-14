@@ -25,7 +25,7 @@ array_len_fix AS (
       , CASE WHEN ARRAY_LENGTH(part_dep) = 0 THEN [NULL, NULL, NULL] ELSE part_dep END AS part_dep
     FROM int_time_parts
 ),
-gtfs_schedule_dim_stop_times(
+gtfs_schedule_dim_stop_times AS (
   SELECT
   * EXCEPT(continuous_pickup, continuous_drop_off, part_arr, part_dep)
   , continuous_pickup AS stop_time_continuous_pickup
