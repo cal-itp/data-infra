@@ -271,3 +271,28 @@ models:
         tests:
           - not_null
           - unique
+  - name: shapes
+    description: |
+      This table is a latest-only cut of the cleaned GTFS data.
+      It contains current-only data for agencies we are currently scraping.
+      Each row is a cleaned row from a shapes.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#shapestxt.
+    columns:
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+        tests:
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+        tests:
+      - name: calitp_extracted_at
+        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
+        tests:
+      - name: calitp_hash
+        description: '{{ doc("column_schedule_calitp_hash") }}'
+        tests:
+      - name: shape_key
+        description: '{{ doc("column_schedule_file_key") }}'
+        tests:
+          - not_null
+          - unique
