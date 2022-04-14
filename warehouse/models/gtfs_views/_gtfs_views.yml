@@ -414,3 +414,36 @@ models:
         description: '{{ doc("column_schedule_calitp_extracted_at") }}'
         tests:
           - not_null
+  - name: gtfs_schedule_stg_daily_service
+    description: |
+      Each row indicates whether a given service_id was
+      active on the given service_date, based on the most
+      recent feed prior to that service_date. Primary
+      key is composite of calitp_itp_id, calitp_url_number,
+      service_id, and service_date.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - calitp_itp_id
+            - calitp_url_number
+            - service_id
+            - service_date
+    columns:
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+        tests:
+          - not_null
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+        tests:
+          - not_null
+      - name: service_id
+        description: |
+          service_id value from calendar.txt or calendar_dates.txt
+        tests:
+          - not_null
+      - name: service_date
+        description: |
+          Service date
+        tests:
+          - not_null
