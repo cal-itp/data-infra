@@ -315,3 +315,12 @@ models:
         description: Feed extraction date
         tests:
           - not_null
+  - name: gtfs_schedule_fact_daily
+    description: |
+      Each row of this table is a daily summary of Cal-ITP GTFS schedule data
+      downloads. Primary key is date.
+    columns:
+      - name: date
+        tests:
+          - not_null
+          - unique
