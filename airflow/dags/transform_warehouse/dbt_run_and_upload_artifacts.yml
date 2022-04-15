@@ -24,6 +24,7 @@ env_vars:
   DBT_PROJECT_DIR: /app
   DBT_PROFILE_DIR: /app
   DBT_TARGET: prod_service_account
+  NETLIFY_SITE_ID: cal-itp-dbt-docs
 secrets:
   - deploy_type: volume
     deploy_target: /secrets/jobs-data/
