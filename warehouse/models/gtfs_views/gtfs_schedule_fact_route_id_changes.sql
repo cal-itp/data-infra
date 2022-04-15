@@ -1,36 +1,24 @@
----
-operator: operators.SqlToWarehouseOperator
-dst_table_name: "views.gtfs_schedule_fact_route_id_changes"
+{{ config(materialized='table') }}
 
-tests:
-  check_null:
-    - feed_key
-    - metric_period
-    - metric_date
-    - change_status
-
-  check_composite_unique:
-    - feed_key
-    - metric_period
-    - metric_date
-    - change_status
-
-
-dependencies:
-  - dim_metric_date
-  - gtfs_schedule_dim_feeds
-  - gtfs_schedule_dim_routes
----
-
-WITH
-
+WITH dim_metric_date AS (
+    SELECT *
+    FROM {{ ref('dim_metric_date') }}
+),
+gtfs_schedule_dim_feeds AS (
+    SELECT *
+    FROM {{ ref('gtfs_schedule_dim_feeds') }}
+),
+gtfs_schedule_dim_routes AS (
+    SELECT *
+    FROM {{ ref('gtfs_schedule_dim_routes') }}
+),
 date_range AS (
     SELECT
       metric_period
       , metric_date
       , start_date
       , end_date
-    FROM `views.dim_metric_date`
+    FROM dim_metric_date
     WHERE
         is_gtfs_schedule_range
         AND metric_type != "daily"
@@ -38,26 +26,37 @@ date_range AS (
 
 source_table AS (
 
-    SELECT *, route_id AS source_id FROM `views.gtfs_schedule_dim_routes`
+    SELECT *,
+      route_id AS source_id
+    FROM gtfs_schedule_dim_routes
 
 ),
 
 table_start AS (
-    SELECT calitp_itp_id, calitp_url_number, metric_period, metric_date, source_id
+    SELECT
+      calitp_itp_id,
+      calitp_url_number,
+      metric_period,
+      metric_date,
+      source_id
     FROM source_table
     JOIN date_range ON calitp_extracted_at <= start_date
     AND calitp_deleted_at > start_date
 ),
 
 table_end AS (
-    SELECT calitp_itp_id, calitp_url_number, metric_period, metric_date, source_id
+    SELECT
+      calitp_itp_id,
+      calitp_url_number,
+      metric_period,
+      metric_date,
+      source_id
     FROM source_table
     JOIN date_range ON calitp_extracted_at <= end_date
     AND calitp_deleted_at > end_date
 ),
 
 table_partial AS (
-
     SELECT
       * EXCEPT (source_id)
       , t1.source_id AS start_table_source_id
@@ -84,14 +83,17 @@ metric_counts AS (
         , COUNT(*) AS n
     FROM table_partial GROUP BY 1, 2, 3, 4, 5
 
-)
-
-SELECT
+),
+gtfs_schedule_fact_route_id_changes AS (
+  SELECT
     T2.feed_key
     , T1.*
-FROM metric_counts T1
-JOIN `views.gtfs_schedule_dim_feeds` T2
-    USING(calitp_itp_id, calitp_url_number)
-WHERE
-    T2.calitp_extracted_at <= T1.metric_date
-    AND T2.calitp_deleted_at > T1.metric_date
+  FROM metric_counts T1
+  JOIN gtfs_schedule_dim_feeds T2
+      USING(calitp_itp_id, calitp_url_number)
+  WHERE
+      T2.calitp_extracted_at <= T1.metric_date
+      AND T2.calitp_deleted_at > T1.metric_date
+)
+
+SELECT * FROM gtfs_schedule_fact_route_id_changes
