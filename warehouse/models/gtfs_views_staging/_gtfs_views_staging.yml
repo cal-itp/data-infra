@@ -558,7 +558,6 @@ models:
   - name: validation_notices_clean
     description: |
       Each row is a validation notice from the GTFS schedule validator.
-    tests:
     columns:
       - name: calitp_itp_id
         description: '{{ doc("column_calitp_itp_id") }}'
