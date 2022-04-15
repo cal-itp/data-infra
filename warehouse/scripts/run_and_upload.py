@@ -88,11 +88,8 @@ def run(
                     "netlify",
                     "deploy",
                     "--dir=docs/",
-                    "--alias=dbt-docs",
+                    # "--alias=dbt-docs",
                 ],
-                env={
-                    "NETLIFY_SITE_ID": "cal-itp-previews",
-                },
             )
 
     if sync_metabase:
