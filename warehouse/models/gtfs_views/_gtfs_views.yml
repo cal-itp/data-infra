@@ -507,3 +507,36 @@ models:
         description: Date on which this feed/stop combination was active
         tests:
           - not_null
+  - name: gtfs_schedule_fact_daily_service
+    description: |
+      Each row is a feed / service / day combination, where the given
+      service is active on the given day, with a summary of the service's
+      coverage on the given day.
+      Primary key is composite of feed_key, service_date, and
+      service_id.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - service_date
+            - service_id
+    columns:
+      - name: feed_key
+        description: '{{ doc("column_schedule_file_key") }}'
+        tests:
+          - not_null
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+      - name: service_id
+        description: |
+          service_id value from calendar.txt / calendar_dates.txt /
+          trips.txt
+        tests:
+          - not_null
+      - name: service_date
+        description: |
+          Service date
+        tests:
+          - not_null
