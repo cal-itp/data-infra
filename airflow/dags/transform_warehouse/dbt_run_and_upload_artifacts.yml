@@ -37,6 +37,10 @@ secrets:
     deploy_target: METABASE_PASSWORD
     secret: jobs-data
     key: metabase-password
+  - deploy_type: env
+    deploy_target: NETLIFY_AUTH_TOKEN
+    secret: jobs-data
+    key: netlify-auth-token
 
 tolerations:
   - key: pod-role
