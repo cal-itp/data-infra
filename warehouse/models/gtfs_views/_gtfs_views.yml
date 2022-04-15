@@ -665,3 +665,44 @@ models:
       - name: change_status
         tests:
           - not_null
+  - name: reports_gtfs_schedule_index
+    description: |
+      Each row is a feed from agencies.yml (e.g. itp id, and url number), and includes
+      date ranges for reports, and indicators for things that might break a report.
+      For example, whether an agency has a feed_info.txt in their data in a given
+      reporting period.
+      Primary key is composite of publish_date, calitp_itp_id,
+      and calitp_url_number.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - publish_date
+            - calitp_itp_id
+            - calitp_url_number
+    columns:
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+        tests:
+          - not_null
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+        tests:
+          - not_null
+      - name: publish_date
+        description: |
+          Date a report will be published (e.g. June 1st reports
+          for the month of May)
+        tests:
+          - not_null
+      - name: date_start
+        description: The beginning of the month being reported
+      - name: date_end
+        description: The end of the month being reported
+      - name: has_feed_info
+        description: |
+          Whether the most recent (date_end) feed for a month
+          has feed_info.txt
+      - name: use_for_report
+        description: |
+          Whether to use to generate a report for this feed on
+          this date
