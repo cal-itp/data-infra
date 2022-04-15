@@ -10,7 +10,7 @@ Below is a series of tips, tricks and use-cases for managing data throughout the
     * [Local Folders](#local-folders)
 * [Formats and Use-Cases](#formats-and-use-cases)
     * [CSVs](#csvs)
-    * [Excel / XLSX](#excel/xlsx)
+    * [Excel / XLSX](#Excel/XLSX)
     * [Parquet](#parquet)
     * [Feather Files](#feather-files)
     * [GeoJSON](#geojson)
@@ -20,8 +20,9 @@ Below is a series of tips, tricks and use-cases for managing data throughout the
     * [Pickles](#pickles)
 
 ## Reading and Writing Data
+
 ### GCS
-Our team often uses Google Cloud Storage (GCS) for object storage. For a walkthrough on how to use GCS buckets, go [here](https://docs.calitp.org/data-infra/analytics_tools/storing_data.html#in-gcs).
+Our team often uses Google Cloud Storage (GCS) for object storage. If you haven't set up your Google authentication, go [here](https://docs.calitp.org/data-infra/analytics_tools/notebooks.html#connecting-to-warehouse) for the instructions. For a walkthrough on how to use GCS buckets, go [here](https://docs.calitp.org/data-infra/analytics_tools/storing_data.html#in-gcs).
 
 By putting data on GCS, anybody on the team can use/access/replicate the data without having to transfer data files between machines.
 
@@ -56,12 +57,12 @@ CSVs are the lowest common denominator of data files. They are plain text files 
 
 Benefits to CSVs include their readability and ease of use for users. Unlike Parquet files, they are stored as plain text, making them human readable.
 
-The downsides to CSVs are that their sizes can easily get out of hand, making Parquet files a preferable alternative in that regard. CSVs also don't store data types for columns. If there are different data types within a single column, this can lead to numerous isses. For example, if there are  strings and integers mixed within a single column, the process of analyzing that CSV becomes extremely difficult and even impossible at times. Finally, another key issue with CSVs is the ability to only store a single sheet in a file without any formatting or formulas. Excel files do a better job of allowing for formulas and different formats.
+The downsides to CSVs are that their sizes can easily get out of hand, making Parquet files a preferable alternative in that regard. CSVs also don't store data types for columns. If there are different data types within a single column, this can lead to numerous issues. For example, if there are  strings and integers mixed within a single column, the process of analyzing that CSV becomes extremely difficult and even impossible at times. Finally, another key issue with CSVs is the ability to only store a single sheet in a file without any formatting or formulas. Excel files do a better job of allowing for formulas and different formats.
 
 
-### Excel / XLSX
+### Excel/XLSX
 
-Excel/XLSX is a binary file format that holds information about all the worksheets in a file, including both content and formatting. This means Excel files are capable of holding formatting, images, charts, forumlas, etc. CSVs are more limited in this respect. A downside to Excel files is that they aren't commonly readable by data analysis platforms. Every data analysis platform is capable of processing CSVs, but Excel files are a proprietary format that often require extensions in order to be processed. The ease of processing CSVs makes it easier to move data between different platforms, compared with Excel files. Excel files are best for sharing with other teams, except for geographic info (use Shapefiles or GeoJSON instead), if the Excel format is the only available and accessible format.
+Excel/XLSX is a binary file format that holds information about all the worksheets in a file, including both content and formatting. This means Excel files are capable of holding formatting, images, charts, formulas, etc. CSVs are more limited in this respect. A downside to Excel files is that they aren't commonly readable by data analysis platforms. Every data analysis platform is capable of processing CSVs, but Excel files are a proprietary format that often require extensions in order to be processed. The ease of processing CSVs makes it easier to move data between different platforms, compared with Excel files. Excel files are best for sharing with other teams, except for geographic info (use Shapefiles or GeoJSON instead), if the Excel format is the only available and accessible format.
 
 You often might want to write multiple dataframes to a single excel files as sheets. Here's a guide:
 
@@ -79,7 +80,7 @@ writer.save()
 ```
 
 ### Parquet
-Parquet is an "open source columnar storage format for use in data analysis systems." Columnar storage is more efficient as it is  easily compressed and the data is more homogenous. CSV files utilize a row-based storage format which is harder to compress, a reason why Parquets files are preferable for larger datasets. Parquet files are faster to read than CSVs, as they have a higher querying speed and preserve datatypes (ie, Number,  Timestamps, Points). They are best for intermediate data storage and large datasets (1GB+) on most any on-disk storage. This file format is also good for passing dataframes between Python and R. A similar option is [feather](https://blog.rstudio.com/2016/03/29/feather/).
+Parquet is an "open source columnar storage format for use in data analysis systems." Columnar storage is more efficient as it is  easily compressed and the data is more homogenous. CSV files utilize a row-based storage format which is harder to compress, a reason why Parquets files are preferable for larger datasets. Parquet files are faster to read than CSVs, as they have a higher querying speed and preserve datatypes (i.e. Number,  Timestamps, Points). They are best for intermediate data storage and large datasets (1GB+) on most any on-disk storage. This file format is also good for passing dataframes between Python and R. A similar option is [feather](https://blog.rstudio.com/2016/03/29/feather/).
 
 One of the downsides to Parquet files is the inability to quickly look at the dataset in GUI based (Excel, QGIS, etc.) programs. Parquet files also lack built-in support for categorical data.
 
@@ -122,7 +123,7 @@ Shapefiles are a geospatial vector data format for geographic information system
 
 One weird thing, however, is that a shapefile isn't a _file_, it's a _folder_, containing multiple subfiles (such as .dbf, .shpx, etc). To properly read/write shapefiles, make sure to read the entire folder or write to a folder each time. This can cause issues especially as most shapefiles are compressed into a zip file with isn't always easily decompressed.
 
-It is often better to use `geojson` vs `shapefiles` since the former is easier to render on the web. The latter is better when you have a bespoke projection. A few downsides to shapefiles include their inability to store topolgical information and the file size restriction of 2GB. Similarly, shapefiles can only contain one geometry type per file.
+It is often better to use `geojson` vs `shapefiles` since the former is easier to render on the web. The latter is better when you have a bespoke projection. A few downsides to shapefiles include their inability to store topological information and the file size restriction of 2GB. Similarly, shapefiles can only contain one geometry type per file.
 
 Here is a template for one way to read and write shapefiles using pandas:
 ```
@@ -142,7 +143,7 @@ gdf.to_file('./outputs/my_dir_name')
 Protocol Buffers is a method of serializing structured data. It is used for storing and interchanging structured information of all types. PBF involves an interface description language that describes the structure of some data and a program that generates source code from that description for generating or parsing a stream of bytes that represents the structured data. As compared to XML, it is designed to be simpler and quicker. A benefit of using PBF is that you can define how you want your data to be structured once and then use special generated source code to easily write and read your structured data to and from a variety of data streams. It is also possible to update the defined data structure without breaking deployed programs that are compiled against the older structure/format. Although PBF was designed as a better medium for communication between systems than XML, it only has some marginal advantages when compared to JSON.
 
 ### Databases
-A whole field of study, it is often useful to use a DB for analytics and aggegrated queries, rather than just your production datastore.
+A whole field of study, it is often useful to use a DB for analytics and aggregated queries, rather than just your production datastore.
 
 ### Pickles
 A way of serializing arbitrary python objects into a byte stream with the intent of storing it in a file/database. Danger lives here.

@@ -38,7 +38,7 @@ To read in our dataframe (df) and geodataframe (gdf) from GCS:
 ```
 df = pd.read_csv('gs://calitp-analytics-data/data-analyses/bucket-name/my-csv.csv')
 gdf = gpd.read_file('gs://calitp-analytics-data/data-analyses/bucket-name/my-geojson.geojson')
-gdf = pd.read_parquet('gs://calitp-analytics-data/data-analyses/bucket-name/my-geojson.parquet', engine= 'auto')
+gdf = pd.read_parquet('gs://calitp-analytics-data/data-analyses/bucket-name/my-geoparquet.parquet', engine= 'auto')
 gdf = gpd.read_file('gs://calitp-analytics-data/data-analyses/bucket-name/my-shapefile.zip')
 
 # Write a file to GCS
@@ -54,7 +54,7 @@ utils.geoparquet_gcs_export(gdf, GCS_FILE_PATH, FILE_NAME)
 Additional general information about various file types can be found in the [Data Management section](./data-management.md).
 
 ## Setting and Projecting Coordinate Reference System
-A coordinate reference system (CRS) tells geopandas how to plot the coordinates on the Earth. Starting with a shapefile usually means that the CRS is already set. In that case, we are interested in re-projecting the gdf to a different CRS. The CRS is chosen specific to a region (i.e., USA, Southern Califonia, New York, etc) or for its map units (i.e., decimal degrees, US feet, meters, etc). Map units that are US feet or meters are easier to work when it comes to defining distances (100 ft buffer, etc).
+A coordinate reference system (CRS) tells geopandas how to plot the coordinates on the Earth. Starting with a shapefile usually means that the CRS is already set. In that case, we are interested in re-projecting the gdf to a different CRS. The CRS is chosen specific to a region (i.e., USA, Southern California, New York, etc) or for its map units (i.e., decimal degrees, US feet, meters, etc). Map units that are US feet or meters are easier to work when it comes to defining distances (100 ft buffer, etc).
 
 In Python, there are 2 related concepts:
 1. Setting the CRS <--> corresponds to geographic coordinate system in ArcGIS
@@ -83,7 +83,7 @@ gdf.crs
 
 # If there is a CRS set, you can change the projection
 # Here, change to CA State Plane (units = US feet)
-gdf = gdf.to_crs('epsg:2229')
+gdf = gdf.to_crs('EPSG:2229')
 ```
 
 Sometimes, the gdf does not have a CRS set and you will need to be manually set it. This might occur if you create the `geometry` column from latitude and longitude points. More on this in the [intermediate tutorial](./spatial-analysis-intermediate.md):
@@ -99,10 +99,8 @@ There are [lots of different CRS available](https://epsg.io). The most common on
 ```
 # If the CRS is not set after checking it with gdf.crs
 
-gdf = gdf.set_crs('epsg:WGS84')
+gdf = gdf.set_crs('EPSG:WGS84')
 
 ```
 
 <br>
-
-[« Previous](./data-analysis-intermediate.md) &nbsp; &nbsp; [Next »](./spatial-analysis-intro.md)

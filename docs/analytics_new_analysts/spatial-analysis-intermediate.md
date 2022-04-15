@@ -50,11 +50,11 @@ Then, create the `geometry` column.  We use a lambda function and apply it to al
 df.rename(columns = {'X': 'longitude', 'Y':'latitude'}, inplace=True)
 
 # Create geometry column
-gdf = geopandas.points_from_xy(df.longitude, df.latitude, crs="EPSG:4326")
+gdf = gpd.points_from_xy(df.longitude, df.latitude, crs="EPSG:4326")
 
 # Project to different CRS. Pawnee is in Indiana, so we'll use EPSG:2965.
 # In southern California, use EPSG:2229.
-gdf = gdf.to_crs(epsg=2965)
+gdf = gdf.to_crs('EPSG:2965')
 
 gdf
 ```
@@ -119,7 +119,7 @@ gdf = gpd.GeoDataFrame(df)
 
 # Set the coordinate reference system. You must set it first before you
 # can project.
-gdf = df.set_crs('epsg:4326')
+gdf = df.set_crs('EPSG:4326')
 ```
 
 
@@ -186,7 +186,7 @@ Sometimes we want to iterate over different options, and we want to see the resu
 
 ```
 # Make sure our projection has US feet as its units
-df.to_crs('epsg:2965')
+df.to_crs('EPSG:2965')
 
 # Add other columns for the different buffers
 df['geometry100'] = df.geometry.buffer(100)
@@ -211,5 +211,3 @@ df100 = df[['Business', 'Sales_millions',
 ```
 
 <br>
-
-[« Previous](./spatial-analysis-intro.md) &nbsp; &nbsp; [Next »](./spatial-analysis-advanced.md)

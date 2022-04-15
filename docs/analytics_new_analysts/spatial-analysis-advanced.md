@@ -55,5 +55,3 @@ df['geometry'] = df.apply(
 ```
 
 <br>
-
-[« Previous](./spatial-analysis-intermediate.md)

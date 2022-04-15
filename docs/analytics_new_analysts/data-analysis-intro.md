@@ -333,5 +333,3 @@ gdf.to_file(driver = 'GeoJSON', filename = '../folder/my_geojson.geojson')
 ```
 
 <br>
-
-[Next »](./data-analysis-intermediate.md)

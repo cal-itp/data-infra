@@ -142,7 +142,7 @@ shared_utils.geography_utils.WGS84
 # after make setup_env in order to successfully import shared_utils
 ```
 
-See [data-analyses/example_reports](https://github.com/cal-itp/data-analyses/tree/main/example_report) for examples in how to use `shared_utils` for general functions, charts), and maps.
+See [data-analyses/example_reports](https://github.com/cal-itp/data-analyses/tree/main/example_report) for examples on how to use `shared_utils` for general functions, charts, and maps.
 
 (pandas-resources)=
 ## pandas

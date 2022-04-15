@@ -194,5 +194,3 @@ summary_dfs["tom"]
 
 
 <br>
-
-[« Previous](./data-analysis-intro.md) &nbsp; &nbsp; [Next »](./spatial-analysis-basics.md)

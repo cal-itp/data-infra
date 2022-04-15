@@ -61,8 +61,8 @@ gdf = gpd.read_file('../folder/council_boundaries.geojson')
 
 # Make sure both our gdfs are projected to the same coordinate reference system
 # (EPSG:4326 = WGS84)
-locations = locations.to_crs('epsg:4326')
-gdf = gdf.to_crs('epsg:4326')
+locations = locations.to_crs('EPSG:4326')
+gdf = gdf.to_crs('EPSG:4326')
 
 ```
 
@@ -89,7 +89,7 @@ gdf = gdf.to_crs('epsg:4326')
 A spatial join finds the Council District the location falls within and attaches that information.
 
 ```
-join = gpd.sjoin(locations, gdf, how = 'inner', op = 'intersects')
+join = gpd.sjoin(locations, gdf, how = 'inner', predicate = 'intersects')
 
 # how = 'inner' means that we only want to keep observations that matched,
 # i.e locations that were within the council district boundaries.
@@ -177,8 +177,8 @@ First, prepare our point gdf and change it to the right projection. Pawnee is in
 
 ```
 # Use NAD83/Indiana East projection (units are in feet)
-homes = homes.to_crs('epsg:2965')
-locations = locations.to_crs('epsg:2965')
+homes = homes.to_crs('EPSG:2965')
+locations = locations.to_crs('EPSG:2965')
 ```
 
 Next, draw a 2 mile buffer around `homes`.
@@ -197,7 +197,7 @@ homes_buffer['geometry'] = homes.geometry.buffer(two_miles)
 Do a spatial join between `locations` and `homes_buffer`. Repeat the process of spatial join and aggregation in Python as illustrated in the previous section (spatial join and dissolve in ArcGIS).
 
 ```
-sjoin = gpd.sjoin(locations, homes_buffer, how = 'inner', op = 'intersects')
+sjoin = gpd.sjoin(locations, homes_buffer, how = 'inner', predicate = 'intersects')
 sjoin
 ```
 
@@ -231,5 +231,3 @@ The final `count`:
 | Ann Perkins | 1
 
 <br>
-
-[« Previous](./spatial-analysis-basics.md) &nbsp; &nbsp; [Next »](./spatial-analysis-intermediate.md)
