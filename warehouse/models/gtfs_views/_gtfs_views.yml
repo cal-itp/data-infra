@@ -492,7 +492,7 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - feed_key
-            - route_key
+            - stop_key
             - date
     columns:
       - name: feed_key
