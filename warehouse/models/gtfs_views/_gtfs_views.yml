@@ -603,24 +603,53 @@ models:
           metric_median for the prior month
   - name: gtfs_schedule_fact_route_id_changes
     description: |
-      Calculates route ID changes by month by feed.
+      Calculates route ID changes by month by feed. Primary key
+      is composite of feed_key, metric_period, metric_date, and
+      change_status.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
-            - calitp_itp_id
-            - calitp_url_number
+            - feed_key
             - metric_period
             - metric_date
             - change_status
     columns:
       - name: calitp_itp_id
         description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
       - name: calitp_url_number
         description: '{{ doc("column_calitp_url_number") }}'
+      - name: feed_key
+        description: |
+          feed_key for the feed from this calitp_itp_id + calitp_url_number
+          that was active on metric_date
         tests:
           - not_null
+      - name: metric_period
+        tests:
+          - not_null
+      - name: metric_date
+        tests:
+          - not_null
+      - name: change_status
+        tests:
+          - not_null
+  - name: gtfs_schedule_fact_stop_id_changes
+    description: |
+      Calculates stop ID changes by month by feed. Primary key
+      is composite of feed_key, metric_period, metric_date, and
+      change_status.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - metric_period
+            - metric_date
+            - change_status
+    columns:
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
       - name: feed_key
         description: |
           feed_key for the feed from this calitp_itp_id + calitp_url_number
