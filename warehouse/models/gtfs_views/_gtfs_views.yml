@@ -576,3 +576,28 @@ models:
           calculated
         tests:
           - not_null
+      - name: metric_day_of_week
+        description: |
+          The day of the week for which the ratio is calculated;
+          1 = Sunday (from BigQuery date standard)
+        tests:
+          - not_null
+      - name: metric_median
+        description: |
+          Median total service hours (across all service_id values,
+          calculated from gtfs_schedule_fact_daily_service)
+      - name: prior_month
+        description: |
+          The prior month against which the current month is being
+          compared; months may not be consecutive if there was no
+          service for a given day of the week in a given month
+          (so, if there is data for August and none again until
+          November, the November data will be compared to August)
+      - name: prior_year
+        description: |
+          The year of the prior month against which the current month
+          is being compared
+      - name: metric_service_hour_ratio_mom
+        description: |
+          metric_median for the current month divided by
+          metric_median for the prior month
