@@ -540,3 +540,39 @@ models:
           Service date
         tests:
           - not_null
+  - name: gtfs_schedule_fact_day_of_week_service_monthly_comparison
+    description: |
+      Compares the median total service hours for a given ITP ID +
+      URL + day of the week to the last available month to
+      identify anomalies. Primary key is composite of
+      calitp_itp_id, calitp_url_number, metric_day_of_week,
+      metric_month, metric_year.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - calitp_itp_id
+            - calitp_url_number
+            - metric_day_of_week
+            - metric_month
+            - metric_year
+    columns:
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+        tests:
+          - not_null
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+        tests:
+          - not_null
+      - name: metric_year
+        description: |
+          The year of the month for which the month-over-month ratio is
+          being calculated
+        tests:
+          - not_null
+      - name: metric_month
+        description: |
+          The month for which the month-over-month ratio is being
+          calculated
+        tests:
+          - not_null
