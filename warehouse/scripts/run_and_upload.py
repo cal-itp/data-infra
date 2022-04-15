@@ -80,7 +80,10 @@ def run(
             else:
                 typer.echo(f"skipping upload of {artifact}")
 
-            shutil.copy(_from, "docs/")
+            # avoid copying run_results is unnecessary for the docs site
+            # so just skip to avoid any potential information leakage
+            if "run_results" not in artifact:
+                shutil.copy(_from, "docs/")
 
         if deploy_docs:
             subprocess.run(
