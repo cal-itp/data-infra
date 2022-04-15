@@ -2,6 +2,12 @@ FROM python:3.7-buster
 
 LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
 
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+RUN apt-get update \
+  && apt-get install -y nodejs
+
+RUN npm install -g --unsafe-perm=true --allow-root netlify-cli
+
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
 ENV PATH="${PATH}:/root/.poetry/bin"
 
