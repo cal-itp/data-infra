@@ -43,7 +43,10 @@ def run(
 
         if target:
             cmd.extend(
-                ["--target", target,]
+                [
+                    "--target",
+                    target,
+                ]
             )
         return cmd
 
@@ -81,8 +84,15 @@ def run(
 
         if deploy_docs:
             subprocess.run(
-                ["netlify", "deploy", "--dir=docs/", "--alias=dbt-docs",],
-                env={"NETLIFY_SITE_ID": "cal-itp-previews",},
+                [
+                    "netlify",
+                    "deploy",
+                    "--dir=docs/",
+                    "--alias=dbt-docs",
+                ],
+                env={
+                    "NETLIFY_SITE_ID": "cal-itp-previews",
+                },
             )
 
     if sync_metabase:
