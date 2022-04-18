@@ -801,3 +801,31 @@ models:
     description: |
       Daily validation notices, up until the date the table was last generated.
       Primary key is composite of all columns.
+  - name: validation_code_descriptions
+    description: |
+      Cal-ITP critical validation codes. Primary key is code.
+    columns:
+      - name: code
+        description: Validation notice code from GTFS validator
+        tests:
+          - unique
+          - not_null
+  - name: validation_notice_fields
+    description: |
+      Lists each field that is populated for each code in validation reports
+      from the GTFS validator (since only a subset of fields are populated
+      based on which code it is.) Primary key is composite of code and field.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - code
+            - field
+    columns:
+      - name: code
+        description: Validation notice code from GTFS validator
+        tests:
+          - not_null
+      - name: field
+        description: Field in validation output from GTFS validator
+        tests:
+          - not_null
