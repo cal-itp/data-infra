@@ -53,7 +53,7 @@ df.rename(columns = {'X': 'longitude', 'Y':'latitude'}, inplace=True)
 gdf = gpd.points_from_xy(df.longitude, df.latitude, crs="EPSG:4326")
 
 # Project to different CRS. Pawnee is in Indiana, so we'll use EPSG:2965.
-# In southern California, use EPSG:2229.
+# In Southern California, use EPSG:2229.
 gdf = gdf.to_crs('EPSG:2965')
 
 gdf
@@ -154,7 +154,7 @@ for key, value in boundaries.items():
     join_df = f"{key}_join"
     agg_df = f"{key}_summary"
     # Spatial join, but don't save it into the results dictionary
-    join_df = gpd.sjoin(df, value, how = 'inner', op = 'intersects')
+    join_df = gpd.sjoin(df, value, how = 'inner', predicate = 'intersects')
     # Aggregate and save results into results dictionary
     results[agg_df] = join_df.groupby('ID').agg(
         {'Business': 'count', 'Sales_millions': 'sum'})

@@ -93,7 +93,7 @@ join = gpd.sjoin(locations, gdf, how = 'inner', predicate = 'intersects')
 
 # how = 'inner' means that we only want to keep observations that matched,
 # i.e locations that were within the council district boundaries.
-# op = 'intersects' means that we are joining based on whether or not the location
+# predicate = 'intersects' means that we are joining based on whether or not the location
 # intersects with the council district.
 ```
 
