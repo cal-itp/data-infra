@@ -666,6 +666,19 @@ models:
       - name: change_status
         tests:
           - not_null
+  - name: gtfs_schedule_index_feed_trip_stops
+    description: |
+      Feed, route, trip, stop_time, stop combinations with validity
+      dates. Primary key is composite of feed_key, route_key, trip_key,
+      stop_time_key, and stop_key.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - route_key
+            - trip_key
+            - stop_time_key
+            - stop_key
   - name: reports_gtfs_schedule_index
     description: |
       Each row is a feed from agencies.yml (e.g. itp id, and url number), and includes
