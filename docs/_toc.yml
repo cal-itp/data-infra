@@ -30,6 +30,7 @@ parts:
         - file: analytics_new_analysts/spatial-analysis-intro
         - file: analytics_new_analysts/spatial-analysis-intermediate
         - file: analytics_new_analysts/spatial-analysis-advanced
+        - file: analytics_new_analysts/useful-links
       - file: warehouse/overview
         sections:
         - file: warehouse/table_naming
