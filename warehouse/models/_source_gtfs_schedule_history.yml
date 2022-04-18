@@ -13,3 +13,5 @@ sources:
       - name: calitp_files_updates
       - name: calitp_included_gtfs_tables
       - name: calitp_status
+      - name: validation_code_descriptions
+      - name: validation_fact_notice_fields

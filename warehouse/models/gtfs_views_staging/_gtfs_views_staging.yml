@@ -122,7 +122,7 @@ models:
           - not_null
   - name: calendar_dates_clean
     description: |
-      Each row is a Each row is a cleaned rowrow from a calendar_dates.txt file.
+      Each row is a cleaned row from a calendar_dates.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#calendar_datestxt.
     columns:

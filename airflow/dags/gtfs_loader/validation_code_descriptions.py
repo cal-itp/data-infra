@@ -1,6 +1,6 @@
 # ---
 # operator: operators.PythonToWarehouseOperator
-# table_name: "views.validation_code_descriptions"
+# table_name: "gtfs_schedule_history.validation_code_descriptions"
 # fields:
 #   severity: Severity of the error code (e.g. validation_codes.severity)
 #   code: Code name (e.g. validation_codes.code)
@@ -27,4 +27,4 @@ code_descriptions["code"] = (
     .replace({"i_o_error": "io_error", "u_r_i_syntax_error": "uri_syntax_error"})
 )
 
-write_table(code_descriptions, "views.validation_code_descriptions")
+write_table(code_descriptions, "gtfs_schedule_history.validation_code_descriptions")
