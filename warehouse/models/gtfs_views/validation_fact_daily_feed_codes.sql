@@ -1,26 +1,12 @@
----
-operator: operators.SqlToWarehouseOperator
-dst_table_name: "views.validation_fact_daily_feed_codes"
+{{ config(materialized='table') }}
 
-tests:
-  check_null:
-    - feed_key
-    - code
-    - date
-  check_composite_unique:
-    - feed_key
-    - code
-    - date
+WITH validation_fact_daily_feed_notices AS (
+    SELECT *
+    FROM {{ ref('validation_fact_daily_feed_notices') }}
+),
 
-dependencies:
-  - validation_fact_daily_feed_notices
-
----
 
 -- This view counts daily validation notices per feed and code
-
-WITH
-
 -- one row per individual code violation, within a feed, per day (where data exists)
 daily_validation_notices AS (
     SELECT * FROM `views.validation_fact_daily_feed_notices`
@@ -70,11 +56,14 @@ final_count_lagged AS (
     FROM daily_feed_cross_codes T1
     LEFT JOIN final_counts T2 USING (feed_key, code, date)
 
-  )
+),
+validation_fact_daily_feed_codes AS (
+  SELECT
+    * EXCEPT(prev_n_notices)
+    , n_notices - prev_n_notices AS diff_n_notices
+    , (prev_n_notices > 0 AND n_notices = 0) AS is_error_resolved
+    , COALESCE((prev_n_notices = 0 AND n_notices > 0), true) AS is_error_introduced
+  FROM final_count_lagged
+)
 
-SELECT
-  * EXCEPT(prev_n_notices)
-  , n_notices - prev_n_notices AS diff_n_notices
-  , (prev_n_notices > 0 AND n_notices = 0) AS is_error_resolved
-  , COALESCE((prev_n_notices = 0 AND n_notices > 0), true) AS is_error_introduced
-FROM final_count_lagged
+SELECT * FROM validation_fact_daily_feed_codes

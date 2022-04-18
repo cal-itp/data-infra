@@ -748,3 +748,29 @@ models:
       - name: severity
         tests:
           - not_null
+  - name: validation_fact_daily_feed_codes
+    description: |
+      Summary of daily validation notices per feed and code. Primary key
+      is composite of feed_key, code, and date.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - code
+            - date
+    columns:
+      - name: feed_key
+        description: '{{ doc("column_schedule_key") }}'
+        tests:
+          - not_null
+      - name: code
+        tests:
+          - not_null
+      - name: date
+        description: Date on which this code was active
+        tests:
+          - not_null
+  - name: validation_fact_daily_feed_notices
+    description: |
+      Daily validation notices, up until the date the table was last generated.
+      Primary key is composite of all columns.
