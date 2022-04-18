@@ -10,7 +10,7 @@ Below is a series of tips, tricks and use-cases for managing data throughout the
     * [Local Folders](#local-folders)
 * [Formats and Use-Cases](#formats-and-use-cases)
     * [CSVs](#csvs)
-    * [Excel / XLSX](#Excel/XLSX)
+    * [Excel / XLSX](#excel)
     * [Parquet](#parquet)
     * [Feather Files](#feather-files)
     * [GeoJSON](#geojson)
@@ -60,7 +60,7 @@ Benefits to CSVs include their readability and ease of use for users. Unlike Par
 The downsides to CSVs are that their sizes can easily get out of hand, making Parquet files a preferable alternative in that regard. CSVs also don't store data types for columns. If there are different data types within a single column, this can lead to numerous issues. For example, if there are  strings and integers mixed within a single column, the process of analyzing that CSV becomes extremely difficult and even impossible at times. Finally, another key issue with CSVs is the ability to only store a single sheet in a file without any formatting or formulas. Excel files do a better job of allowing for formulas and different formats.
 
 
-### Excel/XLSX
+### Excel
 
 Excel/XLSX is a binary file format that holds information about all the worksheets in a file, including both content and formatting. This means Excel files are capable of holding formatting, images, charts, formulas, etc. CSVs are more limited in this respect. A downside to Excel files is that they aren't commonly readable by data analysis platforms. Every data analysis platform is capable of processing CSVs, but Excel files are a proprietary format that often require extensions in order to be processed. The ease of processing CSVs makes it easier to move data between different platforms, compared with Excel files. Excel files are best for sharing with other teams, except for geographic info (use Shapefiles or GeoJSON instead), if the Excel format is the only available and accessible format.
 
