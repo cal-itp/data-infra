@@ -137,6 +137,7 @@ models:
       specification.
     columns:
       - name: file_key
+        description: '{{ doc("column_schedule_file_key") }}'
         tests:
           - not_null
           - unique
@@ -250,7 +251,7 @@ models:
             - date
     columns:
       - name: feed_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
       - name: date
@@ -304,11 +305,11 @@ models:
             - date
     columns:
       - name: feed_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
       - name: file_key
-        description: GTFS file name (like "agency.txt")
+        description: '{{ doc("column_schedule_file_key") }}'
         tests:
           - not_null
       - name: date
@@ -337,11 +338,11 @@ models:
             - date
     columns:
       - name: feed_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
       - name: route_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
       - name: date
@@ -361,11 +362,11 @@ models:
             - date
     columns:
       - name: feed_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
       - name: pathway_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
       - name: date
@@ -461,11 +462,11 @@ models:
             - service_id
     columns:
       - name: feed_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
       - name: trip_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
       - name: calitp_itp_id
@@ -496,11 +497,11 @@ models:
             - date
     columns:
       - name: feed_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
       - name: stop_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
       - name: date
@@ -522,7 +523,7 @@ models:
             - service_id
     columns:
       - name: feed_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
       - name: calitp_itp_id
@@ -706,3 +707,27 @@ models:
         description: |
           Whether to use to generate a report for this feed on
           this date
+  - name: reports_weekly_file_checks
+    description: |
+      Each row is a week / feed / file combination, showing whether
+      the given feed contained the given file in the given week. Primary
+      key is composite of feed_key, date, and file_key.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - date
+            - file_key
+    columns:
+      - name: feed_key
+        description: '{{ doc("column_schedule_key") }}'
+        tests:
+          - not_null
+      - name: date
+        description: The Sunday beginning the week that is being evaluated
+        tests:
+          - not_null
+      - name: file_key
+        description: '{{ doc("column_schedule_file_key") }}'
+        tests:
+          - not_null
