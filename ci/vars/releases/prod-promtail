@@ -1,0 +1,5 @@
+RELEASE_DRIVER=helm
+RELEASE_NAMESPACE=monitoring-loki
+RELEASE_HELM_NAME=promtail
+RELEASE_HELM_CHART=kubernetes/apps/charts/promtail
+RELEASE_HELM_VALUES=
