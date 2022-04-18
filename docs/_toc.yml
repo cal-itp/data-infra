@@ -4,7 +4,7 @@
 format: jb-book
 root: intro
 parts:
-  - caption:  Analysts
+  - caption: Analysts
     chapters:
       - file: analytics_welcome/overview
         sections:
@@ -20,6 +20,16 @@ parts:
         - file: analytics_tools/saving_code
         - file: analytics_tools/storing_data
         - file: analytics_tools/data_catalogs
+      - file: analytics_new_analysts/overview
+        sections:
+        - file: analytics_new_analysts/data-analysis-intro
+        - file: analytics_new_analysts/data-analysis-intermediate
+        - file: analytics_new_analysts/data-management
+        - file: analytics_new_analysts/notebooks
+        - file: analytics_new_analysts/spatial-analysis-basics
+        - file: analytics_new_analysts/spatial-analysis-intro
+        - file: analytics_new_analysts/spatial-analysis-intermediate
+        - file: analytics_new_analysts/spatial-analysis-advanced
       - file: warehouse/overview
         sections:
         - file: warehouse/table_naming
