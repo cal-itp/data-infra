@@ -6,7 +6,7 @@ Data Management is hard, and before you know it, you end up with `final_final_fi
 Below is a series of tips, tricks and use-cases for managing data throughout the lifecycle of a projects.
 
 * [Reading and Writing Data](#reading-and-writing-data)
-    * [GCS](#GCS)
+    * [GCS](#gcs)
     * [Local Folders](#local-folders)
 * [Formats and Use-Cases](#formats-and-use-cases)
     * [CSVs](#csvs)
