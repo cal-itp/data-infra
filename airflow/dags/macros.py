@@ -113,29 +113,6 @@ def scd_join(
 """
 
 
-def get_latest_schedule_data(table):
-
-    return f"""
-
-        WITH is_in_latest AS (
-            SELECT DISTINCT
-                calitp_itp_id,
-                calitp_url_number,
-                calitp_id_in_latest
-            FROM gtfs_views_staging.calitp_feeds
-            WHERE calitp_id_in_latest
-        )
-
-        SELECT
-            t1.* EXCEPT(calitp_deleted_at)
-        FROM gtfs_views_staging.{table}_clean t1
-        LEFT JOIN is_in_latest t2
-            USING(calitp_itp_id, calitp_url_number)
-        WHERE t1.calitp_deleted_at = '2099-01-01'
-        AND t2.calitp_id_in_latest
-"""
-
-
 # Airtable =============================================================
 
 # This is a helper to generate SqlToWarehouse operator tasks
@@ -257,6 +234,5 @@ data_infra_macros = {
     "scd_join": scd_join,
     "sql_enrich_duplicates": sql_enrich_duplicates,
     "sql_airtable_mapping": airtable_mapping_generate_sql,
-    "get_latest_schedule_data": get_latest_schedule_data,
     "is_development": is_development_macro,
 }
