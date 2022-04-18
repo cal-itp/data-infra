@@ -239,6 +239,20 @@ models:
       Each row is a cleaned row from a trips.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#tripstxt.
+  - name: gtfs_schedule_data_feed_trip_stops_latest
+    description: |
+      Trip / route / stop combinations that were active (not yet deleted)
+      as of the last time this table was generated. Primary key is
+      composite of feed_key, route_key, trip_key, stop_time_key, and
+      stop_key.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - route_key
+            - trip_key
+            - stop_time_key
+            - stop_key
   - name: gtfs_schedule_fact_daily_feeds
     description: |
       Each row is a feed + day pair, indicating information about that feed
