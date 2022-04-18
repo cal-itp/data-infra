@@ -52,4 +52,6 @@ def validation_notice_fields():
         {"code": code_fields.keys(), "field": list(map(list, code_fields.values()))}
     ).explode("field")
 
-    write_table(validation_json_fields, "views.validation_notice_fields")
+    write_table(
+        validation_json_fields, "gtfs_schedule_history.validation_notice_fields"
+    )
