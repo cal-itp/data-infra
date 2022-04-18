@@ -18,8 +18,14 @@ Hashed value of all GTFS columns plus calitp_itp_id and calitp_url_number (i.e.,
 
 {% enddocs %}
 
-{% docs column_schedule_file_key %}
+{% docs column_schedule_key %}
 
 Hashed value of all GTFS columns plus calitp_itp_id, calitp_url_number, and calitp_extracted_at (i.e., versioned hash)
+
+{% enddocs %}
+
+{% docs column_schedule_file_key %}
+
+GTFS file name (like "agency.txt")
 
 {% enddocs %}

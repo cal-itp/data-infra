@@ -50,7 +50,7 @@ models:
         tests:
           - not_null
       - name: agency_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
           - unique
@@ -81,7 +81,7 @@ models:
         tests:
           - not_null
       - name: attribution_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
           - unique
@@ -112,7 +112,7 @@ models:
         tests:
           - not_null
       - name: calendar_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
           - unique
@@ -169,7 +169,7 @@ models:
         tests:
           - not_null
       - name: fare_attribute_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
           - unique
@@ -200,7 +200,7 @@ models:
         tests:
           - not_null
       - name: fare_rule_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
           - unique
@@ -231,7 +231,7 @@ models:
         tests:
           - not_null
       - name: feed_info_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
           - unique
@@ -262,7 +262,7 @@ models:
         tests:
           - not_null
       - name: frequency_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
           - unique
@@ -293,7 +293,7 @@ models:
         tests:
           - not_null
       - name: level_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
           - unique
@@ -324,7 +324,7 @@ models:
         tests:
           - not_null
       - name: pathway_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
           - unique
@@ -355,7 +355,7 @@ models:
         tests:
           - not_null
       - name: route_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
           - unique
@@ -386,7 +386,7 @@ models:
         tests:
           - not_null
       - name: shape_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
           - unique
@@ -417,7 +417,7 @@ models:
         tests:
           - not_null
       - name: stop_time_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
           - unique
@@ -448,7 +448,7 @@ models:
         tests:
           - not_null
       - name: stop_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
           - unique
@@ -479,7 +479,7 @@ models:
         tests:
           - not_null
       - name: transfer_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
           - unique
@@ -510,7 +510,7 @@ models:
         tests:
           - not_null
       - name: translation_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
           - unique
@@ -541,7 +541,7 @@ models:
         tests:
           - not_null
       - name: trip_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
           - unique
