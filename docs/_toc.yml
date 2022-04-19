@@ -20,6 +20,7 @@ parts:
         - file: analytics_tools/saving_code
         - file: analytics_tools/storing_data
         - file: analytics_tools/data_catalogs
+        - file: analytics_tools/knowledge_sharing
       - file: analytics_new_analysts/overview
         sections:
         - file: analytics_new_analysts/data-analysis-intro
@@ -30,7 +31,6 @@ parts:
         - file: analytics_new_analysts/spatial-analysis-intro
         - file: analytics_new_analysts/spatial-analysis-intermediate
         - file: analytics_new_analysts/spatial-analysis-advanced
-        - file: analytics_new_analysts/useful-links
       - file: warehouse/overview
         sections:
         - file: warehouse/table_naming
