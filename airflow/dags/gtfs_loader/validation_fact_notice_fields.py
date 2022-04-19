@@ -1,7 +1,7 @@
 # ---
 # python_callable: validation_notice_fields
-# dependencies:
-#   - validation_dim_codes
+# external_dependencies:
+#   - gtfs_downloader: validate_gcs_bucket
 # ---
 
 """Fetch all fields associated to a validator code. Load a table with code,
