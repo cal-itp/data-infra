@@ -95,3 +95,39 @@ models:
           - not_null
       - name: file_count_hr_0
         description: Count of files extracted during hour 0 UTC
+  - name: gtfs_rt_fact_daily_feeds
+    description: |
+      Each row represents a GTFS realtime feed (combination of ITP ID, URL number,
+      and realtime data type) that was present in our extraction list on the given date.
+      Note that a feed can be added to the  list at any point in the day
+      and this table contains no information about extractions success or failure;
+      i.e., a feed may be listed here even if no data was successfully pulled,
+      or if only partial data was pulled.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - calitp_itp_id
+            - calitp_url_number
+            - date
+            - type
+    columns:
+      - name: date
+        description: Date for which this feed was present in our extraction list
+        tests:
+          - not_null
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+        tests:
+          - not_null
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+        tests:
+          - not_null
+      - name: url
+        description: Feed URL
+        tests:
+          - not_null
+      - name: type
+        description: GTFS realtime type (service_alerts, trip_updates, or vehicle_positions)
+        tests:
+          - not_null
