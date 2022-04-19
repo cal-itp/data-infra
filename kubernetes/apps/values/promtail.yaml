@@ -1,2 +1,8 @@
 config:
   lokiAddress: http://loki.monitoring-loki.svc.cluster.local:3100/loki/api/v1/push
+
+tolerations:
+
+  # run on all nodes by default
+  - operator: Exists
+    effect: NoSchedule
