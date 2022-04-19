@@ -1,0 +1,2 @@
+config:
+  lokiAddress: http://loki.monitoring-loki.svc.cluster.local
