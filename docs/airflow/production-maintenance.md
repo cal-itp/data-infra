@@ -30,11 +30,8 @@ DAGs are listed in alphabetical order, as they appear in the Airflow UI.
 `amplitude_benefits` | Yes | No | **🔂 No** | N/A | |
 `gtfs_downloader` | **⛔ No*** | No | **🔂 No** | N/A | Tasks downstream of `download_data` can safely be rerun after 24 hours |
 `gtfs_loader` | Yes | No | **🔂 No** | `gtfs_downloader`* | Technically also depends on `gtfs_schedule_history`, not usually an issue |
-`gtfs_schedule` | Yes | No | Yes* | `gtfs_views_staging` | Latest-only data (but depends on `gtfs_views_staging` for data cleaning) |
 `gtfs_schedule_history` | N/A | N/A | N/A | N/A | Once-only (defines external tables); does not generally need to be re-run |
 `gtfs_schedule_history2` | Yes | **📆 Yes** | **🔂 No** | `gtfs_loader` | |
-`gtfs_views` | Yes | No | Yes | `gtfs_views_staging` | |
-`gtfs_views_staging` | Yes | No | Yes | `gtfs_schedule_history2` | |
 `payments_loader` | Yes | No | Yes | N/A | |
 `payments_views` | Yes | No | Yes | `payments_views_staging`| |
 `payments_views_staging` | Yes | No | Yes | `payments_loader` | |
@@ -43,6 +40,7 @@ DAGs are listed in alphabetical order, as they appear in the Airflow UI.
 `rt_timestamp_fix` | N/A | N/A | N/A | N/A | DAG is deprecated but still appears in Airflow UI |
 `rt_views` | Yes | No | Yes | `rt_loader_files`, `gtfs_views` | |
 `sandbox` | N/A | N/A | N/A | N/A | Testing only; does not need to be re-run |
+`transform_warehouse` | Yes | No | Yes | N/A | Runs dbt warehouse |
 
 ## Dependency diagram
 
@@ -55,15 +53,13 @@ In addition to the tabular view above, here is a diagram representing DAG depend
       gtfs_downloader-->gtfs_loader;
       gtfs_schedule_history-->gtfs_loader;
       gtfs_loader-->gtfs_schedule_history2;
-      gtfs_schedule_history2-->gtfs_views_staging;
-      gtfs_views_staging-->gtfs_views;
-      gtfs_views_staging-->gtfs_schedule;
       payments_loader-->payments_views_staging;
       payments_views_staging-->payments_views;
       gtfs_loader-->rt_loader;
       rt_loader_files-->rt_views;
       gtfs_views-->rt_views;
       sandbox;
+      transform_warehouse;
 ```
 
 ## Task-level considerations
