@@ -42,3 +42,6 @@ models:
 
     gtfs_schedule_latest_only:
       schema: gtfs_schedule
+
+    gtfs_views:
+      schema: views

@@ -120,3 +120,13 @@ models:
         description: The end of the metric_period (inclusive). For rolling windows, this is the metric_date. For calendar, this is metric_date - 1 day (E.g. Jan 1st describes December, etc..)
         tests:
           - not_null
+  - name: gtfs_schedule_dim_feeds
+    description: |
+      Slowly-changing dimension table of all Cal-ITP feeds.
+      Contents are a combination of Cal-ITP metadata and, where available,
+      data from feed_info.txt.
+    columns:
+      - name: feed_key
+      - tests:
+        - not_null
+        - unique
