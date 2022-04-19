@@ -17,18 +17,6 @@ jupyterhub:
     cpu:
       limit: 1
       guarantee: 0.5
-    storage:
-      extraVolumes:
-      - name: gcloud-auth
-        projected:
-          sources:
-            - secret:
-                name: jupyterhub-gcloud-service-key
-      extraVolumeMounts:
-        - name: gcloud-auth
-          mountPath: /usr/local/secrets
-    extraEnv:
-      CALITP_SERVICE_KEY_PATH: /usr/local/secrets/service-key.json
     lifecycleHooks:
       postStart:
         exec:
