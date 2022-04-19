@@ -38,7 +38,7 @@ DAGs are listed in alphabetical order, as they appear in the Airflow UI.
 `rt_loader` | Yes | No | **🔂 No** | `gtfs_loader` | |
 `rt_loader_files` | Yes | No | **🔂 No** | N/A | |
 `rt_timestamp_fix` | N/A | N/A | N/A | N/A | DAG is deprecated but still appears in Airflow UI |
-`rt_views` | Yes | No | Yes | `rt_loader_files`, `gtfs_views` | |
+`rt_views` | Yes | No | Yes | | |
 `sandbox` | N/A | N/A | N/A | N/A | Testing only; does not need to be re-run |
 `transform_warehouse` | Yes | No | Yes | N/A | Runs dbt warehouse |
 
@@ -56,8 +56,6 @@ In addition to the tabular view above, here is a diagram representing DAG depend
       payments_loader-->payments_views_staging;
       payments_views_staging-->payments_views;
       gtfs_loader-->rt_loader;
-      rt_loader_files-->rt_views;
-      gtfs_views-->rt_views;
       sandbox;
       transform_warehouse;
 ```
