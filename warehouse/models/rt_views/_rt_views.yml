@@ -7,7 +7,15 @@ sources:
     schema: gtfs_rt
     tables:
       - name: calitp_files
-        description: List of RT files produced by rt_loader_files.calitp_files_process Airflow DAG task, loaded into BigQuery via rt_loader_files.external_calitp_files DAG task (defines external table).
+        description: |
+          List of RT files produced by
+          rt_loader_files.calitp_files_process Airflow DAG task,
+          loaded into BigQuery via
+          rt_loader_files.external_calitp_files DAG task
+          (defines external table).
+      - name: validation_service_alerts
+      - name: validation_trip_updates
+      - name: validation_vehicle_positions
 
 
 models:
@@ -102,7 +110,8 @@ models:
       Note that a feed can be added to the  list at any point in the day
       and this table contains no information about extractions success or failure;
       i.e., a feed may be listed here even if no data was successfully pulled,
-      or if only partial data was pulled.
+      or if only partial data was pulled. Primary key is composite of
+      calitp_itp_id, calitp_url_number, date, and type.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -129,5 +138,44 @@ models:
           - not_null
       - name: type
         description: GTFS realtime type (service_alerts, trip_updates, or vehicle_positions)
+        tests:
+          - not_null
+  - name: gtfs_rt_fact_daily_validation_errors
+    description: |
+      A daily roll-up of validation errors
+      per calitp_itp_id/calitp_url_number/feed type/error.
+      Primary key is composite of calitp_itp_id,
+      calitp_url_number, rt_feed_type, error_id, and date.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - calitp_itp_id
+            - calitp_url_number
+            - rt_feed_type
+            - error_id
+            - date
+    columns:
+      - name: date
+        description: Date for which this feed was present in our extraction list
+        tests:
+          - not_null
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+        tests:
+          - not_null
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+        tests:
+          - not_null
+      - name: rt_feed_type
+        description: GTFS realtime type (service_alerts, trip_updates, or vehicle_positions)
+        tests:
+          - not_null
+      - name: error_id
+        description: The GTFS Realtime validation error ID (ex. "E001")
+        tests:
+          - not_null
+      - name: occurrences
+        description: The number of occurrences for this combination.
         tests:
           - not_null
