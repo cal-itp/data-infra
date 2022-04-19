@@ -22,6 +22,7 @@ jobs:
     - name: 'Delete orphaned release candidates'
       run: |
         while read candidate_sha1 candidate_ref; do
+          test "$candidate_ref" || continue
           source_branch=${candidate_ref#refs/heads/candidates/}
           source_ref=refs/heads/$source_branch
           if ! [[ $(git ls-remote "$REPO_URL" "$source_ref") ]]; then
