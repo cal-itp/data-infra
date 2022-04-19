@@ -39,3 +39,6 @@ models:
 
     gtfs_views_staging:
       schema: gtfs_views_staging
+
+    gtfs_schedule_latest_only:
+      schema: gtfs_schedule
