@@ -1,0 +1,166 @@
+[kustomize:kubernetes/apps/overlays/gtfs-rt-archive-prod]
+
+diff -u -N /tmp/LIVE-1330925277/apps.v1.Deployment.gtfs-rt.gtfs-rt-archive /tmp/MERGED-1102411541/apps.v1.Deployment.gtfs-rt.gtfs-rt-archive
+--- /tmp/LIVE-1330925277/apps.v1.Deployment.gtfs-rt.gtfs-rt-archive	2022-01-26 17:54:45.211239355 +0000
++++ /tmp/MERGED-1102411541/apps.v1.Deployment.gtfs-rt.gtfs-rt-archive	2022-01-26 17:54:45.215239359 +0000
+@@ -6,13 +6,67 @@
+     kubectl.kubernetes.io/last-applied-configuration: |
+       {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"name":"gtfs-rt-archive"},"name":"gtfs-rt-archive","namespace":"gtfs-rt"},"spec":{"replicas":1,"selector":{"matchLabels":{"name":"gtfs-rt-archive"}},"strategy":{"type":"Recreate"},"template":{"metadata":{"labels":{"name":"gtfs-rt-archive"}},"spec":{"containers":[{"envFrom":[{"configMapRef":{"name":"archiver-app-vars"}},{"configMapRef":{"name":"archiver-channel-vars"}}],"image":"us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:1.2-r2","name":"app","volumeMounts":[{"mountPath":"/secrets/agencies-data","name":"agencies-data"},{"mountPath":"/secrets/gcs-upload-svcacct","name":"gcs-upload-svcacct"}]}],"volumes":[{"name":"agencies-data","secret":{"secretName":"agencies-data"}},{"name":"gcs-upload-svcacct","secret":{"secretName":"gcs-upload-svcacct"}}]}}}}
+   creationTimestamp: "2021-07-26T20:39:07Z"
+-  generation: 89
++  generation: 90
+   labels:
+     name: gtfs-rt-archive
+   managedFields:
+   - apiVersion: apps/v1
+     fieldsType: FieldsV1
+     fieldsV1:
++      f:spec:
++        f:strategy:
++          f:type: {}
++    manager: kubectl-edit
++    operation: Update
++    time: "2021-10-04T14:32:01Z"
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:spec:
++        f:template:
++          f:metadata:
++            f:annotations:
++              .: {}
++              f:kubectl.kubernetes.io/restartedAt: {}
++    manager: kubectl-rollout
++    operation: Update
++    time: "2022-01-20T19:12:34Z"
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:annotations:
++          f:deployment.kubernetes.io/revision: {}
++      f:status:
++        f:availableReplicas: {}
++        f:conditions:
++          .: {}
++          k:{"type":"Available"}:
++            .: {}
++            f:lastTransitionTime: {}
++            f:lastUpdateTime: {}
++            f:message: {}
++            f:reason: {}
++            f:status: {}
++            f:type: {}
++          k:{"type":"Progressing"}:
++            .: {}
++            f:lastTransitionTime: {}
++            f:lastUpdateTime: {}
++            f:message: {}
++            f:reason: {}
++            f:status: {}
++            f:type: {}
++        f:observedGeneration: {}
++        f:readyReplicas: {}
++        f:replicas: {}
++        f:updatedReplicas: {}
++    manager: kube-controller-manager
++    operation: Update
++    time: "2022-01-26T15:16:50Z"
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
+       f:metadata:
+         f:annotations:
+           .: {}
+@@ -41,7 +95,14 @@
+                 f:image: {}
+                 f:imagePullPolicy: {}
+                 f:name: {}
+-                f:resources: {}
++                f:resources:
++                  .: {}
++                  f:limits:
++                    .: {}
++                    f:memory: {}
++                  f:requests:
++                    .: {}
++                    f:memory: {}
+                 f:terminationMessagePath: {}
+                 f:terminationMessagePolicy: {}
+                 f:volumeMounts:
+@@ -77,61 +138,7 @@
+                   f:secretName: {}
+     manager: kubectl-client-side-apply
+     operation: Update
+-    time: "2021-08-31T14:48:10Z"
+-  - apiVersion: apps/v1
+-    fieldsType: FieldsV1
+-    fieldsV1:
+-      f:spec:
+-        f:strategy:
+-          f:type: {}
+-    manager: kubectl-edit
+-    operation: Update
+-    time: "2021-10-04T14:32:01Z"
+-  - apiVersion: apps/v1
+-    fieldsType: FieldsV1
+-    fieldsV1:
+-      f:spec:
+-        f:template:
+-          f:metadata:
+-            f:annotations:
+-              .: {}
+-              f:kubectl.kubernetes.io/restartedAt: {}
+-    manager: kubectl-rollout
+-    operation: Update
+-    time: "2022-01-20T19:12:34Z"
+-  - apiVersion: apps/v1
+-    fieldsType: FieldsV1
+-    fieldsV1:
+-      f:metadata:
+-        f:annotations:
+-          f:deployment.kubernetes.io/revision: {}
+-      f:status:
+-        f:availableReplicas: {}
+-        f:conditions:
+-          .: {}
+-          k:{"type":"Available"}:
+-            .: {}
+-            f:lastTransitionTime: {}
+-            f:lastUpdateTime: {}
+-            f:message: {}
+-            f:reason: {}
+-            f:status: {}
+-            f:type: {}
+-          k:{"type":"Progressing"}:
+-            .: {}
+-            f:lastTransitionTime: {}
+-            f:lastUpdateTime: {}
+-            f:message: {}
+-            f:reason: {}
+-            f:status: {}
+-            f:type: {}
+-        f:observedGeneration: {}
+-        f:readyReplicas: {}
+-        f:replicas: {}
+-        f:updatedReplicas: {}
+-    manager: kube-controller-manager
+-    operation: Update
+-    time: "2022-01-26T15:16:50Z"
++    time: "2022-01-26T17:54:45Z"
+   name: gtfs-rt-archive
+   namespace: gtfs-rt
+   resourceVersion: "172845600"
+@@ -163,7 +170,11 @@
+         image: us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:1.2-r2
+         imagePullPolicy: IfNotPresent
+         name: app
+-        resources: {}
++        resources:
++          limits:
++            memory: 6656Mi
++          requests:
++            memory: 6656Mi
+         terminationMessagePath: /dev/termination-log
+         terminationMessagePolicy: File
+         volumeMounts:
