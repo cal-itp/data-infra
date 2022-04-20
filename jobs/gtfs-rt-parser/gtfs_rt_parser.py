@@ -214,12 +214,13 @@ def main(
         structlog.get_logger().warn(f"limit of {limit} feeds was set")
         feed_files = feed_files[:limit]
 
-    # gcfs does not seem to play nicely with multiprocessing right now
-    # https://github.com/fsspec/gcsfs/issues/379
     if progress:
         pbar = tqdm(total=len(feed_files))
     else:
         pbar = None
+
+    # gcfs does not seem to play nicely with multiprocessing right now, so use threads :(
+    # https://github.com/fsspec/gcsfs/issues/379
     with ThreadPoolExecutor(max_workers=threads) as pool:
         args = [
             (
@@ -233,8 +234,9 @@ def main(
 
     if exceptions:
         msg = f"got {len(exceptions)} exceptions from processing {len(feed_files)} feeds: {exceptions}"
-        typer.echo(msg, err=True)
+        typer.secho(msg, err=True, fg=typer.colors.RED)
         raise RuntimeError(msg)
+
     typer.secho("fin.", fg=typer.colors.MAGENTA)
 
 
