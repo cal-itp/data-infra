@@ -146,22 +146,28 @@ def parse_file(bucket: str, rt_file: RTFile):
     with tempfile.TemporaryDirectory() as tmp_dir:
         parsed = parse_pb(rt_file.path, open_func=fs.open)
 
+        if not parsed or "entity" not in parsed:
+            typer.secho(
+                f"WARNING: no records found in {str(rt_file.path)}",
+                fg=typer.colors.YELLOW,
+            )
+            return
+
         gzip_fname = str(tmp_dir + "/" + "temporary" + EXTENSION)
         written = 0
 
         with gzip.open(gzip_fname, "w") as gzipfile:
-            if parsed and "entity" in parsed:
-                for record in parsed["entity"]:
-                    record.update(
-                        {
-                            "header": parsed["header"],
-                            "metadata": rt_file.json(),
-                        }
-                    )
-                    gzipfile.write((json.dumps(record) + "\n").encode("utf-8"))
-                    written += 1
+            for record in parsed["entity"]:
+                record.update(
+                    {
+                        "header": parsed["header"],
+                        "metadata": rt_file.json(),
+                    }
+                )
+                gzipfile.write((json.dumps(record) + "\n").encode("utf-8"))
+                written += 1
 
-        out_path = rt_file.hive_path(bucket)
+        out_path = f"{rt_file.hive_path(bucket)}{EXTENSION}"  # probably a better way to do this
         typer.echo(f"writing {written} lines from {gzip_fname} to {out_path}")
         put_with_retry(fs, gzip_fname, out_path)
 
@@ -217,6 +223,7 @@ def main(
         msg = f"got {len(exceptions)} exceptions from processing {len(feed_files)} feeds: {exceptions}"
         typer.echo(msg, err=True)
         raise RuntimeError(msg)
+    typer.secho("fin.", fg=typer.colors.MAGENTA)
 
 
 if __name__ == "__main__":
