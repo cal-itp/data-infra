@@ -1,0 +1,831 @@
+version: 2
+
+models:
+  - name: dim_date
+    description: |
+      Each row is a date.
+    columns:
+      - name: id
+        description: Date formatted as string for identification, in "YYYY-MM-DD" format, ex. "2022-03-31".
+        tests:
+          - not_null
+          - unique
+      - name: full_date
+        description: Date formatted as a date; formatted as YYYY-MM-DD, ex. 2022-03-31.
+        tests:
+          - not_null
+      - name: year
+        description: Year portion of date as an integer, ex. 2022.
+        tests:
+          - not_null
+      - name: year_week
+        description: Week number within the year (integer between 0 and 53 -- see BigQuery date function EXTRACT WEEK documentation for details)
+        tests:
+          - not_null
+      - name: year_day
+        description: Day number within the year (integer between 1 and 366)
+        tests:
+          - not_null
+      - name: fiscal_year
+        description: Year portion of date as an integer, ex. 2022.
+        tests:
+          - not_null
+      - name: fiscal_qtr
+        description: Date's quarter (string "1", "2", "3", or "4"; see BigQuery FORMAT DATE %Q documentation for details)
+        tests:
+          - not_null
+      - name: month
+        description: Date's month number (integer from 1 to 12; see BigQuery date function EXTRACT MONTH documentation for details)
+        tests:
+          - not_null
+      - name: month_name
+        description: Date's month name (string ex. "January"; see BigQuery FORMAT DATE %B documentation for details)
+        tests:
+          - not_null
+      - name: week_day
+        description: Date's day number within the week (string value from "0" to "6" with "0" corresponding to Sunday; see BigQuery FORMAT DATE %w documentation for details)
+        tests:
+          - not_null
+      - name: day_name
+        description: Date's day name (string ex. "Monday"; see BigQuery FORMAT DATE %A documentation for details)
+        tests:
+          - not_null
+      - name: day_is_weekday
+        description: Integer value 1 when day_name is "Saturday" or "Sunday", else integer value 0.
+        tests:
+          - not_null
+      - name: is_quarter_start
+        description: Boolean indicator for whether the date is first day of quarter (true indicates one of January 1, April 1, July 1, October 1)
+        tests:
+          - not_null
+      - name: is_month_start
+        description: Boolean indicator for whether the date is first day of its month (true indicates 1st day of month)
+        tests:
+          - not_null
+      - name: is_in_past
+        description: |
+          Boolean indicator for whether the given date was earlier than
+          the date that the table was most recently generated;
+          true indicates that given date is before the date on which the table was last generated.
+        tests:
+          - not_null
+      - name: is_in_past_or_present
+        description: |
+          Boolean indicator for whether the given date was earlier than or equal to
+          the date that the table was most recently generated;
+          true indicates that given date is before or equal to the date on which the table was last generated.
+        tests:
+          - not_null
+      - name: is_in_future
+        description: |
+          Boolean indicator for whether the given date was later than
+          the date that the table was most recently generated;
+          true indicates that given date is after the date on which the table was last generated.
+        tests:
+          - not_null
+      - name: is_gtfs_schedule_range
+        description: |
+          Boolean indicator for whether the given date is after 2021-04-15
+          (the date that Cal-ITP started collecting GTFS schedule data) and
+          before or equal to the date that the table was most recently generate;
+          true indicates that given date is strictly after 2021-04-15 and
+          earlier than or equal to the date on which the table was last generated.
+        tests:
+          - not_null
+  - name: dim_metric_date
+    description: |
+      Each row is a date range (for example, daily, monthly, rolling 7 day period) over which a metric can be calculated.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - metric_period
+            - metric_date
+    columns:
+      - name: metric_period
+        description: The specific range of dates used (e.g. rolling_7, rolling_28, day, month, quarter)
+        tests:
+          - not_null
+      - name: metric_date
+        description: The date the metric_period describes. For example, rolling_7 goes from metric_date to 7 days earlier.
+        tests:
+          - not_null
+      - name: metric_type
+        description: The category of metric_period (rolling, daily, calendar)
+        tests:
+          - not_null
+      - name: start_date
+        description: The beginning of the metric_period (inclusive). Note that for daily this is NULL, so data for the same day isn't selected twice
+      - name: end_date
+        description: The end of the metric_period (inclusive). For rolling windows, this is the metric_date. For calendar, this is metric_date - 1 day (E.g. Jan 1st describes December, etc..)
+        tests:
+          - not_null
+  - name: gtfs_schedule_dim_feeds
+    description: |
+      Slowly-changing dimension table of all Cal-ITP feeds.
+      Contents are a combination of Cal-ITP metadata and, where available,
+      data from feed_info.txt.
+    columns:
+      - name: feed_key
+        tests:
+          - not_null
+          - unique
+  - name: gtfs_schedule_dim_files
+    description: |
+      Dimension table of all files that have been encountered in Cal-ITP
+      GTFS downloads, with indicators for whether they are loaded into a
+      table in the warehouse and whether they are required by the GTFS
+      specification.
+    columns:
+      - name: file_key
+        description: '{{ doc("column_schedule_file_key") }}'
+        tests:
+          - not_null
+          - unique
+  - name: gtfs_schedule_dim_pathways
+    description: |
+      Slowly-changing dimension table of pathways.txt data.
+      Each row is a cleaned row from a pathways.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#pathwaystxt.
+  - name: gtfs_schedule_dim_routes
+    description: |
+      Slowly-changing dimension table of routes.txt data with
+      some agency.txt data appended.
+      Each row is a cleaned row from a routes.txt file with cleaned data
+      from agency.txt appended.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#routestxt and
+      https://gtfs.org/reference/static#agencytxt.
+    columns:
+      - name: route_key
+        description: |
+          This route_key is different from the route_key in
+          gtfs_schedule; it is actually a composite route-agency key.
+        tests:
+          - not_null
+          - unique
+  - name: gtfs_schedule_dim_shapes
+    description: |
+      Slowly-changing dimension table of shapes.txt data.
+      Each row is a cleaned row from a shapes.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#shapestxt.
+  - name: gtfs_schedule_dim_shapes_geo
+    description: |
+      Slowly-changing dimension table of shapes created from shapes.txt
+      data. Each row is a shape. Primary key is composite of
+      calitp_itp_id, calitp_url_number, calitp_extracted_at, and shape_id.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - calitp_extracted_at
+            - calitp_itp_id
+            - calitp_url_number
+            - shape_id
+    columns:
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+      - name: calitp_extracted_at
+        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
+        tests:
+          - not_null
+      - name: calitp_deleted_at
+        description: '{{ doc("column_schedule_calitp_deleted_at") }}'
+        tests:
+          - not_null
+      - name: shape_id
+        description: shape_id from shapes.txt file.
+        tests:
+          - not_null
+      - name: pt_array
+        description: Ordered array of WKT points that make up the shape.
+        tests:
+          - not_null
+  - name: gtfs_schedule_dim_stop_times
+    description: |
+      Slowly-changing dimension table of stop_times.txt data.
+      Each row is a cleaned row from a stop_times.txt file,
+      with a few additional transformed columns added.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#shapestxt.
+    columns:
+      - name: stop_sequence_rank
+        description: |
+          Rank within the stop sequence, starting from 1 and increasing
+          with step size 1. So while the raw stop_sequence values may be discontinuous
+          (ex. 1, 10, 15), the stop_sequence_rank values will increase
+          continuously (ex. 1, 2, 3).
+      - name: arrival_ts
+        description: |
+          arrival_time as a count of seconds starting from midnight.
+          For example, arrival_time "00:01:30" corresponds to
+          arrival_ts of "90".
+      - name: departure_ts
+        description: |
+          departure_time as a count of seconds starting from midnight.
+          For example, departure_time "00:01:30" corresponds to
+          departure_ts of "90".
+  - name: gtfs_schedule_dim_stops
+    description: |
+      Slowly-changing dimension table of stops.txt data.
+      Each row is a cleaned row from a stops.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#stopstxt.
+  - name: gtfs_schedule_dim_trips
+    description: |
+      Slowly-changing dimension table of trips.txt data.
+      Each row is a cleaned row from a trips.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#tripstxt.
+  - name: gtfs_schedule_data_feed_trip_stops_latest
+    description: |
+      Trip / route / stop combinations that were active (not yet deleted)
+      as of the last time this table was generated. Primary key is
+      composite of feed_key, route_key, trip_key, stop_time_key, and
+      stop_key.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - route_key
+            - trip_key
+            - stop_time_key
+            - stop_key
+  - name: gtfs_schedule_fact_daily_feeds
+    description: |
+      Each row is a feed + day pair, indicating information about that feed
+      version's status on that date. Primary key is composite of feed_key
+      and date.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - date
+    columns:
+      - name: feed_key
+        description: '{{ doc("column_schedule_key") }}'
+        tests:
+          - not_null
+      - name: date
+        description: Feed extraction date
+        tests:
+          - not_null
+      - name: is_feed_publish_date_valid
+        description: Whether the feed is valid (active) on this date (boolean)
+      - name: days_until_feed_end_date
+        description: |
+          Number of days between date and feed end date from feed_info.txt (if available)
+          (ex. if date is 2022-01-05 and feed end date is 2022-01-06, this value
+          will be 1); if is_feed_publish_date_valid is False, this may be negative
+          indicating that feed is no longer valid as of date
+      - name: days_from_feed_start_date
+        description: |
+          Number of days between date and feed start date from feed_info.txt (if available)
+          (ex. if date is 2022-01-05 and feed start date is 2022-01-06, this value
+          will be 1); if is_feed_publish_date_valid is False, this may be negative
+          indicating that feed is not yet valid as of date
+      - name: extraction_status
+        description: Indicates whether extraction was successful ('success') or not ('error')
+      - name: parse_error_encountered
+        description: |
+          Whether a fatal error occurred while parsing the feed; only populated
+          for dates where feed updates were parsed (null for dates where no feed
+          updates occurred)
+      - name: raw_gtfs_schedule_url
+        description: URL from which this feed's GTFS schedule data is pulled
+      - name: raw_gtfs_rt_vehicle_positions_url
+        description: URL for this feed's GTFS realtime vehicle positions data, if available
+      - name: raw_gtfs_rt_service_alerts_url
+        description: URL for this feed's GTFS realtime service alerts data, if available
+      - name: raw_gtfs_rt_trip_updates_url
+        description: URL for this feed's GTFS realtime trip updates data, if available
+      - name: days_from_last_schedule_update
+        description: |
+          Days since the feed's contents (the contents of any loadable file
+          within the feed) have changed, relative to date
+  - name: gtfs_schedule_fact_daily_feed_files
+    description: |
+      Each row of this table is a file extracted from a feed on a given day. Note that on days where
+      the extractor failed to download files for a feed, we interpolate by using the previous day's files.
+      This is tracked using the is_interpolated column. Primary key is composite of
+      feed_key, file_key, and date.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - file_key
+            - date
+    columns:
+      - name: feed_key
+        description: '{{ doc("column_schedule_key") }}'
+        tests:
+          - not_null
+      - name: file_key
+        description: '{{ doc("column_schedule_file_key") }}'
+        tests:
+          - not_null
+      - name: date
+        description: Feed extraction date
+        tests:
+          - not_null
+  - name: gtfs_schedule_fact_daily
+    description: |
+      Each row of this table is a daily summary of Cal-ITP GTFS schedule data
+      downloads. Primary key is date.
+    columns:
+      - name: date
+        tests:
+          - not_null
+          - unique
+  - name: gtfs_schedule_fact_daily_feed_routes
+    description: |
+      Each row of this table is a feed/route/day combination, showing
+      when each feed/route combination was active. Primary key is
+      composite of feed_key, route_key, and date.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - route_key
+            - date
+    columns:
+      - name: feed_key
+        description: '{{ doc("column_schedule_key") }}'
+        tests:
+          - not_null
+      - name: route_key
+        description: '{{ doc("column_schedule_key") }}'
+        tests:
+          - not_null
+      - name: date
+        description: Date on which this feed/route combination was active
+        tests:
+          - not_null
+  - name: gtfs_schedule_fact_daily_pathways
+    description: |
+      Each row of this table is a feed/pathway/day combination, showing
+      when each feed/pathway combination was active. Primary key is
+      composite of feed_key, pathway_key, and date.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - pathway_key
+            - date
+    columns:
+      - name: feed_key
+        description: '{{ doc("column_schedule_key") }}'
+        tests:
+          - not_null
+      - name: pathway_key
+        description: '{{ doc("column_schedule_key") }}'
+        tests:
+          - not_null
+      - name: date
+        description: Date on which this feed/pathway combination was active
+        tests:
+          - not_null
+  - name: gtfs_schedule_stg_calendar_long
+    description: |
+      Each row is a cleaned row from calendar.txt made long based on the
+      day of week columns (so for each feed version, instead of one row
+      per service_id, there is one row per service_id / day_name combination).
+      Primary key is composite of calitp_itp_id, calitp_url_number,
+      service_id, day_name, and calitp_extracted_at.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - calitp_itp_id
+            - calitp_url_number
+            - service_id
+            - day_name
+            - calitp_extracted_at
+    columns:
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+        tests:
+          - not_null
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+        tests:
+          - not_null
+      - name: service_id
+        description: service_id value from calendar.txt
+        tests:
+          - not_null
+      - name: day_name
+        description: |
+          monday, tuesday, wednesday, thursday, friday, saturday, sunday
+          (from calendar.txt columns)
+        tests:
+          - not_null
+      - name: calitp_extracted_at
+        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
+        tests:
+          - not_null
+      - name: calitp_deleted_at
+        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
+        tests:
+          - not_null
+  - name: gtfs_schedule_stg_daily_service
+    description: |
+      Each row indicates whether a given service_id was
+      active on the given service_date, based on the most
+      recent feed prior to that service_date. Primary
+      key is composite of calitp_itp_id, calitp_url_number,
+      service_id, and service_date.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - calitp_itp_id
+            - calitp_url_number
+            - service_id
+            - service_date
+    columns:
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+        tests:
+          - not_null
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+        tests:
+          - not_null
+      - name: service_id
+        description: |
+          service_id value from calendar.txt or calendar_dates.txt
+        tests:
+          - not_null
+      - name: service_date
+        description: |
+          Service date
+        tests:
+          - not_null
+  - name: gtfs_schedule_fact_daily_trips
+    description: |
+      Each row is a trip / day combination, where the given trip is
+      active on the given day, enriched with route and stop_time
+      information to give a daily summary. Primary key is composite
+      of trip_key, service_date, and service_id.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - trip_key
+            - service_date
+            - service_id
+    columns:
+      - name: feed_key
+        description: '{{ doc("column_schedule_key") }}'
+        tests:
+          - not_null
+      - name: trip_key
+        description: '{{ doc("column_schedule_key") }}'
+        tests:
+          - not_null
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+      - name: service_id
+        description: |
+          service_id value from calendar.txt / calendar_dates.txt /
+          trips.txt
+        tests:
+          - not_null
+      - name: service_date
+        description: |
+          Service date
+        tests:
+          - not_null
+  - name: gtfs_schedule_fact_daily_feed_stops
+    description: |
+      Each row of this table is a feed/stop/day combination, showing
+      when each feed/stop combination was active. Primary key is
+      composite of feed_key, route_key, and date.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - stop_key
+            - date
+    columns:
+      - name: feed_key
+        description: '{{ doc("column_schedule_key") }}'
+        tests:
+          - not_null
+      - name: stop_key
+        description: '{{ doc("column_schedule_key") }}'
+        tests:
+          - not_null
+      - name: date
+        description: Date on which this feed/stop combination was active
+        tests:
+          - not_null
+  - name: gtfs_schedule_fact_daily_service
+    description: |
+      Each row is a feed / service / day combination, where the given
+      service is active on the given day, with a summary of the service's
+      coverage on the given day.
+      Primary key is composite of feed_key, service_date, and
+      service_id.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - service_date
+            - service_id
+    columns:
+      - name: feed_key
+        description: '{{ doc("column_schedule_key") }}'
+        tests:
+          - not_null
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+      - name: service_id
+        description: |
+          service_id value from calendar.txt / calendar_dates.txt /
+          trips.txt
+        tests:
+          - not_null
+      - name: service_date
+        description: |
+          Service date
+        tests:
+          - not_null
+  - name: gtfs_schedule_fact_day_of_week_service_monthly_comparison
+    description: |
+      Compares the median total service hours for a given ITP ID +
+      URL + day of the week to the last available month to
+      identify anomalies. Primary key is composite of
+      calitp_itp_id, calitp_url_number, metric_day_of_week,
+      metric_month, metric_year.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - calitp_itp_id
+            - calitp_url_number
+            - metric_day_of_week
+            - metric_month
+            - metric_year
+    columns:
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+        tests:
+          - not_null
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+        tests:
+          - not_null
+      - name: metric_year
+        description: |
+          The year of the month for which the month-over-month ratio is
+          being calculated
+        tests:
+          - not_null
+      - name: metric_month
+        description: |
+          The month for which the month-over-month ratio is being
+          calculated
+        tests:
+          - not_null
+      - name: metric_day_of_week
+        description: |
+          The day of the week for which the ratio is calculated;
+          1 = Sunday (from BigQuery date standard)
+        tests:
+          - not_null
+      - name: metric_median
+        description: |
+          Median total service hours (across all service_id values,
+          calculated from gtfs_schedule_fact_daily_service)
+      - name: prior_month
+        description: |
+          The prior month against which the current month is being
+          compared; months may not be consecutive if there was no
+          service for a given day of the week in a given month
+          (so, if there is data for August and none again until
+          November, the November data will be compared to August)
+      - name: prior_year
+        description: |
+          The year of the prior month against which the current month
+          is being compared
+      - name: metric_service_hour_ratio_mom
+        description: |
+          metric_median for the current month divided by
+          metric_median for the prior month
+  - name: gtfs_schedule_fact_route_id_changes
+    description: |
+      Calculates route ID changes by month by feed. Primary key
+      is composite of feed_key, metric_period, metric_date, and
+      change_status.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - metric_period
+            - metric_date
+            - change_status
+    columns:
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+      - name: feed_key
+        description: |
+          feed_key for the feed from this calitp_itp_id + calitp_url_number
+          that was active on metric_date
+        tests:
+          - not_null
+      - name: metric_period
+        tests:
+          - not_null
+      - name: metric_date
+        tests:
+          - not_null
+      - name: change_status
+        tests:
+          - not_null
+  - name: gtfs_schedule_fact_stop_id_changes
+    description: |
+      Calculates stop ID changes by month by feed. Primary key
+      is composite of feed_key, metric_period, metric_date, and
+      change_status.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - metric_period
+            - metric_date
+            - change_status
+    columns:
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+      - name: feed_key
+        description: |
+          feed_key for the feed from this calitp_itp_id + calitp_url_number
+          that was active on metric_date
+        tests:
+          - not_null
+      - name: metric_period
+        tests:
+          - not_null
+      - name: metric_date
+        tests:
+          - not_null
+      - name: change_status
+        tests:
+          - not_null
+  - name: gtfs_schedule_index_feed_trip_stops
+    description: |
+      Feed, route, trip, stop_time, stop combinations with validity
+      dates. Primary key is composite of feed_key, route_key, trip_key,
+      stop_time_key, and stop_key.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - route_key
+            - trip_key
+            - stop_time_key
+            - stop_key
+  - name: reports_gtfs_schedule_index
+    description: |
+      Each row is a feed from agencies.yml (e.g. itp id, and url number), and includes
+      date ranges for reports, and indicators for things that might break a report.
+      For example, whether an agency has a feed_info.txt in their data in a given
+      reporting period.
+      Primary key is composite of publish_date, calitp_itp_id,
+      and calitp_url_number.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - publish_date
+            - calitp_itp_id
+            - calitp_url_number
+    columns:
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+        tests:
+          - not_null
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+        tests:
+          - not_null
+      - name: publish_date
+        description: |
+          Date a report will be published (e.g. June 1st reports
+          for the month of May)
+        tests:
+          - not_null
+      - name: date_start
+        description: The beginning of the month being reported
+      - name: date_end
+        description: The end of the month being reported
+      - name: has_feed_info
+        description: |
+          Whether the most recent (date_end) feed for a month
+          has feed_info.txt
+      - name: use_for_report
+        description: |
+          Whether to use to generate a report for this feed on
+          this date
+  - name: reports_weekly_file_checks
+    description: |
+      Each row is a week / feed / file combination, showing whether
+      the given feed contained the given file in the given week. Primary
+      key is composite of feed_key, date, and file_key.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - date
+            - file_key
+    columns:
+      - name: feed_key
+        description: '{{ doc("column_schedule_key") }}'
+        tests:
+          - not_null
+      - name: date
+        description: The Sunday beginning the week that is being evaluated
+        tests:
+          - not_null
+      - name: file_key
+        description: '{{ doc("column_schedule_file_key") }}'
+        tests:
+          - not_null
+  - name: validation_dim_codes
+    description: |
+      Each row is a validation code and its severity, as encountered in the
+      gtfs_views_staging.validation_notices_clean table.
+      Primary key is composite of code and severity.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - code
+            - severity
+    columns:
+      - name: code
+        tests:
+          - not_null
+      - name: severity
+        tests:
+          - not_null
+  - name: validation_fact_daily_feed_codes
+    description: |
+      Summary of daily validation notices per feed and code. Primary key
+      is composite of feed_key, code, and date.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - code
+            - date
+    columns:
+      - name: feed_key
+        description: '{{ doc("column_schedule_key") }}'
+        tests:
+          - not_null
+      - name: code
+        tests:
+          - not_null
+      - name: date
+        description: Date on which this code was active
+        tests:
+          - not_null
+  - name: validation_fact_daily_feed_notices
+    description: |
+      Daily validation notices, up until the date the table was last generated.
+      Primary key is composite of all columns.
+  - name: validation_code_descriptions
+    description: |
+      Cal-ITP critical validation codes. Primary key is code.
+    columns:
+      - name: code
+        description: Validation notice code from GTFS validator
+        tests:
+          - unique
+          - not_null
+  - name: validation_notice_fields
+    description: |
+      Lists each field that is populated for each code in validation reports
+      from the GTFS validator (since only a subset of fields are populated
+      based on which code it is.) Primary key is composite of code and field.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - code
+            - field
+    columns:
+      - name: code
+        description: Validation notice code from GTFS validator
+        tests:
+          - not_null
+      - name: field
+        description: Field in validation output from GTFS validator
+        tests:
+          - not_null

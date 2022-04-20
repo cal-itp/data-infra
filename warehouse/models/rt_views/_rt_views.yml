@@ -1,0 +1,181 @@
+version: 2
+
+sources:
+  - name: gtfs_rt_raw
+    description: Data in the gtfs_rt dataset in BigQuery, generally produced by the rt_loader and rt_loader_files Airflow DAGs.
+    database: cal-itp-data-infra
+    schema: gtfs_rt
+    tables:
+      - name: calitp_files
+        description: |
+          List of RT files produced by
+          rt_loader_files.calitp_files_process Airflow DAG task,
+          loaded into BigQuery via
+          rt_loader_files.external_calitp_files DAG task
+          (defines external table).
+      - name: validation_service_alerts
+      - name: validation_trip_updates
+      - name: validation_vehicle_positions
+
+
+models:
+  - name: gtfs_rt_fact_files
+    description: |
+      Each row is a GTFS realtime file that was downloaded.
+      Note that presence of a file is not a guarantee that the downloaded file is complete or valid.
+    meta:
+      metabase.display_name: GTFS RT Fact Files
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - calitp_extracted_at
+            - calitp_itp_id
+            - calitp_url_number
+            - name
+    columns:
+      - name: calitp_extracted_at
+        description: Timestamp when this file was extracted
+        tests:
+          - not_null
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+        tests:
+          - not_null
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+        tests:
+          - not_null
+      - name: name
+        description: File type (service_alerts, trip_updates, or vehicle_positions)
+        tests:
+          - not_null
+      - name: size
+        description: File size in bytes
+        tests:
+          - not_null
+      - name: md5_hash
+        description: Hash of file contents
+        tests:
+          - not_null
+      - name: date_extracted
+        description: Date extracted from calitp_extracted_at
+        tests:
+          - not_null
+      - name: hour_extracted
+        description: Hour extracted from calitp_extracted_at
+        tests:
+          - not_null
+      - name: minute_extracted
+        description: Minute extracted from calitp_extracted_at
+        tests:
+          - not_null
+
+  - name: gtfs_rt_fact_files_wide_hourly
+    description: |
+      Each row is one day of realtime data for a given feed (ITP ID + URL number + realtime type), with count of files downloaded by hour.
+      Note that presence of a file is not a guarantee that the downloaded file is complete or valid.
+      Hours here are in UTC.
+    meta:
+      metabase.display_name: GTFS RT Fact Files - Wide by Hour
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date_extracted
+            - calitp_itp_id
+            - calitp_url_number
+            - name
+    columns:
+      - name: date_extracted
+        description: Date extracted from calitp_extracted_at
+        tests:
+          - not_null
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+        tests:
+          - not_null
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+        tests:
+          - not_null
+      - name: name
+        description: File type (service_alerts, trip_updates, or vehicle_positions)
+        tests:
+          - not_null
+      - name: file_count_hr_0
+        description: Count of files extracted during hour 0 UTC
+  - name: gtfs_rt_fact_daily_feeds
+    description: |
+      Each row represents a GTFS realtime feed (combination of ITP ID, URL number,
+      and realtime data type) that was present in our extraction list on the given date.
+      Note that a feed can be added to the  list at any point in the day
+      and this table contains no information about extractions success or failure;
+      i.e., a feed may be listed here even if no data was successfully pulled,
+      or if only partial data was pulled. Primary key is composite of
+      calitp_itp_id, calitp_url_number, date, and type.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - calitp_itp_id
+            - calitp_url_number
+            - date
+            - type
+    columns:
+      - name: date
+        description: Date for which this feed was present in our extraction list
+        tests:
+          - not_null
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+        tests:
+          - not_null
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+        tests:
+          - not_null
+      - name: url
+        description: Feed URL
+        tests:
+          - not_null
+      - name: type
+        description: GTFS realtime type (service_alerts, trip_updates, or vehicle_positions)
+        tests:
+          - not_null
+  - name: gtfs_rt_fact_daily_validation_errors
+    description: |
+      A daily roll-up of validation errors
+      per calitp_itp_id/calitp_url_number/feed type/error.
+      Primary key is composite of calitp_itp_id,
+      calitp_url_number, rt_feed_type, error_id, and date.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - calitp_itp_id
+            - calitp_url_number
+            - rt_feed_type
+            - error_id
+            - date
+    columns:
+      - name: date
+        description: Date for which this feed was present in our extraction list
+        tests:
+          - not_null
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+        tests:
+          - not_null
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+        tests:
+          - not_null
+      - name: rt_feed_type
+        description: GTFS realtime type (service_alerts, trip_updates, or vehicle_positions)
+        tests:
+          - not_null
+      - name: error_id
+        description: The GTFS Realtime validation error ID (ex. "E001")
+        tests:
+          - not_null
+      - name: occurrences
+        description: The number of occurrences for this combination.
+        tests:
+          - not_null
