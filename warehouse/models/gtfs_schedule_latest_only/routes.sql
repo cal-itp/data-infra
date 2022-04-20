@@ -1,16 +1,10 @@
 {{ config(materialized='table') }}
 
-WITH routes_clean as (
-    SELECT *
-    FROM {{ ref('routes_clean') }}
-),
-latest_only_source as (
-    SELECT *
-    FROM {{ ref('calitp_feeds') }}
-),
+WITH
 {{ get_latest_schedule_data(
-    latest_only_source = 'latest_only_source',
+    latest_only_source = ref('calitp_feeds'),
     table_name = 'routes',
-    clean_table_name = 'routes_clean') }}
+    clean_table_name = ref('routes_clean')
+    ) }}
 
 SELECT * FROM routes
