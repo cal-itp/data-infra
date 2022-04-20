@@ -1,6 +1,6 @@
 operator: operators.PodOperator
 name: 'parse-rt-service-alerts'
-image: 'ghcr.io/cal-itp/data-infra/gtfs-rt-parser:latest'
+image: 'ghcr.io/cal-itp/data-infra/gtfs-rt-parser:{{image_tag}}'
 
 cmds:
   - python3
@@ -9,8 +9,8 @@ arguments:
   - "gtfs_rt_parser.py"
   - "al"
   - "service_alerts"
-  - "--iso-date"
-  - "{{execution_date.to_date_string()}}"
+  - "--glob"
+  - "{{get_bucket()}}/rt/{{execution_date.to_date_string()}}*"
 
 is_delete_operator_pod: true
 get_logs: true

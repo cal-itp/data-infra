@@ -1,0 +1,24 @@
+description: "Parses GTFS RT Protobufs, writes JSONL to GCS, and creates external tables for those files."
+schedule_interval: "0 * * * *"
+tags:
+  - all_gusty_features
+default_args:
+    owner: airflow
+    depends_on_past: False
+    start_date: "2021-07-09"
+    email:
+      - "blake.f@jarv.us"
+      - "evan.siroky@dot.ca.gov"
+      - "hunter.owens@dot.ca.gov"
+      - "jameelah.y@jarv.us"
+    email_on_failure: True
+    email_on_retry: False
+    max_active_dag_runs: 6
+    retries: 1
+    pool: rt_parse_pool
+    retry_delay: !timedelta 'minutes: 2'
+    concurrency: 5
+    #sla: !timedelta 'hours: 2'
+wait_for_defaults:
+    timeout: 3600
+latest_only: False

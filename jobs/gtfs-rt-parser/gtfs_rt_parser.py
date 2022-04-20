@@ -12,18 +12,21 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, date
 from enum import Enum
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List
 
 import aiohttp
 import backoff
 import humanize
+import pendulum
 import structlog
 import typer
+from aiohttp.client_exceptions import ClientResponseError
 from calitp.config import get_bucket
 from calitp.storage import get_fs
 from google.protobuf import json_format
 from google.protobuf.message import DecodeError
 from google.transit import gtfs_realtime_pb2
+from pydantic import BaseModel
 from tqdm import tqdm
 
 
@@ -32,168 +35,10 @@ from tqdm import tqdm
 
 EXTENSION = ".jsonl.gz"
 
-
-def parse_pb(path, logger, open_func=open) -> dict:
-    """
-    Convert pb file to Python dictionary
-    """
-    feed = gtfs_realtime_pb2.FeedMessage()
-    try:
-        with open_func(path, "rb") as f:
-            feed.ParseFromString(f.read())
-        d = json_format.MessageToDict(feed)
-        d.update({"calitp_filepath": path})
-        return d
-    except DecodeError:
-        logger.warn("WARN: got DecodeError for {}".format(path))
-        return {}
+yesterday = (date.today() - timedelta(days=1)).isoformat()
 
 
-def fetch_bucket_file_names(src_path, rt_file_substring, iso_date, progress=False):
-    # posix_date = str(time.mktime(execution_date.timetuple()))[:6]
-    fs = get_fs()
-    # get rt files
-    glob = src_path + iso_date + "*"
-    typer.echo("Globbing rt bucket {}".format(glob))
-    before = datetime.now()
-    rt = fs.glob(glob)
-    typer.echo(f"globbing took {(datetime.now() - before).total_seconds()} seconds")
-
-    buckets_to_parse = len(rt)
-    typer.echo("Realtime buckets to parse: {i}".format(i=buckets_to_parse))
-
-    # organize rt files by itpId_urlNumber
-    if progress:
-        rt = tqdm(rt)
-    rt_files = [fs.ls(r) for r in rt]
-
-    entity_files = [
-        item
-        for sublist in rt_files
-        for item in sublist
-        if rt_file_substring.name in item
-    ]
-
-    typer.echo(f"entity files len {len(entity_files)}")
-
-    feed_files = defaultdict(lambda: [])
-
-    for fname in entity_files:
-        itpId, urlNumber = fname.split("/")[-3:-1]
-        feed_files[(itpId, urlNumber)].append(fname)
-
-    # for some reason the fs.glob command takes up a fair amount of memory here,
-    # and does not seem to free it after the function returns, so we manually clear
-    # its caches (at least the ones I could find)
-    fs.dircache.clear()
-
-    # Now our feed files dict has a key of itpId_urlNumber and a list of files to
-    # parse
-    typer.echo("found {} feeds to process".format(len(feed_files.keys())))
-    return feed_files
-
-
-def get_google_cloud_filename(filename_prefix, feed, iso_date):
-    itp_id_url_num = "_".join(map(str, feed))
-    prefix = filename_prefix
-    return f"{prefix}_{iso_date}_{itp_id_url_num}{EXTENSION}"
-
-
-# Try twice in the event we get a ClientResponseError; doesn't have much of a delay (like 0.01s)
-@backoff.on_exception(
-    backoff.expo, exception=aiohttp.client_exceptions.ClientResponseError, max_tries=3
-)
-def get_with_retry(fs, *args, **kwargs):
-    return fs.get(*args, **kwargs)
-
-
-@backoff.on_exception(
-    backoff.expo, exception=aiohttp.client_exceptions.ClientResponseError, max_tries=3
-)
-def put_with_retry(fs, *args, **kwargs):
-    return fs.put(*args, **kwargs)
-
-
-# Originally this whole function was retried, but tmpdir flakiness will throw
-# exceptions in backoff's context, which ruins things
-def handle_one_feed(feed, files, filename_prefix, iso_date, dst_path, logger):
-    start = datetime.now()
-
-    logger.info("entering handle_one_feed")
-
-    fs = get_fs()
-
-    if not files:
-        logger.warn("got no files, returning early")
-        return
-
-    google_cloud_file_name = get_google_cloud_filename(filename_prefix, feed, iso_date)
-    logger.info("Creating {} from {} files".format(google_cloud_file_name, len(files)))
-    # fetch and parse RT files from bucket
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        logger.info(f"downloading {len(files)} files to {tmp_dir}")
-        get_with_retry(fs, files, tmp_dir)
-        all_files = [x for x in Path(tmp_dir).rglob("*") if not x.is_dir()]
-
-        gzip_fname = str(tmp_dir + "/" + "temporary" + EXTENSION)
-        written = 0
-
-        with gzip.open(gzip_fname, "w") as gzipfile:
-            for feed_fname in all_files:
-                # convert protobuff objects to DataFrames
-                parsed = parse_pb(feed_fname, logger=logger)
-
-                if parsed and "entity" in parsed:
-                    for record in parsed["entity"]:
-                        record["header"] = parsed["header"]
-                        record["calitp_filepath"] = str(parsed["calitp_filepath"])
-                        record["calitp_itp_id"] = int(feed[0])
-                        record["calitp_url_number"] = int(feed[1])
-                        gzipfile.write((json.dumps(record) + "\n").encode("utf-8"))
-                        written += 1
-
-        if not written:
-            logger.warning("did not parse any entities, skipping upload")
-            return
-
-        filesize = humanize.naturalsize(os.stat(gzip_fname).st_size)
-        logger.info(
-            f"writing {written} lines ({filesize}) from {gzip_fname} to {dst_path + google_cloud_file_name}"
-        )
-        put_with_retry(fs, gzip_fname, dst_path + google_cloud_file_name)
-        logger.info(
-            "took {} seconds to process {} files".format(
-                (datetime.now() - start).total_seconds(), len(all_files)
-            )
-        )
-
-
-def try_handle_one_feed(
-    i, feed, files, filename_prefix, iso_date, dst_path, total_feeds
-) -> Optional[Exception]:
-    logger = structlog.get_logger().bind(
-        i=i,
-        feed=feed,
-        len_files=len(files),
-        filename_prefix=filename_prefix,
-        iso_date=iso_date,
-        dst_path=dst_path,
-        total_feeds=total_feeds,
-    )
-    try:
-        handle_one_feed(feed, files, filename_prefix, iso_date, dst_path, logger)
-    except Exception as e:
-        logger.error(
-            f"got exception while handling feed: {str(e)} from {str(e.__cause__ or e.__context__)} {traceback.format_exc()}"
-        )
-        # a lot of these are thrown by tmpdir, and are potentially flakes; but if they were thrown during
-        # handling of another exception, we want that exception still
-        if isinstance(e, OSError) and e.errno == 39:
-            return e.__cause__ or e.__context__
-        return e
-
-
-class Prefix(str, Enum):
+class RTFileTypePrefix(str, Enum):
     al = "al"
     tu = "tu"
     rt = "rt"
@@ -205,58 +50,170 @@ class RTFileType(str, Enum):
     vehicle_positions = "vehicle_positions"
 
 
-yesterday = (date.today() - timedelta(days=1)).isoformat()
+class RTFile(BaseModel):
+    prefix: RTFileTypePrefix
+    file_type: RTFileType
+    path: Path
+    itp_id: int
+    url: int
+    tick: pendulum.DateTime
+
+    def hive_path(self, bucket: str):
+        return os.path.join(bucket,
+                            self.file_type,
+                            f"dt={self.tick.to_date_string()}",
+                            f"itp_id={self.itp_id}",
+                            f"url={self.url}",
+                            f"hour={self.tick.hour}",
+                            f"minute={self.tick.minute}",
+                            f"second={self.tick.second}",
+                            self.path.name,
+                            )
+
+
+# Try twice in the event we get a ClientResponseError; doesn't have much of a delay (like 0.01s)
+@backoff.on_exception( backoff.expo, exception=ClientResponseError, max_tries=3 )
+def get_with_retry(fs, *args, **kwargs):
+    return fs.get(*args, **kwargs)
+
+
+@backoff.on_exception( backoff.expo, exception=ClientResponseError, max_tries=3 )
+def put_with_retry(fs, *args, **kwargs):
+    return fs.put(*args, **kwargs)
+
+
+def parse_pb(path, logger, open_func=open) -> dict:
+    """
+    Convert pb file to Python dictionary
+    """
+    feed = gtfs_realtime_pb2.FeedMessage()
+    try:
+        with open_func(path, "rb") as f:
+            feed.ParseFromString(f.read())
+        d = json_format.MessageToDict(feed)
+        return d
+    except DecodeError:
+        logger.warn("WARN: got DecodeError for {}".format(path))
+        return {}
+
+
+def identify_files(glob, prefix: RTFileTypePrefix, rt_file_type: RTFileType, progress=False) -> List[RTFile]:
+    fs = get_fs()
+    typer.secho("Globbing rt bucket {}".format(glob), fg=typer.colors.MAGENTA)
+
+    before = pendulum.now()
+    ticks = fs.glob(glob)
+    typer.echo(f"globbing {len(ticks)} ticks took {(pendulum.now() - before).in_words(locale='en')}")
+
+    files = []
+    if progress:
+        ticks = tqdm(ticks)
+    for tick in ticks:
+        tick_dt = pendulum.parse(Path(tick).name)  # I love this
+        files_in_tick = [filename for filename in fs.ls(tick) if rt_file_type.name in filename]
+
+        for fname in files_in_tick:
+            # This is bad
+            itp_id, url = fname.split("/")[-3:-1]
+            files.append(RTFile(
+                prefix=prefix,
+                file_type=rt_file_type,
+                path=fname,
+                itp_id=itp_id,
+                url=url,
+                tick=tick_dt,
+            ))
+
+    # for some reason the fs.glob command takes up a fair amount of memory here,
+    # and does not seem to free it after the function returns, so we manually clear
+    # its caches (at least the ones I could find)
+    fs.dircache.clear()
+
+    typer.secho(f"found {len(files)} files to process", fg=typer.colors.GREEN)
+    return files
+
+
+# Originally this whole function was retried, but tmpdir flakiness will throw
+# exceptions in backoff's context, which ruins things
+def parse_file(bucket: str, rt_file: RTFile, logger):
+    typer.echo(f"parsing {str(rt_file.path)}")
+    fs = get_fs()
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        parsed = parse_pb(rt_file.path, logger=logger, open_func=fs.open)
+
+        gzip_fname = str(tmp_dir + "/" + "temporary" + EXTENSION)
+        written = 0
+
+        with gzip.open(gzip_fname, "w") as gzipfile:
+            if parsed and "entity" in parsed:
+                for record in parsed["entity"]:
+                    record.update({
+                        "header": parsed["header"],
+                        "calitp_filepath": rt_file.path,
+                        "calitp_itp_id": rt_file.itp_id,
+                        "calitp_url_number": rt_file.url,
+                    })
+                    gzipfile.write((json.dumps(record) + "\n").encode("utf-8"))
+                    written += 1
+
+        out_path = rt_file.hive_path(bucket)
+        logger.info(
+            f"writing {written} lines from {gzip_fname} to {out_path}"
+        )
+        # TODO: bring me back
+        typer.echo(f"WARNING: NOT ACTUALLY WRITING")
+        # put_with_retry(fs, gzip_fname, out_path)
+
+
+def try_handle_one_feed(*args, **kwargs) -> Optional[Exception]:
+    try:
+        parse_file(*args, **kwargs)
+    except Exception as e:
+        typer.echo(
+            f"got exception while handling feed: {str(e)} from {str(e.__cause__ or e.__context__)} {traceback.format_exc()}",
+            err=True,
+        )
+        # a lot of these are thrown by tmpdir, and are potentially flakes; but if they were thrown during
+        # handling of another exception, we want that exception still
+        if isinstance(e, OSError) and e.errno == 39:
+            return e.__cause__ or e.__context__
+        return e
 
 
 def main(
-    filename_prefix: Prefix,
-    rt_file_substring: RTFileType,
+    prefix: RTFileTypePrefix,
+    file_type: RTFileType,
+    glob: str = f"{get_bucket()}/rt/{yesterday}T*",
     iso_date: str = yesterday,
-    src_path=f"{get_bucket()}/rt/",
-    dst_path=f"{get_bucket()}/rt-processed/",
+    dst_bucket=get_bucket(),
     limit: int = 0,
     progress: bool = False,
     threads: int = 4,
 ):
-    # get execution_date from context:
-    # https://stackoverflow.com/questions/59982700/airflow-how-can-i-access-execution-date-on-my-custom-operator
-
-    actual_dst_path = os.path.join(dst_path, rt_file_substring.name, "")
-
-    typer.echo(
-        f"Parsing {filename_prefix}/{rt_file_substring} from {os.path.join(src_path, iso_date)} to {actual_dst_path}"
-    )
+    typer.secho(f"Parsing {prefix}/{file_type} from {glob}", fg=typer.colors.MAGENTA)
 
     # fetch files ----
-    feed_files = fetch_bucket_file_names(
-        src_path, rt_file_substring, iso_date, progress=progress
-    )
+    feed_files = identify_files(glob=glob, prefix=prefix, rt_file_type=file_type, progress=progress)
 
-    enumerated = enumerate(feed_files.items())
     if limit:
         structlog.get_logger().warn(f"limit of {limit} feeds was set")
-        enumerated = itertools.islice(enumerated, limit)
-    enumerated = list(enumerated)
+        feed_files = feed_files[:limit]
 
     # gcfs does not seem to play nicely with multiprocessing right now
     # https://github.com/fsspec/gcsfs/issues/379
     with ThreadPoolExecutor(max_workers=threads) as pool:
         args = [
             (
-                i,
-                feed,
-                files,
-                filename_prefix,
-                iso_date,
-                actual_dst_path,
-                len(feed_files),
+                dst_bucket,
+                file,
             )
-            for i, (feed, files) in enumerated
+            for file in feed_files
         ]
         exceptions = [ret for ret in pool.map(try_handle_one_feed, *zip(*args)) if ret]
 
     if exceptions:
-        msg = f"got {len(exceptions)} exceptions from processing {len(enumerated)} feeds: {exceptions}"
+        msg = f"got {len(exceptions)} exceptions from processing {len(feed_files)} feeds: {exceptions}"
         typer.echo(msg, err=True)
         raise RuntimeError(msg)
 

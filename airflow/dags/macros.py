@@ -259,4 +259,5 @@ data_infra_macros = {
     "sql_airtable_mapping": airtable_mapping_generate_sql,
     "get_latest_schedule_data": get_latest_schedule_data,
     "is_development": is_development_macro,
+    "image_tag": lambda: "development" if is_development() else "latest",
 }
