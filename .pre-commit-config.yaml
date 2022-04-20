@@ -35,3 +35,4 @@ repos:
         # skip: joins should not include subqueries -- TODO
         # skip: use left join instead of right join -- TODO
         args: [--dialect, "bigquery", --ignore, "parsing,templating",--exclude-rules, "L016,L029,L027,L032,L034,L014,L042,L055"]
+        files: "warehouse/"
