@@ -33,12 +33,6 @@ EXTENSION = ".jsonl.gz"
 yesterday = (date.today() - timedelta(days=1)).isoformat()
 
 
-class RTFileTypePrefix(str, Enum):
-    al = "al"
-    tu = "tu"
-    rt = "rt"
-
-
 class RTFileType(str, Enum):
     service_alerts = "service_alerts"
     trip_updates = "trip_updates"
@@ -46,7 +40,6 @@ class RTFileType(str, Enum):
 
 
 class RTFile(BaseModel):
-    prefix: RTFileTypePrefix
     file_type: RTFileType
     path: Path
     itp_id: int
@@ -93,9 +86,7 @@ def parse_pb(path, open_func=open) -> dict:
         return {}
 
 
-def identify_files(
-    glob, prefix: RTFileTypePrefix, rt_file_type: RTFileType, progress=False
-) -> List[RTFile]:
+def identify_files(glob, rt_file_type: RTFileType, progress=False) -> List[RTFile]:
     fs = get_fs()
     typer.secho("Globbing rt bucket {}".format(glob), fg=typer.colors.MAGENTA)
 
@@ -119,7 +110,6 @@ def identify_files(
             itp_id, url = fname.split("/")[-3:-1]
             files.append(
                 RTFile(
-                    prefix=prefix,
                     file_type=rt_file_type,
                     path=fname,
                     itp_id=itp_id,
@@ -195,7 +185,6 @@ def try_handle_one_feed(*args, **kwargs) -> Optional[Exception]:
 
 
 def main(
-    prefix: RTFileTypePrefix,
     file_type: RTFileType,
     glob: str = f"{get_bucket()}/rt/{yesterday}T12:*",
     dst_bucket=get_bucket(),
@@ -203,12 +192,10 @@ def main(
     progress: bool = False,
     threads: int = 4,
 ):
-    typer.secho(f"Parsing {prefix}/{file_type} from {glob}", fg=typer.colors.MAGENTA)
+    typer.secho(f"Parsing {file_type} from {glob}", fg=typer.colors.MAGENTA)
 
     # fetch files ----
-    feed_files = identify_files(
-        glob=glob, prefix=prefix, rt_file_type=file_type, progress=progress
-    )
+    feed_files = identify_files(glob=glob, rt_file_type=file_type, progress=progress)
 
     if limit:
         structlog.get_logger().warn(f"limit of {limit} feeds was set")
