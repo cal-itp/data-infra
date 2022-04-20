@@ -139,18 +139,19 @@ def identify_files(
 
 # Originally this whole function was retried, but tmpdir flakiness will throw
 # exceptions in backoff's context, which ruins things
-def parse_file(bucket: str, rt_file: RTFile):
-    typer.echo(f"Parsing {str(rt_file.path)}")
+def parse_file(bucket: str, rt_file: RTFile, pbar=None):
     fs = get_fs()
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         parsed = parse_pb(rt_file.path, open_func=fs.open)
 
         if not parsed or "entity" not in parsed:
-            typer.secho(
-                f"WARNING: no records found in {str(rt_file.path)}",
-                fg=typer.colors.YELLOW,
-            )
+            msg = f"WARNING: no records found in {str(rt_file.path)}"
+            if pbar:
+                pbar.write(msg)
+                pbar.update(1)
+            else:
+                typer.secho(msg, fg=typer.colors.YELLOW)
             return
 
         gzip_fname = str(tmp_dir + "/" + "temporary" + EXTENSION)
@@ -168,8 +169,14 @@ def parse_file(bucket: str, rt_file: RTFile):
                 written += 1
 
         out_path = f"{rt_file.hive_path(bucket)}{EXTENSION}"  # probably a better way to do this
-        typer.echo(f"writing {written} lines from {gzip_fname} to {out_path}")
+        msg = f"writing {written} lines from {str(rt_file.path)} to {out_path}"
+        if pbar:
+            pbar.write(msg)
+        else:
+            typer.echo(msg)
         put_with_retry(fs, gzip_fname, out_path)
+        if pbar:
+            pbar.update(1)
 
 
 def try_handle_one_feed(*args, **kwargs) -> Optional[Exception]:
@@ -209,11 +216,16 @@ def main(
 
     # gcfs does not seem to play nicely with multiprocessing right now
     # https://github.com/fsspec/gcsfs/issues/379
+    if progress:
+        pbar = tqdm(total=len(feed_files))
+    else:
+        pbar = None
     with ThreadPoolExecutor(max_workers=threads) as pool:
         args = [
             (
                 dst_bucket,
                 file,
+                pbar,
             )
             for file in feed_files
         ]
