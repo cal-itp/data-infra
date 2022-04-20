@@ -806,96 +806,82 @@
 <td><p><code class="docutils literal notranslate"><span class="pre">gtfs_downloader</span></code>*</p></td>
 <td><p>Technically also depends on <code class="docutils literal notranslate"><span class="pre">gtfs_schedule_history</span></code>, not usually an issue</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule</span></code></p></td>
-<td><p>Yes</p></td>
-<td><p>No</p></td>
-<td><p>Yes*</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">gtfs_views_staging</span></code></p></td>
-<td><p>Latest-only data (but depends on <code class="docutils literal notranslate"><span class="pre">gtfs_views_staging</span></code> for data cleaning)</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule_history</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule_history</span></code></p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>Once-only (defines external tables); does not generally need to be re-run</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule_history2</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule_history2</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p><strong>📆 Yes</strong></p></td>
 <td><p><strong>🔂 No</strong></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">gtfs_loader</span></code></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_views</span></code></p></td>
-<td><p>Yes</p></td>
-<td><p>No</p></td>
-<td><p>Yes</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">gtfs_views_staging</span></code></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_views_staging</span></code></p></td>
-<td><p>Yes</p></td>
-<td><p>No</p></td>
-<td><p>Yes</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule_history2</span></code></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">payments_loader</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">payments_loader</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p>Yes</p></td>
 <td><p>N/A</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">payments_views</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">payments_views</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p>Yes</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">payments_views_staging</span></code></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">payments_views_staging</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">payments_views_staging</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p>Yes</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">payments_loader</span></code></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt_loader</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt_loader</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p><strong>🔂 No</strong></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">gtfs_loader</span></code></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt_loader_files</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt_loader_files</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p><strong>🔂 No</strong></p></td>
 <td><p>N/A</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt_timestamp_fix</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt_timestamp_fix</span></code></p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>DAG is deprecated but still appears in Airflow UI</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt_views</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt_views</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p>Yes</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">rt_loader_files</span></code>, <code class="docutils literal notranslate"><span class="pre">gtfs_views</span></code></p></td>
+<td><p></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sandbox</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sandbox</span></code></p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>Testing only; does not need to be re-run</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">transform_warehouse</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>Yes</p></td>
+<td><p>N/A</p></td>
+<td><p>Runs dbt warehouse</p></td>
 </tr>
 </tbody>
 </table>
@@ -910,15 +896,11 @@
       gtfs_downloader--&gt;gtfs_loader;
       gtfs_schedule_history--&gt;gtfs_loader;
       gtfs_loader--&gt;gtfs_schedule_history2;
-      gtfs_schedule_history2--&gt;gtfs_views_staging;
-      gtfs_views_staging--&gt;gtfs_views;
-      gtfs_views_staging--&gt;gtfs_schedule;
       payments_loader--&gt;payments_views_staging;
       payments_views_staging--&gt;payments_views;
       gtfs_loader--&gt;rt_loader;
-      rt_loader_files--&gt;rt_views;
-      gtfs_views--&gt;rt_views;
       sandbox;
+      transform_warehouse;
         </div></div>
 <div class="section" id="task-level-considerations">
 <h2>Task-level considerations<a class="headerlink" href="#task-level-considerations" title="Permalink to this headline">¶</a></h2>
