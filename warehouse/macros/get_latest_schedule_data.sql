@@ -6,7 +6,7 @@
 -- latest_only_source table should be equivalent to
 -- gtfs_views_staging.calitp_feeds and have a calitp_id_in_latest column
 
-is_in_latest AS (
+WITH is_in_latest AS (
     SELECT DISTINCT
         calitp_itp_id,
         calitp_url_number,
@@ -14,7 +14,7 @@ is_in_latest AS (
     FROM {{ latest_only_source }}
     WHERE calitp_id_in_latest
 ),
-{{ table_name }} AS (
+{{ table_name }}_latest AS (
     SELECT
         t1.* EXCEPT(calitp_deleted_at)
     FROM {{ clean_table_name }} t1
@@ -23,4 +23,5 @@ is_in_latest AS (
     WHERE t1.calitp_deleted_at = '2099-01-01'
     AND t2.calitp_id_in_latest
 )
+SELECT * FROM {{ table_name }}_latest
 {% endmacro %}
