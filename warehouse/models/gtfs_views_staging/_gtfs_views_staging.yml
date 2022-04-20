@@ -33,28 +33,33 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#agencytxt.
     columns:
-      - name: calitp_itp_id
+      - &calitp_itp_id
+        name: calitp_itp_id
         description: '{{ doc("column_calitp_itp_id") }}'
         tests:
           - not_null
-      - name: calitp_url_number
+      - &calitp_url_number
+        name: calitp_url_number
         description: '{{ doc("column_calitp_url_number") }}'
         tests:
           - not_null
-      - name: calitp_extracted_at
+      - &calitp_extracted_at
+        name: calitp_extracted_at
         description: '{{ doc("column_schedule_calitp_extracted_at") }}'
         tests:
           - not_null
-      - name: calitp_hash
+      - &calitp_hash
+        name: calitp_hash
         description: '{{ doc("column_schedule_calitp_hash") }}'
         tests:
           - not_null
       - name: agency_key
         description: '{{ doc("column_schedule_key") }}'
-        tests:
+        tests: &primary_key_tests
           - not_null
           - unique
-      - name: calitp_deleted_at
+      - &calitp_deleted_at
+        name: calitp_deleted_at
         description: '{{ doc("column_schedule_calitp_deleted_at") }}'
         tests:
           - not_null
@@ -64,500 +69,224 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#attributionstxt.
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
-      - name: calitp_extracted_at
-        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
-        tests:
-          - not_null
-      - name: calitp_hash
-        description: '{{ doc("column_schedule_calitp_hash") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
+      - *calitp_extracted_at
+      - *calitp_hash
       - name: attribution_key
         description: '{{ doc("column_schedule_key") }}'
-        tests:
-          - not_null
-          - unique
-      - name: calitp_deleted_at
-        description: '{{ doc("column_schedule_calitp_deleted_at") }}'
-        tests:
-          - not_null
+        tests: *primary_key_tests
+      - *calitp_deleted_at
   - name: calendar_clean
     description: |
       Each row is a cleaned row from a calendar.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#calendartxt.
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
-      - name: calitp_extracted_at
-        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
-        tests:
-          - not_null
-      - name: calitp_hash
-        description: '{{ doc("column_schedule_calitp_hash") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
+      - *calitp_extracted_at
+      - *calitp_hash
       - name: calendar_key
         description: '{{ doc("column_schedule_key") }}'
-        tests:
-          - not_null
-          - unique
-      - name: calitp_deleted_at
-        description: '{{ doc("column_schedule_calitp_deleted_at") }}'
-        tests:
-          - not_null
+        tests: *primary_key_tests
+      - *calitp_deleted_at
   - name: calendar_dates_clean
     description: |
       Each row is a cleaned row from a calendar_dates.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#calendar_datestxt.
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
-      - name: calitp_extracted_at
-        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
-        tests:
-          - not_null
-      - name: calitp_hash
-        description: '{{ doc("column_schedule_calitp_hash") }}'
-        tests:
-          - not_null
-      - name: calitp_deleted_at
-        description: '{{ doc("column_schedule_calitp_deleted_at") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
+      - *calitp_extracted_at
+      - *calitp_hash
+      - *calitp_deleted_at
   - name: fare_attributes_clean
     description: |
       Each row is a cleaned row from aß fare_attributes.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#fare_attributestxt.
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
-      - name: calitp_extracted_at
-        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
-        tests:
-          - not_null
-      - name: calitp_hash
-        description: '{{ doc("column_schedule_calitp_hash") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
+      - *calitp_extracted_at
+      - *calitp_hash
       - name: fare_attribute_key
         description: '{{ doc("column_schedule_key") }}'
-        tests:
-          - not_null
-          - unique
-      - name: calitp_deleted_at
-        description: '{{ doc("column_schedule_calitp_deleted_at") }}'
-        tests:
-          - not_null
+        tests: *primary_key_tests
+      - *calitp_deleted_at
   - name: fare_rules_clean
     description: |
       Each row is a cleaned row from a fare_rules.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#fare_rulestxt.
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
-      - name: calitp_extracted_at
-        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
-        tests:
-          - not_null
-      - name: calitp_hash
-        description: '{{ doc("column_schedule_calitp_hash") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
+      - *calitp_extracted_at
+      - *calitp_hash
       - name: fare_rule_key
         description: '{{ doc("column_schedule_key") }}'
-        tests:
-          - not_null
-          - unique
-      - name: calitp_deleted_at
-        description: '{{ doc("column_schedule_calitp_deleted_at") }}'
-        tests:
-          - not_null
+        tests: *primary_key_tests
+      - *calitp_deleted_at
   - name: feed_info_clean
     description: |
       Each row is a cleaned row from a feed_info.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#feed_infotxt.
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
-      - name: calitp_extracted_at
-        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
-        tests:
-          - not_null
-      - name: calitp_hash
-        description: '{{ doc("column_schedule_calitp_hash") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
+      - *calitp_extracted_at
+      - *calitp_hash
       - name: feed_info_key
         description: '{{ doc("column_schedule_key") }}'
-        tests:
-          - not_null
-          - unique
-      - name: calitp_deleted_at
-        description: '{{ doc("column_schedule_calitp_deleted_at") }}'
-        tests:
-          - not_null
+        tests: *primary_key_tests
+      - *calitp_deleted_at
   - name: frequencies_clean
     description: |
       Each row is a cleaned row from a frequencies.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#frequenciestxt.
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
-      - name: calitp_extracted_at
-        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
-        tests:
-          - not_null
-      - name: calitp_hash
-        description: '{{ doc("column_schedule_calitp_hash") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
+      - *calitp_extracted_at
+      - *calitp_hash
       - name: frequency_key
         description: '{{ doc("column_schedule_key") }}'
-        tests:
-          - not_null
-          - unique
-      - name: calitp_deleted_at
-        description: '{{ doc("column_schedule_calitp_deleted_at") }}'
-        tests:
-          - not_null
+        tests: *primary_key_tests
+      - *calitp_deleted_at
   - name: levels_clean
     description: |
       Each row is a cleaned row from a levels.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#levelstxt.
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
-      - name: calitp_extracted_at
-        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
-        tests:
-          - not_null
-      - name: calitp_hash
-        description: '{{ doc("column_schedule_calitp_hash") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
+      - *calitp_extracted_at
+      - *calitp_hash
       - name: level_key
         description: '{{ doc("column_schedule_key") }}'
-        tests:
-          - not_null
-          - unique
-      - name: calitp_deleted_at
-        description: '{{ doc("column_schedule_calitp_deleted_at") }}'
-        tests:
-          - not_null
+        tests: *primary_key_tests
+      - *calitp_deleted_at
   - name: pathways_clean
     description: |
       Each row is a cleaned row from a pathways.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#pathwaystxt.
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
-      - name: calitp_extracted_at
-        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
-        tests:
-          - not_null
-      - name: calitp_hash
-        description: '{{ doc("column_schedule_calitp_hash") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
+      - *calitp_extracted_at
+      - *calitp_hash
       - name: pathway_key
         description: '{{ doc("column_schedule_key") }}'
-        tests:
-          - not_null
-          - unique
-      - name: calitp_deleted_at
-        description: '{{ doc("column_schedule_calitp_deleted_at") }}'
-        tests:
-          - not_null
+        tests: *primary_key_tests
+      - *calitp_deleted_at
   - name: routes_clean
     description: |
       Each row is a cleaned row from a routes.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#routestxt.
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
-      - name: calitp_extracted_at
-        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
-        tests:
-          - not_null
-      - name: calitp_hash
-        description: '{{ doc("column_schedule_calitp_hash") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
+      - *calitp_extracted_at
+      - *calitp_hash
       - name: route_key
         description: '{{ doc("column_schedule_key") }}'
-        tests:
-          - not_null
-          - unique
-      - name: calitp_deleted_at
-        description: '{{ doc("column_schedule_calitp_deleted_at") }}'
-        tests:
-          - not_null
+        tests: *primary_key_tests
+      - *calitp_deleted_at
   - name: shapes_clean
     description: |
       Each row is a cleaned row from a shapes.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#shapestxt.
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
-      - name: calitp_extracted_at
-        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
-        tests:
-          - not_null
-      - name: calitp_hash
-        description: '{{ doc("column_schedule_calitp_hash") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
+      - *calitp_extracted_at
+      - *calitp_hash
       - name: shape_key
         description: '{{ doc("column_schedule_key") }}'
-        tests:
-          - not_null
-          - unique
-      - name: calitp_deleted_at
-        description: '{{ doc("column_schedule_calitp_deleted_at") }}'
-        tests:
-          - not_null
+        tests: *primary_key_tests
+      - *calitp_deleted_at
   - name: stop_times_clean
     description: |
       Each row is a cleaned row from a stop_times.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#stop_timestxt.
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
-      - name: calitp_extracted_at
-        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
-        tests:
-          - not_null
-      - name: calitp_hash
-        description: '{{ doc("column_schedule_calitp_hash") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
+      - *calitp_extracted_at
+      - *calitp_hash
       - name: stop_time_key
         description: '{{ doc("column_schedule_key") }}'
-        tests:
-          - not_null
-          - unique
-      - name: calitp_deleted_at
-        description: '{{ doc("column_schedule_calitp_deleted_at") }}'
-        tests:
-          - not_null
+        tests: *primary_key_tests
+      - *calitp_deleted_at
   - name: stops_clean
     description: |
       Each row is a cleaned row from a stops.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#stopstxt.
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
-      - name: calitp_extracted_at
-        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
-        tests:
-          - not_null
-      - name: calitp_hash
-        description: '{{ doc("column_schedule_calitp_hash") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
+      - *calitp_extracted_at
+      - *calitp_hash
       - name: stop_key
         description: '{{ doc("column_schedule_key") }}'
-        tests:
-          - not_null
-          - unique
-      - name: calitp_deleted_at
-        description: '{{ doc("column_schedule_calitp_deleted_at") }}'
-        tests:
-          - not_null
+        tests: *primary_key_tests
+      - *calitp_deleted_at
   - name: transfers_clean
     description: |
       Each row is a cleaned row from a transfers.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#transferstxt.
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
-      - name: calitp_extracted_at
-        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
-        tests:
-          - not_null
-      - name: calitp_hash
-        description: '{{ doc("column_schedule_calitp_hash") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
+      - *calitp_extracted_at
+      - *calitp_hash
       - name: transfer_key
         description: '{{ doc("column_schedule_key") }}'
-        tests:
-          - not_null
-          - unique
-      - name: calitp_deleted_at
-        description: '{{ doc("column_schedule_calitp_deleted_at") }}'
-        tests:
-          - not_null
+        tests: *primary_key_tests
+      - *calitp_deleted_at
   - name: translations_clean
     description: |
       Each row is a cleaned row from a translations.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#translationstxt.
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
-      - name: calitp_extracted_at
-        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
-        tests:
-          - not_null
-      - name: calitp_hash
-        description: '{{ doc("column_schedule_calitp_hash") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
+      - *calitp_extracted_at
+      - *calitp_hash
       - name: translation_key
         description: '{{ doc("column_schedule_key") }}'
-        tests:
-          - not_null
-          - unique
-      - name: calitp_deleted_at
-        description: '{{ doc("column_schedule_calitp_deleted_at") }}'
-        tests:
-          - not_null
+        tests: *primary_key_tests
+      - *calitp_deleted_at
   - name: trips_clean
     description: |
       Each row is a cleaned row from a trips.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#tripstxt.
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
-      - name: calitp_extracted_at
-        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
-        tests:
-          - not_null
-      - name: calitp_hash
-        description: '{{ doc("column_schedule_calitp_hash") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
+      - *calitp_extracted_at
+      - *calitp_hash
       - name: trip_key
         description: '{{ doc("column_schedule_key") }}'
-        tests:
-          - not_null
-          - unique
-      - name: calitp_deleted_at
-        description: '{{ doc("column_schedule_calitp_deleted_at") }}'
-        tests:
-          - not_null
+        tests: *primary_key_tests
+      - *calitp_deleted_at
   - name: validation_notices_clean
     description: |
       Each row is a validation notice from the GTFS schedule validator.
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
