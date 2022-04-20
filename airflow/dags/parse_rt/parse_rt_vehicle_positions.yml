@@ -1,16 +1,18 @@
 operator: operators.PodOperator
 name: 'parse-rt-vehicle-positions'
-image: 'ghcr.io/cal-itp/data-infra/gtfs-rt-parser:latest'
+image: 'ghcr.io/cal-itp/data-infra/gtfs-rt-parser:{{image_tag()}}'
 
 cmds:
   - python3
 
 arguments:
   - "gtfs_rt_parser.py"
-  - "rt"
   - "vehicle_positions"
-  - "--iso-date"
-  - "{{execution_date.to_date_string()}}"
+  - "--glob"
+  # we run at the :15 because of write delays but then we process the prior _hour_
+  - "{{get_bucket()}}/rt/{{ execution_date.replace(minute=0, second=0).format('YYYY-MM-DDTHH*') }}"
+  - "--dst-bucket"
+  - "{{get_bucket()}}"
 
 is_delete_operator_pod: true
 get_logs: true
