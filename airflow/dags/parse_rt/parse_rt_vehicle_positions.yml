@@ -31,6 +31,10 @@ secrets:
     secret: jobs-data
     key: service_account.json
 
+resources:
+  request_memory: 2.0Gi
+  request_cpu: 1
+
 tolerations:
   - key: pod-role
     operator: Equal
