@@ -45,3 +45,6 @@ models:
 
     rt_views:
       schema: views
+
+    payments_views_staging:
+      schema: payments
