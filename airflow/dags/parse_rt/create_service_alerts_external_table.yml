@@ -1,4 +1,6 @@
 operator: operators.ExternalTable
+dependencies:
+  - parse_rt_service_alerts
 source_objects:
   - "service_alerts/*.jsonl.gz"
 destination_project_dataset_table: "gtfs_rt.external_service_alerts"

@@ -1,0 +1,91 @@
+operator: operators.ExternalTable
+dependencies:
+  - parse_rt_trip_updates
+source_objects:
+  - "trip_updates/*.jsonl.gz"
+destination_project_dataset_table: "gtfs_rt.external_trip_updates"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: AUTO
+  source_uri_prefix: "/trip_updates/"
+schema_fields:
+  - name: metadata
+    type: RECORD
+    fields:
+      - name: path
+        type: string
+      - name: itp_id
+        type: integer
+      - name: url
+        type: integer
+  - name: id
+    type: STRING
+  - name: header
+    type: RECORD
+    fields:
+      - name: timestamp
+        type: INTEGER
+      - name: incrementality
+        type: STRING
+      - name: gtfsRealtimeVersion
+        type: STRING
+  - name: tripUpdate
+    type: RECORD
+    fields:
+      - fields:
+          - name: tripId
+            type: STRING
+          - name: routeId
+            type: STRING
+          - name: directionId
+            type: INTEGER
+          - name: startTime
+            type: STRING
+          - name: startDate
+            type: STRING
+          - name: scheduleRelationship
+            type: STRING
+        name: trip
+        type: RECORD
+      - fields:
+          - name: licensePlate
+            type: STRING
+          - name: label
+            type: STRING
+          - name: id
+            type: STRING
+        name: vehicle
+        type: RECORD
+      - fields:
+          - name: stopSequence
+            type: INTEGER
+          - name: stopId
+            type: STRING
+          - fields:
+              - name: delay
+                type: INTEGER
+              - name: time
+                type: INTEGER
+              - name: uncertainty
+                type: INTEGER
+            name: arrival
+            type: RECORD
+          - fields:
+              - name: delay
+                type: INTEGER
+              - name: time
+                type: INTEGER
+              - name: uncertainty
+                type: INTEGER
+            name: departure
+            type: RECORD
+          - name: scheduleRelationship
+            type: STRING
+        mode: REPEATED
+        name: stopTimeUpdate
+        type: RECORD
+      - name: timestamp
+        type: INTEGER
+      - name: delay
+        type: INTEGER
