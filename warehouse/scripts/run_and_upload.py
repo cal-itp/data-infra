@@ -98,7 +98,13 @@ def run(
             subprocess.run(args)
 
     if sync_metabase:
-        for database in ["Warehouse Views", "GTFS Schedule Feeds Latest"]:
+        for schema, database in [
+            ("views", "Warehouse Views"),
+            ("gtfs_schedule", "GTFS Schedule Feeds Latest"),
+        ]:
+            # TODO: we should check the return code on this once we fully merge things on the Metabase side
+            #       or otherwise map dbt modules/schemas to Metabase databases so we can actually select
+            #       which ones to sync without erroring
             subprocess.run(
                 [
                     "dbt-metabase",
@@ -107,6 +113,8 @@ def run(
                     "./target/manifest.json",
                     "--dbt_database",
                     "cal-itp-data-infra",
+                    "--dbt_schema",
+                    schema,
                     "--metabase_host",
                     "dashboards.calitp.org",
                     "--metabase_user",
