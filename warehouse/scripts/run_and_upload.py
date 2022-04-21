@@ -98,7 +98,7 @@ def run(
             subprocess.run(args)
 
     if sync_metabase:
-        for database in ["Warehouse Views", "GTFS Schedule Views Latest"]:
+        for database in ["Warehouse Views", "GTFS Schedule Feeds Latest"]:
             subprocess.run(
                 [
                     "dbt-metabase",
