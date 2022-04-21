@@ -102,9 +102,6 @@ def run(
             ("views", "Warehouse Views"),
             ("gtfs_schedule", "GTFS Schedule Feeds Latest"),
         ]:
-            # TODO: we should check the return code on this once we fully merge things on the Metabase side
-            #       or otherwise map dbt modules/schemas to Metabase databases so we can actually select
-            #       which ones to sync without erroring
             subprocess.run(
                 [
                     "dbt-metabase",
@@ -124,7 +121,7 @@ def run(
                     "--metabase_database",
                     database,
                 ]
-            )
+            ).check_returncode()
 
     if test_result:
         test_result.check_returncode()
