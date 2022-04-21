@@ -1,0 +1,91 @@
+version: 2
+
+sources:
+  - name: payments
+    description: Source data from Littlepay data feeds
+    database: cal-itp-data-infra
+    schema: payments
+    tables:
+      - name: authorisations
+        description: |
+          Authorisations represent the communication with the acquirer that is
+          not a settlement. As part of this process, Littlepay performs
+          verification with the acquirer to check if a card is valid and has
+          sufficient funds to complete the transaction, which is based on the
+          cardholder scheme prerequisites.
+
+          Each row of data in the authorisation table represents a communication
+          with the acquirer that is represented by the `request_type`.
+        columns:
+          - &authorisations_participant_id
+            name: participant_id
+            description: Identifies the participant that the authorisation belongs to.
+          - &authorisations_aggregation_id
+            name: aggregation_id
+            description: The aggregation that is being authorised. A single aggregation can have multiple authorisations. The authorisations that are submitted depend on the scheme and the result of the initial authorisation (if declined, debt recovery authorisations may be performed).
+          - &authorisations_acquirer_id
+            name: acquirer_id
+            description: The institution that acquired the transaction
+          - &authorisations_request_type
+            name: request_type
+            description: One of (`Card_Check`, `Authorisation`, `Debt Recovery`)
+          - &authorisations_transaction_amount
+            name: transaction_amount
+            description: The amount to authorise
+          - &authorisations_currency_code
+            name: currency_code
+            description: The ISO 4217 numeric currency code for the amount to authorise
+          - &authorisations_retrieval_reference_number
+            name: retrieval_reference_number
+          - &authorisations_response_code
+            name: response_code
+            description: Response code - varies based on acquirer and scheme. Generally `00` if successful.
+          - &authorisations_status
+            name: status
+            description: Status of authorisation. One of (`Authorised`, `Declined`, `Failed`, `Invalid`, `Lost`, `Stolen`, `Unavailable`, `Unknown`, `Verified`)
+          - &authorisations_authorisation_date_time_utc
+            name: authorisation_date_time_utc
+
+enrichment_field_declarations:
+  - &calitp_hash
+    name: calitp_hash
+    description: A hash of the entire raw record
+  - &calitp_file_name
+    name: calitp_file_name
+    description: The full path of the file that the raw record was read from
+  - &calitp_export_account
+    name: calitp_export_account
+    description: The Littlepay AWS account, as parsed from the raw file path
+  - &calitp_export_datetime
+    name: calitp_export_datetime
+    description: The date/time of export, as parsed from the raw file path
+  - &calitp_n_dupes
+    name: calitp_n_dupes
+    description: The number of records on which the `calitp_hash` shows up in the table
+  - &calitp_n_dupe_ids
+    name: calitp_n_dupe_ids
+    description: The number of records that have the same unique key within the table
+  - &calitp_dupe_number
+    name: calitp_dupe_number
+    description: A ranking of the records using a unique key, ordered by decreasing priority
+
+models:
+  - name: stg_enriched_authorisations
+    columns:
+      - *authorisations_participant_id
+      - *authorisations_aggregation_id
+      - *authorisations_acquirer_id
+      - *authorisations_request_type
+      - *authorisations_transaction_amount
+      - *authorisations_currency_code
+      - *authorisations_retrieval_reference_number
+      - *authorisations_response_code
+      - *authorisations_status
+      - *authorisations_authorisation_date_time_utc
+      - *calitp_hash
+      - *calitp_file_name
+      - *calitp_export_account
+      - *calitp_export_datetime
+      - *calitp_n_dupes
+      - *calitp_n_dupe_ids
+      - *calitp_dupe_number
