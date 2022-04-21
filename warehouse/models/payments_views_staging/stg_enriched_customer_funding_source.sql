@@ -1,26 +1,18 @@
----
-operator: operators.SqlToWarehouseOperator
-dst_table_name: "payments.stg_enriched_customer_funding_source"
-
-external_dependencies:
-  - payments_loader: all
----
+{{ config(materialized='table') }}
 
 WITH
 
 core_enrichments AS (
     {{
-
-      sql_enrich_duplicates(
-        "payments.customer_funding_source",
-        ["funding_source_id"],
-        ["calitp_file_name desc"]
-      )
-
+        sql_enrich_duplicates(
+            source('payments', 'customer_funding_source'),
+            ['funding_source_id'],
+            ['calitp_file_name desc']
+        )
     }}
 ),
 
-enrichments_with_ordered_ids AS (
+stg_enriched_customer_funding_source AS (
     SELECT
         *,
 
@@ -45,5 +37,4 @@ enrichments_with_ordered_ids AS (
     FROM core_enrichments
 )
 
-SELECT *
-FROM enrichments_with_ordered_ids
+SELECT * FROM stg_enriched_customer_funding_source

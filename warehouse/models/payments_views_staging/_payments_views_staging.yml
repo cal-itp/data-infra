@@ -45,6 +45,47 @@ sources:
             description: Status of authorisation. One of (`Authorised`, `Declined`, `Failed`, `Invalid`, `Lost`, `Stolen`, `Unavailable`, `Unknown`, `Verified`)
           - &authorisations_authorisation_date_time_utc
             name: authorisation_date_time_utc
+      - name: customer_funding_source
+        description: |
+          The customer funding source table represents the information that
+          links a customer to the funding source personal identification number
+          (PAN) used to perform a tap. In order to uniquely identify a customer,
+          the `principal_customer_id` should be used. However, the data only
+          updates the `principal_customer_id` per `participant_id`.
+        columns:
+          - &customer_funding_source_masked_pan
+            name: masked_pan
+            description: First six and last four numbers of the PAN.
+          - &customer_funding_source_issuer_country
+            name: issuer_country
+            description: Country that the card issuer belongs to.
+          - &customer_funding_source_issuer
+            name: issuer
+            description: Name of the card issuer.
+          - &customer_funding_source_funding_source_id
+            name: funding_source_id
+            description: Unique identifier representing the funding source; a guid internal to Littlepay.
+          - &customer_funding_source_customer_id
+            name: customer_id
+            description: Unique identifier representing the customer that belongs to this customer funding source.
+          - &customer_funding_source_card_scheme
+            name: card_scheme
+            description: Card scheme of this funding source. One of (`VISA`, `MASTERCARD`).
+          - &customer_funding_source_bin
+            name: bin
+            description: First six numbers of the PAN.
+          - &customer_funding_source_funding_source_vault_id
+            name: funding_source_vault_id
+            description: Identifies the funding source (for example, card) that the micropayment will be charged to. This is always the card that was tapped. A registered customer can have multiple funding sources linked to them.
+          - &customer_funding_source_form_factor
+            name: form_factor
+            description: Form factor describing the contactless EMV device of the funding source.
+          - &customer_funding_source_principal_customer_id
+            name: principal_customer_id
+            description: The customer ID that the system initially creates when a new credit card has been identified.
+          - &customer_funding_source_participant_id
+            name: participant_id
+            description: The participant ID that uniquely identifies each participant.
 
 enrichment_field_declarations:
   - &calitp_hash
@@ -89,3 +130,35 @@ models:
       - *calitp_n_dupes
       - *calitp_n_dupe_ids
       - *calitp_dupe_number
+  - name: stg_enriched_customer_funding_source
+    columns:
+      - *customer_funding_source_masked_pan
+      - *customer_funding_source_issuer_country
+      - *customer_funding_source_issuer
+      - *customer_funding_source_funding_source_id
+      - *customer_funding_source_customer_id
+      - *customer_funding_source_card_scheme
+      - *customer_funding_source_bin
+      - *customer_funding_source_funding_source_vault_id
+      - *customer_funding_source_form_factor
+      - *customer_funding_source_principal_customer_id
+      - *customer_funding_source_participant_id
+      - *calitp_hash
+      - *calitp_file_name
+      - *calitp_export_account
+      - *calitp_export_datetime
+      - *calitp_n_dupes
+      - *calitp_n_dupe_ids
+      - *calitp_dupe_number
+      - name: calitp_funding_source_id_ranking_size
+        description: The number of records on which the `funding_source_id` shows up in the table
+      - name: calitp_funding_source_id_rank
+        description: A ranking of the records using the `funding_source_id`, ordered newest to oldest
+      - name: calitp_funding_source_vault_id_ranking_size
+        description: The number of records on which the `funding_source_vault_id` shows up in the table
+      - name: calitp_funding_source_vault_id_rank
+        description: A ranking of the records using the `funding_source_vault_id`, ordered newest to oldest
+      - name: calitp_customer_id_ranking_size
+        description: The number of records on which the `customer_id` shows up in the table
+      - name: calitp_customer_id_rank
+        description: A ranking of the records using the `customer_id`, ordered newest to oldest
