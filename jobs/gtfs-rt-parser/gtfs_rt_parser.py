@@ -52,7 +52,7 @@ class RTFile(BaseModel):
             self.file_type,
             f"dt={self.tick.to_date_string()}",
             f"itp_id={self.itp_id}",
-            f"url={self.url}",
+            f"url_number={self.url}",
             f"hour={self.tick.hour}",
             f"minute={self.tick.minute}",
             f"second={self.tick.second}",
@@ -152,7 +152,7 @@ def parse_file(bucket: str, rt_file: RTFile, pbar=None):
                 record.update(
                     {
                         "header": parsed["header"],
-                        "metadata": rt_file.json(),
+                        "metadata": json.loads(rt_file.json()),  # back and forth so we use pydantic serialization
                     }
                 )
                 gzipfile.write((json.dumps(record) + "\n").encode("utf-8"))

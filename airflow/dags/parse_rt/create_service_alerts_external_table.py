@@ -4,12 +4,161 @@
 # dependencies:
 #   - parse_rt_service_alerts
 # ---
-import json
-import tempfile
-import pandas as pd
 
-from calitp import query_sql, save_to_gcfs, get_engine
-from calitp.config import get_bucket
+from calitp.config import get_project_id
+from google.api_core.exceptions import Conflict
+from google.cloud import bigquery
+
+field = bigquery.SchemaField
+
+INTEGER = "INTEGER"
+NULLABLE = "NULLABLE"
+RECORD = "RECORD"
+REPEATED = "REPEATED"
+STRING = "STRING"
+TIMESTAMP = "TIMESTAMP"
+
+SCHEMA = [
+    field(
+        "metadata",
+        RECORD,
+        fields=[
+            field("path", STRING, mode=NULLABLE),
+            field("itp_id", INTEGER, mode=NULLABLE),
+            field("url", INTEGER, mode=NULLABLE),
+        ],
+    ),
+    field("id", STRING, mode=NULLABLE),
+    field(
+        "header",
+        RECORD,
+        mode=NULLABLE,
+        fields=[
+            field("timestamp", INTEGER, mode=NULLABLE),
+            field("incrementality", STRING, mode=NULLABLE),
+            field("gtfsRealtimeVersion", STRING, mode=NULLABLE),
+        ],
+    ),
+    field(
+        "alert",
+        RECORD,
+        fields=[
+            field(
+                "activePeriod",
+                RECORD,
+                mode=REPEATED,
+                fields=[
+                    field("start", INTEGER, mode=NULLABLE),
+                    field("end", INTEGER, mode=NULLABLE),
+                ],
+            ),
+            field(
+                "informedEntity",
+                RECORD,
+                mode=REPEATED,
+                fields=[
+                    field("agencyId", STRING, mode=NULLABLE),
+                    field("routeId", STRING, mode=NULLABLE),
+                    field("routeType", INTEGER, mode=NULLABLE),
+                    field("directionId", INTEGER, mode=NULLABLE),
+                    field("stopId", STRING, mode=NULLABLE),
+                    field("trip", RECORD, mode=NULLABLE, fields=[
+                        field("tripId", STRING, mode=NULLABLE),
+                        field("routeId", STRING, mode=NULLABLE),
+                        field("directionId", INTEGER, mode=NULLABLE),
+                        field("startTime", STRING, mode=NULLABLE),
+                        field("startDate", STRING, mode=NULLABLE),
+                        field("scheduleRelationship", STRING, mode=NULLABLE),
+                    ]),
+                ],
+            ),
+            field("cause", STRING, mode=NULLABLE),
+            field("effect", STRING, mode=NULLABLE),
+            field(
+                "url",
+                RECORD,
+                mode=NULLABLE,
+                fields=[
+                    field(
+                        "translation",
+                        RECORD,
+                        mode=REPEATED,
+                        fields=[
+                            field("text", STRING, mode=NULLABLE),
+                            field("language", STRING, mode=NULLABLE),
+                        ],
+                    ),
+                ],
+            ),
+            field(
+                "header_text",
+                RECORD,
+                mode=NULLABLE,
+                fields=[
+                    field(
+                        "translation",
+                        RECORD,
+                        mode=REPEATED,
+                        fields=[
+                            field("text", STRING, mode=NULLABLE),
+                            field("language", STRING, mode=NULLABLE),
+                        ],
+                    ),
+                ],
+            ),
+            field(
+                "description_text",
+                RECORD,
+                mode=NULLABLE,
+                fields=[
+                    field(
+                        "translation",
+                        RECORD,
+                        mode=REPEATED,
+                        fields=[
+                            field("text", STRING, mode=NULLABLE),
+                            field("language", STRING, mode=NULLABLE),
+                        ],
+                    ),
+                ],
+            ),
+            field(
+                "tts_header_text",
+                RECORD,
+                mode=NULLABLE,
+                fields=[
+                    field(
+                        "translation",
+                        RECORD,
+                        mode=REPEATED,
+                        fields=[
+                            field("text", STRING, mode=NULLABLE),
+                            field("language", STRING, mode=NULLABLE),
+                        ],
+                    ),
+                ],
+            ),
+            field(
+                "tts_description_text",
+                RECORD,
+                mode=NULLABLE,
+                fields=[
+                    field(
+                        "translation",
+                        RECORD,
+                        mode=REPEATED,
+                        fields=[
+                            field("text", STRING, mode=NULLABLE),
+                            field("language", STRING, mode=NULLABLE),
+                        ],
+                    ),
+                ],
+            ),
+            field("severityLevel", STRING, mode=NULLABLE),
+
+        ],
+    ),
+]
 
 SERVICE_ALERTS_SCHEMA = [
   {
@@ -137,7 +286,7 @@ SERVICE_ALERTS_SCHEMA = [
             "type": "STRING"
           }
         ],
-        "mode": "REPEATED",
+        "mode": REPEATED,
         "name": "translation",
         "type": "RECORD"
       }
@@ -158,7 +307,7 @@ SERVICE_ALERTS_SCHEMA = [
             "type": "STRING"
           }
         ],
-        "mode": "REPEATED",
+        "mode": REPEATED,
         "name": "translation",
         "type": "RECORD"
       }
@@ -179,7 +328,7 @@ SERVICE_ALERTS_SCHEMA = [
             "type": "STRING"
           }
         ],
-        "mode": "REPEATED",
+        "mode": REPEATED,
         "name": "translation",
         "type": "RECORD"
       }
@@ -200,7 +349,7 @@ SERVICE_ALERTS_SCHEMA = [
             "type": "STRING"
           }
         ],
-        "mode": "REPEATED",
+        "mode": REPEATED,
         "name": "translation",
         "type": "RECORD"
       }
@@ -221,7 +370,7 @@ SERVICE_ALERTS_SCHEMA = [
             "type": "STRING"
           }
         ],
-        "mode": "REPEATED",
+        "mode": REPEATED,
         "name": "translation",
         "type": "RECORD"
       }
@@ -237,61 +386,29 @@ SERVICE_ALERTS_SCHEMA = [
 
 
 def main(execution_date, **kwargs):
-    engine = get_engine()
+    client = bigquery.Client()
+    hive_options = bigquery.external_config.HivePartitioningOptions()
+    hive_options.mode = "AUTO"
+    # TODO: do we want this for RT?
+    # opt.require_partition_filter = True
+    hive_options.source_uri_prefix = "gs://gtfs-data-test/service_alerts/"
 
-    with tempfile.TemporaryDirectory() as tmpdir:
-        schema_fname = os.path.join(tmpdir, "external_def")
-        with open(schema_fname, "w") as f:
-            json.dump(SERVICE_ALERTS_SCHEMA, f)
-        subprocess.run([]).check_returncode()
+    external_config = bigquery.ExternalConfig("NEWLINE_DELIMITED_JSON")
+    external_config.source_uris = ["gs://gtfs-data-test/service_alerts/*.jsonl.gz"]
+    external_config.autodetect = True
+    external_config.ignore_unknown_values = True
+    external_config.hive_partitioning = hive_options
 
-    raw_params = query_sql(
-        f"""
-        SELECT
-            calitp_itp_id,
-            calitp_url_number,
-            calitp_extracted_at
-        FROM gtfs_schedule_history.calitp_feed_status
-        WHERE
-            is_extract_success
-            AND NOT is_parse_error
-            AND calitp_extracted_at = "{date_string}"
-        """,
-        as_df=True,
-    )
+    table = bigquery.Table(table_ref=bigquery.DatasetReference(get_project_id(), "gtfs_rt").table("external_service_alerts"),
+                           schema=SCHEMA,
+                           )
+    table.external_data_configuration = external_config
 
-    # Note that raw RT data is currently stored in the production bucket,
-    # and not copied to the staging bucket
-    prefix_path_schedule = f"{get_bucket()}/schedule/{execution_date}"
+    try:
+        table = client.create_table(table)
+    except Conflict:
+        print(f"WARNING: got Conflict, dropping table and re-creating")
+        client.delete_table(table)
+        table = client.create_table(table)
 
-    # This prefix limits the validation to only 1 hour of data currently
-    prefix_path_rt = f"gtfs-data/rt/{date_string}T00:*"
-
-    raw_params["entity"] = [
-        ("service_alerts", "trip_updates", "vehicle_positions")
-    ] * len(raw_params)
-    params = raw_params.explode("entity").reset_index(drop=True)
-
-    params = pd.concat(
-        [
-            params,
-            params.apply(
-                lambda row: {
-                    "gtfs_schedule_path": f"{prefix_path_schedule}/{row.calitp_itp_id}_{row.calitp_url_number}",
-                    "gtfs_rt_glob_path": f"{prefix_path_rt}/{row.calitp_itp_id}/{row.calitp_url_number}/*{row.entity}*",
-                    "output_filename": row.entity,
-                },
-                axis="columns",
-                result_type="expand",
-            ),
-        ],
-        axis="columns",
-    )
-
-    path = f"rt-processed/calitp_validation_params/{date_string}.csv"
-    print(f"saving {params.shape[0]} validation params to {path}")
-    save_to_gcfs(
-        params.to_csv(index=False).encode(),
-        path,
-        use_pipe=True,
-    )
+    print(f"created table {table.full_table_id}")
