@@ -98,24 +98,25 @@ def run(
             subprocess.run(args)
 
     if sync_metabase:
-        subprocess.run(
-            [
-                "dbt-metabase",
-                "models",
-                "--dbt_manifest_path",
-                "./target/manifest.json",
-                "--dbt_database",
-                "cal-itp-data-infra",
-                "--metabase_host",
-                "dashboards.calitp.org",
-                "--metabase_user",
-                os.environ["METABASE_USER"],
-                "--metabase_password",
-                os.environ["METABASE_PASSWORD"],
-                "--metabase_database",
-                "Warehouse Views",
-            ]
-        )
+        for database in ["Warehouse Views", "GTFS Schedule Views Latest"]:
+            subprocess.run(
+                [
+                    "dbt-metabase",
+                    "models",
+                    "--dbt_manifest_path",
+                    "./target/manifest.json",
+                    "--dbt_database",
+                    "cal-itp-data-infra",
+                    "--metabase_host",
+                    "dashboards.calitp.org",
+                    "--metabase_user",
+                    os.environ["METABASE_USER"],
+                    "--metabase_password",
+                    os.environ["METABASE_PASSWORD"],
+                    "--metabase_database",
+                    database,
+                ]
+            )
 
     if test_result:
         test_result.check_returncode()
