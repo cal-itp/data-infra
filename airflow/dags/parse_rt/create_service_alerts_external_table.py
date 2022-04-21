@@ -62,14 +62,19 @@ SCHEMA = [
                     field("routeType", INTEGER, mode=NULLABLE),
                     field("directionId", INTEGER, mode=NULLABLE),
                     field("stopId", STRING, mode=NULLABLE),
-                    field("trip", RECORD, mode=NULLABLE, fields=[
-                        field("tripId", STRING, mode=NULLABLE),
-                        field("routeId", STRING, mode=NULLABLE),
-                        field("directionId", INTEGER, mode=NULLABLE),
-                        field("startTime", STRING, mode=NULLABLE),
-                        field("startDate", STRING, mode=NULLABLE),
-                        field("scheduleRelationship", STRING, mode=NULLABLE),
-                    ]),
+                    field(
+                        "trip",
+                        RECORD,
+                        mode=NULLABLE,
+                        fields=[
+                            field("tripId", STRING, mode=NULLABLE),
+                            field("routeId", STRING, mode=NULLABLE),
+                            field("directionId", INTEGER, mode=NULLABLE),
+                            field("startTime", STRING, mode=NULLABLE),
+                            field("startDate", STRING, mode=NULLABLE),
+                            field("scheduleRelationship", STRING, mode=NULLABLE),
+                        ],
+                    ),
                 ],
             ),
             field("cause", STRING, mode=NULLABLE),
@@ -155,233 +160,133 @@ SCHEMA = [
                 ],
             ),
             field("severityLevel", STRING, mode=NULLABLE),
-
         ],
     ),
 ]
 
 SERVICE_ALERTS_SCHEMA = [
-  {
-    "name": "calitp_itp_id",
-    "type": "INTEGER"
-  },
-  {
-    "name": "calitp_url_number",
-    "type": "INTEGER"
-  },
-  {
-    "name": "calitp_filepath",
-    "type": "STRING"
-  },
-  {
-    "name": "id",
-    "type": "STRING"
-  },
-  {
-    "fields": [
-      {
-        "name": "timestamp",
-        "type": "INTEGER"
-      },
-      {
-        "name": "incrementality",
-        "type": "STRING"
-      },
-      {
-        "name": "gtfsRealtimeVersion",
-        "type": "STRING"
-      }
-    ],
-    "name": "header",
-    "type": "RECORD"
-  },
-  {
-    "fields": [
-      {
-        "name": "start",
-        "type": "INTEGER"
-      },
-      {
-        "name": "end",
-        "type": "INTEGER"
-      }
-    ],
-    "name": "activePeriod",
-    "type": "RECORD"
-  },
-  {
-    "fields": [
-      {
-        "name": "agencyId",
-        "type": "STRING"
-      },
-      {
-        "name": "routeId",
-        "type": "STRING"
-      },
-      {
-        "name": "routeType",
-        "type": "INTEGER"
-      },
-      {
-        "name": "directionId",
-        "type": "INTEGER"
-      },
-      {
+    {"name": "calitp_itp_id", "type": "INTEGER"},
+    {"name": "calitp_url_number", "type": "INTEGER"},
+    {"name": "calitp_filepath", "type": "STRING"},
+    {"name": "id", "type": "STRING"},
+    {
         "fields": [
-          {
-            "name": "tripId",
-            "type": "STRING"
-          },
-          {
-            "name": "routeId",
-            "type": "STRING"
-          },
-          {
-            "name": "directionId",
-            "type": "INTEGER"
-          },
-          {
-            "name": "startTime",
-            "type": "STRING"
-          },
-          {
-            "name": "startDate",
-            "type": "STRING"
-          },
-          {
-            "name": "scheduleRelationship",
-            "type": "STRING"
-          }
+            {"name": "timestamp", "type": "INTEGER"},
+            {"name": "incrementality", "type": "STRING"},
+            {"name": "gtfsRealtimeVersion", "type": "STRING"},
         ],
-        "name": "trip",
-        "type": "RECORD"
-      },
-      {
-        "name": "stopId",
-        "type": "STRING"
-      }
-    ],
-    "name": "informedEntity",
-    "type": "RECORD"
-  },
-  {
-    "name": "cause",
-    "type": "STRING"
-  },
-  {
-    "name": "effect",
-    "type": "STRING"
-  },
-  {
-    "fields": [
-      {
+        "name": "header",
+        "type": "RECORD",
+    },
+    {
         "fields": [
-          {
-            "name": "text",
-            "type": "STRING"
-          },
-          {
-            "name": "language",
-            "type": "STRING"
-          }
+            {"name": "start", "type": "INTEGER"},
+            {"name": "end", "type": "INTEGER"},
         ],
-        "mode": REPEATED,
-        "name": "translation",
-        "type": "RECORD"
-      }
-    ],
-    "name": "url",
-    "type": "RECORD"
-  },
-  {
-    "fields": [
-      {
+        "name": "activePeriod",
+        "type": "RECORD",
+    },
+    {
         "fields": [
-          {
-            "name": "text",
-            "type": "STRING"
-          },
-          {
-            "name": "language",
-            "type": "STRING"
-          }
+            {"name": "agencyId", "type": "STRING"},
+            {"name": "routeId", "type": "STRING"},
+            {"name": "routeType", "type": "INTEGER"},
+            {"name": "directionId", "type": "INTEGER"},
+            {
+                "fields": [
+                    {"name": "tripId", "type": "STRING"},
+                    {"name": "routeId", "type": "STRING"},
+                    {"name": "directionId", "type": "INTEGER"},
+                    {"name": "startTime", "type": "STRING"},
+                    {"name": "startDate", "type": "STRING"},
+                    {"name": "scheduleRelationship", "type": "STRING"},
+                ],
+                "name": "trip",
+                "type": "RECORD",
+            },
+            {"name": "stopId", "type": "STRING"},
         ],
-        "mode": REPEATED,
-        "name": "translation",
-        "type": "RECORD"
-      }
-    ],
-    "name": "header_text",
-    "type": "RECORD"
-  },
-  {
-    "fields": [
-      {
+        "name": "informedEntity",
+        "type": "RECORD",
+    },
+    {"name": "cause", "type": "STRING"},
+    {"name": "effect", "type": "STRING"},
+    {
         "fields": [
-          {
-            "name": "text",
-            "type": "STRING"
-          },
-          {
-            "name": "language",
-            "type": "STRING"
-          }
+            {
+                "fields": [
+                    {"name": "text", "type": "STRING"},
+                    {"name": "language", "type": "STRING"},
+                ],
+                "mode": REPEATED,
+                "name": "translation",
+                "type": "RECORD",
+            }
         ],
-        "mode": REPEATED,
-        "name": "translation",
-        "type": "RECORD"
-      }
-    ],
-    "name": "description_text",
-    "type": "RECORD"
-  },
-  {
-    "fields": [
-      {
+        "name": "url",
+        "type": "RECORD",
+    },
+    {
         "fields": [
-          {
-            "name": "text",
-            "type": "STRING"
-          },
-          {
-            "name": "language",
-            "type": "STRING"
-          }
+            {
+                "fields": [
+                    {"name": "text", "type": "STRING"},
+                    {"name": "language", "type": "STRING"},
+                ],
+                "mode": REPEATED,
+                "name": "translation",
+                "type": "RECORD",
+            }
         ],
-        "mode": REPEATED,
-        "name": "translation",
-        "type": "RECORD"
-      }
-    ],
-    "name": "tts_header_text",
-    "type": "RECORD"
-  },
-  {
-    "fields": [
-      {
+        "name": "header_text",
+        "type": "RECORD",
+    },
+    {
         "fields": [
-          {
-            "name": "text",
-            "type": "STRING"
-          },
-          {
-            "name": "language",
-            "type": "STRING"
-          }
+            {
+                "fields": [
+                    {"name": "text", "type": "STRING"},
+                    {"name": "language", "type": "STRING"},
+                ],
+                "mode": REPEATED,
+                "name": "translation",
+                "type": "RECORD",
+            }
         ],
-        "mode": REPEATED,
-        "name": "translation",
-        "type": "RECORD"
-      }
-    ],
-    "name": "tts_description_text",
-    "type": "RECORD"
-  },
-  {
-    "name": "severityLevel",
-    "type": "STRING"
-  }
+        "name": "description_text",
+        "type": "RECORD",
+    },
+    {
+        "fields": [
+            {
+                "fields": [
+                    {"name": "text", "type": "STRING"},
+                    {"name": "language", "type": "STRING"},
+                ],
+                "mode": REPEATED,
+                "name": "translation",
+                "type": "RECORD",
+            }
+        ],
+        "name": "tts_header_text",
+        "type": "RECORD",
+    },
+    {
+        "fields": [
+            {
+                "fields": [
+                    {"name": "text", "type": "STRING"},
+                    {"name": "language", "type": "STRING"},
+                ],
+                "mode": REPEATED,
+                "name": "translation",
+                "type": "RECORD",
+            }
+        ],
+        "name": "tts_description_text",
+        "type": "RECORD",
+    },
+    {"name": "severityLevel", "type": "STRING"},
 ]
 
 
@@ -399,15 +304,16 @@ def main(execution_date, **kwargs):
     external_config.ignore_unknown_values = True
     external_config.hive_partitioning = hive_options
 
-    table = bigquery.Table(table_ref=bigquery.DatasetReference(get_project_id(), "gtfs_rt").table("external_service_alerts"),
-                           schema=SCHEMA,
-                           )
+    table = bigquery.Table(
+        table_ref=bigquery.DatasetReference(get_project_id(), "gtfs_rt").table("external_service_alerts"),
+        schema=SCHEMA,
+    )
     table.external_data_configuration = external_config
 
     try:
         table = client.create_table(table)
     except Conflict:
-        print(f"WARNING: got Conflict, dropping table and re-creating")
+        print("WARNING: got Conflict, dropping table and re-creating")
         client.delete_table(table)
         table = client.create_table(table)
 
