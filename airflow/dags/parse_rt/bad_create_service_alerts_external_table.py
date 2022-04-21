@@ -1,10 +1,3 @@
-# ---
-# python_callable: main
-# provide_context: true
-# dependencies:
-#   - parse_rt_service_alerts
-# ---
-
 from calitp.config import get_project_id
 from google.api_core.exceptions import Conflict
 from google.cloud import bigquery
@@ -162,6 +155,131 @@ SCHEMA = [
             field("severityLevel", STRING, mode=NULLABLE),
         ],
     ),
+]
+
+SERVICE_ALERTS_SCHEMA = [
+    {"name": "calitp_itp_id", "type": "INTEGER"},
+    {"name": "calitp_url_number", "type": "INTEGER"},
+    {"name": "calitp_filepath", "type": "STRING"},
+    {"name": "id", "type": "STRING"},
+    {
+        "fields": [
+            {"name": "timestamp", "type": "INTEGER"},
+            {"name": "incrementality", "type": "STRING"},
+            {"name": "gtfsRealtimeVersion", "type": "STRING"},
+        ],
+        "name": "header",
+        "type": "RECORD",
+    },
+    {
+        "fields": [
+            {"name": "start", "type": "INTEGER"},
+            {"name": "end", "type": "INTEGER"},
+        ],
+        "name": "activePeriod",
+        "type": "RECORD",
+    },
+    {
+        "fields": [
+            {"name": "agencyId", "type": "STRING"},
+            {"name": "routeId", "type": "STRING"},
+            {"name": "routeType", "type": "INTEGER"},
+            {"name": "directionId", "type": "INTEGER"},
+            {
+                "fields": [
+                    {"name": "tripId", "type": "STRING"},
+                    {"name": "routeId", "type": "STRING"},
+                    {"name": "directionId", "type": "INTEGER"},
+                    {"name": "startTime", "type": "STRING"},
+                    {"name": "startDate", "type": "STRING"},
+                    {"name": "scheduleRelationship", "type": "STRING"},
+                ],
+                "name": "trip",
+                "type": "RECORD",
+            },
+            {"name": "stopId", "type": "STRING"},
+        ],
+        "name": "informedEntity",
+        "type": "RECORD",
+    },
+    {"name": "cause", "type": "STRING"},
+    {"name": "effect", "type": "STRING"},
+    {
+        "fields": [
+            {
+                "fields": [
+                    {"name": "text", "type": "STRING"},
+                    {"name": "language", "type": "STRING"},
+                ],
+                "mode": REPEATED,
+                "name": "translation",
+                "type": "RECORD",
+            }
+        ],
+        "name": "url",
+        "type": "RECORD",
+    },
+    {
+        "fields": [
+            {
+                "fields": [
+                    {"name": "text", "type": "STRING"},
+                    {"name": "language", "type": "STRING"},
+                ],
+                "mode": REPEATED,
+                "name": "translation",
+                "type": "RECORD",
+            }
+        ],
+        "name": "header_text",
+        "type": "RECORD",
+    },
+    {
+        "fields": [
+            {
+                "fields": [
+                    {"name": "text", "type": "STRING"},
+                    {"name": "language", "type": "STRING"},
+                ],
+                "mode": REPEATED,
+                "name": "translation",
+                "type": "RECORD",
+            }
+        ],
+        "name": "description_text",
+        "type": "RECORD",
+    },
+    {
+        "fields": [
+            {
+                "fields": [
+                    {"name": "text", "type": "STRING"},
+                    {"name": "language", "type": "STRING"},
+                ],
+                "mode": REPEATED,
+                "name": "translation",
+                "type": "RECORD",
+            }
+        ],
+        "name": "tts_header_text",
+        "type": "RECORD",
+    },
+    {
+        "fields": [
+            {
+                "fields": [
+                    {"name": "text", "type": "STRING"},
+                    {"name": "language", "type": "STRING"},
+                ],
+                "mode": REPEATED,
+                "name": "translation",
+                "type": "RECORD",
+            }
+        ],
+        "name": "tts_description_text",
+        "type": "RECORD",
+    },
+    {"name": "severityLevel", "type": "STRING"},
 ]
 
 
