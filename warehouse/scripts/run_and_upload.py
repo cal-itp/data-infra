@@ -86,14 +86,16 @@ def run(
                 shutil.copy(_from, "docs/")
 
         if deploy_docs:
-            subprocess.run(
-                [
-                    "netlify",
-                    "deploy",
-                    "--dir=docs/",
-                    # "--alias=dbt-docs",
-                ],
-            )
+            args = [
+                "netlify",
+                "deploy",
+                "--dir=docs/",
+            ]
+
+            if target.startswith("prod"):
+                args.append("--prod")
+
+            subprocess.run(args)
 
     if sync_metabase:
         subprocess.run(
