@@ -7,11 +7,9 @@ external_dependencies:
 ---
 
 {{
-
   sql_enrich_duplicates(
     "payments.device_transaction_purchases",
     ["purchase_id"],
     ["calitp_file_name desc"]
   )
-
 }}
