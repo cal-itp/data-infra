@@ -33,10 +33,14 @@ def _bq_client_create_external_table(
     ext.ignore_unknown_values = True
 
     if hive_options:
-        assert len(source_objects) == 1, "cannot use hive partitioning with more than one URI"
+        assert (
+            len(source_objects) == 1
+        ), "cannot use hive partitioning with more than one URI"
         opt = bigquery.external_config.HivePartitioningOptions()
         opt.mode = hive_options.get("mode", "AUTO")
-        opt.require_partition_filter = hive_options.get("require_partition_filter", False)
+        opt.require_partition_filter = hive_options.get(
+            "require_partition_filter", False
+        )
         # TODO: this is very fragile
         opt.source_uri_prefix = get_bucket() + hive_options["source_uri_prefix"]
         ext.hive_partitioning = opt
@@ -76,7 +80,9 @@ class ExternalTable(BaseOperator):
         **kwargs,
     ):
         self.bucket = bucket
-        self.destination_project_dataset_table = format_table_name(destination_project_dataset_table)
+        self.destination_project_dataset_table = format_table_name(
+            destination_project_dataset_table
+        )
         self.skip_leading_rows = skip_leading_rows
         self.schema_fields = schema_fields
         self.source_objects = list(map(self.fix_prefix, source_objects))
@@ -103,9 +109,13 @@ class ExternalTable(BaseOperator):
 
         else:
             if self.hive_options:
-                raise RuntimeError("have to use the bigquery client when creating a hive partitioned table")
+                raise RuntimeError(
+                    "have to use the bigquery client when creating a hive partitioned table"
+                )
 
-            field_strings = [f'{entry["name"]} {entry["type"]}' for entry in self.schema_fields]
+            field_strings = [
+                f'{entry["name"]} {entry["type"]}' for entry in self.schema_fields
+            ]
             fields_spec = ",\n".join(field_strings)
 
             query = f"""
