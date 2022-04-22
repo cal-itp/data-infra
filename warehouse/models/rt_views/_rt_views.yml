@@ -16,7 +16,12 @@ sources:
       - name: validation_service_alerts
       - name: validation_trip_updates
       - name: validation_vehicle_positions
-
+  - name: gtfs_rt_logs
+    description: Data in the gtfs_rt_logs dataset in BigQuery, from logs sink.
+    database: cal-itp-data-infra
+    schema: gtfs_rt_logs
+    tables:
+      - name: stdout
 
 models:
   - name: gtfs_rt_fact_files
@@ -177,5 +182,30 @@ models:
           - not_null
       - name: occurrences
         description: The number of occurrences for this combination.
+        tests:
+          - not_null
+
+  - name: gtfs_rt_extraction_errors
+    description: |
+      Each row is a unique error message of a feed that
+      failed to fetch the feed url used in agencies.yml
+    columns:
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+        tests:
+          - not_null
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+        tests:
+          - not_null
+      - name: textPayload
+        description: |
+          Error message that contains error severity, error summary,
+          and the RT URL that caused the error
+        tests:
+          - not_null
+      - name: timestamp
+        description: |
+          Time and date when error message was received
         tests:
           - not_null
