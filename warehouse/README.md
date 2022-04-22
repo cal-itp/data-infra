@@ -23,14 +23,14 @@ calitp_warehouse:
 
 See [the dbt docs on profiles.yml](https://docs.getdbt.com/dbt-cli/configure-your-profile) for more background on this file.
 
-2. Install poetry (used for package/dependency management). You can try as described in the [poetry docs](https://python-poetry.org/docs/#osx--linux--bashonwindows-install-instructions) -- this has not worked for some of us; we have had to run `python -m pip install poetry`. **Note: If you have to `pip install` poetry, then in all the commands below, you will need to prefix them with `python -m`. So the `poetry install` command becomes `python -m poetry install`.**
+2. Install poetry (used for package/dependency management). You can try as described in the [poetry docs](https://python-poetry.org/docs/#osx--linux--bashonwindows-install-instructions) -- this has not worked for some of us; we have had to run `python3 -m pip install poetry`. **Note: If you have to `pip install` poetry, then in all the commands below, you will need to prefix them with `python3 -m`. So the `poetry install` command becomes `python3 -m poetry install`.**
 3. Navigate into the `data-infra/warehouse` directory and run the following commands:
     * To install general dependencies, including to install dbt itself: `poetry install`
     * To install dbt package dependencies: `poetry run dbt deps`
 
 ## Running the project locally
 
-Once you have performed the setup above, you are good to go run [dbt commands](https://docs.getdbt.com/reference/dbt-commands) locally! As above, if you had to `pip install` poetry, you will need to prefix all commands with `python -m`.
+Once you have performed the setup above, you are good to go run [dbt commands](https://docs.getdbt.com/reference/dbt-commands) locally! As above, if you had to `pip install` poetry, you will need to prefix all commands with `python3 -m`.
 
 Some especially helpful commands:
 * `poetry run dbt compile` -- will compile all the models (generate SQL, with references resolved) but won't execute anything in the warehouse
