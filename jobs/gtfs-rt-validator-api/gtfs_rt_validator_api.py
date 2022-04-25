@@ -6,9 +6,11 @@ import multiprocessing
 import os
 import shutil
 import subprocess
+import tempfile
 import traceback
 from collections import defaultdict
 from concurrent.futures import ProcessPoolExecutor
+from enum import Enum
 from pathlib import Path
 from tempfile import NamedTemporaryFile, TemporaryDirectory
 
@@ -18,6 +20,8 @@ import pendulum
 import structlog as structlog
 import typer
 from calitp.config import get_bucket
+from calitp.storage import get_fs
+from pydantic.main import BaseModel
 from structlog import configure
 from structlog.threadlocal import bind_threadlocal, clear_threadlocal, merge_threadlocal
 
@@ -42,10 +46,34 @@ try:
 except KeyError:
     raise Exception("Must set the environment variable GTFS_VALIDATOR_JAR")
 
-# https://typer.tiangolo.com/
 app = typer.Typer()
 
-# Utility funcs ----
+
+class RTFileType(str, Enum):
+    service_alerts = "service_alerts"
+    trip_updates = "trip_updates"
+    vehicle_positions = "vehicle_positions"
+
+
+class RTFile(BaseModel):
+    file_type: RTFileType
+    path: Path
+    itp_id: int
+    url: int
+    tick: pendulum.DateTime
+
+    def validation_hive_path(self, bucket: str):
+        return os.path.join(
+            bucket,
+            f"{self.file_type}_validations",
+            f"dt={self.tick.to_date_string()}",
+            f"itp_id={self.itp_id}",
+            f"url_number={self.url}",
+            f"hour={self.tick.hour}",
+            f"minute={self.tick.minute}",
+            f"second={self.tick.second}",
+            self.path.name,
+        )
 
 
 def json_to_newline_delimited(in_file, out_file):
@@ -54,48 +82,54 @@ def json_to_newline_delimited(in_file, out_file):
         f.write("\n".join([json.dumps(record) for record in data]))
 
 
-def parse_pb_name_data(file_name):
-    """Returns data encoded in extraction files, such as datetime or itp id.
-
-    >>> parse_pb_name_data("2021-01-01__1__0__filename__etc")
-    {'extraction_date': '2021-01-01', 'itp_id': 1, 'url_number': 0, 'src_fname': 'filename'}
-
-    """
-
-    extraction_date, itp_id, url_number, src_fname, *_ = Path(file_name).name.split(
-        "__"
-    )
-    return dict(
-        extraction_date=extraction_date,
-        itp_id=int(itp_id),
-        url_number=int(url_number),
-        src_fname=src_fname,
-    )
+def download_gtfs_schedule_zip(gtfs_schedule_path, dst_path, fs):
+    # fetch and zip gtfs schedule
+    logger.info(f"Fetching gtfs schedule data from {gtfs_schedule_path} to {dst_path}")
+    fs.get(gtfs_schedule_path, dst_path, recursive=True)
+    try:
+        os.remove(os.path.join(dst_path, "areas.txt"))
+    except FileNotFoundError:
+        pass
+    shutil.make_archive(dst_path, "zip", dst_path)
 
 
-def build_pb_validator_name(extraction_date, itp_id, url_number, src_fname):
-    """Return name for file in the format needed for validation.
-
-    Note that the RT validator needs to use timestamps at the end of the filename,
-    so this function ensures they are present.
-
-    """
-
-    return RT_FILENAME_TEMPLATE.format(
-        extraction_date=extraction_date,
-        itp_id=itp_id,
-        url_number=url_number,
-        src_fname=src_fname,
+def download_rt_files(glob, dst_path, fs=None) -> List[str]:
+    # {date}T{timestamp}/{itp_id}/{url_number}
+    all_files = (
+        fs.glob(glob_path)
+        if glob_path
+        else fs.glob(f"{RT_BUCKET_FOLDER}/{date}*/*/*/*")
     )
 
+    to_copy = []
+    out_feeds = defaultdict(lambda: [])
+    for src_path in all_files:
+        dt, itp_id, url_number, src_fname = src_path.split("/")[-4:]
+        if glob_path:
+            dst_parent = Path(dst_dir)
+        else:
+            # if we are downloading multiple feeds, make each feed a subdir
+            dst_parent = Path(dst_dir) / itp_id / url_number
 
-# Validation ==================================================================
+        dst_parent.mkdir(parents=True, exist_ok=True)
 
+        out_fname = build_pb_validator_name(dt, itp_id, url_number, src_fname)
 
-def gather_results(rt_path):
-    # TODO: complete functionality to unpack results into a DataFrame
-    # Path(rt_path).glob("*.results.json")
-    raise NotImplementedError()
+        dst_name = str(dst_parent / out_fname)
+
+        to_copy.append([src_path, dst_name])
+        out_feeds[(itp_id, url_number)].append(dst_name)
+
+    if not to_copy:
+        msg = "failed to find any rt files to download"
+        logger.warn(msg)
+        raise ValueError(msg)
+
+    logger.info(f"downloading {len(to_copy)} files with glob_path {glob_path}")
+
+    src_files, dst_files = zip(*to_copy)
+    fs.get(list(src_files), list(dst_files))
+    return len(to_copy)
 
 
 @app.command()
@@ -123,6 +157,21 @@ def validate(gtfs_file, rt_path, verbose=False):
         stderr=stderr,
         stdout=stdout,
     )
+
+@app.command()
+def validate_glob(
+    file_type: RTFileType,
+    glob: str,
+    gtfs_schedule_path: Path,
+    gtfs_rt_glob: str,
+    dst_bucket: str,
+) -> None:
+    fs = get_fs()
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        dst_path_gtfs = f"{tmp_dir}/gtfs"
+        dst_path_rt = f"{tmp_dir}/rt"
+        num_files = download_rt_files(dst_path_rt, fs, glob_path=gtfs_rt_glob)
 
 
 @app.command()
@@ -189,10 +238,10 @@ def validate_gcs_bucket(
         if gtfs_rt_glob_path is None:
             raise ValueError("One of gtfs rt glob path or date must be specified")
 
-        num_files = download_rt_files(dst_path_rt, fs, glob_path=gtfs_rt_glob_path)
+        num_files = download_rt_files(dst_path_rt, fs=fs, glob_path=gtfs_rt_glob_path)
 
         # fetch and zip gtfs schedule
-        download_gtfs_schedule_zip(gtfs_schedule_path, dst_path_gtfs, fs)
+        download_gtfs_schedule_zip(gtfs_schedule_path, dst_path_gtfs, fs=fs)
 
         logger.info(f"validating {num_files} files")
         validate(f"{dst_path_gtfs}.zip", dst_path_rt, verbose=verbose)
@@ -343,96 +392,6 @@ def validate_gcs_bucket_many(
 
     if summary_path:
         fs.pipe(summary_path, summary_ndjson.encode())
-
-
-def download_gtfs_schedule_zip(gtfs_schedule_path, dst_path, fs):
-    # fetch and zip gtfs schedule
-    logger.info(f"Fetching gtfs schedule data from {gtfs_schedule_path} to {dst_path}")
-    fs.get(gtfs_schedule_path, dst_path, recursive=True)
-    try:
-        os.remove(os.path.join(dst_path, "areas.txt"))
-    except FileNotFoundError:
-        pass
-    shutil.make_archive(dst_path, "zip", dst_path)
-
-
-def download_rt_files(dst_dir, fs=None, date="2021-08-01", glob_path=None) -> int:
-    """Download all files for an GTFS RT feed (or multiple feeds)
-
-    If date is specified, downloads daily data for all feeds. Otherwise, if
-    glob_path is specified, downloads data for a single feed.
-
-    Parameters:
-        date: date of desired feeds to download data from (e.g. 2021-09-01)
-        glob_path: if specified, the path (including a wildcard) for downloading a
-                   single feed.
-
-    """
-    if fs is None:
-        raise NotImplementedError("Must specify fs")
-
-    # {date}T{timestamp}/{itp_id}/{url_number}
-    all_files = (
-        fs.glob(glob_path)
-        if glob_path
-        else fs.glob(f"{RT_BUCKET_FOLDER}/{date}*/*/*/*")
-    )
-
-    to_copy = []
-    out_feeds = defaultdict(lambda: [])
-    for src_path in all_files:
-        dt, itp_id, url_number, src_fname = src_path.split("/")[-4:]
-        if glob_path:
-            dst_parent = Path(dst_dir)
-        else:
-            # if we are downloading multiple feeds, make each feed a subdir
-            dst_parent = Path(dst_dir) / itp_id / url_number
-
-        dst_parent.mkdir(parents=True, exist_ok=True)
-
-        out_fname = build_pb_validator_name(dt, itp_id, url_number, src_fname)
-
-        dst_name = str(dst_parent / out_fname)
-
-        to_copy.append([src_path, dst_name])
-        out_feeds[(itp_id, url_number)].append(dst_name)
-
-    if not to_copy:
-        msg = "failed to find any rt files to download"
-        logger.warn(msg)
-        raise ValueError(msg)
-
-    logger.info(f"downloading {len(to_copy)} files with glob_path {glob_path}")
-
-    src_files, dst_files = zip(*to_copy)
-    fs.get(list(src_files), list(dst_files))
-    return len(to_copy)
-
-
-# Rectangling =================================================================
-
-
-def rollup_error_counts(rt_dir):
-    result_files = Path(rt_dir).glob("*.results.json")
-
-    code_counts = []
-    for path in result_files:
-        metadata = parse_pb_name_data(path)
-
-        result_json = json.load(path.open())
-        for entry in result_json:
-            code_counts.append(
-                {
-                    "calitp_itp_id": metadata["itp_id"],
-                    "calitp_url_number": metadata["url_number"],
-                    "calitp_extracted_at": metadata["extraction_date"],
-                    "rt_feed_type": metadata["src_fname"],
-                    "error_id": entry["errorMessage"]["validationRule"]["errorId"],
-                    "n_occurrences": len(entry["occurrenceList"]),
-                }
-            )
-
-    return code_counts
 
 
 if __name__ == "__main__":
