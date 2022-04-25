@@ -1,6 +1,4 @@
 operator: operators.ExternalTable
-dependencies:
-  - parse_rt_trip_updates
 source_objects:
   - "trip_updates/*.jsonl.gz"
 destination_project_dataset_table: "gtfs_rt.external_trip_updates"
