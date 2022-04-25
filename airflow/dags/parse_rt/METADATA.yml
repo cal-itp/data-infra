@@ -1,5 +1,5 @@
 description: "Parses GTFS RT Protobufs, writes JSONL to GCS, and creates external tables for those files."
-schedule_interval: "15 * * * *"
+schedule_interval: "30 * * * *"
 tags:
   - all_gusty_features
 default_args:

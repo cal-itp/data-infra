@@ -188,10 +188,13 @@ def try_handle_one_feed(*args, **kwargs) -> Optional[Exception]:
 
 def main(
     file_type: RTFileType,
-    glob: str = f"{get_bucket()}/rt/{yesterday}T12:*",
+    glob: str,
     dst_bucket=get_bucket(),
     limit: int = 0,
-    progress: bool = False,
+    progress: bool = typer.Option(
+        False,
+        help="If true, display progress bar; useful for development but not in production.",
+    ),
     threads: int = 4,
 ):
     typer.secho(f"Parsing {file_type} from {glob}", fg=typer.colors.MAGENTA)

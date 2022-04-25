@@ -41,7 +41,8 @@ def _bq_client_create_external_table(
         opt.require_partition_filter = hive_options.get(
             "require_partition_filter", False
         )
-        # TODO: this is very fragile
+        # TODO: this is very fragile, we should probably be calculating it from
+        #       the source_objects and validating the format (prefix, trailing slashes)
         opt.source_uri_prefix = get_bucket() + hive_options["source_uri_prefix"]
         ext.hive_partitioning = opt
 
