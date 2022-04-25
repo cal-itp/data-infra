@@ -71,7 +71,7 @@ def _bq_client_create_external_table(
     tbl.external_data_configuration = ext
 
     print(
-        f"Creating external table: {full_table_name} {tbl} {source_objects} {hive_options['source_uri_prefix']}"
+        f"Creating external table: {full_table_name} {tbl} {source_objects} {hive_options}"
     )
     return client.create_table(tbl, timeout=300, exists_ok=True)
 
