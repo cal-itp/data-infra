@@ -260,4 +260,5 @@ data_infra_macros = {
     "get_latest_schedule_data": get_latest_schedule_data,
     "is_development": is_development_macro,
     "image_tag": lambda: "development" if is_development() else "latest",
+    "prefix_bucket": lambda s: f"test-{s}" if is_development() else s,
 }
