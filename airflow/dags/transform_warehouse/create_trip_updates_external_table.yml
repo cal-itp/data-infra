@@ -1,4 +1,6 @@
 operator: operators.ExternalTable
+bucket: gs://rt-parsed
+prefix_bucket: true
 source_objects:
   - "trip_updates/*.jsonl.gz"
 destination_project_dataset_table: "gtfs_rt.external_trip_updates"
@@ -6,7 +8,7 @@ source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 hive_options:
   mode: AUTO
-  source_uri_prefix: "/trip_updates/"
+  source_uri_prefix: "trip_updates/"
 schema_fields:
   - name: metadata
     type: RECORD

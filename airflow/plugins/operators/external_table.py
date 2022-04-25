@@ -1,12 +1,15 @@
 """
 Abstracts the various concerns of external table creation as much as possible
 """
+import re
+
 from calitp.config import (
     CALITP_BQ_LOCATION,
     get_bucket,
     get_project_id,
     format_table_name,
 )
+from calitp.config import is_development
 
 from calitp.sql import get_engine
 from google.cloud import bigquery
@@ -25,6 +28,7 @@ def _bq_client_create_external_table(
     source_objects,
     source_format,
     hive_options=None,
+    bucket=None,
 ):
     # TODO: must be fully qualified table name
     ext = bigquery.ExternalConfig(source_format)
@@ -43,7 +47,12 @@ def _bq_client_create_external_table(
         )
         # TODO: this is very fragile, we should probably be calculating it from
         #       the source_objects and validating the format (prefix, trailing slashes)
-        opt.source_uri_prefix = get_bucket() + hive_options["source_uri_prefix"]
+        prefix = hive_options["source_uri_prefix"]
+
+        if prefix and bucket:
+            opt.source_uri_prefix = bucket + "/" + prefix
+        else:
+            opt.source_uri_prefix = prefix
         ext.hive_partitioning = opt
 
     client = bigquery.Client(project=get_project_id(), location=CALITP_BQ_LOCATION)
@@ -61,7 +70,9 @@ def _bq_client_create_external_table(
     tbl = bigquery.Table(full_table_name, schema_fields)
     tbl.external_data_configuration = ext
 
-    print(f"Creating external table: {full_table_name} {tbl}")
+    print(
+        f"Creating external table: {full_table_name} {tbl} {source_objects} {hive_options['source_uri_prefix']}"
+    )
     return client.create_table(tbl, timeout=300, exists_ok=True)
 
 
@@ -70,6 +81,7 @@ class ExternalTable(BaseOperator):
         self,
         *args,
         bucket=None,
+        prefix_bucket=False,
         destination_project_dataset_table=None,
         skip_leading_rows=1,
         schema_fields=None,
@@ -81,6 +93,10 @@ class ExternalTable(BaseOperator):
         **kwargs,
     ):
         self.bucket = bucket
+        # This only exists because the prefix_bucket() template isn't working in the yml file for some reason
+        if self.bucket and prefix_bucket and is_development():
+            self.bucket = re.sub(r"gs://([\w-]+)", r"gs://test-\1", self.bucket)
+
         self.destination_project_dataset_table = format_table_name(
             destination_project_dataset_table
         )
@@ -106,6 +122,7 @@ class ExternalTable(BaseOperator):
                 self.source_objects,
                 self.source_format,
                 self.hive_options,
+                self.bucket,
             )
 
         else:
