@@ -59,6 +59,20 @@ class RTFile(BaseModel):
             self.path.name,
         )
 
+    def validation_hive_path(self, bucket: str):
+        return os.path.join(
+            bucket,
+            f"{self.file_type}_validations",
+            f"dt={self.tick.to_date_string()}",
+            f"itp_id={self.itp_id}",
+            f"url_number={self.url}",
+            f"hour={self.tick.hour}",
+            f"minute={self.tick.minute}",
+            f"second={self.tick.second}",
+            self.path.name,
+        )
+
+
 
 # Try twice in the event we get a ClientResponseError; doesn't have much of a delay (like 0.01s)
 @backoff.on_exception(backoff.expo, exception=ClientResponseError, max_tries=3)

@@ -5,6 +5,10 @@ via BigQuery external tables. This is primarily so we can run this code as a Pod
 a special jobs node pool; if we ever self-host Airflow and use the [KubernetesExecutor](https://airflow.apache.org/docs/apache-airflow/stable/executor/kubernetes.html), this
 separate image will be redundant.
 
+# gtfs-rt-validator-api
+
+This is basically a ground-up refactor of https://github.com/cal-itp/gtfs-rt-validator-api.
+
 ## Testing
 This image can be built and tested via local Airflow.
 

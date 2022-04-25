@@ -1,6 +1,5 @@
-__version__ = "0.0.5"
-
 import concurrent
+import gzip
 import json
 import multiprocessing
 import os
@@ -13,6 +12,7 @@ from concurrent.futures import ProcessPoolExecutor
 from enum import Enum
 from pathlib import Path
 from tempfile import NamedTemporaryFile, TemporaryDirectory
+from typing import List, Tuple
 
 import gcsfs
 import pandas as pd
@@ -24,6 +24,8 @@ from calitp.storage import get_fs
 from pydantic.main import BaseModel
 from structlog import configure
 from structlog.threadlocal import bind_threadlocal, clear_threadlocal, merge_threadlocal
+
+from gtfs_rt_parser import identify_files, RTFileType, RTFile, EXTENSION, put_with_retry
 
 configure(processors=[merge_threadlocal, structlog.processors.KeyValueRenderer()])
 
@@ -48,34 +50,6 @@ except KeyError:
 
 app = typer.Typer()
 
-
-class RTFileType(str, Enum):
-    service_alerts = "service_alerts"
-    trip_updates = "trip_updates"
-    vehicle_positions = "vehicle_positions"
-
-
-class RTFile(BaseModel):
-    file_type: RTFileType
-    path: Path
-    itp_id: int
-    url: int
-    tick: pendulum.DateTime
-
-    def validation_hive_path(self, bucket: str):
-        return os.path.join(
-            bucket,
-            f"{self.file_type}_validations",
-            f"dt={self.tick.to_date_string()}",
-            f"itp_id={self.itp_id}",
-            f"url_number={self.url}",
-            f"hour={self.tick.hour}",
-            f"minute={self.tick.minute}",
-            f"second={self.tick.second}",
-            self.path.name,
-        )
-
-
 def json_to_newline_delimited(in_file, out_file):
     data = json.load(open(in_file))
     with open(out_file, "w") as f:
@@ -91,45 +65,26 @@ def download_gtfs_schedule_zip(gtfs_schedule_path, dst_path, fs):
     except FileNotFoundError:
         pass
     shutil.make_archive(dst_path, "zip", dst_path)
+    return f"{dst_path}.zip"
 
 
-def download_rt_files(glob, dst_path, fs=None) -> List[str]:
-    # {date}T{timestamp}/{itp_id}/{url_number}
-    all_files = (
-        fs.glob(glob_path)
-        if glob_path
-        else fs.glob(f"{RT_BUCKET_FOLDER}/{date}*/*/*/*")
-    )
+def download_rt_files(glob, rt_file_type, dst_folder) -> List[Tuple[RTFile, str]]:
+    fs = get_fs()
 
-    to_copy = []
-    out_feeds = defaultdict(lambda: [])
-    for src_path in all_files:
-        dt, itp_id, url_number, src_fname = src_path.split("/")[-4:]
-        if glob_path:
-            dst_parent = Path(dst_dir)
-        else:
-            # if we are downloading multiple feeds, make each feed a subdir
-            dst_parent = Path(dst_dir) / itp_id / url_number
+    files = identify_files(glob, rt_file_type)
 
-        dst_parent.mkdir(parents=True, exist_ok=True)
-
-        out_fname = build_pb_validator_name(dt, itp_id, url_number, src_fname)
-
-        dst_name = str(dst_parent / out_fname)
-
-        to_copy.append([src_path, dst_name])
-        out_feeds[(itp_id, url_number)].append(dst_name)
-
-    if not to_copy:
+    if not files:
         msg = "failed to find any rt files to download"
         logger.warn(msg)
         raise ValueError(msg)
 
-    logger.info(f"downloading {len(to_copy)} files with glob_path {glob_path}")
+    src_files = [file.path for file in files]
+    dst_files = [os.path.join(dst_folder, file.path) for file in files]
 
-    src_files, dst_files = zip(*to_copy)
-    fs.get(list(src_files), list(dst_files))
-    return len(to_copy)
+    logger.info(f"downloading {len(files)} files from glob {glob}")
+
+    fs.get(src_files, dst_files)
+    return list(zip(files, dst_files))
 
 
 @app.command()
@@ -165,13 +120,37 @@ def validate_glob(
     gtfs_schedule_path: Path,
     gtfs_rt_glob: str,
     dst_bucket: str,
+    verbose:bool=False,
 ) -> None:
     fs = get_fs()
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         dst_path_gtfs = f"{tmp_dir}/gtfs"
         dst_path_rt = f"{tmp_dir}/rt"
-        num_files = download_rt_files(dst_path_rt, fs, glob_path=gtfs_rt_glob)
+        files = download_rt_files(glob=gtfs_rt_glob,
+                                      rt_file_type=file_type,
+                                      dst_folder=dst_path_rt,
+                                      )
+
+        gtfs_zip = download_gtfs_schedule_zip(gtfs_schedule_path, dst_path_gtfs, fs=fs)
+
+        logger.info(f"validating {len(files)} files")
+        validate(gtfs_zip, dst_path_rt, verbose=verbose)
+
+        for rt_file, output_path in files:
+            with tempfile.TemporaryDirectory as gzip_tmp_dir:
+                written = 0
+                gzip_fname = str(gzip_tmp_dir + "/" + "temporary" + EXTENSION)
+
+                with open(output_path) as f:
+                    records = json.load(f)
+                with gzip.open(gzip_fname, "w") as gzipfile:
+                    for record in records:
+                        gzipfile.write((json.dumps(record) + "\n").encode("utf-8"))
+                        written += 1
+            typer.echo(f"writing {written} lines from {str(rt_file.path)} to {out_path}")
+            out_path =f"{rt_file.validation_hive_path(dst_bucket)}{EXTENSION}"
+            put_with_retry(fs, gzip_fname, out_path)
 
 
 @app.command()
