@@ -9,6 +9,7 @@ import traceback
 from concurrent.futures import ThreadPoolExecutor
 from datetime import timedelta, date
 from enum import Enum
+from functools import lru_cache
 from pathlib import Path
 from typing import Optional, List
 
@@ -99,6 +100,7 @@ def parse_pb(path, open_func=open) -> dict:
         return {}
 
 
+@lru_cache(maxsize=None)
 def identify_files(glob, rt_file_type: RTFileType, progress=False) -> List[RTFile]:
     fs = get_fs()
     typer.secho("Globbing rt bucket {}".format(glob), fg=typer.colors.MAGENTA)

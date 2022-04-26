@@ -7,6 +7,7 @@ import gzip
 import json
 import multiprocessing
 import os
+import re
 import shutil
 import subprocess
 import tempfile
@@ -16,18 +17,11 @@ from typing import List, Tuple
 
 import pandas as pd
 import pendulum
-import structlog as structlog
 import typer
 from calitp.config import get_bucket, is_development
 from calitp.storage import get_fs
-from structlog import configure
-from structlog.threadlocal import merge_threadlocal
 
 from gtfs_rt_parser import identify_files, RTFileType, RTFile, EXTENSION, put_with_retry
-
-configure(processors=[merge_threadlocal, structlog.processors.KeyValueRenderer()])
-
-logger = structlog.get_logger()
 
 JAR_DEFAULT = typer.Option(
     os.environ.get("GTFS_RT_VALIDATOR_JAR"),
@@ -49,7 +43,7 @@ app = typer.Typer()
 
 def download_gtfs_schedule_zip(gtfs_schedule_path, dst_path, fs):
     # fetch and zip gtfs schedule
-    logger.info(f"Fetching gtfs schedule data from {gtfs_schedule_path} to {dst_path}")
+    typer.echo(f"Fetching gtfs schedule data from {gtfs_schedule_path} to {dst_path}")
     fs.get(gtfs_schedule_path, dst_path, recursive=True)
     try:
         os.remove(os.path.join(dst_path, "areas.txt"))
@@ -72,7 +66,7 @@ def download_rt_files(
 
     if not files:
         msg = "failed to find any rt files to download"
-        logger.warn(msg)
+        typer.secho(msg, fg=typer.colors.YELLOW)
         raise ValueError(msg)
 
     src_files = [file.path for file in files]
@@ -82,7 +76,7 @@ def download_rt_files(
         for file in files
     ]
 
-    logger.info(f"downloading {len(files)} files from glob {glob}")
+    typer.echo(f"downloading {len(files)} files from glob {glob}")
 
     fs.get(src_files, dst_files)
     return list(zip(files, dst_files))
@@ -90,7 +84,7 @@ def download_rt_files(
 
 @app.command()
 def validate(gtfs_file, rt_path, jar_path: Path, verbose=False):
-    logger.info(f"validating {gtfs_file} and {rt_path}")
+    typer.echo(f"validating {gtfs_file} and {rt_path}")
 
     if not isinstance(gtfs_file, str):
         raise NotImplementedError("gtfs_file must be a string")
@@ -143,7 +137,7 @@ def validate_glob(
 
         gtfs_zip = download_gtfs_schedule_zip(gtfs_schedule_path, dst_path_gtfs, fs=fs)
 
-        logger.info(f"validating {len(files)} files")
+        typer.echo(f"validating {len(files)} files")
         validate(gtfs_zip, dst_path_rt, jar_path=jar_path, verbose=verbose)
 
         for rt_file, downloaded_path in files:
@@ -161,9 +155,9 @@ def validate_glob(
             out_path = f"{rt_file.validation_hive_path(dst_bucket)}{EXTENSION}"
             msg = f"writing {written} validation result lines from {str(rt_file.path)} to {out_path}"
             if dry_run:
-                typer.echo(f"DRY RUN: would be {msg}")
+                typer.secho(f"DRY RUN: would be {msg}", typer.colors.YELLOW)
             else:
-                typer.echo(msg)
+                typer.secho(msg, fg=typer.colors.GREEN)
                 put_with_retry(fs, gzip_fname, out_path)
 
 
@@ -171,11 +165,12 @@ def validate_glob(
 def validate_gcs_bucket_many(
     param_csv: str = f"{get_bucket()}/rt-processed/calitp_validation_params/{pendulum.today().to_date_string()}.csv",
     dst_bucket=OUTPUT_BUCKET,
-    verbose: bool = True,
+    verbose: bool = False,
     strict: bool = False,
     threads: int = 4,
     limit: int = None,
     jar_path: Path = JAR_DEFAULT,
+    dry_run: bool = False,
 ):
     """Validate many gcs buckets using a parameter file.
 
@@ -205,13 +200,13 @@ def validate_gcs_bucket_many(
         "output_filename",
     ]
 
-    logger.info(f"reading params from {param_csv}")
+    typer.echo(f"reading params from {param_csv}")
     fs = get_fs()
     with fs.open(param_csv) as f:
         params = pd.read_csv(f)
 
     if limit:
-        logger.warn(f"limiting to {limit} rows")
+        typer.secho(f"WARNING: limiting to {limit} rows", fg=typer.colors.YELLOW)
         params = params.iloc[:limit]
 
     # check that the parameters file has all required columns
@@ -219,7 +214,7 @@ def validate_gcs_bucket_many(
     if missing_cols:
         raise ValueError("parameter csv missing columns: %s" % missing_cols)
 
-    logger.info(f"processing {params.shape[0]} inputs with {threads} threads")
+    typer.echo(f"processing {params.shape[0]} inputs with {threads} threads")
 
     # https://github.com/fsspec/gcsfs/issues/379#issuecomment-826887228
     # Note that this seems to differ per OS
@@ -236,10 +231,16 @@ def validate_gcs_bucket_many(
                 # TODO: validation CSV has weird column names
                 file_type=RTFileType[row["output_filename"]],
                 dst_bucket=dst_bucket,
-                gtfs_rt_glob=row["gtfs_rt_glob_path"],
+                gtfs_rt_glob=re.match(r".*?\*", row["gtfs_rt_glob_path"]).group(
+                    0
+                ),  # this is kinda ugly
+                itp_id=row["calitp_itp_id"],
+                url=row["calitp_url_number"],
                 gtfs_schedule_path=row["gtfs_schedule_path"],
                 verbose=verbose,
                 idx=idx,
+                dry_run=dry_run,
+                jar_path=jar_path,
             ): row
             for idx, row in params.iterrows()
         }
@@ -248,12 +249,14 @@ def validate_gcs_bucket_many(
         for future in concurrent.futures.as_completed(futures):
             try:
                 future.result()
+            except KeyboardInterrupt:
+                raise
             except Exception as e:
                 if strict:
                     raise e
                 exceptions.append(e)
 
-    logger.info(
+    typer.echo(
         f"finished multiprocessing; {params.shape[0] - len(exceptions)} successful of {params.shape[0]}"
     )
 
