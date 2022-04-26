@@ -36,9 +36,9 @@ Here are some resources data analysts have collected and referenced, that will h
 
 ### Merging
 * When working with data sets where the "merge on" column is a string data type, it can be difficult to get the DataFrames to join. For example, df1 lists <i>County of Sonoma, Human Services Department, Adult and Aging Division</i>, but df2 references the same department as: <i>County of Sonoma (Human Services Department) </i>.
- * Potential Solution #1: [fill in a column in one DataFrame that has a partial match with the string values in another one.](https://stackoverflow.com/questions/61811137/based-on-partial-string-match-fill-one-data-frame-column-from-another-dataframe)
-* Potential Solution #2: [use the package fuzzymatcher. This will require you to carefully comb through for any bad matches.](https://pbpython.com/record-linking.html)
-* Potential Solution #3: [if you don't have too many values, use a dictionary.](https://github.com/cal-itp/data-analyses/blob/main/drmt_grants/TIRCP_functions.py#:~:text=%23%23%23%20RECIPIENTS%20%23%23%23,%7D)
+    * Potential Solution #1: [fill in a column in one DataFrame that has a partial match with the string values in another one.](https://stackoverflow.com/questions/61811137/based-on-partial-string-match-fill-one-data-frame-column-from-another-dataframe)
+    * Potential Solution #2: [use the package fuzzymatcher. This will require you to carefully comb through for any bad matches.](https://pbpython.com/record-linking.html)
+    * Potential Solution #3: [if you don't have too many values, use a dictionary.](https://github.com/cal-itp/data-analyses/blob/main/drmt_grants/TIRCP_functions.py#:~:text=%23%23%23%20RECIPIENTS%20%23%23%23,%7D)
 
 ### Dates
 * [Use shift to calculate the number of days between two dates.](https://towardsdatascience.com/all-the-pandas-shift-you-should-know-for-data-analysis-791c1692b5e)
@@ -137,4 +137,3 @@ def add_tooltip(chart, tooltip1, tooltip2):
 * [Add a table of content that links to headers throughout a markdown file.](https://stackoverflow.com/questions/2822089/how-to-link-to-part-of-the-same-document-in-markdown)
 * [Add links to local files.](https://stackoverflow.com/questions/32563078/how-link-to-any-local-file-with-markdown-syntax?rq=1)
 * [Direct embed an image.](https://datascienceparichay.com/article/insert-image-in-a-jupyter-notebook/)
-```
