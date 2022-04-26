@@ -82,15 +82,23 @@ def download_rt_files(
         raise ValueError(msg)
 
     src_files = [file.path for file in files]
-    # the RT validator expects file names to end in <extraction_time>Z; could probably do this with paths
+    # the RT validator expects file names to end in <extraction_time>Z
+    # unsure if this is a standard timestamp format
     dst_files = [
-        os.path.join(dst_folder, str(file.path.name) + f"__{file.tick}Z.pb")
+        os.path.join(
+            dst_folder,
+            str(file.path.name) + file.tick.strftime("__%Y-%m-%dT%H:%M:%SZ.pb"),
+        )
         for file in files
     ]
 
     typer.echo(
         f"downloading {len(files)} files from glob {glob} for itp_id {itp_id} and url {url}"
     )
+
+    if verbose:
+        for src, dst in list(zip(src_files, dst_files))[:5]:
+            typer.secho(f"\t{src} => {dst}", fg=typer.colors.BRIGHT_BLUE)
 
     fs.get(src_files, dst_files)
     return list(zip(files, dst_files))
