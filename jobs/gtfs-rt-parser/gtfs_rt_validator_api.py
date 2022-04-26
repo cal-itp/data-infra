@@ -11,6 +11,7 @@ import re
 import shutil
 import subprocess
 import tempfile
+import traceback
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 from typing import List, Tuple
@@ -48,6 +49,10 @@ RT_FILENAME_TEMPLATE = (
 app = typer.Typer()
 
 
+class NoRTFilesFound(Exception):
+    pass
+
+
 def download_gtfs_schedule_zip(gtfs_schedule_path, dst_path, fs):
     # fetch and zip gtfs schedule
     typer.echo(f"Fetching gtfs schedule data from {gtfs_schedule_path} to {dst_path}")
@@ -79,7 +84,7 @@ def download_rt_files(
     if not files:
         msg = "failed to find any rt files to download"
         typer.secho(msg, fg=typer.colors.YELLOW)
-        raise ValueError(msg)
+        raise NoRTFilesFound
 
     src_files = [file.path for file in files]
     # the RT validator expects file names to end in <extraction_time>Z
@@ -280,10 +285,12 @@ def validate_gcs_bucket_many(
                 future.result()
             except KeyboardInterrupt:
                 raise
+            except NoRTFilesFound:
+                pass
             except Exception as e:
                 if strict:
                     raise e
-                exceptions.append(e)
+                exceptions.append((e, traceback.format_exc()))
 
     typer.echo(
         f"finished multiprocessing; {params.shape[0] - len(exceptions)} successful of {params.shape[0]}"
