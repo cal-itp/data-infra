@@ -73,7 +73,6 @@ class RTFile(BaseModel):
         )
 
 
-
 # Try twice in the event we get a ClientResponseError; doesn't have much of a delay (like 0.01s)
 @backoff.on_exception(backoff.expo, exception=ClientResponseError, max_tries=3)
 def get_with_retry(fs, *args, **kwargs):

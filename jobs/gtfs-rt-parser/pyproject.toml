@@ -19,6 +19,7 @@ gcsfs = "0.8.0"
 pendulum = "^2.1.2"
 pydantic = "^1.9.0"
 pytest = "^7.1.1"
+pathy = {extras = ["gcs"], version = "^0.6.1"}
 
 [tool.poetry.dev-dependencies]
 
