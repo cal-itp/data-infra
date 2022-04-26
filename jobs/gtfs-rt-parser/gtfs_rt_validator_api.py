@@ -72,7 +72,7 @@ def download_rt_files(
     src_files = [file.path for file in files]
     # the RT validator expects file names to end in <extraction_time>Z; could probably do this with paths
     dst_files = [
-        os.path.join(dst_folder, str(file.path) + f"__{file.tick}Z.pb")
+        os.path.join(dst_folder, str(file.path.name) + f"__{file.tick}Z.pb")
         for file in files
     ]
 
@@ -83,11 +83,8 @@ def download_rt_files(
 
 
 @app.command()
-def validate(gtfs_file, rt_path, jar_path: Path, verbose=False):
-    typer.echo(f"validating {gtfs_file} and {rt_path}")
-
-    if not isinstance(gtfs_file, str):
-        raise NotImplementedError("gtfs_file must be a string")
+def validate(gtfs_file: str, rt_path: str, jar_path: Path, verbose=False):
+    typer.echo(f"validating {rt_path} with {gtfs_file}")
 
     stderr = subprocess.DEVNULL if not verbose else None
     stdout = subprocess.DEVNULL if not verbose else None
