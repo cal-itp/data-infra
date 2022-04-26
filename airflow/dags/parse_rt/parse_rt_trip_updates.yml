@@ -32,7 +32,7 @@ secrets:
 
 resources:
   request_memory: 2.0Gi
-  request_cpu: 1
+  request_cpu: 0.5
 
 tolerations:
   - key: pod-role
