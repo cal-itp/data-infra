@@ -177,8 +177,17 @@ def validate_glob(
 
             with open(results_fname) as f:
                 records = json.load(f)
+
             with gzip.open(gzip_fname, "w") as gzipfile:
                 for record in records:
+                    record.update(
+                        {
+                            # back and forth so we use pydantic serialization
+                            "metadata": json.loads(
+                                rt_file.json(),
+                            )
+                        }
+                    )
                     gzipfile.write((json.dumps(record) + "\n").encode("utf-8"))
                     written += 1
 

@@ -169,9 +169,8 @@ def parse_file(bucket: str, rt_file: RTFile, pbar=None):
                 record.update(
                     {
                         "header": parsed["header"],
-                        "metadata": json.loads(
-                            rt_file.json()
-                        ),  # back and forth so we use pydantic serialization
+                        # back and forth so we use pydantic serialization
+                        "metadata": json.loads(rt_file.json()),
                     }
                 )
                 gzipfile.write((json.dumps(record) + "\n").encode("utf-8"))
