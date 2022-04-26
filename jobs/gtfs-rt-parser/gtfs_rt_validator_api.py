@@ -23,8 +23,9 @@ from calitp.storage import get_fs
 
 from gtfs_rt_parser import identify_files, RTFileType, RTFile, EXTENSION, put_with_retry
 
+RT_VALIDATOR_JAR_LOCATION_ENV_KEY = "GTFS_RT_VALIDATOR_JAR"
 JAR_DEFAULT = typer.Option(
-    os.environ.get("GTFS_RT_VALIDATOR_JAR"),
+    os.environ.get(RT_VALIDATOR_JAR_LOCATION_ENV_KEY),
     help="Path to the GTFS RT Validator JAR",
 )
 
@@ -141,6 +142,7 @@ def validate_glob(
             with tempfile.TemporaryDirectory(dir=tmp_dir) as gzip_tmp_dir:
                 written = 0
                 gzip_fname = str(gzip_tmp_dir + "/" + "temporary" + EXTENSION)
+                print(f"writing to {gzip_fname}")
 
                 # the validator outputs files with an added .results.json suffix
                 with open(downloaded_path + ".results.json") as f:
@@ -152,7 +154,7 @@ def validate_glob(
             out_path = f"{rt_file.validation_hive_path(dst_bucket)}{EXTENSION}"
             msg = f"writing {written} validation result lines from {str(rt_file.path)} to {out_path}"
             if dry_run:
-                typer.secho(f"DRY RUN: would be {msg}", typer.colors.YELLOW)
+                typer.secho(f"DRY RUN: would be {msg}", fg=typer.colors.YELLOW)
             else:
                 typer.secho(msg, fg=typer.colors.GREEN)
                 put_with_retry(fs, gzip_fname, out_path)
@@ -187,7 +189,9 @@ def validate_gcs_bucket_many(
 
     """
     if not jar_path:
-        raise ValueError("Must set the environment variable GTFS_VALIDATOR_JAR")
+        raise ValueError(
+            f"Must set the environment variable {RT_VALIDATOR_JAR_LOCATION_ENV_KEY}"
+        )
 
     required_cols = [
         "calitp_itp_id",
