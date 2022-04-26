@@ -8,7 +8,6 @@ cmds:
 arguments:
   - "gtfs_rt_parser.py"
   - "trip_updates"
-  - "--glob"
   # we run on a delay because of archiver write latency but then we process the prior _hour_
   - "{{get_bucket()}}/rt/{{ execution_date.replace(minute=0, second=0).format('YYYY-MM-DDTHH*') }}"
   - "--dst-bucket"
