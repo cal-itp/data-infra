@@ -117,7 +117,9 @@ def download_rt_files(
 def validate(gtfs_file: str, rt_path: str, jar_path: Path, verbose=False):
     typer.echo(f"validating {rt_path} with {gtfs_file}")
 
-    stderr = subprocess.DEVNULL if not verbose else None
+    # We probably should always print stderr?
+    stderr = None
+    # stderr = subprocess.DEVNULL if not verbose else None
     stdout = subprocess.DEVNULL if not verbose else None
 
     subprocess.check_call(
