@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Business Insights &amp; Dashboards &#8212; Cal-ITP Data Services</title>
+    <title>Helpful Links &#8212; Cal-ITP Data Services</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -56,8 +56,8 @@
     <script>mermaid.initialize({startOnLoad:true});</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Notebooks" href="notebooks.html" />
-    <link rel="prev" title="Tools Quick Links" href="tools_quick_links.html" />
+    <link rel="next" title="Tutorials for New Python Users" href="../analytics_new_analysts/overview.html" />
+    <link rel="prev" title="Using Data Catalogs" href="data_catalogs.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -157,8 +157,8 @@
      Tools Quick Links
     </a>
    </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
+   <li class="toctree-l2">
+    <a class="reference internal" href="bi_dashboards.html">
      Business Insights &amp; Dashboards
     </a>
    </li>
@@ -187,8 +187,8 @@
      Using Data Catalogs
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="knowledge_sharing.html">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
      Helpful Links
     </a>
    </li>
@@ -612,12 +612,9 @@
 
     <div class="dropdown-buttons">
         <!-- ipynb file if we had a myst markdown file -->
-        <a class="dropdown-buttons"
-            href="../_sources/analytics_tools/bi_dashboards.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
-                data-placement="left">.ipynb</button></a>
+        
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/analytics_tools/bi_dashboards.md"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/analytics_tools/knowledge_sharing.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -637,10 +634,10 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fanalytics_tools/bi_dashboards.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fanalytics_tools/knowledge_sharing.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/analytics_tools/bi_dashboards.md"><button
+        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/analytics_tools/knowledge_sharing.md"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -655,23 +652,6 @@
 
             <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/cal-itp/data-infra/main?urlpath=tree/docs/analytics_tools/bi_dashboards.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="../_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
         </div>
 
         <!-- Table of contents -->
@@ -683,55 +663,87 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#introduction-to-metabase">
-   Introduction to Metabase
+  <a class="reference internal nav-link" href="#data-analysis">
+   Data Analysis
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#overview">
-     Overview
+    <a class="reference internal nav-link" href="#python">
+     Python
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#general-metabase-resources">
-     General Metabase Resources
+    <a class="reference internal nav-link" href="#pandas">
+     Pandas
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#summarizing">
+     Summarizing
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#merging">
+     Merging
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dates">
+     Dates
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#monetary-values">
+     Monetary Values
     </a>
    </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#metabase-at-cal-itp">
-   Metabase at Cal-ITP
+  <a class="reference internal nav-link" href="#visualization">
+   Visualization
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#cal-itp-collections">
-     Cal-ITP Collections
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#cal-itp-dashboards-conventions">
-     Cal-ITP Dashboards Conventions
+    <a class="reference internal nav-link" href="#charts">
+     Charts
     </a>
     <ul class="nav section-nav flex-column">
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#hierarchy">
-       Hierarchy
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#question-title-format">
-       Question Title Format
+      <a class="reference internal nav-link" href="#altair">
+       Altair
       </a>
      </li>
     </ul>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#maps">
+     Maps
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dataframes">
+     DataFrames
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ipywidgets">
+     Ipywidgets
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#tabs">
+       Tabs
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#markdown">
+     Markdown
+    </a>
+   </li>
   </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#video-using-metabase-dashboards">
-   Video - Using Metabase Dashboards
-  </a>
  </li>
 </ul>
 
@@ -743,7 +755,7 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Business Insights & Dashboards</h1>
+                <h1>Helpful Links</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -754,55 +766,87 @@
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#introduction-to-metabase">
-   Introduction to Metabase
+  <a class="reference internal nav-link" href="#data-analysis">
+   Data Analysis
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#overview">
-     Overview
+    <a class="reference internal nav-link" href="#python">
+     Python
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#general-metabase-resources">
-     General Metabase Resources
+    <a class="reference internal nav-link" href="#pandas">
+     Pandas
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#summarizing">
+     Summarizing
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#merging">
+     Merging
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dates">
+     Dates
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#monetary-values">
+     Monetary Values
     </a>
    </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#metabase-at-cal-itp">
-   Metabase at Cal-ITP
+  <a class="reference internal nav-link" href="#visualization">
+   Visualization
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#cal-itp-collections">
-     Cal-ITP Collections
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#cal-itp-dashboards-conventions">
-     Cal-ITP Dashboards Conventions
+    <a class="reference internal nav-link" href="#charts">
+     Charts
     </a>
     <ul class="nav section-nav flex-column">
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#hierarchy">
-       Hierarchy
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#question-title-format">
-       Question Title Format
+      <a class="reference internal nav-link" href="#altair">
+       Altair
       </a>
      </li>
     </ul>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#maps">
+     Maps
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dataframes">
+     DataFrames
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ipywidgets">
+     Ipywidgets
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#tabs">
+       Tabs
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#markdown">
+     Markdown
+    </a>
+   </li>
   </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#video-using-metabase-dashboards">
-   Video - Using Metabase Dashboards
-  </a>
  </li>
 </ul>
 
@@ -813,118 +857,206 @@
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="business-insights-dashboards">
-<span id="metabase"></span><h1>Business Insights &amp; Dashboards<a class="headerlink" href="#business-insights-dashboards" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="introduction-to-metabase">
-<h2>Introduction to Metabase<a class="headerlink" href="#introduction-to-metabase" title="Permalink to this headline">¶</a></h2>
-<p>Metabase is Cal-ITP’s dashboarding tool, and it’s where data generated by Cal-ITP’s data
-pipeline can be turned in to graphs, tables, and robust dashboards.</p>
-<p>This page will provide you with some general Metabase resources, as well as guidance on how
-Metabase is best utilized for the Cal-ITP project.</p>
-<p><strong>You can access Metabase <a class="reference external" href="https://dashboards.calitp.org/">using this link</a></strong>.</p>
-<div class="section" id="overview">
-<h3>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h3>
-<p>If you have never used Metabase before, there are a few important terms:</p>
+  <div class="tex2jax_ignore mathjax_ignore section" id="helpful-links">
+<span id="knowledge-sharing"></span><h1>Helpful Links<a class="headerlink" href="#helpful-links" title="Permalink to this headline">¶</a></h1>
+<p>Here are some resources data analysts have collected and referenced, that will hopefully help you out in your work. Have something you want to share? Create a new markdown file, add it <a class="reference external" href="https://github.com/cal-itp/data-analyses/tree/main/example_report">to the example report folder</a>, and <a class="reference external" href="https://app.slack.com/client/T014965JTHA/C013N8GELLF/user_profile/U02PCTPSZ8A">message Amanda.</a></p>
 <ul class="simple">
-<li><p><strong>Question:</strong> A single table or graph, created by you with either SQL or Metabase’s point-and-click UI.</p></li>
-<li><p><strong>Dashboard:</strong> A group of questions that work together to support holistic data exploration and help inform decisions.</p></li>
-<li><p><strong>Collection:</strong> Essentially, a “folder” for us to put relevant questions and dashboards into.</p></li>
+<li><p><a class="reference external" href="#data-analysis">Data Analysis</a></p>
+<ul>
+<li><p><a class="reference external" href="#python">Python</a></p></li>
+<li><p><a class="reference external" href="#pandas">Pandas</a></p></li>
+<li><p><a class="reference external" href="#summarizing">Summarizing</a></p></li>
+<li><p><a class="reference external" href="#merging">Merging</a></p></li>
+<li><p><a class="reference external" href="#dates">Dates</a></p></li>
+<li><p><a class="reference external" href="#monetary-values">Monetary Values</a></p></li>
 </ul>
-<p>You can also incorporate filters into your questions and dashboards, specify custom
-click behavior in your dashboards, and more.</p>
-</div>
-<div class="section" id="general-metabase-resources">
-<h3>General Metabase Resources<a class="headerlink" href="#general-metabase-resources" title="Permalink to this headline">¶</a></h3>
-<p>One reason Metabase is awesome is because of its <a class="reference external" href="https://www.metabase.com/learn/">learn</a> section,
-which is full of useful tutorials on how to work with Metabase questions, dashboards, and more.</p>
-<p>Below are some helpful articles from Metabase’s learn section:</p>
+</li>
+<li><p><a class="reference external" href="#visualization">Visualizations</a></p>
+<ul>
+<li><p><a class="reference external" href="#charts">Charts</a></p></li>
+<li><p><a class="reference external" href="#maps">Maps</a></p></li>
+<li><p><a class="reference external" href="#dataframes">DataFrames</a></p></li>
+<li><p><a class="reference external" href="#ipywidgets">Ipywidgets</a></p></li>
+<li><p><a class="reference external" href="#markdown">Markdown</a></p></li>
+</ul>
+</li>
+</ul>
+<div class="section" id="data-analysis">
+<h2>Data Analysis<a class="headerlink" href="#data-analysis" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="python">
+<h3>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><p>Getting Started</p>
-<ul>
-<li><p><a class="reference external" href="https://www.metabase.com/learn/getting-started/getting-started.html">Getting Started with Metabase</a> (Video included!)</p></li>
-<li><p><a class="reference external" href="https://www.metabase.com/learn/getting-started/tour-of-metabase.html">A Tour of Metabase</a></p></li>
-</ul>
-</li>
-<li><p>Asking Questions</p>
-<ul>
-<li><p><a class="reference external" href="https://www.metabase.com/learn/questions/drill-through.html">Create Charts with Explorable Data</a></p></li>
-<li><p><a class="reference external" href="https://www.metabase.com/learn/questions/custom-expressions.html">Custom Expressions in the Notebook Editor</a></p></li>
-</ul>
-</li>
-<li><p>Working with SQL</p>
-<ul>
-<li><p><a class="reference external" href="https://www.metabase.com/learn/sql-questions/sql-best-practices.html">Best Practices for Writing SQL Queries</a></p></li>
-<li><p><a class="reference external" href="https://www.metabase.com/learn/sql-questions/sql-variables.html">Create Filter Widgets for Charts Using SQL Variables</a> (Video included!)</p></li>
-<li><p><a class="reference external" href="https://www.metabase.com/learn/sql-questions/field-filters.html">Field Filters</a></p></li>
-</ul>
-</li>
-<li><p>Visualizing Data</p>
-<ul>
-<li><p><a class="reference external" href="https://www.metabase.com/learn/visualization/chart-guide.html">Which Chart Should You Use?</a></p></li>
-<li><p><a class="reference external" href="https://www.metabase.com/learn/visualization/table.html">Everything You Can Do with the Table Visualization</a></p></li>
-<li><p><a class="reference external" href="https://www.metabase.com/learn/visualization/maps.html">Visualizing Data with Maps</a> (Video included!)</p></li>
-</ul>
-</li>
-<li><p>Building Dashboards</p>
-<ul>
-<li><p><a class="reference external" href="https://www.metabase.com/learn/dashboards/bi-dashboard-best-practices.html">Best Practices for BI Dashboards</a></p></li>
-<li><p><a class="reference external" href="https://www.metabase.com/learn/dashboards/linking-filters.html">Linking Filters</a></p></li>
-</ul>
-</li>
+<li><p><a class="reference external" href="https://stackoverflow.com/questions/6523791/why-is-python-running-my-module-when-i-import-it-and-how-do-i-stop-it">Stop Python from executing code when a module is imported.</a></p></li>
+<li><p><a class="reference external" href="https://stackoverflow.com/questions/1663807/how-to-iterate-through-two-lists-in-parallel">Loop through 2 lists with zip in parallel.</a></p></li>
+<li><p><a class="reference external" href="https://stackoverflow.com/questions/41125909/python-find-elements-in-one-list-that-are-not-in-the-other">Find the elements that are in one list, but not in another list.</a></p></li>
+<li><p><a class="reference external" href="https://stackoverflow.com/questions/4841436/what-exactly-does-do">What does += do?</a></p></li>
 </ul>
 </div>
-</div>
-<div class="section" id="metabase-at-cal-itp">
-<h2>Metabase at Cal-ITP<a class="headerlink" href="#metabase-at-cal-itp" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="cal-itp-collections">
-<h3>Cal-ITP Collections<a class="headerlink" href="#cal-itp-collections" title="Permalink to this headline">¶</a></h3>
-<p>Cal-ITP’s Metabase instance makes use of collections to keep questions and dashboards
-organized. Additionally, these collections have specific read/write permissions, in order
-to ensure only certain users are able to edit certain questions. This approach helps separate
-concerns of question/dashboard ownership and responsibility. As of this writing, there are
-three primary collections:</p>
+<div class="section" id="pandas">
+<h3>Pandas<a class="headerlink" href="#pandas" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><p><strong>Cal-ITP Dashboards:</strong> Read-only dashboards, editable only by Cal-ITP analysts</p></li>
-<li><p><strong>Cal-ITP Commons:</strong> Permission-less sharing of questions and dashboards</p></li>
-<li><p><strong>Cal-ITP Development:</strong> Analyst-only collection for works in progress</p></li>
+<li><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.get_dummies.html">Turn columns into dummy variables.</a></p></li>
+<li><p><a class="reference external" href="https://xlsxwriter.readthedocs.io/example_pandas_multiple.html">Export multiple dataframes into their own sheets to a single Excel workbook.</a></p></li>
+<li><p><a class="reference external" href="https://stackoverflow.com/questions/38783027/jupyter-notebook-display-two-pandas-tables-side-by-side">Display multiple dataframes side by side.</a></p></li>
 </ul>
-<p>In general, the <strong>Cal-ITP Dashboards</strong> collection is used for what we might consider
-“complete” or “official” sources of truth for the work done by Cal-ITP analysts.</p>
-<p>If you are analyst, the 2x2 matrix below should help you understand which
-collection you should be operating in for a given piece of work:</p>
-<p><img alt="Collection Matrix" src="https://raw.githubusercontent.com/cal-itp/data-infra/main/docs/warehouse/assets/which_collection_to_use.png" /></p>
 </div>
-<div class="section" id="cal-itp-dashboards-conventions">
-<h3>Cal-ITP Dashboards Conventions<a class="headerlink" href="#cal-itp-dashboards-conventions" title="Permalink to this headline">¶</a></h3>
-<p>The Cal-ITP Dashboards collection has a few specific conventions that you
-should follow in order to help keep your work maintainable and navigable
-by your teammates.</p>
-<div class="section" id="hierarchy">
-<h4>Hierarchy<a class="headerlink" href="#hierarchy" title="Permalink to this headline">¶</a></h4>
-<p>In the Cal-ITP Dashboards collection, you will notice that all of the dashboards
-are pinned.</p>
-<p>Within this collection, there are sub-collections - one sub-collection for each
-dashboard. For sub-collection naming, if the dashboard is called “GTFS Schedule
-Dashboard”, the sub-collection should be called “GTFS Schedule Dashboard Questions”.
-Keeping with this example, all of the questions that power the GTFS Schedule Dashboard
-should be kept in the GTFS Schedule Dashboard sub-collection.</p>
+<div class="section" id="summarizing">
+<h3>Summarizing<a class="headerlink" href="#summarizing" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://stackoverflow.com/questions/35640364/python-pandas-max-value-in-a-group-as-a-new-column">Groupby and calculate a new value, then use that value within your DataFrame.</a></p></li>
+<li><p><a class="reference external" href="https://stackoverflow.com/questions/30244952/how-do-i-create-a-new-column-from-the-output-of-pandas-groupby-sum">Explanation of the split-apply-combine paradigm.</a></p></li>
+<li><p><a class="reference external" href="https://github.com/ydataai/pandas-profiling">Pandas profiling tool: creates html reports from DataFrames.</a></p>
+<ul>
+<li><p><a class="reference external" href="https://pandas-profiling.ydata.ai/examples/master/census/census_report.html">Examples</a></p></li>
+</ul>
+</li>
+</ul>
 </div>
-<div class="section" id="question-title-format">
-<h4>Question Title Format<a class="headerlink" href="#question-title-format" title="Permalink to this headline">¶</a></h4>
-<p>Dashboards can feature a lot of questions! In order to keep questions organized in
-their sub-collections, we use a double pipe (<code class="docutils literal notranslate"><span class="pre">||</span></code>) to separate the section of the
-dashboard from the question name. Having both the dashboard section and the question
-name available available in the title of the question makes for a manageable rendering
-of all questions in a dashboard’s sub-collection of questions.</p>
-<p>A question naming example would be something like this: if there was a “Summary” section
-of your dashboard, and you had a question that specified the start date of that dashboard,
-then your title would be something like <code class="docutils literal notranslate"><span class="pre">Summary</span> <span class="pre">||</span> <span class="pre">Dashboard</span> <span class="pre">Start</span> <span class="pre">Date</span></code>.</p>
+<div class="section" id="merging">
+<h3>Merging<a class="headerlink" href="#merging" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>When working with data sets where the “merge on” column is a string data type, it can be difficult to get the DataFrames to join. For example, df1 lists <i>County of Sonoma, Human Services Department, Adult and Aging Division</i>, but df2 references the same department as: <i>County of Sonoma (Human Services Department) </i>.</p>
+<ul>
+<li><p>Potential Solution #1: <a class="reference external" href="https://stackoverflow.com/questions/61811137/based-on-partial-string-match-fill-one-data-frame-column-from-another-dataframe">fill in a column in one DataFrame that has a partial match with the string values in another one.</a></p></li>
+<li><p>Potential Solution #2: <a class="reference external" href="https://pbpython.com/record-linking.html">use the package fuzzymatcher. This will require you to carefully comb through for any bad matches.</a></p></li>
+<li><p>Potential Solution #3: <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/drmt_grants/TIRCP_functions.py#:~:text=%23%23%23%20RECIPIENTS%20%23%23%23,%7D">if you don’t have too many values, use a dictionary.</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="dates">
+<h3>Dates<a class="headerlink" href="#dates" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://towardsdatascience.com/all-the-pandas-shift-you-should-know-for-data-analysis-791c1692b5e">Use shift to calculate the number of days between two dates.</a></p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;n_days_between&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;prepared_date&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="s1">&#39;prepared_date&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">days</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><a class="reference external" href="https://stackoverflow.com/questions/59181855/get-the-financial-year-from-a-date-in-a-pandas-dataframe-and-add-as-new-column">Assign fiscal year to a date.</a></p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make sure your column is a date time object</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;financial_year&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;base_date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">year</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">month</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="k">else</span> <span class="n">x</span><span class="o">.</span><span class="n">year</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="monetary-values">
+<h3>Monetary Values<a class="headerlink" href="#monetary-values" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/d3/d3-format">Reformat values that are in scientific notation into millions or thousands.</a></p>
+<ul>
+<li><p><a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/30de5cd2fed3a37e2c9cfb661929252ad76f6514/dla/e76_obligated_funds/_dla_utils.py#L221">Example in notebook.</a></p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">x</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="s2">&quot;Funding Amount&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;$.2s&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Obligated Funding ($2021)&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><a class="reference external" href="https://stackoverflow.com/questions/41271673/format-numbers-in-a-python-pandas-dataframe-as-currency-in-thousands-or-millions">Reformat values from 19000000 to $19.0M.</a></p></li>
+<li><p>Adjust for inflation.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Must install and import cpi package for the function to work.</span>
+<span class="k">def</span> <span class="nf">adjust_prices</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="n">cols</span> <span class="o">=</span>  <span class="p">[</span><span class="s2">&quot;total_requested&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;fed_requested&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;ac_requested&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">inflation_table</span><span class="p">(</span><span class="n">base_year</span><span class="p">):</span>
+        <span class="n">cpi</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="n">series_df</span> <span class="o">=</span> <span class="n">cpi</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">area</span><span class="o">=</span><span class="s2">&quot;U.S. city average&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">()</span>
+        <span class="n">inflation_df</span> <span class="o">=</span> <span class="p">(</span><span class="n">series_df</span><span class="p">[</span><span class="n">series_df</span><span class="o">.</span><span class="n">year</span> <span class="o">&gt;=</span> <span class="mi">2008</span><span class="p">]</span>
+                        <span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="n">aggfunc</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+                        <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+                       <span class="p">)</span>
+        <span class="n">denominator</span> <span class="o">=</span> <span class="n">inflation_df</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">inflation_df</span><span class="o">.</span><span class="n">year</span><span class="o">==</span><span class="n">base_year</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">inflation_df</span> <span class="o">=</span> <span class="n">inflation_df</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span>
+        <span class="n">inflation</span> <span class="o">=</span> <span class="n">inflation_df</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">denominator</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">inflation_df</span>
+
+    <span class="c1">##get cpi table</span>
+    <span class="n">cpi</span> <span class="o">=</span> <span class="n">inflation_table</span><span class="p">(</span><span class="mi">2021</span><span class="p">)</span>
+    <span class="n">cpi</span><span class="o">.</span><span class="n">update</span>
+    <span class="n">cpi</span> <span class="o">=</span> <span class="p">(</span><span class="n">cpi</span><span class="o">&gt;&gt;</span><span class="n">select</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+    <span class="n">cpi_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">cpi</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">],</span> <span class="n">cpi</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]))</span>
+
+
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
+        <span class="n">multiplier</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;prepared_y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">cpi_dict</span><span class="p">)</span>
+
+        <span class="c1">##using 270.97 for 2021 dollars</span>
+        <span class="n">df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;adjusted_</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">*</span> <span class="mf">270.97</span><span class="p">)</span> <span class="o">/</span> <span class="n">multiplier</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span>
+</pre></div>
 </div>
 </div>
 </div>
-<div class="section" id="video-using-metabase-dashboards">
-<h2>Video - Using Metabase Dashboards<a class="headerlink" href="#video-using-metabase-dashboards" title="Permalink to this headline">¶</a></h2>
-<div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/1dc0c085b12b4848a52523ef34397f71" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div></div>
+<div class="section" id="visualization">
+<h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="charts">
+<h3>Charts<a class="headerlink" href="#charts" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="altair">
+<h4>Altair<a class="headerlink" href="#altair" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/altair-viz/altair/issues/1934">Manually concatenate a bar chart and line chart to create a dual axis graph.</a></p></li>
+<li><p><a class="reference external" href="https://altair-viz.github.io/user_guide/transform/timeunit.html">Adjust the time units of a datetime column for an axis.</a></p></li>
+<li><p><a class="reference external" href="https://stackoverflow.com/questions/61194028/adding-labels-at-end-of-line-chart-in-altair">Label the lines on a line chart.</a></p></li>
+<li><p><a class="reference external" href="altair-viz/altair#1099">Layer altair charts, lose color with no encoding, workaround to get different colors to appear on legend.</a></p></li>
+<li><p><a class="reference external" href="https://stackoverflow.com/questions/61447422/quick-way-to-visualise-multiple-columns-in-altair-with-regression-lines">Add regression line to scatterplot.</a></p></li>
+<li><p><a class="reference external" href="https://stackoverflow.com/questions/62281179/how-to-adjust-scale-ranges-in-altair">Adjust scales for axes to be the min and max values.</a></p></li>
+<li><p><a class="reference external" href="https://github.com/altair-viz/altair/issues/1355">Resolving the error ‘TypeError: Object of type ‘Timestamp’ is not JSON serializable’</a></p></li>
+<li><p><a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/460e9fc8f4311e90d9c647e149a23a9e38035394/Agreement_Overlap/Visuals.ipynb">Manually sort a legend.</a></p></li>
+<li><p>Add tooltip to chart functions.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">add_tooltip</span><span class="p">(</span><span class="n">chart</span><span class="p">,</span> <span class="n">tooltip1</span><span class="p">,</span> <span class="n">tooltip2</span><span class="p">):</span>
+    <span class="n">chart</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">chart</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">tooltip</span><span class="o">=</span> <span class="p">[</span><span class="n">tooltip1</span><span class="p">,</span><span class="n">tooltip2</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">chart</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="maps">
+<h3>Maps<a class="headerlink" href="#maps" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://nbviewer.org/github/python-visualization/folium/blob/v0.2.0/examples/Colormaps.ipynb">Examples of folium, branca, and color maps.</a></p></li>
+</ul>
+</div>
+<div class="section" id="dataframes">
+<h3>DataFrames<a class="headerlink" href="#dataframes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/user_guide/style.html">Styling dataframes with HTML.</a></p></li>
+<li><p><a class="reference external" href="https://stackoverflow.com/questions/56647813/perform-operations-after-styling-in-a-dataframe">After styling a DataFrame, you will have to access the underlying data with .data</a>.</p></li>
+</ul>
+</div>
+<div class="section" id="ipywidgets">
+<h3>Ipywidgets<a class="headerlink" href="#ipywidgets" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="tabs">
+<h4>Tabs<a class="headerlink" href="#tabs" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>Create tabs to switch between different views.</p></li>
+<li><p><a class="reference external" href="https://stackoverflow.com/questions/50842160/how-to-display-matplotlib-plots-in-a-jupyter-tab-widget">Stack Overflow Help.</a></p>
+<ul>
+<li><p><a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/dla/e76_obligated_funds/charting_function_work.ipynb?short_path=1c01de9#L302333">Notebook example.</a></p></li>
+<li><p><a class="reference external" href="https://ipywidgets.readthedocs.io/en/latest/examples/Widget%20List.html#Tabs">Example on Ipywidgets docs page.</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="markdown">
+<h3>Markdown<a class="headerlink" href="#markdown" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.pluralsight.com/guides/working-tables-github-markdown">Create a markdown table.</a></p></li>
+<li><p><a class="reference external" href="https://stackoverflow.com/questions/2822089/how-to-link-to-part-of-the-same-document-in-markdown">Add a table of content that links to headers throughout a markdown file.</a></p></li>
+<li><p><a class="reference external" href="https://stackoverflow.com/questions/32563078/how-link-to-any-local-file-with-markdown-syntax?rq=1">Add links to local files.</a></p></li>
+<li><p><a class="reference external" href="https://datascienceparichay.com/article/insert-image-in-a-jupyter-notebook/">Direct embed an image.</a></p></li>
+</ul>
+</div>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
@@ -952,17 +1084,17 @@ then your title would be something like <code class="docutils literal notranslat
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="tools_quick_links.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="data_catalogs.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Tools Quick Links</p>
+            <p class="prev-next-title">Using Data Catalogs</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="notebooks.html" title="next page">
+    <a class='right-next' id="next-link" href="../analytics_new_analysts/overview.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Notebooks</p>
+        <p class="prev-next-title">Tutorials for New Python Users</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
