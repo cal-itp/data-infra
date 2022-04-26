@@ -10,6 +10,9 @@ import os
 import re
 import shutil
 import subprocess
+from pprint import pformat
+
+import sys
 import tempfile
 import traceback
 from concurrent.futures import ProcessPoolExecutor
@@ -82,13 +85,14 @@ def download_rt_files(
     ]
 
     if not files:
-        msg = "failed to find any rt files to download"
+        msg = f"failed to find any rt files to download {glob} {rt_file_type} {itp_id} {url}"
         typer.secho(msg, fg=typer.colors.YELLOW)
         raise NoRTFilesFound
 
     src_files = [file.path for file in files]
     # the RT validator expects file names to end in <extraction_time>Z
     # unsure if this is a standard timestamp format
+    # see https://github.com/MobilityData/gtfs-realtime-validator/blob/master/gtfs-realtime-validator-lib/README.md#command-line-config-parameters
     dst_files = [
         os.path.join(
             dst_folder,
@@ -191,6 +195,13 @@ def validate_glob(
                     gzipfile.write((json.dumps(record) + "\n").encode("utf-8"))
                     written += 1
 
+            if not written:
+                typer.secho(
+                    f"no errors found in {str(rt_file.path)}, nothing to upload",
+                    fg=typer.colors.GREEN,
+                )
+                continue
+
             out_path = (
                 f"{rt_file.validation_hive_path(dst_bucket)}{JSONL_GZIP_EXTENSION}"
             )
@@ -290,6 +301,7 @@ def validate_gcs_bucket_many(
 
         # Processes each future as it is completed, i.e. returned or errored
         for future in concurrent.futures.as_completed(futures):
+            row = futures[future]
             try:
                 future.result()
             except KeyboardInterrupt:
@@ -299,16 +311,16 @@ def validate_gcs_bucket_many(
             except Exception as e:
                 if strict:
                     raise e
-                exceptions.append((e, traceback.format_exc()))
+                exceptions.append((e, traceback.format_exc(), list(row)))
 
     typer.echo(
         f"finished multiprocessing; {params.shape[0] - len(exceptions)} successful of {params.shape[0]}"
     )
 
     if exceptions:
-        msg = f"got {len(exceptions)} exceptions from processing {params.shape[0]} feeds: {exceptions}"
+        msg = f"got {len(exceptions)} exceptions from processing {params.shape[0]} feeds: {pformat(exceptions)}"
         typer.secho(msg, err=True, fg=typer.colors.RED)
-        raise RuntimeError(msg)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
