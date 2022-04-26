@@ -29,7 +29,7 @@ from tqdm import tqdm
 # Note that all RT extraction is stored in the prod bucket, since it is very large,
 # but we can still output processed results to the staging bucket
 
-EXTENSION = ".jsonl.gz"
+JSONL_GZIP_EXTENSION = ".jsonl.gz"
 
 yesterday = (date.today() - timedelta(days=1)).isoformat()
 
@@ -159,7 +159,7 @@ def parse_file(bucket: str, rt_file: RTFile, pbar=None):
                 typer.secho(msg, fg=typer.colors.YELLOW)
             return
 
-        gzip_fname = str(tmp_dir + "/" + "temporary" + EXTENSION)
+        gzip_fname = str(tmp_dir + "/" + "temporary" + JSONL_GZIP_EXTENSION)
         written = 0
 
         with gzip.open(gzip_fname, "w") as gzipfile:
@@ -175,7 +175,7 @@ def parse_file(bucket: str, rt_file: RTFile, pbar=None):
                 gzipfile.write((json.dumps(record) + "\n").encode("utf-8"))
                 written += 1
 
-        out_path = f"{rt_file.hive_path(bucket)}{EXTENSION}"  # probably a better way to do this
+        out_path = f"{rt_file.hive_path(bucket)}{JSONL_GZIP_EXTENSION}"  # probably a better way to do this
         msg = f"writing {written} lines from {str(rt_file.path)} to {out_path}"
         if pbar:
             pbar.write(msg)

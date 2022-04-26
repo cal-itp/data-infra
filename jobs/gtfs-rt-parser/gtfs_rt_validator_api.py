@@ -21,7 +21,13 @@ import typer
 from calitp.config import get_bucket, is_development
 from calitp.storage import get_fs
 
-from gtfs_rt_parser import identify_files, RTFileType, RTFile, EXTENSION, put_with_retry
+from gtfs_rt_parser import (
+    identify_files,
+    RTFileType,
+    RTFile,
+    JSONL_GZIP_EXTENSION,
+    put_with_retry,
+)
 
 RT_VALIDATOR_JAR_LOCATION_ENV_KEY = "GTFS_RT_VALIDATOR_JAR"
 JAR_DEFAULT = typer.Option(
@@ -55,7 +61,12 @@ def download_gtfs_schedule_zip(gtfs_schedule_path, dst_path, fs):
 
 
 def download_rt_files(
-    glob, rt_file_type, dst_folder, itp_id: int, url: int
+    glob,
+    rt_file_type,
+    dst_folder,
+    itp_id: int,
+    url: int,
+    verbose: bool = False,
 ) -> List[Tuple[RTFile, str]]:
     fs = get_fs()
 
@@ -123,14 +134,19 @@ def validate_glob(
     fs = get_fs()
 
     with tempfile.TemporaryDirectory() as tmp_dir:
+        typer.secho(
+            f"validating in temporary directory {tmp_dir}", fg=typer.colors.MAGENTA
+        )
         dst_path_gtfs = f"{tmp_dir}/gtfs"
         dst_path_rt = f"{tmp_dir}/rt"
+
         files = download_rt_files(
             glob=gtfs_rt_glob,
             rt_file_type=file_type,
             dst_folder=dst_path_rt,
             itp_id=itp_id,
             url=url,
+            verbose=verbose,
         )
 
         gtfs_zip = download_gtfs_schedule_zip(gtfs_schedule_path, dst_path_gtfs, fs=fs)
@@ -139,19 +155,21 @@ def validate_glob(
         validate(gtfs_zip, dst_path_rt, jar_path=jar_path, verbose=verbose)
 
         for rt_file, downloaded_path in files:
-            with tempfile.TemporaryDirectory(dir=tmp_dir) as gzip_tmp_dir:
-                written = 0
-                gzip_fname = str(gzip_tmp_dir + "/" + "temporary" + EXTENSION)
-                print(f"writing to {gzip_fname}")
+            written = 0
+            # the validator outputs files with an added .results.json suffix
+            results_fname = downloaded_path + ".results.json"
+            gzip_fname = downloaded_path + JSONL_GZIP_EXTENSION
 
-                # the validator outputs files with an added .results.json suffix
-                with open(downloaded_path + ".results.json") as f:
-                    records = json.load(f)
-                with gzip.open(gzip_fname, "w") as gzipfile:
-                    for record in records:
-                        gzipfile.write((json.dumps(record) + "\n").encode("utf-8"))
-                        written += 1
-            out_path = f"{rt_file.validation_hive_path(dst_bucket)}{EXTENSION}"
+            with open(results_fname) as f:
+                records = json.load(f)
+            with gzip.open(gzip_fname, "w") as gzipfile:
+                for record in records:
+                    gzipfile.write((json.dumps(record) + "\n").encode("utf-8"))
+                    written += 1
+
+            out_path = (
+                f"{rt_file.validation_hive_path(dst_bucket)}{JSONL_GZIP_EXTENSION}"
+            )
             msg = f"writing {written} validation result lines from {str(rt_file.path)} to {out_path}"
             if dry_run:
                 typer.secho(f"DRY RUN: would be {msg}", fg=typer.colors.YELLOW)
