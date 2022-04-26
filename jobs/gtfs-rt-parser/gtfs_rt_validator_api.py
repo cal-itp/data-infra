@@ -88,7 +88,9 @@ def download_rt_files(
         for file in files
     ]
 
-    typer.echo(f"downloading {len(files)} files from glob {glob}")
+    typer.echo(
+        f"downloading {len(files)} files from glob {glob} for itp_id {itp_id} and url {url}"
+    )
 
     fs.get(src_files, dst_files)
     return list(zip(files, dst_files))
@@ -135,7 +137,7 @@ def validate_glob(
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         typer.secho(
-            f"validating in temporary directory {tmp_dir}", fg=typer.colors.MAGENTA
+            f"validating in temporary directory {tmp_dir}", fg=typer.colors.CYAN
         )
         dst_path_gtfs = f"{tmp_dir}/gtfs"
         dst_path_rt = f"{tmp_dir}/rt"

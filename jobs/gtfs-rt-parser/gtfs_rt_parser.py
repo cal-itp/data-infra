@@ -138,7 +138,9 @@ def identify_files(glob, rt_file_type: RTFileType, progress=False) -> List[RTFil
     # its caches (at least the ones I could find)
     fs.dircache.clear()
 
-    typer.secho(f"found {len(files)} files in glob {glob}", fg=typer.colors.GREEN)
+    typer.secho(
+        f"found {len(files)} {rt_file_type} files in glob {glob}", fg=typer.colors.GREEN
+    )
     return files
 
 
