@@ -1,5 +1,5 @@
-description: "Download the state of CA GTFS files, async version"
-schedule_interval: "0 0 * * *"
+description: "Parses GTFS RT Protobufs and writes as JSONL to GCS"
+schedule_interval: "30 * * * *"
 tags:
   - all_gusty_features
 default_args:
@@ -15,8 +15,9 @@ default_args:
     email_on_retry: False
     max_active_dag_runs: 6
     retries: 1
+    pool: rt_parse_pool
     retry_delay: !timedelta 'minutes: 2'
-    concurrency: 50
+    concurrency: 5
     #sla: !timedelta 'hours: 2'
 wait_for_defaults:
     timeout: 3600

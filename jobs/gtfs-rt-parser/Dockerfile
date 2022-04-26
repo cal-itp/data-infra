@@ -10,8 +10,8 @@ WORKDIR /app
 
 COPY ./pyproject.toml /app/pyproject.toml
 COPY ./poetry.lock /app/poetry.lock
-RUN poetry export -f requirements.txt --output requirements.txt \
-    && pip install -r requirements.txt
+RUN poetry config virtualenvs.create false
+RUN poetry install
 
 COPY . /app
 
