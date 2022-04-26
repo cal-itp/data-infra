@@ -14,7 +14,11 @@ There are two common ways to make changes to the docs. For those not used to usi
 * Follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) standard for all commits and PR titles
   * Prefix docs commits and PR titles with `docs(subject-area):`
 * Install pre-commit hooks
-  * `pip install pre-commit`, `pre-commit install`
+  * `pip install pre-commit`
+  * `pre-commit install` in the appropriate repo
+  * Troubleshooting:
+    * If upon committing your changes you see that the pre-commit checks have failed, the fixes will be made automatically you will need to **re-add and re-commit the files**. Forgetting to do this may cause frustration.
+    * If for any reason you would like to bypass the hooks, append the flag `--no-verify`
   * If needed, run `pre-commit run --all-files` to run the hooks on all files, not just those staged for changes.
 * Open a PR
   * Use GitHub's *draft* status to indicate PRs that are not ready for review/merging
