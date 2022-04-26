@@ -23,7 +23,7 @@ from calitp.storage import get_fs
 from structlog import configure
 from structlog.threadlocal import merge_threadlocal
 
-from gtfs_rt_parser import identify_files, RTFileType, RTFile, EXTENSION
+from gtfs_rt_parser import identify_files, RTFileType, RTFile, EXTENSION, put_with_retry
 
 configure(processors=[merge_threadlocal, structlog.processors.KeyValueRenderer()])
 
@@ -126,6 +126,7 @@ def validate_glob(
     verbose: bool = False,
     jar_path: Path = JAR_DEFAULT,
     idx: int = None,
+    dry_run: bool = False,
 ) -> None:
     fs = get_fs()
 
@@ -158,10 +159,12 @@ def validate_glob(
                         gzipfile.write((json.dumps(record) + "\n").encode("utf-8"))
                         written += 1
             out_path = f"{rt_file.validation_hive_path(dst_bucket)}{EXTENSION}"
-            typer.echo(
-                f"writing {written} validation result lines from {str(rt_file.path)} to {out_path}"
-            )
-            # put_with_retry(fs, gzip_fname, out_path)
+            msg = f"writing {written} validation result lines from {str(rt_file.path)} to {out_path}"
+            if dry_run:
+                typer.echo(f"DRY RUN: would be {msg}")
+            else:
+                typer.echo(msg)
+                put_with_retry(fs, gzip_fname, out_path)
 
 
 @app.command()
