@@ -1,15 +1,13 @@
----
-operator: operators.SqlToWarehouseOperator
-dst_table_name: "payments.stg_enriched_device_transaction_purchases"
+{{ config(materialized='table') }}
 
-external_dependencies:
-  - payments_loader: all
----
+WITH stg_enriched_device_transaction_purchases AS (
+    {{
+        sql_enrich_duplicates(
+            source('payments', 'device_transaction_purchases'),
+            ['purchase_id'],
+            ['calitp_file_name desc']
+        )
+    }}
+)
 
-{{
-  sql_enrich_duplicates(
-    "payments.device_transaction_purchases",
-    ["purchase_id"],
-    ["calitp_file_name desc"]
-  )
-}}
+SELECT * FROM stg_enriched_device_transaction_purchases
