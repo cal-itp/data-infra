@@ -3,7 +3,7 @@ intake==0.6.1
 ipdb==0.13.4
 pandas==1.1.4
 gusty==0.6.0
-pandas-gbq==0.14.1
+pandas-gbq==0.17.4
 pybigquery==0.7.0
 google-cloud-bigquery==2.34.3
 calitp==0.0.12
