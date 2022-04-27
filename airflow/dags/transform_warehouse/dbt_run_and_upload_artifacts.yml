@@ -12,12 +12,6 @@ arguments:
   - '--deploy-docs'
   - '--sync-metabase'
 
-dependencies:
-  - create_service_alerts_external_table
-  - create_trip_updates_external_table
-  - create_vehicle_positions_external_table
-trigger_rule: all_done
-
 is_delete_operator_pod: true
 get_logs: true
 is_gke: true
