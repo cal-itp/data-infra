@@ -8,7 +8,6 @@ import os
 import shutil
 import subprocess
 import tempfile
-import time
 import traceback
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
@@ -20,7 +19,6 @@ from typing import Optional, List
 
 import backoff
 import pendulum
-import structlog
 import typer
 from aiohttp.client_exceptions import ClientResponseError
 from calitp.config import get_bucket
@@ -43,7 +41,6 @@ JAR_DEFAULT = typer.Option(
 )
 
 yesterday = (date.today() - timedelta(days=1)).isoformat()
-
 
 
 class RTFileType(str, Enum):
@@ -97,6 +94,7 @@ class RTFile(BaseModel):
 
 class RTAggregation(BaseModel):
     hive_path: str
+    validation_hive_path: str
     source_files: List[RTFile]
 
 
@@ -213,16 +211,19 @@ def parse_and_aggregate_hour(
 
     fs = get_fs()
 
-    out_path = (
-        f"{hour.hive_path}{JSONL_GZIP_EXTENSION}"  # probably a better way to do this
-    )
+    # probably a better way to do this
+    out_path = f"{hour.hive_path}{JSONL_GZIP_EXTENSION}"
+    validation_out_path = f"{hour.validation_hive_path}{JSONL_GZIP_EXTENSION}"
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         dst_path_gtfs = f"{tmp_dir}/gtfs"
         dst_path_rt = f"{tmp_dir}/rt"
         fs.get(
             rpath=[file.path for file in hour.source_files],
-            lpath=[os.path.join(dst_path_rt, file.timestamped_filename) for file in hour.source_files],
+            lpath=[
+                os.path.join(dst_path_rt, file.timestamped_filename)
+                for file in hour.source_files
+            ],
         )
 
         if validate:
@@ -230,16 +231,24 @@ def parse_and_aggregate_hour(
                 hour.source_files[0].schedule_path, dst_path_gtfs, fs=fs
             )
             typer.echo(f"validating {len(hour.source_files)} files")
-            execute_rt_validator(gtfs_zip, dst_path_rt, jar_path=jar_path, verbose=verbose)
+            execute_rt_validator(
+                gtfs_zip, dst_path_rt, jar_path=jar_path, verbose=verbose
+            )
 
-        gzip_fname = str(tmp_dir + "/" + "temporary" + JSONL_GZIP_EXTENSION)
+        gzip_fname = str(tmp_dir + "/data" + JSONL_GZIP_EXTENSION)
+        gzip_validation_fname = str(tmp_dir + "/validation" + JSONL_GZIP_EXTENSION)
         written = 0
-        with gzip.open(gzip_fname, "w") as gzipfile:
+        validation_written = 0
+        with gzip.open(gzip_fname, "w") as gzipfile, gzip.open(
+            gzip_validation_fname, "w"
+        ) as validation_gzipfile:
             for rt_file in hour.source_files:
                 feed = gtfs_realtime_pb2.FeedMessage()
 
                 try:
-                    with open(os.path.join(dst_path_rt, rt_file.timestamped_filename), "rb") as f:
+                    with open(
+                        os.path.join(dst_path_rt, rt_file.timestamped_filename), "rb"
+                    ) as f:
                         feed.ParseFromString(f.read())
                     parsed = json_format.MessageToDict(feed)
                 except DecodeError:
@@ -268,9 +277,38 @@ def parse_and_aggregate_hour(
                     gzipfile.write((json.dumps(record) + "\n").encode("utf-8"))
                     written += 1
 
+                if validate:
+                    with open(
+                        os.path.join(
+                            dst_path_rt, rt_file.timestamped_filename + ".results.json"
+                        )
+                    ) as f:
+                        records = json.load(f)
+                    for record in records:
+                        record.update(
+                            {
+                                "metadata": json.loads(
+                                    rt_file.json()
+                                ),  # back and forth so we use pydantic serialization
+                            }
+                        )
+                        validation_gzipfile.write(
+                            (json.dumps(record) + "\n").encode("utf-8")
+                        )
+                        validation_written += 1
+
         if written:
-            log(f"writing {written} lines from {str(rt_file.path)} to {out_path}")
+            log(f"writing {written} lines to {out_path}")
             put_with_retry(fs, gzip_fname, out_path)
+        else:
+            log(
+                f"WARNING: no records at all for {hour.hive_path}",
+                fg=typer.colors.YELLOW,
+            )
+
+        if validation_written:
+            log(f"writing {validation_written} lines to {validation_out_path}")
+            put_with_retry(fs, gzip_validation_fname, validation_out_path)
         else:
             log(
                 f"WARNING: no records at all for {hour.hive_path}",
@@ -322,6 +360,8 @@ def main(
     feed_hours = [
         RTAggregation(
             hive_path=hive_path,
+            # this is a bit weird
+            validation_hive_path=files[0].validation_hive_path(dst_bucket),
             source_files=files,
         )
         for hive_path, files in feed_hours.items()
