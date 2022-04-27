@@ -198,10 +198,9 @@ models:
         description: '{{ doc("column_calitp_url_number") }}'
         tests:
           - not_null
-      - name: textPayload
+      - name: error
         description: |
-          Error message that contains error severity, error summary,
-          and the RT URL that caused the error
+          Download error encountered.
         tests:
           - not_null
       - name: timestamp
