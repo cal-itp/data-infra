@@ -6,6 +6,7 @@ import json
 import os
 import tempfile
 import traceback
+from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from datetime import timedelta, date
 from enum import Enum
@@ -18,7 +19,6 @@ import pendulum
 import structlog
 import typer
 from aiohttp.client_exceptions import ClientResponseError
-from calitp.config import get_bucket
 from calitp.storage import get_fs
 from google.protobuf import json_format
 from google.protobuf.message import DecodeError
@@ -55,8 +55,6 @@ class RTFile(BaseModel):
             f"itp_id={self.itp_id}",
             f"url_number={self.url}",
             f"hour={self.tick.hour}",
-            f"minute={self.tick.minute}",
-            f"second={self.tick.second}",
             self.path.name,
         )
 
@@ -74,6 +72,11 @@ class RTFile(BaseModel):
         )
 
 
+class RTAggregation(BaseModel):
+    hive_path: str
+    source_files: List[RTFile]
+
+
 # Try twice in the event we get a ClientResponseError; doesn't have much of a delay (like 0.01s)
 @backoff.on_exception(backoff.expo, exception=ClientResponseError, max_tries=3)
 def get_with_retry(fs, *args, **kwargs):
@@ -83,21 +86,6 @@ def get_with_retry(fs, *args, **kwargs):
 @backoff.on_exception(backoff.expo, exception=ClientResponseError, max_tries=3)
 def put_with_retry(fs, *args, **kwargs):
     return fs.put(*args, **kwargs)
-
-
-def parse_pb(path, open_func=open) -> dict:
-    """
-    Convert pb file to Python dictionary
-    """
-    feed = gtfs_realtime_pb2.FeedMessage()
-    try:
-        with open_func(path, "rb") as f:
-            feed.ParseFromString(f.read())
-        d = json_format.MessageToDict(feed)
-        return d
-    except DecodeError:
-        typer.secho("WARN: got DecodeError for {}".format(path), fg=typer.colors.YELLOW)
-        return {}
 
 
 @lru_cache(maxsize=None)
@@ -146,50 +134,77 @@ def identify_files(glob, rt_file_type: RTFileType, progress=False) -> List[RTFil
 
 # Originally this whole function was retried, but tmpdir flakiness will throw
 # exceptions in backoff's context, which ruins things
-def parse_file(bucket: str, rt_file: RTFile, pbar=None):
+def parse_and_aggregate_hour(bucket: str, hour: RTAggregation, pbar=None):
+    def log(*args, fg=None, **kwargs):
+        # capture fg so we don't pass it to pbar
+        if pbar:
+            pbar.write(*args, **kwargs)
+        else:
+            typer.secho(*args, fg=fg, **kwargs)
+
     fs = get_fs()
 
+    out_path = (
+        f"{hour.hive_path}{JSONL_GZIP_EXTENSION}"  # probably a better way to do this
+    )
+
     with tempfile.TemporaryDirectory() as tmp_dir:
-        parsed = parse_pb(rt_file.path, open_func=fs.open)
-
-        if not parsed or "entity" not in parsed:
-            msg = f"WARNING: no records found in {str(rt_file.path)}"
-            if pbar:
-                pbar.write(msg)
-                pbar.update(1)
-            else:
-                typer.secho(msg, fg=typer.colors.YELLOW)
-            return
-
+        fs.get(
+            rpath=[file.path for file in hour.source_files],
+            lpath=[os.path.join(tmp_dir, file.path) for file in hour.source_files],
+        )
         gzip_fname = str(tmp_dir + "/" + "temporary" + JSONL_GZIP_EXTENSION)
         written = 0
-
         with gzip.open(gzip_fname, "w") as gzipfile:
-            for record in parsed["entity"]:
-                record.update(
-                    {
-                        "header": parsed["header"],
-                        # back and forth so we use pydantic serialization
-                        "metadata": json.loads(rt_file.json()),
-                    }
-                )
-                gzipfile.write((json.dumps(record) + "\n").encode("utf-8"))
-                written += 1
+            for rt_file in hour.source_files:
+                feed = gtfs_realtime_pb2.FeedMessage()
 
-        out_path = f"{rt_file.hive_path(bucket)}{JSONL_GZIP_EXTENSION}"  # probably a better way to do this
-        msg = f"writing {written} lines from {str(rt_file.path)} to {out_path}"
-        if pbar:
-            pbar.write(msg)
+                try:
+                    with open(os.path.join(tmp_dir, rt_file.path), "rb") as f:
+                        feed.ParseFromString(f.read())
+                    parsed = json_format.MessageToDict(feed)
+                except DecodeError:
+                    log(
+                        f"WARN: got DecodeError for {str(rt_file.path)}",
+                        fg=typer.colors.YELLOW,
+                    )
+                    continue
+
+                if not parsed or "entity" not in parsed:
+                    log(
+                        f"WARNING: no records found in {str(rt_file.path)}",
+                        fg=typer.colors.YELLOW,
+                    )
+                    continue
+
+                for record in parsed["entity"]:
+                    record.update(
+                        {
+                            "header": parsed["header"],
+                            "metadata": json.loads(
+                                rt_file.json()
+                            ),  # back and forth so we use pydantic serialization
+                        }
+                    )
+                    gzipfile.write((json.dumps(record) + "\n").encode("utf-8"))
+                    written += 1
+
+        if written:
+            log(f"writing {written} lines from {str(rt_file.path)} to {out_path}")
+            put_with_retry(fs, gzip_fname, out_path)
         else:
-            typer.echo(msg)
-        put_with_retry(fs, gzip_fname, out_path)
-        if pbar:
-            pbar.update(1)
+            log(
+                f"WARNING: no records at all for {hour.hive_path}",
+                fg=typer.colors.YELLOW,
+            )
+
+    if pbar:
+        pbar.update(1)
 
 
 def try_handle_one_feed(*args, **kwargs) -> Optional[Exception]:
     try:
-        parse_file(*args, **kwargs)
+        parse_and_aggregate_hour(*args, **kwargs)
     except Exception as e:
         typer.echo(
             f"got exception while handling feed: {str(e)} from {str(e.__cause__ or e.__context__)} {traceback.format_exc()}",
@@ -205,7 +220,7 @@ def try_handle_one_feed(*args, **kwargs) -> Optional[Exception]:
 def main(
     file_type: RTFileType,
     glob: str,
-    dst_bucket=get_bucket(),
+    dst_bucket: str,
     limit: int = 0,
     progress: bool = typer.Option(
         False,
@@ -216,16 +231,26 @@ def main(
     typer.secho(f"Parsing {file_type} from {glob}", fg=typer.colors.MAGENTA)
 
     # fetch files ----
-    feed_files = identify_files(glob=glob, rt_file_type=file_type, progress=progress)
+    files = identify_files(glob=glob, rt_file_type=file_type, progress=progress)
+
+    feed_hours = defaultdict(list)
+
+    for file in files:
+        feed_hours[file.hive_path(dst_bucket)].append(file)
+
+    feed_hours = [
+        RTAggregation(
+            hive_path=hive_path,
+            source_files=files,
+        )
+        for hive_path, files in feed_hours.items()
+    ]
 
     if limit:
         structlog.get_logger().warn(f"limit of {limit} feeds was set")
-        feed_files = feed_files[:limit]
+        feed_hours = feed_hours[:limit]
 
-    if progress:
-        pbar = tqdm(total=len(feed_files))
-    else:
-        pbar = None
+    pbar = tqdm(total=len(feed_hours)) if progress else None
 
     # gcfs does not seem to play nicely with multiprocessing right now, so use threads :(
     # https://github.com/fsspec/gcsfs/issues/379
@@ -233,15 +258,15 @@ def main(
         args = [
             (
                 dst_bucket,
-                file,
+                hour,
                 pbar,
             )
-            for file in feed_files
+            for hour in feed_hours
         ]
         exceptions = [ret for ret in pool.map(try_handle_one_feed, *zip(*args)) if ret]
 
     if exceptions:
-        msg = f"got {len(exceptions)} exceptions from processing {len(feed_files)} feeds: {exceptions}"
+        msg = f"got {len(exceptions)} exceptions from processing {len(feed_hours)} feeds: {exceptions}"
         typer.secho(msg, err=True, fg=typer.colors.RED)
         raise RuntimeError(msg)
 
