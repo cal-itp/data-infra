@@ -1,10 +1,14 @@
 """
 Parses binary RT feeds and writes them back to GCS as gzipped newline-delimited JSON
 """
+import concurrent.futures
 import gzip
 import json
 import os
+import shutil
+import subprocess
 import tempfile
+import time
 import traceback
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
@@ -19,6 +23,7 @@ import pendulum
 import structlog
 import typer
 from aiohttp.client_exceptions import ClientResponseError
+from calitp.config import get_bucket
 from calitp.storage import get_fs
 from google.protobuf import json_format
 from google.protobuf.message import DecodeError
@@ -31,7 +36,14 @@ from tqdm import tqdm
 
 JSONL_GZIP_EXTENSION = ".jsonl.gz"
 
+RT_VALIDATOR_JAR_LOCATION_ENV_KEY = "GTFS_RT_VALIDATOR_JAR"
+JAR_DEFAULT = typer.Option(
+    os.environ.get(RT_VALIDATOR_JAR_LOCATION_ENV_KEY),
+    help="Path to the GTFS RT Validator JAR",
+)
+
 yesterday = (date.today() - timedelta(days=1)).isoformat()
+
 
 
 class RTFileType(str, Enum):
@@ -46,6 +58,19 @@ class RTFile(BaseModel):
     itp_id: int
     url: int
     tick: pendulum.DateTime
+
+    @property
+    def timestamped_filename(self):
+        return str(self.path.name) + self.tick.strftime("__%Y-%m-%dT%H:%M:%SZ.pb")
+
+    @property
+    def schedule_path(self):
+        return os.path.join(
+            get_bucket(),
+            "schedule",
+            str(self.tick.replace(hour=0, minute=0, second=0)),
+            f"{self.itp_id}_{self.url}",
+        )
 
     def hive_path(self, bucket: str):
         return os.path.join(
@@ -66,8 +91,6 @@ class RTFile(BaseModel):
             f"itp_id={self.itp_id}",
             f"url_number={self.url}",
             f"hour={self.tick.hour}",
-            f"minute={self.tick.minute}",
-            f"second={self.tick.second}",
             self.path.name,
         )
 
@@ -132,9 +155,55 @@ def identify_files(glob, rt_file_type: RTFileType, progress=False) -> List[RTFil
     return files
 
 
+def download_gtfs_schedule_zip(gtfs_schedule_path, dst_path, fs):
+    # fetch and zip gtfs schedule
+    typer.echo(f"Fetching gtfs schedule data from {gtfs_schedule_path} to {dst_path}")
+    fs.get(gtfs_schedule_path, dst_path, recursive=True)
+    try:
+        os.remove(os.path.join(dst_path, "areas.txt"))
+    except FileNotFoundError:
+        pass
+    shutil.make_archive(dst_path, "zip", dst_path)
+    return f"{dst_path}.zip"
+
+
+def execute_rt_validator(gtfs_file: str, rt_path: str, jar_path: Path, verbose=False):
+    typer.secho(f"validating {rt_path} with {gtfs_file}", fg=typer.colors.MAGENTA)
+
+    # We probably should always print stderr?
+    stderr = subprocess.DEVNULL if not verbose else None
+    stdout = subprocess.DEVNULL if not verbose else None
+
+    subprocess.check_call(
+        [
+            "java",
+            "-jar",
+            str(jar_path),
+            "-gtfs",
+            gtfs_file,
+            "-gtfsRealtimePath",
+            rt_path,
+            "-sort",
+            "name",
+        ],
+        stderr=stderr,
+        stdout=stdout,
+    )
+
+
 # Originally this whole function was retried, but tmpdir flakiness will throw
 # exceptions in backoff's context, which ruins things
-def parse_and_aggregate_hour(bucket: str, hour: RTAggregation, pbar=None):
+def parse_and_aggregate_hour(
+    hour: RTAggregation,
+    jar_path: Path,
+    verbose: bool = False,
+    parse: bool = True,
+    validate: bool = True,
+    pbar=None,
+):
+    if not parse and not validate:
+        raise ValueError("skipping both parsing and validation does nothing for us!")
+
     def log(*args, fg=None, **kwargs):
         # capture fg so we don't pass it to pbar
         if pbar:
@@ -149,10 +218,20 @@ def parse_and_aggregate_hour(bucket: str, hour: RTAggregation, pbar=None):
     )
 
     with tempfile.TemporaryDirectory() as tmp_dir:
+        dst_path_gtfs = f"{tmp_dir}/gtfs"
+        dst_path_rt = f"{tmp_dir}/rt"
         fs.get(
             rpath=[file.path for file in hour.source_files],
-            lpath=[os.path.join(tmp_dir, file.path) for file in hour.source_files],
+            lpath=[os.path.join(dst_path_rt, file.timestamped_filename) for file in hour.source_files],
         )
+
+        if validate:
+            gtfs_zip = download_gtfs_schedule_zip(
+                hour.source_files[0].schedule_path, dst_path_gtfs, fs=fs
+            )
+            typer.echo(f"validating {len(hour.source_files)} files")
+            execute_rt_validator(gtfs_zip, dst_path_rt, jar_path=jar_path, verbose=verbose)
+
         gzip_fname = str(tmp_dir + "/" + "temporary" + JSONL_GZIP_EXTENSION)
         written = 0
         with gzip.open(gzip_fname, "w") as gzipfile:
@@ -160,7 +239,7 @@ def parse_and_aggregate_hour(bucket: str, hour: RTAggregation, pbar=None):
                 feed = gtfs_realtime_pb2.FeedMessage()
 
                 try:
-                    with open(os.path.join(tmp_dir, rt_file.path), "rb") as f:
+                    with open(os.path.join(dst_path_rt, rt_file.timestamped_filename), "rb") as f:
                         feed.ParseFromString(f.read())
                     parsed = json_format.MessageToDict(feed)
                 except DecodeError:
@@ -226,7 +305,9 @@ def main(
         False,
         help="If true, display progress bar; useful for development but not in production.",
     ),
+    verbose: bool = False,
     threads: int = 4,
+    jar_path: Path = JAR_DEFAULT,
 ):
     typer.secho(f"Parsing {file_type} from {glob}", fg=typer.colors.MAGENTA)
 
@@ -247,23 +328,41 @@ def main(
     ]
 
     if limit:
-        structlog.get_logger().warn(f"limit of {limit} feeds was set")
+        typer.secho(f"limit of {limit} feeds was set", fg=typer.colors.YELLOW)
         feed_hours = feed_hours[:limit]
 
     pbar = tqdm(total=len(feed_hours)) if progress else None
 
+    exceptions = []
+
+    # from https://stackoverflow.com/a/55149491
+    # could be cleaned up a bit with a namedtuple
+
     # gcfs does not seem to play nicely with multiprocessing right now, so use threads :(
     # https://github.com/fsspec/gcsfs/issues/379
+
     with ThreadPoolExecutor(max_workers=threads) as pool:
-        args = [
-            (
-                dst_bucket,
-                hour,
-                pbar,
-            )
+        futures = {
+            pool.submit(
+                parse_and_aggregate_hour,
+                hour=hour,
+                jar_path=jar_path,
+                verbose=verbose,
+                parse=True,
+                validate=True,
+                pbar=pbar,
+            ): hour
             for hour in feed_hours
-        ]
-        exceptions = [ret for ret in pool.map(try_handle_one_feed, *zip(*args)) if ret]
+        }
+
+        for future in concurrent.futures.as_completed(futures):
+            hour = futures[future]
+            try:
+                future.result()
+            except KeyboardInterrupt:
+                raise
+            except Exception as e:
+                exceptions.append((e, traceback.format_exc(), hour.hive_path))
 
     if exceptions:
         msg = f"got {len(exceptions)} exceptions from processing {len(feed_hours)} feeds: {exceptions}"

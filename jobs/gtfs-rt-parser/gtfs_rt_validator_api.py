@@ -52,8 +52,6 @@ RT_FILENAME_TEMPLATE = (
 app = typer.Typer()
 
 
-class NoRTFilesFound(Exception):
-    pass
 
 
 def download_gtfs_schedule_zip(gtfs_schedule_path, dst_path, fs):
@@ -118,8 +116,7 @@ def validate(gtfs_file: str, rt_path: str, jar_path: Path, verbose=False):
     typer.echo(f"validating {rt_path} with {gtfs_file}")
 
     # We probably should always print stderr?
-    stderr = None
-    # stderr = subprocess.DEVNULL if not verbose else None
+    stderr = subprocess.DEVNULL if not verbose else None
     stdout = subprocess.DEVNULL if not verbose else None
 
     subprocess.check_call(
@@ -155,9 +152,6 @@ def validate_glob(
     fs = get_fs()
 
     with tempfile.TemporaryDirectory() as tmp_dir:
-        typer.secho(
-            f"validating in temporary directory {tmp_dir}", fg=typer.colors.CYAN
-        )
         dst_path_gtfs = f"{tmp_dir}/gtfs"
         dst_path_rt = f"{tmp_dir}/rt"
 
@@ -175,35 +169,30 @@ def validate_glob(
         typer.echo(f"validating {len(files)} files")
         validate(gtfs_zip, dst_path_rt, jar_path=jar_path, verbose=verbose)
 
-        for rt_file, downloaded_path in files:
-            written = 0
-            # the validator outputs files with an added .results.json suffix
-            results_fname = downloaded_path + ".results.json"
-            gzip_fname = downloaded_path + JSONL_GZIP_EXTENSION
+        gzip_fname = str(tmp_dir + "/" + "temporary" + JSONL_GZIP_EXTENSION)
+        written = 0
 
-            with open(results_fname) as f:
-                records = json.load(f)
+        with gzip.open(gzip_fname, "w") as gzipfile:
+            for rt_file, downloaded_path in files:
+                # the validator outputs files with an added .results.json suffix
+                results_fname = downloaded_path + ".results.json"
 
-            with gzip.open(gzip_fname, "w") as gzipfile:
-                for record in records:
-                    record.update(
-                        {
-                            # back and forth so we use pydantic serialization
-                            "metadata": json.loads(
-                                rt_file.json(),
-                            )
-                        }
-                    )
-                    gzipfile.write((json.dumps(record) + "\n").encode("utf-8"))
-                    written += 1
+                with open(results_fname) as f:
+                    records = json.load(f)
 
-            if not written:
-                typer.secho(
-                    f"no errors found in {str(rt_file.path)}, nothing to upload",
-                    fg=typer.colors.GREEN,
-                )
-                continue
+                    for record in records:
+                        record.update(
+                            {
+                                # back and forth so we use pydantic serialization
+                                "metadata": json.loads(
+                                    rt_file.json(),
+                                )
+                            }
+                        )
+                        gzipfile.write((json.dumps(record) + "\n").encode("utf-8"))
+                        written += 1
 
+        if written:
             out_path = (
                 f"{rt_file.validation_hive_path(dst_bucket)}{JSONL_GZIP_EXTENSION}"
             )
@@ -213,6 +202,11 @@ def validate_glob(
             else:
                 typer.secho(msg, fg=typer.colors.GREEN)
                 put_with_retry(fs, gzip_fname, out_path)
+        else:
+            typer.secho(
+                f"no errors found in {gtfs_rt_glob}, nothing to upload",
+                fg=typer.colors.GREEN,
+            )
 
 
 @app.command()
@@ -278,8 +272,6 @@ def validate_gcs_bucket_many(
 
     exceptions = []
 
-    # from https://stackoverflow.com/a/55149491
-    # could be cleaned up a bit with a namedtuple
     with ProcessPoolExecutor(max_workers=threads, mp_context=ctx) as pool:
         futures = {
             pool.submit(
