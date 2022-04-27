@@ -1,5 +1,5 @@
 git+https://github.com/machow/siuba.git@stable
-jupyter-book==0.12.0
+jupyter-book==0.12.3
 # Temporary pinning of pydata-sphinx-theme to workaround Sphinx 4.3.0 error
 # https://github.com/pydata/pydata-sphinx-theme/issues/508
 pydata-sphinx-theme==0.7.2
