@@ -69,6 +69,8 @@ parts:
       - file: kubernetes/README
         sections:
         - file: kubernetes/JupyterHub
+        - file: kubernetes/architecture
+        - file: kubernetes/deployment
       - file: ci/README
         sections:
         - file: ci/Git-Flow-Services
