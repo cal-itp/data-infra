@@ -34,7 +34,8 @@ def main(execution_date, **kwargs):
     prefix_path_schedule = f"{get_bucket()}/schedule/{execution_date}"
 
     # This prefix limits the validation to only 1 hour of data currently
-    prefix_path_rt = f"gtfs-data/rt/{date_string}T00:*"
+    glob = execution_date.replace(minute=0, second=0).format('YYYY-MM-DDTHH*')
+    prefix_path_rt = f"gtfs-data/rt/{glob}"
 
     raw_params["entity"] = [
         ("service_alerts", "trip_updates", "vehicle_positions")
@@ -57,7 +58,7 @@ def main(execution_date, **kwargs):
         axis="columns",
     )
 
-    path = f"rt-processed/calitp_validation_params/{date_string}.csv"
+    path = f"rt-processed/calitp_validation_params/{execution_date}.csv"
     print(f"saving {params.shape[0]} validation params to {path}")
     save_to_gcfs(
         params.to_csv(index=False).encode(),
