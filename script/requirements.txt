@@ -3,6 +3,6 @@
 jinja2==2.11.3
 PyYAML==5.4.1
 jsonschema==3.2.0
-pandas==1.1.4
+pandas==1.4.2
 requests==2.22.0
 markupsafe==2.0.1
