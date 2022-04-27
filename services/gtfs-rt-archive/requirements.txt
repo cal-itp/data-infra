@@ -5,7 +5,7 @@ google-auth==1.33.0
 idna==3.2
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
-PyYAML==5.4.1
+PyYAML==6.0
 requests==2.26.0
 rsa==4.7.2
 six==1.16.0
