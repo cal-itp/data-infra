@@ -2,7 +2,7 @@ FROM openjdk:11
 
 LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
 
-ENV GTFS_VALIDATOR_JAR=/gtfs-realtime-validator.jar
+ENV GTFS_RT_VALIDATOR_JAR=/gtfs-realtime-validator.jar
 ENV GTFS_VALIDATOR_VERSION=v1.0.0
 
 RUN apt-get update -y \
@@ -13,7 +13,7 @@ ENV PATH="${PATH}:/root/.poetry/bin"
 
 RUN wget \
     https://s3.amazonaws.com/gtfs-rt-validator/travis_builds/gtfs-realtime-validator-lib/1.0.0-SNAPSHOT/gtfs-realtime-validator-lib-1.0.0-SNAPSHOT.jar \
-    -O ${GTFS_VALIDATOR_JAR}
+    -O ${GTFS_RT_VALIDATOR_JAR}
 
 WORKDIR /app
 
