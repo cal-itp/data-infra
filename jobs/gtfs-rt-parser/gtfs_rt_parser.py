@@ -23,6 +23,8 @@ import typer
 from aiohttp.client_exceptions import ClientResponseError, ClientOSError
 from calitp.config import get_bucket
 from calitp.storage import get_fs
+from google.api_core.exceptions import NotFound
+from google.cloud.storage import Client
 from google.protobuf import json_format
 from google.protobuf.message import DecodeError
 from google.transit import gtfs_realtime_pb2
@@ -173,7 +175,7 @@ def identify_files(glob, rt_file_type: RTFileType, progress=False) -> List[RTFil
     return files
 
 
-def download_gtfs_schedule_zip(gtfs_schedule_path, dst_path, fs, pbar=None):
+def download_gtfs_schedule_zip(gtfs_schedule_path, dst_path, pbar=None):
     # fetch and zip gtfs schedule
     log(
         f"Fetching gtfs schedule data from {gtfs_schedule_path} to {dst_path}",
@@ -207,13 +209,14 @@ def download_gtfs_schedule_zip(gtfs_schedule_path, dst_path, fs, pbar=None):
 
     # Do this manually; I think gcsfs.get() with recursive was causing race conditions?
     any_downloaded = False
+    client = Client()
     for file in files:
         try:
-            get_with_retry(fs, f"{gtfs_schedule_path}/{file}", f"{dst_path}{file}")
+            with open(f"{dst_path}{file}", "wb") as f:
+                client.download_blob_to_file(f"{gtfs_schedule_path}/{file}", f)
             any_downloaded = True
-        except ClientResponseError as e:
-            if e.status != 404:
-                raise
+        except NotFound:
+            pass
 
     if not any_downloaded:
         raise ScheduleDataNotFound
@@ -279,6 +282,7 @@ def parse_and_aggregate_hour(
 
     suffix = hashlib.md5(hour.hive_path.encode("utf-8")).hexdigest()
     dst_path_gtfs = f"{tmp_dir}/gtfs_{suffix}/"
+    os.mkdir(dst_path_gtfs)
     dst_path_rt = f"{tmp_dir}/rt_{suffix}/"
     get_with_retry(
         fs,
@@ -293,7 +297,6 @@ def parse_and_aggregate_hour(
         gtfs_zip = download_gtfs_schedule_zip(
             hour.source_files[0].schedule_path,
             dst_path_gtfs,
-            fs=fs,
             pbar=pbar,
         )
         execute_rt_validator(
