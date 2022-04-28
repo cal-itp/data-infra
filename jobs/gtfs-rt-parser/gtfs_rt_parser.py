@@ -27,7 +27,6 @@ from google.protobuf import json_format
 from google.protobuf.message import DecodeError
 from google.transit import gtfs_realtime_pb2
 from pydantic import BaseModel
-from ratelimit import RateLimitException, limits
 from tqdm import tqdm
 
 # Note that all RT extraction is stored in the prod bucket, since it is very large,
@@ -109,11 +108,16 @@ class RTAggregation(BaseModel):
     source_files: List[RTFile]
 
 
+def fatal_code(e):
+    return isinstance(e, ClientResponseError) and e.status == 404
+
+
 @backoff.on_exception(
-    backoff.expo, exception=(ClientOSError, ClientResponseError), max_tries=3
+    backoff.expo,
+    exception=(ClientOSError, ClientResponseError),
+    max_tries=3,
+    giveup=fatal_code,
 )
-@backoff.on_exception(backoff.expo, exception=RateLimitException)
-@limits(calls=1, period=1)
 def get_with_retry(fs, *args, **kwargs):
     return fs.get(*args, **kwargs)
 
@@ -176,16 +180,43 @@ def download_gtfs_schedule_zip(gtfs_schedule_path, dst_path, fs, pbar=None):
         pbar=pbar,
     )
 
-    try:
-        get_with_retry(fs, gtfs_schedule_path, dst_path, recursive=True)
-    except FileNotFoundError as e:
-        log(f"WARNING: got {str(e)} trying to download {gtfs_schedule_path}", pbar=pbar)
-        raise ScheduleDataNotFound from e
+    files = [
+        "agency.txt",
+        "calendar_attributes.txt",
+        "fare_capping.txt",
+        "fare_products.txt",
+        "levels.txt",
+        "shapes.txt",
+        "transfers.txt",
+        "attributions.txt",
+        "calendar_dates.txt",
+        "fare_containers.txt",
+        "fare_transfer_rules.txt",
+        "mtc_feed_versions.txt",
+        "rider_categories.txt",
+        "stop_times.txt",
+        "trips.txt",
+        "calendar.txt",
+        "directions.txt",
+        "fare_leg_rules.txt",
+        "feed_info.txt",
+        "pathways.txt",
+        "routes.txt",
+        "stops.txt",
+    ]
 
-    try:
-        os.remove(os.path.join(dst_path, "areas.txt"))
-    except FileNotFoundError:
-        pass
+    # Do this manually; I think gcsfs.get() with recursive was causing race conditions?
+    any_downloaded = False
+    for file in files:
+        try:
+            get_with_retry(fs, f"{gtfs_schedule_path}/{file}", f"{dst_path}{file}")
+            any_downloaded = True
+        except ClientResponseError as e:
+            if e.status != 404:
+                raise
+
+    if not any_downloaded:
+        raise ScheduleDataNotFound
 
     return shutil.make_archive(dst_path, "zip", dst_path)
 
@@ -199,21 +230,31 @@ def execute_rt_validator(
     stderr = subprocess.DEVNULL if not verbose else None
     stdout = subprocess.DEVNULL if not verbose else None
 
-    subprocess.check_call(
-        [
-            "java",
-            "-jar",
-            str(jar_path),
-            "-gtfs",
-            gtfs_file,
-            "-gtfsRealtimePath",
-            rt_path,
-            "-sort",
-            "name",
-        ],
-        stderr=stderr,
-        stdout=stdout,
-    )
+    args = [
+        "java",
+        "-jar",
+        str(jar_path),
+        "-gtfs",
+        gtfs_file,
+        "-gtfsRealtimePath",
+        rt_path,
+        "-sort",
+        "name",
+    ]
+
+    try:
+        subprocess.check_call(
+            args,
+            stderr=stderr,
+            stdout=stdout,
+        )
+    except subprocess.CalledProcessError:
+        log(
+            f"WARNING: validation subprocess failed for {rt_path} and {gtfs_file}: {' '.join(args)}",
+            fg=typer.colors.RED,
+            pbar=pbar,
+        )
+        raise
 
 
 # Originally this whole function was retried, but tmpdir flakiness will throw
@@ -290,11 +331,12 @@ def parse_and_aggregate_hour(
                 continue
 
             if not parsed or "entity" not in parsed:
-                log(
-                    f"WARNING: no records found in {str(rt_file.path)}",
-                    fg=typer.colors.YELLOW,
-                    pbar=pbar,
-                )
+                if verbose:
+                    log(
+                        f"WARNING: no records found in {str(rt_file.path)}",
+                        fg=typer.colors.YELLOW,
+                        pbar=pbar,
+                    )
                 continue
 
             for record in parsed["entity"]:
@@ -319,11 +361,12 @@ def parse_and_aggregate_hour(
                     ) as f:
                         records = json.load(f)
                 except FileNotFoundError:
-                    log(
-                        f"WARNING: no validation output found in {str(rt_file.timestamped_filename)}",
-                        fg=typer.colors.YELLOW,
-                        pbar=pbar,
-                    )
+                    if verbose:
+                        log(
+                            f"WARNING: no validation output found in {str(rt_file.timestamped_filename)}",
+                            fg=typer.colors.YELLOW,
+                            pbar=pbar,
+                        )
                     continue
 
                 for record in records:
@@ -356,11 +399,12 @@ def parse_and_aggregate_hour(
         )
         put_with_retry(fs, gzip_validation_fname, validation_out_path)
     else:
-        log(
-            f"WARNING: no validation records at all for {hour.validation_hive_path}",
-            fg=typer.colors.YELLOW,
-            pbar=pbar,
-        )
+        if verbose:
+            log(
+                f"WARNING: no validation records at all for {hour.validation_hive_path}",
+                fg=typer.colors.YELLOW,
+                pbar=pbar,
+            )
 
 
 def main(
