@@ -248,10 +248,17 @@ def parse_and_aggregate_hour(
 
         if validate:
             gtfs_zip = download_gtfs_schedule_zip(
-                hour.source_files[0].schedule_path, dst_path_gtfs, fs=fs
+                hour.source_files[0].schedule_path,
+                dst_path_gtfs,
+                fs=fs,
+                pbar=pbar,
             )
             execute_rt_validator(
-                gtfs_zip, dst_path_rt, jar_path=jar_path, verbose=verbose
+                gtfs_zip,
+                dst_path_rt,
+                jar_path=jar_path,
+                verbose=verbose,
+                pbar=pbar,
             )
 
         gzip_fname = str(tmp_dir + "/data" + JSONL_GZIP_EXTENSION)
