@@ -63,7 +63,7 @@ jupyterhub:
     tls:
       - secretName: jupyterhub-tls
         hosts:
-          - notebooks.calipt.org
+          - notebooks.calitp.org
           - hubtest.k8s.calitp.jarv.us
   proxy:
     service:
