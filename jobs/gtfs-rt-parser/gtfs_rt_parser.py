@@ -3,14 +3,15 @@ Parses binary RT feeds and writes them back to GCS as gzipped newline-delimited 
 """
 import concurrent.futures
 import gzip
+import hashlib
 import json
 import os
 import shutil
 import subprocess
 import tempfile
+import traceback
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
-from datetime import timedelta, date
 from enum import Enum
 from functools import lru_cache
 from pathlib import Path
@@ -39,8 +40,6 @@ JAR_DEFAULT = typer.Option(
     os.environ.get(RT_VALIDATOR_JAR_LOCATION_ENV_KEY),
     help="Path to the GTFS RT Validator JAR",
 )
-
-yesterday = (date.today() - timedelta(days=1)).isoformat()
 
 
 def log(*args, err=False, fg=None, pbar=None, **kwargs):
@@ -222,6 +221,7 @@ def execute_rt_validator(
 def parse_and_aggregate_hour(
     hour: RTAggregation,
     jar_path: Path,
+    tmp_dir: str,
     verbose: bool = False,
     parse: bool = True,
     validate: bool = True,
@@ -236,129 +236,131 @@ def parse_and_aggregate_hour(
     out_path = f"{hour.hive_path}{JSONL_GZIP_EXTENSION}"
     validation_out_path = f"{hour.validation_hive_path}{JSONL_GZIP_EXTENSION}"
 
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        dst_path_gtfs = f"{tmp_dir}/gtfs"
-        dst_path_rt = f"{tmp_dir}/rt"
-        get_with_retry(
-            fs,
-            rpath=[file.path for file in hour.source_files],
-            lpath=[
-                os.path.join(dst_path_rt, file.timestamped_filename)
-                for file in hour.source_files
-            ],
+    suffix = hashlib.md5(hour.hive_path.encode("utf-8")).hexdigest()
+    dst_path_gtfs = f"{tmp_dir}/gtfs_{suffix}/"
+    dst_path_rt = f"{tmp_dir}/rt_{suffix}/"
+    get_with_retry(
+        fs,
+        rpath=[file.path for file in hour.source_files],
+        lpath=[
+            os.path.join(dst_path_rt, file.timestamped_filename)
+            for file in hour.source_files
+        ],
+    )
+
+    if validate:
+        gtfs_zip = download_gtfs_schedule_zip(
+            hour.source_files[0].schedule_path,
+            dst_path_gtfs,
+            fs=fs,
+            pbar=pbar,
+        )
+        execute_rt_validator(
+            gtfs_zip,
+            dst_path_rt,
+            jar_path=jar_path,
+            verbose=verbose,
+            pbar=pbar,
         )
 
-        if validate:
-            gtfs_zip = download_gtfs_schedule_zip(
-                hour.source_files[0].schedule_path,
-                dst_path_gtfs,
-                fs=fs,
-                pbar=pbar,
-            )
-            execute_rt_validator(
-                gtfs_zip,
-                dst_path_rt,
-                jar_path=jar_path,
-                verbose=verbose,
-                pbar=pbar,
-            )
+    gzip_fname = str(tmp_dir + f"/data_{suffix}" + JSONL_GZIP_EXTENSION)
+    gzip_validation_fname = str(
+        tmp_dir + f"/validation_{suffix}" + JSONL_GZIP_EXTENSION
+    )
+    written = 0
+    validation_written = 0
+    with gzip.open(gzip_fname, "w") as gzipfile, gzip.open(
+        gzip_validation_fname, "w"
+    ) as validation_gzipfile:
+        for rt_file in hour.source_files:
+            feed = gtfs_realtime_pb2.FeedMessage()
 
-        gzip_fname = str(tmp_dir + "/data" + JSONL_GZIP_EXTENSION)
-        gzip_validation_fname = str(tmp_dir + "/validation" + JSONL_GZIP_EXTENSION)
-        written = 0
-        validation_written = 0
-        with gzip.open(gzip_fname, "w") as gzipfile, gzip.open(
-            gzip_validation_fname, "w"
-        ) as validation_gzipfile:
-            for rt_file in hour.source_files:
-                feed = gtfs_realtime_pb2.FeedMessage()
+            try:
+                with open(
+                    os.path.join(dst_path_rt, rt_file.timestamped_filename), "rb"
+                ) as f:
+                    feed.ParseFromString(f.read())
+                parsed = json_format.MessageToDict(feed)
+            except DecodeError:
+                log(
+                    f"WARN: got DecodeError for {str(rt_file.path)}",
+                    fg=typer.colors.YELLOW,
+                    pbar=pbar,
+                )
+                continue
 
+            if not parsed or "entity" not in parsed:
+                log(
+                    f"WARNING: no records found in {str(rt_file.path)}",
+                    fg=typer.colors.YELLOW,
+                    pbar=pbar,
+                )
+                continue
+
+            for record in parsed["entity"]:
+                record.update(
+                    {
+                        "header": parsed["header"],
+                        "metadata": json.loads(
+                            rt_file.json()
+                        ),  # back and forth so we use pydantic serialization
+                    }
+                )
+                gzipfile.write((json.dumps(record) + "\n").encode("utf-8"))
+                written += 1
+
+            if validate:
                 try:
                     with open(
-                        os.path.join(dst_path_rt, rt_file.timestamped_filename), "rb"
+                        os.path.join(
+                            dst_path_rt,
+                            rt_file.timestamped_filename + ".results.json",
+                        )
                     ) as f:
-                        feed.ParseFromString(f.read())
-                    parsed = json_format.MessageToDict(feed)
-                except DecodeError:
+                        records = json.load(f)
+                except FileNotFoundError:
                     log(
-                        f"WARN: got DecodeError for {str(rt_file.path)}",
+                        f"WARNING: no validation output found in {str(rt_file.timestamped_filename)}",
                         fg=typer.colors.YELLOW,
                         pbar=pbar,
                     )
                     continue
 
-                if not parsed or "entity" not in parsed:
-                    log(
-                        f"WARNING: no records found in {str(rt_file.path)}",
-                        fg=typer.colors.YELLOW,
-                        pbar=pbar,
-                    )
-                    continue
-
-                for record in parsed["entity"]:
+                for record in records:
                     record.update(
                         {
-                            "header": parsed["header"],
                             "metadata": json.loads(
                                 rt_file.json()
                             ),  # back and forth so we use pydantic serialization
                         }
                     )
-                    gzipfile.write((json.dumps(record) + "\n").encode("utf-8"))
-                    written += 1
+                    validation_gzipfile.write(
+                        (json.dumps(record) + "\n").encode("utf-8")
+                    )
+                    validation_written += 1
 
-                if validate:
-                    try:
-                        with open(
-                            os.path.join(
-                                dst_path_rt,
-                                rt_file.timestamped_filename + ".results.json",
-                            )
-                        ) as f:
-                            records = json.load(f)
-                    except FileNotFoundError:
-                        log(
-                            f"WARNING: no validation output found in {str(rt_file.timestamped_filename)}",
-                            fg=typer.colors.YELLOW,
-                            pbar=pbar,
-                        )
-                        continue
+    if written:
+        log(f"writing {written} lines to {out_path}", pbar=pbar)
+        put_with_retry(fs, gzip_fname, out_path)
+    else:
+        log(
+            f"WARNING: no records at all for {hour.hive_path}",
+            fg=typer.colors.YELLOW,
+            pbar=pbar,
+        )
 
-                    for record in records:
-                        record.update(
-                            {
-                                "metadata": json.loads(
-                                    rt_file.json()
-                                ),  # back and forth so we use pydantic serialization
-                            }
-                        )
-                        validation_gzipfile.write(
-                            (json.dumps(record) + "\n").encode("utf-8")
-                        )
-                        validation_written += 1
-
-        if written:
-            log(f"writing {written} lines to {out_path}", pbar=pbar)
-            put_with_retry(fs, gzip_fname, out_path)
-        else:
-            log(
-                f"WARNING: no records at all for {hour.hive_path}",
-                fg=typer.colors.YELLOW,
-                pbar=pbar,
-            )
-
-        if validation_written:
-            log(
-                f"writing {validation_written} lines to {validation_out_path}",
-                pbar=pbar,
-            )
-            put_with_retry(fs, gzip_validation_fname, validation_out_path)
-        else:
-            log(
-                f"WARNING: no validation records at all for {hour.validation_hive_path}",
-                fg=typer.colors.YELLOW,
-                pbar=pbar,
-            )
+    if validation_written:
+        log(
+            f"writing {validation_written} lines to {validation_out_path}",
+            pbar=pbar,
+        )
+        put_with_retry(fs, gzip_validation_fname, validation_out_path)
+    else:
+        log(
+            f"WARNING: no validation records at all for {hour.validation_hive_path}",
+            fg=typer.colors.YELLOW,
+            pbar=pbar,
+        )
 
 
 def main(
@@ -408,42 +410,44 @@ def main(
     # gcfs does not seem to play nicely with multiprocessing right now, so use threads :(
     # https://github.com/fsspec/gcsfs/issues/379
 
-    with ThreadPoolExecutor(max_workers=threads) as pool:
-        futures = {
-            pool.submit(
-                parse_and_aggregate_hour,
-                hour=hour,
-                jar_path=jar_path,
-                verbose=verbose,
-                parse=True,
-                validate=True,
-                pbar=pbar,
-            ): hour
-            for hour in feed_hours
-        }
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        with ThreadPoolExecutor(max_workers=threads) as pool:
+            futures = {
+                pool.submit(
+                    parse_and_aggregate_hour,
+                    hour=hour,
+                    jar_path=jar_path,
+                    tmp_dir=tmp_dir,
+                    verbose=verbose,
+                    parse=True,
+                    validate=True,
+                    pbar=pbar,
+                ): hour
+                for hour in feed_hours
+            }
 
-        for future in concurrent.futures.as_completed(futures):
-            hour = futures[future]
-            pbar.update(1)
-            try:
-                future.result()
-            except KeyboardInterrupt:
-                raise
-            except ScheduleDataNotFound:
-                log(
-                    f"WARNING: no gtfs schedule data found for {hour.hive_path}",
-                    err=True,
-                    fg=typer.colors.YELLOW,
-                    pbar=pbar,
-                )
-            except Exception as e:
-                log(
-                    f"WARNING: exception {str(e)} bubbled up to top for {hour.hive_path}",
-                    err=True,
-                    fg=typer.colors.RED,
-                    pbar=pbar,
-                )
-                exceptions.append((e, hour.hive_path))
+            for future in concurrent.futures.as_completed(futures):
+                hour = futures[future]
+                pbar.update(1)
+                try:
+                    future.result()
+                except KeyboardInterrupt:
+                    raise
+                except ScheduleDataNotFound:
+                    log(
+                        f"WARNING: no gtfs schedule data found for {hour.hive_path}",
+                        err=True,
+                        fg=typer.colors.YELLOW,
+                        pbar=pbar,
+                    )
+                except Exception as e:
+                    log(
+                        f"WARNING: exception {str(e)} bubbled up to top for {hour.hive_path}",
+                        err=True,
+                        fg=typer.colors.RED,
+                        pbar=pbar,
+                    )
+                    exceptions.append((e, hour.hive_path, traceback.format_exc()))
 
     del pbar
 
