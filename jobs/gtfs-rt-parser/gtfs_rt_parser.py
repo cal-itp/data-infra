@@ -332,6 +332,7 @@ def parse_and_aggregate_hour(
             log(
                 f"WARNING: no records at all for {hour.hive_path}",
                 fg=typer.colors.YELLOW,
+                pbar=pbar,
             )
 
         if validation_written:
