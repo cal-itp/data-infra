@@ -176,9 +176,7 @@ def download_gtfs_schedule_zip(gtfs_schedule_path, dst_path, fs, pbar=None):
     try:
         get_with_retry(fs, gtfs_schedule_path, dst_path, recursive=True)
     except FileNotFoundError as e:
-        log(
-            f"WARNING: got {type(e)} trying to download {gtfs_schedule_path}", pbar=pbar
-        )
+        log(f"WARNING: got {str(e)} trying to download {gtfs_schedule_path}", pbar=pbar)
         raise ScheduleDataNotFound from e
 
     try:
@@ -432,16 +430,20 @@ def main(
                 )
             except Exception as e:
                 log(
-                    f"WARNING: got exception {type(e)} for {hour.hive_path}",
+                    f"WARNING: exception {str(e)} bubbled up to top for {hour.hive_path}",
                     err=True,
                     fg=typer.colors.RED,
                     pbar=pbar,
                 )
-                exceptions.append((e, hour.hive_path))
+                tup = (e, hour.hive_path)
+                if isinstance(e, FileNotFoundError):
+                    tup = tup + (e.filename,)
+                exceptions.append(tup)
 
     pbar.close()
     if exceptions:
-        msg = f"got {len(exceptions)} exceptions from processing {len(feed_hours)} feeds: {exceptions}"
+        exc_str = "\n".join(str(tup) for tup in exceptions)
+        msg = f"got {len(exceptions)} exceptions from processing {len(feed_hours)} feeds:\n{exc_str}"
         typer.secho(msg, err=True, fg=typer.colors.RED)
         raise RuntimeError(msg)
 
