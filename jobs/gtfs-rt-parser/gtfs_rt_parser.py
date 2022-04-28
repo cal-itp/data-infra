@@ -19,7 +19,7 @@ from typing import List
 import backoff
 import pendulum
 import typer
-from aiohttp.client_exceptions import ClientResponseError
+from aiohttp.client_exceptions import ClientResponseError, ClientOSError
 from calitp.config import get_bucket
 from calitp.storage import get_fs
 from google.protobuf import json_format
@@ -110,14 +110,18 @@ class RTAggregation(BaseModel):
     source_files: List[RTFile]
 
 
-@backoff.on_exception(backoff.expo, exception=ClientResponseError, max_tries=3)
+@backoff.on_exception(
+    backoff.expo, exception=(ClientOSError, ClientResponseError), max_tries=3
+)
 @backoff.on_exception(backoff.expo, exception=RateLimitException)
 @limits(calls=1, period=1)
 def get_with_retry(fs, *args, **kwargs):
     return fs.get(*args, **kwargs)
 
 
-@backoff.on_exception(backoff.expo, exception=ClientResponseError, max_tries=3)
+@backoff.on_exception(
+    backoff.expo, exception=(ClientOSError, ClientResponseError), max_tries=3
+)
 def put_with_retry(fs, *args, **kwargs):
     return fs.put(*args, **kwargs)
 
@@ -304,12 +308,22 @@ def parse_and_aggregate_hour(
                     written += 1
 
                 if validate:
-                    with open(
-                        os.path.join(
-                            dst_path_rt, rt_file.timestamped_filename + ".results.json"
+                    try:
+                        with open(
+                            os.path.join(
+                                dst_path_rt,
+                                rt_file.timestamped_filename + ".results.json",
+                            )
+                        ) as f:
+                            records = json.load(f)
+                    except FileNotFoundError:
+                        log(
+                            f"WARNING: no validation output found in {str(rt_file.timestamped_filename)}",
+                            fg=typer.colors.YELLOW,
+                            pbar=pbar,
                         )
-                    ) as f:
-                        records = json.load(f)
+                        continue
+
                     for record in records:
                         record.update(
                             {
@@ -415,12 +429,6 @@ def main(
                 future.result()
             except KeyboardInterrupt:
                 raise
-            except OSError as e:
-                # a lot of these are thrown by tmpdir, and are potentially flakes; but if they were thrown during
-                # handling of another exception, we want that exception still
-                if e.errno == 39:
-                    e = e.__cause__ or e.__context__
-                exceptions.append((e, hour.hive_path))
             except ScheduleDataNotFound:
                 log(
                     f"WARNING: no gtfs schedule data found for {hour.hive_path}",
@@ -435,12 +443,10 @@ def main(
                     fg=typer.colors.RED,
                     pbar=pbar,
                 )
-                tup = (e, hour.hive_path)
-                if isinstance(e, FileNotFoundError):
-                    tup = tup + (e.filename,)
-                exceptions.append(tup)
+                exceptions.append((e, hour.hive_path))
 
-    pbar.close()
+    del pbar
+
     if exceptions:
         exc_str = "\n".join(str(tup) for tup in exceptions)
         msg = f"got {len(exceptions)} exceptions from processing {len(feed_hours)} feeds:\n{exc_str}"
