@@ -27,6 +27,7 @@ from google.protobuf import json_format
 from google.protobuf.message import DecodeError
 from google.transit import gtfs_realtime_pb2
 from pydantic import BaseModel
+from ratelimit import RateLimitException, limits
 from tqdm import tqdm
 
 # Note that all RT extraction is stored in the prod bucket, since it is very large,
@@ -41,6 +42,10 @@ JAR_DEFAULT = typer.Option(
 )
 
 yesterday = (date.today() - timedelta(days=1)).isoformat()
+
+
+class ScheduleDataNotFound(Exception):
+    pass
 
 
 class RTFileType(str, Enum):
@@ -98,8 +103,9 @@ class RTAggregation(BaseModel):
     source_files: List[RTFile]
 
 
-# Try twice in the event we get a ClientResponseError; doesn't have much of a delay (like 0.01s)
 @backoff.on_exception(backoff.expo, exception=ClientResponseError, max_tries=3)
+@backoff.on_exception(backoff.expo, exception=RateLimitException)
+@limits(calls=1, period=1)
 def get_with_retry(fs, *args, **kwargs):
     return fs.get(*args, **kwargs)
 
@@ -153,16 +159,26 @@ def identify_files(glob, rt_file_type: RTFileType, progress=False) -> List[RTFil
     return files
 
 
-def download_gtfs_schedule_zip(gtfs_schedule_path, dst_path, fs):
+def download_gtfs_schedule_zip(gtfs_schedule_path, dst_path, fs, pbar=None):
     # fetch and zip gtfs schedule
-    typer.echo(f"Fetching gtfs schedule data from {gtfs_schedule_path} to {dst_path}")
-    fs.get(gtfs_schedule_path, dst_path, recursive=True)
+    msg = f"Fetching gtfs schedule data from {gtfs_schedule_path} to {dst_path}"
+    if pbar:
+        pbar.write(msg)
+    else:
+        typer.echo(msg)
+
+    try:
+        get_with_retry(fs, gtfs_schedule_path, dst_path, recursive=True)
+    except FileNotFoundError as e:
+        typer.secho(f"WARNING: got {type(e)} trying to download {gtfs_schedule_path}")
+        raise ScheduleDataNotFound from e
+
     try:
         os.remove(os.path.join(dst_path, "areas.txt"))
     except FileNotFoundError:
         pass
-    shutil.make_archive(dst_path, "zip", dst_path)
-    return f"{dst_path}.zip"
+
+    return shutil.make_archive(dst_path, "zip", dst_path)
 
 
 def execute_rt_validator(gtfs_file: str, rt_path: str, jar_path: Path, verbose=False):
@@ -218,7 +234,8 @@ def parse_and_aggregate_hour(
     with tempfile.TemporaryDirectory() as tmp_dir:
         dst_path_gtfs = f"{tmp_dir}/gtfs"
         dst_path_rt = f"{tmp_dir}/rt"
-        fs.get(
+        get_with_retry(
+            fs,
             rpath=[file.path for file in hour.source_files],
             lpath=[
                 os.path.join(dst_path_rt, file.timestamped_filename)
@@ -230,7 +247,6 @@ def parse_and_aggregate_hour(
             gtfs_zip = download_gtfs_schedule_zip(
                 hour.source_files[0].schedule_path, dst_path_gtfs, fs=fs
             )
-            typer.echo(f"validating {len(hour.source_files)} files")
             execute_rt_validator(
                 gtfs_zip, dst_path_rt, jar_path=jar_path, verbose=verbose
             )
@@ -315,9 +331,6 @@ def parse_and_aggregate_hour(
                 fg=typer.colors.YELLOW,
             )
 
-    if pbar:
-        pbar.update(1)
-
 
 def try_handle_one_feed(*args, **kwargs) -> Optional[Exception]:
     try:
@@ -369,7 +382,7 @@ def main(
 
     if limit:
         typer.secho(f"limit of {limit} feeds was set", fg=typer.colors.YELLOW)
-        feed_hours = feed_hours[:limit]
+        feed_hours = list(sorted(feed_hours, key=lambda feed: feed.hive_path))[:limit]
 
     pbar = tqdm(total=len(feed_hours)) if progress else None
 
@@ -397,12 +410,19 @@ def main(
 
         for future in concurrent.futures.as_completed(futures):
             hour = futures[future]
+            pbar.update(1)
             try:
                 future.result()
             except KeyboardInterrupt:
                 raise
+            except ScheduleDataNotFound:
+                typer.secho(
+                    f"WARNING: no gtfs schedule data found for {hour.hive_path}",
+                    err=True,
+                    fg=typer.colors.YELLOW,
+                )
             except Exception as e:
-                exceptions.append((e, traceback.format_exc(), hour.hive_path))
+                exceptions.append((e, hour.hive_path))
 
     if exceptions:
         msg = f"got {len(exceptions)} exceptions from processing {len(feed_hours)} feeds: {exceptions}"
