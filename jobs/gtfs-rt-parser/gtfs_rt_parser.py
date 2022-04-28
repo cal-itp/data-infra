@@ -422,6 +422,11 @@ def main(
                     fg=typer.colors.YELLOW,
                 )
             except Exception as e:
+                typer.secho(
+                    f"WARNING: got exception {type(e)} for {hour.hive_path}",
+                    err=True,
+                    fg=typer.colors.RED,
+                )
                 exceptions.append((e, hour.hive_path))
 
     if exceptions:
