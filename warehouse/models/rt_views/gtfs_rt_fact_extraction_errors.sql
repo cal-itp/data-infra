@@ -45,8 +45,18 @@ calitp_feeds_long AS (
 ),
 
 download_issues AS (
-    SELECT
-        timestamp,
+    SELECT DISTINCT
+        -- make a tick identifier to remove duplicates from MTC 511 feeds
+        -- they all use the same service alerts URL
+        -- and so they all have download errors at slightly different timestamps
+        -- but they all came from the same "tick"
+        -- so dedupe on tick here to avoid fanout later
+        TIMESTAMP_ADD(
+            TIMESTAMP_TRUNC(timestamp, MINUTE),
+            -- use floor to estimate tick so that the resulting rounded timestamp
+            -- will have the same minute, hour, date as the original
+            INTERVAL CAST((FLOOR(EXTRACT(SECOND FROM timestamp) / 20) * 20) AS INT) SECOND
+        ) AS tick_timestamp,
         -- this URL contains API keys
         REGEXP_EXTRACT(
             textPayload,
@@ -67,18 +77,17 @@ download_issues AS (
 
 gtfs_rt_extraction_errors AS (
     SELECT
+        T1.tick_timestamp,
         T2.itp_id AS calitp_itp_id,
         T2.url_number AS calitp_url_number,
-        -- TODO: exempt unsafe URL
-        T1.*,
-        T3.url AS raw_url,
-        T3.type AS type
+        T2.type,
+        T1.error,
+        T3.url AS raw_url
     FROM download_issues AS T1
     LEFT JOIN calitp_feeds_long AS T2
         ON (
             T1.unsafe_url = T2.url
-            AND EXTRACT(DATE from T1.timestamp)>= T2.calitp_extracted_at
-            AND EXTRACT(DATE from T1.timestamp)< T2.calitp_deleted_at
+            AND EXTRACT(DATE from T1.tick_timestamp)= T2.calitp_extracted_at
         )
     LEFT JOIN gtfs_rt_fact_daily_feeds AS T3
         ON (
