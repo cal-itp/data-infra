@@ -8,14 +8,13 @@ import os
 import shutil
 import subprocess
 import tempfile
-import traceback
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from datetime import timedelta, date
 from enum import Enum
 from functools import lru_cache
 from pathlib import Path
-from typing import Optional, List
+from typing import List
 
 import backoff
 import pendulum
@@ -42,6 +41,14 @@ JAR_DEFAULT = typer.Option(
 )
 
 yesterday = (date.today() - timedelta(days=1)).isoformat()
+
+
+def log(*args, err=False, fg=None, pbar=None, **kwargs):
+    # capture fg so we don't pass it to pbar
+    if pbar:
+        pbar.write(*args, **kwargs)
+    else:
+        typer.secho(*args, err=err, fg=fg, **kwargs)
 
 
 class ScheduleDataNotFound(Exception):
@@ -161,16 +168,17 @@ def identify_files(glob, rt_file_type: RTFileType, progress=False) -> List[RTFil
 
 def download_gtfs_schedule_zip(gtfs_schedule_path, dst_path, fs, pbar=None):
     # fetch and zip gtfs schedule
-    msg = f"Fetching gtfs schedule data from {gtfs_schedule_path} to {dst_path}"
-    if pbar:
-        pbar.write(msg)
-    else:
-        typer.echo(msg)
+    log(
+        f"Fetching gtfs schedule data from {gtfs_schedule_path} to {dst_path}",
+        pbar=pbar,
+    )
 
     try:
         get_with_retry(fs, gtfs_schedule_path, dst_path, recursive=True)
     except FileNotFoundError as e:
-        typer.secho(f"WARNING: got {type(e)} trying to download {gtfs_schedule_path}")
+        log(
+            f"WARNING: got {type(e)} trying to download {gtfs_schedule_path}", pbar=pbar
+        )
         raise ScheduleDataNotFound from e
 
     try:
@@ -181,8 +189,10 @@ def download_gtfs_schedule_zip(gtfs_schedule_path, dst_path, fs, pbar=None):
     return shutil.make_archive(dst_path, "zip", dst_path)
 
 
-def execute_rt_validator(gtfs_file: str, rt_path: str, jar_path: Path, verbose=False):
-    typer.secho(f"validating {rt_path} with {gtfs_file}", fg=typer.colors.MAGENTA)
+def execute_rt_validator(
+    gtfs_file: str, rt_path: str, jar_path: Path, verbose=False, pbar=None
+):
+    log(f"validating {rt_path} with {gtfs_file}", fg=typer.colors.MAGENTA, pbar=pbar)
 
     # We probably should always print stderr?
     stderr = subprocess.DEVNULL if not verbose else None
@@ -217,13 +227,6 @@ def parse_and_aggregate_hour(
 ):
     if not parse and not validate:
         raise ValueError("skipping both parsing and validation does nothing for us!")
-
-    def log(*args, fg=None, **kwargs):
-        # capture fg so we don't pass it to pbar
-        if pbar:
-            pbar.write(*args, **kwargs)
-        else:
-            typer.secho(*args, fg=fg, **kwargs)
 
     fs = get_fs()
 
@@ -271,6 +274,7 @@ def parse_and_aggregate_hour(
                     log(
                         f"WARN: got DecodeError for {str(rt_file.path)}",
                         fg=typer.colors.YELLOW,
+                        pbar=pbar,
                     )
                     continue
 
@@ -278,6 +282,7 @@ def parse_and_aggregate_hour(
                     log(
                         f"WARNING: no records found in {str(rt_file.path)}",
                         fg=typer.colors.YELLOW,
+                        pbar=pbar,
                     )
                     continue
 
@@ -314,7 +319,7 @@ def parse_and_aggregate_hour(
                         validation_written += 1
 
         if written:
-            log(f"writing {written} lines to {out_path}")
+            log(f"writing {written} lines to {out_path}", pbar=pbar)
             put_with_retry(fs, gzip_fname, out_path)
         else:
             log(
@@ -323,28 +328,17 @@ def parse_and_aggregate_hour(
             )
 
         if validation_written:
-            log(f"writing {validation_written} lines to {validation_out_path}")
+            log(
+                f"writing {validation_written} lines to {validation_out_path}",
+                pbar=pbar,
+            )
             put_with_retry(fs, gzip_validation_fname, validation_out_path)
         else:
             log(
                 f"WARNING: no records at all for {hour.hive_path}",
                 fg=typer.colors.YELLOW,
+                pbar=pbar,
             )
-
-
-def try_handle_one_feed(*args, **kwargs) -> Optional[Exception]:
-    try:
-        parse_and_aggregate_hour(*args, **kwargs)
-    except Exception as e:
-        typer.echo(
-            f"got exception while handling feed: {str(e)} from {str(e.__cause__ or e.__context__)} {traceback.format_exc()}",
-            err=True,
-        )
-        # a lot of these are thrown by tmpdir, and are potentially flakes; but if they were thrown during
-        # handling of another exception, we want that exception still
-        if isinstance(e, OSError) and e.errno == 39:
-            return e.__cause__ or e.__context__
-        return e
 
 
 def main(
@@ -415,17 +409,25 @@ def main(
                 future.result()
             except KeyboardInterrupt:
                 raise
+            except OSError as e:
+                # a lot of these are thrown by tmpdir, and are potentially flakes; but if they were thrown during
+                # handling of another exception, we want that exception still
+                if e.errno == 39:
+                    e = e.__cause__ or e.__context__
+                exceptions.append((e, hour.hive_path))
             except ScheduleDataNotFound:
-                typer.secho(
+                log(
                     f"WARNING: no gtfs schedule data found for {hour.hive_path}",
                     err=True,
                     fg=typer.colors.YELLOW,
+                    pbar=pbar,
                 )
             except Exception as e:
-                typer.secho(
+                log(
                     f"WARNING: got exception {type(e)} for {hour.hive_path}",
                     err=True,
                     fg=typer.colors.RED,
+                    pbar=pbar,
                 )
                 exceptions.append((e, hour.hive_path))
 
