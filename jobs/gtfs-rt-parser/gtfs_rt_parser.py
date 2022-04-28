@@ -342,7 +342,7 @@ def parse_and_aggregate_hour(
             put_with_retry(fs, gzip_validation_fname, validation_out_path)
         else:
             log(
-                f"WARNING: no records at all for {hour.hive_path}",
+                f"WARNING: no validation records at all for {hour.validation_hive_path}",
                 fg=typer.colors.YELLOW,
                 pbar=pbar,
             )
@@ -438,6 +438,7 @@ def main(
                 )
                 exceptions.append((e, hour.hive_path))
 
+    pbar.close()
     if exceptions:
         msg = f"got {len(exceptions)} exceptions from processing {len(feed_hours)} feeds: {exceptions}"
         typer.secho(msg, err=True, fg=typer.colors.RED)
