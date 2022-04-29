@@ -315,6 +315,7 @@ def parse_and_aggregate_hour(
                 pbar=pbar,
             )
         except subprocess.CalledProcessError:
+            # TODO: do something about this
             log(
                 f"WARNING: execute_rt_validator failed for {dst_path_rt} and {gtfs_zip}; includes files {os.listdir(dst_path_gtfs)}",
                 fg=typer.colors.RED,
@@ -513,7 +514,6 @@ def main(
                         pbar=pbar,
                     )
                     exceptions.append((e, hour.hive_path, traceback.format_exc()))
-        input(f"press enter to finish... {tmp_dir}")
 
     if pbar:
         del pbar
