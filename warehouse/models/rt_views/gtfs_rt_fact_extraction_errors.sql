@@ -28,18 +28,7 @@ gtfs_rt_fact_daily_feeds AS (
 calitp_feeds_long AS (
     SELECT
         *,
-        REGEXP_EXTRACT(url_type, r"gtfs_rt_(.*)_url") AS type,
-        COALESCE(
-            LEAD(calitp_extracted_at)
-            OVER (
-                PARTITION BY
-                    itp_id,
-                    url_number,
-                    url_type
-                ORDER BY calitp_extracted_at
-            ),
-            "2099-01-01"
-        ) AS calitp_deleted_at
+        REGEXP_EXTRACT(url_type, r"gtfs_rt_(.*)_url") AS type
     FROM calitp_feeds
     UNPIVOT(url FOR url_type IN (gtfs_rt_service_alerts_url, gtfs_rt_trip_updates_url, gtfs_rt_vehicle_positions_url))
 ),
