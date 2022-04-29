@@ -15,7 +15,7 @@ from enum import Enum
 from functools import lru_cache
 from io import BytesIO
 from pathlib import Path
-from typing import List
+from typing import List, Optional, Dict
 from zipfile import ZipFile
 
 import backoff
@@ -50,6 +50,20 @@ def log(*args, err=False, fg=None, pbar=None, **kwargs):
         pbar.write(*args, **kwargs)
     else:
         typer.secho(*args, err=err, fg=fg, **kwargs)
+
+
+def upload_gzipped_records(
+    fs, gzip_fname, out_path, records: List[Dict], pbar=None, verbose=False
+):
+    log(
+        f"writing {len(records)} lines to {out_path}",
+        pbar=pbar,
+    )
+    with gzip.open(gzip_fname, "w") as gzipfile:
+        gzipfile.write(
+            "\n".join(json.dumps(record) for record in records).encode("utf-8")
+        )
+    put_with_retry(fs, gzip_fname, out_path)
 
 
 class ScheduleDataNotFound(Exception):
@@ -104,11 +118,31 @@ class RTFile(BaseModel):
             self.path.name,
         )
 
+    def errors_hive_path(self, bucket: str):
+        return os.path.join(
+            bucket,
+            f"{self.file_type}_errors",
+            f"dt={self.tick.to_date_string()}",
+            f"itp_id={self.itp_id}",
+            f"url_number={self.url}",
+            f"hour={self.tick.hour}",
+            self.path.name,
+        )
+
 
 class RTAggregation(BaseModel):
     hive_path: str
     validation_hive_path: str
+    errors_hive_path: str
     source_files: List[RTFile]
+
+
+class RTFileProcessingError(BaseModel):
+    step: str
+    exception: str
+    hive_path: Optional[str]
+    file: Optional[RTFile]
+    body: Optional[str]
 
 
 def fatal_code(e):
@@ -209,7 +243,7 @@ def download_gtfs_schedule_zip(gtfs_schedule_path, dst_path, pbar=None):
         "stops.txt",
     ]
 
-    # Do this manually; I think gcsfs.get() with recursive was causing race conditions?
+    # Do this manually; gcsfs.get() with recursive=True downloads extra stuff we don't need
     downloaded = []
     client = Client()
     with ZipFile(zipname, "w") as zf:
@@ -224,7 +258,7 @@ def download_gtfs_schedule_zip(gtfs_schedule_path, dst_path, pbar=None):
                 pass
 
     if not downloaded:
-        raise ScheduleDataNotFound
+        raise ScheduleDataNotFound(f"no schedule data found for {gtfs_schedule_path}")
 
     os.sync()
 
@@ -242,10 +276,6 @@ def execute_rt_validator(
 ):
     log(f"validating {rt_path} with {gtfs_file}", fg=typer.colors.MAGENTA, pbar=pbar)
 
-    # We probably should always print stderr?
-    stderr = subprocess.DEVNULL if not verbose else None
-    stdout = subprocess.DEVNULL if not verbose else None
-
     args = [
         "java",
         "-jar",
@@ -259,11 +289,10 @@ def execute_rt_validator(
     ]
 
     log(f"executing rt_validator: {' '.join(args)}", pbar=pbar)
-    subprocess.check_call(
+    subprocess.run(
         args,
-        stderr=stderr,
-        stdout=stdout,
-    )
+        capture_output=True,
+    ).check_returncode()
 
 
 # Originally this whole function was retried, but tmpdir flakiness will throw
@@ -281,11 +310,6 @@ def parse_and_aggregate_hour(
         raise ValueError("skipping both parsing and validation does nothing for us!")
 
     fs = get_fs()
-
-    # probably a better way to do this
-    out_path = f"{hour.hive_path}{JSONL_GZIP_EXTENSION}"
-    validation_out_path = f"{hour.validation_hive_path}{JSONL_GZIP_EXTENSION}"
-
     suffix = hashlib.md5(hour.hive_path.encode("utf-8")).hexdigest()
     dst_path_gtfs = f"{tmp_dir}/gtfs_{suffix}/"
     os.mkdir(dst_path_gtfs)
@@ -299,14 +323,16 @@ def parse_and_aggregate_hour(
         ],
     )
 
-    if validate:
-        gtfs_zip = download_gtfs_schedule_zip(
-            hour.source_files[0].schedule_path,
-            dst_path_gtfs,
-            pbar=pbar,
-        )
+    errors = []
 
+    if validate:
         try:
+            gtfs_zip = download_gtfs_schedule_zip(
+                hour.source_files[0].schedule_path,
+                dst_path_gtfs,
+                pbar=pbar,
+            )
+
             execute_rt_validator(
                 gtfs_zip,
                 dst_path_rt,
@@ -314,14 +340,31 @@ def parse_and_aggregate_hour(
                 verbose=verbose,
                 pbar=pbar,
             )
-        except subprocess.CalledProcessError:
+        except ScheduleDataNotFound as e:
+            errors.append(
+                RTFileProcessingError(
+                    step="download_schedule",
+                    exception=str(e),
+                    hive_path=hour.hive_path,
+                ).dict()
+            )
+            validate = False
+        except subprocess.CalledProcessError as e:
             # TODO: do something about this
             log(
                 f"WARNING: execute_rt_validator failed for {dst_path_rt} and {gtfs_zip}; includes files {os.listdir(dst_path_gtfs)}",
                 fg=typer.colors.RED,
                 pbar=pbar,
             )
-            raise
+            errors.append(
+                RTFileProcessingError(
+                    step="validate",
+                    exception=str(e),
+                    hive_path=hour.hive_path,
+                    body=e.stderr,
+                ).dict()
+            )
+            validate = False
 
     data_records = []
     validation_records = []
@@ -334,11 +377,13 @@ def parse_and_aggregate_hour(
             ) as f:
                 feed.ParseFromString(f.read())
             parsed = json_format.MessageToDict(feed)
-        except DecodeError:
-            log(
-                f"WARN: got DecodeError for {str(rt_file.path)}",
-                fg=typer.colors.YELLOW,
-                pbar=pbar,
+        except DecodeError as e:
+            errors.append(
+                RTFileProcessingError(
+                    step="parse",
+                    exception=str(e),
+                    file=rt_file,
+                ).dict()
             )
             continue
 
@@ -388,41 +433,26 @@ def parse_and_aggregate_hour(
                     }
                 )
 
-    gzip_fname = str(tmp_dir + f"/data_{suffix}" + JSONL_GZIP_EXTENSION)
-    gzip_validation_fname = str(
-        tmp_dir + f"/validation_{suffix}" + JSONL_GZIP_EXTENSION
-    )
+    # probably a better way to do this
+    record_sets = [
+        ("data", hour.hive_path, data_records),
+        ("validation", hour.validation_hive_path, validation_records),
+        ("errors", hour.errors_hive_path, errors),
+    ]
 
-    if data_records:
-        log(f"writing {len(data_records)} lines to {out_path}", pbar=pbar)
-        with gzip.open(gzip_fname, "w") as gzipfile:
-            gzipfile.write(
-                "\n".join(json.dumps(record) for record in data_records).encode("utf-8")
+    for name, path, record_set in record_sets:
+        if record_set:
+            upload_gzipped_records(
+                fs,
+                gzip_fname=str(tmp_dir + f"/{name}_{suffix}" + JSONL_GZIP_EXTENSION),
+                out_path=f"{path}{JSONL_GZIP_EXTENSION}",
+                records=record_set,
+                pbar=pbar,
+                verbose=verbose,
             )
-        put_with_retry(fs, gzip_fname, out_path)
-    else:
-        log(
-            f"WARNING: no records at all for {hour.hive_path}",
-            fg=typer.colors.YELLOW,
-            pbar=pbar,
-        )
-
-    if validation_records:
-        log(
-            f"writing {len(validation_records)} lines to {validation_out_path}",
-            pbar=pbar,
-        )
-        with gzip.open(gzip_validation_fname, "w") as validation_gzipfile:
-            validation_gzipfile.write(
-                "\n".join(json.dumps(record) for record in validation_records).encode(
-                    "utf-8"
-                )
-            )
-        put_with_retry(fs, gzip_validation_fname, validation_out_path)
-    else:
-        if verbose:
+        else:
             log(
-                f"WARNING: no validation records at all for {hour.validation_hive_path}",
+                f"WARNING: no records at all for {path}",
                 fg=typer.colors.YELLOW,
                 pbar=pbar,
             )
@@ -456,6 +486,7 @@ def main(
             hive_path=hive_path,
             # this is a bit weird
             validation_hive_path=files[0].validation_hive_path(dst_bucket),
+            errors_hive_path=files[0].errors_hive_path(dst_bucket),
             source_files=files,
         )
         for hive_path, files in feed_hours.items()
