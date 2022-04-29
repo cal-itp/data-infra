@@ -1,6 +1,6 @@
 # ---
 # operator: operators.PythonToWarehouseOperator
-# table_name: "views.gtfs_rt_validation_code_descriptions"
+# table_name: "gtfs_rt.validation_code_descriptions"
 # fields:
 #   code: RT Validation error code name
 #   description: A description of the validation error
@@ -17,4 +17,4 @@ sheet_url = (
 
 code_descriptions = pd.read_csv(sheet_url).pipe(to_snakecase)
 
-write_table(code_descriptions, "views.gtfs_rt_validation_code_descriptions")
+write_table(code_descriptions, "gtfs_rt.validation_code_descriptions")

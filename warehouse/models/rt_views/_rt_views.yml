@@ -16,6 +16,7 @@ sources:
       - name: validation_service_alerts
       - name: validation_trip_updates
       - name: validation_vehicle_positions
+      - name: validation_code_descriptions
   - name: gtfs_rt_logs
     description: Data in the gtfs_rt_logs dataset in BigQuery, from logs sink.
     database: cal-itp-data-infra
@@ -218,3 +219,12 @@ models:
           - not_null
       - name: type
         description: GTFS realtime type (service_alerts, trip_updates, or vehicle_positions)
+  - name: gtfs_rt_validation_code_descriptions
+    description: |
+      Cal-ITP critical validation codes. Primary key is code.
+    columns:
+      - name: code
+        description: Validation notice code from GTFS RT validator
+        tests:
+          - unique
+          - not_null
