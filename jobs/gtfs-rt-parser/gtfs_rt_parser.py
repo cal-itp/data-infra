@@ -6,7 +6,6 @@ import gzip
 import hashlib
 import json
 import os
-import shutil
 import subprocess
 import tempfile
 import traceback
@@ -14,8 +13,10 @@ from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from enum import Enum
 from functools import lru_cache
+from io import BytesIO
 from pathlib import Path
 from typing import List
+from zipfile import ZipFile
 
 import backoff
 import pendulum
@@ -177,8 +178,9 @@ def identify_files(glob, rt_file_type: RTFileType, progress=False) -> List[RTFil
 
 def download_gtfs_schedule_zip(gtfs_schedule_path, dst_path, pbar=None):
     # fetch and zip gtfs schedule
+    zipname = f"{dst_path[:-1]}.zip"
     log(
-        f"Fetching gtfs schedule data from {gtfs_schedule_path} to {dst_path}",
+        f"Fetching gtfs schedule data from {gtfs_schedule_path} to {zipname}",
         pbar=pbar,
     )
 
@@ -208,20 +210,31 @@ def download_gtfs_schedule_zip(gtfs_schedule_path, dst_path, pbar=None):
     ]
 
     # Do this manually; I think gcsfs.get() with recursive was causing race conditions?
-    any_downloaded = False
+    downloaded = []
     client = Client()
-    for file in files:
-        try:
-            with open(f"{dst_path}{file}", "wb") as f:
-                client.download_blob_to_file(f"{gtfs_schedule_path}/{file}", f)
-            any_downloaded = True
-        except NotFound:
-            pass
+    with ZipFile(zipname, "w") as zf:
+        for file in files:
+            io = BytesIO()
+            try:
+                client.download_blob_to_file(f"{gtfs_schedule_path}/{file}", io)
+                io.seek(0)
+                zf.writestr(file, io.read().decode("utf-8"))
+                downloaded.append(file)
+            except NotFound:
+                pass
 
-    if not any_downloaded:
+    if not downloaded:
         raise ScheduleDataNotFound
 
-    return shutil.make_archive(dst_path, "zip", dst_path)
+    os.sync()
+
+    with ZipFile(zipname, "r") as zf:
+        zipped_fnames = set(map(lambda f: str(Path(f).name), zf.namelist()))
+        assert (
+            set(downloaded) == zipped_fnames
+        ), f"zipfile not successful {dst_path}\n{set(downloaded)}\n!=\n{zipped_fnames}"
+
+    return zipname
 
 
 def execute_rt_validator(
@@ -245,19 +258,12 @@ def execute_rt_validator(
         "name",
     ]
 
-    try:
-        subprocess.check_call(
-            args,
-            stderr=stderr,
-            stdout=stdout,
-        )
-    except subprocess.CalledProcessError:
-        log(
-            f"WARNING: validation subprocess failed for {rt_path} and {gtfs_file}: {' '.join(args)}",
-            fg=typer.colors.RED,
-            pbar=pbar,
-        )
-        raise
+    log(f"executing rt_validator: {' '.join(args)}", pbar=pbar)
+    subprocess.check_call(
+        args,
+        stderr=stderr,
+        stdout=stdout,
+    )
 
 
 # Originally this whole function was retried, but tmpdir flakiness will throw
@@ -299,94 +305,99 @@ def parse_and_aggregate_hour(
             dst_path_gtfs,
             pbar=pbar,
         )
-        execute_rt_validator(
-            gtfs_zip,
-            dst_path_rt,
-            jar_path=jar_path,
-            verbose=verbose,
-            pbar=pbar,
-        )
 
-    gzip_fname = str(tmp_dir + f"/data_{suffix}" + JSONL_GZIP_EXTENSION)
-    gzip_validation_fname = str(
-        tmp_dir + f"/validation_{suffix}" + JSONL_GZIP_EXTENSION
-    )
-    written = 0
-    validation_written = 0
-    with gzip.open(gzip_fname, "w") as gzipfile, gzip.open(
-        gzip_validation_fname, "w"
-    ) as validation_gzipfile:
-        for rt_file in hour.source_files:
-            feed = gtfs_realtime_pb2.FeedMessage()
+        try:
+            execute_rt_validator(
+                gtfs_zip,
+                dst_path_rt,
+                jar_path=jar_path,
+                verbose=verbose,
+                pbar=pbar,
+            )
+        except subprocess.CalledProcessError:
+            log(
+                f"WARNING: execute_rt_validator failed for {dst_path_rt} and {gtfs_zip}; includes files {os.listdir(dst_path_gtfs)}",
+                fg=typer.colors.RED,
+                pbar=pbar,
+            )
+            raise
 
-            try:
-                with open(
-                    os.path.join(dst_path_rt, rt_file.timestamped_filename), "rb"
-                ) as f:
-                    feed.ParseFromString(f.read())
-                parsed = json_format.MessageToDict(feed)
-            except DecodeError:
+    data_records = []
+    validation_records = []
+    for rt_file in hour.source_files:
+        feed = gtfs_realtime_pb2.FeedMessage()
+
+        try:
+            with open(
+                os.path.join(dst_path_rt, rt_file.timestamped_filename), "rb"
+            ) as f:
+                feed.ParseFromString(f.read())
+            parsed = json_format.MessageToDict(feed)
+        except DecodeError:
+            log(
+                f"WARN: got DecodeError for {str(rt_file.path)}",
+                fg=typer.colors.YELLOW,
+                pbar=pbar,
+            )
+            continue
+
+        if not parsed or "entity" not in parsed:
+            if verbose:
                 log(
-                    f"WARN: got DecodeError for {str(rt_file.path)}",
+                    f"WARNING: no records found in {str(rt_file.path)}",
                     fg=typer.colors.YELLOW,
                     pbar=pbar,
                 )
-                continue
+            continue
 
-            if not parsed or "entity" not in parsed:
+        for record in parsed["entity"]:
+            data_records.append(
+                {
+                    "header": parsed["header"],
+                    # back and forth so we use pydantic serialization
+                    "metadata": json.loads(rt_file.json()),
+                    **record,
+                }
+            )
+
+        if validate:
+            try:
+                with open(
+                    os.path.join(
+                        dst_path_rt,
+                        rt_file.timestamped_filename + ".results.json",
+                    )
+                ) as f:
+                    records = json.load(f)
+            except FileNotFoundError:
                 if verbose:
                     log(
-                        f"WARNING: no records found in {str(rt_file.path)}",
+                        f"WARNING: no validation output found in {str(rt_file.timestamped_filename)}",
                         fg=typer.colors.YELLOW,
                         pbar=pbar,
                     )
                 continue
 
-            for record in parsed["entity"]:
-                record.update(
+            for record in records:
+                validation_records.append(
                     {
-                        "header": parsed["header"],
-                        "metadata": json.loads(
-                            rt_file.json()
-                        ),  # back and forth so we use pydantic serialization
+                        # back and forth so we can use pydantic serialization
+                        "metadata": json.loads(rt_file.json()),
+                        **record,
                     }
                 )
-                gzipfile.write((json.dumps(record) + "\n").encode("utf-8"))
-                written += 1
 
-            if validate:
-                try:
-                    with open(
-                        os.path.join(
-                            dst_path_rt,
-                            rt_file.timestamped_filename + ".results.json",
-                        )
-                    ) as f:
-                        records = json.load(f)
-                except FileNotFoundError:
-                    if verbose:
-                        log(
-                            f"WARNING: no validation output found in {str(rt_file.timestamped_filename)}",
-                            fg=typer.colors.YELLOW,
-                            pbar=pbar,
-                        )
-                    continue
+    gzip_fname = str(tmp_dir + f"/data_{suffix}" + JSONL_GZIP_EXTENSION)
+    gzip_validation_fname = str(
+        tmp_dir + f"/validation_{suffix}" + JSONL_GZIP_EXTENSION
+    )
 
-                for record in records:
-                    record.update(
-                        {
-                            "metadata": json.loads(
-                                rt_file.json()
-                            ),  # back and forth so we use pydantic serialization
-                        }
-                    )
-                    validation_gzipfile.write(
-                        (json.dumps(record) + "\n").encode("utf-8")
-                    )
-                    validation_written += 1
-
-    if written:
-        log(f"writing {written} lines to {out_path}", pbar=pbar)
+    if data_records:
+        log(f"writing {len(data_records)} lines to {out_path}", pbar=pbar)
+        with gzip.open(gzip_fname, "w") as gzipfile:
+            gzipfile.write(
+                "\n".join(json.dumps(record) for record in data_records).encode("utf-8")
+            )
         put_with_retry(fs, gzip_fname, out_path)
     else:
         log(
@@ -395,11 +406,17 @@ def parse_and_aggregate_hour(
             pbar=pbar,
         )
 
-    if validation_written:
+    if validation_records:
         log(
-            f"writing {validation_written} lines to {validation_out_path}",
+            f"writing {len(validation_records)} lines to {validation_out_path}",
             pbar=pbar,
         )
+        with gzip.open(gzip_validation_fname, "w") as validation_gzipfile:
+            validation_gzipfile.write(
+                "\n".join(json.dumps(record) for record in validation_records).encode(
+                    "utf-8"
+                )
+            )
         put_with_retry(fs, gzip_validation_fname, validation_out_path)
     else:
         if verbose:
@@ -475,7 +492,8 @@ def main(
 
             for future in concurrent.futures.as_completed(futures):
                 hour = futures[future]
-                pbar.update(1)
+                if pbar:
+                    pbar.update(1)
                 try:
                     future.result()
                 except KeyboardInterrupt:
@@ -495,8 +513,10 @@ def main(
                         pbar=pbar,
                     )
                     exceptions.append((e, hour.hive_path, traceback.format_exc()))
+        input(f"press enter to finish... {tmp_dir}")
 
-    del pbar
+    if pbar:
+        del pbar
 
     if exceptions:
         exc_str = "\n".join(str(tup) for tup in exceptions)
