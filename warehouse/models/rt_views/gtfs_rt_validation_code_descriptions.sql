@@ -2,7 +2,7 @@
 
 WITH gtfs_rt_validation_code_descriptions AS (
     SELECT *
-    FROM {{ source('gtfs_rt',
+    FROM {{ source('gtfs_rt_raw',
     'validation_code_descriptions') }}
 )
 
