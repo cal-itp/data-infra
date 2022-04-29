@@ -15,7 +15,7 @@ from enum import Enum
 from functools import lru_cache
 from io import BytesIO
 from pathlib import Path
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Union
 from zipfile import ZipFile
 
 import backoff
@@ -53,16 +53,23 @@ def log(*args, err=False, fg=None, pbar=None, **kwargs):
 
 
 def upload_gzipped_records(
-    fs, gzip_fname, out_path, records: List[Dict], pbar=None, verbose=False
+    fs,
+    gzip_fname,
+    out_path,
+    records: Union[List[Dict], List[BaseModel]],
+    pbar=None,
+    verbose=False,
 ):
     log(
         f"writing {len(records)} lines to {out_path}",
         pbar=pbar,
     )
     with gzip.open(gzip_fname, "w") as gzipfile:
-        gzipfile.write(
-            "\n".join(json.dumps(record) for record in records).encode("utf-8")
-        )
+        if isinstance(records[0], BaseModel):
+            encoded = (r.json() for r in records)
+        else:
+            encoded = (json.dumps(r) for r in records)
+        gzipfile.write("\n".join(encoded).encode("utf-8"))
     put_with_retry(fs, gzip_fname, out_path)
 
 
@@ -82,6 +89,11 @@ class RTFile(BaseModel):
     itp_id: int
     url: int
     tick: pendulum.DateTime
+
+    class Config:
+        json_encoders = {
+            Path: lambda p: str(p),
+        }
 
     @property
     def timestamped_filename(self):
@@ -323,7 +335,7 @@ def parse_and_aggregate_hour(
         ],
     )
 
-    errors = []
+    errors: List[RTFileProcessingError] = []
 
     if validate:
         try:
@@ -346,7 +358,7 @@ def parse_and_aggregate_hour(
                     step="download_schedule",
                     exception=str(e),
                     hive_path=hour.hive_path,
-                ).dict()
+                )
             )
             validate = False
         except subprocess.CalledProcessError as e:
@@ -362,7 +374,7 @@ def parse_and_aggregate_hour(
                     exception=str(e),
                     hive_path=hour.hive_path,
                     body=e.stderr,
-                ).dict()
+                )
             )
             validate = False
 
@@ -383,7 +395,7 @@ def parse_and_aggregate_hour(
                     step="parse",
                     exception=str(e),
                     file=rt_file,
-                ).dict()
+                )
             )
             continue
 
