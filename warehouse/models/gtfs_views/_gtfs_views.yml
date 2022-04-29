@@ -26,12 +26,8 @@ models:
         description: Day number within the year (integer between 1 and 366)
         tests:
           - not_null
-      - name: fiscal_year
-        description: Year portion of date as an integer, ex. 2022.
-        tests:
-          - not_null
-      - name: fiscal_qtr
-        description: Date's quarter (string "1", "2", "3", or "4"; see BigQuery FORMAT DATE %Q documentation for details)
+      - name: qtr
+        description: Date's quarter (string "1", "2", "3", or "4"; see BigQuery FORMAT DATE %Q documentation for details). Default quarter as defined by BigQuery.
         tests:
           - not_null
       - name: month
