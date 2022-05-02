@@ -322,7 +322,7 @@ def validate_and_upload(
     verbose=False,
     pbar=None,
 ):
-    validate = True
+    records_to_upload = []
     errors = []
     try:
         gtfs_zip = download_gtfs_schedule_zip(
@@ -346,7 +346,6 @@ def validate_and_upload(
                 hive_path=hour.hive_path,
             )
         )
-        validate = False
     except subprocess.CalledProcessError as e:
         # TODO: do something about this
         log(
@@ -362,44 +361,42 @@ def validate_and_upload(
                 body=e.stderr,
             )
         )
-        validate = False
 
-    if validate:
-        for rt_file in hour.source_files:
-            try:
-                with open(
-                    os.path.join(
-                        dst_path_rt,
-                        rt_file.timestamped_filename + ".results.json",
-                    )
-                ) as f:
-                    records = json.load(f)
-            except FileNotFoundError:
-                if verbose:
-                    log(
-                        f"WARNING: no validation output found in {str(rt_file.timestamped_filename)}",
-                        fg=typer.colors.YELLOW,
-                        pbar=pbar,
-                    )
-                continue
-
-            for record in records:
-                records.append(
-                    {
-                        # back and forth so we can use pydantic serialization
-                        "metadata": json.loads(rt_file.json()),
-                        **record,
-                    }
+    for rt_file in hour.source_files:
+        try:
+            with open(
+                os.path.join(
+                    dst_path_rt,
+                    rt_file.timestamped_filename + ".results.json",
                 )
+            ) as f:
+                records = json.load(f)
+        except FileNotFoundError:
+            if verbose:
+                log(
+                    f"WARNING: no validation output found in {str(rt_file.timestamped_filename)}",
+                    fg=typer.colors.YELLOW,
+                    pbar=pbar,
+                )
+            continue
 
-    if records:
+        for record in records:
+            records_to_upload.append(
+                {
+                    # back and forth so we can use pydantic serialization
+                    "metadata": json.loads(rt_file.json()),
+                    **record,
+                }
+            )
+
+    if records_to_upload:
         upload_gzipped_records(
             fs,
             gzip_fname=str(
                 tmp_dir + f"/validation_{hour.suffix}" + JSONL_GZIP_EXTENSION
             ),
             out_path=f"{hour.validation_hive_path}{JSONL_GZIP_EXTENSION}",
-            records=records,
+            records=records_to_upload,
             pbar=pbar,
             verbose=verbose,
         )
