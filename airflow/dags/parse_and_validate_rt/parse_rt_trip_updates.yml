@@ -12,6 +12,8 @@ arguments:
   - "{{get_bucket()}}/rt/{{ execution_date.replace(minute=0, second=0).format('YYYY-MM-DDTHH*') }}"
   - "gs://{{prefix_bucket('rt-parsed')}}"
   - "--threads=2"
+  - "--parse"
+  - "--verbose"
 
 is_delete_operator_pod: true
 get_logs: true
