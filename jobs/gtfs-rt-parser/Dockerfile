@@ -21,6 +21,7 @@ COPY ./pyproject.toml /app/pyproject.toml
 COPY ./poetry.lock /app/poetry.lock
 RUN poetry config virtualenvs.create false
 RUN poetry install
+RUN pip install memray
 
 COPY . /app
 
