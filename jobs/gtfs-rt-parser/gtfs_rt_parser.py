@@ -2,6 +2,7 @@
 Parses binary RT feeds and writes them back to GCS as gzipped newline-delimited JSON
 """
 import concurrent.futures
+import copy
 import gzip
 import hashlib
 import json
@@ -320,7 +321,7 @@ def validate_and_upload(
     hour: RTAggregation,
     verbose=False,
     pbar=None,
-) -> List[RTFileProcessingError]:
+):
     validate = True
     errors = []
     try:
@@ -409,7 +410,21 @@ def validate_and_upload(
             pbar=pbar,
         )
 
-    return errors
+    if errors:
+        upload_gzipped_records(
+            fs,
+            gzip_fname=str(tmp_dir + f"/errors_{hour.suffix}" + JSONL_GZIP_EXTENSION),
+            out_path=f"{hour.errors_hive_path}_validation{JSONL_GZIP_EXTENSION}",
+            records=errors,
+            pbar=pbar,
+            verbose=verbose,
+        )
+    else:
+        log(
+            f"WARNING: no records at all for {hour.errors_hive_path}_validation",
+            fg=typer.colors.YELLOW,
+            pbar=pbar,
+        )
 
 
 def parse_and_upload(
@@ -419,55 +434,62 @@ def parse_and_upload(
     hour: RTAggregation,
     verbose=False,
     pbar=None,
-) -> List[RTFileProcessingError]:
-    records = []
+):
+    written = 0
     errors = []
-    for rt_file in hour.source_files:
-        feed = gtfs_realtime_pb2.FeedMessage()
+    gzip_fname = str(tmp_dir + f"/data_{hour.suffix}" + JSONL_GZIP_EXTENSION)
+    with gzip.open(gzip_fname, "w") as gzipfile:
+        for rt_file in hour.source_files:
+            feed = gtfs_realtime_pb2.FeedMessage()
 
-        try:
-            with open(
-                os.path.join(dst_path_rt, rt_file.timestamped_filename), "rb"
-            ) as f:
-                feed.ParseFromString(f.read())
-            parsed = json_format.MessageToDict(feed)
-        except DecodeError as e:
-            errors.append(
-                RTFileProcessingError(
-                    step="parse",
-                    exception=str(e),
-                    file=rt_file,
+            try:
+                with open(
+                    os.path.join(dst_path_rt, rt_file.timestamped_filename), "rb"
+                ) as f:
+                    feed.ParseFromString(f.read())
+                parsed = json_format.MessageToDict(feed)
+            except DecodeError as e:
+                errors.append(
+                    RTFileProcessingError(
+                        step="parse",
+                        exception=str(e),
+                        file=rt_file,
+                    )
                 )
-            )
-            continue
+                continue
 
-        if not parsed or "entity" not in parsed:
-            if verbose:
-                log(
-                    f"WARNING: no records found in {str(rt_file.path)}",
-                    fg=typer.colors.YELLOW,
-                    pbar=pbar,
+            if not parsed or "entity" not in parsed:
+                if verbose:
+                    log(
+                        f"WARNING: no records found in {str(rt_file.path)}",
+                        fg=typer.colors.YELLOW,
+                        pbar=pbar,
+                    )
+                continue
+
+            for record in parsed["entity"]:
+                gzipfile.write(
+                    (
+                        json.dumps(
+                            {
+                                "header": parsed["header"],
+                                # back and forth so we use pydantic serialization
+                                "metadata": json.loads(rt_file.json()),
+                                **copy.deepcopy(record),
+                            }
+                        )
+                        + "\n"
+                    ).encode("utf-8")
                 )
-            continue
+                written += 1
+            del parsed
 
-        for record in parsed["entity"]:
-            records.append(
-                {
-                    "header": parsed["header"],
-                    # back and forth so we use pydantic serialization
-                    "metadata": json.loads(rt_file.json()),
-                    **record,
-                }
-            )
-    if records:
-        upload_gzipped_records(
-            fs,
-            gzip_fname=str(tmp_dir + f"/data_{hour.suffix}" + JSONL_GZIP_EXTENSION),
-            out_path=f"{hour.hive_path}{JSONL_GZIP_EXTENSION}",
-            records=records,
+    if written:
+        log(
+            f"writing {written} lines to {hour.hive_path}{JSONL_GZIP_EXTENSION}",
             pbar=pbar,
-            verbose=verbose,
         )
+        put_with_retry(fs, gzip_fname, f"{hour.hive_path}{JSONL_GZIP_EXTENSION}")
     else:
         log(
             f"WARNING: no records at all for {hour.hive_path}",
@@ -475,7 +497,21 @@ def parse_and_upload(
             pbar=pbar,
         )
 
-    return errors
+    if errors:
+        upload_gzipped_records(
+            fs,
+            gzip_fname=str(tmp_dir + f"/errors_{hour.suffix}" + JSONL_GZIP_EXTENSION),
+            out_path=f"{hour.errors_hive_path}{JSONL_GZIP_EXTENSION}",
+            records=errors,
+            pbar=pbar,
+            verbose=verbose,
+        )
+    else:
+        log(
+            f"WARNING: no records at all for {hour.errors_hive_path}",
+            fg=typer.colors.YELLOW,
+            pbar=pbar,
+        )
 
 
 # Originally this whole function was retried, but tmpdir flakiness will throw
@@ -506,47 +542,25 @@ def parse_and_aggregate_hour(
         ],
     )
 
-    errors: List[RTFileProcessingError] = []
-
     if validate:
-        errors.extend(
-            validate_and_upload(
-                fs=fs,
-                jar_path=jar_path,
-                dst_path_gtfs=dst_path_gtfs,
-                dst_path_rt=dst_path_rt,
-                tmp_dir=tmp_dir,
-                hour=hour,
-                verbose=verbose,
-                pbar=pbar,
-            )
+        validate_and_upload(
+            fs=fs,
+            jar_path=jar_path,
+            dst_path_gtfs=dst_path_gtfs,
+            dst_path_rt=dst_path_rt,
+            tmp_dir=tmp_dir,
+            hour=hour,
+            verbose=verbose,
+            pbar=pbar,
         )
 
     if parse:
-        errors.extend(
-            parse_and_upload(
-                fs,
-                dst_path_rt,
-                tmp_dir,
-                hour,
-                verbose,
-                pbar,
-            )
-        )
-
-    if errors:
-        upload_gzipped_records(
-            fs,
-            gzip_fname=str(tmp_dir + f"/errors_{hour.suffix}" + JSONL_GZIP_EXTENSION),
-            out_path=f"{hour.errors_hive_path}{JSONL_GZIP_EXTENSION}",
-            records=errors,
-            pbar=pbar,
+        parse_and_upload(
+            fs=fs,
+            dst_path_rt=dst_path_rt,
+            tmp_dir=tmp_dir,
+            hour=hour,
             verbose=verbose,
-        )
-    else:
-        log(
-            f"WARNING: no records at all for {hour.errors_hive_path}",
-            fg=typer.colors.YELLOW,
             pbar=pbar,
         )
 
