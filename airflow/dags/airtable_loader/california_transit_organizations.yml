@@ -1,6 +1,7 @@
 operator: operators.AirtableToWarehouseOperator
 
 air_base_id: appPnJWrQ7ui4UmIl
+air_base_name: california_transit
 air_table_name: organizations
 gcs_path: airtable/california-transit/
 table_name: airtable.california_transit_organizations
