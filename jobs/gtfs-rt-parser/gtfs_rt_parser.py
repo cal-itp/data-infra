@@ -469,6 +469,11 @@ def parse_and_aggregate_hour(
                 pbar=pbar,
             )
 
+    # see if we can't force this memory to be returned
+    del data_records
+    del validation_records
+    del errors
+
 
 def main(
     file_type: RTFileType,
