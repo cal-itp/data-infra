@@ -148,6 +148,10 @@ class RTAggregation(BaseModel):
     errors_hive_path: str
     source_files: List[RTFile]
 
+    @property
+    def suffix(self) -> str:
+        return hashlib.md5(self.hive_path.encode("utf-8")).hexdigest()
+
 
 class RTFileProcessingError(BaseModel):
     step: str
@@ -307,79 +311,117 @@ def execute_rt_validator(
     ).check_returncode()
 
 
-# Originally this whole function was retried, but tmpdir flakiness will throw
-# exceptions in backoff's context, which ruins things
-def parse_and_aggregate_hour(
-    hour: RTAggregation,
+def validate_and_upload(
+    fs,
     jar_path: Path,
-    tmp_dir: str,
-    verbose: bool = False,
-    parse: bool = True,
-    validate: bool = True,
+    dst_path_gtfs,
+    dst_path_rt,
+    tmp_dir,
+    hour: RTAggregation,
+    verbose=False,
     pbar=None,
-):
-    if not parse and not validate:
-        raise ValueError("skipping both parsing and validation does nothing for us!")
+) -> List[RTFileProcessingError]:
+    validate = True
+    errors = []
+    try:
+        gtfs_zip = download_gtfs_schedule_zip(
+            hour.source_files[0].schedule_path,
+            dst_path_gtfs,
+            pbar=pbar,
+        )
 
-    fs = get_fs()
-    suffix = hashlib.md5(hour.hive_path.encode("utf-8")).hexdigest()
-    dst_path_gtfs = f"{tmp_dir}/gtfs_{suffix}/"
-    os.mkdir(dst_path_gtfs)
-    dst_path_rt = f"{tmp_dir}/rt_{suffix}/"
-    get_with_retry(
-        fs,
-        rpath=[file.path for file in hour.source_files],
-        lpath=[
-            os.path.join(dst_path_rt, file.timestamped_filename)
-            for file in hour.source_files
-        ],
-    )
-
-    errors: List[RTFileProcessingError] = []
+        execute_rt_validator(
+            gtfs_zip,
+            dst_path_rt,
+            jar_path=jar_path,
+            verbose=verbose,
+            pbar=pbar,
+        )
+    except ScheduleDataNotFound as e:
+        errors.append(
+            RTFileProcessingError(
+                step="download_schedule",
+                exception=str(e),
+                hive_path=hour.hive_path,
+            )
+        )
+        validate = False
+    except subprocess.CalledProcessError as e:
+        # TODO: do something about this
+        log(
+            f"WARNING: execute_rt_validator failed for {dst_path_rt} and {gtfs_zip}; includes files {os.listdir(dst_path_gtfs)}",
+            fg=typer.colors.RED,
+            pbar=pbar,
+        )
+        errors.append(
+            RTFileProcessingError(
+                step="validate",
+                exception=str(e),
+                hive_path=hour.hive_path,
+                body=e.stderr,
+            )
+        )
+        validate = False
 
     if validate:
-        try:
-            gtfs_zip = download_gtfs_schedule_zip(
-                hour.source_files[0].schedule_path,
-                dst_path_gtfs,
-                pbar=pbar,
-            )
+        for rt_file in hour.source_files:
+            try:
+                with open(
+                    os.path.join(
+                        dst_path_rt,
+                        rt_file.timestamped_filename + ".results.json",
+                    )
+                ) as f:
+                    records = json.load(f)
+            except FileNotFoundError:
+                if verbose:
+                    log(
+                        f"WARNING: no validation output found in {str(rt_file.timestamped_filename)}",
+                        fg=typer.colors.YELLOW,
+                        pbar=pbar,
+                    )
+                continue
 
-            execute_rt_validator(
-                gtfs_zip,
-                dst_path_rt,
-                jar_path=jar_path,
-                verbose=verbose,
-                pbar=pbar,
-            )
-        except ScheduleDataNotFound as e:
-            errors.append(
-                RTFileProcessingError(
-                    step="download_schedule",
-                    exception=str(e),
-                    hive_path=hour.hive_path,
+            for record in records:
+                records.append(
+                    {
+                        # back and forth so we can use pydantic serialization
+                        "metadata": json.loads(rt_file.json()),
+                        **record,
+                    }
                 )
-            )
-            validate = False
-        except subprocess.CalledProcessError as e:
-            # TODO: do something about this
-            log(
-                f"WARNING: execute_rt_validator failed for {dst_path_rt} and {gtfs_zip}; includes files {os.listdir(dst_path_gtfs)}",
-                fg=typer.colors.RED,
-                pbar=pbar,
-            )
-            errors.append(
-                RTFileProcessingError(
-                    step="validate",
-                    exception=str(e),
-                    hive_path=hour.hive_path,
-                    body=e.stderr,
-                )
-            )
-            validate = False
 
-    data_records = []
-    validation_records = []
+    if records:
+        upload_gzipped_records(
+            fs,
+            gzip_fname=str(
+                tmp_dir + f"/validation_{hour.suffix}" + JSONL_GZIP_EXTENSION
+            ),
+            out_path=f"{hour.validation_hive_path}{JSONL_GZIP_EXTENSION}",
+            records=records,
+            pbar=pbar,
+            verbose=verbose,
+        )
+    else:
+        log(
+            f"WARNING: no records at all for {hour.validation_hive_path}",
+            fg=typer.colors.YELLOW,
+            pbar=pbar,
+        )
+
+    return errors
+
+
+def parse_and_upload(
+    fs,
+    dst_path_rt,
+    tmp_dir,
+    hour: RTAggregation,
+    verbose=False,
+    pbar=None,
+) -> List[RTFileProcessingError]:
+    records = []
+    errors = []
     for rt_file in hour.source_files:
         feed = gtfs_realtime_pb2.FeedMessage()
 
@@ -409,7 +451,7 @@ def parse_and_aggregate_hour(
             continue
 
         for record in parsed["entity"]:
-            data_records.append(
+            records.append(
                 {
                     "header": parsed["header"],
                     # back and forth so we use pydantic serialization
@@ -417,62 +459,96 @@ def parse_and_aggregate_hour(
                     **record,
                 }
             )
+    if records:
+        upload_gzipped_records(
+            fs,
+            gzip_fname=str(tmp_dir + f"/data_{hour.suffix}" + JSONL_GZIP_EXTENSION),
+            out_path=f"{hour.hive_path}{JSONL_GZIP_EXTENSION}",
+            records=records,
+            pbar=pbar,
+            verbose=verbose,
+        )
+    else:
+        log(
+            f"WARNING: no records at all for {hour.hive_path}",
+            fg=typer.colors.YELLOW,
+            pbar=pbar,
+        )
 
-        if validate:
-            try:
-                with open(
-                    os.path.join(
-                        dst_path_rt,
-                        rt_file.timestamped_filename + ".results.json",
-                    )
-                ) as f:
-                    records = json.load(f)
-            except FileNotFoundError:
-                if verbose:
-                    log(
-                        f"WARNING: no validation output found in {str(rt_file.timestamped_filename)}",
-                        fg=typer.colors.YELLOW,
-                        pbar=pbar,
-                    )
-                continue
+    return errors
 
-            for record in records:
-                validation_records.append(
-                    {
-                        # back and forth so we can use pydantic serialization
-                        "metadata": json.loads(rt_file.json()),
-                        **record,
-                    }
-                )
 
-    # probably a better way to do this
-    record_sets = [
-        ("data", hour.hive_path, data_records),
-        ("validation", hour.validation_hive_path, validation_records),
-        ("errors", hour.errors_hive_path, errors),
-    ]
+# Originally this whole function was retried, but tmpdir flakiness will throw
+# exceptions in backoff's context, which ruins things
+def parse_and_aggregate_hour(
+    hour: RTAggregation,
+    jar_path: Path,
+    tmp_dir: str,
+    verbose: bool = False,
+    parse: bool = False,
+    validate: bool = False,
+    pbar=None,
+):
+    if not parse and not validate:
+        raise ValueError("skipping both parsing and validation does nothing for us!")
 
-    for name, path, record_set in record_sets:
-        if record_set:
-            upload_gzipped_records(
-                fs,
-                gzip_fname=str(tmp_dir + f"/{name}_{suffix}" + JSONL_GZIP_EXTENSION),
-                out_path=f"{path}{JSONL_GZIP_EXTENSION}",
-                records=record_set,
-                pbar=pbar,
+    fs = get_fs()
+    suffix = hour.suffix
+    dst_path_gtfs = f"{tmp_dir}/gtfs_{suffix}/"
+    os.mkdir(dst_path_gtfs)
+    dst_path_rt = f"{tmp_dir}/rt_{suffix}/"
+    get_with_retry(
+        fs,
+        rpath=[file.path for file in hour.source_files],
+        lpath=[
+            os.path.join(dst_path_rt, file.timestamped_filename)
+            for file in hour.source_files
+        ],
+    )
+
+    errors: List[RTFileProcessingError] = []
+
+    if validate:
+        errors.extend(
+            validate_and_upload(
+                fs=fs,
+                jar_path=jar_path,
+                dst_path_gtfs=dst_path_gtfs,
+                dst_path_rt=dst_path_rt,
+                tmp_dir=tmp_dir,
+                hour=hour,
                 verbose=verbose,
-            )
-        else:
-            log(
-                f"WARNING: no records at all for {path}",
-                fg=typer.colors.YELLOW,
                 pbar=pbar,
             )
+        )
 
-    # see if we can't force this memory to be returned
-    del data_records
-    del validation_records
-    del errors
+    if parse:
+        errors.extend(
+            parse_and_upload(
+                fs,
+                dst_path_rt,
+                tmp_dir,
+                hour,
+                verbose,
+                pbar,
+            )
+        )
+
+    if errors:
+        upload_gzipped_records(
+            fs,
+            gzip_fname=str(tmp_dir + f"/errors_{hour.suffix}" + JSONL_GZIP_EXTENSION),
+            out_path=f"{hour.errors_hive_path}{JSONL_GZIP_EXTENSION}",
+            records=errors,
+            pbar=pbar,
+            verbose=verbose,
+        )
+    else:
+        log(
+            f"WARNING: no records at all for {hour.errors_hive_path}",
+            fg=typer.colors.YELLOW,
+            pbar=pbar,
+        )
 
 
 def main(
@@ -480,6 +556,8 @@ def main(
     glob: str,
     dst_bucket: str,
     limit: int = 0,
+    parse: bool = False,
+    validate: bool = False,
     progress: bool = typer.Option(
         False,
         help="If true, display progress bar; useful for development but not in production.",
@@ -488,7 +566,9 @@ def main(
     threads: int = 4,
     jar_path: Path = JAR_DEFAULT,
 ):
-    typer.secho(f"Parsing {file_type} from {glob}", fg=typer.colors.MAGENTA)
+    assert parse ^ validate, "must either parse xor validate"
+
+    typer.secho(f"processing {file_type} from {glob}", fg=typer.colors.MAGENTA)
 
     # fetch files ----
     files = identify_files(glob=glob, rt_file_type=file_type, progress=progress)
@@ -497,6 +577,10 @@ def main(
 
     for file in files:
         feed_hours[file.hive_path(dst_bucket)].append(file)
+
+    typer.secho(
+        f"found {len(feed_hours)} feed-hours to process", fg=typer.colors.MAGENTA
+    )
 
     feed_hours = [
         RTAggregation(
@@ -532,8 +616,8 @@ def main(
                     jar_path=jar_path,
                     tmp_dir=tmp_dir,
                     verbose=verbose,
-                    parse=True,
-                    validate=True,
+                    parse=parse,
+                    validate=validate,
                     pbar=pbar,
                 ): hour
                 for hour in feed_hours
