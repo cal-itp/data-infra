@@ -20,6 +20,7 @@ parts:
         - file: analytics_tools/saving_code
         - file: analytics_tools/storing_data
         - file: analytics_tools/data_catalogs
+        - file: analytics_tools/knowledge_sharing
       - file: analytics_new_analysts/overview
         sections:
         - file: analytics_new_analysts/data-analysis-intro
