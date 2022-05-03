@@ -9,8 +9,8 @@ arguments:
   - "gtfs_rt_parser.py"
   - "trip_updates"
   # we run on a delay because of archiver write latency but then we process the prior _hour_
-  - "{{get_bucket()}}/rt/{{ execution_date.replace(minute=0, second=0).format('YYYY-MM-DDTHH*') }}"
-  - "gs://{{prefix_bucket('rt-parsed')}}"
+  - "{{ get_bucket() }}/rt/{{ execution_date.replace(minute=0, second=0).format('YYYY-MM-DDTHH*') }}"
+  - "gs://{{ prefix_bucket('rt-parsed') }}"
   - "--threads=2"
   - "--parse"
   - "--verbose"
@@ -33,7 +33,7 @@ secrets:
     key: service_account.json
 
 resources:
-  request_memory: 10.0Gi
+  request_memory: 2.0Gi
   request_cpu: 1
 
 tolerations:
