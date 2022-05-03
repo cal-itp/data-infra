@@ -58,10 +58,12 @@ jupyterhub:
       cert-manager.io/cluster-issuer: letsencrypt-prod
       nginx.ingress.kubernetes.io/proxy-body-size: "0"
     hosts:
+      - notebooks.calitp.org
       - hubtest.k8s.calitp.jarv.us
     tls:
       - secretName: jupyterhub-tls
         hosts:
+          - notebooks.calitp.org
           - hubtest.k8s.calitp.jarv.us
   proxy:
     service:
