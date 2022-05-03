@@ -1,0 +1,51 @@
+operator: operators.PodOperator
+name: 'validate-rt-vehicle-positions'
+image: 'ghcr.io/cal-itp/data-infra/gtfs-rt-parser:{{image_tag()}}'
+
+cmds:
+  - python3
+
+arguments:
+  - "gtfs_rt_parser.py"
+  - "vehicle_positions"
+  # we run on a delay because of archiver write latency but then we process the prior _hour_
+  - "{{ get_bucket() }}/rt/{{ execution_date.replace(minute=0, second=0).format('YYYY-MM-DDTHH*') }}"
+  - "gs://{{ prefix_bucket('rt-parsed') }}"
+  - "--validate"
+  - "--verbose"
+
+is_delete_operator_pod: true
+get_logs: true
+
+is_gke: true
+pod_location: us-west1
+cluster_name: data-infra-apps
+namespace: airflow-jobs
+
+env_vars:
+  GOOGLE_APPLICATION_CREDENTIALS: /secrets/jobs-data/service_account.json
+
+secrets:
+  - deploy_type: volume
+    deploy_target: /secrets/jobs-data/
+    secret: jobs-data
+    key: service_account.json
+
+resources:
+  request_memory: 5.0Gi
+  request_cpu: 1
+
+tolerations:
+  - key: pod-role
+    operator: Equal
+    value: computetask
+    effect: NoSchedule
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: pod-role
+          operator: In
+          values:
+          - computetask
