@@ -234,7 +234,10 @@ def download_gtfs_schedule_zip(
         pbar=pbar,
     )
 
-    get_with_retry(fs, gtfs_schedule_path, dst_path, recursive=True)
+    try:
+        get_with_retry(fs, gtfs_schedule_path, dst_path, recursive=True)
+    except FileNotFoundError:
+        raise ScheduleDataNotFound(f"no schedule data found for {gtfs_schedule_path}")
 
     try:
         os.remove(os.path.join(dst_path, "areas.txt"))
@@ -636,7 +639,7 @@ def main(
                     )
                 except Exception as e:
                     log(
-                        f"WARNING: exception {str(e)} bubbled up to top for {hour.data_hive_path}",
+                        f"WARNING: exception {type(e)} {str(e)} bubbled up to top for {hour.data_hive_path}",
                         err=True,
                         fg=typer.colors.RED,
                         pbar=pbar,
