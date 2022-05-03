@@ -1,17 +1,13 @@
----
-operator: operators.SqlToWarehouseOperator
-dst_table_name: "payments.stg_enriched_micropayment_adjustments"
+{{ config(materialized='table') }}
 
-external_dependencies:
-  - payments_loader: all
----
+WITH stg_enriched_micropayment_adjustments AS (
+    {{
+        sql_enrich_duplicates(
+            source('payments', 'micropayment_adjustments'),
+            ['calitp_hash'],
+            ['calitp_file_name desc']
+        )
+    }}
+)
 
-{{
-
-  sql_enrich_duplicates(
-    "payments.micropayment_adjustments",
-    ["calitp_hash"],
-    ["calitp_file_name desc"]
-  )
-
-}}
+SELECT * FROM stg_enriched_micropayment_adjustments
