@@ -349,3 +349,5 @@ models:
       - *calitp_n_dupes
       - *calitp_n_dupe_ids
       - *calitp_dupe_number
+      - name: transaction_date_time_pacific
+        description: The date and time that the customer tapped on the device (in Pacific time instead of UTC).
