@@ -14,7 +14,6 @@ from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from enum import Enum
 from functools import lru_cache
-from io import BytesIO
 from pathlib import Path
 from typing import List, Optional, Dict, Union
 from zipfile import ZipFile
@@ -25,8 +24,6 @@ import typer
 from aiohttp.client_exceptions import ClientResponseError, ClientOSError
 from calitp.config import get_bucket
 from calitp.storage import get_fs
-from google.api_core.exceptions import NotFound
-from google.cloud.storage import Client
 from google.protobuf import json_format
 from google.protobuf.message import DecodeError
 from google.transit import gtfs_realtime_pb2
@@ -144,14 +141,14 @@ class RTFile(BaseModel):
 
 
 class RTAggregation(BaseModel):
-    hive_path: str
+    data_hive_path: str
     validation_hive_path: str
     errors_hive_path: str
     source_files: List[RTFile]
 
     @property
     def suffix(self) -> str:
-        return hashlib.md5(self.hive_path.encode("utf-8")).hexdigest()
+        return hashlib.md5(self.data_hive_path.encode("utf-8")).hexdigest()
 
 
 class RTFileProcessingError(BaseModel):
@@ -227,7 +224,9 @@ def identify_files(glob, rt_file_type: RTFileType, progress=False) -> List[RTFil
     return files
 
 
-def download_gtfs_schedule_zip(gtfs_schedule_path, dst_path, pbar=None):
+def download_gtfs_schedule_zip(
+    fs, gtfs_schedule_path, dst_path, pbar=None
+) -> (str, List[str]):
     # fetch and zip gtfs schedule
     zipname = f"{dst_path[:-1]}.zip"
     log(
@@ -235,57 +234,32 @@ def download_gtfs_schedule_zip(gtfs_schedule_path, dst_path, pbar=None):
         pbar=pbar,
     )
 
-    files = [
-        "agency.txt",
-        "calendar_attributes.txt",
-        "fare_capping.txt",
-        "fare_products.txt",
-        "levels.txt",
-        "shapes.txt",
-        "transfers.txt",
-        "attributions.txt",
-        "calendar_dates.txt",
-        "fare_containers.txt",
-        "fare_transfer_rules.txt",
-        "mtc_feed_versions.txt",
-        "rider_categories.txt",
-        "stop_times.txt",
-        "trips.txt",
-        "calendar.txt",
-        "directions.txt",
-        "fare_leg_rules.txt",
-        "feed_info.txt",
-        "pathways.txt",
-        "routes.txt",
-        "stops.txt",
-    ]
+    get_with_retry(fs, gtfs_schedule_path, dst_path, recursive=True)
 
-    # Do this manually; gcsfs.get() with recursive=True downloads extra stuff we don't need
-    downloaded = []
-    client = Client()
+    try:
+        os.remove(os.path.join(dst_path, "areas.txt"))
+    except FileNotFoundError:
+        pass
+
+    try:
+        os.remove(os.path.join(dst_path, "validation.json"))
+    except FileNotFoundError:
+        pass
+
+    written = []
     with ZipFile(zipname, "w") as zf:
-        for file in files:
-            io = BytesIO()
-            try:
-                client.download_blob_to_file(f"{gtfs_schedule_path}/{file}", io)
-                io.seek(0)
-                zf.writestr(file, io.read().decode("utf-8"))
-                downloaded.append(file)
-            except NotFound:
-                pass
+        for file in os.listdir(dst_path):
+            full_path = os.path.join(dst_path, file)
+            if not os.path.isfile(full_path):
+                continue
+            with open(full_path) as f:
+                zf.writestr(file, f.read())
+            written.append(file)
 
-    if not downloaded:
+    if not written:
         raise ScheduleDataNotFound(f"no schedule data found for {gtfs_schedule_path}")
 
-    os.sync()
-
-    with ZipFile(zipname, "r") as zf:
-        zipped_fnames = set(map(lambda f: str(Path(f).name), zf.namelist()))
-        assert (
-            set(downloaded) == zipped_fnames
-        ), f"zipfile not successful {dst_path}\n{set(downloaded)}\n!=\n{zipped_fnames}"
-
-    return zipname
+    return zipname, written
 
 
 def execute_rt_validator(
@@ -325,7 +299,8 @@ def validate_and_upload(
     records_to_upload = []
     errors = []
     try:
-        gtfs_zip = download_gtfs_schedule_zip(
+        gtfs_zip, included_files = download_gtfs_schedule_zip(
+            fs,
             hour.source_files[0].schedule_path,
             dst_path_gtfs,
             pbar=pbar,
@@ -339,17 +314,25 @@ def validate_and_upload(
             pbar=pbar,
         )
     except ScheduleDataNotFound as e:
+        if verbose:
+            log(
+                f"no schedule data found for {hour.source_files[0].schedule_path}",
+                fg=typer.colors.YELLOW,
+                pbar=pbar,
+            )
         errors.append(
             RTFileProcessingError(
                 step="download_schedule",
                 exception=str(e),
-                hive_path=hour.hive_path,
+                hive_path=hour.data_hive_path,
             )
         )
     except subprocess.CalledProcessError as e:
-        # TODO: do something about this
+        msg = f"WARNING: execute_rt_validator failed for {dst_path_rt} and {gtfs_zip}"
+        if verbose:
+            msg += f"\nincluded files: {included_files}\n{e.stderr}"
         log(
-            f"WARNING: execute_rt_validator failed for {dst_path_rt} and {gtfs_zip}; includes files {os.listdir(dst_path_gtfs)}",
+            msg,
             fg=typer.colors.RED,
             pbar=pbar,
         )
@@ -357,7 +340,7 @@ def validate_and_upload(
             RTFileProcessingError(
                 step="validate",
                 exception=str(e),
-                hive_path=hour.hive_path,
+                hive_path=hour.data_hive_path,
                 body=e.stderr,
             )
         )
@@ -483,13 +466,13 @@ def parse_and_upload(
 
     if written:
         log(
-            f"writing {written} lines to {hour.hive_path}{JSONL_GZIP_EXTENSION}",
+            f"writing {written} lines to {hour.data_hive_path}{JSONL_GZIP_EXTENSION}",
             pbar=pbar,
         )
-        put_with_retry(fs, gzip_fname, f"{hour.hive_path}{JSONL_GZIP_EXTENSION}")
+        put_with_retry(fs, gzip_fname, f"{hour.data_hive_path}{JSONL_GZIP_EXTENSION}")
     else:
         log(
-            f"WARNING: no records at all for {hour.hive_path}",
+            f"WARNING: no records at all for {hour.data_hive_path}",
             fg=typer.colors.YELLOW,
             pbar=pbar,
         )
@@ -595,7 +578,7 @@ def main(
 
     feed_hours = [
         RTAggregation(
-            hive_path=hive_path,
+            data_hive_path=hive_path,
             # this is a bit weird
             validation_hive_path=files[0].validation_hive_path(dst_bucket),
             errors_hive_path=files[0].errors_hive_path(dst_bucket),
