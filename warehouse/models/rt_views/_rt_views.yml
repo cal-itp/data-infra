@@ -16,7 +16,13 @@ sources:
       - name: validation_service_alerts
       - name: validation_trip_updates
       - name: validation_vehicle_positions
-
+      - name: validation_code_descriptions
+  - name: gtfs_rt_logs
+    description: Data in the gtfs_rt_logs dataset in BigQuery, from logs sink.
+    database: cal-itp-data-infra
+    schema: gtfs_rt_logs
+    tables:
+      - name: stdout
 
 models:
   - name: gtfs_rt_fact_files
@@ -178,4 +184,47 @@ models:
       - name: occurrences
         description: The number of occurrences for this combination.
         tests:
+          - not_null
+
+  - name: gtfs_rt_fact_extraction_errors
+    description: |
+      Each row is an error that the RT archiver encountered while attempting to
+      fetch an RT feed. Primary key is composite of ITP ID, URL number,
+      tick_timestamp, raw_url, and error. Type labels are added for convenience.
+      Some rows have blank label values because the feed was deleted from our
+      agency list midday and so there is no label present for that feed
+      on that day.
+    columns:
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.95
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.95
+      - name: error
+        description: |
+          Download error encountered.
+        tests:
+          - not_null
+      - name: tick_timestamp
+        description: |
+          Time and date when error message was received; rounded down to
+          :00, :20, :40 timestamp as "tick" identifier for when the archiver
+          fetch occurred.
+        tests:
+          - not_null
+      - name: type
+        description: GTFS realtime type (service_alerts, trip_updates, or vehicle_positions)
+  - name: gtfs_rt_validation_code_descriptions
+    description: |
+      Cal-ITP critical validation codes. Primary key is code.
+    columns:
+      - name: code
+        description: Validation notice code from GTFS RT validator
+        tests:
+          - unique
           - not_null
