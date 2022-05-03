@@ -109,7 +109,7 @@ class RTFile(BaseModel):
             f"{self.itp_id}_{self.url}",
         )
 
-    def hive_path(self, bucket: str):
+    def data_hive_path(self, bucket: str):
         return os.path.join(
             bucket,
             self.file_type,
@@ -587,7 +587,7 @@ def main(
     feed_hours = defaultdict(list)
 
     for file in files:
-        feed_hours[file.hive_path(dst_bucket)].append(file)
+        feed_hours[file.data_hive_path(dst_bucket)].append(file)
 
     typer.secho(
         f"found {len(feed_hours)} feed-hours to process", fg=typer.colors.MAGENTA
@@ -606,7 +606,9 @@ def main(
 
     if limit:
         typer.secho(f"limit of {limit} feeds was set", fg=typer.colors.YELLOW)
-        feed_hours = list(sorted(feed_hours, key=lambda feed: feed.hive_path))[:limit]
+        feed_hours = list(sorted(feed_hours, key=lambda feed: feed.data_hive_path))[
+            :limit
+        ]
 
     pbar = tqdm(total=len(feed_hours)) if progress else None
 
@@ -644,19 +646,19 @@ def main(
                     raise
                 except ScheduleDataNotFound:
                     log(
-                        f"WARNING: no gtfs schedule data found for {hour.hive_path}",
+                        f"WARNING: no gtfs schedule data found for {hour.data_hive_path}",
                         err=True,
                         fg=typer.colors.YELLOW,
                         pbar=pbar,
                     )
                 except Exception as e:
                     log(
-                        f"WARNING: exception {str(e)} bubbled up to top for {hour.hive_path}",
+                        f"WARNING: exception {str(e)} bubbled up to top for {hour.data_hive_path}",
                         err=True,
                         fg=typer.colors.RED,
                         pbar=pbar,
                     )
-                    exceptions.append((e, hour.hive_path, traceback.format_exc()))
+                    exceptions.append((e, hour.data_hive_path, traceback.format_exc()))
 
     if pbar:
         del pbar
