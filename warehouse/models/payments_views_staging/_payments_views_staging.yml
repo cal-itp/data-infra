@@ -282,6 +282,21 @@ sources:
               The ID of the product with the incentive that was applied to micropayments.
 
               Same ID as `product_id`.
+      - name: micropayment_device_transactions
+        description: |
+          Micropayment device transactions can be mapped to a single
+          micropayment. This is common with variable fare and mobility and
+          transport transaction (MTT) environments.
+        columns:
+          - &micropayment_device_transactions_littlepay_transaction_id
+            name: littlepay_transaction_id
+            description: |
+              Transaction identifier assigned by Littlepay.
+
+              For 'tap on, tap off' integrations, merchants will see two transactions for each micropayment.
+          - &micropayment_device_transactions_micropayment_id
+            name: micropayment_id
+            description: The micropayment that the transaction is associated with.
 
 enrichment_field_declarations:
   - &calitp_hash
@@ -420,6 +435,17 @@ models:
       - *micropayment_adjustments_time_period_type
       - *micropayment_adjustments_applied
       - *micropayment_adjustments_incentive_product_id
+      - *calitp_hash
+      - *calitp_file_name
+      - *calitp_export_account
+      - *calitp_export_datetime
+      - *calitp_n_dupes
+      - *calitp_n_dupe_ids
+      - *calitp_dupe_number
+  - name: stg_enriched_micropayment_device_transactions
+    columns:
+      - *micropayment_device_transactions_littlepay_transaction_id
+      - *micropayment_device_transactions_micropayment_id
       - *calitp_hash
       - *calitp_file_name
       - *calitp_export_account
