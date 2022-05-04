@@ -15,7 +15,7 @@ from concurrent.futures import ThreadPoolExecutor
 from enum import Enum
 from functools import lru_cache
 from pathlib import Path
-from typing import List, Optional, Dict, Union
+from typing import List, Optional, Dict, Union, Tuple
 from zipfile import ZipFile
 
 import backoff
@@ -50,9 +50,9 @@ def log(*args, err=False, fg=None, pbar=None, **kwargs):
         typer.secho(*args, err=err, fg=fg, **kwargs)
 
 
-def upload_gzipped_records(
+def upload_if_records(
     fs,
-    gzip_fname,
+    tmp_dir,
     out_path,
     records: Union[List[Dict], List[BaseModel]],
     pbar=None,
@@ -62,13 +62,17 @@ def upload_gzipped_records(
         f"writing {len(records)} lines to {out_path}",
         pbar=pbar,
     )
-    with gzip.open(gzip_fname, "w") as gzipfile:
-        if isinstance(records[0], BaseModel):
-            encoded = (r.json() for r in records)
-        else:
-            encoded = (json.dumps(r) for r in records)
-        gzipfile.write("\n".join(encoded).encode("utf-8"))
-    put_with_retry(fs, gzip_fname, out_path)
+    with tempfile.NamedTemporaryFile(mode="wb", delete=False, dir=tmp_dir) as f:
+        if records:
+            if isinstance(records[0], BaseModel):
+                encoded = (r.json() for r in records)
+            else:
+                encoded = (json.dumps(r) for r in records)
+            gzipfile = gzip.GzipFile(mode="wb", fileobj=f)
+            gzipfile.write("\n".join(encoded).encode("utf-8"))
+            gzipfile.close()
+
+    put_with_retry(fs, f.name, out_path)
 
 
 class ScheduleDataNotFound(Exception):
@@ -106,44 +110,53 @@ class RTFile(BaseModel):
             f"{self.itp_id}_{self.url}",
         )
 
-    def data_hive_path(self, bucket: str):
-        return os.path.join(
-            bucket,
-            self.file_type,
+    @property
+    def hive_partitions(self) -> Tuple[str, str, str, str]:
+        return (
             f"dt={self.tick.to_date_string()}",
             f"itp_id={self.itp_id}",
             f"url_number={self.url}",
             f"hour={self.tick.hour}",
-            self.path.name,
+        )
+
+    def data_hive_path(self, bucket: str):
+        return os.path.join(
+            bucket,
+            self.file_type,
+            *self.hive_partitions,
+            f"{self.path.name}{JSONL_GZIP_EXTENSION}",
         )
 
     def validation_hive_path(self, bucket: str):
         return os.path.join(
             bucket,
             f"{self.file_type}_validations",
-            f"dt={self.tick.to_date_string()}",
-            f"itp_id={self.itp_id}",
-            f"url_number={self.url}",
-            f"hour={self.tick.hour}",
-            self.path.name,
+            *self.hive_partitions,
+            f"{self.path.name}{JSONL_GZIP_EXTENSION}",
         )
 
     def errors_hive_path(self, bucket: str):
         return os.path.join(
             bucket,
             f"{self.file_type}_errors",
-            f"dt={self.tick.to_date_string()}",
-            f"itp_id={self.itp_id}",
-            f"url_number={self.url}",
-            f"hour={self.tick.hour}",
-            self.path.name,
+            *self.hive_partitions,
+            f"{self.path.name}{JSONL_GZIP_EXTENSION}",
+        )
+
+    def validation_errors_hive_path(self, bucket: str):
+        return os.path.join(
+            bucket,
+            f"{self.file_type}_errors",
+            *self.hive_partitions,
+            f"{self.path.name}_validation{JSONL_GZIP_EXTENSION}",
         )
 
 
-class RTAggregation(BaseModel):
+class RTHourlyAggregation(BaseModel):
     data_hive_path: str
     validation_hive_path: str
     errors_hive_path: str
+    validation_errors_hive_path: str
     source_files: List[RTFile]
 
     @property
@@ -239,11 +252,13 @@ def download_gtfs_schedule_zip(
     except FileNotFoundError:
         raise ScheduleDataNotFound(f"no schedule data found for {gtfs_schedule_path}")
 
+    # https://github.com/MobilityData/gtfs-realtime-validator/issues/92
     try:
         os.remove(os.path.join(dst_path, "areas.txt"))
     except FileNotFoundError:
         pass
 
+    # this is validation output from validating schedule data, we should remove if it's there
     try:
         os.remove(os.path.join(dst_path, "validation.json"))
     except FileNotFoundError:
@@ -295,7 +310,7 @@ def validate_and_upload(
     dst_path_gtfs,
     dst_path_rt,
     tmp_dir,
-    hour: RTAggregation,
+    hour: RTHourlyAggregation,
     verbose=False,
     pbar=None,
 ):
@@ -375,52 +390,40 @@ def validate_and_upload(
                 }
             )
 
-    if records_to_upload:
-        upload_gzipped_records(
-            fs,
-            gzip_fname=str(
-                tmp_dir + f"/validation_{hour.suffix}" + JSONL_GZIP_EXTENSION
-            ),
-            out_path=f"{hour.validation_hive_path}{JSONL_GZIP_EXTENSION}",
-            records=records_to_upload,
-            pbar=pbar,
-            verbose=verbose,
-        )
-    else:
-        log(
-            f"WARNING: no records at all for {hour.validation_hive_path}",
-            fg=typer.colors.YELLOW,
-            pbar=pbar,
-        )
+    upload_if_records(
+        fs,
+        tmp_dir,
+        out_path=hour.validation_hive_path,
+        records=records_to_upload,
+        pbar=pbar,
+        verbose=verbose,
+    )
 
-    if errors:
-        upload_gzipped_records(
-            fs,
-            gzip_fname=str(tmp_dir + f"/errors_{hour.suffix}" + JSONL_GZIP_EXTENSION),
-            out_path=f"{hour.errors_hive_path}_validation{JSONL_GZIP_EXTENSION}",
-            records=errors,
-            pbar=pbar,
-            verbose=verbose,
-        )
-    else:
-        log(
-            f"WARNING: no records at all for {hour.errors_hive_path}_validation",
-            fg=typer.colors.YELLOW,
-            pbar=pbar,
-        )
+    upload_if_records(
+        fs,
+        tmp_dir,
+        out_path=hour.validation_errors_hive_path,
+        records=errors,
+        pbar=pbar,
+        verbose=verbose,
+    )
 
 
 def parse_and_upload(
     fs,
     dst_path_rt,
     tmp_dir,
-    hour: RTAggregation,
+    hour: RTHourlyAggregation,
     verbose=False,
     pbar=None,
 ):
     written = 0
     errors = []
     gzip_fname = str(tmp_dir + f"/data_{hour.suffix}" + JSONL_GZIP_EXTENSION)
+
+    # ParseFromString() seems to not release memory well, so manually handle
+    # writing to the gzip and cleaning up after ourselves
+
     with gzip.open(gzip_fname, "w") as gzipfile:
         for rt_file in hour.source_files:
             feed = gtfs_realtime_pb2.FeedMessage()
@@ -480,27 +483,20 @@ def parse_and_upload(
             pbar=pbar,
         )
 
-    if errors:
-        upload_gzipped_records(
-            fs,
-            gzip_fname=str(tmp_dir + f"/errors_{hour.suffix}" + JSONL_GZIP_EXTENSION),
-            out_path=f"{hour.errors_hive_path}{JSONL_GZIP_EXTENSION}",
-            records=errors,
-            pbar=pbar,
-            verbose=verbose,
-        )
-    else:
-        log(
-            f"WARNING: no records at all for {hour.errors_hive_path}",
-            fg=typer.colors.YELLOW,
-            pbar=pbar,
-        )
+    upload_if_records(
+        fs,
+        tmp_dir,
+        out_path=f"{hour.errors_hive_path}{JSONL_GZIP_EXTENSION}",
+        records=errors,
+        pbar=pbar,
+        verbose=verbose,
+    )
 
 
 # Originally this whole function was retried, but tmpdir flakiness will throw
 # exceptions in backoff's context, which ruins things
-def parse_and_aggregate_hour(
-    hour: RTAggregation,
+def parse_and_validate(
+    hour: RTHourlyAggregation,
     jar_path: Path,
     tmp_dir: str,
     verbose: bool = False,
@@ -573,18 +569,21 @@ def main(
     feed_hours = defaultdict(list)
 
     for file in files:
-        feed_hours[file.data_hive_path(dst_bucket)].append(file)
+        feed_hours[file.hive_partitions].append(file)
 
     typer.secho(
         f"found {len(feed_hours)} feed-hours to process", fg=typer.colors.MAGENTA
     )
 
     feed_hours = [
-        RTAggregation(
-            data_hive_path=hive_path,
+        RTHourlyAggregation(
+            data_hive_path=files[0].data_hive_path(dst_bucket),
             # this is a bit weird
             validation_hive_path=files[0].validation_hive_path(dst_bucket),
             errors_hive_path=files[0].errors_hive_path(dst_bucket),
+            validation_errors_hive_path=files[0].validation_errors_hive_path(
+                dst_bucket
+            ),
             source_files=files,
         )
         for hive_path, files in feed_hours.items()
@@ -610,7 +609,7 @@ def main(
         with ThreadPoolExecutor(max_workers=threads) as pool:
             futures = {
                 pool.submit(
-                    parse_and_aggregate_hour,
+                    parse_and_validate,
                     hour=hour,
                     jar_path=jar_path,
                     tmp_dir=tmp_dir,
