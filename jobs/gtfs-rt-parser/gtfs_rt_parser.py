@@ -99,7 +99,7 @@ class RTFile(BaseModel):
 
     @property
     def timestamped_filename(self):
-        return str(self.path.name) + self.tick.strftime("__%Y-%m-%dT%H:%M:%SZ.pb")
+        return str(self.path.name) + self.tick.strftime("__%Y-%m-%dT%H:%M:%SZ")
 
     @property
     def schedule_path(self):
@@ -176,17 +176,13 @@ class RTFileProcessingOutcome(BaseModel):
 
     @validator("step")
     def step_must_be_parse_or_validate(cls, v):
-        if v not in ("parse", "validate"):
-            raise ValueError("step must be parse or validate")
+        assert v in ("parse", "validate"), "step must be parse or validate"
         return v
 
     # this is annoying, waiting on https://github.com/samuelcolvin/pydantic/pull/2625
     @validator("exception")
     def exception_existence_matches_success(cls, v, values):
-        if not (bool(v) ^ values["success"]):
-            raise ValueError(
-                "success must be equivalent to the existence of an exception"
-            )
+        assert values["success"] == (v is None), "if success, exception must be None"
         return v
 
 
@@ -370,16 +366,14 @@ def validate_and_upload(
     records_to_upload = []
     outcomes = []
     for rt_file in hour.source_files:
+        results_path = os.path.join(
+            dst_path_rt, rt_file.timestamped_filename + ".results.json"
+        )
         try:
-            with open(
-                os.path.join(
-                    dst_path_rt,
-                    rt_file.timestamped_filename + ".results.json",
-                )
-            ) as f:
+            with open(results_path) as f:
                 records = json.load(f)
         except FileNotFoundError as e:
-            msg = f"WARNING: no validation output found in {str(rt_file.timestamped_filename)}"
+            msg = f"WARNING: no validation output file found in {results_path}"
             if verbose:
                 log(
                     msg,
