@@ -1,5 +1,5 @@
 operator: operators.ExternalTable
-bucket: gs://rt-parsed
+bucket: "gs://{{ prefix_bucket('rt-parsed') }}"
 prefix_bucket: true
 source_objects:
   - "vehicle_positions/*.jsonl.gz"

@@ -1,7 +1,6 @@
 """
 Abstracts the various concerns of external table creation as much as possible
 """
-import re
 
 from calitp.config import (
     CALITP_BQ_LOCATION,
@@ -9,7 +8,6 @@ from calitp.config import (
     get_project_id,
     format_table_name,
 )
-from calitp.config import is_development
 
 from calitp.sql import get_engine
 from google.cloud import bigquery
@@ -79,11 +77,12 @@ def _bq_client_create_external_table(
 
 
 class ExternalTable(BaseOperator):
+    template_fields = ("bucket",)
+
     def __init__(
         self,
         *args,
         bucket=None,
-        prefix_bucket=False,
         destination_project_dataset_table=None,
         skip_leading_rows=1,
         schema_fields=None,
@@ -95,10 +94,6 @@ class ExternalTable(BaseOperator):
         **kwargs,
     ):
         self.bucket = bucket
-        # This only exists because the prefix_bucket() template isn't working in the yml file for some reason
-        if self.bucket and prefix_bucket and is_development():
-            self.bucket = re.sub(r"gs://([\w-]+)", r"gs://test-\1", self.bucket)
-
         self.destination_project_dataset_table = format_table_name(
             destination_project_dataset_table
         )

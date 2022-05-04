@@ -1,6 +1,5 @@
 operator: operators.ExternalTable
-bucket: gs://rt-parsed
-prefix_bucket: true
+bucket: "gs://{{ prefix_bucket('rt-parsed') }}"
 source_objects:
   - "service_alerts/*.jsonl.gz"
 destination_project_dataset_table: "gtfs_rt.external_service_alerts"
