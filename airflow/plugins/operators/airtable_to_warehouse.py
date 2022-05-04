@@ -1,11 +1,13 @@
-import pandas as pd
-import re
 import os
+import pandas as pd
+import pendulum
 
 from pyairtable import Table
 from pydantic import BaseModel
+from slugify import slugify
 from typing import Optional
-from calitp import save_to_gcfs, to_snakecase, write_table
+from calitp import to_snakecase
+from calitp.storage import get_fs
 
 from airflow.models import BaseOperator
 
@@ -15,10 +17,12 @@ AIRTABLE_API_KEY = os.environ["CALITP_AIRTABLE_API_KEY"]
 class AirtableExtract(BaseModel):
     api_key: str
     air_base_id: str
+    air_base_name: str
     air_table_name: str
     id_name = "__id"
     rename_fields = {}
-    column_prefix: Optional[str] = None
+    column_prefix: Optional[str]
+    extract_time: Optional[pendulum.DateTime]
 
     def airtable_to_df(self):
         """Download an Airtable table as a DataFrame.
@@ -33,8 +37,11 @@ class AirtableExtract(BaseModel):
             3. apply column prefix (to columns not renamed by 1 or 2)
         """
 
-        print(f"Downloading airtable data for {self.air_base_id}.{self.air_table_name}")
+        print(
+            f"Downloading airtable data for {self.air_base_name}.{self.air_table_name}"
+        )
         all_rows = Table(self.api_key, self.air_base_id, self.air_table_name).all()
+        self.extract_time = pendulum.now("utc")
         raw_df = pd.DataFrame(
             [{self.id_name: row["id"], **row["fields"]} for row in all_rows]
         )
@@ -53,24 +60,37 @@ class AirtableExtract(BaseModel):
             )
         return final_df
 
-    def make_hive_path(self, bucket):
-        pass
+    def make_hive_path(self, bucket: str):
+        try:
+            return os.path.join(
+                bucket,
+                f"{self.air_base_name}__{slugify(self.air_table_name, separator='_')}",
+                f"dt={self.extract_time.to_date_string()}",
+                f"time={self.extract_time.to_time_string()}",
+                f"{slugify(self.air_table_name, separator='_')}.csv",
+            )
+        # if the airtable_to_df method hasn't been called, extract time is none
+        except AttributeError:
+            print(
+                "You must extract data from Airtable before a hive path can be generated."
+            )
 
 
 class AirtableToWarehouseOperator(BaseOperator):
+
+    template_fields = ("bucket",)
+
     def __init__(
         self,
-        api_key,
         air_base_id,
+        air_base_name,
         air_table_name,
-        id_name,
-        rename_fields,
-        column_prefix,
-        gcs_path,
+        bucket,
+        api_key=AIRTABLE_API_KEY,
         **kwargs,
     ):
-        """An operator that downloads data from an Airtable base and loads it into
-            and saves it as a CSV file hive-partitioned by date in Google Cloud
+        """An operator that downloads data from an Airtable base
+            and saves it as a CSV file hive-partitioned by date and time in Google Cloud
             Storage (GCS).
 
         Args:
@@ -92,31 +112,22 @@ class AirtableToWarehouseOperator(BaseOperator):
                 This can be someone's personal API key. If not provided, the environment
                 variable of `CALITP_AIRTABLE_API_KEY` is used.
         """
-        self.air_base_id = air_base_id
-        self.air_table_name = air_table_name
-        self.id_name = id_name
-        self.rename_fields = rename_fields
-        self.column_prefix = column_prefix
-        self.api_key = api_key
-        self.gcs_path = gcs_path
 
         self.extract = AirtableExtract(
-            air_base_id, air_table_name, id_name, rename_fields, column_prefix, api_key
+            api_key=api_key,
+            air_base_id=air_base_id,
+            air_base_name=air_base_name,
+            air_table_name=air_table_name,
+            **kwargs,
         )
+
+        self.bucket = bucket
 
         super().__init__(**kwargs)
 
-    def execute(self, context):
+    def execute(self, **kwargs):
         df = self.extract.airtable_to_df()
-
-        if self.table_name:
-            print(f"Writing table with shape: {df.shape}")
-            write_table(df, self.table_name)
-
-        if self.gcs_path:
-            clean_gcs_path = re.sub(r"\/+$", "", self.gcs_path)
-            gcs_file = (
-                f"{clean_gcs_path}/{context['execution_date']}/{self.table_name}.csv"
-            )
-            print(f"Uploading to gcs at {gcs_file}")
-            save_to_gcfs(df.to_csv(index=False).encode(), f"{gcs_file}", use_pipe=True)
+        hive_path = self.extract.make_hive_path(bucket=self.bucket)
+        print(f"Uploading to GCS at {hive_path}")
+        fs = get_fs()
+        fs.pipe(str(hive_path), df.to_csv(index=False).encode())
