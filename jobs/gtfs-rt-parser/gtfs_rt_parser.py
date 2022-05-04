@@ -27,7 +27,7 @@ from calitp.storage import get_fs
 from google.protobuf import json_format
 from google.protobuf.message import DecodeError
 from google.transit import gtfs_realtime_pb2
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 from tqdm import tqdm
 
 # Note that all RT extraction is stored in the prod bucket, since it is very large,
@@ -111,12 +111,13 @@ class RTFile(BaseModel):
         )
 
     @property
-    def hive_partitions(self) -> Tuple[str, str, str, str]:
+    def hive_partitions(self) -> Tuple[str, str, str, str, str]:
         return (
             f"dt={self.tick.to_date_string()}",
             f"itp_id={self.itp_id}",
             f"url_number={self.url}",
             f"hour={self.tick.hour}",
+            f"{self.path.name}{JSONL_GZIP_EXTENSION}",
         )
 
     def data_hive_path(self, bucket: str):
@@ -124,7 +125,6 @@ class RTFile(BaseModel):
             bucket,
             self.file_type,
             *self.hive_partitions,
-            f"{self.path.name}{JSONL_GZIP_EXTENSION}",
         )
 
     def validation_hive_path(self, bucket: str):
@@ -132,31 +132,28 @@ class RTFile(BaseModel):
             bucket,
             f"{self.file_type}_validations",
             *self.hive_partitions,
-            f"{self.path.name}{JSONL_GZIP_EXTENSION}",
         )
 
-    def errors_hive_path(self, bucket: str):
+    def outcomes_hive_path(self, bucket: str):
         return os.path.join(
             bucket,
-            f"{self.file_type}_errors",
+            f"{self.file_type}_outcomes",
             *self.hive_partitions,
-            f"{self.path.name}{JSONL_GZIP_EXTENSION}",
         )
 
-    def validation_errors_hive_path(self, bucket: str):
+    def validation_outcomes_hive_path(self, bucket: str):
         return os.path.join(
             bucket,
-            f"{self.file_type}_errors",
+            f"{self.file_type}_validation_outcomes",
             *self.hive_partitions,
-            f"{self.path.name}_validation{JSONL_GZIP_EXTENSION}",
         )
 
 
 class RTHourlyAggregation(BaseModel):
     data_hive_path: str
     validation_hive_path: str
-    errors_hive_path: str
-    validation_errors_hive_path: str
+    outcomes_hive_path: str
+    validation_outcomes_hive_path: str
     source_files: List[RTFile]
 
     @property
@@ -164,12 +161,33 @@ class RTHourlyAggregation(BaseModel):
         return hashlib.md5(self.data_hive_path.encode("utf-8")).hexdigest()
 
 
-class RTFileProcessingError(BaseModel):
+class RTFileProcessingOutcome(BaseModel):
     step: str
-    exception: str
+    success: bool
+    file: RTFile
+    n_output_records: Optional[int]
+    exception: Optional[Exception]
     hive_path: Optional[str]
-    file: Optional[RTFile]
     body: Optional[str]
+
+    class Config:
+        arbitrary_types_allowed = True
+        json_encoders = {Exception: lambda e: str(e)}
+
+    @validator("step")
+    def step_must_be_parse_or_validate(cls, v):
+        if v not in ("parse", "validate"):
+            raise ValueError("step must be parse or validate")
+        return v
+
+    # this is annoying, waiting on https://github.com/samuelcolvin/pydantic/pull/2625
+    @validator("exception")
+    def exception_existence_matches_success(cls, v, values):
+        if not (bool(v) ^ values["success"]):
+            raise ValueError(
+                "success must be equivalent to the existence of an exception"
+            )
+        return v
 
 
 def fatal_code(e):
@@ -313,9 +331,7 @@ def validate_and_upload(
     hour: RTHourlyAggregation,
     verbose=False,
     pbar=None,
-):
-    records_to_upload = []
-    errors = []
+) -> List[RTFileProcessingOutcome]:
     try:
         gtfs_zip, included_files = download_gtfs_schedule_zip(
             fs,
@@ -323,27 +339,22 @@ def validate_and_upload(
             dst_path_gtfs,
             pbar=pbar,
         )
-
-        execute_rt_validator(
-            gtfs_zip,
-            dst_path_rt,
-            jar_path=jar_path,
-            verbose=verbose,
-            pbar=pbar,
-        )
-    except ScheduleDataNotFound as e:
+    except ScheduleDataNotFound:
         if verbose:
             log(
                 f"no schedule data found for {hour.source_files[0].schedule_path}",
                 fg=typer.colors.YELLOW,
                 pbar=pbar,
             )
-        errors.append(
-            RTFileProcessingError(
-                step="download_schedule",
-                exception=str(e),
-                hive_path=hour.data_hive_path,
-            )
+        raise
+
+    try:
+        execute_rt_validator(
+            gtfs_zip,
+            dst_path_rt,
+            jar_path=jar_path,
+            verbose=verbose,
+            pbar=pbar,
         )
     except subprocess.CalledProcessError as e:
         msg = f"WARNING: execute_rt_validator failed for {dst_path_rt} and {gtfs_zip}"
@@ -354,15 +365,10 @@ def validate_and_upload(
             fg=typer.colors.RED,
             pbar=pbar,
         )
-        errors.append(
-            RTFileProcessingError(
-                step="validate",
-                exception=str(e),
-                hive_path=hour.data_hive_path,
-                body=e.stderr,
-            )
-        )
+        raise
 
+    records_to_upload = []
+    outcomes = []
     for rt_file in hour.source_files:
         try:
             with open(
@@ -372,23 +378,46 @@ def validate_and_upload(
                 )
             ) as f:
                 records = json.load(f)
-        except FileNotFoundError:
+        except FileNotFoundError as e:
+            msg = f"WARNING: no validation output found in {str(rt_file.timestamped_filename)}"
             if verbose:
                 log(
-                    f"WARNING: no validation output found in {str(rt_file.timestamped_filename)}",
+                    msg,
                     fg=typer.colors.YELLOW,
                     pbar=pbar,
                 )
+            outcomes.append(
+                RTFileProcessingOutcome(
+                    step="validate",
+                    success=False,
+                    exception=e,
+                    file=rt_file,
+                    hive_path=hour.validation_hive_path,
+                    body=msg,
+                )
+            )
             continue
 
-        for record in records:
-            records_to_upload.append(
+        records_to_upload.extend(
+            [
                 {
                     # back and forth so we can use pydantic serialization
                     "metadata": json.loads(rt_file.json()),
                     **record,
                 }
+                for record in records
+            ]
+        )
+
+        outcomes.append(
+            RTFileProcessingOutcome(
+                step="validate",
+                success=True,
+                n_output_records=len(records_to_upload),
+                file=rt_file,
+                hive_path=hour.validation_hive_path,
             )
+        )
 
     upload_if_records(
         fs,
@@ -398,15 +427,7 @@ def validate_and_upload(
         pbar=pbar,
         verbose=verbose,
     )
-
-    upload_if_records(
-        fs,
-        tmp_dir,
-        out_path=hour.validation_errors_hive_path,
-        records=errors,
-        pbar=pbar,
-        verbose=verbose,
-    )
+    return outcomes
 
 
 def parse_and_upload(
@@ -418,7 +439,7 @@ def parse_and_upload(
     pbar=None,
 ):
     written = 0
-    errors = []
+    outcomes = []
     gzip_fname = str(tmp_dir + f"/data_{hour.suffix}" + JSONL_GZIP_EXTENSION)
 
     # ParseFromString() seems to not release memory well, so manually handle
@@ -435,22 +456,38 @@ def parse_and_upload(
                     feed.ParseFromString(f.read())
                 parsed = json_format.MessageToDict(feed)
             except DecodeError as e:
-                errors.append(
-                    RTFileProcessingError(
+                if verbose:
+                    log(
+                        f"WARNING: DecodeError for {str(rt_file.path)}",
+                        fg=typer.colors.YELLOW,
+                        pbar=pbar,
+                    )
+                outcomes.append(
+                    RTFileProcessingOutcome(
                         step="parse",
-                        exception=str(e),
+                        success=False,
+                        exception=e,
                         file=rt_file,
                     )
                 )
                 continue
 
             if not parsed or "entity" not in parsed:
+                msg = f"WARNING: no records found in {str(rt_file.path)}"
                 if verbose:
                     log(
-                        f"WARNING: no records found in {str(rt_file.path)}",
+                        msg,
                         fg=typer.colors.YELLOW,
                         pbar=pbar,
                     )
+                outcomes.append(
+                    RTFileProcessingOutcome(
+                        step="parse",
+                        success=False,
+                        exception=ValueError(msg),
+                        file=rt_file,
+                    )
+                )
                 continue
 
             for record in parsed["entity"]:
@@ -468,14 +505,23 @@ def parse_and_upload(
                     ).encode("utf-8")
                 )
                 written += 1
+            outcomes.append(
+                RTFileProcessingOutcome(
+                    step="parse",
+                    success=True,
+                    file=rt_file,
+                    n_output_records=len(parsed["entity"]),
+                    hive_path=hour.data_hive_path,
+                )
+            )
             del parsed
 
     if written:
         log(
-            f"writing {written} lines to {hour.data_hive_path}{JSONL_GZIP_EXTENSION}",
+            f"writing {written} lines to {hour.data_hive_path}",
             pbar=pbar,
         )
-        put_with_retry(fs, gzip_fname, f"{hour.data_hive_path}{JSONL_GZIP_EXTENSION}")
+        put_with_retry(fs, gzip_fname, f"{hour.data_hive_path}")
     else:
         log(
             f"WARNING: no records at all for {hour.data_hive_path}",
@@ -483,14 +529,7 @@ def parse_and_upload(
             pbar=pbar,
         )
 
-    upload_if_records(
-        fs,
-        tmp_dir,
-        out_path=f"{hour.errors_hive_path}{JSONL_GZIP_EXTENSION}",
-        records=errors,
-        pbar=pbar,
-        verbose=verbose,
-    )
+    return outcomes
 
 
 # Originally this whole function was retried, but tmpdir flakiness will throw
@@ -522,25 +561,55 @@ def parse_and_validate(
     )
 
     if validate:
-        validate_and_upload(
+        try:
+            outcomes = validate_and_upload(
+                fs=fs,
+                jar_path=jar_path,
+                dst_path_gtfs=dst_path_gtfs,
+                dst_path_rt=dst_path_rt,
+                tmp_dir=tmp_dir,
+                hour=hour,
+                verbose=verbose,
+                pbar=pbar,
+            )
+        except (ScheduleDataNotFound, subprocess.CalledProcessError) as e:
+            outcomes = [
+                RTFileProcessingOutcome(
+                    step="validate",
+                    success=False,
+                    file=file,
+                    exception=e,
+                    hive_path=hour.data_hive_path,
+                )
+                for file in hour.source_files
+            ]
+        assert len(outcomes) == len(hour.source_files)
+        upload_if_records(
+            fs,
+            tmp_dir,
+            out_path=hour.validation_outcomes_hive_path,
+            records=outcomes,
+            pbar=pbar,
+            verbose=verbose,
+        )
+
+    if parse:
+        outcomes = parse_and_upload(
             fs=fs,
-            jar_path=jar_path,
-            dst_path_gtfs=dst_path_gtfs,
             dst_path_rt=dst_path_rt,
             tmp_dir=tmp_dir,
             hour=hour,
             verbose=verbose,
             pbar=pbar,
         )
-
-    if parse:
-        parse_and_upload(
-            fs=fs,
-            dst_path_rt=dst_path_rt,
-            tmp_dir=tmp_dir,
-            hour=hour,
-            verbose=verbose,
+        assert len(outcomes) == len(hour.source_files)
+        upload_if_records(
+            fs,
+            tmp_dir,
+            out_path=hour.outcomes_hive_path,
+            records=outcomes,
             pbar=pbar,
+            verbose=verbose,
         )
 
 
@@ -580,8 +649,8 @@ def main(
             data_hive_path=files[0].data_hive_path(dst_bucket),
             # this is a bit weird
             validation_hive_path=files[0].validation_hive_path(dst_bucket),
-            errors_hive_path=files[0].errors_hive_path(dst_bucket),
-            validation_errors_hive_path=files[0].validation_errors_hive_path(
+            outcomes_hive_path=files[0].outcomes_hive_path(dst_bucket),
+            validation_outcomes_hive_path=files[0].validation_outcomes_hive_path(
                 dst_bucket
             ),
             source_files=files,
@@ -629,13 +698,6 @@ def main(
                     future.result()
                 except KeyboardInterrupt:
                     raise
-                except ScheduleDataNotFound:
-                    log(
-                        f"WARNING: no gtfs schedule data found for {hour.data_hive_path}",
-                        err=True,
-                        fg=typer.colors.YELLOW,
-                        pbar=pbar,
-                    )
                 except Exception as e:
                     log(
                         f"WARNING: exception {type(e)} {str(e)} bubbled up to top for {hour.data_hive_path}",
