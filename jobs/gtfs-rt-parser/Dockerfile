@@ -11,9 +11,8 @@ RUN apt-get update -y \
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
 ENV PATH="${PATH}:/root/.poetry/bin"
 
-RUN wget \
-    https://s3.amazonaws.com/gtfs-rt-validator/travis_builds/gtfs-realtime-validator-lib/1.0.0-SNAPSHOT/gtfs-realtime-validator-lib-1.0.0-SNAPSHOT.jar \
-    -O ${GTFS_RT_VALIDATOR_JAR}
+# formerly the "1.0.0-SNAPSHOT" from S3
+COPY ./rt-validator.jar ${GTFS_RT_VALIDATOR_JAR}
 
 WORKDIR /app
 

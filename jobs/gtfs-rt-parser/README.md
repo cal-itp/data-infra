@@ -17,3 +17,9 @@ combine them.
 This image can be built and tested via local Airflow.
 
 In addition, there is at least one Python test that can be executed via `poetry run pytest`.
+
+## The GTFS-RT validator
+The [validator jar](./rt-validator.jar) is an old snapshot of the GTFS Realtime validator that now lives under
+[MobilityData](https://github.com/MobilityData/gtfs-realtime-validator). We've temporarily vendored an old version
+(specifically "1.0.0-SNAPSHOT") to help make our builds less dependent on external services. We should begin
+using the officially-published [packages](https://github.com/orgs/MobilityData/packages?repo_name=gtfs-realtime-validator) at some point in the future.
