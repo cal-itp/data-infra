@@ -328,40 +328,20 @@ def validate_and_upload(
     verbose=False,
     pbar=None,
 ) -> List[RTFileProcessingOutcome]:
-    try:
-        gtfs_zip, included_files = download_gtfs_schedule_zip(
-            fs,
-            hour.source_files[0].schedule_path,
-            dst_path_gtfs,
-            pbar=pbar,
-        )
-    except ScheduleDataNotFound:
-        if verbose:
-            log(
-                f"no schedule data found for {hour.source_files[0].schedule_path}",
-                fg=typer.colors.YELLOW,
-                pbar=pbar,
-            )
-        raise
+    gtfs_zip, included_files = download_gtfs_schedule_zip(
+        fs,
+        hour.source_files[0].schedule_path,
+        dst_path_gtfs,
+        pbar=pbar,
+    )
 
-    try:
-        execute_rt_validator(
-            gtfs_zip,
-            dst_path_rt,
-            jar_path=jar_path,
-            verbose=verbose,
-            pbar=pbar,
-        )
-    except subprocess.CalledProcessError as e:
-        msg = f"WARNING: execute_rt_validator failed for {dst_path_rt} and {gtfs_zip}"
-        if verbose:
-            msg += f"\nincluded files: {included_files}\n{e.stderr}"
-        log(
-            msg,
-            fg=typer.colors.RED,
-            pbar=pbar,
-        )
-        raise
+    execute_rt_validator(
+        gtfs_zip,
+        dst_path_rt,
+        jar_path=jar_path,
+        verbose=verbose,
+        pbar=pbar,
+    )
 
     records_to_upload = []
     outcomes = []
@@ -567,6 +547,13 @@ def parse_and_validate(
                 pbar=pbar,
             )
         except (ScheduleDataNotFound, subprocess.CalledProcessError) as e:
+            if verbose:
+                log(
+                    f"{str(e)} thrown for {hour.source_files[0].schedule_path}",
+                    fg=typer.colors.RED,
+                    pbar=pbar,
+                )
+
             outcomes = [
                 RTFileProcessingOutcome(
                     step="validate",
