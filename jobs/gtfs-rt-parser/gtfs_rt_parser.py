@@ -278,6 +278,9 @@ def download_gtfs_schedule_zip(
     except FileNotFoundError:
         pass
 
+    # TODO: sometimes, feeds can live in a subdirectory within the zipfile
+    #       see https://github.com/cal-itp/data-infra/issues/1185 as an
+    #       example; ignoring for now
     written = []
     with ZipFile(zipname, "w") as zf:
         for file in os.listdir(dst_path):
