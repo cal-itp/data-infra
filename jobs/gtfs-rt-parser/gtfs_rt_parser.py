@@ -437,7 +437,7 @@ def parse_and_upload(
     hour: RTHourlyAggregation,
     verbose=False,
     pbar=None,
-):
+) -> List[RTFileProcessingOutcome]:
     written = 0
     outcomes = []
     gzip_fname = str(tmp_dir + f"/data_{hour.suffix}" + JSONL_GZIP_EXTENSION)
