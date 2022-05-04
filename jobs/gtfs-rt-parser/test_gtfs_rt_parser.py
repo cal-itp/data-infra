@@ -13,6 +13,6 @@ def test_get_google_cloud_filename() -> None:
             itp_id=1,
             url=2,
             tick=pendulum.parse("2022-04-05T22:00:00"),
-        ).hive_path(bucket="gs://some-random-bucket")
+        ).data_hive_path(bucket="gs://some-random-bucket")
         == "gs://some-random-bucket/vehicle_positions/dt=2022-04-05/itp_id=1/url_number=2/hour=22/minute=0/second=0/my_file"
     )

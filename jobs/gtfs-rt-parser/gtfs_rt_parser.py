@@ -1,36 +1,82 @@
 """
 Parses binary RT feeds and writes them back to GCS as gzipped newline-delimited JSON
 """
+import concurrent.futures
+import copy
 import gzip
+import hashlib
 import json
 import os
+import subprocess
 import tempfile
 import traceback
+from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
-from datetime import timedelta, date
 from enum import Enum
+from functools import lru_cache
 from pathlib import Path
-from typing import Optional, List
+from typing import List, Optional, Dict, Union, Tuple
+from zipfile import ZipFile
 
 import backoff
 import pendulum
-import structlog
 import typer
-from aiohttp.client_exceptions import ClientResponseError
+from aiohttp.client_exceptions import ClientResponseError, ClientOSError
 from calitp.config import get_bucket
 from calitp.storage import get_fs
 from google.protobuf import json_format
 from google.protobuf.message import DecodeError
 from google.transit import gtfs_realtime_pb2
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 from tqdm import tqdm
 
 # Note that all RT extraction is stored in the prod bucket, since it is very large,
 # but we can still output processed results to the staging bucket
 
-EXTENSION = ".jsonl.gz"
+JSONL_GZIP_EXTENSION = ".jsonl.gz"
 
-yesterday = (date.today() - timedelta(days=1)).isoformat()
+RT_VALIDATOR_JAR_LOCATION_ENV_KEY = "GTFS_RT_VALIDATOR_JAR"
+JAR_DEFAULT = typer.Option(
+    os.environ.get(RT_VALIDATOR_JAR_LOCATION_ENV_KEY),
+    help="Path to the GTFS RT Validator JAR",
+)
+
+
+def log(*args, err=False, fg=None, pbar=None, **kwargs):
+    # capture fg so we don't pass it to pbar
+    if pbar:
+        pbar.write(*args, **kwargs)
+    else:
+        typer.secho(*args, err=err, fg=fg, **kwargs)
+
+
+def upload_if_records(
+    fs,
+    tmp_dir,
+    out_path,
+    records: Union[List[Dict], List[BaseModel]],
+    pbar=None,
+    verbose=False,
+):
+    log(
+        f"writing {len(records)} lines to {out_path}",
+        pbar=pbar,
+    )
+    with tempfile.NamedTemporaryFile(mode="wb", delete=False, dir=tmp_dir) as f:
+        if records:
+            if isinstance(records[0], BaseModel):
+                encoded = (r.json() for r in records)
+            else:
+                encoded = (json.dumps(r) for r in records)
+            gzipfile = gzip.GzipFile(mode="wb", fileobj=f)
+            gzipfile.write("\n".join(encoded).encode("utf-8"))
+            gzipfile.close()
+
+    put_with_retry(fs, f.name, out_path)
+
+
+class ScheduleDataNotFound(Exception):
+    pass
 
 
 class RTFileType(str, Enum):
@@ -46,46 +92,122 @@ class RTFile(BaseModel):
     url: int
     tick: pendulum.DateTime
 
-    def hive_path(self, bucket: str):
+    class Config:
+        json_encoders = {
+            Path: lambda p: str(p),
+        }
+
+    @property
+    def timestamped_filename(self):
+        return str(self.path.name) + self.tick.strftime("__%Y-%m-%dT%H:%M:%SZ")
+
+    @property
+    def schedule_path(self):
         return os.path.join(
-            bucket,
-            self.file_type,
+            get_bucket(),
+            "schedule",
+            str(self.tick.replace(hour=0, minute=0, second=0)),
+            f"{self.itp_id}_{self.url}",
+        )
+
+    @property
+    def hive_partitions(self) -> Tuple[str, str, str, str, str]:
+        return (
             f"dt={self.tick.to_date_string()}",
             f"itp_id={self.itp_id}",
             f"url_number={self.url}",
             f"hour={self.tick.hour}",
-            f"minute={self.tick.minute}",
-            f"second={self.tick.second}",
-            self.path.name,
+            f"{self.path.name}{JSONL_GZIP_EXTENSION}",
+        )
+
+    def data_hive_path(self, bucket: str):
+        return os.path.join(
+            bucket,
+            self.file_type,
+            *self.hive_partitions,
+        )
+
+    def validation_hive_path(self, bucket: str):
+        return os.path.join(
+            bucket,
+            f"{self.file_type}_validations",
+            *self.hive_partitions,
+        )
+
+    def outcomes_hive_path(self, bucket: str):
+        return os.path.join(
+            bucket,
+            f"{self.file_type}_outcomes",
+            *self.hive_partitions,
+        )
+
+    def validation_outcomes_hive_path(self, bucket: str):
+        return os.path.join(
+            bucket,
+            f"{self.file_type}_validation_outcomes",
+            *self.hive_partitions,
         )
 
 
-# Try twice in the event we get a ClientResponseError; doesn't have much of a delay (like 0.01s)
-@backoff.on_exception(backoff.expo, exception=ClientResponseError, max_tries=3)
+class RTHourlyAggregation(BaseModel):
+    data_hive_path: str
+    validation_hive_path: str
+    outcomes_hive_path: str
+    validation_outcomes_hive_path: str
+    source_files: List[RTFile]
+
+    @property
+    def suffix(self) -> str:
+        return hashlib.md5(self.data_hive_path.encode("utf-8")).hexdigest()
+
+
+class RTFileProcessingOutcome(BaseModel):
+    step: str
+    success: bool
+    file: RTFile
+    n_output_records: Optional[int]
+    exception: Optional[Exception]
+    hive_path: Optional[str]
+    body: Optional[str]
+
+    class Config:
+        arbitrary_types_allowed = True
+        json_encoders = {Exception: lambda e: str(e)}
+
+    @validator("step")
+    def step_must_be_parse_or_validate(cls, v):
+        assert v in ("parse", "validate"), "step must be parse or validate"
+        return v
+
+    # this is annoying, waiting on https://github.com/samuelcolvin/pydantic/pull/2625
+    @validator("exception")
+    def exception_existence_matches_success(cls, v, values):
+        assert values["success"] == (v is None), "if success, exception must be None"
+        return v
+
+
+def fatal_code(e):
+    return isinstance(e, ClientResponseError) and e.status == 404
+
+
+@backoff.on_exception(
+    backoff.expo,
+    exception=(ClientOSError, ClientResponseError),
+    max_tries=3,
+    giveup=fatal_code,
+)
 def get_with_retry(fs, *args, **kwargs):
     return fs.get(*args, **kwargs)
 
 
-@backoff.on_exception(backoff.expo, exception=ClientResponseError, max_tries=3)
+@backoff.on_exception(
+    backoff.expo, exception=(ClientOSError, ClientResponseError), max_tries=3
+)
 def put_with_retry(fs, *args, **kwargs):
     return fs.put(*args, **kwargs)
 
 
-def parse_pb(path, open_func=open) -> dict:
-    """
-    Convert pb file to Python dictionary
-    """
-    feed = gtfs_realtime_pb2.FeedMessage()
-    try:
-        with open_func(path, "rb") as f:
-            feed.ParseFromString(f.read())
-        d = json_format.MessageToDict(feed)
-        return d
-    except DecodeError:
-        typer.secho("WARN: got DecodeError for {}".format(path), fg=typer.colors.YELLOW)
-        return {}
-
-
+@lru_cache(maxsize=None)
 def identify_files(glob, rt_file_type: RTFileType, progress=False) -> List[RTFile]:
     fs = get_fs()
     typer.secho("Globbing rt bucket {}".format(glob), fg=typer.colors.MAGENTA)
@@ -123,109 +245,458 @@ def identify_files(glob, rt_file_type: RTFileType, progress=False) -> List[RTFil
     # its caches (at least the ones I could find)
     fs.dircache.clear()
 
-    typer.secho(f"found {len(files)} files to process", fg=typer.colors.GREEN)
+    typer.secho(
+        f"found {len(files)} {rt_file_type} files in glob {glob}", fg=typer.colors.GREEN
+    )
     return files
+
+
+def download_gtfs_schedule_zip(
+    fs, gtfs_schedule_path, dst_path, pbar=None
+) -> (str, List[str]):
+    # fetch and zip gtfs schedule
+    zipname = f"{dst_path[:-1]}.zip"
+    log(
+        f"Fetching gtfs schedule data from {gtfs_schedule_path} to {zipname}",
+        pbar=pbar,
+    )
+
+    try:
+        get_with_retry(fs, gtfs_schedule_path, dst_path, recursive=True)
+    except FileNotFoundError:
+        raise ScheduleDataNotFound(f"no schedule data found for {gtfs_schedule_path}")
+
+    # https://github.com/MobilityData/gtfs-realtime-validator/issues/92
+    try:
+        os.remove(os.path.join(dst_path, "areas.txt"))
+    except FileNotFoundError:
+        pass
+
+    # this is validation output from validating schedule data, we should remove if it's there
+    try:
+        os.remove(os.path.join(dst_path, "validation.json"))
+    except FileNotFoundError:
+        pass
+
+    # TODO: sometimes, feeds can live in a subdirectory within the zipfile
+    #       see https://github.com/cal-itp/data-infra/issues/1185 as an
+    #       example; ignoring for now
+    written = []
+    with ZipFile(zipname, "w") as zf:
+        for file in os.listdir(dst_path):
+            full_path = os.path.join(dst_path, file)
+            if not os.path.isfile(full_path):
+                continue
+            with open(full_path) as f:
+                zf.writestr(file, f.read())
+            written.append(file)
+
+    if not written:
+        raise ScheduleDataNotFound(f"no schedule data found for {gtfs_schedule_path}")
+
+    return zipname, written
+
+
+def execute_rt_validator(
+    gtfs_file: str, rt_path: str, jar_path: Path, verbose=False, pbar=None
+):
+    log(f"validating {rt_path} with {gtfs_file}", fg=typer.colors.MAGENTA, pbar=pbar)
+
+    args = [
+        "java",
+        "-jar",
+        str(jar_path),
+        "-gtfs",
+        gtfs_file,
+        "-gtfsRealtimePath",
+        rt_path,
+        "-sort",
+        "name",
+    ]
+
+    log(f"executing rt_validator: {' '.join(args)}", pbar=pbar)
+    subprocess.run(
+        args,
+        capture_output=True,
+    ).check_returncode()
+
+
+def validate_and_upload(
+    fs,
+    jar_path: Path,
+    dst_path_gtfs,
+    dst_path_rt,
+    tmp_dir,
+    hour: RTHourlyAggregation,
+    verbose=False,
+    pbar=None,
+) -> List[RTFileProcessingOutcome]:
+    gtfs_zip, included_files = download_gtfs_schedule_zip(
+        fs,
+        hour.source_files[0].schedule_path,
+        dst_path_gtfs,
+        pbar=pbar,
+    )
+
+    execute_rt_validator(
+        gtfs_zip,
+        dst_path_rt,
+        jar_path=jar_path,
+        verbose=verbose,
+        pbar=pbar,
+    )
+
+    records_to_upload = []
+    outcomes = []
+    for rt_file in hour.source_files:
+        results_path = os.path.join(
+            dst_path_rt, rt_file.timestamped_filename + ".results.json"
+        )
+        try:
+            with open(results_path) as f:
+                records = json.load(f)
+        except FileNotFoundError as e:
+            msg = f"WARNING: no validation output file found in {results_path}"
+            if verbose:
+                log(
+                    msg,
+                    fg=typer.colors.YELLOW,
+                    pbar=pbar,
+                )
+            outcomes.append(
+                RTFileProcessingOutcome(
+                    step="validate",
+                    success=False,
+                    exception=e,
+                    file=rt_file,
+                    hive_path=hour.validation_hive_path,
+                    body=msg,
+                )
+            )
+            continue
+
+        records_to_upload.extend(
+            [
+                {
+                    # back and forth so we can use pydantic serialization
+                    "metadata": json.loads(rt_file.json()),
+                    **record,
+                }
+                for record in records
+            ]
+        )
+
+        outcomes.append(
+            RTFileProcessingOutcome(
+                step="validate",
+                success=True,
+                n_output_records=len(records_to_upload),
+                file=rt_file,
+                hive_path=hour.validation_hive_path,
+            )
+        )
+
+    upload_if_records(
+        fs,
+        tmp_dir,
+        out_path=hour.validation_hive_path,
+        records=records_to_upload,
+        pbar=pbar,
+        verbose=verbose,
+    )
+    return outcomes
+
+
+def parse_and_upload(
+    fs,
+    dst_path_rt,
+    tmp_dir,
+    hour: RTHourlyAggregation,
+    verbose=False,
+    pbar=None,
+) -> List[RTFileProcessingOutcome]:
+    written = 0
+    outcomes = []
+    gzip_fname = str(tmp_dir + f"/data_{hour.suffix}" + JSONL_GZIP_EXTENSION)
+
+    # ParseFromString() seems to not release memory well, so manually handle
+    # writing to the gzip and cleaning up after ourselves
+
+    with gzip.open(gzip_fname, "w") as gzipfile:
+        for rt_file in hour.source_files:
+            feed = gtfs_realtime_pb2.FeedMessage()
+
+            try:
+                with open(
+                    os.path.join(dst_path_rt, rt_file.timestamped_filename), "rb"
+                ) as f:
+                    feed.ParseFromString(f.read())
+                parsed = json_format.MessageToDict(feed)
+            except DecodeError as e:
+                if verbose:
+                    log(
+                        f"WARNING: DecodeError for {str(rt_file.path)}",
+                        fg=typer.colors.YELLOW,
+                        pbar=pbar,
+                    )
+                outcomes.append(
+                    RTFileProcessingOutcome(
+                        step="parse",
+                        success=False,
+                        exception=e,
+                        file=rt_file,
+                    )
+                )
+                continue
+
+            if not parsed or "entity" not in parsed:
+                msg = f"WARNING: no records found in {str(rt_file.path)}"
+                if verbose:
+                    log(
+                        msg,
+                        fg=typer.colors.YELLOW,
+                        pbar=pbar,
+                    )
+                outcomes.append(
+                    RTFileProcessingOutcome(
+                        step="parse",
+                        success=False,
+                        exception=ValueError(msg),
+                        file=rt_file,
+                    )
+                )
+                continue
+
+            for record in parsed["entity"]:
+                gzipfile.write(
+                    (
+                        json.dumps(
+                            {
+                                "header": parsed["header"],
+                                # back and forth so we use pydantic serialization
+                                "metadata": json.loads(rt_file.json()),
+                                **copy.deepcopy(record),
+                            }
+                        )
+                        + "\n"
+                    ).encode("utf-8")
+                )
+                written += 1
+            outcomes.append(
+                RTFileProcessingOutcome(
+                    step="parse",
+                    success=True,
+                    file=rt_file,
+                    n_output_records=len(parsed["entity"]),
+                    hive_path=hour.data_hive_path,
+                )
+            )
+            del parsed
+
+    if written:
+        log(
+            f"writing {written} lines to {hour.data_hive_path}",
+            pbar=pbar,
+        )
+        put_with_retry(fs, gzip_fname, f"{hour.data_hive_path}")
+    else:
+        log(
+            f"WARNING: no records at all for {hour.data_hive_path}",
+            fg=typer.colors.YELLOW,
+            pbar=pbar,
+        )
+
+    return outcomes
 
 
 # Originally this whole function was retried, but tmpdir flakiness will throw
 # exceptions in backoff's context, which ruins things
-def parse_file(bucket: str, rt_file: RTFile, pbar=None):
+def parse_and_validate(
+    hour: RTHourlyAggregation,
+    jar_path: Path,
+    tmp_dir: str,
+    verbose: bool = False,
+    parse: bool = False,
+    validate: bool = False,
+    pbar=None,
+):
+    if not parse and not validate:
+        raise ValueError("skipping both parsing and validation does nothing for us!")
+
     fs = get_fs()
+    suffix = hour.suffix
+    dst_path_gtfs = f"{tmp_dir}/gtfs_{suffix}/"
+    os.mkdir(dst_path_gtfs)
+    dst_path_rt = f"{tmp_dir}/rt_{suffix}/"
+    get_with_retry(
+        fs,
+        rpath=[file.path for file in hour.source_files],
+        lpath=[
+            os.path.join(dst_path_rt, file.timestamped_filename)
+            for file in hour.source_files
+        ],
+    )
 
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        parsed = parse_pb(rt_file.path, open_func=fs.open)
-
-        if not parsed or "entity" not in parsed:
-            msg = f"WARNING: no records found in {str(rt_file.path)}"
-            if pbar:
-                pbar.write(msg)
-                pbar.update(1)
-            else:
-                typer.secho(msg, fg=typer.colors.YELLOW)
-            return
-
-        gzip_fname = str(tmp_dir + "/" + "temporary" + EXTENSION)
-        written = 0
-
-        with gzip.open(gzip_fname, "w") as gzipfile:
-            for record in parsed["entity"]:
-                record.update(
-                    {
-                        "header": parsed["header"],
-                        "metadata": json.loads(
-                            rt_file.json()
-                        ),  # back and forth so we use pydantic serialization
-                    }
+    if validate:
+        try:
+            outcomes = validate_and_upload(
+                fs=fs,
+                jar_path=jar_path,
+                dst_path_gtfs=dst_path_gtfs,
+                dst_path_rt=dst_path_rt,
+                tmp_dir=tmp_dir,
+                hour=hour,
+                verbose=verbose,
+                pbar=pbar,
+            )
+        except (ScheduleDataNotFound, subprocess.CalledProcessError) as e:
+            if verbose:
+                log(
+                    f"{str(e)} thrown for {hour.source_files[0].schedule_path}",
+                    fg=typer.colors.RED,
+                    pbar=pbar,
                 )
-                gzipfile.write((json.dumps(record) + "\n").encode("utf-8"))
-                written += 1
 
-        out_path = f"{rt_file.hive_path(bucket)}{EXTENSION}"  # probably a better way to do this
-        msg = f"writing {written} lines from {str(rt_file.path)} to {out_path}"
-        if pbar:
-            pbar.write(msg)
-        else:
-            typer.echo(msg)
-        put_with_retry(fs, gzip_fname, out_path)
-        if pbar:
-            pbar.update(1)
-
-
-def try_handle_one_feed(*args, **kwargs) -> Optional[Exception]:
-    try:
-        parse_file(*args, **kwargs)
-    except Exception as e:
-        typer.echo(
-            f"got exception while handling feed: {str(e)} from {str(e.__cause__ or e.__context__)} {traceback.format_exc()}",
-            err=True,
+            outcomes = [
+                RTFileProcessingOutcome(
+                    step="validate",
+                    success=False,
+                    file=file,
+                    exception=e,
+                    hive_path=hour.data_hive_path,
+                )
+                for file in hour.source_files
+            ]
+        assert len(outcomes) == len(hour.source_files)
+        upload_if_records(
+            fs,
+            tmp_dir,
+            out_path=hour.validation_outcomes_hive_path,
+            records=outcomes,
+            pbar=pbar,
+            verbose=verbose,
         )
-        # a lot of these are thrown by tmpdir, and are potentially flakes; but if they were thrown during
-        # handling of another exception, we want that exception still
-        if isinstance(e, OSError) and e.errno == 39:
-            return e.__cause__ or e.__context__
-        return e
+
+    if parse:
+        outcomes = parse_and_upload(
+            fs=fs,
+            dst_path_rt=dst_path_rt,
+            tmp_dir=tmp_dir,
+            hour=hour,
+            verbose=verbose,
+            pbar=pbar,
+        )
+        assert len(outcomes) == len(hour.source_files)
+        upload_if_records(
+            fs,
+            tmp_dir,
+            out_path=hour.outcomes_hive_path,
+            records=outcomes,
+            pbar=pbar,
+            verbose=verbose,
+        )
 
 
 def main(
     file_type: RTFileType,
     glob: str,
-    dst_bucket=get_bucket(),
+    dst_bucket: str,
     limit: int = 0,
+    parse: bool = False,
+    validate: bool = False,
     progress: bool = typer.Option(
         False,
         help="If true, display progress bar; useful for development but not in production.",
     ),
+    verbose: bool = False,
     threads: int = 4,
+    jar_path: Path = JAR_DEFAULT,
 ):
-    typer.secho(f"Parsing {file_type} from {glob}", fg=typer.colors.MAGENTA)
+    assert parse ^ validate, "must either parse xor validate"
+
+    typer.secho(f"processing {file_type} from {glob}", fg=typer.colors.MAGENTA)
 
     # fetch files ----
-    feed_files = identify_files(glob=glob, rt_file_type=file_type, progress=progress)
+    files = identify_files(glob=glob, rt_file_type=file_type, progress=progress)
+
+    feed_hours = defaultdict(list)
+
+    for file in files:
+        feed_hours[file.hive_partitions].append(file)
+
+    typer.secho(
+        f"found {len(feed_hours)} feed-hours to process", fg=typer.colors.MAGENTA
+    )
+
+    feed_hours = [
+        RTHourlyAggregation(
+            data_hive_path=files[0].data_hive_path(dst_bucket),
+            # this is a bit weird
+            validation_hive_path=files[0].validation_hive_path(dst_bucket),
+            outcomes_hive_path=files[0].outcomes_hive_path(dst_bucket),
+            validation_outcomes_hive_path=files[0].validation_outcomes_hive_path(
+                dst_bucket
+            ),
+            source_files=files,
+        )
+        for hive_path, files in feed_hours.items()
+    ]
 
     if limit:
-        structlog.get_logger().warn(f"limit of {limit} feeds was set")
-        feed_files = feed_files[:limit]
+        typer.secho(f"limit of {limit} feeds was set", fg=typer.colors.YELLOW)
+        feed_hours = list(sorted(feed_hours, key=lambda feed: feed.data_hive_path))[
+            :limit
+        ]
 
-    if progress:
-        pbar = tqdm(total=len(feed_files))
-    else:
-        pbar = None
+    pbar = tqdm(total=len(feed_hours)) if progress else None
+
+    exceptions = []
+
+    # from https://stackoverflow.com/a/55149491
+    # could be cleaned up a bit with a namedtuple
 
     # gcfs does not seem to play nicely with multiprocessing right now, so use threads :(
     # https://github.com/fsspec/gcsfs/issues/379
-    with ThreadPoolExecutor(max_workers=threads) as pool:
-        args = [
-            (
-                dst_bucket,
-                file,
-                pbar,
-            )
-            for file in feed_files
-        ]
-        exceptions = [ret for ret in pool.map(try_handle_one_feed, *zip(*args)) if ret]
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        with ThreadPoolExecutor(max_workers=threads) as pool:
+            futures = {
+                pool.submit(
+                    parse_and_validate,
+                    hour=hour,
+                    jar_path=jar_path,
+                    tmp_dir=tmp_dir,
+                    verbose=verbose,
+                    parse=parse,
+                    validate=validate,
+                    pbar=pbar,
+                ): hour
+                for hour in feed_hours
+            }
+
+            for future in concurrent.futures.as_completed(futures):
+                hour = futures[future]
+                if pbar:
+                    pbar.update(1)
+                try:
+                    future.result()
+                except KeyboardInterrupt:
+                    raise
+                except Exception as e:
+                    log(
+                        f"WARNING: exception {type(e)} {str(e)} bubbled up to top for {hour.data_hive_path}",
+                        err=True,
+                        fg=typer.colors.RED,
+                        pbar=pbar,
+                    )
+                    exceptions.append((e, hour.data_hive_path, traceback.format_exc()))
+
+    if pbar:
+        del pbar
 
     if exceptions:
-        msg = f"got {len(exceptions)} exceptions from processing {len(feed_files)} feeds: {exceptions}"
+        exc_str = "\n".join(str(tup) for tup in exceptions)
+        msg = f"got {len(exceptions)} exceptions from processing {len(feed_hours)} feeds:\n{exc_str}"
         typer.secho(msg, err=True, fg=typer.colors.RED)
         raise RuntimeError(msg)
 

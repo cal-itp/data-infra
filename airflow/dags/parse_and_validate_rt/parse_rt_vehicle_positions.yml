@@ -1,5 +1,5 @@
 operator: operators.PodOperator
-name: 'parse-rt-trip-updates'
+name: 'parse-rt-vehicle-positions'
 image: 'ghcr.io/cal-itp/data-infra/gtfs-rt-parser:{{image_tag()}}'
 
 cmds:
@@ -7,11 +7,12 @@ cmds:
 
 arguments:
   - "gtfs_rt_parser.py"
-  - "trip_updates"
+  - "vehicle_positions"
   # we run on a delay because of archiver write latency but then we process the prior _hour_
-  - "{{get_bucket()}}/rt/{{ execution_date.replace(minute=0, second=0).format('YYYY-MM-DDTHH*') }}"
-  - "--dst-bucket"
-  - "gs://{{prefix_bucket('rt-parsed')}}"
+  - "{{ get_bucket() }}/rt/{{ execution_date.replace(minute=0, second=0).format('YYYY-MM-DDTHH*') }}"
+  - "gs://{{ prefix_bucket('rt-parsed') }}"
+  - "--parse"
+  - "--verbose"
 
 is_delete_operator_pod: true
 get_logs: true
@@ -32,7 +33,7 @@ secrets:
 
 resources:
   request_memory: 2.0Gi
-  request_cpu: 0.5
+  request_cpu: 1
 
 tolerations:
   - key: pod-role
