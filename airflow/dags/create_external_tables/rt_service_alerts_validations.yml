@@ -8,6 +8,7 @@ source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 hive_options:
   mode: CUSTOM
+  require_partition_filter: false
   source_uri_prefix: "service_alerts_validations/{dt:DATE}/{itp_id:INTEGER}/{url_number:INTEGER}/{hour:INTEGER}/"
 schema_fields:
   - name: metadata
