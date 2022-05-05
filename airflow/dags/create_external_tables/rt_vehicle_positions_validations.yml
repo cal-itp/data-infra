@@ -1,0 +1,56 @@
+operator: operators.ExternalTable
+bucket: gs://rt-parsed
+prefix_bucket: true
+source_objects:
+  - "vehicle_positions_validations/*.jsonl.gz"
+destination_project_dataset_table: "gtfs_rt.external_vehicle_positions_validations"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  source_uri_prefix: "vehicle_positions_validations/{dt:DATE}/{itp_id:INTEGER}/{url_number:INTEGER}/{hour:INTEGER}/"
+schema_fields:
+  - name: metadata
+    type: RECORD
+    fields:
+      - name: path
+        type: string
+      - name: itp_id
+        type: integer
+      - name: url
+        type: integer
+  - name: errorMessage
+    type: RECORD
+    fields:
+      - name: messageId
+        type: integer
+      - name: gtfsRtFeedIterationModel
+        type: string
+        mode: nullable
+      - name: errorDetails
+        type: string
+        mode: nullable
+      - name: validationRule
+        type: RECORD
+        fields:
+          - name: errorId
+            type: string
+          - name: severity
+            type: string
+          - name: title
+            type: string
+          - name: errorDescription
+            type: string
+          - name: occurrenceSuffix
+            type: string
+  - name: occurrenceList
+    type: RECORD
+    mode: REPEATED
+    fields:
+      - name: occurrenceId
+        type: integer
+      - name: messageLogModel
+        type: string
+        mode: nullable
+      - name: prefix
+        type: string
