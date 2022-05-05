@@ -1,6 +1,6 @@
 # Production Maintenance
 
-_Edited March 2022_
+_Last edited: May 5, 2022_
 
 ## Re-running or clearing DAGs
 
@@ -28,18 +28,32 @@ DAGs are listed in alphabetical order, as they appear in the Airflow UI.
 `airtable_loader` | **⛔ No*** | No | **🔂 No** | N/A | All tasks are unsafe after 24 hours |
 `airtable_views` | Yes | No | Yes* | `airtable_loader` | Latest-only data |
 `amplitude_benefits` | Yes | No | **🔂 No** | N/A | |
+`check_feed_aggregators` | **⛔ No** | No | **🔂 No** | N/A | |
+`create_external_tables` | N/A | N/A | N/A | N/A | Once-only (defines external tables); does not generally need to be re-run  |
 `gtfs_downloader` | **⛔ No*** | No | **🔂 No** | N/A | Tasks downstream of `download_data` can safely be rerun after 24 hours |
 `gtfs_loader` | Yes | No | **🔂 No** | `gtfs_downloader`* | Technically also depends on `gtfs_schedule_history`, not usually an issue |
 `gtfs_schedule_history` | N/A | N/A | N/A | N/A | Once-only (defines external tables); does not generally need to be re-run |
 `gtfs_schedule_history2` | Yes | **📆 Yes** | **🔂 No** | `gtfs_loader` | |
+`parse_and_validate_rt` | Yes | No | **🔂 No** | N/A | |
 `payments_loader` | Yes | No | Yes | N/A | |
 `payments_views` | Yes | No | Yes | `payments_views_staging`| |
 `payments_views_staging` | Yes | No | Yes | `payments_loader` | |
 `rt_loader` | Yes | No | **🔂 No** | `gtfs_loader` | |
 `rt_loader_files` | Yes | No | **🔂 No** | N/A | |
-`rt_timestamp_fix` | N/A | N/A | N/A | N/A | DAG is deprecated but still appears in Airflow UI |
 `sandbox` | N/A | N/A | N/A | N/A | Testing only; does not need to be re-run |
 `transform_warehouse` | Yes | No | Yes | N/A | Runs dbt warehouse |
+
+### Deprecated DAGs
+
+The following DAGs are still listed in the Airflow UI even though they are **deprecated**. They never need to be re-run.
+
+* `gtfs_schedule`
+* `gtfs_views_staging`
+* `gtfs_views`
+* `parse_rt`
+* `rt_timestamp_fix`
+* `transitstacks_loader`
+* `transitstacks_views`
 
 ## Dependency diagram
 
