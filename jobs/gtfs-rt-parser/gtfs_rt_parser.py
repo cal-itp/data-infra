@@ -144,7 +144,7 @@ class RTFile(BaseModel):
     def validation_outcomes_hive_path(self, bucket: str):
         return os.path.join(
             bucket,
-            f"{self.file_type}_validation_outcomes",
+            f"{self.file_type}_validations_outcomes",
             *self.hive_partitions,
         )
 
