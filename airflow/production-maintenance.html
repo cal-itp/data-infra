@@ -666,6 +666,13 @@
   <a class="reference internal nav-link" href="#re-running-or-clearing-dags">
    Re-running or clearing DAGs
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deprecated-dags">
+     Deprecated DAGs
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#dependency-diagram">
@@ -706,6 +713,13 @@
   <a class="reference internal nav-link" href="#re-running-or-clearing-dags">
    Re-running or clearing DAGs
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deprecated-dags">
+     Deprecated DAGs
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#dependency-diagram">
@@ -733,7 +747,7 @@
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="production-maintenance">
 <h1>Production Maintenance<a class="headerlink" href="#production-maintenance" title="Permalink to this headline">¶</a></h1>
-<p><em>Edited March 2022</em></p>
+<p><em>Last edited: May 5, 2022</em></p>
 <div class="section" id="re-running-or-clearing-dags">
 <h2>Re-running or clearing DAGs<a class="headerlink" href="#re-running-or-clearing-dags" title="Permalink to this headline">¶</a></h2>
 <p>Sometimes DAGs will fail in production. Below are considerations to take into account when re-running or clearing DAGs to address failures.</p>
@@ -797,6 +811,20 @@
 <td><p>N/A</p></td>
 <td><p></p></td>
 </tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">check_feed_aggregators</span></code></p></td>
+<td><p><strong>⛔ No</strong></p></td>
+<td><p>No</p></td>
+<td><p><strong>🔂 No</strong></p></td>
+<td><p>N/A</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">create_external_tables</span></code></p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>Once-only (defines external tables); does not generally need to be re-run</p></td>
+</tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_downloader</span></code></p></td>
 <td><p><strong>⛔ No</strong>*</p></td>
 <td><p>No</p></td>
@@ -825,47 +853,47 @@
 <td><p><code class="docutils literal notranslate"><span class="pre">gtfs_loader</span></code></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">payments_loader</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">parse_and_validate_rt</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p><strong>🔂 No</strong></p></td>
+<td><p>N/A</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">payments_loader</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p>Yes</p></td>
 <td><p>N/A</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">payments_views</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">payments_views</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p>Yes</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">payments_views_staging</span></code></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">payments_views_staging</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">payments_views_staging</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p>Yes</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">payments_loader</span></code></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt_loader</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt_loader</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p><strong>🔂 No</strong></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">gtfs_loader</span></code></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt_loader_files</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt_loader_files</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p><strong>🔂 No</strong></p></td>
 <td><p>N/A</p></td>
 <td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt_timestamp_fix</span></code></p></td>
-<td><p>N/A</p></td>
-<td><p>N/A</p></td>
-<td><p>N/A</p></td>
-<td><p>N/A</p></td>
-<td><p>DAG is deprecated but still appears in Airflow UI</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sandbox</span></code></p></td>
 <td><p>N/A</p></td>
@@ -883,6 +911,20 @@
 </tr>
 </tbody>
 </table>
+<div class="section" id="deprecated-dags">
+<h3>Deprecated DAGs<a class="headerlink" href="#deprecated-dags" title="Permalink to this headline">¶</a></h3>
+<p>The following DAGs are still listed in the Airflow UI even though they are <strong>deprecated</strong>. They never need to be re-run.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gtfs_views_staging</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gtfs_views</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">parse_rt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rt_timestamp_fix</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rt_views</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">transitstacks_loader</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">transitstacks_views</span></code></p></li>
+</ul>
+</div>
 </div>
 <div class="section" id="dependency-diagram">
 <h2>Dependency diagram<a class="headerlink" href="#dependency-diagram" title="Permalink to this headline">¶</a></h2>
@@ -898,6 +940,9 @@
       payments_views_staging--&gt;payments_views;
       gtfs_loader--&gt;rt_loader;
       sandbox;
+      create_external_tables;
+      check_feed_aggregators;
+      parse_and_validate_rt;
       transform_warehouse;
         </div></div>
 <div class="section" id="task-level-considerations">
