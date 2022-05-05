@@ -70,6 +70,9 @@ In addition to the tabular view above, here is a diagram representing DAG depend
       payments_views_staging-->payments_views;
       gtfs_loader-->rt_loader;
       sandbox;
+      create_external_tables;
+      check_feed_aggregators;
+      parse_and_validate_rt;
       transform_warehouse;
 ```
 
