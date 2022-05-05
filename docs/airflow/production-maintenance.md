@@ -52,6 +52,7 @@ The following DAGs are still listed in the Airflow UI even though they are **dep
 * `gtfs_views`
 * `parse_rt`
 * `rt_timestamp_fix`
+* `rt_views`
 * `transitstacks_loader`
 * `transitstacks_views`
 
