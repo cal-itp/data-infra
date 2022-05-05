@@ -29,6 +29,7 @@ def _bq_client_create_external_table(
     source_format,
     hive_options=None,
     bucket=None,
+    test=False,
 ):
     # TODO: must be fully qualified table name
     ext = bigquery.ExternalConfig(source_format)
@@ -75,7 +76,13 @@ def _bq_client_create_external_table(
     print(
         f"Creating external table: {full_table_name} {tbl} {source_objects} {hive_options}"
     )
-    return client.create_table(tbl, timeout=300, exists_ok=True)
+    created_table = client.create_table(tbl, timeout=300, exists_ok=True)
+
+    if test:
+        client.query(f"select * from {full_table_name} limit 1").result()
+        print(f"Successfully queried {full_table_name}")
+
+    return created_table
 
 
 class ExternalTable(BaseOperator):
@@ -92,6 +99,7 @@ class ExternalTable(BaseOperator):
         source_format="CSV",
         use_bq_client=False,
         field_delimiter=",",
+        test=False,
         **kwargs,
     ):
         self.bucket = bucket
@@ -109,6 +117,7 @@ class ExternalTable(BaseOperator):
         self.hive_options = hive_options
         self.use_bq_client = use_bq_client
         self.field_delimiter = field_delimiter
+        self.test = test
 
         super().__init__(**kwargs)
 
@@ -125,6 +134,7 @@ class ExternalTable(BaseOperator):
                 self.source_format,
                 self.hive_options,
                 self.bucket,
+                self.test,
             )
 
         else:

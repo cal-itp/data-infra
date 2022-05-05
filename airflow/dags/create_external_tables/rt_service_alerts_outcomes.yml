@@ -1,6 +1,7 @@
 operator: operators.ExternalTable
 bucket: gs://rt-parsed
 prefix_bucket: true
+test: true
 source_objects:
   - "service_alerts_outcomes/*.jsonl.gz"
 destination_project_dataset_table: "gtfs_rt.external_service_alerts_outcomes"
