@@ -24,6 +24,11 @@ class AirtableExtract(BaseModel):
     data: Optional[pd.DataFrame]
     extract_time: Optional[pendulum.DateTime]
 
+    # pydantic doesn't know dataframe
+    # see https://stackoverflow.com/a/69200069
+    class Config:
+        arbitrary_types_allowed = True
+
     def fetch_from_airtable(self, api_key):
         """Download an Airtable table as a DataFrame.
 
