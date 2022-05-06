@@ -4,7 +4,8 @@ air_base_id: appPnJWrQ7ui4UmIl
 air_table_name: services
 air_base_name: california_transit
 bucket: "gs://{{ prefix_bucket('airtable') }}"
-id_name: service_id
+airtable_options:
+  id_name: service_id
 
 rename_fields:
   "# Static": num_static

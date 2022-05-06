@@ -5,4 +5,5 @@ air_table_name: "county geography"
 air_base_name: california_transit
 bucket: "gs://{{ prefix_bucket('airtable') }}"
 
-id_name: county_geography_id
+airtable_options:
+  id_name: county_geography_id
