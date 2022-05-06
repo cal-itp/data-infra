@@ -63,14 +63,17 @@ def upload_if_records(
         pbar=pbar,
     )
     with tempfile.NamedTemporaryFile(mode="wb", delete=False, dir=tmp_dir) as f:
+        gzipfile = gzip.GzipFile(mode="wb", fileobj=f)
         if records:
             if isinstance(records[0], BaseModel):
                 encoded = (r.json() for r in records)
             else:
                 encoded = (json.dumps(r) for r in records)
-            gzipfile = gzip.GzipFile(mode="wb", fileobj=f)
             gzipfile.write("\n".join(encoded).encode("utf-8"))
-            gzipfile.close()
+        else:
+            # BigQuery fails when trying to parse empty files, so we include a single newline character
+            gzipfile.write("\n".encode("utf-8"))
+        gzipfile.close()
 
     put_with_retry(fs, f.name, out_path)
 
@@ -106,7 +109,8 @@ class RTFile(BaseModel):
         return os.path.join(
             get_bucket(),
             "schedule",
-            str(self.tick.replace(hour=0, minute=0, second=0)),
+            # we timestamp with Airflow _execution date_ currently which is fun
+            str(self.tick.subtract(days=1).replace(hour=0, minute=0, second=0)),
             f"{self.itp_id}_{self.url}",
         )
 
