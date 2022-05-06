@@ -4,4 +4,5 @@ air_base_id: appPnJWrQ7ui4UmIl
 air_table_name: "place geography"
 air_base_name: california_transit
 bucket: "gs://{{ prefix_bucket('airtable') }}"
-id_name: place_geography_id
+airtable_options:
+  id_name: place_geography_id
