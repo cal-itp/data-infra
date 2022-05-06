@@ -109,7 +109,8 @@ class RTFile(BaseModel):
         return os.path.join(
             get_bucket(),
             "schedule",
-            str(self.tick.replace(hour=0, minute=0, second=0)),
+            # we timestamp with Airflow _execution date_ currently which is fun
+            str(self.tick.subtract(days=1).replace(hour=0, minute=0, second=0)),
             f"{self.itp_id}_{self.url}",
         )
 
