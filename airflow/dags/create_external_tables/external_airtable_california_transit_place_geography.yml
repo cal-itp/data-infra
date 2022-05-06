@@ -1,0 +1,11 @@
+operator: operators.ExternalTable
+bucket: gs://airtable
+prefix_bucket: true
+source_objects:
+  - "california_transit__place_geography/*.csv"
+destination_project_dataset_table: "external_airtable.california_transit__place_geography"
+source_format: CSV
+use_bq_client: true
+hive_options:
+  mode: AUTO
+  source_uri_prefix: "california_transit__place_geography/"
