@@ -5,7 +5,7 @@ import pendulum
 from pyairtable import Table
 from pydantic import BaseModel
 from slugify import slugify
-from typing import Optional
+from typing import Optional, Dict
 from calitp import to_snakecase
 from calitp.storage import get_fs
 
@@ -15,16 +15,16 @@ AIRTABLE_API_KEY = os.environ["CALITP_AIRTABLE_API_KEY"]
 
 
 class AirtableExtract(BaseModel):
-    api_key: str
     air_base_id: str
     air_base_name: str
     air_table_name: str
-    id_name = "__id"
-    rename_fields = {}
+    id_name: str = "__id"
+    rename_fields: Dict[str, str] = {}
     column_prefix: Optional[str]
+    data: Optional[pd.DataFrame]
     extract_time: Optional[pendulum.DateTime]
 
-    def airtable_to_df(self):
+    def fetch_from_airtable(self, api_key):
         """Download an Airtable table as a DataFrame.
 
         Note that airtable records have rows structured as follows:
@@ -40,7 +40,7 @@ class AirtableExtract(BaseModel):
         print(
             f"Downloading airtable data for {self.air_base_name}.{self.air_table_name}"
         )
-        all_rows = Table(self.api_key, self.air_base_id, self.air_table_name).all()
+        all_rows = Table(api_key, self.air_base_id, self.air_table_name).all()
         self.extract_time = pendulum.now("utc")
         raw_df = pd.DataFrame(
             [{self.id_name: row["id"], **row["fields"]} for row in all_rows]
@@ -58,22 +58,26 @@ class AirtableExtract(BaseModel):
                 if (s in new_field_names or s == self.id_name)
                 else f"{self.column_prefix}{s}"
             )
-        return final_df
+        self.data = final_df
 
     def make_hive_path(self, bucket: str):
-        try:
-            return os.path.join(
-                bucket,
-                f"{self.air_base_name}__{slugify(self.air_table_name, separator='_')}",
-                f"dt={self.extract_time.to_date_string()}",
-                f"time={self.extract_time.to_time_string()}",
-                f"{slugify(self.air_table_name, separator='_')}.csv",
+        if not self.extract_time:
+            # extract_time is usually set when airtable_to_df is called & data is retrieved
+            raise ValueError(
+                "An extract time must be set before a hive path can be generated."
             )
-        # if the airtable_to_df method hasn't been called, extract time is none
-        except AttributeError:
-            print(
-                "You must extract data from Airtable before a hive path can be generated."
-            )
+        return os.path.join(
+            bucket,
+            f"{self.air_base_name}__{slugify(self.air_table_name, separator='_')}",
+            f"dt={self.extract_time.to_date_string()}",
+            f"time={self.extract_time.to_time_string()}",
+            f"{slugify(self.air_table_name, separator='_')}.csv",
+        )
+
+    def save_to_gcs(self, fs, bucket):
+        hive_path = self.make_hive_path(bucket)
+        print(f"Uploading to GCS at {hive_path}")
+        fs.pipe(hive_path, self.data.to_csv(index=False).encode())
 
 
 class AirtableToWarehouseOperator(BaseOperator):
@@ -82,11 +86,12 @@ class AirtableToWarehouseOperator(BaseOperator):
 
     def __init__(
         self,
+        bucket,
         air_base_id,
         air_base_name,
         air_table_name,
-        bucket,
         api_key=AIRTABLE_API_KEY,
+        airtable_options={},
         **kwargs,
     ):
         """An operator that downloads data from an Airtable base
@@ -114,20 +119,16 @@ class AirtableToWarehouseOperator(BaseOperator):
         """
 
         self.extract = AirtableExtract(
-            api_key=api_key,
             air_base_id=air_base_id,
             air_base_name=air_base_name,
             air_table_name=air_table_name,
-            **kwargs,
+            **airtable_options,
         )
-
+        self.api_key = api_key
         self.bucket = bucket
-
         super().__init__(**kwargs)
 
     def execute(self, **kwargs):
-        df = self.extract.airtable_to_df()
-        hive_path = self.extract.make_hive_path(bucket=self.bucket)
-        print(f"Uploading to GCS at {hive_path}")
+        self.extract.fetch_from_airtable(self.api_key)
         fs = get_fs()
-        fs.pipe(str(hive_path), df.to_csv(index=False).encode())
+        self.extract.save_to_gcs(fs, self.bucket)

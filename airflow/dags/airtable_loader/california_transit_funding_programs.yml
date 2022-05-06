@@ -4,4 +4,5 @@ air_base_id: appPnJWrQ7ui4UmIl
 air_table_name: "funding programs"
 air_base_name: california_transit
 bucket: "gs://{{ prefix_bucket('airtable') }}"
-id_name: funding_program_id
+airtable_options:
+  id_name: funding_program_id
