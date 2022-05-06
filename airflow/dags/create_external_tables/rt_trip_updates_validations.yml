@@ -4,12 +4,11 @@ prefix_bucket: true
 test: true
 source_objects:
   - "trip_updates_validations/*.jsonl.gz"
-destination_project_dataset_table: "gtfs_rt.external_trip_updates_validations"
+destination_project_dataset_table: "external_gtfs_rt.trip_updates_validations"
 source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 hive_options:
   mode: CUSTOM
-  require_partition_filter: false
   source_uri_prefix: "trip_updates_validations/{dt:DATE}/{itp_id:INTEGER}/{url_number:INTEGER}/{hour:INTEGER}/"
 schema_fields:
   - name: metadata

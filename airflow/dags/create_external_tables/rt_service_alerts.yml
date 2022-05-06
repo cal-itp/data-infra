@@ -3,11 +3,12 @@ bucket: gs://rt-parsed
 prefix_bucket: true
 source_objects:
   - "service_alerts/*.jsonl.gz"
-destination_project_dataset_table: "gtfs_rt.external_service_alerts"
+destination_project_dataset_table: "external_gtfs_rt.service_alerts"
 source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 hive_options:
   mode: CUSTOM
+  require_partition_filter: true
   source_uri_prefix: "service_alerts/{dt:DATE}/{itp_id:INTEGER}/{url_number:INTEGER}/{hour:INTEGER}/"
 schema_fields:
   - name: metadata
