@@ -63,14 +63,17 @@ def upload_if_records(
         pbar=pbar,
     )
     with tempfile.NamedTemporaryFile(mode="wb", delete=False, dir=tmp_dir) as f:
+        gzipfile = gzip.GzipFile(mode="wb", fileobj=f)
         if records:
             if isinstance(records[0], BaseModel):
                 encoded = (r.json() for r in records)
             else:
                 encoded = (json.dumps(r) for r in records)
-            gzipfile = gzip.GzipFile(mode="wb", fileobj=f)
             gzipfile.write("\n".join(encoded).encode("utf-8"))
-            gzipfile.close()
+        else:
+            # BigQuery fails when trying to parse empty files, so we include a single newline character
+            gzipfile.write("\n".encode("utf-8"))
+        gzipfile.close()
 
     put_with_retry(fs, f.name, out_path)
 
