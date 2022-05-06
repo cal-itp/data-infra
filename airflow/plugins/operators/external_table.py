@@ -12,6 +12,7 @@ from calitp.config import (
 from calitp.config import is_development
 
 from calitp.sql import get_engine
+from google.api_core.exceptions import NotFound
 from google.cloud import bigquery
 
 from airflow.models import BaseOperator
@@ -29,6 +30,7 @@ def _bq_client_create_external_table(
     source_format,
     hive_options=None,
     bucket=None,
+    test=False,
 ):
     # TODO: must be fully qualified table name
     ext = bigquery.ExternalConfig(source_format)
@@ -45,7 +47,7 @@ def _bq_client_create_external_table(
         # key schema for more than a trivial number of files
         opt.mode = hive_options.get("mode", "AUTO")
         opt.require_partition_filter = hive_options.get(
-            "require_partition_filter", True
+            "require_partition_filter", False
         )
         # TODO: this is very fragile, we should probably be calculating it from
         #       the source_objects and validating the format (prefix, trailing slashes)
@@ -58,6 +60,17 @@ def _bq_client_create_external_table(
         ext.hive_partitioning = opt
 
     client = bigquery.Client(project=get_project_id(), location=CALITP_BQ_LOCATION)
+
+    dataset_name, _ = table_name.split(".")
+    full_dataset_name = ".".join((get_project_id(), dataset_name))
+
+    try:
+        client.get_dataset(full_dataset_name)
+    except NotFound:
+        print(f"Dataset {full_dataset_name} not found, creating.")
+        dataset = bigquery.Dataset(full_dataset_name)
+        dataset.location = "us-west2"
+        client.create_dataset(dataset, timeout=30)
 
     # for some reason, you can set the project name in the bigquery client, and
     # it doesn't need to be in the SQL code, but this bigquery API still requires
@@ -75,7 +88,13 @@ def _bq_client_create_external_table(
     print(
         f"Creating external table: {full_table_name} {tbl} {source_objects} {hive_options}"
     )
-    return client.create_table(tbl, timeout=300, exists_ok=True)
+    created_table = client.create_table(tbl, timeout=300, exists_ok=True)
+
+    if test:
+        client.query(f"select * from {full_table_name} limit 1").result()
+        print(f"Successfully queried {full_table_name}")
+
+    return created_table
 
 
 class ExternalTable(BaseOperator):
@@ -84,7 +103,7 @@ class ExternalTable(BaseOperator):
         *args,
         bucket=None,
         prefix_bucket=False,
-        destination_project_dataset_table=None,
+        destination_project_dataset_table=None,  # note that the project is optional here
         skip_leading_rows=1,
         schema_fields=None,
         hive_options=None,
@@ -92,6 +111,7 @@ class ExternalTable(BaseOperator):
         source_format="CSV",
         use_bq_client=False,
         field_delimiter=",",
+        test=False,
         **kwargs,
     ):
         self.bucket = bucket
@@ -109,6 +129,7 @@ class ExternalTable(BaseOperator):
         self.hive_options = hive_options
         self.use_bq_client = use_bq_client
         self.field_delimiter = field_delimiter
+        self.test = test
 
         super().__init__(**kwargs)
 
@@ -125,6 +146,7 @@ class ExternalTable(BaseOperator):
                 self.source_format,
                 self.hive_options,
                 self.bucket,
+                self.test,
             )
 
         else:

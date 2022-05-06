@@ -3,11 +3,12 @@ bucket: gs://rt-parsed
 prefix_bucket: true
 source_objects:
   - "vehicle_positions/*.jsonl.gz"
-destination_project_dataset_table: "gtfs_rt.external_vehicle_positions"
+destination_project_dataset_table: "external_gtfs_rt.vehicle_positions"
 source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 hive_options:
   mode: CUSTOM
+  require_partition_filter: true
   source_uri_prefix: "vehicle_positions/{dt:DATE}/{itp_id:INTEGER}/{url_number:INTEGER}/{hour:INTEGER}/"
 schema_fields:
   - name: metadata
