@@ -21,7 +21,11 @@ from zipfile import ZipFile
 import backoff
 import pendulum
 import typer
-from aiohttp.client_exceptions import ClientResponseError, ClientOSError
+from aiohttp.client_exceptions import (
+    ClientResponseError,
+    ClientOSError,
+    ServerDisconnectedError,
+)
 from calitp.config import get_bucket
 from calitp.storage import get_fs
 from google.protobuf import json_format
@@ -200,7 +204,7 @@ def fatal_code(e):
 
 @backoff.on_exception(
     backoff.expo,
-    exception=(ClientOSError, ClientResponseError),
+    exception=(ClientOSError, ClientResponseError, ServerDisconnectedError),
     max_tries=3,
     giveup=fatal_code,
 )
@@ -209,7 +213,9 @@ def get_with_retry(fs, *args, **kwargs):
 
 
 @backoff.on_exception(
-    backoff.expo, exception=(ClientOSError, ClientResponseError), max_tries=3
+    backoff.expo,
+    exception=(ClientOSError, ClientResponseError, ServerDisconnectedError),
+    max_tries=3,
 )
 def put_with_retry(fs, *args, **kwargs):
     return fs.put(*args, **kwargs)
