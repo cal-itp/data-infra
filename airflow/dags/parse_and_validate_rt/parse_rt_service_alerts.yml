@@ -1,6 +1,7 @@
 operator: operators.PodOperator
 name: 'parse-rt-service-alerts'
 image: 'ghcr.io/cal-itp/data-infra/gtfs-rt-parser:{{image_tag()}}'
+pool: rt_parse_pool
 
 cmds:
   - python3

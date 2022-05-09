@@ -15,7 +15,6 @@ default_args:
     email_on_retry: False
     max_active_dag_runs: 6
     retries: 1
-    pool: rt_parse_pool
     retry_delay: !timedelta 'minutes: 2'
     concurrency: 5
     #sla: !timedelta 'hours: 2'
