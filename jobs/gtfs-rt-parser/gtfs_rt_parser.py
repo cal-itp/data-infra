@@ -21,7 +21,11 @@ from zipfile import ZipFile
 import backoff
 import pendulum
 import typer
-from aiohttp.client_exceptions import ClientResponseError, ClientOSError
+from aiohttp.client_exceptions import (
+    ClientResponseError,
+    ClientOSError,
+    ServerDisconnectedError,
+)
 from calitp.config import get_bucket
 from calitp.storage import get_fs
 from google.protobuf import json_format
@@ -58,21 +62,26 @@ def upload_if_records(
     pbar=None,
     verbose=False,
 ):
+    # BigQuery fails when trying to parse empty files, so shouldn't write them
+    if not records:
+        log(
+            f"WARNING: no records found for {out_path}, skipping upload",
+            fg=typer.colors.YELLOW,
+            pbar=pbar,
+        )
+        return
+
     log(
         f"writing {len(records)} lines to {out_path}",
         pbar=pbar,
     )
     with tempfile.NamedTemporaryFile(mode="wb", delete=False, dir=tmp_dir) as f:
         gzipfile = gzip.GzipFile(mode="wb", fileobj=f)
-        if records:
-            if isinstance(records[0], BaseModel):
-                encoded = (r.json() for r in records)
-            else:
-                encoded = (json.dumps(r) for r in records)
-            gzipfile.write("\n".join(encoded).encode("utf-8"))
+        if isinstance(records[0], BaseModel):
+            encoded = (r.json() for r in records)
         else:
-            # BigQuery fails when trying to parse empty files, so we include a single newline character
-            gzipfile.write("\n".encode("utf-8"))
+            encoded = (json.dumps(r) for r in records)
+        gzipfile.write("\n".join(encoded).encode("utf-8"))
         gzipfile.close()
 
     put_with_retry(fs, f.name, out_path)
@@ -196,7 +205,7 @@ def fatal_code(e):
 
 @backoff.on_exception(
     backoff.expo,
-    exception=(ClientOSError, ClientResponseError),
+    exception=(ClientOSError, ClientResponseError, ServerDisconnectedError),
     max_tries=3,
     giveup=fatal_code,
 )
@@ -205,7 +214,9 @@ def get_with_retry(fs, *args, **kwargs):
 
 
 @backoff.on_exception(
-    backoff.expo, exception=(ClientOSError, ClientResponseError), max_tries=3
+    backoff.expo,
+    exception=(ClientOSError, ClientResponseError, ServerDisconnectedError),
+    max_tries=3,
 )
 def put_with_retry(fs, *args, **kwargs):
     return fs.put(*args, **kwargs)

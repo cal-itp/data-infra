@@ -1,6 +1,7 @@
 operator: operators.PodOperator
 name: 'validate-rt-vehicle-positions'
 image: 'ghcr.io/cal-itp/data-infra/gtfs-rt-parser:{{image_tag()}}'
+pool: rt_validate_pool
 
 cmds:
   - python3
