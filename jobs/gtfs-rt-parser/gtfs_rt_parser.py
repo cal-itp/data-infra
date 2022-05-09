@@ -69,6 +69,7 @@ def upload_if_records(
             fg=typer.colors.YELLOW,
             pbar=pbar,
         )
+        return
 
     log(
         f"writing {len(records)} lines to {out_path}",
