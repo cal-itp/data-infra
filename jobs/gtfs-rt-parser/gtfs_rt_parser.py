@@ -58,21 +58,25 @@ def upload_if_records(
     pbar=None,
     verbose=False,
 ):
+    # BigQuery fails when trying to parse empty files, so shouldn't write them
+    if not records:
+        log(
+            f"WARNING: no records found for {out_path}, skipping upload",
+            fg=typer.colors.YELLOW,
+            pbar=pbar,
+        )
+
     log(
         f"writing {len(records)} lines to {out_path}",
         pbar=pbar,
     )
     with tempfile.NamedTemporaryFile(mode="wb", delete=False, dir=tmp_dir) as f:
         gzipfile = gzip.GzipFile(mode="wb", fileobj=f)
-        if records:
-            if isinstance(records[0], BaseModel):
-                encoded = (r.json() for r in records)
-            else:
-                encoded = (json.dumps(r) for r in records)
-            gzipfile.write("\n".join(encoded).encode("utf-8"))
+        if isinstance(records[0], BaseModel):
+            encoded = (r.json() for r in records)
         else:
-            # BigQuery fails when trying to parse empty files, so we include a single newline character
-            gzipfile.write("\n".encode("utf-8"))
+            encoded = (json.dumps(r) for r in records)
+        gzipfile.write("\n".join(encoded).encode("utf-8"))
         gzipfile.close()
 
     put_with_retry(fs, f.name, out_path)
