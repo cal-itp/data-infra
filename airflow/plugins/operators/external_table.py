@@ -30,7 +30,7 @@ def _bq_client_create_external_table(
     source_format,
     hive_options=None,
     bucket=None,
-    test=False,
+    post_hook=None,
 ):
     # TODO: must be fully qualified table name
     ext = bigquery.ExternalConfig(source_format)
@@ -90,14 +90,16 @@ def _bq_client_create_external_table(
     )
     created_table = client.create_table(tbl, timeout=300, exists_ok=True)
 
-    if test:
-        client.query(f"select * from {full_table_name} limit 1").result()
-        print(f"Successfully queried {full_table_name}")
+    if post_hook:
+        client.query(post_hook).result()
+        print(f"Successfully ran {post_hook}")
 
     return created_table
 
 
 class ExternalTable(BaseOperator):
+    template_fields = ("post_hook",)
+
     def __init__(
         self,
         *args,
@@ -111,7 +113,7 @@ class ExternalTable(BaseOperator):
         source_format="CSV",
         use_bq_client=False,
         field_delimiter=",",
-        test=False,
+        post_hook=None,
         **kwargs,
     ):
         self.bucket = bucket
@@ -129,7 +131,7 @@ class ExternalTable(BaseOperator):
         self.hive_options = hive_options
         self.use_bq_client = use_bq_client
         self.field_delimiter = field_delimiter
-        self.test = test
+        self.post_hook = post_hook
 
         super().__init__(**kwargs)
 
@@ -146,7 +148,7 @@ class ExternalTable(BaseOperator):
                 self.source_format,
                 self.hive_options,
                 self.bucket,
-                self.test,
+                self.post_hook,
             )
 
         else:

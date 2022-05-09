@@ -1,7 +1,11 @@
 operator: operators.ExternalTable
 bucket: gs://rt-parsed
 prefix_bucket: true
-test: true
+
+post_hook: |
+  select distinct errorMessage.validationRule.errorDescription
+  from `{{ get_project_id() }}`.external_gtfs_rt.trip_updates_validations;
+
 source_objects:
   - "trip_updates_validations/*.jsonl.gz"
 destination_project_dataset_table: "external_gtfs_rt.trip_updates_validations"
