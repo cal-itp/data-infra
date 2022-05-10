@@ -6,11 +6,10 @@ air_base_name: california_transit
 bucket: "gs://{{ prefix_bucket('airtable') }}"
 airtable_options:
   id_name: service_id
-
-rename_fields:
-  "# Static": num_static
-  "# TripUpdates": num_trip_updates
-  "# Alerts": num_service_alerts
-  "# VehiclePositions": num_vehicle_positions
-  "Product: GRaaS": "product_graas"
-  "Product: Payments": "product_payments"
+  rename_fields:
+    "# Static": num_static
+    "# TripUpdates": num_trip_updates
+    "# Alerts": num_service_alerts
+    "# VehiclePositions": num_vehicle_positions
+    "Product: GRaaS": "product_graas"
+    "Product: Payments": "product_payments"
