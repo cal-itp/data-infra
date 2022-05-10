@@ -126,7 +126,6 @@ class AirtableToWarehouseOperator(BaseOperator):
                 This can be someone's personal API key. If not provided, the environment
                 variable of `CALITP_AIRTABLE_API_KEY` is used.
         """
-
         self.extract = AirtableExtract(
             air_base_id=air_base_id,
             air_base_name=air_base_name,
