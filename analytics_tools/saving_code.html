@@ -722,6 +722,11 @@
     </ul>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#options-for-resolving-merge-conflicts">
+     Options for Resolving Merge Conflicts
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#helpful-hints">
      Helpful Hints
     </a>
@@ -818,6 +823,11 @@
     </ul>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#options-for-resolving-merge-conflicts">
+     Options for Resolving Merge Conflicts
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#helpful-hints">
      Helpful Hints
     </a>
@@ -862,6 +872,7 @@
 <li><p>What’s a typical <a class="reference external" href="#project-workflow">project workflow</a>?</p></li>
 <li><p>Someone is collaborating on my branch, how do we <a class="reference external" href="#pulling-and-pushing-changes">stay in sync</a>?</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">main</span></code> branch is ahead, and I want to <a class="reference internal" href="#rebase-and-merge"><span class="std std-ref">sync my branch with <code class="docutils literal notranslate"><span class="pre">main</span></code></span></a></p></li>
+<li><p>Options to <a class="reference internal" href="#resolve-merge-conflicts"><span class="std std-ref">Resolve Merge Conflicts</span></a></p></li>
 <li><p><a class="reference external" href="#helpful-hints">Helpful Hints</a></p></li>
 <li><p><a class="reference internal" href="#external-git-resources"><span class="std std-ref">External Git Resources</span></a></p></li>
 </ul>
@@ -1038,6 +1049,22 @@
 <li><p>Type <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">log</span></code> to see that the merge commit was created.</p></li>
 </ol>
 </div>
+</div>
+<div class="section" id="options-for-resolving-merge-conflicts">
+<span id="resolve-merge-conflicts"></span><h3>Options for Resolving Merge Conflicts<a class="headerlink" href="#options-for-resolving-merge-conflicts" title="Permalink to this headline">¶</a></h3>
+<p>If you discover merge conflicts and they are within a single notebook that only you are working on it can be relatively easy to resolve them using the Git command line instructions:</p>
+<ul class="simple">
+<li><p>From the command line, run <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">merge</span> <span class="pre">main</span></code>. This should show you the conflict.</p></li>
+<li><p>From here, there are two options depending on what version of the notebook you’d like to keep.</p>
+<ul>
+<li><p>To keep the version on your branch, run:<br/>
+<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">--ours</span> <span class="pre">path/to/notebook.ipynb</span></code></p></li>
+<li><p>To keep the remote version, run:<br/>
+<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">--theirs</span> <span class="pre">path/to/notebook.ipynb</span></code></p></li>
+</ul>
+</li>
+<li><p>From here, just add the file and commit with a message as you normally would and the conflict should be fixed in your Pull Request.</p></li>
+</ul>
 </div>
 <div class="section" id="helpful-hints">
 <h3>Helpful Hints<a class="headerlink" href="#helpful-hints" title="Permalink to this headline">¶</a></h3>
