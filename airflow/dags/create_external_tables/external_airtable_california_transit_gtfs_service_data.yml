@@ -1,10 +1,14 @@
 operator: operators.ExternalTable
 bucket: gs://airtable
 prefix_bucket: true
+post_hook: |
+  SELECT *
+  FROM `{{ get_project_id() }}`.external_airtable.california_transit__gtfs_service_data
+  LIMIT 1;
 source_objects:
-  - "california_transit__gtfs_service_data/*.csv"
+  - "california_transit__gtfs_service_data/*.jsonl.gz"
 destination_project_dataset_table: "external_airtable.california_transit__gtfs_service_data"
-source_format: CSV
+source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 hive_options:
   mode: AUTO
