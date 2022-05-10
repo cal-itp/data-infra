@@ -1,3 +1,4 @@
+import gzip
 import os
 import pandas as pd
 import pendulum
@@ -76,13 +77,16 @@ class AirtableExtract(BaseModel):
             f"{self.air_base_name}__{slugify(self.air_table_name, separator='_')}",
             f"dt={self.extract_time.to_date_string()}",
             f"time={self.extract_time.to_time_string()}",
-            f"{slugify(self.air_table_name, separator='_')}.csv",
+            f"{slugify(self.air_table_name, separator='_')}.jsonl.gz",
         )
 
     def save_to_gcs(self, fs, bucket):
         hive_path = self.make_hive_path(bucket)
         print(f"Uploading to GCS at {hive_path}")
-        fs.pipe(hive_path, self.data.to_csv(index=False).encode())
+        fs.pipe(
+            hive_path,
+            gzip.compress(self.data.to_json(orient="records", lines=True).encode()),
+        )
 
 
 class AirtableToWarehouseOperator(BaseOperator):
