@@ -1,18 +1,13 @@
----
-description: "This task makes the assumption that, in the case of duplicated micropayment_id values, the one with the latest transaction_time in the latest export file takes precedence."
-operator: operators.SqlToWarehouseOperator
-dst_table_name: "payments.stg_enriched_micropayments"
+{{ config(materialized='table') }}
 
-external_dependencies:
-  - payments_loader: all
----
+WITH stg_enriched_micropayments AS (
+    {{
+        sql_enrich_duplicates(
+            source('payments', 'micropayments'),
+            ['micropayment_id'],
+            ['calitp_file_name desc', 'transaction_time desc']
+        )
+    }}
+)
 
-{{
-
-  sql_enrich_duplicates(
-    "payments.micropayments",
-    ["micropayment_id"],
-    ["calitp_file_name desc", "transaction_time desc"]
-  )
-
-}}
+SELECT * FROM stg_enriched_micropayments

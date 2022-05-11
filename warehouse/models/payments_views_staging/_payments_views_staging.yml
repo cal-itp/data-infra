@@ -297,6 +297,68 @@ sources:
           - &micropayment_device_transactions_micropayment_id
             name: micropayment_id
             description: The micropayment that the transaction is associated with.
+      - name: micropayments
+        description: |
+          A micropayment represents a debit or credit that is made against the
+          customer's funding source for a trip. Multiple micropayments can be
+          aggregated and settled together. Credit micropayments can be created
+          if a refund is requested for the travel associated with a debit
+          micropayment, and before the aggregation containing the debit
+          micropayment is settled.
+        columns:
+          - &micropayments_micropayment_id
+            name: micropayment_id
+            description: Uniquely identifies the micropayment.
+          - &micropayments_aggregation_id
+            name: aggregation_id
+            description: Identifies the aggregation that the micropayment belongs to.
+          - &micropayments_participant_id
+            name: participant_id
+            description: Identifies the participant that the micropayment belongs to.
+          - &micropayments_customer_id
+            name: customer_id
+            description: Identifies the customer that the micropayment belongs to.
+          - &micropayments_funding_source_vault_id
+            name: funding_source_vault_id
+            description: |
+              Identifies the funding source (for example, card) that the micropayment will be charged to. This is always the card that was tapped.
+
+              A registered customer can have multiple funding sources linked to it. This field can be used to join to the `customer_funding_source` feed.
+          - &micropayments_transaction_time
+            name: transaction_time
+            description: |
+              The date and time when the micropayment was created.
+
+              For variable fare (tap on/tap off), the micropayment will not be created until the tap off occurs.
+
+              The date reflects the processing time by Littlepay, rather than the event time; that is, when the related taps occurred.
+          - &micropayments_payment_liability
+            name: payment_liability
+            description: |
+              Indicates who would be liable to absorb the cost if the micropayment was declined by the issuer when an authorisation is attempted.
+
+              Possible values are `ISSUER` or `OPERATOR`.
+          - &micropayments_charge_amount
+            name: charge_amount
+            description: The amount that will be credited to or debited from the funding source. This may be lower than the nominal amount if adjustments have been applied. nominal_amount Decimal The amount that would be charged if no adjustments were to be applied.
+          - &micropayments_currency_code
+            name: currency_code
+            description: ISO 4217 numeric code representing the currency that the `charge_amount` and `nominal_amount` are denominated in.
+          - &micropayments_type
+            name: type
+            description: |
+              Indicates the type of fare that the micropayment charge represents.
+
+              Transaction type. Possible values are `CREDIT` or `DEBIT`. The value Will be `DEBIT` if `charge_amount >= 0.00`
+          - &micropayments_charge_type
+            name: charge_type
+            description: |
+              Possible values:
+              * `RETAIL_FARE`
+              * `FLAT_FARE`
+              * `COMPLETE_VARIABLE_FARE`
+              * `INCOMPLETE_VARIABLE_FARE`
+              * `REFUND`
 
 enrichment_field_declarations:
   - &calitp_hash
@@ -446,6 +508,27 @@ models:
     columns:
       - *micropayment_device_transactions_littlepay_transaction_id
       - *micropayment_device_transactions_micropayment_id
+      - *calitp_hash
+      - *calitp_file_name
+      - *calitp_export_account
+      - *calitp_export_datetime
+      - *calitp_n_dupes
+      - *calitp_n_dupe_ids
+      - *calitp_dupe_number
+  - name: stg_enriched_micropayments
+    description: This model makes the assumption that, in the case of duplicated micropayment_id values, the one with the latest transaction_time in the latest export file takes precedence.
+    columns:
+      - *micropayments_micropayment_id
+      - *micropayments_aggregation_id
+      - *micropayments_participant_id
+      - *micropayments_customer_id
+      - *micropayments_funding_source_vault_id
+      - *micropayments_transaction_time
+      - *micropayments_payment_liability
+      - *micropayments_charge_amount
+      - *micropayments_currency_code
+      - *micropayments_type
+      - *micropayments_charge_type
       - *calitp_hash
       - *calitp_file_name
       - *calitp_export_account
