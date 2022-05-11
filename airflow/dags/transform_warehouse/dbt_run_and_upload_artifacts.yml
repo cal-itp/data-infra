@@ -1,6 +1,6 @@
 operator: 'operators.PodOperator'
 name: 'dbt-run-and-upload-artifacts'
-image: 'ghcr.io/cal-itp/data-infra/warehouse:latest'
+image: 'ghcr.io/cal-itp/data-infra/warehouse:{{ image_tag() }}'
 
 cmds:
   - python3
