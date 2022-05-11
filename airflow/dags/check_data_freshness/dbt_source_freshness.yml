@@ -1,5 +1,5 @@
 operator: 'operators.PodOperator'
-name: 'dbt-test'
+name: 'dbt-source-freshness'
 image: 'ghcr.io/cal-itp/data-infra/warehouse:{{ image_tag() }}'
 
 cmds:
