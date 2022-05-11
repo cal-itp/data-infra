@@ -21,7 +21,7 @@ def run(
     target: str = os.environ.get("DBT_TARGET"),
     dbt_run: bool = True,
     dbt_test: bool = True,
-    dbt_snapshot_freshness: bool = True,
+    dbt_freshness: bool = True,
     dbt_docs: bool = False,
     save_artifacts: bool = False,
     deploy_docs: bool = False,
@@ -62,7 +62,7 @@ def run(
     else:
         test_result = None
 
-    if dbt_snapshot_freshness:
+    if dbt_freshness:
         freshness_result = subprocess.run(get_command("source", "snapshot-freshness"))
     else:
         freshness_result = None

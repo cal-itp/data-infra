@@ -8,7 +8,7 @@ arguments:
   - '/app/scripts/run_and_upload.py'
   - '--no-dbt-run'
   - '--no-dbt-test'
-  - '--dbt-source-freshness'
+  - '--dbt-freshness'
 
 dependencies:
   - dbt_run_and_upload_artifacts
