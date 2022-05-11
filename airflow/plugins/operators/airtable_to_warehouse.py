@@ -15,6 +15,51 @@ from airflow.models import BaseOperator
 AIRTABLE_API_KEY = os.environ["CALITP_AIRTABLE_API_KEY"]
 
 
+def fix_array_containing_null(arr):
+    """
+    BigQuery doesn't allow arrays that contain null values --
+    see: https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types#array_nulls
+    Therefore we need to manually replace nulls with falsy values according
+    to the data in the array.
+    """
+    # we already know the array has a null value before we call this
+    # check whether there are any non-null values
+    if len(set(arr)) > 1:
+        non_null_entries = set(arr) - {None}
+        non_null_types = {type(entry) for entry in non_null_entries}
+        if non_null_types in [{int}, {float}]:
+            new_array = [x if x is not None else -1 for x in arr]
+        else:
+            new_array = [x if x is not None else "" for x in arr]
+    else:
+        # if it only has null values, just return an empty array --
+        # this collapses a distinction in lookup cases
+        # between records in the current table that have a record in the foreign
+        # table where the lookup field is null in the foreign table
+        # (these would return an array with a null entry like [null])
+        # vs. records in the current table that have no corresponding record
+        # (these would return a null array like [])
+        # in the foreign table
+        # however, this distinction should be recoverable from other fields
+        new_array = []
+    return new_array
+
+
+def make_arrays_bq_safe(raw_data):
+    safe_data = {}
+    for k, v in raw_data.items():
+        if type(v) == dict:
+            make_arrays_bq_safe(v)
+        elif type(v) == list:
+            if None in v:
+                safe_data[k] = fix_array_containing_null(v)
+            else:
+                safe_data[k] = v
+        else:
+            safe_data[k] = v
+    return safe_data
+
+
 class AirtableExtract(BaseModel):
     air_base_id: str
     air_base_name: str
@@ -25,7 +70,7 @@ class AirtableExtract(BaseModel):
     data: Optional[pd.DataFrame]
     extract_time: Optional[pendulum.DateTime]
 
-    # pydantic doesn't know dataframe
+    # pydantic doesn't know dataframe type
     # see https://stackoverflow.com/a/69200069
     class Config:
         arbitrary_types_allowed = True
@@ -48,8 +93,12 @@ class AirtableExtract(BaseModel):
         )
         all_rows = Table(api_key, self.air_base_id, self.air_table_name).all()
         self.extract_time = pendulum.now("utc")
+
         raw_df = pd.DataFrame(
-            [{self.id_name: row["id"], **row["fields"]} for row in all_rows]
+            [
+                {self.id_name: row["id"], **make_arrays_bq_safe(row["fields"])}
+                for row in all_rows
+            ]
         )
 
         # rename fields follows format new_name: old_name
@@ -104,28 +153,29 @@ class AirtableToWarehouseOperator(BaseOperator):
         **kwargs,
     ):
         """An operator that downloads data from an Airtable base
-            and saves it as a CSV file hive-partitioned by date and time in Google Cloud
+            and saves it as a JSON file hive-partitioned by date and time in Google Cloud
             Storage (GCS).
 
         Args:
-            air_base_id (str): The underlying id of the airtable instance being used.
+            bucket (str): GCS bucket where the scraped Airtable will be saved.
+            air_base_id (str): The underlying id of the Airtable instance being used.
+            air_base_name (str): The string name of the Base.
             air_table_name (str): The table name that should be extracted from the
-                airtable base
-            table_name (str): The name of the table to save to in Big Query
-            gcs_path (str, optional): A GCS path prefix. If not provided, no uploading
-                to GCS will occur. The resulting item gets saved to GCS at the following
-                path:
-                    `{base_calitp_bucket}/{gcs_path}/{execution_date}/{table_name}.csv`.
-            id_name (str, optional): The name to give the ID column. Defaults to "__id".
-            rename_fields (dict, optional): A mapping new desired column name (string)
-                to current airtable column name (string) respectively. Defaults to None.
-            column_prefix (str, optional): A string prefix to rename all columns with.
-                This prefix is not applied to columns affected by a rename triggered
-                from providing either `id_name` or `rename_fields`. Defaults to None.
+                Airtable Base
+            airtable_options (dict): optional fields: id_name, rename_fields,
+                column_prefix.
+                id_name (str, optional): The name to give the ID column. Defaults to "__id".
+                rename_fields (dict, optional): A mapping of raw column name from Airtable
+                    (string) to desired column name (string) respectively. Defaults to
+                    empty dict.
+                column_prefix (str, optional): A string prefix to rename all columns with.
+                    This prefix is not applied to columns affected by a rename triggered
+                    from providing either `id_name` or `rename_fields`.
             api_key (str, optional): The API key to use when downloading from airtable.
                 This can be someone's personal API key. If not provided, the environment
                 variable of `CALITP_AIRTABLE_API_KEY` is used.
         """
+        self.bucket = bucket
         self.extract = AirtableExtract(
             air_base_id=air_base_id,
             air_base_name=air_base_name,
@@ -133,7 +183,7 @@ class AirtableToWarehouseOperator(BaseOperator):
             **airtable_options,
         )
         self.api_key = api_key
-        self.bucket = bucket
+
         super().__init__(**kwargs)
 
     def execute(self, **kwargs):
