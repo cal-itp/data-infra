@@ -21,6 +21,7 @@ def run(
     target: str = os.environ.get("DBT_TARGET"),
     dbt_run: bool = True,
     dbt_test: bool = True,
+    dbt_snapshot_freshness: bool = True,
     dbt_docs: bool = False,
     save_artifacts: bool = False,
     deploy_docs: bool = False,
@@ -60,6 +61,11 @@ def run(
         test_result = subprocess.run(get_command("test"))
     else:
         test_result = None
+
+    if dbt_snapshot_freshness:
+        freshness_result = subprocess.run(get_command("source", "snapshot-freshness"))
+    else:
+        freshness_result = None
 
     if dbt_docs:
         subprocess.run(get_command("docs", "generate")).check_returncode()
@@ -125,6 +131,9 @@ def run(
 
     if test_result:
         test_result.check_returncode()
+
+    if freshness_result:
+        freshness_result.check_returncode()
 
 
 if __name__ == "__main__":
