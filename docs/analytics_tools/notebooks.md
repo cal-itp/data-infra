@@ -6,7 +6,7 @@ Jupyterhub is a web application that allows users to analyze and create reports 
 
 Analyses on JupyterHub are accomplished using notebooks, which allow users to mix narrative with analysis code.
 
-**You can access JuypterHub [using this link](https://hubtest.k8s.calitp.jarv.us/)**.
+**You can access JuypterHub using this link:[notebooks.calitp.org](https://notebooks.calitp.org/)**.
 
 ## Table of Contents
 1. [Using JupyterHub](#using-jupyterhub)
@@ -25,7 +25,7 @@ This avoids the need to set up a local environment, provides dedicated storage, 
 
 ### Logging in to JupyterHub
 
-JupyterHub currently lives at [hubtest.k8s.calitp.jarv.us/hub](https://hubtest.k8s.calitp.jarv.us/hub/).
+JupyterHub currently lives at [notebooks.calitp.org](https://notebooks.calitp.org/).
 
 Note: you will need to have been added to the Cal-ITP organization on GitHub to obtain access. If you have yet to be added to the organization and need to be, DM Charlie on Cal-ITP Slack <a href="https://cal-itp.slack.com/team/U027GAVHFST" target="_blank">using this link</a>.
 

@@ -21,13 +21,14 @@
 **Dashboards & Notebooks:**
 
 - [ ]  [**Metabase**](https://dashboards.calitp.org/) - Business Insights & Dashboards | ([Docs](metabase))
-- [ ]  [**JupyterHub**](https://hubtest.k8s.calitp.jarv.us/) - Cloud-based notebooks for querying Python, SQL, R | ([Docs](jupyterhub))
+- [ ]  [**JupyterHub**](https://notebooks.calitp.org/) - Cloud-based notebooks for querying Python, SQL, R | ([Docs](jupyterhub))
 - [ ]  [**Google BigQuery**](https://console.cloud.google.com/bigquery) - Viewing the data warehouse and querying SQL
 
 **Python Libraries:**
 
 - [ ]  **calitp** - Cal-ITP's internal Python library | ([Docs](calitp))
 - [ ]  **siuba** - Recommended data analysis library | ([Docs](siuba))
+- [ ]  **shared_utils** - A shared analytics team utilities library | ([Docs](shared-utils))
 
 &nbsp;
 (get-help)=
