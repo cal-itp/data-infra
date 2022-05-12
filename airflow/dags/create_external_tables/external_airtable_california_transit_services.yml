@@ -1,5 +1,5 @@
 operator: operators.ExternalTable
-bucket: gs://airtable
+bucket: gs://calitp-airtable
 prefix_bucket: true
 post_hook: |
   SELECT *
