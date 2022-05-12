@@ -103,7 +103,7 @@ class AirtableExtract(BaseModel):
             raise ValueError(
                 "An extract time must be set before a hive path can be generated."
             )
-        safe_air_table_name = "_".join(self.air_table_name.split(" "))
+        safe_air_table_name = str.lower("_".join(self.air_table_name.split(" ")))
         return os.path.join(
             bucket,
             f"{self.air_base_name}__{safe_air_table_name}",
@@ -115,7 +115,7 @@ class AirtableExtract(BaseModel):
     def save_to_gcs(self, fs, bucket):
         hive_path = self.make_hive_path(bucket)
         print(f"Uploading to GCS at {hive_path}")
-        assert self.data, "data does not exist, cannot save"
+        assert self.data.any(None), "data does not exist, cannot save"
         fs.pipe(
             hive_path,
             gzip.compress(self.data.to_json(orient="records", lines=True).encode()),
