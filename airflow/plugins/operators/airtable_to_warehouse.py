@@ -15,32 +15,29 @@ from airflow.models import BaseOperator
 AIRTABLE_API_KEY = os.environ["CALITP_AIRTABLE_API_KEY"]
 
 
-def fix_array_containing_null(arr):
+def process_arrays_for_nulls(arr):
     """
     BigQuery doesn't allow arrays that contain null values --
     see: https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types#array_nulls
     Therefore we need to manually replace nulls with falsy values according
-    to the data in the array.
+    to the type of data in the array.
     """
-    # we already know the array has a null value before we call this
-    # check whether there are any non-null values
-    if len(set(arr)) > 1:
-        non_null_entries = set(arr) - {None}
-        non_null_types = {type(entry) for entry in non_null_entries}
-        if non_null_types in [{int}, {float}]:
+    # check whether there are any non-null values in the array
+    # can't look at NoneType directly in Python 3: https://bugs.python.org/issue19438
+    types = {type(entry) for entry in {arr}} - {type(None)}
+    if len(types) > 0:
+        if types <= {int, float}:
             new_array = [x if x is not None else -1 for x in arr]
+        # use empty string for all non-numeric types
+        # may need to expand this over time
         else:
             new_array = [x if x is not None else "" for x in arr]
     else:
-        # if it only has null values, just return an empty array --
-        # this collapses a distinction in lookup cases
-        # between records in the current table that have a record in the foreign
-        # table where the lookup field is null in the foreign table
-        # (these would return an array with a null entry like [null])
-        # vs. records in the current table that have no corresponding record
-        # (these would return a null array like [])
-        # in the foreign table
-        # however, this distinction should be recoverable from other fields
+        # if array only has null values, just return an empty array --
+        # this collapses the distinction between [null] and []
+        # which may be meaningful in cases where the array is the
+        # result of a lookup in Airtable, but the distinction
+        # should be recoverable by checking the lookup relation directly
         new_array = []
     return new_array
 
@@ -51,10 +48,7 @@ def make_arrays_bq_safe(raw_data):
         if isinstance(v, dict):
             make_arrays_bq_safe(v)
         elif isinstance(v, list):
-            if None in v:
-                safe_data[k] = fix_array_containing_null(v)
-            else:
-                safe_data[k] = v
+            safe_data[k] = process_arrays_for_nulls(v)
         else:
             safe_data[k] = v
     return safe_data
