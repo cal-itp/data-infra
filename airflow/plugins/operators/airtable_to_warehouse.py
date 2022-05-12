@@ -48,9 +48,9 @@ def fix_array_containing_null(arr):
 def make_arrays_bq_safe(raw_data):
     safe_data = {}
     for k, v in raw_data.items():
-        if type(v) == dict:
+        if isinstance(v, dict):
             make_arrays_bq_safe(v)
-        elif type(v) == list:
+        elif isinstance(v, list):
             if None in v:
                 safe_data[k] = fix_array_containing_null(v)
             else:
