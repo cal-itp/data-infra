@@ -21,24 +21,14 @@ def process_arrays_for_nulls(arr):
     Therefore we need to manually replace nulls with falsy values according
     to the type of data in the array.
     """
-    # check whether there are any non-null values in the array
-    # can't look at NoneType directly in Python 3: https://bugs.python.org/issue19438
-    types = {type(entry) for entry in {arr}} - {type(None)}
-    if len(types) > 0:
-        if types <= {int, float}:
-            new_array = [x if x is not None else -1 for x in arr]
-        # use empty string for all non-numeric types
-        # may need to expand this over time
-        else:
-            new_array = [x if x is not None else "" for x in arr]
-    else:
-        # if array only has null values, just return an empty array --
-        # this collapses the distinction between [null] and []
-        # which may be meaningful in cases where the array is the
-        # result of a lookup in Airtable, but the distinction
-        # should be recoverable by checking the lookup relation directly
-        new_array = []
-    return new_array
+    types = set(type(entry) for entry in arr if entry is not None)
+
+    if not types:
+        return []
+    # use empty string for all non-numeric types
+    # may need to expand this over time
+    filler = -1 if types <= {int, float} else ""
+    return [x if x is not None else filler for x in arr]
 
 
 def make_arrays_bq_safe(raw_data):
