@@ -5,7 +5,6 @@ import pendulum
 
 from pyairtable import Table
 from pydantic import BaseModel
-from slugify import slugify
 from typing import Optional, Dict
 from calitp import to_snakecase
 from calitp.storage import get_fs
@@ -115,17 +114,19 @@ class AirtableExtract(BaseModel):
             raise ValueError(
                 "An extract time must be set before a hive path can be generated."
             )
+        safe_air_table_name = "_".join(self.air_table_name.split(" "))
         return os.path.join(
             bucket,
-            f"{self.air_base_name}__{slugify(self.air_table_name, separator='_')}",
+            f"{self.air_base_name}__{safe_air_table_name}",
             f"dt={self.extract_time.to_date_string()}",
             f"time={self.extract_time.to_time_string()}",
-            f"{slugify(self.air_table_name, separator='_')}.jsonl.gz",
+            f"{safe_air_table_name}.jsonl.gz",
         )
 
     def save_to_gcs(self, fs, bucket):
         hive_path = self.make_hive_path(bucket)
         print(f"Uploading to GCS at {hive_path}")
+        assert self.data, "data does not exist, cannot save"
         fs.pipe(
             hive_path,
             gzip.compress(self.data.to_json(orient="records", lines=True).encode()),
