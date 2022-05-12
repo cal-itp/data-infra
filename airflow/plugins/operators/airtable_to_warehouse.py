@@ -45,11 +45,10 @@ def make_arrays_bq_safe(raw_data):
     safe_data = {}
     for k, v in raw_data.items():
         if isinstance(v, dict):
-            make_arrays_bq_safe(v)
+            v = make_arrays_bq_safe(v)
         elif isinstance(v, list):
-            safe_data[k] = process_arrays_for_nulls(v)
-        else:
-            safe_data[k] = v
+            v = process_arrays_for_nulls(v)
+        safe_data[k] = v
     return safe_data
 
 
