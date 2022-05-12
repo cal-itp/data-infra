@@ -18,4 +18,4 @@ typer==0.4.0
 humanize==3.14.0
 backoff==1.11.1
 pydantic==1.9.0
-slugify==0.0.1
+python-slugify==5.0.0
