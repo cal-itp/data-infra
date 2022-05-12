@@ -271,3 +271,31 @@ models:
     columns:
       - *calitp_itp_id
       - *calitp_url_number
+
+exposures:
+  - name: california_open_data
+    type: application
+    maturity: low
+    url: https://data.ca.gov/dataset/cal-itp-gtfs-ingest-pipeline-dataset
+    description: Latest-only GTFS Schedule data published to Caltrans CKAN instance.
+
+    depends_on:
+      - ref("agency")
+      - ref("routes")
+      - ref("stop_times")
+      - ref("stops")
+      - ref("trips")
+
+    owner:
+      email: laurie.m@jarv.us
+
+    meta:
+      destinations:
+        - type: ckan
+          url: something
+          ids:
+            agency: e8f9d49e-2bb6-400b-b01f-28bc2e0e7df2
+            routes: c6bbb637-988f-431c-8444-aef7277297f8
+            stop_times: d31eef2f-e223-4ca4-a86b-170acc6b2590
+            stops: 8c876204-e12b-48a2-8299-10f6ae3d4f2b
+            trips: 0e4da89e-9330-43f8-8de9-305cb7d4918f
