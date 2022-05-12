@@ -5,7 +5,7 @@ description = ""
 authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.9"
 dbt-core = "^1.0.4"
 dbt-bigquery = "^1.0.0"
 colorama = "^0.4.4"
@@ -16,6 +16,7 @@ typer = "^0.4.0"
 click = "8.0.0"
 # Point at the JarvusInnovations fork for new features; long-term we may be able to point at the pypi version
 dbt-metabase = { git = "https://github.com/JarvusInnovations/dbt-metabase" }
+pydantic = "^1.9.0"
 
 [tool.poetry.dev-dependencies]
 
