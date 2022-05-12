@@ -3,10 +3,11 @@ operator: operators.AirtableToWarehouseOperator
 air_base_id: apphcwzP8cR82NeJo
 air_base_name: sandbox
 air_table_name: child
-bucket: "gs://{{ prefix_bucket('airtable') }}"
+bucket: "gs://{{ prefix_bucket('calitp-airtable') }}"
 
-id_name: "child_id"
-column_prefix: "child_"
+airtable_options:
+  id_name: "child_id"
+  column_prefix: "child_"
 
 
 dependencies:
