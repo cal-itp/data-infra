@@ -13,7 +13,7 @@ kernelspec:
   name: python3
 ---
 (warehouse-tutorial)=
-# Tutorial - Querying the Data Warehouse
+# Querying GTFS in the Data Warehouse
 
 ## Introduction
 
