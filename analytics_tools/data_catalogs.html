@@ -327,7 +327,7 @@
  </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../analytics_examples/overview.html">
-   Analysis Examples
+   Analysis Tutorials
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
   <label for="toctree-checkbox-6">
@@ -337,7 +337,7 @@
   <ul>
    <li class="toctree-l2">
     <a class="reference internal" href="../analytics_examples/warehouse_tutorial.html">
-     Tutorial - Querying the Data Warehouse
+     Querying GTFS in the Data Warehouse
     </a>
    </li>
    <li class="toctree-l2">
@@ -369,7 +369,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../analytics_publishing/where_reports_live.html">
-     Where Reports Live (WIP)
+     Where Reports Live
     </a>
    </li>
   </ul>
@@ -813,7 +813,7 @@
 <div class="section" id="google-cloud-storage">
 <span id="catalogue-cloud-storage"></span><h3>Google Cloud Storage<a class="headerlink" href="#google-cloud-storage" title="Permalink to this headline">¶</a></h3>
 <p>When putting GCS files into the catalog, note that geospatial datasets (zipped shapefiles, GeoJSONs) require the additional <code class="docutils literal notranslate"><span class="pre">use_fsspec:</span> <span class="pre">true</span></code> argument compared to tabular datasets (parquets, CSVs). Geoparquets, the exception, are catalogued like tabular datasets.</p>
-<p>Opening geospatial datasets through <code class="docutils literal notranslate"><span class="pre">intake</span></code> is the easiest way to import these datasets within a Jupyter Notebook. Otherwise, <code class="docutils literal notranslate"><span class="pre">geopandas</span></code> can read the geospatial datasets that are locally saved or downloaded first from the bucket, but not directly with a GCS file path. Refer to <a class="reference internal" href="notebooks.html#connecting-to-warehouse"><span class="std std-ref">storing data</span></a> to set up your Google authentication.</p>
+<p>Opening geospatial datasets through <code class="docutils literal notranslate"><span class="pre">intake</span></code> is the easiest way to import these datasets within a Jupyter Notebook. Otherwise, <code class="docutils literal notranslate"><span class="pre">geopandas</span></code> can read the geospatial datasets that are locally saved or downloaded first from the bucket, but not directly with a GCS file path. Refer to [storing data](Connecting to the Warehouse) to set up your Google authentication.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">lehd_federal_jobs_by_tract</span><span class="p">:</span><span class="w"></span>
 <span class="w">    </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">parquet</span><span class="w"></span>
 <span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LEHD Workplace Area Characteristics (WAC) federal jobs by census tract.</span><span class="w"></span>

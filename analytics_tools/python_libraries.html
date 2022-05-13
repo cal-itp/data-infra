@@ -327,7 +327,7 @@
  </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../analytics_examples/overview.html">
-   Analysis Examples
+   Analysis Tutorials
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
   <label for="toctree-checkbox-6">
@@ -337,7 +337,7 @@
   <ul>
    <li class="toctree-l2">
     <a class="reference internal" href="../analytics_examples/warehouse_tutorial.html">
-     Tutorial - Querying the Data Warehouse
+     Querying GTFS in the Data Warehouse
     </a>
    </li>
    <li class="toctree-l2">
@@ -369,7 +369,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../analytics_publishing/where_reports_live.html">
-     Where Reports Live (WIP)
+     Where Reports Live
     </a>
    </li>
   </ul>
@@ -851,7 +851,7 @@
 <br> - <a class="reference external" href="#collect-query-results">Collect Query Results</a>
 <br> - <a class="reference external" href="#show-query-sql">Show Query SQL</a>
 <br> - <a class="reference internal" href="#more-siuba-resources"><span class="std std-ref">More siuba Resources</span></a></p></li>
-<li><p><a class="reference external" href="#shared-utils">shared utils</a></p></li>
+<li><p><a class="reference internal" href="#shared-utils"><span class="std std-ref">shared utils</span></a></p></li>
 <li><p><a class="reference internal" href="#pandas-resources"><span class="std std-ref">pandas</span></a></p></li>
 <li><p><a class="reference external" href="#add-new-packages">Add New Packages</a></p></li>
 </ol>
@@ -906,43 +906,43 @@
   <tbody>
     <tr>
       <th>0</th>
-      <td>9127058137036371429</td>
-      <td>4260441460837749951</td>
-      <td>2022-02-07</td>
-      <td>2022-01-31</td>
-      <td>2022-03-04</td>
+      <td>7326056996075156023</td>
+      <td>-6477902332919655831</td>
+      <td>2021-11-12</td>
+      <td>2021-11-08</td>
+      <td>2021-12-07</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>8353930773170009113</td>
-      <td>3656661739516995261</td>
-      <td>2021-08-13</td>
-      <td>2021-07-22</td>
-      <td>2021-10-14</td>
+      <td>-2013723651409416975</td>
+      <td>-2049464040527004315</td>
+      <td>2021-10-04</td>
+      <td>2021-10-01</td>
+      <td>2021-11-09</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>1847504978900494835</td>
-      <td>5212172959443075570</td>
-      <td>2021-07-27</td>
-      <td>2021-06-10</td>
-      <td>2021-08-06</td>
+      <td>-8337383773544914182</td>
+      <td>-3971759332961273536</td>
+      <td>2021-08-05</td>
+      <td>2021-07-07</td>
+      <td>2021-08-20</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-2587753254940472677</td>
-      <td>-6508874650971447450</td>
-      <td>2022-02-13</td>
-      <td>2022-02-04</td>
-      <td>2022-03-08</td>
+      <td>6457647398798790934</td>
+      <td>-4101836768357648033</td>
+      <td>2021-08-25</td>
+      <td>2021-07-12</td>
+      <td>2021-10-01</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-4496272124528728604</td>
-      <td>-1861692096182612125</td>
-      <td>2022-04-10</td>
-      <td>2022-03-29</td>
-      <td>2022-04-14</td>
+      <td>2549049850763959125</td>
+      <td>-3495800089097736971</td>
+      <td>2021-08-07</td>
+      <td>2021-08-01</td>
+      <td>2021-08-15</td>
     </tr>
   </tbody>
 </table>
@@ -1021,19 +1021,42 @@
   <tbody>
     <tr>
       <th>0</th>
-      <td>-3971869378563233510</td>
-      <td>8</td>
+      <td>18414309913382105</td>
       <td>1</td>
-      <td>Monterey-Salinas Transit</td>
-      <td>http://www.mst.org/google/google_transit.zip</td>
+      <td>2</td>
+      <td>Glendale Beeline</td>
+      <td>http://glendaleca.gov/Home/ShowDocument?id=29549</td>
       <td>False</td>
-      <td>8__1</td>
-      <td>Monterey-Salinas Transit (1)</td>
-      <td>MST</td>
-      <td>http://www.mst.org</td>
-      <td>en</td>
+      <td>1__2</td>
+      <td>Glendale Beeline (2)</td>
       <td>None</td>
-      <td>202101-February2021v00</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>False</td>
+      <td>2021-04-15</td>
+      <td>2021-04-16</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-5674234595782173143</td>
+      <td>2</td>
+      <td>0</td>
+      <td>Beach Cities Transit</td>
+      <td>https://www.redondo.org/civicax/filebank/blobd...</td>
+      <td>False</td>
+      <td>2__0</td>
+      <td>Beach Cities Transit (0)</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
@@ -1043,96 +1066,73 @@
       <td>2021-05-13</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>3220016414264074104</td>
-      <td>13</td>
-      <td>0</td>
-      <td>Amtrak</td>
-      <td>https://content.amtrak.com/content/gtfs/GTFS.zip</td>
-      <td>True</td>
-      <td>13__0</td>
-      <td>Amtrak (0)</td>
-      <td>Amtrak</td>
-      <td>http://www.amtrak.com</td>
-      <td>en</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>2022-02-28</td>
-      <td>None</td>
-      <td>False</td>
-      <td>2022-02-28</td>
-      <td>2022-03-04</td>
-    </tr>
-    <tr>
       <th>2</th>
-      <td>-1246851374109274803</td>
-      <td>13</td>
-      <td>0</td>
-      <td>Amtrak</td>
-      <td>https://storage.googleapis.com/gtfs-data/sched...</td>
-      <td>True</td>
-      <td>13__0</td>
-      <td>Amtrak (0)</td>
-      <td>Amtrak</td>
-      <td>http://www.amtrak.com</td>
-      <td>en</td>
+      <td>6604405555889056708</td>
+      <td>2</td>
+      <td>5</td>
+      <td>SamTrans</td>
+      <td>http://www.samtrans.com/Assets/GTFS/samtrans/S...</td>
+      <td>False</td>
+      <td>2__5</td>
+      <td>SamTrans (5)</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
-      <td>2021-09-04</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
       <td>None</td>
       <td>False</td>
-      <td>2021-10-19</td>
-      <td>2022-02-28</td>
+      <td>2021-04-15</td>
+      <td>2021-04-16</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-8012815880707764251</td>
-      <td>13</td>
+      <td>-5403103044674130453</td>
+      <td>3</td>
       <td>0</td>
-      <td>Amtrak</td>
-      <td>https://content.amtrak.com/content/gtfs/GTFS.zip</td>
-      <td>True</td>
-      <td>13__0</td>
-      <td>Amtrak (0)</td>
-      <td>Amtrak</td>
-      <td>http://www.amtrak.com</td>
-      <td>en</td>
+      <td>Commuter Express</td>
+      <td>http://lacitydot.com/gtfs/administrator/gtfszi...</td>
+      <td>False</td>
+      <td>3__0</td>
+      <td>Commuter Express (0)</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
-      <td>2022-04-30</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
       <td>None</td>
       <td>False</td>
-      <td>2022-05-09</td>
-      <td>2099-01-01</td>
+      <td>2021-04-15</td>
+      <td>2021-05-13</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-6443842139930306849</td>
-      <td>13</td>
+      <td>-6200903198154079414</td>
+      <td>5</td>
       <td>0</td>
-      <td>Amtrak</td>
-      <td>https://content.amtrak.com/content/gtfs/GTFS.zip</td>
-      <td>True</td>
-      <td>13__0</td>
-      <td>Amtrak (0)</td>
-      <td>Amtrak</td>
-      <td>http://www.amtrak.com</td>
-      <td>en</td>
+      <td>e-Tran</td>
+      <td>https://share.elkgrovecity.org/messages/tpLyue...</td>
+      <td>False</td>
+      <td>5__0</td>
+      <td>e-Tran (0)</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
-      <td>2022-03-05</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
       <td>None</td>
       <td>False</td>
-      <td>2022-03-04</td>
-      <td>2022-05-09</td>
+      <td>2021-04-15</td>
+      <td>2021-05-13</td>
     </tr>
   </tbody>
 </table>
@@ -1193,27 +1193,27 @@ and showing SQL test queries that siuba code generates.</p>
   <tbody>
     <tr>
       <th>0</th>
-      <td>-5768367084319898193</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>1</th>
       <td>2570854701378106641</td>
       <td>1</td>
     </tr>
     <tr>
+      <th>1</th>
+      <td>4353298498747921001</td>
+      <td>1</td>
+    </tr>
+    <tr>
       <th>2</th>
-      <td>1619926170103152824</td>
+      <td>-74403229883010320</td>
       <td>1</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-5013919702465349414</td>
+      <td>1619926170103152824</td>
       <td>1</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>4353298498747921001</td>
+      <td>-1803822485067769256</td>
       <td>1</td>
     </tr>
   </tbody>
@@ -1278,19 +1278,42 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
   <tbody>
     <tr>
       <th>0</th>
-      <td>-3971869378563233510</td>
-      <td>8</td>
+      <td>18414309913382105</td>
       <td>1</td>
-      <td>Monterey-Salinas Transit</td>
-      <td>http://www.mst.org/google/google_transit.zip</td>
+      <td>2</td>
+      <td>Glendale Beeline</td>
+      <td>http://glendaleca.gov/Home/ShowDocument?id=29549</td>
       <td>False</td>
-      <td>8__1</td>
-      <td>Monterey-Salinas Transit (1)</td>
-      <td>MST</td>
-      <td>http://www.mst.org</td>
-      <td>en</td>
+      <td>1__2</td>
+      <td>Glendale Beeline (2)</td>
       <td>None</td>
-      <td>202101-February2021v00</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>False</td>
+      <td>2021-04-15</td>
+      <td>2021-04-16</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-5674234595782173143</td>
+      <td>2</td>
+      <td>0</td>
+      <td>Beach Cities Transit</td>
+      <td>https://www.redondo.org/civicax/filebank/blobd...</td>
+      <td>False</td>
+      <td>2__0</td>
+      <td>Beach Cities Transit (0)</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
@@ -1300,96 +1323,73 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
       <td>2021-05-13</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>3220016414264074104</td>
-      <td>13</td>
-      <td>0</td>
-      <td>Amtrak</td>
-      <td>https://content.amtrak.com/content/gtfs/GTFS.zip</td>
-      <td>True</td>
-      <td>13__0</td>
-      <td>Amtrak (0)</td>
-      <td>Amtrak</td>
-      <td>http://www.amtrak.com</td>
-      <td>en</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>2022-02-28</td>
-      <td>None</td>
-      <td>False</td>
-      <td>2022-02-28</td>
-      <td>2022-03-04</td>
-    </tr>
-    <tr>
       <th>2</th>
-      <td>-1246851374109274803</td>
-      <td>13</td>
-      <td>0</td>
-      <td>Amtrak</td>
-      <td>https://storage.googleapis.com/gtfs-data/sched...</td>
-      <td>True</td>
-      <td>13__0</td>
-      <td>Amtrak (0)</td>
-      <td>Amtrak</td>
-      <td>http://www.amtrak.com</td>
-      <td>en</td>
+      <td>6604405555889056708</td>
+      <td>2</td>
+      <td>5</td>
+      <td>SamTrans</td>
+      <td>http://www.samtrans.com/Assets/GTFS/samtrans/S...</td>
+      <td>False</td>
+      <td>2__5</td>
+      <td>SamTrans (5)</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
-      <td>2021-09-04</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
       <td>None</td>
       <td>False</td>
-      <td>2021-10-19</td>
-      <td>2022-02-28</td>
+      <td>2021-04-15</td>
+      <td>2021-04-16</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-8012815880707764251</td>
-      <td>13</td>
+      <td>-5403103044674130453</td>
+      <td>3</td>
       <td>0</td>
-      <td>Amtrak</td>
-      <td>https://content.amtrak.com/content/gtfs/GTFS.zip</td>
-      <td>True</td>
-      <td>13__0</td>
-      <td>Amtrak (0)</td>
-      <td>Amtrak</td>
-      <td>http://www.amtrak.com</td>
-      <td>en</td>
+      <td>Commuter Express</td>
+      <td>http://lacitydot.com/gtfs/administrator/gtfszi...</td>
+      <td>False</td>
+      <td>3__0</td>
+      <td>Commuter Express (0)</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
-      <td>2022-04-30</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
       <td>None</td>
       <td>False</td>
-      <td>2022-05-09</td>
-      <td>2099-01-01</td>
+      <td>2021-04-15</td>
+      <td>2021-05-13</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-6443842139930306849</td>
-      <td>13</td>
+      <td>-6200903198154079414</td>
+      <td>5</td>
       <td>0</td>
-      <td>Amtrak</td>
-      <td>https://content.amtrak.com/content/gtfs/GTFS.zip</td>
-      <td>True</td>
-      <td>13__0</td>
-      <td>Amtrak (0)</td>
-      <td>Amtrak</td>
-      <td>http://www.amtrak.com</td>
-      <td>en</td>
+      <td>e-Tran</td>
+      <td>https://share.elkgrovecity.org/messages/tpLyue...</td>
+      <td>False</td>
+      <td>5__0</td>
+      <td>e-Tran (0)</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
-      <td>2022-03-05</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
       <td>None</td>
       <td>False</td>
-      <td>2022-03-04</td>
-      <td>2022-05-09</td>
+      <td>2021-04-15</td>
+      <td>2021-05-13</td>
     </tr>
   </tbody>
 </table>
@@ -1461,118 +1461,118 @@ WHERE regexp_contains(`anon_1`.`calitp_agency_name`, &#39;Metro&#39;)
   <tbody>
     <tr>
       <th>0</th>
-      <td>-5156377554606803196</td>
-      <td>293</td>
+      <td>8654575366107518227</td>
+      <td>278</td>
       <td>0</td>
-      <td>Santa Barbara Metropolitan Transit District</td>
-      <td>http://sbmtd.gov/google_transit/feed.zip</td>
+      <td>San Diego Metropolitan Transit System</td>
+      <td>https://www.sdmts.com/google_transit_files/goo...</td>
       <td>True</td>
-      <td>293__0</td>
-      <td>Santa Barbara Metropolitan Transit District (0)</td>
-      <td>Santa Barbara MTD</td>
-      <td>http://www.sbmtd.gov</td>
-      <td>en</td>
+      <td>278__0</td>
+      <td>San Diego Metropolitan Transit System (0)</td>
+      <td>MTS</td>
+      <td>http://www.sdmts.com</td>
+      <td>EN</td>
       <td>None</td>
-      <td>220425 April 25_20220331</td>
+      <td>v1 - Nov 21 2021 svc change merged Sept 5 2021 v4</td>
       <td>None</td>
       <td>None</td>
-      <td>2022-04-25</td>
-      <td>2022-08-14</td>
+      <td>None</td>
+      <td>None</td>
       <td>False</td>
-      <td>2022-04-04</td>
-      <td>2022-04-18</td>
+      <td>2021-11-03</td>
+      <td>2021-11-21</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-4045042305146455543</td>
-      <td>296</td>
+      <td>2579053550214098649</td>
+      <td>278</td>
       <td>0</td>
-      <td>Santa Cruz Metropolitan Transit District</td>
-      <td>http://scmtd.com/google_transit/google_transit...</td>
+      <td>San Diego Metropolitan Transit System</td>
+      <td>https://www.sdmts.com/google_transit_files/goo...</td>
       <td>True</td>
-      <td>296__0</td>
-      <td>Santa Cruz Metropolitan Transit District (0)</td>
-      <td>Santa Cruz Metro</td>
-      <td>http://www.scmtd.com</td>
-      <td>en</td>
+      <td>278__0</td>
+      <td>San Diego Metropolitan Transit System (0)</td>
+      <td>MTS</td>
+      <td>http://www.sdmts.com</td>
+      <td>EN</td>
+      <td>None</td>
+      <td>v3 - Add ComicCon Trolley Service + remove can...</td>
       <td>None</td>
       <td>None</td>
-      <td>gtfsupdates@scmtd.com</td>
-      <td>https://scmtd.com/en/riders-guide/google-trans...</td>
       <td>None</td>
       <td>None</td>
       <td>False</td>
-      <td>2021-09-07</td>
-      <td>2021-12-10</td>
+      <td>2021-11-24</td>
+      <td>2021-12-23</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>-6941377690184990428</td>
-      <td>296</td>
+      <td>-5144776693092683578</td>
+      <td>278</td>
       <td>0</td>
-      <td>Santa Cruz Metropolitan Transit District</td>
-      <td>http://scmtd.com/google_transit/google_transit...</td>
+      <td>San Diego Metropolitan Transit System</td>
+      <td>https://www.sdmts.com/google_transit_files/goo...</td>
       <td>True</td>
-      <td>296__0</td>
-      <td>Santa Cruz Metropolitan Transit District (0)</td>
-      <td>Santa Cruz Metro</td>
-      <td>http://www.scmtd.com</td>
-      <td>en</td>
+      <td>278__0</td>
+      <td>San Diego Metropolitan Transit System (0)</td>
+      <td>MTS</td>
+      <td>http://www.sdmts.com</td>
+      <td>EN</td>
+      <td>None</td>
+      <td>v3 - Sept 5. 2021 svc change unmerged file + 9...</td>
       <td>None</td>
       <td>None</td>
-      <td>gtfsupdates@scmtd.com</td>
-      <td>https://www.scmtd.com/en/riders-guide/about-go...</td>
       <td>None</td>
       <td>None</td>
       <td>False</td>
-      <td>2021-12-10</td>
-      <td>2099-01-01</td>
+      <td>2021-09-05</td>
+      <td>2021-10-21</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-4127903740760437821</td>
-      <td>323</td>
+      <td>-1745411673204459848</td>
+      <td>278</td>
       <td>0</td>
-      <td>Metrolink</td>
-      <td>https://www.metrolinktrains.com/globalassets/a...</td>
+      <td>San Diego Metropolitan Transit System</td>
+      <td>https://www.sdmts.com/google_transit_files/goo...</td>
       <td>True</td>
-      <td>323__0</td>
-      <td>Metrolink (0)</td>
-      <td>Metrolink Trains</td>
-      <td>http://www.metrolinktrains.com</td>
-      <td>en</td>
+      <td>278__0</td>
+      <td>San Diego Metropolitan Transit System (0)</td>
+      <td>MTS</td>
+      <td>http://www.sdmts.com</td>
+      <td>EN</td>
       <td>None</td>
-      <td>20210621</td>
+      <td>v4 - from v3 + add SDTC restored svc + Trolley...</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>False</td>
-      <td>2021-08-10</td>
-      <td>2021-10-28</td>
+      <td>2021-12-23</td>
+      <td>2022-01-11</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-5198458284510493752</td>
-      <td>323</td>
+      <td>-7198457722100906194</td>
+      <td>278</td>
       <td>0</td>
-      <td>Metrolink</td>
-      <td>https://www.metrolinktrains.com/globalassets/a...</td>
+      <td>San Diego Metropolitan Transit System</td>
+      <td>https://www.sdmts.com/google_transit_files/goo...</td>
       <td>True</td>
-      <td>323__0</td>
-      <td>Metrolink (0)</td>
-      <td>Metrolink Trains</td>
-      <td>http://www.metrolinktrains.com</td>
-      <td>en</td>
+      <td>278__0</td>
+      <td>San Diego Metropolitan Transit System (0)</td>
+      <td>MTS</td>
+      <td>http://www.sdmts.com</td>
+      <td>EN</td>
       <td>None</td>
-      <td>20220318</td>
+      <td>v1 - June 6. 2021 svc change</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>False</td>
-      <td>2022-04-05</td>
-      <td>2099-01-01</td>
+      <td>2021-05-21</td>
+      <td>2021-06-28</td>
     </tr>
   </tbody>
 </table>
@@ -1589,8 +1589,8 @@ WHERE regexp_contains(`anon_1`.`calitp_agency_name`, &#39;Metro&#39;)
 </div>
 </div>
 <div class="section" id="shared-utils">
-<h2>shared utils<a class="headerlink" href="#shared-utils" title="Permalink to this headline">¶</a></h2>
-<p>A set of shared utility functions can also be installed, similarly to any Python library. The <a class="reference external" href="https://github.com/cal-itp/data-analyses/shared_utils">shared_utils</a> are stored here. Generalized functions for analysis are added as collaborative work evolves so we aren’t constantly reinventing the wheel.</p>
+<span id="id5"></span><h2>shared utils<a class="headerlink" href="#shared-utils" title="Permalink to this headline">¶</a></h2>
+<p>A set of shared utility functions can also be installed, similarly to any Python library. The <a class="reference external" href="https://github.com/cal-itp/data-analyses/tree/main/_shared_utils">shared_utils</a> are stored here. Generalized functions for analysis are added as collaborative work evolves so we aren’t constantly reinventing the wheel.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># In terminal:</span>
 <span class="n">cd</span> <span class="n">data</span><span class="o">-</span><span class="n">analyses</span><span class="o">/</span><span class="n">_shared_utils</span>
 

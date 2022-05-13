@@ -12,6 +12,7 @@ kernelspec:
   language: python
   name: python3
 ---
+(complex-queries)=
 # More Complex Queries
 
 ## Introduction

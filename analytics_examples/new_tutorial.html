@@ -57,7 +57,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Sample Data Catalog" href="sample-catalog-viewer.html" />
-    <link rel="prev" title="Tutorial - Querying the Data Warehouse" href="warehouse_tutorial.html" />
+    <link rel="prev" title="Querying GTFS in the Data Warehouse" href="warehouse_tutorial.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -327,7 +327,7 @@
  </li>
  <li class="toctree-l1 current active has-children">
   <a class="reference internal" href="overview.html">
-   Analysis Examples
+   Analysis Tutorials
   </a>
   <input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
   <label for="toctree-checkbox-6">
@@ -337,7 +337,7 @@
   <ul class="current">
    <li class="toctree-l2">
     <a class="reference internal" href="warehouse_tutorial.html">
-     Tutorial - Querying the Data Warehouse
+     Querying GTFS in the Data Warehouse
     </a>
    </li>
    <li class="toctree-l2 current active">
@@ -369,7 +369,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../analytics_publishing/where_reports_live.html">
-     Where Reports Live (WIP)
+     Where Reports Live
     </a>
    </li>
   </ul>
@@ -766,7 +766,7 @@
               <div>
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="more-complex-queries">
-<h1>More Complex Queries<a class="headerlink" href="#more-complex-queries" title="Permalink to this headline">¶</a></h1>
+<span id="complex-queries"></span><h1>More Complex Queries<a class="headerlink" href="#more-complex-queries" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>The queries represented in the following tutorial are as follows:</p>
@@ -882,61 +882,61 @@
       <th>0</th>
       <td>208</td>
       <td>2021-09-01</td>
-      <td>8320140545118041953</td>
-      <td>4930011</td>
-      <td>6031</td>
-      <td>11:29:00</td>
-      <td>36.707628</td>
-      <td>-121.653357</td>
-      <td>N Main /  Alvin</td>
+      <td>-1400496153168738684</td>
+      <td>95030037</td>
+      <td>9105</td>
+      <td>13:24:00</td>
+      <td>36.597886</td>
+      <td>-121.894036</td>
+      <td>Monterey Transit Plaza / Gate 5 (Tyler/Pearl)</td>
     </tr>
     <tr>
       <th>1</th>
       <td>208</td>
       <td>2021-09-01</td>
-      <td>8320140545118041953</td>
-      <td>4930011</td>
-      <td>6031</td>
-      <td>11:29:00</td>
-      <td>36.707585</td>
-      <td>-121.653397</td>
-      <td>N Main /  Alvin</td>
+      <td>-1400496153168738684</td>
+      <td>95030037</td>
+      <td>6704</td>
+      <td>13:29:00</td>
+      <td>36.602953</td>
+      <td>-121.895315</td>
+      <td>Pacific /  Scott</td>
     </tr>
     <tr>
       <th>2</th>
       <td>208</td>
       <td>2021-09-01</td>
-      <td>8320140545118041953</td>
-      <td>4930011</td>
-      <td>6031</td>
-      <td>11:29:00</td>
-      <td>36.707585</td>
-      <td>-121.653397</td>
-      <td>N Main /  Alvin</td>
+      <td>-1400496153168738684</td>
+      <td>95030037</td>
+      <td>6704</td>
+      <td>13:29:00</td>
+      <td>36.602970</td>
+      <td>-121.895359</td>
+      <td>Pacific /  Scott</td>
     </tr>
     <tr>
       <th>3</th>
       <td>208</td>
       <td>2021-09-01</td>
-      <td>8320140545118041953</td>
-      <td>4930011</td>
-      <td>3326</td>
-      <td>11:44:00</td>
-      <td>36.724050</td>
-      <td>-121.647581</td>
-      <td>Van Buren /  Swaner</td>
+      <td>-1400496153168738684</td>
+      <td>95030037</td>
+      <td>6704</td>
+      <td>13:29:00</td>
+      <td>36.602970</td>
+      <td>-121.895359</td>
+      <td>Pacific /  Scott</td>
     </tr>
     <tr>
       <th>4</th>
       <td>208</td>
       <td>2021-09-01</td>
-      <td>8320140545118041953</td>
-      <td>4930011</td>
-      <td>3326</td>
-      <td>11:44:00</td>
-      <td>36.724000</td>
-      <td>-121.647658</td>
-      <td>Van Buren /  Swaner</td>
+      <td>-1400496153168738684</td>
+      <td>95030037</td>
+      <td>1601</td>
+      <td>13:27:00</td>
+      <td>36.601054</td>
+      <td>-121.894431</td>
+      <td>Del Monte /  Conference Center</td>
     </tr>
   </tbody>
 </table>
@@ -1021,7 +1021,7 @@
   </thead>
   <tbody>
     <tr>
-      <th>8708</th>
+      <th>885</th>
       <td>208</td>
       <td>41089</td>
       <td>2022-03-23</td>
@@ -1266,10 +1266,10 @@
       <th></th>
       <th>stop_key</th>
       <th>date</th>
-      <th>calitp_itp_id</th>
       <th>stop_lon</th>
       <th>stop_lat</th>
       <th>stop_id</th>
+      <th>calitp_itp_id</th>
     </tr>
   </thead>
   <tbody>
@@ -1277,46 +1277,46 @@
       <th>0</th>
       <td>-3465164382055991093</td>
       <td>2021-09-01</td>
-      <td>6</td>
       <td>-118.117346</td>
       <td>34.079011</td>
       <td>2619783</td>
+      <td>6</td>
     </tr>
     <tr>
       <th>1</th>
       <td>-4388330883484799862</td>
       <td>2021-09-01</td>
-      <td>6</td>
       <td>-118.111602</td>
       <td>34.079282</td>
       <td>2619784</td>
+      <td>6</td>
     </tr>
     <tr>
       <th>2</th>
       <td>-3890148245714116244</td>
       <td>2021-09-01</td>
-      <td>6</td>
       <td>-118.114294</td>
       <td>34.080835</td>
       <td>2619785</td>
+      <td>6</td>
     </tr>
     <tr>
       <th>3</th>
       <td>3725728967761887153</td>
       <td>2021-09-01</td>
-      <td>6</td>
       <td>-118.116863</td>
       <td>34.085540</td>
       <td>2619787</td>
+      <td>6</td>
     </tr>
     <tr>
       <th>4</th>
       <td>-6069710332211186970</td>
       <td>2021-09-01</td>
-      <td>6</td>
       <td>-118.117052</td>
       <td>34.085874</td>
       <td>2619788</td>
+      <td>6</td>
     </tr>
   </tbody>
 </table>
@@ -1355,7 +1355,7 @@
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Tutorial - Querying the Data Warehouse</p>
+            <p class="prev-next-title">Querying GTFS in the Data Warehouse</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="sample-catalog-viewer.html" title="next page">

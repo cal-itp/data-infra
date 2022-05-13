@@ -7,5 +7,5 @@ This resource serves as an opportunity to learn more about how the data services
 Use the links below to access dedicated chapters for the following users:
 
 * [Analysts](analysts-welcome)
-* [Developers](airflow)
+* [Developers](architecture-overview)
 * [Contribute to the Docs!](contribute-overview)

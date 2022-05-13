@@ -16,6 +16,7 @@ After you've read through this section, continue reading through the remaining s
 **Other Analytics Sections**:
 * [Technical Onboarding](technical-onboarding)
 * [Introduction to Analytics Tools](intro-analytics-tools)
+* [Tutorials for New Python Users](beginner_analysts_tutorials)
 * [Introduction to the Warehouse](intro-warehouse)
 * [Datasets & Tables](datasets-tables)
 * [Analysis Examples](analysis-examples-overview)
