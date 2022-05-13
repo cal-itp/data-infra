@@ -1,0 +1,15 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-airtable
+prefix_bucket: true
+post_hook: |
+  SELECT *
+  FROM `{{ get_project_id() }}`.external_airtable.california_transit__eligibility_programs
+  LIMIT 1;
+source_objects:
+  - "california_transit__eligibility_programs/*.jsonl.gz"
+destination_project_dataset_table: "external_airtable.california_transit__eligibility_programs"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: AUTO
+  source_uri_prefix: "california_transit__eligibility_programs/"
