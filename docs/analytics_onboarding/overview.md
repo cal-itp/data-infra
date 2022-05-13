@@ -20,10 +20,10 @@
 
 **Analytics Tools:**
 
-- [ ]  **Metabase** - [dashboards.calitp.org](https://dashboards.calitp.org/) - Business Insights & Dashboards | ([Docs](metabase))
-- [ ]  **JupyterHub** - [notebooks.calitp.org](https://notebooks.calitp.org/) - Cloud-based notebooks for querying Python, SQL, R | ([Docs](jupyterhub))
-- [ ]  **Analytics Portfolio Site** - [analysis.calitp.org](https://analysis.calitp.org/) - The landing page for the Cal-ITP analytics portfolio website. | (Docs WIP)
-- [ ]  **DBT Warehouse Documentation** - [dbt-docs.calitp.org](https://dbt-docs.calitp.org/) - Documentation for the Cal-ITP data warehouse. | ([See also](intro-warehouse))
+- [ ]  **[notebooks.calitp.org](https://notebooks.calitp.org/)** - Cloud-based notebooks for querying Python, SQL, R | ([Docs](jupyterhub))
+- [ ]  **[dashboards.calitp.org](https://dashboards.calitp.org/)** - Metabase business insights & dashboards | ([Docs](metabase))
+- [ ]  **[dbt-docs.calitp.org](https://dbt-docs.calitp.org/)** - Documentation for the Cal-ITP data warehouse. | ([See also](intro-warehouse))
+- [ ]  **[analysis.calitp.org](https://analysis.calitp.org/)** - The Cal-ITP analytics portfolio website. | (Docs WIP)
 - [ ]  [**Google BigQuery**](https://console.cloud.google.com/bigquery) - Viewing the data warehouse and querying SQL
 
 **Python Libraries:**
