@@ -10,7 +10,7 @@ calitp_warehouse:
   target: dev
   outputs:
     dev:
-      schema: <enter your first name or initials here, like "laurie" or "lam" -- this will be used to prefix your datasets in BigQuery, like "laurie_views">
+      schema: <enter your first name or initials here, like "laurie" or "lam">
       fixed_retries: 1
       location: us-west2
       method: oauth
