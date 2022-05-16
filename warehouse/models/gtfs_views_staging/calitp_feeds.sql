@@ -107,7 +107,7 @@ lag_md5_hash AS (
 hash_check AS (
     SELECT
         *,
-        calitp_hash != prev_calitp_hash OR is_first_extraction
+        calitp_hash != COALESCE(prev_calitp_hash, "") OR is_first_extraction
         AS is_changed
     FROM lag_md5_hash
 ),
