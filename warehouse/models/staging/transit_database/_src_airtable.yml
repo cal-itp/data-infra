@@ -1,9 +1,9 @@
 version: 2
 
 sources:
-  - name: airtable_california_transit
+  - name: airtable
     description: |
-      Data from the California Transit base in Airtable.
+      Data from Airtable.
     database: cal-itp-data-infra-staging
     schema: external_airtable
     tables:
@@ -18,11 +18,4 @@ sources:
       - name: california_transit__place_geography
       - name: california_transit__rider_requirements
       - name: california_transit__services
-
-  - name: airtable_transit_technology_stacks
-    description: |
-      Data from the Transit Technology Stacks base in Airtable.
-    database: cal-itp-data-infra-staging
-    schema: external_airtable
-    tables:
       - name: transit_technology_stacks__contracts
