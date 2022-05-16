@@ -1,0 +1,28 @@
+version: 2
+
+sources:
+  - name: airtable_california_transit
+    description: |
+      Data from the California Transit base in Airtable.
+    database: cal-itp-data-infra-staging
+    schema: external_airtable
+    tables:
+      - name: california_transit__county_geography
+      - name: california_transit__eligibility_programs
+      - name: california_transit__fare_systems
+      - name: california_transit__funding_programs
+      - name: california_transit__gtfs_datasets
+      - name: california_transit__gtfs_service_data
+      - name: california_transit__ntd_agency_info
+      - name: california_transit__organizations
+      - name: california_transit__place_geography
+      - name: california_transit__rider_requirements
+      - name: california_transit__services
+
+  - name: airtable_transit_technology_stacks
+    description: |
+      Data from the Transit Technology Stacks base in Airtable.
+    database: cal-itp-data-infra-staging
+    schema: external_airtable
+    tables:
+      - name: transit_technology_stacks__contracts
