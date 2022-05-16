@@ -292,7 +292,7 @@ exposures:
     meta:
       destinations:
         - type: ckan
-          url: something
+          url: https://data.ca.gov/api/3/action/resource_update
           ids:
             agency: e8f9d49e-2bb6-400b-b01f-28bc2e0e7df2
             routes: c6bbb637-988f-431c-8444-aef7277297f8
