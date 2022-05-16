@@ -361,7 +361,7 @@ cudahy-area-rapid-transit:
 culver-citybus:
   agency_name: Culver CityBus
   feeds:
-    - gtfs_schedule_url: https://www.culvercity.org/files/assets/public/documents/information-technology/maps/gtfsexport12-28-21.zip
+    - gtfs_schedule_url: https://www.culvercity.org/files/assets/public/documents/information-technology/maps/gtfsexport.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
