@@ -1,16 +1,13 @@
 """
 Built off the starting point of https://guitton.co/posts/dbt-artifacts
 """
-from datetime import datetime
-
 import json
-
-from pathlib import Path
-
-from typing import Dict, Optional, List, Union, Literal, Annotated
-
+from datetime import datetime
 from enum import Enum
-from pydantic import validator, BaseModel, Field
+from pathlib import Path
+from typing import Annotated, ClassVar, Dict, List, Literal, Optional, Union
+
+from pydantic import BaseModel, Field, validator
 
 
 class DbtResourceType(str, Enum):
@@ -36,16 +33,30 @@ class NodeDeps(BaseModel):
 
 
 class NodeConfig(BaseModel):
+    alias: Optional[str]
+    _schema: str = Field(None, alias="schema")
     materialized: Optional[DbtMaterializationType]
 
 
 class Node(BaseModel):
+    _instances: ClassVar[Dict[str, "Node"]] = {}
     unique_id: str
     path: Path
+    database: str
+    schema_: str = Field(None, alias="schema")
+    name: str
     resource_type: DbtResourceType
     description: str
     depends_on: Optional[NodeDeps]
     config: NodeConfig
+
+    def __init__(self, **kwargs):
+        super(Node, self).__init__(**kwargs)
+        self._instances[(self.resource_type, self.name)] = self
+
+    @property
+    def schema_table(self):
+        return f"{str(self.schema_)}.{self.config.alias or self.name}"
 
 
 class ExposureType(str, Enum):
@@ -72,9 +83,14 @@ class TileServerConfig(BaseModel):
 
 
 class CkanConfig(BaseModel):
+    _instances: ClassVar[List["CkanConfig"]] = []
     type: Literal["ckan"]
     url: str
     ids: Dict[str, str]
+
+    def __init__(self, **kwargs):
+        super(CkanConfig, self).__init__(**kwargs)
+        self._instances.append(self)
 
 
 Destination = Annotated[
