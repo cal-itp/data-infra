@@ -24,6 +24,7 @@ humanize = "^4.1.0"
 requests-toolbelt = "^0.9.1"
 pandas-gbq = "^0.17.4"
 tqdm = "^4.64.0"
+pendulum = "^2.1.2"
 
 [tool.poetry.dev-dependencies]
 
