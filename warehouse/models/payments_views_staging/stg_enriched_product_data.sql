@@ -1,17 +1,13 @@
----
-operator: operators.SqlToWarehouseOperator
-dst_table_name: "payments.stg_enriched_product_data"
+{{ config(materialized='table') }}
 
-external_dependencies:
-  - payments_loader: all
----
+WITH stg_enriched_product_data AS (
+    {{
+        sql_enrich_duplicates(
+            source('payments', 'product_data'),
+            ['product_id'],
+            ['calitp_file_name desc']
+        )
+    }}
+)
 
-{{
-
-  sql_enrich_duplicates(
-    "payments.product_data",
-    ["product_id"],
-    ["calitp_file_name desc"]
-  )
-
-}}
+SELECT * FROM stg_enriched_product_data

@@ -359,6 +359,179 @@ sources:
               * `COMPLETE_VARIABLE_FARE`
               * `INCOMPLETE_VARIABLE_FARE`
               * `REFUND`
+      - name: product_data
+        description: Information about a price-adjusting product.
+        columns:
+          - &product_data_participant_id
+            name: participant_id
+            description: Identifies the participant that the micropayment belongs to.
+          - &product_data_product_id
+            name: product_id
+            description: Identifies the product that was used to adjust the micropayment.
+          - &product_data_previous_version_id
+            name: previous_version_id
+            description: Refers to the previous version ID of the product
+          - &product_data_original_version_id
+            name: original_version_id
+            description: |
+              Refers to the original version ID of the product.
+
+              The `original_version_id` may differs from the `previous_version_id` if the product has been updated more than once.
+          - &product_data_product_code
+            name: product_code
+            description: The code specified in the Merchant Portal against the product.
+          - &product_data_product_description
+            name: product_description
+            description: The description specified in the Merchant Portal during the product creation.
+          - &product_data_product_type
+            name: product_type
+            description: |
+              The name of the product type.
+
+              Possible values:
+              * `CAPPING`
+              * `DISCOUNT`
+              * `PURCHASE`
+          - &product_data_activation_type
+            name: activation_type
+            description: The type of customers the product will be actioned for.
+          - &product_data_product_status
+            name: product_status
+            description: |
+              The status of the product as set in the Merchant Portal.
+
+              Possible values:
+              * `ACTIVE`
+              * `INACTIVE`
+              * `EXPIRED`
+          - &product_data_superseded
+            name: superseded
+            description: If `true`, indicates that the product version is obsolete as a new version of the product is in use.
+          - &product_data_created_date
+            name: created_date
+            description: The date the product was created in the Merchant Portal.
+          - &product_data_capping_type
+            name: capping_type
+            description: |
+              Type of capping assigned to the product.
+
+              Possible values:
+              * `Daily Capping`
+              * `Weekly Capping`
+              * `Multi Day Capping`
+              * `Time Based Capping`
+          - &product_data_multi_operator
+            name: multi_operator
+            description: If `TRUE`, indicates that the product falls under a multi-operator scheme.
+          - &product_data_rules_default_limit
+            name: rules_default_limit
+            description: Maximum capping limit for the product.
+          - &product_data_rules_max_fare_value
+            name: rules_max_fare_value
+            description: Maximum fare value used. Anything exceeding this value is not included in capping.
+          - &product_data_rules_transaction_types
+            name: rules_transaction_types
+            description: |
+              This list the type of transaction that can be applied to this product.
+
+              Possible values:
+              * `Autoscan`
+              * `Variable`
+              * `Flat`
+          - &product_data_capping_start_time
+            name: capping_start_time
+            description: Indicates capping start time. This is used when the capping product has a specific start time.
+          - &product_data_capping_end_time
+            name: capping_end_time
+            description: Indicates capping end time. This is used when the capping product has a specific end time.
+          - &product_data_all_day
+            name: all_day
+            description: If set to `1`, indicates that the capping product is in effect for the entire day.
+          - &product_data_weekly_cap_start_day
+            name: weekly_cap_start_day
+            description: |
+              Indicates the start day of the product's weekly cap.
+
+              Possible values are `SUNDAY` or `MONDAY`.
+          - &product_data_weekly_cap_end_day
+            name: weekly_cap_end_day
+            description: |
+              Indicates the end day of the product's weekly cap.
+
+              Possible values are `SATURDAY` or `SUNDAY`.
+          - &product_data_number_of_days_in_cap_window
+            name: number_of_days_in_cap_window
+            description: This is the number of days in the capping window set against the product.
+          - &product_data_capping_duration
+            name: capping_duration
+            description: The duration of time after the customer initially taps where future taps are not charged.
+          - &product_data_number_of_transfer
+            name: number_of_transfer
+            description: The number of free transfers after the initial tap.
+          - &product_data_capping_time_zone
+            name: capping_time_zone
+            description: The time zone where the capping product was used.
+          - &product_data_capping_overlap
+            name: capping_overlap
+            description: The time a customer can overlap within a 24-hour period.
+          - &product_data_capping_application_level
+            name: capping_application_level
+            description: This is the customer level tapping as customers can have multiple cards (physical / digital).
+          - &product_data_scheduled_start_date_time
+            name: scheduled_start_date_time
+            description: Expected Blank
+          - &product_data_scheduled_end_date_time
+            name: scheduled_end_date_time
+            description: Expected Blank
+          - &product_data_route_capping_enabled
+            name: route_capping_enabled
+            description: If `true`, route capping is enabled.
+          - &product_data_routes
+            name: routes
+            description: List of routes that apply to the product.
+          - &product_data_zoned_capping_enabled
+            name: zoned_capping_enabled
+            description: If `true`, zoned capping is enabled.
+          - &product_data_zoned_capping_mode
+            name: zoned_capping_mode
+            description: |
+              Defines how the zones are mapped relative to one another.
+
+              Possible values:
+              * `Concentric` — Zones start from an inner zone and expand outwards with each new zone.
+              * `Nonconcentric` — Zones are next to each other and do not overlap.
+          - &product_data_zoned_capping_pricing_type
+            name: zoned_capping_pricing_type
+            description: |
+              Defines which pricing period applies to the product.
+
+              Possible values are `PEAK` or `OFFPEAK`.
+          - &product_data_on_peak_zones
+            name: on_peak_zones
+            description: JSON object that defines the rules for the peak zones.
+          - &product_data_off_peak_zones
+            name: off_peak_zones
+            description: JSON object that defines the rules for the off-peak zones
+          - &product_data_incentive_enabled
+            name: incentive_enabled
+            description: If `true`, an incentive is enabled on the product.
+          - &product_data_incentive_type
+            name: incentive_type
+            description: |
+              The type of the incentive associated to the product.
+
+              Possible values are `DAILY_CAP` or `CUMULATIVE_CAP`.
+          - &product_data_discount_qualifier
+            name: discount_qualifier
+            description: |
+              The type of qualifier that gives eligibility to the product.
+
+              Possible values are `CAP_REACHED` or `SINGLE_TRIP`.
+          - &product_data_configuration
+            name: configuration
+            description: |
+              Configuration type for the incentive.
+              Possible values are `DAILY_TABLE` or `ZONE_TRIANGLE`.
 
 enrichment_field_declarations:
   - &calitp_hash
@@ -529,6 +702,55 @@ models:
       - *micropayments_currency_code
       - *micropayments_type
       - *micropayments_charge_type
+      - *calitp_hash
+      - *calitp_file_name
+      - *calitp_export_account
+      - *calitp_export_datetime
+      - *calitp_n_dupes
+      - *calitp_n_dupe_ids
+      - *calitp_dupe_number
+  - name: stg_enriched_product_data
+    columns:
+      - *product_data_participant_id
+      - *product_data_product_id
+      - *product_data_previous_version_id
+      - *product_data_original_version_id
+      - *product_data_product_code
+      - *product_data_product_description
+      - *product_data_product_type
+      - *product_data_activation_type
+      - *product_data_product_status
+      - *product_data_superseded
+      - *product_data_created_date
+      - *product_data_capping_type
+      - *product_data_multi_operator
+      - *product_data_rules_default_limit
+      - *product_data_rules_max_fare_value
+      - *product_data_rules_transaction_types
+      - *product_data_capping_start_time
+      - *product_data_capping_end_time
+      - *product_data_all_day
+      - *product_data_weekly_cap_start_day
+      - *product_data_weekly_cap_end_day
+      - *product_data_number_of_days_in_cap_window
+      - *product_data_capping_duration
+      - *product_data_number_of_transfer
+      - *product_data_capping_time_zone
+      - *product_data_capping_overlap
+      - *product_data_capping_application_level
+      - *product_data_scheduled_start_date_time
+      - *product_data_scheduled_end_date_time
+      - *product_data_route_capping_enabled
+      - *product_data_routes
+      - *product_data_zoned_capping_enabled
+      - *product_data_zoned_capping_mode
+      - *product_data_zoned_capping_pricing_type
+      - *product_data_on_peak_zones
+      - *product_data_off_peak_zones
+      - *product_data_incentive_enabled
+      - *product_data_incentive_type
+      - *product_data_discount_qualifier
+      - *product_data_configuration
       - *calitp_hash
       - *calitp_file_name
       - *calitp_export_account
