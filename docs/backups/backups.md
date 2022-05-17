@@ -22,7 +22,7 @@ The preferred method is to use the Lens Kubernetes IDE https://k8slens.dev/. Onc
 
 Then navigate to the Workloads parent folder and select `CronJobs`. Select the cronjob `postgressql-backup`. If you click the edit button you can look at it in yaml form. There you will obtain the restic repository info.
 
-```code
+```terminal
 name: RESTIC_REPOSITORY
 value: gs:calitp-backups-metabase:/
 - name: PGHOST
