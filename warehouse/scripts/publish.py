@@ -66,7 +66,7 @@ def publish_to_ckan(
                         fg=typer.colors.MAGENTA,
                     )
                 else:
-                    fs = gcsfs.GCSFileSystem(project=project)
+                    fs = gcsfs.GCSFileSystem(project=project, token="google_default")
                     fs.put(fpath, hive_path)
 
                     with open(fpath, "rb") as fp:
