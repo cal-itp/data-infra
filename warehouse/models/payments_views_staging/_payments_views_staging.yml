@@ -532,6 +532,125 @@ sources:
             description: |
               Configuration type for the incentive.
               Possible values are `DAILY_TABLE` or `ZONE_TRIANGLE`.
+      - name: refunds
+        description: |
+          Refunds may be requested by a merchant customer for a given debit
+          micropayment; for example, providing a refund for a trip. Refunds
+          requested by a customer require approval by the merchant.
+
+          If the aggregation containing the micropayment is still open, then a
+          credit micropayment will be created and added to the aggregation.
+
+          If the aggregation containing the micropayment has already been
+          settled and had not been rejected, the settlement of the refund amount
+          is requested directly using the original `transaction_id` from the
+          settlement result for the aggregation, and no credit micropayment is
+          created.
+        columns:
+          - &refunds_refund_id
+            name: refund_id
+            description: The unique identifier for each requested refund.
+          - &refunds_aggregation_id
+            name: aggregation_id
+            description: |
+              The aggregation that is being authorised.
+
+              A single aggregation can have multiple authorisations. The
+              authorisations that are submitted depend on the scheme and the result
+              of the initial authorisation. For example, if an authorisation is declined,
+              then a debt recovery authorisation may be performed.
+          - &refunds_participant_id
+            name: participant_id
+            description: Identifies the participant that the micropayment belongs to.
+          - &refunds_customer_id
+            name: customer_id
+            description: Identifies the customer that the micropayment belongs to.
+          - &refunds_micropayment_id
+            name: micropayment_id
+            description: Uniquely identifies the micropayment.
+          - &refunds_settlement_id
+            name: settlement_id
+            description: The unique identifier for each settlement requested to the acquirer.
+          - &refunds_refund_amount
+            name: refund_amount
+            description: The actual amount refunded to the customer.
+          - &refunds_currency_code
+            name: currency_code
+            description: ISO 4217 numeric currency code for the amount that was requested to be settled.
+          - &refunds_initiator
+            name: initiator
+            description: The user who initiated the refund request.
+          - &refunds_reason
+            name: reason
+            description: The reason given for requesting the refund.
+          - &refunds_approval_status
+            name: approval_status
+            description: |
+              The status of the approval request.
+
+              If the refund was initiated by the merchant, then the request is automatically approved.
+
+              Possible values are `Approved` or `Pending Approval`.
+          - &refunds_settlement_status
+            name: settlement_status
+            description: |
+              The status of the refund.
+
+              Possible values are `Sent for Settlement` or `Settled`.
+          - &refunds_retrieval_reference_number
+            name: retrieval_reference_number
+            description: |
+              Uniquely identifies a card transaction, based on the ISO 8583 standard. The value is generated during authorisation.
+
+              If the acquirer is Elavon, this value will be split between `littlepay_reference_number` and `external_reference_number`.
+          - &refunds_littlepay_reference_number
+            name: littlepay_reference_number
+            description: |
+              Uniquely identifies a card transaction.
+
+              If the acquirer is Elavon, then this key will contain the first part of the string from `retrieval_reference_number`.
+          - &refunds_external_reference_number
+            name: external_reference_number
+            description: |
+              Uniquely identifies a card transaction.
+
+              If the acquirer is Elavon, then this key will contain the second part of the string from `retrieval_reference_number`.
+          - &refunds_transaction_date
+            name: transaction_date
+            description: Settlement transaction date (if micropayment was settled before refund)
+          - &refunds_transaction_amount
+            name: transaction_amount
+            description: The amount of the original fare.
+          - &refunds_proposed_amount
+            name: proposed_amount
+            description: The amount equalling `transaction_amount - refund_amount`.
+          - &refunds_issuer
+            name: issuer
+            description: The user that approved the refund.
+          - &refunds_issuer_comment
+            name: issuer_comment
+            description: This field is not in use.
+          - &refunds_created_time
+            name: created_time
+            description: The time the request was created.
+          - &refunds_approved_time
+            name: approved_time
+            description: The time the approval was processed.
+          - &refunds_status
+            name: status
+            description: |
+              The status of the refund.
+
+              Possible values are `SENT_FOR_SETTLEMENT` or `SETTLED`.
+          - &refunds_settlement_status_time
+            name: settlement_status_time
+            description: The time the refund was settled.
+          - &refunds_settlement_reason_code
+            name: settlement_reason_code
+            description: This field is not in use.
+          - &refunds_settlement_response_text
+            name: settlement_response_text
+            description: This field is not in use.
 
 enrichment_field_declarations:
   - &calitp_hash
@@ -751,6 +870,41 @@ models:
       - *product_data_incentive_type
       - *product_data_discount_qualifier
       - *product_data_configuration
+      - *calitp_hash
+      - *calitp_file_name
+      - *calitp_export_account
+      - *calitp_export_datetime
+      - *calitp_n_dupes
+      - *calitp_n_dupe_ids
+      - *calitp_dupe_number
+  - name: stg_enriched_refunds
+    columns:
+      - *refunds_refund_id
+      - *refunds_aggregation_id
+      - *refunds_participant_id
+      - *refunds_customer_id
+      - *refunds_micropayment_id
+      - *refunds_settlement_id
+      - *refunds_refund_amount
+      - *refunds_currency_code
+      - *refunds_initiator
+      - *refunds_reason
+      - *refunds_approval_status
+      - *refunds_settlement_status
+      - *refunds_retrieval_reference_number
+      - *refunds_littlepay_reference_number
+      - *refunds_external_reference_number
+      - *refunds_transaction_date
+      - *refunds_transaction_amount
+      - *refunds_proposed_amount
+      - *refunds_issuer
+      - *refunds_issuer_comment
+      - *refunds_created_time
+      - *refunds_approved_time
+      - *refunds_status
+      - *refunds_settlement_status_time
+      - *refunds_settlement_reason_code
+      - *refunds_settlement_response_text
       - *calitp_hash
       - *calitp_file_name
       - *calitp_export_account
