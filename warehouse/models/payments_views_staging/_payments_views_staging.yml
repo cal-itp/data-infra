@@ -651,6 +651,66 @@ sources:
           - &refunds_settlement_response_text
             name: settlement_response_text
             description: This field is not in use.
+      - name: settlements
+        description: |
+          A settlement represents the amount of money to be cleared by the
+          acquirer from the customers funding source. A settlement type is
+          either a credit or debit.
+        columns:
+          - &settlements_settlement_id
+            name: settlement_id
+            description: A unique identifier for each settlement.
+          - &settlements_participant_id
+            name: participant_id
+            description: The unique identifier of the participant that the device belongs to.
+          - &settlements_aggregation_id
+            name: aggregation_id
+            description: Identifies the aggregation that the micropayment belongs to.
+          - &settlements_customer_id
+            name: customer_id
+            description: Identifies the customer that the micropayment belongs to.
+          - &settlements_funding_source_id
+            name: funding_source_id
+            description: |
+              Identifies the funding source (for example, card) that the micropayment will be charged to. This is always the card that was tapped.
+
+              A registered customer can have multiple funding sources linked to it. This field can be used to join to the `customer_funding_source` feed.
+          - &settlements_settlement_type
+            name: settlement_type
+            description: |
+              Type of settlement that occurred. Possible values are `DEBIT` or `CREDIT`.
+
+              If refunding a micropayment that has already been settled, the value will be `CREDIT`.
+          - &settlements_transaction_amount
+            name: transaction_amount
+            description: The settlement amount.
+          - &settlements_currency_code
+            name: currency_code
+            description: ISO 4217 numeric currency code for the amount that was requested to be settled.
+          - &settlements_retrieval_reference_number
+            name: retrieval_reference_number
+            description: |
+              Uniquely identifies a card transaction, based on the ISO 8583 standard.
+
+              If the acquirer is Elavon, this value will be split between `littlepay_reference_number` and `external_reference_number`.
+          - &settlements_littlepay_reference_number
+            name: littlepay_reference_number
+            description: |
+              Uniquely identifies a card transaction.
+
+              If the acquirer is Elavon, then this key will contain the first part of the string from `retrieval_reference_number`.
+          - &settlements_external_reference_number
+            name: external_reference_number
+            description: |
+              Uniquely identifies a card transaction.
+
+              If the acquirer is Elavon, then this key will contain the second part of the string from `retrieval_reference_number`.
+          - &settlements_settlement_requested_date_time_utc
+            name: settlement_requested_date_time_utc
+            description: Timestamp of when the settlement request was submitted to the acquirer.
+          - &settlements_acquirer
+            name: acquirer
+            description: Identifies the acquirer used to settle the transaction.
 
 enrichment_field_declarations:
   - &calitp_hash
@@ -905,6 +965,28 @@ models:
       - *refunds_settlement_status_time
       - *refunds_settlement_reason_code
       - *refunds_settlement_response_text
+      - *calitp_hash
+      - *calitp_file_name
+      - *calitp_export_account
+      - *calitp_export_datetime
+      - *calitp_n_dupes
+      - *calitp_n_dupe_ids
+      - *calitp_dupe_number
+  - name: stg_enriched_settlements
+    columns:
+      - *settlements_settlement_id
+      - *settlements_participant_id
+      - *settlements_aggregation_id
+      - *settlements_customer_id
+      - *settlements_funding_source_id
+      - *settlements_settlement_type
+      - *settlements_transaction_amount
+      - *settlements_currency_code
+      - *settlements_retrieval_reference_number
+      - *settlements_littlepay_reference_number
+      - *settlements_external_reference_number
+      - *settlements_settlement_requested_date_time_utc
+      - *settlements_acquirer
       - *calitp_hash
       - *calitp_file_name
       - *calitp_export_account
