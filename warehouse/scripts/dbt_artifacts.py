@@ -2,12 +2,20 @@
 Built off the starting point of https://guitton.co/posts/dbt-artifacts
 """
 import json
+import os
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Annotated, ClassVar, Dict, List, Literal, Optional, Union
+from typing import Annotated, Any, ClassVar, Dict, List, Literal, Optional, Tuple, Union
 
+import pendulum
 from pydantic import BaseModel, Field, validator
+from sqlalchemy import MetaData, Table, select
+
+
+class FileFormat(str, Enum):
+    csv = "csv"
+    jsonl = "jsonl"
 
 
 class DbtResourceType(str, Enum):
@@ -38,6 +46,16 @@ class NodeConfig(BaseModel):
     materialized: Optional[DbtMaterializationType]
 
 
+class Column(BaseModel):
+    name: str
+    description: Optional[str]
+    meta: Dict[str, Any]
+
+    @property
+    def publish(self):
+        return not self.meta.get("publish.ignore", False)
+
+
 class Node(BaseModel):
     _instances: ClassVar[Dict[str, "Node"]] = {}
     unique_id: str
@@ -49,6 +67,7 @@ class Node(BaseModel):
     description: str
     depends_on: Optional[NodeDeps]
     config: NodeConfig
+    columns: Dict[str, Column]
 
     def __init__(self, **kwargs):
         super(Node, self).__init__(**kwargs)
@@ -57,6 +76,17 @@ class Node(BaseModel):
     @property
     def schema_table(self):
         return f"{str(self.schema_)}.{self.config.alias or self.name}"
+
+    def sqlalchemy_table(self, engine):
+        return Table(self.schema_table, MetaData(bind=engine), autoload=True)
+
+    def select(self, engine):
+        columns = [
+            c
+            for c in self.sqlalchemy_table(engine).columns
+            if c.name not in self.columns or self.columns[c.name].publish
+        ]
+        return select(columns=columns)
 
 
 class ExposureType(str, Enum):
@@ -73,8 +103,24 @@ class Owner(BaseModel):
 
 
 class GCSConfig(BaseModel):
-    type: Literal["gcs_bucket"]
-    path: str
+    type: Literal["gcs"]
+    bucket: str
+    format: FileFormat
+
+    def hive_partitions(
+        self, model: str, dt: pendulum.DateTime = pendulum.now()
+    ) -> Tuple[str, str]:
+        return (
+            f"dt={dt.to_date_string()}",
+            f"{model}.{self.format.value}",
+        )
+
+    def hive_path(self, model: str, bucket: str):
+        return os.path.join(
+            bucket,
+            model,
+            *self.hive_partitions(model),
+        )
 
 
 class TileServerConfig(BaseModel):
@@ -82,7 +128,7 @@ class TileServerConfig(BaseModel):
     url: str
 
 
-class CkanConfig(BaseModel):
+class CkanConfig(GCSConfig):
     _instances: ClassVar[List["CkanConfig"]] = []
     type: Literal["ckan"]
     url: str
