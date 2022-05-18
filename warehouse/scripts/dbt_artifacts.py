@@ -6,6 +6,7 @@ import os
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
+from slugify import slugify
 from typing import Annotated, Any, ClassVar, Dict, List, Literal, Optional, Tuple, Union
 
 import pendulum
@@ -15,7 +16,10 @@ from sqlalchemy import MetaData, Table, select
 
 class FileFormat(str, Enum):
     csv = "csv"
+    geojson = "geojson"
+    json = "json"
     jsonl = "jsonl"
+    mbtiles = "mbtiles"
 
 
 class DbtResourceType(str, Enum):
@@ -42,7 +46,7 @@ class NodeDeps(BaseModel):
 
 class NodeConfig(BaseModel):
     alias: Optional[str]
-    _schema: str = Field(None, alias="schema")
+    schema_: str = Field(None, alias="schema")
     materialized: Optional[DbtMaterializationType]
 
 
@@ -71,11 +75,15 @@ class Node(BaseModel):
 
     def __init__(self, **kwargs):
         super(Node, self).__init__(**kwargs)
-        self._instances[(self.resource_type, self.name)] = self
+        self._instances[self.unique_id] = self
+
+    @property
+    def table_name(self):
+        return self.config.alias or self.name
 
     @property
     def schema_table(self):
-        return f"{str(self.schema_)}.{self.config.alias or self.name}"
+        return f"{str(self.schema_)}.{self.table_name}"
 
     def sqlalchemy_table(self, engine):
         return Table(self.schema_table, MetaData(bind=engine), autoload=True)
@@ -102,50 +110,55 @@ class Owner(BaseModel):
     email: str
 
 
-class GCSConfig(BaseModel):
+class GcsDestination(BaseModel):
     type: Literal["gcs"]
     bucket: str
     format: FileFormat
+
+    def filename(self, model: str):
+        return f"{model}.{self.format.value}"
 
     def hive_partitions(
         self, model: str, dt: pendulum.DateTime = pendulum.now()
     ) -> Tuple[str, str]:
         return (
             f"dt={dt.to_date_string()}",
-            f"{model}.{self.format.value}",
+            self.filename(model),
         )
 
-    def hive_path(self, model: str, bucket: str):
+    def hive_path(self, exposure: "Exposure", model: str, bucket: str):
         return os.path.join(
             bucket,
-            model,
+            f"{slugify(exposure.name, separator='_')}__{model}",
             *self.hive_partitions(model),
         )
 
 
-class TileServerConfig(BaseModel):
+class TileServerDestination(GcsDestination):
     type: Literal["tile_server"]
     url: str
+    format: FileFormat
 
 
-class CkanConfig(GCSConfig):
-    _instances: ClassVar[List["CkanConfig"]] = []
+class CkanDestination(GcsDestination):
+    _instances: ClassVar[List["CkanDestination"]] = []
     type: Literal["ckan"]
     url: str
     ids: Dict[str, str]
 
     def __init__(self, **kwargs):
-        super(CkanConfig, self).__init__(**kwargs)
+        super(CkanDestination, self).__init__(**kwargs)
         self._instances.append(self)
 
 
 Destination = Annotated[
-    Union[CkanConfig, TileServerConfig, GCSConfig], Field(discriminator="type")
+    Union[CkanDestination, TileServerDestination, GcsDestination],
+    Field(discriminator="type"),
 ]
 
 
 class ExposureMeta(BaseModel):
-    destinations: Optional[List[Destination]]
+    destinations: List[Destination] = []
 
 
 class Exposure(BaseModel):
