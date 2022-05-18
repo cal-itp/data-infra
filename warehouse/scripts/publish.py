@@ -130,15 +130,15 @@ def _publish_exposure(project: str, bucket: str, exposure: Exposure, dry_run: bo
                     # gdf = gdf.to_crs(WGS84)
                     gdf[["geometry"]].to_file(geojson_fpath, driver="GeoJSON")
 
-                    subprocess.run(
-                        [
-                            "tippecanoe",
-                            "-zg",
-                            "-o",
-                            fpath,
-                            geojson_fpath,
-                        ]
-                    ).check_returncode()
+                    args = [
+                        "tippecanoe",
+                        "-zg",
+                        "-o",
+                        fpath,
+                        geojson_fpath,
+                    ]
+                    typer.secho(f"running tippecanoe with args {args}")
+                    subprocess.run(args).check_returncode()
 
                     hive_path = destination.hive_path(exposure, node.name, bucket)
 
