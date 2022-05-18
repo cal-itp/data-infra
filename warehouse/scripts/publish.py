@@ -106,7 +106,6 @@ def _publish_exposure(project: str, bucket: str, exposure: Exposure, dry_run: bo
                     geojson_fpath = os.path.join(tmpdir, f"{node.name}.geojson")
                     fpath = os.path.join(tmpdir, destination.filename(node.name))
 
-                    # from https://gist.github.com/drmalex07/5a54fc4f1db06a66679e
                     df = pd.read_gbq(
                         str(node.select(engine)),
                         project_id=project,
@@ -141,7 +140,7 @@ def _publish_exposure(project: str, bucket: str, exposure: Exposure, dry_run: bo
                         ]
                     ).check_returncode()
 
-                    hive_path = destination.hive_path(destination, node.name, bucket)
+                    hive_path = destination.hive_path(exposure, node.name, bucket)
 
                     if dry_run:
                         typer.secho(
