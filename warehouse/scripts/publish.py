@@ -1,8 +1,12 @@
 """
 Publishes various dbt models to various sources.
 """
+import enum
+
 import json
 import os
+import shapely.geometry
+import shapely.wkt
 import tempfile
 
 import gcsfs
@@ -12,7 +16,14 @@ import requests
 import typer
 from sqlalchemy import create_engine
 
-from scripts.dbt_artifacts import CkanConfig, DbtResourceType, Manifest, Node
+from scripts.dbt_artifacts import (
+    CkanDestination,
+    Exposure,
+    Manifest,
+    Node,
+    TileServerDestination,
+)
+from tqdm import tqdm
 
 API_KEY = os.environ.get("CALITP_CKAN_GTFS_SCHEDULE_KEY")
 
@@ -32,50 +43,144 @@ def get_engine(project, max_bytes=None):
     )
 
 
+def _publish_exposure(project: str, bucket: str, exposure: Exposure, dry_run: bool):
+    engine = get_engine(project)
+
+    for destination in exposure.meta.destinations:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            if isinstance(destination, CkanDestination):
+                assert len(exposure.depends_on.nodes) == len(destination.ids)
+
+                # TODO: this should probably be driven by the depends_on nodes
+                for model_name, ckan_id in destination.ids.items():
+                    typer.secho(f"handling {model_name} {ckan_id}")
+                    node = Node._instances[f"model.calitp_warehouse.{model_name}"]
+
+                    fpath = os.path.join(tmpdir, destination.filename(model_name))
+
+                    df = pd.read_gbq(
+                        str(node.select(engine)),
+                        project_id=project,
+                        progress_bar_type="tqdm",
+                    )
+                    df.to_csv(fpath, index=False)
+                    typer.secho(
+                        f"selected {len(df)} rows ({humanize.naturalsize(os.stat(fpath).st_size)}) from {model_name}"
+                    )
+
+                    hive_path = destination.hive_path(exposure, model_name, bucket)
+
+                    msg = f"writing {model_name} to {hive_path} and {destination.url} {ckan_id}"
+                    if dry_run:
+                        typer.secho(
+                            f"would be {msg}",
+                            fg=typer.colors.MAGENTA,
+                        )
+                    else:
+                        typer.secho(msg, fg=typer.colors.GREEN)
+                        fs = gcsfs.GCSFileSystem(
+                            project=project, token="google_default"
+                        )
+                        fs.put(fpath, hive_path)
+
+                        with open(fpath, "rb") as fp:
+                            requests.post(
+                                destination.url,
+                                data={"id": ckan_id},
+                                headers={"Authorization": API_KEY},
+                                files={"upload": fp},
+                            ).raise_for_status()
+            elif isinstance(destination, TileServerDestination):
+                # the depends_on each create a layer
+                for model in exposure.depends_on.nodes:
+                    node = Node._instances[model]
+
+                    fpath = os.path.join(tmpdir, destination.filename(node.name))
+
+                    # from https://gist.github.com/drmalex07/5a54fc4f1db06a66679e
+                    df = pd.read_gbq(
+                        str(node.select(engine)),
+                        project_id=project,
+                        progress_bar_type="tqdm",
+                    )
+                    df.pt_array.apply(
+                        lambda arr: [
+                            shapely.geometry.mapping(shapely.wkt.loads(p))
+                            for p in tqdm(arr)
+                        ]
+                    )
+                    df.to_csv(fpath, index=False)
+                    typer.secho(
+                        f"selected {len(df)} rows ({humanize.naturalsize(os.stat(fpath).st_size)}) from {model_name}"
+                    )
+
+                    hive_path = destination.hive_path(destination, model_name, bucket)
+
+                    if dry_run:
+                        typer.secho(
+                            f"would be writing {model_name} to {hive_path} and {destination.url} {ckan_id}",
+                            fg=typer.colors.MAGENTA,
+                        )
+                    else:
+                        fs = gcsfs.GCSFileSystem(
+                            project=project, token="google_default"
+                        )
+                        fs.put(fpath, hive_path)
+
+
+with open("./target/manifest.json") as f:
+    ExistingExposure = enum.Enum(
+        "ExistingExposure",
+        {
+            exposure.name: exposure.name
+            for exposure in Manifest(**json.load(f)).exposures.values()
+        },
+    )
+
+
 @app.command()
-def publish_to_ckan(
+def publish_exposure(
+    exposure: ExistingExposure,
     project: str = "cal-itp-data-infra",
     bucket: str = "gs://calitp-publish",
     dry_run: bool = False,
 ) -> None:
+    """
+    Only publish one exposure, by name.
+    """
     with open("./target/manifest.json") as f:
-        _ = Manifest(**json.load(f))
+        manifest = Manifest(**json.load(f))
 
-    engine = get_engine(project)
-    for config in CkanConfig._instances:
-        with tempfile.TemporaryDirectory() as tmpdir:
-            for model_name, ckan_id in config.ids.items():
-                table = Node._instances[(DbtResourceType.model, model_name)]
+    exposure = manifest.exposures[f"exposure.calitp_warehouse.{exposure.value}"]
 
-                fpath = os.path.join(tmpdir, f"{model_name}.csv")
-                df = pd.read_gbq(
-                    str(table.select(engine)),
-                    project_id=project,
-                    progress_bar_type="tqdm",
-                )
-                df.to_csv(fpath, index=False)
-                typer.secho(
-                    f"selected {len(df)} rows ({humanize.naturalsize(os.stat(fpath).st_size)}) from {model_name}"
-                )
+    _publish_exposure(
+        project=project,
+        bucket=bucket,
+        exposure=exposure,
+        dry_run=dry_run,
+    )
 
-                hive_path = config.hive_path(model_name, bucket)
 
-                if dry_run:
-                    typer.secho(
-                        f"would be writing {model_name} to {hive_path} and {config.url} {ckan_id}",
-                        fg=typer.colors.MAGENTA,
-                    )
-                else:
-                    fs = gcsfs.GCSFileSystem(project=project, token="google_default")
-                    fs.put(fpath, hive_path)
+@app.command()
+def publish_all_exposures(
+    project: str = "cal-itp-data-infra",
+    bucket: str = "gs://calitp-publish",
+    dry_run: bool = False,
+) -> None:
+    """
+    Publish all exposures found in a dbt manifest.
+    """
 
-                    with open(fpath, "rb") as fp:
-                        requests.post(
-                            config.url,
-                            data={"id": ckan_id},
-                            headers={"Authorization": API_KEY},
-                            files={"upload": fp},
-                        ).raise_for_status()
+    with open("./target/manifest.json") as f:
+        manifest = Manifest(**json.load(f))
+
+    for name, exposure in manifest.exposures.items():
+        _publish_exposure(
+            project=project,
+            bucket=bucket,
+            exposure=exposure,
+            dry_run=dry_run,
+        )
 
 
 if __name__ == "__main__":

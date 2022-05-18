@@ -825,3 +825,24 @@ models:
         description: Field in validation output from GTFS validator
         tests:
           - not_null
+
+exposures:
+  - name: calitp_map_tile_server
+    type: application
+    maturity: low
+    url: ""
+    description: Just the shapes as map tiles
+
+    depends_on:
+      - ref("gtfs_schedule_dim_shapes_geo")
+
+    owner:
+      email: andrew.v@jarv.us
+
+    meta:
+      destinations:
+        - type: tile_server
+          bucket: gs://calitp-publish
+          format: mbtiles
+          url: temporary-placeholder
+          geo_column: pt_array
