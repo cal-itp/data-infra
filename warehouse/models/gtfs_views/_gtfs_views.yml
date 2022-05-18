@@ -834,7 +834,7 @@ exposures:
     description: Just the shapes as map tiles
 
     depends_on:
-      - ref("gtfs_schedule_dim_shapes_geo")
+      - ref("gtfs_schedule_dim_shapes_geo_latest")
 
     owner:
       email: andrew.v@jarv.us
