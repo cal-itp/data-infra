@@ -65,7 +65,7 @@ def _publish_exposure(project: str, bucket: str, exposure: Exposure, dry_run: bo
                     )
                     df.to_csv(fpath, index=False)
                     typer.secho(
-                        f"selected {len(df)} rows ({humanize.naturalsize(os.stat(fpath).st_size)}) from {model_name}"
+                        f"selected {len(df)} rows ({humanize.naturalsize(os.stat(fpath).st_size)}) from {node.schema_table}"
                     )
 
                     hive_path = destination.hive_path(exposure, model_name, bucket)
