@@ -1,6 +1,6 @@
-# Metabase
+# Backups
 
-## Backups
+## Metabase
 
 For most of our backups we utilize [Restic](https://restic.readthedocs.io/en/latest/010_introduction.html)
 
