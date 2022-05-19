@@ -89,7 +89,7 @@ parts:
         - file: services/gtfs-rt-archive
       - file: backups
         sections:
-        - file: metabase
+        - file: backups/metabase
 
   - caption: Contribute to the Docs!
     chapters:
