@@ -1,6 +1,9 @@
 version: 2
 
 models:
+  - name: stg_transit_database__components
+    description: |
+      Components data.
   - name: stg_transit_database__contracts
     description: |
       Contracts data.

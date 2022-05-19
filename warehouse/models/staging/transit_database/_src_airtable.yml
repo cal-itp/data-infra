@@ -18,4 +18,6 @@ sources:
       - name: california_transit__place_geography
       - name: california_transit__rider_requirements
       - name: california_transit__services
+      - name: transit_technology_stacks__components
       - name: transit_technology_stacks__contracts
+      - name: transit_technology_stacks__products
