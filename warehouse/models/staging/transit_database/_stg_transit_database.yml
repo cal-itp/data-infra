@@ -4,3 +4,6 @@ models:
   - name: stg_transit_database__contracts
     description: |
       Contracts data.
+  - name: stg_transit_database__products
+    description: |
+      Products data.
