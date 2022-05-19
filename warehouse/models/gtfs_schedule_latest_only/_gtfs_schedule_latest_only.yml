@@ -22,7 +22,7 @@ models:
         name: calitp_hash
         description: '{{ doc("column_schedule_calitp_hash") }}'
       - name: agency_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests: &primary_key_tests
           - not_null
           - unique
@@ -39,7 +39,7 @@ models:
       - *calitp_extracted_at
       - *calitp_hash
       - name: attribution_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
   - name: calendar
     description: |
@@ -54,7 +54,7 @@ models:
       - *calitp_extracted_at
       - *calitp_hash
       - name: calendar_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
   - name: calendar_dates
     description: |
@@ -81,7 +81,7 @@ models:
       - *calitp_extracted_at
       - *calitp_hash
       - name: fare_attribute_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
   - name: fare_rules
     description: |
@@ -96,7 +96,7 @@ models:
       - *calitp_extracted_at
       - *calitp_hash
       - name: fare_rule_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
   - name: feed_info
     description: |
@@ -111,7 +111,7 @@ models:
       - *calitp_extracted_at
       - *calitp_hash
       - name: feed_info_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
   - name: frequencies
     description: |
@@ -126,7 +126,7 @@ models:
       - *calitp_extracted_at
       - *calitp_hash
       - name: frequency_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
   - name: levels
     description: |
@@ -141,7 +141,7 @@ models:
       - *calitp_extracted_at
       - *calitp_hash
       - name: level_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
   - name: pathways
     description: |
@@ -156,7 +156,7 @@ models:
       - *calitp_extracted_at
       - *calitp_hash
       - name: pathway_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
   - name: routes
     description: |
@@ -171,7 +171,7 @@ models:
       - *calitp_extracted_at
       - *calitp_hash
       - name: route_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
   - name: shapes
     description: |
@@ -186,7 +186,7 @@ models:
       - *calitp_extracted_at
       - *calitp_hash
       - name: shape_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
   - name: stop_times
     description: |
@@ -201,7 +201,7 @@ models:
       - *calitp_extracted_at
       - *calitp_hash
       - name: stop_time_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
   - name: stops
     description: |
@@ -216,7 +216,7 @@ models:
       - *calitp_extracted_at
       - *calitp_hash
       - name: stop_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
   - name: transfers
     description: |
@@ -231,7 +231,7 @@ models:
       - *calitp_extracted_at
       - *calitp_hash
       - name: transfer_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
   - name: translations
     description: |
@@ -246,7 +246,7 @@ models:
       - *calitp_extracted_at
       - *calitp_hash
       - name: translation_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
   - name: trips
     description: |
@@ -261,7 +261,7 @@ models:
       - *calitp_extracted_at
       - *calitp_hash
       - name: trip_key
-        description: '{{ doc("column_schedule_file_key") }}'
+        description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
   - name: validation_notices
     description: |
