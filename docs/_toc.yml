@@ -87,7 +87,7 @@ parts:
         sections:
         - file: services/gtfs-ckan-uploader
         - file: services/gtfs-rt-archive
-      - file: backups/metabase
+      - file: backups/backups
   - caption: Contribute to the Docs!
     chapters:
       - file: contribute/overview
