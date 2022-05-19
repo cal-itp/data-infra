@@ -1,6 +1,6 @@
-# Backups
+# Metabase
 
-## Metabase Backups
+## Backups
 
 For most of our backups we utilize [Restic](https://restic.readthedocs.io/en/latest/010_introduction.html)
 
@@ -12,11 +12,11 @@ To verify that metabase configuration backups have been created, there are three
 
 There are several ways to obtain the Restic information.
 
-### Google Cloud Engine
+## Google Cloud Engine
 
 Within the kubernetes engine on GCE, go to the sidebar of `Secrets and Config Maps`. Select `cluster = data-infra-apps(us-west1)` and `namespace = metabase`, then select `database-backup`. This will have the Restic password that you will need but it will be encrypted.
 
-### Lens
+## Lens
 
 The preferred method is to use the Lens Kubernetes IDE https://k8slens.dev/. Once Lens desktop is set up, sync the following cluster `gke_cal-itp-data-infra_us-west1_data-infra-apps`. Within the configuration sidebar, navigate to `Secrets`. Select the `database-backup` secret where you will see the `RESTIC_PASSWORD`. Click the eye icon to unencrypt the password.
 
@@ -31,7 +31,7 @@ value: database.metabase.svc.cluster.local
 
 Once you have the name of the Restic repository, the password and your google access token you can connect to Restic.
 
-### Restic
+## Restic
 
 Within Restic you can see the snapshots by running the following terminal commands:
 
@@ -46,7 +46,7 @@ This will be a zipped file, unzip it by using
 
 `gunzip /tmp/pgdump/pg_dumpall.sql`
 
-### Verify SQL in Postgres
+## Verify SQL in Postgres
 
 To verify the SQL schema and underlying data has not been corrupted , open the SQL file within a Docker container. For initial Docker container setup please visit [Docker Documentation](https://docs.docker.com/get-started/)
 
