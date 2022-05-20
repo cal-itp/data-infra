@@ -103,7 +103,9 @@ class AirtableExtract(BaseModel):
             raise ValueError(
                 "An extract time must be set before a hive path can be generated."
             )
-        safe_air_table_name = str.lower("_".join(self.air_table_name.split(" ")))
+        safe_air_table_name = str.lower(
+            "_".join(self.air_table_name.split(" "))
+        ).replace("-", "_")
         return os.path.join(
             bucket,
             f"{self.air_base_name}__{safe_air_table_name}",
