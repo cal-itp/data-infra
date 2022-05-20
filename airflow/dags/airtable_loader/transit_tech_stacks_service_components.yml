@@ -1,0 +1,9 @@
+operator: operators.AirtableToWarehouseOperator
+
+air_base_id: appeVUdmRBi3K9hTS
+air_table_name: "service-components"
+air_base_name: transit_technology_stacks
+bucket: "gs://{{ prefix_bucket('calitp-airtable') }}"
+
+airtable_options:
+  id_name: service_component_id
