@@ -28,6 +28,7 @@ DAGs are listed in alphabetical order, as they appear in the Airflow UI.
 `airtable_loader` | **⛔ No*** | No | **🔂 No** | N/A | All tasks are unsafe after 24 hours |
 `airtable_views` | Yes | No | Yes* | `airtable_loader` | Latest-only data |
 `amplitude_benefits` | Yes | No | **🔂 No** | N/A | |
+`check_data_freshness` | Yes | No | N/A | N/A | |
 `check_feed_aggregators` | **⛔ No** | No | **🔂 No** | N/A | |
 `create_external_tables` | N/A | N/A | N/A | N/A | Once-only (defines external tables); does not generally need to be re-run  |
 `gtfs_downloader` | **⛔ No*** | No | **🔂 No** | N/A | Tasks downstream of `download_data` can safely be rerun after 24 hours |
