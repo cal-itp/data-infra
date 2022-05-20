@@ -23,3 +23,4 @@ sources:
       - name: transit_technology_stacks__products
       - name: transit_technology_stacks__service_components
       - name: transit_technology_stacks__relationships_service_components
+      - name: transit_technology_stacks__data_schemas
