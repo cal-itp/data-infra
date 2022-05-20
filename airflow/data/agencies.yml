@@ -1135,8 +1135,8 @@ santa-cruz-metropolitan-transit-district:
 santa-maria-area-transit:
   agency_name: Santa Maria Area Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/smat-ca-us/smat-ca-us.zip
-      gtfs_rt_vehicle_positions_url: null
+    - gtfs_schedule_url: https://smrt.tripshot.com/v1/gtfs.zip?regionId=CA558DDC-D7F2-4B48-9CAC-DEEA1134F820
+      gtfs_rt_vehicle_positions_url: https://smrt.tripshot.com/v1/gtfs/realtime/CA558DDC-D7F2-4B48-9CAC-DEEA1134F820
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 298
@@ -1660,3 +1660,11 @@ lax-flyaway:
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 165
+anaheim-regional:
+  agency_name: Anaheim Regional Transportation
+  feeds:
+    - gtfs_schedule_url: https://art.tripshot.com/v1/gtfs.zip?regionId=CA558DDC-D7F2-4B48-9CAC-DEEA1134F820
+      gtfs_rt_vehicle_positions_url: https://art.tripshot.com/v1/gtfs/realtime/CA558DDC-D7F2-4B48-9CAC-DEEA1134F820
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
+  itp_id: 14
