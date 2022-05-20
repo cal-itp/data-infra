@@ -10,3 +10,6 @@ models:
   - name: stg_transit_database__products
     description: |
       Products data.
+  - name: stg_transit_database__service_components
+    description: |
+      Service/component relationship data.
