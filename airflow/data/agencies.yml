@@ -362,9 +362,9 @@ culver-citybus:
   agency_name: Culver CityBus
   feeds:
     - gtfs_schedule_url: https://www.culvercity.org/files/assets/public/documents/information-technology/maps/gtfsexport.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://nextccbus.org/gtfsrt/vehicles?apiKey={{ CULVER_CITY_API_KEY }}
+      gtfs_rt_service_alerts_url: https://nextccbus.org/gtfsrt/alerts?apiKey={{ CULVER_CITY_API_KEY }}
+      gtfs_rt_trip_updates_url: https://nextccbus.org/gtfsrt/trips?apiKey={{ CULVER_CITY_API_KEY }}
   itp_id: 87
 ladot:
   agency_name: Los Angeles Department of Transportation
