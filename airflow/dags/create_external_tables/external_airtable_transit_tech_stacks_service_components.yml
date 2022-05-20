@@ -6,7 +6,7 @@ post_hook: |
   FROM `{{ get_project_id() }}`.external_airtable.transit_technology_stacks__service_components
   LIMIT 1;
 source_objects:
-  - "transit_technology_stacks__service-components/*.jsonl.gz"
+  - "transit_technology_stacks__service_components/*.jsonl.gz"
 destination_project_dataset_table: "external_airtable.transit_technology_stacks__service_components"
 source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
