@@ -72,6 +72,7 @@ class Node(BaseModel):
     depends_on: Optional[NodeDeps]
     config: NodeConfig
     columns: Dict[str, Column]
+    meta: Optional[Dict]
 
     def __init__(self, **kwargs):
         super(Node, self).__init__(**kwargs)
