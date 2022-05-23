@@ -1,6 +1,8 @@
 """
 Publishes various dbt models to various sources.
 """
+from datetime import timedelta
+
 import csv
 
 import pendulum
@@ -174,15 +176,16 @@ with open("./target/manifest.json") as f:
 
 class MetadataRow(BaseModel):
     dataset_name: str
+    tags: List[str]
     description: str
     methodology: Literal[
         "Cal-ITP collects the GTFS feeds from a statewide list [link] every night and aggegrates it into a statewide table for analysis purposes only. Do not use for trip planner ingestation, rather is meant to be used for statewide analytics and other use cases. Note: These data may or may or may not have passed GTFS-Validation"
     ]
-    keywords: List[str]
     topic: Literal["Transportation"]
     publisher_organization: Literal["Caltrans"]
     place: Literal["CA"]
     frequency: str
+    next_update: pendulum.Date
     creation_date: pendulum.Date
     last_update: None
     status: Literal["Complete"]
@@ -227,25 +230,11 @@ class DictionaryRow(BaseModel):
     field_type: str
     field_length: int
     field_precision: None
-    data_class: None
-    field_units: None
+    units: None
     domain_type: Literal["Unrepresented"]
-    default_value: None
-    example_value: None
-    input_mask: None
     allowable_min_value: None
     allowable_max_value: None
-    expected_min_value: None
-    expected_max_value: None
-    required: YesOrNo
-    unique: YesOrNo
-    indexed: None
-    primary_key: None
-    foreign_key: None
-    data_entry_type: None
-    source_system: Literal["github.com/cal-itp/data-infra"]
     usage_notes: None
-    business_term: None
 
 
 @app.command()
@@ -277,9 +266,7 @@ def generate_exposure_documentation(
             writer.writerow(
                 MetadataRow(
                     dataset_name=node.name,
-                    description=node.description,
-                    methodology="Cal-ITP collects the GTFS feeds from a statewide list [link] every night and aggegrates it into a statewide table for analysis purposes only. Do not use for trip planner ingestation, rather is meant to be used for statewide analytics and other use cases. Note: These data may or may or may not have passed GTFS-Validation",
-                    keywords=[
+                    tags=[
                         "transit",
                         "gtfs",
                         "gtfs-schedule",
@@ -288,10 +275,13 @@ def generate_exposure_documentation(
                         "ferry",
                         "mobility",
                     ],
+                    description=node.description,
+                    methodology="Cal-ITP collects the GTFS feeds from a statewide list [link] every night and aggegrates it into a statewide table for analysis purposes only. Do not use for trip planner ingestation, rather is meant to be used for statewide analytics and other use cases. Note: These data may or may or may not have passed GTFS-Validation",
                     topic="Transportation",
                     publisher_organization="Caltrans",
                     place="CA",
-                    frequency="Nightly",
+                    frequency="Monthly",
+                    next_update=pendulum.today() + timedelta(days=30),
                     creation_date=pendulum.today(),
                     last_update=None,
                     status="Complete",
@@ -336,25 +326,11 @@ def generate_exposure_documentation(
                         field_type=column.meta.get("publish.type", "STRING"),
                         field_length=column.meta.get("publish.length", 1024),
                         field_precision=None,
-                        data_class=None,
-                        field_units=None,
+                        units=None,
                         domain_type="Unrepresented",
-                        default_value=None,
-                        example_value=None,
-                        input_mask=None,
                         allowable_min_value=None,
                         allowable_max_value=None,
-                        expected_min_value=None,
-                        expected_max_value=None,
-                        required="Y" if "not_null" in column.tests else "N",
-                        unique="Y" if "unique" in column.tests else "N",
-                        indexed=None,
-                        primary_key=None,
-                        foreign_key=None,
-                        data_entry_type=None,
-                        source_system="github.com/cal-itp/data-infra",
                         usage_notes=None,
-                        business_term=None,
                     ).dict()
                 )
 
