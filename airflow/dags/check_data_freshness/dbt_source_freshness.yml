@@ -1,5 +1,5 @@
 operator: 'operators.PodOperator'
-name: 'dbt-test'
+name: 'dbt-source-freshness'
 image: 'ghcr.io/cal-itp/data-infra/warehouse:{{ image_tag() }}'
 
 cmds:
@@ -7,7 +7,8 @@ cmds:
 arguments:
   - '/app/scripts/run_and_upload.py'
   - '--no-dbt-run'
-  - '--dbt-test'
+  - '--no-dbt-test'
+  - '--dbt-freshness'
 
 dependencies:
   - dbt_run_and_upload_artifacts
