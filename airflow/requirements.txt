@@ -19,3 +19,4 @@ humanize==3.14.0
 backoff==1.11.1
 pydantic==1.9.0
 tabulate==0.8.9
+google-api-core==2.8.0
