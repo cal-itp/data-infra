@@ -209,6 +209,8 @@ models:
       - name: stop_time_key
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
+    meta:
+      publish.gis_coordinate_system_epsg: WGS84
   - name: stops
     description: |
       This table is a latest-only cut of the cleaned GTFS data.

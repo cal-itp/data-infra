@@ -28,11 +28,11 @@ import typer
 from pydantic import BaseModel
 from sqlalchemy import create_engine
 
-from scripts.dbt_artifacts import (
+from dbt_artifacts import (
+    BaseNode,
     CkanDestination,
     Exposure,
     Manifest,
-    Node,
     TileServerDestination,
 )
 from tqdm import tqdm
@@ -70,7 +70,7 @@ def _publish_exposure(project: str, bucket: str, exposure: Exposure, dry_run: bo
                 # TODO: this should probably be driven by the depends_on nodes
                 for model_name, ckan_id in destination.ids.items():
                     typer.secho(f"handling {model_name} {ckan_id}")
-                    node = Node._instances[f"model.calitp_warehouse.{model_name}"]
+                    node = BaseNode._instances[f"model.calitp_warehouse.{model_name}"]
 
                     fpath = os.path.join(tmpdir, destination.filename(model_name))
 
@@ -109,7 +109,7 @@ def _publish_exposure(project: str, bucket: str, exposure: Exposure, dry_run: bo
             elif isinstance(destination, TileServerDestination):
                 # the depends_on each create a layer
                 for model in exposure.depends_on.nodes:
-                    node = Node._instances[model]
+                    node = BaseNode._instances[model]
 
                     geojson_fpath = os.path.join(tmpdir, f"{node.name}.geojson")
                     fpath = os.path.join(tmpdir, destination.filename(node.name))
@@ -175,7 +175,9 @@ with open("./target/manifest.json") as f:
 class MetadataRow(BaseModel):
     dataset_name: str
     description: str
-    methodology: Literal["Cal-ITP collects the GTFS feeds from a statewide list [link] every night and aggegrates it into a statewide table for analysis purposes only. Do not use for trip planner ingestation, rather is meant to be used for statewide analytics and other use cases. Note: These data may or may or may not have passed GTFS-Validation"]
+    methodology: Literal[
+        "Cal-ITP collects the GTFS feeds from a statewide list [link] every night and aggegrates it into a statewide table for analysis purposes only. Do not use for trip planner ingestation, rather is meant to be used for statewide analytics and other use cases. Note: These data may or may or may not have passed GTFS-Validation"
+    ]
     keywords: List[str]
     topic: Literal["Transportation"]
     publisher_organization: Literal["Caltrans"]
@@ -205,9 +207,11 @@ class MetadataRow(BaseModel):
     gis_coordinate_system_epsg: Optional[str]
     gis_vert_datum_epsg: None
 
+
 class YesOrNo(str, enum.Enum):
     y = "Y"
     n = "N"
+
 
 class DictionaryRow(BaseModel):
     system_name: str
@@ -258,46 +262,101 @@ def generate_exposure_documentation(
 
     exposure = manifest.exposures[f"exposure.calitp_warehouse.{exposure.value}"]
 
-    with open(metadata_output, "w", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=MetadataRow.__fields__.keys())
+    with open(metadata_output, "w", newline="") as mf, open(
+        dictionary_output, "w", newline=""
+    ) as df:
+        writer = csv.DictWriter(mf, fieldnames=MetadataRow.__fields__.keys())
         writer.writeheader()
 
-        for model in exposure.depends_on.nodes:
-            node = Node._instances[model]
-            writer.writerow(MetadataRow(
-                dataset_name=node.name,
-                description=node.description,
-                methodology="Cal-ITP collects the GTFS feeds from a statewide list [link] every night and aggegrates it into a statewide table for analysis purposes only. Do not use for trip planner ingestation, rather is meant to be used for statewide analytics and other use cases. Note: These data may or may or may not have passed GTFS-Validation",
-                keywords=["transit", "gtfs", "gtfs-schedule", "bus", "rail", "ferry", "mobility"],
-                topic="Transportation",
-                publisher_organization="Caltrans",
-                place="CA",
-                frequency="Nightly",
-                creation_date=pendulum.today(),
-                last_update=None,
-                status="Complete",
-                temporal_coverage_begin=None,
-                temporal_coverage_end=None,
-                data_dictionary=str,
-                data_dictionary_type="csv",
-                contact_organization="Caltrans",
-                contact_position="Cal-ITP",
-                contact_name="Hunter Owens",
-                contact_email="hunter.owens@dot.ca.gov",
-                public_access_level="public",
-                access_constraints=None,
-                use_constraints="Creative Commons 4.0 Attribution",
-                data_life_span=None,
-                caltrans_link=None,
-                data_standard="https://developers.google.com/transit/gtfs",
-                notes=None,
-                gis_theme=None,
-                gis_horiz_accuracy=None,
-                gis_vert_accuracy=None,
-                gis_coordinate_system_epsg=,
-                gis_vert_datum_epsg=None,
-            ).dict())
+        dictionary_writer = csv.DictWriter(
+            df, fieldnames=DictionaryRow.__fields__.keys()
+        )
+        dictionary_writer.writeheader()
 
+        for node in exposure.depends_on.resolved_nodes:
+            writer.writerow(
+                MetadataRow(
+                    dataset_name=node.name,
+                    description=node.description,
+                    methodology="Cal-ITP collects the GTFS feeds from a statewide list [link] every night and aggegrates it into a statewide table for analysis purposes only. Do not use for trip planner ingestation, rather is meant to be used for statewide analytics and other use cases. Note: These data may or may or may not have passed GTFS-Validation",
+                    keywords=[
+                        "transit",
+                        "gtfs",
+                        "gtfs-schedule",
+                        "bus",
+                        "rail",
+                        "ferry",
+                        "mobility",
+                    ],
+                    topic="Transportation",
+                    publisher_organization="Caltrans",
+                    place="CA",
+                    frequency="Nightly",
+                    creation_date=pendulum.today(),
+                    last_update=None,
+                    status="Complete",
+                    temporal_coverage_begin=None,
+                    temporal_coverage_end=None,
+                    data_dictionary="",
+                    data_dictionary_type="csv",
+                    contact_organization="Caltrans",
+                    contact_position="Cal-ITP",
+                    contact_name="Hunter Owens",
+                    contact_email="hunter.owens@dot.ca.gov",
+                    public_access_level="Public",
+                    access_constraints=None,
+                    use_constraints="Creative Commons 4.0 Attribution",
+                    data_life_span=None,
+                    caltrans_link=None,
+                    data_standard="https://developers.google.com/transit/gtfs",
+                    notes=None,
+                    gis_theme=None,
+                    gis_horiz_accuracy=None,
+                    gis_vert_accuracy=None,
+                    gis_coordinate_system_epsg=node.meta.get(
+                        "publish.gis_coordinate_system_epsg"
+                    ),
+                    gis_vert_datum_epsg=None,
+                ).dict()
+            )
+
+            for name, column in node.columns.items():
+                dictionary_writer.writerow(
+                    DictionaryRow(
+                        system_name="Cal-ITP GTFS-Ingest Pipeline",
+                        table_name=node.name,
+                        field_name=column.name,
+                        field_alias=None,
+                        field_description=column.description,
+                        field_description_authority="",
+                        confidential="N",
+                        sensitive="N",
+                        pii="N",
+                        pci="N",
+                        field_type=column.meta.get("publish.type", "STRING"),
+                        field_length=column.meta.get("publish.length", 1024),
+                        field_precision=None,
+                        data_class=None,
+                        field_units=None,
+                        domain_type="Unrepresented",
+                        default_value=None,
+                        example_value=None,
+                        input_mask=None,
+                        allowable_min_value=None,
+                        allowable_max_value=None,
+                        expected_min_value=None,
+                        expected_max_value=None,
+                        required="Y" if "not_null" in column.tests else "N",
+                        unique="Y" if "unique" in column.tests else "N",
+                        indexed=None,
+                        primary_key=None,
+                        foreign_key=None,
+                        data_entry_type=None,
+                        source_system="github.com/cal-itp/data-infra",
+                        usage_notes=None,
+                        business_term=None,
+                    ).dict()
+                )
 
 
 @app.command()

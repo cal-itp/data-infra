@@ -10,7 +10,7 @@ from slugify import slugify
 from typing import Annotated, Any, ClassVar, Dict, List, Literal, Optional, Tuple, Union
 
 import pendulum
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field
 from sqlalchemy import MetaData, Table, select
 
 
@@ -41,7 +41,12 @@ class DbtMaterializationType(str, Enum):
 
 
 class NodeDeps(BaseModel):
+    macros: List[str]
     nodes: List[str]
+
+    @property
+    def resolved_nodes(self) -> List["BaseNode"]:
+        return [BaseNode._instances[node] for node in self.nodes]
 
 
 class NodeConfig(BaseModel):
@@ -54,14 +59,25 @@ class Column(BaseModel):
     name: str
     description: Optional[str]
     meta: Dict[str, Any]
+    parent: "BaseNode" = None  # this is set after the fact
 
     @property
-    def publish(self):
+    def publish(self) -> bool:
         return not self.meta.get("publish.ignore", False)
 
+    @property
+    def tests(self) -> List[str]:
+        return [
+            node.name
+            for name, node in BaseNode._instances.items()
+            if node.resource_type == DbtResourceType.test
+            and self.parent.unique_id in node.depends_on.nodes
+            and self.name == node.test_metadata.kwargs.get("column_name")
+        ]
 
-class Node(BaseModel):
-    _instances: ClassVar[Dict[str, "Node"]] = {}
+
+class BaseNode(BaseModel):
+    _instances: ClassVar[Dict[str, "BaseNode"]] = {}
     unique_id: str
     path: Path
     database: str
@@ -75,8 +91,10 @@ class Node(BaseModel):
     meta: Optional[Dict]
 
     def __init__(self, **kwargs):
-        super(Node, self).__init__(**kwargs)
+        super(BaseNode, self).__init__(**kwargs)
         self._instances[self.unique_id] = self
+        for column in self.columns.values():
+            column.parent = self
 
     @property
     def table_name(self):
@@ -96,6 +114,30 @@ class Node(BaseModel):
             if c.name not in self.columns or self.columns[c.name].publish
         ]
         return select(columns=columns)
+
+
+class Model(BaseNode):
+    resource_type: Literal[DbtResourceType.model]
+
+
+class Source(BaseNode):
+    resource_type: Literal[DbtResourceType.source]
+
+
+class TestMetadata(BaseModel):
+    name: str
+    kwargs: Dict[str, Union[str, List, Dict]]
+
+
+class Test(BaseNode):
+    resource_type: Literal[DbtResourceType.test]
+    test_metadata: TestMetadata
+
+
+Node = Annotated[
+    Union[Model, Test],
+    Field(discriminator="resource_type"),
+]
 
 
 class ExposureType(str, Enum):
@@ -176,18 +218,18 @@ class Exposure(BaseModel):
 
 class Manifest(BaseModel):
     nodes: Dict[str, Node]
-    sources: Dict[str, Node]
+    sources: Dict[str, Source]
     macros: Dict
     docs: Dict
     exposures: Dict[str, Exposure]
 
-    @validator("nodes", "sources")
-    def filter(cls, val):
-        return {
-            k: v
-            for k, v in val.items()
-            if v.resource_type.value in ("model", "seed", "source")
-        }
+    # @validator("nodes", "sources")
+    # def filter(cls, val):
+    #     return {
+    #         k: v
+    #         for k, v in val.items()
+    #         if v.resource_type.value in ("model", "seed", "source")
+    #     }
 
 
 class TimingInfo(BaseModel):
