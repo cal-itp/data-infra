@@ -16,6 +16,9 @@ models:
   - name: stg_transit_database__relationships_service_components
     description: |
       Service/component relationship data.
-  - name: stg_transit_database__relationships_data_schemas
+  - name: stg_transit_database__data_schemas
+    description: |
+      Data schema data.
+  - name: stg_transit_database__properties_features
     description: |
       Data schema data.
