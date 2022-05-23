@@ -811,98 +811,105 @@
 <td><p>N/A</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">check_feed_aggregators</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">check_data_freshness</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>This is not really worth re-running, as the point is that stale data caused a failure at a moment in time</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">check_feed_aggregators</span></code></p></td>
 <td><p><strong>⛔ No</strong></p></td>
 <td><p>No</p></td>
 <td><p><strong>🔂 No</strong></p></td>
 <td><p>N/A</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">create_external_tables</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">create_external_tables</span></code></p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>Once-only (defines external tables); does not generally need to be re-run</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_downloader</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_downloader</span></code></p></td>
 <td><p><strong>⛔ No</strong>*</p></td>
 <td><p>No</p></td>
 <td><p><strong>🔂 No</strong></p></td>
 <td><p>N/A</p></td>
 <td><p>Tasks downstream of <code class="docutils literal notranslate"><span class="pre">download_data</span></code> can safely be rerun after 24 hours</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_loader</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_loader</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p><strong>🔂 No</strong></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">gtfs_downloader</span></code>*</p></td>
 <td><p>Technically also depends on <code class="docutils literal notranslate"><span class="pre">gtfs_schedule_history</span></code>, not usually an issue</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule_history</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule_history</span></code></p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>Once-only (defines external tables); does not generally need to be re-run</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule_history2</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule_history2</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p><strong>📆 Yes</strong></p></td>
 <td><p><strong>🔂 No</strong></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">gtfs_loader</span></code></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">parse_and_validate_rt</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">parse_and_validate_rt</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p><strong>🔂 No</strong></p></td>
 <td><p>N/A</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">payments_loader</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">payments_loader</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p>Yes</p></td>
 <td><p>N/A</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">payments_views</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">payments_views</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p>Yes</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">payments_views_staging</span></code></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">payments_views_staging</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">payments_views_staging</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p>Yes</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">payments_loader</span></code></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt_loader</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt_loader</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p><strong>🔂 No</strong></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">gtfs_loader</span></code></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt_loader_files</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt_loader_files</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p><strong>🔂 No</strong></p></td>
 <td><p>N/A</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sandbox</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sandbox</span></code></p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>Testing only; does not need to be re-run</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">transform_warehouse</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">transform_warehouse</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p>Yes</p></td>
