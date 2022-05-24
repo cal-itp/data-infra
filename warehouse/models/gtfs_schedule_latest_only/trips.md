@@ -1,3 +1,4 @@
+Original definitions from https://gtfs.org/reference/static#tripstxt
 
 {% docs gtfs_trips__route_id %}
 Identifies a route.

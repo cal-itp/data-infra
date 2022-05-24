@@ -1,3 +1,4 @@
+Original definitions from https://gtfs.org/reference/static#transferstxt
 
 {% docs gtfs_transfers__from_stop_id %}
 Identifies a stop or station where a connection between routes begins. If this field refers to a station, the transfer rule applies to all its child stops.

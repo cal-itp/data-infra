@@ -1,3 +1,4 @@
+Original definitions from https://gtfs.org/reference/static#translationstxt
 
 {% docs gtfs_translations__table_name %}
 Defines the table that contains the field to be translated. Allowed values are: agency, stops, routes, trips, stop_times, pathways, levels, feed_info and attributions (do not include the .txt file extension). If a table with a new file name is added by another proposal in the future, the table name is the name of the filename without the .txt file extension.

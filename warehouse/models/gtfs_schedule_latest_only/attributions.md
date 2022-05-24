@@ -1,3 +1,4 @@
+Original definitions from https://gtfs.org/reference/static#attributionstxt
 
 {% docs gtfs_attributions__attribution_id %}
 Identifies an attribution for the dataset or a subset of it. This is mostly useful for translations.

@@ -1,3 +1,4 @@
+Original definitions from https://gtfs.org/reference/static#frequenciestxt
 
 {% docs gtfs_frequencies__trip_id %}
 Identifies a trip to which the specified headway of service applies.

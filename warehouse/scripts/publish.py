@@ -286,7 +286,7 @@ def generate_exposure_documentation(
                             "ferry",
                             "mobility",
                         ],
-                        description=node.description,
+                        description=node.description.replace("\n", " "),
                         methodology="Cal-ITP collects the GTFS feeds from a statewide list [link] every night and aggegrates it into a statewide table for analysis purposes only. Do not use for trip planner ingestation, rather is meant to be used for statewide analytics and other use cases. Note: These data may or may or may not have passed GTFS-Validation",
                         topic="Transportation",
                         publisher_organization="Caltrans",

@@ -1,3 +1,4 @@
+Original definitions from https://gtfs.org/reference/static#stopstxt
 
 {% docs gtfs_stops__stop_id %}
 Identifies a stop, station, or station entrance.
