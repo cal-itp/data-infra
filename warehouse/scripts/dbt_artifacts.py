@@ -3,6 +3,7 @@ Built off the starting point of https://guitton.co/posts/dbt-artifacts
 """
 import json
 import os
+import yaml
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
@@ -58,7 +59,7 @@ class NodeConfig(BaseModel):
 class Column(BaseModel):
     name: str
     description: Optional[str]
-    meta: Dict[str, Any]
+    meta: Optional[Dict[str, Any]]
     parent: "BaseNode" = None  # this is set after the fact
 
     @property
@@ -74,6 +75,21 @@ class Column(BaseModel):
             and self.parent.unique_id in node.depends_on.nodes
             and self.name == node.test_metadata.kwargs.get("column_name")
         ]
+
+    def docblock(self, prefix="") -> str:
+        return f"""
+{{% docs {prefix}{self.name} %}}
+{self.description}
+{{% enddocs %}}
+"""
+
+    def yaml(self, include_description=True, extras={}) -> str:
+        include = {
+            "name",
+        }
+        if include_description:
+            include += "description"
+        return yaml.dump([{**self.dict(include=include), **extras}], sort_keys=False)
 
 
 class BaseNode(BaseModel):
