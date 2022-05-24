@@ -174,9 +174,14 @@ with open("./target/manifest.json") as f:
     )
 
 
+# once https://github.com/samuelcolvin/pydantic/pull/2745 is merged, we don't need this
+class ListOfStrings(BaseModel):
+    __root__: List[str]
+
+
 class MetadataRow(BaseModel):
     dataset_name: str
-    tags: List[str]
+    tags: ListOfStrings
     description: str
     methodology: Literal[
         "Cal-ITP collects the GTFS feeds from a statewide list [link] every night and aggegrates it into a statewide table for analysis purposes only. Do not use for trip planner ingestation, rather is meant to be used for statewide analytics and other use cases. Note: These data may or may or may not have passed GTFS-Validation"
@@ -209,6 +214,11 @@ class MetadataRow(BaseModel):
     gis_vert_accuracy: None
     gis_coordinate_system_epsg: Optional[str]
     gis_vert_datum_epsg: None
+
+    class Config:
+        json_encoders = {
+            ListOfStrings: lambda los: ",".join(los.__root__),
+        }
 
 
 class YesOrNo(str, enum.Enum):
@@ -264,74 +274,78 @@ def generate_exposure_documentation(
 
         for node in exposure.depends_on.resolved_nodes:
             writer.writerow(
-                MetadataRow(
-                    dataset_name=node.name,
-                    tags=[
-                        "transit",
-                        "gtfs",
-                        "gtfs-schedule",
-                        "bus",
-                        "rail",
-                        "ferry",
-                        "mobility",
-                    ],
-                    description=node.description,
-                    methodology="Cal-ITP collects the GTFS feeds from a statewide list [link] every night and aggegrates it into a statewide table for analysis purposes only. Do not use for trip planner ingestation, rather is meant to be used for statewide analytics and other use cases. Note: These data may or may or may not have passed GTFS-Validation",
-                    topic="Transportation",
-                    publisher_organization="Caltrans",
-                    place="CA",
-                    frequency="Monthly",
-                    next_update=pendulum.today() + timedelta(days=30),
-                    creation_date=pendulum.today(),
-                    last_update=None,
-                    status="Complete",
-                    temporal_coverage_begin=None,
-                    temporal_coverage_end=None,
-                    data_dictionary="",
-                    data_dictionary_type="csv",
-                    contact_organization="Caltrans",
-                    contact_position="Cal-ITP",
-                    contact_name="Hunter Owens",
-                    contact_email="hunter.owens@dot.ca.gov",
-                    public_access_level="Public",
-                    access_constraints=None,
-                    use_constraints="Creative Commons 4.0 Attribution",
-                    data_life_span=None,
-                    caltrans_link=None,
-                    data_standard="https://developers.google.com/transit/gtfs",
-                    notes=None,
-                    gis_theme=None,
-                    gis_horiz_accuracy=None,
-                    gis_vert_accuracy=None,
-                    gis_coordinate_system_epsg=node.meta.get(
-                        "publish.gis_coordinate_system_epsg"
-                    ),
-                    gis_vert_datum_epsg=None,
-                ).dict()
+                json.loads(
+                    MetadataRow(
+                        dataset_name=node.name,
+                        tags=[
+                            "transit",
+                            "gtfs",
+                            "gtfs-schedule",
+                            "bus",
+                            "rail",
+                            "ferry",
+                            "mobility",
+                        ],
+                        description=node.description,
+                        methodology="Cal-ITP collects the GTFS feeds from a statewide list [link] every night and aggegrates it into a statewide table for analysis purposes only. Do not use for trip planner ingestation, rather is meant to be used for statewide analytics and other use cases. Note: These data may or may or may not have passed GTFS-Validation",
+                        topic="Transportation",
+                        publisher_organization="Caltrans",
+                        place="CA",
+                        frequency="Monthly",
+                        next_update=pendulum.today() + timedelta(days=30),
+                        creation_date=pendulum.today(),
+                        last_update=None,
+                        status="Complete",
+                        temporal_coverage_begin=None,
+                        temporal_coverage_end=None,
+                        data_dictionary="",
+                        data_dictionary_type="csv",
+                        contact_organization="Caltrans",
+                        contact_position="Cal-ITP",
+                        contact_name="Hunter Owens",
+                        contact_email="hunter.owens@dot.ca.gov",
+                        public_access_level="Public",
+                        access_constraints=None,
+                        use_constraints="Creative Commons 4.0 Attribution",
+                        data_life_span=None,
+                        caltrans_link=None,
+                        data_standard="https://developers.google.com/transit/gtfs",
+                        notes=None,
+                        gis_theme=None,
+                        gis_horiz_accuracy=None,
+                        gis_vert_accuracy=None,
+                        gis_coordinate_system_epsg=node.meta.get(
+                            "publish.gis_coordinate_system_epsg"
+                        ),
+                        gis_vert_datum_epsg=None,
+                    ).json(models_as_dict=False)
+                )
             )
 
             for name, column in node.columns.items():
                 dictionary_writer.writerow(
-                    DictionaryRow(
-                        system_name="Cal-ITP GTFS-Ingest Pipeline",
-                        table_name=node.name,
-                        field_name=column.name,
-                        field_alias=None,
-                        field_description=column.description,
-                        field_description_authority="",
-                        confidential="N",
-                        sensitive="N",
-                        pii="N",
-                        pci="N",
-                        field_type=column.meta.get("publish.type", "STRING"),
-                        field_length=column.meta.get("publish.length", 1024),
-                        field_precision=None,
-                        units=None,
-                        domain_type="Unrepresented",
-                        allowable_min_value=None,
-                        allowable_max_value=None,
-                        usage_notes=None,
-                    ).dict()
+                    json.loads(
+                        DictionaryRow(
+                            system_name="Cal-ITP GTFS-Ingest Pipeline",
+                            table_name=node.name,
+                            field_name=column.name,
+                            field_alias=None,
+                            field_description=column.description,
+                            field_description_authority="",
+                            confidential="N",
+                            sensitive="N",
+                            pii="N",
+                            pci="N",
+                            field_type=column.meta.get("publish.type", "STRING"),
+                            field_length=column.meta.get("publish.length", 1024),
+                            field_precision=None,
+                            units=None,
+                            domain_type="Unrepresented",
+                            allowable_min_value=None,
+                            allowable_max_value=None,
+                            usage_notes=None,
+                        ).json()
+                    )
                 )
 
 
