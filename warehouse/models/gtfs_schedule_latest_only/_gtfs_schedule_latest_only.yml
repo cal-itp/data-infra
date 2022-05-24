@@ -33,27 +33,27 @@ models:
           - not_null
           - unique
       - name: agency_id
-        description: '''{{ doc("gtfs_agency__agency_id") }}'''
+        description: '{{ doc("gtfs_agency__agency_id") }}'
       - name: agency_name
-        description: '''{{ doc("gtfs_agency__agency_name") }}'''
+        description: '{{ doc("gtfs_agency__agency_name") }}'
         tests:
         - not_null
       - name: agency_url
-        description: '''{{ doc("gtfs_agency__agency_url") }}'''
+        description: '{{ doc("gtfs_agency__agency_url") }}'
         tests:
         - not_null
       - name: agency_timezone
-        description: '''{{ doc("gtfs_agency__agency_timezone") }}'''
+        description: '{{ doc("gtfs_agency__agency_timezone") }}'
         tests:
         - not_null
       - name: agency_lang
-        description: '''{{ doc("gtfs_agency__agency_lang") }}'''
+        description: '{{ doc("gtfs_agency__agency_lang") }}'
       - name: agency_phone
-        description: '''{{ doc("gtfs_agency__agency_phone") }}'''
+        description: '{{ doc("gtfs_agency__agency_phone") }}'
       - name: agency_fare_url
-        description: '''{{ doc("gtfs_agency__agency_fare_url") }}'''
+        description: '{{ doc("gtfs_agency__agency_fare_url") }}'
       - name: agency_email
-        description: '''{{ doc("gtfs_agency__agency_email") }}'''
+        description: '{{ doc("gtfs_agency__agency_email") }}'
 
 
   - name: attributions
@@ -72,29 +72,29 @@ models:
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
       - name: attribution_id
-        description: '''{{ doc("gtfs_attributions__attribution_id") }}'''
+        description: '{{ doc("gtfs_attributions__attribution_id") }}'
       - name: agency_id
-        description: '''{{ doc("gtfs_attributions__agency_id") }}'''
+        description: '{{ doc("gtfs_attributions__agency_id") }}'
       - name: route_id
-        description: '''{{ doc("gtfs_attributions__route_id") }}'''
+        description: '{{ doc("gtfs_attributions__route_id") }}'
       - name: trip_id
-        description: '''{{ doc("gtfs_attributions__trip_id") }}'''
+        description: '{{ doc("gtfs_attributions__trip_id") }}'
       - name: organization_name
-        description: '''{{ doc("gtfs_attributions__organization_name") }}'''
+        description: '{{ doc("gtfs_attributions__organization_name") }}'
         tests:
         - not_null
       - name: is_producer
-        description: '''{{ doc("gtfs_attributions__is_producer") }}'''
+        description: '{{ doc("gtfs_attributions__is_producer") }}'
       - name: is_operator
-        description: '''{{ doc("gtfs_attributions__is_operator") }}'''
+        description: '{{ doc("gtfs_attributions__is_operator") }}'
       - name: is_authority
-        description: '''{{ doc("gtfs_attributions__is_authority") }}'''
+        description: '{{ doc("gtfs_attributions__is_authority") }}'
       - name: attribution_url
-        description: '''{{ doc("gtfs_attributions__attribution_url") }}'''
+        description: '{{ doc("gtfs_attributions__attribution_url") }}'
       - name: attribution_email
-        description: '''{{ doc("gtfs_attributions__attribution_email") }}'''
+        description: '{{ doc("gtfs_attributions__attribution_email") }}'
       - name: attribution_phone
-        description: '''{{ doc("gtfs_attributions__attribution_phone") }}'''
+        description: '{{ doc("gtfs_attributions__attribution_phone") }}'
 
   - name: calendar
     description: |
@@ -112,43 +112,43 @@ models:
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
       - name: service_id
-        description: '''{{ doc("gtfs_calendar__service_id") }}'''
+        description: '{{ doc("gtfs_calendar__service_id") }}'
         tests:
         - not_null
       - name: monday
-        description: '''{{ doc("gtfs_calendar__monday") }}'''
+        description: '{{ doc("gtfs_calendar__monday") }}'
         tests:
         - not_null
       - name: tuesday
-        description: '''{{ doc("gtfs_calendar__tuesday") }}'''
+        description: '{{ doc("gtfs_calendar__tuesday") }}'
         tests:
         - not_null
       - name: wednesday
-        description: '''{{ doc("gtfs_calendar__wednesday") }}'''
+        description: '{{ doc("gtfs_calendar__wednesday") }}'
         tests:
         - not_null
       - name: thursday
-        description: '''{{ doc("gtfs_calendar__thursday") }}'''
+        description: '{{ doc("gtfs_calendar__thursday") }}'
         tests:
         - not_null
       - name: friday
-        description: '''{{ doc("gtfs_calendar__friday") }}'''
+        description: '{{ doc("gtfs_calendar__friday") }}'
         tests:
         - not_null
       - name: saturday
-        description: '''{{ doc("gtfs_calendar__saturday") }}'''
+        description: '{{ doc("gtfs_calendar__saturday") }}'
         tests:
         - not_null
       - name: sunday
-        description: '''{{ doc("gtfs_calendar__sunday") }}'''
+        description: '{{ doc("gtfs_calendar__sunday") }}'
         tests:
         - not_null
       - name: start_date
-        description: '''{{ doc("gtfs_calendar__start_date") }}'''
+        description: '{{ doc("gtfs_calendar__start_date") }}'
         tests:
         - not_null
       - name: end_date
-        description: '''{{ doc("gtfs_calendar__end_date") }}'''
+        description: '{{ doc("gtfs_calendar__end_date") }}'
         tests:
         - not_null
 
@@ -165,15 +165,15 @@ models:
       - *calitp_extracted_at
       - *calitp_hash
       - name: service_id
-        description: '''{{ doc("gtfs_calendar_dates__service_id") }}'''
+        description: '{{ doc("gtfs_calendar_dates__service_id") }}'
         tests:
         - not_null
       - name: date
-        description: '''{{ doc("gtfs_calendar_dates__date") }}'''
+        description: '{{ doc("gtfs_calendar_dates__date") }}'
         tests:
         - not_null
       - name: exception_type
-        description: '''{{ doc("gtfs_calendar_dates__exception_type") }}'''
+        description: '{{ doc("gtfs_calendar_dates__exception_type") }}'
         tests:
         - not_null
 
@@ -193,29 +193,29 @@ models:
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
       - name: fare_id
-        description: '''{{ doc("gtfs_fare_attributes__fare_id") }}'''
+        description: '{{ doc("gtfs_fare_attributes__fare_id") }}'
         tests:
         - not_null
       - name: price
-        description: '''{{ doc("gtfs_fare_attributes__price") }}'''
+        description: '{{ doc("gtfs_fare_attributes__price") }}'
         tests:
         - not_null
       - name: currency_type
-        description: '''{{ doc("gtfs_fare_attributes__currency_type") }}'''
+        description: '{{ doc("gtfs_fare_attributes__currency_type") }}'
         tests:
         - not_null
       - name: payment_method
-        description: '''{{ doc("gtfs_fare_attributes__payment_method") }}'''
+        description: '{{ doc("gtfs_fare_attributes__payment_method") }}'
         tests:
         - not_null
       - name: transfers
-        description: '''{{ doc("gtfs_fare_attributes__transfers") }}'''
+        description: '{{ doc("gtfs_fare_attributes__transfers") }}'
         tests:
         - not_null
       - name: agency_id
-        description: '''{{ doc("gtfs_fare_attributes__agency_id") }}'''
+        description: '{{ doc("gtfs_fare_attributes__agency_id") }}'
       - name: transfer_duration
-        description: '''{{ doc("gtfs_fare_attributes__transfer_duration") }}'''
+        description: '{{ doc("gtfs_fare_attributes__transfer_duration") }}'
 
   - name: fare_rules
     description: |
@@ -233,17 +233,17 @@ models:
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
       - name: fare_id
-        description: '''{{ doc("gtfs_fare_rules__fare_id") }}'''
+        description: '{{ doc("gtfs_fare_rules__fare_id") }}'
         tests:
         - not_null
       - name: route_id
-        description: '''{{ doc("gtfs_fare_rules__route_id") }}'''
+        description: '{{ doc("gtfs_fare_rules__route_id") }}'
       - name: origin_id
-        description: '''{{ doc("gtfs_fare_rules__origin_id") }}'''
+        description: '{{ doc("gtfs_fare_rules__origin_id") }}'
       - name: destination_id
-        description: '''{{ doc("gtfs_fare_rules__destination_id") }}'''
+        description: '{{ doc("gtfs_fare_rules__destination_id") }}'
       - name: contains_id
-        description: '''{{ doc("gtfs_fare_rules__contains_id") }}'''
+        description: '{{ doc("gtfs_fare_rules__contains_id") }}'
 
   - name: feed_info
     description: |
@@ -261,29 +261,29 @@ models:
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
       - name: feed_publisher_name
-        description: '''{{ doc("gtfs_feed_info__feed_publisher_name") }}'''
+        description: '{{ doc("gtfs_feed_info__feed_publisher_name") }}'
         tests:
         - not_null
       - name: feed_publisher_url
-        description: '''{{ doc("gtfs_feed_info__feed_publisher_url") }}'''
+        description: '{{ doc("gtfs_feed_info__feed_publisher_url") }}'
         tests:
         - not_null
       - name: feed_lang
-        description: '''{{ doc("gtfs_feed_info__feed_lang") }}'''
+        description: '{{ doc("gtfs_feed_info__feed_lang") }}'
         tests:
         - not_null
       - name: default_lang
-        description: '''{{ doc("gtfs_feed_info__default_lang") }}'''
+        description: '{{ doc("gtfs_feed_info__default_lang") }}'
       - name: feed_start_date
-        description: '''{{ doc("gtfs_feed_info__feed_start_date") }}'''
+        description: '{{ doc("gtfs_feed_info__feed_start_date") }}'
       - name: feed_end_date
-        description: '''{{ doc("gtfs_feed_info__feed_end_date") }}'''
+        description: '{{ doc("gtfs_feed_info__feed_end_date") }}'
       - name: feed_version
-        description: '''{{ doc("gtfs_feed_info__feed_version") }}'''
+        description: '{{ doc("gtfs_feed_info__feed_version") }}'
       - name: feed_contact_email
-        description: '''{{ doc("gtfs_feed_info__feed_contact_email") }}'''
+        description: '{{ doc("gtfs_feed_info__feed_contact_email") }}'
       - name: feed_contact_url
-        description: '''{{ doc("gtfs_feed_info__feed_contact_url") }}'''
+        description: '{{ doc("gtfs_feed_info__feed_contact_url") }}'
 
   - name: frequencies
     description: |
@@ -301,23 +301,23 @@ models:
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
       - name: trip_id
-        description: '''{{ doc("gtfs_frequencies__trip_id") }}'''
+        description: '{{ doc("gtfs_frequencies__trip_id") }}'
         tests:
         - not_null
       - name: start_time
-        description: '''{{ doc("gtfs_frequencies__start_time") }}'''
+        description: '{{ doc("gtfs_frequencies__start_time") }}'
         tests:
         - not_null
       - name: end_time
-        description: '''{{ doc("gtfs_frequencies__end_time") }}'''
+        description: '{{ doc("gtfs_frequencies__end_time") }}'
         tests:
         - not_null
       - name: headway_secs
-        description: '''{{ doc("gtfs_frequencies__headway_secs") }}'''
+        description: '{{ doc("gtfs_frequencies__headway_secs") }}'
         tests:
         - not_null
       - name: exact_times
-        description: '''{{ doc("gtfs_frequencies__exact_times") }}'''
+        description: '{{ doc("gtfs_frequencies__exact_times") }}'
 
   - name: levels
     description: |
@@ -335,15 +335,15 @@ models:
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
       - name: level_id
-        description: '''{{ doc("gtfs_levels__level_id") }}'''
+        description: '{{ doc("gtfs_levels__level_id") }}'
         tests:
         - not_null
       - name: level_index
-        description: '''{{ doc("gtfs_levels__level_index") }}'''
+        description: '{{ doc("gtfs_levels__level_index") }}'
         tests:
         - not_null
       - name: level_name
-        description: '''{{ doc("gtfs_levels__level_name") }}'''
+        description: '{{ doc("gtfs_levels__level_name") }}'
 
   - name: pathways
     description: |
@@ -361,39 +361,39 @@ models:
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
       - name: pathway_id
-        description: '''{{ doc("gtfs_pathways__pathway_id") }}'''
+        description: '{{ doc("gtfs_pathways__pathway_id") }}'
         tests:
         - not_null
       - name: from_stop_id
-        description: '''{{ doc("gtfs_pathways__from_stop_id") }}'''
+        description: '{{ doc("gtfs_pathways__from_stop_id") }}'
         tests:
         - not_null
       - name: to_stop_id
-        description: '''{{ doc("gtfs_pathways__to_stop_id") }}'''
+        description: '{{ doc("gtfs_pathways__to_stop_id") }}'
         tests:
         - not_null
       - name: pathway_mode
-        description: '''{{ doc("gtfs_pathways__pathway_mode") }}'''
+        description: '{{ doc("gtfs_pathways__pathway_mode") }}'
         tests:
         - not_null
       - name: is_bidirectional
-        description: '''{{ doc("gtfs_pathways__is_bidirectional") }}'''
+        description: '{{ doc("gtfs_pathways__is_bidirectional") }}'
         tests:
         - not_null
       - name: length
-        description: '''{{ doc("gtfs_pathways__length") }}'''
+        description: '{{ doc("gtfs_pathways__length") }}'
       - name: traversal_time
-        description: '''{{ doc("gtfs_pathways__traversal_time") }}'''
+        description: '{{ doc("gtfs_pathways__traversal_time") }}'
       - name: stair_count
-        description: '''{{ doc("gtfs_pathways__stair_count") }}'''
+        description: '{{ doc("gtfs_pathways__stair_count") }}'
       - name: max_slope
-        description: '''{{ doc("gtfs_pathways__max_slope") }}'''
+        description: '{{ doc("gtfs_pathways__max_slope") }}'
       - name: min_width
-        description: '''{{ doc("gtfs_pathways__min_width") }}'''
+        description: '{{ doc("gtfs_pathways__min_width") }}'
       - name: signposted_as
-        description: '''{{ doc("gtfs_pathways__signposted_as") }}'''
+        description: '{{ doc("gtfs_pathways__signposted_as") }}'
       - name: reversed_signposted_as
-        description: '''{{ doc("gtfs_pathways__reversed_signposted_as") }}'''
+        description: '{{ doc("gtfs_pathways__reversed_signposted_as") }}'
 
 
   - name: routes
@@ -412,33 +412,33 @@ models:
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
       - name: route_id
-        description: '''{{ doc("gtfs_routes__route_id") }}'''
+        description: '{{ doc("gtfs_routes__route_id") }}'
         tests:
         - not_null
       - name: agency_id
-        description: '''{{ doc("gtfs_routes__agency_id") }}'''
+        description: '{{ doc("gtfs_routes__agency_id") }}'
       - name: route_short_name
-        description: '''{{ doc("gtfs_routes__route_short_name") }}'''
+        description: '{{ doc("gtfs_routes__route_short_name") }}'
       - name: route_long_name
-        description: '''{{ doc("gtfs_routes__route_long_name") }}'''
+        description: '{{ doc("gtfs_routes__route_long_name") }}'
       - name: route_desc
-        description: '''{{ doc("gtfs_routes__route_desc") }}'''
+        description: '{{ doc("gtfs_routes__route_desc") }}'
       - name: route_type
-        description: '''{{ doc("gtfs_routes__route_type") }}'''
+        description: '{{ doc("gtfs_routes__route_type") }}'
         tests:
         - not_null
       - name: route_url
-        description: '''{{ doc("gtfs_routes__route_url") }}'''
+        description: '{{ doc("gtfs_routes__route_url") }}'
       - name: route_color
-        description: '''{{ doc("gtfs_routes__route_color") }}'''
+        description: '{{ doc("gtfs_routes__route_color") }}'
       - name: route_text_color
-        description: '''{{ doc("gtfs_routes__route_text_color") }}'''
+        description: '{{ doc("gtfs_routes__route_text_color") }}'
       - name: route_sort_order
-        description: '''{{ doc("gtfs_routes__route_sort_order") }}'''
+        description: '{{ doc("gtfs_routes__route_sort_order") }}'
       - name: continuous_pickup
-        description: '''{{ doc("gtfs_routes__continuous_pickup") }}'''
+        description: '{{ doc("gtfs_routes__continuous_pickup") }}'
       - name: continuous_drop_off
-        description: '''{{ doc("gtfs_routes__continuous_drop_off") }}'''
+        description: '{{ doc("gtfs_routes__continuous_drop_off") }}'
 
   - name: shapes
     description: |
@@ -456,23 +456,23 @@ models:
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
       - name: shape_id
-        description: '''{{ doc("gtfs_shapes__shape_id") }}'''
+        description: '{{ doc("gtfs_shapes__shape_id") }}'
         tests:
         - not_null
       - name: shape_pt_lat
-        description: '''{{ doc("gtfs_shapes__shape_pt_lat") }}'''
+        description: '{{ doc("gtfs_shapes__shape_pt_lat") }}'
         tests:
         - not_null
       - name: shape_pt_lon
-        description: '''{{ doc("gtfs_shapes__shape_pt_lon") }}'''
+        description: '{{ doc("gtfs_shapes__shape_pt_lon") }}'
         tests:
         - not_null
       - name: shape_pt_sequence
-        description: '''{{ doc("gtfs_shapes__shape_pt_sequence") }}'''
+        description: '{{ doc("gtfs_shapes__shape_pt_sequence") }}'
         tests:
         - not_null
       - name: shape_dist_traveled
-        description: '''{{ doc("gtfs_shapes__shape_dist_traveled") }}'''
+        description: '{{ doc("gtfs_shapes__shape_dist_traveled") }}'
 
 
   - name: stop_times
@@ -491,35 +491,35 @@ models:
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
       - name: trip_id
-        description: '''{{ doc("gtfs_stop_times__trip_id") }}'''
+        description: '{{ doc("gtfs_stop_times__trip_id") }}'
         tests:
         - not_null
       - name: arrival_time
-        description: '''{{ doc("gtfs_stop_times__arrival_time") }}'''
+        description: '{{ doc("gtfs_stop_times__arrival_time") }}'
       - name: departure_time
-        description: '''{{ doc("gtfs_stop_times__departure_time") }}'''
+        description: '{{ doc("gtfs_stop_times__departure_time") }}'
       - name: stop_id
-        description: '''{{ doc("gtfs_stop_times__stop_id") }}'''
+        description: '{{ doc("gtfs_stop_times__stop_id") }}'
         tests:
         - not_null
       - name: stop_sequence
-        description: '''{{ doc("gtfs_stop_times__stop_sequence") }}'''
+        description: '{{ doc("gtfs_stop_times__stop_sequence") }}'
         tests:
         - not_null
       - name: stop_headsign
-        description: '''{{ doc("gtfs_stop_times__stop_headsign") }}'''
+        description: '{{ doc("gtfs_stop_times__stop_headsign") }}'
       - name: pickup_type
-        description: '''{{ doc("gtfs_stop_times__pickup_type") }}'''
+        description: '{{ doc("gtfs_stop_times__pickup_type") }}'
       - name: drop_off_type
-        description: '''{{ doc("gtfs_stop_times__drop_off_type") }}'''
+        description: '{{ doc("gtfs_stop_times__drop_off_type") }}'
       - name: continuous_pickup
-        description: '''{{ doc("gtfs_stop_times__continuous_pickup") }}'''
+        description: '{{ doc("gtfs_stop_times__continuous_pickup") }}'
       - name: continuous_drop_off
-        description: '''{{ doc("gtfs_stop_times__continuous_drop_off") }}'''
+        description: '{{ doc("gtfs_stop_times__continuous_drop_off") }}'
       - name: shape_dist_traveled
-        description: '''{{ doc("gtfs_stop_times__shape_dist_traveled") }}'''
+        description: '{{ doc("gtfs_stop_times__shape_dist_traveled") }}'
       - name: timepoint
-        description: '''{{ doc("gtfs_stop_times__timepoint") }}'''
+        description: '{{ doc("gtfs_stop_times__timepoint") }}'
     meta:
       publish.gis_coordinate_system_epsg: WGS84
 
@@ -539,37 +539,37 @@ models:
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
       - name: stop_id
-        description: '''{{ doc("gtfs_stops__stop_id") }}'''
+        description: '{{ doc("gtfs_stops__stop_id") }}'
         tests:
         - not_null
       - name: stop_code
-        description: '''{{ doc("gtfs_stops__stop_code") }}'''
+        description: '{{ doc("gtfs_stops__stop_code") }}'
       - name: stop_name
-        description: '''{{ doc("gtfs_stops__stop_name") }}'''
+        description: '{{ doc("gtfs_stops__stop_name") }}'
       - name: tts_stop_name
-        description: '''{{ doc("gtfs_stops__tts_stop_name") }}'''
+        description: '{{ doc("gtfs_stops__tts_stop_name") }}'
       - name: stop_desc
-        description: '''{{ doc("gtfs_stops__stop_desc") }}'''
+        description: '{{ doc("gtfs_stops__stop_desc") }}'
       - name: stop_lat
-        description: '''{{ doc("gtfs_stops__stop_lat") }}'''
+        description: '{{ doc("gtfs_stops__stop_lat") }}'
       - name: stop_lon
-        description: '''{{ doc("gtfs_stops__stop_lon") }}'''
+        description: '{{ doc("gtfs_stops__stop_lon") }}'
       - name: zone_id
-        description: '''{{ doc("gtfs_stops__zone_id") }}'''
+        description: '{{ doc("gtfs_stops__zone_id") }}'
       - name: stop_url
-        description: '''{{ doc("gtfs_stops__stop_url") }}'''
+        description: '{{ doc("gtfs_stops__stop_url") }}'
       - name: location_type
-        description: '''{{ doc("gtfs_stops__location_type") }}'''
+        description: '{{ doc("gtfs_stops__location_type") }}'
       - name: parent_station
-        description: '''{{ doc("gtfs_stops__parent_station") }}'''
+        description: '{{ doc("gtfs_stops__parent_station") }}'
       - name: stop_timezone
-        description: '''{{ doc("gtfs_stops__stop_timezone") }}'''
+        description: '{{ doc("gtfs_stops__stop_timezone") }}'
       - name: wheelchair_boarding
-        description: '''{{ doc("gtfs_stops__wheelchair_boarding") }}'''
+        description: '{{ doc("gtfs_stops__wheelchair_boarding") }}'
       - name: level_id
-        description: '''{{ doc("gtfs_stops__level_id") }}'''
+        description: '{{ doc("gtfs_stops__level_id") }}'
       - name: platform_code
-        description: '''{{ doc("gtfs_stops__platform_code") }}'''
+        description: '{{ doc("gtfs_stops__platform_code") }}'
 
   - name: transfers
     description: |
@@ -587,19 +587,19 @@ models:
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
       - name: from_stop_id
-        description: '''{{ doc("gtfs_transfers__from_stop_id") }}'''
+        description: '{{ doc("gtfs_transfers__from_stop_id") }}'
         tests:
         - not_null
       - name: to_stop_id
-        description: '''{{ doc("gtfs_transfers__to_stop_id") }}'''
+        description: '{{ doc("gtfs_transfers__to_stop_id") }}'
         tests:
         - not_null
       - name: transfer_type
-        description: '''{{ doc("gtfs_transfers__transfer_type") }}'''
+        description: '{{ doc("gtfs_transfers__transfer_type") }}'
         tests:
         - not_null
       - name: min_transfer_time
-        description: '''{{ doc("gtfs_transfers__min_transfer_time") }}'''
+        description: '{{ doc("gtfs_transfers__min_transfer_time") }}'
 
   - name: translations
     description: |
@@ -617,27 +617,27 @@ models:
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
       - name: table_name
-        description: '''{{ doc("gtfs_translations__table_name") }}'''
+        description: '{{ doc("gtfs_translations__table_name") }}'
         tests:
         - not_null
       - name: field_name
-        description: '''{{ doc("gtfs_translations__field_name") }}'''
+        description: '{{ doc("gtfs_translations__field_name") }}'
         tests:
         - not_null
       - name: language
-        description: '''{{ doc("gtfs_translations__language") }}'''
+        description: '{{ doc("gtfs_translations__language") }}'
         tests:
         - not_null
       - name: translation
-        description: '''{{ doc("gtfs_translations__translation") }}'''
+        description: '{{ doc("gtfs_translations__translation") }}'
         tests:
         - not_null
       - name: record_id
-        description: '''{{ doc("gtfs_translations__record_id") }}'''
+        description: '{{ doc("gtfs_translations__record_id") }}'
       - name: record_sub_id
-        description: '''{{ doc("gtfs_translations__record_sub_id") }}'''
+        description: '{{ doc("gtfs_translations__record_sub_id") }}'
       - name: field_value
-        description: '''{{ doc("gtfs_translations__field_value") }}'''
+        description: '{{ doc("gtfs_translations__field_value") }}'
 
 
   - name: trips
@@ -656,31 +656,31 @@ models:
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
       - name: route_id
-        description: '''{{ doc("gtfs_trips__route_id") }}'''
+        description: '{{ doc("gtfs_trips__route_id") }}'
         tests:
         - not_null
       - name: service_id
-        description: '''{{ doc("gtfs_trips__service_id") }}'''
+        description: '{{ doc("gtfs_trips__service_id") }}'
         tests:
         - not_null
       - name: trip_id
-        description: '''{{ doc("gtfs_trips__trip_id") }}'''
+        description: '{{ doc("gtfs_trips__trip_id") }}'
         tests:
         - not_null
       - name: trip_headsign
-        description: '''{{ doc("gtfs_trips__trip_headsign") }}'''
+        description: '{{ doc("gtfs_trips__trip_headsign") }}'
       - name: trip_short_name
-        description: '''{{ doc("gtfs_trips__trip_short_name") }}'''
+        description: '{{ doc("gtfs_trips__trip_short_name") }}'
       - name: direction_id
-        description: '''{{ doc("gtfs_trips__direction_id") }}'''
+        description: '{{ doc("gtfs_trips__direction_id") }}'
       - name: block_id
-        description: '''{{ doc("gtfs_trips__block_id") }}'''
+        description: '{{ doc("gtfs_trips__block_id") }}'
       - name: shape_id
-        description: '''{{ doc("gtfs_trips__shape_id") }}'''
+        description: '{{ doc("gtfs_trips__shape_id") }}'
       - name: wheelchair_accessible
-        description: '''{{ doc("gtfs_trips__wheelchair_accessible") }}'''
+        description: '{{ doc("gtfs_trips__wheelchair_accessible") }}'
       - name: bikes_allowed
-        description: '''{{ doc("gtfs_trips__bikes_allowed") }}'''
+        description: '{{ doc("gtfs_trips__bikes_allowed") }}'
 
   - name: validation_notices
     description: |
