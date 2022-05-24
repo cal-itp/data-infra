@@ -1,3 +1,4 @@
+Original definitions from https://gtfs.org/reference/static#pathwaystxt
 
 {% docs gtfs_pathways__pathway_id %}
 The pathway_id field contains an ID that uniquely identifies the pathway. The pathway_id is used by systems as an internal identifier of this record (e.g., primary key in database), and therefore the pathway_id must be dataset unique.

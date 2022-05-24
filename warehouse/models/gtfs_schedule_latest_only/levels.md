@@ -1,3 +1,4 @@
+Original definitions from https://gtfs.org/reference/static#levelstxt
 
 {% docs gtfs_levels__level_id %}
 Id of the level that can be referenced from stops.txt.

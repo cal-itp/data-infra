@@ -1,3 +1,4 @@
+Original definitions from https://gtfs.org/reference/static#feed_infotxt
 
 {% docs gtfs_feed_info__feed_publisher_name %}
 Full name of the organization that publishes the dataset. This may be the same as one of the agency.agency_name values.

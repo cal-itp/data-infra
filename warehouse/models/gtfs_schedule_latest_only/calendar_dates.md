@@ -1,3 +1,4 @@
+Original definitions from https://gtfs.org/reference/static#calendar_datestxt
 
 {% docs gtfs_calendar_dates__service_id %}
 Identifies a set of dates when a service exception occurs for one or more routes. Each (service_id, date) pair can only appear once in calendar_dates.txt if using calendar.txt and calendar_dates.txt in conjunction. If a service_id value appears in both calendar.txt and calendar_dates.txt, the information in calendar_dates.txt modifies the service information specified in calendar.txt.

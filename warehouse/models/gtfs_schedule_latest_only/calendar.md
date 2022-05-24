@@ -1,3 +1,4 @@
+Original definitions from https://gtfs.org/reference/static#calendartxt
 
 {% docs gtfs_calendar__service_id %}
 Uniquely identifies a set of dates when service is available for one or more routes. Each service_id value can appear at most once in a calendar.txt file.

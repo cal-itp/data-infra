@@ -395,7 +395,6 @@ models:
       - name: reversed_signposted_as
         description: '{{ doc("gtfs_pathways__reversed_signposted_as") }}'
 
-
   - name: routes
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
@@ -639,7 +638,6 @@ models:
       - name: field_value
         description: '{{ doc("gtfs_translations__field_value") }}'
 
-
   - name: trips
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
@@ -700,9 +698,21 @@ exposures:
 
     depends_on:
       - ref("agency")
+      - ref("attributions")
+      - ref("calendar")
+      - ref("calendar_dates")
+      - ref("fare_attributes")
+      - ref("fare_rules")
+      - ref("feed_info")
+      - ref("frequencies")
+      - ref("levels")
+      - ref("pathways")
       - ref("routes")
+      - ref("shapes")
       - ref("stop_times")
       - ref("stops")
+      - ref("transfers")
+      - ref("translations")
       - ref("trips")
 
     owner:

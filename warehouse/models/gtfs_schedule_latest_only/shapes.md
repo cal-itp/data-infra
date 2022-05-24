@@ -1,3 +1,4 @@
+Original definitions from https://gtfs.org/reference/static#shapestxt
 
 {% docs gtfs_shapes__shape_id %}
 Identifies a shape.

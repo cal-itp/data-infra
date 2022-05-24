@@ -1,3 +1,4 @@
+Original definitions from https://gtfs.org/reference/static#fare_attributestxt
 
 {% docs gtfs_fare_attributes__fare_id %}
 Identifies a fare class.

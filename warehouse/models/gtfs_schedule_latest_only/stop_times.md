@@ -1,3 +1,4 @@
+Original definitions from https://gtfs.org/reference/static#stop_timestxt
 
 {% docs gtfs_stop_times__trip_id %}
 Identifies a trip.
