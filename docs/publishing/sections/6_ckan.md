@@ -10,7 +10,8 @@ a. For example, we have [latest-only GTFS schedule models](https://github.com/ca
 b. [latest-only agency](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.agency)
 
 ### Document data
-a. We should generally be documenting both individual data models as well as rows within those models
+a. We should generally be documenting both individual data models and rows
+within those models
 b. In a dbt-based model, this would correspond to model and column descriptions
 
 ### Create dataset and metadata
@@ -19,4 +20,5 @@ b. Email Chad Baker
     i. Keep somebody with a Caltrans email in the loop (e.g. Eric)
 
 ### Publish the data!
-a. Either create an Airflow job to refresh/update the data at the specified frequency, or do it manually
+a. Either create an Airflow job to refresh/update the data at the specified
+frequency, or do it manually.
