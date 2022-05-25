@@ -1,6 +1,10 @@
 (publishing-ckan=)
 # Publishing data to California Open Data aka CKAN
 
+NOTE: Only non-spatial data should be directly published to CKAN. Spatial data
+(i.e. data keyed by location in some manner) has to go through the Caltrans
+geoportal and is subsequently synced to CKAN.
+
 ## What is the California Open Data Portal?
 
 The state of California hosts its own instance of CKAN, called the [California Open Data Portal](https://data.ca.gov/).
