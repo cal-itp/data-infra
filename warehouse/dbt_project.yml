@@ -51,3 +51,7 @@ models:
     staging:
       +materialized: view
       schema: staging
+
+    mart:
+      transit_database:
+        schema: mart_transit_database
