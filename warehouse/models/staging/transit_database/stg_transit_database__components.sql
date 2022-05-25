@@ -19,7 +19,8 @@ stg_transit_database__components AS (
         location,
         organization_stack_components,
         products,
-        properties_and_features
+        properties_and_features,
+        dt as last_updated
     FROM latest
 )
 

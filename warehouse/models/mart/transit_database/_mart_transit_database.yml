@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: components
+    description: '{{ doc("components_table") }}'
