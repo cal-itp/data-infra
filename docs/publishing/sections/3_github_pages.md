@@ -1,5 +1,5 @@
 (publishing-github-pages)=
-## HTML Visualizations
+# HTML Visualizations
 
 Visualizations that benefit from limited interactivity, such as displaying tooltips on hover or zooming in / out and scrolling can be rendered within GitHub pages.
 

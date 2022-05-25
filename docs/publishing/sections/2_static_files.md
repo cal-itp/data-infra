@@ -1,7 +1,9 @@
 (publishing-static-files)=
-## Static Visualizations
+# Static Visualizations
 
-Static visualizations should be created in a Jupyter Notebook, saved locally (in JupyterHub), and checked into GitHub.
+Static visualizations should be created in a Jupyter Notebook, saved locally
+(in JupyterHub), and checked into GitHub. For example, you can save charts
+as image files (such as PNGs) and commit them to the repository.
 
 ```python
 
@@ -21,7 +23,8 @@ chart.save(filename = '../my-visualization.png')
 ```
 
 ## Publishing Reports
-Reports can be shared as HTML webpages or PDFs.
+Reports can be shared as HTML webpages or PDFs. Standalone HTML pages tend
+to be self-contained and can be sent via email or similar.
 
 A Jupyter Notebook can be converted to HTML with:
 
