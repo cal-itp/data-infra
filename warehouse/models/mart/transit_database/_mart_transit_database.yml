@@ -3,3 +3,40 @@ version: 2
 models:
   - name: components
     description: '{{ doc("components_table") }}'
+    columns:
+      - name: component_id
+        tests: &primary_key_tests
+          - not_null
+          - unique
+  - name: map_components_x_products
+    description: |
+      Mapping table between components and products.
+      Relationship indicates that product can act as that component.
+      This is a many-to-many relationship.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - component_id
+            - product_id
+  - name: map_components_x_service_components
+    description: |
+      Mapping table between components and service_components.
+      Relationship indicates that component is a constituent of the
+      given service_component relationship. (Maps component entity
+      to a service<>component relationship.)
+      This is a one-to-many relationship.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - component_id
+            - service_component_id
+  - name: map_components_x_properties_and_features
+    description: |
+      Mapping table between components and properties_and_features.
+      Relationship indicates that component has specified property or feature.
+      This is a many-to-many relationship.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - component_id
+            - property_feature_id
