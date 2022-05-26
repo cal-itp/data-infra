@@ -18,6 +18,6 @@ models:
   - name: stg_transit_database__data_schemas
     description: |
       Data schema data.
-  - name: stg_transit_database__properties_features
+  - name: stg_transit_database__properties_and_features
     description: |
       Data schema data.
