@@ -17,7 +17,7 @@ stg_transit_database__components AS (
         function_group,
         system,
         location,
-        organization_stack_components,
+        organization_stack_components as service_components,
         products,
         properties_and_features,
         dt as last_updated
