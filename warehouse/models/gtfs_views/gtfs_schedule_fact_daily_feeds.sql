@@ -69,22 +69,22 @@ daily_feeds AS (
 ),
 
 daily_service AS (
-  SELECT
-    Service.feed_key,
-    calitp_itp_id,
-    calitp_url_number,
-    D.full_date AS date,
-    Service.service_date,
-    Service.ttl_service_hours,
-    MAX(service.service_date) as max_service_date,
-    DATE_DIFF(D.full_date, MAX(Service.service_date), DAY)
-        AS days_from_service_date,
-  FROM gtfs_daily_service AS Service
-  INNER JOIN dim_date AS D
-    ON Service.service_date <= D.full_date
-  Group BY 1, 2, 3, 4, 5, 6
+    SELECT
+        Services.feed_key,
+        D.full_date AS date,
+        Services.service_date,
 
-  ),
+        MAX(Services.service_date)
+        AS max_service_date,
+
+        DATE_DIFF(D.full_date, MAX(Services.service_date), DAY)
+            AS days_from_service_date,
+
+    FROM gtfs_daily_service AS Services
+    INNER JOIN dim_date AS D
+        ON
+            Services.service_date <= D.full_date
+            Group BY 1, 2, 3
 
 ),
 
@@ -101,16 +101,28 @@ raw_feed_urls AS (
     FROM calitp_feeds_raw
 ),
 
+-- join daily_service with daily_feeds
+
+daily_join AS (
+    SELECT
+        daily_feeds.*,
+        daily_service.feed_key,
+        daily_service.max_service_date,
+        daily_service.days_from_service_date,
+    FROM daily_service
+    LEFT JOIN daily_feeds
+    ON daily_feeds.feed_key = daily_service.feed_key
+)
+
+
+
+
 -- join in whether or not a feed download succeeded on a given day and also the raw feed
 -- URLs
 
 feed_status AS (
     SELECT
-        daily_feeds.*,
-
-        -- still need to select
-
-        daily_service.*,
+        daily_join.*,
         CASE WHEN download_status.status = "success" THEN "success" ELSE "error"
         END
         AS extraction_status,
@@ -119,27 +131,22 @@ feed_status AS (
         raw_feed_urls.gtfs_rt_vehicle_positions_url AS raw_gtfs_rt_vehicle_positions_url,
         raw_feed_urls.gtfs_rt_service_alerts_url AS raw_gtfs_rt_service_alerts_url,
         raw_feed_urls.gtfs_rt_trip_updates_url AS raw_gtfs_rt_trip_updates_url
-    FROM daily_feeds
+    FROM daily_join
     LEFT JOIN calitp_status AS download_status
         ON
-            daily_feeds.calitp_itp_id = download_status.itp_id
-            AND daily_feeds.calitp_url_number = download_status.url_number
-            AND daily_feeds.date = download_status.calitp_extracted_at
+            daily_join.calitp_itp_id = download_status.itp_id
+            AND daily_join.calitp_url_number = download_status.url_number
+            AND daily_join.date = download_status.calitp_extracted_at
     LEFT JOIN calitp_feed_parse_result AS parse_result
         ON
-            daily_feeds.calitp_itp_id = parse_result.calitp_itp_id
-            AND daily_feeds.calitp_url_number = parse_result.calitp_url_number
-            AND daily_feeds.date = parse_result.calitp_extracted_at
+            daily_join.calitp_itp_id = parse_result.calitp_itp_id
+            AND daily_join.calitp_url_number = parse_result.calitp_url_number
+            AND daily_join.date = parse_result.calitp_extracted_at
     LEFT JOIN raw_feed_urls
         ON
-            daily_feeds.calitp_itp_id = raw_feed_urls.itp_id
-            AND daily_feeds.calitp_url_number = raw_feed_urls.url_number
-            AND daily_feeds.date = raw_feed_urls.extract_date
-    LEFT JOIN daily_service
-        ON
-            daily_feeds.feed_key = daily_service.feed_key
-            AND daily_feeds.calitp_itp_id = daily_service.calitp_itp_id
-            AND daily_feeds.calitp_url_number = daily_service.calitp_url_number
+            daily_join.calitp_itp_id = raw_feed_urls.itp_id
+            AND daily_join.calitp_url_number = raw_feed_urls.url_number
+            AND daily_join.date = raw_feed_urls.extract_date
 ),
 
 -- join in whether or not a feed updated on this day
