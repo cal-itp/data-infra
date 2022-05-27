@@ -301,12 +301,17 @@ models:
         description: |
           Days since the feed's contents (the contents of any loadable file
           within the feed) have changed, relative to date
-      - name: max_service_date
+      - name: is_service_valid
         description: |
-          For each feed, if there is service, what is the latest service date
-      - name: days_from_last_service
+          Whether the service is valid (active) on this date (boolean). Service date is based on when feed_key is active.
+      - name: days_from_service_start_date
         description: |
-          For each feed, if there is service, how many days has it been since the lastest service
+          Number of days between date and service start date. if is_service_valid is False, this may be negative
+          indicating that feed is not yet valid as of date
+      - name: days_until_service_end_date
+        description: |
+          Number of days between date and service end date. if is_service_valid is False, this may be negative
+          indicating that feed is not yet valid as of date
   - name: gtfs_schedule_fact_daily_feed_files
     description: |
       Each row of this table is a file extracted from a feed on a given day. Note that on days where
