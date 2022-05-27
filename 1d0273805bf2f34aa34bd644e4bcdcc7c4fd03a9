@@ -1,0 +1,206 @@
+[helm:metabase-preprod=kubernetes/apps/charts/metabase]
+
+diff -u -N /tmp/LIVE-1393727314/apps.v1.Deployment.metabase-preprod.metabase /tmp/MERGED-3230554339/apps.v1.Deployment.metabase-preprod.metabase
+--- /tmp/LIVE-1393727314/apps.v1.Deployment.metabase-preprod.metabase	2022-03-31 22:04:41.004228937 +0000
++++ /tmp/MERGED-3230554339/apps.v1.Deployment.metabase-preprod.metabase	2022-03-31 22:04:41.004228937 +0000
+@@ -6,7 +6,7 @@
+     meta.helm.sh/release-name: metabase-preprod
+     meta.helm.sh/release-namespace: metabase-preprod
+   creationTimestamp: "2022-01-09T23:50:48Z"
+-  generation: 3
++  generation: 4
+   labels:
+     app.kubernetes.io/managed-by: Helm
+     name: metabase
+@@ -43,7 +43,6 @@
+               k:{"name":"metabase"}:
+                 .: {}
+                 f:envFrom: {}
+-                f:image: {}
+                 f:imagePullPolicy: {}
+                 f:livenessProbe:
+                   .: {}
+@@ -133,16 +132,21 @@
+     fieldsV1:
+       f:spec:
+         f:replicas: {}
+-    manager: kubectl-edit
++        f:template:
++          f:spec:
++            f:containers:
++              k:{"name":"metabase"}:
++                f:image: {}
++    manager: kubectl-client-side-apply
+     operation: Update
+-    time: "2022-03-31T17:57:22Z"
++    time: "2022-03-31T22:04:40Z"
+   name: metabase
+   namespace: metabase-preprod
+   resourceVersion: "216243221"
+   uid: 30b6c404-f056-4195-8960-513d889ddc8d
+ spec:
+   progressDeadlineSeconds: 600
+-  replicas: 0
++  replicas: 1
+   revisionHistoryLimit: 10
+   selector:
+     matchLabels:
+@@ -162,7 +166,7 @@
+       - envFrom:
+         - configMapRef:
+             name: metabase-config
+-        image: metabase/metabase:v0.42.3
++        image: metabase/metabase:v0.41.1
+         imagePullPolicy: IfNotPresent
+         livenessProbe:
+           failureThreshold: 3
+diff -u -N /tmp/LIVE-1393727314/apps.v1.StatefulSet.metabase-preprod.database /tmp/MERGED-3230554339/apps.v1.StatefulSet.metabase-preprod.database
+--- /tmp/LIVE-1393727314/apps.v1.StatefulSet.metabase-preprod.database	2022-03-31 22:04:41.108233001 +0000
++++ /tmp/MERGED-3230554339/apps.v1.StatefulSet.metabase-preprod.database	2022-03-31 22:04:41.108233001 +0000
+@@ -5,7 +5,7 @@
+     meta.helm.sh/release-name: metabase-preprod
+     meta.helm.sh/release-namespace: metabase-preprod
+   creationTimestamp: "2022-01-09T23:50:48Z"
+-  generation: 2
++  generation: 3
+   labels:
+     app.kubernetes.io/managed-by: Helm
+     name: database
+@@ -41,7 +41,6 @@
+               k:{"name":"database"}:
+                 .: {}
+                 f:envFrom: {}
+-                f:image: {}
+                 f:imagePullPolicy: {}
+                 f:livenessProbe:
+                   .: {}
+@@ -103,14 +102,6 @@
+   - apiVersion: apps/v1
+     fieldsType: FieldsV1
+     fieldsV1:
+-      f:spec:
+-        f:replicas: {}
+-    manager: kubectl-edit
+-    operation: Update
+-    time: "2022-03-31T19:39:16Z"
+-  - apiVersion: apps/v1
+-    fieldsType: FieldsV1
+-    fieldsV1:
+       f:status:
+         f:collisionCount: {}
+         f:currentRevision: {}
+@@ -120,13 +111,26 @@
+     manager: kube-controller-manager
+     operation: Update
+     time: "2022-03-31T19:39:17Z"
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:spec:
++        f:replicas: {}
++        f:template:
++          f:spec:
++            f:containers:
++              k:{"name":"database"}:
++                f:image: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-03-31T22:04:41Z"
+   name: database
+   namespace: metabase-preprod
+   resourceVersion: "216291967"
+   uid: 1deb5dc8-9126-428b-87f3-f84b5d930f3b
+ spec:
+   podManagementPolicy: OrderedReady
+-  replicas: 0
++  replicas: 1
+   revisionHistoryLimit: 10
+   selector:
+     matchLabels:
+@@ -145,7 +149,7 @@
+       - envFrom:
+         - configMapRef:
+             name: database-config
+-        image: postgres:9.6
++        image: postgres:13.5
+         imagePullPolicy: IfNotPresent
+         livenessProbe:
+           failureThreshold: 3
+diff -u -N /tmp/LIVE-1393727314/v1.ConfigMap.metabase-preprod.metabase-config /tmp/MERGED-3230554339/v1.ConfigMap.metabase-preprod.metabase-config
+--- /tmp/LIVE-1393727314/v1.ConfigMap.metabase-preprod.metabase-config	2022-03-31 22:04:40.764219558 +0000
++++ /tmp/MERGED-3230554339/v1.ConfigMap.metabase-preprod.metabase-config	2022-03-31 22:04:40.764219558 +0000
+@@ -1,7 +1,7 @@
+ apiVersion: v1
+ data:
+   MB_DB_DBNAME: metabase
+-  MB_DB_HOST: database.metabase.svc.cluster.local
++  MB_DB_HOST: database.metabase-preprod.svc.cluster.local
+   MB_DB_PASS: admin
+   MB_DB_PORT: "5432"
+   MB_DB_TYPE: postgres
+@@ -22,7 +22,6 @@
+       f:data:
+         .: {}
+         f:MB_DB_DBNAME: {}
+-        f:MB_DB_HOST: {}
+         f:MB_DB_PASS: {}
+         f:MB_DB_PORT: {}
+         f:MB_DB_TYPE: {}
+@@ -39,6 +38,14 @@
+     manager: helm
+     operation: Update
+     time: "2022-01-09T23:50:48Z"
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:data:
++        f:MB_DB_HOST: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-03-31T22:04:40Z"
+   name: metabase-config
+   namespace: metabase-preprod
+   resourceVersion: "160993061"
+[helm:postgresql-backup=kubernetes/apps/charts/postgresql-backup]
+
+diff -u -N /tmp/LIVE-324383518/batch.v1beta1.CronJob.metabase-preprod.postgresql-backup /tmp/MERGED-3892896943/batch.v1beta1.CronJob.metabase-preprod.postgresql-backup
+--- /tmp/LIVE-324383518/batch.v1beta1.CronJob.metabase-preprod.postgresql-backup	2022-03-31 22:04:44.048322079 +0000
++++ /tmp/MERGED-3892896943/batch.v1beta1.CronJob.metabase-preprod.postgresql-backup	2022-03-31 22:04:44.052321989 +0000
+@@ -92,7 +92,6 @@
+                         f:name: {}
+                         f:value: {}
+                     f:envFrom: {}
+-                    f:image: {}
+                     f:imagePullPolicy: {}
+                     f:name: {}
+                     f:resources: {}
+@@ -132,6 +131,20 @@
+     manager: kube-controller-manager
+     operation: Update
+     time: "2022-03-31T21:15:06Z"
++  - apiVersion: batch/v1beta1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:spec:
++        f:jobTemplate:
++          f:spec:
++            f:template:
++              f:spec:
++                f:containers:
++                  k:{"name":"client"}:
++                    f:image: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-03-31T22:04:44Z"
+   name: postgresql-backup
+   namespace: metabase-preprod
+   resourceVersion: "216337825"
+@@ -200,7 +213,7 @@
+             envFrom:
+             - secretRef:
+                 name: database-backup
+-            image: ghcr.io/jarvusinnovations/restic-toolkit:latest
++            image: ghcr.io/jarvusinnovations/restic-toolkit:1.3.0
+             imagePullPolicy: Always
+             name: client
+             resources: {}
