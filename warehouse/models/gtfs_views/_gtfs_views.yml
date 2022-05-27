@@ -301,6 +301,12 @@ models:
         description: |
           Days since the feed's contents (the contents of any loadable file
           within the feed) have changed, relative to date
+      - name: max_service_date
+        description: |
+          Maximum service date by feed
+      - name: days_from_last_service
+        description: |
+          Days since the last service date by feed
   - name: gtfs_schedule_fact_daily_feed_files
     description: |
       Each row of this table is a file extracted from a feed on a given day. Note that on days where
