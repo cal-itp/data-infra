@@ -30,7 +30,7 @@ gtfs_schedule_dim_feeds AS (
 gtfs_schedule_service AS (
     SELECT *
     FROM {{ ref('gtfs_schedule_fact_daily_service') }}
-)
+),
 
 dim_date AS (
     SELECT *
