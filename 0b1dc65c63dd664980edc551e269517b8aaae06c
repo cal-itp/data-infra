@@ -1,0 +1,117 @@
+[kustomize:kubernetes/apps/overlays/gtfs-rt-archive-preprod]
+
+diff -u -N /tmp/LIVE-1208626587/apps.v1.Deployment.gtfs-rt-preprod.gtfs-rt-archive /tmp/MERGED-585550231/apps.v1.Deployment.gtfs-rt-preprod.gtfs-rt-archive
+--- /tmp/LIVE-1208626587/apps.v1.Deployment.gtfs-rt-preprod.gtfs-rt-archive	2022-05-27 17:47:39.511073239 +0000
++++ /tmp/MERGED-585550231/apps.v1.Deployment.gtfs-rt-preprod.gtfs-rt-archive	2022-05-27 17:47:39.515073222 +0000
+@@ -6,7 +6,7 @@
+     kubectl.kubernetes.io/last-applied-configuration: |
+       {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"name":"gtfs-rt-archive"},"name":"gtfs-rt-archive","namespace":"gtfs-rt-preprod"},"spec":{"replicas":1,"selector":{"matchLabels":{"name":"gtfs-rt-archive"}},"strategy":{"type":"Recreate"},"template":{"metadata":{"labels":{"name":"gtfs-rt-archive"}},"spec":{"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"resource-domain","operator":"In","values":["gtfsrt"]}]}]}}},"containers":[{"envFrom":[{"configMapRef":{"name":"archiver-app-vars"}},{"configMapRef":{"name":"archiver-channel-vars"}}],"image":"us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:2.1","imagePullPolicy":"Always","name":"app","resources":{"limits":{"memory":"2.0Gi"},"requests":{"memory":"2.0Gi"}},"volumeMounts":[{"mountPath":"/secrets/agencies-data","name":"agencies-data"},{"mountPath":"/secrets/gcs-upload-svcacct","name":"gcs-upload-svcacct"}]}],"tolerations":[{"effect":"NoSchedule","key":"resource-domain","operator":"Equal","value":"gtfsrt"}],"volumes":[{"name":"agencies-data","secret":{"secretName":"agencies-data"}},{"name":"gcs-upload-svcacct","secret":{"secretName":"gcs-upload-svcacct"}}]}}}}
+   creationTimestamp: "2021-08-27T15:19:49Z"
+-  generation: 412
++  generation: 413
+   labels:
+     name: gtfs-rt-archive
+   managedFields:
+@@ -35,6 +35,39 @@
+     fieldsV1:
+       f:metadata:
+         f:annotations:
++          f:deployment.kubernetes.io/revision: {}
++      f:status:
++        f:availableReplicas: {}
++        f:conditions:
++          .: {}
++          k:{"type":"Available"}:
++            .: {}
++            f:lastTransitionTime: {}
++            f:lastUpdateTime: {}
++            f:message: {}
++            f:reason: {}
++            f:status: {}
++            f:type: {}
++          k:{"type":"Progressing"}:
++            .: {}
++            f:lastTransitionTime: {}
++            f:lastUpdateTime: {}
++            f:message: {}
++            f:reason: {}
++            f:status: {}
++            f:type: {}
++        f:observedGeneration: {}
++        f:readyReplicas: {}
++        f:replicas: {}
++        f:updatedReplicas: {}
++    manager: kube-controller-manager
++    operation: Update
++    time: "2022-05-27T11:33:22Z"
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:annotations:
+           .: {}
+           f:kubectl.kubernetes.io/last-applied-configuration: {}
+         f:labels:
+@@ -73,6 +106,7 @@
+                     f:memory: {}
+                   f:requests:
+                     .: {}
++                    f:cpu: {}
+                     f:memory: {}
+                 f:terminationMessagePath: {}
+                 f:terminationMessagePolicy: {}
+@@ -110,40 +144,7 @@
+                   f:secretName: {}
+     manager: kubectl-client-side-apply
+     operation: Update
+-    time: "2022-03-31T15:46:34Z"
+-  - apiVersion: apps/v1
+-    fieldsType: FieldsV1
+-    fieldsV1:
+-      f:metadata:
+-        f:annotations:
+-          f:deployment.kubernetes.io/revision: {}
+-      f:status:
+-        f:availableReplicas: {}
+-        f:conditions:
+-          .: {}
+-          k:{"type":"Available"}:
+-            .: {}
+-            f:lastTransitionTime: {}
+-            f:lastUpdateTime: {}
+-            f:message: {}
+-            f:reason: {}
+-            f:status: {}
+-            f:type: {}
+-          k:{"type":"Progressing"}:
+-            .: {}
+-            f:lastTransitionTime: {}
+-            f:lastUpdateTime: {}
+-            f:message: {}
+-            f:reason: {}
+-            f:status: {}
+-            f:type: {}
+-        f:observedGeneration: {}
+-        f:readyReplicas: {}
+-        f:replicas: {}
+-        f:updatedReplicas: {}
+-    manager: kube-controller-manager
+-    operation: Update
+-    time: "2022-05-27T11:33:22Z"
++    time: "2022-05-27T17:47:39Z"
+   name: gtfs-rt-archive
+   namespace: gtfs-rt-preprod
+   resourceVersion: "259516324"
+@@ -185,9 +186,10 @@
+         name: app
+         resources:
+           limits:
+-            memory: 2Gi
++            memory: 512Mi
+           requests:
+-            memory: 2Gi
++            cpu: "5"
++            memory: 512Mi
+         terminationMessagePath: /dev/termination-log
+         terminationMessagePolicy: File
+         volumeMounts:
