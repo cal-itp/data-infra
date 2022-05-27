@@ -27,6 +27,11 @@ gtfs_schedule_dim_feeds AS (
     FROM {{ ref('gtfs_schedule_dim_feeds') }}
 ),
 
+gtfs_schedule_service AS (
+    SELECT *
+    FROM {{ ref('gtfs_schedule_fact_daily_service') }}
+)
+
 dim_date AS (
     SELECT *
     FROM {{ ref('dim_date') }}
@@ -63,6 +68,27 @@ daily_feeds AS (
             AND D.is_in_past_or_present
 ),
 
+daily_service AS (
+  SELECT
+    Service.feed_key,
+    calitp_itp_id,
+    calitp_url_number,
+    D.full_date AS date,
+    Service.service_date,
+    Service.ttl_service_hours,
+    MAX(service.service_date) as max_service_date,
+    DATE_DIFF(D.full_date, MAX(Service.service_date), DAY)
+        AS days_from_service_date,
+  FROM gtfs_daily_service AS Service
+  INNER JOIN dim_date AS D
+    ON Service.service_date <= D.full_date
+  Group BY 1, 2, 3, 4, 5, 6
+
+  ),
+
+),
+
+
 -- Extract raw feeds URLs
 
 raw_feed_urls AS (
@@ -81,6 +107,10 @@ raw_feed_urls AS (
 feed_status AS (
     SELECT
         daily_feeds.*,
+
+        -- still need to select
+
+        daily_service.*,
         CASE WHEN download_status.status = "success" THEN "success" ELSE "error"
         END
         AS extraction_status,
@@ -105,6 +135,11 @@ feed_status AS (
             daily_feeds.calitp_itp_id = raw_feed_urls.itp_id
             AND daily_feeds.calitp_url_number = raw_feed_urls.url_number
             AND daily_feeds.date = raw_feed_urls.extract_date
+    LEFT JOIN daily_service
+        ON
+            daily_feeds.feed_key = daily_service.feed_key
+            AND daily_feeds.calitp_itp_id = daily_service.calitp_itp_id
+            AND daily_feeds.calitp_url_number = daily_service.calitp_url_number
 ),
 
 -- join in whether or not a feed updated on this day
