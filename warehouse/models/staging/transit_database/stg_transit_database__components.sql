@@ -20,7 +20,7 @@ stg_transit_database__components AS (
         organization_stack_components as service_components,
         products,
         properties_and_features,
-        dt as last_updated
+        dt as calitp_extracted_at
     FROM latest
 )
 

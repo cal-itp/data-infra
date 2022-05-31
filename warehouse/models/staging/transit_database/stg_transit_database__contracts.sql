@@ -24,6 +24,7 @@ stg_transit_database__contracts AS (
         contract_name AS contract_name_notes,
         attachments.url AS attachment_url,
         dt AS calitp_extracted_at
+    FROM latest
 )
 
 SELECT * FROM stg_transit_database__contracts
