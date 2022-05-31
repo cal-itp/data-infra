@@ -3,7 +3,7 @@
 WITH
 latest AS (
     {{ get_latest_external_data(
-        external_table_name = source('airtable', 'transit_technology_stacks__organizations'),
+        external_table_name = source('airtable', 'california_transit__organizations'),
         columns = 'dt DESC, time DESC'
         ) }}
 ),
