@@ -1,4 +1,4 @@
-(publishing-ckan=)
+(publishing-ckan)=
 # Publishing data to California Open Data aka CKAN
 
 NOTE: Only non-spatial data should be directly published to CKAN. Spatial data

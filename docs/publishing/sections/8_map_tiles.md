@@ -1,4 +1,4 @@
-(publishing-map-tiles=)
+(publishing-map-tiles)=
 # Map tiles
 
 TBD.

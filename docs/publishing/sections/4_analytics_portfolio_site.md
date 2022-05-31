@@ -1,4 +1,4 @@
-(publishing-analytics-portfolio-site=)
+(publishing-analytics-portfolio-site)=
 # The Cal-ITP Analytics Portfolio
 
 Depending on the complexity of your visualizations, you may want to produce

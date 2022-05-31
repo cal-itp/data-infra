@@ -1,4 +1,4 @@
-(publishing-metabase=)
+(publishing-metabase)=
 # Metabase
 
 Interactive charts should be displayed in Metabase. Using Voila on Jupyter Notebooks works locally, but doesn't allow for sharing with external stakeholders. The data cleaning and processing should still be done within Python scripts or Jupyter notebooks. The processed dataset backing the dashboard should be exported to a Google Cloud Storage bucket.
