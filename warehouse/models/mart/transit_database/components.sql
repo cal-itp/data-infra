@@ -13,7 +13,7 @@ components AS (
         function_group,
         system,
         location,
-        last_updated
+        calitp_extracted_at
     FROM stg_transit_database__components
 )
 
