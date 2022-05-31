@@ -47,24 +47,29 @@ Conditionally Required:
 {% enddocs %}
 
 {% docs gtfs_translations__record_sub_id %}
-Helps the record that contains the field to be translated when the table doesn’t have a unique ID. Therefore, the value in record_sub_id is the secondary ID of the table, as defined by the table below:
-• None for agency.txt;
-• None for stops.txt;
-• None for routes.txt;
-• None for trips.txt;
-• stop_sequence for stop_times.txt;
-• None for pathways.txt;
-• None for levels.txt;
-• None for attributions.txt.
+Helps the record that contains the field to be translated when the table doesn’t
+have a unique ID. Therefore, the value in record_sub_id is the secondary ID of
+the table, as defined by the table below:
+• None for agency;
+• None for stops;
+• None for routes;
+• None for trips;
+• stop_sequence for stop_times;
+• None for pathways;
+• None for levels;
+• None for attributions.
 
-No field should be translated in the other tables. However producers sometimes add extra fields that are outside the official specification and these unofficial fields may need to be translated. Below is the recommended way to use record_sub_id for those tables:
-• None for calendar.txt;
-• date for calendar_dates.txt;
-• None for fare_attributes.txt;
-• route_id for fare_rules.txt;
-• None for shapes.txt;
-• start_time for frequencies.txt;
-• to_stop_id for transfers.txt.
+No field should be translated in the other tables. However producers sometimes
+add extra fields that are outside the official specification and these unofficial
+fields may need to be translated. Below is the recommended way to use
+record_sub_id for those tables:
+• None for calendar;
+• date for calendar_dates;
+• None for fare_attributes;
+• route_id for fare_rules;
+• None for shapes;
+• start_time for frequencies;
+• to_stop_id for transfers.
 
 Conditionally Required:
 - forbidden if table_name is feed_info;
