@@ -309,11 +309,11 @@ models:
       - name: days_from_service_start_date
         description: |
           Number of days between date and service start date. if is_service_valid is False, this may be negative
-          indicating that feed is not yet valid as of date. Service start date is the first day on which service occurs on any service in this feed.
+          indicating that feed is not yet valid as of date. Service start date is the first day on which service occurs on any service in this feed. Is a feed-wide summary.
       - name: days_until_service_end_date
         description: |
           Number of days between date and service end date. if is_service_valid is False, this may be negative
-          indicating that feed is not yet valid as of date. Service end date is the last day on which service occurs on any service in this feed.
+          indicating that feed is not yet valid as of date. Service end date is the last day on which service occurs on any service in this feed. Is a feed-wide summary.
   - name: gtfs_schedule_fact_daily_feed_files
     description: |
       Each row of this table is a file extracted from a feed on a given day. Note that on days where
