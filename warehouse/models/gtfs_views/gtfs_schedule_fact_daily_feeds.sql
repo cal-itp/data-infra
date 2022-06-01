@@ -35,7 +35,7 @@ gtfs_schedule_service AS (
 dim_date AS (
     SELECT *
     FROM {{ ref('dim_date') }}
-)
+),
 
 
 -- create underlying dimensions: daily feeds
@@ -72,7 +72,7 @@ daily_service AS (
     SELECT
         gtfs_schedule_service.feed_key,
         MAX(gtfs_schedule_service.service_date) AS max_service_date,
-        MIN(gtfs_schedule_service.service_date) AS min_service_date,
+        MIN(gtfs_schedule_service.service_date) AS min_service_date
 
 
     FROM gtfs_schedule_service
@@ -90,7 +90,7 @@ daily_feed_join AS (
         (daily_service.min_service_date <= daily_feeds.date AND daily_service.max_service_date >= daily_feeds.date)
         AS is_service_date_valid,
 
-          -- how long until this service ends?
+        -- how long until this service ends?
         DATE_DIFF(daily_service.max_service_date, daily_feeds.date, DAY)
         AS days_until_service_end_date,
 
