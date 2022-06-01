@@ -45,3 +45,6 @@ models:
 
     rt_views:
       schema: views
+
+    rt_staging:
+      schema: staging

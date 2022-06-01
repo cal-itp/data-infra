@@ -1,45 +1,7 @@
 version: 2
 
 sources:
-  - name: gtfs_rt_external_tables
-    description: New hive-partitioned external tables reading from GCS.
-    database: cal-itp-data-infra
-    schema: external_gtfs_rt
-    tables:
-      - name: service_alerts
-      - name: service_alerts_outcomes
-        loaded_at_field: cast(dt as timestamp)
-        freshness:
-          warn_after: { count: 1, period: day }
-      - name: service_alerts_validations
-      - name: service_alerts_validations_outcomes
-        loaded_at_field: cast(dt as timestamp)
-        freshness:
-          warn_after: { count: 1, period: day }
-      - name: trip_updates
-      - name: trip_updates_outcomes
-        loaded_at_field: cast(dt as timestamp)
-        freshness:
-          warn_after: { count: 1, period: day }
-      - name: trip_updates_validations
-      - name: trip_updates_validations_outcomes
-        loaded_at_field: cast(dt as timestamp)
-        freshness:
-          warn_after: { count: 1, period: day }
-      - name: vehicle_positions
-      - name: vehicle_positions_outcomes
-        loaded_at_field: cast(dt as timestamp)
-        freshness:
-          warn_after: { count: 1, period: day }
-      - name: vehicle_positions_validations
-      - name: vehicle_positions_validations_outcomes
-        loaded_at_field: cast(dt as timestamp)
-        freshness:
-          warn_after: { count: 1, period: day }
-
-
-
-  # Note: this source is deprecated by the above
+    # note: these tables should probably be moved at some point
   - name: gtfs_rt_raw
     description: Data in the gtfs_rt dataset in BigQuery, generally produced by the rt_loader and rt_loader_files Airflow DAGs.
     database: cal-itp-data-infra
@@ -52,10 +14,8 @@ sources:
           loaded into BigQuery via
           rt_loader_files.external_calitp_files DAG task
           (defines external table).
-      - name: validation_service_alerts
-      - name: validation_trip_updates
-      - name: validation_vehicle_positions
       - name: validation_code_descriptions
+
   - name: gtfs_rt_logs
     description: Data in the gtfs_rt_logs dataset in BigQuery, from logs sink.
     database: cal-itp-data-infra
