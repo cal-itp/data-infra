@@ -786,6 +786,9 @@ models:
         description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
+          - relationships:
+              to: ref('gtfs_schedule_dim_feeds')
+              field: feed_key
       - name: code
         tests:
           - not_null
