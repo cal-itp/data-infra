@@ -8,4 +8,4 @@ stg_transit_database__service_components AS (
         ) }}
 )
 
-SELECT * EXCEPT(name), name as service_component_name FROM stg_transit_database__service_components
+SELECT * FROM stg_transit_database__service_components

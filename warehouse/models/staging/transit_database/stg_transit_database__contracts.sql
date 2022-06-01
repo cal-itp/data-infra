@@ -11,7 +11,7 @@ latest AS (
 stg_transit_database__contracts AS (
     SELECT
         contract_id as id,
-        name AS contract_name,
+        name,
         contract_type_functional_category,
         contract_type_functions,
         unnested_contract_holder AS contract_holder,

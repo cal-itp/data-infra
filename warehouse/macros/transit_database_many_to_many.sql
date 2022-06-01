@@ -4,11 +4,13 @@
     table_a_id_col,
     table_a_id_col_name,
     table_a_name_col,
+    table_a_name_col_name,
     table_b,
     table_b_join_col,
     table_b_id_col,
     table_b_id_col_name,
-    table_b_name_col) %}
+    table_b_name_col,
+    table_b_name_col_name) %}
 
     -- follow Airflow sandbox example for unnesting airtable data
 
@@ -16,7 +18,7 @@
     unnested_table_a AS (
         SELECT
             T1.{{ table_a_id_col }} AS {{ table_a_id_col_name }}
-            , T1.{{ table_a_name_col }}
+            , T1.{{ table_a_name_col }} AS {{ table_a_name_col_name }}
             , CAST({{ table_a_join_col }} AS STRING) AS {{ table_b_id_col_name }}
         FROM
             {{ table_a }} T1
@@ -25,7 +27,7 @@
     unnested_table_b AS (
         SELECT
             T2.{{ table_b_id_col }} AS {{ table_b_id_col_name }}
-            , T2.{{ table_b_name_col }}
+            , T2.{{ table_b_name_col }} AS {{ table_b_name_col_name }}
             , CAST({{ table_b_join_col }} AS STRING) AS {{ table_a_id_col_name }}
         FROM
             {{ table_b }} T2

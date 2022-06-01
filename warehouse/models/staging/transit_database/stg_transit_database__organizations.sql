@@ -8,9 +8,16 @@ latest AS (
         ) }}
 ),
 
-stg_transit_database__organizations AS (
+latest AS (
     SELECT * EXCEPT(name),
         name as organization_name
+    FROM latest
+),
+
+stg_transit_database__organizations AS (
+    SELECT
+        organization_id AS id,
+        name
     FROM latest
 )
 

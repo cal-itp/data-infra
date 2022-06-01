@@ -8,4 +8,4 @@ stg_transit_database__products AS (
         ) }}
 )
 
-SELECT * EXCEPT(name), name AS product_name FROM stg_transit_database__products
+SELECT * FROM stg_transit_database__products

@@ -7,7 +7,7 @@ WITH stg_transit_database__components AS (
 dim_components AS (
     SELECT
         id,
-        component_name,
+        name,
         aliases,
         description,
         function_group,
