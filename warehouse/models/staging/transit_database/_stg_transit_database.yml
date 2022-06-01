@@ -4,14 +4,14 @@ models:
   - name: stg_transit_database__components
     description: '{{ doc("components_table") }}'
     columns:
-      - name: component_id
+      - name: id
         tests: &primary_key_tests
           - not_null
           - unique
   - name: stg_transit_database__contracts
     description: '{{ doc("contracts_table") }}'
     columns:
-      - name: contract_id
+      - name: id
         tests: *primary_key_tests
   - name: stg_transit_database__products
     description: |
@@ -25,7 +25,7 @@ models:
   - name: stg_transit_database__data_schemas
     description: '{{ doc("data_schemas_table") }}'
     columns:
-      - name: data_schema_id
+      - name: id
         tests: *primary_key_tests
   - name: stg_transit_database__properties_and_features
     description: |
