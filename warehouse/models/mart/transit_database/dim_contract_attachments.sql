@@ -6,11 +6,11 @@ WITH stg_transit_database__contracts AS (
 
 dim_contract_attachments AS (
     SELECT
-        unnested_attachments.id AS attachment_id,
-        contract_id,
-        contract_name,
+        unnested_attachments.id AS id,
+        stg_transit_database__contracts.id AS contract_id,
+        stg_transit_database__contracts.contract_name,
         unnested_attachments.url AS attachment_url,
-        calitp_extracted_at
+        stg_transit_database__contracts.calitp_extracted_at
     FROM stg_transit_database__contracts,
         stg_transit_database__contracts.attachments AS unnested_attachments
 )
