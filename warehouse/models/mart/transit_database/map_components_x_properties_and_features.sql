@@ -13,12 +13,14 @@ map_components_properties_and_features_x_properties_and_features AS (
      table_a = 'stg_transit_database__components',
      table_a_id_col = 'id',
      table_a_id_col_name = 'component_id',
-     table_a_name_col = 'component_name',
+     table_a_name_col = 'name',
+     table_a_name_col_name = 'component_name',
      table_a_join_col = 'properties_and_features',
      table_b = 'stg_transit_database__properties_and_features',
      table_b_id_col = 'property_feature_id',
      table_b_id_col_name = 'property_feature_id',
-     table_b_name_col = 'property_feature_name',
+     table_b_name_col = 'name',
+     table_b_name_col_name = 'property_feature_name',
      table_b_join_col = 'available_in_components'
  ) }}
 )

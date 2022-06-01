@@ -13,12 +13,14 @@ map_components_products_x_products_components AS (
      table_a = 'stg_transit_database__components',
      table_a_id_col = 'id',
      table_a_id_col_name = 'component_id',
-     table_a_name_col = 'component_name',
+     table_a_name_col = 'name',
+     table_a_name_col_name = 'component_name',
      table_a_join_col = 'products',
      table_b = 'stg_transit_database__products',
      table_b_id_col = 'product_id',
      table_b_id_col_name = 'product_id',
-     table_b_name_col = 'product_name',
+     table_b_name_col = 'name',
+     table_b_name_col_name = 'product_name',
      table_b_join_col = 'components'
  ) }}
 )

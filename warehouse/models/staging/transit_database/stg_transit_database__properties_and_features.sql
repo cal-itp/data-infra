@@ -8,4 +8,4 @@ stg_transit_database__properties_and_features AS (
         ) }}
 )
 
-SELECT * EXCEPT(name), name as property_feature_name FROM stg_transit_database__properties_and_features
+SELECT * FROM stg_transit_database__properties_and_features
