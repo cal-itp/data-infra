@@ -16,7 +16,6 @@ contracts AS (
         renewal_option,
         notes,
         contract_name_notes,
-        attachment_url,
         calitp_extracted_at
     FROM stg_transit_database__contracts
 )
