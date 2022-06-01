@@ -4,7 +4,7 @@ WITH stg_transit_database__components AS (
     SELECT * FROM {{ ref('stg_transit_database__components') }}
 ),
 
-components AS (
+dim_components AS (
     SELECT
         component_id,
         component_name,
@@ -17,4 +17,4 @@ components AS (
     FROM stg_transit_database__components
 )
 
-SELECT * FROM components
+SELECT * FROM dim_components

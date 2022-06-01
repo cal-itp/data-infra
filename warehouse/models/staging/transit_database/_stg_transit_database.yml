@@ -9,8 +9,7 @@ models:
           - not_null
           - unique
   - name: stg_transit_database__contracts
-    description: |
-      Contracts data.
+    description: '{{ doc("contracts_table") }}'
     columns:
       - name: contract_id
         tests: *primary_key_tests
@@ -24,8 +23,10 @@ models:
     description: |
       Service/component relationship data.
   - name: stg_transit_database__data_schemas
-    description: |
-      Data schema data.
+    description: '{{ doc("data_schemas_table") }}'
+    columns:
+      - name: data_schema_id
+        tests: *primary_key_tests
   - name: stg_transit_database__properties_and_features
     description: |
       Data schema data.

@@ -1,11 +1,22 @@
 {{ config(materialized='table') }}
 
 WITH
-stg_transit_database__data_schemas AS (
+latest AS (
     {{ get_latest_external_data(
         external_table_name = source('airtable', 'transit_technology_stacks__data_schemas'),
         columns = 'dt DESC, time DESC'
         ) }}
+),
+
+stg_transit_database__data_schemas AS (
+    SELECT
+        data_schema_id,
+        name as data_schema_name,
+        status,
+        products AS input_products,
+        products_copy AS output_products,
+        dt as calitp_extracted_at
+    FROM latest
 )
 
 SELECT * FROM stg_transit_database__data_schemas
