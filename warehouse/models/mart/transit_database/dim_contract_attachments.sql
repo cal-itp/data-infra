@@ -4,7 +4,7 @@ WITH stg_transit_database__contracts AS (
     SELECT * FROM {{ ref('stg_transit_database__contracts') }}
 ),
 
-contract_attachments AS (
+dim_contract_attachments AS (
     SELECT
         unnested_attachments.id AS attachment_id,
         contract_id,
@@ -15,4 +15,4 @@ contract_attachments AS (
         stg_transit_database__contracts.attachments AS unnested_attachments
 )
 
-SELECT * FROM contract_attachments
+SELECT * FROM dim_contract_attachments
