@@ -9,7 +9,7 @@ stg_transit_database__properties_and_features AS (
 ),
 
 map_components_properties_and_features_x_properties_and_features AS (
- {{ transit_database_two_table_join(
+ {{ transit_database_many_to_many(
      table_a = 'stg_transit_database__components',
      table_a_id_col = 'component_id',
      table_a_name_col = 'component_name',
