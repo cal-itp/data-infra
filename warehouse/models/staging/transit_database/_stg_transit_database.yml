@@ -3,9 +3,17 @@ version: 2
 models:
   - name: stg_transit_database__components
     description: '{{ doc("components_table") }}'
+    columns:
+      - name: component_id
+        tests: &primary_key_tests
+          - not_null
+          - unique
   - name: stg_transit_database__contracts
     description: |
       Contracts data.
+    columns:
+      - name: contract_id
+        tests: *primary_key_tests
   - name: stg_transit_database__products
     description: |
       Products data.

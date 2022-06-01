@@ -11,3 +11,9 @@ etc) and is operated in physical space defined
 in `Location` (e.g. Cloud, Vehicle, etc.)
 
 {% enddocs%}
+
+{% docs contracts_table %}
+
+Each record is a contract between `organizations` to either provide one or more `products` or operate one or more `services`.  Each contract has properties such as execution date, expiration, and renewals.
+
+{% enddocs%}

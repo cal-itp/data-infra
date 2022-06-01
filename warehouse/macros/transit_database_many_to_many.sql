@@ -1,4 +1,4 @@
-{% macro transit_database_two_table_join(
+{% macro transit_database_many_to_many(
     table_a,
     table_a_join_col,
     table_a_id_col,
