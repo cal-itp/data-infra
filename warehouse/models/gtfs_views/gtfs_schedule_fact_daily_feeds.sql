@@ -70,13 +70,13 @@ daily_feeds AS (
 
 daily_service AS (
     SELECT
-        Services.feed_key,
-        MAX(Services.service_date) AS max_service_date,
-        MIN(Services.service_date) AS min_service_date,
+        gtfs_schedule_service.feed_key,
+        MAX(gtfs_schedule_service.service_date) AS max_service_date,
+        MIN(gtfs_schedule_service.service_date) AS min_service_date,
 
 
-    FROM gtfs_schedule_service AS Services
-    GROUP BY 1
+    FROM gtfs_schedule_service
+    GROUP BY gtfs_schedule_service.feed_key
 
 ),
 
