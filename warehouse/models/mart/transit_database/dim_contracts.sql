@@ -6,7 +6,7 @@ WITH stg_transit_database__contracts AS (
 
 dim_contracts AS (
     SELECT
-        contract_id,
+        id,
         contract_name,
         contract_type_functional_category,
         contract_type_functions,
