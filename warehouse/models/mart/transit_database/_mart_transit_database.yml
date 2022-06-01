@@ -3,19 +3,72 @@ version: 2
 models:
   - name: dim_components
     description: '{{ doc("components_table") }}'
+    columns:
+      - name: id
+        tests: &primary_key_tests
+          - not_null
+          - unique
   - name: dim_contracts
     description: '{{ doc("contracts_table") }}'
+    columns:
+      - name: id
+        tests: *primary_key_tests
   - name: dim_data_schemas
     description: '{{ doc("data_schemas_table") }}'
+    columns:
+      - name: id
+        tests: *primary_key_tests
+  - name: dim_organizations
+    description: '{{ doc("organizations_table") }}'
+    columns:
+      - name: id
+        tests: *primary_key_tests
+      - name: name
+        description: Organization name
+      - name: organization_type
+        description: |
+          Categorical data; example values "City/Town",
+          "Joint Powers Agency"
+      - name: roles
+        description: |
+          Array of categorical choices; example values
+          "Regional Transportation Planning Agency,
+          Metropolitan Planning Organization";
+          "Metropolitan Planning Organization"
+      - name: itp_id
+        description: Cal-ITP ITP ID
+      - name: details
+        description:	Text description related to the organization
+  - name: dim_services
+    description: '{{ doc("services_table") }}'
+    columns:
+      - name: id
+        tests: *primary_key_tests
+      - name: name
+        description: Service name
+      - name: service_type
+        description: |
+          Array of categorical choices; example
+          values "ADA paratransit, on-demand"; "fixed-route"
+      - name: mode
+        description: |
+          Array of categorical choices; example
+          values "bus, car/van"; "ferry"
+      - name: currently_operating
+        description: |
+          Boolean for whether service is currently active
+  - name: dim_products
+    description: '{{ doc("products_table") }}'
+    columns:
+      - name: id
+        tests: *primary_key_tests
   - name: dim_contract_attachments
     description: |
       Attachment links to images of contracts.
       One contract can have multiple attachments.
     columns:
-      - name: attachment_id
-        tests: &primary_key_tests
-          - not_null
-          - unique
+      - name: id
+        tests: *primary_key_tests
   - name: map_components_x_products
     description: |
       Mapping table between components and products.
@@ -58,3 +111,35 @@ models:
           combination_of_columns:
             - data_schema_id
             - product_id
+  - name: map_organizations_x_services_managed
+    description: |
+      Mapping table between organizations and services.
+      Relationship indicates that organization manages (provides)
+      the given mobility service.
+      This is a many-to-many relationship.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - organization_id
+            - service_id
+  - name: map_parent_organizations
+    description: |
+      Mapping table between organizations and their parents
+      (map between two organization records.)
+      This is a many-to-many relationship.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - organization_id
+            - parent_organization_id
+  - name: map_paratransit_services
+    description: |
+      Mapping table between services and services for which
+      they provide paratransit service
+      (map between two service records.)
+      This is a many-to-many relationship.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - service_id
+            - paratransit_for_service_id
