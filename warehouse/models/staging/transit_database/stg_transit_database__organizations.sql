@@ -8,16 +8,18 @@ latest AS (
         ) }}
 ),
 
-latest AS (
-    SELECT * EXCEPT(name),
-        name as organization_name
-    FROM latest
-),
-
 stg_transit_database__organizations AS (
     SELECT
         organization_id AS id,
-        name
+        name,
+        organization_type,
+        roles,
+        itp_id,
+        details,
+        caltrans_district,
+        mobility_services_managed,
+        parent_organization,
+        dt AS calitp_extracted_at
     FROM latest
 )
 

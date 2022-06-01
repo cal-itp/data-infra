@@ -17,7 +17,7 @@ map_data_schemas_x_products_outputs AS (
      table_a_name_col_name = 'data_schema_name',
      table_a_join_col = 'output_products',
      table_b = 'stg_transit_database__products',
-     table_b_id_col = 'product_id',
+     table_b_id_col = 'id',
      table_b_id_col_name = 'product_id',
      table_b_name_col = 'name',
      table_b_name_col_name = 'product_name',

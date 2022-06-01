@@ -23,3 +23,25 @@ Each record is a contract between `organizations` to either provide one or more 
 Each record indicates a data schema which  can be used in one or more `relationships service-components`.
 
 {% enddocs%}
+
+{% docs organizations_table %}
+
+Records are legal organizations, including companies, governmental bodies, or non-profits.
+
+Table includes information on organizational properties (i.e. locale, type) as well as summarizations of its various relationships (e.g. `services` for a transit provider, or `products` for a vendor)
+
+{% enddocs%}
+
+{% docs services_table %}
+
+Each record defines a transit service and its properties.
+
+While there are a small number of exceptions (e.g. Solano Express, which is jointly managed by Solano and Napa), generally each transit service is managed by a single organization.
+
+{% enddocs%}
+
+{% docs products_table %}
+
+Each record is a product used in a transit technology stack at another organization (e.g. fixed-route scheduling software) or by riders (e.g. Google Maps).  Products have properties such as input/output capabilities.
+
+{% enddocs%}
