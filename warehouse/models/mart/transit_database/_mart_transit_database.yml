@@ -5,6 +5,8 @@ models:
     description: '{{ doc("components_table") }}'
   - name: dim_contracts
     description: '{{ doc("contracts_table") }}'
+  - name: dim_data_schemas
+    description: '{{ doc("data_schemas_table") }}'
   - name: dim_contract_attachments
     description: |
       Attachment links to images of contracts.
@@ -34,3 +36,25 @@ models:
           combination_of_columns:
             - component_id
             - property_feature_id
+  - name: map_data_schemas_x_products_inputs
+    description: |
+      Mapping table between data schemas and products.
+      Relationship indicates that data schema is an accepted input into
+      given product.
+      This is a many-to-many relationship.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - data_schema_id
+            - product_id
+  - name: map_data_schemas_x_products_outputs
+    description: |
+      Mapping table between data schemas and products.
+      Relationship indicates that data schema can be produced as output
+      of given product.
+      This is a many-to-many relationship.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - data_schema_id
+            - product_id
