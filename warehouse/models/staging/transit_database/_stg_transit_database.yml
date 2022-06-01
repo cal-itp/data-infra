@@ -14,8 +14,10 @@ models:
       - name: id
         tests: *primary_key_tests
   - name: stg_transit_database__products
-    description: |
-      Products data.
+    description: '{{ doc("products_table") }}'
+    columns:
+      - name: id
+        tests: *primary_key_tests
   - name: stg_transit_database__service_components
     description: |
       Service/component relationship data.
@@ -30,3 +32,13 @@ models:
   - name: stg_transit_database__properties_and_features
     description: |
       Data schema data.
+  - name: stg_transit_database__organizations
+    description: '{{ doc("organizations_table") }}'
+    columns:
+      - name: id
+        tests: *primary_key_tests
+  - name: stg_transit_database__services
+    description: '{{ doc("services_table") }}'
+    columns:
+      - name: id
+        tests: *primary_key_tests
