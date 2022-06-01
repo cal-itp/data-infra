@@ -6,7 +6,7 @@ WITH stg_transit_database__data_schemas AS (
 
 dim_data_schemas AS (
     SELECT
-        data_schema_id,
+        id,
         data_schema_name,
         status,
         calitp_extracted_at

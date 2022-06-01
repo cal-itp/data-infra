@@ -10,7 +10,7 @@ latest AS (
 
 stg_transit_database__components AS (
     SELECT
-        component_id,
+        component_id as id,
         name as component_name,
         aliases,
         description,
