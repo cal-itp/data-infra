@@ -303,7 +303,7 @@ models:
           within the feed) have changed, relative to date
       - name: is_service_valid
         description: |
-          Whether the service is valid (active) on this date (boolean). Service date is based on when feed_key is active.
+Indicates whether this date is between the first and last dates on which this feed has service. Service is defined as a trip actually being scheduled on that date (a `service_id` within the feed is active on that date, and a trip occurs on that `service_id`). This field does not guarantee that any service occurred on this specific date, just that this date is within a window of time where some service was defined for this feed.
       - name: days_from_service_start_date
         description: |
           Number of days between date and service start date. if is_service_valid is False, this may be negative
