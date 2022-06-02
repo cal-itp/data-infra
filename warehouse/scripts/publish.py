@@ -341,9 +341,9 @@ def generate_exposure_documentation(
 @app.command()
 def publish_exposure(
     exposure: ExistingExposure,
-    project: str = typer.Option("cal-itp-data-infra"),
+    project: str = typer.Option("cal-itp-data-infra-staging"),
     bucket: str = typer.Option(
-        "gs://calitp-publish", help="The bucket in which artifacts are persisted."
+        "gs://test-calitp-publish", help="The bucket in which artifacts are persisted."
     ),
     dry_run: bool = typer.Option(False, help="If True, skips writing out any data."),
     deploy: bool = typer.Option(
@@ -353,7 +353,12 @@ def publish_exposure(
     """
     Only publish one exposure, by name.
     """
-    assert dry_run or not deploy, "cannot deploy during a dry run!"
+    if deploy:
+        assert not dry_run, "cannot deploy during a dry run!"
+        assert not project.endswith(
+            "-staging"
+        ), "cannot deploy from the staging project!"
+        assert not bucket.startswith("gs://test-"), "cannot deploy with a test bucket!"
 
     with open("./target/manifest.json") as f:
         manifest = Manifest(**json.load(f))
