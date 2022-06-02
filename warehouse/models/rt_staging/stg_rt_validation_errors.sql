@@ -1,9 +1,3 @@
-{{
-    config(
-        materialized='view',
-    )
-}}
-
 WITH validation_service_alerts AS (
     SELECT *, 'service_alerts' as rt_feed_type
     FROM {{ source('gtfs_rt_external_tables', 'service_alerts_validations') }}

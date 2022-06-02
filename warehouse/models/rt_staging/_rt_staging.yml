@@ -41,9 +41,15 @@ models:
   - name: stg_rt_validation_errors
     description: Unioned and unnested table of all RT validator output.
     columns:
-      - name: key
+      - &rt_key
+        name: key
         tests:
           - not_null:
               where: date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
           - unique:
               where: date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+
+  - name: stg_vehicle_positions
+    description: Unnested RT vehicle positions.
+    columns:
+      - *rt_key
