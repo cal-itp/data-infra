@@ -21,11 +21,12 @@ error_counts AS (
         calitp_itp_id,
         calitp_url_number,
         rt_feed_type,
+        error_description,
         error_id,
         date,
         COUNT(*) AS occurrences
     FROM errors
-    GROUP BY 1, 2, 3, 4, 5
+    GROUP BY 1, 2, 3, 4, 5, 6
 ),
 
 -- join with schedule dim feeds to get feed key
