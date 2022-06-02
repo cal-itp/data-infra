@@ -145,21 +145,19 @@ models:
         description: GTFS realtime type (service_alerts, trip_updates, or vehicle_positions)
         tests:
           - not_null
+
   - name: gtfs_rt_fact_daily_validation_errors
     description: |
       A daily roll-up of validation errors
       per calitp_itp_id/calitp_url_number/feed type/error.
       Primary key is composite of calitp_itp_id,
       calitp_url_number, rt_feed_type, error_id, and date.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - calitp_itp_id
-            - calitp_url_number
-            - rt_feed_type
-            - error_id
-            - date
     columns:
+      - name: key
+        description: Synthetic key
+        tests:
+          - not_null
+          - unique
       - name: date
         description: Date for which this feed was present in our extraction list
         tests:

@@ -1,37 +1,22 @@
 {{
     config(
-        materialized='incremental',
-        unique_key='key',
-        partition_by={
-            'field': 'date',
-            'data_type': 'date',
-            'granularity': 'day',
-        },
+        materialized='view',
     )
 }}
 
 WITH validation_service_alerts AS (
     SELECT *, 'service_alerts' as rt_feed_type
     FROM {{ source('gtfs_rt_external_tables', 'service_alerts_validations') }}
-    {% if is_incremental() or target.name == 'dev' %}
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
-    {% endif %}
 ),
 
 validation_trip_updates AS (
     SELECT *, 'trip_updates' as rt_feed_type
     FROM {{ source('gtfs_rt_external_tables', 'trip_updates_validations') }}
-    {% if is_incremental() or target.name == 'dev' %}
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
-    {% endif %}
 ),
 
 validation_vehicle_positions AS (
     SELECT *, 'vehicle_positions' as rt_feed_type
     FROM {{ source('gtfs_rt_external_tables', 'vehicle_positions_validations') }}
-    {% if is_incremental() or target.name == 'dev' %}
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
-    {% endif %}
 ),
 
 unioned AS (

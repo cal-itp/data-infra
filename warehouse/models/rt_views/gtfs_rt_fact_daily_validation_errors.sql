@@ -1,7 +1,15 @@
-{{ config(materialized='table') }}
+{{
+    config(
+        materialized='incremental',
+        unique_key='key',
+    )
+}}
 
 WITH errors AS (
     SELECT * FROM {{ ref('stg_rt_validation_errors') }}
+    {% if is_incremental() or target.name == 'dev' %}
+    WHERE date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+    {% endif %}
 ),
 
 gtfs_schedule_dim_feeds AS (
@@ -26,6 +34,13 @@ error_counts AS (
 gtfs_rt_fact_daily_validation_errors AS (
     SELECT
         t1.*,
+        {{ dbt_utils.surrogate_key(['t1.calitp_itp_id',
+                                    't1.calitp_url_number',
+                                    't1.rt_feed_type',
+                                    't1.error_id',
+                                    't1.date',
+                                    ])
+        }} as key,
         t2.feed_key
     FROM error_counts AS t1
     LEFT JOIN gtfs_schedule_dim_feeds AS t2

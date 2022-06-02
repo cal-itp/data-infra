@@ -43,5 +43,7 @@ models:
     columns:
       - name: key
         tests:
-          - not_null
-          - unique
+          - not_null:
+              where: date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+          - unique:
+              where: date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
