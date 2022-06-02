@@ -1,5 +1,7 @@
 """
 Super useful with https://www.convertjson.com/html-table-to-json.htm
+
+Originally used to produce dbt docs from https://gtfs.org/reference/static#field-definitions
 """
 import json
 import sys

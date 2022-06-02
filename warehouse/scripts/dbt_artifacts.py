@@ -217,6 +217,7 @@ Destination = Annotated[
 
 
 class ExposureMeta(BaseModel):
+    methodology: Optional[str]
     destinations: List[Destination] = []
 
 
@@ -226,6 +227,7 @@ class Exposure(BaseModel):
     package_name: str
     path: Path
     name: str
+    description: str
     type: ExposureType
     url: Optional[str]
     depends_on: NodeDeps
@@ -238,14 +240,6 @@ class Manifest(BaseModel):
     macros: Dict
     docs: Dict
     exposures: Dict[str, Exposure]
-
-    # @validator("nodes", "sources")
-    # def filter(cls, val):
-    #     return {
-    #         k: v
-    #         for k, v in val.items()
-    #         if v.resource_type.value in ("model", "seed", "source")
-    #     }
 
 
 class TimingInfo(BaseModel):

@@ -183,9 +183,7 @@ class MetadataRow(BaseModel):
     dataset_name: str
     tags: ListOfStrings
     description: str
-    methodology: Literal[
-        "Cal-ITP collects the GTFS feeds from a statewide list [link] every night and aggegrates it into a statewide table for analysis purposes only. Do not use for trip planner ingestation, rather is meant to be used for statewide analytics and other use cases. Note: These data may or may or may not have passed GTFS-Validation"
-    ]
+    methodology: str
     topic: Literal["Transportation"]
     publisher_organization: Literal["Caltrans"]
     place: Literal["CA"]
@@ -287,7 +285,7 @@ def generate_exposure_documentation(
                             "mobility",
                         ],
                         description=node.description.replace("\n", " "),
-                        methodology="Cal-ITP collects the GTFS feeds from a statewide list [link] every night and aggegrates it into a statewide table for analysis purposes only. Do not use for trip planner ingestation, rather is meant to be used for statewide analytics and other use cases. Note: These data may or may or may not have passed GTFS-Validation",
+                        methodology=exposure.meta.methodology,
                         topic="Transportation",
                         publisher_organization="Caltrans",
                         place="CA",
