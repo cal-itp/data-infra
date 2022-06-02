@@ -69,11 +69,19 @@ meta:
 
 ### Publish the data!
 Either create an Airflow job to refresh/update the data at the specified
-frequency, or do it manually.
+frequency, or do it manually. You can use flags to execute a dry run or write to
+GCS without also uploading to CKAN.
 
+Example dry run:
 ```bash
-poetry run python scripts/publish.py publish-exposure california_open_data (--dry-run) (--deploy)
+poetry run python scripts/publish.py publish-exposure california_open_data --dry-run
 ```
+
+Example production deployment:
+```bash
+poetry run python scripts/publish.py publish-exposure california_open_data --project=cal-itp-data-infra --bucket="gs://calitp-publish" --deploy
+```
+
 
 If you are using dbt-based publishing, the `publish_exposure` subcommand of `publish.py`
 will query BigQuery, write out CSV files, and upload those files to CKAN.
