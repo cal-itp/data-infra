@@ -35,6 +35,16 @@ these two files using the main `publish.py` script (specifically the `generate-e
 subcommand). The documentation from the dbt models' corresponding YAML will be
 converted into appropriate CSVs and written out locally.
 
+Run this command inside the `warehouse` folder, assuming you have local dbt
+artifacts in `target/` from a `dbt run` or `dbt compile`.
+```bash
+poetry run python scripts/publish.py generate-exposure-documentation california_open_data
+```
+
+Generally, we recommend executing the dbt models locally and using your local
+artifacts to produce the data to be generated; this ensures the data is
+up-to-date and fits nicely into a tool-enabled manual workflow.
+
 ### Create dataset and metadata
 Once you've generated the necessary metadata and dictionary CSV, you need to get
 approval from Chad Baker. Send the CSVs via email, preferably CC'ing somebody
@@ -60,6 +70,10 @@ meta:
 ### Publish the data!
 Either create an Airflow job to refresh/update the data at the specified
 frequency, or do it manually.
+
+```bash
+poetry run python scripts/publish.py publish-exposure california_open_data (--dry-run) (--deploy)
+```
 
 If you are using dbt-based publishing, the `publish_exposure` subcommand of `publish.py`
 will query BigQuery, write out CSV files, and upload those files to CKAN.

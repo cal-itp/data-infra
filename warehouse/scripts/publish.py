@@ -28,7 +28,6 @@ import requests
 import swifter  # noqa
 import typer
 from pydantic import BaseModel
-from sqlalchemy import create_engine
 
 from dbt_artifacts import (
     BaseNode,
@@ -48,26 +47,17 @@ app = typer.Typer()
 WGS84 = "EPSG:4326"
 
 
-# Taken from the calitp repo which we can't install because of deps issue
-def get_engine(project, max_bytes=None):
-    max_bytes = 5_000_000_000 if max_bytes is None else max_bytes
-
-    # Note that we should be able to add location as a uri parameter, but
-    # it is not being picked up, so passing as a separate argument for now.
-    return create_engine(
-        f"bigquery://{project}/?maximum_bytes_billed={max_bytes}",
-        location="us-west2",
-        credentials_path=os.environ.get("BIGQUERY_KEYFILE_LOCATION"),
-    )
-
-
-def _publish_exposure(project: str, bucket: str, exposure: Exposure, dry_run: bool):
-    engine = get_engine(project)
-
+def _publish_exposure(
+    project: str, bucket: str, exposure: Exposure, dry_run: bool, deploy: bool
+):
     for destination in exposure.meta.destinations:
         with tempfile.TemporaryDirectory() as tmpdir:
             if isinstance(destination, CkanDestination):
-                assert len(exposure.depends_on.nodes) == len(destination.ids)
+                if len(exposure.depends_on.nodes) != len(destination.ids):
+                    typer.secho(
+                        f"WARNING: mismatch between {len(exposure.depends_on.nodes)} depends_on nodes and {len(destination.ids)} destination ids",
+                        fg=typer.colors.YELLOW,
+                    )
 
                 # TODO: this should probably be driven by the depends_on nodes
                 for model_name, ckan_id in destination.ids.items():
@@ -77,8 +67,8 @@ def _publish_exposure(project: str, bucket: str, exposure: Exposure, dry_run: bo
                     fpath = os.path.join(tmpdir, destination.filename(model_name))
 
                     df = pd.read_gbq(
-                        str(node.select(engine)),
-                        project_id=project,
+                        str(node.select),
+                        project_id=node.database,
                         progress_bar_type="tqdm",
                     )
                     df.to_csv(fpath, index=False)
@@ -88,26 +78,28 @@ def _publish_exposure(project: str, bucket: str, exposure: Exposure, dry_run: bo
 
                     hive_path = destination.hive_path(exposure, model_name, bucket)
 
-                    msg = f"writing {model_name} to {hive_path} and {destination.url} {ckan_id}"
+                    write_msg = f"writing {model_name} to {hive_path}"
+                    upload_msg = f"uploading to {destination.url} {ckan_id}"
                     if dry_run:
                         typer.secho(
-                            f"would be {msg}",
+                            f"would be {write_msg} and {upload_msg}",
                             fg=typer.colors.MAGENTA,
                         )
                     else:
-                        typer.secho(msg, fg=typer.colors.GREEN)
-                        fs = gcsfs.GCSFileSystem(
-                            project=project, token="google_default"
-                        )
+                        typer.secho(write_msg, fg=typer.colors.GREEN)
+                        fs = gcsfs.GCSFileSystem(token="google_default")
                         fs.put(fpath, hive_path)
 
-                        with open(fpath, "rb") as fp:
-                            requests.post(
-                                destination.url,
-                                data={"id": ckan_id},
-                                headers={"Authorization": API_KEY},
-                                files={"upload": fp},
-                            ).raise_for_status()
+                        if deploy:
+                            typer.secho(upload_msg, fg=typer.colors.GREEN)
+                            with open(fpath, "rb") as fp:
+                                requests.post(
+                                    destination.url,
+                                    data={"id": ckan_id},
+                                    headers={"Authorization": API_KEY},
+                                    files={"upload": fp},
+                                ).raise_for_status()
+
             elif isinstance(destination, TileServerDestination):
                 # the depends_on each create a layer
                 for model in exposure.depends_on.nodes:
@@ -117,7 +109,7 @@ def _publish_exposure(project: str, bucket: str, exposure: Exposure, dry_run: bo
                     fpath = os.path.join(tmpdir, destination.filename(node.name))
 
                     df = pd.read_gbq(
-                        str(node.select(engine)),
+                        str(node.select),
                         project_id=project,
                         progress_bar_type="tqdm",
                     )
@@ -126,7 +118,11 @@ def _publish_exposure(project: str, bucket: str, exposure: Exposure, dry_run: bo
                     # )
 
                     def make_linestring(x):
+                        """
+                        This comes from https://github.com/cal-itp/data-analyses/blob/09f3b23c488e7ed1708ba721bf49121a925a8e0b/_shared_utils/shared_utils/geography_utils.py#L190
 
+                        It's specific to dim_shapes_geo, so we should update this when we actually start producing geojson
+                        """
                         # shapely errors if the array contains only one point
                         if len(x) > 1:
                             # each point in the array is wkt
@@ -158,9 +154,7 @@ def _publish_exposure(project: str, bucket: str, exposure: Exposure, dry_run: bo
                             fg=typer.colors.MAGENTA,
                         )
                     else:
-                        fs = gcsfs.GCSFileSystem(
-                            project=project, token="google_default"
-                        )
+                        fs = gcsfs.GCSFileSystem(token="google_default")
                         fs.put(fpath, hive_path)
 
 
@@ -248,11 +242,8 @@ class DictionaryRow(BaseModel):
 @app.command()
 def generate_exposure_documentation(
     exposure: ExistingExposure,
-    # project: str = "cal-itp-data-infra",
     metadata_output: Path = "./metadata.csv",
     dictionary_output: Path = "./dictionary.csv",
-    # bucket: str = "gs://calitp-publish",
-    dry_run: bool = False,
 ) -> None:
     with open("./target/manifest.json") as f:
         manifest = Manifest(**json.load(f))
@@ -350,13 +341,20 @@ def generate_exposure_documentation(
 @app.command()
 def publish_exposure(
     exposure: ExistingExposure,
-    project: str = "cal-itp-data-infra",
-    bucket: str = "gs://calitp-publish",
-    dry_run: bool = False,
+    project: str = typer.Option("cal-itp-data-infra"),
+    bucket: str = typer.Option(
+        "gs://calitp-publish", help="The bucket in which artifacts are persisted."
+    ),
+    dry_run: bool = typer.Option(False, help="If True, skips writing out any data."),
+    deploy: bool = typer.Option(
+        False, help="If True, actually deploy to external systems."
+    ),
 ) -> None:
     """
     Only publish one exposure, by name.
     """
+    assert dry_run or not deploy, "cannot deploy during a dry run!"
+
     with open("./target/manifest.json") as f:
         manifest = Manifest(**json.load(f))
 
@@ -367,29 +365,8 @@ def publish_exposure(
         bucket=bucket,
         exposure=exposure,
         dry_run=dry_run,
+        deploy=deploy,
     )
-
-
-@app.command()
-def publish_all_exposures(
-    project: str = "cal-itp-data-infra",
-    bucket: str = "gs://calitp-publish",
-    dry_run: bool = False,
-) -> None:
-    """
-    Publish all exposures found in a dbt manifest.
-    """
-
-    with open("./target/manifest.json") as f:
-        manifest = Manifest(**json.load(f))
-
-    for name, exposure in manifest.exposures.items():
-        _publish_exposure(
-            project=project,
-            bucket=bucket,
-            exposure=exposure,
-            dry_run=dry_run,
-        )
 
 
 if __name__ == "__main__":

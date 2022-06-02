@@ -8,11 +8,25 @@ from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from slugify import slugify
+from sqlalchemy.sql import Select
 from typing import Annotated, Any, ClassVar, Dict, List, Literal, Optional, Tuple, Union
 
 import pendulum
 from pydantic import BaseModel, Field
-from sqlalchemy import MetaData, Table, select
+from sqlalchemy import create_engine, MetaData, Table, select
+
+
+# Taken from the calitp repo which we can't install because of deps issue
+def get_engine(project, max_bytes=None):
+    max_bytes = 5_000_000_000 if max_bytes is None else max_bytes
+
+    # Note that we should be able to add location as a uri parameter, but
+    # it is not being picked up, so passing as a separate argument for now.
+    return create_engine(
+        f"bigquery://{project}/?maximum_bytes_billed={max_bytes}",
+        location="us-west2",
+        credentials_path=os.environ.get("BIGQUERY_KEYFILE_LOCATION"),
+    )
 
 
 class FileFormat(str, Enum):
@@ -123,7 +137,9 @@ class BaseNode(BaseModel):
     def sqlalchemy_table(self, engine):
         return Table(self.schema_table, MetaData(bind=engine), autoload=True)
 
-    def select(self, engine):
+    @property
+    def select(self) -> Select:
+        engine = get_engine(self.database)
         columns = [
             c
             for c in self.sqlalchemy_table(engine).columns
