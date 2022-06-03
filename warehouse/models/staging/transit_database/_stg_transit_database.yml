@@ -42,3 +42,7 @@ models:
     columns:
       - name: key
         tests: *primary_key_tests
+  - name: stg_transit_database__properties_and_features
+    columns:
+      - name: key
+        tests: *primary_key_tests
