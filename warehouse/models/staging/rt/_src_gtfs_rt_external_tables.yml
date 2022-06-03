@@ -1,0 +1,38 @@
+version: 2
+
+sources:
+  - name: gtfs_rt_external_tables
+    description: Hive-partitioned external tables reading GTFS RT data and validation errors from GCS.
+    database: cal-itp-data-infra
+    schema: external_gtfs_rt
+    tables:
+      - name: service_alerts
+      - name: service_alerts_outcomes
+        loaded_at_field: cast(dt as timestamp)
+        freshness:
+          warn_after: { count: 1, period: day }
+      - name: service_alerts_validations
+      - name: service_alerts_validations_outcomes
+        loaded_at_field: cast(dt as timestamp)
+        freshness:
+          warn_after: { count: 1, period: day }
+      - name: trip_updates
+      - name: trip_updates_outcomes
+        loaded_at_field: cast(dt as timestamp)
+        freshness:
+          warn_after: { count: 1, period: day }
+      - name: trip_updates_validations
+      - name: trip_updates_validations_outcomes
+        loaded_at_field: cast(dt as timestamp)
+        freshness:
+          warn_after: { count: 1, period: day }
+      - name: vehicle_positions
+      - name: vehicle_positions_outcomes
+        loaded_at_field: cast(dt as timestamp)
+        freshness:
+          warn_after: { count: 1, period: day }
+      - name: vehicle_positions_validations
+      - name: vehicle_positions_validations_outcomes
+        loaded_at_field: cast(dt as timestamp)
+        freshness:
+          warn_after: { count: 1, period: day }
