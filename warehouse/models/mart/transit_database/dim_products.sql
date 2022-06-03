@@ -6,7 +6,7 @@ WITH stg_transit_database__products AS (
 
 dim_products AS (
     SELECT
-        id,
+        key,
         name,
         url,
         requirements,

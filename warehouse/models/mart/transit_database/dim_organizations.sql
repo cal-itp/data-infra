@@ -6,7 +6,7 @@ WITH stg_transit_database__organizations AS (
 
 dim_organizations AS (
     SELECT
-        id,
+        key,
         name,
         organization_type,
         roles,
