@@ -10,7 +10,7 @@ latest AS (
 
 stg_transit_database__products AS (
     SELECT
-        product_id AS id,
+        product_id AS key,
         name,
         url,
         requirements,
