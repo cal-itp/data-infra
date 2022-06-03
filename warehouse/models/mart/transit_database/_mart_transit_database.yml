@@ -62,6 +62,10 @@ models:
     columns:
       - name: key
         tests: *primary_key_tests
+  - name: dim_properties_and_features
+    columns:
+      - name: key
+        tests: *primary_key_tests
   - name: dim_contract_attachments
     description: |
       Attachment links to images of contracts.
@@ -77,8 +81,8 @@ models:
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
-            - component_id
-            - product_id
+            - component_key
+            - product_key
   - name: map_components_x_properties_and_features
     description: |
       Mapping table between components and properties_and_features.
@@ -87,8 +91,8 @@ models:
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
-            - component_id
-            - property_feature_id
+            - component_key
+            - property_feature_key
   - name: map_data_schemas_x_products_inputs
     description: |
       Mapping table between data schemas and products.
@@ -98,8 +102,8 @@ models:
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
-            - data_schema_id
-            - product_id
+            - data_schema_key
+            - product_key
   - name: map_data_schemas_x_products_outputs
     description: |
       Mapping table between data schemas and products.
@@ -109,8 +113,8 @@ models:
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
-            - data_schema_id
-            - product_id
+            - data_schema_key
+            - product_key
   - name: map_organizations_x_services_managed
     description: |
       Mapping table between organizations and services.
@@ -120,8 +124,8 @@ models:
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
-            - organization_id
-            - service_id
+            - organization_key
+            - service_key
   - name: map_parent_organizations
     description: |
       Mapping table between organizations and their parents
@@ -130,8 +134,8 @@ models:
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
-            - organization_id
-            - parent_organization_id
+            - organization_key
+            - parent_organization_key
   - name: map_paratransit_services
     description: |
       Mapping table between services and services for which
@@ -141,5 +145,5 @@ models:
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
-            - service_id
-            - paratransit_for_service_id
+            - service_key
+            - paratransit_for_service_key
