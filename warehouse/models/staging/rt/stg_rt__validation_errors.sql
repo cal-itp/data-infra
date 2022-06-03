@@ -24,7 +24,7 @@ unioned AS (
     FROM validation_vehicle_positions
 ),
 
-stg_rt_validation_errors as (
+stg_rt__validation_errors as (
     SELECT
         metadata.itp_id as calitp_itp_id,
         metadata.url as calitp_url_number,
@@ -44,4 +44,4 @@ stg_rt_validation_errors as (
     FROM unioned, unnest(occurrenceList) as occurrence WITH OFFSET
 )
 
-SELECT * FROM stg_rt_validation_errors
+SELECT * FROM stg_rt__validation_errors

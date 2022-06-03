@@ -234,7 +234,7 @@ exposures:
     description: Parameterized bus speed maps!
 
     depends_on:
-      - source('gtfs_rt_raw', 'external_vehicle_positions')
+      - source('gtfs_rt_external_tables', 'vehicle_positions')
 
     owner:
       name: Eric

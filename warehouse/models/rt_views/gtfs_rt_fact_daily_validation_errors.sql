@@ -6,7 +6,7 @@
 }}
 
 WITH errors AS (
-    SELECT * FROM {{ ref('stg_rt_validation_errors') }}
+    SELECT * FROM {{ ref('stg_rt__validation_errors') }}
     {% if is_incremental() or target.name == 'dev' %}
     WHERE date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
     {% endif %}

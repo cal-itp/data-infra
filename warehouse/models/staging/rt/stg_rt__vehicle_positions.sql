@@ -2,7 +2,7 @@ WITH source AS (
     SELECT * FROM {{ source('gtfs_rt_external_tables', 'vehicle_positions') }}
 ),
 
-stg_vehicle_positions AS (
+stg_rt__vehicle_positions AS (
     SELECT
         metadata.itp_id AS calitp_itp_id,
         metadata.url AS calitp_url_number,
@@ -48,4 +48,4 @@ stg_vehicle_positions AS (
     WHERE vehicle.vehicle.id IS NOT NULL
 )
 
-SELECT * FROM stg_vehicle_positions
+SELECT * FROM stg_rt__vehicle_positions

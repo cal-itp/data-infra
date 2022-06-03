@@ -2,7 +2,7 @@ version: 2
 
 sources:
   - name: gtfs_rt_external_tables
-    description: New hive-partitioned external tables reading from GCS.
+    description: Hive-partitioned external tables reading GTFS RT data and validation errors from GCS.
     database: cal-itp-data-infra
     schema: external_gtfs_rt
     tables:
@@ -36,20 +36,3 @@ sources:
         loaded_at_field: cast(dt as timestamp)
         freshness:
           warn_after: { count: 1, period: day }
-
-models:
-  - name: stg_rt_validation_errors
-    description: Unioned and unnested table of all RT validator output.
-    columns:
-      - &rt_key
-        name: key
-        tests:
-          - not_null:
-              where: date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
-          - unique:
-              where: date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
-
-  - name: stg_vehicle_positions
-    description: Unnested RT vehicle positions.
-    columns:
-      - *rt_key

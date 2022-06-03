@@ -48,6 +48,6 @@ models:
       +materialized: table
       schema: views
 
-    rt_staging:
+    staging:
       +materialized: view
       schema: staging
