@@ -225,3 +225,17 @@ models:
         tests:
           - unique
           - not_null
+
+exposures:
+  - name: rt_speed_maps
+    type: notebook
+    maturity: medium
+    url: https://analysis.calitp.org/rt/
+    description: Parameterized bus speed maps!
+
+    depends_on:
+      - source('gtfs_rt_raw', 'external_vehicle_positions')
+
+    owner:
+      name: Eric
+      email: eric.d@jarv.us
