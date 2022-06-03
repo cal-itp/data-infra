@@ -19,8 +19,10 @@ models:
       - name: key
         tests: *primary_key_tests
   - name: stg_transit_database__service_components
-    description: |
-      Service/component relationship data.
+    description: '{{ doc("service_components_table") }}'
+    columns:
+      - name: key
+        tests: *primary_key_tests
   - name: stg_transit_database__relationships_service_components
     description: |
       Service/component relationship data.
@@ -29,9 +31,6 @@ models:
     columns:
       - name: key
         tests: *primary_key_tests
-  - name: stg_transit_database__properties_and_features
-    description: |
-      Data schema data.
   - name: stg_transit_database__organizations
     description: '{{ doc("organizations_table") }}'
     columns:
