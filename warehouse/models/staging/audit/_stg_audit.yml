@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: stg_audit__cloudaudit_googleapis_com_activity
+  - name: stg_audit__cloudaudit_googleapis_com_data_access
