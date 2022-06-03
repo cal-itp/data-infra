@@ -10,7 +10,7 @@ latest AS (
 
 stg_transit_database__data_schemas AS (
     SELECT
-        data_schema_id as id,
+        data_schema_id AS key,
         name,
         status,
         products AS input_products,
