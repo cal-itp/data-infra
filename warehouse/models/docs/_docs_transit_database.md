@@ -45,3 +45,9 @@ While there are a small number of exceptions (e.g. Solano Express, which is join
 Each record is a product used in a transit technology stack at another organization (e.g. fixed-route scheduling software) or by riders (e.g. Google Maps).  Products have properties such as input/output capabilities.
 
 {% enddocs%}
+
+{% docs service_components_table %}
+
+Each record is an association between one or more `services`, a `product`, and one or more `components` which that product is serving as.
+
+{% enddocs%}
