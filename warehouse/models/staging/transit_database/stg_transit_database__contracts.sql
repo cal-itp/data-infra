@@ -10,7 +10,7 @@ latest AS (
 
 stg_transit_database__contracts AS (
     SELECT
-        contract_id as id,
+        contract_id AS key,
         name,
         contract_type_functional_category,
         contract_type_functions,

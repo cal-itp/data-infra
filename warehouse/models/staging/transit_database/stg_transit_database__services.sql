@@ -10,7 +10,7 @@ latest AS (
 
 stg_transit_database__services AS (
     SELECT
-        service_id AS id,
+        service_id AS key,
         name,
         service_type,
         mode,

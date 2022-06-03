@@ -10,7 +10,7 @@ latest AS (
 
 stg_transit_database__organizations AS (
     SELECT
-        organization_id AS id,
+        organization_id AS key,
         name,
         organization_type,
         roles,
