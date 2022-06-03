@@ -6,7 +6,7 @@ WITH stg_transit_database__services AS (
 
 dim_services AS (
     SELECT
-        id,
+        key,
         name,
         service_type,
         mode,
