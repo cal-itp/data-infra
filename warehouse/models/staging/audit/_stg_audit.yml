@@ -1,5 +1,25 @@
 version: 2
 
+# note: much of these models are derived from blog posts
+# https://towardsdatascience.com/bigquery-3-simple-ways-to-audit-and-monitor-your-dabatase-1cf09027f0de
+# https://dataform.co/blog/exporting-bigquery-usage-logs
+# https://towardsdatascience.com/monitoring-your-bigquery-costs-and-reports-usage-with-data-studio-b77819ffd9fa
+
 models:
   - name: stg_audit__cloudaudit_googleapis_com_activity
+
   - name: stg_audit__cloudaudit_googleapis_com_data_access
+    description: Parsed/unnested record of all data access from a log sink.
+    columns:
+      - name: timestamp
+        tests:
+          - not_null
+      - name: date
+        tests:
+          - not_null
+      - name: job
+        tests:
+          - not_null
+      - name: job_type
+        tests:
+          - not_null
