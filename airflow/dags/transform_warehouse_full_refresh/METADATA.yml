@@ -1,4 +1,4 @@
-description: "Builds and tests the warehouse, and uploads artifacts"
+description: "Runs dbt with --full-refresh; use this to refresh/rebuild/backfill incremental models."
 schedule_interval: null
 tags:
   - all_gusty_features
