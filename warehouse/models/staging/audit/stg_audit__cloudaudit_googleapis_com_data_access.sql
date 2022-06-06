@@ -11,8 +11,9 @@
         cluster_by='job_type',
     )
 }}
--- Note this uses a direct reference instead of source, because a new table is created daily
+-- we should use https://cloud.google.com/bigquery/docs/reference/standard-sql/json_functions#parse_json when available
 
+-- Note these two source CTEs a direct reference instead of source, because a new table is created daily
 WITH latest AS (
     {% set today = modules.datetime.date.today() %}
 
@@ -43,7 +44,9 @@ data_to_process AS (
         EXTRACT(DATE FROM timestamp) AS date,
         -- do some initial renaming/unnesting here since we can't refer to same-SELECT aliases
         protopayload_auditlog AS payload,
-        protopayload_auditlog.metadataJson AS metadata
+        protopayload_auditlog.metadataJson AS metadata,
+
+        JSON_QUERY(protopayload_auditlog.metadataJson, '$.jobChange.job') AS job
 
     {% if is_incremental() or target.name == 'dev' %}
     FROM latest
@@ -58,24 +61,26 @@ stg_audit__cloudaudit_googleapis_com_data_access AS (
         date,
         payload.resourceName as resource_name,
 
-        -- TODO: a lot of these can be simplified if we get access to https://cloud.google.com/bigquery/docs/reference/standard-sql/json_functions#parse_json
-        JSON_EXTRACT_SCALAR(metadata, '$.jobChange.job.jobName') as job_name,
-        JSON_EXTRACT_SCALAR(metadata, '$.jobChange.job.jobConfig.type') as job_type,
-        JSON_EXTRACT_SCALAR(metadata, '$.jobChange.job.jobConfig.labels.dbt_invocation_id') AS dbt_invocation_id,
+        JSON_VALUE(metadata, '$.jobChange.job.jobName') as job_name,
+        JSON_VALUE(job, '$.jobConfig.type') as job_type,
+        JSON_VALUE(job, '$.jobConfig.labels.dbt_invocation_id') AS dbt_invocation_id,
         TIMESTAMP_DIFF(
-            CAST(JSON_EXTRACT_SCALAR(metadata, '$.jobChange.job.jobStats.endTime') AS timestamp),
-            CAST(JSON_EXTRACT_SCALAR(metadata, '$.jobChange.job.jobStats.createTime') AS timestamp),
+            CAST(JSON_VALUE(job, '$.jobStatus.endTime') AS timestamp),
+            CAST(JSON_VALUE(job, '$.jobStatus.createTime') AS timestamp),
             SECOND
         ) AS duration_in_seconds,
-        JSON_EXTRACT_SCALAR(metadata, '$.jobChange.job.jobStats.queryStats.referencedTables') as referenced_tables,
-        5.0 * CAST(JSON_EXTRACT_SCALAR(metadata, '$.jobChange.job.jobStats.queryStats.totalBilledBytes') AS INT64) / POWER(2, 40) AS estimated_cost_usd, -- $5/TB
-        CAST(JSON_EXTRACT_SCALAR(metadata, '$.jobChange.job.jobStats.totalSlotMs') AS INT64) / 1000 AS total_slots_seconds,
+        JSON_VALUE_ARRAY(job, '$.jobStatus.queryStats.referencedTables') as referenced_tables,
+        5.0 * CAST(JSON_VALUE(job, '$.jobStatus.queryStats.totalBilledBytes') AS INT64) / POWER(2, 40) AS estimated_cost_usd, -- $5/TB
+        CAST(JSON_VALUE(job, '$.jobStatus.totalSlotMs') AS INT64) / 1000 AS total_slots_seconds,
 
-        JSON_EXTRACT_SCALAR(metadata, '$.tableDataRead.jobName') as table_data_read_job_name,
+        JSON_VALUE(metadata, '$.tableDataRead.jobName') as table_data_read_job_name,
 
         payload,
-        metadata
+        metadata,
+        job
     FROM data_to_process
+
+--     WHERE job IS NOT NULL
 )
 
 SELECT * FROM stg_audit__cloudaudit_googleapis_com_data_access

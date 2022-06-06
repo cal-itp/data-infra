@@ -20,6 +20,3 @@ models:
       - name: job
         tests:
           - not_null
-      - name: job_type
-        tests:
-          - not_null
