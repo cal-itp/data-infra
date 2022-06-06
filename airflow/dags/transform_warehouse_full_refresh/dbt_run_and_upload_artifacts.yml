@@ -6,7 +6,7 @@ cmds:
   - python3
 arguments:
   - '/app/scripts/run_and_upload.py'
-  - '--no-dbt-test'
+  - '--full-refresh'
   - '--dbt-docs'
   - '--save-artifacts'
   - '--deploy-docs'
