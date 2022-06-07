@@ -59,14 +59,20 @@ stg_audit__cloudaudit_googleapis_com_data_access AS (
     SELECT
         timestamp,
         date,
-
+        severity,
         payload.resourceName as resource_name,
         payload.authenticationInfo.principalEmail AS principal_email,
-
-
         JSON_VALUE(metadata, '$.jobChange.job.jobName') as job_name,
+
         JSON_VALUE(job, '$.jobConfig.type') as job_type,
         JSON_VALUE(job, '$.jobConfig.labels.dbt_invocation_id') AS dbt_invocation_id,
+        JSON_VALUE(job, '$.jobConfig.queryConfig.createDisposition') AS create_disposition,
+        JSON_VALUE(job, '$.jobConfig.queryConfig.destinationTable') AS destination_table,
+        JSON_VALUE(job, '$.jobConfig.queryConfig.priority') AS priority,
+        JSON_VALUE(job, '$.jobConfig.queryConfig.query') AS query,
+        JSON_VALUE(job, '$.jobConfig.queryConfig.statementType') AS statement_type,
+        JSON_VALUE(job, '$.jobConfig.queryConfig.writeDisposition') AS write_disposition,
+
         TIMESTAMP_DIFF(
             CAST(JSON_VALUE(job, '$.jobStats.endTime') AS timestamp),
             CAST(JSON_VALUE(job, '$.jobStats.createTime') AS timestamp),

@@ -17,6 +17,9 @@ models:
       - name: date
         tests:
           - not_null
+      - name: severity
+        tests:
+          - not_null
       - name: resource_name
         tests:
           - not_null
@@ -32,3 +35,23 @@ models:
           - unique:
               # this is the only dupe, I'm not sure why two logs show up
               where: job_name != 'projects/cal-itp-data-infra/jobs/job_whFNQ0oGxCM2ejXkfMAk5QA41Vcv'
+      - name: job_type
+        tests:
+          - not_null
+      - name: referenced_tables
+        tests:
+          - not_null
+      - name: duration_in_seconds
+        tests:
+          - not_null
+      - name: estimated_cost_usd
+        tests:
+          - not_null:
+              where: duration_in_seconds > 0 and job_type != 'IMPORT' and statement_type != 'CREATE_EXTERNAL_TABLE'
+      - name: total_slots_seconds
+        tests:
+          - not_null:
+              where: duration_in_seconds > 0 and job_type != 'IMPORT' and statement_type != 'CREATE_EXTERNAL_TABLE'
+      - name: payload
+      - name: metadata
+      - name: job
