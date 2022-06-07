@@ -1664,3 +1664,11 @@ anaheim-regional:
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 14
+city-of-west-hollywood:
+  agency_name: City of West Hollywood
+  feeds:
+    - gtfs_schedule_url: https://www.weho.org/home/showdocument?id=53383&t=637901042129473913
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
+  itp_id: 367
