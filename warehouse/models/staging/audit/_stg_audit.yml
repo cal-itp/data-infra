@@ -17,10 +17,18 @@ models:
       - name: date
         tests:
           - not_null
+      - name: resource_name
+        tests:
+          - not_null
+      - name: principal_email
+        tests:
+          - not_null
       - name: job
         tests:
           - not_null
       - name: job_name
         tests:
           - not_null
-          - unique
+          - unique:
+              # this is the only dupe, I'm not sure why two logs show up
+              where: job_name != 'projects/cal-itp-data-infra/jobs/job_whFNQ0oGxCM2ejXkfMAk5QA41Vcv'

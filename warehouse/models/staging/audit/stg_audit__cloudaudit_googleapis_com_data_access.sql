@@ -59,7 +59,10 @@ stg_audit__cloudaudit_googleapis_com_data_access AS (
     SELECT
         timestamp,
         date,
+
         payload.resourceName as resource_name,
+        payload.authenticationInfo.principalEmail AS principal_email,
+
 
         JSON_VALUE(metadata, '$.jobChange.job.jobName') as job_name,
         JSON_VALUE(job, '$.jobConfig.type') as job_type,
