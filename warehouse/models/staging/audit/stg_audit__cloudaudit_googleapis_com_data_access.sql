@@ -48,7 +48,7 @@ data_to_process AS (
 
         JSON_QUERY(protopayload_auditlog.metadataJson, '$.jobChange.job') AS job
 
-    {% if is_incremental() or target.name == 'dev' %}
+    {% if is_incremental() %}
     FROM latest
     {% else %}
     FROM everything
@@ -65,13 +65,13 @@ stg_audit__cloudaudit_googleapis_com_data_access AS (
         JSON_VALUE(job, '$.jobConfig.type') as job_type,
         JSON_VALUE(job, '$.jobConfig.labels.dbt_invocation_id') AS dbt_invocation_id,
         TIMESTAMP_DIFF(
-            CAST(JSON_VALUE(job, '$.jobStatus.endTime') AS timestamp),
-            CAST(JSON_VALUE(job, '$.jobStatus.createTime') AS timestamp),
+            CAST(JSON_VALUE(job, '$.jobStats.endTime') AS timestamp),
+            CAST(JSON_VALUE(job, '$.jobStats.createTime') AS timestamp),
             SECOND
         ) AS duration_in_seconds,
-        JSON_VALUE_ARRAY(job, '$.jobStatus.queryStats.referencedTables') as referenced_tables,
-        5.0 * CAST(JSON_VALUE(job, '$.jobStatus.queryStats.totalBilledBytes') AS INT64) / POWER(2, 40) AS estimated_cost_usd, -- $5/TB
-        CAST(JSON_VALUE(job, '$.jobStatus.totalSlotMs') AS INT64) / 1000 AS total_slots_seconds,
+        JSON_VALUE_ARRAY(job, '$.jobStats.queryStats.referencedTables') as referenced_tables,
+        5.0 * CAST(JSON_VALUE(job, '$.jobStats.queryStats.totalBilledBytes') AS INT64) / POWER(2, 40) AS estimated_cost_usd, -- $5/TB
+        CAST(JSON_VALUE(job, '$.jobStats.totalSlotMs') AS INT64) / 1000 AS total_slots_seconds,
 
         JSON_VALUE(metadata, '$.tableDataRead.jobName') as table_data_read_job_name,
 
@@ -80,7 +80,7 @@ stg_audit__cloudaudit_googleapis_com_data_access AS (
         job
     FROM data_to_process
 
---     WHERE job IS NOT NULL
+    WHERE job IS NOT NULL
 )
 
 SELECT * FROM stg_audit__cloudaudit_googleapis_com_data_access
