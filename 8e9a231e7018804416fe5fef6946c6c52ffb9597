@@ -1,0 +1,158 @@
+[kustomize:kubernetes/apps/overlays/gtfs-rt-archive-prod]
+
+diff -u -N /tmp/LIVE-3551372982/apps.v1.Deployment.gtfs-rt.gtfs-rt-archive /tmp/MERGED-1743424634/apps.v1.Deployment.gtfs-rt.gtfs-rt-archive
+--- /tmp/LIVE-3551372982/apps.v1.Deployment.gtfs-rt.gtfs-rt-archive	2022-03-15 00:59:43.769086521 +0000
++++ /tmp/MERGED-1743424634/apps.v1.Deployment.gtfs-rt.gtfs-rt-archive	2022-03-15 00:59:43.769086521 +0000
+@@ -6,7 +6,7 @@
+     kubectl.kubernetes.io/last-applied-configuration: |
+       {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"name":"gtfs-rt-archive"},"name":"gtfs-rt-archive","namespace":"gtfs-rt"},"spec":{"replicas":1,"selector":{"matchLabels":{"name":"gtfs-rt-archive"}},"strategy":{"type":"Recreate"},"template":{"metadata":{"labels":{"name":"gtfs-rt-archive"}},"spec":{"containers":[{"envFrom":[{"configMapRef":{"name":"archiver-app-vars"}},{"configMapRef":{"name":"archiver-channel-vars"}}],"image":"us.gcr.io/cal-itp-data-infra/gtfs-rt-archive:2.1","name":"app","resources":{"limits":{"memory":"6.5Gi"},"requests":{"memory":"6.5Gi"}},"volumeMounts":[{"mountPath":"/secrets/agencies-data","name":"agencies-data"},{"mountPath":"/secrets/gcs-upload-svcacct","name":"gcs-upload-svcacct"}]}],"volumes":[{"name":"agencies-data","secret":{"secretName":"agencies-data"}},{"name":"gcs-upload-svcacct","secret":{"secretName":"gcs-upload-svcacct"}}]}}}}
+   creationTimestamp: "2021-07-26T20:39:07Z"
+-  generation: 102
++  generation: 103
+   labels:
+     name: gtfs-rt-archive
+   managedFields:
+@@ -46,6 +46,39 @@
+     fieldsV1:
+       f:metadata:
+         f:annotations:
++          f:deployment.kubernetes.io/revision: {}
++      f:status:
++        f:availableReplicas: {}
++        f:conditions:
++          .: {}
++          k:{"type":"Available"}:
++            .: {}
++            f:lastTransitionTime: {}
++            f:lastUpdateTime: {}
++            f:message: {}
++            f:reason: {}
++            f:status: {}
++            f:type: {}
++          k:{"type":"Progressing"}:
++            .: {}
++            f:lastTransitionTime: {}
++            f:lastUpdateTime: {}
++            f:message: {}
++            f:reason: {}
++            f:status: {}
++            f:type: {}
++        f:observedGeneration: {}
++        f:readyReplicas: {}
++        f:replicas: {}
++        f:updatedReplicas: {}
++    manager: kube-controller-manager
++    operation: Update
++    time: "2022-03-12T08:13:44Z"
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:annotations:
+           .: {}
+           f:kubectl.kubernetes.io/last-applied-configuration: {}
+         f:labels:
+@@ -61,6 +94,13 @@
+               .: {}
+               f:name: {}
+           f:spec:
++            f:affinity:
++              .: {}
++              f:nodeAffinity:
++                .: {}
++                f:requiredDuringSchedulingIgnoredDuringExecution:
++                  .: {}
++                  f:nodeSelectorTerms: {}
+             f:containers:
+               k:{"name":"app"}:
+                 .: {}
+@@ -93,6 +133,7 @@
+             f:schedulerName: {}
+             f:securityContext: {}
+             f:terminationGracePeriodSeconds: {}
++            f:tolerations: {}
+             f:volumes:
+               .: {}
+               k:{"name":"agencies-data"}:
+@@ -111,40 +152,7 @@
+                   f:secretName: {}
+     manager: kubectl-client-side-apply
+     operation: Update
+-    time: "2022-03-11T16:58:56Z"
+-  - apiVersion: apps/v1
+-    fieldsType: FieldsV1
+-    fieldsV1:
+-      f:metadata:
+-        f:annotations:
+-          f:deployment.kubernetes.io/revision: {}
+-      f:status:
+-        f:availableReplicas: {}
+-        f:conditions:
+-          .: {}
+-          k:{"type":"Available"}:
+-            .: {}
+-            f:lastTransitionTime: {}
+-            f:lastUpdateTime: {}
+-            f:message: {}
+-            f:reason: {}
+-            f:status: {}
+-            f:type: {}
+-          k:{"type":"Progressing"}:
+-            .: {}
+-            f:lastTransitionTime: {}
+-            f:lastUpdateTime: {}
+-            f:message: {}
+-            f:reason: {}
+-            f:status: {}
+-            f:type: {}
+-        f:observedGeneration: {}
+-        f:readyReplicas: {}
+-        f:replicas: {}
+-        f:updatedReplicas: {}
+-    manager: kube-controller-manager
+-    operation: Update
+-    time: "2022-03-12T08:13:44Z"
++    time: "2022-03-15T00:59:43Z"
+   name: gtfs-rt-archive
+   namespace: gtfs-rt
+   resourceVersion: "203048254"
+@@ -166,6 +174,15 @@
+       labels:
+         name: gtfs-rt-archive
+     spec:
++      affinity:
++        nodeAffinity:
++          requiredDuringSchedulingIgnoredDuringExecution:
++            nodeSelectorTerms:
++            - matchExpressions:
++              - key: resource-domain
++                operator: In
++                values:
++                - gtfsrt
+       containers:
+       - envFrom:
+         - configMapRef:
+@@ -177,9 +194,9 @@
+         name: app
+         resources:
+           limits:
+-            memory: 6656Mi
++            memory: 5Gi
+           requests:
+-            memory: 6656Mi
++            memory: 5Gi
+         terminationMessagePath: /dev/termination-log
+         terminationMessagePolicy: File
+         volumeMounts:
+@@ -192,6 +209,11 @@
+       schedulerName: default-scheduler
+       securityContext: {}
+       terminationGracePeriodSeconds: 30
++      tolerations:
++      - effect: NoSchedule
++        key: resource-domain
++        operator: Equal
++        value: gtfsrt
+       volumes:
+       - name: agencies-data
+         secret:
