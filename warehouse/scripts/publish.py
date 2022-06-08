@@ -102,11 +102,11 @@ def _publish_exposure(
 
             elif isinstance(destination, TileServerDestination):
                 layer_geojson_paths = []
+                tiles_dir = os.path.join(tmpdir, "tiles")
                 for model in exposure.depends_on.nodes:
                     node = BaseNode._instances[model]
 
-                    geojson_fpath = os.path.join(tmpdir, f"{node.name}.geojson")
-                    fpath = os.path.join(tmpdir, destination.filename(node.name))
+                    geojsonl_fpath = os.path.join(tmpdir, f"{node.name}.geojsonl")
 
                     df = pd.read_gbq(
                         str(node.select),
@@ -143,28 +143,31 @@ def _publish_exposure(
                     # gdf = gdf.to_crs(WGS84)
                     if destination.metadata_columns:
                         gdf = gdf[["geometry"] + destination.metadata_columns]
-                    gdf.to_file(geojson_fpath, driver="GeoJSON")
-                    layer_geojson_paths.append(geojson_fpath)
+                    gdf.to_file(geojsonl_fpath, driver="GeoJSONSeq")
+                    layer_geojson_paths.append(geojsonl_fpath)
                     hive_path = destination.hive_path(exposure, node.name, bucket)
 
                     if dry_run:
                         typer.secho(
-                            f"would be writing {model} to {hive_path} and {destination.url} {ckan_id}",
+                            f"would be writing {model} to {hive_path}",
                             fg=typer.colors.MAGENTA,
                         )
                     else:
                         fs = gcsfs.GCSFileSystem(token="google_default")
-                        fs.put(fpath, hive_path)
+                        fs.put(geojsonl_fpath, hive_path)
 
                 args = [
                     "tippecanoe",
                     "-zg",
-                    "-o",
-                    fpath,
+                    "-e",
+                    tiles_dir,
                     *layer_geojson_paths,
                 ]
                 typer.secho(f"running tippecanoe with args {args}")
                 subprocess.run(args).check_returncode()
+
+                # TODO: upload the output
+                print(f"NEED TO IMPLEMENT UPLOADING {tiles_dir}")
 
 
 with open("./target/manifest.json") as f:

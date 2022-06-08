@@ -32,6 +32,7 @@ def get_engine(project, max_bytes=None):
 class FileFormat(str, Enum):
     csv = "csv"
     geojson = "geojson"
+    geojsonl = "geojsonl"
     json = "json"
     jsonl = "jsonl"
     mbtiles = "mbtiles"

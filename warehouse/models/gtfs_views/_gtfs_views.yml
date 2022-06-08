@@ -957,6 +957,6 @@ exposures:
       destinations:
         - type: tile_server
           bucket: gs://calitp-publish
-          format: pbf
+          format: geojsonl # note that this is the intermediary format
           url: temporary-placeholder
           geo_column: pt_array
