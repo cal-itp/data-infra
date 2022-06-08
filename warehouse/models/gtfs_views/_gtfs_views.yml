@@ -166,6 +166,7 @@ models:
       Each row is a cleaned row from a shapes.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#shapestxt.
+
   - name: gtfs_schedule_dim_shapes_geo
     description: |
       Slowly-changing dimension table of shapes created from shapes.txt
@@ -199,6 +200,32 @@ models:
         description: Ordered array of WKT points that make up the shape.
         tests:
           - not_null
+
+  - name: gtfs_schedule_dim_shapes_geo_latest
+    description: |
+      Latest-only slice of the table of shapes created from shapes.txt
+      data. Each row is a shape. Primary key is composite of
+      calitp_itp_id, calitp_url_number, calitp_extracted_at, and shape_id.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - calitp_itp_id
+            - calitp_url_number
+            - shape_id
+    columns:
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+      - name: shape_id
+        description: shape_id from shapes.txt file.
+        tests:
+          - not_null
+      - name: pt_array
+        description: Ordered array of WKT points that make up the shape.
+        tests:
+          - not_null
+
   - name: gtfs_schedule_dim_stop_times
     description: |
       Slowly-changing dimension table of stop_times.txt data.
