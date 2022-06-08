@@ -101,7 +101,7 @@ def _publish_exposure(
                                 ).raise_for_status()
 
             elif isinstance(destination, TileServerDestination):
-                # the depends_on each create a layer
+                layer_geojson_paths = []
                 for model in exposure.depends_on.nodes:
                     node = BaseNode._instances[model]
 
@@ -144,17 +144,7 @@ def _publish_exposure(
                     if destination.metadata_columns:
                         gdf = gdf[["geometry"] + destination.metadata_columns]
                     gdf.to_file(geojson_fpath, driver="GeoJSON")
-
-                    args = [
-                        "tippecanoe",
-                        "-zg",
-                        "-o",
-                        fpath,
-                        geojson_fpath,
-                    ]
-                    typer.secho(f"running tippecanoe with args {args}")
-                    subprocess.run(args).check_returncode()
-
+                    layer_geojson_paths.append(geojson_fpath)
                     hive_path = destination.hive_path(exposure, node.name, bucket)
 
                     if dry_run:
@@ -165,6 +155,16 @@ def _publish_exposure(
                     else:
                         fs = gcsfs.GCSFileSystem(token="google_default")
                         fs.put(fpath, hive_path)
+
+                args = [
+                    "tippecanoe",
+                    "-zg",
+                    "-o",
+                    fpath,
+                    *layer_geojson_paths,
+                ]
+                typer.secho(f"running tippecanoe with args {args}")
+                subprocess.run(args).check_returncode()
 
 
 with open("./target/manifest.json") as f:

@@ -211,6 +211,11 @@ class GcsDestination(BaseModel):
 
 
 class TileServerDestination(GcsDestination):
+    """
+    For tile server destinations, each depends_on becomes
+    a tile layer.
+    """
+
     type: Literal["tile_server"]
     url: str
     format: FileFormat
