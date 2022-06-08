@@ -127,14 +127,23 @@ def _publish_exposure(
                         if len(x) > 1:
                             # each point in the array is wkt
                             # so convert them to shapely points via list comprehension
-                            as_wkt = [shapely.wkt.loads(i) for i in x]
-                            return shapely.geometry.LineString(as_wkt)
+                            return shapely.geometry.LineString(
+                                shapely.wkt.loads(i) for i in x
+                            )
 
                     # apply the function
-                    df["geometry"] = df.pt_array.swifter.apply(make_linestring)
-                    gdf = gpd.GeoDataFrame(df, geometry="geometry", crs=WGS84)
+                    df["geometry"] = df[destination.geo_column].swifter.apply(
+                        make_linestring
+                    )
+                    gdf = gpd.GeoDataFrame(
+                        data=df.drop(destination.geo_column, axis="columns"),
+                        geometry="geometry",
+                        crs=WGS84,
+                    )
                     # gdf = gdf.to_crs(WGS84)
-                    gdf[["geometry"]].to_file(geojson_fpath, driver="GeoJSON")
+                    if destination.metadata_columns:
+                        gdf = gdf[["geometry"] + destination.metadata_columns]
+                    gdf.to_file(geojson_fpath, driver="GeoJSON")
 
                     args = [
                         "tippecanoe",
@@ -150,7 +159,7 @@ def _publish_exposure(
 
                     if dry_run:
                         typer.secho(
-                            f"would be writing {model_name} to {hive_path} and {destination.url} {ckan_id}",
+                            f"would be writing {model} to {hive_path} and {destination.url} {ckan_id}",
                             fg=typer.colors.MAGENTA,
                         )
                     else:

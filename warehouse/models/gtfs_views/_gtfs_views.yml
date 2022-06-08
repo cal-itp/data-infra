@@ -930,6 +930,6 @@ exposures:
       destinations:
         - type: tile_server
           bucket: gs://calitp-publish
-          format: mbtiles
+          format: pbf
           url: temporary-placeholder
           geo_column: pt_array

@@ -35,6 +35,7 @@ class FileFormat(str, Enum):
     json = "json"
     jsonl = "jsonl"
     mbtiles = "mbtiles"
+    pbf = "pbf"
 
 
 class DbtResourceType(str, Enum):
@@ -213,6 +214,8 @@ class TileServerDestination(GcsDestination):
     type: Literal["tile_server"]
     url: str
     format: FileFormat
+    geo_column: str
+    metadata_columns: Optional[List[str]]
 
 
 class CkanDestination(GcsDestination):
