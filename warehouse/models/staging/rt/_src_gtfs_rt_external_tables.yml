@@ -7,6 +7,7 @@ sources:
     schema: external_gtfs_rt
     tables:
       - name: service_alerts
+        description: Unnested service alerts records, hive partitioned in GCS.
       - name: service_alerts_outcomes
         loaded_at_field: cast(dt as timestamp)
         freshness:
@@ -17,6 +18,7 @@ sources:
         freshness:
           warn_after: { count: 1, period: day }
       - name: trip_updates
+        description: Unnested trip updates records, hive partitioned in GCS.
       - name: trip_updates_outcomes
         loaded_at_field: cast(dt as timestamp)
         freshness:
@@ -27,6 +29,7 @@ sources:
         freshness:
           warn_after: { count: 1, period: day }
       - name: vehicle_positions
+        description: Unnested vehicle positions records, hive partitioned in GCS.
       - name: vehicle_positions_outcomes
         loaded_at_field: cast(dt as timestamp)
         freshness:
