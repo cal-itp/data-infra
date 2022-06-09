@@ -9,9 +9,12 @@ URL of the dataset publishing organization's website. This may be the same as on
 {% enddocs %}
 
 {% docs gtfs_feed_info__feed_lang %}
-Default language used for the text in this dataset. This setting helps GTFS consumers choose capitalization rules and other language-specific settings for the dataset. The file translations.txt can be used if the text needs to be translated into languages other than the default one.
+Default language used for the text in this dataset. This setting helps GTFS consumers choose capitalization rules and other language-specific settings for the dataset.
+The file translations.txt can be used if the text needs to be translated into languages other than the default one.
 
-The default language may be multilingual for datasets with the original text in multiple languages. In such cases, the feed_lang field should contain the language code mul defined by the norm ISO 639-2. The best practice here would be to provide, in translations.txt, a translation for each language used throughout the dataset. If all the original text in the dataset is in the same language, then mul should not be used.Example: Consider a dataset from a multilingual country like Switzerland, with the original stops.stop_name field populated with stop names in different languages. Each stop name is written according to the dominant language in that stop’s geographic location, e.g. Genève for the French-speaking city of Geneva, Zürich for the German-speaking city of Zurich, and Biel/Bienne for the bilingual city of Biel/Bienne. The dataset feed_lang should be mul and translations would be provided in translations.txt, in German: Genf, Zürich and Biel; in French: Genève, Zurich and Bienne; in Italian: Ginevra, Zurigo and Bienna; and in English: Geneva, Zurich and Biel/Bienne.
+The default language may be multilingual for datasets with the original text in multiple languages. In such cases, the feed_lang field should contain the language code mul
+defined by the norm ISO 639-2. The best practice here would be to provide, in translations.txt, a translation for each language used throughout the dataset. If all the
+original text in the dataset is in the same language, then mul should not be used. See https://gtfs.org/reference/static#feed_infotxt for examples.
 {% enddocs %}
 
 {% docs gtfs_feed_info__default_lang %}
