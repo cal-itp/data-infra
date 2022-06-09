@@ -132,7 +132,14 @@ initial_pt_array AS (
 ),
 
 gtfs_schedule_dim_shapes_geo AS (
-    SELECT * EXCEPT(ct)
+    SELECT
+        * EXCEPT(ct),
+        {{ farm_surrogate_key([
+            'calitp_itp_id',
+            'calitp_url_number',
+            'calitp_extracted_at',
+            'shape_id',
+        ]) }} AS key
     FROM initial_pt_array
     -- drop shapes that had nulls
     WHERE ARRAY_LENGTH(pt_array) = ct

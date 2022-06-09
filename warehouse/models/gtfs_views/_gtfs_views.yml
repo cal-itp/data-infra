@@ -5,6 +5,14 @@ models:
     description: |
       Each row is a date.
     columns:
+      - &key
+        name: key
+        description: Surrogate primary key for the table.
+        tests:
+          - not_null
+          - unique
+        meta:
+          metabase.semantic_type: type/PK
       - name: id
         description: Date formatted as string for identification, in "YYYY-MM-DD" format, ex. "2022-03-31".
         tests:
@@ -166,19 +174,16 @@ models:
       Each row is a cleaned row from a shapes.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#shapestxt.
+    columns:
+      - *key
+
   - name: gtfs_schedule_dim_shapes_geo
     description: |
       Slowly-changing dimension table of shapes created from shapes.txt
       data. Each row is a shape. Primary key is composite of
       calitp_itp_id, calitp_url_number, calitp_extracted_at, and shape_id.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - calitp_extracted_at
-            - calitp_itp_id
-            - calitp_url_number
-            - shape_id
     columns:
+      - *key
       - &calitp_itp_id
         name: calitp_itp_id
         description: '{{ doc("column_calitp_itp_id") }}'
@@ -211,6 +216,7 @@ models:
         description: Ordered array of WKT points that make up the shape.
         tests:
           - not_null
+
   - name: gtfs_schedule_dim_stop_times
     description: |
       Slowly-changing dimension table of stop_times.txt data.

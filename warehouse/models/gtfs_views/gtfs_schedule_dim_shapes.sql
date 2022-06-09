@@ -6,7 +6,15 @@ WITH shapes_clean AS (
 ),
 
 gtfs_schedule_dim_shapes AS (
-    SELECT * FROM shapes_clean
+    SELECT
+        *,
+        {{ farm_surrogate_key([
+            'calitp_itp_id',
+            'calitp_url_number',
+            'calitp_extracted_at',
+            'shape_id',
+        ]) }} AS key
+    FROM shapes_clean
 )
 
 SELECT * FROM gtfs_schedule_dim_shapes
