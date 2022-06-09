@@ -9,8 +9,7 @@ id_name: service_id
 
 rename_fields:
   "# Static": num_static
-  # this typo exists in Airtable currently
-  "# Schedule FEeds": num_schedule_feeds
+  "# Schedule Feeds": num_schedule_feeds
   "# TripUpdates": num_trip_updates
   "# Alerts": num_service_alerts
   "# VehiclePositions": num_vehicle_positions
