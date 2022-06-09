@@ -798,9 +798,9 @@ monterey-salinas-transit:
   agency_name: Monterey-Salinas Transit
   feeds:
     - gtfs_schedule_url: http://www.mst.org/google/google_transit.zip
-      gtfs_rt_vehicle_positions_url: http://206.128.158.191/TMGTFSRealTimeWebService/Vehicle/VehiclePositions.pb
-      gtfs_rt_service_alerts_url: http://206.128.158.191/TMGTFSRealTimeWebService/Alert/Alerts.pb
-      gtfs_rt_trip_updates_url: http://206.128.158.191/TMGTFSRealTimeWebService/TripUpdate/TripUpdates.pb
+      gtfs_rt_vehicle_positions_url: https://gtfs.mst.org/TMGTFSRealTimeWebService/Vehicle/VehiclePositions.pb
+      gtfs_rt_service_alerts_url: https://gtfs.mst.org/TMGTFSRealTimeWebService/Alert/Alerts.pb
+      gtfs_rt_trip_updates_url: https://gtfs.mst.org/TMGTFSRealTimeWebService/TripUpdate/TripUpdates.pb
   itp_id: 208
 moorpark-city-transit:
   agency_name: Moorpark City Transit
