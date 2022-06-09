@@ -7,9 +7,15 @@ version: 2
 
 models:
   - name: stg_audit__cloudaudit_googleapis_com_activity
+    description: |
+      Does not exist yet.
+      https://cloud.google.com/bigquery/docs/reference/auditlogs/#admin_activity_activity
 
   - name: stg_audit__cloudaudit_googleapis_com_data_access
-    description: Parsed/unnested record of all data access from a log sink.
+    description: |
+      Parsed/unnested record of all data access from a log sink. See
+      https://cloud.google.com/bigquery/docs/reference/auditlogs/#data_access_data_access
+      for more details.
     columns:
       - name: timestamp
         tests:

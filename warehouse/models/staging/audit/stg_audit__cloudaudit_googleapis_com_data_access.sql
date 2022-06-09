@@ -13,7 +13,7 @@
 }}
 -- we should use https://cloud.google.com/bigquery/docs/reference/standard-sql/json_functions#parse_json when available
 
--- Note these two source CTEs a direct reference instead of source, because a new table is created daily
+-- Note these two source CTEs use a direct reference instead of source, because a new table is created daily
 WITH latest AS (
     {% set today = modules.datetime.date.today() %}
 
