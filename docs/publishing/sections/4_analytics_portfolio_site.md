@@ -74,8 +74,8 @@ export NETLIFY_SITE_ID=cal-itp-data-analyses
           - notebook: ./my-analyses/notebook_1.ipynb
           - notebook: ./my-analyses/notebook_2.ipynb
         ```
-## Running the BUILD Command:
-**Note** The build command must be run from the root of the repo!
+## Running the `Build` Command:
+**Note:** The build command must be run from the root of the repo!
 1. Navigate back to the repo data-analyses and install the portfolio requirements with
 `pip install -r portfolio/requirements.txt`
 2. Then run
@@ -95,6 +95,20 @@ export NETLIFY_SITE_ID=cal-itp-data-analyses
 * `–deploy`: `Website Draft URL: https://my-analysis--cal-itp-data-analyses.netlify.app`
 
 4. Add the files using `git add` and commit!
-5. Your notebook should now be displayed at [https://analysis.calitp.org/](https://analysis.calitp.org/)
+5. Your notebook should now be displayed in the [Cal-ITP Analytics Portfolio](https://analysis.calitp.org/](https://analysis.calitp.org/)
 
 ## Adding to the Makefile:
+
+Another way to write to the Analytics Portfolio is to use the Makefile and run
+`make build_my_report -f Makefile` in data-analyses
+
+Example makefile in [`cal-tip/data-analyses`](https://github.com/cal-itp/data-analyses/blob/main/Makefile):
+
+```{code-cell}
+build_my_reports:
+    pip install -r portfolio/requirements.txt
+    git rm portfolio/my-analyses/ -rf
+    python portfolio/portfolio.py build my-analyses --deploy
+    git add portfolio/my-analyses/district_*/ portfolio/dla/*.yml portfolio/dla/*.md
+    git add portfolio/sites/my-analyses.yml
+```
