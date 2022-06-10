@@ -79,6 +79,7 @@ stg_audit__cloudaudit_googleapis_com_data_access AS (
             SECOND
         ) AS duration_in_seconds,
         JSON_VALUE_ARRAY(job, '$.jobStats.queryStats.referencedTables') as referenced_tables,
+        CAST(JSON_VALUE(job, '$.jobStats.queryStats.totalBilledBytes') AS INT64) AS total_billed_bytes,
         5.0 * CAST(JSON_VALUE(job, '$.jobStats.queryStats.totalBilledBytes') AS INT64) / POWER(2, 40) AS estimated_cost_usd, -- $5/TB
         CAST(JSON_VALUE(job, '$.jobStats.totalSlotMs') AS INT64) / 1000 AS total_slots_seconds,
 
