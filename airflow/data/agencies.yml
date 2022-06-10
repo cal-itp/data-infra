@@ -666,9 +666,9 @@ long-beach-transit:
   agency_name: Long Beach Transit
   feeds:
     - gtfs_schedule_url: https://lbtransit.box.com/shared/static/aoyeskwmsa9g7pyg78q3xuioi0lgqe4f.zip
-      gtfs_rt_vehicle_positions_url: http://206.128.158.171/TMGTFSRealTimeWebService/Vehicle/VehiclePositions.pb
-      gtfs_rt_service_alerts_url: http://206.128.158.171/TMGTFSRealTimeWebService/Alert/Alerts.pb
-      gtfs_rt_trip_updates_url: http://206.128.158.171/TMGTFSRealTimeWebService/TripUpdate/TripUpdates.pb
+      gtfs_rt_vehicle_positions_url: https://lbtgtfs.lbtransit.com/TMGTFSRealTimeWebService/Vehicle/VehiclePositions.pb
+      gtfs_rt_service_alerts_url: https://lbtgtfs.lbtransit.com/TMGTFSRealTimeWebService/Alert/Alerts.pb
+      gtfs_rt_trip_updates_url: https://lbtgtfs.lbtransit.com/TMGTFSRealTimeWebService/TripUpdate/TripUpdates.pb
   itp_id: 170
 madera-area-express:
   agency_name: Madera Area Express
