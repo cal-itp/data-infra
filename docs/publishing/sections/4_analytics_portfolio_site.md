@@ -95,7 +95,7 @@ export NETLIFY_SITE_ID=cal-itp-data-analyses
 * `–deploy`: `Website Draft URL: https://my-analysis--cal-itp-data-analyses.netlify.app`
 
 4. Add the files using `git add` and commit!
-5. Your notebook should now be displayed in the [Cal-ITP Analytics Portfolio](https://analysis.calitp.org/](https://analysis.calitp.org/)
+5. Your notebook should now be displayed in the [Cal-ITP Analytics Portfolio](https://analysis.calitp.org/)
 
 ## Adding to the Makefile:
 
