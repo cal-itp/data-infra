@@ -13,26 +13,26 @@ You can find the Cal-ITP Analytics Portfolio at [analysis.calitp.org](https://an
 ## Setup:
 Before executing the build, there are a few prior steps you need to do.
 
-1. Set up netlify key.
-* npm install -g netlify-cli
+1. Set up netlify key:
+* install netlify: `npm install -g netlify-cli`
 * Navigate to your main directory
-* Edit your bash profile:  `vi ~/.bash_profile`
-* Type `o` to enter a new line
-* Once in insert mode, can copy and paste keys, prefixing it with "export"
-```
-export NETLIFY_AUTH_TOKEN= YOURTOKENHEREABCDEFG123456
-export NETLIFY_SITE_ID=cal-itp-data-analyses
-```
+* Edit your bash profile:
+    * enter`vi ~/.bash_profile` in the command line
+    * Type `o` to enter a new line
+    * Once in insert mode, can copy and paste the following keys, prefixing it with "export":
+    ```
+    export NETLIFY_AUTH_TOKEN= YOURTOKENHERE123
+    export NETLIFY_SITE_ID=cal-itp-data-analyses
+    ```
 
-* Press `ESC` + `:wq` to stop insert mode and to close the vim
-    * note: `ESC` + `dd` gets rid of unwanted lines
-* Enter `source ~/.bash_profile`
-* Enter `cat ~/.bash_profile` to see that it's there
+    * Press `ESC` + `:wq` to stop insert mode and to close the vim
+        * note: `ESC` + `dd` gets rid of unwanted lines
+    * Enter command `source ~/.bash_profile` in the command line.
+    * Enter command: `cat ~/.bash_profile` to see that it's there
 
-2. Create a .yml file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites). Each .yml file is a site, so if you have separate research topics, they should each have their own .yml file.
-* This .yml file will include the directory to the notebook(s) you want to publish.
-
-* The `parts` structure depends on the type of your analysis:
+2. Create a `.yml` file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites). Each `.yml` file is a site, so if you have separate research topics, they should each have their own `.yml` file.
+* This `.yml` file will include the directory to the notebook(s) you want to publish.
+* The structure of your `.yml` file depends on the type of your analysis:
     * If you have one parameterized notebook with one parameter:
         * Single Parameterized Notebook
         ```
@@ -74,25 +74,24 @@ export NETLIFY_SITE_ID=cal-itp-data-analyses
           - notebook: ./my-analyses/notebook_1.ipynb
           - notebook: ./my-analyses/notebook_2.ipynb
         ```
-## Running the `Build` Command:
+## Running the Build Command:
 **Note:** The build command must be run from the root of the repo!
 1. Navigate back to the repo data-analyses and install the portfolio requirements with
 `pip install -r portfolio/requirements.txt`
-2. Then run
-`python portfolio/portfolio.py build sires --deploy`
-*  You also have the option to specify: run `python portfolio/portfolio.py build --help` to see the following options:
-    * `--deploy / --no-deploy`
-        * deploy this component to netlify.
-    * `--prepare-only / --no-prepare-only`
-        * Pass-through flag to papermill; if true, papermill will not actually execute cells.
-    * Other specifications:
-        * `--execute-papermill / --no-execute-papermill`
-        * `--no-stderr / --no-no-stderr`
-        * `--continue-on-error / --no-continue-on-error`
+2. Then run `python portfolio/portfolio.py build sires --deploy`
+    *  You also have the option to specify: run `python portfolio/portfolio.py build --help` to see the following options:
+        * `--deploy / --no-deploy`
+            * deploy this component to netlify.
+        * `--prepare-only / --no-prepare-only`
+            * Pass-through flag to papermill; if true, papermill will not actually execute cells.
+        * Other specifications:
+            * `--execute-papermill / --no-execute-papermill`
+            * `--no-stderr / --no-no-stderr`
+            * `--continue-on-error / --no-continue-on-error`
 
 3. Once this runs, you can check the preview link at the bottom of the output. It should look something like:
-* `–no-deploy`: `file:///home/jovyan/data-analyses/portfolio/my-analysis/_build/html/index.html`
-* `–deploy`: `Website Draft URL: https://my-analysis--cal-itp-data-analyses.netlify.app`
+    * `–no-deploy`: `file:///home/jovyan/data-analyses/portfolio/my-analysis/_build/html/index.html`
+    * `–deploy`: `Website Draft URL: https://my-analysis--cal-itp-data-analyses.netlify.app`
 
 4. Add the files using `git add` and commit!
 5. Your notebook should now be displayed in the [Cal-ITP Analytics Portfolio](https://analysis.calitp.org/)
