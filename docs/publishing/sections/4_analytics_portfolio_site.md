@@ -30,47 +30,48 @@ Before executing the build, there are a few prior steps you need to do.
 2. Create a `.yml` file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites). Each `.yml` file is a site, so if you have separate research topics, they should each have their own `.yml` file.
     * This `.yml` file will include the directory to the notebook(s) you want to publish.
     * The structure of your `.yml` file depends on the type of your analysis:
-        * If you have one parameterized notebook with one parameter:
-            * Single Parameterized Notebook
-        ```
-        title: My Analyses
-        directory: ./my-analyses/
-        readme: ./my-analyses/README.md
-        notebook: ./my-analyses/my-notebook.ipynb
-        parts:
-           - caption: Introduction
-           - chapters:
-             - params:
-                  district_parameter: 1
-                  district_title: District 1
-        ```
-             * Notebook with Multiple Parameters
-        ```
-        title: My Analyses
-        directory: ./my-analyses/
-        readme: ./my-analyses/README.md
-        notebook: ./my-analyses/my-notebook.ipynb
-        parts:
-        - chapters:
-          - caption: County Name
-            params:
-              paramter1_county_name
-            sections:
-            - city: parameter2_city_name
-            - city: parameter2_city_name
-        ```
+        * If you have one parameterized notebook with **one parameter**:
 
-            * Individual Notebooks: no parameters
-        ```
-        title: My Analyses
-        directory: ./my-analyses/
-        readme: ./my-analyses/README.md
-        parts:
-        - caption: Introduction
-        - chapters:
-          - notebook: ./my-analyses/notebook_1.ipynb
-          - notebook: ./my-analyses/notebook_2.ipynb
-        ```
+            ```
+            title: My Analyses
+            directory: ./my-analyses/
+            readme: ./my-analyses/README.md
+            notebook: ./my-analyses/my-notebook.ipynb
+            parts:
+               - caption: Introduction
+               - chapters:
+                 - params:
+                      district_parameter: 1
+                      district_title: District 1
+            ```
+         * If you have a parameterized notebook with **multiple parameters**:
+
+            ```
+            title: My Analyses
+            directory: ./my-analyses/
+            readme: ./my-analyses/README.md
+            notebook: ./my-analyses/my-notebook.ipynb
+            parts:
+            - chapters:
+              - caption: County Name
+                params:
+                  paramter1_county_name
+                sections:
+                - city: parameter2_city_name
+                - city: parameter2_city_name
+            ```
+         * If you have an individual notebook with **no parameters**
+
+            ```
+            title: My Analyses
+            directory: ./my-analyses/
+            readme: ./my-analyses/README.md
+            parts:
+            - caption: Introduction
+            - chapters:
+              - notebook: ./my-analyses/notebook_1.ipynb
+              - notebook: ./my-analyses/notebook_2.ipynb
+            ```
 ## Running the Build Command:
 **Note:** The build command must be run from the root of the repo!
 1. Navigate back to the repo data-analyses and install the portfolio requirements with
