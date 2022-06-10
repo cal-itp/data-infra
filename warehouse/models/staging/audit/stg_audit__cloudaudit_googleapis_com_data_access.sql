@@ -15,10 +15,10 @@
 
 -- Note these two source CTEs use a direct reference instead of source, because a new table is created daily
 WITH latest AS (
-    {% set today = modules.datetime.date.today() %}
+    {% set yesterday = modules.datetime.date.today() - modules.datetime.timedelta(days=1) %}
 
     SELECT *
-    FROM cal-itp-data-infra.audit.cloudaudit_googleapis_com_data_access_{{ today.strftime('%Y%m%d') }}
+    FROM cal-itp-data-infra.audit.cloudaudit_googleapis_com_data_access_{{ yesterday.strftime('%Y%m%d') }}
 ),
 
 everything AS (
