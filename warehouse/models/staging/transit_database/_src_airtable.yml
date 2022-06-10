@@ -25,3 +25,5 @@ sources:
       - name: transit_technology_stacks__relationships_service_components
       - name: transit_technology_stacks__data_schemas
       - name: transit_technology_stacks__properties_and_features
+      - name: transit_technology_stacks__services
+      - name: transit_technology_stacks__organizations
