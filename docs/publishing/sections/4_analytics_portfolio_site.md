@@ -29,6 +29,7 @@ Before executing the build, there are a few prior steps you need to do.
 
 2. Create a `.yml` file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites). Each `.yml` file is a site, so if you have separate research topics, they should each have their own `.yml` file.
     * This `.yml` file will include the directory to the notebook(s) you want to publish.
+    * Name your `.yml` file
     * The structure of your `.yml` file depends on the type of your analysis:
         * If you have one parameterized notebook with **one parameter**:
 
@@ -60,7 +61,7 @@ Before executing the build, there are a few prior steps you need to do.
                 - city: parameter2_city_name
                 - city: parameter2_city_name
             ```
-         * If you have an individual notebook with **no parameters**
+         * If you have an individual notebook with **no parameters**:
 
             ```
             title: My Analyses
@@ -76,8 +77,9 @@ Before executing the build, there are a few prior steps you need to do.
 **Note:** The build command must be run from the root of the repo!
 1. Navigate back to the repo data-analyses and install the portfolio requirements with
 `pip install -r portfolio/requirements.txt`
-2. Then run `python portfolio/portfolio.py build sires --deploy`
-    *  You also have the option to specify: run `python portfolio/portfolio.py build --help` to see the following options:
+2. Then run `python portfolio/portfolio.py build my_report --deploy`
+    * The `my_report` will be replaced by the name of your `.yml` file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites).
+    * You also have the option to specify: run `python portfolio/portfolio.py build --help` to see the following options:
         * `--deploy / --no-deploy`
             * deploy this component to netlify.
         * `--prepare-only / --no-prepare-only`
