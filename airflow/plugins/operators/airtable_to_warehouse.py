@@ -6,7 +6,7 @@ import pendulum
 from pyairtable import Table
 from pydantic import BaseModel
 from typing import Optional, Dict
-from calitp import to_snakecase
+from utils import make_name_bq_safe
 from calitp.storage import get_fs
 
 from airflow.models import BaseOperator
@@ -86,7 +86,7 @@ class AirtableExtract(BaseModel):
         # rename fields follows format new_name: old_name
         final_df = raw_df.rename(
             columns={k: v for k, v in self.rename_fields.items()}
-        ).pipe(to_snakecase)
+        ).rename(make_name_bq_safe, axis="columns")
 
         if self.column_prefix:
             new_field_names = self.rename_fields.values()
