@@ -14,27 +14,24 @@ You can find the Cal-ITP Analytics Portfolio at [analysis.calitp.org](https://an
 Before executing the build, there are a few prior steps you need to do.
 
 1. Set up netlify key:
-* install netlify: `npm install -g netlify-cli`
-* Navigate to your main directory
-* Edit your bash profile:
-    * enter`vi ~/.bash_profile` in the command line
-    * Type `o` to enter a new line
-    * Once in insert mode, can copy and paste the following keys, prefixing it with "export":
-    ```
-    export NETLIFY_AUTH_TOKEN= YOURTOKENHERE123
-    export NETLIFY_SITE_ID=cal-itp-data-analyses
-    ```
-
-    * Press `ESC` + `:wq` to stop insert mode and to close the vim
-        * note: `ESC` + `dd` gets rid of unwanted lines
-    * Enter command `source ~/.bash_profile` in the command line.
-    * Enter command: `cat ~/.bash_profile` to see that it's there
+    * install netlify: `npm install -g netlify-cli`
+    * Navigate to your main directory
+    * Edit your bash profile:
+        * enter `vi ~/.bash_profile` in the command line
+        * Type `o` to enter a new line
+        * Once in insert mode, can copy and paste the following keys, prefixing it with "export":
+            * `export NETLIFY_AUTH_TOKEN= YOURTOKENHERE123`
+            * `export NETLIFY_SITE_ID=cal-itp-data-analyses`
+        * Press `ESC` + `:wq` to stop insert mode and to close the vim
+            * note: `ESC` + `dd` gets rid of unwanted lines
+        * Enter command `source ~/.bash_profile` in the command line.
+        * Enter command: `cat ~/.bash_profile` to see that it's there
 
 2. Create a `.yml` file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites). Each `.yml` file is a site, so if you have separate research topics, they should each have their own `.yml` file.
-* This `.yml` file will include the directory to the notebook(s) you want to publish.
-* The structure of your `.yml` file depends on the type of your analysis:
-    * If you have one parameterized notebook with one parameter:
-        * Single Parameterized Notebook
+    * This `.yml` file will include the directory to the notebook(s) you want to publish.
+    * The structure of your `.yml` file depends on the type of your analysis:
+        * If you have one parameterized notebook with one parameter:
+            * Single Parameterized Notebook
         ```
         title: My Analyses
         directory: ./my-analyses/
@@ -47,7 +44,7 @@ Before executing the build, there are a few prior steps you need to do.
                   district_parameter: 1
                   district_title: District 1
         ```
-        * Notebook with Multiple Parameters
+             * Notebook with Multiple Parameters
         ```
         title: My Analyses
         directory: ./my-analyses/
@@ -63,7 +60,7 @@ Before executing the build, there are a few prior steps you need to do.
             - city: parameter2_city_name
         ```
 
-        * Individual Notebooks: no parameters
+            * Individual Notebooks: no parameters
         ```
         title: My Analyses
         directory: ./my-analyses/
