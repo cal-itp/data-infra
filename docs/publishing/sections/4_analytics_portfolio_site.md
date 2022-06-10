@@ -20,7 +20,7 @@ Before executing the build, there are a few prior steps you need to do.
 * Type `o` to enter a new line
 * Once in insert mode, can copy and paste keys, prefixing it with "export"
 ```
-export NETLIFY_AUTH_TOKEN= ABCDEFG123456
+export NETLIFY_AUTH_TOKEN= YOURTOKENHEREABCDEFG123456
 export NETLIFY_SITE_ID=cal-itp-data-analyses
 ```
 
@@ -104,7 +104,7 @@ Another way to write to the Analytics Portfolio is to use the Makefile and run
 
 Example makefile in [`cal-tip/data-analyses`](https://github.com/cal-itp/data-analyses/blob/main/Makefile):
 
-```{code-cell}
+```
 build_my_reports:
     pip install -r portfolio/requirements.txt
     git rm portfolio/my-analyses/ -rf
