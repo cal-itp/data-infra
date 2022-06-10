@@ -85,6 +85,10 @@ stg_audit__cloudaudit_googleapis_com_data_access AS (
 
         JSON_VALUE(metadata, '$.tableDataRead.jobName') as table_data_read_job_name,
 
+        -- try to parse out the dbt node if we can
+        TRIM(REGEXP_EXTRACT(JSON_VALUE(job, '$.jobConfig.queryConfig.query'), r'\/\*\s.*\s\*\/'), '/* ') AS dbt_header,
+        JSON_VALUE(TRIM(REGEXP_EXTRACT(JSON_VALUE(job, '$.jobConfig.queryConfig.query'), r'\/\*\s.*\s\*\/'), '/* '), '$.node_id') AS dbt_node,
+
         payload,
         metadata,
         job
