@@ -15,10 +15,10 @@
 
 -- Note these two source CTEs use a direct reference instead of source, because a new table is created daily
 WITH latest AS (
-    {% set today = modules.datetime.date.today() %}
+    {% set yesterday = modules.datetime.date.today() - modules.datetime.timedelta(days=1) %}
 
     SELECT *
-    FROM cal-itp-data-infra.audit.cloudaudit_googleapis_com_data_access_{{ today.strftime('%Y%m%d') }}
+    FROM cal-itp-data-infra.audit.cloudaudit_googleapis_com_data_access_{{ yesterday.strftime('%Y%m%d') }}
 ),
 
 everything AS (
@@ -79,10 +79,15 @@ stg_audit__cloudaudit_googleapis_com_data_access AS (
             SECOND
         ) AS duration_in_seconds,
         JSON_VALUE_ARRAY(job, '$.jobStats.queryStats.referencedTables') as referenced_tables,
+        CAST(JSON_VALUE(job, '$.jobStats.queryStats.totalBilledBytes') AS INT64) AS total_billed_bytes,
         5.0 * CAST(JSON_VALUE(job, '$.jobStats.queryStats.totalBilledBytes') AS INT64) / POWER(2, 40) AS estimated_cost_usd, -- $5/TB
         CAST(JSON_VALUE(job, '$.jobStats.totalSlotMs') AS INT64) / 1000 AS total_slots_seconds,
 
         JSON_VALUE(metadata, '$.tableDataRead.jobName') as table_data_read_job_name,
+
+        -- try to parse out the dbt node if we can
+        TRIM(REGEXP_EXTRACT(JSON_VALUE(job, '$.jobConfig.queryConfig.query'), r'\/\*\s.*\s\*\/'), '/* ') AS dbt_header,
+        JSON_VALUE(TRIM(REGEXP_EXTRACT(JSON_VALUE(job, '$.jobConfig.queryConfig.query'), r'\/\*\s.*\s\*\/'), '/* '), '$.node_id') AS dbt_node,
 
         payload,
         metadata,
