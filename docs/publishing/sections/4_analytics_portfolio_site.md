@@ -72,28 +72,42 @@ Before executing the build, there are a few prior steps you need to do.
               - notebook: ./my-analyses/notebook_1.ipynb
               - notebook: ./my-analyses/notebook_2.ipynb
             ```
-## Running the Build Command:
+## Building and Deploying your Report:
+### Build your Report:
 **Note:** The build command must be run from the root of the repo!
 1. Navigate back to the repo data-analyses and install the portfolio requirements with
 `pip install -r portfolio/requirements.txt`
-2. Then run `python portfolio/portfolio.py build my_report --deploy`
+2. Then run `python portfolio/portfolio.py build my_report` to build your report
     * The `my_report` will be replaced by the name of your `.yml` file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites).
-    * You also have the option to specify: run `python portfolio/portfolio.py build --help` to see the following options:
-        * `--deploy / --no-deploy`
-            * deploy this component to netlify.
-        * `--prepare-only / --no-prepare-only`
-            * Pass-through flag to papermill; if true, papermill will not actually execute cells.
-        * Other specifications:
-            * `--execute-papermill / --no-execute-papermill`
-            * `--no-stderr / --no-no-stderr`
-            * `--continue-on-error / --no-continue-on-error`
+    * Your build will be located in: `data-analyses/portfolio/my_report/_build/html/index.html`
+4. Add the files using `git add` and commit your progress!
 
+
+### Deploy your Report:
+
+1. Make sure you are in the root of the data-analyses repo: `~/data-analyses`
+2. Run `python portfolio/portfolio.py build my_report --deploy`
+    * The `my_report` will be replaced by the name of your `.yml` file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites).
 3. Once this runs, you can check the preview link at the bottom of the output. It should look something like:
     * `–no-deploy`: `file:///home/jovyan/data-analyses/portfolio/my-analysis/_build/html/index.html`
     * `–deploy`: `Website Draft URL: https://my-analysis--cal-itp-data-analyses.netlify.app`
-
 4. Add the files using `git add` and commit!
 5. Your notebook should now be displayed in the [Cal-ITP Analytics Portfolio](https://analysis.calitp.org/)
+
+
+### Other Specifications:
+ * You also have the option to specify: run `python portfolio/portfolio.py build --help` to see the following options:
+     * `--deploy / --no-deploy`
+         * deploy this component to netlify.
+     * `--prepare-only / --no-prepare-only`
+         * Pass-through flag to papermill; if true, papermill will not actually execute cells.
+     * `--execute-papermill / --no-execute-papermill`
+         * If false, will skip calls to papermill
+     * `--no-stderr / --no-no-stderr`
+         * If true, will clear stderr stream for cell outputs
+     * `--continue-on-error / --no-continue-on-error`
+         * Default: no-continue-on-error
+
 
 ## Adding to the Makefile:
 
