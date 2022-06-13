@@ -4,6 +4,7 @@ import shutil
 import subprocess
 from pathlib import Path
 from typing import List
+from bs4 import BeautifulSoup
 
 import gcsfs
 import typer
@@ -90,6 +91,19 @@ def run(
             # so just skip to avoid any potential information leakage
             if "run_results" not in str(artifact):
                 shutil.copy(_from, "docs/")
+
+            # add google analytics to the index.html after being saved in the bucket
+
+            if "index.html" in str(artifact):
+                with open("index.html") as fp:
+                    index_soup = BeautifulSoup(fp, "html.parser")
+                    with open(
+                        "/Cal-ITP/data-infra/warehouse/scripts/GA_Script.html"
+                    ) as fp:
+                        ga_soup = BeautifulSoup(fp, "html.parser")
+                tag = index_soup.head
+                tag.insert(1, ga_soup)
+                # now need to return it
 
         if deploy_docs:
             args = [
