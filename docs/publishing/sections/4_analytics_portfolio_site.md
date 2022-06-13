@@ -24,8 +24,7 @@ Before executing the build, there are a few prior steps you need to do.
             * `export NETLIFY_SITE_ID=cal-itp-data-analyses`
         * Press `ESC` + `:wq` to stop insert mode and to close the vim
             * note: `ESC` + `dd` gets rid of unwanted lines
-        * Enter command `source ~/.bash_profile` in the command line.
-        * Enter command: `cat ~/.bash_profile` to see that it's there
+        * In the terminal enter command: `env | grep NETLIFY` to see that your Netlify token is there
 
 2. Create a `.yml` file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites). Each `.yml` file is a site, so if you have separate research topics, they should each have their own `.yml` file.
     * This `.yml` file will include the directory to the notebook(s) you want to publish.
