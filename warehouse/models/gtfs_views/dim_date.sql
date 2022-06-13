@@ -12,7 +12,6 @@ WITH raw_dates AS (
 dim_date AS (
     SELECT
         FORMAT_DATE('%F', d) AS id,
-        {{ farm_surrogate_key(["FORMAT_DATE('%F', d)"]) }} AS key,
         d AS full_date,
         EXTRACT(YEAR FROM d) AS year,
         EXTRACT(WEEK FROM d) AS year_week,
