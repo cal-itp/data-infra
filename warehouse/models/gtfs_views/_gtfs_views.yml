@@ -174,6 +174,13 @@ models:
       Slowly-changing dimension table of shapes created from shapes.txt
       data. Each row is a shape. Primary key is composite of
       calitp_itp_id, calitp_url_number, calitp_extracted_at, and shape_id.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - calitp_extracted_at
+            - calitp_itp_id
+            - calitp_url_number
+            - shape_id
     columns:
       - &calitp_itp_id
         name: calitp_itp_id
