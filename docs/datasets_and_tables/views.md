@@ -4,7 +4,7 @@
 
 |Table                                                    |Description|Link                                                                                                                         |
 |---------------------------------------------------------|-----------|-----------------------------------------------------------------------------------------------------------------------------|
-|dim_date                                                 |           |[link](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.dim_date)                                                 |
+|dim_date                                                 |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.dim_date">link</a>                    |
 |dim_metric_date                                          |           |[link](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.dim_metric_date)                                          |
 |gtfs_rt_fact_daily_feeds                                 |           |[link](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_rt_fact_daily_feeds)                                 |
 |gtfs_rt_fact_daily_validation_errors                     |           |[link](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_rt_fact_daily_validation_errors)                     |
