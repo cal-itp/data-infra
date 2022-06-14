@@ -18,11 +18,11 @@ Before executing the build, there are a few prior steps you need to do.
     * Navigate to your main directory
     * Edit your bash profile:
         * In your terminal, enter `nano ~/.bash_profile` to edit.
-        * Navigate using arrows (down, right, etc) to paste (CTRL + v)  in 2 new lines, prefixed with "export"
+        * Navigate using arrows (down, right, etc) to paste (`CTRL` + `v`)  in 2 new lines, prefixed with "export"
             * `export NETLIFY_AUTH_TOKEN= YOURTOKENHERE123`
             * `export NETLIFY_SITE_ID=cal-itp-data-analyses`
-        * To exit, press CTRL + X
-        * It will ask if you want to save your changes. Type `Y` to save. (sub bullet: Type N to discard your changes and exit)
+        * To exit, press `CTRL` + `X`
+        * It will ask if you want to save your changes. Type `Y` to save. (sub bullet: Type `N` to discard your changes and exit)
         * Back in your terminal, enter `env | grep NETLIFY` to see that your Netlify token is there
 
 2. Create a `.yml` file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites). Each `.yml` file is a site, so if you have separate research topics, they should each have their own `.yml` file.
@@ -113,7 +113,7 @@ Before executing the build, there are a few prior steps you need to do.
 1. Make sure you are in the root of the data-analyses repo: `~/data-analyses`
 2. Run `python portfolio/portfolio.py build my_report --deploy`
     * The `my_report` will be replaced by the name of your `.yml` file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites).
-    * If you have already deployed but want to make changes to the README, run `python portfolio/portfolio.py build my_report --papermill-no-execute`
+    * If you have already deployed but want to make changes to the README, run: `python portfolio/portfolio.py build my_report --papermill-no-execute`
 
 3. Once this runs, you can check the preview link at the bottom of the output. It should look something like:
     * `–no-deploy`: `file:///home/jovyan/data-analyses/portfolio/my_report/_build/html/index.html`
