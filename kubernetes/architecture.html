@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DAGs Maintenance &#8212; Cal-ITP Data Services</title>
+    <title>architecture &#8212; Cal-ITP Data Services</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -56,8 +56,8 @@
     <script>mermaid.initialize({startOnLoad:true});</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Agency GTFS Feeds" href="agencies.html" />
-    <link rel="prev" title="Production Maintenance" href="production-maintenance.html" />
+    <link rel="next" title="deployment" href="deployment.html" />
+    <link rel="prev" title="JupyterHub" href="JupyterHub.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -411,70 +411,70 @@
    Architecture Overview
   </a>
  </li>
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="overview.html">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../airflow/overview.html">
    Airflow
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
   <label for="toctree-checkbox-8">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul class="current">
-   <li class="toctree-l2">
-    <a class="reference internal" href="local-setup.html">
-     Local Airflow
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="static-schedule-pipeline.html">
-     Static Schedule Pipeline
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="production-maintenance.html">
-     Production Maintenance
-    </a>
-   </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     DAGs Maintenance
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="agencies.html">
-     Agency GTFS Feeds
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="views.html">
-     Creating New Tables (Views)
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../kubernetes/README.html">
-   Kubernetes
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
-  <label for="toctree-checkbox-9">
    <i class="fas fa-chevron-down">
    </i>
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../kubernetes/JupyterHub.html">
-     JupyterHub
+    <a class="reference internal" href="../airflow/local-setup.html">
+     Local Airflow
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../kubernetes/architecture.html">
+    <a class="reference internal" href="../airflow/static-schedule-pipeline.html">
+     Static Schedule Pipeline
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../airflow/production-maintenance.html">
+     Production Maintenance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../airflow/dags-maintenance.html">
+     DAGs Maintenance
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../airflow/agencies.html">
+     Agency GTFS Feeds
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../airflow/views.html">
+     Creating New Tables (Views)
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="README.html">
+   Kubernetes
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="JupyterHub.html">
+     JupyterHub
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
      architecture
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../kubernetes/deployment.html">
+    <a class="reference internal" href="deployment.html">
      deployment
     </a>
    </li>
@@ -654,7 +654,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/airflow/dags-maintenance.md"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/kubernetes/architecture.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -674,10 +674,10 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fairflow/dags-maintenance.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fkubernetes/architecture.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/airflow/dags-maintenance.md"><button
+        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/kubernetes/architecture.md"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -703,109 +703,8 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#gtfs-schedule-dags-maintenance">
-   GTFS Schedule - DAGs Maintenance
+  <a class="reference internal nav-link" href="#id1">
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dags-overview">
-     DAGs Overview
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#common-issues">
-     Common Issues
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#backfilling">
-     Backfilling
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#gtfs-realtime-dags-maintenance">
-   GTFS Realtime - DAGs Maintenance
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id1">
-     DAGs Overview
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#extraction">
-     Extraction
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#logging">
-     Logging
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#validation">
-     Validation
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id2">
-     Backfilling
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#mst-payments-dags-maintenance">
-   MST Payments - DAGs Maintenance
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id3">
-     DAGs Overview
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#adding-new-tables-in-payments-loader">
-     Adding New Tables in payments_loader
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#adding-a-new-table-to-payments-views">
-     Adding a New Table to payments_views
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id4">
-     Backfilling
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#transit-database-dags-maintenance">
-   Transit Database - DAGs Maintenance
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id5">
-     DAGs Overview
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#views-dags-maintenance">
-   Views - DAGs Maintenance
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id6">
-     DAGs Overview
-    </a>
-   </li>
-  </ul>
  </li>
 </ul>
 
@@ -817,7 +716,7 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>DAGs Maintenance</h1>
+                <h1>architecture</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -828,109 +727,8 @@
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#gtfs-schedule-dags-maintenance">
-   GTFS Schedule - DAGs Maintenance
+  <a class="reference internal nav-link" href="#id1">
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dags-overview">
-     DAGs Overview
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#common-issues">
-     Common Issues
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#backfilling">
-     Backfilling
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#gtfs-realtime-dags-maintenance">
-   GTFS Realtime - DAGs Maintenance
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id1">
-     DAGs Overview
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#extraction">
-     Extraction
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#logging">
-     Logging
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#validation">
-     Validation
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id2">
-     Backfilling
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#mst-payments-dags-maintenance">
-   MST Payments - DAGs Maintenance
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id3">
-     DAGs Overview
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#adding-new-tables-in-payments-loader">
-     Adding New Tables in payments_loader
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#adding-a-new-table-to-payments-views">
-     Adding a New Table to payments_views
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id4">
-     Backfilling
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#transit-database-dags-maintenance">
-   Transit Database - DAGs Maintenance
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id5">
-     DAGs Overview
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#views-dags-maintenance">
-   Views - DAGs Maintenance
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id6">
-     DAGs Overview
-    </a>
-   </li>
-  </ul>
  </li>
 </ul>
 
@@ -941,135 +739,12 @@
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="dags-maintenance">
-<h1>DAGs Maintenance<a class="headerlink" href="#dags-maintenance" title="Permalink to this headline">¶</a></h1>
-<p>Use this page to find information on maintenance of the DAGs that support our data pipelines.</p>
-<ol class="simple">
-<li><p><a class="reference internal" href="#gtfs-schedule-dags"><span class="std std-ref">GTFS Schedule DAGs</span></a></p></li>
-<li><p><a class="reference internal" href="#gtfs-realtime-dags"><span class="std std-ref">GTFS Realtime DAGs</span></a></p></li>
-<li><p><a class="reference internal" href="#mst-payments-dags"><span class="std std-ref">MST Payments DAGs</span></a></p></li>
-<li><p><a class="reference internal" href="#transit-database-dags"><span class="std std-ref">Transit Database DAGs</span></a></p></li>
-<li><p><a class="reference internal" href="#views-dags"><span class="std std-ref">Views DAGs</span></a></p></li>
-</ol>
-<div class="section" id="gtfs-schedule-dags-maintenance">
-<span id="gtfs-schedule-dags"></span><h2>GTFS Schedule - DAGs Maintenance<a class="headerlink" href="#gtfs-schedule-dags-maintenance" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="dags-overview">
-<h3>DAGs Overview<a class="headerlink" href="#dags-overview" title="Permalink to this headline">¶</a></h3>
-</div>
-<div class="section" id="common-issues">
-<h3>Common Issues<a class="headerlink" href="#common-issues" title="Permalink to this headline">¶</a></h3>
-</div>
-<div class="section" id="backfilling">
-<h3>Backfilling<a class="headerlink" href="#backfilling" title="Permalink to this headline">¶</a></h3>
-</div>
-</div>
-<div class="section" id="gtfs-realtime-dags-maintenance">
-<span id="gtfs-realtime-dags"></span><h2>GTFS Realtime - DAGs Maintenance<a class="headerlink" href="#gtfs-realtime-dags-maintenance" title="Permalink to this headline">¶</a></h2>
+  <div class="tex2jax_ignore mathjax_ignore section" id="architecture">
+<h1>architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h1>
+<p>This page displays the architecture of our kubernetes enviornment.</p>
 <div class="section" id="id1">
-<h3>DAGs Overview<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<p>Currently, 3 DAGs are used with GTFS RT data:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">rt_loader_files</span></code>: Populates a table called <code class="docutils literal notranslate"><span class="pre">gtfs_rt.calitp_files</span></code> that has one row per
-sample of GTFS RT data. For example, a vehicle positions file downloaded at a specific point in time.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">rt_loader</span></code>: handles the rectangling and loading of GTFS RT and validation data.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">rt_views</span></code>: exposes user-friendly views for analysis.</p></li>
-</ul>
-<p>Internal data should live in the <code class="docutils literal notranslate"><span class="pre">gtfs_rt</span></code> dataset on bigquery, while those that are
-broadly useful across the org should live in <code class="docutils literal notranslate"><span class="pre">views</span></code>.</p>
-</div>
-<div class="section" id="extraction">
-<h3>Extraction<a class="headerlink" href="#extraction" title="Permalink to this headline">¶</a></h3>
-<p>Extraction of GTFS RT feeds is handled by the <a class="reference internal" href="../services/gtfs-rt-archive.html"><span class="doc std std-doc">gtfs-rt-archive service</span></a>. Within the service, <code class="docutils literal notranslate"><span class="pre">agencies.yml</span></code> is read into separate threads and each RT feed is uploaded to a GCPBucketWriter via a post request. This data is stored in a kubernetes cluster <code class="docutils literal notranslate"><span class="pre">data-infra-apps</span></code>.</p>
-</div>
-<div class="section" id="logging">
-<h3>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h3>
-<p>Within the gtfs-rt-archive service, A logger channel is set up with the <code class="docutils literal notranslate"><span class="pre">logging</span></code> facility for Python. If an error is raised within the service, the log messages are also uploaded and stored in the cluster <code class="docutils literal notranslate"><span class="pre">data-infra-apps</span></code>. Within this logger object some of the errors we are currently logging and their associated error levels:</p>
-<ul class="simple">
-<li><p>missing feeds (Warning)</p></li>
-<li><p>missing itp_id (Warning)</p></li>
-<li><p>event dropped (Warning)</p></li>
-<li><p>ticker (Debug)</p></li>
-<li><p>error fetching URL (Info)</p></li>
-</ul>
-<p>Google cloud automatically creates specific buckets called ‘logging buckets’ when a kubernetes cluster is stood up, these are called <code class="docutils literal notranslate"><span class="pre">_Default</span></code> and <code class="docutils literal notranslate"><span class="pre">_Required</span></code>. Cloud Logging provides these two predefined sinks for each Cloud Project. All logs that are generated in a resource are automatically processed through those two sinks and then are stored either in the <code class="docutils literal notranslate"><span class="pre">_Required</span></code> or <code class="docutils literal notranslate"><span class="pre">_Default</span></code> Buckets. <code class="docutils literal notranslate"><span class="pre">_Required</span></code> has retention for 400 days and appears to have mostly audit log functionality for data compliance. We are mostly using _Default which has a retention of 30 days to log all of our cloud services. <code class="docutils literal notranslate"><span class="pre">_Default</span></code> gets updated from the kubernetes cluster in hourly batches. We created a log sink called <code class="docutils literal notranslate"><span class="pre">rt-extract-to-bigquery</span></code> that filters the logs within <code class="docutils literal notranslate"><span class="pre">_Default</span></code> for the namespace <code class="docutils literal notranslate"><span class="pre">resource.labels.namespace_name=&quot;gtfs-rt&quot;</span></code>. To reliably route logs, the log router stores the logs temporarily, which buffers against temporary disruptions on any sink. According to this documentation, the log logging frequency between Cloud Logging and Bigquery is <a class="reference external" href="https://cloud.google.com/logging/docs/export/using_exported_logs#bigquery-frequency">near real-time</a>.</p>
-<p>Within The BigQuery table, the error messages are stored within the stdout table. The table names are generated automatically through the cloud router and cannot be renamed. The stout table is a partitioned table that does not have any limits on storage size currently. See <a class="reference external" href="https://cloud.google.com/logging/docs/routing/overview">Google Cloud Log Router docs</a> for more information. The raw logs may be browsed in the <a class="reference external" href="https://console.cloud.google.com/logs/query?project=cal-itp-data-infra">Logs Explorer</a>.</p>
-</div>
-<div class="section" id="validation">
-<h3>Validation<a class="headerlink" href="#validation" title="Permalink to this headline">¶</a></h3>
-<p>Validation of GTFS RT uses the <a class="reference external" href="https://github.com/cal-itp/gtfs-rt-validator-api">gtfs-rt-validator-api</a>.
-This repo publishes a docker image on every release, so that it can used from a KubernetesPodOperator.
-It allows for fetching GTFS RT and schedule data from our cloud storage, validating, and putting the results
-back into cloud storage.</p>
-<p>Note that the validation process requires two pieces per feed:</p>
-<ul class="simple">
-<li><p>a zipped GTFS Schedule</p></li>
-<li><p>realtime feed data (e.g. vehicle positions, trip updates, service alerts)</p></li>
-</ul>
-</div>
-<div class="section" id="id2">
-<h3>Backfilling<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<p>This DAG does not have any tasks that <code class="docutils literal notranslate"><span class="pre">depends_on_past</span></code>, so you should be able to
-clear and re-run tasks as needed.</p>
-</div>
-</div>
-<div class="section" id="mst-payments-dags-maintenance">
-<span id="mst-payments-dags"></span><h2>MST Payments - DAGs Maintenance<a class="headerlink" href="#mst-payments-dags-maintenance" title="Permalink to this headline">¶</a></h2>
-<p>The ETL is currently a scheduled Google Data Transfer job that transfers all files to <code class="docutils literal notranslate"><span class="pre">gcs://littlepay-data-extract-prod</span></code></p>
-<p>From there, tables are loaded into BigQuery as external tables in the <code class="docutils literal notranslate"><span class="pre">transaction_data</span></code> buclet.</p>
-<div class="section" id="id3">
-<h3>DAGs Overview<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
-<p>The payments data is loaded and transformed in the payments_loader and payments_views dags.</p>
-<p>The payments_loader dag has three kinds of tasks:</p>
-<ul class="simple">
-<li><p>ExternalTable operator tasks (e.g. <code class="docutils literal notranslate"><span class="pre">customer_funding_source</span></code>). These define the underlying data.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">calitp_included_payments_data</span></code> - a table of underlying payments table names defined in the task above.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">preprocessing_columns</span></code> - move data from <code class="docutils literal notranslate"><span class="pre">gs://littlepay-data-extract-prod</span></code> to <code class="docutils literal notranslate"><span class="pre">gs://gtfs-data</span></code>,
-then process to keep only columns defined in external tables.</p></li>
-</ul>
-<p>The payments_views is made of SQL queries that transform the loaded tables above.</p>
-</div>
-<div class="section" id="adding-new-tables-in-payments-loader">
-<h3>Adding New Tables in payments_loader<a class="headerlink" href="#adding-new-tables-in-payments-loader" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li><p>Copy the <code class="docutils literal notranslate"><span class="pre">customer_funding_source</span></code> task. The new task name should match the table it creates.</p></li>
-<li><p>Alter <code class="docutils literal notranslate"><span class="pre">destination_project_dataset_table</span></code> and <code class="docutils literal notranslate"><span class="pre">source_objects</span></code> to match the new table name.</p></li>
-<li><p>Edit <code class="docutils literal notranslate"><span class="pre">schema_fields</span></code> to be the columns in the new table. If you are unsure of a column type,
-specify it as “STRING”.</p>
-<ul>
-<li><p>Keep a <code class="docutils literal notranslate"><span class="pre">calitp_extracted_at</span></code> column at the end of the table. This column contains the execution date of the load task, and is added automatically by the <code class="docutils literal notranslate"><span class="pre">preprocess_columns</span></code> task.</p></li>
-</ul>
-</li>
-<li><p>In the <code class="docutils literal notranslate"><span class="pre">calitp_included_payments_data</span></code> task,</p>
-<ul>
-<li><p>add a row for this new table.</p></li>
-<li><p>add a depedency in yaml header to this new table.</p></li>
-</ul>
-</li>
-<li><p>In the <code class="docutils literal notranslate"><span class="pre">docs/datasets/mst_payments.md</span></code> file, add an entry into the <code class="docutils literal notranslate"><span class="pre">Tables</span></code> table describing the new data set.</p></li>
-</ul>
-</div>
-<div class="section" id="adding-a-new-table-to-payments-views">
-<h3>Adding a New Table to payments_views<a class="headerlink" href="#adding-a-new-table-to-payments-views" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li><p>Ensure your task is given the same name as the table it creates.</p></li>
-<li><p>Be sure to include an <code class="docutils literal notranslate"><span class="pre">external_dependency</span></code> on payments_loader (see other views in payments_views).</p></li>
-</ul>
-</div>
-<div class="section" id="id4">
-<h3>Backfilling<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
-</div>
-</div>
-<div class="section" id="transit-database-dags-maintenance">
-<span id="transit-database-dags"></span><h2>Transit Database - DAGs Maintenance<a class="headerlink" href="#transit-database-dags-maintenance" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id5">
-<h3>DAGs Overview<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
-</div>
-</div>
-<div class="section" id="views-dags-maintenance">
-<span id="views-dags"></span><h2>Views - DAGs Maintenance<a class="headerlink" href="#views-dags-maintenance" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id6">
-<h3>DAGs Overview<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
-</div>
+<h2><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p><img alt="Collection Matrix" src="../_images/kubernetes_architecture.png" /></p>
 </div>
 </div>
 
@@ -1086,7 +761,7 @@ specify it as “STRING”.</p>
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./airflow"
+            path: "./kubernetes"
         },
         predefinedOutput: true
     }
@@ -1098,17 +773,17 @@ specify it as “STRING”.</p>
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="production-maintenance.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="JupyterHub.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Production Maintenance</p>
+            <p class="prev-next-title">JupyterHub</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="agencies.html" title="next page">
+    <a class='right-next' id="next-link" href="deployment.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Agency GTFS Feeds</p>
+        <p class="prev-next-title">deployment</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
