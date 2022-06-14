@@ -45,7 +45,6 @@ parts:
         - file: datasets_and_tables/mst_payments
         - file: datasets_and_tables/transitdatabase
         - file: datasets_and_tables/views
-        - file: datasets_and_tables/tables
       - file: analytics_examples/overview
         sections:
         - file: analytics_examples/warehouse_tutorial

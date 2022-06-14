@@ -5,16 +5,16 @@
 | dataset | description |
 | ------- | ----------- |
 | [(Reference) GTFS-Schedule Data Standard](https://developers.google.com/transit/gtfs/reference#agencytxt) | A reference to the GTFS-Schedule data standard. |
-| [gtfs_schedule](gtfs-schedule) | Latest warehouse data for GTFS Static feeds. See the [GTFS static reference](https://developers.google.com/transit/gtfs/reference). |
-| [gtfs_schedule_type2](gtfs-schedule-type2) | Tables with GTFS Static feeds across history (going back to April 15th, 2021). These are stored as type 2 slowly changing dimensions. They have `calitp_extracted_at`, and `calitp_deleted_at` fields. |
+| [gtfs_schedule](gtfs-schedule) | Latest warehouse data for GTFS-Schedule feeds. See the [GTFS-Schedule reference](https://developers.google.com/transit/gtfs/reference). |
+| [gtfs_schedule_type2](gtfs-schedule-type2) | Tables with GTFS-Static feeds across history (going back to April 15th, 2021). These are stored as type 2 slowly changing dimensions. They have `calitp_extracted_at`, and `calitp_deleted_at` fields. |
 | [(Internal) gtfs_schedule_history](gtfs-schedule-history) | External tables with all new feed data across history. |
 
 ### (Reference) GTFS-Schedule Data Standard - Tables
-A reference to the [GTFS-Schedule data standard](https://developers.google.com/transit/gtfs/reference#agencytxt).
+For background on the tables used in the GTFS-Schedule standard, see the [GTFS-Schedule data standard](https://developers.google.com/transit/gtfs/reference#agencytxt).
 
 (gtfs-schedule)=
 ### gtfs_schedule
-Latest warehouse data for GTFS Static feeds. See the [GTFS static reference](https://developers.google.com/transit/gtfs/reference).
+Latest warehouse data for GTFS Static feeds. See the [GTFS-Schedule reference](https://developers.google.com/transit/gtfs/reference).
 
 |table             |link                                                                                             |
 |------------------|-------------------------------------------------------------------------------------------------|
