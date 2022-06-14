@@ -10,8 +10,11 @@
 | [gtfs_schedule_type2](gtfs-schedule-type2) | Tables with GTFS-Static feeds across history (going back to April 15th, 2021). These are stored as type 2 slowly changing dimensions. They have `calitp_extracted_at`, and `calitp_deleted_at` fields. |
 | [(Internal) gtfs_schedule_history](gtfs-schedule-history) | External tables with all new feed data across history. |
 
-### (Reference) GTFS-Schedule Data Standard - Tables
-For background on the tables used in the GTFS-Schedule standard, see the [GTFS-Schedule data standard](https://developers.google.com/transit/gtfs/reference#agencytxt).
+
+:::{admonition} (Tables Reference) GTFS-Schedule Data Standard
+:class: tip
+For background on the tables used to make up the GTFS-Schedule standard, see this [GTFS-Schedule data standard reference](https://developers.google.com/transit/gtfs/reference#agencytxt).
+:::
 
 (gtfs-schedule-views)=
 ### Views
