@@ -16,7 +16,7 @@ exposures:
     description: Just the shapes as map tiles
 
     depends_on:
-#      - source("hqta_external_tables", "areas")
+      - source("hqta_external_tables", "areas")
       - source("hqta_external_tables", "stops")
 
     owner:
