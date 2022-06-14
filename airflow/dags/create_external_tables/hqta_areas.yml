@@ -1,0 +1,21 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-analytics-data
+source_objects:
+  - "data-analyses/high_quality_transit_areas/export/2022-05-04/ca_hq_transit_areas_wgs84.parquet"
+destination_project_dataset_table: "external_hqta.areas"
+source_format: PARQUET
+schema_fields:
+  - name: calitp_itp_id_primary
+    type: INT64
+  - name: agency_name_primary
+    type: STRING
+  - name: hqta_type
+    type: STRING
+  - name: calitp_itp_id_secondary
+    type: STRING
+    mode: NULLABLE
+  - name: agency_name_secondary
+    type: STRING
+    mode: NULLABLE
+  - name: geometry
+    type: GEOGRAPHY

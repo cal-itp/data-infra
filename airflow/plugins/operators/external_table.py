@@ -162,16 +162,21 @@ class ExternalTable(BaseOperator):
             ]
             fields_spec = ",\n".join(field_strings)
 
+            options = [
+                f'format = "{self.source_format}"',
+                f"uris = {repr(self.source_objects)}",
+            ]
+
+            if self.source_format == "CSV":
+                options.append(f"skip_leading_rows = {self.skip_leading_rows}")
+                options.append(f"field_delimiter = {repr(self.field_delimiter)}")
+
+            options_str = ",".join(options)
             query = f"""
 CREATE OR REPLACE EXTERNAL TABLE `{self.destination_project_dataset_table}` (
     {fields_spec}
 )
-OPTIONS (
-    format = "{self.source_format}",
-    skip_leading_rows = {self.skip_leading_rows},
-    uris = {repr(self.source_objects)},
-    field_delimiter = {repr(self.field_delimiter)}
-)
+OPTIONS ({options_str})
             """
 
             print(query)
