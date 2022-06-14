@@ -16,18 +16,19 @@ Before executing the build, there are a few prior steps you need to do.
 1. Set up netlify key:
     * install netlify: `npm install -g netlify-cli`
     * Navigate to your main directory
-    * Edit your bash profile:
+    * Edit your bash profile using Nano:
         * In your terminal, enter `nano ~/.bash_profile` to edit.
-        * Navigate using arrows (down, right, etc) to paste (`CTRL` + `v`)  in 2 new lines, prefixed with "export"
+        * Navigate using arrows (down, right, etc) to create 2 new lines. Paste (`CTRL` + `V`) your netlify key in the lines in the following format, each line prefixed with "export"
             * `export NETLIFY_AUTH_TOKEN= YOURTOKENHERE123`
             * `export NETLIFY_SITE_ID=cal-itp-data-analyses`
         * To exit, press `CTRL` + `X`
-        * It will ask if you want to save your changes. Type `Y` to save. (sub bullet: Type `N` to discard your changes and exit)
+        * Nano will ask if you want to save your changes. Type `Y` to save.
+            * Type `N` to discard your changes and exit
         * Back in your terminal, enter `env | grep NETLIFY` to see that your Netlify token is there
 
 2. Create a `.yml` file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites). Each `.yml` file is a site, so if you have separate research topics, they should each have their own `.yml` file.
     * This `.yml` file will include the directory to the notebook(s) you want to publish.
-    * Name your `.yml` file (for now we will use `my_report.yml`)
+    * Name your `.yml` file. For now we will use `my_report.yml` as an example.
     * The structure of your `.yml` file depends on the type of your analysis:
         * If you have one parameterized notebook with **one parameter**:
             * Example: [dla.yml](https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/dla.yml)
@@ -103,7 +104,7 @@ Before executing the build, there are a few prior steps you need to do.
 1. Navigate back to the repo data-analyses and install the portfolio requirements with
 `pip install -r portfolio/requirements.txt`
 2. Then run `python portfolio/portfolio.py build my_report` to build your report
-    * The `my_report` will be replaced by the name of your `.yml` file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites).
+    * **Note:** `my_report.yml` will be replaced by the name of your `.yml` file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites).
     * Your build will be located in: `data-analyses/portfolio/my_report/_build/html/index.html`
 4. Add the files using `git add` and commit your progress!
 
@@ -112,8 +113,10 @@ Before executing the build, there are a few prior steps you need to do.
 
 1. Make sure you are in the root of the data-analyses repo: `~/data-analyses`
 2. Run `python portfolio/portfolio.py build my_report --deploy`
-    * The `my_report` will be replaced by the name of your `.yml` file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites).
+    * By running `--deploy`, you are deploying the changes to display in the Analytics Portfolio.
+    * **Note:** The `my_report` will be replaced by the name of your `.yml` file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites).
     * If you have already deployed but want to make changes to the README, run: `python portfolio/portfolio.py build my_report --papermill-no-execute`
+        * Running this is helpful for larger outputs or if you are updating the README.
 
 3. Once this runs, you can check the preview link at the bottom of the output. It should look something like:
     * `–no-deploy`: `file:///home/jovyan/data-analyses/portfolio/my_report/_build/html/index.html`
