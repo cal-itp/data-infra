@@ -28,6 +28,7 @@ def _bq_client_create_external_table(
     schema_fields,
     source_objects,
     source_format,
+    geojson=False,
     hive_options=None,
     bucket=None,
     post_hook=None,
@@ -37,6 +38,9 @@ def _bq_client_create_external_table(
     ext.source_uris = source_objects
     ext.autodetect = True
     ext.ignore_unknown_values = True
+
+    if geojson:
+        ext.json_extension = "GEOJSON"
 
     if hive_options:
         assert (
@@ -111,6 +115,7 @@ class ExternalTable(BaseOperator):
         hive_options=None,
         source_objects=[],
         source_format="CSV",
+        geojson=False,
         use_bq_client=False,
         field_delimiter=",",
         post_hook=None,
@@ -128,6 +133,7 @@ class ExternalTable(BaseOperator):
         self.schema_fields = schema_fields
         self.source_objects = list(map(self.fix_prefix, source_objects))
         self.source_format = source_format
+        self.geojson = geojson
         self.hive_options = hive_options
         self.use_bq_client = use_bq_client
         self.field_delimiter = field_delimiter
@@ -146,6 +152,7 @@ class ExternalTable(BaseOperator):
                 self.schema_fields,
                 self.source_objects,
                 self.source_format,
+                self.geojson,
                 self.hive_options,
                 self.bucket,
                 self.post_hook,
@@ -170,6 +177,9 @@ class ExternalTable(BaseOperator):
             if self.source_format == "CSV":
                 options.append(f"skip_leading_rows = {self.skip_leading_rows}")
                 options.append(f"field_delimiter = {repr(self.field_delimiter)}")
+
+            if self.geojson:
+                options.append("json_extension = 'GEOJSON'")
 
             options_str = ",".join(options)
             query = f"""

@@ -1,9 +1,10 @@
 operator: operators.ExternalTable
 bucket: gs://calitp-analytics-data
 source_objects:
-  - "data-analyses/high_quality_transit_areas/export/2022-05-04/ca_hq_transit_areas_wgs84.parquet"
+  - "data-analyses/high_quality_transit_areas/export/2022-05-04/hqta_areas.geojsonl"
 destination_project_dataset_table: "external_hqta.areas"
-source_format: PARQUET
+source_format: NEWLINE_DELIMITED_JSON
+geojson: True
 schema_fields:
   - name: calitp_itp_id_primary
     type: INT64
