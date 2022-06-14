@@ -9,11 +9,11 @@ models:
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
-            - tts_service_id
+            - tts_key
             - tts_date
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
-            - ct_service_id
+            - ct_key
             - ct_date
   - name: int_tts_organizations_ct_organizations_map
     description: |
@@ -23,9 +23,9 @@ models:
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
-            - tts_organization_id
+            - tts_key
             - tts_date
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
-            - ct_organization_id
+            - ct_key
             - ct_date
