@@ -6,6 +6,7 @@ from datetime import timedelta
 import csv
 
 import pendulum
+from google.cloud import bigquery
 from typing import Optional, Literal, List
 
 from pathlib import Path
@@ -45,6 +46,19 @@ API_KEY = os.environ.get("CALITP_CKAN_GTFS_SCHEDULE_KEY")
 app = typer.Typer()
 
 WGS84 = "EPSG:4326"
+
+
+def make_linestring(x):
+    """
+    This comes from https://github.com/cal-itp/data-analyses/blob/09f3b23c488e7ed1708ba721bf49121a925a8e0b/_shared_utils/shared_utils/geography_utils.py#L190
+
+    It's specific to dim_shapes_geo, so we should update this when we actually start producing geojson
+    """
+    # shapely errors if the array contains only one point
+    if isinstance(x, str) and x:
+        # each point in the array is wkt
+        return shapely.geometry.LineString(map(shapely.wkt.loads, x))
+    return x
 
 
 def _publish_exposure(
@@ -108,41 +122,28 @@ def _publish_exposure(
 
                     geojsonl_fpath = os.path.join(tmpdir, f"{node.name}.geojsonl")
 
-                    df = pd.read_gbq(
-                        str(node.select),
-                        project_id=project,
-                        progress_bar_type="tqdm",
-                    )
+                    client = bigquery.Client(project=project)
+                    # TODO: this is not great
+                    df = client.query(
+                        f"select * from {node.schema_table}"
+                    ).to_geodataframe()
+                    # df = client.query(node.select).to_geodataframe()
                     # typer.secho(
                     #     f"selected {len(df)} rows ({humanize.naturalsize(os.stat(fpath).st_size)}) from {model_name}"
                     # )
-
-                    def make_linestring(x):
-                        """
-                        This comes from https://github.com/cal-itp/data-analyses/blob/09f3b23c488e7ed1708ba721bf49121a925a8e0b/_shared_utils/shared_utils/geography_utils.py#L190
-
-                        It's specific to dim_shapes_geo, so we should update this when we actually start producing geojson
-                        """
-                        # shapely errors if the array contains only one point
-                        if len(x) > 1:
-                            # each point in the array is wkt
-                            # so convert them to shapely points via list comprehension
-                            return shapely.geometry.LineString(
-                                shapely.wkt.loads(i) for i in x
-                            )
-
-                    # apply the function
-                    df["geometry"] = df[destination.geo_column].swifter.apply(
-                        make_linestring
-                    )
+                    df["geometry_to_publish"] = df[
+                        destination.geo_column
+                    ].swifter.apply(make_linestring)
                     gdf = gpd.GeoDataFrame(
                         data=df.drop(destination.geo_column, axis="columns"),
-                        geometry="geometry",
+                        geometry="geometry_to_publish",
                         crs=WGS84,
                     )
                     # gdf = gdf.to_crs(WGS84)
                     if destination.metadata_columns:
-                        gdf = gdf[["geometry"] + destination.metadata_columns]
+                        gdf = gdf[
+                            ["geometry_to_publish"] + destination.metadata_columns
+                        ]
                     gdf.to_file(geojsonl_fpath, driver="GeoJSONSeq")
                     layer_geojson_paths.append(geojsonl_fpath)
                     hive_path = destination.hive_path(exposure, node.name, bucket)

@@ -1,0 +1,31 @@
+version: 2
+
+sources:
+  - name: hqta_external_tables
+    database: cal-itp-data-infra-staging
+    schema: external_hqta
+    tables:
+      - name: areas
+      - name: stops
+
+exposures:
+  - name: hqta_map_tiles
+    type: application
+    maturity: low
+    url: ""
+    description: Just the shapes as map tiles
+
+    depends_on:
+#      - source("hqta_external_tables", "areas")
+      - source("hqta_external_tables", "stops")
+
+    owner:
+      email: eric.d@jarv.us
+
+    meta:
+      destinations:
+        - type: tile_server
+          bucket: gs://calitp-publish
+          format: geojsonl # note that this is the intermediary format
+          url: temporary-placeholder
+          geo_column: geometry
