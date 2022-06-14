@@ -955,8 +955,8 @@ exposures:
 
     meta:
       destinations:
-        - type: tile_server
+        - type: tiles
           bucket: gs://calitp-publish
           format: geojsonl # note that this is the intermediary format
-          url: temporary-placeholder
+          tile_format: mbtiles
           geo_column: pt_array

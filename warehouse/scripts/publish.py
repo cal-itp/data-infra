@@ -35,7 +35,7 @@ from dbt_artifacts import (
     CkanDestination,
     Exposure,
     Manifest,
-    TileServerDestination,
+    TilesDestination, FileFormat, TileFormat,
 )
 from tqdm import tqdm
 
@@ -114,9 +114,8 @@ def _publish_exposure(
                                     files={"upload": fp},
                                 ).raise_for_status()
 
-            elif isinstance(destination, TileServerDestination):
+            elif isinstance(destination, TilesDestination):
                 layer_geojson_paths = []
-                tiles_dir = os.path.join(tmpdir, "tiles")
                 for model in exposure.depends_on.nodes:
                     node = BaseNode._instances[model]
 
@@ -150,25 +149,37 @@ def _publish_exposure(
 
                     if dry_run:
                         typer.secho(
-                            f"would be writing {model} to {hive_path}",
+                            f"would be writing {geojsonl_fpath} to {hive_path}",
                             fg=typer.colors.MAGENTA,
                         )
                     else:
                         fs = gcsfs.GCSFileSystem(token="google_default")
                         fs.put(geojsonl_fpath, hive_path)
 
-                args = [
-                    "tippecanoe",
-                    "-zg",
-                    "-e",
-                    tiles_dir,
-                    *layer_geojson_paths,
-                ]
-                typer.secho(f"running tippecanoe with args {args}")
-                subprocess.run(args).check_returncode()
+                if destination.tile_format == TileFormat.mbtiles:
+                    mbtiles_path = os.path.join(tmpdir, "tiles.mbtiles")
+                    args = [
+                        "tippecanoe",
+                        "-zg",
+                        "-o",
+                        mbtiles_path,
+                        *layer_geojson_paths,
+                    ]
+                    typer.secho(f"running tippecanoe with args {args}")
+                    subprocess.run(args).check_returncode()
 
-                # TODO: upload the output
-                print(f"NEED TO IMPLEMENT UPLOADING {tiles_dir}")
+                    tiles_hive_path = destination.tiles_hive_path(exposure, node.name, bucket)
+                    if dry_run:
+                        typer.secho(
+                            f"would be writing {mbtiles_path} to {tiles_hive_path}",
+                            fg=typer.colors.MAGENTA,
+                        )
+                    else:
+                        fs = gcsfs.GCSFileSystem(token="google_default")
+                        fs.put(mbtiles_path, tiles_hive_path)
+                else:
+                    # -e for this when time
+                    raise NotImplementedError
 
 
 with open("./target/manifest.json") as f:
@@ -186,6 +197,7 @@ class ListOfStrings(BaseModel):
     __root__: List[str]
 
 
+# this is DDP-6
 class MetadataRow(BaseModel):
     dataset_name: str
     tags: ListOfStrings
@@ -231,6 +243,7 @@ class YesOrNo(str, enum.Enum):
     n = "N"
 
 
+# This is DDP-8
 class DictionaryRow(BaseModel):
     system_name: str
     table_name: str

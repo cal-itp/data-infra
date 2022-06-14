@@ -35,6 +35,9 @@ class FileFormat(str, Enum):
     geojsonl = "geojsonl"
     json = "json"
     jsonl = "jsonl"
+
+
+class TileFormat(str, Enum):
     mbtiles = "mbtiles"
     pbf = "pbf"
 
@@ -195,33 +198,51 @@ class GcsDestination(BaseModel):
     def filename(self, model: str):
         return f"{model}.{self.format.value}"
 
+    @property
     def hive_partitions(
-        self, model: str, dt: pendulum.DateTime = pendulum.now()
+        self, dt: pendulum.DateTime = pendulum.now()
     ) -> Tuple[str, str]:
         return (
             f"dt={dt.to_date_string()}",
-            self.filename(model),
         )
 
     def hive_path(self, exposure: "Exposure", model: str, bucket: str):
+        entity_name_parts = [
+            slugify(exposure.name, separator='_'),
+            model,
+        ]
         return os.path.join(
             bucket,
-            f"{slugify(exposure.name, separator='_')}__{model}",
-            *self.hive_partitions(model),
+            "__".join(entity_name_parts),
+            *self.hive_partitions,
+            self.filename(model),
         )
 
 
-class TileServerDestination(GcsDestination):
+class TilesDestination(GcsDestination):
     """
     For tile server destinations, each depends_on becomes
     a tile layer.
     """
-
-    type: Literal["tile_server"]
-    url: str
-    format: FileFormat
+    type: Literal["tiles"]
+    tile_format: TileFormat
     geo_column: str
     metadata_columns: Optional[List[str]]
+
+    def tile_filename(self, model):
+        return f"{model}.{self.tile_format.value}"
+
+    def tiles_hive_path(self, exposure: "Exposure", model: str, bucket: str):
+        entity_name_parts = [
+            slugify(exposure.name, separator='_'),
+            model,
+        ]
+        return os.path.join(
+            bucket,
+            "__".join(entity_name_parts),
+            *self.hive_partitions,
+            self.tile_filename(model),
+        )
 
 
 class CkanDestination(GcsDestination):
@@ -236,7 +257,7 @@ class CkanDestination(GcsDestination):
 
 
 Destination = Annotated[
-    Union[CkanDestination, TileServerDestination, GcsDestination],
+    Union[CkanDestination, TilesDestination, GcsDestination],
     Field(discriminator="type"),
 ]
 
