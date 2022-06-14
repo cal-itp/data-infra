@@ -10,27 +10,27 @@ present in the data-analyses repo is your friend.
 
 You can find the Cal-ITP Analytics Portfolio at [analysis.calitp.org](https://analysis.calitp.org).
 
-## Setup:
+## Setup
 Before executing the build, there are a few prior steps you need to do.
 
 1. Set up netlify key:
     * install netlify: `npm install -g netlify-cli`
     * Navigate to your main directory
     * Edit your bash profile:
-        * enter `vi ~/.bash_profile` in the command line
-        * Type `o` to enter a new line
-        * Once in insert mode, can copy and paste the following keys, prefixing it with "export":
+        * In your terminal, enter `nano ~/.bash_profile` to edit.
+        * Navigate using arrows (down, right, etc) to paste (CTRL + v)  in 2 new lines, prefixed with "export"
             * `export NETLIFY_AUTH_TOKEN= YOURTOKENHERE123`
             * `export NETLIFY_SITE_ID=cal-itp-data-analyses`
-        * Press `ESC` + `:wq` to stop insert mode and to close the vim
-            * note: `ESC` + `dd` gets rid of unwanted lines
-        * In the terminal enter command: `env | grep NETLIFY` to see that your Netlify token is there
+        * To exit, press CTRL + X
+        * It will ask if you want to save your changes. Type `Y` to save. (sub bullet: Type N to discard your changes and exit)
+        * Back in your terminal, enter `env | grep NETLIFY` to see that your Netlify token is there
 
 2. Create a `.yml` file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites). Each `.yml` file is a site, so if you have separate research topics, they should each have their own `.yml` file.
     * This `.yml` file will include the directory to the notebook(s) you want to publish.
-    * Name your `.yml` file
+    * Name your `.yml` file (for now we will use `my_report.yml`)
     * The structure of your `.yml` file depends on the type of your analysis:
         * If you have one parameterized notebook with **one parameter**:
+            * Example: [dla.yml](https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/dla.yml)
 
             ```
             title: My Analyses
@@ -45,6 +45,7 @@ Before executing the build, there are a few prior steps you need to do.
                       district_title: District 1
             ```
          * If you have a parameterized notebook with **multiple parameters**:
+             * Example: [rt.yml](https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/rt.yml)
 
             ```
             title: My Analyses
@@ -61,6 +62,7 @@ Before executing the build, there are a few prior steps you need to do.
                 - city: parameter2_city_name
             ```
          * If you have an individual notebook with **no parameters**:
+             * Example: [hqta.yml](https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/hqta.yml)
 
             ```
             title: My Analyses
@@ -72,8 +74,31 @@ Before executing the build, there are a few prior steps you need to do.
               - notebook: ./my-analyses/notebook_1.ipynb
               - notebook: ./my-analyses/notebook_2.ipynb
             ```
-## Building and Deploying your Report:
-### Build your Report:
+
+        * If you have multiple parameterized notebooks with **the same parameters**:
+            * Example: [rt_parallel.yml](https://github.com/cal-itp/data-analyses/blob/main/portfolio/rt_parallel.yml)
+        ```
+        title: My Analyses
+        directory: ./my-analyses/
+        readme: ./my-analyses/README.md
+        parts:
+        - caption: District Name
+        - chapters:
+          - caption: Parameter 1
+            params:
+              itp_id: parameter_1
+                sections: &sections
+                - notebook: ./analysis_1/notebook_1.ipynb
+                - notebook: ./analysis_2/notebook_2.ipynb
+          - caption: Parameter 2
+            params:
+              itp_id: parameter_2
+                sections: *sections
+        ```
+
+
+## Building and Deploying your Report
+### Build your Report
 **Note:** The build command must be run from the root of the repo!
 1. Navigate back to the repo data-analyses and install the portfolio requirements with
 `pip install -r portfolio/requirements.txt`
@@ -83,19 +108,21 @@ Before executing the build, there are a few prior steps you need to do.
 4. Add the files using `git add` and commit your progress!
 
 
-### Deploy your Report:
+### Deploy your Report
 
 1. Make sure you are in the root of the data-analyses repo: `~/data-analyses`
 2. Run `python portfolio/portfolio.py build my_report --deploy`
     * The `my_report` will be replaced by the name of your `.yml` file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites).
+    * If you have already deployed but want to make changes to the README, run `python portfolio/portfolio.py build my_report --papermill-no-execute`
+
 3. Once this runs, you can check the preview link at the bottom of the output. It should look something like:
-    * `–no-deploy`: `file:///home/jovyan/data-analyses/portfolio/my-analysis/_build/html/index.html`
-    * `–deploy`: `Website Draft URL: https://my-analysis--cal-itp-data-analyses.netlify.app`
+    * `–no-deploy`: `file:///home/jovyan/data-analyses/portfolio/my_report/_build/html/index.html`
+    * `–deploy`: `Website Draft URL: https://my-report--cal-itp-data-analyses.netlify.app`
 4. Add the files using `git add` and commit!
 5. Your notebook should now be displayed in the [Cal-ITP Analytics Portfolio](https://analysis.calitp.org/)
 
 
-### Other Specifications:
+### Other Specifications
  * You also have the option to specify: run `python portfolio/portfolio.py build --help` to see the following options:
      * `--deploy / --no-deploy`
          * deploy this component to netlify.
@@ -109,7 +136,7 @@ Before executing the build, there are a few prior steps you need to do.
          * Default: no-continue-on-error
 
 
-## Adding to the Makefile:
+## Adding to the Makefile
 
 Another way to write to the Analytics Portfolio is to use the Makefile and run
 `make build_my_report -f Makefile` in data-analyses
@@ -119,8 +146,8 @@ Example makefile in [`cal-tip/data-analyses`](https://github.com/cal-itp/data-an
 ```
 build_my_reports:
     pip install -r portfolio/requirements.txt
-    git rm portfolio/my-analyses/ -rf
-    python portfolio/portfolio.py build my-analyses --deploy
-    git add portfolio/my-analyses/district_*/ portfolio/dla/*.yml portfolio/dla/*.md
-    git add portfolio/sites/my-analyses.yml
+    git rm portfolio/my_report/ -rf
+    python portfolio/portfolio.py build my_report --deploy
+    git add portfolio/my_report/district_*/ portfolio/my_report/*.yml portfolio/my_report/*.md
+    git add portfolio/sites/my_report.yml
 ```
