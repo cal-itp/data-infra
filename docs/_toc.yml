@@ -41,7 +41,7 @@ parts:
         sections:
         - file: datasets_and_tables/amplitude
         - file: datasets_and_tables/gtfs_schedule
-        - file: datasets_and_tables/gtfs_rt
+        - file: datasets_and_tables/gtfs_realtime
         - file: datasets_and_tables/mst_payments
         - file: datasets_and_tables/transitdatabase
         - file: datasets_and_tables/views
