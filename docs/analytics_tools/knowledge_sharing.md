@@ -125,7 +125,7 @@ def add_tooltip(chart, tooltip1, tooltip2):
 * [Styling dataframes with HTML.](https://pandas.pydata.org/pandas-docs/stable/user_guide/style.html)
 * [After styling a DataFrame, you will have to access the underlying data with .data](https://stackoverflow.com/questions/56647813/perform-operations-after-styling-in-a-dataframe).
 
-### Ipywidgets
+### ipywidgets
 #### Tabs
 * Create tabs to switch between different views.
 * [Stack Overflow Help.](https://stackoverflow.com/questions/50842160/how-to-display-matplotlib-plots-in-a-jupyter-tab-widget)

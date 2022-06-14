@@ -14,7 +14,7 @@ kernelspec:
 ---
 (helpful-sql-snippets)=
 # Helpful SQL Snippets
-
+For information on how to query SQL in JupyterHub notebooks, refer to [this documentation](querying-sql-jupyterhub).
 ## Fetching historical data for specific dates
 
 Some tables in the warehouse--like those in `gtfs_schedule_type2`--capture the full

@@ -23,7 +23,7 @@ The following libraries are available and recommended for use by Cal-ITP data an
 <br> - [Collect Query Results](#collect-query-results)
 <br> - [Show Query SQL](#show-query-sql)
 <br> - [More siuba Resources](more-siuba-resources)
-1. [shared utils](#shared-utils)
+1. [shared utils](shared-utils)
 1. [pandas](pandas-resources)
 1. [Add New Packages](#add-new-packages)
 
@@ -123,8 +123,9 @@ Note that here the pandas Series method `str.contains` corresponds to `regexp_co
 * [siuba docs](https://siuba.readthedocs.io)
 * ['Tidy Tuesday' live analyses with siuba](https://www.youtube.com/playlist?list=PLiQdjX20rXMHc43KqsdIowHI3ouFnP_Sf)
 
+(shared-utils)=
 ## shared utils
-A set of shared utility functions can also be installed, similarly to any Python library. The [shared_utils](https://github.com/cal-itp/data-analyses/shared_utils) are stored here. Generalized functions for analysis are added as collaborative work evolves so we aren't constantly reinventing the wheel.
+A set of shared utility functions can also be installed, similarly to any Python library. The [shared_utils](https://github.com/cal-itp/data-analyses/tree/main/_shared_utils) are stored here. Generalized functions for analysis are added as collaborative work evolves so we aren't constantly reinventing the wheel.
 
 ```python
 # In terminal:

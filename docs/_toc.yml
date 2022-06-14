@@ -50,10 +50,9 @@ parts:
         - file: analytics_examples/warehouse_tutorial
         - file: analytics_examples/new_tutorial
         - file: analytics_examples/sample-catalog-viewer
-      - file: analytics_publishing/overview
+      - file: publishing/overview
         sections:
-        - file: analytics_publishing/how_to_publish
-        - file: analytics_publishing/where_reports_live
+          - glob: publishing/sections/*
   - caption: Developers
     chapters:
       - file: architecture/architecture_overview
@@ -86,6 +85,7 @@ parts:
         sections:
         - file: services/gtfs-ckan-uploader
         - file: services/gtfs-rt-archive
+      - file: backups/metabase
   - caption: Contribute to the Docs!
     chapters:
       - file: contribute/overview

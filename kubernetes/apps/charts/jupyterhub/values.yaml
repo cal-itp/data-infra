@@ -8,7 +8,7 @@ jupyterhub:
     defaultUrl: "/lab"
     image:
       name: ghcr.io/cal-itp/calitp-py
-      tag: hub-v12
+      tag: hub-v14
     memory:
       # Much more than 10 and we risk bumping up against the actual capacity of e2-highmem-2
       limit: 10G
@@ -37,7 +37,7 @@ jupyterhub:
       GitHubOAuthenticator:
         # client_id:     in existingSecret
         # client_secret: in existingSecret
-        oauth_callback_url: https://hubtest.k8s.calitp.jarv.us/hub/oauth_callback
+        oauth_callback_url: https://notebooks.calitp.org/hub/oauth_callback
         allowed_organizations:
           - cal-itp:warehouse-users
         scope:

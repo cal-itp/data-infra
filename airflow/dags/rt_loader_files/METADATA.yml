@@ -1,4 +1,4 @@
-description: "Download the state of CA GTFS files, async version"
+description: "Loads metadata about RT data, specifically existence of files and code descriptions."
 schedule_interval: "0 0 * * *"
 tags:
   - all_gusty_features

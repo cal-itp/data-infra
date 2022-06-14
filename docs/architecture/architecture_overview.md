@@ -1,5 +1,5 @@
+(architecture-overview)=
 # Architecture Overview
-
 Here is a high-level summary of the Cal-ITP data services architecture.
 
 ```{mermaid}

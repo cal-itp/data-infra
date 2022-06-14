@@ -14,7 +14,10 @@ kernelspec:
 ---
 (datasets-tables)=
 # Datasets & Tables
-Use the links below to navigate to pages that provide more information on individual datasets and tables.
+In general, the [dbt docs site](https://dbt-docs.calitp.org/) should be the main
+source of all documentation for warehouse entities (sources, views, tables,
+"models", etc.) but the following pages contain some not-yet-migrated
+documentation.
 
 | page | description | datasets |
 | ---- | ----------- | -------- |

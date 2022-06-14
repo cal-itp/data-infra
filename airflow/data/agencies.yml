@@ -361,10 +361,10 @@ cudahy-area-rapid-transit:
 culver-citybus:
   agency_name: Culver CityBus
   feeds:
-    - gtfs_schedule_url: https://www.culvercity.org/files/assets/public/documents/information-technology/maps/gtfsexport12-28-21.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+    - gtfs_schedule_url: https://www.culvercity.org/files/assets/public/documents/information-technology/maps/gtfsexport.zip
+      gtfs_rt_vehicle_positions_url: https://nextccbus.org/gtfsrt/vehicles?apiKey={{ CULVER_CITY_API_KEY }}
+      gtfs_rt_service_alerts_url: https://nextccbus.org/gtfsrt/alerts?apiKey={{ CULVER_CITY_API_KEY }}
+      gtfs_rt_trip_updates_url: https://nextccbus.org/gtfsrt/trips?apiKey={{ CULVER_CITY_API_KEY }}
   itp_id: 87
 ladot:
   agency_name: Los Angeles Department of Transportation
@@ -666,9 +666,9 @@ long-beach-transit:
   agency_name: Long Beach Transit
   feeds:
     - gtfs_schedule_url: https://lbtransit.box.com/shared/static/aoyeskwmsa9g7pyg78q3xuioi0lgqe4f.zip
-      gtfs_rt_vehicle_positions_url: http://206.128.158.171/TMGTFSRealTimeWebService/Vehicle/VehiclePositions.pb
-      gtfs_rt_service_alerts_url: http://206.128.158.171/TMGTFSRealTimeWebService/Alert/Alerts.pb
-      gtfs_rt_trip_updates_url: http://206.128.158.171/TMGTFSRealTimeWebService/TripUpdate/TripUpdates.pb
+      gtfs_rt_vehicle_positions_url: https://lbtgtfs.lbtransit.com/TMGTFSRealTimeWebService/Vehicle/VehiclePositions.pb
+      gtfs_rt_service_alerts_url: https://lbtgtfs.lbtransit.com/TMGTFSRealTimeWebService/Alert/Alerts.pb
+      gtfs_rt_trip_updates_url: https://lbtgtfs.lbtransit.com/TMGTFSRealTimeWebService/TripUpdate/TripUpdates.pb
   itp_id: 170
 madera-area-express:
   agency_name: Madera Area Express
@@ -798,9 +798,9 @@ monterey-salinas-transit:
   agency_name: Monterey-Salinas Transit
   feeds:
     - gtfs_schedule_url: http://www.mst.org/google/google_transit.zip
-      gtfs_rt_vehicle_positions_url: http://206.128.158.191/TMGTFSRealTimeWebService/Vehicle/VehiclePositions.pb
-      gtfs_rt_service_alerts_url: http://206.128.158.191/TMGTFSRealTimeWebService/Alert/Alerts.pb
-      gtfs_rt_trip_updates_url: http://206.128.158.191/TMGTFSRealTimeWebService/TripUpdate/TripUpdates.pb
+      gtfs_rt_vehicle_positions_url: https://gtfs.mst.org/TMGTFSRealTimeWebService/Vehicle/VehiclePositions.pb
+      gtfs_rt_service_alerts_url: https://gtfs.mst.org/TMGTFSRealTimeWebService/Alert/Alerts.pb
+      gtfs_rt_trip_updates_url: https://gtfs.mst.org/TMGTFSRealTimeWebService/TripUpdate/TripUpdates.pb
   itp_id: 208
 moorpark-city-transit:
   agency_name: Moorpark City Transit
@@ -901,10 +901,6 @@ omnitrans:
 orange-county-transportation-authority:
   agency_name: Orange County Transportation Authority
   feeds:
-    - gtfs_schedule_url: https://octa.net/current/google_transit.zip
-      gtfs_rt_vehicle_positions_url: https://api.octa.net/GTFSRealTime/protoBuf/VehiclePositions.aspx
-      gtfs_rt_service_alerts_url: https://api.octa.net/GTFSRealTime/protoBuf/servicealerts.aspx
-      gtfs_rt_trip_updates_url: https://api.octa.net/GTFSRealTime/protoBuf/tripupdates.aspx
     - gtfs_schedule_url: https://octa.net/current/google_transit.zip
       gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/octa/gtfs-rt-vehicle-positions
       gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/octa/gtfs-rt-alerts
@@ -1135,8 +1131,8 @@ santa-cruz-metropolitan-transit-district:
 santa-maria-area-transit:
   agency_name: Santa Maria Area Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/smat-ca-us/smat-ca-us.zip
-      gtfs_rt_vehicle_positions_url: null
+    - gtfs_schedule_url: https://smrt.tripshot.com/v1/gtfs.zip?regionId=CA558DDC-D7F2-4B48-9CAC-DEEA1134F820
+      gtfs_rt_vehicle_positions_url: https://smrt.tripshot.com/v1/gtfs/realtime/CA558DDC-D7F2-4B48-9CAC-DEEA1134F820
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 298
@@ -1652,3 +1648,27 @@ west-berkeley-shuttle:
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 365
+lax-flyaway:
+  agency_name: LAX FlyAway
+  feeds:
+    - gtfs_schedule_url: https://www.flylax.com/-/media/flylax/flyaway/gtfs/google_transit.ashx
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
+  itp_id: 165
+anaheim-regional:
+  agency_name: Anaheim Regional Transportation
+  feeds:
+    - gtfs_schedule_url: https://art.tripshot.com/v1/gtfs.zip?regionId=CA558DDC-D7F2-4B48-9CAC-DEEA1134F820
+      gtfs_rt_vehicle_positions_url: https://art.tripshot.com/v1/gtfs/realtime/CA558DDC-D7F2-4B48-9CAC-DEEA1134F820
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
+  itp_id: 14
+city-of-west-hollywood:
+  agency_name: City of West Hollywood
+  feeds:
+    - gtfs_schedule_url: https://www.weho.org/home/showdocument?id=53383&t=637901042129473913
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
+  itp_id: 367

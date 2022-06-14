@@ -20,7 +20,9 @@ def run(
     profiles_dir: Path = os.environ.get("DBT_PROFILES_DIR", os.getcwd()),
     target: str = os.environ.get("DBT_TARGET"),
     dbt_run: bool = True,
-    dbt_test: bool = True,
+    full_refresh: bool = False,
+    dbt_test: bool = False,
+    dbt_freshness: bool = False,
     dbt_docs: bool = False,
     save_artifacts: bool = False,
     deploy_docs: bool = False,
@@ -51,7 +53,11 @@ def run(
         return cmd
 
     if dbt_run:
-        subprocess.run(get_command("run")).check_returncode()
+        args = ["run"]
+
+        if full_refresh:
+            args.append("--full-refresh")
+        subprocess.run(get_command(*args)).check_returncode()
     else:
         typer.echo("skipping run, only compiling")
         subprocess.run(get_command("compile")).check_returncode()
@@ -60,6 +66,11 @@ def run(
         test_result = subprocess.run(get_command("test"))
     else:
         test_result = None
+
+    if dbt_freshness:
+        freshness_result = subprocess.run(get_command("source", "snapshot-freshness"))
+    else:
+        freshness_result = None
 
     if dbt_docs:
         subprocess.run(get_command("docs", "generate")).check_returncode()
@@ -125,6 +136,9 @@ def run(
 
     if test_result:
         test_result.check_returncode()
+
+    if freshness_result:
+        freshness_result.check_returncode()
 
 
 if __name__ == "__main__":
