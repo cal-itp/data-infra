@@ -77,24 +77,24 @@ Before executing the build, there are a few prior steps you need to do.
 
         * If you have multiple parameterized notebooks with **the same parameters**:
             * Example: [rt_parallel.yml](https://github.com/cal-itp/data-analyses/blob/main/portfolio/rt_parallel.yml)
-        ```
-        title: My Analyses
-        directory: ./my-analyses/
-        readme: ./my-analyses/README.md
-        parts:
-        - caption: District Name
-        - chapters:
-          - caption: Parameter 1
-            params:
-              itp_id: parameter_1
-                sections: &sections
-                - notebook: ./analysis_1/notebook_1.ipynb
-                - notebook: ./analysis_2/notebook_2.ipynb
-          - caption: Parameter 2
-            params:
-              itp_id: parameter_2
-                sections: *sections
-        ```
+            ```
+            title: My Analyses
+            directory: ./my-analyses/
+            readme: ./my-analyses/README.md
+            parts:
+            - caption: District Name
+            - chapters:
+              - caption: Parameter 1
+                params:
+                  itp_id: parameter_1
+                    sections: &sections
+                    - notebook: ./analysis_1/notebook_1.ipynb
+                    - notebook: ./analysis_2/notebook_2.ipynb
+              - caption: Parameter 2
+                params:
+                  itp_id: parameter_2
+                    sections: *sections
+            ```
 
 
 ## Building and Deploying your Report
@@ -141,7 +141,7 @@ Before executing the build, there are a few prior steps you need to do.
 Another way to write to the Analytics Portfolio is to use the Makefile and run
 `make build_my_report -f Makefile` in data-analyses
 
-Example makefile in [`cal-tip/data-analyses`](https://github.com/cal-itp/data-analyses/blob/main/Makefile):
+Example makefile in [`cal-itp/data-analyses`](https://github.com/cal-itp/data-analyses/blob/main/Makefile):
 
 ```
 build_my_reports:
