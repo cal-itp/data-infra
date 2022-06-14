@@ -19,8 +19,8 @@ Use the links below to navigate to pages that provide more information on indivi
 | page | description | datasets |
 | ---- | ----------- | -------- |
 | [Amplitude](./amplitude.md) | Data from Amplitude API for Benefits app | `amplitude.benefits_events `, `views.amplitude_benefits_events` |
-| [GTFS Schedule](./gtfs_schedule.md) | GTFS Schedule data for the current day | `gtfs_schedule`, `gtfs_schedule_history`, `gtfs_schedule_type2` |
-| [GTFS Realtime](./gtfs_rt.md) | GTFS Realtime data, collected every 20 seconds | `gtfs_rt`, `views.gtfs_rt_*` |
+| [GTFS-Schedule](./gtfs_schedule.md) | GTFS Schedule data for the current day | `gtfs_schedule`, `gtfs_schedule_history`, `gtfs_schedule_type2` |
+| [GTFS-Realtime](gtfs-realtime) | GTFS Realtime data, collected every 20 seconds | `gtfs_rt`, `views.gtfs_rt_*` |
 | [MST Payments](./mst_payments.md) | TODO | TODO |
 | [Transit Database](./transitdatabase.md) | A representation of Cal-ITP's internal knowledge about our Transit Operators in CA and various pieces of National Transit Database statistics for ease of use | `airtable` (internal access only), `views.airtable_*` |
 
