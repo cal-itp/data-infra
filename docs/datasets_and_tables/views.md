@@ -1,5 +1,7 @@
 # Views
 
+End-user friendly data for dashboards and metrics
+
 ## Data
 
 |Table                                                    |Description|Link                                                                                                                                    |
