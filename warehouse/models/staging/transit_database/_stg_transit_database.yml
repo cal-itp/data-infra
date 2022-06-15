@@ -4,44 +4,49 @@ models:
   - name: stg_transit_database__components
     description: '{{ doc("components_table") }}'
     columns:
-      - name: key
+      - &key
+        name: key
         tests: &primary_key_tests
           - not_null
           - unique
+      - &name
+        name: name
+        tests:
+          - not_null:
+              severity: warn
   - name: stg_transit_database__contracts
     description: '{{ doc("contracts_table") }}'
     columns:
-      - name: key
-        tests: *primary_key_tests
+      - *key
+      - *name
   - name: stg_transit_database__products
     description: '{{ doc("products_table") }}'
     columns:
-      - name: key
-        tests: *primary_key_tests
+      - *key
+      - *name
   - name: stg_transit_database__service_components
     description: '{{ doc("service_components_table") }}'
     columns:
-      - name: key
-        tests: *primary_key_tests
+      - *key
+      - *name
   - name: stg_transit_database__relationships_service_components
     description: |
       Service/component relationship data.
   - name: stg_transit_database__data_schemas
     description: '{{ doc("data_schemas_table") }}'
     columns:
-      - name: key
-        tests: *primary_key_tests
+      - *key
+      - *name
   - name: stg_transit_database__organizations
     description: '{{ doc("organizations_table") }}'
     columns:
-      - name: key
-        tests: *primary_key_tests
+      - *key
   - name: stg_transit_database__services
     description: '{{ doc("services_table") }}'
     columns:
-      - name: key
-        tests: *primary_key_tests
+      - *key
+      - *name
   - name: stg_transit_database__properties_and_features
     columns:
-      - name: key
-        tests: *primary_key_tests
+      - *key
+      - *name

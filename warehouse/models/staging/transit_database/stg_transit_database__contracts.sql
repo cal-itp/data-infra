@@ -32,7 +32,7 @@ mapped_holder_ids AS (
 stg_transit_database__contracts AS (
     SELECT
         contract_id AS key,
-        name,
+        {{ trim_make_empty_string_null(column_name = "name") }},
         contract_type_functional_category,
         contract_type_functions,
         map.contract_holder AS contract_holder_organization_key,

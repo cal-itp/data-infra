@@ -11,7 +11,7 @@ latest AS (
 stg_transit_database__organizations AS (
     SELECT
         organization_id AS key,
-        name,
+        {{ trim_make_empty_string_null(column_name = "name") }},
         organization_type,
         roles,
         itp_id,

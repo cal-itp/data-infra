@@ -11,7 +11,7 @@ latest AS (
 stg_transit_database__properties_and_features AS (
     SELECT
         property_feature_id AS key,
-        name,
+        {{ trim_make_empty_string_null(column_name = "name") }},
         recommended_value,
         considerations,
         details,
