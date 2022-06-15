@@ -1,4 +1,4 @@
-(publishing-principles=)
+(publishing-principles)=
 # Data Publishing Principles
 
 ## Follow prior art
