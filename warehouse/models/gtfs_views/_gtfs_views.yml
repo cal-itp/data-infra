@@ -960,3 +960,5 @@ exposures:
           format: geojsonl # note that this is the intermediary format
           tile_format: mbtiles
           geo_column: pt_array
+          layer_names:
+            - GTFS Schedule Shapes (Latest)

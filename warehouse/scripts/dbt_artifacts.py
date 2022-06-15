@@ -12,7 +12,7 @@ from sqlalchemy.sql import Select
 from typing import Annotated, Any, ClassVar, Dict, List, Literal, Optional, Union
 
 import pendulum
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 from sqlalchemy import create_engine, MetaData, Table, select
 
 
@@ -227,6 +227,7 @@ class TilesDestination(GcsDestination):
     tile_format: TileFormat
     geo_column: str
     metadata_columns: Optional[List[str]]
+    layer_names: List[str]
 
     def tile_filename(self, model):
         return f"{model}.{self.tile_format.value}"
@@ -234,7 +235,9 @@ class TilesDestination(GcsDestination):
     def tiles_hive_path(self, exposure: "Exposure", model: str, bucket: str):
         entity_name_parts = [
             slugify(exposure.name, separator="_"),
-            model,
+            # TODO: we should probably exclude this since 1 mbtiles is output per _exposure_
+            # model,
+            self.tile_format.value,
         ]
         return os.path.join(
             bucket,
@@ -275,8 +278,20 @@ class Exposure(BaseModel):
     description: str
     type: ExposureType
     url: Optional[str]
+    # TODO: we should validate that model names do not conflict with
+    #  file format names since they are used as entity names in hive partitions
     depends_on: NodeDeps
     meta: Optional[ExposureMeta]
+
+    @validator("meta")
+    def must_provide_layer_names_if_tiles(cls, v, values):
+        if v:
+            for dest in v.destinations:
+                if isinstance(dest, TilesDestination):
+                    assert len(dest.layer_names) == len(
+                        values["depends_on"].nodes
+                    ), "must provide one layer name per depends_on"
+        return v
 
 
 class Manifest(BaseModel):

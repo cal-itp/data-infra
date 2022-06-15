@@ -31,3 +31,6 @@ exposures:
           format: geojsonl # note that this is the intermediary format
           tile_format: mbtiles
           geo_column: geometry
+          layer_names:
+            - High Quality Transit Areas
+            - High Quality Transit Stops

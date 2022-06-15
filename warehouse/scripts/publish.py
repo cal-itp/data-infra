@@ -7,7 +7,7 @@ import csv
 
 import pendulum
 from google.cloud import bigquery
-from typing import Optional, Literal, List
+from typing import Optional, Literal, List, Dict
 
 from pathlib import Path
 
@@ -116,7 +116,7 @@ def _publish_exposure(
                                 ).raise_for_status()
 
             elif isinstance(destination, TilesDestination):
-                layer_geojson_paths = []
+                layer_geojson_paths: Dict[str, Path] = {}
                 for model in exposure.depends_on.nodes:
                     node = BaseNode._instances[model]
 
@@ -145,7 +145,7 @@ def _publish_exposure(
                             ["geometry_to_publish"] + destination.metadata_columns
                         ]
                     gdf.to_file(geojsonl_fpath, driver="GeoJSONSeq")
-                    layer_geojson_paths.append(geojsonl_fpath)
+                    layer_geojson_paths[node.name.title()] = geojsonl_fpath
                     hive_path = destination.hive_path(exposure, node.name, bucket)
 
                     if dry_run:
@@ -164,7 +164,10 @@ def _publish_exposure(
                         "-zg",
                         "-o",
                         mbtiles_path,
-                        *layer_geojson_paths,
+                        *[
+                            f"--named-layer={layer}:{path}"
+                            for layer, path in layer_geojson_paths.items()
+                        ],
                     ]
                     typer.secho(f"running tippecanoe with args {args}")
                     subprocess.run(args).check_returncode()
