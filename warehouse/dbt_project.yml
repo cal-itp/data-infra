@@ -49,9 +49,6 @@ models:
     staging:
       schema: staging
 
-    staging:
-      schema: staging
-
     mart:
       transit_database:
         schema: mart_transit_database
