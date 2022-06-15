@@ -35,7 +35,8 @@ from dbt_artifacts import (
     CkanDestination,
     Exposure,
     Manifest,
-    TilesDestination, FileFormat, TileFormat,
+    TilesDestination,
+    TileFormat,
 )
 from tqdm import tqdm
 
@@ -168,7 +169,9 @@ def _publish_exposure(
                     typer.secho(f"running tippecanoe with args {args}")
                     subprocess.run(args).check_returncode()
 
-                    tiles_hive_path = destination.tiles_hive_path(exposure, node.name, bucket)
+                    tiles_hive_path = destination.tiles_hive_path(
+                        exposure, node.name, bucket
+                    )
                     if dry_run:
                         typer.secho(
                             f"would be writing {mbtiles_path} to {tiles_hive_path}",

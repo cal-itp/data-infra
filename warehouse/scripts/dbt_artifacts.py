@@ -9,7 +9,7 @@ from enum import Enum
 from pathlib import Path
 from slugify import slugify
 from sqlalchemy.sql import Select
-from typing import Annotated, Any, ClassVar, Dict, List, Literal, Optional, Tuple, Union
+from typing import Annotated, Any, ClassVar, Dict, List, Literal, Optional, Union
 
 import pendulum
 from pydantic import BaseModel, Field
@@ -199,16 +199,14 @@ class GcsDestination(BaseModel):
         return f"{model}.{self.format.value}"
 
     @property
-    def hive_partitions(
-        self, dt: pendulum.DateTime = pendulum.now()
-    ) -> Tuple[str, str]:
-        return (
+    def hive_partitions(self, dt: pendulum.DateTime = pendulum.now()) -> List[str]:
+        return [
             f"dt={dt.to_date_string()}",
-        )
+        ]
 
     def hive_path(self, exposure: "Exposure", model: str, bucket: str):
         entity_name_parts = [
-            slugify(exposure.name, separator='_'),
+            slugify(exposure.name, separator="_"),
             model,
         ]
         return os.path.join(
@@ -224,6 +222,7 @@ class TilesDestination(GcsDestination):
     For tile server destinations, each depends_on becomes
     a tile layer.
     """
+
     type: Literal["tiles"]
     tile_format: TileFormat
     geo_column: str
@@ -234,7 +233,7 @@ class TilesDestination(GcsDestination):
 
     def tiles_hive_path(self, exposure: "Exposure", model: str, bucket: str):
         entity_name_parts = [
-            slugify(exposure.name, separator='_'),
+            slugify(exposure.name, separator="_"),
             model,
         ]
         return os.path.join(
