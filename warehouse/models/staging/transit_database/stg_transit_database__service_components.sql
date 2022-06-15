@@ -26,7 +26,7 @@ mapped_service_ids AS (
 stg_transit_database__service_components AS (
     SELECT
         service_component_id AS key,
-        name,
+        {{ trim_make_empty_string_null(column_name = "name") }},
         ntd_certified,
         product_component_valid,
         notes,
