@@ -5,7 +5,9 @@ models:
     description: |
       Mapping between two instances of synced `services` table in Airtable;
       one copy in California Transit base and the other in Transit
-      Technology Stacks base.
+      Technology Stacks base. Different Airtable internal record IDs
+      are assigned in each instance so this table maps the IDs between
+      instances, using `name` (Airtable primary field) to join.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -18,7 +20,9 @@ models:
     description: |
       Mapping between two instances of synced `organization` table in Airtable;
       one copy in California Transit base and the other in Transit
-      Technology Stacks base.
+      Technology Stacks base. Different Airtable internal record IDs
+      are assigned in each instance so this table maps the IDs between
+      instances, using `name` (Airtable primary field) to join.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:

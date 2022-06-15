@@ -11,7 +11,7 @@ latest AS (
 stg_transit_database__services AS (
     SELECT
         service_id AS key,
-        name,
+        {{ trim_make_empty_string_null(column_name = "name") }},
         service_type,
         mode,
         currently_operating,
