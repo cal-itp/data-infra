@@ -3,13 +3,13 @@ WITH
 ct_organizations AS (
     SELECT *
     FROM {{ source('airtable', 'california_transit__organizations') }}
-    WHERE TRIM(name) <> ""
+    WHERE TRIM(name) != ""
 ),
 
 tts_organizations AS (
     SELECT *
     FROM {{ source('airtable', 'transit_technology_stacks__organizations') }}
-    WHERE TRIM(name) <> ""
+    WHERE TRIM(name) != ""
 ),
 
 int_tts_organizations_ct_organizations_map AS (
