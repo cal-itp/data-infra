@@ -4,25 +4,23 @@ models:
   - name: dim_components
     description: '{{ doc("components_table") }}'
     columns:
-      - name: key
+      - &key
+        name: key
         tests: &primary_key_tests
           - not_null
           - unique
   - name: dim_contracts
     description: '{{ doc("contracts_table") }}'
     columns:
-      - name: key
-        tests: *primary_key_tests
+      - *key
   - name: dim_data_schemas
     description: '{{ doc("data_schemas_table") }}'
     columns:
-      - name: key
-        tests: *primary_key_tests
+      - *key
   - name: dim_organizations
     description: '{{ doc("organizations_table") }}'
     columns:
-      - name: key
-        tests: *primary_key_tests
+      - *key
       - name: name
         description: Organization name
       - name: organization_type
@@ -42,8 +40,7 @@ models:
   - name: dim_services
     description: '{{ doc("services_table") }}'
     columns:
-      - name: key
-        tests: *primary_key_tests
+      - *key
       - name: name
         description: Service name
       - name: service_type
@@ -60,19 +57,16 @@ models:
   - name: dim_products
     description: '{{ doc("products_table") }}'
     columns:
-      - name: key
-        tests: *primary_key_tests
+      - *key
   - name: dim_properties_and_features
     columns:
-      - name: key
-        tests: *primary_key_tests
+      - *key
   - name: dim_contract_attachments
     description: |
       Attachment links to images of contracts.
       One contract can have multiple attachments.
     columns:
-      - name: key
-        tests: *primary_key_tests
+      - *key
   - name: map_components_x_products
     description: |
       Mapping table between components and products.
