@@ -82,5 +82,6 @@ def get_successfully_downloaded_feeds(execution_date):
 
 
 def make_name_bq_safe(name: str):
-    """Replace non-word characters."""
+    """Replace non-word characters.
+    See: https://cloud.google.com/bigquery/docs/reference/standard-sql/lexical#identifiers."""
     return str.lower(re.sub("[^\w]", "_", name))  # noqa: W605
