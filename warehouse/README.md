@@ -14,13 +14,20 @@ This dbt project is intended to be the source of truth for the cal-itp-data-infr
 ### Install the Google SDK (if you haven't)
 0. Implied: make sure that you have GCP permissions (i.e. that someone has added you to the GCP project)
 1. Follow the installation instructions at https://cloud.google.com/sdk/docs/install
-2. You must also [authorize](https://cloud.google.com/sdk/docs/authorizing) and [set the application default](https://cloud.google.com/sdk/gcloud/reference/auth/application-default)
+   1. Use `tar -xvf <drag file from Finder window to get file name> ~` to unzip into your home directory
+   2. Answer `yes` to adding the tool to your path
+   3. Most recent macOS versions use `zsh` as the default shell, so ensure the path modification is added to `~/.zshrc` when prompted
+   4. Restart your terminal, and run `gcloud init`
+   5. Answer `yes` to log in, and select the Google account associated with GCP
+   6. Set `cal-itp-data-infra` as the default project, and do not set a region
+2. You should also set the [set the application default](https://cloud.google.com/sdk/gcloud/reference/auth/application-default)
 3. If `bq ls` shows output, you are good to go.
 
 
 ### Install poetry and Python/dbt dependencies
-1. Install poetry (used for package/dependency management). You can try as described in the [poetry docs](https://python-poetry.org/docs/#osx--linux--bashonwindows-install-instructions) -- this has not worked for some of us; we have had to run `python3 -m pip install poetry`. **Note: If you have to `pip install` poetry, then in all the commands below, you will need to prefix them with `python3 -m`. So the `poetry install` command becomes `python3 -m poetry install`.**
-2. Navigate into the `data-infra/warehouse` directory and run the following commands:
+1. Install [poetry](https://python-poetry.org/docs/#osx--linux--bashonwindows-install-instructions) (used for package/dependency management).
+   1. Answer `yes` to adding the tool to your path
+2. Restart your terminal and confirm `poetry --version` works.
 3. `poetry install` to create a virtual environment and install requirements
    1. If this doesn’t work because of an error with Python version, you may need to install Python 3.9
    2. `brew install python@3.9`
