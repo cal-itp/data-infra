@@ -1,7 +1,16 @@
+# https://pydantic-docs.helpmanual.io/usage/postponed_annotations/#self-referencing-models
+from __future__ import annotations
+
+import base64
+import os
 import pandas as pd
+import pendulum
+from enum import Enum
 
 from calitp import read_gcfs, save_to_gcfs
 from pandas.errors import EmptyDataError
+from pydantic import BaseModel, HttpUrl
+from typing import Tuple, Optional
 
 
 def _keep_columns(
@@ -78,3 +87,39 @@ def get_successfully_downloaded_feeds(execution_date):
     status = pd.read_csv(f)
 
     return status[lambda d: d.status == "success"]
+
+
+# TODO: consider moving this to calitp-py or some other more shared location
+class GTFSFeedType(str, Enum):
+    schedule = "schedule"
+    rt_service_alerts = "service_alerts"
+    rt_trip_updates = "trip_updates"
+    rt_vehicle_positions = "vehicle_positions"
+
+
+class GTFSFeed(BaseModel):
+    type: GTFSFeedType
+    url: HttpUrl
+    schedule_feed: Optional[GTFSFeed]
+    auth_query_param: Optional[str]
+    auth_header: Optional[str]
+
+    @property
+    def encoded_url(self) -> str:
+        return base64.urlsafe_b64encode(self.url.encode())
+
+    # ideally this would be a property
+    # but how/when will datetime be populated...?
+    def hive_partitions(self, datetime: pendulum.DateTime) -> Tuple[str, str, str]:
+        return (
+            f"dt={datetime.to_date_string()}",
+            f"time={datetime.to_time_string()}",
+            f"feed={self.encoded_url}",
+        )
+
+    def data_hive_path(self, bucket: str, datetime: pendulum.DateTime):
+        return os.path.join(
+            bucket,
+            self.type,
+            *self.hive_partitions(datetime),
+        )
