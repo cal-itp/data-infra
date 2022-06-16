@@ -1,9 +1,10 @@
 operator: operators.ExternalTable
 bucket: gs://analysis-output-models
 source_objects:
-  - "high_quality_transit_areas_stops/dt=2022-05-04/*.parquet"
+  - "high_quality_transit_areas_stops/dt=2022-05-04/*.geojsonl"
 destination_project_dataset_table: "external_hqta.stops"
-source_format: PARQUET
+source_format: NEWLINE_DELIMITED_JSON
+geojson: True
 schema_fields:
   - name: calitp_itp_id_primary
     type: INT64
