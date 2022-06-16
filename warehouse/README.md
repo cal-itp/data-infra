@@ -37,16 +37,19 @@ This dbt project is intended to be the source of truth for the cal-itp-data-infr
 ### Install poetry and Python/dbt dependencies
 1. Install [poetry](https://python-poetry.org/docs/#osx--linux--bashonwindows-install-instructions) (used for package/dependency management).
    1. If `curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -`
-      does not work, you can `curl` to a file `curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py`
+      does not work, you can `curl` to a file `curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py -o get-poetry.py`
       and then execute the file with `python get-poetry.py`.
    2. Answer `yes` to adding the tool to your path
 2. Restart your terminal and confirm `poetry --version` works.
 3. `poetry install` to create a virtual environment and install requirements
    1. Now would be the time to [clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
       the `data-infra` repo if you haven't already. Use [SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account),
-      not HTTPS.
+      not HTTPS. If you haven't made a folder/directory for your git repos yet,
+      you can create one with `mkdir git` (within your home directory, usually).
    2. This needs to be run from within the `warehouse/` directory; you may need
-      to `cd` to it via `cd <git-repos-path>/data-infra/warehouse/` or similar.
+      to `cd` to it via `cd <git-repos-path>/data-infra/warehouse/` or similar;
+      for example, if you had created your directory with `mkdir git`, you will
+      navigate to the warehouse directory with `cd git/data-infra/warehouse/`.
    3. If this doesn’t work because of an error with Python version, you may need to install Python 3.9
    4. `brew install python@3.9`
    5. `brew link python@3.9`
@@ -55,7 +58,14 @@ This dbt project is intended to be the source of truth for the cal-itp-data-infr
 
 ### Initialize your dbt profiles.yml
 1. `poetry run dbt init` inside `warehouse/` will create a `.dbt/` directory in your home directory and a `.dbt/profiles.yml` file.
-2. Fill out your `~/.dbt/profiles.yml` with the following content.
+2. You can enable [displaying hidden folders/files in macOS Finder](https://www.macworld.com/article/671158/how-to-show-hidden-files-on-a-mac.html)
+   but generally, we recommend using the terminal when possible for editing
+   these files. Generally, `nano ~/.dbt/profiles.yml` will be the easiest method
+   for editing your personal profiles file. `nano` is a simple terminal-based
+   text editor; you use the arrows keys to navigate and the hotkeys displayed
+   at the bottom to save and exit. Reading an [online tutorial](https://www.howtogeek.com/howto/42980/the-beginners-guide-to-nano-the-linux-command-line-text-editor/)
+   may be useful if you haven't used a terminal-based editor before.
+3. Fill out your `~/.dbt/profiles.yml` with the following content.
 ```yaml
 calitp_warehouse:
   target: dev
@@ -71,7 +81,7 @@ calitp_warehouse:
       timeout_seconds: 300
       type: bigquery
 ```
-3. See [the dbt docs on profiles.yml](https://docs.getdbt.com/dbt-cli/configure-your-profile) for more background on this file.
+4. See [the dbt docs on profiles.yml](https://docs.getdbt.com/dbt-cli/configure-your-profile) for more background on this file.
 
 ## Running the project locally
 
