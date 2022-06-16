@@ -7,11 +7,15 @@ import pandas as pd
 import re
 import pendulum
 from enum import Enum
+from requests import Request
+import logging
 
 from calitp import read_gcfs, save_to_gcfs
 from pandas.errors import EmptyDataError
-from pydantic import BaseModel, HttpUrl
-from typing import Tuple, Optional
+from pydantic import AnyUrl, BaseModel, ValidationError, validator
+from typing import ClassVar, Dict, List, Tuple, Optional
+
+GTFS_FEED_LIST_ERROR_THRESHOLD = 0.95
 
 def make_name_bq_safe(name: str):
     """Replace non-word characters.
@@ -96,34 +100,106 @@ def get_successfully_downloaded_feeds(execution_date):
 # TODO: consider moving this to calitp-py or some other more shared location
 class GTFSFeedType(str, Enum):
     schedule = "schedule"
-    rt_service_alerts = "service_alerts"
-    rt_trip_updates = "trip_updates"
-    rt_vehicle_positions = "vehicle_positions"
+    rt = "rt"
+
+
+class GTFSRTFeedType(str, Enum):
+    service_alerts = "service_alerts"
+    trip_updates = "trip_updates"
+    vehicle_positions = "vehicle_positions"
+
+
+class DuplicateURLError(ValueError):
+    pass
 
 
 class GTFSFeed(BaseModel):
+    _instances: ClassVar[Dict[str, "GTFSFeed"]] = {}
     type: GTFSFeedType
-    url: HttpUrl
-    schedule_feed: Optional[GTFSFeed]
-    auth_query_param: Optional[str]
-    auth_header: Optional[str]
+    url: AnyUrl
+    rt_type: Optional[GTFSRTFeedType]
+    schedule_url: Optional[AnyUrl]
+    # key is auth param name in URL, value is name of secret where API key is stored
+    auth_query_param: Optional[Dict[str, str]]
+    # key is auth param name in header, value is name of secret where API key is stored
+    auth_header: Optional[Dict[str, str]]
+
+    def __init__(self, **kwargs):
+        super(GTFSFeed, self).__init__(**kwargs)
+        self._instances[self.url] = self
 
     @property
-    def encoded_url(self) -> str:
-        return base64.urlsafe_b64encode(self.url.encode())
+    def schedule_feed(self):
+        return self._instances[self.schedule_url]
 
-    # ideally this would be a property
-    # but how/when will datetime be populated...?
-    def hive_partitions(self, datetime: pendulum.DateTime) -> Tuple[str, str, str]:
+    @property
+    def base64_encoded_url(self) -> str:
+        # see: https://docs.python.org/3/library/base64.html#base64.urlsafe_b64encode
+        # we care about replacing slashes for GCS object names
+        # can use: https://www.base64url.com/ to test encoding/decoding
+        # convert in bigquery: https://cloud.google.com/bigquery/docs/reference/standard-sql/string_functions#from_base64
+        return base64.urlsafe_b64encode(self.url.encode()).decode()
+
+    @validator("url")
+    def urls_must_be_unique(cls, v):
+        if v in cls._instances:
+            raise DuplicateURLError(v)
+        return v
+
+    # @validator
+    # def rt_type_defined(self):
+    #     assert
+
+    def build_request(self, auth_dict: dict) -> Request:
+        filled_auth_params = {k: auth_dict(v) for k, v in self.auth_query_param.items()}
+        filled_auth_headers = {k: auth_dict(v) for k, v in self.auth_header.items()}
+        # inspired by: https://stackoverflow.com/questions/18869074/create-url-without-request-execution
+        return Request(
+            "GET", url=self.url, params=filled_auth_params, headers=filled_auth_headers
+        )
+
+
+class GTFSExtract(BaseModel):
+    feed: GTFSFeed
+    download_time: pendulum.DateTime
+
+    @property
+    def hive_partitions(self) -> Tuple[str, str, str]:
         return (
-            f"dt={datetime.to_date_string()}",
-            f"time={datetime.to_time_string()}",
-            f"feed={self.encoded_url}",
+            f"dt={self.download_time.to_date_string()}",
+            f"base64_url={self.feed.encoded_url}",
+            f"time={self.download_time.to_time_string()}",
         )
 
-    def data_hive_path(self, bucket: str, datetime: pendulum.DateTime):
-        return os.path.join(
-            bucket,
-            self.type,
-            *self.hive_partitions(datetime),
-        )
+    def data_hive_path(self, bucket: str):
+        return os.path.join(bucket, self.feed.type, *self.hive_partitions())
+
+
+class GTFSFeedDownloadList(BaseModel):
+    feeds: List[GTFSFeed]
+
+    def get_feeds_by_type(self, type: GTFSFeedType) -> List[GTFSFeed]:
+        return [feed for feed in self.feeds if feed.type == type]
+
+    # TODO: return failures for outcomes file
+    # TODO: clean up error messages
+    @staticmethod
+    def from_dict(feed_dicts: List[Dict]):
+        validated_feeds = []
+        for feed in feed_dicts:
+            try:
+                new_feed = GTFSFeed(**feed)
+                validated_feeds.append(new_feed)
+            except ValidationError as e:
+                logging.warn(f"Validation error occurred for: {e}")
+                continue
+
+        success_rate = len(validated_feeds) / len(feed_dicts)
+        if success_rate < GTFS_FEED_LIST_ERROR_THRESHOLD:
+            raise RuntimeError(
+                f"{success_rate} < {GTFS_FEED_LIST_ERROR_THRESHOLD} failed validation"
+            )
+        return GTFSFeedDownloadList(feeds=validated_feeds)
+
+
+# TODO: function to get auth stuff -- airflow w fallback to env
