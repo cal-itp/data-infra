@@ -1,7 +1,7 @@
 operator: operators.ExternalTable
-bucket: gs://calitp-analytics-data
+bucket: gs://analysis-output-models
 source_objects:
-  - "data-analyses/high_quality_transit_areas/export/2022-05-04/hqta_areas.geojsonl"
+  - "high_quality_transit_areas_areas/dt=2022-05-04/*.geojsonl"
 destination_project_dataset_table: "external_hqta.areas"
 source_format: NEWLINE_DELIMITED_JSON
 geojson: True
