@@ -1,17 +1,20 @@
 import base64
+import gcsfs
+import logging
 import os
 import pandas as pd
 import re
 import pendulum
-from enum import Enum
-from requests import Request
-import logging
-
 from airflow.models import Variable
 from calitp import read_gcfs, save_to_gcfs
+from calitp.config import is_development
+from enum import Enum
 from pandas.errors import EmptyDataError
-from pydantic import AnyUrl, BaseModel, ValidationError, validator
-from typing import ClassVar, Dict, List, Tuple, Optional
+from pydantic import AnyUrl, validator
+from pydantic import BaseModel, ValidationError
+from requests import Request
+from typing import ClassVar, List
+from typing import Tuple, Optional, Dict
 
 GTFS_FEED_LIST_ERROR_THRESHOLD = 0.95
 
@@ -19,6 +22,13 @@ def make_name_bq_safe(name: str):
     """Replace non-word characters.
     See: https://cloud.google.com/bigquery/docs/reference/standard-sql/lexical#identifiers."""
     return str.lower(re.sub("[^\w]", "_", name))  # noqa: W605
+
+def prefix_bucket(bucket):
+    # TODO: use once we're in python 3.9+
+    # bucket = bucket.removeprefix("gs://")
+    bucket = bucket.replace("gs://", "")
+    return f"gs://test-{bucket}" if is_development() else f"gs://{bucket}"
+
 
 def _keep_columns(
     src_path,
@@ -150,8 +160,8 @@ class GTFSFeed(BaseModel):
     #     assert
 
     def build_request(self, auth_dict: dict) -> Request:
-        filled_auth_params = {k: auth_dict(v) for k, v in self.auth_query_param.items()}
-        filled_auth_headers = {k: auth_dict(v) for k, v in self.auth_header.items()}
+        filled_auth_params = {k: auth_dict[v] for k, v in self.auth_query_param.items()}
+        filled_auth_headers = {k: auth_dict[v] for k, v in self.auth_header.items()}
         # inspired by: https://stackoverflow.com/questions/18869074/create-url-without-request-execution
         return Request(
             "GET", url=self.url, params=filled_auth_params, headers=filled_auth_headers
@@ -160,18 +170,31 @@ class GTFSFeed(BaseModel):
 
 class GTFSExtract(BaseModel):
     feed: GTFSFeed
+    filename: str
+    response_code: int
+    response_headers: Optional[Dict[str, str]]
     download_time: pendulum.DateTime
 
     @property
     def hive_partitions(self) -> Tuple[str, str, str]:
         return (
             f"dt={self.download_time.to_date_string()}",
-            f"base64_url={self.feed.encoded_url}",
+            f"base64_url={self.feed.base64_encoded_url}",
             f"time={self.download_time.to_time_string()}",
         )
 
     def data_hive_path(self, bucket: str):
-        return os.path.join(bucket, self.feed.type, *self.hive_partitions())
+        return os.path.join(
+            bucket,
+            self.feed.type,
+            *self.hive_partitions,
+            self.filename,
+        )
+
+    def save_content(self, fs: gcsfs.GCSFileSystem, bucket: str, content: bytes):
+        path = self.data_hive_path(bucket)
+        logging.info(f"saving {len(content)} bytes to {path}")
+        fs.pipe(path=path, value=content)
 
 
 class GTFSFeedDownloadList(BaseModel):
@@ -200,6 +223,25 @@ class GTFSFeedDownloadList(BaseModel):
                 f"Success rate: {success_rate} was below error threshold: {GTFS_FEED_LIST_ERROR_THRESHOLD}"
             )
         return GTFSFeedDownloadList(feeds=validated_feeds), failures
+
+
+class GTFSExtractOutcome(BaseModel):
+    extract: GTFSExtract
+    success: bool
+    exception: Optional[Exception]
+    body: Optional[str]
+
+    class Config:
+        arbitrary_types_allowed = True
+        json_encoders = {Exception: lambda e: str(e)}
+
+    def hive_path(self, bucket: str):
+        return os.path.join(
+            bucket,
+            self.extract.feed.type,
+            *self.extract.hive_partitions,
+            self.extract.filename,
+        )
 
 
 def get_auth_secret(auth_secret_key: str) -> str:
