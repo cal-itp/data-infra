@@ -1,6 +1,3 @@
-# https://pydantic-docs.helpmanual.io/usage/postponed_annotations/#self-referencing-models
-from __future__ import annotations
-
 import base64
 import os
 import pandas as pd
@@ -10,6 +7,7 @@ from enum import Enum
 from requests import Request
 import logging
 
+from airflow.models import Variable
 from calitp import read_gcfs, save_to_gcfs
 from pandas.errors import EmptyDataError
 from pydantic import AnyUrl, BaseModel, ValidationError, validator
@@ -119,9 +117,10 @@ class GTFSFeed(BaseModel):
     url: AnyUrl
     rt_type: Optional[GTFSRTFeedType]
     schedule_url: Optional[AnyUrl]
-    # key is auth param name in URL, value is name of secret where API key is stored
+    # for both auth dicts, key is auth param name in URL (like "api_key"),
+    # value is name of secret (Airflow or environment variable)
+    # where API key is stored (like AGENCY_NAME_API_KEY)
     auth_query_param: Optional[Dict[str, str]]
-    # key is auth param name in header, value is name of secret where API key is stored
     auth_header: Optional[Dict[str, str]]
 
     def __init__(self, **kwargs):
@@ -140,7 +139,7 @@ class GTFSFeed(BaseModel):
         # convert in bigquery: https://cloud.google.com/bigquery/docs/reference/standard-sql/string_functions#from_base64
         return base64.urlsafe_b64encode(self.url.encode()).decode()
 
-    @validator("url")
+    @validator("url", allow_reuse=True)
     def urls_must_be_unique(cls, v):
         if v in cls._instances:
             raise DuplicateURLError(v)
@@ -181,25 +180,32 @@ class GTFSFeedDownloadList(BaseModel):
     def get_feeds_by_type(self, type: GTFSFeedType) -> List[GTFSFeed]:
         return [feed for feed in self.feeds if feed.type == type]
 
-    # TODO: return failures for outcomes file
-    # TODO: clean up error messages
     @staticmethod
     def from_dict(feed_dicts: List[Dict]):
         validated_feeds = []
+        failures = []
         for feed in feed_dicts:
             try:
                 new_feed = GTFSFeed(**feed)
                 validated_feeds.append(new_feed)
             except ValidationError as e:
-                logging.warn(f"Validation error occurred for: {e}")
+                failures.append(feed)
+                logging.warn(f"Error occurred for feed {feed}:")
+                logging.warn(e)
                 continue
 
         success_rate = len(validated_feeds) / len(feed_dicts)
         if success_rate < GTFS_FEED_LIST_ERROR_THRESHOLD:
             raise RuntimeError(
-                f"{success_rate} < {GTFS_FEED_LIST_ERROR_THRESHOLD} failed validation"
+                f"Success rate: {success_rate} was below error threshold: {GTFS_FEED_LIST_ERROR_THRESHOLD}"
             )
-        return GTFSFeedDownloadList(feeds=validated_feeds)
+        return GTFSFeedDownloadList(feeds=validated_feeds), failures
 
 
-# TODO: function to get auth stuff -- airflow w fallback to env
+def get_auth_secret(auth_secret_key: str) -> str:
+    try:
+        secret = Variable.get(auth_secret_key, os.environ[auth_secret_key])
+        return secret
+    except KeyError as e:
+        logging.error(f"No value found for {auth_secret_key}")
+        raise e
