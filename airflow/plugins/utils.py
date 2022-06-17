@@ -120,6 +120,20 @@ class GTFSRTFeedType(str, Enum):
 class DuplicateURLError(ValueError):
     pass
 
+class AirtableGTFSDataRecord(BaseModel):
+    pass
+
+class AirtableGTFSDataExtract(BaseModel):
+    records: List[AirtableGTFSDataRecord]
+    timestamp: pendulum.DateTime
+
+    @classmethod
+    def get_latest(cls) -> AirtableGTFSDataExtract:
+        # get the latest jsonl.gz as a dictionary
+        return AirtableGTFSDataExtract(timestamp=latest.timestamp, **dictionary)
+
+    def to_download_list(self) -> GTFSFeedDownloadList:
+        pass
 
 class GTFSFeed(BaseModel):
     _instances: ClassVar[Dict[str, "GTFSFeed"]] = {}
