@@ -1,3 +1,9 @@
+from datetime import datetime
+
+import json
+
+import gzip
+
 import base64
 import gcsfs
 import logging
@@ -8,6 +14,7 @@ import pendulum
 from airflow.models import Variable
 from calitp import read_gcfs, save_to_gcfs
 from calitp.config import is_development
+from calitp.storage import get_fs
 from enum import Enum
 from pandas.errors import EmptyDataError
 from pydantic import AnyUrl, validator
@@ -29,6 +36,10 @@ def prefix_bucket(bucket):
     bucket = bucket.replace("gs://", "")
     return f"gs://test-{bucket}" if is_development() else f"gs://{bucket}"
 
+def partition_map(path) -> Dict[str, str]:
+    parts = path.split("/")
+
+    for part in parts:
 
 def _keep_columns(
     src_path,
@@ -105,13 +116,13 @@ def get_successfully_downloaded_feeds(execution_date):
 
     return status[lambda d: d.status == "success"]
 
+# class GTFSFeedType(str, Enum):
+#     schedule = "schedule"
+#     rt = "rt"
+
 # TODO: consider moving this to calitp-py or some other more shared location
 class GTFSFeedType(str, Enum):
     schedule = "schedule"
-    rt = "rt"
-
-
-class GTFSRTFeedType(str, Enum):
     service_alerts = "service_alerts"
     trip_updates = "trip_updates"
     vehicle_positions = "vehicle_positions"
@@ -120,26 +131,48 @@ class GTFSRTFeedType(str, Enum):
 class DuplicateURLError(ValueError):
     pass
 
+
 class AirtableGTFSDataRecord(BaseModel):
-    pass
+    name: str
+    uri: AnyUrl
+    data: GTFSFeedType
+    schedule_to_use_for_rt_validation: List[str]
+
+    class Config:
+        extra = "allow"
+
+    @validator("data", pre=True)
+    def convert_feed_type(self, v):
+        if "schedule" in v.lower():
+            return GTFSFeedType.schedule
+        elif "vehicle" in v.lower():
+            return GTFSFeedType.vehicle_positions
+        elif "trip" in v.lower():
+            return GTFSFeedType.trip_updates
+        elif "service" in v.lower():
+            return GTFSFeedType.service_alerts
+        return v
 
 class AirtableGTFSDataExtract(BaseModel):
     records: List[AirtableGTFSDataRecord]
     timestamp: pendulum.DateTime
 
+    # TODO: this should probably be abstracted somewhere... it's useful in lots of places, probably
     @classmethod
-    def get_latest(cls) -> AirtableGTFSDataExtract:
-        # get the latest jsonl.gz as a dictionary
-        return AirtableGTFSDataExtract(timestamp=latest.timestamp, **dictionary)
+    def get_latest(cls) -> "AirtableGTFSDataExtract":
+        # TODO: change me
+        path =  "gs://test-calitp-airtable/california_transit__gtfs_datasets/dt=2022-06-10/time=14:27:21/gtfs_datasets.jsonl.gz"
+        with get_fs().open(path, "rb") as f:
+            content = gzip.decompress(f.read()).decode()
+        pendulum.DateTime.combine(date, time)
+        return AirtableGTFSDataExtract(timestamp=pendulum.DateTime(), records=[json.loads(row) for row in content.splitlines()])
 
-    def to_download_list(self) -> GTFSFeedDownloadList:
-        pass
 
 class GTFSFeed(BaseModel):
     _instances: ClassVar[Dict[str, "GTFSFeed"]] = {}
     type: GTFSFeedType
     url: AnyUrl
-    rt_type: Optional[GTFSRTFeedType]
+    # rt_type: Optional[GTFSRTFeedType]
     schedule_url: Optional[AnyUrl]
     # for both auth dicts, key is auth param name in URL (like "api_key"),
     # value is name of secret (Airflow or environment variable)
@@ -238,25 +271,31 @@ class GTFSFeedDownloadList(BaseModel):
 
     # TODO: this should return validated feeds, plus one outcome per failure so we can save them
     @staticmethod
-    def from_dict(feed_dicts: List[Dict]) -> GTFSFeedDownloadList, List[GTFSExtractOutcome]:
-        validated_feeds = []
-        failures = []
-        for feed in feed_dicts:
+    def from_airtable_extract(extract: AirtableGTFSDataExtract) -> Tuple["GTFSFeedDownloadList", List[GTFSExtractOutcome]]:
+        validated_feeds: List[GTFSFeed] = []
+        failures: List[GTFSExtractOutcome] = []
+        for record in extract.records:
             try:
-                new_feed = GTFSFeed(**feed)
+                new_feed = GTFSFeed(
+                    type=,
+                    url=record.uri,
+
+                )
                 validated_feeds.append(new_feed)
             except ValidationError as e:
-                failures.append(feed)
-                logging.warn(f"Error occurred for feed {feed}:")
+                failures.append(GTFSExtractOutcome(
+
+                ))
+                logging.warn(f"Error occurred for feed {record}:")
                 logging.warn(e)
                 continue
 
-        success_rate = len(validated_feeds) / len(feed_dicts)
+        success_rate = len(validated_feeds) / len(extract.records)
         if success_rate < GTFS_FEED_LIST_ERROR_THRESHOLD:
             raise RuntimeError(
                 f"Success rate: {success_rate} was below error threshold: {GTFS_FEED_LIST_ERROR_THRESHOLD}"
             )
-        assert len(feed_dicts) == len(validated_feeds) + len(failures)
+        assert len(extract.records) == len(validated_feeds) + len(failures)
         return GTFSFeedDownloadList(feeds=validated_feeds), failures
 
 
