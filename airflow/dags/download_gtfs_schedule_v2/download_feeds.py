@@ -23,6 +23,7 @@ def download_all(task_instance, execution_date, **kwargs):
     with create_session() as session:
         auth_dict = {var.key: var.val for var in session.query(Variable)}
 
+    airtable_records = AirtableGTFSDataExtract.get_latest().records
     # TODO: get these from Airtable or whatever
     feeds: List[GTFSFeed] = [
         GTFSFeed(
@@ -32,6 +33,7 @@ def download_all(task_instance, execution_date, **kwargs):
     ]
 
     exceptions = []
+    outcomes = []
 
     for feed in feeds:
         try:
@@ -76,6 +78,8 @@ def download_all(task_instance, execution_date, **kwargs):
                 traceback.format_exc(),
             )
             exceptions.append(e)
+
+    assert len(outcomes) == len(airtable_records)
 
     if exceptions:
         exc_str = "\n".join(map(str, exceptions))

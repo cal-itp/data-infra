@@ -211,14 +211,34 @@ class GTFSExtract(BaseModel):
         fs.pipe(path=path, value=content)
 
 
+class GTFSExtractOutcome(BaseModel):
+    extract: GTFSExtract
+    success: bool
+    exception: Optional[Exception]
+    body: Optional[str]
+
+    class Config:
+        arbitrary_types_allowed = True
+        json_encoders = {Exception: lambda e: str(e)}
+
+    def hive_path(self, bucket: str):
+        return os.path.join(
+            bucket,
+            f"{self.extract.feed.type}_outcomes",
+            *self.extract.hive_partitions,
+            self.extract.filename,
+        )
+
+
 class GTFSFeedDownloadList(BaseModel):
     feeds: List[GTFSFeed]
 
     def get_feeds_by_type(self, type: GTFSFeedType) -> List[GTFSFeed]:
         return [feed for feed in self.feeds if feed.type == type]
 
+    # TODO: this should return validated feeds, plus one outcome per failure so we can save them
     @staticmethod
-    def from_dict(feed_dicts: List[Dict]):
+    def from_dict(feed_dicts: List[Dict]) -> GTFSFeedDownloadList, List[GTFSExtractOutcome]:
         validated_feeds = []
         failures = []
         for feed in feed_dicts:
@@ -236,26 +256,8 @@ class GTFSFeedDownloadList(BaseModel):
             raise RuntimeError(
                 f"Success rate: {success_rate} was below error threshold: {GTFS_FEED_LIST_ERROR_THRESHOLD}"
             )
+        assert len(feed_dicts) == len(validated_feeds) + len(failures)
         return GTFSFeedDownloadList(feeds=validated_feeds), failures
-
-
-class GTFSExtractOutcome(BaseModel):
-    extract: GTFSExtract
-    success: bool
-    exception: Optional[Exception]
-    body: Optional[str]
-
-    class Config:
-        arbitrary_types_allowed = True
-        json_encoders = {Exception: lambda e: str(e)}
-
-    def hive_path(self, bucket: str):
-        return os.path.join(
-            bucket,
-            self.extract.feed.type,
-            *self.extract.hive_partitions,
-            self.extract.filename,
-        )
 
 
 def get_auth_secret(auth_secret_key: str) -> str:
