@@ -1375,7 +1375,7 @@ tri-delta-transit:
 tri-valley-wheels:
   agency_name: Tri-Valley Wheels
   feeds:
-    - gtfs_schedule_url: https://www.wheelsbus.com/wp-content/uploads/2020/06/google_transit1.zip?read_comply=
+    - gtfs_schedule_url: http://webwatch.lavta.org/tmgtfsrealtimewebservice/gtfs-static/google_transit.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
