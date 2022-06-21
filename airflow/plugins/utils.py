@@ -1,16 +1,12 @@
-from datetime import datetime
-
-import json
-
-import gzip
-
 import base64
 import gcsfs
+import gzip
+import json
 import logging
 import os
 import pandas as pd
-import re
 import pendulum
+import re
 from airflow.models import Variable
 from calitp import read_gcfs, save_to_gcfs
 from calitp.config import is_development
@@ -25,10 +21,12 @@ from typing import Tuple, Optional, Dict
 
 GTFS_FEED_LIST_ERROR_THRESHOLD = 0.95
 
+
 def make_name_bq_safe(name: str):
     """Replace non-word characters.
     See: https://cloud.google.com/bigquery/docs/reference/standard-sql/lexical#identifiers."""
     return str.lower(re.sub("[^\w]", "_", name))  # noqa: W605
+
 
 def prefix_bucket(bucket):
     # TODO: use once we're in python 3.9+
@@ -36,10 +34,18 @@ def prefix_bucket(bucket):
     bucket = bucket.replace("gs://", "")
     return f"gs://test-{bucket}" if is_development() else f"gs://{bucket}"
 
+
 def partition_map(path) -> Dict[str, str]:
+    partitions = {}
     parts = path.split("/")
 
     for part in parts:
+        if re.match(r"\w+=\w+", part.lower()):
+            key, value = part.split("=")
+            partitions[key] = value
+
+    return partitions
+
 
 def _keep_columns(
     src_path,
@@ -116,6 +122,7 @@ def get_successfully_downloaded_feeds(execution_date):
 
     return status[lambda d: d.status == "success"]
 
+
 # class GTFSFeedType(str, Enum):
 #     schedule = "schedule"
 #     rt = "rt"
@@ -136,22 +143,23 @@ class AirtableGTFSDataRecord(BaseModel):
     name: str
     uri: AnyUrl
     data: GTFSFeedType
-    schedule_to_use_for_rt_validation: List[str]
+    schedule_to_use_for_rt_validation: Optional[List[str]]
 
     class Config:
         extra = "allow"
 
     @validator("data", pre=True)
-    def convert_feed_type(self, v):
+    def convert_feed_type(cls, v):
         if "schedule" in v.lower():
             return GTFSFeedType.schedule
         elif "vehicle" in v.lower():
             return GTFSFeedType.vehicle_positions
         elif "trip" in v.lower():
             return GTFSFeedType.trip_updates
-        elif "service" in v.lower():
+        elif "alerts" in v.lower():
             return GTFSFeedType.service_alerts
         return v
+
 
 class AirtableGTFSDataExtract(BaseModel):
     records: List[AirtableGTFSDataRecord]
@@ -161,11 +169,38 @@ class AirtableGTFSDataExtract(BaseModel):
     @classmethod
     def get_latest(cls) -> "AirtableGTFSDataExtract":
         # TODO: change me
-        path =  "gs://test-calitp-airtable/california_transit__gtfs_datasets/dt=2022-06-10/time=14:27:21/gtfs_datasets.jsonl.gz"
+        path = "gs://test-calitp-airtable/california_transit__gtfs_datasets/dt=2022-06-10/time=14:27:21/gtfs_datasets.jsonl.gz"
         with get_fs().open(path, "rb") as f:
             content = gzip.decompress(f.read()).decode()
-        pendulum.DateTime.combine(date, time)
-        return AirtableGTFSDataExtract(timestamp=pendulum.DateTime(), records=[json.loads(row) for row in content.splitlines()])
+        partitions = partition_map(path)
+        ts = pendulum.DateTime.combine(
+            pendulum.parse(partitions["dt"], exact=True),
+            pendulum.parse(partitions["time"], exact=True),
+        )
+
+        records = []
+        jinja_pattern = r"(?P<param_name>\w+)={{\s*(?P<param_lookup_key>\w+)\s*}}"
+        # this is a bit hacky but we need this until we split off auth query params from the URI itself
+        for row in content.splitlines():
+            record = json.loads(row)
+            if record["uri"]:
+                if ".132" in record["uri"] or "GRAAS_SERVER_URL" in record["uri"]:
+                    continue
+                match = re.search(jinja_pattern, record["uri"])
+                if match:
+                    record["auth_query_param"] = {
+                        match.group("param_name"): match.group("param_lookup_key")
+                    }
+                    record["uri"] = re.sub(jinja_pattern, "", record["uri"])
+            else:
+                logging.warning(
+                    f"Airtable GTFS Data record missing URI: {record['gtfs_dataset_id']}"
+                )
+                continue
+            AirtableGTFSDataRecord(**record)
+            records.append(record)
+
+        return AirtableGTFSDataExtract(timestamp=ts, records=records)
 
 
 class GTFSFeed(BaseModel):
@@ -271,21 +306,20 @@ class GTFSFeedDownloadList(BaseModel):
 
     # TODO: this should return validated feeds, plus one outcome per failure so we can save them
     @staticmethod
-    def from_airtable_extract(extract: AirtableGTFSDataExtract) -> Tuple["GTFSFeedDownloadList", List[GTFSExtractOutcome]]:
+    def from_airtable_extract(
+        extract: AirtableGTFSDataExtract,
+    ) -> Tuple["GTFSFeedDownloadList", List[GTFSExtractOutcome]]:
         validated_feeds: List[GTFSFeed] = []
         failures: List[GTFSExtractOutcome] = []
         for record in extract.records:
             try:
                 new_feed = GTFSFeed(
-                    type=,
+                    # type=,
                     url=record.uri,
-
                 )
                 validated_feeds.append(new_feed)
             except ValidationError as e:
-                failures.append(GTFSExtractOutcome(
-
-                ))
+                failures.append(GTFSExtractOutcome())
                 logging.warn(f"Error occurred for feed {record}:")
                 logging.warn(e)
                 continue
