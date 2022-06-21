@@ -13,11 +13,12 @@ from calitp.config import is_development
 from calitp.storage import get_fs
 from enum import Enum
 from pandas.errors import EmptyDataError
-from pydantic import AnyUrl, validator
+from pydantic import AnyUrl, validator, Field
 from pydantic import BaseModel, ValidationError
 from requests import Request
-from typing import ClassVar, List
+from typing import ClassVar, List, Literal, Union
 from typing import Tuple, Optional, Dict
+from typing_extensions import Annotated
 
 GTFS_FEED_LIST_ERROR_THRESHOLD = 0.95
 
@@ -161,6 +162,47 @@ class AirtableGTFSDataRecord(BaseModel):
         return v
 
 
+class GCSBaseInfo(BaseModel):
+    bucket: str
+    name: str
+
+    class Config:
+        extra = "ignore"
+
+    @property
+    def partition(self) -> Dict[str, str]:
+        return partition_map(self.name)
+
+
+class GCSFileInfo(GCSBaseInfo):
+    type: Literal["file"]
+    size: int
+    md5Hash: str
+
+
+class GCSDirectoryInfo(GCSBaseInfo):
+    type: Literal["directory"]
+
+    def children(self, fs) -> List["GCSObjectInfo"]:
+        return [fs.info(child) for child in fs.ls(self.name)]
+
+
+GCSObjectInfo = Annotated[
+    Union[GCSFileInfo, GCSDirectoryInfo],
+    Field(discriminator="type"),
+]
+
+
+def get_latest_file(table_path: str, keys: List[str]) -> GCSFileInfo:
+    fs = get_fs()
+    obj = GCSDirectoryInfo(**fs.info(table_path))
+
+    for key in keys:
+        obj = sorted(obj.children(fs), key=lambda o: o.partition[key], reverse=True)[0]
+
+    return obj
+
+
 class AirtableGTFSDataExtract(BaseModel):
     records: List[AirtableGTFSDataRecord]
     timestamp: pendulum.DateTime
@@ -169,10 +211,14 @@ class AirtableGTFSDataExtract(BaseModel):
     @classmethod
     def get_latest(cls) -> "AirtableGTFSDataExtract":
         # TODO: change me
-        path = "gs://test-calitp-airtable/california_transit__gtfs_datasets/dt=2022-06-10/time=14:27:21/gtfs_datasets.jsonl.gz"
-        with get_fs().open(path, "rb") as f:
+        latest = get_latest_file(
+            "gs://test-calitp-airtable/california_transit__gtfs_datasets",
+            keys=["dt", "time"],
+        )
+
+        with get_fs().open(latest.name, "rb") as f:
             content = gzip.decompress(f.read()).decode()
-        partitions = partition_map(path)
+        partitions = partition_map(latest.name)
         ts = pendulum.DateTime.combine(
             pendulum.parse(partitions["dt"], exact=True),
             pendulum.parse(partitions["time"], exact=True),
