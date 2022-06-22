@@ -1,23 +1,27 @@
+import abc
 import base64
-import gcsfs
 import gzip
 import json
 import logging
 import os
+import re
+from enum import Enum
+from typing import ClassVar, List, Literal, Union
+from typing import Tuple, Optional, Dict
+
+import gcsfs
 import pandas as pd
 import pendulum
-import re
 from airflow.models import Variable
 from calitp import read_gcfs, save_to_gcfs
 from calitp.config import is_development
 from calitp.storage import get_fs
-from enum import Enum
 from pandas.errors import EmptyDataError
 from pydantic import AnyUrl, validator, Field
 from pydantic import BaseModel, ValidationError
+from pydantic.tools import parse_obj_as
+from pydantic.types import constr
 from requests import Request
-from typing import ClassVar, List, Literal, Union
-from typing import Tuple, Optional, Dict
 from typing_extensions import Annotated
 
 GTFS_FEED_LIST_ERROR_THRESHOLD = 0.95
@@ -37,15 +41,9 @@ def prefix_bucket(bucket):
 
 
 def partition_map(path) -> Dict[str, str]:
-    partitions = {}
-    parts = path.split("/")
-
-    for part in parts:
-        if re.match(r"\w+=\w+", part.lower()):
-            key, value = part.split("=")
-            partitions[key] = value
-
-    return partitions
+    return {
+        key: value for key, value in re.findall(r"/(\w+)=([\w\-:]+)(?=/)", path.lower())
+    }
 
 
 def _keep_columns(
@@ -162,7 +160,7 @@ class AirtableGTFSDataRecord(BaseModel):
         return v
 
 
-class GCSBaseInfo(BaseModel):
+class GCSBaseInfo(BaseModel, abc.ABC):
     bucket: str
     name: str
 
@@ -170,8 +168,9 @@ class GCSBaseInfo(BaseModel):
         extra = "ignore"
 
     @property
+    @abc.abstractmethod
     def partition(self) -> Dict[str, str]:
-        return partition_map(self.name)
+        pass
 
 
 class GCSFileInfo(GCSBaseInfo):
@@ -179,12 +178,31 @@ class GCSFileInfo(GCSBaseInfo):
     size: int
     md5Hash: str
 
+    @property
+    def filename(self) -> str:
+        return os.path.basename(self.name)
+
+    @property
+    def partition(self) -> Dict[str, str]:
+        return partition_map(self.name)
+
+
+class GCSObjectInfoList(BaseModel):
+    __root__: List["GCSObjectInfo"]
+
 
 class GCSDirectoryInfo(GCSBaseInfo):
     type: Literal["directory"]
 
+    @property
+    def partition(self) -> Dict[str, str]:
+        return partition_map(self.name + "/")
+
     def children(self, fs) -> List["GCSObjectInfo"]:
-        return [fs.info(child) for child in fs.ls(self.name)]
+        # TODO: this should work with a discriminated type but idk why it's not
+        return parse_obj_as(
+            GCSObjectInfoList, [fs.info(child) for child in fs.ls(self.name)]
+        ).__root__
 
 
 GCSObjectInfo = Annotated[
@@ -192,15 +210,33 @@ GCSObjectInfo = Annotated[
     Field(discriminator="type"),
 ]
 
+GCSObjectInfoList.update_forward_refs()
+
 
 def get_latest_file(table_path: str, keys: List[str]) -> GCSFileInfo:
     fs = get_fs()
-    obj = GCSDirectoryInfo(**fs.info(table_path))
+    directory = GCSDirectoryInfo(**fs.info(table_path))
 
     for key in keys:
-        obj = sorted(obj.children(fs), key=lambda o: o.partition[key], reverse=True)[0]
+        directory = sorted(
+            directory.children(fs), key=lambda o: o.partition[key], reverse=True
+        )[0]
 
-    return obj
+    children = directory.children(fs)
+    if len(children) != 1:
+        raise ValueError(
+            f"found {len(directory.children(fs))} files rather than 1 in the directory {directory.name}"
+        )
+
+    ret = children[0]
+
+    # is there a way to have pydantic check this?
+    if not isinstance(ret, GCSFileInfo):
+        raise ValueError(
+            f"encountered unexpected type {type(ret)} rather than GCSFileInfo"
+        )
+
+    return ret
 
 
 class AirtableGTFSDataExtract(BaseModel):
@@ -210,14 +246,18 @@ class AirtableGTFSDataExtract(BaseModel):
     # TODO: this should probably be abstracted somewhere... it's useful in lots of places, probably
     @classmethod
     def get_latest(cls) -> "AirtableGTFSDataExtract":
-        # TODO: change me
         latest = get_latest_file(
             "gs://test-calitp-airtable/california_transit__gtfs_datasets",
             keys=["dt", "time"],
         )
 
+        logging.info(
+            f"identified {latest.name} as the most recent extract of gtfs datasets"
+        )
+
         with get_fs().open(latest.name, "rb") as f:
             content = gzip.decompress(f.read()).decode()
+
         partitions = partition_map(latest.name)
         ts = pendulum.DateTime.combine(
             pendulum.parse(partitions["dt"], exact=True),
@@ -296,12 +336,40 @@ class GTFSFeed(BaseModel):
         )
 
 
+PartitionType = Union[str, int, pendulum.DateTime, pendulum.Date, pendulum.Time]
+
+
 class GTFSExtract(BaseModel):
+    # TODO: this should check whether the bucket exists https://stackoverflow.com/a/65628273
+    bucket: constr(regex=r"gs://")  # noqa: F722
     feed: GTFSFeed
     filename: str
     response_code: int
     response_headers: Optional[Dict[str, str]]
     download_time: pendulum.DateTime
+
+    @classmethod
+    def fetch_all_in_partition(
+        cls,
+        fs: gcsfs.GCSFileSystem,
+        bucket: str,
+        feed_type: GTFSFeedType,
+        partitions: Dict[str, PartitionType],
+    ) -> List["GTFSExtract"]:
+        path = "/".join(
+            [
+                bucket,
+                feed_type,
+                *[f"{key}={value}" for key, value in partitions.items()],
+            ]
+        )
+        return parse_obj_as(
+            List["GTFSExtract"], [fs.info(file) for file in fs.ls(path)]
+        )
+
+    @property
+    def table_path(self) -> Tuple[str, str]:
+        return self.bucket, self.feed.type
 
     @property
     def hive_partitions(self) -> Tuple[str, str, str]:
@@ -386,3 +454,7 @@ def get_auth_secret(auth_secret_key: str) -> str:
     except KeyError as e:
         logging.error(f"No value found for {auth_secret_key}")
         raise e
+
+
+if __name__ == "__main__":
+    AirtableGTFSDataExtract.get_latest()
