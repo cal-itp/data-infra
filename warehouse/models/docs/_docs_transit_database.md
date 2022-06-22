@@ -51,3 +51,22 @@ Each record is a product used in a transit technology stack at another organizat
 Each record is an association between one or more `services`, a `product`, and one or more `components` which that product is serving as.
 
 {% enddocs%}
+
+{% docs gtfs_datasets_table %}
+
+Each record represents a gtfs dataset (feed) that is either a type of GTFS Schedule, Trip Updates, Vehicle Locations or Alerts.
+
+A gtfs dataset MAY:
+- be *disaggregated into* one or more `gtfs service data` records.
+- be *produced* by one or more `organizations`
+- be *published* by an `organizations`.
+
+{% enddocs%}
+
+{% docs gtfs_service_data_table %}
+
+Each record links together a single `gtfs dataset` and one (if possible) or more `services`.  Additional fields define how to isolate the service within the `gtfs dataset`.
+
+Many services have more than one GTFS dataset which describes their service. Often these are either precursors to *final* datasets (e.g. AC Transit's GTFS dataset is a precursor to the Bay Area 511 dataset) or artifacts produced in other processes such as creating GTFS Realtime.
+
+{% enddocs%}

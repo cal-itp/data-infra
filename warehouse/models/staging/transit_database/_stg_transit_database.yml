@@ -50,3 +50,21 @@ models:
     columns:
       - *key
       - *name
+  - name: stg_transit_database__gtfs_datasets
+    description: '{{ doc("gtfs_datasets_table") }}'
+    columns:
+      - *key
+      - *name
+      - name: data
+      - name: uri
+      - name: future_uri
+      - name: calitp_extracted_at
+  - name: stg_transit_database__gtfs_service_data
+    description: '{{ doc("gtfs_service_data_table") }}'
+    columns:
+      - *key
+      - *name
+      - name: services
+      - name: gtfs_dataset
+      - name: category
+      - name: calitp_extracted_at
