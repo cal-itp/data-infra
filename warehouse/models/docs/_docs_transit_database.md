@@ -70,3 +70,46 @@ Each record links together a single `gtfs dataset` and one (if possible) or more
 Many services have more than one GTFS dataset which describes their service. Often these are either precursors to *final* datasets (e.g. AC Transit's GTFS dataset is a precursor to the Bay Area 511 dataset) or artifacts produced in other processes such as creating GTFS Realtime.
 
 {% enddocs%}
+
+{% docs county_geography_table %}
+
+Data representing county geography. Further description needed.
+
+{% enddocs%}
+
+{% docs eligibility_programs_table %}
+
+Data representing eligibility programs. Further description needed.
+
+{% enddocs%}
+
+{% docs fare_systems_table %}
+
+Data representing fare systems. Further description needed.
+
+{% enddocs%}
+
+{% docs funding_programs_table %}
+
+Data representing funding programs. Further description needed.
+
+{% enddocs%}
+
+{% docs ntd_agency_info_table %}
+
+2018 NTD Agency Info Table
+Imported 10/6/2021 from fta.gov
+
+{% enddocs%}
+
+{% docs place_geography_table %}
+
+Geographic info from: [https://www.census.gov/library/reference/code-lists/ansi.html](https://www.census.gov/library/reference/code-lists/ansi.html)
+
+{% enddocs%}
+
+{% docs rider_requirements_table %}
+
+Data representing rider requirements. Further description needed.
+
+{% enddocs%}
