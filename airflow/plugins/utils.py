@@ -19,6 +19,7 @@ from calitp.storage import get_fs
 from pandas.errors import EmptyDataError
 from pydantic import AnyUrl, validator, Field
 from pydantic import BaseModel, ValidationError
+from pydantic.class_validators import root_validator
 from pydantic.tools import parse_obj_as
 from pydantic.types import constr
 from requests import Request
@@ -160,6 +161,37 @@ class AirtableGTFSDataRecord(BaseModel):
         return v
 
 
+class PartitionedGCSArtifact(BaseModel, abc.ABC):
+    @property
+    @abc.abstractmethod
+    def bucket(self) -> str:
+        """Bucket name"""
+
+    @property
+    @abc.abstractmethod
+    def table(self) -> str:
+        """Table name"""
+
+    @classmethod
+    def bucket_table(cls) -> str:
+        bucket = cls.bucket.replace("gs://", "")
+        return f"gs://{bucket}/{cls.table}/"
+
+    @property
+    @abc.abstractmethod
+    def partition_names(self) -> List[str]:
+        """Defines the partitions into which this artifact is organized"""
+
+    @root_validator
+    def check_partitions(cls, values):
+        missing = [name for name in cls.partition_names if name not in values]
+        if missing:
+            raise ValueError(
+                f"all partition names must exist as fields; missing {missing}"
+            )
+        return values
+
+
 class GCSBaseInfo(BaseModel, abc.ABC):
     bucket: str
     name: str
@@ -239,17 +271,19 @@ def get_latest_file(table_path: str, keys: List[str]) -> GCSFileInfo:
     return ret
 
 
-class AirtableGTFSDataExtract(BaseModel):
+class AirtableGTFSDataExtract(PartitionedGCSArtifact):
+    bucket: ClassVar[str] = prefix_bucket("gs://calitp-airtable")
+    table: ClassVar[str] = "california_transit__gtfs_datasets"
+    partition_names: ClassVar[List[str]] = ["dt", "time"]
     records: List[AirtableGTFSDataRecord]
-    timestamp: pendulum.DateTime
+    dt: pendulum.Date
+    time: pendulum.Time
 
     # TODO: this should probably be abstracted somewhere... it's useful in lots of places, probably
     @classmethod
     def get_latest(cls) -> "AirtableGTFSDataExtract":
-        latest = get_latest_file(
-            "gs://test-calitp-airtable/california_transit__gtfs_datasets",
-            keys=["dt", "time"],
-        )
+        # TODO: this concatenation should live on the abstract base class probably
+        latest = get_latest_file(cls.bucket_table(), keys=cls.partition_names)
 
         logging.info(
             f"identified {latest.name} as the most recent extract of gtfs datasets"
@@ -257,12 +291,6 @@ class AirtableGTFSDataExtract(BaseModel):
 
         with get_fs().open(latest.name, "rb") as f:
             content = gzip.decompress(f.read()).decode()
-
-        partitions = partition_map(latest.name)
-        ts = pendulum.DateTime.combine(
-            pendulum.parse(partitions["dt"], exact=True),
-            pendulum.parse(partitions["time"], exact=True),
-        )
 
         records = []
         jinja_pattern = r"(?P<param_name>\w+)={{\s*(?P<param_lookup_key>\w+)\s*}}"
@@ -286,7 +314,11 @@ class AirtableGTFSDataExtract(BaseModel):
             AirtableGTFSDataRecord(**record)
             records.append(record)
 
-        return AirtableGTFSDataExtract(timestamp=ts, records=records)
+        return AirtableGTFSDataExtract(
+            records=records,
+            dt=pendulum.parse(latest.partition["dt"], exact=True),
+            time=pendulum.parse(latest.partition["time"], exact=True),
+        )
 
 
 class GTFSFeed(BaseModel):
