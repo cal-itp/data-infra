@@ -5,9 +5,10 @@ import json
 import logging
 import os
 import re
+import typing
 from enum import Enum
-from typing import ClassVar, List, Literal, Union
-from typing import Tuple, Optional, Dict
+from typing import ClassVar, List, Union
+from typing import Optional, Dict
 
 import gcsfs
 import pandas as pd
@@ -18,14 +19,20 @@ from calitp.config import is_development
 from calitp.storage import get_fs
 from pandas.errors import EmptyDataError
 from pydantic import AnyUrl, validator, Field
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel
 from pydantic.class_validators import root_validator
 from pydantic.tools import parse_obj_as
-from pydantic.types import constr
 from requests import Request
-from typing_extensions import Annotated
+from typing_extensions import Annotated, Literal
 
-GTFS_FEED_LIST_ERROR_THRESHOLD = 0.95
+
+def get_auth_secret(auth_secret_key: str) -> str:
+    try:
+        secret = Variable.get(auth_secret_key, os.environ[auth_secret_key])
+        return secret
+    except KeyError as e:
+        logging.error(f"No value found for {auth_secret_key}")
+        raise e
 
 
 def make_name_bq_safe(name: str):
@@ -41,7 +48,26 @@ def prefix_bucket(bucket):
     return f"gs://test-{bucket}" if is_development() else f"gs://{bucket}"
 
 
-def partition_map(path) -> Dict[str, str]:
+PartitionType = Union[str, int, pendulum.DateTime, pendulum.Date, pendulum.Time]
+
+PARTITION_SERIALIZERS = {
+    str: str,
+    int: str,
+    pendulum.DateTime: lambda dt: dt.to_iso8601_string(),
+    pendulum.Date: lambda d: d.strftime("%Y-%m-%d"),
+    pendulum.Time: lambda t: t.format("HH:mm:ss"),
+}
+
+PARTITION_DESERIALIZERS = {
+    str: str,
+    int: int,
+    pendulum.DateTime: lambda s: pendulum.parse(s, exact=True),
+    pendulum.Date: lambda s: pendulum.parse(s, exact=True),
+    pendulum.Time: lambda s: pendulum.parse(s, exact=True),
+}
+
+
+def partition_map(path) -> Dict[str, PartitionType]:
     return {
         key: value for key, value in re.findall(r"/(\w+)=([\w\-:]+)(?=/)", path.lower())
     }
@@ -135,20 +161,17 @@ class GTFSFeedType(str, Enum):
     vehicle_positions = "vehicle_positions"
 
 
-class DuplicateURLError(ValueError):
-    pass
-
-
 class AirtableGTFSDataRecord(BaseModel):
     name: str
-    uri: AnyUrl
+    uri: Optional[str]
     data: GTFSFeedType
     schedule_to_use_for_rt_validation: Optional[List[str]]
+    auth_query_param: Dict[str, str] = {}
 
     class Config:
         extra = "allow"
 
-    @validator("data", pre=True)
+    @validator("data", pre=True, allow_reuse=True)
     def convert_feed_type(cls, v):
         if "schedule" in v.lower():
             return GTFSFeedType.schedule
@@ -160,8 +183,40 @@ class AirtableGTFSDataRecord(BaseModel):
             return GTFSFeedType.service_alerts
         return v
 
+    @property
+    def schedule_url(self) -> Optional[AnyUrl]:
+        # TODO: implement me
+        raise NotImplementedError
+
+    @property
+    def auth_header(self) -> Dict[str, str]:
+        return {}
+
+    @property
+    def base64_encoded_url(self) -> str:
+        # see: https://docs.python.org/3/library/base64.html#base64.urlsafe_b64encode
+        # we care about replacing slashes for GCS object names
+        # can use: https://www.base64url.com/ to test encoding/decoding
+        # convert in bigquery: https://cloud.google.com/bigquery/docs/reference/standard-sql/string_functions#from_base64
+        return base64.urlsafe_b64encode(self.uri.encode()).decode()
+
+    def build_request(self, auth_dict: dict) -> Request:
+        filled_auth_params = {k: auth_dict[v] for k, v in self.auth_query_param.items()}
+        filled_auth_headers = {k: auth_dict[v] for k, v in self.auth_header.items()}
+        # inspired by: https://stackoverflow.com/questions/18869074/create-url-without-request-execution
+        return Request(
+            "GET", url=self.uri, params=filled_auth_params, headers=filled_auth_headers
+        )
+
 
 class PartitionedGCSArtifact(BaseModel, abc.ABC):
+    """
+    This class is designed to be subclassed to model "extracts", i.e. a particular
+    download of a given data source.
+    """
+
+    filename: str
+
     @property
     @abc.abstractmethod
     def bucket(self) -> str:
@@ -180,16 +235,57 @@ class PartitionedGCSArtifact(BaseModel, abc.ABC):
     @property
     @abc.abstractmethod
     def partition_names(self) -> List[str]:
-        """Defines the partitions into which this artifact is organized"""
+        """
+        Defines the partitions into which this artifact is organized.
+        The order does matter!
+        """
 
-    @root_validator
+    @root_validator(allow_reuse=True)
     def check_partitions(cls, values):
-        missing = [name for name in cls.partition_names if name not in values]
+        cls_properties = [
+            name for name in dir(cls) if isinstance(getattr(cls, name), property)
+        ]
+        missing = [
+            name
+            for name in cls.partition_names
+            if name not in values and name not in cls_properties
+        ]
         if missing:
             raise ValueError(
                 f"all partition names must exist as fields; missing {missing}"
             )
         return values
+
+    @property
+    def path(self):
+        return os.path.join(
+            self.bucket,
+            self.table,
+            *[
+                f"{name}={PARTITION_SERIALIZERS[type(getattr(self, name))](getattr(self, name))}"
+                for name in self.partition_names
+            ],
+            self.filename,
+        )
+
+    def save_content(self, fs: gcsfs.GCSFileSystem, content: bytes):
+        logging.info(f"saving {len(content)} bytes to {self.path}")
+        fs.pipe(path=self.path, value=content)
+
+
+class ProcessingOutcome(BaseModel, abc.ABC):
+    success: bool
+    exception: Optional[Exception]
+
+    class Config:
+        arbitrary_types_allowed = True
+        json_encoders = {Exception: lambda e: str(e)}
+
+    # TODO: is this really useful?
+    @property
+    @abc.abstractmethod
+    def input_type(self) -> typing.Type[PartitionedGCSArtifact]:
+        """The input type that was processed to produce this outcome.."""
 
 
 class GCSBaseInfo(BaseModel, abc.ABC):
@@ -250,6 +346,7 @@ def get_latest_file(table_path: str, keys: List[str]) -> GCSFileInfo:
     directory = GCSDirectoryInfo(**fs.info(table_path))
 
     for key in keys:
+        # TODO: this just sorts by string values, but we should parse stuff out
         directory = sorted(
             directory.children(fs), key=lambda o: o.partition[key], reverse=True
         )[0]
@@ -275,9 +372,9 @@ class AirtableGTFSDataExtract(PartitionedGCSArtifact):
     bucket: ClassVar[str] = prefix_bucket("gs://calitp-airtable")
     table: ClassVar[str] = "california_transit__gtfs_datasets"
     partition_names: ClassVar[List[str]] = ["dt", "time"]
-    records: List[AirtableGTFSDataRecord]
     dt: pendulum.Date
     time: pendulum.Time
+    records: List[AirtableGTFSDataRecord]
 
     # TODO: this should probably be abstracted somewhere... it's useful in lots of places, probably
     @classmethod
@@ -292,201 +389,100 @@ class AirtableGTFSDataExtract(PartitionedGCSArtifact):
         with get_fs().open(latest.name, "rb") as f:
             content = gzip.decompress(f.read()).decode()
 
-        records = []
-        jinja_pattern = r"(?P<param_name>\w+)={{\s*(?P<param_lookup_key>\w+)\s*}}"
-        # this is a bit hacky but we need this until we split off auth query params from the URI itself
-        for row in content.splitlines():
-            record = json.loads(row)
-            if record["uri"]:
-                if ".132" in record["uri"] or "GRAAS_SERVER_URL" in record["uri"]:
-                    continue
-                match = re.search(jinja_pattern, record["uri"])
-                if match:
-                    record["auth_query_param"] = {
-                        match.group("param_name"): match.group("param_lookup_key")
-                    }
-                    record["uri"] = re.sub(jinja_pattern, "", record["uri"])
-            else:
-                logging.warning(
-                    f"Airtable GTFS Data record missing URI: {record['gtfs_dataset_id']}"
-                )
-                continue
-            AirtableGTFSDataRecord(**record)
-            records.append(record)
+        records = [
+            AirtableGTFSDataRecord(**json.loads(row)) for row in content.splitlines()
+        ]
 
         return AirtableGTFSDataExtract(
             records=records,
+            filename=latest.filename,
             dt=pendulum.parse(latest.partition["dt"], exact=True),
             time=pendulum.parse(latest.partition["time"], exact=True),
         )
 
 
-class GTFSFeed(BaseModel):
-    _instances: ClassVar[Dict[str, "GTFSFeed"]] = {}
-    type: GTFSFeedType
-    url: AnyUrl
-    # rt_type: Optional[GTFSRTFeedType]
-    schedule_url: Optional[AnyUrl]
-    # for both auth dicts, key is auth param name in URL (like "api_key"),
-    # value is name of secret (Airflow or environment variable)
-    # where API key is stored (like AGENCY_NAME_API_KEY)
-    auth_query_param: Optional[Dict[str, str]]
-    auth_header: Optional[Dict[str, str]]
-
-    def __init__(self, **kwargs):
-        super(GTFSFeed, self).__init__(**kwargs)
-        self._instances[self.url] = self
-
-    @property
-    def schedule_feed(self):
-        return self._instances[self.schedule_url]
-
-    @property
-    def base64_encoded_url(self) -> str:
-        # see: https://docs.python.org/3/library/base64.html#base64.urlsafe_b64encode
-        # we care about replacing slashes for GCS object names
-        # can use: https://www.base64url.com/ to test encoding/decoding
-        # convert in bigquery: https://cloud.google.com/bigquery/docs/reference/standard-sql/string_functions#from_base64
-        return base64.urlsafe_b64encode(self.url.encode()).decode()
-
-    @validator("url", allow_reuse=True)
-    def urls_must_be_unique(cls, v):
-        if v in cls._instances:
-            raise DuplicateURLError(v)
-        return v
-
-    # @validator
-    # def rt_type_defined(self):
-    #     assert
-
-    def build_request(self, auth_dict: dict) -> Request:
-        filled_auth_params = {k: auth_dict[v] for k, v in self.auth_query_param.items()}
-        filled_auth_headers = {k: auth_dict[v] for k, v in self.auth_header.items()}
-        # inspired by: https://stackoverflow.com/questions/18869074/create-url-without-request-execution
-        return Request(
-            "GET", url=self.url, params=filled_auth_params, headers=filled_auth_headers
-        )
-
-
-PartitionType = Union[str, int, pendulum.DateTime, pendulum.Date, pendulum.Time]
-
-
-class GTFSExtract(BaseModel):
+class GTFSFeedExtract(PartitionedGCSArtifact):
     # TODO: this should check whether the bucket exists https://stackoverflow.com/a/65628273
-    bucket: constr(regex=r"gs://")  # noqa: F722
-    feed: GTFSFeed
-    filename: str
+    bucket: ClassVar[str] = prefix_bucket("gs://gtfs-schedule-raw")
+    partition_names: ClassVar[List[str]] = ["dt", "base64_url", "time"]
+    config: AirtableGTFSDataRecord
     response_code: int
     response_headers: Optional[Dict[str, str]]
     download_time: pendulum.DateTime
 
-    @classmethod
-    def fetch_all_in_partition(
-        cls,
-        fs: gcsfs.GCSFileSystem,
-        bucket: str,
-        feed_type: GTFSFeedType,
-        partitions: Dict[str, PartitionType],
-    ) -> List["GTFSExtract"]:
-        path = "/".join(
-            [
-                bucket,
-                feed_type,
-                *[f"{key}={value}" for key, value in partitions.items()],
-            ]
-        )
-        return parse_obj_as(
-            List["GTFSExtract"], [fs.info(file) for file in fs.ls(path)]
-        )
+    @property
+    def table(self) -> str:
+        return self.config.data
 
     @property
-    def table_path(self) -> Tuple[str, str]:
-        return self.bucket, self.feed.type
+    def dt(self) -> pendulum.Date:
+        return self.download_time.date()
 
     @property
-    def hive_partitions(self) -> Tuple[str, str, str]:
-        return (
-            f"dt={self.download_time.to_date_string()}",
-            f"base64_url={self.feed.base64_encoded_url}",
-            f"time={self.download_time.to_time_string()}",
-        )
+    def base64_url(self) -> str:
+        return self.config.base64_encoded_url
 
-    def data_hive_path(self, bucket: str):
-        return os.path.join(
-            bucket,
-            self.feed.type,
-            *self.hive_partitions,
-            self.filename,
-        )
+    @property
+    def time(self) -> pendulum.Time:
+        return self.download_time.time()
 
-    def save_content(self, fs: gcsfs.GCSFileSystem, bucket: str, content: bytes):
-        path = self.data_hive_path(bucket)
-        logging.info(f"saving {len(content)} bytes to {path}")
-        fs.pipe(path=path, value=content)
-
-
-class GTFSExtractOutcome(BaseModel):
-    extract: GTFSExtract
-    success: bool
-    exception: Optional[Exception]
-    body: Optional[str]
-
-    class Config:
-        arbitrary_types_allowed = True
-        json_encoders = {Exception: lambda e: str(e)}
-
-    def hive_path(self, bucket: str):
-        return os.path.join(
-            bucket,
-            f"{self.extract.feed.type}_outcomes",
-            *self.extract.hive_partitions,
-            self.extract.filename,
-        )
+    # @classmethod
+    # def fetch_all_in_partition(
+    #     cls,
+    #     fs: gcsfs.GCSFileSystem,
+    #     bucket: str,
+    #     feed_type: GTFSFeedType,
+    #     partitions: Dict[str, PartitionType],
+    # ) -> List["GTFSFeedExtract"]:
+    #     path = "/".join(
+    #         [
+    #             bucket,
+    #             feed_type,
+    #             *[f"{key}={value}" for key, value in partitions.items()],
+    #         ]
+    #     )
+    #     return parse_obj_as(
+    #         List["GTFSFeedExtract"], [fs.info(file) for file in fs.ls(path)]
+    #     )
 
 
-class GTFSFeedDownloadList(BaseModel):
-    feeds: List[GTFSFeed]
-
-    def get_feeds_by_type(self, type: GTFSFeedType) -> List[GTFSFeed]:
-        return [feed for feed in self.feeds if feed.type == type]
-
-    # TODO: this should return validated feeds, plus one outcome per failure so we can save them
-    @staticmethod
-    def from_airtable_extract(
-        extract: AirtableGTFSDataExtract,
-    ) -> Tuple["GTFSFeedDownloadList", List[GTFSExtractOutcome]]:
-        validated_feeds: List[GTFSFeed] = []
-        failures: List[GTFSExtractOutcome] = []
-        for record in extract.records:
-            try:
-                new_feed = GTFSFeed(
-                    # type=,
-                    url=record.uri,
-                )
-                validated_feeds.append(new_feed)
-            except ValidationError as e:
-                failures.append(GTFSExtractOutcome())
-                logging.warn(f"Error occurred for feed {record}:")
-                logging.warn(e)
-                continue
-
-        success_rate = len(validated_feeds) / len(extract.records)
-        if success_rate < GTFS_FEED_LIST_ERROR_THRESHOLD:
-            raise RuntimeError(
-                f"Success rate: {success_rate} was below error threshold: {GTFS_FEED_LIST_ERROR_THRESHOLD}"
-            )
-        assert len(extract.records) == len(validated_feeds) + len(failures)
-        return GTFSFeedDownloadList(feeds=validated_feeds), failures
+class AirtableGTFSDataRecordProcessingOutcome(ProcessingOutcome):
+    input_type: ClassVar[typing.Type[PartitionedGCSArtifact]] = GTFSFeedExtract
+    extract: GTFSFeedExtract
 
 
-def get_auth_secret(auth_secret_key: str) -> str:
-    try:
-        secret = Variable.get(auth_secret_key, os.environ[auth_secret_key])
-        return secret
-    except KeyError as e:
-        logging.error(f"No value found for {auth_secret_key}")
-        raise e
+# class GTFSFeedExtractOutcome(PartitionedGCSArtifact):
+#     extract: Optional[GTFSFeedExtract]
+#     success: bool
+#     exception: Optional[Exception]
+#     body: Optional[str]
+#
+#     class Config:
+#         arbitrary_types_allowed = True
+#         json_encoders = {Exception: lambda e: str(e)}
+#
+#     @property
+#     def table(self) -> str:
+#         return f"{self.extract.feed.type}_outcomes"
+#
+#     @property
+#     def bucket(self) -> str:
+#         pass
 
 
 if __name__ == "__main__":
-    AirtableGTFSDataExtract.get_latest()
+    records = AirtableGTFSDataExtract.get_latest().records
+    extract = GTFSFeedExtract(
+        filename="whatever",
+        config=records[0],
+        response_code=200,
+        response_headers={},
+        download_time=pendulum.now(),
+    )
+    extract.save_content(get_fs(), b"")
+    print(
+        AirtableGTFSDataRecordProcessingOutcome(
+            success=True,
+            extract=extract,
+        ).json(indent=4)
+    )
