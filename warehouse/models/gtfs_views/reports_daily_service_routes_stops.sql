@@ -36,8 +36,6 @@ stops_agg AS (
         date AS service_date,
         COUNT(DISTINCT stop_key) AS n_stops
     FROM gtfs_schedule_fact_daily_feed_stops
-    -- temporary, test filter
-    -- WHERE date >= '2022-04-01' AND date <= '2022-06-30'
     GROUP BY 1, 2
 ),
 
@@ -47,8 +45,6 @@ routes_agg AS (
         date AS service_date,
         COUNT(DISTINCT route_key) AS n_routes
     FROM gtfs_schedule_fact_daily_feed_routes
-    -- temporary, test filter
-    -- WHERE date >= '2022-04-01' AND date <= '2022-06-30'
     GROUP BY 1, 2
 ),
 
@@ -77,8 +73,6 @@ stops_routes_metadata_joined AS (
 date_renamed AS (
     SELECT full_date AS service_date
     FROM dim_date
-    -- temporary, test filter
-    -- WHERE full_date >= '2022-04-01' AND full_date <= '2022-06-30'
 ),
 
 reports_feeds_distinct AS (
@@ -96,8 +90,6 @@ date_feed_cross AS (
     FROM date_renamed AS T1
     CROSS JOIN reports_feeds_distinct AS T2
     WHERE T2.use_for_report
-    -- temporary, for testing on a single month...
-    -- AND T1.service_date >= '2022-04-01' AND T1.service_date <= '2022-06-30'
 ),
 
 for_report AS (
