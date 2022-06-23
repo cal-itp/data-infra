@@ -69,7 +69,8 @@ PARTITION_DESERIALIZERS = {
 
 def partition_map(path) -> Dict[str, PartitionType]:
     return {
-        key: value for key, value in re.findall(r"/(\w+)=([\w\-:]+)(?=/)", path.lower())
+        key: value
+        for key, value in re.findall(r"/(\w+)=([\w\-:=]+)(?=/)", path.lower())
     }
 
 
@@ -276,6 +277,7 @@ class PartitionedGCSArtifact(BaseModel, abc.ABC):
 class ProcessingOutcome(BaseModel, abc.ABC):
     success: bool
     exception: Optional[Exception]
+    input_record: BaseModel
 
     class Config:
         arbitrary_types_allowed = True
@@ -448,7 +450,7 @@ class GTFSFeedExtract(PartitionedGCSArtifact):
 
 class AirtableGTFSDataRecordProcessingOutcome(ProcessingOutcome):
     input_type: ClassVar[typing.Type[PartitionedGCSArtifact]] = GTFSFeedExtract
-    extract: GTFSFeedExtract
+    extract: Optional[GTFSFeedExtract]
 
 
 # class GTFSFeedExtractOutcome(PartitionedGCSArtifact):

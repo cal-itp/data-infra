@@ -62,6 +62,7 @@ def download_feed(
 
     return AirtableGTFSDataRecordProcessingOutcome(
         success=True,
+        input_record=record,
         extract=extract,
     )
 
@@ -91,10 +92,13 @@ def download_all(task_instance, execution_date, **kwargs):
                 f"exception occurred while attempting to download feed: {str(e)}",
                 traceback.format_exc(),
             )
-            raise
-            # outcomes.append(AirtableGTFSDataRecordProcessingOutcome(
-            #
-            # ))
+            outcomes.append(
+                AirtableGTFSDataRecordProcessingOutcome(
+                    success=False,
+                    exception=e,
+                    input_record=record,
+                )
+            )
 
     assert len(records) == len(
         outcomes
