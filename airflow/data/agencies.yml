@@ -789,7 +789,7 @@ stanislaus-regional-transit-authority:
 montebello-bus-lines:
   agency_name: Montebello Bus Lines
   feeds:
-    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/montebello-ca-us/montebello-ca-us.zip
+    - gtfs_schedule_url: https://mbl.rideralerts.com/infopoint/gtfs-zip.ashx
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
