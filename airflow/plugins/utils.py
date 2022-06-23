@@ -11,6 +11,7 @@ from typing import ClassVar, List, Union
 from typing import Optional, Dict
 
 import gcsfs
+import humanize
 import pandas as pd
 import pendulum
 from airflow.models import Variable
@@ -270,7 +271,7 @@ class PartitionedGCSArtifact(BaseModel, abc.ABC):
         )
 
     def save_content(self, fs: gcsfs.GCSFileSystem, content: bytes):
-        logging.info(f"saving {len(content)} bytes to {self.path}")
+        logging.info(f"saving {humanize.naturalsize(len(content))} to {self.path}")
         fs.pipe(path=self.path, value=content)
 
 

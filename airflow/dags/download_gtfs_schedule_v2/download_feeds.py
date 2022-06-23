@@ -1,8 +1,6 @@
 # ---
 # python_callable: download_all
 # provide_context: true
-# dependencies:
-#   - generate_provider_list
 # ---
 import traceback
 
@@ -47,7 +45,7 @@ def download_feed(
         (disp1.group(0) if disp1 else None)
         or (disp2.group(0) if disp1 else None)
         or (os.path.basename(resp.url) if resp.url.endswith(".zip") else None)
-        or "content.zip"
+        or "feed.zip"
     )
 
     extract = GTFSFeedExtract(
