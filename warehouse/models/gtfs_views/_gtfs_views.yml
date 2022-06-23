@@ -843,7 +843,8 @@ models:
           - not_null
   - name: reports_daily_service_route_stops
     description: |
-      New table to consolidate and improve metric generation for reports.
+      Table consolidating daily service hours, routes, and stops by feed,
+      filtered to the specific feed used for each monthly report.
       Replaces complex Siuba code in reports notebook and allows for 
       visibility into service hour changes before the report generation process.
       Primary key is composite of service_date, calitp_itp_id, calitp_url_number.

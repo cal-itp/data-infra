@@ -20,8 +20,8 @@ gtfs_schedule_dim_feeds AS (
     FROM {{ ref('gtfs_schedule_dim_feeds') }}
 ),
 
-dim_date AS (
-    SELECT *
+dates AS (
+    SELECT full_date AS service_date
     FROM {{ ref('dim_date') }}
 ),
 
@@ -48,35 +48,24 @@ routes_agg AS (
     GROUP BY 1, 2
 ),
 
-stops_routes_agg AS (
+stops_routes_metadata_joined AS (
     SELECT
         T1.feed_key,
         T1.n_stops,
         T1.service_date,
         T2.n_routes,
+        T3.calitp_itp_id,
+        T3.calitp_url_number
     FROM stops_agg AS T1
     INNER JOIN routes_agg AS T2
         ON T1.service_date = T2.service_date
             AND T1.feed_key = T2.feed_key
-),
-
-stops_routes_metadata_joined AS (
-    SELECT
-        T1.*,
-        T2.calitp_itp_id,
-        T2.calitp_url_number,
-    FROM stops_routes_agg AS T1
-    INNER JOIN gtfs_schedule_dim_feeds AS T2
-        ON T1.feed_key = T2.feed_key
-),
-
-date_renamed AS (
-    SELECT full_date AS service_date
-    FROM dim_date
+    INNER JOIN gtfs_schedule_dim_feeds AS T3
+        ON T1.feed_key = T3.feed_key
 ),
 
 reports_feeds_distinct AS (
-    SELECT DISTINCT calitp_itp_id, calitp_url_number, use_for_report
+    SELECT DISTINCT calitp_itp_id, calitp_url_number
     FROM reports_gtfs_schedule_index
 ),
 
@@ -87,17 +76,14 @@ date_feed_cross AS (
         -- construct publish_date for all combinations to filter later
         T2.calitp_itp_id,
         T2.calitp_url_number,
-    FROM date_renamed AS T1
+    FROM dates AS T1
     CROSS JOIN reports_feeds_distinct AS T2
-    WHERE T2.use_for_report
 ),
 
 for_report AS (
     SELECT
     calitp_itp_id,
     calitp_url_number,
-    date_start,
-    date_end,
     publish_date
     FROM reports_gtfs_schedule_index
     WHERE use_for_report
