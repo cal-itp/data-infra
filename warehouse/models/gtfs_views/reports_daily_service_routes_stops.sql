@@ -7,12 +7,12 @@ WITH gtfs_schedule_fact_daily_service AS (
 
 gtfs_schedule_fact_daily_feed_stops AS (
     SELECT *
-    FROM {{ ref('gtfs_schedule_fact_daily_feed_stops') }} 
+    FROM {{ ref('gtfs_schedule_fact_daily_feed_stops') }}
 ),
 
 gtfs_schedule_fact_daily_feed_routes AS (
     SELECT *
-    FROM {{ ref('gtfs_schedule_fact_daily_feed_routes') }} 
+    FROM {{ ref('gtfs_schedule_fact_daily_feed_routes') }}
 ),
 
 gtfs_schedule_dim_feeds AS (
@@ -27,14 +27,14 @@ dates AS (
 
 reports_gtfs_schedule_index AS (
     SELECT *
-    FROM {{ ref('reports_gtfs_schedule_index') }} 
+    FROM {{ ref('reports_gtfs_schedule_index') }}
 ),
 
 stops_agg AS (
     SELECT
         feed_key,
         date AS service_date,
-        COUNT(DISTINCT stop_key) AS n_stops
+        COUNT(stop_key) AS n_stops
     FROM gtfs_schedule_fact_daily_feed_stops
     GROUP BY 1, 2
 ),
@@ -43,7 +43,7 @@ routes_agg AS (
     SELECT
         feed_key,
         date AS service_date,
-        COUNT(DISTINCT route_key) AS n_routes
+        COUNT(route_key) AS n_routes
     FROM gtfs_schedule_fact_daily_feed_routes
     GROUP BY 1, 2
 ),
@@ -65,7 +65,9 @@ stops_routes_metadata_joined AS (
 ),
 
 reports_feeds_distinct AS (
-    SELECT DISTINCT calitp_itp_id, calitp_url_number
+    SELECT DISTINCT
+        calitp_itp_id,
+        calitp_url_number
     FROM reports_gtfs_schedule_index
 ),
 
@@ -75,28 +77,28 @@ date_feed_cross AS (
         DATE_ADD(LAST_DAY(T1.service_date, MONTH), INTERVAL 1 DAY) AS publish_date,
         -- construct publish_date for all combinations to filter later
         T2.calitp_itp_id,
-        T2.calitp_url_number,
+        T2.calitp_url_number
     FROM dates AS T1
     CROSS JOIN reports_feeds_distinct AS T2
 ),
 
 for_report AS (
     SELECT
-    calitp_itp_id,
-    calitp_url_number,
-    publish_date
+        calitp_itp_id,
+        calitp_url_number,
+        publish_date
     FROM reports_gtfs_schedule_index
     WHERE use_for_report
 ),
 
 date_feed_cross_rejoin AS (
     SELECT
-    T1.*
+        T1.*
     FROM date_feed_cross AS T1
     INNER JOIN for_report AS T2
-    ON T1.publish_date = T2.publish_date
-        AND T1.calitp_itp_id = T2.calitp_itp_id
-        AND T1.calitp_url_number = T2.calitp_url_number
+        ON T1.publish_date = T2.publish_date
+            AND T1.calitp_itp_id = T2.calitp_itp_id
+            AND T1.calitp_url_number = T2.calitp_url_number
 ),
 
 service_agg AS (
@@ -114,19 +116,19 @@ service_agg AS (
         ON T1.service_date = T2.service_date
             AND T1.calitp_itp_id = T2.calitp_itp_id
             AND T1.calitp_url_number = T2.calitp_url_number
-   GROUP BY 1, 2, 3, 4
+    GROUP BY 1, 2, 3, 4
 ),
 
 reports_daily_service_routes_stops AS (
     SELECT
         T1.*,
         T2.n_stops,
-        T2.n_routes,
+        T2.n_routes
     FROM service_agg AS T1
     INNER JOIN stops_routes_metadata_joined AS T2
         ON T1.calitp_itp_id = T2.calitp_itp_id
             AND T1.calitp_url_number = T2.calitp_url_number
             AND T1.service_date = T2.service_date
-) 
+)
 
 SELECT * FROM reports_daily_service_routes_stops

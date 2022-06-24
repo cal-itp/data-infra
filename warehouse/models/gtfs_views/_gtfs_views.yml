@@ -845,7 +845,7 @@ models:
     description: |
       Table consolidating daily service hours, routes, and stops by feed,
       filtered to the specific feed used for each monthly report.
-      Replaces complex Siuba code in reports notebook and allows for 
+      Replaces complex Siuba code in reports notebook and allows for
       visibility into service hour changes before the report generation process.
       Primary key is composite of service_date, calitp_itp_id, calitp_url_number.
     tests:
@@ -878,11 +878,11 @@ models:
       - name: last_departure_ts
         description: Time of last departure on date
       - name: n_stops
-        description: | 
+        description: |
          Total number of stops present in active feed
          (not necessarily served on date)
       - name: n_routes
-        description: | 
+        description: |
          Total number of routes present in active feed
          (not necessarily operating on date)
 
