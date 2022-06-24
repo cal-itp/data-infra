@@ -841,6 +841,50 @@ models:
         description: Field in validation output from GTFS validator
         tests:
           - not_null
+  - name: reports_daily_service_route_stops
+    description: |
+      Table consolidating daily service hours, routes, and stops by feed,
+      filtered to the specific feed used for each monthly report.
+      Replaces complex Siuba code in reports notebook and allows for
+      visibility into service hour changes before the report generation process.
+      Primary key is composite of service_date, calitp_itp_id, calitp_url_number.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - service_date
+            - calitp_itp_id
+            - calitp_url_number
+    columns:
+      - name: service_date
+        description: Date on which this service level was present
+        tests:
+          - not_null
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+        tests:
+          - not_null
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+      - name: feed_key
+        tests:
+          - not_null
+        description: feed_key only present with active service on date
+      - name: ttl_service_hours
+        description: Total service hours across entire feed on date, if any
+      - name: n_trips
+        description: Total number of trips ran on date, if any
+      - name: first_departure_ts
+        description: Time of first departure on date
+      - name: last_departure_ts
+        description: Time of last departure on date
+      - name: n_stops
+        description: |
+         Total number of stops present in active feed
+         (not necessarily served on date)
+      - name: n_routes
+        description: |
+         Total number of routes present in active feed
+         (not necessarily operating on date)
 
 exposures:
   - name: calitp_map_tile_server
@@ -854,6 +898,27 @@ exposures:
 
     owner:
       email: andrew.v@jarv.us
+  - name: calitp_reports_site
+    type: application
+    maturity: medium
+    url: "reports.calitp.org"
+    description: Cal-ITP reports site
+
+    depends_on:
+      - ref("reports_daily_service_routes_stops")
+      - ref("reports_gtfs_schedule_index")
+      - ref("gtfs_schedule_dim_feeds")
+      - ref("gtfs_schedule_fact_stop_id_changes")
+      - ref("gtfs_schedule_fact_route_id_changes")
+      - source("gtfs_type2", "validation_notices")
+      # ^ hopefully not for long
+      # also gtfs_schedule_history.calitp_files_updates
+      # don't think this is a source in dbt?
+      # could add, but would also like to look at options
+      # to replace reports-side...
+
+    owner:
+      email: eric.d@jarv.us
 
     meta:
       destinations:
