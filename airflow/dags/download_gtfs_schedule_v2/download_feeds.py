@@ -2,6 +2,7 @@
 # python_callable: download_all
 # provide_context: true
 # ---
+import logging
 import traceback
 
 import os
@@ -72,12 +73,17 @@ def download_all(task_instance, execution_date, **kwargs):
     with create_session() as session:
         auth_dict = {var.key: var.val for var in session.query(Variable)}
 
-    records = AirtableGTFSDataExtract.get_latest().records
+    records = [
+        record
+        for record in AirtableGTFSDataExtract.get_latest().records
+        if record.data == GTFSFeedType.schedule
+    ]
     outcomes: List[AirtableGTFSDataRecordProcessingOutcome] = []
 
-    for record in records:
-        if record.data != GTFSFeedType.schedule:
-            continue
+    logging.info(f"processing {len(records)} records")
+
+    for i, record in enumerate(records, start=1):
+        logging.info(f"attempting to fetch {i}/{len(records)} {record.uri}")
 
         try:
             # this is a bit hacky but we need this until we split off auth query params from the URI itself
@@ -90,9 +96,8 @@ def download_all(task_instance, execution_date, **kwargs):
                 record.uri = re.sub(jinja_pattern, "", record.uri)
             outcomes.append(download_feed(record, auth_dict=auth_dict))
         except Exception as e:
-            print(
-                f"exception occurred while attempting to download feed: {str(e)}",
-                traceback.format_exc(),
+            logging.error(
+                f"exception occurred while attempting to download feed {record.uri}: {str(e)}\n{traceback.format_exc()}"
             )
             outcomes.append(
                 AirtableGTFSDataRecordProcessingOutcome(
