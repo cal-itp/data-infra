@@ -282,7 +282,6 @@ class PartitionedGCSArtifact(BaseModel, abc.ABC):
         fs.pipe(path=self.path, value=content)
         fs.setxattrs(
             path=self.path,
-            content_type="json",
             # This syntax seems silly but it's so we pass the _value_ of PARTITIONED_ARTIFACT_METADATA_KEY
             **{PARTITIONED_ARTIFACT_METADATA_KEY: self.json()},
         )
