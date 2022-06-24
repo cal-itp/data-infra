@@ -2,6 +2,7 @@
 # python_callable: download_all
 # provide_context: true
 # ---
+import cgi
 import logging
 import traceback
 
@@ -39,19 +40,28 @@ def download_feed(
     resp = s.send(r)
     resp.raise_for_status()
 
-    # we can try a few different locations for the filename
-    disp1 = re.search('filename="(.+)"', resp.headers.get("content-disposition", ""))
-    disp2 = re.search('filename="(.+)"', resp.headers.get("Content-Disposition", ""))
+    disposition_header = resp.headers.get(
+        "content-disposition", resp.headers.get("Content-Disposition")
+    )
+
+    if disposition_header:
+        if disposition_header.startswith("filename="):
+            # sorry; cgi won't parse unless it's prefixed with the disposition type
+            disposition_header = f"attachment; {disposition_header}"
+        _, params = cgi.parse_header(disposition_header)
+        disposition_filename = params.get("filename")
+    else:
+        disposition_filename = None
 
     filename = (
-        (disp1.group(0) if disp1 else None)
-        or (disp2.group(0) if disp1 else None)
+        disposition_filename
         or (os.path.basename(resp.url) if resp.url.endswith(".zip") else None)
         or "feed.zip"
     )
 
     extract = GTFSFeedExtractInfo(
-        filename=filename,
+        # TODO: handle this in pydantic?
+        filename=filename.strip('"'),
         config=record,
         response_code=resp.status_code,
         response_headers=resp.headers,
