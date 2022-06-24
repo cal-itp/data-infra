@@ -68,6 +68,7 @@ def download_feed(
 
 
 def download_all(task_instance, execution_date, **kwargs):
+    start = pendulum.now()
     # TODO: use laurie's method for this
     # https://stackoverflow.com/a/61808755
     with create_session() as session:
@@ -107,14 +108,16 @@ def download_all(task_instance, execution_date, **kwargs):
                 )
             )
 
+    print(f"took {pendulum.now() - start} to process {len(records)} records")
+
     assert len(records) == len(
         outcomes
     ), f"we somehow ended up with {len(outcomes)} from {len(records)}"
 
-    success_rate = len([outcome for outcome in outcomes if outcome.success]) / len(
-        records
-    )
+    successes = len([outcome for outcome in outcomes if outcome.success])
+    print(f"successfully fetched {successes} of {len(records)}")
+    success_rate = successes / len(records)
     if success_rate < GTFS_FEED_LIST_ERROR_THRESHOLD:
         raise RuntimeError(
-            f"Success rate: {success_rate} was below error threshold: {GTFS_FEED_LIST_ERROR_THRESHOLD}"
+            f"Success rate: {success_rate:.1f} was below error threshold: {GTFS_FEED_LIST_ERROR_THRESHOLD}"
         )
