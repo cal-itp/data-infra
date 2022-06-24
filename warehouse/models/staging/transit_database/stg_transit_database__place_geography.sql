@@ -18,7 +18,7 @@ stg_transit_database__place_geography AS (
         place_base,
         place_formal,
         county,
-        county_base,
+        unnested_county_base AS county_base,
         fips__from_county_base_,
         msa__from_county_base_,
         caltrans_district__from_county_base_,
@@ -29,6 +29,7 @@ stg_transit_database__place_geography AS (
         time,
         dt AS calitp_extracted_at
     FROM latest
+    LEFT JOIN UNNEST(latest.county_base) AS unnested_county_base
 )
 
 SELECT * FROM stg_transit_database__place_geography

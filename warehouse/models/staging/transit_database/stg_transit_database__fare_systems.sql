@@ -46,12 +46,13 @@ stg_transit_database__fare_systems AS (
         demand_response_fare_url,
         mobility_services_managed__from_transit_provider_,
         gtfs_dataset__from_mobility_services_managed___from_transit_provider_,
-        transit_provider,
+        unnested_transit_provider AS transit_provider,
         fares_v2_status__from_mobility_services_managed___from_transit_provider_,
         itp_id,
         time,
         dt AS calitp_extracted_at
     FROM latest
+    LEFT JOIN UNNEST(latest.transit_provider) AS unnested_transit_provider
 )
 
 SELECT * FROM stg_transit_database__fare_systems

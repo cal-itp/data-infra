@@ -7,19 +7,13 @@ latest AS (
         order_by = 'dt DESC, time DESC'
         ) }}
 ),
--- holdover from old sql, replace the below with the unnesting from laurie
-        -- service and gtfs_dataset are 1:1 foreign key fields
-        -- but they export as an array from airtable
-        -- turn them into a string for joining
-        -- JSON_VALUE_ARRAY(services) services,
-        -- JSON_VALUE_ARRAY(gtfs_dataset) gtfs_dataset,
 
 stg_transit_database__gtfs_service_data AS (
     SELECT
         gtfs_service_data_id AS key,
         {{ trim_make_empty_string_null(column_name = "name") }},
-        services,
-        gtfs_dataset,
+        unnested_services AS services,
+        unnested_gtfs_dataset AS gtfs_dataset,
         dataset_type,
         category,
         agency_id,
@@ -37,7 +31,7 @@ stg_transit_database__gtfs_service_data AS (
         schedule_comments__from_gtfs_dataset_,
         itp_activities__from_gtfs_dataset_,
         fares_notes__from_gtfs_dataset_,
-        reference_static_gtfs_service,
+        unnested_reference_static_gtfs_service AS reference_static_gtfs_service,
         uri,
         currently_operating__from_services_,
         provider_reporting_category,
@@ -45,6 +39,9 @@ stg_transit_database__gtfs_service_data AS (
         time,
         dt AS calitp_extracted_at
     FROM latest
+    LEFT JOIN UNNEST(latest.services) as unnested_services
+    LEFT JOIN UNNEST(latest.gtfs_dataset) as unnested_gtfs_dataset
+    LEFT JOIN UNNEST(latest.reference_static_gtfs_service) as unnested_reference_static_gtfs_service
 )
 
 SELECT * FROM stg_transit_database__gtfs_service_data

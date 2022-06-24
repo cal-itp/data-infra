@@ -49,10 +49,11 @@ stg_transit_database__ntd_agency_info AS (
         total_voms,
         volunteer_drivers,
         personal_vehicles,
-        organizations,
+        unnested_organizations AS organizations,
         time,
         dt AS calitp_extracted_at
     FROM latest
+    LEFT JOIN UNNEST(latest.organizations) AS unnested_organizations
 )
 
 SELECT * FROM stg_transit_database__ntd_agency_info
