@@ -20,7 +20,7 @@ stg_transit_database__gtfs_datasets AS (
         uri,
         future_uri,
         api_key,
-        unnested_aggregated_to AS aggregated_to,
+        unnested_aggregated_to AS aggregated_to_gtfs_dataset_key,
         provider_gtfs_capacity,
         service_type,
         category,
