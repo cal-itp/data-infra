@@ -18,9 +18,9 @@ mapped_holder_ids AS (
         map_holder.ct_key AS contract_holder,
         map_vendor.ct_key AS contract_vendor,
         dt
-    FROM latest,
-        latest.contract_holder AS unnested_contract_holder,
-        latest.contract_vendor AS unnested_contract_vendor
+    FROM latest
+    LEFT JOIN UNNEST(latest.contract_holder) AS unnested_contract_holder
+    LEFT JOIN UNNEST(latest.contract_vendor) AS unnested_contract_vendor
     LEFT JOIN int_tts_organizations_ct_organizations_map AS map_holder
         ON unnested_contract_holder = map_holder.tts_key
         AND dt = map_holder.tts_date
