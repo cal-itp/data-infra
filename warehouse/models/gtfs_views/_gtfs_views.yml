@@ -841,7 +841,7 @@ models:
         description: Field in validation output from GTFS validator
         tests:
           - not_null
-  - name: reports_daily_service_route_stops
+  - name: reports_daily_service_routes_stops
     description: |
       Table consolidating daily service hours, routes, and stops by feed,
       filtered to the specific feed used for each monthly report.
