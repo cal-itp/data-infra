@@ -11,7 +11,7 @@ calitp_warehouse:
       method: oauth
       priority: interactive
       threads: 4
-      timeout_seconds: 300
+      timeout_seconds: 600
       type: bigquery
     prod_service_account:
       <<: *prod
