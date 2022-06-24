@@ -79,7 +79,8 @@ reports_gtfs_schedule_index AS (
         has_feed_info,
         is_private_feed,
         (calitp_url_number = 0
-            AND has_feed_info
+            -- try making optional for June reports
+            -- AND has_feed_info
             AND NOT is_private_feed
         ) AS use_for_report
     FROM agency_feeds_on_end_date AS AF
