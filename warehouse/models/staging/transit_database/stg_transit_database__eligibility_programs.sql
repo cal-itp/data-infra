@@ -12,9 +12,9 @@ stg_transit_database__eligibility_programs AS (
     SELECT
         eligibility_program_id AS key,
         {{ trim_make_empty_string_null(column_name = "program") }},
-        unnested_administering_entity AS administering_entity,
-        unnested_eligibility_types AS eligibility_types,
-        unnested_services AS services,
+        unnested_administering_entity AS administering_entity_organization_key,
+        unnested_eligibility_types AS eligibility_type_rider_requirement_key,
+        unnested_services AS service_key,
         process,
         assumed_eligibility__appointment_,
         appointment_duration__hours_,

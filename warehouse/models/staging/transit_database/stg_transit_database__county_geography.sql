@@ -16,13 +16,13 @@ stg_transit_database__county_geography AS (
         msa,
         caltrans_district,
         caltrans_district_name,
-        unnested_rtpa AS rtpa,
+        -- rtpa is not a one-to-one relationship
+        rtpa,
         mpo,
         place_geography,
         time,
         dt AS calitp_extracted_at
     FROM latest
-    LEFT JOIN UNNEST(latest.rtpa) AS unnested_rtpa
 )
 
 SELECT * FROM stg_transit_database__county_geography

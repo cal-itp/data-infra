@@ -18,7 +18,7 @@ stg_transit_database__place_geography AS (
         place_base,
         place_formal,
         county,
-        unnested_county_base AS county_base,
+        unnested_county_base AS county_geography_key,
         fips__from_county_base_,
         msa__from_county_base_,
         caltrans_district__from_county_base_,

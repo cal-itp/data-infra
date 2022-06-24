@@ -15,7 +15,7 @@ stg_transit_database__rider_requirements AS (
         category,
         description,
         services,
-        unnested_eligibility_programs AS eligibility_programs,
+        unnested_eligibility_programs AS eligibility_program_key,
         time,
         dt AS calitp_extracted_at
     FROM latest

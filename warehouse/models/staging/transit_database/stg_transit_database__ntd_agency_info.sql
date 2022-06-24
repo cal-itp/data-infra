@@ -49,7 +49,7 @@ stg_transit_database__ntd_agency_info AS (
         total_voms,
         volunteer_drivers,
         personal_vehicles,
-        unnested_organizations AS organizations,
+        unnested_organizations AS organization_key,
         time,
         dt AS calitp_extracted_at
     FROM latest

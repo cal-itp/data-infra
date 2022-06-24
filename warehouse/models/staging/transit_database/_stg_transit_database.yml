@@ -63,7 +63,7 @@ models:
       - name: uri
       - name: future_uri
       - name: api_key
-      - name: aggregated_to
+      - name: aggregated_to_gtfs_dataset_key
       - name: provider_gtfs_capacity
       - name: service_type
       - name: category
@@ -87,8 +87,8 @@ models:
     columns:
       - *key
       - *name
-      - name: services
-      - name: gtfs_dataset
+      - name: service_key
+      - name: gtfs_dataset_key
       - name: dataset_type
       - name: category
       - name: agency_id
@@ -106,7 +106,7 @@ models:
       - name: schedule_comments__from_gtfs_dataset_
       - name: itp_activities__from_gtfs_dataset_
       - name: fares_notes__from_gtfs_dataset_
-      - name: reference_static_gtfs_service
+      - name: reference_static_gtfs_service_data_key
       - name: uri
       - name: currently_operating__from_services_
       - name: provider_reporting_category
@@ -135,9 +135,9 @@ models:
         tests:
           - not_null:
               severity: warn
-      - name: administering_entity
-      - name: eligibility_types
-      - name: services
+      - name: administering_entity_organization_key
+      - name: eligibility_type_rider_requirement_key
+      - name: service_key
       - name: process
       - name: assumed_eligibility__appointment_
       - name: appointment_duration__hours_
@@ -187,7 +187,7 @@ models:
       - name: demand_response_fare_url
       - name: mobility_services_managed__from_transit_provider_
       - name: gtfs_dataset__from_mobility_services_managed___from_transit_provider_
-      - name: transit_provider
+      - name: transit_provider_organization_key
       - name: fares_v2_status__from_mobility_services_managed___from_transit_provider_
       - name: itp_id
       - name: time
@@ -253,7 +253,7 @@ models:
       - name: total_voms
       - name: volunteer_drivers
       - name: personal_vehicles
-      - name: organizations
+      - name: organization_key
       - name: time
       - name: calitp_extracted_at
   - name: stg_transit_database__place_geography
@@ -267,7 +267,7 @@ models:
       - name: place_base
       - name: place_formal
       - name: county
-      - name: county_base
+      - name: county_geography_key
       - name: fips__from_county_base_
       - name: msa__from_county_base_
       - name: caltrans_district__from_county_base_
@@ -288,6 +288,6 @@ models:
       - name: category
       - name: description
       - name: services
-      - name: eligibility_programs
+      - name: eligibility_program_key
       - name: time
       - name: calitp_extracted_at
