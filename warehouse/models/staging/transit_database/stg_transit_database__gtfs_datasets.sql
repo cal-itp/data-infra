@@ -20,7 +20,7 @@ stg_transit_database__gtfs_datasets AS (
         uri,
         future_uri,
         api_key,
-        aggregated_to,
+        unnested_aggregated_to AS aggregated_to,
         provider_gtfs_capacity,
         service_type,
         category,
@@ -40,6 +40,7 @@ stg_transit_database__gtfs_datasets AS (
         time,
         dt AS calitp_extracted_at
     FROM latest
+    LEFT JOIN UNNEST(latest.aggregated_to) AS unnested_aggregated_to
 )
 
 SELECT * FROM stg_transit_database__gtfs_datasets

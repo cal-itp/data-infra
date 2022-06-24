@@ -12,9 +12,9 @@ stg_transit_database__eligibility_programs AS (
     SELECT
         eligibility_program_id AS key,
         {{ trim_make_empty_string_null(column_name = "program") }},
-        administering_entity,
-        eligibility_types,
-        services,
+        unnested_administering_entity AS administering_entity,
+        unnested_eligibility_types AS eligibility_types,
+        unnested_services AS services,
         process,
         assumed_eligibility__appointment_,
         appointment_duration__hours_,
@@ -23,6 +23,9 @@ stg_transit_database__eligibility_programs AS (
         time,
         dt AS calitp_extracted_at
     FROM latest
+    LEFT JOIN UNNEST(latest.administering_entity) AS unnested_administering_entity
+    LEFT JOIN UNNEST(latest.eligibility_types) AS unnested_eligibility_types
+    LEFT JOIN UNNEST(latest.services) AS unnested_services
 )
 
 SELECT * FROM stg_transit_database__eligibility_programs
