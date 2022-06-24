@@ -49,6 +49,8 @@ def prefix_bucket(bucket):
     return f"gs://test-{bucket}" if is_development() else f"gs://{bucket}"
 
 
+PARTITIONED_ARTIFACT_METADATA_KEY = "PARTITIONED_ARTIFACT_METADATA"
+
 PartitionType = Union[str, int, pendulum.DateTime, pendulum.Date, pendulum.Time]
 
 PARTITION_SERIALIZERS = {
@@ -219,6 +221,11 @@ class PartitionedGCSArtifact(BaseModel, abc.ABC):
 
     filename: str
 
+    class Config:
+        json_encoders = {
+            pendulum.DateTime: lambda dt: dt.to_iso8601_string(),
+        }
+
     @property
     @abc.abstractmethod
     def bucket(self) -> str:
@@ -254,7 +261,7 @@ class PartitionedGCSArtifact(BaseModel, abc.ABC):
         ]
         if missing:
             raise ValueError(
-                f"all partition names must exist as fields; missing {missing}"
+                f"all partition names must exist as fields or properties; missing {missing}"
             )
         return values
 
@@ -273,6 +280,38 @@ class PartitionedGCSArtifact(BaseModel, abc.ABC):
     def save_content(self, fs: gcsfs.GCSFileSystem, content: bytes):
         logging.info(f"saving {humanize.naturalsize(len(content))} to {self.path}")
         fs.pipe(path=self.path, value=content)
+        fs.setxattrs(
+            path=self.path,
+            content_type="json",
+            # This syntax seems silly but it's so we pass the _value_ of PARTITIONED_ARTIFACT_METADATA_KEY
+            **{PARTITIONED_ARTIFACT_METADATA_KEY: self.json()},
+        )
+
+
+def fetch_all_in_partition(
+    cls: typing.Type[PartitionedGCSArtifact],
+    fs: gcsfs.GCSFileSystem,
+    bucket: str,
+    table: str,
+    partitions: Dict[str, PartitionType],
+) -> List[typing.Type[PartitionedGCSArtifact]]:
+    path = "/".join(
+        [
+            bucket,
+            table,
+            *[f"{key}={value}" for key, value in partitions.items()],
+        ]
+    )
+    files = parse_obj_as(
+        GCSObjectInfoList,
+        [v for _, _, files in list(fs.walk(path, detail=True)) for v in files.values()],
+    )
+    return [
+        parse_obj_as(
+            cls, json.loads(fs.getxattr(file.name, PARTITIONED_ARTIFACT_METADATA_KEY))
+        )
+        for file in files.__root__
+    ]
 
 
 class ProcessingOutcome(BaseModel, abc.ABC):
@@ -404,8 +443,9 @@ class AirtableGTFSDataExtract(PartitionedGCSArtifact):
         )
 
 
-class GTFSFeedExtract(PartitionedGCSArtifact):
+class GTFSFeedExtractInfo(PartitionedGCSArtifact):
     # TODO: this should check whether the bucket exists https://stackoverflow.com/a/65628273
+    # TODO: this should be named `gtfs-raw` _or_ we make it dynamic
     bucket: ClassVar[str] = prefix_bucket("gs://gtfs-schedule-raw")
     partition_names: ClassVar[List[str]] = ["dt", "base64_url", "time"]
     config: AirtableGTFSDataRecord
@@ -414,7 +454,7 @@ class GTFSFeedExtract(PartitionedGCSArtifact):
     download_time: pendulum.DateTime
 
     @property
-    def table(self) -> str:
+    def table(self) -> GTFSFeedType:
         return self.config.data
 
     @property
@@ -429,29 +469,10 @@ class GTFSFeedExtract(PartitionedGCSArtifact):
     def time(self) -> pendulum.Time:
         return self.download_time.time()
 
-    # @classmethod
-    # def fetch_all_in_partition(
-    #     cls,
-    #     fs: gcsfs.GCSFileSystem,
-    #     bucket: str,
-    #     feed_type: GTFSFeedType,
-    #     partitions: Dict[str, PartitionType],
-    # ) -> List["GTFSFeedExtract"]:
-    #     path = "/".join(
-    #         [
-    #             bucket,
-    #             feed_type,
-    #             *[f"{key}={value}" for key, value in partitions.items()],
-    #         ]
-    #     )
-    #     return parse_obj_as(
-    #         List["GTFSFeedExtract"], [fs.info(file) for file in fs.ls(path)]
-    #     )
-
 
 class AirtableGTFSDataRecordProcessingOutcome(ProcessingOutcome):
-    input_type: ClassVar[typing.Type[PartitionedGCSArtifact]] = GTFSFeedExtract
-    extract: Optional[GTFSFeedExtract]
+    input_type: ClassVar[typing.Type[PartitionedGCSArtifact]] = GTFSFeedExtractInfo
+    extract: Optional[GTFSFeedExtractInfo]
 
 
 # class GTFSFeedExtractOutcome(PartitionedGCSArtifact):
@@ -474,18 +495,28 @@ class AirtableGTFSDataRecordProcessingOutcome(ProcessingOutcome):
 
 
 if __name__ == "__main__":
-    records = AirtableGTFSDataExtract.get_latest().records
-    extract = GTFSFeedExtract(
-        filename="whatever",
-        config=records[0],
-        response_code=200,
-        response_headers={},
-        download_time=pendulum.now(),
+    # records = AirtableGTFSDataExtract.get_latest().records
+    # extract = GTFSFeedExtract(
+    #     filename="whatever",
+    #     config=records[0],
+    #     response_code=200,
+    #     response_headers={},
+    #     download_time=pendulum.now(),
+    # )
+    # extract.save_content(get_fs(), b"")
+    # print(
+    #     AirtableGTFSDataRecordProcessingOutcome(
+    #         success=True,
+    #         extract=extract,
+    #     ).json(indent=4)
+    # )
+    objs = fetch_all_in_partition(
+        cls=GTFSFeedExtractInfo,
+        fs=get_fs(),
+        bucket=GTFSFeedExtractInfo.bucket,
+        table=GTFSFeedType.schedule.value,
+        partitions=dict(
+            dt=pendulum.Date(year=2022, month=6, day=24),
+        ),
     )
-    extract.save_content(get_fs(), b"")
-    print(
-        AirtableGTFSDataRecordProcessingOutcome(
-            success=True,
-            extract=extract,
-        ).json(indent=4)
-    )
+    print(f"found {len(objs)} objects in partition")

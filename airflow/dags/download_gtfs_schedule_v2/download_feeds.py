@@ -18,7 +18,8 @@ from utils import (
     AirtableGTFSDataExtract,
     AirtableGTFSDataRecord,
     AirtableGTFSDataRecordProcessingOutcome,
-    GTFSFeedExtract,
+    GTFSFeedExtractInfo,
+    GTFSFeedType,
 )
 
 GTFS_FEED_LIST_ERROR_THRESHOLD = 0.95
@@ -48,7 +49,7 @@ def download_feed(
         or "feed.zip"
     )
 
-    extract = GTFSFeedExtract(
+    extract = GTFSFeedExtractInfo(
         filename=filename,
         config=record,
         response_code=resp.status_code,
@@ -75,6 +76,9 @@ def download_all(task_instance, execution_date, **kwargs):
     outcomes: List[AirtableGTFSDataRecordProcessingOutcome] = []
 
     for record in records:
+        if record.data != GTFSFeedType.schedule:
+            continue
+
         try:
             # this is a bit hacky but we need this until we split off auth query params from the URI itself
             jinja_pattern = r"(?P<param_name>\w+)={{\s*(?P<param_lookup_key>\w+)\s*}}"
