@@ -30,11 +30,13 @@ unnest_service_components AS (
         ntd_certified,
         product_component_valid,
         notes
-    FROM stg_transit_database__service_components,
-        stg_transit_database__service_components.services AS service_key,
-        stg_transit_database__service_components.product AS product_key,
-        stg_transit_database__service_components.contracts AS contract_key,
-        stg_transit_database__service_components.component AS component_key
+    FROM stg_transit_database__service_components
+    LEFT JOIN UNNEST(stg_transit_database__service_components.services) AS service_key
+    LEFT JOIN UNNEST(stg_transit_database__service_components.product) AS product_key
+    LEFT JOIN UNNEST(stg_transit_database__service_components.contracts) AS contract_key
+    LEFT JOIN UNNEST(stg_transit_database__service_components.component) AS component_key
+    -- check that we have service and product actually defined
+    WHERE (service_key IS NOT NULL) AND (product_key IS NOT NULL)
 ),
 
 map_services_x_products AS (
