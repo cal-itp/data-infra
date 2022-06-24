@@ -1,4 +1,9 @@
-{{ config(materialized='table') }}
+{{
+    config(
+        materialized='incremental',
+        unique_key='key'
+    )
+}}
 
 WITH gtfs_schedule_dim_feeds AS (
     SELECT *
@@ -13,6 +18,19 @@ gtfs_schedule_dim_trips AS (
 gtfs_schedule_stg_daily_service AS (
     SELECT *
     FROM {{ ref('gtfs_schedule_stg_daily_service') }}
+    {% if is_incremental() or target.name == 'dev' %}
+    WHERE
+        (calitp_extracted_at >=
+            (SELECT MAX(calitp_extracted_at)
+            FROM {{ this }})
+        )
+        OR
+        (calitp_deleted_at >=
+            (SELECT MAX(calitp_extracted_at)
+            FROM {{ this }})
+            WHERE calitp_deleted_at != '2099-01-01'
+        )
+    {% endif %}
 ),
 
 gtfs_schedule_dim_stop_times AS (
@@ -81,6 +99,12 @@ trip_summary AS (
 
 gtfs_schedule_fact_daily_trips AS (
     SELECT
+        {{ dbt_utils.surrogate_key(['t1.calitp_itp_id',
+                                    't1.calitp_url_number',
+                                    't1.service_date',
+                                    't1.trip_key',
+                                    ])
+        }} as key,
         t1.*,
         t2.* EXCEPT(calitp_itp_id, calitp_url_number, trip_id, service_date),
         (t2.trip_last_arrival_ts - t2.trip_first_departure_ts) / 3600 AS service_hours
