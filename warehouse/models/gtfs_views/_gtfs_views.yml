@@ -284,6 +284,8 @@ models:
           indicating that feed is not yet valid as of date
       - name: extraction_status
         description: Indicates whether extraction was successful ('success') or not ('error')
+        tests:
+          - not_null
       - name: parse_error_encountered
         description: |
           Whether a fatal error occurred while parsing the feed; only populated
@@ -314,12 +316,12 @@ models:
         description: |
           Number of days between date and service end date. if is_service_valid is False, this may be negative
           indicating that feed is not yet valid as of date. Service end date is the last day on which service occurs on any service in this feed. Is a feed-wide summary.
-      - name: erroring_since
+      - name: status_since
         description: |
-          If `extraction_status` is "error", this field indicates the date since which this
-          feed has been continuously experiencing extraction errors; i.e., the feed has
-          had extraction_status of "error" every day (inclusive)
-          between `erroring_since` and `date`.
+          This field indicates the date since which this feed has continuously
+          had the same `extraction_status`; i.e., the feed has
+          had the same extraction_status every day (inclusive)
+          between `status_since` and `date`.
   - name: gtfs_schedule_fact_daily_feed_files
     description: |
       Each row of this table is a file extracted from a feed on a given day. Note that on days where

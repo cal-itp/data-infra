@@ -173,7 +173,8 @@ feed_updated AS (
 
 ),
 
-errors_erroring_since AS (
+-- check how long feed has had the same extraction_status
+status_since AS (
     SELECT
         feed_key,
         date,
@@ -181,17 +182,16 @@ errors_erroring_since AS (
         OVER (PARTITION BY feed_key, extraction_status
             ORDER BY date DESC
             ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)
-        AS erroring_since
+        AS status_since
     FROM feed_updated
-    WHERE extraction_status = "error"
 ),
 
 gtfs_schedule_fact_daily_feeds AS (
     SELECT
         t1.* EXCEPT(calitp_itp_id, calitp_url_number),
-        t2.erroring_since
+        t2.status_since
     FROM feed_updated AS t1
-    LEFT JOIN errors_erroring_since AS t2
+    LEFT JOIN status_since AS t2
         USING (feed_key, date)
 )
 
