@@ -173,10 +173,26 @@ feed_updated AS (
 
 ),
 
+-- check how long feed has had the same extraction_status
+status_since AS (
+    SELECT
+        feed_key,
+        date,
+        LAST_VALUE(date)
+        OVER (PARTITION BY feed_key, extraction_status
+            ORDER BY date DESC
+            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)
+        AS status_since
+    FROM feed_updated
+),
+
 gtfs_schedule_fact_daily_feeds AS (
     SELECT
-        * EXCEPT(calitp_itp_id, calitp_url_number)
-    FROM feed_updated
+        t1.* EXCEPT(calitp_itp_id, calitp_url_number),
+        t2.status_since
+    FROM feed_updated AS t1
+    LEFT JOIN status_since AS t2
+        USING (feed_key, date)
 )
 
 SELECT * FROM gtfs_schedule_fact_daily_feeds
