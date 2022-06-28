@@ -316,12 +316,10 @@ models:
         description: |
           Number of days between date and service end date. if is_service_valid is False, this may be negative
           indicating that feed is not yet valid as of date. Service end date is the last day on which service occurs on any service in this feed. Is a feed-wide summary.
-      - name: status_since
+      - name: days_in_status
         description: |
-          This field indicates the date since which this feed has continuously
-          had the same `extraction_status`; i.e., the feed has
-          had the same extraction_status every day (inclusive)
-          between `status_since` and `date`.
+          The number of days for which this feed has continuously had
+          the same `extraction_status`.
   - name: gtfs_schedule_fact_daily_feed_files
     description: |
       Each row of this table is a file extracted from a feed on a given day. Note that on days where
