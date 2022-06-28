@@ -183,14 +183,14 @@ status_since AS (
             OVER (PARTITION BY feed_key, extraction_status
                 ORDER BY date DESC
                 ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING),
-            DAY) AS days_in_status
+            DAY) AS days_in_extraction_status
     FROM feed_updated
 ),
 
 gtfs_schedule_fact_daily_feeds AS (
     SELECT
         t1.* EXCEPT(calitp_itp_id, calitp_url_number),
-        t2.days_in_status
+        t2.days_in_extraction_status
     FROM feed_updated AS t1
     LEFT JOIN status_since AS t2
         USING (feed_key, date)

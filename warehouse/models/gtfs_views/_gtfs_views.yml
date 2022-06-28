@@ -316,7 +316,7 @@ models:
         description: |
           Number of days between date and service end date. if is_service_valid is False, this may be negative
           indicating that feed is not yet valid as of date. Service end date is the last day on which service occurs on any service in this feed. Is a feed-wide summary.
-      - name: days_in_status
+      - name: days_in_extraction_status
         description: |
           The number of days for which this feed has continuously had
           the same `extraction_status`.
