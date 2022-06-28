@@ -4,9 +4,3 @@ air_base_id: appeVUdmRBi3K9hTS
 air_table_name: "contracts"
 air_base_name: transit_technology_stacks
 bucket: "gs://{{ prefix_bucket('calitp-airtable') }}"
-
-airtable_options:
-  id_name: contract_id
-  rename_fields:
-    "Type of Contract: Functional Category": contract_type_functional_category
-    "Type of Contract: Functions": contract_type_functions

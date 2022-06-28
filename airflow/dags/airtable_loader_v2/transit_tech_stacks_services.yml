@@ -4,13 +4,3 @@ air_base_id: appeVUdmRBi3K9hTS
 air_table_name: "services"
 air_base_name: transit_technology_stacks
 bucket: "gs://{{ prefix_bucket('calitp-airtable') }}"
-
-airtable_options:
-  id_name: service_id
-  rename_fields:
-    "# Static": num_static
-    "# TripUpdates": num_trip_updates
-    "# Alerts": num_service_alerts
-    "# VehiclePositions": num_vehicle_positions
-    "Product: GRaaS": "product_graas"
-    "Product: Payments": "product_payments"

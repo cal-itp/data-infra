@@ -5,7 +5,7 @@ import pendulum
 
 from pyairtable import Table
 from pydantic import BaseModel
-from typing import Optional, Dict
+from typing import Optional
 from utils import make_name_bq_safe
 from calitp.storage import get_fs
 
@@ -46,9 +46,6 @@ class AirtableExtract(BaseModel):
     air_base_id: str
     air_base_name: str
     air_table_name: str
-    id_name: str = "__id"
-    rename_fields: Dict[str, str] = {}
-    column_prefix: Optional[str]
     data: Optional[pd.DataFrame]
     extract_time: Optional[pendulum.DateTime]
 
@@ -78,24 +75,12 @@ class AirtableExtract(BaseModel):
 
         raw_df = pd.DataFrame(
             [
-                {self.id_name: row["id"], **make_arrays_bq_safe(row["fields"])}
+                {"id": row["id"], **make_arrays_bq_safe(row["fields"])}
                 for row in all_rows
             ]
         )
 
-        # rename fields follows format new_name: old_name
-        final_df = raw_df.rename(
-            columns={k: v for k, v in self.rename_fields.items()}
-        ).rename(make_name_bq_safe, axis="columns")
-
-        if self.column_prefix:
-            new_field_names = self.rename_fields.values()
-            return final_df.rename(
-                columns=lambda s: s
-                if (s in new_field_names or s == self.id_name)
-                else f"{self.column_prefix}{s}"
-            )
-        self.data = final_df
+        self.data = raw_df.rename(make_name_bq_safe, axis="columns")
 
     def make_hive_path(self, bucket: str):
         if not self.extract_time:
@@ -137,7 +122,6 @@ class AirtableToGCSOperator(BaseOperator):
         air_base_name,
         air_table_name,
         api_key=AIRTABLE_API_KEY,
-        airtable_options={},
         **kwargs,
     ):
         """An operator that downloads data from an Airtable base
@@ -150,15 +134,6 @@ class AirtableToGCSOperator(BaseOperator):
             air_base_name (str): The string name of the Base.
             air_table_name (str): The table name that should be extracted from the
                 Airtable Base
-            airtable_options (dict): optional fields: id_name, rename_fields,
-                column_prefix.
-                id_name (str, optional): The name to give the ID column. Defaults to "__id".
-                rename_fields (dict, optional): A mapping of raw column name from Airtable
-                    (string) to desired column name (string) respectively. Defaults to
-                    empty dict.
-                column_prefix (str, optional): A string prefix to rename all columns with.
-                    This prefix is not applied to columns affected by a rename triggered
-                    from providing either `id_name` or `rename_fields`.
             api_key (str, optional): The API key to use when downloading from airtable.
                 This can be someone's personal API key. If not provided, the environment
                 variable of `CALITP_AIRTABLE_API_KEY` is used.
@@ -168,7 +143,6 @@ class AirtableToGCSOperator(BaseOperator):
             air_base_id=air_base_id,
             air_base_name=air_base_name,
             air_table_name=air_table_name,
-            **airtable_options,
         )
         self.api_key = api_key
 

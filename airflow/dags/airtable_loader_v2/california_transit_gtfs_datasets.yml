@@ -3,9 +3,4 @@ operator: operators.AirtableToGCSOperator
 air_base_id: appPnJWrQ7ui4UmIl
 air_table_name: "gtfs datasets"
 air_base_name: california_transit
-bucket: "gs://{{ prefix_bucket('airtable') }}"
-id_name: gtfs_dataset_id
-
-rename_fields:
-  "QC: Used Schedule in Referenced Schedule": qc_used_schedule_in_referenced_schedule
-  "QC: Appropriately Deprecated": qc_appropriately_deprecated
+bucket: "gs://{{ prefix_bucket('calitp-airtable') }}"
