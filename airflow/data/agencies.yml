@@ -1239,7 +1239,7 @@ sonoma-marin-area-rail-transit:
 south-county-transit-link:
   agency_name: South County Transit Link
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/southcountytransitlink-ca-us/southcountytransitlink-ca-us.zip
+    - gtfs_schedule_url: http://iportal.sacrt.com/gtfs/SCTLink/southcountytransitlink-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
