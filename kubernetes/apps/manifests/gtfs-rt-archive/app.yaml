@@ -32,7 +32,6 @@ spec:
               mountPath: /secrets/gcs-upload-svcacct
           resources:
             requests:
-              memory: 512Mi
               cpu: 5.0
       volumes:
         - name: agencies-data
