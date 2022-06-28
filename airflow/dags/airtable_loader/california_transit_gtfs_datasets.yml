@@ -1,0 +1,12 @@
+operator: operators.AirtableToWarehouseOperator
+
+air_base_id: appPnJWrQ7ui4UmIl
+air_table_name: "gtfs datasets"
+gcs_path: airtable/california-transit/
+table_name: airtable.california_transit_gtfs_datasets
+
+id_name: gtfs_dataset_id
+
+rename_fields:
+  "QC: Used Schedule in Referenced Schedule": qc_used_schedule_in_referenced_schedule
+  "QC: Appropriately Deprecated": qc_appropriately_deprecated
