@@ -42,6 +42,7 @@ def make_arrays_bq_safe(raw_data):
     return safe_data
 
 
+# TODO: this should use the new generic partitioned GCS artifact type once available
 class AirtableExtract(BaseModel):
     air_base_id: str
     air_base_name: str
