@@ -1,4 +1,4 @@
-operator: operators.AirtableToWarehouseOperator
+operator: operators.AirtableToGCSOperator
 
 air_base_id: appPnJWrQ7ui4UmIl
 air_table_name: "fare systems"

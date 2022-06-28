@@ -1,10 +1,9 @@
-operator: operators.AirtableToWarehouseOperator
+operator: operators.AirtableToGCSOperator
 
-air_base_id: appeVUdmRBi3K9hTS
-air_table_name: "organizations"
-air_base_name: transit_technology_stacks
+air_base_id: appPnJWrQ7ui4UmIl
+air_base_name: california_transit
+air_table_name: organizations
 bucket: "gs://{{ prefix_bucket('calitp-airtable') }}"
-
 airtable_options:
   id_name: organization_id
   rename_fields:

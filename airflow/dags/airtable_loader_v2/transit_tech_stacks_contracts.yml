@@ -1,4 +1,4 @@
-operator: operators.AirtableToWarehouseOperator
+operator: operators.AirtableToGCSOperator
 
 air_base_id: appeVUdmRBi3K9hTS
 air_table_name: "contracts"

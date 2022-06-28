@@ -1,9 +1,9 @@
-operator: operators.AirtableToWarehouseOperator
+operator: operators.AirtableToGCSOperator
 
 air_base_id: appeVUdmRBi3K9hTS
-air_table_name: "data schemas"
+air_table_name: "Properties + Features"
 air_base_name: transit_technology_stacks
 bucket: "gs://{{ prefix_bucket('calitp-airtable') }}"
 
 airtable_options:
-  id_name: data_schema_id
+  id_name: property_feature_id

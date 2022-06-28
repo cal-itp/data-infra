@@ -1,8 +1,8 @@
-operator: operators.AirtableToWarehouseOperator
+operator: operators.AirtableToGCSOperator
 
 air_base_id: appPnJWrQ7ui4UmIl
-air_table_name: "NTD Agency Info"
+air_table_name: "gtfs service data"
 air_base_name: california_transit
 bucket: "gs://{{ prefix_bucket('calitp-airtable') }}"
 airtable_options:
-  id_name: ntd_agency_info_id
+  id_name: gtfs_service_data_id

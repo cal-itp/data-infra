@@ -126,7 +126,7 @@ class AirtableExtract(BaseModel):
         )
 
 
-class AirtableToWarehouseOperator(BaseOperator):
+class AirtableToGCSOperator(BaseOperator):
 
     template_fields = ("bucket",)
 
