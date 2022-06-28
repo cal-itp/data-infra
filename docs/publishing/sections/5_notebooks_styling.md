@@ -113,11 +113,14 @@ These are a set of principles to adhere to when writing the narrative content in
 * Decimals less than 1, always prefix with a 0, for readability.
     * 0.05, not .05
 * Integers when referencing dates, times, etc
-    * 2020 for year, not 2020.0 (coerce to int64 or Int64 in `pandas`)
+    * 2020 for year, not 2020.0 (coerce to int64 or Int64 in `pandas`; Int64 are nullable integers, which allow for NaNs to appear alongside integers)
     * 1 hr 20 min, not 1.33 hr (use best judgment to decide what's easier for readers to interpret)
 * Round at the end of the analysis. Use best judgment to decide on significant digits.
     * Too many decimal places give an air of precision that may not be present.
     * Too few decimal places may not give enough detail to distinguish between categories or ranges.
+    * A good rule of thumb is to start with 1 extra decimal place than what is present in the other columns when deriving statistics (averages, percentiles), and decide from there if you want to round up.
+        * An average of $100,000.0 can simply be rounded to $100,000.
+        * An average of 5.2 mi might be left as is.
     * National Institutes of Health [Rounding Rules](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4483789/table/ARCHDISCHILD2014) (full [article](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4483789/#:~:text=Ideally%20data%20should%20be%20rounded,might%20call%20it%20Goldilocks%20rounding.&text=The%20European%20Association%20of%20Science,2%E2%80%933%20effective%20digits%E2%80%9D.))
 
 * Additional references: [American Psychological Association (APA) style](https://apastyle.apa.org/instructional-aids/numbers-statistics-guide.pdf), and [Purdue](https://owl.purdue.edu/owl/research_and_citation/apa_style/apa_formatting_and_style_guide/apa_numbers_statistics.html)
@@ -127,7 +130,7 @@ These are a set of principles to adhere to when writing the narrative content in
 * Analysts should reference the operator name, route name, and Caltrans district the same way across analyses.
     * ITP ID: 182 is `Metro` (not LA Metro, Los Angeles County Metropolitan Transportation Authority, though those are all correct names for the operator)
     * Caltrans District: 7 is `07 - Los Angeles`
-    * Between `route_short_name`, `route_long_name`, `route_desc`, which one should be used to make `route_id` more readable?
+    * Between `route_short_name`, `route_long_name`, `route_desc`, which one should be used to describe `route_id`? Use `shared_utils.portfolio_utils`, which relies on regular expressions, to select the most human-readable route name.
 * Before deploying your portfolio, make sure the operator name you're using is what's used in other analyses in the portfolio.
     * Use `shared_utils.portfolio_utils` to help you grab the right names to use.
 
