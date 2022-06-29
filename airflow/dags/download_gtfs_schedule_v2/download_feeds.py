@@ -79,7 +79,6 @@ def download_feed(
 
 def download_all(task_instance, execution_date, **kwargs):
     start = pendulum.now()
-    # TODO: use laurie's method for this
     # https://stackoverflow.com/a/61808755
     with create_session() as session:
         auth_dict = {var.key: var.val for var in session.query(Variable)}

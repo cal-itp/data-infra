@@ -512,6 +512,7 @@ class AirtableGTFSDataRecordProcessingOutcome(ProcessingOutcome):
 
 
 if __name__ == "__main__":
+    # These snippets are useful for testing/debugging
     print(
         get_latest_file(
             table_path="gs://rt-parsed/service_alerts/",
