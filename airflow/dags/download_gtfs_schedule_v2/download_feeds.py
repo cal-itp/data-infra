@@ -124,7 +124,7 @@ def download_all(task_instance, execution_date, **kwargs):
 
     assert len(records) == len(
         outcomes
-    ), f"we somehow ended up with {len(outcomes)} from {len(records)}"
+    ), f"we somehow ended up with {len(outcomes)} outcomes from {len(records)} records"
 
     successes = len([outcome for outcome in outcomes if outcome.success])
     print(f"successfully fetched {successes} of {len(records)}")

@@ -5,10 +5,8 @@ import json
 import logging
 import os
 import re
-import typing
 from enum import Enum
-from typing import ClassVar, List, Union
-from typing import Optional, Dict
+from typing import ClassVar, List, Union, Type, Optional, Dict, get_type_hints
 
 import gcsfs
 import humanize
@@ -171,6 +169,7 @@ class AirtableGTFSDataRecord(BaseModel):
     data: GTFSFeedType
     schedule_to_use_for_rt_validation: Optional[List[str]]
     auth_query_param: Dict[str, str] = {}
+    # TODO: add auth_headers when available in Airtable!
 
     class Config:
         extra = "allow"
@@ -249,6 +248,10 @@ class PartitionedGCSArtifact(BaseModel, abc.ABC):
         The order does matter!
         """
 
+    @property
+    def partition_types(self) -> Dict[str, Type[PartitionType]]:
+        return {}
+
     @root_validator(allow_reuse=True)
     def check_partitions(cls, values):
         cls_properties = [
@@ -288,12 +291,12 @@ class PartitionedGCSArtifact(BaseModel, abc.ABC):
 
 
 def fetch_all_in_partition(
-    cls: typing.Type[PartitionedGCSArtifact],
+    cls: Type[PartitionedGCSArtifact],
     fs: gcsfs.GCSFileSystem,
     bucket: str,
     table: str,
     partitions: Dict[str, PartitionType],
-) -> List[typing.Type[PartitionedGCSArtifact]]:
+) -> List[Type[PartitionedGCSArtifact]]:
     path = "/".join(
         [
             bucket,
@@ -325,8 +328,8 @@ class ProcessingOutcome(BaseModel, abc.ABC):
     # TODO: is this really useful?
     @property
     @abc.abstractmethod
-    def input_type(self) -> typing.Type[PartitionedGCSArtifact]:
-        """The input type that was processed to produce this outcome.."""
+    def input_type(self) -> Type[PartitionedGCSArtifact]:
+        """The input type that was processed to produce this outcome."""
 
 
 class GCSBaseInfo(BaseModel, abc.ABC):
@@ -382,14 +385,18 @@ GCSObjectInfo = Annotated[
 GCSObjectInfoList.update_forward_refs()
 
 
-def get_latest_file(table_path: str, keys: List[str]) -> GCSFileInfo:
+# TODO: we could probably pass this a class
+def get_latest_file(
+    table_path: str, partitions: Dict[str, Type[PartitionType]]
+) -> GCSFileInfo:
     fs = get_fs()
     directory = GCSDirectoryInfo(**fs.info(table_path))
 
-    for key in keys:
-        # TODO: this just sorts by string values, but we should parse stuff out
+    for key, typ in partitions.items():
         directory = sorted(
-            directory.children(fs), key=lambda o: o.partition[key], reverse=True
+            directory.children(fs),
+            key=lambda o: PARTITION_DESERIALIZERS[typ](o.partition[key]),
+            reverse=True,
         )[0]
 
     children = directory.children(fs)
@@ -421,7 +428,12 @@ class AirtableGTFSDataExtract(PartitionedGCSArtifact):
     @classmethod
     def get_latest(cls) -> "AirtableGTFSDataExtract":
         # TODO: this concatenation should live on the abstract base class probably
-        latest = get_latest_file(cls.bucket_table(), keys=cls.partition_names)
+        latest = get_latest_file(
+            cls.bucket_table(),
+            partitions={
+                name: get_type_hints(cls).get(name, str) for name in cls.partition_names
+            },
+        )
 
         logging.info(
             f"identified {latest.name} as the most recent extract of gtfs datasets"
@@ -445,7 +457,7 @@ class AirtableGTFSDataExtract(PartitionedGCSArtifact):
 class GTFSFeedExtractInfo(PartitionedGCSArtifact):
     # TODO: this should check whether the bucket exists https://stackoverflow.com/a/65628273
     # TODO: this should be named `gtfs-raw` _or_ we make it dynamic
-    bucket: ClassVar[str] = prefix_bucket("gs://gtfs-schedule-raw")
+    bucket: ClassVar[str] = prefix_bucket("gs://calitp-gtfs-raw")
     partition_names: ClassVar[List[str]] = ["dt", "base64_url", "time"]
     config: AirtableGTFSDataRecord
     response_code: int
@@ -470,9 +482,15 @@ class GTFSFeedExtractInfo(PartitionedGCSArtifact):
 
 
 class AirtableGTFSDataRecordProcessingOutcome(ProcessingOutcome):
-    input_type: ClassVar[typing.Type[PartitionedGCSArtifact]] = GTFSFeedExtractInfo
+    input_type: ClassVar[Type[PartitionedGCSArtifact]] = GTFSFeedExtractInfo
     extract: Optional[GTFSFeedExtractInfo]
 
+
+# class GTFSDownloadFeeds(PartitionedGCSArtifact):
+#     __root__: List[AirtableGTFSDataRecordProcessingOutcome]
+#     bucket: ClassVar[str] = prefix_bucket("gs://calitp-gtfs-raw")
+#     table: ClassVar[str] =
+#     partition_names: ClassVar[List[str]] = ["dt", "base64_url", "time"]
 
 # class GTFSFeedExtractOutcome(PartitionedGCSArtifact):
 #     extract: Optional[GTFSFeedExtract]
@@ -494,14 +512,25 @@ class AirtableGTFSDataRecordProcessingOutcome(ProcessingOutcome):
 
 
 if __name__ == "__main__":
-    # records = AirtableGTFSDataExtract.get_latest().records
-    # extract = GTFSFeedExtract(
-    #     filename="whatever",
-    #     config=records[0],
-    #     response_code=200,
-    #     response_headers={},
-    #     download_time=pendulum.now(),
-    # )
+    print(
+        get_latest_file(
+            table_path="gs://rt-parsed/service_alerts/",
+            partitions={
+                "dt": pendulum.Date,
+                "itp_id": int,
+                "url_number": int,
+                "hour": int,
+            },
+        )
+    )
+    records = AirtableGTFSDataExtract.get_latest().records
+    extract = GTFSFeedExtractInfo(
+        filename="whatever",
+        config=records[0],
+        response_code=200,
+        response_headers={},
+        download_time=pendulum.now(),
+    )
     # extract.save_content(get_fs(), b"")
     # print(
     #     AirtableGTFSDataRecordProcessingOutcome(
