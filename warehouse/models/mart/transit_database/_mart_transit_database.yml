@@ -1,0 +1,220 @@
+version: 2
+
+models:
+  - name: dim_components
+    description: '{{ doc("components_table") }}'
+    columns:
+      - &key
+        name: key
+        tests: &primary_key_tests
+          - not_null
+          - unique
+  - name: dim_contracts
+    description: '{{ doc("contracts_table") }}'
+    columns:
+      - *key
+  - name: dim_data_schemas
+    description: '{{ doc("data_schemas_table") }}'
+    columns:
+      - *key
+  - name: dim_organizations
+    description: '{{ doc("organizations_table") }}'
+    columns:
+      - *key
+      - name: name
+        description: Organization name
+      - name: organization_type
+        description: |
+          Categorical data; example values "City/Town",
+          "Joint Powers Agency"
+      - name: roles
+        description: |
+          Array of categorical choices; example values
+          "Regional Transportation Planning Agency,
+          Metropolitan Planning Organization";
+          "Metropolitan Planning Organization"
+      - name: itp_id
+        description: Cal-ITP ITP ID
+      - name: details
+        description:	Text description related to the organization
+  - name: dim_services
+    description: '{{ doc("services_table") }}'
+    columns:
+      - *key
+      - name: name
+        description: Service name
+      - name: service_type
+        description: |
+          Array of categorical choices; example
+          values "ADA paratransit, on-demand"; "fixed-route"
+      - name: mode
+        description: |
+          Array of categorical choices; example
+          values "bus, car/van"; "ferry"
+      - name: currently_operating
+        description: |
+          Boolean for whether service is currently active
+  - name: dim_products
+    description: '{{ doc("products_table") }}'
+    columns:
+      - *key
+  - name: dim_properties_and_features
+    columns:
+      - *key
+  - name: dim_contract_attachments
+    description: |
+      Attachment links to images of contracts.
+      One contract can have multiple attachments.
+    columns:
+      - *key
+  - name: map_components_x_products
+    description: |
+      Mapping table between components and products.
+      Relationship indicates that product can act as that component.
+      This is a many-to-many relationship.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - component_key
+            - product_key
+    columns:
+      - name: component_key
+        tests:
+          - relationships:
+             to: ref('dim_components')
+             field: key
+      - name: product_key
+        tests:
+          - relationships:
+             to: ref('dim_products')
+             field: key
+  - name: map_components_x_properties_and_features
+    description: |
+      Mapping table between components and properties_and_features.
+      Relationship indicates that component has specified property or feature.
+      This is a many-to-many relationship.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - component_key
+            - property_feature_key
+    columns:
+      - name: component_key
+        tests:
+          - relationships:
+             to: ref('dim_components')
+             field: key
+      - name: property_feature_key
+        tests:
+          - relationships:
+             to: ref('dim_properties_and_features')
+             field: key
+  - name: map_data_schemas_x_products_inputs
+    description: |
+      Mapping table between data schemas and products.
+      Relationship indicates that data schema is an accepted input into
+      given product.
+      This is a many-to-many relationship.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - data_schema_key
+            - product_key
+    columns:
+      - name: data_schema_key
+        tests:
+          - relationships:
+             to: ref('dim_data_schemas')
+             field: key
+      - name: product_key
+        tests:
+          - relationships:
+             to: ref('dim_products')
+             field: key
+  - name: map_data_schemas_x_products_outputs
+    description: |
+      Mapping table between data schemas and products.
+      Relationship indicates that data schema can be produced as output
+      of given product.
+      This is a many-to-many relationship.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - data_schema_key
+            - product_key
+    columns:
+      - name: data_schema_key
+        tests:
+          - relationships:
+             to: ref('dim_data_schemas')
+             field: key
+      - name: product_key
+        tests:
+          - relationships:
+             to: ref('dim_products')
+             field: key
+  - name: map_organizations_x_services_managed
+    description: |
+      Mapping table between organizations and services.
+      Relationship indicates that organization manages (provides)
+      the given mobility service.
+      This is a many-to-many relationship.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - organization_key
+            - service_key
+    columns:
+      - name: organization_key
+        tests:
+          - relationships:
+             to: ref('dim_organizations')
+             field: key
+      - name: service_key
+        tests:
+          - relationships:
+             to: ref('dim_services')
+             field: key
+  - name: map_parent_organizations
+    description: |
+      Mapping table between organizations and their parents
+      (map between two organization records.)
+      This is a many-to-many relationship.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - organization_key
+            - parent_organization_key
+    columns:
+      - name: organization_key
+        tests:
+          - relationships:
+             to: ref('dim_organizations')
+             field: key
+      - name: parent_organization_key
+        tests:
+          - relationships:
+             to: ref('dim_organizations')
+             field: key
+  - name: map_paratransit_services
+    description: |
+      Mapping table between services and services for which
+      they provide paratransit service
+      (map between two service records.)
+      This is a many-to-many relationship.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - service_key
+            - paratransit_for_service_key
+    columns:
+      - name: service_key
+        tests:
+          - relationships:
+             to: ref('dim_services')
+             field: key
+      - name: paratransit_for_service_key
+        tests:
+          - relationships:
+             to: ref('dim_services')
+             field: key

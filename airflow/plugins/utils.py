@@ -1,4 +1,5 @@
 import pandas as pd
+import re
 
 from calitp import read_gcfs, save_to_gcfs
 from pandas.errors import EmptyDataError
@@ -78,3 +79,9 @@ def get_successfully_downloaded_feeds(execution_date):
     status = pd.read_csv(f)
 
     return status[lambda d: d.status == "success"]
+
+
+def make_name_bq_safe(name: str):
+    """Replace non-word characters.
+    See: https://cloud.google.com/bigquery/docs/reference/standard-sql/lexical#identifiers."""
+    return str.lower(re.sub("[^\w]", "_", name))  # noqa: W605

@@ -1,0 +1,293 @@
+version: 2
+
+models:
+  - name: stg_transit_database__components
+    description: '{{ doc("components_table") }}'
+    columns:
+      - &key
+        name: key
+        tests: &primary_key_tests
+          - not_null
+          - unique
+      - &name
+        name: name
+        tests:
+          - not_null:
+              severity: warn
+  - name: stg_transit_database__contracts
+    description: '{{ doc("contracts_table") }}'
+    columns:
+      - *key
+      - *name
+  - name: stg_transit_database__products
+    description: '{{ doc("products_table") }}'
+    columns:
+      - *key
+      - *name
+  - name: stg_transit_database__service_components
+    description: '{{ doc("service_components_table") }}'
+    columns:
+      - *key
+      - *name
+  - name: stg_transit_database__relationships_service_components
+    description: |
+      Service/component relationship data.
+  - name: stg_transit_database__data_schemas
+    description: '{{ doc("data_schemas_table") }}'
+    columns:
+      - *key
+      - *name
+  - name: stg_transit_database__organizations
+    description: '{{ doc("organizations_table") }}'
+    columns:
+      - *key
+  - name: stg_transit_database__services
+    description: '{{ doc("services_table") }}'
+    columns:
+      - *key
+      - *name
+  - name: stg_transit_database__properties_and_features
+    columns:
+      - *key
+      - *name
+  - name: stg_transit_database__gtfs_datasets
+    description: '{{ doc("gtfs_datasets_table") }}'
+    columns:
+      - *key
+      - *name
+      - name: data
+      - name: fares_v2_status
+      - name: fares_notes
+      - name: pathways_status
+      - name: schedule_comments
+      - name: uri
+      - name: future_uri
+      - name: api_key
+      - name: aggregated_to_gtfs_dataset_key
+      - name: provider_gtfs_capacity
+      - name: service_type
+      - name: category
+      - name: notes
+      - name: referenced_gtfs__from_gtfs_service_mapping_
+      - name: provider
+      - name: operator
+      - name: provider_reporting_category__from_gtfs_service_mapping_
+      - name: feed_metrics
+      - name: gtfs_service_mapping
+      - name: services
+      - name: dataset_producers
+      - name: dataset_publisher
+      - name: itp_activities
+      - name: itp_schedule_todo
+      - name: deprecated_date
+      - name: time
+      - name: calitp_extracted_at
+  - name: stg_transit_database__gtfs_service_data
+    description: '{{ doc("gtfs_service_data_table") }}'
+    columns:
+      - *key
+      - *name
+      - name: service_key
+      - name: gtfs_dataset_key
+      - name: dataset_type
+      - name: category
+      - name: agency_id
+      - name: network_id
+      - name: route_id
+      - name: provider
+      - name: operator
+      - name: dataset_producers__from_gtfs_dataset_
+      - name: dataset_publisher__from_gtfs_dataset_
+      - name: gtfs_dataset_type
+      - name: pathways_status
+      - name: fares_v2_status
+      - name: service_type__from_services_
+      - name: flex_status
+      - name: schedule_comments__from_gtfs_dataset_
+      - name: itp_activities__from_gtfs_dataset_
+      - name: fares_notes__from_gtfs_dataset_
+      - name: reference_static_gtfs_service_data_key
+      - name: uri
+      - name: currently_operating__from_services_
+      - name: provider_reporting_category
+      - name: itp_schedule_todo__from_gtfs_dataset_
+      - name: time
+      - name: calitp_extracted_at
+  - name: stg_transit_database__county_geography
+    description: '{{ doc("county_geography_table") }}'
+    columns:
+      - *key
+      - *name
+      - name: fips
+      - name: msa
+      - name: caltrans_district
+      - name: caltrans_district_name
+      - name: rtpa
+      - name: mpo
+      - name: place_geography
+      - name: time
+      - name: calitp_extracted_at
+  - name: stg_transit_database__eligibility_programs
+    description: '{{ doc("eligibility_programs_table") }}'
+    columns:
+      - *key
+      - name: program
+        tests:
+          - not_null:
+              severity: warn
+      - name: administering_entity_organization_key
+      - name: eligibility_type_rider_requirement_key
+      - name: service_key
+      - name: process
+      - name: assumed_eligibility__appointment_
+      - name: appointment_duration__hours_
+      - name: expected_process_turn_around_application_eligibility__days_
+      - name: website
+      - name: time
+      - name: calitp_extracted_at
+  - name: stg_transit_database__fare_systems
+    description: '{{ doc("fare_systems_table") }}'
+    columns:
+      - *key
+      - name: fare_system
+        tests:
+          - not_null:
+              severity: warn
+      - name: fares_based_on_zone
+      - name: fares_based_on_route
+      - name: zone_based_fares
+      - name: flat_fares
+      - name: reduced_fare
+      - name: generalized_fare_categories
+      - name: reduced_fare_categories
+      - name: category_notes
+      - name: transfers_allowed
+      - name: transfer_time
+      - name: transfer_fee
+      - name: transfers_notes
+      - name: interagency_transfers
+      - name: interagency_transfer_notes
+      - name: pass_times_trips
+      - name: pass_notes
+      - name: reservations
+      - name: group_school_trip_discount
+      - name: ticket_pass_sales_methods
+      - name: payment_accepted
+      - name: ticket_media
+      - name: electronic_fare_program
+      - name: ticket_validation
+      - name: bike_fee
+      - name: cheaper_base_fare_with_smartcard
+      - name: reg_adult_ticket_price_min
+      - name: reg_adult_ticket_price_max
+      - name: pass_price_min
+      - name: pass_price_max
+      - name: fare_capping
+      - name: paratransit_fare_url
+      - name: demand_response_fare_url
+      - name: mobility_services_managed__from_transit_provider_
+      - name: gtfs_dataset__from_mobility_services_managed___from_transit_provider_
+      - name: transit_provider_organization_key
+      - name: fares_v2_status__from_mobility_services_managed___from_transit_provider_
+      - name: itp_id
+      - name: time
+      - name: calitp_extracted_at
+  - name: stg_transit_database__funding_programs
+    description: '{{ doc("funding_programs_table") }}'
+    columns:
+      - *key
+      - name: program
+        tests:
+          - not_null:
+              severity: warn
+      - name: full_name
+      - name: program_informatiom
+      - name: services
+      - name: organization
+      - name: category
+      - name: drmt_data
+      - name: time
+      - name: calitp_extracted_at
+  - name: stg_transit_database__ntd_agency_info
+    description: '{{ doc("ntd_agency_info_table") }}'
+    columns:
+      - *key
+      - name: ntd_id
+        tests:
+          - not_null:
+              severity: warn
+      - name: legacy_ntd_id
+      - name: agency_name
+      - name: reporter_acronym
+      - name: doing_business_as
+      - name: reporter_status
+      - name: reporter_type
+      - name: reporting_module
+      - name: organization_type
+      - name: reported_by_ntd_id
+      - name: reported_by_name
+      - name: subrecipient_type
+      - name: fy_end_date
+      - name: original_due_date
+      - name: address_line_1
+      - name: address_line_2
+      - name: p_o__box
+      - name: city
+      - name: state
+      - name: zip_code
+      - name: zip_code_ext
+      - name: region
+      - name: url
+      - name: fta_recipient_id
+      - name: duns_number
+      - name: service_area_sq_miles
+      - name: service_area_pop
+      - name: primary_uza
+      - name: uza_name
+      - name: tribal_area_name
+      - name: population
+      - name: density
+      - name: sq_miles
+      - name: voms_do
+      - name: voms_pt
+      - name: total_voms
+      - name: volunteer_drivers
+      - name: personal_vehicles
+      - name: organization_key
+      - name: time
+      - name: calitp_extracted_at
+  - name: stg_transit_database__place_geography
+    description: '{{ doc("place_geography_table") }}'
+    columns:
+      - *key
+      - *name
+      - name: place_fips
+      - name: placename
+      - name: type
+      - name: place_base
+      - name: place_formal
+      - name: county
+      - name: county_geography_key
+      - name: fips__from_county_base_
+      - name: msa__from_county_base_
+      - name: caltrans_district__from_county_base_
+      - name: caltrans_district_name__from_county_base_
+      - name: rtpa__from_county_base_
+      - name: mpo__from_county_base_
+      - name: organizations_2
+      - name: time
+      - name: calitp_extracted_at
+  - name: stg_transit_database__rider_requirements
+    description: '{{ doc("rider_requirements_table") }}'
+    columns:
+      - *key
+      - name: requirement
+        tests:
+          - not_null:
+              severity: warn
+      - name: category
+      - name: description
+      - name: services
+      - name: eligibility_program_key
+      - name: time
+      - name: calitp_extracted_at

@@ -1,0 +1,6 @@
+operator: operators.AirtableToGCSOperator
+
+air_base_id: appPnJWrQ7ui4UmIl
+air_table_name: "rider requirements"
+air_base_name: california_transit
+bucket: "gs://{{ prefix_bucket('calitp-airtable') }}"
