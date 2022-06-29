@@ -1575,10 +1575,10 @@ santa-rosa-citybus:
 angel-island-tiburon-ferry-company:
   agency_name: Angel Island-Tiburon Ferry Company
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/bayareaferries-ca-us/bayareaferries-ca-us.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=AF
+      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=AF
+      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=AF
   itp_id: 15
 blue-and-gold-fleet:
   agency_name: Blue and Gold Fleet
