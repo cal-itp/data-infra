@@ -119,7 +119,7 @@ These are a set of principles to adhere to when writing the narrative content in
     * Too many decimal places give an air of precision that may not be present.
     * Too few decimal places may not give enough detail to distinguish between categories or ranges.
     * A good rule of thumb is to start with 1 extra decimal place than what is present in the other columns when deriving statistics (averages, percentiles), and decide from there if you want to round up.
-        * An average of $100,000.0 can simply be rounded to $100,000.
+        * An average of 100,000.0 can simply be rounded to 100,000.
         * An average of 5.2 mi might be left as is.
     * National Institutes of Health [Rounding Rules](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4483789/table/ARCHDISCHILD2014) (full [article](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4483789/#:~:text=Ideally%20data%20should%20be%20rounded,might%20call%20it%20Goldilocks%20rounding.&text=The%20European%20Association%20of%20Science,2%E2%80%933%20effective%20digits%E2%80%9D.))
 
