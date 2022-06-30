@@ -3,14 +3,20 @@
 # provide_context: true
 # ---
 import cgi
+import datetime
 import logging
 import traceback
 
 import os
+
+import humanize
+import pandas as pd
 import pendulum
 import re
 from airflow.models import Variable
 from airflow.utils.db import create_session
+from airflow.utils.email import send_email
+from calitp.config import is_development
 from pydantic.networks import HttpUrl
 from pydantic.tools import parse_obj_as
 from requests import Session
@@ -22,6 +28,7 @@ from utils import (
     AirtableGTFSDataRecordProcessingOutcome,
     GTFSFeedExtractInfo,
     GTFSFeedType,
+    DownloadFeedsResult,
 )
 
 GTFS_FEED_LIST_ERROR_THRESHOLD = 0.95
@@ -119,16 +126,67 @@ def download_all(task_instance, execution_date, **kwargs):
 
     # TODO: save the outcomes somewhere
 
-    print(f"took {pendulum.now() - start} to process {len(records)} records")
+    print(
+        f"took {humanize.naturaltime(pendulum.now() - start)} to process {len(records)} records"
+    )
 
     assert len(records) == len(
         outcomes
     ), f"we somehow ended up with {len(outcomes)} outcomes from {len(records)} records"
 
-    successes = len([outcome for outcome in outcomes if outcome.success])
-    print(f"successfully fetched {successes} of {len(records)}")
-    success_rate = successes / len(records)
+    result = DownloadFeedsResult(
+        start_time=start,
+        outcomes=outcomes,
+        filename="results.jsonl",
+    )
+
+    result.save(get_fs())
+
+    print(f"successfully fetched {len(result.successes)} of {len(records)}")
+
+    if result.failures:
+        # use pandas begrudgingly for email HTML since the old task used it
+        html_report = pd.DataFrame(f.dict() for f in result.failures).to_html(
+            border=False
+        )
+
+        html_content = f"""\
+    The following agency GTFS feeds could not be extracted on {start.to_iso8601_string()}:
+
+    {html_report}
+    """
+    else:
+        html_content = "All feeds were downloaded successfully!"
+
+    if is_development():
+        print(
+            f"Skipping since in development mode! Would have emailed {len(result.failures)} failures."
+        )
+    else:
+        send_email(
+            to=[
+                "aaron@trilliumtransit.com",
+                "blake.f@jarv.us",
+                "evan.siroky@dot.ca.gov",
+                "hunter.owens@dot.ca.gov",
+                "jameelah.y@jarv.us",
+                "juliet@trilliumtransit.com",
+                "olivia.ramacier@dot.ca.gov",
+                "laurie.m@jarv.us",
+                "andrew.v@jarv.us",
+            ],
+            html_content=html_content,
+            subject=(
+                f"Operator GTFS Errors for {datetime.datetime.now().strftime('%Y-%m-%d')}"
+            ),
+        )
+
+    success_rate = len(result.successes) / len(records)
     if success_rate < GTFS_FEED_LIST_ERROR_THRESHOLD:
         raise RuntimeError(
             f"Success rate: {success_rate:.3f} was below error threshold: {GTFS_FEED_LIST_ERROR_THRESHOLD}"
         )
+
+
+if __name__ == "__main__":
+    download_all(None, pendulum.now())

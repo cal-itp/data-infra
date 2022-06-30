@@ -280,13 +280,13 @@ class PartitionedGCSArtifact(BaseModel, abc.ABC):
             self.filename,
         )
 
-    def save_content(self, fs: gcsfs.GCSFileSystem, content: bytes):
+    def save_content(self, fs: gcsfs.GCSFileSystem, content: bytes, exclude=None):
         logging.info(f"saving {humanize.naturalsize(len(content))} to {self.path}")
         fs.pipe(path=self.path, value=content)
         fs.setxattrs(
             path=self.path,
             # This syntax seems silly but it's so we pass the _value_ of PARTITIONED_ARTIFACT_METADATA_KEY
-            **{PARTITIONED_ARTIFACT_METADATA_KEY: self.json()},
+            **{PARTITIONED_ARTIFACT_METADATA_KEY: self.json(exclude=exclude)},
         )
 
 
@@ -484,6 +484,40 @@ class GTFSFeedExtractInfo(PartitionedGCSArtifact):
 class AirtableGTFSDataRecordProcessingOutcome(ProcessingOutcome):
     input_type: ClassVar[Type[PartitionedGCSArtifact]] = GTFSFeedExtractInfo
     extract: Optional[GTFSFeedExtractInfo]
+
+
+class DownloadFeedsResult(PartitionedGCSArtifact):
+    bucket: ClassVar[str] = prefix_bucket("gs://calitp-gtfs-raw")
+    table: ClassVar[str] = "download_schedule_feed_results"
+    partition_names: ClassVar[List[str]] = ["dt", "time"]
+    start_time: pendulum.DateTime
+    outcomes: List[AirtableGTFSDataRecordProcessingOutcome]
+
+    @property
+    def dt(self) -> pendulum.Date:
+        return self.start_time.date()
+
+    @property
+    def time(self) -> pendulum.Time:
+        return self.start_time.time()
+
+    @property
+    def successes(self) -> List[AirtableGTFSDataRecordProcessingOutcome]:
+        return [outcome for outcome in self.outcomes if outcome.success]
+
+    @property
+    def failures(self) -> List[AirtableGTFSDataRecordProcessingOutcome]:
+        return [outcome for outcome in self.outcomes if not outcome.success]
+
+    # TODO: I dislike having to exclude the records here
+    #   I need to figure out the best way to have a single type represent the "metadata" of
+    #   the content as well as the content itself
+    def save(self, fs):
+        self.save_content(
+            fs=fs,
+            content="\n".join(o.json() for o in self.outcomes).encode(),
+            exclude=["outcomes"],
+        )
 
 
 # class GTFSDownloadFeeds(PartitionedGCSArtifact):
