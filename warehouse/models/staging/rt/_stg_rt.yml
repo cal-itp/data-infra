@@ -16,3 +16,7 @@ models:
     description: Unnested RT vehicle positions.
     columns:
       - *rt_key
+  - name: stg_rt__trip_updates
+    description: Unnested RT trip updates.
+    columns:
+      - *rt_key
