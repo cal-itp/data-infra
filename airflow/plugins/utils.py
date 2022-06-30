@@ -516,7 +516,7 @@ class DownloadFeedsResult(PartitionedGCSArtifact):
         self.save_content(
             fs=fs,
             content="\n".join(o.json() for o in self.outcomes).encode(),
-            exclude=["outcomes"],
+            exclude={"outcomes"},
         )
 
 
