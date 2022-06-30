@@ -136,6 +136,7 @@ def download_all(task_instance, execution_date, **kwargs):
 
     result = DownloadFeedsResult(
         start_time=start,
+        end_time=pendulum.now(),
         outcomes=outcomes,
         filename="results.jsonl",
     )

@@ -491,6 +491,7 @@ class DownloadFeedsResult(PartitionedGCSArtifact):
     table: ClassVar[str] = "download_schedule_feed_results"
     partition_names: ClassVar[List[str]] = ["dt", "time"]
     start_time: pendulum.DateTime
+    end_time: pendulum.DateTime
     outcomes: List[AirtableGTFSDataRecordProcessingOutcome]
 
     @property
