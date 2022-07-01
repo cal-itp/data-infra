@@ -127,10 +127,6 @@ def _publish_exposure(
                     df = client.query(
                         f"select * from {node.schema_table}"
                     ).to_geodataframe()
-                    # df = client.query(node.select).to_geodataframe()
-                    # typer.secho(
-                    #     f"selected {len(df)} rows ({humanize.naturalsize(os.stat(fpath).st_size)}) from {model_name}"
-                    # )
                     df["geometry_to_publish"] = df[
                         destination.geo_column
                     ].swifter.apply(make_linestring)

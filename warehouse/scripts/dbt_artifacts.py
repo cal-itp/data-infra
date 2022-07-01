@@ -233,15 +233,12 @@ class TilesDestination(GcsDestination):
         return f"{model}.{self.tile_format.value}"
 
     def tiles_hive_path(self, exposure: "Exposure", model: str, bucket: str):
-        entity_name_parts = [
-            slugify(exposure.name, separator="_"),
-            # TODO: we should probably exclude this since 1 mbtiles is output per _exposure_
-            # model,
-            self.tile_format.value,
-        ]
+        table_name = (
+            f'{slugify(exposure.name, separator="_")}__{self.tile_format.value}'
+        )
         return os.path.join(
             bucket,
-            "__".join(entity_name_parts),
+            table_name,
             *self.hive_partitions,
             self.tile_filename(model),
         )
