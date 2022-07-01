@@ -124,10 +124,10 @@ def _publish_exposure(
 
                     client = bigquery.Client(project=project)
                     print(f"querying {node.schema_table}")
-                    # TODO: this is not great
+                    # TODO: this is not great but we have to work around how BigQuery removes overlapping line segments
                     df = client.query(
                         f"select * from {node.schema_table}"
-                    ).to_geodataframe()
+                    ).to_dataframe()
                     df["geometry_to_publish"] = df[
                         destination.geo_column
                     ].swifter.apply(make_linestring)
