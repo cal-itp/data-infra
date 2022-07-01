@@ -20,7 +20,7 @@ shapes_clean AS (
         SAFE_CAST(TRIM(shape_dist_traveled) AS FLOAT64) AS shape_dist_traveled,
         calitp_extracted_at,
         calitp_hash,
-        FARM_FINGERPRINT(CONCAT(CAST(calitp_hash AS STRING), "___", CAST(calitp_extracted_at AS STRING))) AS shape_key,
+        {{ farm_surrogate_key(['calitp_hash', 'calitp_extracted_at']) }} AS shape_key,
         COALESCE(calitp_deleted_at, "2099-01-01") AS calitp_deleted_at
     FROM shapes
 )

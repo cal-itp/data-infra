@@ -27,7 +27,7 @@ stop_times_clean AS (
         TRIM(timepoint) AS timepoint,
         calitp_extracted_at,
         calitp_hash,
-        FARM_FINGERPRINT(CONCAT(CAST(calitp_hash AS STRING), "___", CAST(calitp_extracted_at AS STRING)))
+        {{ farm_surrogate_key(['calitp_hash', 'calitp_extracted_at']) }}
         AS stop_time_key,
         COALESCE(calitp_deleted_at, "2099-01-01") AS calitp_deleted_at
     FROM stop_times
