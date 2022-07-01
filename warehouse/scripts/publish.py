@@ -156,6 +156,10 @@ def _publish_exposure(
                         )
                     else:
                         fs = gcsfs.GCSFileSystem(token="google_default")
+                        typer.secho(
+                            f"writing {geojsonl_fpath} to {hive_path}",
+                            fg=typer.colors.GREEN,
+                        )
                         fs.put(geojsonl_fpath, hive_path)
 
                 if destination.tile_format == TileFormat.mbtiles:
@@ -183,6 +187,10 @@ def _publish_exposure(
                         )
                     else:
                         fs = gcsfs.GCSFileSystem(token="google_default")
+                        typer.secho(
+                            f"writing {mbtiles_path} to {tiles_hive_path}",
+                            fg=typer.colors.GREEN,
+                        )
                         fs.put(mbtiles_path, tiles_hive_path)
                 else:
                     # -e for this when time
