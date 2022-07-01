@@ -32,7 +32,9 @@ stg_rt__trip_updates AS (
                                     'tripUpdate.timestamp',
                                     'tripUpdate.vehicle.id',
                                     'tripUpdate.vehicle.label',
-                                    'tripUpdate.trip.tripId']) }} AS key
+                                    'tripUpdate.trip.tripId',
+                                    'tripUpdate.trip.startTime',
+                                    'tripUpdate.trip.startDate']) }} AS key
 
     FROM source
 
