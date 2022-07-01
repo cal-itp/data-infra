@@ -20,3 +20,7 @@ models:
     description: Unnested RT trip updates.
     columns:
       - *rt_key
+  - name: stg_rt__service_alerts
+    description: Unnested RT service alerts.
+    columns:
+      - *rt_key
