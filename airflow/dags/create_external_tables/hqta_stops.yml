@@ -2,7 +2,7 @@ operator: operators.ExternalTable
 bucket: gs://analysis-output-models
 # TODO: currently this points at a specific version, but long-term we'll want to read it all in
 source_objects:
-  - "high_quality_transit_areas_stops/dt=2022-05-04/*.geojsonl"
+  - "high_quality_transit_areas_stops/dt=2022-06-15/*.geojsonl"
 destination_project_dataset_table: "external_hqta.stops"
 source_format: NEWLINE_DELIMITED_JSON
 geojson: True
