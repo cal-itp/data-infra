@@ -127,6 +127,8 @@ models:
         tests:
           - not_null
           - unique
+        meta:
+          metabase.semantic_type: type/PK
   - name: gtfs_schedule_dim_files
     description: |
       Dimension table of all files that have been encountered in Cal-ITP
@@ -139,6 +141,8 @@ models:
         tests:
           - not_null
           - unique
+        meta:
+          metabase.semantic_type: type/PK
   - name: gtfs_schedule_dim_pathways
     description: |
       Slowly-changing dimension table of pathways.txt data.
@@ -162,6 +166,8 @@ models:
         tests:
           - not_null
           - unique
+        meta:
+          metabase.semantic_type: type/PK
   - name: gtfs_schedule_dim_shapes
     description: |
       Slowly-changing dimension table of shapes.txt data.
@@ -370,6 +376,8 @@ models:
         tests:
           - not_null
           - unique
+        meta:
+          metabase.semantic_type: type/PK
   - name: gtfs_schedule_fact_daily_feed_routes
     description: |
       Each row of this table is a feed/route/day combination, showing
