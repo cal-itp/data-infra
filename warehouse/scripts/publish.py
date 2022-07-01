@@ -26,7 +26,6 @@ import geopandas as gpd
 import humanize
 import pandas as pd
 import requests
-import swifter  # noqa
 import typer
 from pydantic import BaseModel
 
@@ -55,11 +54,16 @@ def make_linestring(x):
 
     It's specific to dim_shapes_geo, so we should update this when we actually start producing geojson
     """
+    if len(x) == 0:
+        return x
+    if isinstance(x, str):
+        return shapely.wkt.loads(x)
+    # may have to convert wkt strings to points
+    pts = [shapely.wkt.loads(pt) for pt in x] if isinstance(x[0], str) else x
     # shapely errors if the array contains only one point
-    if isinstance(x, str) and x:
-        # each point in the array is wkt
-        return shapely.geometry.LineString(map(shapely.wkt.loads, x))
-    return x
+    if len(pts) > 1:
+        return shapely.geometry.LineString(pts)
+    return pts[0]
 
 
 def _publish_exposure(
@@ -128,9 +132,9 @@ def _publish_exposure(
                     df = client.query(
                         f"select * from {node.schema_table}"
                     ).to_dataframe()
-                    df["geometry_to_publish"] = df[
-                        destination.geo_column
-                    ].swifter.apply(make_linestring)
+                    df["geometry_to_publish"] = df[destination.geo_column].apply(
+                        make_linestring
+                    )
                     gdf = gpd.GeoDataFrame(
                         data=df.drop(destination.geo_column, axis="columns"),
                         geometry="geometry_to_publish",
