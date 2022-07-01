@@ -19,5 +19,8 @@ schema_fields:
   - name: agency_name_secondary
     type: STRING
     mode: NULLABLE
+  - name: hqta_details
+    type: STRING
+    mode: NULLABLE
   - name: geometry
     type: GEOGRAPHY
