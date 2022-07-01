@@ -123,6 +123,7 @@ def _publish_exposure(
                     geojsonl_fpath = os.path.join(tmpdir, f"{node.name}.geojsonl")
 
                     client = bigquery.Client(project=project)
+                    print(f"querying {node.schema_table}")
                     # TODO: this is not great
                     df = client.query(
                         f"select * from {node.schema_table}"
