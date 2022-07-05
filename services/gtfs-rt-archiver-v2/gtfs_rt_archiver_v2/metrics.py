@@ -10,6 +10,16 @@ FEEDS_DOWNLOADED = Counter(
     documentation="Feeds sucessfully downloaded.",
     labelnames=("url",),
 )
+HANDLE_TICK_PROCESSED_BYTES = Counter(
+    name="handled_bytes",
+    documentation="Count of bytes fully handled (i.e. down/upload).",
+    labelnames=("url",),
+)
+HANDLE_TICK_PROCESSING_DELAY = Summary(
+    name="handle_tick_processing_delay_seconds",
+    documentation="The slippage between a tick and full download of a feed.",
+    labelnames=("url",),
+)
 HANDLE_TICK_PROCESSING_TIME = Summary(
     name="handle_tick_processing_time_seconds",
     documentation="Time spent processing a single tick.",

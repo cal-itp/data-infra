@@ -1,6 +1,7 @@
 import base64
 import random
 
+import pendulum
 import requests
 from google.cloud import storage
 from huey import RedisHuey
@@ -10,6 +11,8 @@ from .metrics import (
     FEEDS_IN_PROGRESS,
     FEEDS_DOWNLOADED,
     TASK_SIGNALS,
+    HANDLE_TICK_PROCESSING_DELAY,
+    HANDLE_TICK_PROCESSED_BYTES,
 )
 from .models import FetchTask
 
@@ -32,6 +35,10 @@ def fetch(task: FetchTask):
         if r > 0.99:
             raise RuntimeError
         resp = requests.get(task.url)
+        content = resp.content
+        HANDLE_TICK_PROCESSING_DELAY.labels(url=task.url).observe(
+            (pendulum.now() - task.tick.dt).total_seconds()
+        )
         name = "/".join(
             [
                 "rt_protos",
@@ -45,9 +52,9 @@ def fetch(task: FetchTask):
             name=name,
             bucket=client.bucket("gtfs-data-rt-sandbox"),
         ).upload_from_string(
-            data=resp.content,
+            data=content,
             content_type="application/octet-stream",
             client=client,
         )
-
+        HANDLE_TICK_PROCESSED_BYTES.labels(task.url).inc(len(content))
         FEEDS_DOWNLOADED.labels(url=task.url).inc()
