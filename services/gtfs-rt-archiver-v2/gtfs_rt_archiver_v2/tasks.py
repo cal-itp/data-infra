@@ -36,9 +36,9 @@ def fetch(task: FetchTask):
             raise RuntimeError
         resp = requests.get(task.url)
         content = resp.content
-        HANDLE_TICK_PROCESSING_DELAY.labels(url=task.url).observe(
-            (pendulum.now() - task.tick.dt).total_seconds()
-        )
+        slippage = (pendulum.now() - task.tick.dt).total_seconds()
+        HANDLE_TICK_PROCESSING_DELAY.labels(url=task.url).observe(slippage)
+        # print(f"{slippage} seconds slippage for url {task.url}: {} {}")
         name = "/".join(
             [
                 "rt_protos",

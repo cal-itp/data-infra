@@ -1,4 +1,5 @@
 # fmt: off
+import typer
 from gevent import monkey; monkey.patch_all()  # noqa
 # fmt: on
 """
@@ -15,6 +16,19 @@ from prometheus_client import start_http_server
 
 from gtfs_rt_archiver_v2.tasks import huey
 
+
+def main(port: int = 8001):
+    start_http_server(port)
+    config = ConsumerConfig(
+        workers=64,
+        periodic=False,
+        worker_type=WORKER_GREENLET,
+    )
+    logger = logging.getLogger("huey")
+    config.setup_logger(logger)
+    huey.create_consumer(**config.values).run()
+
+
 if __name__ == "__main__":
     # this is straight from huey_consumer.py
     if sys.version_info >= (3, 8) and sys.platform == "darwin":
@@ -24,12 +38,4 @@ if __name__ == "__main__":
             multiprocessing.set_start_method("fork")
         except RuntimeError:
             pass
-    start_http_server(8000)
-    config = ConsumerConfig(
-        workers=64,
-        periodic=False,
-        worker_type=WORKER_GREENLET,
-    )
-    logger = logging.getLogger("huey")
-    config.setup_logger(logger)
-    huey.create_consumer(**config.values).run()
+    typer.run(main)

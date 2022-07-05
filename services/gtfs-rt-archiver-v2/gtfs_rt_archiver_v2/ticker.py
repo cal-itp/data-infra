@@ -15,7 +15,7 @@ def tick(second):
     t = Tick(dt=dt)
     print(now, dt, t)
     TICKS.inc()
-    for n in range(300):
+    for n in range(1_000):
         fetch(
             FetchTask(
                 tick=t,
@@ -32,7 +32,7 @@ schedule.every().minute.at(":40").do(tick, second=40)
 if __name__ == "__main__":
     huey.flush()
     print(f"ticking starting at {pendulum.now()}!")
-    start_http_server(8001)
+    start_http_server(8000)
     while True:
         schedule.run_pending()
         time.sleep(1)
