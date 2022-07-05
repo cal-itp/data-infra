@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "gtfs-rt-archiver-v2"
+version = "0.1.0"
+description = ""
+authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+typer = "^0.4.1"
+huey = "^2.4.3"
+pydantic = "^1.9.1"
+pendulum = "^2.1.2"
+redis = "^4.3.4"
+celery = {extras = ["redis"], version = "^5.2.7"}
+schedule = "^1.1.0"
+gevent = "^21.12.0"
+prometheus-client = "^0.14.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+mypy = "^0.961"
+black = "^22.6.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
