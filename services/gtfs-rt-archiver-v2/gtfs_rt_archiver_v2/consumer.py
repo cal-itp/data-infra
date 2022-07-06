@@ -20,7 +20,7 @@ from gtfs_rt_archiver_v2.tasks import huey
 def main(port: int = 8001):
     start_http_server(port)
     config = ConsumerConfig(
-        workers=64,
+        workers=32,
         periodic=False,
         worker_type=WORKER_GREENLET,
     )

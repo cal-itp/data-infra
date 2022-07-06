@@ -1,27 +1,23 @@
 import time
+from datetime import datetime, timezone
 
 import pendulum
 import schedule
 from prometheus_client import start_http_server
 
 from gtfs_rt_archiver_v2.metrics import TICKS
-from .models import Tick, FetchTask
 from .tasks import fetch, huey
 
 
 def tick(second):
-    now = pendulum.now()
-    dt = now.replace(second=second, microsecond=0)
-    t = Tick(dt=dt)
-    print(now, dt, t)
+    dt = datetime.now(timezone.utc).replace(second=second)
+    print(dt)
     TICKS.inc()
     for n in range(1_000):
         fetch(
-            FetchTask(
-                tick=t,
-                n=n,
-                url="https://lbtgtfs.lbtransit.com/TMGTFSRealTimeWebService/Vehicle/VehiclePositions.pb",
-            )
+            tick=dt,
+            url="https://lbtgtfs.lbtransit.com/TMGTFSRealTimeWebService/Vehicle/VehiclePositions.pb",
+            n=n,
         )
 
 

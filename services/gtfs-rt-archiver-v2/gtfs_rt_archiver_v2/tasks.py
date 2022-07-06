@@ -1,22 +1,42 @@
 import base64
 import random
+from datetime import datetime
 
+import orjson
 import pendulum
 import requests
 from google.cloud import storage
 from huey import RedisHuey
+from huey.registry import Message
+from huey.serializer import Serializer
 
 from .metrics import (
     HANDLE_TICK_PROCESSING_TIME,
-    FEEDS_IN_PROGRESS,
     FEEDS_DOWNLOADED,
     TASK_SIGNALS,
     HANDLE_TICK_PROCESSING_DELAY,
     HANDLE_TICK_PROCESSED_BYTES,
 )
-from .models import FetchTask
 
-huey = RedisHuey("gtfs-rt-archiver-2", host="localhost")
+
+class PydanticSerializer(Serializer):
+    def _serialize(self, data: Message) -> bytes:
+        return orjson.dumps(data._asdict())
+
+    def _deserialize(self, data: bytes) -> Message:
+        # deal with datetimes manually
+        d = orjson.loads(data)
+        d["expires_resolved"] = datetime.fromisoformat(d["expires_resolved"])
+        d["kwargs"]["tick"] = datetime.fromisoformat(d["kwargs"]["tick"])
+        return Message(*d.values())
+
+
+huey = RedisHuey(
+    name="gtfs-rt-archiver-2",
+    results=False,
+    serializer=PydanticSerializer(),
+    host="localhost",
+)
 
 client = storage.Client()
 
@@ -27,25 +47,23 @@ def instrument_signals(signal, task, exc=None):
 
 
 @huey.task(expires=5)
-def fetch(task: FetchTask):
-    with HANDLE_TICK_PROCESSING_TIME.labels(
-        url=task.url
-    ).time(), FEEDS_IN_PROGRESS.labels(url=task.url).track_inprogress():
+def fetch(tick: datetime, url: str, n: int):
+    with HANDLE_TICK_PROCESSING_TIME.labels(url=url).time():
         r = random.random()
         if r > 0.99:
             raise RuntimeError
-        resp = requests.get(task.url)
+        resp = requests.get(url)
         content = resp.content
-        slippage = (pendulum.now() - task.tick.dt).total_seconds()
-        HANDLE_TICK_PROCESSING_DELAY.labels(url=task.url).observe(slippage)
-        # print(f"{slippage} seconds slippage for url {task.url}: {} {}")
+        slippage = (pendulum.now() - tick).total_seconds()
+        HANDLE_TICK_PROCESSING_DELAY.labels(url=url).observe(slippage)
+        # print(f"{slippage} seconds slippage for url {url}: {} {}")
         name = "/".join(
             [
                 "rt_protos",
-                f"dt={task.tick.dt.to_date_string()}",
-                f"hour={task.tick.dt.hour}",
-                f"time={task.tick.dt.to_time_string()}",
-                f"{task.n}__{base64.urlsafe_b64encode(task.url.encode()).decode()}",
+                f"dt={tick.strftime('%Y-%m-%d')}",
+                f"hour={tick.hour}",
+                f"time={tick.strftime('%H-%M-%S')}",
+                f"{n}__{base64.urlsafe_b64encode(url.encode()).decode()}",
             ]
         )
         storage.Blob(
@@ -56,5 +74,5 @@ def fetch(task: FetchTask):
             content_type="application/octet-stream",
             client=client,
         )
-        HANDLE_TICK_PROCESSED_BYTES.labels(task.url).inc(len(content))
-        FEEDS_DOWNLOADED.labels(url=task.url).inc()
+        HANDLE_TICK_PROCESSED_BYTES.labels(url).inc(len(content))
+        FEEDS_DOWNLOADED.labels(url=url).inc()
