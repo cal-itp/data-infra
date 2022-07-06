@@ -798,8 +798,8 @@ montebello-bus-lines:
   agency_name: Montebello Bus Lines
   feeds:
     - gtfs_schedule_url: https://mbl.rideralerts.com/infopoint/gtfs-zip.ashx
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
+      gtfs_rt_vehicle_positions_url: https://mbl.rideralerts.com/InfoPoint/GTFS-Realtime.ashx?Type=VehiclePosition
+      gtfs_rt_service_alerts_url: https://mbl.rideralerts.com/InfoPoint/GTFS-Realtime.ashx?Type=Alert
       gtfs_rt_trip_updates_url: null
   itp_id: 206
 monterey-salinas-transit:
