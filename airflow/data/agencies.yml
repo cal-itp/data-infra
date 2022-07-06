@@ -50,9 +50,9 @@ antelope-valley-transit-authority:
   agency_name: Antelope Valley Transit Authority
   feeds:
     - gtfs_schedule_url: https://www.avta.com/userfiles/files/AVTA%20GTFS.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://track-it.avta.com/InfoPoint/GTFS-Realtime.ashx?Type=VehiclePosition
+      gtfs_rt_service_alerts_url: https://track-it.avta.com/InfoPoint/GTFS-Realtime.ashx?Type=Alert
+      gtfs_rt_trip_updates_url: https://track-it.avta.com/InfoPoint/GTFS-Realtime.ashx?Type=TripUpdate
   itp_id: 16
 arcadia-transit:
   agency_name: Arcadia Transit
