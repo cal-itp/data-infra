@@ -147,7 +147,7 @@ def download_all(task_instance, execution_date, **kwargs):
 
     if result.failures:
         print(
-            "Failures:",
+            "Failures:\n",
             "\n".join(
                 str(f.exception) or str(type(f.exception)) for f in result.failures
             ),
