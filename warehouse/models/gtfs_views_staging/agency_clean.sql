@@ -22,7 +22,7 @@ agency_clean AS (
         TRIM(agency_email) AS agency_email,
         calitp_extracted_at,
         calitp_hash,
-        FARM_FINGERPRINT(CONCAT(CAST(calitp_hash AS STRING), "___", CAST(calitp_extracted_at AS STRING))) AS agency_key,
+        {{ farm_surrogate_key(['calitp_hash', 'calitp_extracted_at']) }} AS agency_key,
         COALESCE(calitp_deleted_at, "2099-01-01") AS calitp_deleted_at
     FROM agency
 )

@@ -10,6 +10,8 @@ models:
         tests:
           - not_null
           - unique
+        meta:
+          metabase.semantic_type: type/PK
       - name: full_date
         description: Date formatted as a date; formatted as YYYY-MM-DD, ex. 2022-03-31.
         tests:
@@ -125,6 +127,8 @@ models:
         tests:
           - not_null
           - unique
+        meta:
+          metabase.semantic_type: type/PK
   - name: gtfs_schedule_dim_files
     description: |
       Dimension table of all files that have been encountered in Cal-ITP
@@ -137,6 +141,8 @@ models:
         tests:
           - not_null
           - unique
+        meta:
+          metabase.semantic_type: type/PK
   - name: gtfs_schedule_dim_pathways
     description: |
       Slowly-changing dimension table of pathways.txt data.
@@ -160,6 +166,8 @@ models:
         tests:
           - not_null
           - unique
+        meta:
+          metabase.semantic_type: type/PK
   - name: gtfs_schedule_dim_shapes
     description: |
       Slowly-changing dimension table of shapes.txt data.
@@ -180,15 +188,27 @@ models:
             - calitp_url_number
             - shape_id
     columns:
-      - name: calitp_itp_id
+      - &calitp_itp_id
+        name: calitp_itp_id
         description: '{{ doc("column_calitp_itp_id") }}'
-      - name: calitp_url_number
+        tests:
+          - not_null
+        meta:
+          metabase.semantic_type: type/FK
+      - &calitp_url_number
+        name: calitp_url_number
         description: '{{ doc("column_calitp_url_number") }}'
-      - name: calitp_extracted_at
+        tests:
+          - not_null
+        meta:
+          metabase.semantic_type: type/FK
+      - &calitp_extracted_at
+        name: calitp_extracted_at
         description: '{{ doc("column_schedule_calitp_extracted_at") }}'
         tests:
           - not_null
-      - name: calitp_deleted_at
+      - &calitp_deleted_at
+        name: calitp_deleted_at
         description: '{{ doc("column_schedule_calitp_deleted_at") }}'
         tests:
           - not_null
@@ -381,6 +401,8 @@ models:
         tests:
           - not_null
           - unique
+        meta:
+          metabase.semantic_type: type/PK
   - name: gtfs_schedule_fact_daily_feed_routes
     description: |
       Each row of this table is a feed/route/day combination, showing
@@ -445,14 +467,8 @@ models:
             - day_name
             - calitp_extracted_at
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
       - name: service_id
         description: service_id value from calendar.txt
         tests:
@@ -463,14 +479,8 @@ models:
           (from calendar.txt columns)
         tests:
           - not_null
-      - name: calitp_extracted_at
-        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
-        tests:
-          - not_null
-      - name: calitp_deleted_at
-        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
-        tests:
-          - not_null
+      - *calitp_extracted_at
+      - *calitp_deleted_at
   - name: gtfs_schedule_stg_daily_service
     description: |
       Each row indicates whether a given service_id was
@@ -486,14 +496,8 @@ models:
             - service_id
             - service_date
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
       - name: service_id
         description: |
           service_id value from calendar.txt or calendar_dates.txt
@@ -525,10 +529,8 @@ models:
         description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
+      - *calitp_itp_id
+      - *calitp_url_number
       - name: service_id
         description: |
           service_id value from calendar.txt / calendar_dates.txt /
@@ -582,10 +584,8 @@ models:
         description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
+      - *calitp_itp_id
+      - *calitp_url_number
       - name: service_id
         description: |
           service_id value from calendar.txt / calendar_dates.txt /
@@ -613,14 +613,8 @@ models:
             - metric_month
             - metric_year
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
       - name: metric_year
         description: |
           The year of the month for which the month-over-month ratio is
@@ -671,10 +665,8 @@ models:
             - metric_date
             - change_status
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
+      - *calitp_itp_id
+      - *calitp_url_number
       - name: feed_key
         description: |
           feed_key for the feed from this calitp_itp_id + calitp_url_number
@@ -703,10 +695,8 @@ models:
             - metric_date
             - change_status
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
+      - *calitp_itp_id
+      - *calitp_url_number
       - name: feed_key
         description: |
           feed_key for the feed from this calitp_itp_id + calitp_url_number
@@ -750,14 +740,8 @@ models:
             - calitp_itp_id
             - calitp_url_number
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
       - name: publish_date
         description: |
           Date a report will be published (e.g. June 1st reports

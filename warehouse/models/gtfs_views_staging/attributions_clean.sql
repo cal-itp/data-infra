@@ -26,7 +26,7 @@ attributions_clean AS (
         TRIM(attribution_phone) AS attribution_phone,
         calitp_extracted_at,
         calitp_hash,
-        FARM_FINGERPRINT(CONCAT(CAST(calitp_hash AS STRING), "___", CAST(calitp_extracted_at AS STRING))) AS attribution_key,
+        {{ farm_surrogate_key(['calitp_hash', 'calitp_extracted_at']) }} AS attribution_key,
         COALESCE(calitp_deleted_at, "2099-01-01") AS calitp_deleted_at
     FROM attributions
 )

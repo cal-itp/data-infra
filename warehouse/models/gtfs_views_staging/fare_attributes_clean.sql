@@ -22,7 +22,7 @@ fare_attributes_clean AS (
         TRIM(transfer_duration) AS transfer_duration,
         calitp_extracted_at,
         calitp_hash,
-        FARM_FINGERPRINT(CONCAT(CAST(calitp_hash AS STRING), "___", CAST(calitp_extracted_at AS STRING))) AS fare_attribute_key,
+        {{ farm_surrogate_key(['calitp_hash', 'calitp_extracted_at']) }} AS fare_attribute_key,
         COALESCE(calitp_deleted_at, "2099-01-01") AS calitp_deleted_at
     FROM fare_attributes
 )
