@@ -62,7 +62,7 @@ def fetch(tick: datetime, url: str, n: int):
                 "rt_protos",
                 f"dt={tick.strftime('%Y-%m-%d')}",
                 f"hour={tick.hour}",
-                f"time={tick.strftime('%H-%M-%S')}",
+                f"time={tick.strftime('%H:%M:%S')}",
                 f"{n}__{base64.urlsafe_b64encode(url.encode()).decode()}",
             ]
         )
