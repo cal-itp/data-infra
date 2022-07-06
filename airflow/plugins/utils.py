@@ -167,6 +167,7 @@ class AirtableGTFSDataRecord(BaseModel):
     name: str
     uri: Optional[str]
     data: GTFSFeedType
+    data_quality_pipeline: Optional[bool]
     schedule_to_use_for_rt_validation: Optional[List[str]]
     auth_query_param: Dict[str, str] = {}
     # TODO: add auth_headers when available in Airtable!
@@ -466,7 +467,7 @@ class AirtableGTFSDataExtract(PartitionedGCSArtifact):
 class GTFSFeedExtractInfo(PartitionedGCSArtifact):
     # TODO: this should check whether the bucket exists https://stackoverflow.com/a/65628273
     # TODO: this should be named `gtfs-raw` _or_ we make it dynamic
-    bucket: ClassVar[str] = prefix_bucket("gs://calitp-gtfs-raw")
+    bucket: ClassVar[str] = prefix_bucket("gs://calitp-gtfs-schedule-raw")
     partition_names: ClassVar[List[str]] = ["dt", "base64_url", "time"]
     config: AirtableGTFSDataRecord
     response_code: int
@@ -496,7 +497,7 @@ class AirtableGTFSDataRecordProcessingOutcome(ProcessingOutcome):
 
 
 class DownloadFeedsResult(PartitionedGCSArtifact):
-    bucket: ClassVar[str] = prefix_bucket("gs://calitp-gtfs-raw")
+    bucket: ClassVar[str] = prefix_bucket("gs://calitp-gtfs-schedule-raw")
     table: ClassVar[str] = "download_schedule_feed_results"
     partition_names: ClassVar[List[str]] = ["dt", "time"]
     start_time: pendulum.DateTime
@@ -532,7 +533,7 @@ class DownloadFeedsResult(PartitionedGCSArtifact):
 
 # class GTFSDownloadFeeds(PartitionedGCSArtifact):
 #     __root__: List[AirtableGTFSDataRecordProcessingOutcome]
-#     bucket: ClassVar[str] = prefix_bucket("gs://calitp-gtfs-raw")
+#     bucket: ClassVar[str] = prefix_bucket("gs://calitp-gtfs-schedule-raw")
 #     table: ClassVar[str] =
 #     partition_names: ClassVar[List[str]] = ["dt", "base64_url", "time"]
 
