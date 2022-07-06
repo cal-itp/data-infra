@@ -17,7 +17,7 @@ from calitp import read_gcfs, save_to_gcfs
 from calitp.config import is_development
 from calitp.storage import get_fs
 from pandas.errors import EmptyDataError
-from pydantic import AnyUrl, validator, Field
+from pydantic import validator, Field, HttpUrl
 from pydantic import BaseModel
 from pydantic.class_validators import root_validator
 from pydantic.tools import parse_obj_as
@@ -188,7 +188,7 @@ class AirtableGTFSDataRecord(BaseModel):
         return v
 
     @property
-    def schedule_url(self) -> Optional[AnyUrl]:
+    def schedule_url(self) -> Optional[HttpUrl]:
         # TODO: implement me
         raise NotImplementedError
 
@@ -410,6 +410,7 @@ def get_latest_file(
         )[0]
 
     children = directory.children(fs)
+    # This is just a convention for us for now; we could also label files with metadata if desired
     if len(children) != 1:
         raise ValueError(
             f"found {len(directory.children(fs))} files rather than 1 in the directory {directory.name}"
