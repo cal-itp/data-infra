@@ -208,7 +208,7 @@ class AirtableGTFSDataRecord(BaseModel):
         params = {k: auth_dict[v] for k, v in self.auth_query_param.items()}
         headers = {k: auth_dict[v] for k, v in self.auth_header.items()}
 
-        # some web servers
+        # some web servers require user agents or they will throw a 4XX error
         headers[
             "User-Agent"
         ] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0"
