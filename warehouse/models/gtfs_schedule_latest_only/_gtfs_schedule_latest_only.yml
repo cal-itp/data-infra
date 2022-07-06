@@ -32,6 +32,8 @@ models:
         tests: &primary_key_tests
           - not_null
           - unique
+        meta: &pk_meta
+          metabase.semantic_type: type/PK
       - name: agency_id
         description: '{{ doc("gtfs_agency__agency_id") }}'
       - name: agency_name
@@ -71,6 +73,7 @@ models:
       - name: attribution_key
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
+        meta: *pk_meta
       - name: attribution_id
         description: '{{ doc("gtfs_attributions__attribution_id") }}'
       - name: agency_id
@@ -111,6 +114,7 @@ models:
       - name: calendar_key
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
+        meta: *pk_meta
       - name: service_id
         description: '{{ doc("gtfs_calendar__service_id") }}'
         tests:
@@ -192,6 +196,7 @@ models:
       - name: fare_attribute_key
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
+        meta: *pk_meta
       - name: fare_id
         description: '{{ doc("gtfs_fare_attributes__fare_id") }}'
         tests:
@@ -232,6 +237,7 @@ models:
       - name: fare_rule_key
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
+        meta: *pk_meta
       - name: fare_id
         description: '{{ doc("gtfs_fare_rules__fare_id") }}'
         tests:
@@ -260,6 +266,7 @@ models:
       - name: feed_info_key
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
+        meta: *pk_meta
       - name: feed_publisher_name
         description: '{{ doc("gtfs_feed_info__feed_publisher_name") }}'
         tests:
@@ -300,6 +307,7 @@ models:
       - name: frequency_key
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
+        meta: *pk_meta
       - name: trip_id
         description: '{{ doc("gtfs_frequencies__trip_id") }}'
         tests:
@@ -334,6 +342,7 @@ models:
       - name: level_key
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
+        meta: *pk_meta
       - name: level_id
         description: '{{ doc("gtfs_levels__level_id") }}'
         tests:
@@ -360,6 +369,7 @@ models:
       - name: pathway_key
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
+        meta: *pk_meta
       - name: pathway_id
         description: '{{ doc("gtfs_pathways__pathway_id") }}'
         tests:
@@ -410,6 +420,7 @@ models:
       - name: route_key
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
+        meta: *pk_meta
       - name: route_id
         description: '{{ doc("gtfs_routes__route_id") }}'
         tests:
@@ -454,6 +465,7 @@ models:
       - name: shape_key
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
+        meta: *pk_meta
       - name: shape_id
         description: '{{ doc("gtfs_shapes__shape_id") }}'
         tests:
@@ -462,10 +474,14 @@ models:
         description: '{{ doc("gtfs_shapes__shape_pt_lat") }}'
         tests:
         - not_null
+        meta:
+          metabase.semantic_type: type/Latitude
       - name: shape_pt_lon
         description: '{{ doc("gtfs_shapes__shape_pt_lon") }}'
         tests:
         - not_null
+        meta:
+          metabase.semantic_type: type/Longitude
       - name: shape_pt_sequence
         description: '{{ doc("gtfs_shapes__shape_pt_sequence") }}'
         tests:
@@ -489,6 +505,7 @@ models:
       - name: stop_time_key
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
+        meta: *pk_meta
       - name: trip_id
         description: '{{ doc("gtfs_stop_times__trip_id") }}'
         tests:
@@ -537,6 +554,7 @@ models:
       - name: stop_key
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
+        meta: *pk_meta
       - name: stop_id
         description: '{{ doc("gtfs_stops__stop_id") }}'
         tests:
@@ -551,8 +569,12 @@ models:
         description: '{{ doc("gtfs_stops__stop_desc") }}'
       - name: stop_lat
         description: '{{ doc("gtfs_stops__stop_lat") }}'
+        meta:
+          metabase.semantic_type: type/Latitude
       - name: stop_lon
         description: '{{ doc("gtfs_stops__stop_lon") }}'
+        meta:
+          metabase.semantic_type: type/Longitude
       - name: zone_id
         description: '{{ doc("gtfs_stops__zone_id") }}'
       - name: stop_url
@@ -585,6 +607,7 @@ models:
       - name: transfer_key
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
+        meta: *pk_meta
       - name: from_stop_id
         description: '{{ doc("gtfs_transfers__from_stop_id") }}'
         tests:
@@ -615,6 +638,7 @@ models:
       - name: translation_key
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
+        meta: *pk_meta
       - name: table_name
         description: '{{ doc("gtfs_translations__table_name") }}'
         tests:
@@ -653,6 +677,7 @@ models:
       - name: trip_key
         description: '{{ doc("column_schedule_key") }}'
         tests: *primary_key_tests
+        meta: *pk_meta
       - name: route_id
         description: '{{ doc("gtfs_trips__route_id") }}'
         tests:

@@ -42,14 +42,20 @@ models:
         description: Timestamp when this file was extracted
         tests:
           - not_null
-      - name: calitp_itp_id
+      - &calitp_itp_id
+        name: calitp_itp_id
         description: '{{ doc("column_calitp_itp_id") }}'
         tests:
           - not_null
-      - name: calitp_url_number
+        meta:
+          metabase.semantic_type: type/FK
+      - &calitp_url_number
+        name: calitp_url_number
         description: '{{ doc("column_calitp_url_number") }}'
         tests:
           - not_null
+        meta:
+          metabase.semantic_type: type/FK
       - name: name
         description: File type (service_alerts, trip_updates, or vehicle_positions)
         tests:
@@ -94,14 +100,8 @@ models:
         description: Date extracted from calitp_extracted_at
         tests:
           - not_null
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
       - name: name
         description: File type (service_alerts, trip_updates, or vehicle_positions)
         tests:
@@ -129,14 +129,8 @@ models:
         description: Date for which this feed was present in our extraction list
         tests:
           - not_null
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
       - name: url
         description: Feed URL
         tests:
@@ -162,14 +156,8 @@ models:
         description: Date for which this feed was present in our extraction list
         tests:
           - not_null
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
       - name: rt_feed_type
         description: GTFS realtime type (service_alerts, trip_updates, or vehicle_positions)
         tests:
@@ -197,11 +185,15 @@ models:
         tests:
           - dbt_utils.not_null_proportion:
               at_least: 0.95
+        meta:
+          metabase.semantic_type: type/FK
       - name: calitp_url_number
         description: '{{ doc("column_calitp_url_number") }}'
         tests:
           - dbt_utils.not_null_proportion:
               at_least: 0.95
+        meta:
+          metabase.semantic_type: type/FK
       - name: error
         description: |
           Download error encountered.

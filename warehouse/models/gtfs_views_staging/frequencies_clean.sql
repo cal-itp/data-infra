@@ -20,7 +20,7 @@ frequencies_clean AS (
         TRIM(exact_times) AS exact_times,
         calitp_extracted_at,
         calitp_hash,
-        FARM_FINGERPRINT(CONCAT(CAST(calitp_hash AS STRING), "___", CAST(calitp_extracted_at AS STRING))) AS frequency_key,
+        {{ farm_surrogate_key(['calitp_hash', 'calitp_extracted_at']) }} AS frequency_key,
         COALESCE(calitp_deleted_at, "2099-01-01") AS calitp_deleted_at
     FROM frequencies
 )
