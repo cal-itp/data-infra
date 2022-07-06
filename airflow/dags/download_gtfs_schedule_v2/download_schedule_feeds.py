@@ -146,6 +146,7 @@ def download_all(task_instance, execution_date, **kwargs):
     print(f"successfully fetched {len(result.successes)} of {len(records)}")
 
     if result.failures:
+        print("Failures:", "\n".join(str(f.exception) for f in result.failures))
         # use pandas begrudgingly for email HTML since the old task used it
         html_report = pd.DataFrame(f.dict() for f in result.failures).to_html(
             border=False

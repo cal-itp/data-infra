@@ -204,11 +204,20 @@ class AirtableGTFSDataRecord(BaseModel):
         return base64.urlsafe_b64encode(self.uri.encode()).decode()
 
     def build_request(self, auth_dict: dict) -> Request:
-        filled_auth_params = {k: auth_dict[v] for k, v in self.auth_query_param.items()}
-        filled_auth_headers = {k: auth_dict[v] for k, v in self.auth_header.items()}
+        params = {k: auth_dict[v] for k, v in self.auth_query_param.items()}
+        headers = {k: auth_dict[v] for k, v in self.auth_header.items()}
+
+        # some web servers
+        headers[
+            "User-Agent"
+        ] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0"
+
         # inspired by: https://stackoverflow.com/questions/18869074/create-url-without-request-execution
         return Request(
-            "GET", url=self.uri, params=filled_auth_params, headers=filled_auth_headers
+            "GET",
+            url=self.uri,
+            params=params,
+            headers=headers,
         )
 
 
