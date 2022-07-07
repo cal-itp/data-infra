@@ -221,6 +221,31 @@ models:
         tests:
           - not_null
 
+  - name: gtfs_schedule_dim_shapes_geo_latest
+    description: |
+      Latest-only slice of the table of shapes created from shapes.txt
+      data. Each row is a shape. Primary key is composite of
+      calitp_itp_id, calitp_url_number, calitp_extracted_at, and shape_id.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - calitp_itp_id
+            - calitp_url_number
+            - shape_id
+    columns:
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+      - name: shape_id
+        description: shape_id from shapes.txt file.
+        tests:
+          - not_null
+      - name: pt_array
+        description: Ordered array of WKT points that make up the shape.
+        tests:
+          - not_null
+
   - name: gtfs_schedule_dim_stop_times
     description: |
       Slowly-changing dimension table of stop_times.txt data.
@@ -879,23 +904,11 @@ models:
          (not necessarily operating on date)
 
 exposures:
-  - name: calitp_map_tile_server
-    type: application
-    maturity: low
-    url: ""
-    description: Just the shapes as map tiles
-
-    depends_on:
-      - ref("gtfs_schedule_dim_shapes_geo_latest")
-
-    owner:
-      email: andrew.v@jarv.us
   - name: calitp_reports_site
     type: application
     maturity: medium
     url: "reports.calitp.org"
     description: Cal-ITP reports site
-
     depends_on:
       - ref("reports_daily_service_routes_stops")
       - ref("reports_gtfs_schedule_index")
@@ -908,14 +921,24 @@ exposures:
       # don't think this is a source in dbt?
       # could add, but would also like to look at options
       # to replace reports-side...
-
     owner:
       email: eric.d@jarv.us
 
+  - name: calitp_map_tile_server
+    type: application
+    maturity: low
+    url: ""
+    description: Just the shapes as map tiles
+    depends_on:
+      - ref("gtfs_schedule_dim_shapes_geo_latest")
+    owner:
+      email: andrew.v@jarv.us
     meta:
       destinations:
-        - type: tile_server
+        - type: tiles
           bucket: gs://calitp-publish
-          format: mbtiles
-          url: temporary-placeholder
+          format: geojsonl # note that this is the intermediary format
+          tile_format: mbtiles
           geo_column: pt_array
+          layer_names:
+            - GTFS Schedule Shapes (Latest)

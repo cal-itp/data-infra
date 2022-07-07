@@ -9,10 +9,10 @@ from enum import Enum
 from pathlib import Path
 from slugify import slugify
 from sqlalchemy.sql import Select
-from typing import Annotated, Any, ClassVar, Dict, List, Literal, Optional, Tuple, Union
+from typing import Annotated, Any, ClassVar, Dict, List, Literal, Optional, Union
 
 import pendulum
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 from sqlalchemy import create_engine, MetaData, Table, select
 
 
@@ -32,9 +32,14 @@ def get_engine(project, max_bytes=None):
 class FileFormat(str, Enum):
     csv = "csv"
     geojson = "geojson"
+    geojsonl = "geojsonl"
     json = "json"
     jsonl = "jsonl"
+
+
+class TileFormat(str, Enum):
     mbtiles = "mbtiles"
+    pbf = "pbf"
 
 
 class DbtResourceType(str, Enum):
@@ -193,26 +198,50 @@ class GcsDestination(BaseModel):
     def filename(self, model: str):
         return f"{model}.{self.format.value}"
 
-    def hive_partitions(
-        self, model: str, dt: pendulum.DateTime = pendulum.now()
-    ) -> Tuple[str, str]:
-        return (
+    @property
+    def hive_partitions(self, dt: pendulum.DateTime = pendulum.now()) -> List[str]:
+        return [
             f"dt={dt.to_date_string()}",
+        ]
+
+    def hive_path(self, exposure: "Exposure", model: str, bucket: str):
+        entity_name_parts = [
+            slugify(exposure.name, separator="_"),
+            model,
+        ]
+        return os.path.join(
+            bucket,
+            "__".join(entity_name_parts),
+            *self.hive_partitions,
             self.filename(model),
         )
 
-    def hive_path(self, exposure: "Exposure", model: str, bucket: str):
+
+class TilesDestination(GcsDestination):
+    """
+    For tile server destinations, each depends_on becomes
+    a tile layer.
+    """
+
+    type: Literal["tiles"]
+    tile_format: TileFormat
+    geo_column: str
+    metadata_columns: Optional[List[str]]
+    layer_names: List[str]
+
+    def tile_filename(self, model):
+        return f"{model}.{self.tile_format.value}"
+
+    def tiles_hive_path(self, exposure: "Exposure", model: str, bucket: str):
+        table_name = (
+            f'{slugify(exposure.name, separator="_")}__{self.tile_format.value}'
+        )
         return os.path.join(
             bucket,
-            f"{slugify(exposure.name, separator='_')}__{model}",
-            *self.hive_partitions(model),
+            table_name,
+            *self.hive_partitions,
+            self.tile_filename(model),
         )
-
-
-class TileServerDestination(GcsDestination):
-    type: Literal["tile_server"]
-    url: str
-    format: FileFormat
 
 
 class CkanDestination(GcsDestination):
@@ -227,7 +256,7 @@ class CkanDestination(GcsDestination):
 
 
 Destination = Annotated[
-    Union[CkanDestination, TileServerDestination, GcsDestination],
+    Union[CkanDestination, TilesDestination, GcsDestination],
     Field(discriminator="type"),
 ]
 
@@ -246,8 +275,20 @@ class Exposure(BaseModel):
     description: str
     type: ExposureType
     url: Optional[str]
+    # TODO: we should validate that model names do not conflict with
+    #  file format names since they are used as entity names in hive partitions
     depends_on: NodeDeps
     meta: Optional[ExposureMeta]
+
+    @validator("meta")
+    def must_provide_layer_names_if_tiles(cls, v, values):
+        if v:
+            for dest in v.destinations:
+                if isinstance(dest, TilesDestination):
+                    assert len(dest.layer_names) == len(
+                        values["depends_on"].nodes
+                    ), "must provide one layer name per depends_on"
+        return v
 
 
 class Manifest(BaseModel):

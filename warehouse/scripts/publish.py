@@ -6,7 +6,8 @@ from datetime import timedelta
 import csv
 
 import pendulum
-from typing import Optional, Literal, List
+from google.cloud import bigquery
+from typing import Optional, Literal, List, Dict
 
 from pathlib import Path
 
@@ -25,7 +26,6 @@ import geopandas as gpd
 import humanize
 import pandas as pd
 import requests
-import swifter  # noqa
 import typer
 from pydantic import BaseModel
 
@@ -34,7 +34,8 @@ from dbt_artifacts import (
     CkanDestination,
     Exposure,
     Manifest,
-    TileServerDestination,
+    TilesDestination,
+    TileFormat,
 )
 from tqdm import tqdm
 
@@ -45,6 +46,24 @@ API_KEY = os.environ.get("CALITP_CKAN_GTFS_SCHEDULE_KEY")
 app = typer.Typer()
 
 WGS84 = "EPSG:4326"
+
+
+def make_linestring(x):
+    """
+    This comes from https://github.com/cal-itp/data-analyses/blob/09f3b23c488e7ed1708ba721bf49121a925a8e0b/_shared_utils/shared_utils/geography_utils.py#L190
+
+    It's specific to dim_shapes_geo, so we should update this when we actually start producing geojson
+    """
+    if len(x) == 0:
+        return x
+    if isinstance(x, str):
+        return shapely.wkt.loads(x)
+    # may have to convert wkt strings to points
+    pts = [shapely.wkt.loads(pt) for pt in x] if isinstance(x[0], str) else x
+    # shapely errors if the array contains only one point
+    if len(pts) > 1:
+        return shapely.geometry.LineString(pts)
+    return pts[0]
 
 
 def _publish_exposure(
@@ -100,62 +119,82 @@ def _publish_exposure(
                                     files={"upload": fp},
                                 ).raise_for_status()
 
-            elif isinstance(destination, TileServerDestination):
-                # the depends_on each create a layer
+            elif isinstance(destination, TilesDestination):
+                layer_geojson_paths: Dict[str, Path] = {}
                 for model in exposure.depends_on.nodes:
                     node = BaseNode._instances[model]
 
-                    geojson_fpath = os.path.join(tmpdir, f"{node.name}.geojson")
-                    fpath = os.path.join(tmpdir, destination.filename(node.name))
+                    geojsonl_fpath = os.path.join(tmpdir, f"{node.name}.geojsonl")
 
-                    df = pd.read_gbq(
-                        str(node.select),
-                        project_id=project,
-                        progress_bar_type="tqdm",
+                    client = bigquery.Client(project=project)
+                    print(f"querying {node.schema_table}")
+                    # TODO: this is not great but we have to work around how BigQuery removes overlapping line segments
+                    df = client.query(
+                        f"select * from {node.schema_table}"
+                    ).to_dataframe()
+                    df["geometry_to_publish"] = df[destination.geo_column].apply(
+                        make_linestring
                     )
-                    # typer.secho(
-                    #     f"selected {len(df)} rows ({humanize.naturalsize(os.stat(fpath).st_size)}) from {model_name}"
-                    # )
-
-                    def make_linestring(x):
-                        """
-                        This comes from https://github.com/cal-itp/data-analyses/blob/09f3b23c488e7ed1708ba721bf49121a925a8e0b/_shared_utils/shared_utils/geography_utils.py#L190
-
-                        It's specific to dim_shapes_geo, so we should update this when we actually start producing geojson
-                        """
-                        # shapely errors if the array contains only one point
-                        if len(x) > 1:
-                            # each point in the array is wkt
-                            # so convert them to shapely points via list comprehension
-                            as_wkt = [shapely.wkt.loads(i) for i in x]
-                            return shapely.geometry.LineString(as_wkt)
-
-                    # apply the function
-                    df["geometry"] = df.pt_array.swifter.apply(make_linestring)
-                    gdf = gpd.GeoDataFrame(df, geometry="geometry", crs=WGS84)
+                    gdf = gpd.GeoDataFrame(
+                        data=df.drop(destination.geo_column, axis="columns"),
+                        geometry="geometry_to_publish",
+                        crs=WGS84,
+                    )
                     # gdf = gdf.to_crs(WGS84)
-                    gdf[["geometry"]].to_file(geojson_fpath, driver="GeoJSON")
-
-                    args = [
-                        "tippecanoe",
-                        "-zg",
-                        "-o",
-                        fpath,
-                        geojson_fpath,
-                    ]
-                    typer.secho(f"running tippecanoe with args {args}")
-                    subprocess.run(args).check_returncode()
-
+                    if destination.metadata_columns:
+                        gdf = gdf[
+                            ["geometry_to_publish"] + destination.metadata_columns
+                        ]
+                    gdf.to_file(geojsonl_fpath, driver="GeoJSONSeq")
+                    layer_geojson_paths[node.name.title()] = geojsonl_fpath
                     hive_path = destination.hive_path(exposure, node.name, bucket)
 
                     if dry_run:
                         typer.secho(
-                            f"would be writing {model_name} to {hive_path} and {destination.url} {ckan_id}",
+                            f"would be writing {geojsonl_fpath} to {hive_path}",
                             fg=typer.colors.MAGENTA,
                         )
                     else:
                         fs = gcsfs.GCSFileSystem(token="google_default")
-                        fs.put(fpath, hive_path)
+                        typer.secho(
+                            f"writing {geojsonl_fpath} to {hive_path}",
+                            fg=typer.colors.GREEN,
+                        )
+                        fs.put(geojsonl_fpath, hive_path)
+
+                if destination.tile_format == TileFormat.mbtiles:
+                    mbtiles_path = os.path.join(tmpdir, "tiles.mbtiles")
+                    args = [
+                        "tippecanoe",
+                        "-zg",
+                        "-o",
+                        mbtiles_path,
+                        *[
+                            f"--named-layer={layer}:{path}"
+                            for layer, path in layer_geojson_paths.items()
+                        ],
+                    ]
+                    typer.secho(f"running tippecanoe with args {args}")
+                    subprocess.run(args).check_returncode()
+
+                    tiles_hive_path = destination.tiles_hive_path(
+                        exposure, node.name, bucket
+                    )
+                    if dry_run:
+                        typer.secho(
+                            f"would be writing {mbtiles_path} to {tiles_hive_path}",
+                            fg=typer.colors.MAGENTA,
+                        )
+                    else:
+                        fs = gcsfs.GCSFileSystem(token="google_default")
+                        typer.secho(
+                            f"writing {mbtiles_path} to {tiles_hive_path}",
+                            fg=typer.colors.GREEN,
+                        )
+                        fs.put(mbtiles_path, tiles_hive_path)
+                else:
+                    # -e for this when time
+                    raise NotImplementedError
 
 
 with open("./target/manifest.json") as f:
@@ -173,6 +212,7 @@ class ListOfStrings(BaseModel):
     __root__: List[str]
 
 
+# this is DDP-6
 class MetadataRow(BaseModel):
     dataset_name: str
     tags: ListOfStrings
@@ -218,6 +258,7 @@ class YesOrNo(str, enum.Enum):
     n = "N"
 
 
+# This is DDP-8
 class DictionaryRow(BaseModel):
     system_name: str
     table_name: str
