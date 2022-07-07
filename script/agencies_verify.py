@@ -39,7 +39,12 @@ def main():
         if changed_urls is not None and url not in changed_urls:
             continue
         try:
-            result = requests.get(url, headers=headers.get(key, {}))
+            h = {
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0",
+                **headers.get(key, {}),
+            }
+
+            result = requests.get(url, headers=h, timeout=10)
             result.raise_for_status()
         except Exception as e:
             print(f"Failed to download {url}")
