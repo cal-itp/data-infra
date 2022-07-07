@@ -12,6 +12,8 @@
     table_b_name_col,
     table_b_name_col_name) %}
 
+    -- TODO: refactor this to take individual dict inputs for each table instead of so many prefixed fields
+
     -- follow Airflow sandbox example for unnesting airtable data
 
     WITH
