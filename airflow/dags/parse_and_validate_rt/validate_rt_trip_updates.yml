@@ -11,7 +11,7 @@ arguments:
   - "trip_updates"
   # we run on a delay because of archiver write latency but then we process the prior _hour_
   - "{{ get_bucket() }}/rt/{{ execution_date.replace(minute=0, second=0).format('YYYY-MM-DDTHH*') }}"
-  - "gs://{{ prefix_bucket('rt-parsed') }}"
+  - "{{ prefix_bucket('rt-parsed') }}"
   - "--threads=2"
   - "--validate"
   - "--verbose"
