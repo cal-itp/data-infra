@@ -158,6 +158,8 @@ def download_all(task_instance, execution_date, **kwargs):
         )
 
         html_content = f"""\
+    NOTE: These failures come from the v2 of the GTFS Schedule downloader.
+
     The following agency GTFS feeds could not be extracted on {start.to_iso8601_string()}:
 
     {html_report}
@@ -172,13 +174,6 @@ def download_all(task_instance, execution_date, **kwargs):
     else:
         send_email(
             to=[
-                "aaron@trilliumtransit.com",
-                "blake.f@jarv.us",
-                "evan.siroky@dot.ca.gov",
-                "hunter.owens@dot.ca.gov",
-                "jameelah.y@jarv.us",
-                "juliet@trilliumtransit.com",
-                "olivia.ramacier@dot.ca.gov",
                 "laurie.m@jarv.us",
                 "andrew.v@jarv.us",
             ],
