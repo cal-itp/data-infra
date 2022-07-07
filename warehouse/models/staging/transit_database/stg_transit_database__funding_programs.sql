@@ -10,7 +10,7 @@ latest AS (
 
 stg_transit_database__funding_programs AS (
     SELECT
-        funding_program_id AS key,
+        id AS key,
         {{ trim_make_empty_string_null(column_name = "program") }},
         full_name,
         program_informatiom,

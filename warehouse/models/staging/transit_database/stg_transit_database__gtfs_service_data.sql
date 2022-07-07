@@ -10,7 +10,7 @@ latest AS (
 
 stg_transit_database__gtfs_service_data AS (
     SELECT
-        gtfs_service_data_id AS key,
+        id AS key,
         {{ trim_make_empty_string_null(column_name = "name") }},
         unnested_services AS service_key,
         unnested_gtfs_dataset AS gtfs_dataset_key,

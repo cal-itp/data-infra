@@ -10,7 +10,7 @@ latest AS (
 
 stg_transit_database__ntd_agency_info AS (
     SELECT
-        ntd_agency_info_id AS key,
+        id AS key,
         {{ trim_make_empty_string_null(column_name = "ntd_id") }},
         legacy_ntd_id,
         agency_name,

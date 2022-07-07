@@ -10,7 +10,7 @@ latest AS (
 
 stg_transit_database__place_geography AS (
     SELECT
-        place_geography_id AS key,
+        id AS key,
         {{ trim_make_empty_string_null(column_name = "name") }},
         place_fips,
         placename,

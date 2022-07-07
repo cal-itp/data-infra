@@ -10,7 +10,7 @@ latest AS (
 
 stg_transit_database__eligibility_programs AS (
     SELECT
-        eligibility_program_id AS key,
+        id AS key,
         {{ trim_make_empty_string_null(column_name = "program") }},
         unnested_administering_entity AS administering_entity_organization_key,
         unnested_eligibility_types AS eligibility_type_rider_requirement_key,

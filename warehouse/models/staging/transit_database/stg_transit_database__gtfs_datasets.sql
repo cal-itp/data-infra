@@ -10,7 +10,7 @@ latest AS (
 
 stg_transit_database__gtfs_datasets AS (
     SELECT
-        gtfs_dataset_id AS key,
+        id AS key,
         {{ trim_make_empty_string_null(column_name = "name") }},
         data,
         data_quality_pipeline,

@@ -10,7 +10,7 @@ latest AS (
 
 stg_transit_database__products AS (
     SELECT
-        product_id AS key,
+        id AS key,
         {{ trim_make_empty_string_null(column_name = "name") }},
         url,
         requirements,

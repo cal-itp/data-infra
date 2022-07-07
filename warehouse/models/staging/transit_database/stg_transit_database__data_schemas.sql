@@ -10,7 +10,7 @@ latest AS (
 
 stg_transit_database__data_schemas AS (
     SELECT
-        data_schema_id AS key,
+        id AS key,
         {{ trim_make_empty_string_null(column_name = "name") }},
         status,
         products AS input_products,

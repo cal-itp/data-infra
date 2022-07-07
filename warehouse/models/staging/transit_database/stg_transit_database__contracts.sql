@@ -14,7 +14,7 @@ int_tts_organizations_ct_organizations_map AS (
 
 mapped_holder_ids AS (
     SELECT
-        contract_id,
+        id,
         map_holder.ct_key AS contract_holder,
         map_vendor.ct_key AS contract_vendor,
         dt

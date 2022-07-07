@@ -10,7 +10,7 @@ latest AS (
 
 stg_transit_database__components AS (
     SELECT
-        component_id AS key,
+        id AS key,
         {{ trim_make_empty_string_null(column_name = "name") }},
         aliases,
         description,

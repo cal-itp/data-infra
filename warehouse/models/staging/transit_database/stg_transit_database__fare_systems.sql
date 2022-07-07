@@ -10,7 +10,7 @@ latest AS (
 
 stg_transit_database__fare_systems AS (
     SELECT
-        fare_system_id AS key,
+        id AS key,
         {{ trim_make_empty_string_null(column_name = "fare_system") }},
         fares_based_on_zone,
         fares_based_on_route,
