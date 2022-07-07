@@ -67,6 +67,36 @@ models:
       One contract can have multiple attachments.
     columns:
       - *key
+  - name: dim_gtfs_datasets
+    description: |
+      Each record represents a gtfs dataset (feed) that is either a type of
+      GTFS Schedule, Trip Updates, Vehicle Locations or Alerts.
+      A gtfs dataset MAY:
+      - be *disaggregated into* one or more `gtfs service data` records.
+      - be *produced* by one or more `organizations`
+      - be *published* by an `organizations`.
+    columns:
+      - *key
+      - name: data
+        description: |
+          GTFS data type ("GTFS Schedule", "GTFS TripUpdates",
+          "GTFS VehiclePositions", or "GTFS Alerts")
+      - name: data_quality_pipeline
+        description: |
+          If "true", indicates that this dataset should be ingested by the
+          Cal-ITP data pipeline. Nulls indicate dataset should not be ingested.
+      - name: deprecated_date
+        description: |
+          If populated, indicates that dataset was deprecated on listed date
+          and is no longer active.
+      - name: aggregated_to_gtfs_dataset_key
+        description: |
+          Key for another GTFS dataset record to which this record is aggregated.
+      - name: schedule_to_use_for_rt_validation_gtfs_dataset_key
+        description: |
+          For realtime datasets, the key of the schedule dataset that should
+          be used for validation (i.e., the given realtime dataset should reference
+          identifiers from the schedule dataset listed here.)
   - name: map_components_x_products
     description: |
       Mapping table between components and products.
