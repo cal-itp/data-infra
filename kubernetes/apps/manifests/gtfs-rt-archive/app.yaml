@@ -35,7 +35,7 @@ spec:
               memory: 512Mi
               cpu: 5.0
             limits:
-              memory: 640Mi
+              memory: 1Gi
       volumes:
         - name: agencies-data
           secret:
