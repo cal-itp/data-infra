@@ -97,6 +97,62 @@ models:
           For realtime datasets, the key of the schedule dataset that should
           be used for validation (i.e., the given realtime dataset should reference
           identifiers from the schedule dataset listed here.)
+  - name: dim_gtfs_service_data
+    description: |
+      Each record links together a single `gtfs dataset` and one (if possible)
+      or more `services`.  Additional fields define how to isolate the service
+      within the `gtfs dataset` (see below).
+      Many services have more than one GTFS dataset which describes their service. Often these
+      are either precursors to *final* datasets (e.g. AC Transit's GTFS dataset is a
+      precursor to the Bay Area 511 dataset) or artifacts produced in other processes such as
+      creating GTFS Realtime
+
+      To identify specific records within a given dataset that
+      correspond to the listed service:
+      * Selection levels are in following order: agency_id, network_id, route_id
+      * BLANK indicates ALL records
+      * Comma-separated list for values that should be selected at that selection level
+      * "*" indicates remaining records after other selections at that selection level
+
+      For further details, see: https://docs.calitp.org/data-infra/datasets_and_tables/transitdatabase.html?highlight=network_id#gtfs-service-data-notation-for-isolating-gtfs-services-within-gtfs-datasets
+    columns:
+      - *key
+      - name: service_key
+        description: |
+          Service record key for this service / dataset relationship.
+      - name: gtfs_dataset_key
+        description: |
+          GTFS dataset record key for this service / dataset relationship.
+      - name: category
+        description: |
+          "Primary" (indicating that this is the canonical dataset for this service) or
+          "precursor" (this dataset is an input to some other primary
+          canonical dataset for this service). Null or "unknown" indicate unknown.
+      - name: agency_id
+        description: |
+          If only a selection of `agency.agency_id` within the GTFS Dataset
+          should be selected to represent a specific `services` record, they are
+          listed here.  If all `agency_id` should be selected, this is blank.
+          "Leftover" `agency_id` from other `agency_id` selections for the
+          same `GTFS dataset` are indicated by `*`.
+      - name: network_id
+        description: |
+          If only a selection of `routes.network_id` within the GTFS Dataset
+          should be selected to represent a specific `services` record, they are
+          listed here.  If all `network_id` should be selected, this is blank.
+          "Leftover" `network_id` from other `network_id` selections for the
+          same `GTFS dataset` are indicated by `*`.
+      - name: route_id
+        description: |
+          If only a selection of `routes.route_id` within the GTFS Dataset
+          should be selected to represent a specific `services` record, they are
+          listed here.  If all `route_id` should be selected, this is blank.
+          "Leftover" `route_id` from other `route_id` selections for the
+          same `GTFS dataset` are indicated by `*`.
+      - name: reference_static_gtfs_service_data_key
+        description: |
+          For realtime dataset / service relationships,
+          the associated schedule dataset / service relationship.
   - name: map_components_x_products
     description: |
       Mapping table between components and products.
