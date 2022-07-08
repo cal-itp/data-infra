@@ -17,9 +17,10 @@ stg_transit_database__components AS (
         function_group,
         system,
         location,
-        organization_stack_components as service_components,
+        organization_stack_components AS service_components,
         products,
-        properties_and_features,
+        properties___features AS properties_and_features,
+        contracts,
         dt as calitp_extracted_at
     FROM latest
 )

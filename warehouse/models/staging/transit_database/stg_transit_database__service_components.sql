@@ -14,14 +14,14 @@ int_tts_services_ct_services_map AS (
 
 mapped_service_ids AS (
     SELECT
-        service_component_id,
+        id,
         ARRAY_AGG(ct_key IGNORE NULLS) AS services
     FROM latest
     LEFT JOIN UNNEST(latest.services) as tts_service_id
     LEFT JOIN int_tts_services_ct_services_map AS map
         ON tts_service_id = map.tts_key
         AND dt = map.tts_date
-    GROUP BY service_component_id
+    GROUP BY id
 ),
 
 stg_transit_database__service_components AS (
@@ -33,11 +33,10 @@ stg_transit_database__service_components AS (
         notes,
         T2.services,
         component,
-        product,
-        contracts,
+        product
     FROM latest
     LEFT JOIN mapped_service_ids AS T2
-        USING(service_component_id)
+        USING(id)
 )
 
 SELECT * FROM stg_transit_database__service_components
