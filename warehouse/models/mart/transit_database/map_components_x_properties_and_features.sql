@@ -8,7 +8,7 @@ stg_transit_database__properties_and_features AS (
     SELECT * FROM {{ ref('stg_transit_database__properties_and_features') }}
 ),
 
-map_components_properties_and_features_x_properties_and_features AS (
+map_components_x_properties_and_features AS (
  {{ transit_database_many_to_many(
      table_a = 'stg_transit_database__components',
      table_a_key_col = 'key',
@@ -25,4 +25,4 @@ map_components_properties_and_features_x_properties_and_features AS (
  ) }}
 )
 
-SELECT * FROM map_components_properties_and_features_x_properties_and_features
+SELECT * FROM map_components_x_properties_and_features

@@ -8,7 +8,7 @@ stg_transit_database__products AS (
     SELECT * FROM {{ ref('stg_transit_database__products') }}
 ),
 
-map_components_products_x_products_components AS (
+map_components_x_products AS (
  {{ transit_database_many_to_many(
      table_a = 'stg_transit_database__components',
      table_a_key_col = 'key',
@@ -25,4 +25,4 @@ map_components_products_x_products_components AS (
  ) }}
 )
 
-SELECT * FROM map_components_products_x_products_components
+SELECT * FROM map_components_x_products
