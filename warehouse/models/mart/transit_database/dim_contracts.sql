@@ -10,8 +10,6 @@ dim_contracts AS (
         name,
         contract_holder_organization_key,
         contract_vendor_organization_key,
-        contract_type_functional_category,
-        contract_type_functions,
         value,
         start_date,
         end_date,
