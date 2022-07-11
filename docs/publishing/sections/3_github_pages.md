@@ -52,4 +52,4 @@ A single notebook can be converted to HTML using `nbconvert`. If it's a quick an
 1. Once a PR is ready and merged, the GH pages can be changed back to source from `main`. The URL is preserved within the slide deck.
 1. Note: If analysts working on different branches want to display GH pages, one of them needs to merge in `main`, the other needs to do a `git rebase`, and then can choose `my-other-branch` as the GH pages source.
 
-Ex: [Service Density Map](https://docs.calitp.org/data-analyses/bus_service_increase/img/arrivals_pc_high.html)
+Ex:  [Service Density Map](https://docs.calitp.org/data-analyses/bus_service_increase/img/arrivals_pc_high.html)
