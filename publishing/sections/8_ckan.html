@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Static Visualizations &#8212; Cal-ITP Data Services</title>
+    <title>Publishing data to California Open Data aka CKAN &#8212; Cal-ITP Data Services</title>
     
   <link href="../../_static/css/theme.css" rel="stylesheet">
   <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -56,8 +56,8 @@
     <script>mermaid.initialize({startOnLoad:true});</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="HTML Visualizations" href="3_github_pages.html" />
-    <link rel="prev" title="Data Publishing Principles" href="1_publishing_principles.html" />
+    <link rel="next" title="Map tiles" href="9_map_tiles.html" />
+    <link rel="prev" title="GCS" href="7_gcs.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -362,8 +362,8 @@
      Data Publishing Principles
     </a>
    </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
+   <li class="toctree-l2">
+    <a class="reference internal" href="2_static_files.html">
      Static Visualizations
     </a>
    </li>
@@ -392,8 +392,8 @@
      GCS
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="8_ckan.html">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
      Publishing data to California Open Data aka CKAN
     </a>
    </li>
@@ -659,7 +659,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../../_sources/publishing/sections/2_static_files.md"><button type="button"
+        <a class="dropdown-buttons" href="../../_sources/publishing/sections/8_ckan.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -679,10 +679,10 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fpublishing/sections/2_static_files.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fpublishing/sections/8_ckan.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/publishing/sections/2_static_files.md"><button
+        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/publishing/sections/8_ckan.md"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -708,9 +708,41 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#publishing-reports">
-   Publishing Reports
+  <a class="reference internal nav-link" href="#what-is-the-california-open-data-portal">
+   What is the California Open Data Portal?
   </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cal-itp-data-sets">
+   Cal-ITP data sets
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#general-process">
+   General process
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#develop-data-models">
+     Develop data models
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#document-data">
+     Document data
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#create-dataset-and-metadata">
+     Create dataset and metadata
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#publish-the-data">
+     Publish the data!
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -722,7 +754,7 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Static Visualizations</h1>
+                <h1>Publishing data to California Open Data aka CKAN</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -733,9 +765,41 @@
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#publishing-reports">
-   Publishing Reports
+  <a class="reference internal nav-link" href="#what-is-the-california-open-data-portal">
+   What is the California Open Data Portal?
   </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cal-itp-data-sets">
+   Cal-ITP data sets
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#general-process">
+   General process
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#develop-data-models">
+     Develop data models
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#document-data">
+     Document data
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#create-dataset-and-metadata">
+     Create dataset and metadata
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#publish-the-data">
+     Publish the data!
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -746,73 +810,92 @@
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="static-visualizations">
-<span id="publishing-static-files"></span><h1>Static Visualizations<a class="headerlink" href="#static-visualizations" title="Permalink to this headline">¶</a></h1>
-<p>Static visualizations should be created in a Jupyter Notebook, saved locally
-(in JupyterHub), and checked into GitHub. For example, you can save charts
-as image files (such as PNGs) and commit them to the repository.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
-<span class="c1"># matplotlib or seaborn</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plot</span>
-<span class="kn">import</span> <span class="nn">seaborn</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;../my-visualization.png&quot;</span><span class="p">)</span>
-
-<span class="c1"># altair</span>
-<span class="kn">import</span> <span class="nn">altair</span> <span class="k">as</span> <span class="nn">alt</span>
-<span class="kn">import</span> <span class="nn">altair_saver</span>
-<span class="n">chart</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;../my-visualization.png&quot;</span><span class="p">)</span>
-
-<span class="c1"># plotnine</span>
-<span class="kn">from</span> <span class="nn">plotnine</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="n">chart</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;../my-visualization.png&#39;</span><span class="p">)</span>
+  <div class="tex2jax_ignore mathjax_ignore section" id="publishing-data-to-california-open-data-aka-ckan">
+<span id="publishing-ckan"></span><h1>Publishing data to California Open Data aka CKAN<a class="headerlink" href="#publishing-data-to-california-open-data-aka-ckan" title="Permalink to this headline">¶</a></h1>
+<p>NOTE: Only non-spatial data should be directly published to CKAN. Spatial data
+(i.e. data keyed by location in some manner) has to go through the Caltrans
+geoportal and is subsequently synced to CKAN.</p>
+<div class="section" id="what-is-the-california-open-data-portal">
+<h2>What is the California Open Data Portal?<a class="headerlink" href="#what-is-the-california-open-data-portal" title="Permalink to this headline">¶</a></h2>
+<p>The state of California hosts its own instance of CKAN, called the <a class="reference external" href="https://data.ca.gov/">California Open Data Portal</a>.
+<a class="reference external" href="https://ckan.org/">CKAN</a> is an open-source data management tool; in other words,
+it allows organizations such as Caltrans to host data so that users can search
+for and download data sets that might be useful for analysis or research. Among
+other agencies, Caltrans publishes <a class="reference external" href="https://data.ca.gov/organization/caltrans">many data sets</a> to CKAN.
+Data is generally published as flat files (typically CSV) alongside required
+metadata and a data dictionary.</p>
+</div>
+<div class="section" id="cal-itp-data-sets">
+<h2>Cal-ITP data sets<a class="headerlink" href="#cal-itp-data-sets" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://data.ca.gov/dataset/cal-itp-gtfs-ingest-pipeline-dataset">Cal-ITP GTFS Schedule Data</a></p></li>
+</ul>
+</div>
+<div class="section" id="general-process">
+<h2>General process<a class="headerlink" href="#general-process" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="develop-data-models">
+<h3>Develop data models<a class="headerlink" href="#develop-data-models" title="Permalink to this headline">¶</a></h3>
+<p>Generally, data models should be built in dbt/BigQuery if possible. For example,
+we have <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/warehouse/models/gtfs_schedule_latest_only">latest-only GTFS schedule models</a>
+we can use to update and expand the existing <a class="reference external" href="https://data.ca.gov/dataset/cal-itp-gtfs-ingest-pipeline-dataset">CKAN dataset</a>
+<a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.agency">latest-only agency</a></p>
+</div>
+<div class="section" id="document-data">
+<h3>Document data<a class="headerlink" href="#document-data" title="Permalink to this headline">¶</a></h3>
+<p>California Open Data requires two documentation files for published datasets.</p>
+<ol class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">metadata.csv</span></code> - one row per resource (i.e. file) to be published</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dictionary.csv</span></code> - one row per column across all resources</p></li>
+</ol>
+<p>If you are using dbt exposure-based data publishing, you can automatically generate
+these two files using the main <code class="docutils literal notranslate"><span class="pre">publish.py</span></code> script (specifically the <code class="docutils literal notranslate"><span class="pre">generate-exposure-documentation</span></code>
+subcommand). The documentation from the dbt models’ corresponding YAML will be
+converted into appropriate CSVs and written out locally.</p>
+<p>Run this command inside the <code class="docutils literal notranslate"><span class="pre">warehouse</span></code> folder, assuming you have local dbt
+artifacts in <code class="docutils literal notranslate"><span class="pre">target/</span></code> from a <code class="docutils literal notranslate"><span class="pre">dbt</span> <span class="pre">run</span></code> or <code class="docutils literal notranslate"><span class="pre">dbt</span> <span class="pre">compile</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry run python scripts/publish.py generate-exposure-documentation california_open_data
 </pre></div>
 </div>
-<div class="section" id="publishing-reports">
-<h2>Publishing Reports<a class="headerlink" href="#publishing-reports" title="Permalink to this headline">¶</a></h2>
-<p>Reports can be shared as HTML webpages or PDFs. Standalone HTML pages tend
-to be self-contained and can be sent via email or similar.</p>
-<p>A Jupyter Notebook can be converted to HTML with:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">papermill</span> <span class="k">as</span> <span class="nn">pm</span>
-<span class="kn">import</span> <span class="nn">subprocess</span>
-
-<span class="n">OUTPUT_FILENAME</span> <span class="o">=</span> <span class="s2">&quot;sample-report&quot;</span>
-
-<span class="n">pm</span><span class="o">.</span><span class="n">execute_notebook</span><span class="p">(</span>
-    <span class="c1"># notebook to execute</span>
-    <span class="s1">&#39;../my-notebook.ipynb&#39;</span><span class="p">,</span>
-    <span class="c1"># if needed, rename the notebook as something different</span>
-    <span class="c1"># this will be the filename that is used when converting to HTML or PDF</span>
-    <span class="sa">f</span><span class="s1">&#39;../</span><span class="si">{</span><span class="n">OUTPUT_FILENAME</span><span class="si">}</span><span class="s1">.ipynb&#39;</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="c1"># shell out, run NB Convert</span>
-<span class="n">OUTPUT_FORMAT</span> <span class="o">=</span> <span class="s1">&#39;html&#39;</span>
-<span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span>
-    <span class="s2">&quot;jupyter&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;nbconvert&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;--to&quot;</span><span class="p">,</span>
-    <span class="n">OUTPUT_FORMAT</span><span class="p">,</span>
-    <span class="s2">&quot;--no-input&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;--no-prompt&quot;</span><span class="p">,</span>
-    <span class="sa">f</span><span class="s2">&quot;../</span><span class="si">{</span><span class="n">OUTPUT_FILENAME</span><span class="si">}</span><span class="s2">.ipynb&quot;</span><span class="p">,</span>
-<span class="p">])</span>
+<p>Generally, we recommend executing the dbt models locally and using your local
+artifacts to produce the data to be generated; this ensures the data is
+up-to-date and fits nicely into a tool-enabled manual workflow.</p>
+</div>
+<div class="section" id="create-dataset-and-metadata">
+<h3>Create dataset and metadata<a class="headerlink" href="#create-dataset-and-metadata" title="Permalink to this headline">¶</a></h3>
+<p>Once you’ve generated the necessary metadata and dictionary CSV, you need to get
+approval from Chad Baker. Send the CSVs via email, preferably CC’ing somebody
+with a Caltrans email.</p>
+<p>Once approved, a CKAN dataset will be created with UUIDs corresponding to each
+model that will be published. If you are using dbt exposures, you will need to
+update the <code class="docutils literal notranslate"><span class="pre">meta</span></code> field to map the dbt models to the appropriate UUIDs.</p>
+<p>An example from the latest-only GTFS data exposure.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">meta</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">destinations</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ckan</span><span class="w"></span>
+<span class="w">      </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gs://calitp-publish</span><span class="w"></span>
+<span class="w">      </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csv</span><span class="w"></span>
+<span class="w">      </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://data.ca.gov/api/3/action/resource_update</span><span class="w"></span>
+<span class="w">      </span><span class="nt">ids</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">agency</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">e8f9d49e-2bb6-400b-b01f-28bc2e0e7df2</span><span class="w"></span>
+<span class="w">        </span><span class="nt">routes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">c6bbb637-988f-431c-8444-aef7277297f8</span><span class="w"></span>
 </pre></div>
 </div>
-<p>A Jupyter Notebook can be converted to PDF for email distribution with:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Similar as converting to HTML, but change the output_format</span>
-<span class="c1"># shell out, run NB Convert</span>
-<span class="n">OUTPUT_FORMAT</span> <span class="o">=</span> <span class="s1">&#39;PDFviaHTML&#39;</span>
-<span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span>
-    <span class="s2">&quot;jupyter&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;nbconvert&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;--to&quot;</span><span class="p">,</span>
-    <span class="n">OUTPUT_FORMAT</span><span class="p">,</span>
-    <span class="s2">&quot;--no-input&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;--no-prompt&quot;</span><span class="p">,</span>
-    <span class="sa">f</span><span class="s2">&quot;../</span><span class="si">{</span><span class="n">OUTPUT_FILENAME</span><span class="si">}</span><span class="s2">.ipynb&quot;</span><span class="p">,</span>
-<span class="p">])</span>
-
+</div>
+<div class="section" id="publish-the-data">
+<h3>Publish the data!<a class="headerlink" href="#publish-the-data" title="Permalink to this headline">¶</a></h3>
+<p>Either create an Airflow job to refresh/update the data at the specified
+frequency, or do it manually. You can use flags to execute a dry run or write to
+GCS without also uploading to CKAN.</p>
+<p>Example dry run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry run python scripts/publish.py publish-exposure california_open_data --dry-run
 </pre></div>
+</div>
+<p>Example production deployment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry run python scripts/publish.py publish-exposure california_open_data --project<span class="o">=</span>cal-itp-data-infra --bucket<span class="o">=</span><span class="s2">&quot;gs://calitp-publish&quot;</span> --deploy
+</pre></div>
+</div>
+<p>If you are using dbt-based publishing, the <code class="docutils literal notranslate"><span class="pre">publish_exposure</span></code> subcommand of <code class="docutils literal notranslate"><span class="pre">publish.py</span></code>
+will query BigQuery, write out CSV files, and upload those files to CKAN.</p>
 </div>
 </div>
 </div>
@@ -842,17 +925,17 @@ to be self-contained and can be sent via email or similar.</p>
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="1_publishing_principles.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="7_gcs.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Data Publishing Principles</p>
+            <p class="prev-next-title">GCS</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="3_github_pages.html" title="next page">
+    <a class='right-next' id="next-link" href="9_map_tiles.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">HTML Visualizations</p>
+        <p class="prev-next-title">Map tiles</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

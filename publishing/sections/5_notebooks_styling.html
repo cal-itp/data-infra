@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Publishing data to California Open Data aka CKAN &#8212; Cal-ITP Data Services</title>
+    <title>Getting Notebooks Ready for the Portfolio &#8212; Cal-ITP Data Services</title>
     
   <link href="../../_static/css/theme.css" rel="stylesheet">
   <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -56,8 +56,8 @@
     <script>mermaid.initialize({startOnLoad:true});</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Map tiles" href="8_map_tiles.html" />
-    <link rel="prev" title="GCS" href="6_gcs.html" />
+    <link rel="next" title="Metabase" href="6_metabase.html" />
+    <link rel="prev" title="The Cal-ITP Analytics Portfolio" href="4_analytics_portfolio_site.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -377,23 +377,28 @@
      The Cal-ITP Analytics Portfolio
     </a>
    </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Getting Notebooks Ready for the Portfolio
+    </a>
+   </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="5_metabase.html">
+    <a class="reference internal" href="6_metabase.html">
      Metabase
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="6_gcs.html">
+    <a class="reference internal" href="7_gcs.html">
      GCS
     </a>
    </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
+   <li class="toctree-l2">
+    <a class="reference internal" href="8_ckan.html">
      Publishing data to California Open Data aka CKAN
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="8_map_tiles.html">
+    <a class="reference internal" href="9_map_tiles.html">
      Map tiles
     </a>
    </li>
@@ -654,7 +659,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../../_sources/publishing/sections/7_ckan.md"><button type="button"
+        <a class="dropdown-buttons" href="../../_sources/publishing/sections/5_notebooks_styling.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -674,10 +679,10 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fpublishing/sections/7_ckan.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fpublishing/sections/5_notebooks_styling.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/publishing/sections/7_ckan.md"><button
+        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/publishing/sections/5_notebooks_styling.md"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -703,41 +708,46 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#what-is-the-california-open-data-portal">
-   What is the California Open Data Portal?
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#cal-itp-data-sets">
-   Cal-ITP data sets
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#general-process">
-   General process
+  <a class="reference internal nav-link" href="#headers">
+   Headers
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#develop-data-models">
-     Develop data models
+    <a class="reference internal nav-link" href="#parameterized-titles">
+     Parameterized Titles
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#document-data">
-     Document data
+    <a class="reference internal nav-link" href="#consecutive-headers">
+     Consecutive Headers
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#create-dataset-and-metadata">
-     Create dataset and metadata
+    <a class="reference internal nav-link" href="#capturing-parameters">
+     Capturing Parameters
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#publish-the-data">
-     Publish the data!
+    <a class="reference internal nav-link" href="#suppress-warnings">
+     Suppress Warnings
     </a>
    </li>
   </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#narrative">
+   Narrative
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#writing-guide">
+   Writing Guide
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#standard-names">
+   Standard Names
+  </a>
  </li>
 </ul>
 
@@ -749,7 +759,7 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Publishing data to California Open Data aka CKAN</h1>
+                <h1>Getting Notebooks Ready for the Portfolio</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -760,41 +770,46 @@
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#what-is-the-california-open-data-portal">
-   What is the California Open Data Portal?
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#cal-itp-data-sets">
-   Cal-ITP data sets
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#general-process">
-   General process
+  <a class="reference internal nav-link" href="#headers">
+   Headers
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#develop-data-models">
-     Develop data models
+    <a class="reference internal nav-link" href="#parameterized-titles">
+     Parameterized Titles
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#document-data">
-     Document data
+    <a class="reference internal nav-link" href="#consecutive-headers">
+     Consecutive Headers
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#create-dataset-and-metadata">
-     Create dataset and metadata
+    <a class="reference internal nav-link" href="#capturing-parameters">
+     Capturing Parameters
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#publish-the-data">
-     Publish the data!
+    <a class="reference internal nav-link" href="#suppress-warnings">
+     Suppress Warnings
     </a>
    </li>
   </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#narrative">
+   Narrative
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#writing-guide">
+   Writing Guide
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#standard-names">
+   Standard Names
+  </a>
  </li>
 </ul>
 
@@ -805,93 +820,205 @@
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="publishing-data-to-california-open-data-aka-ckan">
-<span id="publishing-ckan"></span><h1>Publishing data to California Open Data aka CKAN<a class="headerlink" href="#publishing-data-to-california-open-data-aka-ckan" title="Permalink to this headline">¶</a></h1>
-<p>NOTE: Only non-spatial data should be directly published to CKAN. Spatial data
-(i.e. data keyed by location in some manner) has to go through the Caltrans
-geoportal and is subsequently synced to CKAN.</p>
-<div class="section" id="what-is-the-california-open-data-portal">
-<h2>What is the California Open Data Portal?<a class="headerlink" href="#what-is-the-california-open-data-portal" title="Permalink to this headline">¶</a></h2>
-<p>The state of California hosts its own instance of CKAN, called the <a class="reference external" href="https://data.ca.gov/">California Open Data Portal</a>.
-<a class="reference external" href="https://ckan.org/">CKAN</a> is an open-source data management tool; in other words,
-it allows organizations such as Caltrans to host data so that users can search
-for and download data sets that might be useful for analysis or research. Among
-other agencies, Caltrans publishes <a class="reference external" href="https://data.ca.gov/organization/caltrans">many data sets</a> to CKAN.
-Data is generally published as flat files (typically CSV) alongside required
-metadata and a data dictionary.</p>
-</div>
-<div class="section" id="cal-itp-data-sets">
-<h2>Cal-ITP data sets<a class="headerlink" href="#cal-itp-data-sets" title="Permalink to this headline">¶</a></h2>
+  <div class="tex2jax_ignore mathjax_ignore section" id="getting-notebooks-ready-for-the-portfolio">
+<h1>Getting Notebooks Ready for the Portfolio<a class="headerlink" href="#getting-notebooks-ready-for-the-portfolio" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="headers">
+<h2>Headers<a class="headerlink" href="#headers" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="parameterized-titles">
+<h3>Parameterized Titles<a class="headerlink" href="#parameterized-titles" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://data.ca.gov/dataset/cal-itp-gtfs-ingest-pipeline-dataset">Cal-ITP GTFS Schedule Data</a></p></li>
+<li><p>If you’re parameterizing the notebook, the first Markdown cell must include parameters to inject.</p>
+<ul>
+<li><p>Ex: If <code class="docutils literal notranslate"><span class="pre">district</span></code> is one of the parameters in your <code class="docutils literal notranslate"><span class="pre">sites/my_report.yml</span></code>, a header Markdown cell could be <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">District</span> <span class="pre">{district}</span> <span class="pre">Analysis</span></code>.</p></li>
+<li><p>Note: The site URL is constructed from the original notebok name and the parameter in the JupyterBook build: <code class="docutils literal notranslate"><span class="pre">0_notebook_name__district_x_analysis.html</span></code></p></li>
+</ul>
+</li>
 </ul>
 </div>
-<div class="section" id="general-process">
-<h2>General process<a class="headerlink" href="#general-process" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="develop-data-models">
-<h3>Develop data models<a class="headerlink" href="#develop-data-models" title="Permalink to this headline">¶</a></h3>
-<p>Generally, data models should be built in dbt/BigQuery if possible. For example,
-we have <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/warehouse/models/gtfs_schedule_latest_only">latest-only GTFS schedule models</a>
-we can use to update and expand the existing <a class="reference external" href="https://data.ca.gov/dataset/cal-itp-gtfs-ingest-pipeline-dataset">CKAN dataset</a>
-<a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.agency">latest-only agency</a></p>
-</div>
-<div class="section" id="document-data">
-<h3>Document data<a class="headerlink" href="#document-data" title="Permalink to this headline">¶</a></h3>
-<p>California Open Data requires two documentation files for published datasets.</p>
-<ol class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">metadata.csv</span></code> - one row per resource (i.e. file) to be published</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">dictionary.csv</span></code> - one row per column across all resources</p></li>
-</ol>
-<p>If you are using dbt exposure-based data publishing, you can automatically generate
-these two files using the main <code class="docutils literal notranslate"><span class="pre">publish.py</span></code> script (specifically the <code class="docutils literal notranslate"><span class="pre">generate-exposure-documentation</span></code>
-subcommand). The documentation from the dbt models’ corresponding YAML will be
-converted into appropriate CSVs and written out locally.</p>
-<p>Run this command inside the <code class="docutils literal notranslate"><span class="pre">warehouse</span></code> folder, assuming you have local dbt
-artifacts in <code class="docutils literal notranslate"><span class="pre">target/</span></code> from a <code class="docutils literal notranslate"><span class="pre">dbt</span> <span class="pre">run</span></code> or <code class="docutils literal notranslate"><span class="pre">dbt</span> <span class="pre">compile</span></code>.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry run python scripts/publish.py generate-exposure-documentation california_open_data
+<div class="section" id="consecutive-headers">
+<h3>Consecutive Headers<a class="headerlink" href="#consecutive-headers" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Headers must move consecutively in Markdown cells. No skipping!</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Notebook Title</span>
+<span class="c1">## First Section</span>
+<span class="c1">## Second Section</span>
+<span class="c1">### Another subheading</span>
 </pre></div>
 </div>
-<p>Generally, we recommend executing the dbt models locally and using your local
-artifacts to produce the data to be generated; this ensures the data is
-up-to-date and fits nicely into a tool-enabled manual workflow.</p>
+<ul>
+<li><p>To get around consecutive headers, you can use <code class="docutils literal notranslate"><span class="pre">display(HTML())</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">HTML</span><span class="p">(</span><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">First</span> <span class="n">Header</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span><span class="p">)</span> <span class="n">display</span><span class="p">(</span><span class="n">HTML</span><span class="p">(</span><span class="o">&lt;</span><span class="n">h3</span><span class="o">&gt;</span><span class="n">Next</span> <span class="n">Header</span><span class="o">&lt;/</span><span class="n">h3</span><span class="o">&gt;</span><span class="p">))</span>
+</pre></div>
 </div>
-<div class="section" id="create-dataset-and-metadata">
-<h3>Create dataset and metadata<a class="headerlink" href="#create-dataset-and-metadata" title="Permalink to this headline">¶</a></h3>
-<p>Once you’ve generated the necessary metadata and dictionary CSV, you need to get
-approval from Chad Baker. Send the CSVs via email, preferably CC’ing somebody
-with a Caltrans email.</p>
-<p>Once approved, a CKAN dataset will be created with UUIDs corresponding to each
-model that will be published. If you are using dbt exposures, you will need to
-update the <code class="docutils literal notranslate"><span class="pre">meta</span></code> field to map the dbt models to the appropriate UUIDs.</p>
-<p>An example from the latest-only GTFS data exposure.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">meta</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">destinations</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ckan</span><span class="w"></span>
-<span class="w">      </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gs://calitp-publish</span><span class="w"></span>
-<span class="w">      </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csv</span><span class="w"></span>
-<span class="w">      </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://data.ca.gov/api/3/action/resource_update</span><span class="w"></span>
-<span class="w">      </span><span class="nt">ids</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">agency</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">e8f9d49e-2bb6-400b-b01f-28bc2e0e7df2</span><span class="w"></span>
-<span class="w">        </span><span class="nt">routes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">c6bbb637-988f-431c-8444-aef7277297f8</span><span class="w"></span>
+</li>
+</ul>
+</div>
+<div class="section" id="capturing-parameters">
+<h3>Capturing Parameters<a class="headerlink" href="#capturing-parameters" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p>If you’re using a heading, you can either use HTML or capture the parameter and inject.</p></li>
+<li><p>HTML - this option works when you run your notebook locally.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">HTML</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">HTML</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;h3&gt;Header with </span><span class="si">{</span><span class="n">variable</span><span class="si">}</span><span class="s2">&lt;/h3&gt;&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</li>
+<li><p>Capture parameters - this option won’t display locally in your notebook (it will still show <code class="docutils literal notranslate"><span class="pre">{district_number}</span></code>), but will be injected with the value when the JupyterBook is built.</p>
+<p>In a code cell:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">capture_parameters</span>
+
+<span class="n">district_number</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">caltrans_district</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+  <br>
+<p>In a Markdown cell:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">## District {district_number}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="suppress-warnings">
+<h3>Suppress Warnings<a class="headerlink" href="#suppress-warnings" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Suppress warnings from displaying in the portfolio site (<code class="docutils literal notranslate"><span class="pre">shared_utils</span></code>).</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Include this in the cell where packages are imported</span>
+
+<span class="o">%%</span><span class="n">capture</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="publish-the-data">
-<h3>Publish the data!<a class="headerlink" href="#publish-the-data" title="Permalink to this headline">¶</a></h3>
-<p>Either create an Airflow job to refresh/update the data at the specified
-frequency, or do it manually. You can use flags to execute a dry run or write to
-GCS without also uploading to CKAN.</p>
-<p>Example dry run:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry run python scripts/publish.py publish-exposure california_open_data --dry-run
+</div>
+<div class="section" id="narrative">
+<h2>Narrative<a class="headerlink" href="#narrative" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Narrative content can be done in Markdown cells or code cells.</p>
+<ul>
+<li><p>Markdown cells should be used when there are no variables to inject.</p></li>
+<li><p>Code cells should be used to write narrative whenever variables constructed from f-strings are used.</p></li>
+</ul>
+</li>
+<li><p>For <code class="docutils literal notranslate"><span class="pre">papermill</span></code>, add a <a class="reference external" href="https://papermill.readthedocs.io/en/latest/usage-parameterize.html">parameters tag to the code cell</a>
+Note: Our portfolio uses a custom <code class="docutils literal notranslate"><span class="pre">papermill</span></code> engine and we can skip this step.</p></li>
+<li><p>Markdown cells can inject f-strings if it’s plain Markdown (not a heading) using <code class="docutils literal notranslate"><span class="pre">display(Markdown())</span></code> in a code cell.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Markdown</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The value of </span><span class="si">{</span><span class="n">variable</span><span class="si">}</span><span class="s2"> is </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>Example production deployment:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry run python scripts/publish.py publish-exposure california_open_data --project<span class="o">=</span>cal-itp-data-infra --bucket<span class="o">=</span><span class="s2">&quot;gs://calitp-publish&quot;</span> --deploy
+<ul class="simple">
+<li><p><strong>Use f-strings to fill in variables and values instead of hard-coding them</strong></p>
+<ul>
+<li><p>Turn anything that runs in a loop or relies on a function into a variable.</p></li>
+<li><p>Use functions to grab those values for a specific entity (operator, district), rather than hard-coding the values into the narrative.</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">n_routes</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">calitp_itp_id</span> <span class="o">==</span> <span class="n">itp_id</span><span class="p">]</span>
+            <span class="o">.</span><span class="n">route_id</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+            <span class="p">)</span>
+
+
+<span class="n">n_parallel</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span>
+            <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">calitp_itp_id</span> <span class="o">==</span> <span class="n">itp_id</span><span class="p">)</span> <span class="o">&amp;</span>
+            <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">parallel</span><span class="o">==</span><span class="mi">1</span><span class="p">)]</span>
+            <span class="o">.</span><span class="n">route_id</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+            <span class="p">)</span>
+
+<span class="n">display</span><span class="p">(</span>
+    <span class="n">Markdown</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;**Bus routes in service: </span><span class="si">{</span><span class="n">n_routes</span><span class="si">}</span><span class="s2">**&quot;</span>
+        <span class="s2">&quot;&lt;br&gt;**Parallel routes** to State Highway Network (SHN): &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;**</span><span class="si">{</span><span class="n">n_parallel</span><span class="si">}</span><span class="s2"> routes**&quot;</span>
+        <span class="p">)</span>
+<span class="p">)</span>
 </pre></div>
 </div>
-<p>If you are using dbt-based publishing, the <code class="docutils literal notranslate"><span class="pre">publish_exposure</span></code> subcommand of <code class="docutils literal notranslate"><span class="pre">publish.py</span></code>
-will query BigQuery, write out CSV files, and upload those files to CKAN.</p>
+<ul class="simple">
+<li><p>Stay away from loops if you need to use headers.</p>
+<ul>
+<li><p>You will need to create Markdown cells for headers or else JupyterBook will not build correctly. For parameterized notebooks, this is an acceptable trade-off.</p></li>
+<li><p>For unparameterized notebooks, you may want use <code class="docutils literal notranslate"><span class="pre">display(HTML())</span></code>.</p></li>
+<li><p>Caveat: Using <code class="docutils literal notranslate"><span class="pre">display(HTML())</span></code> means you’ll lose the table of contents navigation in the top right corner in the JupyterBook build.</p></li>
+</ul>
+</li>
+</ul>
 </div>
+<div class="section" id="writing-guide">
+<h2>Writing Guide<a class="headerlink" href="#writing-guide" title="Permalink to this headline">¶</a></h2>
+<p>These are a set of principles to adhere to when writing the narrative content in a Jupyter Notebook. Use your best judgment to decide when there are exceptions to these principles.</p>
+<ul class="simple">
+<li><p>Decimals less than 1, always prefix with a 0, for readability.</p>
+<ul>
+<li><p>0.05, not .05</p></li>
+</ul>
+</li>
+<li><p>Integers when referencing dates, times, etc</p>
+<ul>
+<li><p>2020 for year, not 2020.0 (coerce to int64 or Int64 in <code class="docutils literal notranslate"><span class="pre">pandas</span></code>; Int64 are nullable integers, which allow for NaNs to appear alongside integers)</p></li>
+<li><p>1 hr 20 min, not 1.33 hr (use best judgment to decide what’s easier for readers to interpret)</p></li>
+</ul>
+</li>
+<li><p>Round at the end of the analysis. Use best judgment to decide on significant digits.</p>
+<ul>
+<li><p>Too many decimal places give an air of precision that may not be present.</p></li>
+<li><p>Too few decimal places may not give enough detail to distinguish between categories or ranges.</p></li>
+<li><p>A good rule of thumb is to start with 1 extra decimal place than what is present in the other columns when deriving statistics (averages, percentiles), and decide from there if you want to round up.</p>
+<ul>
+<li><p>An average of <code class="docutils literal notranslate"><span class="pre">$100,000.0</span></code> can simply be rounded to <code class="docutils literal notranslate"><span class="pre">$100,000</span></code>.</p></li>
+<li><p>An average of 5.2 mi might be left as is.</p></li>
+</ul>
+</li>
+<li><p>National Institutes of Health <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4483789/table/ARCHDISCHILD2014">Rounding Rules</a> (full <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4483789/#:~:text=Ideally%20data%20should%20be%20rounded,might%20call%20it%20Goldilocks%20rounding.&amp;text=The%20European%20Association%20of%20Science,2%E2%80%933%20effective%20digits%E2%80%9D.">article</a>)</p></li>
+</ul>
+</li>
+<li><p>Additional references: <a class="reference external" href="https://apastyle.apa.org/instructional-aids/numbers-statistics-guide.pdf">American Psychological Association (APA) style</a>, and <a class="reference external" href="https://owl.purdue.edu/owl/research_and_citation/apa_style/apa_formatting_and_style_guide/apa_numbers_statistics.html">Purdue</a></p></li>
+</ul>
+</div>
+<div class="section" id="standard-names">
+<h2>Standard Names<a class="headerlink" href="#standard-names" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>GTFS data in our warehouse stores information on operators, routes, and stops.</p></li>
+<li><p>Analysts should reference the operator name, route name, and Caltrans district the same way across analyses.</p>
+<ul class="simple">
+<li><p>ITP ID: 182 is <code class="docutils literal notranslate"><span class="pre">Metro</span></code> (not LA Metro, Los Angeles County Metropolitan Transportation Authority, though those are all correct names for the operator)</p></li>
+<li><p>Caltrans District: 7 is <code class="docutils literal notranslate"><span class="pre">07</span> <span class="pre">-</span> <span class="pre">Los</span> <span class="pre">Angeles</span></code></p></li>
+<li><p>Between <code class="docutils literal notranslate"><span class="pre">route_short_name</span></code>, <code class="docutils literal notranslate"><span class="pre">route_long_name</span></code>, <code class="docutils literal notranslate"><span class="pre">route_desc</span></code>, which one should be used to describe <code class="docutils literal notranslate"><span class="pre">route_id</span></code>? Use <code class="docutils literal notranslate"><span class="pre">shared_utils.portfolio_utils</span></code>, which relies on regular expressions, to select the most human-readable route name.</p></li>
+</ul>
+</li>
+<li><p>Before deploying your portfolio, make sure the operator name you’re using is what’s used in other analyses in the portfolio.</p>
+<ul>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">shared_utils.portfolio_utils</span></code> to help you grab the right names to use.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">shared_utils</span> <span class="kn">import</span> <span class="n">portfolio_utils</span>
+
+<span class="n">route_names</span> <span class="o">=</span> <span class="n">portfolio_utils</span><span class="o">.</span><span class="n">add_route_name</span><span class="p">()</span>
+
+<span class="c1"># Merge in the selected route name using route_id</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span>
+            <span class="n">route_names</span><span class="p">,</span>
+            <span class="n">on</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;calitp_itp_id&quot;</span><span class="p">,</span> <span class="s2">&quot;route_id&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+
+<span class="n">agency_names</span> <span class="o">=</span> <span class="n">portfolio_utils</span><span class="o">.</span><span class="n">add_agency_name</span><span class="p">()</span>
+
+<span class="c1"># Merge in the operator&#39;s name using calitp_itp_id</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span>
+            <span class="n">agency_names</span><span class="p">,</span>
+            <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;calitp_itp_id&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ul>
 </div>
 </div>
 
@@ -920,17 +1047,17 @@ will query BigQuery, write out CSV files, and upload those files to CKAN.</p>
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="6_gcs.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="4_analytics_portfolio_site.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">GCS</p>
+            <p class="prev-next-title">The Cal-ITP Analytics Portfolio</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="8_map_tiles.html" title="next page">
+    <a class='right-next' id="next-link" href="6_metabase.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Map tiles</p>
+        <p class="prev-next-title">Metabase</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

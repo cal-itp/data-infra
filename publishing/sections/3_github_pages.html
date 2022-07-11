@@ -378,22 +378,27 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="5_metabase.html">
+    <a class="reference internal" href="5_notebooks_styling.html">
+     Getting Notebooks Ready for the Portfolio
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="6_metabase.html">
      Metabase
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="6_gcs.html">
+    <a class="reference internal" href="7_gcs.html">
      GCS
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="7_ckan.html">
+    <a class="reference internal" href="8_ckan.html">
      Publishing data to California Open Data aka CKAN
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="8_map_tiles.html">
+    <a class="reference internal" href="9_map_tiles.html">
      Map tiles
     </a>
    </li>
@@ -703,8 +708,13 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#rendering-jupyter-notebook-as-html">
+   Rendering Jupyter Notebook as HTML
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#use-github-pages-to-display-these-html-pages">
-   Use GitHub pages to display these HTML pages.
+   Use GitHub pages to display these HTML pages
   </a>
  </li>
 </ul>
@@ -728,8 +738,13 @@
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#rendering-jupyter-notebook-as-html">
+   Rendering Jupyter Notebook as HTML
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#use-github-pages-to-display-these-html-pages">
-   Use GitHub pages to display these HTML pages.
+   Use GitHub pages to display these HTML pages
   </a>
  </li>
 </ul>
@@ -774,8 +789,21 @@
 <span class="n">fig</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;../my-visualization.html&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="section" id="rendering-jupyter-notebook-as-html">
+<h2>Rendering Jupyter Notebook as HTML<a class="headerlink" href="#rendering-jupyter-notebook-as-html" title="Permalink to this headline">¶</a></h2>
+<p>A single notebook can be converted to HTML using <code class="docutils literal notranslate"><span class="pre">nbconvert</span></code>. If it’s a quick analysis in a standalone notebook, sometimes an analyst may choose not to go down the <a class="reference internal" href="4_analytics_portfolio_site.html#publishing-analytics-portfolio-site"><span class="std std-ref">portfolio method</span></a>.</p>
+<ul class="simple">
+<li><p>In the terminal: <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">nbconvert</span> <span class="pre">--to</span> <span class="pre">html</span> <span class="pre">--no-input</span> <span class="pre">--no-prompt</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">--no-input</span></code>: hide code cells</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--no-prompt</span></code>: hide prompts to have all cells vertically aligned</p></li>
+</ul>
+</li>
+<li><p>A longer example of <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/bus_service_increase/publish_single_report.py">converting multiple notebooks into HTML pages and uploading to GitHub</a></p></li>
+</ul>
+</div>
 <div class="section" id="use-github-pages-to-display-these-html-pages">
-<h2>Use GitHub pages to display these HTML pages.<a class="headerlink" href="#use-github-pages-to-display-these-html-pages" title="Permalink to this headline">¶</a></h2>
+<h2>Use GitHub pages to display these HTML pages<a class="headerlink" href="#use-github-pages-to-display-these-html-pages" title="Permalink to this headline">¶</a></h2>
 <ol class="simple">
 <li><p>Go to the repo’s <a class="reference external" href="https://github.com/cal-itp/data-analyses/settings">settings</a></p></li>
 <li><p>Navigate to <code class="docutils literal notranslate"><span class="pre">Pages</span></code> on the left</p></li>
@@ -784,7 +812,7 @@
 <li><p>Once a PR is ready and merged, the GH pages can be changed back to source from <code class="docutils literal notranslate"><span class="pre">main</span></code>. The URL is preserved within the slide deck.</p></li>
 <li><p>Note: If analysts working on different branches want to display GH pages, one of them needs to merge in <code class="docutils literal notranslate"><span class="pre">main</span></code>, the other needs to do a <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">rebase</span></code>, and then can choose <code class="docutils literal notranslate"><span class="pre">my-other-branch</span></code> as the GH pages source.</p></li>
 </ol>
-<p>Ex: <a class="reference external" href="https://docs.calitp.org/data-analyses/bus_service_increase/img/arrivals_pc_high.html">Service Density Map</a></p>
+<p>Ex:  <a class="reference external" href="https://docs.calitp.org/data-analyses/bus_service_increase/img/arrivals_pc_high.html">Service Density Map</a></p>
 </div>
 </div>
 

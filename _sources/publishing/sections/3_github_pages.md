@@ -35,7 +35,16 @@ import folium
 fig.save("../my-visualization.html")
 ```
 
-## Use GitHub pages to display these HTML pages.
+## Rendering Jupyter Notebook as HTML
+A single notebook can be converted to HTML using `nbconvert`. If it's a quick analysis in a standalone notebook, sometimes an analyst may choose not to go down the [portfolio method](publishing-analytics-portfolio-site).
+
+* In the terminal: `jupyter nbconvert --to html --no-input --no-prompt`
+    * `--no-input`: hide code cells
+    * `--no-prompt`: hide prompts to have all cells vertically aligned
+* A longer example of [converting multiple notebooks into HTML pages and uploading to GitHub](https://github.com/cal-itp/data-analyses/blob/main/bus_service_increase/publish_single_report.py)
+
+
+## Use GitHub pages to display these HTML pages
 1. Go to the repo's [settings](https://github.com/cal-itp/data-analyses/settings)
 1. Navigate to `Pages` on the left
 1. Change the branch GH pages is sourcing from: `main` to `my-current-branch`
@@ -43,4 +52,4 @@ fig.save("../my-visualization.html")
 1. Once a PR is ready and merged, the GH pages can be changed back to source from `main`. The URL is preserved within the slide deck.
 1. Note: If analysts working on different branches want to display GH pages, one of them needs to merge in `main`, the other needs to do a `git rebase`, and then can choose `my-other-branch` as the GH pages source.
 
-Ex: [Service Density Map](https://docs.calitp.org/data-analyses/bus_service_increase/img/arrivals_pc_high.html)
+Ex:  [Service Density Map](https://docs.calitp.org/data-analyses/bus_service_increase/img/arrivals_pc_high.html)
