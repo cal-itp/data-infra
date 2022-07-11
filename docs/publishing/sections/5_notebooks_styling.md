@@ -101,7 +101,7 @@ display(
 )
 ```
 
-* Stay away from loops if you need to headers.
+* Stay away from loops if you need to use headers.
     * You will need to create Markdown cells for headers or else JupyterBook will not build correctly. For parameterized notebooks, this is an acceptable trade-off.
     * For unparameterized notebooks, you may want use `display(HTML())`.
     * Caveat: Using `display(HTML())` means you'll lose the table of contents navigation in the top right corner in the JupyterBook build.
