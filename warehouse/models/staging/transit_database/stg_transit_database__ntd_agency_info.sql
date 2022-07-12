@@ -2,9 +2,9 @@
 
 WITH
 latest AS (
-    {{ get_latest_external_data(
+    {{ get_latest_dense_rank(
         external_table = source('airtable', 'california_transit__ntd_agency_info'),
-        order_by = 'dt DESC, time DESC'
+        order_by = 'time DESC', partition_by = 'dt'
         ) }}
 ),
 
