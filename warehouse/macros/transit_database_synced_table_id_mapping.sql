@@ -28,6 +28,8 @@
     {% set table_b_name_col = table_b_dict.get('name_col', 'name') %}
     {% set table_b_date_col = table_b_dict.get('date_col', 'dt') %}
 
+   -- select distinct gets one mapping per day
+   -- TODO: refactor to be more explicit about this, perhaps use the get_latest_dense_rank macro
    SELECT DISTINCT
         {{ base_a }}.{{ table_a_id_col }} AS {{ base_a }}_{{ shared_id_name }},
         {{ base_b }}.{{ table_b_id_col }} AS {{ base_b }}_{{ shared_id_name }},
