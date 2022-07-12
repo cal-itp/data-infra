@@ -8,8 +8,8 @@ latest AS (
         ) }}
 ),
 
-int_tts_organizations_ct_organizations_map AS (
-    SELECT * FROM {{ ref('int_tts_organizations_ct_organizations_map') }}
+base_tts_organizations_ct_organizations_map AS (
+    SELECT * FROM {{ ref('base_tts_organizations_ct_organizations_map') }}
 ),
 
 mapped_holder_ids AS (
@@ -21,10 +21,10 @@ mapped_holder_ids AS (
     FROM latest
     LEFT JOIN UNNEST(latest.contract_holder) AS unnested_contract_holder
     LEFT JOIN UNNEST(latest.contract_vendor) AS unnested_contract_vendor
-    LEFT JOIN int_tts_organizations_ct_organizations_map AS map_holder
+    LEFT JOIN base_tts_organizations_ct_organizations_map AS map_holder
         ON unnested_contract_holder = map_holder.tts_key
         AND dt = map_holder.tts_date
-    LEFT JOIN int_tts_organizations_ct_organizations_map AS map_vendor
+    LEFT JOIN base_tts_organizations_ct_organizations_map AS map_vendor
         ON unnested_contract_vendor = map_vendor.tts_key
         AND dt = map_vendor.tts_date
 ),

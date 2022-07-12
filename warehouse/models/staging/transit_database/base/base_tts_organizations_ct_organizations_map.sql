@@ -12,7 +12,7 @@ tts_organizations AS (
     WHERE TRIM(name) != ""
 ),
 
-int_tts_organizations_ct_organizations_map AS (
+base_tts_organizations_ct_organizations_map AS (
     {{ transit_database_synced_table_id_mapping(
         table_a_dict = {'table_name': 'ct_organizations',
             'base': 'ct',
@@ -25,4 +25,4 @@ int_tts_organizations_ct_organizations_map AS (
     }}
 )
 
-SELECT * FROM int_tts_organizations_ct_organizations_map
+SELECT * FROM base_tts_organizations_ct_organizations_map

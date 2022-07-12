@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: int_tts_services_ct_services_map
+  - name: base_tts_services_ct_services_map
     description: |
       Mapping between two instances of synced `services` table in Airtable;
       one copy in California Transit base and the other in Transit
@@ -16,7 +16,7 @@ models:
           combination_of_columns:
             - ct_key
             - ct_date
-  - name: int_tts_organizations_ct_organizations_map
+  - name: base_tts_organizations_ct_organizations_map
     description: |
       Mapping between two instances of synced `organization` table in Airtable;
       one copy in California Transit base and the other in Transit

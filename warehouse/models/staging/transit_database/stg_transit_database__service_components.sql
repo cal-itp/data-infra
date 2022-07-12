@@ -8,8 +8,8 @@ latest AS (
         ) }}
 ),
 
-int_tts_services_ct_services_map AS (
-    SELECT * FROM {{ ref('int_tts_services_ct_services_map') }}
+base_tts_services_ct_services_map AS (
+    SELECT * FROM {{ ref('base_tts_services_ct_services_map') }}
 ),
 
 mapped_service_ids AS (
@@ -18,7 +18,7 @@ mapped_service_ids AS (
         ARRAY_AGG(ct_key IGNORE NULLS) AS services
     FROM latest
     LEFT JOIN UNNEST(latest.services) as tts_service_id
-    LEFT JOIN int_tts_services_ct_services_map AS map
+    LEFT JOIN base_tts_services_ct_services_map AS map
         ON tts_service_id = map.tts_key
         AND dt = map.tts_date
     GROUP BY id
