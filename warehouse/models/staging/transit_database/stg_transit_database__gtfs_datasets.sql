@@ -1,4 +1,4 @@
-{{ config(materialized='table') }}
+
 
 WITH
 latest AS (

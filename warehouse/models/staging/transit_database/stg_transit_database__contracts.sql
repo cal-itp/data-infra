@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 WITH
 latest AS (
     {{ get_latest_dense_rank(
