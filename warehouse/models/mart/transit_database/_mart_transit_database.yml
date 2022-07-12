@@ -13,6 +13,16 @@ models:
     description: '{{ doc("contracts_table") }}'
     columns:
       - *key
+      - name: contract_holder_organization_key
+        tests:
+          - relationships:
+             to: ref('dim_organizations')
+             field: key
+      - name: contract_vendor_organization_key
+        tests:
+          - relationships:
+             to: ref('dim_organizations')
+             field: key
   - name: dim_data_schemas
     description: '{{ doc("data_schemas_table") }}'
     columns:
@@ -67,6 +77,11 @@ models:
       One contract can have multiple attachments.
     columns:
       - *key
+      - name: contract_key
+        tests:
+          - relationships:
+             to: ref('dim_contracts')
+             field: key
   - name: dim_gtfs_datasets
     description: |
       Each record represents a gtfs dataset (feed) that is either a type of
@@ -92,11 +107,19 @@ models:
       - name: aggregated_to_gtfs_dataset_key
         description: |
           Key for another GTFS dataset record to which this record is aggregated.
+        tests:
+          - relationships:
+             to: ref('dim_gtfs_datasets')
+             field: key
       - name: schedule_to_use_for_rt_validation_gtfs_dataset_key
         description: |
           For realtime datasets, the key of the schedule dataset that should
           be used for validation (i.e., the given realtime dataset should reference
           identifiers from the schedule dataset listed here.)
+        tests:
+          - relationships:
+             to: ref('dim_gtfs_datasets')
+             field: key
   - name: dim_gtfs_service_data
     description: |
       Each record links together a single `gtfs dataset` and one (if possible)
@@ -120,9 +143,17 @@ models:
       - name: service_key
         description: |
           Service record key for this service / dataset relationship.
+        tests:
+          - relationships:
+             to: ref('dim_services')
+             field: key
       - name: gtfs_dataset_key
         description: |
           GTFS dataset record key for this service / dataset relationship.
+        tests:
+          - relationships:
+             to: ref('dim_gtfs_datasets')
+             field: key
       - name: category
         description: |
           "Primary" (indicating that this is the canonical dataset for this service) or
@@ -153,6 +184,10 @@ models:
         description: |
           For realtime dataset / service relationships,
           the associated schedule dataset / service relationship.
+        tests:
+          - relationships:
+             to: ref('dim_gtfs_service_data')
+             field: key
   - name: map_components_x_products
     description: |
       Mapping table between components and products.
@@ -188,6 +223,26 @@ models:
       will not be present here.
     columns:
       - *key
+      - name: service_key
+        tests:
+          - relationships:
+             to: ref('dim_services')
+             field: key
+      - name: gtfs_dataset_key
+        tests:
+          - relationships:
+             to: ref('dim_gtfs_datasets')
+             field: key
+      - name: organization_key
+        tests:
+          - relationships:
+              to: ref('dim_organizations')
+              field: key
+      - name: gtfs_service_data_key
+        tests:
+          - relationships:
+             to: ref('dim_gtfs_service_data')
+             field: key
   - name: map_components_x_properties_and_features
     description: |
       Mapping table between components and properties_and_features.
