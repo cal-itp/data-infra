@@ -242,7 +242,7 @@ class MetadataRow(BaseModel):
     data_standard: Literal["https://developers.google.com/transit/gtfs"]
     notes: None
     gis_theme: None
-    gis_horiz_accuracy: None
+    gis_horiz_accuracy: None  # this needs to be filled out actually
     gis_vert_accuracy: None
     gis_coordinate_system_epsg: Optional[str]
     gis_vert_datum_epsg: None
