@@ -9,6 +9,8 @@ models:
         tests: &primary_key_tests
           - not_null
           - unique
+        meta:
+          metabase.semantic_type: type/PK
   - name: dim_contracts
     description: '{{ doc("contracts_table") }}'
     columns:
