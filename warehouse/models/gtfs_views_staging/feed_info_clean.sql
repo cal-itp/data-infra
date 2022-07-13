@@ -26,7 +26,7 @@ feed_info_clean AS (
         calitp_hash,
         PARSE_DATE("%Y%m%d", TRIM(feed_start_date)) AS feed_start_date,
         PARSE_DATE("%Y%m%d", TRIM(feed_end_date)) AS feed_end_date,
-        FARM_FINGERPRINT(CONCAT(CAST(calitp_hash AS STRING), "___", CAST(calitp_extracted_at AS STRING)))
+        {{ farm_surrogate_key(['calitp_hash', 'calitp_extracted_at']) }}
         AS feed_info_key,
         COALESCE(calitp_deleted_at, "2099-01-01") AS calitp_deleted_at
     FROM feed_info

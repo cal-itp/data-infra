@@ -1,14 +1,9 @@
-operator: operators.AirtableToWarehouseOperator
+operator: operators.AirtableToGCSOperator
 
 air_base_id: apphcwzP8cR82NeJo
+air_base_name: sandbox
 air_table_name: parent
-gcs_path: sandbox/airtable
-table_name: sandbox.airtable_parent
-
-id_name: "parent_id"
-rename_fields:
-  child: child_id
-column_prefix: "parent_"
+bucket: "{{ prefix_bucket('calitp-airtable') }}"
 
 dependencies:
   - create_dataset

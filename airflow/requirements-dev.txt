@@ -1,0 +1,2 @@
+apache-airflow==2.1.4 # pyup: ignore
+black==22.3.0

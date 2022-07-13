@@ -1,6 +1,7 @@
 version: 2
 
 sources:
+    # note: these tables should probably be moved at some point
   - name: gtfs_rt_raw
     description: Data in the gtfs_rt dataset in BigQuery, generally produced by the rt_loader and rt_loader_files Airflow DAGs.
     database: cal-itp-data-infra
@@ -13,10 +14,8 @@ sources:
           loaded into BigQuery via
           rt_loader_files.external_calitp_files DAG task
           (defines external table).
-      - name: validation_service_alerts
-      - name: validation_trip_updates
-      - name: validation_vehicle_positions
       - name: validation_code_descriptions
+
   - name: gtfs_rt_logs
     description: Data in the gtfs_rt_logs dataset in BigQuery, from logs sink.
     database: cal-itp-data-infra
@@ -43,14 +42,20 @@ models:
         description: Timestamp when this file was extracted
         tests:
           - not_null
-      - name: calitp_itp_id
+      - &calitp_itp_id
+        name: calitp_itp_id
         description: '{{ doc("column_calitp_itp_id") }}'
         tests:
           - not_null
-      - name: calitp_url_number
+        meta:
+          metabase.semantic_type: type/FK
+      - &calitp_url_number
+        name: calitp_url_number
         description: '{{ doc("column_calitp_url_number") }}'
         tests:
           - not_null
+        meta:
+          metabase.semantic_type: type/FK
       - name: name
         description: File type (service_alerts, trip_updates, or vehicle_positions)
         tests:
@@ -95,14 +100,8 @@ models:
         description: Date extracted from calitp_extracted_at
         tests:
           - not_null
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
       - name: name
         description: File type (service_alerts, trip_updates, or vehicle_positions)
         tests:
@@ -130,14 +129,8 @@ models:
         description: Date for which this feed was present in our extraction list
         tests:
           - not_null
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
       - name: url
         description: Feed URL
         tests:
@@ -146,33 +139,25 @@ models:
         description: GTFS realtime type (service_alerts, trip_updates, or vehicle_positions)
         tests:
           - not_null
+
   - name: gtfs_rt_fact_daily_validation_errors
     description: |
       A daily roll-up of validation errors
       per calitp_itp_id/calitp_url_number/feed type/error.
       Primary key is composite of calitp_itp_id,
       calitp_url_number, rt_feed_type, error_id, and date.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - calitp_itp_id
-            - calitp_url_number
-            - rt_feed_type
-            - error_id
-            - date
     columns:
+      - name: key
+        description: Synthetic key
+        tests:
+          - not_null
+          - unique
       - name: date
         description: Date for which this feed was present in our extraction list
         tests:
           - not_null
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
       - name: rt_feed_type
         description: GTFS realtime type (service_alerts, trip_updates, or vehicle_positions)
         tests:
@@ -200,11 +185,15 @@ models:
         tests:
           - dbt_utils.not_null_proportion:
               at_least: 0.95
+        meta:
+          metabase.semantic_type: type/FK
       - name: calitp_url_number
         description: '{{ doc("column_calitp_url_number") }}'
         tests:
           - dbt_utils.not_null_proportion:
               at_least: 0.95
+        meta:
+          metabase.semantic_type: type/FK
       - name: error
         description: |
           Download error encountered.
@@ -228,3 +217,17 @@ models:
         tests:
           - unique
           - not_null
+
+exposures:
+  - name: rt_speed_maps
+    type: notebook
+    maturity: medium
+    url: https://analysis.calitp.org/rt/
+    description: Parameterized bus speed maps!
+
+    depends_on:
+      - source('gtfs_rt_external_tables', 'vehicle_positions')
+
+    owner:
+      name: Eric
+      email: eric.d@jarv.us

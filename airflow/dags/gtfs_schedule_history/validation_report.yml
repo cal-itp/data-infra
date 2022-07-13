@@ -29,6 +29,8 @@ schema_fields:
       fields:
         - name: csvRowNumber
           type: INTEGER
+        - name: columnName
+          type: STRING
         - name: oldCsvRowNumber
           type: INTEGER
         - name: newCsvRowNumber

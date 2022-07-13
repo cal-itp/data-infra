@@ -27,7 +27,7 @@ routes_clean AS (
         TRIM(continuous_drop_off) AS continuous_drop_off,
         calitp_extracted_at,
         calitp_hash,
-        FARM_FINGERPRINT(CONCAT(CAST(calitp_hash AS STRING), "___", CAST(calitp_extracted_at AS STRING)))
+        {{ farm_surrogate_key(['calitp_hash', 'calitp_extracted_at']) }}
         AS route_key,
         COALESCE(calitp_deleted_at, "2099-01-01") AS calitp_deleted_at
     FROM routes

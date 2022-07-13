@@ -1,0 +1,36 @@
+version: 2
+
+sources:
+  - name: hqta_external_tables
+    database: "{{ target.database }}" # TODO: change me back when deployed
+    schema: external_hqta
+    tables:
+      - name: areas
+      - name: stops
+
+exposures:
+  - name: hqta_map_tiles
+    type: application
+    maturity: medium
+    url: "https://gisdata-caltrans.opendata.arcgis.com/datasets/863e61eacbf3463ab239beb3cee4a2c3_0/explore"
+    description: |
+      HQTA is within one-half mile from a “major transit stop” and a “high-quality transit corridor” and developed
+      based on the language in SB375 and codified in the CA Public Resources Code.
+
+    depends_on:
+      - source("hqta_external_tables", "areas")
+      - source("hqta_external_tables", "stops")
+
+    owner:
+      email: eric.d@jarv.us
+
+    meta:
+      destinations:
+        - type: tiles
+          bucket: gs://calitp-publish
+          format: geojsonl # note that this is the intermediary format
+          tile_format: mbtiles
+          geo_column: geometry
+          layer_names:
+            - High Quality Transit Areas
+            - High Quality Transit Stops

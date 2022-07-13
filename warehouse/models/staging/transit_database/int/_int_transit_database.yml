@@ -1,0 +1,33 @@
+version: 2
+
+models:
+  - name: int_tts_services_ct_services_map
+    description: |
+      Mapping between two instances of synced `services` table in Airtable;
+      one copy in California Transit base and the other in Transit
+      Technology Stacks base. Different Airtable internal record IDs
+      are assigned in each instance so this table maps the IDs between
+      instances, using `name` (Airtable primary field) to join.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - tts_key
+            - tts_date
+          combination_of_columns:
+            - ct_key
+            - ct_date
+  - name: int_tts_organizations_ct_organizations_map
+    description: |
+      Mapping between two instances of synced `organization` table in Airtable;
+      one copy in California Transit base and the other in Transit
+      Technology Stacks base. Different Airtable internal record IDs
+      are assigned in each instance so this table maps the IDs between
+      instances, using `name` (Airtable primary field) to join.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - tts_key
+            - tts_date
+          combination_of_columns:
+            - ct_key
+            - ct_date

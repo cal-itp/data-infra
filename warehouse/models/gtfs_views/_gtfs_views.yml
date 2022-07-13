@@ -10,6 +10,8 @@ models:
         tests:
           - not_null
           - unique
+        meta:
+          metabase.semantic_type: type/PK
       - name: full_date
         description: Date formatted as a date; formatted as YYYY-MM-DD, ex. 2022-03-31.
         tests:
@@ -125,6 +127,8 @@ models:
         tests:
           - not_null
           - unique
+        meta:
+          metabase.semantic_type: type/PK
   - name: gtfs_schedule_dim_files
     description: |
       Dimension table of all files that have been encountered in Cal-ITP
@@ -137,6 +141,8 @@ models:
         tests:
           - not_null
           - unique
+        meta:
+          metabase.semantic_type: type/PK
   - name: gtfs_schedule_dim_pathways
     description: |
       Slowly-changing dimension table of pathways.txt data.
@@ -160,12 +166,15 @@ models:
         tests:
           - not_null
           - unique
+        meta:
+          metabase.semantic_type: type/PK
   - name: gtfs_schedule_dim_shapes
     description: |
       Slowly-changing dimension table of shapes.txt data.
       Each row is a cleaned row from a shapes.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#shapestxt.
+
   - name: gtfs_schedule_dim_shapes_geo
     description: |
       Slowly-changing dimension table of shapes created from shapes.txt
@@ -179,15 +188,27 @@ models:
             - calitp_url_number
             - shape_id
     columns:
-      - name: calitp_itp_id
+      - &calitp_itp_id
+        name: calitp_itp_id
         description: '{{ doc("column_calitp_itp_id") }}'
-      - name: calitp_url_number
+        tests:
+          - not_null
+        meta:
+          metabase.semantic_type: type/FK
+      - &calitp_url_number
+        name: calitp_url_number
         description: '{{ doc("column_calitp_url_number") }}'
-      - name: calitp_extracted_at
+        tests:
+          - not_null
+        meta:
+          metabase.semantic_type: type/FK
+      - &calitp_extracted_at
+        name: calitp_extracted_at
         description: '{{ doc("column_schedule_calitp_extracted_at") }}'
         tests:
           - not_null
-      - name: calitp_deleted_at
+      - &calitp_deleted_at
+        name: calitp_deleted_at
         description: '{{ doc("column_schedule_calitp_deleted_at") }}'
         tests:
           - not_null
@@ -199,6 +220,32 @@ models:
         description: Ordered array of WKT points that make up the shape.
         tests:
           - not_null
+
+  - name: gtfs_schedule_dim_shapes_geo_latest
+    description: |
+      Latest-only slice of the table of shapes created from shapes.txt
+      data. Each row is a shape. Primary key is composite of
+      calitp_itp_id, calitp_url_number, calitp_extracted_at, and shape_id.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - calitp_itp_id
+            - calitp_url_number
+            - shape_id
+    columns:
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+      - name: shape_id
+        description: shape_id from shapes.txt file.
+        tests:
+          - not_null
+      - name: pt_array
+        description: Ordered array of WKT points that make up the shape.
+        tests:
+          - not_null
+
   - name: gtfs_schedule_dim_stop_times
     description: |
       Slowly-changing dimension table of stop_times.txt data.
@@ -284,6 +331,8 @@ models:
           indicating that feed is not yet valid as of date
       - name: extraction_status
         description: Indicates whether extraction was successful ('success') or not ('error')
+        tests:
+          - not_null
       - name: parse_error_encountered
         description: |
           Whether a fatal error occurred while parsing the feed; only populated
@@ -301,6 +350,23 @@ models:
         description: |
           Days since the feed's contents (the contents of any loadable file
           within the feed) have changed, relative to date
+      - name: is_service_valid
+        description: |
+          Indicates whether this date is between the first and last dates on which this feed has service.
+          Service is defined as a trip actually being scheduled on that date (a `service_id` within the feed is active on that date,
+          and a trip occurs on that `service_id`). This field does not guarantee that any service occurred on this specific date, just that this date is within a window of time where some service was defined for this feed.
+      - name: days_from_service_start_date
+        description: |
+          Number of days between date and service start date. if is_service_valid is False, this may be negative
+          indicating that feed is not yet valid as of date. Service start date is the first day on which service occurs on any service in this feed. Is a feed-wide summary.
+      - name: days_until_service_end_date
+        description: |
+          Number of days between date and service end date. if is_service_valid is False, this may be negative
+          indicating that feed is not yet valid as of date. Service end date is the last day on which service occurs on any service in this feed. Is a feed-wide summary.
+      - name: days_in_extraction_status
+        description: |
+          The number of days for which this feed has continuously had
+          the same `extraction_status`.
   - name: gtfs_schedule_fact_daily_feed_files
     description: |
       Each row of this table is a file extracted from a feed on a given day. Note that on days where
@@ -335,6 +401,8 @@ models:
         tests:
           - not_null
           - unique
+        meta:
+          metabase.semantic_type: type/PK
   - name: gtfs_schedule_fact_daily_feed_routes
     description: |
       Each row of this table is a feed/route/day combination, showing
@@ -399,14 +467,8 @@ models:
             - day_name
             - calitp_extracted_at
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
       - name: service_id
         description: service_id value from calendar.txt
         tests:
@@ -417,14 +479,8 @@ models:
           (from calendar.txt columns)
         tests:
           - not_null
-      - name: calitp_extracted_at
-        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
-        tests:
-          - not_null
-      - name: calitp_deleted_at
-        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
-        tests:
-          - not_null
+      - *calitp_extracted_at
+      - *calitp_deleted_at
   - name: gtfs_schedule_stg_daily_service
     description: |
       Each row indicates whether a given service_id was
@@ -440,14 +496,8 @@ models:
             - service_id
             - service_date
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
       - name: service_id
         description: |
           service_id value from calendar.txt or calendar_dates.txt
@@ -479,10 +529,8 @@ models:
         description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
+      - *calitp_itp_id
+      - *calitp_url_number
       - name: service_id
         description: |
           service_id value from calendar.txt / calendar_dates.txt /
@@ -536,10 +584,8 @@ models:
         description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
+      - *calitp_itp_id
+      - *calitp_url_number
       - name: service_id
         description: |
           service_id value from calendar.txt / calendar_dates.txt /
@@ -567,14 +613,8 @@ models:
             - metric_month
             - metric_year
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
       - name: metric_year
         description: |
           The year of the month for which the month-over-month ratio is
@@ -625,10 +665,8 @@ models:
             - metric_date
             - change_status
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
+      - *calitp_itp_id
+      - *calitp_url_number
       - name: feed_key
         description: |
           feed_key for the feed from this calitp_itp_id + calitp_url_number
@@ -657,10 +695,8 @@ models:
             - metric_date
             - change_status
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
+      - *calitp_itp_id
+      - *calitp_url_number
       - name: feed_key
         description: |
           feed_key for the feed from this calitp_itp_id + calitp_url_number
@@ -704,14 +740,8 @@ models:
             - calitp_itp_id
             - calitp_url_number
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
       - name: publish_date
         description: |
           Date a report will be published (e.g. June 1st reports
@@ -786,6 +816,9 @@ models:
         description: '{{ doc("column_schedule_key") }}'
         tests:
           - not_null
+          - relationships:
+              to: ref('gtfs_schedule_dim_feeds')
+              field: feed_key
       - name: code
         tests:
           - not_null
@@ -825,3 +858,87 @@ models:
         description: Field in validation output from GTFS validator
         tests:
           - not_null
+  - name: reports_daily_service_routes_stops
+    description: |
+      Table consolidating daily service hours, routes, and stops by feed,
+      filtered to the specific feed used for each monthly report.
+      Replaces complex Siuba code in reports notebook and allows for
+      visibility into service hour changes before the report generation process.
+      Primary key is composite of service_date, calitp_itp_id, calitp_url_number.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - service_date
+            - calitp_itp_id
+            - calitp_url_number
+    columns:
+      - name: service_date
+        description: Date on which this service level was present
+        tests:
+          - not_null
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+        tests:
+          - not_null
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+      - name: feed_key
+        tests:
+          - not_null
+        description: feed_key only present with active service on date
+      - name: ttl_service_hours
+        description: Total service hours across entire feed on date, if any
+      - name: n_trips
+        description: Total number of trips ran on date, if any
+      - name: first_departure_ts
+        description: Time of first departure on date
+      - name: last_departure_ts
+        description: Time of last departure on date
+      - name: n_stops
+        description: |
+         Total number of stops present in active feed
+         (not necessarily served on date)
+      - name: n_routes
+        description: |
+         Total number of routes present in active feed
+         (not necessarily operating on date)
+
+exposures:
+  - name: calitp_reports_site
+    type: application
+    maturity: medium
+    url: "reports.calitp.org"
+    description: Cal-ITP reports site
+    depends_on:
+      - ref("reports_daily_service_routes_stops")
+      - ref("reports_gtfs_schedule_index")
+      - ref("gtfs_schedule_dim_feeds")
+      - ref("gtfs_schedule_fact_stop_id_changes")
+      - ref("gtfs_schedule_fact_route_id_changes")
+      - source("gtfs_type2", "validation_notices")
+      # ^ hopefully not for long
+      # also gtfs_schedule_history.calitp_files_updates
+      # don't think this is a source in dbt?
+      # could add, but would also like to look at options
+      # to replace reports-side...
+    owner:
+      email: eric.d@jarv.us
+
+  - name: calitp_map_tile_server
+    type: application
+    maturity: low
+    url: ""
+    description: Just the shapes as map tiles
+    depends_on:
+      - ref("gtfs_schedule_dim_shapes_geo_latest")
+    owner:
+      email: andrew.v@jarv.us
+    meta:
+      destinations:
+        - type: tiles
+          bucket: gs://calitp-publish
+          format: geojsonl # note that this is the intermediary format
+          tile_format: mbtiles
+          geo_column: pt_array
+          layer_names:
+            - GTFS Schedule Shapes (Latest)

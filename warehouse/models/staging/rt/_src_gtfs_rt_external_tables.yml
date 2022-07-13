@@ -1,0 +1,23 @@
+version: 2
+
+sources:
+  - name: gtfs_rt_external_tables
+    description: Hive-partitioned external tables reading GTFS RT data and validation errors from GCS.
+    database: cal-itp-data-infra
+    schema: external_gtfs_rt
+    tables:
+      - name: service_alerts
+        description: Unnested service alerts records, hive partitioned in GCS.
+      - name: service_alerts_outcomes
+      - name: service_alerts_validations
+      - name: service_alerts_validations_outcomes
+      - name: trip_updates
+        description: Unnested trip updates records, hive partitioned in GCS.
+      - name: trip_updates_outcomes
+      - name: trip_updates_validations
+      - name: trip_updates_validations_outcomes
+      - name: vehicle_positions
+        description: Unnested vehicle positions records, hive partitioned in GCS.
+      - name: vehicle_positions_outcomes
+      - name: vehicle_positions_validations
+      - name: vehicle_positions_validations_outcomes
