@@ -15,7 +15,8 @@ stg_transit_database__service_components AS (
         notes,
         services,
         component,
-        product
+        product,
+        dt AS calitp_extracted_at
     FROM latest
 )
 

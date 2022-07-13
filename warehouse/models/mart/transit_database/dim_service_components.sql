@@ -1,7 +1,10 @@
 {{ config(materialized='table') }}
 
-WITH stg_transit_database__service_components AS (
-    SELECT * FROM {{ ref('stg_transit_database__service_components') }}
+WITH latest AS (
+    {{ get_latest_dense_rank(
+        external_table = ref('stg_transit_database__service_components'),
+        order_by = 'calitp_extracted_at DESC'
+        ) }}
 ),
 
 dim_components AS (
@@ -23,17 +26,19 @@ unnest_service_components AS (
         component_key,
         ntd_certified,
         product_component_valid,
-        notes
-    FROM stg_transit_database__service_components
-    LEFT JOIN UNNEST(stg_transit_database__service_components.services) AS service_key
-    LEFT JOIN UNNEST(stg_transit_database__service_components.product) AS product_key
-    LEFT JOIN UNNEST(stg_transit_database__service_components.component) AS component_key
+        notes,
+        l.calitp_extracted_at
+    FROM latest AS l
+    LEFT JOIN UNNEST(l.services) AS service_key
+    LEFT JOIN UNNEST(l.product) AS product_key
+    LEFT JOIN UNNEST(l.component) AS component_key
     -- check that we have service and product actually defined
     WHERE (service_key IS NOT NULL) AND (product_key IS NOT NULL)
 ),
 
-bridge_services_x_products AS (
+dim_service_components AS (
     SELECT
+        {{ farm_surrogate_key(['COALESCE(service_key,"_")', 'COALESCE(product_key,"_")', 'COALESCE(component_key,"_")', 't1.calitp_extracted_at']) }} AS key,
         t1.service_key,
         t2.name AS service_name,
         t1.product_key,
@@ -42,14 +47,18 @@ bridge_services_x_products AS (
         t5.name AS component_name,
         t1.ntd_certified,
         t1.product_component_valid,
-        t1.notes
+        t1.notes,
+        t1.calitp_extracted_at
     FROM unnest_service_components AS t1
     LEFT JOIN dim_services AS t2
         ON t1.service_key = t2.key
+        AND t1.calitp_extracted_at = t2.calitp_extracted_at
     LEFT JOIN dim_products AS t3
         ON t1.product_key = t3.key
+        AND t1.calitp_extracted_at = t2.calitp_extracted_at
     LEFT JOIN dim_components AS t5
         ON t1.component_key = t5.key
+        AND t1.calitp_extracted_at = t2.calitp_extracted_at
 )
 
-SELECT * FROM bridge_services_x_products
+SELECT * FROM dim_service_components

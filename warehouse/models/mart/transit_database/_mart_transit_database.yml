@@ -190,6 +190,11 @@ models:
           - relationships:
              to: ref('dim_gtfs_service_data')
              field: key
+  - name: dim_service_components
+    description: |
+      Each row is a unique service / product / component combination.
+    columns:
+      - *key
   - name: bridge_components_x_products
     description: |
       Mapping table between components and products.
