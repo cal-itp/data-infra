@@ -6,6 +6,7 @@ WITH latest AS (
         order_by = 'calitp_extracted_at DESC'
         ) }}
 ),
+
 dim_organizations AS (
     SELECT
         key,
@@ -15,6 +16,7 @@ dim_organizations AS (
         itp_id,
         details,
         caltrans_district,
+        website,
         calitp_extracted_at
     FROM latest
 )

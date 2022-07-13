@@ -18,6 +18,8 @@ stg_transit_database__services AS (
         paratransit_for,
         provider,
         operator,
+        funding_sources,
+        operating_counties,
         dt AS calitp_extracted_at
     FROM latest
 )

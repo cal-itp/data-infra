@@ -19,6 +19,7 @@ stg_transit_database__organizations AS (
         caltrans_district,
         mobility_services_managed,
         parent_organization,
+        website,
         dt AS calitp_extracted_at
     FROM latest
 )
