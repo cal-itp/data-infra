@@ -19,8 +19,9 @@ unnest_parents AS (
 
 bridge_parent_organizations AS (
     SELECT
-        t1.*,
-        t2.name AS parent_organization_name
+        t1.* EXCEPT(calitp_extracted_at),
+        t2.name AS parent_organization_name,
+        t1.calitp_extracted_at
     FROM unnest_parents AS t1
     LEFT JOIN latest AS t2
         ON t1.parent_organization_key = t2.key

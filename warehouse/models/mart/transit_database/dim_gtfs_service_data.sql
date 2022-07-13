@@ -2,7 +2,7 @@
 
 WITH latest AS (
     {{ get_latest_dense_rank(
-        external_table = ref('stg_transit_database__gtfs_datasets'),
+        external_table = ref('stg_transit_database__gtfs_service_data'),
         order_by = 'calitp_extracted_at DESC'
         ) }}
 ),

@@ -11,10 +11,10 @@ WITH latest AS (
 dim_contract_attachments AS (
     SELECT
         unnested_attachments.id AS key,
-        stg_transit_database__contracts.key AS contract_key,
-        stg_transit_database__contracts.name AS contract_name,
+        latest.key AS contract_key,
+        latest.name AS contract_name,
         unnested_attachments.url AS attachment_url,
-        stg_transit_database__contracts.calitp_extracted_at
+        latest.calitp_extracted_at
     FROM latest,
         latest.attachments AS unnested_attachments
 )
