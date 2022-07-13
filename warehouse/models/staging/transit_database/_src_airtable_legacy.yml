@@ -1,0 +1,20 @@
+version: 2
+
+sources:
+  - name: legacy_airtable
+    description: |
+      Data from Airtable.
+    database: cal-itp-data-infra
+    schema: airtable
+    tables:
+      - name: california_transit_county_geography
+      - name: california_transit_eligibility_programs
+      - name: california_transit_fare_systems
+      - name: california_transit_funding_programs
+      - name: california_transit_gtfs_datasets
+      - name: california_transit_gtfs_service_data
+      - name: california_transit_ntd_agency_info
+      - name: california_transit_organizations
+      - name: california_transit_place_geography
+      - name: california_transit_rider_requirements
+      - name: california_transit_services

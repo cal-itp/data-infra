@@ -1,10 +1,8 @@
 {{ config(materialized='table') }}
 
 WITH latest AS (
-    {{ get_latest_dense_rank(
-        external_table = ref('stg_transit_database__service_components'),
-        order_by = 'calitp_extracted_at DESC'
-        ) }}
+    SELECT *
+    FROM {{ ref('int_transit_database__service_components_unnested') }}
 ),
 
 dim_components AS (
@@ -19,26 +17,32 @@ dim_products AS (
     SELECT * FROM {{ ref('dim_products') }}
 ),
 
-unnest_service_components AS (
+ranked_service_components AS (
     SELECT
+        key,
         service_key,
         product_key,
         component_key,
         ntd_certified,
         product_component_valid,
         notes,
-        l.calitp_extracted_at
-    FROM latest AS l
-    LEFT JOIN UNNEST(l.services) AS service_key
-    LEFT JOIN UNNEST(l.product) AS product_key
-    LEFT JOIN UNNEST(l.component) AS component_key
-    -- check that we have service and product actually defined
-    WHERE (service_key IS NOT NULL) AND (product_key IS NOT NULL)
+        ROW_NUMBER() OVER
+            (PARTITION BY service_key, product_key, component_key
+            ORDER BY key) AS rank,
+        calitp_extracted_at
+    FROM latest
+),
+
+unique_service_components AS (
+    SELECT
+        * EXCEPT(rank)
+    FROM ranked_service_components
+    WHERE rank = 1
 ),
 
 dim_service_components AS (
     SELECT
-        {{ farm_surrogate_key(['COALESCE(service_key,"_")', 'COALESCE(product_key,"_")', 'COALESCE(component_key,"_")', 't1.calitp_extracted_at']) }} AS key,
+        {{ farm_surrogate_key(['service_key', 'product_key', 'COALESCE(component_key,"_")', 't1.calitp_extracted_at']) }} AS key,
         t1.service_key,
         t2.name AS service_name,
         t1.product_key,
@@ -49,7 +53,7 @@ dim_service_components AS (
         t1.product_component_valid,
         t1.notes,
         t1.calitp_extracted_at
-    FROM unnest_service_components AS t1
+    FROM unique_service_components AS t1
     LEFT JOIN dim_services AS t2
         ON t1.service_key = t2.key
         AND t1.calitp_extracted_at = t2.calitp_extracted_at

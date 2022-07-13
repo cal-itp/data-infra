@@ -1,0 +1,23 @@
+version: 2
+
+models:
+
+  - name: int_transit_database__service_components_unnested
+    description: |
+      Version of `stg_transit_database__service_components` with all
+      service, product, and component keys unnested.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - key
+            - service_key
+            - product_key
+            - component_key
+            - calitp_extracted_at
+      - dbt_utils.unique_combination_of_columns:
+          severity: warn
+          combination_of_columns:
+            - service_key
+            - product_key
+            - component_key
+            - calitp_extracted_at
