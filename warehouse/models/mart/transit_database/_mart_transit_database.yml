@@ -190,7 +190,7 @@ models:
           - relationships:
              to: ref('dim_gtfs_service_data')
              field: key
-  - name: map_components_x_products
+  - name: bridge_components_x_products
     description: |
       Mapping table between components and products.
       Relationship indicates that product can act as that component.
@@ -245,7 +245,7 @@ models:
           - relationships:
              to: ref('dim_gtfs_service_data')
              field: key
-  - name: map_components_x_properties_and_features
+  - name: bridge_components_x_properties_and_features
     description: |
       Mapping table between components and properties_and_features.
       Relationship indicates that component has specified property or feature.
@@ -266,7 +266,7 @@ models:
           - relationships:
              to: ref('dim_properties_and_features')
              field: key
-  - name: map_data_schemas_x_products_inputs
+  - name: bridge_data_schemas_x_products_inputs
     description: |
       Mapping table between data schemas and products.
       Relationship indicates that data schema is an accepted input into
@@ -288,7 +288,7 @@ models:
           - relationships:
              to: ref('dim_products')
              field: key
-  - name: map_data_schemas_x_products_outputs
+  - name: bridge_data_schemas_x_products_outputs
     description: |
       Mapping table between data schemas and products.
       Relationship indicates that data schema can be produced as output
@@ -310,7 +310,7 @@ models:
           - relationships:
              to: ref('dim_products')
              field: key
-  - name: map_organizations_x_services_managed
+  - name: bridge_organizations_x_services_managed
     description: |
       Mapping table between organizations and services.
       Relationship indicates that organization manages (provides)
@@ -332,7 +332,7 @@ models:
           - relationships:
              to: ref('dim_services')
              field: key
-  - name: map_parent_organizations
+  - name: bridge_parent_organizations
     description: |
       Mapping table between organizations and their parents
       (map between two organization records.)
@@ -353,7 +353,7 @@ models:
           - relationships:
              to: ref('dim_organizations')
              field: key
-  - name: map_paratransit_services
+  - name: bridge_paratransit_services
     description: |
       Mapping table between services and services for which
       they provide paratransit service

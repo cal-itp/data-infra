@@ -8,7 +8,7 @@ stg_transit_database__services AS (
     SELECT * FROM {{ ref('stg_transit_database__services') }}
 ),
 
-map_organizations_x_services_managed AS (
+bridge_organizations_x_services_managed AS (
  {{ transit_database_many_to_many(
      table_a = 'stg_transit_database__organizations',
      table_a_key_col = 'key',
@@ -25,4 +25,4 @@ map_organizations_x_services_managed AS (
  ) }}
 )
 
-SELECT * FROM map_organizations_x_services_managed
+SELECT * FROM bridge_organizations_x_services_managed

@@ -13,7 +13,7 @@ unnest_paratransit AS (
         stg_transit_database__services.paratransit_for AS paratransit_for
 ),
 
-map_paratransit_services AS (
+bridge_paratransit_services AS (
     SELECT
         t1.*,
         t2.name AS paratransit_for_service_name
@@ -22,4 +22,4 @@ map_paratransit_services AS (
         ON t1.paratransit_for_service_key = t2.key
 )
 
-SELECT * FROM map_paratransit_services
+SELECT * FROM bridge_paratransit_services

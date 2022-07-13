@@ -13,7 +13,7 @@ unnest_parents AS (
         stg_transit_database__organizations.parent_organization AS parent
 ),
 
-map_parent_organizations AS (
+bridge_parent_organizations AS (
     SELECT
         t1.*,
         t2.name AS parent_organization_name
@@ -22,4 +22,4 @@ map_parent_organizations AS (
         ON t1.parent_organization_key = t2.key
 )
 
-SELECT * FROM map_parent_organizations
+SELECT * FROM bridge_parent_organizations

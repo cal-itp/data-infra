@@ -4,8 +4,8 @@ WITH dim_organizations AS (
     SELECT * FROM {{ ref('dim_organizations') }}
 ),
 
-map_organizations_x_services_managed AS (
-    SELECT * FROM {{ ref('map_organizations_x_services_managed') }}
+bridge_organizations_x_services_managed AS (
+    SELECT * FROM {{ ref('bridge_organizations_x_services_managed') }}
 ),
 
 dim_gtfs_service_data AS (
@@ -31,7 +31,7 @@ dim_provider_service_gtfs_without_key AS (
         gd.data AS dataset_type,
         gd.name AS gtfs_dataset_name
     FROM dim_organizations AS o
-    LEFT JOIN map_organizations_x_services_managed AS osm
+    LEFT JOIN bridge_organizations_x_services_managed AS osm
         ON o.key = osm.organization_key
     LEFT JOIN dim_gtfs_service_data AS gsd
         ON osm.service_key = gsd.service_key

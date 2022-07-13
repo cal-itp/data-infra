@@ -32,7 +32,7 @@ unnest_service_components AS (
     WHERE (service_key IS NOT NULL) AND (product_key IS NOT NULL)
 ),
 
-map_services_x_products AS (
+bridge_services_x_products AS (
     SELECT
         t1.service_key,
         t2.name AS service_name,
@@ -52,4 +52,4 @@ map_services_x_products AS (
         ON t1.component_key = t5.key
 )
 
-SELECT * FROM map_services_x_products
+SELECT * FROM bridge_services_x_products
