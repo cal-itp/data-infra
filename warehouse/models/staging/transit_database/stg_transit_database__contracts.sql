@@ -10,8 +10,8 @@ stg_transit_database__contracts AS (
     SELECT
         id AS key,
         {{ trim_make_empty_string_null(column_name = "name") }},
-        contract_holder AS contract_holder_organization_key,
-        contract_vendor AS contract_vendor_organization_key,
+        unnested_contract_holder AS contract_holder_organization_key,
+        unnested_contract_vendor AS contract_vendor_organization_key,
         covered_components,
         value,
         start_date,
@@ -22,8 +22,8 @@ stg_transit_database__contracts AS (
         attachments,
         dt AS calitp_extracted_at
     FROM latest
-    LEFT JOIN UNNEST(latest.contract_holder)
-    LEFT JOIN UNNEST(latest.contract_vendor)
+    LEFT JOIN UNNEST(latest.contract_holder) AS unnested_contract_holder
+    LEFT JOIN UNNEST(latest.contract_vendor) AS unnested_contract_vendor
 )
 
 SELECT * FROM stg_transit_database__contracts

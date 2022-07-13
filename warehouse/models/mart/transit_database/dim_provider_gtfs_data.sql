@@ -32,7 +32,7 @@ dim_provider_service_gtfs_without_key AS (
         gd.name AS gtfs_dataset_name,
         o.calitp_extracted_at
     FROM dim_organizations AS o
-    LEFT JOIN bridge_organizations_x_services_managed AS osm
+    INNER JOIN bridge_organizations_x_services_managed AS osm
         ON o.key = osm.organization_key
         AND o.calitp_extracted_at = osm.calitp_extracted_at
     LEFT JOIN dim_gtfs_service_data AS gsd
@@ -46,7 +46,7 @@ dim_provider_service_gtfs_without_key AS (
 
 dim_provider_service_gtfs AS (
     SELECT
-        {{ farm_surrogate_key(['organization_key', 'service_key', 'gtfs_service_data_key', 'gtfs_dataset_key']) }} AS key,
+        {{ farm_surrogate_key(['organization_key', 'COALESCE(service_key,"_")', 'COALESCE(gtfs_service_data_key,"_")', 'COALESCE(gtfs_dataset_key,"_")']) }} AS key,
         organization_name,
         mobility_service,
         agency_id,
