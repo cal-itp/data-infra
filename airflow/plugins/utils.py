@@ -1,11 +1,9 @@
 import logging
 import os
-import re
 
 import pandas as pd
 from airflow.models import Variable
 from calitp import read_gcfs, save_to_gcfs
-from calitp.config import is_development
 from pandas.errors import EmptyDataError
 
 
@@ -16,19 +14,6 @@ def get_auth_secret(auth_secret_key: str) -> str:
     except KeyError as e:
         logging.error(f"No value found for {auth_secret_key}")
         raise e
-
-
-def make_name_bq_safe(name: str):
-    """Replace non-word characters.
-    See: https://cloud.google.com/bigquery/docs/reference/standard-sql/lexical#identifiers."""
-    return str.lower(re.sub("[^\w]", "_", name))  # noqa: W605
-
-
-def prefix_bucket(bucket):
-    # TODO: use once we're in python 3.9+
-    # bucket = bucket.removeprefix("gs://")
-    bucket = bucket.replace("gs://", "")
-    return f"gs://test-{bucket}" if is_development() else f"gs://{bucket}"
 
 
 def _keep_columns(
