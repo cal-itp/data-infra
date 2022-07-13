@@ -29,14 +29,18 @@ dim_provider_service_gtfs_without_key AS (
         gsd.route_id,
         gsd.category,
         gd.data AS dataset_type,
-        gd.name AS gtfs_dataset_name
+        gd.name AS gtfs_dataset_name,
+        o.calitp_extracted_at
     FROM dim_organizations AS o
     LEFT JOIN bridge_organizations_x_services_managed AS osm
         ON o.key = osm.organization_key
+        AND o.calitp_extracted_at = osm.calitp_extracted_at
     LEFT JOIN dim_gtfs_service_data AS gsd
         ON osm.service_key = gsd.service_key
+        AND osm.calitp_extracted_at = gsd.calitp_extracted_at
     LEFT JOIN dim_gtfs_datasets AS gd
         ON gsd.gtfs_dataset_key = gd.key
+        AND gsd.calitp_extracted_at = gd.calitp_extracted_at
     WHERE gsd.category = "primary"
 ),
 
@@ -54,7 +58,8 @@ dim_provider_service_gtfs AS (
         organization_key,
         service_key,
         gtfs_service_data_key,
-        gtfs_dataset_key
+        gtfs_dataset_key,
+        calitp_extracted_at
     FROM dim_provider_service_gtfs_without_key
 )
 

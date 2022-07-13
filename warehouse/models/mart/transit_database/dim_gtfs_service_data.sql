@@ -1,7 +1,10 @@
 {{ config(materialized='table') }}
 
-WITH stg_transit_database__gtfs_service_data AS (
-    SELECT * FROM {{ ref('stg_transit_database__gtfs_service_data') }}
+WITH latest AS (
+    {{ get_latest_dense_rank(
+        external_table = ref('stg_transit_database__gtfs_datasets'),
+        order_by = 'calitp_extracted_at DESC'
+        ) }}
 ),
 
 dim_gtfs_service_data AS (
@@ -16,7 +19,7 @@ dim_gtfs_service_data AS (
         route_id,
         reference_static_gtfs_service_data_key,
         calitp_extracted_at
-    FROM stg_transit_database__gtfs_service_data
+    FROM latest
 )
 
 SELECT * FROM dim_gtfs_service_data

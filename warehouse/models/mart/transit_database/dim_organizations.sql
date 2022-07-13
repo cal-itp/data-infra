@@ -1,9 +1,11 @@
 {{ config(materialized='table') }}
 
-WITH stg_transit_database__organizations AS (
-    SELECT * FROM {{ ref('stg_transit_database__organizations') }}
+WITH latest AS (
+    {{ get_latest_dense_rank(
+        external_table = ref('stg_transit_database__organizations'),
+        order_by = 'calitp_extracted_at DESC'
+        ) }}
 ),
-
 dim_organizations AS (
     SELECT
         key,
@@ -14,7 +16,7 @@ dim_organizations AS (
         details,
         caltrans_district,
         calitp_extracted_at
-    FROM stg_transit_database__organizations
+    FROM latest
 )
 
 SELECT * FROM dim_organizations

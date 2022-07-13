@@ -1,7 +1,10 @@
 {{ config(materialized='table') }}
 
-WITH stg_transit_database__services AS (
-    SELECT * FROM {{ ref('stg_transit_database__services') }}
+WITH latest AS (
+    {{ get_latest_dense_rank(
+        external_table = ref('stg_transit_database__services'),
+        order_by = 'calitp_extracted_at DESC'
+        ) }}
 ),
 
 dim_services AS (
@@ -12,7 +15,7 @@ dim_services AS (
         mode,
         currently_operating,
         calitp_extracted_at
-    FROM stg_transit_database__services
+    FROM latest
 )
 
 SELECT * FROM dim_services

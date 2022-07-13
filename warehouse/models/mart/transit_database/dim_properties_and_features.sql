@@ -1,7 +1,10 @@
 {{ config(materialized='table') }}
 
-WITH stg_transit_database__properties_and_features AS (
-    SELECT * FROM {{ ref('stg_transit_database__properties_and_features') }}
+WITH latest AS (
+    {{ get_latest_dense_rank(
+        external_table = ref('stg_transit_database__properties_and_features'),
+        order_by = 'calitp_extracted_at DESC'
+        ) }}
 ),
 
 dim_properties_and_features AS (
@@ -12,7 +15,7 @@ dim_properties_and_features AS (
         considerations,
         details,
         calitp_extracted_at
-    FROM stg_transit_database__properties_and_features
+    FROM latest
 )
 
 SELECT * FROM dim_properties_and_features
