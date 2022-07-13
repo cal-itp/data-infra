@@ -21,8 +21,8 @@ from pydantic.networks import HttpUrl
 from pydantic.tools import parse_obj_as
 from requests import Session
 from typing import List, Dict
-from calitp.storage import (
-    get_fs,
+from calitp.storage import get_fs
+from utils import (
     AirtableGTFSDataExtract,
     AirtableGTFSDataRecord,
     AirtableGTFSDataRecordProcessingOutcome,

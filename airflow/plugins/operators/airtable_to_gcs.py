@@ -6,7 +6,8 @@ import pendulum
 from pyairtable import Table
 from pydantic import BaseModel
 from typing import Optional
-from calitp.storage import get_fs, make_name_bq_safe
+from utils import make_name_bq_safe
+from calitp.storage import get_fs
 
 from airflow.models import BaseOperator
 
