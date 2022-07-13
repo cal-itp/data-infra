@@ -16,6 +16,9 @@ models:
               severity: warn
   - name: stg_transit_database__contracts
     description: '{{ doc("contracts_table") }}'
+    tests:
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('base_tts_contracts_idmap')
     columns:
       - *key
       - *name
@@ -26,6 +29,9 @@ models:
       - *name
   - name: stg_transit_database__service_components
     description: '{{ doc("service_components_table") }}'
+    tests:
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('base_tts_service_components_idmap')
     columns:
       - *key
       - *name
