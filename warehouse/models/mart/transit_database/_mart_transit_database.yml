@@ -20,15 +20,11 @@ models:
           - relationships:
              to: ref('dim_organizations')
              field: key
-        meta:
-          metabase.semantic_type: type/FK
       - name: contract_vendor_organization_key
         tests:
           - relationships:
              to: ref('dim_organizations')
              field: key
-        meta:
-          metabase.semantic_type: type/FK
   - name: dim_data_schemas
     description: '{{ doc("data_schemas_table") }}'
     columns:
@@ -90,8 +86,6 @@ models:
           - relationships:
              to: ref('dim_contracts')
              field: key
-        meta:
-          metabase.semantic_type: type/FK
   - name: dim_gtfs_datasets
     description: |
       Each record represents a gtfs dataset (feed) that is either a type of
@@ -121,15 +115,11 @@ models:
           - relationships:
              to: ref('dim_gtfs_datasets')
              field: key
-        meta:
-          metabase.semantic_type: type/FK
       - name: schedule_to_use_for_rt_validation_gtfs_dataset_key
         description: |
           For realtime datasets, the key of the schedule dataset that should
           be used for validation (i.e., the given realtime dataset should reference
           identifiers from the schedule dataset listed here.)
-        meta:
-          metabase.semantic_type: type/FK
         tests:
           - relationships:
              to: ref('dim_gtfs_datasets')
@@ -157,8 +147,6 @@ models:
       - name: service_key
         description: |
           Service record key for this service / dataset relationship.
-        meta:
-          metabase.semantic_type: type/FK
         tests:
           - relationships:
              to: ref('dim_services')
@@ -166,8 +154,6 @@ models:
       - name: gtfs_dataset_key
         description: |
           GTFS dataset record key for this service / dataset relationship.
-        meta:
-          metabase.semantic_type: type/FK
         tests:
           - relationships:
              to: ref('dim_gtfs_datasets')
@@ -202,8 +188,6 @@ models:
         description: |
           For realtime dataset / service relationships,
           the associated schedule dataset / service relationship.
-        meta:
-          metabase.semantic_type: type/FK
         tests:
           - relationships:
              to: ref('dim_gtfs_service_data')
@@ -225,15 +209,11 @@ models:
             - product_key
     columns:
       - name: component_key
-        meta:
-          metabase.semantic_type: type/FK
         tests:
           - relationships:
              to: ref('dim_components')
              field: key
       - name: product_key
-        meta:
-          metabase.semantic_type: type/FK
         tests:
           - relationships:
              to: ref('dim_products')
@@ -253,29 +233,21 @@ models:
     columns:
       - *key
       - name: service_key
-        meta:
-          metabase.semantic_type: type/FK
         tests:
           - relationships:
              to: ref('dim_services')
              field: key
       - name: gtfs_dataset_key
-        meta:
-          metabase.semantic_type: type/FK
         tests:
           - relationships:
              to: ref('dim_gtfs_datasets')
              field: key
       - name: organization_key
-        meta:
-          metabase.semantic_type: type/FK
         tests:
           - relationships:
               to: ref('dim_organizations')
               field: key
       - name: gtfs_service_data_key
-        meta:
-          metabase.semantic_type: type/FK
         tests:
           - relationships:
              to: ref('dim_gtfs_service_data')
@@ -292,15 +264,11 @@ models:
             - property_feature_key
     columns:
       - name: component_key
-        meta:
-          metabase.semantic_type: type/FK
         tests:
           - relationships:
              to: ref('dim_components')
              field: key
       - name: property_feature_key
-        meta:
-          metabase.semantic_type: type/FK
         tests:
           - relationships:
              to: ref('dim_properties_and_features')
@@ -318,15 +286,11 @@ models:
             - product_key
     columns:
       - name: data_schema_key
-        meta:
-          metabase.semantic_type: type/FK
         tests:
           - relationships:
              to: ref('dim_data_schemas')
              field: key
       - name: product_key
-        meta:
-          metabase.semantic_type: type/FK
         tests:
           - relationships:
              to: ref('dim_products')
@@ -344,15 +308,11 @@ models:
             - product_key
     columns:
       - name: data_schema_key
-        meta:
-          metabase.semantic_type: type/FK
         tests:
           - relationships:
              to: ref('dim_data_schemas')
              field: key
       - name: product_key
-        meta:
-          metabase.semantic_type: type/FK
         tests:
           - relationships:
              to: ref('dim_products')
@@ -370,15 +330,11 @@ models:
             - service_key
     columns:
       - name: organization_key
-        meta:
-          metabase.semantic_type: type/FK
         tests:
           - relationships:
              to: ref('dim_organizations')
              field: key
       - name: service_key
-        meta:
-          metabase.semantic_type: type/FK
         tests:
           - relationships:
              to: ref('dim_services')
@@ -395,15 +351,11 @@ models:
             - parent_organization_key
     columns:
       - name: organization_key
-        meta:
-          metabase.semantic_type: type/FK
         tests:
           - relationships:
              to: ref('dim_organizations')
              field: key
       - name: parent_organization_key
-        meta:
-          metabase.semantic_type: type/FK
         tests:
           - relationships:
              to: ref('dim_organizations')
@@ -421,15 +373,11 @@ models:
             - paratransit_for_service_key
     columns:
       - name: service_key
-        meta:
-          metabase.semantic_type: type/FK
         tests:
           - relationships:
              to: ref('dim_services')
              field: key
       - name: paratransit_for_service_key
-        meta:
-          metabase.semantic_type: type/FK
         tests:
           - relationships:
              to: ref('dim_services')
