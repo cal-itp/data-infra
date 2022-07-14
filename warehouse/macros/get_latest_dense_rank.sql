@@ -8,7 +8,8 @@ WITH ranked AS (
             {% endif %}
             ORDER BY {{ order_by }}) as rank
     FROM {{ external_table }}
+    QUALIFY rank = 1
 )
-SELECT * FROM ranked WHERE rank = 1
+SELECT * FROM ranked
 
 {% endmacro %}

@@ -31,13 +31,7 @@ ranked_service_components AS (
             ORDER BY key) AS rank,
         calitp_extracted_at
     FROM latest
-),
-
-unique_service_components AS (
-    SELECT
-        * EXCEPT(rank)
-    FROM ranked_service_components
-    WHERE rank = 1
+    QUALIFY rank = 1
 ),
 
 dim_service_components AS (
@@ -53,7 +47,7 @@ dim_service_components AS (
         t1.product_component_valid,
         t1.notes,
         t1.calitp_extracted_at
-    FROM unique_service_components AS t1
+    FROM ranked_service_components AS t1
     LEFT JOIN dim_services AS t2
         ON t1.service_key = t2.key
         AND t1.calitp_extracted_at = t2.calitp_extracted_at
