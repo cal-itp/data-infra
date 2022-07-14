@@ -2,7 +2,12 @@ from prometheus_client import Histogram, Counter
 
 FEEDS_DOWNLOADED = Counter(
     name="downloaded_feeds",
-    documentation="Feeds sucessfully downloaded.",
+    documentation="Feeds successfully downloaded.",
+    labelnames=("url",),
+)
+FEED_REQUEST_FAILURES = Counter(
+    name="feed_request_failures",
+    documentation="Exceptions raised during download_feed calls",
     labelnames=("url",),
 )
 HANDLE_TICK_PROCESSED_BYTES = Counter(
