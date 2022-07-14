@@ -97,7 +97,7 @@ class AirtableExtract(BaseModel):
             bucket,
             f"{self.air_base_name}__{safe_air_table_name}",
             f"dt={self.extract_time.to_date_string()}",
-            f"time={self.extract_time.to_time_string()}",
+            f"ts={self.extract_time.to_iso8601_string()}",
             f"{safe_air_table_name}.jsonl.gz",
         )
 
