@@ -72,7 +72,7 @@ def download_feed(
         config=record,
         response_code=resp.status_code,
         response_headers=resp.headers,
-        download_time=pendulum.now(),
+        ts=pendulum.now(),
     )
 
     extract.save_content(fs=get_fs(), content=resp.content)
@@ -135,8 +135,8 @@ def download_all(task_instance, execution_date, **kwargs):
     ), f"we somehow ended up with {len(outcomes)} outcomes from {len(records)} records"
 
     result = DownloadFeedsResult(
-        start_time=start,
-        end_time=pendulum.now(),
+        ts=start,
+        end=pendulum.now(),
         outcomes=outcomes,
         filename="results.jsonl",
     )
