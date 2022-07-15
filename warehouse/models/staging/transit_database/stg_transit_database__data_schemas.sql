@@ -4,7 +4,7 @@ WITH
 once_daily_data_schemas AS (
     {{ get_latest_dense_rank(
         external_table = source('airtable', 'transit_technology_stacks__data_schemas'),
-        order_by = 'time DESC', partition_by = 'dt'
+        order_by = 'ts DESC', partition_by = 'dt'
         ) }}
 ),
 

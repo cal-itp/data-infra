@@ -4,7 +4,7 @@ WITH
 once_daily_rider_requirements AS (
     {{ get_latest_dense_rank(
         external_table = source('airtable', 'california_transit__rider_requirements'),
-        order_by = 'time DESC', partition_by = 'dt'
+        order_by = 'ts DESC', partition_by = 'dt'
         ) }}
 ),
 
@@ -16,7 +16,7 @@ stg_transit_database__rider_requirements AS (
         description,
         services,
         unnested_eligibility_programs AS eligibility_program_key,
-        time,
+        ts,
         dt AS calitp_extracted_at
     FROM once_daily_rider_requirements
     LEFT JOIN UNNEST(once_daily_rider_requirements.eligibility_programs) AS unnested_eligibility_programs

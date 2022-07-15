@@ -4,7 +4,7 @@ WITH
 once_daily_organizations AS (
     {{ get_latest_dense_rank(
         external_table = source('airtable', 'california_transit__organizations'),
-        order_by = 'time DESC', partition_by = 'dt'
+        order_by = 'ts DESC', partition_by = 'dt'
         ) }}
 ),
 

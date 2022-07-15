@@ -4,7 +4,7 @@ WITH
 once_daily_gtfs_datasets AS (
     {{ get_latest_dense_rank(
         external_table = source('airtable', 'california_transit__gtfs_datasets'),
-        order_by = 'time DESC', partition_by = 'dt'
+        order_by = 'ts DESC', partition_by = 'dt'
         ) }}
 ),
 
@@ -39,7 +39,7 @@ stg_transit_database__gtfs_datasets AS (
         itp_activities,
         itp_schedule_todo,
         deprecated_date,
-        time,
+        ts,
         dt AS calitp_extracted_at
     FROM once_daily_gtfs_datasets
     LEFT JOIN UNNEST(once_daily_gtfs_datasets.aggregated_to) AS unnested_aggregated_to

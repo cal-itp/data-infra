@@ -4,7 +4,7 @@ WITH
 once_daily_county_geography AS (
     {{ get_latest_dense_rank(
         external_table = source('airtable', 'california_transit__county_geography'),
-        order_by = 'time DESC', partition_by = 'dt'
+        order_by = 'ts DESC', partition_by = 'dt'
         ) }}
 ),
 
@@ -20,7 +20,7 @@ stg_transit_database__county_geography AS (
         rtpa,
         mpo,
         place_geography,
-        time,
+        ts,
         dt AS calitp_extracted_at
     FROM once_daily_county_geography
 )
