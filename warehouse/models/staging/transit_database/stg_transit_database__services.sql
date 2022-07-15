@@ -1,7 +1,7 @@
 
 
 WITH
-latest AS (
+once_daily_services AS (
     {{ get_latest_dense_rank(
         external_table = source('airtable', 'california_transit__services'),
         order_by = 'time DESC', partition_by = 'dt'
@@ -21,7 +21,7 @@ stg_transit_database__services AS (
         funding_sources,
         operating_counties,
         dt AS calitp_extracted_at
-    FROM latest
+    FROM once_daily_services
 )
 
 SELECT * FROM stg_transit_database__services

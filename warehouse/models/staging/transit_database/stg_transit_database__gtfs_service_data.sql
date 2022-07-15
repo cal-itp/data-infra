@@ -1,7 +1,7 @@
 
 
 WITH
-latest AS (
+once_daily_gtfs_service_data AS (
     {{ get_latest_dense_rank(
         external_table = source('airtable', 'california_transit__gtfs_service_data'),
         order_by = 'time DESC', partition_by = 'dt'
@@ -38,10 +38,10 @@ stg_transit_database__gtfs_service_data AS (
         itp_schedule_todo__from_gtfs_dataset_,
         time,
         dt AS calitp_extracted_at
-    FROM latest
-    LEFT JOIN UNNEST(latest.services) as unnested_services
-    LEFT JOIN UNNEST(latest.gtfs_dataset) as unnested_gtfs_dataset
-    LEFT JOIN UNNEST(latest.reference_static_gtfs_service) as unnested_reference_static_gtfs_service
+    FROM once_daily_gtfs_service_data
+    LEFT JOIN UNNEST(once_daily_gtfs_service_data.services) as unnested_services
+    LEFT JOIN UNNEST(once_daily_gtfs_service_data.gtfs_dataset) as unnested_gtfs_dataset
+    LEFT JOIN UNNEST(once_daily_gtfs_service_data.reference_static_gtfs_service) as unnested_reference_static_gtfs_service
 )
 
 SELECT * FROM stg_transit_database__gtfs_service_data

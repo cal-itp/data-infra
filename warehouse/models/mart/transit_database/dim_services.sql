@@ -1,6 +1,6 @@
 {{ config(materialized='table') }}
 
-WITH latest AS (
+WITH latest_services AS (
     {{ get_latest_dense_rank(
         external_table = ref('stg_transit_database__services'),
         order_by = 'calitp_extracted_at DESC'
@@ -16,7 +16,7 @@ dim_services AS (
         currently_operating,
         operating_counties,
         calitp_extracted_at
-    FROM latest
+    FROM latest_services
 )
 
 SELECT * FROM dim_services

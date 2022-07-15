@@ -1,7 +1,7 @@
 
 
 WITH
-latest AS (
+once_daily_county_geography AS (
     {{ get_latest_dense_rank(
         external_table = source('airtable', 'california_transit__county_geography'),
         order_by = 'time DESC', partition_by = 'dt'
@@ -22,7 +22,7 @@ stg_transit_database__county_geography AS (
         place_geography,
         time,
         dt AS calitp_extracted_at
-    FROM latest
+    FROM once_daily_county_geography
 )
 
 SELECT * FROM stg_transit_database__county_geography

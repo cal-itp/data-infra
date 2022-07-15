@@ -1,7 +1,7 @@
 
 
 WITH
-latest AS (
+once_daily_place_geography AS (
     {{ get_latest_dense_rank(
         external_table = source('airtable', 'california_transit__place_geography'),
         order_by = 'time DESC', partition_by = 'dt'
@@ -28,8 +28,8 @@ stg_transit_database__place_geography AS (
         organizations_2,
         time,
         dt AS calitp_extracted_at
-    FROM latest
-    LEFT JOIN UNNEST(latest.county_base) AS unnested_county_base
+    FROM once_daily_place_geography
+    LEFT JOIN UNNEST(once_daily_place_geography.county_base) AS unnested_county_base
 )
 
 SELECT * FROM stg_transit_database__place_geography

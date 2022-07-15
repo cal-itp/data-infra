@@ -1,7 +1,7 @@
 
 
 WITH
-latest AS (
+once_daily_fare_systems AS (
     {{ get_latest_dense_rank(
         external_table = source('airtable', 'california_transit__fare_systems'),
         order_by = 'time DESC', partition_by = 'dt'
@@ -51,8 +51,8 @@ stg_transit_database__fare_systems AS (
         itp_id,
         time,
         dt AS calitp_extracted_at
-    FROM latest
-    LEFT JOIN UNNEST(latest.transit_provider) AS unnested_transit_provider
+    FROM once_daily_fare_systems
+    LEFT JOIN UNNEST(once_daily_fare_systems.transit_provider) AS unnested_transit_provider
 )
 
 SELECT * FROM stg_transit_database__fare_systems

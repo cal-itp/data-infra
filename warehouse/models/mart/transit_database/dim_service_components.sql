@@ -1,6 +1,6 @@
 {{ config(materialized='table') }}
 
-WITH latest AS (
+WITH latest_service_components AS (
     SELECT *
     FROM {{ ref('int_transit_database__service_components_unnested') }}
 ),
@@ -30,7 +30,7 @@ ranked_service_components AS (
             (PARTITION BY service_key, product_key, component_key
             ORDER BY key) AS rank,
         calitp_extracted_at
-    FROM latest
+    FROM latest_service_components
     QUALIFY rank = 1
 ),
 

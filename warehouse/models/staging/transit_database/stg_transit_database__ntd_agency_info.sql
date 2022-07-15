@@ -1,7 +1,7 @@
 
 
 WITH
-latest AS (
+once_daily_ntd_agency_info AS (
     {{ get_latest_dense_rank(
         external_table = source('airtable', 'california_transit__ntd_agency_info'),
         order_by = 'time DESC', partition_by = 'dt'
@@ -52,8 +52,8 @@ stg_transit_database__ntd_agency_info AS (
         unnested_organizations AS organization_key,
         time,
         dt AS calitp_extracted_at
-    FROM latest
-    LEFT JOIN UNNEST(latest.organizations) AS unnested_organizations
+    FROM once_daily_ntd_agency_info
+    LEFT JOIN UNNEST(once_daily_ntd_agency_info.organizations) AS unnested_organizations
 )
 
 SELECT * FROM stg_transit_database__ntd_agency_info

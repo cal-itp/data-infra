@@ -1,6 +1,6 @@
 {{ config(materialized='table') }}
 
-WITH latest AS (
+WITH latest_contracts AS (
     {{ get_latest_dense_rank(
         external_table = ref('stg_transit_database__contracts'),
         order_by = 'calitp_extracted_at DESC'
@@ -21,7 +21,7 @@ dim_contracts AS (
         notes,
         contract_name_notes,
         calitp_extracted_at
-    FROM latest
+    FROM latest_contracts
 )
 
 SELECT * FROM dim_contracts

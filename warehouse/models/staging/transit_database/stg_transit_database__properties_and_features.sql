@@ -1,7 +1,7 @@
 
 
 WITH
-latest AS (
+once_daily_properties_and_features AS (
     {{ get_latest_dense_rank(
         external_table = source('airtable', 'transit_technology_stacks__properties_and_features'),
         order_by = 'time DESC', partition_by = 'dt'
@@ -17,7 +17,7 @@ stg_transit_database__properties_and_features AS (
         details,
         available_in_components,
         dt AS calitp_extracted_at
-    FROM latest
+    FROM once_daily_properties_and_features
 )
 
 SELECT * FROM stg_transit_database__properties_and_features
