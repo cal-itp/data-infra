@@ -29,7 +29,8 @@ validate_cleaned_micropayment_device_transactions as (
     from stg_cleaned_micropayment_device_transactions
     inner join stg_cleaned_micropayments as m using (micropayment_id)
     inner join multiple_debit_transaction_ids using (littlepay_transaction_id)
- --   order by transaction_time desc, littlepay_transaction_id asc, charge_type desc
+    -- commented out the line below because I could not get rid of sqlfluff error L054
+    -- order by transaction_time desc, littlepay_transaction_id asc, charge_type desc
 
 ),
 
