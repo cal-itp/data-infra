@@ -113,6 +113,7 @@ def run(
         for schema, database in [
             ("views", "Warehouse Views"),
             ("gtfs_schedule", "GTFS Schedule Feeds Latest"),
+            ("mart_transit_database", "Data Marts"),
         ]:
             subprocess.run(
                 [
