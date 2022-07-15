@@ -32,6 +32,6 @@ validate_cleaned_micropayment_device_transactions as (
     -- commented out the line below because I could not get rid of sqlfluff error L054
     -- order by transaction_time desc, littlepay_transaction_id asc, charge_type desc
 
-),
+)
 
 select * from validate_cleaned_micropayment_device_transactions

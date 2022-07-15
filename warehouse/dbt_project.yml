@@ -49,6 +49,7 @@ models:
       schema: views
 
     payments_views_staging:
+      +materialized: view
       schema: payments
 
     staging:

@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 WITH stg_enriched_device_transaction_purchases AS (
     {{
         sql_enrich_duplicates(

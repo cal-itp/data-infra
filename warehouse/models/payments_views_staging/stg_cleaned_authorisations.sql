@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 WITH stg_cleaned_authorisations AS (
     SELECT DISTINCT * EXCEPT (
         calitp_file_name,

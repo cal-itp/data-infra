@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 WITH stg_cleaned_product_data AS (
 
     SELECT DISTINCT * EXCEPT (

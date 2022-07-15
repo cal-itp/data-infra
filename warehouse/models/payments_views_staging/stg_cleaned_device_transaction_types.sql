@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 WITH stg_cleaned_micropayments AS (
 
     SELECT * FROM {{ ref('stg_cleaned_micropayments') }}

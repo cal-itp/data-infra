@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 WITH stg_cleaned_customers AS (
     SELECT DISTINCT
         customer_id,

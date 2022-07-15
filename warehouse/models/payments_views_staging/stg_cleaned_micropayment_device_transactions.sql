@@ -1,6 +1,3 @@
-
-{{ config(materialized='table') }}
-
 with deduped_micropayment_device_transaction_ids as (
 
     select distinct

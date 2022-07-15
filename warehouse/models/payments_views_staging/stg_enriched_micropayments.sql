@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 WITH stg_enriched_micropayments AS (
     {{
         sql_enrich_duplicates(

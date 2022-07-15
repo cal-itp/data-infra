@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 WITH stg_cleaned_device_transactions AS (
 
     SELECT DISTINCT

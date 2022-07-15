@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 WITH stg_enriched_product_data AS (
     {{
         sql_enrich_duplicates(

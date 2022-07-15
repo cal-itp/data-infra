@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 WITH stg_cleaned_customer_funding_source_vaults AS (
     SELECT
         customer_id,
