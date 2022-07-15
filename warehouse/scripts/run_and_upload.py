@@ -111,9 +111,9 @@ def run(
 
     if sync_metabase:
         for schema, database in [
-            ("views", "Warehouse Views"),
+            ("views", "Data Marts (formerly Warehouse Views)"),
             ("gtfs_schedule", "GTFS Schedule Feeds Latest"),
-            ("mart_transit_database", "Data Marts"),
+            ("mart_transit_database", "Data Marts (formerly Warehouse Views)"),
         ]:
             subprocess.run(
                 [
