@@ -6,7 +6,7 @@ from gevent import monkey; monkey.patch_all()  # noqa
 This pretty much exists just to start an in-process Prometheus server since
 Huey's startup hooks are per _worker_ and not the overall consumer process.
 """
-from huey.constants import WORKER_GREENLET
+from huey.constants import WORKER_GREENLET, WORKER_THREAD
 
 import logging
 import sys
@@ -14,7 +14,7 @@ import sys
 from huey.consumer_options import ConsumerConfig
 from prometheus_client import start_http_server
 
-from gtfs_rt_archiver_v2.tasks import huey
+from .tasks import huey
 
 
 def main(port: int = 8001):
@@ -22,7 +22,7 @@ def main(port: int = 8001):
     config = ConsumerConfig(
         workers=32,
         periodic=False,
-        worker_type=WORKER_GREENLET,
+        worker_type=WORKER_THREAD,
     )
     logger = logging.getLogger("huey")
     config.setup_logger(logger)

@@ -1,29 +1,44 @@
+import random
 import time
 from datetime import datetime, timezone
+from typing import List
 
 import pendulum
 import schedule
-from calitp.storage import AirtableGTFSDataExtract, GTFSFeedType
+from cachetools.func import ttl_cache
+from calitp.storage import AirtableGTFSDataExtract, GTFSFeedType, AirtableGTFSDataRecord
 from prometheus_client import start_http_server
 
 from .metrics import TICKS
 from .tasks import fetch, huey
 
 
-if __name__ == "__main__":
-    huey.flush()
-    start_http_server(8000)
+@ttl_cache(ttl=600)
+def get_records() -> List[AirtableGTFSDataRecord]:
+    print("pulling updated records from airtable")
     records = [
         record
         for record in AirtableGTFSDataExtract.get_latest().records
         if record.data_quality_pipeline and record.data != GTFSFeedType.schedule
     ]
+    print(f"found {len(records)} records in airtable")
+    return records
+
+
+if __name__ == "__main__":
+    print("flushing huey")
+
+    huey.flush()
+    start_http_server(8000)
 
     def tick(second):
         dt = datetime.now(timezone.utc).replace(second=second)
         print(dt)
         TICKS.inc()
+        records = get_records()
+        random.shuffle(records)
         for record in records:
+            print(dt, record)
             fetch(
                 tick=dt,
                 record=record,

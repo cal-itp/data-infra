@@ -19,7 +19,9 @@ requests = "^2.28.1"
 google-cloud-storage = "^2.4.0"
 hiredis = "^2.0.0"
 orjson = "^3.7.6"
-calitp = "2022.7.13a9"
+calitp = "2022.7.14a2"
+cachetools = ">=2.0.0,<5.0"
+google-cloud-secret-manager = "^2.11.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
