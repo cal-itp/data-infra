@@ -1,16 +1,16 @@
-{{ config(materialized='table') }}
+
 
 WITH
-latest AS (
-    {{ get_latest_external_data(
+once_daily_county_geography AS (
+    {{ get_latest_dense_rank(
         external_table = source('airtable', 'california_transit__county_geography'),
-        order_by = 'dt DESC, time DESC'
+        order_by = 'ts DESC', partition_by = 'dt'
         ) }}
 ),
 
 stg_transit_database__county_geography AS (
     SELECT
-        county_geography_id AS key,
+        id AS key,
         {{ trim_make_empty_string_null(column_name = "name") }},
         fips,
         msa,
@@ -20,9 +20,9 @@ stg_transit_database__county_geography AS (
         rtpa,
         mpo,
         place_geography,
-        time,
+        ts,
         dt AS calitp_extracted_at
-    FROM latest
+    FROM once_daily_county_geography
 )
 
 SELECT * FROM stg_transit_database__county_geography

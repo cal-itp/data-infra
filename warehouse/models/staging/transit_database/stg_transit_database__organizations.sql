@@ -1,16 +1,16 @@
-{{ config(materialized='table') }}
+
 
 WITH
-latest AS (
-    {{ get_latest_external_data(
+once_daily_organizations AS (
+    {{ get_latest_dense_rank(
         external_table = source('airtable', 'california_transit__organizations'),
-        order_by = 'dt DESC, time DESC'
+        order_by = 'ts DESC', partition_by = 'dt'
         ) }}
 ),
 
 stg_transit_database__organizations AS (
     SELECT
-        organization_id AS key,
+        id AS key,
         {{ trim_make_empty_string_null(column_name = "name") }},
         organization_type,
         roles,
@@ -19,8 +19,9 @@ stg_transit_database__organizations AS (
         caltrans_district,
         mobility_services_managed,
         parent_organization,
+        website,
         dt AS calitp_extracted_at
-    FROM latest
+    FROM once_daily_organizations
 )
 
 SELECT * FROM stg_transit_database__organizations

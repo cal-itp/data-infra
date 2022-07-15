@@ -52,10 +52,6 @@ models:
       +materialized: view
       schema: staging
 
-      transit_database:
-        enabled: false
-
     mart:
       transit_database:
-        enabled: false
         schema: mart_transit_database

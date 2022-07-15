@@ -1,16 +1,16 @@
-{{ config(materialized='table') }}
+
 
 WITH
-latest AS (
-    {{ get_latest_external_data(
+once_daily_ntd_agency_info AS (
+    {{ get_latest_dense_rank(
         external_table = source('airtable', 'california_transit__ntd_agency_info'),
-        order_by = 'dt DESC, time DESC'
+        order_by = 'ts DESC', partition_by = 'dt'
         ) }}
 ),
 
 stg_transit_database__ntd_agency_info AS (
     SELECT
-        ntd_agency_info_id AS key,
+        id AS key,
         {{ trim_make_empty_string_null(column_name = "ntd_id") }},
         legacy_ntd_id,
         agency_name,
@@ -50,10 +50,10 @@ stg_transit_database__ntd_agency_info AS (
         volunteer_drivers,
         personal_vehicles,
         unnested_organizations AS organization_key,
-        time,
+        ts,
         dt AS calitp_extracted_at
-    FROM latest
-    LEFT JOIN UNNEST(latest.organizations) AS unnested_organizations
+    FROM once_daily_ntd_agency_info
+    LEFT JOIN UNNEST(once_daily_ntd_agency_info.organizations) AS unnested_organizations
 )
 
 SELECT * FROM stg_transit_database__ntd_agency_info

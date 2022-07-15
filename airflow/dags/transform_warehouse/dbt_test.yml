@@ -11,6 +11,7 @@ arguments:
 
 dependencies:
   - dbt_run_and_upload_artifacts
+trigger_rule: all_done
 
 is_delete_operator_pod: true
 get_logs: true

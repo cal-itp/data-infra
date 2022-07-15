@@ -52,15 +52,16 @@ def run(
             )
         return cmd
 
+    subprocess.run(get_command("compile")).check_returncode()
+
     if dbt_run:
         args = ["run"]
-
         if full_refresh:
             args.append("--full-refresh")
-        subprocess.run(get_command(*args)).check_returncode()
+        run_result = subprocess.run(get_command(*args))
     else:
-        typer.echo("skipping run, only compiling")
-        subprocess.run(get_command("compile")).check_returncode()
+        typer.echo("skipping run")
+        run_result = None
 
     if dbt_test:
         test_result = subprocess.run(get_command("test"))
@@ -133,6 +134,9 @@ def run(
                     database,
                 ]
             ).check_returncode()
+
+    if run_result:
+        run_result.check_returncode()
 
     if test_result:
         test_result.check_returncode()
