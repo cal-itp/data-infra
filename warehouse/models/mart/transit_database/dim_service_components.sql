@@ -36,7 +36,7 @@ ranked_service_components AS (
 
 dim_service_components AS (
     SELECT
-        {{ farm_surrogate_key(['service_key', 'product_key', 'COALESCE(component_key,"_")', 't1.calitp_extracted_at']) }} AS key,
+        {{ farm_surrogate_key(['service_key', 'product_key', 'component_key', 't1.calitp_extracted_at']) }} AS key,
         t1.service_key,
         t2.name AS service_name,
         t1.product_key,

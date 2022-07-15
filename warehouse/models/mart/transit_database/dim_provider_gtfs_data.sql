@@ -46,7 +46,7 @@ dim_provider_service_gtfs_without_key AS (
 
 dim_provider_service_gtfs AS (
     SELECT
-        {{ farm_surrogate_key(['organization_key', 'COALESCE(service_key,"_")', 'COALESCE(gtfs_service_data_key,"_")', 'COALESCE(gtfs_dataset_key,"_")']) }} AS key,
+        {{ farm_surrogate_key(['organization_key', 'service_key', 'gtfs_service_data_key', 'gtfs_dataset_key']) }} AS key,
         organization_name,
         mobility_service,
         agency_id,
