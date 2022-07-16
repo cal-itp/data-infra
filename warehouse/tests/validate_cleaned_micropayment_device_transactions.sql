@@ -1,3 +1,13 @@
+{{ config(store_failures = true) }}
+
+-- A device transaction should only ever be associated with a single debit
+-- micropayment. This table contains micropayment information where that
+-- invariant does not hold true.
+
+-- tests:
+-- check_empty:
+--  - "*"
+
 with stg_cleaned_micropayment_device_transactions as (
 
     select * from {{ ref('stg_cleaned_micropayment_device_transactions') }}

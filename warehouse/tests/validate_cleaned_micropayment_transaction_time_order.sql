@@ -1,3 +1,8 @@
+{{ config(store_failures = true) }}
+
+-- The timestamp on micropayment records should be at least as late as its
+-- associated transactions timestamps.
+
 WITH stg_cleaned_micropayments AS (
 
     SELECT * FROM {{ ref('stg_cleaned_micropayments') }}

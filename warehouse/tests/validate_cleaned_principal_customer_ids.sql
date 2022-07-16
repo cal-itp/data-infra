@@ -1,3 +1,7 @@
+{{ config(store_failures = true) }}
+
+-- Each pricipal_customer_id should only ever have itself as a principal.
+
 WITH principal_customer_ids AS (
 
     SELECT DISTINCT principal_customer_id

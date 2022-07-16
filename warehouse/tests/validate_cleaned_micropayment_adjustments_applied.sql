@@ -1,3 +1,12 @@
+{{ config(store_failures = true) }}
+
+-- Ensure that there is only one micropayment_adjustments record with applied
+-- set to True for each micropayment.
+
+-- tests:
+-- check_empty:
+--   - "*"
+
 WITH validate_cleaned_micropayment_adjustments_applied AS (
 
     SELECT

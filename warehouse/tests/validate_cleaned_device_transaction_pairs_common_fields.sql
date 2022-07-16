@@ -1,3 +1,10 @@
+{{ config(store_failures = true) }}
+
+-- Ensure that fields that are expected to be consistent across tap on/off
+-- transactions are actually consistent. Invalid records are any that differ on
+-- the device_id, device_id_issuer, route_id, mode, direction, of vehicle_id
+-- fields.
+
 WITH initial_transactions AS (
     SELECT *
     FROM {{ ref('stg_cleaned_micropayment_device_transactions') }}
