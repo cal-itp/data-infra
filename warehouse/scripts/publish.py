@@ -90,6 +90,22 @@ def _publish_exposure(
                         project_id=node.database,
                         progress_bar_type="tqdm",
                     )
+
+                    if model_name == "stops":
+                        df = df.round(
+                            {
+                                "stop_lat": 5,
+                                "stop_lon": 5,
+                            }
+                        )
+                    elif model_name == "shapes":
+                        df = df.round(
+                            {
+                                "shape_pt_lat": 5,
+                                "shape_pt_lon": 5,
+                            }
+                        )
+
                     df.to_csv(fpath, index=False)
                     typer.secho(
                         f"selected {len(df)} rows ({humanize.naturalsize(os.stat(fpath).st_size)}) from {node.schema_table}"
@@ -119,7 +135,10 @@ def _publish_exposure(
                                     files={"upload": fp},
                                 ).raise_for_status()
                         else:
-                            typer.secho(f"would be {upload_msg} if --deploy", fg=typer.colors.MAGENTA)
+                            typer.secho(
+                                f"would be {upload_msg} if --deploy",
+                                fg=typer.colors.MAGENTA,
+                            )
 
             elif isinstance(destination, TilesDestination):
                 layer_geojson_paths: Dict[str, Path] = {}
@@ -244,8 +263,8 @@ class MetadataRow(BaseModel):
     data_standard: Literal["https://developers.google.com/transit/gtfs"]
     notes: None
     gis_theme: None
-    gis_horiz_accuracy: None
-    gis_vert_accuracy: None
+    gis_horiz_accuracy: Literal["4m"]
+    gis_vert_accuracy: Literal["4m"]
     gis_coordinate_system_epsg: Optional[str]
     gis_vert_datum_epsg: None
 
@@ -344,8 +363,8 @@ def generate_exposure_documentation(
                         data_standard="https://developers.google.com/transit/gtfs",
                         notes=None,
                         gis_theme=None,
-                        gis_horiz_accuracy=None,
-                        gis_vert_accuracy=None,
+                        gis_horiz_accuracy="4m",
+                        gis_vert_accuracy="4m",
                         gis_coordinate_system_epsg=node.meta.get(
                             "publish.gis_coordinate_system_epsg"
                         ),
