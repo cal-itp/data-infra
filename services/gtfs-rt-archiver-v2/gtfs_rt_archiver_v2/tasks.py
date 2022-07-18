@@ -6,6 +6,7 @@ import orjson
 import pendulum
 from calitp.storage import AirtableGTFSDataRecord, download_feed
 from google.cloud import secretmanager, storage
+from google.oauth2 import service_account
 from huey import RedisHuey
 from huey.registry import Message
 from huey.serializer import Serializer
@@ -39,7 +40,10 @@ huey = RedisHuey(
     host="localhost",
 )
 
-client = storage.Client()
+credentials = service_account.Credentials.from_service_account_file(
+    os.getenv("CALITP_DATA_DEST_SECRET")
+)
+client = storage.Client(credentials=credentials)
 
 
 @huey.signal()
@@ -88,13 +92,6 @@ def fetch(tick: datetime, record: AirtableGTFSDataRecord):
             #   or persist on disk in between?
             extract, content = download_feed(record, auth_dict)
 
-        storage.Blob(
-            name=name,
-            bucket=client.bucket("gtfs-data-rt-sandbox"),
-        ).upload_from_string(
-            data=content,
-            content_type="application/octet-stream",
-            client=client,
-        )
+        extract.save_content(content=content, client=client)
         HANDLE_TICK_PROCESSED_BYTES.labels(record.uri).inc(len(content))
         FEEDS_DOWNLOADED.labels(url=record.uri).inc()

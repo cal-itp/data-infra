@@ -33,17 +33,15 @@ if __name__ == "__main__":
 
     def tick(second):
         dt = datetime.now(timezone.utc).replace(second=second)
-        print(dt)
+        print(f"ticking {dt}")
         TICKS.inc()
         records = get_records()
         random.shuffle(records)
         for record in records:
-            print(dt, record)
             fetch(
                 tick=dt,
                 record=record,
             )
-
 
     schedule.every().minute.at(":00").do(tick, second=0)
     schedule.every().minute.at(":20").do(tick, second=20)
