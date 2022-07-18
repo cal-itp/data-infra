@@ -118,6 +118,8 @@ def _publish_exposure(
                                     headers={"Authorization": API_KEY},
                                     files={"upload": fp},
                                 ).raise_for_status()
+                        else:
+                            typer.secho(f"would be {upload_msg} if --deploy", fg=typer.colors.MAGENTA)
 
             elif isinstance(destination, TilesDestination):
                 layer_geojson_paths: Dict[str, Path] = {}
