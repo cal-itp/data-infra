@@ -106,6 +106,9 @@ def _publish_exposure(
                             }
                         )
 
+                    typer.secho(
+                        f"saving intermediate file to {fpath}", fg=typer.colors.GREEN
+                    )
                     df.to_csv(fpath, index=False)
                     typer.secho(
                         f"selected {len(df)} rows ({humanize.naturalsize(os.stat(fpath).st_size)}) from {node.schema_table}"
@@ -263,8 +266,8 @@ class MetadataRow(BaseModel):
     data_standard: Literal["https://developers.google.com/transit/gtfs"]
     notes: None
     gis_theme: None
-    gis_horiz_accuracy: Literal["4m"]
-    gis_vert_accuracy: Literal["4m"]
+    gis_horiz_accuracy: Optional[Literal["4m"]]
+    gis_vert_accuracy: Optional[Literal["4m"]]
     gis_coordinate_system_epsg: Optional[str]
     gis_vert_datum_epsg: None
 
@@ -370,9 +373,7 @@ def generate_exposure_documentation(
                         gis_theme=None,
                         gis_horiz_accuracy="4m",
                         gis_vert_accuracy="4m",
-                        gis_coordinate_system_epsg=node.meta.get(
-                            "publish.gis_coordinate_system_epsg"
-                        ),
+                        gis_coordinate_system_epsg=exposure.meta.coordinate_system_espg,
                         gis_vert_datum_epsg=None,
                     ).json(models_as_dict=False)
                 )
