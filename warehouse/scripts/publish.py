@@ -148,7 +148,7 @@ def _publish_exposure(
                     geojsonl_fpath = os.path.join(tmpdir, f"{node.name}.geojsonl")
 
                     client = bigquery.Client(project=project)
-                    print(f"querying {node.schema_table}")
+                    typer.secho(f"querying {node.schema_table}")
                     # TODO: this is not great but we have to work around how BigQuery removes overlapping line segments
                     df = client.query(
                         f"select * from {node.schema_table}"
@@ -311,6 +311,11 @@ def generate_exposure_documentation(
         manifest = Manifest(**json.load(f))
 
     exposure = manifest.exposures[f"exposure.calitp_warehouse.{exposure.value}"]
+
+    typer.secho(
+        f"writing out {metadata_output} and {dictionary_output}",
+        fg=typer.colors.MAGENTA,
+    )
 
     with open(metadata_output, "w", newline="") as mf, open(
         dictionary_output, "w", newline=""
