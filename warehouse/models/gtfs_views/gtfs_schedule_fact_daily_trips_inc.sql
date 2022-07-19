@@ -25,15 +25,15 @@ gtfs_schedule_dim_stop_times AS (
     FROM {{ ref('gtfs_schedule_dim_stop_times') }}
     {% if is_incremental() or target.name == 'dev' %}
         WHERE
-            (calitp_extracted_at >=
+            (calitp_extracted_at >= --noqa
                 (SELECT MAX(calitp_extracted_at)
-                FROM {{ this }})
+                    FROM {{ this }})
             )
-            OR
-            (calitp_deleted_at >=
+            OR --noqa
+            (calitp_deleted_at >= --noqa
                 (SELECT MAX(calitp_deleted_at)
-                FROM {{ this }}
-                WHERE calitp_deleted_at != '2099-01-01')
+                    FROM {{ this }}
+                    WHERE calitp_deleted_at != '2099-01-01')
             )
     {% endif %}
 ),
