@@ -813,6 +813,7 @@
 <li><p><strong>All of history</strong> - Some DAGs contain only operations that cover all of history, even when only for one day (i.e., none of their tasks do anything that is specific to their <code class="docutils literal notranslate"><span class="pre">execution_date</span></code>.) So if these DAGs fail for multiple days in a row, only the latest day needs to be re-run to refresh all the data.</p>
 <ul>
 <li><p>If <strong>🔂 no</strong>, must re-run this DAG for each day that failed to ensure that all data is captured</p></li>
+<li><p>If no (without emoji), this is not all of history, but should not be re-run repeatedly (for example, it scrapes data; if you run it repeatedly, it will just scrape the same data over and over)</p></li>
 <li><p>If yes, can re-run only the most recent date</p></li>
 </ul>
 </li>
@@ -842,26 +843,26 @@
 <td><p>N/A</p></td>
 <td><p>All tasks are unsafe after 24 hours</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">airtable_views</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">airtable_loader_v2</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No*</p></td>
+<td><p>N/A</p></td>
+<td><p>Don’t need to rerun more than once if multiple failures; scrapes data that is correctly timestamped</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">airtable_views</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p>Yes*</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">airtable_loader</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">airtable_</span> <span class="pre">loader</span></code></p></td>
 <td><p>Latest-only data</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">amplitude_benefits</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">amplitude_benefits</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p><strong>🔂 No</strong></p></td>
 <td><p>N/A</p></td>
 <td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">check_data_freshness</span></code></p></td>
-<td><p>Yes</p></td>
-<td><p>No</p></td>
-<td><p>N/A</p></td>
-<td><p>N/A</p></td>
-<td><p>This is not really worth re-running, as the point is that stale data caused a failure at a moment in time</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">check_feed_aggregators</span></code></p></td>
 <td><p><strong>⛔ No</strong></p></td>
@@ -877,18 +878,32 @@
 <td><p>N/A</p></td>
 <td><p>Once-only (defines external tables); does not generally need to be re-run</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_downloader</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">download_gtfs_schedule_v2</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>No*</p></td>
+<td><p>N/A</p></td>
+<td><p>Don’t need to rerun more than once if multiple failures; scrapes data that is correctly timestamped</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_downloader.</span> <span class="pre">generate_provider_list</span></code> and <code class="docutils literal notranslate"><span class="pre">gtfs_downloader.</span> <span class="pre">download_data</span></code></p></td>
 <td><p><strong>⛔ No</strong>*</p></td>
 <td><p>No</p></td>
 <td><p><strong>🔂 No</strong></p></td>
 <td><p>N/A</p></td>
-<td><p>Tasks downstream of <code class="docutils literal notranslate"><span class="pre">download_data</span></code> can safely be rerun after 24 hours</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_downloader.</span> <span class="pre">email_failures</span></code> and <code class="docutils literal notranslate"><span class="pre">gtfs_downloader.</span> <span class="pre">validate_gcs_bucket</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p><strong>🔂 No</strong></p></td>
+<td><p>N/A</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_loader</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p><strong>🔂 No</strong></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">gtfs_downloader</span></code>*</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">gtfs_</span> <span class="pre">downloader</span></code>*</p></td>
 <td><p>Technically also depends on <code class="docutils literal notranslate"><span class="pre">gtfs_schedule_history</span></code>, not usually an issue</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule_history</span></code></p></td>
@@ -902,7 +917,7 @@
 <td><p>Yes</p></td>
 <td><p><strong>📆 Yes</strong></p></td>
 <td><p><strong>🔂 No</strong></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">gtfs_loader</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">gtfs_</span> <span class="pre">loader</span></code></p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">parse_and_validate_rt</span></code></p></td>
@@ -923,21 +938,21 @@
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p>Yes</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">payments_views_staging</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">payments_</span> <span class="pre">views_</span> <span class="pre">staging</span></code></p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">payments_views_staging</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p>Yes</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">payments_loader</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">payments_</span> <span class="pre">loader</span></code></p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt_loader</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p><strong>🔂 No</strong></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">gtfs_loader</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">gtfs_</span> <span class="pre">loader</span></code></p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt_loader_files</span></code></p></td>
@@ -965,8 +980,9 @@
 </table>
 <div class="section" id="deprecated-dags">
 <h3>Deprecated DAGs<a class="headerlink" href="#deprecated-dags" title="Permalink to this headline">¶</a></h3>
-<p>The following DAGs are still listed in the Airflow UI even though they are <strong>deprecated</strong>. They never need to be re-run.</p>
+<p>The following DAGs are still listed in the Airflow UI even though they are <strong>deprecated or indefinitely paused</strong>. They never need to be re-run.</p>
 <ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">check_data_freshness</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">gtfs_views_staging</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">gtfs_views</span></code></p></li>
@@ -983,8 +999,10 @@
 <p>In addition to the tabular view above, here is a diagram representing DAG dependencies.</p>
 <div class="mermaid">
               graph TD;
+      airtable_loader_v2;
       airtable_loader--&gt;airtable_views;
       amplitude_benefits;
+      download_gtfs_schedule_v2;
       gtfs_downloader--&gt;gtfs_loader;
       gtfs_schedule_history--&gt;gtfs_loader;
       gtfs_loader--&gt;gtfs_schedule_history2;
