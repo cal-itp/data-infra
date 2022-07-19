@@ -76,7 +76,7 @@ gtfs_rt_extraction_errors AS (
     LEFT JOIN calitp_feeds_long AS T2
         ON (
             T1.unsafe_url = T2.url
-            AND EXTRACT(DATE from T1.tick_timestamp)= T2.calitp_extracted_at
+            AND EXTRACT(DATE FROM T1.tick_timestamp) = T2.calitp_extracted_at
         )
     LEFT JOIN gtfs_rt_fact_daily_feeds AS T3
         ON (

@@ -3,8 +3,7 @@
 -- from https://gist.github.com/ewhauser/d7dd635ad2d4b20331c7f18038f04817
 
 WITH raw_dates AS (
-    SELECT
-        *
+    SELECT *
     FROM
         UNNEST(GENERATE_DATE_ARRAY('2021-01-01', '2031-01-01', INTERVAL 1 DAY)) AS d
 ),

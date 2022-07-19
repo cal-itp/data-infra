@@ -22,8 +22,7 @@ gtfs_schedule_dim_files AS (
 
 daily_feeds_enriched AS (
 
-    SELECT
-        *
+    SELECT *
     FROM gtfs_schedule_fact_daily_feeds
     INNER JOIN gtfs_schedule_dim_feeds
         USING (feed_key)
@@ -58,8 +57,7 @@ daily_feed_files_enriched AS (
 ),
 
 file_total_counts AS (
-    SELECT
-        *
+    SELECT *
     FROM
         daily_feed_files_enriched
     PIVOT(
@@ -71,8 +69,7 @@ file_total_counts AS (
 ),
 
 gtfs_schedule_fact_daily AS (
-    SELECT
-        *
+    SELECT *
     FROM feed_total_counts
     LEFT JOIN feed_status_counts USING (date)
     LEFT JOIN file_total_counts USING (date)
