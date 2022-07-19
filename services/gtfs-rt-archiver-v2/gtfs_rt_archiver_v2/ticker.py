@@ -15,13 +15,14 @@ from .tasks import fetch, huey
 
 @ttl_cache(ttl=600)
 def get_records() -> List[AirtableGTFSDataRecord]:
-    print("pulling updated records from airtable")
+    latest = AirtableGTFSDataExtract.get_latest()
+    print(f"pulling updated records from airtable {latest.name}")
     records = [
         record
-        for record in AirtableGTFSDataExtract.get_latest().records
+        for record in latest.records
         if record.data_quality_pipeline and record.data != GTFSFeedType.schedule
     ]
-    print(f"found {len(records)} records in airtable")
+    print(f"found {len(records)} records in airtable {latest.name}")
     return records
 
 
