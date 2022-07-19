@@ -1,4 +1,9 @@
-{{ config(materialized='table') }}
+{{
+    config(
+        materialized='incremental',
+        unique_key=['feed_key', 'trip_key', 'service_date']
+    )
+}}
 
 WITH gtfs_schedule_dim_feeds AS (
     SELECT *
@@ -18,6 +23,19 @@ gtfs_schedule_stg_daily_service AS (
 gtfs_schedule_dim_stop_times AS (
     SELECT *
     FROM {{ ref('gtfs_schedule_dim_stop_times') }}
+    {% if is_incremental() or target.name == 'dev' %}
+        WHERE
+            (calitp_extracted_at >=
+                (SELECT MAX(calitp_extracted_at)
+                FROM {{ this }})
+            )
+            OR
+            (calitp_deleted_at >=
+                (SELECT MAX(calitp_deleted_at)
+                FROM {{ this }}
+                WHERE calitp_deleted_at != '2099-01-01')
+            )
+    {% endif %}
 ),
 -- Each trip with scheduled service on a date, augmented with route_id, first departure,
 -- and last arrival timestamps.
