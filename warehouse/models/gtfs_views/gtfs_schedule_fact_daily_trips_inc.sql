@@ -23,7 +23,7 @@ gtfs_schedule_stg_daily_service AS (
 gtfs_schedule_dim_stop_times AS (
     SELECT *
     FROM {{ ref('gtfs_schedule_dim_stop_times') }}
-    {% if is_incremental() or target.name == 'dev' %}
+    {% if is_incremental() %}
         WHERE
             (calitp_extracted_at >= --noqa
                 (SELECT MAX(calitp_extracted_at)
