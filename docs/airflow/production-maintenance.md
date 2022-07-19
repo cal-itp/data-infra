@@ -28,21 +28,21 @@ DAGs are listed in alphabetical order, as they appear in the Airflow UI.
 | --- | --- | --- | --- | --- | --- |
 `airtable_loader` | **⛔ No*** | No | **🔂 No** | N/A | All tasks are unsafe after 24 hours |
 `airtable_loader_v2` | Yes | No | No* | N/A | Don't need to rerun more than once if multiple failures; scrapes data that is correctly timestamped |
-`airtable_views` | Yes | No | Yes* | `airtable_loader` | Latest-only data |
+`airtable_views` | Yes | No | Yes* | `airtable_ loader` | Latest-only data |
 `amplitude_benefits` | Yes | No | **🔂 No** | N/A | |
 `check_feed_aggregators` | **⛔ No** | No | **🔂 No** | N/A | |
 `create_external_tables` | N/A | N/A | N/A | N/A | Once-only (defines external tables); does not generally need to be re-run  |
 `download_gtfs_schedule_v2` | Yes | No | No* | N/A | Don't need to rerun more than once if multiple failures; scrapes data that is correctly timestamped  |
 `gtfs_downloader. generate_provider_list` and `gtfs_downloader. download_data` | **⛔ No*** | No | **🔂 No** | N/A |  |
 `gtfs_downloader. email_failures` and `gtfs_downloader. validate_gcs_bucket` | Yes | No | **🔂 No** | N/A |  |
-`gtfs_loader` | Yes | No | **🔂 No** | `gtfs_downloader`* | Technically also depends on `gtfs_schedule_history`, not usually an issue |
+`gtfs_loader` | Yes | No | **🔂 No** | `gtfs_ downloader`* | Technically also depends on `gtfs_schedule_history`, not usually an issue |
 `gtfs_schedule_history` | N/A | N/A | N/A | N/A | Once-only (defines external tables); does not generally need to be re-run |
-`gtfs_schedule_history2` | Yes | **📆 Yes** | **🔂 No** | `gtfs_loader` | |
+`gtfs_schedule_history2` | Yes | **📆 Yes** | **🔂 No** | `gtfs_ loader` | |
 `parse_and_validate_rt` | Yes | No | **🔂 No** | N/A | |
 `payments_loader` | Yes | No | Yes | N/A | |
-`payments_views` | Yes | No | Yes | `payments_views_staging`| |
-`payments_views_staging` | Yes | No | Yes | `payments_loader` | |
-`rt_loader` | Yes | No | **🔂 No** | `gtfs_loader` | |
+`payments_views` | Yes | No | Yes | `payments_ views_ staging`| |
+`payments_views_staging` | Yes | No | Yes | `payments_ loader` | |
+`rt_loader` | Yes | No | **🔂 No** | `gtfs_ loader` | |
 `rt_loader_files` | Yes | No | **🔂 No** | N/A | |
 `sandbox` | N/A | N/A | N/A | N/A | Testing only; does not need to be re-run |
 `transform_warehouse` | Yes | No | Yes | N/A | Runs dbt warehouse |
