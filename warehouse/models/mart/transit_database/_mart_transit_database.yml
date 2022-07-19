@@ -111,19 +111,23 @@ models:
       - name: aggregated_to_gtfs_dataset_key
         description: |
           Key for another GTFS dataset record to which this record is aggregated.
-        tests:
-          - relationships:
-             to: ref('dim_gtfs_datasets')
-             field: key
+        # self relationship test breaks metabase connector: https://github.com/JarvusInnovations/dbt-metabase/blob/master/dbtmetabase/parsers/dbt_manifest.py#L202
+        # TODO: make an aliased version of the relationship test
+        # tests:
+        #   - relationships:
+        #      to: ref('dim_gtfs_datasets')
+        #      field: key
       - name: schedule_to_use_for_rt_validation_gtfs_dataset_key
         description: |
           For realtime datasets, the key of the schedule dataset that should
           be used for validation (i.e., the given realtime dataset should reference
           identifiers from the schedule dataset listed here.)
-        tests:
-          - relationships:
-             to: ref('dim_gtfs_datasets')
-             field: key
+        # self relationship test breaks metabase connector: https://github.com/JarvusInnovations/dbt-metabase/blob/master/dbtmetabase/parsers/dbt_manifest.py#L202
+        # TODO: make an aliased version of the relationship test
+        # tests:
+        #   - relationships:
+        #      to: ref('dim_gtfs_datasets')
+        #      field: key
   - name: dim_gtfs_service_data
     description: |
       Each record links together a single `gtfs dataset` and one (if possible)
@@ -188,10 +192,12 @@ models:
         description: |
           For realtime dataset / service relationships,
           the associated schedule dataset / service relationship.
-        tests:
-          - relationships:
-             to: ref('dim_gtfs_service_data')
-             field: key
+        # self relationship test breaks metabase connector: https://github.com/JarvusInnovations/dbt-metabase/blob/master/dbtmetabase/parsers/dbt_manifest.py#L202
+        # TODO: make an aliased version of the relationship test
+        # tests:
+        #   - relationships:
+        #      to: ref('dim_gtfs_service_data')
+        #      field: key
   - name: dim_service_components
     description: |
       Each row is a unique service / product / component combination.
