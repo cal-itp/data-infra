@@ -39,8 +39,7 @@ cal_dates AS (
 -- for each day in our date calendar, get service entries that existed
 -- in the feed on that day (for that day).
 cal_dates_daily AS (
-    SELECT
-        t1.*
+    SELECT t1.*
     FROM cal_dates AS t1
     INNER JOIN dim_date AS t2
         ON t1.calitp_extracted_at <= t2.full_date

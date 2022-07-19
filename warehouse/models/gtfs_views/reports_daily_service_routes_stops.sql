@@ -92,8 +92,7 @@ for_report AS (
 ),
 
 date_feed_cross_rejoin AS (
-    SELECT
-        T1.*
+    SELECT T1.*
     FROM date_feed_cross AS T1
     INNER JOIN for_report AS T2
         ON T1.publish_date = T2.publish_date

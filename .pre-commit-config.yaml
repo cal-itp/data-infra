@@ -23,7 +23,7 @@ repos:
         args: ["-ll", "--skip=B108,B608,B310,B303"]
         files: .py$
   - repo: https://github.com/sqlfluff/sqlfluff
-    rev: 0.12.0
+    rev: 1.2.1
     hooks:
       - id: sqlfluff-lint
         additional_dependencies: ['dbt-bigquery', 'sqlfluff-templater-dbt']
@@ -34,5 +34,6 @@ repos:
         # skip: column order -- messed up union operation
         # skip: joins should not include subqueries -- TODO
         # skip: use left join instead of right join -- TODO
-        args: [--dialect, "bigquery", --ignore, "parsing,templating",--exclude-rules, "L016,L029,L027,L032,L034,L014,L042,L055"]
+        # skip: use single quotes instead of double -- TODO
+        args: [--dialect, "bigquery", --ignore, "parsing,templating",--exclude-rules, "L016,L029,L027,L032,L034,L014,L042,L055,L064"]
         files: "warehouse/"
