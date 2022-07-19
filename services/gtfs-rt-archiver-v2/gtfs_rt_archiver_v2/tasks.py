@@ -1,11 +1,10 @@
 import os
 from datetime import datetime
 
-import google_crc32c
 import orjson
 import pendulum
 from calitp.storage import AirtableGTFSDataRecord, download_feed
-from google.cloud import secretmanager, storage
+from google.cloud import storage
 from google.oauth2 import service_account
 from huey import RedisHuey
 from huey.registry import Message
@@ -51,34 +50,20 @@ def instrument_signals(signal, task, exc=None):
     TASK_SIGNALS.labels(signal=signal, exc_type=str(exc)).inc()
 
 
-auth_dict = {
-    key: None
-    for key in [
-        "AC_TRANSIT_API_KEY",
-        "MTC_511_API_KEY",
-        "AMTRAK_GTFS_URL",
-        "SWIFTLY_AUTHORIZATION_KEY_CALITP",
-    ]
-}
+auth_dict = None
 
-# TODO: can this be in an on_startup() hook? seems to block with greenlet
-print("attempting to populate auth_dict")
-secret_client = secretmanager.SecretManagerServiceClient()
-for key in auth_dict:
-    try:
-        auth_dict[key] = os.environ[key]
-    except KeyError:
-        # TODO: does not work :( something to do with fork and grpc
-        print(f"fetching {key}")
-        name = f"projects/cal-itp-data-infra/secrets/{key}/versions/latest"
-        response = secret_client.access_secret_version(request={"name": name})
 
-        crc32c = google_crc32c.Checksum()
-        crc32c.update(response.payload.data)
-        if response.payload.data_crc32c != int(crc32c.hexdigest(), 16):
-            raise ValueError(f"Data corruption detected for secret {name}.")
-
-        auth_dict[key] = response.payload.data.decode("UTF-8")
+@huey.on_startup()
+def load_auth_dict():
+    auth_dict = {  # noqa
+        key: os.environ[key]
+        for key in [
+            "AC_TRANSIT_API_KEY",
+            "MTC_511_API_KEY",
+            "AMTRAK_GTFS_URL",
+            "SWIFTLY_AUTHORIZATION_KEY_CALITP",
+        ]
+    }
 
 
 @huey.task(expires=5)
