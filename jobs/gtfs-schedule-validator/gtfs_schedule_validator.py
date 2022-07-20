@@ -4,6 +4,7 @@ import json
 import os
 import subprocess
 import tempfile
+import traceback
 from datetime import datetime
 from pathlib import Path
 from typing import Dict
@@ -18,6 +19,7 @@ from calitp.storage import (
     GTFSFeedType,
     JSONL_GZIP_EXTENSION,
     GTFSScheduleFeedExtractValidationOutcome,
+    ScheduleValidationResult,
 )
 
 SCHEDULE_VALIDATOR_JAR_LOCATION_ENV_KEY = "GTFS_SCHEDULE_VALIDATOR_JAR"
@@ -106,7 +108,7 @@ def validate_day(
         verbose=True,
     )
 
-    print(f"found {len(extracts)} to process for {day}")
+    typer.secho(f"found {len(extracts)} to process for {day}", fg=typer.colors.MAGENTA)
     fs = get_fs()
     outcomes = []
 
@@ -114,7 +116,9 @@ def validate_day(
         try:
             with tempfile.TemporaryDirectory() as tmp_dir:
                 zip_path = os.path.join(tmp_dir, extract.filename)
-                print(f"downloading {extract.path} to {zip_path}")
+                typer.secho(
+                    f"downloading {extract.path} to {zip_path}", fg=typer.colors.GREEN
+                )
                 fs.get_file(extract.path, zip_path)
                 report, system_errors = execute_schedule_validator(
                     fs=fs,
@@ -127,22 +131,43 @@ def validate_day(
                 system_errors=system_errors,
             )
             validation.save_content(
-                "\n".join(json.dumps(notice) for notice in report["notices"]).encode()
+                content="\n".join(
+                    json.dumps(notice) for notice in report["notices"]
+                ).encode(),
+                fs=fs,
             )
             outcomes.append(
                 GTFSScheduleFeedExtractValidationOutcome(
-                    extract=extract,
+                    success=True,
+                    input_record=extract,
                     validation=validation,
                 )
             )
             break
         except Exception as e:
+            typer.secho(
+                f"encountered exception on extract {extract.path}: {e}\n{traceback.format_exc()}",
+                fg=typer.colors.RED,
+            )
             outcomes.append(
                 GTFSScheduleFeedExtractValidationOutcome(
-                    extract=extract,
+                    success=False,
+                    input_record=extract,
                     exception=e,
                 )
             )
+    result = ScheduleValidationResult(
+        dt=day,
+        outcomes=outcomes,
+    )
+    typer.secho(
+        f"got {len(result.successes)} successes and {len(result.failures)} failures",
+        fg=typer.colors.MAGENTA,
+    )
+    result.save(fs)
+    assert len(extracts) == len(
+        result.outcomes
+    ), f"ended up with {len(outcomes)} outcomes from {len(extracts)} extracts"
 
 
 if __name__ == "__main__":
