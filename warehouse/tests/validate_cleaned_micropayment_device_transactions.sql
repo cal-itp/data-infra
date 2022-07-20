@@ -1,5 +1,6 @@
 {{ config(store_failures = true) }}
 
+-- dst_table_name: "payments.invalid_cleaned_micropayment_device_transactions"
 -- A device transaction should only ever be associated with a single debit
 -- micropayment. This table contains micropayment information where that
 -- invariant does not hold true.

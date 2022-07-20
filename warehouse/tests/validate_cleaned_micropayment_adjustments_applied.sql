@@ -1,5 +1,6 @@
 {{ config(store_failures = true) }}
 
+-- dst_table_name: "payments.invalid_cleaned_micropayment_adjustments_applied"
 -- Ensure that there is only one micropayment_adjustments record with applied
 -- set to True for each micropayment.
 

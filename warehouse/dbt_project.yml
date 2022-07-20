@@ -55,6 +55,9 @@ models:
     payments_views:
       +materialized: table
       schema: views
+      intermediate:
+        +materialized: table
+        schema: intermediate
 
     staging:
       +materialized: view

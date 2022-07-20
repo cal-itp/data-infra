@@ -1,5 +1,6 @@
 {{ config(store_failures = true) }}
 
+-- dst_table_name: "payments.invalid_cleaned_micropayment_transaction_time_order"
 -- The timestamp on micropayment records should be at least as late as its
 -- associated transactions timestamps.
 

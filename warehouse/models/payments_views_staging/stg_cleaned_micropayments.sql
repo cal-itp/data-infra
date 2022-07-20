@@ -1,3 +1,5 @@
+{{ config(materialized='table') }}
+
 WITH stg_cleaned_micropayments AS (
 
     SELECT DISTINCT * EXCEPT (

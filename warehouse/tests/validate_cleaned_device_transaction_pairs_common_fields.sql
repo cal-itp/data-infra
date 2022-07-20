@@ -1,5 +1,6 @@
 {{ config(store_failures = true) }}
 
+-- dst_table_name: "payments.invalid_cleaned_device_transaction_common_fields"
 -- Ensure that fields that are expected to be consistent across tap on/off
 -- transactions are actually consistent. Invalid records are any that differ on
 -- the device_id, device_id_issuer, route_id, mode, direction, of vehicle_id

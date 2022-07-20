@@ -15,7 +15,9 @@ models:
       - name: micropayment_id
         description: From payments.micropayments.micropayment_id
         tests:
-          - unique
+          - unique:
+              config:
+                store_failures: true
       - name: funding_source_vault_id
         description: From payments.micropayments.funding_source_vault_id
       - name: customer_id
@@ -73,7 +75,9 @@ models:
       - name: littlepay_transaction_id
         description: The littlepay_transaction_id of the first tap transaction
         tests:
-          - unique
+          - unique:
+              config:
+                store_failures: true
       - name: device_id
         description: The device_id of the first tap transaction
       - name: transaction_type
@@ -112,3 +116,18 @@ models:
         description: The latitude of the second tap transaction (if there is one)
       - name: off_longitude
         description: The longitude of the second tap transaction (if there is one)
+
+  - name: payments_rides_refactor
+    columns:
+      - name: micropayment_id
+        description: From payments.micropayments.micropayment_id
+        tests:
+          - unique:
+              config:
+                store_failures: true
+      - name: littlepay_transaction_id
+        description: The littlepay_transaction_id of the first tap transaction
+        tests:
+          - unique:
+              config:
+                store_failures: true
