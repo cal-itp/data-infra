@@ -1,12 +1,15 @@
 # fmt: off
-import typer
 from gevent import monkey; monkey.patch_all()  # noqa
 # fmt: on
 """
 This pretty much exists just to start an in-process Prometheus server since
 Huey's startup hooks are per _worker_ and not the overall consumer process.
 """
+import structlog
+import typer
+
 from huey.constants import WORKER_GREENLET, WORKER_THREAD
+from pythonjsonlogger import jsonlogger
 
 import logging
 import sys
