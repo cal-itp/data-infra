@@ -1,0 +1,20 @@
+description: "Unzips (eventually) and validates GTFS Schedule data"
+schedule_interval: "0 2 * * *"
+tags:
+  - all_gusty_features
+default_args:
+    owner: airflow
+    depends_on_past: False
+    start_date: "2021-07-09"
+    email:
+      - "laurie.m@jarv.us"
+      - "andrew.v@jarv.us"
+      - "jameelah.y@jarv.us"
+    email_on_failure: True
+    email_on_retry: False
+    max_active_dag_runs: 6
+    retries: 1
+    retry_delay: !timedelta 'minutes: 2'
+    concurrency: 50
+    #sla: !timedelta 'hours: 2'
+latest_only: False
