@@ -24,6 +24,7 @@ from calitp.storage import (
     ScheduleValidationResult,
 )
 
+JAVA_EXECUTABLE_PATH_KEY = "GTFS_SCHEDULE_VALIDATOR_JAVA_EXECUTABLE"
 SCHEDULE_VALIDATOR_JAR_LOCATION_ENV_KEY = "GTFS_SCHEDULE_VALIDATOR_JAR"
 JAR_DEFAULT = typer.Option(
     default=os.environ.get(SCHEDULE_VALIDATOR_JAR_LOCATION_ENV_KEY),
@@ -45,7 +46,7 @@ def execute_schedule_validator(
         raise TypeError("must provide a path to the zip file")
 
     args = [
-        "java",
+        os.getenv(JAVA_EXECUTABLE_PATH_KEY, default="java"),
         "-jar",
         str(jar_path),
         "--input",
