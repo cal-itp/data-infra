@@ -1,6 +1,8 @@
 __version__ = "0.1.0"
 
+import gzip
 import json
+import logging
 import os
 import subprocess
 import tempfile
@@ -29,6 +31,7 @@ JAR_DEFAULT = typer.Option(
 )
 
 app = typer.Typer()
+logging.basicConfig()
 
 
 def execute_schedule_validator(
@@ -108,6 +111,12 @@ def validate_day(
         verbose=True,
     )
 
+    if not extracts:
+        typer.secho(
+            "WARNING: found 0 extracts to process, exiting", typer.colors.YELLOW
+        )
+        return
+
     typer.secho(f"found {len(extracts)} to process for {day}", fg=typer.colors.MAGENTA)
     fs = get_fs()
     outcomes = []
@@ -131,9 +140,11 @@ def validate_day(
                 system_errors=system_errors,
             )
             validation.save_content(
-                content="\n".join(
-                    json.dumps(notice) for notice in report["notices"]
-                ).encode(),
+                content=gzip.compress(
+                    "\n".join(
+                        json.dumps(notice) for notice in report["notices"]
+                    ).encode()
+                ),
                 fs=fs,
             )
             outcomes.append(
@@ -143,7 +154,6 @@ def validate_day(
                     validation=validation,
                 )
             )
-            break
         except Exception as e:
             typer.secho(
                 f"encountered exception on extract {extract.path}: {e}\n{traceback.format_exc()}",
@@ -157,6 +167,7 @@ def validate_day(
                 )
             )
     result = ScheduleValidationResult(
+        filename="results.jsonl",
         dt=day,
         outcomes=outcomes,
     )
