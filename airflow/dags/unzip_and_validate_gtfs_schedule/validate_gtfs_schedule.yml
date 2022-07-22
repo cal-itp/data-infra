@@ -21,6 +21,8 @@ namespace: airflow-jobs
 
 env_vars:
   GOOGLE_APPLICATION_CREDENTIALS: /secrets/jobs-data/service_account.json
+  AIRFLOW_ENV: "{{ env_var('AIRFLOW_ENV') }}"
+  CALITP_USER: "{{ env_var('CALITP_USER') }}"
 
 secrets:
   - deploy_type: volume

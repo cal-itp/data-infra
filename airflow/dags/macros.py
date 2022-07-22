@@ -1,4 +1,5 @@
 """Macros for Operators"""
+import os
 
 import pandas as pd
 from calitp.config import is_development
@@ -138,4 +139,5 @@ data_infra_macros = {
     "is_development": is_development_macro,
     "image_tag": lambda: "development" if is_development() else "latest",
     "prefix_bucket": prefix_bucket,
+    "env_var": lambda key: os.getenv(key),
 }
