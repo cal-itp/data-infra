@@ -140,6 +140,10 @@ def validate_day(
                 extract=extract,
                 system_errors=system_errors,
             )
+            typer.secho(
+                f"saving validation notice to {validation.path}",
+                fg=typer.colors.GREEN,
+            )
             validation.save_content(
                 content=gzip.compress(
                     "\n".join(
