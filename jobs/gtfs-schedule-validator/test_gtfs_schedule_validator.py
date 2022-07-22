@@ -1,10 +1,12 @@
 from pathlib import Path
 
+import toml
+
 from gtfs_schedule_validator import __version__
 
 
 def test_version():
-    assert __version__ == '0.1.0'
+    assert __version__ == "0.1.0"
 
 
 # from https://github.com/python-poetry/poetry/issues/144#issuecomment-877835259
