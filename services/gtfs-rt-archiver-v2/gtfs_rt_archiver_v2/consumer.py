@@ -5,11 +5,9 @@ from gevent import monkey; monkey.patch_all()  # noqa
 This pretty much exists just to start an in-process Prometheus server since
 Huey's startup hooks are per _worker_ and not the overall consumer process.
 """
-import structlog
 import typer
 
-from huey.constants import WORKER_GREENLET, WORKER_THREAD
-from pythonjsonlogger import jsonlogger
+from huey.constants import WORKER_THREAD
 
 import logging
 import sys
