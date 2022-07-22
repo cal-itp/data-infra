@@ -110,7 +110,7 @@ python-versions = "~=3.5"
 
 [[package]]
 name = "calitp"
-version = "2022.7.21a0"
+version = "2022.7.22a0"
 description = "Shared code for the Cal-ITP data codebases"
 category = "main"
 optional = false
@@ -1367,7 +1367,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.11"
-content-hash = "8ac5ee089feefc4c402168c5a8be2770c8ab4e717fd9515f201be03a2e4305ef"
+content-hash = "b80fc07f7667c776596d426f4a89b0124bcc6db9a83e75364827a9ea24565cf7"
 
 [metadata.files]
 aiohttp = [

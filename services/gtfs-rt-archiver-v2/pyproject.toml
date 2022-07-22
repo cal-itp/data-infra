@@ -6,7 +6,7 @@ authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.11"
-calitp = "2022.7.21a0"
+calitp = "2022.7.22a0"
 typer = "^0.4.1"
 huey = "^2.4.3"
 pydantic = "^1.9.1"
