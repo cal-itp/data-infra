@@ -5,3 +5,4 @@ metadata:
 data:
   CALITP_HUEY_REDIS_HOST: redis
   CALITP_USER: pipeline
+  GOOGLE_APPLICATION_CREDENTIALS: /secrets/gtfs-feed-secrets/google_application_credentials.json
