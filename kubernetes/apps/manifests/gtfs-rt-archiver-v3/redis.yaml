@@ -19,18 +19,18 @@ kind: Deployment
 metadata:
   name: redis
   labels:
-    name: redis
+    app: redis
 spec:
   replicas: 1
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      name: redis
+      app: redis
   template:
     metadata:
       labels:
-        name: redis
+        app: redis
     spec:
       containers:
         - name: app
