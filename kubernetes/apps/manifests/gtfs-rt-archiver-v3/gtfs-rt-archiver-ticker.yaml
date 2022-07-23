@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gtfs-rt-archiver-ticker
+  labels:
+    name: gtfs-rt-archiver-ticker
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      name: gtfs-rt-archiver-ticker
+  template:
+    metadata:
+      labels:
+        name: gtfs-rt-archiver-ticker
+    spec:
+      containers:
+        - name: app
+          image: gtfs-rt-archiver
+          imagePullPolicy: Always
+          command: ["python"]
+          args: ["-m", "gtfs_rt_archiver_v3.ticker"]
+          envFrom:
+            - configMapRef:
+                name: archiver-app-vars
+            - configMapRef:
+                name: archiver-channel-vars
+            - secretRef:
+                name: gtfs-feed-secrets
+          resources:
+            requests:
+              memory: 512Mi
+              cpu: 1
+            limits:
+              memory: 1Gi
+      tolerations:
+        - key: resource-domain
+          operator: Equal
+          value: gtfsrtv3
+          effect: NoSchedule
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: resource-domain
+                operator: In
+                values:
+                - gtfsrtv3
