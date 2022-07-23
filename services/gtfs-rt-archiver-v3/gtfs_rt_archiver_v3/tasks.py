@@ -36,6 +36,7 @@ class PydanticSerializer(Serializer):
 
 huey = RedisExpireHuey(
     name="gtfs-rt-archiver-v3",
+    expire_time=5,
     results=False,
     # serializer=PydanticSerializer(),
     url=os.getenv("CALITP_HUEY_REDIS_URL"),
