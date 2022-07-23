@@ -28,7 +28,7 @@ def get_records() -> List[AirtableGTFSDataRecord]:
     return records
 
 
-def main(port: int = os.getenv("TICKER_PROMETHEUS_PORT", 9090)):
+def main(port: int = os.getenv("TICKER_PROMETHEUS_PORT", 9102)):
     start_http_server(port)
 
     typer.secho("flushing huey")

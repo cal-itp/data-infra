@@ -20,7 +20,7 @@ from prometheus_client import start_http_server
 from .tasks import huey
 
 
-def main(port: int = os.getenv("CONSUMER_PROMETHEUS_PORT", 9090)):
+def main(port: int = os.getenv("CONSUMER_PROMETHEUS_PORT", 9102)):
     start_http_server(port)
     config = ConsumerConfig(
         workers=int(os.getenv("HUEY_CONSUMER_WORKERS", 32)),
