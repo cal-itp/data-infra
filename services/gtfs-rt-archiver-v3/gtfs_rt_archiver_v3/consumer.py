@@ -1,4 +1,6 @@
 # fmt: off
+import os
+
 from gevent import monkey; monkey.patch_all()  # noqa
 # fmt: on
 """
@@ -18,10 +20,10 @@ from prometheus_client import start_http_server
 from .tasks import huey
 
 
-def main(port: int = 8001):
+def main(port: int = os.getenv("CONSUMER_PROMETHEUS_PORT", 9090)):
     start_http_server(port)
     config = ConsumerConfig(
-        workers=32,
+        workers=int(os.getenv("HUEY_CONSUMER_WORKERS", 32)),
         periodic=False,
         worker_type=WORKER_THREAD,
     )

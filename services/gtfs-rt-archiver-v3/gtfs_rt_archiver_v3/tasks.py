@@ -4,20 +4,20 @@ from datetime import datetime
 import orjson
 import pendulum
 import structlog
+import typer
 from calitp.storage import AirtableGTFSDataRecord, download_feed
 from google.cloud import storage
-from google.oauth2 import service_account
-from huey import RedisHuey
+from huey import RedisExpireHuey
 from huey.registry import Message
 from huey.serializer import Serializer
 from requests import HTTPError
 
 from .metrics import (
-    HANDLE_TICK_PROCESSING_TIME,
+    FETCH_PROCESSING_TIME,
     FEEDS_DOWNLOADED,
     TASK_SIGNALS,
-    HANDLE_TICK_PROCESSING_DELAY,
-    HANDLE_TICK_PROCESSED_BYTES,
+    FETCH_PROCESSING_DELAY,
+    FETCH_PROCESSED_BYTES,
     FEED_REQUEST_FAILURES,
 )
 
@@ -34,17 +34,18 @@ class PydanticSerializer(Serializer):
         return Message(*d.values())
 
 
-huey = RedisHuey(
-    name="gtfs-rt-archiver-2",
+huey = RedisExpireHuey(
+    name="gtfs-rt-archiver-v3",
     results=False,
     # serializer=PydanticSerializer(),
-    host="localhost",
+    url=os.getenv("CALITP_HUEY_REDIS_URL"),
+    host=os.getenv("CALITP_HUEY_REDIS_HOST"),
+    port=os.getenv("CALITP_HUEY_REDIS_PORT"),
+    password=os.getenv("CALITP_HUEY_REDIS_PASSWORD"),
 )
 
-credentials = service_account.Credentials.from_service_account_file(
-    os.getenv("CALITP_DATA_DEST_SECRET")
-)
-client = storage.Client(credentials=credentials)
+
+client = storage.Client()
 
 base_logger = structlog.get_logger()
 
@@ -82,9 +83,9 @@ def fetch(tick: datetime, record: AirtableGTFSDataRecord):
         record_uri=record.uri,
     )
     slippage = (pendulum.now() - tick).total_seconds()
-    HANDLE_TICK_PROCESSING_DELAY.labels(url=record.uri).observe(slippage)
+    FETCH_PROCESSING_DELAY.labels(url=record.uri).observe(slippage)
 
-    with HANDLE_TICK_PROCESSING_TIME.labels(url=record.uri).time():
+    with FETCH_PROCESSING_TIME.labels(url=record.uri).time():
         with FEED_REQUEST_FAILURES.labels(url=record.uri).count_exceptions():
             # TODO: can we either get the content bytes without using memory
             #   or persist on disk in between?
@@ -102,6 +103,7 @@ def fetch(tick: datetime, record: AirtableGTFSDataRecord):
                 )
                 raise
 
+        typer.secho(f"saving {len(content)} bytes from {record.uri} to {extract.path}")
         extract.save_content(content=content, client=client)
-        HANDLE_TICK_PROCESSED_BYTES.labels(record.uri).inc(len(content))
+        FETCH_PROCESSED_BYTES.labels(record.uri).inc(len(content))
         FEEDS_DOWNLOADED.labels(url=record.uri).inc()

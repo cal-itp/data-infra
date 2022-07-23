@@ -18,4 +18,4 @@ RUN pip install memray
 
 COPY . /app
 
-CMD ["python3", "-m", "--help"]
+CMD ["python3", "-m", "gtfs_rt_archiver_v3"]

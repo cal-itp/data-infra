@@ -10,18 +10,18 @@ FEED_REQUEST_FAILURES = Counter(
     documentation="Exceptions raised during download_feed calls",
     labelnames=("url",),
 )
-HANDLE_TICK_PROCESSED_BYTES = Counter(
-    name="handled_bytes",
+FETCH_PROCESSED_BYTES = Counter(
+    name="fetch_processed_bytes",
     documentation="Count of bytes fully handled (i.e. down/upload).",
     labelnames=("url",),
 )
-HANDLE_TICK_PROCESSING_DELAY = Histogram(
-    name="handle_tick_processing_delay_seconds",
+FETCH_PROCESSING_DELAY = Histogram(
+    name="fetch_processing_delay_seconds",
     documentation="The slippage between a tick and download start of a feed.",
     labelnames=("url",),
 )
-HANDLE_TICK_PROCESSING_TIME = Histogram(
-    name="handle_tick_processing_time_seconds",
+FETCH_PROCESSING_TIME = Histogram(
+    name="fetch_processing_time_seconds",
     documentation="Time spent processing a single fetch.",
     labelnames=("url",),
 )
