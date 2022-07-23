@@ -93,13 +93,13 @@ def fetch(tick: datetime, record: AirtableGTFSDataRecord):
             try:
                 extract, content = download_feed(record, auth_dict)
             except HTTPError as e:
-                logger.exception(
+                logger.error(
                     "http error occurred while downloading feed",
                     code=e.response.status_code,
                 )
                 raise
             except Exception as e:
-                logger.exception(
+                logger.error(
                     "other exception occurred while downloading feed", exc_type=type(e)
                 )
                 raise
