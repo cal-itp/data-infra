@@ -39,8 +39,8 @@ huey = RedisExpireHuey(
     results=False,
     # serializer=PydanticSerializer(),
     url=os.getenv("CALITP_HUEY_REDIS_URL"),
-    host=os.getenv("CALITP_HUEY_REDIS_HOST", os.getenv("KUBERNETES_SERVICE_HOST")),
-    port=os.getenv("CALITP_HUEY_REDIS_PORT", os.getenv("KUBERNETES_SERVICE_PORT")),
+    host=os.getenv("CALITP_HUEY_REDIS_HOST"),
+    port=os.getenv("CALITP_HUEY_REDIS_PORT"),
     password=os.getenv("CALITP_HUEY_REDIS_PASSWORD"),
 )
 
