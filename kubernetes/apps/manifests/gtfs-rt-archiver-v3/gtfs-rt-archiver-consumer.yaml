@@ -28,6 +28,8 @@ spec:
                 name: archiver-app-vars
             - configMapRef:
                 name: archiver-channel-vars
+            - secretRef:
+                name: gtfs-feed-secrets
           resources:
             requests:
               memory: 512Mi
