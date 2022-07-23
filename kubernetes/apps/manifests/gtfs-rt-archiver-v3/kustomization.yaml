@@ -1,2 +1,4 @@
 resources:
+- archiver-app-vars.yaml
+- gtfs-rt-archiver-consumer.yaml
 - redis.yaml

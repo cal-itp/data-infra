@@ -1,0 +1,50 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gtfs-rt-archiver-consumer
+  labels:
+    name: gtfs-rt-archiver-consumer
+spec:
+  replicas: 3
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      name: gtfs-rt-archiver-consumer
+  template:
+    metadata:
+      labels:
+        name: gtfs-rt-archiver-consumer
+    spec:
+      containers:
+        - name: app
+          image: gtfs-rt-archiver
+          imagePullPolicy: Always
+          command: ["python"]
+          args: ["-m", "gtfs_rt_archiver_v3.consumer"]
+          envFrom:
+            - configMapRef:
+                name: archiver-app-vars
+            - configMapRef:
+                name: archiver-channel-vars
+          resources:
+            requests:
+              memory: 512Mi
+              cpu: 1
+            limits:
+              memory: 1Gi
+      tolerations:
+        - key: resource-domain
+          operator: Equal
+          value: gtfsrtv3
+          effect: NoSchedule
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: resource-domain
+                operator: In
+                values:
+                - gtfsrtv3

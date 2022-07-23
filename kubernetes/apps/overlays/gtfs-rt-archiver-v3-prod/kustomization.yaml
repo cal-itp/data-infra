@@ -4,4 +4,5 @@ namespace: gtfs-rt-v3
 
 resources:
 - ns.yaml
+- archiver-channel-vars.yaml
 - ../gtfs-rt-archiver-v3-release
