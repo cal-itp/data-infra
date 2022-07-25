@@ -110,5 +110,5 @@ def fetch(tick: datetime, record: AirtableGTFSDataRecord):
         extract.save_content(content=content, client=client)
         FETCH_PROCESSED_BYTES.labels(
             **labels,
-            content_type=extract.response_headers.get("Content-Type", ""),
+            content_type=extract.response_headers.get("Content-Type", "").strip(),
         ).inc(len(content))
