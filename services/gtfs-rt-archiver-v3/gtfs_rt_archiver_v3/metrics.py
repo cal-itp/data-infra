@@ -1,9 +1,9 @@
 from prometheus_client import Histogram, Counter
 
 standard_labels = (
-    "name",
-    "uri",
-    "feed_type",
+    "record_name",
+    "record_uri",
+    "record_feed_type",
 )
 TICKS = Counter(
     name="ticks",

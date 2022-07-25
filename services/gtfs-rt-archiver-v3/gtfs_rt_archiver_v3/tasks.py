@@ -52,10 +52,11 @@ base_logger = structlog.get_logger()
 @huey.signal()
 def instrument_signals(signal, task, exc=None):
     TASK_SIGNALS.labels(
-        signal=signal,
-        tick=task.kwargs["tick"],
+        record_name=task.kwargs["record"].name,
         record_uri=task.kwargs["record"].uri,
-        exc_type=str(type(exc)),
+        record_feed_type=task.kwargs["record"].data,
+        signal=signal,
+        exc_type=type(exc) if exc else "",
     ).inc()
 
 
@@ -81,7 +82,9 @@ def load_auth_dict():
 
 @huey.task(expires=5)
 def fetch(tick: datetime, record: AirtableGTFSDataRecord):
-    labels = dict(name=record.name, uri=record.uri, feed_type=record.data)
+    labels = dict(
+        record_name=record.name, record_uri=record.uri, record_feed_type=record.data
+    )
     logger = base_logger.bind(
         tick=tick,
         **labels,
@@ -96,6 +99,7 @@ def fetch(tick: datetime, record: AirtableGTFSDataRecord):
             logger.error(
                 "http error occurred while downloading feed",
                 code=e.response.status_code,
+                exc_type=type(e),
             )
             raise
         except Exception as e:
