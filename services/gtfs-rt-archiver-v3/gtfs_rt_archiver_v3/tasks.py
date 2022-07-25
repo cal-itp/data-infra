@@ -14,11 +14,9 @@ from requests import HTTPError
 
 from .metrics import (
     FETCH_PROCESSING_TIME,
-    FEEDS_DOWNLOADED,
     TASK_SIGNALS,
     FETCH_PROCESSING_DELAY,
     FETCH_PROCESSED_BYTES,
-    FEED_REQUEST_FAILURES,
 )
 
 
@@ -53,7 +51,12 @@ base_logger = structlog.get_logger()
 
 @huey.signal()
 def instrument_signals(signal, task, exc=None):
-    TASK_SIGNALS.labels(signal=signal, exc_type=str(exc)).inc()
+    TASK_SIGNALS.labels(
+        signal=signal,
+        tick=task.kwargs["tick"],
+        record_uri=task.kwargs["record"].uri,
+        exc_type=str(type(exc)),
+    ).inc()
 
 
 auth_dict = None
@@ -78,33 +81,29 @@ def load_auth_dict():
 
 @huey.task(expires=5)
 def fetch(tick: datetime, record: AirtableGTFSDataRecord):
+    labels = dict(name=record.name, uri=record.uri, feed_type=record.data)
     logger = base_logger.bind(
         tick=tick,
-        record_name=record.name,
-        record_uri=record.uri,
+        **labels,
     )
     slippage = (pendulum.now() - tick).total_seconds()
-    FETCH_PROCESSING_DELAY.labels(url=record.uri).observe(slippage)
+    FETCH_PROCESSING_DELAY.labels(**labels).observe(slippage)
 
-    with FETCH_PROCESSING_TIME.labels(url=record.uri).time():
-        with FEED_REQUEST_FAILURES.labels(url=record.uri).count_exceptions():
-            # TODO: can we either get the content bytes without using memory
-            #   or persist on disk in between?
-            try:
-                extract, content = download_feed(record, ts=tick, auth_dict=auth_dict)
-            except HTTPError as e:
-                logger.error(
-                    "http error occurred while downloading feed",
-                    code=e.response.status_code,
-                )
-                raise
-            except Exception as e:
-                logger.error(
-                    "other exception occurred while downloading feed", exc_type=type(e)
-                )
-                raise
+    with FETCH_PROCESSING_TIME.labels(**labels).time():
+        try:
+            extract, content = download_feed(record, ts=tick, auth_dict=auth_dict)
+        except HTTPError as e:
+            logger.error(
+                "http error occurred while downloading feed",
+                code=e.response.status_code,
+            )
+            raise
+        except Exception as e:
+            logger.error(
+                "other exception occurred while downloading feed", exc_type=type(e)
+            )
+            raise
 
         typer.secho(f"saving {len(content)} bytes from {record.uri} to {extract.path}")
         extract.save_content(content=content, client=client)
-        FETCH_PROCESSED_BYTES.labels(record.uri).inc(len(content))
-        FEEDS_DOWNLOADED.labels(url=record.uri).inc()
+        FETCH_PROCESSED_BYTES.labels(**labels).inc(len(content))
