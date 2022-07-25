@@ -60,24 +60,22 @@ def instrument_signals(signal, task, exc=None):
     ).inc()
 
 
+AUTH_KEYS = [
+    "AC_TRANSIT_API_KEY",
+    "AMTRAK_GTFS_URL",
+    "CULVER_CITY_API_KEY",
+    "MTC_511_API_KEY",
+    "SD_MTS_SA_API_KEY",
+    "SD_MTS_VP_TU_API_KEY",
+    "SWIFTLY_AUTHORIZATION_KEY_CALITP",
+]
 auth_dict = None
 
 
 @huey.on_startup()
 def load_auth_dict():
     global auth_dict
-    auth_dict = {
-        key: os.environ[key]
-        for key in [
-            "AC_TRANSIT_API_KEY",
-            "AMTRAK_GTFS_URL",
-            "CULVER_CITY_API_KEY",
-            "MTC_511_API_KEY",
-            "SD_MTS_SA_API_KEY",
-            "SD_MTS_VP_TU_API_KEY",
-            "SWIFTLY_AUTHORIZATION_KEY_CALITP",
-        ]
-    }
+    auth_dict = {key: os.environ[key] for key in AUTH_KEYS}
 
 
 @huey.task(expires=5)
