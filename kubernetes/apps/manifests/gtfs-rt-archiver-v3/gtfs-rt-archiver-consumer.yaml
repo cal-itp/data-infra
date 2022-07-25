@@ -60,3 +60,14 @@ spec:
                 operator: In
                 values:
                 - gtfsrtv3
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchExpressions:
+                    - key: name
+                      operator: In
+                      values:
+                        - gtfs-rt-archiver-consumer

@@ -30,12 +30,19 @@ spec:
                 name: archiver-channel-vars
             - secretRef:
                 name: gtfs-feed-secrets
+          volumeMounts:
+            - name: gtfs-feed-secrets
+              mountPath: /secrets/gtfs-feed-secrets
           resources:
             requests:
               memory: 512Mi
               cpu: 1
             limits:
               memory: 1Gi
+      volumes:
+        - name: gtfs-feed-secrets
+          secret:
+            secretName: gtfs-feed-secrets
       tolerations:
         - key: resource-domain
           operator: Equal
@@ -50,3 +57,14 @@ spec:
                 operator: In
                 values:
                 - gtfsrtv3
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchExpressions:
+                    - key: name
+                      operator: In
+                      values:
+                        - redis
