@@ -769,6 +769,7 @@ exposures:
             frequencies: 48542c8f-8ce1-43e3-a965-6c68771d6fe5
             levels: 288a08cd-7929-479e-aa88-08b677a08510
             pathways: a01484af-c460-40a4-ac8a-896b0196e8c2
+            # TODO: add shapes when the size limit has been lifted
 #            shapes: 2f5e7bdb-33e8-4633-b163-6bab42ad0951
             transfers: f8dcda5d-0c6d-4c70-b5f5-6716adcf6ffc
             translations: 7abe9256-6cd2-4c1f-9b6a-72108022a382
