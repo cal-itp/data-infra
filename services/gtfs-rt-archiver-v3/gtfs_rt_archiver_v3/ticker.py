@@ -36,7 +36,7 @@ def main(port: int = os.getenv("TICKER_PROMETHEUS_PORT", 9102)):
 
     def tick(second):
         start = pendulum.now()
-        dt = datetime.now(timezone.utc).replace(second=second)
+        dt = datetime.now(timezone.utc).replace(second=second, microsecond=0)
         typer.secho(f"ticking {dt}")
         TICKS.inc()
         records = get_records()

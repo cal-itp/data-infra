@@ -6,7 +6,6 @@ authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.11"
-calitp = "2022.7.22a0"
 typer = "^0.4.1"
 huey = "^2.4.3"
 pydantic = "^1.9.1"
@@ -24,6 +23,7 @@ cachetools = ">=2.0.0,<5.0"
 google-cloud-secret-manager = "^2.11.1"
 structlog = "^22.1.0"
 python-json-logger = "^2.0.4"
+calitp = "2022.7.25a0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

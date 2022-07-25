@@ -91,7 +91,7 @@ def fetch(tick: datetime, record: AirtableGTFSDataRecord):
             # TODO: can we either get the content bytes without using memory
             #   or persist on disk in between?
             try:
-                extract, content = download_feed(record, auth_dict)
+                extract, content = download_feed(record, ts=tick, auth_dict=auth_dict)
             except HTTPError as e:
                 logger.error(
                     "http error occurred while downloading feed",
