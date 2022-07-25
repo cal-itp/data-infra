@@ -25,7 +25,7 @@ spec:
           image: gtfs-rt-archiver
           imagePullPolicy: Always
           command: ["python"]
-          args: ["-m", "gtfs_rt_archiver_v3.consumer"]
+          args: ["-m", "gtfs_rt_archiver_v3.consumer", "--load-auth-keys"]
           envFrom:
             - configMapRef:
                 name: archiver-app-vars
