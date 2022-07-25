@@ -54,7 +54,7 @@ paired_device_transaction_ids AS (
     WHERE t1.transaction_date_time_utc < t2.transaction_date_time_utc
 ),
 
-many_unions AS (
+stg_cleaned_device_transaction_types AS (
 
     SELECT
         littlepay_transaction_id,
@@ -87,4 +87,4 @@ many_unions AS (
     FROM paired_device_transaction_ids
 )
 
-SELECT * FROM many_unions
+SELECT * FROM stg_cleaned_device_transaction_types
