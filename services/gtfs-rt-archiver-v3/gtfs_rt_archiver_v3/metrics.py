@@ -17,7 +17,7 @@ TASK_SIGNALS = Counter(
 FETCH_PROCESSED_BYTES = Counter(
     name="fetch_processed_bytes",
     documentation="Count of bytes fully handled (i.e. down/upload).",
-    labelnames=standard_labels,
+    labelnames=standard_labels + ("content_type",),
 )
 FETCH_PROCESSING_DELAY = Histogram(
     name="fetch_processing_delay_seconds",
