@@ -12,15 +12,18 @@ WITH payments_rides_counts AS (
     SELECT
         'on' AS type,
         COUNTIF(charge_type = 'complete_variable_fare') AS val
-    FROM views.payments_rides UNION ALL
+    FROM views.payments_rides
+    UNION ALL
     SELECT
         'off' AS type,
         COUNTIF(charge_type = 'complete_variable_fare') AS val
-    FROM views.payments_rides UNION ALL
+    FROM views.payments_rides
+    UNION ALL
     SELECT
         'pending' AS type,
         COUNTIF(charge_type = 'pending_charge_fare') AS val
-    FROM views.payments_rides UNION ALL
+    FROM views.payments_rides
+    UNION ALL
     SELECT
         'single' AS type,
         COUNTIF(charge_type = 'flat_fare') AS val
@@ -31,15 +34,18 @@ device_transaction_types_counts AS (
     SELECT
         'on' AS type,
         COUNTIF(transaction_type = 'on' AND NOT pending) AS val
-    FROM payments.stg_cleaned_device_transaction_types UNION ALL
+    FROM payments.stg_cleaned_device_transaction_types
+    UNION ALL
     SELECT
         'off' AS type,
         COUNTIF(transaction_type = 'off') AS val
-    FROM payments.stg_cleaned_device_transaction_types UNION ALL
+    FROM payments.stg_cleaned_device_transaction_types
+    UNION ALL
     SELECT
         'pending' AS type,
         COUNTIF(transaction_type = 'on' AND pending) AS val
-    FROM payments.stg_cleaned_device_transaction_types UNION ALL
+    FROM payments.stg_cleaned_device_transaction_types
+    UNION ALL
     SELECT
         'single' AS type,
         COUNTIF(transaction_type = 'single') AS val
