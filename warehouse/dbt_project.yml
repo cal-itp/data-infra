@@ -48,10 +48,12 @@ models:
       +materialized: table
       schema: views
 
+    # To-do: should probably end up in `staging`
     payments_views_staging:
       +materialized: view
       schema: payments
 
+    # To-do: should probably end up in `mart_payments`
     payments_views:
       +materialized: table
       schema: views
