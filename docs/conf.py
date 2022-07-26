@@ -72,3 +72,7 @@ pygments_style = "sphinx"
 suppress_warnings = ["myst.domains"]
 use_jupyterbook_latex = True
 use_multitoc_numbering = True
+
+
+def setup(app):
+    app.add_stylesheet("custom.css")
