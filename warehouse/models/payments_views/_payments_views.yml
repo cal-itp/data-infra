@@ -1,0 +1,118 @@
+version: 2
+
+models:
+  - name: payments_feeds
+    columns:
+      - name: calitp_itp_id
+      - name: calitp_url_number
+      - name: participant_id
+        description: Littlepay-assigned Participant ID.
+
+  - name: payments_rides
+    columns:
+      - name: participant_id
+        description: Littlepay-assigned Participant ID
+      - name: micropayment_id
+        description: From payments.micropayments.micropayment_id
+        tests:
+          - unique:
+              config:
+                store_failures: true
+      - name: funding_source_vault_id
+        description: From payments.micropayments.funding_source_vault_id
+      - name: customer_id
+        description: From payments.micropayments.customer_id
+      - name: principal_customer_id
+        description: From payments.customer_funding_source.principal_customer_id
+      - name: bin
+        description: From payments.customer_funding_source.bin
+      - name: masked_pan
+        description: From payments.customer_funding_source.masked_pan
+      - name: card_scheme
+        description: From payments.customer_funding_source.card_scheme
+      - name: issuer
+        description: From payments.customer_funding_source.issuer
+      - name: issuer_country
+        description: From payments.customer_funding_source.issuer_country
+      - name: form_factor
+        description: From payments.customer_funding_source.form_factor
+      - name: charge_amount
+        description: From payments.micropayments.charge_amount
+      - name: refund_amount
+        description: If there is a refund micropayment associated with the trip, the charge_amount on that refund
+      - name: nominal_amount
+        description: From payments.micropayments.nominal_amount
+      - name: charge_type
+        description: From payments.micropayments.charge_type
+      - name: adjustment_id
+        description: From payments.micropayments.adjustment_id
+      - name: adjustment_type
+        description: From payments.micropayment_adjustments.type
+      - name: adjustment_time_period_type
+        description: From payments.micropayment_adjustments.time_period_type
+      - name: adjustment_description
+        description: From payments.micropayment_adjustments.description
+      - name: adjustment_amount
+        description: From payments.micropayment_adjustments.amount
+      - name: product_id
+        description: From payments.micropayment_adjustments.product_id
+      - name: product_code
+        description: From payments.product_data.product_code
+      - name: product_description
+        description: From payments.product_data.product_description
+      - name: product_type
+        description: From payments.product_data.product_type
+      - name: route_id
+        description: The route_id of the first tap transaction with a non-unknown route_id, else unknown ('Route Z')
+      - name: route_long_name
+        description: The route_long_name of the first tap transaction
+      - name: route_short_name
+        description: The route_short_name of the first tap transaction
+      - name: direction
+        description: The direction of the first tap transaction
+      - name: vehicle_id
+        description: The vehicle_id of the first tap transaction
+      - name: littlepay_transaction_id
+        description: The littlepay_transaction_id of the first tap transaction
+        tests:
+          - unique:
+              config:
+                store_failures: true
+      - name: device_id
+        description: The device_id of the first tap transaction
+      - name: transaction_type
+        description: The transaction_type of the first tap transaction
+      - name: transaction_outcome
+        description: The transaction_outcome of the first tap transaction
+      - name: transaction_date_time_utc
+        description: The transaction_date_time_utc of the first tap transaction
+      - name: transaction_date_time_pacific
+        description: The transaction_date_time_pacific of the first tap transaction
+      - name: location_id
+        description: The location_id of the first tap transaction
+      - name: location_name
+        description: The location_name of the first tap transaction
+      - name: latitude
+        description: The latitude of the first tap transaction
+      - name: longitude
+        description: The longitude of the first tap transaction
+      - name: off_littlepay_transaction_id
+        description: The littlepay_transaction_id of the second tap transaction (if there is one)
+      - name: off_device_id
+        description: The device_id of the second tap transaction (if there is one)
+      - name: off_transaction_type
+        description: The transaction_type of the second tap transaction (if there is one)
+      - name: off_transaction_outcome
+        description: The transaction_outcome of the second tap transaction (if there is one)
+      - name: off_transaction_date_time_utc
+        description: The transaction_date_time_utc of the second tap transaction (if there is one)
+      - name: off_transaction_date_time_pacific
+        description: The transaction_date_time_pacific of the second tap transaction (if there is one)
+      - name: off_location_id
+        description: The location_id of the second tap transaction (if there is one)
+      - name: off_location_name
+        description: The location_name of the second tap transaction (if there is one)
+      - name: off_latitude
+        description: The latitude of the second tap transaction (if there is one)
+      - name: off_longitude
+        description: The longitude of the second tap transaction (if there is one)
