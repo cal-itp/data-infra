@@ -90,6 +90,25 @@ def _publish_exposure(
                         project_id=node.database,
                         progress_bar_type="tqdm",
                     )
+
+                    if model_name == "stops":
+                        df = df.round(
+                            {
+                                "stop_lat": 5,
+                                "stop_lon": 5,
+                            }
+                        )
+                    elif model_name == "shapes":
+                        df = df.round(
+                            {
+                                "shape_pt_lat": 5,
+                                "shape_pt_lon": 5,
+                            }
+                        )
+
+                    typer.secho(
+                        f"saving intermediate file to {fpath}", fg=typer.colors.GREEN
+                    )
                     df.to_csv(fpath, index=False)
                     typer.secho(
                         f"selected {len(df)} rows ({humanize.naturalsize(os.stat(fpath).st_size)}) from {node.schema_table}"
@@ -118,6 +137,11 @@ def _publish_exposure(
                                     headers={"Authorization": API_KEY},
                                     files={"upload": fp},
                                 ).raise_for_status()
+                        else:
+                            typer.secho(
+                                f"would be {upload_msg} if --deploy",
+                                fg=typer.colors.MAGENTA,
+                            )
 
             elif isinstance(destination, TilesDestination):
                 layer_geojson_paths: Dict[str, Path] = {}
@@ -127,7 +151,7 @@ def _publish_exposure(
                     geojsonl_fpath = os.path.join(tmpdir, f"{node.name}.geojsonl")
 
                     client = bigquery.Client(project=project)
-                    print(f"querying {node.schema_table}")
+                    typer.secho(f"querying {node.schema_table}")
                     # TODO: this is not great but we have to work around how BigQuery removes overlapping line segments
                     df = client.query(
                         f"select * from {node.schema_table}"
@@ -242,8 +266,8 @@ class MetadataRow(BaseModel):
     data_standard: Literal["https://developers.google.com/transit/gtfs"]
     notes: None
     gis_theme: None
-    gis_horiz_accuracy: None
-    gis_vert_accuracy: None
+    gis_horiz_accuracy: Optional[Literal["4m"]]
+    gis_vert_accuracy: Optional[Literal["4m"]]
     gis_coordinate_system_epsg: Optional[str]
     gis_vert_datum_epsg: None
 
@@ -290,6 +314,11 @@ def generate_exposure_documentation(
         manifest = Manifest(**json.load(f))
 
     exposure = manifest.exposures[f"exposure.calitp_warehouse.{exposure.value}"]
+
+    typer.secho(
+        f"writing out {metadata_output} and {dictionary_output}",
+        fg=typer.colors.MAGENTA,
+    )
 
     with open(metadata_output, "w", newline="") as mf, open(
         dictionary_output, "w", newline=""
@@ -342,11 +371,9 @@ def generate_exposure_documentation(
                         data_standard="https://developers.google.com/transit/gtfs",
                         notes=None,
                         gis_theme=None,
-                        gis_horiz_accuracy=None,
-                        gis_vert_accuracy=None,
-                        gis_coordinate_system_epsg=node.meta.get(
-                            "publish.gis_coordinate_system_epsg"
-                        ),
+                        gis_horiz_accuracy="4m",
+                        gis_vert_accuracy="4m",
+                        gis_coordinate_system_epsg=exposure.meta.coordinate_system_espg,
                         gis_vert_datum_epsg=None,
                     ).json(models_as_dict=False)
                 )

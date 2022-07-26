@@ -263,6 +263,7 @@ Destination = Annotated[
 
 class ExposureMeta(BaseModel):
     methodology: Optional[str]
+    coordinate_system_espg: Optional[str]
     destinations: List[Destination] = []
 
 
