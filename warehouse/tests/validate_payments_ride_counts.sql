@@ -2,7 +2,7 @@
 
 -- dst_table_name: "payments.invalid_payments_ride_counts"
 -- Make sure that we did not lose any transactions while joining for the rides
--- table.
+-- table
 
 --tests:
 --  check_empty:
