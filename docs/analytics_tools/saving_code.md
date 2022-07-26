@@ -14,6 +14,7 @@ Doing work locally and pushing directly from the command line is a similar workf
     * What's a typical [project workflow](#project-workflow)?
     * Someone is collaborating on my branch, how do we [stay in sync](#pulling-and-pushing-changes)?
     * The `main` branch is ahead, and I want to [sync my branch with `main`](rebase-and-merge)
+    * Options to [Resolve Merge Conflicts](resolve-merge-conflicts)
     * [Helpful Hints](#helpful-hints)
     * [External Git Resources](external-git-resources)
 2. [Committing in the Github User Interface](#pushing-drag-drop)
@@ -156,6 +157,16 @@ A rebase might be preferred, especially if all your work is contained on your br
 1. A merge commit window opens up. Type `:wq` to exit and complete the merge.
 1. Type `git log` to see that the merge commit was created.
 
+(resolve-merge-conflicts)=
+### Options for Resolving Merge Conflicts
+If you discover merge conflicts and they are within a single notebook that only you are working on it can be relatively easy to resolve them using the Git command line instructions:
+* From the command line, run `git merge main`. This should show you the conflict.
+* From here, there are two options depending on what version of the notebook you'd like to keep.
+  * To keep the version on your branch, run:<br/>
+`git checkout --ours path/to/notebook.ipynb`
+  * To keep the remote version, run:<br/>
+`git checkout --theirs path/to/notebook.ipynb`
+* From here, just add the file and commit with a message as you normally would and the conflict should be fixed in your Pull Request.
 
 ### Helpful Hints
 

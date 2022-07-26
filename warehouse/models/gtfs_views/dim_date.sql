@@ -3,8 +3,7 @@
 -- from https://gist.github.com/ewhauser/d7dd635ad2d4b20331c7f18038f04817
 
 WITH raw_dates AS (
-    SELECT
-        *
+    SELECT *
     FROM
         UNNEST(GENERATE_DATE_ARRAY('2021-01-01', '2031-01-01', INTERVAL 1 DAY)) AS d
 ),
@@ -16,8 +15,7 @@ dim_date AS (
         EXTRACT(YEAR FROM d) AS year,
         EXTRACT(WEEK FROM d) AS year_week,
         EXTRACT(DAYOFYEAR FROM d) AS year_day,
-        EXTRACT(YEAR FROM d) AS fiscal_year,
-        FORMAT_DATE('%Q', d) AS fiscal_qtr,
+        FORMAT_DATE('%Q', d) AS qtr,
         EXTRACT(MONTH FROM d) AS month,
         FORMAT_DATE('%B', d) AS month_name,
         EXTRACT(DAY FROM d) AS month_day,

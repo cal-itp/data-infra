@@ -31,17 +31,37 @@ models:
     +persist_docs:
       relation: true
       columns: true
-    # Config indicated by + and applies to all files under models/example/
-    +materialized: view
 
     gtfs_schedule_latest_only:
+      +materialized: table
       schema: gtfs_schedule
 
     gtfs_views:
+      +materialized: table
       schema: views
 
     gtfs_views_staging:
+      +materialized: view
       schema: gtfs_views_staging
 
     rt_views:
+      +materialized: table
       schema: views
+
+    # To-do: should probably end up in `staging`
+    payments_views_staging:
+      +materialized: view
+      schema: payments
+
+    # To-do: should probably end up in `mart_payments`
+    payments_views:
+      +materialized: table
+      schema: views
+
+    staging:
+      +materialized: view
+      schema: staging
+
+    mart:
+      transit_database:
+        schema: mart_transit_database

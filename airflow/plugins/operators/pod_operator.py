@@ -30,6 +30,7 @@ def PodOperator(*args, **kwargs):
             location=kwargs.pop("pod_location", os.environ["POD_LOCATION"]),
             cluster_name=kwargs.pop("cluster_name", os.environ["POD_CLUSTER_NAME"]),
             namespace=namespace,
+            image_pull_policy="Always" if is_development() else "IfNotPresent",
             **kwargs,
         )
 

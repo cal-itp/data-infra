@@ -1,6 +1,6 @@
 operator: 'operators.PodOperator'
 name: 'dbt-test'
-image: 'ghcr.io/cal-itp/data-infra/warehouse:latest'
+image: 'ghcr.io/cal-itp/data-infra/warehouse:{{ image_tag() }}'
 
 cmds:
   - python3
@@ -11,6 +11,7 @@ arguments:
 
 dependencies:
   - dbt_run_and_upload_artifacts
+trigger_rule: all_done
 
 is_delete_operator_pod: true
 get_logs: true

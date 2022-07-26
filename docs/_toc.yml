@@ -20,6 +20,7 @@ parts:
         - file: analytics_tools/saving_code
         - file: analytics_tools/storing_data
         - file: analytics_tools/data_catalogs
+        - file: analytics_tools/knowledge_sharing
       - file: analytics_new_analysts/overview
         sections:
         - file: analytics_new_analysts/data-analysis-intro
@@ -41,7 +42,6 @@ parts:
         sections:
         - file: datasets_and_tables/amplitude
         - file: datasets_and_tables/gtfs_schedule
-        - file: datasets_and_tables/gtfs_rt
         - file: datasets_and_tables/mst_payments
         - file: datasets_and_tables/transitdatabase
         - file: datasets_and_tables/views
@@ -51,10 +51,9 @@ parts:
         - file: analytics_examples/warehouse_tutorial
         - file: analytics_examples/new_tutorial
         - file: analytics_examples/sample-catalog-viewer
-      - file: analytics_publishing/overview
+      - file: publishing/overview
         sections:
-        - file: analytics_publishing/how_to_publish
-        - file: analytics_publishing/where_reports_live
+          - glob: publishing/sections/*
   - caption: Developers
     chapters:
       - file: architecture/architecture_overview
@@ -69,6 +68,8 @@ parts:
       - file: kubernetes/README
         sections:
         - file: kubernetes/JupyterHub
+        - file: kubernetes/architecture
+        - file: kubernetes/deployment
       - file: ci/README
         sections:
         - file: ci/Git-Flow-Services
@@ -87,6 +88,7 @@ parts:
         sections:
         - file: services/gtfs-ckan-uploader
         - file: services/gtfs-rt-archive
+      - file: backups/metabase
   - caption: Contribute to the Docs!
     chapters:
       - file: contribute/overview

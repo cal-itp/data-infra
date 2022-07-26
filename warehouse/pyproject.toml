@@ -5,17 +5,30 @@ description = ""
 authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "~3.9"
 dbt-core = "^1.0.4"
 dbt-bigquery = "^1.0.0"
 colorama = "^0.4.4"
-black = "19.10b0"
+black = "22.3.0"
 gcsfs = "^2022.2.0"
 typer = "^0.4.0"
 # pin click until https://github.com/tiangolo/typer/issues/377 is fixed
 click = "8.0.0"
 # Point at the JarvusInnovations fork for new features; long-term we may be able to point at the pypi version
 dbt-metabase = { git = "https://github.com/JarvusInnovations/dbt-metabase" }
+pydantic = "^1.9.0"
+SQLAlchemy = "1.3.24"
+sqlalchemy-bigquery = {extras = ["geography"], version = "^1.4.3"}
+isort = "^5.10.1"
+humanize = "^4.1.0"
+requests-toolbelt = "^0.9.1"
+pandas-gbq = "^0.17.4"
+tqdm = "^4.64.0"
+pendulum = "^2.1.2"
+Shapely = "^1.8.2"
+geopandas = "^0.10.2"
+python-slugify = "^6.1.2"
+swifter = "^1.1.3"
 
 [tool.poetry.dev-dependencies]
 

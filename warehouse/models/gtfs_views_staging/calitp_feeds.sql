@@ -5,6 +5,54 @@ WITH calitp_status AS (
     FROM {{ source('gtfs_schedule_history', 'calitp_status') }}
 ),
 
+raw_feed_urls AS (
+    SELECT
+        *,
+        PARSE_DATE(
+            '%Y-%m-%d',
+            REGEXP_EXTRACT(_FILE_NAME, ".*/([0-9]+-[0-9]+-[0-9]+)")
+        ) AS calitp_extracted_at
+    FROM {{ source('gtfs_schedule_history', 'calitp_feeds_raw') }}
+),
+
+semi_safe_urls AS (
+    -- there are uncensored URLs with API keys
+    -- in the early days of calitp_feeds_raw and before its implementation
+    SELECT
+        T1.itp_id,
+        T1.url_number,
+        T1.calitp_extracted_at,
+        COALESCE(T2.gtfs_schedule_url, T1.gtfs_schedule_url) AS almost_safe_url
+    FROM calitp_status AS T1
+    LEFT JOIN raw_feed_urls AS T2 USING (itp_id, url_number, calitp_extracted_at)
+    ORDER BY calitp_extracted_at
+),
+
+
+safe_urls AS (
+    SELECT
+        itp_id,
+        url_number,
+        calitp_extracted_at,
+        (CASE
+            WHEN (almost_safe_url LIKE r"%api.actransit.org/transit/gtfs/download?token=%")
+                AND (almost_safe_url NOT LIKE r"%api.actransit.org/transit/gtfs/download?token={\%")
+                THEN REGEXP_REPLACE(
+                    almost_safe_url,
+                    "token=[a-zA-Z0-9-]+", {% raw %}"token={{ AC_TRANSIT_API_KEY }}"{% endraw %}
+                )
+            WHEN (almost_safe_url LIKE r"%api.511.org/transit/%?api_key=%")
+                AND (almost_safe_url NOT LIKE r"%api.511.org/transit/%?api_key={\%")
+                THEN REGEXP_REPLACE(
+                    almost_safe_url,
+                    "api_key=[a-zA-Z0-9-]+", {% raw %}"api_key={{ MTC_511_API_KEY }}"{% endraw %}
+                )
+            ELSE almost_safe_url
+            END) AS gtfs_schedule_url
+    FROM semi_safe_urls
+),
+
+-- TODO: can we use raw URL (no API keys) here in the hash too?
 gtfs_schedule_feed_snapshot AS (
     SELECT
         itp_id,
@@ -59,7 +107,7 @@ lag_md5_hash AS (
 hash_check AS (
     SELECT
         *,
-        calitp_hash != prev_calitp_hash OR is_first_extraction
+        calitp_hash != COALESCE(prev_calitp_hash, "") OR is_first_extraction
         AS is_changed
     FROM lag_md5_hash
 ),
@@ -80,16 +128,18 @@ feed_snapshot_with_removed AS (
 final_data AS (
     SELECT
         TO_BASE64(MD5(
-                CONCAT(calitp_hash, "__", CAST(calitp_extracted_at AS STRING))
+                CONCAT(calitp_hash, "__", CAST(T1.calitp_extracted_at AS STRING))
         ))
         AS feed_key,
-        itp_id AS calitp_itp_id,
-        url_number AS calitp_url_number,
-        agency_name AS calitp_agency_name,
-        gtfs_schedule_url AS calitp_gtfs_schedule_url,
-        calitp_extracted_at,
-        COALESCE(calitp_deleted_at, "2099-01-01") AS calitp_deleted_at
-    FROM feed_snapshot_with_removed
+        T1.itp_id AS calitp_itp_id,
+        T1.url_number AS calitp_url_number,
+        T1.agency_name AS calitp_agency_name,
+        -- the version of URL without API key
+        T2.gtfs_schedule_url AS raw_gtfs_schedule_url,
+        T1.calitp_extracted_at,
+        COALESCE(T1.calitp_deleted_at, "2099-01-01") AS calitp_deleted_at
+    FROM feed_snapshot_with_removed AS T1
+    LEFT JOIN safe_urls AS T2 USING (itp_id, url_number, calitp_extracted_at)
     WHERE NOT is_removed
 ),
 

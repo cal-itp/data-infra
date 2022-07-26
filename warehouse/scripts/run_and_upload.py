@@ -20,7 +20,9 @@ def run(
     profiles_dir: Path = os.environ.get("DBT_PROFILES_DIR", os.getcwd()),
     target: str = os.environ.get("DBT_TARGET"),
     dbt_run: bool = True,
-    dbt_test: bool = True,
+    full_refresh: bool = False,
+    dbt_test: bool = False,
+    dbt_freshness: bool = False,
     dbt_docs: bool = False,
     save_artifacts: bool = False,
     deploy_docs: bool = False,
@@ -50,16 +52,26 @@ def run(
             )
         return cmd
 
+    subprocess.run(get_command("compile")).check_returncode()
+
     if dbt_run:
-        subprocess.run(get_command("run")).check_returncode()
+        args = ["run"]
+        if full_refresh:
+            args.append("--full-refresh")
+        run_result = subprocess.run(get_command(*args))
     else:
-        typer.echo("skipping run, only compiling")
-        subprocess.run(get_command("compile")).check_returncode()
+        typer.echo("skipping run")
+        run_result = None
 
     if dbt_test:
         test_result = subprocess.run(get_command("test"))
     else:
         test_result = None
+
+    if dbt_freshness:
+        freshness_result = subprocess.run(get_command("source", "snapshot-freshness"))
+    else:
+        freshness_result = None
 
     if dbt_docs:
         subprocess.run(get_command("docs", "generate")).check_returncode()
@@ -99,8 +111,9 @@ def run(
 
     if sync_metabase:
         for schema, database in [
-            ("views", "Warehouse Views"),
+            ("views", "Data Marts (formerly Warehouse Views)"),
             ("gtfs_schedule", "GTFS Schedule Feeds Latest"),
+            ("mart_transit_database", "Data Marts (formerly Warehouse Views)"),
         ]:
             subprocess.run(
                 [
@@ -123,8 +136,14 @@ def run(
                 ]
             ).check_returncode()
 
+    if run_result:
+        run_result.check_returncode()
+
     if test_result:
         test_result.check_returncode()
+
+    if freshness_result:
+        freshness_result.check_returncode()
 
 
 if __name__ == "__main__":

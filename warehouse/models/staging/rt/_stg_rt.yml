@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: stg_rt__validation_errors
+    description: Unioned and unnested table of all RT validator output.
+    columns:
+      - &rt_key
+        name: key
+        tests:
+          - not_null:
+              where: date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+          - unique:
+              where: date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+
+  - name: stg_rt__vehicle_positions
+    description: Unnested RT vehicle positions.
+    columns:
+      - *rt_key
+  - name: stg_rt__trip_updates
+    description: Unnested RT trip updates.
+    columns:
+      - *rt_key
+  - name: stg_rt__service_alerts
+    description: Unnested RT service alerts.
+    columns:
+      - *rt_key

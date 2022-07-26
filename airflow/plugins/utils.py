@@ -1,7 +1,19 @@
-import pandas as pd
+import logging
+import os
 
+import pandas as pd
+from airflow.models import Variable
 from calitp import read_gcfs, save_to_gcfs
 from pandas.errors import EmptyDataError
+
+
+def get_auth_secret(auth_secret_key: str) -> str:
+    try:
+        secret = Variable.get(auth_secret_key, os.environ[auth_secret_key])
+        return secret
+    except KeyError as e:
+        logging.error(f"No value found for {auth_secret_key}")
+        raise e
 
 
 def _keep_columns(

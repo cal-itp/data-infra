@@ -1,0 +1,28 @@
+operator: operators.ExternalTable
+bucket: gs://analysis-output-models
+# TODO: currently this points at a specific version, but long-term we'll want to read it all in
+source_objects:
+  - "high_quality_transit_areas_stops/dt=2022-06-15/*.geojsonl"
+destination_project_dataset_table: "external_hqta.stops"
+source_format: NEWLINE_DELIMITED_JSON
+geojson: True
+schema_fields:
+  - name: calitp_itp_id_primary
+    type: INT64
+  - name: agency_name_primary
+    type: STRING
+  - name: stop_id
+    type: STRING
+  - name: hqta_type
+    type: STRING
+  - name: calitp_itp_id_secondary
+    type: STRING
+    mode: NULLABLE
+  - name: agency_name_secondary
+    type: STRING
+    mode: NULLABLE
+  - name: hqta_details
+    type: STRING
+    mode: NULLABLE
+  - name: geometry
+    type: GEOGRAPHY

@@ -1,0 +1,6 @@
+operator: operators.AirtableToGCSOperator
+
+air_base_id: appeVUdmRBi3K9hTS
+air_table_name: "products"
+air_base_name: transit_technology_stacks
+bucket: "{{ prefix_bucket('calitp-airtable') }}"

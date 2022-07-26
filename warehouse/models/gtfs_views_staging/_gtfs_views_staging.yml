@@ -5,6 +5,10 @@ sources:
     description: Data in the gtfs_schedule_type2 dataset in BigQuery
     database: cal-itp-data-infra
     schema: gtfs_schedule_type2
+    loaded_at_field: CAST(calitp_extracted_at AS TIMESTAMP)
+    freshness:
+      warn_after: { count: 1, period: day }
+#      error_after: { count: 2, period: day }
     tables:
       - name: agency
       - name: attributions
