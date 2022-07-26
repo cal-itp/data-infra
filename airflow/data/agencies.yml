@@ -837,7 +837,7 @@ morro-bay-transit:
 mountain-transit:
   agency_name: Mountain Transit
   feeds:
-    - gtfs_schedule_url: https://api.transloc.com/gtfs/mountaintransit.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/bigbear-ca-us/bigbear-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
