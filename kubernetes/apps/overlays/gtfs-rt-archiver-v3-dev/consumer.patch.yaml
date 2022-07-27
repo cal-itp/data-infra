@@ -1,0 +1,12 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gtfs-rt-archiver-consumer
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: app
+          imagePullPolicy: Always
