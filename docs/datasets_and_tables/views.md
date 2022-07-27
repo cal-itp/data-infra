@@ -1,5 +1,5 @@
 (view-models)=
-# `views`
+# Views
 
 End-user friendly data for dashboards and metrics
 
