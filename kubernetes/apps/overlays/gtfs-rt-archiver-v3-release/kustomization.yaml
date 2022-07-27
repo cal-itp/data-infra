@@ -3,8 +3,3 @@ kind: Kustomization
 
 resources:
 - '../../manifests/gtfs-rt-archiver-v3'
-
-images:
-- name: 'gtfs-rt-archiver'
-  newName: 'ghcr.io/cal-itp/data-infra/gtfs-rt-archiver'
-  newTag: '3.0'
