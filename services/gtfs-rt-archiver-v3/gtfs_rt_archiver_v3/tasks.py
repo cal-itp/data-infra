@@ -110,6 +110,7 @@ def fetch(tick: datetime, record: AirtableGTFSDataRecord):
                 "request exception occurred from feed request",
                 exc_type=type(e).__name__,
             )
+            raise
         except Exception as e:
             logger.error(
                 "other non-request exception occurred during download_feed",
