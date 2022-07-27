@@ -73,6 +73,8 @@ suppress_warnings = ["myst.domains"]
 use_jupyterbook_latex = True
 use_multitoc_numbering = True
 
+# Prevents horizontal scroll in markdown tables
+
 
 def setup(app):
     app.add_stylesheet("custom.css")
