@@ -86,7 +86,7 @@ def fetch(tick: datetime, record: AirtableGTFSDataRecord):
         record_name=record.name, record_uri=record.uri, record_feed_type=record.data
     )
     logger = base_logger.bind(
-        tick=tick,
+        tick=tick.isoformat(),
         **labels,
     )
     slippage = (pendulum.now() - tick).total_seconds()
@@ -99,7 +99,7 @@ def fetch(tick: datetime, record: AirtableGTFSDataRecord):
             logger.error(
                 "unexpected HTTP response code from feed request",
                 code=e.response.status_code,
-                content=e.response.content,
+                content=e.response.text,
                 exc_type=type(e),
             )
             raise
