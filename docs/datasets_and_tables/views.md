@@ -6,10 +6,10 @@ Documentation for our `views` tables can be found in our `dbt` documentation: [d
 
 ## How to use the `dbt` documentation:
 
-In the `dbt` documentation, you can navigate from either the `Project` perspective or the `Database` perspective.
+In the dbt documentation, you can navigate from either the `Project` perspective or the `Database` perspective.
 
 ### The `Project` Perspective
-This allows you to view the `dbt` project as it exists in the repository.
+This allows you to view the dbt project as it exists in the repository.
 
 To examine the documentation for our `views` tables from the `Project` perspective:
 
@@ -22,7 +22,7 @@ To examine the documentation for our `views` tables from the `Project` perspecti
     * `payments_views`
 
 ### The `Database` Perspective
-This allows you to view the `dbt` project as it exists in the warehouse.
+This allows you to view the dbt project as it exists in the warehouse.
 
 To examine the documentation for our `views` tables from the `Database` perspective:
 
