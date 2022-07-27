@@ -83,7 +83,9 @@ def load_auth_dict():
 @huey.task(expires=5)
 def fetch(tick: datetime, record: AirtableGTFSDataRecord):
     labels = dict(
-        record_name=record.name, record_uri=record.uri, record_feed_type=record.data
+        record_name=record.name,
+        record_uri=record.uri,
+        record_feed_type=record.data,
     )
     logger = base_logger.bind(
         tick=tick.isoformat(),
