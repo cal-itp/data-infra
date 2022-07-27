@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 
+import humanize
 import orjson
 import pendulum
 import structlog
@@ -46,6 +47,7 @@ huey = RedisExpireHuey(
 
 client = storage.Client()
 
+structlog.configure(processors=[structlog.processors.JSONRenderer()])
 base_logger = structlog.get_logger()
 
 
@@ -97,16 +99,20 @@ def fetch(tick: datetime, record: AirtableGTFSDataRecord):
             logger.error(
                 "http error occurred while downloading feed",
                 code=e.response.status_code,
+                content=e.response.content,
                 exc_type=type(e),
             )
             raise
         except Exception as e:
             logger.error(
-                "other exception occurred while downloading feed", exc_type=type(e)
+                "other exception occurred while downloading feed",
+                exc_type=type(e),
             )
             raise
 
-        typer.secho(f"saving {len(content)} bytes from {record.uri} to {extract.path}")
+        typer.secho(
+            f"saving {humanize.naturalsize(len(content))} from {record.uri} to {extract.path}"
+        )
         extract.save_content(content=content, client=client)
         FETCH_PROCESSED_BYTES.labels(
             **labels,
