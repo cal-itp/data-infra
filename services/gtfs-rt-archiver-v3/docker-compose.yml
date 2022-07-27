@@ -1,0 +1,39 @@
+version: '3.8'
+x-gtfs-rt-archiver-v3-common:
+  &gtfs-rt-archiver-v3-common
+  build: .
+  environment:
+    AIRFLOW_ENV: development
+    HUEY_CONSUMER_WORKERS: 4
+    CALITP_HUEY_REDIS_HOST: redis
+    GOOGLE_APPLICATION_CREDENTIALS: /tmp/secret.json
+#    AC_TRANSIT_API_KEY: $AC_TRANSIT_API_KEY
+#    AMTRAK_GTFS_URL: $AMTRAK_GTFS_URL
+#    CULVER_CITY_API_KEY: $CULVER_CITY_API_KEY
+#    MTC_511_API_KEY: $MTC_511_API_KEY
+#    SD_MTS_SA_API_KEY: $SD_MTS_SA_API_KEY
+#    SD_MTS_VP_TU_API_KEY: $SD_MTS_VP_TU_API_KEY
+#    SWIFTLY_AUTHORIZATION_KEY_CALITP: $SWIFTLY_AUTHORIZATION_KEY_CALITP
+services:
+  redis:
+    image: redis:5.0.4
+    ports:
+      - 6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 30s
+      retries: 50
+    restart: always
+
+  gtfs-rt-archiver-v3-ticker:
+    <<: *gtfs-rt-archiver-v3-common
+    command: python -m gtfs_rt_archiver_v3.ticker
+    volumes:
+      - $CALITP_ARCHIVER_V3_SERVICE_ACCOUNT:/tmp/secret.json:ro
+
+  gtfs-rt-archiver-v3-consumer:
+    <<: *gtfs-rt-archiver-v3-common
+    command: python -m gtfs_rt_archiver_v3.consumer
+    volumes:
+      - $CALITP_ARCHIVER_V3_SERVICE_ACCOUNT:/tmp/secret.json:ro
