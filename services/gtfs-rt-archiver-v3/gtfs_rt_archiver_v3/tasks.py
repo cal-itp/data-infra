@@ -33,7 +33,7 @@ class PydanticSerializer(Serializer):
 
 
 huey = RedisExpireHuey(
-    name="gtfs-rt-archiver-v3",
+    name=f"gtfs-rt-archiver-v3-{os.environ['AIRFLOW_ENV']}",
     expire_time=5,
     results=False,
     # serializer=PydanticSerializer(),
