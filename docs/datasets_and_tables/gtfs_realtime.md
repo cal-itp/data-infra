@@ -4,35 +4,23 @@
 We collect realtime data every 20 seconds for feeds listed in [agencies.yml](../airflow/agencies.md).
 This data is processed and validated daily.
 
+This section contains information for `source` and `staging` tables only. For documentation on GTFS Realtime `views`, [visit this link](view-models).
 
-## Data
+## Warehouse Schemas
 
-| dataset | description |
+### Source
+| dataset name | description |
 | ------- | ----------- |
-| [`views.gtfs_rt_*`](gtfs-rt-views) | User-friendly tables for analyzing GTFS RT data  |
-| [`views.validation_rt_*`](validation-rt-views) | User-friendly tables for analyzing GTFS RT validation data |
-| `gtfs_rt` | Internal warehouse dataset for preparing GTFS RT views |
-| `gtfs_rt_logs` | Internal warehouse dataset for GTFS RT extraction logs |
+| `external_gtfs_rt` | Hive-partitioned external tables reading GTFS RT data and validation errors from GCS. |
+| `gtfs_rt_logs` | Data in the gtfs_rt_logs dataset in BigQuery, from logs sink. |
+| `gtfs_rt` | Data in the gtfs_rt dataset in BigQuery, generally produced by the rt_loader and rt_loader_files Airflow DAGs. |
 
-## View Tables
-(gtfs-rt-views)=
-### GTFS-Realtime Views
-|Table                                                    |Description|Link                                                                                                                                    |
-|---------------------------------------------------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------|
-|gtfs_rt_fact_daily_feeds                                 |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_rt_fact_daily_feeds">link</a>                                 |
-|gtfs_rt_fact_daily_validation_errors                     |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_rt_fact_daily_validation_errors">link</a>                     |
-|gtfs_rt_fact_extraction_errors                           |     Each feed per timepoint that failed to download. Records go back to `2021-12-13`.      |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_rt_fact_extraction_errors">link</a>                           |
-|gtfs_rt_fact_files                                       |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_rt_fact_files">link</a>                                       |
-|gtfs_rt_fact_files_wide_hourly                           |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_rt_fact_files_wide_hourly">link</a>                           |
-|gtfs_rt_validation_code_descriptions                     |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_rt_validation_code_descriptions">link</a>                     |
+### Staging
+| dataset name | description |
+| ------- | ----------- |
+| `staging` | tables with a prefix `stg_rt__` |
 
-(validation-rt-views)=
-### Validation-Realtime Views
-|Table                                                    |Description|Link                                                                                                                                    |
-|---------------------------------------------------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------|
-|gtfs_rt_validation_code_descriptions                     |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_rt_validation_code_descriptions">link</a>                     |
-
-## Internal Tables
+### Internal Tables
 
 | Tablename | Description | Notes |
 | --------- | ----------- | ----- |
@@ -41,3 +29,44 @@ This data is processed and validated daily.
 | `validation_service_alerts` | Each row is the contents of an individual results file from the GTFS RT validator | |
 | `validation_trip_updates` | Similar to above, but for trip updates. | |
 | `validation_vehicle_positions` | Similar to above, but for vehicle positions. | |
+
+## How to view the documentation:
+
+Documentation for our `GTFS Realtime` tables can be found in our `dbt` documentation: [dbt-docs.calitp.org](https://dbt-docs.calitp.org/#!/overview)
+
+In the documentation, you can navigate from either the `Database` perspective (table-level) or the `Project` perspective (as the files are configured in the repository).
+
+### The `Database` Perspective
+This allows you to view the dbt project as it exists in the warehouse.
+
+To examine the documentation for our `GTFS Realtime` tables from the `Database` perspective:
+
+1. Once at the [dbt docs homepage](https://dbt-docs.calitp.org/#!/overview), make sure that the `Database` tab is selected in the left-side panel.
+1. In the same left-side panel, under the `Tables and Views` heading click on `cal-itp-data-infra`, which will turn into a drop-down.
+1. Within that dropdown, select from the below:
+    * Sources:
+        * `external_gtfs_rt`
+        * `gtfs_rt_logs`
+        * `gtfs_rt`
+    * Staging tables:
+        * `staging`
+            * tables with a prefix `stg_rt__`
+
+### The `Project` Perspective
+This allows you to view the warehouse project as it exists in the repository.
+
+To examine the documentation for our `GTFS Realtime` tables from the `Project` perspective:
+
+* Once at the [dbt docs homepage](https://dbt-docs.calitp.org/#!/overview), make sure that the `Project` tab is selected in the left-side panel.
+    * To examine our source tables:
+        1. In the same left-side panel, find the `Sources` heading
+        1. From here, select the `GTFS Realtime` source that you would like to view, from any of the below:
+            * `gtfs_rt_external_tables`
+            * `gtfs_rt_logs`
+            * `gtfs_rt_raw`
+    * To examine our staging tables:
+        1. In the same left-side panel, under the `Projects` heading click on `calitp_warehouse`, which will turn into a drop-down.
+        1. Within that dropdown, select `models`
+        1. Then select `staging`
+        1. Within that dropdown you will find the `rt` directory
+            * From here, select any of the tables within them to view the documentation.
