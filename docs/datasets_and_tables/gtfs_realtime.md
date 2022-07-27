@@ -14,11 +14,12 @@ This section contains information for `source` and `staging` tables only. For do
 | `external_gtfs_rt` | Hive-partitioned external tables reading GTFS RT data and validation errors from GCS. |
 | `gtfs_rt_logs` | Data in the gtfs_rt_logs dataset in BigQuery, from logs sink. |
 | `gtfs_rt` | Data in the gtfs_rt dataset in BigQuery, generally produced by the rt_loader and rt_loader_files Airflow DAGs. |
+| (Reference) [GTFS-Realtime Data Standard](https://developers.google.com/transit/gtfs-realtime/) | A reference to the GTFS-Realtime data standard. |
 
 ### Staging
 | dataset name | description |
 | ------- | ----------- |
-| `staging` | tables with a prefix `stg_rt__` |
+| `staging` | tables with a prefix `staging.stg_rt__*` |
 
 ### Internal Tables
 
@@ -30,7 +31,7 @@ This section contains information for `source` and `staging` tables only. For do
 | `validation_trip_updates` | Similar to above, but for trip updates. | |
 | `validation_vehicle_positions` | Similar to above, but for vehicle positions. | |
 
-## How to view the documentation:
+## How to view the documentation
 
 Documentation for our `GTFS Realtime` tables can be found in our `dbt` documentation: [dbt-docs.calitp.org](https://dbt-docs.calitp.org/#!/overview)
 
@@ -42,15 +43,15 @@ This allows you to view the dbt project as it exists in the warehouse.
 To examine the documentation for our `GTFS Realtime` tables from the `Database` perspective:
 
 1. Once at the [dbt docs homepage](https://dbt-docs.calitp.org/#!/overview), make sure that the `Database` tab is selected in the left-side panel.
-1. In the same left-side panel, under the `Tables and Views` heading click on `cal-itp-data-infra`, which will turn into a drop-down.
-1. Within that dropdown, select from the below:
+1. In the same left-side panel, under the `Tables and Views` heading click on `cal-itp-data-infra`, which will expand.
+1. Within that list, select tables from the below to view their documentation:
     * Sources:
         * `external_gtfs_rt`
         * `gtfs_rt_logs`
         * `gtfs_rt`
     * Staging tables:
         * `staging`
-            * tables with a prefix `stg_rt__`
+            * tables with a prefix `staging.stg_rt__*`
 
 ### The `Project` Perspective
 This allows you to view the warehouse project as it exists in the repository.
@@ -65,8 +66,13 @@ To examine the documentation for our `GTFS Realtime` tables from the `Project` p
             * `gtfs_rt_logs`
             * `gtfs_rt_raw`
     * To examine our staging tables:
-        1. In the same left-side panel, under the `Projects` heading click on `calitp_warehouse`, which will turn into a drop-down.
-        1. Within that dropdown, select `models`
+        1. In the same left-side panel, under the `Projects` heading click on `calitp_warehouse`, which will expand.
+        1. Within that list, select `models`
         1. Then select `staging`
-        1. Within that dropdown you will find the `rt` directory
-            * From here, select any of the tables within them to view the documentation.
+        1. Within that list you will find the `rt` directory
+            * From here, select any of the tables within to view their documentation.
+
+:::{admonition} (Tables Reference) GTFS-Schedule Data Standard
+:class: tip
+For background on the tables used to make up the GTFS-Realtime standard, see this [GTFS-Realtime data standard reference](https://developers.google.com/transit/gtfs-realtime/).
+:::
