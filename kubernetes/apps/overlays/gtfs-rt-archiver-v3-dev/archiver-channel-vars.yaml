@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: archiver-channel-vars
+data:
+  AIRFLOW_ENV: development
+  HUEY_CONSUMER_WORKERS: "16"
