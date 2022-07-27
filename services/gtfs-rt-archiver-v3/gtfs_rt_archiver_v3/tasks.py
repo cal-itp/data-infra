@@ -11,7 +11,7 @@ from google.cloud import storage
 from huey import RedisExpireHuey
 from huey.registry import Message
 from huey.serializer import Serializer
-from requests import HTTPError
+from requests import HTTPError, RequestException
 
 from .metrics import (
     FETCH_PROCESSING_TIME,
@@ -97,15 +97,20 @@ def fetch(tick: datetime, record: AirtableGTFSDataRecord):
             extract, content = download_feed(record, ts=tick, auth_dict=auth_dict)
         except HTTPError as e:
             logger.error(
-                "http error occurred while downloading feed",
+                "unexpected HTTP response code from feed request",
                 code=e.response.status_code,
                 content=e.response.content,
                 exc_type=type(e),
             )
             raise
+        except RequestException as e:
+            logger.error(
+                "request exception occurred from feed request",
+                exc_type=type(e),
+            )
         except Exception as e:
             logger.error(
-                "other exception occurred while downloading feed",
+                "other non-request exception occurred during download_feed",
                 exc_type=type(e),
             )
             raise
