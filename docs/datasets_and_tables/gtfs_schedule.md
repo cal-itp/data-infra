@@ -1,116 +1,65 @@
 # GTFS Schedule
+This section contains information for `source` and `staging` tables only. For documentation on GTFS Schedule `views`, [visit this link](view-models).
 
-## Data
+## Schemas
+
+### Source
 
 | dataset | description |
 | ------- | ----------- |
-| [(Reference) GTFS-Schedule Data Standard](https://developers.google.com/transit/gtfs/reference#agencytxt) | A reference to the GTFS-Schedule data standard. |
-| [Views](gtfs-schedule-views) | A reference to the GTFS-Schedule data standard. |
-| [gtfs_schedule](gtfs-schedule) | Latest warehouse data for GTFS-Schedule feeds. See the [GTFS-Schedule reference](https://developers.google.com/transit/gtfs/reference). |
-| [gtfs_schedule_type2](gtfs-schedule-type2) | Tables with GTFS-Static feeds across history (going back to April 15th, 2021). These are stored as type 2 slowly changing dimensions. They have `calitp_extracted_at`, and `calitp_deleted_at` fields. |
-| [(Internal) gtfs_schedule_history](gtfs-schedule-history) | External tables with all new feed data across history. |
+| `gtfs_type2` | Tables with GTFS-Static feeds across history (going back to April 15th, 2021). These are stored as type 2 slowly changing dimensions. They have `calitp_extracted_at`, and `calitp_deleted_at` fields. |
+| `gtfs_schedule_history` | Data in the gtfs_schedule_history dataset in BigQuery |
+| (Reference) [GTFS-Schedule Data Standard](https://developers.google.com/transit/gtfs/reference#agencytxt) | A reference to the GTFS-Schedule data standard. |
+
+### Staging
+
+| dataset | description |
+| ------- | ----------- |
+| `gtfs_schedule_latest_only` | Latest warehouse data for GTFS-Schedule feeds. |
+| `gtfs_views_staging` | A staging schema for gtfs_views. |
+
+## How to view the documentation:
+
+Documentation for our `gtfs_schedule` tables can be found in our `dbt` documentation: [dbt-docs.calitp.org](https://dbt-docs.calitp.org/#!/overview)
+
+In the documentation, you can navigate from either the `Project` perspective or the `Database` perspective.
+
+### The `Project` Perspective
+This allows you to view the warehouse project as it exists in the repository.
+
+To examine the documentation for our `gtfs_schedule` tables from the `Project` perspective:
+
+* Once at the [dbt docs homepage](https://dbt-docs.calitp.org/#!/overview), make sure that the `Project` tab is selected in the left-side panel.
+    * To examine our source tables:
+        1. In the same left-side panel, find the `Sources` heading
+        1. From here, select the `gtfs_schedule` source that you would like to view, from any of the below:
+            * `gtfs_schedule_history`
+            * `gtfs_type2`
+    * To examine our staging tables:
+        1. In the same left-side panel, under the `Projects` heading click on `calitp_warehouse`, which will turn into a drop-down.
+        1. Within that dropdown, select `models`
+        1. From here, the relevent file directories are below. Select any of the tables within them to view the documentation.
+            * `gtfs_schedule_latest_only`
+            * `gtfs_views_staging`
+
+
+### The `Database` Perspective
+This allows you to view the dbt project as it exists in the warehouse.
+
+To examine the documentation for our `gtfs_schedule` tables from the `Database` perspective:
+
+1. Once at the [dbt docs homepage](https://dbt-docs.calitp.org/#!/overview), make sure that the `Database` tab is selected in the left-side panel.
+1. In the same left-side panel, under the `Tables and Views` heading click on `cal-itp-data-infra`, which will turn into a drop-down.
+1. Within that dropdown, select from the below:
+    * Sources:
+        * `gtfs_schedule_history`
+        * `gtfs_type2`
+    * Staging tables:
+        * `gtfs_schedule_latest_only`
+        * `gtfs_views_staging`
 
 
 :::{admonition} (Tables Reference) GTFS-Schedule Data Standard
 :class: tip
 For background on the tables used to make up the GTFS-Schedule standard, see this [GTFS-Schedule data standard reference](https://developers.google.com/transit/gtfs/reference#agencytxt).
 :::
-
-(gtfs-schedule-views)=
-### Views
-Analyst-ready views related to GTFS-Schedule data
-
-|Table                                                    |Description|Link                                                                                                                                    |
-|---------------------------------------------------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------|
-|gtfs_schedule_data_feed_trip_stops_latest                |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_schedule_data_feed_trip_stops_latest">link</a>                |
-|gtfs_schedule_dim_feeds                                  |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_schedule_dim_feeds">link</a>                                  |
-|gtfs_schedule_dim_files                                  |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_schedule_dim_files">link</a>                                  |
-|gtfs_schedule_dim_pathways                               |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_schedule_dim_pathways">link</a>                               |
-|gtfs_schedule_dim_routes                                 |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_schedule_dim_routes">link</a>                                 |
-|gtfs_schedule_dim_shapes                                 |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_schedule_dim_shapes">link</a>                                 |
-|gtfs_schedule_dim_shapes_geo                             |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_schedule_dim_shapes_geo">link</a>                             |
-|gtfs_schedule_dim_shapes_geo_latest                      |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_schedule_dim_shapes_geo_latest">link</a>                      |
-|gtfs_schedule_dim_stop_times                             |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_schedule_dim_stop_times">link</a>                             |
-|gtfs_schedule_dim_stops                                  |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_schedule_dim_stops">link</a>                                  |
-|gtfs_schedule_dim_trips                                  |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_schedule_dim_trips">link</a>                                  |
-|gtfs_schedule_fact_daily                                 |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_schedule_fact_daily">link</a>                                 |
-|gtfs_schedule_fact_daily_feed_files                      |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_schedule_fact_daily_feed_files">link</a>                      |
-|gtfs_schedule_fact_daily_feed_routes                     |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_schedule_fact_daily_feed_routes">link</a>                     |
-|gtfs_schedule_fact_daily_feed_stops                      |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_schedule_fact_daily_feed_stops">link</a>                      |
-|gtfs_schedule_fact_daily_feeds                           |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_schedule_fact_daily_feeds">link</a>                           |
-|gtfs_schedule_fact_daily_pathways                        |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_schedule_fact_daily_pathways">link</a>                        |
-|gtfs_schedule_fact_daily_service                         |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_schedule_fact_daily_service">link</a>                         |
-|gtfs_schedule_fact_daily_trips                           |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_schedule_fact_daily_trips">link</a>                           |
-|gtfs_schedule_fact_day_of_week_service_monthly_comparison|           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_schedule_fact_day_of_week_service_monthly_comparison">link</a>|
-|gtfs_schedule_fact_route_id_changes                      |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_schedule_fact_route_id_changes">link</a>                      |
-|gtfs_schedule_fact_stop_id_changes                       |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_schedule_fact_stop_id_changes">link</a>                       |
-|gtfs_schedule_index_feed_trip_stops                      |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_schedule_index_feed_trip_stops">link</a>                      |
-|gtfs_schedule_stg_calendar_long                          |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_schedule_stg_calendar_long">link</a>                          |
-|gtfs_schedule_stg_daily_service                          |           |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.gtfs_schedule_stg_daily_service">link</a>                          |
-
-(gtfs-schedule)=
-### gtfs_schedule
-Latest warehouse data for GTFS Static feeds. See the [GTFS-Schedule reference](https://developers.google.com/transit/gtfs/reference).
-
-|table             |link                                                                                             |
-|------------------|-------------------------------------------------------------------------------------------------|
-|agency            |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.agency">link</a>            |
-|attributions      |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.attributions">link</a>      |
-|calendar          |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.calendar">link</a>          |
-|calendar_dates    |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.calendar_dates">link</a>    |
-|fare_attributes   |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fare_attributes">link</a>   |
-|fare_rules        |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fare_rules#details">link</a>|
-|feed_info         |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.feed_info">link</a>         |
-|frequencies       |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.frequencies">link</a>       |
-|levels            |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.levels">link</a>            |
-|pathways          |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.pathways">link</a>          |
-|routes            |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.routes">link</a>            |
-|shapes            |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.shapes">link</a>            |
-|stop_times        |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.stop_times">link</a>        |
-|stops             |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.stops">link</a>             |
-|transfers         |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.transfers">link</a>         |
-|translations      |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.translations">link</a>      |
-|trips             |<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.trips">link</a>             |
-|validation_notices|<a href="https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.validation_notices">link</a>|
-
-(gtfs-schedule-type2)=
-### gtfs_schedule_type2
-Tables with GTFS Static feeds across history (going back to April 15th, 2021). These are stored as type 2 slowly changing dimensions. They have `calitp_extracted_at`, and `calitp_deleted_at` fields.
-
-|dataset   |table             |link                                                                                                          |
-|----------|------------------|--------------------------------------------------------------------------------------------------------------|
-|gtfs_type2|agency            |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_type2.agency">link</a>            |
-|gtfs_type2|attributions      |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_type2.attributions">link</a>      |
-|gtfs_type2|calendar          |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_type2.calendar">link</a>          |
-|gtfs_type2|calendar_dates    |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_type2.calendar_dates">link</a>    |
-|gtfs_type2|fare_attributes   |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_type2.fare_attributes">link</a>   |
-|gtfs_type2|fare_rules        |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_type2.fare_rules">link</a>        |
-|gtfs_type2|feed_info         |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_type2.feed_info">link</a>         |
-|gtfs_type2|frequencies       |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_type2.frequencies">link</a>       |
-|gtfs_type2|levels            |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_type2.levels">link</a>            |
-|gtfs_type2|pathways          |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_type2.pathways">link</a>          |
-|gtfs_type2|routes            |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_type2.routes">link</a>            |
-|gtfs_type2|shapes            |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_type2.shapes">link</a>            |
-|gtfs_type2|stop_times        |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_type2.stop_times">link</a>        |
-|gtfs_type2|stops             |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_type2.stops">link</a>             |
-|gtfs_type2|transfers         |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_type2.transfers">link</a>         |
-|gtfs_type2|translations      |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_type2.translations">link</a>      |
-|gtfs_type2|trips             |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_type2.trips">link</a>             |
-|gtfs_type2|validation_notices|<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_type2.validation_notices">link</a>|
-
-(gtfs-schedule-history)=
-### (Internal) gtfs_schedule_history
-External tables with all new feed data across history.
-
-|dataset              |table                          |link                                                                                                                                  |
-|---------------------|-------------------------------|--------------------------------------------------------------------------------------------------------------------------------------|
-|gtfs_schedule_history|calitp_feed_parse_result       |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_schedule_history.calitp_feed_parse_result">link</a>       |
-|gtfs_schedule_history|calitp_feed_tables_parse_result|<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_schedule_history.calitp_feed_tables_parse_result">link</a>|
-|gtfs_schedule_history|calitp_feed_updates            |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_schedule_history.calitp_feed_updates">link</a>            |
-|gtfs_schedule_history|calitp_feeds                   |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_schedule_history.calitp_feeds">link</a>                   |
-|gtfs_schedule_history|calitp_feeds_raw               |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_schedule_history.calitp_feeds_raw">link</a>               |
-|gtfs_schedule_history|calitp_files_updates           |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_schedule_history.calitp_files_updates">link</a>           |
-|gtfs_schedule_history|calitp_included_gtfs_tables    |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_schedule_history.calitp_included_gtfs_tables">link</a>    |
-|gtfs_schedule_history|calitp_status                  |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_schedule_history.calitp_status">link</a>                  |
-|gtfs_schedule_history|validation_code_descriptions   |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_schedule_history.validation_code_descriptions">link</a>   |
-|gtfs_schedule_history|validation_notice_fields       |<a href="https://dbt-docs.calitp.org/#!/source/source.calitp_warehouse.gtfs_schedule_history.validation_notice_fields">link</a>       |

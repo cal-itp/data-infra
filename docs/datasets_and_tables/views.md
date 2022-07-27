@@ -1,15 +1,16 @@
+(view-models)=
 # `views`
 
 End-user friendly data for dashboards and metrics
 
 Documentation for our `views` tables can be found in our `dbt` documentation: [dbt-docs.calitp.org](https://dbt-docs.calitp.org/#!/overview)
 
-## How to use the `dbt` documentation:
+## How to view the documentation:
 
-In the dbt documentation, you can navigate from either the `Project` perspective or the `Database` perspective.
+In the documentation, you can navigate from either the `Project` perspective or the `Database` perspective.
 
 ### The `Project` Perspective
-This allows you to view the dbt project as it exists in the repository.
+This allows you to view the warehouse project as it exists in the repository.
 
 To examine the documentation for our `views` tables from the `Project` perspective:
 
