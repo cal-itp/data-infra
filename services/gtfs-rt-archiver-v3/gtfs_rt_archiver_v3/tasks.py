@@ -58,7 +58,7 @@ def instrument_signals(signal, task, exc=None):
         record_uri=task.kwargs["record"].uri,
         record_feed_type=task.kwargs["record"].data,
         signal=signal,
-        exc_type=type(exc) if exc else "",
+        exc_type=type(exc).__name__ if exc else "",
     ).inc()
 
 
@@ -102,18 +102,18 @@ def fetch(tick: datetime, record: AirtableGTFSDataRecord):
                 "unexpected HTTP response code from feed request",
                 code=e.response.status_code,
                 content=e.response.text,
-                exc_type=type(e),
+                exc_type=type(e).__name__,
             )
             raise
         except RequestException as e:
             logger.error(
                 "request exception occurred from feed request",
-                exc_type=type(e),
+                exc_type=type(e).__name__,
             )
         except Exception as e:
             logger.error(
                 "other non-request exception occurred during download_feed",
-                exc_type=type(e),
+                exc_type=type(e).__name__,
             )
             raise
 
