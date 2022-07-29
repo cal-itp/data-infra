@@ -40,7 +40,7 @@ DAGs are listed in alphabetical order, as they appear in the Airflow UI.
 `gtfs_schedule_history2` | Yes | **📆 Yes** | **🔂 No** | `gtfs_ loader` | |
 `parse_and_validate_rt` | Yes | No | **🔂 No** | N/A | |
 `payments_loader` | Yes | No | Yes | N/A | |
-`payments_views` | Yes | No | Yes | | `payments_loader` |
+`payments_views` | Yes | No | Yes | | |
 `rt_loader` | Yes | No | **🔂 No** | `gtfs_ loader` | |
 `rt_loader_files` | Yes | No | **🔂 No** | N/A | |
 `sandbox` | N/A | N/A | N/A | N/A | Testing only; does not need to be re-run |
@@ -74,7 +74,8 @@ In addition to the tabular view above, here is a diagram representing DAG depend
       gtfs_downloader-->gtfs_loader;
       gtfs_schedule_history-->gtfs_loader;
       gtfs_loader-->gtfs_schedule_history2;
-      payments_loader-->payments_views;
+      payments_loader;
+      payments_views;
       gtfs_loader-->rt_loader;
       sandbox;
       create_external_tables;
