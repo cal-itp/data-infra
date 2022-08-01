@@ -3,7 +3,6 @@ name: New Team Member
 about: Kick off the onboarding process.
 title: New Team Member - [Name]
 labels: 'new team member'
-assignees: charlie-costanzo
 
 ---
 Name:
@@ -27,10 +26,12 @@ Slack Username:
   - [ ] Slack
 
 - [ ] Added to meetings:
-  - [ ] Daily Stand-ups
+  - [ ] Analyst Round Tables (Tuesday & Thursday)
   - [ ] Lunch n' Learn
+  - [ ] All-hands
 
 - [ ] Added to Slack channels:
   - [ ] #data-analyses
   - [ ] #data-office-hours
   - [ ] #lunch-n-learn
+  - [ ] #data
