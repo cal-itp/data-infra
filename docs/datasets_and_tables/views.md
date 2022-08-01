@@ -3,11 +3,9 @@
 
 End-user-friendly data for dashboards and metrics
 
-Documentation for our `views` tables can be found in our `dbt` documentation: [dbt-docs.calitp.org](https://dbt-docs.calitp.org/#!/overview)
+## How to view the `views` documentation
 
-## How to view the documentation
-
-In the documentation, you can navigate from either the `Database` perspective (table-level) or the `Project` perspective (as the files are configured in the repository).
+In the [Cal-ITP warehouse documentation](https://dbt-docs.calitp.org/#!/overview), you can navigate from either the `Database` perspective (table-level) or the `Project` perspective (as the files are configured in the repository).
 
 ### The `Database` Perspective
 This allows you to view the dbt project as it exists in the warehouse.

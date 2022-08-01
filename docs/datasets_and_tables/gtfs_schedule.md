@@ -1,28 +1,8 @@
 # GTFS Schedule
-This section contains information for `source` and `staging` tables only. For documentation on GTFS Schedule `views`, [visit this link](view-models).
 
-## Warehouse Schemas
+## How to view the `GTFS Schedule` documentation
 
-### Source
-
-| dataset name | description |
-| ------- | ----------- |
-| `gtfs_schedule_type2` | Tables with GTFS-Static feeds across history (going back to April 15 2021). These are stored as type 2 slowly changing dimensions. They have `calitp_extracted_at` and `calitp_deleted_at` fields. |
-| `gtfs_schedule_history` | Data in the `gtfs_schedule_history` dataset in BigQuery |
-| (Reference) [GTFS-Schedule Data Standard](https://developers.google.com/transit/gtfs/) | A reference to the GTFS-Schedule data standard. |
-
-### Staging
-
-| dataset name | description |
-| ------- | ----------- |
-| `gtfs_schedule_latest_only` | Latest warehouse data for GTFS-Schedule feeds. |
-| `gtfs_views_staging` | A staging schema for `gtfs_views`. |
-
-## How to view the documentation
-
-Documentation for our `GTFS Schedule` tables can be found in our `dbt` documentation: [dbt-docs.calitp.org](https://dbt-docs.calitp.org/#!/overview)
-
-In the documentation, you can navigate from either the `Database` perspective (table-level) or the `Project` perspective (as the files are configured in the repository).
+In the [Cal-ITP warehouse documentation](https://dbt-docs.calitp.org/#!/overview), you can navigate from either the `Database` perspective (table-level) or the `Project` perspective (as the files are configured in the repository).
 
 ### The `Database` Perspective
 This allows you to view the dbt project as it exists in the warehouse.
@@ -57,7 +37,26 @@ To examine the documentation for our `GTFS Schedule` tables from the `Project` p
             * `gtfs_schedule_latest_only`
             * `gtfs_views_staging`
 
-:::{admonition} (Tables Reference) GTFS-Schedule Data Standard
+## Warehouse Schemas
+
+### Source
+
+| dataset name | description |
+| ------- | ----------- |
+| `gtfs_schedule_type2` | Tables with GTFS-Static feeds across history (going back to April 15 2021). These are stored as type 2 slowly changing dimensions. They have `calitp_extracted_at` and `calitp_deleted_at` fields. |
+| `gtfs_schedule_history` | Data in the `gtfs_schedule_history` dataset in BigQuery |
+
+### Staging
+
+| dataset name | description |
+| ------- | ----------- |
+| `gtfs_schedule_latest_only` | Latest warehouse data for GTFS-Schedule feeds. |
+| `gtfs_views_staging` | A staging schema for `gtfs_views`. |
+
+### See Also
+The [GTFS-Schedule Data Standard](https://developers.google.com/transit/gtfs/).
+
+:::{admonition} See Also: `views` documentation
 :class: tip
-For background on the tables used to make up the GTFS-Schedule standard, see this [GTFS-Schedule data standard reference](https://developers.google.com/transit/gtfs/).
+This section contains documentation for `source` and `staging` tables only. For documentation on GTFS Schedule `views`, [visit this link](view-models).
 :::

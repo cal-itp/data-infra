@@ -4,38 +4,9 @@
 We collect realtime data every 20 seconds for feeds listed in [agencies.yml](../airflow/agencies.md).
 This data is processed and validated daily.
 
-This section contains information for `source` and `staging` tables only. For documentation on GTFS Realtime `views`, [visit this link](view-models).
+## How to view the `GTFS Realtime` documentation
 
-## Warehouse Schemas
-
-### Source
-| dataset name | description |
-| ------- | ----------- |
-| `external_gtfs_rt` | Hive-partitioned external tables reading GTFS RT data and validation errors from GCS. |
-| `gtfs_rt_logs` | Data in the gtfs_rt_logs dataset in BigQuery, from logs sink. |
-| `gtfs_rt` | Data in the gtfs_rt dataset in BigQuery, generally produced by the rt_loader and rt_loader_files Airflow DAGs. |
-| (Reference) [GTFS-Realtime Data Standard](https://developers.google.com/transit/gtfs-realtime/) | A reference to the GTFS-Realtime data standard. |
-
-### Staging
-| dataset name | description |
-| ------- | ----------- |
-| `staging` | tables with a prefix `staging.stg_rt__*` |
-
-### Internal Tables
-
-| Tablename | Description | Notes |
-| --------- | ----------- | ----- |
-| `calitp_files` | Metadata on each RT feed file we sample every 20 seconds (e.g. vehicle positions) | |
-| `vehicle_positions` | One row per feed individual vehicle position reported every 20 seconds | Sampling times occur in 20 second intervals, but not on specific points in time. |
-| `validation_service_alerts` | Each row is the contents of an individual results file from the GTFS RT validator | |
-| `validation_trip_updates` | Similar to above, but for trip updates. | |
-| `validation_vehicle_positions` | Similar to above, but for vehicle positions. | |
-
-## How to view the documentation
-
-Documentation for our `GTFS Realtime` tables can be found in our `dbt` documentation: [dbt-docs.calitp.org](https://dbt-docs.calitp.org/#!/overview)
-
-In the documentation, you can navigate from either the `Database` perspective (table-level) or the `Project` perspective (as the files are configured in the repository).
+In the [Cal-ITP warehouse documentation](https://dbt-docs.calitp.org/#!/overview), you can navigate from either the `Database` perspective (table-level) or the `Project` perspective (as the files are configured in the repository).
 
 ### The `Database` Perspective
 This allows you to view the dbt project as it exists in the warehouse.
@@ -72,7 +43,34 @@ To examine the documentation for our `GTFS Realtime` tables from the `Project` p
         1. Within that list you will find the `rt` directory
             * From here, select any of the tables within to view their documentation.
 
-:::{admonition} (Tables Reference) GTFS-Schedule Data Standard
+## Warehouse Schemas
+
+### Source
+| dataset name | description |
+| ------- | ----------- |
+| `external_gtfs_rt` | Hive-partitioned external tables reading GTFS RT data and validation errors from GCS. |
+| `gtfs_rt_logs` | Data in the gtfs_rt_logs dataset in BigQuery, from logs sink. |
+| `gtfs_rt` | Data in the gtfs_rt dataset in BigQuery, generally produced by the rt_loader and rt_loader_files Airflow DAGs. |
+
+### Staging
+| dataset name | description |
+| ------- | ----------- |
+| `staging` | tables with a prefix `staging.stg_rt__*` |
+
+### Internal Tables
+
+| Tablename | Description | Notes |
+| --------- | ----------- | ----- |
+| `calitp_files` | Metadata on each RT feed file we sample every 20 seconds (e.g. vehicle positions) | |
+| `vehicle_positions` | One row per feed individual vehicle position reported every 20 seconds | Sampling times occur in 20 second intervals, but not on specific points in time. |
+| `validation_service_alerts` | Each row is the contents of an individual results file from the GTFS RT validator | |
+| `validation_trip_updates` | Similar to above, but for trip updates. | |
+| `validation_vehicle_positions` | Similar to above, but for vehicle positions. | |
+
+### See Also
+The [GTFS-Realtime Data Standard](https://developers.google.com/transit/gtfs-realtime/).
+
+:::{admonition} See Also: `views` documentation
 :class: tip
-For background on the tables used to make up the GTFS-Realtime standard, see this [GTFS-Realtime data standard reference](https://developers.google.com/transit/gtfs-realtime/).
+This section contains information for `source` and `staging` tables only. For documentation on GTFS Realtime `views`, [visit this link](view-models).
 :::
