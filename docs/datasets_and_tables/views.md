@@ -14,7 +14,12 @@ To examine the documentation for our `views` tables from the `Database` perspect
 
 1. Once at the [dbt docs homepage](https://dbt-docs.calitp.org/#!/overview), make sure that the `Database` tab is selected in the left-side panel.
 1. In the same left-side panel, under the `Tables and Views` heading click on `cal-itp-data-infra`, which will expand.
-1. Within that dropdown, select `views`
+1. Within that dropdown, select:
+  * `Views` tables
+    * `views`
+    * `mart_transit_database`
+  * `Staging` tables:
+    * GTFS Views: `gtfs_views_staging`
 1. From here, the relevent tables are listed. Select any of the tables within to view the documentation.
 
 ### The `Project` Perspective
@@ -26,6 +31,10 @@ To examine the documentation for our `views` tables from the `Project` perspecti
 1. In the same left-side panel, under the `Projects` heading click on `calitp_warehouse`, which will expand.
 1. Within that dropdown, select `models`
 1. From here, the relevent file directories are included in the list. Select any of the tables within them to view their documentation.
+  * `Views` tables
     * `gtfs_views`
     * `rt_views`
     * `payments_views`
+    * `mart`
+  * `Staging` tables:
+    * GTFS Views: `gtfs_views_staging`

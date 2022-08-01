@@ -17,7 +17,6 @@ To examine the documentation for our `GTFS Schedule` tables from the `Database` 
         * `gtfs_schedule_type2`
     * Staging tables:
         * `gtfs_schedule`
-        * `gtfs_views_staging`
 
 ### The `Project` Perspective
 This allows you to view the warehouse project as it exists in the repository.
@@ -35,7 +34,6 @@ To examine the documentation for our `GTFS Schedule` tables from the `Project` p
         1. Within that list, select `models`
         1. From here, the relevent file directories are below. Select any of the tables within them to view their documentation.
             * `gtfs_schedule_latest_only`
-            * `gtfs_views_staging`
 
 ## Warehouse Schemas
 
@@ -51,7 +49,6 @@ To examine the documentation for our `GTFS Schedule` tables from the `Project` p
 | dataset name | description |
 | ------- | ----------- |
 | `gtfs_schedule_latest_only` | Latest warehouse data for GTFS-Schedule feeds. |
-| `gtfs_views_staging` | A staging schema for `gtfs_views`. |
 
 ### See Also
 The [GTFS-Schedule Data Standard](https://developers.google.com/transit/gtfs/).
