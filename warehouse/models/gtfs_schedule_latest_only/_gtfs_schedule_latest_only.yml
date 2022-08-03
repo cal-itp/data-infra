@@ -14,19 +14,21 @@ models:
         description: '{{ doc("column_calitp_itp_id") }}'
         meta:
           metabase.semantic_type: type/FK
-          publish.ignore: true
       - &calitp_url_number
         name: calitp_url_number
         description: '{{ doc("column_calitp_url_number") }}'
         meta:
           metabase.semantic_type: type/FK
-          publish.ignore: true
       - &calitp_extracted_at
         name: calitp_extracted_at
         description: '{{ doc("column_schedule_calitp_extracted_at") }}'
+        meta:
+          publish.ignore: true
       - &calitp_hash
         name: calitp_hash
         description: '{{ doc("column_schedule_calitp_hash") }}'
+        meta:
+          publish.ignore: true
       - name: agency_key
         description: '{{ doc("column_schedule_key") }}'
         tests: &primary_key_tests
@@ -34,6 +36,7 @@ models:
           - unique
         meta: &pk_meta
           metabase.semantic_type: type/PK
+          publish.ignore: true
       - name: agency_id
         description: '{{ doc("gtfs_agency__agency_id") }}'
       - name: agency_name
