@@ -3,7 +3,6 @@ operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.mst_transactions_gtfs_enhanced"
 
 dependencies:
-  - dummy_staging
   - payments_feeds
 ---
 

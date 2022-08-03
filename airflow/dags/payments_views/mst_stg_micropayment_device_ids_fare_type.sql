@@ -1,9 +1,6 @@
 ---
 operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.mst_stg_micropayment_device_ids_fare_type"
-
-dependencies:
-  - dummy_staging
 ---
 
 SELECT t1.charge_type,
