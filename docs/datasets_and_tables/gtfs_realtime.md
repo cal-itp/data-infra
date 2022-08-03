@@ -6,42 +6,7 @@ This data is processed and validated daily.
 
 ## How to view the `GTFS Realtime` documentation
 
-In the [Cal-ITP warehouse documentation](https://dbt-docs.calitp.org/#!/overview), you can navigate from either the `Database` perspective (table-level) or the `Project` perspective (as the files are configured in the repository).
-
-### The `Database` Perspective
-This allows you to view the dbt project as it exists in the warehouse.
-
-To examine the documentation for our `GTFS Realtime` tables from the `Database` perspective:
-
-1. Once at the [dbt docs homepage](https://dbt-docs.calitp.org/#!/overview), make sure that the `Database` tab is selected in the left-side panel.
-1. In the same left-side panel, under the `Tables and Views` heading click on `cal-itp-data-infra`, which will expand.
-1. Within that list, select tables from the below to view their documentation:
-    * Sources:
-        * `external_gtfs_rt`
-        * `gtfs_rt_logs`
-        * `gtfs_rt`
-    * Staging tables:
-        * `staging`
-            * tables with a prefix `staging.stg_rt__*`
-
-### The `Project` Perspective
-This allows you to view the warehouse project as it exists in the repository.
-
-To examine the documentation for our `GTFS Realtime` tables from the `Project` perspective:
-
-* Once at the [dbt docs homepage](https://dbt-docs.calitp.org/#!/overview), make sure that the `Project` tab is selected in the left-side panel.
-    * To examine our source tables:
-        1. In the same left-side panel, find the `Sources` heading
-        1. From here, select the `GTFS Realtime` source that you would like to view, from any of the below:
-            * `gtfs_rt_external_tables`
-            * `gtfs_rt_logs`
-            * `gtfs_rt_raw`
-    * To examine our staging tables:
-        1. In the same left-side panel, under the `Projects` heading click on `calitp_warehouse`, which will expand.
-        1. Within that list, select `models`
-        1. Then select `staging`
-        1. Within that list you will find the `rt` directory
-            * From here, select any of the tables within to view their documentation.
+Visit the [dbt Cal-ITP warehouse documentation](https://dbt-docs.calitp.org/#!/overview). For help navgating the documentation, visit [Navigating the dbt Docs](navigating-dbt-docs).
 
 ## Warehouse Schemas
 
@@ -69,6 +34,20 @@ To examine the documentation for our `GTFS Realtime` tables from the `Project` p
 
 ### See Also
 The [GTFS-Realtime Data Standard](https://developers.google.com/transit/gtfs-realtime/).
+
+## dbt Project Directories ([More information on the project-perspective](navigating-dbt-docs))
+
+### Source tables
+| Directory name |
+| ------- |
+| `gtfs_rt_external_tables` |
+| `gtfs_rt_logs` |
+| `gtfs_rt_raw` |
+
+### Staging tables
+| Directory name |
+| ------- |
+| `staging/rt/` |
 
 :::{admonition} See Also: `views` documentation
 :class: tip

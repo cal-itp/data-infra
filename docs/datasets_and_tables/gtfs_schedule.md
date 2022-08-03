@@ -1,40 +1,5 @@
 # GTFS Schedule
 
-## How to view the `GTFS Schedule` documentation
-
-In the [Cal-ITP warehouse documentation](https://dbt-docs.calitp.org/#!/overview), you can navigate from either the `Database` perspective (table-level) or the `Project` perspective (as the files are configured in the repository).
-
-### The `Database` Perspective
-This allows you to view the dbt project as it exists in the warehouse.
-
-To examine the documentation for our `GTFS Schedule` tables from the `Database` perspective:
-
-1. Once at the [dbt docs homepage](https://dbt-docs.calitp.org/#!/overview), make sure that the `Database` tab is selected in the left-side panel.
-1. In the same left-side panel, under the `Tables and Views` heading click on `cal-itp-data-infra`, which will expand.
-1. Within that list, select tables from the below to view their documentation:
-    * Sources:
-        * `gtfs_schedule_history`
-        * `gtfs_schedule_type2`
-    * Staging tables:
-        * `gtfs_schedule`
-
-### The `Project` Perspective
-This allows you to view the warehouse project as it exists in the repository.
-
-To examine the documentation for our `GTFS Schedule` tables from the `Project` perspective:
-
-* Once at the [dbt docs homepage](https://dbt-docs.calitp.org/#!/overview), make sure that the `Project` tab is selected in the left-side panel.
-    * To examine our source tables:
-        1. In the same left-side panel, find the `Sources` heading
-        1. From here, select the `GTFS Schedule` source that you would like to view, from any of the below:
-            * `gtfs_schedule_history`
-            * `gtfs_type2`
-    * To examine our staging tables:
-        1. In the same left-side panel, under the `Projects` heading click on `calitp_warehouse`, which will expand.
-        1. Within that list, select `models`
-        1. From here, the relevent file directories are below. Select any of the tables within them to view their documentation.
-            * `gtfs_schedule_latest_only`
-
 ## Warehouse Schemas
 
 ### Source
@@ -48,10 +13,23 @@ To examine the documentation for our `GTFS Schedule` tables from the `Project` p
 
 | dataset name | description |
 | ------- | ----------- |
-| `gtfs_schedule_latest_only` | Latest warehouse data for GTFS-Schedule feeds. |
+| `gtfs_schedule` | Latest warehouse data for GTFS-Schedule feeds. |
 
 ### See Also
 The [GTFS-Schedule Data Standard](https://developers.google.com/transit/gtfs/).
+
+## dbt Project Directories ([More information on the project-perspective](navigating-dbt-docs))
+
+### Source tables
+| Directory name |
+| ------- |
+| `gtfs_schedule_history` |
+| `gtfs_type2` |
+
+### Staging tables
+| Directory name |
+| ------- |
+| `gtfs_schedule_latest_only` |
 
 :::{admonition} See Also: `views` documentation
 :class: tip
