@@ -40,7 +40,7 @@ DAGs are listed in alphabetical order, as they appear in the Airflow UI.
 `gtfs_schedule_history2` | Yes | **📆 Yes** | **🔂 No** | `gtfs_ loader` | |
 `parse_and_validate_rt` | Yes | No | **🔂 No** | N/A | |
 `payments_loader` | Yes | No | Yes | N/A | |
-`payments_views` | Yes | No | Yes | | |
+`payments_views` | Yes | No | Yes | N/A | |
 `rt_loader` | Yes | No | **🔂 No** | `gtfs_ loader` | |
 `rt_loader_files` | Yes | No | **🔂 No** | N/A | |
 `sandbox` | N/A | N/A | N/A | N/A | Testing only; does not need to be re-run |
