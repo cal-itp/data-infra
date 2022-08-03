@@ -938,38 +938,31 @@
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p>Yes</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">payments_</span> <span class="pre">views_</span> <span class="pre">staging</span></code></p></td>
+<td><p>N/A</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">payments_views_staging</span></code></p></td>
-<td><p>Yes</p></td>
-<td><p>No</p></td>
-<td><p>Yes</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">payments_</span> <span class="pre">loader</span></code></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt_loader</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt_loader</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p><strong>🔂 No</strong></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">gtfs_</span> <span class="pre">loader</span></code></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt_loader_files</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt_loader_files</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p><strong>🔂 No</strong></p></td>
 <td><p>N/A</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sandbox</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sandbox</span></code></p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>Testing only; does not need to be re-run</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">transform_warehouse</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">transform_warehouse</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p>Yes</p></td>
@@ -987,6 +980,7 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">gtfs_views_staging</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">gtfs_views</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">parse_rt</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">payments_views_staging</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">rt_timestamp_fix</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">rt_views</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">transitstacks_loader</span></code></p></li>
@@ -1006,8 +1000,8 @@
       gtfs_downloader--&gt;gtfs_loader;
       gtfs_schedule_history--&gt;gtfs_loader;
       gtfs_loader--&gt;gtfs_schedule_history2;
-      payments_loader--&gt;payments_views_staging;
-      payments_views_staging--&gt;payments_views;
+      payments_loader;
+      payments_views;
       gtfs_loader--&gt;rt_loader;
       sandbox;
       create_external_tables;
