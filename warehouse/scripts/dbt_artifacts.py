@@ -168,7 +168,10 @@ class TestMetadata(BaseModel):
 
 class Test(BaseNode):
     resource_type: Literal[DbtResourceType.test]
-    test_metadata: TestMetadata
+    # test_metadata is optional because singular tests (custom defined) do not have test_metadata attribute
+    # for example: https://github.com/dbt-labs/dbt-docs/blob/main/src/app/services/graph.service.js#L340
+    # ^ singular test is specifically identified by not having the test_metadata attribute
+    test_metadata: Optional[TestMetadata]
 
 
 Node = Annotated[
