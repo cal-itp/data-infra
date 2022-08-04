@@ -42,15 +42,26 @@ See the screencast below for a full walkthrough.
 
 The commands required:
 ```python
+# in the main directory (outside of data-analyses and data-infra)
+
 # initial setup (in terminal) ----
-curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-361.0.0-linux-x86_64.tar.gz
-tar -zxvf google-cloud-sdk-361.0.0-linux-x86_64.tar.gz
+curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-396.0.0-linux-x86_64.tar.gz
+tar -zxvf google-cloud-sdk-396.0.0-linux-x86_64.tar.gz
 ./google-cloud-sdk/install.sh
 ./google-cloud-sdk/bin/gcloud init
 
 # log in to project ----
 gcloud auth login
+
+# Authenticate ---- paste URL into browser, copy/paste the authorization code
+
 gcloud auth application-default login
+
+# When it asks for the path:
+/home/jovyan/.bash_profile
+
+# If the default project ID is None, change it
+gcloud config set project cal-itp-data-infra
 ```
 
 ### Increasing the Query Limit
