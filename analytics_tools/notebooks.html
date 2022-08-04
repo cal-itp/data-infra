@@ -877,15 +877,26 @@ To do this, you will need to download and install the gcloud commandline tool fr
 <p>See the screencast below for a full walkthrough.</p>
 <div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/6883b0bf9c8b4547a93d00bc6ba45b6d" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
 <p>The commands required:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># initial setup (in terminal) ----</span>
-<span class="n">curl</span> <span class="o">-</span><span class="n">O</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">dl</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">dl</span><span class="o">/</span><span class="n">cloudsdk</span><span class="o">/</span><span class="n">channels</span><span class="o">/</span><span class="n">rapid</span><span class="o">/</span><span class="n">downloads</span><span class="o">/</span><span class="n">google</span><span class="o">-</span><span class="n">cloud</span><span class="o">-</span><span class="n">sdk</span><span class="o">-</span><span class="mf">361.0.0</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
-<span class="n">tar</span> <span class="o">-</span><span class="n">zxvf</span> <span class="n">google</span><span class="o">-</span><span class="n">cloud</span><span class="o">-</span><span class="n">sdk</span><span class="o">-</span><span class="mf">361.0.0</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># in the main directory (outside of data-analyses and data-infra)</span>
+
+<span class="c1"># initial setup (in terminal) ----</span>
+<span class="n">curl</span> <span class="o">-</span><span class="n">O</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">dl</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">dl</span><span class="o">/</span><span class="n">cloudsdk</span><span class="o">/</span><span class="n">channels</span><span class="o">/</span><span class="n">rapid</span><span class="o">/</span><span class="n">downloads</span><span class="o">/</span><span class="n">google</span><span class="o">-</span><span class="n">cloud</span><span class="o">-</span><span class="n">sdk</span><span class="o">-</span><span class="mf">396.0.0</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">tar</span> <span class="o">-</span><span class="n">zxvf</span> <span class="n">google</span><span class="o">-</span><span class="n">cloud</span><span class="o">-</span><span class="n">sdk</span><span class="o">-</span><span class="mf">396.0.0</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
 <span class="o">./</span><span class="n">google</span><span class="o">-</span><span class="n">cloud</span><span class="o">-</span><span class="n">sdk</span><span class="o">/</span><span class="n">install</span><span class="o">.</span><span class="n">sh</span>
 <span class="o">./</span><span class="n">google</span><span class="o">-</span><span class="n">cloud</span><span class="o">-</span><span class="n">sdk</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">gcloud</span> <span class="n">init</span>
 
 <span class="c1"># log in to project ----</span>
 <span class="n">gcloud</span> <span class="n">auth</span> <span class="n">login</span>
+
+<span class="c1"># Authenticate ---- paste URL into browser, copy/paste the authorization code</span>
+
 <span class="n">gcloud</span> <span class="n">auth</span> <span class="n">application</span><span class="o">-</span><span class="n">default</span> <span class="n">login</span>
+
+<span class="c1"># When it asks for the path:</span>
+<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">jovyan</span><span class="o">/.</span><span class="n">bash_profile</span>
+
+<span class="c1"># If the default project ID is None, change it</span>
+<span class="n">gcloud</span> <span class="n">config</span> <span class="nb">set</span> <span class="n">project</span> <span class="n">cal</span><span class="o">-</span><span class="n">itp</span><span class="o">-</span><span class="n">data</span><span class="o">-</span><span class="n">infra</span>
 </pre></div>
 </div>
 </div>
