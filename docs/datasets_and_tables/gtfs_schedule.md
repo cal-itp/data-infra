@@ -37,6 +37,8 @@ More information on the [navigating the docs from the project-perspective](navig
 | Directory name |
 | ------- |
 | `gtfs_schedule_latest_only` |
+| `gtfs_views_staging.*` |
+
 
 :::{admonition} See Also: `views` documentation
 :class: tip

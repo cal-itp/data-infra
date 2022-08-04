@@ -17,11 +17,6 @@ For help navgating the documentation, visit [Navigating the dbt Docs](navigating
 | `views.*` |
 | `mart_transit_database.*` |
 
-### Views Staging
-| dataset name |
-| ------- |
-| `gtfs_views_staging.*` |
-
 ## `dbt` Project Directories
 More information on the [navigating the docs from the project-perspective](navigating-dbt-docs)
 

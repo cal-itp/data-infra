@@ -24,16 +24,6 @@ For help navgating the documentation, visit [Navigating the dbt Docs](navigating
 | ------- | ----------- |
 | `staging` | tables with a prefix `staging.stg_rt__*` |
 
-### Internal Tables
-
-| Tablename | Description | Notes |
-| --------- | ----------- | ----- |
-| `calitp_files` | Metadata on each RT feed file we sample every 20 seconds (e.g. vehicle positions) | |
-| `vehicle_positions` | One row per feed individual vehicle position reported every 20 seconds | Sampling times occur in 20 second intervals, but not on specific points in time. |
-| `validation_service_alerts` | Each row is the contents of an individual results file from the GTFS RT validator | |
-| `validation_trip_updates` | Similar to above, but for trip updates. | |
-| `validation_vehicle_positions` | Similar to above, but for vehicle positions. | |
-
 ### See Also
 The [GTFS-Realtime Data Standard](https://developers.google.com/transit/gtfs-realtime/).
 
