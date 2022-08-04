@@ -6,7 +6,9 @@ This data is processed and validated daily.
 
 ## How to view the `GTFS Realtime` documentation
 
-Visit the [dbt Cal-ITP warehouse documentation](https://dbt-docs.calitp.org/#!/overview). For help navgating the documentation, visit [Navigating the dbt Docs](navigating-dbt-docs).
+Visit the [dbt Cal-ITP warehouse documentation](https://dbt-docs.calitp.org/#!/overview).
+
+For help navgating the documentation, visit [Navigating the dbt Docs](navigating-dbt-docs).
 
 ## Warehouse Schemas
 
@@ -35,7 +37,8 @@ Visit the [dbt Cal-ITP warehouse documentation](https://dbt-docs.calitp.org/#!/o
 ### See Also
 The [GTFS-Realtime Data Standard](https://developers.google.com/transit/gtfs-realtime/).
 
-## dbt Project Directories ([More information on the project-perspective](navigating-dbt-docs))
+## `dbt` Project Directories
+More information on the [navigating the docs from the project-perspective](navigating-dbt-docs)
 
 ### Source tables
 | Directory name |

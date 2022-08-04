@@ -5,7 +5,9 @@ End-user-friendly data for dashboards and metrics
 
 ## How to view the `views` documentation
 
-Visit the [dbt Cal-ITP warehouse documentation](https://dbt-docs.calitp.org/#!/overview). For help navgating the documentation, visit [Navigating the dbt Docs](navigating-dbt-docs).
+Visit the [dbt Cal-ITP warehouse documentation](https://dbt-docs.calitp.org/#!/overview).
+
+For help navgating the documentation, visit [Navigating the dbt Docs](navigating-dbt-docs).
 
 ## Database Schemas
 
@@ -20,7 +22,8 @@ Visit the [dbt Cal-ITP warehouse documentation](https://dbt-docs.calitp.org/#!/o
 | ------- |
 | `gtfs_views_staging.*` |
 
-## dbt Project Directories ([More information on the project-perspective](navigating-dbt-docs))
+## `dbt` Project Directories
+More information on the [navigating the docs from the project-perspective](navigating-dbt-docs)
 
 | Directory name |
 | ------- |

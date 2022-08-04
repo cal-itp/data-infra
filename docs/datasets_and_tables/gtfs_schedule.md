@@ -1,5 +1,11 @@
 # GTFS Schedule
 
+## How to view the `GTFS Schedule` documentation
+
+Visit the [dbt Cal-ITP warehouse documentation](https://dbt-docs.calitp.org/#!/overview).
+
+For help navgating the documentation, visit [Navigating the dbt Docs](navigating-dbt-docs).
+
 ## Warehouse Schemas
 
 ### Source
@@ -18,7 +24,8 @@
 ### See Also
 The [GTFS-Schedule Data Standard](https://developers.google.com/transit/gtfs/).
 
-## dbt Project Directories ([More information on the project-perspective](navigating-dbt-docs))
+## `dbt` Project Directories
+More information on the [navigating the docs from the project-perspective](navigating-dbt-docs)
 
 ### Source tables
 | Directory name |
