@@ -12,14 +12,14 @@ For help navgating the documentation, visit [Navigating the dbt Docs](navigating
 
 | dataset name | description |
 | ------- | ----------- |
-| `gtfs_schedule_type2` | Tables with GTFS-Static feeds across history (going back to April 15 2021). These are stored as type 2 slowly changing dimensions. They have `calitp_extracted_at` and `calitp_deleted_at` fields. |
-| `gtfs_schedule_history` | Data in the `gtfs_schedule_history` dataset in BigQuery |
+| `gtfs_schedule_type2.*` | Tables with GTFS-Static feeds across history (going back to April 15 2021). These are stored as type 2 slowly changing dimensions. They have `calitp_extracted_at` and `calitp_deleted_at` fields. |
+| `gtfs_schedule_history.*` | Data in the `gtfs_schedule_history` dataset in BigQuery |
 
 ### Staging
 
 | dataset name | description |
 | ------- | ----------- |
-| `gtfs_schedule` | Latest warehouse data for GTFS-Schedule feeds. |
+| `gtfs_views_staging.*` | |
 
 ### See Also
 The [GTFS-Schedule Data Standard](https://developers.google.com/transit/gtfs/).
@@ -36,8 +36,7 @@ More information on the [navigating the docs from the project-perspective](navig
 ### Staging tables
 | Directory name |
 | ------- |
-| `gtfs_schedule_latest_only` |
-| `gtfs_views_staging.*` |
+| `gtfs_views_staging` |
 
 
 :::{admonition} See Also: `views` documentation

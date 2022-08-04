@@ -15,9 +15,9 @@ For help navgating the documentation, visit [Navigating the dbt Docs](navigating
 ### Source
 | dataset name | description |
 | ------- | ----------- |
-| `external_gtfs_rt` | Hive-partitioned external tables reading GTFS RT data and validation errors from GCS. |
-| `gtfs_rt_logs` | Data in the gtfs_rt_logs dataset in BigQuery, from logs sink. |
-| `gtfs_rt` | Data in the gtfs_rt dataset in BigQuery, generally produced by the rt_loader and rt_loader_files Airflow DAGs. |
+| `external_gtfs_rt.*` | Hive-partitioned external tables reading GTFS RT data and validation errors from GCS. |
+| `gtfs_rt_logs.*` | Data in the gtfs_rt_logs dataset in BigQuery, from logs sink. |
+| `gtfs_rt.*` | Data in the gtfs_rt dataset in BigQuery, generally produced by the rt_loader and rt_loader_files Airflow DAGs. |
 
 ### Staging
 | dataset name | description |
