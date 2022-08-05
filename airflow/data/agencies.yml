@@ -1639,7 +1639,7 @@ elk-grove:
 fresno-county:
   agency_name: Fresno County Rural Transit Agency
   feeds:
-  - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/fresnocounty-ca-us/fresnocounty-ca-us.zip
+  - gtfs_schedule_url: https://rapid.nationalrtap.org/GTFSFileManagement/UserUploadFiles/7869/google_transit.zip
     gtfs_rt_vehicle_positions_url: null
     gtfs_rt_service_alerts_url: null
     gtfs_rt_trip_updates_url: null
@@ -1700,3 +1700,11 @@ treasure-island-ferry:
       gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
       gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=TF
   itp_id: 485
+escalon-transit:
+  agency_name: Escalon Transit
+  feeds:
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/escalon-ca-us/escalon-ca-us.zip
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
+  itp_id: 107
