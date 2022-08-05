@@ -15,6 +15,7 @@ dim_services AS (
         mode,
         currently_operating,
         operating_counties,
+        gtfs_schedule_status,
         calitp_extracted_at
     FROM latest_services
 )

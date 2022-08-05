@@ -19,6 +19,7 @@ stg_transit_database__services AS (
         provider,
         operator,
         funding_sources,
+        gtfs_schedule_status,
         operating_counties,
         dt AS calitp_extracted_at
     FROM once_daily_services

@@ -17,6 +17,11 @@ dim_organizations AS (
         details,
         caltrans_district,
         website,
+        reporting_category,
+        ntp_id,
+        gtfs_static_status,
+        gtfs_realtime_status,
+        alias,
         calitp_extracted_at
     FROM latest_organizations
 )
