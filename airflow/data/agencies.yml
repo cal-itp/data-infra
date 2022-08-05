@@ -1700,8 +1700,8 @@ treasure-island-ferry:
       gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
       gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=TF
   itp_id: 485
-escalon-transit:
-  agency_name: Escalon Transit
+etrans:
+  agency_name: eTrans
   feeds:
     - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/escalon-ca-us/escalon-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
