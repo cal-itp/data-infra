@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 
+import humanize
 import orjson
 import pendulum
 import structlog
@@ -10,7 +11,7 @@ from google.cloud import storage
 from huey import RedisExpireHuey
 from huey.registry import Message
 from huey.serializer import Serializer
-from requests import HTTPError
+from requests import HTTPError, RequestException
 
 from .metrics import (
     FETCH_PROCESSING_TIME,
@@ -46,6 +47,7 @@ huey = RedisExpireHuey(
 
 client = storage.Client()
 
+structlog.configure(processors=[structlog.processors.JSONRenderer()])
 base_logger = structlog.get_logger()
 
 
@@ -56,7 +58,7 @@ def instrument_signals(signal, task, exc=None):
         record_uri=task.kwargs["record"].uri,
         record_feed_type=task.kwargs["record"].data,
         signal=signal,
-        exc_type=type(exc) if exc else "",
+        exc_type=type(exc).__name__ if exc else "",
     ).inc()
 
 
@@ -81,10 +83,12 @@ def load_auth_dict():
 @huey.task(expires=5)
 def fetch(tick: datetime, record: AirtableGTFSDataRecord):
     labels = dict(
-        record_name=record.name, record_uri=record.uri, record_feed_type=record.data
+        record_name=record.name,
+        record_uri=record.uri,
+        record_feed_type=record.data,
     )
     logger = base_logger.bind(
-        tick=tick,
+        tick=tick.isoformat(),
         **labels,
     )
     slippage = (pendulum.now() - tick).total_seconds()
@@ -95,18 +99,28 @@ def fetch(tick: datetime, record: AirtableGTFSDataRecord):
             extract, content = download_feed(record, ts=tick, auth_dict=auth_dict)
         except HTTPError as e:
             logger.error(
-                "http error occurred while downloading feed",
+                "unexpected HTTP response code from feed request",
                 code=e.response.status_code,
-                exc_type=type(e),
+                content=e.response.text,
+                exc_type=type(e).__name__,
+            )
+            raise
+        except RequestException as e:
+            logger.error(
+                "request exception occurred from feed request",
+                exc_type=type(e).__name__,
             )
             raise
         except Exception as e:
             logger.error(
-                "other exception occurred while downloading feed", exc_type=type(e)
+                "other non-request exception occurred during download_feed",
+                exc_type=type(e).__name__,
             )
             raise
 
-        typer.secho(f"saving {len(content)} bytes from {record.uri} to {extract.path}")
+        typer.secho(
+            f"saving {humanize.naturalsize(len(content))} from {record.uri} to {extract.path}"
+        )
         extract.save_content(content=content, client=client)
         FETCH_PROCESSED_BYTES.labels(
             **labels,

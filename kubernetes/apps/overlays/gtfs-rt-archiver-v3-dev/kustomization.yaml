@@ -10,3 +10,8 @@ resources:
 patches:
 - consumer.patch.yaml
 - ticker.patch.yaml
+
+images:
+- name: 'gtfs-rt-archiver'
+  newName: 'ghcr.io/cal-itp/data-infra/gtfs-rt-archiver'
+  newTag: '3.1.1'

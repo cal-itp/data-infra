@@ -6,3 +6,8 @@ resources:
 - ns.yaml
 - archiver-channel-vars.yaml
 - ../gtfs-rt-archiver-v3-release
+
+images:
+- name: 'gtfs-rt-archiver'
+  newName: 'ghcr.io/cal-itp/data-infra/gtfs-rt-archiver'
+  newTag: '3.1.1'
