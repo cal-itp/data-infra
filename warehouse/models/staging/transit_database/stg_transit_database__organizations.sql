@@ -15,11 +15,18 @@ stg_transit_database__organizations AS (
         organization_type,
         roles,
         itp_id,
+        ntp_id,
+        alias_ as alias,
         details,
         caltrans_district,
         mobility_services_managed,
         parent_organization,
         website,
+        reporting_category,
+        funding_programs,
+        gtfs_datasets_produced,
+        gtfs_static_status,
+        gtfs_realtime_status,
         dt AS calitp_extracted_at
     FROM once_daily_organizations
 )

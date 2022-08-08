@@ -51,6 +51,27 @@ models:
           metabase.semantic_type: type/FK
       - name: details
         description:	Text description related to the organization
+      - name: reporting_category
+        description: |
+          Categories we want to hold ourselves accountable to:
+          Core: funded by Caltrans/can control or influence somewhat
+          Other Public Transit: (publicly available or managed) and publicly funded transit
+          Other Transit: transit that isn't the above
+      - name: ntp_id
+        description: National Transit Database (NTD) ID
+      - name: alias
+      - name: gtfs_static_status
+        description: |
+          Computed value from source data: "Static OK" indicates that the number
+          of associated (managed) `service` records is equal to the number of associated (managed) `service`
+          records with static GTFS. Otherwise, status is "Static Incomplete".
+      - name: gtfs_realtime_status
+        description: |
+          Computed value from source data: "RT OK" indicates that the number
+          of associated (managed) `service` records is equal to the number of associated (managed) `service`
+          records with realtime GTFS and at least one managed service has complete RT coverage (i.e.,
+          all three RT feed types: vehicle positions, trip updates, and service alerts).
+          Otherwise, status is "RT Incomplete".
   - name: dim_services
     description: '{{ doc("services_table") }}'
     columns:
@@ -68,6 +89,7 @@ models:
       - name: currently_operating
         description: |
           Boolean for whether service is currently active
+      - name: gtfs_schedule_status
   - name: dim_products
     description: '{{ doc("products_table") }}'
     columns:
@@ -192,6 +214,7 @@ models:
         description: |
           For realtime dataset / service relationships,
           the associated schedule dataset / service relationship.
+      - name:  fares_v2_status
         # self relationship test breaks metabase connector: https://github.com/JarvusInnovations/dbt-metabase/blob/master/dbtmetabase/parsers/dbt_manifest.py#L202
         # TODO: make an aliased version of the relationship test
         # tests:
@@ -387,4 +410,46 @@ models:
         tests:
           - relationships:
              to: ref('dim_services')
+             field: key
+  - name: bridge_organizations_x_gtfs_datasets_produced
+    description: |
+      Mapping table between organizations and GTFS datasets
+      producted by that organization.
+      This is a many-to-many relationship.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - organization_key
+            - gtfs_dataset_key
+    columns:
+      - name: organization_key
+        tests:
+          - relationships:
+             to: ref('dim_organizations')
+             field: key
+      - name: gtfs_dataset_key
+        tests:
+          - relationships:
+             to: ref('dim_gtfs_datasets')
+             field: key
+  - name: bridge_organizations_x_funding_programs
+    description: |
+      Mapping table between organizations and associated
+      funding programs.
+      This is a many-to-many relationship.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - organization_key
+            - funding_program_key
+    columns:
+      - name: organization_key
+        tests:
+          - relationships:
+             to: ref('dim_organizations')
+             field: key
+      - name: funding_program_key
+        tests:
+          - relationships:
+             to: ref('dim_funding_programs')
              field: key
