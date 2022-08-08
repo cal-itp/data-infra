@@ -58,12 +58,20 @@ models:
           Other Public Transit: (publicly available or managed) and publicly funded transit
           Other Transit: transit that isn't the above
       - name: ntp_id
-        description: NTD ID
+        description: National Transit Database (NTD) ID
       - name: alias
       - name: gtfs_static_status
         description: |
-          Computed value from source data: IF(
-          {Complete RT coverage}+{>= 1 complete RT set (1=yes)}=2,"RT OK","RT Incomplete")
+          Computed value from source data: "Static OK" indicates that the number
+          of associated (managed) `service` records is equal to the number of associated (managed) `service`
+          records with static GTFS. Otherwise, status is "Static Incomplete".
+      - name: gtfs_realtime_status
+        description: |
+          Computed value from source data: "RT OK" indicates that the number
+          of associated (managed) `service` records is equal to the number of associated (managed) `service`
+          records with realtime GTFS and at least one managed service has complete RT coverage (i.e.,
+          all three RT feed types: vehicle positions, trip updates, and service alerts).
+          Otherwise, status is "RT Incomplete".
   - name: dim_services
     description: '{{ doc("services_table") }}'
     columns:
