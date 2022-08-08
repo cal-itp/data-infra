@@ -48,7 +48,9 @@ def _keep_columns(
     # pandas.errors.ParserError, but the responsibility to catch this error is assumed
     # to be implemented in the code that calls this method.
     try:
-        df = pd.read_csv(read_gcfs(src_path), dtype="object", **kwargs)
+        df = pd.read_csv(
+            read_gcfs(src_path), dtype="object", encoding_errors="replace", **kwargs
+        )
     except EmptyDataError:
         # in the rare case of a totally empty data file, create a DataFrame
         # with no rows, and the target columns
