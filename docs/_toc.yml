@@ -39,12 +39,13 @@ parts:
         - file: warehouse/sql_snippets
       - file: datasets_and_tables/overview
         sections:
+        - file: datasets_and_tables/navigating_dbt_docs
+        - file: datasets_and_tables/views
         - file: datasets_and_tables/amplitude
         - file: datasets_and_tables/gtfs_schedule
-        - file: datasets_and_tables/mst_payments
+        - file: datasets_and_tables/gtfs_realtime
         - file: datasets_and_tables/transitdatabase
-        - file: datasets_and_tables/views
-        - file: datasets_and_tables/tables
+        - file: datasets_and_tables/mst_payments
       - file: analytics_examples/overview
         sections:
         - file: analytics_examples/warehouse_tutorial
