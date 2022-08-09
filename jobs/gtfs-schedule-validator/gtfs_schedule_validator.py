@@ -9,7 +9,7 @@ import tempfile
 import traceback
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, ClassVar, Optional
 
 import pendulum
 import typer
@@ -17,12 +17,13 @@ from calitp.storage import (
     fetch_all_in_partition,
     GTFSFeedExtractInfo,
     get_fs,
-    GTFSScheduleFeedValidation,
     GTFSFeedType,
     JSONL_GZIP_EXTENSION,
-    GTFSScheduleFeedExtractValidationOutcome,
-    ScheduleValidationResult,
+    PartitionedGCSArtifact,
+    ProcessingOutcome,
+    JSONL_EXTENSION,
 )
+from pydantic import Field, validator
 
 JAVA_EXECUTABLE_PATH_KEY = "GTFS_SCHEDULE_VALIDATOR_JAVA_EXECUTABLE"
 SCHEDULE_VALIDATOR_JAR_LOCATION_ENV_KEY = "GTFS_SCHEDULE_VALIDATOR_JAR"
@@ -30,9 +31,72 @@ JAR_DEFAULT = typer.Option(
     default=os.environ.get(SCHEDULE_VALIDATOR_JAR_LOCATION_ENV_KEY),
     help="Path to the GTFS Schedule Validator JAR",
 )
+SCHEDULE_VALIDATION_BUCKET = os.getenv("CALITP_BUCKET__SCHEDULE_VALIDATION")
 
 app = typer.Typer()
 logging.basicConfig()
+
+
+class GTFSScheduleFeedValidation(PartitionedGCSArtifact):
+    bucket: ClassVar[str] = SCHEDULE_VALIDATION_BUCKET
+    table: ClassVar[str] = "validation_reports"
+    partition_names: ClassVar[List[str]] = GTFSFeedExtractInfo.partition_names
+    extract: GTFSFeedExtractInfo = Field(..., exclude={"config"})
+    system_errors: Dict
+
+    @validator("filename", allow_reuse=True)
+    def is_jsonl_gz(cls, v):
+        assert v.endswith(JSONL_GZIP_EXTENSION)
+        return v
+
+    @property
+    def dt(self) -> pendulum.Date:
+        return self.extract.ts.date()
+
+    @property
+    def base64_url(self) -> str:
+        return self.extract.config.base64_encoded_url
+
+    @property
+    def ts(self) -> pendulum.DateTime:
+        return self.extract.ts
+
+
+class GTFSScheduleFeedExtractValidationOutcome(ProcessingOutcome):
+    extract: GTFSFeedExtractInfo = Field(..., exclude={"config"})
+    validation: Optional[GTFSScheduleFeedValidation]
+
+
+# TODO: this and DownloadFeedsResult probably deserve a base class
+class ScheduleValidationResult(PartitionedGCSArtifact):
+    bucket: ClassVar[str] = SCHEDULE_VALIDATION_BUCKET
+    table: ClassVar[str] = "validation_results"
+    partition_names: ClassVar[List[str]] = ["dt"]
+    dt: pendulum.Date
+    outcomes: List[GTFSScheduleFeedExtractValidationOutcome]
+
+    @validator("filename", allow_reuse=True)
+    def is_jsonl(cls, v):
+        assert v.endswith(JSONL_EXTENSION)
+        return v
+
+    @property
+    def successes(self) -> List[GTFSScheduleFeedExtractValidationOutcome]:
+        return [outcome for outcome in self.outcomes if outcome.success]
+
+    @property
+    def failures(self) -> List[GTFSScheduleFeedExtractValidationOutcome]:
+        return [outcome for outcome in self.outcomes if not outcome.success]
+
+    # TODO: I dislike having to exclude the records here
+    #   I need to figure out the best way to have a single type represent the "metadata" of
+    #   the content as well as the content itself
+    def save(self, fs):
+        self.save_content(
+            fs=fs,
+            content="\n".join(o.json() for o in self.outcomes).encode(),
+            exclude={"outcomes"},
+        )
 
 
 def execute_schedule_validator(
@@ -160,7 +224,7 @@ def validate_day(
             outcomes.append(
                 GTFSScheduleFeedExtractValidationOutcome(
                     success=True,
-                    input_record=extract,
+                    extract=extract,
                     validation=validation,
                 )
             )
@@ -172,7 +236,7 @@ def validate_day(
             outcomes.append(
                 GTFSScheduleFeedExtractValidationOutcome(
                     success=False,
-                    input_record=extract,
+                    extract=extract,
                     exception=e,
                 )
             )
@@ -184,6 +248,10 @@ def validate_day(
     typer.secho(
         f"got {len(result.successes)} successes and {len(result.failures)} failures",
         fg=typer.colors.MAGENTA,
+    )
+    typer.secho(
+        f"saving {len(outcomes)} to {result.path}",
+        fg=typer.colors.GREEN,
     )
     result.save(fs)
     assert len(extracts) == len(
