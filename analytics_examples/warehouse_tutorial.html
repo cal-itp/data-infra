@@ -289,18 +289,28 @@
   </label>
   <ul>
    <li class="toctree-l2">
+    <a class="reference internal" href="../datasets_and_tables/navigating_dbt_docs.html">
+     Navigating the dbt Docs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../datasets_and_tables/views.html">
+     Views
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../datasets_and_tables/amplitude.html">
      Amplitude
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../datasets_and_tables/gtfs_schedule.html">
-     GTFS Schedule (WIP)
+     GTFS Schedule
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../datasets_and_tables/mst_payments.html">
-     MST Payments (WIP)
+    <a class="reference internal" href="../datasets_and_tables/gtfs_realtime.html">
+     GTFS Realtime
     </a>
    </li>
    <li class="toctree-l2">
@@ -309,13 +319,8 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../datasets_and_tables/views.html">
-     Views (WIP)
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../datasets_and_tables/tables.html">
-     Tables (WIP)
+    <a class="reference internal" href="../datasets_and_tables/mst_payments.html">
+     MST Payments (WIP)
     </a>
    </li>
   </ul>
@@ -907,8 +912,8 @@
 <div class="section" id="relevant-tables">
 <h3>Relevant Tables<a class="headerlink" href="#relevant-tables" title="Permalink to this headline">¶</a></h3>
 <div class="tabbed-set docutils">
-<input checked="checked" id="64e8525a-e390-417f-b395-f74427bc8f2f" name="3f8e2e2a-10d6-4b87-a1c9-933e16ccbd4b" type="radio">
-</input><label class="tabbed-label" for="64e8525a-e390-417f-b395-f74427bc8f2f">
+<input checked="checked" id="ad6a260b-bdaf-4cde-9234-2cb865f3d407" name="0d4440b1-240c-4598-bbf9-a55957efce9c" type="radio">
+</input><label class="tabbed-label" for="ad6a260b-bdaf-4cde-9234-2cb865f3d407">
 Fact Tables</label><div class="tabbed-content docutils">
 <p>These tables contain measurements, metrics, and facts used to answer the questions from the following perspectives:</p>
 <table class="colwidths-auto table">
@@ -933,8 +938,8 @@ Fact Tables</label><div class="tabbed-content docutils">
 </tbody>
 </table>
 </div>
-<input id="53d94c46-b5e5-406f-bd5d-c5c0d89abce9" name="3f8e2e2a-10d6-4b87-a1c9-933e16ccbd4b" type="radio">
-</input><label class="tabbed-label" for="53d94c46-b5e5-406f-bd5d-c5c0d89abce9">
+<input id="35f8028e-2827-413c-ae5b-03bb5229d6d9" name="0d4440b1-240c-4598-bbf9-a55957efce9c" type="radio">
+</input><label class="tabbed-label" for="35f8028e-2827-413c-ae5b-03bb5229d6d9">
 Dimensional Tables</label><div class="tabbed-content docutils">
 <p>These tables compliment the fact tables by providing additional descriptive attributes:</p>
 <table class="colwidths-auto table">
@@ -986,14 +991,14 @@ Dimensional Tables</label><div class="tabbed-content docutils">
 <span id="routes-agency-time"></span><h3>1. Number of Routes for a Given Agency Over Time<a class="headerlink" href="#number-of-routes-for-a-given-agency-over-time" title="Permalink to this headline">¶</a></h3>
 <p>This example query uses a fact table describing routes joined with a dimensional table which enriches our data with agency information. We then count the number of routes an agency has published over time.</p>
 <div class="tabbed-set docutils">
-<input checked="checked" id="f9740e9f-b32e-48c3-b027-f4357a9091a8" name="52be9b35-6e29-4ca4-a3ac-4ee35ef79afc" type="radio">
-</input><label class="tabbed-label" for="f9740e9f-b32e-48c3-b027-f4357a9091a8">
+<input checked="checked" id="8a685cef-a0c9-4a40-ab3f-1f08e39ff9d7" name="eee179cc-f6c7-4cca-96f6-1d97e9785e10" type="radio">
+</input><label class="tabbed-label" for="8a685cef-a0c9-4a40-ab3f-1f08e39ff9d7">
 Metabase</label><div class="tabbed-content docutils">
 <p><em>You can view this query in Metabase <a class="reference external" href="https://dashboards.calitp.org/question/215-1-number-of-routes-for-a-given-agency-over-time/notebook">using this link</a></em></p>
 <p><img alt="Collection Matrix" src="../_images/routes_agency_over_time.png" /></p>
 </div>
-<input id="b80c4b7c-7ebb-48ee-b1ac-466fc6e39f6f" name="52be9b35-6e29-4ca4-a3ac-4ee35ef79afc" type="radio">
-</input><label class="tabbed-label" for="b80c4b7c-7ebb-48ee-b1ac-466fc6e39f6f">
+<input id="6f11851f-41fd-4b99-a872-730b28f1a0f6" name="eee179cc-f6c7-4cca-96f6-1d97e9785e10" type="radio">
+</input><label class="tabbed-label" for="6f11851f-41fd-4b99-a872-730b28f1a0f6">
 SQL</label><div class="tabbed-content docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Allows us to query SQL in the JupyterLab notebook</span>
 <span class="c1"># Use this in combination with &#39;%%sql&#39;, as seen below</span>
@@ -1060,61 +1065,61 @@ SQL</label><div class="tabbed-content docutils">
     <tr>
       <th>0</th>
       <td>AC Transit (0)</td>
-      <td>2022-08-04</td>
+      <td>2022-08-09</td>
       <td>85</td>
     </tr>
     <tr>
       <th>1</th>
       <td>AC Transit (0)</td>
-      <td>2022-08-03</td>
+      <td>2022-08-08</td>
       <td>85</td>
     </tr>
     <tr>
       <th>2</th>
       <td>AC Transit (0)</td>
-      <td>2022-08-02</td>
+      <td>2022-08-07</td>
       <td>85</td>
     </tr>
     <tr>
       <th>3</th>
       <td>AC Transit (0)</td>
-      <td>2022-08-01</td>
+      <td>2022-08-06</td>
       <td>85</td>
     </tr>
     <tr>
       <th>4</th>
       <td>AC Transit (0)</td>
-      <td>2022-07-31</td>
+      <td>2022-08-05</td>
       <td>85</td>
     </tr>
     <tr>
       <th>5</th>
       <td>AC Transit (0)</td>
-      <td>2022-07-30</td>
+      <td>2022-08-04</td>
       <td>85</td>
     </tr>
     <tr>
       <th>6</th>
       <td>AC Transit (0)</td>
-      <td>2022-07-29</td>
+      <td>2022-08-03</td>
       <td>85</td>
     </tr>
     <tr>
       <th>7</th>
       <td>AC Transit (0)</td>
-      <td>2022-07-28</td>
+      <td>2022-08-02</td>
       <td>85</td>
     </tr>
     <tr>
       <th>8</th>
       <td>AC Transit (0)</td>
-      <td>2022-07-27</td>
+      <td>2022-08-01</td>
       <td>85</td>
     </tr>
     <tr>
       <th>9</th>
       <td>AC Transit (0)</td>
-      <td>2022-07-26</td>
+      <td>2022-07-31</td>
       <td>85</td>
     </tr>
   </tbody>
@@ -1122,8 +1127,8 @@ SQL</label><div class="tabbed-content docutils">
 </div></div></div>
 </div>
 </div>
-<input id="54f9c690-ca77-4f14-aba6-035afe006f0a" name="52be9b35-6e29-4ca4-a3ac-4ee35ef79afc" type="radio">
-</input><label class="tabbed-label" for="54f9c690-ca77-4f14-aba6-035afe006f0a">
+<input id="42fa1042-57ff-4ea9-9b48-fed910c4e272" name="eee179cc-f6c7-4cca-96f6-1d97e9785e10" type="radio">
+</input><label class="tabbed-label" for="42fa1042-57ff-4ea9-9b48-fed910c4e272">
 siuba</label><div class="tabbed-content docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Allows us to query tables in the warehouse</span>
 <span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbl</span>
@@ -1217,14 +1222,14 @@ siuba</label><div class="tabbed-content docutils">
 <span id="stops-agency-time"></span><h3>2. Number of Stops for a Given Agency Over Time<a class="headerlink" href="#number-of-stops-for-a-given-agency-over-time" title="Permalink to this headline">¶</a></h3>
 <p>This example query is very similar to the previous query, except that it substitutes the routes fact table with the stops fact table to count the number of stops an agency has published over time.</p>
 <div class="tabbed-set docutils">
-<input checked="checked" id="3101de75-f5ea-457b-91a4-a418a94029b4" name="08302e1e-fb1a-46d8-8398-a87ac237be49" type="radio">
-</input><label class="tabbed-label" for="3101de75-f5ea-457b-91a4-a418a94029b4">
+<input checked="checked" id="d54b95a6-9574-40e6-be36-dc4d2613512f" name="e29d2a6e-707f-41fe-b2cd-cebfdb154f40" type="radio">
+</input><label class="tabbed-label" for="d54b95a6-9574-40e6-be36-dc4d2613512f">
 Metabase</label><div class="tabbed-content docutils">
 <p><em>You can view this query in Metabase <a class="reference external" href="https://dashboards.calitp.org/question/216-2-number-of-stops-for-a-given-agency-over-time/notebook">using this link</a></em></p>
 <p><img alt="Collection Matrix" src="../_images/stops_agency_over_time.png" /></p>
 </div>
-<input id="129c5d02-c75a-49d4-b0c8-9695aa232580" name="08302e1e-fb1a-46d8-8398-a87ac237be49" type="radio">
-</input><label class="tabbed-label" for="129c5d02-c75a-49d4-b0c8-9695aa232580">
+<input id="f1120897-9edc-4a92-9f7f-49492910d46c" name="e29d2a6e-707f-41fe-b2cd-cebfdb154f40" type="radio">
+</input><label class="tabbed-label" for="f1120897-9edc-4a92-9f7f-49492910d46c">
 SQL</label><div class="tabbed-content docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Allows us to query SQL in the JupyterLab notebook</span>
 <span class="c1"># Use this in combination with &#39;%%sql&#39;, as seen below</span>
@@ -1353,8 +1358,8 @@ SQL</label><div class="tabbed-content docutils">
 </div></div></div>
 </div>
 </div>
-<input id="f83d6ad0-eea7-4467-b724-4e1513158bf8" name="08302e1e-fb1a-46d8-8398-a87ac237be49" type="radio">
-</input><label class="tabbed-label" for="f83d6ad0-eea7-4467-b724-4e1513158bf8">
+<input id="47071e59-eca3-418e-b564-be2f8f5b58c4" name="e29d2a6e-707f-41fe-b2cd-cebfdb154f40" type="radio">
+</input><label class="tabbed-label" for="47071e59-eca3-418e-b564-be2f8f5b58c4">
 siuba</label><div class="tabbed-content docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Allows us to query tables in the warehouse</span>
 <span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbl</span>
@@ -1456,14 +1461,14 @@ siuba</label><div class="tabbed-content docutils">
 <span id="days-feed-expires"></span><h3>3. For a Given Agency, on Each Day, Days Until the Feed Expires<a class="headerlink" href="#for-a-given-agency-on-each-day-days-until-the-feed-expires" title="Permalink to this headline">¶</a></h3>
 <p>This query uses a fact table as we did in queries the previous two queries. However, instead of counting we pull out previously calculated table columns as important pieces of information.</p>
 <div class="tabbed-set docutils">
-<input checked="checked" id="97ebb34a-7b6d-4e2d-9df0-78e53f373558" name="cedfeaa2-f137-4160-8e20-5853d44a5c5e" type="radio">
-</input><label class="tabbed-label" for="97ebb34a-7b6d-4e2d-9df0-78e53f373558">
+<input checked="checked" id="c3853bca-7a26-4417-b3b6-5a006ddad79f" name="6bcc11e4-fd0a-4cf9-89fd-b55819fb7634" type="radio">
+</input><label class="tabbed-label" for="c3853bca-7a26-4417-b3b6-5a006ddad79f">
 Metabase</label><div class="tabbed-content docutils">
 <p><em>You can view this query in Metabase <a class="reference external" href="https://dashboards.calitp.org/question/227-4-for-a-given-agency-on-each-day-days-until-the-feed-expires/notebook">using this link</a></em></p>
 <p><img alt="Collection Matrix" src="../_images/days_until_agency_feed_expires.png" /></p>
 </div>
-<input id="3880c516-78f7-424d-9a7e-07e78e1bb48c" name="cedfeaa2-f137-4160-8e20-5853d44a5c5e" type="radio">
-</input><label class="tabbed-label" for="3880c516-78f7-424d-9a7e-07e78e1bb48c">
+<input id="2ceccf1b-eb2c-4a4a-8f4d-39660e573d1f" name="6bcc11e4-fd0a-4cf9-89fd-b55819fb7634" type="radio">
+</input><label class="tabbed-label" for="2ceccf1b-eb2c-4a4a-8f4d-39660e573d1f">
 SQL</label><div class="tabbed-content docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Allows us to query SQL in the JupyterLab notebook</span>
 <span class="c1"># Use this in combination with &#39;%%sql&#39;, as seen below</span>
@@ -1533,8 +1538,8 @@ SQL</label><div class="tabbed-content docutils">
 </div></div></div>
 </div>
 </div>
-<input id="52d0f3d0-d9e0-4206-b9d1-9ae367a9d9f8" name="cedfeaa2-f137-4160-8e20-5853d44a5c5e" type="radio">
-</input><label class="tabbed-label" for="52d0f3d0-d9e0-4206-b9d1-9ae367a9d9f8">
+<input id="8eefda8f-70e5-47df-9549-c40fdd152428" name="6bcc11e4-fd0a-4cf9-89fd-b55819fb7634" type="radio">
+</input><label class="tabbed-label" for="8eefda8f-70e5-47df-9549-c40fdd152428">
 siuba</label><div class="tabbed-content docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Allows us to query tables in the warehouse</span>
 <span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbl</span>
@@ -1609,8 +1614,8 @@ siuba</label><div class="tabbed-content docutils">
 <p>Instead of using fact or dimensional tables as in the examples above, this query and the next use a wide convenience table that was created to aggregate trip stops information from only the most recent feeds extracted. Information for the latest day can be found in this table.</p>
 <p>We use this table to query an agency’s most recent feed published and count the total number of trip stops, as well as the number of distinct trips and stops that compose them.</p>
 <div class="tabbed-set docutils">
-<input checked="checked" id="5ba5abc5-b3ab-49ae-b642-582408e057fd" name="3986d814-259a-4e60-8c91-607026403375" type="radio">
-</input><label class="tabbed-label" for="5ba5abc5-b3ab-49ae-b642-582408e057fd">
+<input checked="checked" id="50969886-82b2-49c3-866a-8c77ee49eeac" name="e0419085-10a1-4f90-8557-8b7f6ffd61ce" type="radio">
+</input><label class="tabbed-label" for="50969886-82b2-49c3-866a-8c77ee49eeac">
 Metabase</label><div class="tabbed-content docutils">
 <p><em><strong>4A. Count of Trip Stops Made Across all Trips for an Agency</strong></em></p>
 <p><em>You can view this query in Metabase <a class="reference external" href="https://dashboards.calitp.org/question/224-3a-count-of-trip-stops-made-across-all-trips-for-an-agency/notebook">using this link</a></em></p>
@@ -1622,8 +1627,8 @@ Metabase</label><div class="tabbed-content docutils">
 <p><em>You can view this query in Metabase <a class="reference external" href="https://dashboards.calitp.org/question/226-3c-distinct-stops-in-trip-stops-for-an-agency/notebook">using this link</a></em></p>
 <p><img alt="Collection Matrix" src="../_images/distinct_stops_in_trip_stops.png" /></p>
 </div>
-<input id="4b08300c-e2e7-448b-b886-7e6800b14469" name="3986d814-259a-4e60-8c91-607026403375" type="radio">
-</input><label class="tabbed-label" for="4b08300c-e2e7-448b-b886-7e6800b14469">
+<input id="9bc2b5c2-d721-4ef1-baa5-2de2374bf78e" name="e0419085-10a1-4f90-8557-8b7f6ffd61ce" type="radio">
+</input><label class="tabbed-label" for="9bc2b5c2-d721-4ef1-baa5-2de2374bf78e">
 SQL</label><div class="tabbed-content docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Allows us to query SQL in the JupyterLab notebook</span>
 <span class="c1"># Use this in combination with &#39;%%sql&#39;, as seen below</span>
@@ -1697,8 +1702,8 @@ SQL</label><div class="tabbed-content docutils">
 </div></div></div>
 </div>
 </div>
-<input id="402aab48-5ab6-483b-80a8-60c1162ee531" name="3986d814-259a-4e60-8c91-607026403375" type="radio">
-</input><label class="tabbed-label" for="402aab48-5ab6-483b-80a8-60c1162ee531">
+<input id="b063c850-6495-4629-8b59-d0327ad91f98" name="e0419085-10a1-4f90-8557-8b7f6ffd61ce" type="radio">
+</input><label class="tabbed-label" for="b063c850-6495-4629-8b59-d0327ad91f98">
 siuba</label><div class="tabbed-content docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Allows us to query tables in the warehouse</span>
 <span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbl</span>
@@ -1769,14 +1774,14 @@ siuba</label><div class="tabbed-content docutils">
 <span id="max-number-stops"></span><h3>5. Find the Trip With the Most Number of Stops, Per Agency<a class="headerlink" href="#find-the-trip-with-the-most-number-of-stops-per-agency" title="Permalink to this headline">¶</a></h3>
 <p>Similar to the previous query, this example uses the same wide convenience table. We use this table here to determine the trip that contains the most number of stops in the latest feed, by agency.</p>
 <div class="tabbed-set docutils">
-<input checked="checked" id="f7883036-f4a5-45f7-93e7-e5d1ad545fc5" name="3b0c6f22-ca1d-44b0-977d-2646f06fff73" type="radio">
-</input><label class="tabbed-label" for="f7883036-f4a5-45f7-93e7-e5d1ad545fc5">
+<input checked="checked" id="361db4f3-fc08-432a-ba8d-e72a43b93363" name="02107b78-2e32-49d2-a300-82d4ae43fa21" type="radio">
+</input><label class="tabbed-label" for="361db4f3-fc08-432a-ba8d-e72a43b93363">
 Metabase</label><div class="tabbed-content docutils">
 <p><em>You can view this query in Metabase <a class="reference external" href="https://dashboards.calitp.org/question/223-5-find-the-trip-with-the-most-number-of-stops-per-agency/notebook">using this link</a></em></p>
 <p><img alt="Collection Matrix" src="../_images/most_stops_per_trip_by_agency.png" /></p>
 </div>
-<input id="a81f5289-792e-4604-967d-26013643f4f2" name="3b0c6f22-ca1d-44b0-977d-2646f06fff73" type="radio">
-</input><label class="tabbed-label" for="a81f5289-792e-4604-967d-26013643f4f2">
+<input id="4ffd938e-e8ce-411d-837c-73676c1b7f81" name="02107b78-2e32-49d2-a300-82d4ae43fa21" type="radio">
+</input><label class="tabbed-label" for="4ffd938e-e8ce-411d-837c-73676c1b7f81">
 SQL</label><div class="tabbed-content docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Allows us to query SQL in the JupyterLab notebook</span>
 <span class="c1"># Use this in combination with &#39;%%sql&#39;, as seen below</span>
@@ -1864,8 +1869,8 @@ SQL</label><div class="tabbed-content docutils">
 </div></div></div>
 </div>
 </div>
-<input id="88e6b66a-8d00-42a1-8e43-48262b375e1a" name="3b0c6f22-ca1d-44b0-977d-2646f06fff73" type="radio">
-</input><label class="tabbed-label" for="88e6b66a-8d00-42a1-8e43-48262b375e1a">
+<input id="8e10c31a-e17d-451a-84a4-3fd05e99c686" name="02107b78-2e32-49d2-a300-82d4ae43fa21" type="radio">
+</input><label class="tabbed-label" for="8e10c31a-e17d-451a-84a4-3fd05e99c686">
 siuba</label><div class="tabbed-content docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Allows us to query tables in the warehouse</span>
 <span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbl</span>

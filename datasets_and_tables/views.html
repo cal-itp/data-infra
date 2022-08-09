@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Views (WIP) &#8212; Cal-ITP Data Services</title>
+    <title>Views &#8212; Cal-ITP Data Services</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -56,8 +56,8 @@
     <script>mermaid.initialize({startOnLoad:true});</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Tables (WIP)" href="tables.html" />
-    <link rel="prev" title="Transit Database" href="transitdatabase.html" />
+    <link rel="next" title="Amplitude" href="amplitude.html" />
+    <link rel="prev" title="Navigating the dbt Docs" href="navigating_dbt_docs.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -289,18 +289,28 @@
   </label>
   <ul class="current">
    <li class="toctree-l2">
+    <a class="reference internal" href="navigating_dbt_docs.html">
+     Navigating the dbt Docs
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Views
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="amplitude.html">
      Amplitude
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="gtfs_schedule.html">
-     GTFS Schedule (WIP)
+     GTFS Schedule
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="mst_payments.html">
-     MST Payments (WIP)
+    <a class="reference internal" href="gtfs_realtime.html">
+     GTFS Realtime
     </a>
    </li>
    <li class="toctree-l2">
@@ -308,14 +318,9 @@
      Transit Database
     </a>
    </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Views (WIP)
-    </a>
-   </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="tables.html">
-     Tables (WIP)
+    <a class="reference internal" href="mst_payments.html">
+     MST Payments (WIP)
     </a>
    </li>
   </ul>
@@ -708,9 +713,44 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#data">
-   Data
+  <a class="reference internal nav-link" href="#how-to-view-the-views-documentation">
+   How to view the
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     views
+    </span>
+   </code>
+   documentation
   </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#database-schemas">
+   Database Schemas
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     Views
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dbt-project-directories">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     dbt
+    </span>
+   </code>
+   Project Directories
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#directories">
+     Directories
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -722,7 +762,7 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Views (WIP)</h1>
+                <h1>Views</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -733,9 +773,44 @@
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#data">
-   Data
+  <a class="reference internal nav-link" href="#how-to-view-the-views-documentation">
+   How to view the
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     views
+    </span>
+   </code>
+   documentation
   </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#database-schemas">
+   Database Schemas
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     Views
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dbt-project-directories">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     dbt
+    </span>
+   </code>
+   Project Directories
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#directories">
+     Directories
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -746,176 +821,68 @@
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="views-wip">
-<h1>Views (WIP)<a class="headerlink" href="#views-wip" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="data">
-<h2>Data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h2>
+  <div class="tex2jax_ignore mathjax_ignore section" id="views">
+<span id="view-models"></span><h1>Views<a class="headerlink" href="#views" title="Permalink to this headline">¶</a></h1>
+<p>End-user-friendly data for dashboards and metrics</p>
+<div class="section" id="how-to-view-the-views-documentation">
+<h2>How to view the <code class="docutils literal notranslate"><span class="pre">views</span></code> documentation<a class="headerlink" href="#how-to-view-the-views-documentation" title="Permalink to this headline">¶</a></h2>
+<p>Visit the <a class="reference external" href="https://dbt-docs.calitp.org/#%21/overview">dbt Cal-ITP warehouse documentation</a>.</p>
+<p>For help navgating the documentation, visit <a class="reference internal" href="navigating_dbt_docs.html#navigating-dbt-docs"><span class="std std-ref">Navigating the dbt Docs</span></a>.</p>
+</div>
+<div class="section" id="database-schemas">
+<h2>Database Schemas<a class="headerlink" href="#database-schemas" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h3>Views<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <table class="colwidths-auto table">
 <thead>
-<tr class="row-odd"><th class="head"><p>Table</p></th>
+<tr class="row-odd"><th class="head"><p>dataset name</p></th>
 <th class="head"><p>Description</p></th>
-<th class="head"><p>Link</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>dim_date</p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">views.*</span></code></p></td>
 <td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.dim_date">link</a></p></td>
 </tr>
-<tr class="row-odd"><td><p>dim_metric_date</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">mart_transit_database.*</span></code></p></td>
 <td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.dim_metric_date">link</a></p></td>
 </tr>
-<tr class="row-even"><td><p>gtfs_rt_fact_daily_feeds</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_rt_fact_daily_feeds">link</a></p></td>
-</tr>
-<tr class="row-odd"><td><p>gtfs_rt_fact_daily_validation_errors</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_rt_fact_daily_validation_errors">link</a></p></td>
-</tr>
-<tr class="row-even"><td><p>gtfs_rt_fact_extraction_errors</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_rt_fact_extraction_errors">link</a></p></td>
-</tr>
-<tr class="row-odd"><td><p>gtfs_rt_fact_files</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_rt_fact_files">link</a></p></td>
-</tr>
-<tr class="row-even"><td><p>gtfs_rt_fact_files_wide_hourly</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_rt_fact_files_wide_hourly">link</a></p></td>
-</tr>
-<tr class="row-odd"><td><p>gtfs_rt_validation_code_descriptions</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_rt_validation_code_descriptions">link</a></p></td>
-</tr>
-<tr class="row-even"><td><p>gtfs_schedule_data_feed_trip_stops_latest</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_schedule_data_feed_trip_stops_latest">link</a></p></td>
-</tr>
-<tr class="row-odd"><td><p>gtfs_schedule_dim_feeds</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_schedule_dim_feeds">link</a></p></td>
-</tr>
-<tr class="row-even"><td><p>gtfs_schedule_dim_files</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_schedule_dim_files">link</a></p></td>
-</tr>
-<tr class="row-odd"><td><p>gtfs_schedule_dim_pathways</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_schedule_dim_pathways">link</a></p></td>
-</tr>
-<tr class="row-even"><td><p>gtfs_schedule_dim_routes</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_schedule_dim_routes">link</a></p></td>
-</tr>
-<tr class="row-odd"><td><p>gtfs_schedule_dim_shapes</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_schedule_dim_shapes">link</a></p></td>
-</tr>
-<tr class="row-even"><td><p>gtfs_schedule_dim_shapes_geo</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_schedule_dim_shapes_geo">link</a></p></td>
-</tr>
-<tr class="row-odd"><td><p>gtfs_schedule_dim_shapes_geo_latest</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_schedule_dim_shapes_geo_latest">link</a></p></td>
-</tr>
-<tr class="row-even"><td><p>gtfs_schedule_dim_stop_times</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_schedule_dim_stop_times">link</a></p></td>
-</tr>
-<tr class="row-odd"><td><p>gtfs_schedule_dim_stops</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_schedule_dim_stops">link</a></p></td>
-</tr>
-<tr class="row-even"><td><p>gtfs_schedule_dim_trips</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_schedule_dim_trips">link</a></p></td>
-</tr>
-<tr class="row-odd"><td><p>gtfs_schedule_fact_daily</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_schedule_fact_daily">link</a></p></td>
-</tr>
-<tr class="row-even"><td><p>gtfs_schedule_fact_daily_feed_files</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_schedule_fact_daily_feed_files">link</a></p></td>
-</tr>
-<tr class="row-odd"><td><p>gtfs_schedule_fact_daily_feed_routes</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_schedule_fact_daily_feed_routes">link</a></p></td>
-</tr>
-<tr class="row-even"><td><p>gtfs_schedule_fact_daily_feed_stops</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_schedule_fact_daily_feed_stops">link</a></p></td>
-</tr>
-<tr class="row-odd"><td><p>gtfs_schedule_fact_daily_feeds</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_schedule_fact_daily_feeds">link</a></p></td>
-</tr>
-<tr class="row-even"><td><p>gtfs_schedule_fact_daily_pathways</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_schedule_fact_daily_pathways">link</a></p></td>
-</tr>
-<tr class="row-odd"><td><p>gtfs_schedule_fact_daily_service</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_schedule_fact_daily_service">link</a></p></td>
-</tr>
-<tr class="row-even"><td><p>gtfs_schedule_fact_daily_trips</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_schedule_fact_daily_trips">link</a></p></td>
-</tr>
-<tr class="row-odd"><td><p>gtfs_schedule_fact_day_of_week_service_monthly_comparison</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_schedule_fact_day_of_week_service_monthly_comparison">link</a></p></td>
-</tr>
-<tr class="row-even"><td><p>gtfs_schedule_fact_route_id_changes</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_schedule_fact_route_id_changes">link</a></p></td>
-</tr>
-<tr class="row-odd"><td><p>gtfs_schedule_fact_stop_id_changes</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_schedule_fact_stop_id_changes">link</a></p></td>
-</tr>
-<tr class="row-even"><td><p>gtfs_schedule_index_feed_trip_stops</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_schedule_index_feed_trip_stops">link</a></p></td>
-</tr>
-<tr class="row-odd"><td><p>gtfs_schedule_stg_calendar_long</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_schedule_stg_calendar_long">link</a></p></td>
-</tr>
-<tr class="row-even"><td><p>gtfs_schedule_stg_daily_service</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.gtfs_schedule_stg_daily_service">link</a></p></td>
-</tr>
-<tr class="row-odd"><td><p>reports_gtfs_schedule_index</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.reports_gtfs_schedule_index">link</a></p></td>
-</tr>
-<tr class="row-even"><td><p>reports_weekly_file_checks</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.reports_weekly_file_checks">link</a></p></td>
-</tr>
-<tr class="row-odd"><td><p>validation_code_descriptions</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.validation_code_descriptions">link</a></p></td>
-</tr>
-<tr class="row-even"><td><p>validation_dim_codes</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.validation_dim_codes">link</a></p></td>
-</tr>
-<tr class="row-odd"><td><p>validation_fact_daily_feed_codes</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.validation_fact_daily_feed_codes">link</a></p></td>
-</tr>
-<tr class="row-even"><td><p>validation_fact_daily_feed_notices</p></td>
-<td><p></p></td>
-<td><p><a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.validation_fact_daily_feed_notices">link</a></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule.*</span></code></p></td>
+<td><p>Latest warehouse data for GTFS-Schedule feeds. Used in publishing GTFS feeds to the <code class="docutils literal notranslate"><span class="pre">ckan</span></code> open data portal.</p></td>
 </tr>
 </tbody>
 </table>
+</div>
+</div>
+<div class="section" id="dbt-project-directories">
+<h2><code class="docutils literal notranslate"><span class="pre">dbt</span></code> Project Directories<a class="headerlink" href="#dbt-project-directories" title="Permalink to this headline">¶</a></h2>
+<p>More information on the <a class="reference internal" href="navigating_dbt_docs.html#navigating-dbt-docs"><span class="std std-ref">navigating the docs from the project-perspective</span></a></p>
+<div class="section" id="directories">
+<h3>Directories<a class="headerlink" href="#directories" title="Permalink to this headline">¶</a></h3>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Directory name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_views</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt_views</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">payments_views</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">mart</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule_latest_only</span></code></p></td>
+<td><p>Latest warehouse data for GTFS-Schedule feeds. Used in publishing GTFS feeds to the <code class="docutils literal notranslate"><span class="pre">ckan</span></code> open data portal.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 
@@ -944,17 +911,17 @@
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="transitdatabase.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="navigating_dbt_docs.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Transit Database</p>
+            <p class="prev-next-title">Navigating the dbt Docs</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="tables.html" title="next page">
+    <a class='right-next' id="next-link" href="amplitude.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Tables (WIP)</p>
+        <p class="prev-next-title">Amplitude</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
