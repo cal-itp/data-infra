@@ -9,7 +9,7 @@ import tempfile
 import traceback
 from datetime import datetime
 from pathlib import Path
-from typing import Dict
+from typing import Dict, List
 
 import pendulum
 import typer
@@ -95,14 +95,14 @@ def validate_extract(
 @app.command()
 def validate_day(
     day: datetime = typer.Argument(
-        default=pendulum.today(),
+        ...,
         help="The date of data to validate.",
         formats=["%Y-%m-%d"],
     ),
 ) -> None:
     day = pendulum.instance(day).date()
 
-    extracts = fetch_all_in_partition(
+    extracts: List[GTFSFeedExtractInfo] = fetch_all_in_partition(
         cls=GTFSFeedExtractInfo,
         table=GTFSFeedType.schedule,
         fs=get_fs(),
@@ -114,11 +114,15 @@ def validate_day(
 
     if not extracts:
         typer.secho(
-            "WARNING: found 0 extracts to process, exiting", typer.colors.YELLOW
+            "WARNING: found 0 extracts to process, exiting",
+            fg=typer.colors.YELLOW,
         )
         return
 
-    typer.secho(f"found {len(extracts)} to process for {day}", fg=typer.colors.MAGENTA)
+    typer.secho(
+        f"found {len(extracts)} to process for {day}",
+        fg=typer.colors.MAGENTA,
+    )
     fs = get_fs()
     outcomes = []
 
@@ -127,7 +131,8 @@ def validate_day(
             with tempfile.TemporaryDirectory() as tmp_dir:
                 zip_path = os.path.join(tmp_dir, extract.filename)
                 typer.secho(
-                    f"downloading {extract.path} to {zip_path}", fg=typer.colors.GREEN
+                    f"downloading {extract.path} to {zip_path}",
+                    fg=typer.colors.GREEN,
                 )
                 fs.get_file(extract.path, zip_path)
                 report, system_errors = execute_schedule_validator(
