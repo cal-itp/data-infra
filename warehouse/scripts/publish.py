@@ -380,30 +380,31 @@ def generate_exposure_documentation(
             )
 
             for name, column in node.columns.items():
-                dictionary_writer.writerow(
-                    json.loads(
-                        DictionaryRow(
-                            system_name="Cal-ITP GTFS-Ingest Pipeline",
-                            table_name=node.name,
-                            field_name=column.name,
-                            field_alias=None,
-                            field_description=column.description,
-                            field_description_authority="",
-                            confidential="N",
-                            sensitive="N",
-                            pii="N",
-                            pci="N",
-                            field_type=column.meta.get("publish.type", "STRING"),
-                            field_length=column.meta.get("publish.length", 1024),
-                            field_precision=None,
-                            units=None,
-                            domain_type="Unrepresented",
-                            allowable_min_value=None,
-                            allowable_max_value=None,
-                            usage_notes=None,
-                        ).json()
+                if not column.meta.get("publish.ignore", False):
+                    dictionary_writer.writerow(
+                        json.loads(
+                            DictionaryRow(
+                                system_name="Cal-ITP GTFS-Ingest Pipeline",
+                                table_name=node.name,
+                                field_name=column.name,
+                                field_alias=None,
+                                field_description=column.description,
+                                field_description_authority="",
+                                confidential="N",
+                                sensitive="N",
+                                pii="N",
+                                pci="N",
+                                field_type=column.meta.get("publish.type", "STRING"),
+                                field_length=column.meta.get("publish.length", 1024),
+                                field_precision=None,
+                                units=None,
+                                domain_type="Unrepresented",
+                                allowable_min_value=None,
+                                allowable_max_value=None,
+                                usage_notes=None,
+                            ).json()
+                        )
                     )
-                )
 
 
 @app.command()
