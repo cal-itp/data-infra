@@ -7,6 +7,8 @@ x-gtfs-rt-archiver-v3-common:
     HUEY_CONSUMER_WORKERS: 4
     CALITP_HUEY_REDIS_HOST: redis
     GOOGLE_APPLICATION_CREDENTIALS: /tmp/secret.json
+    CALITP_BUCKET__AIRTABLE: "gs://test-calitp-airtable"
+    CALITP_BUCKET__RT_RAW: "gs://test-calitp-gtfs-rt-raw"
 #    AC_TRANSIT_API_KEY: $AC_TRANSIT_API_KEY
 #    AMTRAK_GTFS_URL: $AMTRAK_GTFS_URL
 #    CULVER_CITY_API_KEY: $CULVER_CITY_API_KEY
@@ -34,6 +36,6 @@ services:
 
   gtfs-rt-archiver-v3-consumer:
     <<: *gtfs-rt-archiver-v3-common
-    command: python -m gtfs_rt_archiver_v3.consumer
+    command: python -m gtfs_rt_archiver_v3.consumer --load-auth-keys
     volumes:
       - $CALITP_ARCHIVER_V3_SERVICE_ACCOUNT:/tmp/secret.json:ro
