@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gtfs-rt-archiver"
-version = "3.1.1"
+version = "3.1.2"
 description = ""
 authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
 
@@ -21,7 +21,7 @@ cachetools = ">=2.0.0,<5.0"
 google-cloud-secret-manager = "^2.11.1"
 structlog = "^22.1.0"
 python-json-logger = "^2.0.4"
-calitp = "2022.7.25a0"
+calitp = "2022.8.9a3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
