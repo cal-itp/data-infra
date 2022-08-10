@@ -1680,9 +1680,9 @@ city-of-west-hollywood:
   agency_name: City of West Hollywood
   feeds:
     - gtfs_schedule_url: https://www.weho.org/home/showdocument?id=53383&t=637901042129473913
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://webservices.umoiq.com/api/gtfs-rt/v1/vehicle-positions/west-hollywood
+      gtfs_rt_service_alerts_url: https://webservices.umoiq.com/api/gtfs-rt/v1/service-alerts/west-hollywood
+      gtfs_rt_trip_updates_url: https://webservices.umoiq.com/api/gtfs-rt/v1/trip-updates/west-hollywood
   itp_id: 367
 south-san-fransisco-shuttle:
   agency_name: South San Francisco Shuttle
