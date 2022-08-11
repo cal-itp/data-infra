@@ -70,6 +70,7 @@ AUTH_KEYS = [
     "SD_MTS_SA_API_KEY",
     "SD_MTS_VP_TU_API_KEY",
     "SWIFTLY_AUTHORIZATION_KEY_CALITP",
+    "WEHO_RT_KEY",
 ]
 auth_dict = None
 
