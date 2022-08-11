@@ -17,8 +17,8 @@ from .tasks import fetch, huey
 
 @ttl_cache(ttl=600)
 def get_records() -> List[AirtableGTFSDataRecord]:
+    typer.secho("pulling updated records from airtable")
     latest = AirtableGTFSDataExtract.get_latest()
-    typer.secho(f"pulling updated records from airtable {latest.path}")
     records = [
         record
         for record in latest.records
