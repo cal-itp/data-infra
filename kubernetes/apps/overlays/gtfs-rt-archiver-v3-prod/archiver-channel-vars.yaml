@@ -5,5 +5,5 @@ metadata:
 data:
   AIRFLOW_ENV: cal-itp-data-infra
   CALITP_BUCKET__AIRTABLE: "gs://calitp-airtable"
-  CALITP_BUCKET__RT_RAW: "gs://calitp-gtfs-rt-raw"
+  CALITP_BUCKET__GTFS_RT_RAW: "gs://calitp-gtfs-rt-raw"
   HUEY_CONSUMER_WORKERS: "16"
