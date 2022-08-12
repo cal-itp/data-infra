@@ -11,25 +11,35 @@ from cachetools.func import ttl_cache
 from calitp.storage import AirtableGTFSDataExtract, GTFSFeedType, AirtableGTFSDataRecord
 from prometheus_client import start_http_server
 
-from .metrics import TICKS
-from .tasks import fetch, huey
+from .metrics import TICKS, AIRTABLE_CONFIGURATION_AGE
+from .tasks import fetch, huey, load_secrets
 
 
-@ttl_cache(ttl=600)
+@ttl_cache(ttl=300)
 def get_records() -> List[AirtableGTFSDataRecord]:
+    typer.secho("pulling updated records from airtable")
     latest = AirtableGTFSDataExtract.get_latest()
-    typer.secho(f"pulling updated records from airtable {latest.name}")
     records = [
         record
         for record in latest.records
         if record.data_quality_pipeline and record.data != GTFSFeedType.schedule
     ]
-    typer.secho(f"found {len(records)} records in airtable {latest.name}")
+    age = (pendulum.now() - latest.ts).total_seconds()
+    typer.secho(
+        f"found {len(records)} records in airtable {latest.path}; {age} seconds old"
+    )
+    AIRTABLE_CONFIGURATION_AGE.set(age)
     return records
 
 
-def main(port: int = os.getenv("TICKER_PROMETHEUS_PORT", 9102)):
+def main(
+    port: int = os.getenv("TICKER_PROMETHEUS_PORT", 9102),
+    load_env_secrets: bool = False,
+):
     start_http_server(port)
+
+    if load_env_secrets:
+        load_secrets()
 
     typer.secho("flushing huey")
     huey.flush()

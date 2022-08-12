@@ -16,12 +16,15 @@ spec:
     metadata:
       labels:
         name: gtfs-rt-archiver-ticker
+      annotations:
+        prometheus.io/port: "9102"
+        prometheus.io/scrape: "true"
     spec:
       containers:
         - name: app
           image: gtfs-rt-archiver
           command: ["python"]
-          args: ["-m", "gtfs_rt_archiver_v3.ticker"]
+          args: ["-m", "gtfs_rt_archiver_v3.ticker", "--load-env-secrets"]
           envFrom:
             - configMapRef:
                 name: archiver-app-vars

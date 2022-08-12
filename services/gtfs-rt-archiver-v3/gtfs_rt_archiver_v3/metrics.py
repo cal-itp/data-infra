@@ -1,9 +1,13 @@
-from prometheus_client import Histogram, Counter
+from prometheus_client import Counter, Gauge, Histogram
 
 standard_labels = (
     "record_name",
     "record_uri",
     "record_feed_type",
+)
+AIRTABLE_CONFIGURATION_AGE = Gauge(
+    name="airtable_configuration_age",
+    documentation="Airtable configuration age in seconds",
 )
 TICKS = Counter(
     name="ticks",
