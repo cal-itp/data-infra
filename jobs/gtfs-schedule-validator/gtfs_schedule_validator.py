@@ -31,7 +31,7 @@ JAR_DEFAULT = typer.Option(
     default=os.environ.get(SCHEDULE_VALIDATOR_JAR_LOCATION_ENV_KEY),
     help="Path to the GTFS Schedule Validator JAR",
 )
-SCHEDULE_VALIDATION_BUCKET = os.getenv("CALITP_BUCKET__SCHEDULE_VALIDATION")
+SCHEDULE_VALIDATION_BUCKET = os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION")
 
 app = typer.Typer()
 logging.basicConfig()
@@ -68,9 +68,9 @@ class GTFSScheduleFeedExtractValidationOutcome(ProcessingOutcome):
 
 
 # TODO: this and DownloadFeedsResult probably deserve a base class
-class ScheduleValidationResult(PartitionedGCSArtifact):
+class ScheduleValidationJobResult(PartitionedGCSArtifact):
     bucket: ClassVar[str] = SCHEDULE_VALIDATION_BUCKET
-    table: ClassVar[str] = "validation_results"
+    table: ClassVar[str] = "validation_job_results"
     partition_names: ClassVar[List[str]] = ["dt"]
     dt: pendulum.Date
     outcomes: List[GTFSScheduleFeedExtractValidationOutcome]
@@ -240,7 +240,7 @@ def validate_day(
                     exception=e,
                 )
             )
-    result = ScheduleValidationResult(
+    result = ScheduleValidationJobResult(
         filename="results.jsonl",
         dt=day,
         outcomes=outcomes,
