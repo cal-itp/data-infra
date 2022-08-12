@@ -11,7 +11,7 @@ from cachetools.func import ttl_cache
 from calitp.storage import AirtableGTFSDataExtract, GTFSFeedType, AirtableGTFSDataRecord
 from prometheus_client import start_http_server
 
-from .metrics import TICKS
+from .metrics import TICKS, AIRTABLE_CONFIGURATION_AGE
 from .tasks import fetch, huey, load_secrets
 
 
@@ -24,7 +24,11 @@ def get_records() -> List[AirtableGTFSDataRecord]:
         for record in latest.records
         if record.data_quality_pipeline and record.data != GTFSFeedType.schedule
     ]
-    typer.secho(f"found {len(records)} records in airtable {latest.path}")
+    age = (pendulum.now() - latest.ts).total_seconds()
+    typer.secho(
+        f"found {len(records)} records in airtable {latest.path}; {age} seconds old"
+    )
+    AIRTABLE_CONFIGURATION_AGE.set(age)
     return records
 
 

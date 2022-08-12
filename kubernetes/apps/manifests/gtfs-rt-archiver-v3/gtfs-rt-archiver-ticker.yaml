@@ -16,6 +16,9 @@ spec:
     metadata:
       labels:
         name: gtfs-rt-archiver-ticker
+      annotations:
+        prometheus.io/port: "9102"
+        prometheus.io/scrape: "true"
     spec:
       containers:
         - name: app
