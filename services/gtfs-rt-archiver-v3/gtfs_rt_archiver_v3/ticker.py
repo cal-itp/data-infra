@@ -15,7 +15,7 @@ from .metrics import TICKS
 from .tasks import fetch, huey
 
 
-@ttl_cache(ttl=600)
+@ttl_cache(ttl=300)
 def get_records() -> List[AirtableGTFSDataRecord]:
     typer.secho("pulling updated records from airtable")
     latest = AirtableGTFSDataExtract.get_latest()
