@@ -7,7 +7,8 @@ import pendulum
 import structlog
 import typer
 from calitp.storage import AirtableGTFSDataRecord, download_feed
-from google.cloud import storage
+from google.cloud import storage, secretmanager
+import google_crc32c
 from huey import RedisExpireHuey
 from huey.registry import Message
 from huey.serializer import Serializer
@@ -66,6 +67,7 @@ AUTH_KEYS = [
     "AC_TRANSIT_API_KEY",
     "AMTRAK_GTFS_URL",
     "CULVER_CITY_API_KEY",
+    "GRAAS_SERVER_URL",
     "MTC_511_API_KEY",
     "SD_MTS_SA_API_KEY",
     "SD_MTS_VP_TU_API_KEY",
@@ -73,6 +75,22 @@ AUTH_KEYS = [
     "WEHO_RT_KEY",
 ]
 auth_dict = None
+
+
+def load_secrets():
+    secret_client = secretmanager.SecretManagerServiceClient()
+    for key in AUTH_KEYS:
+        if key not in os.environ:
+            typer.secho(f"fetching secret {key}")
+            name = f"projects/cal-itp-data-infra/secrets/{key}/versions/latest"
+            response = secret_client.access_secret_version(request={"name": name})
+
+            crc32c = google_crc32c.Checksum()
+            crc32c.update(response.payload.data)
+            if response.payload.data_crc32c != int(crc32c.hexdigest(), 16):
+                raise ValueError(f"Data corruption detected for secret {name}.")
+
+            os.environ[key] = response.payload.data.decode("UTF-8").strip()
 
 
 @huey.on_startup()

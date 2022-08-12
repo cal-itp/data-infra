@@ -5,9 +5,6 @@ Huey's startup hooks are per _worker_ and not the overall consumer process.
 import typer
 import os
 
-from google.cloud import secretmanager
-import google_crc32c
-
 from huey.constants import WORKER_THREAD
 
 import logging
@@ -16,31 +13,17 @@ import sys
 from huey.consumer_options import ConsumerConfig
 from prometheus_client import start_http_server
 
-from .tasks import huey, AUTH_KEYS
+from .tasks import huey, load_secrets
 
 
 def main(
     port: int = os.getenv("CONSUMER_PROMETHEUS_PORT", 9102),
-    load_auth_keys: bool = False,
+    load_env_secrets: bool = False,
 ):
     start_http_server(port)
 
-    # we have to pull these from secrets manager and write to env since
-    # the SDK hangs in a multiprocessing environment aka a huey startup hook
-    if load_auth_keys:
-        secret_client = secretmanager.SecretManagerServiceClient()
-        for key in AUTH_KEYS:
-            if key not in os.environ:
-                typer.secho(f"fetching secret {key}")
-                name = f"projects/cal-itp-data-infra/secrets/{key}/versions/latest"
-                response = secret_client.access_secret_version(request={"name": name})
-
-                crc32c = google_crc32c.Checksum()
-                crc32c.update(response.payload.data)
-                if response.payload.data_crc32c != int(crc32c.hexdigest(), 16):
-                    raise ValueError(f"Data corruption detected for secret {name}.")
-
-                os.environ[key] = response.payload.data.decode("UTF-8").strip()
+    if load_env_secrets:
+        load_secrets()
 
     config = ConsumerConfig(
         workers=int(os.getenv("HUEY_CONSUMER_WORKERS", 32)),

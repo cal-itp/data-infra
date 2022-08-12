@@ -91,7 +91,7 @@ python-versions = "~=3.5"
 
 [[package]]
 name = "calitp"
-version = "2022.8.12a0"
+version = "2022.8.12a2"
 description = "Shared code for the Cal-ITP data codebases"
 category = "main"
 optional = false
@@ -239,8 +239,8 @@ google-cloud-storage = "*"
 requests = "*"
 
 [package.extras]
-crc = ["crcmod"]
 gcsfuse = ["fusepy"]
+crc = ["crcmod"]
 
 [[package]]
 name = "google-api-core"
@@ -518,7 +518,7 @@ optional = false
 python-versions = ">=3.7"
 
 [package.extras]
-tests = ["pytest-cov", "pytest", "freezegun"]
+tests = ["freezegun", "pytest", "pytest-cov"]
 
 [[package]]
 name = "idna"
@@ -902,8 +902,8 @@ deprecated = ">=1.2.3"
 packaging = ">=20.4"
 
 [package.extras]
-ocsp = ["requests (>=2.26.0)", "pyopenssl (==20.0.1)", "cryptography (>=36.0.1)"]
 hiredis = ["hiredis (>=1.0.0)"]
+ocsp = ["cryptography (>=36.0.1)", "pyopenssl (==20.0.1)", "requests (>=2.26.0)"]
 
 [[package]]
 name = "requests"
@@ -1164,7 +1164,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.11"
-content-hash = "74afe8e7bc4c71e1ec36c1a160a7ffe4695f359c72fc549b55a0f57b813a3158"
+content-hash = "9cce61418fb5ea4e1b0a0d31f90a052a2ce68359b0c432d72fdbdc2e27193b68"
 
 [metadata.files]
 aiohttp = []

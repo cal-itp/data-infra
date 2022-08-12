@@ -12,7 +12,7 @@ from calitp.storage import AirtableGTFSDataExtract, GTFSFeedType, AirtableGTFSDa
 from prometheus_client import start_http_server
 
 from .metrics import TICKS
-from .tasks import fetch, huey
+from .tasks import fetch, huey, load_secrets
 
 
 @ttl_cache(ttl=300)
@@ -28,8 +28,14 @@ def get_records() -> List[AirtableGTFSDataRecord]:
     return records
 
 
-def main(port: int = os.getenv("TICKER_PROMETHEUS_PORT", 9102)):
+def main(
+    port: int = os.getenv("TICKER_PROMETHEUS_PORT", 9102),
+    load_env_secrets: bool = False,
+):
     start_http_server(port)
+
+    if load_env_secrets:
+        load_secrets()
 
     typer.secho("flushing huey")
     huey.flush()
