@@ -3,7 +3,6 @@ import os
 
 import pandas as pd
 from calitp.config import is_development
-from calitp.storage import prefix_bucket
 
 # To add a macro, add its definition in the appropriate section
 # And then add it to the dictionary at the bottom of this file
@@ -138,6 +137,5 @@ data_infra_macros = {
     "sql_airtable_mapping": airtable_mapping_generate_sql,
     "is_development": is_development_macro,
     "image_tag": lambda: "development" if is_development() else "latest",
-    "prefix_bucket": prefix_bucket,
     "env_var": lambda key: os.getenv(key),
 }

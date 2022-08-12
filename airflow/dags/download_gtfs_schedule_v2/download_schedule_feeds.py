@@ -2,86 +2,75 @@
 # python_callable: download_all
 # provide_context: true
 # ---
-import cgi
 import datetime
 import logging
+import re
 import traceback
-
-import os
+from typing import List, Optional, ClassVar
 
 import humanize
 import pandas as pd
 import pendulum
-import re
 from airflow.models import Variable
 from airflow.utils.db import create_session
 from airflow.utils.email import send_email
 from calitp.config import is_development
-from pydantic.networks import HttpUrl
-from pydantic.tools import parse_obj_as
-from requests import Session
-from typing import List, Dict
 from calitp.storage import (
     get_fs,
     AirtableGTFSDataExtract,
     AirtableGTFSDataRecord,
-    AirtableGTFSDataRecordProcessingOutcome,
     GTFSFeedExtractInfo,
     GTFSFeedType,
-    DownloadFeedsResult,
+    download_feed,
+    ProcessingOutcome,
+    SCHEDULE_RAW_BUCKET,
+    PartitionedGCSArtifact,
+    JSONL_EXTENSION,
 )
+from pydantic import validator
 
 GTFS_FEED_LIST_ERROR_THRESHOLD = 0.95
 
 
-def download_feed(
-    record: AirtableGTFSDataRecord, auth_dict: Dict
-) -> AirtableGTFSDataRecordProcessingOutcome:
-    if not record.uri:
-        raise ValueError("")
+class AirtableGTFSDataRecordProcessingOutcome(ProcessingOutcome):
+    airtable_record: AirtableGTFSDataRecord
+    extract: Optional[GTFSFeedExtractInfo]
 
-    parse_obj_as(HttpUrl, record.uri)
 
-    s = Session()
-    r = s.prepare_request(record.build_request(auth_dict))
-    resp = s.send(r)
-    resp.raise_for_status()
+class DownloadFeedsResult(PartitionedGCSArtifact):
+    bucket: ClassVar[str] = SCHEDULE_RAW_BUCKET
+    table: ClassVar[str] = "download_schedule_feed_results"
+    partition_names: ClassVar[List[str]] = ["dt", "ts"]
+    ts: pendulum.DateTime
+    end: pendulum.DateTime
+    outcomes: List[AirtableGTFSDataRecordProcessingOutcome]
 
-    disposition_header = resp.headers.get(
-        "content-disposition", resp.headers.get("Content-Disposition")
-    )
+    @validator("filename", allow_reuse=True)
+    def is_jsonl(cls, v):
+        assert v.endswith(JSONL_EXTENSION)
+        return v
 
-    if disposition_header:
-        if disposition_header.startswith("filename="):
-            # sorry; cgi won't parse unless it's prefixed with the disposition type
-            disposition_header = f"attachment; {disposition_header}"
-        _, params = cgi.parse_header(disposition_header)
-        disposition_filename = params.get("filename")
-    else:
-        disposition_filename = None
+    @property
+    def dt(self) -> pendulum.Date:
+        return self.ts.date()
 
-    filename = (
-        disposition_filename
-        or (os.path.basename(resp.url) if resp.url.endswith(".zip") else None)
-        or "feed.zip"
-    )
+    @property
+    def successes(self) -> List[AirtableGTFSDataRecordProcessingOutcome]:
+        return [outcome for outcome in self.outcomes if outcome.success]
 
-    extract = GTFSFeedExtractInfo(
-        # TODO: handle this in pydantic?
-        filename=filename.strip('"'),
-        config=record,
-        response_code=resp.status_code,
-        response_headers=resp.headers,
-        ts=pendulum.now(),
-    )
+    @property
+    def failures(self) -> List[AirtableGTFSDataRecordProcessingOutcome]:
+        return [outcome for outcome in self.outcomes if not outcome.success]
 
-    extract.save_content(fs=get_fs(), content=resp.content)
-
-    return AirtableGTFSDataRecordProcessingOutcome(
-        success=True,
-        input_record=record,
-        extract=extract,
-    )
+    # TODO: I dislike having to exclude the records here
+    #   I need to figure out the best way to have a single type represent the "metadata" of
+    #   the content as well as the content itself
+    def save(self, fs):
+        self.save_content(
+            fs=fs,
+            content="\n".join(o.json() for o in self.outcomes).encode(),
+            exclude={"outcomes"},
+        )
 
 
 def download_all(task_instance, execution_date, **kwargs):
@@ -111,7 +100,22 @@ def download_all(task_instance, execution_date, **kwargs):
                     match.group("param_name"): match.group("param_lookup_key")
                 }
                 record.uri = re.sub(jinja_pattern, "", record.uri)
-            outcomes.append(download_feed(record, auth_dict=auth_dict))
+
+            extract, content = download_feed(
+                record,
+                auth_dict=auth_dict,
+                ts=start,
+            )
+
+            extract.save_content(fs=get_fs(), content=content)
+
+            outcomes.append(
+                AirtableGTFSDataRecordProcessingOutcome(
+                    success=True,
+                    airtable_record=record,
+                    extract=extract,
+                )
+            )
         except Exception as e:
             logging.error(
                 f"exception occurred while attempting to download feed {record.uri}: {str(e)}\n{traceback.format_exc()}"
@@ -120,7 +124,7 @@ def download_all(task_instance, execution_date, **kwargs):
                 AirtableGTFSDataRecordProcessingOutcome(
                     success=False,
                     exception=e,
-                    input_record=record,
+                    airtable_record=record,
                 )
             )
 
