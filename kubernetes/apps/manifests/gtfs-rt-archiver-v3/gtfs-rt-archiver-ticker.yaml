@@ -21,7 +21,7 @@ spec:
         - name: app
           image: gtfs-rt-archiver
           command: ["python"]
-          args: ["-m", "gtfs_rt_archiver_v3.ticker"]
+          args: ["-m", "gtfs_rt_archiver_v3.ticker", "--load-env-secrets"]
           envFrom:
             - configMapRef:
                 name: archiver-app-vars
