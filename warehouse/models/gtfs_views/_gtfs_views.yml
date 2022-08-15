@@ -542,42 +542,6 @@ models:
           Service date
         tests:
           - not_null
-  - name: gtfs_schedule_fact_daily_trips_inc
-    description: |
-      Each row is a trip / day combination, where the given trip is
-      active on the given day, enriched with route and stop_time
-      information to give a daily summary. Primary key is composite
-      of feed_key, trip_key, and service_date. **Incremental version
-      of gtfs_schedule_fact_daily_trips; currently testing incremental
-      implementation.**
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - trip_key
-            - service_date
-            - feed_key
-    columns:
-      - name: feed_key
-        description: '{{ doc("column_schedule_key") }}'
-        tests:
-          - not_null
-      - name: trip_key
-        description: '{{ doc("column_schedule_key") }}'
-        tests:
-          - not_null
-      - *calitp_itp_id
-      - *calitp_url_number
-      - name: service_id
-        description: |
-          service_id value from calendar.txt / calendar_dates.txt /
-          trips.txt
-        tests:
-          - not_null
-      - name: service_date
-        description: |
-          Service date
-        tests:
-          - not_null
   - name: gtfs_schedule_fact_daily_feed_stops
     description: |
       Each row of this table is a feed/stop/day combination, showing
