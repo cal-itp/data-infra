@@ -390,7 +390,7 @@ desert-roadrunner:
   agency_name: Desert Roadrunner
   feeds:
     - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/paloverde_valley-ca-us/paloverde_valley-ca-us.zip
-      gtfs_rt_vehicle_positions_url: https://{{ GRAAS_SERVER_URL}}/vehicle-positions.pb?agency=desert-roadrunner
+      gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 238
@@ -1152,7 +1152,7 @@ santa-ynez-valley-transit:
   agency_name: Santa Ynez Valley Transit
   feeds:
     - gtfs_schedule_url: http://mjcaction.com/MJC_GTFS_Public/syvt_google_transit.zip
-      gtfs_rt_vehicle_positions_url: https://{{ GRAAS_SERVER_URL}}/vehicle-positions.pb?agency=santa-ynez-valley-transit
+      gtfs_rt_vehicle_positions_url: https://lat-long-prototype.wl.r.appspot.com/vehicle-positions.pb?agency=santa-ynez-valley-transit
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 312
@@ -1600,7 +1600,7 @@ glenn-transit:
   agency_name: Glenn County Transit
   feeds:
   - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/glenn-ca-us/glenn-ca-us.zip
-    gtfs_rt_vehicle_positions_url: https://{{ GRAAS_SERVER_URL}}/vehicle-positions.pb?agency=glenn-transit
+    gtfs_rt_vehicle_positions_url: null
     gtfs_rt_service_alerts_url: null
     gtfs_rt_trip_updates_url: null
   itp_id: 122
@@ -1608,7 +1608,7 @@ tcrta:
   agency_name: Tulare County Regional Transit Agency
   feeds:
   - gtfs_schedule_url: https://tularecog.org/tcag/data-gis-modeling/gtfs-data/tulare-county-regional-transit-agency-tcrta-gtfs
-    gtfs_rt_vehicle_positions_url: https://{{ GRAAS_SERVER_URL}}/vehicle-positions.pb?agency=tcrta
+    gtfs_rt_vehicle_positions_url: null
     gtfs_rt_service_alerts_url: null
     gtfs_rt_trip_updates_url: null
   itp_id: 474
