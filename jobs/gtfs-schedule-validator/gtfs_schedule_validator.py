@@ -38,6 +38,7 @@ app = typer.Typer()
 logging.basicConfig()
 
 
+# TODO: this could be merged with the RT one
 class GTFSScheduleFeedValidation(PartitionedGCSArtifact):
     bucket: ClassVar[str] = SCHEDULE_VALIDATION_BUCKET
     table: ClassVar[str] = "validation_reports"
