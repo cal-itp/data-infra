@@ -13,6 +13,7 @@ import tempfile
 import traceback
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
+from enum import Enum
 from pathlib import Path
 from typing import ClassVar, Dict, List, Optional, Sequence, Tuple, Type, Union
 from zipfile import ZipFile
@@ -49,6 +50,11 @@ JAR_DEFAULT = typer.Option(
 
 RT_PARSED_BUCKET = os.environ["CALITP_BUCKET__GTFS_RT_PARSED"]
 RT_VALIDATION_BUCKET = os.environ["CALITP_BUCKET__GTFS_RT_VALIDATION"]
+
+
+class RTProcessingStep(str, Enum):
+    parse = "parse"
+    validate = "validate"
 
 
 def log(*args, err=False, fg=None, pbar=None, **kwargs):
@@ -105,7 +111,7 @@ def remove_from_list_if_type(key: str, typ: Type):
 
 
 class RTHourlyAggregation(PartitionedGCSArtifact):
-    bucket: ClassVar[str] = RT_PARSED_BUCKET
+    step: RTProcessingStep
     feed_type: GTFSFeedType
     extracts: List[GTFSRTFeedExtract]
     hour: pendulum.DateTime
@@ -117,13 +123,20 @@ class RTHourlyAggregation(PartitionedGCSArtifact):
             List: remove_from_list_if_type("config", GTFSRTFeedExtract),
         }
 
+    @property
+    def bucket(self) -> str:
+        if self.step == RTProcessingStep.parse:
+            return RT_PARSED_BUCKET
+        if self.step == RTProcessingStep.validate:
+            return RT_VALIDATION_BUCKET
+        raise RuntimeError("we should not be here")
+
     @validator("extracts", allow_reuse=True)
-    def extracts_have_same_hour_and_url(cls, v):
-        hours = set(
-            extract["ts"].replace(minute=0, second=0, microsecond=0) for extract in v
-        )
-        urls = set(extract["config"]["uri"] for extract in v)
+    def extracts_have_same_hour_and_url(cls, v: List[GTFSRTFeedExtract]):
+        hours = set(extract.hour for extract in v)
+        urls = set(extract.base64_url for extract in v)
         assert len(hours) == len(urls) == 1
+        return v
 
     @property
     def filename(self):
@@ -131,7 +144,11 @@ class RTHourlyAggregation(PartitionedGCSArtifact):
 
     @property
     def table(self):
-        return self.feed_type
+        if self.step == RTProcessingStep.parse:
+            return self.feed_type
+        if self.step == RTProcessingStep.validate:
+            return f"{self.feed_type}_validations"
+        raise RuntimeError("we should not be here")
 
     @property
     def dt(self) -> pendulum.Date:
@@ -172,11 +189,9 @@ class RTFileValidationOutcome(ProcessingOutcome):
     validation: Optional[GTFSRTFeedValidation]
 
 
-# class GTFSRTValidationJobResult(PartitionedGCSArtifact):
-#     bucket: ClassVar[str] = RT_VALIDATION_BUCKET
-#
-#     @property
-#     def table(self):
+class GTFSRTValidationJobResult(PartitionedGCSArtifact):
+    bucket: ClassVar[str] = RT_VALIDATION_BUCKET
+    outcomes: List[RTFileValidationOutcome]
 
 
 def fatal_code(e):
@@ -275,27 +290,10 @@ def execute_rt_validator(
     ).check_returncode()
 
 
-class GTFSRTParsedFile(PartitionedGCSArtifact):
-    bucket: ClassVar[str] = RT_PARSED_BUCKET
-    extract: GTFSRTFeedExtract = Field(..., exclude={"config"})
-    partition_names: ClassVar[List[str]] = ["dt", "hour", "base64_url"]
-
-    @property
-    def dt(self) -> pendulum.Date:
-        return self.extract.ts.date()
-
-    @property
-    def hour(self) -> pendulum.DateTime:
-        return self.extract.ts.replace(minute=0, second=0, microsecond=0)
-
-    @property
-    def table(self):
-        return self.extract.config.data
-
-
 class RTFileProcessingOutcome(ProcessingOutcome):
+    step: RTProcessingStep
     extract: GTFSRTFeedExtract
-    parsed: Optional[GTFSRTParsedFile]
+    parsed: Optional[RTHourlyAggregation]
 
 
 def validate_and_upload(
@@ -397,19 +395,19 @@ def parse_and_upload(
     # writing to the gzip and cleaning up after ourselves
 
     with gzip.open(gzip_fname, "w") as gzipfile:
-        for rt_file in hour.extracts:
+        for extract in hour.extracts:
             feed = gtfs_realtime_pb2.FeedMessage()
 
             try:
                 with open(
-                    os.path.join(dst_path_rt, rt_file.timestamped_filename), "rb"
+                    os.path.join(dst_path_rt, extract.timestamped_filename), "rb"
                 ) as f:
                     feed.ParseFromString(f.read())
                 parsed = json_format.MessageToDict(feed)
             except DecodeError as e:
                 if verbose:
                     log(
-                        f"WARNING: DecodeError for {str(rt_file.path)}",
+                        f"WARNING: DecodeError for {str(extract.path)}",
                         fg=typer.colors.YELLOW,
                         pbar=pbar,
                     )
@@ -418,13 +416,13 @@ def parse_and_upload(
                         step="parse",
                         success=False,
                         exception=e,
-                        file=rt_file,
+                        file=extract,
                     )
                 )
                 continue
 
             if not parsed or "entity" not in parsed:
-                msg = f"WARNING: no records found in {str(rt_file.path)}"
+                msg = f"WARNING: no parsed entity found in {str(extract.path)}"
                 if verbose:
                     log(
                         msg,
@@ -436,7 +434,7 @@ def parse_and_upload(
                         step="parse",
                         success=False,
                         exception=ValueError(msg),
-                        file=rt_file,
+                        extract=extract,
                     )
                 )
                 continue
@@ -448,7 +446,7 @@ def parse_and_upload(
                             {
                                 "header": parsed["header"],
                                 # back and forth so we use pydantic serialization
-                                "metadata": json.loads(rt_file.json()),
+                                "metadata": json.loads(extract.json()),
                                 **copy.deepcopy(record),
                             }
                         )
@@ -460,22 +458,20 @@ def parse_and_upload(
                 RTFileProcessingOutcome(
                     step="parse",
                     success=True,
-                    file=rt_file,
-                    n_output_records=len(parsed["entity"]),
-                    hive_path=hour.data_hive_path,
+                    extract=extract,
                 )
             )
             del parsed
 
     if written:
         log(
-            f"writing {written} lines to {hour.data_hive_path}",
+            f"writing {written} lines to {hour.path}",
             pbar=pbar,
         )
-        put_with_retry(fs, gzip_fname, f"{hour.data_hive_path}")
+        put_with_retry(fs, gzip_fname, hour.path)
     else:
         log(
-            f"WARNING: no records at all for {hour.data_hive_path}",
+            f"WARNING: no records at all for {hour.path}",
             fg=typer.colors.YELLOW,
             pbar=pbar,
         )
@@ -490,18 +486,12 @@ def parse_and_validate(
     jar_path: Path,
     tmp_dir: str,
     verbose: bool = False,
-    parse: bool = False,
-    validate: bool = False,
     pbar=None,
 ):
-    if not parse and not validate:
-        raise ValueError("skipping both parsing and validation does nothing for us!")
-
     fs = get_fs()
-    suffix = hour.suffix
-    dst_path_gtfs = f"{tmp_dir}/gtfs_{suffix}/"
+    dst_path_gtfs = f"{tmp_dir}/gtfs_{hash(hour.name)}/"
     os.mkdir(dst_path_gtfs)
-    dst_path_rt = f"{tmp_dir}/rt_{suffix}/"
+    dst_path_rt = f"{tmp_dir}/rt_{hash(hour.name)}/"
     get_with_retry(
         fs,
         rpath=[file.path for file in hour.extracts],
@@ -511,7 +501,7 @@ def parse_and_validate(
         ],
     )
 
-    if validate:
+    if hour.step == RTProcessingStep.validate:
         try:
             outcomes = validate_and_upload(
                 fs=fs,
@@ -551,7 +541,7 @@ def parse_and_validate(
             verbose=verbose,
         )
 
-    if parse:
+    if hour.step == RTProcessingStep.parse:
         outcomes = parse_and_upload(
             fs=fs,
             dst_path_rt=dst_path_rt,
@@ -560,23 +550,21 @@ def parse_and_validate(
             verbose=verbose,
             pbar=pbar,
         )
+        
         assert len(outcomes) == len(hour.extracts)
-        upload_if_records(
-            fs,
-            tmp_dir,
-            out_path=hour.outcomes_hive_path,
-            records=outcomes,
-            pbar=pbar,
-            verbose=verbose,
-        )
+        GTFSRTValidationJobResult(
+            outcomes=outcomes,
+        ).save_content(fs=fs,
+                       content="\n".join(o.json() for o in outcomes).encode(),
+                       exclude={"outcomes"},
+                       )
 
 
 def main(
-    hour: datetime.datetime,
+    step: RTProcessingStep,
     feed_type: GTFSFeedType,
+    hour: datetime.datetime,
     limit: int = 0,
-    parse: bool = False,
-    validate: bool = False,
     progress: bool = typer.Option(
         False,
         help="If true, display progress bar; useful for development but not in production.",
@@ -585,8 +573,6 @@ def main(
     jar_path: Path = JAR_DEFAULT,
     verbose: bool = False,
 ):
-    assert parse ^ validate, "must either parse xor validate"
-
     pendulum_hour = pendulum.instance(hour)
     files: List[GTFSRTFeedExtract] = fetch_all_in_partition(
         cls=GTFSRTFeedExtract,
@@ -613,10 +599,12 @@ def main(
 
     aggregations_to_process = [
         RTHourlyAggregation(
+            step=step,
+            filename=feed_type,
             feed_type=feed_type,
             hour=hour,
             base64_url=url,
-            source_files=files,
+            extracts=files,
         )
         for (hour, url), files in rt_aggs.items()
     ]
@@ -624,7 +612,7 @@ def main(
     if limit:
         typer.secho(f"limit of {limit} feeds was set", fg=typer.colors.YELLOW)
         aggregations_to_process = list(
-            sorted(aggregations_to_process, key=lambda feed: feed.data_hive_path)
+            sorted(aggregations_to_process, key=lambda feed: feed.path)
         )[:limit]
 
     pbar = tqdm(total=len(aggregations_to_process)) if progress else None
@@ -646,8 +634,6 @@ def main(
                     jar_path=jar_path,
                     tmp_dir=tmp_dir,
                     verbose=verbose,
-                    parse=parse,
-                    validate=validate,
                     pbar=pbar,
                 ): hour
                 for hour in aggregations_to_process
