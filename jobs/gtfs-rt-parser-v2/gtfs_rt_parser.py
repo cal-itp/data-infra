@@ -110,16 +110,18 @@ def remove_from_list_if_type(key: str, typ: Type):
 
 
 class RTHourlyAggregation(PartitionedGCSArtifact):
+    partition_names: ClassVar[List[str]] = ["dt", "hour", "base64_url"]
     step: RTProcessingStep
     feed_type: GTFSFeedType
     extracts: List[GTFSRTFeedExtract]
     hour: pendulum.DateTime
     base64_url: str
-    partition_names: ClassVar[List[str]] = ["dt", "hour", "base64_url"]
 
     class Config:
         json_encoders = {
-            List: remove_from_list_if_type("config", GTFSRTFeedExtract),
+            List[GTFSRTFeedExtract]: lambda extracts: [
+                extract.path for extract in extracts
+            ],
         }
 
     @property
@@ -131,10 +133,11 @@ class RTHourlyAggregation(PartitionedGCSArtifact):
         raise RuntimeError("we should not be here")
 
     @validator("extracts", allow_reuse=True)
-    def extracts_have_same_hour_and_url(cls, v: List[GTFSRTFeedExtract]):
+    def extracts_have_same_hour_and_url_and_schedule(cls, v: List[GTFSRTFeedExtract]):
         hours = set(extract.hour for extract in v)
         urls = set(extract.base64_url for extract in v)
-        assert len(hours) == len(urls) == 1
+        schedules = set(extract.schedule_extract for extract in v)
+        assert len(hours) == len(urls) == len(schedules) == 1
         return v
 
     @property
@@ -373,6 +376,7 @@ def validate_and_upload(
                 )
             outcomes.append(
                 RTFileProcessingOutcome(
+                    step=hour.step,
                     success=False,
                     exception=e,
                     extract=extract,
@@ -393,22 +397,20 @@ def validate_and_upload(
 
         outcomes.append(
             RTFileProcessingOutcome(
-                step="validate",
+                step=hour.step,
                 success=True,
-                n_output_records=len(records_to_upload),
-                file=extract,
-                hive_path=hour.validation_hive_path,
+                extract=extract,
             )
         )
 
     upload_if_records(
         fs,
         tmp_dir,
-        out_path=hour.validation_hive_path,
+        artifact=hour,
         records=records_to_upload,
         pbar=pbar,
-        verbose=verbose,
     )
+
     return outcomes
 
 
@@ -449,7 +451,7 @@ def parse_and_upload(
                         step="parse",
                         success=False,
                         exception=e,
-                        file=extract,
+                        extract=extract,
                     )
                 )
                 continue
@@ -549,7 +551,7 @@ def parse_and_validate(
         except (ScheduleDataNotFound, subprocess.CalledProcessError) as e:
             if verbose:
                 log(
-                    f"{str(e)} thrown for {hour.extracts[0].schedule_path}",
+                    f"{str(e)} thrown for {hour.path}",
                     fg=typer.colors.RED,
                     pbar=pbar,
                 )
@@ -603,10 +605,6 @@ def main(
         progress=progress,
     )
 
-    typer.secho(
-        f"found {len(files)} {feed_type} files to process", fg=typer.colors.MAGENTA
-    )
-
     rt_aggs: Dict[Tuple[pendulum.DateTime, str], List[GTFSRTFeedExtract]] = defaultdict(
         list
     )
@@ -625,6 +623,11 @@ def main(
         )
         for (hour, url), files in rt_aggs.items()
     ]
+
+    typer.secho(
+        f"found {len(files)} {feed_type} files in {len(aggregations_to_process)} aggregations to process",
+        fg=typer.colors.MAGENTA,
+    )
 
     if limit:
         typer.secho(f"limit of {limit} feeds was set", fg=typer.colors.YELLOW)
@@ -677,7 +680,9 @@ def main(
     if pbar:
         del pbar
 
-    assert len(outcomes) == sum(len(hour.extracts) for hour in aggregations_to_process)
+    assert len(outcomes) == len(
+        files
+    ), f"we ended up with {len(outcomes)} outcomes from {len(files)}"
     result = GTFSRTJobResult(
         # TODO: these seem weird...
         hour=aggregations_to_process[0].hour,
