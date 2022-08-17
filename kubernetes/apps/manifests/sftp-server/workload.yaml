@@ -47,6 +47,11 @@ spec:
               cp /config/server/sshd_config /etc/ssh/sshd_config
               ssh-keygen -A
               exec /usr/sbin/sshd -e -D
+          readinessProbe:
+            tcpSocket:
+              port: 22
+            initialDelaySeconds: 5
+            periodSeconds: 5
       securityContext:
         fsGroup: 1000
       volumes:
