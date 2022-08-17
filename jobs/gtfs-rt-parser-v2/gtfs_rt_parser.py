@@ -536,7 +536,7 @@ def parse_and_validate(
 
     if hour.step == RTProcessingStep.validate:
         try:
-            outcomes = validate_and_upload(
+            return validate_and_upload(
                 fs=fs,
                 jar_path=jar_path,
                 dst_path_gtfs=dst_path_gtfs,
@@ -554,25 +554,15 @@ def parse_and_validate(
                     pbar=pbar,
                 )
 
-            outcomes = [
+            return [
                 RTFileProcessingOutcome(
-                    step="validate",
+                    step=hour.step,
                     success=False,
-                    file=file,
+                    extract=extract,
                     exception=e,
-                    hive_path=hour.data_hive_path,
                 )
-                for file in hour.extracts
+                for extract in hour.extracts
             ]
-        assert len(outcomes) == len(hour.extracts)
-        upload_if_records(
-            fs,
-            tmp_dir,
-            out_path=hour.validation_outcomes_hive_path,
-            records=outcomes,
-            pbar=pbar,
-            verbose=verbose,
-        )
 
     if hour.step == RTProcessingStep.parse:
         return parse_and_upload(
