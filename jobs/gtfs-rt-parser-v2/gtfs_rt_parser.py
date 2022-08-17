@@ -68,22 +68,21 @@ def log(*args, err=False, fg=None, pbar=None, **kwargs):
 def upload_if_records(
     fs,
     tmp_dir: str,
-    out_path: str,
+    artifact: PartitionedGCSArtifact,
     records: Sequence[Union[Dict, BaseModel]],
     pbar=None,
-    verbose=False,
 ):
     # BigQuery fails when trying to parse empty files, so shouldn't write them
     if not records:
         log(
-            f"WARNING: no records found for {out_path}, skipping upload",
+            f"WARNING: no records found for {artifact.path}, skipping upload",
             fg=typer.colors.YELLOW,
             pbar=pbar,
         )
         return
 
     log(
-        f"writing {len(records)} lines to {out_path}",
+        f"writing {len(records)} lines to {artifact.path}",
         pbar=pbar,
     )
     with tempfile.NamedTemporaryFile(mode="wb", delete=False, dir=tmp_dir) as f:
@@ -94,7 +93,7 @@ def upload_if_records(
         gzipfile.write("\n".join(encoded).encode("utf-8"))
         gzipfile.close()
 
-    put_with_retry(fs, f.name, out_path)
+    put_with_retry(fs, f.name, artifact.path)
 
 
 class ScheduleDataNotFound(Exception):
@@ -137,10 +136,6 @@ class RTHourlyAggregation(PartitionedGCSArtifact):
         urls = set(extract.base64_url for extract in v)
         assert len(hours) == len(urls) == 1
         return v
-
-    @property
-    def filename(self):
-        return f"{self.feed_type}{JSONL_GZIP_EXTENSION}"
 
     @property
     def table(self):
@@ -191,7 +186,21 @@ class RTFileValidationOutcome(ProcessingOutcome):
 
 class GTFSRTValidationJobResult(PartitionedGCSArtifact):
     bucket: ClassVar[str] = RT_VALIDATION_BUCKET
+    agg: RTHourlyAggregation
+    partition_names: ClassVar[List[str]] = ["dt", "hour"]
     outcomes: List[RTFileValidationOutcome]
+
+    @property
+    def table(self) -> str:
+        return f"{self.agg.table}_outcomes"
+
+    @property
+    def hour(self) -> pendulum.DateTime:
+        return self.agg.hour
+
+    @property
+    def dt(self) -> pendulum.Date:
+        return self.hour.date()
 
 
 def fatal_code(e):
@@ -552,7 +561,11 @@ def parse_and_validate(
         )
 
         assert len(outcomes) == len(hour.extracts)
-        GTFSRTValidationJobResult(outcomes=outcomes,).save_content(
+        GTFSRTValidationJobResult(
+            filename=hour.filename,
+            agg=hour,
+            outcomes=outcomes,
+        ).save_content(
             fs=fs,
             content="\n".join(o.json() for o in outcomes).encode(),
             exclude={"outcomes"},
@@ -599,7 +612,7 @@ def main(
     aggregations_to_process = [
         RTHourlyAggregation(
             step=step,
-            filename=feed_type,
+            filename=f"{feed_type}{JSONL_GZIP_EXTENSION}",
             feed_type=feed_type,
             hour=hour,
             base64_url=url,
