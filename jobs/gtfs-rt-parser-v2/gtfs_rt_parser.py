@@ -12,7 +12,7 @@ import subprocess
 import tempfile
 import traceback
 from collections import defaultdict
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, Future
 from enum import Enum
 from pathlib import Path
 from typing import ClassVar, Dict, List, Optional, Sequence, Tuple, Type, Union
@@ -184,23 +184,52 @@ class RTFileValidationOutcome(ProcessingOutcome):
     validation: Optional[GTFSRTFeedValidation]
 
 
-class GTFSRTValidationJobResult(PartitionedGCSArtifact):
-    bucket: ClassVar[str] = RT_VALIDATION_BUCKET
-    agg: RTHourlyAggregation
+# TODO: this really should encapsulate a lot of hourly aggregations... but do we want to serialize those?
+class GTFSRTJobResult(PartitionedGCSArtifact):
+    step: RTProcessingStep
+    feed_type: GTFSFeedType
+    hour: pendulum.DateTime
     partition_names: ClassVar[List[str]] = ["dt", "hour"]
     outcomes: List[RTFileValidationOutcome]
 
-    @property
-    def table(self) -> str:
-        return f"{self.agg.table}_outcomes"
+    @validator("outcomes", allow_reuse=True)
+    def outcomes_equals_extracts(cls, v, values):
+        assert len(v) == len(values["agg"].extracts)
+        return v
 
     @property
-    def hour(self) -> pendulum.DateTime:
-        return self.agg.hour
+    def bucket(self) -> str:
+        if self.step == RTProcessingStep.parse:
+            return RT_PARSED_BUCKET
+        if self.step == RTProcessingStep.validate:
+            return RT_VALIDATION_BUCKET
+        raise RuntimeError("we should not be here")
+
+    @property
+    def table(self):
+        if self.step == RTProcessingStep.parse:
+            return f"{self.feed_type}_outcomes"
+        if self.step == RTProcessingStep.validate:
+            return f"{self.feed_type}_validation_outcomes"
+        raise RuntimeError("we should not be here")
 
     @property
     def dt(self) -> pendulum.Date:
         return self.hour.date()
+
+    # TODO: I dislike having to exclude the records here
+    #   I need to figure out the best way to have a single type represent the "metadata" of
+    #   the content as well as the content itself
+    def save(self, fs):
+        typer.secho(
+            f"saving {len(self.outcomes)} outcomes to {self.path}",
+            fg=typer.colors.GREEN,
+        )
+        self.save_content(
+            fs=fs,
+            content="\n".join(o.json() for o in self.outcomes).encode(),
+            exclude={"outcomes"},
+        )
 
 
 def fatal_code(e):
@@ -496,7 +525,7 @@ def parse_and_validate(
     tmp_dir: str,
     verbose: bool = False,
     pbar=None,
-):
+) -> List[RTFileProcessingOutcome]:
     fs = get_fs()
     dst_path_gtfs = f"{tmp_dir}/gtfs_{hash(hour.name)}/"
     os.mkdir(dst_path_gtfs)
@@ -551,7 +580,7 @@ def parse_and_validate(
         )
 
     if hour.step == RTProcessingStep.parse:
-        outcomes = parse_and_upload(
+        return parse_and_upload(
             fs=fs,
             dst_path_rt=dst_path_rt,
             tmp_dir=tmp_dir,
@@ -560,16 +589,7 @@ def parse_and_validate(
             pbar=pbar,
         )
 
-        assert len(outcomes) == len(hour.extracts)
-        GTFSRTValidationJobResult(
-            filename=hour.filename,
-            agg=hour,
-            outcomes=outcomes,
-        ).save_content(
-            fs=fs,
-            content="\n".join(o.json() for o in outcomes).encode(),
-            exclude={"outcomes"},
-        )
+    raise RuntimeError("we should not be here")
 
 
 def main(
@@ -629,6 +649,7 @@ def main(
 
     pbar = tqdm(total=len(aggregations_to_process)) if progress else None
 
+    outcomes = []
     exceptions = []
 
     # from https://stackoverflow.com/a/55149491
@@ -639,7 +660,7 @@ def main(
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         with ThreadPoolExecutor(max_workers=threads) as pool:
-            futures = {
+            futures: Dict[Future, RTHourlyAggregation] = {
                 pool.submit(
                     parse_and_validate,
                     hour=hour,
@@ -656,20 +677,36 @@ def main(
                 if pbar:
                     pbar.update(1)
                 try:
-                    future.result()
+                    outcomes.extend(future.result())
                 except KeyboardInterrupt:
                     raise
                 except Exception as e:
                     log(
-                        f"WARNING: exception {type(e)} {str(e)} bubbled up to top for {hour.data_hive_path}",
+                        f"WARNING: exception {type(e)} {str(e)} bubbled up to top for {hour.path}",
                         err=True,
                         fg=typer.colors.RED,
                         pbar=pbar,
                     )
-                    exceptions.append((e, hour.data_hive_path, traceback.format_exc()))
+                    exceptions.append((e, hour.path, traceback.format_exc()))
 
     if pbar:
         del pbar
+
+    assert len(outcomes) == sum(len(hour.extracts) for hour in aggregations_to_process)
+    result = GTFSRTJobResult(
+        # TODO: these seem weird...
+        hour=aggregations_to_process[0].hour,
+        filename=aggregations_to_process[0].filename,
+        step=step,
+        feed_type=feed_type,
+        outcomes=outcomes,
+    )
+    log(
+        f"saving {len(result.outcomes)} outcomes to {result.path}",
+        fg=typer.colors.GREEN,
+        pbar=pbar,
+    )
+    result.save(get_fs())
 
     if exceptions:
         exc_str = "\n".join(str(tup) for tup in exceptions)
