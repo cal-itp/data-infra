@@ -192,11 +192,6 @@ class GTFSRTJobResult(PartitionedGCSArtifact):
     partition_names: ClassVar[List[str]] = ["dt", "hour"]
     outcomes: List[RTFileValidationOutcome]
 
-    @validator("outcomes", allow_reuse=True)
-    def outcomes_equals_extracts(cls, v, values):
-        assert len(v) == len(values["agg"].extracts)
-        return v
-
     @property
     def bucket(self) -> str:
         if self.step == RTProcessingStep.parse:
@@ -700,11 +695,6 @@ def main(
         step=step,
         feed_type=feed_type,
         outcomes=outcomes,
-    )
-    log(
-        f"saving {len(result.outcomes)} outcomes to {result.path}",
-        fg=typer.colors.GREEN,
-        pbar=pbar,
     )
     result.save(get_fs())
 
