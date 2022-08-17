@@ -691,7 +691,7 @@ def main(
     result = GTFSRTJobResult(
         # TODO: these seem weird...
         hour=aggregations_to_process[0].hour,
-        filename=aggregations_to_process[0].filename,
+        filename=aggregations_to_process[0].filename.removesuffix(".gz"),
         step=step,
         feed_type=feed_type,
         outcomes=outcomes,
