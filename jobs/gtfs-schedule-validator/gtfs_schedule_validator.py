@@ -22,6 +22,7 @@ from calitp.storage import (
     PartitionedGCSArtifact,
     ProcessingOutcome,
     JSONL_EXTENSION,
+    SCHEDULE_RAW_BUCKET,
 )
 from pydantic import Field, validator
 
@@ -40,7 +41,6 @@ logging.basicConfig()
 class GTFSScheduleFeedValidation(PartitionedGCSArtifact):
     bucket: ClassVar[str] = SCHEDULE_VALIDATION_BUCKET
     table: ClassVar[str] = "validation_reports"
-    partition_names: ClassVar[List[str]] = GTFSFeedExtractInfo.partition_names
     extract: GTFSFeedExtractInfo = Field(..., exclude={"config"})
     system_errors: Dict
 
@@ -48,6 +48,10 @@ class GTFSScheduleFeedValidation(PartitionedGCSArtifact):
     def is_jsonl_gz(cls, v):
         assert v.endswith(JSONL_GZIP_EXTENSION)
         return v
+
+    @property
+    def partition_names(self) -> List[str]:
+        return self.extract.partition_names
 
     @property
     def dt(self) -> pendulum.Date:
@@ -168,6 +172,7 @@ def validate_day(
 
     extracts: List[GTFSFeedExtractInfo] = fetch_all_in_partition(
         cls=GTFSFeedExtractInfo,
+        bucket=SCHEDULE_RAW_BUCKET,
         table=GTFSFeedType.schedule,
         fs=get_fs(),
         partitions={
@@ -190,7 +195,8 @@ def validate_day(
     fs = get_fs()
     outcomes = []
 
-    for extract in extracts:
+    for i, extract in enumerate(extracts):
+        typer.secho(f"processing {i} of {len(extracts)}")
         try:
             with tempfile.TemporaryDirectory() as tmp_dir:
                 zip_path = os.path.join(tmp_dir, extract.filename)
@@ -209,15 +215,14 @@ def validate_day(
                 extract=extract,
                 system_errors=system_errors,
             )
+            notices = report["notices"]
             typer.secho(
-                f"saving validation notice to {validation.path}",
+                f"saving {len(notices)} validation notices to {validation.path}",
                 fg=typer.colors.GREEN,
             )
             validation.save_content(
                 content=gzip.compress(
-                    "\n".join(
-                        json.dumps(notice) for notice in report["notices"]
-                    ).encode()
+                    "\n".join(json.dumps(notice) for notice in notices).encode()
                 ),
                 fs=fs,
             )
