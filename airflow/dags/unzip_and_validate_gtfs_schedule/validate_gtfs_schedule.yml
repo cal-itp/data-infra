@@ -23,6 +23,9 @@ env_vars:
   GOOGLE_APPLICATION_CREDENTIALS: /secrets/jobs-data/service_account.json
   AIRFLOW_ENV: "{{ env_var('AIRFLOW_ENV') }}"
   CALITP_USER: "{{ env_var('CALITP_USER') }}"
+  CALITP_BUCKET__GTFS_SCHEDULE_RAW: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_RAW') }}"
+  CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION') }}"
+  GRAAS_SERVER_URL: "{{ env_var('GRAAS_SERVER_URL') }}"
 
 secrets:
   - deploy_type: volume
