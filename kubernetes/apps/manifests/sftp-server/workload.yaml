@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: sftp-server
+spec:
+  selector:
+    matchLabels:
+      component: sftp-server
+  serviceName: sftp-intranet
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: sftp-server
+    spec:
+      containers:
+        - name: server
+          image: fedora:latest
+          envFrom:
+            - configMapRef:
+                name: sftp-user
+          ports:
+            - containerPort: 22
+              name: sftp
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: config
+              mountPath: /config
+          command: [ /bin/bash ]
+          args:
+            - -c
+            - |
+              test "$SFTP_USER"               || { echo "fatal: SFTP_USER not defined "; exit 1; }
+              test -e /config/authorized_keys || { echo "fatal: /config/authorized_keys not present"; }
+              dnf install -y openssh-server
+              groupadd -g 1000 $SFTP_USER
+              useradd  -g 1000 -md /home/$SFTP_USER -s /bin/bash $SFTP_USER
+              mkdir -m 0700 /home/$SFTP_USER/.ssh
+              (umask 077; cp /config/authorized_keys /home/$SFTP_USER/.ssh/authorized_keys)
+              chown -R $SFTP_USER:$SFTP_USER /home/$SFTP_USER/.ssh
+              ssh-keygen -A
+              exec /usr/sbin/sshd -D
+      securityContext:
+        fsGroup: 1000
+      volumes:
+        - name: config
+          configMap:
+            name: sftp-user-config
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ 'ReadWriteOnce' ]
+        resources:
+          requests:
+            storage: 1Gi
