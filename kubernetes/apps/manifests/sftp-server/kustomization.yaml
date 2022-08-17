@@ -1,2 +1,7 @@
 resources:
 - workload.yaml
+
+configMapGenerator:
+  - name: sftp-sshd
+    files:
+      - sshd_config

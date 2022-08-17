@@ -24,29 +24,38 @@ spec:
               name: sftp
           volumeMounts:
             - name: data
-              mountPath: /data
-            - name: config
-              mountPath: /config
+              mountPath: /sftp/data
+            - name: user-config
+              mountPath: /config/user
+            - name: server-config
+              mountPath: /config/server
           command: [ /bin/bash ]
           args:
             - -c
             - |
-              test "$SFTP_USER"               || { echo "fatal: SFTP_USER not defined "; exit 1; }
-              test -e /config/authorized_keys || { echo "fatal: /config/authorized_keys not present"; }
+              test "$SFTP_USER" || { echo "fatal: SFTP_USER not defined "; exit 1; }
               dnf install -y openssh-server
               groupadd -g 1000 $SFTP_USER
               useradd  -g 1000 -md /home/$SFTP_USER -s /bin/bash $SFTP_USER
               mkdir -m 0700 /home/$SFTP_USER/.ssh
-              (umask 077; cp /config/authorized_keys /home/$SFTP_USER/.ssh/authorized_keys)
+              if [[ -e /config/user/authorized_keys ]]; then
+                (umask 077; cp /config/user/authorized_keys /home/$SFTP_USER/.ssh/authorized_keys)
+              else
+                echo "warn: no /config/user/authorized_keys file; user $SFTP_USER may not be able to login"
+              fi
               chown -R $SFTP_USER:$SFTP_USER /home/$SFTP_USER/.ssh
+              cp /config/server/sshd_config /etc/ssh/sshd_config
               ssh-keygen -A
-              exec /usr/sbin/sshd -D
+              exec /usr/sbin/sshd -e -D
       securityContext:
         fsGroup: 1000
       volumes:
-        - name: config
+        - name: user-config
           configMap:
             name: sftp-user-config
+        - name: server-config
+          configMap:
+            name: sftp-sshd
   volumeClaimTemplates:
     - metadata:
         name: data
