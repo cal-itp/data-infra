@@ -34,8 +34,8 @@ from calitp.storage import (
     ProcessingOutcome,
     fetch_all_in_partition,
     get_fs,
-)
-from calitp.storage import JSONL_GZIP_EXTENSION  # type: ignore
+    JSONL_GZIP_EXTENSION,
+)  # type: ignore
 from google.protobuf import json_format
 from google.protobuf.message import DecodeError
 from google.transit import gtfs_realtime_pb2  # type: ignore
@@ -550,14 +550,13 @@ def parse_and_validate(
             verbose=verbose,
             pbar=pbar,
         )
-        
+
         assert len(outcomes) == len(hour.extracts)
-        GTFSRTValidationJobResult(
-            outcomes=outcomes,
-        ).save_content(fs=fs,
-                       content="\n".join(o.json() for o in outcomes).encode(),
-                       exclude={"outcomes"},
-                       )
+        GTFSRTValidationJobResult(outcomes=outcomes,).save_content(
+            fs=fs,
+            content="\n".join(o.json() for o in outcomes).encode(),
+            exclude={"outcomes"},
+        )
 
 
 def main(
