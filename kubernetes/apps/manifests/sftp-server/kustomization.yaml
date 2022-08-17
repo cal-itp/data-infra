@@ -1,5 +1,6 @@
 resources:
 - workload.yaml
+- intranet-service.yaml
 
 configMapGenerator:
   - name: sftp-sshd
