@@ -133,9 +133,18 @@ LEFT JOIN t2 USING({id2})
 # key is alias that will be used to reference the template in DAG tasks
 # value is name of function template as defined above
 
+
+def prefix_bucket(bucket):
+    # TODO: use once we're in python 3.9+
+    # bucket = bucket.removeprefix("gs://")
+    bucket = bucket.replace("gs://", "")
+    return f"gs://test-{bucket}" if is_development() else f"gs://{bucket}"
+
+
 data_infra_macros = {
     "sql_airtable_mapping": airtable_mapping_generate_sql,
     "is_development": is_development_macro,
     "image_tag": lambda: "development" if is_development() else "latest",
     "env_var": lambda key: os.getenv(key),
+    "prefix_bucket": prefix_bucket,
 }
