@@ -77,7 +77,7 @@ python-versions = "~=3.5"
 
 [[package]]
 name = "calitp"
-version = "2022.8.17a1"
+version = "2022.8.17"
 description = "Shared code for the Cal-ITP data codebases"
 category = "main"
 optional = false
@@ -948,7 +948,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.11"
-content-hash = "d92fdcd5eb90921d6b5d765167d8944963524cf88e7c08c9fd914fcd48f26293"
+content-hash = "a3819a930acf29a4f5f1a63c34161db91dd37f23597261046660595a6cc2766a"
 
 [metadata.files]
 aiohttp = []

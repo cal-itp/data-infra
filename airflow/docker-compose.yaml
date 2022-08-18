@@ -86,6 +86,7 @@ x-airflow-common:
     CALITP_BUCKET__GTFS_SCHEDULE_RAW: "gs://test-calitp-gtfs-schedule-raw"
     CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION: "gs://test-calitp-gtfs-schedule-validation"
 
+    # TODO: this can be removed once we've confirmed it's no longer in Airtable
     GRAAS_SERVER_URL: $GRAAS_SERVER_URL
 
     # Composer variables for kubernetes

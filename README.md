@@ -29,7 +29,7 @@ This repository uses black and pre-commit hooks to format code. To install local
 
 ## Configuration via Environment Variables
 Generally we try to configure things via environment variables. In the Kubernetes
-world, these get configured via [Kustomize overlays](./kubernetes/overlays/).
+world, these get configured via Kustomize overlays ([example](./kubernetes/apps/overlays/gtfs-rt-archiver-v3-prod/archiver-channel-vars.yaml)).
 For Airflow jobs, we currently use hosted Google Cloud Composer which has a
 [user interface](https://console.cloud.google.com/composer/environments/detail/us-west2/calitp-airflow2-prod/variables)
 for editing environment variables. These environment variables also have to be
