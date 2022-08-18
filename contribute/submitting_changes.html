@@ -28,6 +28,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
     <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
     <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     
@@ -169,7 +170,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../analytics_tools/python_libraries.html">
-     Python Libraries
+     Useful Python Libraries
     </a>
    </li>
    <li class="toctree-l2">
@@ -256,6 +257,17 @@
    </i>
   </label>
   <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../warehouse/what_is_agency.html">
+     What is an
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       agency
+      </span>
+     </code>
+     ?
+    </a>
+   </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../warehouse/table_naming.html">
      Table Naming
@@ -559,7 +571,7 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../github/contribute_to_repos.html">
-   Contributing to data services repos
+   Contributing to Data Services Repos
   </a>
  </li>
  <li class="toctree-l1 has-children">
@@ -876,10 +888,22 @@
 <li><p>Prefix docs commits and PR titles with <code class="docutils literal notranslate"><span class="pre">docs(subject-area):</span></code></p></li>
 </ul>
 </li>
-<li><p>Install pre-commit hooks</p>
+<li><p>Installing and Using pre-commit hooks</p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pre-commit</span></code>, <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">install</span></code></p></li>
+<li><p>Installing:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pre-commit</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">install</span></code> in the appropriate repo</p></li>
+</ul>
+</li>
+<li><p>Using:</p>
+<ul>
+<li><p>The hooks will check your markdown for errors when you commit your changes.</p></li>
+<li><p>If upon committing your changes you see that the pre-commit checks have failed, the fixes will be made automatically but you will need to <strong>re-add and re-commit the files</strong>. Don’t forget to do this!</p></li>
+<li><p>If for any reason you would like to bypass the hooks, append the flag <code class="docutils literal notranslate"><span class="pre">--no-verify</span></code></p></li>
 <li><p>If needed, run <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">run</span> <span class="pre">--all-files</span></code> to run the hooks on all files, not just those staged for changes.</p></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><p>Open a PR</p>

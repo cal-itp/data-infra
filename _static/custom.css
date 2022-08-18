@@ -1,0 +1,4 @@
+/* Prevents horizontal scroll in markdown tables */
+.wy-table-responsive table td {
+    white-space: normal;
+    }
