@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: prod-sftp-ingest-elavon
+
+resources:
+- ../base-sftp-ingest-elavon
+- ns.yaml
+- sftp-user-config.yaml
+
+patches:
+- path: patch-volume-size.json
+  target:
+    kind: StatefulSet
+    name: sftp-server
