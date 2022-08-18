@@ -6,6 +6,7 @@ resources:
 - ../base-sftp-ingest-elavon
 - ns.yaml
 - sftp-user-config.yaml
+- internet-service.yaml
 
 patches:
 - path: patch-volume-size.json

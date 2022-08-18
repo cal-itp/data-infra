@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sftp-internet
+  labels:
+    component: sftp-server
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 22
+      name: sftp
+  selector:
+    statefulset.kubernetes.io/pod-name: sftp-server-0
