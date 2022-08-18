@@ -32,7 +32,7 @@ jupyterhub:
   hub:
     db:
       pvc:
-        storage: 8Gi
+        storage: 32Gi
     config:
       GitHubOAuthenticator:
         # client_id:     in existingSecret
