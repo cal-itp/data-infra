@@ -1,0 +1,737 @@
+[helm:grafana=kubernetes/apps/charts/grafana]
+
+diff -u -N /tmp/LIVE-2275531317/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole /tmp/MERGED-1868951844/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole
+--- /tmp/LIVE-2275531317/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole	2022-08-18 20:36:49.939483077 +0000
++++ /tmp/MERGED-1868951844/rbac.authorization.k8s.io.v1.ClusterRole..grafana-clusterrole	2022-08-18 20:36:49.939483077 +0000
+@@ -27,10 +27,16 @@
+           f:app.kubernetes.io/name: {}
+           f:app.kubernetes.io/version: {}
+           f:helm.sh/chart: {}
+-      f:rules: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-23T18:23:33Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-08-18T20:36:49Z"
+   name: grafana-clusterrole
+   resourceVersion: "228878962"
+   uid: 552f4bb0-454e-4f8d-84e8-597fe033928f
+[helm:jupyterhub=kubernetes/apps/charts/jupyterhub]
+
+diff -u -N /tmp/LIVE-2214015828/apps.v1.DaemonSet.jupyterhub.hook-image-puller /tmp/MERGED-3225512992/apps.v1.DaemonSet.jupyterhub.hook-image-puller
+--- /tmp/LIVE-2214015828/apps.v1.DaemonSet.jupyterhub.hook-image-puller	2022-08-18 20:36:57.971508638 +0000
++++ /tmp/MERGED-3225512992/apps.v1.DaemonSet.jupyterhub.hook-image-puller	2022-08-18 20:36:57.971508638 +0000
+@@ -0,0 +1,206 @@
++apiVersion: apps/v1
++kind: DaemonSet
++metadata:
++  annotations:
++    deprecated.daemonset.template.generation: "1"
++    helm.sh/hook: pre-install,pre-upgrade
++    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
++    helm.sh/hook-weight: "-10"
++  creationTimestamp: "2022-08-18T20:36:57Z"
++  generation: 1
++  labels:
++    app: jupyterhub
++    chart: jupyterhub-1.1.3
++    component: hook-image-puller
++    heritage: Helm
++    hub.jupyter.org/deletable: "true"
++    release: jupyterhub
++  managedFields:
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:annotations:
++          .: {}
++          f:deprecated.daemonset.template.generation: {}
++          f:helm.sh/hook: {}
++          f:helm.sh/hook-delete-policy: {}
++          f:helm.sh/hook-weight: {}
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:hub.jupyter.org/deletable: {}
++          f:release: {}
++      f:spec:
++        f:revisionHistoryLimit: {}
++        f:selector: {}
++        f:template:
++          f:metadata:
++            f:labels:
++              .: {}
++              f:app: {}
++              f:component: {}
++              f:release: {}
++          f:spec:
++            f:affinity:
++              .: {}
++              f:nodeAffinity:
++                .: {}
++                f:requiredDuringSchedulingIgnoredDuringExecution:
++                  .: {}
++                  f:nodeSelectorTerms: {}
++            f:automountServiceAccountToken: {}
++            f:containers:
++              k:{"name":"pause"}:
++                .: {}
++                f:image: {}
++                f:imagePullPolicy: {}
++                f:name: {}
++                f:resources: {}
++                f:securityContext:
++                  .: {}
++                  f:allowPrivilegeEscalation: {}
++                  f:runAsGroup: {}
++                  f:runAsUser: {}
++                f:terminationMessagePath: {}
++                f:terminationMessagePolicy: {}
++            f:dnsPolicy: {}
++            f:initContainers:
++              .: {}
++              k:{"name":"image-pull-metadata-block"}:
++                .: {}
++                f:command: {}
++                f:image: {}
++                f:imagePullPolicy: {}
++                f:name: {}
++                f:resources: {}
++                f:securityContext:
++                  .: {}
++                  f:allowPrivilegeEscalation: {}
++                  f:runAsGroup: {}
++                  f:runAsUser: {}
++                f:terminationMessagePath: {}
++                f:terminationMessagePolicy: {}
++              k:{"name":"image-pull-singleuser"}:
++                .: {}
++                f:command: {}
++                f:image: {}
++                f:imagePullPolicy: {}
++                f:name: {}
++                f:resources: {}
++                f:securityContext:
++                  .: {}
++                  f:allowPrivilegeEscalation: {}
++                  f:runAsGroup: {}
++                  f:runAsUser: {}
++                f:terminationMessagePath: {}
++                f:terminationMessagePolicy: {}
++            f:restartPolicy: {}
++            f:schedulerName: {}
++            f:securityContext: {}
++            f:terminationGracePeriodSeconds: {}
++            f:tolerations: {}
++        f:updateStrategy:
++          f:rollingUpdate:
++            .: {}
++            f:maxSurge: {}
++            f:maxUnavailable: {}
++          f:type: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-08-18T20:36:57Z"
++  name: hook-image-puller
++  namespace: jupyterhub
++  uid: c6ca417c-5fba-4573-8133-1783fd590885
++spec:
++  revisionHistoryLimit: 10
++  selector:
++    matchLabels:
++      app: jupyterhub
++      component: hook-image-puller
++      release: jupyterhub
++  template:
++    metadata:
++      creationTimestamp: null
++      labels:
++        app: jupyterhub
++        component: hook-image-puller
++        release: jupyterhub
++    spec:
++      affinity:
++        nodeAffinity:
++          requiredDuringSchedulingIgnoredDuringExecution:
++            nodeSelectorTerms:
++            - matchExpressions:
++              - key: hub.jupyter.org/node-purpose
++                operator: In
++                values:
++                - user
++      automountServiceAccountToken: false
++      containers:
++      - image: k8s.gcr.io/pause:3.5
++        imagePullPolicy: IfNotPresent
++        name: pause
++        resources: {}
++        securityContext:
++          allowPrivilegeEscalation: false
++          runAsGroup: 65534
++          runAsUser: 65534
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++      dnsPolicy: ClusterFirst
++      initContainers:
++      - command:
++        - /bin/sh
++        - -c
++        - echo "Pulling complete"
++        image: jupyterhub/k8s-network-tools:1.1.3
++        imagePullPolicy: IfNotPresent
++        name: image-pull-metadata-block
++        resources: {}
++        securityContext:
++          allowPrivilegeEscalation: false
++          runAsGroup: 65534
++          runAsUser: 65534
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++      - command:
++        - /bin/sh
++        - -c
++        - echo "Pulling complete"
++        image: ghcr.io/cal-itp/calitp-py:hub-v14
++        imagePullPolicy: IfNotPresent
++        name: image-pull-singleuser
++        resources: {}
++        securityContext:
++          allowPrivilegeEscalation: false
++          runAsGroup: 65534
++          runAsUser: 65534
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++      restartPolicy: Always
++      schedulerName: default-scheduler
++      securityContext: {}
++      terminationGracePeriodSeconds: 0
++      tolerations:
++      - effect: NoSchedule
++        key: hub.jupyter.org/dedicated
++        operator: Equal
++        value: user
++      - effect: NoSchedule
++        key: hub.jupyter.org_dedicated
++        operator: Equal
++        value: user
++  updateStrategy:
++    rollingUpdate:
++      maxSurge: 0
++      maxUnavailable: 100%
++    type: RollingUpdate
++status:
++  currentNumberScheduled: 0
++  desiredNumberScheduled: 0
++  numberMisscheduled: 0
++  numberReady: 0
+diff -u -N /tmp/LIVE-2214015828/apps.v1.Deployment.jupyterhub.hub /tmp/MERGED-3225512992/apps.v1.Deployment.jupyterhub.hub
+--- /tmp/LIVE-2214015828/apps.v1.Deployment.jupyterhub.hub	2022-08-18 20:36:57.107506093 +0000
++++ /tmp/MERGED-3225512992/apps.v1.Deployment.jupyterhub.hub	2022-08-18 20:36:57.107506093 +0000
+@@ -6,7 +6,7 @@
+     meta.helm.sh/release-name: jupyterhub
+     meta.helm.sh/release-namespace: jupyterhub
+   creationTimestamp: "2021-10-12T13:57:33Z"
+-  generation: 37
++  generation: 38
+   labels:
+     app: jupyterhub
+     app.kubernetes.io/managed-by: Helm
+@@ -43,7 +43,6 @@
+             f:annotations:
+               .: {}
+               f:checksum/config-map: {}
+-              f:checksum/secret: {}
+             f:labels:
+               .: {}
+               f:app: {}
+@@ -234,6 +233,17 @@
+     manager: kube-controller-manager
+     operation: Update
+     time: "2022-08-10T14:16:28Z"
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:spec:
++        f:template:
++          f:metadata:
++            f:annotations:
++              f:checksum/secret: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-08-18T20:36:57Z"
+   name: hub
+   namespace: jupyterhub
+   resourceVersion: "320716042"
+@@ -253,7 +263,7 @@
+     metadata:
+       annotations:
+         checksum/config-map: 189424750ee01603a747f1e39408a11c1837880b8fe829acdf20bb1b8d5f8949
+-        checksum/secret: 043941c7061ef8089703524d03dd2dd63467b7221e0065c6dcba65aa97116d41
++        checksum/secret: 753784e20bb27446ac69f9107d1f27ac75e03a76cb8876f7e25c3828c5f0461e
+       creationTimestamp: null
+       labels:
+         app: jupyterhub
+diff -u -N /tmp/LIVE-2214015828/apps.v1.Deployment.jupyterhub.proxy /tmp/MERGED-3225512992/apps.v1.Deployment.jupyterhub.proxy
+--- /tmp/LIVE-2214015828/apps.v1.Deployment.jupyterhub.proxy	2022-08-18 20:36:57.291506635 +0000
++++ /tmp/MERGED-3225512992/apps.v1.Deployment.jupyterhub.proxy	2022-08-18 20:36:57.291506635 +0000
+@@ -6,7 +6,7 @@
+     meta.helm.sh/release-name: jupyterhub
+     meta.helm.sh/release-namespace: jupyterhub
+   creationTimestamp: "2021-10-12T13:57:33Z"
+-  generation: 5
++  generation: 6
+   labels:
+     app: jupyterhub
+     app.kubernetes.io/managed-by: Helm
+@@ -41,7 +41,6 @@
+           f:metadata:
+             f:annotations:
+               .: {}
+-              f:checksum/auth-token: {}
+               f:checksum/proxy-secret: {}
+             f:labels:
+               .: {}
+@@ -178,6 +177,17 @@
+     manager: kube-controller-manager
+     operation: Update
+     time: "2022-08-10T14:16:06Z"
++  - apiVersion: apps/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:spec:
++        f:template:
++          f:metadata:
++            f:annotations:
++              f:checksum/auth-token: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-08-18T20:36:57Z"
+   name: proxy
+   namespace: jupyterhub
+   resourceVersion: "320715822"
+@@ -196,7 +206,7 @@
+   template:
+     metadata:
+       annotations:
+-        checksum/auth-token: 04b0
++        checksum/auth-token: 290a
+         checksum/proxy-secret: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
+         kubectl.kubernetes.io/restartedAt: "2022-01-25T11:49:07-05:00"
+       creationTimestamp: null
+diff -u -N /tmp/LIVE-2214015828/batch.v1.Job.jupyterhub.hook-image-awaiter /tmp/MERGED-3225512992/batch.v1.Job.jupyterhub.hook-image-awaiter
+--- /tmp/LIVE-2214015828/batch.v1.Job.jupyterhub.hook-image-awaiter	2022-08-18 20:36:58.111509050 +0000
++++ /tmp/MERGED-3225512992/batch.v1.Job.jupyterhub.hook-image-awaiter	2022-08-18 20:36:58.111509050 +0000
+@@ -0,0 +1,127 @@
++apiVersion: batch/v1
++kind: Job
++metadata:
++  annotations:
++    helm.sh/hook: pre-install,pre-upgrade
++    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
++    helm.sh/hook-weight: "10"
++  creationTimestamp: "2022-08-18T20:36:58Z"
++  labels:
++    app: jupyterhub
++    chart: jupyterhub-1.1.3
++    component: image-puller
++    heritage: Helm
++    hub.jupyter.org/deletable: "true"
++    release: jupyterhub
++  managedFields:
++  - apiVersion: batch/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:annotations:
++          .: {}
++          f:helm.sh/hook: {}
++          f:helm.sh/hook-delete-policy: {}
++          f:helm.sh/hook-weight: {}
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:hub.jupyter.org/deletable: {}
++          f:release: {}
++      f:spec:
++        f:backoffLimit: {}
++        f:completions: {}
++        f:parallelism: {}
++        f:template:
++          f:metadata:
++            f:labels:
++              .: {}
++              f:app: {}
++              f:component: {}
++              f:release: {}
++          f:spec:
++            f:containers:
++              k:{"name":"hook-image-awaiter"}:
++                .: {}
++                f:command: {}
++                f:image: {}
++                f:imagePullPolicy: {}
++                f:name: {}
++                f:resources: {}
++                f:securityContext:
++                  .: {}
++                  f:allowPrivilegeEscalation: {}
++                  f:runAsGroup: {}
++                  f:runAsUser: {}
++                f:terminationMessagePath: {}
++                f:terminationMessagePolicy: {}
++            f:dnsPolicy: {}
++            f:restartPolicy: {}
++            f:schedulerName: {}
++            f:securityContext: {}
++            f:serviceAccount: {}
++            f:serviceAccountName: {}
++            f:terminationGracePeriodSeconds: {}
++            f:tolerations: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-08-18T20:36:58Z"
++  name: hook-image-awaiter
++  namespace: jupyterhub
++  uid: 1289399b-0cac-47d7-8592-d8df0e4d9aa7
++spec:
++  backoffLimit: 6
++  completions: 1
++  parallelism: 1
++  selector:
++    matchLabels:
++      controller-uid: 1289399b-0cac-47d7-8592-d8df0e4d9aa7
++  template:
++    metadata:
++      creationTimestamp: null
++      labels:
++        app: jupyterhub
++        component: image-puller
++        controller-uid: 1289399b-0cac-47d7-8592-d8df0e4d9aa7
++        job-name: hook-image-awaiter
++        release: jupyterhub
++    spec:
++      containers:
++      - command:
++        - /image-awaiter
++        - -ca-path=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
++        - -auth-token-path=/var/run/secrets/kubernetes.io/serviceaccount/token
++        - -api-server-address=https://kubernetes.default.svc:$(KUBERNETES_SERVICE_PORT)
++        - -namespace=jupyterhub
++        - -daemonset=hook-image-puller
++        - -pod-scheduling-wait-duration=10
++        image: jupyterhub/k8s-image-awaiter:1.1.3
++        imagePullPolicy: IfNotPresent
++        name: hook-image-awaiter
++        resources: {}
++        securityContext:
++          allowPrivilegeEscalation: false
++          runAsGroup: 65534
++          runAsUser: 65534
++        terminationMessagePath: /dev/termination-log
++        terminationMessagePolicy: File
++      dnsPolicy: ClusterFirst
++      restartPolicy: Never
++      schedulerName: default-scheduler
++      securityContext: {}
++      serviceAccount: hook-image-awaiter
++      serviceAccountName: hook-image-awaiter
++      terminationGracePeriodSeconds: 30
++      tolerations:
++      - effect: NoSchedule
++        key: hub.jupyter.org/dedicated
++        operator: Equal
++        value: core
++      - effect: NoSchedule
++        key: hub.jupyter.org_dedicated
++        operator: Equal
++        value: core
++status: {}
+diff -u -N /tmp/LIVE-2214015828/networking.k8s.io.v1beta1.Ingress.jupyterhub.jupyterhub /tmp/MERGED-3225512992/networking.k8s.io.v1beta1.Ingress.jupyterhub.jupyterhub
+--- /tmp/LIVE-2214015828/networking.k8s.io.v1beta1.Ingress.jupyterhub.jupyterhub	2022-08-18 20:36:58.815511123 +0000
++++ /tmp/MERGED-3225512992/networking.k8s.io.v1beta1.Ingress.jupyterhub.jupyterhub	2022-08-18 20:36:58.815511123 +0000
+@@ -8,7 +8,7 @@
+     meta.helm.sh/release-namespace: jupyterhub
+     nginx.ingress.kubernetes.io/proxy-body-size: "0"
+   creationTimestamp: "2021-10-12T13:57:33Z"
+-  generation: 4
++  generation: 5
+   labels:
+     app: jupyterhub
+     app.kubernetes.io/managed-by: Helm
+@@ -45,7 +45,6 @@
+           f:heritage: {}
+           f:release: {}
+       f:spec:
+-        f:rules: {}
+         f:tls: {}
+     manager: helm
+     operation: Update
+@@ -59,6 +58,14 @@
+     manager: kubectl-edit
+     operation: Update
+     time: "2022-05-05T10:58:56Z"
++  - apiVersion: networking.k8s.io/v1beta1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:spec:
++        f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-08-18T20:36:58Z"
+   name: jupyterhub
+   namespace: jupyterhub
+   resourceVersion: "241087580"
+@@ -70,17 +77,17 @@
+       paths:
+       - backend:
+           serviceName: proxy-public
+-          servicePort: http
++          servicePort: 80
+         path: /
+-        pathType: Prefix
++        pathType: ImplementationSpecific
+   - host: hubtest.k8s.calitp.jarv.us
+     http:
+       paths:
+       - backend:
+           serviceName: proxy-public
+-          servicePort: http
++          servicePort: 80
+         path: /
+-        pathType: Prefix
++        pathType: ImplementationSpecific
+   tls:
+   - hosts:
+     - notebooks.calitp.org
+diff -u -N /tmp/LIVE-2214015828/rbac.authorization.k8s.io.v1.Role.jupyterhub.hook-image-awaiter /tmp/MERGED-3225512992/rbac.authorization.k8s.io.v1.Role.jupyterhub.hook-image-awaiter
+--- /tmp/LIVE-2214015828/rbac.authorization.k8s.io.v1.Role.jupyterhub.hook-image-awaiter	2022-08-18 20:36:55.983502783 +0000
++++ /tmp/MERGED-3225512992/rbac.authorization.k8s.io.v1.Role.jupyterhub.hook-image-awaiter	2022-08-18 20:36:55.983502783 +0000
+@@ -0,0 +1,47 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: Role
++metadata:
++  annotations:
++    helm.sh/hook: pre-install,pre-upgrade
++    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
++    helm.sh/hook-weight: "0"
++  creationTimestamp: "2022-08-18T20:36:55Z"
++  labels:
++    app: jupyterhub
++    chart: jupyterhub-1.1.3
++    component: image-puller
++    heritage: Helm
++    hub.jupyter.org/deletable: "true"
++    release: jupyterhub
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:annotations:
++          .: {}
++          f:helm.sh/hook: {}
++          f:helm.sh/hook-delete-policy: {}
++          f:helm.sh/hook-weight: {}
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:hub.jupyter.org/deletable: {}
++          f:release: {}
++      f:rules: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-08-18T20:36:55Z"
++  name: hook-image-awaiter
++  namespace: jupyterhub
++  uid: 99a6628c-b5c8-4513-b196-7c6eb3c83895
++rules:
++- apiGroups:
++  - apps
++  resources:
++  - daemonsets
++  verbs:
++  - get
+diff -u -N /tmp/LIVE-2214015828/rbac.authorization.k8s.io.v1.RoleBinding.jupyterhub.hook-image-awaiter /tmp/MERGED-3225512992/rbac.authorization.k8s.io.v1.RoleBinding.jupyterhub.hook-image-awaiter
+--- /tmp/LIVE-2214015828/rbac.authorization.k8s.io.v1.RoleBinding.jupyterhub.hook-image-awaiter	2022-08-18 20:36:56.355503879 +0000
++++ /tmp/MERGED-3225512992/rbac.authorization.k8s.io.v1.RoleBinding.jupyterhub.hook-image-awaiter	2022-08-18 20:36:56.355503879 +0000
+@@ -0,0 +1,52 @@
++apiVersion: rbac.authorization.k8s.io/v1
++kind: RoleBinding
++metadata:
++  annotations:
++    helm.sh/hook: pre-install,pre-upgrade
++    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
++    helm.sh/hook-weight: "0"
++  creationTimestamp: "2022-08-18T20:36:56Z"
++  labels:
++    app: jupyterhub
++    chart: jupyterhub-1.1.3
++    component: image-puller
++    heritage: Helm
++    hub.jupyter.org/deletable: "true"
++    release: jupyterhub
++  managedFields:
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:annotations:
++          .: {}
++          f:helm.sh/hook: {}
++          f:helm.sh/hook-delete-policy: {}
++          f:helm.sh/hook-weight: {}
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:hub.jupyter.org/deletable: {}
++          f:release: {}
++      f:roleRef:
++        f:apiGroup: {}
++        f:kind: {}
++        f:name: {}
++      f:subjects: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-08-18T20:36:56Z"
++  name: hook-image-awaiter
++  namespace: jupyterhub
++  uid: d6887135-e5c8-4a88-8e2d-263ff49db786
++roleRef:
++  apiGroup: rbac.authorization.k8s.io
++  kind: Role
++  name: hook-image-awaiter
++subjects:
++- kind: ServiceAccount
++  name: hook-image-awaiter
++  namespace: jupyterhub
+diff -u -N /tmp/LIVE-2214015828/v1.Secret.jupyterhub.hub /tmp/MERGED-3225512992/v1.Secret.jupyterhub.hub
+--- /tmp/LIVE-2214015828/v1.Secret.jupyterhub.hub	2022-08-18 20:36:56.747505033 +0000
++++ /tmp/MERGED-3225512992/v1.Secret.jupyterhub.hub	2022-08-18 20:36:56.747505033 +0000
+@@ -1,8 +1,8 @@
+ apiVersion: v1
+ data:
+-  hub.config.ConfigurableHTTPProxy.auth_token: '*** (before)'
+-  hub.config.CryptKeeper.keys: '*** (before)'
+-  hub.config.JupyterHub.cookie_secret: '*** (before)'
++  hub.config.ConfigurableHTTPProxy.auth_token: '*** (after)'
++  hub.config.CryptKeeper.keys: '*** (after)'
++  hub.config.JupyterHub.cookie_secret: '*** (after)'
+   values.yaml: '***'
+ kind: Secret
+ metadata:
+@@ -23,9 +23,6 @@
+     fieldsV1:
+       f:data:
+         .: {}
+-        f:hub.config.ConfigurableHTTPProxy.auth_token: {}
+-        f:hub.config.CryptKeeper.keys: {}
+-        f:hub.config.JupyterHub.cookie_secret: {}
+         f:values.yaml: {}
+       f:metadata:
+         f:annotations:
+@@ -44,6 +41,16 @@
+     manager: helm
+     operation: Update
+     time: "2021-10-12T13:57:32Z"
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:data:
++        f:hub.config.ConfigurableHTTPProxy.auth_token: {}
++        f:hub.config.CryptKeeper.keys: {}
++        f:hub.config.JupyterHub.cookie_secret: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-08-18T20:36:56Z"
+   name: hub
+   namespace: jupyterhub
+   resourceVersion: "308733032"
+diff -u -N /tmp/LIVE-2214015828/v1.ServiceAccount.jupyterhub.hook-image-awaiter /tmp/MERGED-3225512992/v1.ServiceAccount.jupyterhub.hook-image-awaiter
+--- /tmp/LIVE-2214015828/v1.ServiceAccount.jupyterhub.hook-image-awaiter	2022-08-18 20:36:55.723502018 +0000
++++ /tmp/MERGED-3225512992/v1.ServiceAccount.jupyterhub.hook-image-awaiter	2022-08-18 20:36:55.723502018 +0000
+@@ -0,0 +1,39 @@
++apiVersion: v1
++kind: ServiceAccount
++metadata:
++  annotations:
++    helm.sh/hook: pre-install,pre-upgrade
++    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
++    helm.sh/hook-weight: "0"
++  creationTimestamp: "2022-08-18T20:36:55Z"
++  labels:
++    app: jupyterhub
++    chart: jupyterhub-1.1.3
++    component: image-puller
++    heritage: Helm
++    hub.jupyter.org/deletable: "true"
++    release: jupyterhub
++  managedFields:
++  - apiVersion: v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:metadata:
++        f:annotations:
++          .: {}
++          f:helm.sh/hook: {}
++          f:helm.sh/hook-delete-policy: {}
++          f:helm.sh/hook-weight: {}
++        f:labels:
++          .: {}
++          f:app: {}
++          f:chart: {}
++          f:component: {}
++          f:heritage: {}
++          f:hub.jupyter.org/deletable: {}
++          f:release: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-08-18T20:36:55Z"
++  name: hook-image-awaiter
++  namespace: jupyterhub
++  uid: 754a6049-7db0-4901-9de6-0e793846b825
+[helm:loki=kubernetes/apps/charts/loki]
+
+diff -u -N /tmp/LIVE-1889937796/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki /tmp/MERGED-2482040078/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki
+--- /tmp/LIVE-1889937796/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki	2022-08-18 20:37:05.271530035 +0000
++++ /tmp/MERGED-2482040078/rbac.authorization.k8s.io.v1.RoleBinding.monitoring-loki.loki	2022-08-18 20:37:05.271530035 +0000
+@@ -31,10 +31,16 @@
+         f:apiGroup: {}
+         f:kind: {}
+         f:name: {}
+-      f:subjects: {}
+     manager: helm
+     operation: Update
+     time: "2022-02-23T18:24:06Z"
++  - apiVersion: rbac.authorization.k8s.io/v1
++    fieldsType: FieldsV1
++    fieldsV1:
++      f:subjects: {}
++    manager: kubectl-client-side-apply
++    operation: Update
++    time: "2022-08-18T20:37:05Z"
+   name: loki
+   namespace: monitoring-loki
+   resourceVersion: "228879138"
+@@ -46,3 +52,4 @@
+ subjects:
+ - kind: ServiceAccount
+   name: loki
++  namespace: monitoring-loki
