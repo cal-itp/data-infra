@@ -26,3 +26,13 @@ Documentation for this codebase lives at [docs.calitp.org/data-infra](https://do
 This repository uses black and pre-commit hooks to format code. To install locally, run
 
 `pip install pre-commit` & `pre-commit install` in the root of the repo.
+
+## Configuration via Environment Variables
+Generally we try to configure things via environment variables. In the Kubernetes
+world, these get configured via Kustomize overlays ([example](./kubernetes/apps/overlays/gtfs-rt-archiver-v3-prod/archiver-channel-vars.yaml)).
+For Airflow jobs, we currently use hosted Google Cloud Composer which has a
+[user interface](https://console.cloud.google.com/composer/environments/detail/us-west2/calitp-airflow2-prod/variables)
+for editing environment variables. These environment variables also have to be
+injected into pod operators as needed via Gusty YAML or similar. If you are
+running Airflow locally, the [docker-compose file](./airflow/docker-compose.yaml)
+needs to contain appropriately set environment variables.

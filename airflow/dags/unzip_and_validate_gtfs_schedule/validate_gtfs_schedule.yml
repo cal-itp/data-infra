@@ -1,0 +1,53 @@
+operator: operators.PodOperator
+name: 'validate-gtfs-schedule'
+image: 'ghcr.io/cal-itp/data-infra/gtfs-schedule-validator:{{image_tag()}}'
+
+cmds:
+  - python3
+
+arguments:
+  - "-m"
+  - "gtfs_schedule_validator"
+  - "validate-day"
+  - "{{ ds }}"
+
+is_delete_operator_pod: true
+get_logs: true
+
+is_gke: true
+pod_location: us-west1
+cluster_name: data-infra-apps
+namespace: airflow-jobs
+
+env_vars:
+  GOOGLE_APPLICATION_CREDENTIALS: /secrets/jobs-data/service_account.json
+  AIRFLOW_ENV: "{{ env_var('AIRFLOW_ENV') }}"
+  CALITP_USER: "{{ env_var('CALITP_USER') }}"
+  CALITP_BUCKET__GTFS_SCHEDULE_RAW: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_RAW') }}"
+  CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION') }}"
+  GRAAS_SERVER_URL: "{{ env_var('GRAAS_SERVER_URL') }}"
+
+secrets:
+  - deploy_type: volume
+    deploy_target: /secrets/jobs-data/
+    secret: jobs-data
+    key: service_account.json
+
+resources:
+  request_memory: 5.0Gi
+  request_cpu: 1
+
+tolerations:
+  - key: pod-role
+    operator: Equal
+    value: computetask
+    effect: NoSchedule
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: pod-role
+          operator: In
+          values:
+          - computetask

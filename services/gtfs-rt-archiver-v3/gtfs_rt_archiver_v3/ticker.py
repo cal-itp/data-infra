@@ -22,7 +22,13 @@ def get_records() -> List[AirtableGTFSDataRecord]:
     records = [
         record
         for record in latest.records
-        if record.data_quality_pipeline and record.data != GTFSFeedType.schedule
+        if record.data_quality_pipeline
+        and record.data
+        in (
+            GTFSFeedType.service_alerts,
+            GTFSFeedType.trip_updates,
+            GTFSFeedType.vehicle_positions,
+        )
     ]
     age = (pendulum.now() - latest.ts).total_seconds()
     typer.secho(

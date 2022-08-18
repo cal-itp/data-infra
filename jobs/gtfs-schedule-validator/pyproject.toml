@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "gtfs-schedule-validator"
+version = "0.1.0"
+description = ""
+authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.11"
+toml = "^0.10.2"
+gcsfs = "^2022.5.0"
+typer = "^0.6.1"
+humanize = "^4.2.3"
+backoff = "^2.1.2"
+pydantic = "^1.9.1"
+pendulum = "^2.1.2"
+tqdm = "^4.64.0"
+calitp = "2022.8.17"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

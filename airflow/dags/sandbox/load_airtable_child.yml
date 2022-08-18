@@ -3,7 +3,7 @@ operator: operators.AirtableToGCSOperator
 air_base_id: apphcwzP8cR82NeJo
 air_base_name: sandbox
 air_table_name: child
-bucket: "{{ prefix_bucket('calitp-airtable') }}"
+bucket: "{{ env_var('CALITP_BUCKET__AIRTABLE') }}"
 
 dependencies:
   - op_airtable_to_warehouse
