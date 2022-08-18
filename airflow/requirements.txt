@@ -1,4 +1,4 @@
-calitp==2022.8.18a0
+calitp==2022.8.18
 intake==0.6.1
 ipdb==0.13.4
 gusty==0.6.0
