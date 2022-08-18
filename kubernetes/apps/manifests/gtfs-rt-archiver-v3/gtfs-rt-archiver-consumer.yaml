@@ -1,0 +1,72 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gtfs-rt-archiver-consumer
+  labels:
+    name: gtfs-rt-archiver-consumer
+spec:
+  replicas: 3
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      name: gtfs-rt-archiver-consumer
+  template:
+    metadata:
+      labels:
+        name: gtfs-rt-archiver-consumer
+      annotations:
+        prometheus.io/port: "9102"
+        prometheus.io/scrape: "true"
+    spec:
+      containers:
+        - name: app
+          image: gtfs-rt-archiver
+          command: ["python"]
+          args: ["-m", "gtfs_rt_archiver_v3.consumer", "--load-env-secrets"]
+          envFrom:
+            - configMapRef:
+                name: archiver-app-vars
+            - configMapRef:
+                name: archiver-channel-vars
+            - secretRef:
+                name: gtfs-feed-secrets
+          volumeMounts:
+            - name: gtfs-feed-secrets
+              mountPath: /secrets/gtfs-feed-secrets
+          resources:
+            requests:
+              memory: 512Mi
+              cpu: 1
+            limits:
+              memory: 1Gi
+      volumes:
+        - name: gtfs-feed-secrets
+          secret:
+            secretName: gtfs-feed-secrets
+      tolerations:
+        - key: resource-domain
+          operator: Equal
+          value: gtfsrtv3
+          effect: NoSchedule
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: resource-domain
+                operator: In
+                values:
+                - gtfsrtv3
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchExpressions:
+                    - key: name
+                      operator: In
+                      values:
+                        - gtfs-rt-archiver-consumer

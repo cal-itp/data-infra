@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: sftp-server
+spec:
+  selector:
+    matchLabels:
+      component: sftp-server
+  serviceName: sftp-intranet
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: sftp-server
+    spec:
+      containers:
+        - name: server
+          image: fedora:latest
+          env:
+            - name: SFTP_UID
+              value: '1000'
+            - name: SFTP_AUTHORIZED_KEYS_SRC
+              value: /config/user/authorized_keys
+            - name: SFTP_SSHD_CONFIG_SRC
+              value: /config/server/sshd_config
+          envFrom:
+            - configMapRef:
+                name: sftp-user
+          ports:
+            - containerPort: 22
+              name: sftp
+          volumeMounts:
+            - name: data
+              mountPath: /sftp/data
+            - name: user-config
+              mountPath: /config/user
+            - name: server-config
+              mountPath: /config/server
+          command: [ /bin/bash ]
+          args:
+            - -c
+            - |
+              test "$SFTP_USER"          || SFTP_USER=sftp
+              test "$SFTP_USER_HOME"     || SFTP_USER_HOME=/home/$SFTP_USER
+              test "$SFTP_USER_SSH_HOME" || SFTP_USER_SSH_HOME=$SFTP_USER_HOME/.ssh
+              dnf install -y openssh-server
+              groupadd -g $SFTP_UID $SFTP_USER
+              useradd  -g $SFTP_UID -md $SFTP_USER_HOME -s /bin/bash $SFTP_USER
+              mkdir -p -m 0700 "$SFTP_USER_SSH_HOME"
+              if [[ -e $SFTP_AUTHORIZED_KEYS_SRC ]]; then
+                (umask 077; cp $SFTP_AUTHORIZED_KEYS_SRC "$SFTP_USER_SSH_HOME"/authorized_keys)
+              else
+                echo "warn: no $SFTP_AUTHORIZED_KEYS_SRC file; user $SFTP_USER may not be able to login"
+              fi
+              chown -R $SFTP_USER:$SFTP_USER "$SFTP_USER_SSH_HOME"
+              cp "$SFTP_SSHD_CONFIG_SRC" /etc/ssh/sshd_config
+              ssh-keygen -A
+              exec /usr/sbin/sshd -e -D
+          readinessProbe:
+            tcpSocket:
+              port: 22
+            initialDelaySeconds: 5
+            periodSeconds: 5
+      securityContext:
+        fsGroup: 1000
+      volumes:
+        - name: user-config
+          configMap:
+            name: sftp-user-config
+        - name: server-config
+          configMap:
+            name: sftp-sshd
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ 'ReadWriteOnce' ]
+        resources:
+          requests:
+            storage: 1Gi
