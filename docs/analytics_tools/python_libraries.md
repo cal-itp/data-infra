@@ -13,10 +13,11 @@ kernelspec:
   name: python3
 ---
 (python-libraries)=
-# Python Libraries
+# Useful Python Libraries
 The following libraries are available and recommended for use by Cal-ITP data analysts.
 
 ## Table of Contents
+1. [shared utils](#shared-utils)
 1. [calitp](#calitp)
 1. [siuba](#siuba)
 <br> - [Basic Query](#basic-query)
@@ -26,6 +27,27 @@ The following libraries are available and recommended for use by Cal-ITP data an
 1. [shared utils](shared-utils)
 1. [pandas](pandas-resources)
 1. [Add New Packages](#add-new-packages)
+
+## shared utils
+A set of shared utility functions can also be installed, similarly to any Python library. The [shared_utils](https://github.com/cal-itp/data-analyses/shared_utils) are stored here. Generalized functions for analysis are added as collaborative work evolves so we aren't constantly reinventing the wheel.
+
+```python
+# In terminal:
+cd data-analyses/_shared_utils
+
+# Use the make command to run through conda install and pip install
+make setup_env
+
+# In notebook:
+import shared_utils
+
+shared_utils.geography_utils.WGS84
+
+# Note: you may need to select Kernel -> Restart Kernel from the top menu
+# after make setup_env in order to successfully import shared_utils
+```
+
+See [data-analyses/example_reports](https://github.com/cal-itp/data-analyses/tree/main/example_report) for examples on how to use `shared_utils` for general functions, charts, and maps.
 
 (calitp)=
 ## calitp
