@@ -99,7 +99,7 @@ python-versions = "~=3.5"
 
 [[package]]
 name = "calitp"
-version = "2022.8.18.2a0"
+version = "2022.8.19a0"
 description = "Shared code for the Cal-ITP data codebases"
 category = "main"
 optional = false
@@ -186,18 +186,18 @@ optional = false
 python-versions = ">=3.7"
 
 [package.extras]
-all = ["fs (>=2.2.0,<3)", "lxml (>=4.0,<5)", "zopfli (>=0.1.4)", "lz4 (>=1.7.4.2)", "matplotlib", "sympy", "skia-pathops (>=0.5.0)", "uharfbuzz (>=0.23.0)", "brotlicffi (>=0.8.0)", "scipy", "brotli (>=1.0.1)", "munkres", "unicodedata2 (>=14.0.0)", "xattr"]
-graphite = ["lz4 (>=1.7.4.2)"]
-interpolatable = ["scipy", "munkres"]
-lxml = ["lxml (>=4.0,<5)"]
-pathops = ["skia-pathops (>=0.5.0)"]
-plot = ["matplotlib"]
-repacker = ["uharfbuzz (>=0.23.0)"]
-symfont = ["sympy"]
-type1 = ["xattr"]
-ufo = ["fs (>=2.2.0,<3)"]
+woff = ["brotli (>=1.0.1)", "brotlicffi (>=0.8.0)", "zopfli (>=0.1.4)"]
 unicode = ["unicodedata2 (>=14.0.0)"]
-woff = ["zopfli (>=0.1.4)", "brotlicffi (>=0.8.0)", "brotli (>=1.0.1)"]
+ufo = ["fs (>=2.2.0,<3)"]
+type1 = ["xattr"]
+symfont = ["sympy"]
+repacker = ["uharfbuzz (>=0.23.0)"]
+plot = ["matplotlib"]
+pathops = ["skia-pathops (>=0.5.0)"]
+lxml = ["lxml (>=4.0,<5)"]
+interpolatable = ["munkres", "scipy"]
+graphite = ["lz4 (>=1.7.4.2)"]
+all = ["xattr", "unicodedata2 (>=14.0.0)", "munkres", "brotli (>=1.0.1)", "scipy", "brotlicffi (>=0.8.0)", "uharfbuzz (>=0.23.0)", "skia-pathops (>=0.5.0)", "sympy", "matplotlib", "lz4 (>=1.7.4.2)", "zopfli (>=0.1.4)", "lxml (>=4.0,<5)", "fs (>=2.2.0,<3)"]
 
 [[package]]
 name = "frozenlist"
@@ -216,27 +216,27 @@ optional = false
 python-versions = ">=3.7"
 
 [package.extras]
-abfs = ["adlfs"]
-adl = ["adlfs"]
-arrow = ["pyarrow (>=1)"]
-dask = ["dask", "distributed"]
-dropbox = ["dropboxdrivefs", "requests", "dropbox"]
-entrypoints = ["importlib-metadata"]
-fuse = ["fusepy"]
-gcs = ["gcsfs"]
-git = ["pygit2"]
-github = ["requests"]
-gs = ["gcsfs"]
-gui = ["panel"]
-hdfs = ["pyarrow (>=1)"]
-http = ["requests", "aiohttp"]
-libarchive = ["libarchive-c"]
-oci = ["ocifs"]
-s3 = ["s3fs"]
-sftp = ["paramiko"]
-smb = ["smbprotocol"]
-ssh = ["paramiko"]
 tqdm = ["tqdm"]
+ssh = ["paramiko"]
+smb = ["smbprotocol"]
+sftp = ["paramiko"]
+s3 = ["s3fs"]
+oci = ["ocifs"]
+libarchive = ["libarchive-c"]
+http = ["aiohttp", "requests"]
+hdfs = ["pyarrow (>=1)"]
+gui = ["panel"]
+gs = ["gcsfs"]
+github = ["requests"]
+git = ["pygit2"]
+gcs = ["gcsfs"]
+fuse = ["fusepy"]
+entrypoints = ["importlib-metadata"]
+dropbox = ["dropbox", "requests", "dropboxdrivefs"]
+dask = ["distributed", "dask"]
+arrow = ["pyarrow (>=1)"]
+adl = ["adlfs"]
+abfs = ["adlfs"]
 
 [[package]]
 name = "future"
@@ -264,8 +264,8 @@ google-cloud-storage = "*"
 requests = "*"
 
 [package.extras]
-crc = ["crcmod"]
 gcsfuse = ["fusepy"]
+crc = ["crcmod"]
 
 [[package]]
 name = "google-api-core"
@@ -492,7 +492,7 @@ optional = false
 python-versions = ">=3.7"
 
 [package.extras]
-tests = ["freezegun", "pytest", "pytest-cov"]
+tests = ["pytest-cov", "pytest", "freezegun"]
 
 [[package]]
 name = "idna"
@@ -1191,7 +1191,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.10"
-content-hash = "e60c0a56a904c29063702dac5b8de4b270c9acbf6903cc530c15bf9683abf9cd"
+content-hash = "00fffdc9cf2b951c619dd60e2a92478bd075be07e999f4858053c770c0ca8bbc"
 
 [metadata.files]
 aiohttp = []
