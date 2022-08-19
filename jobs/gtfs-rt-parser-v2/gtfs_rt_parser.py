@@ -14,9 +14,9 @@ import traceback
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, Future
 from enum import Enum
+from functools import lru_cache
 from pathlib import Path
-from typing import ClassVar, Dict, List, Optional, Sequence, Tuple, Type, Union
-from zipfile import ZipFile
+from typing import ClassVar, Dict, List, Optional, Sequence, Tuple, Union
 
 import backoff  # type: ignore
 import pendulum
@@ -35,11 +35,16 @@ from calitp.storage import (
     JSONL_GZIP_EXTENSION,
     GTFSRTFeedExtract,
     GTFSFeedExtract,
+    AirtableGTFSDataExtract,
+    AirtableGTFSDataRecord,
+    get_latest_file,
+    PARTITIONED_ARTIFACT_METADATA_KEY,
+    GTFSScheduleFeedExtract,
 )  # type: ignore
 from google.protobuf import json_format
 from google.protobuf.message import DecodeError
 from google.transit import gtfs_realtime_pb2  # type: ignore
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, validator, parse_obj_as
 from tqdm import tqdm
 
 RT_VALIDATOR_JAR_LOCATION_ENV_KEY = "GTFS_RT_VALIDATOR_JAR"
@@ -96,17 +101,67 @@ def upload_if_records(
     put_with_retry(fs, f.name, artifact.path)
 
 
+class NoScheduleDataSpecified(Exception):
+    pass
+
+
 class ScheduleDataNotFound(Exception):
     pass
 
 
-def remove_from_list_if_type(key: str, typ: Type):
-    def handler(records):
-        for record in records:
-            if isinstance(record, typ):
-                del record[key]
+@lru_cache
+def get_airtable_gtfs_records_for_day(
+    dt: pendulum.Date,
+) -> Dict[str, AirtableGTFSDataRecord]:
+    file = get_latest_file(
+        AirtableGTFSDataExtract.bucket,
+        AirtableGTFSDataExtract.table,
+        prefix_partitions={
+            "dt": dt,
+        },
+        partition_types={
+            "ts": pendulum.DateTime,
+        },
+    )
 
-    return handler
+    with get_fs().open(file.name, "rb") as f:
+        content = gzip.decompress(f.read())
+    records = [
+        AirtableGTFSDataRecord(**json.loads(row))
+        for row in content.decode().splitlines()
+    ]
+
+    return {record.id: record for record in records}
+
+
+@lru_cache
+def get_schedule_extract_for_day_and_url(
+    dt: pendulum.Date, url: str
+) -> GTFSScheduleFeedExtract:
+    file = get_latest_file(
+        GTFSScheduleFeedExtract.bucket,
+        GTFSScheduleFeedExtract.table,
+        prefix_partitions={
+            "dt": dt,
+            "base64_url": url,
+        },
+        partition_types={
+            "ts": pendulum.DateTime,
+        },
+    )
+    return parse_obj_as(
+        GTFSScheduleFeedExtract,
+        json.loads(get_fs().getxattr(file.name, PARTITIONED_ARTIFACT_METADATA_KEY)),
+    )
+
+
+def get_schedule_extract_for_rt_validation(
+    extract: GTFSRTFeedExtract,
+) -> GTFSScheduleFeedExtract:
+    # TODO: this does not work if we didn't download a schedule zip for that day
+    airtable_records = get_airtable_gtfs_records_for_day(extract.dt)
+    record = airtable_records[extract.config.schedule_to_use_for_rt_validation[0]]
+    return get_schedule_extract_for_day_and_url(extract.dt, record.base64_encoded_url)
 
 
 class RTHourlyAggregation(PartitionedGCSArtifact):
@@ -231,51 +286,25 @@ def put_with_retry(fs, *args, **kwargs):
 
 def download_gtfs_schedule_zip(
     fs,
-    gtfs_schedule_path: GTFSFeedExtract,
+    schedule_extract: GTFSFeedExtract,
     dst_path: str,
     pbar=None,
-) -> Tuple[str, List[str]]:
+) -> str:
     # fetch and zip gtfs schedule
-    zipname = f"{dst_path[:-1]}.zip"
+    actual_dst_path = "/".join([dst_path, schedule_extract.filename])
     log(
-        f"Fetching gtfs schedule data from {gtfs_schedule_path} to {zipname}",
+        f"Fetching gtfs schedule data from {schedule_extract.path} to {actual_dst_path}",
         pbar=pbar,
     )
-
-    try:
-        get_with_retry(fs, gtfs_schedule_path, dst_path, recursive=True)
-    except FileNotFoundError:
-        raise ScheduleDataNotFound(f"no schedule data found for {gtfs_schedule_path}")
+    get_with_retry(fs, schedule_extract.path, actual_dst_path, recursive=True)
 
     # https://github.com/MobilityData/gtfs-realtime-validator/issues/92
-    try:
-        os.remove(os.path.join(dst_path, "areas.txt"))
-    except FileNotFoundError:
-        pass
+    # try:
+    #     os.remove(os.path.join(dst_path, "areas.txt"))
+    # except FileNotFoundError:
+    #     pass
 
-    # this is validation output from validating schedule data, we should remove if it's there
-    try:
-        os.remove(os.path.join(dst_path, "validation.json"))
-    except FileNotFoundError:
-        pass
-
-    # TODO: sometimes, feeds can live in a subdirectory within the zipfile
-    #       see https://github.com/cal-itp/data-infra/issues/1185 as an
-    #       example; ignoring for now
-    written = []
-    with ZipFile(zipname, "w") as zf:
-        for file in os.listdir(dst_path):
-            full_path = os.path.join(dst_path, file)
-            if not os.path.isfile(full_path):
-                continue
-            with open(full_path) as f:
-                zf.writestr(file, f.read())
-            written.append(file)
-
-    if not written:
-        raise ScheduleDataNotFound(f"no schedule data found for {gtfs_schedule_path}")
-
-    return zipname, written
+    return actual_dst_path
 
 
 def execute_rt_validator(
@@ -302,28 +331,25 @@ def execute_rt_validator(
     ).check_returncode()
 
 
-class RTFileProcessingOutcome(ProcessingOutcome):
-    step: RTProcessingStep
-    extract: GTFSRTFeedExtract
-    parsed: Optional[RTHourlyAggregation]
-
-
 def validate_and_upload(
     fs,
     jar_path: Path,
-    dst_path_gtfs: str,
     dst_path_rt: str,
     tmp_dir: str,
     hour: RTHourlyAggregation,
     verbose: bool = False,
     pbar=None,
 ) -> List[RTFileProcessingOutcome]:
-    gtfs_zip, included_files = download_gtfs_schedule_zip(
-        fs,
-        hour.extracts[0].schedule_extract,
-        dst_path_gtfs,
-        pbar=pbar,
-    )
+    first_extract = hour.extracts[0]
+    try:
+        gtfs_zip = download_gtfs_schedule_zip(
+            fs,
+            schedule_extract=get_schedule_extract_for_rt_validation(first_extract),
+            dst_path=tmp_dir,
+            pbar=pbar,
+        )
+    except FileNotFoundError:
+        raise ScheduleDataNotFound(f"no schedule data found for {first_extract}")
 
     execute_rt_validator(
         gtfs_zip,
@@ -500,9 +526,7 @@ def parse_and_validate(
     pbar=None,
 ) -> List[RTFileProcessingOutcome]:
     fs = get_fs()
-    dst_path_gtfs = f"{tmp_dir}/gtfs_{hash(hour.name)}/"
-    os.mkdir(dst_path_gtfs)
-    dst_path_rt = f"{tmp_dir}/rt_{hash(hour.name)}/"
+    dst_path_rt = f"{tmp_dir}/rt_{hashlib.md5(hour.name.encode('utf-8')).hexdigest()}/"
     get_with_retry(
         fs,
         rpath=[file.path for file in hour.extracts],
@@ -513,11 +537,21 @@ def parse_and_validate(
     )
 
     if hour.step == RTProcessingStep.validate:
+        if not hour.extracts[0].config.schedule_to_use_for_rt_validation:
+            return [
+                RTFileProcessingOutcome(
+                    step=hour.step,
+                    success=False,
+                    extract=extract,
+                    exception=NoScheduleDataSpecified(),
+                )
+                for extract in hour.extracts
+            ]
+
         try:
             return validate_and_upload(
                 fs=fs,
                 jar_path=jar_path,
-                dst_path_gtfs=dst_path_gtfs,
                 dst_path_rt=dst_path_rt,
                 tmp_dir=tmp_dir,
                 hour=hour,
@@ -646,7 +680,7 @@ def main(
                     raise
                 except Exception as e:
                     log(
-                        f"WARNING: exception {type(e)} {str(e)} bubbled up to top for {hour.path}",
+                        f"WARNING: exception {type(e)} {str(e)} bubbled up to top for {hour.path}\n{traceback.format_exc()}",
                         err=True,
                         fg=typer.colors.RED,
                         pbar=pbar,
