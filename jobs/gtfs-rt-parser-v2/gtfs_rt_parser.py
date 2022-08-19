@@ -27,14 +27,14 @@ from aiohttp.client_exceptions import (
     ServerDisconnectedError,
 )
 from calitp.storage import (
-    GTFSFeedExtractInfo,
     GTFSFeedType,
-    GTFSRTFeedExtract,
     PartitionedGCSArtifact,
     ProcessingOutcome,
     fetch_all_in_partition,
     get_fs,
     JSONL_GZIP_EXTENSION,
+    GTFSRTFeedExtract,
+    GTFSFeedExtract,
 )  # type: ignore
 from google.protobuf import json_format
 from google.protobuf.message import DecodeError
@@ -113,9 +113,9 @@ class RTHourlyAggregation(PartitionedGCSArtifact):
     partition_names: ClassVar[List[str]] = ["dt", "hour", "base64_url"]
     step: RTProcessingStep
     feed_type: GTFSFeedType
-    extracts: List[GTFSRTFeedExtract]
     hour: pendulum.DateTime
     base64_url: str
+    extracts: List[GTFSRTFeedExtract] = Field(..., exclude=True)
 
     class Config:
         json_encoders = {
@@ -136,8 +136,9 @@ class RTHourlyAggregation(PartitionedGCSArtifact):
     def extracts_have_same_hour_and_url_and_schedule(cls, v: List[GTFSRTFeedExtract]):
         hours = set(extract.hour for extract in v)
         urls = set(extract.base64_url for extract in v)
-        schedules = set(extract.schedule_extract for extract in v)
-        assert len(hours) == len(urls) == len(schedules) == 1
+        # schedules = set(extract.schedule_extract for extract in v)
+        # assert len(hours) == len(urls) == len(schedules) == 1
+        assert len(hours) == len(urls) == 1
         return v
 
     @property
@@ -158,42 +159,17 @@ class RTHourlyAggregation(PartitionedGCSArtifact):
         return f"{hashlib.md5(self.name.encode('utf-8')).hexdigest()}{JSONL_GZIP_EXTENSION}"
 
 
-# TODO: this could be merged with the Schedule one
-class GTFSRTFeedValidation(PartitionedGCSArtifact):
-    bucket: ClassVar[str] = RT_VALIDATION_BUCKET
-    partition_names: ClassVar[List[str]] = GTFSRTFeedExtract.partition_names
-    extract: GTFSRTFeedExtract = Field(..., exclude={"config"})
-    system_errors: Dict
-
-    @property
-    def table(self):
-        return f"{self.extract.config.data}_validations"
-
-    @property
-    def dt(self) -> pendulum.Date:
-        return self.extract.ts.date()
-
-    @property
-    def base64_url(self) -> str:
-        return self.extract.config.base64_encoded_url
-
-    @property
-    def ts(self) -> pendulum.DateTime:
-        return self.extract.ts
-
-
-class RTFileValidationOutcome(ProcessingOutcome):
+class RTFileProcessingOutcome(ProcessingOutcome):
     extract: GTFSRTFeedExtract
-    validation: Optional[GTFSRTFeedValidation]
+    aggregation: Optional[RTHourlyAggregation]
 
 
-# TODO: this really should encapsulate a lot of hourly aggregations... but do we want to serialize those?
 class GTFSRTJobResult(PartitionedGCSArtifact):
     step: RTProcessingStep
     feed_type: GTFSFeedType
     hour: pendulum.DateTime
     partition_names: ClassVar[List[str]] = ["dt", "hour"]
-    outcomes: List[RTFileValidationOutcome]
+    outcomes: List[RTFileProcessingOutcome]
 
     @property
     def bucket(self) -> str:
@@ -255,7 +231,7 @@ def put_with_retry(fs, *args, **kwargs):
 
 def download_gtfs_schedule_zip(
     fs,
-    gtfs_schedule_path: GTFSFeedExtractInfo,
+    gtfs_schedule_path: GTFSFeedExtract,
     dst_path: str,
     pbar=None,
 ) -> Tuple[str, List[str]]:
@@ -592,7 +568,7 @@ def main(
     jar_path: Path = JAR_DEFAULT,
     verbose: bool = False,
 ):
-    pendulum_hour = pendulum.instance(hour)
+    pendulum_hour = pendulum.instance(hour, tz="Etc/UTC")
     files: List[GTFSRTFeedExtract] = fetch_all_in_partition(
         cls=GTFSRTFeedExtract,
         fs=get_fs(),
