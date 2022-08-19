@@ -1,3 +1,28 @@
+{{ config(
+    post_hook=[" {{ create_row_access_policy(
+    filter_column = 'participant_id',
+    filter_value = 'mst',
+    principals = ['serviceAccount:mst-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }}",
+" {{ create_row_access_policy(
+    filter_column = 'participant_id',
+    filter_value = 'sacrt',
+    principals = ['serviceAccount:sacrt-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }}",
+" {{ create_row_access_policy(
+    filter_column = 'participant_id',
+    filter_value = 'sbmtd',
+    principals = ['serviceAccount:sbmtd-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }}",
+" {{ create_row_access_policy(
+    filter_column = 'participant_id',
+    filter_value = 'clean-air-express',
+    principals = ['serviceAccount:clean-air-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }}"
+]
+
+) }}
+
 WITH
 
 gtfs_routes_with_participant AS (
