@@ -67,6 +67,10 @@ def make_dict_bq_safe(d: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+def serialize_pydantic_model_for_bigquery(model: BaseModel):
+    return make_dict_bq_safe(json.loads(model.json()))
+
+
 class RTProcessingStep(str, Enum):
     parse = "parse"
     validate = "validate"
@@ -228,6 +232,11 @@ class RTFileProcessingOutcome(ProcessingOutcome):
     extract: GTFSRTFeedExtract
     aggregation: Optional[RTHourlyAggregation]
 
+    class Config:
+        json_encoders = {
+            Dict: serialize_pydantic_model_for_bigquery,
+        }
+
 
 class GTFSRTJobResult(PartitionedGCSArtifact):
     step: RTProcessingStep
@@ -264,9 +273,12 @@ class GTFSRTJobResult(PartitionedGCSArtifact):
             f"saving {len(self.outcomes)} outcomes to {self.path}",
             fg=typer.colors.GREEN,
         )
+        jsons = []
+        for o in self.outcomes:
+            jsons.append(o.json())
         self.save_content(
             fs=fs,
-            content="\n".join(o.json() for o in self.outcomes).encode(),
+            content="\n".join(jsons).encode(),
             exclude={"outcomes"},
         )
 
@@ -400,7 +412,7 @@ def validate_and_upload(
             [
                 {
                     # back and forth so we can use pydantic serialization
-                    "metadata": make_dict_bq_safe(json.loads(extract.json())),
+                    "metadata": serialize_pydantic_model_for_bigquery(extract),
                     **record,
                 }
                 for record in records
@@ -493,8 +505,8 @@ def parse_and_upload(
                             {
                                 "header": parsed["header"],
                                 # back and forth so we use pydantic serialization
-                                "metadata": make_dict_bq_safe(
-                                    json.loads(extract.json())
+                                "metadata": serialize_pydantic_model_for_bigquery(
+                                    extract
                                 ),
                                 **copy.deepcopy(record),
                             }
@@ -659,7 +671,7 @@ def main(
 
     pbar = tqdm(total=len(aggregations_to_process)) if progress else None
 
-    outcomes = []
+    outcomes: List[RTFileProcessingOutcome] = []
     exceptions = []
 
     # from https://stackoverflow.com/a/55149491
