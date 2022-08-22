@@ -1,0 +1,138 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__GTFS_RT_PARSED') }}"
+source_objects:
+  - "service_alerts/*.jsonl.gz"
+destination_project_dataset_table: "external_gtfs_rt_v2.service_alerts"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: true
+  source_uri_prefix: "service_alerts/{dt:DATE}/{hour:TIMESTAMP}/{base64_url:STRING}/"
+schema_fields:
+  - name: metadata
+    type: RECORD
+    fields:
+      - name: config
+        type: RECORD
+        fields:
+          - name: id
+            type: STRING
+          - name: name
+            type: STRING
+          - name: uri
+            type: STRING
+            mode: NULLABLE
+  - name: id
+    type: STRING
+  - name: header
+    type: RECORD
+    fields:
+      - name: timestamp
+        type: INTEGER
+      - name: incrementality
+        type: STRING
+      - name: gtfsRealtimeVersion
+        type: STRING
+  - name: alert
+    type: RECORD
+    fields:
+      - name: activePeriod
+        type: RECORD
+        mode: REPEATED
+        fields:
+          - name: start
+            type: INTEGER
+          - name: end
+            type: INTEGER
+
+      - name: informedEntity
+        type: RECORD
+        mode: REPEATED
+        fields:
+          - name: agencyId
+            type: STRING
+          - name: routeId
+            type: STRING
+          - name: routeType
+            type: INTEGER
+          - name: directionId
+            type: INTEGER
+          - name: trip
+            type: RECORD
+            fields:
+              - name: tripId
+                type: STRING
+              - name: routeId
+                type: STRING
+              - name: directionId
+                type: INTEGER
+              - name: startTime
+                type: STRING
+              - name: startDate
+                type: STRING
+              - name: scheduleRelationship
+                type: STRING
+          - name: stopId
+            type: STRING
+      - name: cause
+        type: STRING
+      - name: effect
+        type: STRING
+      - fields:
+          - fields:
+              - name: text
+                type: STRING
+              - name: language
+                type: STRING
+            mode: REPEATED
+            name: translation
+            type: RECORD
+        name: url
+        type: RECORD
+      - fields:
+          - fields:
+              - name: text
+                type: STRING
+              - name: language
+                type: STRING
+            mode: REPEATED
+            name: translation
+            type: RECORD
+        name: header_text
+        type: RECORD
+      - fields:
+          - fields:
+              - name: text
+                type: STRING
+              - name: language
+                type: STRING
+            mode: REPEATED
+            name: translation
+            type: RECORD
+        name: description_text
+        type: RECORD
+      - fields:
+          - fields:
+              - name: text
+                type: STRING
+              - name: language
+                type: STRING
+            mode: REPEATED
+            name: translation
+            type: RECORD
+        name: tts_header_text
+        type: RECORD
+      - fields:
+          - fields:
+              - name: text
+                type: STRING
+              - name: language
+                type: STRING
+            mode: REPEATED
+            name: translation
+            type: RECORD
+        name: tts_description_text
+        type: RECORD
+      - name: severityLevel
+        type: STRING
