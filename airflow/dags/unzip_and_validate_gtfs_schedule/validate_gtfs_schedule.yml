@@ -1,6 +1,7 @@
 operator: operators.PodOperator
 name: 'validate-gtfs-schedule'
 image: 'ghcr.io/cal-itp/data-infra/gtfs-schedule-validator:{{image_tag()}}'
+pool: schedule_validate_pool
 
 cmds:
   - python3
