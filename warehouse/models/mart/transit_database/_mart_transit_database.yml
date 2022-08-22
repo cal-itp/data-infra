@@ -221,6 +221,10 @@ models:
         #   - relationships:
         #      to: ref('dim_gtfs_service_data')
         #      field: key
+  - name: dim_fare_systems
+    description: '{{ doc("fare_systems_table") }}'
+    columns:
+      - *key
   - name: dim_service_components
     description: |
       Each row is a unique service / product / component combination.

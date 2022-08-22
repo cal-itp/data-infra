@@ -113,3 +113,11 @@ Geographic info from: [https://www.census.gov/library/reference/code-lists/ansi.
 Data representing rider requirements. Further description needed.
 
 {% enddocs%}
+
+{% docs fare_systems_table %}
+
+WIP
+
+An import from o.g. Trillium research circa 2020 stored in [this document](https://docs.google.com/spreadsheets/d/1qr49azk6p30mp96_7myKoO-Bb_bXMMn5ZzgbL-uPiPw/edit?usp=drive_web&ouid=116512595786393675275)
+
+{% enddocs%}
