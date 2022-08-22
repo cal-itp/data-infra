@@ -1,5 +1,5 @@
 # What is an `agency`?
-`Agency` is a term that is used often across the Cal-ITP project but depending on the context of it's use, it can have varying meanings when conducting an analysis.
+`Agency` is a term that is used often across the Cal-ITP project but depending on the context of its use, it can have varying meanings when conducting an analysis.
 
 Inconsistent use of the term `agency` can be confusing, so this section of the documentation seeks to help analysts determine how to translate the use of the word `agency` in research requests depending on the area of focus that the research request falls into.
 
