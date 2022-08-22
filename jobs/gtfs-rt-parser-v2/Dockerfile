@@ -12,7 +12,7 @@ RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-
 ENV PATH="${PATH}:/root/.poetry/bin"
 
 # formerly the "1.0.0-SNAPSHOT" from S3
-COPY ./rt-validator-v1.0.0_cli.jar.jar ${GTFS_RT_VALIDATOR_JAR}
+COPY ./rt-validator-v1.0.0_cli.jar ${GTFS_RT_VALIDATOR_JAR}
 
 WORKDIR /app
 
