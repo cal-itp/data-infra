@@ -16,7 +16,7 @@ from concurrent.futures import ThreadPoolExecutor, Future
 from enum import Enum
 from functools import lru_cache
 from pathlib import Path
-from typing import ClassVar, Dict, List, Optional, Sequence, Tuple, Union
+from typing import ClassVar, Dict, List, Optional, Sequence, Tuple, Union, Any
 
 import backoff  # type: ignore
 import pendulum
@@ -40,6 +40,7 @@ from calitp.storage import (
     get_latest_file,
     PARTITIONED_ARTIFACT_METADATA_KEY,
     GTFSScheduleFeedExtract,
+    make_name_bq_safe,
 )  # type: ignore
 from google.protobuf import json_format
 from google.protobuf.message import DecodeError
@@ -55,6 +56,15 @@ JAR_DEFAULT = typer.Option(
 
 RT_PARSED_BUCKET = os.environ["CALITP_BUCKET__GTFS_RT_PARSED"]
 RT_VALIDATION_BUCKET = os.environ["CALITP_BUCKET__GTFS_RT_VALIDATION"]
+
+
+def make_dict_bq_safe(d: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        make_name_bq_safe(key): make_dict_bq_safe(value)
+        if isinstance(value, dict)
+        else value
+        for key, value in d.items()
+    }
 
 
 class RTProcessingStep(str, Enum):
@@ -390,7 +400,7 @@ def validate_and_upload(
             [
                 {
                     # back and forth so we can use pydantic serialization
-                    "metadata": json.loads(extract.json()),
+                    "metadata": make_dict_bq_safe(json.loads(extract.json())),
                     **record,
                 }
                 for record in records
@@ -483,7 +493,9 @@ def parse_and_upload(
                             {
                                 "header": parsed["header"],
                                 # back and forth so we use pydantic serialization
-                                "metadata": json.loads(extract.json()),
+                                "metadata": make_dict_bq_safe(
+                                    json.loads(extract.json())
+                                ),
                                 **copy.deepcopy(record),
                             }
                         )
