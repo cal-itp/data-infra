@@ -19,6 +19,7 @@ from pathlib import Path
 from typing import ClassVar, Dict, List, Optional, Sequence, Tuple, Union, Any
 
 import backoff  # type: ignore
+import gcsfs
 import pendulum
 import typer
 from aiohttp.client_exceptions import (
@@ -67,8 +68,11 @@ def make_dict_bq_safe(d: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def serialize_pydantic_model_for_bigquery(model: BaseModel):
-    return make_dict_bq_safe(json.loads(model.json()))
+def serialize_pydantic_model_for_bigquery(model: BaseModel) -> str:
+    """
+    Sorry. We need https://github.com/pydantic/pydantic/issues/1409.
+    """
+    return json.dumps(make_dict_bq_safe(json.loads(model.json())))
 
 
 class RTProcessingStep(str, Enum):
@@ -232,11 +236,6 @@ class RTFileProcessingOutcome(ProcessingOutcome):
     extract: GTFSRTFeedExtract
     aggregation: Optional[RTHourlyAggregation]
 
-    class Config:
-        json_encoders = {
-            Dict: serialize_pydantic_model_for_bigquery,
-        }
-
 
 class GTFSRTJobResult(PartitionedGCSArtifact):
     step: RTProcessingStep
@@ -265,22 +264,22 @@ class GTFSRTJobResult(PartitionedGCSArtifact):
     def dt(self) -> pendulum.Date:
         return self.hour.date()
 
+
+def save_job_result(fs: gcsfs.GCSFileSystem, result: GTFSRTJobResult):
+    typer.secho(
+        f"saving {len(result.outcomes)} outcomes to {result.path}",
+        fg=typer.colors.GREEN,
+    )
     # TODO: I dislike having to exclude the records here
     #   I need to figure out the best way to have a single type represent the "metadata" of
     #   the content as well as the content itself
-    def save(self, fs):
-        typer.secho(
-            f"saving {len(self.outcomes)} outcomes to {self.path}",
-            fg=typer.colors.GREEN,
-        )
-        jsons = []
-        for o in self.outcomes:
-            jsons.append(o.json())
-        self.save_content(
-            fs=fs,
-            content="\n".join(jsons).encode(),
-            exclude={"outcomes"},
-        )
+    result.save_content(
+        fs=fs,
+        content="\n".join(
+            (serialize_pydantic_model_for_bigquery(o) for o in result.outcomes)
+        ).encode(),
+        exclude={"outcomes"},
+    )
 
 
 def fatal_code(e):
@@ -725,7 +724,7 @@ def main(
         feed_type=feed_type,
         outcomes=outcomes,
     )
-    result.save(get_fs())
+    save_job_result(get_fs(), result)
 
     if exceptions:
         exc_str = "\n".join(str(tup) for tup in exceptions)
