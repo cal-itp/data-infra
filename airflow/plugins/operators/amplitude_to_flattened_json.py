@@ -8,8 +8,10 @@ from datetime import timedelta
 import calitp
 import requests
 import pandas as pd
+from requests import HTTPError
 
 from airflow.models import BaseOperator
+from airflow.exceptions import AirflowSkipException
 from calitp.config import is_development
 
 DATE_FORMAT = "%Y%m%dT%H"
@@ -58,10 +60,18 @@ def amplitude_to_df(
     api_key = api_key or os.environ[api_key_env]
     secret_key = secret_key or os.environ[secret_key_env]
 
-    response = requests.get(url, params=params, auth=(api_key, secret_key), stream=True)
+    try:
+        response = requests.get(
+            url, params=params, auth=(api_key, secret_key), stream=True
+        )
+        response.raise_for_status()
+    except HTTPError as e:
+        code = e.response.status_code
 
-    # raise HTTPError if an error status code was returned
-    response.raise_for_status()
+        if code == 404:  # 404 just means there was no data
+            raise AirflowSkipException()
+        else:
+            raise e
 
     df_list = []
     with zipfile.ZipFile(BytesIO(response.content)) as export:
