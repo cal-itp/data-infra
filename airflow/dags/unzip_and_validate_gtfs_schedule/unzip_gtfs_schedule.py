@@ -3,7 +3,6 @@
 # provide_context: true
 # ---
 import os
-import logging
 import pendulum
 import zipfile
 
@@ -19,11 +18,8 @@ from calitp.storage import (
     ProcessingOutcome,
 )
 
-# TODO: what level?
-logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.INFO)
-
-# SCHEDULE_UNZIPPED_BUCKET = os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED")
-# SCHEDULE_RAW_BUCKET = os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_RAW")
+# SCHEDULE_UNZIPPED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED"]
+# SCHEDULE_RAW_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_RAW"]
 # for testing:
 SCHEDULE_RAW_BUCKET = "test-calitp-gtfs-schedule-raw"
 SCHEDULE_UNZIPPED_BUCKET = "test-calitp-gtfs-schedule-unzipped"
@@ -31,7 +27,7 @@ SCHEDULE_UNZIPPED_BUCKET = "test-calitp-gtfs-schedule-unzipped"
 
 class GTFSScheduleFeedFile(PartitionedGCSArtifact):
     bucket: ClassVar[str] = SCHEDULE_UNZIPPED_BUCKET
-    partition_names: ClassVar[List[str]] = ["dt", "base64_url", "ts"]
+    partition_names: ClassVar[List[str]] = GTFSFeedExtractInfo.partition_names
     ts: pendulum.DateTime
     base64_url: str
     zipfile_path: str
@@ -60,9 +56,8 @@ class GTFSScheduleFeedExtractUnzipOutcome(ProcessingOutcome):
 class ScheduleUnzipResult(PartitionedGCSArtifact):
     bucket: ClassVar[str] = SCHEDULE_UNZIPPED_BUCKET
     table: ClassVar[str] = "unzipping_results"
-    partition_names: ClassVar[List[str]] = ["dt", "ts"]
+    partition_names: ClassVar[List[str]] = ["dt"]
     dt: pendulum.Date
-    ts: pendulum.DateTime
     outcomes: List[GTFSScheduleFeedExtractUnzipOutcome]
 
     @property
@@ -123,12 +118,12 @@ def unzip_individual_feed(
     # TODO: figure out why this isn't working? should be accessible via just extract.path
     # need to update all refs once it's working again
     extract_path = os.path.join(SCHEDULE_RAW_BUCKET, extract.name)
-    logging.info(f"Processing {extract.name}")
+    print(f"Processing {extract.name}")
     try:
         with fs.open(extract_path) as f:
             zip = zipfile.ZipFile(f)
         files, directories = summarize_zip_contents(zip)
-        logging.info(f"Found: {files} and {directories}")
+        print(f"Found: {files} and {directories}")
     except Exception as e:
         return GTFSScheduleFeedExtractUnzipOutcome(
             success=False,
@@ -180,12 +175,12 @@ def unzip_extracts(day=pendulum.today()):
         },
         verbose=True,
     )
-    logging.info(f"Identified {len(extracts)} records for {day}")
+    print(f"Identified {len(extracts)} records for {day}")
     outcomes = []
     # TODO: extract all not just first one
     for extract in extracts[0:1]:
         outcome = unzip_individual_feed(fs, extract)
-        logging.info(f"Outcome: {outcome}")
+        print(f"Outcome: {outcome}")
         outcomes.append(outcome)
 
         # TODO: actually save out outcomes file
