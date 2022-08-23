@@ -1,0 +1,34 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__GTFS_RT_VALIDATION') }}"
+source_objects:
+  - "vehicle_positions_validations_outcomes/*.jsonl.gz"
+destination_project_dataset_table: "external_gtfs_rt_v2.vehicle_positions_validations_outcomes"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: true
+  source_uri_prefix: "vehicle_positions_validations_outcomes/{dt:DATE}/{hour:TIMESTAMP}/"
+schema_fields:
+  - name: success
+    type: BOOLEAN
+  - name: exception
+    type: STRING
+    mode: NULLABLE
+  - name: extract
+    type: RECORD
+    fields:
+      - name: response_headers
+        type: RECORD
+        mode: NULLABLE
+        fields:
+          - name: content_type
+            type: STRING
+            mode: NULLABLE
+  - name: aggregation
+    type: RECORD
+    mode: NULLABLE
+    fields:
+      - name: extracts
+        type: STRING
+        mode: REPEATED

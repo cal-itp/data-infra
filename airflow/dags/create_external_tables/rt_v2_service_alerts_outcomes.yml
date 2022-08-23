@@ -1,0 +1,34 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__GTFS_RT_PARSED') }}"
+source_objects:
+  - "service_alerts_outcomes/*.jsonl"
+destination_project_dataset_table: "external_gtfs_rt_v2.service_alerts_outcomes"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: true
+  source_uri_prefix: "service_alerts_outcomes/{dt:DATE}/{hour:TIMESTAMP}/"
+schema_fields:
+  - name: success
+    type: BOOLEAN
+  - name: exception
+    type: STRING
+    mode: NULLABLE
+  - name: extract
+    type: RECORD
+    fields:
+      - name: response_headers
+        type: RECORD
+        mode: NULLABLE
+        fields:
+          - name: content_type
+            type: STRING
+            mode: NULLABLE
+  - name: aggregation
+    type: RECORD
+    mode: NULLABLE
+    fields:
+      - name: extracts
+        type: STRING
+        mode: REPEATED

@@ -78,11 +78,11 @@ def _bq_client_create_external_table(
 
     # for some reason, you can set the project name in the bigquery client, and
     # it doesn't need to be in the SQL code, but this bigquery API still requires
-    # the fully qualified table name when initializing a Table..
+    # the fully qualified table name when initializing a Table.
     full_table_name = f"{get_project_id()}.{table_name}"
 
     # First delete table if it exists
-    print(f"Deleting external table: {full_table_name}")
+    print(f"Deleting external table if exists: {full_table_name}")
     client.delete_table(full_table_name, not_found_ok=True)
 
     # (re)create table
@@ -102,7 +102,10 @@ def _bq_client_create_external_table(
 
 
 class ExternalTable(BaseOperator):
-    template_fields = ("post_hook",)
+    template_fields = (
+        "bucket",
+        "post_hook",
+    )
 
     def __init__(
         self,
@@ -131,7 +134,7 @@ class ExternalTable(BaseOperator):
         )
         self.skip_leading_rows = skip_leading_rows
         self.schema_fields = schema_fields
-        self.source_objects = list(map(self.fix_prefix, source_objects))
+        self.source_objects = source_objects
         self.source_format = source_format
         self.geojson = geojson
         self.hive_options = hive_options
@@ -142,6 +145,8 @@ class ExternalTable(BaseOperator):
         super().__init__(**kwargs)
 
     def execute(self, context):
+        # we can't do this in the init because templating occurs in the super init call
+        self.source_objects = list(map(self.fix_prefix, self.source_objects))
         # Basically for backwards support of tasks that have nested fields and
         # were created when we were using airflow bigquery hooks.
         # e.g. dags/gtfs_schedule_history/validation_report.yml

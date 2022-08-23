@@ -38,6 +38,8 @@ app = typer.Typer()
 logging.basicConfig()
 
 
+# TODO: this could share some functionality with the RT validation artifact,
+#   similar to the extracts sharing some functionality
 class GTFSScheduleFeedValidation(PartitionedGCSArtifact):
     bucket: ClassVar[str] = SCHEDULE_VALIDATION_BUCKET
     table: ClassVar[str] = "validation_reports"
