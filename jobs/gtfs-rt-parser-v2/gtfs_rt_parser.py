@@ -68,11 +68,11 @@ def make_dict_bq_safe(d: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def serialize_pydantic_model_for_bigquery(model: BaseModel) -> str:
+def make_pydantic_model_bq_safe(model: BaseModel) -> Dict[str, Any]:
     """
     Sorry. We need https://github.com/pydantic/pydantic/issues/1409.
     """
-    return json.dumps(make_dict_bq_safe(json.loads(model.json())))
+    return make_dict_bq_safe(json.loads(model.json()))
 
 
 class RTProcessingStep(str, Enum):
@@ -276,7 +276,7 @@ def save_job_result(fs: gcsfs.GCSFileSystem, result: GTFSRTJobResult):
     result.save_content(
         fs=fs,
         content="\n".join(
-            (serialize_pydantic_model_for_bigquery(o) for o in result.outcomes)
+            (json.dumps(make_pydantic_model_bq_safe(o)) for o in result.outcomes)
         ).encode(),
         exclude={"outcomes"},
     )
@@ -411,7 +411,7 @@ def validate_and_upload(
             [
                 {
                     # back and forth so we can use pydantic serialization
-                    "metadata": serialize_pydantic_model_for_bigquery(extract),
+                    "metadata": make_pydantic_model_bq_safe(extract),
                     **record,
                 }
                 for record in records
@@ -504,9 +504,7 @@ def parse_and_upload(
                             {
                                 "header": parsed["header"],
                                 # back and forth so we use pydantic serialization
-                                "metadata": serialize_pydantic_model_for_bigquery(
-                                    extract
-                                ),
+                                "metadata": make_pydantic_model_bq_safe(extract),
                                 **copy.deepcopy(record),
                             }
                         )

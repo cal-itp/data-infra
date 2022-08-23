@@ -8,7 +8,7 @@ use_bq_client: true
 hive_options:
   mode: CUSTOM
   require_partition_filter: true
-  source_uri_prefix: "trip_updates_validations//{dt:DATE}/{hour:TIMESTAMP}/{base64_url:STRING}/"
+  source_uri_prefix: "trip_updates_validations/{dt:DATE}/{hour:TIMESTAMP}/{base64_url:STRING}/"
 schema_fields:
   - name: metadata
     type: RECORD
