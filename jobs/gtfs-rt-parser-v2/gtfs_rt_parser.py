@@ -70,7 +70,7 @@ def make_dict_bq_safe(d: Dict[str, Any]) -> Dict[str, Any]:
 
 def make_pydantic_model_bq_safe(model: BaseModel) -> Dict[str, Any]:
     """
-    Sorry. We need https://github.com/pydantic/pydantic/issues/1409.
+    This is ugly but I think it's the best option until https://github.com/pydantic/pydantic/issues/1409
     """
     return make_dict_bq_safe(json.loads(model.json()))
 
