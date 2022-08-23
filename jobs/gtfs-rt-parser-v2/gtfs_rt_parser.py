@@ -227,9 +227,13 @@ class RTHourlyAggregation(PartitionedGCSArtifact):
         return self.hour.date()
 
     @property
+    def name_hash(self) -> str:
+        return hashlib.md5(self.name.encode("utf-8")).hexdigest()
+
+    @property
     def unique_filename(self):
         """Used for on-disk handling."""
-        return f"{hashlib.md5(self.name.encode('utf-8')).hexdigest()}{JSONL_GZIP_EXTENSION}"
+        return f"{self.name_hash}{JSONL_GZIP_EXTENSION}"
 
 
 class RTFileProcessingOutcome(ProcessingOutcome):
@@ -547,7 +551,7 @@ def parse_and_validate(
     pbar=None,
 ) -> List[RTFileProcessingOutcome]:
     fs = get_fs()
-    dst_path_rt = f"{tmp_dir}/rt_{hashlib.md5(hour.name.encode('utf-8')).hexdigest()}/"
+    dst_path_rt = f"{tmp_dir}/rt_{hour.name_hash}/"
     get_with_retry(
         fs,
         rpath=[file.path for file in hour.extracts],
