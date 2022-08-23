@@ -36,7 +36,7 @@ def _bq_client_create_external_table(
     # TODO: must be fully qualified table name
     ext = bigquery.ExternalConfig(source_format)
     ext.source_uris = source_objects
-    ext.autodetect = True
+    ext.autodetect = schema_fields is None
     ext.ignore_unknown_values = True
 
     if geojson:
