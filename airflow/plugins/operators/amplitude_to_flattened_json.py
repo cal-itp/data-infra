@@ -1,6 +1,7 @@
 """Module for exporting data from Amplitude and adding to the data warehouse"""
 import os
 import gzip
+import logging
 import zipfile
 from io import BytesIO, StringIO
 from datetime import timedelta
@@ -15,6 +16,9 @@ from airflow.exceptions import AirflowSkipException
 from calitp.config import is_development
 
 DATE_FORMAT = "%Y%m%dT%H"
+
+
+logger = logging.getLogger(__name__)
 
 
 def amplitude_to_df(
@@ -61,14 +65,17 @@ def amplitude_to_df(
     secret_key = secret_key or os.environ[secret_key_env]
 
     try:
+        logger.info("Calling Amplitude API")
         response = requests.get(
             url, params=params, auth=(api_key, secret_key), stream=True
         )
         response.raise_for_status()
     except HTTPError as e:
         code = e.response.status_code
+        logger.info(f"Amplitude API returned error code: {code}")
 
         if code == 404:  # 404 just means there was no data
+            logger.info("Skipping the rest of this task")
             raise AirflowSkipException()
         else:
             raise e
