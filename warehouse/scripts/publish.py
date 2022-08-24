@@ -1,13 +1,14 @@
 """
 Publishes various dbt models to various sources.
 """
+import functools
 from datetime import timedelta
 
 import csv
 
 import pendulum
 from google.cloud import bigquery
-from typing import Optional, Literal, List, Dict
+from typing import Optional, Literal, List, Dict, BinaryIO, TextIO
 
 from pathlib import Path
 
@@ -66,6 +67,64 @@ def make_linestring(x):
     return pts[0]
 
 
+CHUNK_SIZE = 64 * 1024 * 1024
+
+
+def upload_to_ckan(url: str, fname: str, fsize: int, file: TextIO, resource_id: str, api_key: str):
+    typer.secho(f"uploading {humanize.naturalsize(fsize)} to {resource_id}")
+    if fsize <= CHUNK_SIZE:
+        requests.post(
+            f"{url}/api/3/action/resource_update",
+            data={"id": resource_id},
+            headers={"Authorization": API_KEY},
+            files={"upload": file},
+        ).raise_for_status()
+    else:
+        initiate_response = requests.post(
+            f"{url}/api/3/action/cloudstorage_initiate_multipart",
+            json={
+                "id": resource_id,
+                "name": fname,
+                "size": fsize,
+            },
+            headers={"Authorization": API_KEY},
+        )
+        initiate_response.raise_for_status()
+        upload_id = initiate_response.json()["result"]["id"]
+
+        # https://stackoverflow.com/a/54989668
+        chunker = functools.partial(file.read, CHUNK_SIZE)
+        for i, chunk in enumerate(iter(chunker, ""), start=1):
+            try:
+                typer.secho(f"uploading part {i} to multipart upload {upload_id}")
+                requests.post(
+                    f"{url}/api/3/action/cloudstorage_upload_multipart",
+                    json={
+                        "id": resource_id,
+                        "uploadId": upload_id,
+                        "partNumber": str(i), # the server throws a 500 if this isn't a string
+                        "upload": (fname, chunk, "text/plain")
+                    },
+                    headers={"Authorization": API_KEY},
+                ).raise_for_status()
+            except Exception:
+                requests.post(
+                    f"{url}/api/3/action/cloudstorage_abort_multipart",
+                    data={
+                        "id": resource_id,
+                        "uploadId": upload_id,
+                    }
+                ).raise_for_status()
+                raise
+        requests.post(
+            f"{url}/api/3/action/cloudstorage_finish_multipart",
+            data={
+                "uploadId": upload_id,
+                "save_action": "go-metadata",
+            }
+        ).raise_for_status()
+
+
 def _publish_exposure(
     project: str, bucket: str, exposure: Exposure, dry_run: bool, deploy: bool
 ):
@@ -79,8 +138,8 @@ def _publish_exposure(
                     )
 
                 # TODO: this should probably be driven by the depends_on nodes
-                for model_name, ckan_id in destination.ids.items():
-                    typer.secho(f"handling {model_name} {ckan_id}")
+                for model_name, resource_id in destination.ids.items():
+                    typer.secho(f"handling {model_name} {resource_id}")
                     node = BaseNode._instances[f"model.calitp_warehouse.{model_name}"]
 
                     fpath = os.path.join(tmpdir, destination.filename(model_name))
@@ -117,7 +176,7 @@ def _publish_exposure(
                     hive_path = destination.hive_path(exposure, model_name, bucket)
 
                     write_msg = f"writing {model_name} to {hive_path}"
-                    upload_msg = f"uploading to {destination.url} {ckan_id}"
+                    upload_msg = f"uploading to {destination.url} {resource_id}"
                     if dry_run:
                         typer.secho(
                             f"would be {write_msg} and {upload_msg}",
@@ -127,16 +186,20 @@ def _publish_exposure(
                         typer.secho(write_msg, fg=typer.colors.GREEN)
                         fs = gcsfs.GCSFileSystem(token="google_default")
                         fs.put(fpath, hive_path)
+                        fname=destination.filename(model_name)
+                        fsize =os.path.getsize(fpath)
 
                         if deploy:
                             typer.secho(upload_msg, fg=typer.colors.GREEN)
-                            with open(fpath, "rb") as fp:
-                                requests.post(
-                                    destination.url,
-                                    data={"id": ckan_id},
-                                    headers={"Authorization": API_KEY},
-                                    files={"upload": fp},
-                                ).raise_for_status()
+                            with open(fpath, "r") as fp:
+                                upload_to_ckan(
+                                    url=destination.url,
+                                    fname=fname,
+                                    fsize=fsize,
+                                    file=fp,
+                                    resource_id=resource_id,
+                                    api_key=API_KEY,
+                                )
                         else:
                             typer.secho(
                                 f"would be {upload_msg} if --deploy",
