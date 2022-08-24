@@ -1,5 +1,5 @@
 WITH 
--- selecting the distinct trips from GTFS Vehicle Postions for two operators (SamTrans and Big Blue Bus) and two months
+-- selecting the distinct trips from GTFS Vehicle Postions for two operators (SamTrans 290 and Big Blue Bus 300) and two months
 vp_trips AS (
     SELECT DISTINCT
      calitp_itp_id,
