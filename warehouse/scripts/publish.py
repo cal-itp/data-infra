@@ -8,7 +8,7 @@ import csv
 
 import pendulum
 from google.cloud import bigquery
-from typing import Optional, Literal, List, Dict, BinaryIO, TextIO
+from typing import Optional, Literal, List, Dict, BinaryIO
 
 from pathlib import Path
 
@@ -29,6 +29,8 @@ import pandas as pd
 import requests
 import typer
 from pydantic import BaseModel
+from requests import Response
+from requests_toolbelt import MultipartEncoder
 
 from dbt_artifacts import (
     BaseNode,
@@ -70,58 +72,88 @@ def make_linestring(x):
 CHUNK_SIZE = 64 * 1024 * 1024
 
 
-def upload_to_ckan(url: str, fname: str, fsize: int, file: TextIO, resource_id: str, api_key: str):
-    typer.secho(f"uploading {humanize.naturalsize(fsize)} to {resource_id}")
+def upload_to_ckan(
+    url: str, fname: str, fsize: int, file: BinaryIO, resource_id: str, api_key: str
+):
+    def ckan_request(action: str, data: Dict) -> Response:
+        encoder = MultipartEncoder(fields=data)
+        return requests.post(
+            f"{url}/api/action/{action}",
+            data=encoder,
+            headers={"Content-Type": encoder.content_type, "X-CKAN-API-Key": API_KEY},
+        )
+
     if fsize <= CHUNK_SIZE:
+        typer.secho(f"uploading {humanize.naturalsize(fsize)} to {resource_id}")
         requests.post(
-            f"{url}/api/3/action/resource_update",
+            f"{url}/api/action/resource_update",
             data={"id": resource_id},
             headers={"Authorization": API_KEY},
             files={"upload": file},
         ).raise_for_status()
+    elif fsize / CHUNK_SIZE > 4:
+        raise RuntimeError("we probably cannot upload more than 4 chunks to CKAN")
     else:
-        initiate_response = requests.post(
-            f"{url}/api/3/action/cloudstorage_initiate_multipart",
-            json={
+        typer.secho(
+            f"uploading {humanize.naturalsize(fsize)} to {resource_id} in {humanize.naturalsize(CHUNK_SIZE)} chunks"
+        )
+        initiate_response = ckan_request(
+            action="cloudstorage_initiate_multipart",
+            data={
                 "id": resource_id,
                 "name": fname,
-                "size": fsize,
+                "size": str(fsize),
             },
-            headers={"Authorization": API_KEY},
         )
         initiate_response.raise_for_status()
         upload_id = initiate_response.json()["result"]["id"]
 
         # https://stackoverflow.com/a/54989668
         chunker = functools.partial(file.read, CHUNK_SIZE)
-        for i, chunk in enumerate(iter(chunker, ""), start=1):
+        for i, chunk in enumerate(iter(chunker, b""), start=1):
+            if i > 100:
+                raise RuntimeError(
+                    "stopping after 100 chunks, this should be re-considered"
+                )
             try:
                 typer.secho(f"uploading part {i} to multipart upload {upload_id}")
-                requests.post(
-                    f"{url}/api/3/action/cloudstorage_upload_multipart",
-                    json={
-                        "id": resource_id,
-                        "uploadId": upload_id,
-                        "partNumber": str(i), # the server throws a 500 if this isn't a string
-                        "upload": (fname, chunk, "text/plain")
-                    },
-                    headers={"Authorization": API_KEY},
-                ).raise_for_status()
-            except Exception:
-                requests.post(
-                    f"{url}/api/3/action/cloudstorage_abort_multipart",
+                ckan_request(
+                    action="cloudstorage_upload_multipart",
                     data={
                         "id": resource_id,
                         "uploadId": upload_id,
-                    }
+                        "partNumber": str(
+                            i
+                        ),  # the server throws a 500 if this isn't a string
+                        "upload": (fname, chunk, "text/plain"),
+                    },
+                ).raise_for_status()
+            except Exception:
+                ckan_request(
+                    action="cloudstorage_abort_multipart",
+                    data={
+                        "id": resource_id,
+                        "uploadId": upload_id,
+                    },
                 ).raise_for_status()
                 raise
-        requests.post(
-            f"{url}/api/3/action/cloudstorage_finish_multipart",
+        ckan_request(
+            action="cloudstorage_finish_multipart",
             data={
                 "uploadId": upload_id,
+                "id": resource_id,
                 "save_action": "go-metadata",
-            }
+            },
+        ).raise_for_status()
+        ckan_request(
+            action="resource_patch",
+            data={
+                "id": resource_id,
+                "multipart_name": fname,
+                "url": fname,
+                "size": str(fsize),
+                "url_type": "upload",
+            },
         ).raise_for_status()
 
 
@@ -186,12 +218,12 @@ def _publish_exposure(
                         typer.secho(write_msg, fg=typer.colors.GREEN)
                         fs = gcsfs.GCSFileSystem(token="google_default")
                         fs.put(fpath, hive_path)
-                        fname=destination.filename(model_name)
-                        fsize =os.path.getsize(fpath)
+                        fname = destination.filename(model_name)
+                        fsize = os.path.getsize(fpath)
 
                         if deploy:
                             typer.secho(upload_msg, fg=typer.colors.GREEN)
-                            with open(fpath, "r") as fp:
+                            with open(fpath, "rb") as fp:
                                 upload_to_ckan(
                                     url=destination.url,
                                     fname=fname,
