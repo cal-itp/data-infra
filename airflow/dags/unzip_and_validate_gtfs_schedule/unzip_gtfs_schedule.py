@@ -8,7 +8,7 @@ import pendulum
 import zipfile
 
 from io import BytesIO
-from typing import ClassVar, List, Optional
+from typing import ClassVar, List, Optional, Tuple
 
 from calitp.storage import (
     fetch_all_in_partition,
@@ -35,9 +35,7 @@ class GTFSScheduleFeedFile(PartitionedGCSArtifact):
     # so set as a property instead
     @property
     def table(self) -> str:
-        # only replace slashes so that this is a mostly GCS-filepath-safe string
-        # if we encounter something else, we will address: https://cloud.google.com/storage/docs/naming-objects
-        return self.original_filename.replace("/", "__")
+        return self.filename
 
     @property
     def dt(self) -> pendulum.Date:
@@ -75,7 +73,9 @@ class ScheduleUnzipResult(PartitionedGCSArtifact):
         )
 
 
-def summarize_zip_contents(zip: zipfile.ZipFile, at: str = ""):
+def summarize_zip_contents(
+    zip: zipfile.ZipFile, at: str = ""
+) -> Tuple[List[str], List[str], bool]:
     files = []
     directories = []
     for entry in zip.namelist():
@@ -84,41 +84,41 @@ def summarize_zip_contents(zip: zipfile.ZipFile, at: str = ""):
         if zipfile.Path(zip, at=entry).is_dir():
             directories.append(entry)
     logging.info(f"Found files: {files} and directories: {directories}")
-    return files, directories
+    # the only valid case for any directory inside the zipfile is if it's the only item at the root of the zipfile
+    is_valid = (not directories) or (
+        (len(directories) == 1)
+        and ([item.is_dir() for item in zipfile.Path(zip, at="").iterdir()] == [True])
+    )
+    return files, directories, is_valid
 
 
 def process_feed_files(
-    fs, extract: GTFSScheduleFeedExtract, zip: zipfile.ZipFile, directories: List[str]
+    fs,
+    extract: GTFSScheduleFeedExtract,
+    zip: zipfile.ZipFile,
+    files: List[str],
+    directories: List[str],
+    is_valid: bool,
 ):
     zipfile_files = []
-    # more than one directory --> can't parse
-    if len(directories) > 1:
-        raise ValueError("Unparseable zip: Multiple directories found")
-    # directory + any other artifact at top level --> can't parse
-    if directories and len([item for item in zipfile.Path(zip, at="").iterdir()]) > 1:
-        raise ValueError("Unparseable zip: Directory and other artifacts at root level")
-    # if the only artifact at the root level of the zipfile is a directory
-    # we can treat the contents of that directory as the feed
-    if [item.is_dir() for item in zipfile.Path(zip, at="").iterdir()] == [True]:
-        feed_directory = directories[0]
-        logging.info("Top-level directory found")
-    else:
-        feed_directory = ""
+    if not is_valid:
+        raise ValueError(
+            "Unparseable zip: File/directory structure within zipfile cannot be unpacked"
+        )
 
-    for file in zipfile.Path(zip, at=feed_directory).iterdir():
-        if feed_directory:
-            file_name = os.path.join(feed_directory, file.name)
-        else:
-            file_name = file.name
-        with zip.open(file_name) as f:
+    for file in files:
+        # make a proper path so to access the .name attribute later
+        file_path = zipfile.Path(zip, at=file)
+        with zip.open(file) as f:
             file_content = f.read()
         file_extract = GTFSScheduleFeedFile(
             ts=extract.ts,
             base64_url=extract.base64_url,
             zipfile_path=extract.path,
-            original_filename=file.name,
-            # TODO: do we need to make this safe?
-            filename=file.name,
+            original_filename=file,
+            # only replace slashes so that this is a mostly GCS-filepath-safe string
+            # if we encounter something else, we will address: https://cloud.google.com/storage/docs/naming-objects
+            filename=file_path.name.replace("/", "__"),
         )
         file_extract.save_content(content=file_content, fs=fs)
         zipfile_files.append(file_extract)
@@ -128,10 +128,6 @@ def process_feed_files(
 def unzip_individual_feed(
     fs, extract: GTFSScheduleFeedExtract
 ) -> GTFSScheduleFeedExtractUnzipOutcome:
-    """If zip contains a directory and nothing else at top level or files at top level,
-    we return the contents of the top level or the unique directory as the feed.
-    If there's a directory *and* other files at top level within zip, or if
-    there are nested directories, say we can't parse."""
     logging.info(f"Processing {extract.name}")
     zipfile_md5_hash = ""
     files = []
@@ -140,8 +136,10 @@ def unzip_individual_feed(
         with fs.open(extract.path) as f:
             zipfile_md5_hash = f.info()["md5Hash"]
             zip = zipfile.ZipFile(BytesIO(f.read()))
-        files, directories = summarize_zip_contents(zip)
-        zipfile_files = process_feed_files(fs, extract, zip, directories)
+        files, directories, is_valid = summarize_zip_contents(zip)
+        zipfile_files = process_feed_files(
+            fs, extract, zip, files, directories, is_valid
+        )
     except Exception as e:
         logging.warn(f"Can't process {extract.path}: {e}")
         return GTFSScheduleFeedExtractUnzipOutcome(
@@ -152,6 +150,7 @@ def unzip_individual_feed(
             zipfile_files=files,
             zipfile_dirs=directories,
         )
+    logging.info(f"Successfully unzipped {extract.path}")
     return GTFSScheduleFeedExtractUnzipOutcome(
         success=True,
         zipfile_extract_md5hash=zipfile_md5_hash,
@@ -180,7 +179,6 @@ def unzip_extracts(day: pendulum.datetime):
     outcomes = []
     for extract in extracts:
         outcome = unzip_individual_feed(fs, extract)
-        logging.info(f"Processing success: {outcome.success}")
         outcomes.append(outcome)
 
     result = ScheduleUnzipResult(filename="results.jsonl", dt=day, outcomes=outcomes)
