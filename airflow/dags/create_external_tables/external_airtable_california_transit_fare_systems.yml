@@ -13,3 +13,115 @@ use_bq_client: true
 hive_options:
   mode: AUTO
   source_uri_prefix: "california_transit__fare_systems/"
+schema_fields:
+  - name: reservations
+    mode: NULLABLE
+    type: BOOLEAN
+  - name: cheaper_base_fare_with_smartcard
+    mode: NULLABLE
+    type: BOOLEAN
+  - name: transit_services
+    mode: REPEATED
+    type: STRING
+  - name: flat_fares
+    mode: NULLABLE
+    type: BOOLEAN
+  - name: group_school_trip_discount
+    mode: NULLABLE
+    type: BOOLEAN
+  - name: pass_notes
+    mode: NULLABLE
+    type: STRING
+  - name: fare_system_id
+    mode: NULLABLE
+    type: STRING
+  - name: reg_adult_ticket_price_min
+    mode: NULLABLE
+    type: FLOAT
+  - name: ticket_validation
+    mode: NULLABLE
+    type: STRING
+  - name: electronic_fare_program
+    mode: NULLABLE
+    type: STRING
+  - name: reg_adult_ticket_price_max
+    mode: NULLABLE
+    type: FLOAT
+  - name: ticket_media
+    mode: NULLABLE
+    type: STRING
+  - name: ticket_pass_sales_methods
+    mode: NULLABLE
+    type: STRING
+  - name: pass_price_min
+    mode: NULLABLE
+    type: FLOAT
+  - name: pass_times_trips
+    mode: NULLABLE
+    type: STRING
+  - name: demand_response_fare_url
+    mode: NULLABLE
+    type: STRING
+  - name: category_notes
+    mode: NULLABLE
+    type: STRING
+  - name: paratransit_fare_url
+    mode: NULLABLE
+    type: STRING
+  - name: interagency_transfer_notes
+    mode: NULLABLE
+    type: STRING
+  - name: fares_based_on_route
+    mode: NULLABLE
+    type: BOOLEAN
+  - name: zone_based_fares
+    mode: NULLABLE
+    type: BOOLEAN
+  - name: interagency_transfers
+    mode: NULLABLE
+    type: STRING
+  - name: pass_price_max
+    mode: NULLABLE
+    type: FLOAT
+  - name: transfers_notes
+    mode: NULLABLE
+    type: STRING
+  - name: fares_based_on_zone
+    mode: NULLABLE
+    type: BOOLEAN
+  - name: reduced_fare
+    mode: NULLABLE
+    type: BOOLEAN
+  - name: transfer_fee
+    mode: NULLABLE
+    type: BOOLEAN
+  - name: transfer_time
+    mode: NULLABLE
+    type: STRING
+  - name: reduced_fare_categories
+    mode: NULLABLE
+    type: STRING
+  - name: itp_id
+    mode: NULLABLE
+    type: FLOAT
+  - name: bike_fee
+    mode: NULLABLE
+    type: STRING
+  - name: transfers_allowed
+    mode: NULLABLE
+    type: STRING
+  - name: generalized_fare_categories
+    mode: REPEATED
+    type: STRING
+  - name: payment_accepted
+    mode: NULLABLE
+    type: STRING
+  - name: fare_capping
+    mode: NULLABLE
+    type: STRING
+  - name: fare_system
+    mode: NULLABLE
+    type: STRING
+  - name: id
+    mode: NULLABLE
+    type: STRING
