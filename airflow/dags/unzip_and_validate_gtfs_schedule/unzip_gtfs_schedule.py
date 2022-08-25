@@ -132,9 +132,9 @@ def unzip_individual_feed(
             zipfile_extract_path=extract.path,
             exception=e,
         )
-    # more than one directory --> invalid zip
+    # more than one directory --> can't parse
     if len(directories) > 1:
-        logging.info(f"Invalid zip {extract.path}: Multiple directories found")
+        logging.warn(f"Unparseable zip {extract.path}: Multiple directories found")
         return GTFSScheduleFeedExtractUnzipOutcome(
             success=False,
             zipfile_extract_md5hash=zipfile_md5_hash,
@@ -142,12 +142,11 @@ def unzip_individual_feed(
             zipfile_files=files,
             zipfile_dirs=directories,
         )
-    # mix of directories and files at top level --> invalid zip
-    elif (
-        len(directories) > 0
-        and len([item for item in zipfile.Path(zip, at="").iterdir()]) > 1
-    ):
-        logging.info(f"Invalid zip {extract.path}: Mix of directories and files found")
+    # directory + any other artifact at top level --> can't parse
+    if directories and len([item for item in zipfile.Path(zip, at="").iterdir()]) > 1:
+        logging.warn(
+            f"Unparseable zip {extract.path}: Mix of directories and files found"
+        )
         return GTFSScheduleFeedExtractUnzipOutcome(
             success=False,
             zipfile_extract_md5hash=zipfile_md5_hash,
@@ -155,10 +154,10 @@ def unzip_individual_feed(
             zipfile_files=files,
             zipfile_dirs=directories,
         )
-    # if the only item in the zipfile is a directory at the root level
-    # we can treat the contents of that directory as if they were the feed
-    elif [item.is_dir() for item in zipfile.Path(zip, at="").iterdir()] == [True]:
-        logging.info(f"Valid zip {extract.path}: One toplevel directory found")
+    # if the only artifact at the root level of the zipfile is a directory
+    # we can treat the contents of that directory as the feed
+    if [item.is_dir() for item in zipfile.Path(zip, at="").iterdir()] == [True]:
+        logging.info(f"Parseable zip {extract.path}: One toplevel directory found")
         feed_directory = directories[0]
         zipfile_files = process_feed_files(fs, extract, feed_directory)
         return GTFSScheduleFeedExtractUnzipOutcome(
@@ -169,17 +168,17 @@ def unzip_individual_feed(
             zipfile_dirs=directories,
             extracted_files=[file.path for file in zipfile_files],
         )
-    else:
-        logging.info(f"Valid zip {extract.path}")
-        zipfile_files = process_feed_files(fs, extract)
-        return GTFSScheduleFeedExtractUnzipOutcome(
-            success=True,
-            zipfile_extract_md5hash=zipfile_md5_hash,
-            zipfile_extract_path=extract.path,
-            zipfile_files=files,
-            zipfile_dirs=directories,
-            extracted_files=[file.path for file in zipfile_files],
-        )
+
+    logging.info(f"Parseable zip {extract.path}")
+    zipfile_files = process_feed_files(fs, extract)
+    return GTFSScheduleFeedExtractUnzipOutcome(
+        success=True,
+        zipfile_extract_md5hash=zipfile_md5_hash,
+        zipfile_extract_path=extract.path,
+        zipfile_files=files,
+        zipfile_dirs=directories,
+        extracted_files=[file.path for file in zipfile_files],
+    )
 
 
 def unzip_extracts(day: pendulum.datetime):
