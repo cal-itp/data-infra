@@ -84,7 +84,8 @@ def summarize_zip_contents(
         if zipfile.Path(zip, at=entry).is_dir():
             directories.append(entry)
     logging.info(f"Found files: {files} and directories: {directories}")
-    # the only valid case for any directory inside the zipfile is if it's the only item at the root of the zipfile
+    # the only valid case for any directory inside the zipfile is if there's exactly one and it's the only item at the root of the zipfile
+    # (in which case we can treat that directory's contents as the feed)
     is_valid = (not directories) or (
         (len(directories) == 1)
         and ([item.is_dir() for item in zipfile.Path(zip, at="").iterdir()] == [True])
@@ -107,7 +108,7 @@ def process_feed_files(
         )
 
     for file in files:
-        # make a proper path so to access the .name attribute later
+        # make a proper path to access the .name attribute later
         file_path = zipfile.Path(zip, at=file)
         with zip.open(file) as f:
             file_content = f.read()
