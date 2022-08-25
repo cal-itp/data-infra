@@ -190,13 +190,6 @@ class RTHourlyAggregation(PartitionedGCSArtifact):
     base64_url: str
     extracts: List[GTFSRTFeedExtract] = Field(..., exclude=True)
 
-    class Config:
-        json_encoders = {
-            List[GTFSRTFeedExtract]: lambda extracts: [
-                extract.path for extract in extracts
-            ],
-        }
-
     @property
     def bucket(self) -> str:
         if self.step == RTProcessingStep.parse:
