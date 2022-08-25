@@ -44,8 +44,8 @@ class GTFSScheduleFeedFile(PartitionedGCSArtifact):
 
 
 class GTFSScheduleFeedExtractUnzipOutcome(ProcessingOutcome):
-    extract_path: str
-    extract_md5hash: str
+    zipfile_extract_path: str
+    zipfile_extract_md5hash: str
     zipfile_files: Optional[List[str]]
     zipfile_dirs: Optional[List[str]]
     extracted_files: Optional[List[str]]
@@ -128,8 +128,8 @@ def unzip_individual_feed(
     except Exception as e:
         return GTFSScheduleFeedExtractUnzipOutcome(
             success=False,
-            extract_md5hash=zipfile_md5_hash,
-            extract_path=extract.path,
+            zipfile_extract_md5hash=zipfile_md5_hash,
+            zipfile_extract_path=extract.path,
             exception=e,
         )
     # more than one directory --> invalid zip
@@ -137,8 +137,8 @@ def unzip_individual_feed(
         logging.info(f"Invalid zip {extract.path}: Multiple directories found")
         return GTFSScheduleFeedExtractUnzipOutcome(
             success=False,
-            extract_md5hash=zipfile_md5_hash,
-            extract_path=extract.path,
+            zipfile_extract_md5hash=zipfile_md5_hash,
+            zipfile_extract_path=extract.path,
             zipfile_files=files,
             zipfile_dirs=directories,
         )
@@ -150,8 +150,8 @@ def unzip_individual_feed(
         logging.info(f"Invalid zip {extract.path}: Mix of directories and files found")
         return GTFSScheduleFeedExtractUnzipOutcome(
             success=False,
-            extract_md5hash=zipfile_md5_hash,
-            extract_path=extract.path,
+            zipfile_extract_md5hash=zipfile_md5_hash,
+            zipfile_extract_path=extract.path,
             zipfile_files=files,
             zipfile_dirs=directories,
         )
@@ -163,8 +163,8 @@ def unzip_individual_feed(
         zipfile_files = process_feed_files(fs, extract, feed_directory)
         return GTFSScheduleFeedExtractUnzipOutcome(
             success=True,
-            extract_md5hash=zipfile_md5_hash,
-            extract_path=extract.path,
+            zipfile_extract_md5hash=zipfile_md5_hash,
+            zipfile_extract_path=extract.path,
             zipfile_files=files,
             zipfile_dirs=directories,
             extracted_files=[file.path for file in zipfile_files],
@@ -174,8 +174,8 @@ def unzip_individual_feed(
         zipfile_files = process_feed_files(fs, extract)
         return GTFSScheduleFeedExtractUnzipOutcome(
             success=True,
-            extract_md5hash=zipfile_md5_hash,
-            extract_path=extract.path,
+            zipfile_extract_md5hash=zipfile_md5_hash,
+            zipfile_extract_path=extract.path,
             zipfile_files=files,
             zipfile_dirs=directories,
             extracted_files=[file.path for file in zipfile_files],
