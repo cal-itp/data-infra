@@ -19,7 +19,7 @@ from calitp.storage import (
     get_fs,
     AirtableGTFSDataExtract,
     AirtableGTFSDataRecord,
-    GTFSFeedExtractInfo,
+    GTFSScheduleFeedExtract,
     GTFSFeedType,
     download_feed,
     ProcessingOutcome,
@@ -34,7 +34,7 @@ GTFS_FEED_LIST_ERROR_THRESHOLD = 0.95
 
 class AirtableGTFSDataRecordProcessingOutcome(ProcessingOutcome):
     airtable_record: AirtableGTFSDataRecord
-    extract: Optional[GTFSFeedExtractInfo]
+    extract: Optional[GTFSScheduleFeedExtract]
 
 
 class DownloadFeedsResult(PartitionedGCSArtifact):
