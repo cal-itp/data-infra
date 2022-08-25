@@ -1,13 +1,13 @@
 # ---
-# python_callable: unzip
+# python_callable: airflow_unzip_extracts
 # provide_context: true
 # ---
+import logging
 import os
 import pendulum
 import zipfile
 
 from typing import ClassVar, List, Optional
-from pydantic import Field
 
 from calitp.storage import (
     fetch_all_in_partition,
@@ -44,11 +44,11 @@ class GTFSScheduleFeedFile(PartitionedGCSArtifact):
 
 
 class GTFSScheduleFeedExtractUnzipOutcome(ProcessingOutcome):
-    extract: GTFSScheduleFeedExtract = Field(..., exclude={"config"})
+    extract_path: str
     extract_md5hash: str
     zipfile_files: Optional[List[str]]
     zipfile_dirs: Optional[List[str]]
-    extracted_files: Optional[List[GTFSScheduleFeedFile]]
+    extracted_files: Optional[List[str]]
 
 
 class ScheduleUnzipResult(PartitionedGCSArtifact):
@@ -90,7 +90,11 @@ def process_feed_files(fs, extract, feed_directory: str = ""):
     with fs.open(extract.path) as f:
         zip = zipfile.ZipFile(f)
         for file in zipfile.Path(zip, at=feed_directory).iterdir():
-            with zip.open(file.name) as f:
+            if feed_directory:
+                file_name = os.path.join(feed_directory, file.name)
+            else:
+                file_name = file.name
+            with zip.open(file_name) as f:
                 file_content = f.read()
             file_extract = GTFSScheduleFeedFile(
                 ts=extract.ts,
@@ -113,56 +117,72 @@ def unzip_individual_feed(
     If there's a directory *and* other files at top level within zip, or if
     there are nested directories, say we can't parse."""
 
-    print(f"Processing {extract.name}")
+    logging.info(f"Processing {extract.name}")
     zipfile_md5_hash = ""
     try:
         with fs.open(extract.path) as f:
             zipfile_md5_hash = f.info()["md5Hash"]
             zip = zipfile.ZipFile(f)
         files, directories = summarize_zip_contents(zip)
-        print(f"Found files: {files} and directories: {directories}")
+        logging.info(f"Found files: {files} and directories: {directories}")
     except Exception as e:
         return GTFSScheduleFeedExtractUnzipOutcome(
             success=False,
             extract_md5hash=zipfile_md5_hash,
-            extract=extract,
+            extract_path=extract.path,
             exception=e,
         )
     # more than one directory --> invalid zip
     if len(directories) > 1:
+        logging.info(f"Invalid zip {extract.path}: Multiple directories found")
         return GTFSScheduleFeedExtractUnzipOutcome(
             success=False,
             extract_md5hash=zipfile_md5_hash,
-            extract=extract,
+            extract_path=extract.path,
+            zipfile_files=files,
+            zipfile_dirs=directories,
+        )
+    # mix of directories and files at top level --> invalid zip
+    elif (
+        len(directories) > 0
+        and len([item for item in zipfile.Path(zip, at="").iterdir()]) > 1
+    ):
+        logging.info(f"Invalid zip {extract.path}: Mix of directories and files found")
+        return GTFSScheduleFeedExtractUnzipOutcome(
+            success=False,
+            extract_md5hash=zipfile_md5_hash,
+            extract_path=extract.path,
             zipfile_files=files,
             zipfile_dirs=directories,
         )
     # if the only item in the zipfile is a directory at the root level
     # we can treat the contents of that directory as if they were the feed
     elif [item.is_dir() for item in zipfile.Path(zip, at="").iterdir()] == [True]:
+        logging.info(f"Valid zip {extract.path}: One toplevel directory found")
         feed_directory = directories[0]
         zipfile_files = process_feed_files(fs, extract, feed_directory)
         return GTFSScheduleFeedExtractUnzipOutcome(
             success=True,
             extract_md5hash=zipfile_md5_hash,
-            extract=extract,
+            extract_path=extract.path,
             zipfile_files=files,
             zipfile_dirs=directories,
-            extracted_files=zipfile_files,
+            extracted_files=[file.path for file in zipfile_files],
         )
     else:
+        logging.info(f"Valid zip {extract.path}")
         zipfile_files = process_feed_files(fs, extract)
         return GTFSScheduleFeedExtractUnzipOutcome(
             success=True,
             extract_md5hash=zipfile_md5_hash,
-            extract=extract,
+            extract_path=extract.path,
             zipfile_files=files,
             zipfile_dirs=directories,
-            extracted_files=zipfile_files,
+            extracted_files=[file.path for file in zipfile_files],
         )
 
 
-def unzip_extracts(day=pendulum.today()):
+def unzip_extracts(day: pendulum.datetime):
     fs = get_fs()
 
     day = pendulum.instance(day).date()
@@ -176,18 +196,26 @@ def unzip_extracts(day=pendulum.today()):
         },
         verbose=True,
     )
-    print(f"Identified {len(extracts)} records for {day}")
+    logging.info(f"Identified {len(extracts)} records for {day}")
     outcomes = []
     for extract in extracts:
         outcome = unzip_individual_feed(fs, extract)
-        print(f"Processing success: {outcome.success}")
+        logging.info(f"Processing success: {outcome.success}")
         outcomes.append(outcome)
 
-    print("Saving results")
     result = ScheduleUnzipResult(filename="results.jsonl", dt=day, outcomes=outcomes)
-
     result.save(fs)
 
     assert len(extracts) == len(
         result.outcomes
     ), f"ended up with {len(outcomes)} outcomes from {len(extracts)} extracts"
+
+
+def airflow_unzip_extracts(task_instance, execution_date, **kwargs):
+    unzip_extracts(execution_date)
+
+
+if __name__ == "__main__":
+    # for testing
+    logging.basicConfig(level=logging.INFO)
+    unzip_extracts(pendulum.datetime(1901, 1, 1))
