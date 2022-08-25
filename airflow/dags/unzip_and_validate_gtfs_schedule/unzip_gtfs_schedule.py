@@ -7,6 +7,7 @@ import os
 import pendulum
 import zipfile
 
+from io import BytesIO
 from typing import ClassVar, List, Optional
 
 from calitp.storage import (
@@ -133,29 +134,23 @@ def unzip_individual_feed(
     there are nested directories, say we can't parse."""
     logging.info(f"Processing {extract.name}")
     zipfile_md5_hash = ""
+    files = []
+    directories = []
     try:
         with fs.open(extract.path) as f:
             zipfile_md5_hash = f.info()["md5Hash"]
-            zip = zipfile.ZipFile(f)
-            files, directories = summarize_zip_contents(zip)
-            try:
-                zipfile_files = process_feed_files(fs, extract, zip, directories)
-            except ValueError as e:
-                logging.warn(f"Can't parse {extract.path}: {e}")
-                return GTFSScheduleFeedExtractUnzipOutcome(
-                    success=False,
-                    zipfile_extract_md5hash=zipfile_md5_hash,
-                    zipfile_extract_path=extract.path,
-                    zipfile_files=files,
-                    zipfile_dirs=directories,
-                )
-    except (zipfile.BadZipFile, FileNotFoundError) as e:
+            zip = zipfile.ZipFile(BytesIO(f.read()))
+        files, directories = summarize_zip_contents(zip)
+        zipfile_files = process_feed_files(fs, extract, zip, directories)
+    except Exception as e:
         logging.warn(f"Can't process {extract.path}: {e}")
         return GTFSScheduleFeedExtractUnzipOutcome(
             success=False,
             zipfile_extract_md5hash=zipfile_md5_hash,
             zipfile_extract_path=extract.path,
             exception=e,
+            zipfile_files=files,
+            zipfile_dirs=directories,
         )
     return GTFSScheduleFeedExtractUnzipOutcome(
         success=True,
@@ -180,6 +175,7 @@ def unzip_extracts(day: pendulum.datetime):
         },
         verbose=True,
     )
+
     logging.info(f"Identified {len(extracts)} records for {day}")
     outcomes = []
     for extract in extracts:
