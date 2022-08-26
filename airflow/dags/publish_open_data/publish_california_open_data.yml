@@ -1,0 +1,50 @@
+operator: 'operators.PodOperator'
+name: 'publish-california-open-data'
+image: 'ghcr.io/cal-itp/data-infra/warehouse:{{ image_tag() }}'
+
+cmds:
+  - python3
+arguments:
+  - '/app/scripts/run_and_upload.py'
+  - 'publish-exposure'
+  - 'california_open_data'
+  - '--deploy'
+  - '--sync-metabase'
+  - '--project'
+  - 'cal-itp-data-infra'
+  - '--bucket'
+  - 'gs://calitp-publish/'
+  - '--manifest'
+  - "{{ env_var('CALITP_BUCKET__DBT_ARTIFACTS') }}/latest/manifest.json"
+
+is_delete_operator_pod: true
+get_logs: true
+is_gke: true
+pod_location: us-west1
+cluster_name: data-infra-apps
+namespace: airflow-jobs
+
+env_vars:
+  BIGQUERY_KEYFILE_LOCATION: /secrets/jobs-data/service_account.json
+  CALITP_BUCKET__DBT_ARTIFACTS: "{{ env_var('CALITP_BUCKET__DBT_ARTIFACTS') }}"
+
+secrets:
+  - deploy_type: volume
+    deploy_target: /secrets/jobs-data/
+    secret: jobs-data
+    key: service-account.json
+
+tolerations:
+  - key: pod-role
+    operator: Equal
+    value: computetask
+    effect: NoSchedule
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: pod-role
+          operator: In
+          values:
+          - computetask
