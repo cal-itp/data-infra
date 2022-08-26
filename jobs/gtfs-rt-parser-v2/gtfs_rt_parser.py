@@ -190,13 +190,6 @@ class RTHourlyAggregation(PartitionedGCSArtifact):
     base64_url: str
     extracts: List[GTFSRTFeedExtract] = Field(..., exclude=True)
 
-    class Config:
-        json_encoders = {
-            List[GTFSRTFeedExtract]: lambda extracts: [
-                extract.path for extract in extracts
-            ],
-        }
-
     @property
     def bucket(self) -> str:
         if self.step == RTProcessingStep.parse:
@@ -237,7 +230,7 @@ class RTHourlyAggregation(PartitionedGCSArtifact):
 
 
 class RTFileProcessingOutcome(ProcessingOutcome):
-    extract: GTFSRTFeedExtract
+    extract_path: str
     aggregation: Optional[RTHourlyAggregation]
 
 
@@ -406,7 +399,7 @@ def validate_and_upload(
                     step=hour.step,
                     success=False,
                     exception=e,
-                    extract=extract,
+                    extract_path=extract.path,
                 )
             )
             continue
@@ -426,7 +419,7 @@ def validate_and_upload(
             RTFileProcessingOutcome(
                 step=hour.step,
                 success=True,
-                extract=extract,
+                extract_path=extract.path,
             )
         )
 
@@ -478,7 +471,7 @@ def parse_and_upload(
                         step="parse",
                         success=False,
                         exception=e,
-                        extract=extract,
+                        extract_path=extract.path,
                     )
                 )
                 continue
@@ -496,7 +489,7 @@ def parse_and_upload(
                         step="parse",
                         success=False,
                         exception=ValueError(msg),
-                        extract=extract,
+                        extract_path=extract.path,
                     )
                 )
                 continue
@@ -520,7 +513,7 @@ def parse_and_upload(
                 RTFileProcessingOutcome(
                     step="parse",
                     success=True,
-                    extract=extract,
+                    extract_path=extract.path,
                 )
             )
             del parsed
@@ -567,7 +560,7 @@ def parse_and_validate(
                 RTFileProcessingOutcome(
                     step=hour.step,
                     success=False,
-                    extract=extract,
+                    extract_path=extract.path,
                     exception=NoScheduleDataSpecified(),
                 )
                 for extract in hour.extracts
@@ -595,7 +588,7 @@ def parse_and_validate(
                 RTFileProcessingOutcome(
                     step=hour.step,
                     success=False,
-                    extract=extract,
+                    extract_path=extract.path,
                     exception=e,
                 )
                 for extract in hour.extracts
