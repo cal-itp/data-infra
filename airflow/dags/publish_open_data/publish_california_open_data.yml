@@ -8,9 +8,7 @@ arguments:
   - '/app/scripts/publish.py'
   - 'publish-exposure'
   - 'california_open_data'
-  - '{% if is_development() %}--no-deploy{% else %}--deploy{% endif %}'
-  - '--project'
-  - '{{ get_project_id() }}'
+  - '{% if is_development() %}--no-publish{% else %}--publish{% endif %}'
   - '--bucket'
   - "{{ env_var('CALITP_BUCKET__PUBLISH') }}"
   - '--manifest'
@@ -32,11 +30,16 @@ secrets:
     secret: jobs-data
     key: service-account.json
 
+resources:
+  request_memory: 2.0Gi
+  request_cpu: 1
+
 tolerations:
   - key: pod-role
     operator: Equal
     value: computetask
     effect: NoSchedule
+
 affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:

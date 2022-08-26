@@ -6,6 +6,7 @@ cmds:
   - python3
 arguments:
   - '/app/scripts/run_and_upload.py'
+  - '--no-dbt-run'
   - '--dbt-docs'
   - '--save-artifacts'
   - '--deploy-docs'
@@ -44,11 +45,16 @@ secrets:
     secret: jobs-data
     key: netlify-auth-token
 
+resources:
+  request_memory: 2.0Gi
+  request_cpu: 1
+
 tolerations:
   - key: pod-role
     operator: Equal
     value: computetask
     effect: NoSchedule
+
 affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
