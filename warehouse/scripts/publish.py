@@ -91,8 +91,6 @@ def upload_to_ckan(
             headers={"Authorization": API_KEY},
             files={"upload": file},
         ).raise_for_status()
-    elif fsize / CHUNK_SIZE > 4:
-        raise RuntimeError("we probably cannot upload more than 4 chunks to CKAN")
     else:
         typer.secho(
             f"uploading {humanize.naturalsize(fsize)} to {resource_id} in {humanize.naturalsize(CHUNK_SIZE)} chunks"
@@ -145,6 +143,9 @@ def upload_to_ckan(
                 "save_action": "go-metadata",
             },
         ).raise_for_status()
+        typer.secho(
+            f"finished multipart upload_id {upload_id}", fg=typer.colors.MAGENTA
+        )
         ckan_request(
             action="resource_patch",
             data={
@@ -155,6 +156,7 @@ def upload_to_ckan(
                 "url_type": "upload",
             },
         ).raise_for_status()
+        typer.secho(f"patched resource {resource_id}", fg=typer.colors.MAGENTA)
 
 
 def _publish_exposure(
@@ -536,6 +538,23 @@ def publish_exposure(
         dry_run=dry_run,
         deploy=deploy,
     )
+
+
+@app.command()
+def multipart_ckan_upload(
+    resource_id: str,
+    fpath: Path,
+    url: str = "https://data.ca.gov",
+):
+    with open(fpath, "rb") as f:
+        upload_to_ckan(
+            url=url,
+            fname=fpath.name,
+            fsize=os.path.getsize(fpath),
+            file=f,
+            resource_id=resource_id,
+            api_key=API_KEY,
+        )
 
 
 if __name__ == "__main__":

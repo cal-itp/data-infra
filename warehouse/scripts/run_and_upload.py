@@ -79,7 +79,8 @@ def run(
         os.mkdir("docs/")
 
         fs = gcsfs.GCSFileSystem(
-            project="cal-itp-data-infra", token=os.getenv("BIGQUERY_KEYFILE_LOCATION")
+            project="cal-itp-data-infra",
+            token=os.getenv("BIGQUERY_KEYFILE_LOCATION"),
         )
 
         for artifact in artifacts:
