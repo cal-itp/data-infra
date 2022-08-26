@@ -87,6 +87,10 @@ Data representing eligibility programs. Further description needed.
 
 Data representing fare systems. Further description needed.
 
+WIP
+
+An import from o.g. Trillium research circa 2020 stored in [this document](https://docs.google.com/spreadsheets/d/1qr49azk6p30mp96_7myKoO-Bb_bXMMn5ZzgbL-uPiPw/edit?usp=drive_web&ouid=116512595786393675275)
+
 {% enddocs%}
 
 {% docs funding_programs_table %}

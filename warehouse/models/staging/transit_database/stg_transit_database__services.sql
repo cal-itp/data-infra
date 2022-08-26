@@ -13,6 +13,7 @@ stg_transit_database__services AS (
         id AS key,
         {{ trim_make_empty_string_null(column_name = "name") }},
         service_type,
+        fare_systems,
         mode,
         currently_operating,
         paratransit_for,

@@ -1,17 +1,16 @@
+{{ config(materialized='table') }}
 
-
-WITH
-once_daily_fare_systems AS (
+WITH latest_fare_systems AS (
     {{ get_latest_dense_rank(
-        external_table = source('airtable', 'california_transit__fare_systems'),
-        order_by = 'ts DESC', partition_by = 'dt'
+        external_table = ref('stg_transit_database__fare_systems'),
+        order_by = 'calitp_extracted_at DESC'
         ) }}
 ),
 
-stg_transit_database__fare_systems AS (
+dim_fare_systems AS (
     SELECT
-        id AS key,
-        {{ trim_make_empty_string_null(column_name = "fare_system") }},
+        key,
+        fare_system,
         fares_based_on_zone,
         fares_based_on_route,
         zone_based_fares,
@@ -44,11 +43,10 @@ stg_transit_database__fare_systems AS (
         fare_capping,
         paratransit_fare_url,
         demand_response_fare_url,
-        transit_services,
         itp_id,
         ts,
-        dt AS calitp_extracted_at
-    FROM once_daily_fare_systems
+        calitp_extracted_at
+    FROM latest_fare_systems
 )
 
-SELECT * FROM stg_transit_database__fare_systems
+SELECT * FROM dim_fare_systems
