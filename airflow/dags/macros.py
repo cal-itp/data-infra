@@ -145,6 +145,6 @@ data_infra_macros = {
     "sql_airtable_mapping": airtable_mapping_generate_sql,
     "is_development": is_development_macro,
     "image_tag": lambda: "development" if is_development() else "latest",
-    "env_var": lambda key: os.getenv(key),
+    "env_var": os.getenv,
     "prefix_bucket": prefix_bucket,
 }
