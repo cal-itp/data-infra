@@ -511,6 +511,7 @@ def publish_exposure(
     bucket: str = typer.Option(
         "gs://test-calitp-publish", help="The bucket in which artifacts are persisted."
     ),
+    manifest: str = "./target/manifest.json",
     dry_run: bool = typer.Option(False, help="If True, skips writing out any data."),
     deploy: bool = typer.Option(
         False, help="If True, actually deploy to external systems."
@@ -526,10 +527,17 @@ def publish_exposure(
         ), "cannot deploy from the staging project!"
         assert not bucket.startswith("gs://test-"), "cannot deploy with a test bucket!"
 
-    with open("./target/manifest.json") as f:
-        manifest = Manifest(**json.load(f))
+    if manifest.startswith("gs://"):
+        typer.secho(f"fetching manifest from {manifest}", fg=typer.colors.GREEN)
+        fs = gcsfs.GCSFileSystem()
+        with fs.open(manifest) as f:
+            actual_manifest = Manifest(**json.load(f))
 
-    exposure = manifest.exposures[f"exposure.calitp_warehouse.{exposure.value}"]
+    else:
+        with open(manifest) as f:
+            actual_manifest = Manifest(**json.load(f))
+
+    exposure = actual_manifest.exposures[f"exposure.calitp_warehouse.{exposure.value}"]
 
     _publish_exposure(
         project=project,
