@@ -457,3 +457,24 @@ models:
           - relationships:
              to: ref('dim_funding_programs')
              field: key
+  - name: bridge_fare_systems_x_services
+    description: |
+      Mapping table between fare systems and services.
+      Relationship indicates that service utilizes the given fare system.
+      This is a many-to-many relationship.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - fare_system_key
+            - service_key
+    columns:
+      - name: fare_system_key
+        tests:
+          - relationships:
+             to: ref('dim_fare_systems')
+             field: key
+      - name: service_key
+        tests:
+          - relationships:
+             to: ref('dim_services')
+             field: key
