@@ -44,15 +44,11 @@ stg_transit_database__fare_systems AS (
         fare_capping,
         paratransit_fare_url,
         demand_response_fare_url,
---        mobility_services_managed__from_transit_provider_,
---        gtfs_dataset__from_mobility_services_managed___from_transit_provider_,
-        unnested_transit_services AS transit_services,
---        fares_v2_status__from_mobility_services_managed___from_transit_provider_,
+        transit_services,
         itp_id,
         ts,
         dt AS calitp_extracted_at
     FROM once_daily_fare_systems
-    LEFT JOIN UNNEST(once_daily_fare_systems.transit_services) AS unnested_transit_services
 )
 
 SELECT * FROM stg_transit_database__fare_systems

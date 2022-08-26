@@ -43,10 +43,6 @@ dim_fare_systems AS (
         fare_capping,
         paratransit_fare_url,
         demand_response_fare_url,
---        mobility_services_managed__from_transit_provider_,
---        gtfs_dataset__from_mobility_services_managed___from_transit_provider_,
-        transit_services,
---        fares_v2_status__from_mobility_services_managed___from_transit_provider_,
         itp_id,
         ts,
         calitp_extracted_at
