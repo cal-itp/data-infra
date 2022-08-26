@@ -85,6 +85,7 @@ x-airflow-common:
     CALITP_BUCKET__GTFS_RT_VALIDATION: "gs://test-calitp-gtfs-rt-validation"
     CALITP_BUCKET__GTFS_SCHEDULE_RAW: "gs://test-calitp-gtfs-schedule-raw"
     CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION: "gs://test-calitp-gtfs-schedule-validation"
+    CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED: "gs://test-calitp-gtfs-schedule-unzipped"
 
     # TODO: this can be removed once we've confirmed it's no longer in Airtable
     GRAAS_SERVER_URL: $GRAAS_SERVER_URL
