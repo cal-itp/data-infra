@@ -529,7 +529,7 @@ def publish_exposure(
 
     if manifest.startswith("gs://"):
         typer.secho(f"fetching manifest from {manifest}", fg=typer.colors.GREEN)
-        fs = gcsfs.GCSFileSystem()
+        fs = gcsfs.GCSFileSystem(project=project)
         with fs.open(manifest) as f:
             actual_manifest = Manifest(**json.load(f))
 

@@ -10,4 +10,3 @@ stop_times AS (
 )
 
 SELECT * FROM stop_times
-LIMIT 1040900
