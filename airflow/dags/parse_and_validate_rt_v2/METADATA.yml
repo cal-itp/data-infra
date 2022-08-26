@@ -1,0 +1,25 @@
+description: "Parses GTFS RT Protobufs and writes as JSONL to GCS"
+schedule_interval: "15 * * * *"
+tags:
+  - all_gusty_features
+default_args:
+    owner: airflow
+    depends_on_past: False
+    start_date: "2021-07-09"
+    email:
+      - "andrew.v@jarv.us"
+      - "blake.f@jarv.us"
+      - "evan.siroky@dot.ca.gov"
+      - "hunter.owens@dot.ca.gov"
+      - "jameelah.y@jarv.us"
+      - "laurie.m@jarv.us"
+    email_on_failure: True
+    email_on_retry: False
+    max_active_dag_runs: 6
+    retries: 1
+    retry_delay: !timedelta 'minutes: 2'
+    concurrency: 5
+    #sla: !timedelta 'hours: 2'
+wait_for_defaults:
+    timeout: 3600
+latest_only: False
