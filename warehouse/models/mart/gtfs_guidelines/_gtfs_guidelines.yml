@@ -1,0 +1,14 @@
+version: 2
+
+# models:
+  # - name: dim_date
+  #   description: |
+  #     Each row is a date.
+  #   columns:
+  #     - name: id
+  #       description: Date formatted as string for identification, in "YYYY-MM-DD" format, ex. "2022-03-31".
+  #       tests:
+  #         - not_null
+  #         - unique
+  #       meta:
+  #         metabase.semantic_type: type/PK
