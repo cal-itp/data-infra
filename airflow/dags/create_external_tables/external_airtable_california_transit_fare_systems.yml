@@ -103,7 +103,7 @@ schema_fields:
     type: STRING
   - name: itp_id
     mode: NULLABLE
-    type: FLOAT
+    type: FLOAT64
   - name: bike_fee
     mode: NULLABLE
     type: STRING
