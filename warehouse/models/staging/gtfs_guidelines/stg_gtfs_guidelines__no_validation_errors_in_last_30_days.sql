@@ -18,7 +18,7 @@ validation_errors_by_day AS (
         SUM(n_notices) as validation_errors
     FROM validation_fact_daily_feed_codes
     LEFT JOIN validation_dim_codes USING(code)
-    WHERE severity = "error"
+    WHERE severity = "ERROR"
     GROUP BY feed_key, date
 ),
 
@@ -51,7 +51,7 @@ validation_errors_in_last_30_days_idx AS (
         check,
         CASE
             WHEN errors_last_30_days > 0 THEN "FAIL"
-            ELSE "PASS"
+            WHEN errors_last_30_days = 0 THEN "PASS"
         END AS status,
         feature
     FROM validation_errors_in_last_30_days_check

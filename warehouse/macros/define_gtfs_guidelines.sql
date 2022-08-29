@@ -11,3 +11,15 @@
 {% macro compliant_on_the_map() %}
 "Compliant / On the Map"
 {% endmacro %}
+
+
+-- columns
+{% macro gtfs_guidelines_columns() %}
+date,
+calitp_itp_id,
+calitp_url_number,
+calitp_agency_name,
+check,
+status,
+feature
+{% endmacro %}
