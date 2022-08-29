@@ -886,15 +886,20 @@ with a Caltrans email.</p>
 model that will be published. If you are using dbt exposures, you will need to
 update the <code class="docutils literal notranslate"><span class="pre">meta</span></code> field to map the dbt models to the appropriate UUIDs.</p>
 <p>An example from the latest-only GTFS data exposure.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">meta</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">destinations</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ckan</span><span class="w"></span>
-<span class="w">      </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gs://calitp-publish</span><span class="w"></span>
-<span class="w">      </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csv</span><span class="w"></span>
-<span class="w">      </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://data.ca.gov/api/3/action/resource_update</span><span class="w"></span>
-<span class="w">      </span><span class="nt">ids</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">agency</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">e8f9d49e-2bb6-400b-b01f-28bc2e0e7df2</span><span class="w"></span>
-<span class="w">        </span><span class="nt">routes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">c6bbb637-988f-431c-8444-aef7277297f8</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="nt">meta</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">methodology</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">        </span><span class="no">Cal-ITP collects the GTFS feeds from a statewide list [link] every night and aggegrates it into a statewide table</span><span class="w"></span>
+<span class="w">        </span><span class="no">for analysis purposes only. Do not use for trip planner ingestation, rather is meant to be used for statewide</span><span class="w"></span>
+<span class="w">        </span><span class="no">analytics and other use cases. Note: These data may or may or may not have passed GTFS-Validation.</span><span class="w"></span>
+<span class="w">      </span><span class="nt">coordinate_system_espg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;EPSG:4326&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">destinations</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ckan</span><span class="w"></span>
+<span class="w">          </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gs://calitp-publish</span><span class="w"></span>
+<span class="w">          </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csv</span><span class="w"></span>
+<span class="w">          </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://data.ca.gov</span><span class="w"></span>
+<span class="w">          </span><span class="nt">ids</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">agency</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">e8f9d49e-2bb6-400b-b01f-28bc2e0e7df2</span><span class="w"></span>
+<span class="w">            </span><span class="nt">routes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">c6bbb637-988f-431c-8444-aef7277297f8</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -908,7 +913,7 @@ GCS without also uploading to CKAN.</p>
 </pre></div>
 </div>
 <p>Example production deployment:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry run python scripts/publish.py publish-exposure california_open_data --project<span class="o">=</span>cal-itp-data-infra --bucket<span class="o">=</span><span class="s2">&quot;gs://calitp-publish&quot;</span> --deploy
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry run python scripts/publish.py publish-exposure california_open_data --project<span class="o">=</span>cal-itp-data-infra --bucket<span class="o">=</span><span class="s2">&quot;gs://calitp-publish&quot;</span> --publish
 </pre></div>
 </div>
 <p>If you are using dbt-based publishing, the <code class="docutils literal notranslate"><span class="pre">publish_exposure</span></code> subcommand of <code class="docutils literal notranslate"><span class="pre">publish.py</span></code>

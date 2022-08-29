@@ -56,15 +56,20 @@ update the `meta` field to map the dbt models to the appropriate UUIDs.
 
 An example from the latest-only GTFS data exposure.
 ```yaml
-meta:
-  destinations:
-    - type: ckan
-      bucket: gs://calitp-publish
-      format: csv
-      url: https://data.ca.gov/api/3/action/resource_update
-      ids:
-        agency: e8f9d49e-2bb6-400b-b01f-28bc2e0e7df2
-        routes: c6bbb637-988f-431c-8444-aef7277297f8
+    meta:
+      methodology: |
+        Cal-ITP collects the GTFS feeds from a statewide list [link] every night and aggegrates it into a statewide table
+        for analysis purposes only. Do not use for trip planner ingestation, rather is meant to be used for statewide
+        analytics and other use cases. Note: These data may or may or may not have passed GTFS-Validation.
+      coordinate_system_espg: "EPSG:4326"
+      destinations:
+        - type: ckan
+          bucket: gs://calitp-publish
+          format: csv
+          url: https://data.ca.gov
+          ids:
+            agency: e8f9d49e-2bb6-400b-b01f-28bc2e0e7df2
+            routes: c6bbb637-988f-431c-8444-aef7277297f8
 ```
 
 ### Publish the data!
@@ -79,7 +84,7 @@ poetry run python scripts/publish.py publish-exposure california_open_data --dry
 
 Example production deployment:
 ```bash
-poetry run python scripts/publish.py publish-exposure california_open_data --project=cal-itp-data-infra --bucket="gs://calitp-publish" --deploy
+poetry run python scripts/publish.py publish-exposure california_open_data --project=cal-itp-data-infra --bucket="gs://calitp-publish" --publish
 ```
 
 
