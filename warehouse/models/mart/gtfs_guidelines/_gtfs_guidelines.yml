@@ -30,6 +30,8 @@ models:
           metabase.semantic_type: type/FK
       - name: calitp_agency_name
         description: Human readable agency name, provided for convenience.
+        meta:
+          metabase.semantic_type: type/Title
       - name: check
         description: |
           A string description of the GTFS guideline check being performed. For example,
