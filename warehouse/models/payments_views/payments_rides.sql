@@ -23,8 +23,9 @@
 " {{ create_row_access_policy(
     principals = ['serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com',
                   'group:cal-itp@jarv.us',
-                  'user:natalie@calitp.org',
-                  'user:eric@calitp.org',
+                  'domain:calitp.org',
+                  'user:angela@compiler.la',
+                  'user:easall@gmail.com',
                   'user:jeremyscottowades@gmail.com',
                  ]
 ) }}",
