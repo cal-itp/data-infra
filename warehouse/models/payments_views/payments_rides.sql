@@ -1,5 +1,6 @@
 {{ config(
-    post_hook=[" {{ create_row_access_policy(
+    post_hook=[
+" {{ create_row_access_policy(
     filter_column = 'participant_id',
     filter_value = 'mst',
     principals = ['serviceAccount:mst-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
@@ -18,7 +19,16 @@
     filter_column = 'participant_id',
     filter_value = 'clean-air-express',
     principals = ['serviceAccount:clean-air-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
-) }}"
+) }}",
+" {{ create_row_access_policy(
+    principals = ['serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com',
+                  'group:cal-itp@jarv.us',
+                  'domain:calitp.org',
+                  'user:angela@compiler.la',
+                  'user:easall@gmail.com',
+                  'user:jeremyscottowades@gmail.com',
+                 ]
+) }}",
 ]
 
 ) }}
