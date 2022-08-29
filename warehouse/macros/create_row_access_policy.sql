@@ -10,6 +10,10 @@ grant to (
   {% endfor %}
 )
 filter using (
+  {% if not filter_column and not filter_value %}
+  1 = 1
+  {% else %}
   {{ filter_column }} = '{{ filter_value }}'
+  {% endif %}
 )
 {% endmacro %}
