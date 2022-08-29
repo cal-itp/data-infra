@@ -6,7 +6,6 @@ cmds:
   - python3
 arguments:
   - '/app/scripts/run_and_upload.py'
-  - '--no-dbt-run'
   - '--dbt-docs'
   - '--save-artifacts'
   - '--deploy-docs'
