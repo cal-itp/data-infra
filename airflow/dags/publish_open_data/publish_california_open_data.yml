@@ -29,6 +29,10 @@ secrets:
     deploy_target: /secrets/jobs-data/
     secret: jobs-data
     key: service-account.json
+  - deploy_type: env
+    deploy_target: CALITP_CKAN_GTFS_SCHEDULE_KEY
+    secret: jobs-data
+    key: calitp-ckan-gtfs-schedule-key
 
 resources:
   request_memory: 2.0Gi
