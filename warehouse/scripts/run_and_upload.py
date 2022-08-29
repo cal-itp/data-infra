@@ -8,7 +8,7 @@ from typing import List
 import gcsfs
 import typer
 
-BUCKET = "calitp-dbt-artifacts"
+BUCKET = os.environ["CALITP_BUCKET__DBT_ARTIFACTS"]
 
 artifacts = map(
     Path, ["index.html", "catalog.json", "manifest.json", "run_results.json"]
@@ -79,14 +79,15 @@ def run(
         os.mkdir("docs/")
 
         fs = gcsfs.GCSFileSystem(
-            project="cal-itp-data-infra", token=os.getenv("BIGQUERY_KEYFILE_LOCATION")
+            project="cal-itp-data-infra",
+            token=os.getenv("BIGQUERY_KEYFILE_LOCATION"),
         )
 
         for artifact in artifacts:
             _from = str(project_dir / Path("target") / artifact)
 
             if save_artifacts:
-                _to = f"gs://{BUCKET}/latest/{artifact}"
+                _to = f"{BUCKET}/latest/{artifact}"
                 typer.echo(f"writing {_from} to {_to}")
                 fs.put(lpath=_from, rpath=_to)
             else:

@@ -1,15 +1,18 @@
 operator: 'operators.PodOperator'
-name: 'dbt-run-and-upload-artifacts'
+name: 'publish-california-open-data'
 image: 'ghcr.io/cal-itp/data-infra/warehouse:{{ image_tag() }}'
 
 cmds:
   - python3
 arguments:
-  - '/app/scripts/run_and_upload.py'
-  - '--dbt-docs'
-  - '--save-artifacts'
-  - '--deploy-docs'
-  - '--sync-metabase'
+  - '/app/scripts/publish.py'
+  - 'publish-exposure'
+  - 'california_open_data'
+  - '{% if is_development() %}--no-publish{% else %}--publish{% endif %}'
+  - '--bucket'
+  - "{{ env_var('CALITP_BUCKET__PUBLISH') }}"
+  - '--manifest'
+  - "{{ env_var('CALITP_BUCKET__DBT_ARTIFACTS') }}/latest/manifest.json"
 
 is_delete_operator_pod: true
 get_logs: true
@@ -19,30 +22,13 @@ cluster_name: data-infra-apps
 namespace: airflow-jobs
 
 env_vars:
-  CALITP_BUCKET__DBT_ARTIFACTS: "{{ env_var('CALITP_BUCKET__DBT_ARTIFACTS') }}"
-  BIGQUERY_KEYFILE_LOCATION: /secrets/jobs-data/service_account.json
-  DBT_PROJECT_DIR: /app
-  DBT_PROFILE_DIR: /app
-  DBT_TARGET: "{{ env_var('DBT_TARGET') }}"
-  NETLIFY_SITE_ID: cal-itp-dbt-docs
+  GOOGLE_APPLICATION_CREDENTIALS: /secrets/jobs-data/service_account.json
 
 secrets:
   - deploy_type: volume
     deploy_target: /secrets/jobs-data/
     secret: jobs-data
     key: service-account.json
-  - deploy_type: env
-    deploy_target: METABASE_USER
-    secret: jobs-data
-    key: metabase-user
-  - deploy_type: env
-    deploy_target: METABASE_PASSWORD
-    secret: jobs-data
-    key: metabase-password
-  - deploy_type: env
-    deploy_target: NETLIFY_AUTH_TOKEN
-    secret: jobs-data
-    key: netlify-auth-token
 
 resources:
   request_memory: 2.0Gi

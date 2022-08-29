@@ -1,13 +1,14 @@
 """
 Publishes various dbt models to various sources.
 """
+import functools
 from datetime import timedelta
 
 import csv
 
 import pendulum
 from google.cloud import bigquery
-from typing import Optional, Literal, List, Dict
+from typing import Optional, Literal, List, Dict, BinaryIO
 
 from pathlib import Path
 
@@ -28,6 +29,8 @@ import pandas as pd
 import requests
 import typer
 from pydantic import BaseModel
+from requests import Response
+from requests_toolbelt import MultipartEncoder
 
 from dbt_artifacts import (
     BaseNode,
@@ -66,9 +69,97 @@ def make_linestring(x):
     return pts[0]
 
 
-def _publish_exposure(
-    project: str, bucket: str, exposure: Exposure, dry_run: bool, deploy: bool
+CHUNK_SIZE = 64 * 1024 * 1024
+
+
+def upload_to_ckan(
+    url: str, fname: str, fsize: int, file: BinaryIO, resource_id: str, api_key: str
 ):
+    def ckan_request(action: str, data: Dict) -> Response:
+        encoder = MultipartEncoder(fields=data)
+        return requests.post(
+            f"{url}/api/action/{action}",
+            data=encoder,
+            headers={"Content-Type": encoder.content_type, "X-CKAN-API-Key": API_KEY},
+        )
+
+    if fsize <= CHUNK_SIZE:
+        typer.secho(f"uploading {humanize.naturalsize(fsize)} to {resource_id}")
+        requests.post(
+            f"{url}/api/action/resource_update",
+            data={"id": resource_id},
+            headers={"Authorization": API_KEY},
+            files={"upload": file},
+        ).raise_for_status()
+    else:
+        typer.secho(
+            f"uploading {humanize.naturalsize(fsize)} to {resource_id} in {humanize.naturalsize(CHUNK_SIZE)} chunks"
+        )
+        initiate_response = ckan_request(
+            action="cloudstorage_initiate_multipart",
+            data={
+                "id": resource_id,
+                "name": fname,
+                "size": str(fsize),
+            },
+        )
+        initiate_response.raise_for_status()
+        upload_id = initiate_response.json()["result"]["id"]
+
+        # https://stackoverflow.com/a/54989668
+        chunker = functools.partial(file.read, CHUNK_SIZE)
+        for i, chunk in enumerate(iter(chunker, b""), start=1):
+            if i > 100:
+                raise RuntimeError(
+                    "stopping after 100 chunks, this should be re-considered"
+                )
+            try:
+                typer.secho(f"uploading part {i} to multipart upload {upload_id}")
+                ckan_request(
+                    action="cloudstorage_upload_multipart",
+                    data={
+                        "id": resource_id,
+                        "uploadId": upload_id,
+                        "partNumber": str(
+                            i
+                        ),  # the server throws a 500 if this isn't a string
+                        "upload": (fname, chunk, "text/plain"),
+                    },
+                ).raise_for_status()
+            except Exception:
+                ckan_request(
+                    action="cloudstorage_abort_multipart",
+                    data={
+                        "id": resource_id,
+                        "uploadId": upload_id,
+                    },
+                ).raise_for_status()
+                raise
+        ckan_request(
+            action="cloudstorage_finish_multipart",
+            data={
+                "uploadId": upload_id,
+                "id": resource_id,
+                "save_action": "go-metadata",
+            },
+        ).raise_for_status()
+        typer.secho(
+            f"finished multipart upload_id {upload_id}", fg=typer.colors.MAGENTA
+        )
+        ckan_request(
+            action="resource_patch",
+            data={
+                "id": resource_id,
+                "multipart_name": fname,
+                "url": fname,
+                "size": str(fsize),
+                "url_type": "upload",
+            },
+        ).raise_for_status()
+        typer.secho(f"patched resource {resource_id}", fg=typer.colors.MAGENTA)
+
+
+def _publish_exposure(bucket: str, exposure: Exposure, dry_run: bool, publish: bool):
     for destination in exposure.meta.destinations:
         with tempfile.TemporaryDirectory() as tmpdir:
             if isinstance(destination, CkanDestination):
@@ -79,8 +170,8 @@ def _publish_exposure(
                     )
 
                 # TODO: this should probably be driven by the depends_on nodes
-                for model_name, ckan_id in destination.ids.items():
-                    typer.secho(f"handling {model_name} {ckan_id}")
+                for model_name, resource_id in destination.ids.items():
+                    typer.secho(f"handling {model_name} {resource_id}")
                     node = BaseNode._instances[f"model.calitp_warehouse.{model_name}"]
 
                     fpath = os.path.join(tmpdir, destination.filename(model_name))
@@ -117,7 +208,7 @@ def _publish_exposure(
                     hive_path = destination.hive_path(exposure, model_name, bucket)
 
                     write_msg = f"writing {model_name} to {hive_path}"
-                    upload_msg = f"uploading to {destination.url} {ckan_id}"
+                    upload_msg = f"uploading to {destination.url} {resource_id}"
                     if dry_run:
                         typer.secho(
                             f"would be {write_msg} and {upload_msg}",
@@ -127,19 +218,23 @@ def _publish_exposure(
                         typer.secho(write_msg, fg=typer.colors.GREEN)
                         fs = gcsfs.GCSFileSystem(token="google_default")
                         fs.put(fpath, hive_path)
+                        fname = destination.filename(model_name)
+                        fsize = os.path.getsize(fpath)
 
-                        if deploy:
+                        if publish:
                             typer.secho(upload_msg, fg=typer.colors.GREEN)
                             with open(fpath, "rb") as fp:
-                                requests.post(
-                                    destination.url,
-                                    data={"id": ckan_id},
-                                    headers={"Authorization": API_KEY},
-                                    files={"upload": fp},
-                                ).raise_for_status()
+                                upload_to_ckan(
+                                    url=destination.url,
+                                    fname=fname,
+                                    fsize=fsize,
+                                    file=fp,
+                                    resource_id=resource_id,
+                                    api_key=API_KEY,
+                                )
                         else:
                             typer.secho(
-                                f"would be {upload_msg} if --deploy",
+                                f"would be {upload_msg} if --publish",
                                 fg=typer.colors.MAGENTA,
                             )
 
@@ -150,7 +245,7 @@ def _publish_exposure(
 
                     geojsonl_fpath = os.path.join(tmpdir, f"{node.name}.geojsonl")
 
-                    client = bigquery.Client(project=project)
+                    client = bigquery.Client()
                     typer.secho(f"querying {node.schema_table}")
                     # TODO: this is not great but we have to work around how BigQuery removes overlapping line segments
                     df = client.query(
@@ -219,16 +314,6 @@ def _publish_exposure(
                 else:
                     # -e for this when time
                     raise NotImplementedError
-
-
-with open("./target/manifest.json") as f:
-    ExistingExposure = enum.Enum(
-        "ExistingExposure",
-        {
-            exposure.name: exposure.name
-            for exposure in Manifest(**json.load(f)).exposures.values()
-        },
-    )
 
 
 # once https://github.com/samuelcolvin/pydantic/pull/2745 is merged, we don't need this
@@ -306,14 +391,14 @@ class DictionaryRow(BaseModel):
 
 @app.command()
 def generate_exposure_documentation(
-    exposure: ExistingExposure,
+    exposure: str,
     metadata_output: Path = "./metadata.csv",
     dictionary_output: Path = "./dictionary.csv",
 ) -> None:
     with open("./target/manifest.json") as f:
         manifest = Manifest(**json.load(f))
 
-    exposure = manifest.exposures[f"exposure.calitp_warehouse.{exposure.value}"]
+    exposure = manifest.exposures[f"exposure.calitp_warehouse.{exposure}"]
 
     typer.secho(
         f"writing out {metadata_output} and {dictionary_output}",
@@ -409,38 +494,57 @@ def generate_exposure_documentation(
 
 @app.command()
 def publish_exposure(
-    exposure: ExistingExposure,
-    project: str = typer.Option("cal-itp-data-infra-staging"),
+    exposure: str,
     bucket: str = typer.Option(
         "gs://test-calitp-publish", help="The bucket in which artifacts are persisted."
     ),
+    manifest: str = "./target/manifest.json",
     dry_run: bool = typer.Option(False, help="If True, skips writing out any data."),
-    deploy: bool = typer.Option(
-        False, help="If True, actually deploy to external systems."
+    publish: bool = typer.Option(
+        False, help="If True, actually publish to external systems."
     ),
 ) -> None:
     """
     Only publish one exposure, by name.
     """
-    if deploy:
-        assert not dry_run, "cannot deploy during a dry run!"
-        assert not project.endswith(
-            "-staging"
-        ), "cannot deploy from the staging project!"
-        assert not bucket.startswith("gs://test-"), "cannot deploy with a test bucket!"
+    if publish:
+        assert not dry_run, "cannot publish during a dry run!"
+        assert not bucket.startswith("gs://test-"), "cannot publish with a test bucket!"
 
-    with open("./target/manifest.json") as f:
-        manifest = Manifest(**json.load(f))
+    if manifest.startswith("gs://"):
+        typer.secho(f"fetching manifest from {manifest}", fg=typer.colors.GREEN)
+        fs = gcsfs.GCSFileSystem()
+        with fs.open(manifest) as f:
+            actual_manifest = Manifest(**json.load(f))
+    else:
+        with open(manifest) as f:
+            actual_manifest = Manifest(**json.load(f))
 
-    exposure = manifest.exposures[f"exposure.calitp_warehouse.{exposure.value}"]
+    exposure = actual_manifest.exposures[f"exposure.calitp_warehouse.{exposure}"]
 
     _publish_exposure(
-        project=project,
         bucket=bucket,
         exposure=exposure,
         dry_run=dry_run,
-        deploy=deploy,
+        publish=publish,
     )
+
+
+@app.command()
+def multipart_ckan_upload(
+    resource_id: str,
+    fpath: Path,
+    url: str = "https://data.ca.gov",
+):
+    with open(fpath, "rb") as f:
+        upload_to_ckan(
+            url=url,
+            fname=fpath.name,
+            fsize=os.path.getsize(fpath),
+            file=f,
+            resource_id=resource_id,
+            api_key=API_KEY,
+        )
 
 
 if __name__ == "__main__":
