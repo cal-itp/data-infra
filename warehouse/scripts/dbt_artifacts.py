@@ -195,7 +195,6 @@ class Owner(BaseModel):
 
 class GcsDestination(BaseModel):
     type: Literal["gcs"]
-    bucket: str
     format: FileFormat
 
     def filename(self, model: str):
@@ -224,6 +223,7 @@ class TilesDestination(GcsDestination):
     """
 
     type: Literal["tiles"]
+    bucket: str
     tile_format: TileFormat
     geo_column: str
     metadata_columns: Optional[List[str]]

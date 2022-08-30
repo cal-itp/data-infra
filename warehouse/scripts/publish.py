@@ -344,6 +344,28 @@ def _publish_exposure(bucket: str, exposure: Exposure, publish: bool):
                         fg=typer.colors.YELLOW,
                     )
 
+                metadata, dictionary = _generate_exposure_documentation(exposure)
+
+                fs = gcsfs.GCSFileSystem()
+
+                for rows, file, cls in (
+                    (metadata, "metadata", MetadataRow),
+                    (dictionary, "dictionary", DictionaryRow),
+                ):
+                    hive_path = destination.hive_path(exposure, file, bucket, dt=ts)
+
+                    if publish:
+                        typer.secho(f"writing {len(rows)} rows to {hive_path}")
+                        with fs.open(hive_path, "w", newline="") as f:
+                            writer = csv.DictWriter(f, fieldnames=cls.__fields__.keys())
+                            writer.writeheader()
+                            for row in rows:
+                                writer.writerow(row)
+                    else:
+                        typer.secho(
+                            f"would be writing to {hive_path}", fg=typer.colors.YELLOW
+                        )
+
                 # TODO: this should probably be driven by the depends_on nodes
                 for model_name, resource in destination.resources.items():
                     typer.secho(f"handling {model_name} {resource.id}")
@@ -381,7 +403,7 @@ def _publish_exposure(bucket: str, exposure: Exposure, publish: bool):
                         f"writing {len(df)} rows ({humanize.naturalsize(os.stat(fpath).st_size)}) from {node.schema_table} to {hive_path}",
                         fg=typer.colors.GREEN,
                     )
-                    gcsfs.GCSFileSystem(token="google_default").put(fpath, hive_path)
+                    fs.put(fpath, hive_path)
 
                     fname = destination.filename(model_name)
                     fsize = os.path.getsize(fpath)
