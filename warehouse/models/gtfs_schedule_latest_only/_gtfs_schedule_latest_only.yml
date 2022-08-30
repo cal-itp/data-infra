@@ -754,7 +754,6 @@ exposures:
       coordinate_system_espg: "EPSG:4326"
       destinations:
         - type: ckan
-          bucket: gs://calitp-publish
           format: csv
           url: https://data.ca.gov
           resources:
