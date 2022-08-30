@@ -6,9 +6,10 @@ from pathlib import Path
 from typing import List
 
 import gcsfs
+import pendulum
 import typer
 
-BUCKET = os.environ["CALITP_BUCKET__DBT_ARTIFACTS"]
+CALITP_BUCKET__DBT_ARTIFACTS = os.environ["CALITP_BUCKET__DBT_ARTIFACTS"]
 
 artifacts = map(
     Path, ["index.html", "catalog.json", "manifest.json", "run_results.json"]
@@ -83,13 +84,29 @@ def run(
             token=os.getenv("BIGQUERY_KEYFILE_LOCATION"),
         )
 
+        ts = pendulum.now()
+
         for artifact in artifacts:
             _from = str(project_dir / Path("target") / artifact)
 
             if save_artifacts:
-                _to = f"{BUCKET}/latest/{artifact}"
-                typer.echo(f"writing {_from} to {_to}")
-                fs.put(lpath=_from, rpath=_to)
+                # Save the latest ones for easy retrieval downstream
+                # but also save using the usual artifact types
+                latest_to = f"{CALITP_BUCKET__DBT_ARTIFACTS}/latest/{artifact}"
+                # TODO: this should use PartitionedGCSArtifact at some point
+                timestamped_to = "/".join(
+                    [
+                        CALITP_BUCKET__DBT_ARTIFACTS,
+                        artifact,
+                        f"dt={ts.to_date_string}",
+                        f"ts={ts.to_iso8601_string}",
+                        artifact,
+                        "",
+                    ]
+                )
+                typer.echo(f"writing {_from} to {latest_to} and {timestamped_to}")
+                fs.put(lpath=_from, rpath=latest_to)
+                fs.put(lpath=_from, rpath=timestamped_to)
             else:
                 typer.echo(f"skipping upload of {artifact}")
 
