@@ -201,11 +201,9 @@ class GcsDestination(BaseModel):
     def filename(self, model: str):
         return f"{model}.{self.format.value}"
 
-    @property
-    def hive_partitions(self, dt: pendulum.DateTime) -> List[str]:
-        return [f"dt={dt.to_date_string()}", f"ts={dt.to_iso8601_string()}"]
-
-    def hive_path(self, exposure: "Exposure", model: str, bucket: str):
+    def hive_path(
+        self, exposure: "Exposure", model: str, bucket: str, dt: pendulum.DateTime
+    ):
         entity_name_parts = [
             slugify(exposure.name, separator="_"),
             model,
@@ -213,7 +211,7 @@ class GcsDestination(BaseModel):
         return os.path.join(
             bucket,
             "__".join(entity_name_parts),
-            *self.hive_partitions,
+            f"dt={dt.to_date_string()}" f"ts={dt.to_iso8601_string()}",
             self.filename(model),
         )
 

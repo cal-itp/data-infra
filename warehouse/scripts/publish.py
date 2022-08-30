@@ -45,6 +45,8 @@ from tqdm import tqdm
 tqdm.pandas()
 
 API_KEY = os.environ.get("CALITP_CKAN_GTFS_SCHEDULE_KEY")
+CALITP_BUCKET__DBT_ARTIFACTS = os.environ["CALITP_BUCKET__DBT_ARTIFACTS"]
+MANIFEST_DEFAULT = (f"{CALITP_BUCKET__DBT_ARTIFACTS}/latest/manifest.json",)
 
 app = typer.Typer()
 
@@ -159,7 +161,8 @@ def upload_to_ckan(
         typer.secho(f"patched resource {resource_id}", fg=typer.colors.MAGENTA)
 
 
-def _publish_exposure(bucket: str, exposure: Exposure, dry_run: bool, publish: bool):
+def _publish_exposure(bucket: str, exposure: Exposure, publish: bool):
+    ts = pendulum.now()
     for destination in exposure.meta.destinations:
         with tempfile.TemporaryDirectory() as tmpdir:
             if isinstance(destination, CkanDestination):
@@ -205,38 +208,35 @@ def _publish_exposure(bucket: str, exposure: Exposure, dry_run: bool, publish: b
                         f"selected {len(df)} rows ({humanize.naturalsize(os.stat(fpath).st_size)}) from {node.schema_table}"
                     )
 
-                    hive_path = destination.hive_path(exposure, model_name, bucket)
+                    hive_path = destination.hive_path(
+                        exposure, model_name, bucket, dt=ts
+                    )
+                    typer.secho(
+                        f"writing {model_name} to {hive_path}", fg=typer.colors.GREEN
+                    )
 
-                    write_msg = f"writing {model_name} to {hive_path}"
-                    upload_msg = f"uploading to {destination.url} {resource_id}"
-                    if dry_run:
+                    fname = destination.filename(model_name)
+                    gcsfs.GCSFileSystem(token="google_default").put(fpath, hive_path)
+                    fsize = os.path.getsize(fpath)
+
+                    publish_msg = f"uploading to {destination.url} {resource_id}"
+
+                    if publish:
+                        typer.secho(publish_msg, fg=typer.colors.GREEN)
+                        with open(fpath, "rb") as fp:
+                            upload_to_ckan(
+                                url=destination.url,
+                                fname=fname,
+                                fsize=fsize,
+                                file=fp,
+                                resource_id=resource_id,
+                                api_key=API_KEY,
+                            )
+                    else:
                         typer.secho(
-                            f"would be {write_msg} and {upload_msg}",
+                            f"would be {publish_msg} if --publish",
                             fg=typer.colors.MAGENTA,
                         )
-                    else:
-                        typer.secho(write_msg, fg=typer.colors.GREEN)
-                        fs = gcsfs.GCSFileSystem(token="google_default")
-                        fs.put(fpath, hive_path)
-                        fname = destination.filename(model_name)
-                        fsize = os.path.getsize(fpath)
-
-                        if publish:
-                            typer.secho(upload_msg, fg=typer.colors.GREEN)
-                            with open(fpath, "rb") as fp:
-                                upload_to_ckan(
-                                    url=destination.url,
-                                    fname=fname,
-                                    fsize=fsize,
-                                    file=fp,
-                                    resource_id=resource_id,
-                                    api_key=API_KEY,
-                                )
-                        else:
-                            typer.secho(
-                                f"would be {upload_msg} if --publish",
-                                fg=typer.colors.MAGENTA,
-                            )
 
             elif isinstance(destination, TilesDestination):
                 layer_geojson_paths: Dict[str, Path] = {}
@@ -268,18 +268,12 @@ def _publish_exposure(bucket: str, exposure: Exposure, dry_run: bool, publish: b
                     layer_geojson_paths[node.name.title()] = geojsonl_fpath
                     hive_path = destination.hive_path(exposure, node.name, bucket)
 
-                    if dry_run:
-                        typer.secho(
-                            f"would be writing {geojsonl_fpath} to {hive_path}",
-                            fg=typer.colors.MAGENTA,
-                        )
-                    else:
-                        fs = gcsfs.GCSFileSystem(token="google_default")
-                        typer.secho(
-                            f"writing {geojsonl_fpath} to {hive_path}",
-                            fg=typer.colors.GREEN,
-                        )
-                        fs.put(geojsonl_fpath, hive_path)
+                    typer.secho(
+                        f"writing {geojsonl_fpath} to {hive_path}",
+                        fg=typer.colors.GREEN,
+                    )
+                    fs = gcsfs.GCSFileSystem(token="google_default")
+                    fs.put(geojsonl_fpath, hive_path)
 
                 if destination.tile_format == TileFormat.mbtiles:
                     mbtiles_path = os.path.join(tmpdir, "tiles.mbtiles")
@@ -299,18 +293,13 @@ def _publish_exposure(bucket: str, exposure: Exposure, dry_run: bool, publish: b
                     tiles_hive_path = destination.tiles_hive_path(
                         exposure, node.name, bucket
                     )
-                    if dry_run:
-                        typer.secho(
-                            f"would be writing {mbtiles_path} to {tiles_hive_path}",
-                            fg=typer.colors.MAGENTA,
-                        )
-                    else:
-                        fs = gcsfs.GCSFileSystem(token="google_default")
-                        typer.secho(
-                            f"writing {mbtiles_path} to {tiles_hive_path}",
-                            fg=typer.colors.GREEN,
-                        )
-                        fs.put(mbtiles_path, tiles_hive_path)
+
+                    typer.secho(
+                        f"writing {mbtiles_path} to {tiles_hive_path}",
+                        fg=typer.colors.GREEN,
+                    )
+                    fs = gcsfs.GCSFileSystem(token="google_default")
+                    fs.put(mbtiles_path, tiles_hive_path)
                 else:
                     # -e for this when time
                     raise NotImplementedError
@@ -389,14 +378,22 @@ class DictionaryRow(BaseModel):
     usage_notes: None
 
 
+def read_manifest(path: str) -> Manifest:
+    typer.secho(f"reading manifest from {path}", fg=typer.colors.GREEN)
+    opener = gcsfs.GCSFileSystem().open if path.startswith("gs://") else open
+
+    with opener(path) as f:
+        return Manifest(**json.load(f))
+
+
 @app.command()
 def generate_exposure_documentation(
     exposure: str,
+    manifest: str = MANIFEST_DEFAULT,
     metadata_output: Path = "./metadata.csv",
     dictionary_output: Path = "./dictionary.csv",
 ) -> None:
-    with open("./target/manifest.json") as f:
-        manifest = Manifest(**json.load(f))
+    manifest = read_manifest(manifest)
 
     exposure = manifest.exposures[f"exposure.calitp_warehouse.{exposure}"]
 
@@ -496,36 +493,29 @@ def generate_exposure_documentation(
 def publish_exposure(
     exposure: str,
     bucket: str = typer.Option(
-        "gs://test-calitp-publish", help="The bucket in which artifacts are persisted."
+        "gs://test-calitp-publish",
+        help="The bucket in which artifacts are persisted.",
     ),
-    manifest: str = "./target/manifest.json",
-    dry_run: bool = typer.Option(False, help="If True, skips writing out any data."),
+    manifest: str = MANIFEST_DEFAULT,
     publish: bool = typer.Option(
-        False, help="If True, actually publish to external systems."
+        False,
+        help="If True, actually publish to external systems.",
     ),
 ) -> None:
     """
     Only publish one exposure, by name.
     """
-    if publish:
-        assert not dry_run, "cannot publish during a dry run!"
-        assert not bucket.startswith("gs://test-"), "cannot publish with a test bucket!"
+    assert publish or not bucket.startswith(
+        "gs://test-"
+    ), "cannot publish with a test bucket!"
 
-    if manifest.startswith("gs://"):
-        typer.secho(f"fetching manifest from {manifest}", fg=typer.colors.GREEN)
-        fs = gcsfs.GCSFileSystem()
-        with fs.open(manifest) as f:
-            actual_manifest = Manifest(**json.load(f))
-    else:
-        with open(manifest) as f:
-            actual_manifest = Manifest(**json.load(f))
+    actual_manifest = read_manifest(manifest)
 
     exposure = actual_manifest.exposures[f"exposure.calitp_warehouse.{exposure}"]
 
     _publish_exposure(
         bucket=bucket,
         exposure=exposure,
-        dry_run=dry_run,
         publish=publish,
     )
 
