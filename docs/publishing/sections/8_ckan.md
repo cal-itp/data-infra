@@ -64,29 +64,53 @@ An example from the latest-only GTFS data exposure.
       coordinate_system_espg: "EPSG:4326"
       destinations:
         - type: ckan
-          bucket: gs://calitp-publish
           format: csv
           url: https://data.ca.gov
-          ids:
-            agency: e8f9d49e-2bb6-400b-b01f-28bc2e0e7df2
-            routes: c6bbb637-988f-431c-8444-aef7277297f8
+          resources:
+            agency:
+              id: e8f9d49e-2bb6-400b-b01f-28bc2e0e7df2
+              description: |
+                Each row is a cleaned row from an agency.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#agencytxt.
+            attributions:
+              id: 038b7354-06e8-4082-a4a1-40debd3110d5
+              description: |
+                Each row is a cleaned row from an attributions.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#attributionstxt.
 ```
 
 ### Publish the data!
+If you are using dbt-based publishing, the `publish_exposure` subcommand of `publish.py`
+will query BigQuery, write out CSV files, and upload those files to CKAN.
 Either create an Airflow job to refresh/update the data at the specified
 frequency, or do it manually. You can use flags to execute a dry run or write to
 GCS without also uploading to CKAN.
 
-Example dry run:
+If you are running `publish.py` locally, you will need to set `$CALITP_CKAN_GTFS_SCHEDULE_KEY`
+ahead of time.
+
+By default, the script will attempt to use the latest manifest uploaded by the
+Airflow dbt task, and then will write out artifacts to GCS, but will not actually
+upload data to CKAN. In addition, the script will upload the metadata and dictionary
+files to GCS for eventual sharing with Caltrans.
 ```bash
-poetry run python scripts/publish.py publish-exposure california_open_data --dry-run
+$ poetry run python scripts/publish.py publish-exposure california_open_data --manifest ./target/manifest.json
+reading manifest from ./target/manifest.json
+would be writing to gs://test-calitp-publish/california_open_data__metadata/dt=2022-08-30/ts=2022-08-30T20:46:00.474199Z/metadata.csv
+would be writing to gs://test-calitp-publish/california_open_data__dictionary/dt=2022-08-30/ts=2022-08-30T20:46:00.474199Z/dictionary.csv
+handling agency e8f9d49e-2bb6-400b-b01f-28bc2e0e7df2
+...
+writing 346 rows (42.9 kB) from andrew_gtfs_schedule.agency to gs://test-calitp-publish/california_open_data__agency/dt=2022-08-30/ts=2022-08-30T20:46:00.474199Z/agency.csv
+would be uploading to https://data.ca.gov e8f9d49e-2bb6-400b-b01f-28bc2e0e7df2 if --publish
+...
 ```
 
-Example production deployment:
+You can add the `--publish` flag to actually upload artifacts to CKAN after they
+are written to GCS. You must be using a production bucket to publish, either
+by setting `$CALITP_BUCKET__PUBLISH` or using the `--bucket` flag. In addition,
+you may specify a manifest file in GCS if desired.
 ```bash
-poetry run python scripts/publish.py publish-exposure california_open_data --project=cal-itp-data-infra --bucket="gs://calitp-publish" --publish
+poetry run python scripts/publish.py publish-exposure california_open_data --bucket gs://calitp-publish --manifest gs://calitp-dbt-artifacts/latest/manifest.json --publish
 ```
-
-
-If you are using dbt-based publishing, the `publish_exposure` subcommand of `publish.py`
-will query BigQuery, write out CSV files, and upload those files to CKAN.
