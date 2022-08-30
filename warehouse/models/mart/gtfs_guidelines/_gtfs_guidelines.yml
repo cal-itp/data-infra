@@ -1,0 +1,48 @@
+version: 2
+
+models:
+  - name: fact_daily_guideline_checks
+    description: |
+      Each row represents a date/guideline check/feed combination, with pass/fail information
+      indicating whether that feed complied with that check on that date.
+
+      Note that this table is only partially implemented; can use "SELECT DISTINCT check"
+      to see the list of checks that are evaluated herein.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - calitp_itp_id
+            - calitp_url_number
+            - check
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('stg_gtfs_guidelines__feed_guideline_index')
+    columns:
+      - name: date
+        description: Date on which the check is being evaluated.
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+        meta:
+          metabase.semantic_type: type/FK
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+        meta:
+          metabase.semantic_type: type/FK
+      - name: calitp_agency_name
+        description: Human readable agency name, provided for convenience.
+        meta:
+          metabase.semantic_type: type/Title
+      - name: check
+        description: |
+          A string description of the GTFS guideline check being performed. For example,
+          "Static GTFS feed downloads successfully".
+      - name: status
+        description: |
+          Either "PASS" or "FAIL", indicating check status on the given date for the
+          given feed.
+        tests:
+          - not_null
+      - name: feature
+        description: |
+          A string label for the GTFS "feature" associated with the given check. For example,
+          "Compliant / On the Map".
