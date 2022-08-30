@@ -114,6 +114,7 @@ def run(
             ("views", "Data Marts (formerly Warehouse Views)"),
             ("gtfs_schedule", "GTFS Schedule Feeds Latest"),
             ("mart_transit_database", "Data Marts (formerly Warehouse Views)"),
+            ("mart_gtfs_guidelines", "Data Marts (formerly Warehouse Views)"),
         ]:
             subprocess.run(
                 [
