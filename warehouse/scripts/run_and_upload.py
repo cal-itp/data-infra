@@ -97,11 +97,10 @@ def run(
                 timestamped_to = "/".join(
                     [
                         CALITP_BUCKET__DBT_ARTIFACTS,
-                        artifact,
-                        f"dt={ts.to_date_string}",
-                        f"ts={ts.to_iso8601_string}",
-                        artifact,
-                        "",
+                        str(artifact),
+                        f"dt={ts.to_date_string()}",
+                        f"ts={ts.to_iso8601_string()}",
+                        str(artifact),
                     ]
                 )
                 typer.echo(f"writing {_from} to {latest_to} and {timestamped_to}")
