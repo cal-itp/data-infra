@@ -188,7 +188,7 @@ models:
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
-      Each row is a cleaned row from aß fare_attributes.txt file.
+      Each row is a cleaned row from a fare_attributes.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#fare_attributestxt.
     columns:
@@ -760,35 +760,103 @@ exposures:
           resources:
             agency:
               id: e8f9d49e-2bb6-400b-b01f-28bc2e0e7df2
-            routes:
-              id: c6bbb637-988f-431c-8444-aef7277297f8
-            stop_times:
-              id: d31eef2f-e223-4ca4-a86b-170acc6b2590
-            stops:
-              id: 8c876204-e12b-48a2-8299-10f6ae3d4f2b
-            trips:
-              id: 0e4da89e-9330-43f8-8de9-305cb7d4918f
+              description: |
+                Each row is a cleaned row from an agency.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#agencytxt.
             attributions:
               id: 038b7354-06e8-4082-a4a1-40debd3110d5
+              description: |
+                Each row is a cleaned row from an attributions.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#attributionstxt.
             calendar:
               id: a79f10b8-b322-43f3-b3f4-ba46a8dbe9ab
+              description: |
+                Each row is a cleaned row from a calendar.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#calendartxt.
             calendar_dates:
               id: 06a21a8e-dba3-4e7e-8726-f2e992cc1a80
+              description: |
+                Each row is a Each row is a cleaned rowrow from a calendar_dates.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#calendar_datestxt.
             fare_attributes:
               id: 9db51dfa-fd6d-481b-b655-96e8af722ab5
+              description: |
+                Each row is a cleaned row from a fare_attributes.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#fare_attributestxt.
             fare_rules:
               id: 4fb1fa39-0ef9-457d-97b1-bb7e9e848312
+              description: |
+                Each row is a cleaned row from a fare_rules.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#fare_rulestxt.
             feed_info:
               id: 50d12559-635e-4222-ac25-3706c066902d
+              description: |
+                Each row is a cleaned row from a feed_info.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#feed_infotxt.
             frequencies:
               id: 48542c8f-8ce1-43e3-a965-6c68771d6fe5
+              description: |
+                Each row is a cleaned row from a frequencies.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#frequenciestxt.
             levels:
               id: 288a08cd-7929-479e-aa88-08b677a08510
+              description: |
+                Each row is a cleaned row from a levels.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#levelstxt.
             pathways:
               id: a01484af-c460-40a4-ac8a-896b0196e8c2
+              description: |
+                Each row is a cleaned row from a pathways.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#pathwaystxt.
+            routes:
+              id: c6bbb637-988f-431c-8444-aef7277297f8
+              description: |
+                Each row is a cleaned row from a routes.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#routestxt.
             shapes:
               id: 2f5e7bdb-33e8-4633-b163-6bab42ad0951
+              description: |
+                Each row is a cleaned row from a shapes.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#shapestxt.
+            stop_times:
+              id: d31eef2f-e223-4ca4-a86b-170acc6b2590
+              description: |
+                Each row is a cleaned row from a stop_times.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#stop_timestxt.
+            stops:
+              id: 8c876204-e12b-48a2-8299-10f6ae3d4f2b
+              description: |
+                Each row is a cleaned row from a stops.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#stopstxt.
             transfers:
               id: f8dcda5d-0c6d-4c70-b5f5-6716adcf6ffc
+              description: |
+                Each row is a cleaned row from a transfers.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#transferstxt.
             translations:
               id: 7abe9256-6cd2-4c1f-9b6a-72108022a382
+              description: |
+                Each row is a cleaned row from a translations.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#translationstxt.
+            trips:
+              id: 0e4da89e-9330-43f8-8de9-305cb7d4918f
+              description: |
+                Each row is a cleaned row from a trips.txt file.
+                Definitions for the original GTFS fields are available at:
+                https://gtfs.org/reference/static#tripstxt.
