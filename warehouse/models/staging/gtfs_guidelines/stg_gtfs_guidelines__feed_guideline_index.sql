@@ -11,7 +11,8 @@ gtfs_schedule_dim_feeds AS (
 -- list all the checks that have been implemented
 checks_implemented AS (
     SELECT {{ static_feed_downloaded_successfully() }} AS check, {{ compliant_on_the_map() }} AS feature
-    UNION ALL SELECT {{ no_validation_errors_in_last_30_days() }}, {{ compliant_on_the_map() }}
+    UNION ALL
+    SELECT {{ no_validation_errors_in_last_30_days() }}, {{ compliant_on_the_map() }}
 ),
 
 -- create an index: all feed/date/check combinations

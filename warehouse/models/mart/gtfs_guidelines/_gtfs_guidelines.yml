@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: gtfs_schedule_fact_daily_guideline_checks
+  - name: fact_daily_guideline_checks
     description: |
       Each row represents a date/guideline check/feed combination, with pass/fail information
       indicating whether that feed complied with that check on that date.
@@ -40,6 +40,8 @@ models:
         description: |
           Either "PASS" or "FAIL", indicating check status on the given date for the
           given feed.
+        tests:
+          - not_null
       - name: feature
         description: |
           A string label for the GTFS "feature" associated with the given check. For example,
