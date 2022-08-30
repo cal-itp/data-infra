@@ -225,12 +225,12 @@ models:
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
-            - date
+            - service_date
             - calitp_itp_id
             - calitp_url_number
             - route_id
     columns:
-      - name: date
+      - name: service_date
         description: Date for which data was present in our time frame
       - *calitp_itp_id
       - *calitp_url_number

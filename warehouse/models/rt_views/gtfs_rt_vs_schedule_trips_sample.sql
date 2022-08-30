@@ -10,7 +10,7 @@ vp_trips AS (
     -- note: to change when we want to include more operators. trip_route_id and trip_id are optional
     -- https://gtfs.org/realtime/reference/#message-vehicleposition
     FROM {{ ref('stg_rt__vehicle_positions') }}
-    WHERE date BETWEEN '2022-05-01' AND '2022-06-30'
+    WHERE service_date BETWEEN '2022-05-01' AND '2022-06-30'
         AND (calitp_itp_id IN (300, 290)
         )
 ),
@@ -56,7 +56,7 @@ gtfs_rt_vs_schedule_trips_sample AS (
         T1.calitp_url_number,
         T1.route_id,
         T2.route_short_name,
-        T1.service_date AS date,
+        T1.service_date,
         T2.calitp_extracted_at,
         T2.calitp_deleted_at,
         T1.num_sched,
@@ -68,7 +68,7 @@ gtfs_rt_vs_schedule_trips_sample AS (
             T1.route_id = T2.route_id
             AND T1.calitp_itp_id = T2.calitp_itp_id
             AND T1.calitp_url_number = T2.calitp_url_number
-            AND T1.date BETWEEN T2.calitp_extracted_at AND T2.calitp_deleted_at
+            AND T1.service_date BETWEEN T2.calitp_extracted_at AND T2.calitp_deleted_at
 )
 
 SELECT *
