@@ -211,7 +211,8 @@ class GcsDestination(BaseModel):
         return os.path.join(
             bucket,
             "__".join(entity_name_parts),
-            f"dt={dt.to_date_string()}" f"ts={dt.to_iso8601_string()}",
+            f"dt={dt.to_date_string()}",
+            f"ts={dt.to_iso8601_string()}",
             self.filename(model),
         )
 
