@@ -9,7 +9,7 @@
 
 -- declare features
 {% macro compliant_on_the_map() %}
-"Compliant / On the Map"
+"Compliance"
 {% endmacro %}
 
 
