@@ -243,11 +243,16 @@ class TilesDestination(GcsDestination):
         )
 
 
+class CkanResourceMeta(BaseModel):
+    id: str
+    description: Optional[str]
+
+
 class CkanDestination(GcsDestination):
     _instances: ClassVar[List["CkanDestination"]] = []
     type: Literal["ckan"]
     url: str
-    ids: Dict[str, str]
+    resources: Dict[str, CkanResourceMeta]
 
     def __init__(self, **kwargs):
         super(CkanDestination, self).__init__(**kwargs)
