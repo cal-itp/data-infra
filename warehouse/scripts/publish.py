@@ -353,18 +353,12 @@ def _publish_exposure(bucket: str, exposure: Exposure, publish: bool):
                     (dictionary, "dictionary", DictionaryRow),
                 ):
                     hive_path = destination.hive_path(exposure, file, bucket, dt=ts)
-
-                    if publish:
-                        typer.secho(f"writing {len(rows)} rows to {hive_path}")
-                        with fs.open(hive_path, "w", newline="") as f:
-                            writer = csv.DictWriter(f, fieldnames=cls.__fields__.keys())
-                            writer.writeheader()
-                            for row in rows:
-                                writer.writerow(row)
-                    else:
-                        typer.secho(
-                            f"would be writing to {hive_path}", fg=typer.colors.YELLOW
-                        )
+                    typer.secho(f"writing {len(rows)} rows to {hive_path}")
+                    with fs.open(hive_path, "w", newline="") as f:
+                        writer = csv.DictWriter(f, fieldnames=cls.__fields__.keys())
+                        writer.writeheader()
+                        for row in rows:
+                            writer.writerow(row)
 
                 # TODO: this should probably be driven by the depends_on nodes
                 for model_name, resource in destination.resources.items():
