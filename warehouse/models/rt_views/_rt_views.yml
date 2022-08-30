@@ -217,6 +217,35 @@ models:
         tests:
           - unique
           - not_null
+  - name: gtfs_rt_vs_schedule_trips_sample
+    description: |
+      Each row represents a comparison of the scheduled versus realtime vehicle positions data
+      for each route by day over the course of two months. This data is avalibale for two agenices,
+      SamTrans and Big Blue Bus.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - service_date
+            - calitp_itp_id
+            - calitp_url_number
+            - route_id
+    columns:
+      - name: service_date
+        description: Date for which data was present in our time frame
+      - *calitp_itp_id
+      - *calitp_url_number
+      - name: route_id
+        descritpion: Route ID
+      - name: agency_name
+        descritpion: Agency Name
+      - name: route_short_name
+        description: Common route name
+      - name: num_sched
+        description:  Number of trips where GTFS scheduled data is present on given day.
+      - name: num_vp
+        description: Number of trips where GTFS RT vehicle position data is present on given day.
+      - name: pct_w_vp
+        description: Percent of scheduled trips with vehicle positions realtime data for that specific day and route.
 
 exposures:
   - name: rt_speed_maps
