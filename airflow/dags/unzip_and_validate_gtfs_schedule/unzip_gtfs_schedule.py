@@ -9,7 +9,6 @@ import zipfile
 
 from io import BytesIO
 from typing import ClassVar, List, Optional, Tuple
-
 from calitp.storage import (
     fetch_all_in_partition,
     GTFSScheduleFeedExtract,
@@ -18,28 +17,10 @@ from calitp.storage import (
     PartitionedGCSArtifact,
     ProcessingOutcome,
 )
+from utils import GTFSScheduleFeedFile
 
 SCHEDULE_UNZIPPED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED"]
 SCHEDULE_RAW_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_RAW"]
-
-
-class GTFSScheduleFeedFile(PartitionedGCSArtifact):
-    bucket: ClassVar[str] = SCHEDULE_UNZIPPED_BUCKET
-    partition_names: ClassVar[List[str]] = GTFSScheduleFeedExtract.partition_names
-    ts: pendulum.DateTime
-    base64_url: str
-    zipfile_path: str
-    original_filename: str
-
-    # if you try to set table directly, you get an error because it "shadows a BaseModel attribute"
-    # so set as a property instead
-    @property
-    def table(self) -> str:
-        return self.filename
-
-    @property
-    def dt(self) -> pendulum.Date:
-        return self.ts.date()
 
 
 class GTFSScheduleFeedExtractUnzipOutcome(ProcessingOutcome):
