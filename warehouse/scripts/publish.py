@@ -45,8 +45,9 @@ from tqdm import tqdm
 tqdm.pandas()
 
 API_KEY = os.environ.get("CALITP_CKAN_GTFS_SCHEDULE_KEY")
-CALITP_BUCKET__DBT_ARTIFACTS = os.environ["CALITP_BUCKET__DBT_ARTIFACTS"]
-MANIFEST_DEFAULT = (f"{CALITP_BUCKET__DBT_ARTIFACTS}/latest/manifest.json",)
+DBT_ARTIFACTS_BUCKET = os.environ["CALITP_BUCKET__DBT_ARTIFACTS"]
+MANIFEST_DEFAULT = f"{DBT_ARTIFACTS_BUCKET}/latest/manifest.json"
+PUBLISH_BUCKET = os.environ["CALITP_BUCKET__PUBLISH"]
 
 app = typer.Typer()
 
@@ -200,23 +201,18 @@ def _publish_exposure(bucket: str, exposure: Exposure, publish: bool):
                             }
                         )
 
-                    typer.secho(
-                        f"saving intermediate file to {fpath}", fg=typer.colors.GREEN
-                    )
                     df.to_csv(fpath, index=False)
-                    typer.secho(
-                        f"selected {len(df)} rows ({humanize.naturalsize(os.stat(fpath).st_size)}) from {node.schema_table}"
-                    )
 
                     hive_path = destination.hive_path(
                         exposure, model_name, bucket, dt=ts
                     )
                     typer.secho(
-                        f"writing {model_name} to {hive_path}", fg=typer.colors.GREEN
+                        f"writing {len(df)} rows ({humanize.naturalsize(os.stat(fpath).st_size)}) from {node.schema_table} to {hive_path}",
+                        fg=typer.colors.GREEN,
                     )
+                    gcsfs.GCSFileSystem(token="google_default").put(fpath, hive_path)
 
                     fname = destination.filename(model_name)
-                    gcsfs.GCSFileSystem(token="google_default").put(fpath, hive_path)
                     fsize = os.path.getsize(fpath)
 
                     publish_msg = f"uploading to {destination.url} {resource_id}"
@@ -235,7 +231,7 @@ def _publish_exposure(bucket: str, exposure: Exposure, publish: bool):
                     else:
                         typer.secho(
                             f"would be {publish_msg} if --publish",
-                            fg=typer.colors.MAGENTA,
+                            fg=typer.colors.YELLOW,
                         )
 
             elif isinstance(destination, TilesDestination):
@@ -379,7 +375,7 @@ class DictionaryRow(BaseModel):
 
 
 def read_manifest(path: str) -> Manifest:
-    typer.secho(f"reading manifest from {path}", fg=typer.colors.GREEN)
+    typer.secho(f"reading manifest from {path}", fg=typer.colors.MAGENTA)
     opener = gcsfs.GCSFileSystem().open if path.startswith("gs://") else open
 
     with opener(path) as f:
@@ -493,7 +489,7 @@ def generate_exposure_documentation(
 def publish_exposure(
     exposure: str,
     bucket: str = typer.Option(
-        "gs://test-calitp-publish",
+        PUBLISH_BUCKET,
         help="The bucket in which artifacts are persisted.",
     ),
     manifest: str = MANIFEST_DEFAULT,
@@ -505,9 +501,8 @@ def publish_exposure(
     """
     Only publish one exposure, by name.
     """
-    assert publish or not bucket.startswith(
-        "gs://test-"
-    ), "cannot publish with a test bucket!"
+    if publish:
+        assert not bucket.startswith("gs://test-"), "cannot publish with a test bucket!"
 
     actual_manifest = read_manifest(manifest)
 
