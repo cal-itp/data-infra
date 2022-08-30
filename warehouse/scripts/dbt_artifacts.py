@@ -202,10 +202,8 @@ class GcsDestination(BaseModel):
         return f"{model}.{self.format.value}"
 
     @property
-    def hive_partitions(self, dt: pendulum.DateTime = pendulum.now()) -> List[str]:
-        return [
-            f"dt={dt.to_date_string()}",
-        ]
+    def hive_partitions(self, dt: pendulum.DateTime) -> List[str]:
+        return [f"dt={dt.to_date_string()}", f"ts={dt.to_iso8601_string()}"]
 
     def hive_path(self, exposure: "Exposure", model: str, bucket: str):
         entity_name_parts = [
