@@ -222,6 +222,13 @@ models:
       Each row represents a comparison of the scheduled versus realtime vehicle positions data
       for each route by day over the course of two months. This data is avalibale for two agenices,
       SamTrans and Big Blue Bus.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - calitp_itp_id
+            - calitp_url_number
+            - route_id
     columns:
       - name: date
         description: Date for which data was present in our time frame
