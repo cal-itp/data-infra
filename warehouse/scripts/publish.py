@@ -395,7 +395,7 @@ def _publish_exposure(
                     )
 
                     precisions = {
-                        column: int(column.meta.get("ckan.precision"))
+                        name: int(column.meta.get("ckan.precision"))
                         for name, column in node.columns.items()
                         if column.meta.get("ckan.precision")
                     }
