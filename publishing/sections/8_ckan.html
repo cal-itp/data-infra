@@ -870,12 +870,9 @@ subcommand). The documentation from the dbt models’ corresponding YAML will be
 converted into appropriate CSVs and written out locally.</p>
 <p>Run this command inside the <code class="docutils literal notranslate"><span class="pre">warehouse</span></code> folder, assuming you have local dbt
 artifacts in <code class="docutils literal notranslate"><span class="pre">target/</span></code> from a <code class="docutils literal notranslate"><span class="pre">dbt</span> <span class="pre">run</span></code> or <code class="docutils literal notranslate"><span class="pre">dbt</span> <span class="pre">compile</span></code>.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry run python scripts/publish.py generate-exposure-documentation california_open_data
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry run python scripts/publish.py document-exposure california_open_data
 </pre></div>
 </div>
-<p>Generally, we recommend executing the dbt models locally and using your local
-artifacts to produce the data to be generated; this ensures the data is
-up-to-date and fits nicely into a tool-enabled manual workflow.</p>
 </div>
 <div class="section" id="create-dataset-and-metadata">
 <h3>Create dataset and metadata<a class="headerlink" href="#create-dataset-and-metadata" title="Permalink to this headline">¶</a></h3>
@@ -894,30 +891,57 @@ update the <code class="docutils literal notranslate"><span class="pre">meta</sp
 <span class="w">      </span><span class="nt">coordinate_system_espg</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;EPSG:4326&quot;</span><span class="w"></span>
 <span class="w">      </span><span class="nt">destinations</span><span class="p">:</span><span class="w"></span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ckan</span><span class="w"></span>
-<span class="w">          </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gs://calitp-publish</span><span class="w"></span>
 <span class="w">          </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csv</span><span class="w"></span>
 <span class="w">          </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://data.ca.gov</span><span class="w"></span>
-<span class="w">          </span><span class="nt">ids</span><span class="p">:</span><span class="w"></span>
-<span class="w">            </span><span class="nt">agency</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">e8f9d49e-2bb6-400b-b01f-28bc2e0e7df2</span><span class="w"></span>
-<span class="w">            </span><span class="nt">routes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">c6bbb637-988f-431c-8444-aef7277297f8</span><span class="w"></span>
+<span class="w">          </span><span class="nt">resources</span><span class="p">:</span><span class="w"></span>
+<span class="w">            </span><span class="nt">agency</span><span class="p">:</span><span class="w"></span>
+<span class="w">              </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">e8f9d49e-2bb6-400b-b01f-28bc2e0e7df2</span><span class="w"></span>
+<span class="w">              </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">                </span><span class="no">Each row is a cleaned row from an agency.txt file.</span><span class="w"></span>
+<span class="w">                </span><span class="no">Definitions for the original GTFS fields are available at:</span><span class="w"></span>
+<span class="w">                </span><span class="no">https://gtfs.org/reference/static#agencytxt.</span><span class="w"></span>
+<span class="w">            </span><span class="nt">attributions</span><span class="p">:</span><span class="w"></span>
+<span class="w">              </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">038b7354-06e8-4082-a4a1-40debd3110d5</span><span class="w"></span>
+<span class="w">              </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
+<span class="w">                </span><span class="no">Each row is a cleaned row from an attributions.txt file.</span><span class="w"></span>
+<span class="w">                </span><span class="no">Definitions for the original GTFS fields are available at:</span><span class="w"></span>
+<span class="w">                </span><span class="no">https://gtfs.org/reference/static#attributionstxt.</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="publish-the-data">
 <h3>Publish the data!<a class="headerlink" href="#publish-the-data" title="Permalink to this headline">¶</a></h3>
-<p>Either create an Airflow job to refresh/update the data at the specified
+<p>If you are using dbt-based publishing, the <code class="docutils literal notranslate"><span class="pre">publish_exposure</span></code> subcommand of <code class="docutils literal notranslate"><span class="pre">publish.py</span></code>
+will query BigQuery, write out CSV files, and upload those files to CKAN.
+Either create an Airflow job to refresh/update the data at the specified
 frequency, or do it manually. You can use flags to execute a dry run or write to
 GCS without also uploading to CKAN.</p>
-<p>Example dry run:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry run python scripts/publish.py publish-exposure california_open_data --dry-run
+<p>The publish script supports referencing <code class="docutils literal notranslate"><span class="pre">gs://</span></code> paths for the manifest; by default,
+the script will read the latest manifest in GCS uploaded by an Airflow job.
+You may also choose to run dbt models and/or run the publish script locally; these
+operations can be mixed-and-matched. If you are running <code class="docutils literal notranslate"><span class="pre">publish.py</span></code> locally, you
+will need to set <code class="docutils literal notranslate"><span class="pre">$CALITP_CKAN_GTFS_SCHEDULE_KEY</span></code> ahead of time.</p>
+<p>By default, the script will upload artifacts to GCS, but will not actually
+upload data to CKAN. In addition, the script will upload the metadata and dictionary
+files to GCS for eventual sharing with Caltrans.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ poetry run python scripts/publish.py publish-exposure california_open_data --manifest ./target/manifest.json
+reading manifest from ./target/manifest.json
+would be writing to gs://test-calitp-publish/california_open_data__metadata/dt<span class="o">=</span><span class="m">2022</span>-08-30/ts<span class="o">=</span><span class="m">2022</span>-08-30T20:46:00.474199Z/metadata.csv
+would be writing to gs://test-calitp-publish/california_open_data__dictionary/dt<span class="o">=</span><span class="m">2022</span>-08-30/ts<span class="o">=</span><span class="m">2022</span>-08-30T20:46:00.474199Z/dictionary.csv
+handling agency e8f9d49e-2bb6-400b-b01f-28bc2e0e7df2
+...
+writing <span class="m">346</span> rows <span class="o">(</span><span class="m">42</span>.9 kB<span class="o">)</span> from andrew_gtfs_schedule.agency to gs://test-calitp-publish/california_open_data__agency/dt<span class="o">=</span><span class="m">2022</span>-08-30/ts<span class="o">=</span><span class="m">2022</span>-08-30T20:46:00.474199Z/agency.csv
+would be uploading to https://data.ca.gov e8f9d49e-2bb6-400b-b01f-28bc2e0e7df2 <span class="k">if</span> --publish
+...
 </pre></div>
 </div>
-<p>Example production deployment:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry run python scripts/publish.py publish-exposure california_open_data --project<span class="o">=</span>cal-itp-data-infra --bucket<span class="o">=</span><span class="s2">&quot;gs://calitp-publish&quot;</span> --publish
+<p>You can add the <code class="docutils literal notranslate"><span class="pre">--publish</span></code> flag to actually upload artifacts to CKAN after they
+are written to GCS. You must be using a production bucket to publish, either
+by setting <code class="docutils literal notranslate"><span class="pre">$CALITP_BUCKET__PUBLISH</span></code> or using the <code class="docutils literal notranslate"><span class="pre">--bucket</span></code> flag. In addition,
+you may specify a manifest file in GCS if desired.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry run python scripts/publish.py publish-exposure california_open_data --bucket gs://calitp-publish --manifest gs://calitp-dbt-artifacts/latest/manifest.json --publish
 </pre></div>
 </div>
-<p>If you are using dbt-based publishing, the <code class="docutils literal notranslate"><span class="pre">publish_exposure</span></code> subcommand of <code class="docutils literal notranslate"><span class="pre">publish.py</span></code>
-will query BigQuery, write out CSV files, and upload those files to CKAN.</p>
 </div>
 </div>
 </div>
