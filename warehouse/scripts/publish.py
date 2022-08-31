@@ -28,7 +28,7 @@ import humanize
 import pandas as pd
 import requests
 import typer
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 from requests import Response
 from requests_toolbelt import MultipartEncoder
 
@@ -122,12 +122,17 @@ class DictionaryRow(BaseModel):
     pci: Literal["N"]
     field_type: str
     field_length: int
-    field_precision: None
+    field_precision: Optional[int]
     units: None
     domain_type: Literal["Unrepresented"]
     allowable_min_value: None
     allowable_max_value: None
     usage_notes: None
+
+    # constr has to_upper in newer pydantic versions
+    @validator("field_type", allow_reuse=True)
+    def field_type_uppercase(cls, v):
+        return v.upper()
 
 
 def make_linestring(x):
@@ -335,7 +340,9 @@ def _generate_exposure_documentation(
     return metadata_rows, dictionary_rows
 
 
-def _publish_exposure(bucket: str, exposure: Exposure, publish: bool):
+def _publish_exposure(
+    bucket: str, exposure: Exposure, publish: bool, model: str = None
+):
     ts = pendulum.now()
     for destination in exposure.meta.destinations:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -367,7 +374,16 @@ def _publish_exposure(bucket: str, exposure: Exposure, publish: bool):
 
                 # TODO: this should probably be driven by the depends_on nodes
                 for model_name, resource in destination.resources.items():
-                    typer.secho(f"handling {model_name} {resource.id}")
+                    if model and model != model_name:
+                        typer.secho(
+                            f"skipping {model_name} {resource.id}",
+                            fg=typer.colors.YELLOW,
+                        )
+                        continue
+
+                    typer.secho(
+                        f"handling {model_name} {resource.id}", fg=typer.colors.MAGENTA
+                    )
                     node = BaseNode._instances[f"model.calitp_warehouse.{model_name}"]
 
                     fpath = os.path.join(tmpdir, destination.filename(model_name))
@@ -545,6 +561,7 @@ def publish_exposure(
         False,
         help="If True, actually publish to external systems.",
     ),
+    model: str = None,
 ) -> None:
     """
     Only publish one exposure, by name.
@@ -560,6 +577,7 @@ def publish_exposure(
         bucket=bucket,
         exposure=exposure,
         publish=publish,
+        model=model,
     )
 
 
