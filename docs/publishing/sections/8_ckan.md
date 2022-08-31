@@ -38,12 +38,8 @@ converted into appropriate CSVs and written out locally.
 Run this command inside the `warehouse` folder, assuming you have local dbt
 artifacts in `target/` from a `dbt run` or `dbt compile`.
 ```bash
-poetry run python scripts/publish.py generate-exposure-documentation california_open_data
+poetry run python scripts/publish.py document-exposure california_open_data
 ```
-
-Generally, we recommend executing the dbt models locally and using your local
-artifacts to produce the data to be generated; this ensures the data is
-up-to-date and fits nicely into a tool-enabled manual workflow.
 
 ### Create dataset and metadata
 Once you've generated the necessary metadata and dictionary CSV, you need to get
@@ -88,11 +84,13 @@ Either create an Airflow job to refresh/update the data at the specified
 frequency, or do it manually. You can use flags to execute a dry run or write to
 GCS without also uploading to CKAN.
 
-If you are running `publish.py` locally, you will need to set `$CALITP_CKAN_GTFS_SCHEDULE_KEY`
-ahead of time.
+The publish script supports referencing `gs://` paths for the manifest; by default,
+the script will read the latest manifest in GCS uploaded by an Airflow job.
+You may also choose to run dbt models and/or run the publish script locally; these
+operations can be mixed-and-matched. If you are running `publish.py` locally, you
+will need to set `$CALITP_CKAN_GTFS_SCHEDULE_KEY` ahead of time.
 
-By default, the script will attempt to use the latest manifest uploaded by the
-Airflow dbt task, and then will write out artifacts to GCS, but will not actually
+By default, the script will upload artifacts to GCS, but will not actually
 upload data to CKAN. In addition, the script will upload the metadata and dictionary
 files to GCS for eventual sharing with Caltrans.
 ```bash
