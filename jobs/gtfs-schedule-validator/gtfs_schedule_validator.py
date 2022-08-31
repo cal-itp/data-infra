@@ -15,7 +15,7 @@ import pendulum
 import typer
 from calitp.storage import (
     fetch_all_in_partition,
-    GTFSFeedExtractInfo,
+    GTFSScheduleFeedExtract,
     get_fs,
     GTFSFeedType,
     JSONL_GZIP_EXTENSION,
@@ -24,7 +24,7 @@ from calitp.storage import (
     JSONL_EXTENSION,
     SCHEDULE_RAW_BUCKET,
 )
-from pydantic import Field, validator
+from pydantic import validator
 
 JAVA_EXECUTABLE_PATH_KEY = "GTFS_SCHEDULE_VALIDATOR_JAVA_EXECUTABLE"
 SCHEDULE_VALIDATOR_JAR_LOCATION_ENV_KEY = "GTFS_SCHEDULE_VALIDATOR_JAR"
@@ -33,6 +33,7 @@ JAR_DEFAULT = typer.Option(
     help="Path to the GTFS Schedule Validator JAR",
 )
 SCHEDULE_VALIDATION_BUCKET = os.getenv("CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION")
+GTFS_VALIDATOR_VERSION = os.environ["GTFS_SCHEDULE_VALIDATOR_VERSION"]
 
 app = typer.Typer()
 logging.basicConfig()
@@ -42,8 +43,11 @@ logging.basicConfig()
 #   similar to the extracts sharing some functionality
 class GTFSScheduleFeedValidation(PartitionedGCSArtifact):
     bucket: ClassVar[str] = SCHEDULE_VALIDATION_BUCKET
-    table: ClassVar[str] = "validation_reports"
-    extract: GTFSFeedExtractInfo = Field(..., exclude={"config"})
+    partition_names: ClassVar[List[str]] = GTFSScheduleFeedExtract.partition_names
+    table: ClassVar[str] = "validation_notices"
+    ts: pendulum.DateTime
+    base64_url: str
+    extract_path: str
     system_errors: Dict
 
     @validator("filename", allow_reuse=True)
@@ -52,24 +56,12 @@ class GTFSScheduleFeedValidation(PartitionedGCSArtifact):
         return v
 
     @property
-    def partition_names(self) -> List[str]:
-        return self.extract.partition_names
-
-    @property
     def dt(self) -> pendulum.Date:
-        return self.extract.ts.date()
-
-    @property
-    def base64_url(self) -> str:
-        return self.extract.config.base64_encoded_url
-
-    @property
-    def ts(self) -> pendulum.DateTime:
-        return self.extract.ts
+        return self.ts.date()
 
 
 class GTFSScheduleFeedExtractValidationOutcome(ProcessingOutcome):
-    extract: GTFSFeedExtractInfo = Field(..., exclude={"config"})
+    extract_path: str
     validation: Optional[GTFSScheduleFeedValidation]
 
 
@@ -172,8 +164,8 @@ def validate_day(
 ) -> None:
     day = pendulum.instance(day).date()
 
-    extracts: List[GTFSFeedExtractInfo] = fetch_all_in_partition(
-        cls=GTFSFeedExtractInfo,
+    extracts: List[GTFSScheduleFeedExtract] = fetch_all_in_partition(
+        cls=GTFSScheduleFeedExtract,
         bucket=SCHEDULE_RAW_BUCKET,
         table=GTFSFeedType.schedule,
         fs=get_fs(),
@@ -197,7 +189,7 @@ def validate_day(
     fs = get_fs()
     outcomes = []
 
-    for i, extract in enumerate(extracts):
+    for i, extract in enumerate(extracts, start=1):
         typer.secho(f"processing {i} of {len(extracts)}")
         try:
             with tempfile.TemporaryDirectory() as tmp_dir:
@@ -214,10 +206,23 @@ def validate_day(
                 )
             validation = GTFSScheduleFeedValidation(
                 filename=f"validation_notices{JSONL_GZIP_EXTENSION}",
-                extract=extract,
+                ts=extract.ts,
+                base64_url=extract.base64_url,
+                extract_path=extract.path,
                 system_errors=system_errors,
             )
-            notices = report["notices"]
+
+            notices = [
+                {
+                    "metadata": {
+                        "extract_path": extract.path,
+                        "gtfs_validator_version": GTFS_VALIDATOR_VERSION,
+                    },
+                    **notice,
+                }
+                for notice in report["notices"]
+            ]
+
             typer.secho(
                 f"saving {len(notices)} validation notices to {validation.path}",
                 fg=typer.colors.GREEN,
@@ -231,7 +236,7 @@ def validate_day(
             outcomes.append(
                 GTFSScheduleFeedExtractValidationOutcome(
                     success=True,
-                    extract=extract,
+                    extract_path=extract.path,
                     validation=validation,
                 )
             )
@@ -243,7 +248,7 @@ def validate_day(
             outcomes.append(
                 GTFSScheduleFeedExtractValidationOutcome(
                     success=False,
-                    extract=extract,
+                    extract_path=extract.path,
                     exception=e,
                 )
             )
