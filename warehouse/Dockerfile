@@ -9,7 +9,7 @@ RUN apt-get update \
 RUN npm install -g --unsafe-perm=true --allow-root netlify-cli
 
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python -
-ENV PATH="${PATH}:/root/.poetry/bin"
+ENV PATH="/root/.local/bin:${PATH}"
 
 RUN mkdir /app
 WORKDIR /app
