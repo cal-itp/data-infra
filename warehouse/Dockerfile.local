@@ -4,7 +4,7 @@ LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
 
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 RUN apt-get update \
-  && apt-get install -y nodejs libgdal-dev
+  && apt-get install -y nodejs build-essential libgdal-dev
 
 RUN npm install -g --unsafe-perm=true --allow-root netlify-cli
 
@@ -22,7 +22,5 @@ RUN poetry export -f requirements.txt --without-hashes --output requirements.txt
 COPY ./dbt_project.yml /app/dbt_project.yml
 COPY ./packages.yml /app/packages.yml
 RUN dbt deps
-
-COPY . /app
 
 CMD ["dbt", "run", "--project-dir", "/app", "--profiles-dir", "/app"]
