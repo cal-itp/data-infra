@@ -115,7 +115,7 @@ def execute_schedule_validator(
         str(zip_path),
         "--output_base",
         str(output_dir),
-        "--feed_name",
+        "--country_code",
         "us-na",
     ]
 
