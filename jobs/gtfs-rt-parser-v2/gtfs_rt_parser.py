@@ -411,7 +411,7 @@ def validate_and_upload(
                     # back and forth so we can use pydantic serialization
                     "metadata": {
                         "gtfs_validator_version": GTFS_RT_VALIDATOR_VERSION,
-                        **make_pydantic_model_bq_safe(extract),
+                        "extract": make_pydantic_model_bq_safe(extract),
                     },
                     **record,
                 }
@@ -505,7 +505,9 @@ def parse_and_upload(
                             {
                                 "header": parsed["header"],
                                 # back and forth so we use pydantic serialization
-                                "metadata": make_pydantic_model_bq_safe(extract),
+                                "metadata": {
+                                    "extract": make_pydantic_model_bq_safe(extract),
+                                },
                                 **copy.deepcopy(record),
                             }
                         )
