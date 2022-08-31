@@ -480,7 +480,7 @@ models:
         meta:
           metabase.semantic_type: type/Latitude
           ckan.type: FLOAT
-          ckan.length: 7
+          ckan.length: 6
           ckan.precision: 3
       - name: shape_pt_lon
         description: '{{ doc("gtfs_shapes__shape_pt_lon") }}'
@@ -581,7 +581,7 @@ models:
         meta:
           metabase.semantic_type: type/Latitude
           ckan.type: FLOAT
-          ckan.length: 7
+          ckan.length: 6
           ckan.precision: 3
       - name: stop_lon
         description: '{{ doc("gtfs_stops__stop_lon") }}'
