@@ -4,11 +4,11 @@ LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
 
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 RUN apt-get update \
-  && apt-get install -y nodejs
+  && apt-get install -y nodejs libgdal-dev
 
 RUN npm install -g --unsafe-perm=true --allow-root netlify-cli
 
-RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python -
 ENV PATH="${PATH}:/root/.poetry/bin"
 
 RUN mkdir /app
