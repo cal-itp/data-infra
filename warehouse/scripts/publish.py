@@ -321,9 +321,9 @@ def _generate_exposure_documentation(
                             sensitive="N",
                             pii="N",
                             pci="N",
-                            field_type=column.meta.get("publish.type", "STRING"),
-                            field_length=column.meta.get("publish.length", 1024),
-                            field_precision=None,
+                            field_type=column.meta.get("ckan.type", "STRING"),
+                            field_length=column.meta.get("ckan.length", 1024),
+                            field_precision=column.meta.get("ckan.precision"),
                             units=None,
                             domain_type="Unrepresented",
                             allowable_min_value=None,
@@ -378,20 +378,18 @@ def _publish_exposure(bucket: str, exposure: Exposure, publish: bool):
                         progress_bar_type="tqdm",
                     )
 
-                    if model_name == "stops":
-                        df = df.round(
-                            {
-                                "stop_lat": 5,
-                                "stop_lon": 5,
-                            }
+                    precisions = {
+                        column: int(column.meta.get("ckan.precision"))
+                        for name, column in node.columns.items()
+                        if column.meta.get("ckan.precision")
+                    }
+
+                    if precisions:
+                        typer.secho(
+                            f"rounding {model_name} columns {','.join(precisions.keys())}",
+                            fg=typer.colors.CYAN,
                         )
-                    elif model_name == "shapes":
-                        df = df.round(
-                            {
-                                "shape_pt_lat": 5,
-                                "shape_pt_lon": 5,
-                            }
-                        )
+                        df = df.round(precisions)
 
                     df.to_csv(fpath, index=False)
 

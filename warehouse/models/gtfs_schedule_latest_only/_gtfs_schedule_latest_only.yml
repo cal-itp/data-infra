@@ -479,12 +479,18 @@ models:
         - not_null
         meta:
           metabase.semantic_type: type/Latitude
+          ckan.type: FLOAT
+          ckan.length: 5
+          ckan.precision: 3
       - name: shape_pt_lon
         description: '{{ doc("gtfs_shapes__shape_pt_lon") }}'
         tests:
         - not_null
         meta:
           metabase.semantic_type: type/Longitude
+          ckan.type: FLOAT
+          ckan.length: 5
+          ckan.precision: 3
       - name: shape_pt_sequence
         description: '{{ doc("gtfs_shapes__shape_pt_sequence") }}'
         tests:
@@ -574,10 +580,16 @@ models:
         description: '{{ doc("gtfs_stops__stop_lat") }}'
         meta:
           metabase.semantic_type: type/Latitude
+          ckan.type: FLOAT
+          ckan.length: 5
+          ckan.precision: 3
       - name: stop_lon
         description: '{{ doc("gtfs_stops__stop_lon") }}'
         meta:
           metabase.semantic_type: type/Longitude
+          ckan.type: FLOAT
+          ckan.length: 5
+          ckan.precision: 3
       - name: zone_id
         description: '{{ doc("gtfs_stops__zone_id") }}'
       - name: stop_url
