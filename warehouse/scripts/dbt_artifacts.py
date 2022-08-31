@@ -195,19 +195,14 @@ class Owner(BaseModel):
 
 class GcsDestination(BaseModel):
     type: Literal["gcs"]
-    bucket: str
     format: FileFormat
 
     def filename(self, model: str):
         return f"{model}.{self.format.value}"
 
-    @property
-    def hive_partitions(self, dt: pendulum.DateTime = pendulum.now()) -> List[str]:
-        return [
-            f"dt={dt.to_date_string()}",
-        ]
-
-    def hive_path(self, exposure: "Exposure", model: str, bucket: str):
+    def hive_path(
+        self, exposure: "Exposure", model: str, bucket: str, dt: pendulum.DateTime
+    ):
         entity_name_parts = [
             slugify(exposure.name, separator="_"),
             model,
@@ -215,7 +210,8 @@ class GcsDestination(BaseModel):
         return os.path.join(
             bucket,
             "__".join(entity_name_parts),
-            *self.hive_partitions,
+            f"dt={dt.in_tz('utc').to_date_string()}",
+            f"ts={dt.in_tz('utc').to_iso8601_string()}",
             self.filename(model),
         )
 
@@ -227,6 +223,7 @@ class TilesDestination(GcsDestination):
     """
 
     type: Literal["tiles"]
+    bucket: str
     tile_format: TileFormat
     geo_column: str
     metadata_columns: Optional[List[str]]
@@ -247,11 +244,16 @@ class TilesDestination(GcsDestination):
         )
 
 
+class CkanResourceMeta(BaseModel):
+    id: str
+    description: Optional[str]
+
+
 class CkanDestination(GcsDestination):
     _instances: ClassVar[List["CkanDestination"]] = []
     type: Literal["ckan"]
     url: str
-    ids: Dict[str, str]
+    resources: Dict[str, CkanResourceMeta]
 
     def __init__(self, **kwargs):
         super(CkanDestination, self).__init__(**kwargs)

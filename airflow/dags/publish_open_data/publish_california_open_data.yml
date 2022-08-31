@@ -9,10 +9,6 @@ arguments:
   - 'publish-exposure'
   - 'california_open_data'
   - '{% if is_development() %}--no-publish{% else %}--publish{% endif %}'
-  - '--bucket'
-  - "{{ env_var('CALITP_BUCKET__PUBLISH') }}"
-  - '--manifest'
-  - "{{ env_var('CALITP_BUCKET__DBT_ARTIFACTS') }}/latest/manifest.json"
 
 is_delete_operator_pod: true
 get_logs: true
@@ -23,6 +19,8 @@ namespace: airflow-jobs
 
 env_vars:
   GOOGLE_APPLICATION_CREDENTIALS: /secrets/jobs-data/service_account.json
+  CALITP_BUCKET__DBT_ARTIFACTS: "{{ env_var('CALITP_BUCKET__DBT_ARTIFACTS') }}"
+  CALITP_BUCKET__PUBLISH: "{{ env_var('CALITP_BUCKET__PUBLISH') }}"
 
 secrets:
   - deploy_type: volume
