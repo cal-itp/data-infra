@@ -51,8 +51,10 @@ PUBLISH_BUCKET = os.environ["CALITP_BUCKET__PUBLISH"]
 
 app = typer.Typer()
 
-WGS84 = "EPSG:4326"
-CHUNK_SIZE = 64 * 1024 * 1024
+WGS84 = "EPSG:4326"  # "standard" lat/lon coordinate system
+CHUNK_SIZE = (
+    64 * 1024 * 1024
+)  # 64MB, this comes from an example script provided by Caltrans
 
 
 # once https://github.com/samuelcolvin/pydantic/pull/2745 is merged, we don't need this

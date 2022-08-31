@@ -163,7 +163,7 @@ models:
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
-      Each row is a Each row is a cleaned rowrow from a calendar_dates.txt file.
+      Each row is a cleaned row from a calendar_dates.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#calendar_datestxt.
     columns:
@@ -749,7 +749,7 @@ exposures:
     meta:
       methodology: |
         Cal-ITP collects the GTFS feeds from a statewide list every night and aggegrates it into a statewide table
-        for analysis purposes only. Do not use for trip planner ingestation, rather is meant to be used for statewide
+        for analysis purposes only. Do not use for trip planner ingestion, rather is meant to be used for statewide
         analytics and other use cases. Note: These data may or may or may not have passed GTFS-Validation.
       coordinate_system_espg: "EPSG:4326"
       destinations:
