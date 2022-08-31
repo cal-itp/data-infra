@@ -13,3 +13,10 @@ use_bq_client: true
 hive_options:
   mode: AUTO
   source_uri_prefix: "transit_technology_stacks__organizations/"
+schema_fields:
+  - name: id
+    type: STRING
+    mode: NULLABLE
+  - name: name
+    type: STRING
+    mode: NULLABLE
