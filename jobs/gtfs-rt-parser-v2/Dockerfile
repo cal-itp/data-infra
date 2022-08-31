@@ -3,7 +3,7 @@ FROM openjdk:11
 LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
 
 ENV GTFS_RT_VALIDATOR_JAR=/gtfs-realtime-validator.jar
-ENV GTFS_VALIDATOR_VERSION=v1.0.0
+ENV GTFS_RT_VALIDATOR_VERSION=v1.0.0
 
 RUN apt-get update -y \
     && apt-get install -y python3 python3-pip

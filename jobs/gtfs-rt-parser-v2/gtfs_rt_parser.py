@@ -57,6 +57,7 @@ JAR_DEFAULT = typer.Option(
 
 RT_PARSED_BUCKET = os.environ["CALITP_BUCKET__GTFS_RT_PARSED"]
 RT_VALIDATION_BUCKET = os.environ["CALITP_BUCKET__GTFS_RT_VALIDATION"]
+GTFS_RT_VALIDATOR_VERSION = os.environ["GTFS_RT_VALIDATOR_VERSION"]
 
 
 def make_dict_bq_safe(d: Dict[str, Any]) -> Dict[str, Any]:
@@ -408,7 +409,10 @@ def validate_and_upload(
             [
                 {
                     # back and forth so we can use pydantic serialization
-                    "metadata": make_pydantic_model_bq_safe(extract),
+                    "metadata": {
+                        "gtfs_validator_version": GTFS_RT_VALIDATOR_VERSION,
+                        **make_pydantic_model_bq_safe(extract),
+                    },
                     **record,
                 }
                 for record in records
