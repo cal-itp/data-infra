@@ -10,3 +10,4 @@ from operators.sql_query_operator import SqlQueryOperator
 from operators.airtable_to_gcs import AirtableToGCSOperator
 from operators.airtable_to_warehouse import AirtableToWarehouseOperator
 from operators.amplitude_to_flattened_json import AmplitudeToFlattenedJSONOperator
+from operators.gtfs_csv_to_jsonl import GtfsGcsToJsonlOperator
