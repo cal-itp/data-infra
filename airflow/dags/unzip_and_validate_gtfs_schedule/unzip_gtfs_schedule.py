@@ -150,7 +150,7 @@ def unzip_extracts(day: pendulum.datetime):
         cls=GTFSScheduleFeedExtract,
         bucket=SCHEDULE_RAW_BUCKET,
         table=GTFSFeedType.schedule,
-        fs=get_fs(),
+        fs=fs,
         partitions={
             "dt": day,
         },
