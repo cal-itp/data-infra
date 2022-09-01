@@ -123,6 +123,30 @@ models:
       Contents are a combination of Cal-ITP metadata and, where available,
       data from feed_info.txt.
     columns:
+      - &calitp_itp_id
+        name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+        tests:
+          - not_null
+        meta:
+          metabase.semantic_type: type/FK
+      - &calitp_url_number
+        name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+        tests:
+          - not_null
+        meta:
+          metabase.semantic_type: type/FK
+      - &calitp_extracted_at
+        name: calitp_extracted_at
+        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
+        tests:
+          - not_null
+      - &calitp_deleted_at
+        name: calitp_deleted_at
+        description: '{{ doc("column_schedule_calitp_deleted_at") }}'
+        tests:
+          - not_null
       - name: feed_key
         tests:
           - not_null
@@ -149,6 +173,11 @@ models:
       Each row is a cleaned row from a pathways.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#pathwaystxt.
+    columns:
+      - *calitp_itp_id
+      - *calitp_url_number
+      - *calitp_extracted_at
+      - *calitp_deleted_at
   - name: gtfs_schedule_dim_routes
     description: |
       Slowly-changing dimension table of routes.txt data with
@@ -168,13 +197,21 @@ models:
           - unique
         meta:
           metabase.semantic_type: type/PK
+      - *calitp_itp_id
+      - *calitp_url_number
+      - *calitp_extracted_at
+      - *calitp_deleted_at
   - name: gtfs_schedule_dim_shapes
     description: |
       Slowly-changing dimension table of shapes.txt data.
       Each row is a cleaned row from a shapes.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#shapestxt.
-
+    columns:
+      - *calitp_itp_id
+      - *calitp_url_number
+      - *calitp_extracted_at
+      - *calitp_deleted_at
   - name: gtfs_schedule_dim_shapes_geo
     description: |
       Slowly-changing dimension table of shapes created from shapes.txt
@@ -188,30 +225,10 @@ models:
             - calitp_url_number
             - shape_id
     columns:
-      - &calitp_itp_id
-        name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-        meta:
-          metabase.semantic_type: type/FK
-      - &calitp_url_number
-        name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        tests:
-          - not_null
-        meta:
-          metabase.semantic_type: type/FK
-      - &calitp_extracted_at
-        name: calitp_extracted_at
-        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
-        tests:
-          - not_null
-      - &calitp_deleted_at
-        name: calitp_deleted_at
-        description: '{{ doc("column_schedule_calitp_deleted_at") }}'
-        tests:
-          - not_null
+      - *calitp_itp_id
+      - *calitp_url_number
+      - *calitp_extracted_at
+      - *calitp_deleted_at
       - name: shape_id
         description: shape_id from shapes.txt file.
         tests:
@@ -220,7 +237,6 @@ models:
         description: Ordered array of WKT points that make up the shape.
         tests:
           - not_null
-
   - name: gtfs_schedule_dim_shapes_geo_latest
     description: |
       Latest-only slice of the table of shapes created from shapes.txt
@@ -233,10 +249,9 @@ models:
             - calitp_url_number
             - shape_id
     columns:
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
+    columns:
+      - *calitp_itp_id
+      - *calitp_url_number
       - name: shape_id
         description: shape_id from shapes.txt file.
         tests:
@@ -254,6 +269,10 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#shapestxt.
     columns:
+      - *calitp_itp_id
+      - *calitp_url_number
+      - *calitp_extracted_at
+      - *calitp_deleted_at
       - name: stop_sequence_rank
         description: |
           Rank within the stop sequence, starting from 1 and increasing
@@ -276,12 +295,22 @@ models:
       Each row is a cleaned row from a stops.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#stopstxt.
+    columns:
+      - *calitp_itp_id
+      - *calitp_url_number
+      - *calitp_extracted_at
+      - *calitp_deleted_at
   - name: gtfs_schedule_dim_trips
     description: |
       Slowly-changing dimension table of trips.txt data.
       Each row is a cleaned row from a trips.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#tripstxt.
+    columns:
+      - *calitp_itp_id
+      - *calitp_url_number
+      - *calitp_extracted_at
+      - *calitp_deleted_at
   - name: gtfs_schedule_data_feed_trip_stops_latest
     description: |
       Trip / route / stop combinations that were active (not yet deleted)
@@ -876,12 +905,8 @@ models:
         description: Date on which this service level was present
         tests:
           - not_null
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        tests:
-          - not_null
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
+      - *calitp_itp_id
+      - *calitp_url_number
       - name: feed_key
         tests:
           - not_null

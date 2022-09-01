@@ -13,3 +13,216 @@ use_bq_client: true
 hive_options:
   mode: AUTO
   source_uri_prefix: "california_transit__organizations/"
+schema_fields:
+  - name: services
+    type: STRING
+    mode: REPEATED
+  - name: administrating_organization
+    type: STRING
+    mode: REPEATED
+  - name: brand
+    type: STRING
+    mode: NULLABLE
+  - name: opm_id_drmt
+    type: INTEGER
+    mode: NULLABLE
+  - name: drmt_reported_5310_vehicles
+    type: INTEGER
+    mode: REPEATED
+  - name: funding_programs
+    type: STRING
+    mode: REPEATED
+  - name: service_area_population__ntd_
+    type: INTEGER
+    mode: REPEATED
+  - name: total_voms__ntd_
+    type: INTEGER
+    mode: REPEATED
+  - name: immediate_gtfs_goals
+    type: STRING
+    mode: REPEATED
+  - name: flex_status
+    type: STRING
+    mode: REPEATED
+  - name: service___component
+    type: STRING
+    mode: REPEATED
+  - name: fares_v2_status
+    type: STRING
+    mode: REPEATED
+  - name: mobility_services_operated
+    type: STRING
+    mode: REPEATED
+  - name: gtfs_schedule_status
+    type: STRING
+    mode: REPEATED
+  - name: mpo_rtpa
+    type: STRING
+    mode: REPEATED
+  - name: ntp_id
+    type: STRING
+    mode: REPEATED
+  - name: gtfs_datasets_produced
+    type: STRING
+    mode: REPEATED
+  - name: currently_operating__from_mobility_services_operated_
+    type: BOOLEAN
+    mode: REPEATED
+  - name: itp_id
+    type: FLOAT
+    mode: NULLABLE
+  - name: fixed_route_service_operator_type
+    type: STRING
+    mode: REPEATED
+  - name: tracking_category
+    type: STRING
+    mode: NULLABLE
+  - name: website
+    type: STRING
+    mode: NULLABLE
+  - name: service_availability
+    type: STRING
+    mode: REPEATED
+  - name: services_needing_tripupdates_or_vehiclepositions
+    type: STRING
+    mode: REPEATED
+  - name: complete_static_gtfs_coverage__1_yes_
+    type: INTEGER
+    mode: NULLABLE
+  - name: service_area_sq_miles__ntd_
+    type: INTEGER
+    mode: REPEATED
+  - name: __of_fixed_route_services
+    type: INTEGER
+    mode: NULLABLE
+  - name: gtfs_realtime_status
+    type: STRING
+    mode: NULLABLE
+  - name: schedule_datasets
+    type: INTEGER
+    mode: NULLABLE
+  - name: gtfs_dataset__from_mobility_services_managed_
+    type: STRING
+    mode: REPEATED
+  - name: __fixed_route_or_deviated_fixed_route_service_w__static_gtfs
+    type: INTEGER
+    mode: NULLABLE
+  - name: alias_
+    type: STRING
+    mode: REPEATED
+  - name: drmt_organization_name
+    type: STRING
+    mode: REPEATED
+  - name: id
+    type: STRING
+    mode: NULLABLE
+  - name: __fixed_route_or_deviated_fixed_route_services
+    type: INTEGER
+    mode: NULLABLE
+  - name: __1_gtfs_feed_for_any_service__1_yes_
+    type: INTEGER
+    mode: NULLABLE
+  - name: funding_sources_for_managed_transportation
+    type: STRING
+    mode: REPEATED
+  - name: dotid
+    type: INTEGER
+    mode: NULLABLE
+  - name: __services_with_missing_static_feed_for_fixed_route_or_deviated_fixed_route
+    type: INTEGER
+    mode: NULLABLE
+  - name: ___1_complete_rt_set__1_yes_
+    type: INTEGER
+    mode: NULLABLE
+  - name: __fixed_route_services_w__static_gtfs
+    type: INTEGER
+    mode: NULLABLE
+  - name: currently_operating__from_mobility_services_managed_
+    type: BOOLEAN
+    mode: REPEATED
+  - name: service_availability_category__from_mobility_services_managed_
+    type: STRING
+    mode: REPEATED
+  - name: county_geography
+    type: STRING
+    mode: REPEATED
+  - name: gtfs_static_status
+    type: STRING
+    mode: NULLABLE
+  - name: reporting_category
+    type: STRING
+    mode: NULLABLE
+  - name: assist_category
+    type: STRING
+    mode: NULLABLE
+  - name: county_geography_3
+    type: STRING
+    mode: REPEATED
+  - name: service_type__from_mobility_services_managed_
+    type: STRING
+    mode: REPEATED
+  - name: complete_rt_coverage
+    type: INTEGER
+    mode: NULLABLE
+  - name: funding_sources__from_mobility_services_managed__2
+    type: STRING
+    mode: REPEATED
+  - name: headquarters_state_country
+    type: STRING
+    mode: NULLABLE
+  - name: details
+    type: STRING
+    mode: NULLABLE
+  - name: record_creation_time
+    type: TIMESTAMP
+    mode: NULLABLE
+    description: bq-datetime
+  - name: services_needing_alerts
+    type: STRING
+    mode: REPEATED
+  - name: eligibility_programs
+    type: STRING
+    mode: REPEATED
+  - name: missing_static
+    type: STRING
+    mode: REPEATED
+  # suppress pending final resolution of desired behavior -- see https://github.com/cal-itp/data-infra/issues/1731
+  # - name: fare_systems
+  #   type: STRING
+  #   mode: NULLABLE
+  - name: planning_authority
+    type: STRING
+    mode: REPEATED
+  - name: service_type__from_mobility_services_operated_
+    type: STRING
+    mode: REPEATED
+  - name: roles
+    type: STRING
+    mode: REPEATED
+  - name: mobility_services_managed
+    type: STRING
+    mode: REPEATED
+  - name: __services_w__complete_rt_status
+    type: INTEGER
+    mode: NULLABLE
+  - name: headquarters_place
+    type: STRING
+    mode: NULLABLE
+  - name: caltrans_district
+    type: STRING
+    mode: NULLABLE
+  - name: organization_type
+    type: STRING
+    mode: NULLABLE
+  - name: gtfs_datasets_referenced
+    type: STRING
+    mode: REPEATED
+  - name: parent_organization
+    type: STRING
+    mode: REPEATED
+  - name: funding_sources__from_mobility_services_managed_
+    type: STRING
+    mode: REPEATED
+  - name: name
+    type: STRING
+    mode: NULLABLE
