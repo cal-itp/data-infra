@@ -1,6 +1,6 @@
 WITH feed_guideline_index AS (
     SELECT * FROM {{ ref('stg_gtfs_guidelines__feed_guideline_index') }}
-    WHERE check = {{ complete_wheelchair_boarding_data() }}
+    WHERE check = {{ complete_wheelchair_accessibility_data() }}
 ),
 
 gtfs_schedule_fact_daily_trips AS (
@@ -11,8 +11,8 @@ gtfs_schedule_fact_daily_feed_stops AS (
     SELECT * FROM {{ ref('gtfs_schedule_fact_daily_feed_stops') }}
 ),
 
-gtfs_schedule_fact_daily_feeds AS (
-    SELECT * FROM {{ ref('gtfs_schedule_fact_daily_feeds') }}
+gtfs_schedule_dim_feeds AS (
+    SELECT * FROM {{ ref('gtfs_schedule_dim_feeds') }}
 ),
 
 gtfs_schedule_dim_trips AS (
@@ -23,9 +23,10 @@ gtfs_schedule_dim_stops AS (
     SELECT * FROM {{ ref('gtfs_schedule_dim_stops') }}
 ),
 
-trips AS (
+-- Counts use of wheelchair_accessible field in trips.txt for a given FEED (which spans multiple days)
+feed_trips AS (
     SELECT
-        t3.calitp_itp_id,
+        t1.feed_key,
         COUNT(CASE
                 WHEN t2.wheelchair_accessible IS NOT NULL THEN 1
               END) AS accessibility_trips,
@@ -33,16 +34,13 @@ trips AS (
     FROM gtfs_schedule_fact_daily_trips AS t1
     LEFT JOIN gtfs_schedule_dim_trips AS t2
       ON t1.trip_key = t2.trip_key
-    LEFT JOIN gtfs_schedule_fact_daily_feeds AS t3
-      ON t1.feed_key = t3.feed_key
-    WHERE calitp_extracted_at <= CURRENT_DATE()
-      AND calitp_deleted_at > CURRENT_DATE()
-    GROUP BY calitp_itp_id
+    GROUP BY t1.feed_key
 ),
 
-stops AS (
+-- Counts use of wheelchair_boarding field in stops.txt for a given FEED (which spans multiple days)
+feed_stops AS (
     SELECT
-        t3.calitp_itp_id,
+        t1.feed_key,
         COUNT(CASE
                 WHEN t2.wheelchair_boarding IS NOT NULL THEN 1
               END) AS accessibility_stops,
@@ -50,28 +48,31 @@ stops AS (
     FROM gtfs_schedule_fact_daily_feed_stops AS t1
     LEFT JOIN gtfs_schedule_dim_stops AS t2
       ON t1.stop_key = t2.stop_key
-    LEFT JOIN gtfs_schedule_fact_daily_feeds AS t3
-      ON t1.feed_key = t3.feed_key
-    WHERE calitp_extracted_at <= CURRENT_DATE()
-      AND calitp_deleted_at > CURRENT_DATE()
-   GROUP BY calitp_itp_id
+   GROUP BY t1.feed_key
 ),
 
-wheelchair_check AS (
+-- With one row per feed, combines trips and stops wheelchair checks
+-- Also joins with dim_feeds, to get ITP-ID and extraction/deletion dates
+feed_wheelchair_check AS (
     SELECT
-        t1.calitp_itp_id,
-        CURRENT_DATE() AS date,
+        t3.calitp_itp_id,
+        t3.calitp_url_number,
         {{ complete_wheelchair_accessibility_data() }} AS check,
         CASE
-            WHEN accessibility_trips = trips AND accessibility_stops = stops THEN "PASS"
+            WHEN t1.accessibility_trips = t1.trips AND t2.accessibility_stops = t2.stops THEN "PASS"
         ELSE "FAIL"
-        END AS status
-    FROM trips AS t1
-    LEFT JOIN stops AS t2
-        USING calitp_itp_id
+        END AS status,
+        t3.calitp_extracted_at,
+        t3.calitp_deleted_at
+    FROM feed_trips AS t1
+    LEFT JOIN feed_stops AS t2
+      ON t1.feed_key = t2.feed_key
+    LEFT JOIN gtfs_schedule_dim_feeds AS t3
+      ON t1.feed_key = t3.feed_key
 ),
 
-wheelchair_check_joined AS (
+-- Joins our feed-level check with feed_guideline_index, where each feed will have a row for every day it is active
+daily_wheelchair_check AS (
     SELECT
         t1.date,
         t1.calitp_itp_id,
@@ -81,8 +82,12 @@ wheelchair_check_joined AS (
         t1.feature,
         t2.status
     FROM feed_guideline_index AS t1
-    LEFT JOIN wheelchair_check AS t2
-        USING (calitp_itp_id, date, check)
+    LEFT JOIN feed_wheelchair_check AS t2
+       ON t1.calitp_itp_id = t2.calitp_itp_id
+      AND t1.calitp_url_number = t2.calitp_url_number
+      AND t1.check = t2.check
+      AND t1.date >= t2.calitp_extracted_at
+      AND t1.date < t2.calitp_deleted_at
 )
 
-SELECT * FROM wheelchair_check_joined
+SELECT * FROM daily_wheelchair_check
