@@ -16,8 +16,8 @@ WORKDIR /app
 
 COPY ./pyproject.toml /app/pyproject.toml
 COPY ./poetry.lock /app/poetry.lock
-RUN poetry config virtualenvs.create false
-RUN poetry install
+RUN poetry export -f requirements.txt --without-hashes --output requirements.txt \
+    && pip install -r requirements.txt
 RUN pip install memray
 
 COPY . /app
