@@ -368,7 +368,7 @@ def validate_and_upload(
             pbar=pbar,
         )
     except FileNotFoundError:
-        raise ScheduleDataNotFound(f"no schedule data found for {first_extract}")
+        raise ScheduleDataNotFound(f"no schedule data found for {first_extract.path}")
 
     execute_rt_validator(
         gtfs_zip,
@@ -714,9 +714,6 @@ def main(
     if pbar:
         del pbar
 
-    assert len(outcomes) == len(
-        files
-    ), f"we ended up with {len(outcomes)} outcomes from {len(files)}"
     result = GTFSRTJobResult(
         # TODO: these seem weird...
         hour=aggregations_to_process[0].hour,
@@ -726,6 +723,10 @@ def main(
         outcomes=outcomes,
     )
     save_job_result(get_fs(), result)
+
+    assert len(outcomes) == len(
+        files
+    ), f"we ended up with {len(outcomes)} outcomes from {len(files)}"
 
     if exceptions:
         exc_str = "\n".join(str(tup) for tup in exceptions)
