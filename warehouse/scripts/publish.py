@@ -8,7 +8,7 @@ import csv
 
 import pendulum
 from google.cloud import bigquery
-from typing import Optional, Literal, List, Dict, BinaryIO
+from typing import Optional, Literal, List, Dict, BinaryIO, Tuple
 
 from pathlib import Path
 
@@ -28,7 +28,7 @@ import humanize
 import pandas as pd
 import requests
 import typer
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 from requests import Response
 from requests_toolbelt import MultipartEncoder
 
@@ -45,10 +45,94 @@ from tqdm import tqdm
 tqdm.pandas()
 
 API_KEY = os.environ.get("CALITP_CKAN_GTFS_SCHEDULE_KEY")
+DBT_ARTIFACTS_BUCKET = os.environ["CALITP_BUCKET__DBT_ARTIFACTS"]
+MANIFEST_DEFAULT = f"{DBT_ARTIFACTS_BUCKET}/latest/manifest.json"
+PUBLISH_BUCKET = os.environ["CALITP_BUCKET__PUBLISH"]
 
 app = typer.Typer()
 
-WGS84 = "EPSG:4326"
+WGS84 = "EPSG:4326"  # "standard" lat/lon coordinate system
+CHUNK_SIZE = (
+    64 * 1024 * 1024
+)  # 64MB, this comes from an example script provided by Caltrans
+
+
+# once https://github.com/samuelcolvin/pydantic/pull/2745 is merged, we don't need this
+class ListOfStrings(BaseModel):
+    __root__: List[str]
+
+
+# this is DDP-6
+class MetadataRow(BaseModel):
+    dataset_name: str
+    tags: ListOfStrings
+    description: str
+    methodology: str
+    topic: Literal["Transportation"]
+    publisher_organization: Literal["Caltrans"]
+    place: Literal["CA"]
+    frequency: str
+    next_update: pendulum.Date
+    creation_date: pendulum.Date
+    last_update: None
+    status: Literal["Complete"]
+    temporal_coverage_begin: None
+    temporal_coverage_end: None
+    data_dictionary: str
+    data_dictionary_type: Literal["csv"]
+    contact_organization: Literal["Caltrans"]
+    contact_position: Literal["Cal-ITP"]
+    contact_name: Literal["Hunter Owens"]
+    contact_email: Literal["hunter.owens@dot.ca.gov"]
+    public_access_level: Literal["Public"]
+    access_constraints: None
+    use_constraints: Literal["Creative Commons 4.0 Attribution"]
+    data_life_span: None
+    caltrans_link: None
+    data_standard: Literal["https://developers.google.com/transit/gtfs"]
+    notes: None
+    gis_theme: None
+    gis_horiz_accuracy: Optional[Literal["4m"]]
+    gis_vert_accuracy: Optional[Literal["4m"]]
+    gis_coordinate_system_epsg: Optional[str]
+    gis_vert_datum_epsg: None
+
+    class Config:
+        json_encoders = {
+            ListOfStrings: lambda los: ",".join(los.__root__),
+        }
+
+
+class YesOrNo(str, enum.Enum):
+    y = "Y"
+    n = "N"
+
+
+# This is DDP-8
+class DictionaryRow(BaseModel):
+    system_name: str
+    table_name: str
+    field_name: str
+    field_alias: None
+    field_description: str
+    field_description_authority: Optional[str]
+    confidential: Literal["N"]
+    sensitive: Literal["N"]
+    pii: Literal["N"]
+    pci: Literal["N"]
+    field_type: str
+    field_length: int
+    field_precision: Optional[int]
+    units: None
+    domain_type: Literal["Unrepresented"]
+    allowable_min_value: None
+    allowable_max_value: None
+    usage_notes: None
+
+    # constr has to_upper in newer pydantic versions
+    @validator("field_type", allow_reuse=True)
+    def field_type_uppercase(cls, v):
+        return v.upper()
 
 
 def make_linestring(x):
@@ -67,9 +151,6 @@ def make_linestring(x):
     if len(pts) > 1:
         return shapely.geometry.LineString(pts)
     return pts[0]
-
-
-CHUNK_SIZE = 64 * 1024 * 1024
 
 
 def upload_to_ckan(
@@ -159,19 +240,150 @@ def upload_to_ckan(
         typer.secho(f"patched resource {resource_id}", fg=typer.colors.MAGENTA)
 
 
-def _publish_exposure(bucket: str, exposure: Exposure, dry_run: bool, publish: bool):
+def _generate_exposure_documentation(
+    exposure: Exposure,
+) -> Tuple[List[MetadataRow], List[DictionaryRow]]:
+    try:
+        resources = next(
+            dest
+            for dest in exposure.meta.destinations
+            if isinstance(dest, CkanDestination)
+        ).resources
+    except StopIteration:
+        raise ValueError(
+            "cannot generate documentation for exposure without CKAN destination"
+        )
+
+    metadata_rows: List[MetadataRow] = []
+    dictionary_rows: List[DictionaryRow] = []
+
+    for node in exposure.depends_on.resolved_nodes:
+        name = node.name
+        description = node.description.replace("\n", " ")
+
+        if name in resources and resources[name].description:
+            description = resources[name].description
+
+        metadata_rows.append(
+            json.loads(
+                MetadataRow(
+                    dataset_name=name,
+                    tags=[
+                        "transit",
+                        "gtfs",
+                        "gtfs-schedule",
+                        "bus",
+                        "rail",
+                        "ferry",
+                        "mobility",
+                    ],
+                    description=description,
+                    methodology=exposure.meta.methodology,
+                    topic="Transportation",
+                    publisher_organization="Caltrans",
+                    place="CA",
+                    frequency="Monthly",
+                    next_update=pendulum.today() + timedelta(days=30),
+                    creation_date=pendulum.today(),
+                    last_update=None,
+                    status="Complete",
+                    temporal_coverage_begin=None,
+                    temporal_coverage_end=None,
+                    data_dictionary="",
+                    data_dictionary_type="csv",
+                    contact_organization="Caltrans",
+                    contact_position="Cal-ITP",
+                    contact_name="Hunter Owens",
+                    contact_email="hunter.owens@dot.ca.gov",
+                    public_access_level="Public",
+                    access_constraints=None,
+                    use_constraints="Creative Commons 4.0 Attribution",
+                    data_life_span=None,
+                    caltrans_link=None,
+                    data_standard="https://developers.google.com/transit/gtfs",
+                    notes=None,
+                    gis_theme=None,
+                    gis_horiz_accuracy="4m",
+                    gis_vert_accuracy="4m",
+                    gis_coordinate_system_epsg=exposure.meta.coordinate_system_espg,
+                    gis_vert_datum_epsg=None,
+                ).json(models_as_dict=False)
+            )
+        )
+
+        for name, column in node.columns.items():
+            if not column.meta.get("publish.ignore", False):
+                dictionary_rows.append(
+                    json.loads(
+                        DictionaryRow(
+                            system_name="Cal-ITP GTFS-Ingest Pipeline",
+                            table_name=node.name,
+                            field_name=column.name,
+                            field_alias=None,
+                            field_description=column.description,
+                            field_description_authority="",
+                            confidential="N",
+                            sensitive="N",
+                            pii="N",
+                            pci="N",
+                            field_type=column.meta.get("ckan.type", "STRING"),
+                            field_length=column.meta.get("ckan.length", 1024),
+                            field_precision=column.meta.get("ckan.precision"),
+                            units=None,
+                            domain_type="Unrepresented",
+                            allowable_min_value=None,
+                            allowable_max_value=None,
+                            usage_notes=None,
+                        ).json()
+                    )
+                )
+    return metadata_rows, dictionary_rows
+
+
+def _publish_exposure(
+    bucket: str, exposure: Exposure, publish: bool, model: str = None
+):
+    ts = pendulum.now()
     for destination in exposure.meta.destinations:
         with tempfile.TemporaryDirectory() as tmpdir:
             if isinstance(destination, CkanDestination):
-                if len(exposure.depends_on.nodes) != len(destination.ids):
+                if len(exposure.depends_on.nodes) != len(destination.resources):
                     typer.secho(
-                        f"WARNING: mismatch between {len(exposure.depends_on.nodes)} depends_on nodes and {len(destination.ids)} destination ids",
+                        f"WARNING: mismatch between {len(exposure.depends_on.nodes)} depends_on nodes and {len(destination.resources)} destination ids",
                         fg=typer.colors.YELLOW,
                     )
 
+                metadata, dictionary = _generate_exposure_documentation(exposure)
+
+                fs = gcsfs.GCSFileSystem()
+
+                for rows, file, cls in (
+                    (metadata, "metadata", MetadataRow),
+                    (dictionary, "dictionary", DictionaryRow),
+                ):
+                    hive_path = destination.hive_path(exposure, file, bucket, dt=ts)
+                    typer.secho(
+                        f"writing {len(rows)} rows to {hive_path}",
+                        fg=typer.colors.GREEN,
+                    )
+                    with fs.open(hive_path, "w", newline="") as f:
+                        writer = csv.DictWriter(f, fieldnames=cls.__fields__.keys())
+                        writer.writeheader()
+                        for row in rows:
+                            writer.writerow(row)
+
                 # TODO: this should probably be driven by the depends_on nodes
-                for model_name, resource_id in destination.ids.items():
-                    typer.secho(f"handling {model_name} {resource_id}")
+                for model_name, resource in destination.resources.items():
+                    if model and model != model_name:
+                        typer.secho(
+                            f"skipping {model_name} {resource.id}",
+                            fg=typer.colors.YELLOW,
+                        )
+                        continue
+
+                    typer.secho(
+                        f"handling {model_name} {resource.id}", fg=typer.colors.MAGENTA
+                    )
                     node = BaseNode._instances[f"model.calitp_warehouse.{model_name}"]
 
                     fpath = os.path.join(tmpdir, destination.filename(model_name))
@@ -182,61 +394,51 @@ def _publish_exposure(bucket: str, exposure: Exposure, dry_run: bool, publish: b
                         progress_bar_type="tqdm",
                     )
 
-                    if model_name == "stops":
-                        df = df.round(
-                            {
-                                "stop_lat": 5,
-                                "stop_lon": 5,
-                            }
-                        )
-                    elif model_name == "shapes":
-                        df = df.round(
-                            {
-                                "shape_pt_lat": 5,
-                                "shape_pt_lon": 5,
-                            }
-                        )
+                    precisions = {
+                        name: int(column.meta.get("ckan.precision"))
+                        for name, column in node.columns.items()
+                        if column.meta.get("ckan.precision")
+                    }
 
-                    typer.secho(
-                        f"saving intermediate file to {fpath}", fg=typer.colors.GREEN
-                    )
-                    df.to_csv(fpath, index=False)
-                    typer.secho(
-                        f"selected {len(df)} rows ({humanize.naturalsize(os.stat(fpath).st_size)}) from {node.schema_table}"
-                    )
-
-                    hive_path = destination.hive_path(exposure, model_name, bucket)
-
-                    write_msg = f"writing {model_name} to {hive_path}"
-                    upload_msg = f"uploading to {destination.url} {resource_id}"
-                    if dry_run:
+                    if precisions:
                         typer.secho(
-                            f"would be {write_msg} and {upload_msg}",
-                            fg=typer.colors.MAGENTA,
+                            f"rounding {model_name} columns {','.join(precisions.keys())}",
+                            fg=typer.colors.CYAN,
                         )
-                    else:
-                        typer.secho(write_msg, fg=typer.colors.GREEN)
-                        fs = gcsfs.GCSFileSystem(token="google_default")
-                        fs.put(fpath, hive_path)
-                        fname = destination.filename(model_name)
-                        fsize = os.path.getsize(fpath)
+                        df = df.round(precisions)
 
-                        if publish:
-                            typer.secho(upload_msg, fg=typer.colors.GREEN)
-                            with open(fpath, "rb") as fp:
-                                upload_to_ckan(
-                                    url=destination.url,
-                                    fname=fname,
-                                    fsize=fsize,
-                                    file=fp,
-                                    resource_id=resource_id,
-                                    api_key=API_KEY,
-                                )
-                        else:
-                            typer.secho(
-                                f"would be {upload_msg} if --publish",
-                                fg=typer.colors.MAGENTA,
+                    df.to_csv(fpath, index=False)
+
+                    hive_path = destination.hive_path(
+                        exposure, model_name, bucket, dt=ts
+                    )
+                    typer.secho(
+                        f"writing {len(df)} rows ({humanize.naturalsize(os.stat(fpath).st_size)}) from {node.schema_table} to {hive_path}",
+                        fg=typer.colors.GREEN,
+                    )
+                    fs.put(fpath, hive_path)
+
+                    fname = destination.filename(model_name)
+                    fsize = os.path.getsize(fpath)
+
+                    publish_msg = f"uploading to {destination.url} {resource.id}"
+
+                    if publish:
+                        typer.secho(publish_msg, fg=typer.colors.GREEN)
+                        with open(fpath, "rb") as fp:
+                            upload_to_ckan(
+                                url=destination.url,
+                                fname=fname,
+                                fsize=fsize,
+                                file=fp,
+                                resource_id=resource.id,
+                                api_key=API_KEY,
                             )
+                    else:
+                        typer.secho(
+                            f"would be {publish_msg} if --publish",
+                            fg=typer.colors.YELLOW,
+                        )
 
             elif isinstance(destination, TilesDestination):
                 layer_geojson_paths: Dict[str, Path] = {}
@@ -268,18 +470,12 @@ def _publish_exposure(bucket: str, exposure: Exposure, dry_run: bool, publish: b
                     layer_geojson_paths[node.name.title()] = geojsonl_fpath
                     hive_path = destination.hive_path(exposure, node.name, bucket)
 
-                    if dry_run:
-                        typer.secho(
-                            f"would be writing {geojsonl_fpath} to {hive_path}",
-                            fg=typer.colors.MAGENTA,
-                        )
-                    else:
-                        fs = gcsfs.GCSFileSystem(token="google_default")
-                        typer.secho(
-                            f"writing {geojsonl_fpath} to {hive_path}",
-                            fg=typer.colors.GREEN,
-                        )
-                        fs.put(geojsonl_fpath, hive_path)
+                    typer.secho(
+                        f"writing {geojsonl_fpath} to {hive_path}",
+                        fg=typer.colors.GREEN,
+                    )
+                    fs = gcsfs.GCSFileSystem(token="google_default")
+                    fs.put(geojsonl_fpath, hive_path)
 
                 if destination.tile_format == TileFormat.mbtiles:
                     mbtiles_path = os.path.join(tmpdir, "tiles.mbtiles")
@@ -299,234 +495,89 @@ def _publish_exposure(bucket: str, exposure: Exposure, dry_run: bool, publish: b
                     tiles_hive_path = destination.tiles_hive_path(
                         exposure, node.name, bucket
                     )
-                    if dry_run:
-                        typer.secho(
-                            f"would be writing {mbtiles_path} to {tiles_hive_path}",
-                            fg=typer.colors.MAGENTA,
-                        )
-                    else:
-                        fs = gcsfs.GCSFileSystem(token="google_default")
-                        typer.secho(
-                            f"writing {mbtiles_path} to {tiles_hive_path}",
-                            fg=typer.colors.GREEN,
-                        )
-                        fs.put(mbtiles_path, tiles_hive_path)
+
+                    typer.secho(
+                        f"writing {mbtiles_path} to {tiles_hive_path}",
+                        fg=typer.colors.GREEN,
+                    )
+                    fs = gcsfs.GCSFileSystem(token="google_default")
+                    fs.put(mbtiles_path, tiles_hive_path)
                 else:
                     # -e for this when time
                     raise NotImplementedError
 
 
-# once https://github.com/samuelcolvin/pydantic/pull/2745 is merged, we don't need this
-class ListOfStrings(BaseModel):
-    __root__: List[str]
+def read_manifest(path: str) -> Manifest:
+    typer.secho(f"reading manifest from {path}", fg=typer.colors.MAGENTA)
+    opener = gcsfs.GCSFileSystem().open if path.startswith("gs://") else open
 
-
-# this is DDP-6
-class MetadataRow(BaseModel):
-    dataset_name: str
-    tags: ListOfStrings
-    description: str
-    methodology: str
-    topic: Literal["Transportation"]
-    publisher_organization: Literal["Caltrans"]
-    place: Literal["CA"]
-    frequency: str
-    next_update: pendulum.Date
-    creation_date: pendulum.Date
-    last_update: None
-    status: Literal["Complete"]
-    temporal_coverage_begin: None
-    temporal_coverage_end: None
-    data_dictionary: str
-    data_dictionary_type: Literal["csv"]
-    contact_organization: Literal["Caltrans"]
-    contact_position: Literal["Cal-ITP"]
-    contact_name: Literal["Hunter Owens"]
-    contact_email: Literal["hunter.owens@dot.ca.gov"]
-    public_access_level: Literal["Public"]
-    access_constraints: None
-    use_constraints: Literal["Creative Commons 4.0 Attribution"]
-    data_life_span: None
-    caltrans_link: None
-    data_standard: Literal["https://developers.google.com/transit/gtfs"]
-    notes: None
-    gis_theme: None
-    gis_horiz_accuracy: Optional[Literal["4m"]]
-    gis_vert_accuracy: Optional[Literal["4m"]]
-    gis_coordinate_system_epsg: Optional[str]
-    gis_vert_datum_epsg: None
-
-    class Config:
-        json_encoders = {
-            ListOfStrings: lambda los: ",".join(los.__root__),
-        }
-
-
-class YesOrNo(str, enum.Enum):
-    y = "Y"
-    n = "N"
-
-
-# This is DDP-8
-class DictionaryRow(BaseModel):
-    system_name: str
-    table_name: str
-    field_name: str
-    field_alias: None
-    field_description: str
-    field_description_authority: Optional[str]
-    confidential: Literal["N"]
-    sensitive: Literal["N"]
-    pii: Literal["N"]
-    pci: Literal["N"]
-    field_type: str
-    field_length: int
-    field_precision: None
-    units: None
-    domain_type: Literal["Unrepresented"]
-    allowable_min_value: None
-    allowable_max_value: None
-    usage_notes: None
+    with opener(path) as f:
+        return Manifest(**json.load(f))
 
 
 @app.command()
-def generate_exposure_documentation(
+def document_exposure(
     exposure: str,
-    metadata_output: Path = "./metadata.csv",
-    dictionary_output: Path = "./dictionary.csv",
+    manifest: str = MANIFEST_DEFAULT,
+    metadata_output: str = "./metadata.csv",
+    dictionary_output: str = "./dictionary.csv",
 ) -> None:
-    with open("./target/manifest.json") as f:
-        manifest = Manifest(**json.load(f))
+    assert metadata_output.startswith("gs://") == dictionary_output.startswith(
+        "gs://"
+    ), "both outputs must be local or remote"
 
-    exposure = manifest.exposures[f"exposure.calitp_warehouse.{exposure}"]
+    manifest = read_manifest(manifest)
+    metadata_rows, dictionary_rows = _generate_exposure_documentation(
+        manifest.exposures[f"exposure.calitp_warehouse.{exposure}"]
+    )
 
     typer.secho(
         f"writing out {metadata_output} and {dictionary_output}",
         fg=typer.colors.MAGENTA,
     )
 
-    with open(metadata_output, "w", newline="") as mf, open(
-        dictionary_output, "w", newline=""
-    ) as df:
-        writer = csv.DictWriter(mf, fieldnames=MetadataRow.__fields__.keys())
-        writer.writeheader()
+    opener = gcsfs.GCSFileSystem().open if metadata_output.startswith("gs://") else open
 
-        dictionary_writer = csv.DictWriter(
-            df, fieldnames=DictionaryRow.__fields__.keys()
-        )
-        dictionary_writer.writeheader()
-
-        for node in exposure.depends_on.resolved_nodes:
-            writer.writerow(
-                json.loads(
-                    MetadataRow(
-                        dataset_name=node.name,
-                        tags=[
-                            "transit",
-                            "gtfs",
-                            "gtfs-schedule",
-                            "bus",
-                            "rail",
-                            "ferry",
-                            "mobility",
-                        ],
-                        description=node.description.replace("\n", " "),
-                        methodology=exposure.meta.methodology,
-                        topic="Transportation",
-                        publisher_organization="Caltrans",
-                        place="CA",
-                        frequency="Monthly",
-                        next_update=pendulum.today() + timedelta(days=30),
-                        creation_date=pendulum.today(),
-                        last_update=None,
-                        status="Complete",
-                        temporal_coverage_begin=None,
-                        temporal_coverage_end=None,
-                        data_dictionary="",
-                        data_dictionary_type="csv",
-                        contact_organization="Caltrans",
-                        contact_position="Cal-ITP",
-                        contact_name="Hunter Owens",
-                        contact_email="hunter.owens@dot.ca.gov",
-                        public_access_level="Public",
-                        access_constraints=None,
-                        use_constraints="Creative Commons 4.0 Attribution",
-                        data_life_span=None,
-                        caltrans_link=None,
-                        data_standard="https://developers.google.com/transit/gtfs",
-                        notes=None,
-                        gis_theme=None,
-                        gis_horiz_accuracy="4m",
-                        gis_vert_accuracy="4m",
-                        gis_coordinate_system_epsg=exposure.meta.coordinate_system_espg,
-                        gis_vert_datum_epsg=None,
-                    ).json(models_as_dict=False)
-                )
-            )
-
-            for name, column in node.columns.items():
-                if not column.meta.get("publish.ignore", False):
-                    dictionary_writer.writerow(
-                        json.loads(
-                            DictionaryRow(
-                                system_name="Cal-ITP GTFS-Ingest Pipeline",
-                                table_name=node.name,
-                                field_name=column.name,
-                                field_alias=None,
-                                field_description=column.description,
-                                field_description_authority="",
-                                confidential="N",
-                                sensitive="N",
-                                pii="N",
-                                pci="N",
-                                field_type=column.meta.get("publish.type", "STRING"),
-                                field_length=column.meta.get("publish.length", 1024),
-                                field_precision=None,
-                                units=None,
-                                domain_type="Unrepresented",
-                                allowable_min_value=None,
-                                allowable_max_value=None,
-                                usage_notes=None,
-                            ).json()
-                        )
-                    )
+    for rows, file, cls in (
+        (metadata_rows, metadata_output, MetadataRow),
+        (dictionary_rows, dictionary_output, DictionaryRow),
+    ):
+        with opener(file, "w", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=cls.__fields__.keys())
+            writer.writeheader()
+            for row in rows:
+                writer.writerow(row)
 
 
 @app.command()
 def publish_exposure(
     exposure: str,
     bucket: str = typer.Option(
-        "gs://test-calitp-publish", help="The bucket in which artifacts are persisted."
+        PUBLISH_BUCKET,
+        help="The bucket in which artifacts are persisted. Defaults to the value of $CALITP_BUCKET__PUBLISH.",
     ),
-    manifest: str = "./target/manifest.json",
-    dry_run: bool = typer.Option(False, help="If True, skips writing out any data."),
+    manifest: str = MANIFEST_DEFAULT,
     publish: bool = typer.Option(
-        False, help="If True, actually publish to external systems."
+        False,
+        help="If True, actually publish to external systems.",
     ),
+    model: str = None,
 ) -> None:
     """
     Only publish one exposure, by name.
     """
     if publish:
-        assert not dry_run, "cannot publish during a dry run!"
         assert not bucket.startswith("gs://test-"), "cannot publish with a test bucket!"
 
-    if manifest.startswith("gs://"):
-        typer.secho(f"fetching manifest from {manifest}", fg=typer.colors.GREEN)
-        fs = gcsfs.GCSFileSystem()
-        with fs.open(manifest) as f:
-            actual_manifest = Manifest(**json.load(f))
-    else:
-        with open(manifest) as f:
-            actual_manifest = Manifest(**json.load(f))
+    actual_manifest = read_manifest(manifest)
 
     exposure = actual_manifest.exposures[f"exposure.calitp_warehouse.{exposure}"]
 
     _publish_exposure(
         bucket=bucket,
         exposure=exposure,
-        dry_run=dry_run,
         publish=publish,
+        model=model,
     )
 
 
