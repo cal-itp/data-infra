@@ -10,7 +10,8 @@ ENV PATH="/root/.local/bin:${PATH}"
 
 ENV GTFS_SCHEDULE_VALIDATOR_JAR=/gtfs-validator-3.1.1-cli.jar
 ENV GTFS_SCHEDULE_VALIDATOR_VERSION=v3.1.1
-RUN curl https://github.com/MobilityData/gtfs-validator/releases/download/v3.1.1/gtfs-validator-3.1.1-cli.jar > ${GTFS_SCHEDULE_VALIDATOR_JAR}
+# from https://github.com/MobilityData/gtfs-validator/releases/download/v3.1.1/gtfs-validator-3.1.1-cli.jar
+COPY ./gtfs-validator-3.1.1-cli.jar ${GTFS_SCHEDULE_VALIDATOR_JAR}
 
 WORKDIR /app
 

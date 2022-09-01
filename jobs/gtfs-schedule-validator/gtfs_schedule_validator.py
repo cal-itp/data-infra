@@ -98,11 +98,9 @@ class ScheduleValidationJobResult(PartitionedGCSArtifact):
 
 
 def execute_schedule_validator(
-    fs,
     zip_path: Path,
     output_dir: Path,
     jar_path: Path = os.environ.get(SCHEDULE_VALIDATOR_JAR_LOCATION_ENV_KEY),
-    verbose=False,
 ) -> (Dict, Dict):
     if not isinstance(zip_path, Path):
         raise TypeError("must provide a path to the zip file")
@@ -126,7 +124,8 @@ def execute_schedule_validator(
     subprocess.run(
         args,
         capture_output=True,
-    ).check_returncode()
+        check=True,
+    )
 
     with open(report_path) as f:
         report = json.load(f)
@@ -161,6 +160,7 @@ def validate_day(
         help="The date of data to validate.",
         formats=["%Y-%m-%d"],
     ),
+    verbose: bool = False,
 ) -> None:
     day = pendulum.instance(day).date()
 
@@ -172,7 +172,7 @@ def validate_day(
         partitions={
             "dt": day,
         },
-        verbose=True,
+        verbose=verbose,
     )
 
     if not extracts:
@@ -200,7 +200,6 @@ def validate_day(
                 )
                 fs.get_file(extract.path, zip_path)
                 report, system_errors = execute_schedule_validator(
-                    fs=fs,
                     zip_path=Path(zip_path),
                     output_dir=tmp_dir,
                 )
@@ -245,6 +244,11 @@ def validate_day(
                 f"encountered exception on extract {extract.path}: {e}\n{traceback.format_exc()}",
                 fg=typer.colors.RED,
             )
+            if verbose and isinstance(e, subprocess.CalledProcessError):
+                typer.secho(
+                    e.stderr,
+                    fg=typer.colors.RED,
+                )
             outcomes.append(
                 GTFSScheduleFeedExtractValidationOutcome(
                     success=False,
