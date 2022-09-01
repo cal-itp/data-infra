@@ -310,12 +310,11 @@ def download_gtfs_schedule_zip(
     pbar=None,
 ) -> str:
     # fetch and zip gtfs schedule
-    actual_dst_path = "/".join([dst_path, schedule_extract.filename])
     log(
-        f"Fetching gtfs schedule data from {schedule_extract.path} to {actual_dst_path}",
+        f"Fetching gtfs schedule data from {schedule_extract.path} to {dst_path}",
         pbar=pbar,
     )
-    get_with_retry(fs, schedule_extract.path, actual_dst_path, recursive=True)
+    get_with_retry(fs, schedule_extract.path, dst_path, recursive=True)
 
     # https://github.com/MobilityData/gtfs-realtime-validator/issues/92
     # try:
@@ -323,7 +322,7 @@ def download_gtfs_schedule_zip(
     # except FileNotFoundError:
     #     pass
 
-    return actual_dst_path
+    return "/".join([dst_path, schedule_extract.filename])
 
 
 def execute_rt_validator(
@@ -347,7 +346,8 @@ def execute_rt_validator(
     subprocess.run(
         args,
         capture_output=True,
-    ).check_returncode()
+        check=True,
+    )
 
 
 def validate_and_upload(
@@ -589,6 +589,12 @@ def parse_and_validate(
                     fg=typer.colors.RED,
                     pbar=pbar,
                 )
+                if isinstance(e, subprocess.CalledProcessError):
+                    log(
+                        e.stderr,
+                        fg=typer.colors.YELLOW,
+                        pbar=pbar,
+                    )
 
             return [
                 RTFileProcessingOutcome(
@@ -625,6 +631,7 @@ def main(
     threads: int = 4,
     jar_path: Path = JAR_DEFAULT,
     verbose: bool = False,
+    url: str = None,
 ):
     pendulum_hour = pendulum.instance(hour, tz="Etc/UTC")
     files: List[GTFSRTFeedExtract] = fetch_all_in_partition(
@@ -662,6 +669,14 @@ def main(
         f"found {len(files)} {feed_type} files in {len(aggregations_to_process)} aggregations to process",
         fg=typer.colors.MAGENTA,
     )
+
+    if url:
+        typer.secho(
+            f"url filter applied, only processing {url}", fg=typer.colors.YELLOW
+        )
+        aggregations_to_process = [
+            agg for agg in aggregations_to_process if agg.base64_url == url
+        ]
 
     if limit:
         typer.secho(f"limit of {limit} feeds was set", fg=typer.colors.YELLOW)
