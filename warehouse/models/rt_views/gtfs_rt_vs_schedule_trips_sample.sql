@@ -4,7 +4,7 @@ vp_trips AS (
     SELECT DISTINCT
         calitp_itp_id,
         calitp_url_number,
-        date,
+        date AS service_date,
         trip_id AS vp_trip_id
     -- trip_route_id
     -- note: to change when we want to include more operators. trip_route_id and trip_id are optional
@@ -44,7 +44,7 @@ rt_sched_joined AS (
             T1.trip_id = T2.vp_trip_id
             AND T1.calitp_itp_id = T2.calitp_itp_id
             AND T1.calitp_url_number = T2.calitp_url_number
-            AND T1.service_date = T2.date
+            AND T1.service_date = T2.service_date
     GROUP BY 1, 2, 3, 4
 ),
 
