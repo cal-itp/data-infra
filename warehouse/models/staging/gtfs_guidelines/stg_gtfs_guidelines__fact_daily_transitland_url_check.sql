@@ -1,3 +1,5 @@
+{{ config(materialized='table') }}
+
 WITH gtfs_fact_daily_transitland_url_check AS (
     SELECT
 
