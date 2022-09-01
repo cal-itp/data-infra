@@ -11,8 +11,8 @@ RUN apt-get update -y \
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python3 -
 ENV PATH="/root/.local/bin:${PATH}"
 
-# formerly the "1.0.0-SNAPSHOT" from S3
-COPY ./rt-validator-v1.0.0_cli.jar ${GTFS_RT_VALIDATOR_JAR}
+# from https://github.com/MobilityData/gtfs-realtime-validator/packages/1268973
+COPY ./gtfs-realtime-validator-lib-1.0.0-20220223.003525-2.jar ${GTFS_RT_VALIDATOR_JAR}
 
 WORKDIR /app
 
