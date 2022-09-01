@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: stg_feed_aggregator_checks__gtfs_fact_daily_transitland_url_check
+    description: '{{ doc("transitland_url_check_table") }}'
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - dt
+            - url_type
+            - itp_id
+            - url_number
+    columns:
+      - name: dt
+      - name: url
+      - name: url_type
+      - name: itp_id
+      - name: url_number
+      - name: transitland.status
+      - name: transitland.public_web_url
