@@ -2,4 +2,3 @@ operator: operators.GtfsGcsToJsonlOperator
 
 
 input_table: areas.txt
-gtfs_filename: areas

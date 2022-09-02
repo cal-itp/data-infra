@@ -2,4 +2,3 @@ operator: operators.GtfsGcsToJsonlOperator
 
 
 input_table: translations.txt
-gtfs_filename: translations

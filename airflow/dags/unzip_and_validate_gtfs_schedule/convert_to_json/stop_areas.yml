@@ -2,4 +2,3 @@ operator: operators.GtfsGcsToJsonlOperator
 
 
 input_table: stop_areas.txt
-gtfs_filename: stop_areas

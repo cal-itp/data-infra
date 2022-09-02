@@ -1,4 +1,3 @@
 operator: operators.GtfsGcsToJsonlOperator
 
 input_table: agency.txt
-gtfs_filename: agency

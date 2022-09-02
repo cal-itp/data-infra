@@ -2,4 +2,3 @@ operator: operators.GtfsGcsToJsonlOperator
 
 
 input_table: pathways.txt
-gtfs_filename: pathways

@@ -2,4 +2,3 @@ operator: operators.GtfsGcsToJsonlOperator
 
 
 input_table: frequencies.txt
-gtfs_filename: frequencies

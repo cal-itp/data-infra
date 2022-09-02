@@ -18,6 +18,7 @@ from utils import GTFSScheduleFeedFile
 
 SCHEDULE_PARSED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_PARSED"]
 SCHEDULE_UNZIPPED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED"]
+GTFS_PARSE_ERROR_THRESHOLD = 0.95
 
 
 class GTFSScheduleFeedJSONL(PartitionedGCSArtifact):
@@ -141,11 +142,19 @@ def parse_files(day: pendulum.datetime, input_table: str, gtfs_filename: str):
         result.outcomes
     ), f"ended up with {len(outcomes)} outcomes from {len(files)} files"
 
+    success_rate = len(result.successes) / len(files)
+    if success_rate < GTFS_PARSE_ERROR_THRESHOLD:
+        raise RuntimeError(
+            f"Success rate: {success_rate:.3f} was below error threshold: {GTFS_PARSE_ERROR_THRESHOLD}"
+        )
+
 
 class GtfsGcsToJsonlOperator(BaseOperator):
-    def __init__(self, input_table, gtfs_filename, *args, **kwargs):
+    def __init__(self, input_table, gtfs_filename=None, *args, **kwargs):
         self.input_table = input_table
-        self.gtfs_filename = gtfs_filename
+        self.gtfs_filename = (
+            gtfs_filename if gtfs_filename else input_table.replace(".txt", "")
+        )
 
         super().__init__(*args, **kwargs)
 

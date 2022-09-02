@@ -2,4 +2,3 @@ operator: operators.GtfsGcsToJsonlOperator
 
 
 input_table: feed_info.txt
-gtfs_filename: feed_info
