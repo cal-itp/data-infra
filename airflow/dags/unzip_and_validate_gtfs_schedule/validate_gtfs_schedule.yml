@@ -11,6 +11,7 @@ arguments:
   - "gtfs_schedule_validator"
   - "validate-day"
   - "{{ ds }}"
+  - "--verbose"
 
 is_delete_operator_pod: true
 get_logs: true
