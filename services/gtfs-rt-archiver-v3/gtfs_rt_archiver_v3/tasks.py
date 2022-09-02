@@ -1,4 +1,5 @@
 import os
+import traceback
 from datetime import datetime
 from typing import Dict, Any
 
@@ -97,19 +98,25 @@ def fetch(tick: datetime, record: AirtableGTFSDataRecord):
                 "unexpected HTTP response code from feed request",
                 code=e.response.status_code,
                 content=e.response.text,
+                exc=str(e),
                 exc_type=type(e).__name__,
+                traceback=traceback.format_exc(),
             )
             raise
         except RequestException as e:
             logger.error(
                 "request exception occurred from feed request",
+                exc=str(e),
                 exc_type=type(e).__name__,
+                traceback=traceback.format_exc(),
             )
             raise
         except Exception as e:
             logger.error(
                 "other non-request exception occurred during download_feed",
+                exc=str(e),
                 exc_type=type(e).__name__,
+                traceback=traceback.format_exc(),
             )
             raise
 
