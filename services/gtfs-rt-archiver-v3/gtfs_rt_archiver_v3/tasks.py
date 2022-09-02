@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+from typing import Dict, Any
 
 import humanize
 import orjson
@@ -52,14 +53,20 @@ structlog.configure(processors=[structlog.processors.JSONRenderer()])
 base_logger = structlog.get_logger()
 
 
+def record_labels(record: AirtableGTFSDataRecord) -> Dict[str, Any]:
+    return dict(
+        record_name=record.name,
+        record_pipeline_url=record.pipeline_url,
+        record_feed_type=record.data,
+    )
+
+
 @huey.signal()
 def instrument_signals(signal, task, exc=None):
     TASK_SIGNALS.labels(
-        record_name=task.kwargs["record"].name,
-        record_uri=task.kwargs["record"].uri,
-        record_feed_type=task.kwargs["record"].data,
         signal=signal,
         exc_type=type(exc).__name__ if exc else "",
+        **record_labels(task.kwargs["record"]),
     ).inc()
 
 
@@ -74,11 +81,7 @@ def load_auth_dict():
 
 @huey.task(expires=5)
 def fetch(tick: datetime, record: AirtableGTFSDataRecord):
-    labels = dict(
-        record_name=record.name,
-        record_pipeline_urli=record.pipeline_url,
-        record_feed_type=record.data,
-    )
+    labels = record_labels(record)
     logger = base_logger.bind(
         tick=tick.isoformat(),
         **labels,

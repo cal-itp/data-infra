@@ -2,7 +2,7 @@ from prometheus_client import Counter, Gauge, Histogram
 
 standard_labels = (
     "record_name",
-    "record_uri",
+    "record_pipeline_url",
     "record_feed_type",
 )
 AIRTABLE_CONFIGURATION_AGE = Gauge(
