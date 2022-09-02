@@ -8,7 +8,6 @@ import orjson
 import pendulum
 import structlog
 import typer
-from calitp.auth import DEFAULT_AUTH_KEYS
 from calitp.storage import AirtableGTFSDataRecord, download_feed
 from google.cloud import storage
 from huey import RedisExpireHuey
@@ -71,15 +70,6 @@ def instrument_signals(signal, task, exc=None):
     ).inc()
 
 
-auth_dict = None
-
-
-@huey.on_startup()
-def load_auth_dict():
-    global auth_dict
-    auth_dict = {key: os.environ[key] for key in DEFAULT_AUTH_KEYS}
-
-
 @huey.task(expires=5)
 def fetch(tick: datetime, record: AirtableGTFSDataRecord):
     labels = record_labels(record)
@@ -92,7 +82,7 @@ def fetch(tick: datetime, record: AirtableGTFSDataRecord):
 
     with FETCH_PROCESSING_TIME.labels(**labels).time():
         try:
-            extract, content = download_feed(record, auth_dict=auth_dict, ts=tick)
+            extract, content = download_feed(record, auth_dict=os.environ, ts=tick)
         except HTTPError as e:
             logger.error(
                 "unexpected HTTP response code from feed request",
