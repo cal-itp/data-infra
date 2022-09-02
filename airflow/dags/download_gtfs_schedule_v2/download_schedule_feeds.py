@@ -4,16 +4,15 @@
 # ---
 import datetime
 import logging
-import re
+import os
 import traceback
 from typing import List, Optional, ClassVar
 
 import humanize
 import pandas as pd
 import pendulum
-from airflow.models import Variable
-from airflow.utils.db import create_session
 from airflow.utils.email import send_email
+from calitp.auth import load_secrets
 from calitp.config import is_development
 from calitp.storage import (
     get_fs,
@@ -75,9 +74,8 @@ class DownloadFeedsResult(PartitionedGCSArtifact):
 
 def download_all(task_instance, execution_date, **kwargs):
     start = pendulum.now()
-    # https://stackoverflow.com/a/61808755
-    with create_session() as session:
-        auth_dict = {var.key: var.val for var in session.query(Variable)}
+
+    load_secrets()
 
     records = [
         record
@@ -92,18 +90,9 @@ def download_all(task_instance, execution_date, **kwargs):
         logging.info(f"attempting to fetch {i}/{len(records)} {record.uri}")
 
         try:
-            # this is a bit hacky but we need this until we split off auth query params from the URI itself
-            jinja_pattern = r"(?P<param_name>\w+)={{\s*(?P<param_lookup_key>\w+)\s*}}"
-            match = re.search(jinja_pattern, record.uri)
-            if match:
-                record.auth_query_param = {
-                    match.group("param_name"): match.group("param_lookup_key")
-                }
-                record.uri = re.sub(jinja_pattern, "", record.uri)
-
             extract, content = download_feed(
                 record,
-                auth_dict=auth_dict,
+                auth_dict=os.environ,
                 ts=start,
             )
 

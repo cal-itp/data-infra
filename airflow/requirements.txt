@@ -1,4 +1,4 @@
-calitp==2022.8.25
+calitp==2022.9.1a2
 fsspec==2022.5.0
 intake==0.6.1
 ipdb==0.13.4
