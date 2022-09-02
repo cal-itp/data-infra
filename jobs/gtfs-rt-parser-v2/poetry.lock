@@ -99,7 +99,7 @@ python-versions = "~=3.5"
 
 [[package]]
 name = "calitp"
-version = "2022.8.19a0"
+version = "2022.9.1a3"
 description = "Shared code for the Cal-ITP data codebases"
 category = "main"
 optional = false
@@ -111,6 +111,7 @@ gcsfs = ">=2022.5.0,<2022.7.1 || >2022.7.1,<2023.0.0"
 google-api-core = ">=1.32.0,<2.0.0dev"
 google-cloud-bigquery = ">=1.15.0,<3.0.0dev"
 google-cloud-bigquery-storage = "2.14.1"
+google-cloud-secret-manager = ">=2.12.4,<3.0.0"
 gtfs-realtime-bindings = ">=0.0.7,<0.0.8"
 humanize = ">=4.2.3,<5.0.0"
 Jinja2 = "<3.1.0"
@@ -391,6 +392,23 @@ google-auth = ">=1.25.0,<3.0dev"
 grpc = ["grpcio (>=1.38.0,<2.0dev)"]
 
 [[package]]
+name = "google-cloud-secret-manager"
+version = "2.12.4"
+description = "Secret Manager API API client library"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+google-api-core = {version = ">=1.32.0,<2.0.0 || >=2.8.0,<3.0.0dev", extras = ["grpc"]}
+grpc-google-iam-v1 = ">=0.12.4,<1.0.0dev"
+proto-plus = ">=1.22.0,<2.0.0dev"
+protobuf = ">=3.19.0,<5.0.0dev"
+
+[package.extras]
+libcst = ["libcst (>=0.2.5)"]
+
+[[package]]
 name = "google-cloud-storage"
 version = "1.44.0"
 description = "Google Cloud Storage API client library"
@@ -442,6 +460,7 @@ optional = false
 python-versions = ">=3.7"
 
 [package.dependencies]
+grpcio = {version = ">=1.0.0,<2.0.0dev", optional = true, markers = "extra == \"grpc\""}
 protobuf = ">=3.15.0,<5.0.0dev"
 
 [package.extras]
@@ -457,6 +476,18 @@ python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*"
 
 [package.extras]
 docs = ["sphinx"]
+
+[[package]]
+name = "grpc-google-iam-v1"
+version = "0.12.4"
+description = "IAM API client library"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+googleapis-common-protos = {version = ">=1.56.0,<2.0.0dev", extras = ["grpc"]}
+grpcio = ">=1.0.0,<2.0.0dev"
 
 [[package]]
 name = "grpcio"
@@ -1191,7 +1222,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.10"
-content-hash = "a05a6c697498d9eda405c8f4c27f72cd88005c42f14febf053e48b7e82a3161c"
+content-hash = "4e6f8b8308a6f3f2027cbf1d26a54452732fa3796f4a6f9741559bd6c30a9d51"
 
 [metadata.files]
 aiohttp = []
@@ -1220,11 +1251,13 @@ google-auth-oauthlib = []
 google-cloud-bigquery = []
 google-cloud-bigquery-storage = []
 google-cloud-core = []
+google-cloud-secret-manager = []
 google-cloud-storage = []
 google-crc32c = []
 google-resumable-media = []
 googleapis-common-protos = []
 greenlet = []
+grpc-google-iam-v1 = []
 grpcio = []
 gtfs-realtime-bindings = []
 humanize = []

@@ -408,10 +408,9 @@ def validate_and_upload(
         records_to_upload.extend(
             [
                 {
-                    # back and forth so we can use pydantic serialization
                     "metadata": {
                         "gtfs_validator_version": GTFS_RT_VALIDATOR_VERSION,
-                        "extract": make_pydantic_model_bq_safe(extract),
+                        "extract_path": extract.path,
                     },
                     **record,
                 }
@@ -506,7 +505,7 @@ def parse_and_upload(
                                 "header": parsed["header"],
                                 # back and forth so we use pydantic serialization
                                 "metadata": {
-                                    "extract": make_pydantic_model_bq_safe(extract),
+                                    "extract_path": extract.path,
                                 },
                                 **copy.deepcopy(record),
                             }
@@ -631,7 +630,7 @@ def main(
     threads: int = 4,
     jar_path: Path = JAR_DEFAULT,
     verbose: bool = False,
-    url: str = None,
+    base64url: str = None,
 ):
     pendulum_hour = pendulum.instance(hour, tz="Etc/UTC")
     files: List[GTFSRTFeedExtract] = fetch_all_in_partition(
@@ -659,10 +658,10 @@ def main(
             filename=f"{feed_type}{JSONL_GZIP_EXTENSION}",
             feed_type=feed_type,
             hour=hour,
-            base64_url=url,
+            base64_url=base64url,
             extracts=files,
         )
-        for (hour, url), files in rt_aggs.items()
+        for (hour, base64url), files in rt_aggs.items()
     ]
 
     typer.secho(
@@ -670,12 +669,12 @@ def main(
         fg=typer.colors.MAGENTA,
     )
 
-    if url:
+    if base64url:
         typer.secho(
-            f"url filter applied, only processing {url}", fg=typer.colors.YELLOW
+            f"url filter applied, only processing {base64url}", fg=typer.colors.YELLOW
         )
         aggregations_to_process = [
-            agg for agg in aggregations_to_process if agg.base64_url == url
+            agg for agg in aggregations_to_process if agg.base64_url == base64url
         ]
 
     if limit:

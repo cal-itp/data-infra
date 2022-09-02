@@ -6,7 +6,7 @@ authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.10"
-calitp = "2022.8.19a0"
+calitp = "2022.9.1a3"
 backoff = "1.11.1"
 gtfs-realtime-bindings = "0.0.7"
 google-auth = "1.32.1"
