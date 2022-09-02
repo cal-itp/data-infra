@@ -14,7 +14,7 @@ backoff = "^2.1.2"
 pydantic = "^1.9.1"
 pendulum = "^2.1.2"
 tqdm = "^4.64.0"
-calitp = "2022.8.17"
+calitp = "2022.8.25"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
