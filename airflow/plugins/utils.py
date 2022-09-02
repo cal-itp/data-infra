@@ -1,3 +1,4 @@
+import datetime
 import logging
 import os
 import pendulum
@@ -10,6 +11,7 @@ from calitp.storage import (
     PartitionedGCSArtifact,
 )
 from pandas.errors import EmptyDataError
+from pydantic import validator
 from typing import ClassVar, List
 
 SCHEDULE_UNZIPPED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED"]
@@ -119,3 +121,9 @@ class GTFSScheduleFeedFile(PartitionedGCSArtifact):
     @property
     def dt(self) -> pendulum.Date:
         return self.ts.date()
+
+    @validator("ts")
+    def ts_must_be_pendulum_datetime(cls, v) -> pendulum.DateTime:
+        if isinstance(v, datetime.datetime):
+            v = pendulum.instance(v)
+        return v

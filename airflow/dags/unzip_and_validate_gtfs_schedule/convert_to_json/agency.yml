@@ -2,4 +2,4 @@ operator: operators.GtfsGcsToJsonlOperator
 
 date: "{{ execution_date }}"
 input_table: agency.txt
-gtfs_filename: agency.txt
+gtfs_filename: agency

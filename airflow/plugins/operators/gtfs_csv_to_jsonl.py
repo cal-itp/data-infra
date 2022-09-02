@@ -1,4 +1,5 @@
 import csv
+import gzip
 import json
 import logging
 import os
@@ -39,9 +40,9 @@ class GTFSScheduleFeedJSONL(PartitionedGCSArtifact):
 
 
 class GTFSScheduleParseOutcome(ProcessingOutcome):
-    input_file: str
+    input_file_path: str
     fields: Optional[List[str]]
-    parsed_file: Optional[GTFSScheduleFeedJSONL]
+    parsed_file_path: Optional[str]
 
 
 class ScheduleParseResult(PartitionedGCSArtifact):
@@ -76,17 +77,20 @@ def parse_individual_file(
     field_names = []
     lines = []
     try:
-        with fs.open(input_file.path, newline="") as f:
+        with fs.open(input_file.path, newline="", mode="r") as f:
             reader = csv.DictReader(f, restkey="calitp_unknown_fields")
             field_names = reader.fieldnames
             for row in reader:
                 lines.append(row)
 
-        jsonl_content = "\n".join(json.dumps(line) for line in lines).encode()
+        jsonl_content = gzip.compress(
+            "\n".join(json.dumps(line) for line in lines).encode()
+        )
 
         jsonl_file = GTFSScheduleFeedJSONL(
             ts=input_file.ts,
             base64_url=input_file.base64_url,
+            filename=gtfs_filename + ".jsonl.gz",
             input_file_path=input_file.path,
             gtfs_filename=gtfs_filename,
         )
@@ -96,11 +100,17 @@ def parse_individual_file(
     except Exception as e:
         logging.warn(f"Can't process {input_file.path}: {e}")
         return GTFSScheduleParseOutcome(
-            success=False, exception=e, input_file=input_file, fields=field_names
+            success=False,
+            exception=e,
+            input_file_path=input_file.path,
+            fields=field_names,
         )
-    logging.info(f"Successfully unzipped {input_file.path}")
+    logging.info(f"Parsed {input_file.path}")
     return GTFSScheduleParseOutcome(
-        success=True, input_file=input_file, fields=field_names, parsed_file=jsonl_file
+        success=True,
+        input_file_path=input_file.path,
+        fields=field_names,
+        parsed_file=jsonl_file.path,
     )
 
 
