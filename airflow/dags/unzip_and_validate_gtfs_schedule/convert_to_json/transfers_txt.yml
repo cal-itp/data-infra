@@ -1,4 +1,4 @@
 operator: operators.GtfsGcsToJsonlOperator
 
 
-input_table: fare_rules.txt
+input_table_name: transfers.txt

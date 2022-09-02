@@ -115,13 +115,13 @@ def parse_individual_file(
     )
 
 
-def parse_files(day: pendulum.datetime, input_table: str, gtfs_filename: str):
+def parse_files(day: pendulum.datetime, input_table_name: str, gtfs_filename: str):
     fs = get_fs()
     day = pendulum.instance(day).date()
     files = fetch_all_in_partition(
         cls=GTFSScheduleFeedFile,
         bucket=SCHEDULE_UNZIPPED_BUCKET,
-        table=input_table,
+        table=input_table_name,
         fs=fs,
         partitions={
             "dt": day,
@@ -150,17 +150,19 @@ def parse_files(day: pendulum.datetime, input_table: str, gtfs_filename: str):
 
 
 class GtfsGcsToJsonlOperator(BaseOperator):
-    def __init__(self, input_table, gtfs_filename=None, *args, **kwargs):
-        self.input_table = input_table
+    def __init__(self, input_table_name, gtfs_filename=None, *args, **kwargs):
+        self.input_table_name = input_table_name
         self.gtfs_filename = (
-            gtfs_filename if gtfs_filename else input_table.replace(".txt", "")
+            gtfs_filename if gtfs_filename else input_table_name.replace(".txt", "")
         )
 
         super().__init__(*args, **kwargs)
 
     def execute(self, context):
         print(f"Processing {context['execution_date']}")
-        parse_files(context["execution_date"], self.input_table, self.gtfs_filename)
+        parse_files(
+            context["execution_date"], self.input_table_name, self.gtfs_filename
+        )
 
 
 if __name__ == "__main__":

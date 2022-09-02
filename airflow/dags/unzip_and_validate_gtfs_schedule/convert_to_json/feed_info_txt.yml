@@ -1,4 +1,4 @@
 operator: operators.GtfsGcsToJsonlOperator
 
 
-input_table: stop_times.txt
+input_table_name: feed_info.txt

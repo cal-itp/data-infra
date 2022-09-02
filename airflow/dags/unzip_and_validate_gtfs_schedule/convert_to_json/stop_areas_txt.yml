@@ -1,3 +1,4 @@
 operator: operators.GtfsGcsToJsonlOperator
 
-input_table: agency.txt
+
+input_table_name: stop_areas.txt

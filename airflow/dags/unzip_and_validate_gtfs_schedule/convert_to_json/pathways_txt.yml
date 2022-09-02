@@ -1,4 +1,4 @@
 operator: operators.GtfsGcsToJsonlOperator
 
 
-input_table: stop_areas.txt
+input_table_name: pathways.txt

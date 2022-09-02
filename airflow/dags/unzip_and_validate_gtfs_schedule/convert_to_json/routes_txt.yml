@@ -1,4 +1,4 @@
 operator: operators.GtfsGcsToJsonlOperator
 
 
-input_table: calendar_dates.txt
+input_table_name: routes.txt

@@ -1,4 +1,4 @@
 operator: operators.GtfsGcsToJsonlOperator
 
 
-input_table: levels.txt
+input_table_name: stop_times.txt

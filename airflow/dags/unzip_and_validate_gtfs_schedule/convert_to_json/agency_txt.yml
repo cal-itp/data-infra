@@ -1,4 +1,3 @@
 operator: operators.GtfsGcsToJsonlOperator
 
-
-input_table: areas.txt
+input_table_name: agency.txt

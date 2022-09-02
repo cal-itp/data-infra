@@ -1,4 +1,4 @@
 operator: operators.GtfsGcsToJsonlOperator
 
 
-input_table: frequencies.txt
+input_table_name: levels.txt
