@@ -1,0 +1,5 @@
+operator: operators.GtfsGcsToJsonlOperator
+
+date: "{{ execution_date }}"
+input_table: areas.txt
+gtfs_filename: areas

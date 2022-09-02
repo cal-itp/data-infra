@@ -1,0 +1,5 @@
+operator: operators.GtfsGcsToJsonlOperator
+
+date: "{{ execution_date }}"
+input_table: feed_info.txt
+gtfs_filename: feed_info

@@ -1,0 +1,5 @@
+operator: operators.GtfsGcsToJsonlOperator
+
+date: "{{ execution_date }}"
+input_table: stop_times.txt
+gtfs_filename: stop_times
