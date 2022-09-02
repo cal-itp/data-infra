@@ -143,7 +143,7 @@ def parse_files(day: pendulum.datetime, input_table: str, gtfs_filename: str):
 
 
 class GtfsGcsToJsonlOperator(BaseOperator):
-    def __init__(self, date, input_table, gtfs_filename, *args, **kwargs):
+    def __init__(self, input_table, gtfs_filename, *args, **kwargs):
         self.input_table = input_table
         self.gtfs_filename = gtfs_filename
 

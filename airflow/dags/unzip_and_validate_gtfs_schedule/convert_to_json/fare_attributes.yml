@@ -1,5 +1,5 @@
 operator: operators.GtfsGcsToJsonlOperator
 
-date: "{{ execution_date }}"
+
 input_table: fare_attributes.txt
 gtfs_filename: fare_attributes

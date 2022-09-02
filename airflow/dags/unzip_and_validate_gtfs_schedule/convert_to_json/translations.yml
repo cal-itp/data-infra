@@ -1,5 +1,5 @@
 operator: operators.GtfsGcsToJsonlOperator
 
-date: "{{ execution_date }}"
+
 input_table: translations.txt
 gtfs_filename: translations
