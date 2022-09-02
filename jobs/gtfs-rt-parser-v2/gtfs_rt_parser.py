@@ -57,6 +57,7 @@ JAR_DEFAULT = typer.Option(
 
 RT_PARSED_BUCKET = os.environ["CALITP_BUCKET__GTFS_RT_PARSED"]
 RT_VALIDATION_BUCKET = os.environ["CALITP_BUCKET__GTFS_RT_VALIDATION"]
+GTFS_RT_VALIDATOR_VERSION = os.environ["GTFS_RT_VALIDATOR_VERSION"]
 
 
 def make_dict_bq_safe(d: Dict[str, Any]) -> Dict[str, Any]:
@@ -212,7 +213,7 @@ class RTHourlyAggregation(PartitionedGCSArtifact):
         if self.step == RTProcessingStep.parse:
             return self.feed_type
         if self.step == RTProcessingStep.validate:
-            return f"{self.feed_type}_validations"
+            return f"{self.feed_type}_validation_notices"
         raise RuntimeError("we should not be here")
 
     @property
@@ -309,12 +310,11 @@ def download_gtfs_schedule_zip(
     pbar=None,
 ) -> str:
     # fetch and zip gtfs schedule
-    actual_dst_path = "/".join([dst_path, schedule_extract.filename])
     log(
-        f"Fetching gtfs schedule data from {schedule_extract.path} to {actual_dst_path}",
+        f"Fetching gtfs schedule data from {schedule_extract.path} to {dst_path}",
         pbar=pbar,
     )
-    get_with_retry(fs, schedule_extract.path, actual_dst_path, recursive=True)
+    get_with_retry(fs, schedule_extract.path, dst_path, recursive=True)
 
     # https://github.com/MobilityData/gtfs-realtime-validator/issues/92
     # try:
@@ -322,7 +322,7 @@ def download_gtfs_schedule_zip(
     # except FileNotFoundError:
     #     pass
 
-    return actual_dst_path
+    return "/".join([dst_path, schedule_extract.filename])
 
 
 def execute_rt_validator(
@@ -346,7 +346,8 @@ def execute_rt_validator(
     subprocess.run(
         args,
         capture_output=True,
-    ).check_returncode()
+        check=True,
+    )
 
 
 def validate_and_upload(
@@ -367,7 +368,7 @@ def validate_and_upload(
             pbar=pbar,
         )
     except FileNotFoundError:
-        raise ScheduleDataNotFound(f"no schedule data found for {first_extract}")
+        raise ScheduleDataNotFound(f"no schedule data found for {first_extract.path}")
 
     execute_rt_validator(
         gtfs_zip,
@@ -407,8 +408,10 @@ def validate_and_upload(
         records_to_upload.extend(
             [
                 {
-                    # back and forth so we can use pydantic serialization
-                    "metadata": make_pydantic_model_bq_safe(extract),
+                    "metadata": {
+                        "gtfs_validator_version": GTFS_RT_VALIDATOR_VERSION,
+                        "extract_path": extract.path,
+                    },
                     **record,
                 }
                 for record in records
@@ -501,7 +504,9 @@ def parse_and_upload(
                             {
                                 "header": parsed["header"],
                                 # back and forth so we use pydantic serialization
-                                "metadata": make_pydantic_model_bq_safe(extract),
+                                "metadata": {
+                                    "extract_path": extract.path,
+                                },
                                 **copy.deepcopy(record),
                             }
                         )
@@ -583,6 +588,12 @@ def parse_and_validate(
                     fg=typer.colors.RED,
                     pbar=pbar,
                 )
+                if isinstance(e, subprocess.CalledProcessError):
+                    log(
+                        e.stderr,
+                        fg=typer.colors.YELLOW,
+                        pbar=pbar,
+                    )
 
             return [
                 RTFileProcessingOutcome(
@@ -619,6 +630,7 @@ def main(
     threads: int = 4,
     jar_path: Path = JAR_DEFAULT,
     verbose: bool = False,
+    base64url: str = None,
 ):
     pendulum_hour = pendulum.instance(hour, tz="Etc/UTC")
     files: List[GTFSRTFeedExtract] = fetch_all_in_partition(
@@ -646,16 +658,24 @@ def main(
             filename=f"{feed_type}{JSONL_GZIP_EXTENSION}",
             feed_type=feed_type,
             hour=hour,
-            base64_url=url,
+            base64_url=base64url,
             extracts=files,
         )
-        for (hour, url), files in rt_aggs.items()
+        for (hour, base64url), files in rt_aggs.items()
     ]
 
     typer.secho(
         f"found {len(files)} {feed_type} files in {len(aggregations_to_process)} aggregations to process",
         fg=typer.colors.MAGENTA,
     )
+
+    if base64url:
+        typer.secho(
+            f"url filter applied, only processing {base64url}", fg=typer.colors.YELLOW
+        )
+        aggregations_to_process = [
+            agg for agg in aggregations_to_process if agg.base64_url == base64url
+        ]
 
     if limit:
         typer.secho(f"limit of {limit} feeds was set", fg=typer.colors.YELLOW)
@@ -708,9 +728,6 @@ def main(
     if pbar:
         del pbar
 
-    assert len(outcomes) == len(
-        files
-    ), f"we ended up with {len(outcomes)} outcomes from {len(files)}"
     result = GTFSRTJobResult(
         # TODO: these seem weird...
         hour=aggregations_to_process[0].hour,
@@ -720,6 +737,10 @@ def main(
         outcomes=outcomes,
     )
     save_job_result(get_fs(), result)
+
+    assert len(outcomes) == len(
+        files
+    ), f"we ended up with {len(outcomes)} outcomes from {len(files)}"
 
     if exceptions:
         exc_str = "\n".join(str(tup) for tup in exceptions)
