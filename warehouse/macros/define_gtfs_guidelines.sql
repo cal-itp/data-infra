@@ -11,6 +11,10 @@
 "Includes complete wheelchair accessibility data in both stops.txt and trips.txt"
 {% endmacro %}
 
+{% macro technical_contact_listed() %}
+"Technical contact is listed in feed_contact_email field within the feed_info.txt file"
+{% endmacro %}
+
 -- declare features
 {% macro compliant_on_the_map() %}
 "Compliance"
@@ -18,6 +22,10 @@
 
 {% macro accurate_accessibility_data() %}
 "Accurate Accessibility Data"
+{% endmacro %}
+
+{% macro technical_contact_availability() %}
+"Technical Contact Availability"
 {% endmacro %}
 
 -- columns
