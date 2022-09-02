@@ -213,7 +213,7 @@ class RTHourlyAggregation(PartitionedGCSArtifact):
         if self.step == RTProcessingStep.parse:
             return self.feed_type
         if self.step == RTProcessingStep.validate:
-            return f"{self.feed_type}_validations"
+            return f"{self.feed_type}_validation_notices"
         raise RuntimeError("we should not be here")
 
     @property
