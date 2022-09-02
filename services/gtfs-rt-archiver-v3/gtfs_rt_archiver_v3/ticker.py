@@ -8,11 +8,12 @@ import pendulum
 import schedule
 import typer
 from cachetools.func import ttl_cache
+from calitp.auth import load_secrets
 from calitp.storage import AirtableGTFSDataExtract, GTFSFeedType, AirtableGTFSDataRecord
 from prometheus_client import start_http_server
 
 from .metrics import TICKS, AIRTABLE_CONFIGURATION_AGE
-from .tasks import fetch, huey, load_secrets
+from .tasks import fetch, huey
 
 
 @ttl_cache(ttl=300)

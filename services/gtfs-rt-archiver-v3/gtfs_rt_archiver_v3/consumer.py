@@ -5,6 +5,7 @@ Huey's startup hooks are per _worker_ and not the overall consumer process.
 import typer
 import os
 
+from calitp.auth import load_secrets
 from huey.constants import WORKER_THREAD
 
 import logging
@@ -13,7 +14,7 @@ import sys
 from huey.consumer_options import ConsumerConfig
 from prometheus_client import start_http_server
 
-from .tasks import huey, load_secrets
+from .tasks import huey
 
 
 def main(

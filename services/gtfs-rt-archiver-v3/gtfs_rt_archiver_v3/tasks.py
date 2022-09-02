@@ -6,9 +6,9 @@ import orjson
 import pendulum
 import structlog
 import typer
+from calitp.auth import DEFAULT_AUTH_KEYS
 from calitp.storage import AirtableGTFSDataRecord, download_feed
-from google.cloud import storage, secretmanager
-import google_crc32c
+from google.cloud import storage
 from huey import RedisExpireHuey
 from huey.registry import Message
 from huey.serializer import Serializer
@@ -63,48 +63,20 @@ def instrument_signals(signal, task, exc=None):
     ).inc()
 
 
-AUTH_KEYS = [
-    "AC_TRANSIT_API_KEY",
-    "AMTRAK_GTFS_URL",
-    "CULVER_CITY_API_KEY",
-    # TODO: this can be removed once we've confirmed it's no longer in Airtable
-    "GRAAS_SERVER_URL",
-    "MTC_511_API_KEY",
-    "SD_MTS_SA_API_KEY",
-    "SD_MTS_VP_TU_API_KEY",
-    "SWIFTLY_AUTHORIZATION_KEY_CALITP",
-    "WEHO_RT_KEY",
-]
 auth_dict = None
-
-
-def load_secrets():
-    secret_client = secretmanager.SecretManagerServiceClient()
-    for key in AUTH_KEYS:
-        if key not in os.environ:
-            typer.secho(f"fetching secret {key}")
-            name = f"projects/cal-itp-data-infra/secrets/{key}/versions/latest"
-            response = secret_client.access_secret_version(request={"name": name})
-
-            crc32c = google_crc32c.Checksum()
-            crc32c.update(response.payload.data)
-            if response.payload.data_crc32c != int(crc32c.hexdigest(), 16):
-                raise ValueError(f"Data corruption detected for secret {name}.")
-
-            os.environ[key] = response.payload.data.decode("UTF-8").strip()
 
 
 @huey.on_startup()
 def load_auth_dict():
     global auth_dict
-    auth_dict = {key: os.environ[key] for key in AUTH_KEYS}
+    auth_dict = {key: os.environ[key] for key in DEFAULT_AUTH_KEYS}
 
 
 @huey.task(expires=5)
 def fetch(tick: datetime, record: AirtableGTFSDataRecord):
     labels = dict(
         record_name=record.name,
-        record_uri=record.uri,
+        record_pipeline_urli=record.pipeline_url,
         record_feed_type=record.data,
     )
     logger = base_logger.bind(
@@ -116,7 +88,7 @@ def fetch(tick: datetime, record: AirtableGTFSDataRecord):
 
     with FETCH_PROCESSING_TIME.labels(**labels).time():
         try:
-            extract, content = download_feed(record, ts=tick, auth_dict=auth_dict)
+            extract, content = download_feed(record, auth_dict=auth_dict, ts=tick)
         except HTTPError as e:
             logger.error(
                 "unexpected HTTP response code from feed request",
@@ -139,7 +111,7 @@ def fetch(tick: datetime, record: AirtableGTFSDataRecord):
             raise
 
         typer.secho(
-            f"saving {humanize.naturalsize(len(content))} from {record.uri} to {extract.path}"
+            f"saving {humanize.naturalsize(len(content))} from {record.pipeline_url} to {extract.path}"
         )
         extract.save_content(content=content, client=client)
         FETCH_PROCESSED_BYTES.labels(
