@@ -87,7 +87,9 @@ def download_all(task_instance, execution_date, **kwargs):
     logging.info(f"processing {len(records)} records")
 
     for i, record in enumerate(records, start=1):
-        logging.info(f"attempting to fetch {i}/{len(records)} {record.uri}")
+        logging.info(
+            f"attempting to fetch {i}/{len(records)} {record.name}({record.pipeline_url})"
+        )
 
         try:
             extract, content = download_feed(
@@ -107,7 +109,7 @@ def download_all(task_instance, execution_date, **kwargs):
             )
         except Exception as e:
             logging.error(
-                f"exception occurred while attempting to download feed {record.uri}: {str(e)}\n{traceback.format_exc()}"
+                f"exception occurred while attempting to download feed {record.name}({record.pipeline_url}): {str(e)}\n{traceback.format_exc()}"
             )
             outcomes.append(
                 AirtableGTFSDataRecordProcessingOutcome(
