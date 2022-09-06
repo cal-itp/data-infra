@@ -13,7 +13,6 @@ feed_info_clean_check AS (
         calitp_url_number,
         calitp_extracted_at,
         calitp_deleted_at,
-        {{ technical_contact_listed() }} AS check,
         CASE
             WHEN feed_contact_email IS NOT null THEN "PASS"
         ELSE "FAIL"
@@ -35,7 +34,6 @@ daily_feed_info_clean_check AS (
     LEFT JOIN feed_info_clean_check AS t2
        ON t1.calitp_itp_id = t2.calitp_itp_id
       AND t1.calitp_url_number = t2.calitp_url_number
-      AND t1.check = t2.check
       AND t1.date >= t2.calitp_extracted_at
       AND t1.date < t2.calitp_deleted_at
 )
