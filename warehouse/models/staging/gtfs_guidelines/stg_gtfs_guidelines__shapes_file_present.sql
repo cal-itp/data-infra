@@ -6,6 +6,8 @@ WITH feed_guideline_index AS (
 daily_feed_shape_files AS (
     SELECT * FROM {{ ref('gtfs_schedule_fact_daily_feed_files') }}
     WHERE file_key = 'shapes.txt'
+    -- On days where the extractor fails to download files for a feed, fact_daily_feed_files "interpolates" by using the previous day's files.
+    -- By filtering on is_interpolated we capture only the days when the file didn't fail to download (ie was present)
       AND is_interpolated IS false
 ),
 
