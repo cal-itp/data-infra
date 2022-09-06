@@ -11,6 +11,10 @@
 "Includes complete wheelchair accessibility data in both stops.txt and trips.txt"
 {% endmacro %}
 
+{% macro shapes_file_present() %}
+"Shapes.txt file is present"
+{% endmacro %}
+
 -- declare features
 {% macro compliant_on_the_map() %}
 "Compliance"
@@ -18,6 +22,10 @@
 
 {% macro accurate_accessibility_data() %}
 "Accurate Accessibility Data"
+{% endmacro %}
+
+{% macro accurate_service_data() %}
+"Accurate Service Data"
 {% endmacro %}
 
 -- columns
