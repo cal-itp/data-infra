@@ -17,6 +17,8 @@ checks_implemented AS (
     SELECT {{ complete_wheelchair_accessibility_data() }}, {{ accurate_accessibility_data() }}
     UNION ALL
     SELECT {{ shapes_file_present() }}, {{ accurate_service_data() }}
+    UNION ALL
+    SELECT {{ shapes_valid() }}, {{ accurate_service_data() }}
 ),
 
 -- create an index: all feed/date/check combinations

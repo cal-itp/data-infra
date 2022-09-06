@@ -15,6 +15,10 @@
 "Shapes.txt file is present"
 {% endmacro %}
 
+{% macro shapes_valid() %}
+"No shapes-related errors appear in the MobilityData GTFS Validator."
+{% endmacro %}
+
 -- declare features
 {% macro compliant_on_the_map() %}
 "Compliance"
