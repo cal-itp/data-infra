@@ -26,9 +26,7 @@ DAGs are listed in alphabetical order, as they appear in the Airflow UI.
 
 | DAG | Safe after 24h | `depends_ on_past` | All of history | Depends on | Notes |
 | --- | --- | --- | --- | --- | --- |
-`airtable_loader` | **⛔ No*** | No | **🔂 No** | N/A | All tasks are unsafe after 24 hours |
 `airtable_loader_v2` | Yes | No | No* | N/A | Don't need to rerun more than once if multiple failures; scrapes data that is correctly timestamped |
-`airtable_views` | Yes | No | Yes* | `airtable_ loader` | Latest-only data |
 `amplitude_benefits` | Yes | No | **🔂 No** | N/A | |
 `check_feed_aggregators` | **⛔ No** | No | **🔂 No** | N/A | |
 `create_external_tables` | N/A | N/A | N/A | N/A | Once-only (defines external tables); does not generally need to be re-run  |
@@ -52,6 +50,8 @@ DAGs are listed in alphabetical order, as they appear in the Airflow UI.
 
 The following DAGs are still listed in the Airflow UI even though they are **deprecated or indefinitely paused**. They never need to be re-run.
 
+* `airtable_loader`
+* `airtable_views`
 * `check_data_freshness`
 * `gtfs_schedule`
 * `gtfs_views_staging`
@@ -69,7 +69,6 @@ In addition to the tabular view above, here is a diagram representing DAG depend
 ```{mermaid}
   graph TD;
       airtable_loader_v2;
-      airtable_loader-->airtable_views;
       amplitude_benefits;
       download_gtfs_schedule_v2;
       gtfs_downloader-->gtfs_loader;
