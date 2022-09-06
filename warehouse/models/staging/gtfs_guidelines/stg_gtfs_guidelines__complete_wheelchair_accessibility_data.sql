@@ -111,6 +111,7 @@ accessibility_check AS (
              ON t1.date = t2.date
             AND t1.calitp_itp_id = t2.calitp_itp_id
             AND t1.calitp_url_number = t2.calitp_url_number
+            AND t1.calitp_agency_name = t2.calitp_agency_name
             AND t1.feed_key = t2.feed_key
             AND t1.check = t2.check
             AND t1.feature = t2.feature
