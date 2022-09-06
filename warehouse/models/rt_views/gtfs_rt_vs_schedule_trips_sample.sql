@@ -10,7 +10,7 @@ vp_trips AS (
     -- note: to change when we want to include more operators. trip_route_id and trip_id are optional
     -- https://gtfs.org/realtime/reference/#message-vehicleposition
     FROM {{ ref('stg_rt__vehicle_positions') }}
-    WHERE service_date BETWEEN '2022-05-01' AND '2022-06-30'
+    WHERE date BETWEEN '2022-05-01' AND '2022-06-30'
         AND (calitp_itp_id IN (300, 290)
         )
 ),
