@@ -7,11 +7,18 @@
 "No validation errors in last 30 days"
 {% endmacro %}
 
+{% macro complete_wheelchair_accessibility_data() %}
+"Includes complete wheelchair accessibility data in both stops.txt and trips.txt"
+{% endmacro %}
+
 -- declare features
 {% macro compliant_on_the_map() %}
 "Compliance"
 {% endmacro %}
 
+{% macro accurate_accessibility_data() %}
+"Accurate Accessibility Data"
+{% endmacro %}
 
 -- columns
 {% macro gtfs_guidelines_columns() %}
