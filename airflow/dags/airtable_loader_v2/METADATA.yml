@@ -14,6 +14,7 @@ default_args:
     email_on_retry: False
     retries: 1
     retry_delay: !timedelta 'minutes: 2'
+    pool: airtable_pool
     concurrency: 50
     #sla: !timedelta 'hours: 2'
 wait_for_defaults:
