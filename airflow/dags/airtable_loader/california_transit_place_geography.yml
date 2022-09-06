@@ -1,8 +1,0 @@
-operator: operators.AirtableToWarehouseOperator
-
-air_base_id: appPnJWrQ7ui4UmIl
-air_table_name: "place geography"
-gcs_path: airtable/california-transit/
-table_name: airtable.california_transit_place_geography
-
-id_name: place_geography_id
