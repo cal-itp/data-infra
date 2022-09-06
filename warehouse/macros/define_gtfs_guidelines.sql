@@ -23,10 +23,13 @@
 {% macro accurate_accessibility_data() %}
 "Accurate Accessibility Data"
 {% endmacro %}
+<<<<<<< HEAD
 
 {% macro technical_contact_availability() %}
 "Technical Contact Availability"
 {% endmacro %}
+=======
+>>>>>>> main
 
 -- columns
 {% macro gtfs_guidelines_columns() %}
