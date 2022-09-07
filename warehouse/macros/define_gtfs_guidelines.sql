@@ -16,7 +16,7 @@
 {% endmacro %}
 
 {% macro shapes_valid() %}
-"No shapes-related errors appear in the MobilityData GTFS Validator."
+"No shapes-related errors appear in the MobilityData GTFS Validator"
 {% endmacro %}
 
 {% macro technical_contact_listed() %}

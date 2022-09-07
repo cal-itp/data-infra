@@ -6,7 +6,7 @@ WITH feed_guideline_index AS (
 -- For this check we are only looking for errors and warnings related to shapes
 validation_fact_daily_feed_codes_shape_related AS (
     SELECT * FROM {{ ref('validation_fact_daily_feed_codes') }}
-    WHERE code IN (
+     WHERE code IN (
             'decreasing_shape_distance',
             'equal_shape_distance_diff_coordinates',
             'equal_shape_distance_same_coordinates',
