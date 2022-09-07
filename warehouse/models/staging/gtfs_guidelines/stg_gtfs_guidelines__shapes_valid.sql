@@ -39,7 +39,6 @@ shape_validation_check AS (
         CASE
             WHEN t2.validation_notices = 0 THEN "PASS"
             WHEN t2.validation_notices > 0 THEN "FAIL"
-        ELSE "FAIL"
         END AS status
       FROM feed_guideline_index t1
       LEFT JOIN shape_validation_notices_by_day t2
