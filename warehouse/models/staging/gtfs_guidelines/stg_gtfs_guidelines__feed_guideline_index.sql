@@ -15,6 +15,8 @@ checks_implemented AS (
     SELECT {{ no_validation_errors_in_last_30_days() }}, {{ compliant_on_the_map() }}
     UNION ALL
     SELECT {{ complete_wheelchair_accessibility_data() }}, {{ accurate_accessibility_data() }}
+    UNION ALL
+    SELECT {{ technical_contact_listed() }}, {{ technical_contact_availability() }}
 ),
 
 -- create an index: all feed/date/check combinations
