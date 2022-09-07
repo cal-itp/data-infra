@@ -3,8 +3,8 @@
 "Static GTFS feed downloads successfully"
 {% endmacro %}
 
-{% macro no_validation_errors_in_last_30_days() %}
-"No validation errors in last 30 days"
+{% macro no_validation_errors() %}
+"Static feed produces no validation errors in GTFS Validator"
 {% endmacro %}
 
 {% macro complete_wheelchair_accessibility_data() %}
@@ -19,8 +19,12 @@
 "No shapes-related errors appear in the MobilityData GTFS Validator."
 {% endmacro %}
 
+{% macro technical_contact_listed() %}
+"Technical contact is listed in feed_contact_email field within the feed_info.txt file"
+{% endmacro %}
+
 -- declare features
-{% macro compliant_on_the_map() %}
+{% macro compliance() %}
 "Compliance"
 {% endmacro %}
 
@@ -30,6 +34,10 @@
 
 {% macro accurate_service_data() %}
 "Accurate Service Data"
+{% endmacro %}
+
+{% macro technical_contact_availability() %}
+"Technical Contact Availability"
 {% endmacro %}
 
 -- columns
