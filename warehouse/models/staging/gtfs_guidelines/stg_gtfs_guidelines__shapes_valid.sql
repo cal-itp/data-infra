@@ -4,7 +4,6 @@ WITH feed_guideline_index AS (
 ),
 
 -- For this check we are only looking for errors and warnings related to shapes
--- To investigate: there are many instances of error stop_too_far_from_trip_shape where n_notices = 0
 validation_fact_daily_feed_codes_shape_related AS (
     SELECT * FROM {{ ref('validation_fact_daily_feed_codes') }}
     WHERE code IN (
@@ -19,11 +18,11 @@ validation_fact_daily_feed_codes_shape_related AS (
             )
 ),
 
-shape_validation_errors_by_day AS (
+shape_validation_notices_by_day AS (
     SELECT
         feed_key,
         date,
-        SUM(n_notices) as validation_errors
+        SUM(n_notices) as validation_notices
     FROM validation_fact_daily_feed_codes_shape_related
     GROUP BY feed_key, date
 ),
@@ -37,13 +36,13 @@ shape_validation_check AS (
         t1.feed_key,
         t1.check,
         t1.feature,
-        -- validation_errors will only have a non-null value if the given day + feed_key appeared in validation_fact_daily_feed_codes_shape_related
         CASE
-            WHEN t2.validation_errors IS null THEN "PASS"
+            WHEN t2.validation_notices = 0 THEN "PASS"
+            WHEN t2.validation_notices > 0 THEN "FAIL"
         ELSE "FAIL"
         END AS status
       FROM feed_guideline_index t1
-      LEFT JOIN shape_validation_errors_by_day t2
+      LEFT JOIN shape_validation_notices_by_day t2
              ON t1.date = t2.date
             AND t1.feed_key = t2.feed_key
 )
