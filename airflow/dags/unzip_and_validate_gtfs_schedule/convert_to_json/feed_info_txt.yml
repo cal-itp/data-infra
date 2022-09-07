@@ -1,0 +1,4 @@
+operator: operators.GtfsGcsToJsonlOperator
+
+
+input_table_name: feed_info.txt
