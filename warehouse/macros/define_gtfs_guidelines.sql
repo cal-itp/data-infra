@@ -11,6 +11,14 @@
 "Includes complete wheelchair accessibility data in both stops.txt and trips.txt"
 {% endmacro %}
 
+{% macro shapes_file_present() %}
+"Shapes.txt file is present"
+{% endmacro %}
+
+{% macro shapes_valid() %}
+"No shapes-related errors appear in the MobilityData GTFS Validator"
+{% endmacro %}
+
 {% macro technical_contact_listed() %}
 "Technical contact is listed in feed_contact_email field within the feed_info.txt file"
 {% endmacro %}
@@ -22,6 +30,10 @@
 
 {% macro accurate_accessibility_data() %}
 "Accurate Accessibility Data"
+{% endmacro %}
+
+{% macro accurate_service_data() %}
+"Accurate Service Data"
 {% endmacro %}
 
 {% macro technical_contact_availability() %}

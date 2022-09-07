@@ -16,6 +16,10 @@ checks_implemented AS (
     UNION ALL
     SELECT {{ complete_wheelchair_accessibility_data() }}, {{ accurate_accessibility_data() }}
     UNION ALL
+    SELECT {{ shapes_file_present() }}, {{ accurate_service_data() }}
+    UNION ALL
+    SELECT {{ shapes_valid() }}, {{ accurate_service_data() }}
+    UNION ALL
     SELECT {{ technical_contact_listed() }}, {{ technical_contact_availability() }}
 ),
 
