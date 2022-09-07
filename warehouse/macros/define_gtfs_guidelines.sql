@@ -16,7 +16,7 @@
 {% endmacro %}
 
 -- declare features
-{% macro compliant_on_the_map() %}
+{% macro compliance() %}
 "Compliance"
 {% endmacro %}
 
