@@ -72,7 +72,7 @@ fact_daily_guideline_checks AS (
     UNION ALL
     SELECT
         {{ gtfs_guidelines_columns() }}
-    FROM no_rt_critical_validation_errors
+    FROM stg_gtfs_guidelines__no_rt_critical_validation_errors
     UNION ALL
     SELECT
         {{ gtfs_guidelines_columns() }}
