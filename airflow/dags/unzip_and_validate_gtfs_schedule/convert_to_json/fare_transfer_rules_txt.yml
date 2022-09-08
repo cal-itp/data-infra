@@ -1,0 +1,4 @@
+operator: operators.GtfsGcsToJsonlOperator
+
+
+input_table_name: fare_transfer_rules.txt
