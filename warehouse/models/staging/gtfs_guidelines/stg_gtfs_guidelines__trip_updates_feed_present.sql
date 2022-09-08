@@ -1,6 +1,6 @@
 WITH feed_guideline_index AS (
     SELECT * FROM {{ ref('stg_gtfs_guidelines__feed_guideline_index') }}
-    WHERE check = {{ vehicle_positions_feed_present() }}
+    WHERE check = {{ trip_updates_feed_present() }}
 ),
 
 -- It's called "hourly" but if you use the "file_count_day" it's a daily table
