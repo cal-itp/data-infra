@@ -1,0 +1,20 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_PARSED') }}"
+source_objects:
+  - "areas/*.jsonl.gz"
+destination_project_dataset_table: "external_gtfs_schedule.areas"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  source_uri_prefix: "areas/{dt:DATE}/{base64_url:STRING}/{ts:TIMESTAMP}/"
+schema_fields:
+  - name: area_id
+    type: STRING
+  - name: area_name
+    type: STRING
+  - name: metadata
+    type: RECORD
+    fields:
+      - name: config_extract_ts
+        type: TIMESTAMP

@@ -1,0 +1,32 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_PARSED') }}"
+source_objects:
+  - "agency/*.jsonl.gz"
+destination_project_dataset_table: "external_gtfs_schedule.agency"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  source_uri_prefix: "agency/{dt:DATE}/{base64_url:STRING}/{ts:TIMESTAMP}/"
+schema_fields:
+  - name: agency_id
+    type: STRING
+  - name: agency_name
+    type: STRING
+  - name: agency_url
+    type: STRING
+  - name: agency_timezone
+    type: STRING
+  - name: agency_lang
+    type: STRING
+  - name: agency_phone
+    type: STRING
+  - name: agency_fare_url
+    type: STRING
+  - name: agency_email
+    type: STRING
+  - name: metadata
+    type: RECORD
+    fields:
+      - name: config_extract_ts
+        type: TIMESTAMP

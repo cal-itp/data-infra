@@ -1,0 +1,46 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_PARSED') }}"
+source_objects:
+  - "stops/*.jsonl.gz"
+destination_project_dataset_table: "external_gtfs_schedule.stops"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  source_uri_prefix: "stops/{dt:DATE}/{base64_url:STRING}/{ts:TIMESTAMP}/"
+schema_fields:
+  - name: stop_id
+    type: STRING
+  - name: tts_stop_name
+    type: STRING
+  - name: stop_lat
+    type: STRING
+  - name: stop_lon
+    type: STRING
+  - name: zone_id
+    type: STRING
+  - name: parent_station
+    type: STRING
+  - name: stop_code
+    type: STRING
+  - name: stop_name
+    type: STRING
+  - name: stop_desc
+    type: STRING
+  - name: stop_url
+    type: STRING
+  - name: location_type
+    type: STRING
+  - name: stop_timezone
+    type: STRING
+  - name: wheelchair_boarding
+    type: STRING
+  - name: level_id
+    type: STRING
+  - name: platform_code
+    type: STRING
+  - name: metadata
+    type: RECORD
+    fields:
+      - name: config_extract_ts
+        type: TIMESTAMP

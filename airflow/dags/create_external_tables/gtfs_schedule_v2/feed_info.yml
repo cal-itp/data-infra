@@ -1,0 +1,34 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_PARSED') }}"
+source_objects:
+  - "feed_info/*.jsonl.gz"
+destination_project_dataset_table: "external_gtfs_schedule.feed_info"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  source_uri_prefix: "feed_info/{dt:DATE}/{base64_url:STRING}/{ts:TIMESTAMP}/"
+schema_fields:
+  - name: feed_publisher_name
+    type: STRING
+  - name: feed_publisher_url
+    type: STRING
+  - name: feed_lang
+    type: STRING
+  - name: default_lang
+    type: STRING
+  - name: feed_start_date
+    type: STRING
+  - name: feed_end_date
+    type: STRING
+  - name: feed_version
+    type: STRING
+  - name: feed_contact_email
+    type: STRING
+  - name: feed_contact_url
+    type: STRING
+  - name: metadata
+    type: RECORD
+    fields:
+      - name: config_extract_ts
+        type: TIMESTAMP

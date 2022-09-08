@@ -1,0 +1,22 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_PARSED') }}"
+source_objects:
+  - "transfers/*.jsonl.gz"
+destination_project_dataset_table: "external_gtfs_schedule.transfers"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  source_uri_prefix: "transfers/{dt:DATE}/{base64_url:STRING}/{ts:TIMESTAMP}/"
+schema_fields:
+  - name: from_stop_id
+    type: STRING
+  - name: to_stop_id
+    type: STRING
+  - name: transfer_type
+    type: STRING
+  - name: metadata
+    type: RECORD
+    fields:
+      - name: config_extract_ts
+        type: TIMESTAMP

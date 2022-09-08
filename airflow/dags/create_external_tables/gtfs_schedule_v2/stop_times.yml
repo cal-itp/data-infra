@@ -1,37 +1,37 @@
 operator: operators.ExternalTable
 bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_PARSED') }}"
 source_objects:
-  - "routes/*.jsonl.gz"
-destination_project_dataset_table: "external_gtfs_schedule.routes"
+  - "stop_times/*.jsonl.gz"
+destination_project_dataset_table: "external_gtfs_schedule.stop_times"
 source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 hive_options:
   mode: CUSTOM
-  source_uri_prefix: "routes/{dt:DATE}/{base64_url:STRING}/{ts:TIMESTAMP}/"
+  source_uri_prefix: "stop_times/{dt:DATE}/{base64_url:STRING}/{ts:TIMESTAMP}/"
 schema_fields:
-  - name: route_id
+  - name: trip_id
     type: STRING
-  - name: route_type
+  - name: stop_id
     type: STRING
-  - name: agency_id
+  - name: stop_sequence
     type: STRING
-  - name: route_short_name
+  - name: arrival_time
     type: STRING
-  - name: route_long_name
+  - name: departure_time
     type: STRING
-  - name: route_desc
+  - name: stop_headsign
     type: STRING
-  - name: route_url
+  - name: pickup_type
     type: STRING
-  - name: route_color
-    type: STRING
-  - name: route_text_color
-    type: STRING
-  - name: route_sort_order
+  - name: drop_off_type
     type: STRING
   - name: continuous_pickup
     type: STRING
   - name: continuous_drop_off
+    type: STRING
+  - name: shape_dist_traveled
+    type: STRING
+  - name: timepoint
     type: STRING
   - name: metadata
     type: RECORD

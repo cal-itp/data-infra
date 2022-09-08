@@ -1,0 +1,30 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_PARSED') }}"
+source_objects:
+  - "fare_attributes/*.jsonl.gz"
+destination_project_dataset_table: "external_gtfs_schedule.fare_attributes"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  source_uri_prefix: "fare_attributes/{dt:DATE}/{base64_url:STRING}/{ts:TIMESTAMP}/"
+schema_fields:
+  - name: fare_id
+    type: STRING
+  - name: price
+    type: STRING
+  - name: currency_type
+    type: STRING
+  - name: payment_method
+    type: STRING
+  - name: transfers
+    type: STRING
+  - name: agency_id
+    type: STRING
+  - name: transfer_duration
+    type: STRING
+  - name: metadata
+    type: RECORD
+    fields:
+      - name: config_extract_ts
+        type: TIMESTAMP
