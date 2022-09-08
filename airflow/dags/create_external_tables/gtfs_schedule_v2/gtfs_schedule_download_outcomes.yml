@@ -1,0 +1,15 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_RAW') }}"
+source_objects:
+  - "download_schedule_feed_results/*.jsonl"
+destination_project_dataset_table: "external_gtfs_schedule.download_outcomes"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  source_uri_prefix: "download_schedule_feed_results/{dt:DATE}/{ts:TIMESTAMP}/"
+schema_fields:
+  - name: success
+    type: BOOLEAN
+  - name: exception
+    type: STRING

@@ -1,0 +1,18 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_PARSED') }}"
+source_objects:
+  - "parsing_results/*.jsonl"
+destination_project_dataset_table: "external_gtfs_schedule.unzip_outcomes"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  source_uri_prefix: "parsing_results/{dt:DATE}/"
+schema_fields:
+  - name: success
+    type: BOOLEAN
+  - name: exception
+    type: STRING
+  - name: fields
+    type: STRING
+    mode: REPEATED
