@@ -122,7 +122,7 @@ class GTFSScheduleFeedFile(PartitionedGCSArtifact):
     def dt(self) -> pendulum.Date:
         return self.ts.date()
 
-    @validator("ts")
+    @validator("ts", allow_reuse=True)
     def ts_must_be_pendulum_datetime(cls, v) -> pendulum.DateTime:
         if isinstance(v, datetime.datetime):
             v = pendulum.instance(v)
