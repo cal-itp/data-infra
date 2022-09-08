@@ -11,7 +11,13 @@ hive_options:
 schema_fields:
   - name: stop_id
     type: STRING
+  - name: stop_code
+    type: STRING
+  - name: stop_name
+    type: STRING
   - name: tts_stop_name
+    type: STRING
+  - name: stop_desc
     type: STRING
   - name: stop_lat
     type: STRING
@@ -19,17 +25,11 @@ schema_fields:
     type: STRING
   - name: zone_id
     type: STRING
-  - name: parent_station
-    type: STRING
-  - name: stop_code
-    type: STRING
-  - name: stop_name
-    type: STRING
-  - name: stop_desc
-    type: STRING
   - name: stop_url
     type: STRING
   - name: location_type
+    type: STRING
+  - name: parent_station
     type: STRING
   - name: stop_timezone
     type: STRING

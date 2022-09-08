@@ -9,17 +9,17 @@ hive_options:
   mode: CUSTOM
   source_uri_prefix: "routes/{dt:DATE}/{base64_url:STRING}/{ts:TIMESTAMP}/"
 schema_fields:
-  - name: route_id
-    type: STRING
-  - name: route_type
-    type: STRING
   - name: agency_id
+    type: STRING
+  - name: route_id
     type: STRING
   - name: route_short_name
     type: STRING
   - name: route_long_name
     type: STRING
   - name: route_desc
+    type: STRING
+  - name: route_type
     type: STRING
   - name: route_url
     type: STRING
@@ -32,6 +32,8 @@ schema_fields:
   - name: continuous_pickup
     type: STRING
   - name: continuous_drop_off
+    type: STRING
+  - name: network_id
     type: STRING
   - name: metadata
     type: RECORD

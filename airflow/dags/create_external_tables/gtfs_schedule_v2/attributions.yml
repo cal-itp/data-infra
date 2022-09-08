@@ -9,8 +9,6 @@ hive_options:
   mode: CUSTOM
   source_uri_prefix: "attributions/{dt:DATE}/{base64_url:STRING}/{ts:TIMESTAMP}/"
 schema_fields:
-  - name: organization_name
-    type: STRING
   - name: attribution_id
     type: STRING
   - name: agency_id
@@ -18,6 +16,8 @@ schema_fields:
   - name: route_id
     type: STRING
   - name: trip_id
+    type: STRING
+  - name: organization_name
     type: STRING
   - name: is_producer
     type: STRING

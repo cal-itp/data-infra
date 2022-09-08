@@ -15,8 +15,6 @@ schema_fields:
     type: STRING
   - name: trip_id
     type: STRING
-  - name: shape_id
-    type: STRING
   - name: trip_headsign
     type: STRING
   - name: trip_short_name
@@ -24,6 +22,8 @@ schema_fields:
   - name: direction_id
     type: STRING
   - name: block_id
+    type: STRING
+  - name: shape_id
     type: STRING
   - name: wheelchair_accessible
     type: STRING

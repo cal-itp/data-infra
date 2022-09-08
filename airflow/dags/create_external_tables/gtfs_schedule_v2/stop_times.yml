@@ -11,13 +11,13 @@ hive_options:
 schema_fields:
   - name: trip_id
     type: STRING
-  - name: stop_id
-    type: STRING
-  - name: stop_sequence
-    type: STRING
   - name: arrival_time
     type: STRING
   - name: departure_time
+    type: STRING
+  - name: stop_id
+    type: STRING
+  - name: stop_sequence
     type: STRING
   - name: stop_headsign
     type: STRING
