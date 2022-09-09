@@ -13,6 +13,8 @@ schema_fields:
     type: BOOLEAN
   - name: exception
     type: STRING
+  - name: zipfile_extract_path
+    type: STRING
   - name: zipfile_extract_md5hash
     type: STRING
   - name: zipfile_files
