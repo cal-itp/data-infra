@@ -1,5 +1,6 @@
-calitp==2022.8.25
+calitp==2022.9.8
 fsspec==2022.5.0
+gcsfs==2022.5.0
 intake==0.6.1
 ipdb==0.13.4
 gusty==0.6.0
@@ -17,3 +18,4 @@ jinja2<3.1.0
 protobuf==3.20.1
 google-api-core==1.32.0
 pandas-gbq<0.15.0
+pydantic==1.9.1
