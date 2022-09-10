@@ -44,6 +44,7 @@ errors_daily_check AS (
         t1.feature,
         t2.rt_files,
         t3.errors,
+        t1.feed_key,
         CASE
             WHEN rt_files > 0 AND errors IS null THEN "PASS"
             WHEN rt_files IS null THEN "FAIL"
