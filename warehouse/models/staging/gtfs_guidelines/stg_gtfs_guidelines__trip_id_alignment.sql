@@ -1,9 +1,9 @@
 WITH feed_guideline_index AS (
     SELECT * FROM {{ ref('stg_gtfs_guidelines__feed_guideline_index') }}
-    WHERE check = {{ no_rt_critical_validation_errors() }}
+    WHERE check = {{ trip_id_alignment() }}
 ),
 
--- gtfs_rt_fact_files_wide_hourly has one row per day per ID+URL
+-- gtfs_rt_fact_files_wide_hourly has one row per day per ID+URL+feed type
 gtfs_rt_fact_files_wide_daily AS (
 SELECT * FROM {{ ref('gtfs_rt_fact_files_wide_hourly') }}
 ),

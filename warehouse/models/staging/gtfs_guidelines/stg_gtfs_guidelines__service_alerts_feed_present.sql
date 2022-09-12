@@ -3,7 +3,7 @@ WITH feed_guideline_index AS (
     WHERE check = {{ service_alerts_feed_present() }}
 ),
 
--- gtfs_rt_fact_files_wide_hourly has one row per day per ID+URL
+-- gtfs_rt_fact_files_wide_hourly has one row per day per ID+URL+feed type
 gtfs_rt_fact_files_wide_daily AS (
 SELECT * FROM {{ ref('gtfs_rt_fact_files_wide_hourly') }}
 ),
