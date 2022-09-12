@@ -1144,9 +1144,9 @@ santa-maria-area-transit:
   agency_name: Santa Maria Area Transit
   feeds:
     - gtfs_schedule_url: https://smrt.tripshot.com/v1/gtfs.zip?regionId=CA558DDC-D7F2-4B48-9CAC-DEEA1134F820
-      gtfs_rt_vehicle_positions_url: https://smrt.tripshot.com/v1/gtfs/realtime/CA558DDC-D7F2-4B48-9CAC-DEEA1134F820
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://smrt.tripshot.com/v1/gtfs/realtime/vehiclePosition/CA558DDC-D7F2-4B48-9CAC-DEEA1134F820
+      gtfs_rt_service_alerts_url: https://smrt.tripshot.com/v1/gtfs/realtime/serviceAlert/CA558DDC-D7F2-4B48-9CAC-DEEA1134F820
+      gtfs_rt_trip_updates_url: https://smrt.tripshot.com/v1/gtfs/realtime/tripUpdate/CA558DDC-D7F2-4B48-9CAC-DEEA1134F820
   itp_id: 298
 santa-ynez-valley-transit:
   agency_name: Santa Ynez Valley Transit
@@ -1672,9 +1672,9 @@ anaheim-regional:
   agency_name: Anaheim Regional Transportation
   feeds:
     - gtfs_schedule_url: https://art.tripshot.com/v1/gtfs.zip?regionId=CA558DDC-D7F2-4B48-9CAC-DEEA1134F820
-      gtfs_rt_vehicle_positions_url: https://art.tripshot.com/v1/gtfs/realtime/CA558DDC-D7F2-4B48-9CAC-DEEA1134F820
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://art.tripshot.com/v1/gtfs/realtime/vehiclePosition/CA558DDC-D7F2-4B48-9CAC-DEEA1134F820
+      gtfs_rt_service_alerts_url: https://art.tripshot.com/v1/gtfs/realtime/serviceAlert/CA558DDC-D7F2-4B48-9CAC-DEEA1134F820
+      gtfs_rt_trip_updates_url: https://art.tripshot.com/v1/gtfs/realtime/tripUpdate/CA558DDC-D7F2-4B48-9CAC-DEEA1134F820
   itp_id: 14
 city-of-west-hollywood:
   agency_name: City of West Hollywood
