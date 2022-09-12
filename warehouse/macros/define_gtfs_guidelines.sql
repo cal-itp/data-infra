@@ -4,7 +4,7 @@
 {% endmacro %}
 
 {% macro no_validation_errors() %}
-"Static feed produces no validation errors in GTFS Validator"
+"No errors in MobilityData GTFS Schedule Validator"
 {% endmacro %}
 
 {% macro complete_wheelchair_accessibility_data() %}
@@ -16,11 +16,31 @@
 {% endmacro %}
 
 {% macro shapes_valid() %}
-"No shapes-related errors appear in the MobilityData GTFS Validator"
+"No shapes-related errors appear in the MobilityData GTFS Schedule Validator"
 {% endmacro %}
 
 {% macro technical_contact_listed() %}
 "Technical contact is listed in feed_contact_email field within the feed_info.txt file"
+{% endmacro %}
+
+{% macro no_rt_critical_validation_errors() %}
+"No critical errors in the MobilityData GTFS Realtime Validator"
+{% endmacro %}
+
+{% macro trip_id_alignment() %}
+"All trip_ids provided in the GTFS-rt feed exist in the GTFS data"
+{% endmacro %}
+
+{% macro vehicle_positions_feed_present() %}
+"Vehicle positions RT feed is present"
+{% endmacro %}
+
+{% macro trip_updates_feed_present() %}
+"Trip updates RT feed is present"
+{% endmacro %}
+
+{% macro service_alerts_feed_present() %}
+"Service alerts RT feed is present"
 {% endmacro %}
 
 -- declare features
@@ -38,6 +58,10 @@
 
 {% macro technical_contact_availability() %}
 "Technical Contact Availability"
+{% endmacro %}
+
+{% macro fixed_route_completeness() %}
+"Fixed-Route Completeness"
 {% endmacro %}
 
 -- columns
