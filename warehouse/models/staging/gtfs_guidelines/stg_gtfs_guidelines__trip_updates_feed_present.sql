@@ -3,7 +3,7 @@ WITH feed_guideline_index AS (
     WHERE check = {{ trip_updates_feed_present() }}
 ),
 
--- It's called "hourly" but if you use the "file_count_day" it's a daily table
+-- gtfs_rt_fact_files_wide_hourly has one row per day per ID+URL
 gtfs_rt_fact_files_wide_daily AS (
 SELECT * FROM {{ ref('gtfs_rt_fact_files_wide_hourly') }}
 ),
