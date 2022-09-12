@@ -24,7 +24,6 @@ checks_implemented AS (
 ),
 
 -- create an index: all feed/date/check combinations
--- we never want results from the current date, as data will be incomplete
 stg_gtfs_guidelines__feed_check_index AS (
     SELECT
         t2.calitp_itp_id,
@@ -38,7 +37,6 @@ stg_gtfs_guidelines__feed_check_index AS (
     LEFT JOIN gtfs_schedule_dim_feeds AS t2
         USING (feed_key)
     CROSS JOIN checks_implemented AS t3
-    WHERE t1.date < CURRENT_DATE
 )
 
 SELECT * FROM stg_gtfs_guidelines__feed_check_index
