@@ -4,7 +4,7 @@
 {% endmacro %}
 
 {% macro no_validation_errors() %}
-"Static feed produces no errors in MobilityData GTFS Schedule Validator"
+"No errors in MobilityData GTFS Schedule Validator"
 {% endmacro %}
 
 {% macro complete_wheelchair_accessibility_data() %}
