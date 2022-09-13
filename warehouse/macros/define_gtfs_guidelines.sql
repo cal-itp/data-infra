@@ -43,6 +43,10 @@
 "Service alerts RT feed is present"
 {% endmacro %}
 
+{% macro pathways_valid() %}
+"No pathways-related errors appear in the MobilityData GTFS Schedule Validator"
+{% endmacro %}
+
 -- declare features
 {% macro compliance() %}
 "Compliance"
