@@ -95,7 +95,7 @@ def process_feed_files(
             file_content = f.read()
         file_extract = GTFSScheduleFeedFile(
             ts=extract.ts,
-            base64_url=extract.base64_url,
+            extract_config=extract.config,
             zipfile_path=extract.path,
             original_filename=file,
             # only replace slashes so that this is a mostly GCS-filepath-safe string

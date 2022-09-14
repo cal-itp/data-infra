@@ -12,6 +12,7 @@ from calitp.storage import (
     get_fs,
     PartitionedGCSArtifact,
     ProcessingOutcome,
+    GTFSDownloadConfig,
 )
 from typing import ClassVar, List, Optional
 from utils import GTFSScheduleFeedFile
@@ -25,7 +26,7 @@ class GTFSScheduleFeedJSONL(PartitionedGCSArtifact):
     bucket: ClassVar[str] = SCHEDULE_PARSED_BUCKET
     partition_names: ClassVar[List[str]] = GTFSScheduleFeedFile.partition_names
     ts: pendulum.DateTime
-    base64_url: str
+    extract_config: GTFSDownloadConfig
     input_file_path: str
     gtfs_filename: str
 
@@ -38,6 +39,10 @@ class GTFSScheduleFeedJSONL(PartitionedGCSArtifact):
     @property
     def dt(self) -> pendulum.Date:
         return self.ts.date()
+
+    @property
+    def base64_url(self) -> str:
+        return self.extract_config.base64_encoded_url
 
 
 class GTFSScheduleParseOutcome(ProcessingOutcome):
@@ -90,7 +95,7 @@ def parse_individual_file(
 
         jsonl_file = GTFSScheduleFeedJSONL(
             ts=input_file.ts,
-            base64_url=input_file.base64_url,
+            extract_config=input_file.extract_config,
             filename=gtfs_filename + ".jsonl.gz",
             input_file_path=input_file.path,
             gtfs_filename=gtfs_filename,

@@ -71,7 +71,7 @@ class AirtableExtract(BaseModel):
             f"Downloading airtable data for {self.air_base_name}.{self.air_table_name}"
         )
         all_rows = Table(api_key, self.air_base_id, self.air_table_name).all()
-        self.extract_time = pendulum.now("utc")
+        self.extract_time = pendulum.now()
 
         raw_df = pd.DataFrame(
             [
@@ -109,6 +109,7 @@ class AirtableExtract(BaseModel):
             hive_path,
             gzip.compress(self.data.to_json(orient="records", lines=True).encode()),
         )
+        return hive_path
 
 
 class AirtableToGCSOperator(BaseOperator):
@@ -151,4 +152,5 @@ class AirtableToGCSOperator(BaseOperator):
     def execute(self, **kwargs):
         self.extract.fetch_from_airtable(self.api_key)
         fs = get_fs()
-        self.extract.save_to_gcs(fs, self.bucket)
+        # inserts into xcoms
+        return self.extract.save_to_gcs(fs, self.bucket)

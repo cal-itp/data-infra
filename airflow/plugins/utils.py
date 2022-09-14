@@ -9,6 +9,7 @@ from calitp import read_gcfs, save_to_gcfs
 from calitp.storage import (
     GTFSScheduleFeedExtract,
     PartitionedGCSArtifact,
+    GTFSDownloadConfig,
 )
 from pandas.errors import EmptyDataError
 from pydantic import validator
@@ -108,7 +109,7 @@ class GTFSScheduleFeedFile(PartitionedGCSArtifact):
     bucket: ClassVar[str] = SCHEDULE_UNZIPPED_BUCKET
     partition_names: ClassVar[List[str]] = GTFSScheduleFeedExtract.partition_names
     ts: pendulum.DateTime
-    base64_url: str
+    extract_config: GTFSDownloadConfig
     zipfile_path: str
     original_filename: str
 
@@ -121,6 +122,10 @@ class GTFSScheduleFeedFile(PartitionedGCSArtifact):
     @property
     def dt(self) -> pendulum.Date:
         return self.ts.date()
+
+    @property
+    def base64_url(self) -> str:
+        return self.extract_config.base64_encoded_url
 
     @validator("ts", allow_reuse=True)
     def ts_must_be_pendulum_datetime(cls, v) -> pendulum.DateTime:

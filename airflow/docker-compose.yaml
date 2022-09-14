@@ -81,6 +81,7 @@ x-airflow-common:
 
     CALITP_BUCKET__AIRTABLE: "gs://test-calitp-airtable"
     CALITP_BUCKET__DBT_ARTIFACTS: "gs://test-calitp-dbt-artifacts"
+    CALITP_BUCKET__GTFS_CONFIG: "gs://test-calitp-gtfs-config"
     CALITP_BUCKET__GTFS_RT_RAW: "gs://test-calitp-gtfs-rt-raw"
     CALITP_BUCKET__GTFS_RT_PARSED: "gs://test-calitp-gtfs-rt-parsed"
     CALITP_BUCKET__GTFS_RT_VALIDATION: "gs://test-calitp-gtfs-rt-validation"
