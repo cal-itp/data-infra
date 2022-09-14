@@ -15,6 +15,9 @@ from calitp.storage import (
     GTFSDownloadConfig,
 )
 from typing import ClassVar, List, Optional
+
+from pydantic import BaseModel
+
 from utils import GTFSScheduleFeedFile
 
 SCHEDULE_PARSED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_PARSED"]
@@ -43,6 +46,10 @@ class GTFSScheduleFeedJSONL(PartitionedGCSArtifact):
     @property
     def base64_url(self) -> str:
         return self.extract_config.base64_encoded_url
+
+
+class ScheduleParsingMetadata(BaseModel):
+    extract_config: GTFSDownloadConfig
 
 
 class GTFSScheduleParseOutcome(ProcessingOutcome):
@@ -89,8 +96,12 @@ def parse_individual_file(
             for row in reader:
                 lines.append(row)
 
+        meta = ScheduleParsingMetadata(extract_config=input_file.extract_config)
         jsonl_content = gzip.compress(
-            "\n".join(json.dumps(line) for line in lines).encode()
+            "\n".join(
+                json.dumps({"metadata": json.loads(meta.json()), **line})
+                for line in lines
+            ).encode()
         )
 
         jsonl_file = GTFSScheduleFeedJSONL(
