@@ -320,7 +320,7 @@ def validate_day(
         outcomes=outcomes,
     )
     typer.secho(
-        f"got {len(result.successes)} successes and {len(exceptions)} failures",
+        f"got {len(result.successes)} successes and {len(result.failures)} failures",
         fg=typer.colors.MAGENTA,
     )
 
