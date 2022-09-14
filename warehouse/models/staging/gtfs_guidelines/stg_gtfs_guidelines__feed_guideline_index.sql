@@ -20,6 +20,8 @@ checks_implemented AS (
     UNION ALL
     SELECT {{ shapes_valid() }}, {{ accurate_service_data() }}
     UNION ALL
+    SELECT {{ pathways_valid() }}, {{ accurate_accessibility_data() }}
+    UNION ALL
     SELECT {{ technical_contact_listed() }}, {{ technical_contact_availability() }}
     UNION ALL
     SELECT {{ no_rt_critical_validation_errors() }}, {{ compliance() }}
