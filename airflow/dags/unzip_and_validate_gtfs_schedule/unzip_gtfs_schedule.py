@@ -108,9 +108,10 @@ def process_feed_files(
 
 
 def unzip_individual_feed(
-    fs, extract: GTFSScheduleFeedExtract
+    extract: GTFSScheduleFeedExtract,
 ) -> GTFSScheduleFeedExtractUnzipOutcome:
     logging.info(f"Processing {extract.name}")
+    fs = get_fs()
     zipfile_md5_hash = ""
     files = []
     directories = []
@@ -160,7 +161,7 @@ def unzip_extracts(day: pendulum.datetime):
     logging.info(f"Identified {len(extracts)} records for {day}")
     outcomes = []
     for extract in extracts:
-        outcome = unzip_individual_feed(fs, extract)
+        outcome = unzip_individual_feed(extract)
         outcomes.append(outcome)
 
     result = ScheduleUnzipResult(filename="results.jsonl", dt=day, outcomes=outcomes)
