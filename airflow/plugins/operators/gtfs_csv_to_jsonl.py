@@ -30,7 +30,6 @@ class GTFSScheduleFeedJSONL(PartitionedGCSArtifact):
     partition_names: ClassVar[List[str]] = GTFSScheduleFeedFile.partition_names
     ts: pendulum.DateTime
     extract_config: GTFSDownloadConfig
-    input_file_path: str
     gtfs_filename: str
 
     # if you try to set table directly, you get an error because it "shadows a BaseModel attribute"
@@ -53,7 +52,6 @@ class ScheduleParsingMetadata(BaseModel):
 
 
 class GTFSScheduleParseOutcome(ProcessingOutcome):
-    input_file_path: str
     fields: Optional[List[str]]
     parsed_file_path: Optional[str]
 
@@ -108,7 +106,6 @@ def parse_individual_file(
             ts=input_file.ts,
             extract_config=input_file.extract_config,
             filename=gtfs_filename + ".jsonl.gz",
-            input_file_path=input_file.path,
             gtfs_filename=gtfs_filename,
         )
 
@@ -119,13 +116,11 @@ def parse_individual_file(
         return GTFSScheduleParseOutcome(
             success=False,
             exception=e,
-            input_file_path=input_file.path,
             fields=field_names,
         )
     logging.info(f"Parsed {input_file.path}")
     return GTFSScheduleParseOutcome(
         success=True,
-        input_file_path=input_file.path,
         fields=field_names,
         parsed_file=jsonl_file.path,
     )
