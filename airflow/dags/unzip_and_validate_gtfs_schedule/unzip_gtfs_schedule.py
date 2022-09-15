@@ -2,13 +2,16 @@
 # python_callable: airflow_unzip_extracts
 # provide_context: true
 # ---
+import concurrent
 import logging
 import os
+from concurrent.futures import ThreadPoolExecutor, Future
+
 import pendulum
 import zipfile
 
 from io import BytesIO
-from typing import ClassVar, List, Optional, Tuple
+from typing import ClassVar, List, Optional, Tuple, Dict
 from calitp.storage import (
     fetch_all_in_partition,
     GTFSScheduleFeedExtract,
@@ -144,7 +147,7 @@ def unzip_individual_feed(
     )
 
 
-def unzip_extracts(day: pendulum.datetime):
+def unzip_extracts(day: pendulum.datetime, threads: int = 4):
     fs = get_fs()
     day = pendulum.instance(day).date()
     extracts = fetch_all_in_partition(
@@ -160,9 +163,16 @@ def unzip_extracts(day: pendulum.datetime):
 
     logging.info(f"Identified {len(extracts)} records for {day}")
     outcomes = []
-    for extract in extracts:
-        outcome = unzip_individual_feed(extract)
-        outcomes.append(outcome)
+
+    with ThreadPoolExecutor(max_workers=threads) as pool:
+        futures: Dict[Future, GTFSScheduleFeedExtract] = {
+            pool.submit(unzip_individual_feed, extract=extract): extract
+            for extract in extracts
+        }
+
+        for future in concurrent.futures.as_completed(futures):
+            # TODO: could consider letting errors bubble up and handling here
+            outcomes.append(future.result())
 
     result = ScheduleUnzipResult(filename="results.jsonl", dt=day, outcomes=outcomes)
     result.save(fs)
