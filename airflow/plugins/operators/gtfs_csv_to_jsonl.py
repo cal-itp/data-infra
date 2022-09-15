@@ -12,8 +12,12 @@ from calitp.storage import (
     get_fs,
     PartitionedGCSArtifact,
     ProcessingOutcome,
+    GTFSDownloadConfig,
 )
 from typing import ClassVar, List, Optional
+
+from pydantic import BaseModel
+
 from utils import GTFSScheduleFeedFile
 
 SCHEDULE_PARSED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_PARSED"]
@@ -25,8 +29,7 @@ class GTFSScheduleFeedJSONL(PartitionedGCSArtifact):
     bucket: ClassVar[str] = SCHEDULE_PARSED_BUCKET
     partition_names: ClassVar[List[str]] = GTFSScheduleFeedFile.partition_names
     ts: pendulum.DateTime
-    base64_url: str
-    input_file_path: str
+    extract_config: GTFSDownloadConfig
     gtfs_filename: str
 
     # if you try to set table directly, you get an error because it "shadows a BaseModel attribute"
@@ -39,9 +42,16 @@ class GTFSScheduleFeedJSONL(PartitionedGCSArtifact):
     def dt(self) -> pendulum.Date:
         return self.ts.date()
 
+    @property
+    def base64_url(self) -> str:
+        return self.extract_config.base64_encoded_url
+
+
+class ScheduleParsingMetadata(BaseModel):
+    extract_config: GTFSDownloadConfig
+
 
 class GTFSScheduleParseOutcome(ProcessingOutcome):
-    input_file_path: str
     fields: Optional[List[str]]
     parsed_file_path: Optional[str]
 
@@ -84,15 +94,18 @@ def parse_individual_file(
             for row in reader:
                 lines.append(row)
 
+        meta = ScheduleParsingMetadata(extract_config=input_file.extract_config)
         jsonl_content = gzip.compress(
-            "\n".join(json.dumps(line) for line in lines).encode()
+            "\n".join(
+                json.dumps({"metadata": json.loads(meta.json()), **line})
+                for line in lines
+            ).encode()
         )
 
         jsonl_file = GTFSScheduleFeedJSONL(
             ts=input_file.ts,
-            base64_url=input_file.base64_url,
+            extract_config=input_file.extract_config,
             filename=gtfs_filename + ".jsonl.gz",
-            input_file_path=input_file.path,
             gtfs_filename=gtfs_filename,
         )
 
@@ -103,13 +116,11 @@ def parse_individual_file(
         return GTFSScheduleParseOutcome(
             success=False,
             exception=e,
-            input_file_path=input_file.path,
             fields=field_names,
         )
     logging.info(f"Parsed {input_file.path}")
     return GTFSScheduleParseOutcome(
         success=True,
-        input_file_path=input_file.path,
         fields=field_names,
         parsed_file=jsonl_file.path,
     )

@@ -1,4 +1,4 @@
-calitp==2022.9.8
+calitp==2022.9.15
 fsspec==2022.5.0
 gcsfs==2022.5.0
 intake==0.6.1

@@ -36,17 +36,14 @@ from calitp.storage import (
     JSONL_GZIP_EXTENSION,
     GTFSRTFeedExtract,
     GTFSFeedExtract,
-    AirtableGTFSDataExtract,
-    AirtableGTFSDataRecord,
-    get_latest_file,
-    PARTITIONED_ARTIFACT_METADATA_KEY,
     GTFSScheduleFeedExtract,
     make_name_bq_safe,
+    GTFSDownloadConfig,
 )  # type: ignore
 from google.protobuf import json_format
 from google.protobuf.message import DecodeError
 from google.transit import gtfs_realtime_pb2  # type: ignore
-from pydantic import BaseModel, Field, validator, parse_obj_as
+from pydantic import BaseModel, Field, validator
 from tqdm import tqdm
 
 RT_VALIDATOR_JAR_LOCATION_ENV_KEY = "GTFS_RT_VALIDATOR_JAR"
@@ -79,6 +76,15 @@ def make_pydantic_model_bq_safe(model: BaseModel) -> Dict[str, Any]:
 class RTProcessingStep(str, Enum):
     parse = "parse"
     validate = "validate"
+
+
+class RTParsingMetadata(BaseModel):
+    extract_config: GTFSDownloadConfig
+
+
+class RTValidationMetadata(BaseModel):
+    extract_config: GTFSDownloadConfig
+    gtfs_validator_version: str
 
 
 def log(*args, err=False, fg=None, pbar=None, **kwargs):
@@ -129,58 +135,18 @@ class ScheduleDataNotFound(Exception):
 
 
 @lru_cache
-def get_airtable_gtfs_records_for_day(
+def get_schedule_extracts_for_day(
     dt: pendulum.Date,
-) -> Dict[str, AirtableGTFSDataRecord]:
-    file = get_latest_file(
-        AirtableGTFSDataExtract.bucket,
-        AirtableGTFSDataExtract.table,
-        prefix_partitions={
+) -> Dict[str, GTFSScheduleFeedExtract]:
+    extracts: List[GTFSScheduleFeedExtract] = fetch_all_in_partition(
+        cls=GTFSScheduleFeedExtract,
+        fs=get_fs(),
+        partitions={
             "dt": dt,
         },
-        partition_types={
-            "ts": pendulum.DateTime,
-        },
     )
 
-    with get_fs().open(file.name, "rb") as f:
-        content = gzip.decompress(f.read())
-    records = [
-        AirtableGTFSDataRecord(**json.loads(row))
-        for row in content.decode().splitlines()
-    ]
-
-    return {record.id: record for record in records}
-
-
-@lru_cache
-def get_schedule_extract_for_day_and_url(
-    dt: pendulum.Date, url: str
-) -> GTFSScheduleFeedExtract:
-    file = get_latest_file(
-        GTFSScheduleFeedExtract.bucket,
-        GTFSScheduleFeedExtract.table,
-        prefix_partitions={
-            "dt": dt,
-            "base64_url": url,
-        },
-        partition_types={
-            "ts": pendulum.DateTime,
-        },
-    )
-    return parse_obj_as(
-        GTFSScheduleFeedExtract,
-        json.loads(get_fs().getxattr(file.name, PARTITIONED_ARTIFACT_METADATA_KEY)),
-    )
-
-
-def get_schedule_extract_for_rt_validation(
-    extract: GTFSRTFeedExtract,
-) -> GTFSScheduleFeedExtract:
-    # TODO: this does not work if we didn't download a schedule zip for that day
-    airtable_records = get_airtable_gtfs_records_for_day(extract.dt)
-    record = airtable_records[extract.config.schedule_to_use_for_rt_validation[0]]
-    return get_schedule_extract_for_day_and_url(extract.dt, record.base64_encoded_url)
+    return {extract.base64_url: extract for extract in extracts}
 
 
 class RTHourlyAggregation(PartitionedGCSArtifact):
@@ -361,14 +327,20 @@ def validate_and_upload(
 ) -> List[RTFileProcessingOutcome]:
     first_extract = hour.extracts[0]
     try:
+        # TODO: this does not work if we didn't download a schedule zip for that day
+        schedule_extract = get_schedule_extracts_for_day(first_extract.dt)[
+            first_extract.config.base64_validation_url
+        ]
         gtfs_zip = download_gtfs_schedule_zip(
             fs,
-            schedule_extract=get_schedule_extract_for_rt_validation(first_extract),
+            schedule_extract=schedule_extract,
             dst_path=tmp_dir,
             pbar=pbar,
         )
-    except FileNotFoundError:
-        raise ScheduleDataNotFound(f"no schedule data found for {first_extract.path}")
+    except (KeyError, FileNotFoundError) as e:
+        raise ScheduleDataNotFound(
+            f"no schedule data found for {first_extract.path}"
+        ) from e
 
     execute_rt_validator(
         gtfs_zip,
@@ -408,10 +380,12 @@ def validate_and_upload(
         records_to_upload.extend(
             [
                 {
-                    "metadata": {
-                        "gtfs_validator_version": GTFS_RT_VALIDATOR_VERSION,
-                        "extract_path": extract.path,
-                    },
+                    "metadata": json.loads(
+                        RTValidationMetadata(
+                            extract_config=extract.config,
+                            gtfs_validator_version=GTFS_RT_VALIDATOR_VERSION,
+                        ).json()
+                    ),
                     **record,
                 }
                 for record in records
@@ -504,9 +478,11 @@ def parse_and_upload(
                             {
                                 "header": parsed["header"],
                                 # back and forth so we use pydantic serialization
-                                "metadata": {
-                                    "extract_path": extract.path,
-                                },
+                                "metadata": json.loads(
+                                    RTParsingMetadata(
+                                        extract_config=extract.config,
+                                    ).json()
+                                ),
                                 **copy.deepcopy(record),
                             }
                         )
@@ -560,7 +536,7 @@ def parse_and_validate(
     )
 
     if hour.step == RTProcessingStep.validate:
-        if not hour.extracts[0].config.schedule_to_use_for_rt_validation:
+        if not hour.extracts[0].config.schedule_url_for_validation:
             return [
                 RTFileProcessingOutcome(
                     step=hour.step,

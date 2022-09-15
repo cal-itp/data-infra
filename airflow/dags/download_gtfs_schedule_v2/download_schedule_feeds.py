@@ -3,8 +3,9 @@
 # provide_context: true
 # ---
 import datetime
+import gzip
+import json
 import logging
-import re
 import traceback
 from typing import List, Optional, ClassVar
 
@@ -17,8 +18,6 @@ from airflow.utils.email import send_email
 from calitp.config import is_development
 from calitp.storage import (
     get_fs,
-    AirtableGTFSDataExtract,
-    AirtableGTFSDataRecord,
     GTFSScheduleFeedExtract,
     GTFSFeedType,
     download_feed,
@@ -26,14 +25,17 @@ from calitp.storage import (
     SCHEDULE_RAW_BUCKET,
     PartitionedGCSArtifact,
     JSONL_EXTENSION,
+    GTFSDownloadConfig,
+    get_latest,
+    GTFSDownloadConfigExtract,
 )
 from pydantic import validator
 
 GTFS_FEED_LIST_ERROR_THRESHOLD = 0.95
 
 
-class AirtableGTFSDataRecordProcessingOutcome(ProcessingOutcome):
-    airtable_record: AirtableGTFSDataRecord
+class GTFSDownloadOutcome(ProcessingOutcome):
+    config: GTFSDownloadConfig
     extract: Optional[GTFSScheduleFeedExtract]
 
 
@@ -43,7 +45,7 @@ class DownloadFeedsResult(PartitionedGCSArtifact):
     partition_names: ClassVar[List[str]] = ["dt", "ts"]
     ts: pendulum.DateTime
     end: pendulum.DateTime
-    outcomes: List[AirtableGTFSDataRecordProcessingOutcome]
+    outcomes: List[GTFSDownloadOutcome]
 
     @validator("filename", allow_reuse=True)
     def is_jsonl(cls, v):
@@ -55,11 +57,11 @@ class DownloadFeedsResult(PartitionedGCSArtifact):
         return self.ts.date()
 
     @property
-    def successes(self) -> List[AirtableGTFSDataRecordProcessingOutcome]:
+    def successes(self) -> List[GTFSDownloadOutcome]:
         return [outcome for outcome in self.outcomes if outcome.success]
 
     @property
-    def failures(self) -> List[AirtableGTFSDataRecordProcessingOutcome]:
+    def failures(self) -> List[GTFSDownloadOutcome]:
         return [outcome for outcome in self.outcomes if not outcome.success]
 
     # TODO: I dislike having to exclude the records here
@@ -78,65 +80,59 @@ def download_all(task_instance, execution_date, **kwargs):
     # https://stackoverflow.com/a/61808755
     with create_session() as session:
         auth_dict = {var.key: var.val for var in session.query(Variable)}
+    print(auth_dict.keys())
 
+    extract = get_latest(GTFSDownloadConfigExtract)
+
+    fs = get_fs()
+
+    with fs.open(extract.path, "rb") as f:
+        content = gzip.decompress(f.read())
     records = [
-        record
-        for record in AirtableGTFSDataExtract.get_latest().records
-        if record.data_quality_pipeline and record.data == GTFSFeedType.schedule
+        GTFSDownloadConfig(**json.loads(row)) for row in content.decode().splitlines()
     ]
-    outcomes: List[AirtableGTFSDataRecordProcessingOutcome] = []
 
-    logging.info(f"processing {len(records)} records")
+    configs = [
+        config for config in records if config.feed_type == GTFSFeedType.schedule
+    ]
+    outcomes: List[GTFSDownloadOutcome] = []
 
-    for i, record in enumerate(records, start=1):
-        logging.info(f"attempting to fetch {i}/{len(records)} {record.uri}")
+    logging.info(f"processing {len(configs)} configs")
+
+    for i, config in enumerate(configs, start=1):
+        logging.info(f"attempting to fetch {i}/{len(configs)} {config.url}")
 
         try:
-            # this is a bit hacky but we need this until we split off auth query params from the URI itself
-            jinja_pattern = r"(?P<param_name>\w+)={{\s*(?P<param_lookup_key>\w+)\s*}}"
-            match = re.search(jinja_pattern, record.uri)
-            if match:
-                record.auth_query_param = {
-                    match.group("param_name"): match.group("param_lookup_key")
-                }
-                record.uri = re.sub(jinja_pattern, "", record.uri)
-
             extract, content = download_feed(
-                record,
+                config=config,
                 auth_dict=auth_dict,
                 ts=start,
             )
 
-            extract.save_content(fs=get_fs(), content=content)
+            extract.save_content(fs=fs, content=content)
 
             outcomes.append(
-                AirtableGTFSDataRecordProcessingOutcome(
+                GTFSDownloadOutcome(
                     success=True,
-                    airtable_record=record,
+                    config=config,
                     extract=extract,
                 )
             )
         except Exception as e:
             logging.error(
-                f"exception occurred while attempting to download feed {record.uri}: {str(e)}\n{traceback.format_exc()}"
+                f"exception occurred while attempting to download feed {config.url}: {str(e)}\n{traceback.format_exc()}"
             )
             outcomes.append(
-                AirtableGTFSDataRecordProcessingOutcome(
+                GTFSDownloadOutcome(
                     success=False,
                     exception=e,
-                    airtable_record=record,
+                    config=config,
                 )
             )
 
-    # TODO: save the outcomes somewhere
-
     print(
-        f"took {humanize.naturaltime(pendulum.now() - start)} to process {len(records)} records"
+        f"took {humanize.naturaltime(pendulum.now() - start)} to process {len(configs)} configs"
     )
-
-    assert len(records) == len(
-        outcomes
-    ), f"we somehow ended up with {len(outcomes)} outcomes from {len(records)} records"
 
     result = DownloadFeedsResult(
         ts=start,
@@ -147,7 +143,11 @@ def download_all(task_instance, execution_date, **kwargs):
 
     result.save(get_fs())
 
-    print(f"successfully fetched {len(result.successes)} of {len(records)}")
+    assert len(configs) == len(
+        outcomes
+    ), f"we somehow ended up with {len(outcomes)} outcomes from {len(configs)} configs"
+
+    print(f"successfully fetched {len(result.successes)} of {len(configs)}")
 
     if result.failures:
         print(
@@ -187,7 +187,7 @@ def download_all(task_instance, execution_date, **kwargs):
             ),
         )
 
-    success_rate = len(result.successes) / len(records)
+    success_rate = len(result.successes) / len(configs)
     if success_rate < GTFS_FEED_LIST_ERROR_THRESHOLD:
         raise RuntimeError(
             f"Success rate: {success_rate:.3f} was below error threshold: {GTFS_FEED_LIST_ERROR_THRESHOLD}"
