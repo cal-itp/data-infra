@@ -5,7 +5,7 @@ tags:
 default_args:
     owner: airflow
     depends_on_past: False
-    start_date: "2022-09-15"
+    start_date: "2022-09-14"
     email:
       - "laurie.m@jarv.us"
       - "andrew.v@jarv.us"
