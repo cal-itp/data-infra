@@ -52,13 +52,13 @@ class ScheduleParsingMetadata(BaseModel):
 
 
 class GTFSScheduleParseOutcome(ProcessingOutcome):
+    feed_file: GTFSScheduleFeedFile
     fields: Optional[List[str]]
-    parsed_file_path: Optional[str]
+    parsed_file: Optional[GTFSScheduleFeedJSONL]
 
 
 class ScheduleParseResult(PartitionedGCSArtifact):
     bucket: ClassVar[str] = SCHEDULE_PARSED_BUCKET
-    table: ClassVar[str] = "parsing_results"
     partition_names: ClassVar[List[str]] = ["dt"]
     dt: pendulum.Date
     outcomes: List[GTFSScheduleParseOutcome]
@@ -66,6 +66,10 @@ class ScheduleParseResult(PartitionedGCSArtifact):
     @property
     def successes(self) -> List[GTFSScheduleParseOutcome]:
         return [outcome for outcome in self.outcomes if outcome.success]
+
+    @property
+    def table(self) -> str:
+        return f"{self.outcomes[0].feed_file.table}_parsing_results"
 
     @property
     def failures(self) -> List[GTFSScheduleParseOutcome]:
@@ -85,7 +89,7 @@ def parse_individual_file(
     gtfs_filename: str,
 ) -> GTFSScheduleParseOutcome:
     logging.info(f"Processing {input_file.path}")
-    field_names = []
+    field_names = None
     lines = []
     try:
         with fs.open(input_file.path, newline="", mode="r") as f:
@@ -116,13 +120,15 @@ def parse_individual_file(
         return GTFSScheduleParseOutcome(
             success=False,
             exception=e,
+            feed_file=input_file,
             fields=field_names,
         )
     logging.info(f"Parsed {input_file.path}")
     return GTFSScheduleParseOutcome(
         success=True,
+        feed_file=input_file,
         fields=field_names,
-        parsed_file=jsonl_file.path,
+        parsed_file=jsonl_file,
     )
 
 
@@ -146,6 +152,9 @@ def parse_files(day: pendulum.datetime, input_table_name: str, gtfs_filename: st
         outcome = parse_individual_file(fs, file, gtfs_filename)
         outcomes.append(outcome)
 
+    assert (
+        len({outcome.feed_file.table for outcome in outcomes}) == 1
+    ), "somehow you're processing multiple input tables"
     result = ScheduleParseResult(filename="results.jsonl", dt=day, outcomes=outcomes)
     result.save(fs)
 
