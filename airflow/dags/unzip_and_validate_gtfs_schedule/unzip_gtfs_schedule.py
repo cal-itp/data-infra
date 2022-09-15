@@ -111,9 +111,10 @@ def process_feed_files(
 
 
 def unzip_individual_feed(
+    i: int,
     extract: GTFSScheduleFeedExtract,
 ) -> GTFSScheduleFeedExtractUnzipOutcome:
-    logging.info(f"Processing {extract.name}")
+    logging.info(f"processing {i} {extract.name}")
     fs = get_fs()
     zipfile_md5_hash = ""
     files = []
@@ -136,7 +137,6 @@ def unzip_individual_feed(
             zipfile_files=files,
             zipfile_dirs=directories,
         )
-    logging.info(f"Successfully unzipped {extract.path}")
     return GTFSScheduleFeedExtractUnzipOutcome(
         success=True,
         zipfile_extract_md5hash=zipfile_md5_hash,
@@ -166,8 +166,8 @@ def unzip_extracts(day: pendulum.datetime, threads: int = 4):
 
     with ThreadPoolExecutor(max_workers=threads) as pool:
         futures: Dict[Future, GTFSScheduleFeedExtract] = {
-            pool.submit(unzip_individual_feed, extract=extract): extract
-            for extract in extracts
+            pool.submit(unzip_individual_feed, i=i, extract=extract): extract
+            for i, extract in enumerate(extracts)
         }
 
         for future in concurrent.futures.as_completed(futures):
