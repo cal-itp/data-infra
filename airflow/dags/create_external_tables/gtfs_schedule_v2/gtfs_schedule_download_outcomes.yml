@@ -13,3 +13,33 @@ schema_fields:
     type: BOOLEAN
   - name: exception
     type: STRING
+  - &config
+    name: config
+    type: RECORD
+    fields:
+      - name: extracted_at
+        type: TIMESTAMP
+      - name: name
+        type: STRING
+      - name: url
+        type: STRING
+      - name: feed_type
+        type: STRING
+      - name: schedule_url_for_validation
+        type: STRING
+      - name: auth_query_params
+        type: JSON
+      - name: auth_headers
+        type: JSON
+  - name: extract
+    type: RECORD
+    fields:
+      - name: filename
+        type: STRING
+      - name: ts
+        type: TIMESTAMP
+      - *config
+      - name: response_code
+        type: INT64
+      - name: response_headers
+        type: JSON

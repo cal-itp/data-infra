@@ -6,4 +6,6 @@ sources:
     database: cal-itp-data-infra-staging
     schema: external_gtfs_schedule
     tables:
+      - name: download_outcomes
       - name: unzip_outcomes
+      - name: parse_outcomes

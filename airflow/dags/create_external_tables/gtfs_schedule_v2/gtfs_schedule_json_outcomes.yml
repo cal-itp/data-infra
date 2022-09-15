@@ -2,7 +2,7 @@ operator: operators.ExternalTable
 bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_PARSED') }}"
 source_objects:
   - "parsing_results/*.jsonl"
-destination_project_dataset_table: "external_gtfs_schedule.unzip_outcomes"
+destination_project_dataset_table: "external_gtfs_schedule.parse_outcomes"
 source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 hive_options:
@@ -13,6 +13,54 @@ schema_fields:
     type: BOOLEAN
   - name: exception
     type: STRING
-  - name: fields
+  - name: extract
+    type: RECORD
+    fields:
+      - name: filename
+        type: STRING
+      - name: ts
+        type: TIMESTAMP
+      - name: config
+        type: RECORD
+        fields:
+          &config_fields
+          - name: extracted_at
+            type: TIMESTAMP
+          - name: name
+            type: STRING
+          - name: url
+            type: STRING
+          - name: feed_type
+            type: STRING
+          - name: schedule_url_for_validation
+            type: STRING
+          - name: auth_query_params
+            type: JSON
+          - name: auth_headers
+            type: JSON
+      - name: response_code
+        type: INT64
+      - name: response_headers
+        type: JSON
+  - name: zipfile_extract_md5hash
+    type: STRING
+  - name: zipfile_files
     type: STRING
     mode: REPEATED
+  - name: zipfile_dirs
+    type: STRING
+    mode: REPEATED
+  - name: extracted_files
+    type: RECORD
+    mode: REPEATED
+    fields:
+      - name: filename
+        type: STRING
+      - name: ts
+        type: TIMESTAMP
+      - name: extract_config
+        type: RECORD
+        fields:
+          *config_fields
+      - name: original_filename
+        type: STRING
