@@ -621,6 +621,13 @@ def main(
         progress=progress,
     )
 
+    if not files:
+        typer.secho(
+            f"WARNING: found no files to process for {feed_type} {pendulum_hour.isoformat()}, exiting",
+            fg=typer.colors.YELLOW,
+        )
+        return
+
     rt_aggs: Dict[Tuple[pendulum.DateTime, str], List[GTFSRTFeedExtract]] = defaultdict(
         list
     )
