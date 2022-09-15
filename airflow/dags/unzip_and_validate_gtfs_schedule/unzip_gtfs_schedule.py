@@ -39,11 +39,11 @@ def log(*args, err=False, fg=None, pbar=None, **kwargs):
 
 
 class GTFSScheduleFeedExtractUnzipOutcome(ProcessingOutcome):
-    zipfile_extract_path: str
+    extract: GTFSScheduleFeedExtract
     zipfile_extract_md5hash: Optional[str]
     zipfile_files: Optional[List[str]]
     zipfile_dirs: Optional[List[str]]
-    extracted_files: Optional[List[str]]
+    extracted_files: Optional[List[GTFSScheduleFeedFile]]
 
 
 class ScheduleUnzipResult(PartitionedGCSArtifact):
@@ -114,7 +114,6 @@ def process_feed_files(
         file_extract = GTFSScheduleFeedFile(
             ts=extract.ts,
             extract_config=extract.config,
-            zipfile_path=extract.path,
             original_filename=file,
             # only replace slashes so that this is a mostly GCS-filepath-safe string
             # if we encounter something else, we will address: https://cloud.google.com/storage/docs/naming-objects
@@ -153,19 +152,19 @@ def unzip_individual_feed(
         log(f"Can't process {extract.path}: {e}", pbar=pbar)
         return GTFSScheduleFeedExtractUnzipOutcome(
             success=False,
+            extract=extract,
             zipfile_extract_md5hash=zipfile_md5_hash,
-            zipfile_extract_path=extract.path,
             exception=e,
             zipfile_files=files,
             zipfile_dirs=directories,
         )
     return GTFSScheduleFeedExtractUnzipOutcome(
         success=True,
+        extract=extract,
         zipfile_extract_md5hash=zipfile_md5_hash,
-        zipfile_extract_path=extract.path,
         zipfile_files=files,
         zipfile_dirs=directories,
-        extracted_files=[file.path for file in zipfile_files],
+        extracted_files=zipfile_files,
     )
 
 

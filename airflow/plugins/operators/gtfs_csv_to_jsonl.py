@@ -16,8 +16,6 @@ from calitp.storage import (
 )
 from typing import ClassVar, List, Optional
 
-from pydantic import BaseModel
-
 from utils import GTFSScheduleFeedFile
 
 SCHEDULE_PARSED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_PARSED"]
@@ -47,18 +45,14 @@ class GTFSScheduleFeedJSONL(PartitionedGCSArtifact):
         return self.extract_config.base64_encoded_url
 
 
-class ScheduleParsingMetadata(BaseModel):
-    extract_config: GTFSDownloadConfig
-
-
 class GTFSScheduleParseOutcome(ProcessingOutcome):
+    feed_file: GTFSScheduleFeedFile
     fields: Optional[List[str]]
-    parsed_file_path: Optional[str]
+    parsed_file: Optional[GTFSScheduleFeedJSONL]
 
 
 class ScheduleParseResult(PartitionedGCSArtifact):
     bucket: ClassVar[str] = SCHEDULE_PARSED_BUCKET
-    table: ClassVar[str] = "parsing_results"
     partition_names: ClassVar[List[str]] = ["dt"]
     dt: pendulum.Date
     outcomes: List[GTFSScheduleParseOutcome]
@@ -66,6 +60,10 @@ class ScheduleParseResult(PartitionedGCSArtifact):
     @property
     def successes(self) -> List[GTFSScheduleParseOutcome]:
         return [outcome for outcome in self.outcomes if outcome.success]
+
+    @property
+    def table(self) -> str:
+        return f"{self.outcomes[0].feed_file.table}_parsing_results"
 
     @property
     def failures(self) -> List[GTFSScheduleParseOutcome]:
@@ -85,21 +83,17 @@ def parse_individual_file(
     gtfs_filename: str,
 ) -> GTFSScheduleParseOutcome:
     logging.info(f"Processing {input_file.path}")
-    field_names = []
+    field_names = None
     lines = []
     try:
-        with fs.open(input_file.path, newline="", mode="r") as f:
+        with fs.open(input_file.path, newline="", mode="r", encoding="utf-8-sig") as f:
             reader = csv.DictReader(f, restkey="calitp_unknown_fields")
             field_names = reader.fieldnames
             for row in reader:
                 lines.append(row)
 
-        meta = ScheduleParsingMetadata(extract_config=input_file.extract_config)
         jsonl_content = gzip.compress(
-            "\n".join(
-                json.dumps({"metadata": json.loads(meta.json()), **line})
-                for line in lines
-            ).encode()
+            "\n".join(json.dumps(line) for line in lines).encode()
         )
 
         jsonl_file = GTFSScheduleFeedJSONL(
@@ -116,13 +110,15 @@ def parse_individual_file(
         return GTFSScheduleParseOutcome(
             success=False,
             exception=e,
+            feed_file=input_file,
             fields=field_names,
         )
     logging.info(f"Parsed {input_file.path}")
     return GTFSScheduleParseOutcome(
         success=True,
+        feed_file=input_file,
         fields=field_names,
-        parsed_file=jsonl_file.path,
+        parsed_file=jsonl_file,
     )
 
 
@@ -139,12 +135,20 @@ def parse_files(day: pendulum.datetime, input_table_name: str, gtfs_filename: st
         },
         verbose=True,
     )
+    if not files:
+        logging.warn(f"No files found for {input_table_name} for {day}")
+        return
 
-    logging.info(f"Identified {len(files)} records for {day}")
+    logging.info(f"Processing {len(files)} {input_table_name} records for {day}")
+
     outcomes = []
     for file in files:
         outcome = parse_individual_file(fs, file, gtfs_filename)
         outcomes.append(outcome)
+
+    assert (
+        len({outcome.feed_file.table for outcome in outcomes}) == 1
+    ), "somehow you're processing multiple input tables"
 
     result = ScheduleParseResult(filename="results.jsonl", dt=day, outcomes=outcomes)
     result.save(fs)
