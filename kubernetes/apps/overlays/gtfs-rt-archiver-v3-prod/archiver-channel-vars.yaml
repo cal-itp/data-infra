@@ -4,6 +4,6 @@ metadata:
   name: archiver-channel-vars
 data:
   AIRFLOW_ENV: cal-itp-data-infra
-  CALITP_BUCKET__GTFS_CONFIG: "gs://calitp-gtfs-download-config"
+  CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG: "gs://calitp-gtfs-download-config"
   CALITP_BUCKET__GTFS_RT_RAW: "gs://calitp-gtfs-rt-raw-v2"
   HUEY_CONSUMER_WORKERS: "16"
