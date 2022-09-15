@@ -110,7 +110,6 @@ class GTFSScheduleFeedFile(PartitionedGCSArtifact):
     partition_names: ClassVar[List[str]] = GTFSScheduleFeedExtract.partition_names
     ts: pendulum.DateTime
     extract_config: GTFSDownloadConfig
-    zipfile_path: str
     original_filename: str
 
     # if you try to set table directly, you get an error because it "shadows a BaseModel attribute"

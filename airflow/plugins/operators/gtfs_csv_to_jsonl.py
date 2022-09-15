@@ -16,8 +16,6 @@ from calitp.storage import (
 )
 from typing import ClassVar, List, Optional
 
-from pydantic import BaseModel
-
 from utils import GTFSScheduleFeedFile
 
 SCHEDULE_PARSED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_PARSED"]
@@ -45,10 +43,6 @@ class GTFSScheduleFeedJSONL(PartitionedGCSArtifact):
     @property
     def base64_url(self) -> str:
         return self.extract_config.base64_encoded_url
-
-
-class ScheduleParsingMetadata(BaseModel):
-    extract_config: GTFSDownloadConfig
 
 
 class GTFSScheduleParseOutcome(ProcessingOutcome):
@@ -92,18 +86,14 @@ def parse_individual_file(
     field_names = None
     lines = []
     try:
-        with fs.open(input_file.path, newline="", mode="r") as f:
+        with fs.open(input_file.path, newline="", mode="r", encoding="utf-8-sig") as f:
             reader = csv.DictReader(f, restkey="calitp_unknown_fields")
             field_names = reader.fieldnames
             for row in reader:
                 lines.append(row)
 
-        meta = ScheduleParsingMetadata(extract_config=input_file.extract_config)
         jsonl_content = gzip.compress(
-            "\n".join(
-                json.dumps({"metadata": json.loads(meta.json()), **line})
-                for line in lines
-            ).encode()
+            "\n".join(json.dumps(line) for line in lines).encode()
         )
 
         jsonl_file = GTFSScheduleFeedJSONL(
@@ -145,8 +135,12 @@ def parse_files(day: pendulum.datetime, input_table_name: str, gtfs_filename: st
         },
         verbose=True,
     )
+    if not files:
+        logging.warn(f"No files found for {input_table_name} for {day}")
+        return
 
-    logging.info(f"Identified {len(files)} records for {day}")
+    logging.info(f"Processing {len(files)} {input_table_name} records for {day}")
+
     outcomes = []
     for file in files:
         outcome = parse_individual_file(fs, file, gtfs_filename)
@@ -155,6 +149,7 @@ def parse_files(day: pendulum.datetime, input_table_name: str, gtfs_filename: st
     assert (
         len({outcome.feed_file.table for outcome in outcomes}) == 1
     ), "somehow you're processing multiple input tables"
+
     result = ScheduleParseResult(filename="results.jsonl", dt=day, outcomes=outcomes)
     result.save(fs)
 
