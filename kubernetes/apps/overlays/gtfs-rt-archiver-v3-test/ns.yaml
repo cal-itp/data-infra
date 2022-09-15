@@ -2,4 +2,4 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: gtfs-rt-v3-dev
+  name: gtfs-rt-v3-test
