@@ -215,7 +215,7 @@ def unzip_extracts(
 
 
 def airflow_unzip_extracts(task_instance, execution_date, **kwargs):
-    unzip_extracts(execution_date, progress=True)
+    unzip_extracts(execution_date, threads=2, progress=True)
 
 
 if __name__ == "__main__":
