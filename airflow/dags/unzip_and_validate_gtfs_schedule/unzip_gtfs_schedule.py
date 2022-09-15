@@ -12,6 +12,8 @@ import zipfile
 
 from io import BytesIO
 from typing import ClassVar, List, Optional, Tuple, Dict
+
+import typer
 from calitp.storage import (
     fetch_all_in_partition,
     GTFSScheduleFeedExtract,
@@ -20,10 +22,20 @@ from calitp.storage import (
     PartitionedGCSArtifact,
     ProcessingOutcome,
 )
+from tqdm import tqdm
+
 from utils import GTFSScheduleFeedFile
 
 SCHEDULE_UNZIPPED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED"]
 SCHEDULE_RAW_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_RAW"]
+
+
+def log(*args, err=False, fg=None, pbar=None, **kwargs):
+    # capture fg so we don't pass it to pbar
+    if pbar:
+        pbar.write(*args, **kwargs)
+    else:
+        typer.secho(*args, err=err, fg=fg, **kwargs)
 
 
 class GTFSScheduleFeedExtractUnzipOutcome(ProcessingOutcome):
@@ -58,7 +70,9 @@ class ScheduleUnzipResult(PartitionedGCSArtifact):
 
 
 def summarize_zip_contents(
-    zip: zipfile.ZipFile, at: str = ""
+    zip: zipfile.ZipFile,
+    at: str = "",
+    pbar=None,
 ) -> Tuple[List[str], List[str], bool]:
     files = []
     directories = []
@@ -67,7 +81,7 @@ def summarize_zip_contents(
             files.append(entry)
         if zipfile.Path(zip, at=entry).is_dir():
             directories.append(entry)
-    logging.info(f"Found files: {files} and directories: {directories}")
+    log(f"Found files: {files} and directories: {directories}", pbar=pbar)
     # the only valid case for any directory inside the zipfile is if there's exactly one and it's the only item at the root of the zipfile
     # (in which case we can treat that directory's contents as the feed)
     is_valid = (not directories) or (
@@ -84,6 +98,7 @@ def process_feed_files(
     files: List[str],
     directories: List[str],
     is_valid: bool,
+    pbar=None,
 ):
     zipfile_files = []
     if not is_valid:
@@ -113,8 +128,9 @@ def process_feed_files(
 def unzip_individual_feed(
     i: int,
     extract: GTFSScheduleFeedExtract,
+    pbar=None,
 ) -> GTFSScheduleFeedExtractUnzipOutcome:
-    logging.info(f"processing {i} {extract.name}")
+    log(f"processing i={i} {extract.name}", pbar=pbar)
     fs = get_fs()
     zipfile_md5_hash = ""
     files = []
@@ -123,12 +139,18 @@ def unzip_individual_feed(
         with fs.open(extract.path) as f:
             zipfile_md5_hash = f.info()["md5Hash"]
             zip = zipfile.ZipFile(BytesIO(f.read()))
-        files, directories, is_valid = summarize_zip_contents(zip)
+        files, directories, is_valid = summarize_zip_contents(zip, pbar=pbar)
         zipfile_files = process_feed_files(
-            fs, extract, zip, files, directories, is_valid
+            fs,
+            extract,
+            zip,
+            files,
+            directories,
+            is_valid,
+            pbar=pbar,
         )
     except Exception as e:
-        logging.warn(f"Can't process {extract.path}: {e}")
+        log(f"Can't process {extract.path}: {e}", pbar=pbar)
         return GTFSScheduleFeedExtractUnzipOutcome(
             success=False,
             zipfile_extract_md5hash=zipfile_md5_hash,
@@ -147,7 +169,11 @@ def unzip_individual_feed(
     )
 
 
-def unzip_extracts(day: pendulum.datetime, threads: int = 4):
+def unzip_extracts(
+    day: pendulum.datetime,
+    threads: int = 4,
+    progress: bool = False,
+):
     fs = get_fs()
     day = pendulum.instance(day).date()
     extracts = fetch_all_in_partition(
@@ -163,16 +189,22 @@ def unzip_extracts(day: pendulum.datetime, threads: int = 4):
 
     logging.info(f"Identified {len(extracts)} records for {day}")
     outcomes = []
+    pbar = tqdm(total=len(extracts)) if progress else None
 
     with ThreadPoolExecutor(max_workers=threads) as pool:
         futures: Dict[Future, GTFSScheduleFeedExtract] = {
-            pool.submit(unzip_individual_feed, i=i, extract=extract): extract
+            pool.submit(unzip_individual_feed, i=i, extract=extract, pbar=pbar): extract
             for i, extract in enumerate(extracts)
         }
 
         for future in concurrent.futures.as_completed(futures):
+            if pbar:
+                pbar.update(1)
             # TODO: could consider letting errors bubble up and handling here
             outcomes.append(future.result())
+
+    if pbar:
+        del pbar
 
     result = ScheduleUnzipResult(filename="results.jsonl", dt=day, outcomes=outcomes)
     result.save(fs)
@@ -183,7 +215,7 @@ def unzip_extracts(day: pendulum.datetime, threads: int = 4):
 
 
 def airflow_unzip_extracts(task_instance, execution_date, **kwargs):
-    unzip_extracts(execution_date)
+    unzip_extracts(execution_date, progress=True)
 
 
 if __name__ == "__main__":
