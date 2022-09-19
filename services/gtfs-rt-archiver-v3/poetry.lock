@@ -60,6 +60,14 @@ tests = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)"
 tests_no_zope = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "mypy", "pytest-mypy-plugins", "cloudpickle"]
 
 [[package]]
+name = "backoff"
+version = "2.1.2"
+description = "Function decoration for backoff and retry"
+category = "main"
+optional = false
+python-versions = ">=3.7,<4.0"
+
+[[package]]
 name = "black"
 version = "22.6.0"
 description = "The uncompromising code formatter."
@@ -1165,7 +1173,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.11"
-content-hash = "c2d67d10b075aba6da02ea51fc8b9947d461061f08bae5cd81303e39d66baebf"
+content-hash = "5b83ec3fa28cebf4f97eea988e1f2979a89a8478a5c73f25c5f9a1e854d8b9d8"
 
 [metadata.files]
 aiohttp = []
@@ -1173,6 +1181,7 @@ aiosignal = []
 async-timeout = []
 atomicwrites = []
 attrs = []
+backoff = []
 black = []
 cachetools = []
 calitp = []

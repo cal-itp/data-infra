@@ -2,12 +2,13 @@ import os
 import traceback
 from datetime import datetime
 
+import backoff
 import humanize
 import orjson
 import pendulum
 import structlog
 import typer
-from calitp.storage import download_feed, GTFSDownloadConfig
+from calitp.storage import download_feed, GTFSDownloadConfig, GTFSFeedExtract
 from google.cloud import storage, secretmanager
 import google_crc32c
 from huey import RedisExpireHuey
@@ -102,6 +103,15 @@ def load_auth_dict():
     auth_dict = {key: os.environ[key] for key in AUTH_KEYS}
 
 
+@backoff.on_exception(
+    backoff.expo,
+    exception=(Exception,),
+    max_tries=2,
+)
+def save_content_with_retry(extract: GTFSFeedExtract, content: bytes) -> None:
+    extract.save_content(content=content, client=client)
+
+
 @huey.task(expires=5)
 def fetch(tick: datetime, config: GTFSDownloadConfig):
     labels = dict(
@@ -153,7 +163,16 @@ def fetch(tick: datetime, config: GTFSDownloadConfig):
         typer.secho(
             f"saving {humanize.naturalsize(len(content))} from {config.url} to {extract.path}"
         )
-        extract.save_content(content=content, client=client)
+        try:
+            save_content_with_retry(extract=extract, content=content)
+        except Exception as e:
+            logger.error(
+                "failure occurred when saving extract or metadata",
+                exc_type=type(e).__name__,
+                exc_str=str(e),
+                traceback=traceback.format_exc(),
+            )
+            raise
         FETCH_PROCESSED_BYTES.labels(
             **labels,
             content_type=extract.response_headers.get("Content-Type", "").strip(),
