@@ -5,8 +5,21 @@ WITH calitp_feeds AS (
     FROM {{ ref('calitp_feeds') }}
 ),
 
+-- this is a slightly hacky workaround to address feed_info.txt files that contain two rows
+-- specifically, this was an issue for Foothill Transit from May 2022 onward
+-- we are just semi-arbitrarily picking the row that has longer feed dates specified
 feed_info_clean AS (
-    SELECT *
+    SELECT
+        *,
+        RANK() OVER (
+            PARTITION BY
+                calitp_itp_id,
+                calitp_url_number,
+                feed_start_date,
+                feed_version,
+                calitp_extracted_at
+            ORDER BY feed_end_date DESC
+        ) AS row_num
     FROM {{ ref('feed_info_clean') }}
 ),
 
@@ -31,6 +44,7 @@ feed_feed_info AS (
             AND T1.calitp_extracted_at < T2.calitp_deleted_at
             AND T2.calitp_extracted_at < T1.calitp_deleted_at
             AND T2.calitp_itp_id != 200
+            AND T2.row_num = 1
 ),
 
 gtfs_schedule_dim_feeds AS (
