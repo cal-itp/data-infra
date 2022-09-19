@@ -2,12 +2,7 @@ version: 2
 
 models:
   - name: fact_daily_guideline_checks
-    description: |
-      Each row represents a date/guideline check/feed combination, with pass/fail information
-      indicating whether that feed complied with that check on that date.
-
-      Note that this table is only partially implemented; can use "SELECT DISTINCT check"
-      to see the list of checks that are evaluated herein.
+    description: '{{ doc("guideline_checks") }}'
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
