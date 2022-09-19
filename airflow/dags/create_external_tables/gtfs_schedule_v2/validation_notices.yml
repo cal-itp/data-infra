@@ -1,0 +1,295 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_PARSED') }}"
+source_objects:
+  - "trips/*.jsonl.gz"
+destination_project_dataset_table: "external_gtfs_schedule.trips"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  source_uri_prefix: "trips/{dt:DATE}/{base64_url:STRING}/{ts:TIMESTAMP}/"
+schema_fields:
+  - name: metadata
+    type: RECORD
+    fields:
+      - name: extract_config
+        type: RECORD
+        fields:
+          - name: extracted_at
+            type: TIMESTAMP
+          - name: name
+            type: STRING
+          - name: url
+            type: STRING
+          - name: feed_type
+            type: STRING
+          - name: schedule_url_for_validation
+            type: STRING
+          - name: auth_query_params
+            type: JSON
+          - name: auth_headers
+            type: JSON
+      - name: gtfs_validator_versions
+        type: STRING
+  - name: code
+    type: STRING
+  - name: severity
+    type: STRING
+  - name: totalNotices
+    type: INT64
+  - name: sampleNotices
+    type: RECORD
+    mode: REPEATED
+    fields:
+      - name: actual
+        type: STRING
+      - name: actualDistanceBetweenShapePoints
+        type: NUMBER
+      - name: agencyCsvRowNumber
+        type: INTEGER
+      - name: agencyId
+        type: STRING
+      - name: agencyLang
+        type: STRING
+      - name: agencyName
+        type: STRING
+      - name: arrivalTime
+        type: STRING
+      - name: arrivalTime2
+        type: STRING
+      - name: attributionId
+        type: STRING
+      - name: blockId
+        type: STRING
+      - name: charIndex
+        type: INTEGER
+      - name: childFieldName
+        type: STRING
+      - name: childFilename
+        type: STRING
+      - name: columnIndex
+        type: INTEGER
+      - name: columnName
+        type: STRING
+      - name: csvRowNumber
+        type: INTEGER
+      - name: csvRowNumber1
+        type: INTEGER
+      - name: csvRowNumber2
+        type: INTEGER
+      - name: csvRowNumberA
+        type: INTEGER
+      - name: csvRowNumberB
+        type: INTEGER
+      - name: currCsvRowNumber
+        type: INTEGER
+      - name: currStartTime
+        type: STRING
+      - name: currentDate
+        type: STRING
+      - name: departureTime
+        type: STRING
+      - name: departureTime1
+        type: STRING
+      - name: distanceKm
+        type: NUMBER
+      - name: endFieldName
+        type: STRING
+      - name: endValue
+        type: STRING
+      - name: entityCount
+        type: INTEGER
+      - name: entityId
+        type: STRING
+      - name: exception
+        type: STRING
+      - name: expected
+        type: STRING
+      - name: expectedLocationType
+        type: INTEGER
+      - name: fareId
+        type: STRING
+      - name: feedEndDate
+        type: STRING
+      - name: feedLang
+        type: STRING
+      - name: fieldName
+        type: STRING
+      - name: fieldName1
+        type: STRING
+      - name: fieldName2
+        type: STRING
+      - name: fieldType
+        type: STRING
+      - name: fieldValue
+        type: INTEGER
+      - name: fieldValue1
+        type: STRING
+      - name: fieldValue2
+        type: STRING
+      - name: filename
+        type: STRING
+      - name: firstIndex
+        type: INTEGER
+      - name: geoDistanceToShape
+        type: NUMBER
+      - name: hasEntrance
+        type: BOOLEAN
+      - name: hasExit
+        type: BOOLEAN
+      - name: headerCount
+        type: INTEGER
+      - name: index
+        type: INTEGER
+      - name: intersection
+        type: STRING
+      - name: latFieldName
+        type: STRING
+      - name: latFieldValue
+        type: NUMBER
+      - name: lineIndex
+        type: INTEGER
+      - name: locationType
+        type: INTEGER
+      - name: lonFieldName
+        type: STRING
+      - name: lonFieldValue
+        type: NUMBER
+      - name: match
+        type: ARRAY
+      - name: match1
+        type: ARRAY
+      - name: match2
+        type: ARRAY
+      - name: matchCount
+        type: INTEGER
+      - name: message
+        type: STRING
+      - name: newCsvRowNumber
+        type: INTEGER
+      - name: oldCsvRowNumber
+        type: INTEGER
+      - name: parentCsvRowNumber
+        type: INTEGER
+      - name: parentFieldName
+        type: STRING
+      - name: parentFilename
+        type: STRING
+      - name: parentLocationType
+        type: INTEGER
+      - name: parentStation
+        type: STRING
+      - name: parentStopName
+        type: STRING
+      - name: parsedContent
+        type: STRING
+      - name: pathwayId
+        type: STRING
+      - name: prevCsvRowNumber
+        type: INTEGER
+      - name: prevEndTime
+        type: STRING
+      - name: prevShapeDistTraveled
+        type: NUMBER
+      - name: prevShapePtSequence
+        type: INTEGER
+      - name: prevStopSequence
+        type: INTEGER
+      - name: prevStopTimeDistTraveled
+        type: NUMBER
+      - name: previousCsvRowNumber
+        type: INTEGER
+      - name: previousFareId
+        type: STRING
+      - name: recordId
+        type: STRING
+      - name: recordSubId
+        type: STRING
+      - name: routeColor
+        type: STRING
+      - name: routeCsvRowNumber
+        type: INTEGER
+      - name: routeDesc
+        type: STRING
+      - name: routeId
+        type: STRING
+      - name: routeId1
+        type: STRING
+      - name: routeId2
+        type: STRING
+      - name: routeLongName
+        type: STRING
+      - name: routeShortName
+        type: STRING
+      - name: routeTextColor
+        type: STRING
+      - name: routeTypeValue
+        type: INTEGER
+      - name: routeUrl
+        type: STRING
+      - name: rowLength
+        type: INTEGER
+      - name: secondIndex
+        type: INTEGER
+      - name: serviceIdA
+        type: STRING
+      - name: serviceIdB
+        type: STRING
+      - name: shapeDistTraveled
+        type: NUMBER
+      - name: shapeId
+        type: STRING
+      - name: shapePtSequence
+        type: INTEGER
+      - name: specifiedField
+        type: STRING
+      - name: speedKph
+        type: NUMBER
+      - name: startFieldName
+        type: STRING
+      - name: startValue
+        type: STRING
+      - name: stopCsvRowNumber
+        type: INTEGER
+      - name: stopId
+        type: STRING
+      - name: stopId1
+        type: STRING
+      - name: stopId2
+        type: STRING
+      - name: stopName
+        type: STRING
+      - name: stopName1
+        type: STRING
+      - name: stopName2
+        type: STRING
+      - name: stopSequence
+        type: INTEGER
+      - name: stopSequence1
+        type: INTEGER
+      - name: stopSequence2
+        type: INTEGER
+      - name: stopTimeCsvRowNumber
+        type: INTEGER
+      - name: stopTimeCsvRowNumber1
+        type: INTEGER
+      - name: stopTimeCsvRowNumber2
+        type: INTEGER
+      - name: stopUrl
+        type: STRING
+      - name: suggestedExpirationDate
+        type: STRING
+      - name: tableName
+        type: STRING
+      - name: tripCsvRowNumber
+        type: INTEGER
+      - name: tripId
+        type: STRING
+      - name: tripIdA
+        type: STRING
+      - name: tripIdB
+        type: STRING
+      - name: validator
+        type: STRING
+      - name: value
+        type: STRING
