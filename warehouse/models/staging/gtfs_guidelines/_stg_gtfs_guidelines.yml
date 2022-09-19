@@ -8,13 +8,16 @@ models:
           combination_of_columns:
             - dt
             - url_type
-            - itp_id
-            - url_number
+            - calitp_itp_id
+            - calitp_url_number
     columns:
       - name: dt
       - name: url
       - name: url_type
-      - name: itp_id
-      - name: url_number
-      - name: transitland.status
-      - name: transitland.public_web_url
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+      - name: transitland_status
+        description: A value of either `present` or `missing`
+      - name: transitland_public_web_url

@@ -5,9 +5,9 @@ WITH gtfs_fact_daily_transitland_url_check AS (
 
         dt,
 
-        itp_id,
+        itp_id AS calitp_itp_id,
 
-        url_number,
+        url_number AS calitp_url_number,
 
         url_type,
 

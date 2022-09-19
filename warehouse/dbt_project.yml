@@ -67,5 +67,3 @@ models:
         schema: mart_transit_database
       gtfs_guidelines:
         schema: mart_gtfs_guidelines
-      feed_aggregator_checks:
-        schema: mart_feed_aggregator_checks
