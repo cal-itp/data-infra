@@ -1,13 +1,13 @@
 operator: operators.ExternalTable
-bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_PARSED') }}"
+bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION') }}"
 source_objects:
-  - "trips/*.jsonl.gz"
-destination_project_dataset_table: "external_gtfs_schedule.trips"
+  - "validation_notices/*.jsonl.gz"
+destination_project_dataset_table: "external_gtfs_schedule.validation_notices"
 source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 hive_options:
   mode: CUSTOM
-  source_uri_prefix: "trips/{dt:DATE}/{base64_url:STRING}/{ts:TIMESTAMP}/"
+  source_uri_prefix: "validation_notices/{dt:DATE}/{ts:TIMESTAMP}/{base64_url:STRING}/"
 schema_fields:
   - name: metadata
     type: RECORD
@@ -44,9 +44,9 @@ schema_fields:
       - name: actual
         type: STRING
       - name: actualDistanceBetweenShapePoints
-        type: NUMBER
+        type: BIGNUMERIC
       - name: agencyCsvRowNumber
-        type: INTEGER
+        type: BIGNUMERIC
       - name: agencyId
         type: STRING
       - name: agencyLang
@@ -62,27 +62,27 @@ schema_fields:
       - name: blockId
         type: STRING
       - name: charIndex
-        type: INTEGER
+        type: BIGNUMERIC
       - name: childFieldName
         type: STRING
       - name: childFilename
         type: STRING
       - name: columnIndex
-        type: INTEGER
+        type: BIGNUMERIC
       - name: columnName
         type: STRING
       - name: csvRowNumber
-        type: INTEGER
+        type: BIGNUMERIC
       - name: csvRowNumber1
-        type: INTEGER
+        type: BIGNUMERIC
       - name: csvRowNumber2
-        type: INTEGER
+        type: BIGNUMERIC
       - name: csvRowNumberA
-        type: INTEGER
+        type: BIGNUMERIC
       - name: csvRowNumberB
-        type: INTEGER
+        type: BIGNUMERIC
       - name: currCsvRowNumber
-        type: INTEGER
+        type: BIGNUMERIC
       - name: currStartTime
         type: STRING
       - name: currentDate
@@ -92,13 +92,13 @@ schema_fields:
       - name: departureTime1
         type: STRING
       - name: distanceKm
-        type: NUMBER
+        type: BIGNUMERIC
       - name: endFieldName
         type: STRING
       - name: endValue
         type: STRING
       - name: entityCount
-        type: INTEGER
+        type: BIGNUMERIC
       - name: entityId
         type: STRING
       - name: exception
@@ -106,7 +106,7 @@ schema_fields:
       - name: expected
         type: STRING
       - name: expectedLocationType
-        type: INTEGER
+        type: BIGNUMERIC
       - name: fareId
         type: STRING
       - name: feedEndDate
@@ -122,7 +122,7 @@ schema_fields:
       - name: fieldType
         type: STRING
       - name: fieldValue
-        type: INTEGER
+        type: STRING
       - name: fieldValue1
         type: STRING
       - name: fieldValue2
@@ -130,53 +130,56 @@ schema_fields:
       - name: filename
         type: STRING
       - name: firstIndex
-        type: INTEGER
+        type: BIGNUMERIC
       - name: geoDistanceToShape
-        type: NUMBER
+        type: BIGNUMERIC
       - name: hasEntrance
         type: BOOLEAN
       - name: hasExit
         type: BOOLEAN
       - name: headerCount
-        type: INTEGER
+        type: BIGNUMERIC
       - name: index
-        type: INTEGER
+        type: BIGNUMERIC
       - name: intersection
         type: STRING
       - name: latFieldName
         type: STRING
       - name: latFieldValue
-        type: NUMBER
+        type: BIGNUMERIC
       - name: lineIndex
-        type: INTEGER
+        type: BIGNUMERIC
       - name: locationType
-        type: INTEGER
+        type: BIGNUMERIC
       - name: lonFieldName
         type: STRING
       - name: lonFieldValue
-        type: NUMBER
+        type: BIGNUMERIC
       - name: match
-        type: ARRAY
+        type: BIGNUMERIC
+        mode: REPEATED
       - name: match1
-        type: ARRAY
+        type: BIGNUMERIC
+        mode: REPEATED
       - name: match2
-        type: ARRAY
+        type: BIGNUMERIC
+        mode: REPEATED
       - name: matchCount
-        type: INTEGER
+        type: BIGNUMERIC
       - name: message
         type: STRING
       - name: newCsvRowNumber
-        type: INTEGER
+        type: BIGNUMERIC
       - name: oldCsvRowNumber
-        type: INTEGER
+        type: BIGNUMERIC
       - name: parentCsvRowNumber
-        type: INTEGER
+        type: BIGNUMERIC
       - name: parentFieldName
         type: STRING
       - name: parentFilename
         type: STRING
       - name: parentLocationType
-        type: INTEGER
+        type: BIGNUMERIC
       - name: parentStation
         type: STRING
       - name: parentStopName
@@ -186,19 +189,19 @@ schema_fields:
       - name: pathwayId
         type: STRING
       - name: prevCsvRowNumber
-        type: INTEGER
+        type: BIGNUMERIC
       - name: prevEndTime
         type: STRING
       - name: prevShapeDistTraveled
-        type: NUMBER
+        type: BIGNUMERIC
       - name: prevShapePtSequence
-        type: INTEGER
+        type: BIGNUMERIC
       - name: prevStopSequence
-        type: INTEGER
+        type: BIGNUMERIC
       - name: prevStopTimeDistTraveled
-        type: NUMBER
+        type: BIGNUMERIC
       - name: previousCsvRowNumber
-        type: INTEGER
+        type: BIGNUMERIC
       - name: previousFareId
         type: STRING
       - name: recordId
@@ -208,7 +211,7 @@ schema_fields:
       - name: routeColor
         type: STRING
       - name: routeCsvRowNumber
-        type: INTEGER
+        type: BIGNUMERIC
       - name: routeDesc
         type: STRING
       - name: routeId
@@ -224,33 +227,33 @@ schema_fields:
       - name: routeTextColor
         type: STRING
       - name: routeTypeValue
-        type: INTEGER
+        type: BIGNUMERIC
       - name: routeUrl
         type: STRING
       - name: rowLength
-        type: INTEGER
+        type: BIGNUMERIC
       - name: secondIndex
-        type: INTEGER
+        type: BIGNUMERIC
       - name: serviceIdA
         type: STRING
       - name: serviceIdB
         type: STRING
       - name: shapeDistTraveled
-        type: NUMBER
+        type: BIGNUMERIC
       - name: shapeId
         type: STRING
       - name: shapePtSequence
-        type: INTEGER
+        type: BIGNUMERIC
       - name: specifiedField
         type: STRING
       - name: speedKph
-        type: NUMBER
+        type: BIGNUMERIC
       - name: startFieldName
         type: STRING
       - name: startValue
         type: STRING
       - name: stopCsvRowNumber
-        type: INTEGER
+        type: BIGNUMERIC
       - name: stopId
         type: STRING
       - name: stopId1
@@ -264,17 +267,17 @@ schema_fields:
       - name: stopName2
         type: STRING
       - name: stopSequence
-        type: INTEGER
+        type: BIGNUMERIC
       - name: stopSequence1
-        type: INTEGER
+        type: BIGNUMERIC
       - name: stopSequence2
-        type: INTEGER
+        type: BIGNUMERIC
       - name: stopTimeCsvRowNumber
-        type: INTEGER
+        type: BIGNUMERIC
       - name: stopTimeCsvRowNumber1
-        type: INTEGER
+        type: BIGNUMERIC
       - name: stopTimeCsvRowNumber2
-        type: INTEGER
+        type: BIGNUMERIC
       - name: stopUrl
         type: STRING
       - name: suggestedExpirationDate
@@ -282,7 +285,7 @@ schema_fields:
       - name: tableName
         type: STRING
       - name: tripCsvRowNumber
-        type: INTEGER
+        type: BIGNUMERIC
       - name: tripId
         type: STRING
       - name: tripIdA
