@@ -19,7 +19,7 @@ feed_info_clean AS (
                 feed_version,
                 calitp_extracted_at
             ORDER BY feed_end_date DESC
-        ) AS row_num
+        ) AS rank
     FROM {{ ref('feed_info_clean') }}
 ),
 
@@ -44,7 +44,7 @@ feed_feed_info AS (
             AND T1.calitp_extracted_at < T2.calitp_deleted_at
             AND T2.calitp_extracted_at < T1.calitp_deleted_at
             AND T2.calitp_itp_id != 200
-            AND T2.row_num = 1
+            AND T2.rank = 1
 ),
 
 gtfs_schedule_dim_feeds AS (
