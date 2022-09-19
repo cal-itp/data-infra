@@ -1,14 +1,22 @@
+import gzip
+import json
 import os
 import random
 import time
 from datetime import datetime, timezone
-from typing import List
+from typing import List, Tuple
 
 import pendulum
 import schedule
 import typer
 from cachetools.func import ttl_cache
-from calitp.storage import AirtableGTFSDataExtract, GTFSFeedType, AirtableGTFSDataRecord
+from calitp.storage import (
+    GTFSFeedType,
+    GTFSDownloadConfig,
+    get_latest,
+    get_fs,
+    GTFSDownloadConfigExtract,
+)
 from prometheus_client import start_http_server
 
 from .metrics import TICKS, AIRTABLE_CONFIGURATION_AGE
@@ -16,14 +24,19 @@ from .tasks import fetch, huey, load_secrets
 
 
 @ttl_cache(ttl=300)
-def get_records() -> List[AirtableGTFSDataRecord]:
-    typer.secho("pulling updated records from airtable")
-    latest = AirtableGTFSDataExtract.get_latest()
+def get_configs() -> Tuple[pendulum.DateTime, List[GTFSDownloadConfig]]:
+    typer.secho("pulling updated configs from airtable")
+    latest = get_latest(GTFSDownloadConfigExtract)
+    fs = get_fs()
+    with fs.open(latest.path, "rb") as f:
+        content = gzip.decompress(f.read())
     records = [
-        record
-        for record in latest.records
-        if record.data_quality_pipeline
-        and record.data
+        GTFSDownloadConfig(**json.loads(row)) for row in content.decode().splitlines()
+    ]
+    configs = [
+        config
+        for config in records
+        if config.feed_type
         in (
             GTFSFeedType.service_alerts,
             GTFSFeedType.trip_updates,
@@ -32,10 +45,10 @@ def get_records() -> List[AirtableGTFSDataRecord]:
     ]
     age = (pendulum.now() - latest.ts).total_seconds()
     typer.secho(
-        f"found {len(records)} records in airtable {latest.path}; {age} seconds old"
+        f"found {len(configs)} configs in airtable {latest.path} {age} seconds old"
     )
     AIRTABLE_CONFIGURATION_AGE.set(age)
-    return records
+    return latest.ts, configs
 
 
 def main(
@@ -55,15 +68,15 @@ def main(
         dt = datetime.now(timezone.utc).replace(second=second, microsecond=0)
         typer.secho(f"ticking {dt}")
         TICKS.inc()
-        records = get_records()
-        random.shuffle(records)
-        for record in records:
+        extracted_at, configs = get_configs()
+        random.shuffle(configs)
+        for config in configs:
             fetch(
                 tick=dt,
-                record=record,
+                config=config,
             )
         typer.secho(
-            f"took {(pendulum.now() - start).in_words()} to enqueue {len(records)} fetches"
+            f"took {(pendulum.now() - start).in_words()} to enqueue {len(configs)} fetches"
         )
 
     schedule.every().minute.at(":00").do(tick, second=0)

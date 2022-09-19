@@ -1,10 +1,21 @@
+import datetime
 import logging
 import os
+import pendulum
 
 import pandas as pd
 from airflow.models import Variable
 from calitp import read_gcfs, save_to_gcfs
+from calitp.storage import (
+    GTFSScheduleFeedExtract,
+    PartitionedGCSArtifact,
+    GTFSDownloadConfig,
+)
 from pandas.errors import EmptyDataError
+from pydantic import validator
+from typing import ClassVar, List
+
+SCHEDULE_UNZIPPED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED"]
 
 
 def get_auth_secret(auth_secret_key: str) -> str:
@@ -92,3 +103,31 @@ def get_successfully_downloaded_feeds(execution_date):
     status = pd.read_csv(f)
 
     return status[lambda d: d.status == "success"]
+
+
+class GTFSScheduleFeedFile(PartitionedGCSArtifact):
+    bucket: ClassVar[str] = SCHEDULE_UNZIPPED_BUCKET
+    partition_names: ClassVar[List[str]] = GTFSScheduleFeedExtract.partition_names
+    ts: pendulum.DateTime
+    extract_config: GTFSDownloadConfig
+    original_filename: str
+
+    # if you try to set table directly, you get an error because it "shadows a BaseModel attribute"
+    # so set as a property instead
+    @property
+    def table(self) -> str:
+        return self.filename
+
+    @property
+    def dt(self) -> pendulum.Date:
+        return self.ts.date()
+
+    @property
+    def base64_url(self) -> str:
+        return self.extract_config.base64_encoded_url
+
+    @validator("ts", allow_reuse=True)
+    def ts_must_be_pendulum_datetime(cls, v) -> pendulum.DateTime:
+        if isinstance(v, datetime.datetime):
+            v = pendulum.instance(v)
+        return v

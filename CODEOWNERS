@@ -1,5 +1,5 @@
 # repo owners
-*                                       @evansiroky @atvaccaro
+*                                       @atvaccaro
 
 # devops components
 /kubernetes                             @lottspot @themightychris
@@ -13,14 +13,14 @@
 /docs                                   @charlie-costanzo @holly-g
 
 # payments data
-/airflow/dags/payments*/*               @mjumbewu @evansiroky
+/airflow/dags/payments*/*               @mjumbewu
 
 # gtfs data
 /airflow/data/agencies.yml              @lauriemerrell @evansiroky
 
 # gtfs rt
 /airflow/dags/gtfs*/*                   @lauriemerrell @atvaccaro
-/airflow/dags/rt*/*                     @lauriemerrell @evansiroky @atvaccaro
+/airflow/dags/rt*/*                     @lauriemerrell @atvaccaro
 
 # airtable
 /airflow/dags/airtable*/*               @lauriemerrell
@@ -38,4 +38,4 @@
 
 # misc GitHub workflows
 /.github/workflows/board-move-issues.yml          @charlie-costanzo @holly-g
-/.github/workflows/update_gcloud_requirements.yml @evansiroky @atvaccaro
+/.github/workflows/update_gcloud_requirements.yml @atvaccaro

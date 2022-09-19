@@ -8,7 +8,8 @@ x-gtfs-rt-archiver-v3-common:
     CALITP_HUEY_REDIS_HOST: redis
     GOOGLE_APPLICATION_CREDENTIALS: /tmp/secret.json
     CALITP_BUCKET__AIRTABLE: "gs://test-calitp-airtable"
-    CALITP_BUCKET__GTFS_RT_RAW: "gs://test-calitp-gtfs-rt-raw"
+    CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG: "gs://test-calitp-gtfs-download-config"
+    CALITP_BUCKET__GTFS_RT_RAW: "gs://dev-calitp-gtfs-rt-raw"
 #    AC_TRANSIT_API_KEY: $AC_TRANSIT_API_KEY
 #    AMTRAK_GTFS_URL: $AMTRAK_GTFS_URL
 #    CULVER_CITY_API_KEY: $CULVER_CITY_API_KEY

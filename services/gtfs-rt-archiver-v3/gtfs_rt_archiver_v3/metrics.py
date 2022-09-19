@@ -1,5 +1,6 @@
 from prometheus_client import Counter, Gauge, Histogram
 
+# TODO: these should probably be config_ now
 standard_labels = (
     "record_name",
     "record_uri",

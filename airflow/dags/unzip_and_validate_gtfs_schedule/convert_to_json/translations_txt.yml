@@ -1,0 +1,5 @@
+operator: operators.GtfsGcsToJsonlOperator
+dependencies:
+  - unzip_gtfs_schedule
+
+input_table_name: translations.txt

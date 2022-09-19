@@ -1,12 +1,14 @@
 import os
+import traceback
 from datetime import datetime
 
+import backoff
 import humanize
 import orjson
 import pendulum
 import structlog
 import typer
-from calitp.storage import AirtableGTFSDataRecord, download_feed
+from calitp.storage import download_feed, GTFSDownloadConfig, GTFSFeedExtract
 from google.cloud import storage, secretmanager
 import google_crc32c
 from huey import RedisExpireHuey
@@ -54,10 +56,11 @@ base_logger = structlog.get_logger()
 
 @huey.signal()
 def instrument_signals(signal, task, exc=None):
+    config: GTFSDownloadConfig = task.kwargs["config"]
     TASK_SIGNALS.labels(
-        record_name=task.kwargs["record"].name,
-        record_uri=task.kwargs["record"].uri,
-        record_feed_type=task.kwargs["record"].data,
+        record_name=config.name,
+        record_uri=config.url,
+        record_feed_type=config.feed_type,
         signal=signal,
         exc_type=type(exc).__name__ if exc else "",
     ).inc()
@@ -100,12 +103,21 @@ def load_auth_dict():
     auth_dict = {key: os.environ[key] for key in AUTH_KEYS}
 
 
+@backoff.on_exception(
+    backoff.expo,
+    exception=(Exception,),
+    max_tries=2,
+)
+def save_content_with_retry(extract: GTFSFeedExtract, content: bytes) -> None:
+    extract.save_content(content=content, client=client)
+
+
 @huey.task(expires=5)
-def fetch(tick: datetime, record: AirtableGTFSDataRecord):
+def fetch(tick: datetime, config: GTFSDownloadConfig):
     labels = dict(
-        record_name=record.name,
-        record_uri=record.uri,
-        record_feed_type=record.data,
+        record_name=config.name,
+        record_uri=config.url,
+        record_feed_type=config.feed_type,
     )
     logger = base_logger.bind(
         tick=tick.isoformat(),
@@ -116,32 +128,51 @@ def fetch(tick: datetime, record: AirtableGTFSDataRecord):
 
     with FETCH_PROCESSING_TIME.labels(**labels).time():
         try:
-            extract, content = download_feed(record, ts=tick, auth_dict=auth_dict)
+            extract, content = download_feed(
+                config=config,
+                auth_dict=auth_dict,
+                ts=tick,
+            )
         except HTTPError as e:
             logger.error(
                 "unexpected HTTP response code from feed request",
                 code=e.response.status_code,
                 content=e.response.text,
                 exc_type=type(e).__name__,
+                exc_str=str(e),
+                traceback=traceback.format_exc(),
             )
             raise
         except RequestException as e:
             logger.error(
                 "request exception occurred from feed request",
                 exc_type=type(e).__name__,
+                exc_str=str(e),
+                traceback=traceback.format_exc(),
             )
             raise
         except Exception as e:
             logger.error(
                 "other non-request exception occurred during download_feed",
                 exc_type=type(e).__name__,
+                exc_str=str(e),
+                traceback=traceback.format_exc(),
             )
             raise
 
         typer.secho(
-            f"saving {humanize.naturalsize(len(content))} from {record.uri} to {extract.path}"
+            f"saving {humanize.naturalsize(len(content))} from {config.url} to {extract.path}"
         )
-        extract.save_content(content=content, client=client)
+        try:
+            save_content_with_retry(extract=extract, content=content)
+        except Exception as e:
+            logger.error(
+                "failure occurred when saving extract or metadata",
+                exc_type=type(e).__name__,
+                exc_str=str(e),
+                traceback=traceback.format_exc(),
+            )
+            raise
         FETCH_PROCESSED_BYTES.labels(
             **labels,
             content_type=extract.response_headers.get("Content-Type", "").strip(),

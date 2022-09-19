@@ -1,5 +1,6 @@
 __version__ = "0.1.0"
 
+import concurrent.futures
 import gzip
 import json
 import logging
@@ -7,6 +8,7 @@ import os
 import subprocess
 import tempfile
 import traceback
+from concurrent.futures import ThreadPoolExecutor, Future
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, ClassVar, Optional
@@ -23,8 +25,10 @@ from calitp.storage import (
     ProcessingOutcome,
     JSONL_EXTENSION,
     SCHEDULE_RAW_BUCKET,
+    GTFSDownloadConfig,
 )
-from pydantic import validator
+from pydantic import validator, BaseModel
+from tqdm import tqdm
 
 JAVA_EXECUTABLE_PATH_KEY = "GTFS_SCHEDULE_VALIDATOR_JAVA_EXECUTABLE"
 SCHEDULE_VALIDATOR_JAR_LOCATION_ENV_KEY = "GTFS_SCHEDULE_VALIDATOR_JAR"
@@ -39,6 +43,11 @@ app = typer.Typer()
 logging.basicConfig()
 
 
+class ScheduleValidationMetadata(BaseModel):
+    extract_config: GTFSDownloadConfig
+    gtfs_validator_version: str
+
+
 # TODO: this could share some functionality with the RT validation artifact,
 #   similar to the extracts sharing some functionality
 class GTFSScheduleFeedValidation(PartitionedGCSArtifact):
@@ -46,8 +55,7 @@ class GTFSScheduleFeedValidation(PartitionedGCSArtifact):
     partition_names: ClassVar[List[str]] = GTFSScheduleFeedExtract.partition_names
     table: ClassVar[str] = "validation_notices"
     ts: pendulum.DateTime
-    base64_url: str
-    extract_path: str
+    extract_config: GTFSDownloadConfig
     system_errors: Dict
 
     @validator("filename", allow_reuse=True)
@@ -59,9 +67,13 @@ class GTFSScheduleFeedValidation(PartitionedGCSArtifact):
     def dt(self) -> pendulum.Date:
         return self.ts.date()
 
+    @property
+    def base64_url(self) -> str:
+        return self.extract_config.base64_encoded_url
+
 
 class GTFSScheduleFeedExtractValidationOutcome(ProcessingOutcome):
-    extract_path: str
+    extract: GTFSScheduleFeedExtract
     validation: Optional[GTFSScheduleFeedValidation]
 
 
@@ -97,10 +109,19 @@ class ScheduleValidationJobResult(PartitionedGCSArtifact):
         )
 
 
+def log(*args, err=False, fg=None, pbar=None, **kwargs):
+    # capture fg so we don't pass it to pbar
+    if pbar:
+        pbar.write(*args, **kwargs)
+    else:
+        typer.secho(*args, err=err, fg=fg, **kwargs)
+
+
 def execute_schedule_validator(
     zip_path: Path,
     output_dir: Path,
     jar_path: Path = os.environ.get(SCHEDULE_VALIDATOR_JAR_LOCATION_ENV_KEY),
+    pbar=None,
 ) -> (Dict, Dict):
     if not isinstance(zip_path, Path):
         raise TypeError("must provide a path to the zip file")
@@ -120,7 +141,7 @@ def execute_schedule_validator(
     report_path = Path(output_dir) / "report.json"
     system_errors_path = Path(output_dir) / "system_errors.json"
 
-    typer.secho(f"executing schedule validator: {' '.join(args)}")
+    log(f"executing schedule validator: {' '.join(args)}", pbar=pbar)
     subprocess.run(
         args,
         capture_output=True,
@@ -134,6 +155,62 @@ def execute_schedule_validator(
         system_errors = json.load(f)
 
     return report, system_errors
+
+
+def download_and_validate_extract(
+    extract: GTFSScheduleFeedExtract, pbar=None
+) -> GTFSScheduleFeedExtractValidationOutcome:
+    fs = get_fs()
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        zip_path = os.path.join(tmp_dir, extract.filename)
+        log(
+            f"downloading {extract.path} to {zip_path}",
+            fg=typer.colors.GREEN,
+            pbar=pbar,
+        )
+        fs.get_file(extract.path, zip_path)
+        report, system_errors = execute_schedule_validator(
+            zip_path=Path(zip_path),
+            output_dir=tmp_dir,
+            pbar=pbar,
+        )
+    validation = GTFSScheduleFeedValidation(
+        filename=f"validation_notices{JSONL_GZIP_EXTENSION}",
+        ts=extract.ts,
+        extract_config=extract.config,
+        system_errors=system_errors,
+    )
+
+    notices = [
+        {
+            "metadata": json.loads(
+                ScheduleValidationMetadata(
+                    extract_config=extract.config,
+                    gtfs_validator_version=GTFS_VALIDATOR_VERSION,
+                ).json()
+            ),
+            **notice,
+        }
+        for notice in report["notices"]
+    ]
+
+    log(
+        f"saving {len(notices)} validation notices to {validation.path}",
+        fg=typer.colors.GREEN,
+        pbar=pbar,
+    )
+    validation.save_content(
+        content=gzip.compress(
+            "\n".join(json.dumps(notice) for notice in notices).encode()
+        ),
+        fs=fs,
+    )
+
+    return GTFSScheduleFeedExtractValidationOutcome(
+        success=True,
+        extract=extract,
+        validation=validation,
+    )
 
 
 @app.command()
@@ -161,6 +238,8 @@ def validate_day(
         formats=["%Y-%m-%d"],
     ),
     verbose: bool = False,
+    threads: int = 4,
+    progress: bool = False,
 ) -> None:
     day = pendulum.instance(day).date()
 
@@ -186,76 +265,55 @@ def validate_day(
         f"found {len(extracts)} to process for {day}",
         fg=typer.colors.MAGENTA,
     )
-    fs = get_fs()
+
+    pbar = tqdm(total=len(extracts)) if progress else None
+    exceptions = []
     outcomes = []
 
-    for i, extract in enumerate(extracts, start=1):
-        typer.secho(f"processing {i} of {len(extracts)}")
-        try:
-            with tempfile.TemporaryDirectory() as tmp_dir:
-                zip_path = os.path.join(tmp_dir, extract.filename)
-                typer.secho(
-                    f"downloading {extract.path} to {zip_path}",
-                    fg=typer.colors.GREEN,
-                )
-                fs.get_file(extract.path, zip_path)
-                report, system_errors = execute_schedule_validator(
-                    zip_path=Path(zip_path),
-                    output_dir=tmp_dir,
-                )
-            validation = GTFSScheduleFeedValidation(
-                filename=f"validation_notices{JSONL_GZIP_EXTENSION}",
-                ts=extract.ts,
-                base64_url=extract.base64_url,
-                extract_path=extract.path,
-                system_errors=system_errors,
-            )
+    with ThreadPoolExecutor(max_workers=threads) as pool:
+        futures: Dict[Future, GTFSScheduleFeedExtract] = {
+            pool.submit(
+                download_and_validate_extract,
+                extract=extract,
+                pbar=pbar,
+            ): extract
+            for i, extract in enumerate(extracts)
+        }
 
-            notices = [
-                {
-                    "metadata": {
-                        "extract_path": extract.path,
-                        "gtfs_validator_version": GTFS_VALIDATOR_VERSION,
-                    },
-                    **notice,
-                }
-                for notice in report["notices"]
-            ]
+        for future in concurrent.futures.as_completed(futures):
+            extract = futures[future]
+            if pbar:
+                pbar.update(1)
 
-            typer.secho(
-                f"saving {len(notices)} validation notices to {validation.path}",
-                fg=typer.colors.GREEN,
-            )
-            validation.save_content(
-                content=gzip.compress(
-                    "\n".join(json.dumps(notice) for notice in notices).encode()
-                ),
-                fs=fs,
-            )
-            outcomes.append(
-                GTFSScheduleFeedExtractValidationOutcome(
-                    success=True,
-                    extract_path=extract.path,
-                    validation=validation,
-                )
-            )
-        except Exception as e:
-            typer.secho(
-                f"encountered exception on extract {extract.path}: {e}\n{traceback.format_exc()}",
-                fg=typer.colors.RED,
-            )
-            if verbose and isinstance(e, subprocess.CalledProcessError):
-                typer.secho(
-                    e.stderr,
+            try:
+                outcomes.append(future.result())
+            except KeyboardInterrupt:
+                raise
+            except Exception as e:
+                log(
+                    f"encountered exception on extract {extract.path}: {e}\n{traceback.format_exc()}",
                     fg=typer.colors.RED,
+                    pbar=pbar,
                 )
-            outcomes.append(
-                GTFSScheduleFeedExtractValidationOutcome(
-                    success=False,
-                    extract_path=extract.path,
-                    exception=e,
+                if verbose and isinstance(e, subprocess.CalledProcessError):
+                    log(
+                        e.stderr,
+                        fg=typer.colors.RED,
+                        pbar=pbar,
+                    )
+
+                exceptions.append(e)
+                outcomes.append(
+                    GTFSScheduleFeedExtractValidationOutcome(
+                        success=False,
+                        extract=extract,
+                        exception=e,
+                    )
                 )
-            )
+
+    if pbar:
+        del pbar
+
     result = ScheduleValidationJobResult(
         filename="results.jsonl",
         dt=day,
@@ -265,11 +323,19 @@ def validate_day(
         f"got {len(result.successes)} successes and {len(result.failures)} failures",
         fg=typer.colors.MAGENTA,
     )
+
     typer.secho(
         f"saving {len(outcomes)} to {result.path}",
         fg=typer.colors.GREEN,
     )
-    result.save(fs)
+    result.save(get_fs())
+
+    if exceptions:
+        exc_str = "\n".join(str(tup) for tup in exceptions)
+        msg = f"got {len(exceptions)} exceptions from processing {len(extracts)} extracts:\n{exc_str}"
+        typer.secho(msg, err=True, fg=typer.colors.RED)
+        raise RuntimeError(msg)
+
     assert len(extracts) == len(
         result.outcomes
     ), f"ended up with {len(outcomes)} outcomes from {len(extracts)} extracts"
