@@ -41,6 +41,11 @@ spec:
               cpu: 1
             limits:
               memory: 1Gi
+          lifecycle:
+            preStop:
+              exec:
+                command: ["kill", "-2", "1"]
+      terminationGracePeriodSeconds: 5
       volumes:
         - name: gtfs-feed-secrets
           secret:
