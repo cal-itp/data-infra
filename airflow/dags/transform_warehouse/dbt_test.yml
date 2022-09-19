@@ -21,6 +21,7 @@ cluster_name: data-infra-apps
 namespace: airflow-jobs
 
 env_vars:
+  CALITP_BUCKET__DBT_ARTIFACTS: "{{ env_var('CALITP_BUCKET__DBT_ARTIFACTS') }}"
   BIGQUERY_KEYFILE_LOCATION: /secrets/jobs-data/service_account.json
   DBT_PROJECT_DIR: /app
   DBT_PROFILE_DIR: /app
