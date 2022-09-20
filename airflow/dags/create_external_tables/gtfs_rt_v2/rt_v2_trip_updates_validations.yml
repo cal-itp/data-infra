@@ -13,16 +13,25 @@ schema_fields:
   - name: metadata
     type: RECORD
     fields:
-      - name: config
+      - name: extract_config
         type: RECORD
         fields:
-          - name: id
-            type: STRING
+          - name: extracted_at
+            type: TIMESTAMP
           - name: name
             type: STRING
-          - name: uri
+          - name: url
             type: STRING
-            mode: NULLABLE
+          - name: feed_type
+            type: STRING
+          - name: schedule_url_for_validation
+            type: STRING
+          - name: auth_query_params
+            type: JSON
+          - name: auth_headers
+            type: JSON
+      - name: gtfs_validator_version
+        type: STRING
   - name: errorMessage
     type: RECORD
     fields:
