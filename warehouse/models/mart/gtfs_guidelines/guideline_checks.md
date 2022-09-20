@@ -19,5 +19,8 @@ Here is a list of currently-implemented checks:
 |Vehicle positions RT feed is present | Compliance | The vehicle positions RT file is present at least once on the given day.|
 | Trip updates RT feed is present | Compliance | The trip updates RT file is present at least once on the given day.|
 | Service alerts RT feed is present | Compliance | The service alerts RT file is present at least once on the given day.|
-
+| GTFS schedule feed is listed on feed aggregator transit.land | Feed Aggregator Availability | GTFS schedule feed is listed on feed aggregator transit.land on the given day |
+| Vehicle positions RT feed is listed on feed aggregator transit.land | Feed Aggregator Availability | Vehicle positions RT feed is listed on feed aggregator transit.land on the given day |
+| Trip updates RT feed is listed on feed aggregator transit.land | Feed Aggregator Availability | Trip updates RT feed is listed on feed aggregator transit.land on the given day |
+| Service alerts RT feed is listed on feed aggregator transit.land | Feed Aggregator Availability | Service alerts RT feed is listed on feed aggregator transit.land on the given day |
 {% enddocs %}
