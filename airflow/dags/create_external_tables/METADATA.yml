@@ -1,4 +1,5 @@
 description: "Creates all external tables in BigQuery"
+# Should run before dbt
 schedule_interval: "0 11 * * *"
 tags:
   - all_gusty_features
