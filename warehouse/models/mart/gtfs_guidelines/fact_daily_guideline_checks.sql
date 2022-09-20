@@ -49,6 +49,22 @@ stg_gtfs_guidelines__service_alerts_feed_present AS (
     SELECT * FROM {{ ref('stg_gtfs_guidelines__service_alerts_feed_present') }}
 ),
 
+stg_gtfs_guidelines__schedule_feed_on_transitland AS (
+    SELECT * FROM {{ ref('stg_gtfs_guidelines__schedule_feed_on_transitland') }}
+),
+
+stg_gtfs_guidelines__vehicle_positions_feed_on_transitland AS (
+    SELECT * FROM {{ ref('stg_gtfs_guidelines__vehicle_positions_feed_on_transitland') }}
+),
+
+stg_gtfs_guidelines__trip_updates_feed_on_transitland AS (
+    SELECT * FROM {{ ref('stg_gtfs_guidelines__trip_updates_feed_on_transitland') }}
+),
+
+stg_gtfs_guidelines__service_alerts_feed_on_transitland AS (
+    SELECT * FROM {{ ref('stg_gtfs_guidelines__service_alerts_feed_on_transitland') }}
+),
+
 fact_daily_guideline_checks AS (
     SELECT
         {{ gtfs_guidelines_columns() }}
@@ -97,6 +113,22 @@ fact_daily_guideline_checks AS (
     SELECT
         {{ gtfs_guidelines_columns() }}
     FROM stg_gtfs_guidelines__service_alerts_feed_present
+    UNION ALL
+    SELECT
+        {{ gtfs_guidelines_columns() }}
+    FROM stg_gtfs_guidelines__schedule_feed_on_transitland
+    UNION ALL
+    SELECT
+        {{ gtfs_guidelines_columns() }}
+    FROM stg_gtfs_guidelines__vehicle_positions_feed_on_transitland
+    UNION ALL
+    SELECT
+        {{ gtfs_guidelines_columns() }}
+    FROM stg_gtfs_guidelines__trip_updates_feed_on_transitland
+    UNION ALL
+    SELECT
+        {{ gtfs_guidelines_columns() }}
+    FROM stg_gtfs_guidelines__service_alerts_feed_on_transitland
 )
 
 SELECT * FROM fact_daily_guideline_checks
