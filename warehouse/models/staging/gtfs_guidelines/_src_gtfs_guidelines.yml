@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: feed_aggregator_checks
+    description: |
+      Data from daily feed aggregator checks (transitland and transitfeeds).
+    database: cal-itp-data-infra
+    schema: external_feed_aggregator
+    tables:
+      - name: feed_checks

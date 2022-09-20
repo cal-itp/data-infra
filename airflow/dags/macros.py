@@ -141,6 +141,14 @@ def prefix_bucket(bucket):
     return f"gs://test-{bucket}" if is_development() else f"gs://{bucket}"
 
 
+# this only applies to gtfs-data bucket
+def suffix_bucket(bucket):
+    # TODO: use once we're in python 3.9+
+    # bucket = bucket.removeprefix("gs://")
+    bucket = bucket.replace("gs://", "")
+    return f"gs://{bucket}-test" if is_development() else f"gs://{bucket}"
+
+
 data_infra_macros = {
     "sql_airtable_mapping": airtable_mapping_generate_sql,
     "is_development": is_development_macro,

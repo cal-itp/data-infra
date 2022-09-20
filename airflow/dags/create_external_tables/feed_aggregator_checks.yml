@@ -1,0 +1,39 @@
+operator: operators.ExternalTable
+bucket: gs://gtfs-data
+# TO-DO: move this to its own bucket so that we don't have to use suffix_bucket
+suffix_bucket: true
+post_hook: |
+  SELECT *
+  FROM `{{ get_project_id() }}`.external_feed_aggregator.feed_checks
+  LIMIT 1;
+source_objects:
+  - "feed_aggregator_checks/*.jsonl"
+destination_project_dataset_table: "external_feed_aggregator.feed_checks"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  source_uri_prefix: "feed_aggregator_checks/{dt:DATE}/"
+schema_fields:
+  - name: url
+    type: STRING
+  - name: url_type
+    type: STRING
+  - name: itp_id
+    type: INT64
+  - name: url_number
+    type: INT64
+  - name: transitfeeds
+    type: RECORD
+    fields:
+      - name: status
+        type: string
+      - name: public_web_url
+        type: string
+  - name: transitland
+    type: RECORD
+    fields:
+      - name: status
+        type: string
+      - name: public_web_url
+        type: string

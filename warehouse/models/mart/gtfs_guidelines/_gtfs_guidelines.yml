@@ -41,3 +41,24 @@ models:
         description: |
           A string label for the GTFS "feature" associated with the given check. For example,
           "Compliant / On the Map".
+
+  - name: fact_daily_transitland_url_check
+    description: '{{ doc("transitland_url_check_table") }}'
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - dt
+            - url_type
+            - calitp_itp_id
+            - calitp_url_number
+    columns:
+      - name: dt
+      - name: url
+      - name: url_type
+      - name: calitp_itp_id
+        description: '{{ doc("column_calitp_itp_id") }}'
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
+      - name: transitland_status
+        description: A value of either `present` or `missing`
+      - name: transitland_public_web_url
