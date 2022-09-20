@@ -21,4 +21,3 @@ Here is a list of currently-implemented checks:
 | Service alerts RT feed is present | Compliance | The service alerts RT file is present at least once on the given day.|
 
 {% enddocs %}
-
