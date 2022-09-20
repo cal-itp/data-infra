@@ -15,20 +15,8 @@ schema_fields:
   - name: exception
     type: STRING
     mode: NULLABLE
-  - name: extract
-    type: RECORD
-    fields:
-      - name: response_headers
-        type: RECORD
-        mode: NULLABLE
-        fields:
-          - name: content_type
-            type: STRING
-            mode: NULLABLE
+  - name: extract_path
+    type: STRING
+    # just define this as JSON as placeholder -- this is about to be refactored
   - name: aggregation
-    type: RECORD
-    mode: NULLABLE
-    fields:
-      - name: extracts
-        type: STRING
-        mode: REPEATED
+    type: JSON
