@@ -1,20 +1,19 @@
 description: "Creates all external tables in BigQuery"
-schedule_interval: "@once"
+schedule_interval: "0 11 * * *"
 tags:
   - all_gusty_features
 default_args:
     owner: airflow
     depends_on_past: False
-    start_date: "2021-01-01"
+    start_date: !days_ago 1
     email:
-      - "blake.f@jarv.us"
-      - "evan.siroky@dot.ca.gov"
-      - "hunter.owens@dot.ca.gov"
+      - "andrew.v@jarv.us"
       - "jameelah.y@jarv.us"
+      - "laurie.m@jarv.us"
     email_on_failure: True
     email_on_retry: False
     retries: 0
     retry_delay: !timedelta 'minutes: 2'
     concurrency: 50
     #sla: !timedelta 'hours: 2'
-latest_only: False
+latest_only: True

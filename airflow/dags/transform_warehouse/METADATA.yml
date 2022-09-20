@@ -8,6 +8,8 @@ default_args:
     start_date: !days_ago 1
     email:
       - "andrew.v@jarv.us"
+      - "jameelah.y@jarv.us"
+      - "laurie.m@jarv.us"
     email_on_failure: True
     email_on_retry: False
     retries: 1
