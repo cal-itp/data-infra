@@ -200,6 +200,13 @@ class RTFileProcessingOutcome(ProcessingOutcome):
     extract: GTFSRTFeedExtract
     aggregation: Optional[RTHourlyAggregation]
 
+    @validator("aggregation", allow_reuse=True, always=True)
+    def aggregation_exists_if_success(cls, v, values):
+        assert (v is not None) == values[
+            "success"
+        ], "aggregation can exist if and only if the outcome is successful"
+        return v
+
 
 class GTFSRTJobResult(PartitionedGCSArtifact):
     step: RTProcessingStep
@@ -397,6 +404,7 @@ def validate_and_upload(
                 step=hour.step,
                 success=True,
                 extract=extract,
+                aggregation=hour,
             )
         )
 
@@ -495,6 +503,7 @@ def parse_and_upload(
                     step="parse",
                     success=True,
                     extract=extract,
+                    aggregation=hour,
                 )
             )
             del parsed
