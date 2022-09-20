@@ -1,0 +1,41 @@
+# Reference: https://raslasarslas.medium.com/how-to-deploy-sentry-on-a-kubernetes-cluster-using-helm-600db31d4486
+# Sentry chart: https://github.com/sentry-kubernetes/charts
+sentry:
+  user:
+    create: true
+    email: youremail@example.com
+    password: admin
+  ingress:
+    enabled: false
+    # If you are using traefik ingress controller, switch this to 'traefik'
+    regexPathStyle: nginx
+    annotations:
+    # If you are using nginx ingress controller, please use at least those 2 annotations
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/use-regex: "true"
+    hostname: sentry.example.com
+  nginx:
+    enabled: false
+  sentry:
+    singleOrganization: false
+    worker:
+      replicas: 2
+  mail:
+    backend: smtp
+    useTls: false
+    username: "apikey"
+    password: "XXXXX"
+    port: 25
+    host: "smtp.sendgrid.net"
+    from: "sentry@example.com"
+  service:
+    name: sentry
+    type: ClusterIP
+    externalPort: 9000
+    annotations: {}
+  slack:
+    clientId: "client-it"
+    clientSecret: "client-secret"
+    signingSecret: "signing-secret"
+  postgresql:
+    enabled: true
