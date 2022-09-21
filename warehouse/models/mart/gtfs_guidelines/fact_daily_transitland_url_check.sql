@@ -5,7 +5,8 @@ WITH gtfs_fact_daily_transitland_url_check AS (
 
         calitp_itp_id,
 
-        calitp_url_number,
+        -- re-add calitp_url_number after the aggregator checker is migrated to use airtable and the url number value is correct
+        --calitp_url_number,
 
         url_type,
 
