@@ -9,7 +9,7 @@ SELECT * FROM {{ ref('stg_gtfs_guidelines__fact_daily_transitland_url_check') }}
 
 schedule_daily_check AS (
     SELECT
-        calitp_itp_id,
+        DISTINCT calitp_itp_id,
         dt AS date
    FROM fact_daily_transitland_url_check
   WHERE url_type = "gtfs_schedule_url"
