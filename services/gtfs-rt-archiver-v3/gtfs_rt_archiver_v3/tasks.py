@@ -69,7 +69,6 @@ def increment_task_signals_counter(signal, task, exc=None):
 
 @huey.signal(SIGNAL_ERROR)
 def log_error_to_sentry(signal, task, exc=None):
-    print(f"capturing exception type {type(exc)}")
     capture_exception(exc)
 
 
@@ -123,9 +122,6 @@ def fetch(tick: datetime, config: GTFSDownloadConfig):
     )
     slippage = (pendulum.now() - tick).total_seconds()
     FETCH_PROCESSING_DELAY.labels(**labels).observe(slippage)
-
-    if "aspx" in config.url:
-        raise RuntimeError("test error, pretend we cannot handle aspx")
 
     with FETCH_PROCESSING_TIME.labels(**labels).time():
         try:
