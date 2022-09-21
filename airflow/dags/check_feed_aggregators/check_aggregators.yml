@@ -1,6 +1,6 @@
 operator: operators.PodOperator
 name: 'check-aggregators'
-image: 'ghcr.io/cal-itp/data-infra/gtfs-aggregator-checker:latest'
+image: 'ghcr.io/cal-itp/data-infra/gtfs-aggregator-checker:{{ image_tag() }}'
 
 cmds:
   - python3

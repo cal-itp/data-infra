@@ -2,8 +2,8 @@ FROM python:3.7-buster
 
 LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
 
-RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
-ENV PATH="${PATH}:/root/.poetry/bin"
+RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python3 -
+ENV PATH="/root/.local/bin:${PATH}"
 
 RUN mkdir /app
 WORKDIR /app
