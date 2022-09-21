@@ -1,0 +1,30 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG') }}"
+post_hook: |
+  SELECT *
+  FROM `{{ get_project_id() }}`.external_gtfs_schedule.download_configs
+  WHERE dt = '{{ ds }}'
+  LIMIT 1;
+source_objects:
+  - "gtfs_download_configs/*.jsonl"
+destination_project_dataset_table: "external_gtfs_schedule.download_configs"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  source_uri_prefix: "gtfs_download_configs/{dt:DATE}/{ts:TIMESTAMP}/"
+schema_fields:
+  - name: extracted_at
+    type: TIMESTAMP
+  - name: name
+    type: STRING
+  - name: url
+    type: STRING
+  - name: feed_type
+    type: STRING
+  - name: schedule_url_for_validation
+    type: STRING
+  - name: auth_query_params
+    type: JSON
+  - name: auth_headers
+    type: JSON
