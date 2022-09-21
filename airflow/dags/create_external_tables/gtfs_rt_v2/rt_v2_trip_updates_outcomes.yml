@@ -6,7 +6,7 @@ post_hook: |
   WHERE dt = '{{ ds }}'
   LIMIT 1;
 source_objects:
-  - "trip_updates_outcomes/*.jsonl.gz"
+  - "trip_updates_outcomes/*.jsonl"
 destination_project_dataset_table: "external_gtfs_rt_v2.trip_updates_outcomes"
 source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
