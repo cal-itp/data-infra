@@ -21,7 +21,7 @@ cachetools = ">=2.0.0,<5.0"
 google-cloud-secret-manager = "^2.11.1"
 structlog = "^22.1.0"
 python-json-logger = "^2.0.4"
-calitp = "2022.9.20a0"
+calitp = "2022.9.21"
 backoff = "^2.1.2"
 
 [tool.poetry.dev-dependencies]
