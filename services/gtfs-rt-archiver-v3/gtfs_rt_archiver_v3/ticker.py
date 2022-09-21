@@ -56,7 +56,7 @@ def main(
     port: int = os.getenv("TICKER_PROMETHEUS_PORT", 9102),
     load_env_secrets: bool = False,
 ):
-    sentry_sdk.init()
+    sentry_sdk.init(environment=os.getenv("AIRFLOW_ENV"))
     start_http_server(port)
 
     if load_env_secrets:
