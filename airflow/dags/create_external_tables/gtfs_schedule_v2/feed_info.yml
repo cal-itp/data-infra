@@ -12,7 +12,7 @@ source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 hive_options:
   mode: CUSTOM
-  source_uri_prefix: "feed_info/{dt:DATE}/{base64_url:STRING}/{ts:TIMESTAMP}/"
+  source_uri_prefix: "feed_info/{dt:DATE}/{ts:TIMESTAMP}/{base64_url:STRING}/"
 schema_fields:
   - name: feed_publisher_name
     type: STRING

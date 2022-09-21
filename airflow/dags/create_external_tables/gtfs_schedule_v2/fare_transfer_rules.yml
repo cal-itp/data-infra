@@ -12,7 +12,7 @@ source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 hive_options:
   mode: CUSTOM
-  source_uri_prefix: "fare_transfer_rules/{dt:DATE}/{base64_url:STRING}/{ts:TIMESTAMP}/"
+  source_uri_prefix: "fare_transfer_rules/{dt:DATE}/{ts:TIMESTAMP}/{base64_url:STRING}/"
 schema_fields:
   - name: from_leg_group_id
     type: STRING
