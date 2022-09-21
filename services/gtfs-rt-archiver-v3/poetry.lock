@@ -99,13 +99,14 @@ python-versions = "~=3.5"
 
 [[package]]
 name = "calitp"
-version = "2022.9.15"
+version = "2022.9.21"
 description = "Shared code for the Cal-ITP data codebases"
 category = "main"
 optional = false
 python-versions = ">=3.8,<3.11"
 
 [package.dependencies]
+backoff = ">=2.1.2,<3.0.0"
 fsspec = ">=2022.5.0,<2022.7.1 || >2022.7.1,<2023.0.0"
 gcsfs = ">=2022.5.0,<2022.7.1 || >2022.7.1,<2023.0.0"
 google-api-core = ">=1.32.0,<2.0.0dev"
@@ -1173,7 +1174,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.11"
-content-hash = "5b83ec3fa28cebf4f97eea988e1f2979a89a8478a5c73f25c5f9a1e854d8b9d8"
+content-hash = "b1142c627ee127863901e91a0260d80f7555762de8012a353b2037123b5d5d7c"
 
 [metadata.files]
 aiohttp = []
