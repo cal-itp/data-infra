@@ -3,19 +3,18 @@
 sentry:
   user:
     create: true
-    email: youremail@example.com
-    password: admin
+    email: admin@sentry.local
+    existingSecret: sentry-secrets
+    existingSecretKey: admin-password
   ingress:
     enabled: false
-    # If you are using traefik ingress controller, switch this to 'traefik'
     regexPathStyle: nginx
     annotations:
-    # If you are using nginx ingress controller, please use at least those 2 annotations
       kubernetes.io/ingress.class: nginx
       nginx.ingress.kubernetes.io/use-regex: "true"
-    hostname: sentry.example.com
+    hostname: localhost
   nginx:
-    enabled: false
+    enabled: true
   sentry:
     singleOrganization: false
     worker:
