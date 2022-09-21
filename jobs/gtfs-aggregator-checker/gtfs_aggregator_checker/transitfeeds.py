@@ -1,5 +1,6 @@
 from urllib.error import HTTPError
 
+import typer
 from bs4 import BeautifulSoup
 from tqdm import tqdm
 
@@ -18,7 +19,7 @@ def resolve_url(url):
 
 
 def get_transitfeeds_urls(progress=False):
-    print("fetching transit feeds URLs")
+    typer.echo("fetching transit feeds URLs")
 
     page_urls = []
     provider_urls = []
@@ -49,7 +50,7 @@ def get_transitfeeds_urls(progress=False):
         try:
             html = curl_cached(feed_url)
         except HTTPError:
-            print("failed to fetch:", feed_url)
+            typer.echo(f"failed to fetch: {feed_url}")
             continue
 
         soup = BeautifulSoup(html, "html.parser")
