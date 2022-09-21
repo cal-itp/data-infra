@@ -11,6 +11,7 @@ arguments:
   - "/secrets/agencies-data/data_agencies.yaml"
   - "--output={{get_bucket()}}/feed_aggregator_checks/dt={{execution_date.to_date_string()}}/checks.jsonl"
   - "--output-format=JSONL"
+  - "--progress"
 
 is_delete_operator_pod: true
 get_logs: true

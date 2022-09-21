@@ -3,6 +3,7 @@ import urllib.parse
 import urllib.request
 from collections import OrderedDict
 
+import typer
 import yaml
 
 from .transitfeeds import get_transitfeeds_urls
@@ -35,6 +36,7 @@ def check_feeds(yml_file=None, csv_file=None, url=None, progress=False):
             "transitland": {"status": "missing"},
         }
     elif csv_file:
+        typer.echo(f"reading urls from {csv_file}")
         with open(csv_file, "r") as f:
             urls = f.read().strip().splitlines()
             for url in urls:
@@ -44,6 +46,7 @@ def check_feeds(yml_file=None, csv_file=None, url=None, progress=False):
                     "transitland": {"status": "missing"},
                 }
     else:
+        typer.echo(f"reading urls from {yml_file}")
         with open(yml_file, "r") as f:
             agencies_obj = yaml.load(f, Loader=yaml.SafeLoader)
             for agency in agencies_obj.values():
