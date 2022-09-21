@@ -16,5 +16,6 @@ default_args:
     retries: 0
     retry_delay: !timedelta 'minutes: 2'
     concurrency: 50
+    pool: external_table_pool
     #sla: !timedelta 'hours: 2'
 latest_only: True
