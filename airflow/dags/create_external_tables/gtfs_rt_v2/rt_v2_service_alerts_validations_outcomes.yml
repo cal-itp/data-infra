@@ -20,8 +20,44 @@ schema_fields:
   - name: exception
     type: STRING
     mode: NULLABLE
-  - name: extract_path
-    type: STRING
-    # just define this as JSON as placeholder -- this is about to be refactored
+  - name: extract
+    type: RECORD
+    fields:
+      - name: filename
+        type: STRING
+      - name: ts
+        type: TIMESTAMP
+      - name: config
+        type: RECORD
+        fields:
+          - name: extracted_at
+            type: TIMESTAMP
+          - name: name
+            type: STRING
+          - name: url
+            type: STRING
+          - name: feed_type
+            type: STRING
+          - name: schedule_url_for_validation
+            type: STRING
+          - name: auth_query_params
+            type: JSON
+          - name: auth_headers
+            type: JSON
+      - name: response_code
+        type: INT64
+      - name: response_headers
+        type: JSON
   - name: aggregation
-    type: JSON
+    type: RECORD
+    fields:
+      - name: filename
+        type: STRING
+      - name: step
+        type: STRING
+      - name: feed_type
+        type: STRING
+      - name: hour
+        type: TIMESTAMP
+      - name: base64_url
+        type: STRING
