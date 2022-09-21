@@ -55,24 +55,23 @@ def run(
 
     subprocess.run(get_command("compile")).check_returncode()
 
+    results_to_check = []
+
     if dbt_run:
         args = ["run"]
         if full_refresh:
             args.append("--full-refresh")
-        run_result = subprocess.run(get_command(*args))
+        results_to_check.append(subprocess.run(get_command(*args)))
     else:
         typer.echo("skipping run")
-        run_result = None
 
     if dbt_test:
-        test_result = subprocess.run(get_command("test"))
-    else:
-        test_result = None
+        results_to_check.append(subprocess.run(get_command("test")))
 
     if dbt_freshness:
-        freshness_result = subprocess.run(get_command("source", "snapshot-freshness"))
-    else:
-        freshness_result = None
+        results_to_check.append(
+            subprocess.run(get_command("source", "snapshot-freshness"))
+        )
 
     if dbt_docs:
         subprocess.run(get_command("docs", "generate")).check_returncode()
@@ -124,7 +123,7 @@ def run(
             if target.startswith("prod"):
                 args.append("--prod")
 
-            subprocess.run(args)
+            results_to_check.append(subprocess.run(args))
 
     if sync_metabase:
         for schema, database in [
@@ -133,35 +132,28 @@ def run(
             ("mart_transit_database", "Data Marts (formerly Warehouse Views)"),
             ("mart_gtfs_guidelines", "Data Marts (formerly Warehouse Views)"),
         ]:
-            subprocess.run(
-                [
-                    "dbt-metabase",
-                    "models",
-                    "--dbt_manifest_path",
-                    "./target/manifest.json",
-                    "--dbt_database",
-                    "cal-itp-data-infra",
-                    "--dbt_schema",
-                    schema,
-                    "--metabase_host",
-                    "dashboards.calitp.org",
-                    "--metabase_user",
-                    os.environ["METABASE_USER"],
-                    "--metabase_password",
-                    os.environ["METABASE_PASSWORD"],
-                    "--metabase_database",
-                    database,
-                ]
-            ).check_returncode()
+            args = [
+                "dbt-metabase",
+                "models",
+                "--dbt_manifest_path",
+                "./target/manifest.json",
+                "--dbt_database",
+                "cal-itp-data-infra",
+                "--dbt_schema",
+                schema,
+                "--metabase_host",
+                "dashboards.calitp.org",
+                "--metabase_user",
+                os.environ["METABASE_USER"],
+                "--metabase_password",
+                os.environ["METABASE_PASSWORD"],
+                "--metabase_database",
+                database,
+            ]
+            results_to_check.append(subprocess.run(args))
 
-    if run_result:
-        run_result.check_returncode()
-
-    if test_result:
-        test_result.check_returncode()
-
-    if freshness_result:
-        freshness_result.check_returncode()
+    for result in results_to_check:
+        result.check_returncode()
 
 
 if __name__ == "__main__":
