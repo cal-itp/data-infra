@@ -1,6 +1,7 @@
 import json
 from typing import List, Tuple
 
+import typer
 from tqdm import tqdm
 
 from .cache import curl_cached
@@ -33,7 +34,7 @@ def get_feeds(after=None):
 
 
 def get_transitland_urls(progress=False) -> List[Tuple[str, str]]:
-    print("fetching transitland URLs")
+    typer.echo("fetching transitland URLs")
     if not API_KEY:
         raise RuntimeError("TRANSITLAND_API_KEY must be set")
 
@@ -52,5 +53,5 @@ def get_transitland_urls(progress=False) -> List[Tuple[str, str]]:
         if not after:
             break
     else:
-        print("WARNING: hit loop limit for transitland")
+        typer.echo("WARNING: hit loop limit for transitland")
     return urls
