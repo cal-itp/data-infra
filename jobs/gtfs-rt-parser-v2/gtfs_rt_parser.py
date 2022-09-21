@@ -204,7 +204,7 @@ class RTFileProcessingOutcome(ProcessingOutcome):
     def aggregation_exists_if_success(cls, v, values):
         assert (v is not None) == values[
             "success"
-        ], "aggregation can exist if and only if the outcome is successful"
+        ], "aggregation must exist if and only if the outcome is successful"
         return v
 
 
