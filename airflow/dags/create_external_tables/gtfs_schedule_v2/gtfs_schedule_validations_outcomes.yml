@@ -1,5 +1,10 @@
 operator: operators.ExternalTable
 bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION') }}"
+post_hook: |
+  SELECT *
+  FROM `{{ get_project_id() }}`.external_gtfs_schedule.validations_outcomes
+  WHERE dt = '{{ ds }}'
+  LIMIT 1;
 source_objects:
   - "validation_job_results/*.jsonl"
 destination_project_dataset_table: "external_gtfs_schedule.validations_outcomes"

@@ -1,5 +1,10 @@
 operator: operators.ExternalTable
 bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_PARSED') }}"
+post_hook: |
+  SELECT *
+  FROM `{{ get_project_id() }}`.external_gtfs_schedule.attributions
+  WHERE dt = '{{ ds }}'
+  LIMIT 1;
 source_objects:
   - "attributions/*.jsonl.gz"
 destination_project_dataset_table: "external_gtfs_schedule.attributions"
@@ -31,8 +36,3 @@ schema_fields:
     type: STRING
   - name: attribution_phone
     type: STRING
-  - name: metadata
-    type: RECORD
-    fields:
-      - name: config_extract_ts
-        type: TIMESTAMP
