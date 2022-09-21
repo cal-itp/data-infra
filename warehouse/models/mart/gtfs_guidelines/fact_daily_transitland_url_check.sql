@@ -5,7 +5,7 @@ WITH gtfs_fact_daily_transitland_url_check AS (
 
         calitp_itp_id,
 
-        -- re-add calitp_url_number after the aggregator checker is migrated to use airtable and the url number value is correct
+        -- suppressing because value is incorrect https://github.com/cal-itp/data-infra/issues/1825
         --calitp_url_number,
 
         url_type,
