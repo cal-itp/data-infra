@@ -2,15 +2,14 @@ import os
 import traceback
 from datetime import datetime
 
-import backoff
+import google_crc32c
 import humanize
 import orjson
 import pendulum
 import structlog
 import typer
-from calitp.storage import download_feed, GTFSDownloadConfig, GTFSFeedExtract
+from calitp.storage import download_feed, GTFSDownloadConfig
 from google.cloud import storage, secretmanager
-import google_crc32c
 from huey import RedisExpireHuey
 from huey.registry import Message
 from huey.serializer import Serializer
@@ -103,15 +102,6 @@ def load_auth_dict():
     auth_dict = {key: os.environ[key] for key in AUTH_KEYS}
 
 
-@backoff.on_exception(
-    backoff.expo,
-    exception=(Exception,),
-    max_tries=2,
-)
-def save_content_with_retry(extract: GTFSFeedExtract, content: bytes) -> None:
-    extract.save_content(content=content, client=client)
-
-
 @huey.task(expires=5)
 def fetch(tick: datetime, config: GTFSDownloadConfig):
     labels = dict(
@@ -164,7 +154,7 @@ def fetch(tick: datetime, config: GTFSDownloadConfig):
             f"saving {humanize.naturalsize(len(content))} from {config.url} to {extract.path}"
         )
         try:
-            save_content_with_retry(extract=extract, content=content)
+            extract.save_content(content=content, client=client, retry_metadata=True)
         except Exception as e:
             logger.error(
                 "failure occurred when saving extract or metadata",
