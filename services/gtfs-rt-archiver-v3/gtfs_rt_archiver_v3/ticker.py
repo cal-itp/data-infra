@@ -8,6 +8,7 @@ from typing import List, Tuple
 
 import pendulum
 import schedule
+import sentry_sdk
 import typer
 from cachetools.func import ttl_cache
 from calitp.storage import (
@@ -55,6 +56,7 @@ def main(
     port: int = os.getenv("TICKER_PROMETHEUS_PORT", 9102),
     load_env_secrets: bool = False,
 ):
+    sentry_sdk.init()
     start_http_server(port)
 
     if load_env_secrets:

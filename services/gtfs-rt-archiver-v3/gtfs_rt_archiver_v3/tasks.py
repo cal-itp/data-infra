@@ -13,7 +13,9 @@ from google.cloud import storage, secretmanager
 from huey import RedisExpireHuey
 from huey.registry import Message
 from huey.serializer import Serializer
+from huey.signals import SIGNAL_ERROR
 from requests import HTTPError, RequestException
+from sentry_sdk import capture_exception
 
 from .metrics import (
     FETCH_PROCESSING_TIME,
@@ -54,7 +56,7 @@ base_logger = structlog.get_logger()
 
 
 @huey.signal()
-def instrument_signals(signal, task, exc=None):
+def increment_task_signals_counter(signal, task, exc=None):
     config: GTFSDownloadConfig = task.kwargs["config"]
     TASK_SIGNALS.labels(
         record_name=config.name,
@@ -63,6 +65,12 @@ def instrument_signals(signal, task, exc=None):
         signal=signal,
         exc_type=type(exc).__name__ if exc else "",
     ).inc()
+
+
+@huey.signal(SIGNAL_ERROR)
+def log_error_to_sentry(signal, task, exc=None):
+    print(f"capturing exception type {type(exc)}")
+    capture_exception(exc)
 
 
 AUTH_KEYS = [
@@ -115,6 +123,9 @@ def fetch(tick: datetime, config: GTFSDownloadConfig):
     )
     slippage = (pendulum.now() - tick).total_seconds()
     FETCH_PROCESSING_DELAY.labels(**labels).observe(slippage)
+
+    if "aspx" in config.url:
+        raise RuntimeError("test error, pretend we cannot handle aspx")
 
     with FETCH_PROCESSING_TIME.labels(**labels).time():
         try:
