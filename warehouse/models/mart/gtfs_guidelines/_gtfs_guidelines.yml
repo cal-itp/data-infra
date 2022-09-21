@@ -48,9 +48,8 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - dt
-            - url_type
             - calitp_itp_id
-            - calitp_url_number
+            - url
     columns:
       - name: dt
       - name: url
