@@ -13,10 +13,9 @@ import typer
 
 from dbt_artifacts import (
     RunResults,
-    TestStatus,
     Manifest,
     RunResult,
-    RunStatus,
+    RunResultStatus,
 )
 
 CALITP_BUCKET__DBT_ARTIFACTS = os.environ["CALITP_BUCKET__DBT_ARTIFACTS"]
@@ -53,11 +52,9 @@ def report_failures_to_sentry(
         for result in run_results.results
         if result.status
         in (
-            RunStatus.error,
-            RunStatus.fail,
-            TestStatus.fail,
-            TestStatus.error,
-            TestStatus.warn,
+            RunResultStatus.error,
+            RunResultStatus.fail,
+            RunResultStatus.warn,
         )
     ]
     for failure in failures:

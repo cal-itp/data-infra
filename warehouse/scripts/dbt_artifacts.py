@@ -311,29 +311,19 @@ class TimingInfo(BaseModel):
     completed_at: Optional[datetime]
 
 
-class RunStatus(str, Enum):
+# TODO: it'd be nice to be able to distinguish between models, tests, and freshness checks
+class RunResultStatus(str, Enum):
+    _pass = "pass"
     success = "success"
     error = "error"
     fail = "fail"
-
-
-class TestStatus(str, Enum):
-    test_pass = "pass"
-    fail = "fail"
-    error = "error"
     warn = "warn"
     skipped = "skipped"
-
-
-class FreshnessStatus(str, Enum):
-    freshness_pass = "pass"
-    warn = "warn"
-    error = "error"
     runtime_error = "runtime error"
 
 
 class RunResult(BaseModel):
-    status: Union[RunStatus, TestStatus, FreshnessStatus]
+    status: RunResultStatus
     timing: List[TimingInfo]
     thread_id: str
     execution_time: int  # seconds
