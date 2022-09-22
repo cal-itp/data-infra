@@ -47,6 +47,22 @@
 "No pathways-related errors appear in the MobilityData GTFS Schedule Validator"
 {% endmacro %}
 
+{% macro schedule_feed_on_transitland() %}
+"GTFS schedule feed is listed on feed aggregator transit.land"
+{% endmacro %}
+
+{% macro vehicle_positions_feed_on_transitland() %}
+"Vehicle positions RT feed is listed on feed aggregator transit.land"
+{% endmacro %}
+
+{% macro trip_updates_feed_on_transitland() %}
+"Trip updates RT feed is listed on feed aggregator transit.land"
+{% endmacro %}
+
+{% macro service_alerts_feed_on_transitland() %}
+"Service alerts RT feed is listed on feed aggregator transit.land"
+{% endmacro %}
+
 -- declare features
 {% macro compliance() %}
 "Compliance"
@@ -66,6 +82,10 @@
 
 {% macro fixed_route_completeness() %}
 "Fixed-Route Completeness"
+{% endmacro %}
+
+{% macro feed_aggregator_availability() %}
+"Feed Aggregator Availability"
 {% endmacro %}
 
 -- columns

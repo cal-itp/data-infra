@@ -20,3 +20,71 @@ models:
       - name: transitland_status
         description: A value of either `present` or `missing`
       - name: transitland_public_web_url
+  - name: stg_gtfs_guidelines__schedule_feed_on_transitland
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - calitp_itp_id
+            - calitp_url_number
+    columns:
+      - name: date
+      - name: calitp_itp_id
+      - name: calitp_url_number
+      - name: calitp_agency_name
+      - name: check
+      - name: feature
+      - name: status
+        tests:
+          - not_null
+  - name: stg_gtfs_guidelines__vehicle_positions_feed_on_transitland
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - calitp_itp_id
+            - calitp_url_number
+    columns:
+      - name: date
+      - name: calitp_itp_id
+      - name: calitp_url_number
+      - name: calitp_agency_name
+      - name: check
+      - name: feature
+      - name: status
+        tests:
+          - not_null
+  - name: stg_gtfs_guidelines__trip_updates_feed_on_transitland
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - calitp_itp_id
+            - calitp_url_number
+    columns:
+      - name: date
+      - name: calitp_itp_id
+      - name: calitp_url_number
+      - name: calitp_agency_name
+      - name: check
+      - name: feature
+      - name: status
+        tests:
+          - not_null
+  - name: stg_gtfs_guidelines__service_alerts_feed_on_transitland
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - calitp_itp_id
+            - calitp_url_number
+    columns:
+      - name: date
+      - name: calitp_itp_id
+      - name: calitp_url_number
+      - name: calitp_agency_name
+      - name: check
+      - name: feature
+      - name: status
+        tests:
+          - not_null

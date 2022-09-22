@@ -33,6 +33,14 @@ checks_implemented AS (
     SELECT {{ trip_updates_feed_present() }}, {{ compliance() }}
     UNION ALL
     SELECT {{ service_alerts_feed_present() }}, {{ compliance() }}
+    UNION ALL
+    SELECT {{ schedule_feed_on_transitland() }}, {{ feed_aggregator_availability() }}
+    UNION ALL
+    SELECT {{ vehicle_positions_feed_on_transitland() }}, {{ feed_aggregator_availability() }}
+    UNION ALL
+    SELECT {{ trip_updates_feed_on_transitland() }}, {{ feed_aggregator_availability() }}
+    UNION ALL
+    SELECT {{ service_alerts_feed_on_transitland() }}, {{ feed_aggregator_availability() }}
 ),
 
 -- create an index: all feed/date/check combinations
