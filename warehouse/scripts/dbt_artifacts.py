@@ -342,21 +342,6 @@ class RunResult(BaseModel):
     failures: Optional[int]
     unique_id: str
 
-    @property
-    def sentry_fingerprint(self) -> List[Any]:
-        return [self.unique_id, self.message]
-
-
-def get_failure_context(failure: RunResult, manifest: Manifest) -> Dict[str, Any]:
-    context = {
-        "failures": failure.failures,
-        "unique_id": failure.unique_id,
-    }
-    node = manifest.nodes[failure.unique_id]
-    if node.depends_on:
-        context["models"] = node.depends_on.nodes
-    return context
-
 
 class RunResults(BaseModel):
     metadata: Dict

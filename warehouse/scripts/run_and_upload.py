@@ -4,7 +4,7 @@ import os
 import shutil
 import subprocess
 from pathlib import Path
-from typing import List
+from typing import List, Dict, Any
 
 import gcsfs
 import pendulum
@@ -15,7 +15,7 @@ from dbt_artifacts import (
     RunResults,
     TestStatus,
     Manifest,
-    get_failure_context,
+    RunResult,
 )
 
 CALITP_BUCKET__DBT_ARTIFACTS = os.environ["CALITP_BUCKET__DBT_ARTIFACTS"]
@@ -29,8 +29,19 @@ sentry_sdk.init(environment=os.environ["AIRFLOW_ENV"])
 app = typer.Typer()
 
 
-class RunResultFailure(Exception):
+class DbtTestFailure(Exception):
     pass
+
+
+def get_failure_context(failure: RunResult, manifest: Manifest) -> Dict[str, Any]:
+    context = {
+        "failures": failure.failures,
+        "unique_id": failure.unique_id,
+    }
+    node = manifest.nodes[failure.unique_id]
+    if node.depends_on:
+        context["models"] = node.depends_on.nodes
+    return context
 
 
 def report_failures_to_sentry(
@@ -44,11 +55,10 @@ def report_failures_to_sentry(
     for failure in failures:
         assert failure.status in (TestStatus.fail, TestStatus.error)
         with sentry_sdk.push_scope() as scope:
-            scope.fingerprint = failure.sentry_fingerprint
-            for k, v in get_failure_context(failure, manifest).items():
-                scope.set_context(k, v)
+            scope.fingerprint = [failure.unique_id, failure.message]
+            scope.set_context("test_context", get_failure_context(failure, manifest))
             sentry_sdk.capture_exception(
-                error=RunResultFailure(failure.message),
+                error=DbtTestFailure(f"{failure.unique_id} - {failure.message}"),
             )
 
 
