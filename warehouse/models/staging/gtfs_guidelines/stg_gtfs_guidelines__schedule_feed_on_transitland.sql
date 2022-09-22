@@ -7,6 +7,7 @@ fact_daily_transitland_url_check AS (
 SELECT * FROM {{ ref('stg_gtfs_guidelines__fact_daily_transitland_url_check') }}
 ),
 
+-- We're using DISTINCT here as a result of bug #1825
 schedule_daily_check AS (
     SELECT
         DISTINCT calitp_itp_id,
