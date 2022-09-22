@@ -16,7 +16,7 @@
 {% endmacro %}
 
 {% macro shapes_for_all_trips() %}
-"Every shape_id listed in trips.txt is present in shapes.txt"
+"Every trip in trips.txt has a shape_id listed"
 {% endmacro %}
 
 {% macro shapes_valid() %}
