@@ -6,6 +6,7 @@ WITH feed_guideline_index AS (
 dim_trips AS (
     SELECT * FROM {{ ref('gtfs_schedule_dim_trips') }}
 ),
+
 summarize_trips AS (
    SELECT
        calitp_itp_id,
