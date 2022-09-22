@@ -16,6 +16,7 @@ from dbt_artifacts import (
     TestStatus,
     Manifest,
     RunResult,
+    RunStatus,
 )
 
 CALITP_BUCKET__DBT_ARTIFACTS = os.environ["CALITP_BUCKET__DBT_ARTIFACTS"]
@@ -35,12 +36,12 @@ class DbtTestFailure(Exception):
 
 def get_failure_context(failure: RunResult, manifest: Manifest) -> Dict[str, Any]:
     context = {
-        "failures": failure.failures,
         "unique_id": failure.unique_id,
     }
-    node = manifest.nodes[failure.unique_id]
-    if node.depends_on:
-        context["models"] = node.depends_on.nodes
+    if failure.unique_id.startswith("test"):
+        node = manifest.nodes[failure.unique_id]
+        if node.depends_on:
+            context["models"] = node.depends_on.nodes
     return context
 
 
@@ -50,13 +51,20 @@ def report_failures_to_sentry(
     failures = [
         result
         for result in run_results.results
-        if result.status in (TestStatus.fail, TestStatus.error)
+        if result.status
+        in (
+            RunStatus.error,
+            RunStatus.fail,
+            TestStatus.fail,
+            TestStatus.error,
+            TestStatus.warn,
+        )
     ]
     for failure in failures:
         assert failure.status in (TestStatus.fail, TestStatus.error)
         with sentry_sdk.push_scope() as scope:
             scope.fingerprint = [failure.unique_id, failure.message]
-            scope.set_context("test_context", get_failure_context(failure, manifest))
+            scope.set_context("dbt", get_failure_context(failure, manifest))
             sentry_sdk.capture_exception(
                 error=DbtTestFailure(f"{failure.unique_id} - {failure.message}"),
             )
@@ -121,6 +129,12 @@ def run(
         if full_refresh:
             args.append("--full-refresh")
         results_to_check.append(subprocess.run(get_command(*args)))
+
+        with open("./target/run_results.json") as f:
+            run_results = RunResults(**json.load(f))
+        with open("./target/manifest.json") as f:
+            manifest = Manifest(**json.load(f))
+        report_failures_to_sentry(run_results, manifest)
     else:
         typer.echo("skipping run")
 
