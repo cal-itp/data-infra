@@ -11,7 +11,12 @@ import pendulum
 import sentry_sdk
 import typer
 
-from dbt_artifacts import RunResults, RunResult, TestStatus
+from dbt_artifacts import (
+    RunResults,
+    TestStatus,
+    Manifest,
+    get_failure_context,
+)
 
 CALITP_BUCKET__DBT_ARTIFACTS = os.environ["CALITP_BUCKET__DBT_ARTIFACTS"]
 
@@ -21,23 +26,45 @@ artifacts = map(
 
 sentry_sdk.init(environment=os.environ["AIRFLOW_ENV"])
 
+app = typer.Typer()
+
 
 class RunResultFailure(Exception):
     pass
 
 
-def report_failures_to_sentry(failures: List[RunResult]) -> None:
+def report_failures_to_sentry(
+    run_results: RunResults, manifest: Manifest = None
+) -> None:
+    failures = [
+        result
+        for result in run_results.results
+        if result.status in (TestStatus.fail, TestStatus.error)
+    ]
     for failure in failures:
         assert failure.status in (TestStatus.fail, TestStatus.error)
         with sentry_sdk.push_scope() as scope:
             scope.fingerprint = failure.sentry_fingerprint
-            for k, v in failure.context.items():
+            for k, v in get_failure_context(failure, manifest).items():
                 scope.set_context(k, v)
             sentry_sdk.capture_exception(
                 error=RunResultFailure(failure.message),
             )
 
 
+@app.command()
+def report_failures(
+    run_results_path: Path = "./target/run_results.json",
+    manifest_path: Path = "./target/manifest.json",
+):
+    with open(run_results_path) as f:
+        run_results = RunResults(**json.load(f))
+    with open(manifest_path) as f:
+        manifest = Manifest(**json.load(f))
+    report_failures_to_sentry(run_results, manifest)
+
+
+@app.command()
 def run(
     project_dir: Path = os.environ.get("DBT_PROJECT_DIR", os.getcwd()),
     profiles_dir: Path = os.environ.get("DBT_PROFILES_DIR", os.getcwd()),
@@ -92,14 +119,10 @@ def run(
 
         with open("./target/run_results.json") as f:
             run_results = RunResults(**json.load(f))
+        with open("./target/manifest.json") as f:
+            manifest = Manifest(**json.load(f))
 
-        report_failures_to_sentry(
-            [
-                result
-                for result in run_results.results
-                if result.status in (TestStatus.fail, TestStatus.error)
-            ]
-        )
+        report_failures_to_sentry(run_results, manifest)
 
     if dbt_freshness:
         results_to_check.append(
@@ -190,4 +213,4 @@ def run(
 
 
 if __name__ == "__main__":
-    typer.run(run)
+    app()

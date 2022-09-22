@@ -169,7 +169,7 @@ class TestMetadata(BaseModel):
 class Test(BaseNode):
     resource_type: Literal[DbtResourceType.test]
     # test_metadata is optional because singular tests (custom defined) do not have test_metadata attribute
-    # for example: https://github.com/dbt-labs/dbt-docs/blob/main/src/app/services/graph.service.js#L340
+    # for example: https://github.com/dbt-labs/dbt-docs/blob/main/src/app/services/graph.service.js#L355
     # ^ singular test is specifically identified by not having the test_metadata attribute
     test_metadata: Optional[TestMetadata]
 
@@ -346,12 +346,16 @@ class RunResult(BaseModel):
     def sentry_fingerprint(self) -> List[Any]:
         return [self.unique_id, self.message]
 
-    @property
-    def context(self) -> Dict[str, Any]:
-        return {
-            "failures": self.failures,
-            "unique_id": self.unique_id,
-        }
+
+def get_failure_context(failure: RunResult, manifest: Manifest) -> Dict[str, Any]:
+    context = {
+        "failures": failure.failures,
+        "unique_id": failure.unique_id,
+    }
+    node = manifest.nodes[failure.unique_id]
+    if node.depends_on:
+        context["models"] = node.depends_on.nodes
+    return context
 
 
 class RunResults(BaseModel):
