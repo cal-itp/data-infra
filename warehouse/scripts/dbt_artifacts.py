@@ -311,12 +311,40 @@ class TimingInfo(BaseModel):
     completed_at: Optional[datetime]
 
 
+class RunStatus(str, Enum):
+    success = "success"
+    error = "error"
+    fail = "fail"
+
+
+class TestStatus(str, Enum):
+    test_pass = "pass"
+    fail = "fail"
+    error = "error"
+    warn = "warn"
+    skipped = "skipped"
+
+
+class FreshnessStatus(str, Enum):
+    freshness_pass = "pass"
+    warn = "warn"
+    error = "error"
+    runtime_error = "runtime error"
+
+
 class RunResult(BaseModel):
-    status: str
+    status: Union[RunStatus, TestStatus, FreshnessStatus]
     timing: List[TimingInfo]
     thread_id: str
     execution_time: int  # seconds
     adapter_response: Dict
+    message: Optional[str]
+    failures: Optional[int]
+    unique_id: str
+
+    @property
+    def sentry_fingerprint(self) -> List[Any]:
+        return [self.unique_id, self.message]
 
 
 class RunResults(BaseModel):

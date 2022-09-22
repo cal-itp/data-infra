@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import json
 import os
 import shutil
 import subprocess
@@ -7,13 +8,32 @@ from typing import List
 
 import gcsfs
 import pendulum
+import sentry_sdk
 import typer
+
+from dbt_artifacts import RunResults, RunResult, TestStatus
 
 CALITP_BUCKET__DBT_ARTIFACTS = os.environ["CALITP_BUCKET__DBT_ARTIFACTS"]
 
 artifacts = map(
     Path, ["index.html", "catalog.json", "manifest.json", "run_results.json"]
 )
+
+sentry_sdk.init(environment=os.environ["AIRFLOW_ENV"])
+
+
+class RunResultFailure(Exception):
+    pass
+
+
+def report_failures_to_sentry(failures: List[RunResult]) -> None:
+    for failure in failures:
+        assert failure.status in (TestStatus.fail, TestStatus.error)
+        with sentry_sdk.push_scope() as scope:
+            scope.fingerprint = failure.sentry_fingerprint
+            sentry_sdk.capture_exception(
+                error=RunResultFailure(failure.message),
+            )
 
 
 def run(
@@ -66,7 +86,18 @@ def run(
         typer.echo("skipping run")
 
     if dbt_test:
-        results_to_check.append(subprocess.run(get_command("test")))
+        subprocess.run(get_command("test"))
+
+        with open("./target/run_results.json") as f:
+            run_results = RunResults(**json.load(f))
+
+        report_failures_to_sentry(
+            [
+                result
+                for result in run_results.results
+                if result.status in (TestStatus.fail, TestStatus.error)
+            ]
+        )
 
     if dbt_freshness:
         results_to_check.append(
