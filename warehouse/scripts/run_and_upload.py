@@ -61,7 +61,6 @@ def report_failures_to_sentry(
         )
     ]
     for failure in failures:
-        assert failure.status in (TestStatus.fail, TestStatus.error)
         with sentry_sdk.push_scope() as scope:
             scope.fingerprint = [failure.unique_id, failure.message]
             scope.set_context("dbt", get_failure_context(failure, manifest))
