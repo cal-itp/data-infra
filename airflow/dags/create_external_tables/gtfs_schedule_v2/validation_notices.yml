@@ -1,0 +1,298 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION') }}"
+source_objects:
+  - "validation_notices/*.jsonl.gz"
+destination_project_dataset_table: "external_gtfs_schedule.validation_notices"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  source_uri_prefix: "validation_notices/{dt:DATE}/{ts:TIMESTAMP}/{base64_url:STRING}/"
+schema_fields:
+  - name: metadata
+    type: RECORD
+    fields:
+      - name: extract_config
+        type: RECORD
+        fields:
+          - name: extracted_at
+            type: TIMESTAMP
+          - name: name
+            type: STRING
+          - name: url
+            type: STRING
+          - name: feed_type
+            type: STRING
+          - name: schedule_url_for_validation
+            type: STRING
+          - name: auth_query_params
+            type: JSON
+          - name: auth_headers
+            type: JSON
+      - name: gtfs_validator_versions
+        type: STRING
+  - name: code
+    type: STRING
+  - name: severity
+    type: STRING
+  - name: totalNotices
+    type: INT64
+  - name: sampleNotices
+    type: RECORD
+    mode: REPEATED
+    fields:
+      - name: actual
+        type: STRING
+      - name: actualDistanceBetweenShapePoints
+        type: BIGNUMERIC
+      - name: agencyCsvRowNumber
+        type: BIGNUMERIC
+      - name: agencyId
+        type: STRING
+      - name: agencyLang
+        type: STRING
+      - name: agencyName
+        type: STRING
+      - name: arrivalTime
+        type: STRING
+      - name: arrivalTime2
+        type: STRING
+      - name: attributionId
+        type: STRING
+      - name: blockId
+        type: STRING
+      - name: charIndex
+        type: BIGNUMERIC
+      - name: childFieldName
+        type: STRING
+      - name: childFilename
+        type: STRING
+      - name: columnIndex
+        type: BIGNUMERIC
+      - name: columnName
+        type: STRING
+      - name: csvRowNumber
+        type: BIGNUMERIC
+      - name: csvRowNumber1
+        type: BIGNUMERIC
+      - name: csvRowNumber2
+        type: BIGNUMERIC
+      - name: csvRowNumberA
+        type: BIGNUMERIC
+      - name: csvRowNumberB
+        type: BIGNUMERIC
+      - name: currCsvRowNumber
+        type: BIGNUMERIC
+      - name: currStartTime
+        type: STRING
+      - name: currentDate
+        type: STRING
+      - name: departureTime
+        type: STRING
+      - name: departureTime1
+        type: STRING
+      - name: distanceKm
+        type: BIGNUMERIC
+      - name: endFieldName
+        type: STRING
+      - name: endValue
+        type: STRING
+      - name: entityCount
+        type: BIGNUMERIC
+      - name: entityId
+        type: STRING
+      - name: exception
+        type: STRING
+      - name: expected
+        type: STRING
+      - name: expectedLocationType
+        type: BIGNUMERIC
+      - name: fareId
+        type: STRING
+      - name: feedEndDate
+        type: STRING
+      - name: feedLang
+        type: STRING
+      - name: fieldName
+        type: STRING
+      - name: fieldName1
+        type: STRING
+      - name: fieldName2
+        type: STRING
+      - name: fieldType
+        type: STRING
+      - name: fieldValue
+        type: STRING
+      - name: fieldValue1
+        type: STRING
+      - name: fieldValue2
+        type: STRING
+      - name: filename
+        type: STRING
+      - name: firstIndex
+        type: BIGNUMERIC
+      - name: geoDistanceToShape
+        type: BIGNUMERIC
+      - name: hasEntrance
+        type: BOOLEAN
+      - name: hasExit
+        type: BOOLEAN
+      - name: headerCount
+        type: BIGNUMERIC
+      - name: index
+        type: BIGNUMERIC
+      - name: intersection
+        type: STRING
+      - name: latFieldName
+        type: STRING
+      - name: latFieldValue
+        type: BIGNUMERIC
+      - name: lineIndex
+        type: BIGNUMERIC
+      - name: locationType
+        type: BIGNUMERIC
+      - name: lonFieldName
+        type: STRING
+      - name: lonFieldValue
+        type: BIGNUMERIC
+      - name: match
+        type: BIGNUMERIC
+        mode: REPEATED
+      - name: match1
+        type: BIGNUMERIC
+        mode: REPEATED
+      - name: match2
+        type: BIGNUMERIC
+        mode: REPEATED
+      - name: matchCount
+        type: BIGNUMERIC
+      - name: message
+        type: STRING
+      - name: newCsvRowNumber
+        type: BIGNUMERIC
+      - name: oldCsvRowNumber
+        type: BIGNUMERIC
+      - name: parentCsvRowNumber
+        type: BIGNUMERIC
+      - name: parentFieldName
+        type: STRING
+      - name: parentFilename
+        type: STRING
+      - name: parentLocationType
+        type: BIGNUMERIC
+      - name: parentStation
+        type: STRING
+      - name: parentStopName
+        type: STRING
+      - name: parsedContent
+        type: STRING
+      - name: pathwayId
+        type: STRING
+      - name: prevCsvRowNumber
+        type: BIGNUMERIC
+      - name: prevEndTime
+        type: STRING
+      - name: prevShapeDistTraveled
+        type: BIGNUMERIC
+      - name: prevShapePtSequence
+        type: BIGNUMERIC
+      - name: prevStopSequence
+        type: BIGNUMERIC
+      - name: prevStopTimeDistTraveled
+        type: BIGNUMERIC
+      - name: previousCsvRowNumber
+        type: BIGNUMERIC
+      - name: previousFareId
+        type: STRING
+      - name: recordId
+        type: STRING
+      - name: recordSubId
+        type: STRING
+      - name: routeColor
+        type: STRING
+      - name: routeCsvRowNumber
+        type: BIGNUMERIC
+      - name: routeDesc
+        type: STRING
+      - name: routeId
+        type: STRING
+      - name: routeId1
+        type: STRING
+      - name: routeId2
+        type: STRING
+      - name: routeLongName
+        type: STRING
+      - name: routeShortName
+        type: STRING
+      - name: routeTextColor
+        type: STRING
+      - name: routeTypeValue
+        type: BIGNUMERIC
+      - name: routeUrl
+        type: STRING
+      - name: rowLength
+        type: BIGNUMERIC
+      - name: secondIndex
+        type: BIGNUMERIC
+      - name: serviceIdA
+        type: STRING
+      - name: serviceIdB
+        type: STRING
+      - name: shapeDistTraveled
+        type: BIGNUMERIC
+      - name: shapeId
+        type: STRING
+      - name: shapePtSequence
+        type: BIGNUMERIC
+      - name: specifiedField
+        type: STRING
+      - name: speedKph
+        type: BIGNUMERIC
+      - name: startFieldName
+        type: STRING
+      - name: startValue
+        type: STRING
+      - name: stopCsvRowNumber
+        type: BIGNUMERIC
+      - name: stopId
+        type: STRING
+      - name: stopId1
+        type: STRING
+      - name: stopId2
+        type: STRING
+      - name: stopName
+        type: STRING
+      - name: stopName1
+        type: STRING
+      - name: stopName2
+        type: STRING
+      - name: stopSequence
+        type: BIGNUMERIC
+      - name: stopSequence1
+        type: BIGNUMERIC
+      - name: stopSequence2
+        type: BIGNUMERIC
+      - name: stopTimeCsvRowNumber
+        type: BIGNUMERIC
+      - name: stopTimeCsvRowNumber1
+        type: BIGNUMERIC
+      - name: stopTimeCsvRowNumber2
+        type: BIGNUMERIC
+      - name: stopUrl
+        type: STRING
+      - name: suggestedExpirationDate
+        type: STRING
+      - name: tableName
+        type: STRING
+      - name: tripCsvRowNumber
+        type: BIGNUMERIC
+      - name: tripId
+        type: STRING
+      - name: tripIdA
+        type: STRING
+      - name: tripIdB
+        type: STRING
+      - name: validator
+        type: STRING
+      - name: value
+        type: STRING

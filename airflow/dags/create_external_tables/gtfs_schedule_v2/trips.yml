@@ -1,0 +1,31 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_PARSED') }}"
+source_objects:
+  - "trips/*.jsonl.gz"
+destination_project_dataset_table: "external_gtfs_schedule.trips"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  source_uri_prefix: "trips/{dt:DATE}/{ts:TIMESTAMP}/{base64_url:STRING}/"
+schema_fields:
+  - name: route_id
+    type: STRING
+  - name: service_id
+    type: STRING
+  - name: trip_id
+    type: STRING
+  - name: trip_headsign
+    type: STRING
+  - name: trip_short_name
+    type: STRING
+  - name: direction_id
+    type: STRING
+  - name: block_id
+    type: STRING
+  - name: shape_id
+    type: STRING
+  - name: wheelchair_accessible
+    type: STRING
+  - name: bikes_allowed
+    type: STRING
