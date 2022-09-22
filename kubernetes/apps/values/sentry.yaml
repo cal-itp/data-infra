@@ -1,4 +1,0 @@
-
-sentry:
-  ingress:
-    enabled: false

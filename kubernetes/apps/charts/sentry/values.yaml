@@ -6,35 +6,3 @@ sentry:
     email: admin@sentry.local
     existingSecret: sentry-secrets
     existingSecretKey: admin-password
-  ingress:
-    enabled: false
-    regexPathStyle: nginx
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      nginx.ingress.kubernetes.io/use-regex: "true"
-    hostname: localhost
-  nginx:
-    enabled: true
-  sentry:
-    singleOrganization: false
-    worker:
-      replicas: 2
-  mail:
-    backend: smtp
-    useTls: false
-    username: "apikey"
-    password: "XXXXX"
-    port: 25
-    host: "smtp.sendgrid.net"
-    from: "sentry@example.com"
-  service:
-    name: sentry
-    type: ClusterIP
-    externalPort: 9000
-    annotations: {}
-  slack:
-    clientId: "client-it"
-    clientSecret: "client-secret"
-    signingSecret: "signing-secret"
-  postgresql:
-    enabled: true
