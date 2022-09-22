@@ -31,6 +31,8 @@ def report_failures_to_sentry(failures: List[RunResult]) -> None:
         assert failure.status in (TestStatus.fail, TestStatus.error)
         with sentry_sdk.push_scope() as scope:
             scope.fingerprint = failure.sentry_fingerprint
+            for k, v in failure.context.items():
+                scope.set_context(k, v)
             sentry_sdk.capture_exception(
                 error=RunResultFailure(failure.message),
             )

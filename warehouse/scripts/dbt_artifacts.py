@@ -346,6 +346,13 @@ class RunResult(BaseModel):
     def sentry_fingerprint(self) -> List[Any]:
         return [self.unique_id, self.message]
 
+    @property
+    def context(self) -> Dict[str, Any]:
+        return {
+            "failures": self.failures,
+            "unique_id": self.unique_id,
+        }
+
 
 class RunResults(BaseModel):
     metadata: Dict
