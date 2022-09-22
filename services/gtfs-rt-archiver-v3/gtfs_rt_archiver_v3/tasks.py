@@ -6,6 +6,7 @@ import google_crc32c
 import humanize
 import orjson
 import pendulum
+import sentry_sdk
 import structlog
 import typer
 from calitp.storage import download_feed, GTFSDownloadConfig
@@ -13,9 +14,7 @@ from google.cloud import storage, secretmanager
 from huey import RedisExpireHuey
 from huey.registry import Message
 from huey.serializer import Serializer
-from huey.signals import SIGNAL_ERROR
 from requests import HTTPError, RequestException
-from sentry_sdk import capture_exception
 
 from .metrics import (
     FETCH_PROCESSING_TIME,
@@ -67,11 +66,6 @@ def increment_task_signals_counter(signal, task, exc=None):
     ).inc()
 
 
-@huey.signal(SIGNAL_ERROR)
-def log_error_to_sentry(signal, task, exc=None):
-    capture_exception(exc)
-
-
 AUTH_KEYS = [
     "AC_TRANSIT_API_KEY",
     "AMTRAK_GTFS_URL",
@@ -111,6 +105,17 @@ def load_auth_dict():
 
 @huey.task(expires=5)
 def fetch(tick: datetime, config: GTFSDownloadConfig):
+    try:
+        actual_fetch(tick, config)
+    except Exception as exc:
+        with sentry_sdk.push_scope() as scope:
+            scope.fingerprint = [config.url, str(exc)]
+            scope.set_context("config", config.dict())
+            sentry_sdk.capture_exception(exc)
+        raise
+
+
+def actual_fetch(tick: datetime, config: GTFSDownloadConfig):
     labels = dict(
         record_name=config.name,
         record_uri=config.url,
