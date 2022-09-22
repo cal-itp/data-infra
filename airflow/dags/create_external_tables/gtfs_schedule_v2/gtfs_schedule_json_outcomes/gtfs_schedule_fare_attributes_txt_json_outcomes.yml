@@ -1,0 +1,55 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_PARSED') }}"
+source_objects:
+  - "fare_attributes.txt_parsing_results/*.jsonl"
+destination_project_dataset_table: "external_gtfs_schedule.fare_attributes_txt_parse_outcomes"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  source_uri_prefix: "fare_attributes.txt_parsing_results/{dt:DATE}/"
+schema_fields:
+  - name: success
+    type: BOOLEAN
+  - name: exception
+    type: STRING
+  - name: feed_file
+    type: RECORD
+    fields:
+      - &filename
+        name: filename
+        type: STRING
+      - &ts
+        name: ts
+        type: TIMESTAMP
+      - &extract_config
+        name: extract_config
+        type: RECORD
+        fields:
+          - name: extracted_at
+            type: TIMESTAMP
+          - name: name
+            type: STRING
+          - name: url
+            type: STRING
+          - name: feed_type
+            type: STRING
+          - name: schedule_url_for_validation
+            type: STRING
+          - name: auth_query_params
+            type: JSON
+          - name: auth_headers
+            type: JSON
+      - name: original_filename
+        type: STRING
+  - name: fields
+    type: STRING
+    mode: REPEATED
+  - name: parsed_file
+    type: RECORD
+    fields:
+      - *filename
+      - *ts
+      - *extract_config
+      - name: gtfs_filename
+        type: STRING

@@ -1,0 +1,31 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_PARSED') }}"
+source_objects:
+  - "calendar/*.jsonl.gz"
+destination_project_dataset_table: "external_gtfs_schedule.calendar"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  source_uri_prefix: "calendar/{dt:DATE}/{ts:TIMESTAMP}/{base64_url:STRING}/"
+schema_fields:
+  - name: service_id
+    type: STRING
+  - name: monday
+    type: STRING
+  - name: tuesday
+    type: STRING
+  - name: wednesday
+    type: STRING
+  - name: thursday
+    type: STRING
+  - name: friday
+    type: STRING
+  - name: saturday
+    type: STRING
+  - name: sunday
+    type: STRING
+  - name: start_date
+    type: STRING
+  - name: end_date
+    type: STRING
