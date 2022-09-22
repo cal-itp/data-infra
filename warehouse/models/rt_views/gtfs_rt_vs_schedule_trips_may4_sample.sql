@@ -1,5 +1,5 @@
 WITH
--- selecting the distinct trips from GTFS Vehicle Postions for two operators (SamTrans 290 and Big Blue Bus 300) and two months
+-- selecting the distinct trips from GTFS Vehicle Postions for all operators
 vp_trips AS (
     SELECT DISTINCT
         calitp_itp_id,
@@ -11,10 +11,9 @@ vp_trips AS (
     -- https://gtfs.org/realtime/reference/#message-vehicleposition
     FROM {{ ref('stg_rt__vehicle_positions') }}
     WHERE date = '2022-05-04'
-        AND (calitp_itp_id = 182)
 ),
 
---- selecting GTFS schedule data for the same two operators and two months
+--- selecting GTFS schedule data for all operators
 sched_trips AS (
     SELECT
         trip_id,
@@ -24,7 +23,7 @@ sched_trips AS (
         calitp_url_number
     FROM {{ ref('gtfs_schedule_fact_daily_trips') }}
     WHERE service_date = '2022-05-04'
-        AND (calitp_itp_id = 182 AND is_in_service = True)
+        AND (is_in_service = True)
 ),
 
 -- joining Vehicle Position data and Scheduled data on service date, trip id and itp id and url number
@@ -48,7 +47,7 @@ rt_sched_joined AS (
 ),
 
 -- getting the percent of scheduled trips with vehicle position data and adding the common route name
-gtfs_rt_vs_schedule_trips_metro_sample AS (
+gtfs_rt_vs_schedule_trips_may4_sample AS (
     SELECT
         T1.calitp_itp_id,
         T2.agency_name,
@@ -71,4 +70,4 @@ gtfs_rt_vs_schedule_trips_metro_sample AS (
 )
 
 SELECT *
-FROM gtfs_rt_vs_schedule_trips_metro_sample
+FROM gtfs_rt_vs_schedule_trips_may4_sample
