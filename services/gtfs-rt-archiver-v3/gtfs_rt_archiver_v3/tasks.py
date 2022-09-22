@@ -1,6 +1,7 @@
 import os
 import traceback
 from datetime import datetime
+from functools import wraps
 
 import google_crc32c
 import humanize
@@ -103,19 +104,24 @@ def load_auth_dict():
     auth_dict = {key: os.environ[key] for key in AUTH_KEYS}
 
 
-@huey.task(expires=5)
-def fetch(tick: datetime, config: GTFSDownloadConfig):
-    try:
-        actual_fetch(tick, config)
-    except Exception as exc:
+# from https://github.com/getsentry/sentry-python/issues/195#issuecomment-444559126
+def scoped(f):
+    @wraps(f)
+    def inner(*args, **kwargs):
+        config = kwargs.get("config")
         with sentry_sdk.push_scope() as scope:
-            scope.fingerprint = [config.url, str(exc)]
-            scope.set_context("config", config.dict())
-            sentry_sdk.capture_exception(exc)
-        raise
+            scope.clear_breadcrumbs()
+            if config:
+                scope.fingerprint = [config.url]
+                scope.set_context("config", config.dict())
+            return f(*args, **kwargs)
+
+    return inner
 
 
-def actual_fetch(tick: datetime, config: GTFSDownloadConfig):
+@huey.task(expires=5)
+@scoped
+def fetch(tick: datetime, config: GTFSDownloadConfig):
     labels = dict(
         record_name=config.name,
         record_uri=config.url,
