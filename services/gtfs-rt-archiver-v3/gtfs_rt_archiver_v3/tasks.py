@@ -112,7 +112,6 @@ def scoped(f):
         with sentry_sdk.push_scope() as scope:
             scope.clear_breadcrumbs()
             if config:
-                scope.fingerprint = [config.url]
                 scope.set_context("config", config.dict())
             return f(*args, **kwargs)
 
