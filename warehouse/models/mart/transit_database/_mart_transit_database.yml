@@ -90,6 +90,33 @@ models:
         description: |
           Boolean for whether service is currently active
       - name: gtfs_schedule_status
+        description: |
+          Options are: `needed`, `research`,  `ok`, `need long-term solution`,
+          or `not public`.
+          This field may also be empty (null).
+          **Note: This field is manually entered in the Transit Database,
+          so it may be subject to some gaps in coverage and it is not updated automatically.
+          Data in this field may not align with data from the GTFS pipeline,
+          for example in `views.gtfs_schedule_dim_feeds`.**
+      - name: gtfs_schedule_quality
+        description: |
+          Status of overall GTFS quality for a given transit service. Options are:
+          `0 - Does not have GTFS Schedule`;
+          `1 - Has URL for GTFS downloading`;
+          `2 - GTFS data has active service`;
+          `3 - GTFS data has zero validation errors`;
+          `4 - GTFS data has zero validation warnings`;
+          `5 - GTFS data satisfies first tier of GTFS Guidelines`;
+          `6 - GTFS data satisfies all GTFS Guidelines`.
+          This field can also be empty (null). Sometimes this field is null (missing) even
+          for services that **do** have GTFS schedule data.
+          **Note: This field is manually entered in the Transit Database,
+          so it may be subject to some gaps in coverage and it is not updated automatically.
+          Data in this field may not align with validations data from the
+          GTFS pipeline, for example in `views.validation_fact_daily_feed_notices`,
+          or GTFS guidelines checks implemented in `mart_gtfs_guidelines.fact_daily_guideline_checks`.
+          Use those tables directly for the most up-to-date information on individual GTFS feeds'
+          validation and guideline statuses.**
   - name: dim_products
     description: '{{ doc("products_table") }}'
     columns:

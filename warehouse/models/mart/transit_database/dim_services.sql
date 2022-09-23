@@ -15,7 +15,10 @@ dim_services AS (
         mode,
         currently_operating,
         operating_counties,
+        -- TODO: remove this field when v2, automatic determinations are available
         gtfs_schedule_status,
+        -- TODO: remove this field when v2, automatic determinations are available
+        gtfs_schedule_quality,
         calitp_extracted_at
     FROM latest_services
 )
