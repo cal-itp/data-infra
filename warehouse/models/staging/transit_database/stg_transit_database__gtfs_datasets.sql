@@ -20,6 +20,7 @@ stg_transit_database__gtfs_datasets AS (
         schedule_comments,
         uri,
         future_uri,
+        pipeline_url,
         api_key,
         unnested_aggregated_to AS aggregated_to_gtfs_dataset_key,
         provider_gtfs_capacity,
@@ -39,6 +40,14 @@ stg_transit_database__gtfs_datasets AS (
         itp_activities,
         itp_schedule_todo,
         deprecated_date,
+        authorization_url_parameter_name,
+        url_secret_key_name,
+        authorization_header_parameter_name,
+        header_secret_key_name,
+        CASE
+            WHEN ts < CAST("2022-09-15" AS TIMESTAMP) THEN {{ to_url_safe_base64('REGEXP_REPLACE(uri, r"\?([a-zA-Z]+={{[a-zA-Z\s]}})", "")') }}
+            ELSE {{ to_url_safe_base64('pipeline_url') }}
+        END AS base64_url,
         ts,
         dt AS calitp_extracted_at
     FROM once_daily_gtfs_datasets
