@@ -15,6 +15,10 @@
 "Shapes.txt file is present"
 {% endmacro %}
 
+{% macro shapes_for_all_trips() %}
+"Every trip in trips.txt has a shape_id listed"
+{% endmacro %}
+
 {% macro shapes_valid() %}
 "No shapes-related errors appear in the MobilityData GTFS Schedule Validator"
 {% endmacro %}
