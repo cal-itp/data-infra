@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: external_gtfs_schedule
     description: Hive-partitioned external tables reading GTFS schedule data and validation errors from GCS.
-    database: cal-itp-data-infra-staging
+    database: cal-itp-data-infra
     schema: external_gtfs_schedule
     tables:
       - name: download_outcomes
