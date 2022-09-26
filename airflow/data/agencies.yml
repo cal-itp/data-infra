@@ -1704,7 +1704,7 @@ etrans:
   agency_name: eTrans
   feeds:
     - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/escalon-ca-us/escalon-ca-us.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://webservices.umoiq.com/api/gtfs-rt/v1/vehicle-positions/escalon
+      gtfs_rt_service_alerts_url: https://webservices.umoiq.com/api/gtfs-rt/v1/service-alerts/escalon
+      gtfs_rt_trip_updates_url: https://webservices.umoiq.com/api/gtfs-rt/v1/trip-updates/escalon
   itp_id: 107
