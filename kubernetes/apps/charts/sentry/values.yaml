@@ -23,7 +23,6 @@ sentry:
   mail:
     backend: smtp
     useTls: true
-    useSsl: true
     username: "apikey"
     password: "XXXXX"
     port: 25
