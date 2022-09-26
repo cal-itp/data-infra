@@ -29,7 +29,15 @@ sentry_sdk.init(environment=os.environ["AIRFLOW_ENV"])
 app = typer.Typer()
 
 
-class DbtTestFailure(Exception):
+class DbtTestError(Exception):
+    pass
+
+
+class DbtTestFail(Exception):
+    pass
+
+
+class DbtTestWarn(Exception):
     pass
 
 
@@ -61,8 +69,13 @@ def report_failures_to_sentry(
         with sentry_sdk.push_scope() as scope:
             scope.fingerprint = [failure.unique_id, failure.message]
             scope.set_context("dbt", get_failure_context(failure, manifest))
+            exc_type = {
+                RunResultStatus.error: DbtTestError,
+                RunResultStatus.fail: DbtTestFail,
+                RunResultStatus.warn: DbtTestWarn,
+            }[failure.status]
             sentry_sdk.capture_exception(
-                error=DbtTestFailure(f"{failure.unique_id} - {failure.message}"),
+                error=exc_type(f"{failure.unique_id} - {failure.message}"),
             )
 
 
