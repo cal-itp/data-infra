@@ -24,7 +24,6 @@ sentry:
     backend: smtp
     useTls: true
     username: "apikey"
-    password: "XXXXX"
     port: 587
     host: "smtp.sendgrid.net"
     from: "hunter@compiler.la"
