@@ -101,9 +101,7 @@ x-airflow-common:
     POD_LOCATION: "us-west2-a"
     AIRFLOW_ENV: "development"
     CALITP_USER: "pipeline"
-    POD_OPERATOR_SENTRY_DSN: "http://b5b82f68a88f4bbdb627fa774636cf62@sentry-nginx.sentry.svc.cluster.local/2"
-    # TODO: enable this once Ingress/DNS are set up for _Airflow/Composer_
-    SENTRY_DSN: "https://b5b82f68a88f4bbdb627fa774636cf62@sentry.calitp.org/2"
+    SENTRY_DSN: "https://e498431022154366b0ff8b71cf2d93e0@sentry.calitp.org/2"
 
   volumes:
     # Note that in cloud composer, folders like dags are not in AIRFLOW_HOME
