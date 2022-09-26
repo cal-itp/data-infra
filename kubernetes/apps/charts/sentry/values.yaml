@@ -20,3 +20,12 @@ sentry:
       - secretName: metabase-tls
         hosts:
           - sentry.calitp.org
+  mail:
+    backend: smtp
+    useTls: true
+    useSsl: true
+    username: "apikey"
+    password: "XXXXX"
+    port: 25
+    host: "smtp.sendgrid.net"
+    from: "hunter@compiler.la"
