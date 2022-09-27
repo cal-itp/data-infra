@@ -40,6 +40,7 @@ def main(
 ):
     sentry_sdk.init(
         environment=os.getenv("SENTRY_ENV", os.getenv("AIRFLOW_ENV")),
+        before_send=set_exception_fingerprint,
     )
     start_http_server(port)
 
