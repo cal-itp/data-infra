@@ -6,6 +6,7 @@
 # ---
 import gzip
 import json
+import logging
 from typing import List, Tuple
 
 import pendulum
@@ -54,6 +55,7 @@ def gtfs_datasets_to_extract_configs(
                 ),
             )
         except ValidationError as e:
+            logging.exception(f"exception occurred while validation {record.name}: {e}")
             invalid.append((record, e))
 
     # schedule_record_ids is a list... also this is kinda ugly
