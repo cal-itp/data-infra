@@ -2,8 +2,6 @@
 This pretty much exists just to start an in-process Prometheus server since
 Huey's startup hooks are per _worker_ and not the overall consumer process.
 """
-import json
-
 import sentry_sdk
 import typer
 import os
@@ -21,9 +19,6 @@ from .tasks import huey, load_secrets
 
 
 def set_exception_fingerprint(event, hint):
-    print(json.dumps(event), flush=True)
-    print(json.dumps(hint), flush=True)
-    print("done", flush=True)
     if "exc_info" not in hint:
         return event
 
@@ -43,7 +38,9 @@ def main(
     load_env_secrets: bool = False,
 ):
     sentry_sdk.init(
-        environment=os.getenv("AIRFLOW_ENV"), before_send=set_exception_fingerprint
+        environment=os.getenv("AIRFLOW_ENV"),
+        # TODO: add me back if fetch errors are being grouped together too much
+        # before_send=set_exception_fingerprint,
     )
     start_http_server(port)
 
