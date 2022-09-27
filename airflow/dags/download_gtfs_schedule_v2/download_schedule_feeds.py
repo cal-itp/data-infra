@@ -31,6 +31,7 @@ from calitp.storage import (
     GTFSDownloadConfigExtract,
 )
 from pydantic import validator
+from requests.exceptions import HTTPError
 
 GTFS_FEED_LIST_ERROR_THRESHOLD = 0.95
 
@@ -124,6 +125,14 @@ def download_all(task_instance, execution_date, **kwargs):
                     )
                 )
             except Exception as e:
+                if isinstance(e, HTTPError):
+                    scope.fingerprint = [
+                        config.url,
+                        str(e),
+                        str(e.response.status_code),
+                    ]
+                else:
+                    scope.fingerprint = [config.url, str(e)]
                 logging.exception(
                     f"exception occurred while attempting to download feed {config.url}"
                 )

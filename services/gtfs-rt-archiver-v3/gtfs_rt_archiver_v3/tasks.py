@@ -119,9 +119,10 @@ def scoped(f):
 
 
 class RTFetchException(Exception):
-    def __init__(self, url, message):
+    def __init__(self, url, message, status_code=None):
         self.url = url
         self.message = message
+        self.status_code = status_code
         super().__init__(self.message)
 
     def __str__(self):
@@ -151,6 +152,7 @@ def fetch(tick: datetime, config: GTFSDownloadConfig):
                 ts=tick,
             )
         except Exception as e:
+            status_code = None
             kwargs = dict(
                 exc_type=type(e).__name__,
                 exc_str=str(e),
@@ -158,6 +160,7 @@ def fetch(tick: datetime, config: GTFSDownloadConfig):
             )
             if isinstance(e, HTTPError):
                 msg = "unexpected HTTP response code from feed request"
+                status_code = e.response.status_code
                 kwargs.update(
                     dict(
                         code=e.response.status_code,
@@ -169,7 +172,9 @@ def fetch(tick: datetime, config: GTFSDownloadConfig):
             else:
                 msg = "other non-request exception occurred during download_feed"
             logger.exception(msg, **kwargs)
-            raise RTFetchException(config.url, str(e)) from None
+            raise RTFetchException(
+                config.url, str(e), status_code=status_code
+            ) from None
 
         typer.secho(
             f"saving {humanize.naturalsize(len(content))} from {config.url} to {extract.path}"
