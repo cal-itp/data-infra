@@ -79,10 +79,12 @@ class RTProcessingStep(str, Enum):
 
 
 class RTParsingMetadata(BaseModel):
+    extract_ts: pendulum.DateTime
     extract_config: GTFSDownloadConfig
 
 
 class RTValidationMetadata(BaseModel):
+    extract_ts: pendulum.DateTime
     extract_config: GTFSDownloadConfig
     gtfs_validator_version: str
 
@@ -389,6 +391,7 @@ def validate_and_upload(
                 {
                     "metadata": json.loads(
                         RTValidationMetadata(
+                            extract_ts=extract.ts,
                             extract_config=extract.config,
                             gtfs_validator_version=GTFS_RT_VALIDATOR_VERSION,
                         ).json()
@@ -488,6 +491,7 @@ def parse_and_upload(
                                 # back and forth so we use pydantic serialization
                                 "metadata": json.loads(
                                     RTParsingMetadata(
+                                        extract_ts=extract.ts,
                                         extract_config=extract.config,
                                     ).json()
                                 ),
