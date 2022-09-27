@@ -78,7 +78,7 @@ class DownloadFeedsResult(PartitionedGCSArtifact):
 
 
 def download_all(task_instance, execution_date, **kwargs):
-    sentry_sdk.init(environment=os.getenv("AIRFLOW_ENV"))
+    sentry_sdk.init(environment=os.getenv("SENTRY_ENV", os.getenv("AIRFLOW_ENV")))
     start = pendulum.now()
     # https://stackoverflow.com/a/61808755
     with create_session() as session:
@@ -103,10 +103,8 @@ def download_all(task_instance, execution_date, **kwargs):
     logging.info(f"processing {len(configs)} configs")
 
     for i, config in enumerate(configs, start=1):
-        logging.info(f"attempting to fetch {i}/{len(configs)} {config.url}")
-
         with sentry_sdk.push_scope() as scope:
-            scope.clear_breadcrumbs()
+            logging.info(f"attempting to fetch {i}/{len(configs)} {config.url}")
             scope.set_context("config", config.dict())
             try:
                 extract, content = download_feed(
