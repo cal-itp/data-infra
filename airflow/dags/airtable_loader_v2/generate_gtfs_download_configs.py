@@ -7,9 +7,11 @@
 import gzip
 import json
 import logging
+import os
 from typing import List, Tuple
 
 import pendulum
+import sentry_sdk
 from calitp.storage import (
     get_fs,
     GTFSDownloadConfig,
@@ -32,31 +34,35 @@ def gtfs_datasets_to_extract_configs(
     for record in extract.records:
         if not record.data_quality_pipeline:
             continue
-        try:
-            valid[record.id] = (
-                record.schedule_to_use_for_rt_validation,
-                GTFSDownloadConfig(
-                    extracted_at=extract.ts,
-                    name=record.name,
-                    url=record.pipeline_url,
-                    feed_type=record.data,
-                    auth_query_params={
-                        record.authorization_url_parameter_name: record.url_secret_key_name
-                    }
-                    if record.authorization_url_parameter_name
-                    and record.url_secret_key_name
-                    else {},
-                    auth_headers={
-                        record.authorization_header_parameter_name: record.header_secret_key_name
-                    }
-                    if record.authorization_header_parameter_name
-                    and record.header_secret_key_name
-                    else {},
-                ),
-            )
-        except ValidationError as e:
-            logging.exception(f"exception occurred while validation {record.name}: {e}")
-            invalid.append((record, e))
+        with sentry_sdk.push_scope() as scope:
+            try:
+                valid[record.id] = (
+                    record.schedule_to_use_for_rt_validation,
+                    GTFSDownloadConfig(
+                        extracted_at=extract.ts,
+                        name=record.name,
+                        url=record.pipeline_url,
+                        feed_type=record.data,
+                        auth_query_params={
+                            record.authorization_url_parameter_name: record.url_secret_key_name
+                        }
+                        if record.authorization_url_parameter_name
+                        and record.url_secret_key_name
+                        else {},
+                        auth_headers={
+                            record.authorization_header_parameter_name: record.header_secret_key_name
+                        }
+                        if record.authorization_header_parameter_name
+                        and record.header_secret_key_name
+                        else {},
+                    ),
+                )
+            except ValidationError as e:
+                scope.fingerprint = [record.id, record.name, str(e)]
+                logging.exception(
+                    f'exception occurred while validating record id="{record.id}" name="{record.name}": {e}'
+                )
+                invalid.append((record, e))
 
     # schedule_record_ids is a list... also this is kinda ugly
     for schedule_record_ids, config in valid.values():
@@ -69,6 +75,7 @@ def gtfs_datasets_to_extract_configs(
 
 
 def convert_gtfs_datasets_to_download_configs(task_instance, execution_date, **kwargs):
+    sentry_sdk.init(environment=os.getenv("SENTRY_ENV", os.getenv("AIRFLOW_ENV")))
     extract_path = task_instance.xcom_pull(task_ids="california_transit_gtfs_datasets")
     print(f"loading raw airtable records from {extract_path}")
 
