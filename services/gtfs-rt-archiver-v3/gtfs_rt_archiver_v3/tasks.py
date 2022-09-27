@@ -1,11 +1,13 @@
 import os
 import traceback
 from datetime import datetime
+from functools import wraps
 
 import google_crc32c
 import humanize
 import orjson
 import pendulum
+import sentry_sdk
 import structlog
 import typer
 from calitp.storage import download_feed, GTFSDownloadConfig
@@ -54,7 +56,7 @@ base_logger = structlog.get_logger()
 
 
 @huey.signal()
-def instrument_signals(signal, task, exc=None):
+def increment_task_signals_counter(signal, task, exc=None):
     config: GTFSDownloadConfig = task.kwargs["config"]
     TASK_SIGNALS.labels(
         record_name=config.name,
@@ -102,7 +104,32 @@ def load_auth_dict():
     auth_dict = {key: os.environ[key] for key in AUTH_KEYS}
 
 
+# from https://github.com/getsentry/sentry-python/issues/195#issuecomment-444559126
+def scoped(f):
+    @wraps(f)
+    def inner(*args, **kwargs):
+        config = kwargs.get("config")
+        with sentry_sdk.push_scope() as scope:
+            scope.clear_breadcrumbs()
+            if config:
+                scope.set_context("config", config.dict())
+            return f(*args, **kwargs)
+
+    return inner
+
+
+class RTFetchException(Exception):
+    def __init__(self, url, message):
+        self.url = url
+        self.message = message
+        super().__init__(self.message)
+
+    def __str__(self):
+        return f"{self.message} ({self.url})"
+
+
 @huey.task(expires=5)
+@scoped
 def fetch(tick: datetime, config: GTFSDownloadConfig):
     labels = dict(
         record_name=config.name,
@@ -123,32 +150,26 @@ def fetch(tick: datetime, config: GTFSDownloadConfig):
                 auth_dict=auth_dict,
                 ts=tick,
             )
-        except HTTPError as e:
-            logger.error(
-                "unexpected HTTP response code from feed request",
-                code=e.response.status_code,
-                content=e.response.text,
-                exc_type=type(e).__name__,
-                exc_str=str(e),
-                traceback=traceback.format_exc(),
-            )
-            raise
-        except RequestException as e:
-            logger.error(
-                "request exception occurred from feed request",
-                exc_type=type(e).__name__,
-                exc_str=str(e),
-                traceback=traceback.format_exc(),
-            )
-            raise
         except Exception as e:
-            logger.error(
-                "other non-request exception occurred during download_feed",
+            kwargs = dict(
                 exc_type=type(e).__name__,
                 exc_str=str(e),
                 traceback=traceback.format_exc(),
             )
-            raise
+            if isinstance(e, HTTPError):
+                msg = "unexpected HTTP response code from feed request"
+                kwargs.update(
+                    dict(
+                        code=e.response.status_code,
+                        content=e.response.text,
+                    )
+                )
+            elif isinstance(e, RequestException):
+                msg = "request exception occurred from feed request"
+            else:
+                msg = "other non-request exception occurred during download_feed"
+            logger.exception(msg, **kwargs)
+            raise RTFetchException(config.url, str(e)) from None
 
         typer.secho(
             f"saving {humanize.naturalsize(len(content))} from {config.url} to {extract.path}"
@@ -156,7 +177,7 @@ def fetch(tick: datetime, config: GTFSDownloadConfig):
         try:
             extract.save_content(content=content, client=client, retry_metadata=True)
         except Exception as e:
-            logger.error(
+            logger.exception(
                 "failure occurred when saving extract or metadata",
                 exc_type=type(e).__name__,
                 exc_str=str(e),

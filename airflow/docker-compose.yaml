@@ -101,6 +101,7 @@ x-airflow-common:
     POD_LOCATION: "us-west2-a"
     AIRFLOW_ENV: "development"
     CALITP_USER: "pipeline"
+    SENTRY_DSN: "https://e498431022154366b0ff8b71cf2d93e0@sentry.calitp.org/2"
 
   volumes:
     # Note that in cloud composer, folders like dags are not in AIRFLOW_HOME

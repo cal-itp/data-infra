@@ -6,12 +6,13 @@ import datetime
 import gzip
 import json
 import logging
-import traceback
+import os
 from typing import List, Optional, ClassVar
 
 import humanize
 import pandas as pd
 import pendulum
+import sentry_sdk
 from airflow.models import Variable
 from airflow.utils.db import create_session
 from airflow.utils.email import send_email
@@ -76,6 +77,7 @@ class DownloadFeedsResult(PartitionedGCSArtifact):
 
 
 def download_all(task_instance, execution_date, **kwargs):
+    sentry_sdk.init(environment=os.getenv("AIRFLOW_ENV"))
     start = pendulum.now()
     # https://stackoverflow.com/a/61808755
     with create_session() as session:
@@ -102,33 +104,36 @@ def download_all(task_instance, execution_date, **kwargs):
     for i, config in enumerate(configs, start=1):
         logging.info(f"attempting to fetch {i}/{len(configs)} {config.url}")
 
-        try:
-            extract, content = download_feed(
-                config=config,
-                auth_dict=auth_dict,
-                ts=start,
-            )
-
-            extract.save_content(fs=fs, content=content)
-
-            outcomes.append(
-                GTFSDownloadOutcome(
-                    success=True,
+        with sentry_sdk.push_scope() as scope:
+            scope.clear_breadcrumbs()
+            scope.set_context("config", config.dict())
+            try:
+                extract, content = download_feed(
                     config=config,
-                    extract=extract,
+                    auth_dict=auth_dict,
+                    ts=start,
                 )
-            )
-        except Exception as e:
-            logging.error(
-                f"exception occurred while attempting to download feed {config.url}: {str(e)}\n{traceback.format_exc()}"
-            )
-            outcomes.append(
-                GTFSDownloadOutcome(
-                    success=False,
-                    exception=e,
-                    config=config,
+
+                extract.save_content(fs=fs, content=content)
+
+                outcomes.append(
+                    GTFSDownloadOutcome(
+                        success=True,
+                        config=config,
+                        extract=extract,
+                    )
                 )
-            )
+            except Exception as e:
+                logging.exception(
+                    f"exception occurred while attempting to download feed {config.url}"
+                )
+                outcomes.append(
+                    GTFSDownloadOutcome(
+                        success=False,
+                        exception=e,
+                        config=config,
+                    )
+                )
 
     print(
         f"took {humanize.naturaltime(pendulum.now() - start)} to process {len(configs)} configs"

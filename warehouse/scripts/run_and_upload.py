@@ -1,13 +1,22 @@
 #!/usr/bin/env python
+import json
 import os
 import shutil
 import subprocess
 from pathlib import Path
-from typing import List
+from typing import List, Dict, Any
 
 import gcsfs
 import pendulum
+import sentry_sdk
 import typer
+
+from dbt_artifacts import (
+    RunResults,
+    Manifest,
+    RunResult,
+    RunResultStatus,
+)
 
 CALITP_BUCKET__DBT_ARTIFACTS = os.environ["CALITP_BUCKET__DBT_ARTIFACTS"]
 
@@ -15,7 +24,74 @@ artifacts = map(
     Path, ["index.html", "catalog.json", "manifest.json", "run_results.json"]
 )
 
+sentry_sdk.init(environment=os.environ["AIRFLOW_ENV"])
 
+app = typer.Typer()
+
+
+class DbtTestError(Exception):
+    pass
+
+
+class DbtTestFail(Exception):
+    pass
+
+
+class DbtTestWarn(Exception):
+    pass
+
+
+def get_failure_context(failure: RunResult, manifest: Manifest) -> Dict[str, Any]:
+    context = {
+        "unique_id": failure.unique_id,
+    }
+    if failure.unique_id.startswith("test"):
+        node = manifest.nodes[failure.unique_id]
+        if node.depends_on:
+            context["models"] = node.depends_on.nodes
+    return context
+
+
+def report_failures_to_sentry(
+    run_results: RunResults, manifest: Manifest = None
+) -> None:
+    failures = [
+        result
+        for result in run_results.results
+        if result.status
+        in (
+            RunResultStatus.error,
+            RunResultStatus.fail,
+            RunResultStatus.warn,
+        )
+    ]
+    for failure in failures:
+        with sentry_sdk.push_scope() as scope:
+            scope.fingerprint = [failure.unique_id, failure.message]
+            scope.set_context("dbt", get_failure_context(failure, manifest))
+            exc_type = {
+                RunResultStatus.error: DbtTestError,
+                RunResultStatus.fail: DbtTestFail,
+                RunResultStatus.warn: DbtTestWarn,
+            }[failure.status]
+            sentry_sdk.capture_exception(
+                error=exc_type(f"{failure.unique_id} - {failure.message}"),
+            )
+
+
+@app.command()
+def report_failures(
+    run_results_path: Path = "./target/run_results.json",
+    manifest_path: Path = "./target/manifest.json",
+):
+    with open(run_results_path) as f:
+        run_results = RunResults(**json.load(f))
+    with open(manifest_path) as f:
+        manifest = Manifest(**json.load(f))
+    report_failures_to_sentry(run_results, manifest)
+
+
+@app.command()
 def run(
     project_dir: Path = os.environ.get("DBT_PROJECT_DIR", os.getcwd()),
     profiles_dir: Path = os.environ.get("DBT_PROFILES_DIR", os.getcwd()),
@@ -62,11 +138,24 @@ def run(
         if full_refresh:
             args.append("--full-refresh")
         results_to_check.append(subprocess.run(get_command(*args)))
+
+        with open("./target/run_results.json") as f:
+            run_results = RunResults(**json.load(f))
+        with open("./target/manifest.json") as f:
+            manifest = Manifest(**json.load(f))
+        report_failures_to_sentry(run_results, manifest)
     else:
         typer.echo("skipping run")
 
     if dbt_test:
-        results_to_check.append(subprocess.run(get_command("test")))
+        subprocess.run(get_command("test"))
+
+        with open("./target/run_results.json") as f:
+            run_results = RunResults(**json.load(f))
+        with open("./target/manifest.json") as f:
+            manifest = Manifest(**json.load(f))
+
+        report_failures_to_sentry(run_results, manifest)
 
     if dbt_freshness:
         results_to_check.append(
@@ -157,4 +246,4 @@ def run(
 
 
 if __name__ == "__main__":
-    typer.run(run)
+    app()

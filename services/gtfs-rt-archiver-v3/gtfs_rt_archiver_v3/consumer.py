@@ -2,6 +2,7 @@
 This pretty much exists just to start an in-process Prometheus server since
 Huey's startup hooks are per _worker_ and not the overall consumer process.
 """
+import sentry_sdk
 import typer
 import os
 
@@ -20,6 +21,9 @@ def main(
     port: int = os.getenv("CONSUMER_PROMETHEUS_PORT", 9102),
     load_env_secrets: bool = False,
 ):
+    sentry_sdk.init(
+        environment=os.getenv("SENTRY_ENV", os.getenv("AIRFLOW_ENV")),
+    )
     start_http_server(port)
 
     if load_env_secrets:

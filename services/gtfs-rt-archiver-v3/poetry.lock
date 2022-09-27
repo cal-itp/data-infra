@@ -1,6 +1,6 @@
 [[package]]
 name = "aiohttp"
-version = "3.8.1"
+version = "3.8.3"
 description = "Async http client/server framework (asyncio)"
 category = "main"
 optional = false
@@ -47,17 +47,17 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
 name = "attrs"
-version = "21.4.0"
+version = "22.1.0"
 description = "Classes Without Boilerplate"
 category = "main"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+python-versions = ">=3.5"
 
 [package.extras]
-dev = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "mypy", "pytest-mypy-plugins", "zope.interface", "furo", "sphinx", "sphinx-notfound-page", "pre-commit", "cloudpickle"]
+dev = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "mypy (>=0.900,!=0.940)", "pytest-mypy-plugins", "zope.interface", "furo", "sphinx", "sphinx-notfound-page", "pre-commit", "cloudpickle"]
 docs = ["furo", "sphinx", "zope.interface", "sphinx-notfound-page"]
-tests = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "mypy", "pytest-mypy-plugins", "zope.interface", "cloudpickle"]
-tests_no_zope = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "mypy", "pytest-mypy-plugins", "cloudpickle"]
+tests = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "mypy (>=0.900,!=0.940)", "pytest-mypy-plugins", "zope.interface", "cloudpickle"]
+tests_no_zope = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "mypy (>=0.900,!=0.940)", "pytest-mypy-plugins", "cloudpickle"]
 
 [[package]]
 name = "backoff"
@@ -69,7 +69,7 @@ python-versions = ">=3.7,<4.0"
 
 [[package]]
 name = "black"
-version = "22.6.0"
+version = "22.8.0"
 description = "The uncompromising code formatter."
 category = "dev"
 optional = false
@@ -126,7 +126,7 @@ tqdm = ">=4.64.0,<5.0.0"
 
 [[package]]
 name = "certifi"
-version = "2022.6.15"
+version = "2022.9.14"
 description = "Python package for providing Mozilla's CA Bundle."
 category = "main"
 optional = false
@@ -134,7 +134,7 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "charset-normalizer"
-version = "2.1.0"
+version = "2.1.1"
 description = "The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet."
 category = "main"
 optional = false
@@ -186,7 +186,7 @@ dev = ["tox", "bump2version (<1)", "sphinx (<2)", "importlib-metadata (<3)", "im
 
 [[package]]
 name = "frozenlist"
-version = "1.3.0"
+version = "1.3.1"
 description = "A list-like structure which implements collections.abc.MutableSequence"
 category = "main"
 optional = false
@@ -194,7 +194,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "fsspec"
-version = "2022.5.0"
+version = "2022.8.2"
 description = "File-system specification"
 category = "main"
 optional = false
@@ -214,7 +214,7 @@ github = ["requests"]
 gs = ["gcsfs"]
 gui = ["panel"]
 hdfs = ["pyarrow (>=1)"]
-http = ["requests", "aiohttp"]
+http = ["requests", "aiohttp (!=4.0.0a0,!=4.0.0a1)"]
 libarchive = ["libarchive-c"]
 oci = ["ocifs"]
 s3 = ["s3fs"]
@@ -233,16 +233,16 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
 name = "gcsfs"
-version = "2022.5.0"
+version = "2022.8.2"
 description = "Convenient Filesystem interface over GCS"
 category = "main"
 optional = false
 python-versions = ">=3.7"
 
 [package.dependencies]
-aiohttp = "<4"
+aiohttp = "<4.0.0a0 || >4.0.0a0,<4.0.0a1 || >4.0.0a1"
 decorator = ">4.1.2"
-fsspec = "2022.5.0"
+fsspec = "2022.8.2"
 google-auth = ">=1.2"
 google-auth-oauthlib = "*"
 google-cloud-storage = "*"
@@ -254,49 +254,48 @@ gcsfuse = ["fusepy"]
 
 [[package]]
 name = "google-api-core"
-version = "1.32.0"
+version = "1.33.1"
 description = "Google API client core library"
 category = "main"
 optional = false
-python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*"
+python-versions = ">=3.7"
 
 [package.dependencies]
-google-auth = ">=1.25.0,<2.0dev"
-googleapis-common-protos = ">=1.6.0,<2.0dev"
-grpcio = {version = ">=1.29.0,<2.0dev", optional = true, markers = "extra == \"grpc\""}
-packaging = ">=14.3"
-protobuf = {version = ">=3.12.0,<4.0.0dev", markers = "python_version > \"3\""}
-pytz = "*"
+google-auth = ">=1.25.0,<3.0dev"
+googleapis-common-protos = ">=1.56.2,<2.0dev"
+grpcio = {version = ">=1.33.2,<2.0dev", optional = true, markers = "extra == \"grpc\""}
+grpcio-status = {version = ">=1.33.2,<2.0dev", optional = true, markers = "extra == \"grpc\""}
+protobuf = ">=3.20.1,<4.0.0dev"
 requests = ">=2.18.0,<3.0.0dev"
-six = ">=1.13.0"
 
 [package.extras]
-grpc = ["grpcio (>=1.29.0,<2.0dev)"]
-grpcgcp = ["grpcio-gcp (>=0.2.2)"]
-grpcio-gcp = ["grpcio-gcp (>=0.2.2)"]
+grpc = ["grpcio (>=1.33.2,<2.0dev)", "grpcio-status (>=1.33.2,<2.0dev)"]
+grpcgcp = ["grpcio-gcp (>=0.2.2,<1.0dev)"]
+grpcio-gcp = ["grpcio-gcp (>=0.2.2,<1.0dev)"]
 
 [[package]]
 name = "google-auth"
-version = "1.35.0"
+version = "2.11.1"
 description = "Google Authentication Library"
 category = "main"
 optional = false
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*"
 
 [package.dependencies]
-cachetools = ">=2.0.0,<5.0"
+cachetools = ">=2.0.0,<6.0"
 pyasn1-modules = ">=0.2.1"
 rsa = {version = ">=3.1.4,<5", markers = "python_version >= \"3.6\""}
 six = ">=1.9.0"
 
 [package.extras]
 aiohttp = ["requests (>=2.20.0,<3.0.0dev)", "aiohttp (>=3.6.2,<4.0.0dev)"]
+enterprise_cert = ["cryptography (==36.0.2)", "pyopenssl (==22.0.0)"]
 pyopenssl = ["pyopenssl (>=20.0.0)"]
 reauth = ["pyu2f (>=0.1.5)"]
 
 [[package]]
 name = "google-auth-oauthlib"
-version = "0.5.2"
+version = "0.5.3"
 description = "Google Authentication Library"
 category = "main"
 optional = false
@@ -377,7 +376,7 @@ grpc = ["grpcio (>=1.38.0,<2.0dev)"]
 
 [[package]]
 name = "google-cloud-secret-manager"
-version = "2.12.0"
+version = "2.12.4"
 description = "Secret Manager API API client library"
 category = "main"
 optional = false
@@ -386,15 +385,15 @@ python-versions = ">=3.7"
 [package.dependencies]
 google-api-core = {version = ">=1.32.0,<2.0.0 || >=2.8.0,<3.0.0dev", extras = ["grpc"]}
 grpc-google-iam-v1 = ">=0.12.4,<1.0.0dev"
-proto-plus = ">=1.15.0,<2.0.0dev"
-protobuf = ">=3.19.0,<4.0.0dev"
+proto-plus = ">=1.22.0,<2.0.0dev"
+protobuf = ">=3.19.0,<5.0.0dev"
 
 [package.extras]
 libcst = ["libcst (>=0.2.5)"]
 
 [[package]]
 name = "google-cloud-storage"
-version = "2.4.0"
+version = "2.5.0"
 description = "Google Cloud Storage API client library"
 category = "main"
 optional = false
@@ -412,11 +411,11 @@ protobuf = ["protobuf (<5.0.0dev)"]
 
 [[package]]
 name = "google-crc32c"
-version = "1.3.0"
+version = "1.5.0"
 description = "A python wrapper of the C library 'Google CRC32C'"
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [package.extras]
 testing = ["pytest"]
@@ -453,7 +452,7 @@ grpc = ["grpcio (>=1.0.0,<2.0.0dev)"]
 
 [[package]]
 name = "greenlet"
-version = "1.1.2"
+version = "1.1.3"
 description = "Lightweight in-process concurrent programming"
 category = "main"
 optional = false
@@ -476,17 +475,30 @@ grpcio = ">=1.0.0,<2.0.0dev"
 
 [[package]]
 name = "grpcio"
-version = "1.47.0"
+version = "1.49.0"
 description = "HTTP/2-based RPC framework"
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [package.dependencies]
 six = ">=1.5.2"
 
 [package.extras]
-protobuf = ["grpcio-tools (>=1.47.0)"]
+protobuf = ["grpcio-tools (>=1.49.0)"]
+
+[[package]]
+name = "grpcio-status"
+version = "1.48.1"
+description = "Status proto mapping for gRPC"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+googleapis-common-protos = ">=1.5.5"
+grpcio = ">=1.48.1"
+protobuf = ">=3.12.0"
 
 [[package]]
 name = "gtfs-realtime-bindings"
@@ -521,7 +533,7 @@ redis = ["redis (>=3.0.0)"]
 
 [[package]]
 name = "humanize"
-version = "4.2.3"
+version = "4.4.0"
 description = "Python humanize utilities"
 category = "main"
 optional = false
@@ -532,7 +544,7 @@ tests = ["freezegun", "pytest", "pytest-cov"]
 
 [[package]]
 name = "idna"
-version = "3.3"
+version = "3.4"
 description = "Internationalized Domain Names in Applications (IDNA)"
 category = "main"
 optional = false
@@ -562,7 +574,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "more-itertools"
-version = "8.13.0"
+version = "8.14.0"
 description = "More routines for operating on iterables, beyond itertools"
 category = "dev"
 optional = false
@@ -604,7 +616,7 @@ python-versions = "*"
 
 [[package]]
 name = "numpy"
-version = "1.23.1"
+version = "1.23.3"
 description = "NumPy is the fundamental package for array computing with Python."
 category = "main"
 optional = false
@@ -625,7 +637,7 @@ signedtoken = ["cryptography (>=3.0.0)", "pyjwt (>=2.0.0,<3)"]
 
 [[package]]
 name = "orjson"
-version = "3.7.8"
+version = "3.8.0"
 description = "Fast, correct Python JSON library supporting dataclasses, datetimes, and numpy"
 category = "main"
 optional = false
@@ -644,7 +656,7 @@ pyparsing = ">=2.0.2,<3.0.5 || >3.0.5"
 
 [[package]]
 name = "pandas"
-version = "1.4.3"
+version = "1.5.0"
 description = "Powerful data structures for data analysis, time series, and statistics"
 category = "main"
 optional = false
@@ -652,16 +664,14 @@ python-versions = ">=3.8"
 
 [package.dependencies]
 numpy = [
-    {version = ">=1.18.5", markers = "platform_machine != \"aarch64\" and platform_machine != \"arm64\" and python_version < \"3.10\""},
-    {version = ">=1.19.2", markers = "platform_machine == \"aarch64\" and python_version < \"3.10\""},
-    {version = ">=1.20.0", markers = "platform_machine == \"arm64\" and python_version < \"3.10\""},
     {version = ">=1.21.0", markers = "python_version >= \"3.10\""},
+    {version = ">=1.20.3", markers = "python_version < \"3.10\""},
 ]
 python-dateutil = ">=2.8.1"
 pytz = ">=2020.1"
 
 [package.extras]
-test = ["hypothesis (>=5.5.3)", "pytest (>=6.0)", "pytest-xdist (>=1.31)"]
+test = ["pytest-xdist (>=1.31)", "pytest (>=6.0)", "hypothesis (>=5.5.3)"]
 
 [[package]]
 name = "pandas-gbq"
@@ -683,11 +693,11 @@ tqdm = ["tqdm (>=4.23.0)"]
 
 [[package]]
 name = "pathspec"
-version = "0.9.0"
+version = "0.10.1"
 description = "Utility library for gitignore style pattern matching of file paths."
 category = "dev"
 optional = false
-python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
+python-versions = ">=3.7"
 
 [[package]]
 name = "pendulum"
@@ -737,7 +747,7 @@ twisted = ["twisted"]
 
 [[package]]
 name = "proto-plus"
-version = "1.20.6"
+version = "1.22.1"
 description = "Beautiful, Pythonic protocol buffers."
 category = "main"
 optional = false
@@ -751,7 +761,7 @@ testing = ["google-api-core[grpc] (>=1.31.5)"]
 
 [[package]]
 name = "protobuf"
-version = "3.20.1"
+version = "3.20.2"
 description = "Protocol Buffers"
 category = "main"
 optional = false
@@ -797,14 +807,14 @@ pyasn1 = ">=0.4.6,<0.5.0"
 
 [[package]]
 name = "pydantic"
-version = "1.9.1"
+version = "1.10.2"
 description = "Data validation and settings management using python type hints"
 category = "main"
 optional = false
-python-versions = ">=3.6.1"
+python-versions = ">=3.7"
 
 [package.dependencies]
-typing-extensions = ">=3.7.4.3"
+typing-extensions = ">=4.1.0"
 
 [package.extras]
 dotenv = ["python-dotenv (>=0.10.4)"]
@@ -876,7 +886,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "pytz"
-version = "2022.1"
+version = "2022.2.1"
 description = "World timezone definitions, modern and historical"
 category = "main"
 optional = false
@@ -966,6 +976,38 @@ description = "Job scheduling for humans."
 category = "main"
 optional = false
 python-versions = ">=3.6"
+
+[[package]]
+name = "sentry-sdk"
+version = "1.9.8"
+description = "Python client for Sentry (https://sentry.io)"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+certifi = "*"
+urllib3 = {version = ">=1.26.11", markers = "python_version >= \"3.6\""}
+
+[package.extras]
+aiohttp = ["aiohttp (>=3.5)"]
+beam = ["apache-beam (>=2.12)"]
+bottle = ["bottle (>=0.12.13)"]
+celery = ["celery (>=3)"]
+chalice = ["chalice (>=1.16.0)"]
+django = ["django (>=1.8)"]
+falcon = ["falcon (>=1.4)"]
+fastapi = ["fastapi (>=0.79.0)"]
+flask = ["flask (>=0.11)", "blinker (>=1.1)"]
+httpx = ["httpx (>=0.16.0)"]
+pure_eval = ["pure-eval", "executing", "asttokens"]
+pyspark = ["pyspark (>=2.4.4)"]
+quart = ["quart (>=0.16.1)", "blinker (>=1.1)"]
+rq = ["rq (>=0.6)"]
+sanic = ["sanic (>=0.8)"]
+sqlalchemy = ["sqlalchemy (>=1.2)"]
+starlette = ["starlette (>=0.19.1)"]
+tornado = ["tornado (>=5)"]
 
 [[package]]
 name = "siuba"
@@ -1090,7 +1132,7 @@ python-versions = ">= 3.7"
 
 [[package]]
 name = "tqdm"
-version = "4.64.0"
+version = "4.64.1"
 description = "Fast, Extensible Progress Meter"
 category = "main"
 optional = false
@@ -1132,7 +1174,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "urllib3"
-version = "1.26.11"
+version = "1.26.12"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 category = "main"
 optional = false
@@ -1140,7 +1182,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*, 
 
 [package.extras]
 brotli = ["brotlicffi (>=0.8.0)", "brotli (>=1.0.9)", "brotlipy (>=0.6.0)"]
-secure = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "certifi", "ipaddress"]
+secure = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "certifi", "urllib3-secure-extra", "ipaddress"]
 socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
 [[package]]
@@ -1161,11 +1203,11 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 
 [[package]]
 name = "yarl"
-version = "1.7.2"
+version = "1.8.1"
 description = "Yet another URL library"
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [package.dependencies]
 idna = ">=2.0"
@@ -1174,7 +1216,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.11"
-content-hash = "b1142c627ee127863901e91a0260d80f7555762de8012a353b2037123b5d5d7c"
+content-hash = "ad7e41a29678649f4b1c3d4f930f819bc0ffbb892abdfd20b71246a59b28e38a"
 
 [metadata.files]
 aiohttp = []
@@ -1210,6 +1252,7 @@ googleapis-common-protos = []
 greenlet = []
 grpc-google-iam-v1 = []
 grpcio = []
+grpcio-status = []
 gtfs-realtime-bindings = []
 hiredis = []
 huey = []
@@ -1252,6 +1295,7 @@ requests = []
 requests-oauthlib = []
 rsa = []
 schedule = []
+sentry-sdk = []
 siuba = []
 six = []
 snakeviz = []
