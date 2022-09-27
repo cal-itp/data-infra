@@ -13,24 +13,8 @@ import sys
 
 from huey.consumer_options import ConsumerConfig
 from prometheus_client import start_http_server
-from requests import HTTPError
 
 from .tasks import huey, load_secrets
-
-
-def set_exception_fingerprint(event, hint):
-    if "exc_info" not in hint:
-        return event
-
-    exception = hint["exc_info"][1]
-    if isinstance(exception, HTTPError):
-        event["fingerprint"] = [
-            "{{ default }}",
-            str(exception),
-            str(exception.response.status_code),
-        ]
-
-    return event
 
 
 def main(
@@ -39,8 +23,6 @@ def main(
 ):
     sentry_sdk.init(
         environment=os.getenv("SENTRY_ENV", os.getenv("AIRFLOW_ENV")),
-        # TODO: add me back if fetch errors are being grouped together too much
-        # before_send=set_exception_fingerprint,
     )
     start_http_server(port)
 
