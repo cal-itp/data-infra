@@ -87,3 +87,12 @@
         - gtfs_rt_vehicle_positions_url
         - gtfs_rt_service_alerts_url
         - gtfs_rt_trip_updates_url
+- header-data:
+    x-umo-iq-api-key: {{ ESCALON_RT_KEY }}
+  URLs:
+    - itp_id: 107 # eTrans
+      url_number: 0
+      rt_urls:
+        - gtfs_rt_vehicle_positions_url
+        - gtfs_rt_service_alerts_url
+        - gtfs_rt_trip_updates_url
