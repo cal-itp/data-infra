@@ -38,7 +38,7 @@ def main(
     load_env_secrets: bool = False,
 ):
     sentry_sdk.init(
-        environment=os.getenv("AIRFLOW_ENV"),
+        environment=os.getenv("SENTRY_ENV", os.getenv("AIRFLOW_ENV")),
         # TODO: add me back if fetch errors are being grouped together too much
         # before_send=set_exception_fingerprint,
     )
