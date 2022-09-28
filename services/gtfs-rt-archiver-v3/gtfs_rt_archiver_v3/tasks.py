@@ -73,6 +73,7 @@ def increment_task_signals_counter(signal, task, exc=None):
     # We want to let RTFetchException propagate up to Sentry so it holds the right context
     # and can be handled in the before_send hook
     # But in Grafana/Prometheus we want to group metrics by the underlying cause
+    # All of this might be simplified by https://huey.readthedocs.io/en/latest/api.html#Huey.post_execute?
     if exc:
         if isinstance(exc, RTFetchException):
             exc_type = type(exc.cause).__name__
