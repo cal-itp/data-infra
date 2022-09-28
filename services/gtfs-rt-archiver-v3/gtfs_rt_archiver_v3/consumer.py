@@ -24,7 +24,6 @@ def set_exception_fingerprint(event, hint):
     exception = hint["exc_info"][1]
     if isinstance(exception, RTFetchException):
         event["fingerprint"] = [
-            "{{ default }}",
             str(exception),
             str(exception.url),
         ]
