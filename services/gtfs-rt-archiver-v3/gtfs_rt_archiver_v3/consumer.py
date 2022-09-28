@@ -38,10 +38,7 @@ def main(
     port: int = os.getenv("CONSUMER_PROMETHEUS_PORT", 9102),
     load_env_secrets: bool = False,
 ):
-    sentry_sdk.init(
-        environment=os.getenv("SENTRY_ENV", os.getenv("AIRFLOW_ENV")),
-        before_send=set_exception_fingerprint,
-    )
+    sentry_sdk.init(before_send=set_exception_fingerprint)
     start_http_server(port)
 
     if load_env_secrets:

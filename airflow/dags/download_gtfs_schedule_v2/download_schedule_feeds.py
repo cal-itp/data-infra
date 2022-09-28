@@ -6,7 +6,6 @@ import datetime
 import gzip
 import json
 import logging
-import os
 from typing import List, Optional, ClassVar
 
 import humanize
@@ -78,7 +77,7 @@ class DownloadFeedsResult(PartitionedGCSArtifact):
 
 
 def download_all(task_instance, execution_date, **kwargs):
-    sentry_sdk.init(environment=os.getenv("SENTRY_ENV", os.getenv("AIRFLOW_ENV")))
+    sentry_sdk.init()
     start = pendulum.now()
     # https://stackoverflow.com/a/61808755
     with create_session() as session:

@@ -7,7 +7,6 @@
 import gzip
 import json
 import logging
-import os
 from typing import List, Tuple
 
 import pendulum
@@ -75,7 +74,7 @@ def gtfs_datasets_to_extract_configs(
 
 
 def convert_gtfs_datasets_to_download_configs(task_instance, execution_date, **kwargs):
-    sentry_sdk.init(environment=os.getenv("SENTRY_ENV", os.getenv("AIRFLOW_ENV")))
+    sentry_sdk.init()
     extract_path = task_instance.xcom_pull(task_ids="california_transit_gtfs_datasets")
     print(f"loading raw airtable records from {extract_path}")
 
