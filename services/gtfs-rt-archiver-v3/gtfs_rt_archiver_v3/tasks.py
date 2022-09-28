@@ -132,7 +132,8 @@ def scoped(f):
     @wraps(f)
     def inner(*args, **kwargs):
         config: GTFSDownloadConfig = kwargs.get("config")
-        with sentry_sdk.push_scope() as scope:
+        # to be honest I don't really know why push_scope() does not work here
+        with sentry_sdk.configure_scope() as scope:
             scope.clear_breadcrumbs()
             if config:
                 scope.set_tag("config_name", config.name)
@@ -186,7 +187,7 @@ def fetch(tick: datetime, config: GTFSDownloadConfig):
             else:
                 msg = "other non-request exception occurred during download_feed"
             logger.exception(msg, **kwargs)
-            raise RTFetchException(config.url, cause=e, status_code=status_code)
+            raise RTFetchException(config.url, cause=e, status_code=status_code) from e
 
         typer.secho(
             f"saving {humanize.naturalsize(len(content))} from {config.url} to {extract.path}"
