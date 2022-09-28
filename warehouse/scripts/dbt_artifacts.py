@@ -169,7 +169,7 @@ class TestMetadata(BaseModel):
 class Test(BaseNode):
     resource_type: Literal[DbtResourceType.test]
     # test_metadata is optional because singular tests (custom defined) do not have test_metadata attribute
-    # for example: https://github.com/dbt-labs/dbt-docs/blob/main/src/app/services/graph.service.js#L340
+    # for example: https://github.com/dbt-labs/dbt-docs/blob/main/src/app/services/graph.service.js#L355
     # ^ singular test is specifically identified by not having the test_metadata attribute
     test_metadata: Optional[TestMetadata]
 
@@ -311,12 +311,26 @@ class TimingInfo(BaseModel):
     completed_at: Optional[datetime]
 
 
+# TODO: it'd be nice to be able to distinguish between models, tests, and freshness checks
+class RunResultStatus(str, Enum):
+    _pass = "pass"
+    success = "success"
+    error = "error"
+    fail = "fail"
+    warn = "warn"
+    skipped = "skipped"
+    runtime_error = "runtime error"
+
+
 class RunResult(BaseModel):
-    status: str
+    status: RunResultStatus
     timing: List[TimingInfo]
     thread_id: str
     execution_time: int  # seconds
     adapter_response: Dict
+    message: Optional[str]
+    failures: Optional[int]
+    unique_id: str
 
 
 class RunResults(BaseModel):

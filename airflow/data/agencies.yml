@@ -1467,10 +1467,14 @@ vacaville-city-coach:
 ventura-county-transportation-commission:
   agency_name: Ventura County Transportation Commission
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/vctc-ca-us/vctc-ca-us.zip
+    - gtfs_schedule_url: https://govcbus.com/gtfs
       gtfs_rt_vehicle_positions_url: https://govcbus.com/gtfs-rt/vehiclepositions
       gtfs_rt_service_alerts_url: https://govcbus.com/gtfs-rt/alerts
       gtfs_rt_trip_updates_url: https://govcbus.com/gtfs-rt/tripupdates
+    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/vctc-ca-us/vctc-ca-us.zip
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
   itp_id: 380
 victor-valley-transit:
   agency_name: Victor Valley Transit
@@ -1704,7 +1708,7 @@ etrans:
   agency_name: eTrans
   feeds:
     - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/escalon-ca-us/escalon-ca-us.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://webservices.umoiq.com/api/gtfs-rt/v1/vehicle-positions/escalon
+      gtfs_rt_service_alerts_url: https://webservices.umoiq.com/api/gtfs-rt/v1/service-alerts/escalon
+      gtfs_rt_trip_updates_url: https://webservices.umoiq.com/api/gtfs-rt/v1/trip-updates/escalon
   itp_id: 107

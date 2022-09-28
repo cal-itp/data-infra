@@ -13,6 +13,8 @@ schema_fields:
   - name: metadata
     type: RECORD
     fields:
+      - name: extract_ts
+        type: TIMESTAMP
       - name: extract_config
         type: RECORD
         fields:
