@@ -104,6 +104,8 @@ def download_all(task_instance, execution_date, **kwargs):
     for i, config in enumerate(configs, start=1):
         with sentry_sdk.push_scope() as scope:
             logging.info(f"attempting to fetch {i}/{len(configs)} {config.url}")
+            scope.set_tag("config_name", config.name)
+            scope.set_tag("config_url", config.url)
             scope.set_context("config", config.dict())
             try:
                 extract, content = download_feed(

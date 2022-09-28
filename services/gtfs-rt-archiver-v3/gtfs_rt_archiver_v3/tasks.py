@@ -131,10 +131,12 @@ def load_auth_dict():
 def scoped(f):
     @wraps(f)
     def inner(*args, **kwargs):
-        config = kwargs.get("config")
+        config: GTFSDownloadConfig = kwargs.get("config")
         with sentry_sdk.push_scope() as scope:
             scope.clear_breadcrumbs()
             if config:
+                scope.set_tag("config_name", config.name)
+                scope.set_tag("config_url", config.url)
                 scope.set_context("config", config.dict())
             return f(*args, **kwargs)
 
