@@ -14,16 +14,31 @@ import sys
 from huey.consumer_options import ConsumerConfig
 from prometheus_client import start_http_server
 
-from .tasks import huey, load_secrets
+from .tasks import huey, load_secrets, RTFetchException
+
+
+def set_exception_fingerprint(event, hint):
+    if "exc_info" not in hint:
+        return event
+
+    exception = hint["exc_info"][1]
+    if isinstance(exception, RTFetchException):
+        event["fingerprint"] = [
+            "{{ default }}",
+            str(exception),
+            str(exception.url),
+        ]
+        if exception.status_code:
+            event["fingerprint"].append(str(exception.status_code))
+
+    return event
 
 
 def main(
     port: int = os.getenv("CONSUMER_PROMETHEUS_PORT", 9102),
     load_env_secrets: bool = False,
 ):
-    sentry_sdk.init(
-        environment=os.getenv("SENTRY_ENV", os.getenv("AIRFLOW_ENV")),
-    )
+    sentry_sdk.init(before_send=set_exception_fingerprint)
     start_http_server(port)
 
     if load_env_secrets:

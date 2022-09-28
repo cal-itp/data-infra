@@ -11,7 +11,7 @@ x-gtfs-rt-archiver-v3-common:
     CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG: "gs://test-calitp-gtfs-download-config"
     CALITP_BUCKET__GTFS_RT_RAW: "gs://dev-calitp-gtfs-rt-raw"
     SENTRY_DSN: $SENTRY_DSN
-    SENTRY_ENV: "local-development"
+    SENTRY_ENVIRONMENT: "development"
 #    AC_TRANSIT_API_KEY: $AC_TRANSIT_API_KEY
 #    AMTRAK_GTFS_URL: $AMTRAK_GTFS_URL
 #    CULVER_CITY_API_KEY: $CULVER_CITY_API_KEY

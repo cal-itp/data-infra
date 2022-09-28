@@ -26,4 +26,4 @@ sentry:
     username: "apikey"
     port: 587
     host: "smtp.sendgrid.net"
-    from: "hunter@compiler.la"
+    from: "bot@calitp.org"
