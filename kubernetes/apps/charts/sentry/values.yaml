@@ -3,7 +3,7 @@
 sentry:
   user:
     create: true
-    email: admin@sentry.local
+    email: general+cal-itp@jarv.us
     existingSecret: sentry-secrets
     existingSecretKey: admin-password
   nginx:
