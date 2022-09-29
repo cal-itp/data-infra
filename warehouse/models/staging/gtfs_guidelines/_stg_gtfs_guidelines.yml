@@ -15,8 +15,8 @@ models:
       - name: url_type
       - name: calitp_itp_id
         description: '{{ doc("column_calitp_itp_id") }}'
-        meta:
-          metabase.semantic_type: type/FK
+      - name: calitp_url_number
+        description: '{{ doc("column_calitp_url_number") }}'
       - name: transitland_status
         description: A value of either `present` or `missing`
       - name: transitland_public_web_url
