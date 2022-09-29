@@ -34,6 +34,9 @@ def gtfs_datasets_to_extract_configs(
         if not record.data_quality_pipeline:
             continue
         with sentry_sdk.push_scope() as scope:
+            scope.set_tag("record_id", record.id)
+            scope.set_tag("record_name", record.name)
+            scope.set_context("record", record.dict())
             try:
                 valid[record.id] = (
                     record.schedule_to_use_for_rt_validation,

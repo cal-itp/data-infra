@@ -93,6 +93,7 @@ AUTH_KEYS = [
     "AC_TRANSIT_API_KEY",
     "AMTRAK_GTFS_URL",
     "CULVER_CITY_API_KEY",
+    "ESCALON_RT_KEY",
     # TODO: this can be removed once we've confirmed it's no longer in Airtable
     "GRAAS_SERVER_URL",
     "MTC_511_API_KEY",
@@ -130,10 +131,13 @@ def load_auth_dict():
 def scoped(f):
     @wraps(f)
     def inner(*args, **kwargs):
-        config = kwargs.get("config")
-        with sentry_sdk.push_scope() as scope:
+        config: GTFSDownloadConfig = kwargs.get("config")
+        # to be honest I don't really know why push_scope() does not work here
+        with sentry_sdk.configure_scope() as scope:
             scope.clear_breadcrumbs()
             if config:
+                scope.set_tag("config_name", config.name)
+                scope.set_tag("config_url", config.url)
                 scope.set_context("config", config.dict())
             return f(*args, **kwargs)
 
@@ -183,7 +187,7 @@ def fetch(tick: datetime, config: GTFSDownloadConfig):
             else:
                 msg = "other non-request exception occurred during download_feed"
             logger.exception(msg, **kwargs)
-            raise RTFetchException(config.url, cause=e, status_code=status_code)
+            raise RTFetchException(config.url, cause=e, status_code=status_code) from e
 
         typer.secho(
             f"saving {humanize.naturalsize(len(content))} from {config.url} to {extract.path}"
