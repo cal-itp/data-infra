@@ -27,3 +27,11 @@ variable "data_region" {
     error_message = "Invalid data region (must match: '^[a-z][a-z0-9-]*')."
   }
 }
+
+variable "service_accounts" {
+  type = list(object({
+    name = string
+    role = string
+  }))
+  description = "List of service accounts to create in GCP project"
+}
