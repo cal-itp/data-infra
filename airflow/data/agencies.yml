@@ -1421,7 +1421,7 @@ turlock-transit:
   feeds:
     - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/turlock-ca-us/turlock-ca-us.zip
       gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/turlock/gtfs-rt-vehicle-positions
-      gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/turlock/gtfs-rt-alerts
+      gtfs_rt_service_alerts_url: http://gtfs-realtime.trilliumtransit.com/gtfs-realtime/feed/turlock-ca-us/service_alerts.proto
       gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/turlock/gtfs-rt-trip-updates
   itp_id: 349
 union-city-transit:
