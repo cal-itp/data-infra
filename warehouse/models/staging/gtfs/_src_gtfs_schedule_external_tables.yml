@@ -1,0 +1,54 @@
+version: 2
+
+sources:
+  - name: external_gtfs_schedule
+    description: Hive-partitioned external tables reading GTFS schedule data and validation errors from GCS.
+    database: cal-itp-data-infra
+    schema: external_gtfs_schedule
+    tables:
+      - name: download_outcomes
+      - name: unzip_outcomes
+      - name: agency
+      - name: agency_txt_parse_outcomes
+      - name: attributions
+      - name: attributions_txt_parse_outcomes
+      - name: calendar
+      - name: calendar_txt_parse_outcomes
+      - name: calendar_dates
+      - name: calendar_dates_txt_parse_outcomes
+      - name: fare_attributes
+      - name: fare_attributes_txt_parse_outcomes
+      - name: fare_leg_rules
+      - name: fare_leg_rules_txt_parse_outcomes
+      - name: fare_products
+      - name: fare_products_txt_parse_outcomes
+      - name: fare_rules
+      - name: fare_rules_txt_parse_outcomes
+      - name: fare_transfer_rules
+      - name: fare_transfer_rules_txt_parse_outcomes
+      - name: feed_info
+      - name: feed_info_txt_pares_outcomes
+      - name: frequencies
+      - name: frequencies_txt_parse_outcomes
+      - name: levels
+      - name: levels_txt_parse_outcomes
+      - name: pathways
+      - name: pathways_txt_parse_outcomes
+      - name: routes
+      - name: routes_txt_parse_outcomes
+      - name: shapes
+      - name: shapes_txt_parse_outcomes
+      - name: stop_areas
+      - name: stop_areas_txt_parse_outcomes
+      - name: stop_times
+      - name: stop_times_txt_parse_outcomes
+      - name: stops
+      - name: stops_txt_parse_outcomes
+      - name: transfers
+      - name: transfers_txt_parse_outcomes
+      - name: translations
+      - name: translations_txt_parse_outcomes
+      - name: trips
+      - name: trips_txt_parse_outcomes
+      - name: validation_notices
+      - name: validations_outcomes

@@ -1,0 +1,92 @@
+version: 2
+
+models:
+  - name: stg_gtfs_schedule__download_outcomes
+    description: Outcomes from download attempts of GTFS schedule data.
+    columns:
+      - name: dt
+      - &schedule_outcome_key
+        name: key
+        description: |
+          Synthetic key constructed from `base64_url` and `ts`.
+        tests: &primary_key_tests
+          - unique
+          - not_null
+      - name: name
+      - name: url
+      - name: feed_type
+      - name: config_extracted_at
+      - name: schedule_url_for_validation
+      - name: download_success
+      - name: download_exception
+      - name: download_response_code
+      - name: download_response_headers
+      - name: base64_url
+      - name: ts
+  - name: stg_gtfs_schedule__unzip_outcomes
+    description: Outcomes from unzip attempts on downloaded GTFS schedule data.
+    columns:
+      - name: dt
+      - *schedule_outcome_key
+      - name: name
+      - name: url
+      - name: feed_type
+      - name: config_extracted_at
+      - name: unzip_success
+      - name: unzip_exception
+      - name: zipfile_extract_md5hash
+        description: |
+          MD5 hash for the zipfile being unzipped.
+      - name: zipfile_files
+        description: |
+          List (array) of filenames found inside the zipfile being unzipped.
+      - name: zipfile_dirs
+        description: |
+          List (array) of directories found inside the zipfile being unzipped.
+          If more than one directory is present, the zipfile is not valid for our pipeline.
+      - name: base64_url
+      - name: ts
+  - name: stg_gtfs_rt__vehicle_positions
+    description: |
+      Vehicle positions realtime data.
+      See https://gtfs.org/realtime/reference/ for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - _extract_ts
+            - id
+          # test hour = 0 UTC because that's 5pm Pacific = PM peak, good sample of data
+          where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT HOUR FROM ts) = 0
+    columns:
+      - name: dt
+      - name: hour
+      - name: base64_url
+      - name: _extract_ts
+      - name: _config_extracted_at
+      - name: _name
+      - name: header_timestamp
+      - name: header_incrementality
+      - name: header_version
+      - name: id
+      - name: current_stop_sequence
+      - name: stop_id
+      - name: current_status
+      - name: vehicle_timestamp
+      - name: congestion_level
+      - name: occupancy_status
+      - name: occupancy_percentage
+      - name: vehicle_id
+      - name: vehicle_label
+      - name: vehicle_license_plate
+      - name: trip_id
+      - name: trip_route_id
+      - name: trip_direction_id
+      - name: trip_start_time
+      - name: trip_start_date
+      - name: trip_schedule_relationship
+      - name: latitude
+      - name: longitude
+      - name: bearing
+      - name: odometer
+      - name: speed
