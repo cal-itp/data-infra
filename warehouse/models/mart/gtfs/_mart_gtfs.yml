@@ -13,9 +13,9 @@ models:
         tests:
           - unique:
               #TODO: make an RT test macro that does this date subtraction
-              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAYS)
+              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
           - not_null:
-              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAYS)
+              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
       - name: gtfs_dataset_key
         description: |
           The primary key for the record in `dim_gtfs_datasets` associated with this message.

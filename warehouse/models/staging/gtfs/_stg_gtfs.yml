@@ -50,12 +50,14 @@ models:
     description: |
       Vehicle positions realtime data.
       See https://gtfs.org/realtime/reference/ for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - _extract_ts
+            - id
+          where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
     columns:
-      - name: key
-        description: |
-          Synthetic key constructed from `base64_url`, `extract_ts`, and entity `id`
-          (see https://gtfs.org/realtime/reference/#message-feedentity).
-        tests: *primary_key_tests
       - name: dt
       - name: hour
       - name: base64_url

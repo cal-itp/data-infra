@@ -98,10 +98,11 @@ models:
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
-            - key
+            - airtable_record_id
             - calitp_extracted_at
     columns:
-      - *key
+      - name: airtable_record_id
+        tests: *primary_key_tests
       - *name
       - name: data
       - name: fares_v2_status

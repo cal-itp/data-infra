@@ -177,6 +177,10 @@ models:
         #   - relationships:
         #      to: ref('dim_gtfs_datasets')
         #      field: key
+      - name: calitp_extracted_at
+        description: |
+          Date extracted from Airtable. This column will be deprecated as _valid_from
+          and _valid_to are more fully adopted.
       - name: _valid_from
         description: |
           Starting timestamp (inclusive) from which this record is valid.
