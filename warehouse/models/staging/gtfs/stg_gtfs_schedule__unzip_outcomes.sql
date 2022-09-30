@@ -8,7 +8,6 @@ WITH raw_unzip_outcomes AS (
 stg_gtfs_schedule__unzip_outcomes AS (
     SELECT
         dt,
-        {{ farm_surrogate_key(['base64_url', 'ts']) }} as key,
         config.name AS name,
         config.url AS url,
         config.feed_type AS feed_type,
