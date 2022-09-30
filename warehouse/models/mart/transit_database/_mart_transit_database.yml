@@ -177,6 +177,8 @@ models:
         #   - relationships:
         #      to: ref('dim_gtfs_datasets')
         #      field: key
+      - name: _valid_from
+        description: Starting timestamp (inclusive) from which this
   - name: dim_gtfs_service_data
     description: |
       Each record links together a single `gtfs dataset` and one (if possible)

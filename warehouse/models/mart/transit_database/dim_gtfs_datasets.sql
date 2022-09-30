@@ -18,7 +18,8 @@ dim_gtfs_datasets AS (
         deprecated_date,
         data_quality_pipeline,
         schedule_to_use_for_rt_validation_gtfs_dataset_key,
-        calitp_extracted_at
+        CAST("1901-01-01" AS TIMESTAMP) AS _valid_from,
+        CAST("2099-01-01" AS TIMESTAMP) AS _valid_to
     FROM latest_gtfs_datasets
 )
 
