@@ -1,0 +1,116 @@
+version: 2
+
+models:
+  - name: fct_vehicle_positions_messages
+    description: |
+      Each row is a message received from a vehicle positions GTFS RT feed.
+      See https://gtfs.org/realtime/reference/#message-vehicleposition for information
+      about message structure.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `base64_url`, `extract_ts`, and entity `id`.
+        tests: &primary_key_tests
+          - unique
+          - not_null
+      - name: gtfs_dataset_key
+        description: |
+          The primary key for the record in `dim_gtfs_datasets` associated with this message.
+      - name: dt
+        description: |
+          Date on which we scraped this message.
+          A date filter *must* be provided when querying this table, because of the size of the data.
+      - name: hour
+        description: |
+          Timestamp of the beginning of the hour in which this message was scraped,
+          ex. "2022-09-01T00:00:00+00".
+      - name: base64_url
+        description: |
+          URL-safe base64 encoding of the URL from which this message was scraped.
+      - name: _extract_ts
+        description: |
+          Time at which this message was scraped.
+      - name: _name
+        description: |
+          String name of the GTFS dataset of which this message is a part.
+          This field is provided for human readability and should not be used as a join key.
+      - name: header_timestamp
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-feedheader.
+          Field has been converted to TIMESTAMP type for convenience.
+      - name: header_incrementality
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-feedheader.
+      - name: header_version
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-feedheader.
+      - name: id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-feedentity.
+      - name: current_stop_sequence
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
+      - name: stop_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
+      - name: current_status
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
+      - name: vehicle_timestamp
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
+          Field has been converted to TIMESTAMP type for convenience.
+      - name: congestion_level
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
+      - name: occupancy_status
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
+      - name: occupancy_percentage
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
+      - name: vehicle_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
+      - name: vehicle_label
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
+      - name: vehicle_license_plate
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
+      - name: vehicle_wheelchair_accessible
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
+      - name: trip_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: trip_route_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: trip_direction_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: trip_start_time
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: trip_start_date
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: trip_schedule_relationship
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: latitude
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-position.
+      - name: longitude
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-position.
+      - name: bearing
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-position.
+      - name: odometer
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-position.
+      - name: speed
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-position.
