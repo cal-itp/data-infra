@@ -143,6 +143,12 @@ models:
       - be *disaggregated into* one or more `gtfs service data` records.
       - be *produced* by one or more `organizations`
       - be *published* by an `organizations`.
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: airtable_record_id
+          gaps: required
     columns:
       - *key
       - name: data
