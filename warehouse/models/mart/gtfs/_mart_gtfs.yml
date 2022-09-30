@@ -12,10 +12,11 @@ models:
           Synthetic primary key constructed from `base64_url`, `extract_ts`, and entity `id`.
         tests:
           - unique:
-              #TODO: make an RT test macro that does this date subtraction
-              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+              # TODO: make an RT test macro that does this date subtraction
+              # test hour = 0 UTC because that's 5pm Pacific = PM peak, good sample of data
+              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT HOUR FROM hour) = 0
           - not_null:
-              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT HOUR FROM hour) = 0
       - name: gtfs_dataset_key
         description: |
           The primary key for the record in `dim_gtfs_datasets` associated with this message.
