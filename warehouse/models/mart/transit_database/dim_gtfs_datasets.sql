@@ -21,7 +21,7 @@ dim_gtfs_datasets AS (
         schedule_to_use_for_rt_validation_gtfs_dataset_airtable_record_id,
         -- TODO: make this table actually historical
         CAST("1901-01-01" AS TIMESTAMP) AS _valid_from,
-        {{ make_end_of_valid_range(CAST("2099-01-01" AS TIMESTAMP)) }} AS _valid_to
+        {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP))' }} AS _valid_to
     FROM latest_gtfs_datasets
 )
 
