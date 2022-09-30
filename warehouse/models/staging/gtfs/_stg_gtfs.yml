@@ -56,7 +56,8 @@ models:
             - base64_url
             - _extract_ts
             - id
-          where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+          # test hour = 0 UTC because that's 5pm Pacific = PM peak, good sample of data
+          where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT HOUR FROM ts) = 0
     columns:
       - name: dt
       - name: hour
