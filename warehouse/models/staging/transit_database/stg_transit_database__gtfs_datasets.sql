@@ -10,9 +10,47 @@ once_daily_gtfs_datasets AS (
         ) }}
 ),
 
+construct_base64_url AS (
+    SELECT
+        *,
+        -- TODO: update these after we backfill GTFS data before September 15th
+        -- url_to_encode is mostly just for debugging
+        CASE
+            WHEN ts < CAST("2022-09-15" AS TIMESTAMP)
+                CASE
+                    -- if there are multiple query parameters, we leave the question mark, remove ampersand
+                    -- so example.com/gtfs?auth=key&p2=v2 becomes example.com/gtfs?p2=v2
+                    WHEN REGEXP_CONTAINS(uri, r"\?[\w]*\=\{\{[\w\s]*\}\}\&")
+                        THEN REGEXP_REPLACE(uri, r"[\w]*\=\{\{[\w\s]*\}\}\&","")
+                    -- if only one query parameter, remove the question mark
+                    -- so example.com/gtfs?auth=key becomes example.com/gtfs
+                    WHEN REGEXP_CONTAINS(uri, r"\?[\w]*\=\{\{[\w\s]*\}\}$")
+                        THEN REGEXP_REPLACE(uri, r"\?[\w]*\=\{\{[\w\s]*\}\}$","")
+                    ELSE uri
+                END
+            ELSE pipeline_url
+        END AS url_to_encode,
+        CASE
+            WHEN ts < CAST("2022-09-15" AS TIMESTAMP)
+                CASE
+                    -- if there are multiple query parameters, we leave the question mark, remove ampersand
+                    -- so example.com/gtfs?auth=key&p2=v2 becomes example.com/gtfs?p2=v2
+                    WHEN REGEXP_CONTAINS(uri, r"\?[\w]*\=\{\{[\w\s]*\}\}\&")
+                        THEN {{ to_url_safe_base64('REGEXP_REPLACE(uri, r"[\w]*\=\{\{[\w\s]*\}\}\&","")') }}
+                    -- if only one query parameter, remove the question mark
+                    -- so example.com/gtfs?auth=key becomes example.com/gtfs
+                    WHEN REGEXP_CONTAINS(uri, r"\?[\w]*\=\{\{[\w\s]*\}\}$")
+                        THEN {{ to_url_safe_base64('REGEXP_REPLACE(uri, r"\?[\w]*\=\{\{[\w\s]*\}\}$","")') }}
+                    ELSE {{ to_url_safe_base64('uri') }}
+                END
+            ELSE {{ to_url_safe_base64('pipeline_url') }}
+        END AS base64_url
+    FROM once_daily_gtfs_datasets
+)
+
 stg_transit_database__gtfs_datasets AS (
     SELECT
-        id AS key,
+        id AS airtable_record_id,
         {{ trim_make_empty_string_null(column_name = "name") }},
         data,
         data_quality_pipeline,
@@ -46,38 +84,8 @@ stg_transit_database__gtfs_datasets AS (
         url_secret_key_name,
         authorization_header_parameter_name,
         header_secret_key_name,
-        -- TODO: update these after we backfill GTFS data before September 15th
-        -- url_to_encode is mostly just for debugging
-        CASE
-            WHEN ts < CAST("2022-09-15" AS TIMESTAMP)
-                CASE
-                    -- if there are multiple query parameters, we leave the question mark, remove ampersand
-                    -- so example.com/gtfs?auth=key&p2=v2 becomes example.com/gtfs?p2=v2
-                    WHEN REGEXP_CONTAINS(uri, r"\?[\w]*\=\{\{[\w\s]*\}\}\&")
-                        THEN REGEXP_REPLACE(uri, r"[\w]*\=\{\{[\w\s]*\}\}\&","")
-                    -- if only one query parameter, remove the question mark
-                    -- so example.com/gtfs?auth=key becomes example.com/gtfs
-                    WHEN REGEXP_CONTAINS(uri, r"\?[\w]*\=\{\{[\w\s]*\}\}$")
-                        THEN REGEXP_REPLACE(uri, r"\?[\w]*\=\{\{[\w\s]*\}\}$","")
-                    ELSE uri
-                END
-            ELSE pipeline_url
-        END AS url_to_encode,
-        CASE
-            WHEN ts < CAST("2022-09-15" AS TIMESTAMP)
-                CASE
-                    -- if there are multiple query parameters, we leave the question mark, remove ampersand
-                    -- so example.com/gtfs?auth=key&p2=v2 becomes example.com/gtfs?p2=v2
-                    WHEN REGEXP_CONTAINS(uri, r"\?[\w]*\=\{\{[\w\s]*\}\}\&")
-                        THEN {{ to_url_safe_base64('REGEXP_REPLACE(uri, r"[\w]*\=\{\{[\w\s]*\}\}\&","")') }}
-                    -- if only one query parameter, remove the question mark
-                    -- so example.com/gtfs?auth=key becomes example.com/gtfs
-                    WHEN REGEXP_CONTAINS(uri, r"\?[\w]*\=\{\{[\w\s]*\}\}$")
-                        THEN {{ to_url_safe_base64('REGEXP_REPLACE(uri, r"\?[\w]*\=\{\{[\w\s]*\}\}$","")') }}
-                    ELSE {{ to_url_safe_base64('uri') }}
-                END
-            ELSE {{ to_url_safe_base64('pipeline_url') }}
-        END AS base64_url,
+        url_to_encode,
+        base64_url,
         ts,
         dt AS calitp_extracted_at
     FROM once_daily_gtfs_datasets

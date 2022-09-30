@@ -5,8 +5,6 @@ WITH external_vehicle_positions AS (
 
 stg_gtfs_rt__vehicle_positions AS (
     SELECT
-        {{ farm_surrogate_key(['base64_url', 'metadata.extract_ts', 'id']) }} as key,
-
         dt,
         hour,
         base64_url,
@@ -32,6 +30,7 @@ stg_gtfs_rt__vehicle_positions AS (
         vehicle.vehicle.id AS vehicle_id,
         vehicle.vehicle.label AS vehicle_label,
         vehicle.vehicle.licensePlate AS vehicle_license_plate,
+        vehicle.vehicle.wheelchairAccessible AS vehicle_wheelchair_accessible,
 
         vehicle.trip.tripId AS trip_id,
         vehicle.trip.routeId AS trip_route_id,
@@ -40,13 +39,13 @@ stg_gtfs_rt__vehicle_positions AS (
         vehicle.trip.startDate AS trip_start_date,
         vehicle.trip.scheduleRelationship AS trip_schedule_relationship,
 
-        vehicle.position.latitude AS latitude,
-        vehicle.position.longitude AS longitude,
-        vehicle.position.bearing AS bearing,
-        vehicle.position.odometer AS odometer,
-        vehicle.position.speed AS speed,
+        vehicle.position.latitude AS position_latitude,
+        vehicle.position.longitude AS position_longitude,
+        vehicle.position.bearing AS position_bearing,
+        vehicle.position.odometer AS position_odometer,
+        vehicle.position.speed AS position_speed
 
     FROM external_vehicle_positions
-),
+)
 
 SELECT * FROM stg_gtfs_rt__vehicle_positions
