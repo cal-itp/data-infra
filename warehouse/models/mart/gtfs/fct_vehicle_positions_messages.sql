@@ -15,8 +15,7 @@ keying AS (
     FROM stg_gtfs_rt__vehicle_positions AS vp
     LEFT JOIN dim_gtfs_datasets AS gd
         ON vp.base64_url = gd.base64_url
-        AND vp._config_extract_ts >= gd._valid_from
-        AND vp._config_extract_ts < gd._valid_to
+        AND vp._config_extract_ts BETWEEN gd._valid_from AND gd._valid_to
 ),
 
 fct_vehicle_positions_messages AS (
@@ -27,6 +26,7 @@ fct_vehicle_positions_messages AS (
         hour,
         base64_url,
         _extract_ts,
+        _config_extract_ts,
         _name,
 
         header_timestamp,
@@ -54,11 +54,11 @@ fct_vehicle_positions_messages AS (
         trip_start_date,
         trip_schedule_relationship,
 
-        latitude,
-        longitude,
-        bearing,
-        odometer,
-        speed,
+        position_latitude,
+        position_longitude,
+        position_bearing,
+        position_odometer,
+        position_speed
     FROM keying
 )
 

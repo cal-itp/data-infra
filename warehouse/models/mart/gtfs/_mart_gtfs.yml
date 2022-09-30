@@ -102,18 +102,18 @@ models:
       - name: trip_schedule_relationship
         description: |
           See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
-      - name: latitude
+      - name: position_latitude
         description: |
           See: https://gtfs.org/realtime/reference/#message-position.
-      - name: longitude
+      - name: position_longitude
         description: |
           See: https://gtfs.org/realtime/reference/#message-position.
-      - name: bearing
+      - name: position_bearing
         description: |
           See: https://gtfs.org/realtime/reference/#message-position.
-      - name: odometer
+      - name: position_odometer
         description: |
           See: https://gtfs.org/realtime/reference/#message-position.
-      - name: speed
+      - name: position_speed
         description: |
           See: https://gtfs.org/realtime/reference/#message-position.

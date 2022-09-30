@@ -15,13 +15,14 @@ dim_gtfs_datasets AS (
         data,
         uri,
         future_uri,
-        aggregated_to_gtfs_dataset_airtable_record_id,
+        aggregated_to_gtfs_dataset_key,
         deprecated_date,
         data_quality_pipeline,
-        schedule_to_use_for_rt_validation_gtfs_dataset_airtable_record_id,
+        schedule_to_use_for_rt_validation_gtfs_dataset_key,
+        base64_url,
         -- TODO: make this table actually historical
         CAST("1901-01-01" AS TIMESTAMP) AS _valid_from,
-        {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP))' }} AS _valid_to
+        {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }} AS _valid_to
     FROM latest_gtfs_datasets
 )
 
