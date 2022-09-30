@@ -595,7 +595,7 @@ humboldt-transit-authority:
   feeds:
     - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/humboldtcounty-ca-us/humboldtcounty-ca-us.zip
       gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/redwood/gtfs-rt-vehicle-positions
-      gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/redwood/gtfs-rt-alerts
+      gtfs_rt_service_alerts_url: http://gtfs-realtime.trilliumtransit.com/gtfs-realtime/feed/humboldtcounty-ca-us/service_alerts.proto
       gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/redwood/gtfs-rt-trip-updates
   itp_id: 135
 huntington-park-express:
@@ -1283,7 +1283,7 @@ susanville-indian-rancheria-public-transportation-program:
 tahoe-transportation:
   agency_name: Tahoe Transportation
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/laketahoe-ca-us/laketahoe-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/tahoe-ca-us/tahoe-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1421,7 +1421,7 @@ turlock-transit:
   feeds:
     - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/turlock-ca-us/turlock-ca-us.zip
       gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/turlock/gtfs-rt-vehicle-positions
-      gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/turlock/gtfs-rt-alerts
+      gtfs_rt_service_alerts_url: http://gtfs-realtime.trilliumtransit.com/gtfs-realtime/feed/turlock-ca-us/service_alerts.proto
       gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/turlock/gtfs-rt-trip-updates
   itp_id: 349
 union-city-transit:
@@ -1479,7 +1479,7 @@ victor-valley-transit:
       gtfs_rt_vehicle_positions_url: https://ontime.vvta.org/gtfs-rt/vehiclepositions
       gtfs_rt_service_alerts_url: https://ontime.vvta.org/gtfs-rt/alerts
       gtfs_rt_trip_updates_url: https://ontime.vvta.org/gtfs-rt/tripupdates
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/victorville-ca-us/victorville-ca-us.zip
+    - gtfs_schedule_url: https://api.transloc.com/gtfs/vvta.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
