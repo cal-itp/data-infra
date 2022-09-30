@@ -10,9 +10,12 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `base64_url`, `extract_ts`, and entity `id`.
-        tests: &primary_key_tests
-          - unique
-          - not_null
+        tests:
+          - unique:
+              #TODO: make an RT test macro that does this date subtraction
+              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAYS)
+          - not_null:
+              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAYS)
       - name: gtfs_dataset_key
         description: |
           The primary key for the record in `dim_gtfs_datasets` associated with this message.
