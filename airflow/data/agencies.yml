@@ -1479,7 +1479,7 @@ victor-valley-transit:
       gtfs_rt_vehicle_positions_url: https://ontime.vvta.org/gtfs-rt/vehiclepositions
       gtfs_rt_service_alerts_url: https://ontime.vvta.org/gtfs-rt/alerts
       gtfs_rt_trip_updates_url: https://ontime.vvta.org/gtfs-rt/tripupdates
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/victorville-ca-us/victorville-ca-us.zip
+    - gtfs_schedule_url: https://api.transloc.com/gtfs/vvta.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
