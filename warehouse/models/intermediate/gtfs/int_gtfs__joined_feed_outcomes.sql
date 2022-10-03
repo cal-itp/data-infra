@@ -23,5 +23,7 @@ int_gtfs__joined_feed_outcomes AS (
     FROM stg_gtfs_schedule__download_outcomes AS d
     LEFT JOIN stg_gtfs_schedule__unzip_outcomes AS u
         ON d.ts = u.ts
-        AND d.base64_url = u.base64_url
+            AND d.base64_url = u.base64_url
 )
+
+SELECT * FROM int_gtfs__joined_feed_outcomes
