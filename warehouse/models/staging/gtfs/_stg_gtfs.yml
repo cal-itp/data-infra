@@ -5,13 +5,6 @@ models:
     description: Outcomes from download attempts of GTFS schedule data.
     columns:
       - name: dt
-      - &schedule_outcome_key
-        name: key
-        description: |
-          Synthetic key constructed from `base64_url` and `ts`.
-        tests: &primary_key_tests
-          - unique
-          - not_null
       - name: name
       - name: url
       - name: feed_type
@@ -27,7 +20,6 @@ models:
     description: Outcomes from unzip attempts on downloaded GTFS schedule data.
     columns:
       - name: dt
-      - *schedule_outcome_key
       - name: name
       - name: url
       - name: feed_type
@@ -57,7 +49,7 @@ models:
             - _extract_ts
             - id
           # test hour = 0 UTC because that's 5pm Pacific = PM peak, good sample of data
-          where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT HOUR FROM ts) = 0
+          where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM ts)) = 0
     columns:
       - name: dt
       - name: hour

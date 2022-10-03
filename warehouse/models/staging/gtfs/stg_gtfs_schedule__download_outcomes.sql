@@ -15,8 +15,8 @@ stg_gtfs_schedule__download_outcomes AS (
         config.schedule_url_for_validation AS schedule_url_for_validation,
         success AS download_success,
         exception AS download_exception,
-        extract.response_code AS download_response_code,
-        extract.response_headers AS download_response_headers,
+        `extract`.response_code AS download_response_code,
+        `extract`.response_headers AS download_response_headers,
         base64_url,
         ts AS ts
     FROM raw_download_outcomes
