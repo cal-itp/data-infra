@@ -8,4 +8,6 @@ WITH stg_enriched_micropayment_device_transactions AS (
     }}
 )
 
-SELECT * FROM stg_enriched_micropayment_device_transactions
+SELECT
+    *
+ FROM stg_enriched_micropayment_device_transactions
