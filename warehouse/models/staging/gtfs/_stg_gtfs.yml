@@ -43,11 +43,15 @@ models:
       Vehicle positions realtime data.
       See https://gtfs.org/realtime/reference/ for specification.
     tests:
+      # ideally base64_url, _extract_ts, id would be sufficient
+      # but this is not the case in the MTC 511 feed, so adding position
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - base64_url
             - _extract_ts
             - id
+            - position_latitude
+            - position_longitude
           # test hour = 0 UTC because that's 5pm Pacific = PM peak, good sample of data
           where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM _extract_ts)) = 0
     columns:
