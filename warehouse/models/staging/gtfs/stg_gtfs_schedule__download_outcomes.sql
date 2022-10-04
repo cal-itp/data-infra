@@ -11,7 +11,7 @@ stg_gtfs_schedule__download_outcomes AS (
         config.name AS name,
         config.url AS url,
         config.feed_type AS feed_type,
-        config.extracted_at AS config_extracted_at,
+        config.extracted_at AS _config_extract_ts,
         config.schedule_url_for_validation AS schedule_url_for_validation,
         success AS download_success,
         exception AS download_exception,
