@@ -8,7 +8,7 @@ stg_gtfs_schedule__unzip_outcomes AS (
     FROM {{ ref('stg_gtfs_schedule__unzip_outcomes') }}
 ),
 
-int_gtfs__joined_feed_outcomes AS (
+int_gtfs_schedule__joined_feed_outcomes AS (
     SELECT
         d.ts,
         d.base64_url,
@@ -26,4 +26,4 @@ int_gtfs__joined_feed_outcomes AS (
             AND d.base64_url = u.base64_url
 )
 
-SELECT * FROM int_gtfs__joined_feed_outcomes
+SELECT * FROM int_gtfs_schedule__joined_feed_outcomes

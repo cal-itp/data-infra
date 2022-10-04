@@ -18,7 +18,7 @@ stg_gtfs_schedule__download_outcomes AS (
         `extract`.response_code AS download_response_code,
         `extract`.response_headers AS download_response_headers,
         base64_url,
-        ts AS ts
+        ts
     FROM raw_download_outcomes
 )
 

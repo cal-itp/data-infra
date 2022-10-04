@@ -2,7 +2,7 @@
 
 WITH joined_feed_outcomes AS (
     SELECT *
-    FROM {{ ref('int_gtfs__joined_feed_outcomes') }}
+    FROM {{ ref('int_gtfs_schedule__joined_feed_outcomes') }}
 ),
 
 keying AS (
