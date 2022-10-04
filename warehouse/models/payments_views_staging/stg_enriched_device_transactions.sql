@@ -10,5 +10,5 @@ WITH stg_enriched_device_transaction_purchases AS (
 
 SELECT
     *,
-    DATETIME(TIMESTAMP(transaction_date_time_utc), "America/Los_Angeles") AS transaction_date_time_pacific,
+    DATETIME(TIMESTAMP(transaction_date_time_utc), "America/Los_Angeles") AS transaction_date_time_pacific
 FROM stg_enriched_device_transaction_purchases
