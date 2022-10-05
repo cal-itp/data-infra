@@ -15,8 +15,7 @@ models:
     columns:
       - name: key
         description: |
-          Synthetic primary key constructed from `base64_url`,
-          `gtfs_dataset_key`, and `_valid_from`.
+          Synthetic primary key constructed from `base64_url` and `_valid_from`.
         tests: &primary_key_tests
           - unique
           - not_null
@@ -40,8 +39,7 @@ models:
     columns:
       - name: key
         description: |
-          Synthetic primary key constructed from `base64_url`,
-          `ts`, and `gtfs_dataset_key`.
+          Synthetic primary key constructed from `base64_url` and `ts`.
         tests: *primary_key_tests
       - name: feed_key
         description: |

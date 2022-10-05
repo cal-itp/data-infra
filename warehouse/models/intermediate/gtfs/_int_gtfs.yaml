@@ -1,6 +1,28 @@
 version: 2
 
 models:
+  - name: int_gtfs_schedule__joined_feed_outcomes
+    description: |
+      Each row is an individual download attempt combined with the associated unzip and parse attempts for
+      a given feed on a given date.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+    columns:
+      - name: gtfs_dataset_key
+      - name: ts
+      - name: base64_url
+      - name: _config_extract_ts
+      - name: download_success
+      - name: download_exception
+      - name: unzip_success
+      - name: unzip_exception
+      - name: zipfile_extract_md5hash
+      - name: zipfile_files
+      - name: zipfile_dirs
+      - name: pct_files_successfully_parsed
   - name: int_gtfs_schedule__grouped_feed_file_parse_outcomes
     description: |
       Each row is a feed (URL + timestamp), with a summary of whether parsing was successful on the constituent files
@@ -8,6 +30,11 @@ models:
       "Success" means that the raw input file (usually a .txt file) was converted to JSONL format without an error.
       This does not guarantee validity according to the GTFS specification, just that the original input file was
       parseable on a pure file-format level (i.e., the file was not corrupt.)
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
     columns:
       - name: base64_url
       - name: ts

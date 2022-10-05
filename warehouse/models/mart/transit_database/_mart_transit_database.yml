@@ -189,12 +189,12 @@ models:
           and _valid_to are more fully adopted.
       - name: _valid_from
         description: |
-          Starting timestamp (inclusive) from which this record is valid.
+          '{{ doc("column_valid_from") }}'
           Currently just a constant placeholder of '1901-01-01T00:00:00+00' until
           this table has historical data incorporated.
       - name: _valid_to
         description: |
-          Ending timestamp (inclusive) through which this record is valid.
+          '{{ doc("column_valid_to") }}'
           Currently just a constant placeholder of '2099-01-01T00:00:00+00 minus one microsecond' until
           this table has historical data incorporated.
   - name: dim_gtfs_service_data

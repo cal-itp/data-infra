@@ -12,7 +12,7 @@ dim_schedule_feeds AS (
 
 fct_schedule_feeds AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['j.base64_url', 'j.ts', 'j.gtfs_dataset_key']) }} as key,
+        {{ dbt_utils.surrogate_key(['j.base64_url', 'j.ts']) }} as key,
         f.key AS feed_key,
         j.gtfs_dataset_key,
         j.ts,

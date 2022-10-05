@@ -83,7 +83,7 @@ versioned AS (
 
 dim_schedule_feeds AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['versioned.base64_url', 'versioned.gtfs_dataset_key', 'versioned._valid_from']) }} AS key,
+        {{ dbt_utils.surrogate_key(['versioned.base64_url', 'versioned._valid_from']) }} AS key,
         versioned.base64_url,
         versioned.gtfs_dataset_key,
         gd.name,
