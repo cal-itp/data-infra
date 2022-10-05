@@ -5,39 +5,30 @@ WITH joined_feed_outcomes AS (
     FROM {{ ref('int_gtfs_schedule__joined_feed_outcomes') }}
 ),
 
-dim_gtfs_datasets AS (
+dim_schedule_feeds AS (
     SELECT *
-    FROM {{ ref('dim_gtfs_datasets') }}
-),
-
-keying AS (
-    SELECT
-        gd.key as gtfs_dataset_key,
-        f.*
-    FROM joined_feed_outcomes AS f
-    -- TODO: this can lead to fanout until we de-dupe on the dim_gtfs_datasets side
-    -- currently no enforcement that URL is unique
-    LEFT JOIN dim_gtfs_datasets AS gd
-        ON f.base64_url = gd.base64_url
-        AND f._config_extract_ts BETWEEN gd._valid_from AND gd._valid_to
+    FROM {{ ref('dim_schedule_feeds') }}
 ),
 
 fct_schedule_feeds AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['base64_url', 'ts', 'gtfs_dataset_key']) }} as key,
-        gtfs_dataset_key,
-        ts,
-        base64_url,
-        download_success,
-        download_exception,
-        unzip_success,
-        unzip_exception,
-        zipfile_extract_md5hash,
-        zipfile_files,
-        zipfile_dirs,
-        pct_files_successfully_parsed
-    FROM keying
+        {{ dbt_utils.surrogate_key(['j.base64_url', 'j.ts', 'j.gtfs_dataset_key']) }} as key,
+        f.key AS feed_key,
+        j.gtfs_dataset_key,
+        j.ts,
+        j.base64_url,
+        j.download_success,
+        j.download_exception,
+        j.unzip_success,
+        j.unzip_exception,
+        j.zipfile_extract_md5hash,
+        j.zipfile_files,
+        j.zipfile_dirs,
+        j.pct_files_successfully_parsed
+    FROM joined_feed_outcomes AS j
+    LEFT JOIN dim_schedule_feeds AS f
+        ON j.base64_url = f.base64_url
+        AND j.ts BETWEEN f._valid_from AND f._valid_to
 )
-
 
 SELECT * FROM fct_schedule_feeds

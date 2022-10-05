@@ -35,15 +35,11 @@ models:
       - name: unzip_success
       - name: unzip_exception
       - name: zipfile_extract_md5hash
-        description: |
-          MD5 hash for the zipfile being unzipped.
+        description: '{{ doc("column_zipfile_md5_hash") }}'
       - name: zipfile_files
-        description: |
-          List (array) of filenames found inside the zipfile being unzipped.
+        description: '{{ doc("column_zipfile_files") }}'
       - name: zipfile_dirs
-        description: |
-          List (array) of directories found inside the zipfile being unzipped.
-          If more than one directory is present, the zipfile is not valid for our pipeline.
+        description: '{{ doc("column_zipfile_dirs") }}'
       - name: base64_url
       - name: ts
   - name: stg_gtfs_schedule__file_parse_outcomes
