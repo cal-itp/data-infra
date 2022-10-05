@@ -800,7 +800,7 @@ montebello-bus-lines:
     - gtfs_schedule_url: https://mbl.rideralerts.com/infopoint/gtfs-zip.ashx
       gtfs_rt_vehicle_positions_url: https://mbl.rideralerts.com/InfoPoint/GTFS-Realtime.ashx?Type=VehiclePosition
       gtfs_rt_service_alerts_url: https://mbl.rideralerts.com/InfoPoint/GTFS-Realtime.ashx?Type=Alert
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_trip_updates_url: https://mbl.rideralerts.com/InfoPoint/GTFS-Realtime.ashx?Type=TripUpdate
   itp_id: 206
 monterey-salinas-transit:
   agency_name: Monterey-Salinas Transit
@@ -889,6 +889,10 @@ north-county-transit-district:
 norwalk-transit-system:
   agency_name: Norwalk Transit System
   feeds:
+    - gtfs_schedule_url: https://nts.rideralerts.com/InfoPoint/GTFS-Zip.ashx
+      gtfs_rt_vehicle_positions_url: https://nts.rideralerts.com/InfoPoint/GTFS-Realtime.ashx?Type=VehiclePosition
+      gtfs_rt_service_alerts_url: https://nts.rideralerts.com/InfoPoint/GTFS-Realtime.ashx?Type=Alert
+      gtfs_rt_trip_updates_url: https://nts.rideralerts.com/InfoPoint/GTFS-Realtime.ashx?Type=TripUpdate
     - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/nts-ca-us/nts-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
@@ -941,6 +945,10 @@ petaluma-transit:
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
+    - gtfs_schedule_url: https://petaluma.rideralerts.com/InfoPoint/GTFS-Zip.ashx
+      gtfs_rt_vehicle_positions_url: https://petaluma.rideralerts.com/infopoint/GTFS-Realtime.ashx?Type=VehiclePosition
+      gtfs_rt_service_alerts_url: https://petaluma.rideralerts.com/infopoint/GTFS-Realtime.ashx?Type=Alert
+      gtfs_rt_trip_updates_url: https://petaluma.rideralerts.com/infopoint/GTFS-Realtime.ashx?Type=TripUpdate
     - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=PE
       gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=PE
       gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
@@ -1259,6 +1267,10 @@ spirit-bus:
 sunline-transit-agency:
   agency_name: SunLine Transit Agency
   feeds:
+    - gtfs_schedule_url: https://infopoint.sunline.org/InfoPoint/GTFS-Zip.ashx
+      gtfs_rt_vehicle_positions_url: https://infopoint.sunline.org/InfoPoint/GTFS-Realtime.ashx?Type=VehiclePosition
+      gtfs_rt_service_alerts_url: https://infopoint.sunline.org/InfoPoint/GTFS-Realtime.ashx?Type=Alert
+      gtfs_rt_trip_updates_url: https://infopoint.sunline.org/InfoPoint/GTFS-Realtime.ashx?Type=TripUpdate
     - gtfs_schedule_url: https://www.sunline.org/transit/google_transit.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
@@ -1567,6 +1579,10 @@ san-fransisco-international-airport:
 santa-rosa-citybus:
   agency_name: Santa Rosa CityBus
   feeds:
+    - gtfs_schedule_url: https://santarosaivl.availtec.com/InfoPoint/GTFS-Zip.ashx
+      gtfs_rt_vehicle_positions_url: https://santarosaivl.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=VehiclePosition
+      gtfs_rt_service_alerts_url: https://santarosaivl.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=Alert
+      gtfs_rt_trip_updates_url: https://santarosaivl.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=TripUpdate
     - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=SR
       gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=SR
       gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
