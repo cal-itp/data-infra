@@ -49,7 +49,7 @@ models:
   - name: stg_gtfs_schedule__file_parse_outcomes
     description: Outcomes from parse (.txt --> .jsonl conversion) attempts on files within GTFS feeds.
     tests:
-        dbt_utils.unique_combination_of_columns:
+      - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - base64_url
             - ts

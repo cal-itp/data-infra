@@ -1,6 +1,6 @@
 WITH stg_gtfs_schedule__file_parse_outcomes AS (
     SELECT *
-    FROM stg_gtfs_schedule__file_parse_outcomes
+    FROM {{ ref('stg_gtfs_schedule__file_parse_outcomes') }}
 ),
 
 make_numeric AS (
