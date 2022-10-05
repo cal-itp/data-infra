@@ -87,21 +87,17 @@ applied_adjustments AS (
 ),
 
 initial_transactions AS (
-    SELECT
-        *,
-        ST_GEOGPOINT(CAST(t2.longitude AS FLOAT64), CAST(t2.latitude AS FLOAT64)) AS on_geography
+    SELECT *
     FROM {{ ref('stg_cleaned_micropayment_device_transactions') }}
-    INNER JOIN {{ ref('stg_cleaned_device_transactions') }} AS t2 USING (littlepay_transaction_id)
+    INNER JOIN {{ ref('stg_cleaned_device_transactions') }} USING (littlepay_transaction_id)
     INNER JOIN {{ ref('stg_cleaned_device_transaction_types') }} USING (littlepay_transaction_id)
     WHERE transaction_type IN ('single', 'on')
 ),
 
 second_transactions AS (
-    SELECT
-        *,
-        ST_GEOGPOINT(CAST(t2.longitude AS FLOAT64), CAST(t2.latitude AS FLOAT64)) AS off_geography
+    SELECT *
     FROM {{ ref('stg_cleaned_micropayment_device_transactions') }}
-    INNER JOIN {{ ref('stg_cleaned_device_transactions') }} AS t2 USING (littlepay_transaction_id)
+    INNER JOIN {{ ref('stg_cleaned_device_transactions') }} USING (littlepay_transaction_id)
     INNER JOIN {{ ref('stg_cleaned_device_transaction_types') }} USING (littlepay_transaction_id)
     WHERE transaction_type = 'off'
 ),
@@ -160,7 +156,7 @@ join_table AS (
         t1.longitude,
         t1.latitude AS on_latitude,
         t1.longitude AS on_longitude,
-        t1.on_geography,
+        t1.geography AS on_geography,
 
         -- Tap off transaction info
         t2.littlepay_transaction_id AS off_littlepay_transaction_id,
@@ -173,7 +169,7 @@ join_table AS (
         t2.location_name AS off_location_name,
         t2.latitude AS off_latitude,
         t2.longitude AS off_longitude,
-        t2.off_geography
+        t2.geography AS off_geography
 
     FROM debited_micropayments AS m
     LEFT JOIN refunded_micropayments AS mr USING (micropayment_id)
