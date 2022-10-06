@@ -3,17 +3,13 @@ WITH feed_guideline_index AS (
     WHERE check = {{ shapes_valid() }}
 ),
 
--- For this check we are only looking for errors and warnings related to shapes
+-- For this check we are only looking for errors related to shapes
 validation_fact_daily_feed_codes_shape_related AS (
     SELECT * FROM {{ ref('validation_fact_daily_feed_codes') }}
      WHERE code IN (
             'decreasing_shape_distance',
             'equal_shape_distance_diff_coordinates',
             'equal_shape_distance_same_coordinates',
-            'stops_match_shape_out_of_order',
-            'stop_too_far_from_shape',
-            'stop_too_far_from_shape_using_user_distance',
-            'stop_too_far_from_trip_shape',
             'decreasing_or_equal_shape_distance'
             )
 ),
