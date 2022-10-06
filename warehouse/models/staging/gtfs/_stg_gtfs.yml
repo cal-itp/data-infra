@@ -50,6 +50,48 @@ models:
             - base64_url
             - ts
             - filename
+  - name: stg_gtfs_schedule__routes
+    description: |
+      GTFS schedule route data.
+      See https://gtfs.org/schedule/reference/#routestxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - route_id
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: route_id
+        description: '{{ doc("gtfs_routes__route_id") }}'
+        tests:
+        - not_null
+      - name: agency_id
+        description: '{{ doc("gtfs_routes__agency_id") }}'
+      - name: route_short_name
+        description: '{{ doc("gtfs_routes__route_short_name") }}'
+      - name: route_long_name
+        description: '{{ doc("gtfs_routes__route_long_name") }}'
+      - name: route_desc
+        description: '{{ doc("gtfs_routes__route_desc") }}'
+      - name: route_type
+        description: '{{ doc("gtfs_routes__route_type") }}'
+        tests:
+        - not_null
+      - name: route_url
+        description: '{{ doc("gtfs_routes__route_url") }}'
+      - name: route_color
+        description: '{{ doc("gtfs_routes__route_color") }}'
+      - name: route_text_color
+        description: '{{ doc("gtfs_routes__route_text_color") }}'
+      - name: route_sort_order
+        description: '{{ doc("gtfs_routes__route_sort_order") }}'
+      - name: continuous_pickup
+        description: '{{ doc("gtfs_routes__continuous_pickup") }}'
+      - name: continuous_drop_off
+        description: '{{ doc("gtfs_routes__continuous_drop_off") }}'
+
   - name: stg_gtfs_rt__vehicle_positions
     description: |
       Vehicle positions realtime data.
