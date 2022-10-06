@@ -1,6 +1,72 @@
 version: 2
 
 models:
+  - name: dim_schedule_feeds
+    description: |
+      Each row is a "feed", representing a unique combination of a specific zipfile and associated
+      `gtfs_dataset` record (i.e., a specific consistent "version" of a GTFS dataset.)
+      This table should be used to understand "versions" of constituent data like routes, trips, etc.
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: base64_url, gtfs_dataset_key
+          gaps: required
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `base64_url` and `_valid_from`.
+        tests: &primary_key_tests
+          - unique
+          - not_null
+      - &gtfs_dataset_key
+        name: gtfs_dataset_key
+        description: |
+          Foreign key to the `dim_gtfs_datasets` table.
+      - &base64_url
+        name: base64_url
+        description: |
+          Base 64 encoded URL from which this data was scraped.
+      - name: _valid_from
+        description: '{{ doc("column_valid_from") }}'
+      - name: _valid_to
+        description: '{{ doc("column_valid_to") }}'
+  - name: fct_schedule_feeds
+    description: |
+      Each row is an instance of a download attempt, uniquely identified by base64_url,
+      timestamp, and the key of the associated `gtfs_dataset` record (pending future plans
+      to ensure that URL is unique across `gtfs_datasets` at a given point in time).
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `base64_url` and `ts`.
+        tests: *primary_key_tests
+      - name: feed_key
+        description: |
+          Foreign key to the `dim_schedule_feeds` table.
+      - *gtfs_dataset_key
+      - name: ts
+        description: |
+          Timestamp at which this feed download attempt occurred.
+      - *base64_url
+      - name: download_success
+        description: |
+          Boolean indicating whether this download attempt was successful.
+      - name: download_exception
+        description: |
+          If download attempt failed, lists the exception that was encountered.
+      - name: unzip_success
+        description: |
+          Boolean indicating whether this unzip attempt was successful.
+      - name: unzip_exception
+        description: |
+          If unzip attempt failed, lists the exception that was encountered.
+      - name: zipfile_extract_md5hash
+        description: '{{ doc("column_zipfile_md5_hash") }}'
+      - name: zipfile_files
+        description: '{{ doc("column_zipfile_files") }}'
+      - name: zipfile_dirs
+        description: '{{ doc("column_zipfile_dirs") }}'
   - name: fct_vehicle_positions_messages
     description: |
       Each row is a message received from a vehicle positions GTFS RT feed.
@@ -9,7 +75,8 @@ models:
     columns:
       - name: key
         description: |
-          Synthetic primary key constructed from `base64_url`, `extract_ts`, and entity `id`.
+          Synthetic primary key constructed from `base64_url`, `extract_ts`,
+          entity `id`, `vehicle_id`, and `trip_id`.
         tests:
           - unique:
               # TODO: make an RT test macro that does this date subtraction
