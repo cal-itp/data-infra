@@ -25,7 +25,7 @@ Doing work locally and pushing directly from the command line is a similar workf
 We'll work through getting set up with SSH and GitHub on JupyterHub and cloning one GitHub repo. Repeat the steps in [Cloning a Repository](cloning-a-repository) for other repos
 
 (adding-ssh-to-jupyter)=
-#### Adding a GitHub SSH Key to Jupyter
+### Adding a GitHub SSH Key to Jupyter
 (github-setup)=
 For more information on what's below, you can navigate to the [GitHub directions](https://docs.github.com/en/authentication/connecting-to-github-with-ssh) and follow the Linux instructions for each step.
 1. Create a GitHub username if necessary and ensure you're added to the appropriate Cal-ITP teams on GitHub. You'll be committing directly into the Cal-ITP repos!
@@ -60,7 +60,7 @@ For more information on what's below, you can navigate to the [GitHub directions
 After completing the steps above be sure to complete the section below to persist your SSH key between sessions and enable extensions.
 
 (persisting-ssh-and-extensions)=
-#### Persisting your SSH Key and Enabling Extensions
+### Persisting your SSH Key and Enabling Extensions
 To ensure that your SSH key settings persist between your sessions, run the following command in the Jupyter terminal.
 * `echo "source .profile" >> .bashrc`
 
@@ -88,7 +88,7 @@ If the above doesn't work, try:
 After completing this section, you will also enjoy various extensions in Jupyter, such as `black` hotkey auto-formatting with `ctrl+shft+k`, and the ability to see your current git branch in the Jupyter terminal.
 
 (cloning-a-repository)=
-#### Cloning a Repository
+### Cloning a Repository
 1. Navigate to the GitHub repository to clone. We'll work our way through the `data-analyses` [repo here](https://github.com/cal-itp/data-analyses). Click on the green `Code` button, select "SSH" and copy the URL.
 1. Clone the Git repo: `git clone git@github.com:cal-itp/data-analyses.git`
 1. Double check  with `ls` to list and see that the remote repo was successfully cloned into your "local" (cloud-based) filesystem.
@@ -113,8 +113,8 @@ In the `data-analyses` repo, separate analysis tasks live in their own directori
 1. Push those changes from local to remote branch (note: branch is `my-new-branch` and not `main`): `git push origin my-new-branch`.
 1. To review a log of past commits: `git log`
 1. When you are ready to merge all the commits into `main`, open a pull request (PR) on the remote repository, and merge it in!
-1. Once you've merged your branch into `main` and deleted it from the remote, you can delete your branch locally: `git branch -d my-new-branch`
 1. Go back to `main` and update your local to match the remote: `git checkout main`, `git pull origin main`
+1. Once you've merged your branch into `main` and deleted it from the remote, you can delete your branch locally: `git branch -d my-new-branch`. You can reuse the branch name later.
 
 
 ### Pulling and Pushing Changes
@@ -157,6 +157,7 @@ A rebase might be preferred, especially if all your work is contained on your br
 1. Force-push those changes to complete the rebase and rewrite the commit history: `git push origin my-new-branch -f`
 
 #### Merge
+Note: Merging with [fast-forward](https://git-scm.com/docs/git-merge#Documentation/git-merge.txt---ff) behaves similarly to a rebase.
 
 1. At this point, you've either stashed or added commits on `my-new-branch`.
 1. Pull from origin: `git checkout main` and `git pull origin main`
