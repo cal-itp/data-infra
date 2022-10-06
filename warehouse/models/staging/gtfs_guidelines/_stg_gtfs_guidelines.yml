@@ -105,3 +105,20 @@ models:
       - name: status
         tests:
           - not_null
+  - name: stg_gtfs_guidelines__pathways_valid
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - calitp_itp_id
+            - calitp_url_number
+    columns:
+      - name: date
+      - name: calitp_itp_id
+      - name: calitp_url_number
+      - name: calitp_agency_name
+      - name: check
+      - name: feature
+      - name: status
+        tests:
+          - not_null
