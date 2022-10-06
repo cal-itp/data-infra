@@ -1380,9 +1380,9 @@ torrance-transit-system:
   agency_name: Torrance Transit System
   feeds:
     - gtfs_schedule_url: https://transit.torranceca.gov/home/showdocument?id=16673
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: http://www.mybusinfo.com/gtfsrt/vehicles?apiKey={{ TORRANCE_TRANSIT_API_KEY }}
+      gtfs_rt_service_alerts_url: http://www.mybusinfo.com/gtfsrt/alerts?apiKey={{ TORRANCE_TRANSIT_API_KEY }}
+      gtfs_rt_trip_updates_url: http://www.mybusinfo.com/gtfsrt/trips?apiKey={{ TORRANCE_TRANSIT_API_KEY }}
   itp_id: 339
 tri-delta-transit:
   agency_name: Tri Delta Transit
