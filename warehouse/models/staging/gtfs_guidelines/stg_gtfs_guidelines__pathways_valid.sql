@@ -99,7 +99,9 @@ pathway_validation_check AS (
             WHEN t2.calitp_itp_id IS null THEN "N/A"
             WHEN t3.validation_notices = 0 THEN "PASS"
             WHEN t3.validation_notices > 0 THEN "FAIL"
-        END AS status
+        END AS status,
+        -- One more count for deduping - the alternative is to perform some row-level deduping in the pathways_eligibile subquery
+        COUNT(*) AS ct
       FROM feed_guideline_index t1
       LEFT JOIN pathways_eligibile t2
              ON t1.date >= t2.calitp_extracted_at
@@ -109,6 +111,20 @@ pathway_validation_check AS (
       LEFT JOIN pathway_validation_notices_by_day t3
              ON t1.date = t3.date
             AND t1.feed_key = t3.feed_key
+     GROUP BY 1,2,3,4,5,6,7,8
+),
+
+pathway_validation_check_dedupe AS (
+    SELECT
+        date,
+        calitp_itp_id,
+        calitp_url_number,
+        calitp_agency_name,
+        feed_key,
+        check,
+        feature,
+        status,
+      FROM pathway_validation_check
 )
 
-SELECT * FROM pathway_validation_check
+SELECT * FROM pathway_validation_check_dedupe
