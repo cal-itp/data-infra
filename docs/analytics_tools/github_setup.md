@@ -13,7 +13,7 @@ We'll work through getting set up with SSH and GitHub on JupyterHub and cloning 
 
 (adding-ssh-to-jupyter)=
 ### Adding a GitHub SSH Key to Jupyter
-(github-setup)=
+
 Generating and adding an SSH key authenticates your local environment with our GitHub organization. For more information on what's below, you can navigate to the [GitHub directions](https://docs.github.com/en/authentication/connecting-to-github-with-ssh) and follow the Linux instructions for each step.
 1. Create a GitHub username if necessary and ensure you're added to the appropriate Cal-ITP teams on GitHub. You'll be committing directly into the Cal-ITP repos!
 1. Open a terminal in JupyterHub. All of our commands will be typed in this terminal.
