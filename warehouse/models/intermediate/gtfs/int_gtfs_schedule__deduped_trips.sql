@@ -1,4 +1,7 @@
-WITH
+WITH stg_gtfs_schedule__trips AS (
+    SELECT *
+    FROM {{ ref('stg_gtfs_schedule__trips') }}
+),
 
 int_gtfs_schedule__deduped_trips AS (
 
@@ -22,6 +25,6 @@ int_gtfs_schedule__deduped_trips AS (
             'ts',
             'trip_id'
         ]) }}
-)
+    )
 
 SELECT * FROM int_gtfs_schedule__deduped_trips
