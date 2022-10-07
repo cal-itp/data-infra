@@ -1,5 +1,5 @@
-{% macro util_dedupe(table_name, all_columns, dedupe_key) %}
--- deduplicate; uses a hash to have deterministic response
+{% macro util_dedupe_by_freq(table_name, all_columns, dedupe_key) %}
+-- deduplicate; uses a hash to have deterministic response -- keeps most common value if available
 WITH hashed AS (
     SELECT
         {{ util_list(all_columns) }},
