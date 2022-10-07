@@ -22,7 +22,7 @@ Doing work locally and pushing directly from the command line is a similar workf
 
 ## Onboarding Setup
 
-We'll work through getting set up with SSH and GitHub on JupyterHub and cloning one GitHub repo. Repeat the steps in [Cloning a Repository](cloning-a-repository) for other repos
+We'll work through getting set up with SSH and GitHub on JupyterHub and cloning one GitHub repo. Repeat the steps in [Cloning a Repository](cloning-a-repository) for other repos.
 
 (adding-ssh-to-jupyter)=
 ### Adding a GitHub SSH Key to Jupyter
