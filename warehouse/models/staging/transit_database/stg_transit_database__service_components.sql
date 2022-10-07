@@ -1,6 +1,5 @@
-
-
 WITH
+
 once_daily_service_components AS (
     SELECT *
     FROM {{ ref('base_tts_service_components_idmap') }}
@@ -9,7 +8,7 @@ once_daily_service_components AS (
 stg_transit_database__service_components AS (
     SELECT
         id AS key,
-        {{ trim_make_empty_string_null(column_name = "name") }},
+        {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         ntd_certified,
         product_component_valid,
         notes,

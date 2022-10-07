@@ -1,6 +1,5 @@
-
-
 WITH
+
 once_daily_organizations AS (
     {{ get_latest_dense_rank(
         external_table = source('airtable', 'california_transit__organizations'),
@@ -11,7 +10,7 @@ once_daily_organizations AS (
 stg_transit_database__organizations AS (
     SELECT
         id AS key,
-        {{ trim_make_empty_string_null(column_name = "name") }},
+        {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         organization_type,
         roles,
         itp_id,

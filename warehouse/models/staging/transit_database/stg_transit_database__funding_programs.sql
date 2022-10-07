@@ -1,6 +1,5 @@
-
-
 WITH
+
 once_daily_funding_programs AS (
     {{ get_latest_dense_rank(
         external_table = source('airtable', 'california_transit__funding_programs'),
@@ -11,7 +10,7 @@ once_daily_funding_programs AS (
 stg_transit_database__funding_programs AS (
     SELECT
         id AS key,
-        {{ trim_make_empty_string_null(column_name = "program") }},
+        {{ trim_make_empty_string_null(column_name = "program") }} AS program,
         full_name,
         program_informatiom,
         services,
