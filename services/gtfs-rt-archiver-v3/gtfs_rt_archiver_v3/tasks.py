@@ -94,6 +94,7 @@ AUTH_KEYS = [
     "AMTRAK_GTFS_URL",
     "CULVER_CITY_API_KEY",
     "ESCALON_RT_KEY",
+    "TORRANCE_TRANSIT_API_KEY",
     # TODO: this can be removed once we've confirmed it's no longer in Airtable
     "GRAAS_SERVER_URL",
     "MTC_511_API_KEY",

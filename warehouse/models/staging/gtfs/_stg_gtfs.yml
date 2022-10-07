@@ -3,6 +3,12 @@ version: 2
 models:
   - name: stg_gtfs_schedule__download_outcomes
     description: Outcomes from download attempts of GTFS schedule data.
+    tests:
+      - &schedule_outcome_uniqueness
+        dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
     columns:
       - name: dt
       - name: name
@@ -18,6 +24,8 @@ models:
       - name: ts
   - name: stg_gtfs_schedule__unzip_outcomes
     description: Outcomes from unzip attempts on downloaded GTFS schedule data.
+    tests:
+      - *schedule_outcome_uniqueness
     columns:
       - name: dt
       - name: name
@@ -27,17 +35,21 @@ models:
       - name: unzip_success
       - name: unzip_exception
       - name: zipfile_extract_md5hash
-        description: |
-          MD5 hash for the zipfile being unzipped.
+        description: '{{ doc("column_zipfile_md5_hash") }}'
       - name: zipfile_files
-        description: |
-          List (array) of filenames found inside the zipfile being unzipped.
+        description: '{{ doc("column_zipfile_files") }}'
       - name: zipfile_dirs
-        description: |
-          List (array) of directories found inside the zipfile being unzipped.
-          If more than one directory is present, the zipfile is not valid for our pipeline.
+        description: '{{ doc("column_zipfile_dirs") }}'
       - name: base64_url
       - name: ts
+  - name: stg_gtfs_schedule__file_parse_outcomes
+    description: Outcomes from parse (.txt --> .jsonl conversion) attempts on files within GTFS feeds.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - filename
   - name: stg_gtfs_rt__vehicle_positions
     description: |
       Vehicle positions realtime data.
