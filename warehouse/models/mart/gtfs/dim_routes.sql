@@ -11,16 +11,7 @@ stg_gtfs_schedule__routes AS (
 ),
 
 make_dim AS (
-    SELECT
-        f.key AS feed_key,
-        f.gtfs_dataset_key,
-        r.*,
-        f._valid_from,
-        f._valid_to
-    FROM stg_gtfs_schedule__routes AS r
-    INNER JOIN dim_schedule_feeds AS f
-        ON r.ts = f._valid_from
-        AND r.base64_url = f.base64_url
+{{ make_schedule_file_dimension_from_dim_schedule_feeds('dim_schedule_feeds', 'stg_gtfs_schedule__routes') }}
 ),
 
 dim_routes AS (

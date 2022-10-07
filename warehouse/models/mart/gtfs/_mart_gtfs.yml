@@ -235,3 +235,49 @@ models:
         description: '{{ doc("gtfs_routes__continuous_drop_off") }}'
       - *_valid_from
       - *_valid_to
+  - name: dim_trips
+    description: |
+      Each row is a cleaned row from a trips.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#routestxt.
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: base64_url, trip_id
+          gaps: required
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `trip_id`.
+        tests: *primary_key_tests
+      - *gtfs_dataset_key
+      - *base64_url
+      - name: route_id
+        description: '{{ doc("gtfs_trips__route_id") }}'
+        tests:
+        - not_null
+      - name: service_id
+        description: '{{ doc("gtfs_trips__service_id") }}'
+        tests:
+        - not_null
+      - name: trip_id
+        description: '{{ doc("gtfs_trips__trip_id") }}'
+        tests:
+        - not_null
+      - name: trip_headsign
+        description: '{{ doc("gtfs_trips__trip_headsign") }}'
+      - name: trip_short_name
+        description: '{{ doc("gtfs_trips__trip_short_name") }}'
+      - name: direction_id
+        description: '{{ doc("gtfs_trips__direction_id") }}'
+      - name: block_id
+        description: '{{ doc("gtfs_trips__block_id") }}'
+      - name: shape_id
+        description: '{{ doc("gtfs_trips__shape_id") }}'
+      - name: wheelchair_accessible
+        description: '{{ doc("gtfs_trips__wheelchair_accessible") }}'
+      - name: bikes_allowed
+        description: '{{ doc("gtfs_trips__bikes_allowed") }}'
+      - *_valid_from
+      - *_valid_to
