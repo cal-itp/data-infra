@@ -74,6 +74,8 @@ models:
       Each row is a message received from a vehicle positions GTFS RT feed.
       See https://gtfs.org/realtime/reference/#message-vehicleposition for information
       about message structure.
+      Due to data size, this table **must** be queried with a date filter (like `WHERE dt = 'YYYY-MM-DD'`).
+      Hour filters will also further improve performance.
     columns:
       - name: key
         description: |
