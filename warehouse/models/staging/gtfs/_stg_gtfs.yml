@@ -827,3 +827,29 @@ models:
         description: '{{ doc("gtfs_calendar__end_date") }}'
         tests:
         - not_null
+  - name: stg_gtfs_schedule__calendar_dates
+    description: |
+      Cleaned GTFS schedule calendar_dates data.
+      See https://gtfs.org/schedule/reference/#calendar_datestxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - service_id
+            - date
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: service_id
+        description: '{{ doc("gtfs_calendar_dates__service_id") }}'
+        tests:
+        - not_null
+      - name: date
+        description: '{{ doc("gtfs_calendar_dates__date") }}'
+        tests:
+        - not_null
+      - name: exception_type
+        description: '{{ doc("gtfs_calendar_dates__exception_type") }}'
+        tests:
+        - not_null
