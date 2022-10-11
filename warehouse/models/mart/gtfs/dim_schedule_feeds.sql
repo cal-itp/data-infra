@@ -54,7 +54,8 @@ next_valid_extract AS (
 first_instances AS (
     SELECT
         *,
-        LAG(content_hash) OVER (PARTITION BY base64_url ORDER BY ts) != content_hash AS is_first
+        (LAG(content_hash) OVER (PARTITION BY base64_url ORDER BY ts) != content_hash)
+            OR (LAG(content_hash) OVER (PARTITION BY base64_url ORDER BY ts) IS NULL) AS is_first
     FROM hashed
     QUALIFY is_first
 ),
@@ -78,7 +79,6 @@ versioned AS (
     FROM first_instances AS f
     LEFT JOIN next_valid_extract AS n
         ON f.ts = n.ts
-
 ),
 
 dim_schedule_feeds AS (
