@@ -774,3 +774,56 @@ models:
         description: '{{ doc("gtfs_trips__wheelchair_accessible") }}'
       - name: bikes_allowed
         description: '{{ doc("gtfs_trips__bikes_allowed") }}'
+  - name: stg_gtfs_schedule__calendar
+    description: |
+      Cleaned GTFS schedule calendar data.
+      See https://gtfs.org/schedule/reference/#calendartxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - service_id
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: service_id
+        description: '{{ doc("gtfs_calendar__service_id") }}'
+        tests:
+        - not_null
+      - name: monday
+        description: '{{ doc("gtfs_calendar__monday") }}'
+        tests:
+        - not_null
+      - name: tuesday
+        description: '{{ doc("gtfs_calendar__tuesday") }}'
+        tests:
+        - not_null
+      - name: wednesday
+        description: '{{ doc("gtfs_calendar__wednesday") }}'
+        tests:
+        - not_null
+      - name: thursday
+        description: '{{ doc("gtfs_calendar__thursday") }}'
+        tests:
+        - not_null
+      - name: friday
+        description: '{{ doc("gtfs_calendar__friday") }}'
+        tests:
+        - not_null
+      - name: saturday
+        description: '{{ doc("gtfs_calendar__saturday") }}'
+        tests:
+        - not_null
+      - name: sunday
+        description: '{{ doc("gtfs_calendar__sunday") }}'
+        tests:
+        - not_null
+      - name: start_date
+        description: '{{ doc("gtfs_calendar__start_date") }}'
+        tests:
+        - not_null
+      - name: end_date
+        description: '{{ doc("gtfs_calendar__end_date") }}'
+        tests:
+        - not_null
