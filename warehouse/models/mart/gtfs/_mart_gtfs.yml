@@ -1031,3 +1031,34 @@ models:
         description: '{{ doc("gtfs_calendar__end_date") }}'
         tests:
         - not_null
+  - name: dim_calendar_dates
+    description: |
+      Each row is a cleaned row from a calendar_dates.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#calendar_datestxt.
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: base64_url, service_id, date
+          gaps: required
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, `service_id`, and `date`.
+        tests: *primary_key_tests
+      - *gtfs_dataset_key
+      - *feed_key
+      - *base64_url
+      - name: service_id
+        description: '{{ doc("gtfs_calendar_dates__service_id") }}'
+        tests:
+        - not_null
+      - name: date
+        description: '{{ doc("gtfs_calendar_dates__date") }}'
+        tests:
+        - not_null
+      - name: exception_type
+        description: '{{ doc("gtfs_calendar_dates__exception_type") }}'
+        tests:
+        - not_null
