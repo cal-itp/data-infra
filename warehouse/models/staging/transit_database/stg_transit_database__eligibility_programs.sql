@@ -1,6 +1,5 @@
-
-
 WITH
+
 once_daily_eligibility_programs AS (
     {{ get_latest_dense_rank(
         external_table = source('airtable', 'california_transit__eligibility_programs'),
@@ -11,7 +10,7 @@ once_daily_eligibility_programs AS (
 stg_transit_database__eligibility_programs AS (
     SELECT
         id AS key,
-        {{ trim_make_empty_string_null(column_name = "program") }},
+        {{ trim_make_empty_string_null(column_name = "program") }} AS program,
         unnested_administering_entity AS administering_entity_organization_key,
         unnested_eligibility_types AS eligibility_type_rider_requirement_key,
         unnested_services AS service_key,
