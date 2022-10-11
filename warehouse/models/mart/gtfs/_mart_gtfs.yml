@@ -58,9 +58,15 @@ models:
         description: |
           Synthetic primary key constructed from `base64_url` and `ts`.
         tests: *primary_key_tests
-      - name: feed_key
+      - &feed_key
+        name: feed_key
         description: |
           Foreign key to the `dim_schedule_feeds` table.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_schedule_feeds')
+              field: key
       - *gtfs_dataset_key
       - name: ts
         description: |
@@ -925,7 +931,7 @@ models:
     description: |
       Each row is a cleaned row from a trips.txt file.
       Definitions for the original GTFS fields are available at:
-      https://gtfs.org/reference/static#routestxt.
+      https://gtfs.org/reference/static#tripstxt.
     tests:
       - dbt_utils.mutually_exclusive_ranges:
           lower_bound_column: _valid_from
@@ -966,3 +972,62 @@ models:
         description: '{{ doc("gtfs_trips__bikes_allowed") }}'
       - *_valid_from
       - *_valid_to
+  - name: dim_calendar
+    description: |
+      Each row is a cleaned row from a calendar.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#calendartxt.
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: base64_url, service_id
+          gaps: required
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `service_id`.
+        tests: *primary_key_tests
+      - *gtfs_dataset_key
+      - *feed_key
+      - *base64_url
+      - name: service_id
+        description: '{{ doc("gtfs_calendar__service_id") }}'
+        tests:
+        - not_null
+      - name: monday
+        description: '{{ doc("gtfs_calendar__monday") }}'
+        tests:
+        - not_null
+      - name: tuesday
+        description: '{{ doc("gtfs_calendar__tuesday") }}'
+        tests:
+        - not_null
+      - name: wednesday
+        description: '{{ doc("gtfs_calendar__wednesday") }}'
+        tests:
+        - not_null
+      - name: thursday
+        description: '{{ doc("gtfs_calendar__thursday") }}'
+        tests:
+        - not_null
+      - name: friday
+        description: '{{ doc("gtfs_calendar__friday") }}'
+        tests:
+        - not_null
+      - name: saturday
+        description: '{{ doc("gtfs_calendar__saturday") }}'
+        tests:
+        - not_null
+      - name: sunday
+        description: '{{ doc("gtfs_calendar__sunday") }}'
+        tests:
+        - not_null
+      - name: start_date
+        description: '{{ doc("gtfs_calendar__start_date") }}'
+        tests:
+        - not_null
+      - name: end_date
+        description: '{{ doc("gtfs_calendar__end_date") }}'
+        tests:
+        - not_null
