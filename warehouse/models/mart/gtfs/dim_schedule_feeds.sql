@@ -5,16 +5,10 @@ WITH int_gtfs_schedule__joined_feed_outcomes AS (
     FROM {{ ref('int_gtfs_schedule__joined_feed_outcomes') }}
 ),
 
-dim_gtfs_datasets AS (
-    SELECT *
-    FROM {{ ref('dim_gtfs_datasets') }}
-),
-
 hashed AS (
     SELECT
         base64_url,
         ts,
-        gtfs_dataset_key,
         download_success,
         unzip_success,
         zipfile_extract_md5hash,
@@ -75,7 +69,6 @@ first_instances AS (
 versioned AS (
     SELECT
         f.base64_url,
-        f.gtfs_dataset_key,
         f.ts AS _valid_from,
         CASE
             -- if there's a subsequent extract, use that extract time as end date
@@ -99,13 +92,9 @@ dim_schedule_feeds AS (
     SELECT
         {{ dbt_utils.surrogate_key(['versioned.base64_url', 'versioned._valid_from']) }} AS key,
         versioned.base64_url,
-        versioned.gtfs_dataset_key,
-        gd.name,
         versioned._valid_from,
         versioned._valid_to
     FROM versioned
-    LEFT JOIN dim_gtfs_datasets AS gd
-        on gtfs_dataset_key = gd.key
 )
 
 SELECT * FROM dim_schedule_feeds

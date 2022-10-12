@@ -18,7 +18,6 @@ dim_routes AS (
     SELECT
         {{ dbt_utils.surrogate_key(['feed_key', 'route_id']) }} AS key,
         feed_key,
-        gtfs_dataset_key,
         route_id,
         route_type,
         agency_id,
