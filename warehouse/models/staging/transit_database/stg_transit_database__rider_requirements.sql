@@ -2,7 +2,7 @@ WITH
 
 once_daily_rider_requirements AS (
     {{ get_latest_dense_rank(
-        external_table = source('airtable', 'california_transit__rider_requirements'),
+        external_table = source('airtable_ct', 'california_transit__rider_requirements'),
         order_by = 'ts DESC', partition_by = 'dt'
         ) }}
 ),

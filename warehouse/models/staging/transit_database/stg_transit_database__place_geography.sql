@@ -2,7 +2,7 @@ WITH
 
 once_daily_place_geography AS (
     {{ get_latest_dense_rank(
-        external_table = source('airtable', 'california_transit__place_geography'),
+        external_table = source('airtable_ct', 'california_transit__place_geography'),
         order_by = 'ts DESC', partition_by = 'dt'
         ) }}
 ),

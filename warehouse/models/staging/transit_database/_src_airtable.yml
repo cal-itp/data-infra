@@ -1,7 +1,8 @@
 version: 2
 
 sources:
-  - name: airtable
+  # these are split up for dbt lineage clarity
+  - name: airtable_ct
     description: |
       Data from Airtable.
     database: cal-itp-data-infra
@@ -18,6 +19,12 @@ sources:
       - name: california_transit__place_geography
       - name: california_transit__rider_requirements
       - name: california_transit__services
+  - name: airtable_tts
+    description: |
+      Data from Airtable.
+    database: cal-itp-data-infra
+    schema: external_airtable
+    tables:
       - name: transit_technology_stacks__components
       - name: transit_technology_stacks__contracts
       - name: transit_technology_stacks__products

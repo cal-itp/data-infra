@@ -2,7 +2,7 @@ WITH
 
 once_daily_properties_and_features AS (
     {{ get_latest_dense_rank(
-        external_table = source('airtable', 'transit_technology_stacks__properties_and_features'),
+        external_table = source('airtable_tts', 'transit_technology_stacks__properties_and_features'),
         order_by = 'ts DESC', partition_by = 'dt'
         ) }}
 ),

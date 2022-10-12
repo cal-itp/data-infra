@@ -2,7 +2,7 @@ WITH
 
 once_daily_funding_programs AS (
     {{ get_latest_dense_rank(
-        external_table = source('airtable', 'california_transit__funding_programs'),
+        external_table = source('airtable_ct', 'california_transit__funding_programs'),
         order_by = 'ts DESC', partition_by = 'dt'
         ) }}
 ),

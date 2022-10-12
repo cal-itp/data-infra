@@ -2,7 +2,7 @@ WITH
 
 once_daily_fare_systems AS (
     {{ get_latest_dense_rank(
-        external_table = source('airtable', 'california_transit__fare_systems'),
+        external_table = source('airtable_ct', 'california_transit__fare_systems'),
         order_by = 'ts DESC', partition_by = 'dt'
         ) }}
 ),

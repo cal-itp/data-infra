@@ -1,7 +1,7 @@
 WITH
 
 source AS (
-    SELECT * FROM {{ source('airtable', 'california_transit__organizations') }}
+    SELECT * FROM {{ source('airtable_ct', 'california_transit__organizations') }}
 ),
 
 base_california_transit__organizations AS (

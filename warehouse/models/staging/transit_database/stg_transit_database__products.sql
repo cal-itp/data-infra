@@ -2,7 +2,7 @@ WITH
 
 once_daily_products AS (
     {{ get_latest_dense_rank(
-        external_table = source('airtable', 'transit_technology_stacks__products'),
+        external_table = source('airtable_tts', 'transit_technology_stacks__products'),
         order_by = 'ts DESC', partition_by = 'dt'
         ) }}
 ),

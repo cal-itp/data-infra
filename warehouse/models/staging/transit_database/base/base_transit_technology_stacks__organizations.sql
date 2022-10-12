@@ -1,7 +1,7 @@
 WITH
 
 source AS (
-    SELECT * FROM {{ source('airtable', 'transit_technology_stacks__organizations') }}
+    SELECT * FROM {{ source('airtable_tts', 'transit_technology_stacks__organizations') }}
 ),
 
 base_transit_technology_stacks__organizations AS (

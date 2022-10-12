@@ -4,7 +4,7 @@ WITH
 -- if it was downloaded based on an earlier extract in a day with multiple extracts
 once_daily_gtfs_datasets AS (
     {{ get_latest_dense_rank(
-        external_table = source('airtable', 'california_transit__gtfs_datasets'),
+        external_table = source('airtable_ct', 'california_transit__gtfs_datasets'),
         order_by = 'ts DESC', partition_by = 'dt'
         ) }}
 ),

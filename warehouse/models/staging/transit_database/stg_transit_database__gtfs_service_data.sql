@@ -3,7 +3,7 @@
 WITH
 once_daily_gtfs_service_data AS (
     {{ get_latest_dense_rank(
-        external_table = source('airtable', 'california_transit__gtfs_service_data'),
+        external_table = source('airtable_ct', 'california_transit__gtfs_service_data'),
         order_by = 'ts DESC', partition_by = 'dt'
         ) }}
 ),

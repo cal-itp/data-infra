@@ -3,7 +3,7 @@
 WITH
 once_daily_county_geography AS (
     {{ get_latest_dense_rank(
-        external_table = source('airtable', 'california_transit__county_geography'),
+        external_table = source('airtable_ct', 'california_transit__county_geography'),
         order_by = 'ts DESC', partition_by = 'dt'
         ) }}
 ),
