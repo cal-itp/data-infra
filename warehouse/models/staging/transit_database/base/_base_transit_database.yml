@@ -9,14 +9,30 @@ models:
       are assigned in each instance so this table maps the IDs between
       instances, using `name` (Airtable primary field) to join.
     tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - tts_key
-            - tts_date
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - ct_key
-            - ct_date
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: ts
+          upper_bound_column: next_ts
+          partition_by: ct_name
+          gaps: required
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: ts
+          upper_bound_column: next_ts
+          partition_by: tts_name
+          gaps: required
+    columns:
+      - name: ct_name
+        tests:
+          - not_null
+      - name: ct_id
+        tests:
+          - not_null
+      - name: tts_name
+        tests:
+          - not_null
+      - name: tts_id
+        tests:
+          - not_null
+
   - name: base_tts_organizations_ct_organizations_map
     description: |
       Mapping between two instances of synced `organization` table in Airtable;
@@ -25,11 +41,26 @@ models:
       are assigned in each instance so this table maps the IDs between
       instances, using `name` (Airtable primary field) to join.
     tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - tts_key
-            - tts_date
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - ct_key
-            - ct_date
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: ts
+          upper_bound_column: next_ts
+          partition_by: ct_name
+          gaps: required
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: ts
+          upper_bound_column: next_ts
+          partition_by: tts_name
+          gaps: required
+    columns:
+      - name: ct_name
+        tests:
+          - not_null
+      - name: ct_id
+        tests:
+          - not_null
+      - name: tts_name
+        tests:
+          - not_null
+      - name: tts_id
+        tests:
+          - not_null
