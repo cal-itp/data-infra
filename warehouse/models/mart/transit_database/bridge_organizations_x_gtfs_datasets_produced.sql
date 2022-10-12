@@ -34,4 +34,4 @@ bridge_organizations_x_gtfs_datasets_managed AS (
  ) }}
 )
 
-SELECT * FROM bridge_organizations_x_gtfs_datasets_managed
+SELECT * FROM bridge_organizations_x_gtfs_datasets_produced
