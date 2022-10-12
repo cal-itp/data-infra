@@ -13,3 +13,135 @@ use_bq_client: true
 hive_options:
   mode: AUTO
   source_uri_prefix: "california_transit__gtfs_datasets/"
+schema_fields:
+  - name: data_quality_pipeline_disabled_notes
+    type: STRING
+    mode: NULLABLE
+  - name: api_key
+    type: STRING
+    mode: NULLABLE
+  - name: future_uri
+    type: STRING
+    mode: NULLABLE
+  - name: itp_schedule_todo
+    type: STRING
+    mode: REPEATED
+  - name: notes
+    type: STRING
+    mode: NULLABLE
+  - name: referenced_gtfs__from_gtfs_service_mapping_
+    type: STRING
+    mode: REPEATED
+  - name: header_secret_key_name
+    type: STRING
+    mode: NULLABLE
+  - name: authorization_header_parameter_name
+    type: STRING
+    mode: NULLABLE
+  - name: fares_notes
+    type: STRING
+    mode: NULLABLE
+  - name: aggregated_to
+    type: STRING
+    mode: REPEATED
+  - name: qc__number_of_duplicate_uris
+    type: INTEGER
+    mode: NULLABLE
+  - name: url_secret_key_name
+    type: STRING
+    mode: NULLABLE
+  - name: qc__airtable_hack___unique_pipeline_url
+    type: STRING
+    mode: NULLABLE
+  - name: schedule_comments
+    type: STRING
+    mode: NULLABLE
+  - name: qc__number_of_duplicate_pipeline_urls
+    type: INTEGER
+    mode: NULLABLE
+  - name: pathways_status
+    type: STRING
+    mode: NULLABLE
+  - name: qc__has_minimum_required_fields
+    type: STRING
+    mode: NULLABLE
+  - name: deprecated_date
+    type: DATE
+    mode: NULLABLE
+    description: "%E4Y-%m-%d"
+  - name: authorization_url_parameter_name
+    type: STRING
+    mode: NULLABLE
+  - name: gtfs_service_mapping
+    type: STRING
+    mode: REPEATED
+  - name: operator
+    type: STRING
+    mode: REPEATED
+  - name: services
+    type: STRING
+    mode: REPEATED
+  - name: provider
+    type: STRING
+    mode: REPEATED
+  - name: fares_v2_status
+    type: STRING
+    mode: REPEATED
+  - name: qc_automations
+    type: STRING
+    mode: REPEATED
+  - name: itp_activities
+    type: STRING
+    mode: REPEATED
+  - name: last_url_update
+    type: DATE
+    mode: NULLABLE
+    description: "%E4Y-%m-%d"
+  - name: pipeline_url
+    type: STRING
+    mode: NULLABLE
+  - name: data_quality_pipeline
+    type: BOOLEAN
+    mode: NULLABLE
+  - name: service_type
+    type: STRING
+    mode: REPEATED
+  - name: feed_metrics
+    type: STRING
+    mode: REPEATED
+  - name: data
+    type: STRING
+    mode: NULLABLE
+  - name: dataset_producers
+    type: STRING
+    mode: REPEATED
+  - name: qc__airtable_hack___unique_uri
+    type: STRING
+    mode: NULLABLE
+  - name: schedule_to_use_for_rt_validation
+    type: STRING
+    mode: REPEATED
+  - name: category
+    type: STRING
+    mode: REPEATED
+  - name: dataset_publisher
+    type: STRING
+    mode: REPEATED
+  - name: provider_reporting_category__from_gtfs_service_mapping_
+    type: STRING
+    mode: REPEATED
+  - name: uri
+    type: STRING
+    mode: NULLABLE
+  - name: provider_gtfs_capacity
+    type: STRING
+    mode: NULLABLE
+  - name: name
+    type: STRING
+    mode: NULLABLE
+  - name: organizations_copy
+    type: STRING
+    mode: REPEATED
+  - name: id
+    type: STRING
+    mode: NULLABLE
