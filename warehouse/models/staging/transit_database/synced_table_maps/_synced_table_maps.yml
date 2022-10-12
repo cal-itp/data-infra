@@ -10,22 +10,22 @@ models:
       instances, using `name` (Airtable primary field) to join.
     tests:
       - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: ts
-          upper_bound_column: next_ts
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
           partition_by: ct_name
           gaps: required
       - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: ts
-          upper_bound_column: next_ts
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
           partition_by: tts_name
           gaps: required
       - range_gaps_are_microseconds:
-          lower_bound_column: ts
-          upper_bound_column: next_ts
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
           partition_by: ct_name
       - range_gaps_are_microseconds:
-          lower_bound_column: ts
-          upper_bound_column: next_ts
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
           partition_by: tts_name
     columns:
       - name: ct_name
@@ -50,33 +50,33 @@ models:
       instances, using `name` (Airtable primary field) to join.
     tests:
       - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: ts
-          upper_bound_column: next_ts
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
           partition_by: ct_name
           gaps: required
       - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: ts
-          upper_bound_column: next_ts
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
           partition_by: tts_name
           gaps: required
       - range_gaps_are_microseconds:
-          lower_bound_column: ts
-          upper_bound_column: next_ts
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
           partition_by: ct_name
       - range_gaps_are_microseconds:
-          lower_bound_column: ts
-          upper_bound_column: next_ts
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
           partition_by: tts_name
     columns:
       - name: ct_name
         tests:
           - not_null
-      - name: ct_id
+      - name: ct_key
         tests:
           - not_null
       - name: tts_name
         tests:
           - not_null
-      - name: tts_id
+      - name: tts_key
         tests:
           - not_null

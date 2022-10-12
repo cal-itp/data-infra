@@ -24,7 +24,7 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - key
-            - calitp_extracted_at
+            - ts
       - dbt_utils.equal_rowcount:
           compare_model: ref('base_tts_contracts_idmap')
     columns:
@@ -46,7 +46,7 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - key
-            - calitp_extracted_at
+            - ts
       - dbt_utils.equal_rowcount:
           compare_model: ref('base_tts_service_components_idmap')
     columns:
@@ -71,7 +71,7 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - key
-            - calitp_extracted_at
+            - ts
     columns:
       - *key
   - name: stg_transit_database__services
@@ -80,7 +80,7 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - key
-            - calitp_extracted_at
+            - ts
     columns:
       - *key
       - *name

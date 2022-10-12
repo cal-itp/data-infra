@@ -1,10 +1,7 @@
 WITH
 
-latest AS (
-    {{ get_latest_dense_rank(
-        external_table = source('airtable', 'transit_technology_stacks__service_components'),
-        order_by = 'ts DESC', partition_by = 'dt'
-        ) }}
+source AS (
+    SELECT * FROM {{ source('airtable', 'transit_technology_stacks__service_components') }}
 ),
 
 base_tts_services_ct_services_map AS (
@@ -14,25 +11,15 @@ base_tts_services_ct_services_map AS (
 mapped_service_ids AS (
     SELECT
         id,
-        ARRAY_AGG(ct_key IGNORE NULLS) AS services,
-        dt
-    FROM latest
-    LEFT JOIN UNNEST(latest.services) as tts_service_id
+        ARRAY_AGG(map.ct_key IGNORE NULLS) AS services,
+        ts
+    FROM source
+    LEFT JOIN UNNEST(source.services) as tts_service_id
     LEFT JOIN base_tts_services_ct_services_map AS map
         ON tts_service_id = map.tts_key
-        AND dt = map.tts_date
-    GROUP BY id, dt
+        AND source.ts between map._valid_from and map._valid_to
+    GROUP BY id, ts
 ),
-
-base_tts_service_components_idmap AS (
-    SELECT
-        T1.* EXCEPT(services),
-        T2.services
-    FROM latest AS T1
-    LEFT JOIN mapped_service_ids AS T2
-        USING(id, dt)
-)
-
 
 stg_transit_database__service_components AS (
     SELECT
@@ -41,11 +28,13 @@ stg_transit_database__service_components AS (
         ntd_certified,
         product_component_valid,
         notes,
-        services,
+        mapped_service_ids.services,
         component,
         product,
-        dt AS calitp_extracted_at
-    FROM base_tts_service_components_idmap
+        ts
+    FROM source
+    LEFT JOIN mapped_service_ids
+        USING (id, ts)
 )
 
 SELECT * FROM stg_transit_database__service_components
