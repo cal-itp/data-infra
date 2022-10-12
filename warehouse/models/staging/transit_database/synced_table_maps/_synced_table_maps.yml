@@ -19,17 +19,25 @@ models:
           upper_bound_column: next_ts
           partition_by: tts_name
           gaps: required
+      - range_gaps_are_microseconds:
+          lower_bound_column: ts
+          upper_bound_column: next_ts
+          partition_by: ct_name
+      - range_gaps_are_microseconds:
+          lower_bound_column: ts
+          upper_bound_column: next_ts
+          partition_by: tts_name
     columns:
       - name: ct_name
         tests:
           - not_null
-      - name: ct_id
+      - name: ct_key
         tests:
           - not_null
       - name: tts_name
         tests:
           - not_null
-      - name: tts_id
+      - name: tts_key
         tests:
           - not_null
 
@@ -51,6 +59,14 @@ models:
           upper_bound_column: next_ts
           partition_by: tts_name
           gaps: required
+      - range_gaps_are_microseconds:
+          lower_bound_column: ts
+          upper_bound_column: next_ts
+          partition_by: ct_name
+      - range_gaps_are_microseconds:
+          lower_bound_column: ts
+          upper_bound_column: next_ts
+          partition_by: tts_name
     columns:
       - name: ct_name
         tests:

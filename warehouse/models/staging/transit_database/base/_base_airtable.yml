@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: base_california_transit__organizations
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - name
+            - ts
+  - name: base_california_transit__services
+    description: Primarily exists to de-dupe services based on name.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - name
+            - ts
+  - name: base_transit_technology_stacks__organizations
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - name
+            - ts
+  - name: base_transit_technology_stacks__services
+    description: Primarily exists to de-dupe services based on name.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - name
+            - ts

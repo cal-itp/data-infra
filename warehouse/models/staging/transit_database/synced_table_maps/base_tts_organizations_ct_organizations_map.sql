@@ -1,23 +1,23 @@
 WITH
 
 ct_organizations AS (
-    SELECT *, LEAD({{ make_end_of_valid_range('ts') }}, 1,  CAST("2099-01-01" AS TIMESTAMP)) OVER (PARTITION BY id ORDER BY ts) AS next_ts
-    FROM {{ source('airtable', 'california_transit__organizations') }}
+    SELECT *, LEAD({{ make_end_of_valid_range('ts') }}, 1,  CAST("2099-01-01" AS TIMESTAMP)) OVER (PARTITION BY name ORDER BY ts) AS next_ts
+    FROM {{ ref('base_california_transit__organizations')}}
     WHERE TRIM(name) != ""
 ),
 
 tts_organizations AS (
-    SELECT *, LEAD({{ make_end_of_valid_range('ts') }}, 1,  CAST("2099-01-01" AS TIMESTAMP)) OVER (PARTITION BY id ORDER BY ts) AS next_ts
-    FROM {{ source('airtable', 'transit_technology_stacks__organizations') }}
+    SELECT *, LEAD({{ make_end_of_valid_range('ts') }}, 1,  CAST("2099-01-01" AS TIMESTAMP)) OVER (PARTITION BY name ORDER BY ts) AS next_ts
+    FROM {{ ref('base_transit_technology_stacks__organizations')}}
     WHERE TRIM(name) != ""
 ),
 
 base_tts_organizations_ct_organizations_map AS (
     SELECT
         ct.name AS ct_name,
-        ct.id AS ct_id,
+        ct.key AS ct_id,
         tts.name AS tts_name,
-        tts.id AS tts_id,
+        tts.key AS tts_id,
         -- use the later one for start date
         CASE WHEN ct.ts < tts.ts THEN tts.ts ELSE ct.ts END AS ts,
         -- use the earlier one for end date

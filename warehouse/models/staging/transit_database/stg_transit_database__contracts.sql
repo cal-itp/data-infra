@@ -1,10 +1,43 @@
 WITH
 
-once_daily_contracts AS (
-    SELECT *
-    -- have to use base table to get the california transit base organization record ids
-    FROM {{ ref('base_tts_contracts_idmap') }}
+source AS (
+    SELECT * FROM {{ source('airtable', 'transit_technology_stacks__contracts') }}
+)
+
+base_tts_organizations_ct_organizations_map AS (
+    SELECT * FROM {{ ref('base_tts_organizations_ct_organizations_map') }}
 ),
+
+mapped_org_ids AS (
+    SELECT
+        id,
+        ARRAY_AGG(map_holder.ct_key IGNORE NULLS) AS contract_holder,
+        ARRAY_AGG(map_vendor.ct_key IGNORE NULLS) AS contract_vendor,
+        dt
+    FROM source
+    LEFT JOIN UNNEST(latest.contract_holder) AS unnested_contract_holder
+    LEFT JOIN UNNEST(latest.contract_vendor) AS unnested_contract_vendor
+    LEFT JOIN base_tts_organizations_ct_organizations_map AS map_holder
+        ON unnested_contract_holder = map_holder.tts_key
+        AND dt = map_holder.tts_date
+    LEFT JOIN base_tts_organizations_ct_organizations_map AS map_vendor
+        ON unnested_contract_vendor = map_vendor.tts_key
+        AND dt = map_vendor.tts_date
+    GROUP BY id, dt
+),
+
+base_tts_contracts_idmap AS (
+    SELECT
+        r.* EXCEPT(contract_holder, contract_vendor),
+        map.contract_holder,
+        map.contract_vendor
+    FROM latest as r
+    LEFT JOIN mapped_org_ids AS map
+        USING(id, dt)
+)
+
+SELECT * FROM base_tts_contracts_idmap
+
 
 stg_transit_database__contracts AS (
     SELECT
