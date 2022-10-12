@@ -2,7 +2,6 @@
 -- define feed file's feed_key, effective dates, & gtfs_dataset_key based on dim_schedule_feeds
 SELECT
     t2.key AS feed_key,
-    t2.gtfs_dataset_key,
     t1.*,
     t2._valid_from,
     t2._valid_to
