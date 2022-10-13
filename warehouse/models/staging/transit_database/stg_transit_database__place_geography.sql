@@ -1,6 +1,5 @@
-
-
 WITH
+
 once_daily_place_geography AS (
     {{ get_latest_dense_rank(
         external_table = source('airtable', 'california_transit__place_geography'),
@@ -11,7 +10,7 @@ once_daily_place_geography AS (
 stg_transit_database__place_geography AS (
     SELECT
         id AS key,
-        {{ trim_make_empty_string_null(column_name = "name") }},
+        {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         place_fips,
         placename,
         type,

@@ -11,7 +11,7 @@ stg_gtfs_schedule__unzip_outcomes AS (
         `extract`.config.name AS name,
         `extract`.config.url AS url,
         `extract`.config.feed_type AS feed_type,
-        `extract`.config.extracted_at AS config_extracted_at,
+        `extract`.config.extracted_at AS _config_extract_ts,
         success AS unzip_success,
         exception AS unzip_exception,
         zipfile_extract_md5hash,

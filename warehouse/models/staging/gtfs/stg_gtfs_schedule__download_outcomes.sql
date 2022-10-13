@@ -11,14 +11,14 @@ stg_gtfs_schedule__download_outcomes AS (
         config.name AS name,
         config.url AS url,
         config.feed_type AS feed_type,
-        config.extracted_at AS config_extracted_at,
+        config.extracted_at AS _config_extract_ts,
         config.schedule_url_for_validation AS schedule_url_for_validation,
         success AS download_success,
         exception AS download_exception,
         `extract`.response_code AS download_response_code,
         `extract`.response_headers AS download_response_headers,
         base64_url,
-        ts AS ts
+        ts
     FROM raw_download_outcomes
 )
 
