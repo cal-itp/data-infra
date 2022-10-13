@@ -46,6 +46,7 @@ jupyterhub:
         authenticator_class: github
         Authenticator:
           admin_users:
+            - atvaccaro
             - machow
             - themightchris
             - lottspot
