@@ -88,3 +88,100 @@ models:
         description: '{{ doc("gtfs_trips__wheelchair_accessible") }}'
       - name: bikes_allowed
         description: '{{ doc("gtfs_trips__bikes_allowed") }}'
+  - name: int_gtfs_schedule__deduped_stops
+    description: |
+      This table is a latest-only cut of the cleaned GTFS data.
+      It contains current-only data for agencies we are currently scraping.
+      Each row is a cleaned row from a stops.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#stopstxt.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - stop_id
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: stop_id
+        description: '{{ doc("gtfs_stops__stop_id") }}'
+        tests:
+        - not_null
+      - name: stop_code
+        description: '{{ doc("gtfs_stops__stop_code") }}'
+      - name: stop_name
+        description: '{{ doc("gtfs_stops__stop_name") }}'
+      - name: tts_stop_name
+        description: '{{ doc("gtfs_stops__tts_stop_name") }}'
+      - name: stop_desc
+        description: '{{ doc("gtfs_stops__stop_desc") }}'
+      - name: stop_lat
+        description: '{{ doc("gtfs_stops__stop_lat") }}'
+        meta:
+          metabase.semantic_type: type/Latitude
+          ckan.type: FLOAT
+          ckan.length: 6
+          ckan.precision: 3
+      - name: stop_lon
+        description: '{{ doc("gtfs_stops__stop_lon") }}'
+        meta:
+          metabase.semantic_type: type/Longitude
+          ckan.type: FLOAT
+          ckan.length: 7
+          ckan.precision: 3
+      - name: zone_id
+        description: '{{ doc("gtfs_stops__zone_id") }}'
+      - name: stop_url
+        description: '{{ doc("gtfs_stops__stop_url") }}'
+      - name: location_type
+        description: '{{ doc("gtfs_stops__location_type") }}'
+      - name: parent_station
+        description: '{{ doc("gtfs_stops__parent_station") }}'
+      - name: stop_timezone
+        description: '{{ doc("gtfs_stops__stop_timezone") }}'
+      - name: wheelchair_boarding
+        description: '{{ doc("gtfs_stops__wheelchair_boarding") }}'
+      - name: level_id
+        description: '{{ doc("gtfs_stops__level_id") }}'
+      - name: platform_code
+        description: '{{ doc("gtfs_stops__platform_code") }}'
+  - name: int_gtfs_schedule__deduped_transfers
+    description: |
+      This table is a latest-only cut of the cleaned GTFS data.
+      It contains current-only data for agencies we are currently scraping.
+      Each row is a cleaned row from a transfers.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#transferstxt.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - from_stop_id
+            - to_stop_id
+            - from_trip_id
+            - to_trip_id
+            - from_route_id
+            - to_route_id
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: from_stop_id
+        description: '{{ doc("gtfs_transfers__from_stop_id") }}'
+        tests:
+        - not_null
+      - name: to_stop_id
+        description: '{{ doc("gtfs_transfers__to_stop_id") }}'
+        tests:
+        - not_null
+      - name: transfer_type
+        description: '{{ doc("gtfs_transfers__transfer_type") }}'
+        tests:
+        - not_null
+      - name: min_transfer_time
+        description: '{{ doc("gtfs_transfers__min_transfer_time") }}'
+      - name: from_route_id
+      - name: to_route_id
+      - name: from_trip_id
+      - name: to_trip_id
