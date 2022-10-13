@@ -162,6 +162,7 @@ models:
             - base64_url
             - ts
             - attribution_id
+          severity: warn
     columns:
       - name: base64_url
       - name: ts
@@ -297,6 +298,7 @@ models:
             - origin_id
             - destination_id
             - contains_id
+          severity: warn
     columns:
       - name: base64_url
       - name: ts

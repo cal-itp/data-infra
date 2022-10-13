@@ -7,8 +7,7 @@ stg_gtfs_schedule__attributions AS (
 
     -- Trim all string fields
     -- Incoming schema explicitly defined in gtfs_schedule_history external table definition
-    -- select distinct because of duplicates in MTC 511 feed on 2022-03-23
-    SELECT DISTINCT
+    SELECT
         base64_url,
         ts,
         {{ trim_make_empty_string_null('organization_name') }} AS organization_name,

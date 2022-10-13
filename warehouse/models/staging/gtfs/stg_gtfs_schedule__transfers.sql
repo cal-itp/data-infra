@@ -7,8 +7,7 @@ stg_gtfs_schedule__transfers AS (
 
     -- Trim all string fields
     -- Incoming schema explicitly defined in gtfs_schedule_history external table definition
-    -- select distinct because of several duplicates, including ITP ID 279 URL 1 on 2022-03-23
-    SELECT DISTINCT
+    SELECT
         base64_url,
         ts,
         {{ trim_make_empty_string_null('from_stop_id') }} AS from_stop_id,

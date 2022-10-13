@@ -48,6 +48,44 @@ models:
         description: |
           Successes as a percent of total files (`count_successes` / `count_files` * 100).
           If this is a value less than 100, indicates that file conversion failed for some files in this feed.
+  - name: int_gtfs_schedule__deduped_attributions
+    description: |
+      Cleaned GTFS schedule attribution data that has also been deduplicated so that each
+      `attribution_id` is unique per URL and timestamp.
+      See https://gtfs.org/reference/static#attributionstxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - attribution_id
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: attribution_id
+        description: '{{ doc("gtfs_attributions__attribution_id") }}'
+      - name: agency_id
+        description: '{{ doc("gtfs_attributions__agency_id") }}'
+      - name: route_id
+        description: '{{ doc("gtfs_attributions__route_id") }}'
+      - name: trip_id
+        description: '{{ doc("gtfs_attributions__trip_id") }}'
+      - name: organization_name
+        description: '{{ doc("gtfs_attributions__organization_name") }}'
+        tests:
+        - not_null
+      - name: is_producer
+        description: '{{ doc("gtfs_attributions__is_producer") }}'
+      - name: is_operator
+        description: '{{ doc("gtfs_attributions__is_operator") }}'
+      - name: is_authority
+        description: '{{ doc("gtfs_attributions__is_authority") }}'
+      - name: attribution_url
+        description: '{{ doc("gtfs_attributions__attribution_url") }}'
+      - name: attribution_email
+        description: '{{ doc("gtfs_attributions__attribution_email") }}'
+      - name: attribution_phone
+        description: '{{ doc("gtfs_attributions__attribution_phone") }}'
   - name: int_gtfs_schedule__deduped_fare_leg_rules
     description: |
       Cleaned GTFS schedule fare leg rule data that has also been deduplicated so that each combination of
@@ -106,6 +144,37 @@ models:
         description: '{{ doc("gtfs_fare_products__currency") }}'
         tests:
         - not_null
+  - name: int_gtfs_schedule__deduped_fare_rules
+    description: |
+      Cleaned GTFS schedule fare leg rule data that has also been deduplicated so that each combination of
+      `fare_id`, `route_id`, `origin_id`, `destination_id`, and `contains_id` are unique
+      per URL and timestamp.
+      See https://gtfs.org/reference/static#fare_rulestxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - fare_id
+            - route_id
+            - origin_id
+            - destination_id
+            - contains_id
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: fare_id
+        description: '{{ doc("gtfs_fare_rules__fare_id") }}'
+        tests:
+        - not_null
+      - name: route_id
+        description: '{{ doc("gtfs_fare_rules__route_id") }}'
+      - name: origin_id
+        description: '{{ doc("gtfs_fare_rules__origin_id") }}'
+      - name: destination_id
+        description: '{{ doc("gtfs_fare_rules__destination_id") }}'
+      - name: contains_id
+        description: '{{ doc("gtfs_fare_rules__contains_id") }}'
   - name: int_gtfs_schedule__deduped_fare_transfer_rules
     description: |
       Cleaned GTFS schedule fare transfer rule data that has also been deduplicated so that each combination of
