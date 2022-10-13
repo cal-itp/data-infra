@@ -4,7 +4,6 @@ gcsfs==2022.5.0
 intake==0.6.1
 ipdb==0.13.4
 gusty==0.6.0
-pybigquery==0.7.0
 google-auth==1.32.1
 gtfs-realtime-bindings==0.0.7
 geopandas==0.9.0
