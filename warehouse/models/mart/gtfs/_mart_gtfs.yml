@@ -19,10 +19,6 @@ models:
         tests: &primary_key_tests
           - unique
           - not_null
-      - &gtfs_dataset_key
-        name: gtfs_dataset_key
-        description: |
-          Foreign key to the `dim_gtfs_datasets` table.
       - &base64_url
         name: base64_url
         description: |
@@ -33,11 +29,30 @@ models:
       - &_valid_to
         name: _valid_to
         description: '{{ doc("column_valid_to") }}'
-  - name: fct_schedule_feeds
+  - name: fct_daily_schedule_feeds
     description: |
-      Each row is an instance of a download attempt, uniquely identified by base64_url,
-      timestamp, and the key of the associated `gtfs_dataset` record (pending future plans
-      to ensure that URL is unique across `gtfs_datasets` at a given point in time).
+      Each row is a unique date / feed pair, where the feed is the feed version that was in effect at
+      noon Pacific Time on that date. This is intended to make it clear what feed version to use
+      to analyze a given date.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `date` and `feed_key`.
+        tests: *primary_key_tests
+      - name: date
+        description: |
+          Date on which the given feed was active at noon Pacific Time.
+      - name: feed_key
+        description: |
+          Foreign key to the `dim_schedule_feeds` table.
+      - &gtfs_dataset_key
+        name: gtfs_dataset_key
+        description: |
+          Foreign key to the `dim_gtfs_datasets` table.
+  - name: fct_schedule_feed_downloads
+    description: |
+      Each row is an instance of a download attempt, uniquely identified by base64_url and
+      timestamp.
     columns:
       - name: key
         description: |
@@ -205,7 +220,6 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `route_id`.
         tests: *primary_key_tests
-      - *gtfs_dataset_key
       - *base64_url
       - name: route_id
         description: '{{ doc("gtfs_routes__route_id") }}'
@@ -253,7 +267,6 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `trip_id`.
         tests: *primary_key_tests
-      - *gtfs_dataset_key
       - *base64_url
       - name: route_id
         description: '{{ doc("gtfs_trips__route_id") }}'

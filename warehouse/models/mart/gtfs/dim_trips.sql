@@ -19,7 +19,6 @@ dim_trips AS (
         {{ dbt_utils.surrogate_key(['feed_key', 'trip_id']) }} AS key,
         base64_url,
         feed_key,
-        gtfs_dataset_key,
         route_id,
         service_id,
         trip_id,

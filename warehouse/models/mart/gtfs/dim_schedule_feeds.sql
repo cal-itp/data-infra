@@ -5,24 +5,10 @@ WITH int_gtfs_schedule__joined_feed_outcomes AS (
     FROM {{ ref('int_gtfs_schedule__joined_feed_outcomes') }}
 ),
 
-dim_gtfs_datasets AS (
-    SELECT *
-    FROM {{ ref('dim_gtfs_datasets') }}
-),
-
-in_latest AS (
-    SELECT
-        base64_url,
-        TRUE as in_latest
-    FROM int_gtfs_schedule__joined_feed_outcomes
-    QUALIFY DENSE_RANK() OVER (ORDER BY ts DESC) = 1
-),
-
 hashed AS (
     SELECT
         base64_url,
         ts,
-        gtfs_dataset_key,
         download_success,
         unzip_success,
         zipfile_extract_md5hash,
@@ -50,48 +36,65 @@ next_valid_extract AS (
     FROM valid_global_extracts
 ),
 
+latest_attempt_by_feed AS (
+    SELECT
+        base64_url,
+        MAX(ts) AS latest_extract
+    FROM hashed
+    GROUP BY base64_url
+),
+
+in_latest AS (
+    SELECT
+        base64_url,
+        latest_extract,
+        (DENSE_RANK() OVER (ORDER BY latest_extract DESC)) = 1 AS in_latest,
+        next_ts
+    FROM latest_attempt_by_feed AS l
+    LEFT JOIN next_valid_extract AS n
+        ON l.latest_extract = n.ts
+),
+
 -- following: https://dba.stackexchange.com/questions/210907/determine-consecutive-occurrences-of-values
 first_instances AS (
     SELECT
         *,
-        LAG(content_hash) OVER (PARTITION BY base64_url ORDER BY ts) != content_hash AS is_first
+        (LAG(content_hash) OVER (PARTITION BY base64_url ORDER BY ts) != content_hash)
+            OR (LAG(content_hash) OVER (PARTITION BY base64_url ORDER BY ts) IS NULL) AS is_first
     FROM hashed
+    WHERE download_success AND unzip_success IS NOT NULL
     QUALIFY is_first
 ),
 
 versioned AS (
     SELECT
         f.base64_url,
-        f.gtfs_dataset_key,
         f.ts AS _valid_from,
-        -- if there's a subsequent extract, use that extract time as end date
-        -- if there's no subsequent extract, it was either deleted or it's current
-        -- check if there was another global extract; it so, use that as end date
-        -- if no subsequent global extract, assume current
-        {{ make_end_of_valid_range(
-            'COALESCE(
-                LEAD(f.ts) OVER (PARTITION BY f.base64_url ORDER BY f.ts),
-                n.next_ts,
-                CAST("2099-01-01" AS TIMESTAMP)
-            )')
-        }} AS _valid_to
+        CASE
+            -- if there's a subsequent extract, use that extract time as end date
+            WHEN LEAD(f.ts) OVER (PARTITION BY f.base64_url ORDER BY f.ts) IS NOT NULL
+                THEN {{ make_end_of_valid_range('LEAD(f.ts) OVER (PARTITION BY f.base64_url ORDER BY f.ts)') }}
+            ELSE
+            -- if there's no subsequent extract, it was either deleted or it's current
+            -- if it was in the latest extract, call it current (even if it errored)
+            -- if it was not in the latest extract, call it deleted at the last time it was extracted
+                CASE
+                    WHEN n.in_latest THEN {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }}
+                    ELSE {{ make_end_of_valid_range('n.next_ts') }}
+                END
+        END AS _valid_to
     FROM first_instances AS f
-    LEFT JOIN next_valid_extract AS n
-        ON f.ts = n.ts
-
+    LEFT JOIN in_latest AS n
+        ON f.base64_url = n.base64_url
 ),
 
 dim_schedule_feeds AS (
     SELECT
         {{ dbt_utils.surrogate_key(['versioned.base64_url', 'versioned._valid_from']) }} AS key,
         versioned.base64_url,
-        versioned.gtfs_dataset_key,
-        gd.name,
         versioned._valid_from,
         versioned._valid_to
     FROM versioned
-    LEFT JOIN dim_gtfs_datasets AS gd
-        on gtfs_dataset_key = gd.key
 )
 
 SELECT * FROM dim_schedule_feeds
