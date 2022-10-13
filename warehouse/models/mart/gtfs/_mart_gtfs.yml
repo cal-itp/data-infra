@@ -49,6 +49,11 @@ models:
         name: gtfs_dataset_key
         description: |
           Foreign key to the `dim_gtfs_datasets` table.
+      - name: is_future
+        description: |
+          Boolean indicating whether this date is in the future relative to the last time that the table
+          was run. If this is a future date (if is_future is true), any coverage is prospective and
+          subject to change.
   - name: fct_schedule_feed_downloads
     description: |
       Each row is an instance of a download attempt, uniquely identified by base64_url and

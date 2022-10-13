@@ -28,6 +28,7 @@ fct_daily_schedule_feeds AS (
         t1.date_day AS date,
         t2.key AS feed_key,
         t3.key AS gtfs_dataset_key,
+        t1.date_day > CURRENT_DATE() AS is_future
     FROM make_noon_pacific AS t1
     INNER JOIN dim_schedule_feeds AS t2
         ON t1.noon_pacific BETWEEN t2._valid_from AND t2._valid_to
