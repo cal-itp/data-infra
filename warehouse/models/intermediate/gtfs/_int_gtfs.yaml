@@ -48,53 +48,104 @@ models:
         description: |
           Successes as a percent of total files (`count_successes` / `count_files` * 100).
           If this is a value less than 100, indicates that file conversion failed for some files in this feed.
-  - name: int_gtfs_schedule__deduped_trips
+  - name: int_gtfs_schedule__deduped_fare_leg_rules
     description: |
-      Cleaned GTFS schedule trip data that has also been deduplicated so that each `trip_id` is unique
+      Cleaned GTFS schedule fare leg rule data that has also been deduplicated so that each combination of
+      `network_id`, `from_area_id`, `to_area_id`, and `fare_product_id` are unique
       per URL and timestamp.
-      See https://gtfs.org/schedule/reference/#tripstxt for specification.
+      See https://gtfs.org/schedule/reference/#fare_leg_rulestxt for specification.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - base64_url
             - ts
-            - trip_id
+            - network_id
+            - from_area_id
+            - to_area_id
+            - fare_product_id
     columns:
       - name: base64_url
       - name: ts
-      - name: route_id
-        description: '{{ doc("gtfs_trips__route_id") }}'
+      - name: leg_group_id
+        description: '{{ doc("gtfs_fare_leg_rules__leg_group_id") }}'
+      - name: network_id
+        description: '{{ doc("gtfs_fare_leg_rules__network_id") }}'
+      - name: from_area_id
+        description: '{{ doc("gtfs_fare_leg_rules__from_area_id") }}'
+      - name: to_area_id
+        description: '{{ doc("gtfs_fare_leg_rules__to_area_id") }}'
+      - name: fare_product_id
+        description: '{{ doc("gtfs_fare_leg_rules__fare_product_id") }}'
         tests:
         - not_null
-      - name: service_id
-        description: '{{ doc("gtfs_trips__service_id") }}'
+  - name: int_gtfs_schedule__deduped_fare_products
+    description: |
+      Cleaned GTFS schedule fare products data that has also been deduplicated so that each `fare_product_id` is unique
+      per URL and timestamp.
+      See https://gtfs.org/schedule/reference/#fare_productstxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - fare_product_id
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: fare_product_id
+        description: '{{ doc("gtfs_fare_products__fare_product_id") }}'
         tests:
         - not_null
-      - name: trip_id
-        description: '{{ doc("gtfs_trips__trip_id") }}'
+      - name: fare_product_name
+        description: '{{ doc("gtfs_fare_products__fare_product_name") }}'
+      - name: amount
+        description: '{{ doc("gtfs_fare_products__amount") }}'
         tests:
         - not_null
-      - name: trip_headsign
-        description: '{{ doc("gtfs_trips__trip_headsign") }}'
-      - name: trip_short_name
-        description: '{{ doc("gtfs_trips__trip_short_name") }}'
-      - name: direction_id
-        description: '{{ doc("gtfs_trips__direction_id") }}'
-      - name: block_id
-        description: '{{ doc("gtfs_trips__block_id") }}'
-      - name: shape_id
-        description: '{{ doc("gtfs_trips__shape_id") }}'
-      - name: wheelchair_accessible
-        description: '{{ doc("gtfs_trips__wheelchair_accessible") }}'
-      - name: bikes_allowed
-        description: '{{ doc("gtfs_trips__bikes_allowed") }}'
+      - name: currency
+        description: '{{ doc("gtfs_fare_products__currency") }}'
+        tests:
+        - not_null
+  - name: int_gtfs_schedule__deduped_fare_transfer_rules
+    description: |
+      Cleaned GTFS schedule fare transfer rule data that has also been deduplicated so that each combination of
+      `from_leg_group_id`, `to_leg_group_id`, `fare_product_id`, `transfer_count`, and `duration_limit` are unique
+      per URL and timestamp.
+      See https://gtfs.org/schedule/reference/#fare_transfer_rulestxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - from_leg_group_id
+            - to_leg_group_id
+            - fare_product_id
+            - transfer_count
+            - duration_limit
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: from_leg_group_id
+        description: '{{ doc("gtfs_fare_transfer_rules__from_leg_group_id") }}'
+      - name: to_leg_group_id
+        description: '{{ doc("gtfs_fare_transfer_rules__to_leg_group_id") }}'
+      - name: transfer_count
+        description: '{{ doc("gtfs_fare_transfer_rules__transfer_count") }}'
+      - name: duration_limit
+        description: '{{ doc("gtfs_fare_transfer_rules__duration_limit") }}'
+      - name: duration_limit_type
+        description: '{{ doc("gtfs_fare_transfer_rules__duration_limit_type") }}'
+      - name: fare_transfer_type
+        description: '{{ doc("gtfs_fare_transfer_rules__fare_transfer_type") }}'
+        tests:
+        - not_null
+      - name: fare_product_id
+        description: '{{ doc("gtfs_fare_transfer_rules__fare_product_id") }}'
   - name: int_gtfs_schedule__deduped_stops
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
-      Each row is a cleaned row from a stops.txt file.
-      Definitions for the original GTFS fields are available at:
-      https://gtfs.org/reference/static#stopstxt.
+      Cleaned GTFS schedule stop data that has also been deduplicated so that each `stop_id` is unique
+      per URL and timestamp.
+      See https://gtfs.org/reference/static#stopstxt for specification.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -148,11 +199,10 @@ models:
         description: '{{ doc("gtfs_stops__platform_code") }}'
   - name: int_gtfs_schedule__deduped_transfers
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
-      Each row is a cleaned row from a transfers.txt file.
-      Definitions for the original GTFS fields are available at:
-      https://gtfs.org/reference/static#transferstxt.
+      Cleaned GTFS schedule transfer data that has also been deduplicated so that each combination of
+      `from_stop_id`, `to_stop_id`, `from_trip_id`, `to_trip_id`, `from_route_id`, and `to_route_id`
+      are unique per URL and timestamp.
+      See https://gtfs.org/reference/static#transferstxt for specification.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -185,3 +235,43 @@ models:
       - name: to_route_id
       - name: from_trip_id
       - name: to_trip_id
+  - name: int_gtfs_schedule__deduped_trips
+    description: |
+      Cleaned GTFS schedule trip data that has also been deduplicated so that each `trip_id` is unique
+      per URL and timestamp.
+      See https://gtfs.org/schedule/reference/#tripstxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - trip_id
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: route_id
+        description: '{{ doc("gtfs_trips__route_id") }}'
+        tests:
+        - not_null
+      - name: service_id
+        description: '{{ doc("gtfs_trips__service_id") }}'
+        tests:
+        - not_null
+      - name: trip_id
+        description: '{{ doc("gtfs_trips__trip_id") }}'
+        tests:
+        - not_null
+      - name: trip_headsign
+        description: '{{ doc("gtfs_trips__trip_headsign") }}'
+      - name: trip_short_name
+        description: '{{ doc("gtfs_trips__trip_short_name") }}'
+      - name: direction_id
+        description: '{{ doc("gtfs_trips__direction_id") }}'
+      - name: block_id
+        description: '{{ doc("gtfs_trips__block_id") }}'
+      - name: shape_id
+        description: '{{ doc("gtfs_trips__shape_id") }}'
+      - name: wheelchair_accessible
+        description: '{{ doc("gtfs_trips__wheelchair_accessible") }}'
+      - name: bikes_allowed
+        description: '{{ doc("gtfs_trips__bikes_allowed") }}'

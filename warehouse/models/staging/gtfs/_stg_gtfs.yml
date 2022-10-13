@@ -100,11 +100,8 @@ models:
       - name: speed
   - name: stg_gtfs_schedule__agency
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
-      Each row is a cleaned row from an agency.txt file.
-      Definitions for the original GTFS fields are available at:
-      https://gtfs.org/reference/static#agencytxt.
+      Cleaned GTFS schedule agency data.
+      See https://gtfs.org/reference/static#agencytxt for specification.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -136,13 +133,29 @@ models:
         description: '{{ doc("gtfs_agency__agency_fare_url") }}'
       - name: agency_email
         description: '{{ doc("gtfs_agency__agency_email") }}'
+  - name: stg_gtfs_schedule__areas
+    description: |
+      Cleaned GTFS schedule area data.
+      See https://gtfs.org/schedule/reference/#areastxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - area_id
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: area_id
+        description: '{{ doc("gtfs_areas__area_id") }}'
+        tests:
+        - not_null
+      - name: area_name
+        description: '{{ doc("gtfs_areas__area_name") }}'
   - name: stg_gtfs_schedule__attributions
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
-      Each row is a cleaned row from an attributions.txt file.
-      Definitions for the original GTFS fields are available at:
-      https://gtfs.org/reference/static#attributionstxt.
+      Cleaned GTFS schedule attribution data.
+      See https://gtfs.org/reference/static#attributionstxt for specification.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -178,11 +191,8 @@ models:
         description: '{{ doc("gtfs_attributions__attribution_phone") }}'
   - name: stg_gtfs_schedule__fare_attributes
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
-      Each row is a cleaned row from a fare_attributes.txt file.
-      Definitions for the original GTFS fields are available at:
-      https://gtfs.org/reference/static#fare_attributestxt.
+      Cleaned GTFS schedule fare attribute data.
+      See https://gtfs.org/reference/static#fare_attributestxt for specification.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -216,13 +226,67 @@ models:
         description: '{{ doc("gtfs_fare_attributes__agency_id") }}'
       - name: transfer_duration
         description: '{{ doc("gtfs_fare_attributes__transfer_duration") }}'
+  - name: stg_gtfs_schedule__fare_leg_rules
+    description: |
+      Cleaned GTFS schedule fare leg rule data.
+      See https://gtfs.org/schedule/reference/#fare_leg_rulestxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - network_id
+            - from_area_id
+            - to_area_id
+            - fare_product_id
+          severity: warn
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: leg_group_id
+        description: '{{ doc("gtfs_fare_leg_rules__leg_group_id") }}'
+      - name: network_id
+        description: '{{ doc("gtfs_fare_leg_rules__network_id") }}'
+      - name: from_area_id
+        description: '{{ doc("gtfs_fare_leg_rules__from_area_id") }}'
+      - name: to_area_id
+        description: '{{ doc("gtfs_fare_leg_rules__to_area_id") }}'
+      - name: fare_product_id
+        description: '{{ doc("gtfs_fare_leg_rules__fare_product_id") }}'
+        tests:
+        - not_null
+  - name: stg_gtfs_schedule__fare_products
+    description: |
+      Cleaned GTFS schedule fare products data.
+      See https://gtfs.org/schedule/reference/#fare_productstxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - fare_product_id
+          severity: warn
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: fare_product_id
+        description: '{{ doc("gtfs_fare_products__fare_product_id") }}'
+        tests:
+        - not_null
+      - name: fare_product_name
+        description: '{{ doc("gtfs_fare_products__fare_product_name") }}'
+      - name: amount
+        description: '{{ doc("gtfs_fare_products__amount") }}'
+        tests:
+        - not_null
+      - name: currency
+        description: '{{ doc("gtfs_fare_products__currency") }}'
+        tests:
+        - not_null
   - name: stg_gtfs_schedule__fare_rules
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
-      Each row is a cleaned row from a fare_rules.txt file.
-      Definitions for the original GTFS fields are available at:
-      https://gtfs.org/reference/static#fare_rulestxt.
+      Cleaned GTFS schedule fare rules data.
+      See https://gtfs.org/reference/static#fare_rulestxt for specification.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -248,13 +312,44 @@ models:
         description: '{{ doc("gtfs_fare_rules__destination_id") }}'
       - name: contains_id
         description: '{{ doc("gtfs_fare_rules__contains_id") }}'
+  - name: stg_gtfs_schedule__fare_transfer_rules
+    description: |
+      Cleaned GTFS schedule fare transfer rules data.
+      See https://gtfs.org/schedule/reference/#fare_transfer_rulestxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - from_leg_group_id
+            - to_leg_group_id
+            - fare_product_id
+            - transfer_count
+            - duration_limit
+          severity: warn
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: from_leg_group_id
+        description: '{{ doc("gtfs_fare_transfer_rules__from_leg_group_id") }}'
+      - name: to_leg_group_id
+        description: '{{ doc("gtfs_fare_transfer_rules__to_leg_group_id") }}'
+      - name: transfer_count
+        description: '{{ doc("gtfs_fare_transfer_rules__transfer_count") }}'
+      - name: duration_limit
+        description: '{{ doc("gtfs_fare_transfer_rules__duration_limit") }}'
+      - name: duration_limit_type
+        description: '{{ doc("gtfs_fare_transfer_rules__duration_limit_type") }}'
+      - name: fare_transfer_type
+        description: '{{ doc("gtfs_fare_transfer_rules__fare_transfer_type") }}'
+        tests:
+        - not_null
+      - name: fare_product_id
+        description: '{{ doc("gtfs_fare_transfer_rules__fare_product_id") }}'
   - name: stg_gtfs_schedule__feed_info
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
-      Each row is a cleaned row from a feed_info.txt file.
-      Definitions for the original GTFS fields are available at:
-      https://gtfs.org/reference/static#feed_infotxt.
+      Cleaned GTFS schedule feed info data.
+      See https://gtfs.org/reference/static#feed_infotxt for specification.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -298,11 +393,8 @@ models:
         description: '{{ doc("gtfs_feed_info__feed_contact_url") }}'
   - name: stg_gtfs_schedule__frequencies
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
-      Each row is a cleaned row from a frequencies.txt file.
-      Definitions for the original GTFS fields are available at:
-      https://gtfs.org/reference/static#frequenciestxt.
+      Cleaned GTFS schedule frequency data.
+      See https://gtfs.org/reference/static#frequenciestxt for specification.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -333,11 +425,8 @@ models:
         description: '{{ doc("gtfs_frequencies__exact_times") }}'
   - name: stg_gtfs_schedule__levels
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
-      Each row is a cleaned row from a levels.txt file.
-      Definitions for the original GTFS fields are available at:
-      https://gtfs.org/reference/static#levelstxt.
+      Cleaned GTFS schedule level data.
+      See https://gtfs.org/reference/static#levelstxt for specification.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -359,11 +448,8 @@ models:
         description: '{{ doc("gtfs_levels__level_name") }}'
   - name: stg_gtfs_schedule__pathways
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
-      Each row is a cleaned row from a pathways.txt file.
-      Definitions for the original GTFS fields are available at:
-      https://gtfs.org/reference/static#pathwaystxt.
+      Cleaned GTFS schedule pathway data.
+      See https://gtfs.org/reference/static#pathwaystxt for specification.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -450,11 +536,8 @@ models:
         description: '{{ doc("gtfs_routes__continuous_drop_off") }}'
   - name: stg_gtfs_schedule__shapes
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
-      Each row is a cleaned row from a shapes.txt file.
-      Definitions for the original GTFS fields are available at:
-      https://gtfs.org/reference/static#shapestxt.
+      Cleaned GTFS schedule shape data.
+      See https://gtfs.org/reference/static#shapestxt for specification.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -493,19 +576,39 @@ models:
         - not_null
       - name: shape_dist_traveled
         description: '{{ doc("gtfs_shapes__shape_dist_traveled") }}'
+  - name: stg_gtfs_schedule__stop_areas
+    description: |
+      Cleaned GTFS schedule stop area data.
+      See https://gtfs.org/schedule/reference/#stop_areastxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - area_id
+            - stop_id
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: area_id
+        description: '{{ doc("gtfs_stop_areas__area_id") }}'
+        tests:
+        - not_null
+      - name: stop_id
+        description: '{{ doc("gtfs_stop_areas__stop_id") }}'
+        tests:
+        - not_null
   - name: stg_gtfs_schedule__stops
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
-      Each row is a cleaned row from a stops.txt file.
-      Definitions for the original GTFS fields are available at:
-      https://gtfs.org/reference/static#stopstxt.
+      Cleaned GTFS schedule stop data.
+      See https://gtfs.org/reference/static#stopstxt for specification.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - base64_url
             - ts
             - stop_id
+          severity: warn
     columns:
       - name: base64_url
       - name: ts
@@ -553,11 +656,8 @@ models:
         description: '{{ doc("gtfs_stops__platform_code") }}'
   - name: stg_gtfs_schedule__transfers
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
-      Each row is a cleaned row from a transfers.txt file.
-      Definitions for the original GTFS fields are available at:
-      https://gtfs.org/reference/static#transferstxt.
+      Cleaned GTFS schedule transfer data.
+      See https://gtfs.org/reference/static#transferstxt for specification.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -569,6 +669,7 @@ models:
             - to_trip_id
             - from_route_id
             - to_route_id
+          severity: warn
     columns:
       - name: base64_url
       - name: ts
@@ -592,11 +693,8 @@ models:
       - name: to_trip_id
   - name: stg_gtfs_schedule__translations
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
-      Each row is a cleaned row from a translations.txt file.
-      Definitions for the original GTFS fields are available at:
-      https://gtfs.org/reference/static#translationstxt.
+      Cleaned GTFS schedule translation data.
+      See https://gtfs.org/reference/static#translationstxt for specification.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:

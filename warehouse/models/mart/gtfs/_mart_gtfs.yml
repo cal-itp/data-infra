@@ -191,8 +191,6 @@ models:
           See: https://gtfs.org/realtime/reference/#message-position.
   - name: dim_agency
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
       Each row is a cleaned row from an agency.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#agencytxt.
@@ -233,10 +231,34 @@ models:
         description: '{{ doc("gtfs_agency__agency_email") }}'
       - *_valid_from
       - *_valid_to
+  - name: dim_areas
+    description: |
+      Each row is a cleaned row from an areas.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/schedule/reference/#areastxt.
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: base64_url, area_id
+          gaps: required
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `area_id`.
+        tests: *primary_key_tests
+      - *gtfs_dataset_key
+      - *base64_url
+      - name: area_id
+        description: '{{ doc("gtfs_areas__area_id") }}'
+        tests:
+        - not_null
+      - name: area_name
+        description: '{{ doc("gtfs_areas__area_name") }}'
+      - *_valid_from
+      - *_valid_to
   - name: dim_attributions
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
       Each row is a cleaned row from an attributions.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#attributionstxt.
@@ -281,8 +303,6 @@ models:
       - *_valid_to
   - name: dim_fare_attributes
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
       Each row is a cleaned row from a fare_attributes.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#fare_attributestxt.
@@ -325,10 +345,74 @@ models:
         description: '{{ doc("gtfs_fare_attributes__transfer_duration") }}'
       - *_valid_from
       - *_valid_to
+  - name: dim_fare_leg_rules
+    description: |
+      Each row is a cleaned row from a fare_leg_rules.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/schedule/reference/#fare_leg_rulestxt.
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: base64_url, network_id, from_area_id, to_area_id, fare_product_id
+          gaps: required
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, `network_id`, `from_area_id`, `to_area_id`, and `fare_product_id`.
+        tests: *primary_key_tests
+      - *gtfs_dataset_key
+      - *base64_url
+      - name: leg_group_id
+        description: '{{ doc("gtfs_fare_leg_rules__leg_group_id") }}'
+      - name: network_id
+        description: '{{ doc("gtfs_fare_leg_rules__network_id") }}'
+      - name: from_area_id
+        description: '{{ doc("gtfs_fare_leg_rules__from_area_id") }}'
+      - name: to_area_id
+        description: '{{ doc("gtfs_fare_leg_rules__to_area_id") }}'
+      - name: fare_product_id
+        description: '{{ doc("gtfs_fare_leg_rules__fare_product_id") }}'
+        tests:
+        - not_null
+      - *_valid_from
+      - *_valid_to
+  - name: dim_fare_products
+    description: |
+      Each row is a cleaned row from a fare_products.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/schedule/reference/#fare_productstxt.
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: base64_url, fare_product_id
+          gaps: required
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `fare_product_id`.
+        tests: *primary_key_tests
+      - *gtfs_dataset_key
+      - *base64_url
+      - name: fare_product_id
+        description: '{{ doc("gtfs_fare_products__fare_product_id") }}'
+        tests:
+        - not_null
+      - name: fare_product_name
+        description: '{{ doc("gtfs_fare_products__fare_product_name") }}'
+      - name: amount
+        description: '{{ doc("gtfs_fare_products__amount") }}'
+        tests:
+        - not_null
+      - name: currency
+        description: '{{ doc("gtfs_fare_products__currency") }}'
+        tests:
+        - not_null
+      - *_valid_from
+      - *_valid_to
   - name: dim_fare_rules
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
       Each row is a cleaned row from a fare_rules.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#fare_rulestxt.
@@ -355,10 +439,44 @@ models:
         description: '{{ doc("gtfs_fare_rules__contains_id") }}'
       - *_valid_from
       - *_valid_to
+  - name: dim_fare_transfer_rules
+    description: |
+      Each row is a cleaned row from a fare_transfer_rules.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/schedule/reference/#fare_transfer_rulestxt.
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: base64_url, from_leg_group_id, to_leg_group_id, fare_product_id, transfer_count, duration_limit
+          gaps: required
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, 'from_leg_group_id', 'to_leg_group_id', 'fare_product_id', 'transfer_count', and 'duration_limit'.
+        tests: *primary_key_tests
+      - *gtfs_dataset_key
+      - *base64_url
+      - name: from_leg_group_id
+        description: '{{ doc("gtfs_fare_transfer_rules__from_leg_group_id") }}'
+      - name: to_leg_group_id
+        description: '{{ doc("gtfs_fare_transfer_rules__to_leg_group_id") }}'
+      - name: transfer_count
+        description: '{{ doc("gtfs_fare_transfer_rules__transfer_count") }}'
+      - name: duration_limit
+        description: '{{ doc("gtfs_fare_transfer_rules__duration_limit") }}'
+      - name: duration_limit_type
+        description: '{{ doc("gtfs_fare_transfer_rules__duration_limit_type") }}'
+      - name: fare_transfer_type
+        description: '{{ doc("gtfs_fare_transfer_rules__fare_transfer_type") }}'
+        tests:
+        - not_null
+      - name: fare_product_id
+        description: '{{ doc("gtfs_fare_transfer_rules__fare_product_id") }}'
+      - *_valid_from
+      - *_valid_to
   - name: dim_feed_info
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
       Each row is a cleaned row from a feed_info.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#feed_infotxt.
@@ -403,8 +521,6 @@ models:
       - *_valid_to
   - name: dim_frequencies
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
       Each row is a cleaned row from a frequencies.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#frequenciestxt.
@@ -443,8 +559,6 @@ models:
       - *_valid_to
   - name: dim_levels
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
       Each row is a cleaned row from a levels.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#levelstxt.
@@ -475,8 +589,6 @@ models:
       - *_valid_to
   - name: dim_pathways
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
       Each row is a cleaned row from a pathways.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#pathwaystxt.
@@ -579,8 +691,6 @@ models:
       - *_valid_to
   - name: dim_shapes
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
       Each row is a cleaned row from a shapes.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#shapestxt.
@@ -627,10 +737,36 @@ models:
         description: '{{ doc("gtfs_shapes__shape_dist_traveled") }}'
       - *_valid_from
       - *_valid_to
+  - name: dim_stop_areas
+    description: |
+      Each row is a cleaned row from a stop_areas.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/schedule/reference/#stop_areastxt.
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: base64_url, area_id, stop_id
+          gaps: required
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, `area_id` and `stop_id`.
+        tests: *primary_key_tests
+      - *gtfs_dataset_key
+      - *base64_url
+      - name: area_id
+        description: '{{ doc("gtfs_stop_areas__area_id") }}'
+        tests:
+        - not_null
+      - name: stop_id
+        description: '{{ doc("gtfs_stop_areas__stop_id") }}'
+        tests:
+        - not_null
+      - *_valid_from
+      - *_valid_to
   - name: dim_stops
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
       Each row is a cleaned row from a stops.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#stopstxt.
@@ -693,8 +829,6 @@ models:
       - *_valid_to
   - name: dim_transfers
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
       Each row is a cleaned row from a transfers.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#transferstxt.
@@ -733,8 +867,6 @@ models:
       - *_valid_to
   - name: dim_translations
     description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
       Each row is a cleaned row from a translations.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#translationstxt.
