@@ -21,10 +21,10 @@ unnested_contracts AS (
 
 stg_transit_database__contracts AS (
     SELECT
-        id AS key,
+        id AS record_id,
         {{ trim_make_empty_string_null(column_name = "name") }} AS name,
-        map_holder.ct_key AS contract_holder_organization_key,
-        map_vendor.ct_key AS contract_vendor_organization_key,
+        map_holder.ct_record_id AS contract_holder_organization_record_id,
+        map_vendor.ct_record_id AS contract_vendor_organization_record_id,
         covered_components,
         value,
         start_date,
@@ -37,10 +37,10 @@ stg_transit_database__contracts AS (
     FROM unnested_contracts
     -- NOTE: this is actually a bit imprecise since this is also a type 2 table eventually
     LEFT JOIN base_tts_organizations_ct_organizations_map AS map_holder
-        ON contract_holder = map_holder.tts_key
+        ON contract_holder = map_holder.tts_record_id
         AND ts between map_holder._valid_from and map_holder._valid_to
     LEFT JOIN base_tts_organizations_ct_organizations_map AS map_vendor
-        ON contract_vendor = map_vendor.tts_key
+        ON contract_vendor = map_vendor.tts_record_id
         AND ts between map_vendor._valid_from and map_vendor._valid_to
 )
 

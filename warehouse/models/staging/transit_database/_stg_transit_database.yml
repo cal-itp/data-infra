@@ -6,12 +6,12 @@ models:
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
-            - key
-            - calitp_extracted_at
+            - record_id
+            - ts
     columns:
-      - &key
-        name: key
-        tests: &primary_key_tests
+      - &record_id
+        name: record_id
+        tests:
           - not_null
       - &name
         name: name
@@ -28,7 +28,7 @@ models:
       - dbt_utils.equal_rowcount:
           compare_model: ref('base_tts_contracts_idmap')
     columns:
-      - *key
+      - *record_id
       - *name
   - name: stg_transit_database__products
     description: '{{ doc("products_table") }}'
@@ -38,7 +38,7 @@ models:
             - key
             - calitp_extracted_at
     columns:
-      - *key
+      - *record_id
       - *name
   - name: stg_transit_database__service_components
     description: '{{ doc("service_components_table") }}'
@@ -50,7 +50,7 @@ models:
       - dbt_utils.equal_rowcount:
           compare_model: ref('base_tts_service_components_idmap')
     columns:
-      - *key
+      - *record_id
       - *name
   - name: stg_transit_database__relationships_service_components
     description: |
@@ -63,7 +63,7 @@ models:
             - key
             - calitp_extracted_at
     columns:
-      - *key
+      - *record_id
       - *name
   - name: stg_transit_database__organizations
     description: '{{ doc("organizations_table") }}'
@@ -73,7 +73,7 @@ models:
             - key
             - ts
     columns:
-      - *key
+      - *record_id
   - name: stg_transit_database__services
     description: '{{ doc("services_table") }}'
     tests:
@@ -82,7 +82,7 @@ models:
             - key
             - ts
     columns:
-      - *key
+      - *record_id
       - *name
   - name: stg_transit_database__properties_and_features
     tests:
@@ -91,7 +91,7 @@ models:
             - key
             - calitp_extracted_at
     columns:
-      - *key
+      - *record_id
       - *name
   - name: stg_transit_database__gtfs_datasets
     description: '{{ doc("gtfs_datasets_table") }}'
@@ -101,8 +101,7 @@ models:
             - airtable_record_id
             - calitp_extracted_at
     columns:
-      - name: airtable_record_id
-        tests: *primary_key_tests
+      - *record_id
       - *name
       - name: data
       - name: fares_v2_status
@@ -139,7 +138,7 @@ models:
             - key
             - calitp_extracted_at
     columns:
-      - *key
+      - *record_id
       - *name
       - name: service_key
       - name: gtfs_dataset_key
@@ -175,7 +174,7 @@ models:
             - key
             - calitp_extracted_at
     columns:
-      - *key
+      - *record_id
       - *name
       - name: fips
       - name: msa
@@ -194,7 +193,7 @@ models:
             - key
             - calitp_extracted_at
     columns:
-      - *key
+      - *record_id
       - name: program
         tests:
           - not_null:
@@ -217,7 +216,7 @@ models:
             - key
             - calitp_extracted_at
     columns:
-      - *key
+      - *record_id
       - name: fare_system
         tests:
           - not_null:
@@ -269,7 +268,7 @@ models:
             - key
             - calitp_extracted_at
     columns:
-      - *key
+      - *record_id
       - name: program
         tests:
           - not_null:
@@ -290,7 +289,7 @@ models:
             - key
             - calitp_extracted_at
     columns:
-      - *key
+      - *record_id
       - name: ntd_id
         tests:
           - not_null:
@@ -343,7 +342,7 @@ models:
             - key
             - calitp_extracted_at
     columns:
-      - *key
+      - *record_id
       - *name
       - name: place_fips
       - name: placename
@@ -369,7 +368,7 @@ models:
             - key
             - calitp_extracted_at
     columns:
-      - *key
+      - *record_id
       - name: requirement
         tests:
           - not_null:

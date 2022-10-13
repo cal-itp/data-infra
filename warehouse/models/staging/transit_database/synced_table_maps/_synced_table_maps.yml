@@ -31,13 +31,13 @@ models:
       - name: ct_name
         tests:
           - not_null
-      - name: ct_key
+      - name: ct_record_id
         tests:
           - not_null
       - name: tts_name
         tests:
           - not_null
-      - name: tts_key
+      - name: tts_record_id
         tests:
           - not_null
 
@@ -71,12 +71,12 @@ models:
       - name: ct_name
         tests:
           - not_null
-      - name: ct_key
+      - name: ct_record_id
         tests:
           - not_null
       - name: tts_name
         tests:
           - not_null
-      - name: tts_key
+      - name: tts_record_id
         tests:
           - not_null

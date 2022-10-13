@@ -3,34 +3,57 @@ version: 2
 models:
   - name: dim_components
     description: '{{ doc("components_table") }}'
+    tests: &airtable_scd_tests
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: record_id
+          gaps: required
+      - range_gaps_are_microseconds:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: record_id
+      - last_record_is_infinite:
+          upper_bound_column: _valid_to
+          partition_by: record_id
     columns:
       - &key
         name: key
-        tests: &primary_key_tests
+        tests:
           - not_null
           - unique
         meta:
           metabase.semantic_type: type/PK
+      - &record_id
+        name: record_id
+        tests:
+          - not_null
+          - unique:
+              where: is_latest
   - name: dim_contracts
     description: '{{ doc("contracts_table") }}'
+    tests: *airtable_scd_tests
     columns:
       - *key
-      - name: contract_holder_organization_key
+      - *record_id
+      - name: contract_holder_organization_record_id
         tests:
           - relationships:
              to: ref('dim_organizations')
-             field: key
-      - name: contract_vendor_organization_key
+             field: record_id
+      - name: contract_vendor_organization_record_id
         tests:
           - relationships:
              to: ref('dim_organizations')
-             field: key
+             field: record_id
+
   - name: dim_data_schemas
     description: '{{ doc("data_schemas_table") }}'
     columns:
       - *key
   - name: dim_organizations
     description: '{{ doc("organizations_table") }}'
+    tests: *airtable_scd_tests
     columns:
       - *key
       - name: name
@@ -131,10 +154,10 @@ models:
     columns:
       - *key
       - name: contract_key
-        tests:
-          - relationships:
-             to: ref('dim_contracts')
-             field: key
+#        tests:
+#          - relationships:
+#             to: ref('dim_contracts')
+#             field: key
   - name: dim_gtfs_datasets
     description: |
       Each record represents a gtfs dataset (feed) that is either a type of
@@ -323,10 +346,10 @@ models:
              to: ref('dim_gtfs_datasets')
              field: key
       - name: organization_key
-        tests:
-          - relationships:
-              to: ref('dim_organizations')
-              field: key
+#        tests:
+#          - relationships:
+#              to: ref('dim_organizations')
+#              field: key
       - name: gtfs_service_data_key
         tests:
           - relationships:
@@ -410,10 +433,10 @@ models:
             - service_key
     columns:
       - name: organization_key
-        tests:
-          - relationships:
-             to: ref('dim_organizations')
-             field: key
+#        tests:
+#          - relationships:
+#             to: ref('dim_organizations')
+#             field: key
       - name: service_key
         tests:
           - relationships:
@@ -431,15 +454,15 @@ models:
             - parent_organization_key
     columns:
       - name: organization_key
-        tests:
-          - relationships:
-             to: ref('dim_organizations')
-             field: key
+#        tests:
+#          - relationships:
+#             to: ref('dim_organizations')
+#             field: key
       - name: parent_organization_key
-        tests:
-          - relationships:
-             to: ref('dim_organizations')
-             field: key
+#        tests:
+#          - relationships:
+#             to: ref('dim_organizations')
+#             field: key
   - name: bridge_paratransit_services
     description: |
       Mapping table between services and services for which
@@ -474,10 +497,10 @@ models:
             - gtfs_dataset_key
     columns:
       - name: organization_key
-        tests:
-          - relationships:
-             to: ref('dim_organizations')
-             field: key
+#        tests:
+#          - relationships:
+#             to: ref('dim_organizations')
+#             field: key
       - name: gtfs_dataset_key
         tests:
           - relationships:
@@ -495,10 +518,10 @@ models:
             - funding_program_key
     columns:
       - name: organization_key
-        tests:
-          - relationships:
-             to: ref('dim_organizations')
-             field: key
+#        tests:
+#          - relationships:
+#             to: ref('dim_organizations')
+#             field: key
       - name: funding_program_key
         tests:
           - relationships:

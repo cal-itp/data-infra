@@ -1,16 +1,13 @@
 {{ config(materialized='table') }}
 
-WITH latest_contracts AS (
-    {{ get_latest_dense_rank(
-    external_table = ref('stg_transit_database__contracts'),
-    order_by = 'calitp_extracted_at DESC'
-    ) }}
+WITH
+
+stg_transit_database__contracts AS (
+    SELECT * FROM {{ ref('stg_transit_database__contracts') }}
 ),
-latest_components AS (
-    {{ get_latest_dense_rank(
-    external_table = ref('stg_transit_database__components'),
-    order_by = 'calitp_extracted_at DESC'
-    ) }}
+
+stg_transit_database__components AS (
+    SELECT * FROM {{ ref('stg_transit_database__components') }}
 ),
 
 bridge_contracts_x_components AS (

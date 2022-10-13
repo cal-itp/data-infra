@@ -15,9 +15,9 @@ tts_organizations AS (
 base_tts_organizations_ct_organizations_map AS (
     SELECT
         ct.name AS ct_name,
-        ct.key AS ct_key,
+        ct.record_id AS ct_record_id,
         tts.name AS tts_name,
-        tts.key AS tts_key,
+        tts.record_id AS tts_record_id,
         -- use the later one for start date
         CASE WHEN ct.ts < tts.ts THEN tts.ts ELSE ct.ts END AS _valid_from,
         -- use the earlier one for end date
