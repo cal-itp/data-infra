@@ -1,6 +1,5 @@
-
-
 WITH
+
 once_daily_fare_systems AS (
     {{ get_latest_dense_rank(
         external_table = source('airtable', 'california_transit__fare_systems'),
@@ -11,7 +10,7 @@ once_daily_fare_systems AS (
 stg_transit_database__fare_systems AS (
     SELECT
         id AS key,
-        {{ trim_make_empty_string_null(column_name = "fare_system") }},
+        {{ trim_make_empty_string_null(column_name = "fare_system") }} AS fare_system,
         fares_based_on_zone,
         fares_based_on_route,
         zone_based_fares,

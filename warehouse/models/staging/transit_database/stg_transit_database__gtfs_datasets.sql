@@ -1,6 +1,5 @@
-
-
 WITH
+
 -- TODO: we need to change this logic -- this prevents us from successfully joining with GTFS data
 -- if it was downloaded based on an earlier extract in a day with multiple extracts
 once_daily_gtfs_datasets AS (
@@ -53,7 +52,7 @@ construct_base64_url AS (
 stg_transit_database__gtfs_datasets AS (
     SELECT
         id AS airtable_record_id,
-        {{ trim_make_empty_string_null(column_name = "name") }},
+        {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         data,
         data_quality_pipeline,
         fares_v2_status,
