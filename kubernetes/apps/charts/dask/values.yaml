@@ -1,0 +1,6 @@
+#worker:
+#  tolerations:
+
+dask:
+  jupyter:
+    enabled: false
