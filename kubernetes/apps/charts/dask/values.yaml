@@ -3,9 +3,9 @@ dask:
     enabled: false
   worker:
     tolerations:
-      - key: pod-role=computetask
+      - key: hub.jupyter.org/dedicated
         operator: Equal
-        value: computetask
+        value: user
         effect: NoSchedule
     affinity:
       nodeAffinity:
