@@ -20,12 +20,10 @@ RUN curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cl
 RUN curl -sSL https://install.python-poetry.org | python3 -
 ENV PATH="$HOME/.local/bin:$PATH"
 
-WORKDIR /reqs
-
 COPY ./pyproject.toml /reqs/pyproject.toml
 COPY ./poetry.lock /reqs/poetry.lock
 RUN poetry config virtualenvs.create false
-RUN poetry install
+RUN cd /reqs && poetry install
 
 RUN mkdir /opt/conda/share/jupyter/lab/settings/
 COPY ./overrides.json /opt/conda/share/jupyter/lab/settings/overrides.json

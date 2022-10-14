@@ -1,6 +1,18 @@
-#worker:
-#  tolerations:
-
 dask:
   jupyter:
     enabled: false
+  worker:
+    tolerations:
+      - key: pod-role=computetask
+        operator: Equal
+        value: computetask
+        effect: NoSchedule
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: hub.jupyter.org/node-purpose
+              operator: In
+              values:
+              - user
