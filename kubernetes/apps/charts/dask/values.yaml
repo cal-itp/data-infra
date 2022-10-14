@@ -1,3 +1,4 @@
+# https://github.com/dask/helm-chart/blob/main/dask/values.yaml
 dask:
   scheduler:
     image:
