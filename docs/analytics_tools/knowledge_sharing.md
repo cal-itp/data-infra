@@ -18,6 +18,8 @@ Here are some resources data analysts have collected and referenced, that will h
 
 ## Data Analysis
 ### Python
+* [Composing Programs: comprehensive Python course](https://composingprograms.com/)
+* [Intermediate Python: tips for improving your programs](https://book.pythontips.com/en/latest/index.html)
 * [Stop Python from executing code when a module is imported.](https://stackoverflow.com/questions/6523791/why-is-python-running-my-module-when-i-import-it-and-how-do-i-stop-it)
 * [Loop through 2 lists with zip in parallel.](https://stackoverflow.com/questions/1663807/how-to-iterate-through-two-lists-in-parallel)
 * [Find the elements that are in one list, but not in another list.](https://stackoverflow.com/questions/41125909/python-find-elements-in-one-list-that-are-not-in-the-other)
@@ -27,6 +29,8 @@ Here are some resources data analysts have collected and referenced, that will h
 * [Turn columns into dummy variables.](https://pandas.pydata.org/docs/reference/api/pandas.get_dummies.html)
 * [Export multiple dataframes into their own sheets to a single Excel workbook.](https://xlsxwriter.readthedocs.io/example_pandas_multiple.html)
 * [Display multiple dataframes side by side.](https://stackoverflow.com/questions/38783027/jupyter-notebook-display-two-pandas-tables-side-by-side)
+* [Display all rows or columns of a dataframe in the notebook](https://pandas.pydata.org/pandas-docs/stable/user_guide/options.html)
+
 
 ### Summarizing
 * [Groupby and calculate a new value, then use that value within your DataFrame.](https://stackoverflow.com/questions/35640364/python-pandas-max-value-in-a-group-as-a-new-column)
@@ -120,6 +124,7 @@ def add_tooltip(chart, tooltip1, tooltip2):
 
 ### Maps
 * [Examples of folium, branca, and color maps.](https://nbviewer.org/github/python-visualization/folium/blob/v0.2.0/examples/Colormaps.ipynb)
+* [Quick interactive maps with Geopandas.gdf.explore()](https://geopandas.org/en/stable/docs/reference/api/geopandas.GeoDataFrame.explore.html)
 
 ### DataFrames
 * [Styling dataframes with HTML.](https://pandas.pydata.org/pandas-docs/stable/user_guide/style.html)
