@@ -6,7 +6,7 @@ dask:
     metrics:
       enabled: true
     serviceAnnotations:
-      prometheus.io/port: "8786"
+      prometheus.io/port: "80"
       prometheus.io/scrape: "true"
   worker:
     image:
