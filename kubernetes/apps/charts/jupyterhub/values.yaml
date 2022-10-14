@@ -24,7 +24,7 @@ jupyterhub:
             - "sh"
             - "-c"
             - >
-              cp /tmp/custom.sh /home/jovyan/.profile;
+              cp /tmp/profile.sh /home/jovyan/.profile;
   scheduling:
     userPods:
       nodeAffinity:
