@@ -154,6 +154,11 @@
   </label>
   <ul class="current">
    <li class="toctree-l2">
+    <a class="reference internal" href="github_setup.html">
+     GitHub Setup
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="tools_quick_links.html">
      Tools Quick Links
     </a>
@@ -753,6 +758,18 @@
   <a class="reference internal nav-link" href="#shared-utils">
    shared utils
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#in-terminal">
+     In terminal:
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#in-notebook">
+     In notebook:
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#calitp">
@@ -797,11 +814,6 @@
     </a>
    </li>
   </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id4">
-   shared utils
-  </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#pandas">
@@ -842,6 +854,18 @@
   <a class="reference internal nav-link" href="#shared-utils">
    shared utils
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#in-terminal">
+     In terminal:
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#in-notebook">
+     In notebook:
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#calitp">
@@ -888,11 +912,6 @@
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id4">
-   shared utils
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#pandas">
    pandas
   </a>
@@ -924,33 +943,46 @@
 <br> - <a class="reference external" href="#collect-query-results">Collect Query Results</a>
 <br> - <a class="reference external" href="#show-query-sql">Show Query SQL</a>
 <br> - <a class="reference internal" href="#more-siuba-resources"><span class="std std-ref">More siuba Resources</span></a></p></li>
-<li><p><a class="reference internal" href="#id4"><span class="std std-ref">shared utils</span></a></p></li>
 <li><p><a class="reference internal" href="#pandas-resources"><span class="std std-ref">pandas</span></a></p></li>
 <li><p><a class="reference external" href="#add-new-packages">Add New Packages</a></p></li>
 </ol>
 </div>
 <div class="section" id="shared-utils">
-<h2>shared utils<a class="headerlink" href="#shared-utils" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h2>shared utils<a class="headerlink" href="#shared-utils" title="Permalink to this headline">¶</a></h2>
 <p>A set of shared utility functions can also be installed, similarly to any Python library. The <a class="reference external" href="https://github.com/cal-itp/data-analyses/shared_utils">shared_utils</a> are stored here. Generalized functions for analysis are added as collaborative work evolves so we aren’t constantly reinventing the wheel.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># In terminal:</span>
-<span class="n">cd</span> <span class="n">data</span><span class="o">-</span><span class="n">analyses</span><span class="o">/</span><span class="n">_shared_utils</span>
+<div class="section" id="in-terminal">
+<h3>In terminal:<a class="headerlink" href="#in-terminal" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Navigate to the package folder: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">data-analyses/_shared_utils</span></code></p></li>
+<li><p>Use the make command to run through conda install and pip install: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">setup_env</span></code></p>
+<ul>
+<li><p>Note: you may need to select Kernel -&gt; Restart Kernel from the top menu after make setup_env in order to successfully import shared_utils</p></li>
+</ul>
+</li>
+<li><p>Alternative: add an <code class="docutils literal notranslate"><span class="pre">alias</span></code> to your <code class="docutils literal notranslate"><span class="pre">.bash_profile</span></code>:</p>
+<ul>
+<li><p>In terminal use <code class="docutils literal notranslate"><span class="pre">cd</span></code> to navigate to the home directory (not a repository)</p></li>
+<li><p>Type <code class="docutils literal notranslate"><span class="pre">nano</span> <span class="pre">.bash_profile</span></code> to open the .bash_profile in a text editor</p></li>
+<li><p>Add a line at end: <code class="docutils literal notranslate"><span class="pre">alias</span> <span class="pre">go='cd</span> <span class="pre">~/data-analyses/portfolio</span> <span class="pre">&amp;&amp;</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span> <span class="pre">&amp;&amp;</span> <span class="pre">cd</span> <span class="pre">../_shared_utils</span> <span class="pre">&amp;&amp;</span> <span class="pre">make</span> <span class="pre">setup_env</span> <span class="pre">&amp;&amp;</span> <span class="pre">cd</span> <span class="pre">..'</span></code></p></li>
+<li><p>Exit with Ctrl+X, hit yes, then hit enter at the filename prompt</p></li>
+<li><p>Restart your server; you can check your changes with <code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">.bash_profile</span></code></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="in-notebook">
+<h3>In notebook:<a class="headerlink" href="#in-notebook" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">shared_utils</span>
 
-<span class="c1"># Use the make command to run through conda install and pip install</span>
-<span class="n">make</span> <span class="n">setup_env</span>
-
-<span class="c1"># In notebook:</span>
-<span class="kn">import</span> <span class="nn">shared_utils</span>
-
+<span class="c1">#example of using shared_utils</span>
 <span class="n">shared_utils</span><span class="o">.</span><span class="n">geography_utils</span><span class="o">.</span><span class="n">WGS84</span>
-
-<span class="c1"># Note: you may need to select Kernel -&gt; Restart Kernel from the top menu</span>
-<span class="c1"># after make setup_env in order to successfully import shared_utils</span>
 </pre></div>
 </div>
 <p>See <a class="reference external" href="https://github.com/cal-itp/data-analyses/tree/main/example_report">data-analyses/example_reports</a> for examples on how to use <code class="docutils literal notranslate"><span class="pre">shared_utils</span></code> for general functions, charts, and maps.</p>
 </div>
+</div>
 <div class="section" id="calitp">
-<span id="id1"></span><h2>calitp<a class="headerlink" href="#calitp" title="Permalink to this headline">¶</a></h2>
+<span id="id2"></span><h2>calitp<a class="headerlink" href="#calitp" title="Permalink to this headline">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">calitp</span></code> is an internal library of utility functions used to access our warehouse data.</p>
 <div class="section" id="import-tbl">
 <h3>import tbl<a class="headerlink" href="#import-tbl" title="Permalink to this headline">¶</a></h3>
@@ -968,7 +1000,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/pkg_resources/__init__.py:2456: UserWarning: Obsolete pybigquery is installed, which is likely to
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.8.14/x64/lib/python3.8/site-packages/pkg_resources/__init__.py:2456: UserWarning: Obsolete pybigquery is installed, which is likely to
 interfere with sqlalchemy_bigquery.
 pybigquery should be uninstalled.
   module = __import__(self.module_name, fromlist=[&#39;__name__&#39;], level=0)
@@ -1005,43 +1037,43 @@ pybigquery should be uninstalled.
   <tbody>
     <tr>
       <th>0</th>
-      <td>7163072394104027048</td>
-      <td>7810251488346474526</td>
-      <td>2022-06-22</td>
-      <td>2022-03-12</td>
-      <td>2022-06-29</td>
+      <td>-7983989138583547129</td>
+      <td>603325171794367025</td>
+      <td>2021-10-21</td>
+      <td>2021-09-30</td>
+      <td>2021-11-01</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-4941191507196261664</td>
-      <td>-9024239805506298293</td>
-      <td>2022-03-13</td>
-      <td>2022-03-03</td>
-      <td>2022-03-22</td>
+      <td>-7983989138583547129</td>
+      <td>1900530758473194710</td>
+      <td>2022-07-11</td>
+      <td>2022-07-05</td>
+      <td>2022-07-28</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>-4941191507196261664</td>
-      <td>-9024239805506298293</td>
-      <td>2022-03-21</td>
-      <td>2022-03-03</td>
-      <td>2022-03-22</td>
+      <td>-5144776693092683578</td>
+      <td>-5461054011127360086</td>
+      <td>2021-10-02</td>
+      <td>2021-09-05</td>
+      <td>2021-10-21</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>558786184387747543</td>
-      <td>-951498181921903348</td>
-      <td>2021-09-28</td>
-      <td>2021-07-29</td>
-      <td>2021-10-11</td>
+      <td>8654575366107518227</td>
+      <td>4483100731162076934</td>
+      <td>2021-11-06</td>
+      <td>2021-11-03</td>
+      <td>2021-11-21</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>8794138346383749474</td>
-      <td>-2859751762945309582</td>
-      <td>2022-07-06</td>
-      <td>2022-04-11</td>
-      <td>2022-07-11</td>
+      <td>-7198457722100906194</td>
+      <td>-8088577524757298255</td>
+      <td>2021-06-04</td>
+      <td>2021-05-21</td>
+      <td>2021-06-06</td>
     </tr>
   </tbody>
 </table>
@@ -1105,13 +1137,14 @@ pybigquery should be uninstalled.
       <th>calitp_feed_name</th>
       <th>feed_publisher_name</th>
       <th>feed_publisher_url</th>
-      <th>feed_lang</th>
+      <th>...</th>
       <th>default_lang</th>
       <th>feed_version</th>
       <th>feed_contact_email</th>
       <th>feed_contact_url</th>
       <th>feed_start_date</th>
       <th>feed_end_date</th>
+      <th>rank</th>
       <th>is_composite_feed</th>
       <th>calitp_extracted_at</th>
       <th>calitp_deleted_at</th>
@@ -1120,19 +1153,44 @@ pybigquery should be uninstalled.
   <tbody>
     <tr>
       <th>0</th>
-      <td>-3971869378563233510</td>
-      <td>8</td>
+      <td>18414309913382105</td>
       <td>1</td>
-      <td>Monterey-Salinas Transit</td>
-      <td>http://www.mst.org/google/google_transit.zip</td>
+      <td>2</td>
+      <td>Glendale Beeline</td>
+      <td>http://glendaleca.gov/Home/ShowDocument?id=29549</td>
       <td>False</td>
-      <td>8__1</td>
-      <td>Monterey-Salinas Transit (1)</td>
-      <td>MST</td>
-      <td>http://www.mst.org</td>
-      <td>en</td>
+      <td>1__2</td>
+      <td>Glendale Beeline (2)</td>
       <td>None</td>
-      <td>202101-February2021v00</td>
+      <td>None</td>
+      <td>...</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>False</td>
+      <td>2021-04-15</td>
+      <td>2021-04-16</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-5674234595782173143</td>
+      <td>2</td>
+      <td>0</td>
+      <td>Beach Cities Transit</td>
+      <td>https://www.redondo.org/civicax/filebank/blobd...</td>
+      <td>False</td>
+      <td>2__0</td>
+      <td>Beach Cities Transit (0)</td>
+      <td>None</td>
+      <td>None</td>
+      <td>...</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
@@ -1142,105 +1200,86 @@ pybigquery should be uninstalled.
       <td>2021-05-13</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>3220016414264074104</td>
-      <td>13</td>
-      <td>0</td>
-      <td>Amtrak</td>
-      <td>https://content.amtrak.com/content/gtfs/GTFS.zip</td>
-      <td>True</td>
-      <td>13__0</td>
-      <td>Amtrak (0)</td>
-      <td>Amtrak</td>
-      <td>http://www.amtrak.com</td>
-      <td>en</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>2022-02-28</td>
-      <td>None</td>
-      <td>False</td>
-      <td>2022-02-28</td>
-      <td>2022-03-04</td>
-    </tr>
-    <tr>
       <th>2</th>
-      <td>-1246851374109274803</td>
-      <td>13</td>
-      <td>0</td>
-      <td>Amtrak</td>
-      <td>https://storage.googleapis.com/gtfs-data/sched...</td>
-      <td>True</td>
-      <td>13__0</td>
-      <td>Amtrak (0)</td>
-      <td>Amtrak</td>
-      <td>http://www.amtrak.com</td>
-      <td>en</td>
+      <td>6604405555889056708</td>
+      <td>2</td>
+      <td>5</td>
+      <td>SamTrans</td>
+      <td>http://www.samtrans.com/Assets/GTFS/samtrans/S...</td>
+      <td>False</td>
+      <td>2__5</td>
+      <td>SamTrans (5)</td>
+      <td>None</td>
+      <td>None</td>
+      <td>...</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
-      <td>2021-09-04</td>
+      <td>None</td>
+      <td>None</td>
       <td>None</td>
       <td>False</td>
-      <td>2021-10-19</td>
-      <td>2022-02-28</td>
+      <td>2021-04-15</td>
+      <td>2021-04-16</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-6443842139930306849</td>
-      <td>13</td>
+      <td>-5403103044674130453</td>
+      <td>3</td>
       <td>0</td>
-      <td>Amtrak</td>
-      <td>https://content.amtrak.com/content/gtfs/GTFS.zip</td>
-      <td>True</td>
-      <td>13__0</td>
-      <td>Amtrak (0)</td>
-      <td>Amtrak</td>
-      <td>http://www.amtrak.com</td>
-      <td>en</td>
+      <td>Commuter Express</td>
+      <td>http://lacitydot.com/gtfs/administrator/gtfszi...</td>
+      <td>False</td>
+      <td>3__0</td>
+      <td>Commuter Express (0)</td>
+      <td>None</td>
+      <td>None</td>
+      <td>...</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
-      <td>2022-03-05</td>
+      <td>None</td>
+      <td>None</td>
       <td>None</td>
       <td>False</td>
-      <td>2022-03-04</td>
-      <td>2022-05-09</td>
+      <td>2021-04-15</td>
+      <td>2021-05-13</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>4406438169490586349</td>
-      <td>13</td>
+      <td>-6200903198154079414</td>
+      <td>5</td>
       <td>0</td>
-      <td>Amtrak</td>
-      <td>https://content.amtrak.com/content/gtfs/GTFS.zip</td>
-      <td>True</td>
-      <td>13__0</td>
-      <td>Amtrak (0)</td>
-      <td>Amtrak</td>
-      <td>http://www.amtrak.com</td>
-      <td>en</td>
+      <td>e-Tran</td>
+      <td>https://share.elkgrovecity.org/messages/tpLyue...</td>
+      <td>False</td>
+      <td>5__0</td>
+      <td>e-Tran (0)</td>
+      <td>None</td>
+      <td>None</td>
+      <td>...</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
-      <td>2022-07-09</td>
+      <td>None</td>
+      <td>None</td>
       <td>None</td>
       <td>False</td>
-      <td>2022-07-19</td>
-      <td>2022-07-25</td>
+      <td>2021-04-15</td>
+      <td>2021-05-13</td>
     </tr>
   </tbody>
 </table>
+<p>5 rows × 21 columns</p>
 </div></div></div>
 </div>
 </div>
 </div>
 <div class="section" id="siuba">
-<span id="id2"></span><h2>siuba<a class="headerlink" href="#siuba" title="Permalink to this headline">¶</a></h2>
+<span id="id3"></span><h2>siuba<a class="headerlink" href="#siuba" title="Permalink to this headline">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">siuba</span></code> is a tool that allows the same analysis code to run on a pandas DataFrame,
 as well as generate SQL for different databases.
 It supports most <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/series.html">pandas Series methods</a> analysts use. See the <a class="reference external" href="https://siuba.readthedocs.io">siuba docs</a> for more information.</p>
@@ -1292,27 +1331,27 @@ and showing SQL test queries that siuba code generates.</p>
   <tbody>
     <tr>
       <th>0</th>
-      <td>1619926170103152824</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>1</th>
       <td>-74403229883010320</td>
       <td>1</td>
     </tr>
     <tr>
-      <th>2</th>
+      <th>1</th>
       <td>4353298498747921001</td>
       <td>1</td>
     </tr>
     <tr>
+      <th>2</th>
+      <td>-5768367084319898193</td>
+      <td>1</td>
+    </tr>
+    <tr>
       <th>3</th>
-      <td>2570854701378106641</td>
+      <td>-8979759065771846304</td>
       <td>1</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-1803822485067769256</td>
+      <td>-5013919702465349414</td>
       <td>1</td>
     </tr>
   </tbody>
@@ -1362,13 +1401,14 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
       <th>calitp_feed_name</th>
       <th>feed_publisher_name</th>
       <th>feed_publisher_url</th>
-      <th>feed_lang</th>
+      <th>...</th>
       <th>default_lang</th>
       <th>feed_version</th>
       <th>feed_contact_email</th>
       <th>feed_contact_url</th>
       <th>feed_start_date</th>
       <th>feed_end_date</th>
+      <th>rank</th>
       <th>is_composite_feed</th>
       <th>calitp_extracted_at</th>
       <th>calitp_deleted_at</th>
@@ -1377,121 +1417,127 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
   <tbody>
     <tr>
       <th>0</th>
-      <td>-3971869378563233510</td>
-      <td>8</td>
+      <td>18414309913382105</td>
       <td>1</td>
-      <td>Monterey-Salinas Transit</td>
-      <td>http://www.mst.org/google/google_transit.zip</td>
+      <td>2</td>
+      <td>Glendale Beeline</td>
+      <td>http://glendaleca.gov/Home/ShowDocument?id=29549</td>
       <td>False</td>
-      <td>8__1</td>
-      <td>Monterey-Salinas Transit (1)</td>
-      <td>MST</td>
-      <td>http://www.mst.org</td>
-      <td>en</td>
+      <td>1__2</td>
+      <td>Glendale Beeline (2)</td>
       <td>None</td>
-      <td>202101-February2021v00</td>
+      <td>None</td>
+      <td>...</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>NaN</td>
+      <td>False</td>
+      <td>2021-04-15</td>
+      <td>2021-04-16</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-5674234595782173143</td>
+      <td>2</td>
+      <td>0</td>
+      <td>Beach Cities Transit</td>
+      <td>https://www.redondo.org/civicax/filebank/blobd...</td>
+      <td>False</td>
+      <td>2__0</td>
+      <td>Beach Cities Transit (0)</td>
+      <td>None</td>
+      <td>None</td>
+      <td>...</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>NaN</td>
       <td>False</td>
       <td>2021-04-15</td>
       <td>2021-05-13</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>3220016414264074104</td>
-      <td>13</td>
-      <td>0</td>
-      <td>Amtrak</td>
-      <td>https://content.amtrak.com/content/gtfs/GTFS.zip</td>
-      <td>True</td>
-      <td>13__0</td>
-      <td>Amtrak (0)</td>
-      <td>Amtrak</td>
-      <td>http://www.amtrak.com</td>
-      <td>en</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>2022-02-28</td>
-      <td>None</td>
-      <td>False</td>
-      <td>2022-02-28</td>
-      <td>2022-03-04</td>
-    </tr>
-    <tr>
       <th>2</th>
-      <td>-1246851374109274803</td>
-      <td>13</td>
-      <td>0</td>
-      <td>Amtrak</td>
-      <td>https://storage.googleapis.com/gtfs-data/sched...</td>
-      <td>True</td>
-      <td>13__0</td>
-      <td>Amtrak (0)</td>
-      <td>Amtrak</td>
-      <td>http://www.amtrak.com</td>
-      <td>en</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>2021-09-04</td>
-      <td>None</td>
+      <td>6604405555889056708</td>
+      <td>2</td>
+      <td>5</td>
+      <td>SamTrans</td>
+      <td>http://www.samtrans.com/Assets/GTFS/samtrans/S...</td>
       <td>False</td>
-      <td>2021-10-19</td>
-      <td>2022-02-28</td>
+      <td>2__5</td>
+      <td>SamTrans (5)</td>
+      <td>None</td>
+      <td>None</td>
+      <td>...</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>NaN</td>
+      <td>False</td>
+      <td>2021-04-15</td>
+      <td>2021-04-16</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-6443842139930306849</td>
-      <td>13</td>
+      <td>-5403103044674130453</td>
+      <td>3</td>
       <td>0</td>
-      <td>Amtrak</td>
-      <td>https://content.amtrak.com/content/gtfs/GTFS.zip</td>
-      <td>True</td>
-      <td>13__0</td>
-      <td>Amtrak (0)</td>
-      <td>Amtrak</td>
-      <td>http://www.amtrak.com</td>
-      <td>en</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>2022-03-05</td>
-      <td>None</td>
+      <td>Commuter Express</td>
+      <td>http://lacitydot.com/gtfs/administrator/gtfszi...</td>
       <td>False</td>
-      <td>2022-03-04</td>
-      <td>2022-05-09</td>
+      <td>3__0</td>
+      <td>Commuter Express (0)</td>
+      <td>None</td>
+      <td>None</td>
+      <td>...</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>NaN</td>
+      <td>False</td>
+      <td>2021-04-15</td>
+      <td>2021-05-13</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>4406438169490586349</td>
-      <td>13</td>
+      <td>-6200903198154079414</td>
+      <td>5</td>
       <td>0</td>
-      <td>Amtrak</td>
-      <td>https://content.amtrak.com/content/gtfs/GTFS.zip</td>
-      <td>True</td>
-      <td>13__0</td>
-      <td>Amtrak (0)</td>
-      <td>Amtrak</td>
-      <td>http://www.amtrak.com</td>
-      <td>en</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>2022-07-09</td>
-      <td>None</td>
+      <td>e-Tran</td>
+      <td>https://share.elkgrovecity.org/messages/tpLyue...</td>
       <td>False</td>
-      <td>2022-07-19</td>
-      <td>2022-07-25</td>
+      <td>5__0</td>
+      <td>e-Tran (0)</td>
+      <td>None</td>
+      <td>None</td>
+      <td>...</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>NaN</td>
+      <td>False</td>
+      <td>2021-04-15</td>
+      <td>2021-05-13</td>
     </tr>
   </tbody>
 </table>
+<p>5 rows × 21 columns</p>
 </div></div></div>
 </div>
 </div>
@@ -1508,8 +1554,8 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SELECT `anon_1`.`feed_key`, `anon_1`.`calitp_itp_id`, `anon_1`.`calitp_url_number`, `anon_1`.`calitp_agency_name`, `anon_1`.`raw_gtfs_schedule_url`, `anon_1`.`calitp_id_in_latest`, `anon_1`.`calitp_feed_id`, `anon_1`.`calitp_feed_name`, `anon_1`.`feed_publisher_name`, `anon_1`.`feed_publisher_url`, `anon_1`.`feed_lang`, `anon_1`.`default_lang`, `anon_1`.`feed_version`, `anon_1`.`feed_contact_email`, `anon_1`.`feed_contact_url`, `anon_1`.`feed_start_date`, `anon_1`.`feed_end_date`, `anon_1`.`is_composite_feed`, `anon_1`.`calitp_extracted_at`, `anon_1`.`calitp_deleted_at` 
-FROM (SELECT feed_key, calitp_itp_id, calitp_url_number, calitp_agency_name, raw_gtfs_schedule_url, calitp_id_in_latest, calitp_feed_id, calitp_feed_name, feed_publisher_name, feed_publisher_url, feed_lang, default_lang, feed_version, feed_contact_email, feed_contact_url, feed_start_date, feed_end_date, is_composite_feed, calitp_extracted_at, calitp_deleted_at 
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SELECT `anon_1`.`feed_key`, `anon_1`.`calitp_itp_id`, `anon_1`.`calitp_url_number`, `anon_1`.`calitp_agency_name`, `anon_1`.`raw_gtfs_schedule_url`, `anon_1`.`calitp_id_in_latest`, `anon_1`.`calitp_feed_id`, `anon_1`.`calitp_feed_name`, `anon_1`.`feed_publisher_name`, `anon_1`.`feed_publisher_url`, `anon_1`.`feed_lang`, `anon_1`.`default_lang`, `anon_1`.`feed_version`, `anon_1`.`feed_contact_email`, `anon_1`.`feed_contact_url`, `anon_1`.`feed_start_date`, `anon_1`.`feed_end_date`, `anon_1`.`rank`, `anon_1`.`is_composite_feed`, `anon_1`.`calitp_extracted_at`, `anon_1`.`calitp_deleted_at` 
+FROM (SELECT feed_key, calitp_itp_id, calitp_url_number, calitp_agency_name, raw_gtfs_schedule_url, calitp_id_in_latest, calitp_feed_id, calitp_feed_name, feed_publisher_name, feed_publisher_url, feed_lang, default_lang, feed_version, feed_contact_email, feed_contact_url, feed_start_date, feed_end_date, rank, is_composite_feed, calitp_extracted_at, calitp_deleted_at 
 FROM `views.gtfs_schedule_dim_feeds`) AS `anon_1` 
 WHERE regexp_contains(`anon_1`.`calitp_agency_name`, &#39;Metro&#39;)
 </pre></div>
@@ -1545,13 +1591,14 @@ WHERE regexp_contains(`anon_1`.`calitp_agency_name`, &#39;Metro&#39;)
       <th>calitp_feed_name</th>
       <th>feed_publisher_name</th>
       <th>feed_publisher_url</th>
-      <th>feed_lang</th>
+      <th>...</th>
       <th>default_lang</th>
       <th>feed_version</th>
       <th>feed_contact_email</th>
       <th>feed_contact_url</th>
       <th>feed_start_date</th>
       <th>feed_end_date</th>
+      <th>rank</th>
       <th>is_composite_feed</th>
       <th>calitp_extracted_at</th>
       <th>calitp_deleted_at</th>
@@ -1560,152 +1607,138 @@ WHERE regexp_contains(`anon_1`.`calitp_agency_name`, &#39;Metro&#39;)
   <tbody>
     <tr>
       <th>0</th>
-      <td>-5156377554606803196</td>
-      <td>293</td>
+      <td>-442792423321825659</td>
+      <td>278</td>
       <td>0</td>
-      <td>Santa Barbara Metropolitan Transit District</td>
-      <td>http://sbmtd.gov/google_transit/feed.zip</td>
+      <td>San Diego Metropolitan Transit System</td>
+      <td>https://www.sdmts.com/google_transit_files/goo...</td>
       <td>True</td>
-      <td>293__0</td>
-      <td>Santa Barbara Metropolitan Transit District (0)</td>
-      <td>Santa Barbara MTD</td>
-      <td>http://www.sbmtd.gov</td>
-      <td>en</td>
+      <td>278__0</td>
+      <td>San Diego Metropolitan Transit System (0)</td>
+      <td>MTS</td>
+      <td>http://www.sdmts.com</td>
+      <td>...</td>
       <td>None</td>
-      <td>220425 April 25_20220331</td>
+      <td>v2 - back to single utc stop</td>
       <td>None</td>
       <td>None</td>
-      <td>2022-04-25</td>
-      <td>2022-08-14</td>
+      <td>None</td>
+      <td>None</td>
+      <td>1</td>
       <td>False</td>
-      <td>2022-04-04</td>
-      <td>2022-04-18</td>
+      <td>2022-02-08</td>
+      <td>2022-02-09</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-4045042305146455543</td>
-      <td>296</td>
+      <td>-5144776693092683578</td>
+      <td>278</td>
       <td>0</td>
-      <td>Santa Cruz Metropolitan Transit District</td>
-      <td>http://scmtd.com/google_transit/google_transit...</td>
+      <td>San Diego Metropolitan Transit System</td>
+      <td>https://www.sdmts.com/google_transit_files/goo...</td>
       <td>True</td>
-      <td>296__0</td>
-      <td>Santa Cruz Metropolitan Transit District (0)</td>
-      <td>Santa Cruz Metro</td>
-      <td>http://www.scmtd.com</td>
-      <td>en</td>
+      <td>278__0</td>
+      <td>San Diego Metropolitan Transit System (0)</td>
+      <td>MTS</td>
+      <td>http://www.sdmts.com</td>
+      <td>...</td>
+      <td>None</td>
+      <td>v3 - Sept 5. 2021 svc change unmerged file + 9...</td>
       <td>None</td>
       <td>None</td>
-      <td>gtfsupdates@scmtd.com</td>
-      <td>https://scmtd.com/en/riders-guide/google-trans...</td>
       <td>None</td>
       <td>None</td>
+      <td>1</td>
       <td>False</td>
-      <td>2021-09-07</td>
-      <td>2021-12-10</td>
+      <td>2021-09-05</td>
+      <td>2021-10-21</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>-6941377690184990428</td>
-      <td>296</td>
+      <td>8795779120208877258</td>
+      <td>278</td>
       <td>0</td>
-      <td>Santa Cruz Metropolitan Transit District</td>
-      <td>http://scmtd.com/google_transit/google_transit...</td>
+      <td>San Diego Metropolitan Transit System</td>
+      <td>https://www.sdmts.com/google_transit_files/goo...</td>
       <td>True</td>
-      <td>296__0</td>
-      <td>Santa Cruz Metropolitan Transit District (0)</td>
-      <td>Santa Cruz Metro</td>
-      <td>http://www.scmtd.com</td>
-      <td>en</td>
+      <td>278__0</td>
+      <td>San Diego Metropolitan Transit System (0)</td>
+      <td>MTS</td>
+      <td>http://www.sdmts.com</td>
+      <td>...</td>
+      <td>None</td>
+      <td>v1 merged - 2206v2 &amp; 2209v1.2</td>
       <td>None</td>
       <td>None</td>
-      <td>gtfsupdates@scmtd.com</td>
-      <td>https://www.scmtd.com/en/riders-guide/about-go...</td>
       <td>None</td>
       <td>None</td>
+      <td>1</td>
       <td>False</td>
-      <td>2021-12-10</td>
-      <td>2099-01-01</td>
+      <td>2022-08-16</td>
+      <td>2022-08-25</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>6961970883549490697</td>
-      <td>323</td>
+      <td>4271781403277438177</td>
+      <td>278</td>
       <td>0</td>
-      <td>Metrolink</td>
-      <td>https://www.metrolinktrains.com/globalassets/a...</td>
+      <td>San Diego Metropolitan Transit System</td>
+      <td>https://www.sdmts.com/google_transit_files/goo...</td>
       <td>True</td>
-      <td>323__0</td>
-      <td>Metrolink (0)</td>
-      <td>Metrolink Trains</td>
-      <td>http://www.metrolinktrains.com</td>
-      <td>en</td>
+      <td>278__0</td>
+      <td>San Diego Metropolitan Transit System (0)</td>
+      <td>MTS</td>
+      <td>http://www.sdmts.com</td>
+      <td>...</td>
       <td>None</td>
-      <td>20210106</td>
-      <td>None</td>
-      <td>None</td>
+      <td>v1.3: 1.2 pathways + GTFS Fares v2</td>
       <td>None</td>
       <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>1</td>
       <td>False</td>
-      <td>2021-04-15</td>
-      <td>2021-05-24</td>
+      <td>2022-07-05</td>
+      <td>2022-07-25</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>5099168586858814596</td>
-      <td>323</td>
+      <td>-2403866816282273791</td>
+      <td>278</td>
       <td>0</td>
-      <td>Metrolink</td>
-      <td>https://www.metrolinktrains.com/globalassets/a...</td>
+      <td>San Diego Metropolitan Transit System</td>
+      <td>https://www.sdmts.com/google_transit_files/goo...</td>
       <td>True</td>
-      <td>323__0</td>
-      <td>Metrolink (0)</td>
-      <td>Metrolink Trains</td>
-      <td>http://www.metrolinktrains.com</td>
-      <td>en</td>
+      <td>278__0</td>
+      <td>San Diego Metropolitan Transit System (0)</td>
+      <td>MTS</td>
+      <td>http://www.sdmts.com</td>
+      <td>...</td>
       <td>None</td>
-      <td>20211015</td>
-      <td>None</td>
-      <td>None</td>
+      <td>v1.1 - Nov 21 2021 svc change unmerged + remov...</td>
       <td>None</td>
       <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>1</td>
       <td>False</td>
-      <td>2021-10-28</td>
-      <td>2022-04-05</td>
+      <td>2021-11-21</td>
+      <td>2021-11-23</td>
     </tr>
   </tbody>
 </table>
+<p>5 rows × 21 columns</p>
 </div><p># .. may have more rows</p></div></div></div>
 </div>
 <p>Note that here the pandas Series method <code class="docutils literal notranslate"><span class="pre">str.contains</span></code> corresponds to <code class="docutils literal notranslate"><span class="pre">regexp_contains</span></code> in Google BigQuery.</p>
 </div>
 <div class="section" id="more-siuba-resources">
-<span id="id3"></span><h3>More siuba Resources:<a class="headerlink" href="#more-siuba-resources" title="Permalink to this headline">¶</a></h3>
+<span id="id4"></span><h3>More siuba Resources:<a class="headerlink" href="#more-siuba-resources" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p><a class="reference external" href="https://siuba.readthedocs.io">siuba docs</a></p></li>
 <li><p><a class="reference external" href="https://www.youtube.com/playlist?list=PLiQdjX20rXMHc43KqsdIowHI3ouFnP_Sf">‘Tidy Tuesday’ live analyses with siuba</a></p></li>
 </ul>
 </div>
-</div>
-<div class="section" id="id4">
-<span id="id5"></span><h2>shared utils<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
-<p>A set of shared utility functions can also be installed, similarly to any Python library. The <a class="reference external" href="https://github.com/cal-itp/data-analyses/tree/main/_shared_utils">shared_utils</a> are stored here. Generalized functions for analysis are added as collaborative work evolves so we aren’t constantly reinventing the wheel.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># In terminal:</span>
-<span class="n">cd</span> <span class="n">data</span><span class="o">-</span><span class="n">analyses</span><span class="o">/</span><span class="n">_shared_utils</span>
-
-<span class="c1"># Use the make command to run through conda install and pip install</span>
-<span class="n">make</span> <span class="n">setup_env</span>
-
-<span class="c1"># In notebook:</span>
-<span class="kn">import</span> <span class="nn">shared_utils</span>
-
-<span class="n">shared_utils</span><span class="o">.</span><span class="n">geography_utils</span><span class="o">.</span><span class="n">WGS84</span>
-
-<span class="c1"># Note: you may need to select Kernel -&gt; Restart Kernel from the top menu</span>
-<span class="c1"># after make setup_env in order to successfully import shared_utils</span>
-</pre></div>
-</div>
-<p>See <a class="reference external" href="https://github.com/cal-itp/data-analyses/tree/main/example_report">data-analyses/example_reports</a> for examples on how to use <code class="docutils literal notranslate"><span class="pre">shared_utils</span></code> for general functions, charts, and maps.</p>
 </div>
 <div class="section" id="pandas">
 <span id="pandas-resources"></span><h2>pandas<a class="headerlink" href="#pandas" title="Permalink to this headline">¶</a></h2>

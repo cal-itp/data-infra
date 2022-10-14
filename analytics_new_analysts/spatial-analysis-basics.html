@@ -154,6 +154,11 @@
   </label>
   <ul>
    <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/github_setup.html">
+     GitHub Setup
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../analytics_tools/tools_quick_links.html">
      Tools Quick Links
     </a>
@@ -855,7 +860,7 @@
 <p>To read in our dataframe (df) and geodataframe (gdf) from GCS:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/bucket-name/my-csv.csv&#39;</span><span class="p">)</span>
 <span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/bucket-name/my-geojson.geojson&#39;</span><span class="p">)</span>
-<span class="n">gdf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/bucket-name/my-geoparquet.parquet&#39;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span> <span class="s1">&#39;auto&#39;</span><span class="p">)</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/bucket-name/my-geoparquet.parquet&#39;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span> <span class="s1">&#39;auto&#39;</span><span class="p">)</span>
 <span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/bucket-name/my-shapefile.zip&#39;</span><span class="p">)</span>
 
 <span class="c1"># Write a file to GCS</span>

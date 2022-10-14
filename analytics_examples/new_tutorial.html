@@ -154,6 +154,11 @@
   </label>
   <ul>
    <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/github_setup.html">
+     GitHub Setup
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../analytics_tools/tools_quick_links.html">
      Tools Quick Links
     </a>
@@ -760,11 +765,6 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#assemble-a-route-shapefile">
-     Assemble a Route Shapefile
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#filter-with-lists-and-unpacking">
      Filter with Lists and Unpacking
     </a>
@@ -807,11 +807,6 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#assemble-a-route-shapefile">
-     Assemble a Route Shapefile
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#filter-with-lists-and-unpacking">
      Filter with Lists and Unpacking
     </a>
@@ -834,7 +829,6 @@
 <p>The queries represented in the following tutorial are as follows:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#stop-arrivals-operator"><span class="std std-ref"><strong>All the Stops and Arrival Times for an Operator on a Given Day</strong></span></a></p></li>
-<li><p><a class="reference external" href="#assemble-a-route-shapefile"><strong>Assemble a Route Shapefile</strong></a></p></li>
 <li><p><a class="reference external" href="#filter-with-lists-and-unpacking"><strong>Filter with Lists and Unpacking</strong></a></p></li>
 </ul>
 </div>
@@ -861,7 +855,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/pkg_resources/__init__.py:2456: UserWarning: Obsolete pybigquery is installed, which is likely to
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.8.14/x64/lib/python3.8/site-packages/pkg_resources/__init__.py:2456: UserWarning: Obsolete pybigquery is installed, which is likely to
 interfere with sqlalchemy_bigquery.
 pybigquery should be uninstalled.
   module = __import__(self.module_name, fromlist=[&#39;__name__&#39;], level=0)
@@ -952,154 +946,61 @@ pybigquery should be uninstalled.
       <th>0</th>
       <td>208</td>
       <td>2021-09-01</td>
-      <td>3179823969004340843</td>
-      <td>330002</td>
-      <td>0004</td>
-      <td>09:17:00</td>
-      <td>36.584452</td>
-      <td>-121.898935</td>
-      <td>Del Monte Center / Gate 3</td>
+      <td>2856850404124219391</td>
+      <td>4930027</td>
+      <td>6018</td>
+      <td>19:21:00</td>
+      <td>36.677795</td>
+      <td>-121.657645</td>
+      <td>Lincoln /  West Market</td>
     </tr>
     <tr>
       <th>1</th>
       <td>208</td>
       <td>2021-09-01</td>
-      <td>3179823969004340843</td>
-      <td>330002</td>
-      <td>0004</td>
-      <td>09:17:00</td>
-      <td>36.584452</td>
-      <td>-121.898935</td>
-      <td>Del Monte Center / Gate 3</td>
+      <td>2856850404124219391</td>
+      <td>4930027</td>
+      <td>6018</td>
+      <td>19:21:00</td>
+      <td>36.677795</td>
+      <td>-121.657645</td>
+      <td>Lincoln /  West Market</td>
     </tr>
     <tr>
       <th>2</th>
       <td>208</td>
       <td>2021-09-01</td>
-      <td>3179823969004340843</td>
-      <td>330002</td>
-      <td>6775</td>
-      <td>09:21:00</td>
-      <td>36.591846</td>
-      <td>-121.896651</td>
-      <td>Cass /  # 1011</td>
+      <td>2856850404124219391</td>
+      <td>4930027</td>
+      <td>6018</td>
+      <td>19:21:00</td>
+      <td>36.677860</td>
+      <td>-121.657593</td>
+      <td>Lincoln /  West Market</td>
     </tr>
     <tr>
       <th>3</th>
       <td>208</td>
       <td>2021-09-01</td>
-      <td>3179823969004340843</td>
-      <td>330002</td>
-      <td>6775</td>
-      <td>09:21:00</td>
-      <td>36.591860</td>
-      <td>-121.896687</td>
-      <td>Cass /  # 1011</td>
+      <td>2856850404124219391</td>
+      <td>4930027</td>
+      <td>6028</td>
+      <td>19:30:00</td>
+      <td>36.704259</td>
+      <td>-121.652773</td>
+      <td>N Main /  Chaparral</td>
     </tr>
     <tr>
       <th>4</th>
       <td>208</td>
       <td>2021-09-01</td>
-      <td>3179823969004340843</td>
-      <td>330002</td>
-      <td>6775</td>
-      <td>09:21:00</td>
-      <td>36.591860</td>
-      <td>-121.896687</td>
-      <td>Cass /  # 1011</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
-</div>
-</div>
-<div class="section" id="assemble-a-route-shapefile">
-<h3>Assemble a Route Shapefile<a class="headerlink" href="#assemble-a-route-shapefile" title="Permalink to this headline">¶</a></h3>
-<p>Transit stops are given as lat/lon (point geometry), but what if we want to get the line geometry? We will demonstrate on one route for Monterey-Salinas Transit.</p>
-<p>Tables used:</p>
-<ol class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule.shapes</span></code>: stops with stop sequence, lat/lon, and associated <code class="docutils literal notranslate"><span class="pre">shape_id</span></code></p></li>
-</ol>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Grab the shapes for this operator</span>
-<span class="n">shapes</span> <span class="o">=</span> <span class="p">(</span><span class="n">tbl</span><span class="o">.</span><span class="n">gtfs_schedule</span><span class="o">.</span><span class="n">shapes</span><span class="p">()</span>
-          <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_itp_id</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">ITP_ID</span><span class="p">))</span>
-          <span class="o">&gt;&gt;</span> <span class="n">collect</span><span class="p">()</span>
-<span class="p">)</span>
-
-<span class="c1"># Make a gdf</span>
-<span class="n">shapes</span> <span class="o">=</span> <span class="p">(</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">shapes</span><span class="p">,</span>
-                      <span class="n">geometry</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">points_from_xy</span>
-                      <span class="p">(</span><span class="n">shapes</span><span class="o">.</span><span class="n">shape_pt_lon</span><span class="p">,</span> <span class="n">shapes</span><span class="o">.</span><span class="n">shape_pt_lat</span><span class="p">),</span>
-                      <span class="n">crs</span> <span class="o">=</span> <span class="s1">&#39;EPSG:4326&#39;</span><span class="p">)</span>
-     <span class="p">)</span>
-
-<span class="n">MY_ROUTE</span> <span class="o">=</span> <span class="s2">&quot;41089&quot;</span>
-
-<span class="c1"># Now, combine all the stops by stop sequence, and create linestring</span>
-<span class="n">single_shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">shapes</span>
-                <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">shape_id</span> <span class="o">==</span> <span class="n">MY_ROUTE</span><span class="p">)</span>
-                <span class="o">&gt;&gt;</span> <span class="n">mutate</span><span class="p">(</span><span class="n">shape_pt_sequence</span> <span class="o">=</span> <span class="n">_</span><span class="o">.</span><span class="n">shape_pt_sequence</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
-                <span class="c1"># arrange in the order of stop sequence</span>
-                <span class="o">&gt;&gt;</span> <span class="n">arrange</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">shape_pt_sequence</span><span class="p">)</span>
-<span class="p">)</span>
-
-<span class="c1"># Convert from a bunch of points to a line (for a route, there are multiple points)</span>
-<span class="n">route_line</span> <span class="o">=</span> <span class="n">shapely</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">LineString</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">single_shape</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]))</span>
-
-<span class="c1"># Create a df that will hold this new line geometry</span>
-<span class="n">single_route</span> <span class="o">=</span> <span class="p">(</span><span class="n">single_shape</span>
-               <span class="p">[[</span><span class="s1">&#39;calitp_itp_id&#39;</span><span class="p">,</span> <span class="s1">&#39;shape_id&#39;</span><span class="p">,</span> <span class="s1">&#39;calitp_extracted_at&#39;</span><span class="p">]]</span>
-               <span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">]]</span>
-              <span class="p">)</span> <span class="c1">##preserve info cols</span>
-
-<span class="c1"># Set the geometry column values</span>
-<span class="n">single_route</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">route_line</span>
-
-<span class="c1"># Convert to gdf</span>
-<span class="n">single_route</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">single_route</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">)</span>
-
-<span class="n">single_route</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/geopandas/array.py:275: ShapelyDeprecationWarning: The array interface is deprecated and will no longer work in Shapely 2.0. Convert the &#39;.coords&#39; to a numpy array instead.
-  return GeometryArray(vectorized.points_from_xy(x, y, z), crs=crs)
-</pre></div>
-</div>
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>calitp_itp_id</th>
-      <th>shape_id</th>
-      <th>calitp_extracted_at</th>
-      <th>geometry</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>12596</th>
-      <td>208</td>
-      <td>41089</td>
-      <td>2022-03-23</td>
-      <td>LINESTRING (-121.65706 36.67671, -121.65687 36...</td>
+      <td>2856850404124219391</td>
+      <td>4930027</td>
+      <td>6028</td>
+      <td>19:30:00</td>
+      <td>36.704259</td>
+      <td>-121.652773</td>
+      <td>N Main /  Chaparral</td>
     </tr>
   </tbody>
 </table>
@@ -1341,8 +1242,8 @@ pybigquery should be uninstalled.
       <th>stop_key</th>
       <th>date</th>
       <th>stop_lat</th>
-      <th>stop_id</th>
       <th>stop_lon</th>
+      <th>stop_id</th>
       <th>calitp_itp_id</th>
     </tr>
   </thead>
@@ -1352,8 +1253,8 @@ pybigquery should be uninstalled.
       <td>-3465164382055991093</td>
       <td>2021-09-01</td>
       <td>34.079011</td>
-      <td>2619783</td>
       <td>-118.117346</td>
+      <td>2619783</td>
       <td>6</td>
     </tr>
     <tr>
@@ -1361,8 +1262,8 @@ pybigquery should be uninstalled.
       <td>-4388330883484799862</td>
       <td>2021-09-01</td>
       <td>34.079282</td>
-      <td>2619784</td>
       <td>-118.111602</td>
+      <td>2619784</td>
       <td>6</td>
     </tr>
     <tr>
@@ -1370,8 +1271,8 @@ pybigquery should be uninstalled.
       <td>-3890148245714116244</td>
       <td>2021-09-01</td>
       <td>34.080835</td>
-      <td>2619785</td>
       <td>-118.114294</td>
+      <td>2619785</td>
       <td>6</td>
     </tr>
     <tr>
@@ -1379,8 +1280,8 @@ pybigquery should be uninstalled.
       <td>3725728967761887153</td>
       <td>2021-09-01</td>
       <td>34.085540</td>
-      <td>2619787</td>
       <td>-118.116863</td>
+      <td>2619787</td>
       <td>6</td>
     </tr>
     <tr>
@@ -1388,8 +1289,8 @@ pybigquery should be uninstalled.
       <td>-6069710332211186970</td>
       <td>2021-09-01</td>
       <td>34.085874</td>
-      <td>2619788</td>
       <td>-118.117052</td>
+      <td>2619788</td>
       <td>6</td>
     </tr>
   </tbody>
