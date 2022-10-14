@@ -366,6 +366,7 @@ models:
             - feed_contact_url
             - feed_start_date
             - feed_end_date
+          severity: warn
     columns:
       - name: base64_url
       - name: ts

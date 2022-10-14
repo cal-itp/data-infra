@@ -210,6 +210,54 @@ models:
         - not_null
       - name: fare_product_id
         description: '{{ doc("gtfs_fare_transfer_rules__fare_product_id") }}'
+  - name: int_gtfs_schedule__deduped_feed_info
+    description: |
+      Cleaned GTFS schedule feed info data that has also been deduplicated so that each combination of
+      `feed_publisher_name`, `feed_publisher_url`, `feed_lang`, `default_lang`, `feed_version`,
+      `feed_contact_email`, `feed_contact_url`, `feed_start_date` and `feed_end_date` are unique
+      per URL and timestamp.
+      See https://gtfs.org/reference/static#feed_infotxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - feed_publisher_name
+            - feed_publisher_url
+            - feed_lang
+            - default_lang
+            - feed_version
+            - feed_contact_email
+            - feed_contact_url
+            - feed_start_date
+            - feed_end_date
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: feed_publisher_name
+        description: '{{ doc("gtfs_feed_info__feed_publisher_name") }}'
+        tests:
+        - not_null
+      - name: feed_publisher_url
+        description: '{{ doc("gtfs_feed_info__feed_publisher_url") }}'
+        tests:
+        - not_null
+      - name: feed_lang
+        description: '{{ doc("gtfs_feed_info__feed_lang") }}'
+        tests:
+        - not_null
+      - name: default_lang
+        description: '{{ doc("gtfs_feed_info__default_lang") }}'
+      - name: feed_start_date
+        description: '{{ doc("gtfs_feed_info__feed_start_date") }}'
+      - name: feed_end_date
+        description: '{{ doc("gtfs_feed_info__feed_end_date") }}'
+      - name: feed_version
+        description: '{{ doc("gtfs_feed_info__feed_version") }}'
+      - name: feed_contact_email
+        description: '{{ doc("gtfs_feed_info__feed_contact_email") }}'
+      - name: feed_contact_url
+        description: '{{ doc("gtfs_feed_info__feed_contact_url") }}'
   - name: int_gtfs_schedule__deduped_stops
     description: |
       Cleaned GTFS schedule stop data that has also been deduplicated so that each `stop_id` is unique

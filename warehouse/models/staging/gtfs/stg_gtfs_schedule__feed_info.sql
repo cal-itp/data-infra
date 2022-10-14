@@ -8,9 +8,7 @@ stg_gtfs_schedule__feed_info AS (
     -- Trim all string fields
     -- Incoming schema explicitly defined in gtfs_schedule_history external table definition
 
-    -- select distinct because of Foothill Transit feed with exact duplicates
-    -- duplicates here result in duplicate feed_keys downstream
-    SELECT DISTINCT
+    SELECT
         base64_url,
         ts,
         {{ trim_make_empty_string_null('feed_publisher_name') }} AS feed_publisher_name,
