@@ -18,7 +18,6 @@ dim_calendar AS (
     SELECT
         {{ dbt_utils.surrogate_key(['feed_key', 'service_id']) }} AS key,
         feed_key,
-
         service_id,
         monday,
         tuesday,

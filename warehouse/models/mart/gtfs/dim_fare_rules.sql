@@ -18,7 +18,6 @@ dim_fare_rules AS (
     SELECT
         {{ dbt_utils.surrogate_key(['feed_key', 'fare_id', 'route_id', 'origin_id', 'destination_id', 'contains_id']) }} AS key,
         feed_key,
-
         fare_id,
         route_id,
         origin_id,

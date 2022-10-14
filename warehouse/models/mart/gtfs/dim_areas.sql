@@ -18,7 +18,6 @@ dim_areas AS (
     SELECT
         {{ dbt_utils.surrogate_key(['feed_key', 'area_id']) }} AS key,
         feed_key,
-
         area_id,
         area_name,
         base64_url,

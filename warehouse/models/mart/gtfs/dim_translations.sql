@@ -18,7 +18,6 @@ dim_translations AS (
     SELECT
         {{ dbt_utils.surrogate_key(['feed_key', 'table_name', 'field_name', 'language', 'record_id', 'record_sub_id', 'field_value']) }} AS key,
         feed_key,
-
         table_name,
         field_name,
         language,

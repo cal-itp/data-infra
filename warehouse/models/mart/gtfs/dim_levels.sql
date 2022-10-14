@@ -18,7 +18,6 @@ dim_levels AS (
     SELECT
         {{ dbt_utils.surrogate_key(['feed_key', 'level_id']) }} AS key,
         feed_key,
-
         level_id,
         level_index,
         level_name,

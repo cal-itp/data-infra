@@ -18,7 +18,6 @@ dim_agency AS (
     SELECT
         {{ dbt_utils.surrogate_key(['feed_key', 'agency_id']) }} AS key,
         feed_key,
-
         agency_id,
         agency_name,
         agency_url,

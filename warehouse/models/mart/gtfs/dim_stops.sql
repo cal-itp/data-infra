@@ -19,7 +19,6 @@ dim_stops AS (
         {{ dbt_utils.surrogate_key(['feed_key', 'stop_id']) }} AS key,
         base64_url,
         feed_key,
-
         stop_id,
         tts_stop_name,
         stop_lat,

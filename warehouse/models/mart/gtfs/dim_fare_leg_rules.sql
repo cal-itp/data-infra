@@ -19,7 +19,6 @@ dim_fare_leg_rules AS (
         {{ dbt_utils.surrogate_key(['feed_key', 'network_id', 'from_area_id', 'to_area_id', 'fare_product_id']) }} AS key,
         base64_url,
         feed_key,
-
         leg_group_id,
         network_id,
         from_area_id,

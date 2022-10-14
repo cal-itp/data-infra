@@ -19,7 +19,6 @@ dim_fare_transfer_rules AS (
         {{ dbt_utils.surrogate_key(['feed_key', 'from_leg_group_id', 'to_leg_group_id', 'fare_product_id', 'transfer_count', 'duration_limit']) }} AS key,
         base64_url,
         feed_key,
-
         from_leg_group_id,
         to_leg_group_id,
         transfer_count,
