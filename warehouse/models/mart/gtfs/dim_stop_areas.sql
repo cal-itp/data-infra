@@ -18,7 +18,7 @@ dim_stop_areas AS (
     SELECT
         {{ dbt_utils.surrogate_key(['feed_key', 'area_id', 'stop_id']) }} AS key,
         feed_key,
-        gtfs_dataset_key,
+
         area_id,
         stop_id,
         base64_url,

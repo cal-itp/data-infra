@@ -18,7 +18,7 @@ dim_transfers AS (
     SELECT
         {{ dbt_utils.surrogate_key(['feed_key', 'from_stop_id', 'to_stop_id', 'from_trip_id', 'to_trip_id', 'from_route_id',' to_route_id']) }} AS key,
         feed_key,
-        gtfs_dataset_key,
+
         from_stop_id,
         to_stop_id,
         transfer_type,

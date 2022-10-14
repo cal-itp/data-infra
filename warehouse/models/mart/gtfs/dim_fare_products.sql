@@ -19,7 +19,7 @@ dim_fare_products AS (
         {{ dbt_utils.surrogate_key(['feed_key', 'fare_product_id']) }} AS key,
         base64_url,
         feed_key,
-        gtfs_dataset_key,
+
         fare_product_id,
         fare_product_name,
         amount,

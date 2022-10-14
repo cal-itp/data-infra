@@ -18,7 +18,7 @@ dim_attributions AS (
     SELECT
         {{ dbt_utils.surrogate_key(['feed_key', 'attribution_id']) }} AS key,
         feed_key,
-        gtfs_dataset_key,
+
         organization_name,
         attribution_id,
         agency_id,

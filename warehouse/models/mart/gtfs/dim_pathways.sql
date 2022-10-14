@@ -18,7 +18,7 @@ dim_pathways AS (
     SELECT
         {{ dbt_utils.surrogate_key(['feed_key', 'pathway_id']) }} AS key,
         feed_key,
-        gtfs_dataset_key,
+
         pathway_id,
         from_stop_id,
         to_stop_id,
