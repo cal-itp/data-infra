@@ -18,7 +18,6 @@ dim_frequencies AS (
     SELECT
         {{ dbt_utils.surrogate_key(['feed_key', 'trip_id', 'start_time']) }} AS key,
         feed_key,
-        gtfs_dataset_key,
         trip_id,
         start_time,
         end_time,

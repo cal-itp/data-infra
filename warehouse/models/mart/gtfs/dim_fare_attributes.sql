@@ -18,7 +18,6 @@ dim_fare_attributes AS (
     SELECT
         {{ dbt_utils.surrogate_key(['feed_key', 'fare_id']) }} AS key,
         feed_key,
-        gtfs_dataset_key,
         fare_id,
         price,
         currency_type,

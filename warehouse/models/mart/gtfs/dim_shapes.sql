@@ -18,7 +18,6 @@ dim_shapes AS (
     SELECT
         {{ dbt_utils.surrogate_key(['feed_key', 'shape_id', 'shape_pt_sequence']) }} AS key,
         feed_key,
-        gtfs_dataset_key,
         shape_id,
         shape_pt_lat,
         shape_pt_lon,

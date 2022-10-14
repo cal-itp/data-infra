@@ -49,6 +49,11 @@ models:
         name: gtfs_dataset_key
         description: |
           Foreign key to the `dim_gtfs_datasets` table.
+      - name: is_future
+        description: |
+          Boolean indicating whether this date is in the future relative to the last time that the table
+          was run. If this is a future date (if is_future is true), any coverage is prospective and
+          subject to change.
   - name: fct_schedule_feed_downloads
     description: |
       Each row is an instance of a download attempt, uniquely identified by base64_url and
@@ -58,9 +63,15 @@ models:
         description: |
           Synthetic primary key constructed from `base64_url` and `ts`.
         tests: *primary_key_tests
-      - name: feed_key
+      - &feed_key
+        name: feed_key
         description: |
           Foreign key to the `dim_schedule_feeds` table.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_schedule_feeds')
+              field: key
       - *gtfs_dataset_key
       - name: ts
         description: |
@@ -220,7 +231,6 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `agency_id`.
         tests: *primary_key_tests
-      - *gtfs_dataset_key
       - *base64_url
       - name: agency_id
         description: '{{ doc("gtfs_agency__agency_id") }}'
@@ -262,7 +272,6 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `area_id`.
         tests: *primary_key_tests
-      - *gtfs_dataset_key
       - *base64_url
       - name: area_id
         description: '{{ doc("gtfs_areas__area_id") }}'
@@ -288,7 +297,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `attribution_id`.
         tests: *primary_key_tests
-      - *gtfs_dataset_key
+
       - *base64_url
       - name: attribution_id
         description: '{{ doc("gtfs_attributions__attribution_id") }}'
@@ -332,7 +341,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `fare_id`.
         tests: *primary_key_tests
-      - *gtfs_dataset_key
+
       - *base64_url
       - name: fare_id
         description: '{{ doc("gtfs_fare_attributes__fare_id") }}'
@@ -376,7 +385,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `network_id`, `from_area_id`, `to_area_id`, and `fare_product_id`.
         tests: *primary_key_tests
-      - *gtfs_dataset_key
+
       - *base64_url
       - name: leg_group_id
         description: '{{ doc("gtfs_fare_leg_rules__leg_group_id") }}'
@@ -408,7 +417,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `fare_product_id`.
         tests: *primary_key_tests
-      - *gtfs_dataset_key
+
       - *base64_url
       - name: fare_product_id
         description: '{{ doc("gtfs_fare_products__fare_product_id") }}'
@@ -442,7 +451,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `fare_id`, `route_id`, `origin_id`, `destination_id`, and `contains_id`.
         tests: *primary_key_tests
-      - *gtfs_dataset_key
+
       - *base64_url
       - name: route_id
         description: '{{ doc("gtfs_fare_rules__route_id") }}'
@@ -470,7 +479,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, 'from_leg_group_id', 'to_leg_group_id', 'fare_product_id', 'transfer_count', and 'duration_limit'.
         tests: *primary_key_tests
-      - *gtfs_dataset_key
+
       - *base64_url
       - name: from_leg_group_id
         description: '{{ doc("gtfs_fare_transfer_rules__from_leg_group_id") }}'
@@ -506,7 +515,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `feed_publisher_name`, `feed_publisher_url`, `feed_lang`, `default_lang`, `feed_version`, `feed_contact_email`, `feed_contact_url`, `feed_start_date`, and `feed_end_date`.
         tests: *primary_key_tests
-      - *gtfs_dataset_key
+
       - *base64_url
       - name: feed_publisher_name
         description: '{{ doc("gtfs_feed_info__feed_publisher_name") }}'
@@ -550,7 +559,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `trip_id`, and `start_time`.
         tests: *primary_key_tests
-      - *gtfs_dataset_key
+
       - *base64_url
       - name: trip_id
         description: '{{ doc("gtfs_frequencies__trip_id") }}'
@@ -588,7 +597,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `level_id`.
         tests: *primary_key_tests
-      - *gtfs_dataset_key
+
       - *base64_url
       - name: level_id
         description: '{{ doc("gtfs_levels__level_id") }}'
@@ -618,7 +627,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `pathway_id`.
         tests: *primary_key_tests
-      - *gtfs_dataset_key
+
       - *base64_url
       - name: pathway_id
         description: '{{ doc("gtfs_pathways__pathway_id") }}'
@@ -719,7 +728,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `shape_id`, and `shape_pt_sequence`.
         tests: *primary_key_tests
-      - *gtfs_dataset_key
+
       - *base64_url
       - name: shape_id
         description: '{{ doc("gtfs_shapes__shape_id") }}'
@@ -767,7 +776,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `area_id` and `stop_id`.
         tests: *primary_key_tests
-      - *gtfs_dataset_key
+
       - *base64_url
       - name: area_id
         description: '{{ doc("gtfs_stop_areas__area_id") }}'
@@ -795,7 +804,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `stop_id`.
         tests: *primary_key_tests
-      - *gtfs_dataset_key
+
       - *base64_url
       - name: stop_id
         description: '{{ doc("gtfs_stops__stop_id") }}'
@@ -857,7 +866,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `from_stop_id`, `to_stop_id`, `from_trip_id`, `to_trip_id`, `from_route_id`, and `to_route_id`.
         tests: *primary_key_tests
-      - *gtfs_dataset_key
+
       - *base64_url
       - name: from_stop_id
         description: '{{ doc("gtfs_transfers__from_stop_id") }}'
@@ -895,7 +904,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `table_name`, `field_name`, `language`, `record_id`, `record_sub_id`, and `field_value`.
         tests: *primary_key_tests
-      - *gtfs_dataset_key
+
       - *base64_url
       - name: table_name
         description: '{{ doc("gtfs_translations__table_name") }}'
@@ -925,7 +934,7 @@ models:
     description: |
       Each row is a cleaned row from a trips.txt file.
       Definitions for the original GTFS fields are available at:
-      https://gtfs.org/reference/static#routestxt.
+      https://gtfs.org/reference/static#tripstxt.
     tests:
       - dbt_utils.mutually_exclusive_ranges:
           lower_bound_column: _valid_from
@@ -966,3 +975,138 @@ models:
         description: '{{ doc("gtfs_trips__bikes_allowed") }}'
       - *_valid_from
       - *_valid_to
+  - name: dim_calendar
+    description: |
+      Each row is a cleaned row from a calendar.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#calendartxt.
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: base64_url, service_id
+          gaps: required
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `service_id`.
+        tests: *primary_key_tests
+
+      - *feed_key
+      - *base64_url
+      - name: service_id
+        description: '{{ doc("gtfs_calendar__service_id") }}'
+        tests:
+        - not_null
+      - name: monday
+        description: '{{ doc("gtfs_calendar__monday") }}'
+        tests:
+        - not_null
+      - name: tuesday
+        description: '{{ doc("gtfs_calendar__tuesday") }}'
+        tests:
+        - not_null
+      - name: wednesday
+        description: '{{ doc("gtfs_calendar__wednesday") }}'
+        tests:
+        - not_null
+      - name: thursday
+        description: '{{ doc("gtfs_calendar__thursday") }}'
+        tests:
+        - not_null
+      - name: friday
+        description: '{{ doc("gtfs_calendar__friday") }}'
+        tests:
+        - not_null
+      - name: saturday
+        description: '{{ doc("gtfs_calendar__saturday") }}'
+        tests:
+        - not_null
+      - name: sunday
+        description: '{{ doc("gtfs_calendar__sunday") }}'
+        tests:
+        - not_null
+      - name: start_date
+        description: '{{ doc("gtfs_calendar__start_date") }}'
+        tests:
+        - not_null
+      - name: end_date
+        description: '{{ doc("gtfs_calendar__end_date") }}'
+        tests:
+        - not_null
+  - name: dim_calendar_dates
+    description: |
+      Each row is a cleaned row from a calendar_dates.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#calendar_datestxt.
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: base64_url, service_id, date
+          gaps: required
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, `service_id`, and `date`.
+        tests: *primary_key_tests
+
+      - *feed_key
+      - *base64_url
+      - name: service_id
+        description: '{{ doc("gtfs_calendar_dates__service_id") }}'
+        tests:
+        - not_null
+      - name: date
+        description: '{{ doc("gtfs_calendar_dates__date") }}'
+        tests:
+        - not_null
+      - name: exception_type
+        description: '{{ doc("gtfs_calendar_dates__exception_type") }}'
+        tests:
+        - not_null
+  - name: dim_stop_times
+    description: |
+      Cleaned GTFS schedule stop_times data.
+      See https://gtfs.org/schedule/reference/#calendar_datestxt for specification.
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: base64_url, trip_id, stop_sequence
+          gaps: required
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: trip_id
+        description: '{{ doc("gtfs_stop_times__trip_id") }}'
+        tests:
+        - not_null
+      - name: arrival_time
+        description: '{{ doc("gtfs_stop_times__arrival_time") }}'
+      - name: departure_time
+        description: '{{ doc("gtfs_stop_times__departure_time") }}'
+      - name: stop_id
+        description: '{{ doc("gtfs_stop_times__stop_id") }}'
+        tests:
+        - not_null
+      - name: stop_sequence
+        description: '{{ doc("gtfs_stop_times__stop_sequence") }}'
+        tests:
+        - not_null
+      - name: stop_headsign
+        description: '{{ doc("gtfs_stop_times__stop_headsign") }}'
+      - name: pickup_type
+        description: '{{ doc("gtfs_stop_times__pickup_type") }}'
+      - name: drop_off_type
+        description: '{{ doc("gtfs_stop_times__drop_off_type") }}'
+      - name: continuous_pickup
+        description: '{{ doc("gtfs_stop_times__continuous_pickup") }}'
+      - name: continuous_drop_off
+        description: '{{ doc("gtfs_stop_times__continuous_drop_off") }}'
+      - name: shape_dist_traveled
+        description: '{{ doc("gtfs_stop_times__shape_dist_traveled") }}'
+      - name: timepoint
+        description: '{{ doc("gtfs_stop_times__timepoint") }}'
+    meta:
+      publish.gis_coordinate_system_epsg: WGS84

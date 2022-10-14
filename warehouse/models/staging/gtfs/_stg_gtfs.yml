@@ -162,7 +162,7 @@ models:
             - base64_url
             - ts
             - attribution_id
-          severity: warn
+
     columns:
       - name: base64_url
       - name: ts
@@ -240,7 +240,7 @@ models:
             - from_area_id
             - to_area_id
             - fare_product_id
-          severity: warn
+
     columns:
       - name: base64_url
       - name: ts
@@ -266,7 +266,7 @@ models:
             - base64_url
             - ts
             - fare_product_id
-          severity: warn
+
     columns:
       - name: base64_url
       - name: ts
@@ -298,7 +298,7 @@ models:
             - origin_id
             - destination_id
             - contains_id
-          severity: warn
+
     columns:
       - name: base64_url
       - name: ts
@@ -328,7 +328,7 @@ models:
             - fare_product_id
             - transfer_count
             - duration_limit
-          severity: warn
+
     columns:
       - name: base64_url
       - name: ts
@@ -366,7 +366,7 @@ models:
             - feed_contact_url
             - feed_start_date
             - feed_end_date
-          severity: warn
+
     columns:
       - name: base64_url
       - name: ts
@@ -611,7 +611,7 @@ models:
             - base64_url
             - ts
             - stop_id
-          severity: warn
+
     columns:
       - name: base64_url
       - name: ts
@@ -672,7 +672,7 @@ models:
             - to_trip_id
             - from_route_id
             - to_route_id
-          severity: warn
+
     columns:
       - name: base64_url
       - name: ts
@@ -744,7 +744,7 @@ models:
             - base64_url
             - ts
             - trip_id
-          severity: warn
+
     columns:
       - name: base64_url
       - name: ts
@@ -774,3 +774,127 @@ models:
         description: '{{ doc("gtfs_trips__wheelchair_accessible") }}'
       - name: bikes_allowed
         description: '{{ doc("gtfs_trips__bikes_allowed") }}'
+  - name: stg_gtfs_schedule__calendar
+    description: |
+      Cleaned GTFS schedule calendar data.
+      See https://gtfs.org/schedule/reference/#calendartxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - service_id
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: service_id
+        description: '{{ doc("gtfs_calendar__service_id") }}'
+        tests:
+        - not_null
+      - name: monday
+        description: '{{ doc("gtfs_calendar__monday") }}'
+        tests:
+        - not_null
+      - name: tuesday
+        description: '{{ doc("gtfs_calendar__tuesday") }}'
+        tests:
+        - not_null
+      - name: wednesday
+        description: '{{ doc("gtfs_calendar__wednesday") }}'
+        tests:
+        - not_null
+      - name: thursday
+        description: '{{ doc("gtfs_calendar__thursday") }}'
+        tests:
+        - not_null
+      - name: friday
+        description: '{{ doc("gtfs_calendar__friday") }}'
+        tests:
+        - not_null
+      - name: saturday
+        description: '{{ doc("gtfs_calendar__saturday") }}'
+        tests:
+        - not_null
+      - name: sunday
+        description: '{{ doc("gtfs_calendar__sunday") }}'
+        tests:
+        - not_null
+      - name: start_date
+        description: '{{ doc("gtfs_calendar__start_date") }}'
+        tests:
+        - not_null
+      - name: end_date
+        description: '{{ doc("gtfs_calendar__end_date") }}'
+        tests:
+        - not_null
+  - name: stg_gtfs_schedule__calendar_dates
+    description: |
+      Cleaned GTFS schedule calendar_dates data.
+      See https://gtfs.org/schedule/reference/#calendar_datestxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - service_id
+            - date
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: service_id
+        description: '{{ doc("gtfs_calendar_dates__service_id") }}'
+        tests:
+        - not_null
+      - name: date
+        description: '{{ doc("gtfs_calendar_dates__date") }}'
+        tests:
+        - not_null
+      - name: exception_type
+        description: '{{ doc("gtfs_calendar_dates__exception_type") }}'
+        tests:
+  - name: stg_gtfs_schedule__stop_times
+    description: |
+      Cleaned GTFS schedule stop_times data.
+      See https://gtfs.org/schedule/reference/#calendar_datestxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - trip_id
+            - stop_sequence
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: trip_id
+        description: '{{ doc("gtfs_stop_times__trip_id") }}'
+        tests:
+        - not_null
+      - name: arrival_time
+        description: '{{ doc("gtfs_stop_times__arrival_time") }}'
+      - name: departure_time
+        description: '{{ doc("gtfs_stop_times__departure_time") }}'
+      - name: stop_id
+        description: '{{ doc("gtfs_stop_times__stop_id") }}'
+        tests:
+        - not_null
+      - name: stop_sequence
+        description: '{{ doc("gtfs_stop_times__stop_sequence") }}'
+        tests:
+        - not_null
+      - name: stop_headsign
+        description: '{{ doc("gtfs_stop_times__stop_headsign") }}'
+      - name: pickup_type
+        description: '{{ doc("gtfs_stop_times__pickup_type") }}'
+      - name: drop_off_type
+        description: '{{ doc("gtfs_stop_times__drop_off_type") }}'
+      - name: continuous_pickup
+        description: '{{ doc("gtfs_stop_times__continuous_pickup") }}'
+      - name: continuous_drop_off
+        description: '{{ doc("gtfs_stop_times__continuous_drop_off") }}'
+      - name: shape_dist_traveled
+        description: '{{ doc("gtfs_stop_times__shape_dist_traveled") }}'
+      - name: timepoint
+        description: '{{ doc("gtfs_stop_times__timepoint") }}'
+    meta:
+      publish.gis_coordinate_system_epsg: WGS84
