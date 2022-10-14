@@ -5,7 +5,7 @@ on:
     branches:
       - 'main'
     paths:
-      - '.github/workflows/build-gtfs-schedule-validator.yml'
+      - '.github/workflows/build-gtfs-schedule-validator-image.yml'
       - 'jobs/gtfs-schedule-validator/**'
 
 jobs:

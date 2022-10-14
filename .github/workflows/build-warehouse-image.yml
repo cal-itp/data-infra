@@ -5,7 +5,7 @@ on:
     branches:
       - 'main'
     paths:
-      - '.github/workflows/dbt-build.yml'
+      - '.github/workflows/build-warehouse-image.yml'
       - 'warehouse/**'
 
 jobs:
