@@ -32,3 +32,4 @@ RUN mkdir /opt/conda/share/jupyter/lab/settings/
 COPY ./overrides.json /opt/conda/share/jupyter/lab/settings/overrides.json
 
 COPY ./profile.sh /tmp/profile.sh
+COPY ./dask_config.yml /opt/conda/etc/dask/dask_config.yml
