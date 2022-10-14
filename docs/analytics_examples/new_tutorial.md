@@ -19,7 +19,6 @@ kernelspec:
 
 The queries represented in the following tutorial are as follows:
 * [**All the Stops and Arrival Times for an Operator on a Given Day**](stop-arrivals-operator)
-* [**Assemble a Route Shapefile**](#assemble-a-route-shapefile)
 * [**Filter with Lists and Unpacking**](#filter-with-lists-and-unpacking)
 
 ## Python Libraries to Import
@@ -88,55 +87,6 @@ daily_stops = (
     )
 
 daily_stops.head()
-```
-
-### Assemble a Route Shapefile
-
-Transit stops are given as lat/lon (point geometry), but what if we want to get the line geometry? We will demonstrate on one route for Monterey-Salinas Transit.
-
-Tables used:
-1. `gtfs_schedule.shapes`: stops with stop sequence, lat/lon, and associated `shape_id`
-
-```{code-cell}
-# Grab the shapes for this operator
-shapes = (tbl.gtfs_schedule.shapes()
-          >> filter(_.calitp_itp_id == int(ITP_ID))
-          >> collect()
-)
-
-# Make a gdf
-shapes = (gpd.GeoDataFrame(shapes,
-                      geometry = gpd.points_from_xy
-                      (shapes.shape_pt_lon, shapes.shape_pt_lat),
-                      crs = 'EPSG:4326')
-     )
-
-MY_ROUTE = "41089"
-
-# Now, combine all the stops by stop sequence, and create linestring
-single_shape = (shapes
-                >> filter(_.shape_id == MY_ROUTE)
-                >> mutate(shape_pt_sequence = _.shape_pt_sequence.astype(int))
-                # arrange in the order of stop sequence
-                >> arrange(_.shape_pt_sequence)
-)
-
-# Convert from a bunch of points to a line (for a route, there are multiple points)
-route_line = shapely.geometry.LineString(list(single_shape['geometry']))
-
-# Create a df that will hold this new line geometry
-single_route = (single_shape
-               [['calitp_itp_id', 'shape_id', 'calitp_extracted_at']]
-               .iloc[[0]]
-              ) ##preserve info cols
-
-# Set the geometry column values
-single_route['geometry'] = route_line
-
-# Convert to gdf
-single_route = gpd.GeoDataFrame(single_route, crs="EPSG:4326")
-
-single_route
 ```
 
 ### Filter with Lists and Unpacking
