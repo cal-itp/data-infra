@@ -5,13 +5,13 @@ WITH dim_schedule_feeds AS (
     FROM {{ ref('dim_schedule_feeds') }}
 ),
 
-int_gtfs_schedule__deduped_feed_info AS (
+stg_gtfs_schedule__feed_info AS (
     SELECT *
-    FROM {{ ref('int_gtfs_schedule__deduped_feed_info') }}
+    FROM {{ ref('stg_gtfs_schedule__feed_info') }}
 ),
 
 make_dim AS (
-{{ make_schedule_file_dimension_from_dim_schedule_feeds('dim_schedule_feeds', 'int_gtfs_schedule__deduped_feed_info') }}
+{{ make_schedule_file_dimension_from_dim_schedule_feeds('dim_schedule_feeds', 'stg_gtfs_schedule__feed_info') }}
 ),
 
 dim_feed_info AS (
