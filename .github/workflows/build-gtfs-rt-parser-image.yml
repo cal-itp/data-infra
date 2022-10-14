@@ -5,7 +5,7 @@ on:
     branches:
       - 'main'
     paths:
-      - '.github/workflows/build-gtfs-rt-parser-imager.yml'
+      - '.github/workflows/build-gtfs-rt-parser-image.yml'
       - 'jobs/gtfs-rt-parser/**'
 
 jobs:
