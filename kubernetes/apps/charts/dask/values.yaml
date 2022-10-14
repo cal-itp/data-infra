@@ -1,7 +1,22 @@
 dask:
-  jupyter:
-    enabled: false
+  scheduler:
+    image:
+      repository: "ghcr.io/cal-itp/data-infra/dask"
+      tag: "2022.10.13"
+    metrics:
+      enabled: true
+    serviceAnnotations:
+      prometheus.io/port: "8786"
+      prometheus.io/scrape: "true"
   worker:
+    image:
+      repository: "ghcr.io/cal-itp/data-infra/dask"
+      tag: "2022.10.13"
+    metrics:
+      enabled: true
+    annotations:
+      prometheus.io/port: "8790"
+      prometheus.io/scrape: "true"
     tolerations:
       - key: hub.jupyter.org/dedicated
         operator: Equal
@@ -16,3 +31,5 @@ dask:
               operator: In
               values:
               - user
+  jupyter:
+    enabled: false
