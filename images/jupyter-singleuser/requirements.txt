@@ -26,3 +26,4 @@ pandas-profiling==3.1.0
 pre-commit==2.18.1
 jupyter-resource-usage==0.6.1
 dask-labextension==5.3.0
+matplotlib==3.5.1

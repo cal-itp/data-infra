@@ -522,24 +522,6 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
-name = "contourpy"
-version = "1.0.5"
-description = "Python library for calculating contours of 2D quadrilateral grids"
-category = "main"
-optional = false
-python-versions = ">=3.7"
-
-[package.dependencies]
-numpy = ">=1.16"
-
-[package.extras]
-test-no-codebase = ["pillow", "matplotlib", "pytest"]
-test-minimal = ["pytest"]
-test = ["isort", "flake8", "pillow", "matplotlib", "pytest"]
-docs = ["sphinx-rtd-theme", "sphinx", "docutils (<0.18)"]
-bokeh = ["selenium", "bokeh"]
-
-[[package]]
 name = "cramjam"
 version = "2.5.0"
 description = "Thin Python bindings to de/compression algorithms in Rust"
@@ -1733,23 +1715,22 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "matplotlib"
-version = "3.6.1"
+version = "3.5.0"
 description = "Python plotting package"
 category = "main"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.7"
 
 [package.dependencies]
-contourpy = ">=1.0.1"
 cycler = ">=0.10"
 fonttools = ">=4.22.0"
 kiwisolver = ">=1.0.1"
-numpy = ">=1.19"
+numpy = ">=1.17"
 packaging = ">=20.0"
 pillow = ">=6.2.0"
 pyparsing = ">=2.2.1"
 python-dateutil = ">=2.7"
-setuptools_scm = ">=7"
+setuptools_scm = ">=4"
 
 [[package]]
 name = "matplotlib-inline"
@@ -3385,7 +3366,7 @@ heapdict = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "35d67b87ee180de137cbeff38dd31b92a0edad0b5b40e3ade62e9fa888d3b21a"
+content-hash = "66cc24c063bc85bc5ab2a051ce22a701a320ed24ad67e243f3106c0550f17710"
 
 [metadata.files]
 agate = []
@@ -3428,7 +3409,6 @@ click-plugins = []
 cligj = []
 cloudpickle = []
 colorama = []
-contourpy = []
 cramjam = []
 csvkit = []
 cycler = []
