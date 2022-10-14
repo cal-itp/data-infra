@@ -143,6 +143,12 @@ models:
       - be *disaggregated into* one or more `gtfs service data` records.
       - be *produced* by one or more `organizations`
       - be *published* by an `organizations`.
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: airtable_record_id
+          gaps: required
     columns:
       - *key
       - name: data
@@ -177,6 +183,20 @@ models:
         #   - relationships:
         #      to: ref('dim_gtfs_datasets')
         #      field: key
+      - name: calitp_extracted_at
+        description: |
+          Date extracted from Airtable. This column will be deprecated as _valid_from
+          and _valid_to are more fully adopted.
+      - name: _valid_from
+        description: |
+          '{{ doc("column_valid_from") }}'
+          Currently just a constant placeholder of '1901-01-01T00:00:00+00' until
+          this table has historical data incorporated.
+      - name: _valid_to
+        description: |
+          '{{ doc("column_valid_to") }}'
+          Currently just a constant placeholder of '2099-01-01T00:00:00+00 minus one microsecond' until
+          this table has historical data incorporated.
   - name: dim_gtfs_service_data
     description: |
       Each record links together a single `gtfs dataset` and one (if possible)

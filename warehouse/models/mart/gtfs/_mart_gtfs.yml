@@ -1,0 +1,298 @@
+version: 2
+
+models:
+  - name: dim_schedule_feeds
+    description: |
+      Each row is a "feed", representing a unique combination of a specific zipfile and associated
+      `gtfs_dataset` record (i.e., a specific consistent "version" of a GTFS dataset.)
+      This table should be used to understand "versions" of constituent data like routes, trips, etc.
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: base64_url
+          gaps: required
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `base64_url` and `_valid_from`.
+        tests: &primary_key_tests
+          - unique
+          - not_null
+      - &base64_url
+        name: base64_url
+        description: |
+          Base 64 encoded URL from which this data was scraped.
+      - &_valid_from
+        name: _valid_from
+        description: '{{ doc("column_valid_from") }}'
+      - &_valid_to
+        name: _valid_to
+        description: '{{ doc("column_valid_to") }}'
+  - name: fct_daily_schedule_feeds
+    description: |
+      Each row is a unique date / feed pair, where the feed is the feed version that was in effect at
+      noon Pacific Time on that date. This is intended to make it clear what feed version to use
+      to analyze a given date.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `date` and `feed_key`.
+        tests: *primary_key_tests
+      - name: date
+        description: |
+          Date on which the given feed was active at noon Pacific Time.
+      - name: feed_key
+        description: |
+          Foreign key to the `dim_schedule_feeds` table.
+      - &gtfs_dataset_key
+        name: gtfs_dataset_key
+        description: |
+          Foreign key to the `dim_gtfs_datasets` table.
+  - name: fct_schedule_feed_downloads
+    description: |
+      Each row is an instance of a download attempt, uniquely identified by base64_url and
+      timestamp.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `base64_url` and `ts`.
+        tests: *primary_key_tests
+      - name: feed_key
+        description: |
+          Foreign key to the `dim_schedule_feeds` table.
+      - *gtfs_dataset_key
+      - name: ts
+        description: |
+          Timestamp at which this feed download attempt occurred.
+      - *base64_url
+      - name: download_success
+        description: |
+          Boolean indicating whether this download attempt was successful.
+      - name: download_exception
+        description: |
+          If download attempt failed, lists the exception that was encountered.
+      - name: unzip_success
+        description: |
+          Boolean indicating whether this unzip attempt was successful.
+      - name: unzip_exception
+        description: |
+          If unzip attempt failed, lists the exception that was encountered.
+      - name: zipfile_extract_md5hash
+        description: '{{ doc("column_zipfile_md5_hash") }}'
+      - name: zipfile_files
+        description: '{{ doc("column_zipfile_files") }}'
+      - name: zipfile_dirs
+        description: '{{ doc("column_zipfile_dirs") }}'
+  - name: fct_vehicle_positions_messages
+    description: |
+      Each row is a message received from a vehicle positions GTFS RT feed.
+      See https://gtfs.org/realtime/reference/#message-vehicleposition for information
+      about message structure.
+      Due to data size, this table **must** be queried with a date filter (like `WHERE dt = 'YYYY-MM-DD'`).
+      Hour filters will also further improve performance.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `base64_url`, `extract_ts`,
+          entity `id`, `vehicle_id`, and `trip_id`.
+        tests:
+          - unique:
+              # TODO: make an RT test macro that does this date subtraction
+              # test hour = 0 UTC because that's 5pm Pacific = PM peak, good sample of data
+              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
+          - not_null:
+              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
+      - name: gtfs_dataset_key
+        description: |
+          The primary key for the record in `dim_gtfs_datasets` associated with this message.
+      - name: dt
+        description: |
+          Date on which we scraped this message.
+          A date filter *must* be provided when querying this table, because of the size of the data.
+      - name: hour
+        description: |
+          Timestamp of the beginning of the hour in which this message was scraped,
+          ex. "2022-09-01T00:00:00+00".
+      - name: base64_url
+        description: |
+          URL-safe base64 encoding of the URL from which this message was scraped.
+      - name: _extract_ts
+        description: |
+          Time at which this message was scraped.
+      - name: _name
+        description: |
+          String name of the GTFS dataset of which this message is a part.
+          This field is provided for human readability and should not be used as a join key.
+      - name: header_timestamp
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-feedheader.
+          Field has been converted to TIMESTAMP type for convenience.
+      - name: header_incrementality
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-feedheader.
+      - name: header_version
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-feedheader.
+      - name: id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-feedentity.
+      - name: current_stop_sequence
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
+      - name: stop_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
+      - name: current_status
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
+      - name: vehicle_timestamp
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
+          Field has been converted to TIMESTAMP type for convenience.
+      - name: congestion_level
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
+      - name: occupancy_status
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
+      - name: occupancy_percentage
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-vehicleposition.
+      - name: vehicle_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
+      - name: vehicle_label
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
+      - name: vehicle_license_plate
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
+      - name: vehicle_wheelchair_accessible
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
+      - name: trip_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: trip_route_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: trip_direction_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: trip_start_time
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: trip_start_date
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: trip_schedule_relationship
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: position_latitude
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-position.
+      - name: position_longitude
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-position.
+      - name: position_bearing
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-position.
+      - name: position_odometer
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-position.
+      - name: position_speed
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-position.
+  - name: dim_routes
+    description: |
+      Each row is a cleaned row from a routes.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#routestxt.
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: base64_url, route_id
+          gaps: required
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `route_id`.
+        tests: *primary_key_tests
+      - *base64_url
+      - name: route_id
+        description: '{{ doc("gtfs_routes__route_id") }}'
+        tests:
+        - not_null
+      - name: agency_id
+        description: '{{ doc("gtfs_routes__agency_id") }}'
+      - name: route_short_name
+        description: '{{ doc("gtfs_routes__route_short_name") }}'
+      - name: route_long_name
+        description: '{{ doc("gtfs_routes__route_long_name") }}'
+      - name: route_desc
+        description: '{{ doc("gtfs_routes__route_desc") }}'
+      - name: route_type
+        description: '{{ doc("gtfs_routes__route_type") }}'
+        tests:
+        - not_null
+      - name: route_url
+        description: '{{ doc("gtfs_routes__route_url") }}'
+      - name: route_color
+        description: '{{ doc("gtfs_routes__route_color") }}'
+      - name: route_text_color
+        description: '{{ doc("gtfs_routes__route_text_color") }}'
+      - name: route_sort_order
+        description: '{{ doc("gtfs_routes__route_sort_order") }}'
+      - name: continuous_pickup
+        description: '{{ doc("gtfs_routes__continuous_pickup") }}'
+      - name: continuous_drop_off
+        description: '{{ doc("gtfs_routes__continuous_drop_off") }}'
+      - *_valid_from
+      - *_valid_to
+  - name: dim_trips
+    description: |
+      Each row is a cleaned row from a trips.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#routestxt.
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: base64_url, trip_id
+          gaps: required
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `trip_id`.
+        tests: *primary_key_tests
+      - *base64_url
+      - name: route_id
+        description: '{{ doc("gtfs_trips__route_id") }}'
+        tests:
+        - not_null
+      - name: service_id
+        description: '{{ doc("gtfs_trips__service_id") }}'
+        tests:
+        - not_null
+      - name: trip_id
+        description: '{{ doc("gtfs_trips__trip_id") }}'
+        tests:
+        - not_null
+      - name: trip_headsign
+        description: '{{ doc("gtfs_trips__trip_headsign") }}'
+      - name: trip_short_name
+        description: '{{ doc("gtfs_trips__trip_short_name") }}'
+      - name: direction_id
+        description: '{{ doc("gtfs_trips__direction_id") }}'
+      - name: block_id
+        description: '{{ doc("gtfs_trips__block_id") }}'
+      - name: shape_id
+        description: '{{ doc("gtfs_trips__shape_id") }}'
+      - name: wheelchair_accessible
+        description: '{{ doc("gtfs_trips__wheelchair_accessible") }}'
+      - name: bikes_allowed
+        description: '{{ doc("gtfs_trips__bikes_allowed") }}'
+      - *_valid_from
+      - *_valid_to

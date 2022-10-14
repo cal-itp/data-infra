@@ -1,0 +1,4 @@
+[submodule "iac/.engine"]
+	path = iac/.engine
+	url = https://github.com/JarvusInnovations/infra-components
+	branch = channels/engine/latest
