@@ -67,6 +67,10 @@
 "Service alerts RT feed is listed on feed aggregator transit.land"
 {% endmacro %}
 
+{% macro include_tts() %}
+"Include tts_stop_name entries in stops.txt for stop names that are pronounced incorrectly in most mobile applications"
+{% endmacro %}
+
 -- declare features
 {% macro compliance() %}
 "Compliance"
