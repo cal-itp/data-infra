@@ -10,6 +10,8 @@ sources:
       - name: unzip_outcomes
       - name: agency
       - name: agency_txt_parse_outcomes
+      - name: areas
+      - name: areas_txt_parse_outcomes
       - name: attributions
       - name: attributions_txt_parse_outcomes
       - name: calendar
