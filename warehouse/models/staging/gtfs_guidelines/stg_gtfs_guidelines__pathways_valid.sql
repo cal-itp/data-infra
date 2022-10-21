@@ -27,6 +27,7 @@ stops_joined AS (
         t4.stop_name,
         t4.parent_station,
         t3.route_type,
+        t4.stop_name,
         CASE
             WHEN LOWER(t4.stop_name) LIKE '%station%' OR LOWER(t4.stop_name) LIKE '%transit center%' THEN true
         ELSE false
@@ -123,7 +124,7 @@ pathway_validation_check_dedupe AS (
         feed_key,
         check,
         feature,
-        status,
+        status
       FROM pathway_validation_check
 )
 
