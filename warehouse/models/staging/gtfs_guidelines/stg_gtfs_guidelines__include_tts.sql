@@ -13,16 +13,41 @@ summarize_stops AS (
        calitp_url_number,
        calitp_extracted_at,
        calitp_deleted_at,
-       COUNTIF(
-                (stop_name LIKE '%NW%'
-              OR stop_name LIKE '%NE%'
-              OR stop_name LIKE '%SW%'
-              OR stop_name LIKE '%SE%'
-              OR LOWER(stop_name) LIKE '% st'
-              OR LOWER(stop_name) LIKE 'rd%'
+       COUNTIF(tts_stop_name IS null AND
+        -- Examples guided by https://docs.google.com/document/d/1LObjgDyiiE6UBiA3GpoNOlZ36li-KKj6dwBzRTDa7VU
+                (
+                -- Cardinal directions, check start and end of stop names for each direction.
+                -- Must be in CAPS to be caught
+                    stop_name LIKE '% N'OR
+                    stop_name LIKE 'N %'OR
+                    stop_name LIKE '% NE'OR
+                    stop_name LIKE 'NE %'OR
+                    stop_name LIKE '% E'OR
+                    stop_name LIKE 'E %'OR
+                    stop_name LIKE '% SE'OR
+                    stop_name LIKE 'SE %'OR
+                    stop_name LIKE '% S'OR
+                    stop_name LIKE 'S %'OR
+                    stop_name LIKE '% SW'OR
+                    stop_name LIKE 'SW %'OR
+                    stop_name LIKE '% W'OR
+                    stop_name LIKE 'W %'OR
+                    stop_name LIKE '% NW' OR
+                    stop_name LIKE 'NW %' OR
+                -- Street names, must end name or be standalone word
+                    LOWER(stop_name) LIKE '% st' OR
+                    LOWER(stop_name) LIKE '% st %' OR
+                    LOWER(stop_name) LIKE '% rd' OR
+                    LOWER(stop_name) LIKE '% rd %'
+                -- "blvd" and "hwy" are distinctive enough to flag in all cases
+                    LOWER(stop_name) LIKE '%blvd%' OR
+                    LOWER(stop_name) LIKE '%hwy%' OR
+                -- "Pine/Baker" should read "pine and baker"
+                    stop_name LIKE '%/%'
+                -- "21" should read "twenty one"
+                    REGEXP_CONTAINS(stop_name, '[0-9][0-9]')
                 )
-            AND tts_stop_name IS null
-        ) AS ct_tts_issue,
+        ) AS ct_tts_issues,
     FROM dim_stops
    GROUP BY 1, 2, 3, 4
 ),
@@ -36,8 +61,7 @@ daily_stops AS (
     t1.feed_key,
     t1.check,
     t1.feature,
-    SUM(t2.ct_accessible_stops) AS tot_accessible_stops,
-    SUM(t2.ct_stops) AS tot_stops
+    SUM(t2.ct_tts_issues) AS tot_tts_issues
   FROM feed_guideline_index AS t1
   LEFT JOIN summarize_stops AS t2
        ON t1.date >= t2.calitp_extracted_at
@@ -54,32 +78,21 @@ daily_stops AS (
         t1.feature
 ),
 
-accessibility_check AS (
+tts_check AS (
     SELECT
-        t1.date,
-        t1.calitp_itp_id,
-        t1.calitp_url_number,
-        t1.calitp_agency_name,
-        t1.feed_key,
-        t1.check,
-        t1.feature,
-        t1.tot_trips,
-        t1.tot_accessible_trips,
-        t2.tot_stops,
-        t2.tot_accessible_stops,
+        date,
+        calitp_itp_id,
+        calitp_url_number,
+        calitp_agency_name,
+        feed_key,
+        check,
+        feature,
+        tot_tts_issues,
         CASE
-            WHEN t1.tot_accessible_trips = t1.tot_trips AND t2.tot_accessible_stops = t2.tot_stops THEN "PASS"
+            WHEN tot_tts_issues = 0 THEN "PASS"
         ELSE "FAIL"
         END AS status,
-      FROM daily_trips t1
-      LEFT JOIN daily_stops t2
-             ON t1.date = t2.date
-            AND t1.calitp_itp_id = t2.calitp_itp_id
-            AND t1.calitp_url_number = t2.calitp_url_number
-            AND t1.calitp_agency_name = t2.calitp_agency_name
-            AND t1.feed_key = t2.feed_key
-            AND t1.check = t2.check
-            AND t1.feature = t2.feature
+      FROM daily_stops
 )
 
-SELECT * FROM accessibility_check
+SELECT * FROM tts_check
