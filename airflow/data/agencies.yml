@@ -1080,9 +1080,9 @@ san-francisco-bay-ferry:
   agency_name: San Francisco Bay Ferry
   feeds:
     - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/sfbayferry-ca-us/sfbayferry-ca-us.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/sfbay-ferry/gtfs-rt-vehicle-positions
+      gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/sfbay-ferry/gtfs-rt-alerts
+      gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/sfbay-ferry/gtfs-rt-trip-updates
     - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=SB
       gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=SB
       gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
