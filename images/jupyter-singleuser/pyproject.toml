@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "jupyter-singleuser"
-version = "2022.10.14.1"
+version = "2022.10.24"
 description = ""
 authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
 
@@ -35,6 +35,9 @@ pre-commit = "2.18.1"
 jupyter-resource-usage = "0.6.1"
 dask-labextension = "5.3.0"
 matplotlib = "<=3.5"
+dask-geopandas = "0.2.0"
+dask = "~2022.10"
+distributed = "~2022.10"
 
 [tool.poetry.dev-dependencies]
 
