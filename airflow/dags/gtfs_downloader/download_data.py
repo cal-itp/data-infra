@@ -19,7 +19,7 @@ import pandas as pd
 from pathlib import Path
 
 import yaml
-from calitp.config import pipe_file_name
+from calitp.config import pipe_file_name, is_development
 from calitp import save_to_gcfs
 
 SRC_DIR = "/tmp/gtfs-data/schedule"
@@ -90,7 +90,9 @@ def downloader(task_instance, execution_date, **kwargs):
     Returns dict of form {gtfs_paths, errors}
     """
     try:
-        fname = pipe_file_name("data/headers.yml")
+        fname = pipe_file_name(
+            "data/headers.filled.yml" if is_development() else "data/headers.yml"
+        )
 
         with open(fname) as f:
             raw_headers = yaml.safe_load(f)
@@ -100,6 +102,7 @@ def downloader(task_instance, execution_date, **kwargs):
             for url in record["URLs"]
             if "gtfs_schedule_url" in url["rt_urls"]
         }
+        print(f"successfully loaded headers from {fname}")
     except Exception as e:
         logging.warn("error getting auth headers", e)
         auth_headers = {}
