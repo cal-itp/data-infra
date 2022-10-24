@@ -31,7 +31,7 @@ jobs:
       - name: Get image tag from version.txt
         run: |
           cd images/dask
-          PROJECT_VERSION=$(cat -n version.txt)
+          PROJECT_VERSION=$(cat version.txt)
           echo "PROJECT_VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
       - uses: docker/build-push-action@v2
         with:
