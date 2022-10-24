@@ -12,6 +12,10 @@ on:
       - '.github/workflows/build-jupyter-singleuser-image.yml'
       - 'images/jupyter-singleuser/**'
 
+concurrency:
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
+
 jobs:
   build_push:
     name: Package docker image
