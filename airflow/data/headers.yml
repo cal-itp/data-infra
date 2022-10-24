@@ -102,6 +102,8 @@
     - itp_id: 33 # Bear Transit
       url_number: 0
       rt_urls:
+        # note this is a gtfs schedule url...
+        - gtfs_schedule_url
         - gtfs_rt_vehicle_positions_url
         - gtfs_rt_service_alerts_url
         - gtfs_rt_trip_updates_url
