@@ -1,4 +1,4 @@
-FROM ghcr.io/dask/dask:2022.8.0
+FROM ghcr.io/dask/dask:2022.10.0-py3.10
 
 LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
 
