@@ -149,10 +149,10 @@ beach-cities-transit:
 bear-transit:
   agency_name: Bear Transit
   feeds:
-    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/beartransit-ca-us/beartransit-ca-us.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+    - gtfs_schedule_url: https://webservices.umoiq.com/api/gtfs-rt/v1/GTFS/ucb
+      gtfs_rt_vehicle_positions_url: https://webservices.umoiq.com/api/gtfs-rt/v1/vehicle-positions/ucb
+      gtfs_rt_service_alerts_url: https://webservices.umoiq.com/api/gtfs-rt/v1/service-alerts/ucb
+      gtfs_rt_trip_updates_url: https://webservices.umoiq.com/api/gtfs-rt/v1/trip-updates/ucb
   itp_id: 33
 beaumont-pass-transit:
   agency_name: Beaumont Pass Transit
