@@ -1,0 +1,24 @@
+{
+  "@ryantam626/jupyterlab_code_formatter:settings": {
+    "preferences": {
+      "default_formatter": {
+        "python": [
+          "isort",
+          "black"
+        ]
+      }
+    },
+    "formatOnSave": false
+  },
+  "@jupyterlab/shortcuts-extension:shortcuts": {
+    "shortcuts": [
+      {
+        "command": "jupyterlab_code_formatter:black",
+        "keys": [
+          "Ctrl Shift K"
+        ],
+        "selector": ".jp-Notebook.jp-mod-editMode"
+      }
+    ]
+  }
+}
