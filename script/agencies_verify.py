@@ -44,6 +44,7 @@ def main():
                 **headers.get(key, {}),
             }
 
+            print(f"attempting to download {key}")
             result = requests.get(url, headers=h, timeout=10)
             result.raise_for_status()
         except Exception as e:
