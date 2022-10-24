@@ -1732,3 +1732,11 @@ ucla-bruin-bus:
       gtfs_rt_service_alerts_url: https://uclabruinbus.tripshot.com/v1/gtfs/realtime/serviceAlert/CA558DDC-D7F2-4B48-9CAC-DEEA1134F820
       gtfs_rt_trip_updates_url: https://uclabruinbus.tripshot.com/v1/gtfs/realtime/tripUpdate/CA558DDC-D7F2-4B48-9CAC-DEEA1134F820
   itp_id: 486
+oregon-point:
+  agency_name: Oregon POINT
+  feeds:
+    - gtfs_schedule_url: https://oregon-gtfs.trilliumtransit.com/gtfs_data/point-or-us/point-or-us.zip
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
+  itp_id: 487
