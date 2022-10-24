@@ -92,6 +92,7 @@ def increment_task_signals_counter(signal, task, exc=None):
 AUTH_KEYS = [
     "AC_TRANSIT_API_KEY",
     "AMTRAK_GTFS_URL",
+    "BEAR_TRANSIT_KEY",
     "CULVER_CITY_API_KEY",
     "ESCALON_RT_KEY",
     "TORRANCE_TRANSIT_API_KEY",
