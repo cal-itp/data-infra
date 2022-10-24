@@ -15,7 +15,8 @@ models:
     columns:
       - name: date
         description: Date on which the check is being evaluated.
-      - name: calitp_itp_id
+      - &calitp_itp_id
+        name: calitp_itp_id
         description: '{{ doc("column_calitp_itp_id") }}'
         meta:
           metabase.semantic_type: type/FK
@@ -54,10 +55,10 @@ models:
       - name: dt
       - name: url
       - name: url_type
-      - name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-      - name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
+      - *calitp_itp_id
+      # -- suppressing because value is incorrect https://github.com/cal-itp/data-infra/issues/1825
+      # - name: calitp_url_number
+      #   description: '{{ doc("column_calitp_url_number") }}'
       - name: transitland_status
         description: A value of either `present` or `missing`
       - name: transitland_public_web_url

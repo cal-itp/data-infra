@@ -7,89 +7,17 @@ Doing work locally and pushing directly from the command line is a similar workf
 
 ## Table of Contents
 1. [Committing from JupyterHub](#pushing-from-jupyterhub)
-    * [Onboarding Setup](#onboarding-setup)
-        * [Adding a GitHub SSH Key to Jupyter](adding-ssh-to-jupyter)
-        * [Persisting your SSH Key and Enabling Extensions](persisting-ssh-and-extensions)
-        * [Cloning a Repository](cloning-a-repository)
     * What's a typical [project workflow](#project-workflow)?
     * Someone is collaborating on my branch, how do we [stay in sync](#pulling-and-pushing-changes)?
     * The `main` branch is ahead, and I want to [sync my branch with `main`](rebase-and-merge)
     * Options to [Resolve Merge Conflicts](resolve-merge-conflicts)
     * [Helpful Hints](#helpful-hints)
     * [External Git Resources](external-git-resources)
-2. [Committing in the Github User Interface](#pushing-drag-drop)
+1. [Committing in the Github User Interface](#pushing-drag-drop)
+
 
 (committing-from-jupyterhub)=
 ## Committing from JupyterHub
-
-### Onboarding Setup
-
-We'll work through getting set up with SSH and GitHub on JupyterHub and cloning one GitHub repo. Repeat the steps in [Cloning a Repository](cloning-a-repository) for other repos
-
-(adding-ssh-to-jupyter)=
-#### Adding a GitHub SSH Key to Jupyter
-(github-setup)=
-For more information on what's below, you can navigate to the [GitHub directions](https://docs.github.com/en/authentication/connecting-to-github-with-ssh) and follow the Linux instructions for each step.
-1. Create a GitHub username if necessary and ensure you're added to the appropriate Cal-ITP teams on GitHub. You'll be committing directly into the Cal-ITP repos!
-1. Open a terminal in JupyterHub. All of our commands will be typed in this terminal.
-1. Set up SSH by following these directions:
-    * Run the following command in the terminal, replacing what's inside the quotes with the email address your GitHub account is associated with:
-        * `ssh-keygen -t ed25519 -C "your_email@example.com"`
-    * After that, select `enter` to store it in the default location, and select `enter` twice more to bypass creating a passphrase
-    * Run the following command to "start" ssh key in the background, which should return a response similar to `Agent pid 258`
-        * `eval "$(ssh-agent -s)"`
-    * Add the ssh key to the ssh agent with this command
-        * `ssh-add ~/.ssh/id_ed25519`
-    * From here we will copy the contents of your public ssh file, which we will first do by viewing it's contents.
-        * To view:
-            * `cat ~/.ssh/id_ed25519.pub`
-        * Then, select and copy the entire contents of the file that display
-            * The text should begin with `ssh-ed25519` and end with your GitHub email address
-            * Beware of copying white spaces, which may cause errors in the following steps
-
-
-    * Once copied, navigate to GitHub
-    * In the top right corner, select `Settings` and then select `SSH and GPC Keys` in the left sidebar
-    * Select `New SSH Key`
-        * For the title add something like ‘JupyterHub’
-        * Paste the key that you copied into key field
-    * Click `Add SSH Key`, and, if necessary, enter password
-
-
-    * After you've added your SSH key to your GitHub account, open a new Jupyter terminal window and you'll be able to test your connection with:
-        * `ssh -T git@github.com`
-
-After completing the steps above be sure to complete the section below to persist your SSH key between sessions and enable extensions.
-
-(persisting-ssh-and-extensions)=
-#### Persisting your SSH Key and Enabling Extensions
-To ensure that your SSH key settings persist between your sessions, run the following command in the Jupyter terminal.
-* `echo "source .profile" >> .bashrc`
-
-
-Now, restart your Jupyter server by selecting:
-* `File` -> `Hub Control Panel` -> `Stop Server`, then `Start Server`
-
-
-From here, after opening a new Jupyter terminal you should see the notification:
-* `ssh-add: Identities added: /home/jovyan/.ssh/id_ed25519`
-
-
-If the above doesn't work, try:
-* Closing your terminal and opening a new one
-* Following the instructions to restart your Jupyter server above
-* Substituting the following for the `echo` command above and re-attempting:
-    * `echo "source .profile" >> .bash_profile`
-
-After completing this section, you will also enjoy various extensions in Jupyter, such as `black` hotkey auto-formatting with `ctrl+shft+k`, and the ability to see your current git branch in the Jupyter terminal.
-
-(cloning-a-repository)=
-#### Cloning a Repository
-1. Navigate to the GitHub repository to clone. We'll work our way through the `data-analyses` [repo here](https://github.com/cal-itp/data-analyses). Click on the green `Code` button, select "SSH" and copy the URL.
-1. Clone the Git repo: `git clone git@github.com:cal-itp/data-analyses.git`
-1. Double check  with `ls` to list and see that the remote repo was successfully cloned into your "local" (cloud-based) filesystem.
-1. Change into the `data-analyses` directory: `cd data-analyses`
-1. Pull from the `main` branch and sync your remote and local repos: `git pull origin main`
 
 ### Project Workflow
 
@@ -107,6 +35,7 @@ In the `data-analyses` repo, separate analysis tasks live in their own directori
 1. To review a log of past commits: `git log`
 1. When you are ready to merge all the commits into `main`, open a pull request (PR) on the remote repository, and merge it in!
 1. Go back to `main` and update your local to match the remote: `git checkout main`, `git pull origin main`
+1. Once you've merged your branch into `main` and deleted it from the remote, you can delete your branch locally: `git branch -d my-new-branch`. You can reuse the branch name later.
 
 
 ### Pulling and Pushing Changes
@@ -149,6 +78,7 @@ A rebase might be preferred, especially if all your work is contained on your br
 1. Force-push those changes to complete the rebase and rewrite the commit history: `git push origin my-new-branch -f`
 
 #### Merge
+Note: Merging with [fast-forward](https://git-scm.com/docs/git-merge#Documentation/git-merge.txt---ff) behaves similarly to a rebase.
 
 1. At this point, you've either stashed or added commits on `my-new-branch`.
 1. Pull from origin: `git checkout main` and `git pull origin main`
@@ -176,7 +106,6 @@ These are helpful Git commands an analyst might need, listed in no particular or
 * To discard the changes you made to a file, `git checkout my-notebook.ipynb`, and you can revert back to the version that was last committed.
 * Temporarily stash changes, move to a different branch, and come back and retain those changes: `git stash`, `git checkout some-other-branch`, do stuff on the other branch, `git checkout original-branch`, `git stash pop`
 * Rename files and retain the version history associated (`mv` is move, and renaming is moving the file path): `git mv old-notebook.ipynb new-notebook.ipynb`
-* Once you've merged your branch into `main`, you can delete your branch locally: `git branch -d my-new-branch`
 * Set your local `main` branch to be the same as the remote branch: `git fetch origin
 git reset --hard origin/main`
 * To delete a file that's been added in a previous commit: `git rm notebooks/my-notebook.ipynb`

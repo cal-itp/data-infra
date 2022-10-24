@@ -24,7 +24,7 @@ bridge_organizations_x_gtfs_datasets_managed AS (
      table_a_join_col = 'gtfs_datasets_produced',
      table_a_date_col = 'calitp_extracted_at',
      table_b = 'latest_gtfs_datasets',
-     table_b_key_col = 'key',
+     table_b_key_col = 'airtable_record_id',
      table_b_key_col_name = 'gtfs_dataset_key',
      table_b_name_col = 'name',
      table_b_name_col_name = 'gtfs_dataset_name',

@@ -1,0 +1,1 @@
+scheduler-address: "dask-scheduler.dask.svc.cluster.local:8786"

@@ -24,27 +24,32 @@ The following libraries are available and recommended for use by Cal-ITP data an
 <br> - [Collect Query Results](#collect-query-results)
 <br> - [Show Query SQL](#show-query-sql)
 <br> - [More siuba Resources](more-siuba-resources)
-1. [shared utils](shared-utils)
 1. [pandas](pandas-resources)
 1. [Add New Packages](#add-new-packages)
 
+(shared-utils)=
 ## shared utils
 A set of shared utility functions can also be installed, similarly to any Python library. The [shared_utils](https://github.com/cal-itp/data-analyses/shared_utils) are stored here. Generalized functions for analysis are added as collaborative work evolves so we aren't constantly reinventing the wheel.
 
+
+### In terminal:
+* Navigate to the package folder: `cd data-analyses/_shared_utils`
+* Use the make command to run through conda install and pip install: `make setup_env`
+    * Note: you may need to select Kernel -> Restart Kernel from the top menu after make setup_env in order to successfully import shared_utils
+* Alternative: add an `alias` to your `.bash_profile`:
+    * In terminal use `cd` to navigate to the home directory (not a repository)
+    * Type `nano .bash_profile` to open the .bash_profile in a text editor
+    * Add a line at end: `alias go='cd ~/data-analyses/portfolio && pip install -r requirements.txt && cd ../_shared_utils && make setup_env && cd ..'`
+    * Exit with Ctrl+X, hit yes, then hit enter at the filename prompt
+    * Restart your server; you can check your changes with `cat .bash_profile`
+
+
+### In notebook:
 ```python
-# In terminal:
-cd data-analyses/_shared_utils
-
-# Use the make command to run through conda install and pip install
-make setup_env
-
-# In notebook:
 import shared_utils
 
+#example of using shared_utils
 shared_utils.geography_utils.WGS84
-
-# Note: you may need to select Kernel -> Restart Kernel from the top menu
-# after make setup_env in order to successfully import shared_utils
 ```
 
 See [data-analyses/example_reports](https://github.com/cal-itp/data-analyses/tree/main/example_report) for examples on how to use `shared_utils` for general functions, charts, and maps.
@@ -145,27 +150,6 @@ Note that here the pandas Series method `str.contains` corresponds to `regexp_co
 * [siuba docs](https://siuba.readthedocs.io)
 * ['Tidy Tuesday' live analyses with siuba](https://www.youtube.com/playlist?list=PLiQdjX20rXMHc43KqsdIowHI3ouFnP_Sf)
 
-(shared-utils)=
-## shared utils
-A set of shared utility functions can also be installed, similarly to any Python library. The [shared_utils](https://github.com/cal-itp/data-analyses/tree/main/_shared_utils) are stored here. Generalized functions for analysis are added as collaborative work evolves so we aren't constantly reinventing the wheel.
-
-```python
-# In terminal:
-cd data-analyses/_shared_utils
-
-# Use the make command to run through conda install and pip install
-make setup_env
-
-# In notebook:
-import shared_utils
-
-shared_utils.geography_utils.WGS84
-
-# Note: you may need to select Kernel -> Restart Kernel from the top menu
-# after make setup_env in order to successfully import shared_utils
-```
-
-See [data-analyses/example_reports](https://github.com/cal-itp/data-analyses/tree/main/example_report) for examples on how to use `shared_utils` for general functions, charts, and maps.
 
 (pandas-resources)=
 ## pandas

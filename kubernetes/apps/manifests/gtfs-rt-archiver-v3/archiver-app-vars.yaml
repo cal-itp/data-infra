@@ -6,4 +6,3 @@ data:
   CALITP_HUEY_REDIS_HOST: redis
   CALITP_USER: pipeline
   GOOGLE_APPLICATION_CREDENTIALS: /secrets/gtfs-feed-secrets/google_application_credentials.json
-  SENTRY_DSN: "https://e498431022154366b0ff8b71cf2d93e0@sentry.calitp.org/2"

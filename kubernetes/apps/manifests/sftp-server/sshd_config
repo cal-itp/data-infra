@@ -1,6 +1,7 @@
 Port 22
-Include /etc/ssh/sshd_config.d/*.conf
+ChallengeResponseAuthentication yes
 AuthorizedKeysFile      .ssh/authorized_keys
 Subsystem       sftp    internal-sftp
 ForceCommand internal-sftp
 ChrootDirectory /sftp
+Include /etc/ssh/sshd_config.d/*.conf

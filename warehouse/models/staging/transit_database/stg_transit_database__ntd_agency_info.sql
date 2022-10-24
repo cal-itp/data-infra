@@ -1,6 +1,5 @@
-
-
 WITH
+
 once_daily_ntd_agency_info AS (
     {{ get_latest_dense_rank(
         external_table = source('airtable', 'california_transit__ntd_agency_info'),
@@ -11,7 +10,7 @@ once_daily_ntd_agency_info AS (
 stg_transit_database__ntd_agency_info AS (
     SELECT
         id AS key,
-        {{ trim_make_empty_string_null(column_name = "ntd_id") }},
+        {{ trim_make_empty_string_null(column_name = "ntd_id") }} AS ntd_id,
         legacy_ntd_id,
         agency_name,
         reporter_acronym,

@@ -67,7 +67,7 @@ def report_failures_to_sentry(
     ]
     for failure in failures:
         with sentry_sdk.push_scope() as scope:
-            scope.fingerprint = [failure.unique_id, failure.message]
+            scope.fingerprint = [failure.status, failure.unique_id]
             scope.set_context("dbt", get_failure_context(failure, manifest))
             exc_type = {
                 RunResultStatus.error: DbtTestError,

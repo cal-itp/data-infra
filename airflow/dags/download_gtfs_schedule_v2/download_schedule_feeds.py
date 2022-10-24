@@ -6,7 +6,6 @@ import datetime
 import gzip
 import json
 import logging
-import os
 from typing import List, Optional, ClassVar
 
 import humanize
@@ -31,6 +30,7 @@ from calitp.storage import (
     GTFSDownloadConfigExtract,
 )
 from pydantic import validator
+from requests.exceptions import HTTPError
 
 GTFS_FEED_LIST_ERROR_THRESHOLD = 0.95
 
@@ -77,7 +77,7 @@ class DownloadFeedsResult(PartitionedGCSArtifact):
 
 
 def download_all(task_instance, execution_date, **kwargs):
-    sentry_sdk.init(environment=os.getenv("AIRFLOW_ENV"))
+    sentry_sdk.init()
     start = pendulum.now()
     # https://stackoverflow.com/a/61808755
     with create_session() as session:
@@ -102,10 +102,10 @@ def download_all(task_instance, execution_date, **kwargs):
     logging.info(f"processing {len(configs)} configs")
 
     for i, config in enumerate(configs, start=1):
-        logging.info(f"attempting to fetch {i}/{len(configs)} {config.url}")
-
         with sentry_sdk.push_scope() as scope:
-            scope.clear_breadcrumbs()
+            logging.info(f"attempting to fetch {i}/{len(configs)} {config.url}")
+            scope.set_tag("config_name", config.name)
+            scope.set_tag("config_url", config.url)
             scope.set_context("config", config.dict())
             try:
                 extract, content = download_feed(
@@ -124,6 +124,14 @@ def download_all(task_instance, execution_date, **kwargs):
                     )
                 )
             except Exception as e:
+                if isinstance(e, HTTPError):
+                    scope.fingerprint = [
+                        config.url,
+                        str(e),
+                        str(e.response.status_code),
+                    ]
+                else:
+                    scope.fingerprint = [config.url, str(e)]
                 logging.exception(
                     f"exception occurred while attempting to download feed {config.url}"
                 )
