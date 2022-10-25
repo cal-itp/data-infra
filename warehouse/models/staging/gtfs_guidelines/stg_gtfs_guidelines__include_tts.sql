@@ -97,6 +97,8 @@ tts_check AS (
         CASE
             WHEN tot_tts_issues = 0 THEN "PASS"
             WHEN tot_tts_issues > 0 THEN "FAIL"
+            -- This catches cases where a provider has data in feed_guideline_index for dates that are present in dim_stops. Such as itp_id=192
+            ELSE "FAIL"
         END AS status,
       FROM daily_stops
 )
