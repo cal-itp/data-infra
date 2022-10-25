@@ -15,11 +15,10 @@ concurrency:
 jobs:
   build_push:
     name: Package docker image
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
+      - uses: docker/login-action@v1
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -31,12 +30,11 @@ jobs:
       # from https://forcepush.tech/python-package-ci-cd-with-git-hub-actions
       - name: Get image tag from pyproject.toml
         run: |
-          cd images/jupyter-singleuser
+          cd services/gtfs-rt-archiver-v3
           PROJECT_VERSION=$(poetry version --short)
           echo "PROJECT_VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
-      - name: Build and push
-        uses: docker/build-push-action@v2
+      - uses: docker/build-push-action@v2
         with:
           context: services/gtfs-rt-archiver-v3
-          push: true
+          push: ${{ github.ref == 'refs/heads/main' }}
           tags: ghcr.io/${{github.repository}}/gtfs-rt-archiver-v3:${{env.PROJECT_VERSION}}
