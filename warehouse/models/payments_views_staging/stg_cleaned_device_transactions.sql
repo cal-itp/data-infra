@@ -7,7 +7,14 @@ WITH stg_cleaned_device_transactions AS (
             calitp_n_dupe_ids,
             calitp_dupe_number,
             route_id,
-            location_id),
+            location_id,
+            longitude,
+            latitude),
+
+        -- cast lng/lat to float fields
+        CAST(longitude AS FLOAT64) AS longitude,
+        CAST(latitude AS FLOAT64) AS latitude,
+
         -- trim to align with gtfs cleaning steps
         -- since these fields are used to join with gtfs data
         TRIM(route_id) AS route_id,
@@ -19,5 +26,5 @@ WITH stg_cleaned_device_transactions AS (
 
 SELECT
     *,
-    ST_GEOGPOINT(CAST(longitude AS FLOAT64), CAST(latitude AS FLOAT64)) AS geography
+    ST_GEOGPOINT(longitude, latitude) AS geography
 FROM stg_cleaned_device_transactions
