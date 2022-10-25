@@ -1,12 +1,11 @@
 [tool.poetry]
 name = "jupyter-singleuser"
-version = "2022.10.25"
+version = "2022.10.25.1"
 description = ""
 authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "~3.10"
-calitp = "0.0.16"
 black = "22.3.0"
 intake = "0.6.4"
 intake-dcat = "0.4.0"
@@ -15,7 +14,6 @@ intake-parquet = "0.2.3"
 ipyleaflet = "0.15.0"
 jupytext = "1.13.5"
 jupyterlab-code-formatter = "1.4.10"
-siuba = "1.0.0a2"
 voila = "0.3.6"
 plotnine = "0.8.0"
 plotly = "5.5.0"
@@ -39,6 +37,10 @@ dask-bigquery = "^2022.5.0"
 pandas-profiling = "^3.4.0"
 dask = "~2022.8"
 distributed = "~2022.8"
+pyodbc = "^4.0.34"
+sqlalchemy-bigquery = "^1.4.4"
+siuba = "1.0.0a2"
+calitp = "0.0.16"
 
 [tool.poetry.dev-dependencies]
 
