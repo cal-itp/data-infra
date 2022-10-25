@@ -558,7 +558,7 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "dask"
-version = "2022.10.0"
+version = "2022.8.1"
 description = "Parallel PyData with Task Scheduling"
 category = "main"
 optional = false
@@ -574,10 +574,10 @@ toolz = ">=0.8.2"
 
 [package.extras]
 array = ["numpy (>=1.18)"]
-complete = ["bokeh (>=2.4.2)", "distributed (==2022.10.0)", "jinja2", "numpy (>=1.18)", "pandas (>=1.0)"]
+complete = ["bokeh (>=2.4.2)", "distributed (==2022.8.1)", "jinja2", "numpy (>=1.18)", "pandas (>=1.0)"]
 dataframe = ["numpy (>=1.18)", "pandas (>=1.0)"]
 diagnostics = ["bokeh (>=2.4.2)", "jinja2"]
-distributed = ["distributed (==2022.10.0)"]
+distributed = ["distributed (==2022.8.1)"]
 test = ["pandas", "pytest", "pytest-rerunfailures", "pytest-xdist", "pre-commit"]
 
 [[package]]
@@ -694,7 +694,7 @@ python-versions = "*"
 
 [[package]]
 name = "distributed"
-version = "2022.10.0"
+version = "2022.8.1"
 description = "Distributed scheduler for Dask"
 category = "main"
 optional = false
@@ -703,7 +703,7 @@ python-versions = ">=3.8"
 [package.dependencies]
 click = ">=6.6"
 cloudpickle = ">=1.5.0"
-dask = "2022.10.0"
+dask = "2022.8.1"
 jinja2 = "*"
 locket = ">=1.0.0"
 msgpack = ">=0.6.0"
@@ -3448,7 +3448,7 @@ heapdict = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.10"
-content-hash = "32aad02108306f5de1ad6f671e90cf2bca34bcce05c063a3859de5c39649c8ab"
+content-hash = "5528751f0e9b48d4d229fdd0f2c46b834b3eb605a4b0a5d33a0c038347cc9c24"
 
 [metadata.files]
 agate = []
