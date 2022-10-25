@@ -1,6 +1,6 @@
 WITH feed_guideline_index AS (
     SELECT * FROM {{ ref('stg_gtfs_guidelines__feed_guideline_index') }}
-    WHERE check = {{ complete_wheelchair_accessibility_data() }}
+    WHERE check = {{ include_tts() }}
 ),
 
 dim_stops AS (
@@ -13,11 +13,13 @@ summarize_stops AS (
        calitp_url_number,
        calitp_extracted_at,
        calitp_deleted_at,
-       COUNTIF(tts_stop_name IS null AND
+       COUNTIF((tts_stop_name IS null OR tts_stop_name = stop_name)
+                AND
         -- Examples guided by https://docs.google.com/document/d/1LObjgDyiiE6UBiA3GpoNOlZ36li-KKj6dwBzRTDa7VU
                 (
                 -- Cardinal directions, check start and end of stop names for each direction.
-                -- Must be in CAPS to be caught
+                -- Must be in CAPSf to be caught
+                -- "N" should read "north"
                     stop_name LIKE '% N'OR
                     stop_name LIKE 'N %'OR
                     stop_name LIKE '% NE'OR
@@ -35,15 +37,19 @@ summarize_stops AS (
                     stop_name LIKE '% NW' OR
                     stop_name LIKE 'NW %' OR
                 -- Street names, must end name or be standalone word
+                -- "st" should read "street"
                     LOWER(stop_name) LIKE '% st' OR
                     LOWER(stop_name) LIKE '% st %' OR
                     LOWER(stop_name) LIKE '% rd' OR
-                    LOWER(stop_name) LIKE '% rd %'
+                    LOWER(stop_name) LIKE '% rd %' OR
                 -- "blvd" and "hwy" are distinctive enough to flag in all cases
+                -- "blvd" should read "boulevard"
                     LOWER(stop_name) LIKE '%blvd%' OR
                     LOWER(stop_name) LIKE '%hwy%' OR
                 -- "Pine/Baker" should read "pine and baker"
-                    stop_name LIKE '%/%'
+                    stop_name LIKE '%/%' OR
+                    stop_name LIKE '%(%' OR
+                    stop_name LIKE '%)%' OR
                 -- "21" should read "twenty one"
                     REGEXP_CONTAINS(stop_name, '[0-9][0-9]')
                 )
@@ -90,7 +96,7 @@ tts_check AS (
         tot_tts_issues,
         CASE
             WHEN tot_tts_issues = 0 THEN "PASS"
-        ELSE "FAIL"
+            WHEN tot_tts_issues > 0 THEN "FAIL"
         END AS status,
       FROM daily_stops
 )
