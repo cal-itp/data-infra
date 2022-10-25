@@ -5,10 +5,10 @@ ac-transit:
       gtfs_rt_vehicle_positions_url: https://api.actransit.org/transit/gtfsrt/vehicles?token={{ AC_TRANSIT_API_KEY }}
       gtfs_rt_service_alerts_url: https://api.actransit.org/transit/gtfsrt/alerts?token={{ AC_TRANSIT_API_KEY }}
       gtfs_rt_trip_updates_url: https://api.actransit.org/transit/gtfsrt/tripupdates?token={{ AC_TRANSIT_API_KEY }}
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=AC
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=AC
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=AC
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=AC
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=AC
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=AC
   itp_id: 4
 alhambra-community-transit:
   agency_name: Alhambra Community Transit
@@ -25,15 +25,15 @@ altamont-corridor-express:
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=CE
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=CE
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=CE
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=CE
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=CE
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=CE
   itp_id: 10
 amador-regional-transit-system:
   agency_name: Amador Regional Transit System
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/amador-ca-us/amador-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/amador-ca-us/amador-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -65,7 +65,7 @@ arcadia-transit:
 arcata-and-mad-river-transit-system:
   agency_name: Arcata and Mad River Transit System
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/humboldtcounty-ca-us/humboldtcounty-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/humboldtcounty-ca-us/humboldtcounty-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -89,7 +89,7 @@ auburn-transit:
 avalon-transit:
   agency_name: Avalon Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/avalon-ca-us/avalon-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/avalon-ca-us/avalon-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -97,7 +97,7 @@ avalon-transit:
 avocado-heights/bassett/west-valinda-shuttle:
   agency_name: Avocado Heights/Bassett/West Valinda Shuttle
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -121,7 +121,7 @@ baldwin-park-transit:
 banning-pass-transit:
   agency_name: Banning Pass Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/banning-ca-us/banning-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/banning-ca-us/banning-ca-us.zip
       gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/banning/gtfs-rt-vehicle-positions
       gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/banning/gtfs-rt-alerts
       gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/banning/gtfs-rt-trip-updates
@@ -131,12 +131,12 @@ bay-area-rapid-transit:
   feeds:
     - gtfs_schedule_url: https://www.bart.gov/dev/schedules/google_transit.zip
       gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: http://api.bart.gov/gtfsrt/alerts.aspx
-      gtfs_rt_trip_updates_url: http://api.bart.gov/gtfsrt/tripupdate.aspx
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=BA
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=BA
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=BA
+      gtfs_rt_service_alerts_url: https://api.bart.gov/gtfsrt/alerts.aspx
+      gtfs_rt_trip_updates_url: https://api.bart.gov/gtfsrt/tripupdate.aspx
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=BA
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=BA
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=BA
   itp_id: 279
 beach-cities-transit:
   agency_name: Beach Cities Transit
@@ -157,7 +157,7 @@ bear-transit:
 beaumont-pass-transit:
   agency_name: Beaumont Pass Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/beaumont-ca-us/beaumont-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/beaumont-ca-us/beaumont-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -197,7 +197,7 @@ blossom-express:
 blue-lake-rancheria:
   agency_name: Blue Lake Rancheria
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/humboldtcounty-ca-us/humboldtcounty-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/humboldtcounty-ca-us/humboldtcounty-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -213,7 +213,7 @@ burbank-bus:
 burney-express:
   agency_name: Burney Express
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/redding-ca-us/redding-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/redding-ca-us/redding-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -229,7 +229,7 @@ calabasas-transit-system:
 calaveras-transit:
   agency_name: Calaveras Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/calaveras-ca-us/calaveras-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/calaveras-ca-us/calaveras-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -237,19 +237,19 @@ calaveras-transit:
 caltrain:
   agency_name: Caltrain
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/caltrain-ca-us/caltrain-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/caltrain-ca-us/caltrain-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=CT
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=CT
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=CT
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=CT
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=CT
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=CT
   itp_id: 246
 camarillo-area-transit:
   agency_name: Camarillo Area Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/camarillo-ca-us/camarillo-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/camarillo-ca-us/camarillo-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -257,14 +257,14 @@ camarillo-area-transit:
 capitol-corridor:
   agency_name: Capitol Corridor
   feeds:
-    - gtfs_schedule_url: http://www.capitolcorridor.org/googletransit/google_transit.zip
+    - gtfs_schedule_url: https://www.capitolcorridor.org/googletransit/google_transit.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=AM
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=AM
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=AM
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=AM
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=AM
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=AM
   itp_id: 56
 city-of-lompoc-transit:
   agency_name: City of Lompoc Transit
@@ -285,7 +285,7 @@ clean-air-express:
 cloverdale-transit:
   agency_name: Cloverdale Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/sonomacounty-ca-us/sonomacounty-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/sonomacounty-ca-us/sonomacounty-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -293,7 +293,7 @@ cloverdale-transit:
 clovis-transit-system:
   agency_name: Clovis Transit System
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/clovistransit-ca-us/clovistransit-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/clovistransit-ca-us/clovistransit-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -309,14 +309,14 @@ commerce-municipal-bus-lines:
 commute-org-shuttles:
   agency_name: Commute.org Shuttles
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/commute-ca-us/commute-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/commute-ca-us/commute-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=CM
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=CM
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=CM
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=CM
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=CM
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=CM
   itp_id: 76
 compton-renaissance-transit-service:
   agency_name: Compton Renaissance Transit Service
@@ -329,7 +329,7 @@ compton-renaissance-transit-service:
 corona-cruiser:
   agency_name: Corona Cruiser
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/corona-ca-us/corona-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/corona-ca-us/corona-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -341,15 +341,15 @@ county-connection:
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=CC
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=CC
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=CC
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=CC
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=CC
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=CC
   itp_id: 61
 county-express:
   agency_name: County Express
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/sanbenitocounty-ca-us/sanbenitocounty-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/sanbenitocounty-ca-us/sanbenitocounty-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -389,7 +389,7 @@ delano-area-rapid-transit:
 desert-roadrunner:
   agency_name: Desert Roadrunner
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/paloverde_valley-ca-us/paloverde_valley-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/paloverde_valley-ca-us/paloverde_valley-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -405,7 +405,7 @@ downeylink:
 east-los-angeles-shuttle:
   agency_name: East Los Angeles Shuttle
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -413,7 +413,7 @@ east-los-angeles-shuttle:
 east-valinda-shuttle:
   agency_name: East Valinda Shuttle
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -421,7 +421,7 @@ east-valinda-shuttle:
 eastern-sierra-transit-authority:
   agency_name: Eastern Sierra Transit Authority
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/easternsierra-ca-us/easternsierra-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/easternsierra-ca-us/easternsierra-ca-us.zip
       gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/esta/gtfs-rt-vehicle-positions
       gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/esta/gtfs-rt-alerts
       gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/esta/gtfs-rt-trip-updates
@@ -429,7 +429,7 @@ eastern-sierra-transit-authority:
 el-dorado-transit:
   agency_name: El Dorado Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/eldoradotransit-ca-us/eldoradotransit-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/eldoradotransit-ca-us/eldoradotransit-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -437,7 +437,7 @@ el-dorado-transit:
 el-monte-transportation-division:
   agency_name: El Monte Transportation Division
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/elmonte-ca-us/elmonte-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/elmonte-ca-us/elmonte-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -457,11 +457,11 @@ emery-go-round:
       gtfs_rt_vehicle_positions_url: https://egrshuttle.com/gtfs-rt/vehiclepositions
       gtfs_rt_service_alerts_url: https://egrshuttle.com/gtfs-rt/alerts
       gtfs_rt_trip_updates_url: https://egrshuttle.com/gtfs-rt/tripupdates
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=EM
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=EM
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=EM
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/emerygoround-ca-us/emerygoround-ca-us.zip
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=EM
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=EM
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=EM
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/emerygoround-ca-us/emerygoround-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -469,7 +469,7 @@ emery-go-round:
 eureka-transit-service:
   agency_name: Eureka Transit Service
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/humboldtcounty-ca-us/humboldtcounty-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/humboldtcounty-ca-us/humboldtcounty-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -477,14 +477,14 @@ eureka-transit-service:
 fairfield-and-suisun-transit:
   agency_name: Fairfield and Suisun Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/fairfield-ca-us/fairfield-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/fairfield-ca-us/fairfield-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=FS
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=FS
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=FS
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=FS
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=FS
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=FS
   itp_id: 110
 foothill-transit:
   agency_name: Foothill Transit
@@ -506,14 +506,14 @@ get-bus:
   agency_name: GET Bus
   feeds:
     - gtfs_schedule_url: http://eta.getbus.org/rtt/public/utility/gtfs.aspx
-      gtfs_rt_vehicle_positions_url: http://get.connexionz.net/rtt/public/utility/gtfsrealtime.aspx/vehicleposition
-      gtfs_rt_service_alerts_url: http://get.connexionz.net/rtt/public/utility/gtfsrealtime.aspx/alert
-      gtfs_rt_trip_updates_url: http://get.connexionz.net/rtt/public/utility/gtfsrealtime.aspx/tripupdate
+      gtfs_rt_vehicle_positions_url: https://get.connexionz.net/rtt/public/utility/gtfsrealtime.aspx/vehicleposition
+      gtfs_rt_service_alerts_url: https://get.connexionz.net/rtt/public/utility/gtfsrealtime.aspx/alert
+      gtfs_rt_trip_updates_url: https://get.connexionz.net/rtt/public/utility/gtfsrealtime.aspx/tripupdate
   itp_id: 126
 glendale-beeline:
   agency_name: Glendale Beeline
   feeds:
-    - gtfs_schedule_url: http://glendaleca.gov/Home/ShowDocument?id=29549
+    - gtfs_schedule_url: https://glendaleca.gov/Home/ShowDocument?id=29549
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -537,7 +537,7 @@ go-west-shuttle:
 gold-coast-transit:
   agency_name: Gold Coast Transit
   feeds:
-    - gtfs_schedule_url: http://www.goldcoasttransit.org/images/GTFS/GTFS.zip
+    - gtfs_schedule_url: https://www.goldcoasttransit.org/images/GTFS/GTFS.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -545,7 +545,7 @@ gold-coast-transit:
 gold-country-stage:
   agency_name: Gold Country Stage
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/goldcountrystage-ca-us/goldcountrystage-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/goldcountrystage-ca-us/goldcountrystage-ca-us.zip
       gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/gold-country-stage/gtfs-rt-vehicle-positions
       gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/gold-country-stage/gtfs-rt-alerts
       gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/gold-country-stage/gtfs-rt-trip-updates
@@ -557,14 +557,14 @@ golden-gate-bridge-highway-and-transportation-district:
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=GG
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=GG
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=GG
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=GF
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=GF
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=GF
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=GG
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=GG
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=GG
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=GF
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=GF
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=GF
   itp_id: 127
 grapeline:
   agency_name: Grapeline
@@ -593,9 +593,9 @@ guadalupe-flyer:
 humboldt-transit-authority:
   agency_name: Humboldt Transit Authority
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/humboldtcounty-ca-us/humboldtcounty-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/humboldtcounty-ca-us/humboldtcounty-ca-us.zip
       gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/redwood/gtfs-rt-vehicle-positions
-      gtfs_rt_service_alerts_url: http://gtfs-realtime.trilliumtransit.com/gtfs-realtime/feed/humboldtcounty-ca-us/service_alerts.proto
+      gtfs_rt_service_alerts_url: https://gtfs-realtime.trilliumtransit.com/gtfs-realtime/feed/humboldtcounty-ca-us/service_alerts.proto
       gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/redwood/gtfs-rt-trip-updates
   itp_id: 135
 huntington-park-express:
@@ -617,7 +617,7 @@ irvine-shuttle:
 kern-transit:
   agency_name: Kern Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/kerncounty-ca-us/kerncounty-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/kerncounty-ca-us/kerncounty-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -625,10 +625,10 @@ kern-transit:
 kings-area-rural-transit:
   agency_name: Kings Area Rural Transit
   feeds:
-    - gtfs_schedule_url: http://kart.connexionz.net/rtt/public/utility/gtfs.aspx
-      gtfs_rt_vehicle_positions_url: http://kart.connexionz.net/rtt/public/utility/gtfsrealtime.aspx/vehicleposition
-      gtfs_rt_service_alerts_url: http://kart.connexionz.net/rtt/public/utility/gtfsrealtime.aspx/alert
-      gtfs_rt_trip_updates_url: http://kart.connexionz.net/rtt/public/utility/gtfsrealtime.aspx/tripupdate
+    - gtfs_schedule_url: https://kart.connexionz.net/rtt/public/utility/gtfs.aspx
+      gtfs_rt_vehicle_positions_url: https://kart.connexionz.net/rtt/public/utility/gtfsrealtime.aspx/vehicleposition
+      gtfs_rt_service_alerts_url: https://kart.connexionz.net/rtt/public/utility/gtfsrealtime.aspx/alert
+      gtfs_rt_trip_updates_url: https://kart.connexionz.net/rtt/public/utility/gtfsrealtime.aspx/tripupdate
   itp_id: 148
 la-campana:
   agency_name: La Campana
@@ -641,7 +641,7 @@ la-campana:
 laguna-beach-municipal-transit:
   agency_name: Laguna Beach Municipal Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/lagunabeach-ca-us/lagunabeach-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/lagunabeach-ca-us/lagunabeach-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -649,7 +649,7 @@ laguna-beach-municipal-transit:
 lake-transit:
   agency_name: Lake Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/laketransit-ca-us/laketransit-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/laketransit-ca-us/laketransit-ca-us.zip
       gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/lake-county/gtfs-rt-vehicle-positions
       gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/lake-county/gtfs-rt-alerts
       gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/lake-county/gtfs-rt-trip-updates
@@ -657,7 +657,7 @@ lake-transit:
 lassen-transit-service-agency:
   agency_name: Lassen Transit Service Agency
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/lassen-ca-us/lassen-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/lassen-ca-us/lassen-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -689,7 +689,7 @@ madera-area-express:
 madera-county-connection:
   agency_name: Madera County Connection
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/maderactc-ca-us/maderactc-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/maderactc-ca-us/maderactc-ca-us.zip
       gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/madera/gtfs-rt-vehicle-positions
       gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/madera/gtfs-rt-alerts
       gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/madera/gtfs-rt-trip-updates
@@ -697,7 +697,7 @@ madera-county-connection:
 mammoth-lakes-transit-system:
   agency_name: Mammoth Lakes Transit System
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/easternsierra-ca-us/easternsierra-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/easternsierra-ca-us/easternsierra-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -721,19 +721,19 @@ marguerite-shuttle:
 marin-transit:
   agency_name: Marin Transit
   feeds:
-    - gtfs_schedule_url: http://marintransit.org/data/google_transit.zip
+    - gtfs_schedule_url: https://marintransit.org/data/google_transit.zip
       gtfs_rt_vehicle_positions_url: https://marintransit.net/gtfs-rt/vehiclepositions
       gtfs_rt_service_alerts_url: https://marintransit.net/gtfs-rt/alerts
       gtfs_rt_trip_updates_url: https://marintransit.net/gtfs-rt/tripupdates
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=MA
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=MA
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=MA
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=MA
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=MA
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=MA
   itp_id: 194
 mendocino-transit-authority:
   agency_name: Mendocino Transit Authority
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/mendocino-ca-us/mendocino-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/mendocino-ca-us/mendocino-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -753,7 +753,7 @@ merced-the-bus:
       gtfs_rt_vehicle_positions_url: https://thebuslive.com/gtfs-rt/vehiclepositions
       gtfs_rt_service_alerts_url: https://thebuslive.com/gtfs-rt/alerts
       gtfs_rt_trip_updates_url: null
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/mercedthebus-ca-us/mercedthebus-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/mercedthebus-ca-us/mercedthebus-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -781,7 +781,7 @@ metrolink:
 mission-bay-tma:
   agency_name: Mission Bay TMA
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/missionbaytma-ca-us/missionbaytma-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/missionbaytma-ca-us/missionbaytma-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -805,7 +805,7 @@ montebello-bus-lines:
 monterey-salinas-transit:
   agency_name: Monterey-Salinas Transit
   feeds:
-    - gtfs_schedule_url: http://www.mst.org/google/google_transit.zip
+    - gtfs_schedule_url: https://www.mst.org/google/google_transit.zip
       gtfs_rt_vehicle_positions_url: https://gtfs.mst.org/TMGTFSRealTimeWebService/Vehicle/VehiclePositions.pb
       gtfs_rt_service_alerts_url: https://gtfs.mst.org/TMGTFSRealTimeWebService/Alert/Alerts.pb
       gtfs_rt_trip_updates_url: https://gtfs.mst.org/TMGTFSRealTimeWebService/TripUpdate/TripUpdates.pb
@@ -813,7 +813,7 @@ monterey-salinas-transit:
 moorpark-city-transit:
   agency_name: Moorpark City Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/moorparkcitytransit-ca-us/moorparkcitytransit-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/moorparkcitytransit-ca-us/moorparkcitytransit-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -821,7 +821,7 @@ moorpark-city-transit:
 morongo-basin-transit-authority:
   agency_name: Morongo Basin Transit Authority
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/morongobasin-ca-us/morongobasin-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/morongobasin-ca-us/morongobasin-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -829,7 +829,7 @@ morongo-basin-transit-authority:
 morro-bay-transit:
   agency_name: Morro Bay Transit
   feeds:
-    - gtfs_schedule_url: http://mjcaction.com/MJC_GTFS_Public/morrobay_google_transit.zip
+    - gtfs_schedule_url: https://mjcaction.com/MJC_GTFS_Public/morrobay_google_transit.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -849,10 +849,10 @@ muni:
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=SF
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=SF
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=SF
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=SF
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=SF
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=SF
   itp_id: 282
 mvgo:
   agency_name: MVGO
@@ -861,19 +861,19 @@ mvgo:
       gtfs_rt_vehicle_positions_url: https://ridemvgo.org/gtfs-rt/vehiclepositions
       gtfs_rt_service_alerts_url: https://ridemvgo.org/gtfs-rt/alerts
       gtfs_rt_trip_updates_url: https://ridemvgo.org/gtfs-rt/tripupdates
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/mountainview-ca-us/mountainview-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/mountainview-ca-us/mountainview-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=MV
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=MV
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=MV
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=MV
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=MV
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=MV
   itp_id: 217
 needles-area-transit:
   agency_name: Needles Area Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/needles-ca-us/needles-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/needles-ca-us/needles-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -881,7 +881,7 @@ needles-area-transit:
 north-county-transit-district:
   agency_name: North County Transit District
   feeds:
-    - gtfs_schedule_url: http://www.gonctd.com/google_transit.zip
+    - gtfs_schedule_url: https://www.gonctd.com/google_transit.zip
       gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/nctd/gtfs-rt-vehicle-positions
       gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/nctd/gtfs-rt-alerts
       gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/nctd/gtfs-rt-trip-updates
@@ -893,7 +893,7 @@ norwalk-transit-system:
       gtfs_rt_vehicle_positions_url: https://nts.rideralerts.com/InfoPoint/GTFS-Realtime.ashx?Type=VehiclePosition
       gtfs_rt_service_alerts_url: https://nts.rideralerts.com/InfoPoint/GTFS-Realtime.ashx?Type=Alert
       gtfs_rt_trip_updates_url: https://nts.rideralerts.com/InfoPoint/GTFS-Realtime.ashx?Type=TripUpdate
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/nts-ca-us/nts-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/nts-ca-us/nts-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -909,7 +909,7 @@ ojai-trolley:
 omnitrans:
   agency_name: OmniTrans
   feeds:
-    - gtfs_schedule_url: http://www.omnitrans.org/google/google_transit.zip
+    - gtfs_schedule_url: https://www.omnitrans.org/google/google_transit.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -925,7 +925,7 @@ orange-county-transportation-authority:
 palos-verdes-peninsula-transit-authority:
   agency_name: Palos Verdes Peninsula Transit Authority
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/pvpta-ca-us/pvpta-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/pvpta-ca-us/pvpta-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -933,15 +933,15 @@ palos-verdes-peninsula-transit-authority:
 pasadena-transit:
   agency_name: Pasadena Transit
   feeds:
-    - gtfs_schedule_url: http://rt.pasadenatransit.net/rtt/public/utility/gtfs.aspx
-      gtfs_rt_vehicle_positions_url: http://rt.pasadenatransit.net/rtt/public/utility/gtfsrealtime.aspx/vehicleposition
-      gtfs_rt_service_alerts_url: http://rt.pasadenatransit.net/rtt/public/utility/gtfsrealtime.aspx/alert
-      gtfs_rt_trip_updates_url: http://rt.pasadenatransit.net/rtt/public/utility/gtfsrealtime.aspx/tripupdate
+    - gtfs_schedule_url: https://rt.pasadenatransit.net/rtt/public/utility/gtfs.aspx
+      gtfs_rt_vehicle_positions_url: https://rt.pasadenatransit.net/rtt/public/utility/gtfsrealtime.aspx/vehicleposition
+      gtfs_rt_service_alerts_url: https://rt.pasadenatransit.net/rtt/public/utility/gtfsrealtime.aspx/alert
+      gtfs_rt_trip_updates_url: https://rt.pasadenatransit.net/rtt/public/utility/gtfsrealtime.aspx/tripupdate
   itp_id: 243
 petaluma-transit:
   agency_name: Petaluma Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/petalumatransit-petaluma-ca-us/petalumatransit-petaluma-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/petalumatransit-petaluma-ca-us/petalumatransit-petaluma-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -949,10 +949,10 @@ petaluma-transit:
       gtfs_rt_vehicle_positions_url: https://petaluma.rideralerts.com/infopoint/GTFS-Realtime.ashx?Type=VehiclePosition
       gtfs_rt_service_alerts_url: https://petaluma.rideralerts.com/infopoint/GTFS-Realtime.ashx?Type=Alert
       gtfs_rt_trip_updates_url: https://petaluma.rideralerts.com/infopoint/GTFS-Realtime.ashx?Type=TripUpdate
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=PE
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=PE
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=PE
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=PE
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=PE
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=PE
   itp_id: 247
 presidigo:
   agency_name: PresidiGo
@@ -965,7 +965,7 @@ presidigo:
 placer-county-transit:
   agency_name: Placer County Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/placercounty-ca-us/placercounty-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/placercounty-ca-us/placercounty-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -973,7 +973,7 @@ placer-county-transit:
 plumas-transit-systems:
   agency_name: Plumas Transit Systems
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/plumas-ca-us/plumas-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/plumas-ca-us/plumas-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -981,7 +981,7 @@ plumas-transit-systems:
 redding-area-bus-authority:
   agency_name: Redding Area Bus Authority
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/redding-ca-us/redding-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/redding-ca-us/redding-ca-us.zip
       gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/redding/gtfs-rt-vehicle-positions
       gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/redding/gtfs-rt-alerts
       gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/redding/gtfs-rt-trip-updates
@@ -989,7 +989,7 @@ redding-area-bus-authority:
 redwood-coast-transit:
   agency_name: Redwood Coast Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/delnorte-ca-us/delnorte-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/delnorte-ca-us/delnorte-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1005,14 +1005,14 @@ ridgecrest-transit:
 rio-vista-delta-breeze:
   agency_name: Rio Vista Delta Breeze
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/riovista-ca-us/riovista-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/riovista-ca-us/riovista-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=RV
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=RV
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=RV
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=RV
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=RV
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=RV
   itp_id: 264
 riverside-transit-agency:
   agency_name: Riverside Transit Agency
@@ -1033,7 +1033,7 @@ rosemead-explorer:
 roseville-transit:
   agency_name: Roseville Transit
   feeds:
-    - gtfs_schedule_url: http://iportal.sacrt.com/GTFS/Roseville/google_transit.zip
+    - gtfs_schedule_url: https://iportal.sacrt.com/GTFS/Roseville/google_transit.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1041,7 +1041,7 @@ roseville-transit:
 sacramento-regional-transit-district:
   agency_name: Sacramento Regional Transit District
   feeds:
-    - gtfs_schedule_url: http://iportal.sacrt.com/GTFS/SRTD/google_transit.zip
+    - gtfs_schedule_url: https://iportal.sacrt.com/GTFS/SRTD/google_transit.zip
       gtfs_rt_vehicle_positions_url: https://bustime.sacrt.com/gtfsrt/vehicles
       gtfs_rt_service_alerts_url: https://bustime.sacrt.com/gtfsrt/alerts
       gtfs_rt_trip_updates_url: https://bustime.sacrt.com/gtfsrt/trips
@@ -1049,7 +1049,7 @@ sacramento-regional-transit-district:
 sage-stage:
   agency_name: Sage Stage
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/sagestage-ca-us/sagestage-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/sagestage-ca-us/sagestage-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1057,21 +1057,21 @@ sage-stage:
 samtrans:
   agency_name: SamTrans
   feeds:
-    - gtfs_schedule_url: http://www.samtrans.com/Assets/GTFS/samtrans/ST-GTFS.zip?v=1114
+    - gtfs_schedule_url: https://www.samtrans.com/Assets/GTFS/samtrans/ST-GTFS.zip?v=1114
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=SM
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=SM
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=SM
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=SM
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=SM
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=SM
   itp_id: 290
 san-diego-metropolitan-transit-system:
   agency_name: San Diego Metropolitan Transit System
   feeds:
     - gtfs_schedule_url: https://www.sdmts.com/google_transit_files/google_transit.zip
       gtfs_rt_vehicle_positions_url: https://realtime.sdmts.com/api/api/gtfs_realtime/vehicle-positions-for-agency/MTS.pb?key={{ SD_MTS_VP_TU_API_KEY}}
-      gtfs_rt_service_alerts_url: http://app.mecatran.com/utw/ws/gtfsfeed/alerts/sdmts?apiKey={{ SD_MTS_SA_API_KEY}}
+      gtfs_rt_service_alerts_url: https://app.mecatran.com/utw/ws/gtfsfeed/alerts/sdmts?apiKey={{ SD_MTS_SA_API_KEY}}
       # This is commented out because we think we are getting 500 errors from the sdmts.com API when there are two simultaneous HTTP connections with the same API key
       # We want vehicle positions to keep going
       gtfs_rt_trip_updates_url: null # https://realtime.sdmts.com/api/api/gtfs_realtime/trip-updates-for-agency/MTS.pb?key={{ SD_MTS_VP_TU_API_KEY}}
@@ -1079,14 +1079,14 @@ san-diego-metropolitan-transit-system:
 san-francisco-bay-ferry:
   agency_name: San Francisco Bay Ferry
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/sfbayferry-ca-us/sfbayferry-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/sfbayferry-ca-us/sfbayferry-ca-us.zip
       gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/sfbay-ferry/gtfs-rt-vehicle-positions
       gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/sfbay-ferry/gtfs-rt-alerts
       gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/sfbay-ferry/gtfs-rt-trip-updates
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=SB
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=SB
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=SB
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=SB
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=SB
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=SB
   itp_id: 280
 san-joaquin-regional-transit-district:
   agency_name: San Joaquin Regional Transit District
@@ -1099,7 +1099,7 @@ san-joaquin-regional-transit-district:
 san-juan-capistrano-free-weekend-trolley:
   agency_name: San Juan Capistrano Free Weekend Trolley
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/sanjuancapistrano-ca-us/sanjuancapistrano-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/sanjuancapistrano-ca-us/sanjuancapistrano-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1107,7 +1107,7 @@ san-juan-capistrano-free-weekend-trolley:
 san-luis-obispo-regional-transit-authority:
   agency_name: San Luis Obispo Regional Transit Authority
   feeds:
-    - gtfs_schedule_url: http://slo.connexionz.net/rtt/public/resource/gtfs.zip
+    - gtfs_schedule_url: https://slo.connexionz.net/rtt/public/resource/gtfs.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1115,7 +1115,7 @@ san-luis-obispo-regional-transit-authority:
 santa-barbara-metropolitan-transit-district:
   agency_name: Santa Barbara Metropolitan Transit District
   feeds:
-    - gtfs_schedule_url: http://sbmtd.gov/google_transit/feed.zip
+    - gtfs_schedule_url: https://sbmtd.gov/google_transit/feed.zip
       gtfs_rt_vehicle_positions_url: https://bustracker.sbmtd.gov/gtfsrt/vehicles
       gtfs_rt_service_alerts_url: https://bustracker.sbmtd.gov/gtfsrt/alerts
       gtfs_rt_trip_updates_url: https://bustracker.sbmtd.gov/gtfsrt/trips
@@ -1127,23 +1127,23 @@ santa-clara-valley-transportation-authority:
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=SC
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=SC
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=SC
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=SC
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=SC
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=SC
   itp_id: 294
 santa-clarita-transit:
   agency_name: Santa Clarita Transit
   feeds:
-    - gtfs_schedule_url: http://apps.santaclaritatransit.com/rtt/public/utility/gtfs.aspx
-      gtfs_rt_vehicle_positions_url: http://apps.santaclaritatransit.com/rtt/public/utility/gtfsrealtime.aspx/vehicleposition
-      gtfs_rt_service_alerts_url: http://apps.santaclaritatransit.com/rtt/public/utility/gtfsrealtime.aspx/alert
-      gtfs_rt_trip_updates_url: http://apps.santaclaritatransit.com/rtt/public/utility/gtfsrealtime.aspx/tripupdate
+    - gtfs_schedule_url: https://apps.santaclaritatransit.com/rtt/public/utility/gtfs.aspx
+      gtfs_rt_vehicle_positions_url: https://apps.santaclaritatransit.com/rtt/public/utility/gtfsrealtime.aspx/vehicleposition
+      gtfs_rt_service_alerts_url: https://apps.santaclaritatransit.com/rtt/public/utility/gtfsrealtime.aspx/alert
+      gtfs_rt_trip_updates_url: https://apps.santaclaritatransit.com/rtt/public/utility/gtfsrealtime.aspx/tripupdate
   itp_id: 295
 santa-cruz-metropolitan-transit-district:
   agency_name: Santa Cruz Metropolitan Transit District
   feeds:
-    - gtfs_schedule_url: http://scmtd.com/google_transit/google_transit.zip
+    - gtfs_schedule_url: https://scmtd.com/google_transit/google_transit.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1159,7 +1159,7 @@ santa-maria-area-transit:
 santa-ynez-valley-transit:
   agency_name: Santa Ynez Valley Transit
   feeds:
-    - gtfs_schedule_url: http://mjcaction.com/MJC_GTFS_Public/syvt_google_transit.zip
+    - gtfs_schedule_url: https://mjcaction.com/MJC_GTFS_Public/syvt_google_transit.zip
       gtfs_rt_vehicle_positions_url: https://lat-long-prototype.wl.r.appspot.com/vehicle-positions.pb?agency=santa-ynez-valley-transit
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1175,7 +1175,7 @@ sierra-madre:
 simi-valley-transit:
   agency_name: Simi Valley Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/simivalley-ca-us/simivalley-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/simivalley-ca-us/simivalley-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1183,7 +1183,7 @@ simi-valley-transit:
 siskiyou-transit-and-general-express:
   agency_name: Siskiyou Transit and General Express
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/siskiyou-ca-us/siskiyou-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/siskiyou-ca-us/siskiyou-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1211,39 +1211,39 @@ soltrans:
       gtfs_rt_vehicle_positions_url: https://soltrans.connexionz.net/rtt/public/utility/gtfsrealtime.aspx/vehicleposition
       gtfs_rt_service_alerts_url: https://soltrans.connexionz.net/rtt/public/utility/gtfsrealtime.aspx/alert
       gtfs_rt_trip_updates_url: https://soltrans.connexionz.net/rtt/public/utility/gtfsrealtime.aspx/tripupdate2
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=ST
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=ST
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=ST
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=ST
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=ST
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=ST
   itp_id: 310
 sonoma-county-transit:
   agency_name: Sonoma County Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/sonomacounty-ca-us/sonomacounty-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/sonomacounty-ca-us/sonomacounty-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=SO
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=SO
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=SO
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=SO
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=SO
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=SO
   itp_id: 314
 sonoma-marin-area-rail-transit:
   agency_name: Sonoma-Marin Area Rail Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/smart-ca-us/smart-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/smart-ca-us/smart-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=SA
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=SA
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=SA
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=SA
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=SA
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=SA
   itp_id: 315
 south-county-transit-link:
   agency_name: South County Transit Link
   feeds:
-    - gtfs_schedule_url: http://iportal.sacrt.com/gtfs/SCTLink/southcountytransitlink-ca-us.zip
+    - gtfs_schedule_url: https://iportal.sacrt.com/gtfs/SCTLink/southcountytransitlink-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1259,7 +1259,7 @@ southgate:
 spirit-bus:
   agency_name: Spirit Bus
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/montereypark-ca-us/montereypark-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/montereypark-ca-us/montereypark-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1279,7 +1279,7 @@ sunline-transit-agency:
 sunshine-bus(south-whittier):
   agency_name: Sunshine Bus(South Whittier)
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1287,7 +1287,7 @@ sunshine-bus(south-whittier):
 susanville-indian-rancheria-public-transportation-program:
   agency_name: Susanville Indian Rancheria Public Transportation Program
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/tehama-ca-us/tehama-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/tehama-ca-us/tehama-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1303,7 +1303,7 @@ tahoe-transportation:
 tahoe-truckee-area-regional-transportation:
   agency_name: Tahoe Truckee Area Regional Transportation
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/laketahoe-ca-us/laketahoe-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/laketahoe-ca-us/laketahoe-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1311,7 +1311,7 @@ tahoe-truckee-area-regional-transportation:
 tehama-rural-area-express:
   agency_name: Tehama Rural Area eXpress
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/tehama-ca-us/tehama-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/tehama-ca-us/tehama-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1319,7 +1319,7 @@ tehama-rural-area-express:
 the-link-athens:
   agency_name: the Link-Athens
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1327,7 +1327,7 @@ the-link-athens:
 the-link-florence-firestone/walnut-park:
   agency_name: the Link Florence-Firestone/Walnut Park
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1335,7 +1335,7 @@ the-link-florence-firestone/walnut-park:
 the-link-king-medical-center:
   agency_name: the Link King Medical Center
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1343,7 +1343,7 @@ the-link-king-medical-center:
 the-link-lennox:
   agency_name: the Link Lennox
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1351,7 +1351,7 @@ the-link-lennox:
 the-link-willowbrook:
   agency_name: the Link Willowbrook
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/dpwlacounty-ca-us/dpwlacounty-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1359,7 +1359,7 @@ the-link-willowbrook:
 thousand-oaks-transit:
   agency_name: Thousand Oaks Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/thousandoaks-ca-us/thousandoaks-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/thousandoaks-ca-us/thousandoaks-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1367,14 +1367,14 @@ thousand-oaks-transit:
 tideline:
   agency_name: Tideline
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/tidelinewatertaxi-ca-us/tidelinewatertaxi-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/tidelinewatertaxi-ca-us/tidelinewatertaxi-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=TD
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=TD
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=TD
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=TD
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=TD
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=TD
   itp_id: 338
 torrance-transit-system:
   agency_name: Torrance Transit System
@@ -1387,10 +1387,10 @@ torrance-transit-system:
 tri-delta-transit:
   agency_name: Tri Delta Transit
   feeds:
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=3D
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=3D
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=3D
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=3D
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=3D
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=3D
   itp_id: 336
 tri-valley-wheels:
   agency_name: Tri-Valley Wheels
@@ -1399,15 +1399,15 @@ tri-valley-wheels:
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=WH
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=WH
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=WH
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=WH
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=WH
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=WH
   itp_id: 167
 trinity-transit:
   agency_name: Trinity Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/weaverville-ca-us/weaverville-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/weaverville-ca-us/weaverville-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1415,7 +1415,7 @@ trinity-transit:
 tulare-county-area-transit:
   agency_name: Tulare County Area Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/tcat-flex-ca-us/tcat-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/tcat-flex-ca-us/tcat-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1431,9 +1431,9 @@ tuolumne-transit:
 turlock-transit:
   agency_name: Turlock Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/turlock-ca-us/turlock-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/turlock-ca-us/turlock-ca-us.zip
       gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/turlock/gtfs-rt-vehicle-positions
-      gtfs_rt_service_alerts_url: http://gtfs-realtime.trilliumtransit.com/gtfs-realtime/feed/turlock-ca-us/service_alerts.proto
+      gtfs_rt_service_alerts_url: https://gtfs-realtime.trilliumtransit.com/gtfs-realtime/feed/turlock-ca-us/service_alerts.proto
       gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/turlock/gtfs-rt-trip-updates
   itp_id: 349
 union-city-transit:
@@ -1443,10 +1443,10 @@ union-city-transit:
       gtfs_rt_vehicle_positions_url: https://uctransit.info/gtfs-rt/vehiclepositions
       gtfs_rt_service_alerts_url: https://uctransit.info/gtfs-rt/alerts
       gtfs_rt_trip_updates_url: https://uctransit.info/gtfs-rt/tripupdates
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=UC
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=UC
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=UC
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=UC
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=UC
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=UC
     - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/unioncity-ca-us/unioncity-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
@@ -1463,14 +1463,14 @@ unitrans:
 vacaville-city-coach:
   agency_name: Vacaville City Coach
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/vacavillecitycoach-ca-us/vacavillecitycoach-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/vacavillecitycoach-ca-us/vacavillecitycoach-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=VC
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=VC
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=VC
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=VC
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=VC
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=VC
   itp_id: 356
 ventura-county-transportation-commission:
   agency_name: Ventura County Transportation Commission
@@ -1479,7 +1479,7 @@ ventura-county-transportation-commission:
       gtfs_rt_vehicle_positions_url: https://govcbus.com/gtfs-rt/vehiclepositions
       gtfs_rt_service_alerts_url: https://govcbus.com/gtfs-rt/alerts
       gtfs_rt_trip_updates_url: https://govcbus.com/gtfs-rt/tripupdates
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/vctc-ca-us/vctc-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/vctc-ca-us/vctc-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1499,14 +1499,14 @@ victor-valley-transit:
 vine-transit:
   agency_name: Vine Transit
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/vinetransit-ca-us/vinetransit-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/vinetransit-ca-us/vinetransit-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=VN
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=VN
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=VN
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=VN
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=VN
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=VN
   itp_id: 218
 visalia-transit:
   agency_name: Visalia Transit
@@ -1519,27 +1519,27 @@ visalia-transit:
 westcat:
   agency_name: WestCAT
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/westcat-ca-us/westcat-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/westcat-ca-us/westcat-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=WC
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=WC
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=WC
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=WC
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=WC
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=WC
   itp_id: 368
 yolobus:
   agency_name: Yolobus
   feeds:
-    - gtfs_schedule_url: http://www.yolobus.com/GTFS/google_transit.zip
-      gtfs_rt_vehicle_positions_url: http://avl.yctd.org/RealTime/GTFS_VehiclePositions.pb
-      gtfs_rt_service_alerts_url: http://avl.yctd.org/RealTime/GTFS_ServiceAlerts.pb
-      gtfs_rt_trip_updates_url: http://avl.yctd.org/RealTime/GTFS_TripUpdates.pb
+    - gtfs_schedule_url: https://www.yolobus.com/GTFS/google_transit.zip
+      gtfs_rt_vehicle_positions_url: https://avl.yctd.org/RealTime/GTFS_VehiclePositions.pb
+      gtfs_rt_service_alerts_url: https://avl.yctd.org/RealTime/GTFS_ServiceAlerts.pb
+      gtfs_rt_trip_updates_url: https://avl.yctd.org/RealTime/GTFS_TripUpdates.pb
   itp_id: 372
 yosemite-area-regional-transportation-system:
   agency_name: Yosemite Area Regional Transportation System
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/yosemite-ca-us/yosemite-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/yosemite-ca-us/yosemite-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1547,7 +1547,7 @@ yosemite-area-regional-transportation-system:
 yuba-sutter-transit-authority:
   agency_name: Yuba-Sutter Transit Authority
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/yubasutter-ca-us/yubasutter-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/yubasutter-ca-us/yubasutter-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1563,18 +1563,18 @@ yuma-county-area-transit:
 dumbarton-express:
   agency_name: Dumbarton Express
   feeds:
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=DE
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=DE
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=DE
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=DE
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=DE
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=DE
   itp_id: 98
 san-fransisco-international-airport:
   agency_name: San Francisco International Airport
   feeds:
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=SI
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=SI
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=SI
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=SI
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=SI
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=SI
   itp_id: 281
 santa-rosa-citybus:
   agency_name: Santa Rosa CityBus
@@ -1583,23 +1583,23 @@ santa-rosa-citybus:
       gtfs_rt_vehicle_positions_url: https://santarosaivl.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=VehiclePosition
       gtfs_rt_service_alerts_url: https://santarosaivl.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=Alert
       gtfs_rt_trip_updates_url: https://santarosaivl.availtec.com/InfoPoint/GTFS-Realtime.ashx?Type=TripUpdate
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=SR
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=SR
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=SR
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=SR
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=SR
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=SR
   itp_id: 301
 angel-island-tiburon-ferry-company:
   agency_name: Angel Island-Tiburon Ferry Company
   feeds:
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=AF
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=AF
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=AF
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=AF
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=AF
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=AF
   itp_id: 15
 blue-and-gold-fleet:
   agency_name: Blue and Gold Fleet
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/bayareaferries-ca-us/bayareaferries-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/bayareaferries-ca-us/bayareaferries-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1608,14 +1608,14 @@ metropolitan-transportation-commission:
   agency_name: "MTC 511"
   itp_id: 200
   feeds:
-    - gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=RG
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=RG
-      gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=RG
+    - gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=RG
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=RG
+      gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=RG
 glenn-transit:
   agency_name: Glenn County Transit
   feeds:
-  - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/glenn-ca-us/glenn-ca-us.zip
+  - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/glenn-ca-us/glenn-ca-us.zip
     gtfs_rt_vehicle_positions_url: null
     gtfs_rt_service_alerts_url: null
     gtfs_rt_trip_updates_url: null
@@ -1631,7 +1631,7 @@ tcrta:
 tracer:
   agency_name: TRACER
   feeds:
-  - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/tracy-ca-us/tracy-ca-us.zip
+  - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/tracy-ca-us/tracy-ca-us.zip
     gtfs_rt_vehicle_positions_url: null
     gtfs_rt_service_alerts_url: null
     gtfs_rt_trip_updates_url: null
@@ -1663,7 +1663,7 @@ fresno-county:
 lynwood-breeze:
   agency_name: Lynwood Breeze
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/lynwood-ca-us/lynwood-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/lynwood-ca-us/lynwood-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1671,7 +1671,7 @@ lynwood-breeze:
 west-berkeley-shuttle:
   agency_name: West Berkeley Shuttle
   feeds:
-    - gtfs_schedule_url: http://data.trilliumtransit.com/gtfs/westberkeleyshuttle-ca-us/westberkeleyshuttle-ca-us.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/westberkeleyshuttle-ca-us/westberkeleyshuttle-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1703,18 +1703,18 @@ city-of-west-hollywood:
 south-san-fransisco-shuttle:
   agency_name: South San Francisco Shuttle
   feeds:
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=SS
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=SS
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=SS
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=SS
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=SS
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=SS
   itp_id: 481
 treasure-island-ferry:
   agency_name: Treasure Island Ferry
   feeds:
-    - gtfs_schedule_url: http://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=TF
-      gtfs_rt_vehicle_positions_url: http://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=TF
-      gtfs_rt_service_alerts_url: http://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
-      gtfs_rt_trip_updates_url: http://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=TF
+    - gtfs_schedule_url: https://api.511.org/transit/datafeeds?api_key={{ MTC_511_API_KEY}}&operator_id=TF
+      gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=TF
+      gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
+      gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=TF
   itp_id: 485
 etrans:
   agency_name: eTrans
