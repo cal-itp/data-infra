@@ -84,12 +84,12 @@
         - gtfs_rt_vehicle_positions_url
         - gtfs_rt_service_alerts_url
         - gtfs_rt_trip_updates_url
-     - itp_id: 339 # Torrance Transit System   
-       url_number: 0  
-       rt_urls:
+    - itp_id: 339 # Torrance Transit System
+      url_number: 0
+      rt_urls:
         - gtfs_rt_vehicle_positions_url
         - gtfs_rt_service_alerts_url
-        - gtfs_rt_trip_updates_url       
+        - gtfs_rt_trip_updates_url
 - header-data:
     x-umo-iq-api-key: {{ WEHO_RT_KEY }}
   URLs:
