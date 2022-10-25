@@ -1,16 +1,16 @@
-name: Build and push jupyter-singleuser image
+name: Build and push dask image
 
 on:
   push:
     branches:
       - 'main'
     paths:
-      - '.github/workflows/build-jupyter-singleuser-image.yml'
-      - 'images/jupyter-singleuser/**'
+      - '.github/workflows/build-dask-image.yml'
+      - 'images/dask/**'
   pull_request:
     paths:
-      - '.github/workflows/build-jupyter-singleuser-image.yml'
-      - 'images/jupyter-singleuser/**'
+      - '.github/workflows/build-dask-image.yml'
+      - 'images/dask/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -32,13 +32,13 @@ jobs:
           python-version: '3.10'
       - run: curl -sSL https://install.python-poetry.org | python -
       # from https://forcepush.tech/python-package-ci-cd-with-git-hub-actions
-      - name: Get image tag from pyproject.toml
+      - name: Get image tag from version.txt
         run: |
-          cd images/jupyter-singleuser
-          PROJECT_VERSION=$(poetry version --short)
+          cd images/dask
+          PROJECT_VERSION=$(cat version.txt)
           echo "PROJECT_VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
       - uses: docker/build-push-action@v2
         with:
-          context: images/jupyter-singleuser
+          context: images/dask
           push: ${{ github.ref == 'refs/heads/main' }}
-          tags: ghcr.io/${{github.repository}}/jupyter-singleuser:${{env.PROJECT_VERSION}}
+          tags: ghcr.io/${{github.repository}}/dask:${{env.PROJECT_VERSION}}

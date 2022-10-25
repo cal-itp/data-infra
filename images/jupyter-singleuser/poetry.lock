@@ -558,7 +558,7 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "dask"
-version = "2022.6.1"
+version = "2022.10.0"
 description = "Parallel PyData with Task Scheduling"
 category = "main"
 optional = false
@@ -574,11 +574,44 @@ toolz = ">=0.8.2"
 
 [package.extras]
 array = ["numpy (>=1.18)"]
-complete = ["bokeh (>=2.4.2)", "distributed (==2022.6.1)", "jinja2", "numpy (>=1.18)", "pandas (>=1.0)"]
+complete = ["bokeh (>=2.4.2)", "distributed (==2022.10.0)", "jinja2", "numpy (>=1.18)", "pandas (>=1.0)"]
 dataframe = ["numpy (>=1.18)", "pandas (>=1.0)"]
 diagnostics = ["bokeh (>=2.4.2)", "jinja2"]
-distributed = ["distributed (==2022.6.1)"]
-test = ["pytest", "pytest-rerunfailures", "pytest-xdist", "pre-commit"]
+distributed = ["distributed (==2022.10.0)"]
+test = ["pandas", "pytest", "pytest-rerunfailures", "pytest-xdist", "pre-commit"]
+
+[[package]]
+name = "dask-bigquery"
+version = "2022.5.0"
+description = "Dask + BigQuery intergration"
+category = "main"
+optional = false
+python-versions = ">=3.8"
+
+[package.dependencies]
+dask = "*"
+google-cloud-bigquery = ">=2.11.0"
+google-cloud-bigquery-storage = "*"
+pandas = "*"
+pyarrow = "*"
+
+[package.extras]
+test = ["pytest", "pandas-gbq (<=0.15)", "distributed", "google-auth (>=1.30.0)"]
+
+[[package]]
+name = "dask-geopandas"
+version = "0.2.0"
+description = "Parallel GeoPandas with Dask"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+dask = ">=2021.06.0"
+distributed = ">=2021.06.0"
+geopandas = ">=0.10"
+packaging = "*"
+pygeos = "*"
 
 [[package]]
 name = "dask-labextension"
@@ -593,6 +626,20 @@ bokeh = ">=1.0.0,<2.0.0 || >2.0.0"
 distributed = ">=1.24.1"
 jupyter-server-proxy = ">=1.3.2"
 jupyterlab = ">=3.0.0"
+
+[[package]]
+name = "db-dtypes"
+version = "1.0.4"
+description = "Pandas Data Types for SQL systems (BigQuery, Spanner)"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+numpy = ">=1.16.6,<2.0dev"
+packaging = ">=17.0"
+pandas = ">=0.24.2,<2.0dev"
+pyarrow = ">=3.0.0,<10.0dev"
 
 [[package]]
 name = "dbfread"
@@ -647,7 +694,7 @@ python-versions = "*"
 
 [[package]]
 name = "distributed"
-version = "2022.6.1"
+version = "2022.10.0"
 description = "Distributed scheduler for Dask"
 category = "main"
 optional = false
@@ -656,7 +703,7 @@ python-versions = ">=3.8"
 [package.dependencies]
 click = ">=6.6"
 cloudpickle = ">=1.5.0"
-dask = "2022.6.1"
+dask = "2022.10.0"
 jinja2 = "*"
 locket = ">=1.0.0"
 msgpack = ">=0.6.0"
@@ -666,7 +713,7 @@ pyyaml = "*"
 sortedcontainers = "<2.0.0 || >2.0.0,<2.0.1 || >2.0.1"
 tblib = ">=1.6.0"
 toolz = ">=0.8.2"
-tornado = ">=6.0.3"
+tornado = ">=6.0.3,<6.2"
 urllib3 = "*"
 zict = ">=0.1.3"
 
@@ -896,7 +943,7 @@ shapely = ">=1.7,<2"
 
 [[package]]
 name = "google-api-core"
-version = "1.33.2"
+version = "2.10.2"
 description = "Google API client core library"
 category = "main"
 optional = false
@@ -907,7 +954,7 @@ google-auth = ">=1.25.0,<3.0dev"
 googleapis-common-protos = ">=1.56.2,<2.0dev"
 grpcio = {version = ">=1.33.2,<2.0dev", optional = true, markers = "extra == \"grpc\""}
 grpcio-status = {version = ">=1.33.2,<2.0dev", optional = true, markers = "extra == \"grpc\""}
-protobuf = ">=3.19.5,<3.20.0 || >3.20.0,<3.20.1 || >3.20.1,<4.0.0dev"
+protobuf = ">=3.19.5,<3.20.0 || >3.20.0,<3.20.1 || >3.20.1,<4.21.0 || >4.21.0,<4.21.1 || >4.21.1,<4.21.2 || >4.21.2,<4.21.3 || >4.21.3,<4.21.4 || >4.21.4,<4.21.5 || >4.21.5,<5.0.0dev"
 requests = ">=2.18.0,<3.0.0dev"
 
 [package.extras]
@@ -951,30 +998,32 @@ tool = ["click (>=6.0.0)"]
 
 [[package]]
 name = "google-cloud-bigquery"
-version = "1.24.0"
+version = "2.34.4"
 description = "Google BigQuery API client library"
 category = "main"
 optional = false
-python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
+python-versions = ">=3.6, <3.11"
 
 [package.dependencies]
-google-api-core = ">=1.15.0,<2.0dev"
-google-auth = ">=1.9.0,<2.0dev"
-google-cloud-bigquery-storage = {version = ">=0.6.0,<2.0.0dev", optional = true, markers = "extra == \"bqstorage\""}
-google-cloud-core = ">=1.1.0,<2.0dev"
-google-resumable-media = ">=0.5.0,<0.6dev"
-pandas = {version = ">=0.17.1", optional = true, markers = "extra == \"pandas\""}
-protobuf = ">=3.6.0"
-pyarrow = {version = ">=0.13.0,<0.14.0 || >0.14.0", optional = true, markers = "extra == \"bqstorage\""}
-six = ">=1.13.0,<2.0.0dev"
+google-api-core = {version = ">=1.31.5,<2.0.0 || >2.3.0,<3.0.0dev", extras = ["grpc"]}
+google-cloud-core = ">=1.4.1,<3.0.0dev"
+google-resumable-media = ">=0.6.0,<3.0dev"
+grpcio = ">=1.38.1,<2.0dev"
+packaging = ">=14.3,<22.0dev"
+proto-plus = ">=1.15.0,<2.0.0dev"
+protobuf = ">=3.12.0,<4.0.0dev"
+python-dateutil = ">=2.7.2,<3.0dev"
+requests = ">=2.18.0,<3.0.0dev"
 
 [package.extras]
-all = ["google-cloud-bigquery-storage (>=0.6.0,<2.0.0dev)", "pyarrow (>=0.13.0,!=0.14.0)", "pandas (>=0.17.1)", "pyarrow (>=0.4.1,!=0.14.0)", "tqdm (>=4.0.0,<5.0.0dev)"]
-bqstorage = ["google-cloud-bigquery-storage (>=0.6.0,<2.0.0dev)", "pyarrow (>=0.13.0,!=0.14.0)"]
-fastparquet = ["fastparquet", "python-snappy"]
-pandas = ["pandas (>=0.17.1)"]
-pyarrow = ["pyarrow (>=0.4.1,!=0.14.0)"]
-tqdm = ["tqdm (>=4.0.0,<5.0.0dev)"]
+all = ["google-cloud-bigquery-storage (>=2.0.0,<3.0.0dev)", "grpcio (>=1.38.1,<2.0dev)", "pyarrow (>=3.0.0,<8.0dev)", "geopandas (>=0.9.0,<1.0dev)", "Shapely (>=1.6.0,<2.0dev)", "pandas (>=0.24.2)", "ipython (>=7.0.1,!=8.1.0)", "tqdm (>=4.7.4,<5.0.0dev)", "opentelemetry-api (>=1.1.0)", "opentelemetry-sdk (>=1.1.0)", "opentelemetry-instrumentation (>=0.20b0)"]
+bignumeric_type = ["pyarrow (>=3.0.0,<8.0dev)"]
+bqstorage = ["google-cloud-bigquery-storage (>=2.0.0,<3.0.0dev)", "grpcio (>=1.38.1,<2.0dev)", "pyarrow (>=3.0.0,<8.0dev)"]
+geopandas = ["geopandas (>=0.9.0,<1.0dev)", "Shapely (>=1.6.0,<2.0dev)"]
+ipython = ["ipython (>=7.0.1,!=8.1.0)"]
+opentelemetry = ["opentelemetry-api (>=1.1.0)", "opentelemetry-sdk (>=1.1.0)", "opentelemetry-instrumentation (>=0.20b0)"]
+pandas = ["pandas (>=0.24.2)", "pyarrow (>=3.0.0,<8.0dev)"]
+tqdm = ["tqdm (>=4.7.4,<5.0.0dev)"]
 
 [[package]]
 name = "google-cloud-bigquery-storage"
@@ -1011,29 +1060,44 @@ grpc = ["grpcio (>=1.8.2,<2.0dev)"]
 
 [[package]]
 name = "google-cloud-storage"
-version = "1.29.0"
+version = "2.2.1"
 description = "Google Cloud Storage API client library"
 category = "main"
 optional = false
-python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
+python-versions = ">=3.7"
 
 [package.dependencies]
-google-auth = ">=1.11.0,<2.0dev"
-google-cloud-core = ">=1.2.0,<2.0dev"
-google-resumable-media = ">=0.5.0,<0.6dev"
+google-api-core = ">=1.31.5,<2.0.0 || >2.3.0,<3.0.0dev"
+google-auth = ">=1.25.0,<3.0dev"
+google-cloud-core = ">=1.6.0,<3.0dev"
+google-resumable-media = ">=2.3.2"
+protobuf = "*"
+requests = ">=2.18.0,<3.0.0dev"
+
+[[package]]
+name = "google-crc32c"
+version = "1.5.0"
+description = "A python wrapper of the C library 'Google CRC32C'"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+testing = ["pytest"]
 
 [[package]]
 name = "google-resumable-media"
-version = "0.5.1"
+version = "2.4.0"
 description = "Utilities for Google Media Downloads and Resumable Uploads"
 category = "main"
 optional = false
-python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*"
+python-versions = ">= 3.7"
 
 [package.dependencies]
-six = "*"
+google-crc32c = ">=1.0,<2.0dev"
 
 [package.extras]
+aiohttp = ["aiohttp (>=3.6.2,<4.0.0dev)"]
 requests = ["requests (>=2.18.0,<3.0.0dev)"]
 
 [[package]]
@@ -1389,11 +1453,11 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "joblib"
-version = "1.0.1"
+version = "1.2.0"
 description = "Lightweight pipelining with Python functions"
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [[package]]
 name = "json5"
@@ -1440,7 +1504,7 @@ qtconsole = "*"
 
 [[package]]
 name = "jupyter-client"
-version = "7.4.2"
+version = "7.3.4"
 description = "Jupyter protocol implementation and client libraries"
 category = "main"
 optional = false
@@ -1452,7 +1516,7 @@ jupyter-core = ">=4.9.2"
 nest-asyncio = ">=1.5.4"
 python-dateutil = ">=2.8.2"
 pyzmq = ">=23.0"
-tornado = ">=6.2"
+tornado = ">=6.0"
 traitlets = "*"
 
 [package.extras]
@@ -2116,17 +2180,22 @@ test = ["pytest-xdist (>=1.31)", "pytest (>=6.0)", "hypothesis (>=5.5.3)"]
 
 [[package]]
 name = "pandas-gbq"
-version = "0.15.0"
-description = "Pandas interface to Google BigQuery"
+version = "0.17.9"
+description = "Google BigQuery connector for pandas"
 category = "main"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.7, <3.11"
 
 [package.dependencies]
-google-auth = "*"
-google-auth-oauthlib = "*"
-google-cloud-bigquery = {version = ">=1.11.1,<2.4.0 || >=2.5.0,<3.0.0dev", extras = ["bqstorage", "pandas"]}
-pandas = ">=0.23.2"
+db-dtypes = ">=0.3.1,<2.0.0"
+google-api-core = ">=1.31.5,<2.0.0 || >2.3.0,<3.0.0dev"
+google-auth = ">=1.25.0"
+google-auth-oauthlib = ">=0.0.1"
+google-cloud-bigquery = ">=1.27.2,<2.4.0 || >=2.5.0,<4.0.0dev"
+google-cloud-bigquery-storage = ">=1.1.0,<3.0.0dev"
+numpy = ">=1.16.6"
+pandas = ">=0.24.2"
+pyarrow = ">=3.0.0,<10.0dev"
 pydata-google-auth = "*"
 
 [package.extras]
@@ -2134,34 +2203,33 @@ tqdm = ["tqdm (>=4.23.0)"]
 
 [[package]]
 name = "pandas-profiling"
-version = "3.1.0"
+version = "3.4.0"
 description = "Generate profile report for pandas DataFrame"
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7, <3.11"
 
 [package.dependencies]
-htmlmin = ">=0.1.12"
-jinja2 = ">=2.11.1"
-joblib = ">=1.0.1,<1.1.0"
-markupsafe = ">=2.0.1,<2.1.0"
-matplotlib = ">=3.2.0"
-missingno = ">=0.4.2"
-multimethod = ">=1.4"
-numpy = ">=1.16.0"
-pandas = ">=0.25.3,<1.0.0 || >1.0.0,<1.0.1 || >1.0.1,<1.0.2 || >1.0.2,<1.1.0 || >1.1.0"
-phik = ">=0.11.1"
-pydantic = ">=1.8.1"
-PyYAML = ">=5.0.0"
-requests = ">=2.24.0"
-scipy = ">=1.4.1"
-seaborn = ">=0.10.1"
-tangled-up-in-unicode = "0.1.0"
-tqdm = ">=4.48.2"
-visions = {version = "0.7.4", extras = ["type_image_path"]}
+htmlmin = "0.1.12"
+jinja2 = ">=2.11.1,<3.2"
+matplotlib = ">=3.2,<3.6"
+missingno = ">=0.4.2,<0.6"
+multimethod = ">=1.4,<1.10"
+numpy = ">=1.16.0,<1.24"
+pandas = ">1.1,<1.4.0 || >1.4.0,<1.6"
+phik = ">=0.11.1,<0.13"
+pydantic = ">=1.8.1,<1.11"
+PyYAML = ">=5.0.0,<6.1"
+requests = ">=2.24.0,<2.29"
+scipy = ">=1.4.1,<1.10"
+seaborn = ">=0.10.1,<0.13"
+statsmodels = ">=0.13.2,<0.14"
+tqdm = ">=4.48.2,<4.65"
+visions = {version = "0.7.5", extras = ["type_image_path"]}
 
 [package.extras]
-notebook = ["jupyter-client (>=6.0.0)", "jupyter-core (>=4.6.3)", "ipywidgets (>=7.5.1)"]
+notebook = ["jupyter-client (>=5.3.4)", "jupyter-core (>=4.6.3)", "ipywidgets (>=7.5.1)"]
+unicode = ["tangled-up-in-unicode (==0.2.0)"]
 
 [[package]]
 name = "pandocfilters"
@@ -2374,6 +2442,20 @@ python-versions = ">=3.6.2"
 
 [package.dependencies]
 wcwidth = "*"
+
+[[package]]
+name = "proto-plus"
+version = "1.22.1"
+description = "Beautiful, Pythonic protocol buffers."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+protobuf = ">=3.19.0,<5.0.0dev"
+
+[package.extras]
+testing = ["google-api-core[grpc] (>=1.31.5)"]
 
 [[package]]
 name = "protobuf"
@@ -2973,11 +3055,11 @@ docs = ["sphinx", "nbconvert", "jupyter-client", "ipykernel", "matplotlib", "nbf
 
 [[package]]
 name = "tangled-up-in-unicode"
-version = "0.1.0"
+version = "0.2.0"
 description = "Access to the Unicode Character Database (UCD)"
 category = "main"
 optional = false
-python-versions = ">=3.5"
+python-versions = ">=3.6"
 
 [[package]]
 name = "tblib"
@@ -3063,11 +3145,11 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "tornado"
-version = "6.2"
+version = "6.1"
 description = "Tornado is a Python web framework and asynchronous networking library, originally developed at FriendFeed."
 category = "main"
 optional = false
-python-versions = ">= 3.7"
+python-versions = ">= 3.5"
 
 [[package]]
 name = "tqdm"
@@ -3205,7 +3287,7 @@ testing = ["coverage (>=6.2)", "coverage-enable-subprocess (>=1)", "flaky (>=3.7
 
 [[package]]
 name = "visions"
-version = "0.7.4"
+version = "0.7.5"
 description = "Visions"
 category = "main"
 optional = false
@@ -3225,7 +3307,7 @@ tangled-up-in-unicode = ">=0.0.4"
 all = ["numpy", "pandas (>=0.25.3)", "attrs (>=19.3.0)", "networkx (>=2.4)", "tangled-up-in-unicode (>=0.0.4)", "multimethod (>=1.4)", "shapely", "imagehash", "pillow", "pydot", "pygraphviz", "matplotlib"]
 dev = ["setuptools (>=46.1.3)", "wheel (>=0.34.2)", "black (>=20.8b1)", "isort (>=5.0.9)", "mypy (>=0.770)", "recommonmark (>=0.6.0)", "nbsphinx", "sphinx-rtd-theme (>=0.4.3)", "sphinx-autodoc-typehints (>=1.10.3)", "ipython", "sphinx-copybutton"]
 plotting = ["pydot", "pygraphviz", "matplotlib"]
-test = ["matplotlib", "imagehash", "pillow", "shapely", "mypy (>=0.800)", "black (>=19.10b0)", "isort (>=5.0.9)", "big-o (>=0.10.1)", "twine (>=3.1.1)", "pydot", "pytest (>=5.2.0)", "check-manifest (>=0.41)", "pandas", "pre-commit", "pytest-spark (>=0.6.0)", "pyarrow (>=1.0.1)"]
+test = ["matplotlib", "imagehash", "pillow", "shapely", "mypy (>=0.800)", "black (>=19.10b0)", "isort (>=5.0.9)", "big-o (>=0.10.1)", "twine (>=3.1.1)", "pydot", "pytest (>=5.2.0)", "check-manifest (>=0.41)", "pandas", "pre-commit", "pytest-spark (>=0.6.0)", "pyarrow (>=1.0.1)", "pyspark"]
 type_geometry = ["shapely"]
 type_image_path = ["imagehash", "pillow"]
 
@@ -3365,8 +3447,8 @@ heapdict = "*"
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^3.10"
-content-hash = "66cc24c063bc85bc5ab2a051ce22a701a320ed24ad67e243f3106c0550f17710"
+python-versions = "~3.10"
+content-hash = "32aad02108306f5de1ad6f671e90cf2bca34bcce05c063a3859de5c39649c8ab"
 
 [metadata.files]
 agate = []
@@ -3413,7 +3495,10 @@ cramjam = []
 csvkit = []
 cycler = []
 dask = []
+dask-bigquery = []
+dask-geopandas = []
 dask-labextension = []
+db-dtypes = []
 dbfread = []
 debugpy = []
 decorator = []
@@ -3443,6 +3528,7 @@ google-cloud-bigquery = []
 google-cloud-bigquery-storage = []
 google-cloud-core = []
 google-cloud-storage = []
+google-crc32c = []
 google-resumable-media = []
 googleapis-common-protos = []
 greenlet = []
@@ -3538,6 +3624,7 @@ portpicker = []
 pre-commit = []
 prometheus-client = []
 prompt-toolkit = []
+proto-plus = []
 protobuf = []
 psutil = []
 ptyprocess = []

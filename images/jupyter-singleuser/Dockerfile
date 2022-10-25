@@ -8,7 +8,7 @@ RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
 RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
 RUN apt update \
-    && apt install -y keychain nodejs git-lfs gh libspatialindex-dev
+    && apt install -y keychain nodejs git-lfs gh libspatialindex-dev graphviz
 USER $NB_UID
 RUN npm install -g --unsafe-perm=true --allow-root netlify-cli
 
