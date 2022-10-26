@@ -3,15 +3,15 @@ import traceback
 from datetime import datetime
 from functools import wraps
 
-import google_crc32c
 import humanize
 import orjson
 import pendulum
 import sentry_sdk
 import structlog
 import typer
+from calitp.auth import DEFAULT_AUTH_KEYS
 from calitp.storage import download_feed, GTFSDownloadConfig
-from google.cloud import storage, secretmanager
+from google.cloud import storage
 from huey import RedisExpireHuey
 from huey.registry import Message
 from huey.serializer import Serializer
@@ -89,44 +89,13 @@ def increment_task_signals_counter(signal, task, exc=None):
     ).inc()
 
 
-AUTH_KEYS = [
-    "AC_TRANSIT_API_KEY",
-    "AMTRAK_GTFS_URL",
-    "BEAR_TRANSIT_KEY",
-    "CULVER_CITY_API_KEY",
-    "ESCALON_RT_KEY",
-    "TORRANCE_TRANSIT_API_KEY",
-    # TODO: this can be removed once we've confirmed it's no longer in Airtable
-    "GRAAS_SERVER_URL",
-    "MTC_511_API_KEY",
-    "SD_MTS_SA_API_KEY",
-    "SD_MTS_VP_TU_API_KEY",
-    "SWIFTLY_AUTHORIZATION_KEY_CALITP",
-    "WEHO_RT_KEY",
-]
 auth_dict = None
-
-
-def load_secrets():
-    secret_client = secretmanager.SecretManagerServiceClient()
-    for key in AUTH_KEYS:
-        if key not in os.environ:
-            typer.secho(f"fetching secret {key}")
-            name = f"projects/cal-itp-data-infra/secrets/{key}/versions/latest"
-            response = secret_client.access_secret_version(request={"name": name})
-
-            crc32c = google_crc32c.Checksum()
-            crc32c.update(response.payload.data)
-            if response.payload.data_crc32c != int(crc32c.hexdigest(), 16):
-                raise ValueError(f"Data corruption detected for secret {name}.")
-
-            os.environ[key] = response.payload.data.decode("UTF-8").strip()
 
 
 @huey.on_startup()
 def load_auth_dict():
     global auth_dict
-    auth_dict = {key: os.environ[key] for key in AUTH_KEYS}
+    auth_dict = {key: os.environ[key] for key in DEFAULT_AUTH_KEYS}
 
 
 # from https://github.com/getsentry/sentry-python/issues/195#issuecomment-444559126

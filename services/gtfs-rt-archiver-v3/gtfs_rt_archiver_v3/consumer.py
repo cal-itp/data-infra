@@ -6,6 +6,7 @@ import sentry_sdk
 import typer
 import os
 
+from calitp.auth import load_secrets
 from huey.constants import WORKER_THREAD
 
 import logging
@@ -14,7 +15,7 @@ import sys
 from huey.consumer_options import ConsumerConfig
 from prometheus_client import start_http_server
 
-from .tasks import huey, load_secrets, RTFetchException
+from .tasks import huey, RTFetchException
 
 
 def set_exception_fingerprint(event, hint):
