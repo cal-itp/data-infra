@@ -1460,9 +1460,9 @@ unitrans:
   agency_name: Unitrans
   feeds:
     - gtfs_schedule_url: https://unitrans.ucdavis.edu/media/gtfs/Unitrans_GTFS.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://webservices.umoiq.com/api/gtfs-rt/v1/vehicle-positions/unitrans
+      gtfs_rt_service_alerts_url: https://webservices.umoiq.com/api/gtfs-rt/v1/service-alerts/unitrans
+      gtfs_rt_trip_updates_url: https://webservices.umoiq.com/api/gtfs-rt/v1/trip-updates/unitrans
   itp_id: 351
 vacaville-city-coach:
   agency_name: Vacaville City Coach
