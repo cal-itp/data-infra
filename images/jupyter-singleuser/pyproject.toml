@@ -40,7 +40,7 @@ distributed = "~2022.8"
 pyodbc = "^4.0.34"
 sqlalchemy-bigquery = "^1.4.4"
 siuba = "^0.4.0"
-calitp = "2022.10.26a0"
+calitp = "2022.10.26"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.2.0"

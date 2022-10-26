@@ -422,7 +422,7 @@ python-versions = "~=3.7"
 
 [[package]]
 name = "calitp"
-version = "2022.10.26a0"
+version = "2022.10.26"
 description = "Shared code for the Cal-ITP data codebases"
 category = "main"
 optional = false
@@ -3604,7 +3604,7 @@ heapdict = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.10"
-content-hash = "5d698548007cca3525282e573df25f69ef0ab5e564e959c8aaf91dc8d5deec31"
+content-hash = "9ce85ea88ccb8a212cd35e31fa8857c19d84aefdcd358552497a252a74899874"
 
 [metadata.files]
 agate = []

@@ -8,7 +8,7 @@ jupyterhub:
     defaultUrl: "/lab"
     image:
       name: ghcr.io/cal-itp/data-infra/jupyter-singleuser
-      tag: 2022.10.25.1
+      tag: 2022.10.26
     memory:
       # Much more than 10 and we risk bumping up against the actual capacity of e2-highmem-2
       limit: 10G

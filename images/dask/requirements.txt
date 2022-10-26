@@ -29,7 +29,7 @@ bokeh==2.4.3; python_version >= "3.7"
 botocore==1.27.59; python_version >= "3.7"
 branca==0.4.2; python_version >= "3.5"
 cachetools==5.2.0; python_version >= "3.7" and python_version < "4.0" and (python_version >= "3.8" and python_full_version < "3.0.0" and python_version < "3.11" or python_version >= "3.8" and python_version < "3.11" and python_full_version >= "3.6.0")
-calitp==2022.10.26a0; python_version >= "3.8" and python_version < "3.11"
+calitp==2022.10.26; python_version >= "3.8" and python_version < "3.11"
 certifi==2022.9.24; python_version >= "3.8" and python_version < "3.11"
 cffi==1.15.1
 cfgv==3.3.1; python_full_version >= "3.6.1" and python_version >= "3.7"
