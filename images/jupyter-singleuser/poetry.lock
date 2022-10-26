@@ -1157,6 +1157,19 @@ protobuf = ">=3.15.0,<5.0.0dev"
 grpc = ["grpcio (>=1.0.0,<2.0.0dev)"]
 
 [[package]]
+name = "graphviz"
+version = "0.20.1"
+description = "Simple Python interface for Graphviz"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+dev = ["tox (>=3)", "flake8", "pep8-naming", "wheel", "twine"]
+docs = ["sphinx (>=5)", "sphinx-autodoc-typehints", "sphinx-rtd-theme"]
+test = ["pytest (>=7)", "pytest-mock (>=3)", "mock (>=4)", "pytest-cov", "coverage"]
+
+[[package]]
 name = "greenlet"
 version = "1.1.3.post0"
 description = "Lightweight in-process concurrent programming"
@@ -3604,7 +3617,7 @@ heapdict = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.10"
-content-hash = "9ce85ea88ccb8a212cd35e31fa8857c19d84aefdcd358552497a252a74899874"
+content-hash = "5702a2586a47858451a92a8c128d8e6e5ff907d0afb0e982853e86743679cd65"
 
 [metadata.files]
 agate = []
@@ -3689,6 +3702,7 @@ google-cloud-storage = []
 google-crc32c = []
 google-resumable-media = []
 googleapis-common-protos = []
+graphviz = []
 greenlet = []
 grpc-google-iam-v1 = []
 grpcio = []
