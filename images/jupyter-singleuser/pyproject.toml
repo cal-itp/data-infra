@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "jupyter-singleuser"
-version = "2022.10.25.1"
+version = "2022.10.26"
 description = ""
 authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
 
@@ -39,8 +39,8 @@ dask = "~2022.8"
 distributed = "~2022.8"
 pyodbc = "^4.0.34"
 sqlalchemy-bigquery = "^1.4.4"
-calitp = "2022.10.25a0"
 siuba = "^0.4.0"
+calitp = "2022.10.26a0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.2.0"
