@@ -309,6 +309,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "backoff"
+version = "2.2.1"
+description = "Function decoration for backoff and retry"
+category = "main"
+optional = false
+python-versions = ">=3.7,<4.0"
+
+[[package]]
 name = "beautifulsoup4"
 version = "4.11.1"
 description = "Screen-scraping library"
@@ -414,19 +422,31 @@ python-versions = "~=3.7"
 
 [[package]]
 name = "calitp"
-version = "0.0.16"
-description = ""
+version = "2022.10.25a0"
+description = "Shared code for the Cal-ITP data codebases"
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=3.8,<3.11"
 
 [package.dependencies]
-gcsfs = "*"
-google-cloud-bigquery = "*"
-gtfs-realtime-bindings = "*"
-pandas = "*"
-pandas-gbq = "*"
-sqlalchemy-bigquery = "*"
+backoff = ">=2.1.2,<3.0.0"
+fsspec = ">=2022.5.0,<2022.7.1 || >2022.7.1,<2023.0.0"
+gcsfs = ">=2022.5.0,<2022.7.1 || >2022.7.1,<2023.0.0"
+google-api-core = ">=1.32.0,<2.0.0dev"
+google-cloud-bigquery = ">=1.15.0,<3.0.0dev"
+google-cloud-bigquery-storage = "2.14.1"
+google-cloud-secret-manager = ">=2.12.4,<3.0.0"
+gtfs-realtime-bindings = ">=0.0.7,<0.0.8"
+humanize = ">=4.2.3,<5.0.0"
+Jinja2 = "<3.1.0"
+pandas = ">=1.3.3,<2.0.0"
+pandas-gbq = ">=0.17.9,<0.18.0"
+pendulum = ">=2.1.2,<3.0.0"
+protobuf = ">=3.19.0,<4.0.0dev"
+pydantic = ">=1.9.1,<2.0.0"
+siuba = ">=0.4.0,<0.5.0"
+sqlalchemy-bigquery = ">=1.4.4,<2.0.0"
+tqdm = ">=4.64.0,<5.0.0"
 
 [[package]]
 name = "certifi"
@@ -943,7 +963,7 @@ shapely = ">=1.7,<2"
 
 [[package]]
 name = "google-api-core"
-version = "2.10.2"
+version = "1.33.2"
 description = "Google API client core library"
 category = "main"
 optional = false
@@ -954,7 +974,7 @@ google-auth = ">=1.25.0,<3.0dev"
 googleapis-common-protos = ">=1.56.2,<2.0dev"
 grpcio = {version = ">=1.33.2,<2.0dev", optional = true, markers = "extra == \"grpc\""}
 grpcio-status = {version = ">=1.33.2,<2.0dev", optional = true, markers = "extra == \"grpc\""}
-protobuf = ">=3.19.5,<3.20.0 || >3.20.0,<3.20.1 || >3.20.1,<4.21.0 || >4.21.0,<4.21.1 || >4.21.1,<4.21.2 || >4.21.2,<4.21.3 || >4.21.3,<4.21.4 || >4.21.4,<4.21.5 || >4.21.5,<5.0.0dev"
+protobuf = ">=3.19.5,<3.20.0 || >3.20.0,<3.20.1 || >3.20.1,<4.0.0dev"
 requests = ">=2.18.0,<3.0.0dev"
 
 [package.extras]
@@ -999,36 +1019,36 @@ tool = ["click (>=6.0.0)"]
 
 [[package]]
 name = "google-cloud-bigquery"
-version = "3.3.5"
+version = "2.34.4"
 description = "Google BigQuery API client library"
 category = "main"
 optional = false
-python-versions = ">=3.7, <3.11"
+python-versions = ">=3.6, <3.11"
 
 [package.dependencies]
 google-api-core = {version = ">=1.31.5,<2.0.0 || >2.3.0,<3.0.0dev", extras = ["grpc"]}
-google-cloud-bigquery-storage = ">=2.0.0,<3.0.0dev"
 google-cloud-core = ">=1.4.1,<3.0.0dev"
 google-resumable-media = ">=0.6.0,<3.0dev"
-grpcio = ">=1.47.0,<2.0dev"
-packaging = ">=14.3,<22.0.0dev"
-proto-plus = ">=1.22.0,<2.0.0dev"
-protobuf = ">=3.19.5,<3.20.0 || >3.20.0,<3.20.1 || >3.20.1,<4.21.0 || >4.21.0,<4.21.1 || >4.21.1,<4.21.2 || >4.21.2,<4.21.3 || >4.21.3,<4.21.4 || >4.21.4,<4.21.5 || >4.21.5,<5.0.0dev"
-pyarrow = ">=3.0.0,<10.0dev"
+grpcio = ">=1.38.1,<2.0dev"
+packaging = ">=14.3,<22.0dev"
+proto-plus = ">=1.15.0,<2.0.0dev"
+protobuf = ">=3.12.0,<4.0.0dev"
 python-dateutil = ">=2.7.2,<3.0dev"
 requests = ">=2.18.0,<3.0.0dev"
 
 [package.extras]
-all = ["pandas (>=1.0.0)", "db-dtypes (>=0.3.0,<2.0.0dev)", "geopandas (>=0.9.0,<1.0dev)", "Shapely (>=1.6.0,<2.0dev)", "ipython (>=7.0.1,!=8.1.0)", "tqdm (>=4.7.4,<5.0.0dev)", "opentelemetry-api (>=1.1.0)", "opentelemetry-sdk (>=1.1.0)", "opentelemetry-instrumentation (>=0.20b0)"]
+all = ["google-cloud-bigquery-storage (>=2.0.0,<3.0.0dev)", "grpcio (>=1.38.1,<2.0dev)", "pyarrow (>=3.0.0,<8.0dev)", "geopandas (>=0.9.0,<1.0dev)", "Shapely (>=1.6.0,<2.0dev)", "pandas (>=0.24.2)", "ipython (>=7.0.1,!=8.1.0)", "tqdm (>=4.7.4,<5.0.0dev)", "opentelemetry-api (>=1.1.0)", "opentelemetry-sdk (>=1.1.0)", "opentelemetry-instrumentation (>=0.20b0)"]
+bignumeric_type = ["pyarrow (>=3.0.0,<8.0dev)"]
+bqstorage = ["google-cloud-bigquery-storage (>=2.0.0,<3.0.0dev)", "grpcio (>=1.38.1,<2.0dev)", "pyarrow (>=3.0.0,<8.0dev)"]
 geopandas = ["geopandas (>=0.9.0,<1.0dev)", "Shapely (>=1.6.0,<2.0dev)"]
 ipython = ["ipython (>=7.0.1,!=8.1.0)"]
 opentelemetry = ["opentelemetry-api (>=1.1.0)", "opentelemetry-sdk (>=1.1.0)", "opentelemetry-instrumentation (>=0.20b0)"]
-pandas = ["pandas (>=1.0.0)", "db-dtypes (>=0.3.0,<2.0.0dev)"]
+pandas = ["pandas (>=0.24.2)", "pyarrow (>=3.0.0,<8.0dev)"]
 tqdm = ["tqdm (>=4.7.4,<5.0.0dev)"]
 
 [[package]]
 name = "google-cloud-bigquery-storage"
-version = "2.16.2"
+version = "2.14.1"
 description = "BigQuery Storage API API client library"
 category = "main"
 optional = false
@@ -1036,13 +1056,14 @@ python-versions = ">=3.7"
 
 [package.dependencies]
 google-api-core = {version = ">=1.32.0,<2.0.0 || >=2.8.0,<3.0.0dev", extras = ["grpc"]}
-proto-plus = ">=1.22.0,<2.0.0dev"
-protobuf = ">=3.19.5,<3.20.0 || >3.20.0,<3.20.1 || >3.20.1,<4.21.0 || >4.21.0,<4.21.1 || >4.21.1,<4.21.2 || >4.21.2,<4.21.3 || >4.21.3,<4.21.4 || >4.21.4,<4.21.5 || >4.21.5,<5.0.0dev"
+proto-plus = ">=1.18.0,<2.0.0dev"
+protobuf = ">=3.19.0,<4.0.0dev"
 
 [package.extras]
 fastavro = ["fastavro (>=0.21.2)"]
 pandas = ["pandas (>=0.21.1)"]
 pyarrow = ["pyarrow (>=0.15.0)"]
+tests = ["freezegun"]
 
 [[package]]
 name = "google-cloud-core"
@@ -1058,6 +1079,23 @@ google-auth = ">=1.25.0,<3.0dev"
 
 [package.extras]
 grpc = ["grpcio (>=1.38.0,<2.0dev)"]
+
+[[package]]
+name = "google-cloud-secret-manager"
+version = "2.12.6"
+description = "Secret Manager API API client library"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+google-api-core = {version = ">=1.32.0,<2.0.0 || >=2.8.0,<3.0.0dev", extras = ["grpc"]}
+grpc-google-iam-v1 = ">=0.12.4,<1.0.0dev"
+proto-plus = ">=1.22.0,<2.0.0dev"
+protobuf = ">=3.19.5,<3.20.0 || >3.20.0,<3.20.1 || >3.20.1,<4.21.0 || >4.21.0,<4.21.1 || >4.21.1,<4.21.2 || >4.21.2,<4.21.3 || >4.21.3,<4.21.4 || >4.21.4,<4.21.5 || >4.21.5,<5.0.0dev"
+
+[package.extras]
+libcst = ["libcst (>=0.2.5)"]
 
 [[package]]
 name = "google-cloud-storage"
@@ -1112,6 +1150,7 @@ optional = false
 python-versions = ">=3.7"
 
 [package.dependencies]
+grpcio = {version = ">=1.0.0,<2.0.0dev", optional = true, markers = "extra == \"grpc\""}
 protobuf = ">=3.15.0,<5.0.0dev"
 
 [package.extras]
@@ -1129,6 +1168,18 @@ python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*"
 docs = ["sphinx"]
 
 [[package]]
+name = "grpc-google-iam-v1"
+version = "0.12.4"
+description = "IAM API client library"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+googleapis-common-protos = {version = ">=1.56.0,<2.0.0dev", extras = ["grpc"]}
+grpcio = ">=1.0.0,<2.0.0dev"
+
+[[package]]
 name = "grpcio"
 version = "1.50.0"
 description = "HTTP/2-based RPC framework"
@@ -1144,7 +1195,7 @@ protobuf = ["grpcio-tools (>=1.50.0)"]
 
 [[package]]
 name = "grpcio-status"
-version = "1.50.0"
+version = "1.48.2"
 description = "Status proto mapping for gRPC"
 category = "main"
 optional = false
@@ -1152,8 +1203,8 @@ python-versions = ">=3.6"
 
 [package.dependencies]
 googleapis-common-protos = ">=1.5.5"
-grpcio = ">=1.50.0"
-protobuf = ">=4.21.6"
+grpcio = ">=1.48.2"
+protobuf = ">=3.12.0"
 
 [[package]]
 name = "gtfs-realtime-bindings"
@@ -1189,6 +1240,17 @@ description = "An HTML Minifier"
 category = "main"
 optional = false
 python-versions = "*"
+
+[[package]]
+name = "humanize"
+version = "4.4.0"
+description = "Python humanize utilities"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+tests = ["freezegun", "pytest", "pytest-cov"]
 
 [[package]]
 name = "identify"
@@ -1443,11 +1505,11 @@ testing = ["Django (<3.1)", "colorama", "docopt", "pytest (<7.0.0)"]
 
 [[package]]
 name = "jinja2"
-version = "3.1.2"
+version = "3.0.3"
 description = "A very fast and expressive template engine."
 category = "main"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.6"
 
 [package.dependencies]
 MarkupSafe = ">=2.0"
@@ -2314,6 +2376,18 @@ six = "*"
 test = ["scipy", "pytest-cov", "pytest"]
 
 [[package]]
+name = "pendulum"
+version = "2.1.2"
+description = "Python datetimes made easy"
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+
+[package.dependencies]
+python-dateutil = ">=2.6,<3.0"
+pytzdata = ">=2020.1"
+
+[[package]]
 name = "pexpect"
 version = "4.8.0"
 description = "Pexpect allows easy control of interactive console applications."
@@ -2484,8 +2558,8 @@ testing = ["google-api-core[grpc] (>=1.31.5)"]
 
 [[package]]
 name = "protobuf"
-version = "4.21.8"
-description = ""
+version = "3.20.3"
+description = "Protocol Buffers"
 category = "main"
 optional = false
 python-versions = ">=3.7"
@@ -2738,6 +2812,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "pytzdata"
+version = "2020.1"
+description = "The Olson timezone database for Python."
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+
+[[package]]
 name = "pywavelets"
 version = "1.4.1"
 description = "PyWavelets, wavelet transform module"
@@ -2942,9 +3024,9 @@ optional = false
 python-versions = "*"
 
 [package.extras]
-nativelib = ["pyobjc-framework-cocoa", "pywin32"]
-objc = ["pyobjc-framework-cocoa"]
 win32 = ["pywin32"]
+objc = ["pyobjc-framework-cocoa"]
+nativelib = ["pywin32", "pyobjc-framework-cocoa"]
 
 [[package]]
 name = "setuptools-scm"
@@ -2986,17 +3068,21 @@ python-versions = "*"
 
 [[package]]
 name = "siuba"
-version = "1.0.0a2"
+version = "0.4.0"
 description = "A package for quick, scrappy analyses with pandas and SQL"
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [package.dependencies]
 numpy = ">=1.12.0"
 pandas = ">=0.24.0"
 PyYAML = ">=3.0.0"
 SQLAlchemy = ">=1.2.19"
+
+[package.extras]
+test = ["hypothesis", "pytest"]
+docs = ["gapminder (==0.1)", "jupytext", "nbsphinx", "sphinx", "nbval", "jupyter", "plotnine"]
 
 [[package]]
 name = "six"
@@ -3518,7 +3604,7 @@ heapdict = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.10"
-content-hash = "f36fe58c0f0388e201e5cf6fedc3b860fd4834cf2f4655b7cce7f3346569b04b"
+content-hash = "93b9184fc20de47bb3dfbf1b1f16391939703fe9e4eb32b003adad734b2b2d7d"
 
 [metadata.files]
 agate = []
@@ -3544,6 +3630,7 @@ async-timeout = []
 attrs = []
 babel = []
 backcall = []
+backoff = []
 beautifulsoup4 = []
 black = []
 bleach = []
@@ -3597,17 +3684,20 @@ google-auth-oauthlib = []
 google-cloud-bigquery = []
 google-cloud-bigquery-storage = []
 google-cloud-core = []
+google-cloud-secret-manager = []
 google-cloud-storage = []
 google-crc32c = []
 google-resumable-media = []
 googleapis-common-protos = []
 greenlet = []
+grpc-google-iam-v1 = []
 grpcio = []
 grpcio-status = []
 gtfs-realtime-bindings = []
 h11 = []
 heapdict = []
 htmlmin = []
+humanize = []
 identify = []
 idna = []
 imagehash = []
@@ -3684,6 +3774,7 @@ parso = []
 partd = []
 pathspec = []
 patsy = []
+pendulum = []
 pexpect = []
 phik = []
 pickleshare = []
@@ -3721,6 +3812,7 @@ python-dotenv = []
 python-slugify = []
 pytimeparse = []
 pytz = []
+pytzdata = []
 pywavelets = []
 pywin32 = []
 pywinpty = []

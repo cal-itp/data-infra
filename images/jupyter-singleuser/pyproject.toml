@@ -39,8 +39,8 @@ dask = "~2022.8"
 distributed = "~2022.8"
 pyodbc = "^4.0.34"
 sqlalchemy-bigquery = "^1.4.4"
-siuba = "1.0.0a2"
-calitp = "0.0.16"
+calitp = "2022.10.25a0"
+siuba = "^0.4.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.2.0"
