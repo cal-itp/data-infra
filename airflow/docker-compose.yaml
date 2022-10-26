@@ -60,7 +60,6 @@ x-airflow-common:
     # try to run on a million dates when unpaused.
     AIRFLOW__SCHEDULER__CATCHUP_BY_DEFAULT: 'false'
 
-
     CALITP_BQ_MAX_BYTES: 10000000000
     CALITP_SLACK_URL: ${CALITP_SLACK_URL}
 
@@ -69,7 +68,6 @@ x-airflow-common:
     AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT: "google-cloud-platform://:@:?extra__google_cloud_platform__project=cal-itp-data-infra"
 
     # API keys
-    CALITP_AIRTABLE_API_KEY: "${CALITP_AIRTABLE_API_KEY}"
     CALITP_AMPLITUDE_BENEFITS_API_KEY: "${CALITP_AMPLITUDE_BENEFITS_API_KEY}"
     CALITP_AMPLITUDE_BENEFITS_SECRET_KEY: "${CALITP_AMPLITUDE_BENEFITS_SECRET_KEY}"
 
@@ -79,6 +77,7 @@ x-airflow-common:
     # see https://googleapis.dev/python/google-auth/latest/user-guide.html#using-external-identities
     GOOGLE_CLOUD_PROJECT: cal-itp-data-infra
 
+    CALITP_AUTH_KEYS: "AC_TRANSIT_API_KEY,AMTRAK_GTFS_URL,BEAR_TRANSIT_KEY,CULVER_CITY_API_KEY,ESCALON_RT_KEY,TORRANCE_TRANSIT_API_KEY,MTC_511_API_KEY,SD_MTS_SA_API_KEY,SD_MTS_VP_TU_API_KEY,SWIFTLY_AUTHORIZATION_KEY_CALITP,WEHO_RT_KEY"
     CALITP_BUCKET__AIRTABLE: "gs://test-calitp-airtable"
     CALITP_BUCKET__DBT_ARTIFACTS: "gs://test-calitp-dbt-artifacts"
     CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG: "gs://test-calitp-gtfs-download-config"

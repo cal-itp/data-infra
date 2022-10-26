@@ -6,15 +6,15 @@ import datetime
 import gzip
 import json
 import logging
+import os
 from typing import List, Optional, ClassVar
 
 import humanize
 import pandas as pd
 import pendulum
 import sentry_sdk
-from airflow.models import Variable
-from airflow.utils.db import create_session
 from airflow.utils.email import send_email
+from calitp.auth import load_secrets
 from calitp.config import is_development
 from calitp.storage import (
     get_fs,
@@ -79,13 +79,9 @@ class DownloadFeedsResult(PartitionedGCSArtifact):
 def download_all(task_instance, execution_date, **kwargs):
     sentry_sdk.init()
     start = pendulum.now()
-    # https://stackoverflow.com/a/61808755
-    with create_session() as session:
-        auth_dict = {var.key: var.val for var in session.query(Variable)}
-    print(auth_dict.keys())
+    load_secrets()
 
     extract = get_latest(GTFSDownloadConfigExtract)
-
     fs = get_fs()
 
     with fs.open(extract.path, "rb") as f:
@@ -110,7 +106,7 @@ def download_all(task_instance, execution_date, **kwargs):
             try:
                 extract, content = download_feed(
                     config=config,
-                    auth_dict=auth_dict,
+                    auth_dict=os.environ,
                     ts=start,
                 )
 
