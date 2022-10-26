@@ -1,16 +1,16 @@
-name: Build and push jupyter-singleuser image
+name: Build and push gtfs-rt-archiver-v3 image
 
 on:
   push:
     branches:
       - 'main'
     paths:
-      - '.github/workflows/build-jupyter-singleuser-image.yml'
-      - 'images/jupyter-singleuser/**'
+      - '.github/workflows/build-gtfs-rt-archiver-v3-image.yml'
+      - 'services/gtfs-rt-archiver-v3/**'
   pull_request:
     paths:
-      - '.github/workflows/build-jupyter-singleuser-image.yml'
-      - 'images/jupyter-singleuser/**'
+      - '.github/workflows/build-gtfs-rt-archiver-v3-image.yml'
+      - 'services/gtfs-rt-archiver-v3/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -34,11 +34,11 @@ jobs:
       # from https://forcepush.tech/python-package-ci-cd-with-git-hub-actions
       - name: Get image tag from pyproject.toml
         run: |
-          cd images/jupyter-singleuser
+          cd services/gtfs-rt-archiver-v3
           PROJECT_VERSION=$(poetry version --short)
           echo "PROJECT_VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
       - uses: docker/build-push-action@v2
         with:
-          context: images/jupyter-singleuser
+          context: services/gtfs-rt-archiver-v3
           push: ${{ github.ref == 'refs/heads/main' }}
-          tags: ghcr.io/${{github.repository}}/jupyter-singleuser:${{env.PROJECT_VERSION}}
+          tags: ghcr.io/${{github.repository}}/gtfs-rt-archiver-v3:${{env.PROJECT_VERSION}}
