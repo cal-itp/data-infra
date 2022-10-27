@@ -11,6 +11,7 @@ stg_gtfs_schedule__trips AS (
     SELECT
         base64_url,
         ts,
+        dt AS _dt,
         {{ trim_make_empty_string_null('route_id') }} AS route_id,
         {{ trim_make_empty_string_null('service_id') }} AS service_id,
         {{ trim_make_empty_string_null('trip_id') }} AS trip_id,
