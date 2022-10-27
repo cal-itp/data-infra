@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 -- TODO: make an intermediate calendar and use that instead of the dimension
 WITH dim_calendar AS (
     SELECT *
@@ -9,7 +7,7 @@ WITH dim_calendar AS (
 int_gtfs_schedule__long_calendar AS (
     -- Note that you can unnest values easily in SQL, but getting the column names
     -- is weirdly hard. To work around this, we just UNION ALL.
-    {% for dow in ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"] %}
+    {% for dow in [("monday", 2), ("tuesday", 3), ("wednesday", 4), ("thursday", 5), ("friday", 6), ("saturday", 7), ("sunday", 0)] %}
 
         {% if not loop.first %}
             UNION ALL
@@ -21,8 +19,9 @@ int_gtfs_schedule__long_calendar AS (
             service_id,
             start_date,
             end_date,
-            "{{ dow | title }}" AS day_name,
-            CAST({{ dow }} AS boolean) AS service_indicator
+            "{{ dow[0] }}" AS day_name,
+            "{{ dow[1] }}" AS day_num,
+            CAST({{ dow[0] }} AS boolean) AS service_indicator
         FROM dim_calendar
     {% endfor %}
 )
