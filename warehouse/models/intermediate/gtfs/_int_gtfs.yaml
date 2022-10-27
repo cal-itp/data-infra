@@ -85,3 +85,30 @@ models:
         description: |
           Timestamp for when the given row was inserted into the table.
           Primarily useful for debugging, not meaningful for general use.
+  - name: int_gtfs_schedule__long_calendar
+    description: |
+      This table transforms the raw GTFS calendar.txt format (where each row corresponds to a `service_id` and
+      each day of the week is a column and service indicators are entered in a "wide" fashion) into a long format,
+      where a row is identified by `feed_key`, `service_id`, and `day_name`.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - service_id
+            - day_name
+    columns:
+      - name: base64_url
+      - name: feed_key
+        description: Foreign key for `dim_schedule_feeds`.
+      - name: service_id
+        description: '{{ doc("gtfs_calendar__service_id") }}'
+      - name: start_date
+        description: '{{ doc("gtfs_calendar__start_date") }}'
+      - name: end_date
+        description: '{{ doc("gtfs_calendar_dates__date") }}'
+      - name: day_name
+        description: String name of day of the week like "monday"
+      - name: service_indicator
+        description: |
+          Boolean indicating whether there is service for this `service_id` / `day_name` pair
+          between `start_date` and `end_date`.
