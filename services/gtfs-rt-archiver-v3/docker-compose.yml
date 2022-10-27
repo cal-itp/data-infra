@@ -4,7 +4,6 @@ x-gtfs-rt-archiver-v3-common:
   build: .
   environment:
     AIRFLOW_ENV: development
-    CALITP_AUTH_KEYS: "AC_TRANSIT_API_KEY,AMTRAK_GTFS_URL,BEAR_TRANSIT_KEY,CULVER_CITY_API_KEY,ESCALON_RT_KEY,TORRANCE_TRANSIT_API_KEY,MTC_511_API_KEY,SD_MTS_SA_API_KEY,SD_MTS_VP_TU_API_KEY,SWIFTLY_AUTHORIZATION_KEY_CALITP,WEHO_RT_KEY"
     CALITP_BUCKET__AIRTABLE: "gs://test-calitp-airtable"
     CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG: "gs://test-calitp-gtfs-download-config"
     CALITP_BUCKET__GTFS_RT_RAW: "gs://dev-calitp-gtfs-rt-raw"

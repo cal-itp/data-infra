@@ -5,12 +5,11 @@ import logging
 import zipfile
 from io import BytesIO, StringIO
 from datetime import timedelta
-from operator import itemgetter
 
 import calitp
 import requests
 import pandas as pd
-from calitp.auth import get_secrets
+from calitp.auth import get_secret_by_name
 from requests import HTTPError
 
 from airflow.models import BaseOperator
@@ -108,15 +107,8 @@ class AmplitudeToFlattenedJSONOperator(BaseOperator):
 
     def __init__(self, app_name, rename_fields=None, **kwargs):
         self.app_name = app_name
-        secrets = get_secrets(
-            [
-                "CALITP_AMPLITUDE_BENEFITS_API_KEY",
-                "CALITP_AMPLITUDE_BENEFITS_SECRET_KEY",
-            ]
-        )
-        self.api_key, self.secret_key = itemgetter(
-            "CALITP_AMPLITUDE_BENEFITS_API_KEY", "CALITP_AMPLITUDE_BENEFITS_SECRET_KEY"
-        )(secrets)
+        self.api_key = get_secret_by_name("CALITP_AMPLITUDE_BENEFITS_API_KEY")
+        self.secret_key = get_secret_by_name("CALITP_AMPLITUDE_BENEFITS_SECRET_KEY")
         self.rename_fields = rename_fields
 
         super().__init__(**kwargs)

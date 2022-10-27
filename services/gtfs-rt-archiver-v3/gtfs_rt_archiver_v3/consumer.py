@@ -6,7 +6,7 @@ import sentry_sdk
 import typer
 import os
 
-from calitp.auth import get_secrets
+from calitp.auth import get_secrets_by_label
 from huey.constants import WORKER_THREAD
 
 import logging
@@ -42,7 +42,7 @@ def main(
     start_http_server(port)
 
     if load_env_secrets:
-        for key, value in get_secrets().items():
+        for key, value in get_secrets_by_label("gtfs_rt").items():
             os.environ[key] = value
 
     config = ConsumerConfig(

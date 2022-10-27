@@ -11,7 +11,7 @@ import schedule
 import sentry_sdk
 import typer
 from cachetools.func import ttl_cache
-from calitp.auth import get_secrets
+from calitp.auth import get_secrets_by_label
 from calitp.storage import (
     GTFSFeedType,
     GTFSDownloadConfig,
@@ -61,7 +61,7 @@ def main(
     start_http_server(port)
 
     if load_env_secrets:
-        for key, value in get_secrets().items():
+        for key, value in get_secrets_by_label("gtfs_rt").items():
             os.environ[key] = value
 
     typer.secho("flushing huey")
