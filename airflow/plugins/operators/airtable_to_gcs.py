@@ -144,15 +144,13 @@ class AirtableToGCSOperator(BaseOperator):
             air_base_name=air_base_name,
             air_table_name=air_table_name,
         )
-        if api_key:
-            self.api_key = api_key
-        else:
-            self.api_key = get_secret_by_name("CALITP_AIRTABLE_API_KEY")
+        self.api_key = api_key
 
         super().__init__(**kwargs)
 
     def execute(self, **kwargs):
-        self.extract.fetch_from_airtable(self.api_key)
+        api_key = self.api_key or get_secret_by_name("CALITP_AIRTABLE_API_KEY")
+        self.extract.fetch_from_airtable(api_key)
         fs = get_fs()
         # inserts into xcoms
         return self.extract.save_to_gcs(fs, self.bucket)
