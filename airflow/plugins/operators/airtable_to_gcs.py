@@ -2,6 +2,7 @@ import gzip
 import os
 import pandas as pd
 import pendulum
+from calitp.auth import get_secret_by_name
 
 from pyairtable import Table
 from pydantic import BaseModel
@@ -9,8 +10,6 @@ from typing import Optional
 from calitp.storage import get_fs, make_name_bq_safe
 
 from airflow.models import BaseOperator
-
-AIRTABLE_API_KEY = os.environ["CALITP_AIRTABLE_API_KEY"]
 
 
 def process_arrays_for_nulls(arr):
@@ -122,7 +121,7 @@ class AirtableToGCSOperator(BaseOperator):
         air_base_id,
         air_base_name,
         air_table_name,
-        api_key=AIRTABLE_API_KEY,
+        api_key=None,
         **kwargs,
     ):
         """An operator that downloads data from an Airtable base
@@ -145,7 +144,10 @@ class AirtableToGCSOperator(BaseOperator):
             air_base_name=air_base_name,
             air_table_name=air_table_name,
         )
-        self.api_key = api_key
+        if api_key:
+            self.api_key = api_key
+        else:
+            self.api_key = get_secret_by_name("CALITP_AIRTABLE_API_KEY")
 
         super().__init__(**kwargs)
 

@@ -1,4 +1,4 @@
-calitp==2022.9.21
+calitp==2022.10.27
 fsspec==2022.5.0
 gcsfs==2022.5.0
 intake==0.6.1
@@ -16,6 +16,6 @@ typing-extensions==3.10.0.2
 jinja2<3.1.0
 protobuf==3.20.1
 google-api-core==1.32.0
-pandas-gbq<0.15.0
+pandas-gbq==0.17.9
 pydantic==1.9.1
 sentry-sdk==1.9.8
