@@ -23,6 +23,7 @@ stg_gtfs_schedule__trips AS (
 
 int_gtfs_schedule__incremental_trips AS (
     -- select distinct because there is at least one feed that
+    -- has entire duplicates (all values identical)
     SELECT DISTINCT
         t1.base64_url,
         t1.ts,
