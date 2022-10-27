@@ -13,3 +13,4 @@ typing-extensions==3.10.0.2
 protobuf==3.20.1
 google-api-core==1.32.0
 sentry-sdk==1.9.8
+pydantic==1.9.1
