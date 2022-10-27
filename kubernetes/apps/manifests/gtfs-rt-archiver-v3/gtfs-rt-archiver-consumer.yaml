@@ -6,7 +6,7 @@ metadata:
   labels:
     name: gtfs-rt-archiver-consumer
 spec:
-  replicas: 3
+  replicas: 4
   strategy:
     type: Recreate
   selector:
