@@ -940,12 +940,16 @@ models:
           lower_bound_column: _valid_from
           upper_bound_column: _valid_to
           partition_by: base64_url, trip_id
+          where: "not warning_duplicate_primary_key"
           gaps: required
     columns:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key` and `trip_id`.
-        tests: *primary_key_tests
+        tests:
+          - unique:
+              where: "not warning_duplicate_primary_key"
+          - not_null
       - *base64_url
       - name: route_id
         description: '{{ doc("gtfs_trips__route_id") }}'
@@ -975,6 +979,10 @@ models:
         description: '{{ doc("gtfs_trips__bikes_allowed") }}'
       - *_valid_from
       - *_valid_to
+      - name: warning_duplicate_primary_key
+        description: |
+          Rows with `true` in this column have a duplicate primary key; i.e., `trip_id` is duplicated within an individual feed
+          instance and `key` will also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
   - name: dim_calendar
     description: |
       Each row is a cleaned row from a calendar.txt file.
@@ -991,7 +999,6 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `service_id`.
         tests: *primary_key_tests
-
       - *feed_key
       - *base64_url
       - name: service_id

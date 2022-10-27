@@ -48,3 +48,40 @@ models:
         description: |
           Successes as a percent of total files (`count_successes` / `count_files` * 100).
           If this is a value less than 100, indicates that file conversion failed for some files in this feed.
+  - name: int_gtfs_schedule__incremental_trips
+    description: |
+      This table is an incremental, sparse history of GTFS schedule trips data. It is a precursor to `dim_trips`
+      with the goal of facilitating duplicate detection. It also drops entire duplicate rows (rows where all
+      fields are identical.)
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - trip_id
+          severity: warn
+    columns:
+      - name: route_id
+        description: '{{ doc("gtfs_trips__route_id") }}'
+      - name: service_id
+        description: '{{ doc("gtfs_trips__service_id") }}'
+      - name: trip_id
+        description: '{{ doc("gtfs_trips__trip_id") }}'
+      - name: trip_headsign
+        description: '{{ doc("gtfs_trips__trip_headsign") }}'
+      - name: trip_short_name
+        description: '{{ doc("gtfs_trips__trip_short_name") }}'
+      - name: direction_id
+        description: '{{ doc("gtfs_trips__direction_id") }}'
+      - name: block_id
+        description: '{{ doc("gtfs_trips__block_id") }}'
+      - name: shape_id
+        description: '{{ doc("gtfs_trips__shape_id") }}'
+      - name: wheelchair_accessible
+        description: '{{ doc("gtfs_trips__wheelchair_accessible") }}'
+      - name: bikes_allowed
+        description: '{{ doc("gtfs_trips__bikes_allowed") }}'
+      - name: _inserted_at
+        description: |
+          Timestamp for when the given row was inserted into the table.
+          Primarily useful for debugging, not meaningful for general use.

@@ -744,10 +744,14 @@ models:
             - base64_url
             - ts
             - trip_id
-
+          severity: warn
     columns:
       - name: base64_url
       - name: ts
+      - name: _dt
+        description: |
+          Date that data was downloaded (aligns with the date portion of `ts`).
+          Included only because it assists with partition elimination in the underlying external table.
       - name: route_id
         description: '{{ doc("gtfs_trips__route_id") }}'
         tests:
