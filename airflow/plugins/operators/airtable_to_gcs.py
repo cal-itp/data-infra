@@ -2,7 +2,7 @@ import gzip
 import os
 import pandas as pd
 import pendulum
-from calitp.auth import load_secrets
+from calitp.auth import get_secrets
 
 from pyairtable import Table
 from pydantic import BaseModel
@@ -147,8 +147,9 @@ class AirtableToGCSOperator(BaseOperator):
         if api_key:
             self.api_key = api_key
         else:
-            load_secrets(["CALITP_AIRTABLE_API_KEY"])
-            self.api_key = os.environ["CALITP_AIRTABLE_API_KEY"]
+            self.api_key = get_secrets(["CALITP_AIRTABLE_API_KEY"])[
+                "CALITP_AIRTABLE_API_KEY"
+            ]
 
         super().__init__(**kwargs)
 

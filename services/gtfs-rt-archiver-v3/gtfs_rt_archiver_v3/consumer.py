@@ -6,7 +6,7 @@ import sentry_sdk
 import typer
 import os
 
-from calitp.auth import load_secrets
+from calitp.auth import get_secrets
 from huey.constants import WORKER_THREAD
 
 import logging
@@ -42,7 +42,8 @@ def main(
     start_http_server(port)
 
     if load_env_secrets:
-        load_secrets()
+        for key, value in get_secrets().items():
+            os.environ[key] = value
 
     config = ConsumerConfig(
         workers=int(os.getenv("HUEY_CONSUMER_WORKERS", 32)),
