@@ -9,7 +9,6 @@ import pendulum
 import sentry_sdk
 import structlog
 import typer
-from calitp.auth import DEFAULT_AUTH_KEYS
 from calitp.storage import download_feed, GTFSDownloadConfig
 from google.cloud import storage
 from huey import RedisExpireHuey
@@ -95,7 +94,8 @@ auth_dict = None
 @huey.on_startup()
 def load_auth_dict():
     global auth_dict
-    auth_dict = {key: os.environ[key] for key in DEFAULT_AUTH_KEYS}
+    # TODO: this isn't ideal, we probably could store the keys from get_secrets_by_label() in consumer.py
+    auth_dict = os.environ
 
 
 # from https://github.com/getsentry/sentry-python/issues/195#issuecomment-444559126
