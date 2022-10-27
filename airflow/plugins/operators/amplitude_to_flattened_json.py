@@ -107,8 +107,6 @@ class AmplitudeToFlattenedJSONOperator(BaseOperator):
 
     def __init__(self, app_name, rename_fields=None, **kwargs):
         self.app_name = app_name
-        self.api_key = get_secret_by_name("CALITP_AMPLITUDE_BENEFITS_API_KEY")
-        self.secret_key = get_secret_by_name("CALITP_AMPLITUDE_BENEFITS_SECRET_KEY")
         self.rename_fields = rename_fields
 
         super().__init__(**kwargs)
@@ -126,8 +124,8 @@ class AmplitudeToFlattenedJSONOperator(BaseOperator):
         events_df = amplitude_to_df(
             start,
             end,
-            api_key=self.api_key,
-            secret_key=self.secret_key,
+            api_key=get_secret_by_name("CALITP_AMPLITUDE_BENEFITS_API_KEY"),
+            secret_key=get_secret_by_name("CALITP_AMPLITUDE_BENEFITS_SECRET_KEY"),
             rename_fields=self.rename_fields,
         )
 
