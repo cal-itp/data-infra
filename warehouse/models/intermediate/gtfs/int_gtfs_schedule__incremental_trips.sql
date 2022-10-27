@@ -1,5 +1,7 @@
 {{ config(materialized='incremental') }}
 
+-- BigQuery does not do partition elimination when using a subquery: https://stackoverflow.com/questions/54135893/using-subquery-for-partitiontime-in-bigquery-does-not-limit-cost
+-- save max timestamp in a variable instead so it can be referenced in incremental logic and still use partition elimination
 {% if is_incremental() %}
     {% set timestamps = dbt_utils.get_column_values(table=this, column='ts', order_by = 'ts DESC', max_records = 1) %}
     {% set max_ts = timestamps[0] %}
