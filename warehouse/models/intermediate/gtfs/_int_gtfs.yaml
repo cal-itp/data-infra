@@ -139,7 +139,13 @@ models:
     columns:
       - name: feed_key
         description: Foreign key for `dim_schedule_feeds`.
+        tests:
+          - not_null
       - name: service_date
         description: Date on which service was scheduled.
+        tests:
+          - not_null
       - name: service_id
         description: Service identifier from calendar and/or calendar_dates.
+        tests:
+          - not_null
