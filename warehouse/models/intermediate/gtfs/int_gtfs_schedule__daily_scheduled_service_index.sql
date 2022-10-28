@@ -69,7 +69,7 @@ daily_services AS (
             AND (t2.service_id = t3.service_id OR t2.service_id IS NULL)
 ),
 
-fct_daily_scheduled_service AS (
+int_gtfs_schedule__daily_scheduled_service_index AS (
     SELECT
         service_date,
         cd_date,
@@ -80,4 +80,4 @@ fct_daily_scheduled_service AS (
         AND service_indicator
 )
 
-SELECT * FROM fct_daily_scheduled_service
+SELECT * FROM int_gtfs_schedule__daily_scheduled_service_index
