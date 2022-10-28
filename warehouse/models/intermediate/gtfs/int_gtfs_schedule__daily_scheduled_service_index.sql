@@ -46,27 +46,27 @@ summarize_calendar_dates AS (
 daily_services AS (
 
     SELECT
-        t1.date AS service_date,
-        t3.date AS cd_date,
-        t1.feed_key,
-        t2.service_id AS calendar_service_id,
-        t2.service_indicator AS calendar_service_indicator,
-        t3.service_id AS calendar_dates_service_id,
-        t3.service_indicator AS calendar_dates_service_indicator,
-        COALESCE(t2.service_id, t3.service_id) AS service_id,
+        daily_feeds.date AS service_date,
+        cal_dates.date AS cd_date,
+        daily_feeds.feed_key,
+        long_cal.service_id AS calendar_service_id,
+        long_cal.service_indicator AS calendar_service_indicator,
+        cal_dates.service_id AS calendar_dates_service_id,
+        cal_dates.service_indicator AS calendar_dates_service_indicator,
+        COALESCE(long_cal.service_id, cal_dates.service_id) AS service_id,
         -- calendar_dates takes precedence if present: it can modify calendar
         -- if no calendar_dates, use calendar
         -- if neither, no service
-        COALESCE(t3.service_indicator, t2.service_indicator, FALSE) AS service_indicator
-    FROM fct_daily_schedule_feeds AS t1
-    LEFT JOIN int_gtfs_schedule__long_calendar AS t2
-        ON t1.feed_key = t2.feed_key
-            AND t1.day_num = t2.day_num
-            AND t1.date BETWEEN t2.start_date AND t2.end_date
-    LEFT JOIN summarize_calendar_dates AS t3
-        ON t1.feed_key = t3.feed_key
-            AND t1.date = t3.date
-            AND (t2.service_id = t3.service_id OR t2.service_id IS NULL)
+        COALESCE(cal_dates.service_indicator, long_cal.service_indicator, FALSE) AS service_indicator
+    FROM fct_daily_schedule_feeds AS daily_feeds
+    LEFT JOIN int_gtfs_schedule__long_calendar AS long_cal
+        ON daily_feeds.feed_key = long_cal.feed_key
+            AND daily_feeds.day_num = long_cal.day_num
+            AND daily_feeds.date BETWEEN long_cal.start_date AND long_cal.end_date
+    LEFT JOIN summarize_calendar_dates AS cal_dates
+        ON daily_feeds.feed_key = cal_dates.feed_key
+            AND daily_feeds.date = cal_dates.date
+            AND (long_cal.service_id = cal_dates.service_id OR long_cal.service_id IS NULL)
 ),
 
 int_gtfs_schedule__daily_scheduled_service_index AS (
