@@ -11,7 +11,7 @@ dim_gtfs_datasets AS (
 keying AS (
     SELECT
         gd.key as gtfs_dataset_key,
-        gd.name as gtfs_dataset_name,
+        gd.name as _gtfs_dataset_name,
         vp.*
     FROM stg_gtfs_rt__vehicle_positions AS vp
     LEFT JOIN dim_gtfs_datasets AS gd
@@ -30,7 +30,7 @@ fct_vehicle_positions_messages AS (
         base64_url,
         _extract_ts,
         _config_extract_ts,
-        gtfs_dataset_name AS _gtfs_dataset_name,
+        _gtfs_dataset_name,
 
         header_timestamp,
         header_version
