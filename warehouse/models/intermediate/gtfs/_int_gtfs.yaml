@@ -108,7 +108,7 @@ models:
         description: '{{ doc("gtfs_calendar_dates__date") }}'
       - name: day_name
         description: String name of day of the week like "monday"
-      - name: service_indicator
+      - name: has_service
         description: |
           Boolean indicating whether there is service for this `service_id` / `day_name` pair
           between `start_date` and `end_date`.

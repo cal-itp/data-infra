@@ -25,7 +25,7 @@ boolean_calendar_dates AS (
         CASE
             WHEN exception_type = 1 THEN TRUE
             WHEN exception_type = 2 THEN FALSE
-        END AS service_indicator
+        END AS has_service
     FROM dim_calendar_dates
 ),
 
@@ -38,7 +38,7 @@ summarize_calendar_dates AS (
         date,
         feed_key,
         service_id,
-        LOGICAL_AND(service_indicator) AS service_indicator
+        LOGICAL_AND(has_service) AS has_service
     FROM boolean_calendar_dates
     GROUP BY date, feed_key, service_id
 ),
@@ -50,14 +50,14 @@ daily_services AS (
         cal_dates.date AS cd_date,
         daily_feeds.feed_key,
         long_cal.service_id AS calendar_service_id,
-        long_cal.service_indicator AS calendar_service_indicator,
+        long_cal.has_service AS calendar_has_service,
         cal_dates.service_id AS calendar_dates_service_id,
-        cal_dates.service_indicator AS calendar_dates_service_indicator,
+        cal_dates.has_service AS calendar_dates_has_service,
         COALESCE(long_cal.service_id, cal_dates.service_id) AS service_id,
         -- calendar_dates takes precedence if present: it can modify calendar
         -- if no calendar_dates, use calendar
         -- if neither, no service
-        COALESCE(cal_dates.service_indicator, long_cal.service_indicator, FALSE) AS service_indicator
+        COALESCE(cal_dates.has_service, long_cal.has_service, FALSE) AS has_service
     FROM fct_daily_schedule_feeds AS daily_feeds
     LEFT JOIN int_gtfs_schedule__long_calendar AS long_cal
         ON daily_feeds.feed_key = long_cal.feed_key
@@ -77,7 +77,7 @@ int_gtfs_schedule__daily_scheduled_service_index AS (
         service_id
     FROM daily_services
     WHERE service_id IS NOT NULL
-        AND service_indicator
+        AND has_service
 )
 
 SELECT * FROM int_gtfs_schedule__daily_scheduled_service_index

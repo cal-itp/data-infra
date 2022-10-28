@@ -22,7 +22,7 @@ int_gtfs_schedule__long_calendar AS (
             end_date,
             "{{ dow[0] }}" AS day_name,
             {{ dow[1] }} AS day_num,
-            CAST({{ dow[0] }} AS boolean) AS service_indicator
+            CAST({{ dow[0] }} AS boolean) AS has_service
         FROM dim_calendar
     {% endfor %}
 )
