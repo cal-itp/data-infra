@@ -4,6 +4,7 @@ WITH dim_calendar AS (
     FROM {{ ref('dim_calendar') }}
 ),
 
+-- TODO: see if this can be refactored using UNPIVOT (logic inherited from v1 warehouse, wondering if it should be revisited)
 int_gtfs_schedule__long_calendar AS (
     -- Note that you can unnest values easily in SQL, but getting the column names
     -- is weirdly hard. To work around this, we just UNION ALL.
