@@ -85,3 +85,67 @@ models:
         description: |
           Timestamp for when the given row was inserted into the table.
           Primarily useful for debugging, not meaningful for general use.
+  - name: int_gtfs_schedule__long_calendar
+    description: |
+      This table transforms the raw GTFS calendar.txt format (where each row corresponds to a `service_id` and
+      each day of the week is a column and service indicators are entered in a "wide" fashion) into a long format,
+      where a row is identified by `feed_key`, `service_id`, and `day_name`.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - service_id
+            - day_name
+    columns:
+      - name: base64_url
+      - name: feed_key
+        description: Foreign key for `dim_schedule_feeds`.
+      - name: service_id
+        description: '{{ doc("gtfs_calendar__service_id") }}'
+      - name: start_date
+        description: '{{ doc("gtfs_calendar__start_date") }}'
+      - name: end_date
+        description: '{{ doc("gtfs_calendar_dates__date") }}'
+      - name: day_name
+        description: String name of day of the week like "monday"
+      - name: has_service
+        description: |
+          Boolean indicating whether there is service for this `service_id` / `day_name` pair
+          between `start_date` and `end_date`.
+  - name: int_gtfs_schedule__daily_scheduled_service_index
+    description: |
+      An index listing date, feed, and `service_id` combinations for which service was scheduled (i.e.,
+      the `service_id` is "in effect" and says that service occurred).
+      Essentially, it takes `calendar` and `calendar_dates` for a given feed, takes the dates for which that
+      feed was "in effect", and combines those into a long list of all service_ids that were in effect for a given
+      date, then filters down to only those where service was actually scheduled on that date.
+      For example, a row in this table with `feed_key = A`, `service_date = 2022-10-01`, `service_id = 1` indicates
+      that:
+      * Feed A was online on 2022-10-01
+      * Service ID 1 covers the date 2022-10-01, i.e., if service ID 1 is defined in `calendar.txt`,
+         `start_date <= 2022-10-01 <= end_date` and if service ID ` is defined in `calendar_dates.txt`,
+         `2022-10-01` is listed as a `date` within that file.
+      * The service indicator is `true` for 2022-10-01 (a Saturday). So, if this service was defined in `calendar.txt`,
+         `saturday = 1` for `service_id = 1`, and there is no `exception_type = 2` in `calendar_dates.txt` for this service and date.
+         If this service is defined exclusively in `calendar_dates.txt`, then `exception_type = 1` is listed for `2022-10-01` in that file.
+      This table therefore excludes `service_id` values which were in effect (i.e., feed was online and date range of service
+      overlaps with service date) but where service was not scheduled.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - service_date
+            - service_id
+    columns:
+      - name: feed_key
+        description: Foreign key for `dim_schedule_feeds`.
+        tests:
+          - not_null
+      - name: service_date
+        description: Date on which service was scheduled.
+        tests:
+          - not_null
+      - name: service_id
+        description: Service identifier from calendar and/or calendar_dates.
+        tests:
+          - not_null

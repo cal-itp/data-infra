@@ -1117,3 +1117,34 @@ models:
         description: '{{ doc("gtfs_stop_times__timepoint") }}'
     meta:
       publish.gis_coordinate_system_epsg: WGS84
+  - name: fct_daily_scheduled_trips
+    description: |
+      A daily table showing all trips that were scheduled on a given date.
+      If a `service_date`, `trip_key` pair is present in this table,
+      it means that that `trip_key` was scheduled to occur on that `service_date`.
+      Specifically, it means that the associated `service_id` was active and had service
+      scheduled. Dates where a `service_id` was active but not scheduled (for example,
+      weekend dates within a weekday service's effective dates) are not listed in this table.
+    columns:
+      - name: key
+        tests:
+          - unique:
+              where: "not warning_duplicate_trip_primary_key"
+          - not_null
+      - name: feed_key
+        description: Foreign key to dim_schedule_feeds.
+      - name: service_date
+        description: Date on which this trip was active.
+      - name: service_id
+        description: |
+          Service ID from calendar or calendar_dates that determines that this trip
+          has service on this date.
+      - name: trip_key
+        description: Foreign key to dim_trips.
+      - name: route_key
+        description: Foreign key to dim_routes.
+      - name: warning_duplicate_trip_primary_key
+        description: |
+          Rows with `true` in this column have a duplicate primary key in dim_trips;
+          i.e., `trip_id` is duplicated within an individual feed instance.
+          Treat these rows with caution.
