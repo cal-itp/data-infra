@@ -23,6 +23,7 @@ fct_vehicle_positions_messages AS (
     SELECT *
     FROM coalesced_and_filtered
     QUALIFY ROW_NUMBER() OVER (
+        -- the dt is necessary to preserve partition elimination in downstream queries
         PARTITION BY dt, base64_url, location_timestamp, vehicle_id, trip_id
         ORDER BY NULL
     ) = 1
