@@ -21,3 +21,25 @@ models:
             - product_key
             - component_key
             - calitp_extracted_at
+
+  - name: int_transit_database__urls_to_gtfs_datasets
+    description: |
+      Creates a 1:N relationship so any given extract/URL in the
+      GTFS models can identify its source gtfs_datasets record.
+      Currently this is unversioned; any historical URLs point
+      to the latest version of their gtfs_datasets record.
+    columns:
+      - name: base64_url
+        tests:
+          - not_null
+          - unique
+      - name: gtfs_dataset_key
+        tests:
+          - relationships:
+              to: ref('dim_gtfs_datasets')
+              field: key
+              config:
+                # four SMART urls and two test URLs that have been removed
+                # will work once the dim is historical
+                error_if: ">10"
+                warn_if: ">0"

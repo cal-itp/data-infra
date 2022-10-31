@@ -13,10 +13,10 @@ int_gtfs_schedule__grouped_feed_file_parse_outcomes AS (
     FROM {{ ref('int_gtfs_schedule__grouped_feed_file_parse_outcomes') }}
 ),
 
-dim_gtfs_datasets AS (
-    SELECT *
-    FROM {{ ref('dim_gtfs_datasets') }}
+urls_to_gtfs_datasets AS (
+    SELECT * FROM {{ ref('int_transit_database__urls_to_gtfs_datasets') }}
 ),
+
 
 join_outcomes_only AS (
     SELECT
@@ -42,7 +42,7 @@ join_outcomes_only AS (
 
 int_gtfs_schedule__joined_feed_outcomes AS (
     SELECT
-        gd.key AS gtfs_dataset_key,
+        urls_to_gtfs_datasets.gtfs_dataset_key,
         f.ts,
         f.base64_url,
         f._config_extract_ts,
@@ -55,11 +55,8 @@ int_gtfs_schedule__joined_feed_outcomes AS (
         f.zipfile_dirs,
         f.pct_files_successfully_parsed
     FROM join_outcomes_only AS f
-    -- TODO: this can lead to fanout until we de-dupe on the dim_gtfs_datasets side
-    -- currently no enforcement that URL is unique
-    LEFT JOIN dim_gtfs_datasets AS gd
-        ON f.base64_url = gd.base64_url
-            AND f._config_extract_ts BETWEEN gd._valid_from AND gd._valid_to
+    LEFT JOIN urls_to_gtfs_datasets
+        ON f.base64_url = urls_to_gtfs_datasets.base64_url
 )
 
 SELECT * FROM int_gtfs_schedule__joined_feed_outcomes
