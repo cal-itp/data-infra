@@ -154,7 +154,7 @@ models:
       - name: _extract_ts
         description: |
           Time at which this message was scraped.
-      - name: _name
+      - name: _gtfs_dataset_name
         description: |
           String name of the GTFS dataset of which this message is a part.
           This field is provided for human readability and should not be used as a join key.

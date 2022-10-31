@@ -22,7 +22,7 @@ fct_vehicle_positions_messages AS (
 , deduped AS (
     SELECT *,
         {{ dbt_utils.surrogate_key(['dt', 'base64_url', 'location_timestamp', 'vehicle_id', 'vehicle_label', 'trip_id']) }} AS key,
-        {{ dbt_utils.surrogate_key(['dt', 'base64_url', 'vehicle_id', 'vehicle_label', 'trip_id']) }} AS path_key
+        {{ dbt_utils.surrogate_key(['dt', 'base64_url', 'vehicle_id', 'vehicle_label', 'trip_id']) }} AS vehicle_trip_key
     FROM coalesced_and_filtered
     QUALIFY ROW_NUMBER() OVER (
         -- the dt is necessary to preserve partition elimination in downstream queries
@@ -33,7 +33,7 @@ fct_vehicle_positions_messages AS (
 
 , fct_vehicle_locations AS (
     SELECT *,
-        LEAD(key) OVER (PARTITION BY dt, base64_url, path_key ORDER BY location_timestamp) AS next_location_key,
+        LEAD(key) OVER (PARTITION BY dt, base64_url, vehicle_trip_key ORDER BY location_timestamp) AS next_location_key,
         ST_GEOGPOINT(position_longitude, position_latitude) AS location
     FROM deduped
 )
