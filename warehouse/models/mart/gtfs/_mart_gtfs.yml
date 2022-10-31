@@ -132,11 +132,13 @@ models:
           entity `id`, `vehicle_id`, and `trip_id`.
         tests:
           - unique:
-              # TODO: make an RT test macro that does this date subtraction
-              # test hour = 0 UTC because that's 5pm Pacific = PM peak, good sample of data
-              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
+              config:
+                # TODO: make an RT test macro that does this date subtraction
+                # test hour = 0 UTC because that's 5pm Pacific = PM peak, good sample of data
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
           - not_null:
-              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
+              config:
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
       - name: gtfs_dataset_key
         description: |
           The primary key for the record in `dim_gtfs_datasets` associated with this message.
@@ -971,7 +973,8 @@ models:
           Synthetic primary key constructed from `feed_key` and `trip_id`.
         tests:
           - unique:
-              where: "not warning_duplicate_primary_key"
+              config:
+                where: "not warning_duplicate_primary_key"
           - not_null
       - *base64_url
       - name: route_id
