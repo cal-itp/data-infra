@@ -5,13 +5,13 @@ WITH dim_schedule_feeds AS (
     FROM {{ ref('dim_schedule_feeds') }}
 ),
 
-stg_gtfs_schedule__stop_times AS (
+int_gtfs_schedule__incremental_stop_times AS (
     SELECT *
-    FROM {{ ref('stg_gtfs_schedule__stop_times') }}
+    FROM {{ ref('int_gtfs_schedule__incremental_stop_times') }}
 ),
 
 make_dim AS (
-{{ make_schedule_file_dimension_from_dim_schedule_feeds('dim_schedule_feeds', 'stg_gtfs_schedule__stop_times') }}
+{{ make_schedule_file_dimension_from_dim_schedule_feeds('dim_schedule_feeds', 'int_gtfs_schedule__incremental_stop_times') }}
 ),
 
 dim_stop_times AS (
