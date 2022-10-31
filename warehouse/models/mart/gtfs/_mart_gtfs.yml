@@ -23,6 +23,18 @@ models:
         name: base64_url
         description: |
           Base 64 encoded URL from which this data was scraped.
+      - &gtfs_dataset_key
+        name: gtfs_dataset_key
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_gtfs_datasets')
+              field: key
+              config:
+                # there are a dozen rows of SMART transit which was deleted from Airtable
+                # this will work without exception once the Airtable dim is historical;
+                # this threshold may need to increase if the backfill occurs prior to that
+                error_if: ">20"
       - &_valid_from
         name: _valid_from
         description: '{{ doc("column_valid_from") }}'
@@ -45,10 +57,7 @@ models:
       - name: feed_key
         description: |
           Foreign key to the `dim_schedule_feeds` table.
-      - &gtfs_dataset_key
-        name: gtfs_dataset_key
-        description: |
-          Foreign key to the `dim_gtfs_datasets` table.
+      - *gtfs_dataset_key
       - name: is_future
         description: |
           Boolean indicating whether this date is in the future relative to the last time that the table
@@ -132,16 +141,18 @@ models:
           entity `id`, `vehicle_id`, and `trip_id`.
         tests:
           - unique:
-              config:
-                # TODO: make an RT test macro that does this date subtraction
-                # test hour = 0 UTC because that's 5pm Pacific = PM peak, good sample of data
-                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
+              # TODO: make an RT test macro that does this date subtraction
+              # test hour = 0 UTC because that's 5pm Pacific = PM peak, good sample of data
+              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
           - not_null:
-              config:
-                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
+              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
       - name: gtfs_dataset_key
         description: |
           The primary key for the record in `dim_gtfs_datasets` associated with this message.
+        columns:
+          - <<: *gtfs_dataset_key
+            config:
+              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
       - name: dt
         description: |
           Date on which we scraped this message.
@@ -156,7 +167,7 @@ models:
       - name: _extract_ts
         description: |
           Time at which this message was scraped.
-      - name: _gtfs_dataset_name
+      - name: _name
         description: |
           String name of the GTFS dataset of which this message is a part.
           This field is provided for human readability and should not be used as a join key.
@@ -973,8 +984,7 @@ models:
           Synthetic primary key constructed from `feed_key` and `trip_id`.
         tests:
           - unique:
-              config:
-                where: "not warning_duplicate_primary_key"
+              where: "not warning_duplicate_primary_key"
           - not_null
       - *base64_url
       - name: route_id
@@ -1159,6 +1169,11 @@ models:
           - not_null
       - name: feed_key
         description: Foreign key to dim_schedule_feeds.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_schedule_feeds')
+              field: key
       - name: service_date
         description: Date on which this trip was active.
       - name: service_id
@@ -1167,8 +1182,16 @@ models:
           has service on this date.
       - name: trip_key
         description: Foreign key to dim_trips.
+        tests:
+          - relationships:
+              to: ref('dim_trips')
+              field: key
       - name: route_key
         description: Foreign key to dim_routes.
+        tests:
+          - relationships:
+              to: ref('dim_routes')
+              field: key
       - name: warning_duplicate_trip_primary_key
         description: |
           Rows with `true` in this column have a duplicate primary key in dim_trips;

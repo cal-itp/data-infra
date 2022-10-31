@@ -5,9 +5,8 @@ WITH joined_feed_outcomes AS (
     FROM {{ ref('int_gtfs_schedule__joined_feed_outcomes') }}
 ),
 
-dim_schedule_feeds AS (
-    SELECT *
-    FROM {{ ref('dim_schedule_feeds') }}
+urls_to_gtfs_datasets AS (
+    SELECT * FROM {{ ref('int_transit_database__urls_to_gtfs_datasets') }}
 ),
 
 fct_schedule_feeds AS (
