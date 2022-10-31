@@ -95,6 +95,29 @@ models:
         description: '{{ doc("column_zipfile_files") }}'
       - name: zipfile_dirs
         description: '{{ doc("column_zipfile_dirs") }}'
+  - name: fct_vehicle_locations
+    description: |
+      De-duped vehicle positions, removing redundant/duplicated positions
+      in the underlying messages. Unique at the url/timestamp/vehicle/trip
+      level.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key.
+        tests:
+          - unique:
+              # TODO: make an RT test macro that does this date subtraction
+              # test hour = 0 UTC because that's 5pm Pacific = PM peak, good sample of data
+              config:
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
+          - not_null:
+              config:
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
+      - name: trip_id
+        tests:
+          - not_null:
+              config:
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
   - name: fct_vehicle_positions_messages
     description: |
       Each row is a message received from a vehicle positions GTFS RT feed.
@@ -109,11 +132,13 @@ models:
           entity `id`, `vehicle_id`, and `trip_id`.
         tests:
           - unique:
-              # TODO: make an RT test macro that does this date subtraction
-              # test hour = 0 UTC because that's 5pm Pacific = PM peak, good sample of data
-              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
+              config:
+                # TODO: make an RT test macro that does this date subtraction
+                # test hour = 0 UTC because that's 5pm Pacific = PM peak, good sample of data
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
           - not_null:
-              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
+              config:
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
       - name: gtfs_dataset_key
         description: |
           The primary key for the record in `dim_gtfs_datasets` associated with this message.
@@ -131,7 +156,7 @@ models:
       - name: _extract_ts
         description: |
           Time at which this message was scraped.
-      - name: _name
+      - name: _gtfs_dataset_name
         description: |
           String name of the GTFS dataset of which this message is a part.
           This field is provided for human readability and should not be used as a join key.
@@ -948,7 +973,8 @@ models:
           Synthetic primary key constructed from `feed_key` and `trip_id`.
         tests:
           - unique:
-              where: "not warning_duplicate_primary_key"
+              config:
+                where: "not warning_duplicate_primary_key"
           - not_null
       - *base64_url
       - name: route_id
