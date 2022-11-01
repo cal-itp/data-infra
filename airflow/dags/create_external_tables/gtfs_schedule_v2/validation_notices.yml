@@ -29,7 +29,7 @@ schema_fields:
             type: JSON
           - name: auth_headers
             type: JSON
-      - name: gtfs_validator_versions
+      - name: gtfs_validator_version
         type: STRING
   - name: code
     type: STRING
