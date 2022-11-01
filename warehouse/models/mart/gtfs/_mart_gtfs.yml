@@ -71,8 +71,7 @@ models:
         description: |
           Synthetic primary key constructed from `base64_url` and `ts`.
         tests: *primary_key_tests
-      - &feed_key
-        name: feed_key
+      - name: feed_key
         description: |
           Foreign key to the `dim_schedule_feeds` table.
         tests:
@@ -268,6 +267,15 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `agency_id`.
         tests: *primary_key_tests
+      - &feed_key
+        name: feed_key
+        description: |
+          Foreign key to the `dim_schedule_feeds` table.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_schedule_feeds')
+              field: key
       - *base64_url
       - name: agency_id
         description: '{{ doc("gtfs_agency__agency_id") }}'
@@ -309,6 +317,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `area_id`.
         tests: *primary_key_tests
+      - *feed_key
       - *base64_url
       - name: area_id
         description: '{{ doc("gtfs_areas__area_id") }}'
@@ -334,7 +343,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `attribution_id`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: attribution_id
         description: '{{ doc("gtfs_attributions__attribution_id") }}'
@@ -378,7 +387,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `fare_id`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: fare_id
         description: '{{ doc("gtfs_fare_attributes__fare_id") }}'
@@ -422,7 +431,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `network_id`, `from_area_id`, `to_area_id`, and `fare_product_id`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: leg_group_id
         description: '{{ doc("gtfs_fare_leg_rules__leg_group_id") }}'
@@ -454,7 +463,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `fare_product_id`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: fare_product_id
         description: '{{ doc("gtfs_fare_products__fare_product_id") }}'
@@ -488,7 +497,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `fare_id`, `route_id`, `origin_id`, `destination_id`, and `contains_id`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: route_id
         description: '{{ doc("gtfs_fare_rules__route_id") }}'
@@ -516,7 +525,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, 'from_leg_group_id', 'to_leg_group_id', 'fare_product_id', 'transfer_count', and 'duration_limit'.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: from_leg_group_id
         description: '{{ doc("gtfs_fare_transfer_rules__from_leg_group_id") }}'
@@ -552,7 +561,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `feed_publisher_name`, `feed_publisher_url`, `feed_lang`, `default_lang`, `feed_version`, `feed_contact_email`, `feed_contact_url`, `feed_start_date`, and `feed_end_date`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: feed_publisher_name
         description: '{{ doc("gtfs_feed_info__feed_publisher_name") }}'
@@ -596,7 +605,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `trip_id`, and `start_time`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: trip_id
         description: '{{ doc("gtfs_frequencies__trip_id") }}'
@@ -634,7 +643,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `level_id`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: level_id
         description: '{{ doc("gtfs_levels__level_id") }}'
@@ -664,7 +673,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `pathway_id`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: pathway_id
         description: '{{ doc("gtfs_pathways__pathway_id") }}'
@@ -718,6 +727,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `route_id`.
         tests: *primary_key_tests
+      - *feed_key
       - *base64_url
       - name: route_id
         description: '{{ doc("gtfs_routes__route_id") }}'
@@ -765,7 +775,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `shape_id`, and `shape_pt_sequence`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: shape_id
         description: '{{ doc("gtfs_shapes__shape_id") }}'
@@ -813,7 +823,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `area_id` and `stop_id`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: area_id
         description: '{{ doc("gtfs_stop_areas__area_id") }}'
@@ -841,7 +851,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `stop_id`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: stop_id
         description: '{{ doc("gtfs_stops__stop_id") }}'
@@ -903,7 +913,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `from_stop_id`, `to_stop_id`, `from_trip_id`, `to_trip_id`, `from_route_id`, and `to_route_id`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: from_stop_id
         description: '{{ doc("gtfs_transfers__from_stop_id") }}'
@@ -941,7 +951,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `table_name`, `field_name`, `language`, `record_id`, `record_sub_id`, and `field_value`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: table_name
         description: '{{ doc("gtfs_translations__table_name") }}'
@@ -987,6 +997,7 @@ models:
           - unique:
               where: "not warning_duplicate_primary_key"
           - not_null
+      - *feed_key
       - *base64_url
       - name: route_id
         description: '{{ doc("gtfs_trips__route_id") }}'
@@ -1121,7 +1132,7 @@ models:
           gaps: required
     columns:
       - name: base64_url
-      - name: ts
+      - *feed_key
       - name: trip_id
         description: '{{ doc("gtfs_stop_times__trip_id") }}'
         tests:
