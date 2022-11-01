@@ -41,10 +41,10 @@ fct_daily_rt_feed_data AS (
         dt,
         base64_url,
         feed_type,
-        aggregation_success_file_count,
-        aggregation_failure_file_count
+        parse_success_file_count,
+        parse_failure_file_count
     FROM grouped_parse_outcomes
-    PIVOT(SUM(file_count) FOR aggregation_outcome IN ("aggregation_success_file_count", "aggregation_failure_file_count"))
+    PIVOT(SUM(file_count) FOR aggregation_outcome IN ("parse_success_file_count", "parse_failure_file_count"))
 )
 
 SELECT * FROM fct_daily_rt_feed_data
