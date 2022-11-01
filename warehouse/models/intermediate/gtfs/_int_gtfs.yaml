@@ -163,13 +163,13 @@ models:
       - name: feed_type,
       - name: _config_extract_ts,
       - name: schedule_url_for_validation,
-      - name: agg_success
+      - name: parse_success
         description: |
           Boolean success indicator for whether this raw data was successfully included
           in the associated hourly aggregation.
-      - name: agg_exception
+      - name: parse_exception
         description: |
-          If `agg_success` is false, the associated exception.
+          If `parse_success` is false, the associated exception.
       - name: download_response_code
       - name: download_response_headers
       - name: step
