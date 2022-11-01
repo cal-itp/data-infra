@@ -902,6 +902,7 @@ models:
         description: '{{ doc("gtfs_stop_times__timepoint") }}'
     meta:
       publish.gis_coordinate_system_epsg: WGS84
+
   - name: stg_gtfs_rt__service_alerts_outcomes
     description: Outcomes from parsing process on GTFS RT service alerts data.
     columns: &stg_gtfs_rt_parse_outcomes_columns
@@ -932,3 +933,42 @@ models:
   - name: stg_gtfs_rt__trip_updates_outcomes
     description: Outcomes from parsing process on GTFS RT vehicle_positions data.
     columns: *stg_gtfs_rt_parse_outcomes_columns
+
+  - name: stg_gtfs_schedule__validation_notices
+    description: |
+      Validation notices resulting from executing the schedule
+      validator against GTFS Schedule zipfiles. Each row represents
+      a single notice coming from a single zipfile; this row contains
+      the count of input records in the file that generated the
+      notice as well as sample input records that violate the rule.
+    tests:
+      - *schedule_outcome_uniqueness
+    columns:
+      - name: dt
+      - name: base64_url
+      - name: ts
+      - name: name
+      - name: feed_type
+      - name: _config_extract_ts
+      - name: code
+      - name: severity
+      - name: total_notices
+      - name: sample_notices
+  - name: stg_gtfs_schedule__validations_outcomes
+    description: |
+      Records representing the outcome of executing the schedule
+      validator against GTFS Schedule zipfiles.
+    tests:
+      - *schedule_outcome_uniqueness
+    columns:
+      - name: dt
+      - name: name
+      - name: url
+      - name: feed_type
+      - name: config_extracted_at
+      - name: validation_success
+      - name: validation_exception
+      - name: validation_filename
+      - name: validation_system_errors
+      - name: base64_url
+      - name: ts
