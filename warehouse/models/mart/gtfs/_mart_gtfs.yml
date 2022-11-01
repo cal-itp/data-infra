@@ -1209,3 +1209,18 @@ models:
           Rows with `true` in this column have a duplicate primary key in dim_trips;
           i.e., `trip_id` is duplicated within an individual feed instance.
           Treat these rows with caution.
+  - name: fct_daily_rt_feed_data
+    description: |
+      Each row is a date / URL pair with a summary of data aggregation outcomes.
+    columns:
+    - name: key
+      tests: *primary_key_tests
+    - name: dt
+      description: Date that data was downloaded.
+    - *base64_url
+    - name: feed_type
+      description: One of `service_alerts`, `vehicle_positions`, and `trip_updates`.
+    - name: parse_success_file_count
+      description: Count of files successfully parsed. Target is 4,320 (one file every 20 seconds.)
+    - name: parse_failure_file_count
+      description: Count of files where parsing failed, but a file was present.
