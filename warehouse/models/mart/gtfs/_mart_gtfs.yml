@@ -71,8 +71,7 @@ models:
         description: |
           Synthetic primary key constructed from `base64_url` and `ts`.
         tests: *primary_key_tests
-      - &feed_key
-        name: feed_key
+      - name: feed_key
         description: |
           Foreign key to the `dim_schedule_feeds` table.
         tests:
@@ -1036,7 +1035,15 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `service_id`.
         tests: *primary_key_tests
-      - *feed_key
+      - &feed_key
+        name: feed_key
+        description: |
+          Foreign key to the `dim_schedule_feeds` table.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_schedule_feeds')
+              field: key
       - *base64_url
       - name: service_id
         description: '{{ doc("gtfs_calendar__service_id") }}'
