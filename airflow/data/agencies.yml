@@ -705,7 +705,7 @@ mammoth-lakes-transit-system:
 manteca-transit:
   agency_name: Manteca Transit
   feeds:
-    - gtfs_schedule_url: https://www.ci.manteca.ca.us/CommunityDevelopment/MantecaTransit/googletransit/google_transit.zip
+    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/manteca-ca-us/manteca-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1296,9 +1296,9 @@ tahoe-transportation:
   agency_name: Tahoe Transportation
   feeds:
     - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/tahoe-ca-us/tahoe-ca-us.zip
-      gtfs_rt_vehicle_positions_url: null
-      gtfs_rt_service_alerts_url: null
-      gtfs_rt_trip_updates_url: null
+      gtfs_rt_vehicle_positions_url: https://api.goswift.ly/real-time/bluego/gtfs-rt-vehicle-positions
+      gtfs_rt_service_alerts_url: https://api.goswift.ly/real-time/bluego/gtfs-rt-alerts
+      gtfs_rt_trip_updates_url: https://api.goswift.ly/real-time/bluego/gtfs-rt-trip-updates
   itp_id: 331
 tahoe-truckee-area-regional-transportation:
   agency_name: Tahoe Truckee Area Regional Transportation
