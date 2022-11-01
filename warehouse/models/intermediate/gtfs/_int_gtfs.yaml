@@ -149,3 +149,29 @@ models:
         description: Service identifier from calendar and/or calendar_dates.
         tests:
           - not_null
+  - name: int_gtfs_rt__unioned_parse_outcomes
+    description: |
+      A unioned combination of the parse outcomes for service alerts,
+      vehicle positions, and trip updates data.
+    columns:
+      - name: dt
+      - name: hour
+        description: |
+          Starting timestamp of hour in which data was downloaded, like `2022-10-31 23:00:00 UTC`.
+      - name: name
+      - name: url
+      - name: feed_type,
+      - name: _config_extract_ts,
+      - name: schedule_url_for_validation,
+      - name: agg_success
+        description: |
+          Boolean success indicator for whether this raw data was successfully included
+          in the associated hourly aggregation.
+      - name: agg_exception
+        description: |
+          If `agg_success` is false, the associated exception.
+      - name: download_response_code
+      - name: download_response_headers
+      - name: step
+      - name: base64_url
+      - name: ts
