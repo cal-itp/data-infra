@@ -23,18 +23,6 @@ models:
         name: base64_url
         description: |
           Base 64 encoded URL from which this data was scraped.
-      - &gtfs_dataset_key
-        name: gtfs_dataset_key
-        tests:
-          - not_null
-          - relationships:
-              to: ref('dim_gtfs_datasets')
-              field: key
-              config:
-                # there are a dozen rows of SMART transit which was deleted from Airtable
-                # this will work without exception once the Airtable dim is historical;
-                # this threshold may need to increase if the backfill occurs prior to that
-                error_if: ">20"
       - &_valid_from
         name: _valid_from
         description: '{{ doc("column_valid_from") }}'
@@ -57,7 +45,18 @@ models:
       - name: feed_key
         description: |
           Foreign key to the `dim_schedule_feeds` table.
-      - *gtfs_dataset_key
+      - &gtfs_dataset_key
+        name: gtfs_dataset_key
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_gtfs_datasets')
+              field: key
+              config:
+                # there are a dozen rows of SMART transit which was deleted from Airtable
+                # this will work without exception once the Airtable dim is historical;
+                # this threshold may need to increase if the backfill occurs prior to that
+                error_if: ">20"
       - name: is_future
         description: |
           Boolean indicating whether this date is in the future relative to the last time that the table
@@ -77,7 +76,9 @@ models:
         description: |
           Foreign key to the `dim_schedule_feeds` table.
         tests:
-          - not_null
+          - not_null:
+              config:
+                where: download_success
           - relationships:
               to: ref('dim_schedule_feeds')
               field: key
