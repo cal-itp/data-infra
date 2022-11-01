@@ -7,58 +7,36 @@ dim_stops AS (
     SELECT * FROM {{ ref('gtfs_schedule_dim_stops') }}
 ),
 
-summarize_stops AS (
+tts_issue_stops AS (
    SELECT
        calitp_itp_id,
        calitp_url_number,
        calitp_extracted_at,
-       calitp_deleted_at,
-       COUNTIF((tts_stop_name IS null OR tts_stop_name = stop_name)
-                AND
-        -- Examples guided by https://docs.google.com/document/d/1LObjgDyiiE6UBiA3GpoNOlZ36li-KKj6dwBzRTDa7VU
-                (
-                -- Cardinal directions, check start and end of stop names for each direction.
-                -- Must be in CAPSf to be caught
-                -- "N" should read "north"
-                    stop_name LIKE '% N'OR
-                    stop_name LIKE 'N %'OR
-                    stop_name LIKE '% NE'OR
-                    stop_name LIKE 'NE %'OR
-                    stop_name LIKE '% E'OR
-                    stop_name LIKE 'E %'OR
-                    stop_name LIKE '% SE'OR
-                    stop_name LIKE 'SE %'OR
-                    stop_name LIKE '% S'OR
-                    stop_name LIKE 'S %'OR
-                    stop_name LIKE '% SW'OR
-                    stop_name LIKE 'SW %'OR
-                    stop_name LIKE '% W'OR
-                    stop_name LIKE 'W %'OR
-                    stop_name LIKE '% NW' OR
-                    stop_name LIKE 'NW %' OR
-                -- Street names, must end name or be standalone word
-                -- "st" should read "street"
-                    LOWER(stop_name) LIKE '% st' OR
-                    LOWER(stop_name) LIKE '% st %' OR
-                    LOWER(stop_name) LIKE '% rd' OR
-                    LOWER(stop_name) LIKE '% rd %' OR
-                -- "blvd" and "hwy" are distinctive enough to flag in all cases
-                -- "blvd" should read "boulevard"
-                    LOWER(stop_name) LIKE '%blvd%' OR
-                    LOWER(stop_name) LIKE '%hwy%' OR
-                -- "Pine/Baker" should read "pine and baker"
-                    stop_name LIKE '%/%' OR
-                    stop_name LIKE '%(%' OR
-                    stop_name LIKE '%)%' OR
-                -- "21" should read "twenty one"
-                    REGEXP_CONTAINS(stop_name, '[0-9][0-9]')
-                )
-        ) AS ct_tts_issues,
+       calitp_deleted_at
     FROM dim_stops
+    WHERE (tts_stop_name IS null OR tts_stop_name = stop_name) AND
+    -- "exists" statement checks whether stop name contains any words in a list.
+    -- It performs this by breaking apart stop_name into an array, and then joining that array to an array of "no-no" words
+    -- The alternative to this was a long list of stop_name LIKE x OR stop_name LIKE y OR...
+      (EXISTS (
+              SELECT 1
+                FROM UNNEST(SPLIT(LOWER(stop_name), ' ')) c1
+                JOIN UNNEST([
+                            -- directions, "N" should read "north"
+                            "n","s","e","w","ne","se","sw","nw","nb","sb","eb","wb",
+                            -- street suffixes, "st" should read "street"
+                            "st","rd","blvd","hwy"
+                ]) c2
+                     ON c1 = c2)
+            -- 2 or more adjacent numbers, "21" should read "twenty one"
+            OR REGEXP_CONTAINS(stop_name, '[0-9][0-9]')
+            -- certain symbols, "Pine/Baker" should read "pine and baker"
+            OR REGEXP_CONTAINS(stop_name, r'[/()]')
+        )
    GROUP BY 1, 2, 3, 4
 ),
 
-daily_stops AS (
+daily_tts_issue_stops AS (
   SELECT
     t1.date,
     t1.calitp_itp_id,
@@ -67,9 +45,9 @@ daily_stops AS (
     t1.feed_key,
     t1.check,
     t1.feature,
-    SUM(t2.ct_tts_issues) AS tot_tts_issues
+    COUNTIF(t2.calitp_itp_id IS NOT null) AS tts_issues
   FROM feed_guideline_index AS t1
-  LEFT JOIN summarize_stops AS t2
+  LEFT JOIN tts_issue_stops AS t2
        ON t1.date >= t2.calitp_extracted_at
        AND t1.date < t2.calitp_deleted_at
        AND t1.calitp_itp_id = t2.calitp_itp_id
@@ -93,14 +71,12 @@ tts_check AS (
         feed_key,
         check,
         feature,
-        tot_tts_issues,
+        tts_issues,
         CASE
-            WHEN tot_tts_issues = 0 THEN "PASS"
-            WHEN tot_tts_issues > 0 THEN "FAIL"
-            -- This catches cases where a provider has data in feed_guideline_index for dates that are present in dim_stops. Such as itp_id=192
-            ELSE "FAIL"
+            WHEN tts_issues > 0 THEN "FAIL"
+            WHEN tts_issues = 0 THEN "PASS"
         END AS status,
-      FROM daily_stops
+      FROM daily_tts_issue_stops
 )
 
 SELECT * FROM tts_check
