@@ -17,20 +17,24 @@ tts_issue_stops AS (
     WHERE (tts_stop_name IS null OR tts_stop_name = stop_name) AND
     -- "exists" statement checks whether stop name contains any words in a list.
     -- It performs this by breaking apart stop_name into an array, and then joining that array to an array of "no-no" words
-    -- The alternative to this was a long list of stop_name LIKE x OR stop_name LIKE y OR...
-      (EXISTS (
-              SELECT 1
-                FROM UNNEST(SPLIT(LOWER(stop_name), ' ')) c1
-                JOIN UNNEST([
-                            -- directions, "N" should read "north"
-                            "n","s","e","w","ne","se","sw","nw","nb","sb","eb","wb",
-                            -- street suffixes, "st" should read "street"
-                            "st","rd","blvd","hwy"
-                ]) c2
-                     ON c1 = c2)
+    -- The alternative to this was a long repetitive query: "stop_name LIKE x OR stop_name LIKE y OR..."
+         (
+            -- EXISTS function returns true if the stop_name contains any of the listed strings, and false if not
+            EXISTS (
+                  SELECT 1
+                    -- Create an array of strings from stop_name
+                    -- ie. 1234 North St becomes (1234,north,st)
+                    FROM UNNEST(SPLIT(LOWER(stop_name), ' ')) stop_name_parts
+                    JOIN UNNEST([
+                                -- directions, "n" should read "north"
+                                "n","s","e","w","ne","se","sw","nw","nb","sb","eb","wb",
+                                -- street suffixes, "st" should read "street"
+                                "st","rd","blvd","hwy"
+                    ]) tts_necessary_strings
+                         ON stop_name_parts = tts_necessary_strings)
             -- 2 or more adjacent numbers, "21" should read "twenty one"
             OR REGEXP_CONTAINS(stop_name, '[0-9][0-9]')
-            -- certain symbols, "Pine/Baker" should read "pine and baker"
+            -- certain symbols, "pine/baker" should read "pine and baker"
             OR REGEXP_CONTAINS(stop_name, r'[/()]')
         )
    GROUP BY 1, 2, 3, 4
