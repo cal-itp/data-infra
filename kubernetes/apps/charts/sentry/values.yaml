@@ -3,7 +3,7 @@
 sentry:
   user:
     create: true
-    email: admin@sentry.local
+    email: general+cal-itp@jarv.us
     existingSecret: sentry-secrets
     existingSecretKey: admin-password
   nginx:
@@ -23,7 +23,7 @@ sentry:
   mail:
     backend: smtp
     useTls: true
-    username: "apikey"
+    username: "PM-T-outbound-FUA5Xw3iImqk9PVLER6dkt"
     port: 587
-    host: "smtp.sendgrid.net"
+    host: "smtp.postmarkapp.com"
     from: "bot@calitp.org"

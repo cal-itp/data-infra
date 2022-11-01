@@ -38,7 +38,7 @@ To read in our dataframe (df) and geodataframe (gdf) from GCS:
 ```
 df = pd.read_csv('gs://calitp-analytics-data/data-analyses/bucket-name/my-csv.csv')
 gdf = gpd.read_file('gs://calitp-analytics-data/data-analyses/bucket-name/my-geojson.geojson')
-gdf = pd.read_parquet('gs://calitp-analytics-data/data-analyses/bucket-name/my-geoparquet.parquet', engine= 'auto')
+gdf = gpd.read_parquet('gs://calitp-analytics-data/data-analyses/bucket-name/my-geoparquet.parquet', engine= 'auto')
 gdf = gpd.read_file('gs://calitp-analytics-data/data-analyses/bucket-name/my-shapefile.zip')
 
 # Write a file to GCS

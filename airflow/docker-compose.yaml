@@ -60,18 +60,12 @@ x-airflow-common:
     # try to run on a million dates when unpaused.
     AIRFLOW__SCHEDULER__CATCHUP_BY_DEFAULT: 'false'
 
-
     CALITP_BQ_MAX_BYTES: 10000000000
     CALITP_SLACK_URL: ${CALITP_SLACK_URL}
 
     # connections - required to allow local testing of pod operators
     # see https://stackoverflow.com/a/55064944/1144523
     AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT: "google-cloud-platform://:@:?extra__google_cloud_platform__project=cal-itp-data-infra"
-
-    # API keys
-    CALITP_AIRTABLE_API_KEY: "${CALITP_AIRTABLE_API_KEY}"
-    CALITP_AMPLITUDE_BENEFITS_API_KEY: "${CALITP_AMPLITUDE_BENEFITS_API_KEY}"
-    CALITP_AMPLITUDE_BENEFITS_SECRET_KEY: "${CALITP_AMPLITUDE_BENEFITS_SECRET_KEY}"
 
     # bucket for holding results of extraction tasks
     AIRFLOW_VAR_EXTRACT_BUCKET: "gs://gtfs-data-test"

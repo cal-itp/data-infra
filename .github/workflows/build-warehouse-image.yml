@@ -5,13 +5,13 @@ on:
     branches:
       - 'main'
     paths:
-      - '.github/workflows/dbt-build.yml'
+      - '.github/workflows/build-warehouse-image.yml'
       - 'warehouse/**'
 
 jobs:
   build_push:
     name: Package docker image
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Login to GitHub Container Registry

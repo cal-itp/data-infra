@@ -17,6 +17,9 @@ import io
 import pandas as pd
 
 from pathlib import Path
+
+import yaml
+from calitp.config import pipe_file_name, is_development
 from calitp import save_to_gcfs
 
 SRC_DIR = "/tmp/gtfs-data/schedule"
@@ -32,7 +35,7 @@ class NoFeedError(Exception):
     pass
 
 
-def download_url(url, itp_id, url_number, execution_date):
+def download_url(url, itp_id, url_number, execution_date, auth_headers=None):
     """
     Download a URL as a task item
     using airflow. **kwargs are airflow
@@ -47,6 +50,9 @@ def download_url(url, itp_id, url_number, execution_date):
     }
     if pd.isna(itp_id):
         raise NoFeedError("missing itp_id")
+
+    if auth_headers:
+        headers.update(auth_headers.get((itp_id, url_number), {}))
 
     try:
         r = requests.get(url, headers=headers)
@@ -83,6 +89,23 @@ def downloader(task_instance, execution_date, **kwargs):
 
     Returns dict of form {gtfs_paths, errors}
     """
+    try:
+        fname = pipe_file_name(
+            "data/headers.filled.yml" if is_development() else "data/headers.yml"
+        )
+
+        with open(fname) as f:
+            raw_headers = yaml.safe_load(f)
+        auth_headers = {
+            (url["itp_id"], url["url_number"]): record["header-data"]
+            for record in raw_headers
+            for url in record["URLs"]
+            if "gtfs_schedule_url" in url["rt_urls"]
+        }
+        print(f"successfully loaded headers from {fname}")
+    except Exception as e:
+        logging.warn("error getting auth headers", e)
+        auth_headers = {}
 
     provider_set = task_instance.xcom_pull(task_ids="generate_provider_list")
     url_status = []
@@ -96,6 +119,7 @@ def downloader(task_instance, execution_date, **kwargs):
                 row["itp_id"],
                 row["url_number"],
                 execution_date,
+                auth_headers=auth_headers,
             )
             gtfs_paths.append(res_path)
 
