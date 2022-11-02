@@ -1,29 +1,32 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.4.0
+    rev: v4.3.0
     hooks:
-      - id: flake8
-        args: ["--ignore=E501,W503"] # line too long and line before binary operator (black is ok with these)
-        types:
-          - python
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml
         args: ["--unsafe"]
         exclude: 'kubernetes/apps/charts/.*'
       - id: check-added-large-files
+  - repo: https://github.com/pycqa/flake8
+    rev: 5.0.4
+    hooks:
+      - id: flake8
+        args: ["--ignore=E501,W503"] # line too long and line before binary operator (black is ok with these)
+        types:
+          - python
   - repo: https://github.com/psf/black
-    rev: 22.3.0
+    rev: 22.10.0
     hooks:
       - id: black
   - repo: https://github.com/pycqa/bandit
-    rev: 1.7.0
+    rev: 1.7.4
     hooks:
       - id: bandit
         args: ["-ll", "--skip=B108,B608,B310,B303"]
         files: .py$
   - repo: https://github.com/sqlfluff/sqlfluff
-    rev: 1.2.1
+    rev: 1.4.1
     hooks:
       - id: sqlfluff-lint
         additional_dependencies: ['dbt-bigquery', 'sqlfluff-templater-dbt']
