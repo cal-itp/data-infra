@@ -90,7 +90,7 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - base64_url
-            - ts
+            - extract_ts
     columns:
       - name: dt
       - name: name
@@ -102,4 +102,4 @@ models:
       - name: validation_filename
       - name: validation_system_errors
       - name: base64_url
-      - name: ts
+      - name: extract_ts

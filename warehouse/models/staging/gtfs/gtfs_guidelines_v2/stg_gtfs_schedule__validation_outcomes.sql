@@ -18,7 +18,7 @@ stg_gtfs_schedule__validation_outcomes AS (
         validation.filename AS validation_filename,
         validation.system_errors AS validation_system_errors,
         base64_url,
-        `extract`.ts AS ts
+        `extract`.ts AS extract_ts
     FROM raw_validation_outcomes
 )
 
