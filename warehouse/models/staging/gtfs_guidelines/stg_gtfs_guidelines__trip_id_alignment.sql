@@ -19,7 +19,7 @@ rt_files_by_day AS (
         date_extracted AS date,
         COUNT(*) AS rt_files
     FROM gtfs_rt_fact_files_wide_daily
-    GROUP BY 1,2,3
+    GROUP BY 1, 2, 3
 ),
 
 errors_by_day AS (
@@ -27,11 +27,11 @@ errors_by_day AS (
         feed_key,
         date,
         SUM(occurrences) AS errors
-    FROM gtfs_rt_fact_daily_validation_errors AS t1
+    FROM gtfs_rt_fact_daily_validation_errors
     -- Description for error E003:
     ---- "All trip_ids provided in the GTFS-rt feed must exist in the GTFS data, unless the schedule_relationship is ADDED"
     WHERE error_id = "E003"
-    GROUP BY feed_key, date
+    GROUP BY 1, 2
 ),
 
 errors_daily_check AS (

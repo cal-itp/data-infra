@@ -14,7 +14,6 @@ static_feed_downloaded_successfully_check AS (
         CASE
             WHEN extraction_status = "success" THEN "PASS"
             WHEN extraction_status = "error" THEN "FAIL"
-        ELSE null
         END AS status,
         {{ static_feed_downloaded_successfully() }} AS check
     FROM gtfs_schedule_fact_daily_feeds

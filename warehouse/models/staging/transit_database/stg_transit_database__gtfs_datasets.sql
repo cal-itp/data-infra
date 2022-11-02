@@ -30,11 +30,11 @@ construct_base64_url AS (
                         -- if there are multiple query parameters, we leave the question mark, remove ampersand
                         -- so example.com/gtfs?auth=key&p2=v2 becomes example.com/gtfs?p2=v2
                         WHEN REGEXP_CONTAINS(uri, r"\?[\w]*\=\{\{[\w\s]*\}\}\&")
-                            THEN REGEXP_REPLACE(uri, r"[\w]*\=\{\{[\w\s]*\}\}\&","")
+                            THEN REGEXP_REPLACE(uri, r"[\w]*\=\{\{[\w\s]*\}\}\&", "")
                         -- if only one query parameter, remove the question mark
                         -- so example.com/gtfs?auth=key becomes example.com/gtfs
                         WHEN REGEXP_CONTAINS(uri, r"\?[\w]*\=\{\{[\w\s]*\}\}$")
-                            THEN REGEXP_REPLACE(uri, r"\?[\w]*\=\{\{[\w\s]*\}\}$","")
+                            THEN REGEXP_REPLACE(uri, r"\?[\w]*\=\{\{[\w\s]*\}\}$", "")
                         ELSE uri
                 END
             ELSE pipeline_url

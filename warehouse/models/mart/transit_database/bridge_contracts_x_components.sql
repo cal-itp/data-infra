@@ -6,6 +6,7 @@ WITH latest_contracts AS (
     order_by = 'calitp_extracted_at DESC'
     ) }}
 ),
+
 latest_components AS (
     {{ get_latest_dense_rank(
     external_table = ref('stg_transit_database__components'),

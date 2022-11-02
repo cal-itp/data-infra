@@ -1,4 +1,3 @@
-
 WITH
 latest AS (
     {{ get_latest_dense_rank(
@@ -30,7 +29,7 @@ base_tts_service_components_idmap AS (
         T2.services
     FROM latest AS T1
     LEFT JOIN mapped_service_ids AS T2
-        USING(id, dt)
+        USING (id, dt)
 )
 
 SELECT * FROM base_tts_service_components_idmap

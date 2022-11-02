@@ -19,7 +19,7 @@ stg_gtfs_schedule__trips AS (
     SELECT *
     FROM {{ ref('stg_gtfs_schedule__trips') }}
     {% if is_incremental() %}
-    WHERE _dt >= EXTRACT (DATE FROM TIMESTAMP('{{ max_ts }}'))
+    WHERE _dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% endif %}
 ),
 

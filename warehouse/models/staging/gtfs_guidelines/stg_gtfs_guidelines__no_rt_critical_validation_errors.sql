@@ -5,7 +5,7 @@ WITH feed_guideline_index AS (
 
 -- gtfs_rt_fact_files_wide_hourly has one row per day per ID+URL+feed type
 gtfs_rt_fact_files_wide_daily AS (
-SELECT * FROM {{ ref('gtfs_rt_fact_files_wide_hourly') }}
+    SELECT * FROM {{ ref('gtfs_rt_fact_files_wide_hourly') }}
 ),
 
 gtfs_rt_fact_daily_validation_errors AS (
@@ -23,7 +23,7 @@ rt_files_by_day AS (
         date_extracted AS date,
         COUNT(*) AS rt_files
     FROM gtfs_rt_fact_files_wide_daily
-    GROUP BY 1,2,3
+    GROUP BY 1, 2, 3
 ),
 
 errors_by_day AS (
@@ -35,7 +35,7 @@ errors_by_day AS (
     LEFT JOIN gtfs_rt_validation_code_descriptions AS t2
          ON t1.error_id = t2.code
     WHERE t2.is_critical = "y"
-    GROUP BY t1.feed_key, t1.date
+    GROUP BY 1, 2
 ),
 
 errors_daily_check AS (

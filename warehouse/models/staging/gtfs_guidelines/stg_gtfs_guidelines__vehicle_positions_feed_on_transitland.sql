@@ -9,8 +9,8 @@ SELECT * FROM {{ ref('stg_gtfs_guidelines__fact_daily_transitland_url_check') }}
 
 -- We're using DISTINCT here as a result of bug #1825
 vehicle_positions_daily_check AS (
-    SELECT
-        DISTINCT calitp_itp_id,
+    SELECT DISTINCT
+        calitp_itp_id,
         dt AS date
    FROM fact_daily_transitland_url_check
   WHERE url_type = "gtfs_rt_vehicle_positions_url"

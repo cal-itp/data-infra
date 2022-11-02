@@ -38,7 +38,7 @@ fct_vehicle_positions_messages AS (
         _gtfs_dataset_name,
 
         header_timestamp,
-        header_version
+        header_version,
         header_incrementality,
 
         id,
