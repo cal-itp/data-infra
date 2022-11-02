@@ -27,13 +27,12 @@ stops_joined AS (
         t4.stop_name,
         t4.parent_station,
         t3.route_type,
-        t4.stop_name,
         CASE
             WHEN LOWER(t4.stop_name) LIKE '%station%' OR LOWER(t4.stop_name) LIKE '%transit center%' THEN true
         ELSE false
         END AS keyword_match
     FROM unique_trip_stops t1
-    LEFT JOIN {{ ref('trips_clean') }} t2
+    JOIN {{ ref('trips_clean') }} t2
       ON t1.trip_id = t2.trip_id
      AND t1.calitp_extracted_at = t2.calitp_extracted_at
      AND t1.calitp_deleted_at = t2.calitp_deleted_at
