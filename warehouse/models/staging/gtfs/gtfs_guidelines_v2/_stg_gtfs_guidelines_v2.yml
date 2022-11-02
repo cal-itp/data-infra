@@ -1,26 +1,59 @@
 version: 2
 
 models:
-  - name: stg_gtfs_guidelines__checks_implemented
-    description: Index model listing all implemented GTFS guideline checks.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - check
-            - feature
-
-  - name: stg_gtfs_guidelines__feed_guideline_index_v2
+  - name: stg_gtfs_rt__service_alerts_validation_notices
     description: |
-      Daily index of v2 schedule feeds and corresponding checks.
-      Provides structure for individual check models to be joined
-      together by day.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - feed_key
-            - date
-            - check
-            - feature
+      Validation notices resulting from executing the RT
+      validator against GTFS RT service alerts files.
+    columns:
+      - &rt_key
+        name: key
+        tests:
+          - not_null:
+              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
+          - unique:
+              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
+
+  - name: stg_gtfs_rt__service_alerts_validations_outcomes
+    description: |
+      Records representing the outcome of executing the RT
+      validator against service alerts files; not the actual
+      output notices, but the "execution" results i.e. did we get
+      output written to GCS.
+    columns:
+      - *rt_key
+
+  - name: stg_gtfs_rt__trip_updates_validation_notices
+    description: |
+      Validation notices resulting from executing the RT
+      validator against GTFS RT trip updates files.
+    columns:
+      - *rt_key
+
+  - name: stg_gtfs_rt__trip_updates_validations_outcomes
+    description: |
+      Records representing the outcome of executing the RT
+      validator against trip updates files; not the actual
+      output notices, but the "execution" results i.e. did we get
+      output written to GCS.
+    columns:
+      - *rt_key
+
+  - name: stg_gtfs_rt__vehicle_positions_validation_notices
+    description: |
+      Validation notices resulting from executing the RT
+      validatior against GTFS RT vehicle position files.
+    columns:
+      - *rt_key
+
+  - name: stg_gtfs_rt__vehicle_positions_validations_outcomes
+    description: |
+      Records representing the outcome of executing the RT
+      validator against vehicle position files; not the actual
+      output notices, but the "execution" results i.e. did we get
+      output written to GCS.
+    columns:
+      - *rt_key
 
   - name: stg_gtfs_schedule__validation_notices
     description: |
@@ -46,10 +79,13 @@ models:
       - name: severity
       - name: total_notices
       - name: sample_notices
+
   - name: stg_gtfs_schedule__validations_outcomes
     description: |
       Records representing the outcome of executing the schedule
-      validator against GTFS Schedule zipfiles.
+      validator against GTFS Schedule zipfiles; not the actual
+      output notices, but the "execution" results i.e. did we get
+      output written to GCS.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:

@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: int_gtfs_guidelines__feed_guideline_index_v2
+    description: |
+      Daily index of v2 schedule feeds and corresponding checks.
+      Provides structure for individual check models to be joined
+      together by day.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - date
+            - check
+            - feature
