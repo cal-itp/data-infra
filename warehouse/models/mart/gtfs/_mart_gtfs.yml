@@ -1209,13 +1209,13 @@ models:
           Rows with `true` in this column have a duplicate primary key in dim_trips;
           i.e., `trip_id` is duplicated within an individual feed instance.
           Treat these rows with caution.
-  - name: fct_daily_rt_feed_data
+  - name: fct_daily_rt_feed_files
     description: |
       Each row is a date / URL pair with a summary of data aggregation outcomes.
     columns:
     - name: key
       tests: *primary_key_tests
-    - name: dt
+    - name: date
       description: Date that data was downloaded.
     - *base64_url
     - name: feed_type
@@ -1224,3 +1224,19 @@ models:
       description: Count of files successfully parsed. Target is 4,320 (one file every 20 seconds.)
     - name: parse_failure_file_count
       description: Count of files where parsing failed, but a file was present.
+    - *gtfs_dataset_key
+    - name: schedule_to_use_for_rt_validation_gtfs_dataset_key
+      description: |
+        Foreign key for the GTFS dataset record of the GTFS schedule dataset that
+        should be used to validate this realtime dataset.
+      tests:
+          - relationships:
+              to: ref('dim_gtfs_datasets')
+              field: key
+    - name: schedule_feed_key
+      description: |
+        Foreign key for the GTFS schedule feed version for this date / RT feed pair.
+      tests:
+          - relationships:
+              to: ref('dim_gtfs_schedule_feeds')
+              field: key
