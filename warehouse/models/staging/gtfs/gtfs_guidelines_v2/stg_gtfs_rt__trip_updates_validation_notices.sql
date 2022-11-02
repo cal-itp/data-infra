@@ -1,5 +1,5 @@
 WITH raw_validation_notices AS (
-    SELECT * FROM {{ source('external_gtfs_rt', 'trip_updates_validations') }}
+    SELECT * FROM {{ source('external_gtfs_rt', 'trip_updates_validation_notices') }}
 ),
 
 stg_gtfs_rt__trip_updates_validation_notices AS (

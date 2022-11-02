@@ -1,11 +1,11 @@
-WITH raw_validations_outcomes AS (
+WITH raw_validation_outcomes AS (
     SELECT
         *,
         {{ to_url_safe_base64('`extract`.config.url') }} AS base64_url
-    FROM {{ source('external_gtfs_rt', 'service_alerts_validations_outcomes') }}
+    FROM {{ source('external_gtfs_rt', 'service_alerts_validation_outcomes') }}
 ),
 
-stg_gtfs_rt__service_alerts_validations_outcomes AS (
+stg_gtfs_rt__service_alerts_validation_outcomes AS (
     SELECT
         -- this mainly exists so we can use WHERE in tests
         {{ dbt_utils.surrogate_key(['`extract`.ts', 'base64_url']) }} AS key,
@@ -20,7 +20,7 @@ stg_gtfs_rt__service_alerts_validations_outcomes AS (
         exception AS validation_exception,
         aggregation.filename AS aggregation_filename,
         aggregation.base64_url AS aggregation_base64_url
-    FROM raw_validations_outcomes
+    FROM raw_validation_outcomes
 )
 
-SELECT * FROM stg_gtfs_rt__service_alerts_validations_outcomes
+SELECT * FROM stg_gtfs_rt__service_alerts_validation_outcomes

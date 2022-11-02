@@ -1,11 +1,12 @@
-WITH raw_validations_outcomes AS (
+WITH raw_validation_outcomes AS (
     SELECT
         *,
         {{ to_url_safe_base64('`extract`.config.url') }} AS base64_url
+    -- TODO: make me validation_outcomes
     FROM {{ source('external_gtfs_schedule', 'validations_outcomes') }}
 ),
 
-stg_gtfs_schedule__validations_outcomes AS (
+stg_gtfs_schedule__validation_outcomes AS (
     SELECT
         dt,
         `extract`.config.name AS name,
@@ -18,7 +19,7 @@ stg_gtfs_schedule__validations_outcomes AS (
         validation.system_errors AS validation_system_errors,
         base64_url,
         `extract`.ts AS ts
-    FROM raw_validations_outcomes
+    FROM raw_validation_outcomes
 )
 
-SELECT * FROM stg_gtfs_schedule__validations_outcomes
+SELECT * FROM stg_gtfs_schedule__validation_outcomes
