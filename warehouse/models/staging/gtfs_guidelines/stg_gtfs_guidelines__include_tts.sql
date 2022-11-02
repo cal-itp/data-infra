@@ -7,7 +7,8 @@ dim_stops AS (
     SELECT * FROM {{ ref('gtfs_schedule_dim_stops') }}
 ),
 
-tts_issue_stops AS (
+-- All feeds missing at least one tts_stop_name value
+tts_issue_feeds AS (
    SELECT
        calitp_itp_id,
        calitp_url_number,
@@ -43,7 +44,8 @@ tts_issue_stops AS (
    GROUP BY 1, 2, 3, 4
 ),
 
-daily_tts_issue_stops AS (
+-- A daily count of feeds with at least one missing tts_stop_name value. It doesn't matter if one or more exist - the count is for dedupe purposes
+daily_tts_issue_feeds AS (
   SELECT
     t1.date,
     t1.calitp_itp_id,
@@ -52,9 +54,9 @@ daily_tts_issue_stops AS (
     t1.feed_key,
     t1.check,
     t1.feature,
-    COUNTIF(t2.calitp_itp_id IS NOT null) AS tts_issues
+    COUNTIF(t2.calitp_itp_id IS NOT null) AS tts_issue_feeds
   FROM feed_guideline_index AS t1
-  LEFT JOIN tts_issue_stops AS t2
+  LEFT JOIN tts_issue_feeds AS t2
        ON t1.date >= t2.calitp_extracted_at
        AND t1.date < t2.calitp_deleted_at
        AND t1.calitp_itp_id = t2.calitp_itp_id
@@ -78,12 +80,12 @@ tts_check AS (
         feed_key,
         check,
         feature,
-        tts_issues,
+        tts_issue_feeds,
         CASE
-            WHEN tts_issues > 0 THEN "FAIL"
-            WHEN tts_issues = 0 THEN "PASS"
+            WHEN tts_issue_feeds > 0 THEN "FAIL"
+            WHEN tts_issue_feeds = 0 THEN "PASS"
         END AS status,
-      FROM daily_tts_issue_stops
+      FROM daily_tts_issue_feeds
 )
 
 SELECT * FROM tts_check
