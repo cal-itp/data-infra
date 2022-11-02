@@ -61,8 +61,7 @@ pathways_eligibile AS (
    GROUP BY 1,2,3,4
 ),
 
-
--- For this check we are only looking for errors and warnings related to pathways
+-- For this check we are only looking for notices related to pathways
 validation_fact_daily_feed_codes_pathway_related AS (
     SELECT * FROM {{ ref('validation_fact_daily_feed_codes') }}
      WHERE code IN (
@@ -101,7 +100,7 @@ pathway_validation_check AS (
             WHEN t3.validation_notices = 0 THEN "PASS"
             WHEN t3.validation_notices > 0 THEN "FAIL"
         END AS status,
-        -- One more count for deduping - the alternative is to perform some row-level deduping in the pathways_eligibile subquery
+        -- Count for deduping - the alternative is to perform some row-level deduping in the pathways_eligibile subquery
         COUNT(*) AS ct
       FROM feed_guideline_index t1
       LEFT JOIN pathways_eligibile t2
@@ -115,7 +114,7 @@ pathway_validation_check AS (
      GROUP BY 1,2,3,4,5,6,7,8
 ),
 
-pathway_validation_check_dedupe AS (
+pathway_validation_check_final AS (
     SELECT
         date,
         calitp_itp_id,
@@ -128,4 +127,4 @@ pathway_validation_check_dedupe AS (
       FROM pathway_validation_check
 )
 
-SELECT * FROM pathway_validation_check_dedupe
+SELECT * FROM pathway_validation_check_final
