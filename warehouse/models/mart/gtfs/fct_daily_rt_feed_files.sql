@@ -1,9 +1,9 @@
-{{ config(materialized='incremental') }}
+{{ config(materialized='incremental', unique_key = 'key') }}
 
 -- BigQuery does not do partition elimination when using a subquery: https://stackoverflow.com/questions/54135893/using-subquery-for-partitiontime-in-bigquery-does-not-limit-cost
 -- save max date in a variable instead so it can be referenced in incremental logic and still use partition elimination
 {% if is_incremental() %}
-    {% set dates = dbt_utils.get_column_values(table=this, column='dt', order_by = 'dt DESC', max_records = 1) %}
+    {% set dates = dbt_utils.get_column_values(table=this, column='date', order_by = 'date DESC', max_records = 1) %}
     {% set max_date = dates[0] %}
 {% endif %}
 
@@ -71,7 +71,7 @@ fct_daily_rt_feed_files AS (
         parse.parse_failure_file_count,
         url_map.gtfs_dataset_key,
         datasets.schedule_to_use_for_rt_validation_gtfs_dataset_key,
-        schedule.key AS schedule_feed_key
+        schedule.feed_key AS schedule_feed_key
     FROM pivoted_parse_outcomes AS parse
     LEFT JOIN int_transit_database__urls_to_gtfs_datasets AS url_map
         ON parse.base64_url = url_map.base64_url

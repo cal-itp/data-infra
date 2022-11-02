@@ -1238,5 +1238,5 @@ models:
         Foreign key for the GTFS schedule feed version for this date / RT feed pair.
       tests:
           - relationships:
-              to: ref('dim_gtfs_schedule_feeds')
+              to: ref('dim_schedule_feeds')
               field: key
