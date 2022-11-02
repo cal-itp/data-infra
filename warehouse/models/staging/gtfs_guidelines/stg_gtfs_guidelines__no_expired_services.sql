@@ -46,7 +46,7 @@ stale_service_check AS (
         CASE
             WHEN end_date < date THEN "FAIL"
             WHEN end_date >= date THEN "PASS"
-            -- Else clause captures cases where there is no calendar.txt file, or it is empty. This is OK, as some services rely on calendar_dates.txt instead
+            -- Else clause captures cases where there is no calendar.txt file, or it is empty. This is OK, as some feeds rely on calendar_dates.txt instead
             ELSE "PASS"
         END AS status,
       FROM daily_stalest_services
