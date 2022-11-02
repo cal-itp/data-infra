@@ -14,7 +14,7 @@ models:
           - unique:
               where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
 
-  - name: stg_gtfs_rt__service_alerts_validations_outcomes
+  - name: stg_gtfs_rt__service_alerts_validation_outcomes
     description: |
       Records representing the outcome of executing the RT
       validator against service alerts files; not the actual
@@ -30,7 +30,7 @@ models:
     columns:
       - *rt_key
 
-  - name: stg_gtfs_rt__trip_updates_validations_outcomes
+  - name: stg_gtfs_rt__trip_updates_validation_outcomes
     description: |
       Records representing the outcome of executing the RT
       validator against trip updates files; not the actual
@@ -46,7 +46,7 @@ models:
     columns:
       - *rt_key
 
-  - name: stg_gtfs_rt__vehicle_positions_validations_outcomes
+  - name: stg_gtfs_rt__vehicle_positions_validation_outcomes
     description: |
       Records representing the outcome of executing the RT
       validator against vehicle position files; not the actual
@@ -80,7 +80,7 @@ models:
       - name: total_notices
       - name: sample_notices
 
-  - name: stg_gtfs_schedule__validations_outcomes
+  - name: stg_gtfs_schedule__validation_outcomes
     description: |
       Records representing the outcome of executing the schedule
       validator against GTFS Schedule zipfiles; not the actual
