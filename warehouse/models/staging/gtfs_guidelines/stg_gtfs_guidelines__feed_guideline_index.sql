@@ -4,47 +4,8 @@ WITH gtfs_schedule_fact_daily_feeds AS (
     SELECT * FROM {{ ref('gtfs_schedule_fact_daily_feeds') }}
 ),
 
-gtfs_schedule_dim_feeds AS (
-    SELECT * FROM {{ ref('gtfs_schedule_dim_feeds') }}
-),
-
--- list all the checks that have been implemented
 checks_implemented AS (
-    SELECT {{ static_feed_downloaded_successfully() }} AS check, {{ compliance() }} AS feature
-    UNION ALL
-    SELECT {{ no_validation_errors() }}, {{ compliance() }}
-    UNION ALL
-    SELECT {{ complete_wheelchair_accessibility_data() }}, {{ accurate_accessibility_data() }}
-    UNION ALL
-    SELECT {{ shapes_file_present() }}, {{ accurate_service_data() }}
-    UNION ALL
-    SELECT {{ shapes_for_all_trips() }}, {{ accurate_service_data() }}
-    UNION ALL
-    SELECT {{ shapes_valid() }}, {{ accurate_service_data() }}
-    UNION ALL
-    SELECT {{ pathways_valid() }}, {{ accurate_accessibility_data() }}
-    UNION ALL
-    SELECT {{ technical_contact_listed() }}, {{ technical_contact_availability() }}
-    UNION ALL
-    SELECT {{ no_rt_critical_validation_errors() }}, {{ compliance() }}
-    UNION ALL
-    SELECT {{ trip_id_alignment() }}, {{ fixed_route_completeness() }}
-    UNION ALL
-    SELECT {{ vehicle_positions_feed_present() }}, {{ compliance() }}
-    UNION ALL
-    SELECT {{ trip_updates_feed_present() }}, {{ compliance() }}
-    UNION ALL
-    SELECT {{ service_alerts_feed_present() }}, {{ compliance() }}
-    UNION ALL
-    SELECT {{ schedule_feed_on_transitland() }}, {{ feed_aggregator_availability() }}
-    UNION ALL
-    SELECT {{ vehicle_positions_feed_on_transitland() }}, {{ feed_aggregator_availability() }}
-    UNION ALL
-    SELECT {{ trip_updates_feed_on_transitland() }}, {{ feed_aggregator_availability() }}
-    UNION ALL
-    SELECT {{ service_alerts_feed_on_transitland() }}, {{ feed_aggregator_availability() }}
-    UNION ALL
-    SELECT {{ include_tts() }}, {{ accurate_accessibility_data() }}
+    SELECT * FROM {{ ref('stg_gtfs_guidelines__checks_implemented') }}
 ),
 
 -- create an index: all feed/date/check combinations

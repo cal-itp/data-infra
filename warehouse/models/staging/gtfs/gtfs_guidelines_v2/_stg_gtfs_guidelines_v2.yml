@@ -1,0 +1,69 @@
+version: 2
+
+models:
+  - name: stg_gtfs_guidelines__checks_implemented
+    description: Index model listing all implemented GTFS guideline checks.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - check
+            - feature
+
+  - name: stg_gtfs_guidelines__feed_guideline_index_v2
+    description: |
+      Daily index of v2 schedule feeds and corresponding checks.
+      Provides structure for individual check models to be joined
+      together by day.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - date
+            - check
+            - feature
+
+  - name: stg_gtfs_schedule__validation_notices
+    description: |
+      Validation notices resulting from executing the schedule
+      validator against GTFS Schedule zipfiles. Each row represents
+      a single notice coming from a single zipfile; this row contains
+      the count of input records in the file that generated the
+      notice as well as sample input records that violate the rule.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - code
+    columns:
+      - name: dt
+      - name: base64_url
+      - name: ts
+      - name: name
+      - name: feed_type
+      - name: _config_extract_ts
+      - name: code
+      - name: severity
+      - name: total_notices
+      - name: sample_notices
+  - name: stg_gtfs_schedule__validations_outcomes
+    description: |
+      Records representing the outcome of executing the schedule
+      validator against GTFS Schedule zipfiles.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+    columns:
+      - name: dt
+      - name: name
+      - name: url
+      - name: feed_type
+      - name: config_extracted_at
+      - name: validation_success
+      - name: validation_exception
+      - name: validation_filename
+      - name: validation_system_errors
+      - name: base64_url
+      - name: ts
