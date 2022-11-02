@@ -1,0 +1,44 @@
+name: Build and push jupyter-singleuser image
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - '.github/workflows/build-jupyter-singleuser-image.yml'
+      - 'images/jupyter-singleuser/**'
+  pull_request:
+    paths:
+      - '.github/workflows/build-jupyter-singleuser-image.yml'
+      - 'images/jupyter-singleuser/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build_push:
+    name: Package docker image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - run: curl -sSL https://install.python-poetry.org | python -
+      # from https://forcepush.tech/python-package-ci-cd-with-git-hub-actions
+      - name: Get image tag from pyproject.toml
+        run: |
+          cd images/jupyter-singleuser
+          PROJECT_VERSION=$(poetry version --short)
+          echo "PROJECT_VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
+      - uses: docker/build-push-action@v2
+        with:
+          context: images/jupyter-singleuser
+          push: ${{ github.ref == 'refs/heads/main' }}
+          tags: ghcr.io/${{github.repository}}/jupyter-singleuser:${{env.PROJECT_VERSION}}

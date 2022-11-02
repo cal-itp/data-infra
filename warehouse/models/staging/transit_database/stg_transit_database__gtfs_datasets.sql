@@ -9,6 +9,15 @@ once_daily_gtfs_datasets AS (
         ) }}
 ),
 
+-- generally we should have been trimming whitespace
+-- on the Airflow/GCS side, so trim it here before encoding
+trimmed AS (
+    SELECT * EXCEPT (uri, pipeline_url),
+        TRIM(uri) AS uri,
+        TRIM(pipeline_url) AS pipeline_url
+    FROM once_daily_gtfs_datasets
+),
+
 construct_base64_url AS (
     SELECT
         *,
@@ -46,7 +55,7 @@ construct_base64_url AS (
                     END
             ELSE {{ to_url_safe_base64('pipeline_url') }}
         END AS base64_url
-    FROM once_daily_gtfs_datasets
+    FROM trimmed
 ),
 
 stg_transit_database__gtfs_datasets AS (

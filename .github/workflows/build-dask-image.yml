@@ -1,0 +1,44 @@
+name: Build and push dask image
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - '.github/workflows/build-dask-image.yml'
+      - 'images/dask/**'
+  pull_request:
+    paths:
+      - '.github/workflows/build-dask-image.yml'
+      - 'images/dask/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build_push:
+    name: Package docker image
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - run: curl -sSL https://install.python-poetry.org | python -
+      # from https://forcepush.tech/python-package-ci-cd-with-git-hub-actions
+      - name: Get image tag from version.txt
+        run: |
+          cd images/dask
+          PROJECT_VERSION=$(cat version.txt)
+          echo "PROJECT_VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
+      - uses: docker/build-push-action@v2
+        with:
+          context: images/dask
+          push: ${{ github.ref == 'refs/heads/main' }}
+          tags: ghcr.io/${{github.repository}}/dask:${{env.PROJECT_VERSION}}

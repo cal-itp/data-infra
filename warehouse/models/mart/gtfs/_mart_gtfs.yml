@@ -47,8 +47,16 @@ models:
           Foreign key to the `dim_schedule_feeds` table.
       - &gtfs_dataset_key
         name: gtfs_dataset_key
-        description: |
-          Foreign key to the `dim_gtfs_datasets` table.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_gtfs_datasets')
+              field: key
+              config:
+                # there are a dozen rows of SMART transit which was deleted from Airtable
+                # this will work without exception once the Airtable dim is historical;
+                # this threshold may need to increase if the backfill occurs prior to that
+                error_if: ">20"
       - name: is_future
         description: |
           Boolean indicating whether this date is in the future relative to the last time that the table
@@ -63,12 +71,13 @@ models:
         description: |
           Synthetic primary key constructed from `base64_url` and `ts`.
         tests: *primary_key_tests
-      - &feed_key
-        name: feed_key
+      - name: feed_key
         description: |
           Foreign key to the `dim_schedule_feeds` table.
         tests:
-          - not_null
+          - not_null:
+              config:
+                where: download_success
           - relationships:
               to: ref('dim_schedule_feeds')
               field: key
@@ -95,6 +104,29 @@ models:
         description: '{{ doc("column_zipfile_files") }}'
       - name: zipfile_dirs
         description: '{{ doc("column_zipfile_dirs") }}'
+  - name: fct_vehicle_locations
+    description: |
+      De-duped vehicle positions, removing redundant/duplicated positions
+      in the underlying messages. Unique at the url/timestamp/vehicle/trip
+      level.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key.
+        tests:
+          - unique:
+              # TODO: make an RT test macro that does this date subtraction
+              # test hour = 0 UTC because that's 5pm Pacific = PM peak, good sample of data
+              config:
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
+          - not_null:
+              config:
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
+      - name: trip_id
+        tests:
+          - not_null:
+              config:
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
   - name: fct_vehicle_positions_messages
     description: |
       Each row is a message received from a vehicle positions GTFS RT feed.
@@ -117,6 +149,10 @@ models:
       - name: gtfs_dataset_key
         description: |
           The primary key for the record in `dim_gtfs_datasets` associated with this message.
+        columns:
+          - <<: *gtfs_dataset_key
+            config:
+              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
       - name: dt
         description: |
           Date on which we scraped this message.
@@ -231,6 +267,15 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `agency_id`.
         tests: *primary_key_tests
+      - &feed_key
+        name: feed_key
+        description: |
+          Foreign key to the `dim_schedule_feeds` table.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_schedule_feeds')
+              field: key
       - *base64_url
       - name: agency_id
         description: '{{ doc("gtfs_agency__agency_id") }}'
@@ -272,6 +317,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `area_id`.
         tests: *primary_key_tests
+      - *feed_key
       - *base64_url
       - name: area_id
         description: '{{ doc("gtfs_areas__area_id") }}'
@@ -297,7 +343,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `attribution_id`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: attribution_id
         description: '{{ doc("gtfs_attributions__attribution_id") }}'
@@ -341,7 +387,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `fare_id`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: fare_id
         description: '{{ doc("gtfs_fare_attributes__fare_id") }}'
@@ -385,7 +431,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `network_id`, `from_area_id`, `to_area_id`, and `fare_product_id`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: leg_group_id
         description: '{{ doc("gtfs_fare_leg_rules__leg_group_id") }}'
@@ -417,7 +463,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `fare_product_id`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: fare_product_id
         description: '{{ doc("gtfs_fare_products__fare_product_id") }}'
@@ -451,7 +497,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `fare_id`, `route_id`, `origin_id`, `destination_id`, and `contains_id`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: route_id
         description: '{{ doc("gtfs_fare_rules__route_id") }}'
@@ -479,7 +525,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, 'from_leg_group_id', 'to_leg_group_id', 'fare_product_id', 'transfer_count', and 'duration_limit'.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: from_leg_group_id
         description: '{{ doc("gtfs_fare_transfer_rules__from_leg_group_id") }}'
@@ -515,7 +561,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `feed_publisher_name`, `feed_publisher_url`, `feed_lang`, `default_lang`, `feed_version`, `feed_contact_email`, `feed_contact_url`, `feed_start_date`, and `feed_end_date`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: feed_publisher_name
         description: '{{ doc("gtfs_feed_info__feed_publisher_name") }}'
@@ -559,7 +605,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `trip_id`, and `start_time`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: trip_id
         description: '{{ doc("gtfs_frequencies__trip_id") }}'
@@ -597,7 +643,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `level_id`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: level_id
         description: '{{ doc("gtfs_levels__level_id") }}'
@@ -627,7 +673,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `pathway_id`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: pathway_id
         description: '{{ doc("gtfs_pathways__pathway_id") }}'
@@ -681,6 +727,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `route_id`.
         tests: *primary_key_tests
+      - *feed_key
       - *base64_url
       - name: route_id
         description: '{{ doc("gtfs_routes__route_id") }}'
@@ -728,7 +775,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `shape_id`, and `shape_pt_sequence`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: shape_id
         description: '{{ doc("gtfs_shapes__shape_id") }}'
@@ -776,7 +823,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `area_id` and `stop_id`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: area_id
         description: '{{ doc("gtfs_stop_areas__area_id") }}'
@@ -804,7 +851,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `stop_id`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: stop_id
         description: '{{ doc("gtfs_stops__stop_id") }}'
@@ -866,7 +913,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `from_stop_id`, `to_stop_id`, `from_trip_id`, `to_trip_id`, `from_route_id`, and `to_route_id`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: from_stop_id
         description: '{{ doc("gtfs_transfers__from_stop_id") }}'
@@ -904,7 +951,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `table_name`, `field_name`, `language`, `record_id`, `record_sub_id`, and `field_value`.
         tests: *primary_key_tests
-
+      - *feed_key
       - *base64_url
       - name: table_name
         description: '{{ doc("gtfs_translations__table_name") }}'
@@ -940,12 +987,17 @@ models:
           lower_bound_column: _valid_from
           upper_bound_column: _valid_to
           partition_by: base64_url, trip_id
+          where: "not warning_duplicate_primary_key"
           gaps: required
     columns:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key` and `trip_id`.
-        tests: *primary_key_tests
+        tests:
+          - unique:
+              where: "not warning_duplicate_primary_key"
+          - not_null
+      - *feed_key
       - *base64_url
       - name: route_id
         description: '{{ doc("gtfs_trips__route_id") }}'
@@ -975,6 +1027,10 @@ models:
         description: '{{ doc("gtfs_trips__bikes_allowed") }}'
       - *_valid_from
       - *_valid_to
+      - name: warning_duplicate_primary_key
+        description: |
+          Rows with `true` in this column have a duplicate primary key; i.e., `trip_id` is duplicated within an individual feed
+          instance and `key` will also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
   - name: dim_calendar
     description: |
       Each row is a cleaned row from a calendar.txt file.
@@ -991,7 +1047,6 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `service_id`.
         tests: *primary_key_tests
-
       - *feed_key
       - *base64_url
       - name: service_id
@@ -1077,7 +1132,7 @@ models:
           gaps: required
     columns:
       - name: base64_url
-      - name: ts
+      - *feed_key
       - name: trip_id
         description: '{{ doc("gtfs_stop_times__trip_id") }}'
         tests:
@@ -1110,3 +1165,47 @@ models:
         description: '{{ doc("gtfs_stop_times__timepoint") }}'
     meta:
       publish.gis_coordinate_system_epsg: WGS84
+  - name: fct_daily_scheduled_trips
+    description: |
+      A daily table showing all trips that were scheduled on a given date.
+      If a `service_date`, `trip_key` pair is present in this table,
+      it means that that `trip_key` was scheduled to occur on that `service_date`.
+      Specifically, it means that the associated `service_id` was active and had service
+      scheduled. Dates where a `service_id` was active but not scheduled (for example,
+      weekend dates within a weekday service's effective dates) are not listed in this table.
+    columns:
+      - name: key
+        tests:
+          - unique:
+              where: "not warning_duplicate_trip_primary_key"
+          - not_null
+      - name: feed_key
+        description: Foreign key to dim_schedule_feeds.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_schedule_feeds')
+              field: key
+      - name: service_date
+        description: Date on which this trip was active.
+      - name: service_id
+        description: |
+          Service ID from calendar or calendar_dates that determines that this trip
+          has service on this date.
+      - name: trip_key
+        description: Foreign key to dim_trips.
+        tests:
+          - relationships:
+              to: ref('dim_trips')
+              field: key
+      - name: route_key
+        description: Foreign key to dim_routes.
+        tests:
+          - relationships:
+              to: ref('dim_routes')
+              field: key
+      - name: warning_duplicate_trip_primary_key
+        description: |
+          Rows with `true` in this column have a duplicate primary key in dim_trips;
+          i.e., `trip_id` is duplicated within an individual feed instance.
+          Treat these rows with caution.

@@ -11,6 +11,7 @@ import schedule
 import sentry_sdk
 import typer
 from cachetools.func import ttl_cache
+from calitp.auth import get_secrets_by_label
 from calitp.storage import (
     GTFSFeedType,
     GTFSDownloadConfig,
@@ -21,7 +22,7 @@ from calitp.storage import (
 from prometheus_client import start_http_server
 
 from .metrics import TICKS, AIRTABLE_CONFIGURATION_AGE
-from .tasks import fetch, huey, load_secrets
+from .tasks import fetch, huey
 
 
 @ttl_cache(ttl=300)
@@ -60,7 +61,8 @@ def main(
     start_http_server(port)
 
     if load_env_secrets:
-        load_secrets()
+        for key, value in get_secrets_by_label("gtfs_rt").items():
+            os.environ[key] = value
 
     typer.secho("flushing huey")
     huey.flush()

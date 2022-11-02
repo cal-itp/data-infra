@@ -12,9 +12,8 @@ import humanize
 import pandas as pd
 import pendulum
 import sentry_sdk
-from airflow.models import Variable
-from airflow.utils.db import create_session
 from airflow.utils.email import send_email
+from calitp.auth import get_secrets_by_label
 from calitp.config import is_development
 from calitp.storage import (
     get_fs,
@@ -79,13 +78,9 @@ class DownloadFeedsResult(PartitionedGCSArtifact):
 def download_all(task_instance, execution_date, **kwargs):
     sentry_sdk.init()
     start = pendulum.now()
-    # https://stackoverflow.com/a/61808755
-    with create_session() as session:
-        auth_dict = {var.key: var.val for var in session.query(Variable)}
-    print(auth_dict.keys())
+    auth_dict = get_secrets_by_label("gtfs_schedule")
 
     extract = get_latest(GTFSDownloadConfigExtract)
-
     fs = get_fs()
 
     with fs.open(extract.path, "rb") as f:
