@@ -1,0 +1,12 @@
+version: 2
+
+models:
+  - name: fct_daily_feed_validation_notices
+    description: ""
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from date, feed_key, and code.
+        tests: &primary_key_tests
+          - unique
+          - not_null
