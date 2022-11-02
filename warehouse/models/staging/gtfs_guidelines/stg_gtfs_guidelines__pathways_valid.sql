@@ -60,17 +60,14 @@ pathways_eligibile AS (
    GROUP BY 1,2,3,4
 ),
 
--- For this check we are only looking for notices related to pathways
+-- For this check we are only looking for validator errors related to pathways
 validation_fact_daily_feed_codes_pathway_related AS (
     SELECT * FROM {{ ref('validation_fact_daily_feed_codes') }}
      WHERE code IN (
                     'pathway_to_platform_with_boarding_areas',
                     'pathway_to_wrong_location_type',
                     'pathway_unreachable_location',
-                    'pathway_dangling_generic_node',
-                    'pathway_loop',
                     'missing_level_id',
-                    'platform_without_parent_station',
                     'station_with_parent_station',
                     'wrong_parent_location_type'
             )
