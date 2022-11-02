@@ -39,13 +39,13 @@ safe_urls AS (
                 AND (almost_safe_url NOT LIKE r"%api.actransit.org/transit/gtfs/download?token={\%")
                 THEN REGEXP_REPLACE(
                     almost_safe_url,
-                    "token=[a-zA-Z0-9-]+", {% raw %}"token={{ AC_TRANSIT_API_KEY }}"{% endraw %}
+                    "token=[a-zA-Z0-9-]+", {% raw %}"token={{ AC_TRANSIT_API_KEY }}"{% endraw %} -- noqa: L048
                 )
             WHEN (almost_safe_url LIKE r"%api.511.org/transit/%?api_key=%")
                 AND (almost_safe_url NOT LIKE r"%api.511.org/transit/%?api_key={\%")
                 THEN REGEXP_REPLACE(
                     almost_safe_url,
-                    "api_key=[a-zA-Z0-9-]+", {% raw %}"api_key={{ MTC_511_API_KEY }}"{% endraw %}
+                    "api_key=[a-zA-Z0-9-]+", {% raw %}"api_key={{ MTC_511_API_KEY }}"{% endraw %} -- noqa: L048
                 )
             ELSE almost_safe_url
             END) AS gtfs_schedule_url

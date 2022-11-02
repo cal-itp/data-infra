@@ -1,5 +1,3 @@
-
-
 WITH
 once_daily_county_geography AS (
     {{ get_latest_dense_rank(

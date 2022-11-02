@@ -1,5 +1,3 @@
-
-
 WITH
 once_daily_gtfs_service_data AS (
     {{ get_latest_dense_rank(

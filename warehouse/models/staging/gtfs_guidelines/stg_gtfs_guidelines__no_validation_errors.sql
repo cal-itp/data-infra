@@ -17,7 +17,7 @@ validation_errors_by_day AS (
         date,
         SUM(n_notices) as validation_errors
     FROM validation_fact_daily_feed_codes
-    LEFT JOIN validation_dim_codes USING(code)
+    LEFT JOIN validation_dim_codes USING (code)
     WHERE severity = "ERROR"
     GROUP BY feed_key, date
 ),

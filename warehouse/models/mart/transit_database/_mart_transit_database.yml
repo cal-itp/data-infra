@@ -51,7 +51,7 @@ models:
         meta:
           metabase.semantic_type: type/FK
       - name: details
-        description:	Text description related to the organization
+        description: Text description related to the organization
       - name: reporting_category
         description: |
           Categories we want to hold ourselves accountable to:
