@@ -13,3 +13,14 @@ models:
             - date
             - check
             - feature
+
+  - name: int_gtfs_guidelines_v2__no_schedule_validation_errors
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - feed_key
+    columns:
+      - name: sum_total_notices
+        tests:
+          - not_null
