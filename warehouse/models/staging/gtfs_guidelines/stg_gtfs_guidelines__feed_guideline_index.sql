@@ -4,6 +4,10 @@ WITH gtfs_schedule_fact_daily_feeds AS (
     SELECT * FROM {{ ref('gtfs_schedule_fact_daily_feeds') }}
 ),
 
+gtfs_schedule_dim_feeds AS (
+    SELECT * FROM {{ ref('gtfs_schedule_dim_feeds') }}
+),
+
 checks_implemented AS (
     SELECT * FROM {{ ref('stg_gtfs_guidelines__checks_implemented') }}
 ),
