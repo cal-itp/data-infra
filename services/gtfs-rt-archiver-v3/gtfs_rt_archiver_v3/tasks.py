@@ -11,7 +11,7 @@ import structlog
 import typer
 from calitp.storage import download_feed, GTFSDownloadConfig
 from google.cloud import storage
-from huey import RedisExpireHuey
+from huey import RedisHuey
 from huey.registry import Message
 from huey.serializer import Serializer
 from requests import HTTPError, RequestException
@@ -36,9 +36,9 @@ class PydanticSerializer(Serializer):
         return Message(*d.values())
 
 
-huey = RedisExpireHuey(
+huey = RedisHuey(
     name=f"gtfs-rt-archiver-v3-{os.environ['AIRFLOW_ENV']}",
-    expire_time=5,
+    blocking=False,
     results=False,
     # serializer=PydanticSerializer(),
     url=os.getenv("CALITP_HUEY_REDIS_URL"),
