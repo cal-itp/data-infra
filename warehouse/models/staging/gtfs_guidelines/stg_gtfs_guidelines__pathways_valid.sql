@@ -13,7 +13,7 @@ unique_trip_stops AS (
       trip_id,
       COUNT(*) AS ct
     FROM {{ ref('gtfs_schedule_dim_stop_times') }}
-   GROUP BY 1,2,3,4,5,6
+   GROUP BY 1, 2, 3, 4, 5, 6
 ),
 
 stops_joined AS (
@@ -27,20 +27,17 @@ stops_joined AS (
         t4.stop_name,
         t4.parent_station,
         t3.route_type,
-        CASE
-            WHEN LOWER(t4.stop_name) LIKE '%station%' OR LOWER(t4.stop_name) LIKE '%transit center%' THEN true
-        ELSE false
-        END AS keyword_match
+        LOWER(t4.stop_name) LIKE '%station%' OR LOWER(t4.stop_name) LIKE '%transit center%' AS keyword_match
     FROM unique_trip_stops t1
-    JOIN {{ ref('trips_clean') }} t2
+    INNER JOIN {{ ref('trips_clean') }} t2
       ON t1.trip_id = t2.trip_id
      AND t1.calitp_extracted_at = t2.calitp_extracted_at
      AND t1.calitp_deleted_at = t2.calitp_deleted_at
-    JOIN {{ ref('gtfs_schedule_dim_routes') }} t3
+    INNER JOIN {{ ref('gtfs_schedule_dim_routes') }} t3
       ON t2.route_id = t3.route_id
      AND t2.calitp_extracted_at = t3.calitp_extracted_at
      AND t2.calitp_deleted_at = t3.calitp_deleted_at
-    JOIN {{ ref('stops_clean') }} t4
+    INNER JOIN {{ ref('stops_clean') }} t4
       ON t1.stop_id = t4.stop_id
      AND t1.calitp_extracted_at = t4.calitp_extracted_at
      AND t1.calitp_deleted_at = t4.calitp_deleted_at
@@ -57,7 +54,7 @@ pathways_eligibile AS (
    WHERE route_type = "2" --  Route type 2 is Rail
       OR keyword_match IS true
       OR parent_station IS NOT null
-   GROUP BY 1,2,3,4
+   GROUP BY 1, 2, 3, 4
 ),
 
 -- For this check we are only looking for validator errors related to pathways
@@ -79,7 +76,7 @@ pathway_validation_notices_by_day AS (
         date,
         SUM(n_notices) as validation_notices
     FROM validation_fact_daily_feed_codes_pathway_related
-    GROUP BY feed_key, date
+    GROUP BY 1, 2
 ),
 
 pathway_validation_check AS (
@@ -107,7 +104,7 @@ pathway_validation_check AS (
       LEFT JOIN pathway_validation_notices_by_day t3
              ON t1.date = t3.date
             AND t1.feed_key = t3.feed_key
-     GROUP BY 1,2,3,4,5,6,7,8
+     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
 ),
 
 pathway_validation_check_final AS (

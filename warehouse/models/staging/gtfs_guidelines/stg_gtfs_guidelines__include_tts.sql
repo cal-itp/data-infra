@@ -16,8 +16,8 @@ tts_issue_feeds AS (
        calitp_deleted_at
     FROM dim_stops
     -- When there is no tts_stop_name field for a given stop_name, or tts_stop_name is identical to stop_name, we proceed to run a few tests
-    WHERE (tts_stop_name IS null OR tts_stop_name = stop_name) AND
-         (
+    WHERE (tts_stop_name IS null OR tts_stop_name = stop_name)
+         AND (
             -- Test 1: check for abbreviations that need to be spelled out, including directions (n, sb) and ROW types (st, rd)
             ---- EXISTS function returns true if the stop_name contains any of the listed "no-no words", and false if not
             EXISTS (
@@ -26,11 +26,11 @@ tts_issue_feeds AS (
                     -- ie. 1234 North St becomes (1234,north,st)
                     FROM UNNEST(SPLIT(LOWER(stop_name), ' ')) stop_name_parts
                     -- Join stop_name_parts to list of "no-no words"
-                    JOIN UNNEST([
+                    INNER JOIN UNNEST([
                                 -- Directional abbreviations, ie "n" should read "north"
-                                "n","s","e","w","ne","se","sw","nw","nb","sb","eb","wb",
+                                "n", "s", "e", "w", "ne", "se", "sw", "nw", "nb", "sb", "eb", "wb",
                                 -- ROW abbreviations, ie "st" should read "street"
-                                "st","rd","blvd","hwy"
+                                "st", "rd", "blvd", "hwy"
                     ]) tts_necessary_strings
                          ON stop_name_parts = tts_necessary_strings)
             -- Test 2: Check for >=2 adjacent numerals
@@ -61,14 +61,7 @@ daily_tts_issue_feeds AS (
        AND t1.date < t2.calitp_deleted_at
        AND t1.calitp_itp_id = t2.calitp_itp_id
        AND t1.calitp_url_number = t2.calitp_url_number
- GROUP BY
-        t1.date,
-        t1.calitp_itp_id,
-        t1.calitp_url_number,
-        t1.calitp_agency_name,
-        t1.feed_key,
-        t1.check,
-        t1.feature
+ GROUP BY 1, 2, 3, 4, 5, 6, 7
 ),
 
 tts_check AS (
