@@ -21,6 +21,6 @@ models:
             - date
             - feed_key
     columns:
-      - name: sum_total_notices
+      - name: status
         tests:
           - not_null
