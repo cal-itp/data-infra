@@ -30,7 +30,10 @@ fct_daily_feed_validation_notices AS (
         codes.severity,
         outcomes.validation_success,
         outcomes.validation_exception,
-        SUM(total_notices) AS total_notices,
+        COALESCE(
+            SUM(total_notices),
+            CASE WHEN validation_success THEN 0 END
+        ) AS total_notices,
     FROM fct_daily_schedule_feeds AS daily_feeds
     LEFT JOIN dim_schedule_feeds AS dim_feeds
         ON daily_feeds.feed_key = dim_feeds.key
@@ -40,6 +43,7 @@ fct_daily_feed_validation_notices AS (
     CROSS JOIN validation_codes AS codes
     LEFT JOIN validation_notices AS notices
         ON codes.code = notices.code
+        AND outcomes.extract_ts = notices.ts
     GROUP BY 1, 2, 3, 4, 5, 6, 7
 )
 

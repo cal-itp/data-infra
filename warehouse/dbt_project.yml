@@ -67,5 +67,7 @@ models:
         schema: mart_transit_database
       gtfs_guidelines:
         schema: mart_gtfs_guidelines
+      gtfs_guidelines_v2:
+        schema: mart_gtfs_guidelines_v2
       gtfs:
         schema: mart_gtfs
