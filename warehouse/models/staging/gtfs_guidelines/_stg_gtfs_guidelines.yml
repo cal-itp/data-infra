@@ -1,15 +1,6 @@
 version: 2
 
 models:
-  # TODO: this should be moved to the v2 module when appropriate (i.e. when this module is deprecated/removed)
-  - name: stg_gtfs_guidelines__checks_implemented
-    description: Index model listing all implemented GTFS guideline checks.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - check
-            - feature
-
   - name: stg_gtfs_guidelines__fact_daily_transitland_url_check
     description: '{{ doc("transitland_url_check_table") }}'
     tests:
