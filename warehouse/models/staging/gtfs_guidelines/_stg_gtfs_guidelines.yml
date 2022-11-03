@@ -21,13 +21,13 @@ models:
         description: A value of either `present` or `missing`
       - name: transitland_public_web_url
   - name: stg_gtfs_guidelines__schedule_feed_on_transitland
-    tests:
+    tests: &stg_gtfs_guideline_tests
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - date
             - calitp_itp_id
             - calitp_url_number
-    columns:
+    columns: &stg_gtfs_guideline_columns
       - name: date
       - name: calitp_itp_id
       - name: calitp_url_number
@@ -38,138 +38,26 @@ models:
         tests:
           - not_null
   - name: stg_gtfs_guidelines__vehicle_positions_feed_on_transitland
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - date
-            - calitp_itp_id
-            - calitp_url_number
-    columns:
-      - name: date
-      - name: calitp_itp_id
-      - name: calitp_url_number
-      - name: calitp_agency_name
-      - name: check
-      - name: feature
-      - name: status
-        tests:
-          - not_null
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
   - name: stg_gtfs_guidelines__trip_updates_feed_on_transitland
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - date
-            - calitp_itp_id
-            - calitp_url_number
-    columns:
-      - name: date
-      - name: calitp_itp_id
-      - name: calitp_url_number
-      - name: calitp_agency_name
-      - name: check
-      - name: feature
-      - name: status
-        tests:
-          - not_null
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
   - name: stg_gtfs_guidelines__service_alerts_feed_on_transitland
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - date
-            - calitp_itp_id
-            - calitp_url_number
-    columns:
-      - name: date
-      - name: calitp_itp_id
-      - name: calitp_url_number
-      - name: calitp_agency_name
-      - name: check
-      - name: feature
-      - name: status
-        tests:
-          - not_null
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
   - name: stg_gtfs_guidelines__shapes_for_all_trips
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - date
-            - calitp_itp_id
-            - calitp_url_number
-    columns:
-      - name: date
-      - name: calitp_itp_id
-      - name: calitp_url_number
-      - name: calitp_agency_name
-      - name: check
-      - name: feature
-      - name: status
-        tests:
-          - not_null
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
   - name: stg_gtfs_guidelines__pathways_valid
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - date
-            - calitp_itp_id
-            - calitp_url_number
-    columns:
-      - name: date
-      - name: calitp_itp_id
-      - name: calitp_url_number
-      - name: calitp_agency_name
-      - name: check
-      - name: feature
-      - name: status
-        tests:
-          - not_null
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
   - name: stg_gtfs_guidelines__shapes_valid
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - date
-            - calitp_itp_id
-            - calitp_url_number
-    columns:
-      - name: date
-      - name: calitp_itp_id
-      - name: calitp_url_number
-      - name: calitp_agency_name
-      - name: check
-      - name: feature
-      - name: status
-        tests:
-          - not_null
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
   - name: stg_gtfs_guidelines__include_tts
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - date
-            - calitp_itp_id
-            - calitp_url_number
-    columns:
-      - name: date
-      - name: calitp_itp_id
-      - name: calitp_url_number
-      - name: calitp_agency_name
-      - name: check
-      - name: feature
-      - name: status
-        tests:
-          - not_null
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
   - name: stg_gtfs_guidelines__no_expired_services
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - date
-            - calitp_itp_id
-            - calitp_url_number
-    columns:
-      - name: date
-      - name: calitp_itp_id
-      - name: calitp_url_number
-      - name: calitp_agency_name
-      - name: check
-      - name: feature
-      - name: status
-        tests:
-          - not_null
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
