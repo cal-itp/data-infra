@@ -2,11 +2,36 @@ version: 2
 
 models:
   - name: fct_daily_feed_validation_notices
-    description: ""
+    description: |
+      A daily model of validation notices found per feed. Data
+      is filled in so there is always a count of notices per day
+      per feed, even if that count is zero; null counts indicate
+      a lack of validation for that feed on that day, though
+      these can be interpolated for feeds that do not change
+      day-to-day.
     columns:
       - name: key
         description: |
           Synthetic primary key constructed from date, feed_key, and code.
         tests: &primary_key_tests
           - unique
+          - not_null
+      - name: date
+        tests:
+          - not_null
+      - name: feed_key
+        tests:
+          - not_null
+      - name: code
+        tests:
+          - not_null
+      - name: severity
+        tests:
+          - not_null
+      - name: validation_success
+        tests:
+          - not_null
+      - name: validation_exception
+      - name: total_notices
+        tests:
           - not_null
