@@ -55,17 +55,17 @@ daily_calendar_dates_service_expiration AS (
 
 daily_service_expiration AS (
    SELECT
-        t1.date,
-        t1.calitp_itp_id,
-        t1.calitp_url_number,
-        t1.calitp_agency_name,
-        t1.feed_key,
-        t1.check,
-        t1.feature,
-        t1.service_id,
-        GREATEST(t1.end_date,t2.end_date) AS service_end_date
+        COALESCE(t1.date,t2.date) AS date,
+        COALESCE(t1.calitp_itp_id,t2.calitp_itp_id) AS calitp_itp_id,
+        COALESCE(t1.calitp_url_number,t2.calitp_url_number) AS calitp_url_number,
+        COALESCE(t1.calitp_agency_name,t2.calitp_agency_name) AS calitp_agency_name,
+        COALESCE(t1.feed_key,t2.feed_key) AS feed_key,
+        COALESCE(t1.check,t2.check) AS check,
+        COALESCE(t1.feature,t2.feature) AS feature,
+        COALESCE(t1.service_id,t2.service_id) AS service_id,
+        GREATEST(COALESCE(t1.end_date,'1970-01-01'),COALESCE(t2.end_date,'1970-01-01')) AS service_end_date
    FROM daily_calendar_service_expiration AS t1
-   LEFT JOIN daily_calendar_dates_service_expiration AS t2
+   FULL OUTER JOIN daily_calendar_dates_service_expiration AS t2
      ON t1.date = t2.date
     AND t1.calitp_itp_id = t2.calitp_itp_id
     AND t1.calitp_url_number = t2.calitp_url_number
