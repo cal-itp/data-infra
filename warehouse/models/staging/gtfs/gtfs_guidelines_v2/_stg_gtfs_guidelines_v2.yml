@@ -1,8 +1,10 @@
 version: 2
 
 models:
-  - name: stg_gtfs_guidelines__checks_implemented
-    description: Index model listing all implemented GTFS guideline checks.
+  - name: stg_gtfs_guidelines__intended_checks_v2
+    description: |
+      Index model listing all intended-to-have-been-implemented
+      GTFS guideline checks.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:

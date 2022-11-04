@@ -63,3 +63,8 @@ models:
       - name: status
         tests:
           - not_null
+
+  - name: fct_implemented_checks
+    tests:
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('stg_gtfs_guidelines__intended_checks_v2')
