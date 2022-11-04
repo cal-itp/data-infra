@@ -61,3 +61,6 @@ models:
   - name: stg_gtfs_guidelines__no_expired_services
     tests: *stg_gtfs_guideline_tests
     columns: *stg_gtfs_guideline_columns
+  - name: stg_gtfs_guidelines__technical_contact_listed
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
