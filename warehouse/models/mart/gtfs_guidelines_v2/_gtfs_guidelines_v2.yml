@@ -66,5 +66,15 @@ models:
 
   - name: fct_implemented_checks
     tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - check
+            - feature
       - dbt_utils.equal_rowcount:
           compare_model: ref('stg_gtfs_guidelines__intended_checks_v2')
+    columns:
+      - name: is_implemented
+        tests:
+          - accepted_values:
+              values:
+                - "BOOLEAN('true')"
