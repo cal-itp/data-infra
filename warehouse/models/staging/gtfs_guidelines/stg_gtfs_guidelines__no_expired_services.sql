@@ -9,9 +9,21 @@ stalest_calendar_services AS (
        calitp_url_number,
        calitp_extracted_at,
        calitp_deleted_at,
-       MIN(end_date) AS end_date
+       MIN(end_date) AS earliest_end_date
     FROM {{ ref('calendar_clean') }}
    GROUP BY 1, 2, 3, 4
+),
+
+calendar_dates_service_expiration AS (
+   SELECT
+       calitp_itp_id,
+       calitp_url_number,
+       calitp_extracted_at,
+       calitp_deleted_at,
+       service_id,
+       MAX(date) AS service_end_date
+    FROM {{ ref('calendar_dates_clean') }}
+   GROUP BY 1, 2, 3, 4, 5
 ),
 
 stalest_calendar_dates_services AS (
@@ -20,8 +32,8 @@ stalest_calendar_dates_services AS (
        calitp_url_number,
        calitp_extracted_at,
        calitp_deleted_at,
-       MIN(date) AS date
-    FROM {{ ref('calendar_dates_clean') }}
+       MIN(service_end_date) AS earliest_end_date
+    FROM calendar_dates_service_expiration
    GROUP BY 1, 2, 3, 4
 ),
 
@@ -34,8 +46,8 @@ daily_stalest_services AS (
     t1.feed_key,
     t1.check,
     t1.feature,
-    MIN(t2.end_date) AS min_end_date,
-    MIN(t3.date) AS min_date
+    MIN(t2.earliest_end_date) AS c_min_date,
+    MIN(t3.earliest_end_date) AS cd_min_date
   FROM feed_guideline_index AS t1
   LEFT JOIN stalest_calendar_services AS t2
        ON t1.date >= t2.calitp_extracted_at
@@ -59,11 +71,11 @@ stale_service_check AS (
         feed_key,
         check,
         feature,
-        min_end_date,
-        min_date,
+        c_min_date,
+        cd_min_date,
         CASE
-            WHEN min_end_date < date OR min_date < date THEN "FAIL"
-            WHEN min_end_date >= date OR min_date >= date THEN "PASS"
+            WHEN c_min_date < date OR cd_min_date < date THEN "FAIL"
+            WHEN c_min_date >= date OR cd_min_date >= date THEN "PASS"
             ELSE "N/A"
         END AS status
       FROM daily_stalest_services
