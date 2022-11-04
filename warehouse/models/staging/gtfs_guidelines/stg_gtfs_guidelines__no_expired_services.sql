@@ -63,14 +63,14 @@ daily_service_expiration AS (
         t1.check,
         t1.feature,
         t1.service_id,
-        MAX(t1.end_date,t2.end_date) AS service_end_date
+        GREATEST(t1.end_date,t2.end_date) AS service_end_date
    FROM daily_calendar_service_expiration AS t1
    LEFT JOIN daily_calendar_dates_service_expiration AS t2
      ON t1.date = t2.date
     AND t1.calitp_itp_id = t2.calitp_itp_id
     AND t1.calitp_url_number = t2.calitp_url_number
     AND t1.service_id = t2.service_id
-  GROUP BY 1,2,3,4,5,6,7,8
+  -- GROUP BY 1,2,3,4,5,6,7,8
 ),
 
 daily_earliest_service_expiration AS (
