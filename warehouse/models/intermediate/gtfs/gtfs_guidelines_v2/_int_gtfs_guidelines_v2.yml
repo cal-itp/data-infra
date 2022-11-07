@@ -26,7 +26,9 @@ models:
     columns:
       - name: status
         tests:
-          - not_null
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
+
   - name: int_gtfs_guidelines_v2__shapes_valid
     tests:
       - dbt_utils.unique_combination_of_columns:
@@ -36,4 +38,5 @@ models:
     columns:
       - name: status
         tests:
-          - not_null
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99

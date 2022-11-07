@@ -12,6 +12,7 @@ models:
           combination_of_columns:
             - date
             - feed_key
+            - check
     columns:
       - name: key
         tests: &primary_key_tests
@@ -25,7 +26,8 @@ models:
           - not_null
       - name: status
         tests:
-          - not_null
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
 
   - name: fct_daily_schedule_feed_validation_notices
     description: |
@@ -98,9 +100,7 @@ models:
             - feature
       - dbt_utils.equal_rowcount:
           compare_model: ref('stg_gtfs_guidelines__intended_checks_v2')
+      - dbt_utils.expression_is_true:
+          expression: "is_implemented"
     columns:
       - name: is_implemented
-        tests:
-          - accepted_values:
-              values:
-                - "BOOLEAN('true')"
