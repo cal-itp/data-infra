@@ -15,7 +15,7 @@ unioned AS (
         date,
         base64_url,
         feed_key,
-        null AS schedule_feed_key,
+        feed_key AS schedule_feed_key,
         gtfs_dataset_key,
         'schedule' AS feed_type,
     FROM schedule_feeds
