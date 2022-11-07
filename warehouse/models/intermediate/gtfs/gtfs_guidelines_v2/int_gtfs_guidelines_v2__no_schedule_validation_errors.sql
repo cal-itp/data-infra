@@ -1,10 +1,9 @@
 WITH feed_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_guidelines_v2__feed_guideline_index') }}
-    WHERE check = {{ no_validation_errors() }}
+    SELECT * FROM {{ ref('int_gtfs_guidelines_v2__schedule_feed_guideline_index') }}
 ),
 
 validation_notices AS (
-    SELECT * FROM {{ ref('fct_daily_feed_validation_notices') }}
+    SELECT * FROM {{ ref('fct_daily_schedule_feed_validation_notices') }}
 ),
 
 validation_errors_by_day AS (
@@ -21,8 +20,8 @@ int_gtfs_guidelines_v2__no_schedule_validation_errors AS (
     SELECT
         idx.date,
         idx.feed_key,
-        check,
-        feature,
+        {{ no_validation_errors() }} AS check,
+        {{ compliance() }} AS feature,
         CASE
             WHEN sum_total_notices > 0 THEN "FAIL"
             WHEN sum_total_notices = 0 THEN "PASS"

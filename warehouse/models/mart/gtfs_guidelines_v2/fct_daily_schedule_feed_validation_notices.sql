@@ -21,7 +21,7 @@ validation_notices AS (
     SELECT * FROM {{ ref('stg_gtfs_schedule__validation_notices') }}
 ),
 
-fct_daily_feed_validation_notices AS (
+fct_daily_schedule_feed_validation_notices AS (
     SELECT
         {{ dbt_utils.surrogate_key(['daily_feeds.date', 'daily_feeds.feed_key', 'codes.code']) }} AS key,
         daily_feeds.date,
@@ -47,4 +47,4 @@ fct_daily_feed_validation_notices AS (
     GROUP BY 1, 2, 3, 4, 5, 6, 7
 )
 
-SELECT * FROM fct_daily_feed_validation_notices
+SELECT * FROM fct_daily_schedule_feed_validation_notices

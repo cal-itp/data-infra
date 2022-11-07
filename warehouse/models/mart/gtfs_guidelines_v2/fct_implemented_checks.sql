@@ -1,14 +1,16 @@
+{{ config(materialized='table') }}
+
 WITH
 
 intended_checks AS (
-    SELECT * FROM {{ ref('stg_gtfs_guidelines__intended_checks_v2')}}
+    SELECT * FROM {{ ref('stg_gtfs_guidelines__intended_checks_v2') }}
 ),
 
 existing_checks AS (
     SELECT DISTINCT
         check,
         feature
-    FROM {{ ref('fct_daily_guideline_checks') }}
+    FROM {{ ref('fct_daily_feed_guideline_checks') }}
 ),
 
 fct_implemented_checks AS (

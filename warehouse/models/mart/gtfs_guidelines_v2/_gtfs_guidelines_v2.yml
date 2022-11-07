@@ -1,7 +1,33 @@
 version: 2
 
 models:
-  - name: fct_daily_feed_validation_notices
+  # TODO: once we have checks that occur above the feed level (e.g. organization)
+  #   we will need to create additional daily check fact tables at the
+  #   appropriate grain
+  - name: fct_daily_feed_guideline_checks
+    description: |
+      Union of all feed-level daily guideline checks.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - feed_key
+    columns:
+      - name: key
+        tests: &primary_key_tests
+          - unique
+          - not_null
+      - name: date
+        tests:
+          - not_null
+      - name: feed_key
+        tests:
+          - not_null
+      - name: status
+        tests:
+          - not_null
+
+  - name: fct_daily_schedule_feed_validation_notices
     description: |
       A daily model of validation notices found per feed. Data
       is filled in so there is always a count of notices per day
@@ -13,9 +39,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from date, feed_key, and code.
-        tests: &primary_key_tests
-          - unique
-          - not_null
+        tests: *primary_key_tests
       - name: date
         tests:
           - not_null
@@ -30,11 +54,13 @@ models:
           - not_null
       - name: validation_success
         tests:
-          - not_null
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
       - name: validation_exception
       - name: total_notices
         tests:
-          - not_null
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
 
   - name: fct_daily_guideline_checks
     description: |
