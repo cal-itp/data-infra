@@ -1,4 +1,4 @@
-{% macro gtfs_rt_stg_parse_outcomes(source_table) %}
+{% macro gtfs_rt_stg_outcomes(step, source_table) %}
 
 WITH raw_aggregation_outcomes AS (
     SELECT
@@ -16,8 +16,8 @@ stg_gtfs_rt__agg_outcomes AS (
         `extract`.config.feed_type AS feed_type,
         `extract`.config.extracted_at AS _config_extract_ts,
         `extract`.config.schedule_url_for_validation AS schedule_url_for_validation,
-        success AS parse_success,
-        exception AS parse_exception,
+        success AS {{ step }}_success,
+        exception AS {{ step }}_exception,
         `extract`.response_code AS download_response_code,
         `extract`.response_headers AS download_response_headers,
         aggregation.step AS step,
