@@ -12,7 +12,6 @@ validation_codes AS (
     SELECT * FROM {{ ref('int_gtfs_quality__schedule_validation_severities') }}
 ),
 
--- TODO: this is just schedule, add RT
 validation_outcomes AS (
     SELECT * FROM {{ ref('stg_gtfs_schedule__validation_outcomes') }}
 ),
@@ -27,9 +26,10 @@ fct_daily_schedule_feed_validation_notices AS (
         daily_feeds.date,
         daily_feeds.feed_key,
         codes.code,
-        codes.severity,
         outcomes.validation_success,
         outcomes.validation_exception,
+        notices.severity,
+        notices.gtfs_validator_version,
         COALESCE(
             SUM(total_notices),
             CASE WHEN validation_success THEN 0 END
@@ -44,7 +44,7 @@ fct_daily_schedule_feed_validation_notices AS (
     LEFT JOIN validation_notices AS notices
         ON codes.code = notices.code
         AND outcomes.extract_ts = notices.ts
-    GROUP BY 1, 2, 3, 4, 5, 6, 7
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
 )
 
 SELECT * FROM fct_daily_schedule_feed_validation_notices

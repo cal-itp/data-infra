@@ -10,7 +10,12 @@ models:
           combination_of_columns:
             - feed_key
             - date
+
   - name: int_gtfs_quality__schedule_validation_severities
+    description: |
+      List of codes and their severity in the GTFS validator.
+      TODO: this will need additional work when we deploy
+      a new GTFS validator version.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
