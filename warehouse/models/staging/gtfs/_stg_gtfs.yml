@@ -902,3 +902,34 @@ models:
         description: '{{ doc("gtfs_stop_times__timepoint") }}'
     meta:
       publish.gis_coordinate_system_epsg: WGS84
+
+  - name: stg_gtfs_rt__service_alerts_outcomes
+    description: Outcomes from parsing process on GTFS RT service alerts data.
+    columns: &stg_gtfs_rt_parse_outcomes_columns
+      - name: dt
+      - name: hour
+        description: |
+          Starting timestamp of hour in which data was downloaded, like `2022-10-31 23:00:00 UTC`.
+      - name: name
+      - name: url
+      - name: feed_type,
+      - name: _config_extract_ts,
+      - name: schedule_url_for_validation,
+      - name: parse_success
+        description: |
+          Boolean success indicator for whether this raw data was successfully included
+          in the associated hourly aggregation.
+      - name: parse_exception
+        description: |
+          If `parse_success` is false, the associated exception.
+      - name: download_response_code
+      - name: download_response_headers
+      - name: step
+      - name: base64_url
+      - name: ts
+  - name: stg_gtfs_rt__vehicle_positions_outcomes
+    description: Outcomes from parsing process on GTFS RT vehicle positions data.
+    columns: *stg_gtfs_rt_parse_outcomes_columns
+  - name: stg_gtfs_rt__trip_updates_outcomes
+    description: Outcomes from parsing process on GTFS RT trip updates data.
+    columns: *stg_gtfs_rt_parse_outcomes_columns
