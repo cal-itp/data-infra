@@ -1240,24 +1240,3 @@ models:
           - relationships:
               to: ref('dim_schedule_feeds')
               field: key
-
-  - name: fct_daily_all_feeds
-    description: |
-      Unioned model of Schedule and RT daily feeds.
-    columns:
-    - name: key
-      tests: *primary_key_tests
-    - name: feed_key
-      description: |
-        For schedule feeds, the foreign key to the versioned
-        schedule feed dimension row. Null for RT rows.
-      tests:
-        - not_null:
-            config:
-              where: feed_type = 'schedule'
-    - name: schedule_feed_key
-      description: |
-        Foreign key for the schedule feed version related
-        to this feed. For schedule, the same as feed_key.
-        For RT, the Schedule feed that this RT feed relates
-        to.
