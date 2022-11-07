@@ -37,9 +37,7 @@ models:
       A daily model of validation notices found per feed. Data
       is filled in so there is always a count of notices per day
       per feed, even if that count is zero; null counts indicate
-      a lack of validation for that feed on that day, though
-      these can be interpolated for feeds that do not change
-      day-to-day.
+      a lack of validation for that feed on that day.
     columns:
       - name: key
         description: |
