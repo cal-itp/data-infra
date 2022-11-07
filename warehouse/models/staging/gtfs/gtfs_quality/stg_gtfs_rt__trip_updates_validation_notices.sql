@@ -15,7 +15,14 @@ stg_gtfs_rt__trip_updates_validation_notices AS (
         metadata.extract_config.url AS url,
         metadata.extract_config.feed_type AS feed_type,
         metadata.extract_config.extracted_at AS _config_extract_ts,
-        errorMessage AS error_message,
+        errorMessage.messageId AS error_message_message_id,
+        errorMessage.gtfsRtFeedIterationModel AS error_message_gtfs_rt_feed_iteration_model,
+        errorMessage.errorDetails AS error_message_error_details,
+        errorMessage.validationRule.errorId AS error_message_validation_rule_error_id,
+        errorMessage.validationRule.severity AS error_message_validation_rule_severity,
+        errorMessage.validationRule.title AS error_message_validation_rule_title,
+        errorMessage.validationRule.errorDescription AS error_message_validation_rule_error_description,
+        errorMessage.validationRule.occurrenceSuffix AS error_message_validation_rule_occurrence_suffix,
         occurrenceList AS occurrence_list
     FROM raw_validation_notices
 )
