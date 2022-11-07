@@ -56,7 +56,9 @@ models:
           - not_null
       - name: severity
         tests:
-          - not_null
+          - not_null:
+              config:
+                where: validation_success is not null
       - name: validation_success
         tests:
           - dbt_utils.not_null_proportion:
