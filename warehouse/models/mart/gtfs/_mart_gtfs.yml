@@ -1240,6 +1240,7 @@ models:
           - relationships:
               to: ref('dim_schedule_feeds')
               field: key
+
   - name: fct_daily_all_feeds
     description: |
       Unioned model of Schedule and RT daily feeds.

@@ -13,6 +13,7 @@ rt_feeds AS (
 unioned AS (
     SELECT
         date,
+        base64_url,
         feed_key,
         null AS schedule_feed_key,
         gtfs_dataset_key,
@@ -23,6 +24,7 @@ unioned AS (
 
     SELECT
         date,
+        base64_url,
         null AS feed_key,
         schedule_feed_key,
         gtfs_dataset_key,
@@ -32,7 +34,7 @@ unioned AS (
 
 fct_daily_all_feeds AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['date', 'gtfs_dataset_key']) }} AS key,
+        {{ dbt_utils.surrogate_key(['date', 'base64_url']) }} AS key,
         *,
     FROM unioned
 )
