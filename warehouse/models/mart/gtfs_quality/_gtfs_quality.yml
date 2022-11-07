@@ -99,7 +99,7 @@ models:
             - check
             - feature
       - dbt_utils.equal_rowcount:
-          compare_model: ref('stg_gtfs_guidelines__intended_checks_v2')
+          compare_model: ref('stg_gtfs_quality__intended_checks')
       - dbt_utils.expression_is_true:
           expression: "is_implemented"
     columns:

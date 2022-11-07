@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: stg_gtfs_guidelines__intended_checks_v2
+  - name: stg_gtfs_quality__intended_checks
     description: |
       Index model listing all intended-to-have-been-implemented
       GTFS guideline checks.

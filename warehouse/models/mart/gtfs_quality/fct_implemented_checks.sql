@@ -3,7 +3,7 @@
 WITH
 
 intended_checks AS (
-    SELECT * FROM {{ ref('stg_gtfs_guidelines__intended_checks_v2') }}
+    SELECT * FROM {{ ref('stg_gtfs_quality__intended_checks') }}
 ),
 
 existing_checks AS (

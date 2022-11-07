@@ -1,5 +1,5 @@
 {{ config(materialized='ephemeral') }}
-WITH stg_gtfs_guidelines__intended_checks_v2 AS (
+WITH stg_gtfs_quality__intended_checks AS (
     {# SELECT {{ static_feed_downloaded_successfully() }} AS check, {{ compliance() }} AS feature #}
     {# UNION ALL #}
     SELECT {{ no_validation_errors() }} AS check, {{ compliance() }} AS feature
@@ -35,4 +35,4 @@ WITH stg_gtfs_guidelines__intended_checks_v2 AS (
     {# SELECT {{ service_alerts_feed_on_transitland() }}, {{ feed_aggregator_availability() }} #}
 )
 
-SELECT * FROM stg_gtfs_guidelines__intended_checks_v2
+SELECT * FROM stg_gtfs_quality__intended_checks
