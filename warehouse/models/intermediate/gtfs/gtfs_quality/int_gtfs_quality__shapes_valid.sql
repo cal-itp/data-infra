@@ -1,5 +1,5 @@
 WITH feed_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_guidelines_v2__schedule_feed_guideline_index') }}
+    SELECT * FROM {{ ref('int_gtfs_quality__schedule_feed_guideline_index') }}
 ),
 
 -- For this check we are only looking for errors related to shapes
@@ -22,7 +22,7 @@ shape_validation_notices_by_day AS (
     GROUP BY feed_key, date
 ),
 
-int_gtfs_guidelines_v2__shapes_valid AS (
+int_gtfs_quality__shapes_valid AS (
     SELECT
         idx.date,
         idx.feed_key,
@@ -38,4 +38,4 @@ int_gtfs_guidelines_v2__shapes_valid AS (
             AND idx.date = notices.date
 )
 
-SELECT * FROM int_gtfs_guidelines_v2__shapes_valid
+SELECT * FROM int_gtfs_quality__shapes_valid

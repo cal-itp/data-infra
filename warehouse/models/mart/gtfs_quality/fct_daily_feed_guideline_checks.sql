@@ -5,8 +5,8 @@ WITH
 unioned AS (
     {{ dbt_utils.union_relations(
         relations=[
-            ref('int_gtfs_guidelines_v2__no_schedule_validation_errors'),
-            ref('int_gtfs_guidelines_v2__shapes_valid'),
+            ref('int_gtfs_quality__no_schedule_validation_errors'),
+            ref('int_gtfs_quality__shapes_valid'),
         ],
     ) }}
 ),

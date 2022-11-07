@@ -5,7 +5,7 @@ WITH fct_daily_schedule_feeds AS (
 ),
 
 -- we never want results from the current date, as data will be incomplete
-int_gtfs_guidelines_v2__schedule_feed_guideline_index AS (
+int_gtfs_quality__schedule_feed_guideline_index AS (
     SELECT
         feed_key,
         date,
@@ -13,4 +13,4 @@ int_gtfs_guidelines_v2__schedule_feed_guideline_index AS (
     WHERE date < CURRENT_DATE
 )
 
-SELECT * FROM int_gtfs_guidelines_v2__schedule_feed_guideline_index
+SELECT * FROM int_gtfs_quality__schedule_feed_guideline_index

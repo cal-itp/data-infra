@@ -1,5 +1,5 @@
 WITH feed_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_guidelines_v2__schedule_feed_guideline_index') }}
+    SELECT * FROM {{ ref('int_gtfs_quality__schedule_feed_guideline_index') }}
 ),
 
 validation_notices AS (
@@ -16,7 +16,7 @@ validation_errors_by_day AS (
     GROUP BY 1, 2
 ),
 
-int_gtfs_guidelines_v2__no_schedule_validation_errors AS (
+int_gtfs_quality__no_schedule_validation_errors AS (
     SELECT
         idx.date,
         idx.feed_key,
@@ -32,4 +32,4 @@ int_gtfs_guidelines_v2__no_schedule_validation_errors AS (
             AND idx.date = validation_errors_by_day.date
 )
 
-SELECT * FROM int_gtfs_guidelines_v2__no_schedule_validation_errors
+SELECT * FROM int_gtfs_quality__no_schedule_validation_errors

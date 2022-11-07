@@ -9,7 +9,7 @@ dim_schedule_feeds AS (
 ),
 
 validation_codes AS (
-    SELECT * FROM {{ ref('int_gtfs_guidelines_v2__schedule_validation_severities') }}
+    SELECT * FROM {{ ref('int_gtfs_quality__schedule_validation_severities') }}
 ),
 
 -- TODO: this is just schedule, add RT

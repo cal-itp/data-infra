@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: int_gtfs_guidelines_v2__schedule_feed_guideline_index
+  - name: int_gtfs_quality__schedule_feed_guideline_index
     description: |
       Daily index of v2 schedule feeds. Provides structure for
       individual check models to be joined together by day.
@@ -10,14 +10,14 @@ models:
           combination_of_columns:
             - feed_key
             - date
-  - name: int_gtfs_guidelines_v2__schedule_validation_severities
+  - name: int_gtfs_quality__schedule_validation_severities
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - code
             - severity
 
-  - name: int_gtfs_guidelines_v2__no_schedule_validation_errors
+  - name: int_gtfs_quality__no_schedule_validation_errors
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -29,7 +29,7 @@ models:
           - dbt_utils.not_null_proportion:
               at_least: 0.99
 
-  - name: int_gtfs_guidelines_v2__shapes_valid
+  - name: int_gtfs_quality__shapes_valid
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
