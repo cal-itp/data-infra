@@ -6,7 +6,8 @@ models:
   #   appropriate grain
   - name: fct_daily_feed_guideline_checks
     description: |
-      Union of all feed-level daily guideline checks.
+      Union of all feed-level daily guideline checks; unique at
+      the date/feed/check level.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -64,11 +65,12 @@ models:
           - dbt_utils.not_null_proportion:
               at_least: 0.99
 
-  - name: fct_daily_guideline_checks
+  - name: fct_daily_feed_guideline_checks
     description: |
       Indicates whether a given feed passed or failed a given check
       per day. A row will exist for every check, for every row
       from the index which is driven by fct_daily_schedule_feeds.
+      Only contains checks that are performed at the feed level.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -93,6 +95,10 @@ models:
           - not_null
 
   - name: fct_implemented_checks
+    description: |
+      Contains the actually implemented checks, i.e. checks that
+      show up in the underlying daily checks model. Tested against
+      the "intended checks" to verify checks are actually implemented.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
