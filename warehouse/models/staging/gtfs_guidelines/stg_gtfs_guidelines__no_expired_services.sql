@@ -83,6 +83,7 @@ daily_earliest_service_expiration AS (
         feature,
         MIN(service_end_date) AS earliest_service_end_date
    FROM daily_service_expiration
+  WHERE service_id IS NOT null
   GROUP BY 1,2,3,4,5,6,7
 ),
 
