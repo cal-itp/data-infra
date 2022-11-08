@@ -71,6 +71,10 @@
 "Include tts_stop_name entries in stops.txt for stop names that are pronounced incorrectly in most mobile applications"
 {% endmacro %}
 
+{% macro no_expired_services() %}
+"No expired services are listed in the feed"
+{% endmacro %}
+
 -- declare features
 {% macro compliance() %}
 "Compliance"
@@ -94,6 +98,10 @@
 
 {% macro feed_aggregator_availability() %}
 "Feed Aggregator Availability"
+{% endmacro %}
+
+{% macro best_practices_alignment() %}
+"Best Practices Alignment"
 {% endmacro %}
 
 -- columns

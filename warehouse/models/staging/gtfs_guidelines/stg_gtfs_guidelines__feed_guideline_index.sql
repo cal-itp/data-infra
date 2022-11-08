@@ -45,6 +45,8 @@ checks_implemented AS (
     SELECT {{ service_alerts_feed_on_transitland() }}, {{ feed_aggregator_availability() }}
     UNION ALL
     SELECT {{ include_tts() }}, {{ accurate_accessibility_data() }}
+    UNION ALL
+    SELECT {{ no_expired_services() }}, {{ best_practices_alignment() }}
 ),
 
 -- create an index: all feed/date/check combinations
