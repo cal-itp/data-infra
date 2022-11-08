@@ -5,7 +5,7 @@ models:
   #   we will need to create additional daily check fact tables at the
   #   appropriate grain
   - name: fct_daily_feed_guideline_checks
-    description: '{{ doc("guideline_checks") }}'
+    description: '{{ doc("fct_daily_feed_guideline_checks") }}'
 
     tests:
       - dbt_utils.unique_combination_of_columns:
