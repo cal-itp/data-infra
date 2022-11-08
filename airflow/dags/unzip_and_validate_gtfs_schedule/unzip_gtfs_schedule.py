@@ -28,6 +28,9 @@ from utils import GTFSScheduleFeedFile
 
 SCHEDULE_UNZIPPED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED"]
 SCHEDULE_RAW_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_RAW"]
+GTFS_UNZIP_LIST_ERROR_THRESHOLD = float(
+    os.getenv("GTFS_UNZIP_LIST_ERROR_THRESHOLD", 0.99)
+)
 
 
 def log(*args, err=False, fg=None, pbar=None, **kwargs):
@@ -211,6 +214,14 @@ def unzip_extracts(
     assert len(extracts) == len(
         result.outcomes
     ), f"ended up with {len(outcomes)} outcomes from {len(extracts)} extracts"
+
+    success_rate = len(result.successes) / len(extracts)
+    if success_rate < GTFS_UNZIP_LIST_ERROR_THRESHOLD:
+        exceptions = [failure.exception for failure in result.failures]
+        exc_str = "\n".join(str(tup) for tup in exceptions)
+        msg = f"got {len(exceptions)} exceptions from validating {len(extracts)} extracts:\n{exc_str}"
+        typer.secho(msg, err=True, fg=typer.colors.RED)
+        raise RuntimeError(msg)
 
 
 def airflow_unzip_extracts(task_instance, execution_date, **kwargs):
