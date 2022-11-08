@@ -28,6 +28,8 @@ models:
           combination_of_columns:
             - date
             - feed_key
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__schedule_feed_guideline_index')
     columns:
       - name: status
         tests:
@@ -40,6 +42,8 @@ models:
           combination_of_columns:
             - date
             - feed_key
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__schedule_feed_guideline_index')
     columns:
       - name: status
         tests:
