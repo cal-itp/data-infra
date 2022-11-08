@@ -5,11 +5,8 @@ models:
   #   we will need to create additional daily check fact tables at the
   #   appropriate grain
   - name: fct_daily_feed_guideline_checks
-    description: |
-      Indicates whether a given feed passed or failed a given check
-      per day. A row will exist for every check, for every row
-      from the index which is driven by fct_daily_schedule_feeds.
-      Only contains checks that are performed at the feed level.
+    description: '{{ doc("guideline_checks") }}'
+
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
