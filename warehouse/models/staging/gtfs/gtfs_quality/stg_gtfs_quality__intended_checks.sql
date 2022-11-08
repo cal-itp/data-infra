@@ -33,6 +33,10 @@ WITH stg_gtfs_quality__intended_checks AS (
     {# SELECT {{ trip_updates_feed_on_transitland() }}, {{ feed_aggregator_availability() }} #}
     {# UNION ALL #}
     {# SELECT {{ service_alerts_feed_on_transitland() }}, {{ feed_aggregator_availability() }} #}
+    UNION ALL
+    SELECT {{ no_7_day_feed_expiration() }}, {{ best_practices_alignment() }}
+    UNION ALL
+    SELECT {{ no_30_day_feed_expiration() }}, {{ best_practices_alignment() }}
 )
 
 SELECT * FROM stg_gtfs_quality__intended_checks
