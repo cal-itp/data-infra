@@ -51,7 +51,7 @@ checks_implemented AS (
 
 -- create an index: all feed/date/check combinations
 -- we never want results from the current date, as data will be incomplete
-stg_gtfs_guidelines__feed_check_index AS (
+stg_gtfs_guidelines__feed_guideline_index AS (
     SELECT
         t2.calitp_itp_id,
         t2.calitp_url_number,
@@ -67,4 +67,4 @@ stg_gtfs_guidelines__feed_check_index AS (
     WHERE t1.date < CURRENT_DATE
 )
 
-SELECT * FROM stg_gtfs_guidelines__feed_check_index
+SELECT * FROM stg_gtfs_guidelines__feed_guideline_index
