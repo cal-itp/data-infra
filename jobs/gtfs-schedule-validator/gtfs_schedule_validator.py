@@ -38,6 +38,9 @@ JAR_DEFAULT = typer.Option(
 )
 SCHEDULE_VALIDATION_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION"]
 GTFS_VALIDATOR_VERSION = os.environ["GTFS_SCHEDULE_VALIDATOR_VERSION"]
+GTFS_VALIDATE_LIST_ERROR_THRESHOLD = float(
+    os.getenv("GTFS_VALIDATE_LIST_ERROR_THRESHOLD", 0.99)
+)
 
 app = typer.Typer()
 logging.basicConfig()
@@ -330,15 +333,16 @@ def validate_day(
     )
     result.save(get_fs())
 
-    if exceptions:
-        exc_str = "\n".join(str(tup) for tup in exceptions)
-        msg = f"got {len(exceptions)} exceptions from processing {len(extracts)} extracts:\n{exc_str}"
-        typer.secho(msg, err=True, fg=typer.colors.RED)
-        raise RuntimeError(msg)
-
     assert len(extracts) == len(
         result.outcomes
     ), f"ended up with {len(outcomes)} outcomes from {len(extracts)} extracts"
+
+    success_rate = len(result.successes) / len(extracts)
+    if success_rate < GTFS_VALIDATE_LIST_ERROR_THRESHOLD:
+        exc_str = "\n".join(str(tup) for tup in exceptions)
+        msg = f"got {len(exceptions)} exceptions from validating {len(extracts)} extracts:\n{exc_str}"
+        typer.secho(msg, err=True, fg=typer.colors.RED)
+        raise RuntimeError(msg)
 
 
 if __name__ == "__main__":
