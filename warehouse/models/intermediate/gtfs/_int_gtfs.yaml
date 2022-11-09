@@ -175,7 +175,7 @@ models:
       - name: step
       - name: base64_url
       - name: ts
-  - name: int_gtfs_schedule__incremental_trips
+  - name: int_gtfs_schedule__stop_times
     description: |
       This table is an incremental, sparse history of GTFS schedule stop times data.
       It is a precursor to `dim_stop_times` with the goal of facilitating duplicate detection and missing key issues.
