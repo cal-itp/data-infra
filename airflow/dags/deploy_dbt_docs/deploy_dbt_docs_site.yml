@@ -12,6 +12,7 @@ arguments:
   - '--deploy-docs'
 
 is_delete_operator_pod: true
+startup_timeout_seconds: 300
 get_logs: true
 is_gke: true
 pod_location: us-west1
