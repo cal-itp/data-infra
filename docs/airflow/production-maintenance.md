@@ -32,7 +32,7 @@ DAGs are listed in alphabetical order, as they appear in the Airflow UI.
 `amplitude_benefits` | Yes | No | **🔂 No** | N/A | |
 `check_feed_aggregators` | **⛔ No** | No | **🔂 No** | N/A | |
 `create_external_tables` | N/A | N/A | N/A | N/A | Once-only (defines external tables); does not generally need to be re-run  |
-`deploy_dbt_docs` | Yes | No |  | N/A | Manual job to deploy dbt docs to Metabase and Netlify |
+`deploy_dbt_docs` | Yes | No | N/A | N/A | Manual job to deploy dbt docs to Metabase and Netlify |
 `download_gtfs_schedule_v2` | Yes | No | No* | N/A | Don't need to rerun more than once if multiple failures; scrapes data that is correctly timestamped  |
 `gtfs_downloader. generate_provider_list` and `gtfs_downloader. download_data` | **⛔ No*** | No | **🔂 No** | N/A |  |
 `gtfs_downloader. email_failures` and `gtfs_downloader. validate_gcs_bucket` | Yes | No | **🔂 No** | N/A |  |
