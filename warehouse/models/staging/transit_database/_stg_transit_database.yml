@@ -160,7 +160,6 @@ models:
       - name: schedule_comments__from_gtfs_dataset_
       - name: itp_activities__from_gtfs_dataset_
       - name: fares_notes__from_gtfs_dataset_
-      - name: reference_static_gtfs_service_data_key
       - name: uri
       - name: currently_operating__from_services_
       - name: provider_reporting_category

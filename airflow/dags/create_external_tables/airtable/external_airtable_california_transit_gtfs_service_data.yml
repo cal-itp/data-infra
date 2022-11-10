@@ -13,3 +13,100 @@ use_bq_client: true
 hive_options:
   mode: AUTO
   source_uri_prefix: "california_transit__gtfs_service_data/"
+schema_fields:
+  - name: network_id
+    type: STRING
+    mode: NULLABLE
+  - name: itp_schedule_todo__from_gtfs_dataset_
+    type: STRING
+    mode: REPEATED
+  - name: fares_notes__from_gtfs_dataset_
+    type: STRING
+    mode: REPEATED
+  - name: fares_v2_status
+    type: STRING
+    mode: REPEATED
+  - name: agency_id
+    type: STRING
+    mode: NULLABLE
+  - name: qc__number_of_gtfs_datasets
+    type: INTEGER
+    mode: NULLABLE
+  - name: pathways_status
+    type: STRING
+    mode: REPEATED
+  - name: qc__has_minimum_required_fields
+    type: STRING
+    mode: NULLABLE
+  - name: provider_reporting_category
+    type: STRING
+    mode: REPEATED
+  - name: flex_status
+    type: STRING
+    mode: REPEATED
+  - name: service_type__from_services_
+    type: STRING
+    mode: REPEATED
+  - name: dataset_type
+    type: STRING
+    mode: REPEATED
+  - name: qc__duplicate_check
+    type: STRING
+    mode: REPEATED
+  - name: dataset_producers__from_gtfs_dataset_
+    type: STRING
+    mode: REPEATED
+  - name: dataset_publisher__from_gtfs_dataset_
+    type: STRING
+    mode: REPEATED
+  - name: itp_activities__from_gtfs_dataset_
+    type: STRING
+    mode: REPEATED
+  - name: gtfs_dataset_type
+    type: STRING
+    mode: REPEATED
+  - name: services
+    type: STRING
+    mode: REPEATED
+  - name: qc__number_of_duplicate_names
+    type: INTEGER
+    mode: NULLABLE
+  - name: route_id
+    type: STRING
+    mode: NULLABLE
+  - name: category
+    type: STRING
+    mode: NULLABLE
+  - name: provider
+    type: STRING
+    mode: REPEATED
+  - name: schedule_comments__from_gtfs_dataset_
+    type: STRING
+    mode: REPEATED
+  - name: manual_check__demand_response_completeness
+    type: STRING
+    mode: NULLABLE
+  - name: qc__number_of_services
+    type: INTEGER
+    mode: NULLABLE
+  - name: operator
+    type: STRING
+    mode: REPEATED
+  - name: gtfs_dataset
+    type: STRING
+    mode: REPEATED
+  - name: uri
+    type: STRING
+    mode: REPEATED
+  - name: name
+    type: STRING
+    mode: NULLABLE
+  - name: manual_check__fixed_route_completeness
+    type: STRING
+    mode: NULLABLE
+  - name: currently_operating__from_services_
+    type: BOOLEAN
+    mode: REPEATED
+  - name: id
+    type: STRING
+    mode: NULLABLE
