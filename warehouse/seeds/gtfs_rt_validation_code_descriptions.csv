@@ -1,0 +1,58 @@
+Code,Description,Is_Critical
+E001,Not in POSIX time,y
+E002,stop_time_updates not strictly sorted,y
+E003,GTFS-rt trip_id does not exist in GTFS data,y
+E004,GTFS-rt route_id does not exist in GTFS data,
+E006,Missing required trip field for frequency-based exact_times = 0,
+E009,GTFS-rt stop_sequence isn't provided for trip that visits same stop_id more than once,y
+E010,location_type not 0 in stops.txt (Note that this is implemented but not executed because it's specific to GTFS - see issue #126),
+E011,GTFS-rt stop_id does not exist in GTFS data,y
+E012,Header timestamp should be greater than or equal to all other timestamps,
+E013,Frequency type 0 trip schedule_relationship should be UNSCHEDULED or empty,
+E015,All stop_ids referenced in GTFS-rt TripUpdates and VehiclePositions feeds must have the location_type = 0,
+E016,trip_ids with schedule_relationship ADDED must not be in GTFS data,
+E017,GTFS-rt content changed but has the same header timestamp,
+E018,GTFS-rt header timestamp decreased between two sequential iterations,
+E019,GTFS-rt frequency type 1 trip start_time must be a multiple of GTFS headway_secs later than GTFS start_time,
+E020,Invalid start_time format,y
+E021,Invalid start_date format,y
+E022,Sequential stop_time_update times are not increasing,y
+E023,trip start_time does not match first GTFS arrival_time,
+E024,trip direction_id does not match GTFS data,
+E025,stop_time_update departure time is before arrival time,
+E026,Invalid vehicle position,y
+E027,Invalid vehicle bearing,
+E028,Vehicle position outside agency coverage area,
+E029,Vehicle position far from trip shape,y
+E030,GTFS-rt alert trip_id does not belong to GTFS-rt alert route_id in GTFS trips.txt,
+E031,Alert informed_entity.route_id does not match informed_entity.trip.route_id,
+E032,Alert does not have an informed_entity,
+E033,Alert informed_entity does not have any specifiers,
+E034,GTFS-rt agency_id does not exist in GTFS data,
+E035,GTFS-rt trip.trip_id does not belong to GTFS-rt trip.route_id in GTFS trips.txt,
+E036,Sequential stop_time_updates have the same stop_sequence,
+E037,Sequential stop_time_updates have the same stop_id,
+E038,Invalid header.gtfs_realtime_version,
+E039,FULL_DATASET feeds should not include entity.is_deleted,
+E040,stop_time_update doesn't contain stop_id or stop_sequence,y
+E041,trip doesn't have any stop_time_updates,
+E042,arrival or departure provided for NO_DATA stop_time_update,
+E043,stop_time_update doesn't have arrival or departure,y
+E044,stop_time_update arrival/departure doesn't have delay or time,y
+E045,GTFS-rt stop_time_update stop_sequence and stop_id do not match GTFS,
+E046,GTFS-rt stop_time_update without time doesn't have arrival/departure time in GTFS,
+E047,VehiclePosition and TripUpdate ID pairing mismatch,
+E048,header timestamp not populated (GTFS-rt v2.0 and higher),
+E049,header incrementality not populated (GTFS-rt v2.0 and higher),
+E050,timestamp is in the future,
+E051,GTFS-rt stop_sequence not found in GTFS data,
+E052,vehicle.id is not unique,
+W001,timestamps not populated,
+W002,vehicle_id not populated,
+W003,ID in one feed missing from the other,
+W004,vehicle speed is unrealistic,
+W005,Missing vehicle_id in trip_update for frequency-based exact_times = 0,
+W006,trip_update missing trip_id,
+W007,Refresh interval is more than 35 seconds,y
+W008,Header timestamp is older than 65 seconds,y
+W009,schedule_relationship not populated,
