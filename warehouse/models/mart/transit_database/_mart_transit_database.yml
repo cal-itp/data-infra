@@ -258,10 +258,6 @@ models:
           listed here.  If all `route_id` should be selected, this is blank.
           "Leftover" `route_id` from other `route_id` selections for the
           same `GTFS dataset` are indicated by `*`.
-      - name: reference_static_gtfs_service_data_key
-        description: |
-          For realtime dataset / service relationships,
-          the associated schedule dataset / service relationship.
       - name:  fares_v2_status
         # self relationship test breaks metabase connector: https://github.com/JarvusInnovations/dbt-metabase/blob/master/dbtmetabase/parsers/dbt_manifest.py#L202
         # TODO: make an aliased version of the relationship test
