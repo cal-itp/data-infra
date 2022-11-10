@@ -7,13 +7,15 @@ models:
   - name: fct_daily_schedule_feed_guideline_checks
     description: '{{ doc("fct_daily_schedule_feed_guideline_checks") }}'
     columns:
-      - name: key
+      - &key
+        name: key
         tests: &primary_key_tests
-          - not_null
           - unique
+          - not_null
         meta: &pk_meta
           metabase.semantic_type: type/PK
-      - name: date
+      - &date
+        name: date
         tests:
           - not_null
       - name: feed_key
@@ -22,6 +24,15 @@ models:
         meta: &fk_meta
           metabase.semantic_type: type/FK
       - name: status
+      - &check
+        name: check
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_gtfs_quality__intended_checks')
+              field: check
+      - &status
+        name: status
         tests:
           - dbt_utils.not_null_proportion:
               at_least: 0.99
@@ -31,19 +42,14 @@ models:
     description: '{{ doc("fct_daily_rt_feed_guideline_checks") }}'
     tests:
     columns:
-      - name: key
-        tests: *primary_key_tests
-        meta: *pk_meta
-      - name: date
-        tests:
-          - not_null
+      - *key
+      - *date
       - name: base64_url
+      - name: feed_key
         tests:
           - not_null
-      - name: status
-        tests:
-          - dbt_utils.not_null_proportion:
-              at_least: 0.99
+      - *check
+      - *status
 
 
   - name: fct_daily_rt_feed_validation_notices
@@ -56,13 +62,8 @@ models:
       - dbt_utils.expression_is_true:
           expression: 'validated_extracts = validation_successes + validation_exceptions'
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from date, feed_key, and code.
-        tests: *primary_key_tests
-      - name: date
-        tests:
-          - not_null
+      - *key
+      - *date
       - name: code
         tests:
           - not_null
@@ -107,9 +108,7 @@ models:
           Synthetic primary key constructed from date, feed_key, and code.
         tests: *primary_key_tests
         meta: *pk_meta
-      - name: date
-        tests:
-          - not_null
+      - *date
       - name: feed_key
         tests:
           - not_null
