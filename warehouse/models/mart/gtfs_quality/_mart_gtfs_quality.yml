@@ -4,19 +4,13 @@ models:
   # TODO: once we have checks that occur above the feed level (e.g. organization)
   #   we will need to create additional daily check fact tables at the
   #   appropriate grain
-  - name: fct_daily_feed_guideline_checks
-    description: '{{ doc("fct_daily_feed_guideline_checks") }}'
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - date
-            - feed_key
-            - check
+  - name: fct_daily_schedule_feed_guideline_checks
+    description: '{{ doc("fct_daily_schedule_feed_guideline_checks") }}'
     columns:
       - name: key
         tests: &primary_key_tests
-          - unique
           - not_null
+          - unique
         meta: &pk_meta
           metabase.semantic_type: type/PK
       - name: date
@@ -31,6 +25,75 @@ models:
         tests:
           - dbt_utils.not_null_proportion:
               at_least: 0.99
+
+
+  - name: fct_daily_rt_feed_guideline_checks
+    description: '{{ doc("fct_daily_rt_feed_guideline_checks") }}'
+    tests:
+    columns:
+      - name: key
+        tests: *primary_key_tests
+        meta: *pk_meta
+      - name: date
+        tests:
+          - not_null
+      - name: base64_url
+        tests:
+          - not_null
+      - name: status
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
+
+
+  - name: fct_daily_rt_feed_validation_notices
+    description: |
+      A daily model of validation notices found per feed. Data
+      is filled in so there is always a count of notices per day
+      per feed, even if that count is zero; null counts indicate
+      a lack of validation for that feed on that day.
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: 'validated_extracts = validation_successes + validation_exceptions'
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from date, feed_key, and code.
+        tests: *primary_key_tests
+      - name: date
+        tests:
+          - not_null
+      - name: code
+        tests:
+          - not_null
+      - name: is_critical
+        tests:
+          - not_null
+      - name: parsed_files
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
+          - dbt_utils.expression_is_true:
+              expression: '<= 4320'
+      - name: validated_extracts
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
+          - dbt_utils.expression_is_true:
+              expression: '<= 4320'
+      - name: validation_successes
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
+          - dbt_utils.expression_is_true:
+              expression: '<= 4320'
+      - name: validation_exceptions
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
+          - dbt_utils.expression_is_true:
+              expression: '<= 4320'
+      - name: total_notices
 
   - name: fct_daily_schedule_feed_validation_notices
     description: |
