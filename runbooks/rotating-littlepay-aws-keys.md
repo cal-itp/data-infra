@@ -4,7 +4,7 @@ LittlePay requests that clients accessing their raw data feeds through S3 rotate
 
 0.  **Pre-requisites**
 
-    You'll to install the `aws` CLI locally, and to configure profiles for each Littlepay `merchant_id` (the account names in LittlePay). To set up a profile, follow the instructions at https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. You can find the access key id and secret for each `merchant_id` in [VaultWarden](https://vaultwarden.jarv.us/#/vault) (search for "_aws_" and you should see several entries with names that match the format "_Cal-ITP Littlepay AWS IAM Keys (<merchant_id>)_").
+    You'll need to install the `aws` CLI locally, and to configure profiles for each Littlepay `merchant_id` (the account names in LittlePay). To set up a profile, follow the instructions at https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. You can find the access key id and secret for each `merchant_id` in [VaultWarden](https://vaultwarden.jarv.us/#/vault) (search for "_aws_" and you should see several entries with names that match the format "_Cal-ITP Littlepay AWS IAM Keys (<merchant_id>)_").
 
 1.  **Creating new AWS credentials**
 
