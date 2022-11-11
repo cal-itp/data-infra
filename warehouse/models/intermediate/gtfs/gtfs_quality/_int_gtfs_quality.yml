@@ -49,3 +49,17 @@ models:
         tests:
           - dbt_utils.not_null_proportion:
               at_least: 0.99
+
+  - name: int_gtfs_quality__technical_contact_listed
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - feed_key
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__schedule_feed_guideline_index')
+    columns:
+      - name: status
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
