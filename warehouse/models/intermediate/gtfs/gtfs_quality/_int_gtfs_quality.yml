@@ -43,4 +43,3 @@ models:
   - name: int_gtfs_quality__shapes_for_all_trips
     tests: *stg_gtfs_guideline_tests
     columns: *stg_gtfs_guideline_columns
-
