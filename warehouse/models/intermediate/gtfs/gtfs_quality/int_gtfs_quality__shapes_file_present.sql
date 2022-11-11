@@ -24,13 +24,14 @@ int_gtfs_quality__shapes_file_present AS (
         {{ accurate_service_data() }} AS feature,
         -- Status will be null in cases where feed had download or unzip failure
         CASE
-            WHEN has_shapes THEN "PASS"
-            WHEN NOT(has_shapes) THEN "FAIL"
+            WHEN LOGICAL_OR(has_shapes) THEN "PASS"
+            WHEN NOT(LOGICAL_OR(has_shapes)) THEN "FAIL"
         END AS status
     FROM feed_guideline_index idx
     LEFT JOIN daily_feed_shapes_present s
         ON idx.feed_key = s.feed_key
             AND idx.date = s.date
+    GROUP BY 1,2,3,4
 )
 
 SELECT * FROM int_gtfs_quality__shapes_file_present
