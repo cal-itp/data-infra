@@ -1,7 +1,7 @@
 {{ config(
     materialized='incremental',
     incremental_strategy='insert_overwrite',
-    partition_by={
+    partition_by = {
         'field': 'dt',
         'data_type': 'date',
         'granularity': 'day',
