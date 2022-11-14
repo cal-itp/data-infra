@@ -9,7 +9,7 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#agencytxt.
     meta:
-      ckan.authority: https://developers.google.com/transit/gtfs/reference#agencytxt
+      ckan.authority: https://gtfs.org/schedule/reference/#agencytxt
     columns:
       - &calitp_itp_id
         name: calitp_itp_id
@@ -73,7 +73,7 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#attributionstxt.
     meta:
-      ckan.authority: https://developers.google.com/transit/gtfs/reference#attributionstxt
+      ckan.authority: https://gtfs.org/schedule/reference/#attributionstxt
     columns:
       - *calitp_itp_id
       - *calitp_url_number
@@ -116,7 +116,7 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#calendartxt.
     meta:
-      ckan.authority: https://developers.google.com/transit/gtfs/reference#calendartxt
+      ckan.authority: https://gtfs.org/schedule/reference/#calendartxt
     columns:
       - *calitp_itp_id
       - *calitp_url_number
