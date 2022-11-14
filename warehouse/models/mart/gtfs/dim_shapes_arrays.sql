@@ -9,6 +9,7 @@ WITH dim_shapes AS (
 lat_long AS (
     SELECT
         feed_key,
+        base64_url,
         shape_id,
         shape_pt_sequence,
         ST_GEOGPOINT(
@@ -24,6 +25,7 @@ lat_long AS (
 initial_pt_array AS (
     SELECT
         feed_key,
+        base64_url,
         shape_id,
         _valid_from,
         _valid_to,
@@ -39,15 +41,16 @@ initial_pt_array AS (
         -- count number of rows so we can check for nulls (drops) later
         COUNT(*) AS ct
     FROM lat_long
-    GROUP BY feed_key, shape_id, _valid_from, _valid_to
+    GROUP BY feed_key, base64_url, shape_id, _valid_from, _valid_to
 ),
 
-dim_shapes_geo AS (
+dim_shapes_arrays AS (
     SELECT
         {{ dbt_utils.surrogate_key(['feed_key', 'shape_id']) }} AS key,
         feed_key,
         shape_id,
         pt_array,
+        base64_url,
         _valid_from,
         _valid_to
     FROM initial_pt_array
@@ -55,4 +58,4 @@ dim_shapes_geo AS (
     WHERE ARRAY_LENGTH(pt_array) = ct
 )
 
-SELECT * FROM dim_shapes_geo
+SELECT * FROM dim_shapes_arrays
