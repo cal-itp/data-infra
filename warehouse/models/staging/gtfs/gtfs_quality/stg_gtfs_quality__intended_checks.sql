@@ -11,11 +11,11 @@ WITH stg_gtfs_quality__intended_checks AS (
     {# SELECT {{ shapes_for_all_trips() }}, {{ accurate_service_data() }} #}
     {# UNION ALL #}
     SELECT {{ shapes_valid() }}, {{ accurate_service_data() }}
-    {# UNION ALL #}
+    UNION ALL
     {# SELECT {{ pathways_valid() }}, {{ accurate_accessibility_data() }} #}
     {# UNION ALL #}
     SELECT {{ technical_contact_listed() }}, {{ technical_contact_availability() }}
-    UNION ALL
+    {# UNION ALL #}
     {# SELECT {{ no_rt_critical_validation_errors() }}, {{ compliance() }} #}
     {# UNION ALL #}
     {# SELECT {{ trip_id_alignment() }}, {{ fixed_route_completeness() }} #}
