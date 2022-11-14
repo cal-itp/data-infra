@@ -867,6 +867,8 @@ models:
             - ts
             - trip_id
             - stop_sequence
+          severity: warn
+
     columns:
       - name: base64_url
       - name: ts
@@ -885,7 +887,9 @@ models:
       - name: stop_id
         description: '{{ doc("gtfs_stop_times__stop_id") }}'
         tests:
-        - not_null
+        - not_null:
+            config:
+              severity: warn
       - name: stop_sequence
         description: '{{ doc("gtfs_stop_times__stop_sequence") }}'
         tests:

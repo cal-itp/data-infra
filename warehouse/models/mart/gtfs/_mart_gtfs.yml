@@ -1150,7 +1150,8 @@ models:
       - name: stop_id
         description: '{{ doc("gtfs_stop_times__stop_id") }}'
         tests:
-        - not_null
+        - not_null:
+            where: "not warning_missing_foreign_key_stop_id"
       - name: stop_sequence
         description: '{{ doc("gtfs_stop_times__stop_sequence") }}'
         tests:
