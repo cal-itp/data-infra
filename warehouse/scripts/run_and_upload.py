@@ -18,7 +18,7 @@ from dbt_artifacts import (
     RunResultStatus,
 )
 
-CALITP_BUCKET__DBT_ARTIFACTS = os.environ["CALITP_BUCKET__DBT_ARTIFACTS"]
+CALITP_BUCKET__DBT_ARTIFACTS = os.getenv("CALITP_BUCKET__DBT_ARTIFACTS")
 
 artifacts = map(
     Path, ["index.html", "catalog.json", "manifest.json", "run_results.json"]
@@ -108,6 +108,9 @@ def run(
     assert (
         dbt_docs or not save_artifacts
     ), "cannot save artifacts without generating them!"
+    assert (
+        CALITP_BUCKET__DBT_ARTIFACTS or not save_artifacts
+    ), "must specify an artifacts bucket if saving artifacts"
     assert dbt_docs or not deploy_docs, "cannot deploy docs without generating them!"
 
     def get_command(*args) -> List[str]:
@@ -220,6 +223,7 @@ def run(
             ("gtfs_schedule", "GTFS Schedule Feeds Latest"),
             ("mart_transit_database", "Data Marts (formerly Warehouse Views)"),
             ("mart_gtfs_guidelines", "Data Marts (formerly Warehouse Views)"),
+            ("mart_gtfs", "Data Marts (formerly Warehouse Views)"),
         ]:
             args = [
                 "dbt-metabase",

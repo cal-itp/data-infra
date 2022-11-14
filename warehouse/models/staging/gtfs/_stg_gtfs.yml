@@ -910,6 +910,7 @@ models:
         description: '{{ doc("gtfs_stop_times__timepoint") }}'
     meta:
       publish.gis_coordinate_system_epsg: WGS84
+
   - name: stg_gtfs_rt__service_alerts_outcomes
     description: Outcomes from parsing process on GTFS RT service alerts data.
     columns: &stg_gtfs_rt_parse_outcomes_columns
@@ -935,8 +936,8 @@ models:
       - name: base64_url
       - name: ts
   - name: stg_gtfs_rt__vehicle_positions_outcomes
-    description: Outcomes from parsing process on GTFS RT vehicle_positions data.
+    description: Outcomes from parsing process on GTFS RT vehicle positions data.
     columns: *stg_gtfs_rt_parse_outcomes_columns
   - name: stg_gtfs_rt__trip_updates_outcomes
-    description: Outcomes from parsing process on GTFS RT vehicle_positions data.
+    description: Outcomes from parsing process on GTFS RT trip updates data.
     columns: *stg_gtfs_rt_parse_outcomes_columns
