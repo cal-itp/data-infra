@@ -9,12 +9,10 @@ dim_trips AS (
 summarize_trips AS (
    SELECT
        feed_key,
-       EXTRACT(date FROM _valid_from) AS valid_from,
-       EXTRACT(date FROM _valid_to) AS valid_to,
        COUNTIF(shape_id IS NOT NULL) AS ct_shape_trips,
        COUNT(*) AS ct_trips
     FROM dim_trips
-   GROUP BY 1, 2, 3
+   GROUP BY 1
 ),
 
 daily_trips AS (
@@ -25,9 +23,7 @@ daily_trips AS (
     SUM(t2.ct_trips) AS tot_trips
   FROM feed_guideline_index AS t1
   LEFT JOIN summarize_trips AS t2
-       ON t1.date >= t2.valid_from
-       AND t1.date <= t2.valid_to
-       AND t1.feed_key = t2.feed_key
+       ON t1.feed_key = t2.feed_key
  GROUP BY 1, 2
 ),
 
