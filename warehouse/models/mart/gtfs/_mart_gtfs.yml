@@ -1204,6 +1204,12 @@ models:
           - relationships:
               to: ref('dim_routes')
               field: key
+      - name: shape_array_key
+        description: Foreign key to dim_shapes_arrays.
+        tests:
+          - relationships:
+              to: ref('dim_shapes_arrays')
+              field: key
       - name: warning_duplicate_trip_primary_key
         description: |
           Rows with `true` in this column have a duplicate primary key in dim_trips;
