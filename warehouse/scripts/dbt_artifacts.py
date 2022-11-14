@@ -268,7 +268,7 @@ Destination = Annotated[
 
 class ExposureMeta(BaseModel):
     methodology: Optional[str]
-    coordinate_system_epsg: Optional[str] = constr(regex=r"\d+")
+    coordinate_system_epsg: Optional[constr(regex=r"\d+")]  # noqa: F722
     destinations: List[Destination] = []
 
 
