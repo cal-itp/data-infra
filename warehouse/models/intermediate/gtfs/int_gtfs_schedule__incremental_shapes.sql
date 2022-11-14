@@ -31,6 +31,7 @@ int_gtfs_schedule__incremental_shapes AS (
         t1.shape_pt_sequence,
         t1.shape_dist_traveled,
         t1.base64_url,
+        t1.ts,
         CURRENT_TIMESTAMP() AS _inserted_at
     FROM stg_gtfs_schedule__shapes t1
     INNER JOIN dim_schedule_feeds t2

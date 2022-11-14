@@ -187,6 +187,7 @@ models:
             - shape_pt_sequence
     columns:
       - name: base64_url
+      - name: ts
       - name: shape_id
         description: '{{ doc("gtfs_shapes__shape_id") }}'
         tests:
