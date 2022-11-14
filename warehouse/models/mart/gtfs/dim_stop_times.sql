@@ -14,18 +14,6 @@ make_dim AS (
 {{ make_schedule_file_dimension_from_dim_schedule_feeds('dim_schedule_feeds', 'int_gtfs_schedule__incremental_stop_times') }}
 ),
 
-bad_rows AS (
-    SELECT
-        base64_url,
-        ts,
-        trip_id,
-        stop_sequence,
-        TRUE AS warning_duplicate_primary_key
-    FROM make_dim
-    GROUP BY base64_url, ts, trip_id, stop_sequence
-    HAVING COUNT(*) > 1
-),
-
 dim_stop_times AS (
     SELECT
         {{ dbt_utils.surrogate_key(['feed_key', 'trip_id', 'stop_sequence']) }} AS key,
@@ -43,13 +31,11 @@ dim_stop_times AS (
         continuous_drop_off,
         shape_dist_traveled,
         timepoint,
-        COALESCE(warning_duplicate_primary_key, FALSE) AS warning_duplicate_primary_key,
+        COUNT(*) OVER (PARTITION BY base64_url, ts, trip_id, stop_sequence) > 1 AS warning_duplicate_primary_key,
         stop_id IS NULL AS warning_missing_foreign_key_stop_id,
         _valid_from,
         _valid_to
     FROM make_dim
-    LEFT JOIN bad_rows
-        USING (base64_url, ts, trip_id, stop_sequence)
 )
 
 SELECT * FROM dim_stop_times
