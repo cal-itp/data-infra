@@ -92,7 +92,7 @@ class MetadataRow(BaseModel):
     use_constraints: Literal["Creative Commons 4.0 Attribution"]
     data_life_span: None
     caltrans_link: None
-    data_standard: Literal["https://developers.google.com/transit/gtfs"]
+    data_standard: Literal["https://gtfs.org/schedule/"]
     notes: None
     gis_theme: None
     gis_horiz_accuracy: Optional[Literal["4m"]]
@@ -320,7 +320,7 @@ def _generate_exposure_documentation(
             use_constraints="Creative Commons 4.0 Attribution",
             data_life_span=None,
             caltrans_link=None,
-            data_standard="https://developers.google.com/transit/gtfs",
+            data_standard="https://gtfs.org/schedule/",
             notes=None,
             gis_theme=None,
             gis_horiz_accuracy="4m",
