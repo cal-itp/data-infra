@@ -5,9 +5,9 @@ WITH stg_gtfs_quality__intended_checks AS (
     SELECT {{ no_validation_errors() }} AS check, {{ compliance() }} AS feature
     UNION ALL
     {# SELECT {{ complete_wheelchair_accessibility_data() }}, {{ accurate_accessibility_data() }} #}
-    UNION ALL
-    SELECT {{ shapes_file_present() }}, {{ accurate_service_data() }}
     {# UNION ALL #}
+    SELECT {{ shapes_file_present() }}, {{ accurate_service_data() }}
+    UNION ALL
     {# SELECT {{ shapes_for_all_trips() }}, {{ accurate_service_data() }} #}
     {# UNION ALL #}
     SELECT {{ shapes_valid() }}, {{ accurate_service_data() }}

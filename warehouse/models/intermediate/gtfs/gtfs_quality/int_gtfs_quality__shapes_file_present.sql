@@ -10,7 +10,7 @@ daily_feed_shapes_present AS (
            CASE WHEN EXISTS(SELECT * FROM UNNEST(zipfile_files) AS x WHERE LOWER(x) LIKE '%shapes.txt') THEN true
                 ELSE false
            END AS has_shapes
-      FROM `cal-itp-data-infra-staging`.`owades_mart_gtfs`.`fct_schedule_feed_downloads`
+      FROM {{ ref('fct_schedule_feed_downloads') }}
       -- If download or unzip fails, that is a different issue than a missing shapes file
      WHERE download_success
        AND unzip_success
