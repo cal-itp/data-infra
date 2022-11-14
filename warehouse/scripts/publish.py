@@ -1,11 +1,14 @@
 """
 Publishes various dbt models to various sources.
+
+TODO: consider using https://github.com/ckan/ckanapi?
 """
 import functools
 from datetime import timedelta
 
 import csv
 
+import backoff
 import pendulum
 from google.cloud import bigquery
 from typing import Optional, Literal, List, Dict, BinaryIO, Tuple
@@ -28,7 +31,7 @@ import humanize
 import pandas as pd
 import requests
 import typer
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, validator, constr
 from requests import Response
 from requests_toolbelt import MultipartEncoder
 
@@ -94,7 +97,7 @@ class MetadataRow(BaseModel):
     gis_theme: None
     gis_horiz_accuracy: Optional[Literal["4m"]]
     gis_vert_accuracy: Optional[Literal["4m"]]
-    gis_coordinate_system_epsg: Optional[str]
+    gis_coordinate_system_epsg: Optional[str] = constr(regex=r"\d+")
     gis_vert_datum_epsg: None
 
     class Config:
@@ -112,10 +115,10 @@ class YesOrNo(str, enum.Enum):
 class DictionaryRow(BaseModel):
     system_name: str
     table_name: str
-    field_name: str
+    field_name: constr(to_upper=True)
     field_alias: None
     field_description: str
-    field_description_authority: Optional[str]
+    field_description_authority: str
     confidential: Literal["N"]
     sensitive: Literal["N"]
     pii: Literal["N"]
@@ -153,8 +156,18 @@ def make_linestring(x):
     return pts[0]
 
 
+@backoff.on_exception(
+    backoff.constant,
+    requests.exceptions.HTTPError,
+    max_tries=2,
+    interval=10,
+)
 def upload_to_ckan(
-    url: str, fname: str, fsize: int, file: BinaryIO, resource_id: str, api_key: str
+    url: str,
+    fname: str,
+    fsize: int,
+    file: BinaryIO,
+    resource_id: str,
 ):
     def ckan_request(action: str, data: Dict) -> Response:
         encoder = MultipartEncoder(fields=data)
@@ -166,12 +179,17 @@ def upload_to_ckan(
 
     if fsize <= CHUNK_SIZE:
         typer.secho(f"uploading {humanize.naturalsize(fsize)} to {resource_id}")
-        requests.post(
+        response = requests.post(
             f"{url}/api/action/resource_update",
             data={"id": resource_id},
             headers={"Authorization": API_KEY},
             files={"upload": file},
-        ).raise_for_status()
+        )
+        try:
+            response.raise_for_status()
+        except requests.exceptions.HTTPError:
+            typer.secho(f"response body: {response.text}")
+            raise
     else:
         typer.secho(
             f"uploading {humanize.naturalsize(fsize)} to {resource_id} in {humanize.naturalsize(CHUNK_SIZE)} chunks"
@@ -184,7 +202,11 @@ def upload_to_ckan(
                 "size": str(fsize),
             },
         )
-        initiate_response.raise_for_status()
+        try:
+            initiate_response.raise_for_status()
+        except requests.exceptions.HTTPError:
+            typer.secho(f"response body: {initiate_response.text}")
+            raise
         upload_id = initiate_response.json()["result"]["id"]
 
         # https://stackoverflow.com/a/54989668
@@ -305,7 +327,7 @@ def _generate_exposure_documentation(
                     gis_theme=None,
                     gis_horiz_accuracy="4m",
                     gis_vert_accuracy="4m",
-                    gis_coordinate_system_epsg=exposure.meta.coordinate_system_espg,
+                    gis_coordinate_system_epsg=exposure.meta.coordinate_system_epsg,
                     gis_vert_datum_epsg=None,
                 ).json(models_as_dict=False)
             )
@@ -321,7 +343,9 @@ def _generate_exposure_documentation(
                             field_name=column.name,
                             field_alias=None,
                             field_description=column.description,
-                            field_description_authority="",
+                            field_description_authority=column.meta.get(
+                                "ckan.authority", node.meta.get("ckan.authority")
+                            ),
                             confidential="N",
                             sensitive="N",
                             pii="N",
@@ -416,7 +440,7 @@ def _publish_exposure(
                         f"writing {len(df)} rows ({humanize.naturalsize(os.stat(fpath).st_size)}) from {node.schema_table} to {hive_path}",
                         fg=typer.colors.GREEN,
                     )
-                    fs.put(fpath, hive_path)
+                    fs.put_file(fpath, hive_path)
 
                     fname = destination.filename(model_name)
                     fsize = os.path.getsize(fpath)
@@ -432,7 +456,6 @@ def _publish_exposure(
                                 fsize=fsize,
                                 file=fp,
                                 resource_id=resource.id,
-                                api_key=API_KEY,
                             )
                     else:
                         typer.secho(
