@@ -551,6 +551,7 @@ models:
     columns:
       - name: base64_url
       - name: ts
+      - name: _dt
       - name: shape_id
         description: '{{ doc("gtfs_shapes__shape_id") }}'
         tests:
