@@ -8,8 +8,8 @@ WITH stg_gtfs_quality__intended_checks AS (
     {# UNION ALL #}
     {# SELECT {{ shapes_file_present() }}, {{ accurate_service_data() }} #}
     {# UNION ALL #}
-    {# SELECT {{ shapes_for_all_trips() }}, {{ accurate_service_data() }} #}
-    {# UNION ALL #}
+    SELECT {{ shapes_for_all_trips() }}, {{ accurate_service_data() }}
+    UNION ALL
     SELECT {{ shapes_valid() }}, {{ accurate_service_data() }}
     {# UNION ALL #}
     {# SELECT {{ pathways_valid() }}, {{ accurate_accessibility_data() }} #}
