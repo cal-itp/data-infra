@@ -48,6 +48,9 @@ models:
       - name: feed_key
         tests:
           - not_null
+          - relationships:
+              to: ref('dim_schedule_feeds')
+              field: key
       - *check
       - *status
 

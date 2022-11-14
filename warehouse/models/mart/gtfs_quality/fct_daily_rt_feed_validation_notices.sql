@@ -16,6 +16,14 @@ notices AS (
     SELECT * FROM {{ ref('int_gtfs_quality__rt_validation_notices') }}
 ),
 
+-- This CTE starts with daily RT feeds, then pulls in validation outcomes
+-- to give us a row per actual validation execution (outcome) that we have;
+-- then cross-join codes to give us "buckets" per outcome since the
+-- underlying notices will not contain a code that did not trigger a notice;
+-- finally, we aggregate everything back up to the date/URL/code level
+-- and count how many parsed and validated files we have, and sum the
+-- notice occurrences; if we have successful validations but no occurrences,
+-- we assume the feeds passed the code 100% of the time
 fct_daily_rt_feed_validation_notices AS (
     SELECT
         {{ dbt_utils.surrogate_key(['daily_feeds.date', 'daily_feeds.base64_url', 'codes.code', 'codes.is_critical']) }} AS key,

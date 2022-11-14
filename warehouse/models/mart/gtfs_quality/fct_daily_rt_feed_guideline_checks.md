@@ -10,5 +10,5 @@ Here is a list of currently-implemented checks:
 
 | Check | Feature | Description |
 | ------------------------------------ |---------|------------ |
-|No critical errors in the MobilityData GTFS Realtime Validator | Compliance | The feed has at least one GTFS-RT file present on the given day, and GTFS Realtime Validator produced no critical errors for any RT feed on that day.|
+|No critical errors in the MobilityData GTFS Realtime Validator | Compliance | The feed has at least one GTFS-RT file present on the given day, and GTFS Realtime Validator produced no critical errors for any RT feed extract on that day.|
 {% enddocs %}

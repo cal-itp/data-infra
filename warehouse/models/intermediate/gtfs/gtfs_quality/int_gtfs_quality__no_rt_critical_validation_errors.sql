@@ -33,6 +33,7 @@ int_gtfs_quality__no_rt_critical_validation_errors AS (
     SELECT
         idx.date,
         idx.base64_url,
+        idx.feed_type,
         {{ no_rt_critical_validation_errors() }} AS check,
         {{ compliance() }} AS feature,
         rt_files,

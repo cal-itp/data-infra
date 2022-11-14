@@ -9,6 +9,7 @@ int_gtfs_quality__rt_feed_guideline_index AS (
     SELECT
         date,
         base64_url,
+        feed_type,
     FROM fct_daily_rt_feed_files
     WHERE date < CURRENT_DATE
 )
