@@ -7,7 +7,11 @@ unioned AS (
         relations=[
             ref('int_gtfs_quality__no_schedule_validation_errors'),
             ref('int_gtfs_quality__shapes_valid'),
+<<<<<<< HEAD
             ref('int_gtfs_quality__technical_contact_listed'),
+=======
+            ref('int_gtfs_quality__shapes_for_all_trips'),
+>>>>>>> main
         ],
     ) }}
 ),

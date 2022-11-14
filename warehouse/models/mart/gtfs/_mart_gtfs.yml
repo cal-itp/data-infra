@@ -1240,3 +1240,33 @@ models:
           - relationships:
               to: ref('dim_schedule_feeds')
               field: key
+  - name: dim_shapes_arrays
+    description: |
+      Each row is a shape, constructed from the points listed in
+      `dim_shapes`, with the shape geometry described as an ordered
+      array of points in the `pt_array` column.
+      We cannot construct a LineString because of BigQuery limitations;
+      see: https://gis.stackexchange.com/questions/426188/can-i-represent-a-route-that-doubles-back-on-itself-in-bigquery-with-a-linestrin.
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: base64_url, shape_id
+          gaps: required
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `shape_id`.
+        tests: *primary_key_tests
+      - *feed_key
+      - *base64_url
+      - name: shape_id
+        description: '{{ doc("gtfs_shapes__shape_id") }}'
+        tests:
+        - not_null
+      - name: pt_array
+        description: Ordered array of WKT points that describe this shape.
+        tests:
+        - not_null
+      - *_valid_from
+      - *_valid_to

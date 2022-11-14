@@ -11,6 +11,7 @@ stg_gtfs_schedule__shapes AS (
     SELECT
         base64_url,
         ts,
+        dt AS _dt,
         {{ trim_make_empty_string_null('shape_id') }} AS shape_id,
         SAFE_CAST({{ trim_make_empty_string_null('shape_pt_lat') }} AS FLOAT64) AS shape_pt_lat,
         SAFE_CAST({{ trim_make_empty_string_null('shape_pt_lon') }} AS FLOAT64) AS shape_pt_lon,
