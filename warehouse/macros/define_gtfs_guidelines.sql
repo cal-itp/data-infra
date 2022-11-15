@@ -1,6 +1,6 @@
 -- declare checks
 {% macro static_feed_downloaded_successfully() %}
-"Static GTFS feed downloads successfully"
+"Static GTFS schedule feed downloads successfully"
 {% endmacro %}
 
 {% macro no_validation_errors() %}
