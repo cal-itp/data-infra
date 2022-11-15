@@ -8,16 +8,20 @@ models:
       Each row is a cleaned row from an agency.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#agencytxt.
+    meta:
+      ckan.authority: https://gtfs.org/schedule/reference/#agencytxt
     columns:
       - &calitp_itp_id
         name: calitp_itp_id
         description: '{{ doc("column_calitp_itp_id") }}'
         meta:
+          ckan.authority: "Source: GTFS Files for each transit agency in CA, captured nightly by the Cal-ITP team. URL and ITP ID source is https://github.com/cal-itp/data-infra/blob/main/airflow/data/agencies.yml"
           metabase.semantic_type: type/FK
       - &calitp_url_number
         name: calitp_url_number
         description: '{{ doc("column_calitp_url_number") }}'
         meta:
+          ckan.authority: "Source: GTFS Files for each transit agency in CA, captured nightly by the Cal-ITP team. URL and ITP ID source is https://github.com/cal-itp/data-infra/blob/main/airflow/data/agencies.yml"
           metabase.semantic_type: type/FK
       - &calitp_extracted_at
         name: calitp_extracted_at
@@ -68,6 +72,8 @@ models:
       Each row is a cleaned row from an attributions.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#attributionstxt.
+    meta:
+      ckan.authority: https://gtfs.org/schedule/reference/#attributionstxt
     columns:
       - *calitp_itp_id
       - *calitp_url_number
@@ -109,6 +115,8 @@ models:
       Each row is a cleaned row from a calendar.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#calendartxt.
+    meta:
+      ckan.authority: https://gtfs.org/schedule/reference/#calendartxt
     columns:
       - *calitp_itp_id
       - *calitp_url_number
@@ -166,6 +174,8 @@ models:
       Each row is a cleaned row from a calendar_dates.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#calendar_datestxt.
+    meta:
+      ckan.authority: https://gtfs.org/reference/static#calendar_datestxt
     columns:
       - *calitp_itp_id
       - *calitp_url_number
@@ -191,6 +201,8 @@ models:
       Each row is a cleaned row from a fare_attributes.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#fare_attributestxt.
+    meta:
+      ckan.authority: https://gtfs.org/reference/static#fare_attributestxt
     columns:
       - *calitp_itp_id
       - *calitp_url_number
@@ -232,6 +244,8 @@ models:
       Each row is a cleaned row from a fare_rules.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#fare_rulestxt.
+    meta:
+      ckan.authority: https://gtfs.org/reference/static#fare_rulestxt
     columns:
       - *calitp_itp_id
       - *calitp_url_number
@@ -261,6 +275,8 @@ models:
       Each row is a cleaned row from a feed_info.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#feed_infotxt.
+    meta:
+      ckan.authority: https://gtfs.org/reference/static#feed_infotxt
     columns:
       - *calitp_itp_id
       - *calitp_url_number
@@ -302,6 +318,8 @@ models:
       Each row is a cleaned row from a frequencies.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#frequenciestxt.
+    meta:
+      ckan.authority: https://gtfs.org/reference/static#frequenciestxt
     columns:
       - *calitp_itp_id
       - *calitp_url_number
@@ -337,6 +355,8 @@ models:
       Each row is a cleaned row from a levels.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#levelstxt.
+    meta:
+      ckan.authority: https://gtfs.org/reference/static#levelstxt
     columns:
       - *calitp_itp_id
       - *calitp_url_number
@@ -364,6 +384,8 @@ models:
       Each row is a cleaned row from a pathways.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#pathwaystxt.
+    meta:
+      ckan.authority: https://gtfs.org/reference/static#pathwaystxt
     columns:
       - *calitp_itp_id
       - *calitp_url_number
@@ -415,6 +437,8 @@ models:
       Each row is a cleaned row from a routes.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#routestxt.
+    meta:
+      ckan.authority: https://gtfs.org/reference/static#routestxt
     columns:
       - *calitp_itp_id
       - *calitp_url_number
@@ -460,6 +484,8 @@ models:
       Each row is a cleaned row from a shapes.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#shapestxt.
+    meta:
+      ckan.authority: https://gtfs.org/reference/static#shapestxt
     columns:
       - *calitp_itp_id
       - *calitp_url_number
@@ -506,6 +532,9 @@ models:
       Each row is a cleaned row from a stop_times.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#stop_timestxt.
+    meta:
+      ckan.authority: https://gtfs.org/reference/static#stop_timestxt
+      publish.gis_coordinate_system_epsg: WGS84
     columns:
       - *calitp_itp_id
       - *calitp_url_number
@@ -545,8 +574,6 @@ models:
         description: '{{ doc("gtfs_stop_times__shape_dist_traveled") }}'
       - name: timepoint
         description: '{{ doc("gtfs_stop_times__timepoint") }}'
-    meta:
-      publish.gis_coordinate_system_epsg: WGS84
 
   - name: stops
     description: |
@@ -555,6 +582,8 @@ models:
       Each row is a cleaned row from a stops.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#stopstxt.
+    meta:
+      ckan.authority: https://gtfs.org/reference/static#stopstxt
     columns:
       - *calitp_itp_id
       - *calitp_url_number
@@ -614,6 +643,8 @@ models:
       Each row is a cleaned row from a transfers.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#transferstxt.
+    meta:
+      ckan.authority: https://gtfs.org/reference/static#transferstxt
     columns:
       - *calitp_itp_id
       - *calitp_url_number
@@ -645,6 +676,8 @@ models:
       Each row is a cleaned row from a translations.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#translationstxt.
+    meta:
+      ckan.authority: https://gtfs.org/reference/static#translationstxt
     columns:
       - *calitp_itp_id
       - *calitp_url_number
@@ -684,6 +717,8 @@ models:
       Each row is a cleaned row from a trips.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#tripstxt.
+    meta:
+      ckan.authority: https://gtfs.org/reference/static#tripstxt
     columns:
       - *calitp_itp_id
       - *calitp_url_number
@@ -763,7 +798,7 @@ exposures:
         Cal-ITP collects the GTFS feeds from a statewide list every night and aggegrates it into a statewide table
         for analysis purposes only. Do not use for trip planner ingestion, rather is meant to be used for statewide
         analytics and other use cases. Note: These data may or may or may not have passed GTFS-Validation.
-      coordinate_system_espg: "EPSG:4326"
+      coordinate_system_epsg: "4326"
       destinations:
         - type: ckan
           format: csv
