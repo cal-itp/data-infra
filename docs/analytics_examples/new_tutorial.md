@@ -26,7 +26,6 @@ The queries represented in the following tutorial are as follows:
 ```{code-cell}
 import os
 import pandas as pd
-import shapely
 
 os.environ["CALITP_BQ_MAX_BYTES"] = str(50_000_000_000)
 
