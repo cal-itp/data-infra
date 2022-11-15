@@ -2,18 +2,16 @@ WITH feed_guideline_index AS (
     SELECT * FROM {{ ref('int_gtfs_quality__schedule_feed_guideline_index') }}
 ),
 
+keyed_parse_outcomes AS (
+    SELECT * FROM {{ ref('int_gtfs_schedule__keyed_parse_outcomes')}}
+),
+
 daily_feed_shapes_present AS (
-    SELECT feed_key,
-           EXTRACT(date FROM ts) AS date,
-           -- zipfile_files is an array which may contain "shapes.txt" but may also contain a string like "google_transit/shapes.txt".
-           -- this long EXISTS statement solves for both
-           CASE WHEN EXISTS(SELECT * FROM UNNEST(zipfile_files) AS x WHERE LOWER(x) LIKE '%shapes.txt') THEN true
-                ELSE false
-           END AS has_shapes
-      FROM {{ ref('fct_schedule_feed_downloads') }}
-      -- If download or unzip fails, that is a different issue than a missing shapes file
-     WHERE download_success
-       AND unzip_success
+    SELECT feed_key
+      FROM keyed_parse_outcomes
+     WHERE parse_success
+       AND filename = 'shapes.txt'
+       AND feed_key IS NOT null
 ),
 
 int_gtfs_quality__shapes_file_present AS (
@@ -22,16 +20,13 @@ int_gtfs_quality__shapes_file_present AS (
         idx.feed_key,
         {{ shapes_file_present() }} AS check,
         {{ accurate_service_data() }} AS feature,
-        -- Status will be null in cases where feed had download or unzip failure
         CASE
-            WHEN LOGICAL_OR(has_shapes) THEN "PASS"
-            WHEN NOT(LOGICAL_OR(has_shapes)) THEN "FAIL"
+            WHEN s.feed_key IS NOT null THEN "PASS"
+            ELSE "FAIL"
         END AS status
     FROM feed_guideline_index idx
     LEFT JOIN daily_feed_shapes_present s
-        ON idx.feed_key = s.feed_key
-            AND idx.date = s.date
-    GROUP BY 1,2,3,4
+      ON idx.feed_key = s.feed_key
 )
 
 SELECT * FROM int_gtfs_quality__shapes_file_present
