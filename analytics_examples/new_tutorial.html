@@ -836,15 +836,13 @@
 <h2>Python Libraries to Import<a class="headerlink" href="#python-libraries-to-import" title="Permalink to this headline">¶</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">shapely</span>
 
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CALITP_BQ_MAX_BYTES&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="mi">50_000_000_000</span><span class="p">)</span>
 
 <span class="kn">import</span> <span class="nn">calitp</span>
-<span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbl</span>
+<span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbls</span>
 <span class="kn">from</span> <span class="nn">siuba</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;display.max_rows&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
@@ -879,7 +877,7 @@ pybigquery should be uninstalled.
 
 <span class="c1"># Grab the stop times for a given date for just 1 agency</span>
 <span class="n">tbl_stop_times</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_dim_stop_times</span><span class="p">()</span>
+    <span class="n">tbls</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_dim_stop_times</span><span class="p">()</span>
     <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_extracted_at</span> <span class="o">&lt;=</span> <span class="n">SELECTED_DATE</span><span class="p">,</span>
               <span class="n">_</span><span class="o">.</span><span class="n">calitp_deleted_at</span> <span class="o">&gt;</span> <span class="n">SELECTED_DATE</span><span class="p">,</span>
               <span class="n">_</span><span class="o">.</span><span class="n">calitp_itp_id</span> <span class="o">==</span> <span class="n">ITP_ID</span>
@@ -888,7 +886,7 @@ pybigquery should be uninstalled.
 
 <span class="c1"># Grab the trips done on that day, for that agency</span>
 <span class="n">daily_stops</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_fact_daily_trips</span><span class="p">()</span>
+    <span class="n">tbls</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_fact_daily_trips</span><span class="p">()</span>
     <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_itp_id</span> <span class="o">==</span> <span class="n">ITP_ID</span><span class="p">,</span>
               <span class="n">_</span><span class="o">.</span><span class="n">service_date</span> <span class="o">==</span> <span class="n">SELECTED_DATE</span><span class="p">,</span>
               <span class="n">_</span><span class="o">.</span><span class="n">is_in_service</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)</span>
@@ -897,7 +895,7 @@ pybigquery should be uninstalled.
     <span class="o">&gt;&gt;</span> <span class="n">left_join</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">tbl_stop_times</span><span class="p">,</span>
               <span class="c1"># also added url number to the join keys ----</span>
              <span class="p">[</span><span class="s2">&quot;calitp_itp_id&quot;</span><span class="p">,</span> <span class="s2">&quot;calitp_url_number&quot;</span><span class="p">,</span> <span class="s2">&quot;trip_id&quot;</span><span class="p">])</span>
-    <span class="o">&gt;&gt;</span> <span class="n">inner_join</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_dim_stops</span><span class="p">(),</span>
+    <span class="o">&gt;&gt;</span> <span class="n">inner_join</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">tbls</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_dim_stops</span><span class="p">(),</span>
                  <span class="p">[</span><span class="s2">&quot;calitp_itp_id&quot;</span><span class="p">,</span> <span class="s2">&quot;stop_id&quot;</span><span class="p">])</span>
     <span class="o">&gt;&gt;</span> <span class="n">select</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">itp_id</span> <span class="o">==</span> <span class="n">_</span><span class="o">.</span><span class="n">calitp_itp_id</span><span class="p">,</span>
               <span class="n">_</span><span class="o">.</span><span class="n">date</span> <span class="o">==</span> <span class="n">_</span><span class="o">.</span><span class="n">service_date</span><span class="p">,</span>
@@ -946,61 +944,61 @@ pybigquery should be uninstalled.
       <th>0</th>
       <td>208</td>
       <td>2021-09-01</td>
-      <td>2856850404124219391</td>
-      <td>4930027</td>
-      <td>6018</td>
-      <td>19:21:00</td>
-      <td>36.677795</td>
-      <td>-121.657645</td>
-      <td>Lincoln /  West Market</td>
+      <td>-5555291310752453761</td>
+      <td>95030001</td>
+      <td>9105</td>
+      <td>10:00:00</td>
+      <td>36.597886</td>
+      <td>-121.894036</td>
+      <td>Monterey Transit Plaza / Gate 5 (Tyler/Pearl)</td>
     </tr>
     <tr>
       <th>1</th>
       <td>208</td>
       <td>2021-09-01</td>
-      <td>2856850404124219391</td>
-      <td>4930027</td>
-      <td>6018</td>
-      <td>19:21:00</td>
-      <td>36.677795</td>
-      <td>-121.657645</td>
-      <td>Lincoln /  West Market</td>
+      <td>-5555291310752453761</td>
+      <td>95030001</td>
+      <td>9105</td>
+      <td>10:00:00</td>
+      <td>36.597886</td>
+      <td>-121.894036</td>
+      <td>Monterey Transit Plaza / Gate 5 (Tyler/Pearl)</td>
     </tr>
     <tr>
       <th>2</th>
       <td>208</td>
       <td>2021-09-01</td>
-      <td>2856850404124219391</td>
-      <td>4930027</td>
-      <td>6018</td>
-      <td>19:21:00</td>
-      <td>36.677860</td>
-      <td>-121.657593</td>
-      <td>Lincoln /  West Market</td>
+      <td>-5555291310752453761</td>
+      <td>95030001</td>
+      <td>6915</td>
+      <td>09:58:00</td>
+      <td>36.600361</td>
+      <td>-121.893344</td>
+      <td>Tyler / Franklin (Parking Garage)</td>
     </tr>
     <tr>
       <th>3</th>
       <td>208</td>
       <td>2021-09-01</td>
-      <td>2856850404124219391</td>
-      <td>4930027</td>
-      <td>6028</td>
-      <td>19:30:00</td>
-      <td>36.704259</td>
-      <td>-121.652773</td>
-      <td>N Main /  Chaparral</td>
+      <td>-5555291310752453761</td>
+      <td>95030001</td>
+      <td>6915</td>
+      <td>09:58:00</td>
+      <td>36.600361</td>
+      <td>-121.893344</td>
+      <td>Tyler / Franklin (Parking Garage)</td>
     </tr>
     <tr>
       <th>4</th>
       <td>208</td>
       <td>2021-09-01</td>
-      <td>2856850404124219391</td>
-      <td>4930027</td>
-      <td>6028</td>
-      <td>19:30:00</td>
-      <td>36.704259</td>
-      <td>-121.652773</td>
-      <td>N Main /  Chaparral</td>
+      <td>-5555291310752453761</td>
+      <td>95030001</td>
+      <td>6915</td>
+      <td>09:58:00</td>
+      <td>36.600361</td>
+      <td>-121.893344</td>
+      <td>Tyler / Franklin (Parking Garage)</td>
     </tr>
   </tbody>
 </table>
@@ -1035,7 +1033,7 @@ pybigquery should be uninstalled.
                      <span class="s1">&#39;minivan&#39;</span><span class="p">,</span> <span class="s1">&#39;sport_utility_vehicle&#39;</span><span class="p">]</span>
 
 <span class="c1"># transitstacks has a lot of columns, and we want to keep a fairly large subset of them</span>
-<span class="n">lossan_df</span> <span class="o">=</span> <span class="p">(</span><span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">transitstacks</span><span class="p">()</span>
+<span class="n">lossan_df</span> <span class="o">=</span> <span class="p">(</span><span class="n">tbls</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">transitstacks</span><span class="p">()</span>
              <span class="c1"># Collect to turn into pandas.DataFrame earlier for isin to work</span>
              <span class="o">&gt;&gt;</span> <span class="n">collect</span><span class="p">()</span>
              <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">county</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">lossan_counties</span><span class="p">))</span>
@@ -1200,12 +1198,12 @@ pybigquery should be uninstalled.
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Grab stops for that day</span>
-<span class="n">lossan_stops</span> <span class="o">=</span> <span class="p">(</span><span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_fact_daily_feed_stops</span><span class="p">()</span>
+<span class="n">lossan_stops</span> <span class="o">=</span> <span class="p">(</span><span class="n">tbls</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_fact_daily_feed_stops</span><span class="p">()</span>
                 <span class="o">&gt;&gt;</span> <span class="nb">filter</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">date</span> <span class="o">==</span> <span class="n">SELECTED_DATE</span><span class="p">)</span>
                 <span class="o">&gt;&gt;</span> <span class="n">select</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">stop_key</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">date</span><span class="p">)</span>
                 <span class="c1"># Merge with stop geom using stop_key</span>
                 <span class="o">&gt;&gt;</span> <span class="n">inner_join</span><span class="p">(</span><span class="n">_</span><span class="p">,</span>
-                              <span class="p">(</span><span class="n">tbl</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_dim_stops</span><span class="p">()</span>
+                              <span class="p">(</span><span class="n">tbls</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_dim_stops</span><span class="p">()</span>
                                <span class="o">&gt;&gt;</span> <span class="n">select</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">calitp_itp_id</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">stop_key</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">stop_id</span><span class="p">,</span>
                                          <span class="n">_</span><span class="o">.</span><span class="n">stop_lat</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">stop_lon</span><span class="p">)</span>
                               <span class="p">),</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;stop_key&#39;</span><span class="p">)</span>
@@ -1241,10 +1239,10 @@ pybigquery should be uninstalled.
       <th></th>
       <th>stop_key</th>
       <th>date</th>
-      <th>stop_lat</th>
-      <th>stop_lon</th>
       <th>stop_id</th>
+      <th>stop_lon</th>
       <th>calitp_itp_id</th>
+      <th>stop_lat</th>
     </tr>
   </thead>
   <tbody>
@@ -1252,46 +1250,46 @@ pybigquery should be uninstalled.
       <th>0</th>
       <td>-3465164382055991093</td>
       <td>2021-09-01</td>
-      <td>34.079011</td>
-      <td>-118.117346</td>
       <td>2619783</td>
+      <td>-118.117346</td>
       <td>6</td>
+      <td>34.079011</td>
     </tr>
     <tr>
       <th>1</th>
       <td>-4388330883484799862</td>
       <td>2021-09-01</td>
-      <td>34.079282</td>
-      <td>-118.111602</td>
       <td>2619784</td>
+      <td>-118.111602</td>
       <td>6</td>
+      <td>34.079282</td>
     </tr>
     <tr>
       <th>2</th>
       <td>-3890148245714116244</td>
       <td>2021-09-01</td>
-      <td>34.080835</td>
-      <td>-118.114294</td>
       <td>2619785</td>
+      <td>-118.114294</td>
       <td>6</td>
+      <td>34.080835</td>
     </tr>
     <tr>
       <th>3</th>
       <td>3725728967761887153</td>
       <td>2021-09-01</td>
-      <td>34.085540</td>
-      <td>-118.116863</td>
       <td>2619787</td>
+      <td>-118.116863</td>
       <td>6</td>
+      <td>34.085540</td>
     </tr>
     <tr>
       <th>4</th>
       <td>-6069710332211186970</td>
       <td>2021-09-01</td>
-      <td>34.085874</td>
-      <td>-118.117052</td>
       <td>2619788</td>
+      <td>-118.117052</td>
       <td>6</td>
+      <td>34.085874</td>
     </tr>
   </tbody>
 </table>

@@ -900,49 +900,63 @@
 <td><p>N/A</p></td>
 <td><p>Once-only (defines external tables); does not generally need to be re-run</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">download_gtfs_schedule_v2</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">deploy_dbt_docs</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>Manual job to deploy dbt docs to Metabase and Netlify</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">download_gtfs_schedule_v2</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p>No*</p></td>
 <td><p>N/A</p></td>
 <td><p>Don’t need to rerun more than once if multiple failures; scrapes data that is correctly timestamped</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_downloader.</span> <span class="pre">generate_provider_list</span></code> and <code class="docutils literal notranslate"><span class="pre">gtfs_downloader.</span> <span class="pre">download_data</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_downloader.</span> <span class="pre">generate_provider_list</span></code> and <code class="docutils literal notranslate"><span class="pre">gtfs_downloader.</span> <span class="pre">download_data</span></code></p></td>
 <td><p><strong>⛔ No</strong>*</p></td>
 <td><p>No</p></td>
 <td><p><strong>🔂 No</strong></p></td>
 <td><p>N/A</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_downloader.</span> <span class="pre">email_failures</span></code> and <code class="docutils literal notranslate"><span class="pre">gtfs_downloader.</span> <span class="pre">validate_gcs_bucket</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_downloader.</span> <span class="pre">email_failures</span></code> and <code class="docutils literal notranslate"><span class="pre">gtfs_downloader.</span> <span class="pre">validate_gcs_bucket</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p><strong>🔂 No</strong></p></td>
 <td><p>N/A</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_loader</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_loader</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p><strong>🔂 No</strong></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">gtfs_</span> <span class="pre">downloader</span></code>*</p></td>
 <td><p>Technically also depends on <code class="docutils literal notranslate"><span class="pre">gtfs_schedule_history</span></code>, not usually an issue</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule_history</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule_history</span></code></p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>Once-only (defines external tables); does not generally need to be re-run</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule_history2</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gtfs_schedule_history2</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p><strong>📆 Yes</strong></p></td>
 <td><p><strong>🔂 No</strong></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">gtfs_</span> <span class="pre">loader</span></code></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">parse_and_validate_rt</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">parse_and_validate_rt</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p><strong>🔂 No</strong></p></td>
+<td><p>N/A</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">parse_and_validate_rt_v2</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p><strong>🔂 No</strong></p></td>
@@ -956,40 +970,40 @@
 <td><p>N/A</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">payments_views</span></code></p></td>
-<td><p>Yes</p></td>
-<td><p>No</p></td>
-<td><p>Yes</p></td>
-<td><p>N/A</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt_loader</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt_loader</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p><strong>🔂 No</strong></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">gtfs_</span> <span class="pre">loader</span></code></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rt_loader_files</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rt_loader_files</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p><strong>🔂 No</strong></p></td>
 <td><p>N/A</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sandbox</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sandbox</span></code></p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>Testing only; does not need to be re-run</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">transform_warehouse</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">transform_warehouse</span></code></p></td>
 <td><p>Yes</p></td>
 <td><p>No</p></td>
 <td><p>Yes</p></td>
 <td><p>N/A</p></td>
 <td><p>Runs dbt warehouse</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">unzip_and_validate_gtfs_schedule_</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>No</p></td>
+<td><p><strong>🔂 No</strong></p></td>
+<td><p>N/A</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -1002,7 +1016,6 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">gtfs_views_staging</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">gtfs_views</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">parse_rt</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">payments_views_staging</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">rt_timestamp_fix</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">rt_views</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">transitstacks_loader</span></code></p></li>
@@ -1023,7 +1036,6 @@
       gtfs_schedule_history--&gt;gtfs_loader;
       gtfs_loader--&gt;gtfs_schedule_history2;
       payments_loader;
-      payments_views;
       gtfs_loader--&gt;rt_loader;
       sandbox;
       create_external_tables;

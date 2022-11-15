@@ -925,12 +925,12 @@ To do this, you will need to download and install the gcloud commandline tool fr
 <div class="section" id="increasing-the-query-limit">
 <h3>Increasing the Query Limit<a class="headerlink" href="#increasing-the-query-limit" title="Permalink to this headline">¶</a></h3>
 <p>By default, there is a query limit set within the Jupyter Notebook. Most queries should be within that limit, and running into <code class="docutils literal notranslate"><span class="pre">DatabaseError:</span> <span class="pre">500</span> <span class="pre">Query</span> <span class="pre">exceeded</span> <span class="pre">limit</span> <span class="pre">for</span> <span class="pre">bytes</span> <span class="pre">billed</span></code> should be a red flag to investigate whether such a large query is needed for the analysis. To increase the query limit, add and execute the following in your notebook:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbl</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbls</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CALITP_BQ_MAX_BYTES&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="mi">20_000_000_000</span><span class="p">)</span>
 
-<span class="n">tbl</span><span class="o">.</span><span class="n">_init</span><span class="p">()</span>
+<span class="n">tbls</span><span class="o">.</span><span class="n">_init</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
