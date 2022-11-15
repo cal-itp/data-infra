@@ -50,6 +50,25 @@ models:
             - base64_url
             - ts
             - filename
+    columns:
+      - name: parse_success
+        description: '{{ doc("column_schedule_parse_success") }}'
+      - name: parse_exception
+        description: '{{ doc("column_schedule_parse_exception") }}'
+      - name: filename
+        description: '{{ doc("column_schedule_parse_filename") }}'
+      - name: _config_extract_ts
+      - name: feed_name
+        description: '{{ doc("column_schedule_parse_feed_name") }}'
+      - name: feed_url
+        description: '{{ doc("column_schedule_parse_feed_url") }}'
+      - name: original_filename
+        description: '{{ doc("column_schedule_parse_original_filename") }}'
+      - name: gtfs_filename
+        description: '{{ doc("column_schedule_parse_gtfs_filename") }}'
+      - name: dt
+      - name: ts
+      - name: base64_url
   - name: stg_gtfs_rt__vehicle_positions
     description: |
       Vehicle positions realtime data.
@@ -551,6 +570,7 @@ models:
     columns:
       - name: base64_url
       - name: ts
+      - name: _dt
       - name: shape_id
         description: '{{ doc("gtfs_shapes__shape_id") }}'
         tests:

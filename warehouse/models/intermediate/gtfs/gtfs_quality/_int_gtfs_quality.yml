@@ -23,29 +23,27 @@ models:
             - severity
 
   - name: int_gtfs_quality__no_schedule_validation_errors
-    tests:
+    tests: &stg_gtfs_guideline_tests
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - date
             - feed_key
       - dbt_utils.equal_rowcount:
           compare_model: ref('int_gtfs_quality__schedule_feed_guideline_index')
-    columns:
+    columns: &stg_gtfs_guideline_columns
       - name: status
         tests:
           - dbt_utils.not_null_proportion:
               at_least: 0.99
 
   - name: int_gtfs_quality__shapes_valid
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - date
-            - feed_key
-      - dbt_utils.equal_rowcount:
-          compare_model: ref('int_gtfs_quality__schedule_feed_guideline_index')
-    columns:
-      - name: status
-        tests:
-          - dbt_utils.not_null_proportion:
-              at_least: 0.99
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__technical_contact_listed
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__shapes_for_all_trips
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
