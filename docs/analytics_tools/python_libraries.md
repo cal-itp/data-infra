@@ -58,19 +58,19 @@ See [data-analyses/example_reports](https://github.com/cal-itp/data-analyses/tre
 ## calitp
 `calitp` is an internal library of utility functions used to access our warehouse data.
 
-### import tbl
+### import tbls
 
-Most notably, you can include `import tbl` at the top of your notebook to import a table from the warehouse in the form of a `tbl`:
+Most notably, you can include `import tbls` at the top of your notebook to import a table from the warehouse in the form of a `tbls`:
 
 ```python
-from calitp.tables import tbl
+from calitp.tables import tbls
 ```
 
 Example:
 ```{code-cell}
-from calitp.tables import tbl
+from calitp.tables import tbls
 
-tbl.views.gtfs_schedule_fact_daily_feed_routes()
+tbls.views.gtfs_schedule_fact_daily_feed_routes()
 ```
 
 ### query_sql
@@ -105,12 +105,12 @@ and showing SQL test queries that siuba code generates.
 ### Basic query
 ```{code-cell}
 from myst_nb import glue
-from calitp.tables import tbl
+from calitp.tables import tbls
 from siuba import _, filter, count, collect, show_query
 
 # query lastest validation notices, then filter for a single gtfs feed,
 # and then count how often each code occurs
-(tbl.views.gtfs_schedule_dim_feeds()
+(tbls.views.gtfs_schedule_dim_feeds()
     >> filter(_.calitp_itp_id == 10, _.calitp_url_number==0)
     >> count(_.feed_key)
 )
@@ -123,7 +123,7 @@ Note that siuba by default prints out a preview of the SQL query results.
 In order to fetch the results of the query as a pandas DataFrame, run `collect()`.
 
 ```{code-cell}
-tbl_agency_names = tbl.views.gtfs_schedule_dim_feeds() >> collect()
+tbl_agency_names = tbls.views.gtfs_schedule_dim_feeds() >> collect()
 
 # Use pandas .head() method to show first 5 rows of data
 tbl_agency_names.head()
@@ -137,7 +137,7 @@ tbl_agency_names.head()
 While `collect()` fetches query results, `show_query()` prints out the SQL code that siuba generates.
 
 ```{code-cell}
-(tbl.views.gtfs_schedule_dim_feeds()
+(tbls.views.gtfs_schedule_dim_feeds()
   >> filter(_.calitp_agency_name.str.contains("Metro"))
   >> show_query(simplify=True)
 )
