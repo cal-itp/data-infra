@@ -216,3 +216,38 @@ models:
         - not_null
       - name: shape_dist_traveled
         description: '{{ doc("gtfs_shapes__shape_dist_traveled") }}'
+  - name: int_gtfs_schedule__keyed_parse_outcomes
+    description: |
+      All GTFS schedule file parse outcomes, with `feed_key` identifier joined
+      on to facilitate downstream use.
+    tests:
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('stg_gtfs_schedule__file_parse_outcomes')
+    columns:
+      - name: feed_key
+        description: |
+          Foreign key to `dim_schedule_feeds`.
+          Because `dim_schedule_feeds` only includes unique feed versions, this will not be populated
+          for downloads where no data changed relative to what had already been ingested.
+        tests:
+          - relationships:
+              to: ref('dim_schedule_feeds')
+              field: key
+      - name: parse_success
+        description: '{{ doc("column_schedule_parse_success") }}'
+      - name: parse_exception
+        description: '{{ doc("column_schedule_parse_exception") }}'
+      - name: filename
+        description: '{{ doc("column_schedule_parse_filename") }}'
+      - name: _config_extract_ts
+      - name: feed_name
+        description: '{{ doc("column_schedule_parse_feed_name") }}'
+      - name: feed_url
+        description: '{{ doc("column_schedule_parse_feed_url") }}'
+      - name: original_filename
+        description: '{{ doc("column_schedule_parse_original_filename") }}'
+      - name: gtfs_filename
+        description: '{{ doc("column_schedule_parse_gtfs_filename") }}'
+      - name: dt
+      - name: ts
+      - name: base64_url
