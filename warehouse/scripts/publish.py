@@ -392,7 +392,9 @@ def _publish_exposure(
                         fg=typer.colors.GREEN,
                     )
                     with fs.open(hive_path, "w", newline="") as f:
-                        writer = csv.DictWriter(f, fieldnames=cls.__fields__.keys())
+                        writer = csv.DictWriter(
+                            f, fieldnames=[key.upper() for key in cls.__fields__.keys()]
+                        )
                         writer.writeheader()
                         for row in rows:
                             writer.writerow(row)
