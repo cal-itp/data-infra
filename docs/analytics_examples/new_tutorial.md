@@ -115,7 +115,7 @@ paratransit_cols = ['van', 'cutaway', 'automobile',
                      'minivan', 'sport_utility_vehicle']
 
 # transitstacks has a lot of columns, and we want to keep a fairly large subset of them
-lossan_df = (s.views.transitstacks()
+lossan_df = (tbls.views.transitstacks()
              # Collect to turn into pandas.DataFrame earlier for isin to work
              >> collect()
              >> filter(_.county.isin(lossan_counties))
@@ -130,12 +130,12 @@ Next, we can query the `gtfs_schedule_fat_daily_feed_stops` to grab the stops fo
 
 ```{code-cell}
 # Grab stops for that day
-lossan_stops = (s.views.gtfs_schedule_fact_daily_feed_stops()
+lossan_stops = (tbls.views.gtfs_schedule_fact_daily_feed_stops()
                 >> filter(_.date == SELECTED_DATE)
                 >> select(_.stop_key, _.date)
                 # Merge with stop geom using stop_key
                 >> inner_join(_,
-                              (s.views.gtfs_schedule_dim_stops()
+                              (tbls.views.gtfs_schedule_dim_stops()
                                >> select(_.calitp_itp_id, _.stop_key, _.stop_id,
                                          _.stop_lat, _.stop_lon)
                               ), on='stop_key')
