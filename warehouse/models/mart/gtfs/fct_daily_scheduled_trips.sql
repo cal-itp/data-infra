@@ -19,6 +19,10 @@ dim_schedule_feeds AS (
     SELECT * FROM {{ ref('dim_schedule_feeds') }}
 ),
 
+dim_shapes_arrays AS (
+    SELECT * FROM {{ ref('dim_shapes_arrays') }}
+),
+
 urls_to_gtfs_datasets AS (
     SELECT * FROM {{ ref('int_transit_database__urls_to_gtfs_datasets') }}
 ),
@@ -31,6 +35,7 @@ fct_daily_scheduled_trips AS (
         service_index.service_id,
         trips.key AS trip_key,
         routes.key AS route_key,
+        shapes.key AS shape_array_key,
         urls_to_gtfs_datasets.gtfs_dataset_key AS gtfs_dataset_key,
         trips.warning_duplicate_primary_key AS warning_duplicate_trip_primary_key
     FROM int_gtfs_schedule__daily_scheduled_service_index AS service_index
@@ -40,6 +45,9 @@ fct_daily_scheduled_trips AS (
     LEFT JOIN dim_routes AS routes
         ON service_index.feed_key = routes.feed_key
         AND trips.route_id = routes.route_id
+    LEFT JOIN dim_shapes_arrays AS shapes
+        ON service_index.feed_key = shapes.feed_key
+        AND trips.shape_id = shapes.shape_id
     LEFT JOIN dim_schedule_feeds AS feeds
         ON service_index.feed_key = feeds.key
     LEFT JOIN urls_to_gtfs_datasets
