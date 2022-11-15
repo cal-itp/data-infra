@@ -24,7 +24,6 @@ The queries represented in the following tutorial are as follows:
 ## Python Libraries to Import
 
 ```{code-cell}
-import geopandas as gpd
 import os
 import pandas as pd
 import shapely
