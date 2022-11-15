@@ -227,6 +227,9 @@ models:
       - name: feed_key
         description: |
           Foreign key to `dim_schedule_feeds`.
+          Because `dim_schedule_feeds` only includes unique feed versions where all files
+          were parsed successfully, this will not be populated for downloads where no data
+          changed relative to what had already been ingested or for cases where parsing failed.
         tests:
           - relationships:
               to: ref('dim_schedule_feeds')
