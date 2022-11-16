@@ -40,6 +40,11 @@ models:
     tests: *stg_gtfs_guideline_tests
     columns: *stg_gtfs_guideline_columns
 
+
+  - name: int_gtfs_quality__shapes_file_present
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
+
   - name: int_gtfs_quality__technical_contact_listed
     tests: *stg_gtfs_guideline_tests
     columns: *stg_gtfs_guideline_columns
