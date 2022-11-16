@@ -65,8 +65,11 @@ pathway_validation_notices_by_day AS (
     GROUP BY feed_key
 ),
 
-pathway_validation_check AS (
+int_gtfs_quality__pathways_valid AS (
     SELECT
+        t1.date,
+        {{ pathways_valid() }} AS check,
+        {{ accurate_accessibility_data() }} AS feature,
         t1.feed_key,
         CASE
             WHEN t2.feed_key IS null THEN "N/A"
@@ -78,15 +81,6 @@ pathway_validation_check AS (
              ON t1.feed_key = t2.feed_key
       LEFT JOIN pathway_validation_notices_by_day t3
              ON t1.feed_key = t3.feed_key
-),
-
-int_gtfs_quality__pathways_valid AS (
-    SELECT
-        feed_key,
-        {{ pathways_valid() }} AS check,
-        {{ accurate_accessibility_data() }} AS feature,
-        status
-      FROM pathway_validation_check
 )
 
 SELECT * FROM int_gtfs_quality__pathways_valid
