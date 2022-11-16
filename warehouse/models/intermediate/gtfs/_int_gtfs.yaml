@@ -298,3 +298,14 @@ models:
       - name: dt
       - name: ts
       - name: base64_url
+
+  - name: int_gtfs_schedule__trip_summaries
+    description: |
+      Insert description
+      here
+    columns:
+      - name: trip_id
+      - name: n_stops
+      - name: n_stop_times
+      - name: trip_first_departure_ts
+      - name: trip_last_arrival_ts

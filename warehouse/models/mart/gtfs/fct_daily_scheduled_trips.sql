@@ -27,6 +27,10 @@ urls_to_gtfs_datasets AS (
     SELECT * FROM {{ ref('int_transit_database__urls_to_gtfs_datasets') }}
 ),
 
+trip_summaries AS (
+    SELECT * FROM {{ ref('int_gtfs_schedule__trip_summaries') }}
+),
+
 fct_daily_scheduled_trips AS (
     SELECT
         {{ dbt_utils.surrogate_key(['service_index.service_date', 'trips.key']) }} as key,
@@ -37,7 +41,14 @@ fct_daily_scheduled_trips AS (
         routes.key AS route_key,
         shapes.key AS shape_array_key,
         urls_to_gtfs_datasets.gtfs_dataset_key AS gtfs_dataset_key,
-        trips.warning_duplicate_primary_key AS warning_duplicate_trip_primary_key
+        trips.warning_duplicate_primary_key AS warning_duplicate_trip_primary_key,
+
+        trip_summaries.trip_id,
+        trip_summaries.n_stops,
+        trip_summaries.n_stop_times,
+        trip_summaries.trip_first_departure_ts,
+        trip_summaries.trip_last_arrival_ts
+
     FROM int_gtfs_schedule__daily_scheduled_service_index AS service_index
     LEFT JOIN dim_trips AS trips
         ON service_index.feed_key = trips.feed_key
@@ -52,6 +63,8 @@ fct_daily_scheduled_trips AS (
         ON service_index.feed_key = feeds.key
     LEFT JOIN urls_to_gtfs_datasets
         ON feeds.base64_url = urls_to_gtfs_datasets.base64_url
+    LEFT JOIN trip_summaries
+        ON trips.key = trip_summaries.trip_key
 )
 
 SELECT * FROM fct_daily_scheduled_trips
