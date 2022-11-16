@@ -43,11 +43,7 @@ models:
 
   - name: int_gtfs_quality__shapes_file_present
     tests: *stg_gtfs_guideline_tests
-    columns:
-      - name: status
-        tests:
-          - dbt_utils.not_null_proportion:
-              at_least: 0.80
+    columns: *stg_gtfs_guideline_columns
 
   - name: int_gtfs_quality__technical_contact_listed
     tests: *stg_gtfs_guideline_tests
