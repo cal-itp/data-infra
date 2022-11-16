@@ -12,7 +12,7 @@ Here is a list of currently-implemented checks:
 | ------------------------------------ |---------|------------ |
 | No errors in MobilityData GTFS Schedule Validator |Compliance |GTFS Schedule Validator produced no errors for the transit provider’s static feed. |
 |No shapes-related errors appear in the MobilityData GTFS Validator | Accurate Service Data | None of the following shapes-related errors appear in the GTFS Schedule Validator: decreasing_shape_distance, equal_shape_distance_diff_coordinates, decreasing_or_equal_shape_distance, decreasing_or_equal_shape_distance |
-|Shapes.txt file is present | Accurate Service Data | Static GTFS feed contains the file shapes.txt. If the feed failed to download, this check will return a value of value of null.|
+|Shapes.txt file is present | Accurate Service Data | Static GTFS feed contains the file shapes.txt.|
 | Every trip in trips.txt has a shape_id listed | Accurate Service Data | Every trip in trips.txt has a shape_id listed.|
 |Technical contact is listed in feed_contact_email field within the feed_info.txt file | Technical Contact Availability | The feed_contact_email field in feed_info.txt contains a non-empty value.|
 |Includes complete wheelchair accessibility data in both stops.txt and trips.txt | Accurate Accessibility Data | Trips.txt contains non-empty values for each trip in the wheelchair_accessible column, and stops.txt contains non-empty values for each stop in the wheelchair_boarding column.|
