@@ -40,30 +40,19 @@ tts_issue_feeds AS (
    GROUP BY feed_key
 ),
 
--- A daily count of feeds with at least one missing tts_stop_name value. It doesn't matter if one or more exist - the count is for dedupe purposes
--- CONFIRM WHETHER STILL NEEDED IN V2
-tts_issue_feeds_check AS (
-  SELECT
-    t1.date,
-    t1.feed_key,
-    COUNTIF(t2.calitp_itp_id IS NOT null) AS tts_issue_feeds
-  FROM feed_guideline_index AS t1
-  LEFT JOIN tts_issue_feeds AS t2
-       ON t1.feed_key = t2.feed_key
- GROUP BY 1, 2
-),
-
 int_gtfs_quality__include_tts AS (
     SELECT
-        date,
-        feed_key,
+        t1.date,
+        t1.feed_key,
         {{ include_tts() }} AS check,
         {{ accurate_accessibility_data() }} AS feature,
         CASE
-            WHEN tts_issue_feeds > 0 THEN "FAIL"
-            WHEN tts_issue_feeds = 0 THEN "PASS"
+            WHEN t2.feed_key IS NOT null THEN "FAIL"
+            ELSE "PASS"
         END AS status,
-      FROM daily_tts_issue_feeds
+      FROM feed_guideline_index t1
+      LEFT JOIN tts_issue_feeds AS t2
+        ON t1.feed_key = t2.feed_key
 )
 
 SELECT * FROM int_gtfs_quality__include_tts
