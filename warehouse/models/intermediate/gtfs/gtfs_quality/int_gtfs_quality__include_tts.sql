@@ -41,6 +41,7 @@ tts_issue_feeds AS (
 ),
 
 -- A daily count of feeds with at least one missing tts_stop_name value. It doesn't matter if one or more exist - the count is for dedupe purposes
+-- CONFIRM WHETHER STILL NEEDED IN V2
 tts_issue_feeds_check AS (
   SELECT
     t1.date,
