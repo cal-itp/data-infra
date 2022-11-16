@@ -18,22 +18,14 @@ hashed AS (
     FROM int_gtfs_schedule__joined_feed_outcomes
 ),
 
-valid_global_extracts AS (
-    SELECT
-        ts,
-        COUNT(*) AS ct,
-        SUM(int_download_success) AS ct_successful
-    FROM hashed
-    GROUP BY ts
-    -- TODO: these are made up constants
-    HAVING (ct / ct_successful > .9) AND (ct >= 40)
-),
-
 next_valid_extract AS (
     SELECT
         ts,
         LEAD(ts) OVER (ORDER BY ts) AS next_ts
-    FROM valid_global_extracts
+    FROM hashed
+    GROUP BY ts
+    -- TODO: these are made up constants indicating "enough success to say that the downloader ran"
+    HAVING ( (SUM(int_download_success) / COUNT(*)) > .9) AND (COUNT(*) >= 40)
 ),
 
 latest_attempt_by_feed AS (
