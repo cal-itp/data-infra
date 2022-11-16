@@ -9,6 +9,7 @@ unioned AS (
             ref('int_gtfs_quality__shapes_valid'),
             ref('int_gtfs_quality__technical_contact_listed'),
             ref('int_gtfs_quality__shapes_for_all_trips'),
+            ref('int_gtfs_quality__include_tts'),
         ],
     ) }}
 ),
