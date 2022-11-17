@@ -3,8 +3,8 @@ version: 2
 models:
   - name: dim_schedule_feeds
     description: |
-      Each row is a "feed", representing a unique zipfile version that was successfully downloaded and
-      has data in the warehouse.
+      Each row is a "feed", representing a unique zipfile version associated with the same GTFS dataset record
+      that was successfully downloaded and has data in the warehouse.
       When data fails to download, we do not interpolate it unless an identical zipfile is subsequently
       downloaded. So for example, say we download zipfile A from URL X on January 1, then the download
       or unzip operation fails for any reason on January 2, and then we download zipfile A from URL X
