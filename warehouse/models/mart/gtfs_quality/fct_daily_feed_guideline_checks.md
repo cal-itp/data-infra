@@ -12,7 +12,7 @@ Here is a list of currently-implemented checks:
 | ------------------------------------ |---------|------------ |
 | No errors in MobilityData GTFS Schedule Validator |Compliance |GTFS Schedule Validator produced no errors for the transit provider’s static feed. |
 |No shapes-related errors appear in the MobilityData GTFS Validator | Accurate Service Data | None of the following shapes-related errors appear in the GTFS Schedule Validator: decreasing_shape_distance, equal_shape_distance_diff_coordinates, decreasing_or_equal_shape_distance, decreasing_or_equal_shape_distance |
-| Feed will be valid for more than 7 days | Best Practices Alignment | The dataset expiration date defined in feed_info.txt is in 7 days or more |
+| Feed will be valid for more than 7 days | Best Practices Alignment | The dataset expiration date defined in feed_info.txt is in 8 days or more |
 | Feed will be valid for more than 30 days | Best Practices Alignment | The dataset expiration date defined in feed_info.txt is in 31 days or more |
 |Shapes.txt file is present | Accurate Service Data | Static GTFS feed contains the file shapes.txt.|
 | Every trip in trips.txt has a shape_id listed | Accurate Service Data | Every trip in trips.txt has a shape_id listed.|
