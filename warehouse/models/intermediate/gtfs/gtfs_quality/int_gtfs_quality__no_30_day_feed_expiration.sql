@@ -17,7 +17,7 @@ validation_notices_by_day AS (
     GROUP BY feed_key, date
 ),
 
-int_gtfs_quality__no_30_day_feed_experiation AS (
+int_gtfs_quality__no_30_day_feed_expiration AS (
     SELECT
         idx.date,
         idx.feed_key,
@@ -33,4 +33,4 @@ int_gtfs_quality__no_30_day_feed_experiation AS (
             AND idx.date = notices.date
 )
 
-SELECT * FROM int_gtfs_quality__no_30_day_feed_experiation
+SELECT * FROM int_gtfs_quality__no_30_day_feed_expiration
