@@ -3,8 +3,16 @@ version: 2
 models:
   - name: dim_schedule_feeds
     description: |
-      Each row is a "feed", representing a unique combination of a specific zipfile and associated
-      `gtfs_dataset` record (i.e., a specific consistent "version" of a GTFS dataset.)
+      Each row is a "feed", representing a unique zipfile version that was successfully downloaded and
+      has data in the warehouse.
+      When data fails to download, we do not interpolate it unless an identical zipfile is subsequently
+      downloaded. So for example, say we download zipfile A from URL X on January 1, then the download
+      or unzip operation fails for any reason on January 2, and then we download zipfile A from URL X
+      again on January 3. If you check this table on January 3 before the new data has appeared in the
+      warehouse, it will show zipfile A has expired on January 2. But once the same zipfile is ingested
+      again, if you check on January 4, we will show that zipfile A was continuously in effect
+      January 1-3. The reason for this is that if a new zipfile version B were to be uploaded on January 3,
+      we would want to correctly say that we don't know what was in effect on January 2.
       This table should be used to understand "versions" of constituent data like routes, trips, etc.
     tests:
       - dbt_utils.mutually_exclusive_ranges:

@@ -1,8 +1,13 @@
 {{ config(materialized='table') }}
 
+{% set timestamps = dbt_utils.get_column_values(table=ref('int_gtfs_schedule__joined_feed_outcomes'), column='ts', order_by = 'ts DESC', max_records = 1) %}
+{% set latest_processed_timestamp = timestamps[0] %}
+
 WITH int_gtfs_schedule__joined_feed_outcomes AS (
     SELECT *
     FROM {{ ref('int_gtfs_schedule__joined_feed_outcomes') }}
+    WHERE EXTRACT(DATE FROM ts) < EXTRACT(DATE FROM TIMESTAMP '{{ latest_processed_timestamp }}')
+        AND download_success AND unzip_success
 ),
 
 hashed AS (
@@ -13,6 +18,7 @@ hashed AS (
         unzip_success,
         zipfile_extract_md5hash,
         CAST(download_success AS INTEGER) as int_download_success,
+        MAX(ts) OVER(PARTITION BY base64_url ORDER BY ts DESC) AS latest_extract,
         {{ dbt_utils.surrogate_key(['gtfs_dataset_key', 'download_success', 'unzip_success',
          'zipfile_extract_md5hash']) }} AS content_hash
     FROM int_gtfs_schedule__joined_feed_outcomes
@@ -24,69 +30,72 @@ next_valid_extract AS (
         LEAD(ts) OVER (ORDER BY ts) AS next_ts
     FROM hashed
     GROUP BY ts
-    -- TODO: these are made up constants indicating "enough success to say that the downloader ran"
-    HAVING ( (SUM(int_download_success) / COUNT(*)) > .9) AND (COUNT(*) >= 40)
-),
-
-latest_attempt_by_feed AS (
-    SELECT
-        base64_url,
-        MAX(ts) AS latest_extract
-    FROM hashed
-    GROUP BY base64_url
-),
-
-in_latest AS (
-    SELECT
-        base64_url,
-        latest_extract,
-        (DENSE_RANK() OVER (ORDER BY latest_extract DESC)) = 1 AS in_latest,
-        next_ts
-    FROM latest_attempt_by_feed AS l
-    LEFT JOIN next_valid_extract AS n
-        ON l.latest_extract = n.ts
 ),
 
 -- following: https://dba.stackexchange.com/questions/210907/determine-consecutive-occurrences-of-values
 first_instances AS (
     SELECT
-        *,
-        (LAG(content_hash) OVER (PARTITION BY base64_url ORDER BY ts) != content_hash)
-            OR (LAG(content_hash) OVER (PARTITION BY base64_url ORDER BY ts) IS NULL) AS is_first
+        hashed.ts,
+        base64_url,
+        latest_extract,
+        download_success,
+        unzip_success,
+        zipfile_extract_md5hash,
+        (DENSE_RANK() OVER (ORDER BY latest_extract DESC)) = 1 AS in_latest,
+        next_ts,
+        (LAG(content_hash) OVER (PARTITION BY base64_url ORDER BY hashed.ts) != content_hash)
+            OR (LAG(content_hash) OVER (PARTITION BY base64_url ORDER BY hashed.ts) IS NULL) AS is_first
     FROM hashed
-    WHERE download_success AND unzip_success IS NOT NULL
+    LEFT JOIN next_valid_extract AS next
+        ON hashed.latest_extract = next.ts
     QUALIFY is_first
 ),
 
-versioned AS (
+all_versioned AS (
     SELECT
-        f.base64_url,
-        f.ts AS _valid_from,
+        base64_url,
+        download_success,
+        unzip_success,
+        zipfile_extract_md5hash,
+        ts AS _valid_from,
         CASE
             -- if there's a subsequent extract, use that extract time as end date
-            WHEN LEAD(f.ts) OVER (PARTITION BY f.base64_url ORDER BY f.ts) IS NOT NULL
-                THEN {{ make_end_of_valid_range('LEAD(f.ts) OVER (PARTITION BY f.base64_url ORDER BY f.ts)') }}
+            WHEN LEAD(ts) OVER (PARTITION BY base64_url ORDER BY ts) IS NOT NULL
+                THEN {{ make_end_of_valid_range('LEAD(ts) OVER (PARTITION BY base64_url ORDER BY ts)') }}
             ELSE
             -- if there's no subsequent extract, it was either deleted or it's current
             -- if it was in the latest extract, call it current (even if it errored)
             -- if it was not in the latest extract, call it deleted at the last time it was extracted
                 CASE
-                    WHEN n.in_latest THEN {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }}
-                    ELSE {{ make_end_of_valid_range('n.next_ts') }}
+                    WHEN in_latest THEN {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }}
+                    ELSE {{ make_end_of_valid_range('next_ts') }}
                 END
         END AS _valid_to
-    FROM first_instances AS f
-    LEFT JOIN in_latest AS n
-        ON f.base64_url = n.base64_url
+    FROM first_instances
+),
+
+actual_data_only AS (
+    SELECT
+        base64_url,
+        download_success,
+        unzip_success,
+        zipfile_extract_md5hash,
+        _valid_from,
+        _valid_to
+    FROM all_versioned
+    WHERE download_success AND unzip_success
 ),
 
 dim_schedule_feeds AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['versioned.base64_url', 'versioned._valid_from']) }} AS key,
-        versioned.base64_url,
-        versioned._valid_from,
-        versioned._valid_to
-    FROM versioned
+        {{ dbt_utils.surrogate_key(['base64_url', '_valid_from']) }} AS key,
+        base64_url,
+        download_success,
+        unzip_success,
+        zipfile_extract_md5hash,
+        _valid_from,
+        _valid_to
+    FROM actual_data_only
 )
 
 SELECT * FROM dim_schedule_feeds
