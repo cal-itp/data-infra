@@ -5,7 +5,7 @@ WITH feed_guideline_index AS (
 -- For this check we are only looking for the 7-day feed expiration warning
 validation_fact_daily_feed_codes_shape_related AS (
     SELECT * FROM {{ ref('fct_daily_schedule_feed_validation_notices') }}
-     WHERE code = 'feed_expiration_date_7_days'
+     WHERE code = 'feed_expiration_date7_days'
 ),
 
 validation_notices_by_day AS (

@@ -7,6 +7,12 @@ unioned AS (
         relations=[
             ref('int_gtfs_quality__no_schedule_validation_errors'),
             ref('int_gtfs_quality__shapes_valid'),
+            ref('int_gtfs_quality__shapes_file_present'),
+            ref('int_gtfs_quality__technical_contact_listed'),
+            ref('int_gtfs_quality__shapes_for_all_trips'),
+            ref('int_gtfs_quality__include_tts'),
+            ref('int_gtfs_quality__pathways_valid'),
+            ref('int_gtfs_quality__complete_wheelchair_accessibility_data'),
         ],
     ) }}
 ),

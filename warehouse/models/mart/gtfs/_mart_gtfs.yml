@@ -993,7 +993,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key` and `trip_id`.
-        tests:
+        tests: &pk_tests_with_dups
           - unique:
               where: "not warning_duplicate_primary_key"
           - not_null
@@ -1129,10 +1129,16 @@ models:
           lower_bound_column: _valid_from
           upper_bound_column: _valid_to
           partition_by: base64_url, trip_id, stop_sequence
+          where: "not warning_duplicate_primary_key"
           gaps: required
     columns:
       - name: base64_url
       - *feed_key
+      - name: ts
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, `trip_id`, and `stop_sequence`.
+        tests: *pk_tests_with_dups
       - name: trip_id
         description: '{{ doc("gtfs_stop_times__trip_id") }}'
         tests:
@@ -1144,7 +1150,8 @@ models:
       - name: stop_id
         description: '{{ doc("gtfs_stop_times__stop_id") }}'
         tests:
-        - not_null
+        - not_null:
+            where: "not warning_missing_foreign_key_stop_id"
       - name: stop_sequence
         description: '{{ doc("gtfs_stop_times__stop_sequence") }}'
         tests:
@@ -1163,6 +1170,15 @@ models:
         description: '{{ doc("gtfs_stop_times__shape_dist_traveled") }}'
       - name: timepoint
         description: '{{ doc("gtfs_stop_times__timepoint") }}'
+      - name: warning_duplicate_primary_key
+        description: |
+          Rows with `true` in this column have a duplicate primary key; i.e., the given `trip_id`
+          / `stop_sequence` pair is duplicated within an individual feed instance and `key` will
+          also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
+      - name: warning_missing_foreign_key_stop_id
+        description: |
+          Rows with `true` in this column are missing the required `stop_id` value.
+          This means they will fail to join with `stop` related information.
     meta:
       publish.gis_coordinate_system_epsg: WGS84
   - name: fct_daily_scheduled_trips
@@ -1204,6 +1220,12 @@ models:
           - relationships:
               to: ref('dim_routes')
               field: key
+      - name: shape_array_key
+        description: Foreign key to dim_shapes_arrays.
+        tests:
+          - relationships:
+              to: ref('dim_shapes_arrays')
+              field: key
       - name: warning_duplicate_trip_primary_key
         description: |
           Rows with `true` in this column have a duplicate primary key in dim_trips;
@@ -1240,3 +1262,33 @@ models:
           - relationships:
               to: ref('dim_schedule_feeds')
               field: key
+  - name: dim_shapes_arrays
+    description: |
+      Each row is a shape, constructed from the points listed in
+      `dim_shapes`, with the shape geometry described as an ordered
+      array of points in the `pt_array` column.
+      We cannot construct a LineString because of BigQuery limitations;
+      see: https://gis.stackexchange.com/questions/426188/can-i-represent-a-route-that-doubles-back-on-itself-in-bigquery-with-a-linestrin.
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: base64_url, shape_id
+          gaps: required
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `shape_id`.
+        tests: *primary_key_tests
+      - *feed_key
+      - *base64_url
+      - name: shape_id
+        description: '{{ doc("gtfs_shapes__shape_id") }}'
+        tests:
+        - not_null
+      - name: pt_array
+        description: Ordered array of WKT points that describe this shape.
+        tests:
+        - not_null
+      - *_valid_from
+      - *_valid_to

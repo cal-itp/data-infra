@@ -12,7 +12,7 @@ from sqlalchemy.sql import Select
 from typing import Annotated, Any, ClassVar, Dict, List, Literal, Optional, Union
 
 import pendulum
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, validator, constr
 from sqlalchemy import create_engine, MetaData, Table, select
 
 
@@ -268,7 +268,7 @@ Destination = Annotated[
 
 class ExposureMeta(BaseModel):
     methodology: Optional[str]
-    coordinate_system_espg: Optional[str]
+    coordinate_system_epsg: Optional[constr(regex=r"\d+")]  # noqa: F722
     destinations: List[Destination] = []
 
 
