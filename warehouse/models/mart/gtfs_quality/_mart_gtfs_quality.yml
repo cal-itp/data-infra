@@ -18,12 +18,16 @@ models:
         tests: &primary_key_tests
           - unique
           - not_null
+        meta: &pk_meta
+          metabase.semantic_type: type/PK
       - name: date
         tests:
           - not_null
       - name: feed_key
         tests:
           - not_null
+        meta: &fk_meta
+          metabase.semantic_type: type/FK
       - name: status
         tests:
           - dbt_utils.not_null_proportion:

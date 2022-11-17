@@ -224,6 +224,7 @@ def run(
             ("mart_transit_database", "Data Marts (formerly Warehouse Views)"),
             ("mart_gtfs_guidelines", "Data Marts (formerly Warehouse Views)"),
             ("mart_gtfs", "Data Marts (formerly Warehouse Views)"),
+            ("mart_gtfs_quality", "Data Marts (formerly Warehouse Views)"),
         ]:
             args = [
                 "dbt-metabase",
