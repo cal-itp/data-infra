@@ -53,6 +53,10 @@ models:
     tests: *stg_gtfs_guideline_tests
     columns: *stg_gtfs_guideline_columns
 
+  - name: int_gtfs_quality__include_tts
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
+
   - name: int_gtfs_quality__pathways_valid
     tests: *stg_gtfs_guideline_tests
     columns: *stg_gtfs_guideline_columns
