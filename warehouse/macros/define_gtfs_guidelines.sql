@@ -75,6 +75,14 @@
 "No expired services are listed in the feed"
 {% endmacro %}
 
+{% macro no_7_day_feed_expiration() %}
+"Feed will be valid for more than 7 days"
+{% endmacro %}
+
+{% macro no_30_day_feed_expiration() %}
+"Feed will be valid for more than 30 days"
+{% endmacro %}
+
 -- declare features
 {% macro compliance() %}
 "Compliance"
