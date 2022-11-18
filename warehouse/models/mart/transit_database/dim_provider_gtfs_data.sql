@@ -17,7 +17,7 @@ dim_gtfs_datasets AS (
 ),
 
 quartet_pivoted AS (
-    SELECT * FROM {{ ref('int_transit_database__service_datasets_pivot') }}
+    SELECT * FROM {{ ref('int_transit_database__service_datasets_pivoted') }}
 ),
 
 dim_provider_service_gtfs AS (
@@ -30,6 +30,7 @@ dim_provider_service_gtfs AS (
             'gtfs_dataset_key_trip_updates']) }} AS key,
         quartet_pivoted.service_key,
         services.name AS service_name,
+        organizations.key AS organization_key,
         organizations.name AS organization_name,
         organizations.itp_id AS itp_id,
         category,

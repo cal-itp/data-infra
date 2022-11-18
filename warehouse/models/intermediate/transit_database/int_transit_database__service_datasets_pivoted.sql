@@ -49,6 +49,7 @@ datasets_services_joined AS (
         ON dim_gtfs_service_data.gtfs_dataset_key = dim_gtfs_datasets.key
 ),
 
+-- TODO: can remove this when data entry for Torrance is corrected so that only one feed is primary
 dedupe_torrance AS (
     SELECT
         service_key,
@@ -62,7 +63,7 @@ dedupe_torrance AS (
     FROM datasets_services_joined
 ),
 
-quartet_pivoted AS (
+int_transit_database__service_datasets_pivoted AS (
     SELECT *
     FROM dedupe_torrance
     PIVOT(
@@ -71,4 +72,4 @@ quartet_pivoted AS (
     )
 )
 
-SELECT * FROM quartet_pivoted
+SELECT * FROM int_transit_database__service_datasets_pivoted

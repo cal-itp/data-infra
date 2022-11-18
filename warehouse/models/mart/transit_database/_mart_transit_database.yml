@@ -160,6 +160,7 @@ models:
         description: |
           If "true", indicates that this dataset should be ingested by the
           Cal-ITP data pipeline. Nulls indicate dataset should not be ingested.
+      - name: base64_url
       - name: deprecated_date
         description: |
           If populated, indicates that dataset was deprecated on listed date

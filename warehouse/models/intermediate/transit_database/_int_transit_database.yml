@@ -43,7 +43,7 @@ models:
                 # will work once the dim is historical
                 error_if: ">10"
                 warn_if: ">0"
-  - name: int_transit_database__service_datasets_pivot
+  - name: int_transit_database__service_datasets_pivoted
     description: |
       A pivoted (wide) table showing a grouping of a service and a set of up to
       four GTFS dataset records (one of each type: schedule, RT service alerts,
