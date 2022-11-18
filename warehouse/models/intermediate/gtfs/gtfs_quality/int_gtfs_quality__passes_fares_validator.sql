@@ -15,9 +15,7 @@ daily_feed_fare_files AS (
                              'rider_categories',
                              'fare_containers',
                              'fare_products',
-                             'fare_rules',
-                             'fare_transfer_rules',
-                             'fare_attributes'
+                             'fare_transfer_rules'
                              )
        AND feed_key IS NOT null
      GROUP BY 1
