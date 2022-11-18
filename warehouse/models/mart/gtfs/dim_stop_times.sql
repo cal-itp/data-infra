@@ -24,10 +24,9 @@ raw_time_parts AS (
 
 int_time_parts AS (
     SELECT
-        * EXCEPT (part_arr, part_dep, stop_sequence),
+        * EXCEPT (part_arr, part_dep),
         ARRAY(SELECT CAST(num AS INT64) FROM UNNEST(raw_time_parts.part_arr) AS num) AS part_arr,
-        ARRAY(SELECT CAST(num AS INT64) FROM UNNEST(raw_time_parts.part_dep) AS num) AS part_dep,
-        CAST(stop_sequence AS INT64) AS stop_sequence
+        ARRAY(SELECT CAST(num AS INT64) FROM UNNEST(raw_time_parts.part_dep) AS num) AS part_dep
     FROM raw_time_parts
 ),
 

@@ -1220,23 +1220,31 @@ models:
           - relationships:
               to: ref('dim_trips')
               field: key
+      - name: trip_id
       - name: route_key
         description: Foreign key to dim_routes.
         tests:
           - relationships:
               to: ref('dim_routes')
               field: key
+      - name: route_id
       - name: shape_array_key
         description: Foreign key to dim_shapes_arrays.
         tests:
           - relationships:
               to: ref('dim_shapes_arrays')
               field: key
+      - name: gtfs_dataset_key
       - name: warning_duplicate_trip_primary_key
         description: |
           Rows with `true` in this column have a duplicate primary key in dim_trips;
           i.e., `trip_id` is duplicated within an individual feed instance.
           Treat these rows with caution.
+      - name: n_stops
+      - name: n_stop_times
+      - name: trip_first_departure_ts
+      - name: trip_last_arrival_ts
+      - name: service_hours
   - name: fct_daily_rt_feed_files
     description: |
       Each row is a date / URL pair with a summary of data aggregation outcomes.
@@ -1298,3 +1306,58 @@ models:
         - not_null
       - *_valid_from
       - *_valid_to
+  - name: fct_daily_scheduled_service_summary
+    description: |
+      This is daily service totals by feed.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - service_date
+            - feed_key
+      - dbt_utils.expression_is_true:
+          expression: "ttl_service_hours >= 0"
+    columns:
+      - name: service_date
+        description: Date on which this service level was present
+        tests:
+          - not_null
+      - name: feed_key
+        tests:
+          - not_null
+        description: feed_key only present with active service on date
+      - name: ttl_service_hours
+        description: Total service hours across entire feed on date, if any
+      - name: n_trips
+        description: Total number of trips ran on date, if any
+      - name: first_departure_ts
+        description: Time of first departure on date
+      - name: last_arrival_ts
+        description: Time of last departure on date
+      - name: n_stop_times
+        description: |
+         Total number of stop events present in active feed
+         (not necessarily served on date)
+      - name: n_routes
+        description: |
+         Total number of routes that had trips scheduled on this day
+         (not necessarily operating on date)
+exposures:
+  - name: calitp_reports_site
+    type: application
+    maturity: medium
+    url: "reports.calitp.org"
+    description: Cal-ITP reports site
+    depends_on:
+      - ref("reports_daily_service_routes_stops")
+      - ref("reports_gtfs_schedule_index")
+      - ref("gtfs_schedule_dim_feeds")
+      - ref("gtfs_schedule_fact_stop_id_changes")
+      - ref("gtfs_schedule_fact_route_id_changes")
+      - source("gtfs_type2", "validation_notices")
+      # ^ hopefully not for long
+      # also gtfs_schedule_history.calitp_files_updates
+      # don't think this is a source in dbt?
+      # could add, but would also like to look at options
+      # to replace reports-side...
+    owner:
+      email: eric.d@jarv.us

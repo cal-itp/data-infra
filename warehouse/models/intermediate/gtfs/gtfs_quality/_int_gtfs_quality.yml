@@ -47,14 +47,3 @@ models:
   - name: int_gtfs_quality__shapes_for_all_trips
     tests: *stg_gtfs_guideline_tests
     columns: *stg_gtfs_guideline_columns
-
-  - name: int_gtfs_schedule__trip_calculations
-    description: |
-      Insert description
-      here
-    columns:
-      - name: trip_id
-      - name: n_stops
-      - name: n_stop_times
-      - name: trip_first_departure_ts
-      - name: trip_last_arrival_ts

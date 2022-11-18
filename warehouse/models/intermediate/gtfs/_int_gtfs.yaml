@@ -298,3 +298,15 @@ models:
       - name: dt
       - name: ts
       - name: base64_url
+
+  - name: int_gtfs_schedule__stop_times_grouped
+    description: |
+      Stop times grouped by trip_id with trip aggregation calculations.
+    columns:
+      - name: feed_key
+      - name: trip_id
+      - name: n_stops
+      - name: n_stop_times
+      - name: trip_first_departure_ts
+      - name: trip_last_arrival_ts
+      - name: service_hours

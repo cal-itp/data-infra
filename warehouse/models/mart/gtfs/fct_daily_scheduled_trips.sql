@@ -32,8 +32,8 @@ urls_to_gtfs_datasets AS (
     SELECT * FROM {{ ref('int_transit_database__urls_to_gtfs_datasets') }}
 ),
 
-trip_calculations AS (
-    SELECT * FROM {{ ref('int_gtfs_schedule__trip_calculations') }}
+stop_times_grouped AS (
+    SELECT * FROM {{ ref('int_gtfs_schedule__stop_times_grouped') }}
 ),
 
 fct_daily_scheduled_trips AS (
@@ -42,22 +42,22 @@ fct_daily_scheduled_trips AS (
         service_index.service_date,
         service_index.feed_key,
         service_index.service_id,
-        trips.key AS trip_key,
 
-        -- added to do the join?
+        trips.key AS trip_key,
         trips.trip_id AS trip_id,
 
         routes.key AS route_key,
+        routes.route_id AS route_id,
+
         shapes.key AS shape_array_key,
         urls_to_gtfs_datasets.gtfs_dataset_key AS gtfs_dataset_key,
         trips.warning_duplicate_primary_key AS warning_duplicate_trip_primary_key,
 
-        --trip_calculations.trip_id,
-        --trip_calculations.n_stops,
-        --trip_calculations.n_stop_times,
-        --trip_calculations.trip_first_departure_ts,
-        --trip_calculations.trip_last_arrival_ts,
-        --trip_calculations.service_hours
+        stop_times_grouped.n_stops,
+        stop_times_grouped.n_stop_times,
+        stop_times_grouped.trip_first_departure_ts,
+        stop_times_grouped.trip_last_arrival_ts,
+        stop_times_grouped.service_hours
 
     FROM int_gtfs_schedule__daily_scheduled_service_index AS service_index
     LEFT JOIN dim_trips AS trips
@@ -73,27 +73,9 @@ fct_daily_scheduled_trips AS (
         ON service_index.feed_key = feeds.key
     LEFT JOIN urls_to_gtfs_datasets
         ON feeds.base64_url = urls_to_gtfs_datasets.base64_url
-),
-
-join_trip_calculations AS (
-
-    SELECT
-
-        fct_daily_scheduled_trips.*,
-
-        trip_calculations.n_stops,
-        trip_calculations.n_stop_times,
-        trip_calculations.trip_first_departure_ts,
-        trip_calculations.trip_last_arrival_ts,
-        trip_calculations.service_hours,
-        trip_calculations.n_trips
-        --, trip_calculations.n_routes
-
-    FROM fct_daily_scheduled_trips
-    LEFT JOIN trip_calculations
-        ON fct_daily_scheduled_trips.feed_key = trip_calculations.feed_key
-        AND fct_daily_scheduled_trips.trip_id = trip_calculations.trip_id
-
+    LEFT JOIN stop_times_grouped
+        ON service_index.feed_key = stop_times_grouped.feed_key
+        AND trips.trip_id = stop_times_grouped.trip_id
 )
 
-SELECT * FROM join_trip_calculations
+SELECT * FROM fct_daily_scheduled_trips

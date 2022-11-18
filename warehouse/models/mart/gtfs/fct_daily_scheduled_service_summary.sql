@@ -7,21 +7,21 @@ WITH fct_daily_scheduled_trips AS (
 
 ),
 
-fct_daily_reports_service AS (
+fct_daily_scheduled_service_summary AS (
 
     SELECT
 
         service_date,
         feed_key,
         SUM(service_hours) AS ttl_service_hours,
-        SUM(n_trips) AS n_trips,
+        COUNT(DISTINCT trip_id) AS n_trips,
         MIN(trip_first_departure_ts) AS first_departure_ts,
         MAX(trip_last_arrival_ts) AS last_arrival_ts,
-        SUM(n_stops) AS n_stops
-        --, SUM(n_routes) AS n_routes
+        SUM(n_stop_times) AS n_stop_times,
+        COUNT(DISTINCT route_id) AS n_routes
 
     FROM fct_daily_scheduled_trips
     GROUP BY service_date, feed_key
 )
 
-SELECT * FROM fct_daily_reports_service
+SELECT * FROM fct_daily_scheduled_service_summary
