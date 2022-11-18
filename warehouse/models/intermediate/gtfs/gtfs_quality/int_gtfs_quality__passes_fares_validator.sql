@@ -6,6 +6,17 @@ keyed_parse_outcomes AS (
     SELECT * FROM {{ ref('int_gtfs_schedule__keyed_parse_outcomes')}}
 ),
 
+validation_fact_daily_feed_codes_fares_related AS (
+    SELECT * FROM {{ ref('fct_daily_schedule_feed_validation_notices') }}
+     WHERE code IN ('fare_transfer_rule_duration_limit_type_without_duration_limit',
+                    'fare_transfer_rule_duration_limit_without_type',
+                    'fare_transfer_rule_invalid_transfer_count',
+                    'fare_transfer_rule_missing_transfer_count',
+                    'fare_transfer_rule_with_forbidden_transfer_count',
+                    'invalid_currency_amount'
+                    )
+),
+
 daily_feed_fare_files AS (
     SELECT feed_key,
            COUNT(*) AS ct_files
@@ -19,17 +30,6 @@ daily_feed_fare_files AS (
                              )
        AND feed_key IS NOT null
      GROUP BY 1
-),
-
-validation_fact_daily_feed_codes_fares_related AS (
-    SELECT * FROM {{ ref('fct_daily_schedule_feed_validation_notices') }}
-     WHERE code IN ('fare_transfer_rule_duration_limit_type_without_duration_limit',
-                    'fare_transfer_rule_duration_limit_without_type',
-                    'fare_transfer_rule_invalid_transfer_count',
-                    'fare_transfer_rule_missing_transfer_count',
-                    'fare_transfer_rule_with_forbidden_transfer_count',
-                    'invalid_currency_amount'
-                    )
 ),
 
 validation_notices_by_day AS (
