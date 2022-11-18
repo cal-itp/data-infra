@@ -1179,6 +1179,12 @@ models:
         description: |
           Rows with `true` in this column are missing the required `stop_id` value.
           This means they will fail to join with `stop` related information.
+      - name: arrival_sec
+        description: |
+          This is a calculated field that does not come from GTFS - it is not a timestamp and can't be treated as such.
+      - name: departure_sec
+        description: |
+          This is a calculated field that does not come from GTFS - it is not a timestamp and can't be treated as such.
     meta:
       publish.gis_coordinate_system_epsg: WGS84
   - name: fct_daily_scheduled_trips
