@@ -6,7 +6,6 @@ models:
   #   appropriate grain
   - name: fct_daily_feed_guideline_checks
     description: '{{ doc("fct_daily_feed_guideline_checks") }}'
-
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -44,12 +43,14 @@ models:
         description: |
           Synthetic primary key constructed from date, feed_key, and code.
         tests: *primary_key_tests
+        meta: *pk_meta
       - name: date
         tests:
           - not_null
       - name: feed_key
         tests:
           - not_null
+        meta: *fk_meta
       - name: code
         tests:
           - not_null
