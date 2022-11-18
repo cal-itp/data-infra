@@ -83,6 +83,10 @@
 "Feed will be valid for more than 30 days"
 {% endmacro %}
 
+{% macro passes_fares_validator() %}
+"Passes Fares v2 portion of MobilityData GTFS Schedule Validator"
+{% endmacro %}
+
 -- declare features
 {% macro compliance() %}
 "Compliance"
@@ -110,6 +114,10 @@
 
 {% macro best_practices_alignment() %}
 "Best Practices Alignment"
+{% endmacro %}
+
+{% macro fare_completeness() %}
+"Fare Completeness"
 {% endmacro %}
 
 -- columns

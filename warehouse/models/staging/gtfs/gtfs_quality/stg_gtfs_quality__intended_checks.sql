@@ -39,6 +39,8 @@ WITH stg_gtfs_quality__intended_checks AS (
     SELECT {{ no_7_day_feed_expiration() }}, {{ best_practices_alignment() }}
     UNION ALL
     SELECT {{ no_30_day_feed_expiration() }}, {{ best_practices_alignment() }}
+    UNION ALL
+    SELECT {{ passes_fares_validator() }}, {{ fare_completeness() }}
 )
 
 SELECT * FROM stg_gtfs_quality__intended_checks
