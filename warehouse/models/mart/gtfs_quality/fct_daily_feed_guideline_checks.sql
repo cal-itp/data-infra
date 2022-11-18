@@ -13,6 +13,9 @@ unioned AS (
             ref('int_gtfs_quality__include_tts'),
             ref('int_gtfs_quality__pathways_valid'),
             ref('int_gtfs_quality__complete_wheelchair_accessibility_data'),
+            ref('int_gtfs_quality__passes_fares_validator'),
+            ref('int_gtfs_quality__no_7_day_feed_expiration'),
+            ref('int_gtfs_quality__no_30_day_feed_expiration'),
         ],
     ) }}
 ),
