@@ -53,6 +53,7 @@ int_gtfs_quality__no_expired_services AS (
         t1.feed_key,
         {{ no_expired_services() }} AS check,
         {{ best_practices_alignment() }} AS feature,
+        t2.earliest_service_end_date,
         CASE
             WHEN t2.earliest_service_end_date < date THEN "FAIL"
             WHEN t2.earliest_service_end_date >= date THEN "PASS"
