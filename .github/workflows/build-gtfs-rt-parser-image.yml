@@ -7,6 +7,14 @@ on:
     paths:
       - '.github/workflows/build-gtfs-rt-parser-image.yml'
       - 'jobs/gtfs-rt-parser/**'
+  pull_request:
+    paths:
+      - '.github/workflows/build-gtfs-rt-parser-image.yml'
+      - 'jobs/gtfs-rt-parser/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build_push:
@@ -14,15 +22,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
+      - uses: docker/login-action@v1
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and push
+      - name: Build development image
+        if: ${{ github.event_name == 'pull_request' }}
         uses: docker/build-push-action@v2
         with:
           context: jobs/gtfs-rt-parser
-          push: true
+          tags: ghcr.io/${{github.repository}}/gtfs-rt-parser:development
+      - name: Build and push latest image
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        uses: docker/build-push-action@v2
+        with:
+          context: jobs/gtfs-rt-parser
           tags: ghcr.io/${{github.repository}}/gtfs-rt-parser:latest
