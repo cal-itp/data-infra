@@ -40,8 +40,7 @@ int_gtfs_quality__no_rt_critical_validation_errors AS (
         errors,
         CASE
             WHEN COALESCE(errors, 0) = 0 THEN "PASS"
-            WHEN rt_files IS null THEN "FAIL"
-            WHEN errors > 0 THEN "FAIL"
+            WHEN rt_files IS NOT NULL THEN "FAIL" -- we had no errors, but did have files
         END AS status,
     FROM feed_guideline_index AS idx
     LEFT JOIN count_files AS files
