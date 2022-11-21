@@ -18,11 +18,13 @@ models:
         name: date
         tests:
           - not_null
-      - name: feed_key
+      - &schedule_feed_key
+        name: feed_key
         tests:
           - not_null
-        meta: &fk_meta
-          metabase.semantic_type: type/FK
+          - relationships:
+              to: ref('dim_schedule_feeds')
+              field: key
       - name: status
       - &check
         name: check
@@ -45,12 +47,8 @@ models:
       - *key
       - *date
       - name: base64_url
-      - name: feed_key
         tests:
           - not_null
-          - relationships:
-              to: ref('dim_schedule_feeds')
-              field: key
       - *check
       - *status
 
@@ -106,16 +104,9 @@ models:
       per feed, even if that count is zero; null counts indicate
       a lack of validation for that feed on that day.
     columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from date, feed_key, and code.
-        tests: *primary_key_tests
-        meta: *pk_meta
+      - *key
       - *date
-      - name: feed_key
-        tests:
-          - not_null
-        meta: *fk_meta
+      - *schedule_feed_key
       - name: code
         tests:
           - not_null
