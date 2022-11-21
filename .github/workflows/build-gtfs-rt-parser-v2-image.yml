@@ -32,7 +32,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: jobs/gtfs-rt-parser
-          tags: ghcr.io/${{github.repository}}/gtfs-rt-parser-v2:development
       - name: Build and push latest image
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         uses: docker/build-push-action@v2

@@ -7,6 +7,14 @@ on:
     paths:
       - '.github/workflows/build-gtfs-schedule-validator-image.yml'
       - 'jobs/gtfs-schedule-validator/**'
+  pull_request:
+    paths:
+      - '.github/workflows/build-gtfs-schedule-validator-image.yml'
+      - 'jobs/gtfs-schedule-validator/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build_push:
@@ -20,7 +28,13 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and push
+      - name: Build development image
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: docker/build-push-action@v2
+        with:
+          context: jobs/gtfs-schedule-validator
+      - name: Build and push latest image
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         uses: docker/build-push-action@v2
         with:
           context: jobs/gtfs-schedule-validator
