@@ -11,6 +11,29 @@ models:
             - feed_key
             - date
 
+  - name: int_gtfs_quality__no_rt_critical_validation_errors
+    description: |
+      Checks for any critical validation notices in RT feeds.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - base64_url
+    columns:
+      - name: status
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
+
+  - name: int_gtfs_quality__rt_validation_outcomes
+    description: |
+      Unioned, incremental table of RT validation outcomes.
+    columns:
+      - name: key
+        tests:
+          - not_null
+          - unique
+
   - name: int_gtfs_quality__schedule_validation_severities
     description: |
       List of codes and their severity in the GTFS validator.

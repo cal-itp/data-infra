@@ -160,6 +160,7 @@ models:
         description: |
           If "true", indicates that this dataset should be ingested by the
           Cal-ITP data pipeline. Nulls indicate dataset should not be ingested.
+      - name: base64_url
       - name: deprecated_date
         description: |
           If populated, indicates that dataset was deprecated on listed date
@@ -297,16 +298,20 @@ models:
              field: key
   - name: dim_provider_gtfs_data
     description: |
-      Each record links together an organization with a GTFS dataset,
-      where the organization manages a service for which that GTFS dataset is "primary".
-      Thus, each row represents a unique "primary" organization / service / gtfs_service_data /
-      gtfs_dataset relationship. This table can be used to determine what
-      GTFS dataset(s) represent a given provider's service(s); i.e., if
-      trying to determine whether a given "agency" "has" GTFS, this table can
-      be used to make that determination.
-
-      Note that GTFS datasets whose service relationships are null or unknown
-      will not be present here.
+      Each record links together an organization with a service and a set of up to four
+      GTFS datasets (schedule, RT service alerts, RT vehicle positions, and RT trip updates),
+      where the organization manages the service.
+      This table can be used to determine what GTFS dataset(s) represent a given provider's service(s);
+      i.e., this table can be used to determine whether a given "agency" "has" GTFS.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - service_key
+            - organization_key
+            - schedule_gtfs_dataset_key
+            - service_alerts_gtfs_dataset_key
+            - vehicle_positions_gtfs_dataset_key
+            - trip_updates_gtfs_dataset_key
     columns:
       - *key
       - name: service_key
@@ -314,25 +319,39 @@ models:
           - relationships:
              to: ref('dim_services')
              field: key
-      - &gtfs_dataset_key
-        name: gtfs_dataset_key
+          - unique:
+              config:
+                where: category = "primary"
+      - name: schedule_gtfs_dataset_key
         tests:
-          - relationships:
+          - &ref_gtfs_datasets_key
+            relationships:
               to: ref('dim_gtfs_datasets')
               field: key
-              config:
-                error_if: ">10" # four SMART urls and two test URLs that have been removed
-                warn_if: ">0"
+      - name: service_alerts_gtfs_dataset_key
+        tests:
+          - *ref_gtfs_datasets_key
+      - name: vehicle_positions_gtfs_dataset_key
+        tests:
+          - *ref_gtfs_datasets_key
+      - name: trip_updates_gtfs_dataset_key
+        tests:
+          - *ref_gtfs_datasets_key
       - name: organization_key
         tests:
           - relationships:
               to: ref('dim_organizations')
               field: key
-      - name: gtfs_service_data_key
-        tests:
-          - relationships:
-             to: ref('dim_gtfs_service_data')
-             field: key
+      - name: service_name
+      - name: organization_name
+      - name: schedule_name
+      - name: service_alerts_name
+      - name: vehicle_positions_name
+      - name: trip_updates_name
+      - name: category
+        description: |
+          Service/dataset relationship type; "primary" indicates that we believe that this
+          set of datasets is ingested by trip planners (and therefore is rider-facing) for this service.
   - name: bridge_components_x_properties_and_features
     description: |
       Mapping table between components and properties_and_features.

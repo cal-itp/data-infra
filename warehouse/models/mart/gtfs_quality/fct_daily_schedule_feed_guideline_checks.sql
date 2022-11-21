@@ -21,11 +21,11 @@ unioned AS (
     ) }}
 ),
 
-fct_daily_feed_guideline_checks AS (
+fct_daily_schedule_feed_guideline_checks AS (
     SELECT
         {{ dbt_utils.surrogate_key(['date', 'feed_key', 'check']) }} AS key,
         *
     FROM unioned
 )
 
-SELECT * FROM fct_daily_feed_guideline_checks
+SELECT * FROM fct_daily_schedule_feed_guideline_checks
