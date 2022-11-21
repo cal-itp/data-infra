@@ -1252,8 +1252,12 @@ models:
       description: One of `service_alerts`, `vehicle_positions`, and `trip_updates`.
     - name: parse_success_file_count
       description: Count of files successfully parsed. Target is 4,320 (one file every 20 seconds.)
+      tests:
+        - not_null
     - name: parse_failure_file_count
       description: Count of files where parsing failed, but a file was present.
+      tests:
+        - not_null
     - *gtfs_dataset_key
     - name: schedule_to_use_for_rt_validation_gtfs_dataset_key
       description: |

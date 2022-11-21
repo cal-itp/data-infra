@@ -11,6 +11,21 @@ models:
             - check
             - feature
 
+  - name: stg_gtfs_quality__rt_validation_code_descriptions
+    description: |
+      Metadata for codes that come from the GTFS RT validator.
+    columns:
+      - name: code
+        tests:
+          - not_null
+          - unique
+      - name: description
+        tests:
+          - not_null
+      - name: is_critical
+        tests:
+          - not_null
+
   - name: stg_gtfs_rt__service_alerts_validation_notices
     description: |
       Validation notices resulting from executing the RT
