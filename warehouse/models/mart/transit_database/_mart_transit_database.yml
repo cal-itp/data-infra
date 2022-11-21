@@ -319,6 +319,9 @@ models:
           - relationships:
              to: ref('dim_services')
              field: key
+          - unique:
+              config:
+                where: category = "primary"
       - name: schedule_gtfs_dataset_key
         tests:
           - &ref_gtfs_datasets_key
