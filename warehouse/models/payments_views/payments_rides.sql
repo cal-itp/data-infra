@@ -115,10 +115,12 @@ refunded_micropayments AS (
         m_credit.charge_amount AS refund_amount
 
     FROM debited_micropayments AS m_debit
-    INNER JOIN stg_cleaned_micropayment_device_transactions USING (micropayment_id)
-    INNER JOIN stg_cleaned_micropayment_device_transactions AS dt_credit USING (littlepay_transaction_id)
-    INNER JOIN stg_cleaned_micropayments AS m_credit ON
-        dt_credit.micropayment_id = m_credit.micropayment_id
+    INNER JOIN stg_cleaned_micropayment_device_transactions AS mds
+        ON m_debit.micropayment_id = mds.micropayment_id
+    INNER JOIN stg_cleaned_micropayment_device_transactions AS dt_credit
+        ON mds.littlepay_transaction_id = dt_credit.littlepay_transaction_id
+    INNER JOIN stg_cleaned_micropayments AS m_credit
+        ON dt_credit.micropayment_id = m_credit.micropayment_id
     WHERE m_credit.type = 'CREDIT'
         AND m_credit.charge_type = 'refund'
 ),
@@ -140,10 +142,41 @@ applied_adjustments AS (
 ),
 
 initial_transactions AS (
-    SELECT *
-    FROM stg_cleaned_micropayment_device_transactions
-    INNER JOIN stg_cleaned_device_transactions USING (littlepay_transaction_id)
-    INNER JOIN stg_cleaned_device_transaction_types USING (littlepay_transaction_id)
+    SELECT
+        mdt.*,
+
+        dt.participant_id,
+        dt.customer_id,
+        dt.device_transaction_id,
+        dt.device_id,
+        dt.device_id_issuer,
+        dt.type,
+        dt.transaction_outcome,
+        dt.transction_deny_reason,
+        dt.transaction_date_time_utc,
+        dt.location_scheme,
+        dt.location_name,
+        dt.zone_id,
+        dt.mode,
+        dt.direction,
+        dt.vehicle_id,
+        dt.granted_zone_ids,
+        dt.onward_zone_ids,
+        dt.latitude,
+        dt.longitude,
+        dt.transaction_date_time_pacific,
+        dt.route_id,
+        dt.location_id,
+        dt.geography,
+
+        dtt.transaction_type,
+        dtt.pending
+
+    FROM stg_cleaned_micropayment_device_transactions AS mdt
+    INNER JOIN stg_cleaned_device_transactions AS dt
+        ON mdt.littlepay_transaction_id = dt.littlepay_transaction_id
+    INNER JOIN stg_cleaned_device_transaction_types AS dtt
+        ON mdt.littlepay_transaction_id = dtt.littlepay_transaction_id
     WHERE transaction_type IN ('single', 'on')
 ),
 
@@ -242,10 +275,16 @@ join_table AS (
             -- (don't have to handle unkowns the way we do with route_id)
             AND r.calitp_extracted_at <= DATETIME(TIMESTAMP(t1.transaction_date_time_utc))
             AND r.calitp_deleted_at > DATETIME(TIMESTAMP(t1.transaction_date_time_utc))
-)
+),
+
+payments_rides AS (
 
 SELECT
     *,
     DATETIME_DIFF(off_transaction_date_time_pacific, transaction_date_time_pacific, MINUTE) AS duration,
     ST_DISTANCE(on_geography, off_geography) / 1609.34 AS distance
 FROM join_table
+
+)
+
+SELECT * FROM payments_rides
