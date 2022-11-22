@@ -63,7 +63,6 @@ models:
     tests: *stg_gtfs_guideline_tests
     columns: *stg_gtfs_guideline_columns
 
-
   - name: int_gtfs_quality__shapes_file_present
     tests: *stg_gtfs_guideline_tests
     columns: *stg_gtfs_guideline_columns
@@ -101,5 +100,17 @@ models:
     columns: *stg_gtfs_guideline_columns
 
   - name: int_gtfs_quality__no_expired_services
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__feed_present_service_alerts
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__feed_present_vehicle_positions
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__feed_present_trip_updates
     tests: *stg_gtfs_guideline_tests
     columns: *stg_gtfs_guideline_columns
