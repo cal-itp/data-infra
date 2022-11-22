@@ -47,8 +47,8 @@ six = "*"
 xlrd = ">=0.9.4"
 
 [package.extras]
+docs = ["Sphinx (>=1.2.2)", "sphinx-rtd-theme (>=0.1.6)"]
 test = ["nose (>=1.1.2)"]
-docs = ["sphinx-rtd-theme (>=0.1.6)", "Sphinx (>=1.2.2)"]
 
 [[package]]
 name = "agate-sql"
@@ -565,8 +565,8 @@ agate-sql = ">=0.5.3"
 six = ">=1.6.1"
 
 [package.extras]
-test = ["mock (>=1.3.0)", "pytest-cov", "pytest", "coverage (>=4.4.2)"]
-docs = ["sphinx-rtd-theme", "sphinx (>=1.0.7)"]
+docs = ["sphinx (>=1.0.7)", "sphinx-rtd-theme"]
+test = ["coverage (>=4.4.2)", "pytest", "pytest-cov", "mock (>=1.3.0)"]
 
 [[package]]
 name = "cycler"
@@ -773,7 +773,7 @@ optional = false
 python-versions = "*"
 
 [package.extras]
-tests = ["rich", "littleutils", "pytest", "asttokens"]
+tests = ["asttokens", "pytest", "littleutils", "rich"]
 
 [[package]]
 name = "fastjsonschema"
@@ -1358,8 +1358,8 @@ geopandas = "*"
 intake = "*"
 
 [package.extras]
-regionmask = ["regionmask"]
 arrow = ["pyarrow"]
+regionmask = ["regionmask"]
 
 [[package]]
 name = "intake-parquet"
@@ -1850,12 +1850,12 @@ python-versions = "~=3.6"
 attrs = ">=19,<22"
 
 [package.extras]
-testing = ["pytest-regressions", "pytest-cov", "pytest-benchmark (>=3.2,<4.0)", "pytest (>=3.6,<4)", "psutil", "coverage"]
-rtd = ["sphinx-book-theme", "sphinx-panels (>=0.4.0,<0.5.0)", "sphinx-copybutton", "sphinx (>=2,<4)", "pyyaml", "myst-nb (==0.13.0a1)"]
-plugins = ["mdit-py-plugins"]
-linkify = ["linkify-it-py (>=1.0,<2.0)"]
-compare = ["panflute (>=1.12,<2.0)", "mistune (>=0.8.4,<0.9.0)", "mistletoe-ebp (>=0.10.0,<0.11.0)", "markdown (>=3.2.2,<3.3.0)", "commonmark (>=0.9.1,<0.10.0)"]
 code_style = ["pre-commit (==2.6)"]
+compare = ["commonmark (>=0.9.1,<0.10.0)", "markdown (>=3.2.2,<3.3.0)", "mistletoe-ebp (>=0.10.0,<0.11.0)", "mistune (>=0.8.4,<0.9.0)", "panflute (>=1.12,<2.0)"]
+linkify = ["linkify-it-py (>=1.0,<2.0)"]
+plugins = ["mdit-py-plugins"]
+rtd = ["myst-nb (==0.13.0a1)", "pyyaml", "sphinx (>=2,<4)", "sphinx-copybutton", "sphinx-panels (>=0.4.0,<0.5.0)", "sphinx-book-theme"]
+testing = ["coverage", "psutil", "pytest (>=3.6,<4)", "pytest-benchmark (>=3.2,<4.0)", "pytest-cov", "pytest-regressions"]
 
 [[package]]
 name = "markupsafe"
@@ -1907,9 +1907,9 @@ python-versions = ">=3.7"
 markdown-it-py = ">=1.0.0,<3.0.0"
 
 [package.extras]
-testing = ["pytest-regressions", "pytest-cov", "pytest", "coverage"]
-rtd = ["sphinx-book-theme (>=0.1.0,<0.2.0)", "myst-parser (>=0.16.1,<0.17.0)", "attrs"]
 code_style = ["pre-commit"]
+rtd = ["attrs", "myst-parser (>=0.16.1,<0.17.0)", "sphinx-book-theme (>=0.1.0,<0.2.0)"]
+testing = ["coverage", "pytest", "pytest-cov", "pytest-regressions"]
 
 [[package]]
 name = "missingno"
@@ -1926,7 +1926,7 @@ scipy = "*"
 seaborn = "*"
 
 [package.extras]
-tests = ["pytest-mpl", "pytest"]
+tests = ["pytest", "pytest-mpl"]
 
 [[package]]
 name = "mistune"
@@ -1953,8 +1953,8 @@ scipy = ">=1.5.0"
 tzdata = {version = "*", markers = "platform_system == \"Windows\""}
 
 [package.extras]
-testing = ["pytest-cov", "flake8"]
-doc = ["numpydoc (>=0.9.1)", "sphinx (>=4.5.0)"]
+doc = ["sphinx (>=4.5.0)", "numpydoc (>=0.9.1)"]
+testing = ["flake8", "pytest-cov"]
 
 [[package]]
 name = "msgpack"
@@ -2178,7 +2178,7 @@ python-versions = ">=3.7"
 jupyter-server = ">=1.8,<3"
 
 [package.extras]
-test = ["pytest-tornasync", "pytest-console-scripts", "pytest"]
+test = ["pytest", "pytest-console-scripts", "pytest-tornasync"]
 
 [[package]]
 name = "numpy"
@@ -2386,7 +2386,7 @@ numpy = ">=1.4"
 six = "*"
 
 [package.extras]
-test = ["scipy", "pytest-cov", "pytest"]
+test = ["pytest", "pytest-cov", "scipy"]
 
 [[package]]
 name = "pendulum"
@@ -2439,7 +2439,7 @@ python-versions = "*"
 
 [[package]]
 name = "pillow"
-version = "9.2.0"
+version = "9.3.0"
 description = "Python Imaging Library (Fork)"
 category = "main"
 optional = false
@@ -2492,7 +2492,7 @@ scipy = ">=1.5.0"
 statsmodels = ">=0.12.1"
 
 [package.extras]
-all = ["scikit-misc", "scikit-learn"]
+all = ["scikit-learn", "scikit-misc"]
 
 [[package]]
 name = "pluggy"
@@ -2692,8 +2692,8 @@ python-versions = ">=3.6"
 numpy = ">=1.13"
 
 [package.extras]
+docs = ["sphinx", "numpydoc"]
 test = ["pytest"]
-docs = ["numpydoc", "sphinx"]
 
 [[package]]
 name = "pygments"
@@ -3037,9 +3037,9 @@ optional = false
 python-versions = "*"
 
 [package.extras]
-win32 = ["pywin32"]
+nativelib = ["pyobjc-framework-cocoa", "pywin32"]
 objc = ["pyobjc-framework-cocoa"]
-nativelib = ["pywin32", "pyobjc-framework-cocoa"]
+win32 = ["pywin32"]
 
 [[package]]
 name = "setuptools-scm"
@@ -3198,7 +3198,7 @@ executing = "*"
 pure-eval = "*"
 
 [package.extras]
-tests = ["cython", "littleutils", "pygments", "typeguard", "pytest"]
+tests = ["pytest", "typeguard", "pygments", "littleutils", "cython"]
 
 [[package]]
 name = "statsmodels"
@@ -3284,8 +3284,8 @@ python-versions = ">=3.7"
 webencodings = ">=0.4"
 
 [package.extras]
-test = ["flake8", "isort", "pytest"]
-doc = ["sphinx-rtd-theme", "sphinx"]
+doc = ["sphinx", "sphinx-rtd-theme"]
+test = ["pytest", "isort", "flake8"]
 
 [[package]]
 name = "toml"
@@ -3499,9 +3499,9 @@ traitlets = ">=5.0.3,<6"
 websockets = ">=9.0"
 
 [package.extras]
-visual_test = ["jupyterlab-miami-nights (==0.3.2)", "ipyvolume", "ipympl (==0.8.7)", "scipy", "bqplot", "jupyterlab (>=3.0,<4.0)"]
-test = ["pytest-tornasync", "pytest-rerunfailures", "pytest", "mock", "matplotlib", "ipywidgets", "pandas", "numpy"]
-dev = ["jupyter-releaser (>=0.6,<1.0)", "bump2version", "black"]
+dev = ["black", "bump2version", "jupyter-releaser (>=0.6,<1.0)"]
+test = ["numpy", "pandas", "ipywidgets", "matplotlib", "mock", "pytest", "pytest-rerunfailures", "pytest-tornasync"]
+visual_test = ["jupyterlab (>=3.0,<4.0)", "bqplot", "scipy", "ipympl (==0.8.7)", "ipyvolume", "jupyterlab-miami-nights (==0.3.2)"]
 
 [[package]]
 name = "wcwidth"
@@ -3528,9 +3528,9 @@ optional = false
 python-versions = ">=3.7"
 
 [package.extras]
+docs = ["Sphinx (>=3.4)", "sphinx-rtd-theme (>=0.5)"]
+optional = ["python-socks", "wsaccel"]
 test = ["websockets"]
-optional = ["wsaccel", "python-socks"]
-docs = ["sphinx-rtd-theme (>=0.5)", "Sphinx (>=3.4)"]
 
 [[package]]
 name = "websockets"
@@ -3579,9 +3579,9 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*"
 
 [package.extras]
-test = ["pytest-cov", "pytest"]
+build = ["wheel", "twine"]
 docs = ["sphinx"]
-build = ["twine", "wheel"]
+test = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "xyzservices"

@@ -710,10 +710,10 @@ smart-open = ">=5.2.1,<6.0.0"
 typer = ">=0.3.0,<1.0.0"
 
 [package.extras]
-test = ["typer-cli", "mock", "pytest-coverage", "pytest"]
-s3 = ["boto3"]
+all = ["google-cloud-storage (>=1.26.0,<2.0.0)", "boto3", "pytest", "pytest-coverage", "mock", "typer-cli"]
 gcs = ["google-cloud-storage (>=1.26.0,<2.0.0)"]
-all = ["typer-cli", "mock", "pytest-coverage", "pytest", "boto3", "google-cloud-storage (>=1.26.0,<2.0.0)"]
+s3 = ["boto3"]
+test = ["pytest", "pytest-coverage", "mock", "typer-cli"]
 
 [[package]]
 name = "pendulum"
@@ -729,7 +729,7 @@ pytzdata = ">=2020.1"
 
 [[package]]
 name = "pillow"
-version = "9.2.0"
+version = "9.3.0"
 description = "Python Imaging Library (Fork)"
 category = "main"
 optional = false
@@ -779,7 +779,7 @@ testing = ["google-api-core[grpc] (>=1.31.5)"]
 
 [[package]]
 name = "protobuf"
-version = "3.20.1"
+version = "3.20.3"
 description = "Protocol Buffers"
 category = "main"
 optional = false
@@ -1003,8 +1003,8 @@ PyYAML = ">=3.0.0"
 SQLAlchemy = ">=1.2.19"
 
 [package.extras]
-test = ["hypothesis", "pytest"]
-docs = ["gapminder (==0.1)", "jupytext", "nbsphinx", "sphinx", "nbval", "jupyter", "plotnine"]
+docs = ["plotnine", "jupyter", "nbval", "sphinx", "nbsphinx", "jupytext", "gapminder (==0.1)"]
+test = ["pytest", "hypothesis"]
 
 [[package]]
 name = "six"
@@ -1123,10 +1123,10 @@ python-versions = ">=3.6"
 click = ">=7.1.1,<9.0.0"
 
 [package.extras]
-test = ["rich (>=10.11.0,<13.0.0)", "isort (>=5.0.6,<6.0.0)", "black (>=22.3.0,<23.0.0)", "mypy (==0.910)", "pytest-sugar (>=0.9.4,<0.10.0)", "pytest-xdist (>=1.32.0,<2.0.0)", "coverage (>=5.2,<6.0)", "pytest-cov (>=2.10.0,<3.0.0)", "pytest (>=4.4.0,<5.4.0)", "shellingham (>=1.3.0,<2.0.0)"]
-doc = ["mdx-include (>=1.4.1,<2.0.0)", "mkdocs-material (>=8.1.4,<9.0.0)", "mkdocs (>=1.1.2,<2.0.0)"]
-dev = ["pre-commit (>=2.17.0,<3.0.0)", "flake8 (>=3.8.3,<4.0.0)", "autoflake (>=1.3.1,<2.0.0)"]
-all = ["rich (>=10.11.0,<13.0.0)", "shellingham (>=1.3.0,<2.0.0)", "colorama (>=0.4.3,<0.5.0)"]
+all = ["colorama (>=0.4.3,<0.5.0)", "shellingham (>=1.3.0,<2.0.0)", "rich (>=10.11.0,<13.0.0)"]
+dev = ["autoflake (>=1.3.1,<2.0.0)", "flake8 (>=3.8.3,<4.0.0)", "pre-commit (>=2.17.0,<3.0.0)"]
+doc = ["mkdocs (>=1.1.2,<2.0.0)", "mkdocs-material (>=8.1.4,<9.0.0)", "mdx-include (>=1.4.1,<2.0.0)"]
+test = ["shellingham (>=1.3.0,<2.0.0)", "pytest (>=4.4.0,<5.4.0)", "pytest-cov (>=2.10.0,<3.0.0)", "coverage (>=5.2,<6.0)", "pytest-xdist (>=1.32.0,<2.0.0)", "pytest-sugar (>=0.9.4,<0.10.0)", "mypy (==0.910)", "black (>=22.3.0,<23.0.0)", "isort (>=5.0.6,<6.0.0)", "rich (>=10.11.0,<13.0.0)"]
 
 [[package]]
 name = "types-protobuf"
