@@ -67,6 +67,26 @@
 "Service alerts RT feed is listed on feed aggregator transit.land"
 {% endmacro %}
 
+{% macro include_tts() %}
+"Include tts_stop_name entries in stops.txt for stop names that are pronounced incorrectly in most mobile applications"
+{% endmacro %}
+
+{% macro no_expired_services() %}
+"No expired services are listed in the feed"
+{% endmacro %}
+
+{% macro no_7_day_feed_expiration() %}
+"Feed will be valid for more than 7 days"
+{% endmacro %}
+
+{% macro no_30_day_feed_expiration() %}
+"Feed will be valid for more than 30 days"
+{% endmacro %}
+
+{% macro passes_fares_validator() %}
+"Passes Fares v2 portion of MobilityData GTFS Schedule Validator"
+{% endmacro %}
+
 -- declare features
 {% macro compliance() %}
 "Compliance"
@@ -90,6 +110,14 @@
 
 {% macro feed_aggregator_availability() %}
 "Feed Aggregator Availability"
+{% endmacro %}
+
+{% macro best_practices_alignment() %}
+"Best Practices Alignment"
+{% endmacro %}
+
+{% macro fare_completeness() %}
+"Fare Completeness"
 {% endmacro %}
 
 -- columns

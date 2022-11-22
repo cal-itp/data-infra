@@ -1,0 +1,130 @@
+version: 2
+
+models:
+  - name: stg_gtfs_quality__intended_checks
+    description: |
+      Index model listing all intended-to-have-been-implemented
+      GTFS guideline checks.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - check
+            - feature
+
+  - name: stg_gtfs_quality__rt_validation_code_descriptions
+    description: |
+      Metadata for codes that come from the GTFS RT validator.
+    columns:
+      - name: code
+        tests:
+          - not_null
+          - unique
+      - name: description
+        tests:
+          - not_null
+      - name: is_critical
+        tests:
+          - not_null
+
+  - name: stg_gtfs_rt__service_alerts_validation_notices
+    description: |
+      Validation notices resulting from executing the RT
+      validator against GTFS RT service alerts files.
+    columns:
+      - &rt_key
+        name: key
+        tests:
+          - not_null:
+              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
+          - unique:
+              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
+
+  - name: stg_gtfs_rt__service_alerts_validation_outcomes
+    description: |
+      Records representing the outcome of executing the RT
+      validator against service alerts files; not the actual
+      output notices, but the "execution" results i.e. did we get
+      output written to GCS.
+    columns:
+      - *rt_key
+
+  - name: stg_gtfs_rt__trip_updates_validation_notices
+    description: |
+      Validation notices resulting from executing the RT
+      validator against GTFS RT trip updates files.
+    columns:
+      - *rt_key
+
+  - name: stg_gtfs_rt__trip_updates_validation_outcomes
+    description: |
+      Records representing the outcome of executing the RT
+      validator against trip updates files; not the actual
+      output notices, but the "execution" results i.e. did we get
+      output written to GCS.
+    columns:
+      - *rt_key
+
+  - name: stg_gtfs_rt__vehicle_positions_validation_notices
+    description: |
+      Validation notices resulting from executing the RT
+      validatior against GTFS RT vehicle position files.
+    columns:
+      - *rt_key
+
+  - name: stg_gtfs_rt__vehicle_positions_validation_outcomes
+    description: |
+      Records representing the outcome of executing the RT
+      validator against vehicle position files; not the actual
+      output notices, but the "execution" results i.e. did we get
+      output written to GCS.
+    columns:
+      - *rt_key
+
+  - name: stg_gtfs_schedule__validation_notices
+    description: |
+      Validation notices resulting from executing the schedule
+      validator against GTFS Schedule zipfiles. Each row represents
+      a single notice coming from a single zipfile; this row contains
+      the count of input records in the file that generated the
+      notice as well as sample input records that violate the rule.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - code
+    columns:
+      - name: dt
+      - name: base64_url
+      - name: ts
+      - name: name
+      - name: feed_type
+      - name: _config_extract_ts
+      - name: code
+      - name: severity
+      - name: total_notices
+      - name: sample_notices
+
+  - name: stg_gtfs_schedule__validation_outcomes
+    description: |
+      Records representing the outcome of executing the schedule
+      validator against GTFS Schedule zipfiles; not the actual
+      output notices, but the "execution" results i.e. did we get
+      output written to GCS.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - extract_ts
+    columns:
+      - name: dt
+      - name: name
+      - name: url
+      - name: feed_type
+      - name: config_extracted_at
+      - name: validation_success
+      - name: validation_exception
+      - name: validation_filename
+      - name: validation_system_errors
+      - name: base64_url
+      - name: extract_ts

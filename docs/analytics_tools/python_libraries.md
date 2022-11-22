@@ -24,27 +24,32 @@ The following libraries are available and recommended for use by Cal-ITP data an
 <br> - [Collect Query Results](#collect-query-results)
 <br> - [Show Query SQL](#show-query-sql)
 <br> - [More siuba Resources](more-siuba-resources)
-1. [shared utils](shared-utils)
 1. [pandas](pandas-resources)
 1. [Add New Packages](#add-new-packages)
 
+(shared-utils)=
 ## shared utils
 A set of shared utility functions can also be installed, similarly to any Python library. The [shared_utils](https://github.com/cal-itp/data-analyses/shared_utils) are stored here. Generalized functions for analysis are added as collaborative work evolves so we aren't constantly reinventing the wheel.
 
+
+### In terminal:
+* Navigate to the package folder: `cd data-analyses/_shared_utils`
+* Use the make command to run through conda install and pip install: `make setup_env`
+    * Note: you may need to select Kernel -> Restart Kernel from the top menu after make setup_env in order to successfully import shared_utils
+* Alternative: add an `alias` to your `.bash_profile`:
+    * In terminal use `cd` to navigate to the home directory (not a repository)
+    * Type `nano .bash_profile` to open the .bash_profile in a text editor
+    * Add a line at end: `alias go='cd ~/data-analyses/portfolio && pip install -r requirements.txt && cd ../_shared_utils && make setup_env && cd ..'`
+    * Exit with Ctrl+X, hit yes, then hit enter at the filename prompt
+    * Restart your server; you can check your changes with `cat .bash_profile`
+
+
+### In notebook:
 ```python
-# In terminal:
-cd data-analyses/_shared_utils
-
-# Use the make command to run through conda install and pip install
-make setup_env
-
-# In notebook:
 import shared_utils
 
+#example of using shared_utils
 shared_utils.geography_utils.WGS84
-
-# Note: you may need to select Kernel -> Restart Kernel from the top menu
-# after make setup_env in order to successfully import shared_utils
 ```
 
 See [data-analyses/example_reports](https://github.com/cal-itp/data-analyses/tree/main/example_report) for examples on how to use `shared_utils` for general functions, charts, and maps.
@@ -53,19 +58,19 @@ See [data-analyses/example_reports](https://github.com/cal-itp/data-analyses/tre
 ## calitp
 `calitp` is an internal library of utility functions used to access our warehouse data.
 
-### import tbl
+### import tbls
 
-Most notably, you can include `import tbl` at the top of your notebook to import a table from the warehouse in the form of a `tbl`:
+Most notably, you can include `import tbls` at the top of your notebook to import a table from the warehouse in the form of a `tbls`:
 
 ```python
-from calitp.tables import tbl
+from calitp.tables import tbls
 ```
 
 Example:
 ```{code-cell}
-from calitp.tables import tbl
+from calitp.tables import tbls
 
-tbl.views.gtfs_schedule_fact_daily_feed_routes()
+tbls.views.gtfs_schedule_fact_daily_feed_routes()
 ```
 
 ### query_sql
@@ -100,12 +105,12 @@ and showing SQL test queries that siuba code generates.
 ### Basic query
 ```{code-cell}
 from myst_nb import glue
-from calitp.tables import tbl
+from calitp.tables import tbls
 from siuba import _, filter, count, collect, show_query
 
 # query lastest validation notices, then filter for a single gtfs feed,
 # and then count how often each code occurs
-(tbl.views.gtfs_schedule_dim_feeds()
+(tbls.views.gtfs_schedule_dim_feeds()
     >> filter(_.calitp_itp_id == 10, _.calitp_url_number==0)
     >> count(_.feed_key)
 )
@@ -118,7 +123,7 @@ Note that siuba by default prints out a preview of the SQL query results.
 In order to fetch the results of the query as a pandas DataFrame, run `collect()`.
 
 ```{code-cell}
-tbl_agency_names = tbl.views.gtfs_schedule_dim_feeds() >> collect()
+tbl_agency_names = tbls.views.gtfs_schedule_dim_feeds() >> collect()
 
 # Use pandas .head() method to show first 5 rows of data
 tbl_agency_names.head()
@@ -132,7 +137,7 @@ tbl_agency_names.head()
 While `collect()` fetches query results, `show_query()` prints out the SQL code that siuba generates.
 
 ```{code-cell}
-(tbl.views.gtfs_schedule_dim_feeds()
+(tbls.views.gtfs_schedule_dim_feeds()
   >> filter(_.calitp_agency_name.str.contains("Metro"))
   >> show_query(simplify=True)
 )
@@ -145,27 +150,6 @@ Note that here the pandas Series method `str.contains` corresponds to `regexp_co
 * [siuba docs](https://siuba.readthedocs.io)
 * ['Tidy Tuesday' live analyses with siuba](https://www.youtube.com/playlist?list=PLiQdjX20rXMHc43KqsdIowHI3ouFnP_Sf)
 
-(shared-utils)=
-## shared utils
-A set of shared utility functions can also be installed, similarly to any Python library. The [shared_utils](https://github.com/cal-itp/data-analyses/tree/main/_shared_utils) are stored here. Generalized functions for analysis are added as collaborative work evolves so we aren't constantly reinventing the wheel.
-
-```python
-# In terminal:
-cd data-analyses/_shared_utils
-
-# Use the make command to run through conda install and pip install
-make setup_env
-
-# In notebook:
-import shared_utils
-
-shared_utils.geography_utils.WGS84
-
-# Note: you may need to select Kernel -> Restart Kernel from the top menu
-# after make setup_env in order to successfully import shared_utils
-```
-
-See [data-analyses/example_reports](https://github.com/cal-itp/data-analyses/tree/main/example_report) for examples on how to use `shared_utils` for general functions, charts, and maps.
 
 (pandas-resources)=
 ## pandas

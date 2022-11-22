@@ -3,6 +3,12 @@ version: 2
 models:
   - name: stg_gtfs_schedule__download_outcomes
     description: Outcomes from download attempts of GTFS schedule data.
+    tests:
+      - &schedule_outcome_uniqueness
+        dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
     columns:
       - name: dt
       - name: name
@@ -18,6 +24,8 @@ models:
       - name: ts
   - name: stg_gtfs_schedule__unzip_outcomes
     description: Outcomes from unzip attempts on downloaded GTFS schedule data.
+    tests:
+      - *schedule_outcome_uniqueness
     columns:
       - name: dt
       - name: name
@@ -27,29 +35,56 @@ models:
       - name: unzip_success
       - name: unzip_exception
       - name: zipfile_extract_md5hash
-        description: |
-          MD5 hash for the zipfile being unzipped.
+        description: '{{ doc("column_zipfile_md5_hash") }}'
       - name: zipfile_files
-        description: |
-          List (array) of filenames found inside the zipfile being unzipped.
+        description: '{{ doc("column_zipfile_files") }}'
       - name: zipfile_dirs
-        description: |
-          List (array) of directories found inside the zipfile being unzipped.
-          If more than one directory is present, the zipfile is not valid for our pipeline.
+        description: '{{ doc("column_zipfile_dirs") }}'
       - name: base64_url
       - name: ts
+  - name: stg_gtfs_schedule__file_parse_outcomes
+    description: Outcomes from parse (.txt --> .jsonl conversion) attempts on files within GTFS feeds.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - filename
+    columns:
+      - name: parse_success
+        description: '{{ doc("column_schedule_parse_success") }}'
+      - name: parse_exception
+        description: '{{ doc("column_schedule_parse_exception") }}'
+      - name: filename
+        description: '{{ doc("column_schedule_parse_filename") }}'
+      - name: _config_extract_ts
+      - name: feed_name
+        description: '{{ doc("column_schedule_parse_feed_name") }}'
+      - name: feed_url
+        description: '{{ doc("column_schedule_parse_feed_url") }}'
+      - name: original_filename
+        description: '{{ doc("column_schedule_parse_original_filename") }}'
+      - name: gtfs_filename
+        description: '{{ doc("column_schedule_parse_gtfs_filename") }}'
+      - name: dt
+      - name: ts
+      - name: base64_url
   - name: stg_gtfs_rt__vehicle_positions
     description: |
       Vehicle positions realtime data.
       See https://gtfs.org/realtime/reference/ for specification.
     tests:
+      # ideally base64_url, _extract_ts, id would be sufficient
+      # but this is not the case in the MTC 511 feed, so adding position
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - base64_url
             - _extract_ts
             - id
+            - position_latitude
+            - position_longitude
           # test hour = 0 UTC because that's 5pm Pacific = PM peak, good sample of data
-          where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM ts)) = 0
+          where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM _extract_ts)) = 0
     columns:
       - name: dt
       - name: hour
@@ -82,3 +117,847 @@ models:
       - name: bearing
       - name: odometer
       - name: speed
+  - name: stg_gtfs_schedule__agency
+    description: |
+      Cleaned GTFS schedule agency data.
+      See https://gtfs.org/reference/static#agencytxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - agency_id
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: agency_id
+        description: '{{ doc("gtfs_agency__agency_id") }}'
+      - name: agency_name
+        description: '{{ doc("gtfs_agency__agency_name") }}'
+        tests:
+        - not_null
+      - name: agency_url
+        description: '{{ doc("gtfs_agency__agency_url") }}'
+        tests:
+        - not_null
+      - name: agency_timezone
+        description: '{{ doc("gtfs_agency__agency_timezone") }}'
+        tests:
+        - not_null
+      - name: agency_lang
+        description: '{{ doc("gtfs_agency__agency_lang") }}'
+      - name: agency_phone
+        description: '{{ doc("gtfs_agency__agency_phone") }}'
+      - name: agency_fare_url
+        description: '{{ doc("gtfs_agency__agency_fare_url") }}'
+      - name: agency_email
+        description: '{{ doc("gtfs_agency__agency_email") }}'
+  - name: stg_gtfs_schedule__areas
+    description: |
+      Cleaned GTFS schedule area data.
+      See https://gtfs.org/schedule/reference/#areastxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - area_id
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: area_id
+        description: '{{ doc("gtfs_areas__area_id") }}'
+        tests:
+        - not_null
+      - name: area_name
+        description: '{{ doc("gtfs_areas__area_name") }}'
+  - name: stg_gtfs_schedule__attributions
+    description: |
+      Cleaned GTFS schedule attribution data.
+      See https://gtfs.org/reference/static#attributionstxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - attribution_id
+
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: attribution_id
+        description: '{{ doc("gtfs_attributions__attribution_id") }}'
+      - name: agency_id
+        description: '{{ doc("gtfs_attributions__agency_id") }}'
+      - name: route_id
+        description: '{{ doc("gtfs_attributions__route_id") }}'
+      - name: trip_id
+        description: '{{ doc("gtfs_attributions__trip_id") }}'
+      - name: organization_name
+        description: '{{ doc("gtfs_attributions__organization_name") }}'
+        tests:
+        - not_null
+      - name: is_producer
+        description: '{{ doc("gtfs_attributions__is_producer") }}'
+      - name: is_operator
+        description: '{{ doc("gtfs_attributions__is_operator") }}'
+      - name: is_authority
+        description: '{{ doc("gtfs_attributions__is_authority") }}'
+      - name: attribution_url
+        description: '{{ doc("gtfs_attributions__attribution_url") }}'
+      - name: attribution_email
+        description: '{{ doc("gtfs_attributions__attribution_email") }}'
+      - name: attribution_phone
+        description: '{{ doc("gtfs_attributions__attribution_phone") }}'
+  - name: stg_gtfs_schedule__fare_attributes
+    description: |
+      Cleaned GTFS schedule fare attribute data.
+      See https://gtfs.org/reference/static#fare_attributestxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - fare_id
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: fare_id
+        description: '{{ doc("gtfs_fare_attributes__fare_id") }}'
+        tests:
+        - not_null
+      - name: price
+        description: '{{ doc("gtfs_fare_attributes__price") }}'
+        tests:
+        - not_null
+      - name: currency_type
+        description: '{{ doc("gtfs_fare_attributes__currency_type") }}'
+        tests:
+        - not_null
+      - name: payment_method
+        description: '{{ doc("gtfs_fare_attributes__payment_method") }}'
+        tests:
+        - not_null
+      - name: transfers
+        description: '{{ doc("gtfs_fare_attributes__transfers") }}'
+        tests:
+        - not_null
+      - name: agency_id
+        description: '{{ doc("gtfs_fare_attributes__agency_id") }}'
+      - name: transfer_duration
+        description: '{{ doc("gtfs_fare_attributes__transfer_duration") }}'
+  - name: stg_gtfs_schedule__fare_leg_rules
+    description: |
+      Cleaned GTFS schedule fare leg rule data.
+      See https://gtfs.org/schedule/reference/#fare_leg_rulestxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - network_id
+            - from_area_id
+            - to_area_id
+            - fare_product_id
+
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: leg_group_id
+        description: '{{ doc("gtfs_fare_leg_rules__leg_group_id") }}'
+      - name: network_id
+        description: '{{ doc("gtfs_fare_leg_rules__network_id") }}'
+      - name: from_area_id
+        description: '{{ doc("gtfs_fare_leg_rules__from_area_id") }}'
+      - name: to_area_id
+        description: '{{ doc("gtfs_fare_leg_rules__to_area_id") }}'
+      - name: fare_product_id
+        description: '{{ doc("gtfs_fare_leg_rules__fare_product_id") }}'
+        tests:
+        - not_null
+  - name: stg_gtfs_schedule__fare_products
+    description: |
+      Cleaned GTFS schedule fare products data.
+      See https://gtfs.org/schedule/reference/#fare_productstxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - fare_product_id
+
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: fare_product_id
+        description: '{{ doc("gtfs_fare_products__fare_product_id") }}'
+        tests:
+        - not_null
+      - name: fare_product_name
+        description: '{{ doc("gtfs_fare_products__fare_product_name") }}'
+      - name: amount
+        description: '{{ doc("gtfs_fare_products__amount") }}'
+        tests:
+        - not_null
+      - name: currency
+        description: '{{ doc("gtfs_fare_products__currency") }}'
+        tests:
+        - not_null
+  - name: stg_gtfs_schedule__fare_rules
+    description: |
+      Cleaned GTFS schedule fare rules data.
+      See https://gtfs.org/reference/static#fare_rulestxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - fare_id
+            - route_id
+            - origin_id
+            - destination_id
+            - contains_id
+
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: fare_id
+        description: '{{ doc("gtfs_fare_rules__fare_id") }}'
+        tests:
+        - not_null
+      - name: route_id
+        description: '{{ doc("gtfs_fare_rules__route_id") }}'
+      - name: origin_id
+        description: '{{ doc("gtfs_fare_rules__origin_id") }}'
+      - name: destination_id
+        description: '{{ doc("gtfs_fare_rules__destination_id") }}'
+      - name: contains_id
+        description: '{{ doc("gtfs_fare_rules__contains_id") }}'
+  - name: stg_gtfs_schedule__fare_transfer_rules
+    description: |
+      Cleaned GTFS schedule fare transfer rules data.
+      See https://gtfs.org/schedule/reference/#fare_transfer_rulestxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - from_leg_group_id
+            - to_leg_group_id
+            - fare_product_id
+            - transfer_count
+            - duration_limit
+
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: from_leg_group_id
+        description: '{{ doc("gtfs_fare_transfer_rules__from_leg_group_id") }}'
+      - name: to_leg_group_id
+        description: '{{ doc("gtfs_fare_transfer_rules__to_leg_group_id") }}'
+      - name: transfer_count
+        description: '{{ doc("gtfs_fare_transfer_rules__transfer_count") }}'
+      - name: duration_limit
+        description: '{{ doc("gtfs_fare_transfer_rules__duration_limit") }}'
+      - name: duration_limit_type
+        description: '{{ doc("gtfs_fare_transfer_rules__duration_limit_type") }}'
+      - name: fare_transfer_type
+        description: '{{ doc("gtfs_fare_transfer_rules__fare_transfer_type") }}'
+        tests:
+        - not_null
+      - name: fare_product_id
+        description: '{{ doc("gtfs_fare_transfer_rules__fare_product_id") }}'
+  - name: stg_gtfs_schedule__feed_info
+    description: |
+      Cleaned GTFS schedule feed info data.
+      See https://gtfs.org/reference/static#feed_infotxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - feed_publisher_name
+            - feed_publisher_url
+            - feed_lang
+            - default_lang
+            - feed_version
+            - feed_contact_email
+            - feed_contact_url
+            - feed_start_date
+            - feed_end_date
+
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: feed_publisher_name
+        description: '{{ doc("gtfs_feed_info__feed_publisher_name") }}'
+        tests:
+        - not_null
+      - name: feed_publisher_url
+        description: '{{ doc("gtfs_feed_info__feed_publisher_url") }}'
+        tests:
+        - not_null
+      - name: feed_lang
+        description: '{{ doc("gtfs_feed_info__feed_lang") }}'
+        tests:
+        - not_null
+      - name: default_lang
+        description: '{{ doc("gtfs_feed_info__default_lang") }}'
+      - name: feed_start_date
+        description: '{{ doc("gtfs_feed_info__feed_start_date") }}'
+      - name: feed_end_date
+        description: '{{ doc("gtfs_feed_info__feed_end_date") }}'
+      - name: feed_version
+        description: '{{ doc("gtfs_feed_info__feed_version") }}'
+      - name: feed_contact_email
+        description: '{{ doc("gtfs_feed_info__feed_contact_email") }}'
+      - name: feed_contact_url
+        description: '{{ doc("gtfs_feed_info__feed_contact_url") }}'
+  - name: stg_gtfs_schedule__frequencies
+    description: |
+      Cleaned GTFS schedule frequency data.
+      See https://gtfs.org/reference/static#frequenciestxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - trip_id
+            - start_time
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: trip_id
+        description: '{{ doc("gtfs_frequencies__trip_id") }}'
+        tests:
+        - not_null
+      - name: start_time
+        description: '{{ doc("gtfs_frequencies__start_time") }}'
+        tests:
+        - not_null
+      - name: end_time
+        description: '{{ doc("gtfs_frequencies__end_time") }}'
+        tests:
+        - not_null
+      - name: headway_secs
+        description: '{{ doc("gtfs_frequencies__headway_secs") }}'
+        tests:
+        - not_null
+      - name: exact_times
+        description: '{{ doc("gtfs_frequencies__exact_times") }}'
+  - name: stg_gtfs_schedule__levels
+    description: |
+      Cleaned GTFS schedule level data.
+      See https://gtfs.org/reference/static#levelstxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - level_id
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: level_id
+        description: '{{ doc("gtfs_levels__level_id") }}'
+        tests:
+        - not_null
+      - name: level_index
+        description: '{{ doc("gtfs_levels__level_index") }}'
+        tests:
+        - not_null
+      - name: level_name
+        description: '{{ doc("gtfs_levels__level_name") }}'
+  - name: stg_gtfs_schedule__pathways
+    description: |
+      Cleaned GTFS schedule pathway data.
+      See https://gtfs.org/reference/static#pathwaystxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - pathway_id
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: pathway_id
+        description: '{{ doc("gtfs_pathways__pathway_id") }}'
+        tests:
+        - not_null
+      - name: from_stop_id
+        description: '{{ doc("gtfs_pathways__from_stop_id") }}'
+        tests:
+        - not_null
+      - name: to_stop_id
+        description: '{{ doc("gtfs_pathways__to_stop_id") }}'
+        tests:
+        - not_null
+      - name: pathway_mode
+        description: '{{ doc("gtfs_pathways__pathway_mode") }}'
+        tests:
+        - not_null
+      - name: is_bidirectional
+        description: '{{ doc("gtfs_pathways__is_bidirectional") }}'
+        tests:
+        - not_null
+      - name: length
+        description: '{{ doc("gtfs_pathways__length") }}'
+      - name: traversal_time
+        description: '{{ doc("gtfs_pathways__traversal_time") }}'
+      - name: stair_count
+        description: '{{ doc("gtfs_pathways__stair_count") }}'
+      - name: max_slope
+        description: '{{ doc("gtfs_pathways__max_slope") }}'
+      - name: min_width
+        description: '{{ doc("gtfs_pathways__min_width") }}'
+      - name: signposted_as
+        description: '{{ doc("gtfs_pathways__signposted_as") }}'
+      - name: reversed_signposted_as
+        description: '{{ doc("gtfs_pathways__reversed_signposted_as") }}'
+  - name: stg_gtfs_schedule__routes
+    description: |
+      Cleaned GTFS schedule route data.
+      See https://gtfs.org/schedule/reference/#routestxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - route_id
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: route_id
+        description: '{{ doc("gtfs_routes__route_id") }}'
+        tests:
+        - not_null
+      - name: agency_id
+        description: '{{ doc("gtfs_routes__agency_id") }}'
+      - name: route_short_name
+        description: '{{ doc("gtfs_routes__route_short_name") }}'
+      - name: route_long_name
+        description: '{{ doc("gtfs_routes__route_long_name") }}'
+      - name: route_desc
+        description: '{{ doc("gtfs_routes__route_desc") }}'
+      - name: route_type
+        description: '{{ doc("gtfs_routes__route_type") }}'
+        tests:
+        - not_null
+      - name: route_url
+        description: '{{ doc("gtfs_routes__route_url") }}'
+      - name: route_color
+        description: '{{ doc("gtfs_routes__route_color") }}'
+      - name: route_text_color
+        description: '{{ doc("gtfs_routes__route_text_color") }}'
+      - name: route_sort_order
+        description: '{{ doc("gtfs_routes__route_sort_order") }}'
+      - name: continuous_pickup
+        description: '{{ doc("gtfs_routes__continuous_pickup") }}'
+      - name: continuous_drop_off
+        description: '{{ doc("gtfs_routes__continuous_drop_off") }}'
+  - name: stg_gtfs_schedule__shapes
+    description: |
+      Cleaned GTFS schedule shape data.
+      See https://gtfs.org/reference/static#shapestxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - shape_id
+            - shape_pt_sequence
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: _dt
+      - name: shape_id
+        description: '{{ doc("gtfs_shapes__shape_id") }}'
+        tests:
+        - not_null
+      - name: shape_pt_lat
+        description: '{{ doc("gtfs_shapes__shape_pt_lat") }}'
+        tests:
+        - not_null
+        meta:
+          metabase.semantic_type: type/Latitude
+          ckan.type: FLOAT
+          ckan.length: 6
+          ckan.precision: 3
+      - name: shape_pt_lon
+        description: '{{ doc("gtfs_shapes__shape_pt_lon") }}'
+        tests:
+        - not_null
+        meta:
+          metabase.semantic_type: type/Longitude
+          ckan.type: FLOAT
+          ckan.length: 7
+          ckan.precision: 3
+      - name: shape_pt_sequence
+        description: '{{ doc("gtfs_shapes__shape_pt_sequence") }}'
+        tests:
+        - not_null
+      - name: shape_dist_traveled
+        description: '{{ doc("gtfs_shapes__shape_dist_traveled") }}'
+  - name: stg_gtfs_schedule__stop_areas
+    description: |
+      Cleaned GTFS schedule stop area data.
+      See https://gtfs.org/schedule/reference/#stop_areastxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - area_id
+            - stop_id
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: area_id
+        description: '{{ doc("gtfs_stop_areas__area_id") }}'
+        tests:
+        - not_null
+      - name: stop_id
+        description: '{{ doc("gtfs_stop_areas__stop_id") }}'
+        tests:
+        - not_null
+  - name: stg_gtfs_schedule__stops
+    description: |
+      Cleaned GTFS schedule stop data.
+      See https://gtfs.org/reference/static#stopstxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - stop_id
+
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: stop_id
+        description: '{{ doc("gtfs_stops__stop_id") }}'
+        tests:
+        - not_null
+      - name: stop_code
+        description: '{{ doc("gtfs_stops__stop_code") }}'
+      - name: stop_name
+        description: '{{ doc("gtfs_stops__stop_name") }}'
+      - name: tts_stop_name
+        description: '{{ doc("gtfs_stops__tts_stop_name") }}'
+      - name: stop_desc
+        description: '{{ doc("gtfs_stops__stop_desc") }}'
+      - name: stop_lat
+        description: '{{ doc("gtfs_stops__stop_lat") }}'
+        meta:
+          metabase.semantic_type: type/Latitude
+          ckan.type: FLOAT
+          ckan.length: 6
+          ckan.precision: 3
+      - name: stop_lon
+        description: '{{ doc("gtfs_stops__stop_lon") }}'
+        meta:
+          metabase.semantic_type: type/Longitude
+          ckan.type: FLOAT
+          ckan.length: 7
+          ckan.precision: 3
+      - name: zone_id
+        description: '{{ doc("gtfs_stops__zone_id") }}'
+      - name: stop_url
+        description: '{{ doc("gtfs_stops__stop_url") }}'
+      - name: location_type
+        description: '{{ doc("gtfs_stops__location_type") }}'
+      - name: parent_station
+        description: '{{ doc("gtfs_stops__parent_station") }}'
+      - name: stop_timezone
+        description: '{{ doc("gtfs_stops__stop_timezone") }}'
+      - name: wheelchair_boarding
+        description: '{{ doc("gtfs_stops__wheelchair_boarding") }}'
+      - name: level_id
+        description: '{{ doc("gtfs_stops__level_id") }}'
+      - name: platform_code
+        description: '{{ doc("gtfs_stops__platform_code") }}'
+  - name: stg_gtfs_schedule__transfers
+    description: |
+      Cleaned GTFS schedule transfer data.
+      See https://gtfs.org/reference/static#transferstxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - from_stop_id
+            - to_stop_id
+            - from_trip_id
+            - to_trip_id
+            - from_route_id
+            - to_route_id
+
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: from_stop_id
+        description: '{{ doc("gtfs_transfers__from_stop_id") }}'
+        tests:
+        - not_null
+      - name: to_stop_id
+        description: '{{ doc("gtfs_transfers__to_stop_id") }}'
+        tests:
+        - not_null
+      - name: transfer_type
+        description: '{{ doc("gtfs_transfers__transfer_type") }}'
+        tests:
+        - not_null
+      - name: min_transfer_time
+        description: '{{ doc("gtfs_transfers__min_transfer_time") }}'
+      - name: from_route_id
+      - name: to_route_id
+      - name: from_trip_id
+      - name: to_trip_id
+  - name: stg_gtfs_schedule__translations
+    description: |
+      Cleaned GTFS schedule translation data.
+      See https://gtfs.org/reference/static#translationstxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - table_name
+            - field_name
+            - language
+            - record_id
+            - record_sub_id
+            - field_value
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: table_name
+        description: '{{ doc("gtfs_translations__table_name") }}'
+        tests:
+        - not_null
+      - name: field_name
+        description: '{{ doc("gtfs_translations__field_name") }}'
+        tests:
+        - not_null
+      - name: language
+        description: '{{ doc("gtfs_translations__language") }}'
+        tests:
+        - not_null
+      - name: translation
+        description: '{{ doc("gtfs_translations__translation") }}'
+        tests:
+        - not_null
+      - name: record_id
+        description: '{{ doc("gtfs_translations__record_id") }}'
+      - name: record_sub_id
+        description: '{{ doc("gtfs_translations__record_sub_id") }}'
+      - name: field_value
+        description: '{{ doc("gtfs_translations__field_value") }}'
+  - name: stg_gtfs_schedule__trips
+    description: |
+      Cleaned GTFS schedule trip data.
+      See https://gtfs.org/schedule/reference/#tripstxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - trip_id
+          severity: warn
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: _dt
+        description: |
+          Date that data was downloaded (aligns with the date portion of `ts`).
+          Included only because it assists with partition elimination in the underlying external table.
+      - name: route_id
+        description: '{{ doc("gtfs_trips__route_id") }}'
+        tests:
+        - not_null
+      - name: service_id
+        description: '{{ doc("gtfs_trips__service_id") }}'
+        tests:
+        - not_null
+      - name: trip_id
+        description: '{{ doc("gtfs_trips__trip_id") }}'
+        tests:
+        - not_null
+      - name: trip_headsign
+        description: '{{ doc("gtfs_trips__trip_headsign") }}'
+      - name: trip_short_name
+        description: '{{ doc("gtfs_trips__trip_short_name") }}'
+      - name: direction_id
+        description: '{{ doc("gtfs_trips__direction_id") }}'
+      - name: block_id
+        description: '{{ doc("gtfs_trips__block_id") }}'
+      - name: shape_id
+        description: '{{ doc("gtfs_trips__shape_id") }}'
+      - name: wheelchair_accessible
+        description: '{{ doc("gtfs_trips__wheelchair_accessible") }}'
+      - name: bikes_allowed
+        description: '{{ doc("gtfs_trips__bikes_allowed") }}'
+  - name: stg_gtfs_schedule__calendar
+    description: |
+      Cleaned GTFS schedule calendar data.
+      See https://gtfs.org/schedule/reference/#calendartxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - service_id
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: service_id
+        description: '{{ doc("gtfs_calendar__service_id") }}'
+        tests:
+        - not_null
+      - name: monday
+        description: '{{ doc("gtfs_calendar__monday") }}'
+        tests:
+        - not_null
+      - name: tuesday
+        description: '{{ doc("gtfs_calendar__tuesday") }}'
+        tests:
+        - not_null
+      - name: wednesday
+        description: '{{ doc("gtfs_calendar__wednesday") }}'
+        tests:
+        - not_null
+      - name: thursday
+        description: '{{ doc("gtfs_calendar__thursday") }}'
+        tests:
+        - not_null
+      - name: friday
+        description: '{{ doc("gtfs_calendar__friday") }}'
+        tests:
+        - not_null
+      - name: saturday
+        description: '{{ doc("gtfs_calendar__saturday") }}'
+        tests:
+        - not_null
+      - name: sunday
+        description: '{{ doc("gtfs_calendar__sunday") }}'
+        tests:
+        - not_null
+      - name: start_date
+        description: '{{ doc("gtfs_calendar__start_date") }}'
+        tests:
+        - not_null
+      - name: end_date
+        description: '{{ doc("gtfs_calendar__end_date") }}'
+        tests:
+        - not_null
+  - name: stg_gtfs_schedule__calendar_dates
+    description: |
+      Cleaned GTFS schedule calendar_dates data.
+      See https://gtfs.org/schedule/reference/#calendar_datestxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - service_id
+            - date
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: service_id
+        description: '{{ doc("gtfs_calendar_dates__service_id") }}'
+        tests:
+        - not_null
+      - name: date
+        description: '{{ doc("gtfs_calendar_dates__date") }}'
+        tests:
+        - not_null
+      - name: exception_type
+        description: '{{ doc("gtfs_calendar_dates__exception_type") }}'
+        tests:
+  - name: stg_gtfs_schedule__stop_times
+    description: |
+      Cleaned GTFS schedule stop_times data.
+      See https://gtfs.org/schedule/reference/#calendar_datestxt for specification.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - trip_id
+            - stop_sequence
+          severity: warn
+
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: _dt
+        description: |
+          Date that data was downloaded (aligns with the date portion of `ts`).
+          Included only because it assists with partition elimination in the underlying external table.
+      - name: trip_id
+        description: '{{ doc("gtfs_stop_times__trip_id") }}'
+        tests:
+        - not_null
+      - name: arrival_time
+        description: '{{ doc("gtfs_stop_times__arrival_time") }}'
+      - name: departure_time
+        description: '{{ doc("gtfs_stop_times__departure_time") }}'
+      - name: stop_id
+        description: '{{ doc("gtfs_stop_times__stop_id") }}'
+        tests:
+        - not_null:
+            config:
+              severity: warn
+      - name: stop_sequence
+        description: '{{ doc("gtfs_stop_times__stop_sequence") }}'
+        tests:
+        - not_null
+      - name: stop_headsign
+        description: '{{ doc("gtfs_stop_times__stop_headsign") }}'
+      - name: pickup_type
+        description: '{{ doc("gtfs_stop_times__pickup_type") }}'
+      - name: drop_off_type
+        description: '{{ doc("gtfs_stop_times__drop_off_type") }}'
+      - name: continuous_pickup
+        description: '{{ doc("gtfs_stop_times__continuous_pickup") }}'
+      - name: continuous_drop_off
+        description: '{{ doc("gtfs_stop_times__continuous_drop_off") }}'
+      - name: shape_dist_traveled
+        description: '{{ doc("gtfs_stop_times__shape_dist_traveled") }}'
+      - name: timepoint
+        description: '{{ doc("gtfs_stop_times__timepoint") }}'
+    meta:
+      publish.gis_coordinate_system_epsg: WGS84
+
+  - name: stg_gtfs_rt__service_alerts_outcomes
+    description: Outcomes from parsing process on GTFS RT service alerts data.
+    columns: &stg_gtfs_rt_parse_outcomes_columns
+      - name: dt
+      - name: hour
+        description: |
+          Starting timestamp of hour in which data was downloaded, like `2022-10-31 23:00:00 UTC`.
+      - name: name
+      - name: url
+      - name: feed_type,
+      - name: _config_extract_ts,
+      - name: schedule_url_for_validation,
+      - name: parse_success
+        description: |
+          Boolean success indicator for whether this raw data was successfully included
+          in the associated hourly aggregation.
+      - name: parse_exception
+        description: |
+          If `parse_success` is false, the associated exception.
+      - name: download_response_code
+      - name: download_response_headers
+      - name: step
+      - name: base64_url
+      - name: ts
+  - name: stg_gtfs_rt__vehicle_positions_outcomes
+    description: Outcomes from parsing process on GTFS RT vehicle positions data.
+    columns: *stg_gtfs_rt_parse_outcomes_columns
+  - name: stg_gtfs_rt__trip_updates_outcomes
+    description: Outcomes from parsing process on GTFS RT trip updates data.
+    columns: *stg_gtfs_rt_parse_outcomes_columns

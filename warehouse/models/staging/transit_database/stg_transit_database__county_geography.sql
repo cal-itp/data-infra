@@ -1,5 +1,3 @@
-
-
 WITH
 once_daily_county_geography AS (
     {{ get_latest_dense_rank(
@@ -11,7 +9,7 @@ once_daily_county_geography AS (
 stg_transit_database__county_geography AS (
     SELECT
         id AS key,
-        {{ trim_make_empty_string_null(column_name = "name") }},
+        {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         fips,
         msa,
         caltrans_district,

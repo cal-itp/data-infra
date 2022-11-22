@@ -1,0 +1,101 @@
+version: 2
+
+models:
+  - name: int_gtfs_quality__schedule_feed_guideline_index
+    description: |
+      Daily index of v2 schedule feeds. Provides structure for
+      individual check models to be joined together by day.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - date
+
+  - name: int_gtfs_quality__no_rt_critical_validation_errors
+    description: |
+      Checks for any critical validation notices in RT feeds.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - base64_url
+    columns:
+      - name: status
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
+
+  - name: int_gtfs_quality__rt_validation_outcomes
+    description: |
+      Unioned, incremental table of RT validation outcomes.
+    columns:
+      - name: key
+        tests:
+          - not_null
+          - unique
+
+  - name: int_gtfs_quality__schedule_validation_severities
+    description: |
+      List of codes and their severity in the GTFS validator.
+      TODO: this will need additional work when we deploy
+      a new GTFS validator version.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - code
+            - severity
+
+  - name: int_gtfs_quality__no_schedule_validation_errors
+    tests: &stg_gtfs_guideline_tests
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - feed_key
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__schedule_feed_guideline_index')
+    columns: &stg_gtfs_guideline_columns
+      - name: status
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
+
+  - name: int_gtfs_quality__shapes_valid
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
+
+
+  - name: int_gtfs_quality__shapes_file_present
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__technical_contact_listed
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__shapes_for_all_trips
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__include_tts
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__pathways_valid
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__complete_wheelchair_accessibility_data
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__no_7_day_feed_expiration
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__no_30_day_feed_expiration
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__passes_fares_validator
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns

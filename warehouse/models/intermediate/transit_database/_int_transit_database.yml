@@ -21,3 +21,54 @@ models:
             - product_key
             - component_key
             - calitp_extracted_at
+
+  - name: int_transit_database__urls_to_gtfs_datasets
+    description: |
+      Creates a 1:N relationship so any given extract/URL in the
+      GTFS models can identify its source gtfs_datasets record.
+      Currently this is unversioned; any historical URLs point
+      to the latest version of their gtfs_datasets record.
+    columns:
+      - name: base64_url
+        tests:
+          - not_null
+          - unique
+      - name: gtfs_dataset_key
+        tests:
+          - relationships:
+              to: ref('dim_gtfs_datasets')
+              field: key
+              config:
+                # four SMART urls and two test URLs that have been removed
+                # will work once the dim is historical
+                error_if: ">10"
+                warn_if: ">0"
+  - name: int_transit_database__service_datasets_pivoted
+    description: |
+      A pivoted (wide) table showing a grouping of a service and a set of up to
+      four GTFS dataset records (one of each type: schedule, RT service alerts,
+      RT vehicle positions, and RT trip updates) that are associated with that service.
+      For a set of GTFS datasets to be listed together, they must meet two conditions:
+      1. They are associated with the same service, with the same category (primary or not)
+      2. The RT feeds use this schedule feed for validation
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - service_key
+            - gtfs_dataset_key_schedule
+            - gtfs_dataset_key_service_alerts
+            - gtfs_dataset_key_vehicle_positions
+            - gtfs_dataset_key_trip_updates
+    columns:
+      - name: service_key
+        description: Foreign key to dim_services.
+        test:
+          - not_null
+      - name: gtfs_dataset_key_schedule
+        description: Foreign key to dim_gtfs_datasets, for a record with data = "GTFS Schedule."
+      - name: gtfs_dataset_key_service_alerts
+        description: Foreign key to dim_gtfs_datasets, for a record with data = "GTFS Alerts."
+      - name: gtfs_dataset_key_vehicle_positions
+        description: Foreign key to dim_gtfs_datasets, for a record with data = "GTFS VehiclePositions."
+      - name: gtfs_dataset_key_trip_updates
+        description: Foreign key to dim_gtfs_datasets, for a record with data = "GTFS TripUpdates."

@@ -19,21 +19,18 @@ kernelspec:
 
 The queries represented in the following tutorial are as follows:
 * [**All the Stops and Arrival Times for an Operator on a Given Day**](stop-arrivals-operator)
-* [**Assemble a Route Shapefile**](#assemble-a-route-shapefile)
 * [**Filter with Lists and Unpacking**](#filter-with-lists-and-unpacking)
 
 ## Python Libraries to Import
 
 ```{code-cell}
-import geopandas as gpd
 import os
 import pandas as pd
-import shapely
 
 os.environ["CALITP_BQ_MAX_BYTES"] = str(50_000_000_000)
 
 import calitp
-from calitp.tables import tbl
+from calitp.tables import tbls
 from siuba import *
 
 pd.set_option("display.max_rows", 10)
@@ -59,7 +56,7 @@ Here, all the trips for one operator, for a particular day, is joined with all t
 
 # Grab the stop times for a given date for just 1 agency
 tbl_stop_times = (
-    tbl.views.gtfs_schedule_dim_stop_times()
+    tbls.views.gtfs_schedule_dim_stop_times()
     >> filter(_.calitp_extracted_at <= SELECTED_DATE,
               _.calitp_deleted_at > SELECTED_DATE,
               _.calitp_itp_id == ITP_ID
@@ -68,7 +65,7 @@ tbl_stop_times = (
 
 # Grab the trips done on that day, for that agency
 daily_stops = (
-    tbl.views.gtfs_schedule_fact_daily_trips()
+    tbls.views.gtfs_schedule_fact_daily_trips()
     >> filter(_.calitp_itp_id == ITP_ID,
               _.service_date == SELECTED_DATE,
               _.is_in_service == True)
@@ -77,7 +74,7 @@ daily_stops = (
     >> left_join(_, tbl_stop_times,
               # also added url number to the join keys ----
              ["calitp_itp_id", "calitp_url_number", "trip_id"])
-    >> inner_join(_, tbl.views.gtfs_schedule_dim_stops(),
+    >> inner_join(_, tbls.views.gtfs_schedule_dim_stops(),
                  ["calitp_itp_id", "stop_id"])
     >> select(_.itp_id == _.calitp_itp_id,
               _.date == _.service_date,
@@ -88,55 +85,6 @@ daily_stops = (
     )
 
 daily_stops.head()
-```
-
-### Assemble a Route Shapefile
-
-Transit stops are given as lat/lon (point geometry), but what if we want to get the line geometry? We will demonstrate on one route for Monterey-Salinas Transit.
-
-Tables used:
-1. `gtfs_schedule.shapes`: stops with stop sequence, lat/lon, and associated `shape_id`
-
-```{code-cell}
-# Grab the shapes for this operator
-shapes = (tbl.gtfs_schedule.shapes()
-          >> filter(_.calitp_itp_id == int(ITP_ID))
-          >> collect()
-)
-
-# Make a gdf
-shapes = (gpd.GeoDataFrame(shapes,
-                      geometry = gpd.points_from_xy
-                      (shapes.shape_pt_lon, shapes.shape_pt_lat),
-                      crs = 'EPSG:4326')
-     )
-
-MY_ROUTE = "41089"
-
-# Now, combine all the stops by stop sequence, and create linestring
-single_shape = (shapes
-                >> filter(_.shape_id == MY_ROUTE)
-                >> mutate(shape_pt_sequence = _.shape_pt_sequence.astype(int))
-                # arrange in the order of stop sequence
-                >> arrange(_.shape_pt_sequence)
-)
-
-# Convert from a bunch of points to a line (for a route, there are multiple points)
-route_line = shapely.geometry.LineString(list(single_shape['geometry']))
-
-# Create a df that will hold this new line geometry
-single_route = (single_shape
-               [['calitp_itp_id', 'shape_id', 'calitp_extracted_at']]
-               .iloc[[0]]
-              ) ##preserve info cols
-
-# Set the geometry column values
-single_route['geometry'] = route_line
-
-# Convert to gdf
-single_route = gpd.GeoDataFrame(single_route, crs="EPSG:4326")
-
-single_route
 ```
 
 ### Filter with Lists and Unpacking
@@ -167,7 +115,7 @@ paratransit_cols = ['van', 'cutaway', 'automobile',
                      'minivan', 'sport_utility_vehicle']
 
 # transitstacks has a lot of columns, and we want to keep a fairly large subset of them
-lossan_df = (tbl.views.transitstacks()
+lossan_df = (tbls.views.transitstacks()
              # Collect to turn into pandas.DataFrame earlier for isin to work
              >> collect()
              >> filter(_.county.isin(lossan_counties))
@@ -182,12 +130,12 @@ Next, we can query the `gtfs_schedule_fat_daily_feed_stops` to grab the stops fo
 
 ```{code-cell}
 # Grab stops for that day
-lossan_stops = (tbl.views.gtfs_schedule_fact_daily_feed_stops()
+lossan_stops = (tbls.views.gtfs_schedule_fact_daily_feed_stops()
                 >> filter(_.date == SELECTED_DATE)
                 >> select(_.stop_key, _.date)
                 # Merge with stop geom using stop_key
                 >> inner_join(_,
-                              (tbl.views.gtfs_schedule_dim_stops()
+                              (tbls.views.gtfs_schedule_dim_stops()
                                >> select(_.calitp_itp_id, _.stop_key, _.stop_id,
                                          _.stop_lat, _.stop_lon)
                               ), on='stop_key')

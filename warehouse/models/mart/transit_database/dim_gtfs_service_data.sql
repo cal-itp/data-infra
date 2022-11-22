@@ -17,7 +17,6 @@ dim_gtfs_service_data AS (
         agency_id,
         network_id,
         route_id,
-        reference_static_gtfs_service_data_key,
         fares_v2_status,
         calitp_extracted_at
     FROM latest_gtfs_service_data

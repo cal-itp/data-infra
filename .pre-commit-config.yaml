@@ -1,32 +1,43 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.4.0
+    rev: v4.3.0
     hooks:
-      - id: flake8
-        args: ["--ignore=E501,W503"] # line too long and line before binary operator (black is ok with these)
-        types:
-          - python
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml
         args: ["--unsafe"]
         exclude: 'kubernetes/apps/charts/.*'
       - id: check-added-large-files
+  - repo: https://github.com/pycqa/flake8
+    rev: 5.0.4
+    hooks:
+      - id: flake8
+        args: ["--ignore=E501,W503"] # line too long and line before binary operator (black is ok with these)
+        types:
+          - python
   - repo: https://github.com/psf/black
-    rev: 22.3.0
+    rev: 22.10.0
     hooks:
       - id: black
   - repo: https://github.com/pycqa/bandit
-    rev: 1.7.0
+    rev: 1.7.4
     hooks:
       - id: bandit
-        args: ["-ll", "--skip=B108,B608,B310,B303"]
+        args: ["-ll", "--skip=B108,B608,B310,B303,B324"]
         files: .py$
   - repo: https://github.com/sqlfluff/sqlfluff
-    rev: 1.2.1
+    rev: 1.4.1
     hooks:
       - id: sqlfluff-lint
         additional_dependencies: ['dbt-bigquery', 'sqlfluff-templater-dbt']
+        # skip: L003 indentation stuff -- TODO
+        # skip: L010 uppercase keywords -- TODO
+        # skip: L011 implicit/explicit aliasing of tables? -- TODO
+        # skip: L022 spacing between CTEs -- TODO
+        # skip: L036 select targets should be on new line unless only 1 target
+        # skip: L038 trailing comma in SELECT, bigquery is OK with this
+        # skip: L039 unnecessary whitespace, this is tricky with templating
+        # skip: L059 unnecessary quoted identifier, we need this for `extract` among others
         # skip: parsing, templating that are unfixable by linter
         # skip: line too long, keywords should not be used as identifier (at least for now...)
         # skip: unqualified reference from multiple tables
@@ -35,5 +46,5 @@ repos:
         # skip: joins should not include subqueries -- TODO
         # skip: use left join instead of right join -- TODO
         # skip: use single quotes instead of double -- TODO
-        args: [--dialect, "bigquery", --ignore, "parsing,templating",--exclude-rules, "L016,L029,L027,L032,L034,L014,L042,L055,L064"]
+        args: [--dialect, "bigquery", --ignore, "parsing,templating",--exclude-rules, "L003,L010,L011,L022,L036,L038,L039,L059,L016,L029,L027,L032,L034,L014,L042,L055,L064"]
         files: "warehouse/"

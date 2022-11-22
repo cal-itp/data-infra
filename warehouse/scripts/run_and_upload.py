@@ -18,7 +18,7 @@ from dbt_artifacts import (
     RunResultStatus,
 )
 
-CALITP_BUCKET__DBT_ARTIFACTS = os.environ["CALITP_BUCKET__DBT_ARTIFACTS"]
+CALITP_BUCKET__DBT_ARTIFACTS = os.getenv("CALITP_BUCKET__DBT_ARTIFACTS")
 
 artifacts = map(
     Path, ["index.html", "catalog.json", "manifest.json", "run_results.json"]
@@ -96,6 +96,7 @@ def run(
     project_dir: Path = os.environ.get("DBT_PROJECT_DIR", os.getcwd()),
     profiles_dir: Path = os.environ.get("DBT_PROFILES_DIR", os.getcwd()),
     target: str = os.environ.get("DBT_TARGET"),
+    dbt_seed: bool = True,
     dbt_run: bool = True,
     full_refresh: bool = False,
     dbt_test: bool = False,
@@ -108,6 +109,9 @@ def run(
     assert (
         dbt_docs or not save_artifacts
     ), "cannot save artifacts without generating them!"
+    assert (
+        CALITP_BUCKET__DBT_ARTIFACTS or not save_artifacts
+    ), "must specify an artifacts bucket if saving artifacts"
     assert dbt_docs or not deploy_docs, "cannot deploy docs without generating them!"
 
     def get_command(*args) -> List[str]:
@@ -132,6 +136,16 @@ def run(
     subprocess.run(get_command("compile")).check_returncode()
 
     results_to_check = []
+
+    if dbt_seed:
+        results_to_check.append(subprocess.run(get_command("seed")))
+
+        with open("./target/run_results.json") as f:
+            run_results = RunResults(**json.load(f))
+        with open("./target/manifest.json") as f:
+            manifest = Manifest(**json.load(f))
+
+        report_failures_to_sentry(run_results, manifest)
 
     if dbt_run:
         args = ["run"]
@@ -220,6 +234,8 @@ def run(
             ("gtfs_schedule", "GTFS Schedule Feeds Latest"),
             ("mart_transit_database", "Data Marts (formerly Warehouse Views)"),
             ("mart_gtfs_guidelines", "Data Marts (formerly Warehouse Views)"),
+            ("mart_gtfs", "Data Marts (formerly Warehouse Views)"),
+            ("mart_gtfs_quality", "Data Marts (formerly Warehouse Views)"),
         ]:
             args = [
                 "dbt-metabase",

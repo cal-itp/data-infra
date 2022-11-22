@@ -2,6 +2,7 @@ import logging
 import requests
 import sys
 import yaml
+from requests import HTTPError
 
 sys.path.append("services/gtfs-rt-archive/src/gtfs_rt_archive/")
 
@@ -44,11 +45,15 @@ def main():
                 **headers.get(key, {}),
             }
 
+            print(f"attempting to download {key}")
             result = requests.get(url, headers=h, timeout=10)
             result.raise_for_status()
         except Exception as e:
-            print(f"Failed to download {url}")
-            print(f"Reason: {e}")
+            print(f"Failed to download {key}")
+            reason = f"Reason: {type(e)}"
+            if isinstance(e, HTTPError):
+                reason = f"{reason}({e.response.status_code})"
+            print(reason)
             fails.append(url)
             continue
         successes.append(url)

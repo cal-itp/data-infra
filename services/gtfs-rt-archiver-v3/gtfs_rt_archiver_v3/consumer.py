@@ -6,6 +6,7 @@ import sentry_sdk
 import typer
 import os
 
+from calitp.auth import get_secrets_by_label
 from huey.constants import WORKER_THREAD
 
 import logging
@@ -14,7 +15,7 @@ import sys
 from huey.consumer_options import ConsumerConfig
 from prometheus_client import start_http_server
 
-from .tasks import huey, load_secrets, RTFetchException
+from .tasks import huey, RTFetchException
 
 
 def set_exception_fingerprint(event, hint):
@@ -41,7 +42,8 @@ def main(
     start_http_server(port)
 
     if load_env_secrets:
-        load_secrets()
+        for key, value in get_secrets_by_label("gtfs_rt").items():
+            os.environ[key] = value
 
     config = ConsumerConfig(
         workers=int(os.getenv("HUEY_CONSUMER_WORKERS", 32)),

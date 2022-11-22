@@ -1,12 +1,12 @@
 WITH
 
-ct_organizations AS (
+ct_organizations AS ( -- noqa: L045
     SELECT *
     FROM {{ source('airtable', 'california_transit__organizations') }}
     WHERE TRIM(name) != ""
 ),
 
-tts_organizations AS (
+tts_organizations AS ( -- noqa: L045
     SELECT *
     FROM {{ source('airtable', 'transit_technology_stacks__organizations') }}
     WHERE TRIM(name) != ""

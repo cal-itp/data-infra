@@ -3,6 +3,10 @@ WITH stg_gtfs_rt__vehicle_positions AS (
     FROM {{ ref('stg_gtfs_rt__vehicle_positions') }}
 ),
 
+urls_to_gtfs_datasets AS (
+    SELECT * FROM {{ ref('int_transit_database__urls_to_gtfs_datasets') }}
+),
+
 dim_gtfs_datasets AS (
     SELECT *
     FROM {{ ref('dim_gtfs_datasets') }}
@@ -10,27 +14,31 @@ dim_gtfs_datasets AS (
 
 keying AS (
     SELECT
-        gd.key as gtfs_dataset_key,
+        urls_to_gtfs_datasets.gtfs_dataset_key,
+        gd.name as _gtfs_dataset_name,
         vp.*
     FROM stg_gtfs_rt__vehicle_positions AS vp
+    LEFT JOIN urls_to_gtfs_datasets
+        ON vp.base64_url = urls_to_gtfs_datasets.base64_url
     LEFT JOIN dim_gtfs_datasets AS gd
-        ON vp.base64_url = gd.base64_url
-        AND vp._config_extract_ts BETWEEN gd._valid_from AND gd._valid_to
+        ON urls_to_gtfs_datasets.gtfs_dataset_key = gd.key
 ),
 
 fct_vehicle_positions_messages AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['base64_url', '_extract_ts', 'id']) }} as key,
+        -- ideally this would not include vehicle_id / trip_id, but using it for now because
+        -- MTC 511 regional feed does not have feed-unique entity ids
+        {{ dbt_utils.surrogate_key(['base64_url', '_extract_ts', 'id', 'position_latitude', 'position_longitude']) }} as key,
         gtfs_dataset_key,
         dt,
         hour,
         base64_url,
         _extract_ts,
         _config_extract_ts,
-        _name,
+        _gtfs_dataset_name,
 
         header_timestamp,
-        header_version
+        header_version,
         header_incrementality,
 
         id,

@@ -1,5 +1,3 @@
-
-
 WITH
 once_daily_gtfs_service_data AS (
     {{ get_latest_dense_rank(
@@ -11,7 +9,7 @@ once_daily_gtfs_service_data AS (
 stg_transit_database__gtfs_service_data AS (
     SELECT
         id AS key,
-        {{ trim_make_empty_string_null(column_name = "name") }},
+        {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         unnested_services AS service_key,
         unnested_gtfs_dataset AS gtfs_dataset_key,
         dataset_type,
@@ -31,7 +29,6 @@ stg_transit_database__gtfs_service_data AS (
         schedule_comments__from_gtfs_dataset_,
         itp_activities__from_gtfs_dataset_,
         fares_notes__from_gtfs_dataset_,
-        unnested_reference_static_gtfs_service AS reference_static_gtfs_service_data_key,
         uri,
         currently_operating__from_services_,
         provider_reporting_category,
@@ -41,7 +38,6 @@ stg_transit_database__gtfs_service_data AS (
     FROM once_daily_gtfs_service_data
     LEFT JOIN UNNEST(once_daily_gtfs_service_data.services) as unnested_services
     LEFT JOIN UNNEST(once_daily_gtfs_service_data.gtfs_dataset) as unnested_gtfs_dataset
-    LEFT JOIN UNNEST(once_daily_gtfs_service_data.reference_static_gtfs_service) as unnested_reference_static_gtfs_service
 )
 
 SELECT * FROM stg_transit_database__gtfs_service_data

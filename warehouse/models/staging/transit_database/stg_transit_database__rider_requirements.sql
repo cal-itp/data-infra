@@ -1,6 +1,5 @@
-
-
 WITH
+
 once_daily_rider_requirements AS (
     {{ get_latest_dense_rank(
         external_table = source('airtable', 'california_transit__rider_requirements'),
@@ -11,7 +10,7 @@ once_daily_rider_requirements AS (
 stg_transit_database__rider_requirements AS (
     SELECT
         id AS key,
-        {{ trim_make_empty_string_null(column_name = "requirement") }},
+        {{ trim_make_empty_string_null(column_name = "requirement") }} AS requirement,
         category,
         description,
         services,

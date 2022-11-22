@@ -1,0 +1,301 @@
+version: 2
+
+models:
+  - name: int_gtfs_schedule__joined_feed_outcomes
+    description: |
+      Each row is an individual download attempt combined with the associated unzip and parse attempts for
+      a given feed on a given date.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+    columns:
+      - name: gtfs_dataset_key
+      - name: ts
+      - name: base64_url
+      - name: _config_extract_ts
+      - name: download_success
+      - name: download_exception
+      - name: unzip_success
+      - name: unzip_exception
+      - name: zipfile_extract_md5hash
+      - name: zipfile_files
+      - name: zipfile_dirs
+      - name: pct_files_successfully_parsed
+  - name: int_gtfs_schedule__grouped_feed_file_parse_outcomes
+    description: |
+      Each row is a feed (URL + timestamp), with a summary of whether parsing was successful on the constituent files
+      within that feed.
+      "Success" means that the raw input file (usually a .txt file) was converted to JSONL format without an error.
+      This does not guarantee validity according to the GTFS specification, just that the original input file was
+      parseable on a pure file-format level (i.e., the file was not corrupt.)
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: count_successes
+        description: |
+          Number of successful file conversions within this feed.
+      - name: count_files
+        description: |
+          Number of total file conversions attempted for this feed.
+      - name: pct_success
+        description: |
+          Successes as a percent of total files (`count_successes` / `count_files` * 100).
+          If this is a value less than 100, indicates that file conversion failed for some files in this feed.
+  - name: int_gtfs_schedule__incremental_trips
+    description: |
+      This table is an incremental, sparse history of GTFS schedule trips data. It is a precursor to `dim_trips`
+      with the goal of facilitating duplicate detection. It also drops entire duplicate rows (rows where all
+      fields are identical.)
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - trip_id
+          severity: warn
+    columns:
+      - name: route_id
+        description: '{{ doc("gtfs_trips__route_id") }}'
+      - name: service_id
+        description: '{{ doc("gtfs_trips__service_id") }}'
+      - name: trip_id
+        description: '{{ doc("gtfs_trips__trip_id") }}'
+      - name: trip_headsign
+        description: '{{ doc("gtfs_trips__trip_headsign") }}'
+      - name: trip_short_name
+        description: '{{ doc("gtfs_trips__trip_short_name") }}'
+      - name: direction_id
+        description: '{{ doc("gtfs_trips__direction_id") }}'
+      - name: block_id
+        description: '{{ doc("gtfs_trips__block_id") }}'
+      - name: shape_id
+        description: '{{ doc("gtfs_trips__shape_id") }}'
+      - name: wheelchair_accessible
+        description: '{{ doc("gtfs_trips__wheelchair_accessible") }}'
+      - name: bikes_allowed
+        description: '{{ doc("gtfs_trips__bikes_allowed") }}'
+      - name: _inserted_at
+        description: |
+          Timestamp for when the given row was inserted into the table.
+          Primarily useful for debugging, not meaningful for general use.
+  - name: int_gtfs_schedule__long_calendar
+    description: |
+      This table transforms the raw GTFS calendar.txt format (where each row corresponds to a `service_id` and
+      each day of the week is a column and service indicators are entered in a "wide" fashion) into a long format,
+      where a row is identified by `feed_key`, `service_id`, and `day_name`.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - service_id
+            - day_name
+    columns:
+      - name: base64_url
+      - name: feed_key
+        description: Foreign key for `dim_schedule_feeds`.
+      - name: service_id
+        description: '{{ doc("gtfs_calendar__service_id") }}'
+      - name: start_date
+        description: '{{ doc("gtfs_calendar__start_date") }}'
+      - name: end_date
+        description: '{{ doc("gtfs_calendar_dates__date") }}'
+      - name: day_name
+        description: String name of day of the week like "monday"
+      - name: has_service
+        description: |
+          Boolean indicating whether there is service for this `service_id` / `day_name` pair
+          between `start_date` and `end_date`.
+  - name: int_gtfs_schedule__daily_scheduled_service_index
+    description: |
+      An index listing date, feed, and `service_id` combinations for which service was scheduled (i.e.,
+      the `service_id` is "in effect" and says that service occurred).
+      Essentially, it takes `calendar` and `calendar_dates` for a given feed, takes the dates for which that
+      feed was "in effect", and combines those into a long list of all service_ids that were in effect for a given
+      date, then filters down to only those where service was actually scheduled on that date.
+      For example, a row in this table with `feed_key = A`, `service_date = 2022-10-01`, `service_id = 1` indicates
+      that:
+      * Feed A was online on 2022-10-01
+      * Service ID 1 covers the date 2022-10-01, i.e., if service ID 1 is defined in `calendar.txt`,
+         `start_date <= 2022-10-01 <= end_date` and if service ID ` is defined in `calendar_dates.txt`,
+         `2022-10-01` is listed as a `date` within that file.
+      * The service indicator is `true` for 2022-10-01 (a Saturday). So, if this service was defined in `calendar.txt`,
+         `saturday = 1` for `service_id = 1`, and there is no `exception_type = 2` in `calendar_dates.txt` for this service and date.
+         If this service is defined exclusively in `calendar_dates.txt`, then `exception_type = 1` is listed for `2022-10-01` in that file.
+      This table therefore excludes `service_id` values which were in effect (i.e., feed was online and date range of service
+      overlaps with service date) but where service was not scheduled.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - service_date
+            - service_id
+    columns:
+      - name: feed_key
+        description: Foreign key for `dim_schedule_feeds`.
+        tests:
+          - not_null
+      - name: service_date
+        description: Date on which service was scheduled.
+        tests:
+          - not_null
+      - name: service_id
+        description: Service identifier from calendar and/or calendar_dates.
+        tests:
+          - not_null
+  - name: int_gtfs_rt__unioned_parse_outcomes
+    description: |
+      A unioned combination of the parse outcomes for service alerts,
+      vehicle positions, and trip updates data.
+    columns:
+      - name: dt
+      - name: hour
+        description: |
+          Starting timestamp of hour in which data was downloaded, like `2022-10-31 23:00:00 UTC`.
+      - name: name
+      - name: url
+      - name: feed_type,
+      - name: _config_extract_ts,
+      - name: schedule_url_for_validation,
+      - name: parse_success
+        description: |
+          Boolean success indicator for whether this raw data was successfully included
+          in the associated hourly aggregation.
+      - name: parse_exception
+        description: |
+          If `parse_success` is false, the associated exception.
+      - name: download_response_code
+      - name: download_response_headers
+      - name: step
+      - name: base64_url
+      - name: ts
+  - name: int_gtfs_schedule__incremental_stop_times
+    description: |
+      This table is an incremental, sparse history of GTFS schedule stop times data.
+      It is a precursor to `dim_stop_times` with the goal of facilitating duplicate detection and missing key issues.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - trip_id
+            - stop_sequence
+          severity: warn
+    columns:
+      - name: trip_id
+        description: '{{ doc("gtfs_stop_times__trip_id") }}'
+        tests:
+        - not_null
+      - name: arrival_time
+        description: '{{ doc("gtfs_stop_times__arrival_time") }}'
+      - name: departure_time
+        description: '{{ doc("gtfs_stop_times__departure_time") }}'
+      - name: stop_id
+        description: '{{ doc("gtfs_stop_times__stop_id") }}'
+        tests:
+        - not_null:
+            severity: warn
+      - name: stop_sequence
+        description: '{{ doc("gtfs_stop_times__stop_sequence") }}'
+        tests:
+        - not_null
+      - name: stop_headsign
+        description: '{{ doc("gtfs_stop_times__stop_headsign") }}'
+      - name: pickup_type
+        description: '{{ doc("gtfs_stop_times__pickup_type") }}'
+      - name: drop_off_type
+        description: '{{ doc("gtfs_stop_times__drop_off_type") }}'
+      - name: continuous_pickup
+        description: '{{ doc("gtfs_stop_times__continuous_pickup") }}'
+      - name: continuous_drop_off
+        description: '{{ doc("gtfs_stop_times__continuous_drop_off") }}'
+      - name: shape_dist_traveled
+        description: '{{ doc("gtfs_stop_times__shape_dist_traveled") }}'
+      - name: timepoint
+        description: '{{ doc("gtfs_stop_times__timepoint") }}'
+      - name: _inserted_at
+        description: |
+          Timestamp for when the given row was inserted into the table.
+          Primarily useful for debugging, not meaningful for general use.
+  - name: int_gtfs_schedule__incremental_shapes
+    description: |
+      This table is an incremental, sparse history of GTFS schedule shapes data.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - shape_id
+            - shape_pt_sequence
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: shape_id
+        description: '{{ doc("gtfs_shapes__shape_id") }}'
+        tests:
+        - not_null
+      - name: shape_pt_lat
+        description: '{{ doc("gtfs_shapes__shape_pt_lat") }}'
+        tests:
+        - not_null
+        meta:
+          metabase.semantic_type: type/Latitude
+          ckan.type: FLOAT
+          ckan.length: 6
+          ckan.precision: 3
+      - name: shape_pt_lon
+        description: '{{ doc("gtfs_shapes__shape_pt_lon") }}'
+        tests:
+        - not_null
+        meta:
+          metabase.semantic_type: type/Longitude
+          ckan.type: FLOAT
+          ckan.length: 7
+          ckan.precision: 3
+      - name: shape_pt_sequence
+        description: '{{ doc("gtfs_shapes__shape_pt_sequence") }}'
+        tests:
+        - not_null
+      - name: shape_dist_traveled
+        description: '{{ doc("gtfs_shapes__shape_dist_traveled") }}'
+  - name: int_gtfs_schedule__keyed_parse_outcomes
+    description: |
+      All GTFS schedule file parse outcomes, with `feed_key` identifier joined
+      on to facilitate downstream use.
+    tests:
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('stg_gtfs_schedule__file_parse_outcomes')
+    columns:
+      - name: feed_key
+        description: |
+          Foreign key to `dim_schedule_feeds`.
+          Because `dim_schedule_feeds` only includes unique feed versions, this will not be populated
+          for downloads where no data changed relative to what had already been ingested.
+        tests:
+          - relationships:
+              to: ref('dim_schedule_feeds')
+              field: key
+      - name: parse_success
+        description: '{{ doc("column_schedule_parse_success") }}'
+      - name: parse_exception
+        description: '{{ doc("column_schedule_parse_exception") }}'
+      - name: filename
+        description: '{{ doc("column_schedule_parse_filename") }}'
+      - name: _config_extract_ts
+      - name: feed_name
+        description: '{{ doc("column_schedule_parse_feed_name") }}'
+      - name: feed_url
+        description: '{{ doc("column_schedule_parse_feed_url") }}'
+      - name: original_filename
+        description: '{{ doc("column_schedule_parse_original_filename") }}'
+      - name: gtfs_filename
+        description: '{{ doc("column_schedule_parse_gtfs_filename") }}'
+      - name: dt
+      - name: ts
+      - name: base64_url

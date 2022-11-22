@@ -36,14 +36,7 @@ daily_trips AS (
        AND t1.date < t2.calitp_deleted_at
        AND t1.calitp_itp_id = t2.calitp_itp_id
        AND t1.calitp_url_number = t2.calitp_url_number
- GROUP BY
-        t1.date,
-        t1.calitp_itp_id,
-        t1.calitp_url_number,
-        t1.calitp_agency_name,
-        t1.feed_key,
-        t1.check,
-        t1.feature
+ GROUP BY 1, 2, 3, 4, 5, 6, 7
 ),
 
 trip_shape_check AS (

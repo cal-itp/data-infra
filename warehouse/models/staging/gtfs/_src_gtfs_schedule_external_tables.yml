@@ -10,6 +10,8 @@ sources:
       - name: unzip_outcomes
       - name: agency
       - name: agency_txt_parse_outcomes
+      - name: areas
+      - name: areas_txt_parse_outcomes
       - name: attributions
       - name: attributions_txt_parse_outcomes
       - name: calendar
@@ -27,7 +29,7 @@ sources:
       - name: fare_transfer_rules
       - name: fare_transfer_rules_txt_parse_outcomes
       - name: feed_info
-      - name: feed_info_txt_pares_outcomes
+      - name: feed_info_txt_parse_outcomes
       - name: frequencies
       - name: frequencies_txt_parse_outcomes
       - name: levels

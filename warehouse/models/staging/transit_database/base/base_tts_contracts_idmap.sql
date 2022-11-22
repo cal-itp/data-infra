@@ -35,7 +35,7 @@ base_tts_contracts_idmap AS (
         map.contract_vendor
     FROM latest as r
     LEFT JOIN mapped_org_ids AS map
-        USING(id, dt)
+        USING (id, dt)
 )
 
 SELECT * FROM base_tts_contracts_idmap

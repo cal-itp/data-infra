@@ -1,15 +1,18 @@
 WITH validation_service_alerts AS (
-    SELECT *, 'service_alerts' as rt_feed_type
+    SELECT *,
+           'service_alerts' as rt_feed_type
     FROM {{ source('gtfs_rt_external_tables', 'service_alerts_validations') }}
 ),
 
 validation_trip_updates AS (
-    SELECT *, 'trip_updates' as rt_feed_type
+    SELECT *,
+           'trip_updates' as rt_feed_type
     FROM {{ source('gtfs_rt_external_tables', 'trip_updates_validations') }}
 ),
 
 validation_vehicle_positions AS (
-    SELECT *, 'vehicle_positions' as rt_feed_type
+    SELECT *,
+           'vehicle_positions' as rt_feed_type
     FROM {{ source('gtfs_rt_external_tables', 'vehicle_positions_validations') }}
 ),
 

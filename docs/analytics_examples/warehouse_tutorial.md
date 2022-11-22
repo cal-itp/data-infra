@@ -40,7 +40,7 @@ The tools that we can use to answer them are:
 ```{code-cell}
 :tags: [remove-cell]
 from myst_nb import glue
-from calitp.tables import tbl
+from calitp.tables import tbls
 from siuba import *
 import calitp.magics
 from calitp import query_sql
@@ -103,8 +103,8 @@ glue("df_routes_output", df_routes)
 ```{code-cell}
 :tags: [remove-cell]
 siuba_routes = (
-    tbl.views.gtfs_schedule_fact_daily_feed_routes()
-    >> left_join(_, tbl.views.gtfs_schedule_dim_feeds(), "feed_key")
+    tbls.views.gtfs_schedule_fact_daily_feed_routes()
+    >> left_join(_, tbls.views.gtfs_schedule_dim_feeds(), "feed_key")
     >> filter(_.calitp_feed_name == "AC Transit (0)")
     >> count(_.date)
     >> arrange(_.date)
@@ -161,7 +161,7 @@ LIMIT 10
 ````{tabbed} siuba
 ```python
 # Allows us to query tables in the warehouse
-from calitp.tables import tbl
+from calitp.tables import tbls
 
 # The data analysis library used
 from siuba import *
@@ -170,11 +170,11 @@ from siuba import *
 (
     # Primary fact table, we need this because it contains route information
     # for each agency on each day
-    tbl.views.gtfs_schedule_fact_daily_feed_routes()
+    tbls.views.gtfs_schedule_fact_daily_feed_routes()
 
     # Enriching with information about feeds from dimensional table
     # This will include columns such as calitp_feed_name, etc..
-    >> left_join(_, tbl.views.gtfs_schedule_dim_feeds(), "feed_key")
+    >> left_join(_, tbls.views.gtfs_schedule_dim_feeds(), "feed_key")
 
     # Filtering for agency, this column comes from the dimensional table above
     >> filter(_.calitp_feed_name == "AC Transit (0)")
@@ -217,8 +217,8 @@ glue("df_stops_output", df_stops)
 ```{code-cell}
 :tags: [remove-cell]
 siuba_stops = (
-    tbl.views.gtfs_schedule_fact_daily_feed_stops()
-    >> left_join(_, tbl.views.gtfs_schedule_dim_feeds(), "feed_key")
+    tbls.views.gtfs_schedule_fact_daily_feed_stops()
+    >> left_join(_, tbls.views.gtfs_schedule_dim_feeds(), "feed_key")
     >> count(_.date, _.calitp_feed_name)
     >> filter(_.calitp_feed_name == "AC Transit (0)")
     >> arrange(_.date)
@@ -276,7 +276,7 @@ LIMIT 10
 ````{tabbed} siuba
 ```python
 # Allows us to query tables in the warehouse
-from calitp.tables import tbl
+from calitp.tables import tbls
 
 # The data analysis library used
 from siuba import *
@@ -287,11 +287,11 @@ from siuba import *
 (
     # Primary fact table, we need this because it contains stop information
     # for each agency on each day
-    tbl.views.gtfs_schedule_fact_daily_feed_stops()
+    tbls.views.gtfs_schedule_fact_daily_feed_stops()
 
     # Enriching with information about feeds from dimensional table
     # This will include columns such as calitp_feed_name, etc..
-    >> left_join(_, tbl.views.gtfs_schedule_dim_feeds(), "feed_key")
+    >> left_join(_, tbls.views.gtfs_schedule_dim_feeds(), "feed_key")
 
     # Filtering for agency, this column comes from the dimensional table above
     >> filter(_.calitp_feed_name == "AC Transit (0)")
@@ -331,8 +331,8 @@ glue("df_feed_expires_output", df_feed_expires)
 ```{code-cell}
 :tags: [remove-cell]
 siuba_feed_expires = (
-    tbl.views.gtfs_schedule_fact_daily_feeds()
-    >> left_join(_, tbl.views.gtfs_schedule_dim_feeds(), "feed_key")
+    tbls.views.gtfs_schedule_fact_daily_feeds()
+    >> left_join(_, tbls.views.gtfs_schedule_dim_feeds(), "feed_key")
     >> select(_.calitp_feed_name, _.date, _.days_until_feed_end_date, _.feed_end_date)
     >> filter(_.date == "2021-09-01", _.calitp_feed_name == "AC Transit (0)")
 )
@@ -381,7 +381,7 @@ LIMIT 10
 ````{tabbed} siuba
 ```python
 # Allows us to query tables in the warehouse
-from calitp.tables import tbl
+from calitp.tables import tbls
 
 # The data analysis library used
 from siuba import *
@@ -390,11 +390,11 @@ from siuba import *
 (
     # Primary fact table, we need this because it contains information on
     # agency feeds
-    tbl.views.gtfs_schedule_fact_daily_feeds()
+    tbls.views.gtfs_schedule_fact_daily_feeds()
 
     # Enriching with information about feeds from dimensional table
     # This will include columns such as calitp_feed_name, etc..
-    >> left_join(_, tbl.views.gtfs_schedule_dim_feeds(), "feed_key")
+    >> left_join(_, tbls.views.gtfs_schedule_dim_feeds(), "feed_key")
 
     # Keeping the columns that we need for this query
     >> select(_.calitp_feed_name, _.date, _.days_until_feed_end_date, _.feed_end_date)
@@ -432,7 +432,7 @@ glue("df_stops_trips_output", df_stops_trips)
 ```{code-cell}
 :tags: [remove-cell]
 siuba_stops_trips = (
-    tbl.views.gtfs_schedule_data_feed_trip_stops_latest()
+    tbls.views.gtfs_schedule_data_feed_trip_stops_latest()
     >> filter(_.calitp_feed_name == "AC Transit (0)")
     >> summarize(
         n_trips=_.trip_id.nunique(), n_stops=_.stop_id.nunique(), n=_.trip_id.size()
@@ -500,7 +500,7 @@ LIMIT 10
 ````{tabbed} siuba
 ```python
 # Allows us to query tables in the warehouse
-from calitp.tables import tbl
+from calitp.tables import tbls
 
 # The data analysis library used
 from siuba import *
@@ -509,7 +509,7 @@ from siuba import *
 (
     # Primary fact table, we need this because it contains trip stop information
     # for each agency on each day in the latest feed
-    tbl.views.gtfs_schedule_data_feed_trip_stops_latest()
+    tbls.views.gtfs_schedule_data_feed_trip_stops_latest()
 
     # Filtering for agency
     >> filter(_.calitp_feed_name == "AC Transit (0)")
@@ -563,7 +563,7 @@ glue("df_max_stops_output", df_max_stops)
 ```{code-cell}
 :tags: [remove-cell]
 siuba_max_stops = (
-    tbl.views.gtfs_schedule_data_feed_trip_stops_latest()
+    tbls.views.gtfs_schedule_data_feed_trip_stops_latest()
     >> count(_.trip_id, _.calitp_feed_name)
     >> filter(_.calitp_feed_name == "AC Transit (0)")
     >> summarize(n_max=_.n.max())
@@ -635,7 +635,7 @@ LIMIT 10
 ````{tabbed} siuba
 ```python
 # Allows us to query tables in the warehouse
-from calitp.tables import tbl
+from calitp.tables import tbls
 
 # The data analysis library used
 from siuba import *
@@ -644,7 +644,7 @@ from siuba import *
 (
     # Primary fact table, we need this because it contains trip stop information
     # for each agency on each day in the latest feed
-    tbl.views.gtfs_schedule_data_feed_trip_stops_latest()
+    tbls.views.gtfs_schedule_data_feed_trip_stops_latest()
 
     # Group and count rows by trip ID and agency, effectively counting the
     # number of stops for a given trip by agency in the latest feed

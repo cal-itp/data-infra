@@ -69,6 +69,14 @@ stg_gtfs_guidelines__service_alerts_feed_on_transitland AS (
     SELECT * FROM {{ ref('stg_gtfs_guidelines__service_alerts_feed_on_transitland') }}
 ),
 
+stg_gtfs_guidelines__include_tts AS (
+    SELECT * FROM {{ ref('stg_gtfs_guidelines__include_tts') }}
+),
+
+stg_gtfs_guidelines__no_expired_services AS (
+    SELECT * FROM {{ ref('stg_gtfs_guidelines__no_expired_services') }}
+),
+
 fact_daily_guideline_checks AS (
     SELECT
         {{ gtfs_guidelines_columns() }}
@@ -137,6 +145,14 @@ fact_daily_guideline_checks AS (
     SELECT
         {{ gtfs_guidelines_columns() }}
     FROM stg_gtfs_guidelines__service_alerts_feed_on_transitland
+    UNION ALL
+    SELECT
+        {{ gtfs_guidelines_columns() }}
+    FROM stg_gtfs_guidelines__include_tts
+    UNION ALL
+    SELECT
+        {{ gtfs_guidelines_columns() }}
+    FROM stg_gtfs_guidelines__no_expired_services
 )
 
 SELECT * FROM fact_daily_guideline_checks

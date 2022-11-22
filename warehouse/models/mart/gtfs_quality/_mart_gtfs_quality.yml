@@ -1,0 +1,141 @@
+version: 2
+
+models:
+  # TODO: once we have checks that occur above the feed level (e.g. organization)
+  #   we will need to create additional daily check fact tables at the
+  #   appropriate grain
+  - name: fct_daily_schedule_feed_guideline_checks
+    description: '{{ doc("fct_daily_schedule_feed_guideline_checks") }}'
+    columns:
+      - &key
+        name: key
+        tests: &primary_key_tests
+          - unique
+          - not_null
+        meta: &pk_meta
+          metabase.semantic_type: type/PK
+      - &date
+        name: date
+        tests:
+          - not_null
+      - &schedule_feed_key
+        name: feed_key
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_schedule_feeds')
+              field: key
+      - name: status
+      - &check
+        name: check
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_gtfs_quality__intended_checks')
+              field: check
+      - &status
+        name: status
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
+
+
+  - name: fct_daily_rt_feed_guideline_checks
+    description: '{{ doc("fct_daily_rt_feed_guideline_checks") }}'
+    tests:
+    columns:
+      - *key
+      - *date
+      - name: base64_url
+        tests:
+          - not_null
+      - *check
+      - *status
+
+
+  - name: fct_daily_rt_feed_validation_notices
+    description: |
+      A daily model of validation notices found per feed. Data
+      is filled in so there is always a count of notices per day
+      per feed, even if that count is zero; null counts indicate
+      a lack of validation for that feed on that day.
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: 'validated_extracts = validation_successes + validation_exceptions'
+    columns:
+      - *key
+      - *date
+      - name: code
+        tests:
+          - not_null
+      - name: is_critical
+        tests:
+          - not_null
+      - name: parsed_files
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
+          - dbt_utils.expression_is_true:
+              expression: '<= 4320'
+      - name: validated_extracts
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
+          - dbt_utils.expression_is_true:
+              expression: '<= 4320'
+      - name: validation_successes
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
+          - dbt_utils.expression_is_true:
+              expression: '<= 4320'
+      - name: validation_exceptions
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
+          - dbt_utils.expression_is_true:
+              expression: '<= 4320'
+      - name: total_notices
+
+  - name: fct_daily_schedule_feed_validation_notices
+    description: |
+      A daily model of validation notices found per feed. Data
+      is filled in so there is always a count of notices per day
+      per feed, even if that count is zero; null counts indicate
+      a lack of validation for that feed on that day.
+    columns:
+      - *key
+      - *date
+      - *schedule_feed_key
+      - name: code
+        tests:
+          - not_null
+      - name: severity
+        tests:
+          - not_null
+      - name: validation_success
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
+      - name: validation_exception
+      - name: total_notices
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
+
+  - name: fct_implemented_checks
+    description: |
+      Contains the actually implemented checks, i.e. checks that
+      show up in the underlying daily checks model. Tested against
+      the "intended checks" to verify checks are actually implemented.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - check
+            - feature
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('stg_gtfs_quality__intended_checks')
+      - dbt_utils.expression_is_true:
+          expression: "is_implemented"
+    columns:
+      - name: is_implemented

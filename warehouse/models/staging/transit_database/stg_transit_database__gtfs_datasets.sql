@@ -1,6 +1,5 @@
-
-
 WITH
+
 -- TODO: we need to change this logic -- this prevents us from successfully joining with GTFS data
 -- if it was downloaded based on an earlier extract in a day with multiple extracts
 once_daily_gtfs_datasets AS (
@@ -8,6 +7,15 @@ once_daily_gtfs_datasets AS (
         external_table = source('airtable', 'california_transit__gtfs_datasets'),
         order_by = 'ts DESC', partition_by = 'dt'
         ) }}
+),
+
+-- generally we should have been trimming whitespace
+-- on the Airflow/GCS side, so trim it here before encoding
+trimmed AS (
+    SELECT * EXCEPT (uri, pipeline_url),
+        TRIM(uri) AS uri,
+        TRIM(pipeline_url) AS pipeline_url
+    FROM once_daily_gtfs_datasets
 ),
 
 construct_base64_url AS (
@@ -22,11 +30,11 @@ construct_base64_url AS (
                         -- if there are multiple query parameters, we leave the question mark, remove ampersand
                         -- so example.com/gtfs?auth=key&p2=v2 becomes example.com/gtfs?p2=v2
                         WHEN REGEXP_CONTAINS(uri, r"\?[\w]*\=\{\{[\w\s]*\}\}\&")
-                            THEN REGEXP_REPLACE(uri, r"[\w]*\=\{\{[\w\s]*\}\}\&","")
+                            THEN REGEXP_REPLACE(uri, r"[\w]*\=\{\{[\w\s]*\}\}\&", "")
                         -- if only one query parameter, remove the question mark
                         -- so example.com/gtfs?auth=key becomes example.com/gtfs
                         WHEN REGEXP_CONTAINS(uri, r"\?[\w]*\=\{\{[\w\s]*\}\}$")
-                            THEN REGEXP_REPLACE(uri, r"\?[\w]*\=\{\{[\w\s]*\}\}$","")
+                            THEN REGEXP_REPLACE(uri, r"\?[\w]*\=\{\{[\w\s]*\}\}$", "")
                         ELSE uri
                 END
             ELSE pipeline_url
@@ -47,13 +55,13 @@ construct_base64_url AS (
                     END
             ELSE {{ to_url_safe_base64('pipeline_url') }}
         END AS base64_url
-    FROM once_daily_gtfs_datasets
+    FROM trimmed
 ),
 
 stg_transit_database__gtfs_datasets AS (
     SELECT
         id AS airtable_record_id,
-        {{ trim_make_empty_string_null(column_name = "name") }},
+        {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         data,
         data_quality_pipeline,
         fares_v2_status,
