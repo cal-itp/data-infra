@@ -35,23 +35,76 @@
 
 WITH
 
+gtfs_schedule_dim_routes AS (
+    SELECT *
+    FROM {{ ref('gtfs_schedule_dim_routes') }}
+),
+
+payments_feeds AS (
+    SELECT *
+    FROM {{ ref('payments_feeds') }}
+),
+
+stg_cleaned_micropayments AS (
+    SELECT *
+    FROM {{ ref('stg_cleaned_micropayments') }}
+),
+
+stg_cleaned_micropayment_device_transactions AS (
+    SELECT *
+    FROM {{ ref('stg_cleaned_micropayment_device_transactions') }}
+),
+
+stg_cleaned_micropayment_adjustments AS (
+    SELECT *
+    FROM {{ ref('stg_cleaned_micropayment_adjustments') }}
+),
+
+stg_cleaned_device_transactions AS (
+    SELECT *
+    FROM {{ ref('stg_cleaned_device_transactions') }}
+),
+
+stg_cleaned_device_transaction_types AS (
+    SELECT *
+    FROM {{ ref('stg_cleaned_device_transaction_types') }}
+),
+
+stg_cleaned_customers AS (
+    SELECT *
+    FROM {{ ref('stg_cleaned_customers') }}
+),
+
+stg_cleaned_customer_funding_source_vaults AS (
+    SELECT *
+    FROM {{ ref('stg_cleaned_customer_funding_source_vaults') }}
+),
+
+stg_cleaned_product_data AS (
+    SELECT *
+    FROM {{ ref('stg_cleaned_product_data') }}
+),
+
 gtfs_routes_with_participant AS (
     SELECT
 
-        participant_id,
-        route_id,
-        route_short_name,
-        route_long_name,
-        calitp_extracted_at,
-        calitp_deleted_at
+        p.participant_id,
 
-    FROM {{ ref('gtfs_schedule_dim_routes') }}
-    INNER JOIN {{ ref('payments_feeds') }} USING (calitp_itp_id, calitp_url_number)
+        g.route_id,
+        g.route_short_name,
+        g.route_long_name,
+        g.calitp_extracted_at,
+        g.calitp_deleted_at
+
+    FROM gtfs_schedule_dim_routes AS g
+    INNER JOIN payments_feeds AS p
+    ON g.calitp_itp_id = p.calitp_itp_id
+        AND g.calitp_url_number = p.calitp_url_number
 ),
 
 debited_micropayments AS (
     SELECT *
-    FROM {{ ref('stg_cleaned_micropayments') }}
+    FROM stg_cleaned_micropayments
     WHERE type = 'DEBIT'
 ),
 
@@ -62,9 +115,9 @@ refunded_micropayments AS (
         m_credit.charge_amount AS refund_amount
 
     FROM debited_micropayments AS m_debit
-    INNER JOIN {{ ref('stg_cleaned_micropayment_device_transactions') }} USING (micropayment_id)
-    INNER JOIN {{ ref('stg_cleaned_micropayment_device_transactions') }} AS dt_credit USING (littlepay_transaction_id)
-    INNER JOIN {{ ref('stg_cleaned_micropayments') }} AS m_credit ON
+    INNER JOIN stg_cleaned_micropayment_device_transactions USING (micropayment_id)
+    INNER JOIN stg_cleaned_micropayment_device_transactions AS dt_credit USING (littlepay_transaction_id)
+    INNER JOIN stg_cleaned_micropayments AS m_credit ON
         dt_credit.micropayment_id = m_credit.micropayment_id
     WHERE m_credit.type = 'CREDIT'
         AND m_credit.charge_type = 'refund'
@@ -82,23 +135,23 @@ applied_adjustments AS (
         description,
         amount
 
-    FROM {{ ref('stg_cleaned_micropayment_adjustments') }}
+    FROM stg_cleaned_micropayment_adjustments
     WHERE applied IS True
 ),
 
 initial_transactions AS (
     SELECT *
-    FROM {{ ref('stg_cleaned_micropayment_device_transactions') }}
-    INNER JOIN {{ ref('stg_cleaned_device_transactions') }} USING (littlepay_transaction_id)
-    INNER JOIN {{ ref('stg_cleaned_device_transaction_types') }} USING (littlepay_transaction_id)
+    FROM stg_cleaned_micropayment_device_transactions
+    INNER JOIN stg_cleaned_device_transactions USING (littlepay_transaction_id)
+    INNER JOIN stg_cleaned_device_transaction_types USING (littlepay_transaction_id)
     WHERE transaction_type IN ('single', 'on')
 ),
 
 second_transactions AS (
     SELECT *
-    FROM {{ ref('stg_cleaned_micropayment_device_transactions') }}
-    INNER JOIN {{ ref('stg_cleaned_device_transactions') }} USING (littlepay_transaction_id)
-    INNER JOIN {{ ref('stg_cleaned_device_transaction_types') }} USING (littlepay_transaction_id)
+    FROM stg_cleaned_micropayment_device_transactions
+    INNER JOIN stg_cleaned_device_transactions USING (littlepay_transaction_id)
+    INNER JOIN stg_cleaned_device_transaction_types USING (littlepay_transaction_id)
     WHERE transaction_type = 'off'
 ),
 
@@ -173,15 +226,15 @@ join_table AS (
 
     FROM debited_micropayments AS m
     LEFT JOIN refunded_micropayments AS mr USING (micropayment_id)
-    INNER JOIN {{ ref('stg_cleaned_customers') }} AS c USING (customer_id)
-    LEFT JOIN {{ ref('stg_cleaned_customer_funding_source_vaults') }} AS v
+    INNER JOIN stg_cleaned_customers AS c USING (customer_id)
+    LEFT JOIN stg_cleaned_customer_funding_source_vaults AS v
         ON m.funding_source_vault_id = v.funding_source_vault_id
             AND m.transaction_time >= v.calitp_valid_at
             AND m.transaction_time < v.calitp_invalid_at
     INNER JOIN initial_transactions AS t1 USING (participant_id, micropayment_id)
     LEFT JOIN second_transactions AS t2 USING (participant_id, micropayment_id)
     LEFT JOIN applied_adjustments AS a USING (participant_id, micropayment_id)
-    LEFT JOIN {{ ref('stg_cleaned_product_data') }} AS p USING (participant_id, product_id)
+    LEFT JOIN stg_cleaned_product_data AS p USING (participant_id, product_id)
     LEFT JOIN gtfs_routes_with_participant AS r
         ON r.participant_id = m.participant_id
             AND r.route_id = (CASE WHEN t1.route_id != 'Route Z' THEN t1.route_id ELSE COALESCE(t2.route_id, 'Route Z') END)
