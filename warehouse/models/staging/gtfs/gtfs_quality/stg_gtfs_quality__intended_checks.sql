@@ -18,6 +18,8 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ technical_contact_listed() }}, {{ technical_contact_availability() }}
     UNION ALL
+    SELECT {{ no_expired_services() }}, {{ best_practices_alignment() }}
+    UNION ALL
     SELECT {{ no_rt_critical_validation_errors() }}, {{ compliance() }}
     {# UNION ALL #}
     {# SELECT {{ trip_id_alignment() }}, {{ fixed_route_completeness() }} #}

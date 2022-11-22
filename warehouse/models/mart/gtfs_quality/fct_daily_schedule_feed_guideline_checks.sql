@@ -16,6 +16,7 @@ unioned AS (
             ref('int_gtfs_quality__passes_fares_validator'),
             ref('int_gtfs_quality__no_7_day_feed_expiration'),
             ref('int_gtfs_quality__no_30_day_feed_expiration'),
+            ref('int_gtfs_quality__no_expired_services'),
         ],
     ) }}
 ),
