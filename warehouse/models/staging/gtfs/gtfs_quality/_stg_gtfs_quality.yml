@@ -26,6 +26,28 @@ models:
         tests:
           - not_null
 
+  - name: stg_gtfs_quality__schedule_validation_code_descriptions
+    description: |
+      Metadata for codes that come from the GTFS Schedule validator.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - code
+            - gtfs_validator_version
+    columns:
+      - name: severity
+        tests:
+          - not_null
+      - name: code
+        tests:
+          - not_null
+      - name: description
+        tests:
+          - not_null
+      - name: gtfs_validator_version
+        tests:
+          - not_null
+
   - name: stg_gtfs_rt__service_alerts_validation_notices
     description: |
       Validation notices resulting from executing the RT

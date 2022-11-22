@@ -107,6 +107,9 @@ models:
       - *key
       - *date
       - *schedule_feed_key
+      - name: gtfs_validator_version
+        tests:
+          - not_null
       - name: code
         tests:
           - not_null

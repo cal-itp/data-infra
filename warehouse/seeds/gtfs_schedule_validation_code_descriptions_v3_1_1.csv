@@ -1,0 +1,53 @@
+Type,Name,Human_Readable_Description,Critical_for_reporting,What_to_Report
+Error,block_trips_with_overlapping_stop_times,"Trips within the same block have overlapping stop times, which is not allowed.",,Count
+Error,csv_parsing_failed,The validator was unable to parse a field. This is typically caused by a cell containing more than 4096 characters.,,File Name
+Error,decreasing_or_equal_shape_distance,"Two consecutive points in shapes.txt should have increasing values for shape_dist_traveled. If the values are equal, this is considered as an error.",,Count
+Error,decreasing_or_equal_stop_time_distance,"Two consecutive stop times in a trip should have increasing distance. If the values are equal, this is considered as an error.",,Count
+Error,duplicate_fare_rule_zone_id_fields,"Each of the following fields should be unique in fare_rules.txt: fare_rules.route_id, fare_rules.origin_id, fare_rules.contains_id and fare_rules.destination_id",,Rows by fare_id
+Error,duplicate_key,The values of the given key and rows are duplicates.,,File Name
+Error,duplicated_column,The input file CSV header has the same column name repeated.,,File Name
+Error,empty_file,"Empty csv file found in the archive: file does not have any headers, or is a required file and does not have any data. The GTFS specification requires the first line of each file to contain field names and required files must have data.",,File Name
+Error,foreign_key_violation,The values of the given key and rows of one table cannot be found with values of the given key in another table.,,File Names
+Error,inconsistent_agency_timezone,Agencies from GTFS agency.txt have been found to have different timezones.,,Rows by agency_id
+Error,invalid_color,"A color is coded incorrectly. A color must be encoded as a six-digit hexadecimal number. The leading ""#"" should not be included.",,Row by route_id: field contents
+Error,invalid_currency,Value of field with type currency is not valid. Currency code must follow ISO 4217.,,Row by fare_id: field contents
+Error,invalid_date,A date is coded incorrectly. Dates must have the YYYYMMDD format.,,"If calendar or calendar_dates. File name, row by service_id, and field contents. If feed_info: File name and field contents."
+Error,invalid_email,A field contains a malformed email address.,,File name and field contents
+Error,invalid_float,A field cannot be parsed as a floating point number.,,File name and field name
+Error,invalid_integer,A field cannot be parsed as an integer.,,File name and field name
+Error,invalid_language_code,A field contains a wrong language code. Language codes must follow IETF BCP 47.,,File name and field contents
+Error,invalid_row_length,A row in the input file has a different number of values than specified by the CSV header.,,File name and field name
+Error,invalid_time,"Value of field with type time is not valid. Time must be in the H:MM:SS, HH:MM:SS or HHH:MM:SS format.",,File name and field contents
+Error,invalid_timezone,Value of field with type timezone is not valid.Timezones are defined at www.iana.org. Timezone names never contain the space character but may contain an underscore.,,File name and field contents
+Error,invalid_url,A field contains a malformed URL.,,File name and field contents
+Error,location_without_parent_station,"The following location types must have a parent station: entrance, generic node, boarding_area.",,Row by stop_id if under 10; otherwise a count of affected rows
+Error,missing_calendar_and_calendar_date_files,Both files calendar_dates.txt and calendar.txt are missing from the GTFS dataset. At least one of the files must be provided.,,Binary
+Error,missing_required_column,A required column is missing.,,File name and field name
+Error,missing_required_field,A required field is blank.,,File name and field name
+Error,missing_required_file,A required file is missing.,,File name
+Error,missing_trip_edge,First and last stop of a trip must define both arrival_time and departure_time fields.,,Row by trip_id if under 10; otherwise a count of affected trips.
+Error,new_line_in_value,A value in CSV file has a new line or carriage return.,,File name
+Error,number_out_of_range,The values in the given column of the input rows are out of range.,,File name and field name
+Error,overlapping_frequency,Trip frequencies must not overlap in time.,,Row by trip_id if under 10; otherwise a count of affected trips.
+Error,route_both_short_and_long_name_missing,Both short_name and long_name are missing for a route. At least one is required.,,Row by route_id
+Error,same_name_and_description_for_route,The GTFS spec requires that a route_description is distinct from both the route short and long names.,,Row by route_id
+Error,start_and_end_range_equal,Date or time fields have been found equal.,,Count of affected rows
+Error,start_and_end_range_out_of_order,Date or time fields have been found out of order.,,Count of affected rows
+Error,station_with_parent_station,Field parent_station must be empty when location_type is 2 (entrance/exit).,,"Rows by stop ID if fewer than 10, otherwise a count of affected rows"
+Error,stop_time_with_arrival_before_previous_departure_time,The departure_time must not precede the arrival_time in stop_times.txt if both are given.,,Count of affected rows
+Error,wrong_parent_location_type,"Value of field location_type of parent found in field parent_station is invalid. Stops, Platforms, Entrance/exit, and generic nodes can only have a Station as a parent. Boarding Area can only have Platform as a parent. Stations cannot have a parent. All other combinations are prohibited.",,Count of affected rows
+Warning,duplicate_route_name,All routes of the same route_type with the same agency_id should have unique combinations of route_short_name and route_long_name.,,Row by route_id
+Warning,empty_column_name,A column name has not been provided. Such columns are skipped by the validator.,,File name
+Warning,empty_row,A row in the input file has only spaces.,,File name
+Warning,feed_expiration_date,"At any time, the published GTFS dataset should be valid for at least the next 7 days, and ideally for as long as the operator is confident that the schedule will continue to be operated. If possible, the GTFS dataset should cover at least the next 30 days of service.",,Binary
+Warning,more_than_one_entity,A file that is expected to have only one row has more than one row.,,File name
+Warning,non_ascii_or_non_printable_char,A value of filed with type id contains non ASCII or non printable characters. This is not recommended.,,File name and field contents
+Warning,platform_without_parent_station,A platform has no parent_station field set.,,"Row by stop_id if fewer than 10, otherwise count affected rows"
+Warning,route_short_and_long_name_equal,Short and long name should not be identical.,,Row by route_id
+Warning,route_short_name_too_long,Short name of a route is too long (more than 12 characters). Note that major trip planning applications start truncating short names after seven characters.,,Field contents
+Warning,start_and_end_time_equal,"The start_time and end_time in frequencies.txt should not match, or block IDs will not be able to represent linked trips.",,count of affected rows
+Warning,stop_time_timepoint_without_times,Any record with stop_times.timepoint set to 1 should define a value for stop_times.arrival_time and stop_times.departure_time fields.,,count of affected rows
+Warning,stop_too_far_from_trip_shape,"Per GTFS Best Practices, route alignments (in shapes.txt) should be within 100 meters of stop locations which a trip serves.",,count of affected rows
+Warning,too_fast_travel,"As implemented in the original Google Python GTFS validator, the calculated speed between stops should not be greater than 150 km/h (42 m/s SI or 93 mph).",,count of affected rows
+Warning,unexpected_enum_value,An enum has an unexpected value.,,file name and field name
+Warning,unusable_trip,A trip must visit more than one stop in stop_times.txt to be usable by passengers for boarding and alighting.,,"rows by trip_id if fewer than 10, otherwise a count of affected rows"
