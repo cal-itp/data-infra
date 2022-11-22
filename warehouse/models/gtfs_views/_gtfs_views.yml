@@ -929,7 +929,7 @@ models:
          (not necessarily operating on date)
 
 exposures:
-  - name: legacy_calitp_reports_site
+  - name: calitp_reports_site
     type: application
     maturity: medium
     url: "reports.calitp.org"

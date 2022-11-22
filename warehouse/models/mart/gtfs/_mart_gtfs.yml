@@ -1190,9 +1190,19 @@ models:
       - name: arrival_sec
         description: |
           This is a calculated field that does not come from GTFS - it is not a timestamp and can't be treated as such.
+
+          Represents `arrival_time` as a total number of seconds after midnight of the first day of the given trip.
+          For example, `arrival_time = 21:30:45` would lead to `arrival_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
+          This allows us to perform duration calculations and handle timestamps that wrap past midnight like
+          `25:40:00`, which are allowed in GTFS.
       - name: departure_sec
         description: |
           This is a calculated field that does not come from GTFS - it is not a timestamp and can't be treated as such.
+
+          Represents `departure_time` as a total number of seconds after midnight of the first day of the given trip.
+          For example, `departure_time = 21:30:45` would lead to `departure_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
+          This allows us to perform duration calculations and handle timestamps that wrap past midnight like
+          `25:40:00`, which are allowed in GTFS.
     meta:
       publish.gis_coordinate_system_epsg: WGS84
   - name: fct_daily_scheduled_trips
@@ -1253,6 +1263,15 @@ models:
       - name: trip_first_departure_ts
       - name: trip_last_arrival_ts
       - name: service_hours
+      - name: contains_warning_duplicate_primary_key
+        description: |
+          Rows with `true` in this column have a duplicate primary key in their aggregation; i.e., the given `trip_id`
+          / `stop_sequence` pair is duplicated within this GROUP BY.
+          Treat these rows with caution. They will cause fanout in joins.
+      - name: contains_warning_missing_foreign_key_stop_id
+        description: |
+          Rows with `true` in this column are aggregated with columns that are missing the required `stop_id` value.
+          This means they will fail to join with `stop` related information.
   - name: fct_daily_rt_feed_files
     description: |
       Each row is a date / URL pair with a summary of data aggregation outcomes.
@@ -1347,29 +1366,16 @@ models:
         description: Time of last departure on date
       - name: n_stop_times
         description: |
-         Total number of stop events present in active feed
-         (not necessarily served on date)
+          Total number of stop events observed
       - name: n_routes
         description: |
-         Total number of routes that had trips scheduled on this day
-         (not necessarily operating on date)
-exposures:
-  - name: calitp_reports_site
-    type: application
-    maturity: medium
-    url: "reports.calitp.org"
-    description: Cal-ITP reports site
-    depends_on:
-      - ref("reports_daily_service_routes_stops")
-      - ref("reports_gtfs_schedule_index")
-      - ref("gtfs_schedule_dim_feeds")
-      - ref("gtfs_schedule_fact_stop_id_changes")
-      - ref("gtfs_schedule_fact_route_id_changes")
-      - source("gtfs_type2", "validation_notices")
-      # ^ hopefully not for long
-      # also gtfs_schedule_history.calitp_files_updates
-      # don't think this is a source in dbt?
-      # could add, but would also like to look at options
-      # to replace reports-side...
-    owner:
-      email: eric.d@jarv.us
+          Total number of routes that had trips scheduled on this day
+      - name: contains_warning_duplicate_primary_key
+        description: |
+          Rows with `true` in this column have a duplicate primary key in their aggregation; i.e., the given `trip_id`
+          / `stop_sequence` pair is duplicated within this GROUP BY.
+          Treat these rows with caution. They will cause fanout in joins.
+      - name: contains_warning_missing_foreign_key_stop_id
+        description: |
+          Rows with `true` in this column are aggregated with columns that are missing the required `stop_id` value.
+          This means they will fail to join with `stop` related information.

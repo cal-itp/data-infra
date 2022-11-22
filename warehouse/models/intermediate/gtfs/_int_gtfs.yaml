@@ -311,3 +311,12 @@ models:
       - name: trip_first_departure_ts
       - name: trip_last_arrival_ts
       - name: service_hours
+      - name: contains_warning_duplicate_primary_key
+        description: |
+          Rows with `true` in this column have a duplicate primary key in their aggregation; i.e., the given `trip_id`
+          / `stop_sequence` pair is duplicated within this GROUP BY.
+          Treat these rows with caution. They will cause fanout in joins.
+      - name: contains_warning_missing_foreign_key_stop_id
+        description: |
+          Rows with `true` in this column are aggregated with columns that are missing the required `stop_id` value.
+          This means they will fail to join with `stop` related information.
