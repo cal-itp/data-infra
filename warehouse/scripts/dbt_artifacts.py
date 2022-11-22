@@ -153,12 +153,16 @@ class BaseNode(BaseModel):
         return select(columns=columns)
 
 
-class Model(BaseNode):
-    resource_type: Literal[DbtResourceType.model]
+class Seed(BaseNode):
+    resource_type: Literal[DbtResourceType.seed]
 
 
 class Source(BaseNode):
     resource_type: Literal[DbtResourceType.source]
+
+
+class Model(BaseNode):
+    resource_type: Literal[DbtResourceType.model]
 
 
 class TestMetadata(BaseModel):
@@ -175,7 +179,7 @@ class Test(BaseNode):
 
 
 Node = Annotated[
-    Union[Model, Test],
+    Union[Seed, Source, Model, Test],
     Field(discriminator="resource_type"),
 ]
 
