@@ -80,8 +80,11 @@ In addition to the tabular view above, here is a diagram representing DAG depend
       sandbox;
       create_external_tables;
       check_feed_aggregators;
+      rt_loader_files;
       parse_and_validate_rt;
+      parse_and_validate_rt_v2;
       transform_warehouse;
+      unzip_and_validate_gtfs_schedule;
 ```
 
 ## Task-level considerations
