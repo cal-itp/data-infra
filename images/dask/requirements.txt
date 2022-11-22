@@ -169,7 +169,7 @@ pendulum==2.1.2; python_version >= "3.8" and python_full_version < "3.0.0" and p
 pexpect==4.8.0; sys_platform != "win32" and python_version >= "3.8" and python_full_version >= "3.6.1"
 phik==0.12.2; python_version >= "3.7" and python_version < "3.11"
 pickleshare==0.7.5; python_version >= "3.8" and python_full_version >= "3.6.1"
-pillow==9.2.0; python_version >= "3.7" and python_version < "3.11"
+pillow==9.3.0; python_version >= "3.7" and python_version < "3.11"
 platformdirs==2.5.2; python_version >= "3.7" and python_full_version >= "3.6.2"
 plotly==5.5.0; python_version >= "3.6"
 plotnine==0.8.0; python_version >= "3.6"
