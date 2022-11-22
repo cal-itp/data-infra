@@ -789,6 +789,7 @@ models:
         description: '{{ doc("customer_funding_source_principal_customer_id") }}'
         tests:
           - not_null
+      - name: earliest_tap
   - name: stg_cleaned_device_transaction_types
     columns:
       - name: littlepay_transaction_id
@@ -829,6 +830,7 @@ models:
       - *device_transactions_transaction_date_time_pacific
       - *device_transactions_route_id
       - *device_transactions_location_id
+      - name: geography
   - name: stg_cleaned_micropayment_adjustments
     tests:
       - dbt_utils.unique_combination_of_columns:

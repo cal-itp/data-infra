@@ -98,8 +98,8 @@ gtfs_routes_with_participant AS (
 
     FROM gtfs_schedule_dim_routes AS g
     INNER JOIN payments_feeds AS p
-    ON g.calitp_itp_id = p.calitp_itp_id
-        AND g.calitp_url_number = p.calitp_url_number
+        ON g.calitp_itp_id = p.calitp_itp_id
+            AND g.calitp_url_number = p.calitp_url_number
 ),
 
 debited_micropayments AS (
@@ -177,15 +177,46 @@ initial_transactions AS (
         ON mdt.littlepay_transaction_id = dt.littlepay_transaction_id
     INNER JOIN stg_cleaned_device_transaction_types AS dtt
         ON mdt.littlepay_transaction_id = dtt.littlepay_transaction_id
-    WHERE transaction_type IN ('single', 'on')
+    WHERE dtt.transaction_type IN ('single', 'on')
 ),
 
 second_transactions AS (
-    SELECT *
-    FROM stg_cleaned_micropayment_device_transactions
-    INNER JOIN stg_cleaned_device_transactions USING (littlepay_transaction_id)
-    INNER JOIN stg_cleaned_device_transaction_types USING (littlepay_transaction_id)
-    WHERE transaction_type = 'off'
+    SELECT
+        mdt.*,
+
+        dt.participant_id,
+        dt.customer_id,
+        dt.device_transaction_id,
+        dt.device_id,
+        dt.device_id_issuer,
+        dt.type,
+        dt.transaction_outcome,
+        dt.transction_deny_reason,
+        dt.transaction_date_time_utc,
+        dt.location_scheme,
+        dt.location_name,
+        dt.zone_id,
+        dt.mode,
+        dt.direction,
+        dt.vehicle_id,
+        dt.granted_zone_ids,
+        dt.onward_zone_ids,
+        dt.latitude,
+        dt.longitude,
+        dt.transaction_date_time_pacific,
+        dt.route_id,
+        dt.location_id,
+        dt.geography,
+
+        dtt.transaction_type,
+        dtt.pending
+
+    FROM stg_cleaned_micropayment_device_transactions AS mdt
+    INNER JOIN stg_cleaned_device_transactions AS dt
+        ON mdt.littlepay_transaction_id = dt.littlepay_transaction_id
+    INNER JOIN stg_cleaned_device_transaction_types AS dtt
+        ON mdt.littlepay_transaction_id = dtt.littlepay_transaction_id
+    WHERE dtt.transaction_type = 'off'
 ),
 
 join_table AS (
@@ -221,14 +252,13 @@ join_table AS (
         p.product_type,
 
         -- Common transaction info
-        CASE WHEN t1.route_id != 'Route Z' THEN t1.route_id ELSE COALESCE(t2.route_id, 'Route Z') END AS route_id,
         r.route_long_name,
         r.route_short_name,
         t1.direction,
         t1.vehicle_id,
+        t1.littlepay_transaction_id,
 
         -- Tap on or single transaction info
-        t1.littlepay_transaction_id,
         t1.device_id,
         t1.transaction_type,
         t1.transaction_outcome,
@@ -236,16 +266,17 @@ join_table AS (
         t1.transaction_date_time_pacific,
         t1.location_id,
         t1.location_name,
-
-        -- should we remove latitute and longitude in favor of on_latitude and on_longitude
         t1.latitude,
+
+        -- should we remove latitute and longitude in favor
+        -- of on_latitude and on_longitude
         t1.longitude,
         t1.latitude AS on_latitude,
         t1.longitude AS on_longitude,
         t1.geography AS on_geography,
+        t2.littlepay_transaction_id AS off_littlepay_transaction_id,
 
         -- Tap off transaction info
-        t2.littlepay_transaction_id AS off_littlepay_transaction_id,
         t2.device_id AS off_device_id,
         t2.transaction_type AS off_transaction_type,
         t2.transaction_outcome AS off_transaction_outcome,
@@ -255,35 +286,64 @@ join_table AS (
         t2.location_name AS off_location_name,
         t2.latitude AS off_latitude,
         t2.longitude AS off_longitude,
-        t2.geography AS off_geography
+        t2.geography AS off_geography,
+        CASE
+            WHEN
+                t1.route_id != 'Route Z' THEN t1.route_id
+            ELSE COALESCE(t2.route_id, 'Route Z')
+        END AS route_id
 
     FROM debited_micropayments AS m
-    LEFT JOIN refunded_micropayments AS mr USING (micropayment_id)
-    INNER JOIN stg_cleaned_customers AS c USING (customer_id)
+    LEFT JOIN refunded_micropayments AS mr
+        ON m.micropayment_id = mr.micropayment_id
+    INNER JOIN stg_cleaned_customers AS c
+        ON m.customer_id = c.customer_id
     LEFT JOIN stg_cleaned_customer_funding_source_vaults AS v
         ON m.funding_source_vault_id = v.funding_source_vault_id
             AND m.transaction_time >= v.calitp_valid_at
             AND m.transaction_time < v.calitp_invalid_at
-    INNER JOIN initial_transactions AS t1 USING (participant_id, micropayment_id)
-    LEFT JOIN second_transactions AS t2 USING (participant_id, micropayment_id)
-    LEFT JOIN applied_adjustments AS a USING (participant_id, micropayment_id)
-    LEFT JOIN stg_cleaned_product_data AS p USING (participant_id, product_id)
+    INNER JOIN initial_transactions AS t1
+        ON m.participant_id = t1.participant_id
+            AND m.micropayment_id = t1.micropayment_id
+    LEFT JOIN second_transactions AS t2
+        ON m.participant_id = t2.participant_id
+            AND m.micropayment_id = t2.micropayment_id
+    LEFT JOIN applied_adjustments AS a
+        ON m.participant_id = a.participant_id
+            AND m.micropayment_id = a.micropayment_id
+    LEFT JOIN stg_cleaned_product_data AS p
+        ON m.participant_id = p.participant_id
+            AND a.product_id = p.product_id
     LEFT JOIN gtfs_routes_with_participant AS r
         ON r.participant_id = m.participant_id
-            AND r.route_id = (CASE WHEN t1.route_id != 'Route Z' THEN t1.route_id ELSE COALESCE(t2.route_id, 'Route Z') END)
+            AND r.route_id = (
+                CASE
+                    WHEN
+                        t1.route_id != 'Route Z' THEN t1.route_id
+                    ELSE COALESCE(t2.route_id, 'Route Z')
+                END
+            )
             -- here, can just use t1 because transaction date will be populated
             -- (don't have to handle unkowns the way we do with route_id)
-            AND r.calitp_extracted_at <= DATETIME(TIMESTAMP(t1.transaction_date_time_utc))
-            AND r.calitp_deleted_at > DATETIME(TIMESTAMP(t1.transaction_date_time_utc))
+            AND r.calitp_extracted_at <= DATETIME(
+                TIMESTAMP(t1.transaction_date_time_utc)
+            )
+            AND r.calitp_deleted_at > DATETIME(
+                TIMESTAMP(t1.transaction_date_time_utc)
+            )
 ),
 
 payments_rides AS (
 
-SELECT
-    *,
-    DATETIME_DIFF(off_transaction_date_time_pacific, transaction_date_time_pacific, MINUTE) AS duration,
-    ST_DISTANCE(on_geography, off_geography) / 1609.34 AS distance
-FROM join_table
+    SELECT
+        *,
+        DATETIME_DIFF(
+            off_transaction_date_time_pacific,
+            transaction_date_time_pacific,
+            MINUTE
+        ) AS duration,
+        ST_DISTANCE(on_geography, off_geography) AS distance_meters
+    FROM join_table
 
 )
 
