@@ -208,7 +208,7 @@ models:
           - not_null
       - name: type
         description: GTFS realtime type (service_alerts, trip_updates, or vehicle_positions)
-  - name: gtfs_rt_validation_code_descriptions
+  - name: gtfs_rt_validation_code_descriptions_legacy
     description: |
       Cal-ITP critical validation codes. Primary key is code.
     columns:

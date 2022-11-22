@@ -114,6 +114,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "backoff"
+version = "2.2.1"
+description = "Function decoration for backoff and retry"
+category = "main"
+optional = false
+python-versions = ">=3.7,<4.0"
+
+[[package]]
 name = "black"
 version = "22.3.0"
 description = "The uncompromising code formatter."
@@ -257,13 +265,14 @@ test = ["hypothesis (==3.55.3)", "flake8 (==3.7.8)"]
 
 [[package]]
 name = "dask"
-version = "2022.9.1"
+version = "2022.11.1"
 description = "Parallel PyData with Task Scheduling"
 category = "main"
 optional = false
 python-versions = ">=3.8"
 
 [package.dependencies]
+click = ">=7.0"
 cloudpickle = ">=1.1.1"
 fsspec = ">=0.6.0"
 numpy = {version = ">=1.18", optional = true, markers = "extra == \"dataframe\""}
@@ -275,10 +284,10 @@ toolz = ">=0.8.2"
 
 [package.extras]
 array = ["numpy (>=1.18)"]
-complete = ["bokeh (>=2.4.2)", "distributed (==2022.9.1)", "jinja2", "numpy (>=1.18)", "pandas (>=1.0)"]
+complete = ["bokeh (>=2.4.2,<3)", "distributed (==2022.11.1)", "jinja2", "numpy (>=1.18)", "pandas (>=1.0)"]
 dataframe = ["numpy (>=1.18)", "pandas (>=1.0)"]
-diagnostics = ["bokeh (>=2.4.2)", "jinja2"]
-distributed = ["distributed (==2022.9.1)"]
+diagnostics = ["bokeh (>=2.4.2,<3)", "jinja2"]
+distributed = ["distributed (==2022.11.1)"]
 test = ["pandas", "pytest", "pytest-rerunfailures", "pytest-xdist", "pre-commit"]
 
 [[package]]
@@ -1866,7 +1875,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.9"
-content-hash = "0613034428c6d8749a5be70d211470b8f7a19381e506762a380d513ac634b5e1"
+content-hash = "dacd8047c38677f15d37d67bb4992bc951cd8216f8568b31d341b10fc54eb2f8"
 
 [metadata.files]
 agate = []
@@ -1878,6 +1887,7 @@ async-timeout = []
 attrs = []
 babel = []
 backcall = []
+backoff = []
 black = []
 bleach = []
 cachetools = []

@@ -1,4 +1,4 @@
-{% docs fct_daily_feed_guideline_checks %}
+{% docs fct_daily_schedule_feed_guideline_checks %}
 
 Each row represents a date/guideline check/feed combination, with pass/fail
 information indicating whether that feed complied with that check on that date.

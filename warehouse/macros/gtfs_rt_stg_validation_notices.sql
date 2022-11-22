@@ -6,7 +6,7 @@ WITH raw_validation_notices AS (
 stg_gtfs_rt__validation_notices AS (
     SELECT
         -- this mainly exists so we can use WHERE in tests
-        {{ dbt_utils.surrogate_key(['metadata.extract_ts', 'base64_url', 'errorMessage.messageId']) }} AS key,
+        {{ dbt_utils.surrogate_key(['metadata.extract_ts', 'base64_url', 'errorMessage.validationRule.errorId']) }} AS key,
         dt,
         hour,
         base64_url,

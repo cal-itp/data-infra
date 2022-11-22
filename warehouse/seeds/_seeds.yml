@@ -1,0 +1,22 @@
+version: 2
+
+seeds:
+  - name: gtfs_rt_validation_code_descriptions
+    description: |
+      A list of validation codes output by the GTFS RT validator, and their severities.
+      Originally sourced from https://docs.google.com/spreadsheets/d/1GDDaDlsBPCYn3dtYPSABnce9ns3ekJ8Jzfgyy56lZz4/edit#gid=617612870.
+    columns:
+      - name: code
+        tests:
+          - not_null
+          - unique
+
+  - name: gtfs_schedule_validation_code_descriptions
+    description: |
+      A list of validation codes output by the GTFS Schedule validator, and their severities.
+      Originally sourced from https://docs.google.com/spreadsheets/d/1GDDaDlsBPCYn3dtYPSABnce9ns3ekJ8Jzfgyy56lZz4/edit#gid=0.
+    columns:
+      - name: name
+        tests:
+          - not_null
+          - unique

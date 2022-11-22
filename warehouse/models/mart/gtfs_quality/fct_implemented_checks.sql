@@ -10,7 +10,14 @@ existing_checks AS (
     SELECT DISTINCT
         check,
         feature
-    FROM {{ ref('fct_daily_feed_guideline_checks') }}
+    FROM {{ ref('fct_daily_schedule_feed_guideline_checks') }}
+
+    UNION ALL
+
+    SELECT DISTINCT
+        check,
+        feature
+    FROM {{ ref('fct_daily_rt_feed_guideline_checks') }}
 ),
 
 fct_implemented_checks AS (
