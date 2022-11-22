@@ -44,7 +44,7 @@ DAGs are listed in alphabetical order, as they appear in the Airflow UI.
 `rt_loader_files` | Yes | No | **🔂 No** | N/A | |
 `sandbox` | N/A | N/A | N/A | N/A | Testing only; does not need to be re-run |
 `transform_warehouse` | Yes | No | Yes | N/A | Runs dbt warehouse |
-`unzip_and_validate_gtfs_schedule_` | Yes | No | **🔂 No** | N/A | |
+`unzip_and_validate_gtfs_schedule` | Yes | No | **🔂 No** | N/A | |
 
 ### Deprecated DAGs
 
@@ -57,6 +57,7 @@ The following DAGs are still listed in the Airflow UI even though they are **dep
 * `gtfs_views_staging`
 * `gtfs_views`
 * `parse_rt`
+* `payments_views`
 * `rt_timestamp_fix`
 * `rt_views`
 * `transitstacks_loader`
