@@ -14,7 +14,7 @@ You can find the Cal-ITP Analytics Portfolio at [analysis.calitp.org](https://an
 Before executing the build, there are a few prior steps you need to do.
 
 1. Set up netlify key:
-    * install netlify: `npm install -g netlify-cli`
+    * Install netlify: `npm install -g netlify-cli`
     * Navigate to your main directory
     * Edit your bash profile using Nano:
         * In your terminal, enter `nano ~/.bash_profile` to edit.
@@ -24,6 +24,7 @@ Before executing the build, there are a few prior steps you need to do.
         * To exit, press `CTRL` + `X`
         * Nano will ask if you want to save your changes. Type `Y` to save.
             * Type `N` to discard your changes and exit
+    * For the changes to take effect, open a new terminal or run `source ~/.bash_profile`
         * Back in your terminal, enter `env | grep NETLIFY` to see that your Netlify token is there
 
 2. Create a `.yml` file in [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites). Each `.yml` file is a site, so if you have separate research topics, they should each have their own `.yml` file.
