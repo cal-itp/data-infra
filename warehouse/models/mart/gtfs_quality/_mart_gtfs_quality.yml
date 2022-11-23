@@ -37,7 +37,7 @@ models:
         name: status
         tests:
           - dbt_utils.not_null_proportion:
-              at_least: 0.99
+              at_least: 0.75 # this is null in situations where a check did not exist in an older validator version
 
 
   - name: fct_daily_rt_feed_guideline_checks
