@@ -12,7 +12,7 @@ validation_errors_by_day AS (
         date,
         SUM(total_notices) AS sum_total_notices
     FROM validation_notices
-    WHERE severity = "ERROR"
+    WHERE severity = 'Error'
     GROUP BY 1, 2
 ),
 

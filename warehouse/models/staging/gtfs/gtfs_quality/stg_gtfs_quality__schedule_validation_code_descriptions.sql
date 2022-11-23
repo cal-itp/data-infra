@@ -10,7 +10,7 @@ v4 AS (
 
 stg_gtfs_quality__schedule_validation_code_descriptions AS (
     SELECT
-        "type" AS severity,
+        `type` AS severity,
         Name AS code,
         Human_Readable_Description AS description,
         'v3.1.1' AS gtfs_validator_version, -- this has to match what's in the validator Dockerfile
@@ -19,7 +19,7 @@ stg_gtfs_quality__schedule_validation_code_descriptions AS (
     UNION ALL
 
     SELECT
-        "type" AS severity,
+        `type` AS severity,
         Name AS code,
         Human_Readable_Description AS description,
         'v4.0.0' AS gtfs_validator_version, -- this has to match what's in the validator Dockerfile

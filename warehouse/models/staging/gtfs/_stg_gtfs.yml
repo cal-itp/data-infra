@@ -396,11 +396,13 @@ models:
       - name: feed_publisher_url
         description: '{{ doc("gtfs_feed_info__feed_publisher_url") }}'
         tests:
-        - not_null
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
       - name: feed_lang
         description: '{{ doc("gtfs_feed_info__feed_lang") }}'
         tests:
-        - not_null
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
       - name: default_lang
         description: '{{ doc("gtfs_feed_info__default_lang") }}'
       - name: feed_start_date
