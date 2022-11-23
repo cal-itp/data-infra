@@ -16,7 +16,8 @@ stg_gtfs_schedule__validation_outcomes AS (
         success AS validation_success,
         exception AS validation_exception,
         validation.filename AS validation_filename,
-        validation.system_errors AS validation_system_errors,
+        -- TODO: this is failing with some JSON error
+--         validation.system_errors AS validation_system_errors,
         base64_url,
         `extract`.ts AS extract_ts
     FROM raw_validation_outcomes

@@ -38,6 +38,7 @@ fct_daily_schedule_feed_validation_notices AS (
         outcomes.validation_success,
         outcomes.validation_exception,
         versions.gtfs_validator_version,
+        COUNT(DISTINCT outcomes.extract_ts) AS n_extracts,
         COALESCE(
             SUM(total_notices),
             CASE WHEN validation_success THEN 0 END
@@ -47,7 +48,7 @@ fct_daily_schedule_feed_validation_notices AS (
         ON daily_feeds.feed_key = dim_feeds.key
     LEFT JOIN validation_outcomes AS outcomes
         ON dim_feeds.base64_url = outcomes.base64_url
-        AND dim_feeds._valid_from = outcomes.extract_ts
+        AND daily_feeds.date = EXTRACT(DATE FROM outcomes.extract_ts)
     LEFT JOIN observed_validator_versions AS versions
         ON daily_feeds.date = versions.dt
     LEFT JOIN code_descriptions AS codes

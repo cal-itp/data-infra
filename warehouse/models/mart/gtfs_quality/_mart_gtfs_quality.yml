@@ -109,18 +109,27 @@ models:
       - *schedule_feed_key
       - name: gtfs_validator_version
         tests:
-          - not_null
+          - not_null:
+              config:
+                where: validation_success is not null
       - name: code
         tests:
-          - not_null
+          - not_null:
+              config:
+                where: validation_success is not null
       - name: severity
         tests:
-          - not_null
+          - not_null:
+              config:
+                where: validation_success is not null
       - name: validation_success
         tests:
           - dbt_utils.not_null_proportion:
               at_least: 0.99
       - name: validation_exception
+      - name: n_extracts
+        tests:
+          - not_null
       - name: total_notices
         tests:
           - dbt_utils.not_null_proportion:
