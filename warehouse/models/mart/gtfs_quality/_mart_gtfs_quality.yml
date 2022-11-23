@@ -139,3 +139,15 @@ models:
           expression: "is_implemented"
     columns:
       - name: is_implemented
+
+# TODO: This should be filled out once the reports site is actually migrated
+#exposures:
+#  - name: calitp_reports_site
+#    type: application
+#    maturity: medium
+#    url: "reports.calitp.org"
+#    description: Cal-ITP reports site
+#    depends_on:
+#      - ref(" ")
+#    owner:
+#      email: eric.d@jarv.us
