@@ -169,6 +169,7 @@ models:
           If you are performing an analysis where using a regional combined feed is
           inappropriate (even though that is the customer-facing data), this field can
           help you assess other alternative feeds for the same services and organizations.
+          Not specified (null) for feeds with no relationship to regional feeds.
       - name: base64_url
       - name: deprecated_date
         description: |
@@ -248,6 +249,7 @@ models:
           should be receiving GTFS data in trip planning applications. Every service/dataset
           type combo with a record in this table should have exactly one of those records
           marked as customer-facing.
+          This field is "true" for customer-facing feeds and otherwise null.
           This field is intended to replace the `category` field over time.
       - name: category
         description: |
