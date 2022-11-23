@@ -5,8 +5,8 @@ v3 AS (
 ),
 
 v4 AS (
-    SELECT * FROPM {{ ref('gtfs_schedule_validation_code_descriptions_v4_0_0') }}
-)
+    SELECT * FROM {{ ref('gtfs_schedule_validation_code_descriptions_v4_0_0') }}
+),
 
 stg_gtfs_quality__schedule_validation_code_descriptions AS (
     SELECT
