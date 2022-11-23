@@ -1,5 +1,5 @@
-WITH stg_enriched_device_transaction_purchases AS (
-    {{
+WITH stg_enriched_device_transactions AS (
+{{
         sql_enrich_duplicates(
             source('payments', 'device_transactions'),
             ['littlepay_transaction_id'],
@@ -10,5 +10,7 @@ WITH stg_enriched_device_transaction_purchases AS (
 
 SELECT
     *,
-    DATETIME(TIMESTAMP(transaction_date_time_utc), "America/Los_Angeles") AS transaction_date_time_pacific
-FROM stg_enriched_device_transaction_purchases
+    DATETIME(
+        TIMESTAMP(transaction_date_time_utc), "America/Los_Angeles"
+    ) AS transaction_date_time_pacific
+FROM stg_enriched_device_transactions
