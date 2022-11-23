@@ -15,11 +15,6 @@ dim_routes AS (
     FROM {{ ref('dim_routes') }}
 ),
 
-dim_stops AS (
-    SELECT *
-    FROM {{ ref('dim_stops') }}
-),
-
 dim_schedule_feeds AS (
     SELECT * FROM {{ ref('dim_schedule_feeds') }}
 ),
@@ -38,7 +33,7 @@ stop_times_grouped AS (
 
 fct_daily_scheduled_trips AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['service_index.service_date', 'trips.key']) }} as key,
+        {{ dbt_utils.surrogate_key(['service_index.service_date', 'trips.key']) }} AS key,
         service_index.service_date,
         service_index.feed_key,
         service_index.service_id,
@@ -55,29 +50,29 @@ fct_daily_scheduled_trips AS (
 
         stop_times_grouped.n_stops,
         stop_times_grouped.n_stop_times,
-        stop_times_grouped.trip_first_departure_ts,
-        stop_times_grouped.trip_last_arrival_ts,
+        stop_times_grouped.trip_first_departure_sec,
+        stop_times_grouped.trip_last_arrival_sec,
         stop_times_grouped.service_hours,
         stop_times_grouped.contains_warning_duplicate_primary_key AS contains_warning_duplicate_stop_times_primary_key,
         stop_times_grouped.contains_warning_missing_foreign_key_stop_id
 
     FROM int_gtfs_schedule__daily_scheduled_service_index AS service_index
-    LEFT JOIN dim_trips AS trips
+    INNER JOIN dim_trips AS trips
         ON service_index.feed_key = trips.feed_key
-        AND service_index.service_id = trips.service_id
+            AND service_index.service_id = trips.service_id
     LEFT JOIN dim_routes AS routes
         ON service_index.feed_key = routes.feed_key
-        AND trips.route_id = routes.route_id
+            AND trips.route_id = routes.route_id
     LEFT JOIN dim_shapes_arrays AS shapes
         ON service_index.feed_key = shapes.feed_key
-        AND trips.shape_id = shapes.shape_id
+            AND trips.shape_id = shapes.shape_id
     LEFT JOIN dim_schedule_feeds AS feeds
         ON service_index.feed_key = feeds.key
     LEFT JOIN urls_to_gtfs_datasets
         ON feeds.base64_url = urls_to_gtfs_datasets.base64_url
     LEFT JOIN stop_times_grouped
         ON service_index.feed_key = stop_times_grouped.feed_key
-        AND trips.trip_id = stop_times_grouped.trip_id
+            AND trips.trip_id = stop_times_grouped.trip_id
 )
 
 SELECT * FROM fct_daily_scheduled_trips
