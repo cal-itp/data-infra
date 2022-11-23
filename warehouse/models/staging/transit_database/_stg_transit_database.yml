@@ -144,6 +144,7 @@ models:
       - name: service_key
       - name: gtfs_dataset_key
       - name: dataset_type
+      - name: customer_facing
       - name: category
       - name: agency_id
       - name: network_id

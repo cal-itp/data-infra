@@ -233,6 +233,13 @@ models:
           - relationships:
              to: ref('dim_gtfs_datasets')
              field: key
+      - name: customer_facing
+        description: |
+          Indicates that this gtfs service data relationship represents the primary way that customers
+          should be receiving GTFS data in trip planning applications. Every service/dataset
+          type combo with a record in this table should have exactly one of those records
+          marked as customer-facing.
+          This field is intended to replace the `category` field over time.
       - name: category
         description: |
           "Primary" (indicating that this is the canonical dataset for this service) or
