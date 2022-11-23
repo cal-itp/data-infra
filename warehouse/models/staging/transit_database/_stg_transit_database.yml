@@ -105,6 +105,7 @@ models:
         tests: *primary_key_tests
       - *name
       - name: data
+      - name: regional_feed_type
       - name: fares_v2_status
       - name: fares_notes
       - name: pathways_status
@@ -144,6 +145,7 @@ models:
       - name: service_key
       - name: gtfs_dataset_key
       - name: dataset_type
+      - name: customer_facing
       - name: category
       - name: agency_id
       - name: network_id

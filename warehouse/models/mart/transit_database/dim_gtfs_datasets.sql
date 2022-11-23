@@ -13,6 +13,7 @@ dim_gtfs_datasets AS (
         airtable_record_id,
         name,
         data,
+        regional_feed_type,
         uri,
         future_uri,
         aggregated_to_gtfs_dataset_key,
