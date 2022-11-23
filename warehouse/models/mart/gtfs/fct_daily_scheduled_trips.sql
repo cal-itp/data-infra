@@ -51,14 +51,14 @@ fct_daily_scheduled_trips AS (
 
         shapes.key AS shape_array_key,
         urls_to_gtfs_datasets.gtfs_dataset_key AS gtfs_dataset_key,
-        trips.warning_duplicate_primary_key AS warning_duplicate_trip_primary_key,
+        trips.warning_duplicate_primary_key AS contains_warning_duplicate_trip_primary_key,
 
         stop_times_grouped.n_stops,
         stop_times_grouped.n_stop_times,
         stop_times_grouped.trip_first_departure_ts,
         stop_times_grouped.trip_last_arrival_ts,
         stop_times_grouped.service_hours,
-        stop_times_grouped.contains_warning_duplicate_primary_key,
+        stop_times_grouped.contains_warning_duplicate_primary_key AS contains_warning_duplicate_stop_times_primary_key,
         stop_times_grouped.contains_warning_missing_foreign_key_stop_id
 
     FROM int_gtfs_schedule__daily_scheduled_service_index AS service_index
