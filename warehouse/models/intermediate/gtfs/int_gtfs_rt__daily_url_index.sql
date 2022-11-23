@@ -15,7 +15,11 @@ int_gtfs_rt__daily_url_index AS (
         configs.dt,
         url_to_encode AS string_url,
         base64_url,
-        data AS type
+        CASE
+            WHEN data = "GTFS Alerts" THEN "service_alerts"
+            WHEN data = "GTFS VehiclePositions" THEN "vehicle_positions"
+            WHEN data = "GTFS TripUpdates" THEN "trip_updates"
+        END AS type
     FROM int_gtfs_rt__distinct_download_configs AS configs
     LEFT JOIN stg_transit_database__gtfs_datasets AS datasets
         ON configs._config_extract_ts = datasets.ts
