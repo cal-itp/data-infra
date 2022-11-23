@@ -105,6 +105,7 @@ models:
         tests: *primary_key_tests
       - *name
       - name: data
+      - name: regional_feed_type
       - name: fares_v2_status
       - name: fares_notes
       - name: pathways_status

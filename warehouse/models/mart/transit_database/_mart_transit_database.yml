@@ -160,6 +160,15 @@ models:
         description: |
           If "true", indicates that this dataset should be ingested by the
           Cal-ITP data pipeline. Nulls indicate dataset should not be ingested.
+      - name: regional_feed_type
+        description: |
+          Describes whether this feed is a combined regional feed or has a relation
+          to a combined regional feed in some manner.
+          For example for MTC 511, the combined regional feed has type "Combined
+          Regional Feed", and the MTC-published subfeeds have type "Regional Subfeed".
+          If you are performing an analysis where using a regional combined feed is
+          inappropriate (even though that is the customer-facing data), this field can
+          help you assess other alternative feeds for the same services and organizations.
       - name: base64_url
       - name: deprecated_date
         description: |
