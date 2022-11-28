@@ -1187,6 +1187,22 @@ models:
         description: |
           Rows with `true` in this column are missing the required `stop_id` value.
           This means they will fail to join with `stop` related information.
+      - name: arrival_sec
+        description: |
+          This is a calculated field that does not come from GTFS - it is not a timestamp and can't be treated as such.
+
+          Represents `arrival_time` as a total number of seconds after midnight of the first day of the given trip.
+          For example, `arrival_time = 21:30:45` would lead to `arrival_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
+          This allows us to perform duration calculations and handle timestamps that wrap past midnight like
+          `25:40:00`, which are allowed in GTFS.
+      - name: departure_sec
+        description: |
+          This is a calculated field that does not come from GTFS - it is not a timestamp and can't be treated as such.
+
+          Represents `departure_time` as a total number of seconds after midnight of the first day of the given trip.
+          For example, `departure_time = 21:30:45` would lead to `departure_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
+          This allows us to perform duration calculations and handle timestamps that wrap past midnight like
+          `25:40:00`, which are allowed in GTFS.
     meta:
       publish.gis_coordinate_system_epsg: WGS84
   - name: fct_daily_scheduled_trips
@@ -1201,7 +1217,7 @@ models:
       - name: key
         tests:
           - unique:
-              where: "not warning_duplicate_trip_primary_key"
+              where: "not contains_warning_duplicate_trip_primary_key"
           - not_null
       - name: feed_key
         description: Foreign key to dim_schedule_feeds.
@@ -1222,23 +1238,61 @@ models:
           - relationships:
               to: ref('dim_trips')
               field: key
+      - name: trip_id
       - name: route_key
         description: Foreign key to dim_routes.
         tests:
           - relationships:
               to: ref('dim_routes')
               field: key
+      - name: route_id
       - name: shape_array_key
         description: Foreign key to dim_shapes_arrays.
         tests:
           - relationships:
               to: ref('dim_shapes_arrays')
               field: key
-      - name: warning_duplicate_trip_primary_key
+      - name: gtfs_dataset_key
+      - name: contains_warning_duplicate_trip_primary_key
         description: |
           Rows with `true` in this column have a duplicate primary key in dim_trips;
           i.e., `trip_id` is duplicated within an individual feed instance.
           Treat these rows with caution.
+      - name: n_stops
+        description: |
+          A distinct count of stop_id by trip
+          Because this represents distinct stop_id values, it is not appropriate to sum across different trips.
+      - name: n_stop_times
+        description: |
+          A count of stop events by trip
+      - name: trip_first_departure_sec
+        description: |
+          A trip's earliest departure, calculated in seconds of the day
+      - name: trip_last_arrival_sec
+        description: |
+          A trip's last arrival, calculated in seconds of the day
+      - name: service_hours
+        description: |
+          A trip's total hours of service, calculated by subtracting `trip_last_arrival_sec` from
+          `trip_first_departure_sec` and converting to hours
+      - name: contains_warning_duplicate_stop_times_primary_key
+        description: |
+          Rows with `true` in this column indicate that the columns in this table that are aggregated from
+          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
+          and `service_hours`) contain at least one row that had a duplicate primary key in the source stop times data.
+
+          I.e., at least one row being aggregated had a `trip_id` / `stop_sequence` pair that was not unique
+          in the input data. This indicates that data quality issues were present in the stop times data
+          that is being summarized here, and counts may be inflated due to multiple rows with identical identifiers.
+      - name: contains_warning_missing_foreign_key_stop_id
+        description: |
+          Rows with `true` in this column indicate that the columns in this table that are aggregated from
+          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
+          and `service_hours`) contain at least one row that had a missing `stop_id` foreign key in the source stops data.
+
+          I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
+          in the input data. This indicates that data quality issues were present in the stop times data
+          that is being summarized here, and the count of distinct `stop_id`s at the trip level may be incorrect.
   - name: fct_daily_rt_feed_files
     description: |
       Each row is a date / URL pair with a summary of data aggregation outcomes.
@@ -1304,3 +1358,59 @@ models:
         - not_null
       - *_valid_from
       - *_valid_to
+  - name: fct_daily_scheduled_service_summary
+    description: |
+      This is daily service totals by feed.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - service_date
+            - feed_key
+      - dbt_utils.expression_is_true:
+          expression: "ttl_service_hours >= 0"
+    columns:
+      - name: service_date
+        description: Date on which this service level was present
+        tests:
+          - not_null
+      - name: feed_key
+        tests:
+          - not_null
+        description: feed_key only present with active service on date
+      - name: ttl_service_hours
+        description: Total service hours across entire feed on date
+      - name: n_trips
+        description: Total number of trips ran on date, if any
+      - name: first_departure_sec
+        description: Time of first departure on date
+      - name: last_arrival_sec
+        description: Time of last departure on date
+      - name: n_stop_times
+        description: |
+          Total number of stop events observed
+      - name: n_routes
+        description: |
+          Total number of routes that had trips scheduled on this day
+      - name: contains_warning_duplicate_stop_times_primary_key
+        description: |
+          Rows with `true` in this column indicate that the columns in this table that are aggregated from
+          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
+          and `service_hours`) contain at least one row that had a duplicate primary key in the source stop times data.
+
+          I.e., at least one row being aggregated had a `trip_id` / `stop_sequence` pair that was not unique
+          in the input data. This indicates that data quality issues were present in the stop times data
+          that is being summarized here, and counts may be inflated due to multiple rows with identical identifiers.
+      - name: contains_warning_duplicate_trip_primary_key
+        description: |
+          Rows with `true` in this column indicate that `dim_trips` contains duplicates of this trip primary key.
+
+          i.e., `trip_id` is duplicated within an individual feed instance.
+      - name: contains_warning_missing_foreign_key_stop_id
+        description: |
+          Rows with `true` in this column indicate that the columns in this table that are aggregated from
+          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
+          and `service_hours`) contain at least one row that had a missing `stop_id` foreign key in the source stops data.
+
+          I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
+          in the input data. This indicates that data quality issues were present in the stop times data
+          that is being summarized here.

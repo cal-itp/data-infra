@@ -299,3 +299,33 @@ models:
       - name: dt
       - name: ts
       - name: base64_url
+
+  - name: int_gtfs_schedule__stop_times_grouped
+    description: |
+      Stop times grouped by trip_id with trip aggregation calculations.
+    columns:
+      - name: feed_key
+      - name: trip_id
+      - name: n_stops
+      - name: n_stop_times
+      - name: trip_first_departure_sec
+      - name: trip_last_arrival_sec
+      - name: service_hours
+      - name: contains_warning_duplicate_stop_times_primary_key
+        description: |
+          Rows with `true` in this column indicate that the columns in this table that are aggregated from
+          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_ts`, `trip_last_arrival_ts`,
+          and `service_hours`) contain at least one row that had a duplicate primary key in the source stop times data.
+
+          I.e., at least one row being aggregated had a `trip_id` / `stop_sequence` pair that was not unique
+          in the input data. This indicates that data quality issues were present in the stop times data
+          that is being summarized here, and counts may be inflated due to multiple rows with identical identifiers.
+      - name: contains_warning_missing_foreign_key_stop_id
+        description: |
+          Rows with `true` in this column indicate that the columns in this table that are aggregated from
+          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_ts`, `trip_last_arrival_ts`,
+          and `service_hours`) contain at least one row that had a missing `stop_id` foreign key in the source stops data.
+
+          I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
+          in the input data. This indicates that data quality issues were present in the stop times data
+          that is being summarized here, and the count of distinct `stop_id`s at the trip level may be incorrect.

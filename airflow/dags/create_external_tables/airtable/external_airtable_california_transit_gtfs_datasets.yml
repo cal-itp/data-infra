@@ -142,6 +142,9 @@ schema_fields:
   - name: organizations_copy
     type: STRING
     mode: REPEATED
+  - name: regional_feed_type
+    type: STRING
+    mode: NULLABLE
   - name: id
     type: STRING
     mode: NULLABLE

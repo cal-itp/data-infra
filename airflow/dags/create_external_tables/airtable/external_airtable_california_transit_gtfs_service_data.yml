@@ -107,6 +107,9 @@ schema_fields:
   - name: currently_operating__from_services_
     type: BOOLEAN
     mode: REPEATED
+  - name: customer_facing
+    type: BOOLEAN
+    mode: NULLABLE
   - name: id
     type: STRING
     mode: NULLABLE
