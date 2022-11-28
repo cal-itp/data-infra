@@ -21,8 +21,8 @@ WITH stg_gtfs_quality__intended_checks AS (
     SELECT {{ no_expired_services() }}, {{ best_practices_alignment() }}
     UNION ALL
     SELECT {{ no_rt_critical_validation_errors() }}, {{ compliance() }}
-    {# UNION ALL #}
-    {# SELECT {{ trip_id_alignment() }}, {{ fixed_route_completeness() }} #}
+    UNION ALL
+    SELECT {{ trip_id_alignment() }}, {{ fixed_route_completeness() }}
     {# UNION ALL #}
     {# SELECT {{ vehicle_positions_feed_present() }}, {{ compliance() }} #}
     {# UNION ALL #}

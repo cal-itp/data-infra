@@ -32,7 +32,7 @@
 {% endmacro %}
 
 {% macro trip_id_alignment() %}
-"All trip_ids provided in the GTFS-rt feed exist in the GTFS data"
+"All trip_ids provided in the GTFS-rt feed exist in the GTFS Schedule feed"
 {% endmacro %}
 
 {% macro vehicle_positions_feed_present() %}

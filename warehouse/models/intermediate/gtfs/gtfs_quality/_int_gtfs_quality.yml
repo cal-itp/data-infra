@@ -63,7 +63,6 @@ models:
     tests: *stg_gtfs_guideline_tests
     columns: *stg_gtfs_guideline_columns
 
-
   - name: int_gtfs_quality__shapes_file_present
     tests: *stg_gtfs_guideline_tests
     columns: *stg_gtfs_guideline_columns
@@ -103,3 +102,5 @@ models:
   - name: int_gtfs_quality__no_expired_services
     tests: *stg_gtfs_guideline_tests
     columns: *stg_gtfs_guideline_columns
+
+# todo: add tests for this PR
