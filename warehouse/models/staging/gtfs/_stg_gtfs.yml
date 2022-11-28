@@ -141,8 +141,8 @@ models:
       - name: agency_url
         description: '{{ doc("gtfs_agency__agency_url") }}'
         tests:
-        - not_null:
-            config:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
               severity: warn
       - name: agency_timezone
         description: '{{ doc("gtfs_agency__agency_timezone") }}'
@@ -174,9 +174,7 @@ models:
       - name: area_id
         description: '{{ doc("gtfs_areas__area_id") }}'
         tests:
-        - not_null:
-            config:
-              severity: warn
+        - not_null
       - name: area_name
         description: '{{ doc("gtfs_areas__area_name") }}'
   - name: stg_gtfs_schedule__attributions
@@ -235,9 +233,7 @@ models:
       - name: fare_id
         description: '{{ doc("gtfs_fare_attributes__fare_id") }}'
         tests:
-        - not_null:
-            config:
-              severity: warn
+        - not_null
       - name: price
         description: '{{ doc("gtfs_fare_attributes__price") }}'
         tests:
@@ -314,9 +310,7 @@ models:
       - name: fare_product_id
         description: '{{ doc("gtfs_fare_products__fare_product_id") }}'
         tests:
-        - not_null:
-            config:
-              severity: warn
+        - not_null
       - name: fare_product_name
         description: '{{ doc("gtfs_fare_products__fare_product_name") }}'
       - name: amount
@@ -352,9 +346,7 @@ models:
       - name: fare_id
         description: '{{ doc("gtfs_fare_rules__fare_id") }}'
         tests:
-        - not_null:
-            config:
-              severity: warn
+        - not_null
       - name: route_id
         description: '{{ doc("gtfs_fare_rules__route_id") }}'
       - name: origin_id
@@ -468,9 +460,7 @@ models:
       - name: trip_id
         description: '{{ doc("gtfs_frequencies__trip_id") }}'
         tests:
-        - not_null:
-            config:
-              severity: warn
+        - not_null
       - name: start_time
         description: '{{ doc("gtfs_frequencies__start_time") }}'
         tests:
@@ -507,9 +497,7 @@ models:
       - name: level_id
         description: '{{ doc("gtfs_levels__level_id") }}'
         tests:
-        - not_null:
-            config:
-              severity: warn
+        - not_null
       - name: level_index
         description: '{{ doc("gtfs_levels__level_index") }}'
         tests:
@@ -534,21 +522,15 @@ models:
       - name: pathway_id
         description: '{{ doc("gtfs_pathways__pathway_id") }}'
         tests:
-        - not_null:
-            config:
-              severity: warn
+        - not_null
       - name: from_stop_id
         description: '{{ doc("gtfs_pathways__from_stop_id") }}'
         tests:
-        - not_null:
-            config:
-              severity: warn
+        - not_null
       - name: to_stop_id
         description: '{{ doc("gtfs_pathways__to_stop_id") }}'
         tests:
-        - not_null:
-            config:
-              severity: warn
+        - not_null
       - name: pathway_mode
         description: '{{ doc("gtfs_pathways__pathway_mode") }}'
         tests:
@@ -591,9 +573,7 @@ models:
       - name: route_id
         description: '{{ doc("gtfs_routes__route_id") }}'
         tests:
-        - not_null:
-            config:
-              severity: warn
+        - not_null
       - name: agency_id
         description: '{{ doc("gtfs_routes__agency_id") }}'
       - name: route_short_name
@@ -638,9 +618,7 @@ models:
       - name: shape_id
         description: '{{ doc("gtfs_shapes__shape_id") }}'
         tests:
-        - not_null:
-            config:
-              severity: warn
+        - not_null
       - name: shape_pt_lat
         description: '{{ doc("gtfs_shapes__shape_pt_lat") }}'
         tests:
@@ -688,15 +666,11 @@ models:
       - name: area_id
         description: '{{ doc("gtfs_stop_areas__area_id") }}'
         tests:
-        - not_null:
-            config:
-              severity: warn
+        - not_null
       - name: stop_id
         description: '{{ doc("gtfs_stop_areas__stop_id") }}'
         tests:
-        - not_null:
-            config:
-              severity: warn
+        - not_null
   - name: stg_gtfs_schedule__stops
     description: |
       Cleaned GTFS schedule stop data.
@@ -714,9 +688,7 @@ models:
       - name: stop_id
         description: '{{ doc("gtfs_stops__stop_id") }}'
         tests:
-        - not_null:
-            config:
-              severity: warn
+        - not_null
       - name: stop_code
         description: '{{ doc("gtfs_stops__stop_code") }}'
       - name: stop_name
@@ -777,15 +749,11 @@ models:
       - name: from_stop_id
         description: '{{ doc("gtfs_transfers__from_stop_id") }}'
         tests:
-        - not_null:
-            config:
-              severity: warn
+        - not_null
       - name: to_stop_id
         description: '{{ doc("gtfs_transfers__to_stop_id") }}'
         tests:
-        - not_null:
-            config:
-              severity: warn
+        - not_null
       - name: transfer_type
         description: '{{ doc("gtfs_transfers__transfer_type") }}'
         tests:
@@ -867,21 +835,15 @@ models:
       - name: route_id
         description: '{{ doc("gtfs_trips__route_id") }}'
         tests:
-        - not_null:
-            config:
-              severity: warn
+        - not_null
       - name: service_id
         description: '{{ doc("gtfs_trips__service_id") }}'
         tests:
-        - not_null:
-            config:
-              severity: warn
+        - not_null
       - name: trip_id
         description: '{{ doc("gtfs_trips__trip_id") }}'
         tests:
-        - not_null:
-            config:
-              severity: warn
+        - not_null
       - name: trip_headsign
         description: '{{ doc("gtfs_trips__trip_headsign") }}'
       - name: trip_short_name
@@ -912,9 +874,7 @@ models:
       - name: service_id
         description: '{{ doc("gtfs_calendar__service_id") }}'
         tests:
-        - not_null:
-            config:
-              severity: warn
+        - not_null
       - name: monday
         description: '{{ doc("gtfs_calendar__monday") }}'
         tests:
@@ -986,9 +946,7 @@ models:
       - name: service_id
         description: '{{ doc("gtfs_calendar_dates__service_id") }}'
         tests:
-        - not_null:
-            config:
-              severity: warn
+        - not_null
       - name: date
         description: '{{ doc("gtfs_calendar_dates__date") }}'
         tests:
@@ -1024,9 +982,7 @@ models:
       - name: trip_id
         description: '{{ doc("gtfs_stop_times__trip_id") }}'
         tests:
-        - not_null:
-            config:
-              severity: warn
+        - not_null
       - name: arrival_time
         description: '{{ doc("gtfs_stop_times__arrival_time") }}'
       - name: departure_time
@@ -1034,9 +990,7 @@ models:
       - name: stop_id
         description: '{{ doc("gtfs_stop_times__stop_id") }}'
         tests:
-        - not_null:
-            config:
-              severity: warn
+        - not_null
       - name: stop_sequence
         description: '{{ doc("gtfs_stop_times__stop_sequence") }}'
         tests:
