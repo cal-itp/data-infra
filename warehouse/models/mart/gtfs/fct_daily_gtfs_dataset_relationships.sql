@@ -3,6 +3,7 @@
 WITH date_spine AS (
     SELECT *
     FROM {{ ref('util_gtfs_schedule_v2_date_spine') }}
+    WHERE date_day <= CURRENT_DATE()
 ),
 
 dim_provider_gtfs_data AS (
@@ -78,9 +79,47 @@ rt_join AS (
     FROM schedule_join AS sched
     {% for rt_type in ['service_alerts', 'vehicle_positions', 'trip_updates'] %}
     LEFT JOIN rt_gtfs_datasets AS {{ rt_type }}
-        ON sched.{{ rt_type }}_gtfs_dataset_key = {{ rt_type }}.gtfs_dataset_key
+        ON sched.{{ rt_type }}_gtfs_dataset_key = COALESCE({{ rt_type }}.gtfs_dataset_key, "")
         AND sched.date_day = {{ rt_type }}.dt
     {% endfor %}
+),
+
+fct_daily_gtfs_dataset_relationships AS (
+    SELECT
+        date_day AS date,
+        {{ dbt_utils.surrogate_key([
+            'date_day',
+            'key',
+            'schedule_base64_url',
+            'schedule_feed_key',
+            'service_alerts_base64_url',
+            'vehicle_positions_base64_url',
+            'trip_updates_base64_url']) }} AS key,
+        key AS dim_provider_gtfs_data_key,
+        service_key,
+        service_name,
+        organization_key,
+        organization_name,
+        itp_id,
+        category,
+        schedule_gtfs_dataset_key,
+        schedule_name,
+        service_alerts_gtfs_dataset_key,
+        service_alerts_name,
+        vehicle_positions_gtfs_dataset_key,
+        vehicle_positions_name,
+        trip_updates_gtfs_dataset_key,
+        trip_updates_name,
+        schedule_base64_url,
+        schedule_string_url,
+        schedule_feed_key,
+        service_alerts_base64_url,
+        service_alerts_string_url,
+        vehicle_positions_base64_url,
+        vehicle_positions_string_url,
+        trip_updates_base64_url,
+        trip_updates_string_url
+    FROM rt_join
 )
 
-SELECT * FROM rt_join
+SELECT * FROM fct_daily_gtfs_dataset_relationships

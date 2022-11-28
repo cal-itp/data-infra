@@ -1359,3 +1359,74 @@ models:
           I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
           in the input data. This indicates that data quality issues were present in the stop times data
           that is being summarized here.
+  - name: fct_daily_gtfs_dataset_relationships
+    description: |
+      A mapping of GTFS dataset record, organization, service, URL, and schedule feed key
+      relationships at the daily level.
+      The relationships between transit database entities (organizations, services,
+      and GTFS datasets) are not historical, i.e., these relationships are based on the current
+      state within the transit database and are the same for all dates.
+      The URL and `schedule_feed_key` values are historical and represent what values
+      were actually in effect on each date.
+    columns:
+      - name: date
+        description: |
+          Date on which these relationships were "in effect".
+      - name: key
+        description: Synthetic key.
+        tests:
+          - not_null
+          - unique
+      - name: dim_provider_gtfs_data_key
+        description: |
+          Foreign key to `dim_provider_gtfs_data`.
+        tests:
+          - not_null
+      - name: service_key
+        description: |
+          Foreign key to `dim_services`.
+      - name: service_name
+        description: |
+          Name from `dim_services` for readability, not to be used for joins.
+      - name: organization_key
+        description: |
+          Foreign key to `dim_organizations`.
+      - name: organization_name
+        description: |
+          Name from `dim_organizations` for readability, not to be used for joins.
+      - name: itp_id
+        description: |
+          ITP ID value looked up from `dim_organizations`. Note that this value
+          will not be unique for a given date if this organization manages multiple services.
+      - name: category
+        description: |
+          Category (precursor or primary.)
+      - name: schedule_gtfs_dataset_key
+        description: &gtfs_dataset_key_desc |
+          Foreign key to `dim_gtfs_datasets`.
+      - name: schedule_name
+        description: &gtfs_dataset_name_desc |
+          Name from `dim_gtfs_datasets` for readability, not to be used for joins.
+      - name: service_alerts_gtfs_dataset_key
+        description: *gtfs_dataset_key_desc
+      - name: service_alerts_name
+        description: *gtfs_dataset_name_desc
+      - name: vehicle_positions_gtfs_dataset_key
+        description: *gtfs_dataset_key_desc
+      - name: vehicle_positions_name
+        description: *gtfs_dataset_name_desc
+      - name: trip_updates_gtfs_dataset_key
+        description: *gtfs_dataset_key_desc
+      - name: trip_updates_name
+        description: *gtfs_dataset_name_desc
+      - name: schedule_base64_url
+      - name: schedule_string_url
+      - name: schedule_feed_key
+        description: |
+          Foreign key to `dim_schedule_feeds`.
+      - name: service_alerts_base64_url
+      - name: service_alerts_string_url
+      - name: vehicle_positions_base64_url
+      - name: vehicle_positions_string_url
+      - name: trip_updates_base64_url
+      - name: trip_updates_string_url
