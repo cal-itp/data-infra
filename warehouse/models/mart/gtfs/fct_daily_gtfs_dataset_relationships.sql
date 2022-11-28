@@ -45,6 +45,7 @@ schedule_daily_url_index AS (
         base64_url,
         {{ from_url_safe_base64('base64_url') }} AS string_url
     FROM int_gtfs_schedule__joined_feed_outcomes
+    QUALIFY RANK() OVER(PARTITION BY dt, gtfs_dataset_key, base64_url ORDER BY ts DESC) = 1
 ),
 
 quartet_cross_join AS (
