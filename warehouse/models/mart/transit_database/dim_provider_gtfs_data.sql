@@ -37,6 +37,7 @@ dim_provider_service_gtfs AS (
         customer_facing,
         gtfs_dataset_key_schedule AS schedule_gtfs_dataset_key,
         schedule.name AS schedule_name,
+        schedule.regional_feed_type AS regional_feed_type,
         gtfs_dataset_key_service_alerts AS service_alerts_gtfs_dataset_key,
         service_alerts.name AS service_alerts_name,
         gtfs_dataset_key_vehicle_positions AS vehicle_positions_gtfs_dataset_key,
