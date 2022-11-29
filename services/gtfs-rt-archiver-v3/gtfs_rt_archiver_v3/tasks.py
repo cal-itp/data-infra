@@ -2,6 +2,7 @@ import os
 import traceback
 from datetime import datetime
 from functools import wraps
+from pathlib import Path
 
 import humanize
 import orjson
@@ -177,3 +178,4 @@ def fetch(tick: datetime, config: GTFSDownloadConfig):
             **labels,
             content_type=extract.response_headers.get("Content-Type", "").strip(),
         ).inc(len(content))
+        Path(os.getenv("LAST_FETCH_FILE")).touch()
