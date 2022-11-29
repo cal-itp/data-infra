@@ -4,6 +4,7 @@ import os
 import random
 import time
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import List, Tuple
 
 import pendulum
@@ -56,6 +57,7 @@ def get_configs() -> Tuple[pendulum.DateTime, List[GTFSDownloadConfig]]:
 def main(
     port: int = os.getenv("TICKER_PROMETHEUS_PORT", 9102),
     load_env_secrets: bool = False,
+    touch_file: Path = os.getenv("LAST_TICK_FILE"),
 ):
     sentry_sdk.init(environment=os.getenv("AIRFLOW_ENV"))
     start_http_server(port)
@@ -68,6 +70,7 @@ def main(
     huey.flush()
 
     def tick(second):
+        touch_file.touch()
         start = pendulum.now()
         dt = datetime.now(timezone.utc).replace(second=second, microsecond=0)
         typer.secho(f"ticking {dt}")
