@@ -1,5 +1,5 @@
 WITH stg_enriched_micropayment_device_transactions AS (
-    {{
+{{
         sql_enrich_duplicates(
             source('payments', 'micropayment_device_transactions'),
             ['calitp_hash'],
