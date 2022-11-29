@@ -99,3 +99,7 @@ models:
   - name: int_gtfs_quality__passes_fares_validator
     tests: *stg_gtfs_guideline_tests
     columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__no_expired_services
+    tests: *stg_gtfs_guideline_tests
+    columns: *stg_gtfs_guideline_columns

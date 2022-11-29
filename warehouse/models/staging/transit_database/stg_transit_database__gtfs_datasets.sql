@@ -64,6 +64,7 @@ stg_transit_database__gtfs_datasets AS (
         {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         data,
         data_quality_pipeline,
+        regional_feed_type,
         fares_v2_status,
         fares_notes,
         pathways_status,
