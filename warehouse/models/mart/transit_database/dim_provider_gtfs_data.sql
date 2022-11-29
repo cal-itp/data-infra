@@ -34,6 +34,7 @@ dim_provider_service_gtfs AS (
         organizations.name AS organization_name,
         organizations.itp_id AS itp_id,
         category,
+        customer_facing,
         gtfs_dataset_key_schedule AS schedule_gtfs_dataset_key,
         schedule.name AS schedule_name,
         gtfs_dataset_key_service_alerts AS service_alerts_gtfs_dataset_key,

@@ -1398,9 +1398,15 @@ models:
         description: |
           ITP ID value looked up from `dim_organizations`. Note that this value
           will not be unique for a given date if this organization manages multiple services.
-      - name: category
+      - name: customer_facing
         description: |
-          Category (precursor or primary.)
+          If true, we believe this GTFS data is customer-facing, i.e., ingested
+          by trip-planning applications for this service/organization.
+          If null, we believe that this GTFS data is not customer-facing, i.e., it
+          is data that is not ingested by trip-planning applications.
+          Generally, customer-facing data should be used for analysis, because it
+          represents the data that is being used for decision-making by customers and
+          should be the highest-quality/most accurate data available.
       - name: schedule_gtfs_dataset_key
         description: &gtfs_dataset_key_desc |
           Foreign key to `dim_gtfs_datasets`.

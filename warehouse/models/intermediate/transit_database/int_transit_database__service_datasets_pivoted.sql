@@ -37,6 +37,7 @@ datasets_services_joined AS (
             ELSE dim_gtfs_datasets.schedule_to_use_for_rt_validation_gtfs_dataset_key
         END AS associated_gtfs_schedule_gtfs_dataset_key,
         category,
+        customer_facing,
         dim_gtfs_datasets.name AS dataset_name,
         CASE
             WHEN data = 'GTFS Schedule' THEN 'schedule'
@@ -55,6 +56,7 @@ dedupe_torrance AS (
         service_key,
         gtfs_dataset_key,
         category,
+        customer_facing,
         type,
         associated_gtfs_schedule_gtfs_dataset_key,
         RANK() OVER(

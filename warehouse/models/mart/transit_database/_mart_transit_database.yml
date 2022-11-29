@@ -370,6 +370,15 @@ models:
         description: |
           Service/dataset relationship type; "primary" indicates that we believe that this
           set of datasets is ingested by trip planners (and therefore is rider-facing) for this service.
+      - name: customer_facing
+        description: |
+          If true, we believe this GTFS data is customer-facing, i.e., ingested
+          by trip-planning applications for this service/organization.
+          If null, we believe that this GTFS data is not customer-facing, i.e., it
+          is data that is not ingested by trip-planning applications.
+          Generally, customer-facing data should be used for analysis, because it
+          represents the data that is being used for decision-making by customers and
+          should be the highest-quality/most accurate data available.
   - name: dim_ntd_agency_info
     description: |
       2018 NTD Agency Info Table

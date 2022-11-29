@@ -102,7 +102,7 @@ fct_daily_gtfs_dataset_relationships AS (
         organization_key,
         organization_name,
         itp_id,
-        category,
+        customer_facing,
         schedule_gtfs_dataset_key,
         schedule_name,
         service_alerts_gtfs_dataset_key,
