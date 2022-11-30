@@ -339,7 +339,7 @@ models:
              field: key
           - unique:
               config:
-                where: category = "primary"
+                where: customer_facing
       - name: schedule_gtfs_dataset_key
         tests:
           - &ref_gtfs_datasets_key
@@ -379,6 +379,21 @@ models:
           Generally, customer-facing data should be used for analysis, because it
           represents the data that is being used for decision-making by customers and
           should be the highest-quality/most accurate data available.
+      - name: regional_feed_type
+        description: |
+          This is only populated for GTFS datasets that have some relationship with a regional,
+          combined feed like MTC 511 or VCTC.
+          The types are:
+          - "Combined Regional Feed" - These GTFS datasets contain information
+            about services managed by a variety of different organizations. If the
+            customer-facing feed for an organization or service is this category,
+            users may need to filter within feed data when doing more granular (ex.
+            agency-level) analysis.
+          - "Regional Subfeed" - Currently this category only applies to MTC 511, which provides
+            an option to query the combined regional feed for a given agency's data.
+          - "Regional Precursor Feed" - This category applies to agencies whose data appears in a
+            combined regional feed but who produce some other independent dataset.
+            The independent dataset may be an input into the combined regional feed.
   - name: dim_ntd_agency_info
     description: |
       2018 NTD Agency Info Table
