@@ -58,7 +58,7 @@ models:
           Core: funded by Caltrans/can control or influence somewhat
           Other Public Transit: (publicly available or managed) and publicly funded transit
           Other Transit: transit that isn't the above
-      - name: ntp_id
+      - name: ntd_id
         description: National Transit Database (NTD) ID
       - name: alias
       - name: gtfs_static_status
@@ -73,6 +73,9 @@ models:
           records with realtime GTFS and at least one managed service has complete RT coverage (i.e.,
           all three RT feed types: vehicle positions, trip updates, and service alerts).
           Otherwise, status is "RT Incomplete".
+      - name: hubspot_company_record_id
+        description: |
+          Organization's ID in Hubspot CRM.
   - name: dim_services
     description: '{{ doc("services_table") }}'
     columns:
