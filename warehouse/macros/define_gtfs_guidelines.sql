@@ -50,7 +50,7 @@
 "Service alerts RT feed is present"
 {% endmacro %}
 
--- Remove above 3 checks ocne v1 guideline checks table is deprecated
+-- Remove above 3 macros once v1 guideline checks table is deprecated
 
 {% macro feed_present_vehicle_positions() %}
 "Vehicle positions RT feed is present"
