@@ -23,12 +23,12 @@ WITH stg_gtfs_quality__intended_checks AS (
     SELECT {{ no_rt_critical_validation_errors() }}, {{ compliance() }}
     {# UNION ALL #}
     {# SELECT {{ trip_id_alignment() }}, {{ fixed_route_completeness() }} #}
-    {# UNION ALL #}
-    {# SELECT {{ vehicle_positions_feed_present() }}, {{ compliance() }} #}
-    {# UNION ALL #}
-    {# SELECT {{ trip_updates_feed_present() }}, {{ compliance() }} #}
-    {# UNION ALL #}
-    {# SELECT {{ service_alerts_feed_present() }}, {{ compliance() }} #}
+    UNION ALL
+    SELECT {{ feed_present_vehicle_positions() }}, {{ compliance() }}
+    UNION ALL
+    SELECT {{ feed_present_trip_updates() }}, {{ compliance() }}
+    UNION ALL
+    SELECT {{ feed_present_service_alerts() }}, {{ compliance() }}
     {# UNION ALL #}
     {# SELECT {{ schedule_feed_on_transitland() }}, {{ feed_aggregator_availability() }} #}
     {# UNION ALL #}
