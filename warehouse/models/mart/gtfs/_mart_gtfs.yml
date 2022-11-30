@@ -1359,7 +1359,7 @@ models:
           I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
           in the input data. This indicates that data quality issues were present in the stop times data
           that is being summarized here.
-  - name: fct_daily_gtfs_dataset_relationships
+  - name: fct_daily_gtfs_organization_service_mappings
     description: |
       A mapping of GTFS dataset record, organization, service, URL, and schedule feed key
       relationships at the daily level.

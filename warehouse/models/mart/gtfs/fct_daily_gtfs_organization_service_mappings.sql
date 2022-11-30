@@ -85,7 +85,7 @@ rt_join AS (
     {% endfor %}
 ),
 
-fct_daily_gtfs_dataset_relationships AS (
+fct_daily_gtfs_organization_service_mappings AS (
     SELECT
         date_day AS date,
         {{ dbt_utils.surrogate_key([
@@ -123,4 +123,4 @@ fct_daily_gtfs_dataset_relationships AS (
     FROM rt_join
 )
 
-SELECT * FROM fct_daily_gtfs_dataset_relationships
+SELECT * FROM fct_daily_gtfs_organization_service_mappings
