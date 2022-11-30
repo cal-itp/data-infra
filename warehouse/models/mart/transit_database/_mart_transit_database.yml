@@ -405,6 +405,13 @@ models:
       - name: agency_id
       - name: network_id
       - name: route_id
+      - name: ntd_id
+        description: |
+          Five digit NTD ID for this organization.
+          Organization <--> NTD mappings are based on NTD 2018 data.
+      - name: hubspot_company_record_id
+        description: |
+          Hubspot CRM record ID for this organization.
   - name: dim_ntd_agency_info
     description: |
       2018 NTD Agency Info Table

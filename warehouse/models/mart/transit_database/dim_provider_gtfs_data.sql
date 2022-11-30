@@ -37,6 +37,8 @@ dim_provider_service_gtfs AS (
         agency_id,
         network_id,
         route_id,
+        ntd_id,
+        hubspot_company_record_id,
         gtfs_dataset_key_schedule AS schedule_gtfs_dataset_key,
         schedule.name AS schedule_name,
         schedule.regional_feed_type AS regional_feed_type,
