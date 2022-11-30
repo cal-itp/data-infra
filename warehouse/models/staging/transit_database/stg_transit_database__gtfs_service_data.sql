@@ -13,7 +13,7 @@ stg_transit_database__gtfs_service_data AS (
         unnested_services AS service_key,
         unnested_gtfs_dataset AS gtfs_dataset_key,
         dataset_type,
-        customer_facing,
+        COALESCE(customer_facing, FALSE) AS customer_facing,
         category,
         agency_id,
         network_id,

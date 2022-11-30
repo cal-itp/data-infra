@@ -249,7 +249,7 @@ models:
           should be receiving GTFS data in trip planning applications. Every service/dataset
           type combo with a record in this table should have exactly one of those records
           marked as customer-facing.
-          This field is "true" for customer-facing feeds and otherwise null.
+          This field is "true" for customer-facing feeds and otherwise false.
           This field is intended to replace the `category` field over time.
       - name: category
         description: |
@@ -374,7 +374,7 @@ models:
         description: |
           If true, we believe this GTFS data is customer-facing, i.e., ingested
           by trip-planning applications for this service/organization.
-          If null, we believe that this GTFS data is not customer-facing, i.e., it
+          If false, we believe that this GTFS data is not customer-facing, i.e., it
           is data that is not ingested by trip-planning applications.
           Generally, customer-facing data should be used for analysis, because it
           represents the data that is being used for decision-making by customers and
