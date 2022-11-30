@@ -45,16 +45,19 @@ models:
         description: '{{ doc("gtfs_agency__agency_id") }}'
       - name: agency_name
         description: '{{ doc("gtfs_agency__agency_name") }}'
-        tests:
-        - not_null
+        tests: &not_null_warn_99_threshold
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
+              severity: warn
       - name: agency_url
         description: '{{ doc("gtfs_agency__agency_url") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn_99_threshold
       - name: agency_timezone
         description: '{{ doc("gtfs_agency__agency_timezone") }}'
-        tests:
-        - not_null
+        tests: &not_null_warn
+        - not_null:
+            config:
+              severity: warn
       - name: agency_lang
         description: '{{ doc("gtfs_agency__agency_lang") }}'
       - name: agency_phone
@@ -93,8 +96,7 @@ models:
         description: '{{ doc("gtfs_attributions__trip_id") }}'
       - name: organization_name
         description: '{{ doc("gtfs_attributions__organization_name") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: is_producer
         description: '{{ doc("gtfs_attributions__is_producer") }}'
       - name: is_operator
@@ -128,44 +130,35 @@ models:
         meta: *pk_meta
       - name: service_id
         description: '{{ doc("gtfs_calendar__service_id") }}'
-        tests:
+        tests: &not_null_error
         - not_null
       - name: monday
         description: '{{ doc("gtfs_calendar__monday") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: tuesday
         description: '{{ doc("gtfs_calendar__tuesday") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: wednesday
         description: '{{ doc("gtfs_calendar__wednesday") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: thursday
         description: '{{ doc("gtfs_calendar__thursday") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: friday
         description: '{{ doc("gtfs_calendar__friday") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: saturday
         description: '{{ doc("gtfs_calendar__saturday") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: sunday
         description: '{{ doc("gtfs_calendar__sunday") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: start_date
         description: '{{ doc("gtfs_calendar__start_date") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: end_date
         description: '{{ doc("gtfs_calendar__end_date") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
 
   - name: calendar_dates
     description: |
@@ -183,16 +176,13 @@ models:
       - *calitp_hash
       - name: service_id
         description: '{{ doc("gtfs_calendar_dates__service_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: date
         description: '{{ doc("gtfs_calendar_dates__date") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: exception_type
         description: '{{ doc("gtfs_calendar_dates__exception_type") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
 
   - name: fare_attributes
     description: |
@@ -214,24 +204,19 @@ models:
         meta: *pk_meta
       - name: fare_id
         description: '{{ doc("gtfs_fare_attributes__fare_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: price
         description: '{{ doc("gtfs_fare_attributes__price") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: currency_type
         description: '{{ doc("gtfs_fare_attributes__currency_type") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: payment_method
         description: '{{ doc("gtfs_fare_attributes__payment_method") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: transfers
         description: '{{ doc("gtfs_fare_attributes__transfers") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: agency_id
         description: '{{ doc("gtfs_fare_attributes__agency_id") }}'
       - name: transfer_duration
@@ -257,8 +242,7 @@ models:
         meta: *pk_meta
       - name: fare_id
         description: '{{ doc("gtfs_fare_rules__fare_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: route_id
         description: '{{ doc("gtfs_fare_rules__route_id") }}'
       - name: origin_id
@@ -288,16 +272,13 @@ models:
         meta: *pk_meta
       - name: feed_publisher_name
         description: '{{ doc("gtfs_feed_info__feed_publisher_name") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: feed_publisher_url
         description: '{{ doc("gtfs_feed_info__feed_publisher_url") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: feed_lang
         description: '{{ doc("gtfs_feed_info__feed_lang") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: default_lang
         description: '{{ doc("gtfs_feed_info__default_lang") }}'
       - name: feed_start_date
@@ -331,20 +312,16 @@ models:
         meta: *pk_meta
       - name: trip_id
         description: '{{ doc("gtfs_frequencies__trip_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: start_time
         description: '{{ doc("gtfs_frequencies__start_time") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: end_time
         description: '{{ doc("gtfs_frequencies__end_time") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: headway_secs
         description: '{{ doc("gtfs_frequencies__headway_secs") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: exact_times
         description: '{{ doc("gtfs_frequencies__exact_times") }}'
 
@@ -368,12 +345,10 @@ models:
         meta: *pk_meta
       - name: level_id
         description: '{{ doc("gtfs_levels__level_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: level_index
         description: '{{ doc("gtfs_levels__level_index") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: level_name
         description: '{{ doc("gtfs_levels__level_name") }}'
 
@@ -397,24 +372,19 @@ models:
         meta: *pk_meta
       - name: pathway_id
         description: '{{ doc("gtfs_pathways__pathway_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: from_stop_id
         description: '{{ doc("gtfs_pathways__from_stop_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: to_stop_id
         description: '{{ doc("gtfs_pathways__to_stop_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: pathway_mode
         description: '{{ doc("gtfs_pathways__pathway_mode") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: is_bidirectional
         description: '{{ doc("gtfs_pathways__is_bidirectional") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: length
         description: '{{ doc("gtfs_pathways__length") }}'
       - name: traversal_time
@@ -450,8 +420,7 @@ models:
         meta: *pk_meta
       - name: route_id
         description: '{{ doc("gtfs_routes__route_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: agency_id
         description: '{{ doc("gtfs_routes__agency_id") }}'
       - name: route_short_name
@@ -462,8 +431,7 @@ models:
         description: '{{ doc("gtfs_routes__route_desc") }}'
       - name: route_type
         description: '{{ doc("gtfs_routes__route_type") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: route_url
         description: '{{ doc("gtfs_routes__route_url") }}'
       - name: route_color
@@ -497,12 +465,10 @@ models:
         meta: *pk_meta
       - name: shape_id
         description: '{{ doc("gtfs_shapes__shape_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: shape_pt_lat
         description: '{{ doc("gtfs_shapes__shape_pt_lat") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
         meta:
           metabase.semantic_type: type/Latitude
           ckan.type: FLOAT
@@ -510,8 +476,7 @@ models:
           ckan.precision: 3
       - name: shape_pt_lon
         description: '{{ doc("gtfs_shapes__shape_pt_lon") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
         meta:
           metabase.semantic_type: type/Longitude
           ckan.type: FLOAT
@@ -519,8 +484,7 @@ models:
           ckan.precision: 3
       - name: shape_pt_sequence
         description: '{{ doc("gtfs_shapes__shape_pt_sequence") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: shape_dist_traveled
         description: '{{ doc("gtfs_shapes__shape_dist_traveled") }}'
 
@@ -546,20 +510,17 @@ models:
         meta: *pk_meta
       - name: trip_id
         description: '{{ doc("gtfs_stop_times__trip_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: arrival_time
         description: '{{ doc("gtfs_stop_times__arrival_time") }}'
       - name: departure_time
         description: '{{ doc("gtfs_stop_times__departure_time") }}'
       - name: stop_id
         description: '{{ doc("gtfs_stop_times__stop_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: stop_sequence
         description: '{{ doc("gtfs_stop_times__stop_sequence") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: stop_headsign
         description: '{{ doc("gtfs_stop_times__stop_headsign") }}'
       - name: pickup_type
@@ -595,9 +556,9 @@ models:
         meta: *pk_meta
       - name: stop_id
         description: '{{ doc("gtfs_stops__stop_id") }}'
-        tests:
-        - not_null
-      - name: stop_code
+        tests: &not_null_error_99_threshold
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
         description: '{{ doc("gtfs_stops__stop_code") }}'
       - name: stop_name
         description: '{{ doc("gtfs_stops__stop_name") }}'
@@ -656,16 +617,13 @@ models:
         meta: *pk_meta
       - name: from_stop_id
         description: '{{ doc("gtfs_transfers__from_stop_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: to_stop_id
         description: '{{ doc("gtfs_transfers__to_stop_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: transfer_type
         description: '{{ doc("gtfs_transfers__transfer_type") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: min_transfer_time
         description: '{{ doc("gtfs_transfers__min_transfer_time") }}'
 
@@ -689,20 +647,16 @@ models:
         meta: *pk_meta
       - name: table_name
         description: '{{ doc("gtfs_translations__table_name") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: field_name
         description: '{{ doc("gtfs_translations__field_name") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: language
         description: '{{ doc("gtfs_translations__language") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: translation
         description: '{{ doc("gtfs_translations__translation") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: record_id
         description: '{{ doc("gtfs_translations__record_id") }}'
       - name: record_sub_id
@@ -730,16 +684,13 @@ models:
         meta: *pk_meta
       - name: route_id
         description: '{{ doc("gtfs_trips__route_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: service_id
         description: '{{ doc("gtfs_trips__service_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: trip_id
         description: '{{ doc("gtfs_trips__trip_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: trip_headsign
         description: '{{ doc("gtfs_trips__trip_headsign") }}'
       - name: trip_short_name
