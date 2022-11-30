@@ -95,7 +95,6 @@ models:
           combination_of_columns:
             - date
             - base64_url
-            - feed_type
       - dbt_utils.equal_rowcount:
           compare_model: ref('int_gtfs_quality__rt_feed_guideline_index')
     columns: *stg_gtfs_guideline_columns
@@ -106,7 +105,6 @@ models:
           combination_of_columns:
             - date
             - base64_url
-            - feed_type
     columns: *stg_gtfs_guideline_columns
 
   - name: int_gtfs_quality__feed_present_vehicle_positions

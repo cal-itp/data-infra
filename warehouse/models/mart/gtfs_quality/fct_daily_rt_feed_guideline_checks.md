@@ -11,7 +11,7 @@ Here is a list of currently-implemented checks:
 | Check | Feature | Description |
 | ------------------------------------ |---------|------------ |
 |No critical errors in the MobilityData GTFS Realtime Validator | Compliance | The feed has at least one GTFS-RT file present on the given day, and GTFS Realtime Validator produced no critical errors for any RT feed extract on that day.|
-|Vehicle positions RT feed is present | Compliance | The vehicle positions RT file is present at least once on the given day.|
-| Trip updates RT feed is present | Compliance | The trip updates RT file is present at least once on the given day.|
-| Service alerts RT feed is present | Compliance | The service alerts RT file is present at least once on the given day.|
+|Vehicle positions RT feed is present | Compliance | The vehicle positions RT feed contains at least one file on the given day.|
+| Trip updates RT feed is present | Compliance | The trip updates RT feed contains at least one file on the given day.|
+| Service alerts RT feed is present | Compliance | The service alerts RT feed contains at least one file on the given day.|
 {% enddocs %}
