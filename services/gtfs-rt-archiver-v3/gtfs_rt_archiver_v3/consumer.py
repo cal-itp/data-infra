@@ -46,9 +46,11 @@ def main(
             os.environ[key] = value
 
     config = ConsumerConfig(
-        workers=int(os.getenv("HUEY_CONSUMER_WORKERS", 32)),
-        periodic=False,
+        workers=int(os.getenv("CALITP_HUEY_CONSUMER_WORKERS", 16)),
         worker_type=WORKER_THREAD,
+        backoff=float(os.getenv("CALITP_HUEY_BACKOFF", 1.15)),  # default from huey
+        max_delay=float(os.getenv("CALITP_HUEY_MAX_DELAY", 10.0)),  # default from huey
+        periodic=False,
     )
     logger = logging.getLogger("huey")
     config.setup_logger(logger)

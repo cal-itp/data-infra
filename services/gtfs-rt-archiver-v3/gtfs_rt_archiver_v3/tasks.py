@@ -37,15 +37,21 @@ class PydanticSerializer(Serializer):
         return Message(*d.values())
 
 
-huey = RedisHuey(
+class RedisHueyWithMetrics(RedisHuey):
+    pass
+
+
+huey = RedisHueyWithMetrics(
     name=f"gtfs-rt-archiver-v3-{os.environ['AIRFLOW_ENV']}",
-    blocking=False,
+    blocking=os.getenv("CALITP_HUEY_BLOCKING", "true").lower()
+    in ("true", "t", "yes", "y", "1"),
     results=False,
     # serializer=PydanticSerializer(),
     url=os.getenv("CALITP_HUEY_REDIS_URL"),
     host=os.getenv("CALITP_HUEY_REDIS_HOST"),
     port=os.getenv("CALITP_HUEY_REDIS_PORT"),
     password=os.getenv("CALITP_HUEY_REDIS_PASSWORD"),
+    read_timeout=int(os.getenv("CALITP_HUEY_READ_TIMEOUT", 1)),  # default from huey
 )
 
 
