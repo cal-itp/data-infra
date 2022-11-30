@@ -1413,6 +1413,20 @@ models:
           This field will be deprecated over time as customer_facing is adopted.
           "primary" in this field is meant to correspond to `customer_facing = True`.
           Other vallues are meant to correspond to `customer_facing = False`.
+      - name: regional_feed_type
+        description: |
+          This is only populated for GTFS datasets that have some relationship with a regional,
+          combined feed like MTC 511 or VCTC.
+          The types are:
+          - "Combined Regional Feed" - These GTFS datasets contain information
+            about services managed by a variety of different organizations. If the
+            customer-facing feed for an organization or service is this category,
+            users may need to filter within feed data when doing more granular (ex.
+            agency-level) analysis.
+          - "Regional Subfeed" - Currently this category only applies to MTC 511, which provides
+            an option to query the combined regional feed for a given agency's data.
+          - "Regional Precursor Feed" - This category applies to agencies whose data appears in a
+            combined regional feed but who produce some other independent dataset. The independent dataset may be an input into the combined regional feed.
       - name: schedule_gtfs_dataset_key
         description: &gtfs_dataset_key_desc |
           Foreign key to `dim_gtfs_datasets`.

@@ -104,6 +104,7 @@ fct_daily_gtfs_organization_service_mappings AS (
         itp_id,
         customer_facing,
         category,
+        regional_feed_type,
         schedule_gtfs_dataset_key,
         schedule_name,
         service_alerts_gtfs_dataset_key,
