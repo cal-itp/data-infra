@@ -1402,11 +1402,17 @@ models:
         description: |
           If true, we believe this GTFS data is customer-facing, i.e., ingested
           by trip-planning applications for this service/organization.
-          If null, we believe that this GTFS data is not customer-facing, i.e., it
+          If false, we believe that this GTFS data is not customer-facing, i.e., it
           is data that is not ingested by trip-planning applications.
-          Generally, customer-facing data should be used for analysis, because it
+          Generally, when multiple datasets are available for a given service,
+          the customer-facing data should be used for analysis because it
           represents the data that is being used for decision-making by customers and
           should be the highest-quality/most accurate data available.
+      - name: category
+        description: |
+          This field will be deprecated over time as customer_facing is adopted.
+          "primary" in this field is meant to correspond to `customer_facing = True`.
+          Other vallues are meant to correspond to `customer_facing = False`.
       - name: schedule_gtfs_dataset_key
         description: &gtfs_dataset_key_desc |
           Foreign key to `dim_gtfs_datasets`.

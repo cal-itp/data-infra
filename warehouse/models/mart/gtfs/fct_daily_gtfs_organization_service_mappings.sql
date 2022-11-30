@@ -103,6 +103,7 @@ fct_daily_gtfs_organization_service_mappings AS (
         organization_name,
         itp_id,
         customer_facing,
+        category,
         schedule_gtfs_dataset_key,
         schedule_name,
         service_alerts_gtfs_dataset_key,
