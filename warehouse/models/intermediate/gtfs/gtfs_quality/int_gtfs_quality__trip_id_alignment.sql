@@ -25,17 +25,19 @@ critical_notices AS (
         base64_url,
         SUM(total_notices) AS errors,
     FROM fct_daily_rt_feed_validation_notices
-    WHERE is_critical
+    -- Description for code E003:
+    ---- "All trip_ids provided in the GTFS-rt feed must exist in the GTFS data, unless the schedule_relationship is ADDED"
+    WHERE code = "E003"
     GROUP BY 1, 2
 ),
 
-int_gtfs_quality__no_rt_critical_validation_errors AS (
+int_gtfs_quality__trip_id_alignment AS (
     SELECT
         idx.date,
         idx.base64_url,
         idx.feed_type,
-        {{ no_rt_critical_validation_errors() }} AS check,
-        {{ compliance() }} AS feature,
+        {{ trip_id_alignment() }} AS check,
+        {{ fixed_route_completeness() }} AS feature,
         rt_files,
         errors,
         CASE
@@ -51,4 +53,4 @@ int_gtfs_quality__no_rt_critical_validation_errors AS (
         AND idx.base64_url = notices.base64_url
 )
 
-SELECT * FROM int_gtfs_quality__no_rt_critical_validation_errors
+SELECT * FROM int_gtfs_quality__trip_id_alignment
