@@ -11,17 +11,6 @@ models:
             - feed_key
             - date
 
-  - name: int_gtfs_quality__no_rt_critical_validation_errors
-    tests: &stg_gtfs_guideline_tests_rt
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - date
-            - base64_url
-            - feed_type
-      - dbt_utils.equal_rowcount:
-          compare_model: ref('int_gtfs_quality__schedule_feed_guideline_index')
-    columns: *stg_gtfs_guideline_columns
-
   - name: int_gtfs_quality__rt_validation_outcomes
     description: |
       Unioned, incremental table of RT validation outcomes.
@@ -98,6 +87,17 @@ models:
 
   - name: int_gtfs_quality__no_expired_services
     tests: *stg_gtfs_guideline_tests_schedule
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__no_rt_critical_validation_errors
+    tests: &stg_gtfs_guideline_tests_rt
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - base64_url
+            - feed_type
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__rt_feed_guideline_index')
     columns: *stg_gtfs_guideline_columns
 
   - name: int_gtfs_quality__feed_present_service_alerts
