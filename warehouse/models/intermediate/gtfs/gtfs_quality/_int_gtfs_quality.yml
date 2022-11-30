@@ -99,6 +99,10 @@ models:
           compare_model: ref('int_gtfs_quality__rt_feed_guideline_index')
     columns: *stg_gtfs_guideline_columns
 
+  - name: int_gtfs_quality__trip_id_alignment
+    tests: *stg_gtfs_guideline_tests_rt
+    columns: *stg_gtfs_guideline_columns
+
   - name: int_gtfs_quality__feed_present_service_alerts
     tests: &stg_gtfs_guideline_tests_rt_single_feed
       - dbt_utils.unique_combination_of_columns:
