@@ -140,9 +140,9 @@ class ScheduleDataNotFound(Exception):
 def get_schedule_extracts_for_day(
     dt: pendulum.Date,
 ) -> Dict[str, GTFSScheduleFeedExtract]:
-    extracts: List[GTFSScheduleFeedExtract] = fetch_all_in_partition(
+    extracts: List[GTFSScheduleFeedExtract]
+    extracts, missing, invalid = fetch_all_in_partition(
         cls=GTFSScheduleFeedExtract,
-        fs=get_fs(),
         partitions={
             "dt": dt,
         },
@@ -622,17 +622,23 @@ def main(
     base64url: str = None,
 ):
     pendulum_hour = pendulum.instance(hour, tz="Etc/UTC")
-    files: List[GTFSRTFeedExtract] = fetch_all_in_partition(
+    files: List[GTFSRTFeedExtract]
+    files, files_missing_metadata, files_invalid_metadata = fetch_all_in_partition(
         cls=GTFSRTFeedExtract,
-        fs=get_fs(),
         partitions={
             "dt": pendulum_hour.date(),
             "hour": pendulum_hour,
         },
         table=feed_type,
         verbose=True,
-        progress=progress,
     )
+
+    total = len(files) + len(files_missing_metadata) + len(files_invalid_metadata)
+    percentage_valid = len(files) / total
+    if percentage_valid < 0.99:
+        raise RuntimeError(
+            f"too many files have missing/invalid metadata; {total - len(files)} of {total}"
+        )
 
     if not files:
         typer.secho(
