@@ -6,6 +6,5 @@ data:
   AIRFLOW_ENV: cal-itp-data-infra
   CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG: "gs://calitp-gtfs-download-config"
   CALITP_BUCKET__GTFS_RT_RAW: "gs://calitp-gtfs-rt-raw-v2"
-  HUEY_CONSUMER_WORKERS: "16"
   SENTRY_DSN: "https://0fc56e5e8a96482da63b8d9dd3955ee7@sentry.calitp.org/2"
   SENTRY_ENVIRONMENT: cal-itp-data-infra
