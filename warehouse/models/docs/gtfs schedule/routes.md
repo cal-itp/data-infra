@@ -72,3 +72,7 @@ Indicates that the rider can alight from the transit vehicle at any point along 
 
 The continuous drop-off behavior defined in routes.txt can be overridden in stop_times.txt.
 {% enddocs %}
+
+{% docs gtfs_routes__network_id %}
+Identifies a group of routes. Multiple rows in routes.txt may have the same network_id.
+{% enddocs %}

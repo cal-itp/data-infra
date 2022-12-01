@@ -744,6 +744,8 @@ models:
         description: '{{ doc("gtfs_routes__continuous_pickup") }}'
       - name: continuous_drop_off
         description: '{{ doc("gtfs_routes__continuous_drop_off") }}'
+      - name: network_id
+        description: '{{ doc("gtfs_routes__network_id") }}'
       - *_valid_from
       - *_valid_to
   - name: dim_shapes

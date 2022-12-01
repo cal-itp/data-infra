@@ -37,6 +37,10 @@ datasets_services_joined AS (
             ELSE dim_gtfs_datasets.schedule_to_use_for_rt_validation_gtfs_dataset_key
         END AS associated_gtfs_schedule_gtfs_dataset_key,
         category,
+        customer_facing,
+        agency_id,
+        network_id,
+        route_id,
         dim_gtfs_datasets.name AS dataset_name,
         CASE
             WHEN data = 'GTFS Schedule' THEN 'schedule'
@@ -54,7 +58,7 @@ dedupe_torrance AS (
     SELECT
         service_key,
         gtfs_dataset_key,
-        category,
+        customer_facing,
         type,
         associated_gtfs_schedule_gtfs_dataset_key,
         RANK() OVER(
@@ -63,13 +67,31 @@ dedupe_torrance AS (
     FROM datasets_services_joined
 ),
 
-int_transit_database__service_datasets_pivoted AS (
+pivoted AS (
     SELECT *
     FROM dedupe_torrance
     PIVOT(
         STRING_AGG(gtfs_dataset_key) AS gtfs_dataset_key
         FOR type IN ('schedule', 'service_alerts', 'trip_updates', 'vehicle_positions')
     )
+),
+
+int_transit_database__service_datasets_pivoted AS (
+    SELECT
+        pivoted.service_key,
+        pivoted.customer_facing,
+        dim_gtfs_service_data.agency_id,
+        dim_gtfs_service_data.network_id,
+        dim_gtfs_service_data.route_id,
+        pivoted.associated_gtfs_schedule_gtfs_dataset_key,
+        pivoted.gtfs_dataset_key_schedule,
+        pivoted.gtfs_dataset_key_service_alerts,
+        pivoted.gtfs_dataset_key_trip_updates,
+        pivoted.gtfs_dataset_key_vehicle_positions
+    FROM pivoted
+    LEFT JOIN dim_gtfs_service_data
+    ON pivoted.associated_gtfs_schedule_gtfs_dataset_key = dim_gtfs_service_data.gtfs_dataset_key
+        AND pivoted.service_key = dim_gtfs_service_data.service_key
 )
 
 SELECT * FROM int_transit_database__service_datasets_pivoted

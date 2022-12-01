@@ -64,6 +64,10 @@ models:
         description: Foreign key to dim_services.
         test:
           - not_null
+      - name: customer_facing
+      - name: route_id
+      - name: agency_id
+      - name: network_id
       - name: gtfs_dataset_key_schedule
         description: Foreign key to dim_gtfs_datasets, for a record with data = "GTFS Schedule."
       - name: gtfs_dataset_key_service_alerts

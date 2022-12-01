@@ -299,7 +299,6 @@ models:
       - name: dt
       - name: ts
       - name: base64_url
-
   - name: int_gtfs_schedule__stop_times_grouped
     description: |
       Stop times grouped by trip_id with trip aggregation calculations.
@@ -329,3 +328,50 @@ models:
           I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
           in the input data. This indicates that data quality issues were present in the stop times data
           that is being summarized here, and the count of distinct `stop_id`s at the trip level may be incorrect.
+  - name: int_gtfs_rt__distinct_download_configs
+    description: |
+      Distinct `dt`, `_config_extract_ts` pairs indicating
+      the configuration versions that were in effect for a given date of RT data.
+      This allows us to reconstruct what URLs were in our configuration list for each date.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - dt
+            - _config_extract_ts
+    columns:
+      - name: dt
+        description: Date that RT data was extracted.
+      - name: _config_extract_ts
+        description: Timestamp that download config file was extracted.
+  - name: int_gtfs_rt__daily_url_index
+    description: |
+      All RT URLs that were present at least once for each given day.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - dt
+            - base64_url
+    columns:
+      - name: dt
+        description: |
+          Date that this URL was present in an active download configuration,
+          indicating that downloads should have been attempted for this URL
+          on this date.
+        tests:
+          - not_null
+      - name: string_url
+        description: |
+          URL in human-readable format.
+        tests:
+          - not_null
+      - name: base64_url
+        description: |
+          Base64 encoded URL, can be used to join with other tables
+          containing data from this feed.
+        tests:
+          - not_null
+      - name: type
+        description: |
+          RT data type: "GTFS Alerts", "GTFS VehiclePositions", "GTFS TripUpdates".
+        tests:
+          - not_null
