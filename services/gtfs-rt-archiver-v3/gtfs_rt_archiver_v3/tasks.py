@@ -5,7 +5,6 @@ from functools import wraps
 from pathlib import Path
 
 import humanize
-import orjson
 import pendulum
 import sentry_sdk
 import structlog
@@ -13,8 +12,6 @@ import typer
 from calitp.storage import download_feed, GTFSDownloadConfig
 from google.cloud import storage
 from huey import RedisHuey
-from huey.registry import Message
-from huey.serializer import Serializer
 from requests import HTTPError, RequestException
 
 from .metrics import (
@@ -23,18 +20,6 @@ from .metrics import (
     FETCH_PROCESSING_DELAY,
     FETCH_PROCESSED_BYTES,
 )
-
-
-class PydanticSerializer(Serializer):
-    def _serialize(self, data: Message) -> bytes:
-        return orjson.dumps(data._asdict())
-
-    def _deserialize(self, data: bytes) -> Message:
-        # deal with datetimes manually
-        d = orjson.loads(data)
-        d["expires_resolved"] = datetime.fromisoformat(d["expires_resolved"])
-        d["kwargs"]["tick"] = datetime.fromisoformat(d["kwargs"]["tick"])
-        return Message(*d.values())
 
 
 class RedisHueyWithMetrics(RedisHuey):
