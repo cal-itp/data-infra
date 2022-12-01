@@ -636,6 +636,8 @@ def main(
     total = len(files) + len(files_missing_metadata) + len(files_invalid_metadata)
     percentage_valid = len(files) / total
     if percentage_valid < 0.99:
+        typer.secho(f"missing: {files_missing_metadata}")
+        typer.secho(f"invalid: {files_invalid_metadata}")
         raise RuntimeError(
             f"too many files have missing/invalid metadata; {total - len(files)} of {total}"
         )
