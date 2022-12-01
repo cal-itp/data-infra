@@ -30,6 +30,7 @@ dim_routes AS (
         route_sort_order,
         continuous_pickup,
         continuous_drop_off,
+        network_id,
         base64_url,
         _valid_from,
         _valid_to
