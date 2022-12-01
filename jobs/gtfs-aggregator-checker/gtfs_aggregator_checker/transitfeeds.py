@@ -55,7 +55,11 @@ def get_transitfeeds_urls(progress=False):
 
         soup = BeautifulSoup(html, "html.parser")
         for a in soup.select("a"):
-            url = a["href"]
+            try:
+                url = a["href"]
+            except KeyError:
+                typer.echo(f"no href for {a}")
+                continue
             if url.startswith("/") or url.startswith(ROOT):
                 continue
             results.append((feed_url, url))
