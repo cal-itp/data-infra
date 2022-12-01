@@ -16,6 +16,7 @@ jsonlines = "^3.0.0"
 gcsfs = "^2022.3.0"
 mypy = "^0.942"
 types-PyYAML = "^6.0.5"
+backoff = "^2.2.1"
 
 [tool.poetry.dev-dependencies]
 

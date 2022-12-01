@@ -65,6 +65,14 @@ tests = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)"
 tests_no_zope = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "mypy", "pytest-mypy-plugins", "cloudpickle"]
 
 [[package]]
+name = "backoff"
+version = "2.2.1"
+description = "Function decoration for backoff and retry"
+category = "main"
+optional = false
+python-versions = ">=3.7,<4.0"
+
+[[package]]
 name = "beautifulsoup4"
 version = "4.11.1"
 description = "Screen-scraping library"
@@ -616,7 +624,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "aefefba8db3342fbaab0208369119622c8f42702f097ec694f8fe0acb790dbcb"
+content-hash = "9d175f6a04b022ffe66621a0706a95bd0f1d101334805f870554f1985de202e2"
 
 [metadata.files]
 aiohttp = []
@@ -624,6 +632,7 @@ aiosignal = []
 async-timeout = []
 asynctest = []
 attrs = []
+backoff = []
 beautifulsoup4 = []
 cachetools = []
 certifi = []
