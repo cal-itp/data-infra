@@ -9,6 +9,7 @@ unioned AS (
             ref('int_gtfs_quality__feed_present_trip_updates'),
             ref('int_gtfs_quality__feed_present_service_alerts'),
             ref('int_gtfs_quality__feed_present_vehicle_positions'),
+            ref('int_gtfs_quality__trip_id_alignment'),
         ],
     ) }}
 ),
