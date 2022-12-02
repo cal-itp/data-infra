@@ -34,6 +34,7 @@ dim_provider_service_gtfs AS (
             'gtfs_dataset_key_trip_updates']) }} AS key,
         quartet_pivoted.service_key,
         services.name AS service_name,
+        services.assessment_status AS service_assessment_status,
         organizations.key AS organization_key,
         organizations.name AS organization_name,
         organizations.itp_id AS itp_id,

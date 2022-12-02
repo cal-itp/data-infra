@@ -22,6 +22,7 @@ dim_organizations AS (
         hubspot_company_record_id,
         gtfs_static_status,
         gtfs_realtime_status,
+        assessment_status,
         alias,
         calitp_extracted_at
     FROM latest_organizations

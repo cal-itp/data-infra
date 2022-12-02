@@ -24,6 +24,7 @@ stg_transit_database__services AS (
         -- TODO: remove this field when v2, automatic determinations are available
         gtfs_schedule_quality,
         operating_counties,
+        assessment_status,
         dt AS calitp_extracted_at
     FROM once_daily_services
 )
