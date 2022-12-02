@@ -125,16 +125,21 @@ def parse_individual_file(
 def parse_files(day: pendulum.datetime, input_table_name: str, gtfs_filename: str):
     fs = get_fs()
     day = pendulum.instance(day).date()
-    files = fetch_all_in_partition(
+    files, missing, invalid = fetch_all_in_partition(
         cls=GTFSScheduleFeedFile,
         bucket=SCHEDULE_UNZIPPED_BUCKET,
         table=input_table_name,
-        fs=fs,
         partitions={
             "dt": day,
         },
         verbose=True,
     )
+
+    if missing or invalid:
+        logging.error(f"missing: {missing}")
+        logging.error(f"invalid: {invalid}")
+        raise RuntimeError("found files with missing or invalid metadata; failing job")
+
     if not files:
         logging.warn(f"No files found for {input_table_name} for {day}")
         return

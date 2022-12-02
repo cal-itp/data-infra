@@ -246,16 +246,21 @@ def validate_day(
 ) -> None:
     day = pendulum.instance(day).date()
 
-    extracts: List[GTFSScheduleFeedExtract] = fetch_all_in_partition(
+    extracts: List[GTFSScheduleFeedExtract]
+    extracts, missing, invalid = fetch_all_in_partition(
         cls=GTFSScheduleFeedExtract,
         bucket=SCHEDULE_RAW_BUCKET,
         table=GTFSFeedType.schedule,
-        fs=get_fs(),
         partitions={
             "dt": day,
         },
         verbose=verbose,
     )
+
+    if missing or invalid:
+        typer.secho(f"missing: {missing}")
+        typer.secho(f"invalid: {invalid}")
+        raise RuntimeError("found files with missing or invalid metadata; failing job")
 
     if not extracts:
         typer.secho(
@@ -263,7 +268,6 @@ def validate_day(
             fg=typer.colors.YELLOW,
         )
         return
-
     typer.secho(
         f"found {len(extracts)} to process for {day}",
         fg=typer.colors.MAGENTA,
