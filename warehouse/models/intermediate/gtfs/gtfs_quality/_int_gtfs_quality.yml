@@ -103,18 +103,21 @@ models:
     tests: *stg_gtfs_guideline_tests_rt
     columns: *stg_gtfs_guideline_columns
 
-  - name: int_gtfs_quality__feed_present_service_alerts
-    tests: &stg_gtfs_guideline_tests_rt_single_feed
+  - name: int_gtfs_quality__rt_feeds_present
+    tests: *stg_gtfs_guideline_tests_rt
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__rt_https
+    tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - date
             - base64_url
-    columns: *stg_gtfs_guideline_columns
-
-  - name: int_gtfs_quality__feed_present_vehicle_positions
-    tests: *stg_gtfs_guideline_tests_rt_single_feed
-    columns: *stg_gtfs_guideline_columns
-
-  - name: int_gtfs_quality__feed_present_trip_updates
-    tests: *stg_gtfs_guideline_tests_rt_single_feed
-    columns: *stg_gtfs_guideline_columns
+      # Since int_gtfs_rt__daily_url_index only has data back to November, this table doesn't have as many rows as feed_guideline_index.
+      # - dbt_utils.equal_rowcount:
+      #     compare_model: ref('int_gtfs_quality__rt_feed_guideline_index')
+    columns:
+      - name: status
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99

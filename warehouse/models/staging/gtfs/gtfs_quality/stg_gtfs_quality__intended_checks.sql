@@ -29,6 +29,12 @@ WITH stg_gtfs_quality__intended_checks AS (
     SELECT {{ feed_present_trip_updates() }}, {{ compliance() }}
     UNION ALL
     SELECT {{ feed_present_service_alerts() }}, {{ compliance() }}
+    UNION ALL
+    SELECT {{ rt_https_trip_updates() }}, {{ best_practices_alignment() }}
+    UNION ALL
+    SELECT {{ rt_https_vehicle_positions() }}, {{ best_practices_alignment() }}
+    UNION ALL
+    SELECT {{ rt_https_service_alerts() }}, {{ best_practices_alignment() }}
     {# UNION ALL #}
     {# SELECT {{ schedule_feed_on_transitland() }}, {{ feed_aggregator_availability() }} #}
     {# UNION ALL #}
