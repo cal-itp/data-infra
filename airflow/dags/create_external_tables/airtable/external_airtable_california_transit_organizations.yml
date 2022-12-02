@@ -232,3 +232,6 @@ schema_fields:
   - name: hubspot_company_record_id
     type: STRING
     mode: NULLABLE
+  - name: assessment_status
+    type: STRING
+    mode: NULLABLE
