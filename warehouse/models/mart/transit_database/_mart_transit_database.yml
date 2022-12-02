@@ -80,6 +80,10 @@ models:
       - name: hubspot_company_record_id
         description: |
           Organization's ID in Hubspot CRM.
+      - name: assessment_status
+        description: |
+          Is either "Yes" or "No" and indicates whether this Organization
+          manages qualifying assessed services
   - name: dim_services
     description: '{{ doc("services_table") }}'
     columns:
@@ -125,6 +129,10 @@ models:
           or GTFS guidelines checks implemented in `mart_gtfs_guidelines.fact_daily_guideline_checks`.
           Use those tables directly for the most up-to-date information on individual GTFS feeds'
           validation and guideline statuses.**
+      - name: assessment_status
+        description: |
+          Is either "Yes" or "No" and indicates whether this Service qualifies as
+          being an assessed service
   - name: dim_products
     description: '{{ doc("products_table") }}'
     columns:
@@ -362,6 +370,11 @@ models:
             relationships:
               to: ref('dim_gtfs_datasets')
               field: key
+      - name: service_assessment_status
+        description: |
+          If "Yes", this service should be considered "assessed" by Cal-ITP
+          for quality and reporting purposes.
+          If "No", this service is not "asssessed".
       - name: service_alerts_gtfs_dataset_key
         tests:
           - *ref_gtfs_datasets_key
