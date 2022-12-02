@@ -16,13 +16,17 @@ dim_gtfs_datasets AS (
     SELECT * FROM {{ ref('dim_gtfs_datasets') }}
 ),
 
+dim_ntd_agency_info AS (
+    SELECT * FROM {{ ref('dim_ntd_agency_info') }}
+),
+
 quartet_pivoted AS (
     SELECT * FROM {{ ref('int_transit_database__service_datasets_pivoted') }}
 ),
 
 dim_provider_service_gtfs AS (
     SELECT
-        {{ farm_surrogate_key(['organization_key',
+        {{ farm_surrogate_key(['organizations.key',
             'quartet_pivoted.service_key',
             'gtfs_dataset_key_schedule',
             'gtfs_dataset_key_service_alerts',
@@ -37,7 +41,7 @@ dim_provider_service_gtfs AS (
         agency_id,
         network_id,
         route_id,
-        ntd_id,
+        ntd.ntd_id,
         hubspot_company_record_id,
         gtfs_dataset_key_schedule AS schedule_gtfs_dataset_key,
         schedule.name AS schedule_name,
@@ -63,6 +67,8 @@ dim_provider_service_gtfs AS (
         ON quartet_pivoted.service_key = bridge_organizations_x_services_managed.service_key
     LEFT JOIN dim_organizations AS organizations
         ON bridge_organizations_x_services_managed.organization_key = organizations.key
+    LEFT JOIN dim_ntd_agency_info AS ntd
+        ON organizations.ntd_agency_info_key = ntd.key
 )
 
 SELECT * FROM dim_provider_service_gtfs

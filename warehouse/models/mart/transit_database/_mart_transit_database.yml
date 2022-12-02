@@ -58,8 +58,12 @@ models:
           Core: funded by Caltrans/can control or influence somewhat
           Other Public Transit: (publicly available or managed) and publicly funded transit
           Other Transit: transit that isn't the above
-      - name: ntd_id
-        description: National Transit Database (NTD) ID
+      - name: ntd_agency_info_key
+        description: Foreign key to `dim_ntd_agency_info`.
+        tests:
+          - relationships:
+             to: ref('dim_ntd_agency_info')
+             field: key
       - name: alias
       - name: gtfs_static_status
         description: |
