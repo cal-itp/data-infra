@@ -104,6 +104,10 @@
 "Passes Fares v2 portion of MobilityData GTFS Schedule Validator"
 {% endmacro %}
 
+{% macro lead_time() %}
+"All schedule changes in the last month have provided at least 7 days of lead time"
+{% endmacro %}
+
 -- declare features
 {% macro compliance() %}
 "Compliance"
@@ -135,6 +139,10 @@
 
 {% macro fare_completeness() %}
 "Fare Completeness"
+{% endmacro %}
+
+{% macro up_to_dateness() %}
+"Up-to-Dateness"
 {% endmacro %}
 
 -- columns

@@ -118,3 +118,7 @@ models:
   - name: int_gtfs_quality__feed_present_trip_updates
     tests: *stg_gtfs_guideline_tests_rt_single_feed
     columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__lead_time
+    tests: *stg_gtfs_guideline_tests_schedule
+    columns: *stg_gtfs_guideline_columns
