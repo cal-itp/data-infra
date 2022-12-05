@@ -7,7 +7,6 @@ default_args:
     depends_on_past: True
     start_date: "2021-04-15"
     email:
-      - "blake.f@jarv.us"
       - "evan.siroky@dot.ca.gov"
       - "hunter.owens@dot.ca.gov"
       - "jameelah.y@jarv.us"
