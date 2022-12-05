@@ -215,9 +215,9 @@ class RTFileProcessingOutcome(ProcessingOutcome):
 
     @validator("aggregation", allow_reuse=True, always=True)
     def aggregation_exists_if_success(cls, v, values):
-        assert (v is not None) == values[
-            "success"
-        ], "aggregation must exist if and only if the outcome is successful"
+        assert (
+            values["success"] or v is None
+        ), "aggregation cannot exist if there is a failure"
         return v
 
     @validator("blob_path", allow_reuse=True, always=True)
@@ -482,8 +482,8 @@ def parse_and_upload(
                 )
                 continue
 
-            if not parsed or "entity" not in parsed:
-                msg = f"WARNING: no parsed entity found in {str(extract.path)}"
+            if not parsed:
+                msg = f"WARNING: no parsed dictionary found in {str(extract.path)}"
                 if verbose:
                     log(
                         msg,
@@ -495,6 +495,23 @@ def parse_and_upload(
                         step="parse",
                         success=False,
                         exception=ValueError(msg),
+                        extract=extract,
+                    )
+                )
+                continue
+
+            if "entity" not in parsed:
+                msg = f"WARNING: no parsed entity found in {str(extract.path)}"
+                if verbose:
+                    log(
+                        msg,
+                        fg=typer.colors.YELLOW,
+                        pbar=pbar,
+                    )
+                outcomes.append(
+                    RTFileProcessingOutcome(
+                        step="parse",
+                        success=True,
                         extract=extract,
                     )
                 )
