@@ -209,7 +209,9 @@ class RTHourlyAggregation(PartitionedGCSArtifact):
 
 class RTFileProcessingOutcome(ProcessingOutcome):
     # an extract is technically optional if we have a blob missing metadata
+    step: RTProcessingStep
     extract: Optional[GTFSRTFeedExtract]
+    header: Optional[Dict[Any, Any]]
     aggregation: Optional[RTHourlyAggregation]
     blob_path: Optional[str]
 
@@ -225,6 +227,12 @@ class RTFileProcessingOutcome(ProcessingOutcome):
         assert (v is None) != (
             values["extract"] is None
         ), "one of blob or extract must be null"
+        return v
+
+    @validator("header", allow_reuse=True)
+    def header_must_exist_for_successful_parses(cls, v, values):
+        if values["success"] and values["step"] == "parse":
+            assert v
         return v
 
 
@@ -474,7 +482,7 @@ def parse_and_upload(
                     )
                 outcomes.append(
                     RTFileProcessingOutcome(
-                        step="parse",
+                        step=RTProcessingStep.parse,
                         success=False,
                         exception=e,
                         extract=extract,
@@ -492,7 +500,7 @@ def parse_and_upload(
                     )
                 outcomes.append(
                     RTFileProcessingOutcome(
-                        step="parse",
+                        step=RTProcessingStep.parse,
                         success=False,
                         exception=ValueError(msg),
                         extract=extract,
@@ -510,9 +518,10 @@ def parse_and_upload(
                     )
                 outcomes.append(
                     RTFileProcessingOutcome(
-                        step="parse",
+                        step=RTProcessingStep.parse,
                         success=True,
                         extract=extract,
+                        header=parsed["header"],
                     )
                 )
                 continue
@@ -539,10 +548,11 @@ def parse_and_upload(
                 written += 1
             outcomes.append(
                 RTFileProcessingOutcome(
-                    step="parse",
+                    step=RTProcessingStep.parse,
                     success=True,
                     extract=extract,
                     aggregation=hour,
+                    header=parsed["header"],
                 )
             )
             del parsed
