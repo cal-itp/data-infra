@@ -10,6 +10,18 @@ dim_calendar AS (
       FROM {{ ref('dim_calendar') }}
 ),
 
+dim_calendar AS (
+    SELECT  *,
+    -- Add in calendar dates from here
+      FROM {{ ref('dim_calendar') }}
+),
+
+dim_trips AS (
+    SELECT  *,
+    -- Add in trips from here, including stop times
+      FROM {{ ref('dim_calendar') }}
+),
+
 distinct_feed_versions AS (
 SELECT base64_url,
        key AS feed_key,
@@ -28,19 +40,11 @@ SELECT base64_url,
 ),
 
 calendar_joined AS (
-  SELECT
-        t1.base64_url,
-        t1.feed_key,
-        t1.previous_feed_key,
-        cal.service_id,
-        prev_cal.service_id AS prev_service_id,
-        t1.valid_from,
-        cal.start_date,
-        cal.end_date,
-        cal.day_combo AS cal_day_combo,
-        prev_cal.day_combo AS prev_cal_day_combo,
-        DATE_DIFF(valid_from, cal.start_date, DAY) AS days_since_start_date,
-        DATE_DIFF(cal.end_date, valid_from, DAY) AS days_until_end_date
+  SELECT t1.base64_url,
+         t1.feed_key,
+         t1.valid_from,
+         DATE_DIFF(valid_from, cal.start_date, DAY) AS days_since_start_date,
+         DATE_DIFF(cal.end_date, valid_from, DAY) AS days_until_end_date
     FROM feed_version_history AS t1
     JOIN dim_calendar AS cal
       ON t1.feed_key = cal.feed_key
@@ -50,10 +54,9 @@ calendar_joined AS (
 ),
 
 daily_improper_calendar_updates AS (
-  SELECT
-        feed_key,
-        valid_from AS date,
-        COUNT(*) AS updates
+  SELECT feed_key,
+         valid_from AS date,
+         COUNT(*) AS updates
     FROM calendar_joined
    WHERE (cal_day_combo != prev_cal_day_combo
           OR prev_cal_day_combo IS null)
@@ -65,31 +68,27 @@ daily_improper_calendar_updates AS (
 ),
 
 feed_update_count AS (
-    SELECT
-        t1.date,
-        t1.feed_key,
-        SUM(t2.updates)
-            OVER (
-                PARTITION BY
-                    t2.feed_key
-                ORDER BY t2.date
-                ROWS BETWEEN 30 PRECEDING AND CURRENT ROW
-        ) AS updates_last_30_days
+    SELECT t1.date,
+           t1.feed_key,
+           SUM(t2.updates)
+               OVER (
+                   PARTITION BY t2.feed_key
+                   ORDER BY t2.date
+                   ROWS BETWEEN 30 PRECEDING AND CURRENT ROW
+                ) AS updates_last_30_days
       FROM feed_guideline_index AS t1
       LEFT JOIN daily_improper_calendar_updates AS t2
         ON t1.feed_key = t2.feed_key
 ),
 
 int_gtfs_quality__lead_time AS (
-    SELECT
-            date,
-            feed_key,
-            {{ lead_time() }} AS check,
-            {{ up_to_dateness() }} AS feature,
-            CASE
-                WHEN updates_last_30_days > 0 THEN "FAIL"
+    SELECT date,
+           feed_key,
+           {{ lead_time() }} AS check,
+           {{ up_to_dateness() }} AS feature,
+           CASE WHEN updates_last_30_days > 0 THEN "FAIL"
                 ELSE "PASS"
-            END AS status
+           END AS status
       FROM feed_update_count
 )
 
