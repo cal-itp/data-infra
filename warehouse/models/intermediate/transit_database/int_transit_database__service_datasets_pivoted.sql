@@ -36,12 +36,7 @@ datasets_services_joined AS (
             WHEN data = "GTFS Schedule" THEN dim_gtfs_datasets.key
             ELSE dim_gtfs_datasets.schedule_to_use_for_rt_validation_gtfs_dataset_key
         END AS associated_gtfs_schedule_gtfs_dataset_key,
-        category,
         customer_facing,
-        agency_id,
-        network_id,
-        route_id,
-        dim_gtfs_datasets.name AS dataset_name,
         CASE
             WHEN data = 'GTFS Schedule' THEN 'schedule'
             WHEN data = 'GTFS Alerts' THEN 'service_alerts'
@@ -53,23 +48,9 @@ datasets_services_joined AS (
         ON dim_gtfs_service_data.gtfs_dataset_key = dim_gtfs_datasets.key
 ),
 
--- TODO: can remove this when data entry for Torrance is corrected so that only one feed is primary
-dedupe_torrance AS (
-    SELECT
-        service_key,
-        gtfs_dataset_key,
-        customer_facing,
-        type,
-        associated_gtfs_schedule_gtfs_dataset_key,
-        RANK() OVER(
-            PARTITION BY associated_gtfs_schedule_gtfs_dataset_key, type
-            ORDER BY dataset_name) AS rnk
-    FROM datasets_services_joined
-),
-
 pivoted AS (
     SELECT *
-    FROM dedupe_torrance
+    FROM datasets_services_joined
     PIVOT(
         STRING_AGG(gtfs_dataset_key) AS gtfs_dataset_key
         FOR type IN ('schedule', 'service_alerts', 'trip_updates', 'vehicle_positions')
