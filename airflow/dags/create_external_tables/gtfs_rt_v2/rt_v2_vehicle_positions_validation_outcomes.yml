@@ -43,6 +43,8 @@ schema_fields:
         type: INT64
       - name: response_headers
         type: JSON
+  - name: header
+    type: JSON
   - name: aggregation
     type: RECORD
     fields:
