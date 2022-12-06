@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: payments
     description: Source data from Littlepay data feeds
-    database: cal-itp-data-infra
+    database: "{{ var('SOURCE_DATABASE') }}"
     schema: payments
     tables:
       - name: authorisations

@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: gtfs_schedule_history
     description: Data in the gtfs_schedule_history dataset in BigQuery
-    database: cal-itp-data-infra
+    database: "{{ var('SOURCE_DATABASE') }}"
     schema: gtfs_schedule_history
     tables:
       - name: calitp_feed_parse_result
