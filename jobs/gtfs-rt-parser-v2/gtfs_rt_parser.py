@@ -231,7 +231,7 @@ class RTFileProcessingOutcome(ProcessingOutcome):
 
     @validator("header", allow_reuse=True)
     def header_must_exist_for_successful_parses(cls, v, values):
-        if values["success"] and values["step"] == "parse":
+        if values["success"] and values["step"] == RTProcessingStep.parse:
             assert v
         return v
 
