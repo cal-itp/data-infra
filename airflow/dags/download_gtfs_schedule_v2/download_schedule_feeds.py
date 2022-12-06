@@ -188,6 +188,10 @@ def download_all(task_instance, execution_date, **kwargs):
             to=[
                 "laurie.m@jarv.us",
                 "andrew.v@jarv.us",
+                "evan.siroky@dot.ca.gov",
+                "hunter.owens@dot.ca.gov",
+                "jameelah.y@jarv.us",
+                "olivia.ramacier@dot.ca.gov",
             ],
             html_content=html_content,
             subject=(

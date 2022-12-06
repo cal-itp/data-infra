@@ -7,7 +7,6 @@ default_args:
     depends_on_past: False
     start_date: !days_ago 1
     email:
-      - "blake.f@jarv.us"
       - "evan.siroky@dot.ca.gov"
       - "andrew.v@jarv.us"
       - "hunter.owens@dot.ca.gov"
