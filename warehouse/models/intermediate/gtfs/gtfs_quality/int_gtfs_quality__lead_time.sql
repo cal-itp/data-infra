@@ -23,7 +23,7 @@ dim_stop_times AS (
 ),
 
 dim_stops AS (
-    SELECT  *
+    SELECT  *,
       FROM {{ ref('dim_stops') }}
 ),
 
@@ -47,17 +47,18 @@ stop_times_expanded AS (
 stop_times_agg AS (
     SELECT feed_key,
            trip_id,
+           -- A single field summarizing all stops & times for this trip, for easy comparison
            STRING_AGG(stop_info_combined ORDER BY stop_sequence ASC) AS stop_info_agg
       FROM stop_times_expanded
      GROUP BY 1,2
 ),
 
+-- Aggregate information about each trip, including stops, stop times, and calendar attributes
 trips_expanded AS (
     SELECT t1.feed_key,
            t1.trip_id,
+           -- Combine stop & schedule summary fields for one summary field to rule them all
            CONCAT(t2.stop_info_agg,t3.day_combo) AS trip_info_combined,
-           t2.stop_info_agg,
-           t3.day_combo,
            t3.start_date,
            t3.end_date
       FROM dim_trips t1
@@ -77,13 +78,13 @@ distinct_feed_versions AS (
      WHERE key IS NOT null
 ),
 
+-- Maps each feed_key to the feed_key of the previous version of that feed
 feed_version_history AS (
     SELECT base64_url,
            feed_key,
            LAG (feed_key) OVER (PARTITION BY base64_url ORDER BY _valid_from ASC) AS previous_feed_key,
            EXTRACT(date FROM _valid_from) AS valid_from
       FROM distinct_feed_versions
-     ORDER BY base64_url
 ),
 
 trips_version_compare AS (
@@ -95,8 +96,10 @@ trips_version_compare AS (
          DATE_DIFF(valid_from, trips.start_date, DAY) AS days_since_start_date,
          DATE_DIFF(trips.end_date, valid_from, DAY) AS days_until_end_date
     FROM feed_version_history AS t1
+    -- Inner join, so that there will be one row for every trip for every feed
     JOIN trips_expanded AS trips
       ON t1.feed_key = trips.feed_key
+    -- Left join, so that prev_trips fields will be null in cases where a new trip has been added
     LEFT JOIN trips_expanded AS prev_trips
       ON t1.previous_feed_key = prev_trips.feed_key
      AND trips.trip_id = prev_trips.trip_id
@@ -107,8 +110,13 @@ daily_improper_trip_updates AS (
          valid_from AS date,
          COUNT(*) AS updates
     FROM trips_version_compare
-   WHERE (trip_info_combined != prev_trip_info_combined
-          OR prev_trip_info_combined IS null)
+   WHERE (
+            -- Something has changed about the trip since the previous version
+            trip_info_combined != prev_trip_info_combined
+         OR
+            -- This trip_id wasn't in the previous version
+            prev_trip_info_combined IS null
+         )
          -- Start date is no later than 7 days from now (can be in the past)
          AND days_since_start_date > -7
          -- End date is in the future
@@ -136,11 +144,21 @@ daily_improper_calendar_dates_updates AS (
          valid_from AS date,
          COUNT(*) AS updates
     FROM calendar_dates_joined
-        -- A new calendar_date is being added, or an existing calendar_date is changing its exception_type
-   WHERE (prev_exception_type IS null OR exception_type != prev_exception_type)
-        AND
-         -- Date is in the past or more than 7 days from now
-         (days_until_date < 0 OR days_until_date > 7)
+   WHERE (
+            -- A new calendar_date is being added
+            prev_exception_type IS null
+            OR
+            -- An existing calendar_date is changing its exception_type
+            exception_type != prev_exception_type
+         )
+         AND
+         (
+            -- Date is in the past
+            days_until_date < 0
+            OR
+            -- Date is more than 7 days from now
+            days_until_date > 7
+         )
    GROUP BY 1,2
 ),
 
