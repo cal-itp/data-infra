@@ -28,6 +28,6 @@ stg_gtfs_rt__agg_outcomes AS (
     FROM raw_outcomes
 )
 
-SELECT * FROM raw_outcomes
+SELECT * FROM stg_gtfs_rt__agg_outcomes
 
 {% endmacro %}
