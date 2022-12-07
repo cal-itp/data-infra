@@ -113,7 +113,12 @@ models:
           combination_of_columns:
             - date
             - base64_url
-      # Since int_gtfs_rt__daily_url_index only has data back to November, this table doesn't have as many rows as feed_guideline_index.
-      # - dbt_utils.equal_rowcount:
-      #     compare_model: ref('int_gtfs_quality__rt_feed_guideline_index')
-    columns: *stg_gtfs_guideline_columns
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__rt_feed_guideline_index')
+    # Reducing null_proportion minimum due to missing rows in rt_https check, due to missing data before Nov 22
+    # This floor can be raised over time, as more data populates
+    columns:
+      - name: status
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.50

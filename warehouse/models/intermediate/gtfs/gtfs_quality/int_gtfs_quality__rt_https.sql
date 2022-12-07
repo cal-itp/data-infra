@@ -21,7 +21,7 @@ int_gtfs_quality__rt_https AS (
             WHEN string_url IS NOT null AND string_url NOT LIKE 'https%' THEN "FAIL"
         END AS status,
     FROM feed_guideline_index AS idx
-    JOIN rt_daily_url_index AS url_index
+    LEFT JOIN rt_daily_url_index AS url_index
     ON idx.date = url_index.dt
    AND idx.base64_url = url_index.base64_url
    AND idx.feed_type = url_index.type
