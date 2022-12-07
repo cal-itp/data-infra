@@ -8,7 +8,6 @@ default_args:
     start_date: "2022-09-14"
     email:
       - "andrew.v@jarv.us"
-      - "blake.f@jarv.us"
       - "evan.siroky@dot.ca.gov"
       - "hunter.owens@dot.ca.gov"
       - "jameelah.y@jarv.us"
