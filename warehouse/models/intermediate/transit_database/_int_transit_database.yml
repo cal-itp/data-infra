@@ -76,3 +76,35 @@ models:
         description: Foreign key to dim_gtfs_datasets, for a record with data = "GTFS VehiclePositions."
       - name: gtfs_dataset_key_trip_updates
         description: Foreign key to dim_gtfs_datasets, for a record with data = "GTFS TripUpdates."
+  - name: int_transit_database__service_history
+    description: |
+      Daily list of services with attributes required to check whether they were
+      assessed by Cal-ITP on the given date.
+
+      This table is different than other Transit Database data because it
+      captures the historical state of various attributes. This historical
+      data is meant to be used for quality assessment purposes.
+
+      For the most up to date information about services, use dim_services.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - key
+            - date
+    columns:
+      - name: date
+        description: |
+          Date on which this service was in our Transit Database data.
+      - name: key
+        description: |
+          Service record key.
+      - name: name
+      - name: assessment_status
+        description: |
+          Assessment status from raw Transit Database data as of date.
+      - name: currently_operating
+        description: |
+          Currently operating value from raw Transit Database data as of date.
+      - name: service_type
+        description: |
+          Service type value from raw Transit Database data as of date.
