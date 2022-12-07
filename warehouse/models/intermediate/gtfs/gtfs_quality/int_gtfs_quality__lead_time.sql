@@ -29,10 +29,10 @@ dim_stops AS (
 
 dim_trips AS (
     SELECT  *
-    -- Add in trips from here, including stop times
       FROM {{ ref('dim_trips') }}
 ),
 
+-- Combine stop_time and stops data
 stop_times_expanded AS (
     SELECT t1.feed_key,
            t1.trip_id,
@@ -44,10 +44,11 @@ stop_times_expanded AS (
        AND t2.feed_key = t1.feed_key
 ),
 
+-- Aggregate stop_times up to the trip level
 stop_times_agg AS (
     SELECT feed_key,
            trip_id,
-           -- A single field summarizing all stops & times for this trip, for easy comparison
+           -- A single field summarizing all stop_times and stop info for this trip, for easy comparison
            STRING_AGG(stop_info_combined ORDER BY stop_sequence ASC) AS stop_info_agg
       FROM stop_times_expanded
      GROUP BY 1,2
@@ -83,102 +84,120 @@ feed_version_history AS (
     SELECT base64_url,
            feed_key,
            LAG (feed_key) OVER (PARTITION BY base64_url ORDER BY _valid_from ASC) AS previous_feed_key,
+           LEAD (feed_key) OVER (PARTITION BY base64_url ORDER BY _valid_from ASC) AS next_feed_key,
+           LEAD (EXTRACT(date FROM _valid_from)) OVER (PARTITION BY base64_url ORDER BY _valid_from ASC) AS next_feed_valid_from,
            EXTRACT(date FROM _valid_from) AS valid_from
       FROM distinct_feed_versions
 ),
 
-trips_version_compare AS (
+trips_version_history AS (
   SELECT t1.base64_url,
          t1.feed_key,
+         t1.previous_feed_key,
+         t1.next_feed_key,
          t1.valid_from,
+         t1.next_feed_valid_from,
          trips.trip_info_combined AS trip_info_combined,
-         prev_trips.trip_info_combined AS prev_trip_info_combined,
-         DATE_DIFF(valid_from, trips.start_date, DAY) AS days_since_start_date,
-         DATE_DIFF(trips.end_date, valid_from, DAY) AS days_until_end_date
     FROM feed_version_history AS t1
     -- Inner join, so that there will be one row for every trip for every feed
     JOIN trips_expanded AS trips
       ON t1.feed_key = trips.feed_key
-    -- Left join, so that prev_trips fields will be null in cases where a new trip has been added
-    LEFT JOIN trips_expanded AS prev_trips
-      ON t1.previous_feed_key = prev_trips.feed_key
-     AND trips.trip_id = prev_trips.trip_id
 ),
 
-daily_improper_trip_updates AS (
+trips_version_compare AS (
+  SELECT COALESCE(trips.base64_url,prev_trips.base64_url) AS base64_url,
+         COALESCE(trips.feed_key,prev_trips.next_feed_key) AS feed_key,
+         COALESCE(trips.valid_from,prev_trips.next_feed_valid_from) AS valid_from,
+         trips.trip_info_combined,
+         prev_trips.trip_info_combined AS prev_trip_info_combined,
+         DATE_DIFF(COALESCE(trips.valid_from, prev_trips.next_feed_valid_from), COALESCE(trips.start_date,prev_trips.feed_start_date), DAY) AS days_since_start_date,
+         DATE_DIFF(COALESCE(trips.end_date, prev_trips.end_date), COALESCE(trips.valid_from,prev_trips.next_feed_valid_from), DAY) AS days_until_end_date
+    FROM trips_version_history AS trips
+    FULL OUTER JOIN trips_version_history AS prev_trips
+      ON trips.previous_feed_key = prev_trips.feed_key
+     AND trips.trip_info_combined = prev_trips.trip_info_combined
+),
+
+daily_improper_trips_updates AS (
   SELECT feed_key,
          valid_from AS date,
-         COUNT(*) AS updates
+          -- A new trip is being added
+         COUNT(CASE WHEN prev_trip_info_combined IS null THEN 1 END) AS trip_added,
+          -- An existing trip is being removed
+         COUNT(CASE WHEN trip_info_combined IS null THEN 1 END) AS trip_removed,
+          -- An existing trip's is being changed
+         COUNT(CASE WHEN trip_info_combined != prev_trip_info_combined THEN 1 END) AS trip_changed
     FROM trips_version_compare
-   WHERE (
-            -- Something has changed about the trip since the previous version
-            trip_info_combined != prev_trip_info_combined
-         OR
-            -- This trip_id wasn't in the previous version
-            prev_trip_info_combined IS null
-         )
-         -- Start date is no later than 7 days from now (can be in the past)
-         AND days_since_start_date > -7
+   WHERE
          -- End date is in the future
-         AND days_until_end_date > 0
+         days_until_end_date > 0
+         -- Start date is in the past or up to 7 days from now
+         AND days_since_start_date > -7
    GROUP BY 1,2
 ),
 
 calendar_dates_joined AS (
   SELECT t1.base64_url,
          t1.feed_key,
+         t1.previous_feed_key,
+         t1.next_feed_key,
          t1.valid_from,
-         cal_dates.exception_type,
-         prev_cal_dates.exception_type AS prev_exception_type,
-         DATE_DIFF(cal_dates.date, valid_from, DAY) AS days_until_date
+         t1.next_feed_valid_from,
+         cal_dates.service_id_date,
+         cal_dates.date,
+         cal_dates.exception_type
     FROM feed_version_history AS t1
     JOIN dim_calendar_dates AS cal_dates
       ON t1.feed_key = cal_dates.feed_key
-    LEFT JOIN dim_calendar_dates AS prev_cal_dates
-      ON t1.previous_feed_key = prev_cal_dates.feed_key
+),
+
+calendar_dates_joined_previous AS (
+  SELECT COALESCE(cal_dates.base64_url, prev_cal_dates.base64_url) AS base64_url,
+         COALESCE(cal_dates.feed_key, prev_cal_dates.next_feed_key) AS feed_key,
+         COALESCE(cal_dates.valid_from, prev_cal_dates.next_feed_valid_from) AS valid_from,
+         cal_dates.exception_type,
+         prev_cal_dates.exception_type AS prev_exception_type,
+         DATE_DIFF(COALESCE(cal_dates.date,prev_cal_dates.date), COALESCE(cal_dates.valid_from,prev_cal_dates.next_feed_valid_from), DAY) AS days_until_date
+    FROM calendar_dates_joined AS cal_dates
+    FULL OUTER JOIN calendar_dates_joined AS prev_cal_dates
+      ON cal_dates.previous_feed_key = prev_cal_dates.feed_key
      AND cal_dates.service_id_date = prev_cal_dates.service_id_date
 ),
 
 daily_improper_calendar_dates_updates AS (
-  SELECT feed_key,
+  SELECT base64_url,
+         feed_key,
          valid_from AS date,
-         COUNT(*) AS updates
-    FROM calendar_dates_joined
-   WHERE (
-            -- A new calendar_date is being added
-            prev_exception_type IS null
-            OR
-            -- An existing calendar_date is changing its exception_type
-            exception_type != prev_exception_type
-         )
-         AND
-         (
-            -- Date is in the past
-            days_until_date < 0
-            OR
-            -- Date is more than 7 days from now
-            days_until_date > 7
-         )
-   GROUP BY 1,2
+          -- A new calendar_date is being added
+         COUNT(CASE WHEN prev_exception_type IS null THEN 1 END) AS cal_added,
+          -- An existing calendar_date is being removed
+         COUNT(CASE WHEN exception_type IS null THEN 1 END) AS cal_removed,
+          -- An existing calendar_date is changing its exception_type
+         COUNT(CASE WHEN exception_type != prev_exception_type THEN 1 END) AS cal_changed
+    FROM calendar_dates_joined_previous
+   WHERE
+        -- Date is between 0 and 7 days from now
+        days_until_date >= 0 AND days_until_date <= 7
+   GROUP BY 1,2,3
 ),
 
 feed_update_count AS (
     SELECT t1.date,
            t1.feed_key,
-           SUM(t2.updates)
+           SUM(t2.trip_added + t2.trip_removed + t2.trip_changed)
                OVER (
                    PARTITION BY t2.feed_key
                    ORDER BY t2.date
                    ROWS BETWEEN 30 PRECEDING AND CURRENT ROW
-                ) AS trip_updates_last_30_days,
-           SUM(t3.updates)
+                ) AS trips_updates_last_30_days,
+           SUM(t3.cal_added + t3.cal_removed + t3.cal_changed)
                OVER (
                    PARTITION BY t3.feed_key
                    ORDER BY t3.date
                    ROWS BETWEEN 30 PRECEDING AND CURRENT ROW
                 ) AS calendar_dates_updates_last_30_days
       FROM feed_guideline_index AS t1
-      LEFT JOIN daily_improper_trip_updates AS t2
+      LEFT JOIN daily_improper_trips_updates AS t2
         ON t1.feed_key = t2.feed_key
       LEFT JOIN daily_improper_calendar_dates_updates AS t3
         ON t1.feed_key = t3.feed_key
@@ -189,7 +208,7 @@ int_gtfs_quality__lead_time AS (
            feed_key,
            {{ lead_time() }} AS check,
            {{ up_to_dateness() }} AS feature,
-           CASE WHEN trip_updates_last_30_days + calendar_dates_updates_last_30_days > 0 THEN "FAIL"
+           CASE WHEN trips_updates_last_30_days + calendar_dates_updates_last_30_days > 0 THEN "FAIL"
                 ELSE "PASS"
            END AS status
       FROM feed_update_count
