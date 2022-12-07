@@ -19,8 +19,8 @@ stg_gtfs_rt__service_alerts AS (
 
         id,
 
-        alert.activePeriod.start AS active_period_start,
-        alert.activePeriod.end AS active_period_end,
+        alert.activePeriod.`start` AS active_period_start,
+        alert.activePeriod.`end` AS active_period_end,
 
         alert.informedEntity.agency_id AS informed_entity_agency_id,
         alert.informedEntity.route_id AS informed_entity_route_id,
