@@ -1511,6 +1511,10 @@ vine-transit:
       gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=VN
       gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
       gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=VN
+    - gtfs_schedule_url: https://napa.syncromatics.com/gtfs
+      gtfs_rt_vehicle_positions_url: https://napa.syncromatics.com/gtfs-rt/vehiclepositions
+      gtfs_rt_service_alerts_url: https://napa.syncromatics.com/gtfs-rt/alerts
+      gtfs_rt_trip_updates_url: https://napa.syncromatics.com/gtfs-rt/tripupdates
   itp_id: 218
 visalia-transit:
   agency_name: Visalia Transit
