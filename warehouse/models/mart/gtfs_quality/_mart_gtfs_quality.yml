@@ -50,7 +50,12 @@ models:
         tests:
           - not_null
       - *check
-      - *status
+      # Reducing null_proportion minimum due to missing rows in rt_https check, due to missing data before Nov 22
+      # This floor can be raised over time, as more data populates
+      - name: status
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.90
 
 
   - name: fct_daily_rt_feed_validation_notices

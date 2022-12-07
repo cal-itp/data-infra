@@ -1,6 +1,5 @@
 WITH feed_guideline_index AS (
     SELECT * FROM {{ ref('int_gtfs_quality__rt_feed_guideline_index') }}
-     WHERE feed_type = 'vehicle_positions'
 ),
 
 fct_daily_rt_feed_files AS (
@@ -11,18 +10,21 @@ count_files AS (
     SELECT
         base64_url,
         date,
+        feed_type,
         SUM(parse_success_file_count) AS rt_files
     FROM fct_daily_rt_feed_files
-   WHERE feed_type = 'vehicle_positions'
-   GROUP BY 1, 2
+   GROUP BY 1, 2, 3
 ),
 
-int_gtfs_quality__feed_present_vehicle_positions AS (
+int_gtfs_quality__rt_feeds_present AS (
     SELECT
         idx.date,
         idx.base64_url,
         idx.feed_type,
-        {{ feed_present_vehicle_positions() }} AS check,
+        CASE WHEN idx.feed_type = 'service_alerts' THEN {{ feed_present_service_alerts() }}
+             WHEN idx.feed_type = 'trip_updates' THEN {{ feed_present_trip_updates() }}
+             WHEN idx.feed_type = 'vehicle_positions' THEN {{ feed_present_vehicle_positions() }}
+        END AS check,
         {{ compliance() }} AS feature,
         rt_files,
         CASE
@@ -31,8 +33,9 @@ int_gtfs_quality__feed_present_vehicle_positions AS (
         END AS status,
     FROM feed_guideline_index AS idx
     LEFT JOIN count_files AS files
-    ON idx.date = files.date
-        AND idx.base64_url = files.base64_url
+           ON idx.date = files.date
+          AND idx.base64_url = files.base64_url
+          AND idx.feed_type = files.feed_type
 )
 
-SELECT * FROM int_gtfs_quality__feed_present_vehicle_positions
+SELECT * FROM int_gtfs_quality__rt_feeds_present
