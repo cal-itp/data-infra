@@ -90,6 +90,7 @@ feed_version_history AS (
       FROM distinct_feed_versions
 ),
 
+-- There will be one row for every trip for every feed
 trips_version_history AS (
   SELECT t1.base64_url,
          t1.feed_key,
@@ -97,29 +98,39 @@ trips_version_history AS (
          t1.next_feed_key,
          t1.valid_from,
          t1.next_feed_valid_from,
+         trips.trip_id,
+         trips.start_date,
+         trips.end_date,
          trips.trip_info_combined AS trip_info_combined,
     FROM feed_version_history AS t1
-    -- Inner join, so that there will be one row for every trip for every feed
     JOIN trips_expanded AS trips
       ON t1.feed_key = trips.feed_key
 ),
 
+-- The self-outer-join, with all of the coalescing, allows us to see:
+------ 1 trips that were REMOVED since the previous version
+------ 2 trips that were ADDED since the previous version
+------ 3 trips that were CHANGED since the previous version
 trips_version_compare AS (
   SELECT COALESCE(trips.base64_url,prev_trips.base64_url) AS base64_url,
          COALESCE(trips.feed_key,prev_trips.next_feed_key) AS feed_key,
          COALESCE(trips.valid_from,prev_trips.next_feed_valid_from) AS valid_from,
+         trips.trip_id,
+         prev_trips.trip_id AS prev_trip_id,
          trips.trip_info_combined,
          prev_trips.trip_info_combined AS prev_trip_info_combined,
-         DATE_DIFF(COALESCE(trips.valid_from, prev_trips.next_feed_valid_from), COALESCE(trips.start_date,prev_trips.feed_start_date), DAY) AS days_since_start_date,
+         DATE_DIFF(COALESCE(trips.valid_from, prev_trips.next_feed_valid_from), COALESCE(trips.start_date,prev_trips.start_date), DAY) AS days_since_start_date,
          DATE_DIFF(COALESCE(trips.end_date, prev_trips.end_date), COALESCE(trips.valid_from,prev_trips.next_feed_valid_from), DAY) AS days_until_end_date
     FROM trips_version_history AS trips
     FULL OUTER JOIN trips_version_history AS prev_trips
       ON trips.previous_feed_key = prev_trips.feed_key
-     AND trips.trip_info_combined = prev_trips.trip_info_combined
+     AND trips.trip_id = prev_trips.trip_id
 ),
 
+-- We count each infraction seprately, mostly for QA and sanity check purposes
 daily_improper_trips_updates AS (
-  SELECT feed_key,
+  SELECT base64_url,
+         feed_key,
          valid_from AS date,
           -- A new trip is being added
          COUNT(CASE WHEN prev_trip_info_combined IS null THEN 1 END) AS trip_added,
@@ -133,7 +144,7 @@ daily_improper_trips_updates AS (
          days_until_end_date > 0
          -- Start date is in the past or up to 7 days from now
          AND days_since_start_date > -7
-   GROUP BY 1,2
+   GROUP BY 1,2,3
 ),
 
 calendar_dates_joined AS (
@@ -151,6 +162,10 @@ calendar_dates_joined AS (
       ON t1.feed_key = cal_dates.feed_key
 ),
 
+-- The self-outer-join, with all of the coalescing, allows us to see:
+------ 1 dates that were REMOVED since the previous version
+------ 2 dates that were ADDED since the previous version
+------ 3 dates that were CHANGED since the previous version
 calendar_dates_joined_previous AS (
   SELECT COALESCE(cal_dates.base64_url, prev_cal_dates.base64_url) AS base64_url,
          COALESCE(cal_dates.feed_key, prev_cal_dates.next_feed_key) AS feed_key,
@@ -164,6 +179,7 @@ calendar_dates_joined_previous AS (
      AND cal_dates.service_id_date = prev_cal_dates.service_id_date
 ),
 
+-- We count each infraction seprately, mostly for QA and sanity check purposes
 daily_improper_calendar_dates_updates AS (
   SELECT base64_url,
          feed_key,
