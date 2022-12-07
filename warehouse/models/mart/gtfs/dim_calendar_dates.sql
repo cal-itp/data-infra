@@ -15,7 +15,8 @@ make_dim AS (
 ),
 
 dim_calendar_dates AS (
-    SELECT
+    -- some full duplicate rows
+    SELECT DISTINCT
         {{ dbt_utils.surrogate_key(['feed_key', 'service_id', 'date']) }} AS key,
         feed_key,
         service_id,
