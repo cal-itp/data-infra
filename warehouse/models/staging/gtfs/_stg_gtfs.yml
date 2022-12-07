@@ -117,6 +117,56 @@ models:
       - name: bearing
       - name: odometer
       - name: speed
+  - name: stg_gtfs_rt__service_alerts
+    description: |
+      Service alerts realtime data.
+      See https://gtfs.org/realtime/reference/ for specification.
+    tests:
+      # ideally base64_url, _extract_ts, id would be sufficient
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - _extract_ts
+            - id
+          # test hour = 0 UTC because that's 5pm Pacific = PM peak, good sample of data
+          where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM _extract_ts)) = 0
+    columns:
+      - name: dt
+      - name: hour
+      - name: base64_url
+      - name: _extract_ts
+      - name: _config_extracted_at
+      - name: _name
+      - name: header_timestamp
+      - name: header_incrementality
+      - name: header_version
+      - name: id
+      - name: active_period_start
+      - name: active_period_end
+      - name: informed_entity_agency_id
+      - name: informed_entity_route_id
+      - name: informed_entity_route_type
+      - name: informed_entity_direction_id
+      - name: informed_entity_trip_id
+      - name: informed_entity_trip_route_id
+      - name: informed_entity_trip_direction_id
+      - name: informed_entity_trip_start_time
+      - name: informed_entity_trip_start_date
+      - name: informed_entity_trip_schedule_relationship
+      - name: informed_entity_stop_id
+      - name: cause
+      - name: effect
+      - name: url_translation_text
+      - name: url_translation_language
+      - name: header_text_translation_text
+      - name: header_text_translation_language
+      - name: description_text_translation_text
+      - name: description_text_translation_language
+      - name: tts_header_text_translation_text
+      - name: tts_header_text_translation_language
+      - name: tts_description_text_translation_text
+      - name: tts_description_text_translation_language
+      - name: severity_level
   - name: stg_gtfs_schedule__agency
     description: |
       Cleaned GTFS schedule agency data.
