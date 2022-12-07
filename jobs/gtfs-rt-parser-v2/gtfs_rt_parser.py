@@ -209,15 +209,17 @@ class RTHourlyAggregation(PartitionedGCSArtifact):
 
 class RTFileProcessingOutcome(ProcessingOutcome):
     # an extract is technically optional if we have a blob missing metadata
+    step: RTProcessingStep
     extract: Optional[GTFSRTFeedExtract]
+    header: Optional[Dict[Any, Any]]
     aggregation: Optional[RTHourlyAggregation]
     blob_path: Optional[str]
 
     @validator("aggregation", allow_reuse=True, always=True)
     def aggregation_exists_if_success(cls, v, values):
-        assert (v is not None) == values[
-            "success"
-        ], "aggregation must exist if and only if the outcome is successful"
+        assert (
+            values["success"] or v is None
+        ), "aggregation cannot exist if there is a failure"
         return v
 
     @validator("blob_path", allow_reuse=True, always=True)
@@ -225,6 +227,12 @@ class RTFileProcessingOutcome(ProcessingOutcome):
         assert (v is None) != (
             values["extract"] is None
         ), "one of blob or extract must be null"
+        return v
+
+    @validator("header", allow_reuse=True)
+    def header_must_exist_for_successful_parses(cls, v, values):
+        if values["success"] and values["step"] == RTProcessingStep.parse:
+            assert v
         return v
 
 
@@ -474,7 +482,7 @@ def parse_and_upload(
                     )
                 outcomes.append(
                     RTFileProcessingOutcome(
-                        step="parse",
+                        step=RTProcessingStep.parse,
                         success=False,
                         exception=e,
                         extract=extract,
@@ -482,7 +490,25 @@ def parse_and_upload(
                 )
                 continue
 
-            if not parsed or "entity" not in parsed:
+            if not parsed:
+                msg = f"WARNING: no parsed dictionary found in {str(extract.path)}"
+                if verbose:
+                    log(
+                        msg,
+                        fg=typer.colors.YELLOW,
+                        pbar=pbar,
+                    )
+                outcomes.append(
+                    RTFileProcessingOutcome(
+                        step=RTProcessingStep.parse,
+                        success=False,
+                        exception=ValueError(msg),
+                        extract=extract,
+                    )
+                )
+                continue
+
+            if "entity" not in parsed:
                 msg = f"WARNING: no parsed entity found in {str(extract.path)}"
                 if verbose:
                     log(
@@ -492,10 +518,10 @@ def parse_and_upload(
                     )
                 outcomes.append(
                     RTFileProcessingOutcome(
-                        step="parse",
-                        success=False,
-                        exception=ValueError(msg),
+                        step=RTProcessingStep.parse,
+                        success=True,
                         extract=extract,
+                        header=parsed["header"],
                     )
                 )
                 continue
@@ -522,10 +548,11 @@ def parse_and_upload(
                 written += 1
             outcomes.append(
                 RTFileProcessingOutcome(
-                    step="parse",
+                    step=RTProcessingStep.parse,
                     success=True,
                     extract=extract,
                     aggregation=hour,
+                    header=parsed["header"],
                 )
             )
             del parsed

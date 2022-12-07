@@ -5,11 +5,11 @@ version: 2
 
 sources:
   - name: cloudaudit
-    database: cal-itp-data-infra
+    database: "{{ var('SOURCE_DATABASE') }}"
     schema: audit
 
   - name: information_schema
-    database: cal-itp-data-infra
+    database: "{{ var('SOURCE_DATABASE') }}"
     # this schema is queried as `region-us`.information_schema
     schema: information_schema
     tables:
