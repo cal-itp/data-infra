@@ -127,7 +127,7 @@ trips_version_compare AS (
      AND trips.trip_id = prev_trips.trip_id
 ),
 
--- We count each infraction seprately, mostly for QA and sanity check purposes
+-- We count each infraction seprately, mostly for QA purposes
 daily_improper_trips_updates AS (
   SELECT base64_url,
          feed_key,
@@ -179,7 +179,7 @@ calendar_dates_joined_previous AS (
      AND cal_dates.service_id_date = prev_cal_dates.service_id_date
 ),
 
--- We count each infraction seprately, mostly for QA and sanity check purposes
+-- We count each infraction seprately, mostly for QA purposes
 daily_improper_calendar_dates_updates AS (
   SELECT base64_url,
          feed_key,

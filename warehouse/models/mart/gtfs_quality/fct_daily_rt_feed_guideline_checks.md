@@ -15,4 +15,7 @@ Here is a list of currently-implemented checks:
 |Vehicle positions RT feed is present | Compliance | The vehicle positions RT feed contains at least one file on the given day.|
 | Trip updates RT feed is present | Compliance | The trip updates RT feed contains at least one file on the given day.|
 | Service alerts RT feed is present | Compliance | The service alerts RT feed contains at least one file on the given day.|
+| Service alerts RT feed uses HTTPS | Best Practice Alignment | The service alerts RT feed endpoint uses HTTPS instead of HTTPS to ensure feed integrity.|
+|Vehicle positions RT feed uses HTTPS | Best Practice Alignment | The vehicle positions RT feed endpoint uses HTTPS instead of HTTPS to ensure feed integrity.|
+| Trip updates RT feed uses HTTPS | Best Practice Alignment | The trip updates RT feed endpoint uses HTTPS instead of HTTPS to ensure feed integrity.|
 {% enddocs %}

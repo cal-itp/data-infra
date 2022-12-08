@@ -103,22 +103,27 @@ models:
     tests: *stg_gtfs_guideline_tests_rt
     columns: *stg_gtfs_guideline_columns
 
-  - name: int_gtfs_quality__feed_present_service_alerts
-    tests: &stg_gtfs_guideline_tests_rt_single_feed
+  - name: int_gtfs_quality__rt_feeds_present
+    tests: *stg_gtfs_guideline_tests_rt
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__rt_https
+    tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - date
             - base64_url
     columns: *stg_gtfs_guideline_columns
 
-  - name: int_gtfs_quality__feed_present_vehicle_positions
-    tests: *stg_gtfs_guideline_tests_rt_single_feed
-    columns: *stg_gtfs_guideline_columns
-
-  - name: int_gtfs_quality__feed_present_trip_updates
-    tests: *stg_gtfs_guideline_tests_rt_single_feed
-    columns: *stg_gtfs_guideline_columns
-
   - name: int_gtfs_quality__lead_time
     tests: *stg_gtfs_guideline_tests_schedule
     columns: *stg_gtfs_guideline_columns
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__rt_feed_guideline_index')
+    # Reducing null_proportion minimum due to missing rows in rt_https check, due to missing data before Nov 22
+    # This floor can be raised over time, as more data populates
+    columns:
+      - name: status
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.50
