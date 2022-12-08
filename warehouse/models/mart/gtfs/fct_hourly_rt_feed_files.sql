@@ -22,6 +22,11 @@ dim_gtfs_datasets AS (
     FROM {{ ref('dim_gtfs_datasets') }}
 ),
 
+int_gtfs_rt__daily_url_index AS (
+    SELECT *
+    FROM {{ ref('int_gtfs_rt__daily_url_index') }}
+),
+
 parse_outcomes AS (
     SELECT *
     FROM {{ ref('int_gtfs_rt__unioned_parse_outcomes') }}
@@ -77,19 +82,26 @@ pivoted_parse_outcomes AS (
 
 fct_hourly_rt_feed_files AS (
     SELECT
-        parse.*,
         {{ dbt_utils.surrogate_key(['parse.dt', 'parse.base64_url']) }} AS key,
-        url_map.gtfs_dataset_key,
-        datasets.schedule_to_use_for_rt_validation_gtfs_dataset_key,
-        schedule.feed_key AS schedule_feed_key
-    FROM pivoted_parse_outcomes AS parse
-    LEFT JOIN int_transit_database__urls_to_gtfs_datasets AS url_map
-        ON parse.base64_url = url_map.base64_url
-    LEFT JOIN dim_gtfs_datasets AS datasets
-        ON url_map.gtfs_dataset_key = datasets.key
-    LEFT JOIN fct_daily_schedule_feeds AS schedule
-        ON datasets.schedule_to_use_for_rt_validation_gtfs_dataset_key = schedule.gtfs_dataset_key
-        AND parse.dt = schedule.date
+        url_index.dt,
+        url_index.string_url,
+        url_index.base64_url,
+        url_index.type AS feed_type,
+        parse.* EXCEPT (dt, base64_url, feed_type)
+
+    FROM int_gtfs_rt__daily_url_index AS url_index
+    LEFT JOIN pivoted_parse_outcomes AS parse
+        ON url_index.dt = parse.dt
+        AND url_index.base64_url = parse.base64_url
+        AND url_index.type = parse.feed_type
+
+    -- LEFT JOIN int_transit_database__urls_to_gtfs_datasets AS url_map
+    --     ON parse.base64_url = url_map.base64_url
+    -- LEFT JOIN dim_gtfs_datasets AS datasets
+    --     ON url_map.gtfs_dataset_key = datasets.key
+    -- LEFT JOIN fct_daily_schedule_feeds AS schedule
+    --     ON datasets.schedule_to_use_for_rt_validation_gtfs_dataset_key = schedule.gtfs_dataset_key
+    --     AND parse.dt = schedule.date
 )
 
 SELECT * FROM fct_hourly_rt_feed_files
