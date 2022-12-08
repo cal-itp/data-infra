@@ -113,11 +113,6 @@ models:
           combination_of_columns:
             - date
             - base64_url
-    columns: *stg_gtfs_guideline_columns
-
-  - name: int_gtfs_quality__lead_time
-    tests: *stg_gtfs_guideline_tests_schedule
-    columns: *stg_gtfs_guideline_columns
       - dbt_utils.equal_rowcount:
           compare_model: ref('int_gtfs_quality__rt_feed_guideline_index')
     # Reducing null_proportion minimum due to missing rows in rt_https check, due to missing data before Nov 22
@@ -127,3 +122,7 @@ models:
         tests:
           - dbt_utils.not_null_proportion:
               at_least: 0.50
+
+  - name: int_gtfs_quality__lead_time
+    tests: *stg_gtfs_guideline_tests_schedule
+    columns: *stg_gtfs_guideline_columns
