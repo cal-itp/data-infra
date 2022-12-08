@@ -152,7 +152,7 @@ def unzip_individual_feed(
             pbar=pbar,
         )
     except Exception as e:
-        log(f"Can't process {extract.path}: {e}", pbar=pbar)
+        log(f"Can't process {extract.path}: {type(e)} {e}", pbar=pbar)
         return GTFSScheduleFeedExtractUnzipOutcome(
             success=False,
             extract=extract,
