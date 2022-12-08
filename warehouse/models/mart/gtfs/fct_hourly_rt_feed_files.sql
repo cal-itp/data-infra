@@ -7,29 +7,21 @@
     {% set max_date = dates[0] %}
 {% endif %}
 
-WITH int_transit_database__urls_to_gtfs_datasets AS (
-    SELECT *
-    FROM {{ ref('int_transit_database__urls_to_gtfs_datasets') }}
-),
-
-fct_daily_schedule_feeds AS (
-    SELECT *
-    FROM {{ ref('fct_daily_schedule_feeds') }}
-),
-
-dim_gtfs_datasets AS (
-    SELECT *
-    FROM {{ ref('dim_gtfs_datasets') }}
-),
+WITH
 
 int_gtfs_rt__daily_url_index AS (
     SELECT *
     FROM {{ ref('int_gtfs_rt__daily_url_index') }}
 ),
 
-parse_outcomes AS (
+int_gtfs_rt__unioned_parse_outcomes AS (
     SELECT *
     FROM {{ ref('int_gtfs_rt__unioned_parse_outcomes') }}
+),
+
+parse_outcomes AS (
+    SELECT *
+    FROM int_gtfs_rt__unioned_parse_outcomes
     {% if is_incremental() %}
     WHERE dt >= DATE '{{ max_date }}'
     {% else %}
@@ -40,10 +32,12 @@ parse_outcomes AS (
 daily_tot AS (
 
     SELECT
+
         dt,
         base64_url,
         feed_type,
         COUNT(*) as file_count_day
+
     FROM parse_outcomes
     GROUP BY
         dt,
@@ -52,15 +46,17 @@ daily_tot AS (
 
 ),
 
-wide_hourly AS (
+hourly_tot AS (
 
     SELECT *
     FROM
         (SELECT
-        dt,
-        EXTRACT(HOUR FROM hour AT TIME ZONE "America/Los_Angeles") as download_hour,
-        base64_url,
-        feed_type,
+
+            dt,
+            EXTRACT(HOUR FROM hour AT TIME ZONE "America/Los_Angeles") as download_hour,
+            base64_url,
+            feed_type,
+
         FROM parse_outcomes)
     PIVOT(
         COUNT(*) file_count_hr
@@ -71,37 +67,43 @@ wide_hourly AS (
     )
 ),
 
-pivoted_parse_outcomes AS (
+pivoted_tots AS (
 
-    SELECT *
+    SELECT
+
+        daily_tot.dt,
+        daily_tot.base64_url,
+        daily_tot.feed_type,
+        daily_tot.file_count_day,
+
+        hourly_tot.* EXCEPT (dt, base64_url, feed_type)
+
     FROM daily_tot
-    LEFT JOIN wide_hourly
-        USING (dt, base64_url, feed_type)
+    LEFT JOIN hourly_tot
+        ON daily_tot.dt = hourly_tot.dt
+            AND daily_tot.base64_url = hourly_tot.base64_url
+            AND daily_tot.feed_type = hourly_tot.feed_type
 
 ),
 
 fct_hourly_rt_feed_files AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['parse.dt', 'parse.base64_url']) }} AS key,
+
+        {{ dbt_utils.surrogate_key(['pivoted_tots.dt', 'pivoted_tots.base64_url']) }} AS key,
+
         url_index.dt,
         url_index.string_url,
         url_index.base64_url,
         url_index.type AS feed_type,
-        parse.* EXCEPT (dt, base64_url, feed_type)
+
+        pivoted_tots.* EXCEPT (dt, base64_url, feed_type)
 
     FROM int_gtfs_rt__daily_url_index AS url_index
-    LEFT JOIN pivoted_parse_outcomes AS parse
-        ON url_index.dt = parse.dt
-        AND url_index.base64_url = parse.base64_url
-        AND url_index.type = parse.feed_type
+    LEFT JOIN pivoted_tots
+        ON url_index.dt = pivoted_tots.dt
+            AND url_index.base64_url = pivoted_tots.base64_url
+            AND url_index.type = pivoted_tots.feed_type
 
-    -- LEFT JOIN int_transit_database__urls_to_gtfs_datasets AS url_map
-    --     ON parse.base64_url = url_map.base64_url
-    -- LEFT JOIN dim_gtfs_datasets AS datasets
-    --     ON url_map.gtfs_dataset_key = datasets.key
-    -- LEFT JOIN fct_daily_schedule_feeds AS schedule
-    --     ON datasets.schedule_to_use_for_rt_validation_gtfs_dataset_key = schedule.gtfs_dataset_key
-    --     AND parse.dt = schedule.date
 )
 
 SELECT * FROM fct_hourly_rt_feed_files
