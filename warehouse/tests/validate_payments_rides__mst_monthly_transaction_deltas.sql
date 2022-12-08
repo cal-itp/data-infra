@@ -11,6 +11,7 @@ extract_count_date AS (
 
     SELECT
 
+        participant_id,
         COUNT(*) AS ridership_count,
         CONCAT(CAST(EXTRACT(YEAR FROM transaction_date_time_pacific) AS string),
             '-',
@@ -24,8 +25,7 @@ extract_count_date AS (
         ) AS yearmonth
 
     FROM payments_rides
-    WHERE participant_id = 'mst'
-    GROUP BY yearmonth
+    GROUP BY yearmonth, participant_id
 ),
 
 
@@ -38,8 +38,8 @@ calculate_relative_difference AS (
             (
                 ridership_count - LAG(
                     ridership_count, 1
-                ) OVER (ORDER BY yearmonth)
-            ) / LAG(ridership_count, 1) OVER (ORDER BY yearmonth)
+                ) OVER (PARTITION BY participant_id ORDER BY yearmonth)
+            ) / LAG(ridership_count, 1) OVER (PARTITION BY participant_id ORDER BY yearmonth)
         ) * 100
         AS relative_difference
 
@@ -51,16 +51,18 @@ test_recent_values AS (
 
     SELECT
 
+        participant_id,
         yearmonth,
         ridership_count,
         relative_difference
 
     FROM
         (SELECT
+            participant_id,
             yearmonth,
             ridership_count,
             relative_difference,
-            RANK() OVER (ORDER BY yearmonth DESC) AS rank
+            RANK() OVER (PARTITION BY participant_id ORDER BY yearmonth DESC) AS rank
             FROM calculate_relative_difference)
     WHERE rank != 1
         AND rank < 5
