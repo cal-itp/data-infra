@@ -179,13 +179,13 @@ calendar_dates_version_history AS (
 calendar_dates_version_compare AS (
   SELECT
          -- base64_url is same between feed versions
-         COALESCE(trips.base64_url,prev_trips.base64_url) AS base64_url,
+         COALESCE(cal_dates.base64_url,prev_cal_dates.base64_url) AS base64_url,
          -- one feed's key is the previous feed's next key
-         COALESCE(trips.feed_key,prev_trips.next_feed_key) AS feed_key,
+         COALESCE(cal_dates.feed_key,prev_cal_dates.next_feed_key) AS feed_key,
          -- one feed's previous key is the previous feed's key
-         COALESCE(trips.prev_feed_key,prev_trips.feed_key) AS prev_feed_key,
+         COALESCE(cal_dates.prev_feed_key,prev_cal_dates.feed_key) AS prev_feed_key,
          -- we need to know the next feed's valid_from date, in cases where a trip is removed since the previous feed
-         COALESCE(trips.valid_from,prev_trips.next_feed_valid_from) AS valid_from,
+         COALESCE(cal_dates.valid_from,prev_cal_dates.next_feed_valid_from) AS valid_from,
          cal_dates.exception_type,
          prev_cal_dates.exception_type AS prev_exception_type,
          DATE_DIFF(COALESCE(cal_dates.date,prev_cal_dates.date), COALESCE(cal_dates.valid_from,prev_cal_dates.next_feed_valid_from), DAY) AS days_until_date
