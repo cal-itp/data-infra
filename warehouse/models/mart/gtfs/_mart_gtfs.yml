@@ -1362,3 +1362,4 @@ models:
           in the input data. This indicates that data quality issues were present in the stop times data
           that is being summarized here.
   - name: fct_hourly_rt_feed_files
+  - name: fct_hourly_rt_feed_files_success
