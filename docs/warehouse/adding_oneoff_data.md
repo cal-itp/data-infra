@@ -17,7 +17,7 @@ When uploading data to the warehouse we will use the `uploaded_data` dataset in 
 bq --location=us-west2 load <source_format> --autodetect <destination_table> <source>
 ```
 
-* The **`<source_format>`** specifies the type of file you would like to use. An example of this flag's use is `--source-format=CSV`. Other options include `PARQUET` and `NEWLINE_DELIMITED_JSON`
+* The **`<source_format>`** specifies the type of file you would like to use. An example of this flag's use is `--source_format=CSV`. Other options include `PARQUET` and `NEWLINE_DELIMITED_JSON`
 
 * The **`<destination_table>`** is the table you would like to create, or append to if the table already exists. Your uploaded table destination should always be the `uploaded_data` dataset in BigQuery (e.g. the `destination_table` name should always have the format `uploaded_data.your_new_table_name`).
   * If you are looking to **create a new table**: use a new table name
