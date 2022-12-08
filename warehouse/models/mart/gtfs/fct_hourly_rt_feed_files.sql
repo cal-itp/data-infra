@@ -3,7 +3,7 @@
 -- BigQuery does not do partition elimination when using a subquery: https://stackoverflow.com/questions/54135893/using-subquery-for-partitiontime-in-bigquery-does-not-limit-cost
 -- save max date in a variable instead so it can be referenced in incremental logic and still use partition elimination
 {% if is_incremental() %}
-    {% set dates = dbt_utils.get_column_values(table=this, column='date', order_by = 'date DESC', max_records = 1) %}
+    {% set dates = dbt_utils.get_column_values(table=this, column='dt', order_by = 'dt DESC', max_records = 1) %}
     {% set max_date = dates[0] %}
 {% endif %}
 
@@ -38,7 +38,7 @@ daily_tot AS (
         dt,
         base64_url,
         feed_type,
-        COUNT(*) as file_count
+        COUNT(*) as file_count_day
     FROM parse_outcomes
     GROUP BY
         dt,
@@ -58,7 +58,7 @@ wide_hourly AS (
         feed_type,
         FROM parse_outcomes)
     PIVOT(
-        COUNT(*) success_file_count_hour
+        COUNT(*) file_count_hr
         FOR download_hour IN
         (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
             11, 12, 13, 14, 15, 16, 17, 18, 19,
