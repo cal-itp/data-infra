@@ -58,8 +58,12 @@ models:
           Core: funded by Caltrans/can control or influence somewhat
           Other Public Transit: (publicly available or managed) and publicly funded transit
           Other Transit: transit that isn't the above
-      - name: ntp_id
-        description: National Transit Database (NTD) ID
+      - name: ntd_agency_info_key
+        description: Foreign key to `dim_ntd_agency_info`.
+        tests:
+          - relationships:
+             to: ref('dim_ntd_agency_info')
+             field: key
       - name: alias
       - name: gtfs_static_status
         description: |
@@ -73,6 +77,13 @@ models:
           records with realtime GTFS and at least one managed service has complete RT coverage (i.e.,
           all three RT feed types: vehicle positions, trip updates, and service alerts).
           Otherwise, status is "RT Incomplete".
+      - name: hubspot_company_record_id
+        description: |
+          Organization's ID in Hubspot CRM.
+      - name: assessment_status
+        description: |
+          Is either "Yes" or "No" and indicates whether this Organization
+          manages qualifying assessed services
   - name: dim_services
     description: '{{ doc("services_table") }}'
     columns:
@@ -118,6 +129,10 @@ models:
           or GTFS guidelines checks implemented in `mart_gtfs_guidelines.fact_daily_guideline_checks`.
           Use those tables directly for the most up-to-date information on individual GTFS feeds'
           validation and guideline statuses.**
+      - name: assessment_status
+        description: |
+          Is either "Yes" or "No" and indicates whether this Service qualifies as
+          being an assessed service
   - name: dim_products
     description: '{{ doc("products_table") }}'
     columns:
@@ -160,6 +175,17 @@ models:
         description: |
           If "true", indicates that this dataset should be ingested by the
           Cal-ITP data pipeline. Nulls indicate dataset should not be ingested.
+      - name: regional_feed_type
+        description: |
+          Describes whether this feed is a combined regional feed or has a relation
+          to a combined regional feed in some manner.
+          For example for MTC 511, the combined regional feed has type "Combined
+          Regional Feed", and the MTC-published subfeeds have type "Regional Subfeed".
+          If you are performing an analysis where using a regional combined feed is
+          inappropriate (even though that is the customer-facing data), this field can
+          help you assess other alternative feeds for the same services and organizations.
+          Not specified (null) for feeds with no relationship to regional feeds.
+      - name: base64_url
       - name: deprecated_date
         description: |
           If populated, indicates that dataset was deprecated on listed date
@@ -232,6 +258,14 @@ models:
           - relationships:
              to: ref('dim_gtfs_datasets')
              field: key
+      - name: customer_facing
+        description: |
+          Indicates that this gtfs service data relationship represents the primary way that customers
+          should be receiving GTFS data in trip planning applications. Every service/dataset
+          type combo with a record in this table should have exactly one of those records
+          marked as customer-facing.
+          This field is "true" for customer-facing feeds and otherwise false.
+          This field is intended to replace the `category` field over time.
       - name: category
         description: |
           "Primary" (indicating that this is the canonical dataset for this service) or
@@ -297,16 +331,29 @@ models:
              field: key
   - name: dim_provider_gtfs_data
     description: |
-      Each record links together an organization with a GTFS dataset,
-      where the organization manages a service for which that GTFS dataset is "primary".
-      Thus, each row represents a unique "primary" organization / service / gtfs_service_data /
-      gtfs_dataset relationship. This table can be used to determine what
-      GTFS dataset(s) represent a given provider's service(s); i.e., if
-      trying to determine whether a given "agency" "has" GTFS, this table can
-      be used to make that determination.
+      Each record links together an organization with a service and a set of up to four
+      GTFS datasets (schedule, RT service alerts, RT vehicle positions, and RT trip updates),
+      where the organization manages the service.
+      This table can be used to determine what GTFS dataset(s) represent a given provider's service(s);
+      i.e., this table can be used to determine whether a given "agency" "has" GTFS.
 
-      Note that GTFS datasets whose service relationships are null or unknown
-      will not be present here.
+      To identify specific records within a given dataset that
+      correspond to the listed service:
+      * Selection levels are in following order: agency_id, network_id, route_id
+      * BLANK indicates ALL records
+      * Comma-separated list for values that should be selected at that selection level
+      * "*" indicates remaining records after other selections at that selection level
+
+      For further details, see: https://docs.calitp.org/data-infra/datasets_and_tables/transitdatabase.html?highlight=network_id#gtfs-service-data-notation-for-isolating-gtfs-services-within-gtfs-datasets
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - service_key
+            - organization_key
+            - schedule_gtfs_dataset_key
+            - service_alerts_gtfs_dataset_key
+            - vehicle_positions_gtfs_dataset_key
+            - trip_updates_gtfs_dataset_key
     columns:
       - *key
       - name: service_key
@@ -314,25 +361,125 @@ models:
           - relationships:
              to: ref('dim_services')
              field: key
-      - &gtfs_dataset_key
-        name: gtfs_dataset_key
+          - unique:
+              config:
+                where: customer_facing
+      - name: schedule_gtfs_dataset_key
         tests:
-          - relationships:
+          - &ref_gtfs_datasets_key
+            relationships:
               to: ref('dim_gtfs_datasets')
               field: key
-              config:
-                error_if: ">10" # four SMART urls and two test URLs that have been removed
-                warn_if: ">0"
+      - name: service_assessment_status
+        description: |
+          If "Yes", this service should be considered "assessed" by Cal-ITP
+          for quality and reporting purposes.
+          If "No", this service is not "asssessed".
+      - name: service_alerts_gtfs_dataset_key
+        tests:
+          - *ref_gtfs_datasets_key
+      - name: vehicle_positions_gtfs_dataset_key
+        tests:
+          - *ref_gtfs_datasets_key
+      - name: trip_updates_gtfs_dataset_key
+        tests:
+          - *ref_gtfs_datasets_key
       - name: organization_key
         tests:
           - relationships:
               to: ref('dim_organizations')
               field: key
-      - name: gtfs_service_data_key
+      - name: service_name
+      - name: organization_name
+      - name: schedule_name
+      - name: service_alerts_name
+      - name: vehicle_positions_name
+      - name: trip_updates_name
+      - name: customer_facing
+        description: |
+          If true, we believe this GTFS data is customer-facing, i.e., ingested
+          by trip-planning applications for this service/organization.
+          If false, we believe that this GTFS data is not customer-facing, i.e., it
+          is data that is not ingested by trip-planning applications.
+          Generally, customer-facing data should be used for analysis, because it
+          represents the data that is being used for decision-making by customers and
+          should be the highest-quality/most accurate data available.
+      - name: regional_feed_type
+        description: |
+          This is only populated for GTFS datasets that have some relationship with a regional,
+          combined feed like MTC 511 or VCTC.
+          The types are:
+          * "Combined Regional Feed" - These GTFS datasets contain information
+            about services managed by a variety of different organizations. If the
+            customer-facing feed for an organization or service is this category,
+            users may need to filter within feed data when doing more granular (ex.
+            agency-level) analysis.
+          * "Regional Subfeed" - Currently this category only applies to MTC 511, which provides
+            an option to query the combined regional feed for a given agency's data.
+          * "Regional Precursor Feed" - This category applies to agencies whose data appears in a
+            combined regional feed but who produce some other independent dataset.
+            The independent dataset may be an input into the combined regional feed.
+      - name: agency_id
+      - name: network_id
+      - name: route_id
+      - name: ntd_id
+        description: |
+          Five digit NTD ID for this organization.
+          Organization <--> NTD mappings are based on NTD 2018 data.
+      - name: hubspot_company_record_id
+        description: |
+          Hubspot CRM record ID for this organization.
+  - name: dim_ntd_agency_info
+    description: |
+      2018 NTD Agency Info Table
+      Imported 10/6/2021 from
+      https://www7.fta.dot.gov/ntd/data-product/2018-annual-database-agency-information
+    columns:
+      - *key
+      - name: ntd_id
+      - name: legacy_ntd_id
+      - name: ntd_agency_name
+      - name: reporter_acronym
+      - name: doing_business_as
+      - name: reporter_status
+      - name: reporter_type
+      - name: reporting_module
+      - name: organization_type
+      - name: reported_by_ntd_id
+      - name: reported_by_name
+      - name: subrecipient_type
+      - name: fy_end_date
+      - name: original_due_date
+      - name: address_line_1
+      - name: address_line_2
+      - name: p_o__box
+      - name: city
+      - name: state
+      - name: zip_code
+      - name: zip_code_ext
+      - name: region
+      - name: url
+      - name: fta_recipient_id
+      - name: duns_number
+      - name: service_area_sq_miles
+      - name: service_area_pop
+      - name: primary_uza
+      - name: uza_name
+      - name: tribal_area_name
+      - name: population
+      - name: density
+      - name: sq_miles
+      - name: voms_do
+      - name: voms_pt
+      - name: total_voms
+      - name: volunteer_drivers
+      - name: personal_vehicles
+      - name: organization_key
         tests:
           - relationships:
-             to: ref('dim_gtfs_service_data')
+             to: ref('dim_organizations')
              field: key
+      - name: calitp_extracted_at
   - name: bridge_components_x_properties_and_features
     description: |
       Mapping table between components and properties_and_features.

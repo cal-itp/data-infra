@@ -1,6 +1,6 @@
 {% macro gtfs_rt_stg_outcomes(step, source_table) %}
 
-WITH raw_aggregation_outcomes AS (
+WITH raw_outcomes AS (
     SELECT
         *,
         {{ to_url_safe_base64('`extract`.config.url') }} AS base64_url
@@ -9,6 +9,7 @@ WITH raw_aggregation_outcomes AS (
 
 stg_gtfs_rt__agg_outcomes AS (
     SELECT
+        {{ dbt_utils.surrogate_key(['`extract`.ts', 'base64_url']) }} AS key,
         dt,
         hour,
         `extract`.config.name AS name,
@@ -22,8 +23,9 @@ stg_gtfs_rt__agg_outcomes AS (
         `extract`.response_headers AS download_response_headers,
         aggregation.step AS step,
         base64_url,
-        `extract`.ts
-    FROM raw_aggregation_outcomes
+        {% if step == 'parse' %}header,{% endif %}
+        `extract`.ts AS extract_ts
+    FROM raw_outcomes
 )
 
 SELECT * FROM stg_gtfs_rt__agg_outcomes

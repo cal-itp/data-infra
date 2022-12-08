@@ -18,9 +18,11 @@ dim_organizations AS (
         caltrans_district,
         website,
         reporting_category,
-        ntp_id,
+        ntd_agency_info_key,
+        hubspot_company_record_id,
         gtfs_static_status,
         gtfs_realtime_status,
+        assessment_status,
         alias,
         calitp_extracted_at
     FROM latest_organizations

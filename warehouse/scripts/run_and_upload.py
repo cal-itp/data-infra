@@ -96,6 +96,7 @@ def run(
     project_dir: Path = os.environ.get("DBT_PROJECT_DIR", os.getcwd()),
     profiles_dir: Path = os.environ.get("DBT_PROFILES_DIR", os.getcwd()),
     target: str = os.environ.get("DBT_TARGET"),
+    dbt_seed: bool = True,
     dbt_run: bool = True,
     full_refresh: bool = False,
     dbt_test: bool = False,
@@ -135,6 +136,16 @@ def run(
     subprocess.run(get_command("compile")).check_returncode()
 
     results_to_check = []
+
+    if dbt_seed:
+        results_to_check.append(subprocess.run(get_command("seed")))
+
+        with open("./target/run_results.json") as f:
+            run_results = RunResults(**json.load(f))
+        with open("./target/manifest.json") as f:
+            manifest = Manifest(**json.load(f))
+
+        report_failures_to_sentry(run_results, manifest)
 
     if dbt_run:
         args = ["run"]
@@ -224,6 +235,7 @@ def run(
             ("mart_transit_database", "Data Marts (formerly Warehouse Views)"),
             ("mart_gtfs_guidelines", "Data Marts (formerly Warehouse Views)"),
             ("mart_gtfs", "Data Marts (formerly Warehouse Views)"),
+            ("mart_gtfs_quality", "Data Marts (formerly Warehouse Views)"),
         ]:
             args = [
                 "dbt-metabase",

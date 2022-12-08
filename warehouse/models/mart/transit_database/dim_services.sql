@@ -19,6 +19,7 @@ dim_services AS (
         gtfs_schedule_status,
         -- TODO: remove this field when v2, automatic determinations are available
         gtfs_schedule_quality,
+        assessment_status,
         calitp_extracted_at
     FROM latest_services
 )

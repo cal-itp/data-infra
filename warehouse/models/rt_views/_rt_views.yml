@@ -4,7 +4,7 @@ sources:
     # note: these tables should probably be moved at some point
   - name: gtfs_rt_raw
     description: Data in the gtfs_rt dataset in BigQuery, generally produced by the rt_loader and rt_loader_files Airflow DAGs.
-    database: cal-itp-data-infra
+    database: "{{ var('SOURCE_DATABASE') }}"
     schema: gtfs_rt
     tables:
       - name: calitp_files
@@ -18,7 +18,7 @@ sources:
 
   - name: gtfs_rt_logs
     description: Data in the gtfs_rt_logs dataset in BigQuery, from logs sink.
-    database: cal-itp-data-infra
+    database: "{{ var('SOURCE_DATABASE') }}"
     schema: gtfs_rt_logs
     tables:
       - name: stdout
@@ -208,7 +208,7 @@ models:
           - not_null
       - name: type
         description: GTFS realtime type (service_alerts, trip_updates, or vehicle_positions)
-  - name: gtfs_rt_validation_code_descriptions
+  - name: gtfs_rt_validation_code_descriptions_legacy
     description: |
       Cal-ITP critical validation codes. Primary key is code.
     columns:

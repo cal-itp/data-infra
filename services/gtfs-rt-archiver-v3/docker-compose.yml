@@ -9,7 +9,7 @@ x-gtfs-rt-archiver-v3-common:
     CALITP_BUCKET__GTFS_RT_RAW: "gs://dev-calitp-gtfs-rt-raw"
     CALITP_HUEY_REDIS_HOST: redis
     GOOGLE_APPLICATION_CREDENTIALS: /tmp/secret.json
-    HUEY_CONSUMER_WORKERS: 4
+    CALITP_HUEY_CONSUMER_WORKERS: 4
     SENTRY_DSN: $SENTRY_DSN
     SENTRY_ENVIRONMENT: "development"
 services:

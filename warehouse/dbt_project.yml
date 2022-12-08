@@ -21,9 +21,9 @@ clean-targets:         # directories to be removed by `dbt clean`
   - "target"
   - "dbt_packages"
 
-
-# Configuring models
-# Full documentation: https://docs.getdbt.com/docs/configuring-models
+vars:
+  INCREMENTAL_PARTITIONS_LOOKBACK_DAYS: 30
+  SOURCE_DATABASE: cal-itp-data-infra
 
 models:
   calitp_warehouse:

@@ -175,6 +175,54 @@ models:
       - name: step
       - name: base64_url
       - name: ts
+  - name: int_gtfs_schedule__incremental_stop_times
+    description: |
+      This table is an incremental, sparse history of GTFS schedule stop times data.
+      It is a precursor to `dim_stop_times` with the goal of facilitating duplicate detection and missing key issues.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - trip_id
+            - stop_sequence
+          severity: warn
+    columns:
+      - name: trip_id
+        description: '{{ doc("gtfs_stop_times__trip_id") }}'
+        tests:
+        - not_null
+      - name: arrival_time
+        description: '{{ doc("gtfs_stop_times__arrival_time") }}'
+      - name: departure_time
+        description: '{{ doc("gtfs_stop_times__departure_time") }}'
+      - name: stop_id
+        description: '{{ doc("gtfs_stop_times__stop_id") }}'
+        tests:
+        - not_null:
+            severity: warn
+      - name: stop_sequence
+        description: '{{ doc("gtfs_stop_times__stop_sequence") }}'
+        tests:
+        - not_null
+      - name: stop_headsign
+        description: '{{ doc("gtfs_stop_times__stop_headsign") }}'
+      - name: pickup_type
+        description: '{{ doc("gtfs_stop_times__pickup_type") }}'
+      - name: drop_off_type
+        description: '{{ doc("gtfs_stop_times__drop_off_type") }}'
+      - name: continuous_pickup
+        description: '{{ doc("gtfs_stop_times__continuous_pickup") }}'
+      - name: continuous_drop_off
+        description: '{{ doc("gtfs_stop_times__continuous_drop_off") }}'
+      - name: shape_dist_traveled
+        description: '{{ doc("gtfs_stop_times__shape_dist_traveled") }}'
+      - name: timepoint
+        description: '{{ doc("gtfs_stop_times__timepoint") }}'
+      - name: _inserted_at
+        description: |
+          Timestamp for when the given row was inserted into the table.
+          Primarily useful for debugging, not meaningful for general use.
   - name: int_gtfs_schedule__incremental_shapes
     description: |
       This table is an incremental, sparse history of GTFS schedule shapes data.
@@ -216,3 +264,114 @@ models:
         - not_null
       - name: shape_dist_traveled
         description: '{{ doc("gtfs_shapes__shape_dist_traveled") }}'
+  - name: int_gtfs_schedule__keyed_parse_outcomes
+    description: |
+      All GTFS schedule file parse outcomes, with `feed_key` identifier joined
+      on to facilitate downstream use.
+    tests:
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('stg_gtfs_schedule__file_parse_outcomes')
+    columns:
+      - name: feed_key
+        description: |
+          Foreign key to `dim_schedule_feeds`.
+          Because `dim_schedule_feeds` only includes unique feed versions, this will not be populated
+          for downloads where no data changed relative to what had already been ingested.
+        tests:
+          - relationships:
+              to: ref('dim_schedule_feeds')
+              field: key
+      - name: parse_success
+        description: '{{ doc("column_schedule_parse_success") }}'
+      - name: parse_exception
+        description: '{{ doc("column_schedule_parse_exception") }}'
+      - name: filename
+        description: '{{ doc("column_schedule_parse_filename") }}'
+      - name: _config_extract_ts
+      - name: feed_name
+        description: '{{ doc("column_schedule_parse_feed_name") }}'
+      - name: feed_url
+        description: '{{ doc("column_schedule_parse_feed_url") }}'
+      - name: original_filename
+        description: '{{ doc("column_schedule_parse_original_filename") }}'
+      - name: gtfs_filename
+        description: '{{ doc("column_schedule_parse_gtfs_filename") }}'
+      - name: dt
+      - name: ts
+      - name: base64_url
+  - name: int_gtfs_schedule__stop_times_grouped
+    description: |
+      Stop times grouped by trip_id with trip aggregation calculations.
+    columns:
+      - name: feed_key
+      - name: trip_id
+      - name: n_stops
+      - name: n_stop_times
+      - name: trip_first_departure_sec
+      - name: trip_last_arrival_sec
+      - name: service_hours
+      - name: contains_warning_duplicate_stop_times_primary_key
+        description: |
+          Rows with `true` in this column indicate that the columns in this table that are aggregated from
+          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_ts`, `trip_last_arrival_ts`,
+          and `service_hours`) contain at least one row that had a duplicate primary key in the source stop times data.
+
+          I.e., at least one row being aggregated had a `trip_id` / `stop_sequence` pair that was not unique
+          in the input data. This indicates that data quality issues were present in the stop times data
+          that is being summarized here, and counts may be inflated due to multiple rows with identical identifiers.
+      - name: contains_warning_missing_foreign_key_stop_id
+        description: |
+          Rows with `true` in this column indicate that the columns in this table that are aggregated from
+          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_ts`, `trip_last_arrival_ts`,
+          and `service_hours`) contain at least one row that had a missing `stop_id` foreign key in the source stops data.
+
+          I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
+          in the input data. This indicates that data quality issues were present in the stop times data
+          that is being summarized here, and the count of distinct `stop_id`s at the trip level may be incorrect.
+  - name: int_gtfs_rt__distinct_download_configs
+    description: |
+      Distinct `dt`, `_config_extract_ts` pairs indicating
+      the configuration versions that were in effect for a given date of RT data.
+      This allows us to reconstruct what URLs were in our configuration list for each date.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - dt
+            - _config_extract_ts
+    columns:
+      - name: dt
+        description: Date that RT data was extracted.
+      - name: _config_extract_ts
+        description: Timestamp that download config file was extracted.
+  - name: int_gtfs_rt__daily_url_index
+    description: |
+      All RT URLs that were present at least once for each given day.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - dt
+            - base64_url
+    columns:
+      - name: dt
+        description: |
+          Date that this URL was present in an active download configuration,
+          indicating that downloads should have been attempted for this URL
+          on this date.
+        tests:
+          - not_null
+      - name: string_url
+        description: |
+          URL in human-readable format.
+        tests:
+          - not_null
+      - name: base64_url
+        description: |
+          Base64 encoded URL, can be used to join with other tables
+          containing data from this feed.
+        tests:
+          - not_null
+      - name: type
+        description: |
+          RT data type: "GTFS Alerts", "GTFS VehiclePositions", "GTFS TripUpdates".
+        tests:
+          - not_null

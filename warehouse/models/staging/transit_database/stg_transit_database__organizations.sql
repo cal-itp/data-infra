@@ -14,7 +14,8 @@ stg_transit_database__organizations AS (
         organization_type,
         roles,
         itp_id,
-        ntp_id,
+        unnested_ntd_records AS ntd_agency_info_key,
+        hubspot_company_record_id,
         alias_ as alias,
         details,
         caltrans_district,
@@ -26,8 +27,10 @@ stg_transit_database__organizations AS (
         gtfs_datasets_produced,
         gtfs_static_status,
         gtfs_realtime_status,
+        assessment_status,
         dt AS calitp_extracted_at
     FROM once_daily_organizations
+    LEFT JOIN UNNEST(once_daily_organizations.ntd_id) as unnested_ntd_records
 )
 
 SELECT * FROM stg_transit_database__organizations

@@ -1,7 +1,8 @@
 import os
-import urllib.error
-import urllib.request
 from pathlib import Path
+
+import backoff
+import requests
 
 from .utils import url_split
 
@@ -36,10 +37,14 @@ def curl_cached(url, key=None):
     if len(key) > 255:
         key = key[:255]  # max filename length is 255
 
+    @backoff.on_exception(
+        backoff.constant,
+        requests.exceptions.HTTPError,
+        max_tries=2,
+        interval=10,
+    )
     def get():
-        req = urllib.request.Request(url)
-        r = urllib.request.urlopen(req)
-        return r.read().decode()
+        return requests.get(url).text
 
     cache_dir = get_cache_dir()
     if not cache_dir:

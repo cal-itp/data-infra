@@ -178,18 +178,32 @@ def unzip_extracts(
 ):
     fs = get_fs()
     day = pendulum.instance(day).date()
-    extracts = fetch_all_in_partition(
+    extracts, missing, invalid = fetch_all_in_partition(
         cls=GTFSScheduleFeedExtract,
         bucket=SCHEDULE_RAW_BUCKET,
         table=GTFSFeedType.schedule,
-        fs=fs,
         partitions={
             "dt": day,
         },
         verbose=True,
     )
 
-    logging.info(f"Identified {len(extracts)} records for {day}")
+    if missing or invalid:
+        typer.secho(f"missing: {missing}")
+        typer.secho(f"invalid: {invalid}")
+        raise RuntimeError("found files with missing or invalid metadata; failing job")
+
+    if not extracts:
+        typer.secho(
+            "WARNING: found 0 extracts to process, exiting",
+            fg=typer.colors.YELLOW,
+        )
+        return
+    typer.secho(
+        f"found {len(extracts)} to process for {day}",
+        fg=typer.colors.MAGENTA,
+    )
+
     outcomes = []
     pbar = tqdm(total=len(extracts)) if progress else None
 

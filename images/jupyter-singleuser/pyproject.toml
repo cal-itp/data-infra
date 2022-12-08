@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "jupyter-singleuser"
-version = "2022.10.26.1"
+version = "2022.11.28"
 description = ""
 authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "~3.10"
+python = "~3.9"
 black = "22.3.0"
 intake = "0.6.4"
 intake-dcat = "0.4.0"
@@ -40,7 +40,7 @@ distributed = "~2022.8"
 pyodbc = "^4.0.34"
 sqlalchemy-bigquery = "^1.4.4"
 siuba = "^0.4.0"
-calitp = "2022.10.26"
+calitp = "2022.11.28"
 graphviz = "^0.20.1"
 
 [tool.poetry.dev-dependencies]

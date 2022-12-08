@@ -13,7 +13,7 @@ gtfs_rt_fact_daily_validation_errors AS (
 ),
 
 gtfs_rt_validation_code_descriptions AS (
-    SELECT * FROM {{ ref('gtfs_rt_validation_code_descriptions') }}
+    SELECT * FROM {{ ref('gtfs_rt_validation_code_descriptions_legacy') }}
 ),
 
 rt_files_by_day AS (

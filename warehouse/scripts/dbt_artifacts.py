@@ -12,7 +12,7 @@ from sqlalchemy.sql import Select
 from typing import Annotated, Any, ClassVar, Dict, List, Literal, Optional, Union
 
 import pendulum
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, validator, constr
 from sqlalchemy import create_engine, MetaData, Table, select
 
 
@@ -153,12 +153,16 @@ class BaseNode(BaseModel):
         return select(columns=columns)
 
 
-class Model(BaseNode):
-    resource_type: Literal[DbtResourceType.model]
+class Seed(BaseNode):
+    resource_type: Literal[DbtResourceType.seed]
 
 
 class Source(BaseNode):
     resource_type: Literal[DbtResourceType.source]
+
+
+class Model(BaseNode):
+    resource_type: Literal[DbtResourceType.model]
 
 
 class TestMetadata(BaseModel):
@@ -175,7 +179,7 @@ class Test(BaseNode):
 
 
 Node = Annotated[
-    Union[Model, Test],
+    Union[Seed, Source, Model, Test],
     Field(discriminator="resource_type"),
 ]
 
@@ -268,7 +272,7 @@ Destination = Annotated[
 
 class ExposureMeta(BaseModel):
     methodology: Optional[str]
-    coordinate_system_espg: Optional[str]
+    coordinate_system_epsg: Optional[constr(regex=r"\d+")]  # noqa: F722
     destinations: List[Destination] = []
 
 

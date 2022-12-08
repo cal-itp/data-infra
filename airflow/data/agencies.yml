@@ -1511,6 +1511,10 @@ vine-transit:
       gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=VN
       gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
       gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=VN
+    - gtfs_schedule_url: https://napa.syncromatics.com/gtfs
+      gtfs_rt_vehicle_positions_url: https://napa.syncromatics.com/gtfs-rt/vehiclepositions
+      gtfs_rt_service_alerts_url: https://napa.syncromatics.com/gtfs-rt/alerts
+      gtfs_rt_trip_updates_url: https://napa.syncromatics.com/gtfs-rt/tripupdates
   itp_id: 218
 visalia-transit:
   agency_name: Visalia Transit
@@ -1667,7 +1671,7 @@ fresno-county:
 lynwood-breeze:
   agency_name: Lynwood Breeze
   feeds:
-    - gtfs_schedule_url: https://data.trilliumtransit.com/gtfs/lynwood-ca-us/lynwood-ca-us.zip
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/lynwood-ca-us/lynwood-ca-us.zip
       gtfs_rt_vehicle_positions_url: null
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
@@ -1744,3 +1748,43 @@ oregon-point:
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 487
+artesia-transit:
+  agency_name: Artesia Transit
+  feeds:
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/artesia-ca-us/artesia-ca-us.zip
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
+  itp_id: 20
+catalina-flyer:
+  agency_name: Catalina Flyer
+  feeds:
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/catalinaflyer-ca-us/catalinaflyer-ca-us.zip
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
+  itp_id: 59
+i-line-shuttle:
+  agency_name: I-Line Shuttle
+  feeds:
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/inglewood-ca-us/inglewood-ca-us.zip
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
+  itp_id: 139
+maywood-express-shuttle:
+  agency_name: Maywood Express Shuttle
+  feeds:
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/maywood-ca-us/maywood-ca-us.zip
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
+  itp_id: 196
+playa-vista-shuttle:
+  agency_name: Playa Vista Shuttle
+  feeds:
+    - gtfs_schedule_url: https://github.com/LACMTA/los-angeles-regional-gtfs/raw/main/playavistashuttle-ca-us/playavistashuttle-ca-us.zip
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
+  itp_id: 252

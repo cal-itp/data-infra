@@ -116,3 +116,10 @@ models:
         description: The latitude of the second tap transaction (if there is one)
       - name: off_longitude
         description: The longitude of the second tap transaction (if there is one)
+      - name: earliest_tap
+      - name: on_latitude
+      - name: on_longitude
+      - name: on_geography
+      - name: off_geography
+      - name: duration
+      - name: distance_meters

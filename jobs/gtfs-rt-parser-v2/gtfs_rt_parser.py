@@ -40,6 +40,7 @@ from calitp.storage import (
     make_name_bq_safe,
     GTFSDownloadConfig,
 )  # type: ignore
+from google.cloud.storage import Blob
 from google.protobuf import json_format
 from google.protobuf.message import DecodeError
 from google.transit import gtfs_realtime_pb2  # type: ignore
@@ -71,6 +72,14 @@ def make_pydantic_model_bq_safe(model: BaseModel) -> Dict[str, Any]:
     This is ugly but I think it's the best option until https://github.com/pydantic/pydantic/issues/1409
     """
     return make_dict_bq_safe(json.loads(model.json()))
+
+
+class MissingMetadata(Exception):
+    pass
+
+
+class InvalidMetadata(Exception):
+    pass
 
 
 class RTProcessingStep(str, Enum):
@@ -140,9 +149,9 @@ class ScheduleDataNotFound(Exception):
 def get_schedule_extracts_for_day(
     dt: pendulum.Date,
 ) -> Dict[str, GTFSScheduleFeedExtract]:
-    extracts: List[GTFSScheduleFeedExtract] = fetch_all_in_partition(
+    extracts: List[GTFSScheduleFeedExtract]
+    extracts, missing, invalid = fetch_all_in_partition(
         cls=GTFSScheduleFeedExtract,
-        fs=get_fs(),
         partitions={
             "dt": dt,
         },
@@ -199,14 +208,31 @@ class RTHourlyAggregation(PartitionedGCSArtifact):
 
 
 class RTFileProcessingOutcome(ProcessingOutcome):
-    extract: GTFSRTFeedExtract
+    # an extract is technically optional if we have a blob missing metadata
+    step: RTProcessingStep
+    extract: Optional[GTFSRTFeedExtract]
+    header: Optional[Dict[Any, Any]]
     aggregation: Optional[RTHourlyAggregation]
+    blob_path: Optional[str]
 
     @validator("aggregation", allow_reuse=True, always=True)
     def aggregation_exists_if_success(cls, v, values):
-        assert (v is not None) == values[
-            "success"
-        ], "aggregation must exist if and only if the outcome is successful"
+        assert (
+            values["success"] or v is None
+        ), "aggregation cannot exist if there is a failure"
+        return v
+
+    @validator("blob_path", allow_reuse=True, always=True)
+    def blob_path_cannot_exist_if_an_extract_exists(cls, v, values):
+        assert (v is None) != (
+            values["extract"] is None
+        ), "one of blob or extract must be null"
+        return v
+
+    @validator("header", allow_reuse=True)
+    def header_must_exist_for_successful_parses(cls, v, values):
+        if values["success"] and values["step"] == RTProcessingStep.parse:
+            assert v
         return v
 
 
@@ -456,7 +482,7 @@ def parse_and_upload(
                     )
                 outcomes.append(
                     RTFileProcessingOutcome(
-                        step="parse",
+                        step=RTProcessingStep.parse,
                         success=False,
                         exception=e,
                         extract=extract,
@@ -464,7 +490,25 @@ def parse_and_upload(
                 )
                 continue
 
-            if not parsed or "entity" not in parsed:
+            if not parsed:
+                msg = f"WARNING: no parsed dictionary found in {str(extract.path)}"
+                if verbose:
+                    log(
+                        msg,
+                        fg=typer.colors.YELLOW,
+                        pbar=pbar,
+                    )
+                outcomes.append(
+                    RTFileProcessingOutcome(
+                        step=RTProcessingStep.parse,
+                        success=False,
+                        exception=ValueError(msg),
+                        extract=extract,
+                    )
+                )
+                continue
+
+            if "entity" not in parsed:
                 msg = f"WARNING: no parsed entity found in {str(extract.path)}"
                 if verbose:
                     log(
@@ -474,10 +518,10 @@ def parse_and_upload(
                     )
                 outcomes.append(
                     RTFileProcessingOutcome(
-                        step="parse",
-                        success=False,
-                        exception=ValueError(msg),
+                        step=RTProcessingStep.parse,
+                        success=True,
                         extract=extract,
+                        header=parsed["header"],
                     )
                 )
                 continue
@@ -504,10 +548,11 @@ def parse_and_upload(
                 written += 1
             outcomes.append(
                 RTFileProcessingOutcome(
-                    step="parse",
+                    step=RTProcessingStep.parse,
                     success=True,
                     extract=extract,
                     aggregation=hour,
+                    header=parsed["header"],
                 )
             )
             del parsed
@@ -622,17 +667,27 @@ def main(
     base64url: str = None,
 ):
     pendulum_hour = pendulum.instance(hour, tz="Etc/UTC")
-    files: List[GTFSRTFeedExtract] = fetch_all_in_partition(
+    files: List[GTFSRTFeedExtract]
+    files_missing_metadata: List[Blob]
+    files_invalid_metadata: List[Blob]
+    files, files_missing_metadata, files_invalid_metadata = fetch_all_in_partition(
         cls=GTFSRTFeedExtract,
-        fs=get_fs(),
         partitions={
             "dt": pendulum_hour.date(),
             "hour": pendulum_hour,
         },
         table=feed_type,
         verbose=True,
-        progress=progress,
     )
+
+    total = len(files) + len(files_missing_metadata) + len(files_invalid_metadata)
+    percentage_valid = len(files) / total
+    if percentage_valid < 0.99:
+        typer.secho(f"missing: {files_missing_metadata}")
+        typer.secho(f"invalid: {files_invalid_metadata}")
+        raise RuntimeError(
+            f"too many files have missing/invalid metadata; {total - len(files)} of {total}"
+        )
 
     if not files:
         typer.secho(
@@ -681,7 +736,23 @@ def main(
 
     pbar = tqdm(total=len(aggregations_to_process)) if progress else None
 
-    outcomes: List[RTFileProcessingOutcome] = []
+    outcomes: List[RTFileProcessingOutcome] = [
+        RTFileProcessingOutcome(
+            step=step.value,
+            success=False,
+            blob_path=blob.path,
+            exception=MissingMetadata(),
+        )
+        for blob in files_missing_metadata
+    ] + [
+        RTFileProcessingOutcome(
+            step=step.value,
+            success=False,
+            blob_path=blob.path,
+            exception=InvalidMetadata(),
+        )
+        for blob in files_invalid_metadata
+    ]
     exceptions = []
 
     # from https://stackoverflow.com/a/55149491
@@ -734,9 +805,9 @@ def main(
     )
     save_job_result(get_fs(), result)
 
-    assert len(outcomes) == len(
-        files
-    ), f"we ended up with {len(outcomes)} outcomes from {len(files)}"
+    assert (
+        len(outcomes) == total
+    ), f"we ended up with {len(outcomes)} outcomes from {total}"
 
     if exceptions:
         exc_str = "\n".join(str(tup) for tup in exceptions)

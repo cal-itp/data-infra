@@ -2,9 +2,9 @@ import os
 import traceback
 from datetime import datetime
 from functools import wraps
+from pathlib import Path
 
 import humanize
-import orjson
 import pendulum
 import sentry_sdk
 import structlog
@@ -12,8 +12,6 @@ import typer
 from calitp.storage import download_feed, GTFSDownloadConfig
 from google.cloud import storage
 from huey import RedisHuey
-from huey.registry import Message
-from huey.serializer import Serializer
 from requests import HTTPError, RequestException
 
 from .metrics import (
@@ -24,27 +22,21 @@ from .metrics import (
 )
 
 
-class PydanticSerializer(Serializer):
-    def _serialize(self, data: Message) -> bytes:
-        return orjson.dumps(data._asdict())
-
-    def _deserialize(self, data: bytes) -> Message:
-        # deal with datetimes manually
-        d = orjson.loads(data)
-        d["expires_resolved"] = datetime.fromisoformat(d["expires_resolved"])
-        d["kwargs"]["tick"] = datetime.fromisoformat(d["kwargs"]["tick"])
-        return Message(*d.values())
+class RedisHueyWithMetrics(RedisHuey):
+    pass
 
 
-huey = RedisHuey(
+huey = RedisHueyWithMetrics(
     name=f"gtfs-rt-archiver-v3-{os.environ['AIRFLOW_ENV']}",
-    blocking=False,
+    blocking=os.getenv("CALITP_HUEY_BLOCKING", "true").lower()
+    in ("true", "t", "yes", "y", "1"),
     results=False,
     # serializer=PydanticSerializer(),
     url=os.getenv("CALITP_HUEY_REDIS_URL"),
     host=os.getenv("CALITP_HUEY_REDIS_HOST"),
     port=os.getenv("CALITP_HUEY_REDIS_PORT"),
     password=os.getenv("CALITP_HUEY_REDIS_PASSWORD"),
+    read_timeout=int(os.getenv("CALITP_HUEY_READ_TIMEOUT", 1)),  # default from huey
 )
 
 
@@ -177,3 +169,4 @@ def fetch(tick: datetime, config: GTFSDownloadConfig):
             **labels,
             content_type=extract.response_headers.get("Content-Type", "").strip(),
         ).inc(len(content))
+        Path(os.getenv("LAST_FETCH_FILE")).touch()

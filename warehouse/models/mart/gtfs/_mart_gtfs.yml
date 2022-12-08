@@ -3,8 +3,16 @@ version: 2
 models:
   - name: dim_schedule_feeds
     description: |
-      Each row is a "feed", representing a unique combination of a specific zipfile and associated
-      `gtfs_dataset` record (i.e., a specific consistent "version" of a GTFS dataset.)
+      Each row is a "feed", representing a unique zipfile version associated with the same GTFS dataset record
+      that was successfully downloaded and has data in the warehouse.
+      When data fails to download, we do not interpolate it unless an identical zipfile is subsequently
+      downloaded. So for example, say we download zipfile A from URL X on January 1, then the download
+      or unzip operation fails for any reason on January 2, and then we download zipfile A from URL X
+      again on January 3. If you check this table on January 3 before the new data has appeared in the
+      warehouse, it will show zipfile A has expired on January 2. But once the same zipfile is ingested
+      again, if you check on January 4, we will show that zipfile A was continuously in effect
+      January 1-3. The reason for this is that if a new zipfile version B were to be uploaded on January 3,
+      we would want to correctly say that we don't know what was in effect on January 2.
       This table should be used to understand "versions" of constituent data like routes, trips, etc.
     tests:
       - dbt_utils.mutually_exclusive_ranges:
@@ -281,16 +289,19 @@ models:
         description: '{{ doc("gtfs_agency__agency_id") }}'
       - name: agency_name
         description: '{{ doc("gtfs_agency__agency_name") }}'
-        tests:
-        - not_null
+        tests: &not_null_warn_99_threshold
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
+              severity: warn
       - name: agency_url
         description: '{{ doc("gtfs_agency__agency_url") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn_99_threshold
       - name: agency_timezone
         description: '{{ doc("gtfs_agency__agency_timezone") }}'
-        tests:
-        - not_null
+        tests: &not_null_warn
+        - not_null:
+            config:
+              severity: warn
       - name: agency_lang
         description: '{{ doc("gtfs_agency__agency_lang") }}'
       - name: agency_phone
@@ -321,7 +332,7 @@ models:
       - *base64_url
       - name: area_id
         description: '{{ doc("gtfs_areas__area_id") }}'
-        tests:
+        tests: &not_null_error
         - not_null
       - name: area_name
         description: '{{ doc("gtfs_areas__area_name") }}'
@@ -355,8 +366,7 @@ models:
         description: '{{ doc("gtfs_attributions__trip_id") }}'
       - name: organization_name
         description: '{{ doc("gtfs_attributions__organization_name") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: is_producer
         description: '{{ doc("gtfs_attributions__is_producer") }}'
       - name: is_operator
@@ -391,24 +401,19 @@ models:
       - *base64_url
       - name: fare_id
         description: '{{ doc("gtfs_fare_attributes__fare_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: price
         description: '{{ doc("gtfs_fare_attributes__price") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: currency_type
         description: '{{ doc("gtfs_fare_attributes__currency_type") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: payment_method
         description: '{{ doc("gtfs_fare_attributes__payment_method") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: transfers
         description: '{{ doc("gtfs_fare_attributes__transfers") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: agency_id
         description: '{{ doc("gtfs_fare_attributes__agency_id") }}'
       - name: transfer_duration
@@ -443,8 +448,7 @@ models:
         description: '{{ doc("gtfs_fare_leg_rules__to_area_id") }}'
       - name: fare_product_id
         description: '{{ doc("gtfs_fare_leg_rules__fare_product_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - *_valid_from
       - *_valid_to
   - name: dim_fare_products
@@ -467,18 +471,15 @@ models:
       - *base64_url
       - name: fare_product_id
         description: '{{ doc("gtfs_fare_products__fare_product_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: fare_product_name
         description: '{{ doc("gtfs_fare_products__fare_product_name") }}'
       - name: amount
         description: '{{ doc("gtfs_fare_products__amount") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn_99_threshold
       - name: currency
         description: '{{ doc("gtfs_fare_products__currency") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn_99_threshold
       - *_valid_from
       - *_valid_to
   - name: dim_fare_rules
@@ -499,6 +500,9 @@ models:
         tests: *primary_key_tests
       - *feed_key
       - *base64_url
+      - name: fare_id
+        description: '{{ doc("gtfs_fare_rules__fare_id") }}'
+        tests: *not_null_error
       - name: route_id
         description: '{{ doc("gtfs_fare_rules__route_id") }}'
       - name: origin_id
@@ -539,8 +543,7 @@ models:
         description: '{{ doc("gtfs_fare_transfer_rules__duration_limit_type") }}'
       - name: fare_transfer_type
         description: '{{ doc("gtfs_fare_transfer_rules__fare_transfer_type") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn_99_threshold
       - name: fare_product_id
         description: '{{ doc("gtfs_fare_transfer_rules__fare_product_id") }}'
       - *_valid_from
@@ -565,16 +568,13 @@ models:
       - *base64_url
       - name: feed_publisher_name
         description: '{{ doc("gtfs_feed_info__feed_publisher_name") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: feed_publisher_url
         description: '{{ doc("gtfs_feed_info__feed_publisher_url") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn_99_threshold
       - name: feed_lang
         description: '{{ doc("gtfs_feed_info__feed_lang") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn_99_threshold
       - name: default_lang
         description: '{{ doc("gtfs_feed_info__default_lang") }}'
       - name: feed_start_date
@@ -609,20 +609,16 @@ models:
       - *base64_url
       - name: trip_id
         description: '{{ doc("gtfs_frequencies__trip_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: start_time
         description: '{{ doc("gtfs_frequencies__start_time") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: end_time
         description: '{{ doc("gtfs_frequencies__end_time") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: headway_secs
         description: '{{ doc("gtfs_frequencies__headway_secs") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: exact_times
         description: '{{ doc("gtfs_frequencies__exact_times") }}'
       - *_valid_from
@@ -647,12 +643,10 @@ models:
       - *base64_url
       - name: level_id
         description: '{{ doc("gtfs_levels__level_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: level_index
         description: '{{ doc("gtfs_levels__level_index") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: level_name
         description: '{{ doc("gtfs_levels__level_name") }}'
       - *_valid_from
@@ -677,24 +671,19 @@ models:
       - *base64_url
       - name: pathway_id
         description: '{{ doc("gtfs_pathways__pathway_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: from_stop_id
         description: '{{ doc("gtfs_pathways__from_stop_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: to_stop_id
         description: '{{ doc("gtfs_pathways__to_stop_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: pathway_mode
         description: '{{ doc("gtfs_pathways__pathway_mode") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: is_bidirectional
         description: '{{ doc("gtfs_pathways__is_bidirectional") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: length
         description: '{{ doc("gtfs_pathways__length") }}'
       - name: traversal_time
@@ -731,8 +720,7 @@ models:
       - *base64_url
       - name: route_id
         description: '{{ doc("gtfs_routes__route_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: agency_id
         description: '{{ doc("gtfs_routes__agency_id") }}'
       - name: route_short_name
@@ -743,8 +731,7 @@ models:
         description: '{{ doc("gtfs_routes__route_desc") }}'
       - name: route_type
         description: '{{ doc("gtfs_routes__route_type") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: route_url
         description: '{{ doc("gtfs_routes__route_url") }}'
       - name: route_color
@@ -757,6 +744,8 @@ models:
         description: '{{ doc("gtfs_routes__continuous_pickup") }}'
       - name: continuous_drop_off
         description: '{{ doc("gtfs_routes__continuous_drop_off") }}'
+      - name: network_id
+        description: '{{ doc("gtfs_routes__network_id") }}'
       - *_valid_from
       - *_valid_to
   - name: dim_shapes
@@ -779,12 +768,10 @@ models:
       - *base64_url
       - name: shape_id
         description: '{{ doc("gtfs_shapes__shape_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: shape_pt_lat
         description: '{{ doc("gtfs_shapes__shape_pt_lat") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
         meta:
           metabase.semantic_type: type/Latitude
           ckan.type: FLOAT
@@ -792,8 +779,7 @@ models:
           ckan.precision: 3
       - name: shape_pt_lon
         description: '{{ doc("gtfs_shapes__shape_pt_lon") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
         meta:
           metabase.semantic_type: type/Longitude
           ckan.type: FLOAT
@@ -801,8 +787,7 @@ models:
           ckan.precision: 3
       - name: shape_pt_sequence
         description: '{{ doc("gtfs_shapes__shape_pt_sequence") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: shape_dist_traveled
         description: '{{ doc("gtfs_shapes__shape_dist_traveled") }}'
       - *_valid_from
@@ -827,12 +812,10 @@ models:
       - *base64_url
       - name: area_id
         description: '{{ doc("gtfs_stop_areas__area_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: stop_id
         description: '{{ doc("gtfs_stop_areas__stop_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - *_valid_from
       - *_valid_to
   - name: dim_stops
@@ -855,8 +838,9 @@ models:
       - *base64_url
       - name: stop_id
         description: '{{ doc("gtfs_stops__stop_id") }}'
-        tests:
-        - not_null
+        tests: &not_null_error_99_threshold
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
       - name: stop_code
         description: '{{ doc("gtfs_stops__stop_code") }}'
       - name: stop_name
@@ -917,16 +901,13 @@ models:
       - *base64_url
       - name: from_stop_id
         description: '{{ doc("gtfs_transfers__from_stop_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: to_stop_id
         description: '{{ doc("gtfs_transfers__to_stop_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: transfer_type
         description: '{{ doc("gtfs_transfers__transfer_type") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: min_transfer_time
         description: '{{ doc("gtfs_transfers__min_transfer_time") }}'
       - name: from_route_id
@@ -955,20 +936,16 @@ models:
       - *base64_url
       - name: table_name
         description: '{{ doc("gtfs_translations__table_name") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: field_name
         description: '{{ doc("gtfs_translations__field_name") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: language
         description: '{{ doc("gtfs_translations__language") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: translation
         description: '{{ doc("gtfs_translations__translation") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: record_id
         description: '{{ doc("gtfs_translations__record_id") }}'
       - name: record_sub_id
@@ -993,7 +970,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key` and `trip_id`.
-        tests:
+        tests: &pk_tests_with_dups
           - unique:
               where: "not warning_duplicate_primary_key"
           - not_null
@@ -1001,16 +978,13 @@ models:
       - *base64_url
       - name: route_id
         description: '{{ doc("gtfs_trips__route_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: service_id
         description: '{{ doc("gtfs_trips__service_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: trip_id
         description: '{{ doc("gtfs_trips__trip_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: trip_headsign
         description: '{{ doc("gtfs_trips__trip_headsign") }}'
       - name: trip_short_name
@@ -1051,44 +1025,34 @@ models:
       - *base64_url
       - name: service_id
         description: '{{ doc("gtfs_calendar__service_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: monday
         description: '{{ doc("gtfs_calendar__monday") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: tuesday
         description: '{{ doc("gtfs_calendar__tuesday") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: wednesday
         description: '{{ doc("gtfs_calendar__wednesday") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: thursday
         description: '{{ doc("gtfs_calendar__thursday") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: friday
         description: '{{ doc("gtfs_calendar__friday") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: saturday
         description: '{{ doc("gtfs_calendar__saturday") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: sunday
         description: '{{ doc("gtfs_calendar__sunday") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: start_date
         description: '{{ doc("gtfs_calendar__start_date") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: end_date
         description: '{{ doc("gtfs_calendar__end_date") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
   - name: dim_calendar_dates
     description: |
       Each row is a cleaned row from a calendar_dates.txt file.
@@ -1110,16 +1074,13 @@ models:
       - *base64_url
       - name: service_id
         description: '{{ doc("gtfs_calendar_dates__service_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: date
         description: '{{ doc("gtfs_calendar_dates__date") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: exception_type
         description: '{{ doc("gtfs_calendar_dates__exception_type") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
   - name: dim_stop_times
     description: |
       Cleaned GTFS schedule stop_times data.
@@ -1129,14 +1090,19 @@ models:
           lower_bound_column: _valid_from
           upper_bound_column: _valid_to
           partition_by: base64_url, trip_id, stop_sequence
+          where: "not warning_duplicate_primary_key"
           gaps: required
     columns:
       - name: base64_url
       - *feed_key
+      - name: ts
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, `trip_id`, and `stop_sequence`.
+        tests: *pk_tests_with_dups
       - name: trip_id
         description: '{{ doc("gtfs_stop_times__trip_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: arrival_time
         description: '{{ doc("gtfs_stop_times__arrival_time") }}'
       - name: departure_time
@@ -1144,11 +1110,11 @@ models:
       - name: stop_id
         description: '{{ doc("gtfs_stop_times__stop_id") }}'
         tests:
-        - not_null
+        - not_null:
+            where: "not warning_missing_foreign_key_stop_id"
       - name: stop_sequence
         description: '{{ doc("gtfs_stop_times__stop_sequence") }}'
-        tests:
-        - not_null
+        tests: *not_null_warn
       - name: stop_headsign
         description: '{{ doc("gtfs_stop_times__stop_headsign") }}'
       - name: pickup_type
@@ -1163,6 +1129,31 @@ models:
         description: '{{ doc("gtfs_stop_times__shape_dist_traveled") }}'
       - name: timepoint
         description: '{{ doc("gtfs_stop_times__timepoint") }}'
+      - name: warning_duplicate_primary_key
+        description: |
+          Rows with `true` in this column have a duplicate primary key; i.e., the given `trip_id`
+          / `stop_sequence` pair is duplicated within an individual feed instance and `key` will
+          also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
+      - name: warning_missing_foreign_key_stop_id
+        description: |
+          Rows with `true` in this column are missing the required `stop_id` value.
+          This means they will fail to join with `stop` related information.
+      - name: arrival_sec
+        description: |
+          This is a calculated field that does not come from GTFS - it is not a timestamp and can't be treated as such.
+
+          Represents `arrival_time` as a total number of seconds after midnight of the first day of the given trip.
+          For example, `arrival_time = 21:30:45` would lead to `arrival_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
+          This allows us to perform duration calculations and handle timestamps that wrap past midnight like
+          `25:40:00`, which are allowed in GTFS.
+      - name: departure_sec
+        description: |
+          This is a calculated field that does not come from GTFS - it is not a timestamp and can't be treated as such.
+
+          Represents `departure_time` as a total number of seconds after midnight of the first day of the given trip.
+          For example, `departure_time = 21:30:45` would lead to `departure_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
+          This allows us to perform duration calculations and handle timestamps that wrap past midnight like
+          `25:40:00`, which are allowed in GTFS.
     meta:
       publish.gis_coordinate_system_epsg: WGS84
   - name: fct_daily_scheduled_trips
@@ -1177,7 +1168,7 @@ models:
       - name: key
         tests:
           - unique:
-              where: "not warning_duplicate_trip_primary_key"
+              where: "not contains_warning_duplicate_trip_primary_key"
           - not_null
       - name: feed_key
         description: Foreign key to dim_schedule_feeds.
@@ -1198,23 +1189,61 @@ models:
           - relationships:
               to: ref('dim_trips')
               field: key
+      - name: trip_id
       - name: route_key
         description: Foreign key to dim_routes.
         tests:
           - relationships:
               to: ref('dim_routes')
               field: key
+      - name: route_id
       - name: shape_array_key
         description: Foreign key to dim_shapes_arrays.
         tests:
           - relationships:
               to: ref('dim_shapes_arrays')
               field: key
-      - name: warning_duplicate_trip_primary_key
+      - name: gtfs_dataset_key
+      - name: contains_warning_duplicate_trip_primary_key
         description: |
           Rows with `true` in this column have a duplicate primary key in dim_trips;
           i.e., `trip_id` is duplicated within an individual feed instance.
           Treat these rows with caution.
+      - name: n_stops
+        description: |
+          A distinct count of stop_id by trip
+          Because this represents distinct stop_id values, it is not appropriate to sum across different trips.
+      - name: n_stop_times
+        description: |
+          A count of stop events by trip
+      - name: trip_first_departure_sec
+        description: |
+          A trip's earliest departure, calculated in seconds of the day
+      - name: trip_last_arrival_sec
+        description: |
+          A trip's last arrival, calculated in seconds of the day
+      - name: service_hours
+        description: |
+          A trip's total hours of service, calculated by subtracting `trip_last_arrival_sec` from
+          `trip_first_departure_sec` and converting to hours
+      - name: contains_warning_duplicate_stop_times_primary_key
+        description: |
+          Rows with `true` in this column indicate that the columns in this table that are aggregated from
+          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
+          and `service_hours`) contain at least one row that had a duplicate primary key in the source stop times data.
+
+          I.e., at least one row being aggregated had a `trip_id` / `stop_sequence` pair that was not unique
+          in the input data. This indicates that data quality issues were present in the stop times data
+          that is being summarized here, and counts may be inflated due to multiple rows with identical identifiers.
+      - name: contains_warning_missing_foreign_key_stop_id
+        description: |
+          Rows with `true` in this column indicate that the columns in this table that are aggregated from
+          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
+          and `service_hours`) contain at least one row that had a missing `stop_id` foreign key in the source stops data.
+
+          I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
+          in the input data. This indicates that data quality issues were present in the stop times data
+          that is being summarized here, and the count of distinct `stop_id`s at the trip level may be incorrect.
   - name: fct_daily_rt_feed_files
     description: |
       Each row is a date / URL pair with a summary of data aggregation outcomes.
@@ -1228,8 +1257,12 @@ models:
       description: One of `service_alerts`, `vehicle_positions`, and `trip_updates`.
     - name: parse_success_file_count
       description: Count of files successfully parsed. Target is 4,320 (one file every 20 seconds.)
+      tests:
+        - not_null
     - name: parse_failure_file_count
       description: Count of files where parsing failed, but a file was present.
+      tests:
+        - not_null
     - *gtfs_dataset_key
     - name: schedule_to_use_for_rt_validation_gtfs_dataset_key
       description: |
@@ -1268,11 +1301,63 @@ models:
       - *base64_url
       - name: shape_id
         description: '{{ doc("gtfs_shapes__shape_id") }}'
-        tests:
-        - not_null
+        tests: *not_null_error
       - name: pt_array
         description: Ordered array of WKT points that describe this shape.
-        tests:
-        - not_null
+        tests: *not_null_error
       - *_valid_from
       - *_valid_to
+  - name: fct_daily_scheduled_service_summary
+    description: |
+      This is daily service totals by feed.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - service_date
+            - feed_key
+      - dbt_utils.expression_is_true:
+          expression: "ttl_service_hours >= 0"
+    columns:
+      - name: service_date
+        description: Date on which this service level was present
+        tests: *not_null_error
+      - name: feed_key
+        tests: *not_null_error
+        description: feed_key only present with active service on date
+      - name: ttl_service_hours
+        description: Total service hours across entire feed on date
+      - name: n_trips
+        description: Total number of trips ran on date, if any
+      - name: first_departure_sec
+        description: Time of first departure on date
+      - name: last_arrival_sec
+        description: Time of last departure on date
+      - name: n_stop_times
+        description: |
+          Total number of stop events observed
+      - name: n_routes
+        description: |
+          Total number of routes that had trips scheduled on this day
+      - name: contains_warning_duplicate_stop_times_primary_key
+        description: |
+          Rows with `true` in this column indicate that the columns in this table that are aggregated from
+          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
+          and `service_hours`) contain at least one row that had a duplicate primary key in the source stop times data.
+
+          I.e., at least one row being aggregated had a `trip_id` / `stop_sequence` pair that was not unique
+          in the input data. This indicates that data quality issues were present in the stop times data
+          that is being summarized here, and counts may be inflated due to multiple rows with identical identifiers.
+      - name: contains_warning_duplicate_trip_primary_key
+        description: |
+          Rows with `true` in this column indicate that `dim_trips` contains duplicates of this trip primary key.
+
+          i.e., `trip_id` is duplicated within an individual feed instance.
+      - name: contains_warning_missing_foreign_key_stop_id
+        description: |
+          Rows with `true` in this column indicate that the columns in this table that are aggregated from
+          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
+          and `service_hours`) contain at least one row that had a missing `stop_id` foreign key in the source stops data.
+
+          I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
+          in the input data. This indicates that data quality issues were present in the stop times data
+          that is being summarized here.

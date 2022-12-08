@@ -22,7 +22,8 @@ stg_gtfs_schedule__routes AS (
         {{ trim_make_empty_string_null('route_text_color') }} AS route_text_color,
         SAFE_CAST({{ trim_make_empty_string_null('route_sort_order') }} AS INTEGER) AS route_sort_order,
         SAFE_CAST({{ trim_make_empty_string_null('continuous_pickup') }} AS INTEGER) AS continuous_pickup,
-        SAFE_CAST({{ trim_make_empty_string_null('continuous_drop_off') }} AS INTEGER) AS continuous_drop_off
+        SAFE_CAST({{ trim_make_empty_string_null('continuous_drop_off') }} AS INTEGER) AS continuous_drop_off,
+        {{ trim_make_empty_string_null('network_id') }} AS network_id,
     FROM external_routes
 )
 

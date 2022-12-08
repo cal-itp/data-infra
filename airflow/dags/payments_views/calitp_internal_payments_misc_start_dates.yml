@@ -1,7 +1,0 @@
-description: Export a csv from a manually-maintained sheet with miscellaneous fare information and upload it to the warehouse
-operator: operators.CsvToWarehouseOperator
-table_name: "payments.calitp_internal_misc_start_dates"
-src_uri: "https://docs.google.com/spreadsheets/d/1SJNyiyplZlJnD_uXuvERZFjzJ6qZw3lXh8WoxqtY20s/export?format=csv"
-fields:
-  participant_id: ID of the agency with payments
-  start_date: Start date in format YYYY-MM-DD of when participant began collecting contactless fare payments

@@ -13,6 +13,7 @@ dim_gtfs_service_data AS (
         name,
         service_key,
         gtfs_dataset_key,
+        customer_facing,
         category,
         agency_id,
         network_id,

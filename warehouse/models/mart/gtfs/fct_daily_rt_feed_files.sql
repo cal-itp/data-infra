@@ -55,8 +55,8 @@ pivoted_parse_outcomes AS (
         dt,
         base64_url,
         feed_type,
-        parse_success_file_count,
-        parse_failure_file_count
+        COALESCE(parse_success_file_count, 0) AS parse_success_file_count,
+        COALESCE(parse_failure_file_count, 0) AS parse_failure_file_count,
     FROM grouped_parse_outcomes
     PIVOT(SUM(file_count) FOR aggregation_outcome IN ("parse_success_file_count", "parse_failure_file_count"))
 ),

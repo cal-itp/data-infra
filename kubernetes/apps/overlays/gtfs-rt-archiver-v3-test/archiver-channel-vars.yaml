@@ -6,6 +6,5 @@ data:
   AIRFLOW_ENV: development
   CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG: "gs://test-calitp-gtfs-download-config"
   CALITP_BUCKET__GTFS_RT_RAW: "gs://test-calitp-gtfs-rt-raw-v2"
-  HUEY_CONSUMER_WORKERS: "8"
   SENTRY_DSN: "https://e498431022154366b0ff8b71cf2d93e0@sentry.calitp.org/2"
   SENTRY_ENVIRONMENT: test
