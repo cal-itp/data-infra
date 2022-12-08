@@ -36,7 +36,7 @@ daily_tots AS (
         dt,
         base64_url,
         feed_type,
-        COALESCE(COUNT(*), 0) AS file_count_day,
+        COUNT(*) AS file_count_day,
         SUM(
             CASE parse_success WHEN TRUE THEN 1 ELSE 0 END
         ) AS success_file_count_day,
@@ -86,11 +86,7 @@ pivot_hourly_tots AS (
             download_hour,
             base64_url,
             feed_type,
-            (
-                COALESCE(
-                    (success_file_count_hour), 0
-                ) / COALESCE(file_count_hour, 0)
-            ) * 100 AS pct_success_hour
+            (success_file_count_hour / file_count_hour) * 100 AS pct_success_hour
 
             FROM hourly_tots)
     PIVOT(
