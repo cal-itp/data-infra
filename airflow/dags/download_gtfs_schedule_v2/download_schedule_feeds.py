@@ -46,6 +46,7 @@ class DownloadFeedsResult(PartitionedGCSArtifact):
     ts: pendulum.DateTime
     end: pendulum.DateTime
     outcomes: List[GTFSDownloadOutcome]
+    backfilled: bool = False
 
     @validator("filename", allow_reuse=True)
     def is_jsonl(cls, v):
