@@ -122,3 +122,7 @@ models:
         tests:
           - dbt_utils.not_null_proportion:
               at_least: 0.50
+
+  - name: int_gtfs_quality__rt_protobuf_error
+    tests: *stg_gtfs_guideline_tests_rt
+    columns: *stg_gtfs_guideline_columns
