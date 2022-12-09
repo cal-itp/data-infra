@@ -50,7 +50,7 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ passes_fares_validator() }}, {{ fare_completeness() }}
     UNION ALL
-    SELECT {{ lead_time() }}, {{ best_practices_alignment() }}
+    SELECT {{ lead_time() }}, {{ up_to_dateness() }}
 )
 
 SELECT * FROM stg_gtfs_quality__intended_checks
