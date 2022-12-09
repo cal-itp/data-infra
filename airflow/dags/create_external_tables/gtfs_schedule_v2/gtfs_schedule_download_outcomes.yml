@@ -13,6 +13,9 @@ schema_fields:
     type: BOOLEAN
   - name: exception
     type: STRING
+  - name: backfilled
+    type: BOOLEAN
+    mode: NULLABLE
   - &config
     name: config
     type: RECORD
