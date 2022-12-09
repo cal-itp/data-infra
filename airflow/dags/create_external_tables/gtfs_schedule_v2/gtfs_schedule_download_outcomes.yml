@@ -43,3 +43,6 @@ schema_fields:
         type: INT64
       - name: response_headers
         type: JSON
+      - name: reconstructed
+        type: BOOLEAN
+        mode: NULLABLE
