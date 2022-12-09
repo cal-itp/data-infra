@@ -37,6 +37,7 @@ GTFS_FEED_LIST_ERROR_THRESHOLD = 0.95
 class GTFSDownloadOutcome(ProcessingOutcome):
     config: GTFSDownloadConfig
     extract: Optional[GTFSScheduleFeedExtract]
+    backfilled: bool = False
 
 
 class DownloadFeedsResult(PartitionedGCSArtifact):
