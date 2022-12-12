@@ -66,11 +66,11 @@ pivot_hourly_totals AS (
             download_hour,
             base64_url,
             feed_type,
-            (success_file_count_hour / file_count_hour) * 100 AS pct_success_hour
+            (success_file_count_hour / file_count_hour) AS prop_success_hour
 
             FROM hourly_totals)
     PIVOT(
-        MAX(pct_success_hour) AS hr
+        MAX(prop_success_hour) AS hr
         FOR download_hour IN
         (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
             11, 12, 13, 14, 15, 16, 17, 18, 19,

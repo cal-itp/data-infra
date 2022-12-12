@@ -1365,20 +1365,20 @@ models:
           that is being summarized here.
   - name: fct_hourly_rt_feed_files
     description: |
-      An hourly count of the files that were attempted to be downloaded each day per feed.
+      An hourly count of the files that were downloaded each day per feed.
     columns:
       - name: key
         description: |
           Synthetic primary key constructed from `dt` and `base64_url`.
-        tests:
-          - unique
-          - not_null
+        tests: *primary_key_tests
       - name: dt
         description: |
           Date on which the download attempt was made.
       - *base64_url
       - *feed_type
       - name: hr_0
+        description: |
+          Count of files downloaded for this URL in the 0 hour UTC
       - name: hr_1
       - name: hr_2
       - name: hr_3
@@ -1404,23 +1404,23 @@ models:
       - name: hr_23
       - name: gtfs_dataset_key
         description: |
-          The primary key for the record in `dim_gtfs_datasets` associated with this file.
+          The primary key for the record in `dim_gtfs_datasets` associated with this feed.
   - name: fct_hourly_rt_feed_files_success
     description: |
-      The percentage of files successfully downloaded each hour by day and feed.
+      The proportion of downloaded files that were successfully parsed as GTFS-RT.
     columns:
       - name: key
         description: |
           Synthetic primary key constructed from `dt` and `base64_url`.
-        tests:
-          - unique
-          - not_null
+        tests: *primary_key_tests
       - name: dt
         description: |
           Date on which the download attempt was made.
       - *base64_url
       - *feed_type
       - name: hr_0
+        description: |
+          Count of files downloaded for this URL in the 0 hour UTC
       - name: hr_1
       - name: hr_2
       - name: hr_3
@@ -1446,4 +1446,4 @@ models:
       - name: hr_23
       - name: gtfs_dataset_key
         description: |
-          The primary key for the record in `dim_gtfs_datasets` associated with this file.
+          The primary key for the record in `dim_gtfs_datasets` associated with this feed.
