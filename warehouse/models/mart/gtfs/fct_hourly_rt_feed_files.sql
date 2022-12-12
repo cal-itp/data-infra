@@ -34,7 +34,7 @@ parse_outcomes AS (
     {% endif %}
 ),
 
-hourly_totals AS (
+pivot_hourly_totals AS (
 
     SELECT *
     FROM
@@ -47,7 +47,7 @@ hourly_totals AS (
 
         FROM parse_outcomes)
     PIVOT(
-        COUNT(*) file_count_hr
+        COUNT(*) AS hr
         FOR download_hour IN
         (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
             11, 12, 13, 14, 15, 16, 17, 18, 19,
@@ -58,21 +58,21 @@ hourly_totals AS (
 fct_hourly_rt_feed_files AS (
     SELECT
 
-        {{ farm_surrogate_key(['hourly_totals.dt', 'hourly_totals.base64_url']) }} AS key,
+        {{ farm_surrogate_key(['pivot_hourly_totals.dt', 'pivot_hourly_totals.base64_url']) }} AS key,
 
         url_index.dt,
         url_index.base64_url,
         url_index.type AS feed_type,
 
-        hourly_totals.* EXCEPT (dt, base64_url, feed_type),
+        pivot_hourly_totals.* EXCEPT (dt, base64_url, feed_type),
 
         url_map.gtfs_dataset_key
 
     FROM int_gtfs_rt__daily_url_index AS url_index
-    LEFT JOIN hourly_totals
-        ON url_index.dt = hourly_totals.dt
-            AND url_index.base64_url = hourly_totals.base64_url
-            AND url_index.type = hourly_totals.feed_type
+    LEFT JOIN pivot_hourly_totals
+        ON url_index.dt = pivot_hourly_totals.dt
+            AND url_index.base64_url = pivot_hourly_totals.base64_url
+            AND url_index.type = pivot_hourly_totals.feed_type
     LEFT JOIN int_transit_database__urls_to_gtfs_datasets AS url_map
         ON url_index.base64_url = url_map.base64_url
 
