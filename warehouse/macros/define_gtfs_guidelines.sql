@@ -64,6 +64,18 @@
 "Service alerts RT feed is present"
 {% endmacro %}
 
+{% macro rt_https_vehicle_positions() %}
+"Vehicle positions RT feed uses HTTPS"
+{% endmacro %}
+
+{% macro rt_https_trip_updates() %}
+"Trip updates RT feed uses HTTPS"
+{% endmacro %}
+
+{% macro rt_https_service_alerts() %}
+"Service alerts RT feed uses HTTPS"
+{% endmacro %}
+
 {% macro pathways_valid() %}
 "No pathways-related errors appear in the MobilityData GTFS Schedule Validator"
 {% endmacro %}
