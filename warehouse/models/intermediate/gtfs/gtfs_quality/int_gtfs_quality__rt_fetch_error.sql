@@ -11,7 +11,7 @@ daily_success_percent AS (
         base64_url,
         date,
         feed_type,
-        COUNT(*) * 100 / 4320 AS percent_success
+        SUM(parse_success_file_count + parse_failure_file_count) * 100 / 4320 AS percent_success
     FROM fct_daily_rt_feed_files
    GROUP BY 1, 2, 3
 ),
