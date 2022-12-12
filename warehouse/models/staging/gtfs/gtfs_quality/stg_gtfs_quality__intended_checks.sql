@@ -41,12 +41,6 @@ WITH stg_gtfs_quality__intended_checks AS (
     SELECT {{ no_pb_error_vp() }}, {{ best_practices_alignment() }}
     UNION ALL
     SELECT {{ no_pb_error_sa() }}, {{ best_practices_alignment() }}
-    UNION ALL
-    SELECT {{ no_fetch_error_tu() }}, {{ best_practices_alignment() }}
-    UNION ALL
-    SELECT {{ no_fetch_error_vp() }}, {{ best_practices_alignment() }}
-    UNION ALL
-    SELECT {{ no_fetch_error_sa() }}, {{ best_practices_alignment() }}
     {# UNION ALL #}
     {# SELECT {{ schedule_feed_on_transitland() }}, {{ feed_aggregator_availability() }} #}
     {# UNION ALL #}

@@ -128,18 +128,6 @@
 "Fewer than 1% of requests to Vehicle positions RT feed result in a protobuf error"
 {% endmacro %}
 
-{% macro no_fetch_error_tu() %}
-"Fewer than 1% of requests to Trip updates RT feed result in a fetch error"
-{% endmacro %}
-
-{% macro no_fetch_error_sa() %}
-"Fewer than 1% of requests to Service alerts RT feed result in a fetch error"
-{% endmacro %}
-
-{% macro no_fetch_error_vp() %}
-"Fewer than 1% of requests to Vehicle positions RT feed result in a fetch error"
-{% endmacro %}
-
 -- declare features
 {% macro compliance() %}
 "Compliance"
