@@ -154,7 +154,7 @@ def execute_schedule_validator(
         str(zip_path),
         "--output_base",
         str(output_dir),
-        "--country_code",
+        "--feed_name" if validator_version == "v2.0.0" else "--country_code",
         "us-na",
     ]
 
@@ -191,6 +191,7 @@ def download_and_validate_extract(
         fs.get_file(extract.path, zip_path)
 
         report, system_errors, validator_version = execute_schedule_validator(
+            extract_ts=extract.ts,
             zip_path=Path(zip_path),
             output_dir=tmp_dir,
             pbar=pbar,
