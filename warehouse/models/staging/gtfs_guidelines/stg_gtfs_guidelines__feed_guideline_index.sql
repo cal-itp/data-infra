@@ -10,9 +10,9 @@ gtfs_schedule_dim_feeds AS (
 
 -- list all the checks that have been implemented
 checks_implemented AS (
-    SELECT {{ static_feed_downloaded_successfully() }} AS check, {{ compliance() }} AS feature
+    SELECT {{ static_feed_downloaded_successfully() }} AS check, {{ compliance_schedule() }} AS feature
     UNION ALL
-    SELECT {{ no_validation_errors() }}, {{ compliance() }}
+    SELECT {{ no_validation_errors() }}, {{ compliance_schedule() }}
     UNION ALL
     SELECT {{ complete_wheelchair_accessibility_data() }}, {{ accurate_accessibility_data() }}
     UNION ALL
@@ -26,15 +26,15 @@ checks_implemented AS (
     UNION ALL
     SELECT {{ technical_contact_listed() }}, {{ technical_contact_availability() }}
     UNION ALL
-    SELECT {{ no_rt_critical_validation_errors() }}, {{ compliance() }}
+    SELECT {{ no_rt_critical_validation_errors() }}, {{ compliance_rt() }}
     UNION ALL
     SELECT {{ trip_id_alignment() }}, {{ fixed_route_completeness() }}
     UNION ALL
-    SELECT {{ vehicle_positions_feed_present() }}, {{ compliance() }}
+    SELECT {{ vehicle_positions_feed_present() }}, {{ compliance_rt() }}
     UNION ALL
-    SELECT {{ trip_updates_feed_present() }}, {{ compliance() }}
+    SELECT {{ trip_updates_feed_present() }}, {{ compliance_rt() }}
     UNION ALL
-    SELECT {{ service_alerts_feed_present() }}, {{ compliance() }}
+    SELECT {{ service_alerts_feed_present() }}, {{ compliance_rt() }}
     UNION ALL
     SELECT {{ schedule_feed_on_transitland() }}, {{ feed_aggregator_availability() }}
     UNION ALL
@@ -46,7 +46,7 @@ checks_implemented AS (
     UNION ALL
     SELECT {{ include_tts() }}, {{ accurate_accessibility_data() }}
     UNION ALL
-    SELECT {{ no_expired_services() }}, {{ best_practices_alignment() }}
+    SELECT {{ no_expired_services() }}, {{ best_practices_alignment_schedule() }}
 ),
 
 -- create an index: all feed/date/check combinations
