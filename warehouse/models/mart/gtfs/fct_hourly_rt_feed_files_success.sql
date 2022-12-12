@@ -34,30 +34,7 @@ parse_outcomes AS (
     {% endif %}
 ),
 
-daily_tots AS (
-
-    SELECT
-
-        dt,
-        base64_url,
-        feed_type,
-        COUNT(*) AS file_count_day,
-        SUM(
-            CASE parse_success WHEN TRUE THEN 1 ELSE 0 END
-        ) AS success_file_count_day,
-        (
-            SUM(CASE parse_success WHEN TRUE THEN 1 ELSE 0 END) / COUNT(*)
-        ) * 100 AS pct_success_file_count_day
-
-    FROM parse_outcomes
-    GROUP BY
-        dt,
-        base64_url,
-        feed_type
-
-),
-
-hourly_tots AS (
+hourly_totals AS (
 
     SELECT
 
@@ -79,7 +56,7 @@ hourly_tots AS (
 
 ),
 
-pivot_hourly_tots AS (
+pivot_hourly_totals AS (
 
     SELECT *
     FROM
@@ -91,7 +68,7 @@ pivot_hourly_tots AS (
             feed_type,
             (success_file_count_hour / file_count_hour) * 100 AS pct_success_hour
 
-            FROM hourly_tots)
+            FROM hourly_totals)
     PIVOT(
         SUM(pct_success_hour)
         FOR download_hour IN
@@ -101,57 +78,24 @@ pivot_hourly_tots AS (
     )
 ),
 
-joined_tots AS (
-
-    SELECT
-
-        pivot_hourly_tots.* EXCEPT (dt, base64_url, feed_type),
-        daily_tots.dt,
-        daily_tots.base64_url,
-        daily_tots.feed_type,
-
-        --these are probably extraneous and can be removed
-        daily_tots.pct_success_file_count_day,
-        daily_tots.file_count_day,
-
-        daily_tots.success_file_count_day
-
-    FROM daily_tots
-    LEFT JOIN pivot_hourly_tots
-        ON daily_tots.dt = pivot_hourly_tots.dt
-            AND daily_tots.base64_url = pivot_hourly_tots.base64_url
-            AND daily_tots.feed_type = pivot_hourly_tots.feed_type
-
-),
-
 fct_hourly_rt_feed_files_success AS (
     SELECT
 
-        joined_tots.* EXCEPT (dt, base64_url, feed_type),
+        pivot_hourly_totals.* EXCEPT (dt, base64_url, feed_type),
 
         url_index.dt,
         url_index.base64_url,
         url_index.type AS feed_type,
 
-        TO_HEX(
-            MD5(
-                CAST(
-                    COALESCE(
-                        CAST(joined_tots.dt AS STRING), ""
-                    ) || "-" || COALESCE(
-                        CAST(joined_tots.base64_url AS STRING), ""
-                    ) AS STRING
-                )
-            )
-        ) AS key,
+        {{ farm_surrogate_key(['pivot_hourly_totals.dt', 'pivot_hourly_totals.base64_url', 'url_map.gtfs_dataset_key']) }} AS key,
 
         url_map.gtfs_dataset_key
 
     FROM int_gtfs_rt__daily_url_index AS url_index
-    LEFT JOIN joined_tots
-        ON url_index.dt = joined_tots.dt
-            AND url_index.base64_url = joined_tots.base64_url
-            AND url_index.type = joined_tots.feed_type
+    LEFT JOIN pivot_hourly_totals
+        ON url_index.dt = pivot_hourly_totals.dt
+            AND url_index.base64_url = pivot_hourly_totals.base64_url
+            AND url_index.type = pivot_hourly_totals.feed_type
     LEFT JOIN int_transit_database__urls_to_gtfs_datasets AS url_map
         ON url_index.base64_url = url_map.base64_url
 

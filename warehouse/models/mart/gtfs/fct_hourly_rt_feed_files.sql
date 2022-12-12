@@ -34,24 +34,7 @@ parse_outcomes AS (
     {% endif %}
 ),
 
-daily_tot AS (
-
-    SELECT
-
-        dt,
-        base64_url,
-        feed_type,
-        COUNT(*) as file_count_day
-
-    FROM parse_outcomes
-    GROUP BY
-        dt,
-        base64_url,
-        feed_type
-
-),
-
-hourly_tot AS (
+hourly_totals AS (
 
     SELECT *
     FROM
@@ -72,44 +55,25 @@ hourly_tot AS (
     )
 ),
 
-pivoted_tots AS (
-
-    SELECT
-
-        daily_tot.dt,
-        daily_tot.base64_url,
-        daily_tot.feed_type,
-        daily_tot.file_count_day,
-
-        hourly_tot.* EXCEPT (dt, base64_url, feed_type)
-
-    FROM daily_tot
-    LEFT JOIN hourly_tot
-        ON daily_tot.dt = hourly_tot.dt
-            AND daily_tot.base64_url = hourly_tot.base64_url
-            AND daily_tot.feed_type = hourly_tot.feed_type
-
-),
-
 fct_hourly_rt_feed_files AS (
     SELECT
 
-        {{ dbt_utils.surrogate_key(['pivoted_tots.dt', 'pivoted_tots.base64_url']) }} AS key,
+        {{ farm_surrogate_key(['hourly_totals.dt', 'hourly_totals.base64_url', 'url_map.gtfs_dataset_key']) }} AS key,
 
         url_index.dt,
         url_index.base64_url,
         url_index.type AS feed_type,
 
-        pivoted_tots.* EXCEPT (dt, base64_url, feed_type),
+        hourly_totals.* EXCEPT (dt, base64_url, feed_type),
 
         url_map.gtfs_dataset_key
 
 
     FROM int_gtfs_rt__daily_url_index AS url_index
-    LEFT JOIN pivoted_tots
-        ON url_index.dt = pivoted_tots.dt
-            AND url_index.base64_url = pivoted_tots.base64_url
-            AND url_index.type = pivoted_tots.feed_type
+    LEFT JOIN hourly_totals
+        ON url_index.dt = hourly_totals.dt
+            AND url_index.base64_url = hourly_totals.base64_url
+            AND url_index.type = hourly_totals.feed_type
     LEFT JOIN int_transit_database__urls_to_gtfs_datasets AS url_map
         ON url_index.base64_url = url_map.base64_url
 
