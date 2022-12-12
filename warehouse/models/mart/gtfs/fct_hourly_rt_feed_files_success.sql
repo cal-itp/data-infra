@@ -81,7 +81,7 @@ pivot_hourly_totals AS (
 fct_hourly_rt_feed_files_success AS (
     SELECT
 
-        {{ farm_surrogate_key(['pivot_hourly_totals.dt', 'pivot_hourly_totals.base64_url']) }} AS key,
+        {{ farm_surrogate_key(['url_index.dt', 'url_index.base64_url']) }} AS key,
 
         url_index.dt,
         url_index.base64_url,
