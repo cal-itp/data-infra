@@ -16,6 +16,7 @@ int_gtfs_schedule__long_calendar AS (
 
         SELECT
             base64_url,
+            key AS calendar_key,
             feed_key,
             service_id,
             start_date,
