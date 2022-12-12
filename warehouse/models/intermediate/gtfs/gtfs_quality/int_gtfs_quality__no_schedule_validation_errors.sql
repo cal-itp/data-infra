@@ -21,7 +21,7 @@ int_gtfs_quality__no_schedule_validation_errors AS (
         idx.date,
         idx.feed_key,
         {{ no_validation_errors() }} AS check,
-        {{ compliance() }} AS feature,
+        {{ compliance_schedule() }} AS feature,
         CASE
             WHEN sum_total_notices > 0 THEN "FAIL"
             WHEN sum_total_notices = 0 THEN "PASS"
