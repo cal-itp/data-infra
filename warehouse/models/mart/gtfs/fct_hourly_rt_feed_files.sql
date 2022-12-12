@@ -58,7 +58,7 @@ hourly_totals AS (
 fct_hourly_rt_feed_files AS (
     SELECT
 
-        {{ farm_surrogate_key(['hourly_totals.dt', 'hourly_totals.base64_url', 'url_map.gtfs_dataset_key']) }} AS key,
+        {{ farm_surrogate_key(['hourly_totals.dt', 'hourly_totals.base64_url']) }} AS key,
 
         url_index.dt,
         url_index.base64_url,
@@ -67,7 +67,6 @@ fct_hourly_rt_feed_files AS (
         hourly_totals.* EXCEPT (dt, base64_url, feed_type),
 
         url_map.gtfs_dataset_key
-
 
     FROM int_gtfs_rt__daily_url_index AS url_index
     LEFT JOIN hourly_totals
