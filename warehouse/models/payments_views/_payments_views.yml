@@ -88,6 +88,10 @@ models:
         description: The transaction_date_time_utc of the first tap transaction
       - name: transaction_date_time_pacific
         description: The transaction_date_time_pacific of the first tap transaction
+        tests:
+          - dbt_expectations.expect_row_values_to_have_recent_data:
+                datepart: day
+                interval: 2
       - name: location_id
         description: The location_id of the first tap transaction
       - name: location_name
