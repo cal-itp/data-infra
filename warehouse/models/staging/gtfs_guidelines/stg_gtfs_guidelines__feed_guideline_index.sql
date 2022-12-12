@@ -36,13 +36,13 @@ checks_implemented AS (
     UNION ALL
     SELECT {{ service_alerts_feed_present() }}, {{ compliance_rt() }}
     UNION ALL
-    SELECT {{ schedule_feed_on_transitland() }}, {{ feed_aggregator_availability() }}
+    SELECT {{ schedule_feed_on_transitland() }}, {{ feed_aggregator_availability_schedule() }}
     UNION ALL
-    SELECT {{ vehicle_positions_feed_on_transitland() }}, {{ feed_aggregator_availability() }}
+    SELECT {{ vehicle_positions_feed_on_transitland() }}, {{ feed_aggregator_availability_rt() }}
     UNION ALL
-    SELECT {{ trip_updates_feed_on_transitland() }}, {{ feed_aggregator_availability() }}
+    SELECT {{ trip_updates_feed_on_transitland() }}, {{ feed_aggregator_availability_rt() }}
     UNION ALL
-    SELECT {{ service_alerts_feed_on_transitland() }}, {{ feed_aggregator_availability() }}
+    SELECT {{ service_alerts_feed_on_transitland() }}, {{ feed_aggregator_availability_rt() }}
     UNION ALL
     SELECT {{ include_tts() }}, {{ accurate_accessibility_data() }}
     UNION ALL
