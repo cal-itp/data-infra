@@ -23,6 +23,7 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 vars:
   INCREMENTAL_PARTITIONS_LOOKBACK_DAYS: 30
+  'dbt_date:time_zone': 'America/Los_Angeles'
   SOURCE_DATABASE: cal-itp-data-infra
 
 models:
