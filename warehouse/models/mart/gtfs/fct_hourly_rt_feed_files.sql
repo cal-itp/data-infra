@@ -97,7 +97,6 @@ fct_hourly_rt_feed_files AS (
         {{ dbt_utils.surrogate_key(['pivoted_tots.dt', 'pivoted_tots.base64_url']) }} AS key,
 
         url_index.dt,
-        url_index.string_url,
         url_index.base64_url,
         url_index.type AS feed_type,
 

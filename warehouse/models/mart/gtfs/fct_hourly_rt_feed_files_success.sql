@@ -130,7 +130,6 @@ fct_hourly_rt_feed_files_success AS (
         joined_tots.* EXCEPT (dt, base64_url, feed_type),
 
         url_index.dt,
-        url_index.string_url,
         url_index.base64_url,
         url_index.type AS feed_type,
 
