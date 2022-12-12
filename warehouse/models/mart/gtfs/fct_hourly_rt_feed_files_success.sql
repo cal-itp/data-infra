@@ -19,6 +19,11 @@ int_gtfs_rt__unioned_parse_outcomes AS (
     FROM {{ ref('int_gtfs_rt__unioned_parse_outcomes') }}
 ),
 
+int_transit_database__urls_to_gtfs_datasets AS (
+    SELECT *
+    FROM {{ ref('int_transit_database__urls_to_gtfs_datasets') }}
+),
+
 parse_outcomes AS (
     SELECT *
     FROM int_gtfs_rt__unioned_parse_outcomes
@@ -59,9 +64,7 @@ hourly_tots AS (
         dt,
         base64_url,
         feed_type,
-        EXTRACT(
-            HOUR FROM hour AT TIME ZONE "America/Los_Angeles"
-        ) AS download_hour,
+        EXTRACT(HOUR FROM hour) AS download_hour,
         SUM(
             CASE parse_success WHEN TRUE THEN 1 ELSE 0 END
         ) AS success_file_count_hour,
@@ -141,13 +144,17 @@ fct_hourly_rt_feed_files_success AS (
                     ) AS STRING
                 )
             )
-        ) AS key
+        ) AS key,
+
+        url_map.gtfs_dataset_key
 
     FROM int_gtfs_rt__daily_url_index AS url_index
     LEFT JOIN joined_tots
         ON url_index.dt = joined_tots.dt
             AND url_index.base64_url = joined_tots.base64_url
             AND url_index.type = joined_tots.feed_type
+    LEFT JOIN int_transit_database__urls_to_gtfs_datasets AS url_map
+        ON url_index.base64_url = url_map.base64_url
 
 )
 
