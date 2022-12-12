@@ -116,6 +116,14 @@
 "Passes Fares v2 portion of MobilityData GTFS Schedule Validator"
 {% endmacro %}
 
+{% macro rt_20sec_vp() %}
+"Vehicle Positions feed contains updates at least once every 20 seconds"
+{% endmacro %}
+
+{% macro rt_20sec_tu() %}
+"Trip Updates feed contains updates at least once every 20 seconds"
+{% endmacro %}
+
 -- declare features
 {% macro compliance_schedule() %}
 "Compliance (Schedule)"

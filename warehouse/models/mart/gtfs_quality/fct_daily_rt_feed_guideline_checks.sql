@@ -9,6 +9,7 @@ unioned AS (
             ref('int_gtfs_quality__rt_feeds_present'),
             ref('int_gtfs_quality__trip_id_alignment'),
             ref('int_gtfs_quality__rt_https'),
+            ref('int_gtfs_quality__rt_20sec'),
         ],
     ) }}
 ),

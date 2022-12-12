@@ -18,4 +18,6 @@ Here is a list of currently-implemented checks:
 | Service alerts RT feed uses HTTPS | Best Practice Alignment | The service alerts RT feed endpoint uses HTTPS instead of HTTPS to ensure feed integrity.|
 |Vehicle positions RT feed uses HTTPS | Best Practice Alignment | The vehicle positions RT feed endpoint uses HTTPS instead of HTTPS to ensure feed integrity.|
 | Trip updates RT feed uses HTTPS | Best Practice Alignment | The trip updates RT feed endpoint uses HTTPS instead of HTTPS to ensure feed integrity.|
+| Vehicle positions RT feed contains updates at least once every 20 seconds | Accurate Service Data | Vehicle positions feed never contains a lag between updates of more than 20 seconds |
+| Trip updates RT feed contains updates at least once every 20 seconds | Accurate Service Data | Trip updates feed never contains a lag between updates of more than 20 seconds |
 {% enddocs %}

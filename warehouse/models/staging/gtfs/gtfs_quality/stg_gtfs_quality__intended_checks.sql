@@ -49,6 +49,10 @@ WITH stg_gtfs_quality__intended_checks AS (
     SELECT {{ no_30_day_feed_expiration() }}, {{ best_practices_alignment_schedule() }}
     UNION ALL
     SELECT {{ passes_fares_validator() }}, {{ fare_completeness() }}
+    UNION ALL
+    SELECT {{ rt_20sec_vp() }}, {{ accurate_service_data() }}
+    UNION ALL
+    SELECT {{ rt_20sec_tu() }}, {{ accurate_service_data() }}
 )
 
 SELECT * FROM stg_gtfs_quality__intended_checks
