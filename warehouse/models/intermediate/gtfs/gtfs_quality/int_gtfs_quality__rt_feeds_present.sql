@@ -25,7 +25,7 @@ int_gtfs_quality__rt_feeds_present AS (
              WHEN idx.feed_type = 'trip_updates' THEN {{ feed_present_trip_updates() }}
              WHEN idx.feed_type = 'vehicle_positions' THEN {{ feed_present_vehicle_positions() }}
         END AS check,
-        {{ compliance() }} AS feature,
+        {{ compliance_rt() }} AS feature,
         rt_files,
         CASE
             WHEN rt_files > 0 THEN "PASS"
