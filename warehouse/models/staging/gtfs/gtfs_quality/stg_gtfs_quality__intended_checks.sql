@@ -1,7 +1,7 @@
 {{ config(materialized='ephemeral') }}
 WITH stg_gtfs_quality__intended_checks AS (
-    {# SELECT {{ static_feed_downloaded_successfully() }} AS check, {{ compliance() }} AS feature #}
-    {# UNION ALL #}
+    SELECT {{ static_feed_downloaded_successfully() }} AS check, {{ compliance_schedule() }} AS feature
+    UNION ALL
     SELECT {{ no_validation_errors() }} AS check, {{ compliance_schedule() }} AS feature
     UNION ALL
     SELECT {{ shapes_file_present() }}, {{ accurate_service_data() }}
