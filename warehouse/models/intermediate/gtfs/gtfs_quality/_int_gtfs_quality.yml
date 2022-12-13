@@ -133,6 +133,10 @@ models:
           - dbt_utils.not_null_proportion:
               at_least: 0.50
 
+  - name: int_gtfs_quality__rt_protobuf_error
+    tests: *stg_gtfs_guideline_tests_rt
+    columns: *stg_gtfs_guideline_columns
+
   - name: int_gtfs_quality__schedule_download_success
     tests: &stg_gtfs_guideline_tests_schedule_feed
       - dbt_utils.unique_combination_of_columns:
@@ -141,4 +145,3 @@ models:
             - base64_url
       - dbt_utils.equal_rowcount:
           compare_model: ref('int_gtfs_quality__schedule_url_guideline_index')
-    columns: *stg_gtfs_guideline_columns
