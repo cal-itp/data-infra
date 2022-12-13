@@ -261,14 +261,14 @@ reauth = ["pyu2f (>=0.1.5)"]
 
 [[package]]
 name = "google-auth-oauthlib"
-version = "0.7.1"
+version = "0.8.0"
 description = "Google Authentication Library"
 category = "main"
 optional = false
 python-versions = ">=3.6"
 
 [package.dependencies]
-google-auth = ">=2.14.0"
+google-auth = ">=2.15.0"
 requests-oauthlib = ">=0.7.0"
 
 [package.extras]
@@ -276,7 +276,7 @@ tool = ["click (>=6.0.0)"]
 
 [[package]]
 name = "google-cloud-bigquery"
-version = "2.34.4"
+version = "2.34.3"
 description = "Google BigQuery API client library"
 category = "main"
 optional = false
@@ -288,10 +288,10 @@ google-cloud-bigquery-storage = {version = ">=2.0.0,<3.0.0dev", optional = true,
 google-cloud-core = ">=1.4.1,<3.0.0dev"
 google-resumable-media = ">=0.6.0,<3.0dev"
 grpcio = ">=1.38.1,<2.0dev"
-packaging = ">=14.3,<22.0dev"
+packaging = ">=14.3"
 pandas = {version = ">=0.24.2", optional = true, markers = "extra == \"pandas\""}
-proto-plus = ">=1.15.0,<2.0.0dev"
-protobuf = ">=3.12.0,<4.0.0dev"
+proto-plus = ">=1.15.0"
+protobuf = ">=3.12.0"
 pyarrow = {version = ">=3.0.0,<8.0dev", optional = true, markers = "extra == \"bqstorage\""}
 python-dateutil = ">=2.7.2,<3.0dev"
 requests = ">=2.18.0,<3.0.0dev"
@@ -550,14 +550,11 @@ signedtoken = ["cryptography (>=3.0.0)", "pyjwt (>=2.0.0,<3)"]
 
 [[package]]
 name = "packaging"
-version = "21.3"
+version = "22.0"
 description = "Core utilities for Python packages"
 category = "main"
 optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-pyparsing = ">=2.0.2,<3.0.5 || >3.0.5"
+python-versions = ">=3.7"
 
 [[package]]
 name = "pandas"
@@ -704,17 +701,6 @@ google-auth = {version = ">=1.25.0,<3.0dev", markers = "python_version >= \"3.6\
 google-auth-oauthlib = {version = ">=0.4.0", markers = "python_version >= \"3.6\""}
 
 [[package]]
-name = "pyparsing"
-version = "3.0.9"
-description = "pyparsing module - Classes and methods to define and execute parsing grammars"
-category = "main"
-optional = false
-python-versions = ">=3.6.8"
-
-[package.extras]
-diagrams = ["railroad-diagrams", "jinja2"]
-
-[[package]]
 name = "pytest"
 version = "5.4.3"
 description = "pytest: simple powerful testing with Python"
@@ -746,6 +732,20 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
 
 [package.dependencies]
 six = ">=1.5"
+
+[[package]]
+name = "python-slugify"
+version = "7.0.0"
+description = "A Python slugify application that also handles Unicode"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+text-unidecode = ">=1.3"
+
+[package.extras]
+unidecode = ["Unidecode (>=1.1.1)"]
 
 [[package]]
 name = "pytz"
@@ -843,7 +843,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
 name = "sqlalchemy"
-version = "1.4.44"
+version = "1.4.45"
 description = "Database Abstraction Library"
 category = "main"
 optional = false
@@ -896,6 +896,14 @@ alembic = ["alembic"]
 all = ["packaging", "alembic", "geoalchemy2", "pytz", "shapely"]
 geography = ["geoalchemy2", "shapely"]
 tests = ["packaging", "pytz"]
+
+[[package]]
+name = "text-unidecode"
+version = "1.3"
+description = "The most basic Text::Unidecode port"
+category = "main"
+optional = false
+python-versions = "*"
 
 [[package]]
 name = "toml"
@@ -983,7 +991,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.10"
-content-hash = "ad12238ddc9a781fd28b935036dd399e2ba3a5155699100962ca48540d7f9588"
+content-hash = "9d694b42afafb61251f88e6741571fb2b7bedd1b69031909bdb37e1e89323060"
 
 [metadata.files]
 aiohttp = []
@@ -1040,9 +1048,9 @@ pyasn1 = []
 pyasn1-modules = []
 pydantic = []
 pydata-google-auth = []
-pyparsing = []
 pytest = []
 python-dateutil = []
+python-slugify = []
 pytz = []
 pytzdata = []
 pyyaml = []
@@ -1053,6 +1061,7 @@ siuba = []
 six = []
 sqlalchemy = []
 sqlalchemy-bigquery = []
+text-unidecode = []
 toml = []
 tqdm = []
 typer = []

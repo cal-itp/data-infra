@@ -28,6 +28,7 @@ from calitp.storage import (
     GTFSDownloadConfig,
 )
 from pydantic import validator, BaseModel
+from slugify import slugify
 from tqdm import tqdm
 
 JAVA_EXECUTABLE = os.getenv("JAVA_EXECUTABLE", "java")
@@ -197,8 +198,9 @@ def download_and_validate_extract(
             pbar=pbar,
         )
 
+    slugified_version = slugify(validator_version)
     validation = GTFSScheduleFeedValidation(
-        filename=f"validation_notices{JSONL_GZIP_EXTENSION}",
+        filename=f"validation_notices_{slugified_version}_{JSONL_GZIP_EXTENSION}",
         ts=extract.ts,
         extract_config=extract.config,
         system_errors=system_errors,
