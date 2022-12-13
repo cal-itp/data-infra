@@ -200,7 +200,7 @@ def download_and_validate_extract(
 
     slugified_version = slugify(validator_version)
     validation = GTFSScheduleFeedValidation(
-        filename=f"validation_notices_{slugified_version}_{JSONL_GZIP_EXTENSION}",
+        filename=f"validation_notices_{slugified_version}{JSONL_GZIP_EXTENSION}",
         ts=extract.ts,
         extract_config=extract.config,
         system_errors=system_errors,
