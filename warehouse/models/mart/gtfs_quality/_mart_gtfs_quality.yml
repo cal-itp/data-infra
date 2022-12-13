@@ -39,14 +39,14 @@ models:
           - dbt_utils.not_null_proportion:
               at_least: 0.99
 
-
   - name: fct_daily_rt_feed_guideline_checks
     description: '{{ doc("fct_daily_rt_feed_guideline_checks") }}'
     tests:
     columns:
       - *key
       - *date
-      - name: base64_url
+      - &base64_url
+        name: base64_url
         tests:
           - not_null
       - *check
@@ -57,6 +57,13 @@ models:
           - dbt_utils.not_null_proportion:
               at_least: 0.90
 
+  - name: fct_daily_schedule_url_guideline_checks
+    description: '{{ doc("fct_daily_schedule_url_guideline_checks") }}'
+    columns:
+      - *key
+      - *date
+      - *base64_url
+      - *check
 
   - name: fct_daily_rt_feed_validation_notices
     description: |
