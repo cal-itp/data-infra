@@ -22,7 +22,7 @@ int_gtfs_quality__no_30_day_feed_expiration AS (
         idx.date,
         idx.feed_key,
         {{ no_30_day_feed_expiration() }} AS check,
-        {{ best_practices_alignment() }} AS feature,
+        {{ best_practices_alignment_schedule() }} AS feature,
         CASE
             WHEN notices.validation_notices = 0 THEN "PASS"
             WHEN notices.validation_notices > 0 THEN "FAIL"
