@@ -1253,8 +1253,10 @@ models:
     - name: date
       description: Date that data was downloaded.
     - *base64_url
-    - name: feed_type
-      description: One of `service_alerts`, `vehicle_positions`, and `trip_updates`.
+    - &feed_type
+      name: feed_type
+      description: |
+        One of `service_alerts`, `vehicle_positions`, and `trip_updates`.
     - name: parse_success_file_count
       description: Count of files successfully parsed. Target is 4,320 (one file every 20 seconds.)
       tests:
@@ -1361,3 +1363,87 @@ models:
           I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
           in the input data. This indicates that data quality issues were present in the stop times data
           that is being summarized here.
+  - name: fct_hourly_rt_feed_files
+    description: |
+      An hourly count of the files that were downloaded each day per feed.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `dt` and `base64_url`.
+        tests: *primary_key_tests
+      - name: dt
+        description: |
+          Date on which the download attempt was made.
+      - *base64_url
+      - *feed_type
+      - name: hr_0
+        description: |
+          Count of files downloaded for this URL in the 0 hour UTC
+      - name: hr_1
+      - name: hr_2
+      - name: hr_3
+      - name: hr_4
+      - name: hr_5
+      - name: hr_6
+      - name: hr_7
+      - name: hr_8
+      - name: hr_9
+      - name: hr_10
+      - name: hr_11
+      - name: hr_12
+      - name: hr_13
+      - name: hr_14
+      - name: hr_15
+      - name: hr_16
+      - name: hr_17
+      - name: hr_18
+      - name: hr_19
+      - name: hr_20
+      - name: hr_21
+      - name: hr_22
+      - name: hr_23
+      - name: gtfs_dataset_key
+        description: |
+          The primary key for the record in `dim_gtfs_datasets` associated with this feed.
+  - name: fct_hourly_rt_feed_files_success
+    description: |
+      The proportion of downloaded files that were successfully parsed as GTFS-RT.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `dt` and `base64_url`.
+        tests: *primary_key_tests
+      - name: dt
+        description: |
+          Date on which the download attempt was made.
+      - *base64_url
+      - *feed_type
+      - name: hr_0
+        description: |
+          Count of files downloaded for this URL in the 0 hour UTC
+      - name: hr_1
+      - name: hr_2
+      - name: hr_3
+      - name: hr_4
+      - name: hr_5
+      - name: hr_6
+      - name: hr_7
+      - name: hr_8
+      - name: hr_9
+      - name: hr_10
+      - name: hr_11
+      - name: hr_12
+      - name: hr_13
+      - name: hr_14
+      - name: hr_15
+      - name: hr_16
+      - name: hr_17
+      - name: hr_18
+      - name: hr_19
+      - name: hr_20
+      - name: hr_21
+      - name: hr_22
+      - name: hr_23
+      - name: gtfs_dataset_key
+        description: |
+          The primary key for the record in `dim_gtfs_datasets` associated with this feed.
