@@ -89,10 +89,6 @@ models:
     tests: *stg_gtfs_guideline_tests_schedule
     columns: *stg_gtfs_guideline_columns
 
-  - name: int_gtfs_quality__schedule_download_success
-    tests: *stg_gtfs_guideline_tests
-    columns: *stg_gtfs_guideline_columns
-
   - name: int_gtfs_quality__no_rt_critical_validation_errors
     tests: &stg_gtfs_guideline_tests_rt
       - dbt_utils.unique_combination_of_columns:
@@ -126,3 +122,13 @@ models:
         tests:
           - dbt_utils.not_null_proportion:
               at_least: 0.50
+
+  - name: int_gtfs_quality__schedule_download_success
+    tests: &stg_gtfs_guideline_tests_schedule_feed
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - base64_url
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__schedule_url_guideline_index')
+    columns: *stg_gtfs_guideline_columns
