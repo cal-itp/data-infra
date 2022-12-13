@@ -1,6 +1,6 @@
 -- declare checks
 {% macro static_feed_downloaded_successfully() %}
-"Static GTFS feed downloads successfully"
+"GTFS schedule feed downloads successfully"
 {% endmacro %}
 
 {% macro no_validation_errors() %}
@@ -129,8 +129,12 @@
 {% endmacro %}
 
 -- declare features
-{% macro compliance() %}
-"Compliance"
+{% macro compliance_schedule() %}
+"Compliance (Schedule)"
+{% endmacro %}
+
+{% macro compliance_rt() %}
+"Compliance (RT)"
 {% endmacro %}
 
 {% macro accurate_accessibility_data() %}
@@ -149,12 +153,20 @@
 "Fixed-Route Completeness"
 {% endmacro %}
 
-{% macro feed_aggregator_availability() %}
-"Feed Aggregator Availability"
+{% macro feed_aggregator_availability_schedule() %}
+"Feed Aggregator Availability (Schedule)"
 {% endmacro %}
 
-{% macro best_practices_alignment() %}
-"Best Practices Alignment"
+{% macro feed_aggregator_availability_rt() %}
+"Feed Aggregator Availability (RT)"
+{% endmacro %}
+
+{% macro best_practices_alignment_schedule() %}
+"Best Practices Alignment (Schedule)"
+{% endmacro %}
+
+{% macro best_practices_alignment_rt() %}
+"Best Practices Alignment (RT)"
 {% endmacro %}
 
 {% macro fare_completeness() %}

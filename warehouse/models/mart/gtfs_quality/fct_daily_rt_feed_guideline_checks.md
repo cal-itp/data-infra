@@ -18,7 +18,7 @@ Here is a list of currently-implemented checks:
 | Service alerts RT feed uses HTTPS | Best Practice Alignment | The service alerts RT feed endpoint uses HTTPS instead of HTTPS to ensure feed integrity.|
 |Vehicle positions RT feed uses HTTPS | Best Practice Alignment | The vehicle positions RT feed endpoint uses HTTPS instead of HTTPS to ensure feed integrity.|
 | Trip updates RT feed uses HTTPS | Best Practice Alignment | The trip updates RT feed endpoint uses HTTPS instead of HTTPS to ensure feed integrity.|
-| Fewer than 1% of requests to Trip updates RT feed result in a protobuf error | Best Practice Alignment | On the given day, fewer than 1% of requests to Trip updates RT feed result in a protobuf error.|
-| Fewer than 1% of requests to Service alerts RT feed result in a protobuf error | Best Practice Alignment | On the given day, fewer than 1% of requests to Service alerts RT feed result in a protobuf error.|
-| Fewer than 1% of requests to Vehicle positions RT feed result in a protobuf error | Best Practice Alignment | On the given day, fewer than 1% of requests to Vehicle positions RT feed result in a protobuf error.|
+| Fewer than 1% of requests to Trip updates RT feed result in a protobuf error | Best Practice Alignment | On the given day, fewer than 1% of Trip updates RT feed downloads result in a protobuf error.|
+| Fewer than 1% of requests to Service alerts RT feed result in a protobuf error | Best Practice Alignment | On the given day, fewer than 1% of Service alerts RT feed downloads result in a protobuf error.|
+| Fewer than 1% of requests to Vehicle positions RT feed result in a protobuf error | Best Practice Alignment | On the given day, fewer than 1% of Vehicle positions RT feed downloads result in a protobuf error.|
 {% enddocs %}
