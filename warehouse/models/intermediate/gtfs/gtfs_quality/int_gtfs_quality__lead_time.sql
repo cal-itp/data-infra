@@ -134,6 +134,8 @@ daily_improper_trips_updates AS (
           -- A trip's stop times are being changed
          COUNT(CASE WHEN trip_stop_times_hash != prev_trip_stop_times_hash THEN 1 END) AS stop_times_changed,
           -- A trip's stop location is being changed
+          ---- Note that this will catch micro-adjustments as well as large changes.
+          ---- ...consider calculating distance and setting a minimum allowable change
          COUNT(CASE WHEN trip_stop_locations_hash != prev_trip_stop_locations_hash THEN 1 END) AS stop_location_changed,
     FROM trips_version_compare
    WHERE
