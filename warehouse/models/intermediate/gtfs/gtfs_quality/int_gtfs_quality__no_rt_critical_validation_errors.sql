@@ -35,7 +35,7 @@ int_gtfs_quality__no_rt_critical_validation_errors AS (
         idx.base64_url,
         idx.feed_type,
         {{ no_rt_critical_validation_errors() }} AS check,
-        {{ compliance() }} AS feature,
+        {{ compliance_rt() }} AS feature,
         rt_files,
         errors,
         CASE

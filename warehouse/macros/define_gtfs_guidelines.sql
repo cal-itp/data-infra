@@ -1,6 +1,6 @@
 -- declare checks
 {% macro static_feed_downloaded_successfully() %}
-"Static GTFS feed downloads successfully"
+"GTFS schedule feed downloads successfully"
 {% endmacro %}
 
 {% macro no_validation_errors() %}
@@ -120,9 +120,25 @@
 "All schedule changes in the last month have provided at least 7 days of lead time"
 {% endmacro %}
 
+{% macro no_pb_error_tu() %}
+"Fewer than 1% of requests to Trip updates RT feed result in a protobuf error"
+{% endmacro %}
+
+{% macro no_pb_error_sa() %}
+"Fewer than 1% of requests to Service alerts RT feed result in a protobuf error"
+{% endmacro %}
+
+{% macro no_pb_error_vp() %}
+"Fewer than 1% of requests to Vehicle positions RT feed result in a protobuf error"
+{% endmacro %}
+
 -- declare features
-{% macro compliance() %}
-"Compliance"
+{% macro compliance_schedule() %}
+"Compliance (Schedule)"
+{% endmacro %}
+
+{% macro compliance_rt() %}
+"Compliance (RT)"
 {% endmacro %}
 
 {% macro accurate_accessibility_data() %}
@@ -141,12 +157,20 @@
 "Fixed-Route Completeness"
 {% endmacro %}
 
-{% macro feed_aggregator_availability() %}
-"Feed Aggregator Availability"
+{% macro feed_aggregator_availability_schedule() %}
+"Feed Aggregator Availability (Schedule)"
 {% endmacro %}
 
-{% macro best_practices_alignment() %}
-"Best Practices Alignment"
+{% macro feed_aggregator_availability_rt() %}
+"Feed Aggregator Availability (RT)"
+{% endmacro %}
+
+{% macro best_practices_alignment_schedule() %}
+"Best Practices Alignment (Schedule)"
+{% endmacro %}
+
+{% macro best_practices_alignment_rt() %}
+"Best Practices Alignment (RT)"
 {% endmacro %}
 
 {% macro fare_completeness() %}

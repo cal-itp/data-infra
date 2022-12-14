@@ -28,7 +28,7 @@ parse_outcomes AS (
     {% if is_incremental() %}
     WHERE dt >= DATE '{{ max_date }}'
     {% else %}
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH)
+    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('INCREMENTAL_PARTITIONS_LOOKBACK_DAYS') }} DAY)
     {% endif %}
 ),
 

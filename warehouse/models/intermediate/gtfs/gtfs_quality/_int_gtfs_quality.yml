@@ -11,6 +11,16 @@ models:
             - feed_key
             - date
 
+  - name: int_gtfs_quality__schedule_url_guideline_index
+    description: |
+      Daily index of v2 schedule urls. Provides structure for
+      individual check models to be joined together by day.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - date
+
   - name: int_gtfs_quality__rt_validation_outcomes
     description: |
       Unioned, incremental table of RT validation outcomes.
@@ -126,3 +136,16 @@ models:
   - name: int_gtfs_quality__lead_time
     tests: *stg_gtfs_guideline_tests_schedule
     columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__rt_protobuf_error
+    tests: *stg_gtfs_guideline_tests_rt
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__schedule_download_success
+    tests: &stg_gtfs_guideline_tests_schedule_feed
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - base64_url
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__schedule_url_guideline_index')
