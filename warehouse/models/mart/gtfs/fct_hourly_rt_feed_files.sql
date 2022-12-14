@@ -34,6 +34,23 @@ parse_outcomes AS (
     {% endif %}
 ),
 
+daily_totals AS (
+
+    SELECT
+
+        dt,
+        base64_url,
+        feed_type,
+        COUNT(*) as file_count_day
+
+    FROM parse_outcomes
+    GROUP BY
+        dt,
+        base64_url,
+        feed_type
+
+),
+
 pivot_hourly_totals AS (
 
     SELECT *
@@ -64,6 +81,8 @@ fct_hourly_rt_feed_files AS (
         url_index.base64_url,
         url_index.type AS feed_type,
 
+        daily_totals.file_count_day,
+
         pivot_hourly_totals.* EXCEPT (dt, base64_url, feed_type),
 
         url_map.gtfs_dataset_key
@@ -73,6 +92,10 @@ fct_hourly_rt_feed_files AS (
         ON url_index.dt = pivot_hourly_totals.dt
             AND url_index.base64_url = pivot_hourly_totals.base64_url
             AND url_index.type = pivot_hourly_totals.feed_type
+    LEFT JOIN daily_totals
+        ON url_index.dt = daily_totals.dt
+            AND url_index.base64_url = daily_totals.base64_url
+            AND url_index.type = daily_totals.feed_type
     LEFT JOIN int_transit_database__urls_to_gtfs_datasets AS url_map
         ON url_index.base64_url = url_map.base64_url
 
