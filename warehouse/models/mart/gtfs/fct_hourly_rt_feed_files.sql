@@ -24,6 +24,11 @@ int_transit_database__urls_to_gtfs_datasets AS (
     FROM {{ ref('int_transit_database__urls_to_gtfs_datasets') }}
 ),
 
+fct_daily_rt_feed_files AS (
+    SELECT *
+    FROM {{ ref('fct_daily_rt_feed_files') }}
+),
+
 parse_outcomes AS (
     SELECT *
     FROM int_gtfs_rt__unioned_parse_outcomes
@@ -38,16 +43,14 @@ daily_totals AS (
 
     SELECT
 
-        dt,
+        date AS dt,
         base64_url,
         feed_type,
-        COUNT(*) as file_count_day
+        gtfs_dataset_key,
 
-    FROM parse_outcomes
-    GROUP BY
-        dt,
-        base64_url,
-        feed_type
+        parse_success_file_count + parse_failure_file_count AS file_count_day
+
+    FROM fct_daily_rt_feed_files
 
 ),
 
@@ -82,10 +85,9 @@ fct_hourly_rt_feed_files AS (
         url_index.type AS feed_type,
 
         daily_totals.file_count_day,
+        daily_totals.gtfs_dataset_key,
 
         pivot_hourly_totals.* EXCEPT (dt, base64_url, feed_type),
-
-        url_map.gtfs_dataset_key
 
     FROM int_gtfs_rt__daily_url_index AS url_index
     LEFT JOIN pivot_hourly_totals
@@ -96,8 +98,6 @@ fct_hourly_rt_feed_files AS (
         ON url_index.dt = daily_totals.dt
             AND url_index.base64_url = daily_totals.base64_url
             AND url_index.type = daily_totals.feed_type
-    LEFT JOIN int_transit_database__urls_to_gtfs_datasets AS url_map
-        ON url_index.base64_url = url_map.base64_url
 
 )
 
