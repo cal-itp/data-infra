@@ -35,6 +35,12 @@ WITH stg_gtfs_quality__intended_checks AS (
     SELECT {{ rt_https_vehicle_positions() }}, {{ best_practices_alignment_rt() }}
     UNION ALL
     SELECT {{ rt_https_service_alerts() }}, {{ best_practices_alignment_rt() }}
+    UNION ALL
+    SELECT {{ no_pb_error_tu() }}, {{ best_practices_alignment_rt() }}
+    UNION ALL
+    SELECT {{ no_pb_error_vp() }}, {{ best_practices_alignment_rt() }}
+    UNION ALL
+    SELECT {{ no_pb_error_sa() }}, {{ best_practices_alignment_rt() }}
     {# UNION ALL #}
     {# SELECT {{ schedule_feed_on_transitland() }}, {{ feed_aggregator_availability() }} #}
     {# UNION ALL #}
