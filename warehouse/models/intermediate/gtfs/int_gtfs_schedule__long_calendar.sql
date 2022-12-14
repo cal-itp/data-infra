@@ -1,3 +1,7 @@
+{{ config(materialized='table',
+    cluster_by = ['day_num', 'start_date']
+    ) }}
+
 -- TODO: make an intermediate calendar and use that instead of the dimension
 WITH dim_calendar AS (
     SELECT *
