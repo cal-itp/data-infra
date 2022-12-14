@@ -6,8 +6,6 @@ authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "~3.9"
-dbt-core = "^1.0.4"
-dbt-bigquery = "^1.0.0"
 colorama = "^0.4.4"
 black = "22.3.0"
 gcsfs = "^2022.2.0"
@@ -31,6 +29,8 @@ swifter = "^1.1.3"
 dbt-metabase = {git = "https://github.com/JarvusInnovations/dbt-metabase.git"}
 sentry-sdk = "^1.9.8"
 backoff = "^2.2.1"
+dbt-core = "^1.3.1"
+dbt-bigquery = "^1.3.0"
 
 [tool.poetry.dev-dependencies]
 
