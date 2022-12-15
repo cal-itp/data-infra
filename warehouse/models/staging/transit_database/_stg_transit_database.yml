@@ -98,11 +98,10 @@ models:
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
-            - airtable_record_id
+            - key
             - calitp_extracted_at
     columns:
-      - name: airtable_record_id
-        tests: *primary_key_tests
+      - *key
       - *name
       - name: data
       - name: regional_feed_type

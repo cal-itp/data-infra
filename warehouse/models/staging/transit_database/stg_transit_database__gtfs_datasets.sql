@@ -60,7 +60,7 @@ construct_base64_url AS (
 
 stg_transit_database__gtfs_datasets AS (
     SELECT
-        id AS airtable_record_id,
+        id AS key,
         {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         data,
         data_quality_pipeline,
