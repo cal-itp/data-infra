@@ -19,9 +19,9 @@ int_gtfs_rt__unioned_parse_outcomes AS (
     FROM {{ ref('int_gtfs_rt__unioned_parse_outcomes') }}
 ),
 
-int_transit_database__urls_to_gtfs_datasets AS (
+fct_daily_rt_feed_files AS (
     SELECT *
-    FROM {{ ref('int_transit_database__urls_to_gtfs_datasets') }}
+    FROM {{ ref('fct_daily_rt_feed_files') }}
 ),
 
 parse_outcomes AS (
@@ -32,6 +32,21 @@ parse_outcomes AS (
     {% else %}
     WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('INCREMENTAL_PARTITIONS_LOOKBACK_DAYS') }} DAY)
     {% endif %}
+),
+
+daily_totals AS (
+
+    SELECT
+
+        date AS dt,
+        base64_url,
+        feed_type,
+        gtfs_dataset_key,
+
+        parse_success_file_count + parse_failure_file_count AS file_count_day
+
+    FROM fct_daily_rt_feed_files
+
 ),
 
 pivot_hourly_totals AS (
@@ -64,17 +79,18 @@ fct_hourly_rt_feed_files AS (
         url_index.base64_url,
         url_index.type AS feed_type,
 
-        pivot_hourly_totals.* EXCEPT (dt, base64_url, feed_type),
+        daily_totals.file_count_day,
+        daily_totals.gtfs_dataset_key,
 
-        url_map.gtfs_dataset_key
+        pivot_hourly_totals.* EXCEPT (dt, base64_url, feed_type),
 
     FROM int_gtfs_rt__daily_url_index AS url_index
     LEFT JOIN pivot_hourly_totals
         ON url_index.dt = pivot_hourly_totals.dt
             AND url_index.base64_url = pivot_hourly_totals.base64_url
-            AND url_index.type = pivot_hourly_totals.feed_type
-    LEFT JOIN int_transit_database__urls_to_gtfs_datasets AS url_map
-        ON url_index.base64_url = url_map.base64_url
+    LEFT JOIN daily_totals
+        ON url_index.dt = daily_totals.dt
+            AND url_index.base64_url = daily_totals.base64_url
 
 )
 
