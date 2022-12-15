@@ -25,7 +25,7 @@ int_gtfs_quality__rt_protobuf_error AS (
              WHEN idx.feed_type = 'trip_updates' THEN {{ no_pb_error_tu() }}
              WHEN idx.feed_type = 'vehicle_positions' THEN {{ no_pb_error_vp() }}
         END AS check,
-        {{ best_practices_alignment() }} AS feature,
+        {{ best_practices_alignment_rt() }} AS feature,
         CASE
             WHEN s.percent_success >= 99 THEN "PASS"
             WHEN s.percent_success < 99 THEN "FAIL"
