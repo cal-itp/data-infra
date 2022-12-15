@@ -39,13 +39,13 @@ trips_expanded AS (
            -- Creates a hash for a single field summarizing all stop_times this trip
            MD5(
                 STRING_AGG(
-                    time_pair ORDER BY t2.stop_sequence ASC
+                    t2.time_pair ORDER BY t2.stop_sequence ASC
                 )
             ) AS trip_stop_times_hash,
            -- Creates a hash for a single field summarizing all stop locations for this trip
            MD5(
                 STRING_AGG(
-                    stop_location ORDER BY t2.stop_sequence ASC
+                    t3.stop_location ORDER BY t2.stop_sequence ASC
                 )
             ) AS trip_stop_locations_hash
       FROM dim_trips t1
