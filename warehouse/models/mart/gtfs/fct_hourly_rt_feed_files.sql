@@ -88,7 +88,6 @@ fct_hourly_rt_feed_files AS (
     LEFT JOIN pivot_hourly_totals
         ON url_index.dt = pivot_hourly_totals.dt
             AND url_index.base64_url = pivot_hourly_totals.base64_url
-            AND url_index.type = pivot_hourly_totals.feed_type
     LEFT JOIN daily_totals
         ON url_index.dt = daily_totals.dt
             AND url_index.base64_url = daily_totals.base64_url
