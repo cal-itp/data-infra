@@ -19,11 +19,6 @@ int_gtfs_rt__unioned_parse_outcomes AS (
     FROM {{ ref('int_gtfs_rt__unioned_parse_outcomes') }}
 ),
 
-int_transit_database__urls_to_gtfs_datasets AS (
-    SELECT *
-    FROM {{ ref('int_transit_database__urls_to_gtfs_datasets') }}
-),
-
 fct_daily_rt_feed_files AS (
     SELECT *
     FROM {{ ref('fct_daily_rt_feed_files') }}
@@ -120,7 +115,6 @@ fct_hourly_rt_feed_files_success AS (
     LEFT JOIN daily_totals
         ON url_index.dt = daily_totals.dt
             AND url_index.base64_url = daily_totals.base64_url
-            AND url_index.type = daily_totals.feed_type
 
 )
 
