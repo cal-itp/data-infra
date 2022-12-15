@@ -112,9 +112,15 @@ models:
       - name: service_bool
         description: |
           Boolean indicating whether there is service for this `service_id` / `date` pair.
+        tests:
+          - not_null
       - name: calendar_key
         description: |
           Foreign key to dim_calendar.
+        tests:
+          - relationships:
+              to: ref('dim_calendar')
+              field: key
   - name: int_gtfs_schedule__daily_scheduled_service_index
     description: |
       An index listing date, feed, and `service_id` combinations for which service was scheduled (i.e.,
@@ -148,10 +154,18 @@ models:
         description: |
           Foreign key for `dim_calendar`. If null, the service for this date was
           defined exclusively via `calendar_dates`.
+        tests:
+          - relationships:
+              to: ref('dim_calendar')
+              field: key
       - name: calendar_dates_key
         description: |
           Foreign key for `dim_calendar_dates`. If null, the service for this date was
           defined exclusively via `calendar`.
+        tests:
+          - relationships:
+              to: ref('dim_calendar_dates')
+              field: key
       - name: service_date
         description: Date on which service was scheduled.
         tests:
@@ -414,10 +428,18 @@ models:
         description: |
           Foreign key for `dim_calendar`. If null, the service for this date was
           defined exclusively via `calendar_dates`.
+        tests:
+          - relationships:
+              to: ref('dim_calendar')
+              field: key
       - name: calendar_dates_key
         description: |
           Foreign key for `dim_calendar_dates`. If null, the service for this date was
           defined exclusively via `calendar`.
+        tests:
+          - relationships:
+              to: ref('dim_calendar_dates')
+              field: key
       - name: service_date
         description: Date on which service was scheduled.
         tests:
