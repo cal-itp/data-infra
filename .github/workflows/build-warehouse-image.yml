@@ -6,11 +6,19 @@ on:
       - 'main'
     paths:
       - '.github/workflows/build-warehouse-image.yml'
-      - 'warehouse/**'
+      - 'warehouse/Dockerfile'
+      - 'warehouse/packages.yml'
+      - 'warehouse/poetry.lock'
+      - 'warehouse/pyproject.yml'
+      - 'warehouse/requirements.txt'
   pull_request:
     paths:
       - '.github/workflows/build-warehouse-image.yml'
-      - 'warehouse/**'
+      - 'warehouse/Dockerfile'
+      - 'warehouse/packages.yml'
+      - 'warehouse/poetry.lock'
+      - 'warehouse/pyproject.yml'
+      - 'warehouse/requirements.txt'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
