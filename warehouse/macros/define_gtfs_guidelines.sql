@@ -128,6 +128,10 @@
 "Fewer than 1% of requests to Vehicle positions RT feed result in a protobuf error"
 {% endmacro %}
 
+{% macro persistent_ids_schedule() %}
+"Schedule feed maintains persistent identifiers for stop_id, route_id, and agency_id"
+{% endmacro %}
+
 -- declare features
 {% macro compliance_schedule() %}
 "Compliance (Schedule)"

@@ -17,6 +17,7 @@ unioned AS (
             ref('int_gtfs_quality__no_7_day_feed_expiration'),
             ref('int_gtfs_quality__no_30_day_feed_expiration'),
             ref('int_gtfs_quality__no_expired_services'),
+            ref('int_gtfs_quality__persistent_ids_schedule'),
         ],
     ) }}
 ),

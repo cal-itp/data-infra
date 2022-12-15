@@ -23,4 +23,5 @@ Here is a list of currently-implemented checks:
 |Passes Fares v2 portion of MobilityData GTFS Schedule Validator | Fare Completeness | For feeds containing at least one of the files: fare_leg_rules, rider_categories, fare_containers, fare_products, fare_transfer_rules, none of the following errors appear in the MobilityData GTFS Schedule Validator: fare_transfer_rule_duration_limit_type_without_duration_limit, fare_transfer_rule_duration_limit_without_type, fare_transfer_rule_invalid_transfer_count, fare_transfer_rule_missing_transfer_count, fare_transfer_rule_with_forbidden_transfer_count, invalid_currency_amount. |
 | No expired services are listed in the feed | Best Practices Alignment | Looking at both calendars.txt and calendar_dates.txt, no service_id's exist where the last in-effect date is in the past. |
 | Schedule feed downloads successfully | Compliance | Schedule feed downloads without error. |
+| Schedule feed maintains persistent identifiers for stop_id, route_id, and agency_id | Best Practices Alignment | In the last 30 days, no updates to the schedule feed have replaced more than 50% of stop_id's, route_id's or agency_id's. |
 {% enddocs %}
