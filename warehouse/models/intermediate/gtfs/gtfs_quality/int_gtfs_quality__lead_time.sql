@@ -123,8 +123,7 @@ trips_version_compare AS (
 ),
 
 -- We count each "infraction" type seperately, mostly for QA purposes
-----  Note that since all_scheduled_service table has a row per trip per service day,
-----  this query will count each "infraction" once per day it's in effect
+----  Note that this query will count each "infraction" once per day it's in effect
 daily_improper_trips_updates AS (
   SELECT base64_url,
          feed_key,
