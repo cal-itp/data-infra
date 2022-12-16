@@ -78,8 +78,8 @@ models:
         description: Foreign key to dim_gtfs_datasets, for a record with data = "GTFS TripUpdates."
   - name: int_transit_database__services_history
     description: |
-      Daily list of services with attributes required to check whether they were
-      assessed by Cal-ITP on the given date.
+      Daily list of services, unnested to the organization/service relationship level,
+      with attributes required to check whether they were assessed by Cal-ITP on the given date.
 
       This table is different than other Transit Database data because it
       captures the historical state of various attributes. This historical
@@ -97,6 +97,9 @@ models:
           Date on which this service was in our Transit Database data.
       - name: key
         description: |
+          Synthetic key, hash of `service_key` and `provider_organization_key`.
+      - name: service_key
+        description: |
           Service record key.
       - name: name
       - name: assessment_status
@@ -113,8 +116,8 @@ models:
           Array of organization key(s) for organization(s) managing this service as of this date.
   - name: int_transit_database__organizations_history
     description: |
-      Daily list of organizations with attributes required to check whether they were
-      assessed by Cal-ITP on the given date.
+      Daily list of organizations, unnested to the organization/service relationship level,
+      with attributes required to check whether they were assessed by Cal-ITP on the given date.
 
       This table is different than other Transit Database data because it
       captures the historical state of various attributes. This historical
@@ -131,6 +134,9 @@ models:
         description: |
           Date on which this organization was in our Transit Database data.
       - name: key
+        description: |
+          Synthetic key, hash of `organization_key` and `mobility_services_managed_service_key`.
+      - name: organization_key
         description: |
           Organization record key.
       - name: name

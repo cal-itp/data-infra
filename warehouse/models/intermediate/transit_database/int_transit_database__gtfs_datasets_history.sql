@@ -10,6 +10,7 @@ int_gtfs_quality__gtfs_datasets_history AS (
         calitp_extracted_at AS date,
         key,
         name,
+        data,
         regional_feed_type,
         base64_url
     FROM stg_transit_database__gtfs_datasets

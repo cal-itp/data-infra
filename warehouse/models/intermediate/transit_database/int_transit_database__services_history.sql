@@ -8,13 +8,16 @@ WITH stg_transit_database__services AS (
 int_gtfs_quality__services_history AS (
     SELECT
         calitp_extracted_at AS date,
-        key,
+        {{ dbt_utils.surrogate_key(['key', 'unnest_provider']) }} AS key,
+        key AS service_key,
         name,
         assessment_status,
         currently_operating,
-        service_type,
-        provider
+        ARRAY_TO_STRING(service_type, ",") AS service_type_str,
+        unnest_provider AS provider_organization_key,
     FROM stg_transit_database__services
+    CROSS JOIN UNNEST(stg_transit_database__services.provider) AS unnest_provider
+
 )
 
 SELECT * FROM int_gtfs_quality__services_history
