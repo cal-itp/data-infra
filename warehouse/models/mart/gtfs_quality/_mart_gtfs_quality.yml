@@ -151,6 +151,47 @@ models:
           expression: "is_implemented"
     columns:
       - name: is_implemented
+  - name: fct_daily_guideline_checks
+    description: |
+      **Documentation coming soon**
+    columns:
+      - *key
+      - *date
+      - name: organization_name
+      - name: service_name
+      - name: gtfs_dataset_name
+      - name: gtfs_dataset_type
+      - name: base64_url
+      - name: organization_key
+        description: |
+          Foreign key to `dim_organizations`; note that this is a *historical* key value and
+          so joins may result in some unexpected behavior (for example, deleted records will
+          fail to join.)
+      - name: service_key
+        description: |
+          Foreign key to `dim_services`; note that this is a *historical* key value and
+          so joins may result in some unexpected behavior (for example, deleted records will
+          fail to join.)
+      - name: gtfs_service_data_key
+        description: |
+          Foreign key to `dim_gtfs_service_data`; note that this is a *historical* key value and
+          so joins may result in some unexpected behavior (for example, deleted records will
+          fail to join.)
+      - name: gtfs_dataset_key
+        description: |
+          Foreign key to `dim_gtfs_datasets`; note that this is a *historical* key value and
+          so joins may result in some unexpected behavior (for example, deleted records will
+          fail to join.)
+      - name: schedule_feed_key
+        description: |
+          Foreign key to `dim_schedule_feeds`. Because `dim_schedule_feeds` is slowly-
+          changing dimension, joins using this key are not subject to the historical
+          limitations noted for the other foreign keys in this table.
+      - *check
+      - name: status
+      - name: feature
+
+
 
 # TODO: This should be filled out once the reports site is actually migrated
 #exposures:
