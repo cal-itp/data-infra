@@ -116,6 +116,10 @@
 "Passes Fares v2 portion of MobilityData GTFS Schedule Validator"
 {% endmacro %}
 
+{% macro lead_time() %}
+"All schedule changes in the last month have provided at least 7 days of lead time"
+{% endmacro %}
+
 {% macro no_pb_error_tu() %}
 "Fewer than 1% of requests to Trip updates RT feed result in a protobuf error"
 {% endmacro %}
@@ -171,6 +175,10 @@
 
 {% macro fare_completeness() %}
 "Fare Completeness"
+{% endmacro %}
+
+{% macro up_to_dateness() %}
+"Up-to-Dateness"
 {% endmacro %}
 
 -- columns
