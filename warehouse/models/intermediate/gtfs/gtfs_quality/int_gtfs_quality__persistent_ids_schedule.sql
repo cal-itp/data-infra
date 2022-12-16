@@ -4,19 +4,15 @@ WITH feed_guideline_index AS (
 ),
 
 dim_stops AS (
-    SELECT  *,
-            CONCAT(stop_lat,stop_lon) AS stop_location
-      FROM {{ ref('dim_stops') }}
+    SELECT  * FROM {{ ref('dim_stops') }}
 ),
 
 dim_routes AS (
-    SELECT  *
-      FROM {{ ref('dim_routes') }}
+    SELECT  * FROM {{ ref('dim_routes') }}
 ),
 
 dim_agency AS (
-    SELECT  *
-      FROM {{ ref('dim_agency') }}
+    SELECT  * FROM {{ ref('dim_agency') }}
 ),
 
 distinct_feed_versions AS (
@@ -60,7 +56,6 @@ stop_ids_version_compare AS (
          COALESCE(stops.feed_key,prev_stops.next_feed_key) AS feed_key,
          -- one feed's previous key is the previous feed's key
          COALESCE(stops.prev_feed_key,prev_stops.feed_key) AS prev_feed_key,
-         -- we need to know the next feed's valid_from date, in cases where a trip is removed since the previous feed
          COALESCE(stops.valid_from,prev_stops.next_feed_valid_from) AS valid_from,
          stops.stop_id,
          prev_stops.stop_id AS prev_stop_id
@@ -112,7 +107,6 @@ route_ids_version_compare AS (
          COALESCE(routes.feed_key,prev_routes.next_feed_key) AS feed_key,
          -- one feed's previous key is the previous feed's key
          COALESCE(routes.prev_feed_key,prev_routes.feed_key) AS prev_feed_key,
-         -- we need to know the next feed's valid_from date, in cases where a trip is removed since the previous feed
          COALESCE(routes.valid_from,prev_routes.next_feed_valid_from) AS valid_from,
          routes.route_id,
          prev_routes.route_id AS prev_route_id
@@ -164,7 +158,6 @@ agency_ids_version_compare AS (
          COALESCE(agencies.feed_key,prev_agencies.next_feed_key) AS feed_key,
          -- one feed's previous key is the previous feed's key
          COALESCE(agencies.prev_feed_key,prev_agencies.feed_key) AS prev_feed_key,
-         -- we need to know the next feed's valid_from date, in cases where a trip is removed since the previous feed
          COALESCE(agencies.valid_from,prev_agencies.next_feed_valid_from) AS valid_from,
          agencies.agency_id,
          prev_agencies.agency_id AS prev_agency_id
