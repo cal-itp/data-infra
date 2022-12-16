@@ -1,5 +1,4 @@
 
--- agency_id
 WITH feed_guideline_index AS (
     SELECT * FROM {{ ref('int_gtfs_quality__schedule_feed_guideline_index') }}
 ),
@@ -34,7 +33,8 @@ feed_version_history AS (
            LAG (feed_key) OVER (PARTITION BY base64_url ORDER BY _valid_from ASC) AS prev_feed_key,
            LEAD (feed_key) OVER (PARTITION BY base64_url ORDER BY _valid_from ASC) AS next_feed_key,
            LEAD (EXTRACT(date FROM _valid_from)) OVER (PARTITION BY base64_url ORDER BY _valid_from ASC) AS next_feed_valid_from,
-           EXTRACT(date FROM _valid_from) AS valid_from
+           EXTRACT(date FROM _valid_from) AS valid_from,
+           ROW_NUMBER () OVER (PARTITION BY base64_url ORDER BY _valid_from ASC) feed_version_number
       FROM distinct_feed_versions
 ),
 
@@ -45,12 +45,11 @@ stop_ids_version_history AS (
            t2.prev_feed_key,
            t2.next_feed_key,
            t2.next_feed_valid_from,
-           t2.valid_from
+           t2.valid_from,
+           t2.feed_version_number
       FROM dim_stops AS t1
       JOIN feed_version_history AS t2
         ON t2.feed_key = t1.feed_key
-    -- Since we are comparing feeds with their previous version, omit the initial version of every feed - no comparison is possible
-     WHERE t2.prev_feed_key IS NOT null
 ),
 
 stop_ids_version_compare AS (
@@ -69,6 +68,8 @@ stop_ids_version_compare AS (
     FULL OUTER JOIN stop_ids_version_history AS prev_stops
       ON stops.prev_feed_key = prev_stops.feed_key
      AND stops.stop_id = prev_stops.stop_id
+   -- The first feed version doesn't have a previous to compare to
+   WHERE stops.feed_version_number > 1
 ),
 
 stop_id_comparison AS (
@@ -96,12 +97,11 @@ route_ids_version_history AS (
            t2.prev_feed_key,
            t2.next_feed_key,
            t2.next_feed_valid_from,
-           t2.valid_from
+           t2.valid_from,
+           t2.feed_version_number
       FROM dim_routes AS t1
       JOIN feed_version_history AS t2
         ON t2.feed_key = t1.feed_key
-    -- Since we are comparing feeds with their previous version, omit the initial version of every feed - no comparison is possible
-     WHERE t2.prev_feed_key IS NOT null
 ),
 
 route_ids_version_compare AS (
@@ -120,6 +120,8 @@ route_ids_version_compare AS (
     FULL OUTER JOIN route_ids_version_history AS prev_routes
       ON routes.prev_feed_key = prev_routes.feed_key
      AND routes.route_id = prev_routes.route_id
+   -- The first feed version doesn't have a previous to compare to
+   WHERE routes.feed_version_number > 1
 ),
 
 route_id_comparison AS (
@@ -147,30 +149,31 @@ agency_ids_version_history AS (
            t2.prev_feed_key,
            t2.next_feed_key,
            t2.next_feed_valid_from,
-           t2.valid_from
+           t2.valid_from,
+           t2.feed_version_number
       FROM dim_agency AS t1
       JOIN feed_version_history AS t2
         ON t2.feed_key = t1.feed_key
-    -- Since we are comparing feeds with their previous version, omit the initial version of every feed - no comparison is possible
-     WHERE t2.prev_feed_key IS NOT null
 ),
 
 agency_ids_version_compare AS (
   SELECT
          -- base64_url is same between feed versions
-         COALESCE(agencys.base64_url,prev_agencys.base64_url) AS base64_url,
+         COALESCE(agencies.base64_url,prev_agencies.base64_url) AS base64_url,
          -- one feed's key is the previous feed's next key
-         COALESCE(agencys.feed_key,prev_agencys.next_feed_key) AS feed_key,
+         COALESCE(agencies.feed_key,prev_agencies.next_feed_key) AS feed_key,
          -- one feed's previous key is the previous feed's key
-         COALESCE(agencys.prev_feed_key,prev_agencys.feed_key) AS prev_feed_key,
+         COALESCE(agencies.prev_feed_key,prev_agencies.feed_key) AS prev_feed_key,
          -- we need to know the next feed's valid_from date, in cases where a trip is removed since the previous feed
-         COALESCE(agencys.valid_from,prev_agencys.next_feed_valid_from) AS valid_from,
-         agencys.agency_id,
-         prev_agencys.agency_id AS prev_agency_id
-    FROM agency_ids_version_history AS agencys
-    FULL OUTER JOIN agency_ids_version_history AS prev_agencys
-      ON agencys.prev_feed_key = prev_agencys.feed_key
-     AND agencys.agency_id = prev_agencys.agency_id
+         COALESCE(agencies.valid_from,prev_agencies.next_feed_valid_from) AS valid_from,
+         agencies.agency_id,
+         prev_agencies.agency_id AS prev_agency_id
+    FROM agency_ids_version_history AS agencies
+    FULL OUTER JOIN agency_ids_version_history AS prev_agencies
+      ON agencies.prev_feed_key = prev_agencies.feed_key
+     AND agencies.agency_id = prev_agencies.agency_id
+   -- The first feed version doesn't have a previous to compare to
+   WHERE agencies.feed_version_number > 1
 ),
 
 agency_id_comparison AS (
