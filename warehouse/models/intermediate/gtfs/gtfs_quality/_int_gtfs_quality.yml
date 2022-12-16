@@ -137,6 +137,10 @@ models:
           - dbt_utils.not_null_proportion:
               at_least: 0.50
 
+  - name: int_gtfs_quality__lead_time
+    tests: *stg_gtfs_guideline_tests_schedule
+    columns: *stg_gtfs_guideline_columns
+
   - name: int_gtfs_quality__rt_protobuf_error
     tests: *stg_gtfs_guideline_tests_rt
     columns: *stg_gtfs_guideline_columns
