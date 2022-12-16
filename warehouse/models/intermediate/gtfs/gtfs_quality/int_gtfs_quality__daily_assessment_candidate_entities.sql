@@ -96,7 +96,6 @@ full_join AS (
 int_gtfs_quality__daily_assessment_candidate_entities AS (
     SELECT
         {{ dbt_utils.surrogate_key([
-            'date',
             'organization_key',
             'service_key',
             'gtfs_service_data_key',
