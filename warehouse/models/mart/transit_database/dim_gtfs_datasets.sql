@@ -11,7 +11,7 @@ dim_gtfs_datasets AS (
     SELECT
         key,
         name,
-        data,
+        type,
         regional_feed_type,
         uri,
         future_uri,

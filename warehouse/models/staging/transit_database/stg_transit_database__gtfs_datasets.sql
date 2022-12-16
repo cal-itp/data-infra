@@ -97,6 +97,12 @@ stg_transit_database__gtfs_datasets AS (
         header_secret_key_name,
         url_to_encode,
         base64_url,
+        CASE
+            WHEN data = "GTFS Schedule" THEN "schedule"
+            WHEN data = "GTFS Alerts" THEN "service_alerts"
+            WHEN data = "GTFS VehiclePositions" THEN "vehicle_positions"
+            WHEN data = "GTFS TripUpdates" THEN "trip_updates"
+        END AS type,
         ts,
         dt AS calitp_extracted_at
     FROM construct_base64_url

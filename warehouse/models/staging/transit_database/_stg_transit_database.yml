@@ -104,6 +104,10 @@ models:
       - *key
       - *name
       - name: data
+      - name: type
+        description: |
+          "data" labels mapped to "service_alerts", "vehicle_positions", "trip_updates",
+            and "schedule" (as opposed to "GTFS Alerts" etc.)
       - name: regional_feed_type
       - name: fares_v2_status
       - name: fares_notes

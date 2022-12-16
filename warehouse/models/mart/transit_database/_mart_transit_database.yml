@@ -161,10 +161,10 @@ models:
       - be *published* by an `organizations`.
     columns:
       - *key
-      - name: data
+      - name: type
         description: |
-          GTFS data type ("GTFS Schedule", "GTFS TripUpdates",
-          "GTFS VehiclePositions", or "GTFS Alerts")
+          GTFS data type ("schedule", "trip_updates",
+          "vehicle_positions", or "service_alerts")
       - name: data_quality_pipeline
         description: |
           If "true", indicates that this dataset should be ingested by the
