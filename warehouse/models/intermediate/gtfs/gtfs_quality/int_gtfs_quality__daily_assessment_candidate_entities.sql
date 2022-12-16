@@ -47,7 +47,8 @@ full_join AS (
         orgs.reporting_category AS reporting_category,
         COALESCE(
             orgs.assessment_status,
-            (orgs.reporting_category = "Core") OR (orgs.reporting_category = "Other Public Transit")
+            (orgs.reporting_category = "Core") OR (orgs.reporting_category = "Other Public Transit"),
+            FALSE
         ) AS organization_assessed,
 
         services.name AS service_name,
@@ -57,7 +58,8 @@ full_join AS (
         COALESCE(
             services.assessment_status,
             services.currently_operating
-                AND CONTAINS_SUBSTR(services.service_type_str, "fixed-route")
+                AND CONTAINS_SUBSTR(services.service_type_str, "fixed-route"),
+            FALSE
         ) AS service_assessed,
 
         gtfs_service_data_key,
@@ -65,15 +67,16 @@ full_join AS (
         service_data.category AS gtfs_service_data_category,
         COALESCE(
             service_data.customer_facing,
-            service_data.category = "primary"
+            service_data.category = "primary",
+            FALSE
         ) AS gtfs_service_data_assessed,
 
         datasets.name AS gtfs_dataset_name,
-        datasets.data AS gtfs_dataset_data,
+        datasets.type AS gtfs_dataset_type,
         datasets.regional_feed_type,
         datasets.base64_url,
 
-        feeds.feed_key
+        feeds.feed_key AS schedule_feed_key
     FROM orgs
     FULL OUTER JOIN services
         ON orgs.date = services.date
@@ -81,13 +84,47 @@ full_join AS (
         AND orgs.organization_key = services.provider_organization_key
     FULL OUTER JOIN service_data
         ON services.date = service_data.date
-        AND services.key = service_data.service_key
+        AND services.service_key = service_data.service_key
     FULL OUTER JOIN datasets
         ON service_data.date = datasets.date
         AND service_data.gtfs_dataset_key = datasets.key
     FULL OUTER JOIN feeds
         ON datasets.date = feeds.date
         AND datasets.base64_url = feeds.base64_url
+),
+
+int_gtfs_quality__daily_assessment_candidate_entities AS (
+    SELECT
+        {{ dbt_utils.surrogate_key([
+            'date',
+            'organization_key',
+            'service_key',
+            'gtfs_service_data_key',
+            'gtfs_dataset_key',
+            'schedule_feed_key']) }} AS key,
+        date,
+        organization_name,
+        service_name,
+        gtfs_dataset_name,
+        gtfs_dataset_type,
+
+        (organization_assessed
+            AND service_assessed
+            AND gtfs_service_data_assessed) AS assessed,
+
+
+        organization_assessed,
+        service_assessed,
+        gtfs_service_data_assessed,
+
+        base64_url,
+
+        organization_key,
+        service_key,
+        gtfs_service_data_key,
+        gtfs_dataset_key,
+        schedule_feed_key
+    FROM full_join
 )
 
-SELECT * FROM full_join
+SELECT * FROM int_gtfs_quality__daily_assessment_candidate_entities
