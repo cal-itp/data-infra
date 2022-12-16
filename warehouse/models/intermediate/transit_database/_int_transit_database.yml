@@ -108,9 +108,10 @@ models:
       - name: currently_operating
         description: |
           Currently operating value from raw Transit Database data as of date.
-      - name: service_type
+      - name: service_type_str
         description: |
-          Service type value from raw Transit Database data as of date.
+          Service types from raw Transit Database data as of date, concatenated together
+          into a comma-delimited string.
       - name: provider
         description: |
           Array of organization key(s) for organization(s) managing this service as of this date.
@@ -206,5 +207,6 @@ models:
         description: |
           GTFS dataset record key.
       - name: name
+      - name: type
       - name: regional_feed_type
       - name: base64_url
