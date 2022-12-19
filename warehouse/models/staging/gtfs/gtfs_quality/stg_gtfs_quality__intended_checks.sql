@@ -57,6 +57,8 @@ WITH stg_gtfs_quality__intended_checks AS (
     SELECT {{ passes_fares_validator() }}, {{ fare_completeness() }}
     UNION ALL
     SELECT {{ lead_time() }}, {{ up_to_dateness() }}
+    UNION ALL
+    SELECT {{ persistent_ids_schedule() }}, {{ best_practices_alignment_schedule() }}
 )
 
 SELECT * FROM stg_gtfs_quality__intended_checks
