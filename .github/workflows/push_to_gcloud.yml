@@ -8,6 +8,8 @@ on:
     paths:
       - 'airflow/**'
 
+env:
+  USE_GKE_GCLOUD_AUTH_PLUGIN: True
 
 jobs:
   deploy:
@@ -70,8 +72,9 @@ jobs:
     - if: ${{ github.repository == 'cal-itp/data-infra' }}
       uses: google-github-actions/setup-gcloud@v0
       with:
-        service_account_key: ${{ secrets.GCP_SA_KEY }}
         export_default_credentials: true
+        install_components: 'gke-gcloud-auth-plugin'
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
 
     - if: ${{ github.repository == 'cal-itp/data-infra' }}
       name: Setup kubeconfig
