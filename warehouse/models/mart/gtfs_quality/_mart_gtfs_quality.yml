@@ -151,6 +151,7 @@ models:
           expression: "is_implemented"
     columns:
       - name: is_implemented
+<<<<<<< HEAD
   - name: fct_daily_guideline_checks
     description: |
       **Documentation coming soon**
@@ -292,6 +293,40 @@ models:
       - *check
       - name: status
       - name: feature
+=======
+  - name: fct_schedule_files_parsed
+    description: |
+      All successfully parsed files from the GTFS schedule v2 pipeline.
+      This represents files whose data is available in the warehouse.
+      It is possible to have more than one download per day in rare cases where
+      an additional download was manually triggered, so note that there are
+      cases where the same feed/file combination will appear more than once for a given date.
+    columns:
+      - *key
+      - name: ts
+        description: |
+          Timestamp of download. Possible to have more than one download per day.
+      - name: feed_key
+        description:
+          Foreign key to `dim_schedule_feeds`.
+        tests:
+          - relationships:
+              to: ref('dim_schedule_feeds')
+              field: key
+      - name: gtfs_filename
+        description: |
+            GTFS file name without extension, ex. "shapes".
+            Guaranteed to be a known file type from GTFS specification.
+      - name: base64_url
+        tests:
+          - not_null
+      - name: gtfs_dataset_key
+        tests:
+          - relationships:
+              to: ref('dim_gtfs_datasets')
+              field: key
+      - name: gtfs_dataset_name
+>>>>>>> 8c860370 (make fct_schedule_files_parsed)
 
 # TODO: This should be filled out once the reports site is actually migrated
 #exposures:
