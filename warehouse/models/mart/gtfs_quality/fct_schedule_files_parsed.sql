@@ -28,8 +28,6 @@ fct_schedule_files_parsed AS (
             'parse.original_filename']) }} as key,
         feeds.key AS feed_key,
         parse.gtfs_filename,
-        parse.parse_success,
-        parse.parse_exception,
         parse.ts,
         parse.base64_url,
         {{ from_url_safe_base64('parse.base64_url') }} AS string_url,
@@ -43,6 +41,7 @@ fct_schedule_files_parsed AS (
         AND parse.ts BETWEEN feeds._valid_from AND feeds._valid_to
     LEFT JOIN dim_gtfs_datasets AS datasets
         ON urls.base64_url = datasets.base64_url
+    WHERE parse_success
 )
 
 SELECT * FROM fct_schedule_files_parsed
