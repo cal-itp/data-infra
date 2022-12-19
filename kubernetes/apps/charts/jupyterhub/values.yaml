@@ -15,8 +15,7 @@ jupyterhub:
       # Very roughly I have seen most usage in the 2-3GB range
       guarantee: 3G
     cpu:
-      limit: 1
-      guarantee: 0.5
+      guarantee: 1
     lifecycleHooks:
       postStart:
         exec:
