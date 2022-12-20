@@ -13,6 +13,8 @@ stg_transit_database__gtfs_service_data AS (
         unnested_services AS service_key,
         unnested_gtfs_dataset AS gtfs_dataset_key,
         dataset_type,
+        -- only coalesce to false after the field had been created (November 23, 2022)
+        -- otherwise a null is genuinely a null
         CASE
             WHEN dt >= '2022-11-23' THEN COALESCE(customer_facing, FALSE)
         END AS customer_facing,
