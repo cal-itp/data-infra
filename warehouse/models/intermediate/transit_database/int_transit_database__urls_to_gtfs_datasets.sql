@@ -7,7 +7,7 @@ gtfs_datasets AS (
 int_transit_database__urls_to_gtfs_datasets AS (
     SELECT
         base64_url,
-        airtable_record_id AS gtfs_dataset_key -- this is defined in {{ ref('dim_gtfs_datasets') }}
+        key AS gtfs_dataset_key -- this is defined in {{ ref('dim_gtfs_datasets') }}
     FROM gtfs_datasets
     WHERE base64_url IS NOT NULL
     -- NOTE: there could be more than 1 record per URL per ts if a given

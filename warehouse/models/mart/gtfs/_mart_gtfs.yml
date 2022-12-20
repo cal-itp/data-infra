@@ -85,7 +85,7 @@ models:
         tests:
           - not_null:
               config:
-                where: download_success
+                where: download_success AND unzip_success
           - relationships:
               to: ref('dim_schedule_feeds')
               field: key
