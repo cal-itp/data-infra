@@ -6,11 +6,7 @@ on:
       - 'main'
     paths:
       - '.github/workflows/build-warehouse-image.yml'
-      - 'warehouse/Dockerfile'
-      - 'warehouse/packages.yml'
-      - 'warehouse/poetry.lock'
-      - 'warehouse/pyproject.yml'
-      - 'warehouse/requirements.txt'
+      - 'warehouse/**'
   pull_request:
     paths:
       - '.github/workflows/build-warehouse-image.yml'
