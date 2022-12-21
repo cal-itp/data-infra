@@ -33,7 +33,7 @@
 ]
 
 ) }}
--- TODO: In the last policy of the macro call above, see if we can get the prod service account out of context
+-- TODO: In the last policy of the macro call above, see if we can get the prod warehouse service account out of context
 
 WITH
 
