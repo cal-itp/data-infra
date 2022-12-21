@@ -332,6 +332,7 @@ models:
         description: |
             GTFS file name without extension, ex. "shapes".
             Guaranteed to be a known file type from GTFS specification.
+            Null for files not included in specification or where unzipping failed.
       - name: unzip_success
         description: |
           Whether the unzip operation succeeded for this zipfile.
