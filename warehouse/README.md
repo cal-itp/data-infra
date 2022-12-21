@@ -39,7 +39,8 @@ This dbt project is intended to be the source of truth for the cal-itp-data-infr
    1. If `curl -sSL https://install.python-poetry.org | python3 -`
       does not work, you can `curl` to a file `curl -sSL https://install.python-poetry.org -o install-poetry.py`
       and then execute the file with `python install-poetry.py`.
-   2. Answer `yes` to adding the tool to your path
+   2. Add the tool to your system PATH. This process varies by system, but the poetry installer provides a sample command for
+      addition upon its completion. On an OSX device using zshell, for instance, that line should be added to the ~/.zshrc file.
 2. Restart your terminal and confirm `poetry --version` works.
 3. [Clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
    the `data-infra` repo if you haven't already. Use [SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account), not HTTPS. If you haven't made a folder/directory for your git repos yet, you can create one with `mkdir git` (within your home directory, usually).
@@ -52,10 +53,27 @@ This dbt project is intended to be the source of truth for the cal-itp-data-infr
    3. `brew install python@3.9`
    4. `brew link python@3.9`
    5. After restarting the terminal, confirm with `python3 --version` and retry `poetry install`
-5. `poetry run dbt deps` to install the dbt dependencies defined in `packages.yml` (such as `dbt_utils`)
+5. `poetry run dbt deps` inside `warehouse/` to install the dbt dependencies defined in `packages.yml` (such as `dbt_utils`)
 
 ### Initialize your dbt profiles.yml
-1. `poetry run dbt init` inside `warehouse/` will create a `.dbt/` directory in your home directory and a `.dbt/profiles.yml` file.
+1. `poetry run dbt init` inside `warehouse/` will create a `.dbt/` directory in your home directory and a `.dbt/profiles.yml` file. By
+   default it will also modify the existing profiles.yml within the repository - be sure not to commit your personal version of that
+   file back to the repo. If given command prompts, follow them to set up your profiles.yml with the following values:
+```yaml
+calitp_warehouse:
+  target: dev
+  outputs:
+    dev:
+      schema: <enter your first name or initials here, like "laurie" or "lam">
+      fixed_retries: 1
+      location: us-west2
+      method: oauth
+      priority: interactive
+      project: cal-itp-data-infra-staging
+      threads: 4
+      timeout_seconds: 300
+      type: bigquery
+```
 2. You can enable [displaying hidden folders/files in macOS Finder](https://www.macworld.com/article/671158/how-to-show-hidden-files-on-a-mac.html)
    but generally, we recommend using the terminal when possible for editing
    these files. Generally, `nano ~/.dbt/profiles.yml` will be the easiest method
@@ -63,7 +81,7 @@ This dbt project is intended to be the source of truth for the cal-itp-data-infr
    text editor; you use the arrows keys to navigate and the hotkeys displayed
    at the bottom to save and exit. Reading an [online tutorial](https://www.howtogeek.com/howto/42980/the-beginners-guide-to-nano-the-linux-command-line-text-editor/)
    may be useful if you haven't used a terminal-based editor before.
-3. Fill out your `~/.dbt/profiles.yml` with the following content.
+3. Check whether `~/.dbt/profiles.yml` was successfully created. If not, create it by hand and fill it with the same content:
 ```yaml
 calitp_warehouse:
   target: dev
