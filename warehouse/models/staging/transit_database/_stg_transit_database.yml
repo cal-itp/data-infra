@@ -7,7 +7,7 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - key
-            - calitp_extracted_at
+            - dt
     columns:
       - &key
         name: key
@@ -24,7 +24,7 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - key
-            - calitp_extracted_at
+            - dt
       - dbt_utils.equal_rowcount:
           compare_model: ref('base_tts_contracts_idmap')
     columns:
@@ -36,7 +36,7 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - key
-            - calitp_extracted_at
+            - dt
     columns:
       - *key
       - *name
@@ -46,7 +46,7 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - key
-            - calitp_extracted_at
+            - dt
       - dbt_utils.equal_rowcount:
           compare_model: ref('base_tts_service_components_idmap')
     columns:
@@ -61,7 +61,7 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - key
-            - calitp_extracted_at
+            - dt
     columns:
       - *key
       - *name
@@ -71,7 +71,7 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - key
-            - calitp_extracted_at
+            - dt
     columns:
       - *key
   - name: stg_transit_database__services
@@ -80,7 +80,7 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - key
-            - calitp_extracted_at
+            - dt
     columns:
       - *key
       - *name
@@ -89,7 +89,7 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - key
-            - calitp_extracted_at
+            - dt
     columns:
       - *key
       - *name
@@ -99,7 +99,7 @@ models:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - key
-            - calitp_extracted_at
+            - dt
     columns:
       - *key
       - *name
@@ -135,14 +135,14 @@ models:
       - name: itp_schedule_todo
       - name: deprecated_date
       - name: time
-      - name: calitp_extracted_at
+      - name: dt
   - name: stg_transit_database__gtfs_service_data
     description: '{{ doc("gtfs_service_data_table") }}'
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - key
-            - calitp_extracted_at
+            - dt
     columns:
       - *key
       - *name
@@ -171,14 +171,14 @@ models:
       - name: provider_reporting_category
       - name: itp_schedule_todo__from_gtfs_dataset_
       - name: time
-      - name: calitp_extracted_at
+      - name: dt
   - name: stg_transit_database__county_geography
     description: '{{ doc("county_geography_table") }}'
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - key
-            - calitp_extracted_at
+            - dt
     columns:
       - *key
       - *name
@@ -190,14 +190,14 @@ models:
       - name: mpo
       - name: place_geography
       - name: time
-      - name: calitp_extracted_at
+      - name: dt
   - name: stg_transit_database__eligibility_programs
     description: '{{ doc("eligibility_programs_table") }}'
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - key
-            - calitp_extracted_at
+            - dt
     columns:
       - *key
       - name: program
@@ -213,14 +213,14 @@ models:
       - name: expected_process_turn_around_application_eligibility__days_
       - name: website
       - name: time
-      - name: calitp_extracted_at
+      - name: dt
   - name: stg_transit_database__fare_systems
     description: '{{ doc("fare_systems_table") }}'
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - key
-            - calitp_extracted_at
+            - dt
     columns:
       - *key
       - name: fare_system
@@ -265,14 +265,14 @@ models:
       - name: fares_v2_status__from_mobility_services_managed___from_transit_provider_
       - name: itp_id
       - name: time
-      - name: calitp_extracted_at
+      - name: dt
   - name: stg_transit_database__funding_programs
     description: '{{ doc("funding_programs_table") }}'
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - key
-            - calitp_extracted_at
+            - dt
     columns:
       - *key
       - name: program
@@ -286,14 +286,14 @@ models:
       - name: category
       - name: drmt_data
       - name: time
-      - name: calitp_extracted_at
+      - name: dt
   - name: stg_transit_database__ntd_agency_info
     description: '{{ doc("ntd_agency_info_table") }}'
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - key
-            - calitp_extracted_at
+            - dt
     columns:
       - *key
       - name: ntd_id
@@ -339,14 +339,14 @@ models:
       - name: personal_vehicles
       - name: organization_key
       - name: time
-      - name: calitp_extracted_at
+      - name: dt
   - name: stg_transit_database__place_geography
     description: '{{ doc("place_geography_table") }}'
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - key
-            - calitp_extracted_at
+            - dt
     columns:
       - *key
       - *name
@@ -365,14 +365,14 @@ models:
       - name: mpo__from_county_base_
       - name: organizations_2
       - name: time
-      - name: calitp_extracted_at
+      - name: dt
   - name: stg_transit_database__rider_requirements
     description: '{{ doc("rider_requirements_table") }}'
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - key
-            - calitp_extracted_at
+            - dt
     columns:
       - *key
       - name: requirement
@@ -384,4 +384,4 @@ models:
       - name: services
       - name: eligibility_program_key
       - name: time
-      - name: calitp_extracted_at
+      - name: dt
