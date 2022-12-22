@@ -3,7 +3,7 @@
 WITH latest_products AS (
     {{ get_latest_dense_rank(
         external_table = ref('stg_transit_database__products'),
-        order_by = 'calitp_extracted_at DESC'
+        order_by = 'dt DESC'
         ) }}
 ),
 
@@ -18,7 +18,7 @@ dim_products AS (
         certifications,
         product_features,
         business_model_features,
-        calitp_extracted_at
+        dt
     FROM latest_products
 )
 

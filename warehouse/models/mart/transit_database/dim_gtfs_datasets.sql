@@ -3,7 +3,7 @@
 WITH latest_gtfs_datasets AS (
     {{ get_latest_dense_rank(
         external_table = ref('stg_transit_database__gtfs_datasets'),
-        order_by = 'calitp_extracted_at DESC'
+        order_by = 'dt DESC'
         ) }}
 ),
 
@@ -20,7 +20,7 @@ dim_gtfs_datasets AS (
         data_quality_pipeline,
         schedule_to_use_for_rt_validation_gtfs_dataset_key,
         base64_url,
-        calitp_extracted_at
+        dt
     FROM latest_gtfs_datasets
 )
 

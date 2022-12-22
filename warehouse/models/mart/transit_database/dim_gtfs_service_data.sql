@@ -3,7 +3,7 @@
 WITH latest_gtfs_service_data AS (
     {{ get_latest_dense_rank(
         external_table = ref('stg_transit_database__gtfs_service_data'),
-        order_by = 'calitp_extracted_at DESC'
+        order_by = 'dt DESC'
         ) }}
 ),
 
@@ -19,7 +19,7 @@ dim_gtfs_service_data AS (
         network_id,
         route_id,
         fares_v2_status,
-        calitp_extracted_at
+        dt
     FROM latest_gtfs_service_data
 )
 

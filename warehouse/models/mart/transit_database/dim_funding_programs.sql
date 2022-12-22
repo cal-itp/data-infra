@@ -3,7 +3,7 @@
 WITH latest_funding_programs AS (
     {{ get_latest_dense_rank(
         external_table = ref('stg_transit_database__funding_programs'),
-        order_by = 'calitp_extracted_at DESC'
+        order_by = 'dt DESC'
         ) }}
 ),
 
@@ -12,7 +12,7 @@ dim_funding_programs AS (
         key,
         program,
         category,
-        calitp_extracted_at
+        dt
     FROM latest_funding_programs
 )
 

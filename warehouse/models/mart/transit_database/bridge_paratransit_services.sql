@@ -3,7 +3,7 @@
 WITH latest AS (
     {{ get_latest_dense_rank(
         external_table = ref('stg_transit_database__services'),
-        order_by = 'calitp_extracted_at DESC'
+        order_by = 'dt DESC'
         ) }}
 ),
 
@@ -12,16 +12,16 @@ unnest_paratransit AS (
         key AS service_key,
         name AS service_name,
         paratransit_for AS paratransit_for_service_key,
-        calitp_extracted_at
+        dt
     FROM latest,
         latest.paratransit_for AS paratransit_for
 ),
 
 bridge_paratransit_services AS (
     SELECT
-        t1.* EXCEPT(calitp_extracted_at),
+        t1.* EXCEPT(dt),
         t2.name AS paratransit_for_service_name,
-        t1.calitp_extracted_at
+        t1.dt
     FROM unnest_paratransit AS t1
     LEFT JOIN latest AS t2
         ON t1.paratransit_for_service_key = t2.key

@@ -3,7 +3,7 @@
 WITH latest_fare_systems AS (
     {{ get_latest_dense_rank(
         external_table = ref('stg_transit_database__fare_systems'),
-        order_by = 'calitp_extracted_at DESC'
+        order_by = 'dt DESC'
         ) }}
 ),
 
@@ -45,7 +45,7 @@ dim_fare_systems AS (
         demand_response_fare_url,
         itp_id,
         ts,
-        calitp_extracted_at
+        dt
     FROM latest_fare_systems
 )
 

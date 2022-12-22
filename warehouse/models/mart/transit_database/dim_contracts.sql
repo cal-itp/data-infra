@@ -3,7 +3,7 @@
 WITH latest_contracts AS (
     {{ get_latest_dense_rank(
         external_table = ref('stg_transit_database__contracts'),
-        order_by = 'calitp_extracted_at DESC'
+        order_by = 'dt DESC'
         ) }}
 ),
 
@@ -20,7 +20,7 @@ dim_contracts AS (
         renewal_option,
         notes,
         contract_name_notes,
-        calitp_extracted_at
+        dt
     FROM latest_contracts
 )
 

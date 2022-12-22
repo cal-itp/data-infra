@@ -13,14 +13,14 @@ models:
             - service_key
             - product_key
             - component_key
-            - calitp_extracted_at
+            - dt
       - dbt_utils.unique_combination_of_columns:
           severity: warn
           combination_of_columns:
             - service_key
             - product_key
             - component_key
-            - calitp_extracted_at
+            - dt
 
   - name: int_transit_database__urls_to_gtfs_datasets
     description: |

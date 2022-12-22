@@ -3,7 +3,7 @@
 WITH latest_ntd_agency_info AS (
     {{ get_latest_dense_rank(
         external_table = ref('stg_transit_database__ntd_agency_info'),
-        order_by = 'calitp_extracted_at DESC'
+        order_by = 'dt DESC'
         ) }}
 ),
 
@@ -49,7 +49,7 @@ dim_ntd_agency_info AS (
         volunteer_drivers,
         personal_vehicles,
         organization_key,
-        calitp_extracted_at
+        dt
     FROM latest_ntd_agency_info
 )
 

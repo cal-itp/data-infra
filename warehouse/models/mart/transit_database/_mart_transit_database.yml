@@ -204,7 +204,7 @@ models:
         #   - relationships:
         #      to: ref('dim_gtfs_datasets')
         #      field: key
-      - name: calitp_extracted_at
+      - name: dt
         description: |
           Date extracted from Airtable. This column will be deprecated as _valid_from
           and _valid_to are more fully adopted.
@@ -463,7 +463,7 @@ models:
           - relationships:
              to: ref('dim_organizations')
              field: key
-      - name: calitp_extracted_at
+      - name: dt
   - name: bridge_components_x_properties_and_features
     description: |
       Mapping table between components and properties_and_features.

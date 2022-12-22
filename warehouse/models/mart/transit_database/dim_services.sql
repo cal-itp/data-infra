@@ -3,7 +3,7 @@
 WITH latest_services AS (
     {{ get_latest_dense_rank(
         external_table = ref('stg_transit_database__services'),
-        order_by = 'calitp_extracted_at DESC'
+        order_by = 'dt DESC'
         ) }}
 ),
 
@@ -20,7 +20,7 @@ dim_services AS (
         -- TODO: remove this field when v2, automatic determinations are available
         gtfs_schedule_quality,
         assessment_status,
-        calitp_extracted_at
+        dt
     FROM latest_services
 )
 

@@ -3,7 +3,7 @@
 WITH latest AS (
     {{ get_latest_dense_rank(
         external_table = ref('stg_transit_database__service_components'),
-        order_by = 'calitp_extracted_at DESC'
+        order_by = 'dt DESC'
         ) }}
 ),
 
@@ -16,7 +16,7 @@ stg_transit_database__service_components_unnested AS (
         ntd_certified,
         product_component_valid,
         notes,
-        l.calitp_extracted_at
+        l.dt
     FROM latest AS l
     LEFT JOIN UNNEST(l.services) AS service_key
     LEFT JOIN UNNEST(l.product) AS product_key

@@ -3,7 +3,7 @@
 WITH latest_organizations AS (
     {{ get_latest_dense_rank(
         external_table = ref('stg_transit_database__organizations'),
-        order_by = 'calitp_extracted_at DESC'
+        order_by = 'dt DESC'
         ) }}
 ),
 
@@ -24,7 +24,7 @@ dim_organizations AS (
         gtfs_realtime_status,
         assessment_status,
         alias,
-        calitp_extracted_at
+        dt
     FROM latest_organizations
 )
 

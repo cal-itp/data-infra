@@ -3,7 +3,7 @@
 WITH latest AS (
     {{ get_latest_dense_rank(
         external_table = ref('stg_transit_database__components'),
-        order_by = 'calitp_extracted_at DESC'
+        order_by = 'dt DESC'
         ) }}
 ),
 
@@ -16,7 +16,7 @@ dim_components AS (
         function_group,
         system,
         location,
-        calitp_extracted_at
+        dt
     FROM latest
 )
 
