@@ -18,7 +18,7 @@ stg_transit_database__funding_programs AS (
         category,
         drmt_data,
         ts,
-        dt AS calitp_extracted_at
+        dt
     FROM once_daily_funding_programs
 )
 

@@ -20,7 +20,7 @@ stg_transit_database__eligibility_programs AS (
         expected_process_turn_around_application_eligibility__days_,
         website,
         ts,
-        dt AS calitp_extracted_at
+        dt
     FROM once_daily_eligibility_programs
     LEFT JOIN UNNEST(once_daily_eligibility_programs.administering_entity) AS unnested_administering_entity
     LEFT JOIN UNNEST(once_daily_eligibility_programs.eligibility_types) AS unnested_eligibility_types

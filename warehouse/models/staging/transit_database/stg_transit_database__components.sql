@@ -19,7 +19,7 @@ stg_transit_database__components AS (
         products,
         properties___features AS properties_and_features,
         contracts,
-        dt as calitp_extracted_at
+        dt
     FROM once_daily_components
 )
 

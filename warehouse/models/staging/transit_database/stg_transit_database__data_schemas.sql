@@ -14,7 +14,7 @@ stg_transit_database__data_schemas AS (
         status,
         products AS input_products,
         products_copy AS output_products,
-        dt as calitp_extracted_at
+        dt
     FROM once_daily_data_schemas
 )
 

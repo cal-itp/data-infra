@@ -22,7 +22,7 @@ stg_transit_database__products AS (
         accepted_input_components,
         output_components,
         components,
-        dt AS calitp_extracted_at
+        dt
     FROM once_daily_products
 )
 

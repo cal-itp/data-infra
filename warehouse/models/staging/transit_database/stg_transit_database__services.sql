@@ -25,7 +25,7 @@ stg_transit_database__services AS (
         gtfs_schedule_quality,
         operating_counties,
         assessment_status,
-        dt AS calitp_extracted_at
+        dt
     FROM once_daily_services
 )
 

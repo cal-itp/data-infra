@@ -15,7 +15,7 @@ stg_transit_database__service_components AS (
         services,
         component,
         product,
-        dt AS calitp_extracted_at
+        dt
     FROM once_daily_service_components
 )
 

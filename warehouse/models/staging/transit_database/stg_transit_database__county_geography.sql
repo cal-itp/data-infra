@@ -19,7 +19,7 @@ stg_transit_database__county_geography AS (
         mpo,
         place_geography,
         ts,
-        dt AS calitp_extracted_at
+        dt
     FROM once_daily_county_geography
 )
 

@@ -46,7 +46,7 @@ stg_transit_database__fare_systems AS (
         transit_services,
         itp_id,
         ts,
-        dt AS calitp_extracted_at
+        dt
     FROM once_daily_fare_systems
 )
 

@@ -39,7 +39,7 @@ stg_transit_database__gtfs_service_data AS (
         provider_reporting_category,
         itp_schedule_todo__from_gtfs_dataset_,
         ts,
-        dt AS calitp_extracted_at
+        dt
     FROM once_daily_gtfs_service_data
     LEFT JOIN UNNEST(once_daily_gtfs_service_data.services) as unnested_services
     LEFT JOIN UNNEST(once_daily_gtfs_service_data.gtfs_dataset) as unnested_gtfs_dataset

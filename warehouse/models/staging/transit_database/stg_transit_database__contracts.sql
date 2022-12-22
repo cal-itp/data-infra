@@ -20,7 +20,7 @@ stg_transit_database__contracts AS (
         notes,
         contract_name AS contract_name_notes,
         attachments,
-        dt AS calitp_extracted_at
+        dt
     FROM once_daily_contracts
     LEFT JOIN UNNEST(once_daily_contracts.contract_holder) AS unnested_contract_holder
     LEFT JOIN UNNEST(once_daily_contracts.contract_vendor) AS unnested_contract_vendor

@@ -15,7 +15,7 @@ stg_transit_database__properties_and_features AS (
         considerations,
         details,
         available_in_components,
-        dt AS calitp_extracted_at
+        dt
     FROM once_daily_properties_and_features
 )
 
