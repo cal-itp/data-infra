@@ -1,0 +1,22 @@
+version: 2
+
+models:
+
+  - name: int_transit_database__organizations_dim
+    description: |
+      Organizations data in slowly-changing-dimension format.
+      For detailed data definitions, see: https://docs.google.com/document/d/1KvlYRYB8cnyTOkT1Q0BbBmdQNguK_AMzhSV5ELXiZR4/edit/.
+    tests: &mutually_exclusive_ranges
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: key
+          gaps: required
+    columns:
+      - &key
+        name: key
+        description: |
+          Synthetic primary key constructed from incoming record ID and `_valid_from`.
+        tests: &primary_key_tests
+          - unique
+          - not_null
