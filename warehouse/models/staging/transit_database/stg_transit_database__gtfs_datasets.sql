@@ -60,7 +60,7 @@ construct_base64_url AS (
 
 stg_transit_database__gtfs_datasets AS (
     SELECT
-        id AS key,
+        id,
         {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         data,
         data_quality_pipeline,

@@ -9,7 +9,7 @@ once_daily_place_geography AS (
 
 stg_transit_database__place_geography AS (
     SELECT
-        id AS key,
+        id,
         {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         place_fips,
         placename,

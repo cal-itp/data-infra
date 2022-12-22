@@ -9,7 +9,7 @@ once_daily_fare_systems AS (
 
 stg_transit_database__fare_systems AS (
     SELECT
-        id AS key,
+        id,
         {{ trim_make_empty_string_null(column_name = "fare_system") }} AS fare_system,
         fares_based_on_zone,
         fares_based_on_route,

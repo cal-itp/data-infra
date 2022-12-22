@@ -8,7 +8,7 @@ once_daily_gtfs_service_data AS (
 
 stg_transit_database__gtfs_service_data AS (
     SELECT
-        id AS key,
+        id,
         {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         unnested_services AS service_key,
         unnested_gtfs_dataset AS gtfs_dataset_key,

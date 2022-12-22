@@ -4,8 +4,8 @@ models:
   - name: stg_transit_database__components
     description: '{{ doc("components_table") }}'
     columns:
-      - &key
-        name: key
+      - &id
+        name: id
       - &name
         name: name
   - name: stg_transit_database__contracts
@@ -14,12 +14,12 @@ models:
       - dbt_utils.equal_rowcount:
           compare_model: ref('base_tts_contracts_idmap')
     columns:
-      - *key
+      - *id
       - *name
   - name: stg_transit_database__products
     description: '{{ doc("products_table") }}'
     columns:
-      - *key
+      - *id
       - *name
   - name: stg_transit_database__service_components
     description: '{{ doc("service_components_table") }}'
@@ -27,7 +27,7 @@ models:
       - dbt_utils.equal_rowcount:
           compare_model: ref('base_tts_service_components_idmap')
     columns:
-      - *key
+      - *id
       - *name
   - name: stg_transit_database__relationships_service_components
     description: |
@@ -35,25 +35,25 @@ models:
   - name: stg_transit_database__data_schemas
     description: '{{ doc("data_schemas_table") }}'
     columns:
-      - *key
+      - *id
       - *name
   - name: stg_transit_database__organizations
     description: '{{ doc("organizations_table") }}'
     columns:
-      - *key
+      - *id
   - name: stg_transit_database__services
     description: '{{ doc("services_table") }}'
     columns:
-      - *key
+      - *id
       - *name
   - name: stg_transit_database__properties_and_features
     columns:
-      - *key
+      - *id
       - *name
   - name: stg_transit_database__gtfs_datasets
     description: '{{ doc("gtfs_datasets_table") }}'
     columns:
-      - *key
+      - *id
       - *name
       - name: data
       - name: data_quality_pipeline
@@ -91,7 +91,7 @@ models:
   - name: stg_transit_database__gtfs_service_data
     description: '{{ doc("gtfs_service_data_table") }}'
     columns:
-      - *key
+      - *id
       - *name
       - name: service_key
       - name: gtfs_dataset_key
@@ -122,7 +122,7 @@ models:
   - name: stg_transit_database__county_geography
     description: '{{ doc("county_geography_table") }}'
     columns:
-      - *key
+      - *id
       - *name
       - name: fips
       - name: msa
@@ -136,7 +136,7 @@ models:
   - name: stg_transit_database__eligibility_programs
     description: '{{ doc("eligibility_programs_table") }}'
     columns:
-      - *key
+      - *id
       - name: program
       - name: administering_entity_organization_key
       - name: eligibility_type_rider_requirement_key
@@ -151,7 +151,7 @@ models:
   - name: stg_transit_database__fare_systems
     description: '{{ doc("fare_systems_table") }}'
     columns:
-      - *key
+      - *id
       - name: fare_system
       - name: fares_based_on_zone
       - name: fares_based_on_route
@@ -195,7 +195,7 @@ models:
   - name: stg_transit_database__funding_programs
     description: '{{ doc("funding_programs_table") }}'
     columns:
-      - *key
+      - *id
       - name: program
       - name: full_name
       - name: program_informatiom
@@ -208,7 +208,7 @@ models:
   - name: stg_transit_database__ntd_agency_info
     description: '{{ doc("ntd_agency_info_table") }}'
     columns:
-      - *key
+      - *id
       - name: ntd_id
       - name: legacy_ntd_id
       - name: agency_name
@@ -253,7 +253,7 @@ models:
   - name: stg_transit_database__place_geography
     description: '{{ doc("place_geography_table") }}'
     columns:
-      - *key
+      - *id
       - *name
       - name: place_fips
       - name: placename
@@ -274,7 +274,7 @@ models:
   - name: stg_transit_database__rider_requirements
     description: '{{ doc("rider_requirements_table") }}'
     columns:
-      - *key
+      - *id
       - name: requirement
       - name: category
       - name: description

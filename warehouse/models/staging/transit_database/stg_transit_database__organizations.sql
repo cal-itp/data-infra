@@ -9,7 +9,7 @@ once_daily_organizations AS (
 
 stg_transit_database__organizations AS (
     SELECT
-        id AS key,
+        id,
         {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         organization_type,
         roles,

@@ -9,7 +9,7 @@ once_daily_services AS (
 
 stg_transit_database__services AS (
     SELECT
-        id AS key,
+        id,
         {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         service_type,
         fare_systems,

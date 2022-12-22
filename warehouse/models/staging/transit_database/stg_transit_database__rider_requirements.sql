@@ -9,7 +9,7 @@ once_daily_rider_requirements AS (
 
 stg_transit_database__rider_requirements AS (
     SELECT
-        id AS key,
+        id,
         {{ trim_make_empty_string_null(column_name = "requirement") }} AS requirement,
         category,
         description,

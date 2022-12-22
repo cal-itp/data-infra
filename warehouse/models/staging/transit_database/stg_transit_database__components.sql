@@ -8,7 +8,7 @@ once_daily_components AS (
 
 stg_transit_database__components AS (
     SELECT
-        id AS key,
+        id,
         {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         aliases,
         description,

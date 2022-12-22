@@ -9,7 +9,7 @@ once_daily_properties_and_features AS (
 
 stg_transit_database__properties_and_features AS (
     SELECT
-        id AS key,
+        id,
         {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         recommended_value,
         considerations,
