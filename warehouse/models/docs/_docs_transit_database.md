@@ -30,6 +30,8 @@ Records are legal organizations, including companies, governmental bodies, or no
 
 Table includes information on organizational properties (i.e. locale, type) as well as summarizations of its various relationships (e.g. `services` for a transit provider, or `products` for a vendor)
 
+For more information, see [the Airtable Data Documentation document](https://docs.google.com/document/d/1KvlYRYB8cnyTOkT1Q0BbBmdQNguK_AMzhSV5ELXiZR4/edit/).
+
 {% enddocs%}
 
 {% docs services_table %}

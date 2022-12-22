@@ -78,7 +78,8 @@ final AS (
     SELECT
         all_versioned.* EXCEPT(key, _valid_from),
         CAST(_valid_from AS TIMESTAMP) AS _valid_from,
-        orig.* EXCEPT({{ date_col }})
+        orig.* EXCEPT({{ date_col }}),
+        _valid_to = {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }} AS _is_current
     FROM all_versioned
     LEFT JOIN {{ ref(once_daily_staging_table) }} AS orig
     ON all_versioned._valid_from = orig.{{ date_col }}

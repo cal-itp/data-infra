@@ -22,6 +22,7 @@ dim_organizations AS (
         gtfs_realtime_status,
         assessment_status,
         alias,
+        _is_current,
         _valid_from,
         _valid_to
     FROM dim

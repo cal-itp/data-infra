@@ -4,7 +4,7 @@ WITH dim AS (
     {{ transit_database_make_historical_dimension(
         once_daily_staging_table = 'stg_transit_database__organizations',
         date_col = 'dt',
-        record_id_col = 'key',
+        record_id_col = 'id',
         array_cols = ['roles', 'alias', 'mobility_services_managed', 'parent_organization',
             'funding_programs', 'gtfs_datasets_produced']
         ) }}
@@ -12,7 +12,8 @@ WITH dim AS (
 
 int_transit_database__organizations_dim AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['key', '_valid_from']) }} AS key,
+        {{ dbt_utils.surrogate_key(['id', '_valid_from']) }} AS key,
+        id AS original_record_id,
         name,
         organization_type,
         roles,
@@ -31,6 +32,7 @@ int_transit_database__organizations_dim AS (
         gtfs_static_status,
         gtfs_realtime_status,
         assessment_status,
+        _is_current,
         _valid_from,
         _valid_to
     FROM dim
