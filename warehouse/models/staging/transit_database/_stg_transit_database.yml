@@ -3,28 +3,14 @@ version: 2
 models:
   - name: stg_transit_database__components
     description: '{{ doc("components_table") }}'
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - dt
     columns:
       - &key
         name: key
-        tests: &primary_key_tests
-          - not_null
       - &name
         name: name
-        tests:
-          - not_null:
-              severity: warn
   - name: stg_transit_database__contracts
     description: '{{ doc("contracts_table") }}'
     tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - dt
       - dbt_utils.equal_rowcount:
           compare_model: ref('base_tts_contracts_idmap')
     columns:
@@ -32,21 +18,12 @@ models:
       - *name
   - name: stg_transit_database__products
     description: '{{ doc("products_table") }}'
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - dt
     columns:
       - *key
       - *name
   - name: stg_transit_database__service_components
     description: '{{ doc("service_components_table") }}'
     tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - dt
       - dbt_utils.equal_rowcount:
           compare_model: ref('base_tts_service_components_idmap')
     columns:
@@ -57,49 +34,24 @@ models:
       Service/component relationship data.
   - name: stg_transit_database__data_schemas
     description: '{{ doc("data_schemas_table") }}'
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - dt
     columns:
       - *key
       - *name
   - name: stg_transit_database__organizations
     description: '{{ doc("organizations_table") }}'
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - dt
     columns:
       - *key
   - name: stg_transit_database__services
     description: '{{ doc("services_table") }}'
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - dt
     columns:
       - *key
       - *name
   - name: stg_transit_database__properties_and_features
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - dt
     columns:
       - *key
       - *name
   - name: stg_transit_database__gtfs_datasets
     description: '{{ doc("gtfs_datasets_table") }}'
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - dt
     columns:
       - *key
       - *name
@@ -138,11 +90,6 @@ models:
       - name: dt
   - name: stg_transit_database__gtfs_service_data
     description: '{{ doc("gtfs_service_data_table") }}'
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - dt
     columns:
       - *key
       - *name
@@ -174,11 +121,6 @@ models:
       - name: dt
   - name: stg_transit_database__county_geography
     description: '{{ doc("county_geography_table") }}'
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - dt
     columns:
       - *key
       - *name
@@ -193,17 +135,9 @@ models:
       - name: dt
   - name: stg_transit_database__eligibility_programs
     description: '{{ doc("eligibility_programs_table") }}'
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - dt
     columns:
       - *key
       - name: program
-        tests:
-          - not_null:
-              severity: warn
       - name: administering_entity_organization_key
       - name: eligibility_type_rider_requirement_key
       - name: service_key
@@ -216,17 +150,9 @@ models:
       - name: dt
   - name: stg_transit_database__fare_systems
     description: '{{ doc("fare_systems_table") }}'
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - dt
     columns:
       - *key
       - name: fare_system
-        tests:
-          - not_null:
-              severity: warn
       - name: fares_based_on_zone
       - name: fares_based_on_route
       - name: zone_based_fares
@@ -268,17 +194,9 @@ models:
       - name: dt
   - name: stg_transit_database__funding_programs
     description: '{{ doc("funding_programs_table") }}'
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - dt
     columns:
       - *key
       - name: program
-        tests:
-          - not_null:
-              severity: warn
       - name: full_name
       - name: program_informatiom
       - name: services
@@ -289,17 +207,9 @@ models:
       - name: dt
   - name: stg_transit_database__ntd_agency_info
     description: '{{ doc("ntd_agency_info_table") }}'
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - dt
     columns:
       - *key
       - name: ntd_id
-        tests:
-          - not_null:
-              severity: warn
       - name: legacy_ntd_id
       - name: agency_name
       - name: reporter_acronym
@@ -342,11 +252,6 @@ models:
       - name: dt
   - name: stg_transit_database__place_geography
     description: '{{ doc("place_geography_table") }}'
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - dt
     columns:
       - *key
       - *name
@@ -368,17 +273,9 @@ models:
       - name: dt
   - name: stg_transit_database__rider_requirements
     description: '{{ doc("rider_requirements_table") }}'
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - dt
     columns:
       - *key
       - name: requirement
-        tests:
-          - not_null:
-              severity: warn
       - name: category
       - name: description
       - name: services
