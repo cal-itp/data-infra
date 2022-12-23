@@ -73,6 +73,8 @@ Each record links together a single `gtfs dataset` and one (if possible) or more
 
 Many services have more than one GTFS dataset which describes their service. Often these are either precursors to *final* datasets (e.g. AC Transit's GTFS dataset is a precursor to the Bay Area 511 dataset) or artifacts produced in other processes such as creating GTFS Realtime.
 
+For more information, see [the Airtable Data Documentation document](https://docs.google.com/document/d/1KvlYRYB8cnyTOkT1Q0BbBmdQNguK_AMzhSV5ELXiZR4/edit/).
+
 {% enddocs%}
 
 {% docs county_geography_table %}
