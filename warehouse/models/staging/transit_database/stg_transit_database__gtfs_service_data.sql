@@ -35,7 +35,6 @@ stg_transit_database__gtfs_service_data AS (
         itp_activities__from_gtfs_dataset_,
         fares_notes__from_gtfs_dataset_,
         uri,
-        currently_operating__from_services_,
         provider_reporting_category,
         itp_schedule_todo__from_gtfs_dataset_,
         ts,
