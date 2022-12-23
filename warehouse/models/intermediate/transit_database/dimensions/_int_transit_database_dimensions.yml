@@ -20,3 +20,10 @@ models:
         tests: &primary_key_tests
           - unique
           - not_null
+  - name: int_transit_database__services_dim
+    description: |
+      Services data in slowly-changing-dimension format.
+      For detailed data definitions, see: https://docs.google.com/document/d/1KvlYRYB8cnyTOkT1Q0BbBmdQNguK_AMzhSV5ELXiZR4/edit/.
+    tests: *mutually_exclusive_ranges
+    columns:
+      - *key

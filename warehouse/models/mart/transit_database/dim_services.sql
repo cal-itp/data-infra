@@ -1,10 +1,8 @@
 {{ config(materialized='table') }}
 
-WITH latest_services AS (
-    {{ get_latest_dense_rank(
-        external_table = ref('stg_transit_database__services'),
-        order_by = 'dt DESC'
-        ) }}
+WITH dim AS (
+    SELECT *
+    FROM {{ ref('int_transit_database__services_dim') }}
 ),
 
 dim_services AS (
@@ -20,8 +18,10 @@ dim_services AS (
         -- TODO: remove this field when v2, automatic determinations are available
         gtfs_schedule_quality,
         assessment_status,
-        dt
-    FROM latest_services
+        _valid_from,
+        _valid_to,
+        _is_current
+    FROM dim
 )
 
 SELECT * FROM dim_services

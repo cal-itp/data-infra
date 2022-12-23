@@ -40,6 +40,8 @@ Each record defines a transit service and its properties.
 
 While there are a small number of exceptions (e.g. Solano Express, which is jointly managed by Solano and Napa), generally each transit service is managed by a single organization.
 
+For more information, see [the Airtable Data Documentation document](https://docs.google.com/document/d/1KvlYRYB8cnyTOkT1Q0BbBmdQNguK_AMzhSV5ELXiZR4/edit/).
+
 {% enddocs%}
 
 {% docs products_table %}
