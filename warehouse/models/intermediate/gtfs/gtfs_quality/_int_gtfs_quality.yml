@@ -40,7 +40,86 @@ models:
           combination_of_columns:
             - code
             - severity
+  - name: int_gtfs_quality__daily_assessment_candidate_entities
+    description: |
+      A row here is a combination of an organization, service, service / GTFS dataset relationship,
+      GTFS dataset, and schedule feed that existed as of the given date. This combined entity
+      represents a candidate for GTFS guideline adherence assessment. The `assessed` column
+      indicates whether the candidate was actually in scope for assessment on the given date, based on whether:
+      * The organization had `reporting_category` = 'Core' or 'Other Public Transit'
+      * The service was `currently_operating`
+      * The service had `service_type` 'fixed-route'
+      * The service/GTFS dataset relationship was `customer_facing` or had `category` = 'primary'
+      (i.e., according to our data, was this dataset ingested by trip planners on this date
+      to represent this service)
 
+      Entities that fail any of the criteria will *not* be included as `assessed` for the given date.
+
+      The data in this table comes directly from historical extracts from the Transit Database. This means
+      that it is subject to historical data quality issues. On days when an extract failed, entities
+      may not resolve correctly.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - key
+            - date
+    columns:
+      - name: key
+        description: |
+          Synthetic key from `organization_key`, `service_key`, `gtfs_service_data_key`, `gtfs_dataset_key`,
+          and `schedule_feed_key`.
+        tests:
+          - not_null
+      - name: date
+        description: |
+          Date on which this combination of records is present in our data.
+      - name: organization_name
+      - name: service_name
+      - name: gtfs_dataset_name
+      - name: gtfs_dataset_type
+      - name: assessed
+        description: |
+          Boolean indicator for whether this combined entity met the criteria to be "assessed"
+          on the given date. Applies "and" logic to `organization_assessed`, `service_assessed`,
+          and `gtfs_service_data_assessed`.
+      - name: organization_assessed
+        description: |
+          Boolean indicator for whether the given organization record met the criteria to be "assessed"
+          on the given date, i.e., had `reporting_category` = 'Core' or 'Other Public Transit'.
+      - name: service_assessed
+        description: |
+          Boolean indicator for whether the given organization record met the criteria to be "assessed"
+          on the given date, i.e., was `currently_operating` and had `service_type` 'fixed-route'.
+      - name: gtfs_service_data_assessed
+        description: |
+          Boolean indicator for whether the given service/GTFS dataset (`gtfs_service_data`) record met
+          the criteria to be "assessed" on the given date, i.e., was `customer_facing` or had `category` = 'primary'.
+      - name: base64_url
+      - name: organization_key
+        description: |
+          Foreign key to `dim_organizations`; note that this is a *historical* key value and
+          so joins may result in some unexpected behavior (for example, deleted records will
+          fail to join.)
+      - name: service_key
+        description: |
+          Foreign key to `dim_services`; note that this is a *historical* key value and
+          so joins may result in some unexpected behavior (for example, deleted records will
+          fail to join.)
+      - name: gtfs_service_data_key
+        description: |
+          Foreign key to `dim_gtfs_service_data`; note that this is a *historical* key value and
+          so joins may result in some unexpected behavior (for example, deleted records will
+          fail to join.)
+      - name: gtfs_dataset_key
+        description: |
+          Foreign key to `dim_gtfs_datasets`; note that this is a *historical* key value and
+          so joins may result in some unexpected behavior (for example, deleted records will
+          fail to join.)
+      - name: schedule_feed_key
+        description: |
+          Foreign key to `dim_schedule_feeds`. Because `dim_schedule_feeds` is slowly-
+          changing dimension, joins using this key are not subject to the historical
+          limitations noted for the other foreign keys in this table.
   - name: int_gtfs_quality__no_schedule_validation_errors
     tests: &stg_gtfs_guideline_tests_schedule
       - dbt_utils.unique_combination_of_columns:

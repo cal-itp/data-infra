@@ -151,6 +151,218 @@ models:
           expression: "is_implemented"
     columns:
       - name: is_implemented
+  - name: fct_daily_guideline_checks
+    description: |
+      **Documentation coming soon**
+    columns:
+      - *key
+      - *date
+      - name: organization_name
+        description: |
+          Organization name as of date.
+      - name: service_name
+        description: |
+          Service name as of date.
+      - name: gtfs_dataset_name
+        description: |
+          GTFS dataset name as of date.
+      - name: gtfs_dataset_type
+        description: |
+          GTFS dataset type as of date.
+      - name: base64_url
+        description: |
+          GTFS dataset base 64 URL as of date.
+      - name: organization_key
+        description: |
+          Foreign key to `dim_organizations`; note that this is a *historical* key value and
+          so joins may result in some unexpected behavior (for example, deleted records will
+          fail to join.)
+      - name: service_key
+        description: |
+          Foreign key to `dim_services`; note that this is a *historical* key value and
+          so joins may result in some unexpected behavior (for example, deleted records will
+          fail to join.)
+      - name: gtfs_service_data_key
+        description: |
+          Foreign key to `dim_gtfs_service_data`; note that this is a *historical* key value and
+          so joins may result in some unexpected behavior (for example, deleted records will
+          fail to join.)
+      - name: gtfs_dataset_key
+        description: |
+          Foreign key to `dim_gtfs_datasets`; note that this is a *historical* key value and
+          so joins may result in some unexpected behavior (for example, deleted records will
+          fail to join.)
+      - name: schedule_feed_key
+        description: |
+          Foreign key to `dim_schedule_feeds`. Because `dim_schedule_feeds` is a slowly-
+          changing dimension, joins using this key are not subject to the historical
+          limitations noted for the other foreign keys in this table.
+      - *check
+      - name: status
+      - name: feature
+  - name: fct_daily_organization_combined_guideline_checks
+    description: |
+      **Documentation coming soon**
+    columns:
+      - *key
+      - *date
+      - name: organization_name
+        description: |
+          Organization name as of date.
+      - name: service_names_included_array
+        description: |
+          Array of service name values (as of date) that are included in this organization's assessment.
+      - name: gtfs_dataset_names_included_array
+        description: |
+          Array of GTFS dataset name values (as of date) that are included in this organization's assessment.
+      - name: base64_urls_included_array
+        description: |
+          Array of base 64 URL values (as of date) that are included in this organization's assessment.
+      - name: organization_key
+        description: |
+          Foreign key to `dim_organizations`; note that this is a *historical* key value and
+          so joins may result in some unexpected behavior (for example, deleted records will
+          fail to join.)
+      - name: service_keys_included_array
+        description: |
+          Array of service_key values for services included in this organization's assessment;
+          note that this is a *historical* key value and so joins may result in some unexpected behavior
+          (for example, deleted records will fail to join.)
+      - name: gtfs_service_data_keys_included_array
+        description: |
+          Array of gtfs_service_data_key values for service/GTFS dataset relationships included in this
+          organization's assessment; note that this is a *historical* key value and so joins may result in
+          some unexpected behavior (for example, deleted records will fail to join.)
+      - name: gtfs_dataset_keys_included_array
+        description: |
+          Array of gtfs_dataset values for GTFS datasets included in this organization's assessment;
+          note that this is a *historical* key value and so joins may result in some unexpected behavior
+          (for example, deleted records will fail to join.)
+      - name: schedule_feed_keys_included_array
+        description: |
+          Array of schedule_feed_key values for schedule feed versions included in this organization's assessemnt;
+          because `dim_schedule_feeds` is a slowly-changing dimension, joins using this key are not subject
+          to the historical limitations noted for the other foreign keys in this table.
+      - *check
+      - name: status
+      - name: feature
+  - name: fct_daily_service_combined_guideline_checks
+    description: |
+      **Documentation coming soon**
+    columns:
+      - *key
+      - *date
+      - name: service_name
+        description: |
+          Service name as of date.
+      - name: organization_names_included_array
+        description: |
+          Array of organization name values (as of date) that are included in this service's assessment.
+      - name: gtfs_dataset_names_included_array
+        description: |
+          Array of GTFS dataset name values (as of date) that are included in this service's assessment.
+      - name: base64_urls_included_array
+        description: |
+          Array of base 64 URL values (as of date) that are included in this service's assessment.
+      - name: service_key
+        description: |
+          Foreign key to `dim_services`; note that this is a *historical* key value and
+          so joins may result in some unexpected behavior (for example, deleted records will
+          fail to join.)
+      - name: organization_keys_included_array
+        description: |
+          Array of organization_key values for organizations included in this service's assessment;
+          note that this is a *historical* key value and so joins may result in some unexpected behavior
+          (for example, deleted records will fail to join.)
+      - name: gtfs_service_data_keys_included_array
+        description: |
+          Array of gtfs_service_data_key values for service/GTFS dataset relationships included in this
+          service's assessment; note that this is a *historical* key value and so joins may result in
+          some unexpected behavior (for example, deleted records will fail to join.)
+      - name: gtfs_dataset_keys_included_array
+        description: |
+          Array of gtfs_dataset values for GTFS datasets included in this service's assessment;
+          note that this is a *historical* key value and so joins may result in some unexpected behavior
+          (for example, deleted records will fail to join.)
+      - name: schedule_feed_keys_included_array
+        description: |
+          Array of schedule_feed_key values for schedule feed versions included in this service's assessemnt;
+          because `dim_schedule_feeds` is a slowly-changing dimension, joins using this key are not subject
+          to the historical limitations noted for the other foreign keys in this table.
+      - *check
+      - name: status
+      - name: feature
+  - name: fct_schedule_feed_files
+    description: |
+      All files found in zipfiles downloaded in the GTFS schedule v2 pipeline.
+      This includes files where unzipping failed because of invalid internal directory
+      structures. This also includes files we don't ingest in the warehouse, for example
+      files that are not part of the GTFS specification (but were present in the zipfile
+      anyway.)
+      It is possible to have more than one download per day in rare cases where
+      an additional download was manually triggered, so note that there are
+      cases where the same feed/file combination will appear more than once for a given date.
+    columns:
+      - *key
+      - name: ts
+        description: |
+          Timestamp of download. Possible to have more than one download per day.
+      - name: feed_key
+        description:
+          Foreign key to `dim_schedule_feeds`.
+          This may be null if the unzip operation failed.
+        tests:
+          - relationships:
+              to: ref('dim_schedule_feeds')
+              field: key
+      - name: original_filepath
+        description: |
+          The original full file path to this file in the zipfile.
+          This may include directory names that were part of
+          the zipfile's original internal structure.
+        tests:
+          - not_null
+      - name: original_filename
+        description: |
+          The file name portion of the original file path
+          (i.e., directories have been stripped away.)
+        tests:
+          - not_null
+      - name: gtfs_filename
+        description: |
+            GTFS file name without extension, ex. "shapes".
+            Guaranteed to be a known file type from GTFS specification.
+            Null for files not included in specification or where unzipping failed.
+      - name: unzip_success
+        description: |
+          Whether the unzip operation succeeded for this zipfile.
+          If false, the associated zipfile's data will not be present in the warehouse.
+      - name: unzip_exception
+        description: |
+          If not `unzip_success`, the exception that was encountered in the unzip operation.
+      - name: parse_success
+        description: |
+          Whether we succeeded in converting the original file to JSONL and ingesting it
+          into the warehouse.
+          This can be null if the unzip operation failed or if this is not a file type
+          that we ingest, for example files that are not part of the GTFS specification.
+      - name: parse_exception
+        description: |
+          If not `parse_success`, the exception that was encountered when
+          converting this file to JSONL.
+      - name: base64_url
+        tests:
+          - not_null
+      - name: string_url
+        description: |
+          Human readable string URL.
+          Will not contain authorization parameters.
+      - name: gtfs_dataset_key
+        tests:
+          - relationships:
+              to: ref('dim_gtfs_datasets')
+              field: key
+      - name: gtfs_dataset_name
 
 # TODO: This should be filled out once the reports site is actually migrated
 #exposures:
