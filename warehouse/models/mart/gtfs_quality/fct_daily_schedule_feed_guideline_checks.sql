@@ -19,7 +19,6 @@ unioned AS (
             ref('int_gtfs_quality__no_expired_services'),
             ref('int_gtfs_quality__persistent_ids_schedule'),
             ref('int_gtfs_quality__lead_time'),
-            ref('int_gtfs_quality__persistent_ids_schedule'),
         ],
     ) }}
 ),
