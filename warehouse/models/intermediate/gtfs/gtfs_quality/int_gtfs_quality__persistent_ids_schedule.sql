@@ -26,24 +26,9 @@ agency_id_comparison AS ( {{ ids_version_compare_aggregate("agency_id","dim_agen
 id_change_count AS (
     SELECT t1.date,
            t1.feed_key,
-           MAX(t2.id_added * 100 / t2.ids_current_feed )
-               OVER (
-                   PARTITION BY t1.feed_key
-                   ORDER BY t1.date
-                   ROWS BETWEEN 30 PRECEDING AND CURRENT ROW
-                ) AS max_percent_ids_new,
-           MAX(t3.id_added * 100 / t3.ids_current_feed )
-               OVER (
-                   PARTITION BY t1.feed_key
-                   ORDER BY t1.date
-                   ROWS BETWEEN 30 PRECEDING AND CURRENT ROW
-                ) AS max_percent_route_ids_new,
-           MAX(t4.id_added * 100 / t4.ids_current_feed )
-               OVER (
-                   PARTITION BY t1.feed_key
-                   ORDER BY t1.date
-                   ROWS BETWEEN 30 PRECEDING AND CURRENT ROW
-                ) AS max_percent_agency_ids_new
+           {{ max_new_id_ratio("t2") }} AS max_percent_stop_ids_new,
+           {{ max_new_id_ratio("t3") }} AS max_percent_route_ids_new,
+           {{ max_new_id_ratio("t4") }} AS max_percent_agency_ids_new
       FROM feed_guideline_index AS t1
       LEFT JOIN stop_id_comparison AS t2
         ON t2.feed_key = t1.feed_key
@@ -58,7 +43,7 @@ int_gtfs_quality__persistent_ids_schedule AS (
            feed_key,
            {{ persistent_ids_schedule() }} AS check,
            {{ best_practices_alignment_schedule() }} AS feature,
-           CASE WHEN max_percent_ids_new > 50
+           CASE WHEN max_percent_stop_ids_new > 50
                      OR max_percent_route_ids_new > 50
                      OR max_percent_agency_ids_new > 50
                 THEN "FAIL"

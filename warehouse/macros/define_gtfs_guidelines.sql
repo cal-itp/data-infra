@@ -243,3 +243,13 @@ feature
      GROUP BY 1,2
     HAVING ids_current_feed > 0
 {% endmacro %}
+
+-- For use in int_gtfs_quality__persistent_ids_schedule:
+{% macro max_new_id_ratio(table_name) %}
+    MAX({{ table_name }}.id_added * 100 / {{ table_name }}.ids_current_feed )
+       OVER (
+           PARTITION BY t1.feed_key
+           ORDER BY t1.date
+           ROWS BETWEEN 30 PRECEDING AND CURRENT ROW
+        )
+{% endmacro %}
