@@ -132,7 +132,7 @@ The constructor takes two arguments: a geodataframe of Vehicle Positions data, f
 
 #### Basic Logging
 
-VehiclePositionsInterpolator has simple logging functionality built in through the VehiclePositionsInterpolator.logassert method. This method is a simple wrapper to Python’s assert keyword that also uses Python’s built in logging module to log which error occurred before raising an AssertionError. By default, the logfile will be ‘./rt_log’.
+VehiclePositionsInterpolator has simple logging functionality built in through the VehiclePositionsInterpolator.logassert method. This method is a simple wrapper to Python’s assert keyword that also uses Python’s built in logging module to log which error occurred before raising an AssertionError. By default, the logfile will be `./rt_log`.
 
 #### Projection
 
