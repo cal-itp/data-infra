@@ -26,7 +26,10 @@ tts_issue_feeds AS (
                                 -- Directional abbreviations, ie "n" should read "north"
                                 "n", "s", "e", "w", "ne", "se", "sw", "nw", "nb", "sb", "eb", "wb",
                                 -- ROW abbreviations, ie "st" should read "street"
-                                "st", "rd", "blvd", "hwy"
+                                "st", "rd", "blvd", "hwy",
+                                -- Especially in SoCal "la" has multiple uses with different pronunciation.
+                                -- For example, "La Brea" and "LA Metro"
+                                "la"
                     ]) tts_necessary_strings
                          ON stop_name_parts = tts_necessary_strings)
             -- Test 2: Check for >=2 adjacent numerals
