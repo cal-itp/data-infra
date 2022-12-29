@@ -181,9 +181,22 @@ rt_trips is a dataframe of trip-level information for every trip for which a Veh
 
 ### Viewing Data Availability (or starting from scratch)
 
-Use rt_analysis.get_operators to see dates and feeds with the core analysis already run and intermediate data available. If necessary, the util can also be used to generate the core analysis and save intermediate data for the dates and feeds of interest. Note that this process can be time-consuming, especially for larger feeds like LA Metro.
+Use shared_utils.rt_utils.get_operators to see dates and feeds with the core analysis already run and intermediate data available.
 
-This function supports an optional progress bar argument to show analysis progress. First make sure tqdm is installed, then create a blank progress bar and provide that as an argument to the function (see example notebook). Note that you may have to[enable the jupyter extension](https://github.com/tqdm/tqdm/issues/394#issuecomment-384743637).
+If not already ran, use the OperatorDayAnalysis constructor to generate the core analysis and save intermediate data for the dates and feeds of interest. Note that this process can be time-consuming, especially for larger feeds like LA Metro.
+
+This function supports an optional progress bar argument to show analysis progress. First make sure tqdm is installed, then create a blank progress bar and provide that as an argument to the function (see example notebook). Note that you may have to [enable the jupyter extension](https://github.com/tqdm/tqdm/issues/394#issuecomment-384743637).
+
+For example, to generate data for Big Blue Bus on October 12, 2022:
+
+```
+from rt_analysis import rt_parser
+from tqdm.notebook import tqdm
+
+pbar = tqdm()
+rt_day = rt_parser.OperatorDayAnalysis(300, dt.date(2022, 10, 12), pbar)
+rt_day.export_views_gcs()
+```
 
 ### RtFilterMapper: your flexible analytics and mapping interface
 
@@ -192,6 +205,33 @@ flowchart TD
     gcs[("GCS (calitp-analytics-data/data_analyses/rt_delay)")]
     subgraph rt_fil_map[RtFilterMapper]
         fm_gcs[self.from_gcs]
+        st_flt[self.set_filter] --->
+        flt[self._filter]
+        rs_flt[self.reset_filter] -->
+        flt
+
+        subgraph stv[static views]
+            self.calitp_agency_name
+            self.rt_trips
+            self.stop_delay_view
+            self.endpoint_delay_summary
+            self.endpoint_delay_view
+        end
+        
+        subgraph dyn[dynamic tools]
+            ssm[self.segment_speed_map] -->
+            dmv[self.detailed_map_view] -->
+            gis[/GIS Format Exports/]
+            self.chart_variability
+            self.map_variance
+            self.chart_delays
+            self.chart_speeds
+            self.describe_slow_routes
+            ssm --> rend[/renders map/]
+        end
+        fm_gcs --> stv
+        flt --> dyn
+        stv --> dyn
     end
     %% top level links
     gcs -->|rt_trips| rt_fil_map
