@@ -4,7 +4,7 @@
 
 This module, rt_analysis, applies various spatial processing, interpolation, and aggregation techniques in order to transform GTFS and GTFS-Realtime data into intermediate data products and production-ready visualizations. It can be found on GitHub at [https://github.com/cal-itp/data-analyses/tree/main/rt_delay/rt_analysis](https://github.com/cal-itp/data-analyses/tree/main/rt_delay/rt_analysis)
 
-Due to the complex nature of the task, it includes its own interface and data model. Some functionality may shift to a more automated part of the pipeline in the future.
+It includes its own interface and data model. Some functionality may shift to a more automated part of the pipeline in the future.
 
 ### Which analyses does it currently support?
 
@@ -33,7 +33,7 @@ _*currently the v1 warehouse, but we'll be converting to v2 ASAP_
 
 The module is split into two major components, `rt_parser`, which generates intermediate data for detailed analysis, and `rt_filter_map_plot`, which provides a rich interface to analyze and generate products like speed maps.
 
-### `rt_parser`
+### `rt_parser`: making sense of Vehicle Positions
 
 ```{mermaid}
 flowchart TD
@@ -74,25 +74,25 @@ flowchart TD
     warehouse -->|single day of data| op_day
 ```
 
-#### What happens at the OperatorDayAnalysis stage?
+#### __What happens at the OperatorDayAnalysis stage?__
 
 The OperatorDayAnalysis class is the top-level class for processing a day’s worth of data and outputting intermediate data to be used later for mapping and analysis through the RtFilterMapper interface. It’s useful to understand how it works when analyzing a feed on a date for the first time, though once this is accomplished nearly any analysis need can be fulfilled without regenerating OperatorDayAnalysis.
 
 An OperatorDayAnalysis is generated for a specific feed on a specific date.
 
-##### Gathering Data
+#### Gathering Data
 
 First, OperatorDayAnalysis gathers GTFS and GTFS Realtime Vehicle Positions data for the feed and date selected (for a complete list of source data, see above).
 
-##### Asserts/Data Checks
+#### Asserts/Data Checks
 
 This step checks for the presence of Vehicle Positions data, with trip_ids matching schedule data, as well as the presence of GTFS Shapes data describing at least 90% of scheduled trips.
 
-##### Generate Position Interpolators
+#### Generate Position Interpolators
 
 This step attempts to generate VehiclePositionInterpolator objects for all trips for which data is present. For a detailed description, see below.
 
-##### Generate Stop Delay View
+#### Generate Stop Delay View
 
 This step uses the generated interpolator objects to estimate and store speed and delay information for every trip along every segment. Segments are generally from transit stop to transit stop, but where stops are less frequent we add segments every kilometer to support granular analysis of express and rural transit routes.
 
@@ -122,25 +122,25 @@ The results of this step are saved in OperatorDayAnalysis.stop_delay_view, a geo
 
 ***early arrivals currently represented as zero delay
 
-#### VehiclePositionsInterpolator: a foundational building block
+#### __VehiclePositionsInterpolator: a foundational building block__
 
 Analyzing speed and position from GTFS-RT Vehicle Positions data requires somewhat complex algorithms for each trip. In this module, these are implemented in the VehiclePositionsInterpolator class. When analyzing a day’s worth of data, the module generates an instance of VehiclePositionsInterpolator for each trip with Vehicle Positions data. There’s little need to interact with VehiclePositionsInterpolator directly for most uses.
 
-##### Constructor
+#### Constructor
 
 The constructor takes two arguments: a geodataframe of Vehicle Positions data, filtered to a single trip and joined with trip identifier information from GTFS Schedule, and a geodataframe of GTFS Shapes as line geometries, which must include the shape of the trip of interest. When constructed, it runs several data checks, enforcing that: Vehicle Positions and Shapes data are provided, both geodataframes have the same coordinate reference system (CA_NAD83Albers), and that Vehicle Positions data is only provided for a single trip and contains the required identifier information.
 
-##### Basic Logging
+#### Basic Logging
 
 VehiclePositionsInterpolator has simple logging functionality built in through the VehiclePositionsInterpolator.logassert method. This method is a simple wrapper to Python’s assert keyword that also uses Python’s built in logging module to log which error occurred before raising an AssertionError. By default, the logfile will be ‘./rt_log’.
 
-##### Projection
+#### Projection
 
 Vehicle Positions data includes a series of positions for a single trip at different points in time. Since we’re interested in tracking speed and delay along the transit route, we need to project those lat/long positions to a linear reference along the actual transit route (GTFS Shape). This is accomplished by the constructor calling VehiclePositionsInterpolator._attach_shape, which first does a naive projection of each position using shapely.LineString.project. This linearly referenced value is stored in the shape_meters column.
 
 Since later stages will have to interpolate these times and positions, it’s necessary to undertake some additional data cleaning. This happens by calling VehiclePositionsInterpolator._linear_reference, which casts shape_meters to be monotonically increasing with respect to time. This removes multiple position reports at the same location, as well as any positions that suggest the vehicle traveled backwards along the route. While this introduces the assumption that the GPS-derived Vehicle Positions data is fairly accurate, our experience is that this process produces good results in most cases. Future updates will better accommodate [looping and inlining](https://gtfs.org/schedule/best-practices/#shapestxt); these currently get dropped in certain cases, which is undesirable.
 
-##### Interpolating, quickly
+#### Interpolating, quickly
 
 As you might expect, the main purpose of VehiclePositionsInterpolator is to provide a fast interface to estimate when a trip arrived at a point of interest (generally a transit stop or segment boundary) based on the two known nearest positions.
 
@@ -189,7 +189,7 @@ This function supports an optional progress bar argument to show analysis progre
 
 For example, to generate data for Big Blue Bus on October 12, 2022:
 
-```
+```{python}
 from rt_analysis import rt_parser
 from tqdm.notebook import tqdm
 
@@ -198,18 +198,16 @@ rt_day = rt_parser.OperatorDayAnalysis(300, dt.date(2022, 10, 12), pbar)
 rt_day.export_views_gcs()
 ```
 
-### RtFilterMapper: your flexible analytics and mapping interface
+### `rt_filter_map_plot`: your flexible analytics and mapping interface
 
 ```{mermaid}
 flowchart TD
     gcs[("GCS (calitp-analytics-data/data_analyses/rt_delay)")]
     subgraph rt_fil_map[RtFilterMapper]
-        fm_gcs[self.from_gcs]
-        st_flt[self.set_filter] --->
+        st_flt[self.set_filter] -->
         flt[self._filter]
         rs_flt[self.reset_filter] -->
         flt
-
         subgraph stv[static views]
             self.calitp_agency_name
             self.rt_trips
@@ -217,7 +215,6 @@ flowchart TD
             self.endpoint_delay_summary
             self.endpoint_delay_view
         end
-        
         subgraph dyn[dynamic tools]
             ssm[self.segment_speed_map] -->
             dmv[self.detailed_map_view] -->
@@ -228,33 +225,73 @@ flowchart TD
             self.chart_speeds
             self.describe_slow_routes
             ssm --> rend[/renders map/]
+            rend -.- dmv
+            subgraph cor[corridor tools]
+                add_cor[self.add_corridor] -->
+                qmc[self.quick_map_corridor]
+                c_met[self.corridor_metrics]
+                add_cor --> c_met
+            end
         end
-        fm_gcs --> stv
+        %% add_cor -.->|corridor= True| ssm
         flt --> dyn
         stv --> dyn
     end
     %% top level links
-    gcs -->|rt_trips| rt_fil_map
-    gcs -->|stop_delay_view| rt_fil_map
+    gcs -->|rt_trips| fm_gcs
+    gcs -->|stop_delay_view| fm_gcs
+    fm_gcs[rt_filter_map_plot.from_gcs] --> rt_fil_map
     rt_fil_map --> speedmaps[/CA Transit Speed Maps/]
     rt_fil_map --> bb[/Better Buses Analysis/]
     rt_fil_map --> sccp[/SCCP/LPP Transit Delay/]
     rt_fil_map --> other[/Other Exposures/]
 ```
 
-RtFilterMapper exists to provide robust analytics functionality separately from the compute-intensive raw data processing steps.
+`rt_filter_map_plot` exists to provide robust analytics functionality separately from the compute-intensive raw data processing steps. It includes the RtFilterMapper class, which provides an interface for loading and filtering a day of data, plus tools to generate various maps, charts, and metrics.
+
+_Check out the [walkthrough notebook](https://github.com/cal-itp/data-analyses/blob/main/rt_delay/31_tutorial.ipynb) for further explanation/demo of these steps_
 
 #### Loading Intermediate Data (largely automatically)
 
-Check out the walkthrough notebook for an explanation/demo of these steps: [data-analyses/31_tutorial.ipynb at main · cal-itp/data-analyses (github.com)](https://github.com/cal-itp/data-analyses/blob/main/rt_delay/31_tutorial.ipynb)
+To load intermediate data, use `rt_filter_map_plot.from_gcs` to create an RtFilterMapper instance for the itp_id and date of interest.
 
 #### Filtering
 
-### Building the California Transit Speed Maps Site
+Using the `set_filter` method, RtFilterMapper supports filtering based on at least one of these attributes at a time:
 
-### Using Intermediate Data in Other Analyses
+|||
+|--- |--- |
+|Attribute|Type|
+|start_time|str (%H:%M, i.e. 11:00)|
+|end_time|str (%H:%M, i.e. 19:00)|
+|route_names|list, pd.Series|
+|shape_ids|list, pd.Series|
+|direction_id|str, '0' or '1'|
+|direction|str, "Northbound", etc, _experimental_|
+|trip_ids|list, pd.Series|
+|route_types|list, pd.Series|
 
-## Example Workflow (SCCP)
+Mapping, charting, and metric generation methods, listed under "dynamic tools" in the chart above, will respect the current filter. After generating your desired output, you can call `set_filter` again to set a new filter, or use `reset_filter` to remove the filter entirely. Then you can continue to analyze, without needing to create a new RtFilterMapper instance.
+
+#### Mapping
+
+Use the `segment_speed_map` method to generate a speed map. Depending on parameters, the speeds visualized will either be the 20th percentile or average speeds for all trips in each segment matching the current filter, if any. See function docstring for additional information.
+
+The `map_variance` method, currently under development, offers a spatial view of relative variance in speeds for all trips in each segment matching the current filter, if any.
+
+#### Other Charts and Metrics
+
+The `chart_variability` method provides a descriptitive view of the speeds experienced by each trip in each segments. It requires that a filter first be set to only one shape_id.
+
+The `chart_speeds` and `chart_delays` methods provide aggregate charts showing speed and delay patterns throughout the day.
+
+The `describe_slow_routes` method lists out the routes in the current filter experiencing the lowest speeds. It is mainly used on the California Transit Speed Maps site.
+
+## Example Workflow: California Transit Speed Maps
+
+Section to come after warehouse v2 migration
+
+## Example Workflow: SCCP
 
 ```{mermaid}
 flowchart TD
@@ -269,5 +306,6 @@ flowchart TD
     end
     gen_data --> fm
     metrics --> pub>"share both speed and schedule metrics (appropriately averaged for SCCP/LPP)"]
-
 ```
+
+Note that these steps are substantially automated using the `rt_analysis.sccp_tools.sccp_average_metrics` function.
