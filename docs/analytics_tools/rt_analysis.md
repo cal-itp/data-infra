@@ -225,13 +225,17 @@ flowchart TD
             self.chart_speeds
             self.describe_slow_routes
             ssm --> rend[/renders map/]
+            ssm --> ssv[self.stop_segment_speed_view]
             rend -.- dmv
             subgraph cor[corridor tools]
+                acor[self.autocorridor] -.->
                 add_cor[self.add_corridor] -->
                 qmc[self.quick_map_corridor]
                 c_met[self.corridor_metrics]
                 add_cor --> c_met
+                ext[/external corridor/] -.-> add_cor
             end
+            ssv -.-> acor
         end
         %% add_cor -.->|corridor= True| ssm
         flt --> dyn
@@ -287,6 +291,26 @@ The `chart_speeds` and `chart_delays` methods provide aggregate charts showing s
 
 The `describe_slow_routes` method lists out the routes in the current filter experiencing the lowest speeds. It is mainly used on the California Transit Speed Maps site.
 
+#### Corridor Analysis
+
+It's often useful to measure transit delay on a specific corridor to support technical metric generation for the Solutions for Congested Corridors Program, Local Partnership Program, and other analyses.
+
+If you've recieved a corridor from an SCCP/LPP applicant or elsewhere, load it as a geodataframe and add it using the `add_corridor` method. If you're already looking at a speed map and want to measure delay for a portion of the map, you can use the `autocorridor` method to specify a corridor using a shape_id and two stop_sequences. This saves time by avoiding the need to generate the polygon elsewhere.
+
+The corridor must be a single polygon, and in order to generate metrics it must include at least one transit stop.
+
+Once the corridor is attached, the `quick_map_corridor` method is available to generate an overview map of the corridor, including the transit stops just before, within, and just after the corridor. The `corridor_metrics` method will generate both a speed-based and schedule-based transit delay metric.
+
+The speed-based metric is a daily average of the sum of delays for each trip traversing the corridor as compared to a reference speed of 16 miles per hour. To further explain, we take each corridor trip that we have data for and calculate the hypothetical time it would take for that trip to traverse the corridor at a speed of 16 mph. The difference between the actual time it took for the trip to traverse the corridor and that hypothetical time is the speed-based delay for that trip, and we sum those delays to create the metric. This metric is intended to provide a more consistent basis for comparison independent of scheduling practices.
+
+In other words, if we expect a hypothetical bus lane/signal priority/payment system etc to increase corridor speeds to 16mph, this is how much time we could save per day.
+
+The schedule-based metric is a daily average of the sum of median trip stop delays along the corridor. To further explain, we take each corridor trip that we have data for and look at the delay in comparison to the schedule at each stop, after subtracting off any delay present as the trip entered the corridor. For each trip we then take the median delay of all stops along the corridor, and sum these medians to create the metric.
+
+Finally, you can use the `corridor = True` argument in the `segment_speed_map` method to generate a speed map for only corridor segments.
+
+While all of these methods respect any filter you may have set with `set_filter`, don't set a filter for SCCP/LPP metric generation.
+
 ## Example Workflow: California Transit Speed Maps
 
 Section to come after warehouse v2 migration
@@ -309,3 +333,5 @@ flowchart TD
 ```
 
 Note that these steps are substantially automated using the `rt_analysis.sccp_tools.sccp_average_metrics` function.
+
+* 2022 SCCP/LPP default timeframe is Apr 30 - May 9 2022.
