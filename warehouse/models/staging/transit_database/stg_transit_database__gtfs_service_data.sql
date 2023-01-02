@@ -12,7 +12,6 @@ stg_transit_database__gtfs_service_data AS (
         {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         unnested_services AS service_key,
         unnested_gtfs_dataset AS gtfs_dataset_key,
-        dataset_type,
         -- only coalesce to false after the field had been created (November 23, 2022)
         -- otherwise a null is genuinely a null
         CASE
@@ -22,21 +21,7 @@ stg_transit_database__gtfs_service_data AS (
         agency_id,
         network_id,
         route_id,
-        provider,
-        operator,
-        dataset_producers__from_gtfs_dataset_,
-        dataset_publisher__from_gtfs_dataset_,
-        gtfs_dataset_type,
-        pathways_status,
         fares_v2_status,
-        service_type__from_services_,
-        flex_status,
-        schedule_comments__from_gtfs_dataset_,
-        itp_activities__from_gtfs_dataset_,
-        fares_notes__from_gtfs_dataset_,
-        uri,
-        provider_reporting_category,
-        itp_schedule_todo__from_gtfs_dataset_,
         ts,
         dt
     FROM once_daily_gtfs_service_data
