@@ -37,14 +37,16 @@
 
 WITH
 
-gtfs_schedule_dim_routes AS (
-    SELECT *
-    FROM {{ ref('gtfs_schedule_dim_routes') }}
+dim_routes AS (
+    SELECT * FROM {{ ref('dim_routes') }}
+),
+
+dim_gtfs_datasets AS (
+    SELECT * FROM {{ ref('dim_gtfs_datasets') }}
 ),
 
 payments_feeds AS (
-    SELECT *
-    FROM {{ ref('payments_feeds') }}
+    SELECT * FROM {{ ref('payments_feeds') }}
 ),
 
 stg_cleaned_micropayments AS (
@@ -98,10 +100,11 @@ gtfs_routes_with_participant AS (
         g.calitp_extracted_at,
         g.calitp_deleted_at
 
-    FROM gtfs_schedule_dim_routes AS g
+    FROM dim_routes AS g
+    LEFT JOIN dim_gtfs_datasets AS d
+        ON g.base64_url = d.base64_url
     INNER JOIN payments_feeds AS p
-        ON g.calitp_itp_id = p.calitp_itp_id
-            AND g.calitp_url_number = p.calitp_url_number
+        ON d.key = p.gtfs_dataset_key
 ),
 
 debited_micropayments AS (
