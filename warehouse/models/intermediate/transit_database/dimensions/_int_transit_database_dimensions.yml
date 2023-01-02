@@ -34,3 +34,10 @@ models:
     tests: *mutually_exclusive_ranges
     columns:
       - *key
+  - name: int_transit_database__gtfs_datasets_dim
+    description: |
+      GTFS datasets data in slowly-changing-dimension format.
+      For detailed data definitions, see: https://docs.google.com/document/d/1KvlYRYB8cnyTOkT1Q0BbBmdQNguK_AMzhSV5ELXiZR4/edit/.
+    tests: *mutually_exclusive_ranges
+    columns:
+      - *key
