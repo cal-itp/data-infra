@@ -6,18 +6,21 @@
     ignore_cols = []) %}
 
 WITH safe_data AS (
-    SELECT * EXCEPT(
-        {% if array_cols %}
-        {% for col in array_cols %}
-        {{ col }} {% if not loop.last or ignore_cols %},{% endif %}
-        {% endfor %}
-        {% endif %}
-        {% if ignore_cols %}
-        {% for col in ignore_cols %}
-        {{ col }} {% if not loop.last %},{% endif %}
-        {% endfor %}
-        {% endif %}
-    )
+    SELECT *
+    {% if array_cols or ignore_cols %}
+        EXCEPT(
+            {% if array_cols %}
+            {% for col in array_cols %}
+            {{ col }} {% if not loop.last or ignore_cols %},{% endif %}
+            {% endfor %}
+            {% endif %}
+            {% if ignore_cols %}
+            {% for col in ignore_cols %}
+            {{ col }} {% if not loop.last %},{% endif %}
+            {% endfor %}
+            {% endif %}
+        )
+    {% endif %}
     {% if array_cols %},
     {% for col in array_cols %}
         ARRAY_TO_STRING({{ col }}, '--') AS {{ col }} {% if not loop.last %},{% endif %}
