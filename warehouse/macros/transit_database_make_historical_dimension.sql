@@ -2,17 +2,27 @@
     once_daily_staging_table,
     date_col,
     record_id_col,
-    array_cols) %}
+    array_cols = [],
+    ignore_cols = []) %}
 
 WITH safe_data AS (
     SELECT * EXCEPT(
+        {% if array_cols %}
         {% for col in array_cols %}
+        {{ col }} {% if not loop.last or ignore_cols %},{% endif %}
+        {% endfor %}
+        {% endif %}
+        {% if ignore_cols %}
+        {% for col in ignore_cols %}
         {{ col }} {% if not loop.last %},{% endif %}
         {% endfor %}
-    ),
+        {% endif %}
+    )
+    {% if array_cols %},
     {% for col in array_cols %}
         ARRAY_TO_STRING({{ col }}, '--') AS {{ col }} {% if not loop.last %},{% endif %}
     {% endfor %}
+    {% endif %}
     FROM {{ ref(once_daily_staging_table) }}
 ),
 
@@ -24,7 +34,7 @@ hashed AS (
         {{ dbt_utils.surrogate_key(
             dbt_utils.get_filtered_columns_in_relation(
                 from=ref(once_daily_staging_table),
-                except=[date_col]
+                except=[date_col] + ignore_cols
             )
             ) }} AS content_hash
     FROM safe_data
@@ -78,7 +88,13 @@ final AS (
     SELECT
         all_versioned.* EXCEPT(key, _valid_from),
         CAST(_valid_from AS TIMESTAMP) AS _valid_from,
-        orig.* EXCEPT({{ date_col }}),
+        orig.* EXCEPT({{ date_col }}
+        {% if ignore_cols %}
+        {% for col in ignore_cols %}
+        , {{ col }} {% if not loop.last %},{% endif %}
+        {% endfor %}
+        {% endif %}
+        ),
         _valid_to = {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }} AS _is_current
     FROM all_versioned
     LEFT JOIN {{ ref(once_daily_staging_table) }} AS orig
