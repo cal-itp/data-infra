@@ -19,7 +19,6 @@ stg_transit_database__eligibility_programs AS (
         appointment_duration__hours_,
         expected_process_turn_around_application_eligibility__days_,
         website,
-        ts,
         dt
     FROM once_daily_eligibility_programs
     LEFT JOIN UNNEST(once_daily_eligibility_programs.administering_entity) AS unnested_administering_entity

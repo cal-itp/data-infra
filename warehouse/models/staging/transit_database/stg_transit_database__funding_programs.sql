@@ -17,7 +17,6 @@ stg_transit_database__funding_programs AS (
         organization,
         category,
         drmt_data,
-        ts,
         dt
     FROM once_daily_funding_programs
 )

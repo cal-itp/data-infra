@@ -49,7 +49,6 @@ stg_transit_database__ntd_agency_info AS (
         volunteer_drivers,
         personal_vehicles,
         unnested_organizations AS organization_key,
-        ts,
         dt
     FROM once_daily_ntd_agency_info
     LEFT JOIN UNNEST(once_daily_ntd_agency_info.organizations) AS unnested_organizations

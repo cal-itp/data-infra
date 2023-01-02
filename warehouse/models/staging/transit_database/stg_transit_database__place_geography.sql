@@ -25,7 +25,6 @@ stg_transit_database__place_geography AS (
         rtpa__from_county_base_,
         mpo__from_county_base_,
         organizations_2,
-        ts,
         dt
     FROM once_daily_place_geography
     LEFT JOIN UNNEST(once_daily_place_geography.county_base) AS unnested_county_base

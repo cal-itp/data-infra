@@ -45,7 +45,6 @@ stg_transit_database__fare_systems AS (
         demand_response_fare_url,
         transit_services,
         itp_id,
-        ts,
         dt
     FROM once_daily_fare_systems
 )
