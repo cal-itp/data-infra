@@ -1,10 +1,7 @@
-{% docs fct_daily_schedule_feed_guideline_checks %}
+{% docs fct_daily_guideline_checks %}
 
-Each row represents a date/guideline check/feed combination, with pass/fail
+Each row represents a date/organization/service/feed/guideline/check combination, with pass/fail
 information indicating whether that feed complied with that check on that date.
-A row will exist for every check, for every row from the index which is driven
-by fct_daily_schedule_feeds. Only contains checks that are performed at the feed
-level.
 
 Here is a list of currently-implemented checks:
 
@@ -23,4 +20,16 @@ Here is a list of currently-implemented checks:
 |Passes Fares v2 portion of MobilityData GTFS Schedule Validator | Fare Completeness | For feeds containing at least one of the files: fare_leg_rules, rider_categories, fare_containers, fare_products, fare_transfer_rules, none of the following errors appear in the MobilityData GTFS Schedule Validator: fare_transfer_rule_duration_limit_type_without_duration_limit, fare_transfer_rule_duration_limit_without_type, fare_transfer_rule_invalid_transfer_count, fare_transfer_rule_missing_transfer_count, fare_transfer_rule_with_forbidden_transfer_count, invalid_currency_amount. |
 | No expired services are listed in the feed | Best Practices Alignment (Schedule) | Looking at both calendars.txt and calendar_dates.txt, no service_id's exist where the last in-effect date is in the past. |
 | All schedule changes in the last month have provided at least 7 days of lead time | Up-to-Dateness | All changes made in the last 30 days to stops.txt, stop_times.txt, calendar.txt, and calendar_dates.txt did not impact trips within seven days of when the update was made. |
+|Schedule feed downloads successfully | Compliance (Schedule) | On the given date, the schedule feed was downloaded and parsed successfully |
+|No critical errors in the MobilityData GTFS Realtime Validator | Compliance (RT) | The feed has at least one GTFS-RT file present on the given day, and GTFS Realtime Validator produced no critical errors for any RT feed extract on that day.|
+|All trip_ids provided in the GTFS-rt feed exist in the GTFS Schedule feed| Fixed-Route Completeness | Error code E003 does not appear in the MobilityData GTFS Realtime Validator on that day.|
+|Vehicle positions RT feed is present | Compliance (RT) | The vehicle positions RT feed contains at least one file on the given day.|
+| Trip updates RT feed is present | Compliance (RT) | The trip updates RT feed contains at least one file on the given day.|
+| Service alerts RT feed is present | Compliance (RT) | The service alerts RT feed contains at least one file on the given day.|
+| Service alerts RT feed uses HTTPS | Best Practice Alignment (RT) | The service alerts RT feed endpoint uses HTTPS instead of HTTPS to ensure feed integrity.|
+|Vehicle positions RT feed uses HTTPS | Best Practice Alignment (RT) | The vehicle positions RT feed endpoint uses HTTPS instead of HTTPS to ensure feed integrity.|
+| Trip updates RT feed uses HTTPS | Best Practice Alignment (RT) | The trip updates RT feed endpoint uses HTTPS instead of HTTPS to ensure feed integrity.|
+| Fewer than 1% of requests to Trip updates RT feed result in a protobuf error | Best Practice Alignment (RT) | On the given day, fewer than 1% of Trip updates RT feed downloads result in a protobuf error.|
+| Fewer than 1% of requests to Service alerts RT feed result in a protobuf error | Best Practice Alignment (RT) | On the given day, fewer than 1% of Service alerts RT feed downloads result in a protobuf error.|
+| Fewer than 1% of requests to Vehicle positions RT feed result in a protobuf error | Best Practice Alignment (RT) | On the given day, fewer than 1% of Vehicle positions RT feed downloads result in a protobuf error.|
 {% enddocs %}
