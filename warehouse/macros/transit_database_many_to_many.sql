@@ -46,3 +46,41 @@
     FULL OUTER JOIN unnested_table_b USING({{ table_a_key_col_name }}, {{ table_b_key_col_name }}, {{ shared_date_name }})
 
 {% endmacro %}
+
+{% macro transit_database_many_to_many2(
+    shared_date_name,
+    table_a = {},
+    table_b = {}
+    ) %}
+
+    -- TODO: refactor this to take individual dict inputs for each table instead of so many prefixed fields
+    -- follow Airflow sandbox example for unnesting airtable data
+
+    WITH
+    unnested_table_a AS (
+        SELECT
+            T1.{{ table_a['key_col'] }} AS {{ table_a['key_col_name'] }}
+            , T1.{{ table_a['name_col'] }} AS {{ table_a['name_col_name'] }}
+            , CAST({{ table_a['join_col'] }} AS STRING) AS {{ table_b['key_col_name'] }}
+            , T1.{{ table_a['date_col'] }} AS {{ shared_date_name }}
+        FROM
+            {{ table_a['name'] }} T1
+            , UNNEST({{ table_a['join_col'] }}) {{ table_a['join_col'] }}
+    ),
+
+    unnested_table_b AS (
+        SELECT
+            T2.{{ table_b['key_col'] }} AS {{ table_b['key_col_name'] }}
+            , T2.{{ table_b['name_col'] }} AS {{ table_b['name_col_name'] }}
+            , CAST({{ table_b['join_col'] }} AS STRING) AS {{ table_a['key_col_name'] }}
+            , T2.{{ table_a['date_col'] }} AS {{ shared_date_name }}
+        FROM
+            {{ table_b['name'] }} T2
+            , UNNEST({{ table_b['join_col'] }}) {{ table_b['join_col'] }}
+    )
+
+    SELECT *
+    FROM unnested_table_a
+    FULL OUTER JOIN unnested_table_b USING({{ table_a['key_col_name'] }}, {{ table_b['key_col_name'] }}, {{ shared_date_name }})
+
+{% endmacro %}
