@@ -7,16 +7,29 @@ WITH latest_contracts AS (
         ) }}
 ),
 
+-- TODO: make this table actually historical
+historical AS (
+    SELECT
+        *,
+        TRUE AS _is_current,
+        CAST((MIN(dt) OVER (ORDER BY dt)) AS TIMESTAMP) AS _valid_from,
+        {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }} AS _valid_to
+    FROM latest_contracts
+),
+
 
 dim_contract_attachments AS (
     SELECT
-        unnested_attachments.id AS key,
-        latest_contracts.key AS contract_key,
-        latest_contracts.name AS contract_name,
+        {{ dbt_utils.surrogate_key(['unnested_attachments.id', '_valid_from']) }} AS key,
+        -- TODO: fix this -- this is not a valid foreign key
+        historical.id AS contract_key,
+        historical.name AS contract_name,
         unnested_attachments.url AS attachment_url,
-        latest_contracts.dt
-    FROM latest_contracts,
-        latest_contracts.attachments AS unnested_attachments
+        _is_current,
+        _valid_from,
+        _valid_to
+    FROM historical,
+        historical.attachments AS unnested_attachments
 )
 
 SELECT * FROM dim_contract_attachments

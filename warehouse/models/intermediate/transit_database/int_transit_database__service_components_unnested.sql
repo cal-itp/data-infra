@@ -9,7 +9,7 @@ WITH latest AS (
 
 stg_transit_database__service_components_unnested AS (
     SELECT
-        key,
+        id,
         service_key,
         product_key,
         component_key,

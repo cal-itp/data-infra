@@ -19,7 +19,7 @@ dim_products AS (
 
 ranked_service_components AS (
     SELECT
-        key,
+        id,
         service_key,
         product_key,
         component_key,
@@ -28,15 +28,26 @@ ranked_service_components AS (
         notes,
         ROW_NUMBER() OVER
             (PARTITION BY service_key, product_key, component_key
-            ORDER BY key) AS rank,
+            ORDER BY id) AS rank,
         dt
     FROM latest_service_components
     QUALIFY rank = 1
 ),
 
+-- TODO: make this table actually historical
+historical AS (
+    SELECT
+        *,
+        TRUE AS _is_current,
+        CAST((MIN(dt) OVER (ORDER BY dt)) AS TIMESTAMP) AS _valid_from,
+        {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }} AS _valid_to
+    FROM ranked_service_components
+),
+
+-- join SCD tables: https://sqlsunday.com/2014/11/30/joining-two-scd2-tables/
 dim_service_components AS (
     SELECT
-        {{ farm_surrogate_key(['service_key', 'product_key', 'component_key', 't1.dt']) }} AS key,
+        {{ dbt_utils.surrogate_key(['t1.id', 'GREATEST(t1._valid_from, t2._valid_from, t3._valid_from, t5._valid_from)']) }} AS key,
         t1.service_key,
         t2.name AS service_name,
         t1.product_key,
@@ -46,17 +57,22 @@ dim_service_components AS (
         t1.ntd_certified,
         t1.product_component_valid,
         t1.notes,
-        t1.dt
-    FROM ranked_service_components AS t1
+        t1._is_current,
+        GREATEST(t1._valid_from, t2._valid_from, t3._valid_from, t5._valid_from) AS _valid_from,
+        LEAST(t1._valid_to, t2._valid_to, t3._valid_to, t5._valid_to) AS _valid_to
+    FROM historical AS t1
     LEFT JOIN dim_services AS t2
         ON t1.service_key = t2.key
-        AND t1.dt = t2.dt
+        AND t1._valid_from < t2._valid_to
+        AND t1._valid_to > t2._valid_from
     LEFT JOIN dim_products AS t3
         ON t1.product_key = t3.key
-        AND t1.dt = t2.dt
+        AND t1._valid_from < t3._valid_to
+        AND t1._valid_to > t3._valid_from
     LEFT JOIN dim_components AS t5
         ON t1.component_key = t5.key
-        AND t1.dt = t2.dt
+        AND t1._valid_from < t5._valid_to
+        AND t1._valid_to > t5._valid_from
 )
 
 SELECT * FROM dim_service_components

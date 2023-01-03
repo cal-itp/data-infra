@@ -7,9 +7,19 @@ WITH latest_ntd_agency_info AS (
         ) }}
 ),
 
+-- TODO: make this table actually historical
+historical AS (
+    SELECT
+        *,
+        TRUE AS _is_current,
+        CAST((MIN(dt) OVER (ORDER BY dt)) AS TIMESTAMP) AS _valid_from,
+        {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }} AS _valid_to
+    FROM latest_ntd_agency_info
+),
+
 dim_ntd_agency_info AS (
     SELECT
-        key,
+        {{ dbt_utils.surrogate_key(['id', '_valid_from']) }} AS key,
         ntd_id,
         legacy_ntd_id,
         agency_name AS ntd_agency_name,
@@ -49,8 +59,10 @@ dim_ntd_agency_info AS (
         volunteer_drivers,
         personal_vehicles,
         organization_key,
-        dt
-    FROM latest_ntd_agency_info
+        _is_current,
+        _valid_from,
+        _valid_to
+    FROM historical
 )
 
 SELECT * FROM dim_ntd_agency_info

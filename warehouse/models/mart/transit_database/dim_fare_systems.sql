@@ -7,9 +7,20 @@ WITH latest_fare_systems AS (
         ) }}
 ),
 
+-- TODO: make this table actually historical
+historical AS (
+    SELECT
+        *,
+        TRUE AS _is_current,
+        CAST((MIN(dt) OVER (ORDER BY dt)) AS TIMESTAMP) AS _valid_from,
+        {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }} AS _valid_to
+    FROM latest_fare_systems
+),
+
+
 dim_fare_systems AS (
     SELECT
-        key,
+        {{ dbt_utils.surrogate_key(['id', '_valid_from']) }} AS key,
         fare_system,
         fares_based_on_zone,
         fares_based_on_route,
@@ -44,9 +55,10 @@ dim_fare_systems AS (
         paratransit_fare_url,
         demand_response_fare_url,
         itp_id,
-        ts,
-        dt
-    FROM latest_fare_systems
+        _is_current,
+        _valid_from,
+        _valid_to
+    FROM historical
 )
 
 SELECT * FROM dim_fare_systems
