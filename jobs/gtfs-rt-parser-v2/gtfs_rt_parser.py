@@ -9,6 +9,7 @@ import hashlib
 import json
 import os
 import subprocess
+import sys
 import tempfile
 import traceback
 from collections import defaultdict
@@ -21,6 +22,7 @@ from typing import ClassVar, Dict, List, Optional, Sequence, Tuple, Union, Any
 import backoff  # type: ignore
 import gcsfs
 import pendulum
+import sentry_sdk
 import typer
 from aiohttp.client_exceptions import (
     ClientOSError,
@@ -101,7 +103,7 @@ class RTValidationMetadata(BaseModel):
 def log(*args, err=False, fg=None, pbar=None, **kwargs):
     # capture fg so we don't pass it to pbar
     if pbar:
-        pbar.write(*args, **kwargs)
+        pbar.write(*args, **kwargs, file=sys.stderr if err else None)
     else:
         typer.secho(*args, err=err, fg=fg, **kwargs)
 
@@ -617,6 +619,7 @@ def parse_and_validate(
                 pbar=pbar,
             )
         except (ScheduleDataNotFound, subprocess.CalledProcessError) as e:
+            sentry_sdk.capture_exception(e)
             if verbose:
                 log(
                     f"{str(e)} thrown for {hour.path}",
@@ -667,6 +670,7 @@ def main(
     verbose: bool = False,
     base64url: str = None,
 ):
+    sentry_sdk.init()
     pendulum_hour = pendulum.instance(hour, tz="Etc/UTC")
     files: List[GTFSRTFeedExtract]
     files_missing_metadata: List[Blob]
@@ -791,6 +795,7 @@ def main(
                         fg=typer.colors.RED,
                         pbar=pbar,
                     )
+                    sentry_sdk.capture_exception(e)
                     exceptions.append((e, hour.path, traceback.format_exc()))
 
     if pbar:
@@ -817,6 +822,7 @@ def main(
         raise RuntimeError(msg)
 
     typer.secho("fin.", fg=typer.colors.MAGENTA)
+    sentry_sdk.flush()
 
 
 if __name__ == "__main__":
