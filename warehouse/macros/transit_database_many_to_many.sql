@@ -48,7 +48,8 @@
 {% endmacro %}
 
 {% macro transit_database_many_to_many2(
-    shared_date_name,
+    shared_start_date_name,
+    shared_end_date_name,
     table_a = {},
     table_b = {}
     ) %}
@@ -62,7 +63,8 @@
             T1.{{ table_a['key_col'] }} AS {{ table_a['key_col_name'] }}
             , T1.{{ table_a['name_col'] }} AS {{ table_a['name_col_name'] }}
             , CAST({{ table_a['join_col'] }} AS STRING) AS {{ table_b['key_col_name'] }}
-            , T1.{{ table_a['date_col'] }} AS {{ shared_date_name }}
+            , T1.{{ table_a['start_date_col'] }} AS {{ shared_start_date_name }}
+            , T1.{{ table_a['end_date_col'] }} AS {{ shared_end_date_name }}
         FROM
             {{ table_a['name'] }} T1
             , UNNEST({{ table_a['join_col'] }}) {{ table_a['join_col'] }}
@@ -73,14 +75,25 @@
             T2.{{ table_b['key_col'] }} AS {{ table_b['key_col_name'] }}
             , T2.{{ table_b['name_col'] }} AS {{ table_b['name_col_name'] }}
             , CAST({{ table_b['join_col'] }} AS STRING) AS {{ table_a['key_col_name'] }}
-            , T2.{{ table_a['date_col'] }} AS {{ shared_date_name }}
+            , T2.{{ table_b['start_date_col'] }} AS {{ shared_start_date_name }}
+            , T2.{{ table_b['end_date_col'] }} AS {{ shared_end_date_name }}
         FROM
             {{ table_b['name'] }} T2
             , UNNEST({{ table_b['join_col'] }}) {{ table_b['join_col'] }}
     )
 
-    SELECT *
+    SELECT
+        COALESCE(unnested_table_a.{{ table_a['key_col_name'] }}, unnested_table_b.{{ table_a['key_col_name'] }}) AS {{ table_a['key_col_name'] }},
+        COALESCE(unnested_table_b.{{ table_b['key_col_name'] }}, unnested_table_a.{{ table_b['key_col_name'] }}) AS {{ table_b['key_col_name'] }},
+        unnested_table_a. {{ table_a['name_col_name'] }},
+        unnested_table_b. {{ table_b['name_col_name'] }},
+        GREATEST(unnested_table_a.{{ shared_start_date_name }}, unnested_table_b.{{ shared_start_date_name }}) AS {{ shared_start_date_name }},
+        LEAST(unnested_table_a.{{ shared_end_date_name }}, unnested_table_b.{{ shared_end_date_name }}) AS {{ shared_end_date_name }}
     FROM unnested_table_a
-    FULL OUTER JOIN unnested_table_b USING({{ table_a['key_col_name'] }}, {{ table_b['key_col_name'] }}, {{ shared_date_name }})
+    FULL OUTER JOIN unnested_table_b
+        ON unnested_table_a.{{ table_a['key_col_name'] }} = unnested_table_b.{{ table_a['key_col_name'] }}
+        AND unnested_table_b.{{ table_b['key_col_name'] }} = unnested_table_a.{{ table_b['key_col_name'] }}
+        AND unnested_table_a.{{ shared_start_date_name }} < unnested_table_b.{{ shared_end_date_name }}
+        AND unnested_table_a.{{ shared_end_date_name }} > unnested_table_b.{{ shared_start_date_name }}
 
 {% endmacro %}
