@@ -8,10 +8,17 @@ RUN apt-get update -y \
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python3 -
 ENV PATH="/root/.local/bin:${PATH}"
 
-ENV GTFS_SCHEDULE_VALIDATOR_JAR=/gtfs-validator-4.0.0-cli.jar
-ENV GTFS_SCHEDULE_VALIDATOR_VERSION=v4.0.0
-# from https://github.com/MobilityData/gtfs-validator/releases/download/v4.0.0/gtfs-validator-4.0.0-cli.jar
-COPY ./gtfs-validator-4.0.0-cli.jar ${GTFS_SCHEDULE_VALIDATOR_JAR}
+# v2 from https://github.com/MobilityData/gtfs-validator/releases/download/v2.0.0/gtfs-validator-v2.0.0_cli.jar
+ENV V2_VALIDATOR_JAR=/gtfs-validator-v2.0.0_cli.jar
+COPY ./gtfs-validator-v2.0.0_cli.jar ${V2_VALIDATOR_JAR}
+
+# v3 from https://github.com/MobilityData/gtfs-validator/releases/download/v3.1.1/gtfs-validator-3.1.1-cli.jar
+ENV V3_VALIDATOR_JAR=/gtfs-validator-3.1.1-cli.jar
+COPY ./gtfs-validator-3.1.1-cli.jar ${V3_VALIDATOR_JAR}
+
+# v4 from https://github.com/MobilityData/gtfs-validator/releases/download/v4.0.0/gtfs-validator-4.0.0-cli.jar
+ENV V4_VALIDATOR_JAR=/gtfs-validator-4.0.0-cli.jar
+COPY ./gtfs-validator-4.0.0-cli.jar ${V4_VALIDATOR_JAR}
 
 WORKDIR /app
 

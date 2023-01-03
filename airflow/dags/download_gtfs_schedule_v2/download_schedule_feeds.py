@@ -37,6 +37,7 @@ GTFS_FEED_LIST_ERROR_THRESHOLD = 0.95
 class GTFSDownloadOutcome(ProcessingOutcome):
     config: GTFSDownloadConfig
     extract: Optional[GTFSScheduleFeedExtract]
+    backfilled: bool = False
 
 
 class DownloadFeedsResult(PartitionedGCSArtifact):
@@ -46,6 +47,7 @@ class DownloadFeedsResult(PartitionedGCSArtifact):
     ts: pendulum.DateTime
     end: pendulum.DateTime
     outcomes: List[GTFSDownloadOutcome]
+    backfilled: bool = False
 
     @validator("filename", allow_reuse=True)
     def is_jsonl(cls, v):
