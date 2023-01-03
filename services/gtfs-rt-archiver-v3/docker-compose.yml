@@ -12,6 +12,8 @@ x-gtfs-rt-archiver-v3-common:
     CALITP_HUEY_CONSUMER_WORKERS: 4
     SENTRY_DSN: $SENTRY_DSN
     SENTRY_ENVIRONMENT: "development"
+    LAST_FETCH_FILE: /tmp/fetch
+    LAST_TICK_FILE: /tmp/tick
 services:
   redis:
     image: redis:5.0.4
