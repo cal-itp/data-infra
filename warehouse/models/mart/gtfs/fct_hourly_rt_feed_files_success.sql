@@ -12,12 +12,11 @@ WITH
 int_gtfs_rt__daily_url_index AS (
     SELECT *
     FROM {{ ref('int_gtfs_rt__daily_url_index') }}
+    WHERE data_quality_pipeline
     {% if is_incremental() %}
-    WHERE dt >= DATE '{{ max_date }}'
-        AND data_quality_pipeline
+    AND dt >= DATE '{{ max_date }}'
     {% else %}
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('INCREMENTAL_PARTITIONS_LOOKBACK_DAYS') }} DAY)
-        AND data_quality_pipeline
+    AND dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('INCREMENTAL_PARTITIONS_LOOKBACK_DAYS') }} DAY)
     {% endif %}
 ),
 
@@ -32,7 +31,7 @@ parse_outcomes AS (
     {% if is_incremental() %}
     WHERE dt >= DATE '{{ max_date }}'
     {% else %}
-        WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('INCREMENTAL_PARTITIONS_LOOKBACK_DAYS') }} DAY)
+    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('INCREMENTAL_PARTITIONS_LOOKBACK_DAYS') }} DAY)
     {% endif %}
 ),
 
