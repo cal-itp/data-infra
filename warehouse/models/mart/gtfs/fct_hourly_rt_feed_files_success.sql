@@ -12,11 +12,12 @@ WITH
 int_gtfs_rt__daily_url_index AS (
     SELECT *
     FROM {{ ref('int_gtfs_rt__daily_url_index') }}
-),
-
-int_gtfs_rt__unioned_parse_outcomes AS (
-    SELECT *
-    FROM {{ ref('int_gtfs_rt__unioned_parse_outcomes') }}
+    WHERE data_quality_pipeline
+    {% if is_incremental() %}
+    AND dt >= DATE '{{ max_date }}'
+    {% else %}
+    AND dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('INCREMENTAL_PARTITIONS_LOOKBACK_DAYS') }} DAY)
+    {% endif %}
 ),
 
 fct_daily_rt_feed_files AS (
@@ -26,11 +27,11 @@ fct_daily_rt_feed_files AS (
 
 parse_outcomes AS (
     SELECT *
-    FROM int_gtfs_rt__unioned_parse_outcomes
+    FROM {{ ref('int_gtfs_rt__unioned_parse_outcomes') }}
     {% if is_incremental() %}
     WHERE dt >= DATE '{{ max_date }}'
     {% else %}
-        WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('INCREMENTAL_PARTITIONS_LOOKBACK_DAYS') }} DAY)
+    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('INCREMENTAL_PARTITIONS_LOOKBACK_DAYS') }} DAY)
     {% endif %}
 ),
 
