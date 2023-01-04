@@ -1190,6 +1190,9 @@ models:
               to: ref('dim_trips')
               field: key
       - name: trip_id
+      - name: trip_short_name
+      - name: direction_id
+      - name: block_id
       - name: route_key
         description: Foreign key to dim_routes.
         tests:
@@ -1197,6 +1200,10 @@ models:
               to: ref('dim_routes')
               field: key
       - name: route_id
+      - name: route_type
+      - name: route_short_name
+      - name: route_long_name
+      - name: route_desc
       - name: shape_array_key
         description: Foreign key to dim_shapes_arrays.
         tests:
