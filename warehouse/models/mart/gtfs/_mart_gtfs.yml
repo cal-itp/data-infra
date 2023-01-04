@@ -1177,6 +1177,8 @@ models:
           - relationships:
               to: ref('dim_schedule_feeds')
               field: key
+      - name: name
+      - name: regional_feed_type
       - name: service_date
         description: Date on which this trip was active.
       - name: service_id

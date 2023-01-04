@@ -31,12 +31,20 @@ stop_times_grouped AS (
     SELECT * FROM {{ ref('int_gtfs_schedule__stop_times_grouped') }}
 ),
 
+dim_gtfs_datasets AS (
+    SELECT *
+    FROM {{ ref('dim_gtfs_datasets') }}
+),
+
 fct_daily_scheduled_trips AS (
     SELECT
         {{ dbt_utils.surrogate_key(['service_index.service_date', 'trips.key']) }} AS key,
         service_index.service_date,
         service_index.feed_key,
         service_index.service_id,
+
+        dim_gtfs_datasets.name,
+        dim_gtfs_datasets.regional_feed_type,
 
         trips.key AS trip_key,
         trips.trip_id AS trip_id,
@@ -85,6 +93,8 @@ fct_daily_scheduled_trips AS (
     LEFT JOIN stop_times_grouped
         ON service_index.feed_key = stop_times_grouped.feed_key
             AND trips.trip_id = stop_times_grouped.trip_id
+    LEFT JOIN dim_gtfs_datasets
+        ON urls_to_gtfs_datasets.gtfs_dataset_key = dim_gtfs_datasets.key
 )
 
 SELECT * FROM fct_daily_scheduled_trips
