@@ -23,6 +23,7 @@ fct_schedule_feeds AS (
         j.base64_url,
         j.download_success,
         j.download_exception,
+        last_modified_timestamp,
         j.unzip_success,
         j.unzip_exception,
         j.zipfile_extract_md5hash,
