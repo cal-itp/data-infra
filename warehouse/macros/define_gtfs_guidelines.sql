@@ -136,6 +136,10 @@
 "Schedule feed maintains persistent identifiers for stop_id, route_id, and agency_id"
 {% endmacro %}
 
+{% macro no_stale_vehicle_positions() %}
+"Data within a GTFS Realtime feed should not be older than 90 seconds for Trip Updates and Vehicle Positions and not older than 10 minutes for Service Alerts. For example, even if a producer is continuously refreshing the FeedHeader.timestamp timestamp every 30 seconds, the age of VehiclePositions within that feed should not be older than 90 seconds."
+{% endmacro %}
+
 -- declare features
 {% macro compliance_schedule() %}
 "Compliance (Schedule)"

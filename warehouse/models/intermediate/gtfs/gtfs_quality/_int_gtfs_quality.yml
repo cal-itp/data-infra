@@ -226,6 +226,20 @@ models:
     tests: *stg_gtfs_guideline_tests_rt
     columns: *stg_gtfs_guideline_columns
 
+  - name: int_gtfs_quality__no_stale_vehicle_positions
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - base64_url
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__rt_feed_guideline_index_vp')
+    columns:
+      - name: status
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.8
+
   - name: int_gtfs_quality__schedule_download_success
     tests: &stg_gtfs_guideline_tests_schedule_feed
       - dbt_utils.unique_combination_of_columns:
