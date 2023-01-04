@@ -12,6 +12,8 @@ WITH
 int_gtfs_rt__daily_url_index AS (
     SELECT *
     FROM {{ ref('int_gtfs_rt__daily_url_index') }}
+    WHERE data_quality_pipeline IS TRUE
+
 ),
 
 int_gtfs_rt__unioned_parse_outcomes AS (
