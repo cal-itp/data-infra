@@ -26,15 +26,15 @@ bridge_organizations_x_services_managed AS (
         'end_date_col': '_valid_to'},
 
     table_b = {'name': 'services',
-    'unversioned_key_col': 'original_record_id',
-    'versioned_key_col': 'key',
-    'key_col_name': 'service_key',
-    'name_col': 'name',
-    'name_col_name': 'service_name',
-    'unversioned_join_col': 'provider',
-    'start_date_col': '_valid_from',
-    'end_date_col': '_valid_to'}
- ) }}
+        'unversioned_key_col': 'original_record_id',
+        'versioned_key_col': 'key',
+        'key_col_name': 'service_key',
+        'name_col': 'name',
+        'name_col_name': 'service_name',
+        'unversioned_join_col': 'provider',
+        'start_date_col': '_valid_from',
+        'end_date_col': '_valid_to'}
+    ) }}
 )
 
 SELECT * FROM bridge_organizations_x_services_managed
