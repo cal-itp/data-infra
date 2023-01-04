@@ -41,3 +41,57 @@ models:
     tests: *mutually_exclusive_ranges
     columns:
       - *key
+  - name: int_transit_database__components_dim
+    description: |
+      Components data in *artificial* slowly-changing-dimension format (current-only data with effective dates).
+    tests: *mutually_exclusive_ranges
+    columns:
+      - *key
+  - name: int_transit_database__products_dim
+    description: |
+      Products data in *artificial* slowly-changing-dimension format (current-only data with effective dates).
+    tests: *mutually_exclusive_ranges
+    columns:
+      - *key
+  - name: int_transit_database__properties_and_features_dim
+    description: |
+      Properties and features data in *artificial* slowly-changing-dimension format (current-only data with effective dates).
+    tests: *mutually_exclusive_ranges
+    columns:
+      - *key
+  - name: int_transit_database__contracts_dim
+    description: |
+      Contracts data in *artificial* slowly-changing-dimension format (current-only data with effective dates).
+    tests: *mutually_exclusive_ranges
+    columns:
+      - *key
+  - name: int_transit_database__data_schemas_dim
+    description: |
+      Data schemas data in *artificial* slowly-changing-dimension format (current-only data with effective dates).
+    tests: *mutually_exclusive_ranges
+    columns:
+      - *key
+  - name: int_transit_database__fare_systems_dim
+    description: |
+      Fare systems data in *artificial* slowly-changing-dimension format (current-only data with effective dates).
+    tests: *mutually_exclusive_ranges
+    columns:
+      - *key
+  - name: int_transit_database__funding_programs_dim
+    description: |
+      Funding programs data in *artificial* slowly-changing-dimension format (current-only data with effective dates).
+    tests: *mutually_exclusive_ranges
+    columns:
+      - *key
+  - name: int_transit_database__service_components_dim
+    description: |
+      Service components data in *artificial* slowly-changing-dimension format (current-only data with effective dates).
+    tests: *mutually_exclusive_ranges
+    columns:
+      - *key
+  - name: int_transit_database__ntd_agency_info_dim
+    description: |
+      NTD agency information data in *artificial* slowly-changing-dimension format (current-only data with effective dates).
+    tests: *mutually_exclusive_ranges
+    columns:
+      - *key

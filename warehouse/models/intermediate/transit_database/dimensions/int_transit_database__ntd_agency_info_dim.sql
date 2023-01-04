@@ -1,16 +1,29 @@
 {{ config(materialized='table') }}
 
-WITH int_transit_database__ntd_agency_info_dim AS (
-    SELECT *
-    FROM {{ ref('int_transit_database__ntd_agency_info_dim') }}
+WITH latest_ntd_agency_info AS (
+    {{ get_latest_dense_rank(
+        external_table = ref('stg_transit_database__ntd_agency_info'),
+        order_by = 'dt DESC'
+        ) }}
 ),
 
-dim_ntd_agency_info AS (
+-- TODO: make this table actually historical
+historical AS (
     SELECT
-        key,
+        *,
+        TRUE AS _is_current,
+        CAST((MIN(dt) OVER (ORDER BY dt)) AS TIMESTAMP) AS _valid_from,
+        {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }} AS _valid_to
+    FROM latest_ntd_agency_info
+),
+
+int_transit_database__ntd_agency_info_dim AS (
+    SELECT
+        {{ dbt_utils.surrogate_key(['id', '_valid_from']) }} AS key,
+        id AS original_record_id,
         ntd_id,
         legacy_ntd_id,
-        ntd_agency_name,
+        agency_name AS ntd_agency_name,
         reporter_acronym,
         doing_business_as,
         reporter_status,
@@ -50,7 +63,7 @@ dim_ntd_agency_info AS (
         _is_current,
         _valid_from,
         _valid_to
-    FROM int_transit_database__ntd_agency_info_dim
+    FROM historical
 )
 
-SELECT * FROM dim_ntd_agency_info
+SELECT * FROM int_transit_database__ntd_agency_info_dim

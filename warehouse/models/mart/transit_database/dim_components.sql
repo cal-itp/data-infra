@@ -1,25 +1,13 @@
 {{ config(materialized='table') }}
 
-WITH latest AS (
-    {{ get_latest_dense_rank(
-        external_table = ref('stg_transit_database__components'),
-        order_by = 'dt DESC'
-        ) }}
-),
-
--- TODO: make this table actually historical
-historical AS (
-    SELECT
-        *,
-        TRUE AS _is_current,
-        CAST((MIN(dt) OVER (ORDER BY dt)) AS TIMESTAMP) AS _valid_from,
-        {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }} AS _valid_to
-    FROM latest
+WITH int_transit_database__components_dim AS (
+    SELECT *
+    FROM {{ ref('int_transit_database__components_dim') }}
 ),
 
 dim_components AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['id', '_valid_from']) }} AS key,
+        key,
         name,
         aliases,
         description,
@@ -29,7 +17,7 @@ dim_components AS (
         _is_current,
         _valid_from,
         _valid_to
-    FROM historical
+    FROM int_transit_database__components_dim
 )
 
 SELECT * FROM dim_components
