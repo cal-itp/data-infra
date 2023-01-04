@@ -24,6 +24,8 @@ extensions = [
     "sphinx_book_theme",
     "sphinxcontrib.mermaid",
     "sphinx_jupyterbook_latex",
+    # https://github.com/spatialaudio/nbsphinx/issues/687
+    "IPython.sphinxext.ipython_console_highlighting",
 ]
 external_toc_exclude_missing = False
 external_toc_path = "_toc.yml"

@@ -9,6 +9,7 @@ import hashlib
 import json
 import os
 import subprocess
+import sys
 import tempfile
 import traceback
 from collections import defaultdict
@@ -21,6 +22,7 @@ from typing import ClassVar, Dict, List, Optional, Sequence, Tuple, Union, Any
 import backoff  # type: ignore
 import gcsfs
 import pendulum
+import sentry_sdk
 import typer
 from aiohttp.client_exceptions import (
     ClientOSError,
@@ -101,7 +103,7 @@ class RTValidationMetadata(BaseModel):
 def log(*args, err=False, fg=None, pbar=None, **kwargs):
     # capture fg so we don't pass it to pbar
     if pbar:
-        pbar.write(*args, **kwargs)
+        pbar.write(*args, **kwargs, file=sys.stderr if err else None)
     else:
         typer.secho(*args, err=err, fg=fg, **kwargs)
 
@@ -307,15 +309,16 @@ def put_with_retry(fs, *args, **kwargs):
 def download_gtfs_schedule_zip(
     fs,
     schedule_extract: GTFSFeedExtract,
-    dst_path: str,
+    dst_dir: str,
     pbar=None,
 ) -> str:
     # fetch and zip gtfs schedule
+    full_dst_path = "/".join([dst_dir, schedule_extract.filename])
     log(
-        f"Fetching gtfs schedule data from {schedule_extract.path} to {dst_path}",
+        f"Fetching gtfs schedule data from {schedule_extract.path} to {full_dst_path}",
         pbar=pbar,
     )
-    get_with_retry(fs, schedule_extract.path, dst_path, recursive=True)
+    get_with_retry(fs, schedule_extract.path, full_dst_path)
 
     # https://github.com/MobilityData/gtfs-realtime-validator/issues/92
     # try:
@@ -323,7 +326,7 @@ def download_gtfs_schedule_zip(
     # except FileNotFoundError:
     #     pass
 
-    return "/".join([dst_path, schedule_extract.filename])
+    return full_dst_path
 
 
 def execute_rt_validator(
@@ -369,7 +372,7 @@ def validate_and_upload(
         gtfs_zip = download_gtfs_schedule_zip(
             fs,
             schedule_extract=schedule_extract,
-            dst_path=tmp_dir,
+            dst_dir=tmp_dir,
             pbar=pbar,
         )
     except (KeyError, FileNotFoundError) as e:
@@ -616,6 +619,7 @@ def parse_and_validate(
                 pbar=pbar,
             )
         except (ScheduleDataNotFound, subprocess.CalledProcessError) as e:
+            sentry_sdk.capture_exception(e)
             if verbose:
                 log(
                     f"{str(e)} thrown for {hour.path}",
@@ -624,7 +628,7 @@ def parse_and_validate(
                 )
                 if isinstance(e, subprocess.CalledProcessError):
                     log(
-                        e.stderr,
+                        e.stderr.decode("utf-8"),
                         fg=typer.colors.YELLOW,
                         pbar=pbar,
                     )
@@ -666,6 +670,7 @@ def main(
     verbose: bool = False,
     base64url: str = None,
 ):
+    sentry_sdk.init()
     pendulum_hour = pendulum.instance(hour, tz="Etc/UTC")
     files: List[GTFSRTFeedExtract]
     files_missing_metadata: List[Blob]
@@ -790,6 +795,7 @@ def main(
                         fg=typer.colors.RED,
                         pbar=pbar,
                     )
+                    sentry_sdk.capture_exception(e)
                     exceptions.append((e, hour.path, traceback.format_exc()))
 
     if pbar:
@@ -816,6 +822,7 @@ def main(
         raise RuntimeError(msg)
 
     typer.secho("fin.", fg=typer.colors.MAGENTA)
+    sentry_sdk.flush()
 
 
 if __name__ == "__main__":
