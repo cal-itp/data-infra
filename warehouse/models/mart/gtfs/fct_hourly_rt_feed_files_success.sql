@@ -12,7 +12,7 @@ WITH
 int_gtfs_rt__daily_url_index AS (
     SELECT *
     FROM {{ ref('int_gtfs_rt__daily_url_index') }}
-    WHERE data_quality_pipeline IS TRUE
+    WHERE use_in_data_quality_pipeline
 
 ),
 

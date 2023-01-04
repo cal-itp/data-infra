@@ -400,7 +400,7 @@ models:
           RT data type: "GTFS Alerts", "GTFS VehiclePositions", "GTFS TripUpdates".
         tests:
           - not_null
-      - name: data_quality_pipeline
+      - name: use_in_data_quality_pipeline
   - name: int_gtfs_schedule__all_scheduled_service
     description: |
       **Use with caution: This table lists service for all feeds, regardless of whether the given feed
