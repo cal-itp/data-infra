@@ -1179,6 +1179,15 @@ models:
               field: key
       - name: name
       - name: regional_feed_type
+        description: |
+          Describes whether this feed is a combined regional feed or has a relation
+          to a combined regional feed in some manner.
+          For example for MTC 511, the combined regional feed has type "Combined
+          Regional Feed", and the MTC-published subfeeds have type "Regional Subfeed".
+          If you are performing an analysis where using a regional combined feed is
+          inappropriate (even though that is the customer-facing data), this field can
+          help you assess other alternative feeds for the same services and organizations.
+          Not specified (null) for feeds with no relationship to regional feeds.
       - name: service_date
         description: Date on which this trip was active.
       - name: service_id
@@ -1192,9 +1201,13 @@ models:
               to: ref('dim_trips')
               field: key
       - name: trip_id
+        description: '{{ doc("gtfs_trips__trip_id") }}'
       - name: trip_short_name
+        description: '{{ doc("gtfs_trips__trip_short_name") }}'
       - name: direction_id
+        description: '{{ doc("gtfs_trips__direction_id") }}'
       - name: block_id
+        description: '{{ doc("gtfs_trips__block_id") }}'
       - name: route_key
         description: Foreign key to dim_routes.
         tests:
@@ -1202,10 +1215,15 @@ models:
               to: ref('dim_routes')
               field: key
       - name: route_id
+        description: '{{ doc("gtfs_routes__route_id") }}'
       - name: route_type
+        description: '{{ doc("gtfs_routes__route_type") }}'
       - name: route_short_name
+        description: '{{ doc("gtfs_routes__route_short_name") }}'
       - name: route_long_name
+        description: '{{ doc("gtfs_routes__route_long_name") }}'
       - name: route_desc
+        description: '{{ doc("gtfs_routes__route_desc") }}'
       - name: shape_array_key
         description: Foreign key to dim_shapes_arrays.
         tests:

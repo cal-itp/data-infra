@@ -48,8 +48,6 @@ fct_daily_scheduled_trips AS (
 
         trips.key AS trip_key,
         trips.trip_id AS trip_id,
-
-        --trips.route_id,
         trips.trip_short_name,
         trips.direction_id,
         trips.block_id,
@@ -58,7 +56,6 @@ fct_daily_scheduled_trips AS (
         routes.route_id AS route_id,
         routes.agency_id AS agency_id,
         routes.network_id AS network_id,
-
         routes.route_type,
         routes.route_short_name,
         routes.route_long_name,
