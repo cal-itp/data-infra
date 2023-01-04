@@ -199,6 +199,7 @@ feature
 -- queries
 -- For use in int_gtfs_quality__persistent_ids_schedule:
 {% macro ids_version_compare_aggregate(id, dim) %}
+(
     -- For a given dim table (stops, routes, agency, etc), get every dim with its corresponding feed version metadata
     WITH ids_version_history AS (
         SELECT t1.{{ id }} AS id,
@@ -242,6 +243,7 @@ feature
       FROM ids_version_compare
      GROUP BY 1,2
     HAVING ids_current_feed > 0
+)
 {% endmacro %}
 
 -- For use in int_gtfs_quality__persistent_ids_schedule:
