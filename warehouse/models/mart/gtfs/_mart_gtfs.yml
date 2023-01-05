@@ -113,6 +113,17 @@ models:
       - name: zipfile_dirs
         description: '{{ doc("column_zipfile_dirs") }}'
 
+  - name: fct_stop_time_updates
+    description: |
+      Unnested and de-duped stop time updates.
+    columns:
+      - name: key
+        tests: &rt_key_tests
+          - unique:
+              where: '__rt_sampled__'
+          - not_null:
+              where: '__rt_sampled__'
+
   - name: fct_trip_updates_messages
     description: |
       Each row is a message received from a trip updates GTFS RT feed.
@@ -125,9 +136,7 @@ models:
         description: |
           Synthetic primary key constructed from `base64_url`, `extract_ts`,
           entity `id`, `vehicle_id`, and `trip_id`.
-        tests: &rt_key_tests
-          - not_null:
-              where: '__rt_sampled__'
+        tests: *rt_key_tests
       - &gtfs_rt_dataset_key
         name: gtfs_dataset_key
         tests:
