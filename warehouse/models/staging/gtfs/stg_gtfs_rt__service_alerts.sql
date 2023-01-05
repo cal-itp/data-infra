@@ -41,16 +41,16 @@ stg_gtfs_rt__service_alerts AS (
         unnested_url_translation.text AS url_language,
 
         unnested_header_text_translation.text AS header_text_text,
-        unnested_header_text_translation.text AS header_text_language,
+        unnested_header_text_translation.language AS header_text_language,
 
         unnested_description_text_translation.text AS description_text_text,
-        unnested_description_text_translation.text AS description_text_language,
+        unnested_description_text_translation.language AS description_text_language,
 
         unnested_tts_header_text_translation.text AS tts_header_text_text,
-        unnested_tts_header_text_translation.text AS tts_header_text_language,
+        unnested_tts_header_text_translation.language AS tts_header_text_language,
 
         unnested_tts_description_text_translation.text AS tts_description_text_text,
-        unnested_tts_description_text_translation.text AS tts_description_text_language,
+        unnested_tts_description_text_translation.language AS tts_description_text_language,
 
         alert.severityLevel AS severity_level
     FROM external_service_alerts
@@ -59,10 +59,10 @@ stg_gtfs_rt__service_alerts AS (
     LEFT JOIN UNNEST(external_service_alerts.alert.activePeriod) AS unnested_active_period
     LEFT JOIN UNNEST(external_service_alerts.alert.informedEntity) AS unnested_informed_entity
     LEFT JOIN UNNEST(external_service_alerts.alert.url.translation) AS unnested_url_translation
-    LEFT JOIN UNNEST(external_service_alerts.alert.header_text.translation) AS unnested_header_text_translation
-    LEFT JOIN UNNEST(external_service_alerts.alert.description_text.translation) AS unnested_description_text_translation
-    LEFT JOIN UNNEST(external_service_alerts.alert.tts_header_text.translation) AS unnested_tts_header_text_translation
-    LEFT JOIN UNNEST(external_service_alerts.alert.tts_description_text.translation) AS unnested_tts_description_text_translation
+    LEFT JOIN UNNEST(external_service_alerts.alert.headerText.translation) AS unnested_header_text_translation
+    LEFT JOIN UNNEST(external_service_alerts.alert.descriptionText.translation) AS unnested_description_text_translation
+    LEFT JOIN UNNEST(external_service_alerts.alert.ttsHeaderText.translation) AS unnested_tts_header_text_translation
+    LEFT JOIN UNNEST(external_service_alerts.alert.ttsDescriptionText.translation) AS unnested_tts_description_text_translation
 )
 
 SELECT * FROM stg_gtfs_rt__service_alerts
