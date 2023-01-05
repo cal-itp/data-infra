@@ -137,7 +137,7 @@
 {% endmacro %}
 
 {% macro no_stale_vehicle_positions() %}
-"Data within a GTFS Realtime feed should not be older than 90 seconds for Trip Updates and Vehicle Positions and not older than 10 minutes for Service Alerts. For example, even if a producer is continuously refreshing the FeedHeader.timestamp timestamp every 30 seconds, the age of VehiclePositions within that feed should not be older than 90 seconds."
+"Vehicle positions RT feed contains no updates older than 90 seconds"
 {% endmacro %}
 
 -- declare features

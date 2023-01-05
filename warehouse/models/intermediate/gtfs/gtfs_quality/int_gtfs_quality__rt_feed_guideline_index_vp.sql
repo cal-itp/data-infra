@@ -8,6 +8,7 @@ int_gtfs_quality__rt_feed_guideline_index_vp AS (
     SELECT *
     FROM int_gtfs_quality__rt_feed_guideline_index
     WHERE feed_type = 'vehicle_positions'
+      AND date < CURRENT_DATE
 )
 
 SELECT * FROM int_gtfs_quality__rt_feed_guideline_index_vp

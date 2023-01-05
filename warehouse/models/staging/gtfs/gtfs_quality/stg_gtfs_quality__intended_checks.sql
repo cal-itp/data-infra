@@ -59,6 +59,8 @@ WITH stg_gtfs_quality__intended_checks AS (
     SELECT {{ persistent_ids_schedule() }}, {{ best_practices_alignment_schedule() }}
     UNION ALL
     SELECT {{ lead_time() }}, {{ up_to_dateness() }}
+    UNION ALL
+    SELECT {{ no_stale_vehicle_positions() }}, {{ best_practices_alignment_rt() }}
 )
 
 SELECT * FROM stg_gtfs_quality__intended_checks
