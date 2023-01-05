@@ -15,9 +15,9 @@ Here is a list of currently-implemented checks:
 |Vehicle positions RT feed is present | Compliance (RT) | The vehicle positions RT feed contains at least one file on the given day.|
 | Trip updates RT feed is present | Compliance (RT) | The trip updates RT feed contains at least one file on the given day.|
 | Service alerts RT feed is present | Compliance (RT) | The service alerts RT feed contains at least one file on the given day.|
-| Service alerts RT feed uses HTTPS | Best Practices Alignment (RT) | The service alerts RT feed endpoint uses HTTPS instead of HTTPS to ensure feed integrity.|
-|Vehicle positions RT feed uses HTTPS | Best Practices Alignment (RT) | The vehicle positions RT feed endpoint uses HTTPS instead of HTTPS to ensure feed integrity.|
-| Trip updates RT feed uses HTTPS | Best Practices Alignment (RT) | The trip updates RT feed endpoint uses HTTPS instead of HTTPS to ensure feed integrity.|
+| Service alerts RT feed uses HTTPS | Best Practices Alignment (RT) | The service alerts RT feed endpoint uses HTTPS instead of HTTP to ensure feed integrity.|
+|Vehicle positions RT feed uses HTTPS | Best Practices Alignment (RT) | The vehicle positions RT feed endpoint uses HTTPS instead of HTTP to ensure feed integrity.|
+| Trip updates RT feed uses HTTPS | Best Practices Alignment (RT) | The trip updates RT feed endpoint uses HTTPS instead of HTTP to ensure feed integrity.|
 | Fewer than 1% of requests to Trip updates RT feed result in a protobuf error | Best Practices Alignment (RT) | On the given day, fewer than 1% of Trip updates RT feed downloads result in a protobuf error.|
 | Fewer than 1% of requests to Service alerts RT feed result in a protobuf error | Best Practices Alignment (RT) | On the given day, fewer than 1% of Service alerts RT feed downloads result in a protobuf error.|
 | Fewer than 1% of requests to Vehicle positions RT feed result in a protobuf error | Best Practices Alignment (RT) | On the given day, fewer than 1% of Vehicle positions RT feed downloads result in a protobuf error.|
