@@ -125,14 +125,24 @@ models:
         description: |
           Synthetic primary key constructed from `base64_url`, `extract_ts`,
           entity `id`, `vehicle_id`, and `trip_id`.
-        tests:
-          - unique:
-              where: '__rt_sampled__'
+        tests: &rt_key_tests
           - not_null:
               where: '__rt_sampled__'
-      - <<: *gtfs_dataset_key
-        config:
-          where: '__rt_sampled__'
+      - &gtfs_rt_dataset_key
+        name: gtfs_dataset_key
+        tests:
+          - not_null:
+              config:
+                where: '__rt_sampled__'
+          - relationships:
+              to: ref('dim_gtfs_datasets')
+              field: key
+              config:
+                # there are a dozen rows of SMART transit which was deleted from Airtable
+                # this will work without exception once the Airtable dim is historical;
+                # this threshold may need to increase if the backfill occurs prior to that
+                error_if: ">20"
+                where: '__rt_sampled__'
       - name: dt
       - name: hour
       - name: base64_url
@@ -190,20 +200,8 @@ models:
         description: |
           Synthetic primary key constructed from `base64_url`, `extract_ts`,
           entity `id`, `vehicle_id`, and `trip_id`.
-        tests:
-          - unique:
-              # TODO: make an RT test macro that does this date subtraction
-              # test hour = 0 UTC because that's 5pm Pacific = PM peak, good sample of data
-              where: '__rt_sampled__'
-          - not_null:
-              where: '__rt_sampled__'
-      - name: gtfs_dataset_key
-        description: |
-          The primary key for the record in `dim_gtfs_datasets` associated with this message.
-        columns:
-          - <<: *gtfs_dataset_key
-            config:
-              where: '__rt_sampled__'
+        tests: *rt_key_tests
+      - *gtfs_rt_dataset_key
       - name: dt
         description: |
           Date on which we scraped this message.

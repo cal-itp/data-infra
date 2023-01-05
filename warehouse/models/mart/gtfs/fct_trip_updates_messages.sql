@@ -26,7 +26,8 @@ keying AS (
 
 fct_trip_updates_messages AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['base64_url', '_extract_ts', 'id']) }} as key,
+        -- TODO: this is not unique yet
+        {{ dbt_utils.surrogate_key(['base64_url', '_extract_ts', 'id', 'vehicle_id', 'trip_id']) }} as key,
         gtfs_dataset_key,
         dt,
         hour,
