@@ -33,6 +33,8 @@ models:
           - relationships:
               to: ref('stg_gtfs_quality__intended_checks')
               field: check
+        meta:
+          metabase.semantic_type: type/Title
       - &status
         name: status
         tests:
@@ -152,17 +154,20 @@ models:
     columns:
       - name: is_implemented
   - name: fct_daily_guideline_checks
-    description: |
-      **Documentation coming soon**
+    description: '{{ doc("fct_daily_guideline_checks") }}'
     columns:
       - *key
       - *date
       - name: organization_name
         description: |
           Organization name as of date.
+        meta:
+          metabase.semantic_type: type/Title
       - name: service_name
         description: |
           Service name as of date.
+        meta:
+          metabase.semantic_type: type/Title
       - name: gtfs_dataset_name
         description: |
           GTFS dataset name as of date.

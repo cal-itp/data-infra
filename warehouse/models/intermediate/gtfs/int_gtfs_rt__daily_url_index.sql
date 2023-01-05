@@ -12,10 +12,13 @@ stg_transit_database__gtfs_datasets AS (
 
 int_gtfs_rt__daily_url_index AS (
     SELECT
+
         configs.dt,
         url_to_encode AS string_url,
         base64_url,
-        type
+        type,
+        datasets.data_quality_pipeline
+
     FROM int_gtfs_rt__distinct_download_configs AS configs
     LEFT JOIN stg_transit_database__gtfs_datasets AS datasets
         ON configs._config_extract_ts = datasets.ts

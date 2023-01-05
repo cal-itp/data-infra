@@ -28,16 +28,23 @@ from calitp.storage import (
     GTFSDownloadConfig,
 )
 from pydantic import validator, BaseModel
+from slugify import slugify
 from tqdm import tqdm
 
-JAVA_EXECUTABLE_PATH_KEY = "GTFS_SCHEDULE_VALIDATOR_JAVA_EXECUTABLE"
+JAVA_EXECUTABLE = os.getenv("JAVA_EXECUTABLE", "java")
 SCHEDULE_VALIDATOR_JAR_LOCATION_ENV_KEY = "GTFS_SCHEDULE_VALIDATOR_JAR"
+
+V2_VALIDATOR_JAR = os.getenv("V2_VALIDATOR_JAR")
+V3_VALIDATOR_JAR = os.getenv("V3_VALIDATOR_JAR")
+V4_VALIDATOR_JAR = os.getenv("V4_VALIDATOR_JAR")
+
 JAR_DEFAULT = typer.Option(
     default=os.environ.get(SCHEDULE_VALIDATOR_JAR_LOCATION_ENV_KEY),
     help="Path to the GTFS Schedule Validator JAR",
 )
+
 SCHEDULE_VALIDATION_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION"]
-GTFS_VALIDATOR_VERSION = os.environ["GTFS_SCHEDULE_VALIDATOR_VERSION"]
+
 GTFS_VALIDATE_LIST_ERROR_THRESHOLD = float(
     os.getenv("GTFS_VALIDATE_LIST_ERROR_THRESHOLD", 0.99)
 )
@@ -60,6 +67,7 @@ class GTFSScheduleFeedValidation(PartitionedGCSArtifact):
     ts: pendulum.DateTime
     extract_config: GTFSDownloadConfig
     system_errors: Dict
+    validator_version: str
 
     @validator("filename", allow_reuse=True)
     def is_jsonl_gz(cls, v):
@@ -121,23 +129,33 @@ def log(*args, err=False, fg=None, pbar=None, **kwargs):
 
 
 def execute_schedule_validator(
+    extract_ts: pendulum.DateTime,
     zip_path: Path,
     output_dir: Path,
-    jar_path: Path = os.environ.get(SCHEDULE_VALIDATOR_JAR_LOCATION_ENV_KEY),
     pbar=None,
-) -> (Dict, Dict):
+) -> (Dict, Dict, str):
     if not isinstance(zip_path, Path):
         raise TypeError("must provide a path to the zip file")
 
+    if extract_ts < pendulum.parse("2022-09-15"):
+        versioned_jar_path = V2_VALIDATOR_JAR
+        validator_version = "v2.0.0"
+    elif extract_ts < pendulum.parse("2022-11-16"):
+        versioned_jar_path = V3_VALIDATOR_JAR
+        validator_version = "v3.1.1"
+    else:
+        versioned_jar_path = V4_VALIDATOR_JAR
+        validator_version = "v4.0.0"
+
     args = [
-        os.getenv(JAVA_EXECUTABLE_PATH_KEY, default="java"),
+        JAVA_EXECUTABLE,
         "-jar",
-        str(jar_path),
+        versioned_jar_path,
         "--input",
         str(zip_path),
         "--output_base",
         str(output_dir),
-        "--country_code",
+        "--feed_name" if validator_version == "v2.0.0" else "--country_code",
         "us-na",
     ]
 
@@ -157,7 +175,7 @@ def execute_schedule_validator(
     with open(system_errors_path) as f:
         system_errors = json.load(f)
 
-    return report, system_errors
+    return report, system_errors, validator_version
 
 
 def download_and_validate_extract(
@@ -172,16 +190,21 @@ def download_and_validate_extract(
             pbar=pbar,
         )
         fs.get_file(extract.path, zip_path)
-        report, system_errors = execute_schedule_validator(
+
+        report, system_errors, validator_version = execute_schedule_validator(
+            extract_ts=extract.ts,
             zip_path=Path(zip_path),
             output_dir=tmp_dir,
             pbar=pbar,
         )
+
+    slugified_version = slugify(validator_version)
     validation = GTFSScheduleFeedValidation(
-        filename=f"validation_notices{JSONL_GZIP_EXTENSION}",
+        filename=f"validation_notices_{slugified_version}{JSONL_GZIP_EXTENSION}",
         ts=extract.ts,
         extract_config=extract.config,
         system_errors=system_errors,
+        validator_version=validator_version,
     )
 
     notices = [
@@ -189,7 +212,7 @@ def download_and_validate_extract(
             "metadata": json.loads(
                 ScheduleValidationMetadata(
                     extract_config=extract.config,
-                    gtfs_validator_version=GTFS_VALIDATOR_VERSION,
+                    gtfs_validator_version=validator_version,
                 ).json()
             ),
             **notice,
@@ -220,16 +243,12 @@ def download_and_validate_extract(
 def validate_extract(
     zip_path: Path,
     output_dir: Path,
-    jar_path: Path = os.environ.get(SCHEDULE_VALIDATOR_JAR_LOCATION_ENV_KEY),
     verbose=False,
 ) -> None:
     """"""
     execute_schedule_validator(
-        fs=get_fs(),
         zip_path=zip_path,
         output_dir=output_dir,
-        jar_path=jar_path,
-        verbose=verbose,
     )
 
 
