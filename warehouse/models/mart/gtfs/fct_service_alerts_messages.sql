@@ -33,6 +33,8 @@ fct_service_alerts_messages AS (
             'informed_entity_agency_id',
             'informed_entity_route_id',
             'informed_entity_trip_id',
+            'informed_entity_trip_start_time',
+            'informed_entity_trip_start_date',
             'informed_entity_stop_id']) }} as key,
         gtfs_dataset_key,
         dt,
