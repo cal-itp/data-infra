@@ -72,3 +72,5 @@ models:
         schema: mart_gtfs_quality
       gtfs:
         schema: mart_gtfs
+      ad_hoc:
+        schema: mart_ad_hoc
