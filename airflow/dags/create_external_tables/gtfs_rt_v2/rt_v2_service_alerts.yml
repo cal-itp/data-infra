@@ -108,7 +108,7 @@ schema_fields:
             mode: REPEATED
             name: translation
             type: RECORD
-        name: header_text
+        name: headerText
         type: RECORD
       - fields:
           - fields:
@@ -119,7 +119,7 @@ schema_fields:
             mode: REPEATED
             name: translation
             type: RECORD
-        name: description_text
+        name: descriptionText
         type: RECORD
       - fields:
           - fields:
@@ -130,7 +130,7 @@ schema_fields:
             mode: REPEATED
             name: translation
             type: RECORD
-        name: tts_header_text
+        name: ttsHeaderText
         type: RECORD
       - fields:
           - fields:
@@ -141,7 +141,7 @@ schema_fields:
             mode: REPEATED
             name: translation
             type: RECORD
-        name: tts_description_text
+        name: ttsDescriptionText
         type: RECORD
       - name: severityLevel
         type: STRING

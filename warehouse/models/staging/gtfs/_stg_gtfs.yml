@@ -831,3 +831,28 @@ models:
   - name: stg_gtfs_rt__trip_updates_outcomes
     description: Outcomes from parsing process on GTFS RT trip updates data.
     columns: *stg_gtfs_rt_parse_outcomes_columns
+  - name: stg_gtfs_rt__service_alerts
+    description: |
+      Service alerts realtime data.
+      See https://gtfs.org/realtime/reference/ for specification.
+    columns:
+      - name: dt
+      - name: hour
+      - name: base64_url
+      - name: _extract_ts
+      - name: _config_extracted_at
+      - name: _name
+      - name: header_timestamp
+      - name: header_incrementality
+      - name: header_version
+      - name: id
+      - name: active_period
+      - name: informed_entity
+      - name: cause
+      - name: effect
+      - name: url
+      - name: header_text
+      - name: description_text
+      - name: tts_header_text
+      - name: tts_description_text
+      - name: severity_level
