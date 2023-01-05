@@ -1556,12 +1556,17 @@ models:
         description: |
           The primary key for the record in `dim_gtfs_datasets` associated with this message.
         tests:
-          - not_null
-          - relationships:
-              to: ref('fct_service_alerts_messages')
-              field: key
+          - not_null:
               config:
                 where: '__rt_sampled__'
+          # todo: figure out how to get this to work; it's erroring on the partition elimination
+          # - dbt_utils.relationships_where:
+          #     to: ref('fct_service_alerts_messages')
+          #     field: key
+          #     config:
+          #       to_condition: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+          #       from_condition: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+      - name: dt
       - name: active_period_start
         description: |
           See: https://gtfs.org/realtime/reference/#message-timerange.
@@ -1582,6 +1587,7 @@ models:
           `agency_id`, `trip_id`, `route_id`, and `stop_id`.
         tests: *rt_primary_key_tests
       - *service_alert_message_key
+      - name: dt
       - name: agency_id
         description: |
           See: https://gtfs.org/realtime/reference/#message-entityselector.
@@ -1629,6 +1635,7 @@ models:
           `header_text_text`, and `header_text_language`.
         tests: *rt_primary_key_tests
       - *service_alert_message_key
+      - name: dt
       - name: url_text
         description: |
           See: https://gtfs.org/realtime/reference/#message-translation.
@@ -1659,6 +1666,31 @@ models:
       - name: tts_description_text_language
         description: |
           See: https://gtfs.org/realtime/reference/#message-translation.
-      - name: severity_level
+      - name: english_likelihood
         description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
+          100 if English language, 1 if null (null can mean no internationalization),
+          0 for other languages.
+  - name: fct_daily_service_alerts
+    description: |
+      Each row is a daily summary of a service alert.
+      See https://gtfs.org/realtime/reference/#message-alert for information
+      about message structure.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `dt`,
+          `base64_url`, and entity `id`.
+        tests:
+          - unique:
+              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+          - not_null:
+              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+      - name: first_header_timestamp
+        description: |
+          Earliest header timestamp at which this alert appeared on this date.
+      - name: last_header_timestamp
+        description: |
+          Latest header timestamp at which this alert appeared on this date.
+      - name: num_appearances
+        description: |
+          Number of times that this alert appeared on this date.

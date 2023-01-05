@@ -5,6 +5,10 @@ WITH messages AS (
 
 fct_service_alerts_informed_entities AS (
     SELECT
+        messages.* EXCEPT(
+            key,
+            informed_entity
+        ),
         key AS service_alert_message_key,
 
         {{ dbt_utils.surrogate_key(['key', 'unnested_informed_entity.agencyId',
@@ -24,7 +28,7 @@ fct_service_alerts_informed_entities AS (
         unnested_informed_entity.stopId AS stop_id
     FROM messages
     -- https://stackoverflow.com/questions/44918108/google-bigquery-i-lost-null-row-when-using-unnest-function
-    -- these arrays have nulls
+    -- these arrays may have nulls
     LEFT JOIN UNNEST(messages.informed_entity) AS unnested_informed_entity
 )
 

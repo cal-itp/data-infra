@@ -5,6 +5,14 @@ WITH messages AS (
 
 fct_service_alert_translations AS (
     SELECT
+        messages.* EXCEPT(
+            key,
+            header_text,
+            description_text,
+            tts_header_text,
+            tts_description_text,
+            url
+        ),
         key AS service_alert_message_key,
 
         {{ dbt_utils.surrogate_key(['key',
@@ -27,12 +35,13 @@ fct_service_alert_translations AS (
         unnested_url_translation.language AS url_language,
 
         CASE
-            WHEN unnested_header_text_translation.language LIKE "%en%" THEN 1
-            WHEN unnested_header_text_translation.language IS NULL THEN 2
-        END AS lang_rank
+            WHEN unnested_header_text_translation.language LIKE "%en%" THEN 100
+            WHEN unnested_header_text_translation.language IS NULL THEN 1
+            ELSE 0
+        END AS english_likelihood
     FROM messages
     -- https://stackoverflow.com/questions/44918108/google-bigquery-i-lost-null-row-when-using-unnest-function
-    -- these arrays have nulls
+    -- these arrays may have nulls
     LEFT JOIN UNNEST(messages.header_text.translation) AS unnested_header_text_translation
     LEFT JOIN UNNEST(messages.description_text.translation) AS unnested_description_text_translation
     LEFT JOIN UNNEST(messages.tts_header_text.translation) AS unnested_tts_header_text_translation
