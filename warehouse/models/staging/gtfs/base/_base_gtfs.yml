@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: base_gtfs_rt__first_unnest_service_alerts
+    description: |
+      Unnests the non-translation values in service alerts to allow for testing that rows
+      are not dropped.
+    columns:
+      - name: msg_key
+        tests:
+          - dbt_utils.relationships_where:
+              to: ref('stg_gtfs_rt__service_alerts')
+              field: msg_key
+              from_condition: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+              to_condition: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
