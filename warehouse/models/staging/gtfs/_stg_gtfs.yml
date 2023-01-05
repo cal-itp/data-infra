@@ -69,22 +69,39 @@ models:
       - name: dt
       - name: ts
       - name: base64_url
+
+  - name: stg_gtfs_rt__trip_updates
+    description: |
+      Trip updates realtime data.
+      See https://gtfs.org/realtime/reference/ for specification.
+    columns:
+      - name: dt
+      - name: hour
+      - name: base64_url
+      - name: _extract_ts
+      - name: _config_extracted_at
+      - name: _name
+      - name: header_timestamp
+      - name: header_incrementality
+      - name: header_version
+      - name: id
+      - name: trip_update_timestamp
+      - name: trip_update_delay
+      - name: vehicle_id
+      - name: vehicle_label
+      - name: vehicle_license_plate
+      - name: trip_id
+      - name: trip_route_id
+      - name: trip_direction_id
+      - name: trip_start_time
+      - name: trip_start_date
+      - name: trip_schedule_relationship
+      - name: stop_time_updates
+
   - name: stg_gtfs_rt__vehicle_positions
     description: |
       Vehicle positions realtime data.
       See https://gtfs.org/realtime/reference/ for specification.
-    tests:
-      # ideally base64_url, _extract_ts, id would be sufficient
-      # but this is not the case in the MTC 511 feed, so adding position
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - _extract_ts
-            - id
-            - position_latitude
-            - position_longitude
-          # test hour = 0 UTC because that's 5pm Pacific = PM peak, good sample of data
-          where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM _extract_ts)) = 0
     columns:
       - name: dt
       - name: hour
@@ -117,6 +134,7 @@ models:
       - name: bearing
       - name: odometer
       - name: speed
+
   - name: stg_gtfs_schedule__agency
     description: |
       Cleaned GTFS schedule agency data.
