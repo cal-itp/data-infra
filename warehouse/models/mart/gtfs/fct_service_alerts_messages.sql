@@ -26,16 +26,7 @@ keying AS (
 
 fct_service_alerts_messages AS (
     SELECT
-        -- same message id when unnested can appear multiple times for each informed entity
-        {{ dbt_utils.surrogate_key(['base64_url',
-            '_extract_ts',
-            'id',
-            'informed_entity_agency_id',
-            'informed_entity_route_id',
-            'informed_entity_trip_id',
-            'informed_entity_trip_start_time',
-            'informed_entity_trip_start_date',
-            'informed_entity_stop_id']) }} as key,
+        {{ dbt_utils.surrogate_key(['_extract_ts', 'base64_url', 'id']) }} AS key,
         gtfs_dataset_key,
         dt,
         hour,
@@ -47,34 +38,17 @@ fct_service_alerts_messages AS (
         header_version,
         header_incrementality,
         id,
-        active_period_start,
-        active_period_end,
-        informed_entity_agency_id,
-        informed_entity_route_id,
-        informed_entity_route_type,
-        informed_entity_direction_id,
-        informed_entity_trip_id,
-        informed_entity_trip_route_id,
-        informed_entity_trip_direction_id,
-        informed_entity_trip_start_time,
-        informed_entity_trip_start_date,
-        informed_entity_trip_schedule_relationship,
-        informed_entity_stop_id,
+        active_period,
+        informed_entity,
         cause,
         effect,
-        url_text,
-        url_language,
-        header_text_text,
-        header_text_language,
-        description_text_text,
-        description_text_language,
-        tts_header_text_text,
-        tts_header_text_language,
-        tts_description_text_text,
-        tts_description_text_language,
+        url,
+        header_text,
+        description_text,
+        tts_header_text,
+        tts_description_text,
         severity_level
     FROM keying
 )
-
 
 SELECT * FROM fct_service_alerts_messages

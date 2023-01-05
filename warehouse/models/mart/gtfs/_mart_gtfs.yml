@@ -1464,12 +1464,9 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `base64_url`, `extract_ts`,
-          entity `id`, `informed_entity_agency_id`, `informed_entity_route_id`,
-          `informed_entity_trip_id` and `informed_entity_stop_id`.
-        tests:
+          entity `id`.
+        tests: &rt_primary_key_tests
           - unique:
-              # TODO: make an RT test macro that does this date subtraction
-              # test hour = 0 UTC because that's 5pm Pacific = PM peak, good sample of data
               where: '__rt_sampled__'
           - not_null:
               where: '__rt_sampled__'
@@ -1511,43 +1508,10 @@ models:
       - name: id
         description: |
           See: https://gtfs.org/realtime/reference/#message-feedentity.
-      - name: active_period_start
+      - name: active_period
         description: |
           See: https://gtfs.org/realtime/reference/#message-alert.
-      - name: active_period_end
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
-      - name: informed_entity_agency_id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
-      - name: informed_entity_route_id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
-      - name: informed_entity_route_type
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
-      - name: informed_entity_direction_id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
-      - name: informed_entity_trip_id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
-      - name: informed_entity_trip_route_id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
-      - name: informed_entity_trip_direction_id
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
-      - name: informed_entity_trip_start_time
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
-      - name: informed_entity_trip_start_date
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
-      - name: informed_entity_trip_schedule_relationship
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
-      - name: informed_entity_stop_id
+      - name: informed_entity
         description: |
           See: https://gtfs.org/realtime/reference/#message-alert.
       - name: cause
@@ -1556,36 +1520,145 @@ models:
       - name: effect
         description: |
           See: https://gtfs.org/realtime/reference/#message-alert.
-      - name: url_text
+      - name: url
         description: |
           See: https://gtfs.org/realtime/reference/#message-alert.
-      - name: url_language
+      - name: header_text
         description: |
           See: https://gtfs.org/realtime/reference/#message-alert.
-      - name: header_text_text
+      - name: description_text
         description: |
           See: https://gtfs.org/realtime/reference/#message-alert.
-      - name: header_text_language
+      - name: tts_header_text
         description: |
           See: https://gtfs.org/realtime/reference/#message-alert.
-      - name: description_text_text
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
-      - name: description_text_language
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
-      - name: tts_header_text_text
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
-      - name: tts_header_text_language
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
-      - name: tts_description_text_text
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-alert.
-      - name: tts_description_text_language
+      - name: tts_description_text
         description: |
           See: https://gtfs.org/realtime/reference/#message-alert.
       - name: severity_level
         description: |
           See: https://gtfs.org/realtime/reference/#message-alert.
+  - name: fct_service_alert_active_periods
+    description: |
+      Each row is an active period for a service alerts message.
+      See https://gtfs.org/realtime/reference/#message-alert for information
+      about message structure.
+      Due to data size, this table **must** be queried with a date filter (like `WHERE dt = 'YYYY-MM-DD'`).
+      Hour filters will also further improve performance.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `service_alerts_message_key`,
+          `active_period_start`, and `active_period_end`.
+        tests: *rt_primary_key_tests
+      - &service_alert_message_key
+        name: service_alert_message_key
+        description: |
+          The primary key for the record in `dim_gtfs_datasets` associated with this message.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('fct_service_alerts_messages')
+              field: key
+              config:
+                where: '__rt_sampled__'
+      - name: active_period_start
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-timerange.
+      - name: active_period_end
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-timerange.
+  - name: fct_service_alert_informed_entities
+    description: |
+      Each row is an informed entity for a service alerts message.
+      See https://gtfs.org/realtime/reference/#message-alert for information
+      about message structure.
+      Due to data size, this table **must** be queried with a date filter (like `WHERE dt = 'YYYY-MM-DD'`).
+      Hour filters will also further improve performance.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `service_alerts_message_key`,
+          `agency_id`, `trip_id`, `route_id`, and `stop_id`.
+        tests: *rt_primary_key_tests
+      - *service_alert_message_key
+      - name: agency_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-entityselector.
+      - name: route_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-entityselector.
+      - name: route_type
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-entityselector.
+      - name: direction_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-entityselector.
+      - name: trip_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-entityselector.
+      - name: route_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: trip_direction_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: trip_start_time
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: trip_start_date
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: trip_schedule_relationship
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: stop_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-entityselector.
+  - name: fct_service_alert_translations
+    description: |
+      Each row is a translation for a service alerts message in a given language.
+      See https://gtfs.org/realtime/reference/#message-alert for information
+      about message structure.
+      Due to data size, this table **must** be queried with a date filter (like `WHERE dt = 'YYYY-MM-DD'`).
+      Hour filters will also further improve performance.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `service_alerts_message_key`,
+          `header_text_text`, and `header_text_language`.
+        tests: *rt_primary_key_tests
+      - *service_alert_message_key
+      - name: url_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: url_language
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: header_text_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: header_text_language
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: description_text_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: description_text_language
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: tts_header_text_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: tts_header_text_language
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: tts_description_text_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: tts_description_text_language
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: severity_level
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
