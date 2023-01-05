@@ -1453,3 +1453,139 @@ models:
       - name: gtfs_dataset_key
         description: |
           The primary key for the record in `dim_gtfs_datasets` associated with this feed.
+  - name: fct_service_alerts_messages
+    description: |
+      Each row is a message received from a service alerts GTFS RT feed.
+      See https://gtfs.org/realtime/reference/#message-alert for information
+      about message structure.
+      Due to data size, this table **must** be queried with a date filter (like `WHERE dt = 'YYYY-MM-DD'`).
+      Hour filters will also further improve performance.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `base64_url`, `extract_ts`,
+          entity `id`, `informed_entity_agency_id`, `informed_entity_route_id`,
+          `informed_entity_trip_id` and `informed_entity_stop_id`.
+        tests:
+          - unique:
+              # TODO: make an RT test macro that does this date subtraction
+              # test hour = 0 UTC because that's 5pm Pacific = PM peak, good sample of data
+              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
+          - not_null:
+              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
+      - name: gtfs_dataset_key
+        description: |
+          The primary key for the record in `dim_gtfs_datasets` associated with this message.
+        columns:
+          - <<: *gtfs_dataset_key
+            config:
+              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
+      - name: dt
+        description: |
+          Date on which we scraped this message.
+          A date filter *must* be provided when querying this table, because of the size of the data.
+      - name: hour
+        description: |
+          Timestamp of the beginning of the hour in which this message was scraped,
+          ex. "2022-09-01T00:00:00+00".
+      - name: base64_url
+        description: |
+          URL-safe base64 encoding of the URL from which this message was scraped.
+      - name: _extract_ts
+        description: |
+          Time at which this message was scraped.
+      - name: _name
+        description: |
+          String name of the GTFS dataset of which this message is a part.
+          This field is provided for human readability and should not be used as a join key.
+      - name: header_timestamp
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-feedheader.
+          Field has been converted to TIMESTAMP type for convenience.
+      - name: header_incrementality
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-feedheader.
+      - name: header_version
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-feedheader.
+      - name: id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-feedentity.
+      - name: active_period_start
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: active_period_end
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: informed_entity_agency_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: informed_entity_route_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: informed_entity_route_type
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: informed_entity_direction_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: informed_entity_trip_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: informed_entity_trip_route_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: informed_entity_trip_direction_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: informed_entity_trip_start_time
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: informed_entity_trip_start_date
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: informed_entity_trip_schedule_relationship
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: informed_entity_stop_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: cause
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: effect
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: url_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: url_language
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: header_text_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: header_text_language
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: description_text_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: description_text_language
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: tts_header_text_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: tts_header_text_language
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: tts_description_text_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: tts_description_text_language
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: severity_level
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
