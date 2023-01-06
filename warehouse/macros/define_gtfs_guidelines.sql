@@ -140,6 +140,14 @@
 "Vehicle positions RT feed contains no updates older than 90 seconds"
 {% endmacro %}
 
+{% macro no_stale_trip_updates() %}
+"Trip updates RT feed contains no updates older than 90 seconds"
+{% endmacro %}
+
+{% macro no_stale_service_alerts() %}
+"Service alerts RT feed contains no updates older than 10 minutes"
+{% endmacro %}
+
 -- declare features
 {% macro compliance_schedule() %}
 "Compliance (Schedule)"

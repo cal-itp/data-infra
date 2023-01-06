@@ -234,11 +234,31 @@ models:
             - base64_url
       - dbt_utils.equal_rowcount:
           compare_model: ref('int_gtfs_quality__rt_feed_guideline_index_vp')
-    columns:
+    columns: &state_rt_guideline_check
       - name: status
         tests:
           - dbt_utils.not_null_proportion:
               at_least: 0.8
+
+  - name: int_gtfs_quality__no_stale_trip_updates
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - base64_url
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__rt_feed_guideline_index_tu')
+    columns: *state_rt_guideline_check
+
+  - name: int_gtfs_quality__no_stale_service_alerts
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - base64_url
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__rt_feed_guideline_index_sa')
+    columns: *state_rt_guideline_check
 
   - name: int_gtfs_quality__schedule_download_success
     tests: &stg_gtfs_guideline_tests_schedule_feed
