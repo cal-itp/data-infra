@@ -40,6 +40,8 @@ models:
           combination_of_columns:
             - code
             - severity
+            - gtfs_validator_version
+
   - name: int_gtfs_quality__daily_assessment_candidate_entities
     description: |
       A row here is a combination of an organization, service, service / GTFS dataset relationship,
