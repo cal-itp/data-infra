@@ -23,6 +23,10 @@ dim_stops AS (
         tts_stop_name,
         stop_lat,
         stop_lon,
+        ST_GEOGPOINT(
+            stop_lon,
+            stop_lat
+        ) AS pt_geom,
         zone_id,
         parent_station,
         stop_code,
