@@ -51,7 +51,7 @@ int_gtfs_quality__no_stale_vehicle_positions AS (
         idx.base64_url,
         idx.feed_type,
         {{ no_stale_vehicle_positions() }} AS check,
-        {{ up_to_dateness() }} AS feature,
+        {{ best_practices_alignment_rt() }} AS feature,
         min_vehicle_position_age,
         max_vehicle_position_age,
         CASE
