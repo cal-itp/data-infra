@@ -10,5 +10,5 @@ Here is a list of currently-implemented checks:
 
 | Check | Feature | Description |
 | ------------------------------------ |---------|------------ |
-|Schedule feed downloads successfully | Compliance (Schedule) | On the given date, the schedule feed was downloaded and parsed successfully |
+| Schedule feed downloads successfully | Compliance (Schedule) | On the given date, the schedule feed was downloaded and parsed successfully. |
 {% enddocs %}
