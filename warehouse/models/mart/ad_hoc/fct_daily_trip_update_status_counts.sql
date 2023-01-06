@@ -31,5 +31,7 @@ fct_daily_trip_update_status_counts AS (
         gtfs_dataset_key,
         COUNT(distinct trip_id) AS distinct_trip_ids,
     FROM fct_stop_time_updates
-    GROUP BY 1, 2, 3, 4
+    GROUP BY 1, 2, 3, 4, 5
 )
+
+SELECT * FROM fct_daily_trip_update_status_counts
