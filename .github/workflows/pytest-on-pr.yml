@@ -28,6 +28,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install flake8 pytest
         if [ -f warehouse/requirements.txt ]; then pip install -r warehouse/requirements.txt; fi
+        if [ -f script/requirements.txt ]; then pip install -r script/requirements.txt; fi
+        if [ -f docs/requirements.txt ]; then pip install -r docs/requirements.txt; fi
+        if [ -f airflow/requirements.txt ]; then pip install -r airflow/requirements.txt; fi
+        if [ -f images/jupyter-singleuser/requirements.txt ]; then pip install -r images/jupyter-singleuser/requirements.txt; fi
+        if [ -f images/dask/requirements.txt ]; then pip install -r images/dask/requirements.txt; fi
+
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
