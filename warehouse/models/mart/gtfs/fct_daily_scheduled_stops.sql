@@ -8,7 +8,8 @@ WITH fct_daily_scheduled_trips AS (
         feed_key,
         service_id,
         trip_id,
-        route_id
+        route_id,
+        route_type
 
     FROM {{ ref('fct_daily_scheduled_trips') }}
 ),
@@ -45,7 +46,6 @@ stops_by_day AS (
     LEFT JOIN fct_daily_scheduled_trips AS trips
         ON trips.feed_key = stop_times.feed_key
             AND trips.trip_id = stop_times.trip_id
-    -- WHERE service_date = '2023-01-02'
     GROUP BY service_date, feed_key, route_type, stop_id
 ),
 
@@ -71,7 +71,6 @@ fct_daily_scheduled_stops AS (
     FROM stops_by_day
     LEFT JOIN dim_stops AS stops
         ON stops_by_day.stop_id = stops.stop_id
-    -- WHERE service_date = '2023-01-02'
 )
 
 SELECT * FROM fct_daily_scheduled_stops
