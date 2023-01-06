@@ -22,7 +22,6 @@ models:
         description: |
           Synthetic primary key constructed from `dt`, `base64_url`.
         tests:
-        tests:
           - unique:
               where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
           - not_null:
