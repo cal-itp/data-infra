@@ -26,15 +26,18 @@ validation_notices AS (
 
 fct_daily_schedule_feed_validation_notices AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['daily_feeds.date', 'daily_feeds.feed_key', 'codes.code']) }} AS key,
+        {{ dbt_utils.surrogate_key(['daily_feeds.date',
+                                    'daily_feeds.feed_key',
+                                    'versions.gtfs_validator_version',
+                                    'codes.code',
+        ]) }} AS key,
         daily_feeds.date,
         daily_feeds.feed_key,
-        -- TODO: at some point, these codes will be versioned by validator version
+        versions.gtfs_validator_version,
         codes.code,
         codes.severity,
         outcomes.validation_success,
         outcomes.validation_exception,
-        notices.gtfs_validator_version,
         COALESCE(
             SUM(total_notices),
             CASE WHEN validation_success THEN 0 END
