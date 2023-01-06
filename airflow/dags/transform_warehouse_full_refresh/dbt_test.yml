@@ -37,11 +37,16 @@ secrets:
     secret: jobs-data
     key: service-account.json
 
+resources:
+  request_memory: 2.0Gi
+  request_cpu: 1
+
 tolerations:
   - key: pod-role
     operator: Equal
     value: computetask
     effect: NoSchedule
+
 affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
