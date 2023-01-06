@@ -9,7 +9,7 @@
 ) }}
 
 {% if is_incremental() %}
-    {% set timestamps = dbt_utils.get_column_values(table=this, column='dt', order_by = 'dt DESC', max_records = 1) %}
+    {% set timestamps = dbt_utils.get_column_values(table=this, column='date', order_by = 'date DESC', max_records = 1) %}
     {% set max_ts = timestamps[0] %}
 {% endif %}
 
@@ -17,6 +17,11 @@ WITH
 
 feed_guideline_index AS (
     SELECT * FROM {{ ref('int_gtfs_quality__rt_feed_guideline_index_vp') }}
+    {% if is_incremental() %}
+    WHERE date >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
+    {% else %}
+    WHERE date >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('RT_LOOKBACK_DAYS') }} DAY)
+    {% endif %}
 ),
 
 stg_gtfs_rt__vehicle_positions AS (
@@ -24,7 +29,7 @@ stg_gtfs_rt__vehicle_positions AS (
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('INCREMENTAL_PARTITIONS_LOOKBACK_DAYS') }} DAY)
+    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('RT_LOOKBACK_DAYS') }} DAY)
     {% endif %}
 ),
 
@@ -52,6 +57,9 @@ int_gtfs_quality__no_stale_vehicle_positions AS (
         CASE
             WHEN max_vehicle_position_age <= 90 THEN "PASS"
             WHEN max_vehicle_position_age > 90 THEN "FAIL"
+            -- If there are no vehicle position updates for that feed for that day, result is N/A
+            -- They will fail other checks for having no feed present
+            WHEN max_vehicle_position_age IS null THEN "N/A"
         END as status
     FROM feed_guideline_index AS idx
     LEFT JOIN vehicle_position_ages AS ages
