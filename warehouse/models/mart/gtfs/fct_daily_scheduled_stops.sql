@@ -35,18 +35,16 @@ stops_by_day AS (
 
         trips.service_date,
         trips.feed_key,
-
-        routes.route_type,
+        trips.route_type,
 
         stop_times.stop_id,
-        count(*) AS stop_id_count,
+
+        count(*) AS stop_event_count,
 
     FROM dim_stop_times AS stop_times
     LEFT JOIN fct_daily_scheduled_trips AS trips
         ON trips.feed_key = stop_times.feed_key
             AND trips.trip_id = stop_times.trip_id
-    LEFT JOIN dim_routes AS routes
-        ON trips.route_id = routes.route_id
     -- WHERE service_date = '2023-01-02'
     GROUP BY service_date, feed_key, route_type, stop_id
 ),
@@ -58,9 +56,8 @@ fct_daily_scheduled_stops AS (
         stops_by_day.feed_key,
         stops_by_day.route_type,
         stops_by_day.stop_id,
-        stops_by_day.stop_id_count,
+        stops_by_day.stop_event_count,
 
-        stops.feed_key,
         stops.tts_stop_name,
         stops.pt_geom,
         stops.parent_station,
