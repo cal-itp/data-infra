@@ -178,6 +178,10 @@ models:
     tests: *stg_gtfs_guideline_tests_schedule
     columns: *stg_gtfs_guideline_columns
 
+  - name: int_gtfs_quality__persistent_ids_schedule
+    tests: *stg_gtfs_guideline_tests_schedule
+    columns: *stg_gtfs_guideline_columns
+
   - name: int_gtfs_quality__no_rt_critical_validation_errors
     tests: &stg_gtfs_guideline_tests_rt
       - dbt_utils.unique_combination_of_columns:
@@ -228,3 +232,15 @@ models:
             - base64_url
       - dbt_utils.equal_rowcount:
           compare_model: ref('int_gtfs_quality__schedule_url_guideline_index')
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__feed_version_history
+    description: |
+      Describes attributes of the previous and following versions of each feed.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - base64_url
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('dim_schedule_feeds')

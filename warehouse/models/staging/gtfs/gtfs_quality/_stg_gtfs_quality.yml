@@ -35,9 +35,9 @@ models:
         name: key
         tests:
           - not_null:
-              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
+              where: '__rt_sampled__'
           - unique:
-              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
+              where: '__rt_sampled__'
 
   - name: stg_gtfs_rt__service_alerts_validation_outcomes
     description: |

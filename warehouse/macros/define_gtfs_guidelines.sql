@@ -132,6 +132,10 @@
 "Fewer than 1% of requests to Vehicle positions RT feed result in a protobuf error"
 {% endmacro %}
 
+{% macro persistent_ids_schedule() %}
+"Schedule feed maintains persistent identifiers for stop_id, route_id, and agency_id"
+{% endmacro %}
+
 -- declare features
 {% macro compliance_schedule() %}
 "Compliance (Schedule)"
@@ -190,4 +194,64 @@ calitp_agency_name,
 check,
 status,
 feature
+{% endmacro %}
+
+-- queries
+-- For use in int_gtfs_quality__persistent_ids_schedule:
+{% macro ids_version_compare_aggregate(id, dim) %}
+(
+    -- For a given dim table (stops, routes, agency, etc), get every dim with its corresponding feed version metadata
+    WITH ids_version_history AS (
+        SELECT t1.{{ id }} AS id,
+               t2.*
+          FROM {{ dim }} AS t1
+          JOIN feed_version_history AS t2
+            ON t2.feed_key = t1.feed_key
+    ),
+
+    ids_version_compare AS (
+      SELECT
+             -- base64_url is same between feed versions
+             COALESCE(ids.base64_url,prev_ids.base64_url) AS base64_url,
+             -- one feed's key is the previous feed's next key
+             COALESCE(ids.feed_key,prev_ids.next_feed_key) AS feed_key,
+             -- one feed's previous key is the previous feed's key
+             COALESCE(ids.prev_feed_key,prev_ids.feed_key) AS prev_feed_key,
+             COALESCE(ids.valid_from,prev_ids.next_feed_valid_from) AS valid_from,
+             ids.id,
+             prev_ids.id AS prev_id
+        FROM ids_version_history AS ids
+        FULL OUTER JOIN ids_version_history AS prev_ids
+          ON ids.prev_feed_key = prev_ids.feed_key
+         AND ids.id = prev_ids.id
+       -- The first feed version doesn't have a previous to compare to
+       WHERE ids.feed_version_number > 1
+    )
+
+    SELECT base64_url,
+           feed_key,
+           -- Total id's in current and previous feeds
+           COUNT(CASE WHEN id IS NOT null AND prev_id IS NOT null THEN 1 END) AS ids_both_feeds,
+           -- Total id's in current feed
+           COUNT(CASE WHEN id IS NOT null THEN 1 END) AS ids_current_feed,
+           -- Total id's in current feed
+           COUNT(CASE WHEN prev_id IS NOT null THEN 1 END) AS ids_prev_feed,
+           -- New id's added
+           COUNT(CASE WHEN prev_id IS null THEN 1 END) AS id_added,
+           -- Previous id's removed
+           COUNT(CASE WHEN id IS null THEN 1 END) AS id_removed
+      FROM ids_version_compare
+     GROUP BY 1,2
+    HAVING ids_current_feed > 0
+)
+{% endmacro %}
+
+-- For use in int_gtfs_quality__persistent_ids_schedule:
+{% macro max_new_id_ratio(table_name) %}
+    MAX({{ table_name }}.id_added * 100 / {{ table_name }}.ids_current_feed )
+       OVER (
+           PARTITION BY t1.feed_key
+           ORDER BY t1.date
+           ROWS BETWEEN 30 PRECEDING AND CURRENT ROW
+        )
 {% endmacro %}

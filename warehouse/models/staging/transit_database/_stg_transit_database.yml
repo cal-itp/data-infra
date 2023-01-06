@@ -104,6 +104,7 @@ models:
       - *key
       - *name
       - name: data
+      - name: data_quality_pipeline
       - name: type
         description: |
           "data" labels mapped to "service_alerts", "vehicle_positions", "trip_updates",

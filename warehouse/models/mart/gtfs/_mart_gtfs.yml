@@ -112,6 +112,69 @@ models:
         description: '{{ doc("column_zipfile_files") }}'
       - name: zipfile_dirs
         description: '{{ doc("column_zipfile_dirs") }}'
+
+  - name: fct_stop_time_updates
+    description: |
+      Unnested and de-duped stop time updates.
+    columns:
+      - name: key
+        tests: &rt_key_tests
+          - unique:
+              where: '__rt_sampled__'
+          - not_null:
+              where: '__rt_sampled__'
+
+  - name: fct_trip_updates_messages
+    description: |
+      Each row is a message received from a trip updates GTFS RT feed.
+      See https://gtfs.org/realtime/reference/#message-tripupdate for information
+      about message structure.
+      Due to data size, this table **must** be queried with a date filter (like `WHERE dt = 'YYYY-MM-DD'`).
+      Hour filters will also further improve performance.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `base64_url`, `extract_ts`,
+          entity `id`, `vehicle_id`, and `trip_id`.
+        tests: *rt_key_tests
+      - &gtfs_rt_dataset_key
+        name: gtfs_dataset_key
+        tests:
+          - not_null:
+              config:
+                where: '__rt_sampled__'
+          - relationships:
+              to: ref('dim_gtfs_datasets')
+              field: key
+              config:
+                # there are a dozen rows of SMART transit which was deleted from Airtable
+                # this will work without exception once the Airtable dim is historical;
+                # this threshold may need to increase if the backfill occurs prior to that
+                error_if: ">20"
+                where: '__rt_sampled__'
+      - name: dt
+      - name: hour
+      - name: base64_url
+      - name: _extract_ts
+      - name: _config_extracted_at
+      - name: _name
+      - name: header_timestamp
+      - name: header_incrementality
+      - name: header_version
+      - name: id
+      - name: trip_update_timestamp
+      - name: trip_update_delay
+      - name: vehicle_id
+      - name: vehicle_label
+      - name: vehicle_license_plate
+      - name: trip_id
+      - name: trip_route_id
+      - name: trip_direction_id
+      - name: trip_start_time
+      - name: trip_start_date
+      - name: trip_schedule_relationship
+      - name: stop_time_updates
+
   - name: fct_vehicle_locations
     description: |
       De-duped vehicle positions, removing redundant/duplicated positions
@@ -123,18 +186,17 @@ models:
           Synthetic primary key.
         tests:
           - unique:
-              # TODO: make an RT test macro that does this date subtraction
-              # test hour = 0 UTC because that's 5pm Pacific = PM peak, good sample of data
               config:
-                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
+                where: '__rt_sampled__'
           - not_null:
               config:
-                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
+                where: '__rt_sampled__'
       - name: trip_id
         tests:
           - not_null:
               config:
-                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
+                where: '__rt_sampled__'
+
   - name: fct_vehicle_positions_messages
     description: |
       Each row is a message received from a vehicle positions GTFS RT feed.
@@ -147,20 +209,8 @@ models:
         description: |
           Synthetic primary key constructed from `base64_url`, `extract_ts`,
           entity `id`, `vehicle_id`, and `trip_id`.
-        tests:
-          - unique:
-              # TODO: make an RT test macro that does this date subtraction
-              # test hour = 0 UTC because that's 5pm Pacific = PM peak, good sample of data
-              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
-          - not_null:
-              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
-      - name: gtfs_dataset_key
-        description: |
-          The primary key for the record in `dim_gtfs_datasets` associated with this message.
-        columns:
-          - <<: *gtfs_dataset_key
-            config:
-              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM hour)) = 0
+        tests: *rt_key_tests
+      - *gtfs_rt_dataset_key
       - name: dt
         description: |
           Date on which we scraped this message.
@@ -259,6 +309,7 @@ models:
       - name: position_speed
         description: |
           See: https://gtfs.org/realtime/reference/#message-position.
+
   - name: dim_agency
     description: |
       Each row is a cleaned row from an agency.txt file.
@@ -1453,3 +1504,244 @@ models:
       - name: gtfs_dataset_key
         description: |
           The primary key for the record in `dim_gtfs_datasets` associated with this feed.
+  - name: fct_service_alerts_messages
+    description: |
+      Each row is a message received from a service alerts GTFS RT feed.
+      See https://gtfs.org/realtime/reference/#message-alert for information
+      about message structure.
+      Due to data size, this table **must** be queried with a date filter (like `WHERE dt = 'YYYY-MM-DD'`).
+      Hour filters will also further improve performance.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `base64_url`, `extract_ts`,
+          entity `id`.
+        tests: &rt_primary_key_tests
+          - unique:
+              where: '__rt_sampled__'
+          - not_null:
+              where: '__rt_sampled__'
+      - name: gtfs_dataset_key
+        description: |
+          The primary key for the record in `dim_gtfs_datasets` associated with this message.
+        columns:
+          - <<: *gtfs_dataset_key
+            config:
+              where: '__rt_sampled__'
+      - name: dt
+        description: |
+          Date on which we scraped this message.
+          A date filter *must* be provided when querying this table, because of the size of the data.
+      - name: hour
+        description: |
+          Timestamp of the beginning of the hour in which this message was scraped,
+          ex. "2022-09-01T00:00:00+00".
+      - name: base64_url
+        description: |
+          URL-safe base64 encoding of the URL from which this message was scraped.
+      - name: _extract_ts
+        description: |
+          Time at which this message was scraped.
+      - name: _name
+        description: |
+          String name of the GTFS dataset of which this message is a part.
+          This field is provided for human readability and should not be used as a join key.
+      - name: header_timestamp
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-feedheader.
+          Field has been converted to TIMESTAMP type for convenience.
+      - name: header_incrementality
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-feedheader.
+      - name: header_version
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-feedheader.
+      - name: id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-feedentity.
+      - name: active_period
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: informed_entity
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: cause
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: effect
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: url
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: header_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: description_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: tts_header_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: tts_description_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+      - name: severity_level
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-alert.
+  - name: fct_service_alert_active_periods
+    description: |
+      Each row is an active period for a service alerts message.
+      See https://gtfs.org/realtime/reference/#message-alert for information
+      about message structure.
+      Due to data size, this table **must** be queried with a date filter (like `WHERE dt = 'YYYY-MM-DD'`).
+      Hour filters will also further improve performance.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `service_alerts_message_key`,
+          `active_period_start`, and `active_period_end`.
+        tests: *rt_primary_key_tests
+      - &service_alert_message_key
+        name: service_alert_message_key
+        description: |
+          The primary key for the record in `dim_gtfs_datasets` associated with this message.
+        tests:
+          - not_null:
+              config:
+                where: '__rt_sampled__'
+          # todo: figure out how to get this to work; it's erroring on the partition elimination
+          # - dbt_utils.relationships_where:
+          #     to: ref('fct_service_alerts_messages')
+          #     field: key
+          #     config:
+          #       to_condition: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+          #       from_condition: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+      - name: dt
+      - name: active_period_start
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-timerange.
+      - name: active_period_end
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-timerange.
+  - name: fct_service_alert_informed_entities
+    description: |
+      Each row is an informed entity for a service alerts message.
+      See https://gtfs.org/realtime/reference/#message-alert for information
+      about message structure.
+      Due to data size, this table **must** be queried with a date filter (like `WHERE dt = 'YYYY-MM-DD'`).
+      Hour filters will also further improve performance.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `service_alerts_message_key`,
+          `agency_id`, `trip_id`, `route_id`, and `stop_id`.
+        tests: *rt_primary_key_tests
+      - *service_alert_message_key
+      - name: dt
+      - name: agency_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-entityselector.
+      - name: route_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-entityselector.
+      - name: route_type
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-entityselector.
+      - name: direction_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-entityselector.
+      - name: trip_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-entityselector.
+      - name: route_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: trip_direction_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: trip_start_time
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: trip_start_date
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: trip_schedule_relationship
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: stop_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-entityselector.
+  - name: fct_service_alert_translations
+    description: |
+      Each row is a translation for a service alerts message in a given language.
+      See https://gtfs.org/realtime/reference/#message-alert for information
+      about message structure.
+      Due to data size, this table **must** be queried with a date filter (like `WHERE dt = 'YYYY-MM-DD'`).
+      Hour filters will also further improve performance.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `service_alerts_message_key`,
+          `header_text_text`, and `header_text_language`.
+        tests: *rt_primary_key_tests
+      - *service_alert_message_key
+      - name: dt
+      - name: url_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: url_language
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: header_text_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: header_text_language
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: description_text_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: description_text_language
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: tts_header_text_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: tts_header_text_language
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: tts_description_text_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: tts_description_text_language
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: english_likelihood
+        description: |
+          100 if English language, 1 if null (null can mean no internationalization),
+          0 for other languages.
+  - name: fct_daily_service_alerts
+    description: |
+      Each row is a daily summary of a service alert.
+      See https://gtfs.org/realtime/reference/#message-alert for information
+      about message structure.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `dt`,
+          `base64_url`, and entity `id`.
+        tests:
+          - unique:
+              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+          - not_null:
+              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+      - name: first_header_timestamp
+        description: |
+          Earliest header timestamp at which this alert appeared on this date.
+      - name: last_header_timestamp
+        description: |
+          Latest header timestamp at which this alert appeared on this date.
+      - name: num_appearances
+        description: |
+          Number of times that this alert appeared on this date.
