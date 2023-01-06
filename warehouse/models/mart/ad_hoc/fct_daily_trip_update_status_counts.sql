@@ -13,24 +13,23 @@
     {% set max_dt = dates[0] %}
 {% endif %}
 
-WITH fct_vehicle_locations AS (
-    SELECT * FROM {{ ref('fct_vehicle_locations') }}
+WITH fct_stop_time_updates AS (
+    SELECT * FROM {{ ref('fct_stop_time_updates') }}
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_dt }}'))
     {% else %}
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('RT_LOOKBACK_DAYS') }} DAY)
+    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('TRIP_UPDATES_LOOKBACK_DAYS') }} DAY)
     {% endif %}
 ),
 
-fct_daily_vehicle_location_trip_counts AS (
+fct_daily_trip_update_status_counts AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['dt', 'base64_url']) }} AS key,
+        {{ dbt_utils.surrogate_key(['dt', 'base64_url', 'trip_schedule_relationship']) }} AS key,
         dt,
-        gtfs_dataset_key,
         base64_url,
-        COUNT(DISTINCT trip_id) AS distinct_trips_observed
-    FROM fct_vehicle_locations
-    GROUP BY dt, gtfs_dataset_key, base64_url
+        trip_schedule_relationship,
+        gtfs_dataset_key,
+        COUNT(distinct trip_id) AS distinct_trip_ids,
+    FROM fct_stop_time_updates
+    GROUP BY 1, 2, 3, 4
 )
-
-SELECT * FROM fct_daily_vehicle_location_trip_counts

@@ -1,6 +1,19 @@
 version: 2
 
 models:
+  - name: fct_daily_trip_update_status_counts
+    description: |
+      Count of distinct trip IDs by date, feed, and update status.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `dt`, `base64_url`.
+        tests:
+          - unique:
+              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+          - not_null:
+              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+
   - name: fct_daily_vehicle_location_feed_trip_counts
     description: |
       Count of distinct trip IDs by date and vehicle locations feed.
