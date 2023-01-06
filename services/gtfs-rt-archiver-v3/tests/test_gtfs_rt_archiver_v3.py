@@ -1,4 +1,4 @@
-from gtfs_rt_archiver_v2 import __version__
+from gtfs_rt_archiver_v3 import __version__
 
 
 def test_version():
