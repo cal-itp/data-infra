@@ -56,8 +56,8 @@ int_gtfs_quality__no_stale_service_alerts AS (
         min_service_alert_age,
         max_service_alert_age,
         CASE
-            WHEN max_service_alert_age <= 90 THEN "PASS"
-            WHEN max_service_alert_age > 90 THEN "FAIL"
+            WHEN max_service_alert_age <= 600 THEN "PASS"
+            WHEN max_service_alert_age > 600 THEN "FAIL"
             -- If there are no service_alerts for that feed for that day, result is N/A
             -- They will fail other checks for having no feed present
             WHEN max_service_alert_age IS null THEN "N/A"
