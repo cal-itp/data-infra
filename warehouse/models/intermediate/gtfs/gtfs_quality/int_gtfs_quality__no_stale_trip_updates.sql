@@ -55,8 +55,8 @@ int_gtfs_quality__no_stale_trip_updates AS (
         min_trip_update_age,
         max_trip_update_age,
         CASE
-            WHEN max_trip_update_age <= 90 THEN "PASS"
-            WHEN max_trip_update_age > 90 THEN "FAIL"
+            WHEN max_trip_update_age <= 600 THEN "PASS"
+            WHEN max_trip_update_age > 600 THEN "FAIL"
             -- If there are no trip updates for that feed for that day, result is N/A
             -- They will fail other checks for having no feed present
             WHEN max_trip_update_age IS null THEN "N/A"

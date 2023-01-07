@@ -38,6 +38,7 @@ service_alert_ages AS (
         dt,
         base64_url,
         COUNT(*) AS num_service_alerts,
+        -- I'm not sure what timestamp to use for service alerts - I don't even understand yet how this check applies to service alerts
         MIN(TIMESTAMP_DIFF(_extract_ts, TIMESTAMP_SECONDS(active.start), SECOND)) AS min_service_alert_age,
         PERCENTILE_CONT(TIMESTAMP_DIFF(_extract_ts, TIMESTAMP_SECONDS(active.start), SECOND), 0.5) AS median_service_alert_age,
         MAX(TIMESTAMP_DIFF(_extract_ts, TIMESTAMP_SECONDS(active.start), SECOND)) AS max_service_alert_age,

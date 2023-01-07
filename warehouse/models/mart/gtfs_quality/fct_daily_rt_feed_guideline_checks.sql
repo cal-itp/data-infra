@@ -10,6 +10,9 @@ unioned AS (
             ref('int_gtfs_quality__trip_id_alignment'),
             ref('int_gtfs_quality__rt_https'),
             ref('int_gtfs_quality__rt_protobuf_error'),
+            ref('int_gtfs_quality__no_stale_vehicle_positions'),
+            ref('int_gtfs_quality__no_stale_service_alerts'),
+            ref('int_gtfs_quality__no_stale_trip_updates'),
         ],
     ) }}
 ),
