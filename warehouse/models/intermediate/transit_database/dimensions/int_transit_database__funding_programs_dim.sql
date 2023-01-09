@@ -22,6 +22,8 @@ int_transit_database__funding_programs_dim AS (
         {{ dbt_utils.surrogate_key(['id', '_valid_from']) }} AS key,
         id AS original_record_id,
         program,
+        organization,
+        services,
         category,
         _is_current,
         _valid_from,
