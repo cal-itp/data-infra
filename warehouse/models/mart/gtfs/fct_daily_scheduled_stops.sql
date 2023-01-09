@@ -64,12 +64,14 @@ pivot_to_route_type AS (
     PIVOT(
         SUM(stop_event_count) AS route_type
         FOR route_type IN
-        (0, 1, 2, 3, 4, 5, 11)
+        (0, 1, 2, 3, 4, 5, 6, 7, 11, 12)
     )
 ),
 
 fct_daily_scheduled_stops AS (
     SELECT
+
+        {{ dbt_utils.surrogate_key(['pivot.service_date', 'stops.key']) }} AS key,
 
         pivot.service_date,
         pivot.feed_key,
@@ -77,14 +79,18 @@ fct_daily_scheduled_stops AS (
 
         stops_by_day.stop_event_count,
 
-        IFNULL(pivot.route_type_0, 0) AS route_type_0_count,
-        IFNULL(pivot.route_type_1, 0) AS route_type_1_count,
-        IFNULL(pivot.route_type_2, 0) AS route_type_2_count,
-        IFNULL(pivot.route_type_3, 0) AS route_type_3_count,
-        IFNULL(pivot.route_type_4, 0) AS route_type_4_count,
-        IFNULL(pivot.route_type_5, 0) AS route_type_5_count,
-        IFNULL(pivot.route_type_11, 0) AS route_type_11_count,
+        pivot.route_type_0,
+        pivot.route_type_1,
+        pivot.route_type_2,
+        pivot.route_type_3,
+        pivot.route_type_4,
+        pivot.route_type_5,
+        pivot.route_type_6,
+        pivot.route_type_7,
+        pivot.route_type_11,
+        pivot.route_type_12,
 
+        stops.key AS stop_key,
         stops.tts_stop_name,
         stops.pt_geom,
         stops.parent_station,
@@ -98,6 +104,7 @@ fct_daily_scheduled_stops AS (
     FROM pivot_to_route_type AS pivot
     LEFT JOIN dim_stops AS stops
         ON pivot.stop_id = stops.stop_id
+        AND pivot.feed_key = stops.feed_key
     LEFT JOIN stops_by_day
         ON pivot.stop_id = stops_by_day.stop_id
         AND pivot.service_date = stops_by_day.service_date

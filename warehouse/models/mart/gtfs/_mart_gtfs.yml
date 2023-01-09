@@ -1488,8 +1488,12 @@ models:
           The primary key for the record in `dim_gtfs_datasets` associated with this feed.
   - name: fct_daily_scheduled_shapes
     description: |
-      A daily table showing all shapes that were scheduled on a given date.
+      A daily table showing shapes that had trips scheduled on a given date.
     columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `service_date` and `shape_array_key`.
+        tests: *primary_key_tests
       - name: n_trips
         description: The number of trips associated with this shape on the given date.
       - name: feed_key
@@ -1503,8 +1507,12 @@ models:
         description: Ordered array of WKT points that describe this shape.
   - name: fct_daily_scheduled_stops
     description: |
-      A daily table showing all stops that were scheduled on a given date.
+      A daily table showing all stops that had trip stop events scheduled on a given date.
     columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `service_date` and `stop_key`.
+        tests: *primary_key_tests
       - name: service_date
         description: Date on which this stop was active.
       - name: feed_key
@@ -1532,9 +1540,20 @@ models:
       - name: route_type_5_count
         description: |
           The count of stop events associated with route_type 5 - Cable Tram
+      - name: route_type_6_count
+        description: |
+          The count of stop events associated with route_type 6 - Aerial lift, suspended cable car (e.g., gondola lift, aerial tramway)
+      - name: route_type_7_count
+        description: |
+          The count of stop events associated with route_type 7 - Cable Tram
       - name: route_type_11_count
         description: |
           The count of stop events associated with route_type 11 - Trolleybus
+      - name: route_type_12_count
+        description: |
+          The count of stop events associated with route_type 12 - Monorail
+      - name: stop_key
+          Foreign key to the `dim_stops` table.
       - name: tts_stop_name
         description: '{{ doc("gtfs_stops__tts_stop_name") }}'
       - name: pt_geom
