@@ -174,6 +174,7 @@ models:
         description: Service identifier from calendar and/or calendar_dates.
         tests:
           - not_null
+
   - name: int_gtfs_rt__unioned_parse_outcomes
     description: |
       A unioned combination of the parse outcomes for service alerts,
@@ -200,6 +201,10 @@ models:
       - name: step
       - name: base64_url
       - name: ts
+      - name: last_modified_string
+      - name: last_modified_timestamp
+      - name: extract_ts
+
   - name: int_gtfs_schedule__incremental_stop_times
     description: |
       This table is an incremental, sparse history of GTFS schedule stop times data.
