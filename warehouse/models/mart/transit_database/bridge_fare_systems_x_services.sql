@@ -1,37 +1,40 @@
 {{ config(materialized='table') }}
 
-WITH latest_fare_systems AS (
-    {{ get_latest_dense_rank(
-    external_table = ref('stg_transit_database__fare_systems'),
-    order_by = 'dt DESC'
-    ) }}
+WITH fare_systems AS ( --noqa
+    SELECT *
+    FROM {{ ref('int_transit_database__fare_systems_dim') }}
 ),
 
-latest_services AS (
-    {{ get_latest_dense_rank(
-    external_table = ref('stg_transit_database__services'),
-    order_by = 'dt DESC'
-    ) }}
+services AS ( -- noqa
+    SELECT *
+    FROM {{ ref('int_transit_database__services_dim') }}
 ),
 
 bridge_fare_systems_x_services AS (
- {{ transit_database_many_to_many(
-     table_a = 'latest_fare_systems',
-     table_a_key_col = 'key',
-     table_a_key_col_name = 'fare_system_key',
-     table_a_name_col = 'fare_system',
-     table_a_name_col_name = 'fare_system_name',
-     table_a_join_col = 'transit_services',
-     table_a_date_col = 'dt',
-     table_b = 'latest_services',
-     table_b_key_col = 'key',
-     table_b_key_col_name = 'service_key',
-     table_b_name_col = 'name',
-     table_b_name_col_name = 'service_name',
-     table_b_join_col = 'fare_systems',
-     table_b_date_col = 'dt',
-     shared_date_name = 'dt'
- ) }}
+ {{ transit_database_many_to_many2(
+    shared_start_date_name = '_valid_from',
+    shared_end_date_name = '_valid_to',
+    shared_current_name = '_is_current',
+    table_a = {'name': 'fare_systems',
+        'unversioned_key_col': 'original_record_id',
+        'versioned_key_col': 'key',
+        'key_col_name': 'fare_system_key',
+        'name_col': 'fare_system',
+        'name_col_name': 'fare_system_name',
+        'unversioned_join_col': 'transit_services',
+        'start_date_col': '_valid_from',
+        'end_date_col': '_valid_to'},
+
+    table_b = {'name': 'services',
+        'unversioned_key_col': 'original_record_id',
+        'versioned_key_col': 'key',
+        'key_col_name': 'service_key',
+        'name_col': 'name',
+        'name_col_name': 'service_name',
+        'unversioned_join_col': 'fare_systems',
+        'start_date_col': '_valid_from',
+        'end_date_col': '_valid_to'}
+    ) }}
 )
 
 SELECT * FROM bridge_fare_systems_x_services

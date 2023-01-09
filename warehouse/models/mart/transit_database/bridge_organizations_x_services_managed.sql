@@ -10,11 +10,11 @@ services AS ( -- noqa
     FROM {{ ref('int_transit_database__services_dim') }}
 ),
 
-
 bridge_organizations_x_services_managed AS (
  {{ transit_database_many_to_many2(
     shared_start_date_name = '_valid_from',
     shared_end_date_name = '_valid_to',
+    shared_current_name = '_is_current',
     table_a = {'name': 'organizations',
         'unversioned_key_col': 'original_record_id',
         'versioned_key_col': 'key',

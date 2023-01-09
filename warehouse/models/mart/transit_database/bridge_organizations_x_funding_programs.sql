@@ -1,37 +1,40 @@
 {{ config(materialized='table') }}
 
-WITH latest_organizations AS (
-    {{ get_latest_dense_rank(
-    external_table = ref('stg_transit_database__organizations'),
-    order_by = 'dt DESC'
-    ) }}
+WITH organizations AS ( --noqa
+    SELECT *
+    FROM {{ ref('int_transit_database__organizations_dim') }}
 ),
 
-latest_funding_programs AS (
-    {{ get_latest_dense_rank(
-    external_table = ref('stg_transit_database__funding_programs'),
-    order_by = 'dt DESC'
-    ) }}
+funding_programs AS ( -- noqa
+    SELECT *
+    FROM {{ ref('int_transit_database__funding_programs_dim') }}
 ),
 
 bridge_organizations_x_funding_programs AS (
- {{ transit_database_many_to_many(
-     table_a = 'latest_organizations',
-     table_a_key_col = 'key',
-     table_a_key_col_name = 'organization_key',
-     table_a_name_col = 'name',
-     table_a_name_col_name = 'organization_name',
-     table_a_join_col = 'funding_programs',
-     table_a_date_col = 'dt',
-     table_b = 'latest_funding_programs',
-     table_b_key_col = 'key',
-     table_b_key_col_name = 'funding_program_key',
-     table_b_name_col = 'program',
-     table_b_name_col_name = 'funding_program',
-     table_b_join_col = 'organization',
-     table_b_date_col = 'dt',
-     shared_date_name = 'dt'
- ) }}
+ {{ transit_database_many_to_many2(
+    shared_start_date_name = '_valid_from',
+    shared_end_date_name = '_valid_to',
+    shared_current_name = '_is_current',
+    table_a = {'name': 'organizations',
+        'unversioned_key_col': 'original_record_id',
+        'versioned_key_col': 'key',
+        'key_col_name': 'organization_key',
+        'name_col': 'name',
+        'name_col_name': 'organization_name',
+        'unversioned_join_col': 'funding_programs',
+        'start_date_col': '_valid_from',
+        'end_date_col': '_valid_to'},
+
+    table_b = {'name': 'funding_programs',
+        'unversioned_key_col': 'original_record_id',
+        'versioned_key_col': 'key',
+        'key_col_name': 'funding_program_key',
+        'name_col': 'program',
+        'name_col_name': 'funding_program_name',
+        'unversioned_join_col': 'organization',
+        'start_date_col': '_valid_from',
+        'end_date_col': '_valid_to'}
+    ) }}
 )
 
 SELECT * FROM bridge_organizations_x_funding_programs

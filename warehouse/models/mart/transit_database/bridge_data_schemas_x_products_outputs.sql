@@ -1,37 +1,40 @@
 {{ config(materialized='table') }}
 
-WITH latest_data_schemas AS (
-    {{ get_latest_dense_rank(
-    external_table = ref('stg_transit_database__data_schemas'),
-    order_by = 'dt DESC'
-    ) }}
+WITH data_schemas AS ( --noqa
+    SELECT *
+    FROM {{ ref('int_transit_database__data_schemas_dim') }}
 ),
 
-latest_products AS (
-    {{ get_latest_dense_rank(
-    external_table = ref('stg_transit_database__products'),
-    order_by = 'dt DESC'
-    ) }}
+products AS ( -- noqa
+    SELECT *
+    FROM {{ ref('int_transit_database__products_dim') }}
 ),
 
 bridge_data_schemas_x_products_outputs AS (
- {{ transit_database_many_to_many(
-     table_a = 'latest_data_schemas',
-     table_a_key_col = 'key',
-     table_a_key_col_name = 'data_schema_key',
-     table_a_name_col = 'name',
-     table_a_name_col_name = 'data_schema_name',
-     table_a_join_col = 'output_products',
-     table_a_date_col = 'dt',
-     table_b = 'latest_products',
-     table_b_key_col = 'key',
-     table_b_key_col_name = 'product_key',
-     table_b_name_col = 'name',
-     table_b_name_col_name = 'product_name',
-     table_b_join_col = 'output_components',
-     table_b_date_col = 'dt',
-     shared_date_name = 'dt'
- ) }}
+ {{ transit_database_many_to_many2(
+    shared_start_date_name = '_valid_from',
+    shared_end_date_name = '_valid_to',
+    shared_current_name = '_is_current',
+    table_a = {'name': 'data_schemas',
+        'unversioned_key_col': 'original_record_id',
+        'versioned_key_col': 'key',
+        'key_col_name': 'data_schema_key',
+        'name_col': 'name',
+        'name_col_name': 'data_schema_name',
+        'unversioned_join_col': 'output_products',
+        'start_date_col': '_valid_from',
+        'end_date_col': '_valid_to'},
+
+    table_b = {'name': 'products',
+        'unversioned_key_col': 'original_record_id',
+        'versioned_key_col': 'key',
+        'key_col_name': 'product_key',
+        'name_col': 'name',
+        'name_col_name': 'product_name',
+        'unversioned_join_col': 'output_components',
+        'start_date_col': '_valid_from',
+        'end_date_col': '_valid_to'}
+    ) }}
 )
 
 SELECT * FROM bridge_data_schemas_x_products_outputs

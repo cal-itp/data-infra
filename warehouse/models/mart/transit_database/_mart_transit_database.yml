@@ -657,3 +657,24 @@ models:
           - relationships:
              to: ref('dim_services')
              field: key
+  - name: bridge_contracts_x_components
+    description: |
+      Mapping table between contracts and components.
+      Relationship indicates that contract covers the given component.
+      This is a many-to-many relationship.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - contract_key
+            - component_key
+    columns:
+      - name: contract_key
+        tests:
+          - relationships:
+             to: ref('dim_contracts')
+             field: key
+      - name: component_key
+        tests:
+          - relationships:
+             to: ref('dim_components')
+             field: key

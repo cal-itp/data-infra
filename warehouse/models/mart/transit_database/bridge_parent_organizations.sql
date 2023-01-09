@@ -1,10 +1,8 @@
 {{ config(materialized='table') }}
 
-WITH latest AS (
-    {{ get_latest_dense_rank(
-        external_table = ref('stg_transit_database__organizations'),
-        order_by = 'dt DESC'
-        ) }}
+WITH organizations AS ( -- noqa
+    SELECT *
+    FROM {{ ref('int_transit_database__organizations_dim') }}
 ),
 
 unnest_parents AS (
@@ -12,20 +10,27 @@ unnest_parents AS (
         key AS organization_key,
         name AS organization_name,
         parent AS parent_organization_key,
-        dt
-    FROM latest,
-        latest.parent_organization AS parent
+        _is_current,
+        _valid_from,
+        _valid_to
+    FROM organizations,
+        organizations.parent_organization AS parent
 ),
 
 bridge_parent_organizations AS (
     SELECT
-        t1.* EXCEPT(dt),
-        t2.name AS parent_organization_name,
-        t1.dt
-    FROM unnest_parents AS t1
-    LEFT JOIN latest AS t2
-        ON t1.parent_organization_key = t2.key
-        AND t1.dt = t2.dt
+        unnested.organization_key,
+        unnested.organization_name,
+        organizations.key AS parent_organization_key,
+        organizations.name AS parent_organization_name,
+        (unnested._is_current AND organizations._is_current) AS _is_current,
+        GREATEST(unnested._valid_from, organizations._valid_from) AS _valid_from,
+        LEAST(unnested._valid_to, organizations._valid_to) AS _valid_to
+    FROM unnest_parents AS unnested
+    LEFT JOIN organizations
+        ON unnested.parent_organization_key = organizations.original_record_id
+        AND unnested._valid_from < organizations._valid_to
+        AND unnested._valid_to > organizations._valid_from
 )
 
 SELECT * FROM bridge_parent_organizations
