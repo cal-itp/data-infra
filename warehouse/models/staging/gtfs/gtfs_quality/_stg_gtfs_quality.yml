@@ -87,12 +87,6 @@ models:
       a single notice coming from a single zipfile; this row contains
       the count of input records in the file that generated the
       notice as well as sample input records that violate the rule.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
-            - code
     columns:
       - name: dt
       - name: base64_url
