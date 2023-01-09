@@ -189,7 +189,7 @@ This function supports an optional progress bar argument to show analysis progre
 
 For example, to generate data for Big Blue Bus on October 12, 2022:
 
-```{python}
+```python
 from rt_analysis import rt_parser
 from tqdm.notebook import tqdm
 
