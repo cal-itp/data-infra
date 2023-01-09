@@ -5,9 +5,9 @@ WITH fct_bigquery_data_access_unnested AS (
     LEFT JOIN UNNEST(fct_bigquery_data_access.referenced_tables) AS referenced_table
 ),
 
-dim_bigquery_data_access_referenced_tables AS (
+fct_bigquery_data_access_referenced_tables AS (
     SELECT * EXCEPT(referenced_tables)
     FROM fct_bigquery_data_access_unnested
 )
 
-SELECT * FROM dim_bigquery_data_access_referenced_tables
+SELECT * FROM fct_bigquery_data_access_referenced_tables
