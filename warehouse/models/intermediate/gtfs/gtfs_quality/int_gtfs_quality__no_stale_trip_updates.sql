@@ -24,8 +24,8 @@ feed_guideline_index AS (
     {% endif %}
 ),
 
-stg_gtfs_rt__trip_updates AS (
-    SELECT * FROM {{ ref('stg_gtfs_rt__trip_updates') }}
+fct_trip_updates_messages AS (
+    SELECT * FROM {{ ref('fct_trip_updates_messages') }}
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
@@ -41,7 +41,8 @@ trip_update_ages AS (
         MIN(TIMESTAMP_DIFF(_extract_ts, trip_update_timestamp, SECOND)) AS min_trip_update_age,
         PERCENTILE_CONT(TIMESTAMP_DIFF(_extract_ts, trip_update_timestamp, SECOND), 0.5) AS median_trip_update_age,
         MAX(TIMESTAMP_DIFF(_extract_ts, trip_update_timestamp, SECOND)) AS max_trip_update_age,
-    FROM stg_gtfs_rt__trip_updates
+        MAX(TIMESTAMP_DIFF(_extract_ts, header_timestamp, SECOND)) AS max_trip_update_feed_age,
+    FROM fct_trip_updates_messages
     GROUP BY 1, 2
 ),
 
@@ -54,12 +55,13 @@ int_gtfs_quality__no_stale_trip_updates AS (
         {{ best_practices_alignment_rt() }} AS feature,
         min_trip_update_age,
         max_trip_update_age,
+        max_trip_update_feed_age,
         CASE
-            WHEN max_trip_update_age <= 90 THEN "PASS"
-            WHEN max_trip_update_age > 90 THEN "FAIL"
+            WHEN max_trip_update_age <= 90 AND max_trip_update_feed_age <= 90 THEN "PASS"
+            WHEN max_trip_update_age > 90 OR max_trip_update_feed_age > 90 THEN "FAIL"
             -- If there are no trip updates for that feed for that day, result is N/A
             -- They will fail other checks for having no feed present
-            WHEN max_trip_update_age IS null THEN "N/A"
+            WHEN max_trip_update_age IS null OR max_trip_update_feed_age IS null THEN "N/A"
         END as status
     FROM feed_guideline_index AS idx
     LEFT JOIN trip_update_ages AS ages

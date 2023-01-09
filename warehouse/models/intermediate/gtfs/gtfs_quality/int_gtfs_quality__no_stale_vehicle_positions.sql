@@ -24,8 +24,8 @@ feed_guideline_index AS (
     {% endif %}
 ),
 
-stg_gtfs_rt__vehicle_positions AS (
-    SELECT * FROM {{ ref('stg_gtfs_rt__vehicle_positions') }}
+fct_vehicle_positions_messages AS (
+    SELECT * FROM {{ ref('fct_vehicle_positions_messages') }}
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
@@ -41,7 +41,8 @@ vehicle_position_ages AS (
         MIN(TIMESTAMP_DIFF(_extract_ts, vehicle_timestamp, SECOND)) AS min_vehicle_position_age,
         PERCENTILE_CONT(TIMESTAMP_DIFF(_extract_ts, vehicle_timestamp, SECOND), 0.5) AS median_vehicle_position_age,
         MAX(TIMESTAMP_DIFF(_extract_ts, vehicle_timestamp, SECOND)) AS max_vehicle_position_age,
-    FROM stg_gtfs_rt__vehicle_positions
+        MAX(TIMESTAMP_DIFF(_extract_ts, header_timestamp, SECOND)) AS max_vehicle_position_feed_age,
+    FROM fct_vehicle_positions_messages
     GROUP BY 1, 2
 ),
 
@@ -54,12 +55,13 @@ int_gtfs_quality__no_stale_vehicle_positions AS (
         {{ best_practices_alignment_rt() }} AS feature,
         min_vehicle_position_age,
         max_vehicle_position_age,
+        max_vehicle_position_feed_age,
         CASE
-            WHEN max_vehicle_position_age <= 90 THEN "PASS"
-            WHEN max_vehicle_position_age > 90 THEN "FAIL"
+            WHEN max_vehicle_position_age <= 90 AND max_vehicle_position_feed_age <= 90 THEN "PASS"
+            WHEN max_vehicle_position_age > 90 OR max_vehicle_position_feed_age > 90 THEN "FAIL"
             -- If there are no vehicle position updates for that feed for that day, result is N/A
             -- They will fail other checks for having no feed present
-            WHEN max_vehicle_position_age IS null THEN "N/A"
+            WHEN max_vehicle_position_age IS null OR max_vehicle_position_feed_age IS null THEN "N/A"
         END as status
     FROM feed_guideline_index AS idx
     LEFT JOIN vehicle_position_ages AS ages
