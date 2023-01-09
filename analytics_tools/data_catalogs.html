@@ -179,6 +179,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="rt_analysis.html">
+     RT Analysis Module
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="saving_code.html">
      Saving Code
     </a>
@@ -594,11 +599,6 @@
      GTFS CKAN Uploader
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../services/gtfs-rt-archive.html">
-     gtfs-rt-archive
-    </a>
-   </li>
   </ul>
  </li>
  <li class="toctree-l1">
@@ -863,13 +863,13 @@
 <li><p>Navigate to the corresponding <code class="docutils literal notranslate"><span class="pre">data.json</span></code> file at <a class="reference external" href="https://data.ca.gov/data.json">https://data.ca.gov/data.json</a></p></li>
 <li><p>Each dataset has associated metadata, including <code class="docutils literal notranslate"><span class="pre">accessURL</span></code>, <code class="docutils literal notranslate"><span class="pre">landingPage</span></code>, etc. Find the dataset’s <code class="docutils literal notranslate"><span class="pre">identifier</span></code>, and input that as the catalog item.</p></li>
 </ul>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Catalog item</span><span class="w"></span>
-<span class="nt">ca_open_data</span><span class="p">:</span><span class="w"></span>
-<span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dcat</span><span class="w"></span>
-<span class="nt">args</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://data.ca.gov/data.json</span><span class="w"></span>
-<span class="w">  </span><span class="nt">items</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">cdcr_population_covid_tracking</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4a9a896a-e64e-48c2-bb35-5589f80e7c52</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Catalog item</span>
+<span class="nt">ca_open_data</span><span class="p">:</span>
+<span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dcat</span>
+<span class="nt">args</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://data.ca.gov/data.json</span>
+<span class="w">  </span><span class="nt">items</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">cdcr_population_covid_tracking</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4a9a896a-e64e-48c2-bb35-5589f80e7c52</span>
 </pre></div>
 </div>
 <p>To import this dataset as a dataframe within the notebook:</p>
@@ -881,28 +881,28 @@
 <span id="catalogue-cloud-storage"></span><h3>Google Cloud Storage<a class="headerlink" href="#google-cloud-storage" title="Permalink to this headline">¶</a></h3>
 <p>When putting GCS files into the catalog, note that geospatial datasets (zipped shapefiles, GeoJSONs) require the additional <code class="docutils literal notranslate"><span class="pre">use_fsspec:</span> <span class="pre">true</span></code> argument compared to tabular datasets (parquets, CSVs). Geoparquets, the exception, are catalogued like tabular datasets.</p>
 <p>Opening geospatial datasets through <code class="docutils literal notranslate"><span class="pre">intake</span></code> is the easiest way to import these datasets within a Jupyter Notebook. Otherwise, <code class="docutils literal notranslate"><span class="pre">geopandas</span></code> can read the geospatial datasets that are locally saved or downloaded first from the bucket, but not directly with a GCS file path. Refer to [storing data](Connecting to the Warehouse) to set up your Google authentication.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">lehd_federal_jobs_by_tract</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">parquet</span><span class="w"></span>
-<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LEHD Workplace Area Characteristics (WAC) federal jobs by census tract.</span><span class="w"></span>
-<span class="w">    </span><span class="nt">args</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">urlpath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gs://calitp-analytics-data/data-analyses/bus_service_increase/wac_fed_tract.parquet</span><span class="w"></span>
-<span class="w">      </span><span class="nt">engine</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pyarrow</span><span class="w"></span>
-<span class="nt">test_csv</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csv</span><span class="w"></span>
-<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Description</span><span class="w"></span>
-<span class="w">    </span><span class="nt">args</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">urlpath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://raw.githubusercontent.com/CityOfLosAngeles/covid19-indicators/master/data/ca_county_pop_crosswalk.csv</span><span class="w"></span>
-<span class="nt">test_zipped_shapefile</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shapefile</span><span class="w"></span>
-<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LA Metro rail lines</span><span class="w"></span>
-<span class="w">    </span><span class="nt">args</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">urlpath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gs://calitp-analytics-data/test_zipped_shapefile.zip</span><span class="w"></span>
-<span class="w">      </span><span class="nt">use_fsspec</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="nt">test_geoparquet</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">geoparquet</span><span class="w"></span>
-<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Description</span><span class="w"></span>
-<span class="w">    </span><span class="nt">args</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">urlpath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gs://calitp-analytics-data/test_geoparquet.parquet</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">lehd_federal_jobs_by_tract</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">parquet</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LEHD Workplace Area Characteristics (WAC) federal jobs by census tract.</span>
+<span class="w">    </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">urlpath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gs://calitp-analytics-data/data-analyses/bus_service_increase/wac_fed_tract.parquet</span>
+<span class="w">      </span><span class="nt">engine</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pyarrow</span>
+<span class="nt">test_csv</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">csv</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Description</span>
+<span class="w">    </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">urlpath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://raw.githubusercontent.com/CityOfLosAngeles/covid19-indicators/master/data/ca_county_pop_crosswalk.csv</span>
+<span class="nt">test_zipped_shapefile</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">shapefile</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LA Metro rail lines</span>
+<span class="w">    </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">urlpath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gs://calitp-analytics-data/test_zipped_shapefile.zip</span>
+<span class="w">      </span><span class="nt">use_fsspec</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="nt">test_geoparquet</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">geoparquet</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Description</span>
+<span class="w">    </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">urlpath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gs://calitp-analytics-data/test_geoparquet.parquet</span>
 </pre></div>
 </div>
 <p>To import each of these files as dataframes or geodataframes:</p>

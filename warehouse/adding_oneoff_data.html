@@ -179,6 +179,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/rt_analysis.html">
+     RT Analysis Module
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../analytics_tools/saving_code.html">
      Saving Code
     </a>
@@ -594,11 +599,6 @@
      GTFS CKAN Uploader
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../services/gtfs-rt-archive.html">
-     gtfs-rt-archive
-    </a>
-   </li>
   </ul>
  </li>
  <li class="toctree-l1">
@@ -759,7 +759,7 @@
 </pre></div>
 </div>
 <ul class="simple">
-<li><p>The <strong><code class="docutils literal notranslate"><span class="pre">&lt;source_format&gt;</span></code></strong> specifies the type of file you would like to use. An example of this flag’s use is <code class="docutils literal notranslate"><span class="pre">--source-format=CSV</span></code>. Other options include <code class="docutils literal notranslate"><span class="pre">PARQUET</span></code> and <code class="docutils literal notranslate"><span class="pre">NEWLINE_DELIMITED_JSON</span></code></p></li>
+<li><p>The <strong><code class="docutils literal notranslate"><span class="pre">&lt;source_format&gt;</span></code></strong> specifies the type of file you would like to use. An example of this flag’s use is <code class="docutils literal notranslate"><span class="pre">--source_format=CSV</span></code>. Other options include <code class="docutils literal notranslate"><span class="pre">PARQUET</span></code> and <code class="docutils literal notranslate"><span class="pre">NEWLINE_DELIMITED_JSON</span></code></p></li>
 <li><p>The <strong><code class="docutils literal notranslate"><span class="pre">&lt;destination_table&gt;</span></code></strong> is the table you would like to create, or append to if the table already exists. Your uploaded table destination should always be the <code class="docutils literal notranslate"><span class="pre">uploaded_data</span></code> dataset in BigQuery (e.g. the <code class="docutils literal notranslate"><span class="pre">destination_table</span></code> name should always have the format <code class="docutils literal notranslate"><span class="pre">uploaded_data.your_new_table_name</span></code>).</p>
 <ul>
 <li><p>If you are looking to <strong>create a new table</strong>: use a new table name</p></li>

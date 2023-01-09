@@ -179,6 +179,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/rt_analysis.html">
+     RT Analysis Module
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../analytics_tools/saving_code.html">
      Saving Code
     </a>
@@ -594,11 +599,6 @@
      GTFS CKAN Uploader
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../services/gtfs-rt-archive.html">
-     gtfs-rt-archive
-    </a>
-   </li>
   </ul>
  </li>
  <li class="toctree-l1">
@@ -803,23 +803,6 @@
      app: metabase
     </a>
    </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#app-gtfs-rt-archive">
-     app: gtfs-rt-archive
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#new-service-versions">
-       new service versions
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#agencies-data">
-       agencies data
-      </a>
-     </li>
-    </ul>
-   </li>
   </ul>
  </li>
 </ul>
@@ -896,23 +879,6 @@
      app: metabase
     </a>
    </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#app-gtfs-rt-archive">
-     app: gtfs-rt-archive
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#new-service-versions">
-       new service versions
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#agencies-data">
-       agencies data
-      </a>
-     </li>
-    </ul>
-   </li>
   </ul>
  </li>
 </ul>
@@ -931,19 +897,19 @@
 <div class="section" id="preflight">
 <h3>preflight<a class="headerlink" href="#preflight" title="Permalink to this headline">¶</a></h3>
 <p>Check logged in user</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcloud auth list
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcloud<span class="w"> </span>auth<span class="w"> </span>list
 <span class="c1"># ensure correct active user</span>
 <span class="c1"># gcloud auth login</span>
 </pre></div>
 </div>
 <p>Check active project</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcloud config get-value project
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcloud<span class="w"> </span>config<span class="w"> </span>get-value<span class="w"> </span>project
 <span class="c1"># project should be cal-itp-data-infra</span>
 <span class="c1"># gcloud config set project cal-itp-data-infra</span>
 </pre></div>
 </div>
 <p>Check compute region</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcloud config get-value compute/region
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcloud<span class="w"> </span>config<span class="w"> </span>get-value<span class="w"> </span>compute/region
 <span class="c1"># region should be us-west1</span>
 <span class="c1"># gcloud config set compute/region us-west1</span>
 </pre></div>
@@ -953,8 +919,8 @@
 <h3>quick start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./kubernetes/gke/cluster-create.sh
 <span class="c1"># ...</span>
-<span class="nb">export</span> <span class="nv">KUBECONFIG</span><span class="o">=</span><span class="nv">$PWD</span>/kubernetes/gke/kube/admin.yaml
-kubectl cluster-info
+<span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span><span class="nv">$PWD</span>/kubernetes/gke/kube/admin.yaml
+kubectl<span class="w"> </span>cluster-info
 </pre></div>
 </div>
 </div>
@@ -1006,7 +972,7 @@ removed from the <code class="docutils literal notranslate"><span class="pre">GK
 <p>Apps are the workloads that users actually care about.</p>
 <div class="section" id="system-workloads">
 <h3>system workloads<a class="headerlink" href="#system-workloads" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl apply -k kubernetes/system
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl<span class="w"> </span>apply<span class="w"> </span>-k<span class="w"> </span>kubernetes/system
 </pre></div>
 </div>
 <p>System workloads are used to support running applications. This includes items
@@ -1017,56 +983,12 @@ to be run again.</p>
 <div class="section" id="app-metabase">
 <h3>app: metabase<a class="headerlink" href="#app-metabase" title="Permalink to this headline">¶</a></h3>
 <p>First deploy:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm install metabase kubernetes/apps/charts/metabase -f kubernetes/apps/values/metabase.yaml -n metabase --create-namespace
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm<span class="w"> </span>install<span class="w"> </span>metabase<span class="w"> </span>kubernetes/apps/charts/metabase<span class="w"> </span>-f<span class="w"> </span>kubernetes/apps/values/metabase.yaml<span class="w"> </span>-n<span class="w"> </span>metabase<span class="w"> </span>--create-namespace
 </pre></div>
 </div>
 <p>Apply changes:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm upgrade metabase kubernetes/apps/charts/metabase -f kubernetes/apps/values/metabase.yaml -n metabase
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>helm<span class="w"> </span>upgrade<span class="w"> </span>metabase<span class="w"> </span>kubernetes/apps/charts/metabase<span class="w"> </span>-f<span class="w"> </span>kubernetes/apps/values/metabase.yaml<span class="w"> </span>-n<span class="w"> </span>metabase
 </pre></div>
-</div>
-</div>
-<div class="section" id="app-gtfs-rt-archive">
-<h3>app: gtfs-rt-archive<a class="headerlink" href="#app-gtfs-rt-archive" title="Permalink to this headline">¶</a></h3>
-<p>First deploy:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Archive url: https://bitwarden.jarv.us//attachments/1ef9cad1-40a3-41f2-963d-f43d64c06efb/09dd10cd528b5f9743f3</span>
-tar xzvf kubernetes-secrets.tar.gz <span class="o">&amp;&amp;</span> rm kubernetes-secrets.tar.gz
-
-<span class="c1"># Deploy app</span>
-kubectl apply -k kubernetes/secrets
-kubectl apply -k kubernetes/apps/overlays/gtfs-rt-<span class="si">${</span><span class="nv">environment</span><span class="si">}</span>
-</pre></div>
-</div>
-<p>Apply changes:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl apply -k kubernetes/apps/overlays/gtfs-rt-<span class="si">${</span><span class="nv">environment</span><span class="si">}</span>
-</pre></div>
-</div>
-<div class="section" id="new-service-versions">
-<h4>new service versions<a class="headerlink" href="#new-service-versions" title="Permalink to this headline">¶</a></h4>
-<p>In order to deploy a new version of the service script, a container image of the new version needs to
-be built and pushed to the GCR repository (see the <a class="reference internal" href="../services/gtfs-rt-archive.html"><span class="doc std std-doc">service documentation</span></a>
-for details). Once there, the image version must be changed in <code class="docutils literal notranslate"><span class="pre">kubernetes/apps/overlays/gtfs-rt-${environmnt}/kustomization.yaml</span></code>
-and the manifest change must then be applied (see: “Apply changes” above).</p>
-</div>
-<div class="section" id="agencies-data">
-<h4>agencies data<a class="headerlink" href="#agencies-data" title="Permalink to this headline">¶</a></h4>
-<p>The secret in <code class="docutils literal notranslate"><span class="pre">kubernetes/secrets/agencies-data.yaml</span></code> is a complete base64 encoded version
-of the rendered agencies.yml file. When there are changes to the agencies file, the following
-steps are required:</p>
-<ol class="simple">
-<li><p>Update the base64 data in <code class="docutils literal notranslate"><span class="pre">kubernetes/secrets/agencies-data.yaml</span></code> to contain the new agencies.yml contents</p></li>
-<li><p>Upload the new data to the kubernetes API server</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">apply</span> <span class="pre">-f</span> <span class="pre">kubernetes/secrets/agencies-data.yaml</span></code></p></li>
-</ul>
-</li>
-<li><p>Restart the kubernetes deployment</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">kubectl</span> <span class="pre">-n</span> <span class="pre">gtfs-rt</span> <span class="pre">rollout</span> <span class="pre">restart</span> <span class="pre">deployment/gtfs-rt-archive</span></code></p></li>
-</ul>
-</li>
-</ol>
-<p>See the <a class="reference internal" href="../services/gtfs-rt-archive.html"><span class="doc std std-doc">gtfs-rt-archive service documentation</span></a> for details on downloading the
-latest agencies file</p>
 </div>
 </div>
 </div>

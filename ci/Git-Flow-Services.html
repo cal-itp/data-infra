@@ -179,6 +179,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/rt_analysis.html">
+     RT Analysis Module
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../analytics_tools/saving_code.html">
      Saving Code
     </a>
@@ -594,11 +599,6 @@
      GTFS CKAN Uploader
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../services/gtfs-rt-archive.html">
-     gtfs-rt-archive
-    </a>
-   </li>
   </ul>
  </li>
  <li class="toctree-l1">
@@ -933,17 +933,17 @@ defined in the <code class="docutils literal notranslate"><span class="pre">kube
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># this is a path under services/$app_name</span>
 <span class="nv">app_name</span><span class="o">=</span>gtfs-rt-archive
 <span class="c1"># this would normally be something like 1.0, 1.1, etc</span>
-<span class="nv">app_version</span><span class="o">=</span><span class="k">$(</span>whoami<span class="k">)</span>.<span class="k">$(</span>date +%Y-%M-%d@%H%M<span class="k">)</span>
+<span class="nv">app_version</span><span class="o">=</span><span class="k">$(</span>whoami<span class="k">)</span>.<span class="k">$(</span>date<span class="w"> </span>+%Y-%M-%d@%H%M<span class="k">)</span>
 <span class="c1"># choose your appropriate remote name if different</span>
 <span class="nv">git_remote</span><span class="o">=</span>origin
 
 <span class="c1"># an annotated tag is a requirement; lightweight tags are not accepted</span>
 <span class="c1"># see below for details on using the more convenient build-git-tag interface</span>
-git tag -a <span class="s2">&quot;</span><span class="si">${</span><span class="nv">app_name</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">app_version</span><span class="si">}</span><span class="s2">&quot;</span>
+git<span class="w"> </span>tag<span class="w"> </span>-a<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">app_name</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">app_version</span><span class="si">}</span><span class="s2">&quot;</span>
 
 <span class="c1"># push the annotated tag; this triggers the image build which is then pushed to</span>
 <span class="c1"># the gcr repository</span>
-git push <span class="s2">&quot;</span><span class="nv">$git_remote</span><span class="s2">&quot;</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">app_name</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">app_version</span><span class="si">}</span><span class="s2">&quot;</span>
+git<span class="w"> </span>push<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$git_remote</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">app_name</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">app_version</span><span class="si">}</span><span class="s2">&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -959,9 +959,9 @@ image name which is pushed to the registry.</p>
 <p>Consequently, the resulting image build is pushed to
 <code class="docutils literal notranslate"><span class="pre">{gcr_registry}/{app_name}:{app_version}</span></code>.</p>
 <p>It is recommended to use the <code class="docutils literal notranslate"><span class="pre">build-git-tag</span></code> step to create the tag, like:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">BUILD_APP</span><span class="o">=</span><span class="nv">$app_name</span>
-<span class="nb">export</span> <span class="nv">BUILD_ID</span><span class="o">=</span><span class="nv">$app_version</span>
-<span class="nb">export</span> <span class="nv">CONFIGURE_GIT_REMOTE_NAME</span><span class="o">=</span><span class="nv">$git_remote</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">BUILD_APP</span><span class="o">=</span><span class="nv">$app_name</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">BUILD_ID</span><span class="o">=</span><span class="nv">$app_version</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">CONFIGURE_GIT_REMOTE_NAME</span><span class="o">=</span><span class="nv">$git_remote</span>
 ./ci/steps/build-git-tag.sh
 </pre></div>
 </div>
@@ -991,34 +991,34 @@ process.</p></li>
 <span class="nv">app_name</span><span class="o">=</span>gtfs-rt-archive
 <span class="c1"># choose your appropriate remote name if different</span>
 <span class="nv">git_remote</span><span class="o">=</span>origin
-<span class="nv">topic_branch</span><span class="o">=</span><span class="k">$(</span>git branch --show-current<span class="k">)</span>
+<span class="nv">topic_branch</span><span class="o">=</span><span class="k">$(</span>git<span class="w"> </span>branch<span class="w"> </span>--show-current<span class="k">)</span>
 <span class="c1"># load the helm or kustomize specific parameters</span>
-<span class="nb">source</span> ci/vars/releases/preprod-<span class="nv">$app_name</span>.env
+<span class="nb">source</span><span class="w"> </span>ci/vars/releases/preprod-<span class="nv">$app_name</span>.env
 
-<span class="k">if</span>   <span class="o">[[</span> <span class="nv">$RELEASE_DRIVER</span> <span class="o">==</span> <span class="s1">&#39;kustomize&#39;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
-  <span class="c1"># bump the newTag version to match the newly pushed app version</span>
-  <span class="nv">$EDITOR</span> kubernetes/apps/overlays/<span class="nv">$app_name</span>-release/kustomization.yaml
-<span class="k">elif</span> <span class="o">[[</span> <span class="nv">$RELEASE_DRIVER</span> <span class="o">==</span> <span class="s1">&#39;helm&#39;</span>      <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
-  <span class="c1"># update the tag part of the image parameter; how to do this may vary from app to app</span>
-  <span class="c1"># the RELEASE_HELM_VALUES parameter in the release config points to the values file which should be changed</span>
-  <span class="nv">$EDITOR</span> <span class="nv">$RELEASE_HELM_VALUES</span>
+<span class="k">if</span><span class="w">   </span><span class="o">[[</span><span class="w"> </span><span class="nv">$RELEASE_DRIVER</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">&#39;kustomize&#39;</span><span class="w"> </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="c1"># bump the newTag version to match the newly pushed app version</span>
+<span class="w">  </span><span class="nv">$EDITOR</span><span class="w"> </span>kubernetes/apps/overlays/<span class="nv">$app_name</span>-release/kustomization.yaml
+<span class="k">elif</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="nv">$RELEASE_DRIVER</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">&#39;helm&#39;</span><span class="w">      </span><span class="o">]]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="c1"># update the tag part of the image parameter; how to do this may vary from app to app</span>
+<span class="w">  </span><span class="c1"># the RELEASE_HELM_VALUES parameter in the release config points to the values file which should be changed</span>
+<span class="w">  </span><span class="nv">$EDITOR</span><span class="w"> </span><span class="nv">$RELEASE_HELM_VALUES</span>
 <span class="k">fi</span>
 
 <span class="c1"># commit the change</span>
-git commit -am <span class="s2">&quot;ops(</span><span class="nv">$app_name</span><span class="s2">): release new version&quot;</span>
+git<span class="w"> </span>commit<span class="w"> </span>-am<span class="w"> </span><span class="s2">&quot;ops(</span><span class="nv">$app_name</span><span class="s2">): release new version&quot;</span>
 
 <span class="c1"># trigger a release candidate build</span>
-git push <span class="nv">$git_remote</span>
+git<span class="w"> </span>push<span class="w"> </span><span class="nv">$git_remote</span>
 
 <span class="c1">#</span>
 <span class="c1"># wait for the &quot;Build release candidate&quot; action to complete in GitHub</span>
 <span class="c1">#</span>
 
 <span class="c1"># fetch the release candidate</span>
-git fetch <span class="nv">$git_remote</span> candidates/<span class="nv">$topic_branch</span>
+git<span class="w"> </span>fetch<span class="w"> </span><span class="nv">$git_remote</span><span class="w"> </span>candidates/<span class="nv">$topic_branch</span>
 
 <span class="c1"># deploy to preprod</span>
-git push -f <span class="nv">$git_remote</span> <span class="nv">$git_remote</span>/candidates/<span class="nv">$topic_branch</span>:releases/preprod
+git<span class="w"> </span>push<span class="w"> </span>-f<span class="w"> </span><span class="nv">$git_remote</span><span class="w"> </span><span class="nv">$git_remote</span>/candidates/<span class="nv">$topic_branch</span>:releases/preprod
 
 <span class="c1"># after it looks good in preprod, merge your changes into main.</span>
 </pre></div>
@@ -1066,7 +1066,7 @@ application using <code class="docutils literal notranslate"><span class="pre">k
 </ul>
 <p>When deploying changed kustomize manifests, the ci pipeline will essentially
 execute the command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl apply -k kubernetes/apps/overlays/<span class="nv">$app_name</span>-<span class="nv">$release_channel</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>kubectl<span class="w"> </span>apply<span class="w"> </span>-k<span class="w"> </span>kubernetes/apps/overlays/<span class="nv">$app_name</span>-<span class="nv">$release_channel</span>
 </pre></div>
 </div>
 </div>

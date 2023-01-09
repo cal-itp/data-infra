@@ -179,6 +179,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/rt_analysis.html">
+     RT Analysis Module
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../analytics_tools/saving_code.html">
      Saving Code
     </a>
@@ -594,11 +599,6 @@
      GTFS CKAN Uploader
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../services/gtfs-rt-archive.html">
-     gtfs-rt-archive
-    </a>
-   </li>
   </ul>
  </li>
  <li class="toctree-l1">
@@ -827,7 +827,7 @@ a <code class="docutils literal notranslate"><span class="pre">calitp_extracted_
 <h2>A single date<a class="headerlink" href="#a-single-date" title="Permalink to this headline">¶</a></h2>
 <div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.8.14/x64/lib/python3.8/site-packages/pkg_resources/__init__.py:2456: UserWarning: Obsolete pybigquery is installed, which is likely to
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.8.15/x64/lib/python3.8/site-packages/pkg_resources/__init__.py:2456: UserWarning: Obsolete pybigquery is installed, which is likely to
 interfere with sqlalchemy_bigquery.
 pybigquery should be uninstalled.
   module = __import__(self.module_name, fromlist=[&#39;__name__&#39;], level=0)
@@ -837,11 +837,11 @@ pybigquery should be uninstalled.
 </div>
 <div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
-<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"></span>
-<span class="k">FROM</span><span class="w"> </span><span class="o">`</span><span class="n">gtfs_schedule_type2</span><span class="p">.</span><span class="n">feed_info</span><span class="o">`</span><span class="w"></span>
-<span class="k">WHERE</span><span class="w"></span>
-<span class="w">    </span><span class="n">calitp_extracted_at</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="ss">&quot;2021-06-01&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="k">AND</span><span class="w"> </span><span class="k">COALESCE</span><span class="p">(</span><span class="n">calitp_deleted_at</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;2099-01-01&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="ss">&quot;2021-06-01&quot;</span><span class="w"></span>
+<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="o">`</span><span class="n">gtfs_schedule_type2</span><span class="p">.</span><span class="n">feed_info</span><span class="o">`</span>
+<span class="k">WHERE</span>
+<span class="w">    </span><span class="n">calitp_extracted_at</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="ss">&quot;2021-06-01&quot;</span>
+<span class="w">    </span><span class="k">AND</span><span class="w"> </span><span class="k">COALESCE</span><span class="p">(</span><span class="n">calitp_deleted_at</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;2099-01-01&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="ss">&quot;2021-06-01&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -857,13 +857,13 @@ so it evaluates to <code class="docutils literal notranslate"><span class="pre">
 <p>In order to do it for a range of dates, you can use a JOIN. This is shown below.</p>
 <div class="cell tag_remove-input docutils container">
 <div class="cell_output docutils container">
-<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"></span>
-<span class="k">FROM</span><span class="w"> </span><span class="o">`</span><span class="n">gtfs_schedule_type2</span><span class="p">.</span><span class="n">feed_info</span><span class="o">`</span><span class="w"> </span><span class="n">FI</span><span class="w"></span>
-<span class="k">JOIN</span><span class="w"> </span><span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">dim_date</span><span class="o">`</span><span class="w"> </span><span class="n">D</span><span class="w"></span>
-<span class="w">    </span><span class="k">ON</span><span class="w"> </span><span class="n">FI</span><span class="p">.</span><span class="n">calitp_extracted_at</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">D</span><span class="p">.</span><span class="n">full_date</span><span class="w"></span>
-<span class="w">        </span><span class="k">AND</span><span class="w"> </span><span class="k">COALESCE</span><span class="p">(</span><span class="n">FI</span><span class="p">.</span><span class="n">calitp_deleted_at</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;2099-01-01&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">D</span><span class="p">.</span><span class="n">full_date</span><span class="w"></span>
-<span class="k">WHERE</span><span class="w"></span>
-<span class="w">    </span><span class="n">D</span><span class="p">.</span><span class="n">full_date</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="ss">&quot;2021-06-01&quot;</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="ss">&quot;2021-06-07&quot;</span><span class="w"></span>
+<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
+<span class="k">FROM</span><span class="w"> </span><span class="o">`</span><span class="n">gtfs_schedule_type2</span><span class="p">.</span><span class="n">feed_info</span><span class="o">`</span><span class="w"> </span><span class="n">FI</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">dim_date</span><span class="o">`</span><span class="w"> </span><span class="n">D</span>
+<span class="w">    </span><span class="k">ON</span><span class="w"> </span><span class="n">FI</span><span class="p">.</span><span class="n">calitp_extracted_at</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">D</span><span class="p">.</span><span class="n">full_date</span>
+<span class="w">        </span><span class="k">AND</span><span class="w"> </span><span class="k">COALESCE</span><span class="p">(</span><span class="n">FI</span><span class="p">.</span><span class="n">calitp_deleted_at</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;2099-01-01&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">D</span><span class="p">.</span><span class="n">full_date</span>
+<span class="k">WHERE</span>
+<span class="w">    </span><span class="n">D</span><span class="p">.</span><span class="n">full_date</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="ss">&quot;2021-06-01&quot;</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="ss">&quot;2021-06-07&quot;</span>
 </pre></div>
 </div>
 </div>

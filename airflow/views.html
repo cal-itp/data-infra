@@ -179,6 +179,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/rt_analysis.html">
+     RT Analysis Module
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../analytics_tools/saving_code.html">
      Saving Code
     </a>
@@ -594,11 +599,6 @@
      GTFS CKAN Uploader
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../services/gtfs-rt-archive.html">
-     gtfs-rt-archive
-    </a>
-   </li>
   </ul>
  </li>
  <li class="toctree-l1">
@@ -823,43 +823,43 @@
 <div class="section" id="syntax-overview">
 <h2>Syntax overview<a class="headerlink" href="#syntax-overview" title="Permalink to this headline">¶</a></h2>
 <p>Below is an example file for the SqlToWarehouseOperator that uses gusty syntax. This file is similar to the one used to create <code class="docutils literal notranslate"><span class="pre">views.transitstacks</span></code>. A number of other operators have variations on this that is currently best learned about by either looking at examples or the underlying operator source code.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># What operator to use. This determines the options available, and how the</span><span class="w"></span>
-<span class="c1"># pipeline executes this task.</span><span class="w"></span>
-<span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">operators.SqlToWarehouseOperator</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># What operator to use. This determines the options available, and how the</span>
+<span class="c1"># pipeline executes this task.</span>
+<span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">operators.SqlToWarehouseOperator</span>
 
-<span class="c1"># Name of the table to load into the warehouse. For some operators this might be `table_name`.</span><span class="w"></span>
-<span class="nt">dst_table_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;views.dim_date&quot;</span><span class="w"></span>
+<span class="c1"># Name of the table to load into the warehouse. For some operators this might be `table_name`.</span>
+<span class="nt">dst_table_name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;views.dim_date&quot;</span>
 
-<span class="c1"># Column descriptions to put into warehouse</span><span class="w"></span>
-<span class="nt">fields</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">The ID Column</span><span class="w"></span>
-<span class="w">  </span><span class="nt">full_date</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">The full date (e.g. &quot;2021-01-01&quot;)</span><span class="w"></span>
-<span class="w">  </span><span class="nt">year</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">The year component (e.g. 2021)</span><span class="w"></span>
+<span class="c1"># Column descriptions to put into warehouse</span>
+<span class="nt">fields</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">The ID Column</span>
+<span class="w">  </span><span class="nt">full_date</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">The full date (e.g. &quot;2021-01-01&quot;)</span>
+<span class="w">  </span><span class="nt">year</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">The year component (e.g. 2021)</span>
 
-<span class="c1"># Specify tests to run over the data</span><span class="w"></span>
-<span class="c1"># e.g. check_null to verify a column contains no nulls</span><span class="w"></span>
-<span class="c1"># e.g. check_unique to verify no duplicate values in a column</span><span class="w"></span>
-<span class="nt">tests</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">check_null</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">id</span><span class="w"></span>
-<span class="w">  </span><span class="nt">check_unique</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">id</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">full_date</span><span class="w"></span>
+<span class="c1"># Specify tests to run over the data</span>
+<span class="c1"># e.g. check_null to verify a column contains no nulls</span>
+<span class="c1"># e.g. check_unique to verify no duplicate values in a column</span>
+<span class="nt">tests</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">check_null</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">id</span>
+<span class="w">  </span><span class="nt">check_unique</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">id</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">full_date</span>
 
-<span class="c1"># Other tasks this depends on. For example, if it uses another SQL view, then</span><span class="w"></span>
-<span class="c1"># that view should be a dependency</span><span class="w"></span>
-<span class="nt">dependencies</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">warehouse_loaded</span><span class="w"></span>
+<span class="c1"># Other tasks this depends on. For example, if it uses another SQL view, then</span>
+<span class="c1"># that view should be a dependency</span>
+<span class="nt">dependencies</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">warehouse_loaded</span>
 
-<span class="c1"># The actual SQL code to be run!</span><span class="w"></span>
-<span class="nt">sql</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"></span>
-<span class="w">  </span><span class="no"># from https://gist.github.com/ewhauser/d7dd635ad2d4b20331c7f18038f04817</span><span class="w"></span>
-<span class="w">  </span><span class="no">SELECT</span><span class="w"></span>
-<span class="w">    </span><span class="no">FORMAT_DATE(&#39;%F&#39;, d) as id,</span><span class="w"></span>
-<span class="w">    </span><span class="no">d AS full_date,</span><span class="w"></span>
-<span class="w">    </span><span class="no">EXTRACT(YEAR FROM d) AS year,</span><span class="w"></span>
-<span class="w">  </span><span class="no">FROM</span><span class="w"></span>
-<span class="w">    </span><span class="no">UNNEST(GENERATE_DATE_ARRAY(&#39;2001-01-01&#39;, &#39;2050-01-01&#39;, INTERVAL 1 DAY)) d</span><span class="w"></span>
+<span class="c1"># The actual SQL code to be run!</span>
+<span class="nt">sql</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">  </span><span class="no"># from https://gist.github.com/ewhauser/d7dd635ad2d4b20331c7f18038f04817</span>
+<span class="w">  </span><span class="no">SELECT</span>
+<span class="w">    </span><span class="no">FORMAT_DATE(&#39;%F&#39;, d) as id,</span>
+<span class="w">    </span><span class="no">d AS full_date,</span>
+<span class="w">    </span><span class="no">EXTRACT(YEAR FROM d) AS year,</span>
+<span class="w">  </span><span class="no">FROM</span>
+<span class="w">    </span><span class="no">UNNEST(GENERATE_DATE_ARRAY(&#39;2001-01-01&#39;, &#39;2050-01-01&#39;, INTERVAL 1 DAY)) d</span>
 </pre></div>
 </div>
 </div>

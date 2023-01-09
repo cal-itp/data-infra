@@ -179,6 +179,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../analytics_tools/rt_analysis.html">
+     RT Analysis Module
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../analytics_tools/saving_code.html">
      Saving Code
     </a>
@@ -594,11 +599,6 @@
      GTFS CKAN Uploader
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../services/gtfs-rt-archive.html">
-     gtfs-rt-archive
-    </a>
-   </li>
   </ul>
  </li>
  <li class="toctree-l1">
@@ -850,14 +850,14 @@ is the unique name used in the airtable.</p></li>
 <li><p>Add the appropriate key name in the text of a URL entry in the <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/airflow/data/agencies.yml">airflow/data/agencies.yml</a> file.</p></li>
 </ol>
 <p>Below is an example entry.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">ac-transit</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">agency_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AC Transit</span><span class="w"></span>
-<span class="w">  </span><span class="nt">feeds</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">gtfs_schedule_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://api.actransit.org/transit/gtfs/download?token={{ AC_TRANSIT_API_KEY }}</span><span class="w"></span>
-<span class="w">      </span><span class="nt">gtfs_rt_vehicle_positions_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://api.actransit.org/gtfsrt/vehicles?token={{ AC_TRANSIT_API_KEY }}</span><span class="w"></span>
-<span class="w">      </span><span class="nt">gtfs_rt_service_alerts_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://api.actransit.org/gtfsrt/alerts?token={{ AC_TRANSIT_API_KEY }}</span><span class="w"></span>
-<span class="w">      </span><span class="nt">gtfs_rt_trip_updates_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://api.actransit.org/gtfsrt/tripupdates?token={{ AC_TRANSIT_API_KEY }}</span><span class="w"></span>
-<span class="w">  </span><span class="nt">itp_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">ac-transit</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">agency_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AC Transit</span>
+<span class="w">  </span><span class="nt">feeds</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">gtfs_schedule_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://api.actransit.org/transit/gtfs/download?token={{ AC_TRANSIT_API_KEY }}</span>
+<span class="w">      </span><span class="nt">gtfs_rt_vehicle_positions_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://api.actransit.org/gtfsrt/vehicles?token={{ AC_TRANSIT_API_KEY }}</span>
+<span class="w">      </span><span class="nt">gtfs_rt_service_alerts_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://api.actransit.org/gtfsrt/alerts?token={{ AC_TRANSIT_API_KEY }}</span>
+<span class="w">      </span><span class="nt">gtfs_rt_trip_updates_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://api.actransit.org/gtfsrt/tripupdates?token={{ AC_TRANSIT_API_KEY }}</span>
+<span class="w">  </span><span class="nt">itp_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
 </pre></div>
 </div>
 </div>
