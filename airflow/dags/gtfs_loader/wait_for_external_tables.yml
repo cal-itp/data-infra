@@ -1,4 +1,0 @@
----
-operator: operators.OnceOffExternalTaskSensor
-external_dag_id: gtfs_schedule_history
----
