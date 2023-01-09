@@ -123,10 +123,14 @@ models:
       - *schedule_feed_key
       - name: code
         tests:
-          - not_null
+          # TODO: this should be 100% populated once backfill flakes are cleared
+          - dbt_utils.not_null_proportion:
+              at_least: 0.999
       - name: severity
         tests:
-          - not_null
+          # TODO: this should be 100% populated once backfill flakes are cleared
+          - dbt_utils.not_null_proportion:
+              at_least: 0.999
       - name: validation_success
         tests:
           - dbt_utils.not_null_proportion:

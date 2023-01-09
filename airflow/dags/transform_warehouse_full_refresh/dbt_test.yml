@@ -12,6 +12,7 @@ arguments:
 
 dependencies:
   - dbt_run_and_upload_artifacts
+trigger_rule: all_done
 
 is_delete_operator_pod: true
 startup_timeout_seconds: 300
@@ -36,11 +37,16 @@ secrets:
     secret: jobs-data
     key: service-account.json
 
+resources:
+  request_memory: 2.0Gi
+  request_cpu: 1
+
 tolerations:
   - key: pod-role
     operator: Equal
     value: computetask
     effect: NoSchedule
+
 affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
