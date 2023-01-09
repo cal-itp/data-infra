@@ -17,31 +17,14 @@ dim_products AS (
     SELECT * FROM {{ ref('dim_products') }}
 ),
 
-ranked_service_components AS (
-    SELECT
-        id,
-        service_key,
-        product_key,
-        component_key,
-        ntd_certified,
-        product_component_valid,
-        notes,
-        ROW_NUMBER() OVER
-            (PARTITION BY service_key, product_key, component_key
-            ORDER BY id) AS rank,
-        dt
-    FROM latest_service_components
-    QUALIFY rank = 1
-),
-
 -- TODO: make this table actually historical
 historical AS (
     SELECT
         *,
         TRUE AS _is_current,
-        CAST((MIN(dt) OVER (ORDER BY dt)) AS TIMESTAMP) AS _valid_from,
+        CAST(universal_first_val AS TIMESTAMP) AS _valid_from,
         {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }} AS _valid_to
-    FROM ranked_service_components
+    FROM latest_service_components
 ),
 
 -- join SCD tables: https://sqlsunday.com/2014/11/30/joining-two-scd2-tables/
