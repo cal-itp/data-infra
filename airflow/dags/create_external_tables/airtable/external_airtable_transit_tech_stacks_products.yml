@@ -12,4 +12,5 @@ source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 hive_options:
   mode: AUTO
+  require_partition_filters: false
   source_uri_prefix: "transit_technology_stacks__products/"

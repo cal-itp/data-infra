@@ -12,6 +12,7 @@ source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 hive_options:
   mode: AUTO
+  require_partition_filters: false
   source_uri_prefix: "california_transit__gtfs_service_data/"
 schema_fields:
   - name: network_id
