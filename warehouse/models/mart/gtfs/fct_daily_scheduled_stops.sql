@@ -29,18 +29,17 @@ dim_routes AS (
     FROM {{ ref('dim_routes') }}
 ),
 
-
 stops_by_day AS (
 
     SELECT
 
         trips.service_date,
         trips.feed_key,
-        trips.route_type,
+        CAST(trips.route_type AS INT) AS route_type,
 
         stop_times.stop_id,
 
-        count(*) AS stop_event_count,
+        COUNT(*) AS stop_event_count
 
     FROM dim_stop_times AS stop_times
     LEFT JOIN fct_daily_scheduled_trips AS trips
@@ -49,14 +48,42 @@ stops_by_day AS (
     GROUP BY service_date, feed_key, route_type, stop_id
 ),
 
+pivot_to_route_type AS (
+
+    SELECT *
+    FROM
+        (SELECT
+
+            service_date,
+            feed_key,
+            route_type,
+            stop_id,
+            stop_event_count
+
+        FROM stops_by_day)
+    PIVOT(
+        SUM(stop_event_count) AS route_type
+        FOR route_type IN
+        (0, 1, 2, 3, 4, 5, 11)
+    )
+),
+
 fct_daily_scheduled_stops AS (
     SELECT
 
-        stops_by_day.service_date,
-        stops_by_day.feed_key,
-        stops_by_day.route_type,
-        stops_by_day.stop_id,
+        pivot.service_date,
+        pivot.feed_key,
+        pivot.stop_id,
+
         stops_by_day.stop_event_count,
+
+        IFNULL(pivot.route_type_0, 0) AS route_type_0_count,
+        IFNULL(pivot.route_type_1, 0) AS route_type_1_count,
+        IFNULL(pivot.route_type_2, 0) AS route_type_2_count,
+        IFNULL(pivot.route_type_3, 0) AS route_type_3_count,
+        IFNULL(pivot.route_type_4, 0) AS route_type_4_count,
+        IFNULL(pivot.route_type_5, 0) AS route_type_5_count,
+        IFNULL(pivot.route_type_11, 0) AS route_type_11_count,
 
         stops.tts_stop_name,
         stops.pt_geom,
@@ -68,9 +95,13 @@ fct_daily_scheduled_stops AS (
         stops.stop_timezone,
         stops.wheelchair_boarding
 
-    FROM stops_by_day
+    FROM pivot_to_route_type AS pivot
     LEFT JOIN dim_stops AS stops
-        ON stops_by_day.stop_id = stops.stop_id
+        ON pivot.stop_id = stops.stop_id
+    LEFT JOIN stops_by_day
+        ON pivot.stop_id = stops_by_day.stop_id
+        AND pivot.service_date = stops_by_day.service_date
+        AND pivot.feed_key = stops_by_day.feed_key
 )
 
 SELECT * FROM fct_daily_scheduled_stops

@@ -54,12 +54,12 @@ fct_daily_scheduled_trips AS (
 
         routes.key AS route_key,
         routes.route_id AS route_id,
-        routes.agency_id AS agency_id,
-        routes.network_id AS network_id,
         routes.route_type,
         routes.route_short_name,
         routes.route_long_name,
         routes.route_desc,
+        routes.agency_id AS agency_id,
+        routes.network_id AS network_id,
 
         shapes.key AS shape_array_key,
         urls_to_gtfs_datasets.gtfs_dataset_key AS gtfs_dataset_key,
