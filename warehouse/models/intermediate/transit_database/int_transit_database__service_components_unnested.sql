@@ -16,7 +16,8 @@ stg_transit_database__service_components_unnested AS (
         ntd_certified,
         product_component_valid,
         notes,
-        l.dt
+        l.dt,
+        l.universal_first_val
     FROM latest AS l
     LEFT JOIN UNNEST(l.services) AS service_key
     LEFT JOIN UNNEST(l.product) AS product_key
