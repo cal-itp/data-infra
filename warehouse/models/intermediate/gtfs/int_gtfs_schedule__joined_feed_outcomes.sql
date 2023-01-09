@@ -25,6 +25,7 @@ join_outcomes_only AS (
         d._config_extract_ts,
         d.download_success,
         d.download_exception,
+        JSON_VALUE(d.download_response_headers, '$."Last-Modified"') AS last_modified_string,
         u.unzip_success,
         u.unzip_exception,
         u.zipfile_extract_md5hash,
@@ -48,6 +49,13 @@ int_gtfs_schedule__joined_feed_outcomes AS (
         f._config_extract_ts,
         f.download_success,
         f.download_exception,
+        -- this seems to be a standard format? https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Last-Modified#syntax
+        -- Last-Modified: <day-name>, <day> <month> <year> <hour>:<minute>:<second> GMT
+        -- but there are some non-standard rows
+        CASE WHEN last_modified_string like '%GMT' THEN PARSE_TIMESTAMP("%a, %d %b %Y %H:%M:%S GMT", last_modified_string)
+             -- 1/28/2020 6:29:01 PM
+             WHEN last_modified_string like '%PM' THEN PARSE_TIMESTAMP("%m/%d/%Y %I:%M:%S %p", last_modified_string)
+        END AS last_modified_timestamp,
         f.unzip_success,
         f.unzip_exception,
         f.zipfile_extract_md5hash,
