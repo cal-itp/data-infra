@@ -50,6 +50,7 @@
 {% macro transit_database_many_to_many2(
     shared_start_date_name,
     shared_end_date_name,
+    shared_current_name,
     table_a = {},
     table_b = {}
     ) %}
@@ -66,6 +67,7 @@
             , CAST({{ table_a['unversioned_join_col'] }} AS STRING) AS table_b_unversioned_key
             , T1.{{ table_a['start_date_col'] }} AS {{ shared_start_date_name }}
             , T1.{{ table_a['end_date_col'] }} AS {{ shared_end_date_name }}
+            , T1.{{ shared_current_name }} AS {{ shared_current_name }}
         FROM
             {{ table_a['name'] }} T1
             , UNNEST({{ table_a['unversioned_join_col'] }}) {{ table_a['unversioned_join_col'] }}
@@ -79,6 +81,7 @@
             , CAST({{ table_b['unversioned_join_col'] }} AS STRING) AS table_a_unversioned_key
             , T2.{{ table_b['start_date_col'] }} AS {{ shared_start_date_name }}
             , T2.{{ table_b['end_date_col'] }} AS {{ shared_end_date_name }}
+            , T2.{{ shared_current_name }} AS {{ shared_current_name }}
         FROM
             {{ table_b['name'] }} T2
             , UNNEST({{ table_b['unversioned_join_col'] }}) {{ table_b['unversioned_join_col'] }}
@@ -90,7 +93,8 @@
         unnested_table_a.{{ table_a['name_col_name'] }},
         unnested_table_b.{{ table_b['name_col_name'] }},
         GREATEST(unnested_table_a.{{ shared_start_date_name }}, unnested_table_b.{{ shared_start_date_name }}) AS {{ shared_start_date_name }},
-        LEAST(unnested_table_a.{{ shared_end_date_name }}, unnested_table_b.{{ shared_end_date_name }}) AS {{ shared_end_date_name }}
+        LEAST(unnested_table_a.{{ shared_end_date_name }}, unnested_table_b.{{ shared_end_date_name }}) AS {{ shared_end_date_name }},
+        (unnested_table_a.{{ shared_current_name }} AND unnested_table_b.{{ shared_current_name }}) AS {{ shared_current_name }}
     FROM unnested_table_a
     FULL OUTER JOIN unnested_table_b
         ON unnested_table_a.table_a_unversioned_key = unnested_table_b.table_a_unversioned_key
