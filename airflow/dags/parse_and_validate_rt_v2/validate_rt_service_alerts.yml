@@ -13,6 +13,7 @@ arguments:
   # we run on a delay because of archiver write latency but then we process the prior _hour_
   - "{{ execution_date.replace(minute=0, second=0).format('YYYY-MM-DDTHH:mm:ss') }}"
   - "--verbose"
+  - "--threads=2"
 
 is_delete_operator_pod: true
 get_logs: true
@@ -41,7 +42,7 @@ secrets:
 
 resources:
   request_memory: 5.0Gi
-  request_cpu: 1
+  request_cpu: 2
 
 tolerations:
   - key: pod-role

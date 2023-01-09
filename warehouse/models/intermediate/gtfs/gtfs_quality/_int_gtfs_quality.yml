@@ -40,6 +40,8 @@ models:
           combination_of_columns:
             - code
             - severity
+            - gtfs_validator_version
+
   - name: int_gtfs_quality__daily_assessment_candidate_entities
     description: |
       A row here is a combination of an organization, service, service / GTFS dataset relationship,
@@ -244,3 +246,14 @@ models:
             - base64_url
       - dbt_utils.equal_rowcount:
           compare_model: ref('dim_schedule_feeds')
+
+  - name: int_gtfs_quality__outcome_validator_versions
+    description: |
+      Unique observed validator versions for each extract.
+    tests:
+    - dbt_utils.unique_combination_of_columns:
+        combination_of_columns:
+          - dt
+          - base64_url
+          - ts
+          - gtfs_validator_version
