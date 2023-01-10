@@ -222,6 +222,10 @@ models:
     tests: *stg_gtfs_guideline_tests_schedule
     columns: *stg_gtfs_guideline_columns
 
+  - name: int_gtfs_quality__modification_date_present
+    tests: *stg_gtfs_guideline_tests_schedule
+    columns: *stg_gtfs_guideline_columns
+
   - name: int_gtfs_quality__rt_protobuf_error
     tests: *stg_gtfs_guideline_tests_rt
     columns: *stg_gtfs_guideline_columns
