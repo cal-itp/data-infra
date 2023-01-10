@@ -10,21 +10,6 @@ dim_gtfs_datasets AS (
     FROM {{ ref('dim_gtfs_datasets') }}
 ),
 
-dim_services AS (
-    SELECT *
-    FROM {{ ref('dim_services') }}
-),
-
-bridge_organizations_x_services_managed AS (
-    SELECT *
-    FROM {{ ref('bridge_organizations_x_services_managed') }}
-),
-
-dim_organizations AS (
-    SELECT *
-    FROM {{ ref('dim_organizations') }}
-),
-
 datasets_services_joined AS (
     SELECT
         service_key,
@@ -63,11 +48,11 @@ int_transit_database__service_datasets_pivoted AS (
         pivoted.gtfs_dataset_key_schedule,
         pivoted.gtfs_dataset_key_service_alerts,
         pivoted.gtfs_dataset_key_trip_updates,
-        pivoted.gtfs_dataset_key_vehicle_positions
+        pivoted.gtfs_dataset_key_vehicle_positions,
     FROM pivoted
     LEFT JOIN dim_gtfs_service_data
-    ON pivoted.associated_gtfs_schedule_gtfs_dataset_key = dim_gtfs_service_data.gtfs_dataset_key
-        AND pivoted.service_key = dim_gtfs_service_data.service_key
+        ON pivoted.associated_gtfs_schedule_gtfs_dataset_key = dim_gtfs_service_data.gtfs_dataset_key
+            AND pivoted.service_key = dim_gtfs_service_data.service_key
 )
 
 SELECT * FROM int_transit_database__service_datasets_pivoted

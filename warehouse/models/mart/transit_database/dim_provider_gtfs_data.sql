@@ -1,5 +1,8 @@
 {{ config(materialized='table') }}
 
+{% set start_timestamps = dbt_utils.get_column_values(table=ref('dim_organizations'), column='_valid_from', order_by = '_valid_from DESC', max_records = 1) %}
+{% set earliest_timestamp = start_timestamps[0] %}
+
 WITH dim_organizations AS (
     SELECT * FROM {{ ref('dim_organizations') }}
 ),
@@ -66,6 +69,7 @@ dim_provider_service_gtfs AS (
         ON quartet_pivoted.gtfs_dataset_key_trip_updates = trip_updates.key
     LEFT JOIN bridge_organizations_x_services_managed
         ON quartet_pivoted.service_key = bridge_organizations_x_services_managed.service_key
+
     LEFT JOIN dim_organizations AS organizations
         ON bridge_organizations_x_services_managed.organization_key = organizations.key
     LEFT JOIN dim_ntd_agency_info AS ntd
