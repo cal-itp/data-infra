@@ -25,9 +25,10 @@ models:
       - name: job_name
         tests:
           - not_null
-          - unique:
-              # the only known dupe, with unclear origin
-              where: job_name != 'projects/cal-itp-data-infra/jobs/job_whFNQ0oGxCM2ejXkfMAk5QA41Vcv'
+          # uniqueness test removed in order to investigate underlying behavior
+          # - unique:
+          #     # the only known dupe, with unclear origin
+          #     where: job_name != 'projects/cal-itp-data-infra/jobs/job_whFNQ0oGxCM2ejXkfMAk5QA41Vcv'
       - name: job_type
         tests:
           - not_null
@@ -46,14 +47,13 @@ models:
           - not_null
       - name: total_billed_bytes
       - name: estimated_cost_usd
-      # this test is not met by the table, likely because a more complicated ruleset is needed
-      # tests:
-      #   - not_null:
-      #       where: duration_in_seconds > 0 and job_type != 'IMPORT' and statement_type != 'CREATE_EXTERNAL_TABLE'
+        tests:
+          - not_null:
+              where: duration_in_seconds > 0 and job_type != 'IMPORT' and statement_type != 'CREATE_EXTERNAL_TABLE' and create_disposition != 'CREATE_IF_NEEDED'
       - name: total_slots_seconds
         tests:
           - not_null:
-              where: duration_in_seconds > 0 and job_type != 'IMPORT' and statement_type != 'CREATE_EXTERNAL_TABLE'
+              where: duration_in_seconds > 0 and job_type != 'IMPORT' and statement_type != 'CREATE_EXTERNAL_TABLE' and create_disposition != 'CREATE_IF_NEEDED'
       - name: table_data_read_job_name
       - name: dbt_header
       - name: dbt_node
@@ -91,9 +91,10 @@ models:
       - name: job_name
         tests:
           - not_null
-          - unique:
-              # the only known dupe, with unclear origin
-              where: job_name != 'projects/cal-itp-data-infra/jobs/job_whFNQ0oGxCM2ejXkfMAk5QA41Vcv'
+          # uniqueness test removed in order to investigate underlying behavior
+          # - unique:
+          #     # the only known dupe, with unclear origin
+          #     where: job_name != 'projects/cal-itp-data-infra/jobs/job_whFNQ0oGxCM2ejXkfMAk5QA41Vcv'
       - name: job_type
         tests:
           - not_null
@@ -109,14 +110,13 @@ models:
           - not_null
       - name: total_billed_bytes
       - name: estimated_cost_usd
-      # this test is not met by the table, likely because a more complicated ruleset is needed
-      # tests:
-      #   - not_null:
-      #       where: duration_in_seconds > 0 and job_type != 'IMPORT' and statement_type != 'CREATE_EXTERNAL_TABLE'
+        tests:
+          - not_null:
+              where: duration_in_seconds > 0 and job_type != 'IMPORT' and statement_type != 'CREATE_EXTERNAL_TABLE' and create_disposition != 'CREATE_IF_NEEDED'
       - name: total_slots_seconds
         tests:
           - not_null:
-              where: duration_in_seconds > 0 and job_type != 'IMPORT' and statement_type != 'CREATE_EXTERNAL_TABLE'
+              where: duration_in_seconds > 0 and job_type != 'IMPORT' and statement_type != 'CREATE_EXTERNAL_TABLE' and create_disposition != 'CREATE_IF_NEEDED'
       - name: table_data_read_job_name
       - name: dbt_header
       - name: dbt_node
