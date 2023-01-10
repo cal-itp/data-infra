@@ -10,6 +10,7 @@ stg_gtfs_schedule__agency AS (
     SELECT
         base64_url,
         ts,
+        dt AS _dt,
         {{ trim_make_empty_string_null('agency_id') }} AS agency_id,
         {{ trim_make_empty_string_null('agency_name') }} AS agency_name,
         {{ trim_make_empty_string_null('agency_url') }} AS agency_url,

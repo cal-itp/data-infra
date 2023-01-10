@@ -1,3 +1,6 @@
+{{ config(enabled=False) }}
+-- we do not actually process translations right now
+
 WITH external_translations AS (
     SELECT *
     FROM {{ source('external_gtfs_schedule', 'translations') }}
@@ -12,6 +15,7 @@ stg_gtfs_schedule__translations AS (
     SELECT
         base64_url,
         ts,
+        dt AS _dt,
         {{ trim_make_empty_string_null('table_name') }} AS table_name,
         {{ trim_make_empty_string_null('field_name') }} AS field_name,
         {{ trim_make_empty_string_null('language') }} AS language,

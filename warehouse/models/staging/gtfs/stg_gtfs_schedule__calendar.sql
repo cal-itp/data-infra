@@ -11,6 +11,7 @@ stg_gtfs_schedule__calendar AS (
     SELECT
         base64_url,
         ts,
+        dt AS _dt,
         {{ trim_make_empty_string_null('service_id') }} AS service_id,
         SAFE_CAST({{ trim_make_empty_string_null('monday') }} AS INTEGER) AS monday,
         SAFE_CAST({{ trim_make_empty_string_null('tuesday') }} AS INTEGER) AS tuesday,
