@@ -19,10 +19,12 @@ trips_counted AS (
         COUNT(DISTINCT trip_key) AS n_trips,
         feed_key,
         service_date,
+        shape_id,
         shape_array_key
 
     FROM fct_daily_scheduled_trips
-    GROUP BY feed_key, service_date, shape_array_key
+    WHERE shape_id IS NOT NULL
+    GROUP BY feed_key, service_date, shape_id, shape_array_key
 
 ),
 
@@ -35,6 +37,7 @@ fct_daily_scheduled_shapes AS (
         trips_counted.n_trips,
         trips_counted.feed_key,
         trips_counted.service_date,
+        trips_counted.shape_id,
         trips_counted.shape_array_key,
 
         dim_shapes_arrays.pt_array

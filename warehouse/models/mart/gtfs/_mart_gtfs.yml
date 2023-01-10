@@ -1237,6 +1237,8 @@ models:
               to: ref('dim_shapes_arrays')
               field: key
       - name: gtfs_dataset_key
+      - name: shape_id
+        description: '{{ doc("gtfs_trips__shape_id") }}'
       - name: contains_warning_duplicate_trip_primary_key
         description: |
           Rows with `true` in this column have a duplicate primary key in dim_trips;
@@ -1501,6 +1503,8 @@ models:
           Foreign key to the `dim_schedule_feeds` table.
       - name: service_date
         description: Date on which this shape was active.
+      - name: shape_id
+        description: '{{ doc("gtfs_trips__shape_id") }}'
       - name: shape_array_key
         description: Foreign key to dim_shapes_arrays.
       - name: pt_array
@@ -1512,7 +1516,10 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `service_date` and `stop_key`.
-        tests: *primary_key_tests
+        tests:
+          - unique:
+              where: "not contains_warning_duplicate_trip_primary_key AND not contains_warning_duplicate_stop_times_primary_key"
+          - not_null
       - name: service_date
         description: Date on which this stop was active.
       - name: feed_key

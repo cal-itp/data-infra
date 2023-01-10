@@ -39,6 +39,7 @@ dim_gtfs_datasets AS (
 fct_daily_scheduled_trips AS (
     SELECT
         {{ dbt_utils.surrogate_key(['service_index.service_date', 'trips.key']) }} AS key,
+
         service_index.service_date,
         service_index.feed_key,
         service_index.service_id,
@@ -62,7 +63,10 @@ fct_daily_scheduled_trips AS (
         routes.network_id AS network_id,
 
         shapes.key AS shape_array_key,
+
         urls_to_gtfs_datasets.gtfs_dataset_key AS gtfs_dataset_key,
+
+        trips.shape_id,
         trips.warning_duplicate_primary_key AS contains_warning_duplicate_trip_primary_key,
 
         stop_times_grouped.n_stops,
