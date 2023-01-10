@@ -2,7 +2,7 @@
 
 WITH int_transit_database__service_components AS (
     SELECT *
-    FROM {{ ref('int_transit_database__service_components') }}
+    FROM {{ ref('int_transit_database__service_components_dim') }}
 ),
 
 dim_service_components AS (

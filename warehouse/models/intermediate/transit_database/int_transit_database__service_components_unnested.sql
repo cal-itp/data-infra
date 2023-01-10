@@ -7,7 +7,7 @@ WITH latest AS (
         ) }}
 ),
 
-stg_transit_database__service_components_unnested AS (
+int_transit_database__service_components_unnested AS (
     SELECT
         id,
         service_key,
@@ -26,4 +26,4 @@ stg_transit_database__service_components_unnested AS (
     WHERE (service_key IS NOT NULL) AND (product_key IS NOT NULL)
 )
 
-SELECT * FROM stg_transit_database__service_components_unnested
+SELECT * FROM int_transit_database__service_components_unnested
