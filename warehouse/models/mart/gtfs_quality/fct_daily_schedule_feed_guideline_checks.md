@@ -24,4 +24,5 @@ Here is a list of currently-implemented checks:
 | No expired services are listed in the feed | Best Practices Alignment (Schedule) | No service_id's exist in calendars.txt or calendar_dates.txt where the last in-effect date is in the past. |
 | All schedule changes in the last month have provided at least 7 days of lead time | Up-to-Dateness | All changes made in the last 30 days to stops.txt, stop_times.txt, calendar.txt, and calendar_dates.txt did not impact trips within seven days of when the update was made. |
 | Schedule feed maintains persistent identifiers for stop_id, route_id, and agency_id | Best Practices Alignment (Schedule)| In the last 30 days, no updates to the schedule feed have created a situation where 50% or more of a given ID (stop_id, route_id, agency_id) were not present in the previous feed version. |
+
 {% enddocs %}
