@@ -1,17 +1,8 @@
-{{ config(materialized='table') }}
-
-WITH dim_schedule_feeds AS (
-    SELECT *
-    FROM {{ ref('dim_schedule_feeds') }}
-),
-
-stg_gtfs_schedule__frequencies AS (
-    SELECT *
-    FROM {{ ref('stg_gtfs_schedule__frequencies') }}
-),
-
-make_dim AS (
-{{ make_schedule_file_dimension_from_dim_schedule_feeds('dim_schedule_feeds', 'stg_gtfs_schedule__frequencies') }}
+WITH make_dim AS (
+    {{ make_schedule_file_dimension_from_dim_schedule_feeds(
+        ref('dim_schedule_feeds'),
+        ref('stg_gtfs_schedule__frequencies'),
+    ) }}
 ),
 
 dim_frequencies AS (
