@@ -6,10 +6,9 @@ version: 2
 # https://towardsdatascience.com/monitoring-your-bigquery-costs-and-reports-usage-with-data-studio-b77819ffd9fa
 
 models:
-  - name: stg_audit__cloudaudit_googleapis_com_activity
+  - name: stg_info__jobs_by_project
     description: |
-      Does not exist yet.
-      https://cloud.google.com/bigquery/docs/reference/auditlogs/#admin_activity_activity
+      Docs to be generated later
 
   - name: stg_audit__cloudaudit_googleapis_com_data_access
     description: |
