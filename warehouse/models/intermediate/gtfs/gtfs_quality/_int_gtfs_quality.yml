@@ -138,7 +138,11 @@ models:
 
   - name: int_gtfs_quality__shapes_valid
     tests: *stg_gtfs_guideline_tests_schedule
-    columns: *stg_gtfs_guideline_columns
+    columns: &stg_gtfs_guideline_columns_60
+      - name: status
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.6
 
   - name: int_gtfs_quality__shapes_file_present
     tests: *stg_gtfs_guideline_tests_schedule
@@ -158,7 +162,7 @@ models:
 
   - name: int_gtfs_quality__pathways_valid
     tests: *stg_gtfs_guideline_tests_schedule
-    columns: *stg_gtfs_guideline_columns
+    columns: *stg_gtfs_guideline_columns_60
 
   - name: int_gtfs_quality__complete_wheelchair_accessibility_data
     tests: *stg_gtfs_guideline_tests_schedule
@@ -166,15 +170,15 @@ models:
 
   - name: int_gtfs_quality__no_7_day_feed_expiration
     tests: *stg_gtfs_guideline_tests_schedule
-    columns: *stg_gtfs_guideline_columns
+    columns: *stg_gtfs_guideline_columns_60
 
   - name: int_gtfs_quality__no_30_day_feed_expiration
     tests: *stg_gtfs_guideline_tests_schedule
-    columns: *stg_gtfs_guideline_columns
+    columns: *stg_gtfs_guideline_columns_60
 
   - name: int_gtfs_quality__passes_fares_validator
     tests: *stg_gtfs_guideline_tests_schedule
-    columns: *stg_gtfs_guideline_columns
+    columns: *stg_gtfs_guideline_columns_60
 
   - name: int_gtfs_quality__no_expired_services
     tests: *stg_gtfs_guideline_tests_schedule
@@ -255,7 +259,7 @@ models:
     columns: *stale_rt_guideline_check
 
   - name: int_gtfs_quality__schedule_download_success
-    tests: &stg_gtfs_guideline_tests_schedule_feed
+    tests: &stg_gtfs_guideline_tests_schedule_url
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - date
