@@ -20,7 +20,17 @@ trips_counted AS (
         feed_key,
         service_date,
         shape_id,
-        shape_array_key
+        shape_array_key,
+
+        LOGICAL_OR(
+            contains_warning_duplicate_stop_times_primary_key
+        ) AS contains_warning_duplicate_stop_times_primary_key,
+        LOGICAL_OR(
+            contains_warning_duplicate_trip_primary_key
+        ) AS contains_warning_duplicate_trip_primary_key,
+        LOGICAL_OR(
+            contains_warning_missing_foreign_key_stop_id
+        ) AS contains_warning_missing_foreign_key_stop_id
 
     FROM fct_daily_scheduled_trips
     WHERE shape_id IS NOT NULL
@@ -32,13 +42,17 @@ fct_daily_scheduled_shapes AS (
 
     SELECT
 
-        {{ dbt_utils.surrogate_key(['trips_counted.service_date', 'trips_counted.shape_array_key']) }} AS key,
+        {{ dbt_utils.surrogate_key(['trips_counted.service_date', 'trips_counted.shape_id', 'trips_counted.shape_array_key']) }} AS key,
 
         trips_counted.n_trips,
         trips_counted.feed_key,
         trips_counted.service_date,
         trips_counted.shape_id,
         trips_counted.shape_array_key,
+
+        trips_counted.contains_warning_duplicate_stop_times_primary_key,
+        trips_counted.contains_warning_duplicate_trip_primary_key,
+        trips_counted.contains_warning_missing_foreign_key_stop_id,
 
         dim_shapes_arrays.pt_array
 

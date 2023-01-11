@@ -141,10 +141,6 @@ fct_daily_scheduled_stops AS (
         stops.wheelchair_boarding
 
     FROM pivot_to_route_type AS pivoted
-    -- LEFT JOIN stops_by_day_by_route
-    --     ON pivoted.stop_id = stops_by_day_by_route.stop_id
-    --     AND pivoted.service_date = stops_by_day_by_route.service_date
-    --     AND pivoted.feed_key = stops_by_day_by_route.feed_key
     LEFT JOIN stops_by_day
         ON pivoted.stop_id = stops_by_day.stop_id
         AND pivoted.service_date = stops_by_day.service_date
