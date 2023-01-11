@@ -1,4 +1,4 @@
-description: "Check common GTFS feed aggregators for canonical URLs in agencies.yml"
+description: "Scrape GTFS (and other) feed URLs present in validators"
 schedule_interval: "0 0 * * *"
 tags:
   - all_gusty_features
@@ -9,7 +9,6 @@ default_args:
     email:
       - "evan.siroky@dot.ca.gov"
       - "andrew.v@jarv.us"
-      - "hunter.owens@dot.ca.gov"
       - "jameelah.y@jarv.us"
       - "laurie.m@jarv.us"
     email_on_failure: True
