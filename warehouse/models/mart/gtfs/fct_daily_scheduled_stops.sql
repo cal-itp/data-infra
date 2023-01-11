@@ -11,7 +11,8 @@ WITH fct_daily_scheduled_trips AS (
         route_id,
         route_type,
         contains_warning_duplicate_stop_times_primary_key,
-        contains_warning_duplicate_trip_primary_key
+        contains_warning_duplicate_trip_primary_key,
+        contains_warning_missing_foreign_key_stop_id
 
     FROM {{ ref('fct_daily_scheduled_trips') }}
 ),
@@ -47,7 +48,10 @@ stops_by_day AS (
         ) AS contains_warning_duplicate_stop_times_primary_key,
         LOGICAL_OR(
             trips.contains_warning_duplicate_trip_primary_key
-        ) AS contains_warning_duplicate_trip_primary_key
+        ) AS contains_warning_duplicate_trip_primary_key,
+        LOGICAL_OR(
+            trips.contains_warning_missing_foreign_key_stop_id
+        ) AS contains_warning_missing_foreign_key_stop_id
 
     FROM dim_stop_times AS stop_times
     LEFT JOIN fct_daily_scheduled_trips AS trips
@@ -120,6 +124,10 @@ fct_daily_scheduled_stops AS (
 
         stops_by_day.contains_warning_duplicate_stop_times_primary_key,
         stops_by_day.contains_warning_duplicate_trip_primary_key,
+        stops_by_day.contains_warning_missing_foreign_key_stop_id,
+
+        stops.warning_duplicate_primary_key AS contains_warning_duplicate_stop_primary_key,
+
 
         stops.key AS stop_key,
         stops.tts_stop_name,

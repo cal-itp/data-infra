@@ -449,3 +449,62 @@ models:
         description: Service identifier from calendar and/or calendar_dates.
         tests:
           - not_null
+  - name: int_gtfs_schedule__incremental_stops
+    description: |
+      This table is an incremental, sparse history of GTFS schedule stops data. It is a precursor to `dim_stops`
+      with the goal of facilitating duplicate detection. It also drops entire duplicate rows (rows where all
+      fields are identical.)
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - ts
+            - stop_id
+          severity: warn
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: stop_id
+        description: '{{ doc("gtfs_stops__stop_id") }}'
+      - name: stop_code
+        description: '{{ doc("gtfs_stops__stop_code") }}'
+      - name: stop_name
+        description: '{{ doc("gtfs_stops__stop_name") }}'
+      - name: tts_stop_name
+        description: '{{ doc("gtfs_stops__tts_stop_name") }}'
+      - name: stop_desc
+        description: '{{ doc("gtfs_stops__stop_desc") }}'
+      - name: stop_lat
+        description: '{{ doc("gtfs_stops__stop_lat") }}'
+        meta:
+          metabase.semantic_type: type/Latitude
+          ckan.type: FLOAT
+          ckan.length: 6
+          ckan.precision: 3
+      - name: stop_lon
+        description: '{{ doc("gtfs_stops__stop_lon") }}'
+        meta:
+          metabase.semantic_type: type/Longitude
+          ckan.type: FLOAT
+          ckan.length: 7
+          ckan.precision: 3
+      - name: zone_id
+        description: '{{ doc("gtfs_stops__zone_id") }}'
+      - name: stop_url
+        description: '{{ doc("gtfs_stops__stop_url") }}'
+      - name: location_type
+        description: '{{ doc("gtfs_stops__location_type") }}'
+      - name: parent_station
+        description: '{{ doc("gtfs_stops__parent_station") }}'
+      - name: stop_timezone
+        description: '{{ doc("gtfs_stops__stop_timezone") }}'
+      - name: wheelchair_boarding
+        description: '{{ doc("gtfs_stops__wheelchair_boarding") }}'
+      - name: level_id
+        description: '{{ doc("gtfs_stops__level_id") }}'
+      - name: platform_code
+        description: '{{ doc("gtfs_stops__platform_code") }}'
+      - name: _inserted_at
+        description: |
+          Timestamp for when the given row was inserted into the table.
+          Primarily useful for debugging, not meaningful for general use.

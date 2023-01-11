@@ -559,6 +559,10 @@ models:
     columns:
       - name: base64_url
       - name: ts
+      - name: _dt
+        description: |
+          Date that data was downloaded (aligns with the date portion of `ts`).
+          Included only because it assists with partition elimination in the underlying external table.
       - name: stop_id
         description: '{{ doc("gtfs_stops__stop_id") }}'
       - name: stop_code

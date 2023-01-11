@@ -828,12 +828,16 @@ models:
           lower_bound_column: _valid_from
           upper_bound_column: _valid_to
           partition_by: base64_url, stop_id
+          where: "not warning_duplicate_primary_key"
           gaps: required
     columns:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key` and `stop_id`.
-        tests: *primary_key_tests
+        tests:
+          - unique:
+              where: "not warning_duplicate_primary_key"
+          - not_null
       - *feed_key
       - *base64_url
       - name: stop_id
@@ -881,6 +885,10 @@ models:
         description: '{{ doc("gtfs_stops__platform_code") }}'
       - name: pt_geom
         description: GEOGPOINT created by the stop latitute and longitude
+      - name: warning_duplicate_primary_key
+        description: |
+          Rows with `true` in this column have a duplicate primary key; i.e., `stop_id` is duplicated within an individual feed
+          instance and `key` will also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
       - *_valid_from
       - *_valid_to
   - name: dim_transfers
@@ -1518,7 +1526,7 @@ models:
           Synthetic primary key constructed from `service_date` and `stop_key`.
         tests:
           - unique:
-              where: "not contains_warning_duplicate_trip_primary_key AND not contains_warning_duplicate_stop_times_primary_key"
+              where: "not contains_warning_duplicate_trip_primary_key AND not contains_warning_duplicate_stop_times_primary_key AND not contains_warning_missing_foreign_key_stop_id AND not contains_warning_duplicate_stop_primary_key"
           - not_null
       - name: service_date
         description: Date on which this stop was active.
@@ -1559,6 +1567,34 @@ models:
       - name: route_type_12_count
         description: |
           The count of stop events associated with route_type 12 - Monorail
+      - name: contains_warning_duplicate_stop_times_primary_key
+        description: |
+          Rows with `true` in this column indicate that the columns in this table that are aggregated from
+          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
+          and `service_hours`) contain at least one row that had a duplicate primary key in the source stop times data.
+
+          I.e., at least one row being aggregated had a `trip_id` / `stop_sequence` pair that was not unique
+          in the input data. This indicates that data quality issues were present in the stop times data
+          that is being summarized here, and counts may be inflated due to multiple rows with identical identifiers.
+      - name: contains_warning_duplicate_trip_primary_key
+        description: |
+          Rows with `true` in this column have a duplicate primary key in dim_trips;
+          i.e., `trip_id` is duplicated within an individual feed instance.
+          Treat these rows with caution.
+      - name: contains_warning_missing_foreign_key_stop_id
+        description: |
+          Rows with `true` in this column indicate that the columns in this table that are aggregated from
+          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
+          and `service_hours`) contain at least one row that had a missing `stop_id` foreign key in the source stops data.
+
+          I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
+          in the input data. This indicates that data quality issues were present in the stop times data
+          that is being summarized here, and the count of distinct `stop_id`s at the trip level may be incorrect.
+      - name: contains_warning_duplicate_stop_primary_key
+        description: |
+          Rows with `true` in this column have a duplicate primary key in dim_stops;
+          i.e., `stop_id` is duplicated within an individual feed instance.
+          Treat these rows with caution.
       - name: stop_key
           Foreign key to the `dim_stops` table.
       - name: tts_stop_name
