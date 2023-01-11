@@ -23,14 +23,8 @@ trips_counted AS (
         shape_array_key,
 
         LOGICAL_OR(
-            contains_warning_duplicate_stop_times_primary_key
-        ) AS contains_warning_duplicate_stop_times_primary_key,
-        LOGICAL_OR(
             contains_warning_duplicate_trip_primary_key
-        ) AS contains_warning_duplicate_trip_primary_key,
-        LOGICAL_OR(
-            contains_warning_missing_foreign_key_stop_id
-        ) AS contains_warning_missing_foreign_key_stop_id
+        ) AS contains_warning_duplicate_trip_primary_key
 
     FROM fct_daily_scheduled_trips
     WHERE shape_id IS NOT NULL
@@ -50,9 +44,7 @@ fct_daily_scheduled_shapes AS (
         trips_counted.shape_id,
         trips_counted.shape_array_key,
 
-        trips_counted.contains_warning_duplicate_stop_times_primary_key,
         trips_counted.contains_warning_duplicate_trip_primary_key,
-        trips_counted.contains_warning_missing_foreign_key_stop_id,
 
         dim_shapes_arrays.pt_array
 

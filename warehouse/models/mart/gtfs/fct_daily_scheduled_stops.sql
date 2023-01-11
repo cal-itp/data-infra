@@ -2,18 +2,7 @@
 
 WITH fct_daily_scheduled_trips AS (
 
-    SELECT
-
-        service_date,
-        feed_key,
-        service_id,
-        trip_id,
-        route_id,
-        route_type,
-        contains_warning_duplicate_stop_times_primary_key,
-        contains_warning_duplicate_trip_primary_key,
-        contains_warning_missing_foreign_key_stop_id
-
+    SELECT *
     FROM {{ ref('fct_daily_scheduled_trips') }}
 ),
 
@@ -127,7 +116,6 @@ fct_daily_scheduled_stops AS (
         stops_by_day.contains_warning_missing_foreign_key_stop_id,
 
         stops.warning_duplicate_primary_key AS contains_warning_duplicate_stop_primary_key,
-
 
         stops.key AS stop_key,
         stops.tts_stop_name,
