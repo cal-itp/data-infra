@@ -22,7 +22,7 @@ Here is a list of currently-implemented checks:
 | All schedule changes in the last month have provided at least 7 days of lead time | Up-to-Dateness | All changes made in the last 30 days to stops.txt, stop_times.txt, calendar.txt, and calendar_dates.txt did not impact trips within seven days of when the update was made. |
 | Schedule feed maintains persistent identifiers for stop_id, route_id, and agency_id | Best Practices Alignment (Schedule)| In the last 30 days, no updates to the schedule feed have created a situation where 50% or more of a given ID (stop_id, route_id, agency_id) were not present in the previous feed version. |
 | Schedule feed downloads successfully | Compliance (Schedule) | On the given date, the schedule feed was downloaded and parsed successfully |
-| No critical errors in the MobilityData GTFS Realtime Validator | Compliance (RT) | The feed has at least one GTFS-RT file present on the given day, and GTFS Realtime Validator produced no critical errors for any RT feed extract on that day.|
+| No errors in the MobilityData GTFS Realtime Validator | Compliance (RT) | The feed has at least one GTFS-RT file present on the given day, and GTFS Realtime Validator produced no errors for any RT feed extract on that day.|
 | All trip_ids provided in the GTFS-rt feed exist in the GTFS Schedule feed| Fixed-Route Completeness | Error code E003 does not appear in the MobilityData GTFS Realtime Validator on that day.|
 | Vehicle positions RT feed is present | Compliance (RT) | The vehicle positions RT feed contains at least one file on the given day.|
 | Trip updates RT feed is present | Compliance (RT) | The trip updates RT feed contains at least one file on the given day.|

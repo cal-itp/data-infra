@@ -13,7 +13,7 @@ dim_stops AS (
 feed_trips_summary AS (
    SELECT
        feed_key,
-       COUNTIF(wheelchair_accessible IS NOT NULL) AS ct_accessible_trips,
+       COUNTIF(wheelchair_accessible IS NOT NULL AND CAST(wheelchair_accessible AS string) != "0") AS ct_trips_accessibility_info,
        COUNT(*) AS ct_trips
     FROM dim_trips
    GROUP BY feed_key
@@ -22,7 +22,7 @@ feed_trips_summary AS (
 feed_stops_summary AS (
    SELECT
        feed_key,
-       COUNTIF(wheelchair_boarding IS NOT NULL) AS ct_accessible_stops,
+       COUNTIF(wheelchair_boarding IS NOT NULL AND CAST(wheelchair_boarding AS string) != "0") AS ct_stops_accessibility_info,
        COUNT(*) AS ct_stops
     FROM dim_stops
    GROUP BY feed_key
@@ -35,7 +35,7 @@ int_gtfs_quality__complete_wheelchair_accessibility_data AS (
         {{ complete_wheelchair_accessibility_data() }} AS check,
         {{ accurate_accessibility_data() }} AS feature,
         CASE
-            WHEN t2.ct_accessible_trips = t2.ct_trips AND t3.ct_accessible_stops = t3.ct_stops THEN "PASS"
+            WHEN t2.ct_trips_accessibility_info = t2.ct_trips AND t3.ct_stops_accessibility_info = t3.ct_stops THEN "PASS"
             ELSE "FAIL"
         END AS status,
       FROM feed_guideline_index t1
