@@ -26,6 +26,11 @@ stg_transit_database__gtfs_service_data AS (
     FROM once_daily_gtfs_service_data
     LEFT JOIN UNNEST(once_daily_gtfs_service_data.services) as unnested_services
     LEFT JOIN UNNEST(once_daily_gtfs_service_data.gtfs_dataset) as unnested_gtfs_dataset
+    -- TODO: actually handle this -- there are records that were not 1:1
+    -- either one service was entered with multiple datasets in a single record
+    -- or vice versa
+    -- we should generate a new key and find a way to keep both
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY id, ts ORDER BY service_key) = 1
 )
 
 SELECT * FROM stg_transit_database__gtfs_service_data
