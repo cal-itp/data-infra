@@ -125,6 +125,6 @@ models:
       - name: job
         tests:
           - not_null
-      - name: referenced_tables
+      - name: referenced_table
         tests:
           - not_null
