@@ -8,6 +8,7 @@ WITH int_transit_database__components_dim AS (
 dim_components AS (
     SELECT
         key,
+        original_record_id,
         name,
         aliases,
         description,

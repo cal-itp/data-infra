@@ -8,6 +8,7 @@ WITH int_transit_database__ntd_agency_info_dim AS (
 dim_ntd_agency_info AS (
     SELECT
         key,
+        original_record_id,
         ntd_id,
         legacy_ntd_id,
         ntd_agency_name,

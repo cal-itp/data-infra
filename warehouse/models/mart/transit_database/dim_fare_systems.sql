@@ -8,6 +8,7 @@ WITH int_transit_database__fare_systems_dim AS (
 dim_fare_systems AS (
     SELECT
         key,
+        original_record_id,
         fare_system,
         fares_based_on_zone,
         fares_based_on_route,

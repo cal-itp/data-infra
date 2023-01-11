@@ -8,6 +8,7 @@ WITH int_transit_database__properties_and_features_dim AS (
 dim_properties_and_features AS (
     SELECT
         key,
+        original_record_id,
         name,
         recommended_value,
         considerations,

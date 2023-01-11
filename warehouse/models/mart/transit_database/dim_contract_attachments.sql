@@ -11,6 +11,7 @@ dim_contract_attachments AS (
         contracts.key AS contract_key,
         contracts.name AS contract_name,
         unnested_attachments.url AS attachment_url,
+        id AS original_record_id,
         _is_current,
         _valid_from,
         _valid_to

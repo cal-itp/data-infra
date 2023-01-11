@@ -13,6 +13,7 @@ dim_contracts AS (
         contract_vendor_organization_key,
         value,
         start_date,
+        original_record_id,
         end_date,
         renewal_option,
         notes,

@@ -10,6 +10,7 @@ dim_data_schemas AS (
         key,
         name,
         status,
+        original_record_id,
         _is_current,
         _valid_from,
         _valid_to

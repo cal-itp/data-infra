@@ -8,6 +8,7 @@ WITH dim AS (
 dim_gtfs_datasets AS (
     SELECT
         key,
+        original_record_id,
         name,
         type,
         regional_feed_type,

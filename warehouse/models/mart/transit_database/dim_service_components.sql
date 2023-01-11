@@ -8,6 +8,7 @@ WITH int_transit_database__service_components AS (
 dim_service_components AS (
     SELECT
         key,
+        original_record_id,
         service_key,
         service_name,
         product_key,

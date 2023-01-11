@@ -8,6 +8,7 @@ WITH dim AS (
 dim_products AS (
     SELECT
         key,
+        original_record_id,
         name,
         url,
         requirements,
