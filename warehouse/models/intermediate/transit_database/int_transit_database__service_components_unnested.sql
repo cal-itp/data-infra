@@ -10,6 +10,7 @@ WITH latest AS (
 int_transit_database__service_components_unnested AS (
     SELECT
         id,
+        name,
         service_key,
         product_key,
         component_key,

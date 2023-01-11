@@ -28,39 +28,77 @@ historical AS (
 ),
 
 -- join SCD tables: https://sqlsunday.com/2014/11/30/joining-two-scd2-tables/
+join_services AS (
+    SELECT
+        historical.name,
+        historical.id AS original_record_id,
+        dim_services.key AS service_key,
+        dim_services.name AS service_name,
+        component_key,
+        product_key,
+        historical.ntd_certified,
+        historical.product_component_valid,
+        historical.notes,
+        (historical._is_current AND dim_services._is_current) AS _is_current,
+        GREATEST(historical._valid_from, dim_services._valid_from) AS _valid_from,
+        LEAST(historical._valid_to, dim_services._valid_to) AS _valid_to
+    FROM historical
+    INNER JOIN dim_services
+        ON historical.service_key = dim_services.original_record_id
+        AND historical._valid_from < dim_services._valid_to
+        AND historical._valid_to > dim_services._valid_from
+),
+
+join_products AS (
+    SELECT
+        join_services.original_record_id,
+        join_services.name,
+        service_key,
+        service_name,
+        dim_products.key AS product_key,
+        dim_products.name AS product_name,
+        component_key,
+        ntd_certified,
+        product_component_valid,
+        join_services.notes,
+        (join_services._is_current AND dim_products._is_current) AS _is_current,
+        GREATEST(join_services._valid_from, dim_products._valid_from) AS _valid_from,
+        LEAST(join_services._valid_to, dim_products._valid_to) AS _valid_to
+    FROM join_services
+    INNER JOIN dim_products
+        ON join_services.product_key = dim_products.original_record_id
+        AND join_services._valid_from < dim_products._valid_to
+        AND join_services._valid_to > dim_products._valid_from
+),
+
 dim_service_components AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['t1.id',
-            't2.key',
-            't3.key',
-            't5.key',
-            'GREATEST(t1._valid_from, t2._valid_from, t3._valid_from, t5._valid_from)']) }} AS key,
-        t1.id AS original_record_id,
-        t2.key AS service_key,
-        t2.name AS service_name,
-        t3.key AS product_key,
-        t3.name AS product_name,
-        t5.key AS component_key,
-        t5.name AS component_name,
-        t1.ntd_certified,
-        t1.product_component_valid,
-        t1.notes,
-        (t1._is_current AND t2._is_current AND t3._is_current AND t5._is_current) AS _is_current,
-        GREATEST(t1._valid_from, t2._valid_from, t3._valid_from, t5._valid_from) AS _valid_from,
-        LEAST(t1._valid_to, t2._valid_to, t3._valid_to, t5._valid_to) AS _valid_to
-    FROM historical AS t1
-    LEFT JOIN dim_services AS t2
-        ON t1.service_key = t2.original_record_id
-        AND t1._valid_from < t2._valid_to
-        AND t1._valid_to > t2._valid_from
-    LEFT JOIN dim_products AS t3
-        ON t1.product_key = t3.original_record_id
-        AND t1._valid_from < t3._valid_to
-        AND t1._valid_to > t3._valid_from
-    LEFT JOIN dim_components AS t5
-        ON t1.component_key = t5.original_record_id
-        AND t1._valid_from < t5._valid_to
-        AND t1._valid_to > t5._valid_from
+        {{ dbt_utils.surrogate_key(['join_products.original_record_id',
+            'service_key',
+            'product_key',
+            'dim_components.key',
+            'GREATEST(join_products._valid_from, dim_components._valid_from)']) }} AS key,
+        join_products.name,
+        join_products.original_record_id,
+        service_key,
+        service_name,
+        product_key,
+        product_name,
+        dim_components.key AS component_key,
+        dim_components.name AS component_name,
+        ntd_certified,
+        product_component_valid,
+        join_products.notes,
+        (join_products._is_current AND COALESCE(dim_components._is_current, TRUE)) AS _is_current,
+        GREATEST(join_products._valid_from, COALESCE(dim_components._valid_from, '1900-01-01')) AS _valid_from,
+        LEAST(join_products._valid_to, COALESCE(dim_components._valid_to, '2099-01-01')) AS _valid_to
+    FROM join_products
+    -- TODO: this might cause problems once we make these properly historical
+    -- normally this would be an inner join
+    LEFT JOIN dim_components
+        ON join_products.component_key = dim_components.original_record_id
+        AND join_products._valid_from < COALESCE(dim_components._valid_to, '2099-01-01')
+        AND join_products._valid_to > COALESCE(dim_components._valid_from, '1900-01-01')
 )
 
 SELECT * FROM dim_service_components
