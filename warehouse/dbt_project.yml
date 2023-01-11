@@ -75,3 +75,5 @@ models:
         schema: mart_gtfs
       ad_hoc:
         schema: mart_ad_hoc
+      audit:
+        schema: mart_audit
