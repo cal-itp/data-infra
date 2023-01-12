@@ -54,7 +54,9 @@ models:
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
+            - gtfs_service_data_key
             - service_key
+            - associated_gtfs_schedule_gtfs_dataset_key
             - gtfs_dataset_key_schedule
             - gtfs_dataset_key_service_alerts
             - gtfs_dataset_key_vehicle_positions
