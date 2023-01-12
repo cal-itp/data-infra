@@ -107,6 +107,7 @@ full_join AS (
         datasets.name AS gtfs_dataset_name,
         datasets.type AS gtfs_dataset_type,
         datasets.regional_feed_type,
+        validation_bridge.schedule_to_use_for_rt_validation_gtfs_dataset_key,
         COALESCE(datasets.base64_url, feeds.base64_url) AS base64_url,
         feeds.feed_key AS schedule_feed_key
     FROM orgs
@@ -152,6 +153,8 @@ int_gtfs_quality__daily_assessment_candidate_entities AS (
         organization_assessed,
         service_assessed,
         gtfs_service_data_assessed,
+        gtfs_service_data_customer_facing,
+        regional_feed_type,
 
         base64_url,
 
@@ -159,7 +162,8 @@ int_gtfs_quality__daily_assessment_candidate_entities AS (
         service_key,
         gtfs_service_data_key,
         gtfs_dataset_key,
-        schedule_feed_key
+        schedule_feed_key,
+        schedule_to_use_for_rt_validation_gtfs_dataset_key
     FROM full_join
 )
 
