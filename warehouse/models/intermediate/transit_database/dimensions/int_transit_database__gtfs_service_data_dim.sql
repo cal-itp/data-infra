@@ -27,7 +27,9 @@ services_join AS (
         services._valid_from AS service_valid_from,
         services._valid_to AS service_valid_to,
         gtfs_dataset_key,
-        customer_facing,
+        COALESCE(
+            customer_facing,
+            category = "primary") AS customer_facing,
         category,
         agency_id,
         network_id,
