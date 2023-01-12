@@ -10,7 +10,7 @@ models:
       - dbt_utils.mutually_exclusive_ranges:
           lower_bound_column: _valid_from
           upper_bound_column: _valid_to
-          partition_by: key
+          partition_by: original_record_id
           gaps: required
     columns:
       - &key
@@ -86,7 +86,12 @@ models:
   - name: int_transit_database__service_components_dim
     description: |
       Service components data in *artificial* slowly-changing-dimension format (current-only data with effective dates).
-    tests: *mutually_exclusive_ranges
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - service_key
+            - product_key
+            - component_key
     columns:
       - *key
   - name: int_transit_database__ntd_agency_info_dim
