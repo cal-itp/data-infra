@@ -113,7 +113,6 @@ fct_daily_scheduled_stops AS (
 
         stops_by_day.contains_warning_duplicate_stop_times_primary_key,
         stops_by_day.contains_warning_duplicate_trip_primary_key,
-        stops_by_day.contains_warning_missing_foreign_key_stop_id,
 
         stops.warning_duplicate_primary_key AS contains_warning_duplicate_stop_primary_key,
 
@@ -128,15 +127,14 @@ fct_daily_scheduled_stops AS (
         stops.stop_timezone,
         stops.wheelchair_boarding
 
-    FROM pivot_to_route_type AS pivoted
+    FROM dim_stops AS stops
+    INNER JOIN pivot_to_route_type AS pivoted
+        ON pivoted.stop_id = stops.stop_id
+        AND pivoted.feed_key = stops.feed_key
     LEFT JOIN stops_by_day
         ON pivoted.stop_id = stops_by_day.stop_id
         AND pivoted.service_date = stops_by_day.service_date
         AND pivoted.feed_key = stops_by_day.feed_key
-    LEFT JOIN dim_stops AS stops
-        ON pivoted.stop_id = stops.stop_id
-        AND pivoted.feed_key = stops.feed_key
-
 )
 
 SELECT * FROM fct_daily_scheduled_stops

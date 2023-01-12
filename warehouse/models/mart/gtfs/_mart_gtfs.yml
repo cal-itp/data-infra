@@ -1522,9 +1522,14 @@ models:
         description: Ordered array of WKT points that describe this shape.
       - name: contains_warning_duplicate_trip_primary_key
         description: |
-          Rows with `true` in this column have a duplicate primary key in dim_trips;
-          i.e., `trip_id` is duplicated within an individual feed instance.
-          Treat these rows with caution.
+          Rows with `true` in this column indicate that the columns in this table that are aggregated from
+          trips data (`stop_event_count`, `route_type_0_count`, `route_type_1_count`, `route_type_2_count`, `route_type_3_count`,
+          `route_type_4_count`, `route_type_5_count`, `route_type_6_count`, `route_type_7_count`, `route_type_11_count`,
+          `route_type_12_count`) contain at least one row that had a duplicate primary key in the source trips data.
+
+          I.e., at least one row being aggregated had a `feed_key` / `trip_id` pair that was not unique
+          in the input data. This indicates that data quality issues were present in the trips data
+          that is being summarized here, and counts may be inflated due to multiple rows with identical identifiers.
   - name: fct_daily_scheduled_stops
     description: |
       A daily table showing all stops that had trip stop events scheduled on a given date.
@@ -1534,7 +1539,7 @@ models:
           Synthetic primary key constructed from `service_date` and `stop_key`.
         tests:
           - unique:
-              where: "not contains_warning_duplicate_trip_primary_key AND not contains_warning_duplicate_stop_times_primary_key AND not contains_warning_missing_foreign_key_stop_id AND not contains_warning_duplicate_stop_primary_key"
+              where: "not contains_warning_duplicate_trip_primary_key AND not contains_warning_duplicate_stop_times_primary_key AND not contains_warning_duplicate_stop_primary_key"
           - not_null
       - name: service_date
         description: Date on which this stop was active.
@@ -1578,26 +1583,23 @@ models:
       - name: contains_warning_duplicate_stop_times_primary_key
         description: |
           Rows with `true` in this column indicate that the columns in this table that are aggregated from
-          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
-          and `service_hours`) contain at least one row that had a duplicate primary key in the source stop times data.
+          stop times data (`stop_event_count`, `route_type_0_count`, `route_type_1_count`, `route_type_2_count`, `route_type_3_count`,
+          `route_type_4_count`, `route_type_5_count`, `route_type_6_count`, `route_type_7_count`, `route_type_11_count`,
+          `route_type_12_count`) contain at least one row that had a duplicate primary key in the source stop times data.
 
           I.e., at least one row being aggregated had a `trip_id` / `stop_sequence` pair that was not unique
           in the input data. This indicates that data quality issues were present in the stop times data
           that is being summarized here, and counts may be inflated due to multiple rows with identical identifiers.
       - name: contains_warning_duplicate_trip_primary_key
         description: |
-          Rows with `true` in this column have a duplicate primary key in dim_trips;
-          i.e., `trip_id` is duplicated within an individual feed instance.
-          Treat these rows with caution.
-      - name: contains_warning_missing_foreign_key_stop_id
-        description: |
           Rows with `true` in this column indicate that the columns in this table that are aggregated from
-          stop times data (`n_stops`, `n_stop_times`,  `trip_first_departure_sec`, `trip_last_arrival_sec`,
-          and `service_hours`) contain at least one row that had a missing `stop_id` foreign key in the source stops data.
+          trips data (`stop_event_count`, `route_type_0_count`, `route_type_1_count`, `route_type_2_count`, `route_type_3_count`,
+          `route_type_4_count`, `route_type_5_count`, `route_type_6_count`, `route_type_7_count`, `route_type_11_count`,
+          `route_type_12_count`) contain at least one row that had a duplicate primary key in the source trips data.
 
-          I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
-          in the input data. This indicates that data quality issues were present in the stop times data
-          that is being summarized here, and the count of distinct `stop_id`s at the trip level may be incorrect.
+          I.e., at least one row being aggregated had a `feed_key` / `trip_id` pair that was not unique
+          in the input data. This indicates that data quality issues were present in the trips data
+          that is being summarized here, and counts may be inflated due to multiple rows with identical identifiers.
       - name: contains_warning_duplicate_stop_primary_key
         description: |
           Rows with `true` in this column have a duplicate primary key in dim_stops;
