@@ -1,9 +1,7 @@
 WITH
 dim_frequencies_latest AS (
     {{ get_latest_schedule_data(
-    latest_only_source = ref('calitp_feeds'),
-    table_name = 'frequencies',
-    clean_table_name = ref('frequencies_clean')
+    table_name = ref('dim_frequencies')
     ) }}
 )
 
