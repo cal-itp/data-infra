@@ -35,7 +35,8 @@ dim_stops AS (
         level_id,
         platform_code,
         _valid_from,
-        _valid_to
+        _valid_to,
+        _is_current
     FROM make_dim
 )
 

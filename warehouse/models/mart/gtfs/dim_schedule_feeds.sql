@@ -89,7 +89,8 @@ actual_data_only AS (
         unzip_success,
         zipfile_extract_md5hash,
         _valid_from,
-        _valid_to
+        _valid_to,
+        _valid_to = {{ make_end_of_valid_range(2099-01-01) }} AS _is_current
     FROM all_versioned
     WHERE download_success AND unzip_success
 ),
@@ -102,7 +103,8 @@ dim_schedule_feeds AS (
         unzip_success,
         zipfile_extract_md5hash,
         _valid_from,
-        _valid_to
+        _valid_to,
+        _is_current
     FROM actual_data_only
 )
 

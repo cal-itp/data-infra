@@ -17,7 +17,8 @@ lat_long AS (
             shape_pt_lat
         ) AS pt_geom,
         _valid_from,
-        _valid_to
+        _valid_to,
+        _is_current
     FROM dim_shapes
 ),
 
@@ -29,6 +30,7 @@ initial_pt_array AS (
         shape_id,
         _valid_from,
         _valid_to,
+        _is_current,
         -- don't try to make LINESTRING because of this issue:
         -- https://stackoverflow.com/questions/58234223/st-makeline-discarding-duplicate-points-even-if-not-consecutive
         -- also: https://gis.stackexchange.com/questions/426188/can-i-represent-a-route-that-doubles-back-on-itself-in-bigquery-with-a-linestrin
@@ -52,7 +54,8 @@ dim_shapes_arrays AS (
         pt_array,
         base64_url,
         _valid_from,
-        _valid_to
+        _valid_to,
+        _is_current
     FROM initial_pt_array
     -- drop shapes that had nulls
     WHERE ARRAY_LENGTH(pt_array) = ct
