@@ -15,7 +15,7 @@ bridge_schedule_dataset_for_validation AS (
         GREATEST(datasets._valid_from, sched_ref._valid_from) AS _valid_from,
         LEAST(datasets._valid_to, sched_ref._valid_to) AS _valid_to
     FROM datasets
-    LEFT JOIN datasets AS sched_ref
+    INNER JOIN datasets AS sched_ref
         ON datasets.schedule_to_use_for_rt_validation_gtfs_dataset_key = sched_ref.original_record_id
         AND datasets._valid_from < sched_ref._valid_to
         AND datasets._valid_to > sched_ref._valid_from
