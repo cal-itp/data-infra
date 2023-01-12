@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 WITH
 attributions AS (
     {{ get_latest_schedule_data(

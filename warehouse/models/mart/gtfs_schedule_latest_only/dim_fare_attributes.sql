@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 WITH
 fare_attributes AS (
     {{ get_latest_schedule_data(

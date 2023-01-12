@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: agency
+  - name: dim_agency
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -68,7 +68,7 @@ models:
         description: '{{ doc("gtfs_agency__agency_email") }}'
 
 
-  - name: attributions
+  - name: dim_attributions
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -110,7 +110,7 @@ models:
       - name: attribution_phone
         description: '{{ doc("gtfs_attributions__attribution_phone") }}'
 
-  - name: calendar
+  - name: dim_calendar
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -160,7 +160,7 @@ models:
         description: '{{ doc("gtfs_calendar__end_date") }}'
         tests: *not_null_warn
 
-  - name: calendar_dates
+  - name: dim_calendar_dates
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -184,7 +184,7 @@ models:
         description: '{{ doc("gtfs_calendar_dates__exception_type") }}'
         tests: *not_null_warn
 
-  - name: fare_attributes
+  - name: dim_fare_attributes
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -222,7 +222,7 @@ models:
       - name: transfer_duration
         description: '{{ doc("gtfs_fare_attributes__transfer_duration") }}'
 
-  - name: fare_rules
+  - name: dim_fare_rules
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -252,7 +252,7 @@ models:
       - name: contains_id
         description: '{{ doc("gtfs_fare_rules__contains_id") }}'
 
-  - name: feed_info
+  - name: dim_feed_info
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -292,7 +292,7 @@ models:
       - name: feed_contact_url
         description: '{{ doc("gtfs_feed_info__feed_contact_url") }}'
 
-  - name: frequencies
+  - name: dim_frequencies
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -325,7 +325,7 @@ models:
       - name: exact_times
         description: '{{ doc("gtfs_frequencies__exact_times") }}'
 
-  - name: levels
+  - name: dim_levels
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -352,7 +352,7 @@ models:
       - name: level_name
         description: '{{ doc("gtfs_levels__level_name") }}'
 
-  - name: pathways
+  - name: dim_pathways
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -400,7 +400,7 @@ models:
       - name: reversed_signposted_as
         description: '{{ doc("gtfs_pathways__reversed_signposted_as") }}'
 
-  - name: routes
+  - name: dim_routes
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -445,7 +445,7 @@ models:
       - name: continuous_drop_off
         description: '{{ doc("gtfs_routes__continuous_drop_off") }}'
 
-  - name: shapes
+  - name: dim_shapes
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -489,7 +489,7 @@ models:
         description: '{{ doc("gtfs_shapes__shape_dist_traveled") }}'
 
 
-  - name: stop_times
+  - name: dim_stop_times
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -536,7 +536,7 @@ models:
       - name: timepoint
         description: '{{ doc("gtfs_stop_times__timepoint") }}'
 
-  - name: stops
+  - name: dim_stops
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -597,7 +597,7 @@ models:
       - name: platform_code
         description: '{{ doc("gtfs_stops__platform_code") }}'
 
-  - name: transfers
+  - name: dim_transfers
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -627,7 +627,7 @@ models:
       - name: min_transfer_time
         description: '{{ doc("gtfs_transfers__min_transfer_time") }}'
 
-  - name: translations
+  - name: dim_translations
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -664,7 +664,7 @@ models:
       - name: field_value
         description: '{{ doc("gtfs_translations__field_value") }}'
 
-  - name: trips
+  - name: dim_trips
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -706,15 +706,6 @@ models:
       - name: bikes_allowed
         description: '{{ doc("gtfs_trips__bikes_allowed") }}'
 
-  - name: validation_notices
-    description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
-      Each row is a validation notice from the GTFS schedule validator.
-    columns:
-      - *calitp_itp_id
-      - *calitp_url_number
-
 exposures:
   - name: california_open_data
     type: application
@@ -723,23 +714,23 @@ exposures:
     description: Latest-only GTFS Schedule data published to Caltrans CKAN instance.
 
     depends_on:
-      - ref("agency")
-      - ref("attributions")
-      - ref("calendar")
-      - ref("calendar_dates")
-      - ref("fare_attributes")
-      - ref("fare_rules")
-      - ref("feed_info")
-      - ref("frequencies")
-      - ref("levels")
-      - ref("pathways")
-      - ref("routes")
-      - ref("shapes")
-      - ref("stop_times")
-      - ref("stops")
-      - ref("transfers")
-      - ref("translations")
-      - ref("trips")
+      - ref("dim_agency")
+      - ref("dim_attributions")
+      - ref("dim_calendar")
+      - ref("dim_calendar_dates")
+      - ref("dim_fare_attributes")
+      - ref("dim_fare_rules")
+      - ref("dim_feed_info")
+      - ref("dim_frequencies")
+      - ref("dim_levels")
+      - ref("dim_pathways")
+      - ref("dim_routes")
+      - ref("dim_shapes")
+      - ref("dim_stop_times")
+      - ref("dim_stops")
+      - ref("dim_transfers")
+      - ref("dim_translations")
+      - ref("dim_trips")
 
     owner:
       email: laurie.m@jarv.us
@@ -755,103 +746,103 @@ exposures:
           format: csv
           url: https://data.ca.gov
           resources:
-            agency:
+            dim_agency:
               id: e8f9d49e-2bb6-400b-b01f-28bc2e0e7df2
               description: |
                 Each row is a cleaned row from an agency.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#agencytxt.
-            attributions:
+            dim_attributions:
               id: 038b7354-06e8-4082-a4a1-40debd3110d5
               description: |
                 Each row is a cleaned row from an attributions.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#attributionstxt.
-            calendar:
+            dim_calendar:
               id: a79f10b8-b322-43f3-b3f4-ba46a8dbe9ab
               description: |
                 Each row is a cleaned row from a calendar.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#calendartxt.
-            calendar_dates:
+            dim_calendar_dates:
               id: 06a21a8e-dba3-4e7e-8726-f2e992cc1a80
               description: |
                 Each row is a Each row is a cleaned rowrow from a calendar_dates.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#calendar_datestxt.
-            fare_attributes:
+            dim_fare_attributes:
               id: 9db51dfa-fd6d-481b-b655-96e8af722ab5
               description: |
                 Each row is a cleaned row from a fare_attributes.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#fare_attributestxt.
-            fare_rules:
+            dim_fare_rules:
               id: 4fb1fa39-0ef9-457d-97b1-bb7e9e848312
               description: |
                 Each row is a cleaned row from a fare_rules.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#fare_rulestxt.
-            feed_info:
+            dim_feed_info:
               id: 50d12559-635e-4222-ac25-3706c066902d
               description: |
                 Each row is a cleaned row from a feed_info.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#feed_infotxt.
-            frequencies:
+            dim_frequencies:
               id: 48542c8f-8ce1-43e3-a965-6c68771d6fe5
               description: |
                 Each row is a cleaned row from a frequencies.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#frequenciestxt.
-            levels:
+            dim_levels:
               id: 288a08cd-7929-479e-aa88-08b677a08510
               description: |
                 Each row is a cleaned row from a levels.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#levelstxt.
-            pathways:
+            dim_pathways:
               id: a01484af-c460-40a4-ac8a-896b0196e8c2
               description: |
                 Each row is a cleaned row from a pathways.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#pathwaystxt.
-            routes:
+            dim_routes:
               id: c6bbb637-988f-431c-8444-aef7277297f8
               description: |
                 Each row is a cleaned row from a routes.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#routestxt.
-            shapes:
+            dim_shapes:
               id: 2f5e7bdb-33e8-4633-b163-6bab42ad0951
               description: |
                 Each row is a cleaned row from a shapes.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#shapestxt.
-            stop_times:
+            dim_stop_times:
               id: d31eef2f-e223-4ca4-a86b-170acc6b2590
               description: |
                 Each row is a cleaned row from a stop_times.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#stop_timestxt.
-            stops:
+            dim_stops:
               id: 8c876204-e12b-48a2-8299-10f6ae3d4f2b
               description: |
                 Each row is a cleaned row from a stops.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#stopstxt.
-            transfers:
+            dim_transfers:
               id: f8dcda5d-0c6d-4c70-b5f5-6716adcf6ffc
               description: |
                 Each row is a cleaned row from a transfers.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#transferstxt.
-            translations:
+            dim_translations:
               id: 7abe9256-6cd2-4c1f-9b6a-72108022a382
               description: |
                 Each row is a cleaned row from a translations.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#translationstxt.
-            trips:
+            dim_trips:
               id: 0e4da89e-9330-43f8-8de9-305cb7d4918f
               description: |
                 Each row is a cleaned row from a trips.txt file.

@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 WITH
 stop_times AS (
     {{ get_latest_schedule_data(

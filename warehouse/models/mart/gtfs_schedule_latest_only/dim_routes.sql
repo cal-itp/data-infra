@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 WITH
 routes AS (
     {{ get_latest_schedule_data(

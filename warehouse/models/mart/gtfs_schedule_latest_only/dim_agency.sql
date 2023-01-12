@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 WITH
 agency AS (
     {{ get_latest_schedule_data(

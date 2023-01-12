@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 WITH
 translations AS (
     {{ get_latest_schedule_data(

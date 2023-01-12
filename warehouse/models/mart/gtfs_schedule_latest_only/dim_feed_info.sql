@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 WITH
 feed_info AS (
     {{ get_latest_schedule_data(

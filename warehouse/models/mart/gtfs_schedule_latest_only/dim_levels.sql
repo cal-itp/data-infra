@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 WITH
 levels AS (
     {{ get_latest_schedule_data(

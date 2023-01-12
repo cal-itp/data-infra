@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 WITH
 calendar AS (
     {{ get_latest_schedule_data(
