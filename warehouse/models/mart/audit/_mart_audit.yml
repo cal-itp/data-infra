@@ -71,7 +71,8 @@ models:
       for more details.
       Note that because this table possesses one row for each array entry in the original
       table's referenced_tables column, sums and other statistics on its columns won't work
-      without additional filtering/grouping.
+      without additional filtering/grouping. There are no corresponding rows in this table for
+      entries in the original table that have an empty referenced_tables array.
     columns:
       - name: timestamp
         tests:
