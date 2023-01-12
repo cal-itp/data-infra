@@ -1,5 +1,5 @@
 WITH
-shapes AS (
+dim_shapes_latest AS (
     {{ get_latest_schedule_data(
     latest_only_source = ref('calitp_feeds'),
     table_name = 'shapes',
@@ -7,4 +7,4 @@ shapes AS (
     ) }}
 )
 
-SELECT * FROM shapes
+SELECT * FROM dim_shapes_latest

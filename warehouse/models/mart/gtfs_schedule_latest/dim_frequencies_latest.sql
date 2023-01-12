@@ -1,5 +1,5 @@
 WITH
-frequencies AS (
+dim_frequencies_latest AS (
     {{ get_latest_schedule_data(
     latest_only_source = ref('calitp_feeds'),
     table_name = 'frequencies',
@@ -7,4 +7,4 @@ frequencies AS (
     ) }}
 )
 
-SELECT * FROM frequencies
+SELECT * FROM dim_frequencies_latest

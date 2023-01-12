@@ -1,5 +1,5 @@
 WITH
-fare_rules AS (
+dim_fare_rules_latest AS (
     {{ get_latest_schedule_data(
     latest_only_source = ref('calitp_feeds'),
     table_name = 'fare_rules',
@@ -7,4 +7,4 @@ fare_rules AS (
     ) }}
 )
 
-SELECT * FROM fare_rules
+SELECT * FROM dim_fare_rules_latest

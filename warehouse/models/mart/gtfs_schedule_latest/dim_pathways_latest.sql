@@ -1,5 +1,5 @@
 WITH
-pathways AS (
+dim_pathways_latest AS (
     {{ get_latest_schedule_data(
     latest_only_source = ref('calitp_feeds'),
     table_name = 'pathways',
@@ -7,4 +7,4 @@ pathways AS (
     ) }}
 )
 
-SELECT * FROM pathways
+SELECT * FROM dim_pathways_latest

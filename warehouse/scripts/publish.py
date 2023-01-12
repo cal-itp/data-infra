@@ -287,7 +287,7 @@ def _generate_exposure_documentation(
             description = resources[name].description
 
         row = MetadataRow(
-            dataset_name=name.replace("dim_", ""),
+            dataset_name=name.replace("dim_", "").replace("_latest", ""),
             tags=[
                 "transit",
                 "gtfs",

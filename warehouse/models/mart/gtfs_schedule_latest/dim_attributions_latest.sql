@@ -1,5 +1,5 @@
 WITH
-attributions AS (
+dim_attributions_latest AS (
     {{ get_latest_schedule_data(
     latest_only_source = ref('calitp_feeds'),
     table_name = 'attributions',
@@ -7,4 +7,4 @@ attributions AS (
  ) }}
 )
 
-SELECT * FROM attributions
+SELECT * FROM dim_attributions_latest

@@ -1,5 +1,5 @@
 WITH
-levels AS (
+dim_levels_latest AS (
     {{ get_latest_schedule_data(
     latest_only_source = ref('calitp_feeds'),
     table_name = 'levels',
@@ -7,4 +7,4 @@ levels AS (
     ) }}
 )
 
-SELECT * FROM levels
+SELECT * FROM dim_levels_latest

@@ -1,5 +1,5 @@
 WITH
-stop_times AS (
+dim_stop_times_latest AS (
     {{ get_latest_schedule_data(
     latest_only_source = ref('calitp_feeds'),
     table_name = 'stop_times',
@@ -7,4 +7,4 @@ stop_times AS (
     ) }}
 )
 
-SELECT * FROM stop_times
+SELECT * FROM dim_stop_times_latest

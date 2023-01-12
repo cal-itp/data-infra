@@ -1,5 +1,5 @@
 WITH
-calendar_dates AS (
+dim_calendar_dates_latest AS (
     {{ get_latest_schedule_data(
     latest_only_source = ref('calitp_feeds'),
     table_name = 'calendar_dates',
@@ -7,4 +7,4 @@ calendar_dates AS (
     ) }}
 )
 
-SELECT * FROM calendar_dates
+SELECT * FROM dim_calendar_dates_latest
