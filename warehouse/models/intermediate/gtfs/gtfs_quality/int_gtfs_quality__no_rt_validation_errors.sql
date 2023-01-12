@@ -19,36 +19,37 @@ count_files AS (
     GROUP BY 1, 2
 ),
 
-critical_notices AS (
+errors AS (
     SELECT
         date,
         base64_url,
-        SUM(total_notices) AS errors,
+        SUM(total_notices) AS total_errors,
     FROM fct_daily_rt_feed_validation_notices
-    WHERE is_critical
+    -- All error codes start with the letter E (warnings start with W)
+    WHERE code LIKE "E%"
     GROUP BY 1, 2
 ),
 
-int_gtfs_quality__no_rt_critical_validation_errors AS (
+int_gtfs_quality__no_rt_validation_errors AS (
     SELECT
         idx.date,
         idx.base64_url,
         idx.feed_type,
-        {{ no_rt_critical_validation_errors() }} AS check,
+        {{ no_rt_validation_errors() }} AS check,
         {{ compliance_rt() }} AS feature,
         rt_files,
-        errors,
+        total_errors,
         CASE
-            WHEN rt_files IS NOT NULL AND COALESCE(errors, 0) = 0 THEN "PASS" -- files present and no errors
-            WHEN rt_files IS NOT NULL AND errors > 0 THEN "FAIL" -- files present and there are errors
+            WHEN rt_files IS NOT NULL AND COALESCE(total_errors, 0) = 0 THEN "PASS" -- files present and no errors
+            WHEN rt_files IS NOT NULL AND total_errors > 0 THEN "FAIL" -- files present and there are errors
         END AS status,
     FROM feed_guideline_index AS idx
     LEFT JOIN count_files AS files
     ON idx.date = files.date
         AND idx.base64_url = files.base64_url
-    LEFT JOIN critical_notices AS notices
-    ON idx.date = notices.date
-        AND idx.base64_url = notices.base64_url
+    LEFT JOIN errors
+    ON idx.date = errors.date
+        AND idx.base64_url = errors.base64_url
 )
 
-SELECT * FROM int_gtfs_quality__no_rt_critical_validation_errors
+SELECT * FROM int_gtfs_quality__no_rt_validation_errors
