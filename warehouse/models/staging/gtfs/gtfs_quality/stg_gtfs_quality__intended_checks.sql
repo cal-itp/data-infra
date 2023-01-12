@@ -65,6 +65,8 @@ WITH stg_gtfs_quality__intended_checks AS (
     SELECT {{ no_stale_trip_updates() }}, {{ best_practices_alignment_rt() }}
     UNION ALL
     SELECT {{ no_stale_service_alerts() }}, {{ best_practices_alignment_rt() }}
+    UNION ALL
+    SELECT {{ modification_date_present() }}, {{ best_practices_alignment_schedule() }}
 )
 
 SELECT * FROM stg_gtfs_quality__intended_checks

@@ -148,6 +148,10 @@
 "Service alerts RT feed contains no updates older than 10 minutes"
 {% endmacro %}
 
+{% macro modification_date_present() %}
+"The GTFS Schedule API endpoint is configured to report the file modification date"
+{% endmacro %}
+
 -- declare features
 {% macro compliance_schedule() %}
 "Compliance (Schedule)"
