@@ -19,16 +19,18 @@ datasets_services_joined AS (
     SELECT
         service_key,
         datasets.key AS gtfs_dataset_key,
-        customer_facing,
+        COALESCE(
+            customer_facing,
+            category = "primary") AS customer_facing,
         datasets.type,
-        (service_data._is_current AND datasets._is_current) AS _is_current,
-        GREATEST(service_data._valid_from, datasets._valid_from) AS _valid_from,
-        LEAST(service_data._valid_to, datasets._valid_to) AS _valid_to
+        service_data._is_current AS _is_current,
+        service_data._valid_from,
+        service_data._valid_to
     FROM dim_gtfs_service_data AS service_data
+    -- because dim_gtfs_service_data is already fully versioned (already accounts for dataset versioning)
+    -- we don't need SCD date logic a second time here
     INNER JOIN dim_gtfs_datasets AS datasets
         ON service_data.gtfs_dataset_key = datasets.key
-        AND service_data._valid_from < datasets._valid_to
-        AND service_data._valid_to > datasets._valid_from
 ),
 
 associated_schedule AS (
@@ -44,15 +46,57 @@ associated_schedule AS (
         END AS associated_gtfs_schedule_gtfs_dataset_key,
         customer_facing,
         type,
-        (dataset_service._is_current AND COALESCE(bridge._is_current, TRUE)) AS _is_current,
         GREATEST(dataset_service._valid_from, COALESCE(bridge._valid_from, '1900-01-01')) AS _valid_from,
         LEAST(dataset_service._valid_to, COALESCE(bridge._valid_to, '2099-01-01')) AS _valid_to
     FROM datasets_services_joined AS dataset_service
-    LEFT JOIN bridge_schedule_dataset_for_validation AS bridge
+    LEFT JOIN combined_bridge AS bridge
         ON dataset_service.gtfs_dataset_key = bridge.gtfs_dataset_key
         AND dataset_service._valid_from < bridge._valid_to
         AND dataset_service._valid_to > bridge._valid_from
 ),
+
+-- service_schedule_spine AS (
+--     SELECT DISTINCT
+--         service_key,
+--         associated_gtfs_schedule_gtfs_dataset_key,
+--         customer_facing,
+--     FROM associated_schedule
+-- ),
+
+-- join_schedule AS (
+--     SELECT
+--         service_key,
+--         spine.associated_gtfs_schedule_gtfs_dataset_key,
+--         datasets.key AS schedule_key,
+--         datasets._valid_from,
+--         datasets._valid_to
+--     FROM service_schedule_spine AS spine
+--     LEFT JOIN associated_schedule AS datasets
+--         ON spine.service_key = datasets.service_key
+--         AND spine.associated_gtfs_schedule_gtfs_dataset_key = datasets.associated_gtfs_schedule_gtfs_dataset_key
+--         AND spine.customer_facing = datasets.customer_facing
+--         AND datasets.type = "schedule"
+-- ),
+
+-- join_alerts AS (
+--     SELECT
+--         service_key,
+--         spine.associated_gtfs_schedule_gtfs_dataset_key,
+--         schedule_key,
+--         datasets.key AS service_alerts_key,
+--         COALESCE(
+--             GREATEST(spine._valid_from,
+--                     datasets._valid_from)
+--             , spine._valid_from,
+--             , datasets._valid_from) AS _valid_from,
+--         LEAST(dataset_service._valid_to, COALESCE(bridge._valid_to, '2099-01-01')) AS _valid_to
+--     FROM join_schedule AS spine
+--     LEFT JOIN associated_schedule AS datasets
+--         ON spine.service_key = datasets.service_key
+--         AND spine.associated_gtfs_schedule_gtfs_dataset_key = datasets.associated_gtfs_schedule_gtfs_dataset_key
+--         AND spine.customer_facing = datasets.customer_facing
+--         AND datasets.type = "service_alerts"
+-- ),
 
 pivoted AS (
     SELECT *
@@ -67,7 +111,7 @@ int_transit_database__service_datasets_pivoted AS (
     SELECT
         dim_gtfs_service_data.key AS gtfs_service_data_key,
         pivoted.service_key,
-        pivoted.customer_facing,
+        dim_gtfs_service_data.customer_facing,
         dim_gtfs_service_data.agency_id,
         dim_gtfs_service_data.network_id,
         dim_gtfs_service_data.route_id,

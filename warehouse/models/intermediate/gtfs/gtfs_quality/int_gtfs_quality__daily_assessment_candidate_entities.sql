@@ -2,22 +2,22 @@
 
 WITH orgs AS (
     SELECT *
-    FROM {{ ref('int_transit_database__organizations_history') }}
+    FROM {{ ref('int_transit_database__organizations_daily_history') }}
 ),
 
 services AS (
     SELECT *
-    FROM {{ ref('int_transit_database__services_history') }}
+    FROM {{ ref('int_transit_database__services_daily_history') }}
 ),
 
 service_data AS (
     SELECT *
-    FROM {{ ref('int_transit_database__gtfs_service_data_history') }}
+    FROM {{ ref('int_gtfs_quality__gtfs_service_data_daily_history') }}
 ),
 
 datasets AS (
     SELECT *
-    FROM {{ ref('int_transit_database__gtfs_datasets_history') }}
+    FROM {{ ref('int_transit_database__gtfs_datasets_daily_history') }}
 ),
 
 feeds AS (
