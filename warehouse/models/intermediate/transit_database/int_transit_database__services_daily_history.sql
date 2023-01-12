@@ -12,7 +12,7 @@ date_spine AS (
 
 int_gtfs_quality__services_daily_history AS (
     SELECT
-        date_spine.date_day,
+        date_spine.date_day AS date,
         dim.key AS service_key,
     FROM date_spine
     LEFT JOIN dim

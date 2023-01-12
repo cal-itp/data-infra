@@ -1,30 +1,67 @@
 {{ config(materialized='table') }}
 
 WITH orgs AS (
-    SELECT *
-    FROM {{ ref('int_transit_database__organizations_daily_history') }}
+    SELECT
+        hist.date,
+        dim.*
+    FROM {{ ref('int_transit_database__organizations_daily_history') }} AS hist
+    LEFT JOIN {{ ref('dim_organizations') }} AS dim
+        ON hist.organization_key = dim.key
 ),
 
 services AS (
-    SELECT *
-    FROM {{ ref('int_transit_database__services_daily_history') }}
+    SELECT
+        hist.date,
+        dim.*,
+        ARRAY_TO_STRING(service_type, ',') AS service_type_str
+    FROM {{ ref('int_transit_database__services_daily_history') }} AS hist
+    LEFT JOIN {{ ref('dim_services') }} AS dim
+        ON hist.service_key = dim.key
 ),
 
 service_data AS (
-    SELECT *
-    FROM {{ ref('int_gtfs_quality__gtfs_service_data_daily_history') }}
+    SELECT
+        hist.date,
+        dim.*
+    FROM {{ ref('int_transit_database__gtfs_service_data_daily_history') }} AS hist
+    LEFT JOIN {{ ref('dim_gtfs_service_data') }} AS dim
+        ON hist.gtfs_service_data_key = dim.key
 ),
 
 datasets AS (
-    SELECT *
-    FROM {{ ref('int_transit_database__gtfs_datasets_daily_history') }}
+    SELECT
+        hist.date,
+        dim.*
+    FROM {{ ref('int_transit_database__gtfs_datasets_daily_history') }} AS hist
+    LEFT JOIN {{ ref('dim_gtfs_datasets') }} AS dim
+        ON hist.gtfs_dataset_key = dim.key
+),
+
+org_service_bridge AS (
+    SELECT
+        hist.date,
+        dim.*
+    FROM {{ ref('int_transit_database__bridge_organizations_x_services_managed_daily_history') }} AS hist
+    LEFT JOIN {{ ref('bridge_organizations_x_services_managed') }} AS dim
+        ON hist.organization_key = dim.organization_key
+        AND hist.service_key = dim.service_key
+),
+
+validation_bridge AS (
+    SELECT
+        hist.date,
+        dim.*
+    FROM {{ ref('int_transit_database__bridge_schedule_dataset_for_validation_daily_history') }} AS hist
+    LEFT JOIN {{ ref('bridge_schedule_dataset_for_validation') }} AS dim
+        ON hist.gtfs_dataset_key = dim.gtfs_dataset_key
+        AND hist.schedule_to_use_for_rt_validation_gtfs_dataset_key = dim.schedule_to_use_for_rt_validation_gtfs_dataset_key
 ),
 
 feeds AS (
     SELECT *
     FROM {{ ref('fct_daily_schedule_feeds') }}
     -- this table goes into the future
-    WHERE date <= CURRENT_DATE()
+    WHERE date < CURRENT_DATE()
 ),
 
 full_join AS (
@@ -34,14 +71,12 @@ full_join AS (
             service_data.date,
             datasets.date,
             feeds.date) AS date,
-        COALESCE(orgs.organization_key, services.provider_organization_key) AS organization_key,
-        COALESCE(orgs.mobility_services_managed_service_key,
-            services.service_key,
+        orgs.key AS organization_key,
+        COALESCE(services.key,
             service_data.service_key)
             AS service_key,
         COALESCE(service_data.gtfs_dataset_key,
             datasets.key) AS gtfs_dataset_key,
-
         orgs.name AS organization_name,
         orgs.assessment_status AS organization_raw_assessment_status,
         orgs.reporting_category AS reporting_category,
@@ -50,7 +85,6 @@ full_join AS (
             (orgs.reporting_category = "Core") OR (orgs.reporting_category = "Other Public Transit"),
             FALSE
         ) AS organization_assessed,
-
         services.name AS service_name,
         services.assessment_status AS services_raw_assessment_status,
         services.currently_operating AS service_currently_operating,
@@ -62,7 +96,7 @@ full_join AS (
             FALSE
         ) AS service_assessed,
 
-        gtfs_service_data_key,
+        service_data.key AS gtfs_service_data_key,
         service_data.customer_facing AS gtfs_service_data_customer_facing,
         service_data.category AS gtfs_service_data_category,
         COALESCE(
@@ -70,24 +104,27 @@ full_join AS (
             service_data.category = "primary",
             FALSE
         ) AS gtfs_service_data_assessed,
-
         datasets.name AS gtfs_dataset_name,
         datasets.type AS gtfs_dataset_type,
         datasets.regional_feed_type,
-        datasets.base64_url,
-
+        COALESCE(datasets.base64_url, feeds.base64_url) AS base64_url,
         feeds.feed_key AS schedule_feed_key
     FROM orgs
+    FULL OUTER JOIN org_service_bridge
+        ON orgs.date = org_service_bridge.date
+        AND orgs.key = org_service_bridge.organization_key
     FULL OUTER JOIN services
         ON orgs.date = services.date
-        AND orgs.mobility_services_managed_service_key = services.service_key
-        AND orgs.organization_key = services.provider_organization_key
+        AND org_service_bridge.service_key = services.key
     FULL OUTER JOIN service_data
         ON services.date = service_data.date
-        AND services.service_key = service_data.service_key
+        AND services.key = service_data.service_key
     FULL OUTER JOIN datasets
         ON service_data.date = datasets.date
         AND service_data.gtfs_dataset_key = datasets.key
+    FULL OUTER JOIN validation_bridge
+        ON datasets.date = validation_bridge.date
+        AND datasets.key = validation_bridge.gtfs_dataset_key
     FULL OUTER JOIN feeds
         ON datasets.date = feeds.date
         AND datasets.base64_url = feeds.base64_url

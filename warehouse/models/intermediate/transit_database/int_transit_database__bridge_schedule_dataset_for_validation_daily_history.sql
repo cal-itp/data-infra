@@ -2,7 +2,7 @@
 
 WITH dim AS (
     SELECT *
-    FROM {{ ref('dim_organizations') }}
+    FROM {{ ref('bridge_schedule_dataset_for_validation') }}
 ),
 
 date_spine AS (
@@ -10,13 +10,14 @@ date_spine AS (
     FROM {{ ref('util_transit_database_history_date_spine') }}
 ),
 
-int_gtfs_quality__organizations_daily_history AS (
+int_transit_database__bridge_schedule_dataset_for_validation_daily_history AS (
     SELECT
         date_spine.date_day AS date,
-        dim.key AS organization_key,
+        dim.gtfs_dataset_key,
+        dim.schedule_to_use_for_rt_validation_gtfs_dataset_key
     FROM date_spine
     LEFT JOIN dim
         ON CAST(date_day AS TIMESTAMP) BETWEEN dim._valid_from AND dim._valid_to
 )
 
-SELECT * FROM int_gtfs_quality__organizations_daily_history
+SELECT * FROM int_transit_database__bridge_schedule_dataset_for_validation_daily_history

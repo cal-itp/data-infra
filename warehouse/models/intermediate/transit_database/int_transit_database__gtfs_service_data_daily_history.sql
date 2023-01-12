@@ -10,13 +10,13 @@ date_spine AS (
     FROM {{ ref('util_transit_database_history_date_spine') }}
 ),
 
-int_gtfs_quality__gtfs_service_data_daily_history AS (
+int_transit_database__gtfs_service_data_daily_history AS (
     SELECT
-        date_spine.date_day,
+        date_spine.date_day AS date,
         dim.key AS gtfs_service_data_key,
     FROM date_spine
     LEFT JOIN dim
         ON CAST(date_day AS TIMESTAMP) BETWEEN dim._valid_from AND dim._valid_to
 )
 
-SELECT * FROM int_gtfs_quality__gtfs_service_data_daily_history
+SELECT * FROM int_transit_database__gtfs_service_data_daily_history
