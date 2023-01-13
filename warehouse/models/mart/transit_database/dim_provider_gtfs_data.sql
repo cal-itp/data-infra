@@ -85,9 +85,17 @@ all_versioned AS (
 
 final AS (
     SELECT
-        all_versioned.* EXCEPT(key, _valid_from),
+        organization_key,
+        service_key,
+        gtfs_service_data_customer_facing,
+        regional_feed_type,
+        associated_gtfs_schedule_key,
+        gtfs_dataset_key_schedule AS schedule_gtfs_dataset_key,
+        gtfs_dataset_key_service_alerts AS service_alerts_gtfs_dataset_key,
+        gtfs_dataset_key_vehicle_positions AS vehicle_positions_gtfs_dataset_key,
+        gtfs_dataset_key_trip_updates AS trip_updates_gtfs_dataset_key,
         CAST(_valid_from AS TIMESTAMP) AS _valid_from,
-        orig.* EXCEPT(date),
+        all_versioned._valid_to,
         _valid_to = {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }} AS _is_current
     FROM all_versioned
     LEFT JOIN pivoted AS orig

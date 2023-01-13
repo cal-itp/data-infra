@@ -3,6 +3,12 @@ version: 2
 models:
   - name: dim_components
     description: '{{ doc("components_table") }}'
+    tests: &mutually_exclusive_ranges
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: original_record_id
+          gaps: required
     columns:
       - &key
         name: key
@@ -14,6 +20,7 @@ models:
 
   - name: dim_contracts
     description: '{{ doc("contracts_table") }}'
+    tests: *mutually_exclusive_ranges
     columns:
       - *key
       - name: contract_holder_organization_key
@@ -28,10 +35,12 @@ models:
              field: key
   - name: dim_data_schemas
     description: '{{ doc("data_schemas_table") }}'
+    tests: *mutually_exclusive_ranges
     columns:
       - *key
   - name: dim_organizations
     description: '{{ doc("organizations_table") }}'
+    tests: *mutually_exclusive_ranges
     columns:
       - *key
       - name: name
@@ -86,6 +95,7 @@ models:
           manages qualifying assessed services
   - name: dim_services
     description: '{{ doc("services_table") }}'
+    tests: *mutually_exclusive_ranges
     columns:
       - *key
       - name: name
@@ -134,16 +144,19 @@ models:
           Is either "Yes" or "No" and indicates whether this Service qualifies as
           being an assessed service
   - name: dim_products
+    tests: *mutually_exclusive_ranges
     description: '{{ doc("products_table") }}'
     columns:
       - *key
   - name: dim_properties_and_features
+    tests: *mutually_exclusive_ranges
     columns:
       - *key
   - name: dim_contract_attachments
     description: |
       Attachment links to images of contracts.
       One contract can have multiple attachments.
+    tests: *mutually_exclusive_ranges
     columns:
       - *key
       - name: contract_key
@@ -159,6 +172,7 @@ models:
       - be *disaggregated into* one or more `gtfs service data` records.
       - be *produced* by one or more `organizations`
       - be *published* by an `organizations`.
+    tests: *mutually_exclusive_ranges
     columns:
       - *key
       - name: type
@@ -226,6 +240,7 @@ models:
       * "*" indicates remaining records after other selections at that selection level
 
       For further details, see: https://docs.calitp.org/data-infra/datasets_and_tables/transitdatabase.html?highlight=network_id#gtfs-service-data-notation-for-isolating-gtfs-services-within-gtfs-datasets
+    tests: *mutually_exclusive_ranges
     columns:
       - *key
       - name: service_key
@@ -285,6 +300,7 @@ models:
         #      field: key
   - name: dim_fare_systems
     description: '{{ doc("fare_systems_table") }}'
+    tests: *mutually_exclusive_ranges
     columns:
       - *key
   - name: dim_service_components
@@ -345,9 +361,10 @@ models:
           - relationships:
              to: ref('dim_services')
              field: key
-          - unique:
-              config:
-                where: customer_facing
+          # is there a way to partition this by date?
+          # - unique:
+          #     config:
+          #       where: gtfs_service_data_customer_facing
       - name: schedule_gtfs_dataset_key
         tests:
           - &ref_gtfs_datasets_key
