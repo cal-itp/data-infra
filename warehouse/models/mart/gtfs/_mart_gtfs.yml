@@ -1580,6 +1580,9 @@ models:
       - name: route_type_12_count
         description: |
           The count of stop events associated with route_type 12 - Monorail
+      - name: missing_route_type
+        description: |
+          The count of stop events associated with a `stop_id` that had a null `route_type` value in `dim_routes`
       - name: contains_warning_duplicate_stop_times_primary_key
         description: |
           Rows with `true` in this column indicate that the columns in this table that are aggregated from

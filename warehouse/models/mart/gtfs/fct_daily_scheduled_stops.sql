@@ -27,7 +27,7 @@ stops_by_day_by_route AS (
 
         trips.service_date,
         trips.feed_key,
-        CAST(trips.route_type AS INT) AS route_type,
+        COALESCE(CAST(trips.route_type AS INT), 1000) AS route_type,
 
         stop_times.stop_id,
 
@@ -57,10 +57,9 @@ stops_by_day AS (
 
         service_date,
         feed_key,
-
         stop_id,
 
-        COUNT(*) AS stop_event_count,
+        SUM(stop_events_count_by_route) AS stop_event_count,
 
         LOGICAL_OR(
             contains_warning_duplicate_stop_times_primary_key
@@ -92,7 +91,7 @@ pivot_to_route_type AS (
     PIVOT(
         SUM(stop_events_count_by_route) AS route_type
         FOR route_type IN
-        (0, 1, 2, 3, 4, 5, 6, 7, 11, 12)
+        (0, 1, 2, 3, 4, 5, 6, 7, 11, 12, 1000)
     )
 ),
 
@@ -117,6 +116,7 @@ fct_daily_scheduled_stops AS (
         pivoted.route_type_7,
         pivoted.route_type_11,
         pivoted.route_type_12,
+        pivoted.route_type_1000 AS missing_route_type,
 
         stops_by_day.contains_warning_duplicate_stop_times_primary_key,
         stops_by_day.contains_warning_duplicate_trip_primary_key,
