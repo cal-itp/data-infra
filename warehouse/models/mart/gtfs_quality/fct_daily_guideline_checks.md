@@ -21,6 +21,9 @@ Here is a list of currently-implemented checks:
 | No expired services are listed in the feed | Best Practices Alignment (Schedule) | No service_id's exist in calendars.txt or calendar_dates.txt where the last in-effect date is in the past. |
 | All schedule changes in the last month have provided at least 7 days of lead time | Up-to-Dateness | All changes made in the last 30 days to stops.txt, stop_times.txt, calendar.txt, and calendar_dates.txt did not impact trips within seven days of when the update was made. |
 | Schedule feed maintains persistent identifiers for stop_id, route_id, and agency_id | Best Practices Alignment (Schedule)| In the last 30 days, no updates to the schedule feed have created a situation where 50% or more of a given ID (stop_id, route_id, agency_id) were not present in the previous feed version. |
+| The GTFS Schedule API endpoint is configured to report the file modification date | Best Practices Alignment (Schedule) | When the GTFS Schedule API endpoint is requested, the response header includes a field called "Last-Modified". |
+| Schedule feed is listed on feed aggregator transit.land | Feed Aggregator Availability (Schedule) | Schedule feed is present on the feed aggregator transit.land. |
+| Schedule feed is listed on feed aggregator Mobility Database | Feed Aggregator Availability (Schedule) | Schedule feed is present on the feed aggregator Mobility Database. |
 | Schedule feed downloads successfully | Compliance (Schedule) | On the given date, the schedule feed was downloaded and parsed successfully |
 | No errors in the MobilityData GTFS Realtime Validator | Compliance (RT) | The feed has at least one GTFS-RT file present on the given day, and GTFS Realtime Validator produced no errors for any RT feed extract on that day.|
 | All trip_ids provided in the GTFS-rt feed exist in the GTFS Schedule feed| Fixed-Route Completeness | Error code E003 does not appear in the MobilityData GTFS Realtime Validator on that day.|
@@ -36,6 +39,11 @@ Here is a list of currently-implemented checks:
 | Vehicle positions RT feed contains no updates older than 90 seconds. | Best Practices Alignment (RT) | At no point during the day is there a Vehicle positions file that is older than 90 seconds. |
 | Trip updates RT feed contains no updates older than 90 seconds. | Best Practices Alignment (RT) | At no point during the day is there a Trip updates file that is older than 90 seconds. |
 | Service alerts RT feed contains no updates older than 10 minutes. | Best Practices Alignment (RT) | At no point during the day is there a Service alerts file that is older than 10 minutes. |
-| The GTFS Schedule API endpoint is configured to report the file modification date | Best Practices Alignment (Schedule) | When the GTFS Schedule API endpoint is requested, the response header includes a field called "Last-Modified". |
+| Vehicle positions RT feed is listed on feed aggregator transit.land | Feed Aggregator Availability (RT) | Vehicle positions RT feed is present on the feed aggregator transit.land. |
+| Trip updates RT feed is listed on feed aggregator transit.land | Feed Aggregator Availability (RT) | Trip updates RT feed is present on the feed aggregator transit.land. |
+| Service alerts RT feed is listed on feed aggregator transit.land | Feed Aggregator Availability (RT) | Service alerts RT feed is present on the feed aggregator transit.land. |
+| Vehicle positions RT feed is listed on feed aggregator Mobility Database | Feed Aggregator Availability (RT) | Vehicle positions RT feed is present on the feed aggregator Mobility Database. |
+| Trip updates RT feed is listed on feed aggregator Mobility Database | Feed Aggregator Availability (RT) | Trip updates RT feed is present on the feed aggregator Mobility Database. |
+| Service alerts RT feed is listed on feed aggregator Mobility Database | Feed Aggregator Availability (RT) | Service alerts RT feed is present on the feed aggregator Mobility Database. |
 
 {% enddocs %}

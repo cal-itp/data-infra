@@ -203,13 +203,7 @@ models:
     columns: *stg_gtfs_guideline_columns
 
   - name: int_gtfs_quality__rt_https
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - date
-            - base64_url
-      - dbt_utils.equal_rowcount:
-          compare_model: ref('int_gtfs_quality__rt_feed_guideline_index')
+    tests: *stg_gtfs_guideline_tests_rt
     # Reducing null_proportion minimum due to missing rows in rt_https check, due to missing data before Nov 22
     # This floor can be raised over time, as more data populates
     columns:
@@ -217,6 +211,14 @@ models:
         tests:
           - dbt_utils.not_null_proportion:
               at_least: 0.50
+
+  - name: int_gtfs_quality__feed_aggregator_rt
+    tests: *stg_gtfs_guideline_tests_rt
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__feed_aggregator_schedule
+    tests: *stg_gtfs_guideline_tests_schedule
+    columns: *stg_gtfs_guideline_columns
 
   - name: int_gtfs_quality__lead_time
     tests: *stg_gtfs_guideline_tests_schedule
@@ -231,35 +233,27 @@ models:
     columns: *stg_gtfs_guideline_columns
 
   - name: int_gtfs_quality__no_stale_vehicle_positions
-    tests:
+    tests: &stale_rt_guideline_check_tests
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - date
             - base64_url
-    columns: &stale_rt_guideline_check
+    columns: &stale_rt_guideline_check_columns
       - name: status
         tests:
           - dbt_utils.not_null_proportion:
               at_least: 0.8
 
   - name: int_gtfs_quality__no_stale_trip_updates
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - date
-            - base64_url
-    columns: *stale_rt_guideline_check
+    tests: *stale_rt_guideline_check_tests
+    columns: *stale_rt_guideline_check_columns
 
   - name: int_gtfs_quality__no_stale_service_alerts
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - date
-            - base64_url
-    columns: *stale_rt_guideline_check
+    tests: *stale_rt_guideline_check_tests
+    columns: *stale_rt_guideline_check_columns
 
   - name: int_gtfs_quality__schedule_download_success
-    tests: &stg_gtfs_guideline_tests_schedule_feed
+    tests: &stg_gtfs_guideline_tests_schedule_url
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - date
