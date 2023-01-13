@@ -13,3 +13,250 @@ use_bq_client: true
 hive_options:
   mode: AUTO
   source_uri_prefix: "california_transit__services/"
+schema_fields:
+  - name: eligibility_programs
+    type: STRING
+    mode: REPEATED
+  - name: context_from_juliet
+    type: STRING
+    mode: NULLABLE
+  - name: new_contact_info__from_usdot_
+    type: STRING
+    mode: NULLABLE
+  - name: next_steps
+    type: STRING
+    mode: NULLABLE
+  - name: itp_dataset_activities
+    type: STRING
+    mode: REPEATED
+  - name: components__from_product_components_
+    type: STRING
+    mode: REPEATED
+  - name: service_area_sq_miles__ntd___from_operator_
+    type: INTEGER
+    mode: REPEATED
+  - name: organizations_2
+    type: STRING
+    mode: REPEATED
+  - name: product__graas
+    type: STRING
+    mode: NULLABLE
+  - name: service_area_population__ntd___from_operator_
+    type: INTEGER
+    mode: REPEATED
+  - name: season_end
+    type: STRING
+    mode: NULLABLE
+  - name: season_start
+    type: STRING
+    mode: NULLABLE
+  - name: assessment_status
+    type: BOOLEAN
+    mode: NULLABLE
+  - name: qc__number_of_duplicates
+    type: INTEGER
+    mode: NULLABLE
+  - name: __schedule_feeds
+    type: INTEGER
+    mode: NULLABLE
+  - name: other__official__interactions
+    type: STRING
+    mode: REPEATED
+  - name: service_area_buffer__miles_
+    type: FLOAT
+    mode: NULLABLE
+  - name: itp_id__from_provider_
+    type: INTEGER
+    mode: REPEATED
+  - name: gtfs_dataset_publisher
+    type: STRING
+    mode: REPEATED
+  - name: caltrans_district
+    type: STRING
+    mode: REPEATED
+  - name: funding_sources
+    type: STRING
+    mode: REPEATED
+  - name: target_date__from_realtime_tasks_
+    type: DATE
+    mode: REPEATED
+  - name: fare_systems
+    type: STRING
+    mode: REPEATED
+  - name: avl_rti_vendor
+    type: STRING
+    mode: REPEATED
+  - name: realtime_task_status
+    type: STRING
+    mode: REPEATED
+  - name: manual_check__gtfs_schedule_ingested_in_trip_planner
+    type: STRING
+    mode: NULLABLE
+  - name: level_of_engagement
+    type: STRING
+    mode: REPEATED
+  - name: gtfs_schedule_quality
+    type: STRING
+    mode: NULLABLE
+  - name: realtime_status
+    type: STRING
+    mode: NULLABLE
+  - name: qc__duplicate_check
+    type: STRING
+    mode: REPEATED
+  - name: avl_rti_products
+    type: STRING
+    mode: REPEATED
+  - name: __vehiclepositions
+    type: INTEGER
+    mode: NULLABLE
+  - name: __tripupdates
+    type: INTEGER
+    mode: NULLABLE
+  - name: realtime_task_details
+    type: STRING
+    mode: REPEATED
+  - name: fares_v2_status
+    type: STRING
+    mode: REPEATED
+  - name: gtfs_provider_datasets
+    type: STRING
+    mode: REPEATED
+  - name: gtfs_services_dataset
+    type: STRING
+    mode: REPEATED
+  - name: funding_category
+    type: STRING
+    mode: REPEATED
+  - name: gtfs_dataset_producers
+    type: STRING
+    mode: REPEATED
+  - name: caltrans_district__from_provider_
+    type: STRING
+    mode: REPEATED
+  - name: pathways_status__from_gtfs_datasets_
+    type: STRING
+    mode: REPEATED
+  - name: target_quarter
+    type: STRING
+    mode: REPEATED
+  - name: service_availability_category
+    type: STRING
+    mode: REPEATED
+  - name: name
+    type: STRING
+    mode: NULLABLE
+  - name: paratransit_for
+    type: STRING
+    mode: REPEATED
+  - name: gtfs_schedule_status
+    type: STRING
+    mode: NULLABLE
+  - name: all_components__from_product_components_
+    type: STRING
+    mode: REPEATED
+  - name: service_operator_type
+    type: STRING
+    mode: NULLABLE
+  - name: total_voms__ntd___from_operator_
+    type: INTEGER
+    mode: REPEATED
+  - name: reporting_category__from_provider_
+    type: STRING
+    mode: REPEATED
+  - name: gtfs_services_association
+    type: STRING
+    mode: REPEATED
+  - name: __static
+    type: INTEGER
+    mode: NULLABLE
+  - name: gtfs_feedback_session_2021
+    type: STRING
+    mode: NULLABLE
+  - name: product__from_product_components_
+    type: STRING
+    mode: REPEATED
+  - name: realtime_tasks
+    type: STRING
+    mode: REPEATED
+  - name: mode
+    type: STRING
+    mode: REPEATED
+  - name: product_components
+    type: STRING
+    mode: REPEATED
+  - name: operating_counties
+    type: STRING
+    mode: REPEATED
+  - name: service_area_type
+    type: STRING
+    mode: REPEATED
+  - name: notes
+    type: STRING
+    mode: NULLABLE
+  - name: flex_status
+    type: STRING
+    mode: REPEATED
+  - name: operator
+    type: STRING
+    mode: REPEATED
+  - name: candidate_for_research
+    type: STRING
+    mode: REPEATED
+  - name: gtfs_realtime_quality
+    type: STRING
+    mode: NULLABLE
+  - name: rider_requirements
+    type: STRING
+    mode: REPEATED
+  - name: service_type
+    type: STRING
+    mode: REPEATED
+  - name: organization_type__from_provider_
+    type: STRING
+    mode: REPEATED
+  - name: alias_
+    type: STRING
+    mode: REPEATED
+  - name: gtfs_improvement_strategy_2021
+    type: STRING
+    mode: NULLABLE
+  - name: currently_operating
+    type: BOOLEAN
+    mode: NULLABLE
+  - name: product__payments
+    type: STRING
+    mode: REPEATED
+  - name: reporting_category__from_provider__2
+    type: STRING
+    mode: REPEATED
+  - name: id
+    type: STRING
+    mode: NULLABLE
+  - name: uris
+    type: STRING
+    mode: REPEATED
+  - name: website
+    type: STRING
+    mode: NULLABLE
+  - name: realtime_task_todos
+    type: STRING
+    mode: REPEATED
+  - name: operator_organization_type
+    type: STRING
+    mode: REPEATED
+  - name: __alerts
+    type: INTEGER
+    mode: NULLABLE
+  - name: manual_check__gtfs_realtime_ingested_in_trip_planner
+    type: JSON
+    mode: NULLABLE
+  - name: count__provider_
+    type: INTEGER
+    mode: NULLABLE
+  - name: provider
+    type: STRING
+    mode: REPEATED
+  - name: organizations_copy
+    type: STRING
+    mode: REPEATED
