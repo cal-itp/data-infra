@@ -51,7 +51,6 @@ class GTFSFeedAggregatorPresence(BaseModel):
     key: str
     name: Optional[str]
     feed_url_str: str
-    # feed_url: HttpUrl
     feed_type: Optional[str]
     raw_record: Dict[str, Any]
 
