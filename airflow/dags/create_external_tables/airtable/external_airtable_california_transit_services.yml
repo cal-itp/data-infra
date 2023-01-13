@@ -260,9 +260,3 @@ schema_fields:
   - name: organizations_copy
     type: STRING
     mode: REPEATED
-  - name: dt
-    type: DATE
-    mode: NULLABLE
-  - name: ts
-    type: TIMESTAMP
-    mode: NULLABLE
