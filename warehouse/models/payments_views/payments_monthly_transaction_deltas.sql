@@ -1,5 +1,3 @@
-{{ config(store_failures = true) }}
-
 WITH payments_rides AS (
 
     SELECT *
