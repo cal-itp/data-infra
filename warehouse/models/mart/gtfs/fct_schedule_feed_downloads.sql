@@ -14,7 +14,7 @@ urls_to_gtfs_datasets AS (
     SELECT * FROM {{ ref('int_transit_database__urls_to_gtfs_datasets') }}
 ),
 
-fct_schedule_feeds AS (
+fct_schedule_feed_downloads AS (
     SELECT
         {{ dbt_utils.surrogate_key(['j.base64_url', 'j.ts']) }} as key,
         f.key AS feed_key,
@@ -23,6 +23,7 @@ fct_schedule_feeds AS (
         j.base64_url,
         j.download_success,
         j.download_exception,
+        last_modified_timestamp,
         j.unzip_success,
         j.unzip_exception,
         j.zipfile_extract_md5hash,
@@ -37,4 +38,4 @@ fct_schedule_feeds AS (
         AND j.ts BETWEEN f._valid_from AND f._valid_to
 )
 
-SELECT * FROM fct_schedule_feeds
+SELECT * FROM fct_schedule_feed_downloads

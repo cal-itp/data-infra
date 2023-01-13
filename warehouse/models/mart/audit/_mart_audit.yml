@@ -1,0 +1,131 @@
+version: 2
+
+models:
+  - name: fct_bigquery_data_access
+    description: |
+      Parsed/unnested record of all data access from a log sink. See
+      https://cloud.google.com/bigquery/docs/reference/auditlogs/#data_access_data_access
+      for more details.
+    columns:
+      - name: timestamp
+        tests:
+          - not_null
+      - name: date
+        tests:
+          - not_null
+      - name: severity
+        tests:
+          - not_null
+      - name: resource_name
+        tests:
+          - not_null
+      - name: principal_email
+        tests:
+          - not_null
+      - name: job_name
+        tests:
+          - not_null
+          # uniqueness test removed in order to investigate underlying behavior
+          # - unique:
+          #     # the only known dupe, with unclear origin
+          #     where: job_name != 'projects/cal-itp-data-infra/jobs/job_whFNQ0oGxCM2ejXkfMAk5QA41Vcv'
+      - name: job_type
+        tests:
+          - not_null
+      - name: dbt_invocation_id
+      - name: create_disposition
+      - name: destination_table
+      - name: priority
+      - name: query
+      - name: statement_type
+      - name: write_disposition
+      - name: duration_in_seconds
+        tests:
+          - not_null
+      - name: referenced_tables
+        tests:
+          - not_null
+      - name: total_billed_bytes
+      - name: estimated_cost_usd
+        tests:
+          - not_null:
+              where: duration_in_seconds > 0 and job_type != 'IMPORT' and statement_type != 'CREATE_EXTERNAL_TABLE' and create_disposition != 'CREATE_IF_NEEDED'
+      - name: total_slots_seconds
+        tests:
+          - not_null:
+              where: duration_in_seconds > 0 and job_type != 'IMPORT' and statement_type != 'CREATE_EXTERNAL_TABLE' and create_disposition != 'CREATE_IF_NEEDED'
+      - name: table_data_read_job_name
+      - name: dbt_header
+      - name: dbt_node
+      - name: payload
+      - name: metadata
+      - name: job
+        tests:
+          - not_null
+
+  - name: fct_bigquery_data_access_referenced_tables
+    description: |
+      Parsed/unnested record of all data access from a log sink, with additional unnesting
+      of the referenced_tables column from fct_bigquery_data_access. See
+      https://cloud.google.com/bigquery/docs/reference/auditlogs/#data_access_data_access
+      for more details.
+      Note that because this table possesses one row for each array entry in the original
+      table's referenced_tables column, sums and other statistics on its columns won't work
+      without additional filtering/grouping. There are no corresponding rows in this table for
+      entries in the original table that have an empty referenced_tables array.
+    columns:
+      - name: timestamp
+        tests:
+          - not_null
+      - name: date
+        tests:
+          - not_null
+      - name: severity
+        tests:
+          - not_null
+      - name: resource_name
+        tests:
+          - not_null
+      - name: principal_email
+        tests:
+          - not_null
+      - name: job_name
+        tests:
+          - not_null
+          # uniqueness test removed in order to investigate underlying behavior
+          # - unique:
+          #     # the only known dupe, with unclear origin
+          #     where: job_name != 'projects/cal-itp-data-infra/jobs/job_whFNQ0oGxCM2ejXkfMAk5QA41Vcv'
+      - name: job_type
+        tests:
+          - not_null
+      - name: dbt_invocation_id
+      - name: create_disposition
+      - name: destination_table
+      - name: priority
+      - name: query
+      - name: statement_type
+      - name: write_disposition
+      - name: duration_in_seconds
+        tests:
+          - not_null
+      - name: total_billed_bytes
+      - name: estimated_cost_usd
+        tests:
+          - not_null:
+              where: duration_in_seconds > 0 and job_type != 'IMPORT' and statement_type != 'CREATE_EXTERNAL_TABLE' and create_disposition != 'CREATE_IF_NEEDED'
+      - name: total_slots_seconds
+        tests:
+          - not_null:
+              where: duration_in_seconds > 0 and job_type != 'IMPORT' and statement_type != 'CREATE_EXTERNAL_TABLE' and create_disposition != 'CREATE_IF_NEEDED'
+      - name: table_data_read_job_name
+      - name: dbt_header
+      - name: dbt_node
+      - name: payload
+      - name: metadata
+      - name: job
+        tests:
+          - not_null
+      - name: referenced_table
+        tests:
+          - not_null

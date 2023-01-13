@@ -4,7 +4,7 @@ import os
 import shutil
 import subprocess
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 
 import gcsfs
 import pendulum
@@ -105,6 +105,7 @@ def run(
     save_artifacts: bool = False,
     deploy_docs: bool = False,
     sync_metabase: bool = False,
+    exclude: Optional[str] = None,
 ) -> None:
     assert (
         dbt_docs or not save_artifacts
@@ -151,6 +152,8 @@ def run(
         args = ["run"]
         if full_refresh:
             args.append("--full-refresh")
+        if exclude:
+            args.extend(["--exclude", exclude])
         results_to_check.append(subprocess.run(get_command(*args)))
 
         with open("./target/run_results.json") as f:
@@ -162,7 +165,10 @@ def run(
         typer.echo("skipping run")
 
     if dbt_test:
-        subprocess.run(get_command("test"))
+        args = ["test"]
+        if exclude:
+            args.extend(["--exclude", exclude])
+        subprocess.run(get_command(*args))
 
         with open("./target/run_results.json") as f:
             run_results = RunResults(**json.load(f))
@@ -236,6 +242,7 @@ def run(
             ("mart_gtfs_guidelines", "Data Marts (formerly Warehouse Views)"),
             ("mart_gtfs", "Data Marts (formerly Warehouse Views)"),
             ("mart_gtfs_quality", "Data Marts (formerly Warehouse Views)"),
+            ("mart_audit", "Data Marts (formerly Warehouse Views)"),
         ]:
             args = [
                 "dbt-metabase",

@@ -27,8 +27,8 @@
 "Technical contact is listed in feed_contact_email field within the feed_info.txt file"
 {% endmacro %}
 
-{% macro no_rt_critical_validation_errors() %}
-"No critical errors in the MobilityData GTFS Realtime Validator"
+{% macro no_rt_validation_errors() %}
+"No errors in the MobilityData GTFS Realtime Validator"
 {% endmacro %}
 
 {% macro trip_id_alignment() %}
@@ -134,6 +134,22 @@
 
 {% macro persistent_ids_schedule() %}
 "Schedule feed maintains persistent identifiers for stop_id, route_id, and agency_id"
+{% endmacro %}
+
+{% macro no_stale_vehicle_positions() %}
+"Vehicle positions RT feed contains no updates older than 90 seconds"
+{% endmacro %}
+
+{% macro no_stale_trip_updates() %}
+"Trip updates RT feed contains no updates older than 90 seconds"
+{% endmacro %}
+
+{% macro no_stale_service_alerts() %}
+"Service alerts RT feed contains no updates older than 10 minutes"
+{% endmacro %}
+
+{% macro modification_date_present() %}
+"The GTFS Schedule API endpoint is configured to report the file modification date"
 {% endmacro %}
 
 -- declare features

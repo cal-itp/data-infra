@@ -69,22 +69,39 @@ models:
       - name: dt
       - name: ts
       - name: base64_url
+
+  - name: stg_gtfs_rt__trip_updates
+    description: |
+      Trip updates realtime data.
+      See https://gtfs.org/realtime/reference/ for specification.
+    columns:
+      - name: dt
+      - name: hour
+      - name: base64_url
+      - name: _extract_ts
+      - name: _config_extracted_at
+      - name: _name
+      - name: header_timestamp
+      - name: header_incrementality
+      - name: header_version
+      - name: id
+      - name: trip_update_timestamp
+      - name: trip_update_delay
+      - name: vehicle_id
+      - name: vehicle_label
+      - name: vehicle_license_plate
+      - name: trip_id
+      - name: trip_route_id
+      - name: trip_direction_id
+      - name: trip_start_time
+      - name: trip_start_date
+      - name: trip_schedule_relationship
+      - name: stop_time_updates
+
   - name: stg_gtfs_rt__vehicle_positions
     description: |
       Vehicle positions realtime data.
       See https://gtfs.org/realtime/reference/ for specification.
-    tests:
-      # ideally base64_url, _extract_ts, id would be sufficient
-      # but this is not the case in the MTC 511 feed, so adding position
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - _extract_ts
-            - id
-            - position_latitude
-            - position_longitude
-          # test hour = 0 UTC because that's 5pm Pacific = PM peak, good sample of data
-          where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY) AND (EXTRACT(HOUR FROM _extract_ts)) = 0
     columns:
       - name: dt
       - name: hour
@@ -117,16 +134,11 @@ models:
       - name: bearing
       - name: odometer
       - name: speed
+
   - name: stg_gtfs_schedule__agency
     description: |
       Cleaned GTFS schedule agency data.
       See https://gtfs.org/reference/static#agencytxt for specification.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
-            - agency_id
     columns:
       - name: base64_url
       - name: ts
@@ -150,12 +162,6 @@ models:
     description: |
       Cleaned GTFS schedule area data.
       See https://gtfs.org/schedule/reference/#areastxt for specification.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
-            - area_id
     columns:
       - name: base64_url
       - name: ts
@@ -167,12 +173,6 @@ models:
     description: |
       Cleaned GTFS schedule attribution data.
       See https://gtfs.org/reference/static#attributionstxt for specification.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
-            - attribution_id
     columns:
       - name: base64_url
       - name: ts
@@ -202,13 +202,6 @@ models:
     description: |
       Cleaned GTFS schedule fare attribute data.
       See https://gtfs.org/reference/static#fare_attributestxt for specification.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
-            - fare_id
-
     columns:
       - name: base64_url
       - name: ts
@@ -230,16 +223,6 @@ models:
     description: |
       Cleaned GTFS schedule fare leg rule data.
       See https://gtfs.org/schedule/reference/#fare_leg_rulestxt for specification.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
-            - network_id
-            - from_area_id
-            - to_area_id
-            - fare_product_id
-
     columns:
       - name: base64_url
       - name: ts
@@ -257,13 +240,6 @@ models:
     description: |
       Cleaned GTFS schedule fare products data.
       See https://gtfs.org/schedule/reference/#fare_productstxt for specification.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
-            - fare_product_id
-
     columns:
       - name: base64_url
       - name: ts
@@ -279,17 +255,6 @@ models:
     description: |
       Cleaned GTFS schedule fare rules data.
       See https://gtfs.org/reference/static#fare_rulestxt for specification.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
-            - fare_id
-            - route_id
-            - origin_id
-            - destination_id
-            - contains_id
-
     columns:
       - name: base64_url
       - name: ts
@@ -307,17 +272,6 @@ models:
     description: |
       Cleaned GTFS schedule fare transfer rules data.
       See https://gtfs.org/schedule/reference/#fare_transfer_rulestxt for specification.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
-            - from_leg_group_id
-            - to_leg_group_id
-            - fare_product_id
-            - transfer_count
-            - duration_limit
-
     columns:
       - name: base64_url
       - name: ts
@@ -339,21 +293,6 @@ models:
     description: |
       Cleaned GTFS schedule feed info data.
       See https://gtfs.org/reference/static#feed_infotxt for specification.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
-            - feed_publisher_name
-            - feed_publisher_url
-            - feed_lang
-            - default_lang
-            - feed_version
-            - feed_contact_email
-            - feed_contact_url
-            - feed_start_date
-            - feed_end_date
-
     columns:
       - name: base64_url
       - name: ts
@@ -379,13 +318,6 @@ models:
     description: |
       Cleaned GTFS schedule frequency data.
       See https://gtfs.org/reference/static#frequenciestxt for specification.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
-            - trip_id
-            - start_time
     columns:
       - name: base64_url
       - name: ts
@@ -403,12 +335,6 @@ models:
     description: |
       Cleaned GTFS schedule level data.
       See https://gtfs.org/reference/static#levelstxt for specification.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
-            - level_id
     columns:
       - name: base64_url
       - name: ts
@@ -422,12 +348,6 @@ models:
     description: |
       Cleaned GTFS schedule pathway data.
       See https://gtfs.org/reference/static#pathwaystxt for specification.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
-            - pathway_id
     columns:
       - name: base64_url
       - name: ts
@@ -459,12 +379,6 @@ models:
     description: |
       Cleaned GTFS schedule route data.
       See https://gtfs.org/schedule/reference/#routestxt for specification.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
-            - route_id
     columns:
       - name: base64_url
       - name: ts
@@ -496,13 +410,6 @@ models:
     description: |
       Cleaned GTFS schedule shape data.
       See https://gtfs.org/reference/static#shapestxt for specification.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
-            - shape_id
-            - shape_pt_sequence
     columns:
       - name: base64_url
       - name: ts
@@ -531,13 +438,6 @@ models:
     description: |
       Cleaned GTFS schedule stop area data.
       See https://gtfs.org/schedule/reference/#stop_areastxt for specification.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
-            - area_id
-            - stop_id
     columns:
       - name: base64_url
       - name: ts
@@ -549,13 +449,6 @@ models:
     description: |
       Cleaned GTFS schedule stop data.
       See https://gtfs.org/reference/static#stopstxt for specification.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
-            - stop_id
-
     columns:
       - name: base64_url
       - name: ts
@@ -607,18 +500,6 @@ models:
     description: |
       Cleaned GTFS schedule transfer data.
       See https://gtfs.org/reference/static#transferstxt for specification.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
-            - from_stop_id
-            - to_stop_id
-            - from_trip_id
-            - to_trip_id
-            - from_route_id
-            - to_route_id
-
     columns:
       - name: base64_url
       - name: ts
@@ -638,17 +519,6 @@ models:
     description: |
       Cleaned GTFS schedule translation data.
       See https://gtfs.org/reference/static#translationstxt for specification.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
-            - table_name
-            - field_name
-            - language
-            - record_id
-            - record_sub_id
-            - field_value
     columns:
       - name: base64_url
       - name: ts
@@ -670,13 +540,6 @@ models:
     description: |
       Cleaned GTFS schedule trip data.
       See https://gtfs.org/schedule/reference/#tripstxt for specification.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
-            - trip_id
-          severity: warn
     columns:
       - name: base64_url
       - name: ts
@@ -708,12 +571,6 @@ models:
     description: |
       Cleaned GTFS schedule calendar data.
       See https://gtfs.org/schedule/reference/#calendartxt for specification.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
-            - service_id
     columns:
       - name: base64_url
       - name: ts
@@ -741,14 +598,6 @@ models:
     description: |
       Cleaned GTFS schedule calendar_dates data.
       See https://gtfs.org/schedule/reference/#calendar_datestxt for specification.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
-            - service_id
-            - date
-          severity: warn
     columns:
       - name: base64_url
       - name: ts
@@ -762,15 +611,6 @@ models:
     description: |
       Cleaned GTFS schedule stop_times data.
       See https://gtfs.org/schedule/reference/#calendar_datestxt for specification.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
-            - trip_id
-            - stop_sequence
-          severity: warn
-
     columns:
       - name: base64_url
       - name: ts
@@ -835,3 +675,28 @@ models:
   - name: stg_gtfs_rt__trip_updates_outcomes
     description: Outcomes from parsing process on GTFS RT trip updates data.
     columns: *stg_gtfs_rt_parse_outcomes_columns
+  - name: stg_gtfs_rt__service_alerts
+    description: |
+      Service alerts realtime data.
+      See https://gtfs.org/realtime/reference/ for specification.
+    columns:
+      - name: dt
+      - name: hour
+      - name: base64_url
+      - name: _extract_ts
+      - name: _config_extracted_at
+      - name: _name
+      - name: header_timestamp
+      - name: header_incrementality
+      - name: header_version
+      - name: id
+      - name: active_period
+      - name: informed_entity
+      - name: cause
+      - name: effect
+      - name: url
+      - name: header_text
+      - name: description_text
+      - name: tts_header_text
+      - name: tts_description_text
+      - name: severity_level

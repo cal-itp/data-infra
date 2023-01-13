@@ -20,7 +20,7 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ no_expired_services() }}, {{ best_practices_alignment_schedule() }}
     UNION ALL
-    SELECT {{ no_rt_critical_validation_errors() }}, {{ compliance_rt() }}
+    SELECT {{ no_rt_validation_errors() }}, {{ compliance_rt() }}
     UNION ALL
     SELECT {{ trip_id_alignment() }}, {{ fixed_route_completeness() }}
     UNION ALL
@@ -59,6 +59,14 @@ WITH stg_gtfs_quality__intended_checks AS (
     SELECT {{ persistent_ids_schedule() }}, {{ best_practices_alignment_schedule() }}
     UNION ALL
     SELECT {{ lead_time() }}, {{ up_to_dateness() }}
+    UNION ALL
+    SELECT {{ no_stale_vehicle_positions() }}, {{ best_practices_alignment_rt() }}
+    UNION ALL
+    SELECT {{ no_stale_trip_updates() }}, {{ best_practices_alignment_rt() }}
+    UNION ALL
+    SELECT {{ no_stale_service_alerts() }}, {{ best_practices_alignment_rt() }}
+    UNION ALL
+    SELECT {{ modification_date_present() }}, {{ best_practices_alignment_schedule() }}
 )
 
 SELECT * FROM stg_gtfs_quality__intended_checks

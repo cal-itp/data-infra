@@ -40,6 +40,8 @@ models:
           combination_of_columns:
             - code
             - severity
+            - gtfs_validator_version
+
   - name: int_gtfs_quality__daily_assessment_candidate_entities
     description: |
       A row here is a combination of an organization, service, service / GTFS dataset relationship,
@@ -182,7 +184,7 @@ models:
     tests: *stg_gtfs_guideline_tests_schedule
     columns: *stg_gtfs_guideline_columns
 
-  - name: int_gtfs_quality__no_rt_critical_validation_errors
+  - name: int_gtfs_quality__no_rt_validation_errors
     tests: &stg_gtfs_guideline_tests_rt
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -220,9 +222,41 @@ models:
     tests: *stg_gtfs_guideline_tests_schedule
     columns: *stg_gtfs_guideline_columns
 
+  - name: int_gtfs_quality__modification_date_present
+    tests: *stg_gtfs_guideline_tests_schedule
+    columns: *stg_gtfs_guideline_columns
+
   - name: int_gtfs_quality__rt_protobuf_error
     tests: *stg_gtfs_guideline_tests_rt
     columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__no_stale_vehicle_positions
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - base64_url
+    columns: &stale_rt_guideline_check
+      - name: status
+        tests:
+          - dbt_utils.not_null_proportion:
+              at_least: 0.8
+
+  - name: int_gtfs_quality__no_stale_trip_updates
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - base64_url
+    columns: *stale_rt_guideline_check
+
+  - name: int_gtfs_quality__no_stale_service_alerts
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - base64_url
+    columns: *stale_rt_guideline_check
 
   - name: int_gtfs_quality__schedule_download_success
     tests: &stg_gtfs_guideline_tests_schedule_feed
@@ -244,3 +278,14 @@ models:
             - base64_url
       - dbt_utils.equal_rowcount:
           compare_model: ref('dim_schedule_feeds')
+
+  - name: int_gtfs_quality__outcome_validator_versions
+    description: |
+      Unique observed validator versions for each extract.
+    tests:
+    - dbt_utils.unique_combination_of_columns:
+        combination_of_columns:
+          - dt
+          - base64_url
+          - ts
+          - gtfs_validator_version
