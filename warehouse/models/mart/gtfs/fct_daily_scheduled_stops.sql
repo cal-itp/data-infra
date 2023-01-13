@@ -21,16 +21,17 @@ dim_routes AS (
     FROM {{ ref('dim_routes') }}
 ),
 
-stops_by_day AS (
+stops_by_day_by_route AS (
 
     SELECT
 
         trips.service_date,
         trips.feed_key,
+        CAST(trips.route_type AS INT) AS route_type,
 
         stop_times.stop_id,
 
-        COUNT(*) AS stop_event_count,
+        COUNT(*) AS stop_events_count_by_route,
 
         LOGICAL_OR(
             trips.contains_warning_duplicate_stop_times_primary_key
@@ -46,27 +47,33 @@ stops_by_day AS (
     LEFT JOIN fct_daily_scheduled_trips AS trips
         ON trips.feed_key = stop_times.feed_key
             AND trips.trip_id = stop_times.trip_id
-    GROUP BY service_date, feed_key, stop_id
+    GROUP BY service_date, feed_key, route_type, stop_id
+
 ),
 
-stops_by_day_by_route AS (
+stops_by_day AS (
 
     SELECT
 
-        trips.service_date,
-        trips.feed_key,
-        CAST(trips.route_type AS INT) AS route_type,
+        service_date,
+        feed_key,
 
-        stop_times.stop_id,
+        stop_id,
 
-        COUNT(*) AS stop_events_count_by_route
+        COUNT(*) AS stop_event_count,
 
-    FROM dim_stop_times AS stop_times
-    LEFT JOIN fct_daily_scheduled_trips AS trips
-        ON trips.feed_key = stop_times.feed_key
-            AND trips.trip_id = stop_times.trip_id
-    GROUP BY service_date, feed_key, route_type, stop_id
+        LOGICAL_OR(
+            contains_warning_duplicate_stop_times_primary_key
+        ) AS contains_warning_duplicate_stop_times_primary_key,
+        LOGICAL_OR(
+            contains_warning_duplicate_trip_primary_key
+        ) AS contains_warning_duplicate_trip_primary_key,
+        LOGICAL_OR(
+            contains_warning_missing_foreign_key_stop_id
+        ) AS contains_warning_missing_foreign_key_stop_id
 
+    FROM stops_by_day_by_route
+    GROUP BY service_date, feed_key, stop_id
 ),
 
 pivot_to_route_type AS (
