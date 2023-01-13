@@ -4,6 +4,7 @@ sources:
   - name: feed_aggregator_checks
     description: |
       Data from daily feed aggregator checks (transitland and transitfeeds).
+      Deprecated/legacy v1, use scraped_urls instead.
     database: "{{ var('SOURCE_DATABASE') }}"
     schema: external_feed_aggregator
     tables:

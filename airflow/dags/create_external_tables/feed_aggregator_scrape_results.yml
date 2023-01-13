@@ -1,0 +1,24 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__AGGREGATOR_SCRAPER') }}"
+suffix_bucket: true
+source_objects:
+  - "gtfs_aggregator_scrape_results/*.jsonl"
+destination_project_dataset_table: "external_feed_aggregator.scraped_urls"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  source_uri_prefix: "gtfs_aggregator_scrape_results/{dt:DATE}/{ts:TIMESTAMP}/{aggregator:STRING}/"
+schema_fields:
+  - name: key
+    type: STRING
+  - name: name
+    mode: NULLABLE
+    type: STRING
+  - name: feed_url_str
+    type: STRING
+  - name: feed_type
+    mode: NULLABLE
+    type: STRING
+  - name: raw_record
+    type: JSON

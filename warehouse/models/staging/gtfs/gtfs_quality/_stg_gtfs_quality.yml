@@ -122,3 +122,31 @@ models:
       - name: validation_system_errors
       - name: base64_url
       - name: extract_ts
+
+  - name: stg_gtfs_quality__scraped_urls
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - dt
+            - ts
+            - aggregator
+            - key
+    columns:
+      - name: dt
+      - name: ts
+      - name: aggregator
+        tests:
+          - accepted_values:
+              values:
+                - mobility_database
+                - transitland
+      - name: key
+        description: |
+          Some computed unique key from the source. Primarily useful
+          for detecting fanout, etc.
+      - name: name
+      - name: feed_url_str
+        tests:
+          - not_null
+      - name: feed_type
+      - name: raw_record
