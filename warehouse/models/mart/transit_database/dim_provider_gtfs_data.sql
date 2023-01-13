@@ -1,19 +1,76 @@
 {{ config(materialized='table') }}
 
-WITH int_gtfs_quality__daily_assessment_candidate_entities AS (
+WITH datasets AS (
+    SELECT *
+    FROM {{ ref('dim_gtfs_datasets') }}
+),
+
+int_gtfs_quality__daily_assessment_candidate_entities AS (
+    -- select distinct to drop duplicate gtfs service data records
+    -- which sometimes exist
+    SELECT DISTINCT
+        date,
+        organization_key,
+        organization_name,
+        organization_itp_id,
+        organization_hubspot_company_record_id,
+        service_key,
+        service_name,
+        gtfs_dataset_key,
+        gtfs_dataset_name,
+        gtfs_dataset_type,
+        gtfs_service_data_customer_facing,
+        regional_feed_type,
+        agency_id,
+        route_id,
+        network_id,
+        CASE
+            WHEN gtfs_dataset_type = "schedule" THEN gtfs_dataset_key
+            WHEN gtfs_dataset_type IS NOT NULL THEN schedule_to_use_for_rt_validation_gtfs_dataset_key
+        END as associated_schedule_gtfs_dataset_key
+    FROM {{ ref('int_gtfs_quality__daily_assessment_candidate_entities') }}
+),
+
+-- handle cases where there are multiple RT feeds with identical relationships
+-- (same org, service, associated schedule, customer_facing, etc.)
+-- also handle cases where there are feeds with missing relationships
+disambiguate_dups AS (
     SELECT
         date,
         organization_key,
+        organization_name,
+        organization_itp_id,
+        organization_hubspot_company_record_id,
         service_key,
+        service_name,
         gtfs_dataset_key,
         gtfs_dataset_type,
         gtfs_service_data_customer_facing,
         regional_feed_type,
-        CASE
-            WHEN gtfs_dataset_type = "schedule" THEN gtfs_dataset_key
-            WHEN gtfs_dataset_type IS NOT NULL THEN schedule_to_use_for_rt_validation_gtfs_dataset_key
-        END as associated_gtfs_schedule_key
-    FROM {{ ref('int_gtfs_quality__daily_assessment_candidate_entities') }}
+        agency_id,
+        route_id,
+        network_id,
+        associated_schedule_gtfs_dataset_key,
+                ROW_NUMBER() OVER (
+            PARTITION BY
+                date,
+                organization_key,
+                service_key,
+                gtfs_dataset_type,
+                gtfs_service_data_customer_facing,
+                regional_feed_type,
+                agency_id,
+                route_id,
+                network_id,
+                associated_schedule_gtfs_dataset_key
+            -- try to get some name that will group like feeds together
+            ORDER BY
+                REGEXP_REPLACE(
+                    gtfs_dataset_name,
+                    '(Trip Updates|TripUpdates|Alerts|Vehicle Positions|VehiclePositions|Schedule)',
+                    '')
+        ) AS ordered
+    FROM int_gtfs_quality__daily_assessment_candidate_entities
 ),
 
 pivoted AS (
@@ -22,7 +79,7 @@ pivoted AS (
         {{ dbt_utils.surrogate_key([
             'organization_key',
             'service_key',
-            'associated_gtfs_schedule_key',
+            'associated_schedule_gtfs_dataset_key',
             'gtfs_dataset_key_schedule',
             'gtfs_dataset_key_service_alerts',
             'gtfs_dataset_key_trip_updates',
@@ -32,14 +89,14 @@ pivoted AS (
         MAX(date) OVER(PARTITION BY {{ dbt_utils.surrogate_key([
             'organization_key',
             'service_key',
-            'associated_gtfs_schedule_key',
+            'associated_schedule_gtfs_dataset_key',
             'gtfs_dataset_key_schedule',
             'gtfs_dataset_key_service_alerts',
             'gtfs_dataset_key_trip_updates',
             'gtfs_dataset_key_vehicle_positions',
             'gtfs_service_data_customer_facing',
             'regional_feed_type']) }} ORDER BY date DESC) AS latest_extract
-    FROM int_gtfs_quality__daily_assessment_candidate_entities
+    FROM disambiguate_dups
     PIVOT(
         STRING_AGG(gtfs_dataset_key) AS gtfs_dataset_key
         FOR gtfs_dataset_type IN ('schedule', 'service_alerts', 'trip_updates', 'vehicle_positions')
@@ -86,22 +143,37 @@ all_versioned AS (
 final AS (
     SELECT
         organization_key,
+        organization_name,
+        organization_itp_id,
+        organization_hubspot_company_record_id,
         service_key,
+        service_name,
         gtfs_service_data_customer_facing,
-        regional_feed_type,
-        associated_gtfs_schedule_key,
+        orig.regional_feed_type,
+        associated_schedule_gtfs_dataset_key AS schedule_to_use_for_rt_validation_gtfs_dataset_key,
+        sched.name AS schedule_gtfs_dataset_name,
+        alerts.name AS service_alerts_gtfs_dataset_name,
+        vehicle_positions.name AS vehicle_positions_gtfs_dataset_name,
+        trip_updates.name AS trip_updates_gtfs_dataset_name,
         gtfs_dataset_key_schedule AS schedule_gtfs_dataset_key,
         gtfs_dataset_key_service_alerts AS service_alerts_gtfs_dataset_key,
         gtfs_dataset_key_vehicle_positions AS vehicle_positions_gtfs_dataset_key,
         gtfs_dataset_key_trip_updates AS trip_updates_gtfs_dataset_key,
-        CAST(_valid_from AS TIMESTAMP) AS _valid_from,
+        CAST(all_versioned._valid_from AS TIMESTAMP) AS _valid_from,
         all_versioned._valid_to,
-        _valid_to = {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }} AS _is_current
+        all_versioned._valid_to = {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }} AS _is_current
     FROM all_versioned
     LEFT JOIN pivoted AS orig
-        ON all_versioned._valid_from = orig.date
-        AND all_versioned.key = orig.key
-
+        ON all_versioned.key = orig.key
+        AND all_versioned._valid_from = orig.date
+    LEFT JOIN datasets AS sched
+        ON orig.gtfs_dataset_key_schedule = sched.key
+    LEFT JOIN datasets AS alerts
+        ON orig.gtfs_dataset_key_service_alerts = alerts.key
+    LEFT JOIN datasets AS trip_updates
+        ON orig.gtfs_dataset_key_trip_updates = trip_updates.key
+    LEFT JOIN datasets AS vehicle_positions
+        ON orig.gtfs_dataset_key_vehicle_positions = vehicle_positions.key
 )
 
 SELECT * FROM final

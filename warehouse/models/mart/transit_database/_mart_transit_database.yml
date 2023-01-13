@@ -350,10 +350,12 @@ models:
           combination_of_columns:
             - service_key
             - organization_key
+            - associated_schedule_gtfs_dataset_key
             - schedule_gtfs_dataset_key
             - service_alerts_gtfs_dataset_key
             - vehicle_positions_gtfs_dataset_key
             - trip_updates_gtfs_dataset_key
+            - gtfs_service_data_customer_facing
     columns:
       - *key
       - name: service_key

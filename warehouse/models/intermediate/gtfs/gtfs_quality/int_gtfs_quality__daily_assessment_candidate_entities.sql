@@ -80,6 +80,8 @@ full_join AS (
         orgs.name AS organization_name,
         orgs.assessment_status AS organization_raw_assessment_status,
         orgs.reporting_category AS reporting_category,
+        orgs.itp_id AS organization_itp_id,
+        orgs.hubspot_company_record_id AS organization_hubspot_company_record_id,
         COALESCE(
             orgs.assessment_status,
             (orgs.reporting_category = "Core") OR (orgs.reporting_category = "Other Public Transit"),
@@ -104,6 +106,9 @@ full_join AS (
             service_data.category = "primary",
             FALSE
         ) AS gtfs_service_data_assessed,
+        service_data.agency_id,
+        service_data.route_id,
+        service_data.network_id,
         datasets.name AS gtfs_dataset_name,
         datasets.type AS gtfs_dataset_type,
         datasets.regional_feed_type,
@@ -151,10 +156,17 @@ int_gtfs_quality__daily_assessment_candidate_entities AS (
 
 
         organization_assessed,
+
+        organization_itp_id,
+        organization_hubspot_company_record_id,
         service_assessed,
         gtfs_service_data_assessed,
         gtfs_service_data_customer_facing,
         regional_feed_type,
+
+        agency_id,
+        route_id,
+        network_id,
 
         base64_url,
 
