@@ -122,6 +122,31 @@ models:
           Foreign key to `dim_schedule_feeds`. Because `dim_schedule_feeds` is slowly-
           changing dimension, joins using this key are not subject to the historical
           limitations noted for the other foreign keys in this table.
+
+  - name: int_gtfs_quality__feed_version_history
+    description: |
+      Describes attributes of the previous and following versions of each feed.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - base64_url
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('dim_schedule_feeds')
+
+  - name: int_gtfs_quality__outcome_validator_versions
+    description: |
+      Unique observed validator versions for each extract.
+    tests:
+    - dbt_utils.unique_combination_of_columns:
+        combination_of_columns:
+          - dt
+          - base64_url
+          - ts
+          - gtfs_validator_version
+
+  # Schedule feed checks
+
   - name: int_gtfs_quality__no_schedule_validation_errors
     tests: &stg_gtfs_guideline_tests_schedule
       - dbt_utils.unique_combination_of_columns:
@@ -130,6 +155,7 @@ models:
             - feed_key
       - dbt_utils.equal_rowcount:
           compare_model: ref('int_gtfs_quality__schedule_feed_guideline_index')
+      - extreme_results
     columns: &stg_gtfs_guideline_columns
       - name: status
         tests:
@@ -184,6 +210,16 @@ models:
     tests: *stg_gtfs_guideline_tests_schedule
     columns: *stg_gtfs_guideline_columns
 
+  - name: int_gtfs_quality__lead_time
+    tests: *stg_gtfs_guideline_tests_schedule
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__modification_date_present
+    tests: *stg_gtfs_guideline_tests_schedule
+    columns: *stg_gtfs_guideline_columns
+
+# RT feed checks
+
   - name: int_gtfs_quality__no_rt_validation_errors
     tests: &stg_gtfs_guideline_tests_rt
       - dbt_utils.unique_combination_of_columns:
@@ -192,6 +228,7 @@ models:
             - base64_url
       - dbt_utils.equal_rowcount:
           compare_model: ref('int_gtfs_quality__rt_feed_guideline_index')
+      - extreme_results
     columns: *stg_gtfs_guideline_columns
 
   - name: int_gtfs_quality__trip_id_alignment
@@ -203,13 +240,7 @@ models:
     columns: *stg_gtfs_guideline_columns
 
   - name: int_gtfs_quality__rt_https
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - date
-            - base64_url
-      - dbt_utils.equal_rowcount:
-          compare_model: ref('int_gtfs_quality__rt_feed_guideline_index')
+    tests: *stg_gtfs_guideline_tests_rt
     # Reducing null_proportion minimum due to missing rows in rt_https check, due to missing data before Nov 22
     # This floor can be raised over time, as more data populates
     columns:
@@ -218,45 +249,32 @@ models:
           - dbt_utils.not_null_proportion:
               at_least: 0.50
 
-  - name: int_gtfs_quality__lead_time
-    tests: *stg_gtfs_guideline_tests_schedule
-    columns: *stg_gtfs_guideline_columns
-
-  - name: int_gtfs_quality__modification_date_present
-    tests: *stg_gtfs_guideline_tests_schedule
-    columns: *stg_gtfs_guideline_columns
-
   - name: int_gtfs_quality__rt_protobuf_error
     tests: *stg_gtfs_guideline_tests_rt
     columns: *stg_gtfs_guideline_columns
 
   - name: int_gtfs_quality__no_stale_vehicle_positions
-    tests:
+    tests:  &stale_rt_guideline_tests
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - date
             - base64_url
-    columns: &stale_rt_guideline_check
+      - extreme_results
+    columns: &stale_rt_guideline_columns
       - name: status
         tests:
           - dbt_utils.not_null_proportion:
               at_least: 0.8
 
   - name: int_gtfs_quality__no_stale_trip_updates
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - date
-            - base64_url
-    columns: *stale_rt_guideline_check
+    tests: *stale_rt_guideline_tests
+    columns: *stale_rt_guideline_columns
 
   - name: int_gtfs_quality__no_stale_service_alerts
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - date
-            - base64_url
-    columns: *stale_rt_guideline_check
+    tests: *stale_rt_guideline_tests
+    columns: *stale_rt_guideline_columns
+
+  # Schedule feed URL checks
 
   - name: int_gtfs_quality__schedule_download_success
     tests: &stg_gtfs_guideline_tests_schedule_feed
@@ -266,26 +284,5 @@ models:
             - base64_url
       - dbt_utils.equal_rowcount:
           compare_model: ref('int_gtfs_quality__schedule_url_guideline_index')
+      - extreme_results
     columns: *stg_gtfs_guideline_columns
-
-  - name: int_gtfs_quality__feed_version_history
-    description: |
-      Describes attributes of the previous and following versions of each feed.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - feed_key
-            - base64_url
-      - dbt_utils.equal_rowcount:
-          compare_model: ref('dim_schedule_feeds')
-
-  - name: int_gtfs_quality__outcome_validator_versions
-    description: |
-      Unique observed validator versions for each extract.
-    tests:
-    - dbt_utils.unique_combination_of_columns:
-        combination_of_columns:
-          - dt
-          - base64_url
-          - ts
-          - gtfs_validator_version
