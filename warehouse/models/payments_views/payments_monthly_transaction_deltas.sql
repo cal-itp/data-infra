@@ -47,7 +47,7 @@ calculate_relative_difference AS (
 
 ),
 
-test_recent_values AS (
+payments_monthly_transaction_deltas AS (
 
     SELECT
 
@@ -66,9 +66,8 @@ test_recent_values AS (
             FROM calculate_relative_difference)
     WHERE rank != 1
         AND rank < 5
-        AND ABS(relative_difference) > 25.0
     ORDER BY yearmonth
 
 )
 
-SELECT * FROM test_recent_values
+SELECT * FROM payments_monthly_transaction_deltas
