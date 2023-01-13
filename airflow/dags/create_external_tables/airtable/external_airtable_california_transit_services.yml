@@ -248,9 +248,9 @@ schema_fields:
   - name: __alerts
     type: INTEGER
     mode: NULLABLE
-  - name: manual_check__gtfs_realtime_ingested_in_trip_planner
-    type: JSON
-    mode: NULLABLE
+#  - name: manual_check__gtfs_realtime_ingested_in_trip_planner
+#    type: JSON
+#    mode: NULLABLE
   - name: count__provider_
     type: INTEGER
     mode: NULLABLE
