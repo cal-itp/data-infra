@@ -8,13 +8,12 @@ keyed_parse_outcomes AS (
 
 validation_fact_daily_feed_codes_fares_related AS (
     SELECT * FROM {{ ref('fct_daily_schedule_feed_validation_notices') }}
-    WHERE code IN ('fare_transfer_rule_duration_limit_type_without_duration_limit',
-                   'fare_transfer_rule_duration_limit_without_type',
-                   'fare_transfer_rule_invalid_transfer_count',
-                   'fare_transfer_rule_missing_transfer_count',
-                   'fare_transfer_rule_with_forbidden_transfer_count',
-                   'invalid_currency_amount',
-                   'duplicate_fare_rule_zone_id_fields'
+     WHERE code IN ('fare_transfer_rule_duration_limit_type_without_duration_limit',
+                    'fare_transfer_rule_duration_limit_without_type',
+                    'fare_transfer_rule_invalid_transfer_count',
+                    'fare_transfer_rule_missing_transfer_count',
+                    'fare_transfer_rule_with_forbidden_transfer_count',
+                    'invalid_currency_amount'
                     )
 ),
 
@@ -49,9 +48,13 @@ int_gtfs_quality__passes_fares_validator AS (
         {{ passes_fares_validator() }} AS check,
         {{ fare_completeness() }} AS feature,
         CASE
-            WHEN files.feed_key IS null THEN "N/A"
             WHEN notices.validation_notices = 0 THEN "PASS"
             WHEN notices.validation_notices > 0 THEN "FAIL"
+            -- Since not all feeds have a row every day for every
+            -- code in fct_daily_schedule_feed_validation_notices,
+            -- we need to assign N/A more generously
+            -- TODO: investigate reason for missing values
+            ELSE "N/A"
         END AS status
     FROM feed_guideline_index idx
     LEFT JOIN validation_notices_by_day notices
