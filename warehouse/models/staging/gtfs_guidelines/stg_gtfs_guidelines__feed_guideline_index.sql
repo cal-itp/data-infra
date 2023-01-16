@@ -26,7 +26,7 @@ checks_implemented AS (
     UNION ALL
     SELECT {{ technical_contact_listed() }}, {{ technical_contact_availability() }}
     UNION ALL
-    SELECT {{ no_rt_critical_validation_errors() }}, {{ compliance_rt() }}
+    SELECT {{ no_rt_validation_errors() }}, {{ compliance_rt() }}
     UNION ALL
     SELECT {{ trip_id_alignment() }}, {{ fixed_route_completeness() }}
     UNION ALL

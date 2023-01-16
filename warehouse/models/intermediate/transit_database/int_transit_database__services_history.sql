@@ -5,7 +5,7 @@ WITH stg_transit_database__services AS (
     FROM {{ ref('stg_transit_database__services') }}
 ),
 
-int_gtfs_quality__services_history AS (
+int_transit_database__services_history AS (
     SELECT
         calitp_extracted_at AS date,
         {{ dbt_utils.surrogate_key(['key', 'unnest_provider']) }} AS key,
@@ -20,4 +20,4 @@ int_gtfs_quality__services_history AS (
 
 )
 
-SELECT * FROM int_gtfs_quality__services_history
+SELECT * FROM int_transit_database__services_history
