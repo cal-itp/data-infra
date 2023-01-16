@@ -1,11 +1,17 @@
 WITH feed_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_quality__schedule_feed_guideline_index') }}
+    SELECT * FROM {{ ref('int_gtfs_quality__schedule_feed_guideline_index_aggregator') }}
 ),
-
--- cross-join feed_guideline_index with manual list of aggregators (so there's a row for each)
 
 scraped_urls AS (
     SELECT * FROM {{ ref('stg_gtfs_quality__scraped_urls') }}
+),
+
+dim_feed_info AS (
+    SELECT * FROM {{ ref('dim_feed_info') }}
+),
+
+dim_gtfs_datasets AS (
+    SELECT * FROM {{ ref('dim_gtfs_datasets') }}
 ),
 
 daily_scraped_urls AS (
@@ -19,8 +25,9 @@ int_gtfs_quality__feed_aggregator_schedule AS (
     SELECT
         t1.date,
         t1.feed_key,
+        t4.aggregator,
         CASE WHEN t4.aggregator = 'transitland' THEN {{ schedule_feed_on_transitland() }}
-             WHEN t4.aggregator = 'md' THEN {{ schedule_feed_on_mobility_database() }}
+             WHEN t4.aggregator = 'mobility_database' THEN {{ schedule_feed_on_mobility_database() }}
              END AS check,
         {{ feed_aggregator_availability_schedule() }} AS feature,
         CASE

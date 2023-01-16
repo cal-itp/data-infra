@@ -213,11 +213,25 @@ models:
               at_least: 0.50
 
   - name: int_gtfs_quality__feed_aggregator_rt
-    tests: *stg_gtfs_guideline_tests_rt
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - base64_url
+            - aggregator
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__rt_feed_guideline_index_aggregator')
     columns: *stg_gtfs_guideline_columns
 
   - name: int_gtfs_quality__feed_aggregator_schedule
-    tests: *stg_gtfs_guideline_tests_schedule
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - feed_key
+            - aggregator
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__schedule_feed_guideline_index_aggregator')
     columns: *stg_gtfs_guideline_columns
 
   - name: int_gtfs_quality__lead_time
