@@ -27,11 +27,16 @@ models:
       GTFS models can identify its source gtfs_datasets record.
       Currently this is unversioned; any historical URLs point
       to the latest version of their gtfs_datasets record.
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: base64_url
+          gaps: required
     columns:
       - name: base64_url
         tests:
           - not_null
-          - unique
       - name: gtfs_dataset_key
         tests:
           - relationships:

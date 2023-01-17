@@ -78,6 +78,7 @@ fct_daily_rt_feed_files AS (
     FROM pivoted_parse_outcomes AS parse
     LEFT JOIN int_transit_database__urls_to_gtfs_datasets AS url_map
         ON parse.base64_url = url_map.base64_url
+        AND CAST(parse.dt AS TIMESTAMP) BETWEEN url_map._valid_from AND url_map._valid_to
     LEFT JOIN dim_gtfs_datasets AS datasets
         ON url_map.gtfs_dataset_key = datasets.key
     LEFT JOIN fct_daily_schedule_feeds AS schedule

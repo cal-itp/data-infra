@@ -55,11 +55,12 @@ fct_schedule_files_parsed AS (
         AND unzip.base64_url = parse.base64_url
     LEFT JOIN urls_to_gtfs_datasets AS urls
         ON unzip.base64_url = urls.base64_url
+        AND unzip.ts BETWEEN urls._valid_from AND urls._valid_to
     LEFT JOIN dim_schedule_feeds AS feeds
         ON unzip.base64_url = feeds.base64_url
         AND unzip.ts BETWEEN feeds._valid_from AND feeds._valid_to
     LEFT JOIN dim_gtfs_datasets AS datasets
-        ON urls.base64_url = datasets.base64_url
+        ON urls.gtfs_dataset_key = datasets.key
 )
 
 SELECT * FROM fct_schedule_files_parsed

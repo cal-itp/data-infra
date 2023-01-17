@@ -20,6 +20,7 @@ keying AS (
     FROM stg_gtfs_rt__vehicle_positions AS vp
     LEFT JOIN urls_to_gtfs_datasets
         ON vp.base64_url = urls_to_gtfs_datasets.base64_url
+        AND vp._extract_ts BETWEEN urls_to_gtfs_datasets._valid_from AND urls_to_gtfs_datasets._valid_to
     LEFT JOIN dim_gtfs_datasets AS gd
         ON urls_to_gtfs_datasets.gtfs_dataset_key = gd.key
 ),

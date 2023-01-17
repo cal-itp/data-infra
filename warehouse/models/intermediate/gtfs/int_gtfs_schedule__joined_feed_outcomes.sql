@@ -65,6 +65,7 @@ int_gtfs_schedule__joined_feed_outcomes AS (
     FROM join_outcomes_only AS f
     LEFT JOIN urls_to_gtfs_datasets
         ON f.base64_url = urls_to_gtfs_datasets.base64_url
+        AND f.ts BETWEEN urls_to_gtfs_datasets._valid_from AND urls_to_gtfs_datasets._valid_to
 )
 
 SELECT * FROM int_gtfs_schedule__joined_feed_outcomes
