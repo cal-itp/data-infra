@@ -89,7 +89,8 @@ def parse_individual_file(
         with fs.open(input_file.path, newline="", mode="r", encoding="utf-8-sig") as f:
             reader = csv.DictReader(f, restkey="calitp_unknown_fields")
             field_names = reader.fieldnames
-            for row in reader:
+            for line_number, row in enumerate(reader, start=1):
+                row["_line_number"] = line_number
                 lines.append(row)
 
         jsonl_content = gzip.compress(
