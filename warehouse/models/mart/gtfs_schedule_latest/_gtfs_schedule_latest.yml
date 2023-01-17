@@ -14,7 +14,9 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key` and `agency_id`.
-        tests: *primary_key_tests
+        tests: &primary_key_tests
+          - unique
+          - not_null
         meta: &pk_meta
           publish.ignore: true
       - &feed_key
@@ -26,7 +28,10 @@ models:
           - relationships:
               to: ref('dim_schedule_feeds')
               field: key
-      - *base64_url
+      - &base64_url
+        name: base64_url
+        description: |
+          Base 64 encoded URL from which this data was scraped.
       - name: agency_id
         description: '{{ doc("gtfs_agency__agency_id") }}'
       - name: agency_name
@@ -82,8 +87,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `attribution_id`.
         tests: *primary_key_tests
-        meta: &pk_meta
-          publish.ignore: true
+        meta: *pk_meta
       - *feed_key
       - *base64_url
       - name: attribution_id
@@ -127,13 +131,13 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `service_id`.
         tests: *primary_key_tests
-        meta: &pk_meta
-          publish.ignore: true
+        meta: *pk_meta
       - *feed_key
       - *base64_url
       - name: service_id
         description: '{{ doc("gtfs_calendar__service_id") }}'
-        tests: *not_null_error
+        tests: &not_null_error
+        - not_null
       - name: monday
         description: '{{ doc("gtfs_calendar__monday") }}'
         tests: *not_null_warn
@@ -179,8 +183,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `service_id`, and `date`.
         tests: *primary_key_tests
-        meta: &pk_meta
-          publish.ignore: true
+        meta: *pk_meta
       - *feed_key
       - *base64_url
       - name: service_id
@@ -210,8 +213,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `fare_id`.
         tests: *primary_key_tests
-        meta: &pk_meta
-          publish.ignore: true
+        meta: *pk_meta
       - *feed_key
       - *base64_url
       - name: fare_id
@@ -251,8 +253,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `fare_id`, `route_id`, `origin_id`, `destination_id`, and `contains_id`.
         tests: *primary_key_tests
-        meta: &pk_meta
-          publish.ignore: true
+        meta: *pk_meta
       - *feed_key
       - *base64_url
       - name: fare_id
@@ -284,8 +285,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `feed_publisher_name`, `feed_publisher_url`, `feed_lang`, `default_lang`, `feed_version`, `feed_contact_email`, `feed_contact_url`, `feed_start_date`, and `feed_end_date`.
         tests: *primary_key_tests
-        meta: &pk_meta
-          publish.ignore: true
+        meta: *pk_meta
       - *feed_key
       - *base64_url
       - name: feed_publisher_name
@@ -327,8 +327,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `trip_id`, and `start_time`.
         tests: *primary_key_tests
-        meta: &pk_meta
-          publish.ignore: true
+        meta: *pk_meta
       - *feed_key
       - *base64_url
       - name: trip_id
@@ -363,8 +362,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `level_id`.
         tests: *primary_key_tests
-        meta: &pk_meta
-          publish.ignore: true
+        meta: *pk_meta
       - *feed_key
       - *base64_url
       - name: level_id
@@ -393,8 +391,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `pathway_id`.
         tests: *primary_key_tests
-        meta: &pk_meta
-          publish.ignore: true
+        meta: *pk_meta
       - *feed_key
       - *base64_url
       - name: pathway_id
@@ -444,8 +441,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `route_id`.
         tests: *primary_key_tests
-        meta: &pk_meta
-          publish.ignore: true
+        meta: *pk_meta
       - *feed_key
       - *base64_url
       - name: route_id
@@ -494,8 +490,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `shape_id`, and `shape_pt_sequence`.
         tests: *primary_key_tests
-        meta: &pk_meta
-          publish.ignore: true
+        meta: *pk_meta
       - *feed_key
       - *base64_url
       - name: shape_id
@@ -543,9 +538,11 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key`, `trip_id`, and `stop_sequence`.
-        tests: *pk_tests_with_dups
-        meta: &pk_meta
-          publish.ignore: true
+        tests: &pk_tests_with_dups
+          - unique:
+              where: "not warning_duplicate_primary_key"
+          - not_null
+        meta: *pk_meta
       - name: trip_id
         description: '{{ doc("gtfs_stop_times__trip_id") }}'
         tests: *not_null_error
@@ -618,8 +615,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `stop_id`.
         tests: *primary_key_tests
-        meta: &pk_meta
-          publish.ignore: true
+        meta: *pk_meta
       - *feed_key
       - *base64_url
       - name: stop_id
@@ -683,8 +679,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `from_stop_id`, `to_stop_id`, `from_trip_id`, `to_trip_id`, `from_route_id`, and `to_route_id`.
         tests: *primary_key_tests
-        meta: &pk_meta
-          publish.ignore: true
+        meta: *pk_meta
       - *feed_key
       - *base64_url
       - name: from_stop_id
@@ -720,8 +715,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `table_name`, `field_name`, `language`, `record_id`, `record_sub_id`, and `field_value`.
         tests: *primary_key_tests
-        meta: &pk_meta
-          publish.ignore: true
+        meta: *pk_meta
       - *feed_key
       - *base64_url
       - name: table_name
@@ -759,12 +753,8 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key` and `trip_id`.
-        tests: &pk_tests_with_dups
-          - unique:
-              where: "not warning_duplicate_primary_key"
-          - not_null
-        meta: &pk_meta
-          publish.ignore: true
+        tests: *pk_tests_with_dups
+        meta: *pk_meta
       - *feed_key
       - *base64_url
       - name: route_id
