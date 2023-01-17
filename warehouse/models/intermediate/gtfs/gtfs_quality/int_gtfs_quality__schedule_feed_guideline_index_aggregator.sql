@@ -2,6 +2,8 @@
 
 WITH int_gtfs_quality__schedule_feed_guideline_index AS (
     SELECT * FROM {{ ref('int_gtfs_quality__schedule_feed_guideline_index') }}
+    -- 1/13/23 is when the aggregator scraper started running
+    WHERE date >= '2023-01-13'
 ),
 
 distinct_aggregators AS (

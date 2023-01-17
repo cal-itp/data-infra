@@ -3,7 +3,9 @@ WITH feed_guideline_index AS (
 ),
 
 scraped_urls AS (
-    SELECT * FROM {{ ref('stg_gtfs_quality__scraped_urls') }}
+    SELECT *,
+           RIGHT(feed_url_str,LENGTH(feed_url_str) - STRPOS(feed_url_str, "://") - 2) AS url_no_scheme
+    FROM {{ ref('stg_gtfs_quality__scraped_urls') }}
 ),
 
 dim_schedule_feeds AS (
@@ -11,13 +13,15 @@ dim_schedule_feeds AS (
 ),
 
 dim_gtfs_datasets AS (
-    SELECT * FROM {{ ref('dim_gtfs_datasets') }}
+    SELECT *,
+           RIGHT(uri,LENGTH(uri) - STRPOS(uri, "://") - 2) AS url_no_scheme
+    FROM {{ ref('dim_gtfs_datasets') }}
 ),
 
 daily_scraped_urls AS (
     SELECT DISTINCT dt AS date,
            aggregator,
-           feed_url_str
+           url_no_scheme
       FROM scraped_urls
 ),
 
@@ -40,7 +44,7 @@ int_gtfs_quality__feed_aggregator_schedule AS (
       LEFT JOIN dim_gtfs_datasets t3
         ON t3.base64_url = t2.base64_url
       LEFT JOIN daily_scraped_urls AS t4
-        ON t4.feed_url_str = t3.uri
+        ON t4.url_no_scheme = t3.url_no_scheme
        AND t4.date = t1.date
        AND t4.aggregator = t1.aggregator
 )
