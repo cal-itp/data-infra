@@ -53,7 +53,8 @@ payments_weekly_transaction_deltas AS (
         participant_id,
         yearweek,
         ridership_count,
-        relative_difference
+        relative_difference,
+        recency_rank
 
     FROM
         (SELECT
@@ -61,11 +62,8 @@ payments_weekly_transaction_deltas AS (
             yearweek,
             ridership_count,
             relative_difference,
-            RANK() OVER (PARTITION BY participant_id ORDER BY yearweek DESC) AS rank
+            RANK() OVER (PARTITION BY participant_id ORDER BY yearweek DESC) AS recency_rank
             FROM calculate_relative_difference)
-    WHERE rank != 1
-        AND rank < 5
-    ORDER BY yearweek
 
 )
 

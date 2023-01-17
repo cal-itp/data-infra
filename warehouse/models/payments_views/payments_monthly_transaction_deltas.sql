@@ -52,7 +52,8 @@ payments_monthly_transaction_deltas AS (
         participant_id,
         yearmonth,
         ridership_count,
-        relative_difference
+        relative_difference,
+        recency_rank
 
     FROM
         (SELECT
@@ -60,11 +61,8 @@ payments_monthly_transaction_deltas AS (
             yearmonth,
             ridership_count,
             relative_difference,
-            RANK() OVER (PARTITION BY participant_id ORDER BY yearmonth DESC) AS rank
+            RANK() OVER (PARTITION BY participant_id ORDER BY yearmonth DESC) AS recency_rank
             FROM calculate_relative_difference)
-    WHERE rank != 1
-        AND rank < 5
-    ORDER BY yearmonth
 
 )
 
