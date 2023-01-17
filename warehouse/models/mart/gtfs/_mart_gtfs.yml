@@ -1126,6 +1126,9 @@ models:
       - name: end_date
         description: '{{ doc("gtfs_calendar__end_date") }}'
         tests: *not_null_warn
+      - *_valid_from
+      - *_valid_to
+      - *_is_current
   - name: dim_calendar_dates
     description: |
       Each row is a cleaned row from a calendar_dates.txt file.
@@ -1142,7 +1145,6 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `service_id`, and `date`.
         tests: *primary_key_tests
-
       - *feed_key
       - *base64_url
       - name: service_id
@@ -1154,6 +1156,9 @@ models:
       - name: exception_type
         description: '{{ doc("gtfs_calendar_dates__exception_type") }}'
         tests: *not_null_warn
+      - *_valid_from
+      - *_valid_to
+      - *_is_current
   - name: dim_stop_times
     description: |
       Cleaned GTFS schedule stop_times data.
@@ -1227,6 +1232,9 @@ models:
           For example, `departure_time = 21:30:45` would lead to `departure_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
           This allows us to perform duration calculations and handle timestamps that wrap past midnight like
           `25:40:00`, which are allowed in GTFS.
+      - *_valid_from
+      - *_valid_to
+      - *_is_current
     meta:
       publish.gis_coordinate_system_epsg: WGS84
   - name: fct_daily_scheduled_trips
