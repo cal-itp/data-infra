@@ -48,9 +48,6 @@ payments_daily_transaction_deltas AS (
         relative_difference
 
     FROM calculate_relative_difference
-    WHERE transaction_date BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 1 WEEK)
-        AND DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY)
-    ORDER BY transaction_date
 
 )
 
