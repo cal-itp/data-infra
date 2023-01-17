@@ -4,6 +4,7 @@ WITH feed_guideline_index AS (
 
 scraped_urls AS (
     SELECT *,
+           -- turns both "https://website.com" and "http://website.com" into "website.com"
            RIGHT(feed_url_str,LENGTH(feed_url_str) - STRPOS(feed_url_str, "://") - 2) AS url_no_scheme
     FROM {{ ref('stg_gtfs_quality__scraped_urls') }}
 ),
@@ -14,6 +15,7 @@ dim_schedule_feeds AS (
 
 dim_gtfs_datasets AS (
     SELECT *,
+           -- turns both "https://website.com" and "http://website.com" into "website.com"
            RIGHT(uri,LENGTH(uri) - STRPOS(uri, "://") - 2) AS url_no_scheme
     FROM {{ ref('dim_gtfs_datasets') }}
 ),
