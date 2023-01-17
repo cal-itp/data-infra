@@ -11,7 +11,7 @@ dim_gtfs_datasets AS (
 ),
 
 daily_scraped_urls AS (
-    SELECT DISTINCT dt,
+    SELECT DISTINCT dt AS date,
            aggregator,
            feed_url_str
       FROM scraped_urls
@@ -22,13 +22,13 @@ int_gtfs_quality__feed_aggregator_rt AS (
         t1.date,
         t1.base64_url,
         t1.feed_type,
-        t3.aggregator,
-        CASE WHEN t3.aggregator = 'transitland' AND feed_type = "vehicle_positions" THEN {{ vehicle_positions_feed_on_transitland() }}
-             WHEN t3.aggregator = 'transitland' AND feed_type = "trip_updates" THEN {{ trip_updates_feed_on_mobility_database() }}
-             WHEN t3.aggregator = 'transitland' AND feed_type = "service_alerts" THEN {{ service_alerts_feed_on_mobility_database() }}
-             WHEN t3.aggregator = 'mobility_database' AND feed_type = "vehicle_positions" THEN {{ vehicle_positions_feed_on_mobility_database() }}
-             WHEN t3.aggregator = 'mobility_database' AND feed_type = "trip_updates" THEN {{ trip_updates_feed_on_mobility_database() }}
-             WHEN t3.aggregator = 'mobility_database' AND feed_type = "service_alerts" THEN {{ service_alerts_feed_on_mobility_database() }}
+        t1.aggregator,
+        CASE WHEN t1.aggregator = 'transitland' AND t1.feed_type = "vehicle_positions" THEN {{ vehicle_positions_feed_on_transitland() }}
+             WHEN t1.aggregator = 'transitland' AND t1.feed_type = "trip_updates" THEN {{ trip_updates_feed_on_mobility_database() }}
+             WHEN t1.aggregator = 'transitland' AND t1.feed_type = "service_alerts" THEN {{ service_alerts_feed_on_mobility_database() }}
+             WHEN t1.aggregator = 'mobility_database' AND t1.feed_type = "vehicle_positions" THEN {{ vehicle_positions_feed_on_mobility_database() }}
+             WHEN t1.aggregator = 'mobility_database' AND t1.feed_type = "trip_updates" THEN {{ trip_updates_feed_on_mobility_database() }}
+             WHEN t1.aggregator = 'mobility_database' AND t1.feed_type = "service_alerts" THEN {{ service_alerts_feed_on_mobility_database() }}
              END AS check,
         {{ feed_aggregator_availability_rt() }} AS feature,
         CASE
@@ -37,10 +37,11 @@ int_gtfs_quality__feed_aggregator_rt AS (
         END AS status,
       FROM feed_guideline_index t1
       LEFT JOIN dim_gtfs_datasets t2
-        ON t2.base64_url = t2.base64_url
+        ON t2.base64_url = t1.base64_url
       LEFT JOIN daily_scraped_urls AS t3
-        ON t2.uri = t3.feed_url_str
-       AND t1.aggregator = t3.aggregator
+        ON t3.feed_url_str = t2.uri
+       AND t3.date = t1.date
+       AND t3.aggregator = t1.aggregator
 )
 
 SELECT * FROM int_gtfs_quality__feed_aggregator_rt
