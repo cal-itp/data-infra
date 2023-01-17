@@ -90,7 +90,7 @@ actual_data_only AS (
         zipfile_extract_md5hash,
         _valid_from,
         _valid_to,
-        _valid_to = {{ make_end_of_valid_range(2099-01-01) }} AS _is_current
+        _valid_to = {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }} AS _is_current
     FROM all_versioned
     WHERE download_success AND unzip_success
 ),
