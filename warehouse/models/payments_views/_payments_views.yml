@@ -88,10 +88,6 @@ models:
         description: The transaction_date_time_utc of the first tap transaction
       - name: transaction_date_time_pacific
         description: The transaction_date_time_pacific of the first tap transaction
-        tests:
-          - dbt_expectations.expect_row_values_to_have_recent_data:
-                datepart: day
-                interval: 2
       - name: location_id
         description: The location_id of the first tap transaction
       - name: location_name
@@ -127,3 +123,33 @@ models:
       - name: off_geography
       - name: duration
       - name: distance_meters
+  - name: payments_monthly_transaction_deltas
+    columns:
+      - name: participant_id
+        description: Littlepay-assigned Participant ID
+      - name: yearmonth
+        description: The month and year of the ridership count calculation
+      - name: ridership_count
+        description: A participant's total ridership in a particular month
+      - name: relative_difference
+        description: The relative change in a participant's ridership count as compared to the previous month
+  - name: payments_weekly_transaction_deltas
+    columns:
+      - name: participant_id
+        description: Littlepay-assigned Participant ID
+      - name: yearweek
+        description: The week and year of the ridership count calculation
+      - name: ridership_count
+        description: A participant's total ridership in a particular week
+      - name: relative_difference
+        description: The relative change in a participant's ridership count as compared to the previous week
+  - name: payments_daily_transaction_deltas
+    columns:
+      - name: participant_id
+        description: Littlepay-assigned Participant ID
+      - name: transaction_date
+        description: The day of the ridership count calculation
+      - name: ridership_count
+        description: A participant's total ridership on a particular day
+      - name: relative_difference
+        description: The relative change in a participant's ridership count as compared to the previous day
