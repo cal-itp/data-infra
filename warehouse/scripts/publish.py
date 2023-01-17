@@ -622,7 +622,6 @@ def multipart_ckan_upload(
             fsize=os.path.getsize(fpath),
             file=f,
             resource_id=resource_id,
-            api_key=API_KEY,
         )
 
 
