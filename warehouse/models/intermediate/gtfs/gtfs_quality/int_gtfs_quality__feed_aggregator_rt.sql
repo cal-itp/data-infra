@@ -29,8 +29,8 @@ int_gtfs_quality__feed_aggregator_rt AS (
         t1.feed_type,
         t1.aggregator,
         CASE WHEN t1.aggregator = 'transitland' AND t1.feed_type = "vehicle_positions" THEN {{ vehicle_positions_feed_on_transitland() }}
-             WHEN t1.aggregator = 'transitland' AND t1.feed_type = "trip_updates" THEN {{ trip_updates_feed_on_mobility_database() }}
-             WHEN t1.aggregator = 'transitland' AND t1.feed_type = "service_alerts" THEN {{ service_alerts_feed_on_mobility_database() }}
+             WHEN t1.aggregator = 'transitland' AND t1.feed_type = "trip_updates" THEN {{ trip_updates_feed_on_transitland() }}
+             WHEN t1.aggregator = 'transitland' AND t1.feed_type = "service_alerts" THEN {{ service_alerts_feed_on_transitland() }}
              WHEN t1.aggregator = 'mobility_database' AND t1.feed_type = "vehicle_positions" THEN {{ vehicle_positions_feed_on_mobility_database() }}
              WHEN t1.aggregator = 'mobility_database' AND t1.feed_type = "trip_updates" THEN {{ trip_updates_feed_on_mobility_database() }}
              WHEN t1.aggregator = 'mobility_database' AND t1.feed_type = "service_alerts" THEN {{ service_alerts_feed_on_mobility_database() }}
