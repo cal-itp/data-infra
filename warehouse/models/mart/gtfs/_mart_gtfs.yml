@@ -879,12 +879,16 @@ models:
           lower_bound_column: _valid_from
           upper_bound_column: _valid_to
           partition_by: base64_url, stop_id
+          where: "not warning_duplicate_primary_key"
           gaps: required
     columns:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key` and `stop_id`.
-        tests: *primary_key_tests
+        tests:
+          - unique:
+              where: "not warning_duplicate_primary_key"
+          - not_null
       - *feed_key
       - *base64_url
       - name: stop_id
@@ -930,6 +934,12 @@ models:
         description: '{{ doc("gtfs_stops__level_id") }}'
       - name: platform_code
         description: '{{ doc("gtfs_stops__platform_code") }}'
+      - name: pt_geom
+        description: GEOGPOINT created by the stop latitute and longitude
+      - name: warning_duplicate_primary_key
+        description: |
+          Rows with `true` in this column have a duplicate primary key; i.e., `stop_id` is duplicated within an individual feed
+          instance and `key` will also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
       - *_valid_from
       - *_valid_to
   - name: dim_transfers
@@ -1228,6 +1238,17 @@ models:
           - relationships:
               to: ref('dim_schedule_feeds')
               field: key
+      - name: name
+      - name: regional_feed_type
+        description: |
+          Describes whether this feed is a combined regional feed or has a relation
+          to a combined regional feed in some manner.
+          For example for MTC 511, the combined regional feed has type "Combined
+          Regional Feed", and the MTC-published subfeeds have type "Regional Subfeed".
+          If you are performing an analysis where using a regional combined feed is
+          inappropriate (even though that is the customer-facing data), this field can
+          help you assess other alternative feeds for the same services and organizations.
+          Not specified (null) for feeds with no relationship to regional feeds.
       - name: service_date
         description: Date on which this trip was active.
       - name: service_id
@@ -1241,6 +1262,13 @@ models:
               to: ref('dim_trips')
               field: key
       - name: trip_id
+        description: '{{ doc("gtfs_trips__trip_id") }}'
+      - name: trip_short_name
+        description: '{{ doc("gtfs_trips__trip_short_name") }}'
+      - name: direction_id
+        description: '{{ doc("gtfs_trips__direction_id") }}'
+      - name: block_id
+        description: '{{ doc("gtfs_trips__block_id") }}'
       - name: route_key
         description: Foreign key to dim_routes.
         tests:
@@ -1248,6 +1276,19 @@ models:
               to: ref('dim_routes')
               field: key
       - name: route_id
+        description: '{{ doc("gtfs_routes__route_id") }}'
+      - name: route_type
+        description: '{{ doc("gtfs_routes__route_type") }}'
+      - name: route_short_name
+        description: '{{ doc("gtfs_routes__route_short_name") }}'
+      - name: route_long_name
+        description: '{{ doc("gtfs_routes__route_long_name") }}'
+      - name: route_desc
+        description: '{{ doc("gtfs_routes__route_desc") }}'
+      - name: agency_id
+        description: '{{ doc("gtfs_routes__agency_id") }}'
+      - name: network_id
+        description: '{{ doc("gtfs_routes__network_id") }}'
       - name: shape_array_key
         description: Foreign key to dim_shapes_arrays.
         tests:
@@ -1255,6 +1296,8 @@ models:
               to: ref('dim_shapes_arrays')
               field: key
       - name: gtfs_dataset_key
+      - name: shape_id
+        description: '{{ doc("gtfs_trips__shape_id") }}'
       - name: contains_warning_duplicate_trip_primary_key
         description: |
           Rows with `true` in this column have a duplicate primary key in dim_trips;
@@ -1303,7 +1346,9 @@ models:
       tests: *primary_key_tests
     - name: date
       description: Date that data was downloaded.
-    - *base64_url
+    - <<: *base64_url
+      tests:
+        - not_null
     - &feed_type
       name: feed_type
       description: |
@@ -1745,3 +1790,135 @@ models:
       - name: num_appearances
         description: |
           Number of times that this alert appeared on this date.
+  - name: fct_daily_scheduled_shapes
+    description: |
+      A daily table showing shapes that had trips scheduled on a given date.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `service_date`, `shape_id`, and `shape_array_key`.
+        tests:
+          - unique:
+              where: "not contains_warning_duplicate_trip_primary_key"
+          - not_null
+      - name: n_trips
+        description: The number of trips associated with this shape on the given date.
+      - name: feed_key
+        description: |
+          Foreign key to the `dim_schedule_feeds` table.
+      - name: service_date
+        description: Date on which this shape was active.
+      - name: shape_id
+        description: '{{ doc("gtfs_trips__shape_id") }}'
+      - name: shape_array_key
+        description: Foreign key to dim_shapes_arrays.
+      - name: pt_array
+        description: Ordered array of WKT points that describe this shape.
+      - name: contains_warning_duplicate_trip_primary_key
+        description: |
+          Rows with `true` in this column indicate that the columns in this table that are aggregated from
+          trips data (`stop_event_count`, `route_type_0_count`, `route_type_1_count`, `route_type_2_count`, `route_type_3_count`,
+          `route_type_4_count`, `route_type_5_count`, `route_type_6_count`, `route_type_7_count`, `route_type_11_count`,
+          `route_type_12_count`) contain at least one row that had a duplicate primary key in the source trips data.
+
+          I.e., at least one row being aggregated had a `feed_key` / `trip_id` pair that was not unique
+          in the input data. This indicates that data quality issues were present in the trips data
+          that is being summarized here, and counts may be inflated due to multiple rows with identical identifiers.
+  - name: fct_daily_scheduled_stops
+    description: |
+      A daily table showing all stops that had trip stop events scheduled on a given date.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `service_date` and `stop_key`.
+        tests:
+          - unique:
+              where: "not contains_warning_duplicate_trip_primary_key AND not contains_warning_duplicate_stop_times_primary_key AND not contains_warning_duplicate_stop_primary_key"
+          - not_null
+      - name: service_date
+        description: Date on which this stop was active.
+      - name: feed_key
+        description: |
+          Foreign key to the `dim_schedule_feeds` table.
+      - name: stop_id
+        description: '{{ doc("gtfs_stops__stop_id") }}'
+      - name: stop_event_count
+        description: The number of stop events associated with this stop on the given date.
+      - name: route_type_0_count
+        description: |
+          The count of stop events associated with route_type 0 - Tram, Streetcar, Light rail
+      - name: route_type_1_count
+        description: |
+          The count of stop events associated with route_type 1 - Subway, Metro
+      - name: route_type_2_count
+        description: |
+          The count of stop events associated with route_type 2 - Rail
+      - name: route_type_3_count
+        description: |
+          The count of stop events associated with route_type 3 - Bus
+      - name: route_type_4_count
+        description: |
+          The count of stop events associated with route_type 4 - Ferry
+      - name: route_type_5_count
+        description: |
+          The count of stop events associated with route_type 5 - Cable Tram
+      - name: route_type_6_count
+        description: |
+          The count of stop events associated with route_type 6 - Aerial lift, suspended cable car (e.g., gondola lift, aerial tramway)
+      - name: route_type_7_count
+        description: |
+          The count of stop events associated with route_type 7 - Cable Tram
+      - name: route_type_11_count
+        description: |
+          The count of stop events associated with route_type 11 - Trolleybus
+      - name: route_type_12_count
+        description: |
+          The count of stop events associated with route_type 12 - Monorail
+      - name: missing_route_type
+        description: |
+          The count of stop events associated with a `stop_id` that had a null `route_type` value in `dim_routes`
+      - name: contains_warning_duplicate_stop_times_primary_key
+        description: |
+          Rows with `true` in this column indicate that the columns in this table that are aggregated from
+          stop times data (`stop_event_count`, `route_type_0_count`, `route_type_1_count`, `route_type_2_count`, `route_type_3_count`,
+          `route_type_4_count`, `route_type_5_count`, `route_type_6_count`, `route_type_7_count`, `route_type_11_count`,
+          `route_type_12_count`) contain at least one row that had a duplicate primary key in the source stop times data.
+
+          I.e., at least one row being aggregated had a `trip_id` / `stop_sequence` pair that was not unique
+          in the input data. This indicates that data quality issues were present in the stop times data
+          that is being summarized here, and counts may be inflated due to multiple rows with identical identifiers.
+      - name: contains_warning_duplicate_trip_primary_key
+        description: |
+          Rows with `true` in this column indicate that the columns in this table that are aggregated from
+          trips data (`stop_event_count`, `route_type_0_count`, `route_type_1_count`, `route_type_2_count`, `route_type_3_count`,
+          `route_type_4_count`, `route_type_5_count`, `route_type_6_count`, `route_type_7_count`, `route_type_11_count`,
+          `route_type_12_count`) contain at least one row that had a duplicate primary key in the source trips data.
+
+          I.e., at least one row being aggregated had a `feed_key` / `trip_id` pair that was not unique
+          in the input data. This indicates that data quality issues were present in the trips data
+          that is being summarized here, and counts may be inflated due to multiple rows with identical identifiers.
+      - name: contains_warning_duplicate_stop_primary_key
+        description: |
+          Rows with `true` in this column have a duplicate primary key in dim_stops;
+          i.e., `stop_id` is duplicated within an individual feed instance.
+          Treat these rows with caution.
+      - name: stop_key
+          Foreign key to the `dim_stops` table.
+      - name: tts_stop_name
+        description: '{{ doc("gtfs_stops__tts_stop_name") }}'
+      - name: pt_geom
+        description: GEOGPOINT created by the stop latitute and longitude
+      - name: parent_station
+        description: '{{ doc("gtfs_stops__parent_station") }}'
+      - name: stop_code
+        description: '{{ doc("gtfs_stops__stop_code") }}'
+      - name: stop_name
+        description: '{{ doc("gtfs_stops__stop_name") }}'
+      - name: stop_desc
+        description: '{{ doc("gtfs_stops__stop_desc") }}'
+      - name: location_type
+        description: '{{ doc("gtfs_stops__location_type") }}'
+      - name: stop_timezone
+        description: '{{ doc("gtfs_stops__stop_timezone") }}'
+      - name: wheelchair_boarding
+        description: '{{ doc("gtfs_stops__wheelchair_boarding") }}'

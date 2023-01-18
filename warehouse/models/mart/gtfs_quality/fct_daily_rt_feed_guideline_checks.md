@@ -24,5 +24,11 @@ Here is a list of currently-implemented checks:
 | Vehicle positions RT feed contains no updates older than 90 seconds. | Best Practices Alignment (RT) | At no point during the day is there a Vehicle positions file that is older than 90 seconds. |
 | Trip updates RT feed contains no updates older than 90 seconds. | Best Practices Alignment (RT) | At no point during the day is there a Trip updates file that is older than 90 seconds. |
 | Service alerts RT feed contains no updates older than 10 minutes. | Best Practices Alignment (RT) | At no point during the day is there a Service alerts file that is older than 10 minutes. |
+| Vehicle positions RT feed is listed on feed aggregator transit.land | Feed Aggregator Availability (RT) | Vehicle positions RT feed is present on the feed aggregator transit.land. |
+| Trip updates RT feed is listed on feed aggregator transit.land | Feed Aggregator Availability (RT) | Trip updates RT feed is present on the feed aggregator transit.land. |
+| Service alerts RT feed is listed on feed aggregator transit.land | Feed Aggregator Availability (RT) | Service alerts RT feed is present on the feed aggregator transit.land. |
+| Vehicle positions RT feed is listed on feed aggregator Mobility Database | Feed Aggregator Availability (RT) | Vehicle positions RT feed is present on the feed aggregator Mobility Database. |
+| Trip updates RT feed is listed on feed aggregator Mobility Database | Feed Aggregator Availability (RT) | Trip updates RT feed is present on the feed aggregator Mobility Database. |
+| Service alerts RT feed is listed on feed aggregator Mobility Database | Feed Aggregator Availability (RT) | Service alerts RT feed is present on the feed aggregator Mobility Database. |
 
 {% enddocs %}

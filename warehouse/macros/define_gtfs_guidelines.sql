@@ -1,4 +1,4 @@
--- declare checks
+-- CHECK NAMES
 {% macro static_feed_downloaded_successfully() %}
 "GTFS schedule feed downloads successfully"
 {% endmacro %}
@@ -34,23 +34,6 @@
 {% macro trip_id_alignment() %}
 "All trip_ids provided in the GTFS-rt feed exist in the GTFS Schedule feed"
 {% endmacro %}
-
--- Remove the below 3 macros once v1 guideline checks table is deprecated
--- These like-checks ought to be be grouped alphabetically, so I swapped around the names for new pipeline
-
-{% macro vehicle_positions_feed_present() %}
-"Vehicle positions RT feed is present"
-{% endmacro %}
-
-{% macro trip_updates_feed_present() %}
-"Trip updates RT feed is present"
-{% endmacro %}
-
-{% macro service_alerts_feed_present() %}
-"Service alerts RT feed is present"
-{% endmacro %}
-
--- Remove above 3 macros once v1 guideline checks table is deprecated
 
 {% macro feed_present_vehicle_positions() %}
 "Vehicle positions RT feed is present"
@@ -94,6 +77,22 @@
 
 {% macro service_alerts_feed_on_transitland() %}
 "Service alerts RT feed is listed on feed aggregator transit.land"
+{% endmacro %}
+
+{% macro schedule_feed_on_mobility_database() %}
+"GTFS schedule feed is listed on feed aggregator Mobility Database"
+{% endmacro %}
+
+{% macro vehicle_positions_feed_on_mobility_database() %}
+"Vehicle positions RT feed is listed on feed aggregator Mobility Database"
+{% endmacro %}
+
+{% macro trip_updates_feed_on_mobility_database() %}
+"Trip updates RT feed is listed on feed aggregator Mobility Database"
+{% endmacro %}
+
+{% macro service_alerts_feed_on_mobility_database() %}
+"Service alerts RT feed is listed on feed aggregator Mobility Database"
 {% endmacro %}
 
 {% macro include_tts() %}
@@ -152,7 +151,10 @@
 "The GTFS Schedule API endpoint is configured to report the file modification date"
 {% endmacro %}
 
--- declare features
+--
+-- FEATURE NAMES
+--
+
 {% macro compliance_schedule() %}
 "Compliance (Schedule)"
 {% endmacro %}
@@ -201,7 +203,10 @@
 "Up-to-Dateness"
 {% endmacro %}
 
--- columns
+--
+-- COLUMNS
+--
+
 {% macro gtfs_guidelines_columns() %}
 date,
 calitp_itp_id,
@@ -212,7 +217,9 @@ status,
 feature
 {% endmacro %}
 
--- queries
+--
+-- QUERIES
+--
 -- For use in int_gtfs_quality__persistent_ids_schedule:
 {% macro ids_version_compare_aggregate(id, dim) %}
 (
@@ -264,6 +271,7 @@ feature
 
 -- For use in int_gtfs_quality__persistent_ids_schedule:
 {% macro max_new_id_ratio(table_name) %}
+
     MAX({{ table_name }}.id_added * 100 / {{ table_name }}.ids_current_feed )
        OVER (
            PARTITION BY t1.feed_key
@@ -271,3 +279,29 @@ feature
            ROWS BETWEEN 30 PRECEDING AND CURRENT ROW
         )
 {% endmacro %}
+
+-- For use in feed aggregator checks
+-- turns both "https://website.com" and "http://website.com" into "website.com"
+{% macro url_remove_scheme(url) %}
+    REGEXP_REPLACE({{ url }}, "^https?://", "")
+{% endmacro %}
+
+--
+-- TESTS
+--
+
+{% test extreme_results(model) %}
+{{ config(severity = 'warn') }}
+
+    SELECT * FROM
+    (
+        SELECT
+            date,
+            COUNT(CASE WHEN status = 'PASS' THEN 1 END) * 100.0 / COUNT(*) AS percent_pass
+        FROM {{ model }}
+       WHERE date > CURRENT_DATE - 30
+       GROUP BY 1
+    )
+    WHERE percent_pass = 100 OR percent_pass = 0
+
+{% endtest %}

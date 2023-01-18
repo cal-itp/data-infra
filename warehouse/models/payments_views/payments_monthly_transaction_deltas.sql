@@ -1,5 +1,3 @@
-{{ config(store_failures = true) }}
-
 WITH payments_rides AS (
 
     SELECT *
@@ -17,15 +15,15 @@ extract_count_date AS (
             '-',
             LPAD(
                 CAST(
-                    EXTRACT(WEEK FROM transaction_date_time_pacific) AS string
+                    EXTRACT(MONTH FROM transaction_date_time_pacific) AS string
                 ),
                 2,
                 '0'
             )
-        ) AS yearweek
+        ) AS yearmonth
 
     FROM payments_rides
-    GROUP BY yearweek, participant_id
+    GROUP BY yearmonth, participant_id
 ),
 
 
@@ -38,38 +36,34 @@ calculate_relative_difference AS (
             (
                 ridership_count - LAG(
                     ridership_count, 1
-                ) OVER (PARTITION BY participant_id ORDER BY yearweek)
-            ) / LAG(ridership_count, 1) OVER (PARTITION BY participant_id ORDER BY yearweek)
+                ) OVER (PARTITION BY participant_id ORDER BY yearmonth)
+            ) / LAG(ridership_count, 1) OVER (PARTITION BY participant_id ORDER BY yearmonth)
         ) * 100
         AS relative_difference
 
     FROM extract_count_date
-    WHERE yearweek NOT LIKE '%-00'
 
 ),
 
-test_recent_values AS (
+payments_monthly_transaction_deltas AS (
 
     SELECT
 
         participant_id,
-        yearweek,
+        yearmonth,
         ridership_count,
-        relative_difference
+        relative_difference,
+        recency_rank
 
     FROM
         (SELECT
             participant_id,
-            yearweek,
+            yearmonth,
             ridership_count,
             relative_difference,
-            RANK() OVER (PARTITION BY participant_id ORDER BY yearweek DESC) AS rank
+            RANK() OVER (PARTITION BY participant_id ORDER BY yearmonth DESC) AS recency_rank
             FROM calculate_relative_difference)
-    WHERE rank != 1
-        AND rank < 5
-        AND ABS(relative_difference) > 25.0
-    ORDER BY yearweek
 
 )
 
-SELECT * FROM test_recent_values
+SELECT * FROM payments_monthly_transaction_deltas
