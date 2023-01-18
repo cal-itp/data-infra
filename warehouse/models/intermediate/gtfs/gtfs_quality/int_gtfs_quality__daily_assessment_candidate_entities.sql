@@ -1,60 +1,63 @@
 {{ config(materialized='table') }}
 
-WITH orgs AS (
+WITH date_spine AS (
+    SELECT date_day AS date
+    FROM {{ ref('util_transit_database_history_date_spine') }}
+),
+
+orgs AS (
     SELECT
-        hist.date,
+        date_spine.date,
         dim.*
-    FROM {{ ref('int_transit_database__organizations_daily_history') }} AS hist
+    FROM date_spine
     LEFT JOIN {{ ref('dim_organizations') }} AS dim
-        ON hist.organization_key = dim.key
+        ON CAST(date_spine.date AS TIMESTAMP) BETWEEN dim._valid_from AND dim._valid_to
 ),
 
 services AS (
     SELECT
-        hist.date,
+        date_spine.date,
         dim.*,
         ARRAY_TO_STRING(service_type, ',') AS service_type_str
-    FROM {{ ref('int_transit_database__services_daily_history') }} AS hist
+    FROM date_spine
     LEFT JOIN {{ ref('dim_services') }} AS dim
-        ON hist.service_key = dim.key
+        ON CAST(date_spine.date AS TIMESTAMP) BETWEEN dim._valid_from AND dim._valid_to
 ),
 
 service_data AS (
     SELECT
-        hist.date,
+        date_spine.date,
         dim.*
-    FROM {{ ref('int_transit_database__gtfs_service_data_daily_history') }} AS hist
+    FROM date_spine
     LEFT JOIN {{ ref('dim_gtfs_service_data') }} AS dim
-        ON hist.gtfs_service_data_key = dim.key
+        ON CAST(date_spine.date AS TIMESTAMP) BETWEEN dim._valid_from AND dim._valid_to
 ),
 
 datasets AS (
     SELECT
-        hist.date,
+        date_spine.date,
         dim.*
-    FROM {{ ref('int_transit_database__gtfs_datasets_daily_history') }} AS hist
+    FROM date_spine
     LEFT JOIN {{ ref('dim_gtfs_datasets') }} AS dim
-        ON hist.gtfs_dataset_key = dim.key
+        ON CAST(date_spine.date AS TIMESTAMP) BETWEEN dim._valid_from AND dim._valid_to
 ),
 
 org_service_bridge AS (
     SELECT
-        hist.date,
+        date_spine.date,
         dim.*
-    FROM {{ ref('int_transit_database__bridge_organizations_x_services_managed_daily_history') }} AS hist
+    FROM date_spine
     LEFT JOIN {{ ref('bridge_organizations_x_services_managed') }} AS dim
-        ON hist.organization_key = dim.organization_key
-        AND hist.service_key = dim.service_key
+        ON CAST(date_spine.date AS TIMESTAMP) BETWEEN dim._valid_from AND dim._valid_to
 ),
 
 validation_bridge AS (
     SELECT
-        hist.date,
+        date_spine.date,
         dim.*
-    FROM {{ ref('int_transit_database__bridge_schedule_dataset_for_validation_daily_history') }} AS hist
+    FROM date_spine
     LEFT JOIN {{ ref('bridge_schedule_dataset_for_validation') }} AS dim
-        ON hist.gtfs_dataset_key = dim.gtfs_dataset_key
-        AND hist.schedule_to_use_for_rt_validation_gtfs_dataset_key = dim.schedule_to_use_for_rt_validation_gtfs_dataset_key
+        ON CAST(date_spine.date AS TIMESTAMP) BETWEEN dim._valid_from AND dim._valid_to
 ),
 
 feeds AS (
