@@ -151,6 +151,18 @@
 "The GTFS Schedule API endpoint is configured to report the file modification date"
 {% endmacro %}
 
+{% macro modification_date_present_service_alerts() %}
+"The Service alerts API endpoint is configured to report the file modification date"
+{% endmacro %}
+
+{% macro modification_date_present_vehicle_positions() %}
+"The Vehicle positions API endpoint is configured to report the file modification date"
+{% endmacro %}
+
+{% macro modification_date_present_trip_updates() %}
+"The Trip updates API endpoint is configured to report the file modification date"
+{% endmacro %}
+
 --
 -- FEATURE NAMES
 --
