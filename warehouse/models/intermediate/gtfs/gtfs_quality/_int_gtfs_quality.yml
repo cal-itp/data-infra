@@ -270,6 +270,7 @@ models:
             - aggregator
       - dbt_utils.equal_rowcount:
           compare_model: ref('int_gtfs_quality__rt_feed_guideline_index_aggregator')
+      - extreme_results
     columns: *stg_gtfs_guideline_columns
 
   - name: int_gtfs_quality__rt_protobuf_error
