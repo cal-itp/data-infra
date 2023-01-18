@@ -48,6 +48,7 @@ int_gtfs_quality__passes_fares_validator AS (
         {{ passes_fares_validator() }} AS check,
         {{ fare_completeness() }} AS feature,
         CASE
+            WHEN files.feed_key IS null THEN "N/A"
             WHEN notices.validation_notices = 0 THEN "PASS"
             WHEN notices.validation_notices > 0 THEN "FAIL"
         END AS status
