@@ -22,6 +22,11 @@ dim_gtfs_datasets AS (
     FROM {{ ref('dim_gtfs_datasets') }}
 ),
 
+validation_map AS (
+    SELECT *
+    FROM {{ ref('bridge_schedule_dataset_for_validation') }}
+),
+
 parse_outcomes AS (
     SELECT *
     FROM {{ ref('int_gtfs_rt__unioned_parse_outcomes') }}
@@ -73,7 +78,7 @@ fct_daily_rt_feed_files AS (
         parse.parse_success_file_count,
         parse.parse_failure_file_count,
         url_map.gtfs_dataset_key,
-        datasets.schedule_to_use_for_rt_validation_gtfs_dataset_key,
+        validation_map.schedule_to_use_for_rt_validation_gtfs_dataset_key,
         schedule.feed_key AS schedule_feed_key
     FROM pivoted_parse_outcomes AS parse
     LEFT JOIN int_transit_database__urls_to_gtfs_datasets AS url_map
@@ -81,8 +86,11 @@ fct_daily_rt_feed_files AS (
         AND CAST(parse.dt AS TIMESTAMP) BETWEEN url_map._valid_from AND url_map._valid_to
     LEFT JOIN dim_gtfs_datasets AS datasets
         ON url_map.gtfs_dataset_key = datasets.key
+    LEFT JOIN validation_map
+        ON url_map.gtfs_dataset_key = validation_map.gtfs_dataset_key
+        AND CAST(parse.dt AS TIMESTAMP) BETWEEN validation_map._valid_from AND validation_map._valid_to
     LEFT JOIN fct_daily_schedule_feeds AS schedule
-        ON datasets.schedule_to_use_for_rt_validation_gtfs_dataset_key = schedule.gtfs_dataset_key
+        ON validation_map.schedule_to_use_for_rt_validation_gtfs_dataset_key = schedule.gtfs_dataset_key
         AND parse.dt = schedule.date
 )
 
