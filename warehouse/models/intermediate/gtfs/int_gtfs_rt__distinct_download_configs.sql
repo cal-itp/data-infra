@@ -24,7 +24,7 @@ int_gtfs_rt__distinct_download_configs AS (
     {% if is_incremental() %}
     WHERE dt >= '{{ max_dt }}'
     {% else %}
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('INCREMENTAL_PARTITIONS_LOOKBACK_DAYS') }} DAY)
+    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('RT_LOOKBACK_DAYS') }} DAY)
     {% endif %}
 )
 

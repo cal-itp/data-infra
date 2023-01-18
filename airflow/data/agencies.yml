@@ -141,10 +141,14 @@ bay-area-rapid-transit:
 beach-cities-transit:
   agency_name: Beach Cities Transit
   feeds:
-    - gtfs_schedule_url: https://www.redondo.org/civicax/filebank/blobdload.aspx?BlobID=33555
+    - gtfs_schedule_url: https://redondobeachbct.com/gtfs
       gtfs_rt_vehicle_positions_url: https://redondobeachbct.com/gtfs-rt/vehiclepositions
       gtfs_rt_service_alerts_url: https://redondobeachbct.com/gtfs-rt/alerts
       gtfs_rt_trip_updates_url: https://redondobeachbct.com/gtfs-rt/tripupdates
+    - gtfs_schedule_url: https://www.redondo.org/civicax/filebank/blobdload.aspx?BlobID=33555
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
   itp_id: 260
 bear-transit:
   agency_name: Bear Transit
@@ -721,7 +725,7 @@ marguerite-shuttle:
 marin-transit:
   agency_name: Marin Transit
   feeds:
-    - gtfs_schedule_url: https://marintransit.org/data/google_transit.zip
+    - gtfs_schedule_url: https://marintransit.net/gtfs
       gtfs_rt_vehicle_positions_url: https://marintransit.net/gtfs-rt/vehiclepositions
       gtfs_rt_service_alerts_url: https://marintransit.net/gtfs-rt/alerts
       gtfs_rt_trip_updates_url: https://marintransit.net/gtfs-rt/tripupdates
@@ -729,6 +733,10 @@ marin-transit:
       gtfs_rt_vehicle_positions_url: https://api.511.org/transit/vehiclepositions?api_key={{ MTC_511_API_KEY}}&agency=MA
       gtfs_rt_service_alerts_url: https://api.511.org/transit/servicealerts?api_key={{ MTC_511_API_KEY}}
       gtfs_rt_trip_updates_url: https://api.511.org/transit/tripupdates?api_key={{ MTC_511_API_KEY}}&agency=MA
+    - gtfs_schedule_url: https://marintransit.org/data/google_transit.zip
+      gtfs_rt_vehicle_positions_url: null
+      gtfs_rt_service_alerts_url: null
+      gtfs_rt_trip_updates_url: null
   itp_id: 194
 mendocino-transit-authority:
   agency_name: Mendocino Transit Authority
@@ -1788,3 +1796,11 @@ playa-vista-shuttle:
       gtfs_rt_service_alerts_url: null
       gtfs_rt_trip_updates_url: null
   itp_id: 252
+cerritos-on-wheels:
+  agency_name: Cerritos on Wheels
+  feeds:
+  - gtfs_schedule_url: https://passio3.com/cerritos/passioTransit/gtfs/google_transit.zip
+    gtfs_rt_vehicle_positions_url: null
+    gtfs_rt_service_alerts_url: null
+    gtfs_rt_trip_updates_url: null
+  itp_id: 63

@@ -12,18 +12,17 @@ stg_transit_database__gtfs_datasets AS (
 
 int_gtfs_rt__daily_url_index AS (
     SELECT
+
         configs.dt,
         url_to_encode AS string_url,
         base64_url,
-        CASE
-            WHEN data = "GTFS Alerts" THEN "service_alerts"
-            WHEN data = "GTFS VehiclePositions" THEN "vehicle_positions"
-            WHEN data = "GTFS TripUpdates" THEN "trip_updates"
-        END AS type
+        type,
+        datasets.data_quality_pipeline
+
     FROM int_gtfs_rt__distinct_download_configs AS configs
     LEFT JOIN stg_transit_database__gtfs_datasets AS datasets
         ON configs._config_extract_ts = datasets.ts
-    WHERE data IN ("GTFS Alerts", "GTFS VehiclePositions", "GTFS TripUpdates")
+    WHERE type IN ("service_alerts", "vehicle_positions", "trip_updates")
     QUALIFY RANK() OVER (PARTITION BY configs.dt, url_to_encode, base64_url ORDER BY _config_extract_ts DESC) = 1
 )
 

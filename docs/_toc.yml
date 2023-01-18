@@ -18,6 +18,7 @@ parts:
         - file: analytics_tools/bi_dashboards
         - file: analytics_tools/notebooks
         - file: analytics_tools/python_libraries
+        - file: analytics_tools/rt_analysis
         - file: analytics_tools/saving_code
         - file: analytics_tools/storing_data
         - file: analytics_tools/data_catalogs
@@ -89,7 +90,6 @@ parts:
       - file: services/overview
         sections:
         - file: services/gtfs-ckan-uploader
-        - file: services/gtfs-rt-archive
       - file: backups/metabase
   - caption: Contribute to the Docs!
     chapters:

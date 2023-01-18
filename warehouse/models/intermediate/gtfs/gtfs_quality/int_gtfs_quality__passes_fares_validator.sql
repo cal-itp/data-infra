@@ -3,7 +3,7 @@ WITH feed_guideline_index AS (
 ),
 
 keyed_parse_outcomes AS (
-    SELECT * FROM {{ ref('int_gtfs_schedule__keyed_parse_outcomes')}}
+    SELECT * FROM {{ ref('int_gtfs_schedule__keyed_parse_outcomes') }}
 ),
 
 validation_fact_daily_feed_codes_fares_related AS (
@@ -29,7 +29,7 @@ daily_feed_fare_files AS (
                              'fare_transfer_rules'
                              )
        AND feed_key IS NOT null
-     GROUP BY 1
+     GROUP BY feed_key
 ),
 
 validation_notices_by_day AS (

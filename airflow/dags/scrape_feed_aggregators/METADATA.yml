@@ -1,0 +1,21 @@
+description: "Scrape GTFS (and other) feed URLs present in validators"
+schedule_interval: "0 0 * * *"
+tags:
+  - all_gusty_features
+default_args:
+    owner: airflow
+    depends_on_past: False
+    start_date: !days_ago 1
+    email:
+      - "andrew.v@jarv.us"
+      - "evan.siroky@dot.ca.gov"
+      - "jameelah.y@jarv.us"
+      - "laurie.m@jarv.us"
+      - "soren.s@jarv.us"
+    email_on_failure: True
+    email_on_retry: False
+    retries: 2
+    retry_delay: !timedelta 'minutes: 2'
+    concurrency: 50
+    #sla: !timedelta 'hours: 2'
+latest_only: True

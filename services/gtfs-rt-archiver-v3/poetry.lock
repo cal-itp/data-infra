@@ -99,7 +99,7 @@ python-versions = "~=3.5"
 
 [[package]]
 name = "calitp"
-version = "2022.10.27"
+version = "2023.1.3"
 description = "Shared code for the Cal-ITP data codebases"
 category = "main"
 optional = false
@@ -107,27 +107,28 @@ python-versions = ">=3.8,<3.11"
 
 [package.dependencies]
 backoff = ">=2.1.2,<3.0.0"
-fsspec = ">=2022.5.0,<2022.7.1 || >2022.7.1,<2023.0.0"
-gcsfs = ">=2022.5.0,<2022.7.1 || >2022.7.1,<2023.0.0"
+fsspec = "2022.5.0"
+gcsfs = "2022.5.0"
 google-api-core = ">=1.32.0,<2.0.0dev"
 google-cloud-bigquery = ">=1.15.0,<3.0.0dev"
 google-cloud-bigquery-storage = "2.14.1"
-google-cloud-secret-manager = ">=2.12.4,<3.0.0"
+google-cloud-secret-manager = "1.0.0"
 gtfs-realtime-bindings = ">=0.0.7,<0.0.8"
 humanize = ">=4.2.3,<5.0.0"
 Jinja2 = "<3.1.0"
-pandas = ">=1.3.3,<2.0.0"
-pandas-gbq = ">=0.17.9,<0.18.0"
+pandas = "1.3.3"
+pandas-gbq = "0.14.1"
 pendulum = ">=2.1.2,<3.0.0"
 protobuf = ">=3.19.0,<4.0.0dev"
 pydantic = ">=1.9.1,<2.0.0"
 siuba = ">=0.4.0,<0.5.0"
 sqlalchemy-bigquery = ">=1.4.4,<2.0.0"
 tqdm = ">=4.64.0,<5.0.0"
+typing-extensions = "3.10.0.2"
 
 [[package]]
 name = "certifi"
-version = "2022.9.14"
+version = "2022.12.7"
 description = "Python package for providing Mozilla's CA Bundle."
 category = "main"
 optional = false
@@ -164,20 +165,6 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
-name = "db-dtypes"
-version = "1.0.4"
-description = "Pandas Data Types for SQL systems (BigQuery, Spanner)"
-category = "main"
-optional = false
-python-versions = ">=3.7"
-
-[package.dependencies]
-numpy = ">=1.16.6,<2.0dev"
-packaging = ">=17.0"
-pandas = ">=0.24.2,<2.0dev"
-pyarrow = ">=3.0.0,<10.0dev"
-
-[[package]]
 name = "decorator"
 version = "5.1.1"
 description = "Decorators for Humans"
@@ -209,7 +196,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "fsspec"
-version = "2022.8.2"
+version = "2022.5.0"
 description = "File-system specification"
 category = "main"
 optional = false
@@ -229,7 +216,7 @@ github = ["requests"]
 gs = ["gcsfs"]
 gui = ["panel"]
 hdfs = ["pyarrow (>=1)"]
-http = ["requests", "aiohttp (!=4.0.0a0,!=4.0.0a1)"]
+http = ["requests", "aiohttp"]
 libarchive = ["libarchive-c"]
 oci = ["ocifs"]
 s3 = ["s3fs"]
@@ -248,16 +235,16 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
 name = "gcsfs"
-version = "2022.8.2"
+version = "2022.5.0"
 description = "Convenient Filesystem interface over GCS"
 category = "main"
 optional = false
 python-versions = ">=3.7"
 
 [package.dependencies]
-aiohttp = "<4.0.0a0 || >4.0.0a0,<4.0.0a1 || >4.0.0a1"
+aiohttp = "<4"
 decorator = ">4.1.2"
-fsspec = "2022.8.2"
+fsspec = "2022.5.0"
 google-auth = ">=1.2"
 google-auth-oauthlib = "*"
 google-cloud-storage = "*"
@@ -333,12 +320,15 @@ python-versions = ">=3.6, <3.11"
 
 [package.dependencies]
 google-api-core = {version = ">=1.31.5,<2.0.0 || >2.3.0,<3.0.0dev", extras = ["grpc"]}
+google-cloud-bigquery-storage = {version = ">=2.0.0,<3.0.0dev", optional = true, markers = "extra == \"bqstorage\""}
 google-cloud-core = ">=1.4.1,<3.0.0dev"
 google-resumable-media = ">=0.6.0,<3.0dev"
 grpcio = ">=1.38.1,<2.0dev"
 packaging = ">=14.3,<22.0dev"
+pandas = {version = ">=0.24.2", optional = true, markers = "extra == \"pandas\""}
 proto-plus = ">=1.15.0,<2.0.0dev"
 protobuf = ">=3.12.0,<4.0.0dev"
+pyarrow = {version = ">=3.0.0,<8.0dev", optional = true, markers = "extra == \"bqstorage\""}
 python-dateutil = ">=2.7.2,<3.0dev"
 requests = ">=2.18.0,<3.0.0dev"
 
@@ -388,20 +378,15 @@ grpc = ["grpcio (>=1.38.0,<2.0dev)"]
 
 [[package]]
 name = "google-cloud-secret-manager"
-version = "2.12.4"
+version = "1.0.0"
 description = "Secret Manager API API client library"
 category = "main"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
 
 [package.dependencies]
-google-api-core = {version = ">=1.32.0,<2.0.0 || >=2.8.0,<3.0.0dev", extras = ["grpc"]}
-grpc-google-iam-v1 = ">=0.12.4,<1.0.0dev"
-proto-plus = ">=1.22.0,<2.0.0dev"
-protobuf = ">=3.19.0,<5.0.0dev"
-
-[package.extras]
-libcst = ["libcst (>=0.2.5)"]
+google-api-core = {version = ">=1.14.0,<2.0.0dev", extras = ["grpc"]}
+grpc-google-iam-v1 = ">=0.12.3,<0.13dev"
 
 [[package]]
 name = "google-cloud-storage"
@@ -668,41 +653,33 @@ pyparsing = ">=2.0.2,<3.0.5 || >3.0.5"
 
 [[package]]
 name = "pandas"
-version = "1.5.0"
+version = "1.3.3"
 description = "Powerful data structures for data analysis, time series, and statistics"
 category = "main"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.7.1"
 
 [package.dependencies]
-numpy = [
-    {version = ">=1.21.0", markers = "python_version >= \"3.10\""},
-    {version = ">=1.20.3", markers = "python_version < \"3.10\""},
-]
-python-dateutil = ">=2.8.1"
-pytz = ">=2020.1"
+numpy = ">=1.17.3"
+python-dateutil = ">=2.7.3"
+pytz = ">=2017.3"
 
 [package.extras]
-test = ["pytest-xdist (>=1.31)", "pytest (>=6.0)", "hypothesis (>=5.5.3)"]
+test = ["hypothesis (>=3.58)", "pytest (>=6.0)", "pytest-xdist"]
 
 [[package]]
 name = "pandas-gbq"
-version = "0.17.9"
-description = "Google BigQuery connector for pandas"
+version = "0.14.1"
+description = "Pandas interface to Google BigQuery"
 category = "main"
 optional = false
-python-versions = ">=3.7, <3.11"
+python-versions = ">=3.5"
 
 [package.dependencies]
-db-dtypes = ">=0.3.1,<2.0.0"
-google-api-core = ">=1.31.5,<2.0.0 || >2.3.0,<3.0.0dev"
-google-auth = ">=1.25.0"
-google-auth-oauthlib = ">=0.0.1"
-google-cloud-bigquery = ">=1.27.2,<2.4.0 || >=2.5.0,<4.0.0dev"
-google-cloud-bigquery-storage = ">=1.1.0,<3.0.0dev"
-numpy = ">=1.16.6"
-pandas = ">=0.24.2"
-pyarrow = ">=3.0.0,<10.0dev"
+google-auth = "*"
+google-auth-oauthlib = "*"
+google-cloud-bigquery = {version = ">=1.11.1,<3.0.0dev", extras = ["bqstorage", "pandas"]}
+pandas = ">=0.20.1"
 pydata-google-auth = "*"
 
 [package.extras]
@@ -824,14 +801,14 @@ pyasn1 = ">=0.4.6,<0.5.0"
 
 [[package]]
 name = "pydantic"
-version = "1.10.2"
+version = "1.9.2"
 description = "Data validation and settings management using python type hints"
 category = "main"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.6.1"
 
 [package.dependencies]
-typing-extensions = ">=4.1.0"
+typing-extensions = ">=3.7.4.3"
 
 [package.extras]
 dotenv = ["python-dotenv (>=0.10.4)"]
@@ -1041,8 +1018,8 @@ PyYAML = ">=3.0.0"
 SQLAlchemy = ">=1.2.19"
 
 [package.extras]
-test = ["hypothesis", "pytest"]
-docs = ["gapminder (==0.1)", "jupytext", "nbsphinx", "sphinx", "nbval", "jupyter", "plotnine"]
+docs = ["plotnine", "jupyter", "nbval", "sphinx", "nbsphinx", "jupytext", "gapminder (==0.1)"]
+test = ["pytest", "hypothesis"]
 
 [[package]]
 name = "six"
@@ -1176,18 +1153,18 @@ python-versions = ">=3.6"
 click = ">=7.1.1,<9.0.0"
 
 [package.extras]
-test = ["isort (>=5.0.6,<6.0.0)", "black (>=22.3.0,<23.0.0)", "mypy (==0.910)", "pytest-sugar (>=0.9.4,<0.10.0)", "pytest-xdist (>=1.32.0,<2.0.0)", "coverage (>=5.2,<6.0)", "pytest-cov (>=2.10.0,<3.0.0)", "pytest (>=4.4.0,<5.4.0)", "shellingham (>=1.3.0,<2.0.0)"]
-doc = ["mdx-include (>=1.4.1,<2.0.0)", "mkdocs-material (>=8.1.4,<9.0.0)", "mkdocs (>=1.1.2,<2.0.0)"]
-dev = ["pre-commit (>=2.17.0,<3.0.0)", "flake8 (>=3.8.3,<4.0.0)", "autoflake (>=1.3.1,<2.0.0)"]
-all = ["shellingham (>=1.3.0,<2.0.0)", "colorama (>=0.4.3,<0.5.0)"]
+all = ["colorama (>=0.4.3,<0.5.0)", "shellingham (>=1.3.0,<2.0.0)"]
+dev = ["autoflake (>=1.3.1,<2.0.0)", "flake8 (>=3.8.3,<4.0.0)", "pre-commit (>=2.17.0,<3.0.0)"]
+doc = ["mkdocs (>=1.1.2,<2.0.0)", "mkdocs-material (>=8.1.4,<9.0.0)", "mdx-include (>=1.4.1,<2.0.0)"]
+test = ["shellingham (>=1.3.0,<2.0.0)", "pytest (>=4.4.0,<5.4.0)", "pytest-cov (>=2.10.0,<3.0.0)", "coverage (>=5.2,<6.0)", "pytest-xdist (>=1.32.0,<2.0.0)", "pytest-sugar (>=0.9.4,<0.10.0)", "mypy (==0.910)", "black (>=22.3.0,<23.0.0)", "isort (>=5.0.6,<6.0.0)"]
 
 [[package]]
 name = "typing-extensions"
-version = "4.3.0"
-description = "Backported and Experimental Type Hints for Python 3.7+"
+version = "3.10.0.2"
+description = "Backported and Experimental Type Hints for Python 3.5+"
 category = "main"
 optional = false
-python-versions = ">=3.7"
+python-versions = "*"
 
 [[package]]
 name = "urllib3"
@@ -1232,8 +1209,8 @@ multidict = ">=4.0"
 
 [metadata]
 lock-version = "1.1"
-python-versions = ">=3.8,<3.11"
-content-hash = "ebce6bb2a82828639c972c7b1a54c494531b043db3236179d840c8b4c025fb3e"
+python-versions = "~3.9"
+content-hash = "f230d7854afebcd238a99d1e0d6bffaf9e387fda4acb977f564be3b1f25a7519"
 
 [metadata.files]
 aiohttp = []
@@ -1249,7 +1226,6 @@ certifi = []
 charset-normalizer = []
 click = []
 colorama = []
-db-dtypes = []
 decorator = []
 deprecated = []
 frozenlist = []

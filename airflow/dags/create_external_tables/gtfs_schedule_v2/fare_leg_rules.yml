@@ -9,6 +9,9 @@ hive_options:
   mode: CUSTOM
   source_uri_prefix: "fare_leg_rules/{dt:DATE}/{ts:TIMESTAMP}/{base64_url:STRING}/"
 schema_fields:
+  - name: _line_number
+    mode: NULLABLE
+    type: INTEGER
   - name: leg_group_id
     type: STRING
   - name: networK_id

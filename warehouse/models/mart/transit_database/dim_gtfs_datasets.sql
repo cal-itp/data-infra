@@ -9,10 +9,9 @@ WITH latest_gtfs_datasets AS (
 
 dim_gtfs_datasets AS (
     SELECT
-        airtable_record_id as key,
-        airtable_record_id,
+        key,
         name,
-        data,
+        type,
         regional_feed_type,
         uri,
         future_uri,
@@ -21,10 +20,7 @@ dim_gtfs_datasets AS (
         data_quality_pipeline,
         schedule_to_use_for_rt_validation_gtfs_dataset_key,
         base64_url,
-        calitp_extracted_at,
-        -- TODO: make this table actually historical
-        CAST("1901-01-01" AS TIMESTAMP) AS _valid_from,
-        {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }} AS _valid_to
+        calitp_extracted_at
     FROM latest_gtfs_datasets
 )
 

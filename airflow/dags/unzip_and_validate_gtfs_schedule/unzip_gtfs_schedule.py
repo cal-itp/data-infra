@@ -3,6 +3,7 @@
 # provide_context: true
 # ---
 import concurrent
+import hashlib
 import logging
 import os
 from concurrent.futures import ThreadPoolExecutor, Future
@@ -102,14 +103,16 @@ def process_feed_files(
     directories: List[str],
     is_valid: bool,
     pbar=None,
-):
+) -> Tuple[List[GTFSScheduleFeedFile], str]:
     zipfile_files = []
+    md5hash = hashlib.md5()
     if not is_valid:
         raise ValueError(
             "Unparseable zip: File/directory structure within zipfile cannot be unpacked"
         )
 
-    for file in files:
+    # sorting is new here, to make the hash deterministic
+    for file in sorted(files):
         # make a proper path to access the .name attribute later
         file_path = zipfile.Path(zip, at=file)
         with zip.open(file) as f:
@@ -122,9 +125,10 @@ def process_feed_files(
             # if we encounter something else, we will address: https://cloud.google.com/storage/docs/naming-objects
             filename=file_path.name.replace("/", "__"),
         )
+        md5hash.update(file_content)
         file_extract.save_content(content=file_content, fs=fs)
         zipfile_files.append(file_extract)
-    return zipfile_files
+    return zipfile_files, md5hash.hexdigest()
 
 
 def unzip_individual_feed(
@@ -134,25 +138,24 @@ def unzip_individual_feed(
 ) -> GTFSScheduleFeedExtractUnzipOutcome:
     log(f"processing i={i} {extract.name}", pbar=pbar)
     fs = get_fs()
-    zipfile_md5_hash = ""
+    zipfile_md5_hash = None
     files = []
     directories = []
     try:
         with fs.open(extract.path) as f:
-            zipfile_md5_hash = f.info()["md5Hash"]
-            zip = zipfile.ZipFile(BytesIO(f.read()))
-        files, directories, is_valid = summarize_zip_contents(zip, pbar=pbar)
-        zipfile_files = process_feed_files(
+            zipf = zipfile.ZipFile(BytesIO(f.read()))
+        files, directories, is_valid = summarize_zip_contents(zipf, pbar=pbar)
+        zipfile_files, zipfile_md5_hash = process_feed_files(
             fs,
             extract,
-            zip,
+            zipf,
             files,
             directories,
             is_valid,
             pbar=pbar,
         )
     except Exception as e:
-        log(f"Can't process {extract.path}: {e}", pbar=pbar)
+        log(f"Can't process {extract.path}: {type(e)} {e}", pbar=pbar)
         return GTFSScheduleFeedExtractUnzipOutcome(
             success=False,
             extract=extract,

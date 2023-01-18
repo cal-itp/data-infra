@@ -13,6 +13,9 @@ schema_fields:
     type: BOOLEAN
   - name: exception
     type: STRING
+  - name: backfilled
+    type: BOOLEAN
+    mode: NULLABLE
   - &config
     name: config
     type: RECORD
@@ -43,3 +46,6 @@ schema_fields:
         type: INT64
       - name: response_headers
         type: JSON
+      - name: reconstructed
+        type: BOOLEAN
+        mode: NULLABLE

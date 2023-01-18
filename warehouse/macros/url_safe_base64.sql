@@ -2,7 +2,7 @@
 -- based on the docs here: https://cloud.google.com/bigquery/docs/reference/standard-sql/functions-and-operators#to_base64
 
 {% macro to_url_safe_base64(column) %}
-REPLACE(REPLACE(TO_BASE64(CAST({{ column }} AS BYTES)),'-','+'),'_','/')
+REPLACE(REPLACE(TO_BASE64(CAST({{ column }} AS BYTES)),'+','-'),'/','_')
 {% endmacro %}
 
 {% macro from_url_safe_base64(column) %}

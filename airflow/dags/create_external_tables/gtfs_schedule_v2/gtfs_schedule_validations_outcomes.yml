@@ -42,6 +42,9 @@ schema_fields:
         type: INT64
       - name: response_headers
         type: JSON
+      - name: reconstructed
+        type: BOOLEAN
+        mode: NULLABLE
   - name: validation
     type: RECORD
     fields:
@@ -55,3 +58,5 @@ schema_fields:
           *config_fields
       - name: system_errors
         type: JSON
+      - name: validator_version
+        type: STRING

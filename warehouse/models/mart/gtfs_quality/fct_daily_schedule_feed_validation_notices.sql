@@ -20,17 +20,33 @@ validation_notices AS (
     SELECT * FROM {{ ref('stg_gtfs_schedule__validation_notices') }}
 ),
 
+-- For each version of a feed, we use the first time a given version
+-- of the validator was run against that feed; technically we don't
+-- guarantee that the "range" will never have overlapped, for example
+-- a backfill could also produce v4 validations alongside v3
+first_outcome_per_version AS (
+    SELECT *
+    FROM validation_outcomes
+    QUALIFY ROW_NUMBER() OVER (
+        PARTITION BY base64_url, validation_validator_version
+        ORDER BY extract_ts
+    ) = 1
+),
+
 fct_daily_schedule_feed_validation_notices AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['daily_feeds.date', 'daily_feeds.feed_key', 'codes.code']) }} AS key,
+        {{ dbt_utils.surrogate_key(['daily_feeds.date',
+                                    'daily_feeds.feed_key',
+                                    'outcomes.validation_validator_version',
+                                    'codes.code',
+        ]) }} AS key,
         daily_feeds.date,
         daily_feeds.feed_key,
-        -- TODO: at some point, these codes will be versioned by validator version
+        outcomes.validation_validator_version,
         codes.code,
         codes.severity,
         outcomes.validation_success,
         outcomes.validation_exception,
-        notices.gtfs_validator_version,
         COALESCE(
             SUM(total_notices),
             CASE WHEN validation_success THEN 0 END
@@ -38,12 +54,13 @@ fct_daily_schedule_feed_validation_notices AS (
     FROM fct_daily_schedule_feeds AS daily_feeds
     LEFT JOIN dim_schedule_feeds AS dim_feeds
         ON daily_feeds.feed_key = dim_feeds.key
-    LEFT JOIN validation_outcomes AS outcomes
+    LEFT JOIN first_outcome_per_version AS outcomes
         ON dim_feeds.base64_url = outcomes.base64_url
-        AND dim_feeds._valid_from = outcomes.extract_ts
-    CROSS JOIN validation_codes AS codes
+    LEFT JOIN validation_codes AS codes
+        ON outcomes.validation_validator_version = codes.gtfs_validator_version
     LEFT JOIN validation_notices AS notices
         ON codes.code = notices.code
+        AND outcomes.base64_url = notices.base64_url
         AND outcomes.extract_ts = notices.ts
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
 )
