@@ -107,7 +107,7 @@ def scoped(f):
     return inner
 
 
-@huey.task(expires=5)
+@huey.task(expires=int(os.getenv("CALITP_FETCH_EXPIRATION_SECONDS", 5)))
 @scoped
 def fetch(tick: datetime, config: GTFSDownloadConfig):
     labels = dict(

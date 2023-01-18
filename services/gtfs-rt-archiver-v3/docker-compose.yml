@@ -7,13 +7,14 @@ x-gtfs-rt-archiver-v3-common:
     CALITP_BUCKET__AIRTABLE: "gs://test-calitp-airtable"
     CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG: "gs://test-calitp-gtfs-download-config"
     CALITP_BUCKET__GTFS_RT_RAW: "gs://dev-calitp-gtfs-rt-raw"
+    CALITP_FETCH_EXPIRATION_SECONDS: "10"
+    CALITP_HUEY_CONSUMER_WORKERS: 4
     CALITP_HUEY_REDIS_HOST: redis
     GOOGLE_APPLICATION_CREDENTIALS: /tmp/secret.json
-    CALITP_HUEY_CONSUMER_WORKERS: 4
-    SENTRY_DSN: $SENTRY_DSN
-    SENTRY_ENVIRONMENT: "development"
     LAST_FETCH_FILE: /tmp/fetch
     LAST_TICK_FILE: /tmp/tick
+    SENTRY_DSN: $SENTRY_DSN
+    SENTRY_ENVIRONMENT: "development"
 services:
   redis:
     image: redis:5.0.4
