@@ -413,7 +413,11 @@ def _publish_exposure(
                     )
                     node = BaseNode._instances[f"model.calitp_warehouse.{model_name}"]
 
-                    fpath = os.path.join(tmpdir, destination.filename(model_name))
+                    fpath = (
+                        os.path.join(tmpdir, destination.filename(model_name))
+                        .replace("dim_", "")
+                        .replace("_latest", "")
+                    )
 
                     df = pd.read_gbq(
                         str(node.select),
