@@ -13,6 +13,7 @@ unioned AS (
             ref('int_gtfs_quality__no_stale_vehicle_positions'),
             ref('int_gtfs_quality__no_stale_service_alerts'),
             ref('int_gtfs_quality__no_stale_trip_updates'),
+            ref('int_gtfs_quality__feed_aggregator_rt'),
         ],
     ) }}
 ),

@@ -425,7 +425,7 @@ python-versions = "~=3.7"
 
 [[package]]
 name = "calitp"
-version = "2022.11.28"
+version = "2023.1.17"
 description = "Shared code for the Cal-ITP data codebases"
 category = "main"
 optional = false
@@ -3659,7 +3659,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "flake8 (<5)", "pytest-co
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.9"
-content-hash = "b91024ca543681665105c557320f9977e9a8c01537cc98a538586d96e643c3cb"
+content-hash = "27d9ad002246d7666e33ecd8d41cbe6480bafe93f313a6c00ec30a8f872f9d78"
 
 [metadata.files]
 agate = []

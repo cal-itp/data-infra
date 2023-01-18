@@ -41,14 +41,6 @@ WITH stg_gtfs_quality__intended_checks AS (
     SELECT {{ no_pb_error_vp() }}, {{ best_practices_alignment_rt() }}
     UNION ALL
     SELECT {{ no_pb_error_sa() }}, {{ best_practices_alignment_rt() }}
-    {# UNION ALL #}
-    {# SELECT {{ schedule_feed_on_transitland() }}, {{ feed_aggregator_availability() }} #}
-    {# UNION ALL #}
-    {# SELECT {{ vehicle_positions_feed_on_transitland() }}, {{ feed_aggregator_availability() }} #}
-    {# UNION ALL #}
-    {# SELECT {{ trip_updates_feed_on_transitland() }}, {{ feed_aggregator_availability() }} #}
-    {# UNION ALL #}
-    {# SELECT {{ service_alerts_feed_on_transitland() }}, {{ feed_aggregator_availability() }} #}
     UNION ALL
     SELECT {{ no_7_day_feed_expiration() }}, {{ best_practices_alignment_schedule() }}
     UNION ALL
@@ -67,6 +59,22 @@ WITH stg_gtfs_quality__intended_checks AS (
     SELECT {{ no_stale_service_alerts() }}, {{ best_practices_alignment_rt() }}
     UNION ALL
     SELECT {{ modification_date_present() }}, {{ best_practices_alignment_schedule() }}
+    UNION ALL
+    SELECT {{ schedule_feed_on_transitland() }}, {{ feed_aggregator_availability_schedule() }}
+    UNION ALL
+    SELECT {{ vehicle_positions_feed_on_transitland() }}, {{ feed_aggregator_availability_rt() }}
+    UNION ALL
+    SELECT {{ trip_updates_feed_on_transitland() }}, {{ feed_aggregator_availability_rt() }}
+    UNION ALL
+    SELECT {{ service_alerts_feed_on_transitland() }}, {{ feed_aggregator_availability_rt() }}
+    UNION ALL
+    SELECT {{ schedule_feed_on_mobility_database() }}, {{ feed_aggregator_availability_schedule() }}
+    UNION ALL
+    SELECT {{ vehicle_positions_feed_on_mobility_database() }}, {{ feed_aggregator_availability_rt() }}
+    UNION ALL
+    SELECT {{ trip_updates_feed_on_mobility_database() }}, {{ feed_aggregator_availability_rt() }}
+    UNION ALL
+    SELECT {{ service_alerts_feed_on_mobility_database() }}, {{ feed_aggregator_availability_rt() }} #}
 )
 
 SELECT * FROM stg_gtfs_quality__intended_checks
