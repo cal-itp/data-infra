@@ -183,29 +183,19 @@ models:
           GTFS dataset base 64 URL as of date.
       - name: organization_key
         description: |
-          Foreign key to `dim_organizations`; note that this is a *historical* key value and
-          so joins may result in some unexpected behavior (for example, deleted records will
-          fail to join.)
+          Foreign key to `dim_organizations`.
       - name: service_key
         description: |
-          Foreign key to `dim_services`; note that this is a *historical* key value and
-          so joins may result in some unexpected behavior (for example, deleted records will
-          fail to join.)
+          Foreign key to `dim_services`.
       - name: gtfs_service_data_key
         description: |
-          Foreign key to `dim_gtfs_service_data`; note that this is a *historical* key value and
-          so joins may result in some unexpected behavior (for example, deleted records will
-          fail to join.)
+          Foreign key to `dim_gtfs_service_data`.
       - name: gtfs_dataset_key
         description: |
-          Foreign key to `dim_gtfs_datasets`; note that this is a *historical* key value and
-          so joins may result in some unexpected behavior (for example, deleted records will
-          fail to join.)
+          Foreign key to `dim_gtfs_datasets`.
       - name: schedule_feed_key
         description: |
-          Foreign key to `dim_schedule_feeds`. Because `dim_schedule_feeds` is a slowly-
-          changing dimension, joins using this key are not subject to the historical
-          limitations noted for the other foreign keys in this table.
+          Foreign key to `dim_schedule_feeds`.
       - *check
       - name: status
       - name: feature
@@ -229,29 +219,20 @@ models:
           Array of base 64 URL values (as of date) that are included in this organization's assessment.
       - name: organization_key
         description: |
-          Foreign key to `dim_organizations`; note that this is a *historical* key value and
-          so joins may result in some unexpected behavior (for example, deleted records will
-          fail to join.)
+          Foreign key to `dim_organizations`.
       - name: service_keys_included_array
         description: |
-          Array of service_key values for services included in this organization's assessment;
-          note that this is a *historical* key value and so joins may result in some unexpected behavior
-          (for example, deleted records will fail to join.)
+          Array of service_key values for services included in this organization's assessment.
       - name: gtfs_service_data_keys_included_array
         description: |
           Array of gtfs_service_data_key values for service/GTFS dataset relationships included in this
-          organization's assessment; note that this is a *historical* key value and so joins may result in
-          some unexpected behavior (for example, deleted records will fail to join.)
+          organization's assessment.
       - name: gtfs_dataset_keys_included_array
         description: |
-          Array of gtfs_dataset values for GTFS datasets included in this organization's assessment;
-          note that this is a *historical* key value and so joins may result in some unexpected behavior
-          (for example, deleted records will fail to join.)
+          Array of gtfs_dataset values for GTFS datasets included in this organization's assessment.
       - name: schedule_feed_keys_included_array
         description: |
-          Array of schedule_feed_key values for schedule feed versions included in this organization's assessemnt;
-          because `dim_schedule_feeds` is a slowly-changing dimension, joins using this key are not subject
-          to the historical limitations noted for the other foreign keys in this table.
+          Array of schedule_feed_key values for schedule feed versions included in this organization's assessment.
       - *check
       - name: status
       - name: feature
@@ -275,29 +256,20 @@ models:
           Array of base 64 URL values (as of date) that are included in this service's assessment.
       - name: service_key
         description: |
-          Foreign key to `dim_services`; note that this is a *historical* key value and
-          so joins may result in some unexpected behavior (for example, deleted records will
-          fail to join.)
+          Foreign key to `dim_services`.
       - name: organization_keys_included_array
         description: |
-          Array of organization_key values for organizations included in this service's assessment;
-          note that this is a *historical* key value and so joins may result in some unexpected behavior
-          (for example, deleted records will fail to join.)
+          Array of organization_key values for organizations included in this service's assessment.
       - name: gtfs_service_data_keys_included_array
         description: |
           Array of gtfs_service_data_key values for service/GTFS dataset relationships included in this
-          service's assessment; note that this is a *historical* key value and so joins may result in
-          some unexpected behavior (for example, deleted records will fail to join.)
+          service's assessment.
       - name: gtfs_dataset_keys_included_array
         description: |
-          Array of gtfs_dataset values for GTFS datasets included in this service's assessment;
-          note that this is a *historical* key value and so joins may result in some unexpected behavior
-          (for example, deleted records will fail to join.)
+          Array of gtfs_dataset values for GTFS datasets included in this service's assessment.
       - name: schedule_feed_keys_included_array
         description: |
-          Array of schedule_feed_key values for schedule feed versions included in this service's assessemnt;
-          because `dim_schedule_feeds` is a slowly-changing dimension, joins using this key are not subject
-          to the historical limitations noted for the other foreign keys in this table.
+          Array of schedule_feed_key values for schedule feed versions included in this service's assessment.
       - *check
       - name: status
       - name: feature

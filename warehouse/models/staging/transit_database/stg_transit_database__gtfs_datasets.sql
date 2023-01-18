@@ -94,6 +94,7 @@ stg_transit_database__gtfs_datasets AS (
             WHEN data = "GTFS VehiclePositions" THEN "vehicle_positions"
             WHEN data = "GTFS TripUpdates" THEN "trip_updates"
         END AS type,
+        ts,
         dt
     FROM construct_base64_url
     LEFT JOIN UNNEST(construct_base64_url.aggregated_to) AS unnested_aggregated_to

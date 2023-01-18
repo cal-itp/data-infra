@@ -6,7 +6,8 @@ WITH dim AS (
         date_col = 'dt',
         record_id_col = 'id',
         array_cols = ['fares_v2_status', 'provider', 'operator',
-        'gtfs_service_mapping', 'dataset_producers', 'dataset_publisher']
+        'gtfs_service_mapping', 'dataset_producers', 'dataset_publisher'],
+        ignore_cols = ['ts']
         ) }}
 ),
 
