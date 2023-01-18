@@ -8,10 +8,11 @@ WITH gtfs_datasets AS (
     WHERE base64_url IS NOT NULL
 ),
 
-latest_appearance AS (
+appearance_duration AS (
     SELECT
         base64_url,
-        MAX(_valid_to) AS latest_app
+        MAX(_valid_to) AS latest_app,
+        MIN(_valid_from) AS first_app
     FROM gtfs_datasets
     GROUP BY base64_url
 ),
@@ -21,10 +22,13 @@ int_transit_database__urls_to_gtfs_datasets AS (
         gtfs_datasets.base64_url,
         gtfs_datasets.original_record_id,
         gtfs_datasets.key AS gtfs_dataset_key,
-        GREATEST(gtfs_datasets._valid_from, COALESCE(self._valid_from, '1900-01-01')) AS _valid_from,
-        LEAST(gtfs_datasets._valid_to, COALESCE(self._valid_to, '2099-01-01')) AS _valid_to
+        CASE
+            WHEN gtfs_datasets._valid_from = appearance_duration.first_app THEN CAST('1900-01-01' AS TIMESTAMP)
+            ELSE gtfs_datasets._valid_from
+        END AS _valid_from,
+        gtfs_datasets._valid_to
     FROM gtfs_datasets
-    LEFT JOIN latest_appearance
+    LEFT JOIN appearance_duration
         USING (base64_url)
     LEFT JOIN gtfs_datasets AS self
         ON gtfs_datasets.base64_url = self.base64_url
@@ -33,7 +37,7 @@ int_transit_database__urls_to_gtfs_datasets AS (
         AND gtfs_datasets.original_record_id != self.original_record_id
     LEFT JOIN gtfs_datasets AS latest
         ON gtfs_datasets.base64_url = latest.base64_url
-        AND latest_appearance.latest_app = latest._valid_to
+        AND appearance_duration.latest_app = latest._valid_to
     WHERE self.key IS NULL OR gtfs_datasets.original_record_id = latest.original_record_id
 )
 
