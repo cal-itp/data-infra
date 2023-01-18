@@ -3,9 +3,7 @@ WITH feed_guideline_index AS (
 ),
 
 scraped_urls AS (
-    SELECT *,
-           -- turns both "https://website.com" and "http://website.com" into "website.com"
-           RIGHT(feed_url_str,LENGTH(feed_url_str) - STRPOS(feed_url_str, "://") - 2) AS url_no_scheme
+    SELECT *
     FROM {{ ref('stg_gtfs_quality__scraped_urls') }}
 ),
 
@@ -14,17 +12,17 @@ dim_schedule_feeds AS (
 ),
 
 dim_gtfs_datasets AS (
-    SELECT *,
-           -- turns both "https://website.com" and "http://website.com" into "website.com"
-           RIGHT(uri,LENGTH(uri) - STRPOS(uri, "://") - 2) AS url_no_scheme
+    SELECT *
     FROM {{ ref('dim_gtfs_datasets') }}
 ),
 
 daily_scraped_urls AS (
     SELECT DISTINCT dt AS date,
            aggregator,
-           url_no_scheme
+           feed_url_str
       FROM scraped_urls
+     -- Omitting the limited (currently 7) ftp addresses listed on TransitLand (they contain"Historic GTFS")
+     WHERE feed_url_str NOT LIKE "ftp%"
 ),
 
 int_gtfs_quality__feed_aggregator_schedule AS (
@@ -46,7 +44,7 @@ int_gtfs_quality__feed_aggregator_schedule AS (
       LEFT JOIN dim_gtfs_datasets t3
         ON t3.base64_url = t2.base64_url
       LEFT JOIN daily_scraped_urls AS t4
-        ON t4.url_no_scheme = t3.url_no_scheme
+        ON {{ url_remove_scheme('t4.feed_url_str') }} = {{ url_remove_scheme('t3.uri') }}
        AND t4.date = t1.date
        AND t4.aggregator = t1.aggregator
 )

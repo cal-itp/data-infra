@@ -287,3 +287,9 @@ feature
            ROWS BETWEEN 30 PRECEDING AND CURRENT ROW
         )
 {% endmacro %}
+
+-- For use in feed aggregator checks
+-- turns both "https://website.com" and "http://website.com" into "website.com"
+{% macro url_remove_scheme(url) %}
+    REGEXP_REPLACE({{ url }}, "^https?://", "")
+{% endmacro %}
