@@ -1,17 +1,13 @@
 operator: operators.PodOperator
-name: 'check-aggregators'
-image: 'ghcr.io/cal-itp/data-infra/gtfs-aggregator-checker:{{ image_tag() }}'
+name: 'scrape-mobility-database'
+image: 'ghcr.io/cal-itp/data-infra/gtfs-aggregator-scraper:{{ image_tag() }}'
 
 cmds:
   - python3
 
 arguments:
-  - "-m"
-  - "gtfs_aggregator_checker"
-  - "/secrets/agencies-data/data_agencies.yaml"
-  - "--output={{get_bucket()}}/feed_aggregator_checks/dt={{execution_date.to_date_string()}}/checks.jsonl"
-  - "--output-format=JSONL"
-  - "--progress"
+  - "gtfs_aggregator_scraper.py"
+  - "mobility_database"
 
 is_delete_operator_pod: true
 get_logs: true
@@ -22,18 +18,10 @@ cluster_name: data-infra-apps
 namespace: airflow-jobs
 
 env_vars:
+  CALITP_BUCKET__AGGREGATOR_SCRAPER: "{{ env_var('CALITP_BUCKET__AGGREGATOR_SCRAPER') }}"
   GOOGLE_APPLICATION_CREDENTIALS: /secrets/jobs-data/service_account.json
-  GTFS_DATA_CACHE: /app/gtfs_cache
 
 secrets:
-  - deploy_type: volume
-    deploy_target: /secrets/agencies-data/
-    secret: agencies-data
-    key: data_agencies.yaml
-  - deploy_type: env
-    deploy_target: TRANSITLAND_API_KEY
-    secret: jobs-data
-    key: transitland-api-key
   - deploy_type: volume
     deploy_target: /secrets/jobs-data/
     secret: jobs-data
@@ -44,6 +32,7 @@ tolerations:
     operator: Equal
     value: computetask
     effect: NoSchedule
+
 affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:

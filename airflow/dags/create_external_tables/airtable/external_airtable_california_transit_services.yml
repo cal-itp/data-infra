@@ -89,9 +89,6 @@ schema_fields:
   - name: realtime_task_status
     type: STRING
     mode: REPEATED
-  - name: manual_check__gtfs_schedule_ingested_in_trip_planner
-    type: STRING
-    mode: NULLABLE
   - name: level_of_engagement
     type: STRING
     mode: REPEATED
@@ -248,9 +245,6 @@ schema_fields:
   - name: __alerts
     type: INTEGER
     mode: NULLABLE
-  - name: manual_check__gtfs_realtime_ingested_in_trip_planner
-    type: JSON
-    mode: NULLABLE
   - name: count__provider_
     type: INTEGER
     mode: NULLABLE
@@ -260,3 +254,9 @@ schema_fields:
   - name: organizations_copy
     type: STRING
     mode: REPEATED
+  - name: manual_check__gtfs_realtime_data_ingested_in_trip_planner
+    type: STRING
+    mode: NULLABLE
+  - name: manual_check__gtfs_schedule_data_ingested_in_trip_planner
+    type: STRING
+    mode: NULLABLE
