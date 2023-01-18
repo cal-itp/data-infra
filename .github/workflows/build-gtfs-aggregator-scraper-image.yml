@@ -1,16 +1,16 @@
-name: Build and push gtfs-aggregator-checker image
+name: Build and push gtfs-aggregator-scraper image
 
 on:
   push:
     branches:
       - 'main'
     paths:
-      - '.github/workflows/build-gtfs-aggregator-checker-image.yml'
-      - 'jobs/gtfs-aggregator-checker/**'
+      - '.github/workflows/build-gtfs-aggregator-scraper-image.yml'
+      - 'jobs/gtfs-aggregator-scraper/**'
   pull_request:
     paths:
-      - '.github/workflows/build-gtfs-aggregator-checker-image.yml'
-      - 'jobs/gtfs-aggregator-checker/**'
+      - '.github/workflows/build-gtfs-aggregator-scraper-image.yml'
+      - 'jobs/gtfs-aggregator-scraper/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -29,6 +29,6 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - uses: docker/build-push-action@v2
         with:
-          context: jobs/gtfs-aggregator-checker
+          context: jobs/gtfs-aggregator-scraper
           push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-          tags: ghcr.io/${{github.repository}}/gtfs-aggregator-checker:latest
+          tags: ghcr.io/${{github.repository}}/gtfs-aggregator-scraper:latest

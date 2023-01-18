@@ -1,5 +1,3 @@
-{{ config(store_failures = true) }}
-
 WITH payments_rides AS (
 
     SELECT *
@@ -17,15 +15,15 @@ extract_count_date AS (
             '-',
             LPAD(
                 CAST(
-                    EXTRACT(MONTH FROM transaction_date_time_pacific) AS string
+                    EXTRACT(WEEK FROM transaction_date_time_pacific) AS string
                 ),
                 2,
                 '0'
             )
-        ) AS yearmonth
+        ) AS yearweek
 
     FROM payments_rides
-    GROUP BY yearmonth, participant_id
+    GROUP BY yearweek, participant_id
 ),
 
 
@@ -38,37 +36,35 @@ calculate_relative_difference AS (
             (
                 ridership_count - LAG(
                     ridership_count, 1
-                ) OVER (PARTITION BY participant_id ORDER BY yearmonth)
-            ) / LAG(ridership_count, 1) OVER (PARTITION BY participant_id ORDER BY yearmonth)
+                ) OVER (PARTITION BY participant_id ORDER BY yearweek)
+            ) / LAG(ridership_count, 1) OVER (PARTITION BY participant_id ORDER BY yearweek)
         ) * 100
         AS relative_difference
 
     FROM extract_count_date
+    WHERE yearweek NOT LIKE '%-00'
 
 ),
 
-test_recent_values AS (
+payments_weekly_transaction_deltas AS (
 
     SELECT
 
         participant_id,
-        yearmonth,
+        yearweek,
         ridership_count,
-        relative_difference
+        relative_difference,
+        recency_rank
 
     FROM
         (SELECT
             participant_id,
-            yearmonth,
+            yearweek,
             ridership_count,
             relative_difference,
-            RANK() OVER (PARTITION BY participant_id ORDER BY yearmonth DESC) AS rank
+            RANK() OVER (PARTITION BY participant_id ORDER BY yearweek DESC) AS recency_rank
             FROM calculate_relative_difference)
-    WHERE rank != 1
-        AND rank < 5
-        AND ABS(relative_difference) > 25.0
-    ORDER BY yearmonth
 
 )
 
-SELECT * FROM test_recent_values
+SELECT * FROM payments_weekly_transaction_deltas

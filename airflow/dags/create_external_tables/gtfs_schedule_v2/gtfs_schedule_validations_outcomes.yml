@@ -58,3 +58,5 @@ schema_fields:
           *config_fields
       - name: system_errors
         type: JSON
+      - name: validator_version
+        type: STRING

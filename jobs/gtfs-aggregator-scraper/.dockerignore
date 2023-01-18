@@ -1,0 +1,3 @@
+out.log
+.mypy_cache
+.pytest_cache

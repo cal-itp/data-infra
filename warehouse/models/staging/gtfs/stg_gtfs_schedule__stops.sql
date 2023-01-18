@@ -11,6 +11,7 @@ stg_gtfs_schedule__stops AS (
     SELECT
         base64_url,
         ts,
+        dt AS _dt,
         {{ trim_make_empty_string_null('stop_id') }} AS stop_id,
         {{ trim_make_empty_string_null('tts_stop_name') }} AS tts_stop_name,
         SAFE_CAST({{ trim_make_empty_string_null('stop_lat') }} AS FLOAT64) AS stop_lat,
