@@ -20,6 +20,7 @@ unioned AS (
             ref('int_gtfs_quality__persistent_ids_schedule'),
             ref('int_gtfs_quality__lead_time'),
             ref('int_gtfs_quality__modification_date_present'),
+            ref('int_gtfs_quality__feed_aggregator_schedule'),
         ],
     ) }}
 ),

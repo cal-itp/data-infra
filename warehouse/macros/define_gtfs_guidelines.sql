@@ -96,6 +96,22 @@
 "Service alerts RT feed is listed on feed aggregator transit.land"
 {% endmacro %}
 
+{% macro schedule_feed_on_mobility_database() %}
+"GTFS schedule feed is listed on feed aggregator Mobility Database"
+{% endmacro %}
+
+{% macro vehicle_positions_feed_on_mobility_database() %}
+"Vehicle positions RT feed is listed on feed aggregator Mobility Database"
+{% endmacro %}
+
+{% macro trip_updates_feed_on_mobility_database() %}
+"Trip updates RT feed is listed on feed aggregator Mobility Database"
+{% endmacro %}
+
+{% macro service_alerts_feed_on_mobility_database() %}
+"Service alerts RT feed is listed on feed aggregator Mobility Database"
+{% endmacro %}
+
 {% macro include_tts() %}
 "Include tts_stop_name entries in stops.txt for stop names that are pronounced incorrectly in most mobile applications"
 {% endmacro %}
@@ -270,4 +286,10 @@ feature
            ORDER BY t1.date
            ROWS BETWEEN 30 PRECEDING AND CURRENT ROW
         )
+{% endmacro %}
+
+-- For use in feed aggregator checks
+-- turns both "https://website.com" and "http://website.com" into "website.com"
+{% macro url_remove_scheme(url) %}
+    REGEXP_REPLACE({{ url }}, "^https?://", "")
 {% endmacro %}
