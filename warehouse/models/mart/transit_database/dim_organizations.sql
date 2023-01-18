@@ -17,7 +17,6 @@ dim_organizations AS (
         caltrans_district,
         website,
         reporting_category,
-        ntd_agency_info_key,
         hubspot_company_record_id,
         gtfs_static_status,
         gtfs_realtime_status,

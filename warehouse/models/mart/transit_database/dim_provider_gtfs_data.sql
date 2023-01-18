@@ -14,6 +14,7 @@ int_gtfs_quality__daily_assessment_candidate_entities AS (
         organization_name,
         organization_itp_id,
         organization_hubspot_company_record_id,
+        organization_ntd_id,
         service_key,
         service_name,
         gtfs_dataset_key,
@@ -41,6 +42,7 @@ disambiguate_dups AS (
         organization_name,
         organization_itp_id,
         organization_hubspot_company_record_id,
+        organization_ntd_id,
         service_key,
         service_name,
         gtfs_dataset_key,
@@ -142,15 +144,26 @@ all_versioned AS (
 
 final AS (
     SELECT
+        {{ dbt_utils.surrogate_key([
+            'organization_key',
+            'service_key',
+            'associated_schedule_gtfs_dataset_key',
+            'gtfs_dataset_key_schedule',
+            'gtfs_dataset_key_service_alerts',
+            'gtfs_dataset_key_vehicle_positions',
+            'gtfs_dataset_key_trip_updates',
+            'gtfs_service_data_customer_facing'
+            ]) }} AS key,
         organization_key,
         organization_name,
         organization_itp_id,
         organization_hubspot_company_record_id,
+        organization_ntd_id,
         service_key,
         service_name,
         gtfs_service_data_customer_facing,
         orig.regional_feed_type,
-        associated_schedule_gtfs_dataset_key AS schedule_to_use_for_rt_validation_gtfs_dataset_key,
+        associated_schedule_gtfs_dataset_key,
         sched.name AS schedule_gtfs_dataset_name,
         alerts.name AS service_alerts_gtfs_dataset_name,
         vehicle_positions.name AS vehicle_positions_gtfs_dataset_name,

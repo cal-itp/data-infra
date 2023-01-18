@@ -23,15 +23,21 @@ models:
     columns:
       - *key
       - name: contract_holder_organization_key
+        description: |
+          Unversioned Airtable record ID for contract holder organization; versioned bridge
+          table to come later.
         tests:
           - relationships:
              to: ref('dim_organizations')
-             field: key
+             field: original_record_id
       - name: contract_vendor_organization_key
+        description: |
+          Unversioned Airtable record ID for contract vendor organization; versioned bridge
+          table to come later.
         tests:
           - relationships:
              to: ref('dim_organizations')
-             field: key
+             field: original_record_id
   - name: dim_data_schemas
     description: '{{ doc("data_schemas_table") }}'
     tests: *mutually_exclusive_ranges
@@ -66,12 +72,6 @@ models:
           Core: funded by Caltrans/can control or influence somewhat
           Other Public Transit: (publicly available or managed) and publicly funded transit
           Other Transit: transit that isn't the above
-      - name: ntd_agency_info_key
-        description: Foreign key to `dim_ntd_agency_info`.
-        tests:
-          - relationships:
-             to: ref('dim_ntd_agency_info')
-             field: key
       - name: alias
       - name: gtfs_static_status
         description: |
@@ -333,16 +333,6 @@ models:
 
       For further details, see: https://docs.calitp.org/data-infra/datasets_and_tables/transitdatabase.html?highlight=network_id#gtfs-service-data-notation-for-isolating-gtfs-services-within-gtfs-datasets
     tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - service_key
-            - organization_key
-            - associated_schedule_gtfs_dataset_key
-            - schedule_gtfs_dataset_key
-            - service_alerts_gtfs_dataset_key
-            - vehicle_positions_gtfs_dataset_key
-            - trip_updates_gtfs_dataset_key
-            - gtfs_service_data_customer_facing
     columns:
       - *key
       - name: service_key
@@ -461,11 +451,6 @@ models:
       - name: total_voms
       - name: volunteer_drivers
       - name: personal_vehicles
-      - name: organization_key
-        tests:
-          - relationships:
-             to: ref('dim_organizations')
-             field: key
       - name: dt
   - name: bridge_components_x_properties_and_features
     description: |
@@ -712,16 +697,16 @@ models:
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
-            - contract_key
-            - component_key
+            - gtfs_dataset_key
+            - schedule_to_use_for_rt_validation_gtfs_dataset_key
     columns:
-      - name: contract_key
+      - name: gtfs_dataset_key
         tests:
           - relationships:
-             to: ref('dim_contracts')
+             to: ref('dim_gtfs_datasets')
              field: key
       - name: component_key
         tests:
           - relationships:
-             to: ref('dim_components')
+             to: ref('dim_gtfs_datasets')
              field: key

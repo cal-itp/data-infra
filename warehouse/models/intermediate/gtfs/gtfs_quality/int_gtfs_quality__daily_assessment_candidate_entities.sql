@@ -60,6 +60,13 @@ validation_bridge AS (
         ON CAST(date_spine.date AS TIMESTAMP) BETWEEN dim._valid_from AND dim._valid_to
 ),
 
+ntd_bridge AS (
+    SELECT *
+    FROM date_spine
+    LEFT JOIN {{ ref('bridge_organizations_x_ntd_agency_info') }} AS dim
+    ON CAST(date_spine.date AS TIMESTAMP) BETWEEN dim._valid_from AND dim._valid_to
+),
+
 feeds AS (
     SELECT *
     FROM {{ ref('fct_daily_schedule_feeds') }}
@@ -85,6 +92,7 @@ full_join AS (
         orgs.reporting_category AS reporting_category,
         orgs.itp_id AS organization_itp_id,
         orgs.hubspot_company_record_id AS organization_hubspot_company_record_id,
+        ntd_bridge.ntd_id AS organization_ntd_id,
         COALESCE(
             orgs.assessment_status,
             (orgs.reporting_category = "Core") OR (orgs.reporting_category = "Other Public Transit"),
@@ -131,12 +139,15 @@ full_join AS (
     FULL OUTER JOIN datasets
         ON service_data.date = datasets.date
         AND service_data.gtfs_dataset_key = datasets.key
-    FULL OUTER JOIN validation_bridge
+    LEFT JOIN validation_bridge
         ON datasets.date = validation_bridge.date
         AND datasets.key = validation_bridge.gtfs_dataset_key
     FULL OUTER JOIN feeds
         ON datasets.date = feeds.date
         AND datasets.base64_url = feeds.base64_url
+    LEFT JOIN ntd_bridge
+        ON orgs.key = ntd_bridge.organization_key
+        AND orgs.date = ntd_bridge.date
 ),
 
 int_gtfs_quality__daily_assessment_candidate_entities AS (
@@ -162,6 +173,7 @@ int_gtfs_quality__daily_assessment_candidate_entities AS (
 
         organization_itp_id,
         organization_hubspot_company_record_id,
+        organization_ntd_id,
         service_assessed,
         gtfs_service_data_assessed,
         gtfs_service_data_customer_facing,

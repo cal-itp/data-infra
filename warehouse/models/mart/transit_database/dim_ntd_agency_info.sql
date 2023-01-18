@@ -47,7 +47,6 @@ dim_ntd_agency_info AS (
         total_voms,
         volunteer_drivers,
         personal_vehicles,
-        organization_key,
         _is_current,
         _valid_from,
         _valid_to
