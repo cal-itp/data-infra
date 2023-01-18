@@ -2,14 +2,18 @@ version: 2
 
 models:
   - name: stg_transit_database__components
-    description: '{{ doc("components_table") }}'
+    description: |
+      Each row is an individual row from an individual download (snapshot) of the
+      Components table in Airtable.
     columns:
       - &id
         name: id
       - &name
         name: name
   - name: stg_transit_database__contracts
-    description: '{{ doc("contracts_table") }}'
+    description: |
+      Each row is an individual row from an individual download (snapshot) of the
+      Contracts table in Airtable.
     tests:
       - dbt_utils.equal_rowcount:
           compare_model: ref('base_tts_contracts_idmap')
@@ -17,12 +21,17 @@ models:
       - *id
       - *name
   - name: stg_transit_database__products
-    description: '{{ doc("products_table") }}'
+    description: |
+      Each row is an individual row from an individual download (snapshot) of the
+      Products table in Airtable.
     columns:
       - *id
       - *name
   - name: stg_transit_database__service_components
-    description: '{{ doc("service_components_table") }}'
+    description: |
+      Each row is an individual row from an individual download (snapshot) of the
+      Service Components table in Airtable.
+      IDs have been translated from the Transit Technology Service base to the California Transit base.
     tests:
       - dbt_utils.equal_rowcount:
           compare_model: ref('base_tts_service_components_idmap')
@@ -31,27 +40,40 @@ models:
       - *name
   - name: stg_transit_database__relationships_service_components
     description: |
-      Service/component relationship data.
+    description: |
+      Each row is an individual row from an individual download (snapshot) of the
+      Relationships Service-Components table in Airtable.
   - name: stg_transit_database__data_schemas
-    description: '{{ doc("data_schemas_table") }}'
+    description: |
+      Each row is an individual row from an individual download (snapshot) of the
+      Data Schemas table in Airtable.
     columns:
       - *id
       - *name
   - name: stg_transit_database__organizations
-    description: '{{ doc("organizations_table") }}'
+    description: |
+      Each row is an individual row from an individual download (snapshot) of the
+      Organizations table in Airtable.
     columns:
       - *id
   - name: stg_transit_database__services
-    description: '{{ doc("services_table") }}'
+    description: |
+      Each row is an individual row from an individual download (snapshot) of the
+      Services table in Airtable.
     columns:
       - *id
       - *name
   - name: stg_transit_database__properties_and_features
+    description: |
+      Each row is an individual row from an individual download (snapshot) of the
+      Properties and Features table in Airtable.
     columns:
       - *id
       - *name
   - name: stg_transit_database__gtfs_datasets
-    description: '{{ doc("gtfs_datasets_table") }}'
+    description: |
+      Each row is an individual row from an individual download (snapshot) of the
+      GTFS datasets table in Airtable.
     columns:
       - *id
       - *name
@@ -89,7 +111,9 @@ models:
       - name: time
       - name: dt
   - name: stg_transit_database__gtfs_service_data
-    description: '{{ doc("gtfs_service_data_table") }}'
+    description: |
+      Each row is an individual row from an individual download (snapshot) of the
+      GTFS service data table in Airtable.
     columns:
       - *id
       - *name
@@ -134,7 +158,9 @@ models:
       - name: time
       - name: dt
   - name: stg_transit_database__eligibility_programs
-    description: '{{ doc("eligibility_programs_table") }}'
+    description: |
+      Each row is an individual row from an individual download (snapshot) of the
+      Eligibility Programs table in Airtable.
     columns:
       - *id
       - name: program
@@ -149,7 +175,9 @@ models:
       - name: time
       - name: dt
   - name: stg_transit_database__fare_systems
-    description: '{{ doc("fare_systems_table") }}'
+    description: |
+      Each row is an individual row from an individual download (snapshot) of the
+      Fare Systems table in Airtable.
     columns:
       - *id
       - name: fare_system
@@ -193,7 +221,9 @@ models:
       - name: time
       - name: dt
   - name: stg_transit_database__funding_programs
-    description: '{{ doc("funding_programs_table") }}'
+    description: |
+      Each row is an individual row from an individual download (snapshot) of the
+      Funding Programs table in Airtable.
     columns:
       - *id
       - name: program
@@ -206,7 +236,9 @@ models:
       - name: time
       - name: dt
   - name: stg_transit_database__ntd_agency_info
-    description: '{{ doc("ntd_agency_info_table") }}'
+    description: |
+      Each row is an individual row from an individual download (snapshot) of the
+      NTD Agency Info table in Airtable.
     columns:
       - *id
       - name: ntd_id
@@ -251,7 +283,9 @@ models:
       - name: time
       - name: dt
   - name: stg_transit_database__place_geography
-    description: '{{ doc("place_geography_table") }}'
+    description: |
+      Each row is an individual row from an individual download (snapshot) of the
+      Place Geography table in Airtable.
     columns:
       - *id
       - *name
@@ -272,7 +306,9 @@ models:
       - name: time
       - name: dt
   - name: stg_transit_database__rider_requirements
-    description: '{{ doc("rider_requirements_table") }}'
+    description: |
+      Each row is an individual row from an individual download (snapshot) of the
+      Rider Requirements table in Airtable.
     columns:
       - *id
       - name: requirement
