@@ -43,6 +43,9 @@ grouped_parse_outcomes AS (
         END AS aggregation_outcome,
         COUNT(*) as file_count
     FROM parse_outcomes
+    -- this can be null if we failed to write metadata on the original extract
+    -- for example gs://calitp-gtfs-rt-raw-v2/trip_updates/dt=2022-12-31/hour=2022-12-31T04:00:00+00:00/ts=2022-12-31T04:17:40+00:00/base64_url=aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L3RyaXB1cGRhdGVzP2FnZW5jeT1DTQ==/feed
+    WHERE base64_url IS NOT NULL
     GROUP BY
         dt,
         base64_url,
