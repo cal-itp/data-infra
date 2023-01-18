@@ -1346,7 +1346,9 @@ models:
       tests: *primary_key_tests
     - name: date
       description: Date that data was downloaded.
-    - *base64_url
+    - <<: *base64_url
+      tests:
+        - not_null
     - &feed_type
       name: feed_type
       description: |
