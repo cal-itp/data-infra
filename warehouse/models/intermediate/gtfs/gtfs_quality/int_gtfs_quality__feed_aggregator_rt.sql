@@ -17,8 +17,6 @@ daily_scraped_urls AS (
            aggregator,
            feed_url_str
       FROM scraped_urls
-     -- Omitting the limited (currently 7) ftp addresses listed on TransitLand (they contain"Historic GTFS")
-     WHERE feed_url_str NOT LIKE "ftp%"
 ),
 
 int_gtfs_quality__feed_aggregator_rt AS (
