@@ -19,6 +19,9 @@ bridge_schedule_dataset_for_validation AS (
         ON datasets.schedule_to_use_for_rt_validation_gtfs_dataset_key = sched_ref.original_record_id
         AND datasets._valid_from < sched_ref._valid_to
         AND datasets._valid_to > sched_ref._valid_from
+    -- there is one entry where a schedule record had itself entered for RT validation
+    -- want to filter that out
+    WHERE datasets.key != sched_ref.key
 )
 
 SELECT * FROM bridge_schedule_dataset_for_validation

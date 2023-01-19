@@ -758,11 +758,13 @@ models:
     columns:
       - name: gtfs_dataset_key
         tests:
-          - relationships:
+          - dbt_utils.relationships_where:
              to: ref('dim_gtfs_datasets')
              field: key
+             to_condition: "type != 'schedule'"
       - name: schedule_to_use_for_rt_validation_gtfs_dataset_key
         tests:
-          - relationships:
+          - dbt_utils.relationships_where:
              to: ref('dim_gtfs_datasets')
              field: key
+             to_condition: "type = 'schedule'"

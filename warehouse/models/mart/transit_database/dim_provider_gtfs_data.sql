@@ -142,7 +142,7 @@ all_versioned AS (
     FROM first_instances
 ),
 
-final AS (
+dim_provider_gtfs_data AS (
     SELECT
         {{ dbt_utils.surrogate_key([
             'organization_key',
@@ -189,4 +189,4 @@ final AS (
         ON orig.gtfs_dataset_key_vehicle_positions = vehicle_positions.key
 )
 
-SELECT * FROM final
+SELECT * FROM dim_provider_gtfs_data
