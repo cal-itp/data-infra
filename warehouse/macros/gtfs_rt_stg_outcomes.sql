@@ -25,10 +25,10 @@ stg_gtfs_rt__agg_outcomes AS (
         base64_url,
         {% if step == 'parse' %}
         header,
-        JSON_VALUE(`extract`.response_headers, '$."last_modified"') AS last_modified_string,
-        CASE WHEN JSON_VALUE(`extract`.response_headers, '$."last_modified"') like '%GMT' THEN PARSE_TIMESTAMP("%a, %d %b %Y %H:%M:%S GMT", JSON_VALUE(`extract`.response_headers, '$."last_modified"'))
+        JSON_VALUE(`extract`.response_headers, '$."Last-Modified"') AS last_modified_string,
+        CASE WHEN JSON_VALUE(`extract`.response_headers, '$."Last-Modified"') like '%GMT' THEN PARSE_TIMESTAMP("%a, %d %b %Y %H:%M:%S GMT", JSON_VALUE(`extract`.response_headers, '$."Last-Modified"'))
              -- 1/28/2020 6:29:01 PM
-             WHEN JSON_VALUE(`extract`.response_headers, '$."last_modified"') like '%PM' THEN PARSE_TIMESTAMP("%m/%d/%Y %I:%M:%S %p", JSON_VALUE(`extract`.response_headers, '$."last_modified"'))
+             WHEN JSON_VALUE(`extract`.response_headers, '$."Last-Modified"') like '%PM' THEN PARSE_TIMESTAMP("%m/%d/%Y %I:%M:%S %p", JSON_VALUE(`extract`.response_headers, '$."Last-Modified"'))
         END AS last_modified_timestamp,
         {% endif %}
         `extract`.ts AS extract_ts

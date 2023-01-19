@@ -251,14 +251,6 @@ models:
     tests: *stg_gtfs_guideline_tests_rt
     columns: *stg_gtfs_guideline_columns
 
-  - name: int_gtfs_quality__rt_protobuf_error
-    tests: *stg_gtfs_guideline_tests_rt
-    columns: *stg_gtfs_guideline_columns
-
-  - name: int_gtfs_quality__modification_date_present_rt
-    tests: *stg_gtfs_guideline_tests_rt
-    columns: *stg_gtfs_guideline_columns
-
   - name: int_gtfs_quality__rt_https
     tests: *stg_gtfs_guideline_tests_rt
     # Reducing null_proportion minimum due to missing rows in rt_https check, due to missing data before Nov 22
@@ -278,6 +270,10 @@ models:
             - aggregator
       - dbt_utils.equal_rowcount:
           compare_model: ref('int_gtfs_quality__rt_feed_guideline_index_aggregator')
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__rt_protobuf_error
+    tests: *stg_gtfs_guideline_tests_rt
     columns: *stg_gtfs_guideline_columns
 
   - name: int_gtfs_quality__no_stale_vehicle_positions
