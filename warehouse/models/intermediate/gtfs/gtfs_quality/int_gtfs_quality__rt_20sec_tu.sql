@@ -24,23 +24,22 @@ feed_guideline_index AS (
     {% endif %}
 ),
 
-parse_outcomes AS (
-    SELECT * FROM {{ ref('int_gtfs_rt__unioned_parse_outcomes') }}
+trip_updates_outcomes AS (
+    SELECT * FROM {{ ref('stg_gtfs_rt__trip_updates_outcomes') }}
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
     WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('TRIP_UPDATES_LOOKBACK_DAYS') }} DAY)
     {% endif %}
-      AND feed_type = "trip_updates"
 ),
 
-parse_outcomes_lag_ts AS (
+lag_ts AS (
   SELECT
           dt AS date,
           base64_url,
           extract_ts,
           LAG (extract_ts) OVER (PARTITION BY base64_url ORDER BY extract_ts) AS prev_extract_ts
-    FROM parse_outcomes
+    FROM trip_updates_outcomes
 ),
 
 daily_max_lag AS (
@@ -48,7 +47,7 @@ SELECT
       date,
       base64_url,
       MAX(DATE_DIFF(extract_ts, prev_extract_ts, SECOND)) AS max_lag
-  FROM parse_outcomes_lag_ts
+  FROM lag_ts
  GROUP BY 1,2
 ),
 
