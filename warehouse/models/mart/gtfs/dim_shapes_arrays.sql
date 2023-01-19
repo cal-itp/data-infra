@@ -1,4 +1,10 @@
-{{ config(materialized='table') }}
+{{
+    config(
+        materialized='table',
+        cluster_by='_valid_from',
+    )
+}}
+
 
 WITH dim_shapes AS (
     SELECT *

@@ -1,3 +1,9 @@
+{{
+    config(
+        cluster_by=['_valid_from', 'warning_duplicate_primary_key'],
+    )
+}}
+
 WITH make_dim AS (
     {{ make_schedule_file_dimension_from_dim_schedule_feeds(
         ref('dim_schedule_feeds'),

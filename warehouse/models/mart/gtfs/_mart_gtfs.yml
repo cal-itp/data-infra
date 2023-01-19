@@ -838,6 +838,7 @@ models:
           lower_bound_column: _valid_from
           upper_bound_column: _valid_to
           partition_by: base64_url, shape_id, shape_pt_sequence
+          where: "_valid_from >= TIMESTAMP_SUB(CURRENT_TIMESTAMP, INTERVAL 30 DAY)"
           gaps: required
     columns:
       - name: key
@@ -1195,7 +1196,7 @@ models:
           lower_bound_column: _valid_from
           upper_bound_column: _valid_to
           partition_by: base64_url, trip_id, stop_sequence
-          where: "not warning_duplicate_primary_key"
+          where: "_valid_from >= TIMESTAMP_SUB(CURRENT_TIMESTAMP, INTERVAL 30 DAY) AND NOT warning_duplicate_primary_key"
           gaps: required
     columns:
       - *feed_key
@@ -1462,6 +1463,7 @@ models:
           lower_bound_column: _valid_from
           upper_bound_column: _valid_to
           partition_by: base64_url, shape_id
+          where: "_valid_from >= TIMESTAMP_SUB(CURRENT_TIMESTAMP, INTERVAL 30 DAY)"
           gaps: required
     columns:
       - name: key
