@@ -55,6 +55,17 @@ models:
           Foreign key to the `dim_schedule_feeds` table.
       - &gtfs_dataset_key_errorif
         name: gtfs_dataset_key
+        description: |
+          Foreign key to the associated GTFS dataset record.
+          Because GTFS data was downloaded in the v1 pipeline before
+          `gtfs dataset` records were being archived in the warehouse,
+          it is possible for GTFS data to be associated with a GTFS dataset
+          record that was not yet in effect at the time the data was downloaded.
+          (So, you may see GTFS data from January 2022 associated with a GTFS dataset
+          record that does not take effect until July 2022.)
+          This is done for convenience to facilitate labeling of older data (the alternative
+          would be failing to join and making it essentially impossible to label
+          historical GTFS data with any associated transit database records).
         tests:
           - not_null:
               config:
@@ -141,6 +152,8 @@ models:
         tests: *rt_key_tests
       - &gtfs_rt_dataset_key
         name: gtfs_dataset_key
+        description: |
+          Foreign key to the associated GTFS dataset record.
         tests:
           - not_null:
               config:
@@ -1298,6 +1311,17 @@ models:
               to: ref('dim_shapes_arrays')
               field: key
       - name: gtfs_dataset_key
+        description: |
+          Foreign key to the associated GTFS dataset record.
+          Because GTFS data was downloaded in the v1 pipeline before
+          `gtfs dataset` records were being archived in the warehouse,
+          it is possible for GTFS data to be associated with a GTFS dataset
+          record that was not yet in effect at the time the data was downloaded.
+          (So, you may see GTFS data from January 2022 associated with a GTFS dataset
+          record that does not take effect until July 2022.)
+          This is done for convenience to facilitate labeling of older data (the alternative
+          would be failing to join and making it essentially impossible to label
+          historical GTFS data with their associated transit database records).
       - name: shape_id
         description: '{{ doc("gtfs_trips__shape_id") }}'
       - name: contains_warning_duplicate_trip_primary_key
@@ -1365,6 +1389,17 @@ models:
         - not_null
     - &gtfs_dataset_key
       name: gtfs_dataset_key
+      description: |
+        Foreign key to the associated GTFS dataset record.
+        Because GTFS data was downloaded in the v1 pipeline before
+        `gtfs dataset` records were being archived in the warehouse,
+        it is possible for GTFS data to be associated with a GTFS dataset
+        record that was not yet in effect at the time the data was downloaded.
+        (So, you may see GTFS data from January 2022 associated with a GTFS dataset
+        record that does not take effect until July 2022.)
+        This is done for convenience to facilitate labeling of older data (the alternative
+        would be failing to join and making it essentially impossible to label
+        historical GTFS data with their associated transit database records).
       tests:
         - not_null
         - relationships:

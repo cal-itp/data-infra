@@ -17,6 +17,26 @@ models:
           - unique
         meta:
           metabase.semantic_type: type/PK
+      - &valid_from_placeholder
+        name: _valid_from
+        description: |
+          Starting timestamp from which this record is in effect (inclusive).
+          Because this table has not actually been fully versioned,
+          this is a constant placeholder value representing the first
+          time that this table was extracted from the source data.
+      - &valid_to_placeholder
+        name: _valid_to
+        description: |
+          End timestamp until which this record is in effect (inclusive).
+          Because this table has not actually been fully versioned,
+          this is a constant placeholder value in the distant future.
+      - &is_current_placeholder
+        name: _is_current
+        description: |
+          Flag indicating whether this is the most recent version of
+          this record.
+          Because this table has not actually been fully versioned,
+          this will always be True.
   - name: dim_contracts
     description: '{{ doc("contracts_table") }}'
     tests: *mutually_exclusive_ranges
@@ -38,11 +58,17 @@ models:
           - relationships:
              to: ref('dim_organizations')
              field: original_record_id
+      - *valid_from_placeholder
+      - *valid_to_placeholder
+      - *is_current_placeholder
   - name: dim_data_schemas
     description: '{{ doc("data_schemas_table") }}'
     tests: *mutually_exclusive_ranges
     columns:
       - *key
+      - *valid_from_placeholder
+      - *valid_to_placeholder
+      - *is_current_placeholder
   - name: dim_organizations
     description: '{{ doc("organizations_table") }}'
     tests: *mutually_exclusive_ranges
@@ -92,6 +118,19 @@ models:
         description: |
           Is either "Yes" or "No" and indicates whether this Organization
           manages qualifying assessed services
+      - &valid_from_actual
+        name: _valid_from
+        description: |
+          Starting timestamp from which this record is in effect (inclusive).
+      - &valid_to_actual
+        name: _valid_to
+        description: |
+          End timestamp until which this record is in effect (inclusive).
+      - &is_current_actual
+        name: _is_current
+        description: |
+          Flag indicating whether this is the most recent version of
+          this record.
   - name: dim_services
     description: '{{ doc("services_table") }}'
     tests: *mutually_exclusive_ranges
@@ -142,15 +181,24 @@ models:
         description: |
           Is either "Yes" or "No" and indicates whether this Service qualifies as
           being an assessed service
+      - *valid_from_actual
+      - *valid_to_actual
+      - *is_current_actual
   - name: dim_products
     tests: *mutually_exclusive_ranges
     description: '{{ doc("products_table") }}'
     columns:
       - *key
+      - *valid_from_placeholder
+      - *valid_to_placeholder
+      - *is_current_placeholder
   - name: dim_properties_and_features
     tests: *mutually_exclusive_ranges
     columns:
       - *key
+      - *valid_from_placeholder
+      - *valid_to_placeholder
+      - *is_current_placeholder
   - name: dim_contract_attachments
     description: |
       Attachment links to images of contracts.
@@ -163,6 +211,9 @@ models:
           - relationships:
              to: ref('dim_contracts')
              field: key
+      - *valid_from_placeholder
+      - *valid_to_placeholder
+      - *is_current_placeholder
   - name: dim_gtfs_datasets
     description: '{{ doc("gtfs_datasets_table") }}'
     tests: *mutually_exclusive_ranges
@@ -211,10 +262,9 @@ models:
         #   - relationships:
         #      to: ref('dim_gtfs_datasets')
         #      field: key
-      - name: dt
-        description: |
-          Date extracted from Airtable. This column will be deprecated as _valid_from
-          and _valid_to are more fully adopted.
+      - *valid_from_actual
+      - *valid_to_actual
+      - *is_current_actual
   - name: dim_gtfs_service_data
     description: '{{ doc("gtfs_service_data_table") }}'
     tests: *mutually_exclusive_ranges
@@ -275,11 +325,17 @@ models:
         #   - relationships:
         #      to: ref('dim_gtfs_service_data')
         #      field: key
+      - *valid_from_actual
+      - *valid_to_actual
+      - *is_current_actual
   - name: dim_fare_systems
     description: '{{ doc("fare_systems_table") }}'
     tests: *mutually_exclusive_ranges
     columns:
       - *key
+      - *valid_from_placeholder
+      - *valid_to_placeholder
+      - *is_current_placeholder
   - name: dim_service_components
     description: '{{ doc("service_components_table") }}'
     columns:
