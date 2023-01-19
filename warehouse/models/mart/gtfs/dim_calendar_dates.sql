@@ -24,7 +24,8 @@ dim_calendar_dates AS (
         exception_type,
         base64_url,
         _valid_from,
-        _valid_to
+        _valid_to,
+        _is_current
     FROM make_dim
 )
 

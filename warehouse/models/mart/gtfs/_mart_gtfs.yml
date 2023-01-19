@@ -37,6 +37,9 @@ models:
       - &_valid_to
         name: _valid_to
         description: '{{ doc("column_valid_to") }}'
+      - &_is_current
+        name: _is_current
+        description: '{{ doc("column_is_current") }}'
   - name: fct_daily_schedule_feeds
     description: |
       Each row is a unique date / feed pair, where the feed is the feed version that was in effect at
@@ -363,6 +366,7 @@ models:
         description: '{{ doc("gtfs_agency__agency_email") }}'
       - *_valid_from
       - *_valid_to
+      - *_is_current
   - name: dim_areas
     description: |
       Each row is a cleaned row from an areas.txt file.
@@ -389,6 +393,7 @@ models:
         description: '{{ doc("gtfs_areas__area_name") }}'
       - *_valid_from
       - *_valid_to
+      - *_is_current
   - name: dim_attributions
     description: |
       Each row is a cleaned row from an attributions.txt file.
@@ -432,6 +437,7 @@ models:
         description: '{{ doc("gtfs_attributions__attribution_phone") }}'
       - *_valid_from
       - *_valid_to
+      - *_is_current
   - name: dim_fare_attributes
     description: |
       Each row is a cleaned row from a fare_attributes.txt file.
@@ -471,6 +477,7 @@ models:
         description: '{{ doc("gtfs_fare_attributes__transfer_duration") }}'
       - *_valid_from
       - *_valid_to
+      - *_is_current
   - name: dim_fare_leg_rules
     description: |
       Each row is a cleaned row from a fare_leg_rules.txt file.
@@ -502,6 +509,7 @@ models:
         tests: *not_null_error
       - *_valid_from
       - *_valid_to
+      - *_is_current
   - name: dim_fare_products
     description: |
       Each row is a cleaned row from a fare_products.txt file.
@@ -533,6 +541,7 @@ models:
         tests: *not_null_warn_99_threshold
       - *_valid_from
       - *_valid_to
+      - *_is_current
   - name: dim_fare_rules
     description: |
       Each row is a cleaned row from a fare_rules.txt file.
@@ -564,6 +573,7 @@ models:
         description: '{{ doc("gtfs_fare_rules__contains_id") }}'
       - *_valid_from
       - *_valid_to
+      - *_is_current
   - name: dim_fare_transfer_rules
     description: |
       Each row is a cleaned row from a fare_transfer_rules.txt file.
@@ -599,6 +609,7 @@ models:
         description: '{{ doc("gtfs_fare_transfer_rules__fare_product_id") }}'
       - *_valid_from
       - *_valid_to
+      - *_is_current
   - name: dim_feed_info
     description: |
       Each row is a cleaned row from a feed_info.txt file.
@@ -640,6 +651,7 @@ models:
         description: '{{ doc("gtfs_feed_info__feed_contact_url") }}'
       - *_valid_from
       - *_valid_to
+      - *_is_current
   - name: dim_frequencies
     description: |
       Each row is a cleaned row from a frequencies.txt file.
@@ -674,6 +686,7 @@ models:
         description: '{{ doc("gtfs_frequencies__exact_times") }}'
       - *_valid_from
       - *_valid_to
+      - *_is_current
   - name: dim_levels
     description: |
       Each row is a cleaned row from a levels.txt file.
@@ -702,6 +715,7 @@ models:
         description: '{{ doc("gtfs_levels__level_name") }}'
       - *_valid_from
       - *_valid_to
+      - *_is_current
   - name: dim_pathways
     description: |
       Each row is a cleaned row from a pathways.txt file.
@@ -751,6 +765,7 @@ models:
         description: '{{ doc("gtfs_pathways__reversed_signposted_as") }}'
       - *_valid_from
       - *_valid_to
+      - *_is_current
   - name: dim_routes
     description: |
       Each row is a cleaned row from a routes.txt file.
@@ -799,6 +814,7 @@ models:
         description: '{{ doc("gtfs_routes__network_id") }}'
       - *_valid_from
       - *_valid_to
+      - *_is_current
   - name: dim_shapes
     description: |
       Each row is a cleaned row from a shapes.txt file.
@@ -843,6 +859,7 @@ models:
         description: '{{ doc("gtfs_shapes__shape_dist_traveled") }}'
       - *_valid_from
       - *_valid_to
+      - *_is_current
   - name: dim_stop_areas
     description: |
       Each row is a cleaned row from a stop_areas.txt file.
@@ -869,6 +886,7 @@ models:
         tests: *not_null_error
       - *_valid_from
       - *_valid_to
+      - *_is_current
   - name: dim_stops
     description: |
       Each row is a cleaned row from a stops.txt file.
@@ -942,6 +960,7 @@ models:
           instance and `key` will also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
       - *_valid_from
       - *_valid_to
+      - *_is_current
   - name: dim_transfers
     description: |
       Each row is a cleaned row from a transfers.txt file.
@@ -977,6 +996,7 @@ models:
       - name: to_trip_id
       - *_valid_from
       - *_valid_to
+      - *_is_current
   - name: dim_translations
     description: |
       Each row is a cleaned row from a translations.txt file.
@@ -1015,6 +1035,7 @@ models:
         description: '{{ doc("gtfs_translations__field_value") }}'
       - *_valid_from
       - *_valid_to
+      - *_is_current
   - name: dim_trips
     description: |
       Each row is a cleaned row from a trips.txt file.
@@ -1062,6 +1083,7 @@ models:
         description: '{{ doc("gtfs_trips__bikes_allowed") }}'
       - *_valid_from
       - *_valid_to
+      - *_is_current
       - name: warning_duplicate_primary_key
         description: |
           Rows with `true` in this column have a duplicate primary key; i.e., `trip_id` is duplicated within an individual feed
@@ -1114,6 +1136,9 @@ models:
       - name: end_date
         description: '{{ doc("gtfs_calendar__end_date") }}'
         tests: *not_null_warn
+      - *_valid_from
+      - *_valid_to
+      - *_is_current
   - name: dim_calendar_dates
     description: |
       Each row is a cleaned row from a calendar_dates.txt file.
@@ -1130,7 +1155,6 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key`, `service_id`, and `date`.
         tests: *primary_key_tests
-
       - *feed_key
       - *base64_url
       - name: service_id
@@ -1142,6 +1166,9 @@ models:
       - name: exception_type
         description: '{{ doc("gtfs_calendar_dates__exception_type") }}'
         tests: *not_null_warn
+      - *_valid_from
+      - *_valid_to
+      - *_is_current
   - name: dim_stop_times
     description: |
       Cleaned GTFS schedule stop_times data.
@@ -1215,6 +1242,9 @@ models:
           For example, `departure_time = 21:30:45` would lead to `departure_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
           This allows us to perform duration calculations and handle timestamps that wrap past midnight like
           `25:40:00`, which are allowed in GTFS.
+      - *_valid_from
+      - *_valid_to
+      - *_is_current
     meta:
       publish.gis_coordinate_system_epsg: WGS84
   - name: fct_daily_scheduled_trips
@@ -1405,6 +1435,7 @@ models:
         tests: *not_null_error
       - *_valid_from
       - *_valid_to
+      - *_is_current
   - name: fct_daily_scheduled_service_summary
     description: |
       This is daily service totals by feed.

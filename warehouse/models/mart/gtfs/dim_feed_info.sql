@@ -29,7 +29,8 @@ dim_feed_info AS (
         feed_end_date,
         base64_url,
         _valid_from,
-        _valid_to
+        _valid_to,
+        _is_current
     FROM make_dim
 )
 

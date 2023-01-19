@@ -11,3 +11,9 @@ Starting timestamp (inclusive) from which this record is valid.
 Ending timestamp (inclusive) through which this record is valid.
 
 {% enddocs %}
+
+{% docs column_is_current %}
+
+Boolean indicating whether a record is among the latest set (used in open data publishing).
+
+{% enddocs %}

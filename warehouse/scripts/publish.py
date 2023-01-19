@@ -138,6 +138,14 @@ class DictionaryRow(BaseModel):
         return v.upper()
 
 
+def strip_modelname(x):
+    """
+    Models published for open data don't include dbt prefixes and internal labeling,
+    so we need to strip that information from their names during publication
+    """
+    return x.replace("dim_", "").replace("fct_", "").replace("_latest", "")
+
+
 def make_linestring(x):
     """
     This comes from https://github.com/cal-itp/data-analyses/blob/09f3b23c488e7ed1708ba721bf49121a925a8e0b/_shared_utils/shared_utils/geography_utils.py#L190
@@ -280,14 +288,14 @@ def _generate_exposure_documentation(
     dictionary_rows: List[Dict[str, Any]] = []
 
     for node in exposure.depends_on.resolved_nodes:
-        name = node.name
+        name = strip_modelname(node.name)
         description = node.description.replace("\n", " ")
 
         if name in resources and resources[name].description:
             description = resources[name].description
 
         row = MetadataRow(
-            dataset_name=name,
+            dataset_name=strip_modelname(name),
             tags=[
                 "transit",
                 "gtfs",
@@ -339,7 +347,7 @@ def _generate_exposure_documentation(
             if not column.meta.get("publish.ignore", False):
                 row = DictionaryRow(
                     system_name="Cal-ITP GTFS-Ingest Pipeline",
-                    table_name=node.name,
+                    table_name=strip_modelname(node.name),
                     field_name=column.name,
                     field_alias=None,
                     field_description=column.description,
@@ -386,7 +394,9 @@ def _publish_exposure(
                     (metadata, "metadata", MetadataRow),
                     (dictionary, "dictionary", DictionaryRow),
                 ):
-                    hive_path = destination.hive_path(exposure, file, bucket, dt=ts)
+                    hive_path = destination.hive_path(
+                        exposure, strip_modelname(file), bucket, dt=ts
+                    )
                     typer.secho(
                         f"writing {len(rows)} rows to {hive_path}",
                         fg=typer.colors.GREEN,
@@ -413,7 +423,9 @@ def _publish_exposure(
                     )
                     node = BaseNode._instances[f"model.calitp_warehouse.{model_name}"]
 
-                    fpath = os.path.join(tmpdir, destination.filename(model_name))
+                    fpath = strip_modelname(
+                        os.path.join(tmpdir, destination.filename(model_name))
+                    )
 
                     df = pd.read_gbq(
                         str(node.select),
@@ -437,7 +449,7 @@ def _publish_exposure(
                     df.to_csv(fpath, index=False)
 
                     hive_path = destination.hive_path(
-                        exposure, model_name, bucket, dt=ts
+                        exposure, strip_modelname(model_name), bucket, dt=ts
                     )
                     typer.secho(
                         f"writing {len(df)} rows ({humanize.naturalsize(os.stat(fpath).st_size)}) from {node.schema_table} to {hive_path}",
@@ -471,7 +483,9 @@ def _publish_exposure(
                 for model in exposure.depends_on.nodes:
                     node = BaseNode._instances[model]
 
-                    geojsonl_fpath = os.path.join(tmpdir, f"{node.name}.geojsonl")
+                    geojsonl_fpath = os.path.join(
+                        tmpdir, f"{strip_modelname(node.name)}.geojsonl"
+                    )
 
                     client = bigquery.Client()
                     typer.secho(f"querying {node.schema_table}")
@@ -493,8 +507,12 @@ def _publish_exposure(
                             ["geometry_to_publish"] + destination.metadata_columns
                         ]
                     gdf.to_file(geojsonl_fpath, driver="GeoJSONSeq")
-                    layer_geojson_paths[node.name.title()] = geojsonl_fpath
-                    hive_path = destination.hive_path(exposure, node.name, bucket)
+                    layer_geojson_paths[
+                        strip_modelname(node.name).title()
+                    ] = geojsonl_fpath
+                    hive_path = destination.hive_path(
+                        exposure, strip_modelname(node.name), bucket
+                    )
 
                     typer.secho(
                         f"writing {geojsonl_fpath} to {hive_path}",
@@ -519,7 +537,7 @@ def _publish_exposure(
                     subprocess.run(args).check_returncode()
 
                     tiles_hive_path = destination.tiles_hive_path(
-                        exposure, node.name, bucket
+                        exposure, strip_modelname(node.name), bucket
                     )
 
                     typer.secho(
@@ -622,7 +640,6 @@ def multipart_ckan_upload(
             fsize=os.path.getsize(fpath),
             file=f,
             resource_id=resource_id,
-            api_key=API_KEY,
         )
 
 

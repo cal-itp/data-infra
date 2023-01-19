@@ -25,7 +25,8 @@ dim_fare_leg_rules AS (
         to_area_id,
         fare_product_id,
         _valid_from,
-        _valid_to
+        _valid_to,
+        _is_current
     FROM make_dim
 )
 

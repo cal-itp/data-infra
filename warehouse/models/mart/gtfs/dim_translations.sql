@@ -27,7 +27,8 @@ dim_translations AS (
         field_value,
         base64_url,
         _valid_from,
-        _valid_to
+        _valid_to,
+        _is_current
     FROM make_dim
 )
 

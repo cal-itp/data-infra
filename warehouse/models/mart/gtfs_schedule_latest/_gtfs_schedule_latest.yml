@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: agency
+  - name: dim_agency_latest
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -11,36 +11,27 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#agencytxt
     columns:
-      - &calitp_itp_id
-        name: calitp_itp_id
-        description: '{{ doc("column_calitp_itp_id") }}'
-        meta:
-          ckan.authority: "Source: GTFS Files for each transit agency in CA, captured nightly by the Cal-ITP team. URL and ITP ID source is https://github.com/cal-itp/data-infra/blob/main/airflow/data/agencies.yml"
-          metabase.semantic_type: type/FK
-      - &calitp_url_number
-        name: calitp_url_number
-        description: '{{ doc("column_calitp_url_number") }}'
-        meta:
-          ckan.authority: "Source: GTFS Files for each transit agency in CA, captured nightly by the Cal-ITP team. URL and ITP ID source is https://github.com/cal-itp/data-infra/blob/main/airflow/data/agencies.yml"
-          metabase.semantic_type: type/FK
-      - &calitp_extracted_at
-        name: calitp_extracted_at
-        description: '{{ doc("column_schedule_calitp_extracted_at") }}'
-        meta:
-          publish.ignore: true
-      - &calitp_hash
-        name: calitp_hash
-        description: '{{ doc("column_schedule_calitp_hash") }}'
-        meta:
-          publish.ignore: true
-      - name: agency_key
-        description: '{{ doc("column_schedule_key") }}'
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `agency_id`.
         tests: &primary_key_tests
-          - not_null
           - unique
+          - not_null
         meta: &pk_meta
-          metabase.semantic_type: type/PK
           publish.ignore: true
+      - &feed_key
+        name: feed_key
+        description: |
+          Foreign key to the `schedule_feeds` table.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_schedule_feeds')
+              field: key
+      - &base64_url
+        name: base64_url
+        description: |
+          Base 64 encoded URL from which this data was scraped.
       - name: agency_id
         description: '{{ doc("gtfs_agency__agency_id") }}'
       - name: agency_name
@@ -66,9 +57,23 @@ models:
         description: '{{ doc("gtfs_agency__agency_fare_url") }}'
       - name: agency_email
         description: '{{ doc("gtfs_agency__agency_email") }}'
+      - &_valid_from
+        name: _valid_from
+        description: '{{ doc("column_valid_from") }}'
+        meta:
+          publish.ignore: true
+      - &_valid_to
+        name: _valid_to
+        description: '{{ doc("column_valid_to") }}'
+        meta:
+          publish.ignore: true
+      - &_is_current
+        name: _is_current
+        description: '{{ doc("column_is_current") }}'
+        meta:
+          publish.ignore: true
 
-
-  - name: attributions
+  - name: dim_attributions_latest
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -78,14 +83,13 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#attributionstxt
     columns:
-      - *calitp_itp_id
-      - *calitp_url_number
-      - *calitp_extracted_at
-      - *calitp_hash
-      - name: attribution_key
-        description: '{{ doc("column_schedule_key") }}'
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `attribution_id`.
         tests: *primary_key_tests
         meta: *pk_meta
+      - *feed_key
+      - *base64_url
       - name: attribution_id
         description: '{{ doc("gtfs_attributions__attribution_id") }}'
       - name: agency_id
@@ -109,8 +113,11 @@ models:
         description: '{{ doc("gtfs_attributions__attribution_email") }}'
       - name: attribution_phone
         description: '{{ doc("gtfs_attributions__attribution_phone") }}'
+      - *_valid_from
+      - *_valid_to
+      - *_is_current
 
-  - name: calendar
+  - name: dim_calendar_latest
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -120,14 +127,13 @@ models:
     meta:
       ckan.authority: https://gtfs.org/schedule/reference/#calendartxt
     columns:
-      - *calitp_itp_id
-      - *calitp_url_number
-      - *calitp_extracted_at
-      - *calitp_hash
-      - name: calendar_key
-        description: '{{ doc("column_schedule_key") }}'
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `service_id`.
         tests: *primary_key_tests
         meta: *pk_meta
+      - *feed_key
+      - *base64_url
       - name: service_id
         description: '{{ doc("gtfs_calendar__service_id") }}'
         tests: &not_null_error
@@ -159,8 +165,11 @@ models:
       - name: end_date
         description: '{{ doc("gtfs_calendar__end_date") }}'
         tests: *not_null_warn
+      - *_valid_from
+      - *_valid_to
+      - *_is_current
 
-  - name: calendar_dates
+  - name: dim_calendar_dates_latest
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -170,10 +179,13 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#calendar_datestxt
     columns:
-      - *calitp_itp_id
-      - *calitp_url_number
-      - *calitp_extracted_at
-      - *calitp_hash
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, `service_id`, and `date`.
+        tests: *primary_key_tests
+        meta: *pk_meta
+      - *feed_key
+      - *base64_url
       - name: service_id
         description: '{{ doc("gtfs_calendar_dates__service_id") }}'
         tests: *not_null_error
@@ -183,8 +195,11 @@ models:
       - name: exception_type
         description: '{{ doc("gtfs_calendar_dates__exception_type") }}'
         tests: *not_null_warn
+      - *_valid_from
+      - *_valid_to
+      - *_is_current
 
-  - name: fare_attributes
+  - name: dim_fare_attributes_latest
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -194,14 +209,13 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#fare_attributestxt
     columns:
-      - *calitp_itp_id
-      - *calitp_url_number
-      - *calitp_extracted_at
-      - *calitp_hash
-      - name: fare_attribute_key
-        description: '{{ doc("column_schedule_key") }}'
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `fare_id`.
         tests: *primary_key_tests
         meta: *pk_meta
+      - *feed_key
+      - *base64_url
       - name: fare_id
         description: '{{ doc("gtfs_fare_attributes__fare_id") }}'
         tests: *not_null_error
@@ -221,8 +235,11 @@ models:
         description: '{{ doc("gtfs_fare_attributes__agency_id") }}'
       - name: transfer_duration
         description: '{{ doc("gtfs_fare_attributes__transfer_duration") }}'
+      - *_valid_from
+      - *_valid_to
+      - *_is_current
 
-  - name: fare_rules
+  - name: dim_fare_rules_latest
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -232,14 +249,13 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#fare_rulestxt
     columns:
-      - *calitp_itp_id
-      - *calitp_url_number
-      - *calitp_extracted_at
-      - *calitp_hash
-      - name: fare_rule_key
-        description: '{{ doc("column_schedule_key") }}'
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, `fare_id`, `route_id`, `origin_id`, `destination_id`, and `contains_id`.
         tests: *primary_key_tests
         meta: *pk_meta
+      - *feed_key
+      - *base64_url
       - name: fare_id
         description: '{{ doc("gtfs_fare_rules__fare_id") }}'
         tests: *not_null_error
@@ -251,8 +267,11 @@ models:
         description: '{{ doc("gtfs_fare_rules__destination_id") }}'
       - name: contains_id
         description: '{{ doc("gtfs_fare_rules__contains_id") }}'
+      - *_valid_from
+      - *_valid_to
+      - *_is_current
 
-  - name: feed_info
+  - name: dim_feed_info_latest
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -262,23 +281,22 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#feed_infotxt
     columns:
-      - *calitp_itp_id
-      - *calitp_url_number
-      - *calitp_extracted_at
-      - *calitp_hash
-      - name: feed_info_key
-        description: '{{ doc("column_schedule_key") }}'
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, `feed_publisher_name`, `feed_publisher_url`, `feed_lang`, `default_lang`, `feed_version`, `feed_contact_email`, `feed_contact_url`, `feed_start_date`, and `feed_end_date`.
         tests: *primary_key_tests
         meta: *pk_meta
+      - *feed_key
+      - *base64_url
       - name: feed_publisher_name
         description: '{{ doc("gtfs_feed_info__feed_publisher_name") }}'
         tests: *not_null_warn
       - name: feed_publisher_url
         description: '{{ doc("gtfs_feed_info__feed_publisher_url") }}'
-        tests: *not_null_warn
+        tests: *not_null_warn_99_threshold
       - name: feed_lang
         description: '{{ doc("gtfs_feed_info__feed_lang") }}'
-        tests: *not_null_warn
+        tests: *not_null_warn_99_threshold
       - name: default_lang
         description: '{{ doc("gtfs_feed_info__default_lang") }}'
       - name: feed_start_date
@@ -291,8 +309,11 @@ models:
         description: '{{ doc("gtfs_feed_info__feed_contact_email") }}'
       - name: feed_contact_url
         description: '{{ doc("gtfs_feed_info__feed_contact_url") }}'
+      - *_valid_from
+      - *_valid_to
+      - *_is_current
 
-  - name: frequencies
+  - name: dim_frequencies_latest
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -302,14 +323,13 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#frequenciestxt
     columns:
-      - *calitp_itp_id
-      - *calitp_url_number
-      - *calitp_extracted_at
-      - *calitp_hash
-      - name: frequency_key
-        description: '{{ doc("column_schedule_key") }}'
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, `trip_id`, and `start_time`.
         tests: *primary_key_tests
         meta: *pk_meta
+      - *feed_key
+      - *base64_url
       - name: trip_id
         description: '{{ doc("gtfs_frequencies__trip_id") }}'
         tests: *not_null_error
@@ -324,8 +344,11 @@ models:
         tests: *not_null_warn
       - name: exact_times
         description: '{{ doc("gtfs_frequencies__exact_times") }}'
+      - *_valid_from
+      - *_valid_to
+      - *_is_current
 
-  - name: levels
+  - name: dim_levels_latest
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -335,14 +358,13 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#levelstxt
     columns:
-      - *calitp_itp_id
-      - *calitp_url_number
-      - *calitp_extracted_at
-      - *calitp_hash
-      - name: level_key
-        description: '{{ doc("column_schedule_key") }}'
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `level_id`.
         tests: *primary_key_tests
         meta: *pk_meta
+      - *feed_key
+      - *base64_url
       - name: level_id
         description: '{{ doc("gtfs_levels__level_id") }}'
         tests: *not_null_error
@@ -351,8 +373,11 @@ models:
         tests: *not_null_warn
       - name: level_name
         description: '{{ doc("gtfs_levels__level_name") }}'
+      - *_valid_from
+      - *_valid_to
+      - *_is_current
 
-  - name: pathways
+  - name: dim_pathways_latest
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -362,14 +387,13 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#pathwaystxt
     columns:
-      - *calitp_itp_id
-      - *calitp_url_number
-      - *calitp_extracted_at
-      - *calitp_hash
-      - name: pathway_key
-        description: '{{ doc("column_schedule_key") }}'
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `pathway_id`.
         tests: *primary_key_tests
         meta: *pk_meta
+      - *feed_key
+      - *base64_url
       - name: pathway_id
         description: '{{ doc("gtfs_pathways__pathway_id") }}'
         tests: *not_null_error
@@ -399,8 +423,11 @@ models:
         description: '{{ doc("gtfs_pathways__signposted_as") }}'
       - name: reversed_signposted_as
         description: '{{ doc("gtfs_pathways__reversed_signposted_as") }}'
+      - *_valid_from
+      - *_valid_to
+      - *_is_current
 
-  - name: routes
+  - name: dim_routes_latest
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -410,14 +437,13 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#routestxt
     columns:
-      - *calitp_itp_id
-      - *calitp_url_number
-      - *calitp_extracted_at
-      - *calitp_hash
-      - name: route_key
-        description: '{{ doc("column_schedule_key") }}'
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `route_id`.
         tests: *primary_key_tests
         meta: *pk_meta
+      - *feed_key
+      - *base64_url
       - name: route_id
         description: '{{ doc("gtfs_routes__route_id") }}'
         tests: *not_null_error
@@ -444,8 +470,13 @@ models:
         description: '{{ doc("gtfs_routes__continuous_pickup") }}'
       - name: continuous_drop_off
         description: '{{ doc("gtfs_routes__continuous_drop_off") }}'
+      - name: network_id
+        description: '{{ doc("gtfs_routes__network_id") }}'
+      - *_valid_from
+      - *_valid_to
+      - *_is_current
 
-  - name: shapes
+  - name: dim_shapes_latest
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -455,14 +486,13 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#shapestxt
     columns:
-      - *calitp_itp_id
-      - *calitp_url_number
-      - *calitp_extracted_at
-      - *calitp_hash
-      - name: shape_key
-        description: '{{ doc("column_schedule_key") }}'
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, `shape_id`, and `shape_pt_sequence`.
         tests: *primary_key_tests
         meta: *pk_meta
+      - *feed_key
+      - *base64_url
       - name: shape_id
         description: '{{ doc("gtfs_shapes__shape_id") }}'
         tests: *not_null_error
@@ -487,9 +517,11 @@ models:
         tests: *not_null_warn
       - name: shape_dist_traveled
         description: '{{ doc("gtfs_shapes__shape_dist_traveled") }}'
+      - *_valid_from
+      - *_valid_to
+      - *_is_current
 
-
-  - name: stop_times
+  - name: dim_stop_times_latest
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -500,13 +532,16 @@ models:
       ckan.authority: https://gtfs.org/reference/static#stop_timestxt
       publish.gis_coordinate_system_epsg: WGS84
     columns:
-      - *calitp_itp_id
-      - *calitp_url_number
-      - *calitp_extracted_at
-      - *calitp_hash
-      - name: stop_time_key
-        description: '{{ doc("column_schedule_key") }}'
-        tests: *primary_key_tests
+      - name: base64_url
+      - *feed_key
+      - name: ts
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, `trip_id`, and `stop_sequence`.
+        tests: &pk_tests_with_dups
+          - unique:
+              where: "not warning_duplicate_primary_key"
+          - not_null
         meta: *pk_meta
       - name: trip_id
         description: '{{ doc("gtfs_stop_times__trip_id") }}'
@@ -517,7 +552,9 @@ models:
         description: '{{ doc("gtfs_stop_times__departure_time") }}'
       - name: stop_id
         description: '{{ doc("gtfs_stop_times__stop_id") }}'
-        tests: *not_null_error
+        tests:
+        - not_null:
+            where: "not warning_missing_foreign_key_stop_id"
       - name: stop_sequence
         description: '{{ doc("gtfs_stop_times__stop_sequence") }}'
         tests: *not_null_warn
@@ -535,8 +572,36 @@ models:
         description: '{{ doc("gtfs_stop_times__shape_dist_traveled") }}'
       - name: timepoint
         description: '{{ doc("gtfs_stop_times__timepoint") }}'
+      - name: warning_duplicate_primary_key
+        description: |
+          Rows with `true` in this column have a duplicate primary key; i.e., the given `trip_id`
+          / `stop_sequence` pair is duplicated within an individual feed instance and `key` will
+          also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
+      - name: warning_missing_foreign_key_stop_id
+        description: |
+          Rows with `true` in this column are missing the required `stop_id` value.
+          This means they will fail to join with `stop` related information.
+      - name: arrival_sec
+        description: |
+          This is a calculated field that does not come from GTFS - it is not a timestamp and can't be treated as such.
 
-  - name: stops
+          Represents `arrival_time` as a total number of seconds after midnight of the first day of the given trip.
+          For example, `arrival_time = 21:30:45` would lead to `arrival_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
+          This allows us to perform duration calculations and handle timestamps that wrap past midnight like
+          `25:40:00`, which are allowed in GTFS.
+      - name: departure_sec
+        description: |
+          This is a calculated field that does not come from GTFS - it is not a timestamp and can't be treated as such.
+
+          Represents `departure_time` as a total number of seconds after midnight of the first day of the given trip.
+          For example, `departure_time = 21:30:45` would lead to `departure_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
+          This allows us to perform duration calculations and handle timestamps that wrap past midnight like
+          `25:40:00`, which are allowed in GTFS.
+      - *_valid_from
+      - *_valid_to
+      - *_is_current
+
+  - name: dim_stops_latest
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -546,19 +611,19 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#stopstxt
     columns:
-      - *calitp_itp_id
-      - *calitp_url_number
-      - *calitp_extracted_at
-      - *calitp_hash
-      - name: stop_key
-        description: '{{ doc("column_schedule_key") }}'
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `stop_id`.
         tests: *primary_key_tests
         meta: *pk_meta
+      - *feed_key
+      - *base64_url
       - name: stop_id
         description: '{{ doc("gtfs_stops__stop_id") }}'
         tests: &not_null_error_99_threshold
           - dbt_utils.not_null_proportion:
               at_least: 0.99
+      - name: stop_code
         description: '{{ doc("gtfs_stops__stop_code") }}'
       - name: stop_name
         description: '{{ doc("gtfs_stops__stop_name") }}'
@@ -596,8 +661,11 @@ models:
         description: '{{ doc("gtfs_stops__level_id") }}'
       - name: platform_code
         description: '{{ doc("gtfs_stops__platform_code") }}'
+      - *_valid_from
+      - *_valid_to
+      - *_is_current
 
-  - name: transfers
+  - name: dim_transfers_latest
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -607,14 +675,13 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#transferstxt
     columns:
-      - *calitp_itp_id
-      - *calitp_url_number
-      - *calitp_extracted_at
-      - *calitp_hash
-      - name: transfer_key
-        description: '{{ doc("column_schedule_key") }}'
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, `from_stop_id`, `to_stop_id`, `from_trip_id`, `to_trip_id`, `from_route_id`, and `to_route_id`.
         tests: *primary_key_tests
         meta: *pk_meta
+      - *feed_key
+      - *base64_url
       - name: from_stop_id
         description: '{{ doc("gtfs_transfers__from_stop_id") }}'
         tests: *not_null_error
@@ -626,8 +693,15 @@ models:
         tests: *not_null_warn
       - name: min_transfer_time
         description: '{{ doc("gtfs_transfers__min_transfer_time") }}'
+      - name: from_route_id
+      - name: to_route_id
+      - name: from_trip_id
+      - name: to_trip_id
+      - *_valid_from
+      - *_valid_to
+      - *_is_current
 
-  - name: translations
+  - name: dim_translations_latest
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -637,14 +711,13 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#translationstxt
     columns:
-      - *calitp_itp_id
-      - *calitp_url_number
-      - *calitp_extracted_at
-      - *calitp_hash
-      - name: translation_key
-        description: '{{ doc("column_schedule_key") }}'
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, `table_name`, `field_name`, `language`, `record_id`, `record_sub_id`, and `field_value`.
         tests: *primary_key_tests
         meta: *pk_meta
+      - *feed_key
+      - *base64_url
       - name: table_name
         description: '{{ doc("gtfs_translations__table_name") }}'
         tests: *not_null_warn
@@ -663,8 +736,11 @@ models:
         description: '{{ doc("gtfs_translations__record_sub_id") }}'
       - name: field_value
         description: '{{ doc("gtfs_translations__field_value") }}'
+      - *_valid_from
+      - *_valid_to
+      - *_is_current
 
-  - name: trips
+  - name: dim_trips_latest
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
       It contains current-only data for agencies we are currently scraping.
@@ -674,14 +750,13 @@ models:
     meta:
       ckan.authority: https://gtfs.org/reference/static#tripstxt
     columns:
-      - *calitp_itp_id
-      - *calitp_url_number
-      - *calitp_extracted_at
-      - *calitp_hash
-      - name: trip_key
-        description: '{{ doc("column_schedule_key") }}'
-        tests: *primary_key_tests
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `trip_id`.
+        tests: *pk_tests_with_dups
         meta: *pk_meta
+      - *feed_key
+      - *base64_url
       - name: route_id
         description: '{{ doc("gtfs_trips__route_id") }}'
         tests: *not_null_error
@@ -705,15 +780,15 @@ models:
         description: '{{ doc("gtfs_trips__wheelchair_accessible") }}'
       - name: bikes_allowed
         description: '{{ doc("gtfs_trips__bikes_allowed") }}'
-
-  - name: validation_notices
-    description: |
-      This table is a latest-only cut of the cleaned GTFS data.
-      It contains current-only data for agencies we are currently scraping.
-      Each row is a validation notice from the GTFS schedule validator.
-    columns:
-      - *calitp_itp_id
-      - *calitp_url_number
+      - *_valid_from
+      - *_valid_to
+      - *_is_current
+      - name: warning_duplicate_primary_key
+        description: |
+          Rows with `true` in this column have a duplicate primary key; i.e., `trip_id` is duplicated within an individual feed
+          instance and `key` will also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
+        meta:
+          publish.ignore: true
 
 exposures:
   - name: california_open_data
@@ -723,23 +798,23 @@ exposures:
     description: Latest-only GTFS Schedule data published to Caltrans CKAN instance.
 
     depends_on:
-      - ref("agency")
-      - ref("attributions")
-      - ref("calendar")
-      - ref("calendar_dates")
-      - ref("fare_attributes")
-      - ref("fare_rules")
-      - ref("feed_info")
-      - ref("frequencies")
-      - ref("levels")
-      - ref("pathways")
-      - ref("routes")
-      - ref("shapes")
-      - ref("stop_times")
-      - ref("stops")
-      - ref("transfers")
-      - ref("translations")
-      - ref("trips")
+      - ref("dim_agency_latest")
+      - ref("dim_attributions_latest")
+      - ref("dim_calendar_latest")
+      - ref("dim_calendar_dates_latest")
+      - ref("dim_fare_attributes_latest")
+      - ref("dim_fare_rules_latest")
+      - ref("dim_feed_info_latest")
+      - ref("dim_frequencies_latest")
+      - ref("dim_levels_latest")
+      - ref("dim_pathways_latest")
+      - ref("dim_routes_latest")
+      - ref("dim_shapes_latest")
+      - ref("dim_stop_times_latest")
+      - ref("dim_stops_latest")
+      - ref("dim_transfers_latest")
+      - ref("dim_translations_latest")
+      - ref("dim_trips_latest")
 
     owner:
       email: laurie.m@jarv.us
@@ -755,103 +830,103 @@ exposures:
           format: csv
           url: https://data.ca.gov
           resources:
-            agency:
+            dim_agency_latest:
               id: e8f9d49e-2bb6-400b-b01f-28bc2e0e7df2
               description: |
                 Each row is a cleaned row from an agency.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#agencytxt.
-            attributions:
+            dim_attributions_latest:
               id: 038b7354-06e8-4082-a4a1-40debd3110d5
               description: |
                 Each row is a cleaned row from an attributions.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#attributionstxt.
-            calendar:
+            dim_calendar_latest:
               id: a79f10b8-b322-43f3-b3f4-ba46a8dbe9ab
               description: |
                 Each row is a cleaned row from a calendar.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#calendartxt.
-            calendar_dates:
+            dim_calendar_dates_latest:
               id: 06a21a8e-dba3-4e7e-8726-f2e992cc1a80
               description: |
                 Each row is a Each row is a cleaned rowrow from a calendar_dates.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#calendar_datestxt.
-            fare_attributes:
+            dim_fare_attributes_latest:
               id: 9db51dfa-fd6d-481b-b655-96e8af722ab5
               description: |
                 Each row is a cleaned row from a fare_attributes.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#fare_attributestxt.
-            fare_rules:
+            dim_fare_rules_latest:
               id: 4fb1fa39-0ef9-457d-97b1-bb7e9e848312
               description: |
                 Each row is a cleaned row from a fare_rules.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#fare_rulestxt.
-            feed_info:
+            dim_feed_info_latest:
               id: 50d12559-635e-4222-ac25-3706c066902d
               description: |
                 Each row is a cleaned row from a feed_info.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#feed_infotxt.
-            frequencies:
+            dim_frequencies_latest:
               id: 48542c8f-8ce1-43e3-a965-6c68771d6fe5
               description: |
                 Each row is a cleaned row from a frequencies.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#frequenciestxt.
-            levels:
+            dim_levels_latest:
               id: 288a08cd-7929-479e-aa88-08b677a08510
               description: |
                 Each row is a cleaned row from a levels.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#levelstxt.
-            pathways:
+            dim_pathways_latest:
               id: a01484af-c460-40a4-ac8a-896b0196e8c2
               description: |
                 Each row is a cleaned row from a pathways.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#pathwaystxt.
-            routes:
+            dim_routes_latest:
               id: c6bbb637-988f-431c-8444-aef7277297f8
               description: |
                 Each row is a cleaned row from a routes.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#routestxt.
-            shapes:
+            dim_shapes_latest:
               id: 2f5e7bdb-33e8-4633-b163-6bab42ad0951
               description: |
                 Each row is a cleaned row from a shapes.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#shapestxt.
-            stop_times:
+            dim_stop_times_latest:
               id: d31eef2f-e223-4ca4-a86b-170acc6b2590
               description: |
                 Each row is a cleaned row from a stop_times.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#stop_timestxt.
-            stops:
+            dim_stops_latest:
               id: 8c876204-e12b-48a2-8299-10f6ae3d4f2b
               description: |
                 Each row is a cleaned row from a stops.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#stopstxt.
-            transfers:
+            dim_transfers_latest:
               id: f8dcda5d-0c6d-4c70-b5f5-6716adcf6ffc
               description: |
                 Each row is a cleaned row from a transfers.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#transferstxt.
-            translations:
+            dim_translations_latest:
               id: 7abe9256-6cd2-4c1f-9b6a-72108022a382
               description: |
                 Each row is a cleaned row from a translations.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#translationstxt.
-            trips:
+            dim_trips_latest:
               id: 0e4da89e-9330-43f8-8de9-305cb7d4918f
               description: |
                 Each row is a cleaned row from a trips.txt file.
