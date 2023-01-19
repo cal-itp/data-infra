@@ -47,6 +47,7 @@ int_gtfs_quality__feed_aggregator_rt AS (
       FROM feed_guideline_index t1
       LEFT JOIN dim_gtfs_datasets t2
         ON t2.base64_url = t1.base64_url
+        AND CAST(t1.date AS TIMESTAMP) BETWEEN t2._valid_from AND t2._valid_to
       LEFT JOIN daily_scraped_urls AS t3
         ON {{ url_remove_scheme('t3.feed_url_str') }} = {{ url_remove_scheme('t2.uri') }}
        AND t3.date = t1.date

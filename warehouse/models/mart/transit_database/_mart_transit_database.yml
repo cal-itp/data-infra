@@ -768,3 +768,28 @@ models:
              to: ref('dim_gtfs_datasets')
              field: key
              to_condition: "type = 'schedule'"
+  - name: bridge_organizations_x_ntd_agency_info
+    description: |
+      Mapping table between organizations and associated
+      NTD agency info records.
+      This is a partially versioned relationship.
+      Because organization records are versioned and NTD agency info records
+      are current-only this represents relationships between versioned organization
+      records and unversioned NTD agency info records.
+      Joins via this table can result in fanout.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - organization_key
+            - ntd_agency_info_key
+    columns:
+      - name: organization_key
+        tests:
+          - relationships:
+             to: ref('dim_organizations')
+             field: key
+      - name: ntd_agency_info_key
+        tests:
+          - relationships:
+             to: ref('dim_ntd_agency_info')
+             field: key

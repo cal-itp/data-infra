@@ -43,7 +43,7 @@ initial_pt_array AS (
         -- count number of rows so we can check for nulls (drops) later
         COUNT(*) AS ct
     FROM lat_long
-    GROUP BY feed_key, base64_url, shape_id, _valid_from, _valid_to
+    GROUP BY feed_key, base64_url, shape_id, _valid_from, _valid_to, _is_current
 ),
 
 dim_shapes_arrays AS (
