@@ -22,7 +22,7 @@ WITH dim_schedule_feeds AS (
     {% if is_incremental() %}
     WHERE _dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
-    WHERE _dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('SCHEDULE_LOOKBACK_DAYS') }} DAY)
+    WHERE _dt >= '{{ var("FULL_REFRESH_SCHEDULE_START") }}'
     {% endif %}
 )
 
