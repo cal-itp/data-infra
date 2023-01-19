@@ -113,3 +113,27 @@ schema_fields:
   - name: id
     type: STRING
     mode: NULLABLE
+  - name: feature_progress__accurate_accessibility
+    type: STRING
+    mode: NULLABLE
+  - name: feature_progress__up_to_dateness
+    type: STRING
+    mode: NULLABLE
+  - name: feature_progress__fare_completeness
+    type: STRING
+    mode: NULLABLE
+  - name: feature_progress__accurate_service
+    type: STRING
+    mode: NULLABLE
+  - name: feature_notes__accurate_accessibility
+    type: STRING
+    mode: NULLABLE
+  - name: feature_notes__up_to_dateness
+    type: STRING
+    mode: NULLABLE
+  - name: feature_notes__fare_completeness
+    type: STRING
+    mode: NULLABLE
+  - name: feature_notes__accurate_service
+    type: STRING
+    mode: NULLABLE
