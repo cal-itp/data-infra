@@ -260,3 +260,15 @@ schema_fields:
   - name: manual_check__gtfs_schedule_data_ingested_in_trip_planner
     type: STRING
     mode: NULLABLE
+  - name: feature_progress__schedule_compliance
+    type: STRING
+    mode: NULLABLE
+  - name: feature_progress__realtime_compliance
+    type: STRING
+    mode: NULLABLE
+  - name: feature_notes__schedule_compliance
+    type: STRING
+    mode: NULLABLE
+  - name: feature_notes__realtime_compliance
+    type: STRING
+    mode: NULLABLE
