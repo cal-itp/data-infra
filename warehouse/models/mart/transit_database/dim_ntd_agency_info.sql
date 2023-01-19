@@ -1,18 +1,17 @@
 {{ config(materialized='table') }}
 
-WITH latest_ntd_agency_info AS (
-    {{ get_latest_dense_rank(
-        external_table = ref('stg_transit_database__ntd_agency_info'),
-        order_by = 'calitp_extracted_at DESC'
-        ) }}
+WITH int_transit_database__ntd_agency_info_dim AS (
+    SELECT *
+    FROM {{ ref('int_transit_database__ntd_agency_info_dim') }}
 ),
 
 dim_ntd_agency_info AS (
     SELECT
         key,
+        original_record_id,
         ntd_id,
         legacy_ntd_id,
-        agency_name AS ntd_agency_name,
+        ntd_agency_name,
         reporter_acronym,
         doing_business_as,
         reporter_status,
@@ -48,9 +47,10 @@ dim_ntd_agency_info AS (
         total_voms,
         volunteer_drivers,
         personal_vehicles,
-        organization_key,
-        calitp_extracted_at
-    FROM latest_ntd_agency_info
+        _is_current,
+        _valid_from,
+        _valid_to
+    FROM int_transit_database__ntd_agency_info_dim
 )
 
 SELECT * FROM dim_ntd_agency_info

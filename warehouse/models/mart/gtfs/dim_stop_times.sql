@@ -77,6 +77,7 @@ dim_stop_times AS (
         stop_id IS NULL AS warning_missing_foreign_key_stop_id,
         _valid_from,
         _valid_to,
+        _is_current,
         part_arr[
             OFFSET(0)
         ] * 3600 + part_arr[

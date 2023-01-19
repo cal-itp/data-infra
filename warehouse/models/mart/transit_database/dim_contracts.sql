@@ -1,12 +1,9 @@
 {{ config(materialized='table') }}
 
-WITH latest_contracts AS (
-    {{ get_latest_dense_rank(
-        external_table = ref('stg_transit_database__contracts'),
-        order_by = 'calitp_extracted_at DESC'
-        ) }}
+WITH int_transit_database__contracts_dim AS (
+    SELECT *
+    FROM {{ ref('int_transit_database__contracts_dim') }}
 ),
-
 
 dim_contracts AS (
     SELECT
@@ -16,12 +13,15 @@ dim_contracts AS (
         contract_vendor_organization_key,
         value,
         start_date,
+        original_record_id,
         end_date,
         renewal_option,
         notes,
         contract_name_notes,
-        calitp_extracted_at
-    FROM latest_contracts
+        _is_current,
+        _valid_from,
+        _valid_to
+    FROM int_transit_database__contracts_dim
 )
 
 SELECT * FROM dim_contracts

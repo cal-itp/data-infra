@@ -9,7 +9,7 @@ once_daily_place_geography AS (
 
 stg_transit_database__place_geography AS (
     SELECT
-        id AS key,
+        id,
         {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         place_fips,
         placename,
@@ -25,8 +25,7 @@ stg_transit_database__place_geography AS (
         rtpa__from_county_base_,
         mpo__from_county_base_,
         organizations_2,
-        ts,
-        dt AS calitp_extracted_at
+        dt
     FROM once_daily_place_geography
     LEFT JOIN UNNEST(once_daily_place_geography.county_base) AS unnested_county_base
 )

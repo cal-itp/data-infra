@@ -11,7 +11,6 @@ models:
             - base64_url
             - ts
     columns:
-      - name: gtfs_dataset_key
       - name: ts
       - name: base64_url
       - name: _config_extract_ts

@@ -13,26 +13,30 @@ models:
             - service_key
             - product_key
             - component_key
-            - calitp_extracted_at
+            - dt
       - dbt_utils.unique_combination_of_columns:
           severity: warn
           combination_of_columns:
             - service_key
             - product_key
             - component_key
-            - calitp_extracted_at
-
+            - dt
   - name: int_transit_database__urls_to_gtfs_datasets
     description: |
       Creates a 1:N relationship so any given extract/URL in the
       GTFS models can identify its source gtfs_datasets record.
       Currently this is unversioned; any historical URLs point
       to the latest version of their gtfs_datasets record.
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: base64_url
+          gaps: required
     columns:
       - name: base64_url
         tests:
           - not_null
-          - unique
       - name: gtfs_dataset_key
         tests:
           - relationships:
@@ -43,170 +47,3 @@ models:
                 # will work once the dim is historical
                 error_if: ">10"
                 warn_if: ">0"
-  - name: int_transit_database__service_datasets_pivoted
-    description: |
-      A pivoted (wide) table showing a grouping of a service and a set of up to
-      four GTFS dataset records (one of each type: schedule, RT service alerts,
-      RT vehicle positions, and RT trip updates) that are associated with that service.
-      For a set of GTFS datasets to be listed together, they must meet two conditions:
-      1. They are associated with the same service, with the same category (primary or not)
-      2. The RT feeds use this schedule feed for validation
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - service_key
-            - gtfs_dataset_key_schedule
-            - gtfs_dataset_key_service_alerts
-            - gtfs_dataset_key_vehicle_positions
-            - gtfs_dataset_key_trip_updates
-    columns:
-      - name: service_key
-        description: Foreign key to dim_services.
-        test:
-          - not_null
-      - name: customer_facing
-      - name: route_id
-      - name: agency_id
-      - name: network_id
-      - name: gtfs_dataset_key_schedule
-        description: Foreign key to dim_gtfs_datasets, for a record with data = "GTFS Schedule."
-      - name: gtfs_dataset_key_service_alerts
-        description: Foreign key to dim_gtfs_datasets, for a record with data = "GTFS Alerts."
-      - name: gtfs_dataset_key_vehicle_positions
-        description: Foreign key to dim_gtfs_datasets, for a record with data = "GTFS VehiclePositions."
-      - name: gtfs_dataset_key_trip_updates
-        description: Foreign key to dim_gtfs_datasets, for a record with data = "GTFS TripUpdates."
-  - name: int_transit_database__services_history
-    description: |
-      Daily list of services, unnested to the organization/service relationship level,
-      with attributes required to check whether they were assessed by Cal-ITP on the given date.
-
-      This table is different than other Transit Database data because it
-      captures the historical state of various attributes. This historical
-      data is meant to be used for quality assessment purposes.
-
-      For the most up to date information about services, use dim_services.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - date
-    columns:
-      - name: date
-        description: |
-          Date on which this service was in our Transit Database data.
-      - name: key
-        description: |
-          Synthetic key, hash of `service_key` and `provider_organization_key`.
-      - name: service_key
-        description: |
-          Service record key.
-      - name: name
-      - name: assessment_status
-        description: |
-          Assessment status from raw Transit Database data as of date.
-      - name: currently_operating
-        description: |
-          Currently operating value from raw Transit Database data as of date.
-      - name: service_type_str
-        description: |
-          Service types from raw Transit Database data as of date, concatenated together
-          into a comma-delimited string.
-      - name: provider
-        description: |
-          Array of organization key(s) for organization(s) managing this service as of this date.
-  - name: int_transit_database__organizations_history
-    description: |
-      Daily list of organizations, unnested to the organization/service relationship level,
-      with attributes required to check whether they were assessed by Cal-ITP on the given date.
-
-      This table is different than other Transit Database data because it
-      captures the historical state of various attributes. This historical
-      data is meant to be used for quality assessment purposes.
-
-      For the most up to date information about organizations, use dim_organizations.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - date
-    columns:
-      - name: date
-        description: |
-          Date on which this organization was in our Transit Database data.
-      - name: key
-        description: |
-          Synthetic key, hash of `organization_key` and `mobility_services_managed_service_key`.
-      - name: organization_key
-        description: |
-          Organization record key.
-      - name: name
-      - name: assessment_status
-        description: |
-          Assessment status from raw Transit Database data as of date.
-      - name: reporting_category
-        description: |
-          Currently operating value from raw Transit Database data as of date.
-      - name: mobility_services_managed
-        description: |
-          Array of service keys for managed services as of this date.
-  - name: int_transit_database__gtfs_service_data_history
-    description: |
-      Daily list of GTFS dataset/service relationships with attributes required to check
-      whether they were assessed by Cal-ITP on the given date.
-
-      This table is different than other Transit Database data because it
-      captures the historical state of various attributes. This historical
-      data is meant to be used for quality assessment purposes.
-
-      For the most up to date information about services, use dim_gtfs_service_data.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - date
-    columns:
-      - name: date
-        description: |
-          Date on which this service was in our Transit Database data.
-      - name: key
-        description: |
-          Synthetic key, hash of `gtfs_service_data_key`, `service_key` and `gtfs_dataset_key`.
-      - name: gtfs_service_data_key
-        description: |
-          GTFS service data record key.
-      - name: service_key
-        description: |
-          Service record key.
-      - name: gtfs_dataset_key
-        description: |
-          GTFS dataset record key.
-      - name: name
-      - name: customer_facing
-      - name: category
-  - name: int_transit_database__gtfs_datasets_history
-    description: |
-      Daily list of GTFS datasets relationships with attributes required to check
-      whether they were assessed by Cal-ITP on the given date.
-
-      This table is different than other Transit Database data because it
-      captures the historical state of various attributes. This historical
-      data is meant to be used for quality assessment purposes.
-
-      For the most up to date information about services, use dim_gtfs_datasets.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - date
-    columns:
-      - name: date
-        description: |
-          Date on which this service was in our Transit Database data.
-      - name: key
-        description: |
-          GTFS dataset record key.
-      - name: name
-      - name: type
-      - name: regional_feed_type
-      - name: base64_url

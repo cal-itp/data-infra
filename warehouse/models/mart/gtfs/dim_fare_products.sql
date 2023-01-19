@@ -24,7 +24,8 @@ dim_fare_products AS (
         amount,
         currency,
         _valid_from,
-        _valid_to
+        _valid_to,
+        _is_current
     FROM make_dim
 )
 

@@ -60,7 +60,7 @@ construct_base64_url AS (
 
 stg_transit_database__gtfs_datasets AS (
     SELECT
-        id AS key,
+        id,
         {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         data,
         data_quality_pipeline,
@@ -72,24 +72,15 @@ stg_transit_database__gtfs_datasets AS (
         uri,
         future_uri,
         pipeline_url,
-        api_key,
         unnested_aggregated_to AS aggregated_to_gtfs_dataset_key,
         provider_gtfs_capacity,
-        service_type,
-        category,
         notes,
-        referenced_gtfs__from_gtfs_service_mapping_,
         provider,
         operator,
-        provider_reporting_category__from_gtfs_service_mapping_,
-        feed_metrics,
         gtfs_service_mapping,
-        services,
         dataset_producers,
         unnested_schedule_to_use_for_rt_validation AS schedule_to_use_for_rt_validation_gtfs_dataset_key,
         dataset_publisher,
-        itp_activities,
-        itp_schedule_todo,
         deprecated_date,
         authorization_url_parameter_name,
         url_secret_key_name,
@@ -104,7 +95,7 @@ stg_transit_database__gtfs_datasets AS (
             WHEN data = "GTFS TripUpdates" THEN "trip_updates"
         END AS type,
         ts,
-        dt AS calitp_extracted_at
+        dt
     FROM construct_base64_url
     LEFT JOIN UNNEST(construct_base64_url.aggregated_to) AS unnested_aggregated_to
     LEFT JOIN UNNEST(construct_base64_url.schedule_to_use_for_rt_validation) AS unnested_schedule_to_use_for_rt_validation

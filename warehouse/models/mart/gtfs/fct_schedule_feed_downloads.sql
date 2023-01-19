@@ -33,6 +33,7 @@ fct_schedule_feed_downloads AS (
     FROM joined_feed_outcomes AS j
     LEFT JOIN urls_to_gtfs_datasets AS u
         ON j.base64_url = u.base64_url
+        AND j.ts BETWEEN u._valid_from AND u._valid_to
     LEFT JOIN dim_schedule_feeds AS f
         ON j.base64_url = f.base64_url
         AND j.ts BETWEEN f._valid_from AND f._valid_to

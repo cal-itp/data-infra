@@ -27,7 +27,8 @@ dim_fare_transfer_rules AS (
         fare_transfer_type,
         fare_product_id,
         _valid_from,
-        _valid_to
+        _valid_to,
+        _is_current
     FROM make_dim
 )
 

@@ -22,7 +22,8 @@ dim_areas AS (
         area_name,
         base64_url,
         _valid_from,
-        _valid_to
+        _valid_to,
+        _is_current
     FROM make_dim
 )
 

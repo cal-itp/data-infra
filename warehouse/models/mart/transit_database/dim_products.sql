@@ -1,15 +1,14 @@
 {{ config(materialized='table') }}
 
-WITH latest_products AS (
-    {{ get_latest_dense_rank(
-        external_table = ref('stg_transit_database__products'),
-        order_by = 'calitp_extracted_at DESC'
-        ) }}
+WITH dim AS (
+    SELECT *
+    FROM {{ ref('int_transit_database__products_dim') }}
 ),
 
 dim_products AS (
     SELECT
         key,
+        original_record_id,
         name,
         url,
         requirements,
@@ -18,8 +17,10 @@ dim_products AS (
         certifications,
         product_features,
         business_model_features,
-        calitp_extracted_at
-    FROM latest_products
+        _is_current,
+        _valid_from,
+        _valid_to
+    FROM dim
 )
 
 SELECT * FROM dim_products

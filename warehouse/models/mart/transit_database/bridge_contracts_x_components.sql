@@ -1,37 +1,41 @@
 {{ config(materialized='table') }}
 
-WITH latest_contracts AS (
-    {{ get_latest_dense_rank(
-    external_table = ref('stg_transit_database__contracts'),
-    order_by = 'calitp_extracted_at DESC'
-    ) }}
+WITH contracts AS ( --noqa
+    SELECT *
+    FROM {{ ref('int_transit_database__contracts_dim') }}
 ),
 
-latest_components AS (
-    {{ get_latest_dense_rank(
-    external_table = ref('stg_transit_database__components'),
-    order_by = 'calitp_extracted_at DESC'
-    ) }}
+components AS ( -- noqa
+    SELECT *
+    FROM {{ ref('int_transit_database__components_dim') }}
 ),
+
 
 bridge_contracts_x_components AS (
- {{ transit_database_many_to_many(
-     table_a = 'latest_contracts',
-     table_a_key_col = 'key',
-     table_a_key_col_name = 'contract_key',
-     table_a_name_col = 'name',
-     table_a_name_col_name = 'contract_name',
-     table_a_join_col = 'covered_components',
-     table_a_date_col = 'calitp_extracted_at',
-     table_b = 'latest_components',
-     table_b_key_col = 'key',
-     table_b_key_col_name = 'component_key',
-     table_b_name_col = 'name',
-     table_b_name_col_name = 'component_name',
-     table_b_join_col = 'contracts',
-     table_b_date_col = 'calitp_extracted_at',
-     shared_date_name = 'calitp_extracted_at'
- ) }}
+ {{ transit_database_many_to_many_versioned(
+    shared_start_date_name = '_valid_from',
+    shared_end_date_name = '_valid_to',
+    shared_current_name = '_is_current',
+    table_a = {'name': 'contracts',
+        'unversioned_key_col': 'original_record_id',
+        'versioned_key_col': 'key',
+        'key_col_name': 'contract_key',
+        'name_col': 'name',
+        'name_col_name': 'contract_name',
+        'unversioned_join_col': 'covered_components',
+        'start_date_col': '_valid_from',
+        'end_date_col': '_valid_to'},
+
+    table_b = {'name': 'components',
+        'unversioned_key_col': 'original_record_id',
+        'versioned_key_col': 'key',
+        'key_col_name': 'component_key',
+        'name_col': 'name',
+        'name_col_name': 'component_name',
+        'unversioned_join_col': 'contracts',
+        'start_date_col': '_valid_from',
+        'end_date_col': '_valid_to'}
+    ) }}
 )
 
 SELECT * FROM bridge_contracts_x_components

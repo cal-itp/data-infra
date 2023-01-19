@@ -1,15 +1,14 @@
 {{ config(materialized='table') }}
 
-WITH latest_fare_systems AS (
-    {{ get_latest_dense_rank(
-        external_table = ref('stg_transit_database__fare_systems'),
-        order_by = 'calitp_extracted_at DESC'
-        ) }}
+WITH int_transit_database__fare_systems_dim AS (
+    SELECT *
+    FROM {{ ref('int_transit_database__fare_systems_dim') }}
 ),
 
 dim_fare_systems AS (
     SELECT
         key,
+        original_record_id,
         fare_system,
         fares_based_on_zone,
         fares_based_on_route,
@@ -44,9 +43,10 @@ dim_fare_systems AS (
         paratransit_fare_url,
         demand_response_fare_url,
         itp_id,
-        ts,
-        calitp_extracted_at
-    FROM latest_fare_systems
+        _is_current,
+        _valid_from,
+        _valid_to
+    FROM int_transit_database__fare_systems_dim
 )
 
 SELECT * FROM dim_fare_systems

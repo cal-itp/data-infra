@@ -9,14 +9,13 @@ once_daily_rider_requirements AS (
 
 stg_transit_database__rider_requirements AS (
     SELECT
-        id AS key,
+        id,
         {{ trim_make_empty_string_null(column_name = "requirement") }} AS requirement,
         category,
         description,
         services,
         unnested_eligibility_programs AS eligibility_program_key,
-        ts,
-        dt AS calitp_extracted_at
+        dt
     FROM once_daily_rider_requirements
     LEFT JOIN UNNEST(once_daily_rider_requirements.eligibility_programs) AS unnested_eligibility_programs
 )

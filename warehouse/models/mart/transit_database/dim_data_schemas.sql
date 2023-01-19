@@ -1,10 +1,8 @@
 {{ config(materialized='table') }}
 
-WITH latest_data_schemas AS (
-    {{ get_latest_dense_rank(
-        external_table = ref('stg_transit_database__data_schemas'),
-        order_by = 'calitp_extracted_at DESC'
-        ) }}
+WITH int_transit_database__data_schemas_dim AS (
+    SELECT *
+    FROM {{ ref('int_transit_database__data_schemas_dim') }}
 ),
 
 dim_data_schemas AS (
@@ -12,8 +10,11 @@ dim_data_schemas AS (
         key,
         name,
         status,
-        calitp_extracted_at
-    FROM latest_data_schemas
+        original_record_id,
+        _is_current,
+        _valid_from,
+        _valid_to
+    FROM int_transit_database__data_schemas_dim
 )
 
 SELECT * FROM dim_data_schemas

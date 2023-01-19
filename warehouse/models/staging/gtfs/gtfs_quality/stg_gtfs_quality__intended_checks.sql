@@ -78,7 +78,13 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ trip_updates_feed_on_mobility_database() }}, {{ feed_aggregator_availability_rt() }}
     UNION ALL
-    SELECT {{ service_alerts_feed_on_mobility_database() }}, {{ feed_aggregator_availability_rt() }} #}
+    SELECT {{ service_alerts_feed_on_mobility_database() }}, {{ feed_aggregator_availability_rt() }}
+    UNION ALL
+    SELECT {{ modification_date_present_service_alerts() }}, {{ best_practices_alignment_rt() }}
+    UNION ALL
+    SELECT {{ modification_date_present_vehicle_positions() }}, {{ best_practices_alignment_rt() }}
+    UNION ALL
+    SELECT {{ modification_date_present_trip_updates() }}, {{ best_practices_alignment_rt() }}
 )
 
 SELECT * FROM stg_gtfs_quality__intended_checks

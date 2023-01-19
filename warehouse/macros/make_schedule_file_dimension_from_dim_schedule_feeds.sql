@@ -4,7 +4,8 @@ SELECT
     t2.key AS feed_key,
     t1.*,
     t2._valid_from,
-    t2._valid_to
+    t2._valid_to,
+    t2._is_current
 FROM {{ gtfs_file_table }} AS t1
 INNER JOIN {{ dim_schedule_feeds }} AS t2
     ON t1.ts = t2._valid_from

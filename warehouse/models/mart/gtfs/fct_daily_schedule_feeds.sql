@@ -10,7 +10,6 @@ dim_schedule_feeds AS (
     FROM {{ ref('dim_schedule_feeds') }}
 ),
 
-
 urls_to_gtfs_datasets AS (
     SELECT * FROM {{ ref('int_transit_database__urls_to_gtfs_datasets') }}
 ),
@@ -35,6 +34,10 @@ fct_daily_schedule_feeds AS (
         ON t1.noon_pacific BETWEEN t2._valid_from AND t2._valid_to
     LEFT JOIN urls_to_gtfs_datasets
         ON t2.base64_url = urls_to_gtfs_datasets.base64_url
+        -- TODO: this fails to join if there is a lag where a feed was extracted the day that its dataset record was deleted
+        -- this issue is rare and basically leads to a rounding error in terms of date coverage
+        -- we could either try to leverage the _config_extract_ts attribute, or artificially backdate this join (ex., subtract a millisecond after casting)
+        AND CAST(date_day AS TIMESTAMP) BETWEEN urls_to_gtfs_datasets._valid_from AND urls_to_gtfs_datasets._valid_to
 )
 
 SELECT * FROM fct_daily_schedule_feeds

@@ -27,7 +27,7 @@ hashed AS (
         zipfile_extract_md5hash,
         CAST(download_success AS INTEGER) as int_download_success,
         MAX(ts) OVER(PARTITION BY base64_url ORDER BY ts DESC) AS latest_extract,
-        {{ dbt_utils.surrogate_key(['gtfs_dataset_key', 'download_success', 'unzip_success',
+        {{ dbt_utils.surrogate_key(['download_success', 'unzip_success',
          'zipfile_extract_md5hash']) }} AS content_hash
     FROM int_gtfs_schedule__joined_feed_outcomes
 ),
@@ -89,7 +89,8 @@ actual_data_only AS (
         unzip_success,
         zipfile_extract_md5hash,
         _valid_from,
-        _valid_to
+        _valid_to,
+        _valid_to = {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }} AS _is_current
     FROM all_versioned
     WHERE download_success AND unzip_success
 ),
@@ -102,7 +103,8 @@ dim_schedule_feeds AS (
         unzip_success,
         zipfile_extract_md5hash,
         _valid_from,
-        _valid_to
+        _valid_to,
+        _is_current
     FROM actual_data_only
 )
 

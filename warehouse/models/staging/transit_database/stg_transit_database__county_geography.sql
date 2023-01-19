@@ -8,7 +8,7 @@ once_daily_county_geography AS (
 
 stg_transit_database__county_geography AS (
     SELECT
-        id AS key,
+        id,
         {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         fips,
         msa,
@@ -18,8 +18,7 @@ stg_transit_database__county_geography AS (
         rtpa,
         mpo,
         place_geography,
-        ts,
-        dt AS calitp_extracted_at
+        dt
     FROM once_daily_county_geography
 )
 
