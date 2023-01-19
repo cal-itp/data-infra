@@ -115,7 +115,6 @@
 "Passes Fares v2 portion of MobilityData GTFS Schedule Validator"
 {% endmacro %}
 
-<<<<<<< HEAD
 {% macro rt_20sec_vp() %}
 "Vehicle Positions feed contains updates at least once every 20 seconds"
 {% endmacro %}
@@ -125,7 +124,6 @@
 {% endmacro %}
 
 -- declare features
-=======
 {% macro lead_time() %}
 "All schedule changes in the last month have provided at least 7 days of lead time"
 {% endmacro %}

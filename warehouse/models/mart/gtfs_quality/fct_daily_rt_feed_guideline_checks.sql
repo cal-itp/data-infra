@@ -9,16 +9,14 @@ unioned AS (
             ref('int_gtfs_quality__rt_feeds_present'),
             ref('int_gtfs_quality__trip_id_alignment'),
             ref('int_gtfs_quality__rt_https'),
-<<<<<<< HEAD
-            ref('int_gtfs_quality__rt_20sec'),
-=======
+            ref('int_gtfs_quality__rt_20sec_vp'),
+            ref('int_gtfs_quality__rt_20sec_tu'),
             ref('int_gtfs_quality__rt_protobuf_error'),
             ref('int_gtfs_quality__no_stale_vehicle_positions'),
             ref('int_gtfs_quality__no_stale_service_alerts'),
             ref('int_gtfs_quality__no_stale_trip_updates'),
             ref('int_gtfs_quality__feed_aggregator_rt'),
             ref('int_gtfs_quality__modification_date_present_rt'),
->>>>>>> main
         ],
     ) }}
 ),

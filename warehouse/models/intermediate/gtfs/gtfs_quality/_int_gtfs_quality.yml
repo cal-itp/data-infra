@@ -259,10 +259,6 @@ models:
     tests: *stg_gtfs_guideline_tests_rt
     columns: *stg_gtfs_guideline_columns
 
-  - name: int_gtfs_quality__rt_20sec
-    tests: *stg_gtfs_guideline_tests_rt
-    columns: *stg_gtfs_guideline_columns
-
   - name: int_gtfs_quality__rt_https
     tests: *stg_gtfs_guideline_tests_rt
     # Reducing null_proportion minimum due to missing rows in rt_https check, due to missing data before Nov 22
@@ -302,6 +298,14 @@ models:
     columns: *stale_rt_guideline_check_columns
 
   - name: int_gtfs_quality__no_stale_service_alerts
+    tests: *stale_rt_guideline_check_tests
+    columns: *stale_rt_guideline_check_columns
+
+  - name: int_gtfs_quality__rt_20sec_vp
+    tests: *stale_rt_guideline_check_tests
+    columns: *stale_rt_guideline_check_columns
+
+  - name: int_gtfs_quality__rt_20sec_tu
     tests: *stale_rt_guideline_check_tests
     columns: *stale_rt_guideline_check_columns
 
