@@ -11,7 +11,7 @@ products AS ( -- noqa
 ),
 
 bridge_data_schemas_x_products_outputs AS (
- {{ transit_database_many_to_many2(
+ {{ transit_database_many_to_many_versioned(
     shared_start_date_name = '_valid_from',
     shared_end_date_name = '_valid_to',
     shared_current_name = '_is_current',

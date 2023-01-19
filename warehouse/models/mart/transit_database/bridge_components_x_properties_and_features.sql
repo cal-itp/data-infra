@@ -12,7 +12,7 @@ properties_and_features AS ( -- noqa
 
 
 bridge_components_x_properties_and_features AS (
- {{ transit_database_many_to_many2(
+ {{ transit_database_many_to_many_versioned(
     shared_start_date_name = '_valid_from',
     shared_end_date_name = '_valid_to',
     shared_current_name = '_is_current',
