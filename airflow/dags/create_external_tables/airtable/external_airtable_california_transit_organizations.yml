@@ -235,3 +235,33 @@ schema_fields:
   - name: assessment_status
     type: STRING
     mode: NULLABLE
+  - name: feature_progress__schedule_demand_response_completeness
+    type: STRING
+    mode: NULLABLE
+  - name: feature_progress__realtime_fixed_route_completeness
+    type: STRING
+    mode: NULLABLE
+  - name: feature_progress__schedule_fixed_route_completeness
+    type: STRING
+    mode: NULLABLE
+  - name: feature_progress__website_availability
+    type: STRING
+    mode: NULLABLE
+  - name: feature_progress__technical_contact
+    type: STRING
+    mode: NULLABLE
+  - name: feature_notes__schedule_demand_response_completeness
+    type: STRING
+    mode: NULLABLE
+  - name: feature_notes__realtime_fixed_route_completeness
+    type: STRING
+    mode: NULLABLE
+  - name: feature_notes__schedule_fixed_route_completeness
+    type: STRING
+    mode: NULLABLE
+  - name: feature_notes__website_availability
+    type: STRING
+    mode: NULLABLE
+  - name: feature_notes__technical_contact
+    type: STRING
+    mode: NULLABLE
