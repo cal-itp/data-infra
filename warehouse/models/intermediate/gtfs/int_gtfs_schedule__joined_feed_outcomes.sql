@@ -13,11 +13,6 @@ int_gtfs_schedule__grouped_feed_file_parse_outcomes AS (
     FROM {{ ref('int_gtfs_schedule__grouped_feed_file_parse_outcomes') }}
 ),
 
-urls_to_gtfs_datasets AS (
-    SELECT * FROM {{ ref('int_transit_database__urls_to_gtfs_datasets') }}
-),
-
-
 join_outcomes_only AS (
     SELECT
         d.ts,
@@ -43,7 +38,6 @@ join_outcomes_only AS (
 
 int_gtfs_schedule__joined_feed_outcomes AS (
     SELECT
-        urls_to_gtfs_datasets.gtfs_dataset_key,
         f.ts,
         f.base64_url,
         f._config_extract_ts,
@@ -63,9 +57,6 @@ int_gtfs_schedule__joined_feed_outcomes AS (
         f.zipfile_dirs,
         f.pct_files_successfully_parsed
     FROM join_outcomes_only AS f
-    LEFT JOIN urls_to_gtfs_datasets
-        ON f.base64_url = urls_to_gtfs_datasets.base64_url
-        AND f.ts BETWEEN urls_to_gtfs_datasets._valid_from AND urls_to_gtfs_datasets._valid_to
 )
 
 SELECT * FROM int_gtfs_schedule__joined_feed_outcomes

@@ -27,7 +27,7 @@ hashed AS (
         zipfile_extract_md5hash,
         CAST(download_success AS INTEGER) as int_download_success,
         MAX(ts) OVER(PARTITION BY base64_url ORDER BY ts DESC) AS latest_extract,
-        {{ dbt_utils.surrogate_key(['gtfs_dataset_key', 'download_success', 'unzip_success',
+        {{ dbt_utils.surrogate_key(['download_success', 'unzip_success',
          'zipfile_extract_md5hash']) }} AS content_hash
     FROM int_gtfs_schedule__joined_feed_outcomes
 ),
