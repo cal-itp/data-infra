@@ -9,7 +9,7 @@ once_daily_services AS (
 
 stg_transit_database__services AS (
     SELECT
-        id AS key,
+        id,
         {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         service_type,
         fare_systems,
@@ -25,7 +25,7 @@ stg_transit_database__services AS (
         gtfs_schedule_quality,
         operating_counties,
         assessment_status,
-        dt AS calitp_extracted_at
+        dt
     FROM once_daily_services
 )
 

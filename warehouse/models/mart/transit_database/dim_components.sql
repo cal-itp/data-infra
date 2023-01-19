@@ -1,23 +1,24 @@
 {{ config(materialized='table') }}
 
-WITH latest AS (
-    {{ get_latest_dense_rank(
-        external_table = ref('stg_transit_database__components'),
-        order_by = 'calitp_extracted_at DESC'
-        ) }}
+WITH int_transit_database__components_dim AS (
+    SELECT *
+    FROM {{ ref('int_transit_database__components_dim') }}
 ),
 
 dim_components AS (
     SELECT
         key,
+        original_record_id,
         name,
         aliases,
         description,
         function_group,
         system,
         location,
-        calitp_extracted_at
-    FROM latest
+        _is_current,
+        _valid_from,
+        _valid_to
+    FROM int_transit_database__components_dim
 )
 
 SELECT * FROM dim_components

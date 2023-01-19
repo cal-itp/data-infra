@@ -3,6 +3,12 @@ version: 2
 models:
   - name: dim_components
     description: '{{ doc("components_table") }}'
+    tests: &mutually_exclusive_ranges
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: original_record_id
+          gaps: required
     columns:
       - &key
         name: key
@@ -11,27 +17,61 @@ models:
           - unique
         meta:
           metabase.semantic_type: type/PK
-
+      - &valid_from_placeholder
+        name: _valid_from
+        description: |
+          Starting timestamp from which this record is in effect (inclusive).
+          Because this table has not actually been fully versioned,
+          this is a constant placeholder value representing the first
+          time that this table was extracted from the source data.
+      - &valid_to_placeholder
+        name: _valid_to
+        description: |
+          End timestamp until which this record is in effect (inclusive).
+          Because this table has not actually been fully versioned,
+          this is a constant placeholder value in the distant future.
+      - &is_current_placeholder
+        name: _is_current
+        description: |
+          Flag indicating whether this is the most recent version of
+          this record.
+          Because this table has not actually been fully versioned,
+          this will always be True.
   - name: dim_contracts
     description: '{{ doc("contracts_table") }}'
+    tests: *mutually_exclusive_ranges
     columns:
       - *key
       - name: contract_holder_organization_key
+        description: |
+          Unversioned Airtable record ID for contract holder organization; versioned bridge
+          table to come later.
         tests:
           - relationships:
              to: ref('dim_organizations')
-             field: key
+             field: original_record_id
       - name: contract_vendor_organization_key
+        description: |
+          Unversioned Airtable record ID for contract vendor organization; versioned bridge
+          table to come later.
         tests:
           - relationships:
              to: ref('dim_organizations')
-             field: key
+             field: original_record_id
+      - *valid_from_placeholder
+      - *valid_to_placeholder
+      - *is_current_placeholder
   - name: dim_data_schemas
     description: '{{ doc("data_schemas_table") }}'
+    tests: *mutually_exclusive_ranges
     columns:
       - *key
+      - *valid_from_placeholder
+      - *valid_to_placeholder
+      - *is_current_placeholder
   - name: dim_organizations
     description: '{{ doc("organizations_table") }}'
+    tests: *mutually_exclusive_ranges
     columns:
       - *key
       - name: name
@@ -58,12 +98,6 @@ models:
           Core: funded by Caltrans/can control or influence somewhat
           Other Public Transit: (publicly available or managed) and publicly funded transit
           Other Transit: transit that isn't the above
-      - name: ntd_agency_info_key
-        description: Foreign key to `dim_ntd_agency_info`.
-        tests:
-          - relationships:
-             to: ref('dim_ntd_agency_info')
-             field: key
       - name: alias
       - name: gtfs_static_status
         description: |
@@ -84,8 +118,22 @@ models:
         description: |
           Is either "Yes" or "No" and indicates whether this Organization
           manages qualifying assessed services
+      - &valid_from_actual
+        name: _valid_from
+        description: |
+          Starting timestamp from which this record is in effect (inclusive).
+      - &valid_to_actual
+        name: _valid_to
+        description: |
+          End timestamp until which this record is in effect (inclusive).
+      - &is_current_actual
+        name: _is_current
+        description: |
+          Flag indicating whether this is the most recent version of
+          this record.
   - name: dim_services
     description: '{{ doc("services_table") }}'
+    tests: *mutually_exclusive_ranges
     columns:
       - *key
       - name: name
@@ -133,17 +181,29 @@ models:
         description: |
           Is either "Yes" or "No" and indicates whether this Service qualifies as
           being an assessed service
+      - *valid_from_actual
+      - *valid_to_actual
+      - *is_current_actual
   - name: dim_products
+    tests: *mutually_exclusive_ranges
     description: '{{ doc("products_table") }}'
     columns:
       - *key
+      - *valid_from_placeholder
+      - *valid_to_placeholder
+      - *is_current_placeholder
   - name: dim_properties_and_features
+    tests: *mutually_exclusive_ranges
     columns:
       - *key
+      - *valid_from_placeholder
+      - *valid_to_placeholder
+      - *is_current_placeholder
   - name: dim_contract_attachments
     description: |
       Attachment links to images of contracts.
       One contract can have multiple attachments.
+    tests: *mutually_exclusive_ranges
     columns:
       - *key
       - name: contract_key
@@ -151,14 +211,12 @@ models:
           - relationships:
              to: ref('dim_contracts')
              field: key
+      - *valid_from_placeholder
+      - *valid_to_placeholder
+      - *is_current_placeholder
   - name: dim_gtfs_datasets
-    description: |
-      Each record represents a gtfs dataset (feed) that is either a type of
-      GTFS Schedule, Trip Updates, Vehicle Locations or Alerts.
-      A gtfs dataset MAY:
-      - be *disaggregated into* one or more `gtfs service data` records.
-      - be *produced* by one or more `organizations`
-      - be *published* by an `organizations`.
+    description: '{{ doc("gtfs_datasets_table") }}'
+    tests: *mutually_exclusive_ranges
     columns:
       - *key
       - name: type
@@ -204,28 +262,12 @@ models:
         #   - relationships:
         #      to: ref('dim_gtfs_datasets')
         #      field: key
-      - name: calitp_extracted_at
-        description: |
-          Date extracted from Airtable. This column will be deprecated as _valid_from
-          and _valid_to are more fully adopted.
+      - *valid_from_actual
+      - *valid_to_actual
+      - *is_current_actual
   - name: dim_gtfs_service_data
-    description: |
-      Each record links together a single `gtfs dataset` and one (if possible)
-      or more `services`.  Additional fields define how to isolate the service
-      within the `gtfs dataset` (see below).
-      Many services have more than one GTFS dataset which describes their service. Often these
-      are either precursors to *final* datasets (e.g. AC Transit's GTFS dataset is a
-      precursor to the Bay Area 511 dataset) or artifacts produced in other processes such as
-      creating GTFS Realtime
-
-      To identify specific records within a given dataset that
-      correspond to the listed service:
-      * Selection levels are in following order: agency_id, network_id, route_id
-      * BLANK indicates ALL records
-      * Comma-separated list for values that should be selected at that selection level
-      * "*" indicates remaining records after other selections at that selection level
-
-      For further details, see: https://docs.calitp.org/data-infra/datasets_and_tables/transitdatabase.html?highlight=network_id#gtfs-service-data-notation-for-isolating-gtfs-services-within-gtfs-datasets
+    description: '{{ doc("gtfs_service_data_table") }}'
+    tests: *mutually_exclusive_ranges
     columns:
       - *key
       - name: service_key
@@ -283,13 +325,19 @@ models:
         #   - relationships:
         #      to: ref('dim_gtfs_service_data')
         #      field: key
+      - *valid_from_actual
+      - *valid_to_actual
+      - *is_current_actual
   - name: dim_fare_systems
     description: '{{ doc("fare_systems_table") }}'
+    tests: *mutually_exclusive_ranges
     columns:
       - *key
+      - *valid_from_placeholder
+      - *valid_to_placeholder
+      - *is_current_placeholder
   - name: dim_service_components
-    description: |
-      Each row is a unique service / product / component combination.
+    description: '{{ doc("service_components_table") }}'
     columns:
       - *key
   - name: bridge_components_x_products
@@ -297,6 +345,9 @@ models:
       Mapping table between components and products.
       Relationship indicates that product can act as that component.
       This is a many-to-many relationship.
+      Currently, this is not a genuinely historical table because component and product data is current-only.
+      Versioning columns are provided for future schema consistency.
+      Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -321,6 +372,14 @@ models:
       This table can be used to determine what GTFS dataset(s) represent a given provider's service(s);
       i.e., this table can be used to determine whether a given "agency" "has" GTFS.
 
+      Because this table is versioned and represents many-to-many relationships (for example, one organization manages
+      multiple services or a given service is represented in multiple sets of GTFS datasets),
+      joins using this table can result in fanout, even when joining with reference to a specific date.
+
+      For best results, join with reference to a specific date, and make sure to choose a specific
+      output grain (organizations, services, customer-facing vs. not); you will likely need to filter
+      or group to get the desired output.
+
       To identify specific records within a given dataset that
       correspond to the listed service:
       * Selection levels are in following order: agency_id, network_id, route_id
@@ -330,14 +389,6 @@ models:
 
       For further details, see: https://docs.calitp.org/data-infra/datasets_and_tables/transitdatabase.html?highlight=network_id#gtfs-service-data-notation-for-isolating-gtfs-services-within-gtfs-datasets
     tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - service_key
-            - organization_key
-            - schedule_gtfs_dataset_key
-            - service_alerts_gtfs_dataset_key
-            - vehicle_positions_gtfs_dataset_key
-            - trip_updates_gtfs_dataset_key
     columns:
       - *key
       - name: service_key
@@ -345,9 +396,10 @@ models:
           - relationships:
              to: ref('dim_services')
              field: key
-          - unique:
-              config:
-                where: customer_facing
+          # is there a way to partition this by date?
+          # - unique:
+          #     config:
+          #       where: gtfs_service_data_customer_facing
       - name: schedule_gtfs_dataset_key
         tests:
           - &ref_gtfs_datasets_key
@@ -414,10 +466,7 @@ models:
         description: |
           Hubspot CRM record ID for this organization.
   - name: dim_ntd_agency_info
-    description: |
-      2018 NTD Agency Info Table
-      Imported 10/6/2021 from
-      https://www7.fta.dot.gov/ntd/data-product/2018-annual-database-agency-information
+    description: '{{ doc("ntd_agency_info_table") }}'
     columns:
       - *key
       - name: ntd_id
@@ -458,17 +507,15 @@ models:
       - name: total_voms
       - name: volunteer_drivers
       - name: personal_vehicles
-      - name: organization_key
-        tests:
-          - relationships:
-             to: ref('dim_organizations')
-             field: key
-      - name: calitp_extracted_at
+      - name: dt
   - name: bridge_components_x_properties_and_features
     description: |
       Mapping table between components and properties_and_features.
       Relationship indicates that component has specified property or feature.
       This is a many-to-many relationship.
+      Currently, this is not a genuinely historical table because component and properties and features data is current-only.
+      Versioning columns are provided for future schema consistency.
+      Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -491,6 +538,9 @@ models:
       Relationship indicates that data schema is an accepted input into
       given product.
       This is a many-to-many relationship.
+      Currently, this is not a genuinely historical table because data schema and product data is current-only.
+      Versioning columns are provided for future schema consistency.
+      Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -513,6 +563,9 @@ models:
       Relationship indicates that data schema can be produced as output
       of given product.
       This is a many-to-many relationship.
+      Currently, this is not a genuinely historical table because data schema and product data is current-only.
+      Versioning columns are provided for future schema consistency.
+      Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -534,7 +587,8 @@ models:
       Mapping table between organizations and services.
       Relationship indicates that organization manages (provides)
       the given mobility service.
-      This is a many-to-many relationship.
+      This is a versioned, many-to-many relationship.
+      Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -555,7 +609,8 @@ models:
     description: |
       Mapping table between organizations and their parents
       (map between two organization records.)
-      This is a many-to-many relationship.
+      This is a versioned, many-to-many relationship.
+      Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -577,7 +632,8 @@ models:
       Mapping table between services and services for which
       they provide paratransit service
       (map between two service records.)
-      This is a many-to-many relationship.
+      This is a versioned, many-to-many relationship.
+      Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -597,8 +653,11 @@ models:
   - name: bridge_organizations_x_gtfs_datasets_produced
     description: |
       Mapping table between organizations and GTFS datasets
-      producted by that organization.
-      This is a many-to-many relationship.
+      produced by that organization.
+      The organization that produces a dataset may be a vendor.
+      For the organization that manages the service represented in a dataset, see dim_provider_gtfs_data.
+      This is a versioned, many-to-many relationship.
+      Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -619,7 +678,10 @@ models:
     description: |
       Mapping table between organizations and associated
       funding programs.
-      This is a many-to-many relationship.
+      This is a partially versioned, many-to-many relationship.
+      Because organization records are versioned and funding programs are current-only this represents relationships between
+      versioned organization records and unversioned funding program records.
+      Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -640,7 +702,8 @@ models:
     description: |
       Mapping table between fare systems and services.
       Relationship indicates that service utilizes the given fare system.
-      This is a many-to-many relationship.
+      This is a versioned, many-to-many relationship.
+      Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -657,3 +720,51 @@ models:
           - relationships:
              to: ref('dim_services')
              field: key
+  - name: bridge_contracts_x_components
+    description: |
+      Mapping table between contracts and components.
+      Relationship indicates that contract covers the given component.
+      This is a versioned, many-to-many relationship.
+      Joins via this table can result in fanout.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - contract_key
+            - component_key
+    columns:
+      - name: contract_key
+        tests:
+          - relationships:
+             to: ref('dim_contracts')
+             field: key
+      - name: component_key
+        tests:
+          - relationships:
+             to: ref('dim_components')
+             field: key
+  - name: bridge_schedule_dataset_for_validation
+    description: |
+      Mapping table between GTFS RT datasets and the schedule dataset that is used to validate it
+      (i.e., the schedule dataset that the RT dataset references.)
+      This is a versioned relationship.
+      While an RT dataset can only use one schedule at a time, because the records are versioned independently,
+      a given `gtfs_dataset_key` can appear multiple times in this table with different versions of its accompanying schedule.
+      Thus, joins via this table can result in fanout if they don't limit to validity on a specific date.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - gtfs_dataset_key
+            - schedule_to_use_for_rt_validation_gtfs_dataset_key
+    columns:
+      - name: gtfs_dataset_key
+        tests:
+          - dbt_utils.relationships_where:
+             to: ref('dim_gtfs_datasets')
+             field: key
+             to_condition: "type != 'schedule'"
+      - name: schedule_to_use_for_rt_validation_gtfs_dataset_key
+        tests:
+          - dbt_utils.relationships_where:
+             to: ref('dim_gtfs_datasets')
+             field: key
+             to_condition: "type = 'schedule'"

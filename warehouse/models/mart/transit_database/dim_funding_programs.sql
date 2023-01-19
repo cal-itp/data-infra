@@ -1,19 +1,20 @@
 {{ config(materialized='table') }}
 
-WITH latest_funding_programs AS (
-    {{ get_latest_dense_rank(
-        external_table = ref('stg_transit_database__funding_programs'),
-        order_by = 'calitp_extracted_at DESC'
-        ) }}
+WITH int_transit_database__funding_programs_dim AS (
+    SELECT *
+    FROM {{ ref('int_transit_database__funding_programs_dim') }}
 ),
 
 dim_funding_programs AS (
     SELECT
         key,
+        original_record_id,
         program,
         category,
-        calitp_extracted_at
-    FROM latest_funding_programs
+        _is_current,
+        _valid_from,
+        _valid_to
+    FROM int_transit_database__funding_programs_dim
 )
 
 SELECT * FROM dim_funding_programs

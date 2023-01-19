@@ -8,7 +8,7 @@ once_daily_contracts AS (
 
 stg_transit_database__contracts AS (
     SELECT
-        id AS key,
+        id,
         {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         unnested_contract_holder AS contract_holder_organization_key,
         unnested_contract_vendor AS contract_vendor_organization_key,
@@ -20,7 +20,7 @@ stg_transit_database__contracts AS (
         notes,
         contract_name AS contract_name_notes,
         attachments,
-        dt AS calitp_extracted_at
+        dt
     FROM once_daily_contracts
     LEFT JOIN UNNEST(once_daily_contracts.contract_holder) AS unnested_contract_holder
     LEFT JOIN UNNEST(once_daily_contracts.contract_vendor) AS unnested_contract_vendor

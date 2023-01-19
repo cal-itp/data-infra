@@ -9,7 +9,7 @@ once_daily_ntd_agency_info AS (
 
 stg_transit_database__ntd_agency_info AS (
     SELECT
-        id AS key,
+        id,
         {{ trim_make_empty_string_null(column_name = "ntd_id") }} AS ntd_id,
         legacy_ntd_id,
         agency_name,
@@ -49,8 +49,7 @@ stg_transit_database__ntd_agency_info AS (
         volunteer_drivers,
         personal_vehicles,
         unnested_organizations AS organization_key,
-        ts,
-        dt AS calitp_extracted_at
+        dt
     FROM once_daily_ntd_agency_info
     LEFT JOIN UNNEST(once_daily_ntd_agency_info.organizations) AS unnested_organizations
 )

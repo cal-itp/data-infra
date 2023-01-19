@@ -6,7 +6,9 @@ WITH ranked AS (
             {% if partition_by %}
             PARTITION BY {{ partition_by }}
             {% endif %}
-            ORDER BY {{ order_by }}) as rank
+            ORDER BY {{ order_by }}) as rank,
+        -- TODO: this is probably a bit fragile, but lets us fake historical Airtable data
+        MIN({{ order_by.replace(' ASC','').replace(' DESC','') }}) OVER () AS universal_first_val
     FROM {{ external_table }}
     QUALIFY rank = 1
 )

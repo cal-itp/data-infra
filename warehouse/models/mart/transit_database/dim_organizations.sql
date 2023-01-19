@@ -1,15 +1,14 @@
 {{ config(materialized='table') }}
 
-WITH latest_organizations AS (
-    {{ get_latest_dense_rank(
-        external_table = ref('stg_transit_database__organizations'),
-        order_by = 'calitp_extracted_at DESC'
-        ) }}
+WITH dim AS (
+    SELECT *
+    FROM {{ ref('int_transit_database__organizations_dim') }}
 ),
 
 dim_organizations AS (
     SELECT
         key,
+        original_record_id,
         name,
         organization_type,
         roles,
@@ -18,14 +17,15 @@ dim_organizations AS (
         caltrans_district,
         website,
         reporting_category,
-        ntd_agency_info_key,
         hubspot_company_record_id,
         gtfs_static_status,
         gtfs_realtime_status,
         assessment_status,
         alias,
-        calitp_extracted_at
-    FROM latest_organizations
+        _is_current,
+        _valid_from,
+        _valid_to
+    FROM dim
 )
 
 SELECT * FROM dim_organizations

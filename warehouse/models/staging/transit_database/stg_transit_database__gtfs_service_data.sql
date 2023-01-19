@@ -8,11 +8,10 @@ once_daily_gtfs_service_data AS (
 
 stg_transit_database__gtfs_service_data AS (
     SELECT
-        id AS key,
+        id,
         {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         unnested_services AS service_key,
         unnested_gtfs_dataset AS gtfs_dataset_key,
-        dataset_type,
         -- only coalesce to false after the field had been created (November 23, 2022)
         -- otherwise a null is genuinely a null
         CASE
@@ -22,27 +21,18 @@ stg_transit_database__gtfs_service_data AS (
         agency_id,
         network_id,
         route_id,
-        provider,
-        operator,
-        dataset_producers__from_gtfs_dataset_,
-        dataset_publisher__from_gtfs_dataset_,
-        gtfs_dataset_type,
-        pathways_status,
         fares_v2_status,
-        service_type__from_services_,
-        flex_status,
-        schedule_comments__from_gtfs_dataset_,
-        itp_activities__from_gtfs_dataset_,
-        fares_notes__from_gtfs_dataset_,
-        uri,
-        currently_operating__from_services_,
-        provider_reporting_category,
-        itp_schedule_todo__from_gtfs_dataset_,
-        ts,
-        dt AS calitp_extracted_at
+        dt
     FROM once_daily_gtfs_service_data
     LEFT JOIN UNNEST(once_daily_gtfs_service_data.services) as unnested_services
     LEFT JOIN UNNEST(once_daily_gtfs_service_data.gtfs_dataset) as unnested_gtfs_dataset
+    -- TODO: actually handle this -- there are historical records that were not 1:1
+    -- either one service was entered with multiple datasets in a single record
+    -- or vice versa
+    -- this was not valid data entry at the time it was done, but we should see
+    -- if we can find a way to preserve that data anyway
+    -- we could see if we can generate a new key to keep all the entries
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY id, ts ORDER BY service_key) = 1
 )
 
 SELECT * FROM stg_transit_database__gtfs_service_data
