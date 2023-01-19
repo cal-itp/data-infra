@@ -705,7 +705,7 @@ models:
           - relationships:
              to: ref('dim_gtfs_datasets')
              field: key
-      - name: component_key
+      - name: schedule_to_use_for_rt_validation_gtfs_dataset_key
         tests:
           - relationships:
              to: ref('dim_gtfs_datasets')
