@@ -14,6 +14,7 @@ unioned AS (
             ref('int_gtfs_quality__no_stale_service_alerts'),
             ref('int_gtfs_quality__no_stale_trip_updates'),
             ref('int_gtfs_quality__feed_aggregator_rt'),
+            ref('int_gtfs_quality__modification_date_present_rt'),
         ],
     ) }}
 ),
