@@ -24,8 +24,8 @@ feed_guideline_index AS (
     {% endif %}
 ),
 
-vehicle_positions_outcomes AS (
-    SELECT * FROM {{ ref('stg_gtfs_rt__vehicle_positions_outcomes') }}
+vehicle_positions AS (
+    SELECT * FROM {{ ref('stg_gtfs_rt__vehicle_positions') }}
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
@@ -37,16 +37,18 @@ lag_ts AS (
   SELECT
           dt AS date,
           base64_url,
-          extract_ts,
-          LAG (extract_ts) OVER (PARTITION BY base64_url ORDER BY extract_ts) AS prev_extract_ts
-    FROM vehicle_positions_outcomes
+          header_timestamp,
+          LAG (header_timestamp) OVER (PARTITION BY base64_url ORDER BY header_timestamp) AS prev_header_timestamp
+    FROM vehicle_positions
 ),
 
+-- Note that since the header_timestamp will repeat when it hasn't been updated, the DATE_DIFF will be 0 seconds for some.
+-- This would affect us if we were measuring the AVG(), but it doesn't since we're only looking at MAX()
 daily_max_lag AS (
 SELECT
       date,
       base64_url,
-      MAX(DATE_DIFF(extract_ts, prev_extract_ts, SECOND)) AS max_lag
+      MAX(DATE_DIFF(header_timestamp, prev_header_timestamp, SECOND)) AS max_lag
   FROM lag_ts
  GROUP BY 1,2
 ),
