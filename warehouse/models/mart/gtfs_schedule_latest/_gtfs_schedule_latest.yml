@@ -28,6 +28,8 @@ models:
           - relationships:
               to: ref('dim_schedule_feeds')
               field: key
+        meta:
+          publish.ignore: true
       - &base64_url
         name: base64_url
         description: |
@@ -532,9 +534,8 @@ models:
       ckan.authority: https://gtfs.org/reference/static#stop_timestxt
       publish.gis_coordinate_system_epsg: WGS84
     columns:
-      - name: base64_url
       - *feed_key
-      - name: ts
+      - *base64_url
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key`, `trip_id`, and `stop_sequence`.
@@ -694,9 +695,13 @@ models:
       - name: min_transfer_time
         description: '{{ doc("gtfs_transfers__min_transfer_time") }}'
       - name: from_route_id
+        description: '{{ doc("gtfs_transfers__from_route_id") }}'
       - name: to_route_id
+        description: '{{ doc("gtfs_transfers__to_route_id") }}'
       - name: from_trip_id
+        description: '{{ doc("gtfs_transfers__from_trip_id") }}'
       - name: to_trip_id
+        description: '{{ doc("gtfs_transfers__to_trip_id") }}'
       - *_valid_from
       - *_valid_to
       - *_is_current
