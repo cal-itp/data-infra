@@ -123,7 +123,6 @@
 "Trip Updates feed contains updates at least once every 20 seconds"
 {% endmacro %}
 
--- declare features
 {% macro lead_time() %}
 "All schedule changes in the last month have provided at least 7 days of lead time"
 {% endmacro %}
@@ -176,7 +175,6 @@
 -- FEATURE NAMES
 --
 
->>>>>>> main
 {% macro compliance_schedule() %}
 "Compliance (Schedule)"
 {% endmacro %}
