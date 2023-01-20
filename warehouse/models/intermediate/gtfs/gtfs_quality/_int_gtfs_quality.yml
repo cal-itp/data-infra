@@ -289,6 +289,14 @@ models:
     tests: *stale_rt_guideline_check_tests
     columns: *stale_rt_guideline_check_columns
 
+  - name: int_gtfs_quality__rt_20sec_vp
+    tests: *stale_rt_guideline_check_tests
+    columns: *stale_rt_guideline_check_columns
+
+  - name: int_gtfs_quality__rt_20sec_tu
+    tests: *stale_rt_guideline_check_tests
+    columns: *stale_rt_guideline_check_columns
+
   - name: int_gtfs_quality__schedule_download_success
     tests: &stg_gtfs_guideline_tests_schedule_url
       - dbt_utils.unique_combination_of_columns:
