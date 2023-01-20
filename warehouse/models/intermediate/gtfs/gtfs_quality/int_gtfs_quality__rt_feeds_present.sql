@@ -1,5 +1,5 @@
 WITH feed_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_quality__rt_feed_guideline_index') }}
+    SELECT * FROM {{ ref('int_gtfs_quality__rt_url_guideline_index') }}
 ),
 
 fct_daily_rt_feed_files AS (
@@ -29,7 +29,7 @@ int_gtfs_quality__rt_feeds_present AS (
         rt_files,
         CASE
             WHEN rt_files > 0 THEN "PASS"
-            WHEN rt_files = 0 THEN "FAIL"
+            WHEN COALESCE(rt_files,0) = 0 THEN "FAIL"
         END AS status,
     FROM feed_guideline_index AS idx
     LEFT JOIN count_files AS files
