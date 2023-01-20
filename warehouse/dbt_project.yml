@@ -22,7 +22,7 @@ clean-targets:         # directories to be removed by `dbt clean`
   - "dbt_packages"
 
 vars:
-  FULL_REFRESH_SCHEDULE_START: 2021-04-16
+  FULL_REFRESH_SCHEDULE_START: '2021-04-16'
   RT_LOOKBACK_DAYS: 30
   TRIP_UPDATES_LOOKBACK_DAYS: 7
   'dbt_date:time_zone': 'America/Los_Angeles'

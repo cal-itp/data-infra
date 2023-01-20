@@ -377,9 +377,9 @@ models:
         description: '{{ doc("gtfs_agency__agency_fare_url") }}'
       - name: agency_email
         description: '{{ doc("gtfs_agency__agency_email") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - &_feed_valid_from
+        name: _feed_valid_from
+        description: Should not be used; exists to faciliate incremental materialization.
   - name: dim_areas
     description: |
       Each row is a cleaned row from an areas.txt file.
@@ -404,9 +404,7 @@ models:
         - not_null
       - name: area_name
         description: '{{ doc("gtfs_areas__area_name") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
   - name: dim_attributions
     description: |
       Each row is a cleaned row from an attributions.txt file.
@@ -448,9 +446,7 @@ models:
         description: '{{ doc("gtfs_attributions__attribution_email") }}'
       - name: attribution_phone
         description: '{{ doc("gtfs_attributions__attribution_phone") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
   - name: dim_fare_attributes
     description: |
       Each row is a cleaned row from a fare_attributes.txt file.
@@ -488,9 +484,7 @@ models:
         description: '{{ doc("gtfs_fare_attributes__agency_id") }}'
       - name: transfer_duration
         description: '{{ doc("gtfs_fare_attributes__transfer_duration") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
   - name: dim_fare_leg_rules
     description: |
       Each row is a cleaned row from a fare_leg_rules.txt file.
@@ -520,9 +514,7 @@ models:
       - name: fare_product_id
         description: '{{ doc("gtfs_fare_leg_rules__fare_product_id") }}'
         tests: *not_null_error
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
   - name: dim_fare_products
     description: |
       Each row is a cleaned row from a fare_products.txt file.
@@ -1192,12 +1184,11 @@ models:
       Cleaned GTFS schedule stop_times data.
       See https://gtfs.org/schedule/reference/#calendar_datestxt for specification.
     tests:
-      - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url, trip_id, stop_sequence
-          where: "_valid_from >= TIMESTAMP_SUB(CURRENT_TIMESTAMP, INTERVAL 30 DAY) AND NOT warning_duplicate_primary_key"
-          gaps: required
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - trip_id
+            - stop_sequence
     columns:
       - *feed_key
       - *base64_url

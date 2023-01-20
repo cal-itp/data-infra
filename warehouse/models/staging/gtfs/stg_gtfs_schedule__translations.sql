@@ -1,6 +1,3 @@
-{{ config(enabled=False) }}
--- we do not actually process translations right now
-
 WITH external_translations AS (
     SELECT *
     FROM {{ source('external_gtfs_schedule', 'translations') }}
