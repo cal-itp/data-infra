@@ -67,8 +67,8 @@ models:
       - *base64_url
       - *check
 
-  - name: fct_daily_schedule_rt_guideline_checks
-    description: '{{ doc("fct_daily_schedule_rt_guideline_checks") }}'
+  - name: fct_daily_rt_url_guideline_checks
+    description: '{{ doc("fct_daily_rt_url_guideline_checks") }}'
     columns:
       - *key
       - *date
