@@ -150,7 +150,7 @@ full_join AS (
         AND orgs.date = ntd_bridge.date
 ),
 
-int_gtfs_quality__daily_assessment_candidate_entities AS (
+initial_assessed AS (
     SELECT
         {{ dbt_utils.surrogate_key([
             'organization_key',
@@ -167,7 +167,6 @@ int_gtfs_quality__daily_assessment_candidate_entities AS (
         (organization_assessed
             AND service_assessed
             AND gtfs_service_data_assessed) AS assessed,
-
 
         organization_assessed,
 
@@ -192,6 +191,66 @@ int_gtfs_quality__daily_assessment_candidate_entities AS (
         schedule_feed_key,
         schedule_to_use_for_rt_validation_gtfs_dataset_key
     FROM full_join
+),
+
+check_regional_feed_types AS (
+    SELECT
+        date,
+        organization_key,
+        service_key,
+        -- use subfeed only if this org/service pair:
+        --  has both feed types
+        --  one of those feed types is assessed for the pair
+        ('Regional Subfeed' IN UNNEST(ARRAY_AGG(regional_feed_type))
+            AND 'Combined Regional Feed' IN UNNEST(ARRAY_AGG(regional_feed_type)))
+        AND LOGICAL_OR(assessed) AS use_subfeed_for_reports
+    FROM initial_assessed
+    WHERE regional_feed_type IN ('Regional Subfeed', 'Combined Regional Feed')
+    GROUP BY date, organization_key, service_key
+),
+
+int_gtfs_quality__daily_assessment_candidate_entities AS (
+    SELECT
+        key,
+        date,
+        organization_name,
+        service_name,
+        gtfs_dataset_name,
+        gtfs_dataset_type,
+        assessed,
+        CASE
+            WHEN (check_regional_feed_types.use_subfeed_for_reports
+                AND regional_feed_type = 'Combined Regional Feed') THEN FALSE
+            WHEN (check_regional_feed_types.use_subfeed_for_reports
+                AND regional_feed_type = 'Regional Subfeed') THEN TRUE
+            ELSE assessed
+        END AS reports_site_assessed,
+        organization_assessed,
+        service_assessed,
+        gtfs_service_data_assessed,
+        organization_itp_id,
+        organization_hubspot_company_record_id,
+        organization_ntd_id,
+        gtfs_service_data_customer_facing,
+        regional_feed_type,
+        check_regional_feed_types.use_subfeed_for_reports,
+        agency_id,
+        route_id,
+        network_id,
+        base64_url,
+        organization_key,
+        service_key,
+        gtfs_service_data_key,
+        gtfs_dataset_key,
+        schedule_feed_key,
+        schedule_to_use_for_rt_validation_gtfs_dataset_key
+    FROM initial_assessed
+    LEFT JOIN check_regional_feed_types
+        USING (date, organization_key, service_key)
 )
+
+
+
+
 
 SELECT * FROM int_gtfs_quality__daily_assessment_candidate_entities
