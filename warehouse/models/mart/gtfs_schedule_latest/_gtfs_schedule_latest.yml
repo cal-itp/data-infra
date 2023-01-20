@@ -578,10 +578,14 @@ models:
           Rows with `true` in this column have a duplicate primary key; i.e., the given `trip_id`
           / `stop_sequence` pair is duplicated within an individual feed instance and `key` will
           also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
+        meta:
+          publish.ignore: true
       - name: warning_missing_foreign_key_stop_id
         description: |
           Rows with `true` in this column are missing the required `stop_id` value.
           This means they will fail to join with `stop` related information.
+        meta:
+          publish.ignore: true
       - name: arrival_sec
         description: |
           This is a calculated field that does not come from GTFS - it is not a timestamp and can't be treated as such.
