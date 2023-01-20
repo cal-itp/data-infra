@@ -5,11 +5,11 @@ Identifies a trip to which the specified headway of service applies.
 {% enddocs %}
 
 {% docs gtfs_frequencies__start_time %}
-Time at which the first vehicle departs from the first stop of the trip with the specified headway.
+HH:MM:SS format. Time at which the first vehicle departs from the first stop of the trip with the specified headway.
 {% enddocs %}
 
 {% docs gtfs_frequencies__end_time %}
-Time at which service changes to a different headway (or ceases) at the first stop in the trip.
+HH:MM:SS format. Time at which service changes to a different headway (or ceases) at the first stop in the trip.
 {% enddocs %}
 
 {% docs gtfs_frequencies__headway_secs %}

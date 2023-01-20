@@ -36,9 +36,9 @@ Functions in the same way as monday except applies to Sundays.
 {% enddocs %}
 
 {% docs gtfs_calendar__start_date %}
-Start service day for the service interval.
+Start service day for the service interval in YYYY-MM-DD format.
 {% enddocs %}
 
 {% docs gtfs_calendar__end_date %}
-End service day for the service interval. This service day is included in the interval.
+End service day for the service interval in YYYY-MM-DD format. This service day is included in the interval.
 {% enddocs %}

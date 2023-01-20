@@ -13,7 +13,7 @@ Short text or a number that identifies the location for riders. These codes are 
 {% docs gtfs_stops__stop_name %}
 Name of the location. Use a name that people will understand in the local and tourist vernacular.
 
-When the location is a boarding area (location_type=4), the stop_name should contains the name of the boarding area as displayed by the agency. It could be just one letter (like on some European intercity railway stations), or text like “Wheelchair boarding area” (NYC’s Subway) or “Head of short trains” (Paris’ RER).
+When the location is a boarding area (location_type=4), the stop_name should contains the name of the boarding area as displayed by the agency. It could be just one letter (like on some European intercity railway stations), or text like “Wheelchair boarding area” (NYC's Subway) or “Head of short trains” (Paris' RER).
 
 Conditionally Required:
 • Required for locations which are stops (location_type=0), stations (location_type=1) or entrances/exits (location_type=2).
@@ -79,7 +79,7 @@ Conditionally Required:
 {% enddocs %}
 
 {% docs gtfs_stops__stop_timezone %}
-Timezone of the location. If the location has a parent station, it inherits the parent station’s timezone instead of applying its own. Stations and parentless stops with empty stop_timezone inherit the timezone specified by agency.agency_timezone. If stop_timezone values are provided, the times in stop_times.txt should be entered as the time since midnight in the timezone specified by agency.agency_timezone. This ensures that the time values in a trip always increase over the course of a trip, regardless of which timezones the trip crosses.
+Timezone of the location. If the location has a parent station, it inherits the parent station's timezone instead of applying its own. Stations and parentless stops with empty stop_timezone inherit the timezone specified by agency.agency_timezone. If stop_timezone values are provided, the times in stop_times.txt should be entered as the time since midnight in the timezone specified by agency.agency_timezone. This ensures that the time values in a trip always increase over the course of a trip, regardless of which timezones the trip crosses.
 {% enddocs %}
 
 {% docs gtfs_stops__wheelchair_boarding %}
@@ -106,5 +106,5 @@ Level of the location. The same level can be used by multiple unlinked stations.
 {% enddocs %}
 
 {% docs gtfs_stops__platform_code %}
-Platform identifier for a platform stop (a stop belonging to a station). This should be just the platform identifier (eg. "G" or "3"). Words like “platform” or "track" (or the feed’s language-specific equivalent) should not be included. This allows feed consumers to more easily internationalize and localize the platform identifier into other languages.
+Platform identifier for a platform stop (a stop belonging to a station). This should be just the platform identifier (eg. "G" or "3"). Words like “platform” or "track" (or the feed's language-specific equivalent) should not be included. This allows feed consumers to more easily internationalize and localize the platform identifier into other languages.
 {% enddocs %}
