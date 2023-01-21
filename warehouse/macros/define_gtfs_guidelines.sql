@@ -171,6 +171,10 @@
 "The Trip updates API endpoint is configured to report the file modification date"
 {% endmacro %}
 
+{% macro all_tu_in_vp() %}
+"100% of trips marked as “Scheduled”, “Canceled”, or “Added” within the Trip updates feed are represented within the Vehicle positions feed"
+{% endmacro %}
+
 --
 -- FEATURE NAMES
 --
