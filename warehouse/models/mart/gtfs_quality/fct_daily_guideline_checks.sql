@@ -26,6 +26,11 @@ schedule_url_checks AS (
     FROM {{ ref('fct_daily_schedule_url_guideline_checks') }}
 ),
 
+rt_url_checks AS (
+    SELECT *
+    FROM {{ ref('fct_daily_rt_url_guideline_checks') }}
+),
+
 idx AS (
     SELECT
         implemented_checks.*,
@@ -75,6 +80,10 @@ fct_daily_guideline_checks AS (
         ON idx.date = schedule_url_checks.date
         AND idx.base64_url = schedule_url_checks.base64_url
         AND idx.check = schedule_url_checks.check
+    LEFT JOIN rt_url_checks
+        ON idx.date = rt_url_checks.date
+        AND idx.base64_url = rt_url_checks.base64_url
+        AND idx.check = rt_url_checks.check
 )
 
 SELECT * FROM fct_daily_guideline_checks

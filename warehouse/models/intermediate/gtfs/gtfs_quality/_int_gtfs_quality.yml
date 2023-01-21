@@ -21,6 +21,26 @@ models:
             - base64_url
             - date
 
+  - name: int_gtfs_quality__rt_feed_guideline_index
+    description: |
+      Daily index of v2 RT feeds. Provides structure for
+      individual check models to be joined together by day.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - date
+
+  - name: int_gtfs_quality__rt_url_guideline_index
+    description: |
+      Daily index of v2 schedule urls. Provides structure for
+      individual check models to be joined together by day.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - base64_url
+            - date
+
   - name: int_gtfs_quality__rt_validation_outcomes
     description: |
       Unioned, incremental table of RT validation outcomes.
@@ -218,6 +238,19 @@ models:
       - extreme_results
     columns: *stg_gtfs_guideline_columns
 
+# Schedule URL checks
+
+  - name: int_gtfs_quality__schedule_download_success
+    tests: &stg_gtfs_guideline_tests_schedule_url
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - base64_url
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__schedule_url_guideline_index')
+      - extreme_results
+    columns: *stg_gtfs_guideline_columns
+
 # RT feed checks
 
   - name: int_gtfs_quality__no_rt_validation_errors
@@ -232,10 +265,6 @@ models:
     columns: *stg_gtfs_guideline_columns
 
   - name: int_gtfs_quality__trip_id_alignment
-    tests: *stg_gtfs_guideline_tests_rt
-    columns: *stg_gtfs_guideline_columns
-
-  - name: int_gtfs_quality__rt_feeds_present
     tests: *stg_gtfs_guideline_tests_rt
     columns: *stg_gtfs_guideline_columns
 
@@ -297,13 +326,15 @@ models:
     tests: *stale_rt_guideline_check_tests
     columns: *stale_rt_guideline_check_columns
 
-  - name: int_gtfs_quality__schedule_download_success
-    tests: &stg_gtfs_guideline_tests_schedule_url
+# RT URL checks
+
+  - name: int_gtfs_quality__rt_feeds_present
+    tests: &stg_gtfs_guideline_tests_rt_url
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - date
             - base64_url
       - dbt_utils.equal_rowcount:
-          compare_model: ref('int_gtfs_quality__schedule_url_guideline_index')
+          compare_model: ref('int_gtfs_quality__rt_url_guideline_index')
       - extreme_results
     columns: *stg_gtfs_guideline_columns
