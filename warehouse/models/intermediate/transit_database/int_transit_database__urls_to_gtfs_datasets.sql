@@ -20,7 +20,7 @@ appearance_duration AS (
 int_transit_database__urls_to_gtfs_datasets AS (
     SELECT
         gtfs_datasets.base64_url,
-        gtfs_datasets.original_record_id,
+        gtfs_datasets.source_record_id,
         gtfs_datasets.key AS gtfs_dataset_key,
         CASE
             WHEN gtfs_datasets._valid_from = appearance_duration.first_app THEN CAST('1900-01-01' AS TIMESTAMP)
@@ -34,11 +34,11 @@ int_transit_database__urls_to_gtfs_datasets AS (
         ON gtfs_datasets.base64_url = self.base64_url
         AND gtfs_datasets._valid_from < self._valid_to
         AND gtfs_datasets._valid_to > self._valid_from
-        AND gtfs_datasets.original_record_id != self.original_record_id
+        AND gtfs_datasets.source_record_id != self.source_record_id
     LEFT JOIN gtfs_datasets AS latest
         ON gtfs_datasets.base64_url = latest.base64_url
         AND appearance_duration.latest_app = latest._valid_to
-    WHERE self.key IS NULL OR gtfs_datasets.original_record_id = latest.original_record_id
+    WHERE self.key IS NULL OR gtfs_datasets.source_record_id = latest.source_record_id
 )
 
 SELECT * FROM int_transit_database__urls_to_gtfs_datasets

@@ -31,7 +31,7 @@ historical AS (
 join_services AS (
     SELECT
         historical.name,
-        historical.id AS original_record_id,
+        historical.id AS source_record_id,
         dim_services.key AS service_key,
         dim_services.name AS service_name,
         component_key,
@@ -44,14 +44,14 @@ join_services AS (
         LEAST(historical._valid_to, dim_services._valid_to) AS _valid_to
     FROM historical
     INNER JOIN dim_services
-        ON historical.service_key = dim_services.original_record_id
+        ON historical.service_key = dim_services.source_record_id
         AND historical._valid_from < dim_services._valid_to
         AND historical._valid_to > dim_services._valid_from
 ),
 
 join_products AS (
     SELECT
-        join_services.original_record_id,
+        join_services.source_record_id,
         join_services.name,
         service_key,
         service_name,
@@ -66,20 +66,20 @@ join_products AS (
         LEAST(join_services._valid_to, dim_products._valid_to) AS _valid_to
     FROM join_services
     INNER JOIN dim_products
-        ON join_services.product_key = dim_products.original_record_id
+        ON join_services.product_key = dim_products.source_record_id
         AND join_services._valid_from < dim_products._valid_to
         AND join_services._valid_to > dim_products._valid_from
 ),
 
 dim_service_components AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['join_products.original_record_id',
+        {{ dbt_utils.surrogate_key(['join_products.source_record_id',
             'service_key',
             'product_key',
             'dim_components.key',
             'GREATEST(join_products._valid_from, dim_components._valid_from)']) }} AS key,
         join_products.name,
-        join_products.original_record_id,
+        join_products.source_record_id,
         service_key,
         service_name,
         product_key,
@@ -96,7 +96,7 @@ dim_service_components AS (
     -- TODO: this might cause problems once we make these properly historical
     -- normally this would be an inner join
     LEFT JOIN dim_components
-        ON join_products.component_key = dim_components.original_record_id
+        ON join_products.component_key = dim_components.source_record_id
         AND join_products._valid_from < COALESCE(dim_components._valid_to, '2099-01-01')
         AND join_products._valid_to > COALESCE(dim_components._valid_from, '1900-01-01')
 )
