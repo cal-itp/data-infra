@@ -16,7 +16,7 @@ bridge_organizations_x_gtfs_datasets_produced AS (
     shared_end_date_name = '_valid_to',
     shared_current_name = '_is_current',
     table_a = {'name': 'organizations',
-        'unversioned_key_col': 'original_record_id',
+        'unversioned_key_col': 'source_record_id',
         'versioned_key_col': 'key',
         'key_col_name': 'organization_key',
         'name_col': 'name',
@@ -26,7 +26,7 @@ bridge_organizations_x_gtfs_datasets_produced AS (
         'end_date_col': '_valid_to'},
 
     table_b = {'name': 'gtfs_datasets',
-        'unversioned_key_col': 'original_record_id',
+        'unversioned_key_col': 'source_record_id',
         'versioned_key_col': 'key',
         'key_col_name': 'gtfs_dataset_key',
         'name_col': 'name',

@@ -17,7 +17,7 @@ bridge_contracts_x_components AS (
     shared_end_date_name = '_valid_to',
     shared_current_name = '_is_current',
     table_a = {'name': 'contracts',
-        'unversioned_key_col': 'original_record_id',
+        'unversioned_key_col': 'source_record_id',
         'versioned_key_col': 'key',
         'key_col_name': 'contract_key',
         'name_col': 'name',
@@ -27,7 +27,7 @@ bridge_contracts_x_components AS (
         'end_date_col': '_valid_to'},
 
     table_b = {'name': 'components',
-        'unversioned_key_col': 'original_record_id',
+        'unversioned_key_col': 'source_record_id',
         'versioned_key_col': 'key',
         'key_col_name': 'component_key',
         'name_col': 'name',

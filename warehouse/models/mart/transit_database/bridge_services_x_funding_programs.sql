@@ -18,7 +18,7 @@ bridge_services_x_funding_programs AS (
     shared_end_date_name = '_valid_to',
     shared_current_name = '_is_current',
     table_a = {'name': 'services',
-        'unversioned_key_col': 'original_record_id',
+        'unversioned_key_col': 'source_record_id',
         'versioned_key_col': 'key',
         'key_col_name': 'service_key',
         'name_col': 'name',
@@ -28,7 +28,7 @@ bridge_services_x_funding_programs AS (
         'end_date_col': '_valid_to'},
 
     table_b = {'name': 'funding_programs',
-        'unversioned_key_col': 'original_record_id',
+        'unversioned_key_col': 'source_record_id',
         'versioned_key_col': 'key',
         'key_col_name': 'funding_program_key',
         'name_col': 'program',

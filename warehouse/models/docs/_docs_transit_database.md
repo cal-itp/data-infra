@@ -12,7 +12,7 @@ in `Location` (e.g. Cloud, Vehicle, etc.)
 
 This is currently a current-only table, so historical data is not present and the data represents
 the record states as they existed in the most recent extract from the source database.
-Versioning columns (`_valid_from` and `_valid_to` for validity dates and `original_record_id` for a stable identifier)
+Versioning columns (`_valid_from` and `_valid_to` for validity dates and `source_record_id` for a stable identifier)
 are implemented for future schema consistency, but historical data has not yet been incorporated.
 
 {% enddocs%}
@@ -23,7 +23,7 @@ Each record is a contract between `organizations` to either provide one or more 
 
 This is currently a current-only table, so historical data is not present and the data represents
 the record states as they existed in the most recent extract from the source database.
-Versioning columns (`_valid_from` and `_valid_to` for validity dates and `original_record_id` for a stable identifier)
+Versioning columns (`_valid_from` and `_valid_to` for validity dates and `source_record_id` for a stable identifier)
 are implemented for future schema consistency, but historical data has not yet been incorporated.
 
 {% enddocs%}
@@ -34,7 +34,7 @@ Each record indicates a data schema which  can be used in one or more `relations
 
 This is currently a current-only table, so historical data is not present and the data represents
 the record states as they existed in the most recent extract from the source database.
-Versioning columns (`_valid_from` and `_valid_to` for validity dates and `original_record_id` for a stable identifier)
+Versioning columns (`_valid_from` and `_valid_to` for validity dates and `source_record_id` for a stable identifier)
 are implemented for future schema consistency, but historical data has not yet been incorporated.
 
 {% enddocs%}
@@ -50,7 +50,7 @@ For more information, see [the Airtable Data Documentation document](https://doc
 Each row in this table is a record version, where the record
 had the given set of attributes. When an attribute changes, a new
 version is created.
-`original_record_id` is the record identifier from Airtable
+`source_record_id` is the record identifier from Airtable
 and is a stable identifier for a given record over time.
 `_valid_from` and `_valid_to` columns represent the
 time period during which this record version
@@ -69,7 +69,7 @@ For more information, see [the Airtable Data Documentation document](https://doc
 Each row in this table is a record version, where the record
 had the given set of attributes. When an attribute changes, a new
 version is created.
-`original_record_id` is the record identifier from Airtable
+`source_record_id` is the record identifier from Airtable
 and is a stable identifier for a given record over time.
 `_valid_from` and `_valid_to` columns represent the
 time period during which this record version
@@ -85,7 +85,7 @@ Each record is a product used in a transit technology stack at another organizat
 
 This is currently a current-only table, so historical data is not present and the data represents
 the record states as they existed in the most recent extract from the source database.
-Versioning columns (`_valid_from` and `_valid_to` for validity dates and `original_record_id` for a stable identifier)
+Versioning columns (`_valid_from` and `_valid_to` for validity dates and `source_record_id` for a stable identifier)
 are implemented for future schema consistency, but historical data has not yet been incorporated.
 
 {% enddocs%}
@@ -101,7 +101,7 @@ When products and components are made fully historical, the relationships will b
 
 When an attribute changes, a new
 version is created.
-`original_record_id` is the record identifier from Airtable
+`source_record_id` is the record identifier from Airtable
 and is a stable identifier for a given record over time.
 `_valid_from` and `_valid_to` columns represent the
 time period during which this record version
@@ -123,7 +123,7 @@ For more information, see [the Airtable Data Documentation document](https://doc
 Each row in this table is a record version, where the record
 had the given set of attributes. When an attribute changes, a new
 version is created.
-`original_record_id` is the record identifier from Airtable
+`source_record_id` is the record identifier from Airtable
 and is a stable identifier for a given record over time.
 `_valid_from` and `_valid_to` columns represent the
 time period during which this record version
@@ -142,7 +142,7 @@ For more information, see [the Airtable Data Documentation document](https://doc
 Each row in this table is a record version, where the record
 had the given set of attributes. When an attribute changes, a new
 version is created.
-`original_record_id` is the record identifier from Airtable
+`source_record_id` is the record identifier from Airtable
 and is a stable identifier for a given record over time.
 `_valid_from` and `_valid_to` columns represent the
 time period during which this record version
@@ -156,7 +156,7 @@ Data representing county geography. Further description needed.
 
 This is currently a current-only table, so historical data is not present and the data represents
 the record states as they existed in the most recent extract from the source database.
-Versioning columns (`_valid_from` and `_valid_to` for validity dates and `original_record_id` for a stable identifier)
+Versioning columns (`_valid_from` and `_valid_to` for validity dates and `source_record_id` for a stable identifier)
 are implemented for future schema consistency, but historical data has not yet been incorporated.
 
 {% enddocs%}
@@ -167,7 +167,7 @@ Data representing eligibility programs. Further description needed.
 
 This is currently a current-only table, so historical data is not present and the data represents
 the record states as they existed in the most recent extract from the source database.
-Versioning columns (`_valid_from` and `_valid_to` for validity dates and `original_record_id` for a stable identifier)
+Versioning columns (`_valid_from` and `_valid_to` for validity dates and `source_record_id` for a stable identifier)
 are implemented for future schema consistency, but historical data has not yet been incorporated.
 
 {% enddocs%}
@@ -182,7 +182,7 @@ An import from o.g. Trillium research circa 2020 stored in [this document](https
 
 This is currently a current-only table, so historical data is not present and the data represents
 the record states as they existed in the most recent extract from the source database.
-Versioning columns (`_valid_from` and `_valid_to` for validity dates and `original_record_id` for a stable identifier)
+Versioning columns (`_valid_from` and `_valid_to` for validity dates and `source_record_id` for a stable identifier)
 are implemented for future schema consistency, but historical data has not yet been incorporated.
 
 {% enddocs%}
@@ -193,7 +193,7 @@ Data representing funding programs. Further description needed.
 
 This is currently a current-only table, so historical data is not present and the data represents
 the record states as they existed in the most recent extract from the source database.
-Versioning columns (`_valid_from` and `_valid_to` for validity dates and `original_record_id` for a stable identifier)
+Versioning columns (`_valid_from` and `_valid_to` for validity dates and `source_record_id` for a stable identifier)
 are implemented for future schema consistency, but historical data has not yet been incorporated.
 
 {% enddocs%}
@@ -205,7 +205,7 @@ Imported 10/6/2021 from fta.gov
 
 This is currently a current-only table, so historical data is not present and the data represents
 the record states as they existed in the most recent extract from the source database.
-Versioning columns (`_valid_from` and `_valid_to` for validity dates and `original_record_id` for a stable identifier)
+Versioning columns (`_valid_from` and `_valid_to` for validity dates and `source_record_id` for a stable identifier)
 are implemented for future schema consistency, but historical data has not yet been incorporated.
 
 {% enddocs%}

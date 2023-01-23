@@ -21,7 +21,7 @@ bridge_organizations_x_ntd_agency_info AS (
         LEAST(orgs._valid_to, ntd._valid_to) AS _valid_to
     FROM orgs
     INNER JOIN ntd
-        ON orgs.ntd_agency_info_key = ntd.original_record_id
+        ON orgs.ntd_agency_info_key = ntd.source_record_id
         AND orgs._valid_from < ntd._valid_to
         AND orgs._valid_to > ntd._valid_from
 )

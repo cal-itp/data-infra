@@ -10,7 +10,7 @@ models:
       - dbt_utils.mutually_exclusive_ranges:
           lower_bound_column: _valid_from
           upper_bound_column: _valid_to
-          partition_by: original_record_id
+          partition_by: source_record_id
           gaps: required
     columns:
       - &key

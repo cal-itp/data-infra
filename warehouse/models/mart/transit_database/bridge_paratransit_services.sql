@@ -28,7 +28,7 @@ bridge_paratransit_services AS (
         LEAST(unnested._valid_to, services._valid_to) AS _valid_to
     FROM unnest_paratransit AS unnested
     LEFT JOIN services
-        ON unnested.paratransit_for_service_key = services.original_record_id
+        ON unnested.paratransit_for_service_key = services.source_record_id
         AND unnested._valid_from < services._valid_to
         AND unnested._valid_to > services._valid_from
 )

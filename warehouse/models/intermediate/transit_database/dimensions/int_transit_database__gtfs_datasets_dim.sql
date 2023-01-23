@@ -14,7 +14,7 @@ WITH dim AS (
 int_transit_database__gtfs_datasets_dim AS (
     SELECT
         {{ dbt_utils.surrogate_key(['id', '_valid_from']) }} AS key,
-        id AS original_record_id,
+        id AS source_record_id,
         name,
         data,
         data_quality_pipeline,

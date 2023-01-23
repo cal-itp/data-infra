@@ -8,7 +8,7 @@ WITH int_transit_database__funding_programs_dim AS (
 dim_funding_programs AS (
     SELECT
         key,
-        original_record_id,
+        source_record_id,
         program,
         category,
         _is_current,

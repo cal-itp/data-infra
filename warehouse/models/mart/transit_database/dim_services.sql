@@ -8,7 +8,7 @@ WITH dim AS (
 dim_services AS (
     SELECT
         key,
-        original_record_id,
+        source_record_id,
         name,
         service_type,
         mode,
