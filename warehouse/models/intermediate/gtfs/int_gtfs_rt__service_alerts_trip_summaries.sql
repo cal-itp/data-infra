@@ -16,8 +16,8 @@
     {% set max_ts = timestamps[0] %}
 {% endif %}
 
-WITH vehicle_positions AS (
-    SELECT * FROM {{ ref('fct_vehicle_positions_messages') }}
+WITH service_alerts AS (
+    SELECT * FROM {{ ref('fct_service_alert_informed_entities') }}
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
@@ -25,7 +25,7 @@ WITH vehicle_positions AS (
     {% endif %}
 ),
 
-int_gtfs_rt__vehicle_positions_trip_summaries AS (
+int_gtfs_rt__service_alerts_trip_summaries AS (
     SELECT
         -- https://gtfs.org/realtime/reference/#message-tripdescriptor
         {{ dbt_utils.surrogate_key([
@@ -45,10 +45,9 @@ int_gtfs_rt__vehicle_positions_trip_summaries AS (
         trip_start_time,
         trip_start_date,
         COUNT(DISTINCT id) AS num_distinct_message_ids,
-        MIN(vehicle_timestamp) AS min_trip_update_timestamp,
-        MAX(vehicle_timestamp) AS max_trip_update_timestamp,
-    FROM vehicle_positions
+        ARRAY_AGG(DISTINCT service_alert_message_key) AS service_alert_message_keys,
+    FROM service_alerts
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
 )
 
-SELECT * FROM int_gtfs_rt__vehicle_positions_trip_summaries
+SELECT * FROM int_gtfs_rt__service_alerts_trip_summaries

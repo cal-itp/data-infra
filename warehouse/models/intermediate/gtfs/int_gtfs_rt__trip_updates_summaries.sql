@@ -12,7 +12,7 @@
 }}
 
 {% if is_incremental() %}
-    {% set timestamps = dbt_utils.get_column_values(table=this, column='dt', order_by = 'dt, DESC', max_records = 1) %}
+    {% set timestamps = dbt_utils.get_column_values(table=this, column='dt', order_by = 'dt DESC', max_records = 1) %}
     {% set max_ts = timestamps[0] %}
 {% endif %}
 

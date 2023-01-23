@@ -19,6 +19,10 @@ vehicle_positions AS (
     SELECT * FROM {{ ref('int_gtfs_rt__vehicle_positions_trip_summaries') }}
 ),
 
+service_alerts AS (
+    SELECT * FROM {{ ref('int_gtfs_rt__service_alerts_trip_summaries') }}
+),
+
 fct_observed_trips AS (
     SELECT
         {{ dbt_utils.surrogate_key([
@@ -40,8 +44,12 @@ fct_observed_trips AS (
         vp.num_distinct_message_ids AS vp_num_distinct_message_ids,
         vp.min_trip_update_timestamp AS vp_min_trip_update_timestamp,
         vp.max_trip_update_timestamp AS vp_max_trip_update_timestamp,
+        sa.num_distinct_message_ids AS sa_num_distinct_message_ids,
+        sa.service_alert_message_keys AS sa_service_alert_message_key,
     FROM trip_updates AS tu
     FULL OUTER JOIN vehicle_positions AS vp
+        USING (dt, base64_url, trip_id, trip_route_id, trip_direction_id, trip_start_time, trip_start_date)
+    FULL OUTER JOIN service_alerts AS sa
         USING (dt, base64_url, trip_id, trip_route_id, trip_direction_id, trip_start_time, trip_start_date)
 )
 
