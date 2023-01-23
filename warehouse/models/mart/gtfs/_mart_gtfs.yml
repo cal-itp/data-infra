@@ -1994,3 +1994,8 @@ models:
         description: '{{ doc("gtfs_stops__stop_timezone") }}'
       - name: wheelchair_boarding
         description: '{{ doc("gtfs_stops__wheelchair_boarding") }}'
+
+  - name: fct_observed_trips
+    columns:
+      - name: key
+        tests: *primary_key_tests
