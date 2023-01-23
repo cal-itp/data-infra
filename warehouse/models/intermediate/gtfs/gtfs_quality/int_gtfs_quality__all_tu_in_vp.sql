@@ -15,14 +15,18 @@
 
 WITH
 
-service_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_quality__daily_assessment_candidate_services') }}
+provider_guideline_index AS (
+    SELECT * FROM {{ ref('fct_daily_provider_gtfs_data') }}
     {% if is_incremental() %}
     WHERE date >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
     WHERE date >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('TRIP_UPDATES_LOOKBACK_DAYS') }} DAY)
     {% endif %}
 ),
+
+dim_gtfs_datasets AS (
+    SELECT * FROM {{ ref('dim_gtfs_datasets') }}
+)
 
 trip_updates_summaries AS (
     SELECT * FROM {{ ref('int_gtfs_rt__trip_updates_summaries') }}
@@ -62,17 +66,21 @@ daily_vehicle_position_trips AS (
 ),
 
 joined AS (
-    SELECT s.service_key,
-           s.date,
+    SELECT p.service_key,
+           p.date,
            tu.trip_id AS tu_trip_id,
            vp.trip_id AS vp_trip_id
-      FROM service_guideline_index s
+      FROM provider_guideline_index p
+      LEFT JOIN dim_gtfs_datasets tud
+        ON d.key = p.trip_updates_gtfs_dataset_key
       LEFT JOIN daily_trip_update_trips tu
-        ON tu.date = s.date
-       AND tu.base64_url = s.tu_base_64_url
+        ON tu.date = p.date
+       AND tu.base64_url = tud.base_64_url
+      LEFT JOIN dim_gtfs_datasets vpd
+        ON d.key = p.vehicle_positions_gtfs_dataset_key
       LEFT JOIN daily_vehicle_position_trips vp
-        ON vp.date = s.date
-       AND vp.base64_url = s.vp_base_64_url
+        ON vp.date = p.date
+       AND vp.base64_url = vpd.vp_base_64_url
        AND vp.trip_id = tu.trip_id
 ),
 
