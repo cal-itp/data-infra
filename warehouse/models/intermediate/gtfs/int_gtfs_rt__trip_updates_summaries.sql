@@ -1,12 +1,15 @@
-{{ config(
-    materialized='incremental',
-    incremental_strategy='insert_overwrite',
-    partition_by = {
-        'field': 'dt',
-        'data_type': 'date',
-        'granularity': 'day',
-    },
-) }}
+{{
+    config(
+        materialized='incremental',
+        incremental_strategy='insert_overwrite',
+        partition_by = {
+            'field': 'dt',
+            'data_type': 'date',
+            'granularity': 'day',
+        },
+        cluster_by='base64_url',
+    )
+}}
 
 {% if is_incremental() %}
     {% set dates = dbt_utils.get_column_values(table=this, column='dt', order_by = 'dt DESC', max_records = 1) %}
