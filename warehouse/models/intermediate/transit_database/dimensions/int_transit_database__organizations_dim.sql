@@ -32,6 +32,7 @@ int_transit_database__organizations_dim AS (
         gtfs_static_status,
         gtfs_realtime_status,
         assessment_status,
+        manual_check__contact_on_website,
         _is_current,
         _valid_from,
         _valid_to

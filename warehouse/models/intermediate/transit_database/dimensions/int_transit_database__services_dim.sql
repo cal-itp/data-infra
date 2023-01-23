@@ -29,6 +29,8 @@ int_transit_database__services_dim AS (
         gtfs_schedule_quality,
         operating_counties,
         assessment_status,
+        manual_check__gtfs_realtime_data_ingested_in_trip_planner,
+        manual_check__gtfs_schedule_data_ingested_in_trip_planner,
         _is_current,
         _valid_from,
         _valid_to
