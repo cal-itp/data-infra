@@ -271,21 +271,8 @@ feature
        WHERE ids.feed_version_number > 1
     )
 
-    SELECT base64_url,
-           feed_key,
-           -- Total id's in current and previous feeds
-           COUNT(CASE WHEN id IS NOT null AND prev_id IS NOT null THEN 1 END) AS ids_both_feeds,
-           -- Total id's in current feed
-           COUNT(CASE WHEN id IS NOT null THEN 1 END) AS ids_current_feed,
-           -- Total id's in current feed
-           COUNT(CASE WHEN prev_id IS NOT null THEN 1 END) AS ids_prev_feed,
-           -- New id's added
-           COUNT(CASE WHEN prev_id IS null THEN 1 END) AS id_added,
-           -- Previous id's removed
-           COUNT(CASE WHEN id IS null THEN 1 END) AS id_removed
-      FROM ids_version_compare
-     GROUP BY 1,2
-    HAVING ids_current_feed > 0
+SELECT * FROM ids_version_compare
+
 )
 {% endmacro %}
 
