@@ -25,7 +25,7 @@ Name of the organization that the dataset is attributed to.
 {% docs gtfs_attributions__is_producer %}
 The role of the organization is producer. Valid options are:
 
-0 or empty - Organization doesn’t have this role.
+0 or empty - Organization doesn't have this role.
 1 - Organization does have this role.
 
 At least one of the fields is_producer, is_operator, or is_authority should be set at 1.

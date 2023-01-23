@@ -148,3 +148,24 @@ schema_fields:
   - name: id
     type: STRING
     mode: NULLABLE
+  - name: manual_check__link_to_dataset_on_website
+    type: STRING
+    mode: NULLABLE
+  - name: manual_check__accurate_shapes
+    type: STRING
+    mode: NULLABLE
+  - name: manual_check__data_license
+    type: STRING
+    mode: NULLABLE
+  - name: manual_check__authentication_acceptable
+    type: STRING
+    mode: NULLABLE
+  - name: manual_check__stable_url
+    type: STRING
+    mode: NULLABLE
+  - name: manual_check__localized_stop_tts
+    type: STRING
+    mode: NULLABLE
+  - name: manual_check__grading_scheme_v1
+    type: STRING
+    mode: NULLABLE

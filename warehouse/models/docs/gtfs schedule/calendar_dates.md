@@ -5,7 +5,7 @@ Identifies a set of dates when a service exception occurs for one or more routes
 {% enddocs %}
 
 {% docs gtfs_calendar_dates__date %}
-Date when service exception occurs.
+Date when service exception occurs in YYYY-MM-DD format.
 {% enddocs %}
 
 {% docs gtfs_calendar_dates__exception_type %}

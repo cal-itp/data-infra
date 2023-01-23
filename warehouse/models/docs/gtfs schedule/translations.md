@@ -47,7 +47,7 @@ Conditionally Required:
 {% enddocs %}
 
 {% docs gtfs_translations__record_sub_id %}
-Helps the record that contains the field to be translated when the table doesn’t
+Helps the record that contains the field to be translated when the table doesn't
 have a unique ID. Therefore, the value in record_sub_id is the secondary ID of
 the table, as defined by the table below:
 • None for agency;
@@ -80,7 +80,7 @@ Conditionally Required:
 {% docs gtfs_translations__field_value %}
 Instead of defining which record should be translated by using record_id and record_sub_id, this field can be used to define the value which should be translated. When used, the translation will be applied when the fields identified by table_name and field_name contains the exact same value defined in field_value.
 
-The field must have exactly the value defined in field_value. If only a subset of the value matches field_value, the translation won’t be applied.
+The field must have exactly the value defined in field_value. If only a subset of the value matches field_value, the translation won't be applied.
 
 If two translation rules match the same record (one with field_value, and the other one with record_id), then the rule with record_id is the one which should be used.
 

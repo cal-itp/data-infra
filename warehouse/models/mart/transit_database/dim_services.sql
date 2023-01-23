@@ -14,11 +14,11 @@ dim_services AS (
         mode,
         currently_operating,
         operating_counties,
-        -- TODO: remove this field when v2, automatic determinations are available
-        gtfs_schedule_status,
-        -- TODO: remove this field when v2, automatic determinations are available
-        gtfs_schedule_quality,
+        gtfs_schedule_status, -- TODO: remove this field when v2, automatic determinations are available
+        gtfs_schedule_quality, -- TODO: remove this field when v2, automatic determinations are available
         assessment_status,
+        manual_check__gtfs_realtime_data_ingested_in_trip_planner,
+        manual_check__gtfs_schedule_data_ingested_in_trip_planner,
         _valid_from,
         _valid_to,
         _is_current

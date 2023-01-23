@@ -19,12 +19,12 @@ stg_transit_database__services AS (
         provider,
         operator,
         funding_sources,
-        -- TODO: remove this field when v2, automatic determinations are available
-        gtfs_schedule_status,
-        -- TODO: remove this field when v2, automatic determinations are available
-        gtfs_schedule_quality,
+        gtfs_schedule_status, -- TODO: remove this field when v2, automatic determinations are available
+        gtfs_schedule_quality, -- TODO: remove this field when v2, automatic determinations are available
         operating_counties,
         assessment_status,
+        manual_check__gtfs_realtime_data_ingested_in_trip_planner,
+        manual_check__gtfs_schedule_data_ingested_in_trip_planner,
         dt
     FROM once_daily_services
 )
