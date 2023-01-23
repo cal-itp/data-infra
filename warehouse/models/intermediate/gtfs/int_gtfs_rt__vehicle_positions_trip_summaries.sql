@@ -3,7 +3,7 @@
         materialized='incremental',
         incremental_strategy='insert_overwrite',
         partition_by={
-            'field': 'date',
+            'field': 'dt',
             'data_type': 'date',
             'granularity': 'day',
         },
@@ -11,15 +11,25 @@
     )
 }}
 
+{% if is_incremental() %}
+    {% set timestamps = dbt_utils.get_column_values(table=this, column='dt', order_by = 'dt, DESC', max_records = 1) %}
+    {% set max_ts = timestamps[0] %}
+{% endif %}
+
 WITH vehicle_positions AS (
     SELECT * FROM {{ ref('fct_vehicle_positions_messages') }}
+    {% if is_incremental() %}
+    WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
+    {% else %}
+    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('TRIP_UPDATES_LOOKBACK_DAYS') }} DAY)
+    {% endif %}
 ),
 
 int_gtfs_rt__vehicle_positions_trip_summaries AS (
     SELECT
         -- https://gtfs.org/realtime/reference/#message-tripdescriptor
         {{ dbt_utils.surrogate_key([
-            'date',
+            'dt',
             'base64_url',
             'trip_id',
             'trip_route_id',
@@ -27,7 +37,7 @@ int_gtfs_rt__vehicle_positions_trip_summaries AS (
             'trip_start_time',
             'trip_start_date',
         ]) }} as key,
-        date,
+        dt,
         base64_url,
         trip_id,
         trip_route_id,
