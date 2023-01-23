@@ -338,3 +338,12 @@ models:
           compare_model: ref('int_gtfs_quality__rt_url_guideline_index')
       - extreme_results
     columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__contact_on_website
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - organization_key
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__organization_guideline_index')
