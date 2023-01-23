@@ -512,3 +512,11 @@ models:
         description: |
           Timestamp for when the given row was inserted into the table.
           Primarily useful for debugging, not meaningful for general use.
+
+  - name: int_gtfs_rt__trip_updates_summaries
+    description: |
+      This is really intended to be a temporary table until
+      this work is done at the Airflow level, most likely.
+      Incrementally materialized trip updates data for use
+      downstream to minimize amount of raw data read from
+      GCS.

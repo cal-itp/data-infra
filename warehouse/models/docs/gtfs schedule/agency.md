@@ -29,5 +29,5 @@ URL of a web page that allows a rider to purchase tickets or other fare instrume
 {% enddocs %}
 
 {% docs gtfs_agency__agency_email %}
-Email address actively monitored by the agency’s customer service department. This email address should be a direct contact point where transit riders can reach a customer service representative at the agency.
+Email address actively monitored by the agency's customer service department. This email address should be a direct contact point where transit riders can reach a customer service representative at the agency.
 {% enddocs %}

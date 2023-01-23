@@ -83,9 +83,6 @@ schema_fields:
   - name: schedule_comments__from_gtfs_dataset_
     type: STRING
     mode: REPEATED
-  - name: manual_check__demand_response_completeness
-    type: STRING
-    mode: NULLABLE
   - name: qc__number_of_services
     type: INTEGER
     mode: NULLABLE
@@ -101,9 +98,6 @@ schema_fields:
   - name: name
     type: STRING
     mode: NULLABLE
-  - name: manual_check__fixed_route_completeness
-    type: STRING
-    mode: NULLABLE
   - name: currently_operating__from_services_
     type: BOOLEAN
     mode: REPEATED
@@ -111,5 +105,11 @@ schema_fields:
     type: BOOLEAN
     mode: NULLABLE
   - name: id
+    type: STRING
+    mode: NULLABLE
+  - name: manual_check__fixed_route_completeness
+    type: STRING
+    mode: NULLABLE
+  - name: manual_check__demand_response_completeness
     type: STRING
     mode: NULLABLE

@@ -52,7 +52,7 @@ Orders the routes in a way which is ideal for presentation to customers. Routes 
 {% enddocs %}
 
 {% docs gtfs_routes__continuous_pickup %}
-Indicates that the rider can board the transit vehicle at any point along the vehicle’s travel path as described by shapes.txt, on every trip of the route. Valid options are:
+Indicates that the rider can board the transit vehicle at any point along the vehicle's travel path as described by shapes.txt, on every trip of the route. Valid options are:
 
 0 - Continuous stopping pickup.
 1 or empty - No continuous stopping pickup.
@@ -63,7 +63,7 @@ The continuous pickup behavior defined in routes.txt can be overridden in stop_t
 {% enddocs %}
 
 {% docs gtfs_routes__continuous_drop_off %}
-Indicates that the rider can alight from the transit vehicle at any point along the vehicle’s travel path as described by shapes.txt, on every trip of the route. Valid options are:
+Indicates that the rider can alight from the transit vehicle at any point along the vehicle's travel path as described by shapes.txt, on every trip of the route. Valid options are:
 
 0 - Continuous stopping drop off.
 1 or empty - No continuous stopping drop off.

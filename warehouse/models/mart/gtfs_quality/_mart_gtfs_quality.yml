@@ -67,6 +67,14 @@ models:
       - *base64_url
       - *check
 
+  - name: fct_daily_rt_url_guideline_checks
+    description: '{{ doc("fct_daily_rt_url_guideline_checks") }}'
+    columns:
+      - *key
+      - *date
+      - *base64_url
+      - *check
+
   - name: fct_daily_rt_feed_validation_notices
     description: |
       A daily model of validation notices found per feed. Data
