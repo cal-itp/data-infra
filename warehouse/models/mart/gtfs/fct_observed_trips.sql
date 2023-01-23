@@ -11,13 +11,16 @@
     )
 }}
 
-WITH stop_time_updates AS (
-    SELECT * FROM {{ ref('fct_stop_time_updates') }}
+WITH trip_updates AS (
+    SELECT * FROM {{ ref('int_gtfs_rt__trip_updates_summaries') }}
+),
+
+vehicle_positions AS (
+    SELECT * FROM {{ ref('int_gtfs_rt__vehicle_positions_trip_summaries') }}
 ),
 
 fct_observed_trips AS (
     SELECT
-        -- https://gtfs.org/realtime/reference/#message-tripdescriptor
         {{ dbt_utils.surrogate_key([
             'date',
             'base64_url',
@@ -27,20 +30,11 @@ fct_observed_trips AS (
             'trip_start_time',
             'trip_start_date',
         ]) }} as key,
-        date,
-        base64_url,
-        trip_id,
-        trip_route_id,
-        trip_direction_id,
-        trip_start_time,
-        trip_start_date,
-        COUNT(DISTINCT id) AS num_distinct_message_ids,
-        MIN(trip_update_timestamp) AS min_trip_update_timestamp,
-        MAX(trip_update_timestamp) AS max_trip_update_timestamp,
-        MAX(trip_update_delay) AS max_delay,
-        COUNT(DISTINCT CASE WHEN schedule_relationship = 'SKIPPED' THEN stop_id END) AS num_skipped_stops,
-    FROM stop_time_updates
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
+        tu.* EXCEPT (key),
+        vp.* EXCEPT (key),
+    FROM trip_updates tu
+    FULL OUTER JOIN vehicle_positions vp
+        USING (date, base64_url, trip_id, trip_route_id, trip_direction_id, trip_start_time, trip_start_date)
 )
 
 SELECT * FROM fct_observed_trips
