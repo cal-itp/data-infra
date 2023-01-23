@@ -8,7 +8,7 @@ WITH dim AS (
 dim_organizations AS (
     SELECT
         key,
-        original_record_id,
+        source_record_id,
         name,
         organization_type,
         roles,

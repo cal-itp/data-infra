@@ -37,7 +37,7 @@ services_join AS (
         dim.fares_v2_status,
         dim.manual_check__fixed_route_completeness,
         dim.manual_check__demand_response_completeness,
-        id AS original_record_id,
+        id AS source_record_id,
         dim._valid_from AS rel_valid_from,
         dim._valid_to AS rel_valid_to,
         (dim._is_current AND services._is_current) AS _is_current,
@@ -45,14 +45,14 @@ services_join AS (
         LEAST(dim._valid_to, services._valid_to) AS _valid_to
     FROM dim
     INNER JOIN services
-        ON dim.service_key = services.original_record_id
+        ON dim.service_key = services.source_record_id
         AND dim._valid_from < services._valid_to
         AND dim._valid_to > services._valid_from
 ),
 
 int_transit_database__gtfs_service_data_dim AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['services_join.original_record_id', 'GREATEST(services_join._valid_from, datasets._valid_from)']) }} AS key,
+        {{ dbt_utils.surrogate_key(['services_join.source_record_id', 'GREATEST(services_join._valid_from, datasets._valid_from)']) }} AS key,
         services_join.name,
         service_key,
         service_name,
@@ -64,15 +64,19 @@ int_transit_database__gtfs_service_data_dim AS (
         network_id,
         route_id,
         services_join.fares_v2_status,
+<<<<<<< HEAD
         services_join.manual_check__fixed_route_completeness,
         services_join.manual_check__demand_response_completeness,
         services_join.original_record_id,
+=======
+        services_join.source_record_id,
+>>>>>>> 1932df32 (rename original_record_id to source_record_id for clarity)
         (services_join._is_current AND datasets._is_current) AS _is_current,
         GREATEST(services_join._valid_from, datasets._valid_from) AS _valid_from,
         LEAST(services_join._valid_to, datasets._valid_to) AS _valid_to
     FROM services_join
     INNER JOIN datasets
-        ON services_join.gtfs_dataset_key = datasets.original_record_id
+        ON services_join.gtfs_dataset_key = datasets.source_record_id
         AND services_join._valid_from < datasets._valid_to
         AND services_join._valid_to > datasets._valid_from
 )
