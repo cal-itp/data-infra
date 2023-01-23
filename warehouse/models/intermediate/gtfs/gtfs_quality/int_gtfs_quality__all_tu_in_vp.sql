@@ -15,7 +15,7 @@
 
 WITH
 
-feed_guideline_index AS (
+service_guideline_index AS (
     SELECT * FROM {{ ref('int_gtfs_quality__daily_assessment_candidate_services') }}
     {% if is_incremental() %}
     WHERE date >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
@@ -66,13 +66,14 @@ joined AS (
            s.date,
            tu.trip_id AS tu_trip_id,
            vp.trip_id AS vp_trip_id
-      FROM feed_guideline_index s
-      JOIN daily_trip_update_trips tu
+      FROM service_guideline_index s
+      LEFT JOIN daily_trip_update_trips tu
         ON tu.date = s.date
        AND tu.base64_url = s.tu_base_64_url
       LEFT JOIN daily_vehicle_position_trips vp
         ON vp.date = s.date
        AND vp.base64_url = s.vp_base_64_url
+       AND vp.trip_id = tu.trip_id
 ),
 
 int_gtfs_quality__all_tu_in_vp AS (
@@ -80,11 +81,11 @@ int_gtfs_quality__all_tu_in_vp AS (
            date,
            {{ all_tu_in_vp() }} AS check,
            {{ fixed_route_completeness() }} AS feature,
-            CASE WHEN COUNT(CASE WHEN vp_trip_id IS NOT null THEN 1 END) * 1.0 / COUNT(*) = 1 THEN "PASS"
+            CASE WHEN COUNT(CASE WHEN vp_trip_id IS NOT null AND tu_trip_id IS NOT null THEN 1 END) * 1.0 / NULLIF(COUNT(CASE WHEN tu_trip_id IS NOT null THEN 1 END),0) = 1 THEN "PASS"
                  ELSE "FAIL"
             END AS status,
       FROM joined
-     GROUP BY 1,2
+     GROUP BY 1,2,3,4
 )
 
 SELECT * FROM int_gtfs_quality__all_tu_in_vp

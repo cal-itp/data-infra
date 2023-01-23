@@ -15,6 +15,7 @@ int_gtfs_quality__daily_assessment_candidate_services AS (
        AND vp.service_key = tu.service_key
      WHERE tu.gtfs_dataset_type = "trip_updates"
        AND vp.gtfs_dataset_type = "vehicle_positions"
+     GROUP BY 1,2,3,4
 )
 
 SELECT * FROM int_gtfs_quality__daily_assessment_candidate_services

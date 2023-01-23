@@ -75,6 +75,20 @@ models:
       - *base64_url
       - *check
 
+  - name: fct_daily_service_guideline_checks
+    description: '{{ doc("fct_daily_service_guideline_checks") }}'
+    columns:
+      - *key
+      - *date
+      - &service_key
+        name: service_key
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_services')
+              field: key
+      - *check
+
   - name: fct_daily_rt_feed_validation_notices
     description: |
       A daily model of validation notices found per feed. Data

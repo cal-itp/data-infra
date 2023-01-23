@@ -35,5 +35,4 @@ Here is a list of currently-implemented checks:
 | The Service alerts API endpoint is configured to report the file modification date | Best Practices Alignment (RT) | When the Service alerts API endpoint is requested, the response header includes a field called "Last-Modified". |
 | The Vehicle positions API endpoint is configured to report the file modification date | Best Practices Alignment (RT) | When the Vehicle Positions API endpoint is requested, the response header includes a field called "Last-Modified". |
 | The Trip updates API endpoint is configured to report the file modification date | Best Practices Alignment (RT) | When the Trip updates API endpoint is requested, the response header includes a field called "Last-Modified". |
-| 100% of trips marked as “Scheduled”, “Canceled”, or “Added” within the Trip updates feed are represented within the Vehicle positions feed | Fixed-Route Completeness | 100% of trips marked as “Scheduled”, “Canceled”, or “Added” within the Trip updates feed are represented within the Vehicle positions feed. |
 {% enddocs %}

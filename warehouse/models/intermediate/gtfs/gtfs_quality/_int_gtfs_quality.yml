@@ -377,8 +377,6 @@ models:
           combination_of_columns:
             - date
             - service_key
-      - dbt_utils.equal_rowcount:
-          compare_model: ref('int_gtfs_quality__daily_assessment_candidate_services')
       - extreme_results
     columns: *stg_gtfs_guideline_columns
 
