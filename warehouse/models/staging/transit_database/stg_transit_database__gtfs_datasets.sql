@@ -87,6 +87,13 @@ stg_transit_database__gtfs_datasets AS (
         authorization_header_parameter_name,
         header_secret_key_name,
         url_to_encode,
+        manual_check__link_to_dataset_on_website,
+        manual_check__accurate_shapes,
+        manual_check__data_license,
+        manual_check__authentication_acceptable,
+        manual_check__stable_url,
+        manual_check__localized_stop_tts,
+        manual_check__grading_scheme_v1,
         base64_url,
         CASE
             WHEN data = "GTFS Schedule" THEN "schedule"

@@ -22,6 +22,8 @@ stg_transit_database__gtfs_service_data AS (
         network_id,
         route_id,
         fares_v2_status,
+        manual_check__fixed_route_completeness,
+        manual_check__demand_response_completeness,
         dt
     FROM once_daily_gtfs_service_data
     LEFT JOIN UNNEST(once_daily_gtfs_service_data.services) as unnested_services

@@ -21,6 +21,7 @@ dim_organizations AS (
         gtfs_static_status,
         gtfs_realtime_status,
         assessment_status,
+        manual_check__contact_on_website,
         alias,
         _is_current,
         _valid_from,

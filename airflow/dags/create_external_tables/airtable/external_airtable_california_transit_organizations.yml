@@ -235,3 +235,6 @@ schema_fields:
   - name: assessment_status
     type: STRING
     mode: NULLABLE
+  - name: manual_check__contact_on_website
+    type: STRING
+    mode: NULLABLE

@@ -18,6 +18,8 @@ dim_gtfs_service_data AS (
         network_id,
         route_id,
         fares_v2_status,
+        manual_check__fixed_route_completeness,
+        manual_check__demand_response_completeness,
         _is_current,
         _valid_from,
         _valid_to

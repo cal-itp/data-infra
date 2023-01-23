@@ -28,6 +28,7 @@ stg_transit_database__organizations AS (
         gtfs_static_status,
         gtfs_realtime_status,
         assessment_status = "Yes" AS assessment_status,
+        manual_check__contact_on_website,
         dt
     FROM once_daily_organizations
     LEFT JOIN UNNEST(once_daily_organizations.ntd_id) as unnested_ntd_records
