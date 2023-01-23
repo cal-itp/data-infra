@@ -20,7 +20,7 @@ feed_guideline_index AS (
     {% if is_incremental() %}
     WHERE date >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
-    WHERE date >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('RT_LOOKBACK_DAYS') }} DAY)
+    WHERE date >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('TRIP_UPDATES_LOOKBACK_DAYS') }} DAY)
     {% endif %}
 ),
 
@@ -29,9 +29,7 @@ trip_updates_summaries AS (
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
-    -- Using the longer RT_LOOKBACK_DAYS rather than TRIP_UPDATES_LOOKBACK_DAYS
-    -- This should be OK since we're using the more-efficient trip_updates_summaries table
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('RT_LOOKBACK_DAYS') }} DAY)
+    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('TRIP_UPDATES_LOOKBACK_DAYS') }} DAY)
     {% endif %}
 ),
 
@@ -40,25 +38,27 @@ fct_vehicle_positions_messages AS (
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('RT_LOOKBACK_DAYS') }} DAY)
+    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('TRIP_UPDATES_LOOKBACK_DAYS') }} DAY)
     {% endif %}
 ),
 
 daily_trip_update_trips AS (
-    SELECT DISTINCT
-          dt AS date,
-          base64_url,
-          trip_id,
-          trip_schedule_relationship
+    SELECT
+        dt AS date,
+        base64_url,
+        trip_id
     FROM trip_updates_summaries
+   WHERE trip_schedule_relationship IN ("SCHEDULED","CANCELED”,“ADDED")
+   GROUP BY 1,2,3
 ),
 
 daily_vehicle_position_trips AS (
-    SELECT DISTINCT
-          dt AS date,
-          base64_url,
-          trip_id
+    SELECT
+        dt AS date,
+        base64_url,
+        trip_id
     FROM fct_vehicle_positions_messages
+    GROUP BY 1,2,3
 ),
 
 joined AS (
