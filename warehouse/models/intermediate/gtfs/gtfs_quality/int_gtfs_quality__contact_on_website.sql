@@ -16,7 +16,8 @@ int_gtfs_quality__contact_on_website AS (
         'Organization has contact info on website' AS check,
         'Has contact info' AS feature,
         CASE manual_check__contact_on_website
-            WHEN 'Yes' then 'PASS'
+            WHEN 'Yes' THEN 'PASS'
+            WHEN 'No' THEN 'FAIL'
         END AS status,
     FROM idx
     LEFT JOIN organizations
