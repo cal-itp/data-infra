@@ -1,4 +1,3 @@
-
 WITH feed_guideline_index AS (
     SELECT * FROM {{ ref('int_gtfs_quality__schedule_feed_guideline_index') }}
 ),
@@ -31,6 +30,66 @@ agency_id_comparison AS (
     SELECT * FROM {{ ids_version_compare_aggregate("agency_id","dim_agency") }}
 ),
 
+stop_id_aggregate AS (
+
+    SELECT base64_url,
+            feed_key,
+            -- Total id's in current and previous feeds
+            COUNT(CASE WHEN id IS NOT null AND prev_id IS NOT null THEN 1 END) AS ids_both_feeds,
+            -- Total id's in current feed
+            COUNT(CASE WHEN id IS NOT null THEN 1 END) AS ids_current_feed,
+            -- Total id's in current feed
+            COUNT(CASE WHEN prev_id IS NOT null THEN 1 END) AS ids_prev_feed,
+            -- New id's added
+            COUNT(CASE WHEN prev_id IS null THEN 1 END) AS id_added,
+            -- Previous id's removed
+            COUNT(CASE WHEN id IS null THEN 1 END) AS id_removed
+        FROM stop_id_comparison
+        GROUP BY 1, 2
+    HAVING ids_current_feed > 0
+
+),
+
+route_id_aggregate AS (
+
+    SELECT base64_url,
+            feed_key,
+            -- Total id's in current and previous feeds
+            COUNT(CASE WHEN id IS NOT null AND prev_id IS NOT null THEN 1 END) AS ids_both_feeds,
+            -- Total id's in current feed
+            COUNT(CASE WHEN id IS NOT null THEN 1 END) AS ids_current_feed,
+            -- Total id's in current feed
+            COUNT(CASE WHEN prev_id IS NOT null THEN 1 END) AS ids_prev_feed,
+            -- New id's added
+            COUNT(CASE WHEN prev_id IS null THEN 1 END) AS id_added,
+            -- Previous id's removed
+            COUNT(CASE WHEN id IS null THEN 1 END) AS id_removed
+        FROM route_id_comparison
+        GROUP BY 1, 2
+    HAVING ids_current_feed > 0
+
+),
+
+agency_id_aggregate AS (
+
+    SELECT base64_url,
+            feed_key,
+            -- Total id's in current and previous feeds
+            COUNT(CASE WHEN id IS NOT null AND prev_id IS NOT null THEN 1 END) AS ids_both_feeds,
+            -- Total id's in current feed
+            COUNT(CASE WHEN id IS NOT null THEN 1 END) AS ids_current_feed,
+            -- Total id's in current feed
+            COUNT(CASE WHEN prev_id IS NOT null THEN 1 END) AS ids_prev_feed,
+            -- New id's added
+            COUNT(CASE WHEN prev_id IS null THEN 1 END) AS id_added,
+            -- Previous id's removed
+            COUNT(CASE WHEN id IS null THEN 1 END) AS id_removed
+        FROM agency_id_comparison
+        GROUP BY 1, 2
+    HAVING ids_current_feed > 0
+
+),
+
 id_change_count AS (
     SELECT t1.date,
            t1.feed_key,
@@ -56,11 +115,11 @@ id_change_count AS (
                     )
                 AS max_percent_agency_ids_new
       FROM feed_guideline_index AS t1
-      LEFT JOIN stop_id_comparison AS t2
+      LEFT JOIN stop_id_aggregate AS t2
         ON t2.feed_key = t1.feed_key
-      LEFT JOIN route_id_comparison AS t3
+      LEFT JOIN route_id_aggregate AS t3
         ON t3.feed_key = t1.feed_key
-      LEFT JOIN agency_id_comparison AS t4
+      LEFT JOIN agency_id_aggregate AS t4
         ON t4.feed_key = t1.feed_key
 ),
 
