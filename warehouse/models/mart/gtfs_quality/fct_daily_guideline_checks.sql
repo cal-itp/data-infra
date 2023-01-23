@@ -31,6 +31,14 @@ rt_url_checks AS (
     FROM {{ ref('fct_daily_rt_url_guideline_checks') }}
 ),
 
+organization_checks AS (
+    SELECT * FROM {{ ref('fct_daily_organization_guideline_checks') }}
+),
+
+service_checks AS (
+    SELECT * FROM {{ ref('fct_daily_service_guideline_checks') }}
+),
+
 idx AS (
     SELECT
         implemented_checks.*,
@@ -65,7 +73,9 @@ fct_daily_guideline_checks AS (
         COALESCE(
             schedule_feed_checks.status,
             rt_feed_checks.status,
-            schedule_url_checks.status
+            schedule_url_checks.status,
+            rt_url_checks.status,
+            organization_checks.status
         ) AS status
     FROM idx
     LEFT JOIN schedule_feed_checks
@@ -84,6 +94,12 @@ fct_daily_guideline_checks AS (
         ON idx.date = rt_url_checks.date
         AND idx.base64_url = rt_url_checks.base64_url
         AND idx.check = rt_url_checks.check
+    LEFT JOIN organization_checks
+        ON idx.date = organization_checks.date
+        AND idx.organization_key = organization_checks.organization_key
+    LEFT JOIN service_checks
+        ON idx.date = service_checks.date
+        AND idx.service_key = service_checks.service_key
 )
 
 SELECT * FROM fct_daily_guideline_checks
