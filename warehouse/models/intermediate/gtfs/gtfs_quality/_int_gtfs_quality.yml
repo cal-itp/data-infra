@@ -131,6 +131,36 @@ models:
           changing dimension, joins using this key are not subject to the historical
           limitations noted for the other foreign keys in this table.
 
+  - name: int_gtfs_quality__daily_assessment_candidate_services
+    description: |
+      A row here is the combination of feeds that make up a single service from
+      int_gtfs_quality__daily_assessment_candidate_entities, for the given date.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - service_key
+            - date
+    columns:
+      - name: date
+        description: |
+          Date on which this combination of records is present in our data.
+      - name: service_key
+        description: |
+          Foreign key to `dim_services`.
+        tests:
+          - not_null
+      - name: schedule_feed_key
+        description: |
+          Foreign key to `dim_schedule_feeds`. Because `dim_schedule_feeds` is slowly-
+          changing dimension, joins using this key are not subject to the historical
+          limitations noted for the other foreign keys in this table.
+      - name: tu_base_64_url
+        description: |
+          Base 64 URL for the service's Trip Updates feed for the given date.
+      - name: vp_base_64_url
+        description: |
+          Base 64 URL for the service's Vehicle Positions feed for the given date.
+
   - name: int_gtfs_quality__feed_version_history
     description: |
       Describes attributes of the previous and following versions of each feed.
@@ -336,5 +366,18 @@ models:
             - base64_url
       - dbt_utils.equal_rowcount:
           compare_model: ref('int_gtfs_quality__rt_url_guideline_index')
+      - extreme_results
+    columns: *stg_gtfs_guideline_columns
+
+#  Service checks
+
+  - name: int_gtfs_quality__all_tu_in_vp
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - service_key
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__daily_assessment_candidate_services')
       - extreme_results
     columns: *stg_gtfs_guideline_columns

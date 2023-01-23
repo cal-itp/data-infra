@@ -5,7 +5,7 @@ WITH daily_assessment_candidate_entities AS (
 ),
 
 int_gtfs_quality__daily_assessment_candidate_services AS (
-    SELECT tu.date,
+    SELECT EXTRACT(DATE FROM tu.date) AS date,
            tu.service_key,
            tu.base64_url AS tu_base_64_url,
            vp.base64_url AS vp_base_64_url
