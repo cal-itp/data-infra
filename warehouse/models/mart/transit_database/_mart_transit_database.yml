@@ -7,7 +7,7 @@ models:
       - dbt_utils.mutually_exclusive_ranges:
           lower_bound_column: _valid_from
           upper_bound_column: _valid_to
-          partition_by: original_record_id
+          partition_by: source_record_id
           gaps: required
     columns:
       - &key
@@ -49,7 +49,7 @@ models:
         tests:
           - relationships:
              to: ref('dim_organizations')
-             field: original_record_id
+             field: source_record_id
       - name: contract_vendor_organization_key
         description: |
           Unversioned Airtable record ID for contract vendor organization; versioned bridge
@@ -57,7 +57,7 @@ models:
         tests:
           - relationships:
              to: ref('dim_organizations')
-             field: original_record_id
+             field: source_record_id
       - *valid_from_placeholder
       - *valid_to_placeholder
       - *is_current_placeholder

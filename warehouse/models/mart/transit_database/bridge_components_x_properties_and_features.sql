@@ -17,7 +17,7 @@ bridge_components_x_properties_and_features AS (
     shared_end_date_name = '_valid_to',
     shared_current_name = '_is_current',
     table_a = {'name': 'components',
-        'unversioned_key_col': 'original_record_id',
+        'unversioned_key_col': 'source_record_id',
         'versioned_key_col': 'key',
         'key_col_name': 'component_key',
         'name_col': 'name',
@@ -27,7 +27,7 @@ bridge_components_x_properties_and_features AS (
         'end_date_col': '_valid_to'},
 
     table_b = {'name': 'properties_and_features',
-        'unversioned_key_col': 'original_record_id',
+        'unversioned_key_col': 'source_record_id',
         'versioned_key_col': 'key',
         'key_col_name': 'property_feature_key',
         'name_col': 'name',

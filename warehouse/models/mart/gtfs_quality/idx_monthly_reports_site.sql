@@ -8,7 +8,7 @@ idx_monthly_reports_site AS (
         date AS date_start,
         organization_itp_id,
         organization_name,
-        organization_original_record_id,
+        organization_source_record_id,
         LAST_DAY(date, MONTH) AS date_end,
         DATE_ADD(LAST_DAY(date, MONTH), INTERVAL 1 DAY) AS publish_date
     FROM assessed_entities

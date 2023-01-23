@@ -16,7 +16,7 @@ bridge_fare_systems_x_services AS (
     shared_end_date_name = '_valid_to',
     shared_current_name = '_is_current',
     table_a = {'name': 'fare_systems',
-        'unversioned_key_col': 'original_record_id',
+        'unversioned_key_col': 'source_record_id',
         'versioned_key_col': 'key',
         'key_col_name': 'fare_system_key',
         'name_col': 'fare_system',
@@ -26,7 +26,7 @@ bridge_fare_systems_x_services AS (
         'end_date_col': '_valid_to'},
 
     table_b = {'name': 'services',
-        'unversioned_key_col': 'original_record_id',
+        'unversioned_key_col': 'source_record_id',
         'versioned_key_col': 'key',
         'key_col_name': 'service_key',
         'name_col': 'name',
