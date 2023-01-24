@@ -93,6 +93,7 @@ fct_daily_guideline_checks AS (
     LEFT JOIN organization_checks
         ON idx.date = organization_checks.date
         AND idx.organization_key = organization_checks.organization_key
+        AND idx.check = organization_checks.check
 )
 
 SELECT * FROM fct_daily_guideline_checks

@@ -85,6 +85,10 @@ WITH stg_gtfs_quality__intended_checks AS (
     SELECT {{ modification_date_present_vehicle_positions() }}, {{ best_practices_alignment_rt() }}
     UNION ALL
     SELECT {{ modification_date_present_trip_updates() }}, {{ best_practices_alignment_rt() }}
+
+    -- MANUAL CHECKS
+    UNION ALL
+    SELECT {{ organization_has_contact_info() }}, {{ technical_contact_availability() }}
 )
 
 SELECT * FROM stg_gtfs_quality__intended_checks

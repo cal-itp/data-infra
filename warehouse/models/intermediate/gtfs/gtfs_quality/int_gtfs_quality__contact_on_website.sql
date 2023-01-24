@@ -12,9 +12,8 @@ int_gtfs_quality__contact_on_website AS (
     SELECT
         idx.date,
         idx.organization_key,
-        -- TODO: use real macros
-        'Organization has contact info on website' AS check,
-        'Has contact info' AS feature,
+        {{ organization_has_contact_info() }} AS check,
+        {{ technical_contact_availability() }} AS feature,
         CASE manual_check__contact_on_website
             WHEN 'Yes' THEN 'PASS'
             WHEN 'No' THEN 'FAIL'
