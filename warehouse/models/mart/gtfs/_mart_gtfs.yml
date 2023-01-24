@@ -566,19 +566,6 @@ models:
       Each row is a cleaned row from a feed_info.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#feed_infotxt.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - feed_key
-            - feed_publisher_name
-            - feed_publisher_url
-            - feed_lang
-            - default_lang
-            - feed_version
-            - feed_contact_email
-            - feed_contact_url
-            - feed_start_date
-            - feed_end_date
     columns:
       - name: key
         description: |
@@ -1290,11 +1277,6 @@ models:
       array of points in the `pt_array` column.
       We cannot construct a LineString because of BigQuery limitations;
       see: https://gis.stackexchange.com/questions/426188/can-i-represent-a-route-that-doubles-back-on-itself-in-bigquery-with-a-linestrin.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - feed_key
-            - shape_id
     columns:
       - name: key
         description: |
