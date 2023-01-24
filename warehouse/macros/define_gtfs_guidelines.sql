@@ -1,4 +1,29 @@
+--
+-- ENTITIES
+--
+{% macro schedule_feed() %}
+'schedule_feed'
+{% endmacro %}
+
+{% macro schedule_url() %}
+'schedule_url'
+{% endmacro %}
+
+{% macro rt_feed() %}
+'rt_feed'
+{% endmacro %}
+
+{% macro rt_url() %}
+'rt_url'
+{% endmacro %}
+
+{% macro organization() %}
+'organization'
+{% endmacro %}
+
+--
 -- CHECK NAMES
+--
 {% macro static_feed_downloaded_successfully() %}
 "GTFS schedule feed downloads successfully"
 {% endmacro %}
