@@ -171,6 +171,10 @@
 "The Trip updates API endpoint is configured to report the file modification date"
 {% endmacro %}
 
+{% macro organization_has_contact_info() %}
+"The organization has contact information on the website."
+{% endmacro %}
+
 --
 -- FEATURE NAMES
 --
