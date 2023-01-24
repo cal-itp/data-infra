@@ -13,6 +13,7 @@ fct_daily_feed_scheduled_service_summary AS (
 
         service_date,
         feed_key,
+        gtfs_dataset_key,
         SUM(service_hours) AS ttl_service_hours,
         COUNT(DISTINCT trip_id) AS n_trips,
         MIN(trip_first_departure_sec) AS first_departure_sec,
@@ -30,7 +31,8 @@ fct_daily_feed_scheduled_service_summary AS (
         ) AS contains_warning_missing_foreign_key_stop_id
 
     FROM fct_daily_scheduled_trips
-    GROUP BY service_date, feed_key
+    WHERE service_date < CURRENT_DATE()
+    GROUP BY service_date, feed_key, gtfs_dataset_key
 )
 
 SELECT * FROM fct_daily_feed_scheduled_service_summary
