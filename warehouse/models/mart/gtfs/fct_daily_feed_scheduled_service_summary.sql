@@ -7,7 +7,7 @@ WITH fct_daily_scheduled_trips AS (
 
 ),
 
-fct_daily_scheduled_service_summary AS (
+fct_daily_feed_scheduled_service_summary AS (
 
     SELECT
 
@@ -33,4 +33,4 @@ fct_daily_scheduled_service_summary AS (
     GROUP BY service_date, feed_key
 )
 
-SELECT * FROM fct_daily_scheduled_service_summary
+SELECT * FROM fct_daily_feed_scheduled_service_summary
