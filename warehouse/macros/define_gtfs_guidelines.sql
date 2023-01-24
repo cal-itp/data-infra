@@ -261,6 +261,7 @@ feature
              -- one feed's previous key is the previous feed's key
              COALESCE(ids.prev_feed_key,prev_ids.feed_key) AS prev_feed_key,
              COALESCE(ids.valid_from,prev_ids.next_feed_valid_from) AS valid_from,
+             COALESCE(ids.next_feed_valid_from, "2099-01-01") AS next_feed_valid_from,
              ids.id,
              prev_ids.id AS prev_id
         FROM ids_version_history AS ids
