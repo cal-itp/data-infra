@@ -167,6 +167,9 @@ models:
       - name: is_implemented
   - name: fct_daily_guideline_checks
     description: '{{ doc("fct_daily_guideline_checks") }}'
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "num_check_sources IS NULL OR num_check_sources <= 1"
     columns:
       - *key
       - *date
@@ -207,6 +210,8 @@ models:
       - *check
       - name: status
       - name: feature
+      - name: num_check_sources
+
   - name: fct_daily_organization_combined_guideline_checks
     description: |
       **Documentation coming soon**

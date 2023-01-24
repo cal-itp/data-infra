@@ -66,13 +66,27 @@ fct_daily_guideline_checks AS (
         idx.schedule_feed_key,
         idx.feature,
         idx.check,
+        idx.entity,
         COALESCE(
             schedule_feed_checks.status,
             rt_feed_checks.status,
             schedule_url_checks.status,
             rt_url_checks.status,
             organization_checks.status
-        ) AS status
+        ) AS status,
+        CASE
+            WHEN schedule_feed_checks.status IS NOT NULL THEN idx.entity = {{ schedule_feed() }}
+            WHEN rt_feed_checks.status IS NOT NULL THEN idx.entity = {{ schedule_feed() }}
+            WHEN schedule_url_checks.status IS NOT NULL THEN idx.entity = {{ schedule_url() }}
+            WHEN rt_url_checks.status IS NOT NULL THEN idx.entity = {{ schedule_url() }}
+            WHEN organization_checks.status IS NOT NULL THEN idx.entity = {{ organization() }}
+        END AS matches_entity,
+        CASE WHEN schedule_feed_checks.status = 'PASS' THEN 1 ELSE 0 END
+        + CASE WHEN rt_feed_checks.status = 'PASS' THEN 1 ELSE 0 END
+        + CASE WHEN schedule_url_checks.status = 'PASS' THEN 1 ELSE 0 END
+        + CASE WHEN rt_url_checks.status = 'PASS' THEN 1 ELSE 0 END
+        + CASE WHEN organization_checks.status = 'PASS' THEN 1 ELSE 0 END
+        AS num_check_sources,
     FROM idx
     LEFT JOIN schedule_feed_checks
         ON idx.date = schedule_feed_checks.date

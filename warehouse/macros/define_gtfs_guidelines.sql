@@ -1,25 +1,25 @@
 --
 -- ENTITIES
 --
-{% macro schedule_feed() %}
+{% macro schedule_feed() -%}
 'schedule_feed'
-{% endmacro %}
+{%- endmacro %}
 
-{% macro schedule_url() %}
+{% macro schedule_url() -%}
 'schedule_url'
-{% endmacro %}
+{%- endmacro %}
 
-{% macro rt_feed() %}
+{% macro rt_feed() -%}
 'rt_feed'
-{% endmacro %}
+{%- endmacro %}
 
-{% macro rt_url() %}
+{% macro rt_url() -%}
 'rt_url'
-{% endmacro %}
+{%- endmacro %}
 
-{% macro organization() %}
+{% macro organization() -%}
 'organization'
-{% endmacro %}
+{%- endmacro %}
 
 --
 -- CHECK NAMES
