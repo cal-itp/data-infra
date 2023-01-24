@@ -1,5 +1,10 @@
 {% macro make_schedule_file_dimension_from_dim_schedule_feeds(dim_schedule_feeds, gtfs_file_table) %}
-{{ config(materialized='incremental') }}
+{{
+    config(
+        materialized='incremental',
+        cluster_by='feed_key',
+    )
+}}
 
 -- BigQuery does not do partition elimination when using a subquery: https://stackoverflow.com/questions/54135893/using-subquery-for-partitiontime-in-bigquery-does-not-limit-cost
 -- save max timestamp in a variable instead so it can be referenced in incremental logic and still use partition elimination

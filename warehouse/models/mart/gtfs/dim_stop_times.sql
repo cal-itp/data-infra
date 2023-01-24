@@ -1,9 +1,3 @@
-{{
-    config(
-        cluster_by=['_valid_from', 'warning_duplicate_primary_key'],
-    )
-}}
-
 WITH make_dim AS (
     {{ make_schedule_file_dimension_from_dim_schedule_feeds(
         ref('dim_schedule_feeds'),
@@ -72,9 +66,7 @@ dim_stop_times AS (
             PARTITION BY base64_url, ts, trip_id, stop_sequence
         ) > 1 AS warning_duplicate_primary_key,
         stop_id IS NULL AS warning_missing_foreign_key_stop_id,
-        _valid_from,
-        _valid_to,
-        _is_current,
+        _feed_valid_from,
         part_arr[
             OFFSET(0)
         ] * 3600 + part_arr[
