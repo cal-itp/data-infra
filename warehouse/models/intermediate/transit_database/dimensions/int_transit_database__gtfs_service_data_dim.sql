@@ -64,13 +64,9 @@ int_transit_database__gtfs_service_data_dim AS (
         network_id,
         route_id,
         services_join.fares_v2_status,
-<<<<<<< HEAD
         services_join.manual_check__fixed_route_completeness,
         services_join.manual_check__demand_response_completeness,
-        services_join.original_record_id,
-=======
         services_join.source_record_id,
->>>>>>> 1932df32 (rename original_record_id to source_record_id for clarity)
         (services_join._is_current AND datasets._is_current) AS _is_current,
         GREATEST(services_join._valid_from, datasets._valid_from) AS _valid_from,
         LEAST(services_join._valid_to, datasets._valid_to) AS _valid_to
