@@ -170,6 +170,8 @@ models:
     tests:
       - dbt_utils.expression_is_true:
           expression: "num_check_sources IS NULL OR num_check_sources <= 1"
+      - dbt_utils.expression_is_true:
+          expression: "matches_entity IS NULL OR matches_entity"
     columns:
       - *key
       - *date
@@ -210,6 +212,7 @@ models:
       - *check
       - name: status
       - name: feature
+      - name: matches_entity
       - name: num_check_sources
 
   - name: fct_daily_organization_combined_guideline_checks

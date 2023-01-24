@@ -22,7 +22,7 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ no_rt_validation_errors() }}, {{ compliance_rt() }}, {{ rt_feed() }}
     UNION ALL
-    SELECT {{ trip_id_alignment() }}, {{ fixed_route_completeness() }}, {{ schedule_feed() }}
+    SELECT {{ trip_id_alignment() }}, {{ fixed_route_completeness() }}, {{ rt_feed() }}
     UNION ALL
     SELECT {{ feed_present_vehicle_positions() }}, {{ compliance_rt() }}, {{ rt_url() }}
     UNION ALL
