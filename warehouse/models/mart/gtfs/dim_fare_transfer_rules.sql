@@ -17,9 +17,7 @@ dim_fare_transfer_rules AS (
         duration_limit_type,
         fare_transfer_type,
         fare_product_id,
-        _valid_from,
-        _valid_to,
-        _is_current
+        _feed_valid_from,
     FROM make_dim
 )
 

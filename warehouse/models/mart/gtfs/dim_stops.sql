@@ -41,9 +41,7 @@ dim_stops AS (
         level_id,
         platform_code,
         COALESCE(warning_duplicate_primary_key, FALSE) AS warning_duplicate_primary_key,
-        _valid_from,
-        _valid_to,
-        _is_current
+        _feed_valid_from,
     FROM make_dim
     LEFT JOIN bad_rows
         USING (base64_url, ts, stop_id)

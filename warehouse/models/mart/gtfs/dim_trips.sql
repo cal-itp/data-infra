@@ -21,9 +21,7 @@ dim_trips AS (
         wheelchair_accessible,
         bikes_allowed,
         COUNT(*) OVER (PARTITION BY base64_url, ts, trip_id) > 1 AS warning_duplicate_primary_key,
-        _valid_from,
-        _valid_to,
-        _is_current
+        _feed_valid_from,
     FROM make_dim
 )
 

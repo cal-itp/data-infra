@@ -14,9 +14,7 @@ dim_fare_products AS (
         fare_product_name,
         amount,
         currency,
-        _valid_from,
-        _valid_to,
-        _is_current
+        _feed_valid_from,
     FROM make_dim
 )
 

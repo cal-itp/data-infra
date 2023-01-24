@@ -21,9 +21,7 @@ dim_attributions AS (
         attribution_email,
         attribution_phone,
         base64_url,
-        _valid_from,
-        _valid_to,
-        _is_current
+        _feed_valid_from,
     FROM make_dim
 )
 
