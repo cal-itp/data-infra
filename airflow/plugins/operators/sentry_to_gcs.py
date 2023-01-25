@@ -2,6 +2,7 @@ import gzip
 import os
 import pandas as pd
 import pendulum
+import requests
 from calitp.auth import get_secret_by_name
 
 from pydantic import BaseModel
@@ -9,6 +10,8 @@ from typing import Optional
 from calitp.storage import get_fs, make_name_bq_safe
 
 from airflow.models import BaseOperator
+
+BASE_URL = "https://sentry.calitp.org/api/0/"
 
 
 def process_arrays_for_nulls(arr):
@@ -55,6 +58,13 @@ class SentryExtract(BaseModel):
 
         Currently a stub.
         """
+        headers = {"Authorization": "Bearer " + auth_token}
+        response = requests.get(
+            BASE_URL + f"issues/{self.issue_id}/events/", headers=headers
+        )
+
+        print(response.status_code)
+
         return None
 
     def fetch_and_clean_from_sentry(self, auth_token):
