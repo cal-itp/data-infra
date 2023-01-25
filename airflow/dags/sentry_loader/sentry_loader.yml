@@ -1,0 +1,4 @@
+operator: operators.SentryToGCSOperator
+
+bucket: "gs://test-calitp-sentry"
+issue_id: "431"

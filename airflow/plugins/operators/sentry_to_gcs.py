@@ -109,7 +109,7 @@ class SentryExtract(PartitionedGCSArtifact):
 
 class SentryToGCSOperator(BaseOperator):
 
-    template_fields = ("bucket",)
+    template_fields = ("bucket", "issue_id")
 
     def __init__(
         self,
