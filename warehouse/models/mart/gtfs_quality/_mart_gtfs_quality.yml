@@ -465,5 +465,4 @@ exposures:
      - ref("fct_daily_reports_site_organization_scheduled_service_summary")
      - ref("idx_monthly_reports_site")
    owner:
-    # TODO: change this pending confirmation of who it should be
-     email: eric.d@jarv.us
+     email: Eric.Dasmalchi@dot.ca.gov
