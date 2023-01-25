@@ -21,15 +21,15 @@
 'organization'
 {%- endmacro %}
 
-{% macro organization() -%}
+{% macro service() -%}
 'service'
 {%- endmacro %}
 
-{% macro organization() -%}
+{% macro gtfs_service_data() -%}
 'gtfs_service_data'
 {%- endmacro %}
 
-{% macro organization() -%}
+{% macro gtfs_dataset() -%}
 'gtfs_dataset'
 {%- endmacro %}
 
