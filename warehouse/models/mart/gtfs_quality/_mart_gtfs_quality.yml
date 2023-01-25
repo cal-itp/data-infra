@@ -213,7 +213,9 @@ models:
       - name: status
       - name: feature
       - name: matches_entity
+        description: Used for testing purposes only.
       - name: num_check_sources
+        description: Used for testing purposes only.
 
   - name: fct_daily_organization_combined_guideline_checks
     description: |

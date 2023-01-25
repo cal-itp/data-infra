@@ -21,6 +21,18 @@
 'organization'
 {%- endmacro %}
 
+{% macro organization() -%}
+'service'
+{%- endmacro %}
+
+{% macro organization() -%}
+'gtfs_service_data'
+{%- endmacro %}
+
+{% macro organization() -%}
+'gtfs_dataset'
+{%- endmacro %}
+
 --
 -- CHECK NAMES
 --
