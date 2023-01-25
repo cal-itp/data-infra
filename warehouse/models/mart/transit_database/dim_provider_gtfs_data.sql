@@ -10,6 +10,8 @@ int_gtfs_quality__daily_assessment_candidate_entities AS (
     -- which sometimes exist
     SELECT DISTINCT
         date,
+        guidelines_assessed,
+        reports_site_assessed,
         organization_key,
         organization_name,
         organization_itp_id,
@@ -40,6 +42,8 @@ int_gtfs_quality__daily_assessment_candidate_entities AS (
 disambiguate_dups AS (
     SELECT
         date,
+        guidelines_assessed,
+        reports_site_assessed,
         organization_key,
         organization_name,
         organization_itp_id,
@@ -158,6 +162,8 @@ dim_provider_gtfs_data AS (
             'gtfs_dataset_key_trip_updates',
             'gtfs_service_data_customer_facing'
             ]) }} AS key,
+        guidelines_assessed,
+        reports_site_assessed,
         organization_key,
         organization_name,
         organization_itp_id,
