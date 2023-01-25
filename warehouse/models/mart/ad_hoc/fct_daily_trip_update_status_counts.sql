@@ -14,7 +14,7 @@
 {% endif %}
 
 WITH fct_stop_time_updates AS (
-    SELECT * FROM {{ ref('fct_stop_time_updates') }}
+    SELECT * FROM {{ ref('int_gtfs_rt__trip_updates_no_stop_times') }}
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_dt }}'))
     {% else %}
@@ -29,7 +29,7 @@ fct_daily_trip_update_status_counts AS (
         base64_url,
         trip_schedule_relationship,
         gtfs_dataset_key,
-        COUNT(distinct trip_id) AS distinct_trip_ids,
+        COUNT(DISTINCT trip_id) AS distinct_trip_ids,
     FROM fct_stop_time_updates
     GROUP BY 1, 2, 3, 4, 5
 )
