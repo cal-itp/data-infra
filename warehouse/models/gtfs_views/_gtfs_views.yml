@@ -929,26 +929,6 @@ models:
          (not necessarily operating on date)
 
 exposures:
-  - name: calitp_reports_site
-    type: application
-    maturity: medium
-    url: "reports.calitp.org"
-    description: Cal-ITP reports site
-    depends_on:
-      - ref("reports_daily_service_routes_stops")
-      - ref("reports_gtfs_schedule_index")
-      - ref("gtfs_schedule_dim_feeds")
-      - ref("gtfs_schedule_fact_stop_id_changes")
-      - ref("gtfs_schedule_fact_route_id_changes")
-      - source("gtfs_type2", "validation_notices")
-      # ^ hopefully not for long
-      # also gtfs_schedule_history.calitp_files_updates
-      # don't think this is a source in dbt?
-      # could add, but would also like to look at options
-      # to replace reports-side...
-    owner:
-      email: eric.d@jarv.us
-
   - name: calitp_map_tile_server
     type: application
     maturity: low
