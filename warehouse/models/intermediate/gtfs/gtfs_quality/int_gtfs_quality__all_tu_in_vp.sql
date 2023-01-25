@@ -15,8 +15,8 @@
 
 WITH
 
-service_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_quality__service_guideline_index') }}
+services_guideline_index AS (
+    SELECT * FROM {{ ref('int_gtfs_quality__services_guideline_index') }}
     {% if is_incremental() %}
     WHERE date >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
@@ -71,10 +71,10 @@ joined AS (
        idx.service_key,
        tu.trip_id AS tu_trip_id,
        vp.trip_id AS vp_trip_id
-    FROM int_gtfs_quality__service_guideline_index AS idx
+    FROM services_guideline_index AS idx
     LEFT JOIN dim_provider_gtfs_data AS quartet
     ON idx.service_key = quartet.service_key
-    AND idx.date BETWEEN quartet._valid_from AND quartet._valid_to
+    AND idx.date BETWEEN EXTRACT(DATE FROM quartet._valid_from) AND EXTRACT(DATE FROM quartet._valid_to)
     LEFT JOIN daily_trip_update_trips tu
     ON tu.date = idx.date
     AND tu.gtfs_dataset_key = quartet.trip_updates_gtfs_dataset_key

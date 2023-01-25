@@ -7,7 +7,7 @@ WITH daily_assessment_candidate_entities AS (
 -- we never want results from the current date, as data will be incomplete
 int_gtfs_quality__service_guideline_index AS (
     SELECT DISTINCT
-        date,
+        EXTRACT(DATE FROM date) AS date,
         service_key,
     FROM daily_assessment_candidate_entities
     WHERE date < CURRENT_DATE

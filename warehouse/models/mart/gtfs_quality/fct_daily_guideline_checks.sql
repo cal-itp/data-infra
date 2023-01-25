@@ -100,6 +100,7 @@ fct_daily_guideline_checks AS (
     LEFT JOIN service_checks
         ON idx.date = service_checks.date
         AND idx.service_key = service_checks.service_key
+        AND idx.check = service_checks.check
 )
 
 SELECT * FROM fct_daily_guideline_checks

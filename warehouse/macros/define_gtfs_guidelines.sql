@@ -173,6 +173,10 @@
 
 {% macro all_tu_in_vp() %}
 "100% of trips marked as Scheduled, Canceled, or Added within the Trip updates feed are represented within the Vehicle positions feed"
+
+{% macro organization_has_contact_info() %}
+"The organization has contact information on the website."
+
 {% endmacro %}
 
 --
