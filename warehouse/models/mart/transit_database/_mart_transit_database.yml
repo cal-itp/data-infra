@@ -410,7 +410,7 @@ models:
         description: |
           If "Yes", this service should be considered "assessed" by Cal-ITP
           for quality and reporting purposes.
-          If "No", this service is not "asssessed".
+          If "No", this service is not "assessed".
       - name: service_alerts_gtfs_dataset_key
         tests:
           - *ref_gtfs_datasets_key
