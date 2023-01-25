@@ -95,11 +95,19 @@ models:
       - name: service_name
       - name: gtfs_dataset_name
       - name: gtfs_dataset_type
-      - name: assessed
+      - name: guidelines_assessed
         description: |
           Boolean indicator for whether this combined entity met the criteria to be "assessed"
-          on the given date. Applies "and" logic to `organization_assessed`, `service_assessed`,
+          against the GTFS guidelines on the given date. Applies "and" logic to `organization_assessed`, `service_assessed`,
           and `gtfs_service_data_assessed`.
+      - name: reports_site_assessed
+        description: |
+          Identical to `guidelines_assessed` except that for entities associated with MTC 511,
+          use the regional subfeed instead of the combined regional feed.
+          I.e., for organization/services where the MTC combined regional feed is the
+          customer-facing feed and "assessed" for guideline purposes, this feed will mark the
+          associated regional subfeed (rather than the combined feed) as assessed for reports site
+          (reports.calitp.org) purposes.
       - name: organization_assessed
         description: |
           Boolean indicator for whether the given organization record met the criteria to be "assessed"
