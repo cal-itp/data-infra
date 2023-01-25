@@ -15,8 +15,8 @@
 
 WITH
 
-provider_guideline_index AS (
-    SELECT * FROM {{ ref('fct_daily_provider_gtfs_data') }}
+service_guideline_index AS (
+    SELECT * FROM {{ ref('int_gtfs_quality__service_guideline_index') }}
     {% if is_incremental() %}
     WHERE date >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
@@ -24,9 +24,9 @@ provider_guideline_index AS (
     {% endif %}
 ),
 
-dim_gtfs_datasets AS (
-    SELECT * FROM {{ ref('dim_gtfs_datasets') }}
-)
+dim_provider_gtfs_data AS (
+    SELECT * FROM {{ ref('dim_provider_gtfs_data') }}
+),
 
 trip_updates_summaries AS (
     SELECT * FROM {{ ref('int_gtfs_rt__trip_updates_summaries') }}
@@ -49,7 +49,7 @@ fct_vehicle_positions_messages AS (
 daily_trip_update_trips AS (
     SELECT
         dt AS date,
-        base64_url,
+        gtfs_dataset_key,
         trip_id
     FROM trip_updates_summaries
    WHERE trip_schedule_relationship IN ("SCHEDULED","CANCELED”,“ADDED")
@@ -59,29 +59,28 @@ daily_trip_update_trips AS (
 daily_vehicle_position_trips AS (
     SELECT
         dt AS date,
-        base64_url,
+        gtfs_dataset_key,
         trip_id
     FROM fct_vehicle_positions_messages
     GROUP BY 1,2,3
 ),
 
 joined AS (
-    SELECT p.service_key,
-           p.date,
-           tu.trip_id AS tu_trip_id,
-           vp.trip_id AS vp_trip_id
-      FROM provider_guideline_index p
-      LEFT JOIN dim_gtfs_datasets tud
-        ON d.key = p.trip_updates_gtfs_dataset_key
-      LEFT JOIN daily_trip_update_trips tu
-        ON tu.date = p.date
-       AND tu.base64_url = tud.base_64_url
-      LEFT JOIN dim_gtfs_datasets vpd
-        ON d.key = p.vehicle_positions_gtfs_dataset_key
-      LEFT JOIN daily_vehicle_position_trips vp
-        ON vp.date = p.date
-       AND vp.base64_url = vpd.vp_base_64_url
-       AND vp.trip_id = tu.trip_id
+    SELECT
+       idx.date,
+       idx.service_key,
+       tu.trip_id AS tu_trip_id,
+       vp.trip_id AS vp_trip_id
+    FROM int_gtfs_quality__service_guideline_index AS idx
+    LEFT JOIN dim_provider_gtfs_data AS quartet
+    ON idx.service_key = quartet.service_key
+    AND idx.date BETWEEN quartet._valid_from AND quartet._valid_to
+    LEFT JOIN daily_trip_update_trips tu
+    ON tu.date = idx.date
+    AND tu.gtfs_dataset_key = quartet.trip_updates_gtfs_dataset_key
+    LEFT JOIN daily_vehicle_position_trips vp
+    ON vp.date = idx.date
+    AND vp.gtfs_dataset_key = quartet.vehicle_positions_gtfs_dataset_key
 ),
 
 int_gtfs_quality__all_tu_in_vp AS (
