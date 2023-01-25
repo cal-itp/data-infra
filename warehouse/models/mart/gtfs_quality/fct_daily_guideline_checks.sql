@@ -81,11 +81,11 @@ fct_daily_guideline_checks AS (
             WHEN rt_url_checks.status IS NOT NULL THEN idx.entity = {{ rt_url() }}
             WHEN organization_checks.status IS NOT NULL THEN idx.entity = {{ organization() }}
         END AS matches_entity,
-        CASE WHEN schedule_feed_checks.status = 'PASS' THEN 1 ELSE 0 END
-        + CASE WHEN rt_feed_checks.status = 'PASS' THEN 1 ELSE 0 END
-        + CASE WHEN schedule_url_checks.status = 'PASS' THEN 1 ELSE 0 END
-        + CASE WHEN rt_url_checks.status = 'PASS' THEN 1 ELSE 0 END
-        + CASE WHEN organization_checks.status = 'PASS' THEN 1 ELSE 0 END
+        CASE WHEN schedule_feed_checks.status IS NOT NULL THEN 1 ELSE 0 END
+        + CASE WHEN rt_feed_checks.status IS NOT NULL THEN 1 ELSE 0 END
+        + CASE WHEN schedule_url_checks.status IS NOT NULL THEN 1 ELSE 0 END
+        + CASE WHEN rt_url_checks.status IS NOT NULL THEN 1 ELSE 0 END
+        + CASE WHEN organization_checks.status IS NOT NULL THEN 1 ELSE 0 END
         AS num_check_sources,
     FROM idx
     LEFT JOIN schedule_feed_checks
