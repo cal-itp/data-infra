@@ -4,10 +4,9 @@ import pandas as pd
 import pendulum
 import requests
 from calitp.auth import get_secret_by_name
+from calitp.storage import PartitionedGCSArtifact, get_fs, make_name_bq_safe
 
-from pydantic import BaseModel
 from typing import Optional
-from calitp.storage import get_fs, make_name_bq_safe
 
 from airflow.models import BaseOperator
 
@@ -42,8 +41,7 @@ def make_arrays_bq_safe(raw_data):
     return safe_data
 
 
-# TODO: this should use the new generic partitioned GCS artifact type once available
-class SentryExtract(BaseModel):
+class SentryExtract(PartitionedGCSArtifact):
     issue_id: str
     data: Optional[pd.DataFrame]
     extract_time: Optional[pendulum.DateTime]
@@ -54,9 +52,8 @@ class SentryExtract(BaseModel):
         arbitrary_types_allowed = True
 
     def iterate_over_sentry_records(self, auth_token):
-        """Paginate over Sentry API responses for an issue and create a combined DataFrame.
-
-        Currently a stub.
+        """
+        Paginate over Sentry API responses for an issue and create a combined list of dicts.
         """
         response_data = []
         next_url = BASE_URL + f"issues/{self.issue_id}/events/"
@@ -73,28 +70,15 @@ class SentryExtract(BaseModel):
         return response_data
 
     def fetch_and_clean_from_sentry(self, auth_token):
-        """Download Sentry event records as a DataFrame.
-
-        Note that Sentry records have rows structured as follows:
-            [{"id", "fields": {colname: value, ...}, ...]
-
-        This function applies renames in the following order.
-
-            1. rename id
-            2. rename fields
-            3. apply column prefix (to columns not renamed by 1 or 2)
+        """
+        Download Sentry event records as a DataFrame.
         """
 
         print(f"Downloading Sentry event data for issue ID {self.issue_id}")
         all_rows = self.iterate_over_sentry_records(auth_token)
         self.extract_time = pendulum.now()
 
-        raw_df = pd.DataFrame(
-            [
-                {"id": row["id"], **make_arrays_bq_safe(row["fields"])}
-                for row in all_rows
-            ]
-        )
+        raw_df = pd.DataFrame([{**make_arrays_bq_safe(row)} for row in all_rows])
 
         self.data = raw_df.rename(make_name_bq_safe, axis="columns")
 
@@ -134,9 +118,10 @@ class SentryToGCSOperator(BaseOperator):
         auth_token=None,
         **kwargs,
     ):
-        """An operator that downloads data from a specific issue within a Sentry instance
-            and saves it as a JSON file hive-partitioned by date and time in Google Cloud
-            Storage (GCS).
+        """
+        An operator that downloads data from a specific issue within a Sentry instance
+        and saves it as a JSON file hive-partitioned by date and time in Google Cloud
+        Storage (GCS).
 
         Args:
             bucket (str): GCS bucket where the scraped Sentry issue will be saved.
