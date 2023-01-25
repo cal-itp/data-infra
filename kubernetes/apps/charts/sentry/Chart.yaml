@@ -6,5 +6,5 @@ version: 0.1.0
 appVersion: "1.4.2"
 dependencies:
   - name: sentry
-    version: 15.1.0
+    version: 17.0.0
     repository: https://sentry-kubernetes.github.io/charts
