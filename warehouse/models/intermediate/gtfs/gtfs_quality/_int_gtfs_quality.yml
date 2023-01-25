@@ -130,6 +130,22 @@ models:
           Foreign key to `dim_schedule_feeds`. Because `dim_schedule_feeds` is slowly-
           changing dimension, joins using this key are not subject to the historical
           limitations noted for the other foreign keys in this table.
+          
+  - name: int_gtfs__organization_dataset_map
+    description: |
+      A version of int_gtfs_quality__daily_assessment_candidate_entities collapsed
+      down to just the organization/GTFS dataset level (basically, removes services.)
+      Columns are identical to int_gtfs_quality__daily_assessment_candidate_entities,
+      except that OR logic has been applied to the customer facing and assessed columns,
+      so that if this organization/dataset relationship is customer facing or assessed
+      for any service, the entire relationship is marked as customer facing or assessed
+      in this table.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - organization_key
+            - gtfs_dataset_key
 
   - name: int_gtfs_quality__feed_version_history
     description: |
@@ -425,3 +441,4 @@ models:
   - name: int_gtfs_quality__demand_responsive_routes_match
     tests: *stg_gtfs_guideline_tests_gtfs_service_data
     columns: *stg_gtfs_guideline_columns
+
