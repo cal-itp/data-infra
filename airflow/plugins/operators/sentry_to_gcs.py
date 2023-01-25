@@ -58,14 +58,19 @@ class SentryExtract(BaseModel):
 
         Currently a stub.
         """
+        response_data = []
+        next_url = BASE_URL + f"issues/{self.issue_id}/events/"
         headers = {"Authorization": "Bearer " + auth_token}
-        response = requests.get(
-            BASE_URL + f"issues/{self.issue_id}/events/", headers=headers
-        )
 
-        print(response.status_code)
+        while next_url:
+            response = requests.get(next_url, headers=headers)
+            response_data.extend(response.json())
+            if response.links["next"]["results"] == "true":
+                next_url = response.links["next"]["url"]
+            else:
+                next_url = None
 
-        return None
+        return response_data
 
     def fetch_and_clean_from_sentry(self, auth_token):
         """Download Sentry event records as a DataFrame.
