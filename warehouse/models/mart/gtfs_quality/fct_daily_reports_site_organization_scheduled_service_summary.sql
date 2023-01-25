@@ -7,29 +7,15 @@ WITH fct_daily_feed_scheduled_service_summary AS (
 
 ),
 
-dim_provider_gtfs_data AS (
+int_gtfs__organization_dataset_map AS (
 
     SELECT *
-    FROM {{ ref('dim_provider_gtfs_data') }}
+    FROM {{ ref('int_gtfs_quality__organization_dataset_map') }}
+    WHERE reports_site_assessed
 
 ),
 
-daily_feed_organization_map AS (
-    -- collapse the services level
-    SELECT DISTINCT
-        service_date,
-        organization_name,
-        organization_itp_id,
-        organization_source_record_id,
-        organization_key,
-        feed_key,
-    FROM fct_daily_feed_scheduled_service_summary AS service
-    LEFT JOIN dim_provider_gtfs_data AS quartet
-        ON CAST(service.service_date AS TIMESTAMP) BETWEEN quartet._valid_from AND quartet._valid_to
-        AND service.gtfs_dataset_key = quartet.schedule_gtfs_dataset_key
-),
-
-fct_daily_organization_scheduled_service_summary AS (
+fct_daily_reports_site_organization_scheduled_service_summary AS (
     SELECT
         service_date,
         organization_name,
@@ -53,10 +39,11 @@ fct_daily_organization_scheduled_service_summary AS (
         LOGICAL_OR(
             contains_warning_missing_foreign_key_stop_id
         ) AS contains_warning_missing_foreign_key_stop_id
-    FROM daily_feed_organization_map
-    LEFT JOIN fct_daily_feed_scheduled_service_summary
-        USING (service_date, feed_key)
+    FROM int_gtfs__organization_dataset_map
+    INNER JOIN fct_daily_feed_scheduled_service_summary
+        ON int_gtfs__organization_dataset_map.date = fct_daily_feed_scheduled_service_summary.service_date
+        AND int_gtfs__organization_dataset_map.schedule_feed_key = fct_daily_feed_scheduled_service_summary.feed_key
     GROUP BY service_date, organization_source_record_id, organization_name, organization_itp_id, organization_key
 )
 
-SELECT * FROM fct_daily_organization_scheduled_service_summary
+SELECT * FROM fct_daily_reports_site_organization_scheduled_service_summary
