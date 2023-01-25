@@ -15,6 +15,8 @@ idx_monthly_reports_site AS (
     WHERE
         DATE_TRUNC(date, MONTH) = date
         AND reports_site_assessed
+        -- don't want to start listing dates until we are past the 1st of the month for which those reports will be generated
+        AND DATE_ADD(LAST_DAY(date, MONTH), INTERVAL 1 DAY) <= CURRENT_DATE()
 )
 
 SELECT * FROM idx_monthly_reports_site
