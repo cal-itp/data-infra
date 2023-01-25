@@ -17,6 +17,7 @@ int_gtfs__organization_dataset_map AS (
 
 fct_daily_reports_site_organization_scheduled_service_summary AS (
     SELECT
+        {{ dbt_utils.surrogate_key(['service_date', 'organization_key']) }} AS key,
         service_date,
         organization_name,
         organization_itp_id,
@@ -29,7 +30,6 @@ fct_daily_reports_site_organization_scheduled_service_summary AS (
         SUM(n_stop_times) AS n_stop_times,
         SUM(n_routes) AS n_routes,
         COUNT(feed_key) AS feed_key_ct,
-        COUNT(DISTINCT feed_key) AS distinct_feed_key_ct,
         LOGICAL_OR(
             contains_warning_duplicate_stop_times_primary_key
         ) AS contains_warning_duplicate_stop_times_primary_key,

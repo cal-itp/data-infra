@@ -5,7 +5,7 @@ WITH assessed_entities AS (
 
 idx_monthly_reports_site AS (
     SELECT DISTINCT
-        date AS date_start,
+        CAST(date AS DATE) AS date_start,
         organization_itp_id,
         organization_name,
         organization_source_record_id,
@@ -15,7 +15,8 @@ idx_monthly_reports_site AS (
     WHERE
         DATE_TRUNC(date, MONTH) = date
         AND reports_site_assessed
-        -- don't want to start listing dates until we are past the 1st of the month for which those reports will be generated
+        -- don't add rows until the month in which the report will be generated
+        -- i.e., do not add January rows until February has started
         AND DATE_ADD(LAST_DAY(date, MONTH), INTERVAL 1 DAY) <= CURRENT_DATE()
 )
 

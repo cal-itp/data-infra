@@ -362,15 +362,108 @@ models:
               to: ref('dim_gtfs_datasets')
               field: key
       - name: gtfs_dataset_name
+  - name: fct_daily_reports_site_organization_scheduled_service_summary
+    description: |
+      Daily service summary of all feeds that are associated with the given organization with
+      a "reports site assessed" relationship, i.e., the organization has public transit, the
+      dataset describes fixed route service, and the given dataset is "customer-facing" or
+      the dataset is an agency subfeed of the MTC 511 combined regional feed (for those organizations,
+      the combined regional feed is technically considered "customer-facing" but for the reports site
+      we use the agency subfeeds.)
 
-# TODO: This should be filled out once the reports site is actually migrated
-#exposures:
-#  - name: calitp_reports_site
-#    type: application
-#    maturity: medium
-#    url: "reports.calitp.org"
-#    description: Cal-ITP reports site
-#    depends_on:
-#      - ref(" ")
-#    owner:
-#      email: eric.d@jarv.us
+      The relationship between the organizations and datasets/feeds here is that the organization
+      manages the service represented in the dataset/feed.
+    columns:
+      - *key
+      - name: service_date
+        description: |
+          Date on which this organization had some scheduled service.
+      - name: organization_name
+      - name: organization_itp_id
+      - name: organization_source_record_id
+      - name: organization_key
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_organizations')
+              field: key
+      - name: ttl_service_hours
+        description: |
+          Sum of total service hours for all reports-assessed feeds for this organization on this date.
+      - name: n_trips
+        description: |
+          Count of total trips scheduled across all reports-assessed feeds for this organization on this date.
+      - name: first_departure_sec
+        description: |
+          Time of first trip departure on date across all reports-assessed feeds for this organization
+      - name: last_arrival_sec
+        description: |
+          Time of last trip arrival on date across all reports-assessed feeds for this organization
+      - name: n_stop_times
+        description: |
+          Count of scheduled stop events on date across all reports-assessed feeds for this organization
+      - name: n_routes
+        description:
+          Count of routes with scheduled trips on date across all reports-assessed feeds for this organization
+      - name: feed_key_ct
+        description: |
+          Number of schedule feeds that were included in the assessment for this organization on
+          this date; used for data integrity checks
+      - name: contains_warning_duplicate_stop_times_primary_key
+        description: |
+          Rows with `true` in this column indicate that the columns in this table that are aggregated from
+          stop times data (`n_stops`, `n_stop_times`,  `first_departure_sec`, `last_arrival_sec`,
+          and `service_hours`) contain at least one row that had a duplicate primary key in the source stop times data.
+
+          I.e., at least one row being aggregated had a `trip_id` / `stop_sequence` pair that was not unique
+          in the input data. This indicates that data quality issues were present in the stop times data
+          that is being summarized here, and counts may be inflated due to multiple rows with identical identifiers.
+      - name: contains_warning_duplicate_trip_primary_key
+        description: |
+          Rows with `true` in this column indicate that `dim_trips` contains duplicates of this trip primary key.
+          i.e., `trip_id` is duplicated within an individual feed instance.
+
+          This means that counts may be inflated due to multiple rows with identical identifiers.
+      - name: contains_warning_missing_foreign_key_stop_id
+        description: |
+          Rows with `true` in this column indicate that the columns in this table that are aggregated from
+          stop times data (`n_stops`, `n_stop_times`,  `first_departure_sec`, `last_arrival_sec`,
+          and `service_hours`) contain at least one row that had a missing `stop_id` foreign key in the source stops data.
+
+          I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
+          in the input data. This indicates that data quality issues were present in the stop times data
+          that is being summarized here.
+  - name: idx_monthly_reports_site
+    description: |
+      Index that drives which organizations get a report generated on reports.calitp.org each
+      month.
+      Rows for a given month will not appear in this table until that month is complete; i.e.,
+      there are no rows for January until February begins.
+    columns:
+      - name: date_start
+        description: |
+          Start date of the given month.
+      - name: date_end
+        description: |
+          End date of the given month.
+      - name: publish_date
+        description: |
+          First date of the following month.
+          For example, if start_date is January 1, 2023, and end_date is January 31, 2023,
+          then publish_date is February 1, 2023.
+      - name: organization_itp_id
+      - name: organization_name
+      - name: organization_source_record_id
+
+exposures:
+ - name: calitp_reports_site
+   type: application
+   maturity: medium
+   url: "reports.calitp.org"
+   description: Cal-ITP reports site
+   depends_on:
+     - ref("fct_daily_reports_site_organization_scheduled_service_summary")
+     - ref("idx_monthly_reports_site")
+   owner:
+    # TODO: change this pending confirmation of who it should be
+     email: eric.d@jarv.us
