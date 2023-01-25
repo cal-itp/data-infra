@@ -3,9 +3,9 @@ import os
 import pandas as pd
 import pendulum
 import requests
+
 from calitp.auth import get_secret_by_name
 from calitp.storage import PartitionedGCSArtifact, get_fs, make_name_bq_safe
-
 from typing import Optional
 
 from airflow.models import BaseOperator
