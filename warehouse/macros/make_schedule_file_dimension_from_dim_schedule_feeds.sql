@@ -27,7 +27,7 @@ WITH dim_schedule_feeds AS (
     {% if is_incremental() %}
     WHERE _dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
-    WHERE _dt >= '{{ var("FULL_REFRESH_SCHEDULE_START") }}'
+    WHERE _dt >= '{{ var("GTFS_SCHEDULE_START") }}'
     {% endif %}
 )
 
