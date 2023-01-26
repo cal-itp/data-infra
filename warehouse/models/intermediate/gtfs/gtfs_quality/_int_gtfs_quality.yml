@@ -364,9 +364,11 @@ models:
             - gtfs_dataset_key
       - dbt_utils.equal_rowcount:
           compare_model: ref('int_gtfs_quality__gtfs_dataset_schedule_guideline_index')
+    columns: *stg_gtfs_guideline_columns
 
   - name: int_gtfs_quality__data_license
     tests: *stg_gtfs_guideline_tests_dataset_schedule
+    columns: *stg_gtfs_guideline_columns
 
 # ----- All 4 feeds
 
@@ -378,15 +380,19 @@ models:
             - gtfs_dataset_key
       - dbt_utils.equal_rowcount:
           compare_model: ref('int_gtfs_quality__gtfs_dataset_guideline_index')
+    columns: *stg_gtfs_guideline_columns
 
   - name: int_gtfs_quality__stable_url
     tests: *stg_gtfs_guideline_tests_dataset
+    columns: *stg_gtfs_guideline_columns
 
   - name: int_gtfs_quality__grading_scheme_v1
     tests: *stg_gtfs_guideline_tests_dataset
+    columns: *stg_gtfs_guideline_columns
 
   - name: int_gtfs_quality__link_to_dataset_on_website
     tests: *stg_gtfs_guideline_tests_dataset
+    columns: *stg_gtfs_guideline_columns
 
 # --- Service-level
 
@@ -398,10 +404,11 @@ models:
             - service_key
       - dbt_utils.equal_rowcount:
           compare_model: ref('int_gtfs_quality__services_guideline_index')
+    columns: *stg_gtfs_guideline_columns
 
   - name: int_gtfs_quality__trip_planner_rt
     tests: *stg_gtfs_guideline_tests_service
-
+    columns: *stg_gtfs_guideline_columns
 
 # --- GTFS-service-data-level
 
@@ -413,6 +420,8 @@ models:
             - gtfs_service_data_key
       - dbt_utils.equal_rowcount:
           compare_model: ref('int_gtfs_quality__gtfs_service_data_guideline_index')
+    columns: *stg_gtfs_guideline_columns
 
   - name: int_gtfs_quality__demand_responsive_routes_match
     tests: *stg_gtfs_guideline_tests_gtfs_service_data
+    columns: *stg_gtfs_guideline_columns
