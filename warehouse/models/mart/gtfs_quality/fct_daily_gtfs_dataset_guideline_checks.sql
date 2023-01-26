@@ -10,6 +10,7 @@ unioned AS (
             ref('int_gtfs_quality__authentication_acceptable'),
             ref('int_gtfs_quality__stable_url'),
             ref('int_gtfs_quality__grading_scheme_v1'),
+            ref('int_gtfs_quality__link_to_dataset_on_website'),
         ],
     ) }}
 ),

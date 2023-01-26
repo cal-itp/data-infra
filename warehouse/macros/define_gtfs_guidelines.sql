@@ -220,16 +220,56 @@
 "Includes an open license that allows commercial use"
 {% endmacro %}
 
-{% macro authentication_acceptable() %}
-"GTFS RT feeds require easy (if any) authentication"
+{% macro authentication_acceptable_schedule() %}
+"GTFS Schedule feed requires easy (if any) authentication"
 {% endmacro %}
 
-{% macro stable_url() %}
-"GTFS Schedule data is published at a stable URI (permalink) from which it can be “fetched” automatically by trip-planning applications"
+{% macro authentication_acceptable_vp() %}
+"Vehicle positions feed requires easy (if any) authentication"
+{% endmacro %}
+
+{% macro authentication_acceptable_tu() %}
+"Trip updates feed requires easy (if any) authentication"
+{% endmacro %}
+
+{% macro authentication_acceptable_sa() %}
+"Service alerts feed requires easy (if any) authentication"
+{% endmacro %}
+
+{% macro stable_url_schedule() %}
+"GTFS Schedule feed is published at a stable URI (permalink) from which it can be “fetched” automatically by trip-planning applications"
+{% endmacro %}
+
+{% macro stable_url_vp() %}
+"Vehicle positions feed is published at a stable URI (permalink) from which it can be “fetched” automatically by trip-planning applications"
+{% endmacro %}
+
+{% macro stable_url_tu() %}
+"Trip updates feed is published at a stable URI (permalink) from which it can be “fetched” automatically by trip-planning applications"
+{% endmacro %}
+
+{% macro stable_url_sa() %}
+"Service alerts feed is published at a stable URI (permalink) from which it can be “fetched” automatically by trip-planning applications"
 {% endmacro %}
 
 {% macro grading_scheme_v1() %}
 "Passes Grading Scheme v1"
+{% endmacro %}
+
+{% macro link_to_dataset_on_website_schedule() %}
+"GTFS Schedule link is posted on website"
+{% endmacro %}
+
+{% macro link_to_dataset_on_website_vp() %}
+"Vehicle positions link link is posted on website"
+{% endmacro %}
+
+{% macro link_to_dataset_on_website_tu() %}
+"Trip updates link is posted on website"
+{% endmacro %}
+
+{% macro link_to_dataset_on_website_sa() %}
+"Service alerts link is posted on website"
 {% endmacro %}
 
 --

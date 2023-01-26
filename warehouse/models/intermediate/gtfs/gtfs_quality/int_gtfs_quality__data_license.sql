@@ -1,7 +1,7 @@
 WITH
 
 idx AS (
-    SELECT * FROM {{ ref('int_gtfs_quality__gtfs_dataset_guideline_index') }}
+    SELECT * FROM {{ ref('int_gtfs_quality__gtfs_dataset_schedule_guideline_index') }}
 ),
 
 gtfs_datasets AS (
@@ -17,6 +17,7 @@ int_gtfs_quality__data_license AS (
         CASE manual_check__data_license
             WHEN 'Yes' THEN 'PASS'
             WHEN 'No' THEN 'FAIL'
+            ELSE 'Needs manual check'
         END AS status,
     FROM idx
     LEFT JOIN gtfs_datasets

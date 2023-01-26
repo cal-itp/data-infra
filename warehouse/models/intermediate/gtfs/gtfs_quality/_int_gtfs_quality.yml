@@ -355,7 +355,26 @@ models:
 
 ## Dataset-level
 
+### Schedule only
+
   - name: int_gtfs_quality__shapes_accurate
+    tests: &stg_gtfs_guideline_tests_dataset_schedule
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - gtfs_dataset_key
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__dataset_schedule_guideline_index')
+
+  - name: int_gtfs_quality__data_license
+    tests: *stg_gtfs_guideline_tests_dataset_schedule
+
+  - name: int_gtfs_quality__stable_url
+    tests: *stg_gtfs_guideline_tests_dataset_schedule
+
+### All 4 feeds
+
+  - name: int_gtfs_quality__authentication_acceptable
     tests: &stg_gtfs_guideline_tests_dataset
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -364,14 +383,8 @@ models:
       - dbt_utils.equal_rowcount:
           compare_model: ref('int_gtfs_quality__dataset_guideline_index')
 
-  - name: int_gtfs_quality__data_license
-    tests: *stg_gtfs_guideline_tests_dataset
-
-  - name: int_gtfs_quality__authentication_acceptable
-    tests: *stg_gtfs_guideline_tests_dataset
-
-  - name: int_gtfs_quality__stable_url
-    tests: *stg_gtfs_guideline_tests_dataset
-
   - name: int_gtfs_quality__grading_scheme_v1
+    tests: *stg_gtfs_guideline_tests_dataset
+
+  - name: int_gtfs_quality__link_to_dataset_on_website
     tests: *stg_gtfs_guideline_tests_dataset

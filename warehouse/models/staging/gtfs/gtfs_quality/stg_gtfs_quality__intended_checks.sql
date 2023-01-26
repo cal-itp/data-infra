@@ -94,11 +94,31 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ data_license() }}, {{ compliance_schedule() }}, {{ gtfs_dataset() }}
     UNION ALL
-    SELECT {{ authentication_acceptable() }}, {{ availability_on_website() }}, {{ gtfs_dataset() }}
+    SELECT {{ authentication_acceptable_schedule() }}, {{ availability_on_website() }}, {{ gtfs_dataset() }}
     UNION ALL
-    SELECT {{ stable_url() }}, {{ compliance_schedule() }}, {{ gtfs_dataset() }}
+    SELECT {{ authentication_acceptable_vp() }}, {{ availability_on_website() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ authentication_acceptable_tu() }}, {{ availability_on_website() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ authentication_acceptable_sa() }}, {{ availability_on_website() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ stable_url_schedule() }}, {{ compliance_schedule() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ stable_url_vp() }}, {{ compliance_rt() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ stable_url_tu() }}, {{ compliance_rt() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ stable_url_sa() }}, {{ compliance_rt() }}, {{ gtfs_dataset() }}
     UNION ALL
     SELECT {{ grading_scheme_v1() }}, {{ accurate_service_data() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ link_to_dataset_on_website_schedule() }}, {{ availability_on_website() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ link_to_dataset_on_website_vp() }}, {{ availability_on_website() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ link_to_dataset_on_website_tu() }}, {{ availability_on_website() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ link_to_dataset_on_website_sa() }}, {{ availability_on_website() }}, {{ gtfs_dataset() }}
 )
 
 SELECT * FROM stg_gtfs_quality__intended_checks
