@@ -1,9 +1,6 @@
 {% docs fct_daily_gtfs_dataset_guideline_checks %}
 
-Each row represents a date/guideline check/gtfs dataset combination, with pass/fail
-information indicating whether that feed complied with that check on that date.
-Only contains checks that are performed at the gtfs_dataset
-level.
+Each row represents a date/guideline check/gtfs dataset combination, with pass/fail information indicating whether that feed complied with that check on that date. Only contains checks that are performed at the gtfs_dataset level. Some checks apply to all 4 feed types, while some apply only to the schedule feed.
 
 
 Here is a list of currently-implemented checks:
