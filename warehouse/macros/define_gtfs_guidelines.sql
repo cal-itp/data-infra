@@ -261,7 +261,7 @@
 {% endmacro %}
 
 {% macro link_to_dataset_on_website_vp() %}
-"Vehicle positions link link is posted on website"
+"Vehicle positions link is posted on website"
 {% endmacro %}
 
 {% macro link_to_dataset_on_website_tu() %}

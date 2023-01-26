@@ -370,6 +370,10 @@ models:
     tests: *stg_gtfs_guideline_tests_dataset_schedule
     columns: *stg_gtfs_guideline_columns
 
+  - name: int_gtfs_quality__grading_scheme_v1
+    tests: *stg_gtfs_guideline_tests_dataset_schedule
+    columns: *stg_gtfs_guideline_columns
+
 # ----- All 4 feeds
 
   - name: int_gtfs_quality__authentication_acceptable
@@ -383,10 +387,6 @@ models:
     columns: *stg_gtfs_guideline_columns
 
   - name: int_gtfs_quality__stable_url
-    tests: *stg_gtfs_guideline_tests_dataset
-    columns: *stg_gtfs_guideline_columns
-
-  - name: int_gtfs_quality__grading_scheme_v1
     tests: *stg_gtfs_guideline_tests_dataset
     columns: *stg_gtfs_guideline_columns
 
