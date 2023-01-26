@@ -85,6 +85,12 @@ WITH stg_gtfs_quality__intended_checks AS (
     SELECT {{ modification_date_present_vehicle_positions() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
     UNION ALL
     SELECT {{ modification_date_present_trip_updates() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
+    UNION ALL
+    SELECT {{ persistent_ids_vp() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
+    -- UNION ALL
+    -- SELECT {{ persistent_ids_tu() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
+    -- UNION ALL
+    -- SELECT {{ persistent_ids_sa() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
 
     -- MANUAL CHECKS
     UNION ALL

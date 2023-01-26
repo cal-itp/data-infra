@@ -212,6 +212,18 @@
 "The organization has contact information on the website."
 {% endmacro %}
 
+{% macro persistent_ids_vp() %}
+"Vehicle positions feed maintains persistent identifiers"
+{% endmacro %}
+
+-- {% macro persistent_ids_tu() %}
+-- "Trip updates feed maintains persistent identifiers"
+-- {% endmacro %}
+
+-- {% macro persistent_ids_sa() %}
+-- "Service alerts feed maintains persistent identifiers"
+-- {% endmacro %}
+
 --
 -- FEATURE NAMES
 --

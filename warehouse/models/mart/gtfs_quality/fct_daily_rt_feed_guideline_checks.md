@@ -35,4 +35,5 @@ Here is a list of currently-implemented checks:
 | The Service alerts API endpoint is configured to report the file modification date | Best Practices Alignment (RT) | When the Service alerts API endpoint is requested, the response header includes a field called "Last-Modified". |
 | The Vehicle positions API endpoint is configured to report the file modification date | Best Practices Alignment (RT) | When the Vehicle Positions API endpoint is requested, the response header includes a field called "Last-Modified". |
 | The Trip updates API endpoint is configured to report the file modification date | Best Practices Alignment (RT) | When the Trip updates API endpoint is requested, the response header includes a field called "Last-Modified". |
+| Vehicle positions feed maintains persistent identifiers | Best Practices Alignment (RT) |  In the last 30 days, no updates to the Vehicle positions feed have created a situation where 50% or more of a given ID (FeedEntity.id, VehicleDescriptor.id) were not present in the previous feed version. |
 {% enddocs %}
