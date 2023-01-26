@@ -1996,6 +1996,42 @@ models:
         description: '{{ doc("gtfs_stops__wheelchair_boarding") }}'
 
   - name: fct_observed_trips
+    description: |
+      Joined model of observed trips across RT feeds related to the same
+      Schedule feed. For each day, per Schedule, there will be one row
+      per "trip_identifier" which is a hash of the fields that make up
+      a GTFS RT TripDescriptor. See https://gtfs.org/realtime/reference/#message-tripdescriptor
+      for more details.
     columns:
       - name: key
         tests: *primary_key_tests
+      - name: tu_num_distinct_message_ids
+        description: |
+          Count of distinct trip update message IDs referencing this trip.
+      - name: tu_min_trip_update_timestamp
+        description: |
+          Timestamp of first trip update referencing this trip.
+      - name: tu_max_trip_update_timestamp
+        description: |
+          Timestamp of last trip update referencing this trip.
+      - name: tu_max_delay
+        description: |
+          Maximum observed delay for this trip.
+      - name: tu_num_skipped_stops
+        description: |
+          Number of skipped stops for this trip.
+      - name: vp_num_distinct_message_ids
+        description: |
+          Count of distinct vehicle position message IDs referencing this trip.
+      - name: vp_min_trip_update_timestamp
+        description: |
+          Timestamp of first vehicle position referencing this trip.
+      - name: vp_max_trip_update_timestamp
+        description: |
+          Timestamp of last vehicle position referencing this trip.
+      - name: sa_num_distinct_message_ids
+        description: |
+          Count of distinct service alert message IDs referencing this trip.
+      - name: sa_service_alert_message_keys
+        description:
+          Array of keys of service alert messages referencing this trip.

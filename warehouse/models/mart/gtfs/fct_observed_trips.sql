@@ -92,7 +92,7 @@ fct_observed_trips AS (
         vp.min_trip_update_timestamp AS vp_min_trip_update_timestamp,
         vp.max_trip_update_timestamp AS vp_max_trip_update_timestamp,
         sa.num_distinct_message_ids AS sa_num_distinct_message_ids,
-        sa.service_alert_message_keys AS sa_service_alert_message_key,
+        sa.service_alert_message_keys AS sa_service_alert_message_keys,
     FROM trip_updates_with_associated_schedule AS tu
     FULL OUTER JOIN vehicle_positions_with_associated_schedule AS vp
         USING (dt, associated_schedule_gtfs_dataset_key, trip_identifier)
