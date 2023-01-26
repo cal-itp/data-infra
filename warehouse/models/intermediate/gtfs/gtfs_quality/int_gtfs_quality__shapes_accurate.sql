@@ -17,7 +17,7 @@ int_gtfs_quality__shapes_accurate AS (
         CASE manual_check__accurate_shapes
             WHEN 'Yes' THEN 'PASS'
             WHEN 'No' THEN 'FAIL'
-            ELSE 'Needs manual check'
+            ELSE {{ manual_check_needed_status() }}
         END AS status,
     FROM idx
     LEFT JOIN gtfs_datasets

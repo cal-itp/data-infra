@@ -39,6 +39,14 @@ gtfs_dataset_checks AS (
     SELECT * FROM {{ ref('fct_daily_gtfs_dataset_guideline_checks') }}
 ),
 
+service_checks AS (
+    SELECT * FROM {{ ref('fct_daily_service_guideline_checks') }}
+),
+
+gtfs_service_data_checks AS (
+    SELECT * FROM {{ ref('fct_daily_gtfs_service_data_guideline_checks') }}
+),
+
 idx AS (
     SELECT
         implemented_checks.*,
@@ -77,7 +85,9 @@ fct_daily_guideline_checks AS (
             schedule_url_checks.status,
             rt_url_checks.status,
             organization_checks.status,
-            gtfs_dataset_checks.status
+            gtfs_dataset_checks.status,
+            service_checks.status,
+            gtfs_service_data_checks.status
         ) AS status,
         CASE
             WHEN schedule_feed_checks.status IS NOT NULL THEN idx.entity = {{ schedule_feed() }}
@@ -86,6 +96,8 @@ fct_daily_guideline_checks AS (
             WHEN rt_url_checks.status IS NOT NULL THEN idx.entity = {{ rt_url() }}
             WHEN organization_checks.status IS NOT NULL THEN idx.entity = {{ organization() }}
             WHEN gtfs_dataset_checks.status IS NOT NULL THEN idx.entity = {{ gtfs_dataset() }}
+            WHEN service_checks.status IS NOT NULL THEN idx.entity = {{ service() }}
+            WHEN gtfs_service_data_checks.status IS NOT NULL THEN idx.entity = {{ gtfs_service_data() }}
         END AS matches_entity,
         CASE WHEN schedule_feed_checks.status IS NOT NULL THEN 1 ELSE 0 END
         + CASE WHEN rt_feed_checks.status IS NOT NULL THEN 1 ELSE 0 END
@@ -93,6 +105,8 @@ fct_daily_guideline_checks AS (
         + CASE WHEN rt_url_checks.status IS NOT NULL THEN 1 ELSE 0 END
         + CASE WHEN organization_checks.status IS NOT NULL THEN 1 ELSE 0 END
         + CASE WHEN gtfs_dataset_checks.status IS NOT NULL THEN 1 ELSE 0 END
+        + CASE WHEN service_checks.status IS NOT NULL THEN 1 ELSE 0 END
+        + CASE WHEN gtfs_service_data_checks.status IS NOT NULL THEN 1 ELSE 0 END
         AS num_check_sources,
     FROM idx
     LEFT JOIN schedule_feed_checks
@@ -119,6 +133,14 @@ fct_daily_guideline_checks AS (
         ON idx.date = gtfs_dataset_checks.date
         AND idx.gtfs_dataset_key = gtfs_dataset_checks.gtfs_dataset_key
         AND idx.check = gtfs_dataset_checks.check
+    LEFT JOIN service_checks
+        ON idx.date = service_checks.date
+        AND idx.service_key = service_checks.service_key
+        AND idx.check = service_checks.check
+    LEFT JOIN gtfs_service_data_checks
+        ON idx.date = gtfs_service_data_checks.date
+        AND idx.gtfs_service_data_key = gtfs_service_data_checks.gtfs_service_data_key
+        AND idx.check = gtfs_service_data_checks.check
 )
 
 SELECT * FROM fct_daily_guideline_checks

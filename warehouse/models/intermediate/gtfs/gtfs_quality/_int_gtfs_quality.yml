@@ -341,7 +341,7 @@ models:
 
 # MANUAL CHECKS
 
-## Organization-level
+# --- Organization-level
 
   - name: int_gtfs_quality__contact_on_website
     tests:
@@ -353,9 +353,8 @@ models:
           compare_model: ref('int_gtfs_quality__organization_guideline_index')
     columns: *stg_gtfs_guideline_columns
 
-## Dataset-level
-
-### Schedule only
+# --- Dataset-level
+# ----- Schedule only
 
   - name: int_gtfs_quality__shapes_accurate
     tests: &stg_gtfs_guideline_tests_dataset_schedule
@@ -364,7 +363,7 @@ models:
             - date
             - gtfs_dataset_key
       - dbt_utils.equal_rowcount:
-          compare_model: ref('int_gtfs_quality__dataset_schedule_guideline_index')
+          compare_model: ref('int_gtfs_quality__gtfs_dataset_schedule_guideline_index')
 
   - name: int_gtfs_quality__data_license
     tests: *stg_gtfs_guideline_tests_dataset_schedule
@@ -372,7 +371,7 @@ models:
   - name: int_gtfs_quality__stable_url
     tests: *stg_gtfs_guideline_tests_dataset_schedule
 
-### All 4 feeds
+# ----- All 4 feeds
 
   - name: int_gtfs_quality__authentication_acceptable
     tests: &stg_gtfs_guideline_tests_dataset
@@ -381,10 +380,39 @@ models:
             - date
             - gtfs_dataset_key
       - dbt_utils.equal_rowcount:
-          compare_model: ref('int_gtfs_quality__dataset_guideline_index')
+          compare_model: ref('int_gtfs_quality__gtfs_dataset_guideline_index')
 
   - name: int_gtfs_quality__grading_scheme_v1
     tests: *stg_gtfs_guideline_tests_dataset
 
   - name: int_gtfs_quality__link_to_dataset_on_website
     tests: *stg_gtfs_guideline_tests_dataset
+
+# --- Service-level
+
+  - name: int_gtfs_quality__trip_planner_schedule
+    tests: &stg_gtfs_guideline_tests_service
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - service_key
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__services_guideline_index')
+
+  - name: int_gtfs_quality__trip_planner_rt
+    tests: *stg_gtfs_guideline_tests_service
+
+
+# --- GTFS-service-data-level
+
+  - name: int_gtfs_quality__fixed_routes_match
+    tests: &stg_gtfs_guideline_tests_gtfs_service_data
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - gtfs_service_data_key
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__gtfs_service_data_guideline_index')
+
+  - name: int_gtfs_quality__demand_responsive_routes_match
+    tests: *stg_gtfs_guideline_tests_gtfs_service_data

@@ -18,11 +18,13 @@ int_gtfs_quality__stable_url AS (
             WHEN gtfs_datasets.type = "trip_updates" THEN {{ stable_url_tu() }}
             WHEN gtfs_datasets.type = "service_alerts" THEN {{ stable_url_sa() }}
         END AS check,
-        {{ compliance_schedule() }} AS feature,
+        CASE
+            WHEN gtfs_datasets.type = "schedule" THEN {{ compliance_schedule() }}
+            WHEN gtfs_datasets.type IN ("vehicle_positions","trip_updates","service_alerts") THEN {{ compliance_rt() }}
         CASE manual_check__stable_url
             WHEN 'Yes' THEN 'PASS'
             WHEN 'No' THEN 'FAIL'
-            ELSE 'Needs manual check'
+            ELSE {{ manual_check_needed_status() }}
         END AS status
     FROM idx
     LEFT JOIN gtfs_datasets

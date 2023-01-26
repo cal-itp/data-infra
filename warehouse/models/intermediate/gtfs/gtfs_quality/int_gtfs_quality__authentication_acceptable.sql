@@ -22,7 +22,7 @@ int_gtfs_quality__authentication_acceptable AS (
         CASE manual_check__authentication_acceptable
             WHEN 'Yes' THEN 'PASS'
             WHEN 'No' THEN 'FAIL'
-            ELSE 'Needs manual check'
+            ELSE {{ manual_check_needed_status() }}
         END AS status
     FROM idx
     LEFT JOIN gtfs_datasets

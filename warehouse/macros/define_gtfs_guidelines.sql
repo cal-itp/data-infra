@@ -272,6 +272,22 @@
 "Service alerts link is posted on website"
 {% endmacro %}
 
+{% macro trip_planner_schedule() %}
+"GTFS Schedule feed ingested by Google Maps and/or a combination of Apple Maps, Transit App, Bing Maps, Moovit or local Open Trip Planner services"
+{% endmacro %}
+
+{% macro trip_planner_rt() %}
+"Realtime feeds ingested by Google Maps and/or a combination of Apple Maps, Transit App, Bing Maps, Moovit or local Open Trip Planner services"
+{% endmacro %}
+
+{% macro fixed_routes_match() %}
+"Static and RT feeds are representative of all demand-responsive transit services under the transit providers’ purview"
+{% endmacro %}
+
+{% macro demand_responsive_routes_match() %}
+"Realtime feeds ingested by Google Maps and/or a combination of Apple Maps, Transit App, Bing Maps, Moovit or local Open Trip Planner services"
+{% endmacro %}
+
 --
 -- FEATURE NAMES
 --
@@ -298,6 +314,10 @@
 
 {% macro fixed_route_completeness() %}
 "Fixed-Route Completeness"
+{% endmacro %}
+
+{% macro demand_responsive_completeness() %}
+"Demand-Responsive Completeness"
 {% endmacro %}
 
 {% macro feed_aggregator_availability_schedule() %}
@@ -430,3 +450,11 @@ feature
     WHERE percent_pass = 100 OR percent_pass = 0
 
 {% endtest %}
+
+
+--
+-- OTHER TEXT
+--
+{% macro manual_check_needed_status() %}
+"MANUAL CHECK NEEDED"
+{% endmacro %}

@@ -25,7 +25,8 @@ Here is a list of currently-implemented checks:
 | Vehicle positions link link is posted on website | Availability on Website | If an API key is required to access the Vehicle positions feed, the registration process must be straightforward, quick, and transparent. |
 | Trip updates link is posted on website | Availability on Website | If an API key is required to access the Trip updates feed, the registration process must be straightforward, quick, and transparent. |
 | Service alerts link is posted on website | Availability on Website | If an API key is required to access the Service alerts feed, the registration process must be straightforward, quick, and transparent. |
-
+| GTFS Schedule feed ingested by Google Maps and/or a combination of Apple Maps, Transit App, Bing Maps, Moovit or local Open Trip Planner services. | Compliance (Schedule) | Transit riders are able to access the trip schedule within commonly-used trip planning apps. |
+| Realtime feeds ingested by Google Maps and/or a combination of Apple Maps, Transit App, Bing Maps, Moovit or local Open Trip Planner services. | Compliance (RT) | Transit riders are able to access live trip statuses within commonly-used trip planning apps. |
 
 
 {% enddocs %}

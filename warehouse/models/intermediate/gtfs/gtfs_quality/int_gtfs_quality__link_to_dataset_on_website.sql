@@ -22,7 +22,7 @@ int_gtfs_quality__link_to_dataset_on_website AS (
         CASE manual_check__link_to_dataset_on_website
             WHEN 'Yes' THEN 'PASS'
             WHEN 'No' THEN 'FAIL'
-            ELSE 'Needs manual check'
+            ELSE {{ manual_check_needed_status() }}
         END AS status
     FROM idx
     LEFT JOIN gtfs_datasets

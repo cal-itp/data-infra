@@ -119,6 +119,14 @@ WITH stg_gtfs_quality__intended_checks AS (
     SELECT {{ link_to_dataset_on_website_tu() }}, {{ availability_on_website() }}, {{ gtfs_dataset() }}
     UNION ALL
     SELECT {{ link_to_dataset_on_website_sa() }}, {{ availability_on_website() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ trip_planner_schedule() }}, {{ compliance_schedule() }}, {{ service() }}
+    UNION ALL
+    SELECT {{ trip_planner_rt() }}, {{ compliance_rt() }}, {{ service() }}
+    UNION ALL
+    SELECT {{ fixed_routes_match() }}, {{ fixed_route_completeness() }}, {{ gtfs_service_data() }}
+    UNION ALL
+    SELECT {{ demand_responsive_routes_match() }}, {{ demand_responsive_completeness() }}, {{ gtfs_service_data() }}
 )
 
 SELECT * FROM stg_gtfs_quality__intended_checks
