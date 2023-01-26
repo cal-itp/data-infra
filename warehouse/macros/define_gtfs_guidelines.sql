@@ -1,37 +1,37 @@
 --
 -- ENTITIES
 --
-{% macro schedule_feed() -%}
+{% macro schedule_feed() %}
 'schedule_feed'
-{%- endmacro %}
+{% endmacro %}
 
-{% macro schedule_url() -%}
+{% macro schedule_url() %}
 'schedule_url'
-{%- endmacro %}
+{% endmacro %}
 
-{% macro rt_feed() -%}
+{% macro rt_feed() %}
 'rt_feed'
-{%- endmacro %}
+{% endmacro %}
 
-{% macro rt_url() -%}
+{% macro rt_url() %}
 'rt_url'
-{%- endmacro %}
+{% endmacro %}
 
-{% macro organization() -%}
+{% macro organization() %}
 'organization'
-{%- endmacro %}
+{% endmacro %}
 
 {% macro service() -%}
 'service'
-{%- endmacro %}
+{% endmacro %}
 
 {% macro gtfs_service_data() -%}
 'gtfs_service_data'
-{%- endmacro %}
+{% endmacro %}
 
 {% macro gtfs_dataset() -%}
 'gtfs_dataset'
-{%- endmacro %}
+{% endmacro %}
 
 --
 -- CHECK NAMES
@@ -209,7 +209,27 @@
 {% endmacro %}
 
 {% macro organization_has_contact_info() %}
-"The organization has contact information on the website."
+"A technical contact email address is listed on the organization website"
+{% endmacro %}
+
+{% macro shapes_accurate() %}
+"Shapes in shapes.txt are precise enough to show the right-of-way that the vehicle uses and not inaccurately exit the right-of-way"
+{% endmacro %}
+
+{% macro data_license() %}
+"Includes an open license that allows commercial use"
+{% endmacro %}
+
+{% macro authentication_acceptable() %}
+"GTFS RT feeds require easy (if any) authentication"
+{% endmacro %}
+
+{% macro stable_url() %}
+"GTFS Schedule data is published at a stable URI (permalink) from which it can be “fetched” automatically by trip-planning applications"
+{% endmacro %}
+
+{% macro grading_scheme_v1() %}
+"Passes Grading Scheme v1"
 {% endmacro %}
 
 --
@@ -262,6 +282,10 @@
 
 {% macro up_to_dateness() %}
 "Up-to-Dateness"
+{% endmacro %}
+
+{% macro availability_on_website() %}
+"Availability on Website"
 {% endmacro %}
 
 --

@@ -89,6 +89,16 @@ WITH stg_gtfs_quality__intended_checks AS (
     -- MANUAL CHECKS
     UNION ALL
     SELECT {{ organization_has_contact_info() }}, {{ technical_contact_availability() }}, {{ organization() }}
+    UNION ALL
+    SELECT {{ shapes_accurate() }}, {{ accurate_service_data() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ data_license() }}, {{ compliance_schedule() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ authentication_acceptable() }}, {{ availability_on_website() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ stable_url() }}, {{ compliance_schedule() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ grading_scheme_v1() }}, {{ accurate_service_data() }}, {{ gtfs_dataset() }}
 )
 
 SELECT * FROM stg_gtfs_quality__intended_checks
