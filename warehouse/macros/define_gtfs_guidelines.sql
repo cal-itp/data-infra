@@ -281,11 +281,11 @@
 {% endmacro %}
 
 {% macro fixed_routes_match() %}
-"Static and RT feeds are representative of all demand-responsive transit services under the transit providers’ purview"
+"Static and RT feeds are representative of all fixed-route transit services under the transit providers’ purview"
 {% endmacro %}
 
 {% macro demand_responsive_routes_match() %}
-"Realtime feeds ingested by Google Maps and/or a combination of Apple Maps, Transit App, Bing Maps, Moovit or local Open Trip Planner services"
+"Static and RT feeds are representative of all demand-responsive transit services under the transit providers’ purview"
 {% endmacro %}
 
 --

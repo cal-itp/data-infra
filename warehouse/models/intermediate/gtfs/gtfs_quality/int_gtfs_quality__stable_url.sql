@@ -21,6 +21,7 @@ int_gtfs_quality__stable_url AS (
         CASE
             WHEN gtfs_datasets.type = "schedule" THEN {{ compliance_schedule() }}
             WHEN gtfs_datasets.type IN ("vehicle_positions","trip_updates","service_alerts") THEN {{ compliance_rt() }}
+        END AS feature,
         CASE manual_check__stable_url
             WHEN 'Yes' THEN 'PASS'
             WHEN 'No' THEN 'FAIL'

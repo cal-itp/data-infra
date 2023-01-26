@@ -9,6 +9,6 @@ Here is a list of currently-implemented checks:
 
 | Check | Feature | Description |
 | ------------------------------------ |---------|------------ |
+| Static and RT feeds are representative of all fixed-route transit services under the transit providers’ purview | Fixed-Route Completeness | All fixed-route routes represented on the agency website are represented in the GTFS feeds. |
 | Static and RT feeds are representative of all demand-responsive transit services under the transit providers’ purview | Demand-Responsive Completeness | All demand-responsive routes represented on the agency website are represented in the GTFS feeds. |
-| Realtime feeds ingested by Google Maps and/or a combination of Apple Maps, Transit App, Bing Maps, Moovit or local Open Trip Planner services | Fixed-Route Completeness | All fixed-route routes represented on the agency website are represented in the GTFS feeds. |
 {% enddocs %}

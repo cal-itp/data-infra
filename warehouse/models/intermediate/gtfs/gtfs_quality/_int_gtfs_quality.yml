@@ -368,9 +368,6 @@ models:
   - name: int_gtfs_quality__data_license
     tests: *stg_gtfs_guideline_tests_dataset_schedule
 
-  - name: int_gtfs_quality__stable_url
-    tests: *stg_gtfs_guideline_tests_dataset_schedule
-
 # ----- All 4 feeds
 
   - name: int_gtfs_quality__authentication_acceptable
@@ -381,6 +378,9 @@ models:
             - gtfs_dataset_key
       - dbt_utils.equal_rowcount:
           compare_model: ref('int_gtfs_quality__gtfs_dataset_guideline_index')
+
+  - name: int_gtfs_quality__stable_url
+    tests: *stg_gtfs_guideline_tests_dataset
 
   - name: int_gtfs_quality__grading_scheme_v1
     tests: *stg_gtfs_guideline_tests_dataset
