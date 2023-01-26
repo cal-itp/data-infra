@@ -1,4 +1,41 @@
+--
+-- ENTITIES
+--
+{% macro schedule_feed() -%}
+'schedule_feed'
+{%- endmacro %}
+
+{% macro schedule_url() -%}
+'schedule_url'
+{%- endmacro %}
+
+{% macro rt_feed() -%}
+'rt_feed'
+{%- endmacro %}
+
+{% macro rt_url() -%}
+'rt_url'
+{%- endmacro %}
+
+{% macro organization() -%}
+'organization'
+{%- endmacro %}
+
+{% macro service() -%}
+'service'
+{%- endmacro %}
+
+{% macro gtfs_service_data() -%}
+'gtfs_service_data'
+{%- endmacro %}
+
+{% macro gtfs_dataset() -%}
+'gtfs_dataset'
+{%- endmacro %}
+
+--
 -- CHECK NAMES
+--
 {% macro static_feed_downloaded_successfully() %}
 "GTFS schedule feed downloads successfully"
 {% endmacro %}

@@ -10,6 +10,16 @@ models:
           combination_of_columns:
             - check
             - feature
+    columns:
+      - name: check
+        tests:
+          - not_null
+      - name: feature
+        tests:
+          - not_null
+      - name: entity
+        tests:
+          - not_null
 
   - name: stg_gtfs_quality__rt_validation_code_descriptions
     description: |
