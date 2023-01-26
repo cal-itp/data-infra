@@ -129,6 +129,7 @@ models:
       - *key
       - *date
       - *schedule_feed_key
+      - *base64_url
       - &schedule_validator_code
         name: code
         description: |
