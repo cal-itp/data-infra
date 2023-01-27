@@ -927,23 +927,3 @@ models:
         description: |
          Total number of routes present in active feed
          (not necessarily operating on date)
-
-exposures:
-  - name: calitp_map_tile_server
-    type: application
-    maturity: low
-    url: ""
-    description: Just the shapes as map tiles
-    depends_on:
-      - ref("gtfs_schedule_dim_shapes_geo_latest")
-    owner:
-      email: andrew.v@jarv.us
-    meta:
-      destinations:
-        - type: tiles
-          bucket: gs://calitp-publish
-          format: geojsonl # note that this is the intermediary format
-          tile_format: mbtiles
-          geo_column: pt_array
-          layer_names:
-            - GTFS Schedule Shapes (Latest)
