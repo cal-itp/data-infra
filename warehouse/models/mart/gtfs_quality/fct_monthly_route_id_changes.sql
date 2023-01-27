@@ -10,12 +10,8 @@ route_id_comparison AS (
     SELECT * FROM {{ ids_version_compare_aggregate("route_id","dim_routes") }}
 ),
 
-date_range_start AS (
-    SELECT DISTINCT date_start, publish_date FROM {{ ref('idx_monthly_reports_site') }}
-),
-
-date_range_end AS (
-    SELECT DISTINCT date_end, publish_date FROM {{ ref('idx_monthly_reports_site') }}
+date_range AS (
+    SELECT DISTINCT date_start, date_end, publish_date FROM {{ ref('idx_monthly_reports_site') }}
 ),
 
 month_start AS (
@@ -25,7 +21,7 @@ month_start AS (
         id,
         publish_date
     FROM route_id_comparison
-    INNER JOIN date_range_start ON valid_from <= date_start
+    INNER JOIN date_range ON valid_from <= date_start
         AND next_feed_valid_from > date_start
 ),
 
@@ -36,7 +32,7 @@ month_end AS (
         id,
         publish_date
     FROM route_id_comparison
-    INNER JOIN date_range_end ON valid_from <= date_end
+    INNER JOIN date_range ON valid_from <= date_end
         AND next_feed_valid_from > date_end
 
 ),

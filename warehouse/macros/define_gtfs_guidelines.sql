@@ -281,7 +281,7 @@ feature
 --
 -- QUERIES
 --
--- For use in int_gtfs_quality__persistent_ids_schedule:
+-- For use in int_gtfs_quality__persistent_ids_schedule, fct_monthly_route_id_changes, and fct_monthly_stop_id_changes:
 {% macro ids_version_compare_aggregate(id, dim) %}
 (
     -- For a given dim table (stops, routes, agency, etc), get every dim with its corresponding feed version metadata
@@ -316,6 +316,27 @@ feature
 SELECT * FROM ids_version_compare
 
 )
+{% endmacro %}
+
+-- For use in int_gtfs_quality__persistent_ids_schedule:
+{% macro id_aggregate(id, prev_id, id_comparison_table) %}
+
+    SELECT base64_url,
+            feed_key,
+            -- Total id's in current and previous feeds
+            COUNT(CASE WHEN {{ id }} IS NOT null AND {{ prev_id }} IS NOT null THEN 1 END) AS ids_both_feeds,
+            -- Total id's in current feed
+            COUNT(CASE WHEN {{ id }} IS NOT null THEN 1 END) AS ids_current_feed,
+            -- Total id's in current feed
+            COUNT(CASE WHEN {{ prev_id }} IS NOT null THEN 1 END) AS ids_prev_feed,
+            -- New id's added
+            COUNT(CASE WHEN {{ prev_id }} IS null THEN 1 END) AS id_added,
+            -- Previous id's removed
+            COUNT(CASE WHEN {{ id }} IS null THEN 1 END) AS id_removed
+        FROM {{ id_comparison_table }}
+        GROUP BY 1, 2
+    HAVING ids_current_feed > 0
+
 {% endmacro %}
 
 -- For use in int_gtfs_quality__persistent_ids_schedule:

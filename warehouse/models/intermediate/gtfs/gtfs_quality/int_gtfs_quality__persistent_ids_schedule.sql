@@ -31,63 +31,15 @@ agency_id_comparison AS (
 ),
 
 stop_id_aggregate AS (
-
-    SELECT base64_url,
-            feed_key,
-            -- Total id's in current and previous feeds
-            COUNT(CASE WHEN id IS NOT null AND prev_id IS NOT null THEN 1 END) AS ids_both_feeds,
-            -- Total id's in current feed
-            COUNT(CASE WHEN id IS NOT null THEN 1 END) AS ids_current_feed,
-            -- Total id's in current feed
-            COUNT(CASE WHEN prev_id IS NOT null THEN 1 END) AS ids_prev_feed,
-            -- New id's added
-            COUNT(CASE WHEN prev_id IS null THEN 1 END) AS id_added,
-            -- Previous id's removed
-            COUNT(CASE WHEN id IS null THEN 1 END) AS id_removed
-        FROM stop_id_comparison
-        GROUP BY 1, 2
-    HAVING ids_current_feed > 0
-
+    {{ id_aggregate("id", "prev_id", "stop_id_comparison") }}
 ),
 
 route_id_aggregate AS (
-
-    SELECT base64_url,
-            feed_key,
-            -- Total id's in current and previous feeds
-            COUNT(CASE WHEN id IS NOT null AND prev_id IS NOT null THEN 1 END) AS ids_both_feeds,
-            -- Total id's in current feed
-            COUNT(CASE WHEN id IS NOT null THEN 1 END) AS ids_current_feed,
-            -- Total id's in current feed
-            COUNT(CASE WHEN prev_id IS NOT null THEN 1 END) AS ids_prev_feed,
-            -- New id's added
-            COUNT(CASE WHEN prev_id IS null THEN 1 END) AS id_added,
-            -- Previous id's removed
-            COUNT(CASE WHEN id IS null THEN 1 END) AS id_removed
-        FROM route_id_comparison
-        GROUP BY 1, 2
-    HAVING ids_current_feed > 0
-
+    {{ id_aggregate("id", "prev_id", "route_id_comparison") }}
 ),
 
 agency_id_aggregate AS (
-
-    SELECT base64_url,
-            feed_key,
-            -- Total id's in current and previous feeds
-            COUNT(CASE WHEN id IS NOT null AND prev_id IS NOT null THEN 1 END) AS ids_both_feeds,
-            -- Total id's in current feed
-            COUNT(CASE WHEN id IS NOT null THEN 1 END) AS ids_current_feed,
-            -- Total id's in current feed
-            COUNT(CASE WHEN prev_id IS NOT null THEN 1 END) AS ids_prev_feed,
-            -- New id's added
-            COUNT(CASE WHEN prev_id IS null THEN 1 END) AS id_added,
-            -- Previous id's removed
-            COUNT(CASE WHEN id IS null THEN 1 END) AS id_removed
-        FROM agency_id_comparison
-        GROUP BY 1, 2
-    HAVING ids_current_feed > 0
-
+    {{ id_aggregate("id", "prev_id", "agency_id_comparison") }}
 ),
 
 id_change_count AS (
