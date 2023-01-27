@@ -10,7 +10,7 @@ from typing import Optional
 
 from airflow.models import BaseOperator
 
-BASE_URL = "https://sentry.calitp.org/api/0/"
+BASE_URL = "https://sentry.k8s.calitp.jarv.us/api/0/"
 
 
 def process_arrays_for_nulls(arr):
