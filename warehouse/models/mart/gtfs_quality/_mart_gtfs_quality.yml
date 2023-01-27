@@ -374,11 +374,14 @@ models:
   - name: fct_daily_reports_site_organization_scheduled_service_summary
     description: |
       Daily service summary of all feeds that are associated with the given organization with
-      a "reports site assessed" relationship, i.e., the organization has public transit, the
-      dataset describes fixed route service, and the given dataset is "customer-facing" or
-      the dataset is an agency subfeed of the MTC 511 combined regional feed (for those organizations,
-      the combined regional feed is technically considered "customer-facing" but for the reports site
-      we use the agency subfeeds.)
+      a "reports site assessed" relationship.
+
+      "Reports site-assessed" means:
+      * Organization has a reporting type of "Core" or "Other public transit"
+      * Organization manages at least one currently-operating fixed-route service
+      * That service has at least one customer-facing GTFS schedule feed; note that for MTC 511 agencies, the subfeed (instead of the combined regional feed)
+      is used as the "customer-facing" feed for reports site purposes
+      * The organization has an ITP ID assigned
 
       The relationship between the organizations and datasets/feeds here is that the organization
       manages the service represented in the dataset/feed.
@@ -449,10 +452,11 @@ models:
       Organizations get a report generated based on their attributes on the last day
       of the month being reported on (so, attributes as of January 31 will drive whether
       organization is included for January report with publish date of February 1).
-      Organizations are included if they are considered "assessed":
+      Organizations are included if they are considered "reports site-assessed":
       * Organization has a reporting type of "Core" or "Other public transit"
       * Organization manages at least one currently-operating fixed-route service
-      * That service has at least one customer-facing GTFS schedule feed
+      * That service has at least one customer-facing GTFS schedule feed; note that for MTC 511 agencies, the subfeed (instead of the combined regional feed)
+      is used as the "customer-facing" feed for reports site purposes
       * The organization has an ITP ID assigned
       Rows for a given month will not appear in this table until that month is complete; i.e.,
       there are no rows for January until February begins.
@@ -471,6 +475,23 @@ models:
       - name: organization_itp_id
       - name: organization_name
       - name: organization_source_record_id
+      - name: has_rt
+        description: |
+          Boolean describing whether there were any reports site-assessed GTFS-RT feeds for
+          this organization as of `end_date`.
+      - name: route_ct
+        description: |
+          Number of distinct `route_id` values across all reports site-assessed schedule feeds
+          for this organization as of `end_date`.
+      - name: stop_ct
+        description: |
+          Number of distinct `stop_id` values across all reports site-assessed schedule feeds
+          for this organization as of `end_date`.
+      - name: no_service_days_ct
+        description: |
+          Number of days between `start_date` and `end_date` with 0 `ttl_service_hours`
+          across all feeds associated with this organization (see `fct_daily_reports_site_organization_scheduled_service_summary`
+          model for daily service hours by organization.)
   - name: fct_monthly_reports_site_organization_validation_codes
     description: |
       Monthly summary for reports.calitp.org showing all unique validation codes

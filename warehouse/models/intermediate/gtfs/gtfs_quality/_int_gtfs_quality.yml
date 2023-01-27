@@ -61,7 +61,14 @@ models:
             - code
             - severity
             - gtfs_validator_version
-
+  - name: int_gtfs_quality__naive_organization_service_dataset_full_join
+    description: |
+      `int_gtfs_quality__daily_assessment_candidate_entities` got too complex, so this
+      table materializes a naive join of the organization, service,
+      GTFS service data, dataset, and NTD agency info records for a given date.
+      Constructed solely to be consumed by `int_gtfs_quality__daily_assessment_candidate_entities`,
+      which is a more polished version for consumption.
+      Do not use for any other purpose.
   - name: int_gtfs_quality__daily_assessment_candidate_entities
     description: |
       A row here is a combination of an organization, service, service / GTFS dataset relationship,
