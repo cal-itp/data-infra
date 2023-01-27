@@ -6,8 +6,8 @@
 
 WITH
 
-fct_daily_rt_feed_files AS (
-    SELECT * FROM {{ ref('fct_daily_rt_feed_files') }}
+urls_to_datasets AS (
+    SELECT * FROM {{ ref('int_transit_database__urls_to_gtfs_datasets') }}
 ),
 dim_provider_gtfs_data AS (
     SELECT * FROM {{ ref('dim_provider_gtfs_data') }}
@@ -21,18 +21,33 @@ vehicle_positions AS (
 service_alerts AS (
     SELECT * FROM {{ ref('int_gtfs_rt__service_alerts_trip_summaries') }}
 ),
---
--- -- in RT world can use associated_schedule_gtfs_dataset_key to identify "groups" of RT feeds
--- url_to_associated_schedule_key AS (
---     SELECT
---         ff.date,
---         ff.gtfs_dataset_key,
---         pgd.associated_schedule_gtfs_dataset_key
---     FROM fct_daily_rt_feed_files AS ff
---     LEFT JOIN dim_provider_gtfs_data AS pgd
---         ON ff.date BETWEEN pgd._valid_from AND pgd._valid_to
---         AND ff.schedule_to_use_for_rt_validation_gtfs_dataset_key = pgd.associated_schedule_gtfs_dataset_key
--- ),
+
+-- get each of these distinct
+trip_updates_to_schedule AS (
+    SELECT DISTINCT
+        associated_schedule_gtfs_dataset_key,
+        trip_updates_gtfs_dataset_key,
+        _valid_from,
+        _valid_to,
+    FROM dim_provider_gtfs_data
+),
+vehicle_positions_to_schedule AS (
+    SELECT DISTINCT
+        associated_schedule_gtfs_dataset_key,
+        vehicle_positions_gtfs_dataset_key,
+        _valid_from,
+        _valid_to,
+    FROM dim_provider_gtfs_data
+),
+service_alerts_to_schedule AS (
+    SELECT DISTINCT
+        associated_schedule_gtfs_dataset_key,
+        service_alerts_gtfs_dataset_key,
+        _valid_from,
+        _valid_to,
+    FROM dim_provider_gtfs_data
+),
+
 
 -- Per usual, see https://gtfs.org/realtime/reference/#message-tripdescriptor for what uniquely
 -- identifies a trip in a given feed. Computing this ahead of time simplifies the join conditions
@@ -41,31 +56,42 @@ trip_updates_with_associated_schedule AS (
     SELECT
         trip_updates.*,
         {{ dbt_utils.surrogate_key(['trip_id', 'trip_route_id', 'trip_direction_id', 'trip_start_time', 'trip_start_date']) }} AS trip_identifier,
-        fct_daily_rt_feed_files.schedule_to_use_for_rt_validation_gtfs_dataset_key AS associated_schedule_gtfs_dataset_key,
+        trip_updates_to_schedule.associated_schedule_gtfs_dataset_key,
     FROM trip_updates
-    LEFT JOIN fct_daily_rt_feed_files
-        ON trip_updates.dt = fct_daily_rt_feed_files.date
-        AND trip_updates.base64_url = fct_daily_rt_feed_files.base64_url
+    LEFT JOIN urls_to_datasets
+        ON trip_updates.base64_url = urls_to_datasets.base64_url
+        AND TIMESTAMP(trip_updates.dt) BETWEEN urls_to_datasets._valid_from AND urls_to_datasets._valid_to
+    LEFT JOIN trip_updates_to_schedule
+        ON urls_to_datasets.gtfs_dataset_key = trip_updates_to_schedule.trip_updates_gtfs_dataset_key
+        AND TIMESTAMP(trip_updates.dt) BETWEEN trip_updates_to_schedule._valid_from AND trip_updates_to_schedule._valid_to
 ),
 vehicle_positions_with_associated_schedule AS (
     SELECT
         vehicle_positions.*,
         {{ dbt_utils.surrogate_key(['trip_id', 'trip_route_id', 'trip_direction_id', 'trip_start_time', 'trip_start_date']) }} AS trip_identifier,
-        fct_daily_rt_feed_files.schedule_to_use_for_rt_validation_gtfs_dataset_key AS associated_schedule_gtfs_dataset_key,
+        vehicle_positions_to_schedule.associated_schedule_gtfs_dataset_key,
     FROM vehicle_positions
-    LEFT JOIN fct_daily_rt_feed_files
-        ON vehicle_positions.dt = fct_daily_rt_feed_files.date
-        AND vehicle_positions.base64_url = fct_daily_rt_feed_files.base64_url
+    LEFT JOIN urls_to_datasets
+        ON vehicle_positions.base64_url = urls_to_datasets.base64_url
+        AND TIMESTAMP(vehicle_positions.dt) BETWEEN urls_to_datasets._valid_from AND urls_to_datasets._valid_to
+    LEFT JOIN vehicle_positions_to_schedule
+        ON urls_to_datasets.gtfs_dataset_key = vehicle_positions_to_schedule.vehicle_positions_gtfs_dataset_key
+        AND TIMESTAMP(vehicle_positions.dt) BETWEEN vehicle_positions_to_schedule._valid_from AND vehicle_positions_to_schedule._valid_to
 ),
 service_alerts_with_associated_schedule AS (
     SELECT
         service_alerts.*,
         {{ dbt_utils.surrogate_key(['trip_id', 'trip_route_id', 'trip_direction_id', 'trip_start_time', 'trip_start_date']) }} AS trip_identifier,
-        fct_daily_rt_feed_files.schedule_to_use_for_rt_validation_gtfs_dataset_key AS associated_schedule_gtfs_dataset_key,
+        urls_to_datasets.gtfs_dataset_key,
+        service_alerts_to_schedule.associated_schedule_gtfs_dataset_key,
     FROM service_alerts
-    LEFT JOIN fct_daily_rt_feed_files
-        ON service_alerts.dt = fct_daily_rt_feed_files.date
-        AND service_alerts.base64_url = fct_daily_rt_feed_files.base64_url
+    LEFT JOIN urls_to_datasets
+        ON service_alerts.base64_url = urls_to_datasets.base64_url
+        AND TIMESTAMP(service_alerts.dt) BETWEEN urls_to_datasets._valid_from AND urls_to_datasets._valid_to
+    LEFT JOIN service_alerts_to_schedule
+        ON urls_to_datasets.gtfs_dataset_key = service_alerts_to_schedule.service_alerts_gtfs_dataset_key
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY trip_identifier) = 1
+        AND TIMESTAMP(service_alerts.dt) BETWEEN service_alerts_to_schedule._valid_from AND service_alerts_to_schedule._valid_to
 ),
 
 fct_observed_trips AS (
