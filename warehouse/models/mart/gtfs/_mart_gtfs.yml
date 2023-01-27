@@ -53,9 +53,15 @@ models:
       - name: date
         description: |
           Date on which the given feed was active at noon Pacific Time.
-      - name: feed_key
+      - &feed_key
+        name: feed_key
         description: |
           Foreign key to the `dim_schedule_feeds` table.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_schedule_feeds')
+              field: key
       - &gtfs_dataset_key_errorif
         name: gtfs_dataset_key
         description: |
@@ -344,15 +350,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `agency_id`.
         tests: *primary_key_tests
-      - &feed_key
-        name: feed_key
-        description: |
-          Foreign key to the `dim_schedule_feeds` table.
-        tests:
-          - not_null
-          - relationships:
-              to: ref('dim_schedule_feeds')
-              field: key
+      - *feed_key
       - *base64_url
       - name: agency_id
         description: '{{ doc("gtfs_agency__agency_id") }}'
@@ -1279,13 +1277,7 @@ models:
           - unique:
               where: "not contains_warning_duplicate_trip_primary_key"
           - not_null
-      - name: feed_key
-        description: Foreign key to dim_schedule_feeds.
-        tests:
-          - not_null
-          - relationships:
-              to: ref('dim_schedule_feeds')
-              field: key
+      - *feed_key
       - name: name
       - name: regional_feed_type
         description: |
@@ -1487,9 +1479,13 @@ models:
       - *_valid_from
       - *_valid_to
       - *_is_current
-  - name: fct_daily_scheduled_service_summary
+  - name: fct_daily_feed_scheduled_service_summary
     description: |
-      This is daily service totals by feed.
+      Daily service totals by feed. Each row is a date / feed pair where that feed
+      was online on that date (corresponds to `fct_daily_schedule_feeds`).
+      This means there are feeds present with 0 `ttl_service_hours`.
+      Service summary is based on `fct_daily_scheduled_trips`, grouped to the feed level
+      (a feed with no trips in `fct_daily_scheduled_trips` will have 0s here for the summary columns.)
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -1501,23 +1497,21 @@ models:
       - name: service_date
         description: Date on which this service level was present
         tests: *not_null_error
-      - name: feed_key
-        tests: *not_null_error
-        description: feed_key only present with active service on date
+      - *feed_key
       - name: ttl_service_hours
-        description: Total service hours across entire feed on date
+        description: Total service hours across entire feed on date; can be 0 if no service
       - name: n_trips
-        description: Total number of trips ran on date, if any
+        description: Total number of trips ran on date; can be 0 if no scheduled trips
       - name: first_departure_sec
-        description: Time of first departure on date
+        description: Time of first departure on date; null when no trips scheduled
       - name: last_arrival_sec
-        description: Time of last departure on date
+        description: Time of last departure on date; null when no trips scheduled
       - name: n_stop_times
         description: |
-          Total number of stop events observed
+          Total number of stop events observed; can be 0 if not scheduled trips
       - name: n_routes
         description: |
-          Total number of routes that had trips scheduled on this day
+          Total number of routes that had trips scheduled on this day; can be 0 if no scheduled trips
       - name: contains_warning_duplicate_stop_times_primary_key
         description: |
           Rows with `true` in this column indicate that the columns in this table that are aggregated from
@@ -1885,9 +1879,7 @@ models:
           - not_null
       - name: n_trips
         description: The number of trips associated with this shape on the given date.
-      - name: feed_key
-        description: |
-          Foreign key to the `dim_schedule_feeds` table.
+      - *feed_key
       - name: service_date
         description: Date on which this shape was active.
       - name: shape_id
@@ -1919,9 +1911,7 @@ models:
           - not_null
       - name: service_date
         description: Date on which this stop was active.
-      - name: feed_key
-        description: |
-          Foreign key to the `dim_schedule_feeds` table.
+      - *feed_key
       - name: stop_id
         description: '{{ doc("gtfs_stops__stop_id") }}'
       - name: stop_event_count
