@@ -1,7 +1,8 @@
 {{ config(materialized='table') }}
 
-WITH fct_daily_schedule_feed_validation_notices AS (
-    SELECT * FROM {{ ref('fct_daily_schedule_feed_validation_notices') }}
+WITH files AS (
+    SELECT *
+    FROM {{ ref('fct_schedule_feed_files') }}
 ),
 
 idx_monthly_reports_site AS (
@@ -13,6 +14,29 @@ int_gtfs__organization_dataset_map AS (
     SELECT *
     FROM {{ ref('int_gtfs_quality__organization_dataset_map') }}
 ),
+
+generate_biweekly_dates AS (
+    SELECT DISTINCT
+        publish_date,
+        sample_dates
+    FROM idx_monthly_reports_site
+    LEFT JOIN
+        UNNEST(GENERATE_DATE_ARRAY(
+            -- add a few days because otherwise it will always pick the first of the month,
+            -- which may be disproportionately likely to have new feed published and thus issues
+            DATE_ADD(CAST(date_start AS DATE), INTERVAL 3 DAY),
+            CAST(date_end AS DATE), INTERVAL 2 WEEK)) AS sample_dates
+),
+
+check_files AS (
+    SELECT *
+    FROM idx_monthly_reports_site AS idx
+    LEFT JOIN generate_biweekly_dates AS dates
+    USING (publish_date)
+    LEFT JOIN int_gtfs__organization_dataset_map AS map
+        ON dates.sample_dates = map.date
+        AND idx.organization_source_record_id = map.organization_source_record_id
+)
 
 fct_monthly_reports_site_organization_validation_codes AS (
     SELECT DISTINCT

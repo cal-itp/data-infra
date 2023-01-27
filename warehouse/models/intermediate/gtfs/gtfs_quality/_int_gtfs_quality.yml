@@ -145,7 +145,7 @@ models:
           Foreign key to `dim_schedule_feeds`. Because `dim_schedule_feeds` is slowly-
           changing dimension, joins using this key are not subject to the historical
           limitations noted for the other foreign keys in this table.
-          
+
   - name: int_gtfs__organization_dataset_map
     description: |
       A version of int_gtfs_quality__daily_assessment_candidate_entities collapsed
@@ -456,4 +456,3 @@ models:
   - name: int_gtfs_quality__demand_responsive_routes_match
     tests: *stg_gtfs_guideline_tests_gtfs_service_data
     columns: *stg_gtfs_guideline_columns
-
