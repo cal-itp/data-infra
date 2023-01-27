@@ -446,6 +446,14 @@ models:
     description: |
       Index that drives which organizations get a report generated on reports.calitp.org each
       month.
+      Organizations get a report generated based on their attributes on the last day
+      of the month being reported on (so, attributes as of January 31 will drive whether
+      organization is included for January report with publish date of February 1).
+      Organizations are included if they are considered "assessed":
+      * Organization has a reporting type of "Core" or "Other public transit"
+      * Organization manages at least one currently-operating fixed-route service
+      * That service has at least one customer-facing GTFS schedule feed
+      * The organization has an ITP ID assigned
       Rows for a given month will not appear in this table until that month is complete; i.e.,
       there are no rows for January until February begins.
     columns:

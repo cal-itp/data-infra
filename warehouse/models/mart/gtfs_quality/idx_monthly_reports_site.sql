@@ -2,6 +2,9 @@ WITH assessed_entities AS (
     SELECT *
     FROM {{ ref('int_gtfs_quality__daily_assessment_candidate_entities') }}
     WHERE reports_site_assessed
+        AND gtfs_dataset_type = "schedule"
+        -- ITP ID is necessary to generate URL for reports site
+        AND organization_itp_id IS NOT NULL
 ),
 
 idx_monthly_reports_site AS (
