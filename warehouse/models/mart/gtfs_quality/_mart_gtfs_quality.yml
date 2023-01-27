@@ -362,6 +362,8 @@ models:
               to: ref('dim_gtfs_datasets')
               field: key
       - name: gtfs_dataset_name
+  - name: fct_schedule_feed_files
+  - name: fct_schedule_feed_files
 
 # TODO: This should be filled out once the reports site is actually migrated
 #exposures:
