@@ -1,6 +1,8 @@
 # Reference: https://raslasarslas.medium.com/how-to-deploy-sentry-on-a-kubernetes-cluster-using-helm-600db31d4486
 # Sentry chart: https://github.com/sentry-kubernetes/charts
 sentry:
+  existingSecret: sentry-secrets
+  existingSecretKey: session-secret
   user:
     create: true
     email: general+cal-itp@jarv.us
