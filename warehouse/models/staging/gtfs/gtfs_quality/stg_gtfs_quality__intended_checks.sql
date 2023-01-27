@@ -89,6 +89,44 @@ WITH stg_gtfs_quality__intended_checks AS (
     -- MANUAL CHECKS
     UNION ALL
     SELECT {{ organization_has_contact_info() }}, {{ technical_contact_availability() }}, {{ organization() }}
+    UNION ALL
+    SELECT {{ shapes_accurate() }}, {{ accurate_service_data() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ data_license() }}, {{ compliance_schedule() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ authentication_acceptable_schedule() }}, {{ availability_on_website() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ authentication_acceptable_vp() }}, {{ availability_on_website() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ authentication_acceptable_tu() }}, {{ availability_on_website() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ authentication_acceptable_sa() }}, {{ availability_on_website() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ stable_url_schedule() }}, {{ compliance_schedule() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ stable_url_vp() }}, {{ compliance_rt() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ stable_url_tu() }}, {{ compliance_rt() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ stable_url_sa() }}, {{ compliance_rt() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ grading_scheme_v1() }}, {{ accurate_service_data() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ link_to_dataset_on_website_schedule() }}, {{ availability_on_website() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ link_to_dataset_on_website_vp() }}, {{ availability_on_website() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ link_to_dataset_on_website_tu() }}, {{ availability_on_website() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ link_to_dataset_on_website_sa() }}, {{ availability_on_website() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ trip_planner_schedule() }}, {{ compliance_schedule() }}, {{ service() }}
+    UNION ALL
+    SELECT {{ trip_planner_rt() }}, {{ compliance_rt() }}, {{ service() }}
+    UNION ALL
+    SELECT {{ fixed_routes_match() }}, {{ fixed_route_completeness() }}, {{ gtfs_service_data() }}
+    UNION ALL
+    SELECT {{ demand_responsive_routes_match() }}, {{ demand_responsive_completeness() }}, {{ gtfs_service_data() }}
 )
 
 SELECT * FROM stg_gtfs_quality__intended_checks
