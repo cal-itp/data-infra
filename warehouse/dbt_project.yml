@@ -34,10 +34,6 @@ models:
       relation: true
       columns: true
 
-    gtfs_schedule_latest_only:
-      +materialized: table
-      schema: gtfs_schedule
-
     gtfs_views:
       +materialized: table
       schema: views

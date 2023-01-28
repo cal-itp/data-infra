@@ -146,7 +146,7 @@ models:
           changing dimension, joins using this key are not subject to the historical
           limitations noted for the other foreign keys in this table.
 
-  - name: int_gtfs__organization_dataset_map
+  - name: int_gtfs_quality__organization_dataset_map
     description: |
       A version of int_gtfs_quality__daily_assessment_candidate_entities collapsed
       down to just the organization/GTFS dataset level (basically, removes services.)

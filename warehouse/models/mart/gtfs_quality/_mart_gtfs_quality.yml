@@ -501,12 +501,45 @@ models:
       - name: organization_name
       - name: organization_source_record_id
       - name: organization_itp_id
-      - name: publish_date
+      - &publish_date_fk
+        name: publish_date
         description: |
           See `idx_monthly_reports_site` table; intended to be used to join this data with the index.
+        tests:
+          - not_null
       - *schedule_validator_code
       - name: severity
       - *schedule_validation_validator_version
+  - name: fct_monthly_reports_site_organization_file_checks
+    description: |
+      Two checks per month on whether files of interest are present.
+      Files checked are: shapes, levels, pathways, fare_rules, fare_leg_rules, and feed_info.
+      Table is intended to be consumed specifically by reports.calitp.org.
+      A file is only marked as present if it is present for ALL feeds for that
+      organization on the `date_checked`.
+    columns:
+      - *key
+      - *publish_date_fk
+      - name: organization_name
+      - name: organization_source_record_id
+      - name: organization_itp_id
+      - name: date_checked
+        description: |
+          Date on which file presence was checked. (Will be the 4th and 18th of each month.)
+      - name: filename
+        description: |
+          Name with file extension, like 'shapes.txt'
+      - name: gtfs_filename
+        description: |
+          Name without file extension, like 'shapes'
+      - name: reason
+        description: |
+          Reason that this file's presence is being checked or
+          feature to which this file is related, for example 'Fares' or 'Navigation'.
+      - name: file_present
+        description: |
+          Boolean for whether this file was present for all feeds for this organization
+          on `date_checked`.
 
 exposures:
  - name: calitp_reports_site
