@@ -550,5 +550,7 @@ exposures:
    depends_on:
      - ref("fct_daily_reports_site_organization_scheduled_service_summary")
      - ref("idx_monthly_reports_site")
+     - ref("fct_monthly_reports_site_organization_file_checks")
+     - ref("fct_monthly_reports_site_organization_validation_codes")
    owner:
      email: Eric.Dasmalchi@dot.ca.gov
