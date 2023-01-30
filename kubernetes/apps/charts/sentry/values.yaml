@@ -1,6 +1,8 @@
 # Reference: https://raslasarslas.medium.com/how-to-deploy-sentry-on-a-kubernetes-cluster-using-helm-600db31d4486
 # Sentry chart: https://github.com/sentry-kubernetes/charts
 sentry:
+  existingSecret: sentry-secrets
+  existingSecretKey: session-secret
   user:
     create: true
     email: general+cal-itp@jarv.us
@@ -16,10 +18,13 @@ sentry:
       nginx.ingress.kubernetes.io/use-regex: "true"
       cert-manager.io/cluster-issuer: letsencrypt-prod
     hostname: sentry.calitp.org
+    additionalHostNames:
+      - sentry.k8s.calitp.jarv.us
     tls:
       - secretName: metabase-tls
         hosts:
           - sentry.calitp.org
+          - sentry.k8s.calitp.jarv.us
   mail:
     backend: smtp
     useTls: true
