@@ -19,6 +19,11 @@ fct_daily_reports_site_organization_scheduled_service_summary AS (
     SELECT
         {{ dbt_utils.surrogate_key(['service_date', 'organization_key']) }} AS key,
         service_date,
+        CASE
+            WHEN EXTRACT(DAYOFWEEK FROM service_date) = 1 THEN "Sunday"
+            WHEN EXTRACT(DAYOFWEEK FROM service_date) = 7 THEN "Saturday"
+            ELSE "Weekday"
+        END AS service_day_type,
         organization_name,
         organization_itp_id,
         organization_source_record_id,
