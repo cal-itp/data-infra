@@ -1,17 +1,26 @@
 {{ config(materialized='table') }}
 
 WITH files_of_interest AS (
-    SELECT 'shapes.txt' AS filename, 'shapes' AS gtfs_filename, 'Visual display' AS reason
-    UNION ALL
-    SELECT 'levels.txt' AS filename, 'levels' AS gtfs_filename, 'Navigation' AS reason
-    UNION ALL
-    SELECT 'pathways.txt' AS filename, 'pathways' AS gtfs_filename, 'Navigation' AS reason
-    UNION ALL
-    SELECT 'fare_leg_rules.txt' AS filename, 'fare_leg_rules' AS gtfs_filename, 'Fares' AS reason
-    UNION ALL
-    SELECT 'fare_rules.txt' AS filename, 'fare_rules' AS gtfs_filename, 'Fares' AS reason
-    UNION ALL
-    SELECT 'feed_info.txt' AS filename, 'feed_info' AS gtfs_filename, 'Technical contacts' AS reason
+    SELECT
+        filename,
+        gtfs_filename,
+        reason
+    FROM UNNEST(
+        ARRAY<
+            STRUCT<
+                filename STRING,
+                gtfs_filename STRING,
+                reason STRING
+            >
+        > [
+            ('shapes.txt', 'shapes', 'Visual display'),
+            ('levels.txt', 'levels', 'Navigation'),
+            ('pathways.txt', 'pathways', 'Navigation'),
+            ('fare_leg_rules.txt', 'fare_leg_rules', 'Fares'),
+            ('fare_rules.txt', 'fare_rules', 'Fares'),
+            ('feed_info.txt', 'feed_info', 'Technical contacts')
+        ]
+        )
 ),
 
 files AS (
