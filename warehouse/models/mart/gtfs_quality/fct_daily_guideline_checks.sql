@@ -8,7 +8,7 @@ WITH implemented_checks AS (
 assessed_entities AS (
     SELECT *
     FROM {{ ref('int_gtfs_quality__daily_assessment_candidate_entities') }}
-    WHERE assessed
+    WHERE guidelines_assessed
 ),
 
 schedule_feed_checks AS (

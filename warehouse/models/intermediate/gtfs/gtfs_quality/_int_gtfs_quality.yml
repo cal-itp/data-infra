@@ -61,7 +61,14 @@ models:
             - code
             - severity
             - gtfs_validator_version
-
+  - name: int_gtfs_quality__naive_organization_service_dataset_full_join
+    description: |
+      `int_gtfs_quality__daily_assessment_candidate_entities` got too complex, so this
+      table materializes a naive join of the organization, service,
+      GTFS service data, dataset, and NTD agency info records for a given date.
+      Constructed solely to be consumed by `int_gtfs_quality__daily_assessment_candidate_entities`,
+      which is a more polished version for consumption.
+      Do not use for any other purpose.
   - name: int_gtfs_quality__daily_assessment_candidate_entities
     description: |
       A row here is a combination of an organization, service, service / GTFS dataset relationship,
@@ -95,11 +102,20 @@ models:
       - name: service_name
       - name: gtfs_dataset_name
       - name: gtfs_dataset_type
-      - name: assessed
+      - name: guidelines_assessed
         description: |
           Boolean indicator for whether this combined entity met the criteria to be "assessed"
-          on the given date. Applies "and" logic to `organization_assessed`, `service_assessed`,
+          against the GTFS guidelines on the given date. Applies "and" logic to `organization_assessed`, `service_assessed`,
           and `gtfs_service_data_assessed`.
+      - name: reports_site_assessed
+        description: |
+          Similar to `guidelines_assessed` except:
+          * For entities associated with MTC 511, use the regional subfeed instead of the combined regional feed;
+            i.e., for organization/services where the MTC combined regional feed is the customer-facing feed and
+            "assessed" for guideline purposes, this feed will mark the associated regional subfeed (rather than the combined feed)
+            as assessed for reports site (reports.calitp.org) purposes.
+          * Entity must include an organization with an ITP ID assigned
+          * Entity must include at least one assessed schedule feed
       - name: organization_assessed
         description: |
           Boolean indicator for whether the given organization record met the criteria to be "assessed"
@@ -130,6 +146,22 @@ models:
           Foreign key to `dim_schedule_feeds`. Because `dim_schedule_feeds` is slowly-
           changing dimension, joins using this key are not subject to the historical
           limitations noted for the other foreign keys in this table.
+
+  - name: int_gtfs_quality__organization_dataset_map
+    description: |
+      A version of int_gtfs_quality__daily_assessment_candidate_entities collapsed
+      down to just the organization/GTFS dataset level (basically, removes services.)
+      Columns are identical to int_gtfs_quality__daily_assessment_candidate_entities,
+      except that OR logic has been applied to the customer facing and assessed columns,
+      so that if this organization/dataset relationship is customer facing or assessed
+      for any service, the entire relationship is marked as customer facing or assessed
+      in this table.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - organization_key
+            - gtfs_dataset_key
 
   - name: int_gtfs_quality__feed_version_history
     description: |

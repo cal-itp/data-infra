@@ -129,21 +129,30 @@ models:
       - *key
       - *date
       - *schedule_feed_key
-      - name: code
+      - *base64_url
+      - &schedule_validator_code
+        name: code
+        description: |
+          Code from the GTFS schedule canonical validator.
+          See https://github.com/MobilityData/gtfs-validator/blob/master/RULES.md for
+          documentation of individual codes.
         tests:
-          # TODO: this should be 100% populated once backfill flakes are cleared
-          - dbt_utils.not_null_proportion:
-              at_least: 0.999
+          - not_null
       - name: severity
         tests:
-          # TODO: this should be 100% populated once backfill flakes are cleared
-          - dbt_utils.not_null_proportion:
-              at_least: 0.999
+          - not_null
       - name: validation_success
         tests:
           - dbt_utils.not_null_proportion:
               at_least: 0.99
       - name: validation_exception
+      - &schedule_validation_validator_version
+        name: validation_validator_version
+        description: |
+          The version of the GTFS schedule canonical validator that these notices are from.
+          See version and release history at https://github.com/MobilityData/gtfs-validator/releases.
+        tests:
+          - not_null
       - name: total_notices
         tests:
           - dbt_utils.not_null_proportion:
@@ -362,15 +371,189 @@ models:
               to: ref('dim_gtfs_datasets')
               field: key
       - name: gtfs_dataset_name
+  - name: fct_daily_reports_site_organization_scheduled_service_summary
+    description: |
+      Daily service summary of all feeds that are associated with the given organization with
+      a "reports site assessed" relationship.
 
-# TODO: This should be filled out once the reports site is actually migrated
-#exposures:
-#  - name: calitp_reports_site
-#    type: application
-#    maturity: medium
-#    url: "reports.calitp.org"
-#    description: Cal-ITP reports site
-#    depends_on:
-#      - ref(" ")
-#    owner:
-#      email: eric.d@jarv.us
+      "Reports site-assessed" means:
+      * Organization has a reporting type of "Core" or "Other public transit"
+      * Organization manages at least one currently-operating fixed-route service
+      * That service has at least one customer-facing GTFS schedule feed; note that for MTC 511 agencies, the subfeed (instead of the combined regional feed)
+      is used as the "customer-facing" feed for reports site purposes
+      * The organization has an ITP ID assigned
+
+      The relationship between the organizations and datasets/feeds here is that the organization
+      manages the service represented in the dataset/feed.
+    columns:
+      - *key
+      - name: service_date
+        description: |
+          Date on which this organization had some scheduled service.
+      - name: service_day_type
+        description: |
+          Day type for reports site service hours visualization: "Weekday", "Saturday", or "Sunday".
+      - name: organization_name
+      - name: organization_itp_id
+      - name: organization_source_record_id
+      - name: organization_key
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_organizations')
+              field: key
+      - name: ttl_service_hours
+        description: |
+          Sum of total service hours for all reports-assessed feeds for this organization on this date.
+      - name: n_trips
+        description: |
+          Count of total trips scheduled across all reports-assessed feeds for this organization on this date.
+      - name: first_departure_sec
+        description: |
+          Time of first trip departure on date across all reports-assessed feeds for this organization
+      - name: last_arrival_sec
+        description: |
+          Time of last trip arrival on date across all reports-assessed feeds for this organization
+      - name: n_stop_times
+        description: |
+          Count of scheduled stop events on date across all reports-assessed feeds for this organization
+      - name: n_routes
+        description:
+          Count of routes with scheduled trips on date across all reports-assessed feeds for this organization
+      - name: feed_key_ct
+        description: |
+          Number of schedule feeds that were included in the assessment for this organization on
+          this date; used for data integrity checks
+      - name: contains_warning_duplicate_stop_times_primary_key
+        description: |
+          Rows with `true` in this column indicate that the columns in this table that are aggregated from
+          stop times data (`n_stops`, `n_stop_times`,  `first_departure_sec`, `last_arrival_sec`,
+          and `service_hours`) contain at least one row that had a duplicate primary key in the source stop times data.
+
+          I.e., at least one row being aggregated had a `trip_id` / `stop_sequence` pair that was not unique
+          in the input data. This indicates that data quality issues were present in the stop times data
+          that is being summarized here, and counts may be inflated due to multiple rows with identical identifiers.
+      - name: contains_warning_duplicate_trip_primary_key
+        description: |
+          Rows with `true` in this column indicate that `dim_trips` contains duplicates of this trip primary key.
+          i.e., `trip_id` is duplicated within an individual feed instance.
+
+          This means that counts may be inflated due to multiple rows with identical identifiers.
+      - name: contains_warning_missing_foreign_key_stop_id
+        description: |
+          Rows with `true` in this column indicate that the columns in this table that are aggregated from
+          stop times data (`n_stops`, `n_stop_times`,  `first_departure_sec`, `last_arrival_sec`,
+          and `service_hours`) contain at least one row that had a missing `stop_id` foreign key in the source stops data.
+
+          I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
+          in the input data. This indicates that data quality issues were present in the stop times data
+          that is being summarized here.
+  - name: idx_monthly_reports_site
+    description: |
+      Index that drives which organizations get a report generated on reports.calitp.org each
+      month.
+      Organizations get a report generated based on their attributes on the last day
+      of the month being reported on (so, attributes as of January 31 will drive whether
+      organization is included for January report with publish date of February 1).
+      Organizations are included if they are considered "reports site-assessed":
+      * Organization has a reporting type of "Core" or "Other public transit"
+      * Organization manages at least one currently-operating fixed-route service
+      * That service has at least one customer-facing GTFS schedule feed; note that for MTC 511 agencies, the subfeed (instead of the combined regional feed)
+      is used as the "customer-facing" feed for reports site purposes
+      * The organization has an ITP ID assigned
+      Rows for a given month will not appear in this table until that month is complete; i.e.,
+      there are no rows for January until February begins.
+    columns:
+      - name: date_start
+        description: |
+          Start date of the given month.
+      - name: date_end
+        description: |
+          End date of the given month.
+      - name: publish_date
+        description: |
+          First date of the following month.
+          For example, if start_date is January 1, 2023, and end_date is January 31, 2023,
+          then publish_date is February 1, 2023.
+      - name: organization_itp_id
+      - name: organization_name
+      - name: organization_source_record_id
+      - name: has_rt
+        description: |
+          Boolean describing whether there were any reports site-assessed GTFS-RT feeds for
+          this organization as of `end_date`.
+      - name: route_ct
+        description: |
+          Number of distinct `route_id` values across all reports site-assessed schedule feeds
+          for this organization as of `end_date`.
+      - name: stop_ct
+        description: |
+          Number of distinct `stop_id` values across all reports site-assessed schedule feeds
+          for this organization as of `end_date`.
+      - name: no_service_days_ct
+        description: |
+          Number of days between `start_date` and `end_date` with 0 `ttl_service_hours`
+          across all feeds associated with this organization (see `fct_daily_reports_site_organization_scheduled_service_summary`
+          model for daily service hours by organization.)
+  - name: fct_monthly_reports_site_organization_validation_codes
+    description: |
+      Monthly summary for reports.calitp.org showing all unique validation codes
+      observed for feeds associated with a given organization during the given report month.
+    columns:
+      - *key
+      - name: organization_name
+      - name: organization_source_record_id
+      - name: organization_itp_id
+      - &publish_date_fk
+        name: publish_date
+        description: |
+          See `idx_monthly_reports_site` table; intended to be used to join this data with the index.
+        tests:
+          - not_null
+      - *schedule_validator_code
+      - name: severity
+      - *schedule_validation_validator_version
+  - name: fct_monthly_reports_site_organization_file_checks
+    description: |
+      Two checks per month on whether files of interest are present.
+      Files checked are: shapes, levels, pathways, fare_rules, fare_leg_rules, and feed_info.
+      Table is intended to be consumed specifically by reports.calitp.org.
+      A file is only marked as present if it is present for ALL feeds for that
+      organization on the `date_checked`.
+    columns:
+      - *key
+      - *publish_date_fk
+      - name: organization_name
+      - name: organization_source_record_id
+      - name: organization_itp_id
+      - name: date_checked
+        description: |
+          Date on which file presence was checked. (Will be the 4th and 18th of each month.)
+      - name: filename
+        description: |
+          Name with file extension, like 'shapes.txt'
+      - name: gtfs_filename
+        description: |
+          Name without file extension, like 'shapes'
+      - name: reason
+        description: |
+          Reason that this file's presence is being checked or
+          feature to which this file is related, for example 'Fares' or 'Navigation'.
+      - name: file_present
+        description: |
+          Boolean for whether this file was present for all feeds for this organization
+          on `date_checked`.
+
+exposures:
+ - name: calitp_reports_site
+   type: application
+   maturity: medium
+   url: "reports.calitp.org"
+   description: Cal-ITP reports site
+   depends_on:
+     - ref("fct_daily_reports_site_organization_scheduled_service_summary")
+     - ref("idx_monthly_reports_site")
+     - ref("fct_monthly_reports_site_organization_file_checks")
+     - ref("fct_monthly_reports_site_organization_validation_codes")
+   owner:
+     email: Eric.Dasmalchi@dot.ca.gov

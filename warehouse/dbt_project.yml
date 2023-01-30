@@ -67,8 +67,6 @@ models:
     mart:
       transit_database:
         schema: mart_transit_database
-      gtfs_guidelines:
-        schema: mart_gtfs_guidelines
       gtfs_quality:
         schema: mart_gtfs_quality
       gtfs:
@@ -77,5 +75,3 @@ models:
         schema: mart_ad_hoc
       audit:
         schema: mart_audit
-      gtfs_schedule_latest:
-        schema: mart_gtfs_schedule_latest

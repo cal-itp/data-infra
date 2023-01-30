@@ -13,7 +13,7 @@ stg_transit_database__organizations AS (
         {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         organization_type,
         roles,
-        itp_id,
+        CAST(itp_id AS INTEGER) AS itp_id,
         unnested_ntd_records AS ntd_agency_info_key,
         hubspot_company_record_id,
         alias_ as alias,

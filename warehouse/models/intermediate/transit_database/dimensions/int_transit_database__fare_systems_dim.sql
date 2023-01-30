@@ -21,7 +21,7 @@ historical AS (
 int_transit_database__fare_systems_dim AS (
     SELECT
         {{ dbt_utils.surrogate_key(['id', '_valid_from']) }} AS key,
-        id AS original_record_id,
+        id AS source_record_id,
         fare_system,
         fares_based_on_zone,
         fares_based_on_route,
