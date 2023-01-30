@@ -24,6 +24,7 @@ int_gtfs_quality__organization_dataset_map AS (
         LOGICAL_OR(guidelines_assessed) AS guidelines_assessed,
         LOGICAL_OR(reports_site_assessed) AS reports_site_assessed
     FROM int_gtfs_quality__daily_assessment_candidate_entities
+    -- TODO: maybe we can/should make this an AND? not sure if having rows where one is null is useful
     WHERE COALESCE(organization_key, gtfs_dataset_key) IS NOT NULL
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 
