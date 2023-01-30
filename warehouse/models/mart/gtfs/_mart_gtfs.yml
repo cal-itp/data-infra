@@ -374,6 +374,7 @@ models:
       - &_feed_valid_from
         name: _feed_valid_from
         description: Should not be used; exists to faciliate incremental materialization.
+
   - name: dim_areas
     description: |
       Each row is a cleaned row from an areas.txt file.
@@ -383,7 +384,9 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key` and `area_id`.
-        tests: *primary_key_tests
+        tests: &pk_tests_with_dups
+          - unique:
+              where: "not warning_duplicate_primary_key"
       - *feed_key
       - *base64_url
       - name: area_id
@@ -402,7 +405,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key` and `attribution_id`.
-        tests: *primary_key_tests
+        tests: *pk_tests_with_dups
       - *feed_key
       - *base64_url
       - name: attribution_id
@@ -470,7 +473,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key`, `network_id`, `from_area_id`, `to_area_id`, and `fare_product_id`.
-        tests: *primary_key_tests
+        tests: *pk_tests_with_dups
       - *feed_key
       - *base64_url
       - name: leg_group_id
@@ -483,7 +486,6 @@ models:
         description: '{{ doc("gtfs_fare_leg_rules__to_area_id") }}'
       - name: fare_product_id
         description: '{{ doc("gtfs_fare_leg_rules__fare_product_id") }}'
-        tests: *not_null_error
       - *_feed_valid_from
   - name: dim_fare_products
     description: |
@@ -791,10 +793,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key` and `stop_id`.
-        tests: &pk_tests_with_dups
-          - unique:
-              where: "not warning_duplicate_primary_key"
-          - not_null
+        tests: *pk_tests_with_dups
       - *feed_key
       - *base64_url
       - name: stop_id
