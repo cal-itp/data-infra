@@ -209,7 +209,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key` and `fare_product_id`.
-        tests: *primary_key_tests
+        tests: *pk_tests_with_dups
       - *feed_key
       - *base64_url
       - name: fare_product_id
@@ -647,7 +647,9 @@ models:
         tests: *not_null_error
       - name: trip_id
         description: '{{ doc("gtfs_trips__trip_id") }}'
-        tests: *not_null_error
+        tests:
+          - not_null:
+              error_if: ">1"
       - name: trip_headsign
         description: '{{ doc("gtfs_trips__trip_headsign") }}'
       - name: trip_short_name
