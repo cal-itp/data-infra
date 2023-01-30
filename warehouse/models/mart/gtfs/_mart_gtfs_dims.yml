@@ -1,0 +1,823 @@
+version: 2
+
+models:
+  - name: dim_schedule_feeds
+    description: |
+      Each row is a "feed", representing a unique zipfile version associated with the same GTFS dataset record
+      that was successfully downloaded and has data in the warehouse.
+      When data fails to download, we do not interpolate it unless an identical zipfile is subsequently
+      downloaded. So for example, say we download zipfile A from URL X on January 1, then the download
+      or unzip operation fails for any reason on January 2, and then we download zipfile A from URL X
+      again on January 3. If you check this table on January 3 before the new data has appeared in the
+      warehouse, it will show zipfile A has expired on January 2. But once the same zipfile is ingested
+      again, if you check on January 4, we will show that zipfile A was continuously in effect
+      January 1-3. The reason for this is that if a new zipfile version B were to be uploaded on January 3,
+      we would want to correctly say that we don't know what was in effect on January 2.
+      This table should be used to understand "versions" of constituent data like routes, trips, etc.
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: base64_url
+          gaps: required
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `base64_url` and `_valid_from`.
+        tests: &primary_key_tests
+          - unique
+          - not_null
+      - &base64_url
+        name: base64_url
+        description: |
+          Base 64 encoded URL from which this data was scraped.
+      - name: _valid_from
+        description: '{{ doc("column_valid_from") }}'
+      - name: _valid_to
+        description: '{{ doc("column_valid_to") }}'
+      - name: _is_current
+        description: '{{ doc("column_is_current") }}'
+
+  - name: dim_agency
+    description: |
+      Each row is a cleaned row from an agency.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#agencytxt.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `agency_id`.
+        tests: *primary_key_tests
+      - &feed_key
+        name: feed_key
+        description: |
+          Foreign key to the `dim_schedule_feeds` table.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_schedule_feeds')
+              field: key
+      - *base64_url
+      - name: agency_id
+        description: '{{ doc("gtfs_agency__agency_id") }}'
+      - name: agency_name
+        description: '{{ doc("gtfs_agency__agency_name") }}'
+        tests: &not_null_warn_99_threshold
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
+              severity: warn
+      - name: agency_url
+        description: '{{ doc("gtfs_agency__agency_url") }}'
+        tests: *not_null_warn_99_threshold
+      - name: agency_timezone
+        description: '{{ doc("gtfs_agency__agency_timezone") }}'
+        tests: &not_null_warn
+        - not_null:
+            config:
+              severity: warn
+      - name: agency_lang
+        description: '{{ doc("gtfs_agency__agency_lang") }}'
+      - name: agency_phone
+        description: '{{ doc("gtfs_agency__agency_phone") }}'
+      - name: agency_fare_url
+        description: '{{ doc("gtfs_agency__agency_fare_url") }}'
+      - name: agency_email
+        description: '{{ doc("gtfs_agency__agency_email") }}'
+      - &_feed_valid_from
+        name: _feed_valid_from
+        description: Should not be used; exists to faciliate incremental materialization.
+
+  - name: dim_areas
+    description: |
+      Each row is a cleaned row from an areas.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/schedule/reference/#areastxt.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `area_id`.
+        tests: &pk_tests_with_dups
+          - unique:
+              where: "not warning_duplicate_primary_key"
+      - *feed_key
+      - *base64_url
+      - name: area_id
+        description: '{{ doc("gtfs_areas__area_id") }}'
+        tests: &not_null_error
+          - not_null
+      - name: area_name
+        description: '{{ doc("gtfs_areas__area_name") }}'
+      - *_feed_valid_from
+  - name: dim_attributions
+    description: |
+      Each row is a cleaned row from an attributions.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#attributionstxt.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `attribution_id`.
+        tests: *pk_tests_with_dups
+      - *feed_key
+      - *base64_url
+      - name: attribution_id
+        description: '{{ doc("gtfs_attributions__attribution_id") }}'
+      - name: agency_id
+        description: '{{ doc("gtfs_attributions__agency_id") }}'
+      - name: route_id
+        description: '{{ doc("gtfs_attributions__route_id") }}'
+      - name: trip_id
+        description: '{{ doc("gtfs_attributions__trip_id") }}'
+      - name: organization_name
+        description: '{{ doc("gtfs_attributions__organization_name") }}'
+        tests: *not_null_warn
+      - name: is_producer
+        description: '{{ doc("gtfs_attributions__is_producer") }}'
+      - name: is_operator
+        description: '{{ doc("gtfs_attributions__is_operator") }}'
+      - name: is_authority
+        description: '{{ doc("gtfs_attributions__is_authority") }}'
+      - name: attribution_url
+        description: '{{ doc("gtfs_attributions__attribution_url") }}'
+      - name: attribution_email
+        description: '{{ doc("gtfs_attributions__attribution_email") }}'
+      - name: attribution_phone
+        description: '{{ doc("gtfs_attributions__attribution_phone") }}'
+      - *_feed_valid_from
+  - name: dim_fare_attributes
+    description: |
+      Each row is a cleaned row from a fare_attributes.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#fare_attributestxt.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `fare_id`.
+        tests: *primary_key_tests
+      - *feed_key
+      - *base64_url
+      - name: fare_id
+        description: '{{ doc("gtfs_fare_attributes__fare_id") }}'
+        tests: *not_null_error
+      - name: price
+        description: '{{ doc("gtfs_fare_attributes__price") }}'
+        tests: *not_null_warn
+      - name: currency_type
+        description: '{{ doc("gtfs_fare_attributes__currency_type") }}'
+        tests: *not_null_warn
+      - name: payment_method
+        description: '{{ doc("gtfs_fare_attributes__payment_method") }}'
+        tests: *not_null_warn
+      - name: transfers
+        description: '{{ doc("gtfs_fare_attributes__transfers") }}'
+        tests: *not_null_warn
+      - name: agency_id
+        description: '{{ doc("gtfs_fare_attributes__agency_id") }}'
+      - name: transfer_duration
+        description: '{{ doc("gtfs_fare_attributes__transfer_duration") }}'
+      - *_feed_valid_from
+  - name: dim_fare_leg_rules
+    description: |
+      Each row is a cleaned row from a fare_leg_rules.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/schedule/reference/#fare_leg_rulestxt.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, `network_id`, `from_area_id`, `to_area_id`, and `fare_product_id`.
+        tests: *pk_tests_with_dups
+      - *feed_key
+      - *base64_url
+      - name: leg_group_id
+        description: '{{ doc("gtfs_fare_leg_rules__leg_group_id") }}'
+      - name: network_id
+        description: '{{ doc("gtfs_fare_leg_rules__network_id") }}'
+      - name: from_area_id
+        description: '{{ doc("gtfs_fare_leg_rules__from_area_id") }}'
+      - name: to_area_id
+        description: '{{ doc("gtfs_fare_leg_rules__to_area_id") }}'
+      - name: fare_product_id
+        description: '{{ doc("gtfs_fare_leg_rules__fare_product_id") }}'
+      - *_feed_valid_from
+
+  - name: dim_fare_products
+    description: |
+      Each row is a cleaned row from a fare_products.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/schedule/reference/#fare_productstxt.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `fare_product_id`.
+        tests: *primary_key_tests
+      - *feed_key
+      - *base64_url
+      - name: fare_product_id
+        description: '{{ doc("gtfs_fare_products__fare_product_id") }}'
+        tests: *not_null_error
+      - name: fare_product_name
+        description: '{{ doc("gtfs_fare_products__fare_product_name") }}'
+      - name: amount
+        description: '{{ doc("gtfs_fare_products__amount") }}'
+        tests: *not_null_warn_99_threshold
+      - name: currency
+        description: '{{ doc("gtfs_fare_products__currency") }}'
+        tests: *not_null_warn_99_threshold
+      - *_feed_valid_from
+
+  - name: dim_fare_rules
+    description: |
+      Each row is a cleaned row from a fare_rules.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#fare_rulestxt.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, `fare_id`, `route_id`, `origin_id`, `destination_id`, and `contains_id`.
+        tests: *pk_tests_with_dups
+      - *feed_key
+      - *base64_url
+      - name: fare_id
+        description: '{{ doc("gtfs_fare_rules__fare_id") }}'
+        tests: *not_null_error
+      - name: route_id
+        description: '{{ doc("gtfs_fare_rules__route_id") }}'
+      - name: origin_id
+        description: '{{ doc("gtfs_fare_rules__origin_id") }}'
+      - name: destination_id
+        description: '{{ doc("gtfs_fare_rules__destination_id") }}'
+      - name: contains_id
+        description: '{{ doc("gtfs_fare_rules__contains_id") }}'
+      - *_feed_valid_from
+  - name: dim_fare_transfer_rules
+    description: |
+      Each row is a cleaned row from a fare_transfer_rules.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/schedule/reference/#fare_transfer_rulestxt.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, 'from_leg_group_id', 'to_leg_group_id', 'fare_product_id', 'transfer_count', and 'duration_limit'.
+        tests: *pk_tests_with_dups
+      - *feed_key
+      - *base64_url
+      - name: from_leg_group_id
+        description: '{{ doc("gtfs_fare_transfer_rules__from_leg_group_id") }}'
+      - name: to_leg_group_id
+        description: '{{ doc("gtfs_fare_transfer_rules__to_leg_group_id") }}'
+      - name: transfer_count
+        description: '{{ doc("gtfs_fare_transfer_rules__transfer_count") }}'
+      - name: duration_limit
+        description: '{{ doc("gtfs_fare_transfer_rules__duration_limit") }}'
+      - name: duration_limit_type
+        description: '{{ doc("gtfs_fare_transfer_rules__duration_limit_type") }}'
+      - name: fare_transfer_type
+        description: '{{ doc("gtfs_fare_transfer_rules__fare_transfer_type") }}'
+        tests: *not_null_warn_99_threshold
+      - name: fare_product_id
+        description: '{{ doc("gtfs_fare_transfer_rules__fare_product_id") }}'
+      - *_feed_valid_from
+  - name: dim_feed_info
+    description: |
+      Each row is a cleaned row from a feed_info.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#feed_infotxt.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, `feed_publisher_name`, `feed_publisher_url`, `feed_lang`, `default_lang`, `feed_version`, `feed_contact_email`, `feed_contact_url`, `feed_start_date`, and `feed_end_date`.
+        tests: *primary_key_tests
+      - *feed_key
+      - *base64_url
+      - name: feed_publisher_name
+        description: '{{ doc("gtfs_feed_info__feed_publisher_name") }}'
+        tests: *not_null_warn
+      - name: feed_publisher_url
+        description: '{{ doc("gtfs_feed_info__feed_publisher_url") }}'
+        tests: *not_null_warn_99_threshold
+      - name: feed_lang
+        description: '{{ doc("gtfs_feed_info__feed_lang") }}'
+        tests: *not_null_warn_99_threshold
+      - name: default_lang
+        description: '{{ doc("gtfs_feed_info__default_lang") }}'
+      - name: feed_start_date
+        description: '{{ doc("gtfs_feed_info__feed_start_date") }}'
+      - name: feed_end_date
+        description: '{{ doc("gtfs_feed_info__feed_end_date") }}'
+      - name: feed_version
+        description: '{{ doc("gtfs_feed_info__feed_version") }}'
+      - name: feed_contact_email
+        description: '{{ doc("gtfs_feed_info__feed_contact_email") }}'
+      - name: feed_contact_url
+        description: '{{ doc("gtfs_feed_info__feed_contact_url") }}'
+      - *_feed_valid_from
+  - name: dim_frequencies
+    description: |
+      Each row is a cleaned row from a frequencies.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#frequenciestxt.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, `trip_id`, and `start_time`.
+        tests: *primary_key_tests
+      - *feed_key
+      - *base64_url
+      - name: trip_id
+        description: '{{ doc("gtfs_frequencies__trip_id") }}'
+        tests: *not_null_error
+      - name: start_time
+        description: '{{ doc("gtfs_frequencies__start_time") }}'
+        tests: *not_null_warn
+      - name: end_time
+        description: '{{ doc("gtfs_frequencies__end_time") }}'
+        tests: *not_null_warn
+      - name: headway_secs
+        description: '{{ doc("gtfs_frequencies__headway_secs") }}'
+        tests: *not_null_warn
+      - name: exact_times
+        description: '{{ doc("gtfs_frequencies__exact_times") }}'
+      - *_feed_valid_from
+  - name: dim_levels
+    description: |
+      Each row is a cleaned row from a levels.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#levelstxt.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `level_id`.
+        tests: *primary_key_tests
+      - *feed_key
+      - *base64_url
+      - name: level_id
+        description: '{{ doc("gtfs_levels__level_id") }}'
+        tests: *not_null_error
+      - name: level_index
+        description: '{{ doc("gtfs_levels__level_index") }}'
+        tests: *not_null_warn
+      - name: level_name
+        description: '{{ doc("gtfs_levels__level_name") }}'
+      - *_feed_valid_from
+  - name: dim_pathways
+    description: |
+      Each row is a cleaned row from a pathways.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#pathwaystxt.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `pathway_id`.
+        tests: *primary_key_tests
+      - *feed_key
+      - *base64_url
+      - name: pathway_id
+        description: '{{ doc("gtfs_pathways__pathway_id") }}'
+        tests: *not_null_error
+      - name: from_stop_id
+        description: '{{ doc("gtfs_pathways__from_stop_id") }}'
+        tests: *not_null_error
+      - name: to_stop_id
+        description: '{{ doc("gtfs_pathways__to_stop_id") }}'
+        tests: *not_null_error
+      - name: pathway_mode
+        description: '{{ doc("gtfs_pathways__pathway_mode") }}'
+        tests: *not_null_warn
+      - name: is_bidirectional
+        description: '{{ doc("gtfs_pathways__is_bidirectional") }}'
+        tests: *not_null_warn
+      - name: length
+        description: '{{ doc("gtfs_pathways__length") }}'
+      - name: traversal_time
+        description: '{{ doc("gtfs_pathways__traversal_time") }}'
+      - name: stair_count
+        description: '{{ doc("gtfs_pathways__stair_count") }}'
+      - name: max_slope
+        description: '{{ doc("gtfs_pathways__max_slope") }}'
+      - name: min_width
+        description: '{{ doc("gtfs_pathways__min_width") }}'
+      - name: signposted_as
+        description: '{{ doc("gtfs_pathways__signposted_as") }}'
+      - name: reversed_signposted_as
+        description: '{{ doc("gtfs_pathways__reversed_signposted_as") }}'
+      - *_feed_valid_from
+  - name: dim_routes
+    description: |
+      Each row is a cleaned row from a routes.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#routestxt.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `route_id`.
+        tests: *primary_key_tests
+      - *feed_key
+      - *base64_url
+      - name: route_id
+        description: '{{ doc("gtfs_routes__route_id") }}'
+        tests: *not_null_error
+      - name: agency_id
+        description: '{{ doc("gtfs_routes__agency_id") }}'
+      - name: route_short_name
+        description: '{{ doc("gtfs_routes__route_short_name") }}'
+      - name: route_long_name
+        description: '{{ doc("gtfs_routes__route_long_name") }}'
+      - name: route_desc
+        description: '{{ doc("gtfs_routes__route_desc") }}'
+      - name: route_type
+        description: '{{ doc("gtfs_routes__route_type") }}'
+        tests: *not_null_warn
+      - name: route_url
+        description: '{{ doc("gtfs_routes__route_url") }}'
+      - name: route_color
+        description: '{{ doc("gtfs_routes__route_color") }}'
+      - name: route_text_color
+        description: '{{ doc("gtfs_routes__route_text_color") }}'
+      - name: route_sort_order
+        description: '{{ doc("gtfs_routes__route_sort_order") }}'
+      - name: continuous_pickup
+        description: '{{ doc("gtfs_routes__continuous_pickup") }}'
+      - name: continuous_drop_off
+        description: '{{ doc("gtfs_routes__continuous_drop_off") }}'
+      - name: network_id
+        description: '{{ doc("gtfs_routes__network_id") }}'
+      - *_feed_valid_from
+  - name: dim_shapes
+    description: |
+      Each row is a cleaned row from a shapes.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#shapestxt.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, `shape_id`, and `shape_pt_sequence`.
+        tests: *primary_key_tests
+      - *feed_key
+      - *base64_url
+      - name: shape_id
+        description: '{{ doc("gtfs_shapes__shape_id") }}'
+        tests: *not_null_error
+      - name: shape_pt_lat
+        description: '{{ doc("gtfs_shapes__shape_pt_lat") }}'
+        tests: *not_null_warn
+        meta:
+          metabase.semantic_type: type/Latitude
+          ckan.type: FLOAT
+          ckan.length: 6
+          ckan.precision: 3
+      - name: shape_pt_lon
+        description: '{{ doc("gtfs_shapes__shape_pt_lon") }}'
+        tests: *not_null_warn
+        meta:
+          metabase.semantic_type: type/Longitude
+          ckan.type: FLOAT
+          ckan.length: 7
+          ckan.precision: 3
+      - name: shape_pt_sequence
+        description: '{{ doc("gtfs_shapes__shape_pt_sequence") }}'
+        tests: *not_null_warn
+      - name: shape_dist_traveled
+        description: '{{ doc("gtfs_shapes__shape_dist_traveled") }}'
+      - *_feed_valid_from
+  - name: dim_stop_areas
+    description: |
+      Each row is a cleaned row from a stop_areas.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/schedule/reference/#stop_areastxt.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, `area_id` and `stop_id`.
+        tests: *primary_key_tests
+      - *feed_key
+      - *base64_url
+      - name: area_id
+        description: '{{ doc("gtfs_stop_areas__area_id") }}'
+        tests: *not_null_error
+      - name: stop_id
+        description: '{{ doc("gtfs_stop_areas__stop_id") }}'
+        tests: *not_null_error
+      - *_feed_valid_from
+  - name: dim_stops
+    description: |
+      Each row is a cleaned row from a stops.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#stopstxt.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `stop_id`.
+        tests: *pk_tests_with_dups
+      - *feed_key
+      - *base64_url
+      - name: stop_id
+        description: '{{ doc("gtfs_stops__stop_id") }}'
+        tests: &not_null_error_99_threshold
+          - dbt_utils.not_null_proportion:
+              at_least: 0.99
+      - name: stop_code
+        description: '{{ doc("gtfs_stops__stop_code") }}'
+      - name: stop_name
+        description: '{{ doc("gtfs_stops__stop_name") }}'
+      - name: tts_stop_name
+        description: '{{ doc("gtfs_stops__tts_stop_name") }}'
+      - name: stop_desc
+        description: '{{ doc("gtfs_stops__stop_desc") }}'
+      - name: stop_lat
+        description: '{{ doc("gtfs_stops__stop_lat") }}'
+        meta:
+          metabase.semantic_type: type/Latitude
+          ckan.type: FLOAT
+          ckan.length: 6
+          ckan.precision: 3
+      - name: stop_lon
+        description: '{{ doc("gtfs_stops__stop_lon") }}'
+        meta:
+          metabase.semantic_type: type/Longitude
+          ckan.type: FLOAT
+          ckan.length: 7
+          ckan.precision: 3
+      - name: zone_id
+        description: '{{ doc("gtfs_stops__zone_id") }}'
+      - name: stop_url
+        description: '{{ doc("gtfs_stops__stop_url") }}'
+      - name: location_type
+        description: '{{ doc("gtfs_stops__location_type") }}'
+      - name: parent_station
+        description: '{{ doc("gtfs_stops__parent_station") }}'
+      - name: stop_timezone
+        description: '{{ doc("gtfs_stops__stop_timezone") }}'
+      - name: wheelchair_boarding
+        description: '{{ doc("gtfs_stops__wheelchair_boarding") }}'
+      - name: level_id
+        description: '{{ doc("gtfs_stops__level_id") }}'
+      - name: platform_code
+        description: '{{ doc("gtfs_stops__platform_code") }}'
+      - name: pt_geom
+        description: GEOGPOINT created by the stop latitute and longitude
+      - name: warning_duplicate_primary_key
+        description: |
+          Rows with `true` in this column have a duplicate primary key; i.e., `stop_id` is duplicated within an individual feed
+          instance and `key` will also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
+      - *_feed_valid_from
+  - name: dim_transfers
+    description: |
+      Each row is a cleaned row from a transfers.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#transferstxt.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, `from_stop_id`, `to_stop_id`, `from_trip_id`, `to_trip_id`, `from_route_id`, and `to_route_id`.
+        tests: *pk_tests_with_dups
+      - *feed_key
+      - *base64_url
+      - name: from_stop_id
+        description: '{{ doc("gtfs_transfers__from_stop_id") }}'
+        tests:
+          - not_null:
+              error_if: "> 5"
+      - name: to_stop_id
+        description: '{{ doc("gtfs_transfers__to_stop_id") }}'
+        tests:
+          - not_null:
+              error_if: "> 5"
+      - name: transfer_type
+        description: '{{ doc("gtfs_transfers__transfer_type") }}'
+        tests: *not_null_warn
+      - name: min_transfer_time
+        description: '{{ doc("gtfs_transfers__min_transfer_time") }}'
+      - name: from_route_id
+        description: '{{ doc("gtfs_transfers__from_route_id") }}'
+      - name: to_route_id
+        description: '{{ doc("gtfs_transfers__to_route_id") }}'
+      - name: from_trip_id
+        description: '{{ doc("gtfs_transfers__from_trip_id") }}'
+      - name: to_trip_id
+        description: '{{ doc("gtfs_transfers__to_trip_id") }}'
+      - *_feed_valid_from
+  - name: dim_translations
+    description: |
+      Each row is a cleaned row from a translations.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#translationstxt.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, `table_name`, `field_name`, `language`, `record_id`, `record_sub_id`, and `field_value`.
+        tests: *primary_key_tests
+      - *feed_key
+      - *base64_url
+      - name: table_name
+        description: '{{ doc("gtfs_translations__table_name") }}'
+        tests: *not_null_warn
+      - name: field_name
+        description: '{{ doc("gtfs_translations__field_name") }}'
+        tests: *not_null_warn
+      - name: language
+        description: '{{ doc("gtfs_translations__language") }}'
+        tests: *not_null_warn
+      - name: translation
+        description: '{{ doc("gtfs_translations__translation") }}'
+        tests: *not_null_warn
+      - name: record_id
+        description: '{{ doc("gtfs_translations__record_id") }}'
+      - name: record_sub_id
+        description: '{{ doc("gtfs_translations__record_sub_id") }}'
+      - name: field_value
+        description: '{{ doc("gtfs_translations__field_value") }}'
+      - *_feed_valid_from
+  - name: dim_trips
+    description: |
+      Each row is a cleaned row from a trips.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#tripstxt.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `trip_id`.
+        tests: *pk_tests_with_dups
+      - *feed_key
+      - *base64_url
+      - name: route_id
+        description: '{{ doc("gtfs_trips__route_id") }}'
+        tests: *not_null_error
+      - name: service_id
+        description: '{{ doc("gtfs_trips__service_id") }}'
+        tests: *not_null_error
+      - name: trip_id
+        description: '{{ doc("gtfs_trips__trip_id") }}'
+        tests: *not_null_error
+      - name: trip_headsign
+        description: '{{ doc("gtfs_trips__trip_headsign") }}'
+      - name: trip_short_name
+        description: '{{ doc("gtfs_trips__trip_short_name") }}'
+      - name: direction_id
+        description: '{{ doc("gtfs_trips__direction_id") }}'
+      - name: block_id
+        description: '{{ doc("gtfs_trips__block_id") }}'
+      - name: shape_id
+        description: '{{ doc("gtfs_trips__shape_id") }}'
+      - name: wheelchair_accessible
+        description: '{{ doc("gtfs_trips__wheelchair_accessible") }}'
+      - name: bikes_allowed
+        description: '{{ doc("gtfs_trips__bikes_allowed") }}'
+      - *_feed_valid_from
+      - name: warning_duplicate_primary_key
+        description: |
+          Rows with `true` in this column have a duplicate primary key; i.e., `trip_id` is duplicated within an individual feed
+          instance and `key` will also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
+  - name: dim_calendar
+    description: |
+      Each row is a cleaned row from a calendar.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#calendartxt.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `service_id`.
+        tests: *primary_key_tests
+      - *feed_key
+      - *base64_url
+      - name: service_id
+        description: '{{ doc("gtfs_calendar__service_id") }}'
+        tests: *not_null_error
+      - name: monday
+        description: '{{ doc("gtfs_calendar__monday") }}'
+        tests: *not_null_warn
+      - name: tuesday
+        description: '{{ doc("gtfs_calendar__tuesday") }}'
+        tests: *not_null_warn
+      - name: wednesday
+        description: '{{ doc("gtfs_calendar__wednesday") }}'
+        tests: *not_null_warn
+      - name: thursday
+        description: '{{ doc("gtfs_calendar__thursday") }}'
+        tests: *not_null_warn
+      - name: friday
+        description: '{{ doc("gtfs_calendar__friday") }}'
+        tests: *not_null_warn
+      - name: saturday
+        description: '{{ doc("gtfs_calendar__saturday") }}'
+        tests: *not_null_warn
+      - name: sunday
+        description: '{{ doc("gtfs_calendar__sunday") }}'
+        tests: *not_null_warn
+      - name: start_date
+        description: '{{ doc("gtfs_calendar__start_date") }}'
+        tests: *not_null_warn
+      - name: end_date
+        description: '{{ doc("gtfs_calendar__end_date") }}'
+        tests: *not_null_warn
+      - *_feed_valid_from
+  - name: dim_calendar_dates
+    description: |
+      Each row is a cleaned row from a calendar_dates.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/reference/static#calendar_datestxt.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, `service_id`, and `date`.
+        tests: *primary_key_tests
+      - *feed_key
+      - *base64_url
+      - name: service_id
+        description: '{{ doc("gtfs_calendar_dates__service_id") }}'
+        tests: *not_null_error
+      - name: date
+        description: '{{ doc("gtfs_calendar_dates__date") }}'
+        tests: *not_null_warn
+      - name: exception_type
+        description: '{{ doc("gtfs_calendar_dates__exception_type") }}'
+        tests: *not_null_warn
+      - *_feed_valid_from
+  - name: dim_stop_times
+    description: |
+      Cleaned GTFS schedule stop_times data.
+      See https://gtfs.org/schedule/reference/#calendar_datestxt for specification.
+    columns:
+      - *feed_key
+      - *base64_url
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key`, `trip_id`, and `stop_sequence`.
+        tests: *pk_tests_with_dups
+      - name: trip_id
+        description: '{{ doc("gtfs_stop_times__trip_id") }}'
+        tests: *not_null_error
+      - name: arrival_time
+        description: '{{ doc("gtfs_stop_times__arrival_time") }}'
+      - name: departure_time
+        description: '{{ doc("gtfs_stop_times__departure_time") }}'
+      - name: stop_id
+        description: '{{ doc("gtfs_stop_times__stop_id") }}'
+        tests:
+        - not_null:
+            where: "not warning_missing_foreign_key_stop_id"
+      - name: stop_sequence
+        description: '{{ doc("gtfs_stop_times__stop_sequence") }}'
+        tests: *not_null_warn
+      - name: stop_headsign
+        description: '{{ doc("gtfs_stop_times__stop_headsign") }}'
+      - name: pickup_type
+        description: '{{ doc("gtfs_stop_times__pickup_type") }}'
+      - name: drop_off_type
+        description: '{{ doc("gtfs_stop_times__drop_off_type") }}'
+      - name: continuous_pickup
+        description: '{{ doc("gtfs_stop_times__continuous_pickup") }}'
+      - name: continuous_drop_off
+        description: '{{ doc("gtfs_stop_times__continuous_drop_off") }}'
+      - name: shape_dist_traveled
+        description: '{{ doc("gtfs_stop_times__shape_dist_traveled") }}'
+      - name: timepoint
+        description: '{{ doc("gtfs_stop_times__timepoint") }}'
+      - name: warning_duplicate_primary_key
+        description: |
+          Rows with `true` in this column have a duplicate primary key; i.e., the given `trip_id`
+          / `stop_sequence` pair is duplicated within an individual feed instance and `key` will
+          also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
+      - name: warning_missing_foreign_key_stop_id
+        description: |
+          Rows with `true` in this column are missing the required `stop_id` value.
+          This means they will fail to join with `stop` related information.
+      - name: arrival_sec
+        description: |
+          This is a calculated field that does not come from GTFS - it is not a timestamp and can't be treated as such.
+
+          Represents `arrival_time` as a total number of seconds after midnight of the first day of the given trip.
+          For example, `arrival_time = 21:30:45` would lead to `arrival_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
+          This allows us to perform duration calculations and handle timestamps that wrap past midnight like
+          `25:40:00`, which are allowed in GTFS.
+      - name: departure_sec
+        description: |
+          This is a calculated field that does not come from GTFS - it is not a timestamp and can't be treated as such.
+
+          Represents `departure_time` as a total number of seconds after midnight of the first day of the given trip.
+          For example, `departure_time = 21:30:45` would lead to `departure_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
+          This allows us to perform duration calculations and handle timestamps that wrap past midnight like
+          `25:40:00`, which are allowed in GTFS.
+      - *_feed_valid_from
+    meta:
+      publish.gis_coordinate_system_epsg: WGS84
+  - name: dim_shapes_arrays
+    description: |
+      Each row is a shape, constructed from the points listed in
+      `dim_shapes`, with the shape geometry described as an ordered
+      array of points in the `pt_array` column.
+      We cannot construct a LineString because of BigQuery limitations;
+      see: https://gis.stackexchange.com/questions/426188/can-i-represent-a-route-that-doubles-back-on-itself-in-bigquery-with-a-linestrin.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `shape_id`.
+        tests: *primary_key_tests
+      - *feed_key
+      - *base64_url
+      - name: shape_id
+        description: '{{ doc("gtfs_shapes__shape_id") }}'
+        tests: *not_null_error
+      - name: pt_array
+        description: Ordered array of WKT points that describe this shape.
+        tests: *not_null_error
+      - *_feed_valid_from
