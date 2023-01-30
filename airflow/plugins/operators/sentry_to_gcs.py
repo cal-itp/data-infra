@@ -5,7 +5,8 @@ import pendulum
 import requests
 
 from calitp.auth import get_secret_by_name
-from calitp.storage import PartitionedGCSArtifact, get_fs, make_name_bq_safe
+from calitp.storage import get_fs, make_name_bq_safe
+from pydantic import BaseModel
 from typing import Optional
 
 from airflow.models import BaseOperator
@@ -41,7 +42,7 @@ def make_arrays_bq_safe(raw_data):
     return safe_data
 
 
-class SentryExtract(PartitionedGCSArtifact):
+class SentryExtract(BaseModel):
     issue_id: str
     data: Optional[pd.DataFrame]
     extract_time: Optional[pendulum.DateTime]
@@ -109,7 +110,7 @@ class SentryExtract(PartitionedGCSArtifact):
 
 class SentryToGCSOperator(BaseOperator):
 
-    template_fields = ("bucket", "issue_id")
+    template_fields = ("bucket",)
 
     def __init__(
         self,
