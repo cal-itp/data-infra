@@ -109,12 +109,13 @@ models:
           and `gtfs_service_data_assessed`.
       - name: reports_site_assessed
         description: |
-          Identical to `guidelines_assessed` except that for entities associated with MTC 511,
-          use the regional subfeed instead of the combined regional feed.
-          I.e., for organization/services where the MTC combined regional feed is the
-          customer-facing feed and "assessed" for guideline purposes, this feed will mark the
-          associated regional subfeed (rather than the combined feed) as assessed for reports site
-          (reports.calitp.org) purposes.
+          Similar to `guidelines_assessed` except:
+          * For entities associated with MTC 511, use the regional subfeed instead of the combined regional feed;
+            i.e., for organization/services where the MTC combined regional feed is the customer-facing feed and
+            "assessed" for guideline purposes, this feed will mark the associated regional subfeed (rather than the combined feed)
+            as assessed for reports site (reports.calitp.org) purposes.
+          * Entity must include an organization with an ITP ID assigned
+          * Entity must include at least one assessed schedule feed
       - name: organization_assessed
         description: |
           Boolean indicator for whether the given organization record met the criteria to be "assessed"
