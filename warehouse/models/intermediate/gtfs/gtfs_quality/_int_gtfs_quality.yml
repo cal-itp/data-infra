@@ -1,6 +1,9 @@
 version: 2
 
 models:
+
+  # Index tables
+
   - name: int_gtfs_quality__schedule_feed_guideline_index
     description: |
       Daily index of v2 schedule feeds. Provides structure for
@@ -40,6 +43,68 @@ models:
           combination_of_columns:
             - base64_url
             - date
+
+  - name: int_gtfs_quality__organization_guideline_index
+    description: |
+      Daily index of v2 organizations. Provides structure for
+      individual check models to be joined together by day.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - organization_key
+            - date
+
+  - name: int_gtfs_quality__gtfs_dataset_guideline_index
+    description: |
+      Daily index of v2 GTFS datasets. Provides structure for
+      individual check models to be joined together by day.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - gtfs_dataset_key
+            - date
+
+  - name: int_gtfs_quality__gtfs_dataset_schedule_guideline_index
+    description: |
+      Daily index of v2 GTFS datasets, including only schedule datasets. Provides structure for
+      individual check models to be joined together by day.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - gtfs_dataset_key
+            - date
+
+  - name: int_gtfs_quality__services_guideline_index
+    description: |
+      Daily index of v2 services. Provides structure for
+      individual check models to be joined together by day.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - service_key
+            - date
+
+  - name: int_gtfs_quality__gtfs_service_data_guideline_index
+    description: |
+      Daily index of v2 GTFS service data. Provides structure for
+      individual check models to be joined together by day.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - gtfs_service_data_key
+            - date
+
+  - name: int_gtfs_quality__gtfs_service_data_schedule_guideline_index
+    description: |
+      Daily index of v2 GTFS service data, including only schedule service data. Provides structure for
+      individual check models to be joined together by day.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - gtfs_service_data_key
+            - date
+
+# Other useful tables
 
   - name: int_gtfs_quality__rt_validation_outcomes
     description: |
@@ -398,10 +463,6 @@ models:
           compare_model: ref('int_gtfs_quality__gtfs_dataset_schedule_guideline_index')
     columns: *stg_gtfs_guideline_columns
 
-  - name: int_gtfs_quality__data_license
-    tests: *stg_gtfs_guideline_tests_dataset_schedule
-    columns: *stg_gtfs_guideline_columns
-
   - name: int_gtfs_quality__grading_scheme_v1
     tests: *stg_gtfs_guideline_tests_dataset_schedule
     columns: *stg_gtfs_guideline_columns
@@ -426,6 +487,10 @@ models:
     tests: *stg_gtfs_guideline_tests_dataset
     columns: *stg_gtfs_guideline_columns
 
+  - name: int_gtfs_quality__data_license
+    tests: *stg_gtfs_guideline_tests_dataset
+    columns: *stg_gtfs_guideline_columns
+
 # --- Service-level
 
   - name: int_gtfs_quality__trip_planner_schedule
@@ -443,7 +508,19 @@ models:
     columns: *stg_gtfs_guideline_columns
 
 # --- GTFS-service-data-level
+# ----- Schedule only
 
+  - name: int_gtfs_quality__demand_responsive_routes_match
+    tests: &stg_gtfs_guideline_tests_gtfs_service_data_schedule
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - gtfs_service_data_key
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__gtfs_service_data_schedule_guideline_index')
+    columns: *stg_gtfs_guideline_columns
+
+# ----- All 4 feeds
   - name: int_gtfs_quality__fixed_routes_match
     tests: &stg_gtfs_guideline_tests_gtfs_service_data
       - dbt_utils.unique_combination_of_columns:
@@ -452,8 +529,4 @@ models:
             - gtfs_service_data_key
       - dbt_utils.equal_rowcount:
           compare_model: ref('int_gtfs_quality__gtfs_service_data_guideline_index')
-    columns: *stg_gtfs_guideline_columns
-
-  - name: int_gtfs_quality__demand_responsive_routes_match
-    tests: *stg_gtfs_guideline_tests_gtfs_service_data
     columns: *stg_gtfs_guideline_columns

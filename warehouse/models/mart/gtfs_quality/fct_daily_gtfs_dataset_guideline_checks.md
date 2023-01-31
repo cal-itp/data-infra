@@ -8,7 +8,10 @@ Here is a list of currently-implemented checks:
 | Check | Feature | Description |
 | ------------------------------------ |---------|------------ |
 | Shapes in shapes.txt are precise enough to show the right-of-way that the vehicle uses and not inaccurately exit the right-of-way | Accurate Service Data | All trip shapes match the right-of-way. |
-| Includes an open license that allows commercial use | Compliance (Schedule) | The transit provider’s website includes an open license that allows commercial use of GTFS data. |
+| Includes an open license that allows commercial use of GTFS Schedule feed| Compliance (Schedule) | The transit provider’s website includes an open license that allows commercial use of GTFS Schedule feed. |
+| Includes an open license that allows commercial use of Vehicle positions feed| Compliance (RT) | The transit provider’s website includes an open license that allows commercial use of Vehicle positions feed. |
+| Includes an open license that allows commercial use of Trip updates feed| Compliance (RT) | The transit provider’s website includes an open license that allows commercial use of Trip updates feed. |
+| Includes an open license that allows commercial use of Service alerts feed| Compliance (RT) | The transit provider’s website includes an open license that allows commercial use of Service alerts feed. |
 | GTFS Schedule feed requires easy (if any) authentication | Availability on Website | If an API key is required to access the GTFS Schedule feed, the registration process must be straightforward, quick, and transparent. |
 | Vehicle positions feed requires easy (if any) authentication | Availability on Website | If an API key is required to access the Vehicle positions feed, the registration process must be straightforward, quick, and transparent. |
 | Trip updates feed requires easy (if any) authentication | Availability on Website | If an API key is required to access the Trip updates feed, the registration process must be straightforward, quick, and transparent. |
