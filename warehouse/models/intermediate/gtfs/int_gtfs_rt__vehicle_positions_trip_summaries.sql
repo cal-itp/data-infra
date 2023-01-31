@@ -16,8 +16,8 @@
     {% set max_ts = timestamps[0] %}
 {% endif %}
 
-WITH stop_time_updates AS (
-    SELECT * FROM {{ ref('fct_stop_time_updates') }}
+WITH vehicle_positions AS (
+    SELECT * FROM {{ ref('fct_vehicle_positions_messages') }}
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
@@ -25,7 +25,7 @@ WITH stop_time_updates AS (
     {% endif %}
 ),
 
-int_gtfs_rt__trip_updates_summaries AS (
+int_gtfs_rt__vehicle_positions_trip_summaries AS (
     SELECT
         -- https://gtfs.org/realtime/reference/#message-tripdescriptor
         {{ dbt_utils.surrogate_key([
@@ -49,12 +49,14 @@ int_gtfs_rt__trip_updates_summaries AS (
         MAX(_extract_ts) AS max_extract_ts,
         MIN(header_timestamp) AS min_header_timestamp,
         MAX(header_timestamp) AS max_header_timestamp,
-        MIN(trip_update_timestamp) AS min_trip_update_timestamp,
-        MAX(trip_update_timestamp) AS max_trip_update_timestamp,
-        MAX(trip_update_delay) AS max_delay,
-        COUNT(DISTINCT CASE WHEN schedule_relationship = 'SKIPPED' THEN stop_id END) AS num_skipped_stops,
-    FROM stop_time_updates
+        MIN(vehicle_timestamp) AS min_vehicle_timestamp,
+        MAX(vehicle_timestamp) AS max_vehicle_timestamp,
+        ARRAY_AGG(position_latitude ORDER BY _extract_ts)[OFFSET(0)] AS first_position_latitude,
+        ARRAY_AGG(position_longitude ORDER BY _extract_ts)[OFFSET(0)] AS first_position_longitude,
+        ARRAY_AGG(position_latitude ORDER BY _extract_ts DESC)[OFFSET(0)] AS last_position_latitude,
+        ARRAY_AGG(position_longitude ORDER BY _extract_ts DESC)[OFFSET(0)] AS last_position_longitude,
+    FROM vehicle_positions
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
 )
 
-SELECT * FROM int_gtfs_rt__trip_updates_summaries
+SELECT * FROM int_gtfs_rt__vehicle_positions_trip_summaries

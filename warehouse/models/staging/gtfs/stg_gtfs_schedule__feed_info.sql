@@ -11,6 +11,7 @@ stg_gtfs_schedule__feed_info AS (
     SELECT
         base64_url,
         ts,
+        dt AS _dt,
         {{ trim_make_empty_string_null('feed_publisher_name') }} AS feed_publisher_name,
         {{ trim_make_empty_string_null('feed_publisher_url') }} AS feed_publisher_url,
         {{ trim_make_empty_string_null('feed_lang') }} AS feed_lang,

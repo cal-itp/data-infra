@@ -487,7 +487,7 @@ def _publish_exposure(
                         tmpdir, f"{strip_modelname(node.name)}.geojsonl"
                     )
 
-                    client = bigquery.Client()
+                    client = bigquery.Client(project=node.database)
                     typer.secho(f"querying {node.schema_table}")
                     # TODO: this is not great but we have to work around how BigQuery removes overlapping line segments
                     df = client.query(
@@ -511,7 +511,10 @@ def _publish_exposure(
                         strip_modelname(node.name).title()
                     ] = geojsonl_fpath
                     hive_path = destination.hive_path(
-                        exposure, strip_modelname(node.name), bucket
+                        exposure=exposure,
+                        model=strip_modelname(node.name),
+                        bucket=bucket,
+                        dt=ts,
                     )
 
                     typer.secho(
@@ -537,7 +540,10 @@ def _publish_exposure(
                     subprocess.run(args).check_returncode()
 
                     tiles_hive_path = destination.tiles_hive_path(
-                        exposure, strip_modelname(node.name), bucket
+                        exposure=exposure,
+                        model=strip_modelname(node.name),
+                        bucket=bucket,
+                        dt=ts,
                     )
 
                     typer.secho(

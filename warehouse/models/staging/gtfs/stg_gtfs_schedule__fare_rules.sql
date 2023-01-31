@@ -10,6 +10,7 @@ stg_gtfs_schedule__fare_rules AS (
     SELECT
         base64_url,
         ts,
+        dt AS _dt,
         {{ trim_make_empty_string_null('fare_id') }} AS fare_id,
         {{ trim_make_empty_string_null('route_id') }} AS route_id,
         {{ trim_make_empty_string_null('origin_id') }} AS origin_id,

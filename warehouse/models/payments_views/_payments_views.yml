@@ -3,8 +3,8 @@ version: 2
 models:
   - name: payments_feeds
     columns:
-      - name: calitp_itp_id
-      - name: calitp_url_number
+      - name: gtfs_dataset_source_record_id
+        description: Unversioned key to dim_gtfs_datasets natural key from Airtable.
       - name: participant_id
         description: Littlepay-assigned Participant ID.
 

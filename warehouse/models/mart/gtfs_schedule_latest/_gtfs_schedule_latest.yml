@@ -941,3 +941,23 @@ exposures:
                 Each row is a cleaned row from a trips.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#tripstxt.
+
+
+  - name: calitp_map_tile_server
+    type: application
+    maturity: low
+    url: ""
+    description: Just the shapes as map tiles
+    depends_on:
+      - ref("dim_shapes_arrays_latest")
+    owner:
+      email: andrew.v@jarv.us
+    meta:
+      destinations:
+        - type: tiles
+          bucket: gs://calitp-publish
+          format: geojsonl # note that this is the intermediary format
+          tile_format: mbtiles
+          geo_column: pt_array
+          layer_names:
+            - GTFS Schedule Shapes (Latest)

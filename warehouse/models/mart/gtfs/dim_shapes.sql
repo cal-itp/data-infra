@@ -1,17 +1,8 @@
-{{ config(materialized='table') }}
-
-WITH dim_schedule_feeds AS (
-    SELECT *
-    FROM {{ ref('dim_schedule_feeds') }}
-),
-
-int_gtfs_schedule__incremental_shapes AS (
-    SELECT *
-    FROM {{ ref('int_gtfs_schedule__incremental_shapes') }}
-),
-
-make_dim AS (
-{{ make_schedule_file_dimension_from_dim_schedule_feeds('dim_schedule_feeds', 'int_gtfs_schedule__incremental_shapes') }}
+WITH make_dim AS (
+    {{ make_schedule_file_dimension_from_dim_schedule_feeds(
+        ref('dim_schedule_feeds'),
+        ref('stg_gtfs_schedule__shapes'),
+    ) }}
 ),
 
 dim_shapes AS (
@@ -24,9 +15,7 @@ dim_shapes AS (
         shape_pt_sequence,
         shape_dist_traveled,
         base64_url,
-        _valid_from,
-        _valid_to,
-        _is_current
+        _feed_valid_from,
     FROM make_dim
 )
 
