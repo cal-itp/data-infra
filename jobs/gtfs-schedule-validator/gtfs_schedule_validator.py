@@ -11,11 +11,11 @@ import traceback
 from concurrent.futures import ThreadPoolExecutor, Future
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, ClassVar, Optional
+from typing import Dict, List, ClassVar, Optional, Tuple, Union
 
 import pendulum
 import typer
-from calitp.storage import (
+from calitp.storage import (  # type: ignore
     fetch_all_in_partition,
     GTFSScheduleFeedExtract,
     get_fs,
@@ -131,22 +131,23 @@ def log(*args, err=False, fg=None, pbar=None, **kwargs):
 def execute_schedule_validator(
     extract_ts: pendulum.DateTime,
     zip_path: Path,
-    output_dir: Path,
+    output_dir: Union[Path, str],
     pbar=None,
-) -> (Dict, Dict, str):
+) -> Tuple[Dict, Dict, str]:
     if not isinstance(zip_path, Path):
         raise TypeError("must provide a path to the zip file")
 
-    if extract_ts < pendulum.parse("2022-09-15"):
+    if extract_ts < pendulum.Date(2022, 9, 15):
         versioned_jar_path = V2_VALIDATOR_JAR
         validator_version = "v2.0.0"
-    elif extract_ts < pendulum.parse("2022-11-16"):
+    elif extract_ts < pendulum.Date(2022, 11, 16):
         versioned_jar_path = V3_VALIDATOR_JAR
         validator_version = "v3.1.1"
     else:
         versioned_jar_path = V4_VALIDATOR_JAR
         validator_version = "v4.0.0"
 
+    assert JAVA_EXECUTABLE and versioned_jar_path  # make mypy happy
     args = [
         JAVA_EXECUTABLE,
         "-jar",
@@ -247,6 +248,7 @@ def validate_extract(
 ) -> None:
     """"""
     execute_schedule_validator(
+        extract_ts=pendulum.now(),
         zip_path=zip_path,
         output_dir=output_dir,
     )
