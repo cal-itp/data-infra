@@ -1,13 +1,12 @@
 WITH payments_feeds AS (
 
     SELECT
-        calitp_itp_id,
-        calitp_url_number,
+        gtfs_dataset_source_record_id,
         participant_id
     FROM UNNEST(
         ARRAY<
             STRUCT<
-                gtfs_dataset_key STRING,
+                gtfs_dataset_source_record_id STRING,
                 participant_id STRING
             >
         > [
