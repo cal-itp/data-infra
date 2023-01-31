@@ -205,7 +205,11 @@ class GcsDestination(BaseModel):
         return f"{model}.{self.format.value}"
 
     def hive_path(
-        self, exposure: "Exposure", model: str, bucket: str, dt: pendulum.DateTime
+        self,
+        exposure: "Exposure",
+        model: str,
+        bucket: str,
+        dt: pendulum.DateTime,
     ):
         entity_name_parts = [
             slugify(exposure.name, separator="_"),
@@ -236,14 +240,18 @@ class TilesDestination(GcsDestination):
     def tile_filename(self, model):
         return f"{model}.{self.tile_format.value}"
 
-    def tiles_hive_path(self, exposure: "Exposure", model: str, bucket: str):
-        table_name = (
-            f'{slugify(exposure.name, separator="_")}__{self.tile_format.value}'
-        )
+    def tiles_hive_path(
+        self,
+        exposure: "Exposure",
+        model: str,
+        bucket: str,
+        dt: pendulum.DateTime,
+    ):
         return os.path.join(
             bucket,
-            table_name,
-            *self.hive_partitions,
+            f'{slugify(exposure.name, separator="_")}__{self.tile_format.value}',
+            f"dt={dt.in_tz('utc').to_date_string()}",
+            f"ts={dt.in_tz('utc').to_iso8601_string()}",
             self.tile_filename(model),
         )
 

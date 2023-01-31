@@ -37,14 +37,20 @@
 
 WITH
 
-gtfs_schedule_dim_routes AS (
-    SELECT *
-    FROM {{ ref('gtfs_schedule_dim_routes') }}
+fct_daily_schedule_feeds AS (
+    SELECT * FROM {{ ref('fct_daily_schedule_feeds') }}
+),
+
+dim_routes AS (
+    SELECT * FROM {{ ref('dim_routes') }}
+),
+
+dim_gtfs_datasets AS (
+    SELECT * FROM {{ ref('dim_gtfs_datasets') }}
 ),
 
 payments_feeds AS (
-    SELECT *
-    FROM {{ ref('payments_feeds') }}
+    SELECT * FROM {{ ref('payments_feeds') }}
 ),
 
 stg_cleaned_micropayments AS (
@@ -87,21 +93,20 @@ stg_cleaned_product_data AS (
     FROM {{ ref('stg_cleaned_product_data') }}
 ),
 
-gtfs_routes_with_participant AS (
+participants_to_routes AS (
     SELECT
-
-        p.participant_id,
-
-        g.route_id,
-        g.route_short_name,
-        g.route_long_name,
-        g.calitp_extracted_at,
-        g.calitp_deleted_at
-
-    FROM gtfs_schedule_dim_routes AS g
-    INNER JOIN payments_feeds AS p
-        ON g.calitp_itp_id = p.calitp_itp_id
-            AND g.calitp_url_number = p.calitp_url_number
+        pf.participant_id,
+        f.date,
+        r.route_id,
+        r.route_short_name,
+        r.route_long_name,
+    FROM payments_feeds AS pf
+    LEFT JOIN dim_gtfs_datasets d
+        ON pf.gtfs_dataset_source_record_id = d.source_record_id
+    LEFT JOIN fct_daily_schedule_feeds AS f
+        ON d.key = f.gtfs_dataset_key
+    LEFT JOIN dim_routes AS r
+        ON f.feed_key = r.feed_key
 ),
 
 debited_micropayments AS (
@@ -316,22 +321,17 @@ join_table AS (
     LEFT JOIN stg_cleaned_product_data AS p
         ON m.participant_id = p.participant_id
             AND a.product_id = p.product_id
-    LEFT JOIN gtfs_routes_with_participant AS r
+    LEFT JOIN participants_to_routes AS r
         ON r.participant_id = m.participant_id
+            -- here, can just use t1 because transaction date will be populated
+            -- (don't have to handle unkowns the way we do with route_id)
+            AND EXTRACT(DATE FROM TIMESTAMP(t1.transaction_date_time_utc)) = r.date
             AND r.route_id = (
                 CASE
                     WHEN
                         t1.route_id != 'Route Z' THEN t1.route_id
                     ELSE COALESCE(t2.route_id, 'Route Z')
                 END
-            )
-            -- here, can just use t1 because transaction date will be populated
-            -- (don't have to handle unkowns the way we do with route_id)
-            AND r.calitp_extracted_at <= DATETIME(
-                TIMESTAMP(t1.transaction_date_time_utc)
-            )
-            AND r.calitp_deleted_at > DATETIME(
-                TIMESTAMP(t1.transaction_date_time_utc)
             )
 ),
 
