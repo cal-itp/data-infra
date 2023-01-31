@@ -1,17 +1,8 @@
-{{ config(materialized='table') }}
-
-WITH dim_schedule_feeds AS (
-    SELECT *
-    FROM {{ ref('dim_schedule_feeds') }}
-),
-
-stg_gtfs_schedule__fare_rules AS (
-    SELECT *
-    FROM {{ ref('stg_gtfs_schedule__fare_rules') }}
-),
-
-make_dim AS (
-{{ make_schedule_file_dimension_from_dim_schedule_feeds('dim_schedule_feeds', 'stg_gtfs_schedule__fare_rules') }}
+WITH make_dim AS (
+    {{ make_schedule_file_dimension_from_dim_schedule_feeds(
+        ref('dim_schedule_feeds'),
+        ref('stg_gtfs_schedule__fare_rules'),
+    ) }}
 ),
 
 dim_fare_rules AS (
@@ -24,9 +15,7 @@ dim_fare_rules AS (
         destination_id,
         contains_id,
         base64_url,
-        _valid_from,
-        _valid_to,
-        _is_current
+        _feed_valid_from,
     FROM make_dim
 )
 

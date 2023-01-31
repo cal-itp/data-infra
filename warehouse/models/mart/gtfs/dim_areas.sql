@@ -1,17 +1,8 @@
-{{ config(materialized='table') }}
-
-WITH dim_schedule_feeds AS (
-    SELECT *
-    FROM {{ ref('dim_schedule_feeds') }}
-),
-
-stg_gtfs_schedule__areas AS (
-    SELECT *
-    FROM {{ ref('stg_gtfs_schedule__areas') }}
-),
-
-make_dim AS (
-{{ make_schedule_file_dimension_from_dim_schedule_feeds('dim_schedule_feeds', 'stg_gtfs_schedule__areas') }}
+WITH make_dim AS (
+    {{ make_schedule_file_dimension_from_dim_schedule_feeds(
+        ref('dim_schedule_feeds'),
+        ref('stg_gtfs_schedule__areas'),
+    ) }}
 ),
 
 dim_areas AS (
@@ -21,9 +12,7 @@ dim_areas AS (
         area_id,
         area_name,
         base64_url,
-        _valid_from,
-        _valid_to,
-        _is_current
+        _feed_valid_from,
     FROM make_dim
 )
 

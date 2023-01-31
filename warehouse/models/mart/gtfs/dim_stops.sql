@@ -1,17 +1,8 @@
-{{ config(materialized='table') }}
-
-WITH dim_schedule_feeds AS (
-    SELECT *
-    FROM {{ ref('dim_schedule_feeds') }}
-),
-
-int_gtfs_schedule__incremental_stops AS (
-    SELECT *
-    FROM {{ ref('int_gtfs_schedule__incremental_stops') }}
-),
-
-make_dim AS (
-{{ make_schedule_file_dimension_from_dim_schedule_feeds('dim_schedule_feeds', 'int_gtfs_schedule__incremental_stops') }}
+WITH make_dim AS (
+    {{ make_schedule_file_dimension_from_dim_schedule_feeds(
+        ref('dim_schedule_feeds'),
+        ref('stg_gtfs_schedule__stops'),
+    ) }}
 ),
 
 bad_rows AS (
@@ -50,9 +41,7 @@ dim_stops AS (
         level_id,
         platform_code,
         COALESCE(warning_duplicate_primary_key, FALSE) AS warning_duplicate_primary_key,
-        _valid_from,
-        _valid_to,
-        _is_current
+        _feed_valid_from,
     FROM make_dim
     LEFT JOIN bad_rows
         USING (base64_url, ts, stop_id)

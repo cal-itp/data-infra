@@ -11,6 +11,7 @@ stg_gtfs_schedule__stop_areas AS (
     SELECT
         base64_url,
         ts,
+        dt AS _dt,
         {{ trim_make_empty_string_null('area_id') }} AS area_id,
         {{ trim_make_empty_string_null('stop_id') }} AS stop_id
     FROM external_stop_areas
