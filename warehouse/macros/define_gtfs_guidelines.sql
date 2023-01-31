@@ -216,8 +216,20 @@
 "Shapes in shapes.txt are precise enough to show the right-of-way that the vehicle uses and not inaccurately exit the right-of-way"
 {% endmacro %}
 
-{% macro data_license() %}
-"Includes an open license that allows commercial use"
+{% macro data_license_schedule() %}
+"Includes an open license that allows commercial use of GTFS Schedule feed"
+{% endmacro %}
+
+{% macro data_license_vp() %}
+"Includes an open license that allows commercial use of Vehicle positions feed"
+{% endmacro %}
+
+{% macro data_license_tu() %}
+"Includes an open license that allows commercial use of Trip updates feed"
+{% endmacro %}
+
+{% macro data_license_sa() %}
+"Includes an open license that allows commercial use of Service alerts feed"
 {% endmacro %}
 
 {% macro authentication_acceptable_schedule() %}
