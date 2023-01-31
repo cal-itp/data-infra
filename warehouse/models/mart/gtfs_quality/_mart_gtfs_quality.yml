@@ -130,6 +130,18 @@ models:
       - *date
       - *schedule_feed_key
       - *base64_url
+      - name: outcome_extract_dt
+        tests:
+          - dbt_utils.expression_is_true:
+              # outcomes only count for the outcomes's date and onwards
+              expression: '<= date'
+      - &schedule_validation_validator_version
+        name: validation_validator_version
+        description: |
+          The version of the GTFS schedule canonical validator that these notices are from.
+          See version and release history at https://github.com/MobilityData/gtfs-validator/releases.
+        tests:
+          - not_null
       - &schedule_validator_code
         name: code
         description: |
@@ -146,13 +158,6 @@ models:
           - dbt_utils.not_null_proportion:
               at_least: 0.99
       - name: validation_exception
-      - &schedule_validation_validator_version
-        name: validation_validator_version
-        description: |
-          The version of the GTFS schedule canonical validator that these notices are from.
-          See version and release history at https://github.com/MobilityData/gtfs-validator/releases.
-        tests:
-          - not_null
       - name: total_notices
         tests:
           - dbt_utils.not_null_proportion:
