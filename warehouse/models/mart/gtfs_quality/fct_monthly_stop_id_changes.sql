@@ -65,8 +65,8 @@ month_comparison AS (
         END AS change_status
     FROM month_start AS t1
     FULL JOIN month_end AS t2
-            USING (base64_url, organization_name, organization_itp_id, stop_id, publish_date)
-            --USING (organization_name, organization_itp_id, stop_id, publish_date)
+            USING (organization_name, organization_itp_id, route_id, publish_date)
+            --USING (base64_url, organization_name, organization_itp_id, route_id, publish_date)
 
 ),
 
