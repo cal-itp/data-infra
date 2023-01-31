@@ -92,7 +92,13 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ shapes_accurate() }}, {{ accurate_service_data() }}, {{ gtfs_dataset() }}
     UNION ALL
-    SELECT {{ data_license() }}, {{ compliance_schedule() }}, {{ gtfs_dataset() }}
+    SELECT {{ data_license_schedule() }}, {{ compliance_schedule() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ data_license_vp() }}, {{ compliance_rt() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ data_license_tu() }}, {{ compliance_rt() }}, {{ gtfs_dataset() }}
+    UNION ALL
+    SELECT {{ data_license_sa() }}, {{ compliance_rt() }}, {{ gtfs_dataset() }}
     UNION ALL
     SELECT {{ authentication_acceptable_schedule() }}, {{ availability_on_website() }}, {{ gtfs_dataset() }}
     UNION ALL

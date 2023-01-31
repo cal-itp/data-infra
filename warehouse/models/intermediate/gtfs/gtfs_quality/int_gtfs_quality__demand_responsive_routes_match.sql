@@ -1,7 +1,7 @@
 WITH
 
 idx AS (
-    SELECT * FROM {{ ref('int_gtfs_quality__gtfs_service_data_guideline_index') }}
+    SELECT * FROM {{ ref('int_gtfs_quality__gtfs_service_data_schedule_guideline_index') }}
 ),
 
 gtfs_service_data AS (
@@ -14,7 +14,7 @@ int_gtfs_quality__demand_responsive_routes_match AS (
         idx.gtfs_service_data_key,
         {{ demand_responsive_routes_match() }} AS check,
         {{ demand_responsive_completeness() }} AS feature,
-        CASE manual_check__fixed_route_completeness
+        CASE manual_check__demand_response_completeness
             WHEN 'Yes' THEN 'PASS'
             WHEN 'No' THEN 'FAIL'
             ELSE {{ manual_check_needed_status() }}
