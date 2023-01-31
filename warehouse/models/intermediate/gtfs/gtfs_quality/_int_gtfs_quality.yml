@@ -494,7 +494,7 @@ models:
 # --- Service-level
 
   - name: int_gtfs_quality__trip_planner_schedule
-    tests: &stg_gtfs_guideline_tests_service
+    tests: &stg_gtfs_guideline_tests_service_manual
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - date
@@ -504,7 +504,19 @@ models:
     columns: *stg_gtfs_guideline_columns
 
   - name: int_gtfs_quality__trip_planner_rt
-    tests: *stg_gtfs_guideline_tests_service
+    tests: *stg_gtfs_guideline_tests_service_manual
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__all_tu_in_vp
+    tests: &stg_gtfs_guideline_tests_service
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - service_key
+      - dbt_utils.equal_rowcount:
+      - extreme_results
+          compare_model: ref('int_gtfs_quality__services_guideline_index')
+    columns: *stg_gtfs_guideline_columns
     columns: *stg_gtfs_guideline_columns
 
 # --- GTFS-service-data-level
