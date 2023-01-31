@@ -514,9 +514,8 @@ models:
             - date
             - service_key
       - dbt_utils.equal_rowcount:
-      - extreme_results
           compare_model: ref('int_gtfs_quality__services_guideline_index')
-    columns: *stg_gtfs_guideline_columns
+      - extreme_results
     columns: *stg_gtfs_guideline_columns
 
 # --- GTFS-service-data-level

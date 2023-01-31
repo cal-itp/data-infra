@@ -33,6 +33,7 @@ joined AS (
     LEFT JOIN fct_observed_trips AS f
     ON quartet.associated_schedule_gtfs_dataset_key = f.schedule_to_use_for_rt_validation_gtfs_dataset_key
     AND idx.date = f.dt
+    AND f.tu_num_trips_scheduled_canceled_added > 0
     GROUP BY 1,2
 ),
 
