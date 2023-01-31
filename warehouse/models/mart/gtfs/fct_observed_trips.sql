@@ -95,6 +95,7 @@ service_alerts_with_associated_schedule AS (
 
 fct_observed_trips AS (
     SELECT
+        -- keys/identifiers
         {{ dbt_utils.surrogate_key([
             'dt',
             'schedule_to_use_for_rt_validation_gtfs_dataset_key',
@@ -108,16 +109,37 @@ fct_observed_trips AS (
         COALESCE(tu.trip_direction_id, vp.trip_direction_id, sa.trip_direction_id) AS trip_direction_id,
         COALESCE(tu.trip_start_time, vp.trip_start_time, sa.trip_start_time) AS trip_start_time,
         COALESCE(tu.trip_start_date, vp.trip_start_date, sa.trip_start_date) AS trip_start_date,
+
+        -- trip updates facts
         tu.num_distinct_message_ids AS tu_num_distinct_message_ids,
+        tu.min_extract_ts AS tu_min_extract_ts,
+        tu.max_extract_ts AS tu_max_extract_ts,
+        tu.min_header_timestamp AS tu_min_header_timestamp,
+        tu.max_header_timestamp AS tu_max_header_timestamp,
         tu.min_trip_update_timestamp AS tu_min_trip_update_timestamp,
         tu.max_trip_update_timestamp AS tu_max_trip_update_timestamp,
         tu.max_delay AS tu_max_delay,
         tu.num_skipped_stops AS tu_num_skipped_stops,
+
+        -- vehicle positions facts
         vp.num_distinct_message_ids AS vp_num_distinct_message_ids,
-        vp.min_trip_update_timestamp AS vp_min_trip_update_timestamp,
-        vp.max_trip_update_timestamp AS vp_max_trip_update_timestamp,
+        vp.min_extract_ts AS vp_min_extract_ts,
+        vp.max_extract_ts AS vp_max_extract_ts,
+        vp.min_header_timestamp AS vp_min_header_timestamp,
+        vp.max_header_timestamp AS vp_max_header_timestamp,
+        vp.min_vehicle_timestamp AS vp_min_vehicle_timestamp,
+        vp.max_vehicle_timestamp AS vp_max_vehicle_timestamp,
+        vp.first_position_latitude AS vp_first_position_latitude,
+        vp.first_position_longitude AS vp_first_position_longitude,
+
+        -- service alerts facts
         sa.num_distinct_message_ids AS sa_num_distinct_message_ids,
         sa.service_alert_message_keys AS sa_service_alert_message_keys,
+        sa.min_extract_ts AS sa_min_extract_ts,
+        sa.max_extract_ts AS sa_max_extract_ts,
+        sa.min_header_timestamp AS sa_min_header_timestamp,
+        sa.max_header_timestamp AS sa_max_header_timestamp,
+
     FROM trip_updates_with_associated_schedule AS tu
     FULL OUTER JOIN vehicle_positions_with_associated_schedule AS vp
         USING (dt, schedule_to_use_for_rt_validation_gtfs_dataset_key, trip_identifier)

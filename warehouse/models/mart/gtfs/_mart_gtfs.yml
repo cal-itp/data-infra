@@ -2005,33 +2005,69 @@ models:
     columns:
       - name: key
         tests: *primary_key_tests
+      - name: dt
+      - name: schedule_to_use_for_rt_validation_gtfs_dataset_key
+        description: Schedule feed used to group RT feeds likely representing the same underlying schedule.
+      - name: trip_identifier
+        description: Hashed representation of a TripDescriptor.
+      - name: trip_id
+        description: Part of a TripDescriptor.
+      - name: trip_route_id
+        description: Part of a TripDescriptor.
+      - name: trip_direction_id
+        description: Part of a TripDescriptor.
+      - name: trip_start_time
+        description: Part of a TripDescriptor.
+      - name: trip_start_date
+        description: Part of a TripDescriptor.
+      # trip update facts
       - name: tu_num_distinct_message_ids
-        description: |
-          Count of distinct trip update message IDs referencing this trip.
+        description: Count of distinct trip update message IDs referencing this trip.
+      - name: tu_min_extract_ts
+        description: Timestamp of first trip update extract referencing this trip.
+      - name: tu_max_extract_ts
+        description: Timestamp of last trip update extract referencing this trip.
+      - name: tu_min_header_timestamp
+        description: Timestamp of first trip update header referencing this trip.
+      - name: tu_max_header_timestamp
+        description: Timestamp of last trip update header referencing this trip.
       - name: tu_min_trip_update_timestamp
-        description: |
-          Timestamp of first trip update referencing this trip.
+        description: Timestamp of first trip update referencing this trip.
       - name: tu_max_trip_update_timestamp
-        description: |
-          Timestamp of last trip update referencing this trip.
+        description: Timestamp of last trip update referencing this trip.
       - name: tu_max_delay
-        description: |
-          Maximum observed delay for this trip.
+        description: Maximum observed delay for this trip.
       - name: tu_num_skipped_stops
-        description: |
-          Number of skipped stops for this trip.
+        description: Number of skipped stops for this trip.
+      # vehicle position facts
       - name: vp_num_distinct_message_ids
-        description: |
-          Count of distinct vehicle position message IDs referencing this trip.
-      - name: vp_min_trip_update_timestamp
-        description: |
-          Timestamp of first vehicle position referencing this trip.
-      - name: vp_max_trip_update_timestamp
-        description: |
-          Timestamp of last vehicle position referencing this trip.
+        description: Count of distinct vehicle position message IDs referencing this trip.
+      - name: vp_min_extract_ts
+        description: Timestamp of first vehicle position extract referencing this trip.
+      - name: vp_max_extract_ts
+        description: Timestamp of last vehicle position extract referencing this trip.
+      - name: vp_min_header_timestamp
+        description: Timestamp of first vehicle position header referencing this trip.
+      - name: vp_max_header_timestamp
+        description: Timestamp of last vehicle position header referencing this trip.
+      - name: vp_min_vehicle_timestamp
+        description: Timestamp of first vehicle position referencing this trip.
+      - name: vp_max_vehicle_timestamp
+        description: Timestamp of last vehicle position referencing this trip.
+      - name: vp_first_position_latitude
+        description: Latitude of first vehicle position referencing this trip.
+      - name: vp_first_position_longitude
+        description: Longitude of last vehicle position referencing this trip.
+      # service alert facts
       - name: sa_num_distinct_message_ids
-        description: |
-          Count of distinct service alert message IDs referencing this trip.
+        description: Count of distinct service alert message IDs referencing this trip.
       - name: sa_service_alert_message_keys
-        description:
-          Array of keys of service alert messages referencing this trip.
+        description: Array of keys of service alert messages referencing this trip.
+      - name: sa_min_extract_ts
+        description: Timestamp of first service alert extract referencing this trip.
+      - name: sa_max_extract_ts
+        description: Timestamp of last service alert extract referencing this trip.
+      - name: sa_min_header_timestamp
+        description: Timestamp of first service alert header referencing this trip.
+      - name: sa_max_header_timestamp
+        description: Timestamp of last service alert header referencing this trip.

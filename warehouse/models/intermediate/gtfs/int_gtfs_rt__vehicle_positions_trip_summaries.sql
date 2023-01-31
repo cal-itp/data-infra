@@ -45,8 +45,14 @@ int_gtfs_rt__vehicle_positions_trip_summaries AS (
         trip_start_time,
         trip_start_date,
         COUNT(DISTINCT id) AS num_distinct_message_ids,
-        MIN(vehicle_timestamp) AS min_trip_update_timestamp,
-        MAX(vehicle_timestamp) AS max_trip_update_timestamp,
+        MIN(_extract_ts) AS min_extract_ts,
+        MAX(_extract_ts) AS max_extract_ts,
+        MIN(header_timestamp) AS min_header_timestamp,
+        MAX(header_timestamp) AS max_header_timestamp,
+        MIN(vehicle_timestamp) AS min_vehicle_timestamp,
+        MAX(vehicle_timestamp) AS max_vehicle_timestamp,
+        ARRAY_AGG(position_latitude ORDER BY _extract_ts)[OFFSET(0)] AS first_position_latitude,
+        ARRAY_AGG(position_longitude ORDER BY _extract_ts)[OFFSET(0)] AS first_position_longitude,
     FROM vehicle_positions
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
 )
