@@ -1,38 +1,54 @@
-WITH dim_stops AS (
-    SELECT  * FROM {{ ref('dim_stops') }}
-),
-
-date_org_index AS (
-    SELECT DISTINCT * FROM {{ ref('idx_monthly_reports_site') }}
+WITH reports_index AS (
+    SELECT * FROM {{ ref('idx_monthly_reports_site') }}
 ),
 
 organization_dataset_map AS (
     SELECT * FROM {{ ref('int_gtfs_quality__organization_dataset_map') }}
 ),
 
+dim_stops AS (
+    SELECT  * FROM {{ ref('dim_stops') }}
+),
+
 month_start AS (
     SELECT
+
+        reports_index.organization_name,
+        reports_index.organization_itp_id,
+        reports_index.publish_date,
+
         orgs.base64_url,
         orgs.schedule_feed_key AS feed_key,
-        orgs.organization_name,
-        dim_stops.stop_id,
-        index.publish_date
-    FROM date_org_index AS index
-    LEFT JOIN organization_dataset_map AS orgs ON (index.date_start = orgs.date)
-        AND (index.organization_name = orgs.organization_name)
+
+        dim_stops.stop_id
+
+    FROM reports_index
+    LEFT JOIN organization_dataset_map AS orgs ON (reports_index.date_start = orgs.date)
+        AND (reports_index.organization_source_record_id = orgs.organization_source_record_id)
+        --AND (reports_index.organization_name = orgs.organization_name)
+        --AND (reports_index.organization_itp_id = orgs.organization_itp_id)
+
     INNER JOIN dim_stops ON (orgs.schedule_feed_key = dim_stops.feed_key)
 ),
 
 month_end AS (
     SELECT
+
+        reports_index.organization_name,
+        reports_index.organization_itp_id,
+        reports_index.publish_date,
+
         orgs.base64_url,
         orgs.schedule_feed_key AS feed_key,
-        orgs.organization_name,
-        dim_stops.stop_id,
-        index.publish_date
-    FROM date_org_index AS index
-    LEFT JOIN organization_dataset_map AS orgs ON  (index.date_end = orgs.date)
-        AND (index.organization_name = orgs.organization_name)
+
+        dim_stops.stop_id
+
+    FROM reports_index
+    LEFT JOIN organization_dataset_map AS orgs ON (reports_index.date_end = orgs.date)
+        AND (reports_index.organization_source_record_id = orgs.organization_source_record_id)
+        --AND (reports_index.organization_name = orgs.organization_name)
+        --AND (reports_index.organization_itp_id = orgs.organization_itp_id)
+
     INNER JOIN dim_stops ON (orgs.schedule_feed_key = dim_stops.feed_key)
 
 ),
@@ -49,7 +65,8 @@ month_comparison AS (
         END AS change_status
     FROM month_start AS t1
     FULL JOIN month_end AS t2
-              USING (organization_name, stop_id, publish_date)
+            USING (base64_url, organization_name, organization_itp_id, stop_id, publish_date)
+            --USING (organization_name, organization_itp_id, stop_id, publish_date)
 
 ),
 
@@ -57,10 +74,11 @@ fct_monthly_stop_id_changes AS (
 
     SELECT
         organization_name,
+        organization_itp_id,
         publish_date,
         change_status,
         COUNT(*) AS n
-    FROM month_comparison GROUP BY 1, 2, 3
+    FROM month_comparison GROUP BY 1, 2, 3, 4
 
 )
 
