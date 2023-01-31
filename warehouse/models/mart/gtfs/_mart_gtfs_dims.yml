@@ -286,7 +286,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key`, `feed_publisher_name`, `feed_publisher_url`, `feed_lang`, `default_lang`, `feed_version`, `feed_contact_email`, `feed_contact_url`, `feed_start_date`, and `feed_end_date`.
-        tests: *primary_key_tests
+        tests: *pk_tests_with_dups
       - *feed_key
       - *base64_url
       - name: feed_publisher_name
