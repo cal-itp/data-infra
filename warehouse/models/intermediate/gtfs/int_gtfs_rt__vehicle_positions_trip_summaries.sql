@@ -53,6 +53,8 @@ int_gtfs_rt__vehicle_positions_trip_summaries AS (
         MAX(vehicle_timestamp) AS max_vehicle_timestamp,
         ARRAY_AGG(position_latitude ORDER BY _extract_ts)[OFFSET(0)] AS first_position_latitude,
         ARRAY_AGG(position_longitude ORDER BY _extract_ts)[OFFSET(0)] AS first_position_longitude,
+        ARRAY_AGG(position_latitude ORDER BY _extract_ts DESC)[OFFSET(0)] AS last_position_latitude,
+        ARRAY_AGG(position_longitude ORDER BY _extract_ts DESC)[OFFSET(0)] AS last_position_longitude,
     FROM vehicle_positions
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
 )

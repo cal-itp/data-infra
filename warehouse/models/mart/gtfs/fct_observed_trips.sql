@@ -131,6 +131,8 @@ fct_observed_trips AS (
         vp.max_vehicle_timestamp AS vp_max_vehicle_timestamp,
         vp.first_position_latitude AS vp_first_position_latitude,
         vp.first_position_longitude AS vp_first_position_longitude,
+        vp.last_position_latitude AS vp_last_position_latitude,
+        vp.last_position_longitude AS vp_last_position_longitude,
 
         -- service alerts facts
         sa.num_distinct_message_ids AS sa_num_distinct_message_ids,

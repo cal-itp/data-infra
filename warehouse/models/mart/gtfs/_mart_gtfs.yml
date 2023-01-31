@@ -2057,6 +2057,10 @@ models:
       - name: vp_first_position_latitude
         description: Latitude of first vehicle position referencing this trip.
       - name: vp_first_position_longitude
+        description: Longitude of first vehicle position referencing this trip.
+      - name: vp_last_position_latitude
+        description: Latitude of last vehicle position referencing this trip.
+      - name: vp_last_position_longitude
         description: Longitude of last vehicle position referencing this trip.
       # service alert facts
       - name: sa_num_distinct_message_ids
