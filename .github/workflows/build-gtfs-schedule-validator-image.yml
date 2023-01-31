@@ -37,7 +37,7 @@ jobs:
         with:
           python-version: '3.9'
       - run: curl -sSL https://install.python-poetry.org | python -
-      - run: cd jobs/gtfs-schedule-validator && poetry run pytest
+      - run: cd jobs/gtfs-schedule-validator && poetry install && poetry run pytest
 
   build_push:
     name: Package docker image
