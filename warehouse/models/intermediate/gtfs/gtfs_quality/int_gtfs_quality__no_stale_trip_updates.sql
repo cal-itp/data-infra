@@ -25,7 +25,7 @@ feed_guideline_index AS (
 ),
 
 fct_trip_updates_messages AS (
-    SELECT * FROM {{ ref('int_gtfs_rt__trip_updates_summaries') }}
+    SELECT * FROM {{ ref('int_gtfs_rt__trip_updates_no_stop_times') }}
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}

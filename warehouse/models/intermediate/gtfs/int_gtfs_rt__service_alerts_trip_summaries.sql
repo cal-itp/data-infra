@@ -16,8 +16,8 @@
     {% set max_ts = timestamps[0] %}
 {% endif %}
 
-WITH stop_time_updates AS (
-    SELECT * FROM {{ ref('fct_stop_time_updates') }}
+WITH service_alerts AS (
+    SELECT * FROM {{ ref('fct_service_alert_informed_entities') }}
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
@@ -25,7 +25,7 @@ WITH stop_time_updates AS (
     {% endif %}
 ),
 
-int_gtfs_rt__trip_updates_summaries AS (
+int_gtfs_rt__service_alerts_trip_summaries AS (
     SELECT
         -- https://gtfs.org/realtime/reference/#message-tripdescriptor
         {{ dbt_utils.surrogate_key([
@@ -45,16 +45,13 @@ int_gtfs_rt__trip_updates_summaries AS (
         trip_start_time,
         trip_start_date,
         COUNT(DISTINCT id) AS num_distinct_message_ids,
+        ARRAY_AGG(DISTINCT service_alert_message_key) AS service_alert_message_keys,
         MIN(_extract_ts) AS min_extract_ts,
         MAX(_extract_ts) AS max_extract_ts,
         MIN(header_timestamp) AS min_header_timestamp,
         MAX(header_timestamp) AS max_header_timestamp,
-        MIN(trip_update_timestamp) AS min_trip_update_timestamp,
-        MAX(trip_update_timestamp) AS max_trip_update_timestamp,
-        MAX(trip_update_delay) AS max_delay,
-        COUNT(DISTINCT CASE WHEN schedule_relationship = 'SKIPPED' THEN stop_id END) AS num_skipped_stops,
-    FROM stop_time_updates
+    FROM service_alerts
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
 )
 
-SELECT * FROM int_gtfs_rt__trip_updates_summaries
+SELECT * FROM int_gtfs_rt__service_alerts_trip_summaries
