@@ -120,7 +120,7 @@ fct_observed_trips AS (
         tu.max_trip_update_timestamp AS tu_max_trip_update_timestamp,
         tu.max_delay AS tu_max_delay,
         tu.num_skipped_stops AS tu_num_skipped_stops,
-        tu.num_scheduled_canceled_added AS tu_num_trips_scheduled_canceled_added,
+        tu.num_scheduled_canceled_added_stops AS tu_num_scheduled_canceled_added_stops,
 
         -- vehicle positions facts
         vp.num_distinct_message_ids AS vp_num_distinct_message_ids,

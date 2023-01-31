@@ -29,11 +29,11 @@ joined AS (
     FROM services_guideline_index AS idx
     LEFT JOIN dim_provider_gtfs_data AS quartet
     ON idx.service_key = quartet.service_key
-    AND idx.date BETWEEN EXTRACT(DATE FROM quartet._valid_from) AND EXTRACT(DATE FROM quartet._valid_to)
+    AND TIMESTAMP(idx.date) BETWEEN quartet._valid_from AND quartet._valid_to
     LEFT JOIN fct_observed_trips AS f
     ON quartet.associated_schedule_gtfs_dataset_key = f.schedule_to_use_for_rt_validation_gtfs_dataset_key
     AND idx.date = f.dt
-    AND f.tu_num_trips_scheduled_canceled_added > 0
+    AND f.tu_num_scheduled_canceled_added_stops > 0
     GROUP BY 1,2
 ),
 
@@ -46,8 +46,8 @@ int_gtfs_quality__all_tu_in_vp AS (
         vp_and_tu_present,
         tu_present,
         CASE
-            WHEN vp_and_tu_present * 1.0 / NULLIF(tu_present,0) = 1 THEN "PASS"
-            WHEN tu_present = 0 THEN "N/A"
+            WHEN tu_present = 0 OR tu_present IS null THEN "N/A"
+            WHEN vp_and_tu_present = tu_present THEN "PASS"
             ELSE "FAIL"
         END AS status,
     FROM joined
