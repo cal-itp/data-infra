@@ -85,6 +85,7 @@ x-airflow-common:
     CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED: "gs://test-calitp-gtfs-schedule-unzipped"
     CALITP_BUCKET__GTFS_SCHEDULE_PARSED: "gs://test-calitp-gtfs-schedule-parsed"
     CALITP_BUCKET__PUBLISH: "gs://test-calitp-publish"
+    CALITP_BUCKET__SENTRY_LOGS: "gs://test-calitp-sentry"
 
     DBT_TARGET: staging_service_account
 

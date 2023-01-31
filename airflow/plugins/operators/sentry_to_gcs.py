@@ -94,7 +94,7 @@ class SentryExtract(BaseModel):
             f"{self.issue_id}",
             f"dt={self.extract_time.to_date_string()}",
             f"ts={self.extract_time.to_iso8601_string()}",
-            f"{self.issue_id}.jsonl.gz",
+            "events.jsonl.gz",
         )
 
     def save_to_gcs(self, fs, bucket):
