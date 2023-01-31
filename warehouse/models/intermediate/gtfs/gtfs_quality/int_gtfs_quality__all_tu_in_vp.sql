@@ -45,8 +45,9 @@ int_gtfs_quality__all_tu_in_vp AS (
         {{ fixed_route_completeness() }} AS feature,
         vp_and_tu_present,
         tu_present,
-        CASE WHEN
-            vp_and_tu_present * 1.0 / NULLIF(tu_present,0) = 1 THEN "PASS"
+        CASE
+            WHEN vp_and_tu_present * 1.0 / NULLIF(tu_present,0) = 1 THEN "PASS"
+            WHEN tu_present = 0 THEN "N/A"
             ELSE "FAIL"
         END AS status,
     FROM joined
