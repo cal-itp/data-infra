@@ -1,10 +1,10 @@
 import pendulum
 import pytest
-from calitp.storage import (
+from calitp.storage import (  # type: ignore
     GTFSRTFeedExtract,
     GTFSDownloadConfig,
     GTFSFeedType,
-)  # type: ignore
+)
 from pydantic import ValidationError
 
 from gtfs_rt_parser import (

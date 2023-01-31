@@ -20,7 +20,7 @@ from pathlib import Path
 from typing import ClassVar, Dict, List, Optional, Sequence, Tuple, Union, Any
 
 import backoff  # type: ignore
-import gcsfs
+import gcsfs  # type: ignore
 import pendulum
 import sentry_sdk
 import typer
@@ -29,7 +29,7 @@ from aiohttp.client_exceptions import (
     ClientResponseError,
     ServerDisconnectedError,
 )
-from calitp.storage import (
+from calitp.storage import (  # type: ignore
     GTFSFeedType,
     PartitionedGCSArtifact,
     ProcessingOutcome,
@@ -41,8 +41,8 @@ from calitp.storage import (
     GTFSScheduleFeedExtract,
     make_name_bq_safe,
     GTFSDownloadConfig,
-)  # type: ignore
-from google.cloud.storage import Blob
+)
+from google.cloud.storage import Blob  # type: ignore
 from google.protobuf import json_format
 from google.protobuf.message import DecodeError
 from google.transit import gtfs_realtime_pb2  # type: ignore
