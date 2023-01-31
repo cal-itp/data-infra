@@ -11,7 +11,6 @@ arguments:
   - '--save-artifacts'
   - '--deploy-docs'
   - '--sync-metabase'
-  - '--exclude="gtfs_schedule_latest_only gtfs_views gtfs_views_staging rt_views staging.gtfs_guidelines mart.gtfs_guidelines"'
 
 is_delete_operator_pod: true
 startup_timeout_seconds: 300
