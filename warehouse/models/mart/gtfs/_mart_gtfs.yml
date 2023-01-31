@@ -339,12 +339,6 @@ models:
       Each row is a cleaned row from an agency.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#agencytxt.
-    tests:
-      - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url, agency_id
-          gaps: required
     columns:
       - name: key
         description: |
@@ -377,20 +371,14 @@ models:
         description: '{{ doc("gtfs_agency__agency_fare_url") }}'
       - name: agency_email
         description: '{{ doc("gtfs_agency__agency_email") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - &_feed_valid_from
+        name: _feed_valid_from
+        description: Should not be used; exists to faciliate incremental materialization.
   - name: dim_areas
     description: |
       Each row is a cleaned row from an areas.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/schedule/reference/#areastxt.
-    tests:
-      - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url, area_id
-          gaps: required
     columns:
       - name: key
         description: |
@@ -404,20 +392,12 @@ models:
         - not_null
       - name: area_name
         description: '{{ doc("gtfs_areas__area_name") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
   - name: dim_attributions
     description: |
       Each row is a cleaned row from an attributions.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#attributionstxt.
-    tests:
-      - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url, attribution_id
-          gaps: required
     columns:
       - name: key
         description: |
@@ -448,20 +428,12 @@ models:
         description: '{{ doc("gtfs_attributions__attribution_email") }}'
       - name: attribution_phone
         description: '{{ doc("gtfs_attributions__attribution_phone") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
   - name: dim_fare_attributes
     description: |
       Each row is a cleaned row from a fare_attributes.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#fare_attributestxt.
-    tests:
-      - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url, fare_id
-          gaps: required
     columns:
       - name: key
         description: |
@@ -488,20 +460,12 @@ models:
         description: '{{ doc("gtfs_fare_attributes__agency_id") }}'
       - name: transfer_duration
         description: '{{ doc("gtfs_fare_attributes__transfer_duration") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
   - name: dim_fare_leg_rules
     description: |
       Each row is a cleaned row from a fare_leg_rules.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/schedule/reference/#fare_leg_rulestxt.
-    tests:
-      - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url, network_id, from_area_id, to_area_id, fare_product_id
-          gaps: required
     columns:
       - name: key
         description: |
@@ -520,20 +484,12 @@ models:
       - name: fare_product_id
         description: '{{ doc("gtfs_fare_leg_rules__fare_product_id") }}'
         tests: *not_null_error
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
   - name: dim_fare_products
     description: |
       Each row is a cleaned row from a fare_products.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/schedule/reference/#fare_productstxt.
-    tests:
-      - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url, fare_product_id
-          gaps: required
     columns:
       - name: key
         description: |
@@ -552,20 +508,12 @@ models:
       - name: currency
         description: '{{ doc("gtfs_fare_products__currency") }}'
         tests: *not_null_warn_99_threshold
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
   - name: dim_fare_rules
     description: |
       Each row is a cleaned row from a fare_rules.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#fare_rulestxt.
-    tests:
-      - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url, fare_id, route_id, origin_id, destination_id, contains_id
-          gaps: required
     columns:
       - name: key
         description: |
@@ -584,20 +532,12 @@ models:
         description: '{{ doc("gtfs_fare_rules__destination_id") }}'
       - name: contains_id
         description: '{{ doc("gtfs_fare_rules__contains_id") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
   - name: dim_fare_transfer_rules
     description: |
       Each row is a cleaned row from a fare_transfer_rules.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/schedule/reference/#fare_transfer_rulestxt.
-    tests:
-      - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url, from_leg_group_id, to_leg_group_id, fare_product_id, transfer_count, duration_limit
-          gaps: required
     columns:
       - name: key
         description: |
@@ -620,20 +560,12 @@ models:
         tests: *not_null_warn_99_threshold
       - name: fare_product_id
         description: '{{ doc("gtfs_fare_transfer_rules__fare_product_id") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
   - name: dim_feed_info
     description: |
       Each row is a cleaned row from a feed_info.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#feed_infotxt.
-    tests:
-      - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url, feed_publisher_name, feed_publisher_url, feed_lang, default_lang, feed_version, feed_contact_email, feed_contact_url, feed_start_date, feed_end_date
-          gaps: required
     columns:
       - name: key
         description: |
@@ -662,20 +594,12 @@ models:
         description: '{{ doc("gtfs_feed_info__feed_contact_email") }}'
       - name: feed_contact_url
         description: '{{ doc("gtfs_feed_info__feed_contact_url") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
   - name: dim_frequencies
     description: |
       Each row is a cleaned row from a frequencies.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#frequenciestxt.
-    tests:
-      - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url, trip_id, start_time
-          gaps: required
     columns:
       - name: key
         description: |
@@ -697,20 +621,12 @@ models:
         tests: *not_null_warn
       - name: exact_times
         description: '{{ doc("gtfs_frequencies__exact_times") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
   - name: dim_levels
     description: |
       Each row is a cleaned row from a levels.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#levelstxt.
-    tests:
-      - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url, level_id
-          gaps: required
     columns:
       - name: key
         description: |
@@ -726,20 +642,12 @@ models:
         tests: *not_null_warn
       - name: level_name
         description: '{{ doc("gtfs_levels__level_name") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
   - name: dim_pathways
     description: |
       Each row is a cleaned row from a pathways.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#pathwaystxt.
-    tests:
-      - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url, pathway_id
-          gaps: required
     columns:
       - name: key
         description: |
@@ -776,20 +684,12 @@ models:
         description: '{{ doc("gtfs_pathways__signposted_as") }}'
       - name: reversed_signposted_as
         description: '{{ doc("gtfs_pathways__reversed_signposted_as") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
   - name: dim_routes
     description: |
       Each row is a cleaned row from a routes.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#routestxt.
-    tests:
-      - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url, route_id
-          gaps: required
     columns:
       - name: key
         description: |
@@ -825,20 +725,12 @@ models:
         description: '{{ doc("gtfs_routes__continuous_drop_off") }}'
       - name: network_id
         description: '{{ doc("gtfs_routes__network_id") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
   - name: dim_shapes
     description: |
       Each row is a cleaned row from a shapes.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#shapestxt.
-    tests:
-      - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url, shape_id, shape_pt_sequence
-          gaps: required
     columns:
       - name: key
         description: |
@@ -870,20 +762,12 @@ models:
         tests: *not_null_warn
       - name: shape_dist_traveled
         description: '{{ doc("gtfs_shapes__shape_dist_traveled") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
   - name: dim_stop_areas
     description: |
       Each row is a cleaned row from a stop_areas.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/schedule/reference/#stop_areastxt.
-    tests:
-      - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url, area_id, stop_id
-          gaps: required
     columns:
       - name: key
         description: |
@@ -897,26 +781,17 @@ models:
       - name: stop_id
         description: '{{ doc("gtfs_stop_areas__stop_id") }}'
         tests: *not_null_error
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
   - name: dim_stops
     description: |
       Each row is a cleaned row from a stops.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#stopstxt.
-    tests:
-      - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url, stop_id
-          where: "not warning_duplicate_primary_key"
-          gaps: required
     columns:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key` and `stop_id`.
-        tests:
+        tests: &pk_tests_with_dups
           - unique:
               where: "not warning_duplicate_primary_key"
           - not_null
@@ -971,20 +846,12 @@ models:
         description: |
           Rows with `true` in this column have a duplicate primary key; i.e., `stop_id` is duplicated within an individual feed
           instance and `key` will also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
   - name: dim_transfers
     description: |
       Each row is a cleaned row from a transfers.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#transferstxt.
-    tests:
-      - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url, from_stop_id, to_stop_id, from_trip_id, to_trip_id, from_route_id, to_route_id
-          gaps: required
     columns:
       - name: key
         description: |
@@ -1011,20 +878,12 @@ models:
         description: '{{ doc("gtfs_transfers__from_trip_id") }}'
       - name: to_trip_id
         description: '{{ doc("gtfs_transfers__to_trip_id") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
   - name: dim_translations
     description: |
       Each row is a cleaned row from a translations.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#translationstxt.
-    tests:
-      - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url, table_name, field_name, language, record_id, record_sub_id, field_value
-          gaps: required
     columns:
       - name: key
         description: |
@@ -1050,29 +909,17 @@ models:
         description: '{{ doc("gtfs_translations__record_sub_id") }}'
       - name: field_value
         description: '{{ doc("gtfs_translations__field_value") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
   - name: dim_trips
     description: |
       Each row is a cleaned row from a trips.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#tripstxt.
-    tests:
-      - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url, trip_id
-          where: "not warning_duplicate_primary_key"
-          gaps: required
     columns:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key` and `trip_id`.
-        tests: &pk_tests_with_dups
-          - unique:
-              where: "not warning_duplicate_primary_key"
-          - not_null
+        tests: *pk_tests_with_dups
       - *feed_key
       - *base64_url
       - name: route_id
@@ -1098,9 +945,7 @@ models:
         description: '{{ doc("gtfs_trips__wheelchair_accessible") }}'
       - name: bikes_allowed
         description: '{{ doc("gtfs_trips__bikes_allowed") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
       - name: warning_duplicate_primary_key
         description: |
           Rows with `true` in this column have a duplicate primary key; i.e., `trip_id` is duplicated within an individual feed
@@ -1110,12 +955,6 @@ models:
       Each row is a cleaned row from a calendar.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#calendartxt.
-    tests:
-      - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url, service_id
-          gaps: required
     columns:
       - name: key
         description: |
@@ -1153,20 +992,12 @@ models:
       - name: end_date
         description: '{{ doc("gtfs_calendar__end_date") }}'
         tests: *not_null_warn
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
   - name: dim_calendar_dates
     description: |
       Each row is a cleaned row from a calendar_dates.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#calendar_datestxt.
-    tests:
-      - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url, service_id, date
-          gaps: required
     columns:
       - name: key
         description: |
@@ -1183,20 +1014,11 @@ models:
       - name: exception_type
         description: '{{ doc("gtfs_calendar_dates__exception_type") }}'
         tests: *not_null_warn
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
   - name: dim_stop_times
     description: |
       Cleaned GTFS schedule stop_times data.
       See https://gtfs.org/schedule/reference/#calendar_datestxt for specification.
-    tests:
-      - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url, trip_id, stop_sequence
-          where: "not warning_duplicate_primary_key"
-          gaps: required
     columns:
       - *feed_key
       - *base64_url
@@ -1258,9 +1080,7 @@ models:
           For example, `departure_time = 21:30:45` would lead to `departure_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
           This allows us to perform duration calculations and handle timestamps that wrap past midnight like
           `25:40:00`, which are allowed in GTFS.
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
     meta:
       publish.gis_coordinate_system_epsg: WGS84
   - name: fct_daily_scheduled_trips
@@ -1457,12 +1277,6 @@ models:
       array of points in the `pt_array` column.
       We cannot construct a LineString because of BigQuery limitations;
       see: https://gis.stackexchange.com/questions/426188/can-i-represent-a-route-that-doubles-back-on-itself-in-bigquery-with-a-linestrin.
-    tests:
-      - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url, shape_id
-          gaps: required
     columns:
       - name: key
         description: |
@@ -1476,9 +1290,8 @@ models:
       - name: pt_array
         description: Ordered array of WKT points that describe this shape.
         tests: *not_null_error
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+      - *_feed_valid_from
+
   - name: fct_daily_feed_scheduled_service_summary
     description: |
       Daily service totals by feed. Each row is a date / feed pair where that feed
