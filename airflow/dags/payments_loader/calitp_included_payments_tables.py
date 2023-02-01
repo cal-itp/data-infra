@@ -14,7 +14,7 @@
 # ---
 
 import pandas as pd
-from calitp.config import get_project_id, format_table_name
+from calitp.config import format_table_name, get_project_id
 
 
 # TODO: this could be data in the data folder

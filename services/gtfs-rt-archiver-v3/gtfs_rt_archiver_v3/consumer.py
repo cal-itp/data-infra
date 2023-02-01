@@ -2,20 +2,18 @@
 This pretty much exists just to start an in-process Prometheus server since
 Huey's startup hooks are per _worker_ and not the overall consumer process.
 """
-import sentry_sdk
-import typer
-import os
-
-from calitp.auth import get_secrets_by_label  # type: ignore
-from huey.constants import WORKER_THREAD  # type: ignore
-
 import logging
+import os
 import sys
 
+import sentry_sdk
+import typer
+from calitp.auth import get_secrets_by_label  # type: ignore
+from huey.constants import WORKER_THREAD  # type: ignore
 from huey.consumer_options import ConsumerConfig  # type: ignore
 from prometheus_client import start_http_server
 
-from .tasks import huey, RTFetchException
+from .tasks import RTFetchException, huey
 
 
 def set_exception_fingerprint(event, hint):

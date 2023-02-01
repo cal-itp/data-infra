@@ -8,26 +8,26 @@ import os
 import subprocess
 import tempfile
 import traceback
-from concurrent.futures import ThreadPoolExecutor, Future
+from concurrent.futures import Future, ThreadPoolExecutor
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, ClassVar, Optional, Tuple, Union
+from typing import ClassVar, Dict, List, Optional, Tuple, Union
 
 import pendulum
 import typer
 from calitp.storage import (  # type: ignore
-    fetch_all_in_partition,
-    GTFSScheduleFeedExtract,
-    get_fs,
-    GTFSFeedType,
-    JSONL_GZIP_EXTENSION,
-    PartitionedGCSArtifact,
-    ProcessingOutcome,
     JSONL_EXTENSION,
+    JSONL_GZIP_EXTENSION,
     SCHEDULE_RAW_BUCKET,
     GTFSDownloadConfig,
+    GTFSFeedType,
+    GTFSScheduleFeedExtract,
+    PartitionedGCSArtifact,
+    ProcessingOutcome,
+    fetch_all_in_partition,
+    get_fs,
 )
-from pydantic import validator, BaseModel
+from pydantic import BaseModel, validator
 from slugify import slugify
 from tqdm import tqdm
 

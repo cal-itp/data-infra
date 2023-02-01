@@ -4,19 +4,13 @@ import os
 import shutil
 import subprocess
 from pathlib import Path
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
 
 import gcsfs
 import pendulum
 import sentry_sdk
 import typer
-
-from dbt_artifacts import (
-    RunResults,
-    Manifest,
-    RunResult,
-    RunResultStatus,
-)
+from dbt_artifacts import Manifest, RunResult, RunResults, RunResultStatus
 
 CALITP_BUCKET__DBT_ARTIFACTS = os.getenv("CALITP_BUCKET__DBT_ARTIFACTS")
 

@@ -12,12 +12,12 @@ from typing import List, Tuple
 import pendulum
 import sentry_sdk
 from calitp.storage import (
-    get_fs,
-    GTFSDownloadConfig,
     AirtableGTFSDataExtract,
     AirtableGTFSDataRecord,
     GCSFileInfo,
+    GTFSDownloadConfig,
     GTFSDownloadConfigExtract,
+    get_fs,
 )
 from pydantic import ValidationError
 

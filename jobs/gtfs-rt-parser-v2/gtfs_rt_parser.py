@@ -13,11 +13,11 @@ import sys
 import tempfile
 import traceback
 from collections import defaultdict
-from concurrent.futures import ThreadPoolExecutor, Future
+from concurrent.futures import Future, ThreadPoolExecutor
 from enum import Enum
 from functools import lru_cache
 from pathlib import Path
-from typing import ClassVar, Dict, List, Optional, Sequence, Tuple, Union, Any
+from typing import Any, ClassVar, Dict, List, Optional, Sequence, Tuple, Union
 
 import backoff  # type: ignore
 import gcsfs  # type: ignore
@@ -30,17 +30,17 @@ from aiohttp.client_exceptions import (
     ServerDisconnectedError,
 )
 from calitp.storage import (  # type: ignore
+    JSONL_GZIP_EXTENSION,
+    GTFSDownloadConfig,
+    GTFSFeedExtract,
     GTFSFeedType,
+    GTFSRTFeedExtract,
+    GTFSScheduleFeedExtract,
     PartitionedGCSArtifact,
     ProcessingOutcome,
     fetch_all_in_partition,
     get_fs,
-    JSONL_GZIP_EXTENSION,
-    GTFSRTFeedExtract,
-    GTFSFeedExtract,
-    GTFSScheduleFeedExtract,
     make_name_bq_safe,
-    GTFSDownloadConfig,
 )
 from google.cloud.storage import Blob  # type: ignore
 from google.protobuf import json_format

@@ -14,15 +14,15 @@ import typer
 from cachetools.func import ttl_cache
 from calitp.auth import get_secrets_by_label  # type: ignore
 from calitp.storage import (  # type: ignore
-    GTFSFeedType,
     GTFSDownloadConfig,
-    get_latest,
-    get_fs,
     GTFSDownloadConfigExtract,
+    GTFSFeedType,
+    get_fs,
+    get_latest,
 )
 from prometheus_client import start_http_server
 
-from .metrics import TICKS, AIRTABLE_CONFIGURATION_AGE
+from .metrics import AIRTABLE_CONFIGURATION_AGE, TICKS
 from .tasks import fetch, huey
 
 

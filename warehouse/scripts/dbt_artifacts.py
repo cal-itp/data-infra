@@ -3,17 +3,17 @@ Built off the starting point of https://guitton.co/posts/dbt-artifacts
 """
 import json
 import os
-import yaml
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from slugify import slugify
-from sqlalchemy.sql import Select
 from typing import Annotated, Any, ClassVar, Dict, List, Literal, Optional, Union
 
 import pendulum
-from pydantic import BaseModel, Field, validator, constr
-from sqlalchemy import create_engine, MetaData, Table, select
+import yaml
+from pydantic import BaseModel, Field, constr, validator
+from slugify import slugify
+from sqlalchemy import MetaData, Table, create_engine, select
+from sqlalchemy.sql import Select
 
 
 # Taken from the calitp repo which we can't install because of deps issue

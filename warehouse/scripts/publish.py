@@ -3,46 +3,39 @@ Publishes various dbt models to various sources.
 
 TODO: consider using https://github.com/ckan/ckanapi?
 """
-import functools
-from datetime import timedelta
-
 import csv
-
-import backoff
-import pendulum
-from google.cloud import bigquery
-from typing import Optional, Literal, List, Dict, BinaryIO, Tuple, Any
-
-from pathlib import Path
-
-import subprocess
-
 import enum
-
+import functools
 import json
 import os
-import shapely.geometry
-import shapely.wkt
+import subprocess
 import tempfile
+from datetime import timedelta
+from pathlib import Path
+from typing import Any, BinaryIO, Dict, List, Literal, Optional, Tuple
 
+import backoff
 import gcsfs
 import geopandas as gpd
 import humanize
 import pandas as pd
+import pendulum
 import requests
+import shapely.geometry
+import shapely.wkt
 import typer
-from pydantic import BaseModel, validator, constr
-from requests import Response
-from requests_toolbelt import MultipartEncoder
-
 from dbt_artifacts import (
     BaseNode,
     CkanDestination,
     Exposure,
     Manifest,
-    TilesDestination,
     TileFormat,
+    TilesDestination,
 )
+from google.cloud import bigquery
+from pydantic import BaseModel, constr, validator
+from requests import Response
+from requests_toolbelt import MultipartEncoder
 from tqdm import tqdm
 
 tqdm.pandas()

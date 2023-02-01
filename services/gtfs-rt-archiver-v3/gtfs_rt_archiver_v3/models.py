@@ -1,5 +1,5 @@
 import pendulum
-from pydantic import BaseModel, AnyHttpUrl
+from pydantic import AnyHttpUrl, BaseModel
 
 
 class FetchTask(BaseModel):
