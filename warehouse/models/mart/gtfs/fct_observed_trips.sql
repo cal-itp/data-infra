@@ -114,8 +114,11 @@ fct_observed_trips AS (
 
         -- foreign keys
         tu.gtfs_dataset_key AS tu_gtfs_dataset_key,
+        tu.base64_url AS tu_base64_url,
         vp.gtfs_dataset_key AS vp_gtfs_dataset_key,
+        vp.base64_url AS vp_base64_url,
         sa.gtfs_dataset_key AS sa_gtfs_dataset_key,
+        sa.base64_url AS sa_base64_url,
 
         -- trip updates facts
         tu.num_distinct_message_ids AS tu_num_distinct_message_ids,

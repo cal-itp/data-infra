@@ -1037,19 +1037,25 @@ models:
       # foreign keys
       - name: tu_gtfs_dataset_key
         tests:
-          - relationships:
+          - dbt_utils.relationships_where:
               to: ref('dim_gtfs_datasets')
               field: key
+              to_condition: "type = 'trip_updates'"
+      - name: tu_base64_url
       - name: vp_gtfs_dataset_key
         tests:
-          - relationships:
+          - dbt_utils.relationships_where:
               to: ref('dim_gtfs_datasets')
               field: key
+              to_condition: "type = 'vehicle_positions'"
+      - name: vp_base64_url
       - name: sa_gtfs_dataset_key
         tests:
-          - relationships:
+          - dbt_utils.relationships_where:
               to: ref('dim_gtfs_datasets')
               field: key
+              to_condition: "type = 'service_alerts'"
+      - name: sa_base64_url
       # trip update facts
       - name: tu_num_distinct_message_ids
         description: Count of distinct trip update message IDs referencing this trip.
