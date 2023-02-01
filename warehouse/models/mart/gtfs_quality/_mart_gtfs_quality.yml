@@ -556,11 +556,11 @@ models:
       with the last day of the month.
       Used by the reports site.
     columns:
-      - organization_name
-      - organization_itp_id
-      - publish_date
-      - change_status
-      - n
+      - name: organization_name
+      - name: organization_itp_id
+      - name: publish_date
+      - name: change_status
+      - name: n
 
   - name: fct_monthly_stop_id_changes
     description: |
@@ -569,11 +569,11 @@ models:
       with the last day of the month.
       Used by the reports site.
     columns:
-      - organization_name
-      - organization_itp_id
-      - publish_date
-      - change_status
-      - n
+      - name: organization_name
+      - name: organization_itp_id
+      - name: publish_date
+      - name: change_status
+      - name: n
 
 exposures:
  - name: calitp_reports_site

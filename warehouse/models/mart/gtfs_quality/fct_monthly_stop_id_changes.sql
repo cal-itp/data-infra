@@ -4,6 +4,7 @@ WITH reports_index AS (
 
 organization_dataset_map AS (
     SELECT * FROM {{ ref('int_gtfs_quality__organization_dataset_map') }}
+    WHERE reports_site_assessed
 ),
 
 dim_stops AS (
@@ -16,6 +17,7 @@ month_start AS (
         reports_index.organization_name,
         reports_index.organization_itp_id,
         reports_index.publish_date,
+        reports_index.organization_source_record_id,
 
         orgs.base64_url,
         orgs.schedule_feed_key AS feed_key,
@@ -25,9 +27,6 @@ month_start AS (
     FROM reports_index
     LEFT JOIN organization_dataset_map AS orgs ON (reports_index.date_start = orgs.date)
         AND (reports_index.organization_source_record_id = orgs.organization_source_record_id)
-        --AND (reports_index.organization_name = orgs.organization_name)
-        --AND (reports_index.organization_itp_id = orgs.organization_itp_id)
-
     INNER JOIN dim_stops ON (orgs.schedule_feed_key = dim_stops.feed_key)
 ),
 
@@ -37,6 +36,7 @@ month_end AS (
         reports_index.organization_name,
         reports_index.organization_itp_id,
         reports_index.publish_date,
+        reports_index.organization_source_record_id,
 
         orgs.base64_url,
         orgs.schedule_feed_key AS feed_key,
@@ -46,16 +46,13 @@ month_end AS (
     FROM reports_index
     LEFT JOIN organization_dataset_map AS orgs ON (reports_index.date_end = orgs.date)
         AND (reports_index.organization_source_record_id = orgs.organization_source_record_id)
-        --AND (reports_index.organization_name = orgs.organization_name)
-        --AND (reports_index.organization_itp_id = orgs.organization_itp_id)
-
     INNER JOIN dim_stops ON (orgs.schedule_feed_key = dim_stops.feed_key)
 
 ),
 
 month_comparison AS (
     SELECT
-        * EXCEPT (stop_id),
+        t1.* EXCEPT (stop_id),
         t1.stop_id AS start_table_source_id,
         t2.stop_id AS stop_table_source_id,
         CASE
@@ -65,8 +62,7 @@ month_comparison AS (
         END AS change_status
     FROM month_start AS t1
     FULL JOIN month_end AS t2
-            USING (organization_name, organization_itp_id, route_id, publish_date)
-            --USING (base64_url, organization_name, organization_itp_id, route_id, publish_date)
+            USING (organization_source_record_id, stop_id, publish_date)
 
 ),
 
@@ -75,10 +71,11 @@ fct_monthly_stop_id_changes AS (
     SELECT
         organization_name,
         organization_itp_id,
+        organization_source_record_id,
         publish_date,
         change_status,
         COUNT(*) AS n
-    FROM month_comparison GROUP BY 1, 2, 3, 4
+    FROM month_comparison GROUP BY 1, 2, 3, 4, 5
 
 )
 
