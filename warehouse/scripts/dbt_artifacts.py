@@ -1,6 +1,7 @@
 """
 Built off the starting point of https://guitton.co/posts/dbt-artifacts
 """
+import abc
 import json
 import os
 from datetime import datetime
@@ -79,7 +80,9 @@ class Column(BaseModel):
     name: str
     description: Optional[str]
     meta: Dict[str, Any] = {}
-    parent: "BaseNode" = None  # this is set after the fact
+    parent: Optional[
+        "BaseNode"
+    ] = None  # this is set after the fact; it's Optional to make mypy happy
 
     @property
     def publish(self) -> bool:
@@ -87,11 +90,16 @@ class Column(BaseModel):
 
     @property
     def tests(self) -> List[str]:
+        # this has a lot of stuff to make mypy happy
         return [
             node.name
             for name, node in BaseNode._instances.items()
             if node.resource_type == DbtResourceType.test
+            and isinstance(node, Test)
+            and node.depends_on
+            and self.parent
             and self.parent.unique_id in node.depends_on.nodes
+            and node.test_metadata
             and self.name == node.test_metadata.kwargs.get("column_name")
         ]
 
@@ -107,7 +115,7 @@ class Column(BaseModel):
             "name",
         }
         if include_description:
-            include += "description"
+            include.add("description")
         return yaml.dump([{**self.dict(include=include), **extras}], sort_keys=False)
 
 
@@ -197,8 +205,7 @@ class Owner(BaseModel):
     email: str
 
 
-class GcsDestination(BaseModel):
-    type: Literal["gcs"]
+class BaseDestination(BaseModel, abc.ABC):
     format: FileFormat
 
     def filename(self, model: str):
@@ -224,7 +231,12 @@ class GcsDestination(BaseModel):
         )
 
 
-class TilesDestination(GcsDestination):
+# mypy will not let subclasses override literals, so we have to have the ABC rather than inheriting from GcsDestination
+class GcsDestination(BaseDestination):
+    type: Literal["gcs"]
+
+
+class TilesDestination(BaseDestination):
     """
     For tile server destinations, each depends_on becomes
     a tile layer.
@@ -261,7 +273,7 @@ class CkanResourceMeta(BaseModel):
     description: Optional[str]
 
 
-class CkanDestination(GcsDestination):
+class CkanDestination(BaseDestination):
     _instances: ClassVar[List["CkanDestination"]] = []
     type: Literal["ckan"]
     url: str
@@ -280,7 +292,7 @@ Destination = Annotated[
 
 class ExposureMeta(BaseModel):
     methodology: Optional[str]
-    coordinate_system_epsg: Optional[constr(regex=r"\d+")]  # noqa: F722
+    coordinate_system_epsg: Optional[constr(regex=r"\d+")]  # type: ignore # noqa: F722
     destinations: List[Destination] = []
 
 
