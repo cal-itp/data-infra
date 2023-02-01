@@ -5,6 +5,17 @@ WITH make_dim AS (
     ) }}
 ),
 
+bad_rows AS (
+    SELECT
+        base64_url,
+        ts,
+        area_id,
+        TRUE AS warning_duplicate_primary_key
+    FROM make_dim
+    GROUP BY base64_url, ts, area_id
+    HAVING COUNT(*) > 1
+),
+
 dim_areas AS (
     SELECT
         {{ dbt_utils.surrogate_key(['feed_key', 'area_id']) }} AS key,
@@ -12,8 +23,11 @@ dim_areas AS (
         area_id,
         area_name,
         base64_url,
+        COALESCE(warning_duplicate_primary_key, FALSE) AS warning_duplicate_primary_key,
         _feed_valid_from,
     FROM make_dim
+    LEFT JOIN bad_rows
+        USING (base64_url, ts, area_id)
 )
 
 SELECT * FROM dim_areas
