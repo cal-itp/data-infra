@@ -24,9 +24,13 @@ joined AS (
        COUNT(observed_trips.trip_id) AS observed_trips,
     FROM services_guideline_index AS idx
 
+    -- Since one service can have multiple quartets, this isn't an ideal join
+    -- For now we are filtering on quartet.guidelines.assessed
+    -- TODO: use more specific indices
     LEFT JOIN dim_provider_gtfs_data AS quartet
     ON idx.service_key = quartet.service_key
     AND TIMESTAMP(idx.date) BETWEEN quartet._valid_from AND quartet._valid_to
+    AND quartet.guidelines_assessed
 
     JOIN fct_daily_scheduled_trips scheduled_trips
     ON idx.date = scheduled_trips.service_date
