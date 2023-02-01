@@ -1012,7 +1012,11 @@ models:
       per "trip_identifier" which is a hash of the fields that make up
       a GTFS RT TripDescriptor. See https://gtfs.org/realtime/reference/#message-tripdescriptor
       for more details.
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "COALESCE(tu_gtfs_dataset_key, vp_gtfs_dataset_key, sa_gtfs_dataset_key) IS NOT NULL"
     columns:
+      # keys and identifiers
       - name: key
         tests: *primary_key_tests
       - name: dt
@@ -1030,6 +1034,22 @@ models:
         description: Part of a TripDescriptor.
       - name: trip_start_date
         description: Part of a TripDescriptor.
+      # foreign keys
+      - name: tu_gtfs_dataset_key
+        tests:
+          - relationships:
+              to: ref('dim_gtfs_datasets')
+              field: key
+      - name: vp_gtfs_dataset_key
+        tests:
+          - relationships:
+              to: ref('dim_gtfs_datasets')
+              field: key
+      - name: sa_gtfs_dataset_key
+        tests:
+          - relationships:
+              to: ref('dim_gtfs_datasets')
+              field: key
       # trip update facts
       - name: tu_num_distinct_message_ids
         description: Count of distinct trip update message IDs referencing this trip.

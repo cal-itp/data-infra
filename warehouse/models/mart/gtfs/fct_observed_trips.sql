@@ -56,6 +56,7 @@ trip_updates_with_associated_schedule AS (
     SELECT
         trip_updates.*,
         {{ dbt_utils.surrogate_key(['trip_id', 'trip_route_id', 'trip_direction_id', 'trip_start_time', 'trip_start_date']) }} AS trip_identifier,
+        urls_to_datasets.gtfs_dataset_key,
         trip_updates_to_schedule.schedule_to_use_for_rt_validation_gtfs_dataset_key,
     FROM trip_updates
     LEFT JOIN urls_to_datasets
@@ -69,6 +70,7 @@ vehicle_positions_with_associated_schedule AS (
     SELECT
         vehicle_positions.*,
         {{ dbt_utils.surrogate_key(['trip_id', 'trip_route_id', 'trip_direction_id', 'trip_start_time', 'trip_start_date']) }} AS trip_identifier,
+        urls_to_datasets.gtfs_dataset_key,
         vehicle_positions_to_schedule.schedule_to_use_for_rt_validation_gtfs_dataset_key,
     FROM vehicle_positions
     LEFT JOIN urls_to_datasets
@@ -109,6 +111,11 @@ fct_observed_trips AS (
         COALESCE(tu.trip_direction_id, vp.trip_direction_id, sa.trip_direction_id) AS trip_direction_id,
         COALESCE(tu.trip_start_time, vp.trip_start_time, sa.trip_start_time) AS trip_start_time,
         COALESCE(tu.trip_start_date, vp.trip_start_date, sa.trip_start_date) AS trip_start_date,
+
+        -- foreign keys
+        tu.gtfs_dataset_key AS tu_gtfs_dataset_key,
+        vp.gtfs_dataset_key AS vp_gtfs_dataset_key,
+        sa.gtfs_dataset_key AS sa_gtfs_dataset_key,
 
         -- trip updates facts
         tu.num_distinct_message_ids AS tu_num_distinct_message_ids,
