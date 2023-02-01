@@ -549,6 +549,32 @@ models:
           Boolean for whether this file was present for all feeds for this organization
           on `date_checked`.
 
+  - name: fct_monthly_route_id_changes
+    description: |
+      A table that quantifies how many routes in an organization's schedule were added, removed, or unchanged
+      over the course of a month by comparing the routes present in the feed that was active on the
+      first of the month with the last day of the month.
+      Used by the reports site.
+    columns:
+      - name: organization_name
+      - name: organization_itp_id
+      - name: publish_date
+      - name: change_status
+      - name: n
+
+  - name: fct_monthly_stop_id_changes
+    description: |
+      A table that quantifies how many stops in an organization's schedule were added, removed, or unchanged
+      over the course of a month by comparing the stops present in the feed that was active on the
+      first of the month with the last day of the month.
+      Used by the reports site.
+    columns:
+      - name: organization_name
+      - name: organization_itp_id
+      - name: publish_date
+      - name: change_status
+      - name: n
+
 exposures:
  - name: calitp_reports_site
    type: application
@@ -560,5 +586,7 @@ exposures:
      - ref("idx_monthly_reports_site")
      - ref("fct_monthly_reports_site_organization_file_checks")
      - ref("fct_monthly_reports_site_organization_validation_codes")
+     - ref("fct_monthly_route_id_changes")
+     - ref("fct_monthly_stop_id_changes")
    owner:
      email: Eric.Dasmalchi@dot.ca.gov
