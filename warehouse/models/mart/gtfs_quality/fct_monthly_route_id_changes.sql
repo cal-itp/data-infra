@@ -53,18 +53,24 @@ month_end AS (
 
 month_comparison AS (
     SELECT
-        t1.* EXCEPT (route_id),
-        t1.route_id AS start_table_source_id,
-        t2.route_id AS stop_table_source_id,
+
+        COALESCE(month_start.organization_name, month_end.organization_name) AS organization_name,
+        COALESCE(month_start.organization_itp_id, month_end.organization_itp_id) AS organization_itp_id,
+        COALESCE(month_start.organization_source_record_id, month_end.organization_source_record_id) AS organization_source_record_id,
+        COALESCE(month_start.publish_date, month_end.publish_date) AS publish_date,
+
+        month_start.route_id AS start_table_source_id,
+        month_end.route_id AS stop_table_source_id,
+
         CASE
-            WHEN t2.route_id IS NULL THEN 'Removed'
-            WHEN t1.route_id IS NULL THEN 'Added'
+            WHEN month_end.route_id IS NULL THEN 'Removed'
+            WHEN month_start.route_id IS NULL THEN 'Added'
             ELSE 'Unchanged'
         END AS change_status
-    FROM month_start AS t1
-    FULL JOIN month_end AS t2
-            USING (organization_source_record_id, route_id, publish_date)
 
+    FROM month_start
+    FULL JOIN month_end
+            USING (organization_source_record_id, route_id, publish_date)
 ),
 
 fct_monthly_route_id_changes AS (
