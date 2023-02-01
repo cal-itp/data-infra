@@ -1,5 +1,4 @@
-{% macro payments_tests_date_spine() %}
-(
+{{ config(materialized='ephemeral') }}
 
 WITH payments_rides AS (
     SELECT * FROM {{ ref('payments_rides') }}
@@ -17,24 +16,16 @@ min_max_dates AS (
     FROM payments_rides
 ),
 
-date_range AS (
-
-    SELECT day_history
-    FROM min_max_dates,
-        UNNEST(
-            GENERATE_DATE_ARRAY(min_max_dates.min_date, min_max_dates.max_date, INTERVAL 1 DAY)
-    ) AS day_history
-
+create_date_range AS (
+        {{ dbt_date.get_base_dates(start_date="2022-01-01", end_date="2022-02-01", datepart="day") }}
 ),
 
 payments_tests_date_spine AS (
     SELECT
         participant_id,
-        day_history
-    FROM distinct_providers, date_range
+        date_day
+    FROM distinct_providers
+    CROSS JOIN create_date_range
 )
 
 SELECT * FROM payments_tests_date_spine
-
-)
-{% endmacro %}
