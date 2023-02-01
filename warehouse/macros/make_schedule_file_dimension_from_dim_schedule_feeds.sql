@@ -16,7 +16,8 @@
 WITH dim_schedule_feeds AS (
     SELECT *
     FROM {{ dim_schedule_feeds }}
-    {% if is_incremental() %}
+    -- if the table is currently empty, max_ts is empty
+    {% if is_incremental() and max_ts %}
     WHERE _valid_from > '{{ max_ts }}'
     {% endif %}
 ),
@@ -24,7 +25,8 @@ WITH dim_schedule_feeds AS (
 {{ gtfs_file_table.identifier }} AS (
     SELECT *
     FROM {{ gtfs_file_table }}
-    {% if is_incremental() %}
+    -- if the table is currently empty, max_ts is empty
+    {% if is_incremental() and max_ts %}
     WHERE _dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
     WHERE _dt >= '{{ var("GTFS_SCHEDULE_START") }}'
