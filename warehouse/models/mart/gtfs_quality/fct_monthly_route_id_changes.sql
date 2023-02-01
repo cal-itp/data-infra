@@ -28,6 +28,7 @@ month_start AS (
     LEFT JOIN organization_dataset_map AS orgs ON (reports_index.date_start = orgs.date)
         AND (reports_index.organization_source_record_id = orgs.organization_source_record_id)
     INNER JOIN dim_routes ON (orgs.schedule_feed_key = dim_routes.feed_key)
+        WHERE dim_routes.route_id IS NOT NULL
 ),
 
 month_end AS (
@@ -47,7 +48,7 @@ month_end AS (
     LEFT JOIN organization_dataset_map AS orgs ON (reports_index.date_end = orgs.date)
         AND (reports_index.organization_source_record_id = orgs.organization_source_record_id)
     INNER JOIN dim_routes ON (orgs.schedule_feed_key = dim_routes.feed_key)
-
+        WHERE dim_routes.route_id IS NOT NULL
 ),
 
 month_comparison AS (
