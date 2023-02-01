@@ -26,6 +26,7 @@ def test_rt_file_processing_outcome_construction() -> None:
     )
 
     RTFileProcessingOutcome(
+        step=RTProcessingStep.parse,
         success=True,
         extract=extract,
         aggregation=RTHourlyAggregation(
