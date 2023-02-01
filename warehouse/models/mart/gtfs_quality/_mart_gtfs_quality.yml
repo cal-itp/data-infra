@@ -552,8 +552,8 @@ models:
   - name: fct_monthly_route_id_changes
     description: |
       A table that quantifies how many routes in an organization's schedule were added, removed, or unchanged
-      over the course of a month by comparing the routes scheduled on the first day of the month
-      with the last day of the month.
+      over the course of a month by comparing the routes present in the feed that was active on the
+      first of the month with the last day of the month.
       Used by the reports site.
     columns:
       - name: organization_name
@@ -565,8 +565,8 @@ models:
   - name: fct_monthly_stop_id_changes
     description: |
       A table that quantifies how many stops in an organization's schedule were added, removed, or unchanged
-      over the course of a month by comparing the routes scheduled on the first day of the month
-      with the last day of the month.
+      over the course of a month by comparing the stops present in the feed that was active on the
+      first of the month with the last day of the month.
       Used by the reports site.
     columns:
       - name: organization_name
