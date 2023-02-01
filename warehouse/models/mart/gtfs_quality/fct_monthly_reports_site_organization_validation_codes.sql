@@ -12,6 +12,7 @@ idx_monthly_reports_site AS (
 int_gtfs__organization_dataset_map AS (
     SELECT *
     FROM {{ ref('int_gtfs_quality__organization_dataset_map') }}
+    WHERE reports_site_assessed
 ),
 
 fct_monthly_reports_site_organization_validation_codes AS (
