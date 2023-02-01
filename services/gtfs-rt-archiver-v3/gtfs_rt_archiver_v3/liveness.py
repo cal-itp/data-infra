@@ -12,7 +12,8 @@ class Action(str, Enum):
 
 
 def check_liveness(
-    action: Action, max_seconds: int = os.getenv("MAX_LIVENESS_FILE_AGE_SECONDS")
+    action: Action,
+    max_seconds: int = int(os.environ["MAX_LIVENESS_FILE_AGE_SECONDS"]),
 ):
     now = time.time()
     if action == Action.fetch:

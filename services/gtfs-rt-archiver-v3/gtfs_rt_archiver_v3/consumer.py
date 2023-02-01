@@ -6,13 +6,13 @@ import sentry_sdk
 import typer
 import os
 
-from calitp.auth import get_secrets_by_label
-from huey.constants import WORKER_THREAD
+from calitp.auth import get_secrets_by_label  # type: ignore
+from huey.constants import WORKER_THREAD  # type: ignore
 
 import logging
 import sys
 
-from huey.consumer_options import ConsumerConfig
+from huey.consumer_options import ConsumerConfig  # type: ignore
 from prometheus_client import start_http_server
 
 from .tasks import huey, RTFetchException
@@ -35,7 +35,7 @@ def set_exception_fingerprint(event, hint):
 
 
 def main(
-    port: int = os.getenv("CONSUMER_PROMETHEUS_PORT", 9102),
+    port: int = int(os.getenv("CONSUMER_PROMETHEUS_PORT", 9102)),
     load_env_secrets: bool = False,
 ):
     sentry_sdk.init(before_send=set_exception_fingerprint)
