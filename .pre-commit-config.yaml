@@ -19,6 +19,11 @@ repos:
     rev: 22.10.0
     hooks:
       - id: black
+  - repo: https://github.com/pycqa/isort
+    rev: 5.11.5
+    hooks:
+      - id: isort
+        name: isort (python)
   - repo: https://github.com/pycqa/bandit
     rev: 1.7.4
     hooks:
