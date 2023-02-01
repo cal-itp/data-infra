@@ -20,10 +20,6 @@ jobs:
   check:
     name: Run static checkers
     runs-on: ubuntu-latest
-    env:
-      CALITP_BUCKET__GTFS_RT_PARSED: gs://some-test-bucket
-      CALITP_BUCKET__GTFS_RT_VALIDATION: gs://some-test-bucket
-      GTFS_RT_VALIDATOR_VERSION: v0.0.0
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v4
@@ -35,6 +31,10 @@ jobs:
   test:
     name: Run pytest
     runs-on: ubuntu-latest
+    env:
+      CALITP_BUCKET__GTFS_RT_PARSED: gs://some-test-bucket
+      CALITP_BUCKET__GTFS_RT_VALIDATION: gs://some-test-bucket
+      GTFS_RT_VALIDATOR_VERSION: v0.0.0
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v4
