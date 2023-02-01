@@ -75,8 +75,8 @@ def report_failures_to_sentry(
 
 @app.command()
 def report_failures(
-    run_results_path: Path = "./target/run_results.json",
-    manifest_path: Path = "./target/manifest.json",
+    run_results_path: Path = Path("./target/run_results.json"),
+    manifest_path: Path = Path("./target/manifest.json"),
 ):
     with open(run_results_path) as f:
         run_results = RunResults(**json.load(f))
@@ -87,8 +87,8 @@ def report_failures(
 
 @app.command()
 def run(
-    project_dir: Path = os.environ.get("DBT_PROJECT_DIR", os.getcwd()),
-    profiles_dir: Path = os.environ.get("DBT_PROFILES_DIR", os.getcwd()),
+    project_dir: Path = Path(os.environ.get("DBT_PROJECT_DIR", os.getcwd())),
+    profiles_dir: Path = Path(os.environ.get("DBT_PROFILES_DIR", os.getcwd())),
     target: str = os.environ.get("DBT_TARGET"),
     dbt_seed: bool = True,
     dbt_run: bool = True,

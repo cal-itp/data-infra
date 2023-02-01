@@ -78,7 +78,7 @@ class NodeConfig(BaseModel):
 class Column(BaseModel):
     name: str
     description: Optional[str]
-    meta: Optional[Dict[str, Any]]
+    meta: Dict[str, Any] = {}
     parent: "BaseNode" = None  # this is set after the fact
 
     @property

@@ -1851,6 +1851,18 @@ geography = ["geoalchemy2", "shapely"]
 tests = ["packaging", "pytz"]
 
 [[package]]
+name = "sqlalchemy-stubs"
+version = "0.4"
+description = "SQLAlchemy stubs and mypy plugin"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+mypy = ">=0.790"
+typing-extensions = ">=3.7.4"
+
+[[package]]
 name = "sqlfluff"
 version = "1.4.5"
 description = "The SQL Linter for Humans"
@@ -2140,7 +2152,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.9"
-content-hash = "f27b667a8365756a53e96784d387ff4bdb2e2fc742367db836b0c3b3203f0f7f"
+content-hash = "dbc829459a8a8ea3603e838f188d64667271aacf0700395c3ec07ea8d5c57b25"
 
 [metadata.files]
 agate = []
@@ -2281,6 +2293,7 @@ shapely = []
 six = []
 sqlalchemy = []
 sqlalchemy-bigquery = []
+sqlalchemy-stubs = []
 sqlfluff = []
 sqlparse = []
 stack-data = []
