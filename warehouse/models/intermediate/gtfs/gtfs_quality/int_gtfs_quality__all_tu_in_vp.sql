@@ -27,9 +27,15 @@ joined AS (
             f.tu_num_distinct_message_ids IS NOT NULL
         THEN 1 END) AS tu_present
     FROM services_guideline_index AS idx
+
+    -- Since one service can have multiple quartets, this isn't an ideal join
+    -- For now we are filtering on quartet.guidelines.assessed
+    -- TODO: use more specific indices
     LEFT JOIN dim_provider_gtfs_data AS quartet
     ON idx.service_key = quartet.service_key
     AND TIMESTAMP(idx.date) BETWEEN quartet._valid_from AND quartet._valid_to
+    AND quartet.guidelines_assessed
+
     LEFT JOIN fct_observed_trips AS f
     ON quartet.associated_schedule_gtfs_dataset_key = f.schedule_to_use_for_rt_validation_gtfs_dataset_key
     AND idx.date = f.dt
