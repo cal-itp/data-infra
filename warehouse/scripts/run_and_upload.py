@@ -6,7 +6,7 @@ import subprocess
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-import gcsfs
+import gcsfs  # type: ignore
 import pendulum
 import sentry_sdk
 import typer
@@ -36,7 +36,7 @@ class DbtTestWarn(Exception):
 
 
 def get_failure_context(failure: RunResult, manifest: Manifest) -> Dict[str, Any]:
-    context = {
+    context: Dict[str, Any] = {
         "unique_id": failure.unique_id,
     }
     if failure.unique_id.startswith("test"):
@@ -46,9 +46,7 @@ def get_failure_context(failure: RunResult, manifest: Manifest) -> Dict[str, Any
     return context
 
 
-def report_failures_to_sentry(
-    run_results: RunResults, manifest: Manifest = None
-) -> None:
+def report_failures_to_sentry(run_results: RunResults, manifest: Manifest) -> None:
     failures = [
         result
         for result in run_results.results
@@ -89,7 +87,7 @@ def report_failures(
 def run(
     project_dir: Path = Path(os.environ.get("DBT_PROJECT_DIR", os.getcwd())),
     profiles_dir: Path = Path(os.environ.get("DBT_PROFILES_DIR", os.getcwd())),
-    target: str = os.environ.get("DBT_TARGET"),
+    target: Optional[str] = os.environ.get("DBT_TARGET"),
     dbt_seed: bool = True,
     dbt_run: bool = True,
     full_refresh: bool = False,
@@ -196,6 +194,7 @@ def run(
                 # but also save using the usual artifact types
                 latest_to = f"{CALITP_BUCKET__DBT_ARTIFACTS}/latest/{artifact}"
                 # TODO: this should use PartitionedGCSArtifact at some point
+                assert CALITP_BUCKET__DBT_ARTIFACTS  # unsure why mypy wants this
                 timestamped_to = "/".join(
                     [
                         CALITP_BUCKET__DBT_ARTIFACTS,
@@ -223,7 +222,7 @@ def run(
                 "--dir=docs/",
             ]
 
-            if target.startswith("prod"):
+            if target and target.startswith("prod"):
                 args.append("--prod")
 
             results_to_check.append(subprocess.run(args))
