@@ -47,14 +47,14 @@ payments_daily_transaction_deltas AS (
     SELECT
 
         t1.participant_id,
-        t1.day,
+        t1.day_history AS transaction_date,
 
         t2.ridership_count,
         t2.relative_difference
 
     FROM payments_tests_date_spine AS t1
     LEFT JOIN calculate_relative_difference AS t2
-        ON (t1.day = t2.transaction_date)
+        ON (t1.day_history = t2.transaction_date)
             AND (t1.participant_id = t2.participant_id)
 
 )
