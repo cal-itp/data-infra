@@ -300,6 +300,10 @@
 "Static and RT feeds are representative of all demand-responsive transit services under the transit providers’ purview"
 {% endmacro %}
 
+{% macro scheduled_trips_in_tu_feed() %}
+"100% of scheduled trips on a given day are represented within the Trip updates feed."
+{% endmacro %}
+
 --
 -- FEATURE NAMES
 --
