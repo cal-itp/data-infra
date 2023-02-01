@@ -34,11 +34,11 @@ joined AS (
 
     JOIN fct_daily_scheduled_trips scheduled_trips
     ON idx.date = scheduled_trips.service_date
-    AND quartet.associated_schedule_gtfs_dataset_key = scheduled_trips.gtfs_dataset_key
+    AND quartet.schedule_gtfs_dataset_key = scheduled_trips.gtfs_dataset_key
 
     LEFT JOIN fct_observed_trips AS observed_trips
-    ON quartet.associated_schedule_gtfs_dataset_key = observed_trips.schedule_to_use_for_rt_validation_gtfs_dataset_key
-    AND idx.date = observed_trips.dt
+    ON idx.date = observed_trips.dt
+    AND quartet.trip_updates_gtfs_dataset_key = observed_trips.tu_gtfs_dataset_key
     AND observed_trips.trip_id = scheduled_trips.trip_id
 
     GROUP BY 1,2
