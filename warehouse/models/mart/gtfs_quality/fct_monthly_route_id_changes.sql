@@ -57,8 +57,8 @@ month_comparison AS (
         t1.route_id AS start_table_source_id,
         t2.route_id AS stop_table_source_id,
         CASE
-            WHEN t2.route_id IS NULL AND t1.route_id IS NOT NULL THEN 'Removed'
-            WHEN t1.route_id IS NULL AND t2.route_id IS NOT NULL THEN 'Added'
+            WHEN t2.route_id IS NULL THEN 'Removed'
+            WHEN t1.route_id IS NULL THEN 'Added'
             ELSE 'Unchanged'
         END AS change_status
     FROM month_start AS t1

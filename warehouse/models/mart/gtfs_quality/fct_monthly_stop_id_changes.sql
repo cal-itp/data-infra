@@ -28,7 +28,7 @@ month_start AS (
     LEFT JOIN organization_dataset_map AS orgs ON (reports_index.date_start = orgs.date)
         AND (reports_index.organization_source_record_id = orgs.organization_source_record_id)
     INNER JOIN dim_stops ON (orgs.schedule_feed_key = dim_stops.feed_key)
-        WHERE dim_routes.route_id IS NOT NULL
+        WHERE dim_stops.stop_id IS NOT NULL
 ),
 
 month_end AS (
@@ -48,7 +48,7 @@ month_end AS (
     LEFT JOIN organization_dataset_map AS orgs ON (reports_index.date_end = orgs.date)
         AND (reports_index.organization_source_record_id = orgs.organization_source_record_id)
     INNER JOIN dim_stops ON (orgs.schedule_feed_key = dim_stops.feed_key)
-        WHERE dim_routes.route_id IS NOT NULL
+        WHERE dim_stops.stop_id IS NOT NULL
 ),
 
 month_comparison AS (
@@ -57,8 +57,8 @@ month_comparison AS (
         t1.stop_id AS start_table_source_id,
         t2.stop_id AS stop_table_source_id,
         CASE
-            WHEN t2.stop_id IS NULL AND t1.stop_id IS NOT NULL THEN 'Removed'
-            WHEN t1.stop_id IS NULL AND t2.stop_id IS NOT NULL THEN 'Added'
+            WHEN t2.stop_id IS NULL THEN 'Removed'
+            WHEN t1.stop_id IS NULL THEN 'Added'
             ELSE 'Unchanged'
         END AS change_status
     FROM month_start AS t1
