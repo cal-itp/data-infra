@@ -26,7 +26,7 @@ create_date_range AS (
     }}
 ),
 
-payments_tests_date_spine AS (
+payments_tests_daily_date_spine AS (
     SELECT
         participant_id,
         date_day AS day_history
@@ -34,4 +34,4 @@ payments_tests_date_spine AS (
     CROSS JOIN create_date_range
 )
 
-SELECT * FROM payments_tests_date_spine
+SELECT * FROM payments_tests_daily_date_spine

@@ -2,8 +2,8 @@ WITH payments_rides AS (
     SELECT * FROM {{ ref('payments_rides') }}
 ),
 
-payments_tests_date_spine AS (
-    SELECT * FROM {{ ref('payments_tests_date_spine') }}
+payments_tests_daily_date_spine AS (
+    SELECT * FROM {{ ref('payments_tests_daily_date_spine') }}
 ),
 
 extract_count_date AS (
