@@ -1,17 +1,16 @@
-import gzip
 import os
 import pandas as pd
 import pendulum
 import requests
 
 from calitp.auth import get_secret_by_name
-from calitp.storage import get_fs, make_name_bq_safe
-from pydantic import BaseModel
-from typing import Optional
+from calitp.storage import get_fs, make_name_bq_safe, PartitionedGCSArtifact
+from typing import ClassVar, List, Optional
 
 from airflow.models import BaseOperator
 
 BASE_URL = "https://sentry.k8s.calitp.jarv.us/api/0/"
+CALITP_BUCKET__SENTRY_LOGS = os.environ["CALITP_BUCKET__SENTRY_LOGS"]
 
 
 def process_arrays_for_nulls(arr):
@@ -42,9 +41,14 @@ def make_arrays_bq_safe(raw_data):
     return safe_data
 
 
-class SentryExtract(BaseModel):
+class SentryExtract(PartitionedGCSArtifact):
+    bucket: ClassVar[str] = CALITP_BUCKET__SENTRY_LOGS
+    table: ClassVar[str] = "events"
+    dt: str
+    ts: str
+    partition_names: ClassVar[List[str]] = ["dt", "ts"]
     issue_id: str
-    data: Optional[pd.DataFrame]
+    data: Optional[bytes]
     extract_time: Optional[pendulum.DateTime]
 
     # pydantic doesn't know dataframe type
@@ -81,31 +85,12 @@ class SentryExtract(BaseModel):
 
         raw_df = pd.DataFrame([{**make_arrays_bq_safe(row)} for row in all_rows])
 
-        self.data = raw_df.rename(make_name_bq_safe, axis="columns")
+        cleaned_df = raw_df.rename(make_name_bq_safe, axis="columns")
 
-    def make_hive_path(self, bucket: str):
-        if not self.extract_time:
-            # extract_time is usually set when fetch_and_clean_from_sentry is called & data is retrieved
-            raise ValueError(
-                "An extract time must be set before a hive path can be generated."
-            )
-        return os.path.join(
-            bucket,
-            f"{self.issue_id}",
-            f"dt={self.extract_time.to_date_string()}",
-            f"ts={self.extract_time.to_iso8601_string()}",
-            "events.jsonl.gz",
-        )
+        self.data = cleaned_df.to_json(orient="records", lines=True).encode()
 
-    def save_to_gcs(self, fs, bucket):
-        hive_path = self.make_hive_path(bucket)
-        print(f"Uploading to GCS at {hive_path}")
-        assert self.data.any(None), "data does not exist, cannot save"
-        fs.pipe(
-            hive_path,
-            gzip.compress(self.data.to_json(orient="records", lines=True).encode()),
-        )
-        return hive_path
+    def save_to_gcs(self, fs):
+        self.save_content(fs=fs, content=self.data)
 
 
 class SentryToGCSOperator(BaseOperator):
@@ -131,8 +116,12 @@ class SentryToGCSOperator(BaseOperator):
                 This can be someone's personal auth token. If not provided, the environment
                 variable of `CALITP_SENTRY_AUTH_TOKEN` is used.
         """
+        self.dt = pendulum.now().to_date_string()
+        self.ts = str(pendulum.now().to_iso8601_string())
         self.bucket = bucket
-        self.extract = SentryExtract(issue_id=issue_id)
+        self.extract = SentryExtract(
+            issue_id=issue_id, dt=self.dt, ts=self.ts, filename="events.jsonl.gz"
+        )
         self.auth_token = auth_token
 
         super().__init__(**kwargs)
@@ -142,4 +131,4 @@ class SentryToGCSOperator(BaseOperator):
         self.extract.fetch_and_clean_from_sentry(auth_token)
         fs = get_fs()
         # inserts into xcoms
-        return self.extract.save_to_gcs(fs, self.bucket)
+        return self.extract.save_to_gcs(fs=fs)
