@@ -5,12 +5,11 @@ import re
 
 from calitp.config import (
     CALITP_BQ_LOCATION,
+    format_table_name,
     get_bucket,
     get_project_id,
-    format_table_name,
+    is_development,
 )
-from calitp.config import is_development
-
 from calitp.sql import get_engine
 from google.api_core.exceptions import NotFound
 from google.cloud import bigquery

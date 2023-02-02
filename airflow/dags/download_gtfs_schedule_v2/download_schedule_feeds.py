@@ -6,30 +6,31 @@ import datetime
 import gzip
 import json
 import logging
-from typing import List, Optional, ClassVar
+from typing import ClassVar, List, Optional
 
 import humanize
 import pandas as pd
 import pendulum
 import sentry_sdk
-from airflow.utils.email import send_email
 from calitp.auth import get_secrets_by_label
 from calitp.config import is_development
 from calitp.storage import (
-    get_fs,
-    GTFSScheduleFeedExtract,
-    GTFSFeedType,
-    download_feed,
-    ProcessingOutcome,
-    SCHEDULE_RAW_BUCKET,
-    PartitionedGCSArtifact,
     JSONL_EXTENSION,
+    SCHEDULE_RAW_BUCKET,
     GTFSDownloadConfig,
-    get_latest,
     GTFSDownloadConfigExtract,
+    GTFSFeedType,
+    GTFSScheduleFeedExtract,
+    PartitionedGCSArtifact,
+    ProcessingOutcome,
+    download_feed,
+    get_fs,
+    get_latest,
 )
 from pydantic import validator
 from requests.exceptions import HTTPError
+
+from airflow.utils.email import send_email
 
 GTFS_FEED_LIST_ERROR_THRESHOLD = 0.95
 

@@ -1,0 +1,4 @@
+# This really only exists for top-level linting configuration
+# All Python environments live within their respective folders
+[tool.isort]
+profile = "black"

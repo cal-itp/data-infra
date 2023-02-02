@@ -5,6 +5,7 @@ Originally used to produce dbt docs from https://gtfs.org/reference/static#field
 """
 import json
 import sys
+from typing import Any, Dict
 
 from dbt_artifacts import Column
 
@@ -24,7 +25,7 @@ if __name__ == "__main__":
 
             doc_ref = f'{{{{ doc("{prefix}{col.name}") }}}}'
 
-            extras = {
+            extras: Dict[str, Any] = {
                 "description": f"'{doc_ref}'",
             }
             if field["Required"] == "Required":

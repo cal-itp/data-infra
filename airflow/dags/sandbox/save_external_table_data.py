@@ -1,9 +1,8 @@
 # ---
 # ---
 
-from calitp import save_to_gcfs
-
 import pandas as pd
+from calitp import save_to_gcfs
 
 df1 = pd.DataFrame(
     {

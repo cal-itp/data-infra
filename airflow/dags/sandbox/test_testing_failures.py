@@ -1,6 +1,5 @@
 import pandas as pd
 from calitp import get_engine, write_table
-
 from testing import Tester
 
 COLNAMES = ["x", "y"]

@@ -6,23 +6,14 @@ import inspect
 import io
 import os
 from enum import Enum
-from typing import (
-    ClassVar,
-    List,
-    Dict,
-    Any,
-    Iterator,
-    Optional,
-    Callable,
-    Union,
-)
+from typing import Any, Callable, ClassVar, Dict, Iterator, List, Optional, Union
 
 import backoff
 import humanize
 import pendulum
 import requests
 import typer
-from calitp.storage import PartitionedGCSArtifact, get_fs, GTFSFeedType  # type: ignore
+from calitp.storage import GTFSFeedType, PartitionedGCSArtifact, get_fs  # type: ignore
 from pydantic import BaseModel, ValidationError
 from requests import JSONDecodeError
 from tqdm import tqdm

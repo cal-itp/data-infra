@@ -1,19 +1,20 @@
 import datetime
 import logging
 import os
-import pendulum
+from typing import ClassVar, List
 
 import pandas as pd
-from airflow.models import Variable
+import pendulum
 from calitp import read_gcfs, save_to_gcfs
 from calitp.storage import (
+    GTFSDownloadConfig,
     GTFSScheduleFeedExtract,
     PartitionedGCSArtifact,
-    GTFSDownloadConfig,
 )
 from pandas.errors import EmptyDataError
 from pydantic import validator
-from typing import ClassVar, List
+
+from airflow.models import Variable
 
 SCHEDULE_UNZIPPED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED"]
 

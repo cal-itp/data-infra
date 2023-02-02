@@ -9,16 +9,16 @@ import pendulum
 import sentry_sdk
 import structlog
 import typer
-from calitp.storage import download_feed, GTFSDownloadConfig
-from google.cloud import storage
-from huey import RedisHuey
+from calitp.storage import GTFSDownloadConfig, download_feed  # type: ignore
+from google.cloud import storage  # type: ignore
+from huey import RedisHuey  # type: ignore
 from requests import HTTPError, RequestException
 
 from .metrics import (
+    FETCH_PROCESSED_BYTES,
+    FETCH_PROCESSING_DELAY,
     FETCH_PROCESSING_TIME,
     TASK_SIGNALS,
-    FETCH_PROCESSING_DELAY,
-    FETCH_PROCESSED_BYTES,
 )
 
 
@@ -81,13 +81,15 @@ def increment_task_signals_counter(signal, task, exc=None):
 
 
 auth_dict = None
+last_fetch_file = None
 
 
 @huey.on_startup()
 def load_auth_dict():
-    global auth_dict
+    global auth_dict, last_fetch_file
     # TODO: this isn't ideal, we probably could store the keys from get_secrets_by_label() in consumer.py
     auth_dict = os.environ
+    last_fetch_file = os.environ["LAST_FETCH_FILE"]
 
 
 # from https://github.com/getsentry/sentry-python/issues/195#issuecomment-444559126
@@ -169,4 +171,4 @@ def fetch(tick: datetime, config: GTFSDownloadConfig):
             **labels,
             content_type=extract.response_headers.get("Content-Type", "").strip(),
         ).inc(len(content))
-        Path(os.getenv("LAST_FETCH_FILE")).touch()
+        Path(last_fetch_file).touch()  # type: ignore
