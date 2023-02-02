@@ -123,6 +123,7 @@ models:
       - name: off_geography
       - name: duration
       - name: distance_meters
+      - name: transaction_date_pacific
   - name: payments_monthly_transaction_deltas
     columns:
       - name: participant_id

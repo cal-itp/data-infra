@@ -22,8 +22,23 @@ extract_count_date AS (
     GROUP BY transaction_date, participant_id
 ),
 
+add_date_spine AS (
 
-calculate_relative_difference AS (
+    SELECT
+
+        t1.participant_id,
+        t1.day_history AS transaction_date,
+
+        t2.ridership_count
+
+    FROM payments_tests_date_spine AS t1
+    LEFT JOIN extract_count_date AS t2
+        ON (t1.day_history = t2.transaction_date)
+            AND (t1.participant_id = t2.participant_id)
+
+),
+
+payments_daily_transaction_deltas AS (
 
     SELECT
 
@@ -37,24 +52,7 @@ calculate_relative_difference AS (
             OVER (PARTITION BY participant_id ORDER BY transaction_date)) * 100
         AS relative_difference
 
-    FROM extract_count_date
-
-),
-
-payments_daily_transaction_deltas AS (
-
-    SELECT
-
-        t1.participant_id,
-        t1.day_history AS transaction_date,
-
-        t2.ridership_count,
-        t2.relative_difference
-
-    FROM payments_tests_date_spine AS t1
-    LEFT JOIN calculate_relative_difference AS t2
-        ON (t1.day_history = t2.transaction_date)
-            AND (t1.participant_id = t2.participant_id)
+    FROM add_date_spine
 
 )
 
