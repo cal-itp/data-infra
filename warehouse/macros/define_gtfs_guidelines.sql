@@ -304,6 +304,10 @@
 "100% of scheduled trips on a given day are represented within the Trip updates feed"
 {% endmacro %}
 
+{% macro all_tu_in_vp() %}
+"100% of trips marked as Scheduled, Canceled, or Added within the Trip updates feed are represented within the Vehicle positions feed"
+{% endmacro %}
+
 --
 -- FEATURE NAMES
 --
