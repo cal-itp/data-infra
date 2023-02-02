@@ -9,6 +9,11 @@ WITH assessed_entities AS (
         AND LAST_DAY(date, MONTH) = date
 ),
 
+dim_organizations AS (
+    SELECT *
+    FROM {{ ref('dim_organizations') }}
+),
+
 dim_routes AS (
     SELECT *
     FROM {{ ref('dim_routes') }}
@@ -17,6 +22,11 @@ dim_routes AS (
 dim_stops AS (
     SELECT *
     FROM {{ ref('dim_stops') }}
+),
+
+dim_feed_info AS (
+    SELECT *
+    FROM {{ ref('dim_feed_info') }}
 ),
 
 service_summary AS (
@@ -83,23 +93,35 @@ no_service_days AS (
     GROUP BY 1, 2
 ),
 
+summarize_feed_info AS (
+    SELECT
+        date,
+        organization_source_record_id,
+        MIN(feed_end_date) AS earliest_feed_end_date
+    FROM schedule_assessed
+    LEFT JOIN dim_feed_info
+        ON schedule_assessed.schedule_feed_key = dim_feed_info.feed_key
+    GROUP BY 1, 2
+),
+
 idx_monthly_reports_site AS (
     -- select distinct to drop services feeds etc., we only want organizations
     SELECT DISTINCT
         -- day after the last of the month is the first of the following month
-        DATE_ADD(orgs.date, INTERVAL 1 DAY) AS publish_date,
-        DATE_TRUNC(orgs.date, MONTH) AS date_start,
+        DATE_ADD(assessed_orgs.date, INTERVAL 1 DAY) AS publish_date,
+        DATE_TRUNC(assessed_orgs.date, MONTH) AS date_start,
         -- above we filtered to only last day of the month already
-        orgs.date AS date_end,
-        orgs.organization_itp_id,
-        orgs.organization_name,
-        orgs.organization_source_record_id,
+        assessed_orgs.date AS date_end,
+        assessed_orgs.organization_itp_id,
+        assessed_orgs.organization_name,
+        assessed_orgs.organization_source_record_id,
         COALESCE(check_rt.has_rt, FALSE) AS has_rt,
         route_count.route_ct,
         stop_count.stop_ct,
         no_service_days.no_service_days_ct,
-    -- we only want reports where there is some schedule data
-    FROM schedule_assessed AS orgs
+        earliest_feed_end_date,
+        org_dim.website AS organization_website
+    FROM schedule_assessed AS assessed_orgs
     LEFT JOIN check_rt
         USING (date, organization_source_record_id)
     LEFT JOIN route_count
@@ -108,6 +130,10 @@ idx_monthly_reports_site AS (
         USING (date, organization_source_record_id)
     LEFT JOIN no_service_days
         USING (date, organization_source_record_id)
+    LEFT JOIN summarize_feed_info
+        USING (date, organization_source_record_id)
+    LEFT JOIN dim_organizations AS org_dim
+        ON assessed_orgs.organization_key = org_dim.key
     -- don't add rows until the month in which the report will be generated
     -- i.e., do not add January rows until February has started
     WHERE date < CURRENT_DATE()
