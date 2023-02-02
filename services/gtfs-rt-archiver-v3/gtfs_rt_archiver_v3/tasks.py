@@ -23,6 +23,8 @@ from .metrics import (
     TASK_SIGNALS,
 )
 
+FETCH_TIMEOUT = int(os.getenv("CALITP_FETCH_REQUEST_TIMEOUT_SECONDS", 10))
+
 
 class RedisHueyWithMetrics(RedisHuey):
     pass
@@ -133,7 +135,7 @@ def fetch(tick: datetime, config: GTFSDownloadConfig):
                     config=config,
                     auth_dict=auth_dict,
                     ts=tick,
-                    timeout=5,
+                    timeout=FETCH_TIMEOUT,
                 )
         except Exception as e:
             status_code = None
