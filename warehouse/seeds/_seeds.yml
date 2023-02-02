@@ -25,7 +25,23 @@ seeds:
     description: |
       A list of validation codes output by the GTFS Schedule validator, and their severities and descriptions.
       This data was manually parsed from the contents of the RULES.md file in the v2.0.0 release of the validator,
-      sourced from: https://github.com/MobilityData/gtfs-validator/releases/download/v2.0.0/Documentation-javadoc--v2.0.0.zip
+      sourced from: https://github.com/MobilityData/gtfs-validator/archive/refs/tags/v2.0.0.zip
+    columns:
+      - name: code
+        tests:
+          - not_null
+          - unique
+      - name: human_readable_description
+        tests:
+          - not_null
+      - name: version
+      - name: severity
+
+  - name: gtfs_schedule_validator_rule_details_v3.1.1
+    description: |
+      A list of validation codes output by the GTFS Schedule validator, and their severities and descriptions.
+      This data was manually parsed from the contents of the RULES.md file in the v3.1.1 release of the validator,
+      sourced from: https://github.com/MobilityData/gtfs-validator/archive/refs/tags/v3.1.1.zip
     columns:
       - name: code
         tests:
