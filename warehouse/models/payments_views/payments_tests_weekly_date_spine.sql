@@ -29,7 +29,8 @@ create_week_range AS (
 payments_tests_weekly_date_spine AS (
     SELECT
         participant_id,
-        date_week AS week_history
+        date_week AS week_start,
+        DATE_ADD(date_week, INTERVAL 6 DAY) AS week_end
     FROM distinct_providers
     CROSS JOIN create_week_range
 )
