@@ -86,6 +86,8 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ modification_date_present_trip_updates() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
     UNION ALL
+    SELECT {{ scheduled_trips_in_tu_feed() }}, {{ fixed_route_completeness() }}, {{ service() }}
+    UNION ALL
     SELECT {{ all_tu_in_vp() }}, {{ fixed_route_completeness() }}, {{ service() }}
 
     -- MANUAL CHECKS
