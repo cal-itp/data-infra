@@ -1,5 +1,13 @@
 {{ config(materialized='ephemeral') }}
 
+{% set min_date_list = dbt_utils.get_column_values(table=ref('payments_rides'), column='transaction_date_pacific', order_by = 'transaction_date_pacific', max_records = 1) %}
+
+{% set min_date = min_date_list[0] %}
+
+{% set max_date_list = dbt_utils.get_column_values(table=ref('payments_rides'), column='transaction_date_pacific', order_by = 'transaction_date_pacific DESC', max_records = 1) %}
+
+{% set max_date = max_date_list[0] %}
+
 WITH payments_rides AS (
     SELECT * FROM {{ ref('payments_rides') }}
 ),
@@ -9,21 +17,19 @@ distinct_providers AS (
     FROM payments_rides
 ),
 
-min_max_dates AS (
-    SELECT
-        MIN(DATE(transaction_date_time_pacific)) AS min_date,
-        MAX(DATE(transaction_date_time_pacific)) AS max_date
-    FROM payments_rides
-),
-
 create_date_range AS (
-        {{ dbt_date.get_base_dates(start_date="2022-01-01", end_date="2022-02-01", datepart="day") }}
+    {{ dbt_utils.date_spine(
+        datepart="day",
+        start_date="'" ~ min_date ~ "'",
+        end_date="'" ~ max_date ~ "'"
+    )
+    }}
 ),
 
 payments_tests_date_spine AS (
     SELECT
         participant_id,
-        date_day
+        date_day AS day_history
     FROM distinct_providers
     CROSS JOIN create_date_range
 )
