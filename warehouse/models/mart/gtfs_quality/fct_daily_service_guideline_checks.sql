@@ -7,6 +7,7 @@ unioned AS (
         relations=[
             ref('int_gtfs_quality__trip_planner_schedule'),
             ref('int_gtfs_quality__trip_planner_rt'),
+            ref('int_gtfs_quality__all_tu_in_vp'),
         ],
     ) }}
 ),
