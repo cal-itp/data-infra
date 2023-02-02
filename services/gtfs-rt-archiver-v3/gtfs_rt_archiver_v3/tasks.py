@@ -15,11 +15,16 @@ from huey import RedisHuey  # type: ignore
 from requests import HTTPError, RequestException
 
 from .metrics import (
+    FETCH_DOWNLOADING_TIME,
     FETCH_PROCESSED_BYTES,
     FETCH_PROCESSING_DELAY,
     FETCH_PROCESSING_TIME,
+    FETCH_UPLOADING_TIME,
     TASK_SIGNALS,
 )
+
+# 30 is ridiculously high for a default, but there's a few feeds that commonly take 10+ seconds
+FETCH_TIMEOUT_SECONDS = int(os.getenv("CALITP_FETCH_REQUEST_TIMEOUT_SECONDS", 30))
 
 
 class RedisHueyWithMetrics(RedisHuey):
@@ -126,11 +131,13 @@ def fetch(tick: datetime, config: GTFSDownloadConfig):
 
     with FETCH_PROCESSING_TIME.labels(**labels).time():
         try:
-            extract, content = download_feed(
-                config=config,
-                auth_dict=auth_dict,
-                ts=tick,
-            )
+            with FETCH_DOWNLOADING_TIME.labels(**labels).time():
+                extract, content = download_feed(
+                    config=config,
+                    auth_dict=auth_dict,
+                    ts=tick,
+                    timeout=FETCH_TIMEOUT_SECONDS,
+                )
         except Exception as e:
             status_code = None
             kwargs = dict(
@@ -158,7 +165,10 @@ def fetch(tick: datetime, config: GTFSDownloadConfig):
             f"saving {humanize.naturalsize(len(content))} from {config.url} to {extract.path}"
         )
         try:
-            extract.save_content(content=content, client=client, retry_metadata=True)
+            with FETCH_UPLOADING_TIME.labels(**labels).time():
+                extract.save_content(
+                    content=content, client=client, retry_metadata=True
+                )
         except Exception as e:
             logger.exception(
                 "failure occurred when saving extract or metadata",
