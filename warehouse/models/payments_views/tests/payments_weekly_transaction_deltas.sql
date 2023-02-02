@@ -13,12 +13,23 @@ extract_count_week AS (
         week_start,
         COUNT(*) AS ridership_count
 
-    FROM payments_rides
-    LEFT JOIN payments_tests_weekly_date_spine
+    FROM payments_tests_weekly_date_spine
+    INNER JOIN payments_rides
         USING (participant_id) WHERE transaction_date_pacific >= week_start AND transaction_date_pacific <= week_end
     GROUP BY week_start, participant_id
 ),
 
+match_date_spine AS (
+    SELECT
+
+        participant_id,
+        week_start,
+        ridership_count
+
+    FROM payments_tests_weekly_date_spine
+    LEFT JOIN extract_count_week
+        USING (participant_id, week_start)
+),
 
 calculate_relative_difference AS (
     SELECT
@@ -33,7 +44,7 @@ calculate_relative_difference AS (
         ) * 100
         AS relative_difference
 
-    FROM extract_count_week
+    FROM match_date_spine
 ),
 
 payments_weekly_transaction_deltas AS (
@@ -53,7 +64,6 @@ payments_weekly_transaction_deltas AS (
             relative_difference,
             RANK() OVER (PARTITION BY participant_id ORDER BY week_start DESC) AS recency_rank
             FROM calculate_relative_difference)
-    WHERE recency_rank != 1
 )
 
 SELECT * FROM payments_weekly_transaction_deltas
