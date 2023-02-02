@@ -44,6 +44,7 @@ spec:
               cpu: 1
             limits:
               memory: 1Gi
+        # from https://github.com/oliver006/redis_exporter
         - name: redis-exporter
           image: oliver006/redis_exporter:latest
           securityContext:
