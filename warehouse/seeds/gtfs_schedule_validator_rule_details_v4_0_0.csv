@@ -1,106 +1,106 @@
 code,human_readable_description,version,severity
-block_trips_with_overlapping_stop_times,Trips with the same block id have overlapping stop times.,v4.0.0,error
-csv_parsing_failed,Parsing of a CSV file failed. One common case of the problem is when a cell value contains more than 4096 characters.,v4.0.0,error
-decreasing_shape_distance,"When sorted by shape.shape_pt_sequence, two consecutive shape points must not have decreasing values for shape_dist_traveled.  ",v4.0.0,error
-decreasing_or_equal_stop_time_distance,"When sorted by stop_times.stop_sequence, two consecutive entries in stop_times.txt should have increasing distance, based on the field shape_dist_traveled. If the values are equal, this is considered as an error.",v4.0.0,error
-duplicated_column,The input file CSV header has the same column name repeated.,v4.0.0,error
-duplicate_fare_rule_zone_id_fields,"The combination of fare_rules.route_id, fare_rules.origin_id, fare_rules.contains_id and fare_rules.destination_id fields should be unique in GTFS file fare_rules.txt.",v4.0.0,error
-duplicate_key,The values of the given key and rows are duplicates.,v4.0.0,error
-empty_column_name,A column name has not been provided. Such columns are skipped by the validator.,v4.0.0,error
-empty_file,"Empty csv file found in the archive: file does not have any headers, or is a required file and does not have any data. The GTFS specification requires the first line of each file to contain field names and required files must have data.",v4.0.0,error
-equal_shape_distance_diff_coordinates,"When sorted by shape.shape_pt_sequence, the values for shape_dist_traveled must increase along a shape. Two consecutive points with equal values for shape_dist_traveled and different coordinates indicate an error.",v4.0.0,error
-fare_transfer_rule_duration_limit_type_without_duration_limit,A row from GTFS file fare_transfer_rules.txt has a defined duration_limit_type field but no duration_limit specified.,v4.0.0,error
-fare_transfer_rule_invalid_transfer_count,A row from GTFS file fare_transfer_rules.txt has a defined transfer_count with an invalid value.,v4.0.0,error
-fare_transfer_rule_missing_transfer_count,"A row from GTFS file fare_transfer_rules.txt has from_leg_group_id equal to to_leg_group_id, but has no transfer_count specified.  Per the spec, transfer_count is required if the two leg group ids are equal.",v4.0.0,error
-fare_transfer_rule_with_forbidden_transfer_count,"A row from GTFS file fare_transfer_rules.txt has from_leg_group_id not equal to to_leg_group_id, but has transfer_count specified.  Per the spec, transfer_count is forbidden if the two leg group ids are not equal.",v4.0.0,error
-foreign_key_violation,"A foreign key references the primary key of another file. A foreign key violation means that the foreign key referenced from a given row (the child file) cannot be found in the corresponding file (the parent file). The Foreign keys are defined in the specification under ""Type"" for each file.",v4.0.0,error
-inconsistent_agency_timezone,Agencies from GTFS agency.txt have been found to have different timezones.,v4.0.0,error
-invalid_color,"Value of field with type color is not valid. A color must be encoded as a six-digit hexadecimal number. The leading ""#"" is not included.",v4.0.0,error
-invalid_currency,"Value of field with type currency is not valid. Currency code must follow ISO 4217",v4.0.0,error
-invalid_currency_amount,"A currency amount field has a value that does not match the format (e.g. expected number of decimal places) of its corresponding currency code field.  The number of decimal places is specified by ISO 4217.",v4.0.0,error
-invalid_date,Value of field with type date is not valid. Dates must have the YYYYMMDD format.,v4.0.0,error
-invalid_email,Value of field with type email is not valid. Definitions for valid emails are quite vague. We perform strict validation using the Apache Commons EmailValidator.,v4.0.0,error
-invalid_float,Value of field with type float is not valid. ,v4.0.0,error
-invalid_integer,Value of field with type integer is not valid. ,v4.0.0,error
-invalid_language_code,"Value of field with type language is not valid. Language codes must follow IETF BCP 47.",v4.0.0,error
-invalid_phone_number,"Value of field with type phone number is not valid. This rule uses the PhoneNumberUtil class to validate a phone number based on a country code. If no country code is provided in the parameters used to run the validator, this notice won't be emitted.",v4.0.0,error
-invalid_row_length,A row in the input file has a different number of values than specified by the CSV header.,v4.0.0,error
-invalid_time,"Value of field with type time is not valid. Time must be in the H:MM:SS, HH:MM:SS or HHH:MM:SS format.",v4.0.0,error
-invalid_timezone,"Value of field with type timezone is not valid.Timezones are defined at www.iana.org. Timezone names never contain the space character but may contain an underscore. Refer to Wikipedia for a list of valid values.",v4.0.0,error
-invalid_url,Value of field with type url is not valid. Definitions for valid URLs are quite vague. We perform strict validation using the Apache Commons UrlValidator.,v4.0.0,error
-location_without_parent_station,"A location that must have parent_station field does not have it. The following location types must have parent_station: entrance, generic node, boarding_area.",v4.0.0,error
-location_with_unexpected_stop_time,"Referenced locations (using stop_times.stop_id) must be stops/platforms, i.e. their stops.location_type value must be 0 or empty.",v4.0.0,error
-missing_calendar_and_calendar_date_files,Both files calendar_dates.txt and calendar.txt are missing from the GTFS archive. At least one of the files must be provided.,v4.0.0,error
-missing_level_id,GTFS file levels.txt is required for elevator (pathway_mode=5). A row from stops.txt linked to an elevator pathway has no value for stops.level_id.,v4.0.0,error
-missing_required_column,A required column is missing in the input file.,v4.0.0,error
-missing_required_field,"The given field has no value in some input row, even though values are required.",v4.0.0,error
-missing_required_file,A required file is missing.,v4.0.0,error
-missing_trip_edge,First and last stop of a trip must define both arrival_time and departure_time fields.,v4.0.0,error
-new_line_in_value,A value in CSV file has a new line or carriage return.,v4.0.0,error
-number_out_of_range,The values in the given column of the input rows are out of range.,v4.0.0,error
-overlapping_frequency,Trip frequencies must not overlap in time,v4.0.0,error
-pathway_to_platform_with_boarding_areas,A pathway has an endpoint that is a platform which has boarding areas. A platform that has boarding,v4.0.0,error
-pathway_to_wrong_location_type,"A pathway has an endpoint that is a station. Pathways endpoints must be platforms (stops),",v4.0.0,error
-pathway_unreachable_location,A location belongs to a station that has pathways and is not reachable at least in one direction:,v4.0.0,error
-point_near_origin,"A point is too close to origin (0, 0).",v4.0.0,error
-point_near_pole,A point is too close to the North or South Pole.,v4.0.0,error
-route_both_short_and_long_name_missing,Both short_name and long_name are missing for a route.,v4.0.0,error
-start_and_end_range_equal,"The fields frequencies.start_date and frequencies.end_date have been found equal in frequencies.txt. The GTFS spec is currently unclear how this case should be handled (e.g., is it a trip that circulates once?). It is recommended to use a trip not defined via frequencies.txt for this case.",v4.0.0,error
-start_and_end_range_out_of_order,"Date or time fields have been found out of order in calendar.txt, feed_info.txt and stop_times.txt.",v4.0.0,error
-station_with_parent_station,Field parent_station must be empty when location_type is 1.,v4.0.0,error
-stop_time_timepoint_without_times,Any records with stop_times.timepoint set to 1 must define a value for stop_times.arrival_time and stop_times.departure_time fields.,v4.0.0,error
-stop_time_with_arrival_before_previous_departure_time,"For a given trip_id, the arrival_time of (n+1)-th stoptime in sequence must not precede the departure_time of n-th stoptime in sequence in stop_times.txt.",v4.0.0,error
-stop_time_with_only_arrival_or_departure_time,Missing stop_time.arrival_time or stop_time.departure_time,v4.0.0,error
-stop_without_zone_id,"If fare_rules.txt is provided, and fare_rules.txt uses at least one column among origin_id, destination_id, and contains_id, then all stops and platforms (location_type = 0) must have stops.zone_id assigned.",v4.0.0,error
-transfer_with_invalid_stop_location_type,A from_stop_id or to_stop_id field from GTFS file transfers.txt references a stop that has a location_type other than 0 or 1 (aka Stop/Platform or Station).,v4.0.0,error
-transfer_with_invalid_trip_and_route,A from_trip_id or to_trip_id field from GTFS file transfers.txt references a route that does not match its trips.txt route_id.,v4.0.0,error
-transfer_with_invalid_trip_and_stop,A from_trip_id or to_trip_id field from GTFS file transfers.txt references a stop that is not included in the referenced trip's stop-times.,v4.0.0,error
-transfer_with_suspicious_mid_trip_in_seat,"A from_trip_id or to_trip_id field from GTFS file transfers.txt with an in-seat transfer type references a stop that is not in the expected position in the trip's stop-times. For in-seat transfers, we expect the stop to be the last stop-time in the trip sequence for from_stop_id and the first stop-time for to_stop_id. If you are intentionally using this feature to model mid-trip transfers, you can ignore this warning, but be aware that this functionality is still considered to be partially experimental in some interpretations of the spec.",v4.0.0,error
-translation_foreign_key_violation,An entity with the given record_id and record_sub_id cannot be found in the referenced table.,v4.0.0,error
-translation_unexpected_value,A field in a translations row has value but must be empty.,v4.0.0,error
-wrong_parent_location_type,Value of field location_type of parent found in field parent_station is invalid.,v4.0.0,error
-attribution_without_role,"At least one of the fields is_producer, is_operator, or is_authority should be set to 1.",v4.0.0,warning
-duplicate_route_name,All routes of the same route_type with the same agency_id should have unique combinations of route_short_name and route_long_name.,v4.0.0,warning
-empty_row,A row in the input file has only spaces.,v4.0.0,warning
-equal_shape_distance_same_coordinates,"When sorted by shape.shape_pt_sequence, the values for shape_dist_traveled must increase along a shape. Two consecutive points with equal values for shape_dist_traveled and the same coordinates indicate a duplicative shape point.",v4.0.0,warning
-fast_travel_between_consecutive_stops,A transit vehicle moves too fast between two consecutive stops. The speed threshold depends on route type.,v4.0.0,warning
-fast_travel_between_far_stops,A transit vehicle moves too fast between far consecutive stops (more than in 10 km apart). ,v4.0.0,warning
-feed_expiration_date_7_days,"The dataset expiration date defined in feed_info.txt is in seven days or less. At any time, the published GTFS dataset should be valid for at least the next 7 days.",v4.0.0,warning
-feed_expiration_date_30_days,"At any time, the GTFS dataset should cover at least the next 30 days of service, and ideally for as long as the operator is confident that the schedule will continue to be operated.",v4.0.0,warning
-inconsistent_agency_lang,Agencies from GTFS agency.txt have been found to have different languages.,v4.0.0,warning
-leading_or_trailing_whitespaces,The value in CSV file has leading or trailing whitespaces.,v4.0.0,warning
-missing_feed_info_date,"Even though feed_info.start_date and feed_info.end_date are optional, if one field is provided the second one should also be provided.",v4.0.0,warning
-missing_recommended_file,A recommended file is missing.,v4.0.0,warning
-missing_recommended_field,"The given field has no value in some input row, even though values are recommended.",v4.0.0,warning
-missing_timepoint_column,The timepoint column should be provided.,v4.0.0,warning
-missing_timepoint_value,"Even though the column timepoint is optional in stop_times.txt according to the specification, stop_times.timepoint should not be empty when provided.",v4.0.0,warning
-more_than_one_entity,"The file is expected to have a single entity but has more (e.g., ""feed_info.txt"").",v4.0.0,warning
-non_ascii_or_non_printable_char,A value of a field with type id contains non ASCII or non printable characters. This is not recommended.,v4.0.0,warning
-pathway_dangling_generic_node,A generic node has only one incident location in a pathway graph. Such generic node is useless,v4.0.0,warning
-pathway_loop,A pathway should not have same values for from_stop_id and to_stop_id.,v4.0.0,warning
-platform_without_parent_station,A platform has no parent_station field set.,v4.0.0,warning
-route_color_contrast,A route's color and route_text_color should be contrasting.,v4.0.0,warning
-route_short_and_long_name_equal,A single route has the same values for route_short_name and route_long_name.,v4.0.0,warning
-route_short_name_too_long,Short name of a route is too long (more than 12 characters).,v4.0.0,warning
-same_name_and_description_for_route,"The GTFS spec defines routes.txt route_desc as: 'Description of a route that provides useful, quality information. Do not simply duplicate the name of the route.'",v4.0.0,warning
-same_name_and_description_for_stop,"The GTFS spec defines stops.txt stop_description as:'Description of the location that provides useful, quality information. Do not simply duplicate the name of the location.'",v4.0.0,warning
-same_route_and_agency_url,A route should not have the same routes.route_url as a record from agency.txt.,v4.0.0,warning
-same_stop_and_agency_url,A stop should not have the same stops.stop_url as a record from agency.txt.,v4.0.0,warning
-same_stop_and_route_url,A stop should not have the same stop.stop_url as a record from routes.txt.,v4.0.0,warning
-stop_has_too_many_matches_for_shape,"A stop entry that has many potential matches to the trip's path of travel, as defined  by the shape entry in shapes.txt.",v4.0.0,warning
-stops_match_shape_out_of_order,Two stop entries in stop_times.txt are different than their arrival-departure order as defined by the shape in the shapes.txt file.,v4.0.0,warning
-stop_too_far_from_shape,"Per GTFS Best Practices, route alignments (in shapes.txt) should be within 100 meters of stop locations which a trip serves.",v4.0.0,warning
-stop_too_far_from_shape_using_user_distance,A stop time entry that is a large distance away from the location of the shape in shapes.txt as defined by shape_dist_traveled values.,v4.0.0,warning
-stop_without_stop_time,"A stop in stops.txt is not referenced by any stop_times.stop_id, so it is not used by any trip.",v4.0.0,warning
-translation_unknown_table_name,A translation references an unknown or missing GTFS table.,v4.0.0,warning
-unexpected_enum_value,An enum has an unexpected value.,v4.0.0,warning
-unusable_trip,A trip must visit more than one stop in stop_times.txt to be usable by passengers for boarding and alighting.,v4.0.0,warning
-unused_shape,All records defined by GTFS shapes.txt should be used in trips.txt.,v4.0.0,warning
-unused_trip,Trips should be referred to at least once in stop_times.txt.,v4.0.0,warning
-unknown_column,A column is unknown.,v4.0.0,info
-unknown_file,A file is unknown.,v4.0.0,info
-i_o_error,Error in IO operation.,v4.0.0,system_error
-runtime_exception_in_loader_error,A RuntimeException occurred while loading a table. This normally indicates a bug in validator.,v4.0.0,system_error
-runtime_exception_in_validator_error,"A RuntimeException occurred during validation. This normally indicates a bug in validator code, e.g., in a custom validator class.",v4.0.0,system_error
-thread_execution_error,An ExecutionException occurred during multithreaded validation.,v4.0.0,system_error
-u_r_i_syntax_error,A string could not be parsed as a URI reference.,v4.0.0,system_error
+block_trips_with_overlapping_stop_times,Trips with the same block id have overlapping stop times.,v4.0.0,ERROR
+csv_parsing_failed,Parsing of a CSV file failed. One common case of the problem is when a cell value contains more than 4096 characters.,v4.0.0,ERROR
+decreasing_shape_distance,"When sorted by shape.shape_pt_sequence, two consecutive shape points must not have decreasing values for shape_dist_traveled.  ",v4.0.0,ERROR
+decreasing_or_equal_stop_time_distance,"When sorted by stop_times.stop_sequence, two consecutive entries in stop_times.txt should have increasing distance, based on the field shape_dist_traveled. If the values are equal, this is considered as an error.",v4.0.0,ERROR
+duplicated_column,The input file CSV header has the same column name repeated.,v4.0.0,ERROR
+duplicate_fare_rule_zone_id_fields,"The combination of fare_rules.route_id, fare_rules.origin_id, fare_rules.contains_id and fare_rules.destination_id fields should be unique in GTFS file fare_rules.txt.",v4.0.0,ERROR
+duplicate_key,The values of the given key and rows are duplicates.,v4.0.0,ERROR
+empty_column_name,A column name has not been provided. Such columns are skipped by the validator.,v4.0.0,ERROR
+empty_file,"Empty csv file found in the archive: file does not have any headers, or is a required file and does not have any data. The GTFS specification requires the first line of each file to contain field names and required files must have data.",v4.0.0,ERROR
+equal_shape_distance_diff_coordinates,"When sorted by shape.shape_pt_sequence, the values for shape_dist_traveled must increase along a shape. Two consecutive points with equal values for shape_dist_traveled and different coordinates indicate an error.",v4.0.0,ERROR
+fare_transfer_rule_duration_limit_type_without_duration_limit,A row from GTFS file fare_transfer_rules.txt has a defined duration_limit_type field but no duration_limit specified.,v4.0.0,ERROR
+fare_transfer_rule_invalid_transfer_count,A row from GTFS file fare_transfer_rules.txt has a defined transfer_count with an invalid value.,v4.0.0,ERROR
+fare_transfer_rule_missing_transfer_count,"A row from GTFS file fare_transfer_rules.txt has from_leg_group_id equal to to_leg_group_id, but has no transfer_count specified.  Per the spec, transfer_count is required if the two leg group ids are equal.",v4.0.0,ERROR
+fare_transfer_rule_with_forbidden_transfer_count,"A row from GTFS file fare_transfer_rules.txt has from_leg_group_id not equal to to_leg_group_id, but has transfer_count specified.  Per the spec, transfer_count is forbidden if the two leg group ids are not equal.",v4.0.0,ERROR
+foreign_key_violation,"A foreign key references the primary key of another file. A foreign key violation means that the foreign key referenced from a given row (the child file) cannot be found in the corresponding file (the parent file). The Foreign keys are defined in the specification under ""Type"" for each file.",v4.0.0,ERROR
+inconsistent_agency_timezone,Agencies from GTFS agency.txt have been found to have different timezones.,v4.0.0,ERROR
+invalid_color,"Value of field with type color is not valid. A color must be encoded as a six-digit hexadecimal number. The leading ""#"" is not included.",v4.0.0,ERROR
+invalid_currency,"Value of field with type currency is not valid. Currency code must follow ISO 4217",v4.0.0,ERROR
+invalid_currency_amount,"A currency amount field has a value that does not match the format (e.g. expected number of decimal places) of its corresponding currency code field.  The number of decimal places is specified by ISO 4217.",v4.0.0,ERROR
+invalid_date,Value of field with type date is not valid. Dates must have the YYYYMMDD format.,v4.0.0,ERROR
+invalid_email,Value of field with type email is not valid. Definitions for valid emails are quite vague. We perform strict validation using the Apache Commons EmailValidator.,v4.0.0,ERROR
+invalid_float,Value of field with type float is not valid. ,v4.0.0,ERROR
+invalid_integer,Value of field with type integer is not valid. ,v4.0.0,ERROR
+invalid_language_code,"Value of field with type language is not valid. Language codes must follow IETF BCP 47.",v4.0.0,ERROR
+invalid_phone_number,"Value of field with type phone number is not valid. This rule uses the PhoneNumberUtil class to validate a phone number based on a country code. If no country code is provided in the parameters used to run the validator, this notice won't be emitted.",v4.0.0,ERROR
+invalid_row_length,A row in the input file has a different number of values than specified by the CSV header.,v4.0.0,ERROR
+invalid_time,"Value of field with type time is not valid. Time must be in the H:MM:SS, HH:MM:SS or HHH:MM:SS format.",v4.0.0,ERROR
+invalid_timezone,"Value of field with type timezone is not valid.Timezones are defined at www.iana.org. Timezone names never contain the space character but may contain an underscore. Refer to Wikipedia for a list of valid values.",v4.0.0,ERROR
+invalid_url,Value of field with type url is not valid. Definitions for valid URLs are quite vague. We perform strict validation using the Apache Commons UrlValidator.,v4.0.0,ERROR
+location_without_parent_station,"A location that must have parent_station field does not have it. The following location types must have parent_station: entrance, generic node, boarding_area.",v4.0.0,ERROR
+location_with_unexpected_stop_time,"Referenced locations (using stop_times.stop_id) must be stops/platforms, i.e. their stops.location_type value must be 0 or empty.",v4.0.0,ERROR
+missing_calendar_and_calendar_date_files,Both files calendar_dates.txt and calendar.txt are missing from the GTFS archive. At least one of the files must be provided.,v4.0.0,ERROR
+missing_level_id,GTFS file levels.txt is required for elevator (pathway_mode=5). A row from stops.txt linked to an elevator pathway has no value for stops.level_id.,v4.0.0,ERROR
+missing_required_column,A required column is missing in the input file.,v4.0.0,ERROR
+missing_required_field,"The given field has no value in some input row, even though values are required.",v4.0.0,ERROR
+missing_required_file,A required file is missing.,v4.0.0,ERROR
+missing_trip_edge,First and last stop of a trip must define both arrival_time and departure_time fields.,v4.0.0,ERROR
+new_line_in_value,A value in CSV file has a new line or carriage return.,v4.0.0,ERROR
+number_out_of_range,The values in the given column of the input rows are out of range.,v4.0.0,ERROR
+overlapping_frequency,Trip frequencies must not overlap in time,v4.0.0,ERROR
+pathway_to_platform_with_boarding_areas,A pathway has an endpoint that is a platform which has boarding areas. A platform that has boarding,v4.0.0,ERROR
+pathway_to_wrong_location_type,"A pathway has an endpoint that is a station. Pathways endpoints must be platforms (stops),",v4.0.0,ERROR
+pathway_unreachable_location,A location belongs to a station that has pathways and is not reachable at least in one direction:,v4.0.0,ERROR
+point_near_origin,"A point is too close to origin (0, 0).",v4.0.0,ERROR
+point_near_pole,A point is too close to the North or South Pole.,v4.0.0,ERROR
+route_both_short_and_long_name_missing,Both short_name and long_name are missing for a route.,v4.0.0,ERROR
+start_and_end_range_equal,"The fields frequencies.start_date and frequencies.end_date have been found equal in frequencies.txt. The GTFS spec is currently unclear how this case should be handled (e.g., is it a trip that circulates once?). It is recommended to use a trip not defined via frequencies.txt for this case.",v4.0.0,ERROR
+start_and_end_range_out_of_order,"Date or time fields have been found out of order in calendar.txt, feed_info.txt and stop_times.txt.",v4.0.0,ERROR
+station_with_parent_station,Field parent_station must be empty when location_type is 1.,v4.0.0,ERROR
+stop_time_timepoint_without_times,Any records with stop_times.timepoint set to 1 must define a value for stop_times.arrival_time and stop_times.departure_time fields.,v4.0.0,ERROR
+stop_time_with_arrival_before_previous_departure_time,"For a given trip_id, the arrival_time of (n+1)-th stoptime in sequence must not precede the departure_time of n-th stoptime in sequence in stop_times.txt.",v4.0.0,ERROR
+stop_time_with_only_arrival_or_departure_time,Missing stop_time.arrival_time or stop_time.departure_time,v4.0.0,ERROR
+stop_without_zone_id,"If fare_rules.txt is provided, and fare_rules.txt uses at least one column among origin_id, destination_id, and contains_id, then all stops and platforms (location_type = 0) must have stops.zone_id assigned.",v4.0.0,ERROR
+transfer_with_invalid_stop_location_type,A from_stop_id or to_stop_id field from GTFS file transfers.txt references a stop that has a location_type other than 0 or 1 (aka Stop/Platform or Station).,v4.0.0,ERROR
+transfer_with_invalid_trip_and_route,A from_trip_id or to_trip_id field from GTFS file transfers.txt references a route that does not match its trips.txt route_id.,v4.0.0,ERROR
+transfer_with_invalid_trip_and_stop,A from_trip_id or to_trip_id field from GTFS file transfers.txt references a stop that is not included in the referenced trip's stop-times.,v4.0.0,ERROR
+transfer_with_suspicious_mid_trip_in_seat,"A from_trip_id or to_trip_id field from GTFS file transfers.txt with an in-seat transfer type references a stop that is not in the expected position in the trip's stop-times. For in-seat transfers, we expect the stop to be the last stop-time in the trip sequence for from_stop_id and the first stop-time for to_stop_id. If you are intentionally using this feature to model mid-trip transfers, you can ignore this warning, but be aware that this functionality is still considered to be partially experimental in some interpretations of the spec.",v4.0.0,ERROR
+translation_foreign_key_violation,An entity with the given record_id and record_sub_id cannot be found in the referenced table.,v4.0.0,ERROR
+translation_unexpected_value,A field in a translations row has value but must be empty.,v4.0.0,ERROR
+wrong_parent_location_type,Value of field location_type of parent found in field parent_station is invalid.,v4.0.0,ERROR
+attribution_without_role,"At least one of the fields is_producer, is_operator, or is_authority should be set to 1.",v4.0.0,WARNING
+duplicate_route_name,All routes of the same route_type with the same agency_id should have unique combinations of route_short_name and route_long_name.,v4.0.0,WARNING
+empty_row,A row in the input file has only spaces.,v4.0.0,WARNING
+equal_shape_distance_same_coordinates,"When sorted by shape.shape_pt_sequence, the values for shape_dist_traveled must increase along a shape. Two consecutive points with equal values for shape_dist_traveled and the same coordinates indicate a duplicative shape point.",v4.0.0,WARNING
+fast_travel_between_consecutive_stops,A transit vehicle moves too fast between two consecutive stops. The speed threshold depends on route type.,v4.0.0,WARNING
+fast_travel_between_far_stops,A transit vehicle moves too fast between far consecutive stops (more than in 10 km apart). ,v4.0.0,WARNING
+feed_expiration_date_7_days,"The dataset expiration date defined in feed_info.txt is in seven days or less. At any time, the published GTFS dataset should be valid for at least the next 7 days.",v4.0.0,WARNING
+feed_expiration_date_30_days,"At any time, the GTFS dataset should cover at least the next 30 days of service, and ideally for as long as the operator is confident that the schedule will continue to be operated.",v4.0.0,WARNING
+inconsistent_agency_lang,Agencies from GTFS agency.txt have been found to have different languages.,v4.0.0,WARNING
+leading_or_trailing_whitespaces,The value in CSV file has leading or trailing whitespaces.,v4.0.0,WARNING
+missing_feed_info_date,"Even though feed_info.start_date and feed_info.end_date are optional, if one field is provided the second one should also be provided.",v4.0.0,WARNING
+missing_recommended_file,A recommended file is missing.,v4.0.0,WARNING
+missing_recommended_field,"The given field has no value in some input row, even though values are recommended.",v4.0.0,WARNING
+missing_timepoint_column,The timepoint column should be provided.,v4.0.0,WARNING
+missing_timepoint_value,"Even though the column timepoint is optional in stop_times.txt according to the specification, stop_times.timepoint should not be empty when provided.",v4.0.0,WARNING
+more_than_one_entity,"The file is expected to have a single entity but has more (e.g., ""feed_info.txt"").",v4.0.0,WARNING
+non_ascii_or_non_printable_char,A value of a field with type id contains non ASCII or non printable characters. This is not recommended.,v4.0.0,WARNING
+pathway_dangling_generic_node,A generic node has only one incident location in a pathway graph. Such generic node is useless,v4.0.0,WARNING
+pathway_loop,A pathway should not have same values for from_stop_id and to_stop_id.,v4.0.0,WARNING
+platform_without_parent_station,A platform has no parent_station field set.,v4.0.0,WARNING
+route_color_contrast,A route's color and route_text_color should be contrasting.,v4.0.0,WARNING
+route_short_and_long_name_equal,A single route has the same values for route_short_name and route_long_name.,v4.0.0,WARNING
+route_short_name_too_long,Short name of a route is too long (more than 12 characters).,v4.0.0,WARNING
+same_name_and_description_for_route,"The GTFS spec defines routes.txt route_desc as: 'Description of a route that provides useful, quality information. Do not simply duplicate the name of the route.'",v4.0.0,WARNING
+same_name_and_description_for_stop,"The GTFS spec defines stops.txt stop_description as:'Description of the location that provides useful, quality information. Do not simply duplicate the name of the location.'",v4.0.0,WARNING
+same_route_and_agency_url,A route should not have the same routes.route_url as a record from agency.txt.,v4.0.0,WARNING
+same_stop_and_agency_url,A stop should not have the same stops.stop_url as a record from agency.txt.,v4.0.0,WARNING
+same_stop_and_route_url,A stop should not have the same stop.stop_url as a record from routes.txt.,v4.0.0,WARNING
+stop_has_too_many_matches_for_shape,"A stop entry that has many potential matches to the trip's path of travel, as defined  by the shape entry in shapes.txt.",v4.0.0,WARNING
+stops_match_shape_out_of_order,Two stop entries in stop_times.txt are different than their arrival-departure order as defined by the shape in the shapes.txt file.,v4.0.0,WARNING
+stop_too_far_from_shape,"Per GTFS Best Practices, route alignments (in shapes.txt) should be within 100 meters of stop locations which a trip serves.",v4.0.0,WARNING
+stop_too_far_from_shape_using_user_distance,A stop time entry that is a large distance away from the location of the shape in shapes.txt as defined by shape_dist_traveled values.,v4.0.0,WARNING
+stop_without_stop_time,"A stop in stops.txt is not referenced by any stop_times.stop_id, so it is not used by any trip.",v4.0.0,WARNING
+translation_unknown_table_name,A translation references an unknown or missing GTFS table.,v4.0.0,WARNING
+unexpected_enum_value,An enum has an unexpected value.,v4.0.0,WARNING
+unusable_trip,A trip must visit more than one stop in stop_times.txt to be usable by passengers for boarding and alighting.,v4.0.0,WARNING
+unused_shape,All records defined by GTFS shapes.txt should be used in trips.txt.,v4.0.0,WARNING
+unused_trip,Trips should be referred to at least once in stop_times.txt.,v4.0.0,WARNING
+unknown_column,A column is unknown.,v4.0.0,INFO
+unknown_file,A file is unknown.,v4.0.0,INFO
+i_o_error,Error in IO operation.,v4.0.0,SYSTEM_ERROR
+runtime_exception_in_loader_error,A RuntimeException occurred while loading a table. This normally indicates a bug in validator.,v4.0.0,SYSTEM_ERROR
+runtime_exception_in_validator_error,"A RuntimeException occurred during validation. This normally indicates a bug in validator code, e.g., in a custom validator class.",v4.0.0,SYSTEM_ERROR
+thread_execution_error,An ExecutionException occurred during multithreaded validation.,v4.0.0,SYSTEM_ERROR
+u_r_i_syntax_error,A string could not be parsed as a URI reference.,v4.0.0,SYSTEM_ERROR
