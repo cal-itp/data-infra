@@ -2,7 +2,7 @@ operator: operators.ExternalTable
 bucket: "{{ env_var('CALITP_BUCKET__SENTRY_LOGS') }}"
 suffix_bucket: true
 source_objects:
-  - "*.jsonl"
+  - "*.jsonl.gz"
 destination_project_dataset_table: "external_sentry_error_logs.events"
 source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
