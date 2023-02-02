@@ -518,6 +518,9 @@ models:
       - *schedule_validator_code
       - name: severity
       - *schedule_validation_validator_version
+      - name: human_readable_description
+        tests:
+          - not_null
   - name: fct_monthly_reports_site_organization_file_checks
     description: |
       Two checks per month on whether files of interest are present.
