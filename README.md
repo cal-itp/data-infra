@@ -21,11 +21,35 @@ Documentation for this codebase lives at [docs.calitp.org/data-infra](https://do
 * Use GitHub's *draft* status to indicate PRs that are not ready for review/merging
 * Do not use GitHub's "update branch" button or merge the `main` branch back into a PR branch to update it. Instead, rebase PR branches to update them and resolve any merge conflicts.
 
-## pre-commit
+## Linting and type-checking
 
-This repository uses black and pre-commit hooks to format code. To install locally, run
+### pre-commit
 
-`pip install pre-commit` & `pre-commit install` in the root of the repo.
+This repository pre-commit hooks to format code, including black. To install
+pre-commit locally, run `pip install pre-commit` & `pre-commit install`
+in the root of the repo. There is a [GitHub Action](./github/workflows/lint.yml)
+that runs pre-commit on all files, not just changed ones. sqlfluff is currently
+disabled in the CI run due to flakiness, but it will still lint any SQL files
+you attempt to commit locally.
+
+### mypy
+
+We encourage mypy compliance for Python when possible, though we do not
+currently run mypy on Airflow DAGs. All service and job images do pass mypy,
+which runs in the GitHub Actions that build the individual images. If you are
+unfamiliar with Python type hints or mypy, the following documentation links
+will prove useful.
+
+* [PEP 484](https://peps.python.org/pep-0484/), which added type hints
+* [The typing module docs](https://docs.python.org/3/library/typing.html)
+* [The mypy docs](https://mypy.readthedocs.io/en/stable/)
+
+In general, it should be relatively easy to make most of our code pass mypy
+since we make heavy use of Pydantic types. Some of our imported modules will
+need to be ignored with `# type: ignore` on import, such as `gcsfs`
+and `shapely` (until stubs are available, if ever). We recommend including
+comments where additional asserts or other weird-looking code exist to make mypy
+happy.
 
 ## Configuration via Environment Variables
 Generally we try to configure things via environment variables. In the Kubernetes
