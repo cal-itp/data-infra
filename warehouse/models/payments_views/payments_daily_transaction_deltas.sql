@@ -33,7 +33,7 @@ add_date_spine AS (
             AND (t1.participant_id = t2.participant_id)
 ),
 
-payments_daily_transaction_deltas AS (
+calculate_relative_difference AS (
     SELECT
 
         *,
@@ -47,6 +47,19 @@ payments_daily_transaction_deltas AS (
         AS relative_difference
 
     FROM add_date_spine
+),
+
+payments_daily_transaction_deltas AS (
+
+    SELECT
+
+        participant_id,
+        transaction_date,
+        COALESCE(ridership_count, 0) AS ridership_count,
+        relative_difference
+
+    FROM calculate_relative_difference
+
 )
 
 SELECT * FROM payments_daily_transaction_deltas
