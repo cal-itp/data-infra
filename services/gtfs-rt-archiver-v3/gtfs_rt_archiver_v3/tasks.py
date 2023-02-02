@@ -133,6 +133,7 @@ def fetch(tick: datetime, config: GTFSDownloadConfig):
                     config=config,
                     auth_dict=auth_dict,
                     ts=tick,
+                    timeout=5,
                 )
         except Exception as e:
             status_code = None
