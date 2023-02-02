@@ -1,6 +1,8 @@
 from prometheus_client import Counter, Gauge, Histogram
 
 # TODO: these should have config_ as a prefix now
+from prometheus_client.utils import INF
+
 standard_labels = (
     "record_name",
     "record_uri",
@@ -38,9 +40,41 @@ FETCH_DOWNLOADING_TIME = Histogram(
     name="fetch_downloading_time_seconds",
     documentation="Time spent downloading a single fetch.",
     labelnames=standard_labels,
+    buckets=(
+        0.1,
+        0.25,
+        0.5,
+        0.75,
+        1.0,
+        2.5,
+        5.0,
+        7.5,
+        10.0,
+        15.0,
+        20.0,
+        25.0,
+        30.0,
+        INF,
+    ),
 )
 FETCH_UPLOADING_TIME = Histogram(
     name="fetch_uploading_time_seconds",
     documentation="Time spent uploading a single fetch.",
     labelnames=standard_labels,
+    buckets=(
+        0.1,
+        0.25,
+        0.5,
+        0.75,
+        1.0,
+        2.5,
+        5.0,
+        7.5,
+        10.0,
+        15.0,
+        20.0,
+        25.0,
+        30.0,
+        INF,
+    ),
 )

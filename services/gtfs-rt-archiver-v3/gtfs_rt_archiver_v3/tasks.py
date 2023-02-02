@@ -23,7 +23,8 @@ from .metrics import (
     TASK_SIGNALS,
 )
 
-FETCH_TIMEOUT = int(os.getenv("CALITP_FETCH_REQUEST_TIMEOUT_SECONDS", 10))
+# 30 is ridiculously high for a default, but there's a few feeds that commonly take 10+ seconds
+FETCH_TIMEOUT_SECONDS = int(os.getenv("CALITP_FETCH_REQUEST_TIMEOUT_SECONDS", 30))
 
 
 class RedisHueyWithMetrics(RedisHuey):
@@ -135,7 +136,7 @@ def fetch(tick: datetime, config: GTFSDownloadConfig):
                     config=config,
                     auth_dict=auth_dict,
                     ts=tick,
-                    timeout=FETCH_TIMEOUT,
+                    timeout=FETCH_TIMEOUT_SECONDS,
                 )
         except Exception as e:
             status_code = None
