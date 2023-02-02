@@ -27,7 +27,7 @@ add_date_spine AS (
 
         t2.ridership_count
 
-    FROM payments_tests_date_spine AS t1
+    FROM payments_tests_daily_date_spine AS t1
     LEFT JOIN extract_count_date AS t2
         ON (t1.day_history = t2.transaction_date)
             AND (t1.participant_id = t2.participant_id)

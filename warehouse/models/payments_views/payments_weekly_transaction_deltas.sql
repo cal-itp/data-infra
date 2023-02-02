@@ -6,7 +6,7 @@ payments_tests_weekly_date_spine AS (
     SELECT * FROM {{ ref('payments_tests_weekly_date_spine') }}
 ),
 
-extract_count_date AS (
+extract_count_week AS (
     SELECT
 
         participant_id,
@@ -33,7 +33,7 @@ calculate_relative_difference AS (
         ) * 100
         AS relative_difference
 
-    FROM extract_count_date
+    FROM extract_count_week
 ),
 
 payments_weekly_transaction_deltas AS (
@@ -54,7 +54,6 @@ payments_weekly_transaction_deltas AS (
             RANK() OVER (PARTITION BY participant_id ORDER BY week_start DESC) AS recency_rank
             FROM calculate_relative_difference)
     WHERE recency_rank != 1
-
 )
 
 SELECT * FROM payments_weekly_transaction_deltas
