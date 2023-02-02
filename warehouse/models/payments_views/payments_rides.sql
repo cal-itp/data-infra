@@ -344,7 +344,8 @@ payments_rides AS (
             transaction_date_time_pacific,
             MINUTE
         ) AS duration,
-        ST_DISTANCE(on_geography, off_geography) AS distance_meters
+        ST_DISTANCE(on_geography, off_geography) AS distance_meters,
+        CAST(transaction_date_time_pacific AS date) AS transaction_date_pacific
     FROM join_table
 
 )
