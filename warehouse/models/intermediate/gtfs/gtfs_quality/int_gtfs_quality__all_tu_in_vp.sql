@@ -38,8 +38,8 @@ joined AS (
 
     LEFT JOIN fct_observed_trips AS f
     ON idx.date = f.dt
-    AND quartet.trip_updates_gtfs_dataset_key = observed_trips.tu_gtfs_dataset_key
-    AND quartet.vehicle_positions_gtfs_dataset_key = observed_trips.vp_gtfs_dataset_key
+    AND quartet.trip_updates_gtfs_dataset_key = f.tu_gtfs_dataset_key
+    AND quartet.vehicle_positions_gtfs_dataset_key = f.vp_gtfs_dataset_key
     AND f.tu_num_scheduled_canceled_added_stops > 0
     GROUP BY 1,2
 ),
