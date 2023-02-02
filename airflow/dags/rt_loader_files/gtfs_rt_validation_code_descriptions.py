@@ -8,7 +8,7 @@
 # ---
 
 import pandas as pd
-from calitp import write_table, to_snakecase
+from calitp import to_snakecase, write_table
 
 sheet_url = (
     "https://docs.google.com/spreadsheets"

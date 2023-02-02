@@ -1,10 +1,11 @@
-from airflow.models import BaseOperator
 from itertools import chain
 
-from calitp.config import format_table_name
-from calitp.sql import sql_patch_comments, write_table, get_table
 from calitp import get_engine
+from calitp.config import format_table_name
+from calitp.sql import get_table, sql_patch_comments, write_table
 from testing import Tester
+
+from airflow.models import BaseOperator
 
 
 class SqlToWarehouseOperator(BaseOperator):

@@ -12,6 +12,12 @@ idx_monthly_reports_site AS (
 int_gtfs__organization_dataset_map AS (
     SELECT *
     FROM {{ ref('int_gtfs_quality__organization_dataset_map') }}
+    WHERE reports_site_assessed
+),
+
+validator_details AS (
+    SELECT *
+    FROM {{ ref('int_gtfs_quality__schedule_validator_rule_details_unioned') }}
 ),
 
 fct_monthly_reports_site_organization_validation_codes AS (
@@ -26,6 +32,7 @@ fct_monthly_reports_site_organization_validation_codes AS (
         idx.publish_date,
         notices.code,
         notices.severity,
+        validator_details.human_readable_description,
         notices.validation_validator_version
     FROM fct_daily_schedule_feed_validation_notices AS notices
     INNER JOIN int_gtfs__organization_dataset_map AS orgs
@@ -34,6 +41,9 @@ fct_monthly_reports_site_organization_validation_codes AS (
     INNER JOIN idx_monthly_reports_site AS idx
         ON notices.date BETWEEN idx.date_start AND idx.date_end
         AND orgs.organization_source_record_id = idx.organization_source_record_id
+    LEFT JOIN validator_details
+        ON notices.code = validator_details.code
+        AND notices.validation_validator_version = validator_details.version
     WHERE total_notices > 0
     QUALIFY validation_validator_version = MAX(validation_validator_version)
         OVER (PARTITION BY publish_date, organization_source_record_id)

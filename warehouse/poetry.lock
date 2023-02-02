@@ -295,7 +295,7 @@ test = ["flake8 (==3.7.8)", "hypothesis (==3.55.3)"]
 
 [[package]]
 name = "dask"
-version = "2022.12.1"
+version = "2023.1.1"
 description = "Parallel PyData with Task Scheduling"
 category = "main"
 optional = false
@@ -314,10 +314,10 @@ toolz = ">=0.8.2"
 
 [package.extras]
 array = ["numpy (>=1.18)"]
-complete = ["bokeh (>=2.4.2,<3)", "distributed (==2022.12.1)", "jinja2", "numpy (>=1.18)", "pandas (>=1.0)"]
+complete = ["bokeh (>=2.4.2,<3)", "distributed (==2023.1.1)", "jinja2", "numpy (>=1.18)", "pandas (>=1.0)"]
 dataframe = ["numpy (>=1.18)", "pandas (>=1.0)"]
 diagnostics = ["bokeh (>=2.4.2,<3)", "jinja2"]
-distributed = ["distributed (==2022.12.1)"]
+distributed = ["distributed (==2023.1.1)"]
 test = ["pandas", "pytest", "pytest-rerunfailures", "pytest-xdist", "pre-commit"]
 
 [[package]]
@@ -1287,6 +1287,17 @@ pydata-google-auth = "*"
 tqdm = ["tqdm (>=4.23.0)"]
 
 [[package]]
+name = "pandas-stubs"
+version = "1.5.2.230105"
+description = "Type annotations for pandas"
+category = "dev"
+optional = false
+python-versions = ">=3.8,<3.12"
+
+[package.dependencies]
+types-pytz = ">=2022.1.1"
+
+[[package]]
 name = "parsedatetime"
 version = "2.4"
 description = "Parse human-readable date/time text."
@@ -1815,11 +1826,11 @@ pymysql = ["pymysql (<1)", "pymysql"]
 
 [[package]]
 name = "sqlalchemy-bigquery"
-version = "1.5.0"
+version = "1.6.0"
 description = "SQLAlchemy dialect for BigQuery"
 category = "main"
 optional = false
-python-versions = ">=3.7, <3.11"
+python-versions = ">=3.7, <3.12"
 
 [package.dependencies]
 future = "*"
@@ -1835,9 +1846,21 @@ sqlalchemy = ">=1.2.0,<2.0.0dev"
 
 [package.extras]
 alembic = ["alembic"]
-all = ["packaging", "alembic", "geoalchemy2", "pytz", "shapely"]
+all = ["shapely", "alembic", "packaging", "pytz", "geoalchemy2"]
 geography = ["geoalchemy2", "shapely"]
 tests = ["packaging", "pytz"]
+
+[[package]]
+name = "sqlalchemy-stubs"
+version = "0.4"
+description = "SQLAlchemy stubs and mypy plugin"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+mypy = ">=0.790"
+typing-extensions = ">=3.7.4"
 
 [[package]]
 name = "sqlfluff"
@@ -2005,6 +2028,57 @@ doc = ["mkdocs (>=1.1.2,<2.0.0)", "mkdocs-material (>=8.1.4,<9.0.0)", "mdx-inclu
 test = ["shellingham (>=1.3.0,<2.0.0)", "pytest (>=4.4.0,<5.4.0)", "pytest-cov (>=2.10.0,<3.0.0)", "coverage (>=5.2,<6.0)", "pytest-xdist (>=1.32.0,<2.0.0)", "pytest-sugar (>=0.9.4,<0.10.0)", "mypy (==0.910)", "black (>=22.3.0,<23.0.0)", "isort (>=5.0.6,<6.0.0)"]
 
 [[package]]
+name = "types-python-slugify"
+version = "8.0.0.0"
+description = "Typing stubs for python-slugify"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "types-pytz"
+version = "2022.7.1.0"
+description = "Typing stubs for pytz"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "types-pyyaml"
+version = "6.0.12.3"
+description = "Typing stubs for PyYAML"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "types-requests"
+version = "2.28.11.8"
+description = "Typing stubs for requests"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+types-urllib3 = "<1.27"
+
+[[package]]
+name = "types-tqdm"
+version = "4.64.7.11"
+description = "Typing stubs for tqdm"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "types-urllib3"
+version = "1.26.25.4"
+description = "Typing stubs for urllib3"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "typing-extensions"
 version = "4.4.0"
 description = "Backported and Experimental Type Hints for Python 3.7+"
@@ -2078,7 +2152,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.9"
-content-hash = "5a5bbc49aeee786a34689fe1f56c561d27d5138e1cf270ed4ae5ad3f7745e760"
+content-hash = "dbc829459a8a8ea3603e838f188d64667271aacf0700395c3ec07ea8d5c57b25"
 
 [metadata.files]
 agate = []
@@ -2172,6 +2246,7 @@ oauthlib = []
 packaging = []
 pandas = []
 pandas-gbq = []
+pandas-stubs = []
 parsedatetime = []
 parso = []
 partd = []
@@ -2218,6 +2293,7 @@ shapely = []
 six = []
 sqlalchemy = []
 sqlalchemy-bigquery = []
+sqlalchemy-stubs = []
 sqlfluff = []
 sqlparse = []
 stack-data = []
@@ -2231,6 +2307,12 @@ tornado = []
 tqdm = []
 traitlets = []
 typer = []
+types-python-slugify = []
+types-pytz = []
+types-pyyaml = []
+types-requests = []
+types-tqdm = []
+types-urllib3 = []
 typing-extensions = []
 urllib3 = []
 wcwidth = []

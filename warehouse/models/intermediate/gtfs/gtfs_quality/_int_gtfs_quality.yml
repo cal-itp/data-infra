@@ -126,6 +126,29 @@ models:
             - code
             - severity
             - gtfs_validator_version
+
+  - name: int_gtfs_quality__schedule_validator_rule_details_unioned
+    description: |
+      GTFS schedule canonical validator rules by validator version (only for versions that we have
+      at some point used within the GTFS data pipeline.)
+    columns:
+      - name: key
+        tests:
+          - not_null
+          - unique
+      - name: code
+        tests:
+          - not_null
+      - name: human_readable_description
+        tests:
+          - not_null
+      - name: version
+        tests:
+          - not_null
+      - name: severity
+        tests:
+          - not_null
+
   - name: int_gtfs_quality__naive_organization_service_dataset_full_join
     description: |
       `int_gtfs_quality__daily_assessment_candidate_entities` got too complex, so this
@@ -494,7 +517,7 @@ models:
 # --- Service-level
 
   - name: int_gtfs_quality__trip_planner_schedule
-    tests: &stg_gtfs_guideline_tests_service
+    tests: &stg_gtfs_guideline_tests_service_manual
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - date
@@ -504,7 +527,18 @@ models:
     columns: *stg_gtfs_guideline_columns
 
   - name: int_gtfs_quality__trip_planner_rt
-    tests: *stg_gtfs_guideline_tests_service
+    tests: *stg_gtfs_guideline_tests_service_manual
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__all_tu_in_vp
+    tests: &stg_gtfs_guideline_tests_service
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - service_key
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__services_guideline_index')
+      - extreme_results
     columns: *stg_gtfs_guideline_columns
 
 # --- GTFS-service-data-level

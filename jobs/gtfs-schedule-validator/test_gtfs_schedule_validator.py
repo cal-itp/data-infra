@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import toml
-
 from gtfs_schedule_validator import __version__
 
 

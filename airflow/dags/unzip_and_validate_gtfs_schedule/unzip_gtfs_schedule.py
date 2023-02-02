@@ -6,25 +6,22 @@ import concurrent
 import hashlib
 import logging
 import os
-from concurrent.futures import ThreadPoolExecutor, Future
+import zipfile
+from concurrent.futures import Future, ThreadPoolExecutor
+from io import BytesIO
+from typing import ClassVar, Dict, List, Optional, Tuple
 
 import pendulum
-import zipfile
-
-from io import BytesIO
-from typing import ClassVar, List, Optional, Tuple, Dict
-
 import typer
 from calitp.storage import (
-    fetch_all_in_partition,
-    GTFSScheduleFeedExtract,
-    get_fs,
     GTFSFeedType,
+    GTFSScheduleFeedExtract,
     PartitionedGCSArtifact,
     ProcessingOutcome,
+    fetch_all_in_partition,
+    get_fs,
 )
 from tqdm import tqdm
-
 from utils import GTFSScheduleFeedFile
 
 SCHEDULE_UNZIPPED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED"]

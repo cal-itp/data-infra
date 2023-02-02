@@ -1,9 +1,10 @@
 # TODO: can remove once execute method is implemented
 # flake8: noqa
 
-from airflow.models import BaseOperator
 from calitp import get_engine
 from sqlalchemy import sql
+
+from airflow.models import BaseOperator
 
 
 class SqlQueryOperator(BaseOperator):
