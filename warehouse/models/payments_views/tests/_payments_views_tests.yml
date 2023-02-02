@@ -1,0 +1,33 @@
+version: 2
+
+models:
+  - name: payments_monthly_transaction_deltas
+    columns:
+      - name: participant_id
+        description: Littlepay-assigned Participant ID
+      - name: yearmonth
+        description: The month and year of the ridership count calculation
+      - name: ridership_count
+        description: A participant's total ridership in a particular month
+      - name: relative_difference
+        description: The relative change in a participant's ridership count as compared to the previous month
+  - name: payments_weekly_transaction_deltas
+    columns:
+      - name: participant_id
+        description: Littlepay-assigned Participant ID
+      - name: yearweek
+        description: The week and year of the ridership count calculation
+      - name: ridership_count
+        description: A participant's total ridership in a particular week
+      - name: relative_difference
+        description: The relative change in a participant's ridership count as compared to the previous week
+  - name: payments_daily_transaction_deltas
+    columns:
+      - name: participant_id
+        description: Littlepay-assigned Participant ID
+      - name: transaction_date
+        description: The day of the ridership count calculation
+      - name: ridership_count
+        description: A participant's total ridership on a particular day
+      - name: relative_difference
+        description: The relative change in a participant's ridership count as compared to the previous day
