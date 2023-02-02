@@ -65,8 +65,8 @@ empty_row,A row in the input file has only spaces.,v4.0.0,WARNING
 equal_shape_distance_same_coordinates,"When sorted by shape.shape_pt_sequence, the values for shape_dist_traveled must increase along a shape. Two consecutive points with equal values for shape_dist_traveled and the same coordinates indicate a duplicative shape point.",v4.0.0,WARNING
 fast_travel_between_consecutive_stops,A transit vehicle moves too fast between two consecutive stops. The speed threshold depends on route type.,v4.0.0,WARNING
 fast_travel_between_far_stops,A transit vehicle moves too fast between far consecutive stops (more than in 10 km apart). ,v4.0.0,WARNING
-feed_expiration_date_7_days,"The dataset expiration date defined in feed_info.txt is in seven days or less. At any time, the published GTFS dataset should be valid for at least the next 7 days.",v4.0.0,WARNING
-feed_expiration_date_30_days,"At any time, the GTFS dataset should cover at least the next 30 days of service, and ideally for as long as the operator is confident that the schedule will continue to be operated.",v4.0.0,WARNING
+feed_expiration_date7_days,"The dataset expiration date defined in feed_info.txt is in seven days or less. At any time, the published GTFS dataset should be valid for at least the next 7 days.",v4.0.0,WARNING
+feed_expiration_date30_days,"At any time, the GTFS dataset should cover at least the next 30 days of service, and ideally for as long as the operator is confident that the schedule will continue to be operated.",v4.0.0,WARNING
 inconsistent_agency_lang,Agencies from GTFS agency.txt have been found to have different languages.,v4.0.0,WARNING
 leading_or_trailing_whitespaces,The value in CSV file has leading or trailing whitespaces.,v4.0.0,WARNING
 missing_feed_info_date,"Even though feed_info.start_date and feed_info.end_date are optional, if one field is provided the second one should also be provided.",v4.0.0,WARNING
