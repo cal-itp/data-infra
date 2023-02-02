@@ -5,12 +5,23 @@ WITH make_dim AS (
     ) }}
 ),
 
+bad_rows AS (
+    SELECT
+        base64_url,
+        ts,
+        attribution_id,
+        TRUE AS warning_duplicate_primary_key
+    FROM make_dim
+    GROUP BY base64_url, ts, attribution_id
+    HAVING COUNT(*) > 1
+),
+
 dim_attributions AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['feed_key', 'attribution_id']) }} AS key,
+        {{ dbt_utils.surrogate_key(['feed_key', 'make_dim.attribution_id']) }} AS key,
         feed_key,
         organization_name,
-        attribution_id,
+        make_dim.attribution_id,
         agency_id,
         route_id,
         trip_id,
@@ -20,9 +31,15 @@ dim_attributions AS (
         attribution_url,
         attribution_email,
         attribution_phone,
-        base64_url,
+        make_dim.base64_url,
+        COALESCE(warning_duplicate_primary_key, FALSE) AS warning_duplicate_primary_key,
         _feed_valid_from,
     FROM make_dim
+    LEFT JOIN bad_rows
+        ON make_dim.base64_url = bad_rows.base64_url
+        AND make_dim.ts = bad_rows.ts
+        AND make_dim.attribution_id = bad_rows.attribution_id
+            OR (make_dim.attribution_id IS NULL AND bad_rows.attribution_id IS NULL)
 )
 
 SELECT * FROM dim_attributions
