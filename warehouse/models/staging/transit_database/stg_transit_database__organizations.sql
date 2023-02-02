@@ -13,7 +13,15 @@ stg_transit_database__organizations AS (
         {{ trim_make_empty_string_null(column_name = "name") }} AS name,
         organization_type,
         roles,
-        CAST(itp_id AS INTEGER) AS itp_id,
+        CASE
+            -- only correct records while they were actively incorrect, don't hard code in general
+            -- just in case there are legitimate changes upstream
+            -- correct Cloverdale having Long Beach ITP ID
+            WHEN id = 'recRM3c9Zfaft4V2B' AND itp_id = 170 THEN 70
+            -- correct City of Madera having Madera County ITP ID
+            WHEN id = 'rec2DteW2sfmBJRsH' AND itp_id = 188 THEN 187
+            ELSE CAST(itp_id AS INTEGER)
+        END AS itp_id,
         unnested_ntd_records AS ntd_agency_info_key,
         hubspot_company_record_id,
         alias_ as alias,
