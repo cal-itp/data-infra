@@ -1,7 +1,5 @@
 WITH payments_rides AS (
-
     SELECT * FROM {{ ref('payments_rides') }}
-
 ),
 
 payments_tests_date_spine AS (
@@ -9,7 +7,6 @@ payments_tests_date_spine AS (
 ),
 
 extract_count_date AS (
-
     SELECT
 
         participant_id,
@@ -23,7 +20,6 @@ extract_count_date AS (
 ),
 
 add_date_spine AS (
-
     SELECT
 
         t1.participant_id,
@@ -35,11 +31,9 @@ add_date_spine AS (
     LEFT JOIN extract_count_date AS t2
         ON (t1.day_history = t2.transaction_date)
             AND (t1.participant_id = t2.participant_id)
-
 ),
 
 payments_daily_transaction_deltas AS (
-
     SELECT
 
         *,
@@ -53,7 +47,6 @@ payments_daily_transaction_deltas AS (
         AS relative_difference
 
     FROM add_date_spine
-
 )
 
 SELECT * FROM payments_daily_transaction_deltas
