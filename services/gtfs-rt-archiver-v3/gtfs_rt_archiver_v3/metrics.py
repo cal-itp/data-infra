@@ -35,6 +35,22 @@ FETCH_PROCESSING_TIME = Histogram(
     name="fetch_processing_time_seconds",
     documentation="Time spent processing a single fetch (end to end).",
     labelnames=standard_labels,
+    buckets=(
+        0.1,
+        0.25,
+        0.5,
+        0.75,
+        1.0,
+        2.5,
+        5.0,
+        7.5,
+        10.0,
+        15.0,
+        20.0,
+        25.0,
+        30.0,
+        INF,
+    ),
 )
 FETCH_DOWNLOADING_TIME = Histogram(
     name="fetch_downloading_time_seconds",
