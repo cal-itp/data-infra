@@ -11,6 +11,7 @@ seeds:
           - not_null
           - unique
 
+  # TODO: delete/deprecate (v1 / superseded by the validator_rule_details tables)
   - name: gtfs_schedule_validation_code_descriptions
     description: |
       A list of validation codes output by the GTFS Schedule validator, and their severities.
