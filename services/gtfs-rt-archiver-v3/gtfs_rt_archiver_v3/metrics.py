@@ -1,8 +1,6 @@
-from prometheus_client import Counter, Gauge, Histogram
+from prometheus_client import Counter, Gauge, Histogram, utils
 
-# TODO: these should have config_ as a prefix now
-from prometheus_client.utils import INF
-
+# TODO: maybe these could live on GTFSDownloadConfig?
 standard_labels = (
     "record_name",
     "record_uri",
@@ -49,7 +47,7 @@ FETCH_PROCESSING_TIME = Histogram(
         20.0,
         25.0,
         30.0,
-        INF,
+        utils.INF,
     ),
 )
 FETCH_DOWNLOADING_TIME = Histogram(
@@ -70,7 +68,7 @@ FETCH_DOWNLOADING_TIME = Histogram(
         20.0,
         25.0,
         30.0,
-        INF,
+        utils.INF,
     ),
 )
 FETCH_UPLOADING_TIME = Histogram(
@@ -91,6 +89,6 @@ FETCH_UPLOADING_TIME = Histogram(
         20.0,
         25.0,
         30.0,
-        INF,
+        utils.INF,
     ),
 )
