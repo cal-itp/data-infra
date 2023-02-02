@@ -46,7 +46,7 @@ spec:
               memory: 1Gi
         # from https://github.com/oliver006/redis_exporter
         - name: redis-exporter
-          image: oliver006/redis_exporter:latest
+          image: oliver006/redis_exporter:v1.46.0
           securityContext:
             runAsUser: 59000
             runAsGroup: 59000
