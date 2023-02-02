@@ -14,7 +14,7 @@ stg_transit_database__organizations AS (
         organization_type,
         roles,
         CASE
-            -- only correct records while they were actively incorrect, don't hard code in genera
+            -- only correct records while they were actively incorrect, don't hard code in general
             -- just in case there are legitimate changes upstream
             -- correct Cloverdale having Long Beach ITP ID
             WHEN id = 'recRM3c9Zfaft4V2B' AND itp_id = 170 THEN 70
