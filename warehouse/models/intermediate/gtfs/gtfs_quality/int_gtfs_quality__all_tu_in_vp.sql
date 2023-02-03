@@ -18,13 +18,13 @@ joined AS (
        idx.service_key,
        COUNT(
         CASE WHEN
-            f.tu_num_distinct_message_ids IS NOT NULL
+            f.tu_num_distinct_message_ids IS NOT null
             AND
-            f.vp_num_distinct_message_ids IS NOT NULL
+            f.vp_num_distinct_message_ids IS NOT null
         THEN 1 END ) AS vp_and_tu_present,
        COUNT(
         CASE WHEN
-            f.tu_num_distinct_message_ids IS NOT NULL
+            f.tu_num_distinct_message_ids IS NOT null
         THEN 1 END) AS tu_present
     FROM services_guideline_index AS idx
 
@@ -39,7 +39,9 @@ joined AS (
     LEFT JOIN fct_observed_trips AS f
     ON idx.date = f.dt
     AND quartet.trip_updates_gtfs_dataset_key = f.tu_gtfs_dataset_key
-    AND quartet.vehicle_positions_gtfs_dataset_key = f.vp_gtfs_dataset_key
+    -- Joining on vp_gtfs_dataset_key would ensure that vp_num_distinct_message_ids was never null
+    -- The below join condition may be unnecessary, though it could rule out potential cases where one TU feed is mapped to multiple scheduel feeds
+    AND quartet.associated_schedule_gtfs_dataset_key = f.schedule_to_use_for_rt_validation_gtfs_dataset_key
     AND f.tu_num_scheduled_canceled_added_stops > 0
     GROUP BY 1,2
 ),
