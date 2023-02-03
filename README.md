@@ -20,6 +20,7 @@ Documentation for this codebase lives at [docs.calitp.org/data-infra](https://do
 * Use Conventional Commit format for PR titles
 * Use GitHub's *draft* status to indicate PRs that are not ready for review/merging
 * Do not use GitHub's "update branch" button or merge the `main` branch back into a PR branch to update it. Instead, rebase PR branches to update them and resolve any merge conflicts.
+* We use GitHub's "code owners" functionality to designate a person or group of people who are in the line of approval for changes to some parts of this repository - if one or more people are automatically tagged as reviewers by GitHub when you create a PR, an approving review from at least one of them is required to merge. This does not automatically place the PR review in somebody's list of priorities, so please reach out to a reviewer to get eyes on your PR if it's time-sensitive.
 
 ## Linting and type-checking
 
@@ -52,6 +53,7 @@ comments where additional asserts or other weird-looking code exist to make mypy
 happy.
 
 ## Configuration via Environment Variables
+
 Generally we try to configure things via environment variables. In the Kubernetes
 world, these get configured via Kustomize overlays ([example](./kubernetes/apps/overlays/gtfs-rt-archiver-v3-prod/archiver-channel-vars.yaml)).
 For Airflow jobs, we currently use hosted Google Cloud Composer which has a
