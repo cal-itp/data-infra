@@ -3,6 +3,10 @@
 sentry:
   existingSecret: sentry-secrets
   existingSecretKey: session-secret
+  postgresql:
+    global:
+      postgresql:
+        existingSecret: sentry-sentry-postgresql
   user:
     create: true
     email: general+cal-itp@jarv.us
