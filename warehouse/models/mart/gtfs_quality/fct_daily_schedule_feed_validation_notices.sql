@@ -26,7 +26,10 @@ validation_notices AS (
 -- guarantee that the "range" will never have overlapped, for example
 -- a backfill could also produce v4 validations alongside v3
 first_outcome_per_version AS (
-    SELECT outcomes.*, EXTRACT(DATE FROM outcomes.extract_ts) AS extract_dt, feeds.key AS feed_key
+    SELECT
+        outcomes.*,
+        EXTRACT(DATE FROM outcomes.extract_ts) AS extract_dt,
+        feeds.key AS feed_key,
     FROM successful_validation_outcomes outcomes
     INNER JOIN dim_schedule_feeds feeds
         ON outcomes.base64_url = feeds.base64_url
@@ -36,6 +39,14 @@ first_outcome_per_version AS (
         ORDER BY outcomes.extract_ts
     ) = 1
 ),
+
+-- have to also get the last day of each feed's validator version
+outcomes_with_end_dt AS (
+    SELECT
+        *,
+        LAG(extract_dt) OVER (PARTITION BY feed_key ORDER BY extract_dt) AS next_outcome_dt
+    FROM first_outcome_per_version
+)
 
 fct_daily_schedule_feed_validation_notices AS (
     SELECT
@@ -60,7 +71,7 @@ fct_daily_schedule_feed_validation_notices AS (
     FROM fct_daily_schedule_feeds AS daily_feeds
     LEFT JOIN first_outcome_per_version AS outcomes
         ON daily_feeds.feed_key = outcomes.feed_key
-        AND daily_feeds.date >= outcomes.extract_dt
+        AND daily_feeds.date BETWEEN outcomes.extract_dt AND outcomes.next_outcome_dt
     LEFT JOIN validation_codes AS codes
         ON outcomes.validation_validator_version = codes.gtfs_validator_version
     LEFT JOIN validation_notices AS notices
