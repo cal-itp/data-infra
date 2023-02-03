@@ -120,7 +120,7 @@ class SentryToGCSOperator(BaseOperator):
         self.ts = str(pendulum.now().to_iso8601_string())
         self.bucket = bucket
         self.extract = SentryExtract(
-            issue_id=issue_id, dt=self.dt, ts=self.ts, filename="events.jsonl.gz"
+            issue_id=issue_id, dt=self.dt, ts=self.ts, filename=f"{issue_id}.jsonl.gz"
         )
         self.auth_token = auth_token
 

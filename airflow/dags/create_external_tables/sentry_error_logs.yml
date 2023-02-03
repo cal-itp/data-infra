@@ -8,7 +8,7 @@ source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 hive_options:
   mode: CUSTOM
-  source_uri_prefix: "{issue:STRING}/{dt:DATE}/{ts:TIMESTAMP}/"
+  source_uri_prefix: "events/{dt:DATE}/{ts:TIMESTAMP}/"
 schema_fields:
   - name: id
     type: STRING
@@ -36,7 +36,7 @@ schema_fields:
   - name: platform
     type: STRING
   - name: datecreated
-    type: DATETIME
+    type: STRING
   - name: crashfile
     mode: NULLABLE
     type: STRING
