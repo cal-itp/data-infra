@@ -18,13 +18,13 @@ joined AS (
        idx.service_key,
        COUNT(
         CASE WHEN
-            f.tu_num_distinct_message_ids IS NOT null
+            f.tu_num_distinct_message_ids IS NOT NULL
             AND
-            f.vp_num_distinct_message_ids IS NOT null
+            f.vp_num_distinct_message_ids IS NOT NULL
         THEN 1 END ) AS vp_and_tu_present,
        COUNT(
         CASE WHEN
-            f.tu_num_distinct_message_ids IS NOT null
+            f.tu_num_distinct_message_ids IS NOT NULL
         THEN 1 END) AS tu_present
     FROM services_guideline_index AS idx
 
