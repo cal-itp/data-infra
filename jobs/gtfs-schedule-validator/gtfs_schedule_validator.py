@@ -279,6 +279,7 @@ def validate_day(
     )
 
     if missing or invalid:
+        typer.secho(f"valid: {len(extracts)}")
         typer.secho(f"missing: {missing}")
         typer.secho(f"invalid: {invalid}")
         raise RuntimeError("found files with missing or invalid metadata; failing job")
