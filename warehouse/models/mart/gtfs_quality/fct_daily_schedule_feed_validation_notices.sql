@@ -25,7 +25,7 @@ validation_notices AS (
 -- of the validator was run against that feed; technically we don't
 -- guarantee that the "range" will never have overlapped, for example
 -- a backfill could also produce v4 validations alongside v3
-first_outcome_per_version AS (
+first_outcome_per_feed_per_version AS (
     SELECT
         outcomes.*,
         EXTRACT(DATE FROM outcomes.extract_ts) AS extract_dt,
@@ -45,8 +45,8 @@ outcomes_with_end_dt AS (
     SELECT
         *,
         LAG(extract_dt) OVER (PARTITION BY feed_key ORDER BY extract_dt) AS next_outcome_dt
-    FROM first_outcome_per_version
-)
+    FROM first_outcome_per_feed_per_version
+),
 
 fct_daily_schedule_feed_validation_notices AS (
     SELECT
@@ -69,7 +69,7 @@ fct_daily_schedule_feed_validation_notices AS (
             CASE WHEN validation_success THEN 0 END
         ) AS total_notices,
     FROM fct_daily_schedule_feeds AS daily_feeds
-    LEFT JOIN first_outcome_per_version AS outcomes
+    LEFT JOIN outcomes_with_end_dt AS outcomes
         ON daily_feeds.feed_key = outcomes.feed_key
         AND daily_feeds.date BETWEEN outcomes.extract_dt AND outcomes.next_outcome_dt
     LEFT JOIN validation_codes AS codes
@@ -78,7 +78,7 @@ fct_daily_schedule_feed_validation_notices AS (
         ON codes.code = notices.code
         AND outcomes.base64_url = notices.base64_url
         AND outcomes.extract_ts = notices.ts
-    -- TODO: truncate at current date (rather than letting future validation dates)
+    WHERE daily_feeds.date <= CURRENT_DATE()
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 )
 
