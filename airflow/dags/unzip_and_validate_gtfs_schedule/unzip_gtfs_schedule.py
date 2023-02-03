@@ -12,6 +12,7 @@ from io import BytesIO
 from typing import ClassVar, Dict, List, Optional, Tuple
 
 import pendulum
+import sentry_sdk
 import typer
 from calitp.storage import (
     GTFSFeedType,
@@ -77,6 +78,8 @@ def summarize_zip_contents(
 ) -> Tuple[List[str], List[str], bool]:
     files = []
     directories = []
+    # TODO: we have to manually handle MACOSX-created zipfiles
+    # see https://superuser.com/questions/104500/what-is-macosx-folder
     for entry in zip.namelist():
         if zipfile.Path(zip, at=entry).is_file():
             files.append(entry)
@@ -153,6 +156,10 @@ def unzip_individual_feed(
         )
     except Exception as e:
         log(f"Can't process {extract.path}: {type(e)} {e}", pbar=pbar)
+        with sentry_sdk.push_scope() as scope:
+            scope.fingerprint = [extract.config.url, str(e)]
+            scope.set_context("extract", extract.dict())
+            sentry_sdk.capture_exception(e)
         return GTFSScheduleFeedExtractUnzipOutcome(
             success=False,
             extract=extract,
@@ -239,6 +246,7 @@ def unzip_extracts(
 
 
 def airflow_unzip_extracts(task_instance, execution_date, **kwargs):
+    sentry_sdk.init()
     unzip_extracts(execution_date, threads=2, progress=True)
 
 
