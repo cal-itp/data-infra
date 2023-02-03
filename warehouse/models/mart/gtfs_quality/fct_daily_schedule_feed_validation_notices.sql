@@ -44,7 +44,7 @@ first_outcome_per_feed_per_version AS (
 outcomes_with_end_dt AS (
     SELECT
         *,
-        LAG(extract_dt) OVER (PARTITION BY feed_key ORDER BY extract_dt) AS next_outcome_dt
+        LAG(extract_dt, 1, DATE '2099-01-01') OVER (PARTITION BY feed_key ORDER BY extract_dt) AS next_outcome_dt
     FROM first_outcome_per_feed_per_version
 ),
 
