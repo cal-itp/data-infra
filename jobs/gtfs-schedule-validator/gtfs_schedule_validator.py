@@ -137,17 +137,18 @@ def execute_schedule_validator(
     if not isinstance(zip_path, Path):
         raise TypeError("must provide a path to the zip file")
 
-    if extract_ts < pendulum.Date(2022, 9, 15):
+    if extract_ts.date() < pendulum.Date(2022, 9, 15):
         versioned_jar_path = V2_VALIDATOR_JAR
         validator_version = "v2.0.0"
-    elif extract_ts < pendulum.Date(2022, 11, 16):
+    elif extract_ts.date() < pendulum.Date(2022, 11, 16):
         versioned_jar_path = V3_VALIDATOR_JAR
         validator_version = "v3.1.1"
     else:
         versioned_jar_path = V4_VALIDATOR_JAR
         validator_version = "v4.0.0"
 
-    assert JAVA_EXECUTABLE and versioned_jar_path  # make mypy happy
+    assert versioned_jar_path
+
     args = [
         JAVA_EXECUTABLE,
         "-jar",
@@ -279,6 +280,7 @@ def validate_day(
     )
 
     if missing or invalid:
+        typer.secho(f"valid: {len(extracts)}")
         typer.secho(f"missing: {missing}")
         typer.secho(f"invalid: {invalid}")
         raise RuntimeError("found files with missing or invalid metadata; failing job")
