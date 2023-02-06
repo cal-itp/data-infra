@@ -1,4 +1,6 @@
 operator: operators.SentryToGCSOperator
-
 bucket: "gs://test-calitp-sentry"
-issue_id: "431"
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: true
+issue_id: 431
