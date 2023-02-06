@@ -1,0 +1,38 @@
+# Reference: https://raslasarslas.medium.com/how-to-deploy-sentry-on-a-kubernetes-cluster-using-helm-600db31d4486
+# Sentry chart: https://github.com/sentry-kubernetes/charts
+sentry:
+  existingSecret: sentry-secrets
+  existingSecretKey: session-secret
+  postgresql:
+    global:
+      postgresql:
+        existingSecret: sentry-sentry-postgresql
+  user:
+    create: true
+    email: general+cal-itp@jarv.us
+    existingSecret: sentry-secrets
+    existingSecretKey: admin-password
+  nginx:
+    enabled: false
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/ingress.allow-http: "false"
+      nginx.ingress.kubernetes.io/use-regex: "true"
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hostname: sentry.calitp.org
+    additionalHostNames:
+      - sentry.k8s.calitp.jarv.us
+    tls:
+      - secretName: metabase-tls
+        hosts:
+          - sentry.calitp.org
+          - sentry.k8s.calitp.jarv.us
+  mail:
+    backend: smtp
+    useTls: true
+    username: "PM-T-outbound-FUA5Xw3iImqk9PVLER6dkt"
+    port: 587
+    host: "smtp.postmarkapp.com"
+    from: "bot@calitp.org"

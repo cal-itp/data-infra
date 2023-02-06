@@ -1,0 +1,36 @@
+# https://github.com/dask/helm-chart/blob/main/dask/values.yaml
+dask:
+  scheduler:
+    image:
+      repository: "ghcr.io/cal-itp/data-infra/dask"
+      tag: "2023.1.17"
+    metrics:
+      enabled: true
+    serviceAnnotations:
+      prometheus.io/port: "8787"
+      prometheus.io/scrape: "true"
+  worker:
+    image:
+      repository: "ghcr.io/cal-itp/data-infra/dask"
+      tag: "2023.1.17"
+    metrics:
+      enabled: true
+    annotations:
+      prometheus.io/port: "8790"
+      prometheus.io/scrape: "true"
+    tolerations:
+      - key: hub.jupyter.org/dedicated
+        operator: Equal
+        value: user
+        effect: NoSchedule
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: hub.jupyter.org/node-purpose
+              operator: In
+              values:
+              - user
+  jupyter:
+    enabled: false
