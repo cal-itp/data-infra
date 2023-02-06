@@ -437,7 +437,7 @@ def _publish_exposure(
                     for name, column in node.columns.items():
                         ckan_precision = column.meta.get("ckan.precision")
                         if ckan_precision:
-                            assert isinstance(ckan_precision, str)
+                            assert isinstance(ckan_precision, (str, int))
                             precisions[name] = int(ckan_precision)
 
                     if precisions:
