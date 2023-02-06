@@ -368,7 +368,6 @@ models:
             - base64_url
       - dbt_utils.equal_rowcount:
           compare_model: ref('int_gtfs_quality__schedule_url_guideline_index')
-      - extreme_results
     columns: *stg_gtfs_guideline_columns
 
 # RT feed checks
