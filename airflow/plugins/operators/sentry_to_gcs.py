@@ -44,12 +44,12 @@ def make_arrays_bq_safe(raw_data):
 class SentryExtract(PartitionedGCSArtifact):
     bucket: ClassVar[str] = CALITP_BUCKET__SENTRY_LOGS
     table: ClassVar[str] = "events"
-    dt: str
-    ts: str
+    dt: pendulum.Date
+    ts: pendulum.DateTime
     partition_names: ClassVar[List[str]] = ["dt", "ts"]
-    issue_id: str
+    issue_id: int
     data: Optional[bytes]
-    extract_time: Optional[pendulum.DateTime]
+    extract_ts: Optional[pendulum.DateTime]
 
     # pydantic doesn't know dataframe type
     # see https://stackoverflow.com/a/69200069
@@ -81,7 +81,7 @@ class SentryExtract(PartitionedGCSArtifact):
 
         print(f"Downloading Sentry event data for issue ID {self.issue_id}")
         all_rows = self.iterate_over_sentry_records(auth_token)
-        self.extract_time = pendulum.now()
+        self.extract_ts = pendulum.now()
 
         raw_df = pd.DataFrame([{**make_arrays_bq_safe(row)} for row in all_rows])
 
@@ -90,7 +90,7 @@ class SentryExtract(PartitionedGCSArtifact):
         self.data = cleaned_df.to_json(orient="records", lines=True).encode()
 
     def save_to_gcs(self, fs):
-        self.save_content(fs=fs, content=self.data)
+        self.save_content(fs=fs, content=self.data, exclude={"data"})
 
 
 class SentryToGCSOperator(BaseOperator):
@@ -111,13 +111,13 @@ class SentryToGCSOperator(BaseOperator):
 
         Args:
             bucket (str): GCS bucket where the scraped Sentry issue will be saved.
-            issue_id (str): The underlying id of the Sentry issue being examined.
+            issue_id (int): The underlying id of the Sentry issue being examined.
             auth_token (str, optional): The auth token to use when downloading from Sentry.
                 This can be someone's personal auth token. If not provided, the environment
                 variable of `CALITP_SENTRY_AUTH_TOKEN` is used.
         """
-        self.dt = pendulum.now().to_date_string()
-        self.ts = str(pendulum.now().to_iso8601_string())
+        self.ts = pendulum.now()
+        self.dt = self.ts.date()
         self.bucket = bucket
         self.extract = SentryExtract(
             issue_id=issue_id, dt=self.dt, ts=self.ts, filename=f"{issue_id}.jsonl.gz"
