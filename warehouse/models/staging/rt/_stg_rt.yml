@@ -24,3 +24,23 @@ models:
     description: Unnested RT service alerts.
     columns:
       - *rt_key
+  - name: stg_rt__feed_fetch_errors
+    description: |
+      TODO
+    columns:
+      - name: id
+      - name: event_type
+      - name: groupid
+      - name: eventid
+      - name: projectid
+      - name: message
+      - name: title
+      - name: location
+      - name: culprit
+      - name: user
+      - name: tags
+      - name: platform
+      - name: datecreated
+      - name: crashfile
+      - name: dt
+      - name: ts
