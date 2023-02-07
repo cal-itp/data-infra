@@ -22,7 +22,7 @@ int_gtfs_quality__data_license AS (
             WHEN gtfs_datasets.type = "schedule" THEN {{ compliance_schedule() }}
             WHEN gtfs_datasets.type IN ("vehicle_positions","trip_updates","service_alerts") THEN {{ compliance_rt() }}
         END AS feature,
-        CASE manual_check__authentication_acceptable
+        CASE manual_check__data_license
             WHEN 'Yes' THEN 'PASS'
             WHEN 'No' THEN 'FAIL'
             ELSE {{ manual_check_needed_status() }}
