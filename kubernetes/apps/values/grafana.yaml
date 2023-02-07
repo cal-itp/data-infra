@@ -17,6 +17,10 @@ datasources:
         type: prometheus
         url: http://prometheus-server.monitoring-prometheus.svc.cluster.local
         isDefault: true
+#      - name: Loki
+#        type: loki
+#        url: http://loki.monitoring-loki.svc.cluster.local:3100
+
 
 dashboardProviders:
 
