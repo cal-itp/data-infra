@@ -2,7 +2,7 @@
 
 Each row represents a date/organization/service/feed/guideline/check combination, with pass/fail
 information indicating whether that entity complied with that check on that date. Entities
-in this table are considered `assessed` for guidlines purposes, meaning:
+in this table are considered `assessed` for guidelines purposes, meaning:
 
 * Organizations in this table have a `reporting_category` of `Core` or `Other Public Transit`
 * The organization manages at least one service that is currently operating and has at least some fixed-route service
@@ -23,6 +23,8 @@ table is intended to be used, the logic is:
 * Apply `LOGICAL_OR` and `LOGICAL_AND` aggregation on the `status` column, like so:
 
 ```
+-- note that the order here matters; the conditions are meant to be applied in this order
+-- so that failing takes precendence
 CASE
     WHEN LOGICAL_OR(NULLIF(status, "N/A") = "FAIL") THEN "FAIL"
     WHEN LOGICAL_AND(NULLIF(status, "N/A") = "PASS") THEN "PASS"
