@@ -340,6 +340,17 @@ models:
     description: '{{ doc("service_components_table") }}'
     columns:
       - *key
+  - name: dim_modes
+    description: Fully-historical modes table.
+    columns:
+      - *key
+      - name: mode
+      - name: super_mode
+      - name: description
+      - name: link_to_formal_definition
+      - *valid_from_actual
+      - *valid_to_actual
+      - *is_current_actual
   - name: bridge_components_x_products
     description: |
       Mapping table between components and products.
@@ -792,4 +803,26 @@ models:
         tests:
           - relationships:
              to: ref('dim_ntd_agency_info')
+             field: key
+  - name: bridge_services_x_modes
+    description: |
+      Mapping table between services and associated
+      modes records.
+      This is a versioned relationship, with one service having one primary mode.
+      Joins via this table can result in fanout because of versioning.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - service_key
+            - mode_key
+    columns:
+      - name: service_key
+        tests:
+          - relationships:
+             to: ref('dim_services')
+             field: key
+      - name: mode_key
+        tests:
+          - relationships:
+             to: ref('dim_modes')
              field: key

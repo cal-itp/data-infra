@@ -15,6 +15,7 @@ int_transit_database__modes_dim AS (
         id AS source_record_id,
         mode,
         super_mode,
+        description,
         link_to_formal_definition,
         services,
         _is_current,

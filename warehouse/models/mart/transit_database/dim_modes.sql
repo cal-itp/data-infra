@@ -9,9 +9,9 @@ dim_modes AS (
     SELECT
         key,
         source_record_id,
-        name,
         mode,
         super_mode,
+        description,
         link_to_formal_definition,
         _is_current,
         _valid_from,
