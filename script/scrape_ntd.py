@@ -6,11 +6,15 @@ import os
 from typing import ClassVar, List
 
 import humanize
-import pandas as pd
+import pandas as pd  # type: ignore
 import pendulum
 import requests
 import typer
-from calitp.storage import PartitionedGCSArtifact, get_fs, make_name_bq_safe
+from calitp.storage import (  # type: ignore
+    PartitionedGCSArtifact,
+    get_fs,
+    make_name_bq_safe,
+)
 from pydantic import HttpUrl, parse_obj_as
 
 CALITP_BUCKET__NTD_DATA_PRODUCTS = os.environ["CALITP_BUCKET__NTD_DATA_PRODUCTS"]
