@@ -1,7 +1,45 @@
 {% docs fct_daily_guideline_checks %}
 
 Each row represents a date/organization/service/feed/guideline/check combination, with pass/fail
-information indicating whether that feed complied with that check on that date.
+information indicating whether that entity complied with that check on that date. Entities
+in this table are considered `assessed` for guidelines purposes, meaning:
+
+* Organizations in this table have a `reporting_category` of `Core` or `Other Public Transit`
+* The organization manages at least one service that is currently operating and has at least some fixed-route service
+* That service is represented in at least one customer-facing GTFS dataset
+
+This table is designed to be an exhaustive accounting of all checks performed on assessed entities which can then be further summarized (grouped) based on the specific entity of interest  (for example, services or organizations). See the `fct_daily_organization_combined_guideline_checks` and `fct_daily_service_combined_guideline_checks` tables to
+get daily assessments for organizations or services; they use the aggregation logic described below.
+
+This table should **not** be used in its raw form for counts of passing/failing checks. The grain of this table is 'every organization/service/dataset combination that was assessed on this date', which is not generally an intuitive or useful grain for analysis. Each row represents a single organization/service/dataset/feed/guideline/check combination, which means that the number of rows for one service, organization, dataset, or feed varies based on the number of relationships that entity has.
+
+For example, a service with a trip updates feed but no vehicle positions feed may have fewer rows than a service with both types of feed. Similarly, an organization with five services (even if they are
+all represented in the same GTFS dataset) will have more rows than an organization with just one service.
+This makes the raw row counts or percentages in this table very difficult to interpret.
+
+To aggregate to a given entity-level (service, organization, dataset, or feed), as this
+table is intended to be used, the logic is:
+* Group by date, that entity's key (for example, `organization_key`), `check`, and `feature`
+* Apply `LOGICAL_OR` and `LOGICAL_AND` aggregation on the `status` column, like so:
+
+```
+-- note that the order here matters; the conditions are meant to be applied in this order
+-- so that failing takes precendence
+CASE
+    WHEN LOGICAL_OR(NULLIF(status, "N/A") = "FAIL") THEN "FAIL"
+    WHEN LOGICAL_AND(NULLIF(status, "N/A") = "PASS") THEN "PASS"
+    WHEN LOGICAL_AND(NULLIF(status, "N/A") = "MANUAL CHECK NEEDED") THEN "MANUAL CHECK NEEDED"
+    WHEN LOGICAL_AND(status = "N/A") THEN "N/A"
+END as status
+```
+
+This will result in:
+* The overall entity check will fail if any check on a constituent entity failed
+* The overall entity check will pass if all constituent entity checks were either `N/A` or pass
+* The overall entity check will be `MANUAL CHECK NEEDED` if all constituent entity checks were `N/A` or `MANUAL CHECK NEEDED`
+* The overall entity check will be `N/A` if all constituent entity checks were `N/A`
+
+Else it will be null.
 
 Here is a list of currently-implemented checks:
 

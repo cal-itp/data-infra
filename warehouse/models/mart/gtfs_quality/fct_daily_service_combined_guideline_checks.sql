@@ -16,8 +16,9 @@ fct_daily_service_combined_guideline_checks AS (
         feature,
         check,
         CASE
+            WHEN LOGICAL_OR(NULLIF(status, "N/A") = "FAIL") THEN "FAIL"
             WHEN LOGICAL_AND(NULLIF(status, "N/A") = "PASS") THEN "PASS"
-            WHEN LOGICAL_AND(NULLIF(status, "N/A") = "FAIL") THEN "FAIL"
+            WHEN LOGICAL_AND(NULLIF(status, "N/A") = {{ manual_check_needed_status() }}) THEN {{ manual_check_needed_status() }}
             WHEN LOGICAL_AND(status = "N/A") THEN "N/A"
         END as status,
         service_key,

@@ -1,4 +1,5 @@
-{{ config(materialized='table') }}
+-- description for this table got too long, don't persist to BQ
+{{ config(materialized='table', persist_docs={"relation": false, "columns": true}) }}
 
 WITH implemented_checks AS (
     SELECT *
