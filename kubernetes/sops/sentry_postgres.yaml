@@ -1,0 +1,21 @@
+apiVersion: ENC[AES256_GCM,data:nAE=,iv:lRYA1lfd7SWe8SMjcG5i9/1n+rlo8if9LnyrgbBQZiA=,tag:HhNgj6WK/dtneWmvGfgLEA==,type:str]
+kind: ENC[AES256_GCM,data:+8LoCXi4,iv:GifoUHPygUDQLnkcIwNnMoh+IbUAaVmdmjiW+BNR11s=,tag:kLqx9FM9+2Mp5ETG+OyR8w==,type:str]
+metadata:
+    name: ENC[AES256_GCM,data:xv6OgsNZEk521gjIpTVBnZsx72yluS5V,iv:pCMiFLcoDs+6V4n4On0rgmtJau57WZD76ij9h1UCBLU=,tag:7poXU3IIWrNFTJ+gjKqvgQ==,type:str]
+    namespace: ENC[AES256_GCM,data:TLLb0eFa,iv:1MWs6BddgbUysJ/V1nmfUP/vPlF9aQvwqbIsLjxGgLo=,tag:BzmXjKI7X7+WmhXTp76xXg==,type:str]
+data:
+    postgresql-password: ENC[AES256_GCM,data:LXKkZ2z7Xr0wwDd52lMJUw==,iv:+Xnv64xjM0WGflVAGNKCUA7C2HY6DDViwGueXeWtnR8=,tag:IF8TZ6I3dmGrioNzLlVPKQ==,type:str]
+sops:
+    kms: []
+    gcp_kms:
+        - resource_id: projects/cal-itp-data-infra/locations/global/keyRings/sops/cryptoKeys/sops-key
+          created_at: "2023-02-07T19:28:38Z"
+          enc: CiQA44aOMsHScdQz6CWf9e47QUi1cFXAguVvdA31gTzc3NyLd88SSQDEwN+ijxMetUG10kYGOpAil8SNctrTYbdqlqX8bNc+qIsXucsIDeL04cASk7mzcDAQ1H8PCTDfEdFKt2GOH3X/bj1DBmMyMRo=
+    azure_kv: []
+    hc_vault: []
+    age: []
+    lastmodified: "2023-02-07T19:28:39Z"
+    mac: ENC[AES256_GCM,data:pBGSPT/1i98IPEjH/VoCPnL1vzPbON2nUbGMtehurGmqbe2P+yGct2YPkAx9zTCMEwFJ43b4745A6wLzax52P/PhkGHndmeJRLpRMqMmBfmlu/hZNTv+XWfc9unLGsg5m6rF759/09k2f49AVDBzRfXBT8NeNaUhfew8j3/J8Wk=,iv:YgF8ygHgwZo/LcpHTwnvP1YKz975+04Ly67MhJ54cgI=,tag:lvAuliSCyI9SPFcay3dGVA==,type:str]
+    pgp: []
+    unencrypted_suffix: _unencrypted
+    version: 3.7.3
