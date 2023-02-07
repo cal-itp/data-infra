@@ -23,6 +23,9 @@ schema_fields:
   - name: super_mode
     type: STRING
     mode: NULLABLE
+  - name: description
+    type: STRING
+    mode: NULLABLE
   - name: link_to_formal_definition
     type: STRING
     mode: NULLABLE

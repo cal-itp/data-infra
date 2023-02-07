@@ -25,6 +25,7 @@ stg_transit_database__services AS (
         assessment_status,
         manual_check__gtfs_realtime_data_ingested_in_trip_planner,
         manual_check__gtfs_schedule_data_ingested_in_trip_planner,
+        primary_mode,
         dt
     FROM once_daily_services
 )
