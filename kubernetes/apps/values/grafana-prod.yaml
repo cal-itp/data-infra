@@ -22,3 +22,5 @@ grafana.ini:
     name: grafana
     user: grafana
     password: $__env{POSTGRES_PASSWORD}
+  server:
+    domain: monitoring.calitp.org
