@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: stg_ntd__annual_database_agency_information
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - ts
+            - year
+            - ntd_id
+    columns:
+      - name: ntd_id
+        tests:
+          - not_null
