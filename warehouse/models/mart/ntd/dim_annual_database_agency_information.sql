@@ -1,7 +1,8 @@
 WITH stg_ntd__annual_database_agency_information AS (
     SELECT
         *,
-        LEAD(ts, 1, CAST('2099-01-01' AS TIMESTAMP)) OVER (PARTITION BY year, ntd_id ORDER BY ts ASC) AS _valid_to,
+        -- TODO: this does not handle deletes
+        LEAD(ts) OVER (PARTITION BY year, ntd_id ORDER BY ts ASC) AS next_ts,
     FROM {{ ref('stg_ntd__annual_database_agency_information') }}
 ),
 
@@ -51,8 +52,8 @@ dim_annual_database_agency_information AS (
         organization_type,
         agency_name,
         ts AS _valid_from,
-        {{ make_end_of_valid_range('_valid_to') }} AS _valid_to,
-        _valid_to = {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }} AS _is_current
+        {{ make_end_of_valid_range('COALESCE(next_ts, CAST("2099-01-01" AS TIMESTAMP))') }} AS _valid_to,
+        next_ts IS NULL AS _is_current,
     FROM stg_ntd__annual_database_agency_information
 )
 
