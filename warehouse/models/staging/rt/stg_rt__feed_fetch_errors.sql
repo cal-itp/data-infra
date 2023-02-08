@@ -8,16 +8,18 @@
             'granularity': 'day',
         },
         partitions=['current_date()'],
-        cluster_by='job_type',
+        cluster_by='groupid',
     )
 }}
 
-WITH latest AS (
-    {% set yesterday = modules.datetime.date.today() - modules.datetime.timedelta(days=1) %}
+WITH source AS (
+    SELECT * FROM {{ source('sentry_external_tables', 'events') }}
+),
 
+latest AS (
     SELECT *
-    FROM cal-itp-data-infra.external_sentry_error_logs.events
-    WHERE dt = yesterday
+    FROM source
+    WHERE dt = (SELECT MAX(dt) FROM source)
 ),
 
 stg_rt__feed_fetch_errors AS (

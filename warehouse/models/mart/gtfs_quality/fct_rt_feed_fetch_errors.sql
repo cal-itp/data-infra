@@ -1,6 +1,6 @@
 {{ config(materialized='table') }}
 
-WITH rt_feed_fetch_errors AS (
+WITH fct_rt_feed_fetch_errors AS (
     SELECT
         id,
         event_type,
@@ -19,5 +19,6 @@ WITH rt_feed_fetch_errors AS (
         dt,
         ts
     FROM {{ ref('stg_rt__feed_fetch_errors') }}
+)
 
 SELECT * FROM fct_rt_feed_fetch_errors
