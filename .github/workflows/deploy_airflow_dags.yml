@@ -2,9 +2,8 @@ name: Deploy Airflow DAGs
 
 on:
   push:
-    paths:
-      - 'airflow/**'
-  pull_request:
+    branches:
+      - main
     paths:
       - 'airflow/**'
 
@@ -34,7 +33,6 @@ jobs:
           gcloud container clusters get-credentials "$GKE_NAME" --region "$GKE_REGION"
 
       - name: Push Airflow code to GCS
-        if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           gsutil -m rsync -d -c -r airflow/dags gs://$AIRFLOW_BUCKET/dags
           gsutil -m rsync -d -c -r airflow/plugins gs://$AIRFLOW_BUCKET/plugins
