@@ -81,3 +81,16 @@ seeds:
       - name: severity
         tests:
           - not_null
+
+  - name: ntd_agency_to_organization
+    description: Extract of Airtable mapping from NTD agency info to transit database organizations.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - ntd_id
+            - organization_name
+    columns:
+      - name: ntd_id
+        tests:
+          - not_null
+          - unique
