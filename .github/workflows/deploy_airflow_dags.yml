@@ -19,23 +19,14 @@ jobs:
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    - name: Set up Python
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.8
-    - name: Install python packages
-      run: |
-        pip install -r script/requirements.txt
 
-    - if: ${{ github.repository == 'cal-itp/data-infra' }}
-      uses: google-github-actions/setup-gcloud@v0
+    - uses: google-github-actions/setup-gcloud@v0
       with:
         export_default_credentials: true
         install_components: 'gke-gcloud-auth-plugin'
         service_account_key: ${{ secrets.GCP_SA_KEY }}
 
-    - if: ${{ github.repository == 'cal-itp/data-infra' }}
-      name: Setup kubeconfig
+    - name: Setup kubeconfig
       env:
         CLOUDSDK_CORE_PROJECT: cal-itp-data-infra
       run: |
@@ -43,7 +34,7 @@ jobs:
         gcloud container clusters get-credentials "$GKE_NAME" --region "$GKE_REGION"
 
     - name: Push Airflow code to GCS
-      if: ${{ github.repository == 'cal-itp/data-infra' && github.ref == 'refs/heads/main' }}
+      if: ${{ github.ref == 'refs/heads/main' }}
       run: |
         gsutil -m rsync -d -c -r airflow/dags gs://$AIRFLOW_BUCKET/dags
         gsutil -m rsync -d -c -r airflow/plugins gs://$AIRFLOW_BUCKET/plugins
