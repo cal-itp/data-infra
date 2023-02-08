@@ -33,12 +33,17 @@ service_data AS (
         ON CAST(date_spine.date AS TIMESTAMP) BETWEEN dim._valid_from AND dim._valid_to
 ),
 
+-- we need to back-date regional feed type later, so will reference the dimension table directly
+datasets_dim AS (
+    SELECT * FROM {{ ref('dim_gtfs_datasets') }}
+),
+
 datasets AS (
     SELECT
         date_spine.date,
         dim.*
     FROM date_spine
-    LEFT JOIN {{ ref('dim_gtfs_datasets') }} AS dim
+    LEFT JOIN datasets_dim AS dim
         ON CAST(date_spine.date AS TIMESTAMP) BETWEEN dim._valid_from AND dim._valid_to
 ),
 
@@ -126,6 +131,8 @@ int_gtfs_quality__naive_organization_service_dataset_full_join AS (
         datasets.name AS gtfs_dataset_name,
         datasets.type AS gtfs_dataset_type,
         datasets.regional_feed_type,
+        -- use this for reports site
+        current_dataset.regional_feed_type AS backdated_regional_feed_type,
         datasets.source_record_id AS gtfs_dataset_source_record_id,
         validation_bridge.schedule_to_use_for_rt_validation_gtfs_dataset_key,
         COALESCE(datasets.base64_url, feeds.base64_url) AS base64_url,
@@ -152,6 +159,9 @@ int_gtfs_quality__naive_organization_service_dataset_full_join AS (
     LEFT JOIN ntd_bridge
         ON orgs.key = ntd_bridge.organization_key
         AND orgs.date = ntd_bridge.date
+    LEFT JOIN datasets_dim AS current_dataset
+        ON datasets.source_record_id = current_dataset.source_record_id
+        AND current_dataset._is_current
 )
 
 SELECT * FROM int_gtfs_quality__naive_organization_service_dataset_full_join

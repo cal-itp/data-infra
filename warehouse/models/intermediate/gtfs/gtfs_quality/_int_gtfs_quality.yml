@@ -234,7 +234,11 @@ models:
           Foreign key to `dim_schedule_feeds`. Because `dim_schedule_feeds` is slowly-
           changing dimension, joins using this key are not subject to the historical
           limitations noted for the other foreign keys in this table.
-
+      - name: backdated_regional_feed_type
+        description: |
+          The `regional_feed_type` value for the *current version* of this GTFS dataset.
+          This allows us to make regional subfeed selections from before the raw data was available in Airtable
+          for reports site assessment purposes.
   - name: int_gtfs_quality__organization_dataset_map
     description: |
       A version of int_gtfs_quality__daily_assessment_candidate_entities collapsed
