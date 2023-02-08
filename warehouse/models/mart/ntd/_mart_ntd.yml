@@ -1,0 +1,33 @@
+version: 2
+
+models:
+  - name: dim_annual_database_agency_information
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: "CONCAT(year, '_', ntd_id)"
+          gaps: required
+    columns:
+      - name: key
+        tests:
+          - not_null
+          - unique
+      - name: year
+        tests:
+          - not_null
+      - name: ntd_id
+        tests:
+          - not_null
+          - unique:
+              config:
+                where: _is_current
+      - name: _valid_from
+        tests:
+          - not_null
+      - name: _valid_to
+        tests:
+          - not_null
+      - name: _is_current
+        tests:
+          - not_null
