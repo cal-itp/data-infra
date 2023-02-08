@@ -1,5 +1,13 @@
 """
-
+This script can be executed manually to scrape a given
+NTD data product for a specific year. In the future,
+we can trivially turn this into an Airflow operator
+and capture NTD data on a recurring basis. The main
+feature we should add is getting the actual file URL
+from the data set page. For example, the 2021 agency
+database page is https://www.transit.dot.gov/ntd/data-product/2021-annual-database-agency-information
+but the actual file is https://www.transit.dot.gov/sites/fta.dot.gov/files/2022-10/2021%20Agency%20Information.xlsx
+which is linked in the HTML page.
 """
 import gzip
 import os
