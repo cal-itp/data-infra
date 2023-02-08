@@ -3,46 +3,39 @@ Publishes various dbt models to various sources.
 
 TODO: consider using https://github.com/ckan/ckanapi?
 """
-import functools
-from datetime import timedelta
-
 import csv
-
-import backoff
-import pendulum
-from google.cloud import bigquery
-from typing import Optional, Literal, List, Dict, BinaryIO, Tuple, Any
-
-from pathlib import Path
-
-import subprocess
-
 import enum
-
+import functools
 import json
 import os
-import shapely.geometry
-import shapely.wkt
+import subprocess
 import tempfile
+from datetime import timedelta
+from pathlib import Path
+from typing import Any, BinaryIO, Dict, List, Literal, Optional, Tuple
 
-import gcsfs
-import geopandas as gpd
+import backoff
+import gcsfs  # type: ignore
+import geopandas as gpd  # type: ignore
 import humanize
 import pandas as pd
+import pendulum
 import requests
+import shapely.geometry  # type: ignore
+import shapely.wkt  # type: ignore
 import typer
-from pydantic import BaseModel, validator, constr
-from requests import Response
-from requests_toolbelt import MultipartEncoder
-
 from dbt_artifacts import (
     BaseNode,
     CkanDestination,
     Exposure,
     Manifest,
-    TilesDestination,
     TileFormat,
+    TilesDestination,
 )
+from google.cloud import bigquery  # type: ignore
+from pydantic import BaseModel, constr, validator
+from requests import Response
+from requests_toolbelt import MultipartEncoder  # type: ignore
 from tqdm import tqdm
 
 tqdm.pandas()
@@ -97,7 +90,7 @@ class MetadataRow(BaseModel):
     gis_theme: None
     gis_horiz_accuracy: Optional[Literal["4m"]]
     gis_vert_accuracy: Optional[Literal["4m"]]
-    gis_coordinate_system_epsg: Optional[constr(regex=r"\d+")]  # noqa: F722
+    gis_coordinate_system_epsg: Optional[constr(regex=r"\d+")]  # type: ignore # noqa: F722
     gis_vert_datum_epsg: None
 
     class Config:
@@ -182,7 +175,7 @@ def upload_to_ckan(
         return requests.post(
             f"{url}/api/action/{action}",
             data=encoder,
-            headers={"Content-Type": encoder.content_type, "X-CKAN-API-Key": API_KEY},
+            headers={"Content-Type": encoder.content_type, "X-CKAN-API-Key": API_KEY},  # type: ignore
         )
 
     if fsize <= CHUNK_SIZE:
@@ -190,7 +183,7 @@ def upload_to_ckan(
         response = requests.post(
             f"{url}/api/action/resource_update",
             data={"id": resource_id},
-            headers={"Authorization": API_KEY},
+            headers={"Authorization": API_KEY},  # type: ignore
             files={"upload": file},
         )
         try:
@@ -273,6 +266,7 @@ def upload_to_ckan(
 def _generate_exposure_documentation(
     exposure: Exposure,
 ) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    assert exposure.meta and exposure.meta.destinations is not None
     try:
         resources = next(
             dest
@@ -288,13 +282,15 @@ def _generate_exposure_documentation(
     dictionary_rows: List[Dict[str, Any]] = []
 
     for node in exposure.depends_on.resolved_nodes:
+        assert exposure.meta is not None
+
         name = strip_modelname(node.name)
         description = node.description.replace("\n", " ")
 
         if name in resources and resources[name].description:
-            description = resources[name].description
+            description = resources[name].description  # type: ignore
 
-        row = MetadataRow(
+        metadata_row = MetadataRow(
             dataset_name=strip_modelname(name),
             tags=[
                 "transit",
@@ -339,21 +335,23 @@ def _generate_exposure_documentation(
         metadata_rows.append(
             {
                 k.upper(): v
-                for k, v in json.loads(row.json(models_as_dict=False)).items()
+                for k, v in json.loads(metadata_row.json(models_as_dict=False)).items()
             }
         )
 
         for name, column in node.columns.items():
             if not column.meta.get("publish.ignore", False):
-                row = DictionaryRow(
+                field_description_authority = column.meta.get(
+                    "ckan.authority", node.meta.get("ckan.authority")
+                )
+                assert field_description_authority is not None
+                dictionary_row = DictionaryRow(
                     system_name="Cal-ITP GTFS-Ingest Pipeline",
                     table_name=strip_modelname(node.name),
                     field_name=column.name,
                     field_alias=None,
                     field_description=column.description,
-                    field_description_authority=column.meta.get(
-                        "ckan.authority", node.meta.get("ckan.authority")
-                    ),
+                    field_description_authority=field_description_authority,
                     confidential="N",
                     sensitive="N",
                     pii="N",
@@ -368,15 +366,16 @@ def _generate_exposure_documentation(
                     usage_notes=None,
                 )
                 dictionary_rows.append(
-                    {k.upper(): v for k, v in json.loads(row.json()).items()}
+                    {k.upper(): v for k, v in json.loads(dictionary_row.json()).items()}
                 )
     return metadata_rows, dictionary_rows
 
 
 def _publish_exposure(
-    bucket: str, exposure: Exposure, publish: bool, model: str = None
+    bucket: str, exposure: Exposure, publish: bool, model: Optional[str] = None
 ):
     ts = pendulum.now()
+    assert exposure.meta is not None
     for destination in exposure.meta.destinations:
         with tempfile.TemporaryDirectory() as tmpdir:
             if isinstance(destination, CkanDestination):
@@ -433,11 +432,13 @@ def _publish_exposure(
                         progress_bar_type="tqdm",
                     )
 
-                    precisions = {
-                        name: int(column.meta.get("ckan.precision"))
-                        for name, column in node.columns.items()
-                        if column.meta.get("ckan.precision")
-                    }
+                    precisions = {}
+
+                    for name, column in node.columns.items():
+                        ckan_precision = column.meta.get("ckan.precision")
+                        if ckan_precision:
+                            assert isinstance(ckan_precision, (str, int))
+                            precisions[name] = int(ckan_precision)
 
                     if precisions:
                         typer.secho(
@@ -483,11 +484,11 @@ def _publish_exposure(
                 for model in exposure.depends_on.nodes:
                     node = BaseNode._instances[model]
 
-                    geojsonl_fpath = os.path.join(
-                        tmpdir, f"{strip_modelname(node.name)}.geojsonl"
+                    geojsonl_fpath = Path(
+                        os.path.join(tmpdir, f"{strip_modelname(node.name)}.geojsonl")
                     )
 
-                    client = bigquery.Client()
+                    client = bigquery.Client(project=node.database)
                     typer.secho(f"querying {node.schema_table}")
                     # TODO: this is not great but we have to work around how BigQuery removes overlapping line segments
                     df = client.query(
@@ -511,7 +512,10 @@ def _publish_exposure(
                         strip_modelname(node.name).title()
                     ] = geojsonl_fpath
                     hive_path = destination.hive_path(
-                        exposure, strip_modelname(node.name), bucket
+                        exposure=exposure,
+                        model=strip_modelname(node.name),
+                        bucket=bucket,
+                        dt=ts,
                     )
 
                     typer.secho(
@@ -537,7 +541,10 @@ def _publish_exposure(
                     subprocess.run(args).check_returncode()
 
                     tiles_hive_path = destination.tiles_hive_path(
-                        exposure, strip_modelname(node.name), bucket
+                        exposure=exposure,
+                        model=strip_modelname(node.name),
+                        bucket=bucket,
+                        dt=ts,
                     )
 
                     typer.secho(
@@ -570,9 +577,8 @@ def document_exposure(
         "gs://"
     ), "both outputs must be local or remote"
 
-    manifest = read_manifest(manifest)
     metadata_rows, dictionary_rows = _generate_exposure_documentation(
-        manifest.exposures[f"exposure.calitp_warehouse.{exposure}"]
+        read_manifest(manifest).exposures[f"exposure.calitp_warehouse.{exposure}"]
     )
 
     typer.secho(
@@ -607,7 +613,7 @@ def publish_exposure(
         False,
         help="If True, actually publish to external systems.",
     ),
-    model: str = None,
+    model: Optional[str] = None,
 ) -> None:
     """
     Only publish one exposure, by name.
@@ -617,11 +623,9 @@ def publish_exposure(
 
     actual_manifest = read_manifest(manifest)
 
-    exposure = actual_manifest.exposures[f"exposure.calitp_warehouse.{exposure}"]
-
     _publish_exposure(
         bucket=bucket,
-        exposure=exposure,
+        exposure=actual_manifest.exposures[f"exposure.calitp_warehouse.{exposure}"],
         publish=publish,
         model=model,
     )

@@ -1,20 +1,20 @@
 """Module for exporting data from Amplitude and adding to the data warehouse"""
-import os
 import gzip
 import logging
+import os
 import zipfile
-from io import BytesIO, StringIO
 from datetime import timedelta
+from io import BytesIO, StringIO
 
 import calitp
-import requests
 import pandas as pd
+import requests
 from calitp.auth import get_secret_by_name
+from calitp.config import is_development
 from requests import HTTPError
 
-from airflow.models import BaseOperator
 from airflow.exceptions import AirflowSkipException
-from calitp.config import is_development
+from airflow.models import BaseOperator
 
 DATE_FORMAT = "%Y%m%dT%H"
 

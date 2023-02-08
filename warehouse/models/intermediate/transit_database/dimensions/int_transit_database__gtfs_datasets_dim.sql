@@ -14,10 +14,17 @@ WITH dim AS (
 int_transit_database__gtfs_datasets_dim AS (
     SELECT
         {{ dbt_utils.surrogate_key(['id', '_valid_from']) }} AS key,
-        id AS original_record_id,
+        id AS source_record_id,
         name,
         data,
         data_quality_pipeline,
+        manual_check__link_to_dataset_on_website,
+        manual_check__accurate_shapes,
+        manual_check__data_license,
+        manual_check__authentication_acceptable,
+        manual_check__stable_url,
+        manual_check__localized_stop_tts,
+        manual_check__grading_scheme_v1,
         regional_feed_type,
         fares_v2_status,
         fares_notes,

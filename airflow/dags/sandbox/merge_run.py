@@ -6,7 +6,6 @@
 
 from calitp import get_engine
 from calitp.config import get_bucket
-
 from merge_sql import SQL_TEMPLATE
 
 merges = [

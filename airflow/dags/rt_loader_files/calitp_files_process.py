@@ -9,12 +9,11 @@ Process and dump files for gtfs_rt_history.calitp_files external table.
 This is for the rt files extracted per feed every 20 seconds.
 """
 
-from calitp import save_to_gcfs
-from calitp.storage import get_fs
-from calitp.config import get_bucket
-
 import pandas as pd
 import structlog
+from calitp import save_to_gcfs
+from calitp.config import get_bucket
+from calitp.storage import get_fs
 
 # FEED_DAILY_URI = "{bucket}/rt/{execution_date}T*
 

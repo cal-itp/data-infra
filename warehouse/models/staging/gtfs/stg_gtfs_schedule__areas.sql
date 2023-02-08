@@ -11,6 +11,7 @@ stg_gtfs_schedule__areas AS (
     SELECT
         base64_url,
         ts,
+        dt AS _dt,
         {{ trim_make_empty_string_null('area_id') }} AS area_id,
         {{ trim_make_empty_string_null('area_name') }} AS area_name
     FROM external_areas

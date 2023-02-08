@@ -1,17 +1,8 @@
-{{ config(materialized='table') }}
-
-WITH dim_schedule_feeds AS (
-    SELECT *
-    FROM {{ ref('dim_schedule_feeds') }}
-),
-
-int_gtfs_schedule__incremental_stop_times AS (
-    SELECT *
-    FROM {{ ref('int_gtfs_schedule__incremental_stop_times') }}
-),
-
-make_dim AS (
-{{ make_schedule_file_dimension_from_dim_schedule_feeds('dim_schedule_feeds', 'int_gtfs_schedule__incremental_stop_times') }}
+WITH make_dim AS (
+    {{ make_schedule_file_dimension_from_dim_schedule_feeds(
+        ref('dim_schedule_feeds'),
+        ref('stg_gtfs_schedule__stop_times'),
+    ) }}
 ),
 
 raw_time_parts AS (
@@ -75,9 +66,7 @@ dim_stop_times AS (
             PARTITION BY base64_url, ts, trip_id, stop_sequence
         ) > 1 AS warning_duplicate_primary_key,
         stop_id IS NULL AS warning_missing_foreign_key_stop_id,
-        _valid_from,
-        _valid_to,
-        _is_current,
+        _feed_valid_from,
         part_arr[
             OFFSET(0)
         ] * 3600 + part_arr[

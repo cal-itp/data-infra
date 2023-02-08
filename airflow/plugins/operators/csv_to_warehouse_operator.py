@@ -1,10 +1,9 @@
 import pandas as pd
 import pandas_gbq
-
-from airflow.models import BaseOperator
-
 from calitp import save_to_gcfs, to_snakecase
 from calitp.config import get_project_id
+
+from airflow.models import BaseOperator
 
 
 def sql_df_to_gbq_schema(df, fields=None):

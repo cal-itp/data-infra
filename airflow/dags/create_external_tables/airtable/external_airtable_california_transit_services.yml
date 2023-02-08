@@ -179,6 +179,9 @@ schema_fields:
   - name: mode
     type: STRING
     mode: REPEATED
+  - name: primary_mode
+    type: STRING
+    mode: REPEATED
   - name: product_components
     type: STRING
     mode: REPEATED

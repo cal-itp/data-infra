@@ -10,6 +10,7 @@ stg_gtfs_schedule__attributions AS (
     SELECT
         base64_url,
         ts,
+        dt AS _dt,
         {{ trim_make_empty_string_null('organization_name') }} AS organization_name,
         {{ trim_make_empty_string_null('attribution_id') }} AS attribution_id,
         {{ trim_make_empty_string_null('agency_id') }} AS agency_id,

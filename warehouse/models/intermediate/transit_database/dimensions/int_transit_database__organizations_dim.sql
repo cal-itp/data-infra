@@ -13,7 +13,7 @@ WITH dim AS (
 int_transit_database__organizations_dim AS (
     SELECT
         {{ dbt_utils.surrogate_key(['id', '_valid_from']) }} AS key,
-        id AS original_record_id,
+        id AS source_record_id,
         name,
         organization_type,
         roles,
@@ -32,6 +32,7 @@ int_transit_database__organizations_dim AS (
         gtfs_static_status,
         gtfs_realtime_status,
         assessment_status,
+        manual_check__contact_on_website,
         _is_current,
         _valid_from,
         _valid_to

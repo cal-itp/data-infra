@@ -10,7 +10,7 @@ models:
       - dbt_utils.mutually_exclusive_ranges:
           lower_bound_column: _valid_from
           upper_bound_column: _valid_to
-          partition_by: original_record_id
+          partition_by: source_record_id
           gaps: required
     columns:
       - &key
@@ -97,6 +97,12 @@ models:
   - name: int_transit_database__ntd_agency_info_dim
     description: |
       NTD agency information data in *artificial* slowly-changing-dimension format (current-only data with effective dates).
+    tests: *mutually_exclusive_ranges
+    columns:
+      - *key
+  - name: int_transit_database__modes_dim
+    description: |
+      Slowly-changing modes data.
     tests: *mutually_exclusive_ranges
     columns:
       - *key

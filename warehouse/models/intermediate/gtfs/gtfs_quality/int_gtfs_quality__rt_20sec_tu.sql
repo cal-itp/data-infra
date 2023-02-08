@@ -25,7 +25,7 @@ feed_guideline_index AS (
 ),
 
 trip_updates AS (
-    SELECT * FROM {{ ref('stg_gtfs_rt__trip_updates') }}
+    SELECT * FROM {{ ref('int_gtfs_rt__trip_updates_no_stop_times') }}
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
@@ -34,23 +34,23 @@ trip_updates AS (
 ),
 
 lag_ts AS (
-  SELECT
-          dt AS date,
-          base64_url,
-          header_timestamp,
-          LAG (header_timestamp) OVER (PARTITION BY base64_url ORDER BY header_timestamp) AS prev_header_timestamp
+    SELECT
+        dt AS date,
+        base64_url,
+        header_timestamp,
+        LAG(header_timestamp) OVER (PARTITION BY base64_url ORDER BY header_timestamp) AS prev_header_timestamp
     FROM trip_updates
 ),
 
 -- Note that since the header_timestamp will repeat when it hasn't been updated, the DATE_DIFF will be 0 seconds for some.
 -- This would affect us if we were measuring the AVG(), but it doesn't since we're only looking at MAX()
 daily_max_lag AS (
-SELECT
-      date,
-      base64_url,
-      MAX(DATE_DIFF(header_timestamp, prev_header_timestamp, SECOND)) AS max_lag
-  FROM lag_ts
- GROUP BY 1,2
+    SELECT
+        date,
+        base64_url,
+        MAX(DATE_DIFF(header_timestamp, prev_header_timestamp, SECOND)) AS max_lag
+    FROM lag_ts
+    GROUP BY 1, 2
 ),
 
 int_gtfs_quality__rt_20sec_tu AS (

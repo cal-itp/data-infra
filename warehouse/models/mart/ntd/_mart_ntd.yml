@@ -1,0 +1,43 @@
+version: 2
+
+models:
+  - name: dim_annual_database_agency_information
+    description: |
+      Versioned extracts of the NTD Annual Database Agency Information.
+      For example, the 2021 dataset is found at https://www.transit.dot.gov/ntd/data-product/2021-annual-database-agency-information.
+      Only contains 2021 data as of 2022-02-08 but we will be importing
+      more data in the future.
+      The versioning is bitemporal, so records are versioned at the year
+      and ntd_id level. This means you must join based on _valid_from/_valid_from
+      to get the records for a given ntd_id, and then choose which year to
+      look up. dim_organizations is pre-joined on this table's 2021 data,
+      so if all you need is 2021 data then use annual_database_agency_information_2021_key.
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: "CONCAT(year, '_', ntd_id)"
+          gaps: required
+    columns:
+      - name: key
+        tests:
+          - not_null
+          - unique
+      - name: year
+        tests:
+          - not_null
+      - name: ntd_id
+        tests:
+          - not_null
+          - unique:
+              config:
+                where: _is_current
+      - name: _valid_from
+        tests:
+          - not_null
+      - name: _valid_to
+        tests:
+          - not_null
+      - name: _is_current
+        tests:
+          - not_null

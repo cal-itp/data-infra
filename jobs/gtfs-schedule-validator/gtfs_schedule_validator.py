@@ -8,26 +8,26 @@ import os
 import subprocess
 import tempfile
 import traceback
-from concurrent.futures import ThreadPoolExecutor, Future
+from concurrent.futures import Future, ThreadPoolExecutor
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, ClassVar, Optional
+from typing import ClassVar, Dict, List, Optional, Tuple, Union
 
 import pendulum
 import typer
-from calitp.storage import (
-    fetch_all_in_partition,
-    GTFSScheduleFeedExtract,
-    get_fs,
-    GTFSFeedType,
-    JSONL_GZIP_EXTENSION,
-    PartitionedGCSArtifact,
-    ProcessingOutcome,
+from calitp.storage import (  # type: ignore
     JSONL_EXTENSION,
+    JSONL_GZIP_EXTENSION,
     SCHEDULE_RAW_BUCKET,
     GTFSDownloadConfig,
+    GTFSFeedType,
+    GTFSScheduleFeedExtract,
+    PartitionedGCSArtifact,
+    ProcessingOutcome,
+    fetch_all_in_partition,
+    get_fs,
 )
-from pydantic import validator, BaseModel
+from pydantic import BaseModel, validator
 from slugify import slugify
 from tqdm import tqdm
 
@@ -131,21 +131,23 @@ def log(*args, err=False, fg=None, pbar=None, **kwargs):
 def execute_schedule_validator(
     extract_ts: pendulum.DateTime,
     zip_path: Path,
-    output_dir: Path,
+    output_dir: Union[Path, str],
     pbar=None,
-) -> (Dict, Dict, str):
+) -> Tuple[Dict, Dict, str]:
     if not isinstance(zip_path, Path):
         raise TypeError("must provide a path to the zip file")
 
-    if extract_ts < pendulum.parse("2022-09-15"):
+    if extract_ts.date() < pendulum.Date(2022, 9, 15):
         versioned_jar_path = V2_VALIDATOR_JAR
         validator_version = "v2.0.0"
-    elif extract_ts < pendulum.parse("2022-11-16"):
+    elif extract_ts.date() < pendulum.Date(2022, 11, 16):
         versioned_jar_path = V3_VALIDATOR_JAR
         validator_version = "v3.1.1"
     else:
         versioned_jar_path = V4_VALIDATOR_JAR
         validator_version = "v4.0.0"
+
+    assert versioned_jar_path
 
     args = [
         JAVA_EXECUTABLE,
@@ -247,6 +249,7 @@ def validate_extract(
 ) -> None:
     """"""
     execute_schedule_validator(
+        extract_ts=pendulum.now(),
         zip_path=zip_path,
         output_dir=output_dir,
     )
@@ -277,6 +280,7 @@ def validate_day(
     )
 
     if missing or invalid:
+        typer.secho(f"valid: {len(extracts)}")
         typer.secho(f"missing: {missing}")
         typer.secho(f"invalid: {invalid}")
         raise RuntimeError("found files with missing or invalid metadata; failing job")

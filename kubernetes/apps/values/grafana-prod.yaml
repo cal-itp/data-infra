@@ -7,3 +7,4 @@ ingress:
     - secretName: grafana-tls
       hosts:
         - monitoring.k8s.calitp.jarv.us
+        - monitoring.calitp.org

@@ -20,7 +20,7 @@ historical AS (
 int_transit_database__contracts_dim AS (
     SELECT
         {{ dbt_utils.surrogate_key(['id', '_valid_from']) }} AS key,
-        id AS original_record_id,
+        id AS source_record_id,
         name,
         contract_holder_organization_key,
         contract_vendor_organization_key,

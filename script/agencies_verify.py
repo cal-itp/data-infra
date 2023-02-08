@@ -1,9 +1,9 @@
 import logging
-import requests
 import sys
+
+import requests
 import yaml
 from requests import HTTPError
-
 
 USAGE = """
 Usage:

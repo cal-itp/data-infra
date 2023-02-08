@@ -6,25 +6,23 @@ import concurrent
 import hashlib
 import logging
 import os
-from concurrent.futures import ThreadPoolExecutor, Future
+import zipfile
+from concurrent.futures import Future, ThreadPoolExecutor
+from io import BytesIO
+from typing import ClassVar, Dict, List, Optional, Tuple
 
 import pendulum
-import zipfile
-
-from io import BytesIO
-from typing import ClassVar, List, Optional, Tuple, Dict
-
+import sentry_sdk
 import typer
 from calitp.storage import (
-    fetch_all_in_partition,
-    GTFSScheduleFeedExtract,
-    get_fs,
     GTFSFeedType,
+    GTFSScheduleFeedExtract,
     PartitionedGCSArtifact,
     ProcessingOutcome,
+    fetch_all_in_partition,
+    get_fs,
 )
 from tqdm import tqdm
-
 from utils import GTFSScheduleFeedFile
 
 SCHEDULE_UNZIPPED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED"]
@@ -32,6 +30,7 @@ SCHEDULE_RAW_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_RAW"]
 GTFS_UNZIP_LIST_ERROR_THRESHOLD = float(
     os.getenv("GTFS_UNZIP_LIST_ERROR_THRESHOLD", 0.99)
 )
+MACOSX_ZIP_FOLDER = "__MACOSX"
 
 
 def log(*args, err=False, fg=None, pbar=None, **kwargs):
@@ -86,11 +85,21 @@ def summarize_zip_contents(
         if zipfile.Path(zip, at=entry).is_dir():
             directories.append(entry)
     log(f"Found files: {files} and directories: {directories}", pbar=pbar)
-    # the only valid case for any directory inside the zipfile is if there's exactly one and it's the only item at the root of the zipfile
-    # (in which case we can treat that directory's contents as the feed)
+    # the only valid case for any directory inside the zipfile is if there's exactly one
+    # and it's the only item at the root of the zipfile(in which case we can treat that
+    # directory's contents as the feed)
+    # we want to exclude __MACOSX directories from this calculation
+    # see https://superuser.com/questions/104500/what-is-macosx-folder
     is_valid = (not directories) or (
         (len(directories) == 1)
-        and ([item.is_dir() for item in zipfile.Path(zip, at="").iterdir()] == [True])
+        and (
+            [
+                item.is_dir()
+                for item in zipfile.Path(zip, at="").iterdir()
+                if item.name != MACOSX_ZIP_FOLDER
+            ]
+            == [True]
+        )
     )
     return files, directories, is_valid
 
@@ -112,7 +121,9 @@ def process_feed_files(
         )
 
     # sorting is new here, to make the hash deterministic
-    for file in sorted(files):
+    for file in sorted(
+        [file for file in files if not file.startswith(MACOSX_ZIP_FOLDER)]
+    ):
         # make a proper path to access the .name attribute later
         file_path = zipfile.Path(zip, at=file)
         with zip.open(file) as f:
@@ -156,6 +167,10 @@ def unzip_individual_feed(
         )
     except Exception as e:
         log(f"Can't process {extract.path}: {type(e)} {e}", pbar=pbar)
+        with sentry_sdk.push_scope() as scope:
+            scope.fingerprint = [extract.config.url, str(e)]
+            scope.set_context("extract", extract.dict())
+            sentry_sdk.capture_exception(e)
         return GTFSScheduleFeedExtractUnzipOutcome(
             success=False,
             extract=extract,
@@ -233,15 +248,18 @@ def unzip_extracts(
     ), f"ended up with {len(outcomes)} outcomes from {len(extracts)} extracts"
 
     success_rate = len(result.successes) / len(extracts)
+    exceptions = [
+        (failure.exception, failure.extract.config.url) for failure in result.failures
+    ]
+    exc_str = "\n".join(str(tup) for tup in exceptions)
+    msg = f"got {len(exceptions)} exceptions from validating {len(extracts)} extracts:\n{exc_str}"
+    typer.secho(msg, err=True, fg=typer.colors.RED)
     if success_rate < GTFS_UNZIP_LIST_ERROR_THRESHOLD:
-        exceptions = [failure.exception for failure in result.failures]
-        exc_str = "\n".join(str(tup) for tup in exceptions)
-        msg = f"got {len(exceptions)} exceptions from validating {len(extracts)} extracts:\n{exc_str}"
-        typer.secho(msg, err=True, fg=typer.colors.RED)
         raise RuntimeError(msg)
 
 
 def airflow_unzip_extracts(task_instance, execution_date, **kwargs):
+    sentry_sdk.init()
     unzip_extracts(execution_date, threads=2, progress=True)
 
 

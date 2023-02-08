@@ -1,0 +1,34 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-airtable
+prefix_bucket: true
+post_hook: |
+  SELECT *
+  FROM `{{ get_project_id() }}`.external_airtable.california_transit__modes
+  LIMIT 1;
+source_objects:
+  - "california_transit__modes/*.jsonl.gz"
+destination_project_dataset_table: "external_airtable.california_transit__modes"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: AUTO
+  source_uri_prefix: "california_transit__modes/"
+schema_fields:
+  - name: id
+    type: STRING
+    mode: NULLABLE
+  - name: mode
+    type: STRING
+    mode: NULLABLE
+  - name: super_mode
+    type: STRING
+    mode: NULLABLE
+  - name: description
+    type: STRING
+    mode: NULLABLE
+  - name: link_to_formal_definition
+    type: STRING
+    mode: NULLABLE
+  - name: services
+    type: STRING
+    mode: REPEATED

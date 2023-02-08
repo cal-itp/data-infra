@@ -318,3 +318,15 @@ models:
       - name: eligibility_program_key
       - name: time
       - name: dt
+  - name: stg_transit_database__modes
+    description: |
+      Each row is an individual row from an individual download (snapshot) of the
+      Modes table in Airtable.
+    columns:
+      - *id
+      - name: mode
+      - name: super_mode
+      - name: description
+      - name: link_to_formal_definition
+      - name: services
+      - name: dt
