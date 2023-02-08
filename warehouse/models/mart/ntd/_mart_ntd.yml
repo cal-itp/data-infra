@@ -5,6 +5,8 @@ models:
     description: |
       Versioned extracts of the NTD Annual Database Agency Information.
       For example, the 2021 dataset is found at https://www.transit.dot.gov/ntd/data-product/2021-annual-database-agency-information.
+      Only contains 2021 data as of 2022-02-08 but we will be importing
+      more data in the future.
       The versioning is bitemporal, so records are versioned at the year
       and ntd_id level. This means you must join based on _valid_from/_valid_from
       to get the records for a given ntd_id, and then choose which year to
