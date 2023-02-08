@@ -38,7 +38,7 @@ dim_organizations AS (
         dim._valid_to
     FROM dim
     LEFT JOIN ntd_agency_to_organization ntd_to_org
-        ON dim.name = ntd_to_org.organization_name
+        ON dim.source_record_id = ntd_to_org.organization_record_id
     LEFT JOIN dim_annual_database_agency_information AS ntd
         -- TODO: make this historical and use a bridge table
         ON ntd_to_org.ntd_id = ntd.ntd_id
