@@ -353,8 +353,7 @@ models:
               field: key
       - name: gtfs_dataset_name
   - name: fct_rt_feed_fetch_errors
-    description: |
-      TODO
+    description: Event logs from Sentry corresponding to RTFetchException errors
     columns:
       - name: id
       - name: event_type
