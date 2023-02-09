@@ -236,9 +236,8 @@ models:
           limitations noted for the other foreign keys in this table.
       - name: backdated_regional_feed_type
         description: |
-          The `regional_feed_type` value for the *current version* of this GTFS dataset.
-          This allows us to make regional subfeed selections from before the raw data was available in Airtable
-          for reports site assessment purposes.
+          For reports site assessment purposes this field allows us to make regional subfeed selections
+          from before the raw regional_feed_type data was available in Airtable.
   - name: int_gtfs_quality__organization_dataset_map
     description: |
       A version of int_gtfs_quality__daily_assessment_candidate_entities collapsed
