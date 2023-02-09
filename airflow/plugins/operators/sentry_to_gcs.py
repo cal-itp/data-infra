@@ -1,11 +1,11 @@
 import os
+from typing import ClassVar, List, Optional
+
 import pandas as pd
 import pendulum
 import requests
-
 from calitp.auth import get_secret_by_name
-from calitp.storage import get_fs, make_name_bq_safe, PartitionedGCSArtifact
-from typing import ClassVar, List, Optional
+from calitp.storage import PartitionedGCSArtifact, get_fs, make_name_bq_safe
 
 from airflow.models import BaseOperator
 
