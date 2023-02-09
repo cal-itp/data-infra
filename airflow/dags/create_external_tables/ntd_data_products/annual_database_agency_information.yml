@@ -1,0 +1,139 @@
+operator: operators.ExternalTable
+bucket: gs://calitp-ntd-data-products
+prefix_bucket: true
+post_hook: |
+  SELECT *
+  FROM `{{ get_project_id() }}`.external_ntd_data_products.annual_database_agency_information
+  LIMIT 1;
+source_objects:
+  - "annual-database-agency-information/*.jsonl.gz"
+destination_project_dataset_table: "external_ntd_data_products.annual_database_agency_information"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  source_uri_prefix: "annual-database-agency-information/{dt:DATE}/{ts:TIMESTAMP}/{year:INTEGER}/"
+schema_fields:
+  - name: number_of_state_counties
+    type: FLOAT
+    mode: NULLABLE
+  - name: tam_tier
+    type: STRING
+    mode: NULLABLE
+  - name: personal_vehicles
+    type: FLOAT
+    mode: NULLABLE
+  - name: density
+    type: FLOAT
+    mode: NULLABLE
+  - name: uza_name
+    type: STRING
+    mode: NULLABLE
+  - name: tribal_area_name
+    type: STRING
+    mode: NULLABLE
+  - name: service_area_sq_miles
+    type: FLOAT
+    mode: NULLABLE
+  - name: total_voms
+    type: FLOAT
+    mode: NULLABLE
+  - name: city
+    type: STRING
+    mode: NULLABLE
+  - name: fta_recipient_id
+    type: FLOAT
+    mode: NULLABLE
+  - name: region
+    type: FLOAT
+    mode: NULLABLE
+  - name: state_admin_funds_expended
+    type: FLOAT
+    mode: NULLABLE
+  - name: zip_code_ext
+    type: FLOAT
+    mode: NULLABLE
+  - name: zip_code
+    type: FLOAT
+    mode: NULLABLE
+  - name: ueid
+    type: STRING
+    mode: NULLABLE
+  - name: address_line_2
+    type: STRING
+    mode: NULLABLE
+  - name: number_of_counties_with_service
+    type: FLOAT
+    mode: NULLABLE
+  - name: reporter_acronym
+    type: STRING
+    mode: NULLABLE
+  - name: original_due_date
+    type: INTEGER
+    mode: NULLABLE
+  - name: sq_miles
+    type: FLOAT
+    mode: NULLABLE
+  - name: address_line_1
+    type: STRING
+    mode: NULLABLE
+  - name: p_o__box
+    type: STRING
+    mode: NULLABLE
+  - name: fy_end_date
+    type: INTEGER
+    mode: NULLABLE
+  - name: reported_by_ntd_id
+    type: STRING
+    mode: NULLABLE
+  - name: population
+    type: FLOAT
+    mode: NULLABLE
+  - name: reporting_module
+    type: STRING
+    mode: NULLABLE
+  - name: service_area_pop
+    type: FLOAT
+    mode: NULLABLE
+  - name: subrecipient_type
+    type: STRING
+    mode: NULLABLE
+  - name: state
+    type: STRING
+    mode: NULLABLE
+  - name: volunteer_drivers
+    type: FLOAT
+    mode: NULLABLE
+  - name: primary_uza
+    type: FLOAT
+    mode: NULLABLE
+  - name: doing_business_as
+    type: STRING
+    mode: NULLABLE
+  - name: reporter_type
+    type: STRING
+    mode: NULLABLE
+  - name: legacy_ntd_id
+    type: STRING
+    mode: NULLABLE
+  - name: voms_do
+    type: FLOAT
+    mode: NULLABLE
+  - name: url
+    type: STRING
+    mode: NULLABLE
+  - name: reported_by_name
+    type: STRING
+    mode: NULLABLE
+  - name: voms_pt
+    type: FLOAT
+    mode: NULLABLE
+  - name: organization_type
+    type: STRING
+    mode: NULLABLE
+  - name: agency_name
+    type: STRING
+    mode: NULLABLE
+  - name: ntd_id
+    type: STRING
+    mode: NULLABLE

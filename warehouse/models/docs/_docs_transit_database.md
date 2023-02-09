@@ -200,6 +200,8 @@ are implemented for future schema consistency, but historical data has not yet b
 
 {% docs ntd_agency_info_table %}
 
+DEPRECATED: Please use mart_ntd.dim_annual_database_agency_information going forward.
+
 2018 NTD Agency Info Table
 Imported 10/6/2021 from fta.gov
 

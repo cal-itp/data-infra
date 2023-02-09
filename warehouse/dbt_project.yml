@@ -90,3 +90,5 @@ models:
         schema: mart_ad_hoc
       audit:
         schema: mart_audit
+      ntd:
+        schema: mart_ntd
