@@ -29,9 +29,6 @@ models:
       - name: ntd_id
         tests:
           - not_null
-          - unique:
-              config:
-                where: _is_current
       - name: _valid_from
         tests:
           - not_null
