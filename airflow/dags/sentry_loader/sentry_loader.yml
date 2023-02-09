@@ -3,4 +3,4 @@ bucket: "gs://test-calitp-sentry"
 hive_options:
   mode: CUSTOM
   require_partition_filter: true
-issue_id: 431
+project_slug: "cal-itp-data-infra"

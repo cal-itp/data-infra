@@ -41,28 +41,36 @@ def make_arrays_bq_safe(raw_data):
     return safe_data
 
 
-class SentryExtract(PartitionedGCSArtifact):
-    bucket: ClassVar[str] = CALITP_BUCKET__SENTRY_LOGS
-    table: ClassVar[str] = "events"
-    dt: pendulum.Date
-    ts: pendulum.DateTime
-    partition_names: ClassVar[List[str]] = ["dt", "ts"]
-    issue_id: int
-    data: Optional[bytes]
-    extract_ts: Optional[pendulum.DateTime]
+def get_issues_list_from_sentry(extract, headers):
+    """
+    Paginate over Sentry issues for a project and create a list of issues matching our
+    criteria for examination (RTFetchExceptions).
+    """
+    next_url = BASE_URL + f"projects/sentry/{extract.project_slug}/issues/"
+    response_data = []
 
-    # pydantic doesn't know dataframe type
-    # see https://stackoverflow.com/a/69200069
-    class Config:
-        arbitrary_types_allowed = True
+    while next_url:
+        response = requests.get(next_url, headers=headers)
+        response_data.extend(response.json())
+        if response.links["next"]["results"] == "true":
+            next_url = response.links["next"]["url"]
+        else:
+            next_url = None
 
-    def iterate_over_sentry_records(self, auth_token):
-        """
-        Paginate over Sentry API responses for an issue and create a combined list of dicts.
-        """
-        response_data = []
-        next_url = BASE_URL + f"issues/{self.issue_id}/events/"
-        headers = {"Authorization": "Bearer " + auth_token}
+    issues_list = [x["id"] for x in response_data if "RTFetchException" in x["title"]]
+    return issues_list
+
+
+def iterate_over_sentry_records(extract, auth_token):
+    """
+    Paginate over API responses for each targeted issue and create a combined list of dicts.
+    """
+    headers = {"Authorization": "Bearer " + auth_token}
+    issues_list = get_issues_list_from_sentry(extract, headers)
+    response_data = []
+
+    for issue_id in issues_list:
+        next_url = BASE_URL + f"issues/{issue_id}/events/"
 
         while next_url:
             response = requests.get(next_url, headers=headers)
@@ -72,22 +80,41 @@ class SentryExtract(PartitionedGCSArtifact):
             else:
                 next_url = None
 
-        return response_data
+    return response_data
 
-    def fetch_and_clean_from_sentry(self, auth_token):
-        """
-        Download Sentry event records as a DataFrame.
-        """
 
-        print(f"Downloading Sentry event data for issue ID {self.issue_id}")
-        all_rows = self.iterate_over_sentry_records(auth_token)
-        self.extract_ts = pendulum.now()
+def fetch_and_clean_from_sentry(extract, auth_token):
+    """
+    Download Sentry event records as a DataFrame.
+    """
 
-        raw_df = pd.DataFrame([{**make_arrays_bq_safe(row)} for row in all_rows])
+    print(f"Downloading Sentry event data for project {extract.project_slug}")
+    all_rows = iterate_over_sentry_records(extract, auth_token)
+    extract.extract_ts = pendulum.now()
 
-        cleaned_df = raw_df.rename(make_name_bq_safe, axis="columns")
+    raw_df = pd.DataFrame([{**make_arrays_bq_safe(row)} for row in all_rows])
 
-        self.data = cleaned_df.to_json(orient="records", lines=True).encode()
+    cleaned_df = raw_df.rename(make_name_bq_safe, axis="columns")
+
+    extract.data = cleaned_df.to_json(orient="records", lines=True).encode()
+
+    return extract
+
+
+class SentryExtract(PartitionedGCSArtifact):
+    bucket: ClassVar[str] = CALITP_BUCKET__SENTRY_LOGS
+    table: ClassVar[str] = "events"
+    dt: pendulum.Date
+    ts: pendulum.DateTime
+    partition_names: ClassVar[List[str]] = ["dt", "ts"]
+    project_slug: str
+    data: Optional[bytes]
+    extract_ts: Optional[pendulum.DateTime]
+
+    # pydantic doesn't know dataframe type
+    # see https://stackoverflow.com/a/69200069
+    class Config:
+        arbitrary_types_allowed = True
 
     def save_to_gcs(self, fs):
         self.save_content(fs=fs, content=self.data, exclude={"data"})
@@ -100,7 +127,7 @@ class SentryToGCSOperator(BaseOperator):
     def __init__(
         self,
         bucket,
-        issue_id,
+        project_slug,
         auth_token=None,
         **kwargs,
     ):
@@ -111,7 +138,7 @@ class SentryToGCSOperator(BaseOperator):
 
         Args:
             bucket (str): GCS bucket where the scraped Sentry issue will be saved.
-            issue_id (int): The underlying id of the Sentry issue being examined.
+            project_slug (str): The identifier for the Sentry project being examined.
             auth_token (str, optional): The auth token to use when downloading from Sentry.
                 This can be someone's personal auth token. If not provided, the environment
                 variable of `CALITP_SENTRY_AUTH_TOKEN` is used.
@@ -120,7 +147,10 @@ class SentryToGCSOperator(BaseOperator):
         self.dt = self.ts.date()
         self.bucket = bucket
         self.extract = SentryExtract(
-            issue_id=issue_id, dt=self.dt, ts=self.ts, filename=f"{issue_id}.jsonl.gz"
+            project_slug=project_slug,
+            dt=self.dt,
+            ts=self.ts,
+            filename=f"{project_slug}.jsonl.gz",
         )
         self.auth_token = auth_token
 
@@ -128,7 +158,7 @@ class SentryToGCSOperator(BaseOperator):
 
     def execute(self, **kwargs):
         auth_token = self.auth_token or get_secret_by_name("CALITP_SENTRY_AUTH_TOKEN")
-        self.extract.fetch_and_clean_from_sentry(auth_token)
+        self.extract = fetch_and_clean_from_sentry(self.extract, auth_token)
         fs = get_fs()
         # inserts into xcoms
         return self.extract.save_to_gcs(fs=fs)

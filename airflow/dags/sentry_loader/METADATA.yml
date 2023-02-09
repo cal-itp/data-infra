@@ -1,4 +1,4 @@
-description: "Load events from Sentry API to Google Cloud Storage as JSONL"
+description: "Load RTFetchException events from Sentry API to Google Cloud Storage as JSONL"
 schedule_interval: "0 0 * * *"
 tags:
   - all_gusty_features
