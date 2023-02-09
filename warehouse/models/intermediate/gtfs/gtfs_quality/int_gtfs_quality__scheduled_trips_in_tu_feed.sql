@@ -21,7 +21,7 @@ daily_trip_compare AS (
        scheduled_trips.service_date AS date,
        scheduled_trips.gtfs_dataset_key AS schedule_gtfs_dataset_key,
        COUNT(scheduled_trips.trip_id) AS scheduled_trips,
-       COUNT(observed_trips.trip_id) AS observed_trips
+       COUNT(observed_trips.tu_num_distinct_message_ids) AS observed_trips
     FROM fct_daily_scheduled_trips scheduled_trips
     LEFT JOIN fct_observed_trips AS observed_trips
     ON scheduled_trips.service_date = observed_trips.dt
@@ -35,6 +35,9 @@ joined AS (
     SELECT
        idx.date,
        idx.service_key,
+       CASE WHEN quartet.trip_updates_gtfs_dataset_key IS NOT null THEN true
+            ELSE false
+       END AS has_tu_feed,
        compare.scheduled_trips,
        compare.observed_trips,
     FROM services_guideline_index AS idx
@@ -52,7 +55,6 @@ joined AS (
     LEFT JOIN daily_trip_compare AS compare
     ON idx.date = compare.date
     AND quartet.associated_schedule_gtfs_dataset_key = compare.schedule_gtfs_dataset_key
-
 ),
 
 int_gtfs_quality__scheduled_trips_in_tu_feed AS (
@@ -65,10 +67,9 @@ int_gtfs_quality__scheduled_trips_in_tu_feed AS (
         observed_trips,
         CASE
             WHEN
+                NOT(has_tu_feed) OR
                 scheduled_trips = 0
-                OR observed_trips = 0
                 OR scheduled_trips IS null
-                OR observed_trips IS null
                 THEN "N/A"
             WHEN scheduled_trips = observed_trips THEN "PASS"
             ELSE "FAIL"
