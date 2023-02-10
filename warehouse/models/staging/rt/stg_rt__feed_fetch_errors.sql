@@ -19,7 +19,7 @@ WITH source AS (
 latest AS (
     SELECT *
     FROM source
-    WHERE dt = (SELECT MAX(dt) FROM source)
+    WHERE ts = (SELECT MAX(ts) FROM source)
 ),
 
 stg_rt__feed_fetch_errors AS (
