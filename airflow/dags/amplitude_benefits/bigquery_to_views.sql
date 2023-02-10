@@ -3,7 +3,7 @@ operator: operators.SqlToWarehouseOperator
 dst_table_name: "views.amplitude_benefits_events"
 
 dependencies:
-  - jsonl_bigquery
+  - benefits_events_external_table
 
 description: |
   Benefits application event data from Amplitude, via Google Cloud Services and BigQuery. See more details of data schema here https://developers.amplitude.com/docs/http-api-v2#properties-1
