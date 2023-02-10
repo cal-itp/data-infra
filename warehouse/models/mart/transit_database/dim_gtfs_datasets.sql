@@ -12,6 +12,13 @@ dim_gtfs_datasets AS (
         name,
         type,
         regional_feed_type,
+        COALESCE(
+            regional_feed_type,
+            FIRST_VALUE(regional_feed_type IGNORE NULLS)
+                OVER(
+                    PARTITION BY source_record_id
+                    ORDER BY _valid_from
+                    ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)) AS backdated_regional_feed_type,
         uri,
         future_uri,
         deprecated_date,
