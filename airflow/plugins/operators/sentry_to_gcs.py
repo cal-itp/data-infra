@@ -1,3 +1,4 @@
+import gzip
 import os
 from typing import ClassVar, List, Optional
 
@@ -9,8 +10,8 @@ from calitp.storage import PartitionedGCSArtifact, get_fs, make_name_bq_safe
 
 from airflow.models import BaseOperator
 
-BASE_URL = "https://sentry.k8s.calitp.jarv.us/api/0/"
-CALITP_BUCKET__SENTRY_LOGS = os.environ["CALITP_BUCKET__SENTRY_LOGS"]
+SENTRY_API_BASE_URL = os.environ["SENTRY_API_BASE_URL"]
+CALITP_BUCKET__SENTRY_EVENTS = os.environ["CALITP_BUCKET__SENTRY_EVENTS"]
 
 
 def process_arrays_for_nulls(arr):
@@ -46,7 +47,7 @@ def get_issues_list_from_sentry(extract, headers):
     Paginate over Sentry issues for a project and create a list of issues matching our
     criteria for examination (RTFetchExceptions).
     """
-    next_url = BASE_URL + f"projects/sentry/{extract.project_slug}/issues/"
+    next_url = f"{SENTRY_API_BASE_URL}/projects/sentry/{extract.project_slug}/issues/"
     response_data = []
 
     while next_url:
@@ -70,7 +71,7 @@ def iterate_over_sentry_records(extract, auth_token):
     response_data = []
 
     for issue_id in issues_list:
-        next_url = BASE_URL + f"issues/{issue_id}/events/"
+        next_url = f"{SENTRY_API_BASE_URL}/issues/{issue_id}/events/"
 
         while next_url:
             response = requests.get(next_url, headers=headers)
@@ -91,33 +92,32 @@ def fetch_and_clean_from_sentry(extract, auth_token):
     print(f"Downloading Sentry event data for project {extract.project_slug}")
     all_rows = iterate_over_sentry_records(extract, auth_token)
     extract.extract_ts = pendulum.now()
-
-    raw_df = pd.DataFrame([{**make_arrays_bq_safe(row)} for row in all_rows])
-
-    cleaned_df = raw_df.rename(make_name_bq_safe, axis="columns")
-
-    extract.data = cleaned_df.to_json(orient="records", lines=True).encode()
+    extract.data = all_rows
 
     return extract
 
 
 class SentryExtract(PartitionedGCSArtifact):
-    bucket: ClassVar[str] = CALITP_BUCKET__SENTRY_LOGS
+    bucket: ClassVar[str] = CALITP_BUCKET__SENTRY_EVENTS
     table: ClassVar[str] = "events"
     dt: pendulum.Date
     ts: pendulum.DateTime
     partition_names: ClassVar[List[str]] = ["dt", "ts"]
     project_slug: str
-    data: Optional[bytes]
+    data: Optional[List[dict]]
     extract_ts: Optional[pendulum.DateTime]
 
-    # pydantic doesn't know dataframe type
-    # see https://stackoverflow.com/a/69200069
-    class Config:
-        arbitrary_types_allowed = True
-
     def save_to_gcs(self, fs):
-        self.save_content(fs=fs, content=self.data, exclude={"data"})
+        raw_df = pd.DataFrame([{**make_arrays_bq_safe(row)} for row in self.data])
+        cleaned_df = raw_df.rename(make_name_bq_safe, axis="columns")
+
+        self.save_content(
+            fs=fs,
+            content=gzip.compress(
+                cleaned_df.to_json(orient="records", lines=True).encode()
+            ),
+            exclude={"data"},
+        )
 
 
 class SentryToGCSOperator(BaseOperator):

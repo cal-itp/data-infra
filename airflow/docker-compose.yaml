@@ -85,7 +85,7 @@ x-airflow-common:
     CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED: "gs://test-calitp-gtfs-schedule-unzipped"
     CALITP_BUCKET__GTFS_SCHEDULE_PARSED: "gs://test-calitp-gtfs-schedule-parsed"
     CALITP_BUCKET__PUBLISH: "gs://test-calitp-publish"
-    CALITP_BUCKET__SENTRY_LOGS: "gs://test-calitp-sentry"
+    CALITP_BUCKET__SENTRY_EVENTS: "gs://test-calitp-sentry"
 
     DBT_TARGET: staging_service_account
 
@@ -99,6 +99,9 @@ x-airflow-common:
     CALITP_USER: "pipeline"
     SENTRY_DSN: "https://e498431022154366b0ff8b71cf2d93e0@sentry.k8s.calitp.jarv.us/2"
     SENTRY_ENVIRONMENT: "development"
+
+    # Base URL for Sentry API (used to bring events data into GCS and BigQuery)
+    SENTRY_API_BASE_URL: "https://sentry.k8s.calitp.jarv.us/api/0"
 
   volumes:
     # Note that in cloud composer, folders like dags are not in AIRFLOW_HOME
