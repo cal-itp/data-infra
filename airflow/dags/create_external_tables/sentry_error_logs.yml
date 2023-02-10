@@ -1,5 +1,5 @@
 operator: operators.ExternalTable
-bucket: "{{ env_var('CALITP_BUCKET__SENTRY_LOGS') }}"
+bucket: "{{ env_var('CALITP_BUCKET__SENTRY_EVENTS') }}"
 suffix_bucket: true
 source_objects:
   - "*.jsonl.gz"
