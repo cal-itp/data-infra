@@ -1,6 +1,4 @@
 operator: operators.ExternalTable
-dependencies:
-  - api_to_jsonl
 bucket: "{{'gs://ingest_amplitude_raw_dev' if is_development() else 'gs://ingest_amplitude_raw_prod'}}"
 source_objects:
   - "benefits/*.jsonl"
