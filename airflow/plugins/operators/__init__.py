@@ -1,7 +1,6 @@
 # flake8: noqa
 from operators.airtable_to_gcs import AirtableToGCSOperator
 from operators.amplitude_to_flattened_json import AmplitudeToFlattenedJSONOperator
-from operators.csv_to_warehouse_operator import CsvToWarehouseOperator
 from operators.external_table import ExternalTable
 from operators.gtfs_csv_to_jsonl import GtfsGcsToJsonlOperator
 from operators.pod_operator import PodOperator
