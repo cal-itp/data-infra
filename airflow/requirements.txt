@@ -1,4 +1,4 @@
-calitp-data-infra==2023.2.10a3
+calitp-data-infra==2023.2.10
 gusty==0.6.0
 pybigquery==0.7.0
 google-auth==1.32.1
