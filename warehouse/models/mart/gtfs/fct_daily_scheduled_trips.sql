@@ -27,13 +27,13 @@ urls_to_gtfs_datasets AS (
     SELECT * FROM {{ ref('int_transit_database__urls_to_gtfs_datasets') }}
 ),
 
-stop_times_grouped AS (
-    SELECT * FROM {{ ref('int_gtfs_schedule__stop_times_grouped') }}
-),
-
 dim_gtfs_datasets AS (
     SELECT *
     FROM {{ ref('dim_gtfs_datasets') }}
+),
+
+stop_times_grouped AS (
+    SELECT * FROM {{ ref('int_gtfs_schedule__stop_times_grouped') }}
 ),
 
 fct_daily_scheduled_trips AS (
@@ -75,7 +75,22 @@ fct_daily_scheduled_trips AS (
         stop_times_grouped.trip_last_arrival_sec,
         stop_times_grouped.service_hours,
         stop_times_grouped.contains_warning_duplicate_primary_key AS contains_warning_duplicate_stop_times_primary_key,
-        stop_times_grouped.contains_warning_missing_foreign_key_stop_id
+        stop_times_grouped.contains_warning_missing_foreign_key_stop_id,
+
+        CASE
+            WHEN stop_times_grouped.trip_first_departure_sec > 8640 THEN DATE_ADD(service_index.service_date, INTERVAL 1 DAY)
+            ELSE service_index.service_date
+        END AS activity_date,
+
+        CASE
+            WHEN (stop_times_grouped.trip_first_departure_sec > 8640) THEN TIME(TIMESTAMP_SECONDS(stop_times_grouped.trip_first_departure_sec - 86400))
+            ELSE TIME(TIMESTAMP_SECONDS(stop_times_grouped.trip_first_departure_sec))
+        END AS activity_first_departure,
+
+        CASE
+            WHEN stop_times_grouped.trip_first_departure_sec > 8640 THEN TIME(TIMESTAMP_SECONDS(stop_times_grouped.trip_last_arrival_sec - 86400))
+            ELSE TIME(TIMESTAMP_SECONDS(stop_times_grouped.trip_last_arrival_sec))
+        END AS activity_last_arrival
 
     FROM int_gtfs_schedule__daily_scheduled_service_index AS service_index
     INNER JOIN dim_trips AS trips
