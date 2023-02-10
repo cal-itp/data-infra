@@ -33,6 +33,7 @@ extract_trip_date_types AS (
         END
         AS time_of_day,
 
+        EXTRACT(hour FROM activity_first_departure) AS hour,
         EXTRACT(month FROM activity_date) AS month,
         EXTRACT(year FROM activity_date) AS year,
         EXTRACT(DAYOFWEEK from activity_date) AS day_type
@@ -41,13 +42,14 @@ extract_trip_date_types AS (
 
 ),
 
-daily_routes_and_shapes AS (
+service_with_daypart AS (
     SELECT
 
         dim_gtfs_datasets.name,
         dim_gtfs_datasets.source_record_id,
 
         trips.time_of_day,
+        trips.hour,
         trips.month,
         trips.year,
         trips.day_type,
@@ -70,29 +72,44 @@ daily_routes_and_shapes AS (
 
 ),
 
-count_day_parts AS (
+daypart_aggregations AS (
     SELECT
 
         name,
         source_record_id,
-        time_of_day,
-        month,
-        year,
-        day_type,
-        shape_id,
+        base64_url,
         route_id,
         route_short_name,
-        base64_url,
+        shape_id,
+        time_of_day,
+        hour,
+        month,
+        year,
+        day_type--,
 
-        COUNT(*) AS n
+        -- COUNT(*) AS n
 
-    FROM daily_routes_and_shapes
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+    FROM service_with_daypart
+    -- GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 ),
 
 fct_scheduled_service_by_daypart AS (
-    SELECT *
-    FROM count_day_parts
+    SELECT
+
+        name,
+        source_record_id,
+        base64_url,
+        route_id,
+        route_short_name,
+        shape_id,
+        time_of_day,
+        hour,
+        month,
+        year,
+        day_type--,
+        --n
+
+    FROM daypart_aggregations
 )
 
 SELECT * FROM fct_scheduled_service_by_daypart

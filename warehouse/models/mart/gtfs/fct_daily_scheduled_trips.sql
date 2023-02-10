@@ -78,17 +78,17 @@ fct_daily_scheduled_trips AS (
         stop_times_grouped.contains_warning_missing_foreign_key_stop_id,
 
         CASE
-            WHEN stop_times_grouped.trip_first_departure_sec > 8640 THEN DATE_ADD(service_index.service_date, INTERVAL 1 DAY)
+            WHEN (stop_times_grouped.trip_first_departure_sec > 86400) THEN DATE_ADD(service_index.service_date, INTERVAL 1 DAY)
             ELSE service_index.service_date
         END AS activity_date,
 
         CASE
-            WHEN (stop_times_grouped.trip_first_departure_sec > 8640) THEN TIME(TIMESTAMP_SECONDS(stop_times_grouped.trip_first_departure_sec - 86400))
+            WHEN (stop_times_grouped.trip_first_departure_sec > 86400) THEN TIME(TIMESTAMP_SECONDS(stop_times_grouped.trip_first_departure_sec - 86400))
             ELSE TIME(TIMESTAMP_SECONDS(stop_times_grouped.trip_first_departure_sec))
         END AS activity_first_departure,
 
         CASE
-            WHEN stop_times_grouped.trip_first_departure_sec > 8640 THEN TIME(TIMESTAMP_SECONDS(stop_times_grouped.trip_last_arrival_sec - 86400))
+            WHEN (stop_times_grouped.trip_first_departure_sec > 86400) THEN TIME(TIMESTAMP_SECONDS(stop_times_grouped.trip_last_arrival_sec - 86400))
             ELSE TIME(TIMESTAMP_SECONDS(stop_times_grouped.trip_last_arrival_sec))
         END AS activity_last_arrival
 
