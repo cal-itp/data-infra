@@ -4,16 +4,50 @@ from typing import ClassVar, List
 
 import pandas as pd
 import pendulum
-from calitp import read_gcfs, save_to_gcfs
-from calitp.storage import (
+from calitp.config import format_table_name, get_project_id
+from calitp_data_infra.storage import (
     GTFSDownloadConfig,
     GTFSScheduleFeedExtract,
     PartitionedGCSArtifact,
+    read_gcfs,
+    save_to_gcfs,
 )
 from pandas.errors import EmptyDataError
 from pydantic import validator
+from sqlalchemy import MetaData, Table, create_engine
 
 SCHEDULE_UNZIPPED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED"]
+
+# TODO: will be unnecessary once payments is migrated to v2 architecture
+# These are copied from the old calitp/now calitp-data-analysis
+CALITP_BQ_MAX_BYTES = os.environ.get("CALITP_BQ_MAX_BYTES", 5_000_000_000)
+CALITP_BQ_LOCATION = os.environ.get("CALITP_BQ_LOCATION", "us-west2")
+
+
+def get_engine(max_bytes=None):
+    max_bytes = CALITP_BQ_MAX_BYTES if max_bytes is None else max_bytes
+
+    cred_path = os.environ.get("CALITP_SERVICE_KEY_PATH")
+
+    # Note that we should be able to add location as a uri parameter, but
+    # it is not being picked up, so passing as a separate argument for now.
+    return create_engine(
+        f"bigquery://{get_project_id()}/?maximum_bytes_billed={max_bytes}",
+        location=CALITP_BQ_LOCATION,
+        credentials_path=cred_path,
+    )
+
+
+def get_table(table_name, as_df=False):
+    engine = get_engine()
+    src_table = format_table_name(table_name)
+
+    table = Table(src_table, MetaData(bind=engine), autoload=True)
+
+    if as_df:
+        return pd.read_sql_query(table.select(), engine)
+
+    return table
 
 
 # TODO: this will be replaced during payments v2

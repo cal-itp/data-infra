@@ -12,9 +12,9 @@ import humanize
 import pandas as pd
 import pendulum
 import sentry_sdk
-from calitp.auth import get_secrets_by_label
 from calitp.config import is_development
-from calitp.storage import (
+from calitp_data_infra.auth import get_secrets_by_label
+from calitp_data_infra.storage import (
     JSONL_EXTENSION,
     SCHEDULE_RAW_BUCKET,
     GTFSDownloadConfig,
