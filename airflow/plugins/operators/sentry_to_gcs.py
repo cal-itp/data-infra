@@ -1,6 +1,7 @@
 import gzip
 import os
-from typing import ClassVar, List, Optional
+from concurrent.futures import Future, ThreadPoolExecutor, as_completed
+from typing import ClassVar, Dict, List, Optional
 
 import pandas as pd
 import pendulum
@@ -42,6 +43,25 @@ def make_arrays_bq_safe(raw_data):
     return safe_data
 
 
+def fetch_events_for_issue(issue_id, headers):
+    response_data = []
+    next_url = f"{SENTRY_API_BASE_URL}/issues/{issue_id}/events/"
+
+    while next_url:
+        response = requests.get(next_url, headers=headers)
+        response_data.extend(response.json())
+        if "next" in response.links:
+            if response.links["next"]["results"] == "true":
+                next_url = response.links["next"]["url"]
+            else:
+                next_url = None
+        else:
+            next_url = None
+
+    print(f"Retrieved {len(response_data)} events for issue {issue_id}")
+    return response_data
+
+
 def get_issues_list_from_sentry(extract, headers):
     """
     Paginate over Sentry issues for a project and create a list of issues matching our
@@ -68,20 +88,20 @@ def iterate_over_sentry_records(extract, auth_token):
     """
     headers = {"Authorization": "Bearer " + auth_token}
     issues_list = get_issues_list_from_sentry(extract, headers)
-    response_data = []
+    combined_response_data = []
 
-    for issue_id in issues_list:
-        next_url = f"{SENTRY_API_BASE_URL}/issues/{issue_id}/events/"
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        futures: Dict[Future, List[Dict]] = {
+            pool.submit(
+                fetch_events_for_issue, headers=headers, issue_id=issue_id
+            ): issue_id
+            for issue_id in issues_list
+        }
 
-        while next_url:
-            response = requests.get(next_url, headers=headers)
-            response_data.extend(response.json())
-            if response.links["next"]["results"] == "true":
-                next_url = response.links["next"]["url"]
-            else:
-                next_url = None
+        for future in as_completed(futures):
+            combined_response_data.extend(future.result())
 
-    return response_data
+    return combined_response_data
 
 
 def fetch_and_clean_from_sentry(extract, auth_token):
@@ -104,7 +124,7 @@ class SentryExtract(PartitionedGCSArtifact):
     ts: pendulum.DateTime
     partition_names: ClassVar[List[str]] = ["dt", "ts"]
     project_slug: str
-    data: Optional[List[dict]]
+    data: Optional[List[Dict]]
     extract_ts: Optional[pendulum.DateTime]
 
     def save_to_gcs(self, fs):
