@@ -4,7 +4,6 @@ from operators.amplitude_to_flattened_json import AmplitudeToFlattenedJSONOperat
 from operators.csv_to_warehouse_operator import CsvToWarehouseOperator
 from operators.external_table import ExternalTable
 from operators.gtfs_csv_to_jsonl import GtfsGcsToJsonlOperator
-from operators.once_off_external_task_sensor import OnceOffExternalTaskSensor
 from operators.pod_operator import PodOperator
 from operators.sql_query_operator import SqlQueryOperator
 from operators.sql_to_warehouse_operator import SqlToWarehouseOperator
