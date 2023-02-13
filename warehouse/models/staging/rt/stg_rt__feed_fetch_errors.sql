@@ -1,11 +1,20 @@
+{{
+    config(
+        materialized='incremental',
+        unique_key='id',
+        incremental_strategy='insert_overwrite',
+        partition_by={
+            'field': 'dt',
+            'data_type': 'date',
+            'granularity': 'day',
+        },
+        partitions=['current_date()'],
+        cluster_by='groupid',
+    )
+}}
+
 WITH source AS (
     SELECT * FROM {{ source('sentry_external_tables', 'events') }}
-),
-
-latest AS (
-    SELECT *
-    FROM source
-    WHERE ts = (SELECT MAX(ts) FROM source)
 ),
 
 stg_rt__feed_fetch_errors AS (
@@ -26,7 +35,7 @@ stg_rt__feed_fetch_errors AS (
         crashfile,
         dt,
         ts
-    FROM latest
+    FROM source
 )
 
 SELECT * FROM stg_rt__feed_fetch_errors
