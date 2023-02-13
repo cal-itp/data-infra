@@ -67,14 +67,17 @@ def get_issues_list_from_sentry(extract, headers):
     Paginate over Sentry issues for a project and create a list of issues matching our
     criteria for examination (RTFetchExceptions).
     """
-    next_url = f"{SENTRY_API_BASE_URL}/projects/sentry/{extract.project_slug}/issues/"
+    next_url = f"{SENTRY_API_BASE_URL}/projects/sentry/{extract.project_slug}/issues/?query=lastSeen:-7d"
     response_data = []
 
     while next_url:
         response = requests.get(next_url, headers=headers)
         response_data.extend(response.json())
-        if response.links["next"]["results"] == "true":
-            next_url = response.links["next"]["url"]
+        if "next" in response.links:
+            if response.links["next"]["results"] == "true":
+                next_url = response.links["next"]["url"]
+            else:
+                next_url = None
         else:
             next_url = None
 
