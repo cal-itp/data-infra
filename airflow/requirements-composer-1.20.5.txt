@@ -114,8 +114,8 @@ google-cloud-compute==0.7.0
 google-cloud-container==2.11.1
 google-cloud-core==2.3.2
 google-cloud-datacatalog==3.9.0
-google-cloud-datacatalog-lineage==0.1.6
-google-cloud-datacatalog-lineage-producer-client==0.0.9
+#google-cloud-datacatalog-lineage==0.1.6
+#google-cloud-datacatalog-lineage-producer-client==0.0.9
 google-cloud-dataform==0.2.0
 google-cloud-dataplex==1.1.0
 google-cloud-dataproc==5.0.0
