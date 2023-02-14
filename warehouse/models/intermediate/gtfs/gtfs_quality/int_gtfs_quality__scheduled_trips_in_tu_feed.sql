@@ -16,21 +16,6 @@ dim_provider_gtfs_data AS (
     SELECT * FROM {{ ref('dim_provider_gtfs_data') }}
 ),
 
--- daily_trip_compare AS (
---     SELECT
---        scheduled_trips.service_date AS date,
---        scheduled_trips.gtfs_dataset_key AS schedule_gtfs_dataset_key,
---        COUNT(scheduled_trips.trip_id) AS scheduled_trips,
---        COUNT(observed_trips.tu_num_distinct_message_ids) AS observed_trips
---     FROM fct_daily_scheduled_trips scheduled_trips
---     LEFT JOIN fct_observed_trips AS observed_trips
---     ON scheduled_trips.service_date = observed_trips.dt
---     AND scheduled_trips.gtfs_dataset_key = observed_trips.schedule_to_use_for_rt_validation_gtfs_dataset_key
---     AND observed_trips.trip_id = scheduled_trips.trip_id
---     GROUP BY 1,2
-
--- ),
-
 joined AS (
     SELECT
        idx.date,
