@@ -20,7 +20,7 @@ joined AS (
     SELECT
        idx.date,
        idx.service_key,
-       CASE WHEN quartet.key IS NOT null THEN true ELSE FALSE END AS has_tu_feed,
+       LOGICAL_OR(quartet.key IS NOT null) AS has_tu_feed,
        COUNT(scheduled_trips.trip_id) AS scheduled_trips,
        COUNT(observed_trips.tu_num_distinct_message_ids) AS observed_trips,
     FROM services_guideline_index AS idx
@@ -35,7 +35,7 @@ joined AS (
     -- We're only interested in provider_gtfs_data rows that have both an associated_schedule_gtfs_dataset_key and a trip_updates_gtfs_dataset_key
     AND quartet.trip_updates_gtfs_dataset_key IS NOT null
 
-    JOIN fct_daily_scheduled_trips AS scheduled_trips
+    LEFT JOIN fct_daily_scheduled_trips AS scheduled_trips
       ON idx.date = scheduled_trips.service_date
      AND quartet.associated_schedule_gtfs_dataset_key = scheduled_trips.gtfs_dataset_key
 
@@ -44,7 +44,7 @@ joined AS (
      AND quartet.associated_schedule_gtfs_dataset_key = observed_trips.schedule_to_use_for_rt_validation_gtfs_dataset_key
      AND scheduled_trips.trip_id = observed_trips.trip_id
 
-     GROUP BY 1,2,3
+     GROUP BY 1,2
 ),
 
 int_gtfs_quality__scheduled_trips_in_tu_feed AS (
