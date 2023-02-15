@@ -11,6 +11,9 @@ int_gtfs_quality__service_guideline_index AS (
         service_key,
     FROM daily_assessment_candidate_entities
     WHERE date < CURRENT_DATE
+    -- Since this is the earliest date in fct_observed_trips, it's the earliest date we currently need
+    -- This filter resolves some duplication issues that appear in dim_services up until Nov '22
+      AND date >= '2022-12-17'
 )
 
 SELECT * FROM int_gtfs_quality__service_guideline_index

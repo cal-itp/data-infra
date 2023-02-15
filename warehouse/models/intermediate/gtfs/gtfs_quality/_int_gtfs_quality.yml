@@ -543,6 +543,10 @@ models:
       - extreme_results
     columns: *stg_gtfs_guideline_columns
 
+  - name: int_gtfs_quality__scheduled_trips_in_tu_feed
+    tests: *stg_gtfs_guideline_tests_service
+    columns: *stg_gtfs_guideline_columns
+
 # --- GTFS-service-data-level
 # ----- Schedule only
 
