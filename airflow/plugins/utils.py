@@ -1,5 +1,4 @@
 import datetime
-import logging
 import os
 from typing import ClassVar, List
 
@@ -14,20 +13,10 @@ from calitp.storage import (
 from pandas.errors import EmptyDataError
 from pydantic import validator
 
-from airflow.models import Variable
-
 SCHEDULE_UNZIPPED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED"]
 
 
-def get_auth_secret(auth_secret_key: str) -> str:
-    try:
-        secret = Variable.get(auth_secret_key, os.environ[auth_secret_key])
-        return secret
-    except KeyError as e:
-        logging.error(f"No value found for {auth_secret_key}")
-        raise e
-
-
+# TODO: this will be replaced during payments v2
 def _keep_columns(
     src_path,
     dst_path,
@@ -96,16 +85,7 @@ def _keep_columns(
     save_to_gcfs(csv_result, dst_path, use_pipe=True)
 
 
-def get_successfully_downloaded_feeds(execution_date):
-    """Get a list of feeds that were successfully downloaded (as noted in a
-    `schedule/{execution_date}/status.csv/` file) for a given execution date.
-    """
-    f = read_gcfs(f"schedule/{execution_date}/status.csv")
-    status = pd.read_csv(f)
-
-    return status[lambda d: d.status == "success"]
-
-
+# TODO: this should be in calitp-data-infra maybe?
 class GTFSScheduleFeedFile(PartitionedGCSArtifact):
     bucket: ClassVar[str] = SCHEDULE_UNZIPPED_BUCKET
     partition_names: ClassVar[List[str]] = GTFSScheduleFeedExtract.partition_names

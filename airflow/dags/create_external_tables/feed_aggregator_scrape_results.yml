@@ -1,6 +1,5 @@
 operator: operators.ExternalTable
 bucket: "{{ env_var('CALITP_BUCKET__AGGREGATOR_SCRAPER') }}"
-suffix_bucket: true
 source_objects:
   - "gtfs_aggregator_scrape_results/*.jsonl"
 destination_project_dataset_table: "external_feed_aggregator.scraped_urls"
