@@ -7,6 +7,7 @@ source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 hive_options:
   mode: CUSTOM
+  require_partition_filter: false
   source_uri_prefix: "gtfs_aggregator_scrape_results/{dt:DATE}/{ts:TIMESTAMP}/{aggregator:STRING}/"
 schema_fields:
   - name: key

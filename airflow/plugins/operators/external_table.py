@@ -50,7 +50,7 @@ def _bq_client_create_external_table(
         # key schema for more than a trivial number of files
         opt.mode = hive_options.get("mode", "AUTO")
         opt.require_partition_filter = hive_options.get(
-            "require_partition_filter", False
+            "require_partition_filter", True
         )
         # TODO: this is very fragile, we should probably be calculating it from
         #       the source_objects and validating the format (prefix, trailing slashes)
