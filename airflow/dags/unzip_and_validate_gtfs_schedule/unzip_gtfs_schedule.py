@@ -14,7 +14,7 @@ from typing import ClassVar, Dict, List, Optional, Tuple
 import pendulum
 import sentry_sdk
 import typer
-from calitp.storage import (
+from calitp_data_infra.storage import (
     GTFSFeedType,
     GTFSScheduleFeedExtract,
     PartitionedGCSArtifact,

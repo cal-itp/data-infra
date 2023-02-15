@@ -1,7 +1,6 @@
-from calitp.config import get_bucket
-from calitp.sql import get_table
-from calitp.storage import get_fs
-from utils import _keep_columns
+from calitp_data.config import get_bucket
+from calitp_data.storage import get_fs
+from utils import _keep_columns, get_table
 
 DATASET = "payments"
 

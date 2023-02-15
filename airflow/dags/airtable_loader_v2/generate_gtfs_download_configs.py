@@ -11,7 +11,7 @@ from typing import List, Tuple
 
 import pendulum
 import sentry_sdk
-from calitp.storage import (
+from calitp_data_infra.storage import (
     AirtableGTFSDataExtract,
     AirtableGTFSDataRecord,
     GCSFileInfo,

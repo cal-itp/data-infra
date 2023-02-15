@@ -1,27 +1,27 @@
 """
 Abstracts the various concerns of external table creation as much as possible
+
+This operator originally ran using airflow's bigquery hooks. However, for the
+version we had to use (airflow v1.14) they used an outdated form of authentication.
+Now, the pipeline aims to use bigquery's sqlalchemy client where possible.
+However, it's cumbersome to convert the http api style schema fields to SQL, so
+we provide a fallback for these old-style tasks.
 """
 import re
 
-from calitp.config import (
-    CALITP_BQ_LOCATION,
+from calitp_data.config import (
     format_table_name,
     get_bucket,
     get_project_id,
     is_development,
 )
-from calitp.sql import get_engine
 from google.api_core.exceptions import NotFound
 from google.cloud import bigquery
+from utils import CALITP_BQ_LOCATION, get_engine
 
 from airflow.models import BaseOperator
 
 
-# This operator originally ran using airflow's bigquery hooks. However, for the
-# version we had to use (airflow v1.14) they used an outdated form of authentication.
-# Now, the pipeline aims to use bigquery's sqlalchemy client where possible.
-# However, it's cumbersome to convert the http api style schema fields to SQL, so
-# we provide a fallback for these old-style tasks.
 def _bq_client_create_external_table(
     table_name,
     schema_fields,
