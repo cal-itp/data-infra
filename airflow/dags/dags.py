@@ -3,7 +3,7 @@ from pathlib import Path
 
 import macros
 import requests
-from calitp.templates import user_defined_filters, user_defined_macros
+from calitp_data.templates import user_defined_filters, user_defined_macros
 from gusty import create_dag
 
 import airflow  # noqa

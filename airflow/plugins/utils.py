@@ -4,7 +4,7 @@ from typing import ClassVar, List
 
 import pandas as pd
 import pendulum
-from calitp.config import format_table_name, get_project_id
+from calitp_data.config import format_table_name, get_project_id
 from calitp_data_infra.storage import (
     GTFSDownloadConfig,
     GTFSScheduleFeedExtract,

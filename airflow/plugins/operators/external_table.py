@@ -9,7 +9,12 @@ we provide a fallback for these old-style tasks.
 """
 import re
 
-from calitp.config import format_table_name, get_bucket, get_project_id, is_development
+from calitp_data.config import (
+    format_table_name,
+    get_bucket,
+    get_project_id,
+    is_development,
+)
 from google.api_core.exceptions import NotFound
 from google.cloud import bigquery
 from utils import CALITP_BQ_LOCATION, get_engine

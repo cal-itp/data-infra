@@ -8,7 +8,7 @@ from io import BytesIO, StringIO
 
 import pandas as pd
 import requests
-from calitp.config import is_development
+from calitp_data.config import is_development
 from calitp_data_infra.auth import get_secret_by_name
 from calitp_data_infra.storage import save_to_gcfs
 from requests import HTTPError

@@ -1,7 +1,7 @@
 """Macros for Operators"""
 import os
 
-from calitp.config import is_development
+from calitp_data.config import is_development
 
 # To add a macro, add its definition in the appropriate section
 # And then add it to the dictionary at the bottom of this file
