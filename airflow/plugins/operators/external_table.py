@@ -194,7 +194,9 @@ OPTIONS ({options_str})
             """
 
             print(query)
-            client = bigquery.Client()
+            client = bigquery.Client(
+                project=get_project_id(), location=CALITP_BQ_LOCATION
+            )
             query_job = client.query(query)
             query_job.result()
 
