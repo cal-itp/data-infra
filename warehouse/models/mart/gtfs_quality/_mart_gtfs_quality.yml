@@ -179,13 +179,6 @@ models:
           expression: "is_implemented"
     columns:
       - name: is_implemented
-  - name: fct_daily_guideline_checks
-    description: '{{ doc("fct_daily_guideline_checks") }}'
-    tests:
-      - dbt_utils.expression_is_true:
-          expression: "num_check_sources IS NULL OR num_check_sources <= 1"
-      - dbt_utils.expression_is_true:
-          expression: "matches_entity IS NULL OR matches_entity"
     columns:
       - *key
       - *date
