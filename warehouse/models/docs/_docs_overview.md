@@ -13,18 +13,19 @@ The Cal-ITP Data Warehouse contains four core types of data (a few other data so
 
 ## Naming and types of models
 
-Data models (tables and views) are usually of one of two types:
+Data models (tables and views) are usually of one of the following types:
 
 * **Dimensions:** These tables are prefixed with `dim_` and are ["typically likened to nouns"](https://docs.getdbt.com/terms/dimensional-modeling#facts), i.e., the entity associated with an event. Many of our dimension tables are [type-2 slowly changing dimensions](https://en.wikipedia.org/wiki/Slowly_changing_dimension#Type_2:_add_new_row) will have `_valid_from` and `_valid_to` columns that indicate the period of time that that version of a record was in effect.
 
 * **Facts:** These tables are prefixed with `fct_` and ["typically refer to an action, event, or result of a business process"](https://docs.getdbt.com/terms/dimensional-modeling#facts), i.e., a thing that happened (or was scheduled to happen) at a specific time or at a specific temporal granularity.
+
+* **Bridges:** Bridge tables are prefixed with `bridge_` and represent a mapping between two dimension tables where 1. The relationship itself is many to many and/or 2. Because both dimensions are versioned (slowly-changing), the relationship becomes many to many because of overlapping record versions. In case #2, bridge tables must be joined with reference to a specific date (so, you must select the relationship between Organization A and Service B *as of January 1, 2023*, because if you just look for the relationship between Organization A and Service B, you will get multiple rows representing the different iterations of that relationship over time.) These versioned bridge tables will have `_valid_from` and `_valid_to` dates like a dimension table.
 
 ## Joins and keys
 
 Columns called `key` are unique*, non-null primary keys for the given table (*except, occasionally, in GTFS data where there are duplicates in the raw data, which we attempt to identify through warning columns). For versioned dimension tables, the `key` column will be a **versioned** primary key, and there may be an unversioned natural key also present on the table. Foreign keys will be prefixed with the entity name of the other table.
 
 So, for example, the primary key for `dim_gtfs_datasets` is called `key`. The unversioned natural key is `source_record_id`, which is specific to the Transit Database source system. Then in the `fct_daily_scheduled_trips` table, the foreign key referencing `dim_gtfs_datasets.key` is called `gtfs_dataset_key`.
-
 
 
 {% enddocs %}
