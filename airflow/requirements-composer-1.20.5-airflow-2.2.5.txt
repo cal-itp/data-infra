@@ -7,12 +7,12 @@ aiosignal==1.3.1
 alembic==1.7.7
 amqp==5.1.0
 anyio==3.5.0
-apache-airflow==2.2.5+composer
+#apache-airflow==2.2.5+composer
 apache-airflow-providers-apache-beam==4.0.0
 apache-airflow-providers-cncf-kubernetes==3.0.0
 apache-airflow-providers-dbt-cloud==2.2.0
 apache-airflow-providers-ftp==3.2.0
-apache-airflow-providers-google==2022.12.20+composer
+#apache-airflow-providers-google==2022.12.20+composer
 apache-airflow-providers-hashicorp==3.1.0
 apache-airflow-providers-http==4.1.0
 apache-airflow-providers-imap==3.1.0
@@ -113,8 +113,8 @@ google-cloud-common==1.0.3
 google-cloud-container==2.11.1
 google-cloud-core==2.3.2
 google-cloud-datacatalog==3.9.0
-google-cloud-datacatalog-lineage==0.1.6
-google-cloud-datacatalog-lineage-producer-client==0.0.9
+#google-cloud-datacatalog-lineage==0.1.6
+#google-cloud-datacatalog-lineage-producer-client==0.0.9
 google-cloud-dataform==0.2.0
 google-cloud-dataplex==1.1.0
 google-cloud-dataproc==5.0.0
