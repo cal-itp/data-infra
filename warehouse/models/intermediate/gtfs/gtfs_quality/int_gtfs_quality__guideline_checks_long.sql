@@ -56,7 +56,7 @@ idx AS (
     CROSS JOIN assessed_entities
 ),
 
-fct_daily_guideline_checks AS (
+int_gtfs_quality__guideline_checks_long AS (
     SELECT
         {{ dbt_utils.surrogate_key([
             'idx.date',
@@ -144,4 +144,4 @@ fct_daily_guideline_checks AS (
         AND idx.check = gtfs_service_data_checks.check
 )
 
-SELECT * FROM fct_daily_guideline_checks
+SELECT * FROM int_gtfs_quality__guideline_checks_long

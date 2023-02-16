@@ -106,6 +106,14 @@ models:
 
 # Other useful tables
 
+  - name: int_gtfs_quality__guideline_checks_long
+    description: '{{ doc("int_gtfs_quality__guideline_checks_long") }}'
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "num_check_sources IS NULL OR num_check_sources <= 1"
+      - dbt_utils.expression_is_true:
+          expression: "matches_entity IS NULL OR matches_entity"
+
   - name: int_gtfs_quality__rt_validation_outcomes
     description: |
       Unioned, incremental table of RT validation outcomes.
