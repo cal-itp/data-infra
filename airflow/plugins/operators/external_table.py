@@ -17,7 +17,7 @@ from calitp_data.config import (
 )
 from google.api_core.exceptions import NotFound
 from google.cloud import bigquery
-from utils import CALITP_BQ_LOCATION, get_engine
+from utils import CALITP_BQ_LOCATION
 
 from airflow.models import BaseOperator
 
@@ -194,10 +194,9 @@ OPTIONS ({options_str})
             """
 
             print(query)
-
-            # delete the external table, if it already exists
-            engine = get_engine()
-            engine.execute(query)
+            client = bigquery.Client()
+            query_job = client.query(query)
+            query_job.result()
 
         return self.schema_fields
 
