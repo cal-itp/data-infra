@@ -9,13 +9,13 @@ The Cal-ITP Data Warehouse contains four core types of data (a few other data so
 
 * **Transit Database data, generally in `mart_transit_database`**: This is data hand-collected by Cal-ITP about transit in California, including things like organizations (whether they are transit providers, vendors, or other participants in the transit ecosystem); transit services; GTFS datasets; contracts; components of a transit technology stack; etc. For additional documentation of the Transit Database data model, see the [Airtable Data Documentation](https://docs.google.com/document/d/1KvlYRYB8cnyTOkT1Q0BbBmdQNguK_AMzhSV5ELXiZR4/edit#heading=h.u7y2eosf0i1d) or the older [Transit Database docs](https://docs.calitp.org/data-infra/datasets_and_tables/transitdatabase.html).
 
-*  **Payments data, further docs to come after v2 migration**
+* **Payments data, further docs to come after v2 migration**
 
 ## Naming and types of models
 
 Data models (tables and views) are usually of one of the following types:
 
-* **Dimensions:** These tables are prefixed with `dim_` and are ["typically likened to nouns"](https://docs.getdbt.com/terms/dimensional-modeling#facts), i.e., the entity associated with an event. Many of our dimension tables are [type-2 slowly changing dimensions](https://en.wikipedia.org/wiki/Slowly_changing_dimension#Type_2:_add_new_row) will have `_valid_from` and `_valid_to` columns that indicate the period of time that that version of a record was in effect.
+* **Dimensions:** These tables are prefixed with `dim_` and are ["typically likened to nouns"](https://docs.getdbt.com/terms/dimensional-modeling#dimensions), i.e., the entity associated with an event. Many of our dimension tables are [type-2 slowly changing dimensions](https://en.wikipedia.org/wiki/Slowly_changing_dimension#Type_2:_add_new_row) will have `_valid_from` and `_valid_to` columns that indicate the period of time that that version of a record was in effect.
 
 * **Facts:** These tables are prefixed with `fct_` and ["typically refer to an action, event, or result of a business process"](https://docs.getdbt.com/terms/dimensional-modeling#facts), i.e., a thing that happened (or was scheduled to happen) at a specific time or at a specific temporal granularity.
 
