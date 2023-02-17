@@ -10,7 +10,14 @@ import gcsfs  # type: ignore
 import pendulum
 import sentry_sdk
 import typer
-from dbt_artifacts import Manifest, RunResult, RunResults, RunResultStatus
+from dbt_artifacts import (
+    DbtResourceType,
+    Manifest,
+    Node,
+    RunResult,
+    RunResults,
+    RunResultStatus,
+)
 
 CALITP_BUCKET__DBT_ARTIFACTS = os.getenv("CALITP_BUCKET__DBT_ARTIFACTS")
 
@@ -21,6 +28,18 @@ artifacts = map(
 sentry_sdk.init(environment=os.environ["AIRFLOW_ENV"])
 
 app = typer.Typer()
+
+
+class DbtException(Exception):
+    pass
+
+
+class DbtSeedError(Exception):
+    pass
+
+
+class DbtModelError(Exception):
+    pass
 
 
 class DbtTestError(Exception):
@@ -35,18 +54,21 @@ class DbtTestWarn(Exception):
     pass
 
 
-def get_failure_context(failure: RunResult, manifest: Manifest) -> Dict[str, Any]:
+def get_failure_context(failure: RunResult, node: Node) -> Dict[str, Any]:
     context: Dict[str, Any] = {
         "unique_id": failure.unique_id,
     }
     if failure.unique_id.startswith("test"):
-        node = manifest.nodes[failure.unique_id]
         if node.depends_on:
             context["models"] = node.depends_on.nodes
     return context
 
 
-def report_failures_to_sentry(run_results: RunResults, manifest: Manifest) -> None:
+def report_failures_to_sentry(
+    run_results: RunResults,
+    manifest: Manifest,
+    verbose: bool = False,
+) -> None:
     failures = [
         result
         for result in run_results.results
@@ -58,14 +80,25 @@ def report_failures_to_sentry(run_results: RunResults, manifest: Manifest) -> No
         )
     ]
     for failure in failures:
+        node = manifest.nodes[failure.unique_id]
+        fingerprint = [failure.status, failure.unique_id]
+        # this is awkward and manual; maybe could do dynamically
+        exc_types = {
+            (DbtResourceType.seed, RunResultStatus.error): DbtSeedError,
+            (DbtResourceType.model, RunResultStatus.error): DbtModelError,
+            (DbtResourceType.test, RunResultStatus.error): DbtTestError,
+            (DbtResourceType.test, RunResultStatus.fail): DbtTestFail,
+            (DbtResourceType.test, RunResultStatus.warn): DbtTestWarn,
+        }
+        exc_type = exc_types.get((node.resource_type, failure.status), DbtException)
+        if verbose:
+            typer.secho(
+                f"reporting failure of {node.resource_type} with fingerprint {fingerprint}",
+                fg=typer.colors.YELLOW,
+            )
         with sentry_sdk.push_scope() as scope:
-            scope.fingerprint = [failure.status, failure.unique_id]
-            scope.set_context("dbt", get_failure_context(failure, manifest))
-            exc_type = {
-                RunResultStatus.error: DbtTestError,
-                RunResultStatus.fail: DbtTestFail,
-                RunResultStatus.warn: DbtTestWarn,
-            }[failure.status]
+            scope.fingerprint = fingerprint
+            scope.set_context("dbt", get_failure_context(failure, node))
             sentry_sdk.capture_exception(
                 error=exc_type(f"{failure.unique_id} - {failure.message}"),
             )
@@ -75,12 +108,13 @@ def report_failures_to_sentry(run_results: RunResults, manifest: Manifest) -> No
 def report_failures(
     run_results_path: Path = Path("./target/run_results.json"),
     manifest_path: Path = Path("./target/manifest.json"),
+    verbose: bool = False,
 ):
     with open(run_results_path) as f:
         run_results = RunResults(**json.load(f))
     with open(manifest_path) as f:
         manifest = Manifest(**json.load(f))
-    report_failures_to_sentry(run_results, manifest)
+    report_failures_to_sentry(run_results, manifest, verbose=verbose)
 
 
 @app.command()
