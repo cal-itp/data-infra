@@ -21,7 +21,6 @@ fct_daily_scheduled_trips AS (
 extract_trip_date_types AS (
 
     SELECT
-        *,
 
         CASE
             WHEN EXTRACT(hour FROM activity_first_departure) < 4 THEN "OWL"
@@ -33,6 +32,10 @@ extract_trip_date_types AS (
         END
         AS time_of_day,
 
+        gtfs_dataset_key,
+        shape_id,
+        route_id,
+        route_short_name,
         EXTRACT(hour FROM activity_first_departure) AS hour,
         EXTRACT(month FROM activity_date) AS month,
         EXTRACT(year FROM activity_date) AS year,
@@ -53,22 +56,13 @@ service_with_daypart AS (
         trips.month,
         trips.year,
         trips.day_type,
-
-        shapes.shape_id,
-
-        routes.route_id,
-        routes.route_short_name,
-        routes.base64_url
+        trips.shape_id,
+        trips.route_id,
+        trips.route_short_name
 
     FROM extract_trip_date_types AS trips
-    INNER JOIN dim_routes AS routes
-        ON (trips.feed_key = routes.feed_key)
-            AND (trips.route_id = routes.route_id)
-    LEFT JOIN dim_shapes_arrays AS shapes
-        ON (trips.feed_key = shapes.feed_key)
-            AND (trips.shape_id = shapes.shape_id)
     LEFT JOIN dim_gtfs_datasets
-        ON (routes.base64_url = dim_gtfs_datasets.base64_url)
+        ON (trips.gtfs_dataset_key = dim_gtfs_datasets.key)
 
 ),
 
@@ -77,7 +71,6 @@ daypart_aggregations AS (
 
         name,
         source_record_id,
-        base64_url,
         route_id,
         route_short_name,
         shape_id,
@@ -85,12 +78,12 @@ daypart_aggregations AS (
         hour,
         month,
         year,
-        day_type--,
+        day_type,
 
-        -- COUNT(*) AS n
+        COUNT(*) AS n
 
     FROM service_with_daypart
-    -- GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 ),
 
 fct_scheduled_service_by_daypart AS (
@@ -98,7 +91,6 @@ fct_scheduled_service_by_daypart AS (
 
         name,
         source_record_id,
-        base64_url,
         route_id,
         route_short_name,
         shape_id,
@@ -106,8 +98,8 @@ fct_scheduled_service_by_daypart AS (
         hour,
         month,
         year,
-        day_type--,
-        --n
+        day_type,
+        n
 
     FROM daypart_aggregations
 )
