@@ -1,16 +1,17 @@
 import pendulum
 import pytest
-from calitp.storage import (  # type: ignore
+from calitp_data_infra.storage import (  # type: ignore
     GTFSDownloadConfig,
     GTFSFeedType,
     GTFSRTFeedExtract,
 )
+from pydantic import ValidationError
+
 from gtfs_rt_parser import (
     RTFileProcessingOutcome,
     RTHourlyAggregation,
     RTProcessingStep,
 )
-from pydantic import ValidationError
 
 
 def test_rt_file_processing_outcome_construction() -> None:
