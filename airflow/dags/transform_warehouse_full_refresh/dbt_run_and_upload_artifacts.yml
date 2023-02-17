@@ -30,6 +30,8 @@ env_vars:
   DBT_PROFILE_DIR: /app
   DBT_TARGET: "{{ env_var('DBT_TARGET') }}"
   NETLIFY_SITE_ID: cal-itp-dbt-docs
+  SENTRY_DSN: "{{ env_var('SENTRY_DSN') }}"
+  SENTRY_ENVIRONMENT: "{{ env_var('SENTRY_ENVIRONMENT') }}"
 
 secrets:
   - deploy_type: volume
