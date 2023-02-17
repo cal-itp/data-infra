@@ -5,13 +5,12 @@ from calitp_data_infra.storage import (  # type: ignore
     GTFSFeedType,
     GTFSRTFeedExtract,
 )
-from pydantic import ValidationError
-
 from gtfs_rt_parser import (
     RTFileProcessingOutcome,
     RTHourlyAggregation,
     RTProcessingStep,
 )
+from pydantic import ValidationError
 
 
 def test_rt_file_processing_outcome_construction() -> None:
