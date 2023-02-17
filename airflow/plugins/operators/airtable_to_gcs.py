@@ -112,7 +112,6 @@ class AirtableExtract(BaseModel):
 
 
 class AirtableToGCSOperator(BaseOperator):
-
     template_fields = ("bucket",)
 
     def __init__(
