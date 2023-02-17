@@ -15,7 +15,7 @@ from typing import ClassVar, Dict, List, Optional, Tuple, Union
 
 import pendulum
 import typer
-from calitp.storage import (  # type: ignore
+from calitp_data_infra.storage import (  # type: ignore
     JSONL_EXTENSION,
     JSONL_GZIP_EXTENSION,
     SCHEDULE_RAW_BUCKET,
