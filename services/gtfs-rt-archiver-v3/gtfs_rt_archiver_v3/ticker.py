@@ -12,8 +12,8 @@ import schedule  # type: ignore
 import sentry_sdk
 import typer
 from cachetools.func import ttl_cache
-from calitp.auth import get_secrets_by_label  # type: ignore
-from calitp.storage import (  # type: ignore
+from calitp_data_infra.auth import get_secrets_by_label
+from calitp_data_infra.storage import (  # type: ignore
     GTFSDownloadConfig,
     GTFSDownloadConfigExtract,
     GTFSFeedType,

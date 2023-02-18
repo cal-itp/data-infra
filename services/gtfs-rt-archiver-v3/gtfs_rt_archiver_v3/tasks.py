@@ -9,7 +9,7 @@ import pendulum
 import sentry_sdk
 import structlog
 import typer
-from calitp.storage import GTFSDownloadConfig, download_feed  # type: ignore
+from calitp_data_infra.storage import GTFSDownloadConfig, download_feed  # type: ignore
 from google.cloud import storage  # type: ignore
 from huey import RedisHuey  # type: ignore
 from requests import HTTPError, RequestException

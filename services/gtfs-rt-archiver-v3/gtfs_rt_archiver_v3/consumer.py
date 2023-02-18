@@ -8,7 +8,7 @@ import sys
 
 import sentry_sdk
 import typer
-from calitp.auth import get_secrets_by_label  # type: ignore
+from calitp_data_infra.auth import get_secrets_by_label  # type: ignore
 from huey.constants import WORKER_THREAD  # type: ignore
 from huey.consumer_options import ConsumerConfig  # type: ignore
 from prometheus_client import start_http_server
