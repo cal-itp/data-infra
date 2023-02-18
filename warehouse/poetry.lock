@@ -651,13 +651,15 @@ files = [
 
 [[package]]
 name = "dbt-metabase"
-version = "0.8.6.dev32+ge2c8c8f"
+version = "0.9.14"
 description = "Model synchronization from dbt to Metabase."
 category = "main"
 optional = false
 python-versions = "*"
-files = []
-develop = false
+files = [
+    {file = "dbt-metabase-0.9.14.tar.gz", hash = "sha256:5e59c4b1a99f4896457a874502fbd62ecc5d7c279b62402808cb3c4238ab686a"},
+    {file = "dbt_metabase-0.9.14-py3-none-any.whl", hash = "sha256:0dd6c558c25e327652564bc154e3a7f6a4b4e3b6bebb9d86b1096c3d2b7b6dcc"},
+]
 
 [package.dependencies]
 click = ">=8.0.0"
@@ -667,12 +669,6 @@ rich = ">=12.0.0"
 
 [package.extras]
 test = ["black", "mypy", "pylint", "restructuredtext-lint", "setuptools (>=45)", "types-PyYAML", "types-requests", "wheel"]
-
-[package.source]
-type = "git"
-url = "https://github.com/JarvusInnovations/dbt-metabase.git"
-reference = "HEAD"
-resolved_reference = "e2c8c8f842685b0fa0c6921cd4b3b8d8feb636df"
 
 [[package]]
 name = "decorator"
@@ -3421,4 +3417,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.9"
-content-hash = "d220fa142ac0580c408b5a5529677a7aa7693f6fe0e43f5758bdcb657f1d9a77"
+content-hash = "83e7d7b5758bde6fd6004bfbee9bf57f1faf348ef6f12b4d2d88d1ff3f20bd1c"
