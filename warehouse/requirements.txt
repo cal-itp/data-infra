@@ -140,6 +140,6 @@ typing-extensions==4.4.0; python_version < "3.10" and python_full_version >= "3.
 urllib3==1.26.13; python_full_version >= "3.7.2" and python_version >= "3.7" and python_version < "4"
 wcwidth==0.2.5; python_full_version >= "3.6.2" and python_version >= "3.8"
 webencodings==0.5.1; python_version >= "3.7"
-werkzeug==2.2.2; python_version >= "3.7" and python_full_version >= "3.7.2"
+werkzeug==2.2.3; python_version >= "3.7" and python_full_version >= "3.7.2"
 widgetsnbextension==4.0.4; python_version >= "3.7"
 yarl==1.8.2; python_version >= "3.7"
