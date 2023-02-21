@@ -177,28 +177,25 @@ class SentryToGCSOperator(BaseOperator):
                 This can be someone's personal auth token. If not provided, the environment
                 variable of `CALITP_SENTRY_AUTH_TOKEN` is used.
         """
-        self.ts = pendulum.now()
-        self.dt = self.ts.date()
         self.bucket = bucket
-        self.extract = SentryExtract(
-            project_slug=project_slug,
-            dt=self.dt,
-            ts=self.ts,
-            filename=f"{project_slug}.jsonl.gz",
-        )
+        self.project_slug = project_slug
         self.auth_token = auth_token
         self.target_date = target_date
 
         super().__init__(**kwargs)
 
     def execute(self, **kwargs):
-        target_date = (
-            self.target_date or pendulum.now().subtract(days=1).to_date_string()
+        ts = pendulum.now()
+        dt = ts.date()
+        extract = SentryExtract(
+            project_slug=self.project_slug,
+            dt=dt,
+            ts=ts,
+            filename=f"{self.project_slug}.jsonl.gz",
         )
+        target_date = self.target_date or ts.subtract(days=1).to_date_string()
         auth_token = self.auth_token or get_secret_by_name("CALITP_SENTRY_AUTH_TOKEN")
-        self.extract = fetch_and_clean_from_sentry(
-            self.extract, target_date, auth_token
-        )
+        extract = fetch_and_clean_from_sentry(extract, target_date, auth_token)
         fs = get_fs()
         # inserts into xcoms
-        return self.extract.save_to_gcs(fs=fs)
+        return extract.save_to_gcs(fs=fs)
