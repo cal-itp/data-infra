@@ -1,4 +1,4 @@
-{% docs fct_daily_guideline_checks %}
+{% docs int_gtfs_quality__guideline_checks_long %}
 
 Each row represents a date/organization/service/feed/guideline/check combination, with pass/fail
 information indicating whether that entity complied with that check on that date. Entities
