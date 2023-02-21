@@ -15,8 +15,8 @@ int_gtfs_quality__fixed_routes_match AS (
         {{ fixed_routes_match() }} AS check,
         {{ fixed_route_completeness() }} AS feature,
         CASE manual_check__fixed_route_completeness
-            WHEN 'Yes' THEN 'PASS'
-            WHEN 'No' THEN 'FAIL'
+            WHEN 'Yes' THEN {{ guidelines_pass_status() }}
+            WHEN 'No' THEN {{ guidelines_fail_status() }}
             ELSE {{ manual_check_needed_status() }}
         END AS status,
     FROM idx

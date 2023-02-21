@@ -23,8 +23,8 @@ int_gtfs_quality__no_schedule_validation_errors AS (
         {{ no_validation_errors() }} AS check,
         {{ compliance_schedule() }} AS feature,
         CASE
-            WHEN sum_total_notices > 0 THEN "FAIL"
-            WHEN sum_total_notices = 0 THEN "PASS"
+            WHEN sum_total_notices > 0 THEN {{ guidelines_fail_status() }}
+            WHEN sum_total_notices = 0 THEN {{ guidelines_pass_status() }}
         END AS status
     FROM feed_guideline_index idx
     LEFT JOIN validation_errors_by_day

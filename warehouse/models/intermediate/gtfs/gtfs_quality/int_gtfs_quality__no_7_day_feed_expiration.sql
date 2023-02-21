@@ -24,8 +24,8 @@ int_gtfs_quality__no_7_day_feed_expiration AS (
         {{ no_7_day_feed_expiration() }} AS check,
         {{ best_practices_alignment_schedule() }} AS feature,
         CASE
-            WHEN notices.validation_notices = 0 THEN "PASS"
-            WHEN notices.validation_notices > 0 THEN "FAIL"
+            WHEN notices.validation_notices = 0 THEN {{ guidelines_pass_status() }}
+            WHEN notices.validation_notices > 0 THEN {{ guidelines_fail_status() }}
         END AS status
     FROM feed_guideline_index idx
     LEFT JOIN validation_notices_by_day notices

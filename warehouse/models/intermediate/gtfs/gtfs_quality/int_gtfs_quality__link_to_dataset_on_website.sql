@@ -20,8 +20,8 @@ int_gtfs_quality__link_to_dataset_on_website AS (
         END AS check,
         {{ availability_on_website() }} AS feature,
         CASE manual_check__link_to_dataset_on_website
-            WHEN 'Yes' THEN 'PASS'
-            WHEN 'No' THEN 'FAIL'
+            WHEN 'Yes' THEN {{ guidelines_pass_status() }}
+            WHEN 'No' THEN {{ guidelines_fail_status() }}
             ELSE {{ manual_check_needed_status() }}
         END AS status
     FROM idx

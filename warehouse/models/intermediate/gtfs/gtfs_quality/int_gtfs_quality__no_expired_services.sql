@@ -29,9 +29,9 @@ feed_calendar_dates_service_expiration AS (
 
 feed_service_expiration AS (
    SELECT
-        COALESCE(t1.feed_key,t2.feed_key) AS feed_key,
-        COALESCE(t1.service_id,t2.service_id) AS service_id,
-        GREATEST(COALESCE(t1.end_date,'1970-01-01'),COALESCE(t2.end_date,'1970-01-01')) AS service_end_date
+        COALESCE(t1.feed_key, t2.feed_key) AS feed_key,
+        COALESCE(t1.service_id, t2.service_id) AS service_id,
+        GREATEST(COALESCE(t1.end_date, '1970-01-01'), COALESCE(t2.end_date, '1970-01-01')) AS service_end_date
    FROM feed_calendar_service_expiration AS t1
    FULL OUTER JOIN feed_calendar_dates_service_expiration AS t2
      ON t1.feed_key = t2.feed_key
@@ -55,9 +55,9 @@ int_gtfs_quality__no_expired_services AS (
         {{ best_practices_alignment_schedule() }} AS feature,
         t2.earliest_service_end_date,
         CASE
-            WHEN t2.earliest_service_end_date < date THEN "FAIL"
-            WHEN t2.earliest_service_end_date >= date THEN "PASS"
-            ELSE "N/A"
+            WHEN t2.earliest_service_end_date < date THEN {{ guidelines_fail_status() }}
+            WHEN t2.earliest_service_end_date >= date THEN {{ guidelines_pass_status() }}
+            ELSE {{ guidelines_na_check_status() }}
         END AS status
       FROM feed_guideline_index AS t1
       LEFT JOIN daily_earliest_service_expiration AS t2

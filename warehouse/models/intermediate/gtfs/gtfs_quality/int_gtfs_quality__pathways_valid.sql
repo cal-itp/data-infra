@@ -62,7 +62,7 @@ pathway_validation_notices_by_day AS (
         feed_key,
         SUM(total_notices) as validation_notices
     FROM validation_fact_daily_feed_codes_pathway_related
-    GROUP BY feed_key
+    GROUP BY 1
 ),
 
 int_gtfs_quality__pathways_valid AS (
@@ -72,9 +72,9 @@ int_gtfs_quality__pathways_valid AS (
         {{ accurate_accessibility_data() }} AS feature,
         t1.feed_key,
         CASE
-            WHEN t2.feed_key IS null THEN "N/A"
-            WHEN t3.validation_notices = 0 THEN "PASS"
-            WHEN t3.validation_notices > 0 THEN "FAIL"
+            WHEN t2.feed_key IS null THEN {{ guidelines_na_check_status() }}
+            WHEN t3.validation_notices = 0 THEN {{ guidelines_pass_status() }}
+            WHEN t3.validation_notices > 0 THEN {{ guidelines_fail_status() }}
         END AS status
       FROM feed_guideline_index t1
       LEFT JOIN pathways_eligibile t2

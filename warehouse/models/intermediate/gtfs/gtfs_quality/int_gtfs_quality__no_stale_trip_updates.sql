@@ -57,11 +57,11 @@ int_gtfs_quality__no_stale_trip_updates AS (
         max_trip_update_age,
         max_trip_update_feed_age,
         CASE
-            WHEN max_trip_update_age <= 90 AND max_trip_update_feed_age <= 90 THEN "PASS"
-            WHEN max_trip_update_age > 90 OR max_trip_update_feed_age > 90 THEN "FAIL"
+            WHEN max_trip_update_age <= 90 AND max_trip_update_feed_age <= 90 THEN {{ guidelines_pass_status() }}
+            WHEN max_trip_update_age > 90 OR max_trip_update_feed_age > 90 THEN {{ guidelines_fail_status() }}
             -- If there are no trip updates for that feed for that day, result is N/A
             -- They will fail other checks for having no feed present
-            WHEN max_trip_update_age IS null OR max_trip_update_feed_age IS null THEN "N/A"
+            WHEN max_trip_update_age IS null OR max_trip_update_feed_age IS null THEN {{ guidelines_na_check_status() }}
         END as status
     FROM feed_guideline_index AS idx
     LEFT JOIN trip_update_ages AS ages

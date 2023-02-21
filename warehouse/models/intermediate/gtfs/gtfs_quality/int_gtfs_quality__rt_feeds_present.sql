@@ -28,8 +28,8 @@ int_gtfs_quality__rt_feeds_present AS (
         {{ compliance_rt() }} AS feature,
         rt_files,
         CASE
-            WHEN rt_files > 0 THEN "PASS"
-            WHEN COALESCE(rt_files,0) = 0 THEN "FAIL"
+            WHEN rt_files > 0 THEN {{ guidelines_pass_status() }}
+            WHEN COALESCE(rt_files, 0) = 0 THEN {{ guidelines_fail_status() }}
         END AS status,
     FROM feed_guideline_index AS idx
     LEFT JOIN count_files AS files

@@ -47,8 +47,8 @@ int_gtfs_quality__include_tts AS (
         {{ include_tts() }} AS check,
         {{ accurate_accessibility_data() }} AS feature,
         CASE
-            WHEN t2.feed_key IS NOT null THEN "FAIL"
-            ELSE "PASS"
+            WHEN t2.feed_key IS NOT null THEN {{ guidelines_fail_status() }}
+            ELSE {{ guidelines_pass_status() }}
         END AS status,
       FROM feed_guideline_index t1
       LEFT JOIN tts_issue_feeds AS t2

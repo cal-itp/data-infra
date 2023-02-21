@@ -43,7 +43,7 @@ joined AS (
     -- The below join condition may be unnecessary, though it could rule out potential cases where one TU feed is mapped to multiple schedule feeds
     AND quartet.associated_schedule_gtfs_dataset_key = f.schedule_to_use_for_rt_validation_gtfs_dataset_key
     AND f.tu_num_scheduled_canceled_added_stops > 0
-    GROUP BY 1,2
+    GROUP BY 1, 2
 ),
 
 int_gtfs_quality__all_tu_in_vp AS (
@@ -55,9 +55,9 @@ int_gtfs_quality__all_tu_in_vp AS (
         vp_and_tu_present,
         tu_present,
         CASE
-            WHEN tu_present = 0 OR tu_present IS null THEN "N/A"
-            WHEN vp_and_tu_present = tu_present THEN "PASS"
-            ELSE "FAIL"
+            WHEN tu_present = 0 OR tu_present IS null THEN {{ guidelines_na_check_status() }}
+            WHEN vp_and_tu_present = tu_present THEN {{ guidelines_pass_status() }}
+            ELSE {{ guidelines_fail_status() }}
         END AS status,
     FROM joined
 )

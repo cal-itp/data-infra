@@ -17,8 +17,8 @@ int_gtfs_quality__rt_https AS (
         END AS check,
         {{ best_practices_alignment_rt() }} AS feature,
         CASE
-            WHEN string_url LIKE 'https%' THEN "PASS"
-            WHEN string_url IS NOT null AND string_url NOT LIKE 'https%' THEN "FAIL"
+            WHEN string_url LIKE 'https%' THEN {{ guidelines_pass_status() }}
+            WHEN string_url IS NOT null AND string_url NOT LIKE 'https%' THEN {{ guidelines_fail_status() }}
         END AS status,
     FROM feed_guideline_index AS idx
     LEFT JOIN rt_daily_url_index AS url_index

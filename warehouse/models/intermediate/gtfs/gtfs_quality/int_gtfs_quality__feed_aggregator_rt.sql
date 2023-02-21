@@ -41,8 +41,8 @@ int_gtfs_quality__feed_aggregator_rt AS (
         END AS check,
         {{ feed_aggregator_availability_rt() }} AS feature,
         CASE
-            WHEN t3.aggregator IS NOT null THEN "PASS"
-            ELSE "FAIL"
+            WHEN t3.aggregator IS NOT null THEN {{ guidelines_pass_status() }}
+            ELSE {{ guidelines_fail_status() }}
         END AS status,
       FROM feed_guideline_index t1
       LEFT JOIN dim_gtfs_datasets t2

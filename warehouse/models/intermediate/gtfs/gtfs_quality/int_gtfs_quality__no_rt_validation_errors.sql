@@ -43,8 +43,8 @@ int_gtfs_quality__no_rt_validation_errors AS (
         rt_files,
         total_errors,
         CASE
-            WHEN rt_files IS NOT NULL AND COALESCE(total_errors, 0) = 0 THEN "PASS" -- files present and no errors
-            WHEN rt_files IS NOT NULL AND total_errors > 0 THEN "FAIL" -- files present and there are errors
+            WHEN rt_files IS NOT NULL AND COALESCE(total_errors, 0) = 0 THEN {{ guidelines_pass_status() }} -- files present and no errors
+            WHEN rt_files IS NOT NULL AND total_errors > 0 THEN {{ guidelines_fail_status() }} -- files present and there are errors
         END AS status,
     FROM feed_guideline_index AS idx
     LEFT JOIN count_files AS files

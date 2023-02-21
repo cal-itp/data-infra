@@ -38,7 +38,7 @@ lag_ts AS (
         dt AS date,
         base64_url,
         header_timestamp,
-        LAG(header_timestamp) OVER (PARTITION BY base64_url ORDER BY header_timestamp) AS prev_header_timestamp
+        LAG(header_timestamp) OVER(PARTITION BY base64_url ORDER BY header_timestamp) AS prev_header_timestamp
     FROM trip_updates
 ),
 
@@ -62,8 +62,8 @@ int_gtfs_quality__rt_20sec_tu AS (
         {{ accurate_service_data() }} AS feature,
         max_lag,
         CASE
-            WHEN max_lag > 20 THEN "FAIL"
-            WHEN max_lag <= 20 THEN "PASS"
+            WHEN max_lag > 20 THEN {{ guidelines_fail_status() }}
+            WHEN max_lag <= 20 THEN {{ guidelines_pass_status() }}
         END AS status,
     FROM feed_guideline_index AS idx
     LEFT JOIN daily_max_lag AS files

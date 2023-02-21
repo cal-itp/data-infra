@@ -20,8 +20,8 @@ int_gtfs_quality__authentication_acceptable AS (
         END AS check,
         {{ availability_on_website() }} AS feature,
         CASE manual_check__authentication_acceptable
-            WHEN 'Yes' THEN 'PASS'
-            WHEN 'No' THEN 'FAIL'
+            WHEN 'Yes' THEN {{ macro guidelines_pass_status() }}
+            WHEN 'No' THEN {{ guidelines_fail_status() }}
             ELSE {{ manual_check_needed_status() }}
         END AS status
     FROM idx

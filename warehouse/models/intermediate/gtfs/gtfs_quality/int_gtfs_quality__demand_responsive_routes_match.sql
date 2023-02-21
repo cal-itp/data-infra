@@ -15,8 +15,8 @@ int_gtfs_quality__demand_responsive_routes_match AS (
         {{ demand_responsive_routes_match() }} AS check,
         {{ demand_responsive_completeness() }} AS feature,
         CASE manual_check__demand_response_completeness
-            WHEN 'Yes' THEN 'PASS'
-            WHEN 'No' THEN 'FAIL'
+            WHEN 'Yes' THEN {{ guidelines_pass_status() }}
+            WHEN 'No' THEN {{ guidelines_fail_status() }}
             ELSE {{ manual_check_needed_status() }}
         END AS status,
     FROM idx

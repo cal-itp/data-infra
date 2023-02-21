@@ -15,8 +15,8 @@ int_gtfs_quality__grading_scheme_v1 AS (
         {{ grading_scheme_v1() }} AS check,
         {{ compliance_schedule() }} AS feature,
         CASE manual_check__grading_scheme_v1
-            WHEN 'Yes' THEN 'PASS'
-            WHEN 'No' THEN 'FAIL'
+            WHEN 'Yes' THEN {{ guidelines_pass_status() }}
+            WHEN 'No' THEN {{ guidelines_fail_status() }}
             ELSE {{ manual_check_needed_status() }}
         END AS status,
     FROM idx

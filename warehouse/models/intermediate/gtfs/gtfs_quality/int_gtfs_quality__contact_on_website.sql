@@ -15,8 +15,8 @@ int_gtfs_quality__contact_on_website AS (
         {{ organization_has_contact_info() }} AS check,
         {{ technical_contact_availability() }} AS feature,
         CASE manual_check__contact_on_website
-            WHEN 'Yes' THEN 'PASS'
-            WHEN 'No' THEN 'FAIL'
+            WHEN 'Yes' THEN {{ guidelines_pass_status() }}
+            WHEN 'No' THEN {{ guidelines_fail_status() }}
             ELSE {{ manual_check_needed_status() }}
         END AS status,
     FROM idx

@@ -3,7 +3,7 @@ WITH feed_guideline_index AS (
 ),
 
 keyed_parse_outcomes AS (
-    SELECT * FROM {{ ref('int_gtfs_schedule__keyed_parse_outcomes')}}
+    SELECT * FROM {{ ref('int_gtfs_schedule__keyed_parse_outcomes') }}
 ),
 
 daily_feed_shapes_present AS (
@@ -21,8 +21,8 @@ int_gtfs_quality__shapes_file_present AS (
         {{ shapes_file_present() }} AS check,
         {{ accurate_service_data() }} AS feature,
         CASE
-            WHEN s.feed_key IS NOT null THEN "PASS"
-            ELSE "FAIL"
+            WHEN s.feed_key IS NOT null THEN {{ guidelines_pass_status() }}
+            ELSE {{ guidelines_fail_status() }}
         END AS status
     FROM feed_guideline_index idx
     LEFT JOIN daily_feed_shapes_present s

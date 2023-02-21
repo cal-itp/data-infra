@@ -26,8 +26,8 @@ int_gtfs_quality__modification_date_present_rt AS (
         END AS check,
         {{ best_practices_alignment_rt() }} AS feature,
         CASE
-            WHEN daily_mod_date.max_last_modified_string IS NOT null THEN "PASS"
-            ELSE "FAIL"
+            WHEN daily_mod_date.max_last_modified_string IS NOT null THEN {{ guidelines_pass_status() }}
+            ELSE {{ guidelines_fail_status() }}
         END AS status
     FROM feed_guideline_index AS idx
     LEFT JOIN daily_modification_date_status AS daily_mod_date

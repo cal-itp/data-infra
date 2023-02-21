@@ -20,11 +20,11 @@ int_gtfs_quality__stable_url AS (
         END AS check,
         CASE
             WHEN gtfs_datasets.type = "schedule" THEN {{ compliance_schedule() }}
-            WHEN gtfs_datasets.type IN ("vehicle_positions","trip_updates","service_alerts") THEN {{ compliance_rt() }}
+            WHEN gtfs_datasets.type IN ("vehicle_positions", "trip_updates", "service_alerts") THEN {{ compliance_rt() }}
         END AS feature,
         CASE manual_check__stable_url
-            WHEN 'Yes' THEN 'PASS'
-            WHEN 'No' THEN 'FAIL'
+            WHEN 'Yes' THEN {{ guidelines_pass_status() }}
+            WHEN 'No' THEN {{ guidelines_fail_status() }}
             ELSE {{ manual_check_needed_status() }}
         END AS status
     FROM idx

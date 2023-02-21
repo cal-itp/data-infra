@@ -29,8 +29,8 @@ int_gtfs_quality__shapes_valid AS (
         {{ shapes_valid() }} AS check,
         {{ accurate_service_data() }} AS feature,
         CASE
-            WHEN notices.validation_notices = 0 THEN "PASS"
-            WHEN notices.validation_notices > 0 THEN "FAIL"
+            WHEN notices.validation_notices = 0 THEN {{ guidelines_pass_status() }}
+            WHEN notices.validation_notices > 0 THEN {{ guidelines_fail_status() }}
         END AS status
     FROM feed_guideline_index idx
     LEFT JOIN shape_validation_notices_by_day notices

@@ -15,8 +15,8 @@ int_gtfs_quality__trip_planner_schedule AS (
         {{ trip_planner_schedule() }} AS check,
         {{ compliance_schedule() }} AS feature,
         CASE manual_check__gtfs_schedule_data_ingested_in_trip_planner
-            WHEN 'Yes' THEN 'PASS'
-            WHEN 'No' THEN 'FAIL'
+            WHEN 'Yes' THEN {{ guidelines_pass_status() }}
+            WHEN 'No' THEN {{ guidelines_fail_status() }}
             ELSE {{ manual_check_needed_status() }}
         END AS status,
     FROM idx

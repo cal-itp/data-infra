@@ -48,9 +48,9 @@ int_gtfs_quality__passes_fares_validator AS (
         {{ passes_fares_validator() }} AS check,
         {{ fare_completeness() }} AS feature,
         CASE
-            WHEN files.feed_key IS null THEN "N/A"
-            WHEN notices.validation_notices = 0 THEN "PASS"
-            WHEN notices.validation_notices > 0 THEN "FAIL"
+            WHEN files.feed_key IS null THEN {{ guidelines_na_check_status() }}
+            WHEN notices.validation_notices = 0 THEN {{ guidelines_pass_status() }}
+            WHEN notices.validation_notices > 0 THEN {{ guidelines_fail_status() }}
         END AS status
     FROM feed_guideline_index idx
     LEFT JOIN validation_notices_by_day notices

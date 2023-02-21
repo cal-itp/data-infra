@@ -15,7 +15,7 @@ dim_stop_times AS (
 
 dim_stops AS (
     SELECT  *,
-            CONCAT(stop_lat,stop_lon) AS stop_location
+            CONCAT(stop_lat, stop_lon) AS stop_location
       FROM {{ ref('dim_stops') }}
 ),
 
@@ -53,7 +53,7 @@ trips_expanded AS (
       LEFT JOIN dim_stops t3
         ON t3.stop_id = t2.stop_id
        AND t3.feed_key = t2.feed_key
-     GROUP BY 1,2,3
+     GROUP BY 1, 2, 3 -- noqa
 ),
 
 scheduled_trips_version_history AS (
@@ -71,7 +71,7 @@ scheduled_trips_version_history AS (
       LEFT JOIN trips_expanded t2
         ON t2.service_id = t1.service_id
        AND t2.feed_key = t1.feed_key
-      JOIN feed_version_history t3
+      INNER JOIN feed_version_history t3
         ON t3.feed_key = t1.feed_key
     -- Since we are comparing feeds with their previous version, omit the initial version of every feed - no comparison is possible
      WHERE t3.prev_feed_key IS NOT null
@@ -84,16 +84,16 @@ scheduled_trips_version_history AS (
 trips_version_compare AS (
   SELECT
          -- base64_url is same between feed versions
-         COALESCE(trips.base64_url,prev_trips.base64_url) AS base64_url,
+         COALESCE(trips.base64_url, prev_trips.base64_url) AS base64_url,
          -- one feed's key is the previous feed's next key
-         COALESCE(trips.feed_key,prev_trips.next_feed_key) AS feed_key,
+         COALESCE(trips.feed_key, prev_trips.next_feed_key) AS feed_key,
          -- one feed's previous key is the previous feed's key
-         COALESCE(trips.prev_feed_key,prev_trips.feed_key) AS prev_feed_key,
+         COALESCE(trips.prev_feed_key, prev_trips.feed_key) AS prev_feed_key,
          -- we need to know the next feed's valid_from date, in cases where a trip is removed since the previous feed
-         COALESCE(trips.valid_from,prev_trips.next_feed_valid_from) AS valid_from,
+         COALESCE(trips.valid_from, prev_trips.next_feed_valid_from) AS valid_from,
          DATE_DIFF(
                      COALESCE(trips.service_date, prev_trips.service_date),
-                     COALESCE(trips.valid_from,prev_trips.next_feed_valid_from),
+                     COALESCE(trips.valid_from, prev_trips.next_feed_valid_from),
                      DAY
          ) AS days_until_service_date,
          trips.trip_id,
@@ -129,7 +129,7 @@ daily_improper_trips_updates AS (
    WHERE
          -- Service date is between 0 and 7 days from now
          days_until_service_date > 0 AND days_until_service_date <= 7
-   GROUP BY 1,2,3
+   GROUP BY 1, 2, 3 -- noqa
 ),
 
 feed_update_count AS (
@@ -151,8 +151,8 @@ int_gtfs_quality__lead_time AS (
            feed_key,
            {{ lead_time() }} AS check,
            {{ up_to_dateness() }} AS feature,
-           CASE WHEN trips_updates_last_30_days > 0 THEN "FAIL"
-                ELSE "PASS"
+           CASE WHEN trips_updates_last_30_days > 0 THEN {{ guidelines_fail_status() }}
+                ELSE {{ guidelines_pass_status() }}
            END AS status
       FROM feed_update_count
 )

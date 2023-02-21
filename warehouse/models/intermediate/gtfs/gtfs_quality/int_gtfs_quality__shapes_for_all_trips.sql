@@ -36,8 +36,8 @@ int_gtfs_quality__shapes_for_all_trips AS (
         tot_shape_trips,
         tot_trips,
         CASE
-            WHEN tot_shape_trips = tot_trips THEN "PASS"
-        ELSE "FAIL"
+            WHEN tot_shape_trips = tot_trips THEN {{ guidelines_pass_status() }}
+        ELSE {{ guidelines_fail_status() }}
         END AS status,
       FROM daily_trips
 )

@@ -35,8 +35,8 @@ int_gtfs_quality__complete_wheelchair_accessibility_data AS (
         {{ complete_wheelchair_accessibility_data() }} AS check,
         {{ accurate_accessibility_data() }} AS feature,
         CASE
-            WHEN t2.ct_trips_accessibility_info = t2.ct_trips AND t3.ct_stops_accessibility_info = t3.ct_stops THEN "PASS"
-            ELSE "FAIL"
+            WHEN t2.ct_trips_accessibility_info = t2.ct_trips AND t3.ct_stops_accessibility_info = t3.ct_stops THEN {{ guidelines_pass_status() }}
+            ELSE {{ guidelines_fail_status() }}
         END AS status,
       FROM feed_guideline_index t1
       LEFT JOIN feed_trips_summary t2

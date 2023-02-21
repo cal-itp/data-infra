@@ -27,8 +27,8 @@ int_gtfs_quality__rt_protobuf_error AS (
         END AS check,
         {{ best_practices_alignment_rt() }} AS feature,
         CASE
-            WHEN s.percent_success >= 99 THEN "PASS"
-            WHEN s.percent_success < 99 THEN "FAIL"
+            WHEN s.percent_success >= 99 THEN {{ guidelines_pass_status() }}
+            WHEN s.percent_success < 99 THEN {{ guidelines_fail_status() }}
         END AS status,
     FROM feed_guideline_index AS idx
     LEFT JOIN daily_success_percent AS s
