@@ -42,24 +42,18 @@ daily_vehicles AS (
      GROUP BY 1,2,3
 ),
 
-daily_vehicles_lag AS (
-    SELECT *,
-           date - 1 AS prev_date,
-           date + 1 AS next_date
-      FROM daily_vehicles
-),
-
 vehicles_joined AS (
-    SELECT COALESCE(current_day.date, prev_day.next_date) AS date,
-           COALESCE(current_day.prev_date, prev_day.date) AS prev_date,
+    SELECT COALESCE(current_day.date, prev_day.date + 1) AS date,
+           COALESCE(current_day.date - 1, prev_day.date) AS prev_date,
            COALESCE(current_day.base64_url, prev_day.base64_url) AS base64_url,
            current_day.vehicle_id AS id,
            prev_day.vehicle_id AS prev_id
-      FROM daily_vehicles_lag AS prev_day
-      FULL OUTER JOIN daily_vehicles_lag AS current_day
-        ON current_day.prev_date = prev_day.date
+      FROM daily_vehicles AS prev_day
+      FULL OUTER JOIN daily_vehicles AS current_day
+        ON current_day.date = prev_day.date + 1
        AND current_day.base64_url = prev_day.base64_url
        AND current_day.vehicle_id = prev_day.vehicle_id
+     WHERE current_day.date != (SELECT MIN(date) FROM daily_vehicles)
 ),
 
 vehicle_id_comparison AS (
