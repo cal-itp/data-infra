@@ -2,7 +2,7 @@ import inspect
 import os
 from functools import wraps
 
-from calitp.config import is_development
+from calitp_data.config import is_development
 
 # FYI, one day we may need to add apache-airflow-providers-cncf-kubernetes==3.0.0 to requirements.txt if we self-host
 # But it's already installed in the Composer environment

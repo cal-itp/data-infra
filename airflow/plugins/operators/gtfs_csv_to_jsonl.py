@@ -6,7 +6,7 @@ import os
 from typing import ClassVar, List, Optional
 
 import pendulum
-from calitp.storage import (
+from calitp_data_infra.storage import (
     GTFSDownloadConfig,
     PartitionedGCSArtifact,
     ProcessingOutcome,

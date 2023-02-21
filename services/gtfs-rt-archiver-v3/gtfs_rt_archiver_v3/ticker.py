@@ -12,8 +12,8 @@ import schedule  # type: ignore
 import sentry_sdk
 import typer
 from cachetools.func import ttl_cache
-from calitp.auth import get_secrets_by_label  # type: ignore
-from calitp.storage import (  # type: ignore
+from calitp_data_infra.auth import get_secrets_by_label  # type: ignore
+from calitp_data_infra.storage import (  # type: ignore
     GTFSDownloadConfig,
     GTFSDownloadConfigExtract,
     GTFSFeedType,
@@ -70,7 +70,7 @@ def main(
     typer.secho("flushing huey")
     huey.flush()
 
-    def tick(second):
+    def tick(second: int) -> None:
         touch_file.touch()
         start = pendulum.now()
         dt = datetime.now(timezone.utc).replace(second=second, microsecond=0)

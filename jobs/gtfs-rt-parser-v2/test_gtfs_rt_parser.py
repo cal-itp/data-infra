@@ -1,6 +1,6 @@
 import pendulum
 import pytest
-from calitp.storage import (  # type: ignore
+from calitp_data_infra.storage import (  # type: ignore
     GTFSDownloadConfig,
     GTFSFeedType,
     GTFSRTFeedExtract,

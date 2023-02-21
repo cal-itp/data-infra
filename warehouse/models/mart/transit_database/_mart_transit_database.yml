@@ -245,6 +245,19 @@ models:
           inappropriate (even though that is the customer-facing data), this field can
           help you assess other alternative feeds for the same services and organizations.
           Not specified (null) for feeds with no relationship to regional feeds.
+      - name: backdated_regional_feed_type
+        description: |
+          This field exists to support assessment determinations for reports.calitp.org.
+
+          For record versions before the regional_feed_type field was added in the source database,
+          this field contains the first value of that field that appeared for this source_record_id.
+          For record versions that had regional_feed_type populated in the source database, this field
+          contains the value current for that version.
+
+          So, for example, if the regional_feed_type field was first populated for source_record_id A
+          on September 1 with value "Regional Subfeed", this field will contain that "Regional Subfeed"
+          value for the source_record_id A record that was active on August 31, even though the raw
+          regional_feed_type field was not populated for that record version.
       - name: base64_url
       - name: deprecated_date
         description: |

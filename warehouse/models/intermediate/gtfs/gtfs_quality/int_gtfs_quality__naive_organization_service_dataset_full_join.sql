@@ -126,6 +126,7 @@ int_gtfs_quality__naive_organization_service_dataset_full_join AS (
         datasets.name AS gtfs_dataset_name,
         datasets.type AS gtfs_dataset_type,
         datasets.regional_feed_type,
+        datasets.backdated_regional_feed_type,
         datasets.source_record_id AS gtfs_dataset_source_record_id,
         validation_bridge.schedule_to_use_for_rt_validation_gtfs_dataset_key,
         COALESCE(datasets.base64_url, feeds.base64_url) AS base64_url,

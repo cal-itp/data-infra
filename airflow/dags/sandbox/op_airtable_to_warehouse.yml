@@ -1,9 +1,0 @@
-operator: operators.AirtableToGCSOperator
-
-air_base_id: apphcwzP8cR82NeJo
-air_base_name: sandbox
-air_table_name: parent
-bucket: "{{ env_var('CALITP_BUCKET__AIRTABLE') }}"
-
-dependencies:
-  - create_dataset
