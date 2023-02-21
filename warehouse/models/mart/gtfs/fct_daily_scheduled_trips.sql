@@ -80,11 +80,9 @@ fct_daily_scheduled_trips AS (
         DATE_ADD(service_index.service_date,
             INTERVAL CAST((TRUNC(SAFE_DIVIDE(stop_times_grouped.trip_first_departure_sec, 86400))) AS INT64) DAY) AS activity_date,
 
-        TIME(TIMESTAMP_SECONDS((stop_times_grouped.trip_first_departure_sec - (CAST((TRUNC(SAFE_DIVIDE(stop_times_grouped.trip_first_departure_sec, 86400))) AS INT64) * 86400))))
-            AS activity_first_departure,
+        TIME(TIMESTAMP_SECONDS(MOD(stop_times_grouped.trip_first_departure_sec, 86400))) AS activity_first_departure,
 
-        TIME(TIMESTAMP_SECONDS((stop_times_grouped.trip_last_arrival_sec - (CAST((TRUNC(SAFE_DIVIDE(stop_times_grouped.trip_last_arrival_sec, 86400))) AS INT64) * 86400))))
-                AS activity_last_arrival
+        TIME(TIMESTAMP_SECONDS(MOD(stop_times_grouped.trip_last_arrival_sec, 86400))) AS activity_last_arrival
 
     FROM int_gtfs_schedule__daily_scheduled_service_index AS service_index
     INNER JOIN dim_trips AS trips
