@@ -67,7 +67,7 @@ def get_issues_list_from_sentry(extract, headers, target_date):
     Paginate over Sentry issues for a project and create a list of issues matching our
     criteria for examination (RTFetchExceptions).
     """
-    next_url = f"{SENTRY_API_BASE_URL}/projects/sentry/{extract.project_slug}/issues/?query=lastSeen:>{target_date.to_date_string()}T00:00:00-00:00"
+    next_url = f"{SENTRY_API_BASE_URL}/projects/sentry/{extract.project_slug}/issues/?query=lastSeen:>{target_date}T00:00:00-00:00"
     response_data = []
 
     while next_url:
@@ -85,11 +85,10 @@ def get_issues_list_from_sentry(extract, headers, target_date):
     return issues_list
 
 
-def iterate_over_sentry_records(extract, auth_token):
+def iterate_over_sentry_records(extract, target_date, auth_token):
     """
     Paginate over API responses for each targeted issue and create a combined list of dicts.
     """
-    target_date = pendulum.now().subtract(days=1)
     headers = {"Authorization": "Bearer " + auth_token}
     issues_list = get_issues_list_from_sentry(extract, headers, target_date)
 
@@ -113,18 +112,18 @@ def iterate_over_sentry_records(extract, auth_token):
         if pendulum.from_format(
             x["dateCreated"][:-1], "YYYY-MM-DDTHH:mm:ss"
         ).to_date_string()
-        == target_date.to_date_string()
+        == target_date
     ]
     return combined_response_data
 
 
-def fetch_and_clean_from_sentry(extract, auth_token):
+def fetch_and_clean_from_sentry(extract, target_date, auth_token):
     """
     Download Sentry event records as a DataFrame.
     """
 
     print(f"Downloading Sentry event data for project {extract.project_slug}")
-    all_rows = iterate_over_sentry_records(extract, auth_token)
+    all_rows = iterate_over_sentry_records(extract, target_date, auth_token)
     extract.extract_ts = pendulum.now()
     extract.data = all_rows
 
@@ -163,6 +162,7 @@ class SentryToGCSOperator(BaseOperator):
         bucket,
         project_slug,
         auth_token=None,
+        target_date=None,
         **kwargs,
     ):
         """
@@ -187,12 +187,18 @@ class SentryToGCSOperator(BaseOperator):
             filename=f"{project_slug}.jsonl.gz",
         )
         self.auth_token = auth_token
+        self.target_date = target_date
 
         super().__init__(**kwargs)
 
     def execute(self, **kwargs):
+        target_date = (
+            self.target_date or pendulum.now().subtract(days=1).to_date_string()
+        )
         auth_token = self.auth_token or get_secret_by_name("CALITP_SENTRY_AUTH_TOKEN")
-        self.extract = fetch_and_clean_from_sentry(self.extract, auth_token)
+        self.extract = fetch_and_clean_from_sentry(
+            self.extract, target_date, auth_token
+        )
         fs = get_fs()
         # inserts into xcoms
         return self.extract.save_to_gcs(fs=fs)
