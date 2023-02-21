@@ -67,7 +67,8 @@ def get_issues_list_from_sentry(extract, headers):
     Paginate over Sentry issues for a project and create a list of issues matching our
     criteria for examination (RTFetchExceptions).
     """
-    next_url = f"{SENTRY_API_BASE_URL}/projects/sentry/{extract.project_slug}/issues/?query=lastSeen:-7d"
+    yesterday = pendulum.now().subtract(days=1)
+    next_url = f"{SENTRY_API_BASE_URL}/projects/sentry/{extract.project_slug}/issues/?query=lastSeen:>{yesterday.to_date_string()}T00:00:00-00:00"
     response_data = []
 
     while next_url:
@@ -91,6 +92,8 @@ def iterate_over_sentry_records(extract, auth_token):
     """
     headers = {"Authorization": "Bearer " + auth_token}
     issues_list = get_issues_list_from_sentry(extract, headers)
+
+    print(f"Issues list includes {len(issues_list)} issues")
     combined_response_data = []
 
     with ThreadPoolExecutor(max_workers=4) as pool:
