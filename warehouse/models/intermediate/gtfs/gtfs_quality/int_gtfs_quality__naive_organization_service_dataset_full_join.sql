@@ -94,31 +94,16 @@ int_gtfs_quality__naive_organization_service_dataset_full_join AS (
         orgs.source_record_id AS organization_source_record_id,
         orgs.hubspot_company_record_id AS organization_hubspot_company_record_id,
         ntd_bridge.ntd_id AS organization_ntd_id,
-        COALESCE(
-            orgs.assessment_status,
-            (orgs.reporting_category = "Core") OR (orgs.reporting_category = "Other Public Transit"),
-            FALSE
-        ) AS organization_assessed,
         services.name AS service_name,
         services.assessment_status AS services_raw_assessment_status,
         services.currently_operating AS service_currently_operating,
         services.source_record_id AS service_source_record_id,
         service_type_str,
-        COALESCE(
-            services.assessment_status,
-            services.currently_operating
-                AND CONTAINS_SUBSTR(services.service_type_str, "fixed-route"),
-            FALSE
-        ) AS service_assessed,
 
         service_data.key AS gtfs_service_data_key,
         service_data.customer_facing AS gtfs_service_data_customer_facing,
         service_data.category AS gtfs_service_data_category,
-        COALESCE(
-            service_data.customer_facing,
-            service_data.category = "primary",
-            FALSE
-        ) AS gtfs_service_data_assessed,
+
         service_data.agency_id,
         service_data.route_id,
         service_data.network_id,

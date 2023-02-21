@@ -1,7 +1,28 @@
 {{ config(materialized='table') }}
 
 WITH full_join AS (
-    SELECT *
+    SELECT
+        *,
+        COALESCE(
+            organization_raw_assessment_status,
+            (reporting_category = "Core") OR (reporting_category = "Other Public Transit"),
+            FALSE
+        ) AS organization_assessed,
+
+        COALESCE(
+            services_raw_assessment_status,
+            service_currently_operating
+                AND CONTAINS_SUBSTR(service_type_str, "fixed-route"),
+            FALSE
+        ) AS service_assessed,
+
+        COALESCE(
+            gtfs_service_data_customer_facing,
+            gtfs_service_data_category = "primary",
+            -- we do want to assess organizations without GTFS data
+            gtfs_service_data_key IS NULL,
+            FALSE
+        ) AS gtfs_service_data_assessed
     FROM {{ ref('int_gtfs_quality__naive_organization_service_dataset_full_join') }}
 ),
 
@@ -24,11 +45,11 @@ initial_assessed AS (
         gtfs_service_data_source_record_id,
         gtfs_dataset_source_record_id,
 
-        (organization_assessed
+        (full_join.organization_assessed
             AND service_assessed
             AND gtfs_service_data_assessed) AS assessed,
 
-        organization_assessed,
+        full_join.organization_assessed,
 
         organization_itp_id,
         organization_hubspot_company_record_id,
@@ -36,6 +57,7 @@ initial_assessed AS (
         service_assessed,
         gtfs_service_data_assessed,
         gtfs_service_data_customer_facing,
+        gtfs_service_data_category,
         regional_feed_type,
         backdated_regional_feed_type,
 
@@ -121,6 +143,7 @@ int_gtfs_quality__daily_assessment_candidate_entities AS (
         organization_hubspot_company_record_id,
         organization_ntd_id,
         gtfs_service_data_customer_facing,
+        gtfs_service_data_category,
         regional_feed_type,
         backdated_regional_feed_type,
         COALESCE(check_regional_feed_types.use_subfeed_for_reports, FALSE) AS use_subfeed_for_reports,
