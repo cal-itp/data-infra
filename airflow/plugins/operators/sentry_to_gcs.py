@@ -62,13 +62,12 @@ def fetch_events_for_issue(issue_id, headers):
     return response_data
 
 
-def get_issues_list_from_sentry(extract, headers):
+def get_issues_list_from_sentry(extract, headers, target_date):
     """
     Paginate over Sentry issues for a project and create a list of issues matching our
     criteria for examination (RTFetchExceptions).
     """
-    yesterday = pendulum.now().subtract(days=1)
-    next_url = f"{SENTRY_API_BASE_URL}/projects/sentry/{extract.project_slug}/issues/?query=lastSeen:>{yesterday.to_date_string()}T00:00:00-00:00"
+    next_url = f"{SENTRY_API_BASE_URL}/projects/sentry/{extract.project_slug}/issues/?query=lastSeen:>{target_date.to_date_string()}T00:00:00-00:00"
     response_data = []
 
     while next_url:
@@ -90,8 +89,9 @@ def iterate_over_sentry_records(extract, auth_token):
     """
     Paginate over API responses for each targeted issue and create a combined list of dicts.
     """
+    target_date = pendulum.now().subtract(days=1)
     headers = {"Authorization": "Bearer " + auth_token}
-    issues_list = get_issues_list_from_sentry(extract, headers)
+    issues_list = get_issues_list_from_sentry(extract, headers, target_date)
 
     print(f"Issues list includes {len(issues_list)} issues")
     combined_response_data = []
@@ -107,6 +107,14 @@ def iterate_over_sentry_records(extract, auth_token):
         for future in as_completed(futures):
             combined_response_data.extend(future.result())
 
+    combined_response_data = [
+        x
+        for x in combined_response_data
+        if pendulum.from_format(
+            x["dateCreated"][:-1], "YYYY-MM-DDTHH:mm:ss"
+        ).to_date_string()
+        == target_date.to_date_string()
+    ]
     return combined_response_data
 
 
