@@ -14,6 +14,7 @@ stg_gtfs_schedule__levels AS (
     SELECT
         base64_url,
         ts,
+        dt AS _dt,
         {{ trim_make_empty_string_null('level_id') }} AS level_id,
         level_index,
         {{ trim_make_empty_string_null('level_name') }} AS level_name

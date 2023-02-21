@@ -1,28 +1,27 @@
 """
 Abstracts the various concerns of external table creation as much as possible
+
+This operator originally ran using airflow's bigquery hooks. However, for the
+version we had to use (airflow v1.14) they used an outdated form of authentication.
+Now, the pipeline aims to use bigquery's sqlalchemy client where possible.
+However, it's cumbersome to convert the http api style schema fields to SQL, so
+we provide a fallback for these old-style tasks.
 """
 import re
 
-from calitp.config import (
-    CALITP_BQ_LOCATION,
+from calitp_data.config import (
+    format_table_name,
     get_bucket,
     get_project_id,
-    format_table_name,
+    is_development,
 )
-from calitp.config import is_development
-
-from calitp.sql import get_engine
 from google.api_core.exceptions import NotFound
 from google.cloud import bigquery
+from utils import CALITP_BQ_LOCATION
 
 from airflow.models import BaseOperator
 
 
-# This operator originally ran using airflow's bigquery hooks. However, for the
-# version we had to use (airflow v1.14) they used an outdated form of authentication.
-# Now, the pipeline aims to use bigquery's sqlalchemy client where possible.
-# However, it's cumbersome to convert the http api style schema fields to SQL, so
-# we provide a fallback for these old-style tasks.
 def _bq_client_create_external_table(
     table_name,
     schema_fields,
@@ -51,7 +50,7 @@ def _bq_client_create_external_table(
         # key schema for more than a trivial number of files
         opt.mode = hive_options.get("mode", "AUTO")
         opt.require_partition_filter = hive_options.get(
-            "require_partition_filter", False
+            "require_partition_filter", True
         )
         # TODO: this is very fragile, we should probably be calculating it from
         #       the source_objects and validating the format (prefix, trailing slashes)
@@ -195,10 +194,11 @@ OPTIONS ({options_str})
             """
 
             print(query)
-
-            # delete the external table, if it already exists
-            engine = get_engine()
-            engine.execute(query)
+            client = bigquery.Client(
+                project=get_project_id(), location=CALITP_BQ_LOCATION
+            )
+            query_job = client.query(query)
+            query_job.result()
 
         return self.schema_fields
 

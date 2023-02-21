@@ -1,10 +1,10 @@
-import yaml
-import pandas as pd
 import sys
-
-from pathlib import Path
-from jinja2 import Environment, select_autoescape, StrictUndefined
 from io import StringIO
+from pathlib import Path
+
+import pandas as pd
+import yaml
+from jinja2 import Environment, StrictUndefined, select_autoescape
 
 if len(sys.argv) < 4:
     raise Exception(

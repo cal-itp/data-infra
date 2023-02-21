@@ -1,13 +1,13 @@
 import gzip
 import os
+from typing import Optional
+
 import pandas as pd
 import pendulum
-from calitp.auth import get_secret_by_name
-
+from calitp_data_infra.auth import get_secret_by_name
+from calitp_data_infra.storage import get_fs, make_name_bq_safe
 from pyairtable import Table
 from pydantic import BaseModel
-from typing import Optional
-from calitp.storage import get_fs, make_name_bq_safe
 
 from airflow.models import BaseOperator
 
@@ -112,7 +112,6 @@ class AirtableExtract(BaseModel):
 
 
 class AirtableToGCSOperator(BaseOperator):
-
     template_fields = ("bucket",)
 
     def __init__(

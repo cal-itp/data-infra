@@ -28,7 +28,7 @@ bridge_parent_organizations AS (
         LEAST(unnested._valid_to, organizations._valid_to) AS _valid_to
     FROM unnest_parents AS unnested
     LEFT JOIN organizations
-        ON unnested.parent_organization_key = organizations.original_record_id
+        ON unnested.parent_organization_key = organizations.source_record_id
         AND unnested._valid_from < organizations._valid_to
         AND unnested._valid_to > organizations._valid_from
 )

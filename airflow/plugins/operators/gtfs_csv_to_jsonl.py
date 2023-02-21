@@ -3,20 +3,19 @@ import gzip
 import json
 import logging
 import os
-import pendulum
-
-from airflow.models import BaseOperator
-
-from calitp.storage import (
-    fetch_all_in_partition,
-    get_fs,
-    PartitionedGCSArtifact,
-    ProcessingOutcome,
-    GTFSDownloadConfig,
-)
 from typing import ClassVar, List, Optional
 
+import pendulum
+from calitp_data_infra.storage import (
+    GTFSDownloadConfig,
+    PartitionedGCSArtifact,
+    ProcessingOutcome,
+    fetch_all_in_partition,
+    get_fs,
+)
 from utils import GTFSScheduleFeedFile
+
+from airflow.models import BaseOperator
 
 SCHEDULE_PARSED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_PARSED"]
 SCHEDULE_UNZIPPED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED"]

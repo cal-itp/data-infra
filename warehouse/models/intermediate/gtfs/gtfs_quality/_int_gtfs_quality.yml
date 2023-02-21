@@ -1,6 +1,9 @@
 version: 2
 
 models:
+
+  # Index tables
+
   - name: int_gtfs_quality__schedule_feed_guideline_index
     description: |
       Daily index of v2 schedule feeds. Provides structure for
@@ -41,6 +44,68 @@ models:
             - base64_url
             - date
 
+  - name: int_gtfs_quality__organization_guideline_index
+    description: |
+      Daily index of v2 organizations. Provides structure for
+      individual check models to be joined together by day.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - organization_key
+            - date
+
+  - name: int_gtfs_quality__gtfs_dataset_guideline_index
+    description: |
+      Daily index of v2 GTFS datasets. Provides structure for
+      individual check models to be joined together by day.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - gtfs_dataset_key
+            - date
+
+  - name: int_gtfs_quality__gtfs_dataset_schedule_guideline_index
+    description: |
+      Daily index of v2 GTFS datasets, including only schedule datasets. Provides structure for
+      individual check models to be joined together by day.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - gtfs_dataset_key
+            - date
+
+  - name: int_gtfs_quality__services_guideline_index
+    description: |
+      Daily index of v2 services. Provides structure for
+      individual check models to be joined together by day.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - service_key
+            - date
+
+  - name: int_gtfs_quality__gtfs_service_data_guideline_index
+    description: |
+      Daily index of v2 GTFS service data. Provides structure for
+      individual check models to be joined together by day.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - gtfs_service_data_key
+            - date
+
+  - name: int_gtfs_quality__gtfs_service_data_schedule_guideline_index
+    description: |
+      Daily index of v2 GTFS service data, including only schedule service data. Provides structure for
+      individual check models to be joined together by day.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - gtfs_service_data_key
+            - date
+
+# Other useful tables
+
   - name: int_gtfs_quality__rt_validation_outcomes
     description: |
       Unioned, incremental table of RT validation outcomes.
@@ -62,6 +127,36 @@ models:
             - severity
             - gtfs_validator_version
 
+  - name: int_gtfs_quality__schedule_validator_rule_details_unioned
+    description: |
+      GTFS schedule canonical validator rules by validator version (only for versions that we have
+      at some point used within the GTFS data pipeline.)
+    columns:
+      - name: key
+        tests:
+          - not_null
+          - unique
+      - name: code
+        tests:
+          - not_null
+      - name: human_readable_description
+        tests:
+          - not_null
+      - name: version
+        tests:
+          - not_null
+      - name: severity
+        tests:
+          - not_null
+
+  - name: int_gtfs_quality__naive_organization_service_dataset_full_join
+    description: |
+      `int_gtfs_quality__daily_assessment_candidate_entities` got too complex, so this
+      table materializes a naive join of the organization, service,
+      GTFS service data, dataset, and NTD agency info records for a given date.
+      Constructed solely to be consumed by `int_gtfs_quality__daily_assessment_candidate_entities`,
+      which is a more polished version for consumption.
+      Do not use for any other purpose.
   - name: int_gtfs_quality__daily_assessment_candidate_entities
     description: |
       A row here is a combination of an organization, service, service / GTFS dataset relationship,
@@ -95,11 +190,20 @@ models:
       - name: service_name
       - name: gtfs_dataset_name
       - name: gtfs_dataset_type
-      - name: assessed
+      - name: guidelines_assessed
         description: |
           Boolean indicator for whether this combined entity met the criteria to be "assessed"
-          on the given date. Applies "and" logic to `organization_assessed`, `service_assessed`,
+          against the GTFS guidelines on the given date. Applies "and" logic to `organization_assessed`, `service_assessed`,
           and `gtfs_service_data_assessed`.
+      - name: reports_site_assessed
+        description: |
+          Similar to `guidelines_assessed` except:
+          * For entities associated with MTC 511, use the regional subfeed instead of the combined regional feed;
+            i.e., for organization/services where the MTC combined regional feed is the customer-facing feed and
+            "assessed" for guideline purposes, this feed will mark the associated regional subfeed (rather than the combined feed)
+            as assessed for reports site (reports.calitp.org) purposes.
+          * Entity must include an organization with an ITP ID assigned
+          * Entity must include at least one assessed schedule feed
       - name: organization_assessed
         description: |
           Boolean indicator for whether the given organization record met the criteria to be "assessed"
@@ -130,6 +234,25 @@ models:
           Foreign key to `dim_schedule_feeds`. Because `dim_schedule_feeds` is slowly-
           changing dimension, joins using this key are not subject to the historical
           limitations noted for the other foreign keys in this table.
+      - name: backdated_regional_feed_type
+        description: |
+          For reports site assessment purposes this field allows us to make regional subfeed selections
+          from before the raw regional_feed_type data was available in Airtable.
+  - name: int_gtfs_quality__organization_dataset_map
+    description: |
+      A version of int_gtfs_quality__daily_assessment_candidate_entities collapsed
+      down to just the organization/GTFS dataset level (basically, removes services.)
+      Columns are identical to int_gtfs_quality__daily_assessment_candidate_entities,
+      except that OR logic has been applied to the customer facing and assessed columns,
+      so that if this organization/dataset relationship is customer facing or assessed
+      for any service, the entire relationship is marked as customer facing or assessed
+      in this table.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - organization_key
+            - gtfs_dataset_key
 
   - name: int_gtfs_quality__feed_version_history
     description: |
@@ -248,7 +371,6 @@ models:
             - base64_url
       - dbt_utils.equal_rowcount:
           compare_model: ref('int_gtfs_quality__schedule_url_guideline_index')
-      - extreme_results
     columns: *stg_gtfs_guideline_columns
 
 # RT feed checks
@@ -298,33 +420,41 @@ models:
     columns: *stg_gtfs_guideline_columns
 
   - name: int_gtfs_quality__no_stale_vehicle_positions
-    tests: &stale_rt_guideline_check_tests
+    tests: &incremental_rt_guideline_check_tests
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - date
             - base64_url
       - extreme_results
-    columns: &stale_rt_guideline_check_columns
+    columns: &incremental_rt_guideline_check_columns
       - name: status
         tests:
           - dbt_utils.not_null_proportion:
               at_least: 0.8
 
   - name: int_gtfs_quality__no_stale_trip_updates
-    tests: *stale_rt_guideline_check_tests
-    columns: *stale_rt_guideline_check_columns
+    tests: *incremental_rt_guideline_check_tests
+    columns: *incremental_rt_guideline_check_columns
 
   - name: int_gtfs_quality__no_stale_service_alerts
-    tests: *stale_rt_guideline_check_tests
-    columns: *stale_rt_guideline_check_columns
+    tests: *incremental_rt_guideline_check_tests
+    columns: *incremental_rt_guideline_check_columns
 
   - name: int_gtfs_quality__rt_20sec_vp
-    tests: *stale_rt_guideline_check_tests
-    columns: *stale_rt_guideline_check_columns
+    tests: *incremental_rt_guideline_check_tests
+    columns: *incremental_rt_guideline_check_columns
 
   - name: int_gtfs_quality__rt_20sec_tu
-    tests: *stale_rt_guideline_check_tests
-    columns: *stale_rt_guideline_check_columns
+    tests: *incremental_rt_guideline_check_tests
+    columns: *incremental_rt_guideline_check_columns
+
+  - name: int_gtfs_quality__rt_20sec_tu
+    tests: *incremental_rt_guideline_check_tests
+    columns: *incremental_rt_guideline_check_columns
+
+  - name: int_gtfs_quality__rt_persistent_ids_vp
+    tests: *incremental_rt_guideline_check_tests
+    columns: *incremental_rt_guideline_check_columns
 
 # RT URL checks
 
@@ -339,6 +469,10 @@ models:
       - extreme_results
     columns: *stg_gtfs_guideline_columns
 
+# MANUAL CHECKS
+
+# --- Organization-level
+
   - name: int_gtfs_quality__contact_on_website
     tests:
       - dbt_utils.unique_combination_of_columns:
@@ -347,3 +481,100 @@ models:
             - organization_key
       - dbt_utils.equal_rowcount:
           compare_model: ref('int_gtfs_quality__organization_guideline_index')
+    columns: *stg_gtfs_guideline_columns
+
+# --- Dataset-level
+# ----- Schedule only
+
+  - name: int_gtfs_quality__shapes_accurate
+    tests: &stg_gtfs_guideline_tests_dataset_schedule
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - gtfs_dataset_key
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__gtfs_dataset_schedule_guideline_index')
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__grading_scheme_v1
+    tests: *stg_gtfs_guideline_tests_dataset_schedule
+    columns: *stg_gtfs_guideline_columns
+
+# ----- All 4 feeds
+
+  - name: int_gtfs_quality__authentication_acceptable
+    tests: &stg_gtfs_guideline_tests_dataset
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - gtfs_dataset_key
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__gtfs_dataset_guideline_index')
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__stable_url
+    tests: *stg_gtfs_guideline_tests_dataset
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__link_to_dataset_on_website
+    tests: *stg_gtfs_guideline_tests_dataset
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__data_license
+    tests: *stg_gtfs_guideline_tests_dataset
+    columns: *stg_gtfs_guideline_columns
+
+# --- Service-level
+
+  - name: int_gtfs_quality__trip_planner_schedule
+    tests: &stg_gtfs_guideline_tests_service_manual
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - service_key
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__services_guideline_index')
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__trip_planner_rt
+    tests: *stg_gtfs_guideline_tests_service_manual
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__all_tu_in_vp
+    tests: &stg_gtfs_guideline_tests_service
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - service_key
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__services_guideline_index')
+      - extreme_results
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__scheduled_trips_in_tu_feed
+    tests: *stg_gtfs_guideline_tests_service
+    columns: *stg_gtfs_guideline_columns
+
+# --- GTFS-service-data-level
+# ----- Schedule only
+
+  - name: int_gtfs_quality__demand_responsive_routes_match
+    tests: &stg_gtfs_guideline_tests_gtfs_service_data_schedule
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - gtfs_service_data_key
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__gtfs_service_data_schedule_guideline_index')
+    columns: *stg_gtfs_guideline_columns
+
+# ----- All 4 feeds
+  - name: int_gtfs_quality__fixed_routes_match
+    tests: &stg_gtfs_guideline_tests_gtfs_service_data
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date
+            - gtfs_service_data_key
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('int_gtfs_quality__gtfs_service_data_guideline_index')
+    columns: *stg_gtfs_guideline_columns

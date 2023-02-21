@@ -7,6 +7,7 @@ source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 hive_options:
   mode: CUSTOM
+  require_partition_filter: false
   source_uri_prefix: "validation_notices/{dt:DATE}/{ts:TIMESTAMP}/{base64_url:STRING}/"
 schema_fields:
   - name: metadata

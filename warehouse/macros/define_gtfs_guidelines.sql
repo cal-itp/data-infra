@@ -1,37 +1,37 @@
 --
 -- ENTITIES
 --
-{% macro schedule_feed() -%}
+{% macro schedule_feed() %}
 'schedule_feed'
-{%- endmacro %}
+{% endmacro %}
 
-{% macro schedule_url() -%}
+{% macro schedule_url() %}
 'schedule_url'
-{%- endmacro %}
+{% endmacro %}
 
-{% macro rt_feed() -%}
+{% macro rt_feed() %}
 'rt_feed'
-{%- endmacro %}
+{% endmacro %}
 
-{% macro rt_url() -%}
+{% macro rt_url() %}
 'rt_url'
-{%- endmacro %}
+{% endmacro %}
 
-{% macro organization() -%}
+{% macro organization() %}
 'organization'
-{%- endmacro %}
+{% endmacro %}
 
 {% macro service() -%}
 'service'
-{%- endmacro %}
+{% endmacro %}
 
 {% macro gtfs_service_data() -%}
 'gtfs_service_data'
-{%- endmacro %}
+{% endmacro %}
 
 {% macro gtfs_dataset() -%}
 'gtfs_dataset'
-{%- endmacro %}
+{% endmacro %}
 
 --
 -- CHECK NAMES
@@ -209,7 +209,103 @@
 {% endmacro %}
 
 {% macro organization_has_contact_info() %}
-"The organization has contact information on the website."
+"A technical contact email address is listed on the organization website"
+{% endmacro %}
+
+{% macro shapes_accurate() %}
+"Shapes in shapes.txt are precise enough to show the right-of-way that the vehicle uses and not inaccurately exit the right-of-way"
+{% endmacro %}
+
+{% macro data_license_schedule() %}
+"Includes an open license that allows commercial use of GTFS Schedule feed"
+{% endmacro %}
+
+{% macro data_license_vp() %}
+"Includes an open license that allows commercial use of Vehicle positions feed"
+{% endmacro %}
+
+{% macro data_license_tu() %}
+"Includes an open license that allows commercial use of Trip updates feed"
+{% endmacro %}
+
+{% macro data_license_sa() %}
+"Includes an open license that allows commercial use of Service alerts feed"
+{% endmacro %}
+
+{% macro authentication_acceptable_schedule() %}
+"GTFS Schedule feed requires easy (if any) authentication"
+{% endmacro %}
+
+{% macro authentication_acceptable_vp() %}
+"Vehicle positions feed requires easy (if any) authentication"
+{% endmacro %}
+
+{% macro authentication_acceptable_tu() %}
+"Trip updates feed requires easy (if any) authentication"
+{% endmacro %}
+
+{% macro authentication_acceptable_sa() %}
+"Service alerts feed requires easy (if any) authentication"
+{% endmacro %}
+
+{% macro stable_url_schedule() %}
+"GTFS Schedule feed is published at a stable URI (permalink) from which it can be “fetched” automatically by trip-planning applications"
+{% endmacro %}
+
+{% macro stable_url_vp() %}
+"Vehicle positions feed is published at a stable URI (permalink) from which it can be “fetched” automatically by trip-planning applications"
+{% endmacro %}
+
+{% macro stable_url_tu() %}
+"Trip updates feed is published at a stable URI (permalink) from which it can be “fetched” automatically by trip-planning applications"
+{% endmacro %}
+
+{% macro stable_url_sa() %}
+"Service alerts feed is published at a stable URI (permalink) from which it can be “fetched” automatically by trip-planning applications"
+{% endmacro %}
+
+{% macro grading_scheme_v1() %}
+"Passes Grading Scheme v1"
+{% endmacro %}
+
+{% macro link_to_dataset_on_website_schedule() %}
+"GTFS Schedule link is posted on website"
+{% endmacro %}
+
+{% macro link_to_dataset_on_website_vp() %}
+"Vehicle positions link is posted on website"
+{% endmacro %}
+
+{% macro link_to_dataset_on_website_tu() %}
+"Trip updates link is posted on website"
+{% endmacro %}
+
+{% macro link_to_dataset_on_website_sa() %}
+"Service alerts link is posted on website"
+{% endmacro %}
+
+{% macro trip_planner_schedule() %}
+"GTFS Schedule feed ingested by Google Maps and/or a combination of Apple Maps, Transit App, Bing Maps, Moovit or local Open Trip Planner services"
+{% endmacro %}
+
+{% macro trip_planner_rt() %}
+"Realtime feeds ingested by Google Maps and/or a combination of Apple Maps, Transit App, Bing Maps, Moovit or local Open Trip Planner services"
+{% endmacro %}
+
+{% macro fixed_routes_match() %}
+"Static and RT feeds are representative of all fixed-route transit services under the transit providers’ purview"
+{% endmacro %}
+
+{% macro demand_responsive_routes_match() %}
+"Static and RT feeds are representative of all demand-responsive transit services under the transit providers’ purview"
+{% endmacro %}
+
+{% macro scheduled_trips_in_tu_feed() %}
+"100% of scheduled trips on a given day are represented within the Trip updates feed"
+{% endmacro %}
+
+{% macro all_tu_in_vp() %}
+"100% of trips marked as Scheduled, Canceled, or Added within the Trip updates feed are represented within the Vehicle positions feed"
 {% endmacro %}
 
 {% macro persistent_ids_vp() %}
@@ -252,6 +348,10 @@
 "Fixed-Route Completeness"
 {% endmacro %}
 
+{% macro demand_responsive_completeness() %}
+"Demand-Responsive Completeness"
+{% endmacro %}
+
 {% macro feed_aggregator_availability_schedule() %}
 "Feed Aggregator Availability (Schedule)"
 {% endmacro %}
@@ -274,6 +374,10 @@
 
 {% macro up_to_dateness() %}
 "Up-to-Dateness"
+{% endmacro %}
+
+{% macro availability_on_website() %}
+"Availability on Website"
 {% endmacro %}
 
 --
@@ -378,3 +482,11 @@ feature
     WHERE percent_pass = 100 OR percent_pass = 0
 
 {% endtest %}
+
+
+--
+-- OTHER TEXT
+--
+{% macro manual_check_needed_status() %}
+"MANUAL CHECK NEEDED"
+{% endmacro %}

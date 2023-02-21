@@ -12,6 +12,7 @@ source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 hive_options:
   mode: AUTO
+  require_partition_filter: false
   source_uri_prefix: "california_transit__services/"
 schema_fields:
   - name: eligibility_programs
@@ -177,6 +178,9 @@ schema_fields:
     type: STRING
     mode: REPEATED
   - name: mode
+    type: STRING
+    mode: REPEATED
+  - name: primary_mode
     type: STRING
     mode: REPEATED
   - name: product_components

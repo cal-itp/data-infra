@@ -13,6 +13,7 @@ stg_gtfs_schedule__pathways AS (
     SELECT
         base64_url,
         ts,
+        dt AS _dt,
         {{ trim_make_empty_string_null('pathway_id') }} AS pathway_id,
         {{ trim_make_empty_string_null('from_stop_id') }} AS from_stop_id,
         {{ trim_make_empty_string_null('to_stop_id') }} AS to_stop_id,

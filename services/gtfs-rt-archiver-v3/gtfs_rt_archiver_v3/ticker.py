@@ -8,21 +8,21 @@ from pathlib import Path
 from typing import List, Tuple
 
 import pendulum
-import schedule
+import schedule  # type: ignore
 import sentry_sdk
 import typer
 from cachetools.func import ttl_cache
-from calitp.auth import get_secrets_by_label
-from calitp.storage import (
-    GTFSFeedType,
+from calitp.auth import get_secrets_by_label  # type: ignore
+from calitp.storage import (  # type: ignore
     GTFSDownloadConfig,
-    get_latest,
-    get_fs,
     GTFSDownloadConfigExtract,
+    GTFSFeedType,
+    get_fs,
+    get_latest,
 )
 from prometheus_client import start_http_server
 
-from .metrics import TICKS, AIRTABLE_CONFIGURATION_AGE
+from .metrics import AIRTABLE_CONFIGURATION_AGE, TICKS
 from .tasks import fetch, huey
 
 
@@ -55,10 +55,11 @@ def get_configs() -> Tuple[pendulum.DateTime, List[GTFSDownloadConfig]]:
 
 
 def main(
-    port: int = os.getenv("TICKER_PROMETHEUS_PORT", 9102),
+    port: int = int(os.getenv("TICKER_PROMETHEUS_PORT", 9102)),
     load_env_secrets: bool = False,
-    touch_file: Path = os.getenv("LAST_TICK_FILE"),
+    touch_file: Path = Path(os.environ["LAST_TICK_FILE"]),
 ):
+    assert isinstance(touch_file, Path)
     sentry_sdk.init(environment=os.getenv("AIRFLOW_ENV"))
     start_http_server(port)
 

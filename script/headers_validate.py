@@ -1,7 +1,7 @@
-import yaml
 import sys
 
-from jsonschema import validate, ValidationError
+import yaml
+from jsonschema import ValidationError, validate
 
 if len(sys.argv) < 3:
     raise Exception("2 arguments required: data file, schema file")

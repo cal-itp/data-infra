@@ -11,6 +11,7 @@ seeds:
           - not_null
           - unique
 
+  # TODO: delete/deprecate (v1 / superseded by the validator_rule_details tables)
   - name: gtfs_schedule_validation_code_descriptions
     description: |
       A list of validation codes output by the GTFS Schedule validator, and their severities.
@@ -19,4 +20,97 @@ seeds:
       - name: name
         tests:
           - not_null
+          - unique
+
+  - name: gtfs_schedule_validator_rule_details_v2_0_0
+    description: |
+      A list of validation codes output by the GTFS Schedule validator, and their severities and descriptions.
+      This data was manually parsed from the contents of the RULES.md file in the v2.0.0 release of the validator,
+      sourced from: https://github.com/MobilityData/gtfs-validator/archive/refs/tags/v2.0.0.zip
+    columns:
+      - name: code
+        tests:
+          - not_null
+          - unique
+      - name: human_readable_description
+        tests:
+          - not_null
+      - name: version
+        tests:
+          - not_null
+      - name: severity
+        tests:
+          - not_null
+
+  - name: gtfs_schedule_validator_rule_details_v3_1_1
+    description: |
+      A list of validation codes output by the GTFS Schedule validator, and their severities and descriptions.
+      This data was manually parsed from the contents of the RULES.md file in the v3.1.1 release of the validator,
+      sourced from: https://github.com/MobilityData/gtfs-validator/archive/refs/tags/v3.1.1.zip
+    columns:
+      - name: code
+        tests:
+          - not_null
+          - unique
+      - name: human_readable_description
+        tests:
+          - not_null
+      - name: version
+        tests:
+          - not_null
+      - name: severity
+        tests:
+          - not_null
+
+  - name: gtfs_schedule_validator_rule_details_v4_0_0
+    description: |
+      A list of validation codes output by the GTFS Schedule validator, and their severities and descriptions.
+      This data was manually parsed from the contents of the RULES.md file in the v3.1.1 release of the validator,
+      sourced from: https://github.com/MobilityData/gtfs-validator/archive/refs/tags/v3.1.1.zip
+    columns:
+      - name: code
+        tests:
+          - not_null
+          - unique
+      - name: human_readable_description
+        tests:
+          - not_null
+      - name: version
+        tests:
+          - not_null
+      - name: severity
+        tests:
+          - not_null
+
+  - name: ntd_agency_to_organization
+    description: |
+      Extract of Airtable mapping from NTD agency info to
+      transit database organizations. Originally extracted
+      from dim_ntd_agency_info with the following query.
+
+      select ntd_id, legacy_ntd_id, org.id as organization_record_id, org.name as organization_name
+      from staging.stg_transit_database__ntd_agency_info ntd
+      left join staging.stg_transit_database__organizations org
+      on ntd.organization_key = org.id
+      and ntd.dt = org.dt
+      where ntd.dt = (select max(dt) from staging.stg_transit_database__ntd_agency_info)
+      ;
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - ntd_id
+            - organization_name
+    columns:
+      - name: ntd_id
+        tests:
+          - not_null
+          - unique
+      - name: legacy_ntd_id
+        tests:
+          - unique
+      - name: organization_record_id
+        tests:
+          - unique
+      - name: organization_name
+        tests:
           - unique

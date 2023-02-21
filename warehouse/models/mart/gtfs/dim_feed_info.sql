@@ -1,17 +1,25 @@
-{{ config(materialized='table') }}
-
-WITH dim_schedule_feeds AS (
-    SELECT *
-    FROM {{ ref('dim_schedule_feeds') }}
+WITH make_dim AS (
+    {{ make_schedule_file_dimension_from_dim_schedule_feeds(
+        ref('dim_schedule_feeds'),
+        ref('stg_gtfs_schedule__feed_info'),
+    ) }}
 ),
 
-stg_gtfs_schedule__feed_info AS (
-    SELECT *
-    FROM {{ ref('stg_gtfs_schedule__feed_info') }}
+-- typical pattern for letting us join on nulls
+with_identifier AS (
+    SELECT *, {{ dbt_utils.surrogate_key(['feed_publisher_name', 'feed_publisher_url', 'feed_lang', 'default_lang', 'feed_version', 'feed_contact_email', 'feed_contact_url', 'feed_start_date', 'feed_end_date']) }} AS feed_info_identifier,
+    FROM make_dim
 ),
 
-make_dim AS (
-{{ make_schedule_file_dimension_from_dim_schedule_feeds('dim_schedule_feeds', 'stg_gtfs_schedule__feed_info') }}
+bad_rows AS (
+    SELECT
+        base64_url,
+        ts,
+        {{ dbt_utils.surrogate_key(['feed_publisher_name', 'feed_publisher_url', 'feed_lang', 'default_lang', 'feed_version', 'feed_contact_email', 'feed_contact_url', 'feed_start_date', 'feed_end_date']) }} AS feed_info_identifier,
+        TRUE AS warning_duplicate_primary_key
+    FROM make_dim
+    GROUP BY 1, 2, 3
+    HAVING COUNT(*) > 1
 ),
 
 dim_feed_info AS (
@@ -28,10 +36,11 @@ dim_feed_info AS (
         feed_start_date,
         feed_end_date,
         base64_url,
-        _valid_from,
-        _valid_to,
-        _is_current
-    FROM make_dim
+        COALESCE(warning_duplicate_primary_key, FALSE) AS warning_duplicate_primary_key,
+        _feed_valid_from,
+    FROM with_identifier
+    LEFT JOIN bad_rows
+        USING (base64_url, ts, feed_info_identifier)
 )
 
 SELECT * FROM dim_feed_info

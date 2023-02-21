@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: ntd_data_products
+    description: Data sets loaded from NTD Data Reports https://www.transit.dot.gov/ntd/ntd-data.
+    database: "{{ var('SOURCE_DATABASE') }}"
+    schema: external_ntd_data_products
+    tables:
+      - name: annual_database_agency_information

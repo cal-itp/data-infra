@@ -1,20 +1,20 @@
 """Module for exporting data from Amplitude and adding to the data warehouse"""
-import os
 import gzip
 import logging
+import os
 import zipfile
-from io import BytesIO, StringIO
 from datetime import timedelta
+from io import BytesIO, StringIO
 
-import calitp
-import requests
 import pandas as pd
-from calitp.auth import get_secret_by_name
+import requests
+from calitp_data.config import is_development
+from calitp_data_infra.auth import get_secret_by_name
+from calitp_data_infra.storage import save_to_gcfs
 from requests import HTTPError
 
-from airflow.models import BaseOperator
 from airflow.exceptions import AirflowSkipException
-from calitp.config import is_development
+from airflow.models import BaseOperator
 
 DATE_FORMAT = "%Y%m%dT%H"
 
@@ -141,6 +141,6 @@ class AmplitudeToFlattenedJSONOperator(BaseOperator):
         )
 
         # if a file already exists at `gcs_file_path`, GCS will overwrite the existing file
-        calitp.save_to_gcfs(
+        save_to_gcfs(
             events_jsonl.encode(), gcs_file_path, bucket=bucket_name, use_pipe=True
         )

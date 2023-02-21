@@ -9,7 +9,7 @@ dim_gtfs_service_data AS (
     SELECT
         key,
         name,
-        original_record_id,
+        source_record_id,
         service_key,
         gtfs_dataset_key,
         customer_facing,

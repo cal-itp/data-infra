@@ -1,7 +1,45 @@
 {% docs fct_daily_guideline_checks %}
 
 Each row represents a date/organization/service/feed/guideline/check combination, with pass/fail
-information indicating whether that feed complied with that check on that date.
+information indicating whether that entity complied with that check on that date. Entities
+in this table are considered `assessed` for guidelines purposes, meaning:
+
+* Organizations in this table have a `reporting_category` of `Core` or `Other Public Transit`
+* The organization manages at least one service that is currently operating and has at least some fixed-route service
+* That service is represented in at least one customer-facing GTFS dataset
+
+This table is designed to be an exhaustive accounting of all checks performed on assessed entities which can then be further summarized (grouped) based on the specific entity of interest  (for example, services or organizations). See the `fct_daily_organization_combined_guideline_checks` and `fct_daily_service_combined_guideline_checks` tables to
+get daily assessments for organizations or services; they use the aggregation logic described below.
+
+This table should **not** be used in its raw form for counts of passing/failing checks. The grain of this table is 'every organization/service/dataset combination that was assessed on this date', which is not generally an intuitive or useful grain for analysis. Each row represents a single organization/service/dataset/feed/guideline/check combination, which means that the number of rows for one service, organization, dataset, or feed varies based on the number of relationships that entity has.
+
+For example, a service with a trip updates feed but no vehicle positions feed may have fewer rows than a service with both types of feed. Similarly, an organization with five services (even if they are
+all represented in the same GTFS dataset) will have more rows than an organization with just one service.
+This makes the raw row counts or percentages in this table very difficult to interpret.
+
+To aggregate to a given entity-level (service, organization, dataset, or feed), as this
+table is intended to be used, the logic is:
+* Group by date, that entity's key (for example, `organization_key`), `check`, and `feature`
+* Apply `LOGICAL_OR` and `LOGICAL_AND` aggregation on the `status` column, like so:
+
+```
+-- note that the order here matters; the conditions are meant to be applied in this order
+-- so that failing takes precendence
+CASE
+    WHEN LOGICAL_OR(NULLIF(status, "N/A") = "FAIL") THEN "FAIL"
+    WHEN LOGICAL_AND(NULLIF(status, "N/A") = "PASS") THEN "PASS"
+    WHEN LOGICAL_AND(NULLIF(status, "N/A") = "MANUAL CHECK NEEDED") THEN "MANUAL CHECK NEEDED"
+    WHEN LOGICAL_AND(status = "N/A") THEN "N/A"
+END as status
+```
+
+This will result in:
+* The overall entity check will fail if any check on a constituent entity failed
+* The overall entity check will pass if all constituent entity checks were either `N/A` or pass
+* The overall entity check will be `MANUAL CHECK NEEDED` if all constituent entity checks were `N/A` or `MANUAL CHECK NEEDED`
+* The overall entity check will be `N/A` if all constituent entity checks were `N/A`
+
+Else it will be null.
 
 Here is a list of currently-implemented checks:
 
@@ -49,4 +87,29 @@ Here is a list of currently-implemented checks:
 | The Vehicle positions API endpoint is configured to report the file modification date | Best Practices Alignment (RT) | When the Vehicle Positions API endpoint is requested, the response header includes a field called "Last-Modified". |
 | The Trip updates API endpoint is configured to report the file modification date | Best Practices Alignment (RT) | When the Trip updates API endpoint is requested, the response header includes a field called "Last-Modified". |
 | Vehicle positions feed maintains persistent identifiers | Best Practices Alignment (RT) |  In the last 30 days, no updates to the Vehicle positions feed have created a situation where 50% or more of a given ID (FeedEntity.id, VehicleDescriptor.id) were not present in the previous feed version. |
+| A technical contact email address is listed on the organization website | Technical Contact Availability | A designated contact is listed on the organization website, to be reached out to for GTFS-related questions. |
+| Shapes in shapes.txt are precise enough to show the right-of-way that the vehicle uses and not inaccurately exit the right-of-way | Accurate Service Data | All trip shapes match the right-of-way. |
+| Includes an open license that allows commercial use of GTFS Schedule feed| Compliance (Schedule) | The transit provider’s website includes an open license that allows commercial use of GTFS Schedule feed. |
+| Includes an open license that allows commercial use of Vehicle positions feed| Compliance (RT) | The transit provider’s website includes an open license that allows commercial use of Vehicle positions feed. |
+| Includes an open license that allows commercial use of Trip updates feed| Compliance (RT) | The transit provider’s website includes an open license that allows commercial use of Trip updates feed. |
+| Includes an open license that allows commercial use of Service alerts feed| Compliance (RT) | The transit provider’s website includes an open license that allows commercial use of Service alerts feed. |
+| GTFS Schedule feed requires easy (if any) authentication | Availability on Website | If an API key is required to access the GTFS Schedule feed, the registration process must be straightforward, quick, and transparent. |
+| Vehicle positions feed requires easy (if any) authentication | Availability on Website | If an API key is required to access the Vehicle positions feed, the registration process must be straightforward, quick, and transparent. |
+| Trip updates feed requires easy (if any) authentication | Availability on Website | If an API key is required to access the Trip updates feed, the registration process must be straightforward, quick, and transparent. |
+| Service alerts feed requires easy (if any) authentication | Availability on Website | If an API key is required to access the Service alerts feed, the registration process must be straightforward, quick, and transparent. |
+| GTFS Schedule feed is published at a stable URI (permalink) from which it can be “fetched” automatically by trip-planning applications | Compliance (Schedule) | The GTFS Schedule URL appears to be permanent (meaning the link is stable and does not change) for the foreseeable future. Common issues that would make a URL not permanent are that the URL has a date within it, or the URL includes a reference to a specific time of year, such as a season. |
+| Vehicle positions feed is published at a stable URI (permalink) from which it can be “fetched” automatically by trip-planning applications | Compliance (RT) | The Vehicle positions URL appears to be permanent (meaning the link is stable and does not change) for the foreseeable future. Common issues that would make a URL not permanent are that the URL has a date within it, or the URL includes a reference to a specific time of year, such as a season. |
+| Trip updates feed is published at a stable URI (permalink) from which it can be “fetched” automatically by trip-planning applications | Compliance (RT) | The Trip updates URL appears to be permanent (meaning the link is stable and does not change) for the foreseeable future. Common issues that would make a URL not permanent are that the URL has a date within it, or the URL includes a reference to a specific time of year, such as a season. |
+| Service alerts feed is published at a stable URI (permalink) from which it can be “fetched” automatically by trip-planning applications | Compliance (RT) | The Service alerts URL appears to be permanent (meaning the link is stable and does not change) for the foreseeable future. Common issues that would make a URL not permanent are that the URL has a date within it, or the URL includes a reference to a specific time of year, such as a season. |
+| Passes Grading Scheme v1 | Accurate Service Data | The GTFS Schedule feed passes the manual Grading Scheme v1 process. |
+| GTFS Schedule link is posted on website | Availability on Website | If an API key is required to access the GTFS Schedule feed, the registration process must be straightforward, quick, and transparent. |
+| Vehicle positions link link is posted on website | Availability on Website | If an API key is required to access the Vehicle positions feed, the registration process must be straightforward, quick, and transparent. |
+| Trip updates link is posted on website | Availability on Website | If an API key is required to access the Trip updates feed, the registration process must be straightforward, quick, and transparent. |
+| Service alerts link is posted on website | Availability on Website | If an API key is required to access the Service alerts feed, the registration process must be straightforward, quick, and transparent. |
+| GTFS Schedule feed ingested by Google Maps and/or a combination of Apple Maps, Transit App, Bing Maps, Moovit or local Open Trip Planner services. | Compliance (Schedule) | Transit riders are able to access the trip schedule within commonly-used trip planning apps. |
+| Realtime feeds ingested by Google Maps and/or a combination of Apple Maps, Transit App, Bing Maps, Moovit or local Open Trip Planner services. | Compliance (RT) | Transit riders are able to access live trip statuses within commonly-used trip planning apps. |
+| Static and RT feeds are representative of all fixed-route transit services under the transit providers’ purview | Fixed-Route Completeness | All fixed-route routes represented on the agency website are represented in the GTFS feeds. |
+| Static and RT feeds are representative of all demand-responsive transit services under the transit providers’ purview | Demand-Responsive Completeness | All demand-responsive routes represented on the agency website are represented in the GTFS feeds. |
+| 100% of scheduled trips on a given day are represented within the Trip updates feed | Fixed-Route Completeness | 100% of scheduled trips on a given day are represented within the Trip Updates feed. This includes canceled trips, which should be accounted for by either marking a trip as canceled or adjusting the estimated arrival times. |
+| 100% of trips marked as “Scheduled”, “Canceled”, or “Added” within the Trip updates feed are represented within the Vehicle positions feed | Fixed-Route Completeness | 100% of trips marked as “Scheduled”, “Canceled”, or “Added” within the Trip updates feed are represented within the Vehicle positions feed. |
 {% enddocs %}

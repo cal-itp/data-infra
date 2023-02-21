@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.3.0
+    rev: v4.4.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -9,16 +9,21 @@ repos:
         exclude: 'kubernetes/apps/charts/.*'
       - id: check-added-large-files
   - repo: https://github.com/pycqa/flake8
-    rev: 5.0.4
+    rev: 6.0.0
     hooks:
       - id: flake8
         args: ["--ignore=E501,W503"] # line too long and line before binary operator (black is ok with these)
         types:
           - python
   - repo: https://github.com/psf/black
-    rev: 22.10.0
+    rev: 23.1.0
     hooks:
       - id: black
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        name: isort (python)
   - repo: https://github.com/pycqa/bandit
     rev: 1.7.4
     hooks:
@@ -49,6 +54,6 @@ repos:
         args: [--dialect, "bigquery", --ignore, "parsing,templating",--exclude-rules, "L003,L010,L011,L022,L036,L038,L039,L059,L016,L029,L027,L032,L034,L014,L042,L055,L064"]
         files: "warehouse/"
   - repo: https://github.com/kynan/nbstripout
-    rev: 0.6.0
+    rev: 0.6.1
     hooks:
       - id: nbstripout

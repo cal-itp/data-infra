@@ -1,9 +1,9 @@
 import logging
-import requests
 import sys
+
+import requests
 import yaml
 from requests import HTTPError
-
 
 USAGE = """
 Usage:
@@ -44,7 +44,6 @@ def map_agencies_urls(logger, yaml_data, key_prefix="gtfs_rt"):
     gtfs_rt_vehicle_positions_url, gtfs_rt_alerts_url, etc).
     """
     for agency_name, agency_def in yaml_data.items():
-
         if "feeds" not in agency_def:
             logger.error(
                 "agency {}: skipped loading "
@@ -62,7 +61,6 @@ def map_agencies_urls(logger, yaml_data, key_prefix="gtfs_rt"):
         for i, feed_set in enumerate(agency_def["feeds"]):
             for feed_name, feed_url in feed_set.items():
                 if feed_name.startswith(key_prefix) and feed_url:
-
                     agency_itp_id = agency_def["itp_id"]
                     feed_id = "{}/{}/{}".format(agency_itp_id, i, feed_name)
                     yield feed_id, feed_url

@@ -22,6 +22,7 @@ clean-targets:         # directories to be removed by `dbt clean`
   - "dbt_packages"
 
 vars:
+  GTFS_SCHEDULE_START: '2021-04-16'
   RT_LOOKBACK_DAYS: 30
   TRIP_UPDATES_LOOKBACK_DAYS: 7
   'dbt_date:time_zone': 'America/Los_Angeles'
@@ -35,18 +36,22 @@ models:
       columns: true
 
     gtfs_schedule_latest_only:
+      +enabled: false
       +materialized: table
       schema: gtfs_schedule
 
     gtfs_views:
+      +enabled: false
       +materialized: table
       schema: views
 
     gtfs_views_staging:
+      +enabled: false
       +materialized: view
       schema: gtfs_views_staging
 
     rt_views:
+      +enabled: false
       +materialized: table
       schema: views
 
@@ -64,11 +69,19 @@ models:
       +materialized: view
       schema: staging
 
+      # legacy guidelines
+      gtfs_guidelines:
+        +enabled: false
+
     mart:
       transit_database:
         schema: mart_transit_database
+
+      # legacy guidelines
       gtfs_guidelines:
+        +enabled: false
         schema: mart_gtfs_guidelines
+
       gtfs_quality:
         schema: mart_gtfs_quality
       gtfs:
@@ -77,5 +90,5 @@ models:
         schema: mart_ad_hoc
       audit:
         schema: mart_audit
-      gtfs_schedule_latest:
-        schema: mart_gtfs_schedule_latest
+      ntd:
+        schema: mart_ntd
