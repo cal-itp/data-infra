@@ -3,6 +3,7 @@ import traceback
 from datetime import datetime
 from functools import wraps
 from pathlib import Path
+from typing import Optional
 
 import humanize
 import pendulum
@@ -12,6 +13,7 @@ import typer
 from calitp_data_infra.storage import GTFSDownloadConfig, download_feed  # type: ignore
 from google.cloud import storage  # type: ignore
 from huey import RedisHuey  # type: ignore
+from huey.api import Task  # type: ignore
 from requests import HTTPError, RequestException
 
 from .metrics import (
@@ -63,7 +65,9 @@ class RTFetchException(Exception):
 
 
 @huey.signal()
-def increment_task_signals_counter(signal, task, exc=None):
+def increment_task_signals_counter(
+    signal: str, task: Task, exc: Optional[Exception] = None
+) -> None:
     config: GTFSDownloadConfig = task.kwargs["config"]
     exc_type = ""
     # We want to let RTFetchException propagate up to Sentry so it holds the right context
