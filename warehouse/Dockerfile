@@ -16,11 +16,8 @@ WORKDIR /app
 
 COPY ./pyproject.toml /app/pyproject.toml
 COPY ./poetry.lock /app/poetry.lock
-# TODO: This is currently broken https://github.com/python-poetry/poetry-plugin-export/issues/118 so we use requirements.txt for now
-#RUN poetry export -f requirements.txt --without-hashes --output requirements.txt \
-    #&& pip install -r requirements.txt
-COPY ./requirements.txt /app/requirements.txt
-RUN pip install -r /app/requirements.txt
+RUN poetry export -f requirements.txt --without-hashes --output requirements.txt \
+    && pip install -r requirements.txt
 
 COPY ./dbt_project.yml /app/dbt_project.yml
 COPY ./packages.yml /app/packages.yml

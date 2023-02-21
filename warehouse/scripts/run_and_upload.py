@@ -160,8 +160,6 @@ def run(
             )
         return cmd
 
-    subprocess.run(get_command("compile")).check_returncode()
-
     results_to_check = []
 
     if dbt_seed:
@@ -188,7 +186,11 @@ def run(
             manifest = Manifest(**json.load(f))
         report_failures_to_sentry(run_results, manifest)
     else:
-        typer.echo("skipping run")
+        typer.secho("skipping run, only compiling", fg=typer.colors.YELLOW)
+        args = ["compile"]
+        if full_refresh:
+            args.append("--full-refresh")
+        subprocess.run(get_command(*args)).check_returncode()
 
     if dbt_test:
         args = ["test"]
