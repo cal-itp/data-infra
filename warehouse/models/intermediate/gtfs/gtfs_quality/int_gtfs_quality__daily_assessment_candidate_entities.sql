@@ -45,11 +45,11 @@ initial_assessed AS (
         gtfs_service_data_source_record_id,
         gtfs_dataset_source_record_id,
 
-        (full_join.organization_assessed
+        (organization_assessed
             AND service_assessed
             AND gtfs_service_data_assessed) AS assessed,
 
-        full_join.organization_assessed,
+        organization_assessed,
 
         organization_itp_id,
         organization_hubspot_company_record_id,
@@ -134,7 +134,9 @@ int_gtfs_quality__daily_assessment_candidate_entities AS (
                 AND has_guidelines_assessed_schedule_feed) THEN TRUE
             -- finally, confirm we have at least one schedule feed and that the overall entity is assessed
             -- and we suppress the MTC regional combined feed from being used in reporting
-            ELSE has_guidelines_assessed_schedule_feed AND assessed AND gtfs_dataset_source_record_id != 'rec9AyXUSMUHFnLsH'
+            ELSE COALESCE(has_guidelines_assessed_schedule_feed, FALSE)
+                AND assessed
+                AND gtfs_dataset_source_record_id != 'rec9AyXUSMUHFnLsH'
         END AS reports_site_assessed,
         organization_assessed,
         service_assessed,
