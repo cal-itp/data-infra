@@ -25,7 +25,7 @@ stops_by_day_by_route AS (
 
     SELECT
 
-        trips.service_date,
+        trips.activity_date,
         trips.feed_key,
         COALESCE(CAST(trips.route_type AS INT), 1000) AS route_type,
 
@@ -47,7 +47,7 @@ stops_by_day_by_route AS (
     LEFT JOIN fct_daily_scheduled_trips AS trips
         ON trips.feed_key = stop_times.feed_key
             AND trips.trip_id = stop_times.trip_id
-    GROUP BY service_date, feed_key, route_type, stop_id
+    GROUP BY activity_date, feed_key, route_type, stop_id
 
 ),
 
@@ -55,7 +55,7 @@ stops_by_day AS (
 
     SELECT
 
-        service_date,
+        activity_date,
         feed_key,
         stop_id,
 
@@ -72,7 +72,7 @@ stops_by_day AS (
         ) AS contains_warning_missing_foreign_key_stop_id
 
     FROM stops_by_day_by_route
-    GROUP BY service_date, feed_key, stop_id
+    GROUP BY activity_date, feed_key, stop_id
 ),
 
 pivot_to_route_type AS (
@@ -81,7 +81,7 @@ pivot_to_route_type AS (
     FROM
         (SELECT
 
-            service_date,
+            activity_date,
             feed_key,
             route_type,
             stop_id,
@@ -98,9 +98,9 @@ pivot_to_route_type AS (
 fct_daily_scheduled_stops AS (
     SELECT
 
-        {{ dbt_utils.surrogate_key(['pivoted.service_date', 'stops.key']) }} AS key,
+        {{ dbt_utils.surrogate_key(['pivoted.activity_date', 'stops.key']) }} AS key,
 
-        pivoted.service_date,
+        pivoted.activity_date,
         pivoted.feed_key,
         pivoted.stop_id,
 
@@ -140,7 +140,7 @@ fct_daily_scheduled_stops AS (
         AND pivoted.feed_key = stops.feed_key
     LEFT JOIN stops_by_day
         ON pivoted.stop_id = stops_by_day.stop_id
-        AND pivoted.service_date = stops_by_day.service_date
+        AND pivoted.activity_date = stops_by_day.activity_date
         AND pivoted.feed_key = stops_by_day.feed_key
 )
 

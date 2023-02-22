@@ -426,6 +426,19 @@ models:
           I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
           in the input data. This indicates that data quality issues were present in the stop times data
           that is being summarized here, and the count of distinct `stop_id`s at the trip level may be incorrect.
+      - name: activity_date
+        description: |
+          The GTFS standard allows for a trip's `trip_first_departure_sec` to be greater than one day (86,400 seconds).
+          In that case, the date of the activity is later than the `service_date`, so we capture that in this `activity_date` column.
+
+          Because of this, `activity_date` is used instead of `service_date` for analysis purposes.
+      - name: activity_first_departure
+        description: |
+          The time of day of the trip's first departure.
+      - name: activity_last_arrival
+        description: |
+          The time of day of the trip's last arrival.
+
   - name: fct_daily_rt_feed_files
     description: |
       Each row is a date / URL pair with a summary of data aggregation outcomes.
@@ -498,12 +511,12 @@ models:
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
-            - service_date
+            - activity_date
             - feed_key
       - dbt_utils.expression_is_true:
           expression: "ttl_service_hours >= 0"
     columns:
-      - name: service_date
+      - name: activity_date
         description: Date on which this service level was present
         tests:
           - not_null
@@ -882,7 +895,7 @@ models:
     columns:
       - name: key
         description: |
-          Synthetic primary key constructed from `service_date`, `shape_id`, and `shape_array_key`.
+          Synthetic primary key constructed from `activity_date`, `shape_id`, and `shape_array_key`.
         tests:
           - unique:
               where: "not contains_warning_duplicate_trip_primary_key"
@@ -890,7 +903,7 @@ models:
       - name: n_trips
         description: The number of trips associated with this shape on the given date.
       - *feed_key
-      - name: service_date
+      - name: activity_date
         description: Date on which this shape was active.
       - name: shape_id
         description: '{{ doc("gtfs_trips__shape_id") }}'
@@ -914,12 +927,12 @@ models:
     columns:
       - name: key
         description: |
-          Synthetic primary key constructed from `service_date` and `stop_key`.
+          Synthetic primary key constructed from `activity_date` and `stop_key`.
         tests:
           - unique:
               where: "not contains_warning_duplicate_trip_primary_key AND not contains_warning_duplicate_stop_times_primary_key AND not contains_warning_duplicate_stop_primary_key"
           - not_null
-      - name: service_date
+      - name: activity_date
         description: Date on which this stop was active.
       - *feed_key
       - name: stop_id
