@@ -30,9 +30,11 @@ models:
         name: check
         tests:
           - not_null
-          - relationships:
-              to: ref('stg_gtfs_quality__intended_checks')
-              field: check
+          # This is a useful test but dbt-metabase fails since
+          # Metabase does not sync the staging schema
+#          - relationships:
+#              to: ref('stg_gtfs_quality__intended_checks')
+#              field: check
         meta:
           metabase.semantic_type: type/Title
       - &status

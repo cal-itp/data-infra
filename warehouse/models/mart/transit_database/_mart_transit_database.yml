@@ -263,26 +263,6 @@ models:
         description: |
           If populated, indicates that dataset was deprecated on listed date
           and is no longer active.
-      - name: aggregated_to_gtfs_dataset_key
-        description: |
-          Key for another GTFS dataset record to which this record is aggregated.
-        # self relationship test breaks metabase connector: https://github.com/JarvusInnovations/dbt-metabase/blob/master/dbtmetabase/parsers/dbt_manifest.py#L202
-        # TODO: make an aliased version of the relationship test
-        # tests:
-        #   - relationships:
-        #      to: ref('dim_gtfs_datasets')
-        #      field: key
-      - name: schedule_to_use_for_rt_validation_gtfs_dataset_key
-        description: |
-          For realtime datasets, the key of the schedule dataset that should
-          be used for validation (i.e., the given realtime dataset should reference
-          identifiers from the schedule dataset listed here.)
-        # self relationship test breaks metabase connector: https://github.com/JarvusInnovations/dbt-metabase/blob/master/dbtmetabase/parsers/dbt_manifest.py#L202
-        # TODO: make an aliased version of the relationship test
-        # tests:
-        #   - relationships:
-        #      to: ref('dim_gtfs_datasets')
-        #      field: key
       - *valid_from_actual
       - *valid_to_actual
       - *is_current_actual
@@ -438,11 +418,12 @@ models:
             relationships:
               to: ref('dim_gtfs_datasets')
               field: key
-      - name: service_assessment_status
+      - name: guidelines_assessed
         description: |
-          If "Yes", this service should be considered "assessed" by Cal-ITP
-          for quality and reporting purposes.
-          If "No", this service is not "assessed".
+          If "Yes", this service should be considered "assessed" by Cal-ITP for guideline/quality purposes.
+      - name: reports_site_assessed
+        description: |
+          If "Yes", this service should be considered "assessed" by Cal-ITP for the reports site.
       - name: service_alerts_gtfs_dataset_key
         tests:
           - *ref_gtfs_datasets_key
@@ -459,11 +440,11 @@ models:
               field: key
       - name: service_name
       - name: organization_name
-      - name: schedule_name
-      - name: service_alerts_name
-      - name: vehicle_positions_name
-      - name: trip_updates_name
-      - name: customer_facing
+      - name: schedule_gtfs_dataset_name
+      - name: service_alerts_gtfs_dataset_name
+      - name: vehicle_positions_gtfs_dataset_name
+      - name: trip_updates_gtfs_dataset_name
+      - name: gtfs_service_data_customer_facing
         description: |
           If true, we believe this GTFS data is customer-facing, i.e., ingested
           by trip-planning applications for this service/organization.
@@ -487,16 +468,14 @@ models:
           * "Regional Precursor Feed" - This category applies to agencies whose data appears in a
             combined regional feed but who produce some other independent dataset.
             The independent dataset may be an input into the combined regional feed.
-      - name: agency_id
-      - name: network_id
-      - name: route_id
-      - name: ntd_id
+      - name: organization_ntd_id
         description: |
           Five digit NTD ID for this organization.
           Organization <--> NTD mappings are based on NTD 2018 data.
-      - name: hubspot_company_record_id
+      - name: organization_hubspot_company_record_id
         description: |
           Hubspot CRM record ID for this organization.
+
   - name: dim_ntd_agency_info
     description: '{{ doc("ntd_agency_info_table") }}'
     columns:
@@ -539,7 +518,6 @@ models:
       - name: total_voms
       - name: volunteer_drivers
       - name: personal_vehicles
-      - name: dt
   - name: bridge_components_x_properties_and_features
     description: |
       Mapping table between components and properties_and_features.
