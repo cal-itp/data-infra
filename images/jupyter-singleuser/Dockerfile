@@ -13,8 +13,8 @@ USER $NB_UID
 RUN npm install -g --unsafe-perm=true --allow-root netlify-cli
 
 # gcloud CLI https://cloud.google.com/sdk/docs/install#deb
-RUN curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-377.0.0-linux-x86_64.tar.gz \
-    && tar -zxvf google-cloud-sdk-377.0.0-linux-x86_64.tar.gz \
+RUN curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-417.0.1-linux-x86_64.tar.gz \
+    && tar -zxvf google-cloud-cli-417.0.1-linux-x86_64.tar.gz \
     && ./google-cloud-sdk/install.sh
 
 RUN curl -sSL https://install.python-poetry.org | python3 -

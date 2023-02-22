@@ -1,0 +1,24 @@
+FROM apache/airflow:2.3.4-python3.8
+
+# install gcloud as root, then switch back to airflow
+USER root
+
+RUN apt-get update \
+  && apt-get install -y git libmysqlclient-dev gcc libpq-dev \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN curl https://sdk.cloud.google.com > install.sh \
+    && sudo bash install.sh --disable-prompts --install-dir=/usr/local/
+
+ENV PATH=$PATH:/usr/local/google-cloud-sdk/bin
+RUN gcloud components install gke-gcloud-auth-plugin
+
+USER airflow
+
+COPY requirements-composer-1.20.5-airflow-2.3.4.txt /tmp/requirements-composer-1.20.5-airflow-2.3.4.txt
+RUN pip install --no-cache-dir --user -r /tmp/requirements-composer-1.20.5-airflow-2.3.4.txt
+
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir --user -r /tmp/requirements.txt
+
+RUN python3 -m pip check

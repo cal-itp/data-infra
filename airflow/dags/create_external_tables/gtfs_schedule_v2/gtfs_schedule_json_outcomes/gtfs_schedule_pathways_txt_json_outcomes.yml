@@ -7,6 +7,7 @@ source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 hive_options:
   mode: CUSTOM
+  require_partition_filter: false
   source_uri_prefix: "pathways.txt_parsing_results/{dt:DATE}/"
 schema_fields:
   - name: success

@@ -1,6 +1,7 @@
-from calitp.config import get_bucket
-from calitp.sql import get_table
-from calitp.storage import get_fs
+import pandas as pd
+from calitp_data.config import format_table_name, get_bucket, get_project_id
+from calitp_data.storage import get_fs
+from google.cloud import bigquery
 from utils import _keep_columns
 
 DATASET = "payments"
@@ -29,8 +30,13 @@ def preprocess_littlepay_provider_bucket(
     fs = get_fs()
 
     # Get high level data on tables we are pre-processing ----
-    tables = get_table("payments.calitp_included_payments_tables", as_df=True)
-    schemas = [get_table(f"{DATASET}.{t}").columns.keys() for t in tables.table_name]
+    formatted_table_name = format_table_name("payments.calitp_included_payments_tables")
+    tables = pd.read_gbq(f"select * from {formatted_table_name}")
+    client = bigquery.Client(get_project_id())
+    schemas = [
+        [column.name for column in client.get_table(f"{DATASET}.{t}").schema]
+        for t in tables.table_name
+    ]
 
     # We'll save date in YYYY-MM-DD format, but littlepay uses YYYYMMDD
     # so we keep the original format for globbing all of the data files for a

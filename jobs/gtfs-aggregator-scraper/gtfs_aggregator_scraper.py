@@ -13,7 +13,11 @@ import humanize
 import pendulum
 import requests
 import typer
-from calitp.storage import GTFSFeedType, PartitionedGCSArtifact, get_fs  # type: ignore
+from calitp_data_infra.storage import (  # type: ignore
+    GTFSFeedType,
+    PartitionedGCSArtifact,
+    get_fs,
+)
 from pydantic import BaseModel, ValidationError
 from requests import JSONDecodeError
 from tqdm import tqdm

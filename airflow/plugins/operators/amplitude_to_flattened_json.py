@@ -6,11 +6,11 @@ import zipfile
 from datetime import timedelta
 from io import BytesIO, StringIO
 
-import calitp
 import pandas as pd
 import requests
-from calitp.auth import get_secret_by_name
-from calitp.config import is_development
+from calitp_data.config import is_development
+from calitp_data_infra.auth import get_secret_by_name
+from calitp_data_infra.storage import save_to_gcfs
 from requests import HTTPError
 
 from airflow.exceptions import AirflowSkipException
@@ -141,6 +141,6 @@ class AmplitudeToFlattenedJSONOperator(BaseOperator):
         )
 
         # if a file already exists at `gcs_file_path`, GCS will overwrite the existing file
-        calitp.save_to_gcfs(
+        save_to_gcfs(
             events_jsonl.encode(), gcs_file_path, bucket=bucket_name, use_pipe=True
         )

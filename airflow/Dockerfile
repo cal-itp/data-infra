@@ -11,9 +11,9 @@ RUN curl https://sdk.cloud.google.com > install.sh \
     && sudo bash install.sh --disable-prompts --install-dir=/usr/local/
 
 ENV PATH=$PATH:/usr/local/google-cloud-sdk/bin
+RUN gcloud components install gke-gcloud-auth-plugin
 
 USER airflow
-
 
 COPY requirements.txt /tmp/requirements.txt
 
