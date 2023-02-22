@@ -64,8 +64,16 @@
 "Technical contact is listed in feed_contact_email field within the feed_info.txt file"
 {% endmacro %}
 
-{% macro no_rt_validation_errors() %}
-"No errors in the MobilityData GTFS Realtime Validator"
+{% macro no_rt_validation_errors_vp() %}
+"The Vehicle positions feed produces no errors in the MobilityData GTFS Realtime Validator"
+{% endmacro %}
+
+{% macro no_rt_validation_errors_tu() %}
+"The Trip updates feed produces no errors in the MobilityData GTFS Realtime Validator"
+{% endmacro %}
+
+{% macro no_rt_validation_errors_sa() %}
+"The Service_alerts feed produces no errors in the MobilityData GTFS Realtime Validator"
 {% endmacro %}
 
 {% macro trip_id_alignment() %}

@@ -35,7 +35,10 @@ int_gtfs_quality__no_rt_validation_errors AS (
         idx.date,
         idx.base64_url,
         idx.feed_type,
-        {{ no_rt_validation_errors() }} AS check,
+        CASE WHEN idx.feed_type = 'service_alerts' THEN {{ no_rt_validation_errors_sa() }}
+             WHEN idx.feed_type = 'trip_updates' THEN {{ no_rt_validation_errors_tu() }}
+             WHEN idx.feed_type = 'vehicle_positions' THEN {{ no_rt_validation_errors_vp() }}
+        END AS check,
         {{ compliance_rt() }} AS feature,
         rt_files,
         total_errors,

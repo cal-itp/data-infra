@@ -20,7 +20,11 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ no_expired_services() }}, {{ best_practices_alignment_schedule() }}, {{ schedule_feed() }}
     UNION ALL
-    SELECT {{ no_rt_validation_errors() }}, {{ compliance_rt() }}, {{ rt_feed() }}
+    SELECT {{ no_rt_validation_errors_vp() }}, {{ compliance_rt() }}, {{ rt_feed() }}
+    UNION ALL
+    SELECT {{ no_rt_validation_errors_tu() }}, {{ compliance_rt() }}, {{ rt_feed() }}
+    UNION ALL
+    SELECT {{ no_rt_validation_errors_sa() }}, {{ compliance_rt() }}, {{ rt_feed() }}
     UNION ALL
     SELECT {{ trip_id_alignment() }}, {{ fixed_route_completeness() }}, {{ rt_feed() }}
     UNION ALL
