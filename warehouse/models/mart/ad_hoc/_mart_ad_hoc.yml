@@ -41,4 +41,4 @@ models:
       - name: month
       - name: year
       - name: day_type
-      - name: n
+      - name: n_trips

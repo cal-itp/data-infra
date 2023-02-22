@@ -1,14 +1,6 @@
 {{ config(materialized='table') }}
 
-WITH dim_shapes_arrays AS (
-    SELECT * FROM {{ ref('dim_shapes_arrays') }}
-),
-
-dim_routes AS (
-    SELECT * FROM {{ ref('dim_routes') }}
-),
-
-dim_gtfs_datasets AS (
+WITH dim_gtfs_datasets AS (
     SELECT * FROM {{ ref('dim_gtfs_datasets') }}
 ),
 
@@ -80,7 +72,7 @@ daypart_aggregations AS (
         year,
         day_type,
 
-        COUNT(*) AS n
+        COUNT(*) AS n_trips
 
     FROM service_with_daypart
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
@@ -99,7 +91,7 @@ fct_scheduled_service_by_daypart AS (
         month,
         year,
         day_type,
-        n
+        n_trips
 
     FROM daypart_aggregations
 )
