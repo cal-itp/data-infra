@@ -25,6 +25,41 @@ existing_checks AS (
         check,
         feature
     FROM {{ ref('fct_daily_schedule_url_guideline_checks') }}
+
+    UNION ALL
+
+    SELECT DISTINCT
+        check,
+        feature
+    FROM {{ ref('fct_daily_rt_url_guideline_checks') }}
+
+    UNION ALL
+
+    SELECT DISTINCT
+        check,
+        feature
+    FROM {{ ref('fct_daily_organization_guideline_checks') }}
+
+    UNION ALL
+
+    SELECT DISTINCT
+        check,
+        feature
+    FROM {{ ref('fct_daily_gtfs_dataset_guideline_checks') }}
+
+    UNION ALL
+
+    SELECT DISTINCT
+        check,
+        feature
+    FROM {{ ref('fct_daily_service_guideline_checks') }}
+
+    UNION ALL
+
+    SELECT DISTINCT
+        check,
+        feature
+    FROM {{ ref('fct_daily_gtfs_service_data_guideline_checks') }}
 ),
 
 fct_implemented_checks AS (
