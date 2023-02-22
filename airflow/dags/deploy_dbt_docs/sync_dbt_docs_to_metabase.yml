@@ -33,11 +33,11 @@ secrets:
     secret: jobs-data
     key: service-account.json
   - deploy_type: env
-    deploy_target: METABASE_USER
+    deploy_target: MB_USER
     secret: jobs-data
     key: metabase-user
   - deploy_type: env
-    deploy_target: METABASE_PASSWORD
+    deploy_target: MB_PASSWORD
     secret: jobs-data
     key: metabase-password
 
