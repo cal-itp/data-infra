@@ -511,12 +511,12 @@ models:
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
-            - service_date
+            - activity_date
             - feed_key
       - dbt_utils.expression_is_true:
           expression: "ttl_service_hours >= 0"
     columns:
-      - name: service_date
+      - name: activity_date
         description: Date on which this service level was present
         tests:
           - not_null

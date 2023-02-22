@@ -19,7 +19,7 @@ summarize_service AS (
 
     SELECT
 
-        service_date,
+        activity_date,
         feed_key,
         gtfs_dataset_key,
         SUM(service_hours) AS ttl_service_hours,
@@ -39,15 +39,15 @@ summarize_service AS (
         ) AS contains_warning_missing_foreign_key_stop_id
 
     FROM fct_daily_scheduled_trips
-    WHERE service_date < CURRENT_DATE()
-    GROUP BY service_date, feed_key, gtfs_dataset_key
+    WHERE activity_date < CURRENT_DATE()
+    GROUP BY activity_date, feed_key, gtfs_dataset_key
 ),
 
 -- left join with feeds to include information about feeds with no service scheduled
 fct_daily_feed_scheduled_service_summary AS (
 
     SELECT
-        feeds.date AS service_date,
+        feeds.date AS activity_date,
         feeds.feed_key,
         feeds.gtfs_dataset_key,
         COALESCE(service.ttl_service_hours, 0) AS ttl_service_hours,
@@ -62,7 +62,7 @@ fct_daily_feed_scheduled_service_summary AS (
     FROM fct_daily_schedule_feeds AS feeds
     LEFT JOIN summarize_service AS service
         ON feeds.feed_key = service.feed_key
-        AND feeds.date = service.service_date
+        AND feeds.date = service.activity_date
 )
 
 SELECT * FROM fct_daily_feed_scheduled_service_summary
