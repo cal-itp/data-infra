@@ -67,12 +67,18 @@ ntd_bridge AS (
     ON CAST(date_spine.date AS TIMESTAMP) BETWEEN dim._valid_from AND dim._valid_to
 ),
 
-feeds AS (
+schedule_feeds AS (
     SELECT *
     FROM {{ ref('fct_daily_schedule_feeds') }}
     -- this table goes into the future
     WHERE date < CURRENT_DATE()
 ),
+
+rt_feeds AS (
+    SELECT *
+    FROM {{ ref('fct_daily_rt_feed_files') }}
+),
+
 
 int_gtfs_quality__naive_organization_service_dataset_full_join AS (
     SELECT
@@ -80,7 +86,8 @@ int_gtfs_quality__naive_organization_service_dataset_full_join AS (
             services.date,
             service_data.date,
             datasets.date,
-            feeds.date) AS date,
+            schedule_feeds.date,
+            rt_feeds.date) AS date,
         orgs.key AS organization_key,
         COALESCE(services.key,
             service_data.service_key)
@@ -114,8 +121,9 @@ int_gtfs_quality__naive_organization_service_dataset_full_join AS (
         datasets.backdated_regional_feed_type,
         datasets.source_record_id AS gtfs_dataset_source_record_id,
         validation_bridge.schedule_to_use_for_rt_validation_gtfs_dataset_key,
-        COALESCE(datasets.base64_url, feeds.base64_url) AS base64_url,
-        feeds.feed_key AS schedule_feed_key
+        COALESCE(datasets.base64_url, schedule_feeds.base64_url, rt_feeds.base64_url) AS base64_url,
+        schedule_feeds.feed_key AS schedule_feed_key,
+        rt_feeds.key IS NOT NULL AS had_rt_files
     FROM orgs
     FULL OUTER JOIN org_service_bridge
         ON orgs.date = org_service_bridge.date
@@ -132,9 +140,12 @@ int_gtfs_quality__naive_organization_service_dataset_full_join AS (
     LEFT JOIN validation_bridge
         ON datasets.date = validation_bridge.date
         AND datasets.key = validation_bridge.gtfs_dataset_key
-    FULL OUTER JOIN feeds
-        ON datasets.date = feeds.date
-        AND datasets.base64_url = feeds.base64_url
+    FULL OUTER JOIN schedule_feeds
+        ON datasets.date = schedule_feeds.date
+        AND datasets.base64_url = schedule_feeds.base64_url
+    FULL OUTER JOIN rt_feeds
+        ON datasets.date = rt_feeds.date
+        AND datasets.base64_url = rt_feeds.base64_url
     LEFT JOIN ntd_bridge
         ON orgs.key = ntd_bridge.organization_key
         AND orgs.date = ntd_bridge.date

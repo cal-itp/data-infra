@@ -66,6 +66,7 @@ initial_assessed AS (
         network_id,
 
         base64_url,
+        had_rt_files,
 
         organization_key,
         service_key,
@@ -153,6 +154,7 @@ int_gtfs_quality__daily_assessment_candidate_entities AS (
         route_id,
         network_id,
         base64_url,
+        had_rt_files,
         organization_key,
         service_key,
         gtfs_service_data_key,
