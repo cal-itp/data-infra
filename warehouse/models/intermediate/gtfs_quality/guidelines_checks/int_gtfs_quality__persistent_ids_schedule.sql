@@ -14,10 +14,12 @@ dim_agency AS (
     SELECT  * FROM {{ ref('dim_agency') }}
 ),
 
-feed_version_history AS ( --noqa
+-- SQLFluff thinks this CTE isn't used, but it is required for the ids_version_compare_aggregate macro
+feed_version_history AS ( -- noqa: disable=L045
     SELECT * FROM {{ ref('int_gtfs_quality__feed_version_history') }}
 ),
 
+-- noqa: enable=L045
 stop_id_comparison AS (
     SELECT * FROM {{ ids_version_compare_aggregate("stop_id", "dim_stops") }}
 ),
