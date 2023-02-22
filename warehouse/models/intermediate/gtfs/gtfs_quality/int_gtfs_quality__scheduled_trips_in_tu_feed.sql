@@ -57,9 +57,9 @@ int_gtfs_quality__scheduled_trips_in_tu_feed AS (
         observed_trips,
         CASE
             WHEN
-                NOT(has_tu_feed)
-                OR scheduled_trips = 0 OR
-                scheduled_trips IS null
+                NOT(has_tu_feed) OR
+                scheduled_trips = 0
+                OR scheduled_trips IS null
                 THEN "N/A"
             WHEN scheduled_trips = observed_trips THEN "PASS"
             ELSE "FAIL"
