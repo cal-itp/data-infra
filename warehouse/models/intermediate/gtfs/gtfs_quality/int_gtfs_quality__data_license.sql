@@ -25,7 +25,7 @@ int_gtfs_quality__data_license AS (
         CASE manual_check__data_license
             WHEN 'Yes' THEN {{ guidelines_pass_status() }}
             WHEN 'No' THEN {{ guidelines_fail_status() }}
-            ELSE {{ manual_check_needed_status() }}
+            ELSE {{ guidelines_manual_check_needed_status() }}
         END AS status
     FROM idx
     LEFT JOIN gtfs_datasets

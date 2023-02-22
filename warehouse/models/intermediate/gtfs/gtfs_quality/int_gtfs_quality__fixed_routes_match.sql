@@ -17,7 +17,7 @@ int_gtfs_quality__fixed_routes_match AS (
         CASE manual_check__fixed_route_completeness
             WHEN 'Yes' THEN {{ guidelines_pass_status() }}
             WHEN 'No' THEN {{ guidelines_fail_status() }}
-            ELSE {{ manual_check_needed_status() }}
+            ELSE {{ guidelines_manual_check_needed_status() }}
         END AS status,
     FROM idx
     LEFT JOIN gtfs_service_data
