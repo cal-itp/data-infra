@@ -79,7 +79,6 @@ rt_feeds AS (
     FROM {{ ref('fct_daily_rt_feed_files') }}
 ),
 
-
 int_gtfs_quality__naive_organization_service_dataset_full_join AS (
     SELECT
         COALESCE(orgs.date,
