@@ -6,8 +6,8 @@ from typing import ClassVar, Dict, List, Optional
 import pandas as pd
 import pendulum
 import requests
-from calitp.auth import get_secret_by_name
-from calitp.storage import PartitionedGCSArtifact, get_fs, make_name_bq_safe
+from calitp_data_infra.auth import get_secret_by_name
+from calitp_data_infra.storage import PartitionedGCSArtifact, get_fs, make_name_bq_safe
 
 from airflow.models import BaseOperator
 
@@ -124,7 +124,7 @@ def fetch_and_clean_from_sentry(extract, target_date, auth_token):
 
     print(f"Downloading Sentry event data for project {extract.project_slug}")
     all_rows = iterate_over_sentry_records(extract, target_date, auth_token)
-    extract.extract_ts = pendulum.now()
+    extract.execution_ts = pendulum.now()
     extract.data = all_rows
 
     return extract
@@ -133,12 +133,12 @@ def fetch_and_clean_from_sentry(extract, target_date, auth_token):
 class SentryExtract(PartitionedGCSArtifact):
     bucket: ClassVar[str] = CALITP_BUCKET__SENTRY_EVENTS
     table: ClassVar[str] = "events"
-    dt: pendulum.Date
-    ts: pendulum.DateTime
-    partition_names: ClassVar[List[str]] = ["dt", "ts"]
+    execution_dt: pendulum.Date
+    execution_ts: pendulum.DateTime
+    partition_names: ClassVar[List[str]] = ["execution_dt", "project_slug"]
     project_slug: str
     data: Optional[List[Dict]]
-    extract_ts: Optional[pendulum.DateTime]
+    execution_ts: Optional[pendulum.DateTime]
 
     def save_to_gcs(self, fs):
         raw_df = pd.DataFrame([{**make_arrays_bq_safe(row)} for row in self.data])
@@ -161,7 +161,6 @@ class SentryToGCSOperator(BaseOperator):
         bucket,
         project_slug,
         auth_token=None,
-        target_date=None,
         **kwargs,
     ):
         """
@@ -179,22 +178,22 @@ class SentryToGCSOperator(BaseOperator):
         self.bucket = bucket
         self.project_slug = project_slug
         self.auth_token = auth_token
-        self.target_date = target_date
 
         super().__init__(**kwargs)
 
-    def execute(self, **kwargs):
-        ts = pendulum.now()
-        dt = ts.date()
+    def execute(self, context, **kwargs):
+        execution_ts = pendulum.from_format(context.get("ts"), "YYYY-MM-DDTHH:mm:ssZ")
+        execution_dt = execution_ts.date()
         extract = SentryExtract(
             project_slug=self.project_slug,
-            dt=dt,
-            ts=ts,
-            filename=f"{self.project_slug}.jsonl.gz",
+            execution_dt=execution_dt,
+            execution_ts=execution_ts,
+            filename=f"{execution_ts}.jsonl.gz",
         )
-        target_date = self.target_date or ts.subtract(days=1).to_date_string()
+        # after Airflow upgrade: target_date = context.get("data_interval_start").subtract(days=1).to_date_string()
+        target_date_string = execution_ts.to_date_string()
         auth_token = self.auth_token or get_secret_by_name("CALITP_SENTRY_AUTH_TOKEN")
-        extract = fetch_and_clean_from_sentry(extract, target_date, auth_token)
+        extract = fetch_and_clean_from_sentry(extract, target_date_string, auth_token)
         fs = get_fs()
         # inserts into xcoms
         return extract.save_to_gcs(fs=fs)
