@@ -36,7 +36,7 @@ joined AS (
     AND quartet.trip_updates_gtfs_dataset_key IS NOT null
 
     LEFT JOIN fct_daily_scheduled_trips AS scheduled_trips
-      ON idx.date = scheduled_trips.activity_date
+      ON idx.date = scheduled_trips.service_date
      AND quartet.associated_schedule_gtfs_dataset_key = scheduled_trips.gtfs_dataset_key
 
     LEFT JOIN fct_observed_trips AS observed_trips
