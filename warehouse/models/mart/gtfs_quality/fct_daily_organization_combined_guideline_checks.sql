@@ -15,12 +15,7 @@ fct_daily_organization_combined_guideline_checks AS (
         organization_name,
         feature,
         check,
-        CASE
-            WHEN LOGICAL_OR(NULLIF(status, "N/A") = "FAIL") THEN "FAIL"
-            WHEN LOGICAL_AND(NULLIF(status, "N/A") = "PASS") THEN "PASS"
-            WHEN LOGICAL_AND(NULLIF(status, "N/A") = {{ manual_check_needed_status() }}) THEN {{ manual_check_needed_status() }}
-            WHEN LOGICAL_AND(status = "N/A") THEN "N/A"
-        END as status,
+        {{ guidelines_aggregation_logic() }} as status,
         organization_key,
         ARRAY_AGG(DISTINCT service_name IGNORE NULLS ORDER BY service_name) AS service_names_included_array,
         ARRAY_AGG(DISTINCT gtfs_dataset_name IGNORE NULLS ORDER BY gtfs_dataset_name) AS gtfs_dataset_names_included_array,
