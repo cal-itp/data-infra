@@ -263,12 +263,15 @@ def run(
 
             results_to_check.append(subprocess.run(args))
 
-    if sync_metabase:
+    # There's a flag called --metabase_sync_skip but it doesn't seem to work as I assumed
+    # so we only want to sync in production
+    if sync_metabase and target and target.startswith("prod"):
         results_to_check.append(
             subprocess.run(
                 [
                     "dbt-metabase",
                     "models",
+                    "--metabase_exclude_sources",
                     "--dbt_manifest_path",
                     "./target/manifest.json",
                     "--metabase_database",
@@ -283,6 +286,7 @@ def run(
                 [
                     "dbt-metabase",
                     "models",
+                    "--metabase_exclude_sources",
                     "--dbt_manifest_path",
                     "./target/manifest.json",
                     "--metabase_database",
