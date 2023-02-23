@@ -15,8 +15,6 @@
 
 WITH source AS (
     SELECT * FROM {{ source('sentry_external_tables', 'events') }}
-    WHERE project_slug IS NOT NULL
-    AND execution_dt IS NOT NULL
 ),
 
 stg_rt__feed_fetch_errors AS (
