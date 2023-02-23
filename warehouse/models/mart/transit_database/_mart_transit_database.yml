@@ -341,6 +341,26 @@ models:
     description: '{{ doc("service_components_table") }}'
     columns:
       - *key
+      - name: component_key
+        tests:
+          - relationships:
+             to: ref('dim_components')
+             field: key
+      - name: product_key
+        tests:
+          - relationships:
+             to: ref('dim_products')
+             field: key
+      - name: service_key
+        tests:
+          - relationships:
+             to: ref('dim_services')
+             field: key
+      - name: product_vendor_organization_key
+        tests:
+          - relationships:
+             to: ref('dim_organizations')
+             field: key
   - name: dim_modes
     description: Fully-historical modes table.
     columns:
