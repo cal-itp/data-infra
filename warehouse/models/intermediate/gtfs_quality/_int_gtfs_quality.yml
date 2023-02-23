@@ -2,6 +2,77 @@ version: 2
 
 models:
 
+  # "Final" combined guideline checks table
+  - name: int_gtfs_quality__guideline_checks_long
+    description: '{{ doc("int_gtfs_quality__guideline_checks_long") }}'
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "num_check_sources IS NULL OR num_check_sources <= 1"
+      - dbt_utils.expression_is_true:
+          expression: "matches_entity IS NULL OR matches_entity"
+    columns:
+    #TODO: use these anchors below
+      - &key
+        name: key
+        tests: &primary_key_tests
+          - unique
+          - not_null
+        meta: &pk_meta
+          metabase.semantic_type: type/PK
+      - &date
+        name: date
+        tests:
+          - not_null
+      - name: organization_name
+        description: |
+          Organization name as of date.
+        meta:
+          metabase.semantic_type: type/Title
+      - name: service_name
+        description: |
+          Service name as of date.
+        meta:
+          metabase.semantic_type: type/Title
+      - name: gtfs_dataset_name
+        description: |
+          GTFS dataset name as of date.
+      - name: gtfs_dataset_type
+        description: |
+          GTFS dataset type as of date.
+      - name: base64_url
+        description: |
+          GTFS dataset base 64 URL as of date.
+      - name: organization_key
+        description: |
+          Foreign key to `dim_organizations`.
+      - name: service_key
+        description: |
+          Foreign key to `dim_services`.
+      - name: gtfs_service_data_key
+        description: |
+          Foreign key to `dim_gtfs_service_data`.
+      - name: gtfs_dataset_key
+        description: |
+          Foreign key to `dim_gtfs_datasets`.
+      - name: schedule_feed_key
+        description: |
+          Foreign key to `dim_schedule_feeds`.
+      - &check
+        name: check
+        tests:
+          - not_null
+          # This is a useful test but dbt-metabase fails since
+          # Metabase does not sync the staging schema
+#          - relationships:
+#              to: ref('stg_gtfs_quality__intended_checks')
+#              field: check
+      - name: status
+      - name: feature
+      - name: matches_entity
+        description: Used for testing purposes only.
+      - name: num_check_sources
+        description: Used for testing purposes only.
+
   # Index tables
 
   - name: int_gtfs_quality__schedule_feed_guideline_index
@@ -105,14 +176,6 @@ models:
             - date
 
 # Other useful tables
-
-  - name: int_gtfs_quality__guideline_checks_long
-    description: '{{ doc("int_gtfs_quality__guideline_checks_long") }}'
-    tests:
-      - dbt_utils.expression_is_true:
-          expression: "num_check_sources IS NULL OR num_check_sources <= 1"
-      - dbt_utils.expression_is_true:
-          expression: "matches_entity IS NULL OR matches_entity"
 
   - name: int_gtfs_quality__rt_validation_outcomes
     description: |
