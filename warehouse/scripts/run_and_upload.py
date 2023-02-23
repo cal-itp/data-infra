@@ -264,7 +264,9 @@ def run(
             results_to_check.append(subprocess.run(args))
 
     # There's a flag called --metabase_sync_skip but it doesn't seem to work as I assumed
-    # so we only want to sync in production
+    # so we only want to sync in production. This makes it hard to test, but we don't really
+    # use the pre-prod Metabase right now; we could theoretically test with that if it
+    # synced schemas created by the staging dbt target.
     if sync_metabase and target and target.startswith("prod"):
         results_to_check.append(
             subprocess.run(
