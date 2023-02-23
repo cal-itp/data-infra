@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "jupyter-singleuser"
-version = "2023.2.10"
+version = "2023.2.21"
 description = ""
 authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
 
@@ -34,14 +34,16 @@ dask-labextension = "5.3.0"
 matplotlib = "<=3.5"
 dask-geopandas = "0.2.0"
 dask-bigquery = "^2022.5.0"
-pandas-profiling = "^3.4.0"
 dask = "~2022.8"
 distributed = "~2022.8"
 pyodbc = "^4.0.34"
 sqlalchemy-bigquery = "^1.4.4"
 siuba = "^0.4.0"
-calitp = "2023.1.17"
 graphviz = "^0.20.1"
+calitp-data-analysis = "2023.2.15"
+ydata-profiling = {extras = ["notebook"], version = "^4.0.0"}
+# https://github.com/statsmodels/statsmodels/issues/8543
+statsmodels = "<0.13.3 || >0.13.3,<0.13.4 || >0.13.4,<0.13.5 || >0.13.5"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.2.0"
