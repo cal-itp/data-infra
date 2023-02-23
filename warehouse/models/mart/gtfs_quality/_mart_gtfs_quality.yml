@@ -30,9 +30,11 @@ models:
         name: check
         tests:
           - not_null
-          - relationships:
-              to: ref('stg_gtfs_quality__intended_checks')
-              field: check
+          # This is a useful test but dbt-metabase fails since
+          # Metabase does not sync the staging schema
+#          - relationships:
+#              to: ref('stg_gtfs_quality__intended_checks')
+#              field: check
         meta:
           metabase.semantic_type: type/Title
       - &status
@@ -179,57 +181,6 @@ models:
           expression: "is_implemented"
     columns:
       - name: is_implemented
-  - name: fct_daily_guideline_checks
-    description: '{{ doc("fct_daily_guideline_checks") }}'
-    tests:
-      - dbt_utils.expression_is_true:
-          expression: "num_check_sources IS NULL OR num_check_sources <= 1"
-      - dbt_utils.expression_is_true:
-          expression: "matches_entity IS NULL OR matches_entity"
-    columns:
-      - *key
-      - *date
-      - name: organization_name
-        description: |
-          Organization name as of date.
-        meta:
-          metabase.semantic_type: type/Title
-      - name: service_name
-        description: |
-          Service name as of date.
-        meta:
-          metabase.semantic_type: type/Title
-      - name: gtfs_dataset_name
-        description: |
-          GTFS dataset name as of date.
-      - name: gtfs_dataset_type
-        description: |
-          GTFS dataset type as of date.
-      - name: base64_url
-        description: |
-          GTFS dataset base 64 URL as of date.
-      - name: organization_key
-        description: |
-          Foreign key to `dim_organizations`.
-      - name: service_key
-        description: |
-          Foreign key to `dim_services`.
-      - name: gtfs_service_data_key
-        description: |
-          Foreign key to `dim_gtfs_service_data`.
-      - name: gtfs_dataset_key
-        description: |
-          Foreign key to `dim_gtfs_datasets`.
-      - name: schedule_feed_key
-        description: |
-          Foreign key to `dim_schedule_feeds`.
-      - *check
-      - name: status
-      - name: feature
-      - name: matches_entity
-        description: Used for testing purposes only.
-      - name: num_check_sources
-        description: Used for testing purposes only.
 
   - name: fct_daily_organization_combined_guideline_checks
     description: |
@@ -411,7 +362,7 @@ models:
       manages the service represented in the dataset/feed.
     columns:
       - *key
-      - name: service_date
+      - name: activity_date
         description: |
           Date on which this organization had some scheduled service.
       - name: service_day_type

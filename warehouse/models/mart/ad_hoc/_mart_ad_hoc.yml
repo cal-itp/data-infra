@@ -26,3 +26,19 @@ models:
               where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
           - not_null:
               where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+
+  - name: fct_scheduled_service_by_daypart
+    description: |
+      An aggregation of GTFS schedule service by day and time characteristics.
+    columns:
+      - name: name
+      - name: source_record_id
+      - name: route_id
+      - name: route_short_name
+      - name: shape_id
+      - name: time_of_day
+      - name: hour
+      - name: month
+      - name: year
+      - name: day_type
+      - name: n_trips

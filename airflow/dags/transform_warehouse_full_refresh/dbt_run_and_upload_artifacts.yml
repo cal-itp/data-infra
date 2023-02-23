@@ -28,7 +28,9 @@ env_vars:
   BIGQUERY_KEYFILE_LOCATION: /secrets/jobs-data/service_account.json
   DBT_PROJECT_DIR: /app
   DBT_PROFILE_DIR: /app
+  DBT_DATABASE: "{{ get_project_id() }}"
   DBT_TARGET: "{{ env_var('DBT_TARGET') }}"
+  MB_HOST: dashboards.calitp.org
   NETLIFY_SITE_ID: cal-itp-dbt-docs
   SENTRY_DSN: "{{ env_var('SENTRY_DSN') }}"
   SENTRY_ENVIRONMENT: "{{ env_var('SENTRY_ENVIRONMENT') }}"
@@ -39,11 +41,11 @@ secrets:
     secret: jobs-data
     key: service-account.json
   - deploy_type: env
-    deploy_target: METABASE_USER
+    deploy_target: MB_USER
     secret: jobs-data
     key: metabase-user
   - deploy_type: env
-    deploy_target: METABASE_PASSWORD
+    deploy_target: MB_PASSWORD
     secret: jobs-data
     key: metabase-password
   - deploy_type: env

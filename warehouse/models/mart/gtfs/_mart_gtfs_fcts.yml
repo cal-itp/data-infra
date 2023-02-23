@@ -146,8 +146,8 @@ models:
       - name: hour
       - name: base64_url
       - name: _extract_ts
-      - name: _config_extracted_at
-      - name: _name
+      - name: _config_extract_ts
+      - name: _gtfs_dataset_name
       - name: header_timestamp
       - name: header_incrementality
       - name: header_version
@@ -215,7 +215,7 @@ models:
       - name: _extract_ts
         description: |
           Time at which this message was scraped.
-      - name: _name
+      - name: _gtfs_dataset_name
         description: |
           String name of the GTFS dataset of which this message is a part.
           This field is provided for human readability and should not be used as a join key.
@@ -426,6 +426,19 @@ models:
           I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
           in the input data. This indicates that data quality issues were present in the stop times data
           that is being summarized here, and the count of distinct `stop_id`s at the trip level may be incorrect.
+      - name: activity_date
+        description: |
+          The GTFS standard allows for a trip's `trip_first_departure_sec` to be greater than one day (86,400 seconds).
+          In that case, the date of the activity is later than the `service_date`, so we capture that in this `activity_date` column.
+
+          Because of this, `activity_date` is used instead of `service_date` for analysis purposes.
+      - name: activity_first_departure
+        description: |
+          The time of day of the trip's first departure.
+      - name: activity_last_arrival
+        description: |
+          The time of day of the trip's last arrival.
+
   - name: fct_daily_rt_feed_files
     description: |
       Each row is a date / URL pair with a summary of data aggregation outcomes.
@@ -498,12 +511,12 @@ models:
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
-            - service_date
+            - activity_date
             - feed_key
       - dbt_utils.expression_is_true:
           expression: "ttl_service_hours >= 0"
     columns:
-      - name: service_date
+      - name: activity_date
         description: Date on which this service level was present
         tests:
           - not_null
@@ -673,7 +686,7 @@ models:
       - name: _extract_ts
         description: |
           Time at which this message was scraped.
-      - name: _name
+      - name: _gtfs_dataset_name
         description: |
           String name of the GTFS dataset of which this message is a part.
           This field is provided for human readability and should not be used as a join key.
@@ -882,7 +895,7 @@ models:
     columns:
       - name: key
         description: |
-          Synthetic primary key constructed from `service_date`, `shape_id`, and `shape_array_key`.
+          Synthetic primary key constructed from `activity_date`, `shape_id`, and `shape_array_key`.
         tests:
           - unique:
               where: "not contains_warning_duplicate_trip_primary_key"
@@ -890,7 +903,7 @@ models:
       - name: n_trips
         description: The number of trips associated with this shape on the given date.
       - *feed_key
-      - name: service_date
+      - name: activity_date
         description: Date on which this shape was active.
       - name: shape_id
         description: '{{ doc("gtfs_trips__shape_id") }}'
@@ -914,46 +927,46 @@ models:
     columns:
       - name: key
         description: |
-          Synthetic primary key constructed from `service_date` and `stop_key`.
+          Synthetic primary key constructed from `activity_date` and `stop_key`.
         tests:
           - unique:
               where: "not contains_warning_duplicate_trip_primary_key AND not contains_warning_duplicate_stop_times_primary_key AND not contains_warning_duplicate_stop_primary_key"
           - not_null
-      - name: service_date
+      - name: activity_date
         description: Date on which this stop was active.
       - *feed_key
       - name: stop_id
         description: '{{ doc("gtfs_stops__stop_id") }}'
       - name: stop_event_count
         description: The number of stop events associated with this stop on the given date.
-      - name: route_type_0_count
+      - name: route_type_0
         description: |
           The count of stop events associated with route_type 0 - Tram, Streetcar, Light rail
-      - name: route_type_1_count
+      - name: route_type_1
         description: |
           The count of stop events associated with route_type 1 - Subway, Metro
-      - name: route_type_2_count
+      - name: route_type_2
         description: |
           The count of stop events associated with route_type 2 - Rail
-      - name: route_type_3_count
+      - name: route_type_3
         description: |
           The count of stop events associated with route_type 3 - Bus
-      - name: route_type_4_count
+      - name: route_type_4
         description: |
           The count of stop events associated with route_type 4 - Ferry
-      - name: route_type_5_count
+      - name: route_type_5
         description: |
           The count of stop events associated with route_type 5 - Cable Tram
-      - name: route_type_6_count
+      - name: route_type_6
         description: |
           The count of stop events associated with route_type 6 - Aerial lift, suspended cable car (e.g., gondola lift, aerial tramway)
-      - name: route_type_7_count
+      - name: route_type_7
         description: |
           The count of stop events associated with route_type 7 - Cable Tram
-      - name: route_type_11_count
+      - name: route_type_11
         description: |
           The count of stop events associated with route_type 11 - Trolleybus
-      - name: route_type_12_count
+      - name: route_type_12
         description: |
           The count of stop events associated with route_type 12 - Monorail
       - name: missing_route_type
@@ -985,7 +998,11 @@ models:
           i.e., `stop_id` is duplicated within an individual feed instance.
           Treat these rows with caution.
       - name: stop_key
-          Foreign key to the `dim_stops` table.
+        description: Foreign key to the `dim_stops` table.
+        tests:
+          - relationships:
+              to: ref('dim_stops')
+              field: key
       - name: tts_stop_name
         description: '{{ doc("gtfs_stops__tts_stop_name") }}'
       - name: pt_geom

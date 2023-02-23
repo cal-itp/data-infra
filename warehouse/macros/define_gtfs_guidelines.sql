@@ -64,8 +64,16 @@
 "Technical contact is listed in feed_contact_email field within the feed_info.txt file"
 {% endmacro %}
 
-{% macro no_rt_validation_errors() %}
-"No errors in the MobilityData GTFS Realtime Validator"
+{% macro no_rt_validation_errors_vp() %}
+"The Vehicle positions feed produces no errors in the MobilityData GTFS Realtime Validator"
+{% endmacro %}
+
+{% macro no_rt_validation_errors_tu() %}
+"The Trip updates feed produces no errors in the MobilityData GTFS Realtime Validator"
+{% endmacro %}
+
+{% macro no_rt_validation_errors_sa() %}
+"The Service_alerts feed produces no errors in the MobilityData GTFS Realtime Validator"
 {% endmacro %}
 
 {% macro trip_id_alignment() %}
@@ -473,8 +481,41 @@ feature
 
 
 --
--- OTHER TEXT
+-- CHECK STATUSES
 --
-{% macro manual_check_needed_status() %}
+{% macro guidelines_manual_check_needed_status() %}
 "MANUAL CHECK NEEDED"
+{% endmacro %}
+
+{% macro guidelines_na_check_status() %}
+"N/A - CHECK-SPECIFIC LOGIC"
+{% endmacro %}
+
+{% macro guidelines_na_entity_status() %}
+"N/A - NO APPLICABLE ENTITY"
+{% endmacro %}
+
+{% macro guidelines_pass_status() %}
+"PASS"
+{% endmacro %}
+
+{% macro guidelines_fail_status() %}
+"FAIL"
+{% endmacro %}
+
+{% macro guidelines_aggregation_logic() %}
+CASE
+    -- order of evaluation matters here!
+    -- fail trumps everything
+    WHEN LOGICAL_OR(status = {{ guidelines_fail_status() }}) THEN {{ guidelines_fail_status() }}
+    -- if at least one check passes and the rest are manual check needed; NA; or null, then let it pass
+    WHEN LOGICAL_OR(status = {{ guidelines_pass_status() }}) THEN {{ guidelines_pass_status() }}
+    -- if at least one check is manual check needed and the rest are NA or null, then manual check needed
+    WHEN LOGICAL_OR(status = {{ guidelines_manual_check_needed_status() }}) THEN {{ guidelines_manual_check_needed_status() }}
+    -- if at least one check is NA because of specific check logic and the rest are NA-no entity or null, then use NA-specific check
+    WHEN LOGICAL_OR(status = {{ guidelines_na_check_status() }}) THEN {{ guidelines_na_check_status() }}
+    -- if all remaining checks are NA because no entity and the rest are null, then use NA no entity
+    -- note that this one is AND because we want to confirm that this is all that's left at this point
+    WHEN LOGICAL_AND(status = {{ guidelines_na_entity_status() }}) THEN {{ guidelines_na_entity_status() }}
+END
 {% endmacro %}

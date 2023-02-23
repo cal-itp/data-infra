@@ -10,7 +10,9 @@ Here is a list of currently-implemented checks:
 
 | Check | Feature | Description |
 | ------------------------------------ |---------|------------ |
-|No  errors in the MobilityData GTFS Realtime Validator | Compliance (RT) | The feed has at least one GTFS-RT file present on the given day, and GTFS Realtime Validator produced no errors for any RT feed extract on that day.|
+|Vehicle positions feed produces no errors in the MobilityData GTFS Realtime Validator | Compliance (RT) | The Vehicle positions feed has at least one GTFS-RT file present on the given day, and GTFS Realtime Validator produced no errors for that feed on that day.|
+|Trip updates feed produces no errors in the MobilityData GTFS Realtime Validator | Compliance (RT) | The Trip updates feed has at least one GTFS-RT file present on the given day, and GTFS Realtime Validator produced no errors for that feed on that day.|
+|Service alerts feed produces no errors in the MobilityData GTFS Realtime Validator | Compliance (RT) | The Service alerts feed has at least one GTFS-RT file present on the given day, and GTFS Realtime Validator produced no errors for that feed on that day.|
 |All trip_ids provided in the GTFS-rt feed exist in the GTFS Schedule feed| Fixed-Route Completeness | Error code E003 does not appear in the MobilityData GTFS Realtime Validator on that day.|
 | Vehicle positions RT feed contains updates at least once every 20 seconds | Accurate Service Data | Vehicle positions feed never contains a lag between updates of more than 20 seconds |
 | Trip updates RT feed contains updates at least once every 20 seconds | Accurate Service Data | Trip updates feed never contains a lag between updates of more than 20 seconds |

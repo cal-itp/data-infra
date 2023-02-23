@@ -5,7 +5,7 @@ models:
     columns:
       - name: participant_id
         description: Littlepay-assigned Participant ID
-      - name: yearmonth
+      - name: month_start
         description: The month and year of the ridership count calculation
       - name: ridership_count
         description: A participant's total ridership in a particular month
@@ -15,7 +15,7 @@ models:
     columns:
       - name: participant_id
         description: Littlepay-assigned Participant ID
-      - name: yearweek
+      - name: week_start
         description: The week and year of the ridership count calculation
       - name: ridership_count
         description: A participant's total ridership in a particular week

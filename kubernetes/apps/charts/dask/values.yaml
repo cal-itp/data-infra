@@ -3,7 +3,7 @@ dask:
   scheduler:
     image:
       repository: "ghcr.io/cal-itp/data-infra/dask"
-      tag: "2023.1.17"
+      tag: "2023.2.21"
     metrics:
       enabled: true
     serviceAnnotations:
@@ -12,7 +12,7 @@ dask:
   worker:
     image:
       repository: "ghcr.io/cal-itp/data-infra/dask"
-      tag: "2023.1.17"
+      tag: "2023.2.21"
     metrics:
       enabled: true
     annotations:
