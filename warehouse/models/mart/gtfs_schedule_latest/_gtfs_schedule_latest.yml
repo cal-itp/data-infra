@@ -59,21 +59,7 @@ models:
         description: '{{ doc("gtfs_agency__agency_fare_url") }}'
       - name: agency_email
         description: '{{ doc("gtfs_agency__agency_email") }}'
-      - &_valid_from
-        name: _valid_from
-        description: '{{ doc("column_valid_from") }}'
-        meta:
-          publish.ignore: true
-      - &_valid_to
-        name: _valid_to
-        description: '{{ doc("column_valid_to") }}'
-        meta:
-          publish.ignore: true
-      - &_is_current
-        name: _is_current
-        description: '{{ doc("column_is_current") }}'
-        meta:
-          publish.ignore: true
+
 
   - name: dim_attributions_latest
     description: |
@@ -115,9 +101,7 @@ models:
         description: '{{ doc("gtfs_attributions__attribution_email") }}'
       - name: attribution_phone
         description: '{{ doc("gtfs_attributions__attribution_phone") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+
 
   - name: dim_calendar_latest
     description: |
@@ -167,9 +151,7 @@ models:
       - name: end_date
         description: '{{ doc("gtfs_calendar__end_date") }}'
         tests: *not_null_warn
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+
 
   - name: dim_calendar_dates_latest
     description: |
@@ -197,9 +179,7 @@ models:
       - name: exception_type
         description: '{{ doc("gtfs_calendar_dates__exception_type") }}'
         tests: *not_null_warn
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+
 
   - name: dim_fare_attributes_latest
     description: |
@@ -237,9 +217,7 @@ models:
         description: '{{ doc("gtfs_fare_attributes__agency_id") }}'
       - name: transfer_duration
         description: '{{ doc("gtfs_fare_attributes__transfer_duration") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+
 
   - name: dim_fare_rules_latest
     description: |
@@ -269,9 +247,7 @@ models:
         description: '{{ doc("gtfs_fare_rules__destination_id") }}'
       - name: contains_id
         description: '{{ doc("gtfs_fare_rules__contains_id") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+
 
   - name: dim_feed_info_latest
     description: |
@@ -311,9 +287,7 @@ models:
         description: '{{ doc("gtfs_feed_info__feed_contact_email") }}'
       - name: feed_contact_url
         description: '{{ doc("gtfs_feed_info__feed_contact_url") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+
 
   - name: dim_frequencies_latest
     description: |
@@ -346,9 +320,7 @@ models:
         tests: *not_null_warn
       - name: exact_times
         description: '{{ doc("gtfs_frequencies__exact_times") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+
 
   - name: dim_levels_latest
     description: |
@@ -375,9 +347,7 @@ models:
         tests: *not_null_warn
       - name: level_name
         description: '{{ doc("gtfs_levels__level_name") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+
 
   - name: dim_pathways_latest
     description: |
@@ -425,9 +395,7 @@ models:
         description: '{{ doc("gtfs_pathways__signposted_as") }}'
       - name: reversed_signposted_as
         description: '{{ doc("gtfs_pathways__reversed_signposted_as") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+
 
   - name: dim_routes_latest
     description: |
@@ -474,9 +442,7 @@ models:
         description: '{{ doc("gtfs_routes__continuous_drop_off") }}'
       - name: network_id
         description: '{{ doc("gtfs_routes__network_id") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+
 
   - name: dim_shapes_latest
     description: |
@@ -519,9 +485,7 @@ models:
         tests: *not_null_warn
       - name: shape_dist_traveled
         description: '{{ doc("gtfs_shapes__shape_dist_traveled") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+
 
   - name: dim_stop_times_latest
     description: |
@@ -602,9 +566,7 @@ models:
           For example, `departure_time = 21:30:45` would lead to `departure_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
           This allows us to perform duration calculations and handle timestamps that wrap past midnight like
           `25:40:00`, which are allowed in GTFS.
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+
 
   - name: dim_stops_latest
     description: |
@@ -666,9 +628,7 @@ models:
         description: '{{ doc("gtfs_stops__level_id") }}'
       - name: platform_code
         description: '{{ doc("gtfs_stops__platform_code") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+
 
   - name: dim_transfers_latest
     description: |
@@ -706,9 +666,7 @@ models:
         description: '{{ doc("gtfs_transfers__from_trip_id") }}'
       - name: to_trip_id
         description: '{{ doc("gtfs_transfers__to_trip_id") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+
 
   - name: dim_translations_latest
     description: |
@@ -745,9 +703,7 @@ models:
         description: '{{ doc("gtfs_translations__record_sub_id") }}'
       - name: field_value
         description: '{{ doc("gtfs_translations__field_value") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+
 
   - name: dim_trips_latest
     description: |
@@ -789,9 +745,7 @@ models:
         description: '{{ doc("gtfs_trips__wheelchair_accessible") }}'
       - name: bikes_allowed
         description: '{{ doc("gtfs_trips__bikes_allowed") }}'
-      - *_valid_from
-      - *_valid_to
-      - *_is_current
+
       - name: warning_duplicate_primary_key
         description: |
           Rows with `true` in this column have a duplicate primary key; i.e., `trip_id` is duplicated within an individual feed
