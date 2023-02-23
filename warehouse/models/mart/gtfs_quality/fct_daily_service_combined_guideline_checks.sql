@@ -1,8 +1,8 @@
 {{ config(materialized='table') }}
 
-WITH fct_daily_guideline_checks AS (
+WITH int_gtfs_quality__guideline_checks_long AS (
     SELECT *
-    FROM {{ ref('fct_daily_guideline_checks') }}
+    FROM {{ ref('int_gtfs_quality__guideline_checks_long') }}
 ),
 
 fct_daily_service_combined_guideline_checks AS (
@@ -29,7 +29,7 @@ fct_daily_service_combined_guideline_checks AS (
         ARRAY_AGG(DISTINCT gtfs_service_data_key IGNORE NULLS ORDER BY gtfs_service_data_key) AS gtfs_service_data_keys_included_array,
         ARRAY_AGG(DISTINCT gtfs_dataset_key IGNORE NULLS ORDER BY gtfs_dataset_key) AS gtfs_dataset_keys_included_array,
         ARRAY_AGG(DISTINCT schedule_feed_key IGNORE NULLS ORDER BY schedule_feed_key) AS schedule_feed_keys_included_array
-    FROM fct_daily_guideline_checks
+    FROM int_gtfs_quality__guideline_checks_long
     GROUP BY date, service_key, service_name, feature, check
 )
 
