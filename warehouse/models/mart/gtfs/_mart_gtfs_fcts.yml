@@ -146,8 +146,8 @@ models:
       - name: hour
       - name: base64_url
       - name: _extract_ts
-      - name: _config_extracted_at
-      - name: _name
+      - name: _config_extract_ts
+      - name: _gtfs_dataset_name
       - name: header_timestamp
       - name: header_incrementality
       - name: header_version
@@ -215,7 +215,7 @@ models:
       - name: _extract_ts
         description: |
           Time at which this message was scraped.
-      - name: _name
+      - name: _gtfs_dataset_name
         description: |
           String name of the GTFS dataset of which this message is a part.
           This field is provided for human readability and should not be used as a join key.
@@ -686,7 +686,7 @@ models:
       - name: _extract_ts
         description: |
           Time at which this message was scraped.
-      - name: _name
+      - name: _gtfs_dataset_name
         description: |
           String name of the GTFS dataset of which this message is a part.
           This field is provided for human readability and should not be used as a join key.
@@ -939,34 +939,34 @@ models:
         description: '{{ doc("gtfs_stops__stop_id") }}'
       - name: stop_event_count
         description: The number of stop events associated with this stop on the given date.
-      - name: route_type_0_count
+      - name: route_type_0
         description: |
           The count of stop events associated with route_type 0 - Tram, Streetcar, Light rail
-      - name: route_type_1_count
+      - name: route_type_1
         description: |
           The count of stop events associated with route_type 1 - Subway, Metro
-      - name: route_type_2_count
+      - name: route_type_2
         description: |
           The count of stop events associated with route_type 2 - Rail
-      - name: route_type_3_count
+      - name: route_type_3
         description: |
           The count of stop events associated with route_type 3 - Bus
-      - name: route_type_4_count
+      - name: route_type_4
         description: |
           The count of stop events associated with route_type 4 - Ferry
-      - name: route_type_5_count
+      - name: route_type_5
         description: |
           The count of stop events associated with route_type 5 - Cable Tram
-      - name: route_type_6_count
+      - name: route_type_6
         description: |
           The count of stop events associated with route_type 6 - Aerial lift, suspended cable car (e.g., gondola lift, aerial tramway)
-      - name: route_type_7_count
+      - name: route_type_7
         description: |
           The count of stop events associated with route_type 7 - Cable Tram
-      - name: route_type_11_count
+      - name: route_type_11
         description: |
           The count of stop events associated with route_type 11 - Trolleybus
-      - name: route_type_12_count
+      - name: route_type_12
         description: |
           The count of stop events associated with route_type 12 - Monorail
       - name: missing_route_type
@@ -998,7 +998,11 @@ models:
           i.e., `stop_id` is duplicated within an individual feed instance.
           Treat these rows with caution.
       - name: stop_key
-          Foreign key to the `dim_stops` table.
+        description: Foreign key to the `dim_stops` table.
+        tests:
+          - relationships:
+              to: ref('dim_stops')
+              field: key
       - name: tts_stop_name
         description: '{{ doc("gtfs_stops__tts_stop_name") }}'
       - name: pt_geom

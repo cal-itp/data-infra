@@ -55,6 +55,7 @@ fct_vehicle_positions_messages AS (
         vehicle_id,
         vehicle_label,
         vehicle_license_plate,
+        vehicle_wheelchair_accessible,
 
         trip_id,
         trip_route_id,

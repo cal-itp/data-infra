@@ -264,34 +264,34 @@ def run(
             results_to_check.append(subprocess.run(args))
 
     if sync_metabase:
-        for schema, database in [
-            ("views", "Data Marts (formerly Warehouse Views)"),
-            ("gtfs_schedule", "GTFS Schedule Feeds Latest"),
-            ("mart_transit_database", "Data Marts (formerly Warehouse Views)"),
-            ("mart_gtfs_guidelines", "Data Marts (formerly Warehouse Views)"),
-            ("mart_gtfs", "Data Marts (formerly Warehouse Views)"),
-            ("mart_gtfs_quality", "Data Marts (formerly Warehouse Views)"),
-            ("mart_audit", "Data Marts (formerly Warehouse Views)"),
-        ]:
-            args = [
-                "dbt-metabase",
-                "models",
-                "--dbt_manifest_path",
-                "./target/manifest.json",
-                "--dbt_database",
-                "cal-itp-data-infra",
-                "--dbt_schema",
-                schema,
-                "--metabase_host",
-                "dashboards.calitp.org",
-                "--metabase_user",
-                os.environ["METABASE_USER"],
-                "--metabase_password",
-                os.environ["METABASE_PASSWORD"],
-                "--metabase_database",
-                database,
-            ]
-            results_to_check.append(subprocess.run(args))
+        results_to_check.append(
+            subprocess.run(
+                [
+                    "dbt-metabase",
+                    "models",
+                    "--dbt_manifest_path",
+                    "./target/manifest.json",
+                    "--metabase_database",
+                    "Data Marts (formerly Warehouse Views)",
+                    "--dbt_schema_excludes",
+                    "staging payments",
+                ]
+            )
+        )
+        results_to_check.append(
+            subprocess.run(
+                [
+                    "dbt-metabase",
+                    "models",
+                    "--dbt_manifest_path",
+                    "./target/manifest.json",
+                    "--metabase_database",
+                    "(Internal) Payments",
+                    "--dbt_schema",
+                    "payments",
+                ]
+            )
+        )
 
     for result in results_to_check:
         result.check_returncode()
