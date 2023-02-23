@@ -481,24 +481,8 @@ feature
 
 
 --
--- CHECK STATUSES
+-- OTHER TEXT
 --
-{% macro guidelines_manual_check_needed_status() %}
+{% macro manual_check_needed_status() %}
 "MANUAL CHECK NEEDED"
-{% endmacro %}
-
-{% macro guidelines_na_check_status() %}
-"N/A - CHECK-SPECIFIC LOGIC"
-{% endmacro %}
-
-{% macro guidelines_na_entity_status() %}
-"N/A - NO APPLICABLE ENTITY"
-{% endmacro %}
-
-{% macro guidelines_pass_status() %}
-"PASS"
-{% endmacro %}
-
-{% macro guidelines_fail_status() %}
-"FAIL"
 {% endmacro %}
