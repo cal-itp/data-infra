@@ -264,13 +264,18 @@ def run(
             results_to_check.append(subprocess.run(args))
 
     if sync_metabase:
-        for schema, database in [
-            ("views", "Data Marts (formerly Warehouse Views)"),
-            ("gtfs_schedule", "GTFS Schedule Feeds Latest"),
-            ("mart_transit_database", "Data Marts (formerly Warehouse Views)"),
-            ("mart_gtfs", "Data Marts (formerly Warehouse Views)"),
-            ("mart_gtfs_quality", "Data Marts (formerly Warehouse Views)"),
-            ("mart_audit", "Data Marts (formerly Warehouse Views)"),
+        # Iterate manually for now; dbt-metabase syncs external tables
+        # which we do not expose to Metabase, so it's hard to just exclude
+        # staging/legacy schemas.
+        for schema in [
+            "dbt_test__audit",
+            "mart_ad_hoc",
+            "mart_audit",
+            "mart_gtfs",
+            "mart_gtfs_quality",
+            "mart_ntd",
+            "mart_transit_database",
+            "views",
         ]:
             args = [
                 "dbt-metabase",
@@ -284,7 +289,7 @@ def run(
                 "--dbt_schema",
                 schema,
                 "--metabase_database",
-                database,
+                "Data Marts (formerly Warehouse Views)",
             ]
             results_to_check.append(subprocess.run(args))
 
