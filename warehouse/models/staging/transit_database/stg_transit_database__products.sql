@@ -1,10 +1,9 @@
 WITH
 
 once_daily_products AS (
-    {{ get_latest_dense_rank(
-        external_table = source('airtable', 'transit_technology_stacks__products'),
-        order_by = 'ts DESC', partition_by = 'dt'
-        ) }}
+    SELECT *
+    -- have to use base table to get the california transit base organization record ids
+    FROM {{ ref('base_tts_products_idmap') }}
 ),
 
 stg_transit_database__products AS (
@@ -15,6 +14,7 @@ stg_transit_database__products AS (
         requirements,
         notes,
         connectivity,
+        unnested_vendor AS vendor_organization_source_record_id,
         certifications,
         product_features,
         business_model_features,
@@ -24,6 +24,7 @@ stg_transit_database__products AS (
         components,
         dt
     FROM once_daily_products
+    LEFT JOIN UNNEST(once_daily_products.vendor) AS unnested_vendor
 )
 
 SELECT * FROM stg_transit_database__products
