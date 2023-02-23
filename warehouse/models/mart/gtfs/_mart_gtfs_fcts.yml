@@ -263,10 +263,9 @@ models:
       - name: vehicle_license_plate
         description: |
           See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
-        # Should this exist? It does not currently in the model.
-#      - name: vehicle_wheelchair_accessible
-#        description: |
-#          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
+      - name: vehicle_wheelchair_accessible
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-vehicledescriptor.
       - name: trip_id
         description: |
           See: https://gtfs.org/realtime/reference/#message-tripdescriptor.

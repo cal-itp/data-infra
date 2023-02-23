@@ -475,6 +475,9 @@ models:
       - name: organization_hubspot_company_record_id
         description: |
           Hubspot CRM record ID for this organization.
+      - name: agency_id
+      - name: network_id
+      - name: route_id
 
   - name: dim_ntd_agency_info
     description: '{{ doc("ntd_agency_info_table") }}'
