@@ -4,7 +4,7 @@
         unique_key='id',
         incremental_strategy='insert_overwrite',
         partition_by={
-            'field': 'dt',
+            'field': 'execution_dt',
             'data_type': 'date',
             'granularity': 'day',
         },
@@ -15,6 +15,8 @@
 
 WITH source AS (
     SELECT * FROM {{ source('sentry_external_tables', 'events') }}
+    WHERE project_slug IS NOT NULL
+    AND execution_dt IS NOT NULL
 ),
 
 stg_rt__feed_fetch_errors AS (
@@ -33,8 +35,8 @@ stg_rt__feed_fetch_errors AS (
         platform,
         datecreated,
         crashfile,
-        dt,
-        ts
+        execution_dt,
+        project_slug
     FROM source
 )
 

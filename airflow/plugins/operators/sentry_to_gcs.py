@@ -138,7 +138,6 @@ class SentryExtract(PartitionedGCSArtifact):
     partition_names: ClassVar[List[str]] = ["execution_dt", "project_slug"]
     project_slug: str
     data: Optional[List[Dict]]
-    execution_ts: Optional[pendulum.DateTime]
 
     def save_to_gcs(self, fs):
         raw_df = pd.DataFrame([{**make_arrays_bq_safe(row)} for row in self.data])

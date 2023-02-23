@@ -16,8 +16,8 @@ WITH fct_rt_feed_fetch_errors AS (
         platform,
         datecreated,
         crashfile,
-        dt,
-        ts
+        execution_dt,
+        project_slug
     FROM {{ ref('stg_rt__feed_fetch_errors') }}
 )
 

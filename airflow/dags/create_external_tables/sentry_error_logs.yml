@@ -8,7 +8,7 @@ source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 hive_options:
   mode: CUSTOM
-  source_uri_prefix: "events/{dt:DATE}/{ts:TIMESTAMP}/"
+  source_uri_prefix: "events/{execution_dt:DATE}/{project_slug:STRING}/"
 schema_fields:
   - name: id
     type: STRING
