@@ -287,23 +287,6 @@ def run(
                     ]
                 )
             )
-            results_to_check.append(
-                subprocess.run(
-                    [
-                        "dbt-metabase",
-                        "models",
-                        "--metabase_exclude_sources",
-                        "--dbt_manifest_path",
-                        "./target/manifest.json",
-                        "--dbt_docs_url",
-                        "https://dbt-docs.calitp.org/",
-                        "--metabase_database",
-                        "(Internal) Payments",
-                        "--dbt_schema",
-                        "payments",
-                    ]
-                )
-            )
         else:
             typer.secho(
                 f"WARNING: running with non-prod target {target} so skipping metabase sync",
