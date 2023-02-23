@@ -264,34 +264,34 @@ def run(
             results_to_check.append(subprocess.run(args))
 
     if sync_metabase:
-        # Iterate manually for now; dbt-metabase syncs external tables
-        # which we do not expose to Metabase, so it's hard to just exclude
-        # staging/legacy schemas.
-        for schema in [
-            "dbt_test__audit",
-            "mart_ad_hoc",
-            "mart_audit",
-            "mart_gtfs",
-            "mart_gtfs_quality",
-            "mart_ntd",
-            "mart_transit_database",
-            "views",
-        ]:
-            args = [
-                "dbt-metabase",
-                "models",
-                "--metabase_host",
-                "dashboards.calitp.org",
-                "--dbt_manifest_path",
-                "./target/manifest.json",
-                "--dbt_database",
-                "cal-itp-data-infra",
-                "--dbt_schema",
-                schema,
-                "--metabase_database",
-                "Data Marts (formerly Warehouse Views)",
-            ]
-            results_to_check.append(subprocess.run(args))
+        results_to_check.append(
+            subprocess.run(
+                [
+                    "dbt-metabase",
+                    "models",
+                    "--dbt_manifest_path",
+                    "./target/manifest.json",
+                    "--metabase_database",
+                    "Data Marts (formerly Warehouse Views)",
+                    "--dbt_schema_excludes",
+                    "staging payments",
+                ]
+            )
+        )
+        results_to_check.append(
+            subprocess.run(
+                [
+                    "dbt-metabase",
+                    "models",
+                    "--dbt_manifest_path",
+                    "./target/manifest.json",
+                    "--metabase_database",
+                    "(Internal) Payments",
+                    "--dbt_schema",
+                    "payments",
+                ]
+            )
+        )
 
     for result in results_to_check:
         result.check_returncode()
