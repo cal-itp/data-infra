@@ -75,6 +75,18 @@ models:
 
   # Index tables
 
+  - name: int_gtfs_quality__guideline_checks_index
+    description: |
+      Daily index of all potentially assessed entities with all possible checks.
+      Index against which individual checks are meant to be defined.
+      All entity-related columns are inherited from `int_gtfs_quality__daily_assessment_candidate_entities`.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - key
+            - date
+            - check
+
   - name: int_gtfs_quality__schedule_feed_guideline_index
     description: |
       Daily index of v2 schedule feeds. Provides structure for
