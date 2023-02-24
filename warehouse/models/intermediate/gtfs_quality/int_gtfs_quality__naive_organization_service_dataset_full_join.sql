@@ -77,6 +77,7 @@ schedule_feeds AS (
 rt_feeds AS (
     SELECT *
     FROM {{ ref('fct_daily_rt_feed_files') }}
+    WHERE date < CURRENT_DATE()
 ),
 
 int_gtfs_quality__naive_organization_service_dataset_full_join AS (
@@ -148,6 +149,13 @@ int_gtfs_quality__naive_organization_service_dataset_full_join AS (
     LEFT JOIN ntd_bridge
         ON orgs.key = ntd_bridge.organization_key
         AND orgs.date = ntd_bridge.date
+    -- just to be on the safe side, double check that we aren't including current date
+    WHERE COALESCE(orgs.date,
+            services.date,
+            service_data.date,
+            datasets.date,
+            schedule_feeds.date,
+            rt_feeds.date) < CURRENT_DATE()
 )
 
 SELECT * FROM int_gtfs_quality__naive_organization_service_dataset_full_join
