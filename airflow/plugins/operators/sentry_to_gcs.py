@@ -133,9 +133,9 @@ def fetch_and_clean_from_sentry(extract, target_date, auth_token):
 class SentryExtract(PartitionedGCSArtifact):
     bucket: ClassVar[str] = CALITP_BUCKET__SENTRY_EVENTS
     table: ClassVar[str] = "events"
-    execution_dt: pendulum.Date
+    dt: pendulum.Date
     execution_ts: pendulum.DateTime
-    partition_names: ClassVar[List[str]] = ["execution_dt", "project_slug"]
+    partition_names: ClassVar[List[str]] = ["project_slug", "dt", "execution_ts"]
     project_slug: str
     data: Optional[List[Dict]]
 
@@ -181,16 +181,16 @@ class SentryToGCSOperator(BaseOperator):
         super().__init__(**kwargs)
 
     def execute(self, context, **kwargs):
-        execution_ts = pendulum.from_format(context.get("ts"), "YYYY-MM-DDTHH:mm:ssZ")
-        execution_dt = execution_ts.date()
+        ts = pendulum.from_format(context.get("ts"), "YYYY-MM-DDTHH:mm:ssZ")
+        dt = ts.date()
         extract = SentryExtract(
             project_slug=self.project_slug,
-            execution_dt=execution_dt,
-            execution_ts=execution_ts,
-            filename=f"{execution_ts}.jsonl.gz",
+            dt=dt,
+            execution_ts=ts,  # Default at instantiation, reset during run
+            filename="events.jsonl.gz",
         )
         # after Airflow upgrade: target_date = context.get("data_interval_start").subtract(days=1).to_date_string()
-        target_date_string = execution_ts.to_date_string()
+        target_date_string = dt.to_date_string()
         auth_token = self.auth_token or get_secret_by_name("CALITP_SENTRY_AUTH_TOKEN")
         extract = fetch_and_clean_from_sentry(extract, target_date_string, auth_token)
         fs = get_fs()

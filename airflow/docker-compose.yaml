@@ -105,7 +105,6 @@ x-airflow-common:
 
     # Base URL for Sentry API (used to bring events data into GCS and BigQuery)
     SENTRY_API_BASE_URL: "https://sentry.k8s.calitp.jarv.us/api/0"
-    CALITP__SENTRY_PROJECT_SLUG: "cal-itp-data-infra"
 
   volumes:
     # Note that in cloud composer, folders like dags are not in AIRFLOW_HOME
