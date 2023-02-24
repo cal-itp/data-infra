@@ -148,6 +148,13 @@ int_gtfs_quality__naive_organization_service_dataset_full_join AS (
     LEFT JOIN ntd_bridge
         ON orgs.key = ntd_bridge.organization_key
         AND orgs.date = ntd_bridge.date
+    -- rt feeds data comes in earlier than the rest and results in a bunch of rows with nulls
+    WHERE COALESCE(orgs.date,
+            services.date,
+            service_data.date,
+            datasets.date,
+            schedule_feeds.date,
+            rt_feeds.date) < CURRENT_DATE()
 )
 
 SELECT * FROM int_gtfs_quality__naive_organization_service_dataset_full_join
