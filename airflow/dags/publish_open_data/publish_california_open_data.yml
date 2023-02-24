@@ -32,7 +32,7 @@ secrets:
     secret: jobs-data
     key: calitp-ckan-gtfs-schedule-key
 
-resources:
+k8s_resources:
   request_memory: 2.0Gi
   request_cpu: 1
 
