@@ -53,7 +53,7 @@ secrets:
     secret: jobs-data
     key: netlify-auth-token
 
-resources:
+k8s_resources:
   request_memory: 2.0Gi
   request_cpu: 1
 
