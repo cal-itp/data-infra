@@ -4,11 +4,11 @@
         unique_key='id',
         incremental_strategy='insert_overwrite',
         partition_by={
-            'field': 'dt',
-            'data_type': 'date',
-            'granularity': 'day',
+            'field': 'execution_ts',
+            'data_type': 'timestamp',
+            'granularity': 'hour',
         },
-        partitions=['current_date()'],
+        partitions=['current_timestamp()'],
         cluster_by='groupid',
     )
 }}
