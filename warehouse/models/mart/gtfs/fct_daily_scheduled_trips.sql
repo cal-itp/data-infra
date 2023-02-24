@@ -96,12 +96,14 @@ fct_daily_scheduled_trips AS (
             AND trips.shape_id = shapes.shape_id
     LEFT JOIN dim_schedule_feeds AS feeds
         ON service_index.feed_key = feeds.key
-    LEFT JOIN urls_to_gtfs_datasets
-        ON feeds.base64_url = urls_to_gtfs_datasets.base64_url
-        AND CAST(service_index.service_date AS TIMESTAMP) BETWEEN urls_to_gtfs_datasets._valid_from AND urls_to_gtfs_datasets._valid_to
     LEFT JOIN stop_times_grouped
         ON service_index.feed_key = stop_times_grouped.feed_key
             AND trips.trip_id = stop_times_grouped.trip_id
+    LEFT JOIN urls_to_gtfs_datasets
+        ON feeds.base64_url = urls_to_gtfs_datasets.base64_url
+        AND CAST(DATE_ADD(service_index.service_date,
+            INTERVAL CAST((TRUNC(SAFE_DIVIDE(stop_times_grouped.trip_first_departure_sec, 86400))) AS INT64) DAY) AS TIMESTAMP) BETWEEN
+                urls_to_gtfs_datasets._valid_from AND urls_to_gtfs_datasets._valid_to
     LEFT JOIN dim_gtfs_datasets
         ON urls_to_gtfs_datasets.gtfs_dataset_key = dim_gtfs_datasets.key
 )
