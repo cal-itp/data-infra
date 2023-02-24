@@ -44,7 +44,7 @@ first_outcome_per_feed_per_version AS (
 outcomes_with_end_dt AS (
     SELECT
         *,
-        LAG(extract_dt, 1, DATE '2099-01-01') OVER (PARTITION BY feed_key ORDER BY extract_dt) AS next_outcome_dt
+        LEAD(extract_dt, 1, DATE '2099-01-01') OVER (PARTITION BY feed_key ORDER BY extract_dt) AS next_outcome_dt
     FROM first_outcome_per_feed_per_version
 ),
 
@@ -59,6 +59,7 @@ fct_daily_schedule_feed_validation_notices AS (
         daily_feeds.feed_key,
         daily_feeds.base64_url,
         outcomes.extract_dt AS outcome_extract_dt,
+        outcomes.next_outcome_dt,
         outcomes.validation_validator_version,
         codes.code,
         codes.severity,
@@ -71,7 +72,7 @@ fct_daily_schedule_feed_validation_notices AS (
     FROM fct_daily_schedule_feeds AS daily_feeds
     LEFT JOIN outcomes_with_end_dt AS outcomes
         ON daily_feeds.feed_key = outcomes.feed_key
-        AND daily_feeds.date BETWEEN outcomes.extract_dt AND outcomes.next_outcome_dt
+        AND daily_feeds.date BETWEEN outcomes.extract_dt AND DATE_SUB(outcomes.next_outcome_dt, INTERVAL 1 DAY)
     LEFT JOIN validation_codes AS codes
         ON outcomes.validation_validator_version = codes.gtfs_validator_version
     LEFT JOIN validation_notices AS notices
@@ -79,7 +80,7 @@ fct_daily_schedule_feed_validation_notices AS (
         AND outcomes.base64_url = notices.base64_url
         AND outcomes.extract_ts = notices.ts
     WHERE daily_feeds.date <= CURRENT_DATE()
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
 )
 
 SELECT * FROM fct_daily_schedule_feed_validation_notices
