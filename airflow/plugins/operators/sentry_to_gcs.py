@@ -62,12 +62,12 @@ def fetch_events_for_issue(issue_id, headers):
     return response_data
 
 
-def get_issues_list_from_sentry(extract, headers, target_date):
+def get_issues_list_from_sentry(project_slug, headers, target_date_string):
     """
     Paginate over Sentry issues for a project and create a list of issues matching our
     criteria for examination (RTFetchExceptions).
     """
-    next_url = f"{SENTRY_API_BASE_URL}/projects/sentry/{extract.project_slug}/issues/?query=lastSeen:>{target_date}T00:00:00-00:00"
+    next_url = f"{SENTRY_API_BASE_URL}/projects/sentry/{project_slug}/issues/?query=lastSeen:>{target_date_string}T00:00:00-00:00"
     response_data = []
 
     while next_url:
@@ -85,12 +85,12 @@ def get_issues_list_from_sentry(extract, headers, target_date):
     return issues_list
 
 
-def iterate_over_sentry_records(extract, target_date, auth_token):
+def iterate_over_sentry_records(project_slug, target_date_string, auth_token):
     """
     Paginate over API responses for each targeted issue and create a combined list of dicts.
     """
     headers = {"Authorization": "Bearer " + auth_token}
-    issues_list = get_issues_list_from_sentry(extract, headers, target_date)
+    issues_list = get_issues_list_from_sentry(project_slug, headers, target_date_string)
 
     print(f"Issues list includes {len(issues_list)} issues")
     combined_response_data = []
@@ -112,20 +112,26 @@ def iterate_over_sentry_records(extract, target_date, auth_token):
         if pendulum.from_format(
             x["dateCreated"][:-1], "YYYY-MM-DDTHH:mm:ss"
         ).to_date_string()
-        == target_date
+        == target_date_string
     ]
     return combined_response_data
 
 
-def fetch_and_clean_from_sentry(extract, target_date, auth_token):
+def fetch_and_clean_from_sentry(project_slug, target_date, auth_token):
     """
     Download Sentry event records as a DataFrame.
     """
 
-    print(f"Downloading Sentry event data for project {extract.project_slug}")
-    all_rows = iterate_over_sentry_records(extract, target_date, auth_token)
-    extract.execution_ts = pendulum.now()
-    extract.data = all_rows
+    print(f"Downloading Sentry event data for project {project_slug}")
+    target_date_string = target_date.to_date_string()
+    all_rows = iterate_over_sentry_records(project_slug, target_date_string, auth_token)
+    extract = SentryExtract(
+        project_slug=project_slug,
+        dt=target_date,
+        execution_ts=pendulum.now(),
+        filename="events.jsonl.gz",
+        data=all_rows,
+    )
 
     return extract
 
@@ -181,18 +187,12 @@ class SentryToGCSOperator(BaseOperator):
         super().__init__(**kwargs)
 
     def execute(self, context, **kwargs):
-        ts = pendulum.from_format(context.get("ts"), "YYYY-MM-DDTHH:mm:ssZ")
-        dt = ts.date()
-        extract = SentryExtract(
-            project_slug=self.project_slug,
-            dt=dt,
-            execution_ts=ts,  # Default at instantiation, reset during run
-            filename="events.jsonl.gz",
-        )
-        # after Airflow upgrade: target_date = context.get("data_interval_start").subtract(days=1).to_date_string()
-        target_date_string = dt.to_date_string()
+        target_date = pendulum.from_format(
+            context.get("ts"), "YYYY-MM-DDTHH:mm:ssZ"
+        ).date()
         auth_token = self.auth_token or get_secret_by_name("CALITP_SENTRY_AUTH_TOKEN")
-        extract = fetch_and_clean_from_sentry(extract, target_date_string, auth_token)
+        extract = fetch_and_clean_from_sentry(
+            self.project_slug, target_date, auth_token
+        )
         fs = get_fs()
-        # inserts into xcoms
         return extract.save_to_gcs(fs=fs)
