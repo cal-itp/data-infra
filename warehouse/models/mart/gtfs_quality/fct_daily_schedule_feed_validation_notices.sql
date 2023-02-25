@@ -30,6 +30,7 @@ first_outcome_per_feed_per_version AS (
         outcomes.*,
         EXTRACT(DATE FROM outcomes.extract_ts) AS extract_dt,
         feeds.key AS feed_key,
+        EXTRACT(DATE FROM feeds._valid_to) AS feed_valid_to_dt,
     FROM successful_validation_outcomes outcomes
     INNER JOIN dim_schedule_feeds feeds
         ON outcomes.base64_url = feeds.base64_url
@@ -40,11 +41,11 @@ first_outcome_per_feed_per_version AS (
     ) = 1
 ),
 
--- have to also get the last day of each feed's validator version
+-- each validation outcome is valid until the next version, or the end of the feed's validity
 outcomes_with_end_dt AS (
     SELECT
         *,
-        LEAD(extract_dt, 1, DATE '2099-01-01') OVER (PARTITION BY feed_key ORDER BY extract_dt) AS next_outcome_dt
+        COALESCE(LEAD(DATE_SUB(extract_dt, INTERVAL 1 DAY)) OVER (PARTITION BY feed_key ORDER BY extract_dt), feed_valid_to_dt) AS outcome_valid_to
     FROM first_outcome_per_feed_per_version
 ),
 
@@ -59,7 +60,7 @@ fct_daily_schedule_feed_validation_notices AS (
         daily_feeds.feed_key,
         daily_feeds.base64_url,
         outcomes.extract_dt AS outcome_extract_dt,
-        outcomes.next_outcome_dt,
+        outcomes.outcome_valid_to,
         outcomes.validation_validator_version,
         codes.code,
         codes.severity,
@@ -72,7 +73,7 @@ fct_daily_schedule_feed_validation_notices AS (
     FROM fct_daily_schedule_feeds AS daily_feeds
     LEFT JOIN outcomes_with_end_dt AS outcomes
         ON daily_feeds.feed_key = outcomes.feed_key
-        AND daily_feeds.date BETWEEN outcomes.extract_dt AND DATE_SUB(outcomes.next_outcome_dt, INTERVAL 1 DAY)
+        AND daily_feeds.date BETWEEN outcomes.extract_dt AND outcome_valid_to
     LEFT JOIN validation_codes AS codes
         ON outcomes.validation_validator_version = codes.gtfs_validator_version
     LEFT JOIN validation_notices AS notices
