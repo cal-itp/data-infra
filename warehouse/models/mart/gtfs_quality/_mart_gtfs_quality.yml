@@ -136,10 +136,10 @@ models:
           # the "range" of validator versions.
           - dbt_utils.accepted_range:
               min_value: "DATE'2021-04-16'"
-              max_value: "DATE'2022-09-15'"
+              max_value: "DATE'2022-09-14'"
               where: validation_validator_version = 'v2.0.0'
           - dbt_utils.accepted_range:
-              min_value: "DATE'2022-09-16'"
+              min_value: "DATE'2022-09-15'"
               max_value: "DATE'2022-11-15'"
               where: validation_validator_version = 'v3.1.1'
           - dbt_utils.accepted_range:
