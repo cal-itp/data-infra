@@ -8,7 +8,6 @@ import logging
 from typing import ClassVar, List, Optional
 
 import humanize
-import pandas as pd
 import pendulum
 import sentry_sdk
 from calitp_data_infra.auth import get_secrets_by_label
@@ -165,7 +164,9 @@ def download_all(task_instance, execution_date, **kwargs):
         )
         task_instance.xcom_push(
             key="download_failures",
-            value=pd.DataFrame(f.dict() for f in result.failures),
+            value=[
+                json.loads(f.json()) for f in result.failures
+            ],  # use the Pydantic serializer
         )
 
     success_rate = len(result.successes) / len(configs)
