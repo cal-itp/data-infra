@@ -25,7 +25,7 @@ int_gtfs_quality__stable_url AS (
         CASE
             WHEN manual_check__stable_url LIKE 'Yes%' THEN {{ guidelines_pass_status() }}
             WHEN manual_check__stable_url LIKE 'No%' THEN {{ guidelines_fail_status() }}
-            WHEN manual_check__stable_url LIKE 'N/A%' THEN {{ guidelines_na_check_status() }}
+            WHEN manual_check__stable_url = 'N/A - dataset is not public-facing' THEN {{ guidelines_na_check_status() }}
             ELSE {{ guidelines_manual_check_needed_status() }}
         END AS status
     FROM idx
