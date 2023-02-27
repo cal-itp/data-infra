@@ -49,7 +49,7 @@ calculate_relative_difference AS (
     FROM match_date_spine
 ),
 
-payments_monthly_route_z_null_tests AS (
+payments_monthly_route_z_relative_to_previous_month AS (
     SELECT
 
         participant_id,
@@ -68,4 +68,4 @@ payments_monthly_route_z_null_tests AS (
             FROM calculate_relative_difference)
 )
 
-SELECT * FROM payments_monthly_route_z_null_tests
+SELECT * FROM payments_monthly_route_z_relative_to_previous_month
