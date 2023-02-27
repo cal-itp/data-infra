@@ -2,7 +2,6 @@
 # python_callable: download_all
 # provide_context: true
 # ---
-import datetime
 import gzip
 import json
 import logging
@@ -12,7 +11,6 @@ import humanize
 import pandas as pd
 import pendulum
 import sentry_sdk
-from calitp_data.config import is_development
 from calitp_data_infra.auth import get_secrets_by_label
 from calitp_data_infra.storage import (
     JSONL_EXTENSION,
@@ -29,8 +27,6 @@ from calitp_data_infra.storage import (
 )
 from pydantic import validator
 from requests.exceptions import HTTPError
-
-from airflow.utils.email import send_email
 
 GTFS_FEED_LIST_ERROR_THRESHOLD = 0.95
 
@@ -167,39 +163,9 @@ def download_all(task_instance, execution_date, **kwargs):
                 str(f.exception) or str(type(f.exception)) for f in result.failures
             ),
         )
-        # use pandas begrudgingly for email HTML since the old task used it
-        html_report = pd.DataFrame(f.dict() for f in result.failures).to_html(
-            border=False
-        )
-
-        html_content = f"""\
-    NOTE: These failures come from the v2 of the GTFS Schedule downloader.
-
-    The following agency GTFS feeds could not be extracted on {start.to_iso8601_string()}:
-
-    {html_report}
-    """
-    else:
-        html_content = "All feeds were downloaded successfully!"
-
-    if is_development():
-        print(
-            f"Skipping since in development mode! Would have emailed {len(result.failures)} failures."
-        )
-    else:
-        send_email(
-            to=[
-                "laurie.m@jarv.us",
-                "andrew.v@jarv.us",
-                "evan.siroky@dot.ca.gov",
-                "hunter.owens@dot.ca.gov",
-                "jameelah.y@jarv.us",
-                "olivia.ramacier@dot.ca.gov",
-            ],
-            html_content=html_content,
-            subject=(
-                f"Operator GTFS Errors for {datetime.datetime.now().strftime('%Y-%m-%d')}"
-            ),
+        task_instance.xcom_push(
+            key="download_failures",
+            value=pd.DataFrame(f.dict() for f in result.failures),
         )
 
     success_rate = len(result.successes) / len(configs)
