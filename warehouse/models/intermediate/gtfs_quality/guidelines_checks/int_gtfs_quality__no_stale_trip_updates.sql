@@ -16,7 +16,7 @@
 WITH
 
 feed_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_quality__rt_feed_guideline_index') }}
+    SELECT * FROM {{ ref('int_gtfs_quality__rt_feed_guideline_index_tu') }}
     {% if is_incremental() %}
     WHERE date >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
@@ -24,8 +24,8 @@ feed_guideline_index AS (
     {% endif %}
 ),
 
-unioned_parse_outcomes AS (
-    SELECT * FROM {{ ref('int_gtfs_rt__unioned_parse_outcomes') }}
+fct_trip_updates_messages AS (
+    SELECT * FROM {{ ref('int_gtfs_rt__trip_updates_no_stop_times') }}
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
@@ -33,16 +33,17 @@ unioned_parse_outcomes AS (
     {% endif %}
 ),
 
-feed_ages AS (
+trip_update_ages AS (
     SELECT
         dt,
         base64_url,
-        feed_type,
-        COUNT(*) AS num_parses,
-        MIN(TIMESTAMP_DIFF(extract_ts, last_modified_timestamp, SECOND)) AS min_feed_age,
-        MAX(TIMESTAMP_DIFF(extract_ts, last_modified_timestamp, SECOND)) AS max_feed_age
-    FROM unioned_parse_outcomes
-    GROUP BY 1, 2, 3
+        COUNT(*) AS num_trip_updates,
+        MIN(TIMESTAMP_DIFF(_extract_ts, trip_update_timestamp, SECOND)) AS min_trip_update_age,
+        PERCENTILE_CONT(TIMESTAMP_DIFF(_extract_ts, trip_update_timestamp, SECOND), 0.5) AS median_trip_update_age,
+        MAX(TIMESTAMP_DIFF(_extract_ts, trip_update_timestamp, SECOND)) AS max_trip_update_age,
+        MAX(TIMESTAMP_DIFF(_extract_ts, header_timestamp, SECOND)) AS max_trip_update_feed_age,
+    FROM fct_trip_updates_messages
+    GROUP BY 1, 2
 ),
 
 int_gtfs_quality__no_stale_trip_updates AS (
