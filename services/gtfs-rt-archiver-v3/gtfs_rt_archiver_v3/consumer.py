@@ -27,6 +27,8 @@ def set_exception_fingerprint(event, hint):
     if isinstance(exception, RTFetchException):
         event["fingerprint"] = [
             # this is ugly but it's the easiest way to quickly remove the object location hex from the fingerprint
+            # without actually messing with the exception chain;
+            # safety net for exceptions that contain a default object str()
             compiled_regex.sub("0x...", str(exception)),
             str(exception.url),
         ]
