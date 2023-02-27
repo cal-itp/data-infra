@@ -27,8 +27,6 @@ def email_failures(task_instance: TaskInstance, execution_date, **kwargs):
         html_report = failures_df.to_html(border=False)
 
         html_content = f"""\
-    NOTE: These failures come from the v2 of the GTFS Schedule downloader.
-
     The following agency GTFS feeds could not be extracted on {execution_date}:
 
     {html_report}
