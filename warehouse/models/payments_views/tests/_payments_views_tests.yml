@@ -31,3 +31,21 @@ models:
         description: A participant's total ridership on a particular day
       - name: relative_difference
         description: The relative change in a participant's ridership count as compared to the previous day
+  - name: payments_reliability_mislabeled_routes
+    columns:
+      - name: participant_id
+        description: Littlepay-assigned Participant ID
+      - name: month_start
+        description: The first day of the month for which the count aggregation is being caclulated
+      - name: n_route_z_rides
+        description: The total number of rides labeled as `Route Z` for the given month
+      - name: n_null_rides
+        description: The total number of rides labeled as `Null` for the given month
+      - name: total_mislabeled_rides
+        description: The total number of rides labeled as either `Route Z` or `Null` for the given month
+      - name: n_all_rides
+        description: The total number of rides for the given month
+      - name: relative_mislabeled_rides_to_total_rides
+        description: The percentage of mislabeled rides compared to the total number of rides for the given month
+      - name: recency_rank
+        description: Used to identify a month's recency (for help with filtering)
