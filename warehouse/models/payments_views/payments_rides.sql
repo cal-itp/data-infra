@@ -294,7 +294,7 @@ join_table AS (
         t2.latitude AS off_latitude,
         t2.longitude AS off_longitude,
         t2.geography AS off_geography,
-        COALESCE(t1.route_id, t2.route_id, Null) AS route_id
+        COALESCE(t1.route_id, t2.route_id) AS route_id
 
     FROM debited_micropayments AS m
     LEFT JOIN refunded_micropayments AS mr
@@ -322,7 +322,7 @@ join_table AS (
             -- here, can just use t1 because transaction date will be populated
             -- (don't have to handle unkowns the way we do with route_id)
             AND EXTRACT(DATE FROM TIMESTAMP(t1.transaction_date_time_utc)) = r.date
-            AND r.route_id = COALESCE(t1.route_id, t2.route_id, Null)
+            AND r.route_id = COALESCE(t1.route_id, t2.route_id)
 ),
 
 payments_rides AS (
