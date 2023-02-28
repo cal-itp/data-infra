@@ -62,7 +62,7 @@ match_date_spine AS (
         date_spine.month_start,
         COALESCE(z_rides.n_route_z_rides, 0) AS n_route_z_rides,
         COALESCE(null_rides.n_null_rides, 0) AS n_null_rides,
-        (COALESCE(z_rides.n_route_z_rides, 0) + COALESCE(null_rides.n_null_rides, 0)) AS total_mislabeled_rides,
+        (COALESCE(z_rides.n_route_z_rides, 0) + COALESCE(null_rides.n_null_rides, 0)) AS total_unlabeled_rides,
         COALESCE(all_rides.n_all_rides, 0) AS n_all_rides
 
     FROM payments_tests_monthly_date_spine AS date_spine
@@ -79,21 +79,21 @@ calculate_relative_count AS (
 
         *,
 
-        SAFE_DIVIDE(total_mislabeled_rides, n_all_rides) * 100 AS relative_mislabeled_rides_to_total_rides,
+        SAFE_DIVIDE(total_unlabeled_rides, n_all_rides) * 100 AS relative_unlabeled_rides_to_total_rides,
 
     FROM match_date_spine
 ),
 
-payments_reliability_mislabeled_routes AS (
+payments_reliability_unlabeled_routes AS (
     SELECT
 
         participant_id,
         month_start,
         n_route_z_rides,
         n_null_rides,
-        total_mislabeled_rides,
+        total_unlabeled_rides,
         n_all_rides,
-        relative_mislabeled_rides_to_total_rides,
+        relative_unlabeled_rides_to_total_rides,
         recency_rank
 
     FROM
@@ -102,13 +102,13 @@ payments_reliability_mislabeled_routes AS (
             month_start,
             n_route_z_rides,
             n_null_rides,
-            total_mislabeled_rides,
+            total_unlabeled_rides,
             n_all_rides,
-            relative_mislabeled_rides_to_total_rides,
+            relative_unlabeled_rides_to_total_rides,
 
             RANK() OVER (PARTITION BY participant_id ORDER BY month_start DESC) AS recency_rank
 
         FROM calculate_relative_count)
 )
 
-SELECT * FROM payments_reliability_mislabeled_routes
+SELECT * FROM payments_reliability_unlabeled_routes
