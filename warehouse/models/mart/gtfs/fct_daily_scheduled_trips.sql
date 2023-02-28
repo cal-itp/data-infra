@@ -36,16 +36,13 @@ stop_times_grouped AS (
     SELECT * FROM {{ ref('int_gtfs_schedule__stop_times_grouped') }}
 ),
 
-fct_daily_scheduled_trips AS (
+gtfs_joins AS (
     SELECT
         {{ dbt_utils.surrogate_key(['service_index.service_date', 'trips.key']) }} AS key,
 
         service_index.service_date,
         service_index.feed_key,
         service_index.service_id,
-
-        dim_gtfs_datasets.name,
-        dim_gtfs_datasets.regional_feed_type,
 
         trips.key AS trip_key,
         trips.trip_id AS trip_id,
@@ -63,8 +60,6 @@ fct_daily_scheduled_trips AS (
         routes.network_id AS network_id,
 
         shapes.key AS shape_array_key,
-
-        urls_to_gtfs_datasets.gtfs_dataset_key AS gtfs_dataset_key,
 
         trips.shape_id,
         trips.warning_duplicate_primary_key AS contains_warning_duplicate_trip_primary_key,
@@ -94,14 +89,56 @@ fct_daily_scheduled_trips AS (
     LEFT JOIN dim_shapes_arrays AS shapes
         ON service_index.feed_key = shapes.feed_key
             AND trips.shape_id = shapes.shape_id
-    LEFT JOIN dim_schedule_feeds AS feeds
-        ON service_index.feed_key = feeds.key
-    LEFT JOIN urls_to_gtfs_datasets
-        ON feeds.base64_url = urls_to_gtfs_datasets.base64_url
-        AND CAST(service_index.service_date AS TIMESTAMP) BETWEEN urls_to_gtfs_datasets._valid_from AND urls_to_gtfs_datasets._valid_to
     LEFT JOIN stop_times_grouped
         ON service_index.feed_key = stop_times_grouped.feed_key
             AND trips.trip_id = stop_times_grouped.trip_id
+),
+
+fct_daily_scheduled_trips AS (
+    SELECT
+        gtfs_joins.key,
+
+        dim_gtfs_datasets.name,
+        dim_gtfs_datasets.regional_feed_type,
+
+        urls_to_gtfs_datasets.gtfs_dataset_key AS gtfs_dataset_key,
+
+        gtfs_joins.service_date,
+        gtfs_joins.feed_key,
+        gtfs_joins.service_id,
+        gtfs_joins.trip_key,
+        gtfs_joins.trip_id,
+        gtfs_joins.trip_short_name,
+        gtfs_joins.direction_id,
+        gtfs_joins.block_id,
+        gtfs_joins.route_key,
+        gtfs_joins.route_id,
+        gtfs_joins.route_type,
+        gtfs_joins.route_short_name,
+        gtfs_joins.route_long_name,
+        gtfs_joins.route_desc,
+        gtfs_joins.agency_id,
+        gtfs_joins.network_id,
+        gtfs_joins.shape_array_key,
+        gtfs_joins.shape_id,
+        gtfs_joins.contains_warning_duplicate_trip_primary_key,
+        gtfs_joins.n_stops,
+        gtfs_joins.n_stop_times,
+        gtfs_joins.trip_first_departure_sec,
+        gtfs_joins.trip_last_arrival_sec,
+        gtfs_joins.service_hours,
+        gtfs_joins.contains_warning_duplicate_stop_times_primary_key,
+        gtfs_joins.contains_warning_missing_foreign_key_stop_id,
+        gtfs_joins.activity_date,
+        gtfs_joins.activity_first_departure,
+        gtfs_joins.activity_last_arrival
+
+    FROM gtfs_joins
+    LEFT JOIN dim_schedule_feeds AS feeds
+        ON gtfs_joins.feed_key = feeds.key
+    LEFT JOIN urls_to_gtfs_datasets
+        ON feeds.base64_url = urls_to_gtfs_datasets.base64_url
+        AND CAST(gtfs_joins.activity_date AS TIMESTAMP) BETWEEN urls_to_gtfs_datasets._valid_from AND urls_to_gtfs_datasets._valid_to
     LEFT JOIN dim_gtfs_datasets
         ON urls_to_gtfs_datasets.gtfs_dataset_key = dim_gtfs_datasets.key
 )

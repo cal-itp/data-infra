@@ -17,6 +17,7 @@ int_gtfs_quality__trip_planner_rt AS (
         CASE manual_check__gtfs_realtime_data_ingested_in_trip_planner
             WHEN 'Yes' THEN {{ guidelines_pass_status() }}
             WHEN 'No' THEN {{ guidelines_fail_status() }}
+            WHEN 'N/A - no fixed-route service' THEN {{ guidelines_na_check_status() }}
             ELSE {{ guidelines_manual_check_needed_status() }}
         END AS status,
     FROM idx

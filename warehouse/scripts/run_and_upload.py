@@ -263,35 +263,35 @@ def run(
 
             results_to_check.append(subprocess.run(args))
 
+    # There's a flag called --metabase_sync_skip but it doesn't seem to work as I assumed
+    # so we only want to sync in production. This makes it hard to test, but we don't really
+    # use the pre-prod Metabase right now; we could theoretically test with that if it
+    # synced schemas created by the staging dbt target.
     if sync_metabase:
-        results_to_check.append(
-            subprocess.run(
-                [
-                    "dbt-metabase",
-                    "models",
-                    "--dbt_manifest_path",
-                    "./target/manifest.json",
-                    "--metabase_database",
-                    "Data Marts (formerly Warehouse Views)",
-                    "--dbt_schema_excludes",
-                    "staging payments",
-                ]
+        if target and target.startswith("prod"):
+            results_to_check.append(
+                subprocess.run(
+                    [
+                        "dbt-metabase",
+                        "models",
+                        "--metabase_exclude_sources",
+                        "--dbt_manifest_path",
+                        "./target/manifest.json",
+                        "--dbt_docs_url",
+                        "https://dbt-docs.calitp.org",
+                        "--metabase_database",
+                        "Data Marts (formerly Warehouse Views)",
+                        "--dbt_schema_excludes",
+                        "staging",
+                        "payments",
+                    ]
+                )
             )
-        )
-        results_to_check.append(
-            subprocess.run(
-                [
-                    "dbt-metabase",
-                    "models",
-                    "--dbt_manifest_path",
-                    "./target/manifest.json",
-                    "--metabase_database",
-                    "(Internal) Payments",
-                    "--dbt_schema",
-                    "payments",
-                ]
+        else:
+            typer.secho(
+                f"WARNING: running with non-prod target {target} so skipping metabase sync",
+                fg=typer.colors.YELLOW,
             )
-        )
 
     for result in results_to_check:
         result.check_returncode()
