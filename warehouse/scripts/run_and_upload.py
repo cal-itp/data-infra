@@ -278,7 +278,7 @@ def run(
                         "--dbt_manifest_path",
                         "./target/manifest.json",
                         "--dbt_docs_url",
-                        "https://dbt-docs.calitp.org/",
+                        "https://dbt-docs.calitp.org",
                         "--metabase_database",
                         "Data Marts (formerly Warehouse Views)",
                         "--dbt_schema_excludes",
