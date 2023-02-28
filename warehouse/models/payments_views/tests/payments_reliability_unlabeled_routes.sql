@@ -49,21 +49,9 @@ payments_reliability_unlabeled_routes AS (
         total_unlabeled_rides,
         n_all_rides,
         percentage_unlabeled_rides_to_total_rides,
-        recency_rank
+        RANK() OVER (PARTITION BY participant_id ORDER BY month_start DESC) AS recency_rank
 
-    FROM
-        (SELECT
-            participant_id,
-            month_start,
-            n_route_z_rides,
-            n_null_rides,
-            total_unlabeled_rides,
-            n_all_rides,
-            percentage_unlabeled_rides_to_total_rides,
-
-            RANK() OVER (PARTITION BY participant_id ORDER BY month_start DESC) AS recency_rank
-
-        FROM aggregations_and_date_spine)
+    FROM aggregations_and_date_spine
 )
 
 SELECT * FROM payments_reliability_unlabeled_routes
