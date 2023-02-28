@@ -79,7 +79,7 @@ calculate_relative_count AS (
 
         *,
 
-        SAFE_DIVIDE(total_unlabeled_rides, n_all_rides) * 100 AS relative_unlabeled_rides_to_total_rides,
+        SAFE_DIVIDE(total_unlabeled_rides, n_all_rides) * 100 AS percentage_unlabeled_rides_to_total_rides,
 
     FROM match_date_spine
 ),
@@ -93,7 +93,7 @@ payments_reliability_unlabeled_routes AS (
         n_null_rides,
         total_unlabeled_rides,
         n_all_rides,
-        relative_unlabeled_rides_to_total_rides,
+        percentage_unlabeled_rides_to_total_rides,
         recency_rank
 
     FROM
@@ -104,7 +104,7 @@ payments_reliability_unlabeled_routes AS (
             n_null_rides,
             total_unlabeled_rides,
             n_all_rides,
-            relative_unlabeled_rides_to_total_rides,
+            percentage_unlabeled_rides_to_total_rides,
 
             RANK() OVER (PARTITION BY participant_id ORDER BY month_start DESC) AS recency_rank
 
