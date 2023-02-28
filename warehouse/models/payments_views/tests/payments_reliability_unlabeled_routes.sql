@@ -19,39 +19,39 @@ payments_tests_monthly_date_spine AS (
 count_route_z_rides AS (
     SELECT
 
-        participant_id,
-        month_start,
+        spine.participant_id,
+        spine.month_start,
         COUNT(*) AS n_route_z_rides
 
-    FROM payments_tests_monthly_date_spine
+    FROM payments_tests_monthly_date_spine AS spine
     INNER JOIN route_z_rides
-        USING (participant_id) WHERE transaction_date_pacific >= month_start AND transaction_date_pacific <= month_end
+        ON (spine.participant_id = route_z_rides.participant_id) AND transaction_date_pacific >= month_start AND transaction_date_pacific <= month_end
     GROUP BY month_start, participant_id
 ),
 
 count_null_rides AS (
     SELECT
 
-        participant_id,
-        month_start,
+        spine.participant_id,
+        spine.month_start,
         COUNT(*) AS n_null_rides
 
-    FROM payments_tests_monthly_date_spine
+    FROM payments_tests_monthly_date_spine AS spine
     INNER JOIN null_rides
-        USING (participant_id) WHERE transaction_date_pacific >= month_start AND transaction_date_pacific <= month_end
+        ON (spine.participant_id = null_rides.participant_id) AND transaction_date_pacific >= month_start AND transaction_date_pacific <= month_end
     GROUP BY month_start, participant_id
 ),
 
 count_all_rides AS (
     SELECT
 
-        participant_id,
-        month_start,
+        spine.participant_id,
+        spine.month_start,
         COUNT(*) AS n_all_rides
 
-    FROM payments_tests_monthly_date_spine
+    FROM payments_tests_monthly_date_spine AS spine
     INNER JOIN payments_rides
-        USING (participant_id) WHERE transaction_date_pacific >= month_start AND transaction_date_pacific <= month_end
+        ON (spine.participant_id = payments_rides.participant_id) AND transaction_date_pacific >= month_start AND transaction_date_pacific <= month_end
     GROUP BY month_start, participant_id
 ),
 
