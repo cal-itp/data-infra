@@ -1,18 +1,16 @@
 import gzip
-import os
-from concurrent.futures import Future, ThreadPoolExecutor, as_completed
-from typing import ClassVar, Dict, List, Optional
+from typing import ClassVar, List, Optional
 
+import clickhouse_connect
 import pandas as pd
 import pendulum
-import requests
-from calitp_data_infra.auth import get_secret_by_name
-from calitp_data_infra.storage import PartitionedGCSArtifact, get_fs, make_name_bq_safe
+import typer
+from calitp_data_infra.storage import (  # , make_name_bq_safe
+    PartitionedGCSArtifact,
+    get_fs,
+)
 
-from airflow.models import BaseOperator
-
-SENTRY_API_BASE_URL = os.environ["SENTRY_API_BASE_URL"]
-CALITP_BUCKET__SENTRY_EVENTS = os.environ["CALITP_BUCKET__SENTRY_EVENTS"]
+CALITP_BUCKET__SENTRY_EVENTS = "test"  # os.environ["CALITP_BUCKET__SENTRY_EVENTS"]
 
 
 def process_arrays_for_nulls(arr):
@@ -43,6 +41,7 @@ def make_arrays_bq_safe(raw_data):
     return safe_data
 
 
+'''
 def fetch_events_for_issue(issue_id, headers):
     response_data = []
     next_url = f"{SENTRY_API_BASE_URL}/issues/{issue_id}/events/"
@@ -115,16 +114,23 @@ def iterate_over_sentry_records(project_slug, target_date_string, auth_token):
         == target_date_string
     ]
     return combined_response_data
+'''
 
 
-def fetch_and_clean_from_sentry(project_slug, target_date, auth_token):
+def fetch_and_clean_from_clickhouse(project_slug, target_date):
     """
     Download Sentry event records as a DataFrame.
     """
 
-    print(f"Downloading Sentry event data for project {project_slug}")
-    target_date_string = target_date.to_date_string()
-    all_rows = iterate_over_sentry_records(project_slug, target_date_string, auth_token)
+    # print(f"Downloading Sentry event data for project {project_slug}")
+    # target_date_string = target_date.to_date_string()
+    client = clickhouse_connect.get_client(host="localhost", port=8123)
+    all_rows = client.query_df(
+        f"""SELECT * FROM errors_dist
+                                   WHERE message like '%RTFetchException%'
+                                   and toDate(timestamp) == '{target_date}'"""
+    )
+
     extract = SentryExtract(
         project_slug=project_slug,
         dt=target_date,
@@ -143,21 +149,29 @@ class SentryExtract(PartitionedGCSArtifact):
     execution_ts: pendulum.DateTime
     partition_names: ClassVar[List[str]] = ["project_slug", "dt", "execution_ts"]
     project_slug: str
-    data: Optional[List[Dict]]
+    data: Optional[pd.DataFrame]
+
+    class Config:
+        arbitrary_types_allowed = True
 
     def save_to_gcs(self, fs):
+        """
         raw_df = pd.DataFrame([{**make_arrays_bq_safe(row)} for row in self.data])
         cleaned_df = raw_df.rename(make_name_bq_safe, axis="columns")
+        """
 
         self.save_content(
             fs=fs,
             content=gzip.compress(
-                cleaned_df.to_json(orient="records", lines=True).encode()
+                self.data.to_json(
+                    orient="records", lines=True, default_handler=str
+                ).encode()
             ),
             exclude={"data"},
         )
 
 
+'''
 class SentryToGCSOperator(BaseOperator):
     template_fields = ("bucket",)
 
@@ -185,14 +199,18 @@ class SentryToGCSOperator(BaseOperator):
         self.auth_token = auth_token
 
         super().__init__(**kwargs)
+'''
 
-    def execute(self, context, **kwargs):
-        target_date = pendulum.from_format(
-            context.get("ts"), "YYYY-MM-DDTHH:mm:ssZ"
-        ).date()
-        auth_token = self.auth_token or get_secret_by_name("CALITP_SENTRY_AUTH_TOKEN")
-        extract = fetch_and_clean_from_sentry(
-            self.project_slug, target_date, auth_token
-        )
-        fs = get_fs()
-        return extract.save_to_gcs(fs=fs)
+
+def main(
+    project_slug: str,
+    logical_date: str,
+):
+    target_date = pendulum.from_format(logical_date, "YYYY-MM-DDTHH:mm:ssZ").date()
+    extract = fetch_and_clean_from_clickhouse(project_slug, target_date)
+    fs = get_fs()
+    return extract.save_to_gcs(fs=fs)
+
+
+if __name__ == "__main__":
+    typer.run(main)
