@@ -3,9 +3,11 @@ WITH feed_guideline_index AS (
 ),
 
 -- For this check we are only looking for the 30-day feed expiration warning
-validation_fact_daily_feed_codes_shape_related AS (
+validation_fact_daily_feed_codes_expiration_related AS (
     SELECT * FROM {{ ref('fct_daily_schedule_feed_validation_notices') }}
-     WHERE code = 'feed_expiration_date30_days'
+    -- If the feed expires within 7 days, the 30day notice won't appear.
+    -- In our case we want this check to fail even if the 7day expiration check also fails.
+     WHERE code IN ('feed_expiration_date30_days','feed_expiration_date7_days')
 ),
 
 validation_notices_by_day AS (
@@ -13,7 +15,7 @@ validation_notices_by_day AS (
         feed_key,
         date,
         SUM(total_notices) as validation_notices
-    FROM validation_fact_daily_feed_codes_shape_related
+    FROM validation_fact_daily_feed_codes_expiration_related
     GROUP BY feed_key, date
 ),
 

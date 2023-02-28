@@ -4,6 +4,7 @@ Huey's startup hooks are per _worker_ and not the overall consumer process.
 """
 import logging
 import os
+import re
 import sys
 
 import sentry_sdk
@@ -15,6 +16,8 @@ from prometheus_client import start_http_server
 
 from .tasks import RTFetchException, huey
 
+compiled_regex = re.compile("0x[0-9a-fA-F]+")
+
 
 def set_exception_fingerprint(event, hint):
     if "exc_info" not in hint:
@@ -23,7 +26,10 @@ def set_exception_fingerprint(event, hint):
     exception = hint["exc_info"][1]
     if isinstance(exception, RTFetchException):
         event["fingerprint"] = [
-            str(exception),
+            # this is ugly but it's the easiest way to quickly remove the object location hex from the fingerprint
+            # without actually messing with the exception chain;
+            # safety net for exceptions that contain a default object str()
+            compiled_regex.sub("0x...", str(exception)),
             str(exception.url),
         ]
         if exception.status_code:
