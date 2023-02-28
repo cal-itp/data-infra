@@ -68,6 +68,7 @@ first_instances AS (
 -- because URLs can be deleted from our list but then reoccur
 -- (which is nonstandard for keys in this kind of SCD logic)
 -- we need to add specific checks to figure out whether the URL was deleted between instances
+-- first step: find what our consecutive versions are
 get_next_first AS (
     SELECT
         base64_url,
@@ -80,6 +81,7 @@ get_next_first AS (
     FROM first_instances
 ),
 
+-- now fill in all observed successes between the versions
 all_versioned AS (
     SELECT
         get_next_first.base64_url,
@@ -88,7 +90,7 @@ all_versioned AS (
         get_next_first.content_hash,
         get_next_first.zipfile_extract_md5hash,
         get_next_first.ts AS _valid_from,
-        COALESCE(
+        {{ make_end_of_valid_range('COALESCE(
                 (
                 -- this is the first (global) extract after the last successful instance of the current version
                 LAST_VALUE(next_valid_extract.next_ts)
@@ -96,12 +98,12 @@ all_versioned AS (
                         ORDER BY successful_downloads.ts
                         ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)
                 ),
-                "2099-01-01")
-            AS _valid_to_raw
+                "2099-01-01"
+        )') }} AS _valid_to
     FROM get_next_first
     LEFT JOIN successful_downloads
         ON get_next_first.base64_url = successful_downloads.base64_url
-        AND successful_downloads.ts BETWEEN get_next_first.ts AND {{ make_end_of_valid_range(COALESCE(get_next_first.next_first_ts, "2099-01-01")) }}
+        AND successful_downloads.ts BETWEEN get_next_first.ts AND {{ make_end_of_valid_range('COALESCE(get_next_first.next_first_ts, "2099-01-01")') }}
     LEFT JOIN next_valid_extract
         ON successful_downloads.ts = next_valid_extract.ts
     -- filter to only the last successful appearance of the current version
@@ -115,7 +117,7 @@ actual_data_only AS (
         unzip_success,
         zipfile_extract_md5hash,
         _valid_from,
-        {{ make_end_of_valid_range(_valid_to_raw) }} AS _valid_to,
+        _valid_to,
         _valid_to = {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }} AS _is_current
     FROM all_versioned
 ),
