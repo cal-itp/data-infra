@@ -1,5 +1,7 @@
-WITH feed_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_quality__schedule_url_guideline_index') }}
+WITH guideline_index AS (
+    SELECT *
+    FROM {{ ref('int_gtfs_quality__guideline_checks_index') }}
+    WHERE check = {{ static_feed_downloaded_successfully() }}
 ),
 
 fct_schedule_feed_downloads AS (
@@ -9,7 +11,7 @@ fct_schedule_feed_downloads AS (
 ),
 
 daily_feed_download_unzip_success AS (
-    SELECT date,
+    SELECT DISTINCT date,
            base64_url
       FROM fct_schedule_feed_downloads
      WHERE download_success
@@ -18,19 +20,16 @@ daily_feed_download_unzip_success AS (
 
 int_gtfs_quality__schedule_download_success AS (
     SELECT
-        idx.date,
-        idx.base64_url,
-        {{ static_feed_downloaded_successfully() }} AS check,
-        {{ compliance_schedule() }} AS feature,
+        idx.* EXCEPT(status),
         CASE
-            WHEN LOGICAL_AND(d.base64_url IS NOT null) THEN {{ guidelines_pass_status() }}
-            ELSE {{ guidelines_fail_status() }}
+            WHEN d.base64_url IS NOT null THEN {{ guidelines_pass_status() }}
+            WHEN idx.has_schedule_url THEN {{ guidelines_fail_status() }}
+            ELSE idx.status
         END AS status
-    FROM feed_guideline_index idx
+    FROM guideline_index idx
     LEFT JOIN daily_feed_download_unzip_success d
       ON idx.base64_url = d.base64_url
      AND idx.date = d.date
-   GROUP BY 1, 2, 3, 4
 )
 
 SELECT * FROM int_gtfs_quality__schedule_download_success
