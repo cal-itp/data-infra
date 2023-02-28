@@ -22,6 +22,7 @@ int_gtfs_quality__authentication_acceptable AS (
         CASE manual_check__authentication_acceptable
             WHEN 'Yes' THEN {{ guidelines_pass_status() }}
             WHEN 'No' THEN {{ guidelines_fail_status() }}
+            WHEN 'N/A - dataset is not public-facing' THEN {{ guidelines_na_check_status() }}
             ELSE {{ guidelines_manual_check_needed_status() }}
         END AS status
     FROM idx
