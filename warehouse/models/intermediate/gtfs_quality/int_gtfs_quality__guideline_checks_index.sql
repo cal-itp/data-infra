@@ -56,21 +56,21 @@ cross_join AS (
         schedule_feed_key,
         schedule_to_use_for_rt_validation_gtfs_dataset_key,
 
-        (gtfs_dataset_type = "schedule" AND gtfs_dataset_key IS NOT NULL) AS has_gtfs_dataset_schedule,
-        (gtfs_dataset_type = "schedule" OR schedule_feed_key IS NOT NULL) AS has_schedule_url,
-        (schedule_feed_key IS NOT NULL) AS has_schedule_feed,
+        COALESCE((gtfs_dataset_type = "schedule" AND gtfs_dataset_key IS NOT NULL), FALSE) AS has_gtfs_dataset_schedule,
+        COALESCE((gtfs_dataset_type = "schedule" OR schedule_feed_key IS NOT NULL), FALSE) AS has_schedule_url,
+        COALESCE((schedule_feed_key IS NOT NULL), FALSE) AS has_schedule_feed,
 
-        (gtfs_dataset_type = "vehicle_positions" AND gtfs_dataset_key IS NOT NULL) AS has_gtfs_dataset_vp,
-        (gtfs_dataset_type = "vehicle_positions") AS has_rt_url_vp,
-        (gtfs_dataset_type = "vehicle_positions" AND had_rt_files) AS has_rt_feed_vp,
+        COALESCE((gtfs_dataset_type = "vehicle_positions" AND gtfs_dataset_key IS NOT NULL), FALSE) AS has_gtfs_dataset_vp,
+        COALESCE((gtfs_dataset_type = "vehicle_positions"), FALSE) AS has_rt_url_vp,
+        COALESCE((gtfs_dataset_type = "vehicle_positions" AND had_rt_files), FALSE) AS has_rt_feed_vp,
 
-        (gtfs_dataset_type = "trip_updates" AND gtfs_dataset_key IS NOT NULL) AS has_gtfs_dataset_tu,
-        (gtfs_dataset_type = "trip_updates") AS has_rt_url_tu,
-        (gtfs_dataset_type = "trip_updates" AND had_rt_files) AS has_rt_feed_tu,
+        COALESCE((gtfs_dataset_type = "trip_updates" AND gtfs_dataset_key IS NOT NULL), FALSE) AS has_gtfs_dataset_tu,
+        COALESCE((gtfs_dataset_type = "trip_updates"), FALSE) AS has_rt_url_tu,
+        COALESCE((gtfs_dataset_type = "trip_updates" AND had_rt_files), FALSE) AS has_rt_feed_tu,
 
-        (gtfs_dataset_type = "service_alerts" AND gtfs_dataset_key IS NOT NULL) AS has_gtfs_dataset_sa,
-        (gtfs_dataset_type = "service_alerts") AS has_rt_url_sa,
-        (gtfs_dataset_type = "service_alerts" AND had_rt_files) AS has_rt_feed_sa,
+        COALESCE((gtfs_dataset_type = "service_alerts" AND gtfs_dataset_key IS NOT NULL), FALSE) AS has_gtfs_dataset_sa,
+        COALESCE((gtfs_dataset_type = "service_alerts"), FALSE) AS has_rt_url_sa,
+        COALESCE((gtfs_dataset_type = "service_alerts" AND had_rt_files), FALSE) AS has_rt_feed_sa,
 
         organization_key IS NOT NULL AS has_organization,
         service_key IS NOT NULL AS has_service,
