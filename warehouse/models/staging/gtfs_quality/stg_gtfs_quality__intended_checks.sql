@@ -93,7 +93,14 @@ WITH stg_gtfs_quality__intended_checks AS (
     SELECT {{ scheduled_trips_in_tu_feed() }}, {{ fixed_route_completeness() }}, {{ service() }}
     UNION ALL
     SELECT {{ all_tu_in_vp() }}, {{ fixed_route_completeness() }}, {{ service() }}
-
+    UNION ALL
+    SELECT {{ feed_listed_schedule() }}, {{ compliance_schedule() }}, {{ service() }}
+    UNION ALL
+    SELECT {{ feed_listed_vp() }}, {{ compliance_rt() }}, {{ service() }}
+    UNION ALL
+    SELECT {{ feed_listed_tu() }}, {{ compliance_rt() }}, {{ service() }}
+    UNION ALL
+    SELECT {{ feed_listed_sa() }}, {{ compliance_rt() }}, {{ service() }}
     -- MANUAL CHECKS
     UNION ALL
     SELECT {{ organization_has_contact_info() }}, {{ technical_contact_availability() }}, {{ organization() }}

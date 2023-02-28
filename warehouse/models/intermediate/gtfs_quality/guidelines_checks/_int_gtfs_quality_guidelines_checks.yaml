@@ -273,6 +273,22 @@ models:
     tests: *stg_gtfs_guideline_tests_service
     columns: *stg_gtfs_guideline_columns
 
+  - name: int_gtfs_quality__feed_listed_schedule
+    tests: *stg_gtfs_guideline_tests_service
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__feed_listed_vp
+    tests: *stg_gtfs_guideline_tests_service
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__feed_listed_tu
+    tests: *stg_gtfs_guideline_tests_service
+    columns: *stg_gtfs_guideline_columns
+
+  - name: int_gtfs_quality__feed_listed_sa
+    tests: *stg_gtfs_guideline_tests_service
+    columns: *stg_gtfs_guideline_columns
+
 # --- GTFS-service-data-level
 # ----- Schedule only
 
