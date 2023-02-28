@@ -23,9 +23,13 @@ int_gtfs_quality__data_license AS (
             WHEN gtfs_datasets.type IN ("vehicle_positions", "trip_updates", "service_alerts") THEN {{ compliance_rt() }}
         END AS feature,
         CASE
-            WHEN manual_check__data_license LIKE ('%Permissive%') THEN {{ guidelines_pass_status() }}
+            WHEN manual_check__data_license LIKE ('%Permissive%')
+                 OR manual_check__data_license LIKE ('%CC-BY%')
+                 OR manual_check__data_license LIKE ('%ODL-BY%')
+                THEN {{ guidelines_pass_status() }}
             WHEN manual_check__data_license LIKE ('%Restrictive%')
-                 OR manual_check__data_license = 'Missing' THEN {{ guidelines_fail_status() }}
+                 OR manual_check__data_license = 'Missing'
+                THEN {{ guidelines_fail_status() }}
             WHEN manual_check__data_license = 'N/A - dataset is not public-facing' THEN {{ guidelines_na_check_status() }}
             ELSE {{ guidelines_manual_check_needed_status() }}
         END AS status
