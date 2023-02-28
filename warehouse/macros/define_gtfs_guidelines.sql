@@ -543,6 +543,11 @@ feature
 "FAIL"
 {% endmacro %}
 
+{% macro guidelines_to_be_assessed_status() %}
+"TO BE ASSESSED"
+{% endmacro %}
+
+
 {% macro guidelines_aggregation_logic() %}
 CASE
     -- order of evaluation matters here!
