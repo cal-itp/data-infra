@@ -104,11 +104,33 @@ summarize_feed_info AS (
     GROUP BY 1, 2
 ),
 
-idx_monthly_reports_site AS (
+dataset_map AS (
+    SELECT *,
+    DATE_ADD(DATE_TRUNC(date, MONTH), INTERVAL 1 MONTH) as publish_date
+    -- align with index using publish date (look for urls in prev month)
+    FROM {{ ref('int_gtfs_quality__organization_dataset_map') }}
+    WHERE reports_site_assessed
+),
+
+make_distinct AS (SELECT DISTINCT 
+    publish_date,
+    organization_itp_id,
+    gtfs_dataset_name,
+    {{ from_url_safe_base64('base64_url') }} AS string_url
+FROM dataset_map
+),
+
+month_reports_urls AS (
+    SELECT publish_date, organization_itp_id, ARRAY_AGG(STRUCT(gtfs_dataset_name, string_url)) AS feeds
+    FROM make_distinct 
+    GROUP BY publish_date, organization_itp_id
+),
+
+idx_pending_urls AS (
     -- select distinct to drop services feeds etc., we only want organizations
     SELECT DISTINCT
         -- day after the last of the month is the first of the following month
-        DATE_ADD(assessed_orgs.date, INTERVAL 1 DAY) AS publish_date,
+        DATE_ADD(assessed_orgs.date, INTERVAL 1 DAY) AS publish_date, 
         DATE_TRUNC(assessed_orgs.date, MONTH) AS date_start,
         -- above we filtered to only last day of the month already
         assessed_orgs.date AS date_end,
@@ -120,7 +142,7 @@ idx_monthly_reports_site AS (
         stop_count.stop_ct,
         no_service_days.no_service_days_ct,
         earliest_feed_end_date,
-        org_dim.website AS organization_website
+        org_dim.website AS organization_website,
     FROM schedule_assessed AS assessed_orgs
     LEFT JOIN check_rt
         USING (date, organization_source_record_id)
@@ -137,6 +159,14 @@ idx_monthly_reports_site AS (
     -- don't add rows until the month in which the report will be generated
     -- i.e., do not add January rows until February has started
     WHERE date < CURRENT_DATE()
+),
+
+idx_monthly_reports_site AS(
+    -- split out since it's impossible to select distinct an array
+    SELECT idx_pending_urls.*, month_reports_urls.feeds
+    FROM idx_pending_urls
+    LEFT JOIN month_reports_urls
+        USING (publish_date, organization_itp_id)
 )
 
 SELECT * FROM idx_monthly_reports_site
