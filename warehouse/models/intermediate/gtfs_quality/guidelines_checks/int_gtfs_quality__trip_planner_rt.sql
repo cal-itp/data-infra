@@ -25,6 +25,8 @@ int_gtfs_quality__trip_planner_rt AS (
         {{ trip_planner_rt() }} AS check,
         {{ compliance_rt() }} AS feature,
         CASE
+            -- If there are no RT feeds listed, the service should not fail this check, instead it should be "N/A"
+            -- Note that we're only looking at VP and TU, since that's what it being checked for in this manual check.
             WHEN tu.status = 'FAIL' AND vp.status = 'FAIL' THEN {{ guidelines_na_check_status() }}
             WHEN rt_in_trip_planner = 'Yes' THEN {{ guidelines_pass_status() }}
             WHEN rt_in_trip_planner = 'No' THEN {{ guidelines_fail_status() }}

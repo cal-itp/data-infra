@@ -21,6 +21,7 @@ int_gtfs_quality__trip_planner_schedule AS (
         {{ trip_planner_schedule() }} AS check,
         {{ compliance_schedule() }} AS feature,
         CASE
+            -- If there is no schedule feed listed, the service should not fail this check, instead it should be "N/A"
             WHEN schedule.status = 'FAIL' THEN {{ guidelines_na_check_status() }}
             WHEN schedule_in_trip_planner = 'Yes' THEN {{ guidelines_pass_status() }}
             WHEN schedule_in_trip_planner = 'No' THEN {{ guidelines_fail_status() }}
