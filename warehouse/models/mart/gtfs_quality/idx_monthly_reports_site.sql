@@ -112,7 +112,7 @@ dataset_map AS (
     WHERE reports_site_assessed
 ),
 
-make_distinct AS (SELECT DISTINCT 
+make_distinct AS (SELECT DISTINCT
     publish_date,
     organization_itp_id,
     gtfs_dataset_name,
@@ -122,7 +122,7 @@ FROM dataset_map
 
 month_reports_urls AS (
     SELECT publish_date, organization_itp_id, ARRAY_AGG(STRUCT(gtfs_dataset_name, string_url)) AS feeds
-    FROM make_distinct 
+    FROM make_distinct
     GROUP BY publish_date, organization_itp_id
 ),
 
@@ -130,7 +130,7 @@ idx_pending_urls AS (
     -- select distinct to drop services feeds etc., we only want organizations
     SELECT DISTINCT
         -- day after the last of the month is the first of the following month
-        DATE_ADD(assessed_orgs.date, INTERVAL 1 DAY) AS publish_date, 
+        DATE_ADD(assessed_orgs.date, INTERVAL 1 DAY) AS publish_date,
         DATE_TRUNC(assessed_orgs.date, MONTH) AS date_start,
         -- above we filtered to only last day of the month already
         assessed_orgs.date AS date_end,
