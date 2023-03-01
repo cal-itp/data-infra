@@ -106,14 +106,13 @@ summarize_feed_info AS (
 
 dataset_map AS (
     SELECT *,
-    DATE_ADD(DATE_TRUNC(date, MONTH), INTERVAL 1 MONTH) as publish_date
-    -- align with index using publish date (look for urls in prev month)
+    DATE_TRUNC(date, MONTH) AS date_start
     FROM {{ ref('int_gtfs_quality__organization_dataset_map') }}
     WHERE reports_site_assessed
 ),
 
 make_distinct AS (SELECT DISTINCT
-    publish_date,
+    date_start,
     organization_itp_id,
     gtfs_dataset_name,
     {{ from_url_safe_base64('base64_url') }} AS string_url
@@ -121,9 +120,9 @@ FROM dataset_map
 ),
 
 month_reports_urls AS (
-    SELECT publish_date, organization_itp_id, ARRAY_AGG(STRUCT(gtfs_dataset_name, string_url)) AS feeds
+    SELECT date_start, organization_itp_id, ARRAY_AGG(STRUCT(gtfs_dataset_name, string_url)) AS feeds
     FROM make_distinct
-    GROUP BY publish_date, organization_itp_id
+    GROUP BY date_start, organization_itp_id
 ),
 
 idx_pending_urls AS (
@@ -166,7 +165,7 @@ idx_monthly_reports_site AS(
     SELECT idx_pending_urls.*, month_reports_urls.feeds
     FROM idx_pending_urls
     LEFT JOIN month_reports_urls
-        USING (publish_date, organization_itp_id)
+        USING (date_start, organization_itp_id)
 )
 
 SELECT * FROM idx_monthly_reports_site
