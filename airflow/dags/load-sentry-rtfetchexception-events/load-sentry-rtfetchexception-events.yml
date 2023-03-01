@@ -1,0 +1,51 @@
+operator: operators.PodOperator
+name: 'load-sentry-rtfetchexception-events'
+image: 'ghcr.io/cal-itp/data-infra/sentry-error-loader:{{image_tag()}}'
+pool: rt_parse_pool
+
+cmds:
+  - python3
+
+arguments:
+  - "sentry_to_gcs.py"
+  - "cal-itp-data-infra"
+  - "{{ execution_date.replace(minute=0, second=0).format('YYYY-MM-DDTHH:mm:ssZ') }}"
+
+is_delete_operator_pod: true
+get_logs: true
+
+is_gke: true
+pod_location: us-west1
+cluster_name: data-infra-apps
+namespace: airflow-jobs
+
+env_vars:
+  GOOGLE_APPLICATION_CREDENTIALS: /secrets/jobs-data/service_account.json
+  GRAAS_SERVER_URL: "{{ env_var('GRAAS_SERVER_URL') }}"
+  SENTRY_DSN: "{{ env_var('SENTRY_DSN') }}"
+  SENTRY_ENVIRONMENT: "{{ env_var('SENTRY_ENVIRONMENT') }}"
+
+secrets:
+  - deploy_type: volume
+    deploy_target: /secrets/jobs-data/
+    secret: jobs-data
+    key: service_account.json
+
+resources:
+  request_memory: 2.0Gi
+  request_cpu: 1
+
+tolerations:
+  - key: pod-role
+    operator: Equal
+    value: computetask
+    effect: NoSchedule
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: pod-role
+          operator: In
+          values:
+          - computetask

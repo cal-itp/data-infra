@@ -5,12 +5,11 @@ import clickhouse_connect
 import pandas as pd
 import pendulum
 import typer
-from calitp_data_infra.storage import (  # , make_name_bq_safe
-    PartitionedGCSArtifact,
-    get_fs,
-)
+from calitp_data_infra.storage import PartitionedGCSArtifact, get_fs, make_name_bq_safe
 
-CALITP_BUCKET__SENTRY_EVENTS = "test"  # os.environ["CALITP_BUCKET__SENTRY_EVENTS"]
+CALITP_BUCKET__SENTRY_EVENTS = (
+    "test-calitp-sentry"  # os.environ["CALITP_BUCKET__SENTRY_EVENTS"]
+)
 
 
 def process_arrays_for_nulls(arr):
@@ -155,15 +154,12 @@ class SentryExtract(PartitionedGCSArtifact):
         arbitrary_types_allowed = True
 
     def save_to_gcs(self, fs):
-        """
-        raw_df = pd.DataFrame([{**make_arrays_bq_safe(row)} for row in self.data])
-        cleaned_df = raw_df.rename(make_name_bq_safe, axis="columns")
-        """
+        cleaned_df = self.data.rename(make_name_bq_safe, axis="columns")
 
         self.save_content(
             fs=fs,
             content=gzip.compress(
-                self.data.to_json(
+                cleaned_df.to_json(
                     orient="records", lines=True, default_handler=str
                 ).encode()
             ),

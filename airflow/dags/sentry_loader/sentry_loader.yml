@@ -1,3 +1,0 @@
-operator: operators.SentryToGCSOperator
-bucket: "{{ env_var('CALITP_BUCKET__SENTRY_EVENTS') }}"
-project_slug: "cal-itp-data-infra"
