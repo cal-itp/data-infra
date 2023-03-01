@@ -48,7 +48,7 @@ models:
         description: The total number of rides labeled as either `Route Z` or `Null` for the given month
       - name: n_all_rides
         description: The total number of rides for the given month
-      - name: percentage_unlabeled_rides_to_total_rides
+      - name: pct_unlabeled_rides_to_total_rides
         description: The percentage of unlabeled rides compared to the total number of rides for the given month
       - name: recency_rank
         description: Used to identify a month's recency (for help with filtering)

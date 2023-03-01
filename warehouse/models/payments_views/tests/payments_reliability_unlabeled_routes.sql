@@ -32,7 +32,7 @@ aggregations_and_date_spine AS (
 
         (count_rides.n_route_z_rides + count_rides.n_null_rides) AS total_unlabeled_rides,
 
-        SAFE_DIVIDE((count_rides.n_route_z_rides + count_rides.n_null_rides), count_rides.n_all_rides) * 100 AS percentage_unlabeled_rides_to_total_rides
+        SAFE_DIVIDE((count_rides.n_route_z_rides + count_rides.n_null_rides), count_rides.n_all_rides) * 100 AS pct_unlabeled_rides_to_total_rides
 
     FROM payments_tests_monthly_date_spine AS date_spine
     LEFT JOIN count_rides
@@ -48,7 +48,7 @@ payments_reliability_unlabeled_routes AS (
         n_null_rides,
         total_unlabeled_rides,
         n_all_rides,
-        percentage_unlabeled_rides_to_total_rides,
+        pct_unlabeled_rides_to_total_rides,
         RANK() OVER (PARTITION BY participant_id ORDER BY month_start DESC) AS recency_rank
 
     FROM aggregations_and_date_spine
