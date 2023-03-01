@@ -19,7 +19,7 @@ joined AS (
     LEFT JOIN dim_provider_gtfs_data AS quartet
         ON idx.service_key = quartet.service_key
        AND TIMESTAMP(idx.date) BETWEEN quartet._valid_from AND quartet._valid_to
-       AND quartet.guidelines_assessed
+       AND quartet.customer_facing
     GROUP BY 1,2
 ),
 
