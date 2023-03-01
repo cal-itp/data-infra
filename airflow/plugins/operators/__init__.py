@@ -4,4 +4,3 @@ from operators.amplitude_to_flattened_json import AmplitudeToFlattenedJSONOperat
 from operators.external_table import ExternalTable
 from operators.gtfs_csv_to_jsonl import GtfsGcsToJsonlOperator
 from operators.pod_operator import PodOperator
-from operators.sentry_to_gcs import SentryToGCSOperator

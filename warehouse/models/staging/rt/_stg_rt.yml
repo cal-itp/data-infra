@@ -47,7 +47,7 @@ models:
       - name: tags_key
       - name: tags_value
       - name: contexts_key
-      - name: context_value
+      - name: contexts_value
       - name: transaction_name
       - name: span_id
       - name: trace_id
@@ -83,3 +83,6 @@ models:
       - name: sdk_integrations
       - name: modules_name
       - name: modules_version
+      - name: project_slug
+      - name: dt
+      - name: execution_ts

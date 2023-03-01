@@ -22,7 +22,7 @@ WITH fct_rt_feed_fetch_errors AS (
         tags_key,
         tags_value,
         contexts_key,
-        context_value,
+        contexts_value,
         transaction_name,
         span_id,
         trace_id,
@@ -57,7 +57,10 @@ WITH fct_rt_feed_fetch_errors AS (
         exception_frames_stack_level,
         sdk_integrations,
         modules_name,
-        modules_version
+        modules_version,
+        project_slug,
+        dt,
+        execution_ts
     FROM {{ ref('stg_rt__feed_fetch_errors') }}
 )
 

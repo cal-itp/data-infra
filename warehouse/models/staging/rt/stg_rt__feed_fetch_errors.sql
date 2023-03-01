@@ -1,7 +1,7 @@
 {{
     config(
         materialized='incremental',
-        unique_key='id',
+        unique_key='event_id',
         incremental_strategy='insert_overwrite',
         partition_by={
             'field': 'execution_ts',
@@ -9,7 +9,7 @@
             'granularity': 'hour',
         },
         partitions=['current_timestamp()'],
-        cluster_by='groupid',
+        cluster_by='group_id',
     )
 }}
 
@@ -42,7 +42,7 @@ stg_rt__feed_fetch_errors AS (
         tags_key,
         tags_value,
         contexts_key,
-        context_value,
+        contexts_value,
         transaction_name,
         span_id,
         trace_id,
@@ -77,7 +77,10 @@ stg_rt__feed_fetch_errors AS (
         exception_frames_stack_level,
         sdk_integrations,
         modules_name,
-        modules_version
+        modules_version,
+        project_slug,
+        dt,
+        execution_ts
     FROM source
 )
 
