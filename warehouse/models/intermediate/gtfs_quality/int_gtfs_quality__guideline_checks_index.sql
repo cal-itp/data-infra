@@ -1,4 +1,4 @@
-{{ config(materialized='table') }}
+{{ config(materialized='table', cluster_by='check') }}
 
 WITH checks AS (
     SELECT *
