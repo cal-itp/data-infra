@@ -120,6 +120,7 @@ int_gtfs_quality__naive_organization_service_dataset_full_join AS (
         datasets.regional_feed_type,
         datasets.backdated_regional_feed_type,
         datasets.source_record_id AS gtfs_dataset_source_record_id,
+        datasets.deprecated_date AS gtfs_dataset_deprecated_date,
         validation_bridge.schedule_to_use_for_rt_validation_gtfs_dataset_key,
         COALESCE(datasets.base64_url, schedule_feeds.base64_url, rt_feeds.base64_url) AS base64_url,
         schedule_feeds.feed_key AS schedule_feed_key,
