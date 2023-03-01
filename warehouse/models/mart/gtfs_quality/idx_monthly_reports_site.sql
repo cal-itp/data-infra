@@ -142,7 +142,7 @@ idx_pending_urls AS (
         stop_count.stop_ct,
         no_service_days.no_service_days_ct,
         earliest_feed_end_date,
-        org_dim.website AS organization_website,
+        org_dim.website AS organization_website
     FROM schedule_assessed AS assessed_orgs
     LEFT JOIN check_rt
         USING (date, organization_source_record_id)
