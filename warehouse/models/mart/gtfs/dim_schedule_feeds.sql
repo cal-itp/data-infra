@@ -17,7 +17,7 @@ WITH int_gtfs_schedule__joined_feed_outcomes AS (
     WHERE EXTRACT(DATE FROM ts) <= EXTRACT(DATE FROM TIMESTAMP '{{ latest_processed_timestamp }}')
 ),
 
-successful_downloads AS (
+data_available AS (
     SELECT *
     FROM int_gtfs_schedule__joined_feed_outcomes
     WHERE download_success AND unzip_success
@@ -34,7 +34,7 @@ hashed AS (
         MAX(ts) OVER(PARTITION BY base64_url ORDER BY ts DESC) AS latest_extract,
         {{ dbt_utils.surrogate_key(['download_success', 'unzip_success',
          'zipfile_extract_md5hash']) }} AS content_hash
-    FROM successful_downloads
+    FROM data_available
 ),
 
 next_valid_extract AS (
@@ -95,19 +95,19 @@ all_versioned AS (
                 -- this is the first (global) extract after the last successful instance of the current version
                 LAST_VALUE(next_valid_extract.next_ts)
                     OVER(PARTITION BY get_next_first.base64_url, get_next_first.ts
-                        ORDER BY successful_downloads.ts
+                        ORDER BY data_available.ts
                         ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)
                 ),
                 "2099-01-01"
         )') }} AS _valid_to
     FROM get_next_first
-    LEFT JOIN successful_downloads
-        ON get_next_first.base64_url = successful_downloads.base64_url
-        AND successful_downloads.ts BETWEEN get_next_first.ts AND {{ make_end_of_valid_range('COALESCE(get_next_first.next_first_ts, "2099-01-01")') }}
+    LEFT JOIN data_available
+        ON get_next_first.base64_url = data_available.base64_url
+        AND data_available.ts BETWEEN get_next_first.ts AND {{ make_end_of_valid_range('COALESCE(get_next_first.next_first_ts, "2099-01-01")') }}
     LEFT JOIN next_valid_extract
-        ON successful_downloads.ts = next_valid_extract.ts
+        ON data_available.ts = next_valid_extract.ts
     -- filter to only the last successful appearance of the current version
-    QUALIFY successful_downloads.ts =  LAST_VALUE(successful_downloads.ts) OVER(PARTITION BY get_next_first.base64_url, get_next_first.ts ORDER BY successful_downloads.ts ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)
+    QUALIFY data_available.ts =  LAST_VALUE(data_available.ts) OVER(PARTITION BY get_next_first.base64_url, get_next_first.ts ORDER BY data_available.ts ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)
 ),
 
 actual_data_only AS (
