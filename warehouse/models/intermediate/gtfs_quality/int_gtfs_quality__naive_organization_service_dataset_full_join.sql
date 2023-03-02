@@ -67,6 +67,16 @@ ntd_bridge AS (
     ON CAST(date_spine.date AS TIMESTAMP) BETWEEN dim._valid_from AND dim._valid_to
 ),
 
+-- for history before Airtable, there are URLs that we were attempting to download
+schedule_urls AS (
+    SELECT DISTINCT
+        EXTRACT(DATE FROM ts) AS date,
+        base64_url
+    FROM {{ ref('fct_schedule_feed_downloads') }}
+    -- just to be safe
+    WHERE EXTRACT(DATE FROM ts) < CURRENT_DATE()
+),
+
 schedule_feeds AS (
     SELECT *, "schedule" AS feed_type
     FROM {{ ref('fct_daily_schedule_feeds') }}
@@ -119,7 +129,7 @@ int_gtfs_quality__naive_organization_service_dataset_full_join AS (
         datasets.source_record_id AS gtfs_dataset_source_record_id,
         datasets.deprecated_date AS gtfs_dataset_deprecated_date,
         validation_bridge.schedule_to_use_for_rt_validation_gtfs_dataset_key,
-        COALESCE(datasets.base64_url, schedule_feeds.base64_url, rt_feeds.base64_url) AS base64_url,
+        COALESCE(datasets.base64_url, schedule_urls.base64_url, schedule_feeds.base64_url, rt_feeds.base64_url) AS base64_url,
         schedule_feeds.feed_key AS schedule_feed_key,
         rt_feeds.key IS NOT NULL AS had_rt_files
     FROM orgs
@@ -138,9 +148,12 @@ int_gtfs_quality__naive_organization_service_dataset_full_join AS (
     LEFT JOIN validation_bridge
         ON datasets.date = validation_bridge.date
         AND datasets.key = validation_bridge.gtfs_dataset_key
+    FULL OUTER JOIN schedule_urls
+        ON datasets.date = schedule_urls.date
+        AND datasets.base64_url = schedule_urls.base64_url
     FULL OUTER JOIN schedule_feeds
-        ON datasets.date = schedule_feeds.date
-        AND datasets.base64_url = schedule_feeds.base64_url
+        ON COALESCE(datasets.date, schedule_urls.date) = schedule_feeds.date
+        AND COALESCE(datasets.base64_url, schedule_urls.base64_url) = schedule_feeds.base64_url
     FULL OUTER JOIN rt_feeds
         ON datasets.date = rt_feeds.date
         AND datasets.base64_url = rt_feeds.base64_url
