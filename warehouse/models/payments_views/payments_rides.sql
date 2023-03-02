@@ -326,8 +326,8 @@ join_table AS (
 ),
 
 payments_rides AS (
-
     SELECT
+
         *,
         DATETIME_DIFF(
             off_transaction_date_time_pacific,
@@ -335,9 +335,10 @@ payments_rides AS (
             MINUTE
         ) AS duration,
         ST_DISTANCE(on_geography, off_geography) AS distance_meters,
-        CAST(transaction_date_time_pacific AS date) AS transaction_date_pacific
-    FROM join_table
+        CAST(transaction_date_time_pacific AS date) AS transaction_date_pacific,
+        EXTRACT(DAYOFWEEK FROM transaction_date_time_pacific) AS day_of_week
 
+    FROM join_table
 )
 
 SELECT * FROM payments_rides
