@@ -71,7 +71,8 @@ ntd_bridge AS (
 schedule_urls AS (
     SELECT DISTINCT
         EXTRACT(DATE FROM ts) AS date,
-        base64_url
+        base64_url,
+         "schedule" AS feed_type
     FROM {{ ref('fct_schedule_feed_downloads') }}
     -- just to be safe
     WHERE EXTRACT(DATE FROM ts) < CURRENT_DATE()
@@ -124,7 +125,7 @@ int_gtfs_quality__naive_organization_service_dataset_full_join AS (
 
         service_data.source_record_id AS gtfs_service_data_source_record_id,
         datasets.name AS gtfs_dataset_name,
-        COALESCE(datasets.type, rt_feeds.feed_type, schedule_feeds.feed_type) AS gtfs_dataset_type,
+        COALESCE(datasets.type, rt_feeds.feed_type, schedule_feeds.feed_type, schedule_urls.feed_type) AS gtfs_dataset_type,
         datasets.regional_feed_type,
         datasets.backdated_regional_feed_type,
         datasets.source_record_id AS gtfs_dataset_source_record_id,
