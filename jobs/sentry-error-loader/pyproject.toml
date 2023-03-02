@@ -8,6 +8,7 @@ authors = ["Soren Spicknall <soren.s@jarv.us>"]
 python = "~3.9"
 clickhouse-connect = "^0.5.14"
 pandas = "^1.3.1"
+pandas-stubs = "^1.5.2"
 pendulum = "^2.1.2"
 typer = "^0.7.0"
 calitp-data-infra = "2023.2.16.1"

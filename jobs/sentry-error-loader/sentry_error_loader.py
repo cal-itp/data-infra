@@ -2,11 +2,15 @@ import gzip
 import os
 from typing import ClassVar, List, Optional
 
-import clickhouse_connect
+import clickhouse_connect  # type: ignore
 import pandas as pd
 import pendulum
 import typer
-from calitp_data_infra.storage import PartitionedGCSArtifact, get_fs, make_name_bq_safe
+from calitp_data_infra.storage import (  # type: ignore
+    PartitionedGCSArtifact,
+    get_fs,
+    make_name_bq_safe,
+)
 
 CALITP_BUCKET__SENTRY_EVENTS = os.environ["CALITP_BUCKET__SENTRY_EVENTS"]
 
