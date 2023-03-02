@@ -96,6 +96,7 @@ int_gtfs_quality__naive_organization_service_dataset_full_join AS (
             services.date,
             service_data.date,
             datasets.date,
+            schedule_urls.date,
             schedule_feeds.date,
             rt_feeds.date) AS date,
         orgs.key AS organization_key,
@@ -165,6 +166,7 @@ int_gtfs_quality__naive_organization_service_dataset_full_join AS (
             services.date,
             service_data.date,
             datasets.date,
+            schedule_urls.date,
             schedule_feeds.date,
             rt_feeds.date) < CURRENT_DATE()
 )
