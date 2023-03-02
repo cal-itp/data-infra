@@ -7,7 +7,7 @@ cmds:
   - python3
 
 arguments:
-  - "sentry_to_gcs.py"
+  - "sentry_error_loader.py"
   - "cal-itp-data-infra"
   - "{{ execution_date.replace(minute=0, second=0).format('YYYY-MM-DDTHH:mm:ssZ') }}"
 
