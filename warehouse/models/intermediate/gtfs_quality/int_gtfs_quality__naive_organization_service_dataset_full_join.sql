@@ -68,7 +68,7 @@ ntd_bridge AS (
 ),
 
 schedule_feeds AS (
-    SELECT *
+    SELECT *, "schedule" AS feed_type
     FROM {{ ref('fct_daily_schedule_feeds') }}
     -- this table goes into the future
     WHERE date < CURRENT_DATE()
@@ -77,6 +77,7 @@ schedule_feeds AS (
 rt_feeds AS (
     SELECT *
     FROM {{ ref('fct_daily_rt_feed_files') }}
+    WHERE date < CURRENT_DATE()
 ),
 
 int_gtfs_quality__naive_organization_service_dataset_full_join AS (
@@ -115,10 +116,11 @@ int_gtfs_quality__naive_organization_service_dataset_full_join AS (
         service_data.network_id,
         service_data.source_record_id AS gtfs_service_data_source_record_id,
         datasets.name AS gtfs_dataset_name,
-        datasets.type AS gtfs_dataset_type,
+        COALESCE(datasets.type, rt_feeds.feed_type, schedule_feeds.feed_type) AS gtfs_dataset_type,
         datasets.regional_feed_type,
         datasets.backdated_regional_feed_type,
         datasets.source_record_id AS gtfs_dataset_source_record_id,
+        datasets.deprecated_date AS gtfs_dataset_deprecated_date,
         validation_bridge.schedule_to_use_for_rt_validation_gtfs_dataset_key,
         COALESCE(datasets.base64_url, schedule_feeds.base64_url, rt_feeds.base64_url) AS base64_url,
         schedule_feeds.feed_key AS schedule_feed_key,
@@ -148,6 +150,13 @@ int_gtfs_quality__naive_organization_service_dataset_full_join AS (
     LEFT JOIN ntd_bridge
         ON orgs.key = ntd_bridge.organization_key
         AND orgs.date = ntd_bridge.date
+    -- just to be on the safe side, double check that we aren't including current date
+    WHERE COALESCE(orgs.date,
+            services.date,
+            service_data.date,
+            datasets.date,
+            schedule_feeds.date,
+            rt_feeds.date) < CURRENT_DATE()
 )
 
 SELECT * FROM int_gtfs_quality__naive_organization_service_dataset_full_join

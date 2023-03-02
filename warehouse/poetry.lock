@@ -651,14 +651,14 @@ files = [
 
 [[package]]
 name = "dbt-metabase"
-version = "0.9.14"
+version = "0.9.15"
 description = "Model synchronization from dbt to Metabase."
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "dbt-metabase-0.9.14.tar.gz", hash = "sha256:5e59c4b1a99f4896457a874502fbd62ecc5d7c279b62402808cb3c4238ab686a"},
-    {file = "dbt_metabase-0.9.14-py3-none-any.whl", hash = "sha256:0dd6c558c25e327652564bc154e3a7f6a4b4e3b6bebb9d86b1096c3d2b7b6dcc"},
+    {file = "dbt-metabase-0.9.15.tar.gz", hash = "sha256:25bc33543ef56928e2917e0c9bcfa99b509117bb9e379f2e17956b6ad0e58f7e"},
+    {file = "dbt_metabase-0.9.15-py3-none-any.whl", hash = "sha256:6be61176b421b448059fb7ebe470ecdbf920f8bd318ebc7f9fe4bd2fe064a8ff"},
 ]
 
 [package.dependencies]

@@ -14,9 +14,10 @@ int_gtfs_quality__shapes_accurate AS (
         idx.gtfs_dataset_key,
         {{ shapes_accurate() }} AS check,
         {{ accurate_service_data() }} AS feature,
-        CASE manual_check__accurate_shapes
-            WHEN 'Yes' THEN {{ guidelines_pass_status() }}
-            WHEN 'No' THEN {{ guidelines_fail_status() }}
+        CASE
+            WHEN manual_check__accurate_shapes = 'Yes' THEN {{ guidelines_pass_status() }}
+            WHEN manual_check__accurate_shapes = 'No' THEN {{ guidelines_fail_status() }}
+            WHEN manual_check__accurate_shapes LIKE 'N/A%' THEN {{ guidelines_na_check_status() }}
             ELSE {{ guidelines_manual_check_needed_status() }}
         END AS status,
     FROM idx

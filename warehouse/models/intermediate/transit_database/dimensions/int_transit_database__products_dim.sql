@@ -30,6 +30,7 @@ int_transit_database__products_dim AS (
         certifications,
         product_features,
         business_model_features,
+        vendor_organization_source_record_id,
         accepted_input_components,
         output_components,
         _is_current,

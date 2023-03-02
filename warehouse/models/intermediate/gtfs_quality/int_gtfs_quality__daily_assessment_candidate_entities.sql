@@ -19,8 +19,9 @@ WITH full_join AS (
         COALESCE(
             gtfs_service_data_customer_facing,
             gtfs_service_data_category = "primary",
-            -- we do want to assess organizations without GTFS data
-            gtfs_service_data_key IS NULL,
+            -- we do want to assess organizations & services without GTFS data
+            -- but we don't want to assess GTFS data without a service
+            gtfs_service_data_key IS NULL AND gtfs_dataset_key IS NULL AND base64_url IS NULL,
             FALSE
         ) AS gtfs_service_data_assessed
     FROM {{ ref('int_gtfs_quality__naive_organization_service_dataset_full_join') }}
@@ -60,6 +61,7 @@ initial_assessed AS (
         gtfs_service_data_category,
         regional_feed_type,
         backdated_regional_feed_type,
+        gtfs_dataset_deprecated_date,
 
         agency_id,
         route_id,
@@ -150,6 +152,7 @@ int_gtfs_quality__daily_assessment_candidate_entities AS (
         regional_feed_type,
         backdated_regional_feed_type,
         COALESCE(check_regional_feed_types.use_subfeed_for_reports, FALSE) AS use_subfeed_for_reports,
+        gtfs_dataset_deprecated_date,
         agency_id,
         route_id,
         network_id,

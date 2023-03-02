@@ -95,9 +95,9 @@ are implemented for future schema consistency, but historical data has not yet b
 Each record is an association between one or more `services`, a `product`, and one or more `components` which that product is serving as.
 
 Each row in this table is a relationship version, where the record
-had the given set of attributes. Because `dim_services` is fully versioned but `dim_products` and `dim_components` are not,
-this represents the relationship between historical service records and current product and component records.
-When products and components are made fully historical, the relationships will be historical as well.
+had the given set of attributes. Because `dim_services` and `dim_organizations` are fully versioned but `dim_products` and `dim_components` are not,
+this represents the relationship between historical service and organization (vendor) records and current product and component records.
+When products and components are made fully historical, the relationships will be fully historical as well.
 
 When an attribute changes, a new
 version is created.
