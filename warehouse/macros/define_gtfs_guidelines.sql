@@ -316,6 +316,22 @@
 "100% of trips marked as Scheduled, Canceled, or Added within the Trip updates feed are represented within the Vehicle positions feed"
 {% endmacro %}
 
+{% macro feed_listed_schedule() %}
+"A GTFS Schedule feed is listed"
+{% endmacro %}
+
+{% macro feed_listed_vp() %}
+"A Vehicle positions feed is listed"
+{% endmacro %}
+
+{% macro feed_listed_tu() %}
+"A Trip updates feed is listed"
+{% endmacro %}
+
+{% macro feed_listed_sa() %}
+"A Service alerts feed is listed"
+{% endmacro %}
+
 --
 -- FEATURE NAMES
 --
