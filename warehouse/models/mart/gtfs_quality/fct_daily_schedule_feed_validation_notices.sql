@@ -45,7 +45,7 @@ first_outcome_per_feed_per_version AS (
 outcomes_with_end_dt AS (
     SELECT
         *,
-        COALESCE(LEAD(DATE_SUB(extract_dt, INTERVAL 1 DAY)) OVER (PARTITION BY feed_key ORDER BY extract_dt), feed_valid_to_dt) AS outcome_valid_to
+        COALESCE(LEAD({{ make_end_of_valid_range_date('extract_dt') }}) OVER (PARTITION BY feed_key ORDER BY extract_dt), feed_valid_to_dt) AS outcome_valid_to
     FROM first_outcome_per_feed_per_version
 ),
 
