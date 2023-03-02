@@ -26,7 +26,7 @@ def process_arrays_for_nulls(arr):
     # use empty string for all non-numeric types
     # may need to expand this over time
     filler = -1 if types <= {int, float} else ""
-    return [x if x is not None else filler for x in arr]
+    return [x if x is not pd.NA else filler for x in arr]
 
 
 def make_arrays_bq_safe(raw_data):
@@ -130,12 +130,27 @@ def fetch_and_clean_from_clickhouse(project_slug, target_date):
                                    and toDate(timestamp) == '{target_date}'"""
     )
 
+    cleaned_df = all_rows.rename(make_name_bq_safe, axis="columns")
+
+    cols_with_nulls_in_arrays = ["exception_frames_colno", "exception_frames_package"]
+    for col_name in cols_with_nulls_in_arrays:
+        cleaned_df[col_name] = cleaned_df[col_name].apply(
+            lambda row: process_arrays_for_nulls(row)
+        )
+
+    # Pandas' default timestamp datatype returned by clickhouse-connect writes out unix timestamps
+    # in nanoseconds, which get interpreted by BQ as microseconds. A quick cast to string before writing
+    # fixes the issue.
+    cols_with_unix_timestamps = ["timestamp", "message_timestamp", "received"]
+    for col_name in cols_with_unix_timestamps:
+        cleaned_df[col_name] = cleaned_df[col_name].apply(lambda row: str(row))
+
     extract = SentryExtract(
         project_slug=project_slug,
         dt=target_date,
         execution_ts=pendulum.now(),
         filename="events.jsonl.gz",
-        data=all_rows,
+        data=cleaned_df,
     )
 
     return extract
@@ -154,12 +169,10 @@ class SentryExtract(PartitionedGCSArtifact):
         arbitrary_types_allowed = True
 
     def save_to_gcs(self, fs):
-        cleaned_df = self.data.rename(make_name_bq_safe, axis="columns")
-
         self.save_content(
             fs=fs,
             content=gzip.compress(
-                cleaned_df.to_json(
+                self.data.to_json(
                     orient="records", lines=True, default_handler=str
                 ).encode()
             ),

@@ -93,6 +93,7 @@ schema_fields:
   - name: primary_hash
     type: STRING
   - name: hierarchical_hashes
+    mode: REPEATED
     type: STRING
   - name: received
     type: TIMESTAMP
