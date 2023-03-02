@@ -4,6 +4,7 @@ LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
 
 RUN curl -sSL https://install.python-poetry.org | python -
 ENV PATH="/root/.local/bin:${PATH}"
+ENV CALITP_BUCKET__SENTRY_EVENTS="test-calitp-sentry"
 
 WORKDIR /app
 
