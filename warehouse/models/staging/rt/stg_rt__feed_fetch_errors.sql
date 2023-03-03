@@ -1,20 +1,6 @@
-{{
-    config(
-        materialized='incremental',
-        unique_key='event_id',
-        partitions=['current_timestamp()'],
-        cluster_by='group_id',
-    )
-}}
-
 WITH source AS (
     SELECT * FROM {{ source('sentry_external_tables', 'events') }}
     WHERE dt IS NOT NULL
-    AND execution_ts = (
-        SELECT MAX(execution_ts) FROM {{ source('sentry_external_tables', 'events') }}
-        WHERE dt IS NOT NULL
-        AND execution_ts IS NOT NULL
-        AND project_slug IS NOT NULL)
     AND project_slug IS NOT NULL
 ),
 

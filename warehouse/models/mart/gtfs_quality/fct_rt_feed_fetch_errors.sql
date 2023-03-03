@@ -1,4 +1,14 @@
-{{ config(materialized='table') }}
+{{ config(
+        materialized='incremental',
+        incremental_strategy='insert_overwrite',
+        partition_by = {
+            'field': 'dt',
+            'data_type': 'date',
+            'granularity': 'day',
+        },
+        cluster_by='group_id',
+    )
+}}
 
 WITH fct_rt_feed_fetch_errors AS (
     SELECT
@@ -62,6 +72,7 @@ WITH fct_rt_feed_fetch_errors AS (
         dt,
         execution_ts
     FROM {{ ref('stg_rt__feed_fetch_errors') }}
+    WHERE message LIKE '%RTFetchException%'
 )
 
 SELECT * FROM fct_rt_feed_fetch_errors

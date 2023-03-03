@@ -52,8 +52,7 @@ def fetch_and_clean_from_clickhouse(project_slug, target_date):
     )
     all_rows = client.query_df(
         f"""SELECT * FROM errors_dist
-                                   WHERE message like '%RTFetchException%'
-                                   and toDate(timestamp) == '{target_date}'"""
+                                   WHERE toDate(timestamp) == '{target_date}'"""
     )
 
     cleaned_df = all_rows.rename(make_name_bq_safe, axis="columns")
