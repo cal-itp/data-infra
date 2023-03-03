@@ -1,5 +1,7 @@
-WITH feed_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_quality__schedule_url_guideline_index') }}
+WITH guideline_index AS (
+    SELECT *
+    FROM {{ ref('int_gtfs_quality__guideline_checks_index') }}
+    WHERE check = {{ static_feed_downloaded_successfully() }}
 ),
 
 fct_schedule_feed_downloads AS (
@@ -10,27 +12,29 @@ fct_schedule_feed_downloads AS (
 
 daily_feed_download_unzip_success AS (
     SELECT date,
-           base64_url
+           base64_url,
+           LOGICAL_OR(download_success) AS download_success,
+           LOGICAL_OR(unzip_success) AS unzip_success
       FROM fct_schedule_feed_downloads
-     WHERE download_success
-       AND unzip_success
+      GROUP BY 1, 2
 ),
 
-int_gtfs_quality__schedule_download_success AS (
+int_gtfs_quality__schedule_url_download_success AS (
     SELECT
-        idx.date,
-        idx.base64_url,
-        {{ static_feed_downloaded_successfully() }} AS check,
-        {{ compliance_schedule() }} AS feature,
+        idx.* EXCEPT(status),
         CASE
-            WHEN LOGICAL_AND(d.base64_url IS NOT null) THEN {{ guidelines_pass_status() }}
-            ELSE {{ guidelines_fail_status() }}
+            WHEN download_success AND unzip_success THEN {{ guidelines_pass_status() }}
+            -- means we attempted to download and failed
+            WHEN idx.has_schedule_url AND d.base64_url IS NOT NULL THEN {{ guidelines_fail_status() }}
+            -- means we did not attempt to download on this day for whatever reason
+            WHEN idx.has_schedule_url AND d.base64_url IS NULL THEN {{ guidelines_na_check_status() }}
+            -- fill in n/a entities etc.
+            ELSE idx.status
         END AS status
-    FROM feed_guideline_index idx
+    FROM guideline_index idx
     LEFT JOIN daily_feed_download_unzip_success d
       ON idx.base64_url = d.base64_url
      AND idx.date = d.date
-   GROUP BY 1, 2, 3, 4
 )
 
-SELECT * FROM int_gtfs_quality__schedule_download_success
+SELECT * FROM int_gtfs_quality__schedule_url_download_success

@@ -6,7 +6,8 @@
 WITH unioned AS (
     {{ dbt_utils.union_relations(
         relations=[
-            ref('int_gtfs_quality__schedule_url_download_success'),
+            ref('int_gtfs_quality__schedule_download_success'),
+            ref('int_gtfs_quality__feed_aggregator'),
         ],
     ) }}
 ),
