@@ -38,7 +38,9 @@ def fetch_and_clean_from_clickhouse(project_slug, target_date):
     """
 
     print(f"Gathering Sentry event data for project {project_slug}")
-    client = clickhouse_connect.get_client(host="localhost", port=8123)
+    client = clickhouse_connect.get_client(
+        host="sentry-clickhouse.sentry.svc.cluster.local", port=8123
+    )
     all_rows = client.query_df(
         f"""SELECT * FROM errors_dist
                                    WHERE message like '%RTFetchException%'
@@ -49,9 +51,7 @@ def fetch_and_clean_from_clickhouse(project_slug, target_date):
 
     cols_with_nulls_in_arrays = ["exception_frames_colno", "exception_frames_package"]
     for col_name in cols_with_nulls_in_arrays:
-        cleaned_df[col_name] = cleaned_df[col_name].apply(
-            lambda row: process_arrays_for_nulls(row)
-        )
+        cleaned_df[col_name] = cleaned_df[col_name].apply(process_arrays_for_nulls)
 
     """
     Pandas' default timestamp datatype returned by clickhouse-connect writes out unix timestamps
@@ -60,7 +60,7 @@ def fetch_and_clean_from_clickhouse(project_slug, target_date):
     """
     cols_with_unix_timestamps = ["timestamp", "message_timestamp", "received"]
     for col_name in cols_with_unix_timestamps:
-        cleaned_df[col_name] = cleaned_df[col_name].apply(lambda row: str(row))
+        cleaned_df[col_name] = cleaned_df[col_name].apply(str)
 
     extract = SentryExtract(
         project_slug=project_slug,
