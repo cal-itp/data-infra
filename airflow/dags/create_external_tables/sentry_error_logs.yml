@@ -74,7 +74,7 @@ schema_fields:
     type: INTEGER
   - name: span_id
     mode: NULLABLE
-    type: INTEGER
+    type: STRING
   - name: trace_id
     mode: NULLABLE
     type: STRING
