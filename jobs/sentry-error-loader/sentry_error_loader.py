@@ -1,5 +1,6 @@
 import gzip
 import os
+from datetime import datetime
 from typing import ClassVar, List, Optional
 
 import clickhouse_connect  # type: ignore
@@ -38,6 +39,14 @@ def fetch_and_clean_from_clickhouse(project_slug, target_date):
     """
 
     print(f"Gathering Sentry event data for project {project_slug}")
+
+    extract = SentryExtract(
+        project_slug=project_slug,
+        dt=target_date,
+        execution_ts=pendulum.now(),
+        filename="events.jsonl.gz",
+    )
+
     client = clickhouse_connect.get_client(
         host="sentry-clickhouse.sentry.svc.cluster.local", port=8123
     )
@@ -62,13 +71,7 @@ def fetch_and_clean_from_clickhouse(project_slug, target_date):
     for col_name in cols_with_unix_timestamps:
         cleaned_df[col_name] = cleaned_df[col_name].apply(str)
 
-    extract = SentryExtract(
-        project_slug=project_slug,
-        dt=target_date,
-        execution_ts=pendulum.now(),
-        filename="events.jsonl.gz",
-        data=cleaned_df,
-    )
+    extract.data = cleaned_df
 
     return extract
 
@@ -99,9 +102,13 @@ class SentryExtract(PartitionedGCSArtifact):
 
 def main(
     project_slug: str,
-    logical_date: str,
+    logical_date: datetime = typer.Argument(
+        ...,
+        help="The date on which the targeted error(s) occurred.",
+        formats=["%Y-%m-%d"],
+    ),
 ):
-    target_date = pendulum.from_format(logical_date, "YYYY-MM-DDTHH:mm:ssZ").date()
+    target_date = pendulum.instance(logical_date).date()
     extract = fetch_and_clean_from_clickhouse(project_slug, target_date)
     fs = get_fs()
     return extract.save_to_gcs(fs=fs)
