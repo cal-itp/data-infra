@@ -4,10 +4,9 @@
 
 
 WITH unioned AS (
-    -- TODO: this is not migrated yet, this is just the first intended check to migrate
     {{ dbt_utils.union_relations(
         relations=[
-            ref('int_gtfs_quality__schedule_download_success'),
+            ref('int_gtfs_quality__schedule_url_download_success'),
         ],
     ) }}
 ),
