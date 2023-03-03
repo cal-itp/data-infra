@@ -8,6 +8,7 @@ WITH unioned AS (
         relations=[
             ref('int_gtfs_quality__schedule_download_success'),
             ref('int_gtfs_quality__feed_aggregator'),
+            ref('int_gtfs_quality__trip_id_alignment')
         ],
     ) }}
 ),
