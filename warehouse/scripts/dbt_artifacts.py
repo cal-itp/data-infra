@@ -63,11 +63,11 @@ class DbtMaterializationType(str, Enum):
 
 class NodeDeps(BaseModel):
     macros: List[str]
-    nodes: List[str]
+    nodes: Optional[List[str]]  # does not exist on seeds
 
     @property
     def resolved_nodes(self) -> List["BaseNode"]:
-        return [BaseNode._instances[node] for node in self.nodes]
+        return [BaseNode._instances[node] for node in self.nodes] if self.nodes else []
 
 
 class NodeConfig(BaseModel):
@@ -324,9 +324,14 @@ class Exposure(BaseModel):
 class Manifest(BaseModel):
     nodes: Dict[str, Node]
     sources: Dict[str, Source]
+    metrics: Dict
+    exposures: Dict[str, Exposure]
     macros: Dict
     docs: Dict
-    exposures: Dict[str, Exposure]
+    parent_map: Dict[str, List[str]]
+    child_map: Dict[str, List[str]]
+    selectors: Dict
+    disabled: Dict  # should be Dict[str, Node] but they lack the resource_type
 
 
 class TimingInfo(BaseModel):
