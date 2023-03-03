@@ -547,6 +547,10 @@ feature
 "N/A - CHECK-SPECIFIC LOGIC"
 {% endmacro %}
 
+{% macro guidelines_na_too_early_status() %}
+"N/A - BEFORE CHECK ASSESSED"
+{% endmacro %}
+
 {% macro guidelines_na_entity_status() %}
 "N/A - NO APPLICABLE ENTITY"
 {% endmacro %}
