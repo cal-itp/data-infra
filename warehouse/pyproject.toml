@@ -44,6 +44,9 @@ types-PyYAML = "^6.0.12"
 pandas-stubs = "^1.5.2"
 sqlalchemy-stubs = "^0.4"
 
+[tool.poetry.group.dev.dependencies]
+datamodel-code-generator = "^0.17.1"
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
