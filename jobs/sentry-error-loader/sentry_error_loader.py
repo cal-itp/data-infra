@@ -55,6 +55,9 @@ def fetch_and_clean_from_clickhouse(project_slug, target_date):
                                    WHERE toDate(timestamp) == '{target_date}'"""
     )
 
+    if all_rows.empty:
+        return extract
+
     cleaned_df = all_rows.rename(make_name_bq_safe, axis="columns")
 
     cols_with_nulls_in_arrays = [
@@ -114,8 +117,16 @@ def main(
 ):
     target_date = pendulum.instance(logical_date).date()
     extract = fetch_and_clean_from_clickhouse(project_slug, target_date)
+
+    if extract.data is None:
+        print(f"No extract was found for project {project_slug} and date {target_date}")
+        return
+    if extract.data.empty:
+        print(f"Empty extract for project {project_slug} and date {target_date}")
+        return
+
     fs = get_fs()
-    return extract.save_to_gcs(fs=fs)
+    extract.save_to_gcs(fs=fs)
 
 
 if __name__ == "__main__":
