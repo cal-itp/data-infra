@@ -52,9 +52,9 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cd warehouse && poetry install
-          gsutil cp -r gs://calitp-dbt-artifacts/latest/ .
+          cd warehouse && poetry install && poetry run dbt deps
           poetry run dbt compile
+          gsutil cp -r gs://calitp-dbt-artifacts/latest/ .
           echo "![](./target/dag.png)" >> report.md
           cml comment update report.md
 
