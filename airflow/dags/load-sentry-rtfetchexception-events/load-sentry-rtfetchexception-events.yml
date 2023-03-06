@@ -23,6 +23,7 @@ env_vars:
   GOOGLE_APPLICATION_CREDENTIALS: /secrets/jobs-data/service_account.json
   SENTRY_DSN: "{{ env_var('SENTRY_DSN') }}"
   SENTRY_ENVIRONMENT: "{{ env_var('SENTRY_ENVIRONMENT') }}"
+  CALITP_BUCKET__SENTRY_EVENTS: "{{ env_var('CALITP_BUCKET__SENTRY_EVENTS') }}"
 
 secrets:
   - deploy_type: volume
