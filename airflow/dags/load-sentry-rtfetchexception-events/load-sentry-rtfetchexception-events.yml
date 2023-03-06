@@ -30,7 +30,7 @@ secrets:
     secret: jobs-data
     key: service_account.json
 
-resources:
+k8s_resources:
   request_memory: 2.0Gi
   request_cpu: 1
 
