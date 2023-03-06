@@ -55,6 +55,9 @@ disambiguate_dups AS (
         service_source_record_id,
         gtfs_dataset_key,
         gtfs_dataset_type,
+        agency_id,
+        route_id,
+        network_id,
         gtfs_service_data_customer_facing,
         regional_feed_type,
         associated_schedule_gtfs_dataset_key,
@@ -66,18 +69,43 @@ disambiguate_dups AS (
                 gtfs_dataset_type,
                 gtfs_service_data_customer_facing,
                 regional_feed_type,
-                agency_id,
-                route_id,
-                network_id,
                 associated_schedule_gtfs_dataset_key
             -- try to get some name that will group like feeds together
             ORDER BY
+                route_id,
+                agency_id,
+                network_id,
                 REGEXP_REPLACE(
                     gtfs_dataset_name,
                     '(Trip Updates|TripUpdates|Alerts|Vehicle Positions|VehiclePositions|Schedule)',
                     '')
         ) AS ordered
     FROM int_gtfs_quality__daily_assessment_candidate_entities
+),
+
+get_feed_selectors AS (
+    SELECT
+        date,
+        service_key,
+        gtfs_dataset_key,
+        route_id,
+        agency_id,
+        network_id,
+    FROM int_gtfs_quality__daily_assessment_candidate_entities
+    GROUP BY 1, 2, 3, 4, 5, 6
+    HAVING COUNT(*) = 1
+),
+
+final_input AS (
+    SELECT disambiguate_dups.* EXCEPT(route_id, network_id, agency_id),
+        COALESCE(disambiguate_dups.route_id, get_feed_selectors.route_id) AS route_id,
+        COALESCE(disambiguate_dups.agency_id, get_feed_selectors.agency_id) AS agency_id,
+        COALESCE(disambiguate_dups.network_id, get_feed_selectors.network_id) AS network_id,
+    FROM disambiguate_dups
+    LEFT JOIN get_feed_selectors
+    ON disambiguate_dups.date = get_feed_selectors.date
+    AND disambiguate_dups.service_key = get_feed_selectors.service_key
+    AND disambiguate_dups.associated_schedule_gtfs_dataset_key = get_feed_selectors.gtfs_dataset_key
 ),
 
 pivoted AS (
@@ -103,7 +131,7 @@ pivoted AS (
             'gtfs_dataset_key_vehicle_positions',
             'gtfs_service_data_customer_facing',
             'regional_feed_type']) }} ORDER BY date DESC) AS latest_extract
-    FROM disambiguate_dups
+    FROM final_input
     PIVOT(
         STRING_AGG(gtfs_dataset_key) AS gtfs_dataset_key
         FOR gtfs_dataset_type IN ('schedule', 'service_alerts', 'trip_updates', 'vehicle_positions')
@@ -115,7 +143,7 @@ next_valid_extract AS (
         date,
         LEAD(date) OVER (ORDER BY date) AS next_dt
     FROM pivoted
-    GROUP BY date
+    GROUP BY 1
 ),
 
 -- following: https://dba.stackexchange.com/questions/210907/determine-consecutive-occurrences-of-values
@@ -150,32 +178,32 @@ all_versioned AS (
 dim_provider_gtfs_data AS (
     SELECT
         {{ dbt_utils.surrogate_key([
-            'orig.organization_key',
-            'orig.service_key',
-            'orig.associated_schedule_gtfs_dataset_key',
-            'orig.gtfs_dataset_key_schedule',
-            'orig.gtfs_dataset_key_service_alerts',
-            'orig.gtfs_dataset_key_vehicle_positions',
-            'orig.gtfs_dataset_key_trip_updates',
-            'orig.gtfs_service_data_customer_facing'
+            'organization_key',
+            'service_key',
+            'associated_schedule_gtfs_dataset_key',
+            'gtfs_dataset_key_schedule',
+            'gtfs_dataset_key_service_alerts',
+            'gtfs_dataset_key_vehicle_positions',
+            'gtfs_dataset_key_trip_updates',
+            'gtfs_service_data_customer_facing'
             ]) }} AS key,
-        orig.guidelines_assessed,
-        orig.reports_site_assessed,
-        orig.organization_key,
-        orig.organization_name,
-        orig.organization_itp_id,
-        orig.organization_hubspot_company_record_id,
-        orig.organization_ntd_id,
-        orig.organization_source_record_id,
-        assessment_candidates.agency_id,
-        assessment_candidates.route_id,
-        assessment_candidates.network_id,
-        orig.service_key,
-        orig.service_name,
-        orig.service_source_record_id,
-        orig.gtfs_service_data_customer_facing,
+        guidelines_assessed,
+        reports_site_assessed,
+        organization_key,
+        organization_name,
+        organization_itp_id,
+        organization_hubspot_company_record_id,
+        organization_ntd_id,
+        organization_source_record_id,
+        agency_id,
+        route_id,
+        network_id,
+        service_key,
+        service_name,
+        service_source_record_id,
+        gtfs_service_data_customer_facing,
         orig.regional_feed_type,
-        orig.associated_schedule_gtfs_dataset_key,
+        associated_schedule_gtfs_dataset_key,
         sched.name AS schedule_gtfs_dataset_name,
         sched.source_record_id AS schedule_source_record_id,
         alerts.name AS service_alerts_gtfs_dataset_name,
@@ -203,10 +231,6 @@ dim_provider_gtfs_data AS (
         ON orig.gtfs_dataset_key_trip_updates = trip_updates.key
     LEFT JOIN datasets AS vehicle_positions
         ON orig.gtfs_dataset_key_vehicle_positions = vehicle_positions.key
-    LEFT JOIN int_gtfs_quality__daily_assessment_candidate_entities AS assessment_candidates
-        ON orig.service_key = assessment_candidates.service_key
-        AND orig.associated_schedule_gtfs_dataset_key = assessment_candidates.gtfs_dataset_key
-        AND all_versioned._valid_from = assessment_candidates.date
 )
 
 SELECT * FROM dim_provider_gtfs_data
