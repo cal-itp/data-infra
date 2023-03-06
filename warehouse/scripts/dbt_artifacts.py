@@ -9,6 +9,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Annotated, Any, ClassVar, Dict, List, Literal, Optional, Union
 
+import humanize
 import pendulum
 import yaml
 from pydantic import BaseModel, Field, constr, validator
@@ -160,13 +161,40 @@ class BaseNode(BaseModel):
         ]
         return select(columns=columns)
 
+    @property
+    def graphviz_repr(self) -> str:
+        return "\n".join(
+            [
+                self.resource_type.value,
+                self.name,
+            ]
+        )
+
+    @property
+    def gv_attrs(self) -> Dict[str, Any]:
+        return {
+            "color": "black",
+        }
+
 
 class Seed(BaseNode):
     resource_type: Literal[DbtResourceType.seed]
 
+    @property
+    def gv_attrs(self) -> Dict[str, Any]:
+        return {
+            "color": "green",
+        }
+
 
 class Source(BaseNode):
     resource_type: Literal[DbtResourceType.source]
+
+    @property
+    def gv_attrs(self) -> Dict[str, Any]:
+        return {
+            "color": "blue",
+        }
 
 
 class Model(BaseNode):
@@ -360,11 +388,48 @@ class RunResult(BaseModel):
     message: Optional[str]
     failures: Optional[int]
     unique_id: str
+    manifest: Optional[Manifest]
+
+    @property
+    def node(self) -> Node:
+        return self.manifest.nodes[self.unique_id]
+
+    @property
+    def bytes_processed(self):
+        return self.adapter_response.get("bytes_processed")
+
+    @property
+    def gv_attrs(self) -> Dict[str, Any]:
+        if self.bytes_processed > 10_000_000_000:
+            color = "yellow"
+        elif self.bytes_processed > 100_000_000_000:
+            color = "red"
+        else:
+            color = "white"
+
+        return {
+            **self.node.gv_attrs,
+            "style": "filled",
+            "fillcolor": color,
+            "label": "\n".join(
+                [
+                    self.node.graphviz_repr,
+                    humanize.naturalsize(self.bytes_processed),
+                ]
+            ),
+        }
 
 
 class RunResults(BaseModel):
     metadata: Dict
     results: List[RunResult]
+    manifest: Optional[Manifest]
+
+    # https://github.com/pydantic/pydantic/issues/1577#issuecomment-803171322
+    def set_manifest(self, m: Manifest):
+        self.manifest = m
+        for result in self.results:
+            result.manifest = m
 
 
 # mainly just to test that these models work

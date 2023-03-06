@@ -9,7 +9,7 @@ import gcsfs
 import matplotlib.pyplot as plt
 import networkx as nx
 import typer
-from dbt_artifacts import Manifest, Model, RunResults
+from dbt_artifacts import Manifest, Model, RunResults, Seed, Source
 from networkx_viewer import Viewer
 
 app = typer.Typer()
@@ -31,9 +31,6 @@ def manviz(
     verbose: bool = False,
 ):
     manifest: Manifest = read_artifact(manifest_path, Manifest, verbose=verbose)
-    run_results: RunResults = read_artifact(
-        run_results_path, RunResults, verbose=verbose
-    )
 
     G = nx.Graph()
     for node in manifest.nodes.values():
@@ -58,38 +55,41 @@ def runviz(
     manifest_path: Path = Path("./target/manifest.json"),
     run_results_path: Path = Path("./target/run_results.json"),
     graph_path: Path = Path("./target/graph.gpickle"),
+    output: Path = Path("./target/dag.png"),
     verbose: bool = False,
+    sources: bool = True,
+    seeds: bool = True,
 ):
     manifest: Manifest = read_artifact(manifest_path, Manifest, verbose=verbose)
     run_results: RunResults = read_artifact(
         run_results_path, RunResults, verbose=verbose
     )
+    run_results.set_manifest(manifest)
 
     G = nx.DiGraph()
+    # We add all results as nodes
     for result in run_results.results:
-        node = manifest.nodes[result.unique_id]
+        G.add_node(
+            result.node.graphviz_repr, **{**result.node.gv_attrs, **result.gv_attrs}
+        )
+    # Then, add edges plus other nodes if not already added as a result node
+    for result in run_results.results:
+        node = result.node
         if node.depends_on and node.depends_on.nodes:
             for dep in node.depends_on.resolved_nodes:
-                G.add_edge(node.name, dep.name)
-        else:
-            G.add_node(node.name)
+                if isinstance(dep, Source) and not sources:
+                    continue
+                if isinstance(dep, Seed) and not seeds:
+                    continue
+                if dep.graphviz_repr not in G:
+                    G.add_node(dep.graphviz_repr, **dep.gv_attrs, style="dashed")
+                G.add_edge(node.graphviz_repr, dep.graphviz_repr)
 
-    nx.draw_networkx(
-        G,
-        pos=nx.planar_layout(G),
-        # font_size=36,
-        node_size=3000,
-        node_color="white",
-        # edgecolors="black",
-        # linewidths=5,
-        # width=5,
-    )
-
-    # Set margins for the axes so that nodes aren't clipped
-    ax = plt.gca()
-    ax.margins(0.20)
-    plt.axis("off")
-    plt.show()
+    A = nx.nx_agraph.to_agraph(G)
+    A.layout(prog="dot")
+    if verbose:
+        print(f"Writing DAG to {output}")
+    A.draw(output)
 
 
 @app.command()
