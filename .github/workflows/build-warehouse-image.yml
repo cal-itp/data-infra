@@ -33,6 +33,29 @@ jobs:
       - run: curl -sSL https://install.python-poetry.org | python -
       - run: cd warehouse && poetry install && poetry run mypy scripts
 
+  visualize:
+    name: Visualize DAG
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - uses: iterative/setup-cml@v1
+      - uses: google-github-actions/setup-gcloud@v0
+        with:
+          export_default_credentials: true
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+      - name: Render diffed manifest
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd warehouse
+          gsutil cp -r gs://calitp-dbt-artifacts/latest/ .
+          poetry run dbt compile
+          echo "![](./target/dag.png)" >> report.md
+          cml comment create report.md
+
   build_push:
     name: Package docker image
     runs-on: ubuntu-latest

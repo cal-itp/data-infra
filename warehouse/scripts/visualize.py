@@ -8,7 +8,7 @@ from typing import Any, List, Type
 import gcsfs
 import networkx as nx
 import typer
-from dbt_artifacts import Manifest, RunResults, Seed, Source
+from dbt_artifacts import Manifest, RunResults, Seed, Source, Test
 from networkx_viewer import Viewer
 
 app = typer.Typer(pretty_exceptions_enable=False)
@@ -29,8 +29,12 @@ def manviz(
     graph_path: Path = Path("./target/graph.gpickle"),
     output: Path = Path("./target/dag.png"),
     verbose: bool = False,
-    sources: bool = True,
-    seeds: bool = True,
+    analyses: bool = False,
+    models: bool = True,
+    seeds: bool = False,
+    snapshots: bool = False,
+    tests: bool = False,
+    sources: bool = False,
 ):
     manifest: Manifest = read_artifact(manifest_path, Manifest, verbose=verbose)
 
@@ -38,10 +42,13 @@ def manviz(
     for node in manifest.nodes.values():
         if node.depends_on and node.depends_on.nodes:
             for dep in node.depends_on.resolved_nodes:
-                if isinstance(dep, Source) and not sources:
-                    continue
                 if isinstance(dep, Seed) and not seeds:
                     continue
+                if isinstance(dep, Test) and not tests:
+                    continue
+                if isinstance(dep, Source) and not sources:
+                    continue
+
                 if dep.graphviz_repr not in G:
                     G.add_node(dep.graphviz_repr, **dep.gv_attrs, style="dashed")
                 G.add_edge(node.graphviz_repr, dep.graphviz_repr)
