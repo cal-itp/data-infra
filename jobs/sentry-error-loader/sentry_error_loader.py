@@ -45,6 +45,7 @@ def fetch_and_clean_from_clickhouse(project_slug, target_date):
         dt=target_date,
         execution_ts=pendulum.now(),
         filename="events.jsonl.gz",
+        data=pd.DataFrame(),
     )
 
     client = clickhouse_connect.get_client(
@@ -55,27 +56,28 @@ def fetch_and_clean_from_clickhouse(project_slug, target_date):
                                    WHERE toDate(timestamp) == '{target_date}'"""
     )
 
-    cleaned_df = all_rows.rename(make_name_bq_safe, axis="columns")
+    if not all_rows.empty:
+        cleaned_df = all_rows.rename(make_name_bq_safe, axis="columns")
 
-    cols_with_nulls_in_arrays = [
-        "exception_frames_colno",
-        "exception_frames_package",
-        "exception_stacks_mechanism_type",
-        "exception_stacks_mechanism_handled",
-    ]
-    for col_name in cols_with_nulls_in_arrays:
-        cleaned_df[col_name] = cleaned_df[col_name].apply(process_arrays_for_nulls)
+        cols_with_nulls_in_arrays = [
+            "exception_frames_colno",
+            "exception_frames_package",
+            "exception_stacks_mechanism_type",
+            "exception_stacks_mechanism_handled",
+        ]
+        for col_name in cols_with_nulls_in_arrays:
+            cleaned_df[col_name] = cleaned_df[col_name].apply(process_arrays_for_nulls)
 
-    """
-    Pandas' default timestamp datatype returned by clickhouse-connect writes out unix timestamps
-    in nanoseconds, but they get interpreted by BQ as microseconds. A quick cast to datetime string
-    before writing avoids triggering the issue.
-    """
-    cols_with_unix_timestamps = ["timestamp", "message_timestamp", "received"]
-    for col_name in cols_with_unix_timestamps:
-        cleaned_df[col_name] = cleaned_df[col_name].apply(str)
+        """
+        Pandas' default timestamp datatype returned by clickhouse-connect writes out unix timestamps
+        in nanoseconds, but they get interpreted by BQ as microseconds. A quick cast to datetime string
+        before writing avoids triggering the issue.
+        """
+        cols_with_unix_timestamps = ["timestamp", "message_timestamp", "received"]
+        for col_name in cols_with_unix_timestamps:
+            cleaned_df[col_name] = cleaned_df[col_name].apply(str)
 
-    extract.data = cleaned_df
+        extract.data = cleaned_df
 
     return extract
 
@@ -114,8 +116,9 @@ def main(
 ):
     target_date = pendulum.instance(logical_date).date()
     extract = fetch_and_clean_from_clickhouse(project_slug, target_date)
-    fs = get_fs()
-    return extract.save_to_gcs(fs=fs)
+    if not extract.data.empty:
+        fs = get_fs()
+        return extract.save_to_gcs(fs=fs)
 
 
 if __name__ == "__main__":
