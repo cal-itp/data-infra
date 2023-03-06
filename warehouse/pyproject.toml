@@ -27,6 +27,10 @@ gcsfs = "^2023.1.0"
 dbt-metabase = "^0.9.14"
 networkx = {version = "<3", extras = ["default"]}
 networkx-viewer = "^0.3.0"
+# https://github.com/pygraphviz/pygraphviz/issues/398#issuecomment-1450367670
+# export CFLAGS="-I $(brew --prefix graphviz)/include"
+# export LDFLAGS="-L $(brew --prefix graphviz)/lib"
+pygraphviz = "^1.10"
 
 [tool.poetry.dev-dependencies]
 sqlfluff = "^1.4.5"
