@@ -51,11 +51,11 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cd warehouse
+          cd warehouse && poetry install
           gsutil cp -r gs://calitp-dbt-artifacts/latest/ .
           poetry run dbt compile
           echo "![](./target/dag.png)" >> report.md
-          cml comment create report.md
+          cml comment update report.md
 
   build_push:
     name: Package docker image
