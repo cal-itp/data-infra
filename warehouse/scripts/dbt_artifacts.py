@@ -98,6 +98,7 @@ class Column(BaseModel):
             if node.resource_type == DbtResourceType.test
             and isinstance(node, Test)
             and node.depends_on
+            and node.depends_on.nodes is not None
             and self.parent
             and self.parent.unique_id in node.depends_on.nodes
             and node.test_metadata
@@ -392,6 +393,8 @@ class RunResult(BaseModel):
 
     @property
     def node(self) -> Node:
+        if not self.manifest:
+            raise ValueError("must set manifest before calling node")
         return self.manifest.nodes[self.unique_id]
 
     @property

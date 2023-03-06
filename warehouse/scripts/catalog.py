@@ -16,7 +16,7 @@ class CatalogMetadata(BaseModel):
 
     dbt_schema_version: Optional[str] = "https://schemas.getdbt.com/dbt/catalog/v1.json"
     dbt_version: Optional[str] = "0.20.0rc1"
-    generated_at: Optional[datetime] = "2021-06-07T14:49:01.098234Z"
+    generated_at: Optional[datetime] = "2021-06-07T14:49:01.098234Z"  # type: ignore
     invocation_id: Optional[str] = None
     env: Optional[Dict[str, str]] = {}
 

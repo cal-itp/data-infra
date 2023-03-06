@@ -5,11 +5,11 @@ import json
 from pathlib import Path
 from typing import Any, List, Type
 
-import gcsfs
-import networkx as nx
+import gcsfs  # type: ignore
+import networkx as nx  # type: ignore
 import typer
 from dbt_artifacts import Manifest, RunResults, Seed, Source, Test
-from networkx_viewer import Viewer
+from networkx_viewer import Viewer  # type: ignore
 
 app = typer.Typer(pretty_exceptions_enable=False)
 
