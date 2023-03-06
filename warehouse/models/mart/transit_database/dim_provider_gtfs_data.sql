@@ -57,9 +57,6 @@ disambiguate_dups AS (
         gtfs_dataset_type,
         gtfs_service_data_customer_facing,
         regional_feed_type,
-        agency_id,
-        route_id,
-        network_id,
         associated_schedule_gtfs_dataset_key,
                 ROW_NUMBER() OVER (
             PARTITION BY
@@ -153,32 +150,32 @@ all_versioned AS (
 dim_provider_gtfs_data AS (
     SELECT
         {{ dbt_utils.surrogate_key([
-            'organization_key',
-            'service_key',
-            'associated_schedule_gtfs_dataset_key',
-            'gtfs_dataset_key_schedule',
-            'gtfs_dataset_key_service_alerts',
-            'gtfs_dataset_key_vehicle_positions',
-            'gtfs_dataset_key_trip_updates',
-            'gtfs_service_data_customer_facing'
+            'orig.organization_key',
+            'orig.service_key',
+            'orig.associated_schedule_gtfs_dataset_key',
+            'orig.gtfs_dataset_key_schedule',
+            'orig.gtfs_dataset_key_service_alerts',
+            'orig.gtfs_dataset_key_vehicle_positions',
+            'orig.gtfs_dataset_key_trip_updates',
+            'orig.gtfs_service_data_customer_facing'
             ]) }} AS key,
-        guidelines_assessed,
-        reports_site_assessed,
-        organization_key,
-        organization_name,
-        organization_itp_id,
-        organization_hubspot_company_record_id,
-        organization_ntd_id,
-        organization_source_record_id,
-        agency_id,
-        route_id,
-        network_id,
-        service_key,
-        service_name,
-        service_source_record_id,
-        gtfs_service_data_customer_facing,
+        orig.guidelines_assessed,
+        orig.reports_site_assessed,
+        orig.organization_key,
+        orig.organization_name,
+        orig.organization_itp_id,
+        orig.organization_hubspot_company_record_id,
+        orig.organization_ntd_id,
+        orig.organization_source_record_id,
+        assessment_candidates.agency_id,
+        assessment_candidates.route_id,
+        assessment_candidates.network_id,
+        orig.service_key,
+        orig.service_name,
+        orig.service_source_record_id,
+        orig.gtfs_service_data_customer_facing,
         orig.regional_feed_type,
-        associated_schedule_gtfs_dataset_key,
+        orig.associated_schedule_gtfs_dataset_key,
         sched.name AS schedule_gtfs_dataset_name,
         sched.source_record_id AS schedule_source_record_id,
         alerts.name AS service_alerts_gtfs_dataset_name,
@@ -206,6 +203,10 @@ dim_provider_gtfs_data AS (
         ON orig.gtfs_dataset_key_trip_updates = trip_updates.key
     LEFT JOIN datasets AS vehicle_positions
         ON orig.gtfs_dataset_key_vehicle_positions = vehicle_positions.key
+    LEFT JOIN int_gtfs_quality__daily_assessment_candidate_entities AS assessment_candidates
+        ON orig.service_key = assessment_candidates.service_key
+        AND orig.associated_schedule_gtfs_dataset_key = assessment_candidates.gtfs_dataset_key
+        AND all_versioned._valid_from = assessment_candidates.date
 )
 
 SELECT * FROM dim_provider_gtfs_data
