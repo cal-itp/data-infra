@@ -7,6 +7,7 @@ cmds:
   - python3
 
 arguments:
+  - "test-calitp-sentry"
   - "sentry_error_loader.py"
   - "cal-itp-data-infra"
   - "{{ ds }}"

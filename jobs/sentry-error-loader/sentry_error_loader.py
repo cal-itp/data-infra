@@ -33,7 +33,7 @@ def process_arrays_for_nulls(arr):
     return [x if x is not pd.NA else filler for x in arr]
 
 
-def fetch_and_clean_from_clickhouse(project_slug, target_date):
+def fetch_and_clean_from_clickhouse(bucket, project_slug, target_date):
     """
     Download Sentry event records from Clickhouse as a DataFrame.
     """
@@ -41,6 +41,7 @@ def fetch_and_clean_from_clickhouse(project_slug, target_date):
     print(f"Gathering Sentry event data for project {project_slug}")
 
     extract = SentryExtract(
+        bucket=bucket,
         project_slug=project_slug,
         dt=target_date,
         execution_ts=pendulum.now(),
@@ -105,6 +106,7 @@ class SentryExtract(PartitionedGCSArtifact):
 
 
 def main(
+    bucket: str,
     project_slug: str,
     logical_date: datetime = typer.Argument(
         ...,
@@ -113,7 +115,7 @@ def main(
     ),
 ):
     target_date = pendulum.instance(logical_date).date()
-    extract = fetch_and_clean_from_clickhouse(project_slug, target_date)
+    extract = fetch_and_clean_from_clickhouse(bucket, project_slug, target_date)
     fs = get_fs()
     return extract.save_to_gcs(fs=fs)
 
