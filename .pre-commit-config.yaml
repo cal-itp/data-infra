@@ -34,7 +34,7 @@ repos:
     rev: 1.4.1
     hooks:
       - id: sqlfluff-lint
-        additional_dependencies: ['dbt-bigquery', 'sqlfluff-templater-dbt']
+        additional_dependencies: ['dbt-bigquery==1.3.0', 'sqlfluff-templater-dbt']
         # skip: L003 indentation stuff -- TODO
         # skip: L010 uppercase keywords -- TODO
         # skip: L011 implicit/explicit aliasing of tables? -- TODO
