@@ -37,6 +37,7 @@ jobs:
     name: Visualize DAG
     runs-on: ubuntu-latest
     steps:
+      - run: apt install graphviz-dev
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
