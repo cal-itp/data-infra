@@ -10,6 +10,11 @@
     )
 }}
 
+{% if is_incremental() %}
+    {% set dates = dbt_utils.get_column_values(table=this, column='dt', order_by = 'dt DESC', max_records = 1) %}
+    {% set max_dt = dates[0] %}
+{% endif %}
+
 WITH fct_rt_feed_fetch_errors AS (
     SELECT
         project_id,
@@ -73,6 +78,11 @@ WITH fct_rt_feed_fetch_errors AS (
         execution_ts
     FROM {{ ref('stg_rt__feed_fetch_errors') }}
     WHERE message LIKE '%RTFetchException%'
+    {% if is_incremental() %}
+    AND dt >= '{{ max_dt }}'
+    {% else %}
+    AND dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('RT_LOOKBACK_DAYS') }} DAY)
+    {% endif %}
 )
 
 SELECT * FROM fct_rt_feed_fetch_errors
