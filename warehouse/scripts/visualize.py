@@ -3,16 +3,15 @@ Provide more visualizations than what dbt provides.
 """
 import json
 from pathlib import Path
-from typing import Any, Type
+from typing import Any, List, Type
 
 import gcsfs
-import matplotlib.pyplot as plt
 import networkx as nx
 import typer
-from dbt_artifacts import Manifest, Model, RunResults, Seed, Source
+from dbt_artifacts import Manifest, RunResults, Seed, Source
 from networkx_viewer import Viewer
 
-app = typer.Typer()
+app = typer.Typer(pretty_exceptions_enable=False)
 
 
 def read_artifact(path: Path, artifact_type: Type, verbose: bool = False) -> Any:
@@ -28,26 +27,30 @@ def manviz(
     manifest_path: Path = Path("./target/manifest.json"),
     run_results_path: Path = Path("./target/run_results.json"),
     graph_path: Path = Path("./target/graph.gpickle"),
+    output: Path = Path("./target/dag.png"),
     verbose: bool = False,
+    sources: bool = True,
+    seeds: bool = True,
 ):
     manifest: Manifest = read_artifact(manifest_path, Manifest, verbose=verbose)
 
-    G = nx.Graph()
+    G = nx.DiGraph()
     for node in manifest.nodes.values():
-        if isinstance(node, Model):
-            # G.add_node(node.name)
+        if node.depends_on and node.depends_on.nodes:
+            for dep in node.depends_on.resolved_nodes:
+                if isinstance(dep, Source) and not sources:
+                    continue
+                if isinstance(dep, Seed) and not seeds:
+                    continue
+                if dep.graphviz_repr not in G:
+                    G.add_node(dep.graphviz_repr, **dep.gv_attrs, style="dashed")
+                G.add_edge(node.graphviz_repr, dep.graphviz_repr)
 
-            if node.depends_on and node.depends_on.nodes:
-                for dep in node.depends_on.resolved_nodes:
-                    G.add_edge(node.name, dep.name)
-
-    nx.draw_networkx(G, font_size=4, pos=nx.spring_layout(G))
-
-    # Set margins for the axes so that nodes aren't clipped
-    ax = plt.gca()
-    ax.margins(0.20)
-    plt.axis("off")
-    plt.show()
+    A = nx.nx_agraph.to_agraph(G)
+    A.layout(prog="dot")
+    if verbose:
+        print(f"Writing DAG to {output}")
+    A.draw(output)
 
 
 @app.command()
@@ -59,6 +62,8 @@ def runviz(
     verbose: bool = False,
     sources: bool = True,
     seeds: bool = True,
+    include: List[str] = [],
+    exclude: List[str] = [],
 ):
     manifest: Manifest = read_artifact(manifest_path, Manifest, verbose=verbose)
     run_results: RunResults = read_artifact(
@@ -69,9 +74,10 @@ def runviz(
     G = nx.DiGraph()
     # We add all results as nodes
     for result in run_results.results:
-        G.add_node(
-            result.node.graphviz_repr, **{**result.node.gv_attrs, **result.gv_attrs}
-        )
+        if result.node.name not in exclude:
+            G.add_node(
+                result.node.graphviz_repr, **{**result.node.gv_attrs, **result.gv_attrs}
+            )
     # Then, add edges plus other nodes if not already added as a result node
     for result in run_results.results:
         node = result.node
@@ -81,9 +87,10 @@ def runviz(
                     continue
                 if isinstance(dep, Seed) and not seeds:
                     continue
-                if dep.graphviz_repr not in G:
+                if dep.graphviz_repr not in G and dep.name not in exclude:
                     G.add_node(dep.graphviz_repr, **dep.gv_attrs, style="dashed")
-                G.add_edge(node.graphviz_repr, dep.graphviz_repr)
+                if node.name not in exclude:
+                    G.add_edge(node.graphviz_repr, dep.graphviz_repr)
 
     A = nx.nx_agraph.to_agraph(G)
     A.layout(prog="dot")

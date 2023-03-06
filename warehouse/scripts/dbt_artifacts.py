@@ -396,14 +396,16 @@ class RunResult(BaseModel):
 
     @property
     def bytes_processed(self):
-        return self.adapter_response.get("bytes_processed")
+        return self.adapter_response.get(
+            "bytes_processed", 0
+        )  # tests do bill bytes but set to 0
 
     @property
     def gv_attrs(self) -> Dict[str, Any]:
-        if self.bytes_processed > 10_000_000_000:
-            color = "yellow"
-        elif self.bytes_processed > 100_000_000_000:
+        if self.bytes_processed > 300_000_000_000:
             color = "red"
+        elif self.bytes_processed > 100_000_000_000:
+            color = "yellow"
         else:
             color = "white"
 
