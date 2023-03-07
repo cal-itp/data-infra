@@ -63,10 +63,6 @@ initial_assessed AS (
         backdated_regional_feed_type,
         gtfs_dataset_deprecated_date,
 
-        agency_id,
-        route_id,
-        network_id,
-
         base64_url,
         had_rt_files,
 
@@ -154,9 +150,6 @@ int_gtfs_quality__daily_assessment_candidate_entities AS (
         backdated_regional_feed_type,
         COALESCE(check_regional_feed_types.use_subfeed_for_reports, FALSE) AS use_subfeed_for_reports,
         gtfs_dataset_deprecated_date,
-        agency_id,
-        route_id,
-        network_id,
         base64_url,
         had_rt_files,
         organization_key,

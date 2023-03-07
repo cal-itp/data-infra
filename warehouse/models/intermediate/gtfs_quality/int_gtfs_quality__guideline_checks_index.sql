@@ -43,9 +43,6 @@ cross_join AS (
         backdated_regional_feed_type,
         use_subfeed_for_reports,
         gtfs_dataset_deprecated_date,
-        agency_id,
-        route_id,
-        network_id,
 
         base64_url,
         had_rt_files,
@@ -114,9 +111,6 @@ int_gtfs_quality__guideline_checks_index AS (
         backdated_regional_feed_type,
         use_subfeed_for_reports,
         gtfs_dataset_deprecated_date,
-        agency_id,
-        route_id,
-        network_id,
 
         base64_url,
         had_rt_files,
