@@ -60,6 +60,7 @@ def fetch_and_clean_from_clickhouse(project_slug, target_date):
 
     cleaned_df = all_rows.rename(make_name_bq_safe, axis="columns")
 
+    # TODO: convert to smarter detection of which columns have arrays
     cols_with_nulls_in_arrays = [
         "exception_frames_abs_path",
         "exception_frames_colno",
