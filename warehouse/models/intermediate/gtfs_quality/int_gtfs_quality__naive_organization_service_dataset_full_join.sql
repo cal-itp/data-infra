@@ -111,9 +111,6 @@ int_gtfs_quality__naive_organization_service_dataset_full_join AS (
         service_data.customer_facing AS gtfs_service_data_customer_facing,
         service_data.category AS gtfs_service_data_category,
 
-        service_data.agency_id,
-        service_data.route_id,
-        service_data.network_id,
         service_data.source_record_id AS gtfs_service_data_source_record_id,
         datasets.name AS gtfs_dataset_name,
         COALESCE(datasets.type, rt_feeds.feed_type, schedule_feeds.feed_type) AS gtfs_dataset_type,
