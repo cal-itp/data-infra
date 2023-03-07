@@ -1,0 +1,151 @@
+import gzip
+import os
+from datetime import datetime
+from typing import ClassVar, List, Optional
+
+import pandas as pd
+import paramiko
+import pendulum
+import typer
+from calitp_data_infra.storage import (  # type: ignore; get_fs,; make_name_bq_safe,
+    PartitionedGCSArtifact,
+)
+
+CALITP_BUCKET__ELAVON = os.environ["CALITP_BUCKET__ELAVON"]
+CALITP__ELAVON_SFTP_PASSWORD = os.environ["CALITP__ELAVON_SFTP_PASSWORD"]
+
+
+def process_arrays_for_nulls(arr):
+    """
+    BigQuery doesn't allow arrays that contain null values --
+    see: https://cloud.google.com/bigquery/docs/reference/standard-sql/data-types#array_nulls
+    Therefore we need to manually replace nulls with falsy values according
+    to the type of data we find in the array.
+    """
+    types = set(type(entry) for entry in arr if entry is not None)
+
+    if not types:
+        return []
+    # use empty string for all non-numeric types
+    # may need to expand this over time
+    filler = -1 if types <= {int, float} else ""
+    return [x if x is not pd.NA else filler for x in arr]
+
+
+def fetch_and_clean_from_clickhouse(project_slug, target_date):
+    """
+    Download Sentry event records from Clickhouse as a DataFrame.
+    """
+
+    print(f"Gathering Sentry event data for project {project_slug}")
+
+    """
+    extract = SentryExtract(
+        project_slug=project_slug,
+        dt=target_date,
+        execution_ts=pendulum.now(),
+        filename="events.jsonl.gz",
+    )
+    """
+
+    all_rows = None
+
+    # prod host: prod-sftp-ingest-elavon.sftp-server-0.svc.cluster.local
+    client = paramiko.SSHClient().connect(
+        hostname="34.145.56.125",
+        port=2200,
+        username="elavon",
+        password=CALITP__ELAVON_SFTP_PASSWORD,
+    )
+    sftp_folder = client.open_sftp().chdir("/data")
+    for file in sftp_folder.listdir():
+        with sftp_folder.open(file) as f:
+            f.prefetch()
+            if all_rows:
+                all_rows.concat(pd.read_csv(f, delimiter="|"))
+            else:
+                all_rows = pd.read_csv(f, delimiter="|")
+    all_rows.to_json("output.jsonl", orient="records", lines=True, default_handler=str)
+
+    '''
+    if all_rows.empty:
+        return extract
+
+    cleaned_df = all_rows.rename(make_name_bq_safe, axis="columns")
+
+    cols_with_nulls_in_arrays = [
+        "exception_frames_colno",
+        "exception_frames_package",
+        "exception_stacks_mechanism_type",
+        "exception_stacks_mechanism_handled",
+    ]
+    for col_name in cols_with_nulls_in_arrays:
+        cleaned_df[col_name] = cleaned_df[col_name].apply(process_arrays_for_nulls)
+
+    """
+    Pandas' default timestamp datatype returned by clickhouse-connect writes out unix timestamps
+    in nanoseconds, but they get interpreted by BQ as microseconds. A quick cast to datetime string
+    before writing avoids triggering the issue.
+    """
+    cols_with_unix_timestamps = ["timestamp", "message_timestamp", "received"]
+    for col_name in cols_with_unix_timestamps:
+        cleaned_df[col_name] = cleaned_df[col_name].apply(str)
+
+    extract.data = cleaned_df
+    '''
+
+    return all_rows
+
+
+class SentryExtract(PartitionedGCSArtifact):
+    bucket: ClassVar[str] = CALITP_BUCKET__ELAVON
+    table: ClassVar[str] = "events"
+    dt: pendulum.Date
+    execution_ts: pendulum.DateTime
+    partition_names: ClassVar[List[str]] = ["project_slug", "dt", "execution_ts"]
+    project_slug: str
+    data: Optional[pd.DataFrame]
+
+    class Config:
+        arbitrary_types_allowed = True
+
+    def save_to_gcs(self, fs):
+        self.save_content(
+            fs=fs,
+            content=gzip.compress(
+                self.data.to_json(
+                    orient="records", lines=True, default_handler=str
+                ).encode()
+            ),
+            exclude={"data"},
+        )
+
+
+def main(
+    project_slug: str,
+    logical_date: datetime = typer.Argument(
+        ...,
+        help="The date on which the targeted error(s) occurred.",
+        formats=["%Y-%m-%d"],
+    ),
+):
+    target_date = pendulum.instance(logical_date).date()
+    # extract =
+    fetch_and_clean_from_clickhouse(project_slug, target_date)
+
+    """
+
+    if extract.data is None:
+        print(f"No extract was found for project {project_slug} and date {target_date}")
+        return
+    if extract.data.empty:
+        print(f"Empty extract for project {project_slug} and date {target_date}")
+        return
+
+    fs = get_fs()
+    extract.save_to_gcs(fs=fs)
+    """
+
+
+if __name__ == "__main__":
+    typer.run(main)
