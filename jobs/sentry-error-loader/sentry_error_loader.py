@@ -61,11 +61,21 @@ def fetch_and_clean_from_clickhouse(project_slug, target_date):
     cleaned_df = all_rows.rename(make_name_bq_safe, axis="columns")
 
     cols_with_nulls_in_arrays = [
+        "exception_frames_abs_path",
         "exception_frames_colno",
+        "exception_frames_filename",
+        "exception_frames_function",
+        "exception_frames_lineno",
+        "exception_frames_in_app",
         "exception_frames_package",
+        "exception_frames_module",
+        "exception_frames_stack_level",
         "exception_stacks_mechanism_type",
         "exception_stacks_mechanism_handled",
+        "exception_stacks_type",
+        "exception_stacks_value",
     ]
+
     for col_name in cols_with_nulls_in_arrays:
         cleaned_df[col_name] = cleaned_df[col_name].apply(process_arrays_for_nulls)
 
