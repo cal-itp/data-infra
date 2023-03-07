@@ -26,9 +26,6 @@ int_gtfs_quality__daily_assessment_candidate_entities AS (
         gtfs_dataset_type,
         gtfs_service_data_customer_facing,
         regional_feed_type,
-        agency_id,
-        route_id,
-        network_id,
         CASE
             WHEN gtfs_dataset_type = "schedule" THEN gtfs_dataset_key
             WHEN gtfs_dataset_type IS NOT NULL THEN schedule_to_use_for_rt_validation_gtfs_dataset_key
@@ -57,9 +54,6 @@ disambiguate_dups AS (
         gtfs_dataset_type,
         gtfs_service_data_customer_facing,
         regional_feed_type,
-        agency_id,
-        route_id,
-        network_id,
         associated_schedule_gtfs_dataset_key,
                 ROW_NUMBER() OVER (
             PARTITION BY
@@ -69,9 +63,6 @@ disambiguate_dups AS (
                 gtfs_dataset_type,
                 gtfs_service_data_customer_facing,
                 regional_feed_type,
-                agency_id,
-                route_id,
-                network_id,
                 associated_schedule_gtfs_dataset_key
             -- try to get some name that will group like feeds together
             ORDER BY
@@ -118,7 +109,7 @@ next_valid_extract AS (
         date,
         LEAD(date) OVER (ORDER BY date) AS next_dt
     FROM pivoted
-    GROUP BY date
+    GROUP BY 1
 ),
 
 -- following: https://dba.stackexchange.com/questions/210907/determine-consecutive-occurrences-of-values
@@ -170,9 +161,6 @@ dim_provider_gtfs_data AS (
         organization_hubspot_company_record_id,
         organization_ntd_id,
         organization_source_record_id,
-        agency_id,
-        route_id,
-        network_id,
         service_key,
         service_name,
         service_source_record_id,

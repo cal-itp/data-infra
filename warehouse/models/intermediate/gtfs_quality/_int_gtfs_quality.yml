@@ -75,6 +75,18 @@ models:
 
   # Index tables
 
+  - name: int_gtfs_quality__guideline_checks_index
+    description: |
+      Daily index of all potentially assessed entities with all possible checks.
+      Index against which individual checks are meant to be defined.
+      All entity-related columns are inherited from `int_gtfs_quality__daily_assessment_candidate_entities`.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - key
+            - date
+            - check
+
   - name: int_gtfs_quality__schedule_feed_guideline_index
     description: |
       Daily index of v2 schedule feeds. Provides structure for
@@ -315,6 +327,11 @@ models:
           (ex. this is a schedule feed) or this is an RT feed that had no successful downloads
           on the given date. This field is primarily intended to be used for assistance in
           joining with the RT feeds guideline checks index.
+      - name: gtfs_dataset_deprecated_date
+        description: |
+          Deprecation date for the given GTFS dataset record. If populated, indicates record
+          is no longer active and is kept for historical purposes.
+          Informs whether we want to use the record for guidelines checks.
   - name: int_gtfs_quality__organization_dataset_map
     description: |
       A version of int_gtfs_quality__daily_assessment_candidate_entities collapsed

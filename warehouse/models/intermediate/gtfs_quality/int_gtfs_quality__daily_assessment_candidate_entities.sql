@@ -61,10 +61,7 @@ initial_assessed AS (
         gtfs_service_data_category,
         regional_feed_type,
         backdated_regional_feed_type,
-
-        agency_id,
-        route_id,
-        network_id,
+        gtfs_dataset_deprecated_date,
 
         base64_url,
         had_rt_files,
@@ -135,10 +132,11 @@ int_gtfs_quality__daily_assessment_candidate_entities AS (
                 AND backdated_regional_feed_type = 'Regional Subfeed'
                 AND has_guidelines_assessed_schedule_feed) THEN TRUE
             -- finally, confirm we have at least one schedule feed and that the overall entity is assessed
-            -- and we suppress the MTC regional combined feed from being used in reporting
+            -- and we suppress the MTC regional combined feed (schedule and all 3 RT) from being used in reporting
             ELSE COALESCE(has_guidelines_assessed_schedule_feed, FALSE)
                 AND assessed
-                AND gtfs_dataset_source_record_id != 'rec9AyXUSMUHFnLsH'
+                AND gtfs_dataset_source_record_id NOT IN
+                ('rec9AyXUSMUHFnLsH', 'recAQiomSPtajnjLy', 'rec2jN0CkL8noOYIr', 'rec2jN0CkL8noOYIr', 'recAfxxeJWxHexo6e')
         END AS reports_site_assessed,
         organization_assessed,
         service_assessed,
@@ -151,9 +149,7 @@ int_gtfs_quality__daily_assessment_candidate_entities AS (
         regional_feed_type,
         backdated_regional_feed_type,
         COALESCE(check_regional_feed_types.use_subfeed_for_reports, FALSE) AS use_subfeed_for_reports,
-        agency_id,
-        route_id,
-        network_id,
+        gtfs_dataset_deprecated_date,
         base64_url,
         had_rt_files,
         organization_key,

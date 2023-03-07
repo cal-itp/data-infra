@@ -1,0 +1,164 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__SENTRY_EVENTS') }}"
+suffix_bucket: true
+source_objects:
+  - "events/*.jsonl.gz"
+destination_project_dataset_table: "external_sentry.events"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  source_uri_prefix: "events/{project_slug:STRING}/{dt:DATE}/{execution_ts:TIMESTAMP}/"
+schema_fields:
+  - name: project_id
+    type: INTEGER
+  - name: timestamp
+    type: TIMESTAMP
+  - name: event_id
+    type: STRING
+  - name: platform
+    type: STRING
+  - name: environment
+    mode: NULLABLE
+    type: STRING
+  - name: release
+    mode: NULLABLE
+    type: STRING
+  - name: dist
+    mode: NULLABLE
+    type: STRING
+  - name: ip_address_v4
+    mode: NULLABLE
+    type: STRING
+  - name: ip_address_v6
+    mode: NULLABLE
+    type: STRING
+  - name: user
+    type: STRING
+  - name: user_id
+    mode: NULLABLE
+    type: STRING
+  - name: user_name
+    mode: NULLABLE
+    type: STRING
+  - name: user_email
+    mode: NULLABLE
+    type: STRING
+  - name: sdk_name
+    mode: NULLABLE
+    type: STRING
+  - name: sdk_version
+    mode: NULLABLE
+    type: STRING
+  - name: http_method
+    mode: NULLABLE
+    type: STRING
+  - name: http_referer
+    mode: NULLABLE
+    type: STRING
+  - name: tags_key
+    mode: REPEATED
+    type: STRING
+  - name: tags_value
+    mode: REPEATED
+    type: STRING
+  - name: contexts_key
+    mode: REPEATED
+    type: STRING
+  - name: contexts_value
+    mode: REPEATED
+    type: STRING
+  - name: transaction_name
+    type: STRING
+  - name: transaction_hash
+    type: INTEGER
+  - name: span_id
+    mode: NULLABLE
+    type: STRING
+  - name: trace_id
+    mode: NULLABLE
+    type: STRING
+  - name: partition
+    type: INTEGER
+  - name: offset
+    type: INTEGER
+  - name: message_timestamp
+    type: TIMESTAMP
+  - name: retention_days
+    type: INTEGER
+  - name: deleted
+    type: INTEGER
+  - name: group_id
+    type: INTEGER
+  - name: primary_hash
+    type: STRING
+  - name: hierarchical_hashes
+    mode: REPEATED
+    type: STRING
+  - name: received
+    type: TIMESTAMP
+  - name: message
+    type: STRING
+  - name: title
+    type: STRING
+  - name: culprit
+    type: STRING
+  - name: level
+    mode: NULLABLE
+    type: STRING
+  - name: location
+    mode: NULLABLE
+    type: STRING
+  - name: version
+    mode: NULLABLE
+    type: STRING
+  - name: type
+    type: STRING
+  - name: exception_stacks_type
+    mode: REPEATED
+    type: STRING
+  - name: exception_stacks_value
+    mode: REPEATED
+    type: STRING
+  - name: exception_stacks_mechanism_type
+    mode: REPEATED
+    type: STRING
+  - name: exception_stacks_mechanism_handled
+    mode: REPEATED
+    type: INTEGER
+  - name: exception_frames_abs_path
+    mode: REPEATED
+    type: STRING
+  - name: exception_frames_colno
+    mode: REPEATED
+    type: INTEGER
+  - name: exception_frames_filename
+    mode: REPEATED
+    type: STRING
+  - name: exception_frames_function
+    mode: REPEATED
+    type: STRING
+  - name: exception_frames_lineno
+    mode: REPEATED
+    type: INTEGER
+  - name: exception_frames_in_app
+    mode: REPEATED
+    type: INTEGER
+  - name: exception_frames_package
+    mode: REPEATED
+    type: STRING
+  - name: exception_frames_module
+    mode: REPEATED
+    type: STRING
+  - name: exception_frames_stack_level
+    mode: REPEATED
+    type: INTEGER
+  - name: sdk_integrations
+    mode: REPEATED
+    type: STRING
+  - name: modules_name
+    mode: REPEATED
+    type: STRING
+  - name: modules_version
+    mode: REPEATED
+    type: STRING

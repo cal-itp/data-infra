@@ -298,27 +298,6 @@ models:
           "Primary" (indicating that this is the canonical dataset for this service) or
           "precursor" (this dataset is an input to some other primary
           canonical dataset for this service). Null or "unknown" indicate unknown.
-      - name: agency_id
-        description: |
-          If only a selection of `agency.agency_id` within the GTFS Dataset
-          should be selected to represent a specific `services` record, they are
-          listed here.  If all `agency_id` should be selected, this is blank.
-          "Leftover" `agency_id` from other `agency_id` selections for the
-          same `GTFS dataset` are indicated by `*`.
-      - name: network_id
-        description: |
-          If only a selection of `routes.network_id` within the GTFS Dataset
-          should be selected to represent a specific `services` record, they are
-          listed here.  If all `network_id` should be selected, this is blank.
-          "Leftover" `network_id` from other `network_id` selections for the
-          same `GTFS dataset` are indicated by `*`.
-      - name: route_id
-        description: |
-          If only a selection of `routes.route_id` within the GTFS Dataset
-          should be selected to represent a specific `services` record, they are
-          listed here.  If all `route_id` should be selected, this is blank.
-          "Leftover" `route_id` from other `route_id` selections for the
-          same `GTFS dataset` are indicated by `*`.
       - name:  fares_v2_status
         # self relationship test breaks metabase connector: https://github.com/JarvusInnovations/dbt-metabase/blob/master/dbtmetabase/parsers/dbt_manifest.py#L202
         # TODO: make an aliased version of the relationship test
@@ -411,15 +390,6 @@ models:
       For best results, join with reference to a specific date, and make sure to choose a specific
       output grain (organizations, services, customer-facing vs. not); you will likely need to filter
       or group to get the desired output.
-
-      To identify specific records within a given dataset that
-      correspond to the listed service:
-      * Selection levels are in following order: agency_id, network_id, route_id
-      * BLANK indicates ALL records
-      * Comma-separated list for values that should be selected at that selection level
-      * "*" indicates remaining records after other selections at that selection level
-
-      For further details, see: https://docs.calitp.org/data-infra/datasets_and_tables/transitdatabase.html?highlight=network_id#gtfs-service-data-notation-for-isolating-gtfs-services-within-gtfs-datasets
     tests:
     columns:
       - *key
@@ -495,9 +465,6 @@ models:
       - name: organization_hubspot_company_record_id
         description: |
           Hubspot CRM record ID for this organization.
-      - name: agency_id
-      - name: network_id
-      - name: route_id
 
   - name: dim_ntd_agency_info
     description: '{{ doc("ntd_agency_info_table") }}'

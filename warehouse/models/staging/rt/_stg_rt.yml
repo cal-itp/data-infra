@@ -24,3 +24,65 @@ models:
     description: Unnested RT service alerts.
     columns:
       - *rt_key
+  - name: stg_rt__feed_fetch_errors
+    description: Event logs from Sentry corresponding to RTFetchException errors
+    columns:
+      - name: project_id
+      - name: timestamp
+      - name: event_id
+      - name: platform
+      - name: environment
+      - name: release
+      - name: dist
+      - name: ip_address_v4
+      - name: ip_address_v6
+      - name: user
+      - name: user_id
+      - name: user_name
+      - name: user_email
+      - name: sdk_name
+      - name: sdk_version
+      - name: http_method
+      - name: http_referer
+      - name: tags_key
+      - name: tags_value
+      - name: contexts_key
+      - name: contexts_value
+      - name: transaction_name
+      - name: span_id
+      - name: trace_id
+      - name: partition
+      - name: offset
+      - name: message_timestamp
+      - name: retention_days
+      - name: deleted
+      - name: group_id
+      - name: primary_hash
+      - name: hierarchical_hashes
+      - name: received
+      - name: message
+      - name: title
+      - name: culprit
+      - name: level
+      - name: location
+      - name: version
+      - name: type
+      - name: exception_stacks_type
+      - name: exception_stacks_value
+      - name: exception_stacks_mechanism_type
+      - name: exception_stacks_mechanism_handled
+      - name: exception_frames_abs_path
+      - name: exception_frames_colno
+      - name: exception_frames_filename
+      - name: exception_frames_function
+      - name: exception_frames_lineno
+      - name: exception_frames_in_app
+      - name: exception_frames_package
+      - name: exception_frames_module
+      - name: exception_frames_stack_level
+      - name: sdk_integrations
+      - name: modules_name
+      - name: modules_version
+      - name: project_slug
+      - name: dt
+      - name: execution_ts

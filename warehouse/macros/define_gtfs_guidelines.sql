@@ -13,8 +13,32 @@
 'rt_feed'
 {% endmacro %}
 
+{% macro rt_feed_vp() %}
+'rt_feed_vp'
+{% endmacro %}
+
+{% macro rt_feed_tu() %}
+'rt_feed_tu'
+{% endmacro %}
+
+{% macro rt_feed_sa() %}
+'rt_feed_sa'
+{% endmacro %}
+
 {% macro rt_url() %}
 'rt_url'
+{% endmacro %}
+
+{% macro rt_url_vp() %}
+'rt_url_vp'
+{% endmacro %}
+
+{% macro rt_url_tu() %}
+'rt_url_tu'
+{% endmacro %}
+
+{% macro rt_url_sa() %}
+'rt_url_sa'
 {% endmacro %}
 
 {% macro organization() %}
@@ -31,6 +55,22 @@
 
 {% macro gtfs_dataset() -%}
 'gtfs_dataset'
+{% endmacro %}
+
+{% macro gtfs_dataset_schedule() -%}
+'gtfs_dataset_schedule'
+{% endmacro %}
+
+{% macro gtfs_dataset_vp() -%}
+'gtfs_dataset_vp'
+{% endmacro %}
+
+{% macro gtfs_dataset_tu() -%}
+'gtfs_dataset_tu'
+{% endmacro %}
+
+{% macro gtfs_dataset_sa() -%}
+'gtfs_dataset_sa'
 {% endmacro %}
 
 --
@@ -316,6 +356,22 @@
 "100% of trips marked as Scheduled, Canceled, or Added within the Trip updates feed are represented within the Vehicle positions feed"
 {% endmacro %}
 
+{% macro feed_listed_schedule() %}
+"A GTFS Schedule feed is listed"
+{% endmacro %}
+
+{% macro feed_listed_vp() %}
+"A Vehicle positions feed is listed"
+{% endmacro %}
+
+{% macro feed_listed_tu() %}
+"A Trip updates feed is listed"
+{% endmacro %}
+
+{% macro feed_listed_sa() %}
+"A Service alerts feed is listed"
+{% endmacro %}
+
 --
 -- FEATURE NAMES
 --
@@ -502,6 +558,11 @@ feature
 {% macro guidelines_fail_status() %}
 "FAIL"
 {% endmacro %}
+
+{% macro guidelines_to_be_assessed_status() %}
+"TO BE ASSESSED"
+{% endmacro %}
+
 
 {% macro guidelines_aggregation_logic() %}
 CASE

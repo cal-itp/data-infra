@@ -294,11 +294,7 @@ join_table AS (
         t2.latitude AS off_latitude,
         t2.longitude AS off_longitude,
         t2.geography AS off_geography,
-        CASE
-            WHEN
-                t1.route_id != 'Route Z' THEN t1.route_id
-            ELSE COALESCE(t2.route_id, 'Route Z')
-        END AS route_id
+        COALESCE(t1.route_id, t2.route_id) AS route_id
 
     FROM debited_micropayments AS m
     LEFT JOIN refunded_micropayments AS mr
@@ -326,18 +322,12 @@ join_table AS (
             -- here, can just use t1 because transaction date will be populated
             -- (don't have to handle unkowns the way we do with route_id)
             AND EXTRACT(DATE FROM TIMESTAMP(t1.transaction_date_time_utc)) = r.date
-            AND r.route_id = (
-                CASE
-                    WHEN
-                        t1.route_id != 'Route Z' THEN t1.route_id
-                    ELSE COALESCE(t2.route_id, 'Route Z')
-                END
-            )
+            AND r.route_id = COALESCE(t1.route_id, t2.route_id)
 ),
 
 payments_rides AS (
-
     SELECT
+
         *,
         DATETIME_DIFF(
             off_transaction_date_time_pacific,
@@ -345,9 +335,10 @@ payments_rides AS (
             MINUTE
         ) AS duration,
         ST_DISTANCE(on_geography, off_geography) AS distance_meters,
-        CAST(transaction_date_time_pacific AS date) AS transaction_date_pacific
-    FROM join_table
+        CAST(transaction_date_time_pacific AS date) AS transaction_date_pacific,
+        EXTRACT(DAYOFWEEK FROM transaction_date_time_pacific) AS day_of_week
 
+    FROM join_table
 )
 
 SELECT * FROM payments_rides
