@@ -81,7 +81,7 @@ WITH fct_rt_feed_fetch_errors AS (
     {% if is_incremental() %}
     AND dt >= '{{ max_dt }}'
     {% else %}
-    AND dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('RT_LOOKBACK_DAYS') }} DAY)
+    AND dt >= '{{ var("GTFS_RT_START") }}'
     {% endif %}
 )
 

@@ -20,7 +20,7 @@ feed_guideline_index AS (
     {% if is_incremental() %}
     WHERE date >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
-    WHERE date >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('TRIP_UPDATES_LOOKBACK_DAYS') }} DAY)
+    WHERE date >= '{{ var("GTFS_RT_TU_START") }}'
     {% endif %}
 ),
 
@@ -29,7 +29,7 @@ fct_trip_updates_messages AS (
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('TRIP_UPDATES_LOOKBACK_DAYS') }} DAY)
+    WHERE dt >= '{{ var("GTFS_RT_TU_START") }}'
     {% endif %}
 ),
 

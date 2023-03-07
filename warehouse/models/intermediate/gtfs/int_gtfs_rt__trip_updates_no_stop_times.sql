@@ -23,7 +23,7 @@ trip_updates AS (
     {% if is_incremental() %}
     WHERE dt >= '{{ max_dt }}'
     {% else %}
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('TRIP_UPDATES_LOOKBACK_DAYS') }} DAY)
+    WHERE dt >= '{{ var("GTFS_RT_TU_START") }}'
     {% endif %}
 ),
 
