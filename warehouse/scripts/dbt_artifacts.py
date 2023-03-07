@@ -166,7 +166,7 @@ class BaseNode(BaseModel):
     def graphviz_repr(self) -> str:
         return "\n".join(
             [
-                self.resource_type.value,
+                self.config.materialized or self.resource_type.value,
                 self.name,
             ]
         )
@@ -174,7 +174,7 @@ class BaseNode(BaseModel):
     @property
     def gv_attrs(self) -> Dict[str, Any]:
         return {
-            "color": "black",
+            "fillcolor": "black",
         }
 
 
@@ -184,7 +184,7 @@ class Seed(BaseNode):
     @property
     def gv_attrs(self) -> Dict[str, Any]:
         return {
-            "color": "green",
+            "fillcolor": "green",
         }
 
 
@@ -194,12 +194,26 @@ class Source(BaseNode):
     @property
     def gv_attrs(self) -> Dict[str, Any]:
         return {
-            "color": "blue",
+            "fillcolor": "blue",
         }
 
 
 class Model(BaseNode):
     resource_type: Literal[DbtResourceType.model]
+
+    @property
+    def gv_attrs(self) -> Dict[str, Any]:
+        fillcolor = "white"
+
+        if self.config.materialized == DbtMaterializationType.table:
+            fillcolor = "aquamarine"
+
+        if self.config.materialized == DbtMaterializationType.incremental:
+            fillcolor = "pink"
+
+        return {
+            "fillcolor": fillcolor,
+        }
 
 
 class TestMetadata(BaseModel):

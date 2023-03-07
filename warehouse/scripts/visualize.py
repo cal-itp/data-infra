@@ -40,6 +40,14 @@ def manviz(
 
     G = nx.DiGraph()
     for node in manifest.nodes.values():
+        if isinstance(node, Seed) and not seeds:
+            continue
+        if isinstance(node, Test) and not tests:
+            continue
+        if isinstance(node, Source) and not sources:
+            continue
+
+        G.add_node(node.graphviz_repr, **node.gv_attrs, style="filled")
         if node.depends_on and node.depends_on.nodes:
             for dep in node.depends_on.resolved_nodes:
                 if isinstance(dep, Seed) and not seeds:
