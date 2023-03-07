@@ -56,7 +56,7 @@ int_gtfs_rt__vehicle_positions_trip_summaries AS (
         ARRAY_AGG(position_latitude ORDER BY _extract_ts DESC)[OFFSET(0)] AS last_position_latitude,
         ARRAY_AGG(position_longitude ORDER BY _extract_ts DESC)[OFFSET(0)] AS last_position_longitude,
     FROM vehicle_positions
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8 --noqa: L054
 )
 
 SELECT * FROM int_gtfs_rt__vehicle_positions_trip_summaries
