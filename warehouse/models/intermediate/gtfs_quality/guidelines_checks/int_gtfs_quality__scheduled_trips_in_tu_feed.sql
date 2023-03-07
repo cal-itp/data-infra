@@ -1,6 +1,3 @@
-{% set min_date_array = dbt_utils.get_column_values(table=ref('fct_observed_trips'), column='dt', order_by = 'dt', max_records = 1) %}
-{% set first_check_date = min_date_array[0] %}
-
 WITH guideline_index AS (
     SELECT *
     FROM {{ ref('int_gtfs_quality__guideline_checks_index') }}
@@ -28,8 +25,8 @@ compare_trips AS (
         scheduled_trips.feed_key AS schedule_feed_key,
         observed_trips.tu_gtfs_dataset_key,
         observed_trips.tu_base64_url,
-        COUNT(scheduled_trips.trip_id) AS scheduled_trips,
-        COUNT(observed_trips.tu_num_distinct_message_ids) AS observed_trips,
+        COUNT(DISTINCT scheduled_trips.trip_id) AS scheduled_trips,
+        COUNTIF(observed_trips.trip_id IS NOT NULL) AS observed_trips,
     FROM fct_daily_scheduled_trips AS scheduled_trips
     LEFT JOIN fct_observed_trips AS observed_trips
       -- should this be activity date or service date?
@@ -37,6 +34,11 @@ compare_trips AS (
       AND scheduled_trips.gtfs_dataset_key = observed_trips.schedule_to_use_for_rt_validation_gtfs_dataset_key
       AND scheduled_trips.trip_id = observed_trips.trip_id
     GROUP BY 1, 2, 3, 4, 5
+),
+
+check_start AS (
+    SELECT MIN(dt) AS first_check_date
+    FROM fct_observed_trips
 ),
 
 map_trips_to_services AS (
@@ -71,12 +73,13 @@ int_gtfs_quality__scheduled_trips_in_tu_feed AS (
         map_trips_to_services.quartet_has_schedule,
         map_trips_to_services.observed_trips,
         map_trips_to_services.scheduled_trips,
+        first_check_date,
         CASE
             WHEN has_service AND has_schedule_feed
                 THEN
                     CASE
                         WHEN scheduled_trips = observed_trips THEN {{ guidelines_pass_status() }}
-                        WHEN idx.date < '{{ first_check_date }}' THEN {{ guidelines_na_too_early_status() }}
+                        WHEN idx.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
                         -- this might be controversial but I think if we don't have a trip updates feed we should say we don't have all the necessary entities?
                         WHEN NOT quartet_has_tu THEN {{ guidelines_na_entity_status() }}
                         WHEN scheduled_trips = 0 OR scheduled_trips IS NULL THEN {{ guidelines_na_check_status() }}
@@ -86,7 +89,7 @@ int_gtfs_quality__scheduled_trips_in_tu_feed AS (
                 THEN
                     CASE
                         WHEN scheduled_trips = observed_trips THEN {{ guidelines_pass_status() }}
-                        WHEN idx.date < '{{ first_check_date }}' THEN {{ guidelines_na_too_early_status() }}
+                        WHEN idx.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
                         WHEN NOT quartet_has_schedule THEN {{ guidelines_na_entity_status() }}
                         WHEN scheduled_trips = 0 OR scheduled_trips IS NULL THEN {{ guidelines_na_check_status() }}
                         WHEN scheduled_trips != observed_trips THEN {{ guidelines_fail_status() }}
@@ -95,6 +98,7 @@ int_gtfs_quality__scheduled_trips_in_tu_feed AS (
             ELSE idx.status
         END AS status,
     FROM guideline_index AS idx
+    CROSS JOIN check_start
     LEFT JOIN map_trips_to_services
         ON idx.date = map_trips_to_services.date
         AND idx.service_key = map_trips_to_services.service_key
