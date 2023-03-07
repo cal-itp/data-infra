@@ -55,9 +55,6 @@ disambiguate_dups AS (
         service_source_record_id,
         gtfs_dataset_key,
         gtfs_dataset_type,
-        agency_id,
-        route_id,
-        network_id,
         gtfs_service_data_customer_facing,
         regional_feed_type,
         associated_schedule_gtfs_dataset_key,
@@ -72,40 +69,15 @@ disambiguate_dups AS (
                 associated_schedule_gtfs_dataset_key
             -- try to get some name that will group like feeds together
             ORDER BY
-                route_id,
-                agency_id,
-                network_id,
+                route_id DESC,
+                agency_id DESC,
+                network_id DESC,
                 REGEXP_REPLACE(
                     gtfs_dataset_name,
                     '(Trip Updates|TripUpdates|Alerts|Vehicle Positions|VehiclePositions|Schedule)',
                     '')
         ) AS ordered
     FROM int_gtfs_quality__daily_assessment_candidate_entities
-),
-
-get_feed_selectors AS (
-    SELECT
-        date,
-        service_key,
-        gtfs_dataset_key,
-        route_id,
-        agency_id,
-        network_id,
-    FROM int_gtfs_quality__daily_assessment_candidate_entities
-    GROUP BY 1, 2, 3, 4, 5, 6
-    HAVING COUNT(*) = 1
-),
-
-final_input AS (
-    SELECT disambiguate_dups.* EXCEPT(route_id, network_id, agency_id),
-        COALESCE(disambiguate_dups.route_id, get_feed_selectors.route_id) AS route_id,
-        COALESCE(disambiguate_dups.agency_id, get_feed_selectors.agency_id) AS agency_id,
-        COALESCE(disambiguate_dups.network_id, get_feed_selectors.network_id) AS network_id,
-    FROM disambiguate_dups
-    LEFT JOIN get_feed_selectors
-    ON disambiguate_dups.date = get_feed_selectors.date
-    AND disambiguate_dups.service_key = get_feed_selectors.service_key
-    AND disambiguate_dups.associated_schedule_gtfs_dataset_key = get_feed_selectors.gtfs_dataset_key
 ),
 
 pivoted AS (
@@ -131,7 +103,7 @@ pivoted AS (
             'gtfs_dataset_key_vehicle_positions',
             'gtfs_service_data_customer_facing',
             'regional_feed_type']) }} ORDER BY date DESC) AS latest_extract
-    FROM final_input
+    FROM disambiguate_dups
     PIVOT(
         STRING_AGG(gtfs_dataset_key) AS gtfs_dataset_key
         FOR gtfs_dataset_type IN ('schedule', 'service_alerts', 'trip_updates', 'vehicle_positions')
@@ -195,9 +167,9 @@ dim_provider_gtfs_data AS (
         organization_hubspot_company_record_id,
         organization_ntd_id,
         organization_source_record_id,
-        agency_id,
-        route_id,
-        network_id,
+        -- agency_id,
+        -- route_id,
+        -- network_id,
         service_key,
         service_name,
         service_source_record_id,
