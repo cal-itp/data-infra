@@ -132,7 +132,7 @@ int_gtfs_quality__daily_assessment_candidate_entities AS (
                 AND backdated_regional_feed_type = 'Regional Subfeed'
                 AND has_guidelines_assessed_schedule_feed) THEN TRUE
             -- finally, confirm we have at least one schedule feed and that the overall entity is assessed
-            -- and we suppress the MTC regional combined feed (schedule and all 3) from being used in reporting
+            -- and we suppress the MTC regional combined feed (schedule and all 3 RT) from being used in reporting
             ELSE COALESCE(has_guidelines_assessed_schedule_feed, FALSE)
                 AND assessed
                 AND gtfs_dataset_source_record_id NOT IN
