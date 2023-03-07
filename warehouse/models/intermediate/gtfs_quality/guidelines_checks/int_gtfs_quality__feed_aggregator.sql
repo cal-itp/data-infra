@@ -1,6 +1,3 @@
-{% set min_date_array = dbt_utils.get_column_values(table=ref('stg_gtfs_quality__scraped_urls'), column='dt', order_by = 'dt', max_records = 1) %}
-{% set first_check_date = min_date_array[0] %}
-
 WITH guideline_index AS (
     SELECT
         *,
@@ -28,9 +25,15 @@ daily_scraped_urls AS (
     FROM {{ ref('stg_gtfs_quality__scraped_urls') }}
 ),
 
+get_start AS (
+    SELECT MIN(date) AS first_check_date
+    FROM daily_scraped_urls
+),
+
 int_gtfs_quality__feed_aggregator AS (
     SELECT
         guideline_index.* EXCEPT(status, aggregator),
+        first_check_date,
         CASE
         -- check that the row has the right entity + check combo, then assign statuses
             WHEN guideline_index.has_schedule_url
@@ -38,7 +41,7 @@ int_gtfs_quality__feed_aggregator AS (
                     THEN
                         CASE
                             WHEN daily_scraped_urls.aggregator IS NOT null THEN {{ guidelines_pass_status() }}
-                            WHEN guideline_index.date < '{{ first_check_date }}' THEN {{ guidelines_na_too_early_status() }}
+                            WHEN guideline_index.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
                             WHEN daily_scraped_urls.aggregator IS NULL THEN {{ guidelines_fail_status() }}
                         END
             WHEN guideline_index.has_rt_url_tu
@@ -46,7 +49,7 @@ int_gtfs_quality__feed_aggregator AS (
                    THEN
                     CASE
                             WHEN daily_scraped_urls.aggregator IS NOT null THEN {{ guidelines_pass_status() }}
-                            WHEN guideline_index.date < '{{ first_check_date }}' THEN {{ guidelines_na_too_early_status() }}
+                            WHEN guideline_index.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
                             WHEN daily_scraped_urls.aggregator IS NULL THEN {{ guidelines_fail_status() }}
                         END
             WHEN guideline_index.has_rt_url_vp
@@ -54,7 +57,7 @@ int_gtfs_quality__feed_aggregator AS (
                     THEN
                         CASE
                             WHEN daily_scraped_urls.aggregator IS NOT null THEN {{ guidelines_pass_status() }}
-                            WHEN guideline_index.date < '{{ first_check_date }}' THEN {{ guidelines_na_too_early_status() }}
+                            WHEN guideline_index.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
                             WHEN daily_scraped_urls.aggregator IS NULL THEN {{ guidelines_fail_status() }}
                         END
             WHEN guideline_index.has_rt_url_sa
@@ -62,7 +65,7 @@ int_gtfs_quality__feed_aggregator AS (
                     THEN
                         CASE
                             WHEN daily_scraped_urls.aggregator IS NOT null THEN {{ guidelines_pass_status() }}
-                            WHEN guideline_index.date < '{{ first_check_date }}' THEN {{ guidelines_na_too_early_status() }}
+                            WHEN guideline_index.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
                             WHEN daily_scraped_urls.aggregator IS NULL THEN {{ guidelines_fail_status() }}
                         END
             ELSE guideline_index.status
@@ -72,6 +75,7 @@ int_gtfs_quality__feed_aggregator AS (
         guideline_index.aggregator AS test_aggregator,
         daily_scraped_urls.aggregator
       FROM guideline_index
+      CROSS JOIN get_start
       LEFT JOIN daily_scraped_urls
         ON guideline_index.no_scheme_url = daily_scraped_urls.no_scheme_url
         AND guideline_index.date = daily_scraped_urls.date
