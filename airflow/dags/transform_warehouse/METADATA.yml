@@ -12,7 +12,7 @@ default_args:
       - "laurie.m@jarv.us"
     email_on_failure: True
     email_on_retry: False
-    retries: 1
+    retries: 0
     retry_delay: !timedelta 'minutes: 2'
     concurrency: 50
     #sla: !timedelta 'hours: 2'

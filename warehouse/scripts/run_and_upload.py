@@ -269,23 +269,22 @@ def run(
     # synced schemas created by the staging dbt target.
     if sync_metabase:
         if target and target.startswith("prod"):
-            results_to_check.append(
-                subprocess.run(
-                    [
-                        "dbt-metabase",
-                        "models",
-                        "--metabase_exclude_sources",
-                        "--dbt_manifest_path",
-                        "./target/manifest.json",
-                        "--dbt_docs_url",
-                        "https://dbt-docs.calitp.org",
-                        "--metabase_database",
-                        "Data Marts (formerly Warehouse Views)",
-                        "--dbt_schema_excludes",
-                        "staging",
-                        "payments",
-                    ]
-                )
+            # TODO: we should be logging each misaligned model to Sentry
+            subprocess.run(
+                [
+                    "dbt-metabase",
+                    "models",
+                    "--metabase_exclude_sources",
+                    "--dbt_manifest_path",
+                    "./target/manifest.json",
+                    "--dbt_docs_url",
+                    "https://dbt-docs.calitp.org",
+                    "--metabase_database",
+                    "Data Marts (formerly Warehouse Views)",
+                    "--dbt_schema_excludes",
+                    "staging",
+                    "payments",
+                ]
             )
         else:
             typer.secho(
