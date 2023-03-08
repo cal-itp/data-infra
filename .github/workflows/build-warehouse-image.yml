@@ -58,6 +58,11 @@ jobs:
           gsutil cp -r gs://calitp-dbt-artifacts/latest/ .
           echo "![](./target/dag.png)" >> report.md
           cml comment update report.md
+      - uses: 'google-github-actions/upload-cloud-storage@v1'
+        if: always()
+        with:
+          path: './warehouse/logs/dbt.log'
+          destination: 'calitp-ci-artifacts/${{github.workflow}}/run_id=${{github.run_id}}/action=${{github.action}}/dbt.log'
 
   build_push:
     name: Package docker image
