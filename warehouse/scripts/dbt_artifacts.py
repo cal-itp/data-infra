@@ -125,6 +125,7 @@ class Column(BaseModel):
 class BaseNode(BaseModel):
     _instances: ClassVar[Dict[str, "BaseNode"]] = {}
     unique_id: str
+    fqn: List[str]
     path: Path
     database: str
     schema_: str = Field(None, alias="schema")
@@ -142,6 +143,10 @@ class BaseNode(BaseModel):
         self._instances[self.unique_id] = self
         for column in self.columns.values():
             column.parent = self
+
+    @property
+    def strfqn(self) -> str:
+        return ".".join(self.fqn)
 
     @property
     def table_name(self):
