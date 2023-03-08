@@ -55,21 +55,21 @@ cross_join AS (
         schedule_to_use_for_rt_validation_gtfs_dataset_key,
 
         COALESCE((gtfs_dataset_type = "schedule" AND gtfs_dataset_key IS NOT NULL AND gtfs_dataset_deprecated_date IS NULL), FALSE) AS has_gtfs_dataset_schedule,
-        COALESCE((gtfs_dataset_type = "schedule" AND gtfs_dataset_deprecated_date IS NULL), FALSE) AS has_schedule_url,
+        COALESCE((gtfs_dataset_type = "schedule" AND base64_url IS NOT NULL AND gtfs_dataset_deprecated_date IS NULL), FALSE) AS has_schedule_url,
         schedule_feed_key IS NOT NULL AS has_schedule_feed,
 
         had_rt_files AS has_rt_feed,
 
         COALESCE((gtfs_dataset_type = "vehicle_positions" AND gtfs_dataset_key IS NOT NULL AND gtfs_dataset_deprecated_date IS NULL), FALSE) AS has_gtfs_dataset_vp,
-        COALESCE((gtfs_dataset_type = "vehicle_positions" AND gtfs_dataset_deprecated_date IS NULL), FALSE) AS has_rt_url_vp,
+        COALESCE((gtfs_dataset_type = "vehicle_positions" AND base64_url IS NOT NULL AND gtfs_dataset_deprecated_date IS NULL), FALSE) AS has_rt_url_vp,
         COALESCE((gtfs_dataset_type = "vehicle_positions" AND had_rt_files), FALSE) AS has_rt_feed_vp,
 
         COALESCE((gtfs_dataset_type = "trip_updates" AND gtfs_dataset_key IS NOT NULL AND gtfs_dataset_deprecated_date IS NULL), FALSE) AS has_gtfs_dataset_tu,
-        COALESCE((gtfs_dataset_type = "trip_updates" AND gtfs_dataset_deprecated_date IS NULL), FALSE) AS has_rt_url_tu,
+        COALESCE((gtfs_dataset_type = "trip_updates" AND base64_url IS NOT NULL AND  gtfs_dataset_deprecated_date IS NULL), FALSE) AS has_rt_url_tu,
         COALESCE((gtfs_dataset_type = "trip_updates" AND had_rt_files), FALSE) AS has_rt_feed_tu,
 
         COALESCE((gtfs_dataset_type = "service_alerts" AND gtfs_dataset_key IS NOT NULL AND gtfs_dataset_deprecated_date IS NULL), FALSE) AS has_gtfs_dataset_sa,
-        COALESCE((gtfs_dataset_type = "service_alerts" AND gtfs_dataset_deprecated_date IS NULL), FALSE) AS has_rt_url_sa,
+        COALESCE((gtfs_dataset_type = "service_alerts" AND base64_url IS NOT NULL AND gtfs_dataset_deprecated_date IS NULL), FALSE) AS has_rt_url_sa,
         COALESCE((gtfs_dataset_type = "service_alerts" AND had_rt_files), FALSE) AS has_rt_feed_sa,
 
         organization_key IS NOT NULL AS has_organization,
