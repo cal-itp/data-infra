@@ -168,8 +168,11 @@ class BaseNode(BaseModel):
     def num_bytes(self) -> Optional[int]:
         if self.catalog_entry and "num_bytes" in self.catalog_entry.stats:
             value = self.catalog_entry.stats["num_bytes"].value
-            assert isinstance(value, float)
-            return int(value)
+            # for some reason, 0 gets parsed as bool by pydantic
+            if isinstance(value, bool):
+                return 0
+            assert isinstance(value, (float, str))
+            return int(float(value))
         return None
 
     @property
@@ -479,6 +482,10 @@ class RunResult(BaseModel):
         )  # tests do bill bytes but set to 0
 
     @property
+    def gvrepr(self) -> str:
+        return self.node.gvrepr
+
+    @property
     def gvattrs(self) -> Dict[str, Any]:
         if self.bytes_processed > 300_000_000_000:
             color = "red"
@@ -489,7 +496,6 @@ class RunResult(BaseModel):
 
         return {
             **self.node.gvattrs,
-            "style": "filled",
             "fillcolor": color,
             "label": "\n".join(
                 [
