@@ -62,6 +62,7 @@ jobs:
       - uses: 'google-github-actions/upload-cloud-storage@v1'
         with:
           path: './warehouse/target/'
+          glob: '*.json'
           destination: 'calitp-ci-artifacts/${{github.workflow}}/run_id=${{github.run_id}}/job=${{github.job}}/target/'
       - uses: iterative/setup-cml@v1
       - name: GitHub comment
