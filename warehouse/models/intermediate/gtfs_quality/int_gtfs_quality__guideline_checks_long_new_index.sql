@@ -4,10 +4,12 @@
 
 
 WITH unioned AS (
-    -- TODO: this is not migrated yet, this is just the first intended check to migrate
     {{ dbt_utils.union_relations(
         relations=[
             ref('int_gtfs_quality__schedule_download_success'),
+            ref('int_gtfs_quality__feed_aggregator'),
+            ref('int_gtfs_quality__trip_id_alignment'),
+            ref('int_gtfs_quality__scheduled_trips_in_tu_feed')
         ],
     ) }}
 ),

@@ -68,21 +68,21 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ modification_date_present() }}, {{ best_practices_alignment_schedule() }}, {{ schedule_feed() }}
     UNION ALL
-    SELECT {{ schedule_feed_on_transitland() }}, {{ feed_aggregator_availability_schedule() }}, {{ schedule_feed() }}
+    SELECT {{ schedule_feed_on_transitland() }}, {{ feed_aggregator_availability_schedule() }}, {{ schedule_url() }}
     UNION ALL
-    SELECT {{ vehicle_positions_feed_on_transitland() }}, {{ feed_aggregator_availability_rt() }}, {{ rt_feed() }}
+    SELECT {{ vehicle_positions_feed_on_transitland() }}, {{ feed_aggregator_availability_rt() }}, {{ rt_url_vp() }}
     UNION ALL
-    SELECT {{ trip_updates_feed_on_transitland() }}, {{ feed_aggregator_availability_rt() }}, {{ rt_feed() }}
+    SELECT {{ trip_updates_feed_on_transitland() }}, {{ feed_aggregator_availability_rt() }}, {{ rt_url_tu() }}
     UNION ALL
-    SELECT {{ service_alerts_feed_on_transitland() }}, {{ feed_aggregator_availability_rt() }}, {{ rt_feed() }}
+    SELECT {{ service_alerts_feed_on_transitland() }}, {{ feed_aggregator_availability_rt() }}, {{ rt_url_sa() }}
     UNION ALL
-    SELECT {{ schedule_feed_on_mobility_database() }}, {{ feed_aggregator_availability_schedule() }}, {{ schedule_feed() }}
+    SELECT {{ schedule_feed_on_mobility_database() }}, {{ feed_aggregator_availability_schedule() }}, {{ schedule_url() }}
     UNION ALL
-    SELECT {{ vehicle_positions_feed_on_mobility_database() }}, {{ feed_aggregator_availability_rt() }}, {{ rt_feed() }}
+    SELECT {{ vehicle_positions_feed_on_mobility_database() }}, {{ feed_aggregator_availability_rt() }}, {{ rt_url_vp() }}
     UNION ALL
-    SELECT {{ trip_updates_feed_on_mobility_database() }}, {{ feed_aggregator_availability_rt() }}, {{ rt_feed() }}
+    SELECT {{ trip_updates_feed_on_mobility_database() }}, {{ feed_aggregator_availability_rt() }}, {{ rt_url_tu() }}
     UNION ALL
-    SELECT {{ service_alerts_feed_on_mobility_database() }}, {{ feed_aggregator_availability_rt() }}, {{ rt_feed() }}
+    SELECT {{ service_alerts_feed_on_mobility_database() }}, {{ feed_aggregator_availability_rt() }}, {{ rt_url_sa() }}
     UNION ALL
     SELECT {{ modification_date_present_service_alerts() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
     UNION ALL
