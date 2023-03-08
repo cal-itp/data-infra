@@ -61,6 +61,7 @@ jobs:
           path: './warehouse/target/'
           destination: 'calitp-ci-artifacts/${{github.workflow}}/run_id=${{github.run_id}}/job=${{github.job}}/target/'
       - uses: iterative/setup-cml@v1
+      - name: GitHub comment
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
