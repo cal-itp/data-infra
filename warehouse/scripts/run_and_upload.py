@@ -222,6 +222,7 @@ def run(
 
         ts = pendulum.now()
 
+        # TODO: we need to save run_results from the run and not the docs generate
         for artifact in artifacts:
             _from = str(project_dir / Path("target") / artifact)
 
