@@ -167,7 +167,9 @@ class BaseNode(BaseModel):
     @property
     def num_bytes(self) -> Optional[int]:
         if self.catalog_entry and "num_bytes" in self.catalog_entry.stats:
-            return int(float(self.catalog_entry.stats["num_bytes"].value))
+            value = self.catalog_entry.stats["num_bytes"].value
+            assert isinstance(value, float)
+            return int(value)
         return None
 
     @property
@@ -209,6 +211,7 @@ class Source(BaseNode):
 # TODO: this should be a discriminated type based on materialization
 class Model(BaseNode):
     resource_type: Literal[DbtResourceType.model]
+    depends_on: NodeDeps
 
     @property
     def children(self) -> List["Model"]:
@@ -250,6 +253,7 @@ class Model(BaseNode):
         if (
             self.num_bytes
             and self.num_bytes > 100_000_000_000
+            and self.catalog_entry
             and "clustering_fields" not in self.catalog_entry.stats
             and "partitioning_type" not in self.catalog_entry.stats
         ):
