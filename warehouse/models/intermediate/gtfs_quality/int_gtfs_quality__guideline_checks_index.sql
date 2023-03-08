@@ -58,6 +58,8 @@ cross_join AS (
         COALESCE((gtfs_dataset_type = "schedule" AND gtfs_dataset_deprecated_date IS NULL), FALSE) AS has_schedule_url,
         schedule_feed_key IS NOT NULL AS has_schedule_feed,
 
+        had_rt_files AS has_rt_feed,
+
         COALESCE((gtfs_dataset_type = "vehicle_positions" AND gtfs_dataset_key IS NOT NULL AND gtfs_dataset_deprecated_date IS NULL), FALSE) AS has_gtfs_dataset_vp,
         COALESCE((gtfs_dataset_type = "vehicle_positions" AND gtfs_dataset_deprecated_date IS NULL), FALSE) AS has_rt_url_vp,
         COALESCE((gtfs_dataset_type = "vehicle_positions" AND had_rt_files), FALSE) AS has_rt_feed_vp,
@@ -119,6 +121,8 @@ int_gtfs_quality__guideline_checks_index AS (
         has_schedule_url,
         has_schedule_feed,
 
+        has_rt_feed,
+
         has_gtfs_dataset_vp,
         has_rt_url_vp,
         has_rt_feed_vp,
@@ -148,6 +152,7 @@ int_gtfs_quality__guideline_checks_index AS (
                 OR (entity = {{ gtfs_dataset_sa() }} AND NOT has_gtfs_dataset_sa)
                 OR (entity = {{ rt_url_sa() }} AND NOT has_rt_url_sa)
                 OR (entity = {{ rt_feed_sa() }} AND NOT has_rt_feed_sa)
+                OR (entity = {{ rt_feed() }} AND NOT has_rt_feed)
                 OR (entity = {{ organization() }} AND NOT has_organization)
                 OR (entity = {{ service() }} AND NOT has_service)
                 OR (entity = {{ gtfs_service_data() }} AND NOT has_gtfs_service_data)

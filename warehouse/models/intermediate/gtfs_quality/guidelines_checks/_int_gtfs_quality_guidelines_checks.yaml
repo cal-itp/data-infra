@@ -99,6 +99,25 @@ models:
           compare_model: ref('int_gtfs_quality__schedule_url_guideline_index')
     columns: *stg_gtfs_guideline_columns
 
+
+# Schedule URL checks reindexed
+# TODO: what kind of yaml do we want for these? specifically what tests
+
+  - name: int_gtfs_quality__schedule_url_download_success
+
+# Schedule + RT combined URL checks reindexed
+# TODO: what kind of yaml do we want for these? specifically what tests
+
+  - name: int_gtfs_quality__feed_aggregator
+
+# RT feed checks reindexed
+# TODO: what kind of yaml do we want for these? specifically what tests
+  - name: int_gtfs_quality__trip_id_alignment
+
+# Service checks reindexed
+# TODO: what kind of yaml do we want for these? specifically what tests
+  - name: int_gtfs_quality__scheduled_trips_in_tu_feed
+
 # RT feed checks
 
   - name: int_gtfs_quality__no_rt_validation_errors
