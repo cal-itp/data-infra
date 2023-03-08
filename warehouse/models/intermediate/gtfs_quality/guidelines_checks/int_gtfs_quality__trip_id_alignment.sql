@@ -7,33 +7,44 @@ WITH guideline_index AS (
     WHERE check = {{ trip_id_alignment() }}
 ),
 
+validation_notices AS (
+    SELECT * FROM {{ ref('fct_daily_rt_feed_validation_notices') }}
+),
+
 critical_notices AS (
     SELECT
         date,
         base64_url,
         COALESCE(SUM(total_notices), 0) AS errors,
-    FROM {{ ref('fct_daily_rt_feed_validation_notices') }}
+    FROM validation_notices
     -- Description for code E003:
     ---- "All trip_ids provided in the GTFS-rt feed must exist in the GTFS data, unless the schedule_relationship is ADDED"
     WHERE code = "E003"
     GROUP BY 1, 2
 ),
 
+check_start AS (
+    SELECT MIN(date) AS first_check_date
+    FROM validation_notices
+),
+
 int_gtfs_quality__trip_id_alignment AS (
     SELECT
         idx.* EXCEPT(status),
+        first_check_date,
         CASE
             WHEN has_rt_feed
                 THEN
                     CASE
                         WHEN errors = 0 THEN {{ guidelines_pass_status() }}
                         WHEN errors > 0 THEN {{ guidelines_fail_status() }}
-                        WHEN idx.date < '{{ first_check_date }}' THEN {{ guidelines_na_too_early_status() }}
+                        WHEN idx.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
                         WHEN errors IS NULL THEN {{ guidelines_na_check_status() }}
                     END
             ELSE idx.status
         END AS status
     FROM guideline_index AS idx
+    CROSS JOIN check_start
     LEFT JOIN critical_notices AS notices
     ON idx.date = notices.date
         AND idx.base64_url = notices.base64_url
