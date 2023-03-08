@@ -18,7 +18,7 @@ WITH fct_service_alert_translations AS (
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_dt }}'))
     {% else %}
-    WHERE dt >= {{ var("GTFS_RT_START") }}
+    WHERE dt >= {{ var('GTFS_RT_START') }}
     {% endif %}
 ),
 

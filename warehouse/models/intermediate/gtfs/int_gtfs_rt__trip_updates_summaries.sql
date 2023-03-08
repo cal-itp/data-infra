@@ -21,7 +21,7 @@ WITH stop_time_updates AS (
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
-    WHERE dt >= {{ var("GTFS_RT_TU_START") }}
+    WHERE dt >= {{ var('GTFS_RT_TU_START') }}
     {% endif %}
 ),
 

@@ -23,7 +23,7 @@ trip_updates AS (
     {% if is_incremental() %}
     WHERE dt >= '{{ max_dt }}'
     {% else %}
-    WHERE dt >= {{ var("GTFS_RT_TU_START") }}
+    WHERE dt >= {{ var('GTFS_RT_TU_START') }}
     {% endif %}
 ),
 
