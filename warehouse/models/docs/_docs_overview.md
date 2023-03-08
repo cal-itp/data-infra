@@ -1,4 +1,4 @@
-{% docs __calitp_warehouse__ %}
+{% docs __overview__ %}
 # Cal-ITP Data Warehouse
 
 The Cal-ITP Data Warehouse contains four core types of data (a few other data sources are available, but the primary data models are composed of the following):
