@@ -18,6 +18,8 @@ dim_provider_gtfs_data AS (
     SELECT * FROM {{ ref('dim_provider_gtfs_data') }}
 ),
 
+-- simply compare scheduled vs. observed RT trips
+-- condense these large trip tables to the feed/day level for more performant joins
 compare_trips AS (
     SELECT
         scheduled_trips.service_date AS date,
@@ -29,7 +31,7 @@ compare_trips AS (
         COUNTIF(observed_trips.trip_id IS NOT NULL) AS observed_trips,
     FROM fct_daily_scheduled_trips AS scheduled_trips
     LEFT JOIN fct_observed_trips AS observed_trips
-      -- should this be activity date or service date?
+      -- should this be activity date or service date? will depend on fix for https://github.com/cal-itp/data-infra/issues/2347
       ON scheduled_trips.service_date = observed_trips.dt
       AND scheduled_trips.gtfs_dataset_key = observed_trips.schedule_to_use_for_rt_validation_gtfs_dataset_key
       AND scheduled_trips.trip_id = observed_trips.trip_id
@@ -41,6 +43,7 @@ check_start AS (
     FROM fct_observed_trips
 ),
 
+-- take the individual schedule/TU feed comparisons and roll them up to the service level
 map_trips_to_services AS (
     SELECT
         idx.date,
@@ -75,14 +78,15 @@ int_gtfs_quality__scheduled_trips_in_tu_feed AS (
         map_trips_to_services.scheduled_trips,
         first_check_date,
         CASE
+            -- we only want to assign a substantive status on rows that have both a service and either a schedule or a TU feed
             WHEN has_service AND has_schedule_feed
                 THEN
                     CASE
                         WHEN scheduled_trips = observed_trips THEN {{ guidelines_pass_status() }}
                         WHEN idx.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
-                        -- this might be controversial but I think if we don't have a trip updates feed we should say we don't have all the necessary entities?
+                        -- if we don't have a trip updates feed, say we don't have all the necessary entities
                         WHEN NOT quartet_has_tu THEN {{ guidelines_na_entity_status() }}
-                        WHEN scheduled_trips = 0 OR scheduled_trips IS NULL THEN {{ guidelines_na_check_status() }}
+                        WHEN scheduled_trips IS NULL THEN {{ guidelines_na_check_status() }}
                         WHEN scheduled_trips != observed_trips THEN {{ guidelines_fail_status() }}
                     END
             WHEN has_service AND has_rt_feed_tu
@@ -90,8 +94,9 @@ int_gtfs_quality__scheduled_trips_in_tu_feed AS (
                     CASE
                         WHEN scheduled_trips = observed_trips THEN {{ guidelines_pass_status() }}
                         WHEN idx.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
+                        -- if we don't have a schedule feed, say we don't have all the necessary entities
                         WHEN NOT quartet_has_schedule THEN {{ guidelines_na_entity_status() }}
-                        WHEN scheduled_trips = 0 OR scheduled_trips IS NULL THEN {{ guidelines_na_check_status() }}
+                        WHEN scheduled_trips IS NULL THEN {{ guidelines_na_check_status() }}
                         WHEN scheduled_trips != observed_trips THEN {{ guidelines_fail_status() }}
                     END
             WHEN has_service AND NOT has_schedule_feed AND NOT has_rt_feed_tu THEN {{ guidelines_na_entity_status() }}
