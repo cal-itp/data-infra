@@ -20,7 +20,6 @@ models:
 
 # Schedule + RT combined URL checks reindexed
 # TODO: what kind of yaml do we want for these? specifically what tests
-
   - name: int_gtfs_quality__feed_aggregator
 
 # RT feed checks reindexed
