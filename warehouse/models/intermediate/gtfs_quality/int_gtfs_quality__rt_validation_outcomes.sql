@@ -21,7 +21,7 @@ int_gtfs_quality__rt_validation_outcomes AS (
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_dt }}'))
     {% else %}
-    WHERE dt >= '{{ var("GTFS_RT_START") }}'
+    WHERE dt >= {{ var("GTFS_RT_START") }}
     {% endif %}
 
     UNION ALL
@@ -30,7 +30,7 @@ int_gtfs_quality__rt_validation_outcomes AS (
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_dt }}'))
     {% else %}
-    WHERE dt >= '{{ var("GTFS_RT_START") }}'
+    WHERE dt >= {{ var("GTFS_RT_START") }}
     {% endif %}
 
     UNION ALL
@@ -39,7 +39,7 @@ int_gtfs_quality__rt_validation_outcomes AS (
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_dt }}'))
     {% else %}
-    WHERE dt >= '{{ var("GTFS_RT_START") }}'
+    WHERE dt >= {{ var("GTFS_RT_START") }}
     {% endif %}
 )
 

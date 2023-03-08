@@ -24,7 +24,7 @@ int_gtfs_rt__distinct_download_configs AS (
     {% if is_incremental() %}
     WHERE dt >= '{{ max_dt }}'
     {% else %}
-    WHERE dt >= '{{ var("GTFS_RT_START") }}'
+    WHERE dt >= {{ var("GTFS_RT_START") }}
     {% endif %}
 )
 

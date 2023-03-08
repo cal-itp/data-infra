@@ -20,7 +20,7 @@ feed_guideline_index AS (
     {% if is_incremental() %}
     WHERE date >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
-    WHERE date >= '{{ var("GTFS_RT_TU_START") }}'
+    WHERE date >= {{ var("GTFS_RT_TU_START") }}
     {% endif %}
 ),
 
@@ -29,7 +29,7 @@ fct_trip_updates_messages AS (
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
-    WHERE dt >= '{{ var("GTFS_RT_TU_START") }}'
+    WHERE dt >= {{ var("GTFS_RT_TU_START") }}
     {% endif %}
 ),
 

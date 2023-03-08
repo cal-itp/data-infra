@@ -16,7 +16,7 @@ int_gtfs_rt__daily_url_index AS (
     {% if is_incremental() %}
     AND dt >= DATE '{{ max_date }}'
     {% else %}
-    AND dt >= '{{ var("GTFS_RT_START") }}'
+    AND dt >= {{ var("GTFS_RT_START") }}
     {% endif %}
 ),
 
@@ -31,7 +31,7 @@ parse_outcomes AS (
     {% if is_incremental() %}
     WHERE dt >= DATE '{{ max_date }}'
     {% else %}
-    WHERE dt >= '{{ var("GTFS_RT_START") }}'
+    WHERE dt >= {{ var("GTFS_RT_START") }}
     {% endif %}
 ),
 

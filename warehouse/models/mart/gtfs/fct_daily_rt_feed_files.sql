@@ -33,7 +33,7 @@ parse_outcomes AS (
     {% if is_incremental() %}
     WHERE dt >= DATE '{{ max_date }}'
     {% else %}
-    WHERE dt >= '{{ var("GTFS_RT_START") }}'
+    WHERE dt >= {{ var("GTFS_RT_START") }}
     {% endif %}
 ),
 
