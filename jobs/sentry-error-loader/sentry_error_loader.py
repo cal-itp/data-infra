@@ -60,24 +60,9 @@ def fetch_and_clean_from_clickhouse(project_slug, target_date):
 
     cleaned_df = all_rows.rename(make_name_bq_safe, axis="columns")
 
-    # TODO: convert to smarter detection of which columns have arrays
-    cols_with_nulls_in_arrays = [
-        "exception_frames_abs_path",
-        "exception_frames_colno",
-        "exception_frames_filename",
-        "exception_frames_function",
-        "exception_frames_lineno",
-        "exception_frames_in_app",
-        "exception_frames_package",
-        "exception_frames_module",
-        "exception_frames_stack_level",
-        "exception_stacks_mechanism_type",
-        "exception_stacks_mechanism_handled",
-        "exception_stacks_type",
-        "exception_stacks_value",
-    ]
-
-    for col_name in cols_with_nulls_in_arrays:
+    # Determine which columns contain list types, and process BQ-disallowed nulls in lists
+    array_cols = [x for x in list(cleaned_df) if isinstance(cleaned_df[x][0], list)]
+    for col_name in array_cols:
         cleaned_df[col_name] = cleaned_df[col_name].apply(process_arrays_for_nulls)
 
     """
