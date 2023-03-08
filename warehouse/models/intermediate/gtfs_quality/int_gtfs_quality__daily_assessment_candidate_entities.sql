@@ -35,6 +35,7 @@ initial_assessed AS (
             'base64_url',
             'gtfs_service_data_key',
             'gtfs_dataset_key',
+            'base64_url',
             'schedule_feed_key']) }} AS key,
         date,
         organization_name,
