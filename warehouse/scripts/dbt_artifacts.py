@@ -238,7 +238,7 @@ class Model(BaseNode):
             return "\n".join(
                 [
                     super(Model, self).gvrepr,
-                    humanize.naturalsize(self.num_bytes),
+                    f"Storage: {humanize.naturalsize(self.num_bytes)}",
                 ]
             )
         return super(Model, self).gvrepr
@@ -500,7 +500,7 @@ class RunResult(BaseModel):
             "label": "\n".join(
                 [
                     self.node.gvrepr,
-                    humanize.naturalsize(self.bytes_processed),
+                    f"Billed: {humanize.naturalsize(self.bytes_processed)}",
                 ]
             ),
         }

@@ -59,7 +59,7 @@ def build_graph(
         if isinstance(node, Source) and not sources:
             continue
 
-        G.add_node(node_or_result.gvrepr, **node.gvattrs, style="filled")
+        G.add_node(node_or_result.gvrepr, **node_or_result.gvattrs, style="filled")
 
     for node_or_result in nodes:
         node: BaseNode = node_or_result.node if isinstance(node_or_result, RunResult) else node_or_result  # type: ignore[no-redef]
@@ -90,9 +90,7 @@ def build_graph(
 @app.command()
 def viz(
     artifact: str,
-    manifest_path: Path = Path("./target/manifest.json"),
-    run_results_path: Path = Path("./target/run_results.json"),
-    catalog_path: Path = Path("./target/catalog.json"),
+    artifacts_path: Path = Path("./target"),
     graph_path: Path = Path("./target/graph.gpickle"),
     analyses: bool = False,
     models: bool = True,
@@ -103,13 +101,17 @@ def viz(
     include: Optional[List[str]] = None,
     exclude: Optional[List[str]] = None,
     verbose: bool = False,
-    output: Path = Path("./target/dag.pdf"),
+    output: Optional[Path] = None,
     display: bool = False,
 ):
-    manifest: Manifest = read_artifact(manifest_path, Manifest, verbose=verbose)
-    catalog: Catalog = read_artifact(catalog_path, Catalog, verbose=verbose)
+    manifest: Manifest = read_artifact(
+        artifacts_path / Path("manifest.json"), Manifest, verbose=verbose
+    )
+    catalog: Catalog = read_artifact(
+        artifacts_path / Path("catalog.json"), Catalog, verbose=verbose
+    )
     run_results: RunResults = read_artifact(
-        run_results_path, RunResults, verbose=verbose
+        artifacts_path / Path("run_results.json"), RunResults, verbose=verbose
     )
     manifest.set_catalog(c=catalog)
     run_results.set_manifest(manifest)
@@ -117,8 +119,12 @@ def viz(
     actual_artifact: Union[Manifest, RunResults]
     if artifact == "man":
         actual_artifact = manifest
+        if not output:
+            output = Path("./target/manifest.pdf")
     elif artifact == "run":
         actual_artifact = run_results
+        if not output:
+            output = Path("./target/run_results.pdf")
     else:
         raise ValueError(f"unknown artifact {artifact} provided")
 
