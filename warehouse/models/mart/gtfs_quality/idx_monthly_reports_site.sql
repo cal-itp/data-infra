@@ -1,12 +1,18 @@
 {{ config(materialized='table') }}
 
-WITH assessed_entities AS (
-    SELECT *
+WITH dataset_map AS (
+    SELECT *,
+    DATE_TRUNC(date, MONTH) AS date_start
     FROM {{ ref('int_gtfs_quality__organization_dataset_map') }}
     -- filter to only organizations that are supposed to be assessed
     WHERE reports_site_assessed
-        -- pull the list of organizations on the *last* day of each month to get final snapshot
-        AND LAST_DAY(date, MONTH) = date
+),
+
+assessed_entities AS (
+    SELECT *
+    FROM dataset_map
+    -- pull the list of organizations on the *last* day of each month to get final snapshot
+    WHERE LAST_DAY(date, MONTH) = date
 ),
 
 dim_organizations AS (
@@ -104,13 +110,6 @@ summarize_feed_info AS (
     GROUP BY 1, 2
 ),
 
-dataset_map AS (
-    SELECT *,
-    DATE_TRUNC(date, MONTH) AS date_start
-    FROM {{ ref('int_gtfs_quality__organization_dataset_map') }}
-    WHERE reports_site_assessed
-),
-
 make_distinct AS (SELECT DISTINCT
     date_start,
     organization_itp_id,
@@ -122,7 +121,7 @@ FROM dataset_map
 month_reports_urls AS (
     SELECT date_start, organization_itp_id, ARRAY_AGG(STRUCT(gtfs_dataset_name, string_url)) AS feeds
     FROM make_distinct
-    GROUP BY date_start, organization_itp_id
+    GROUP BY 1, 2
 ),
 
 idx_pending_urls AS (
@@ -160,7 +159,7 @@ idx_pending_urls AS (
     WHERE date < CURRENT_DATE()
 ),
 
-idx_monthly_reports_site AS(
+idx_monthly_reports_site AS (
     -- split out since it's impossible to select distinct an array
     SELECT idx_pending_urls.*, month_reports_urls.feeds
     FROM idx_pending_urls
