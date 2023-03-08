@@ -41,13 +41,16 @@ def fetch_and_clean_from_elavon(target_date):
     sftp_client = client.open_sftp()
     sftp_client.chdir("/data")
     for file in [x for x in sftp_client.listdir() if "zip" in x]:
-        # TODO: only grab files modified on the task day
-        sftp_client.get(file, f"{file}")
-        print(f"Processing file {file}")
-        if all_rows.empty:
-            all_rows = pd.read_csv(f"{file}", delimiter="|")
-        else:
-            all_rows = pd.concat(all_rows, pd.read_csv(f"{file}", delimiter="|"))
+        if (
+            pendulum.from_format(str(sftp_client.stat(file).st_mtime), "X").date()
+            == target_date
+        ):
+            print(f"Processing file {file}")
+            sftp_client.get(file, f"{file}")
+            if all_rows.empty:
+                all_rows = pd.read_csv(f"{file}", delimiter="|")
+            else:
+                all_rows = pd.concat(all_rows, pd.read_csv(f"{file}", delimiter="|"))
 
     if all_rows.empty:
         return extract
