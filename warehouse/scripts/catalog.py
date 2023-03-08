@@ -64,7 +64,7 @@ class CatalogTable(BaseModel):
     unique_id: Optional[str] = None
 
 
-class Model(BaseModel):
+class Catalog(BaseModel):
     class Config:
         extra = Extra.forbid
 

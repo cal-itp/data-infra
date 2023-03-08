@@ -12,6 +12,7 @@ from typing import Annotated, Any, ClassVar, Dict, List, Literal, Optional, Unio
 import humanize
 import pendulum
 import yaml
+from catalog import Catalog, CatalogTable
 from pydantic import BaseModel, Field, constr, validator
 from slugify import slugify
 from sqlalchemy import MetaData, Table, create_engine, select
@@ -134,6 +135,7 @@ class BaseNode(BaseModel):
     config: NodeConfig
     columns: Dict[str, Column]
     meta: Dict = {}
+    catalog_entry: Optional[CatalogTable]
 
     def __init__(self, **kwargs):
         super(BaseNode, self).__init__(**kwargs)
@@ -163,7 +165,13 @@ class BaseNode(BaseModel):
         return select(columns=columns)
 
     @property
-    def graphviz_repr(self) -> str:
+    def num_bytes(self) -> Optional[int]:
+        if self.catalog_entry and "num_bytes" in self.catalog_entry.stats:
+            return int(float(self.catalog_entry.stats["num_bytes"].value))
+        return None
+
+    @property
+    def gvrepr(self) -> str:
         return "\n".join(
             [
                 self.config.materialized or self.resource_type.value,
@@ -172,7 +180,7 @@ class BaseNode(BaseModel):
         )
 
     @property
-    def gv_attrs(self) -> Dict[str, Any]:
+    def gvattrs(self) -> Dict[str, Any]:
         return {
             "fillcolor": "black",
         }
@@ -182,7 +190,7 @@ class Seed(BaseNode):
     resource_type: Literal[DbtResourceType.seed]
 
     @property
-    def gv_attrs(self) -> Dict[str, Any]:
+    def gvattrs(self) -> Dict[str, Any]:
         return {
             "fillcolor": "green",
         }
@@ -192,23 +200,65 @@ class Source(BaseNode):
     resource_type: Literal[DbtResourceType.source]
 
     @property
-    def gv_attrs(self) -> Dict[str, Any]:
+    def gvattrs(self) -> Dict[str, Any]:
         return {
             "fillcolor": "blue",
         }
 
 
+# TODO: this should be a discriminated type based on materialization
 class Model(BaseNode):
     resource_type: Literal[DbtResourceType.model]
 
     @property
-    def gv_attrs(self) -> Dict[str, Any]:
+    def children(self) -> List["Model"]:
+        children = []
+        for unique_id, node in BaseNode._instances.items():
+            if (
+                isinstance(node, Model)
+                and node.depends_on.nodes
+                and self.unique_id in node.depends_on.nodes
+            ):
+                children.append(node)
+        return children
+
+    @property
+    def gvrepr(self) -> str:
+        if (
+            self.config.materialized
+            in (DbtMaterializationType.table, DbtMaterializationType.incremental)
+            and self.num_bytes
+        ):
+            return "\n".join(
+                [
+                    super(Model, self).gvrepr,
+                    humanize.naturalsize(self.num_bytes),
+                ]
+            )
+        return super(Model, self).gvrepr
+
+    @property
+    def gvattrs(self) -> Dict[str, Any]:
         fillcolor = "white"
 
-        if self.config.materialized == DbtMaterializationType.table:
+        if self.config.materialized in (
+            DbtMaterializationType.table,
+            DbtMaterializationType.incremental,
+        ):
             fillcolor = "aquamarine"
 
-        if self.config.materialized == DbtMaterializationType.incremental:
+        if (
+            self.num_bytes
+            and self.num_bytes > 100_000_000_000
+            and "clustering_fields" not in self.catalog_entry.stats
+            and "partitioning_type" not in self.catalog_entry.stats
+        ):
+            fillcolor = "red"
+
+        if (
+            self.config.materialized == DbtMaterializationType.view
+            and len(self.children) > 1
+        ):
             fillcolor = "pink"
 
         return {
@@ -376,6 +426,13 @@ class Manifest(BaseModel):
     selectors: Dict
     disabled: Dict  # should be Dict[str, Node] but they lack the resource_type
 
+    # https://github.com/pydantic/pydantic/issues/1577#issuecomment-803171322
+    def set_catalog(self, c: Catalog):
+        for node in self.nodes.values():
+            node.catalog_entry = c.nodes.get(
+                node.unique_id, c.sources.get(node.unique_id)
+            )
+
 
 class TimingInfo(BaseModel):
     name: str
@@ -418,7 +475,7 @@ class RunResult(BaseModel):
         )  # tests do bill bytes but set to 0
 
     @property
-    def gv_attrs(self) -> Dict[str, Any]:
+    def gvattrs(self) -> Dict[str, Any]:
         if self.bytes_processed > 300_000_000_000:
             color = "red"
         elif self.bytes_processed > 100_000_000_000:
@@ -427,12 +484,12 @@ class RunResult(BaseModel):
             color = "white"
 
         return {
-            **self.node.gv_attrs,
+            **self.node.gvattrs,
             "style": "filled",
             "fillcolor": color,
             "label": "\n".join(
                 [
-                    self.node.graphviz_repr,
+                    self.node.gvrepr,
                     humanize.naturalsize(self.bytes_processed),
                 ]
             ),
