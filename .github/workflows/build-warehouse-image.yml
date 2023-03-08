@@ -62,7 +62,7 @@ jobs:
         if: always()
         with:
           path: './warehouse/logs/dbt.log'
-          destination: 'calitp-ci-artifacts/${{github.workflow}}/run_id=${{github.run_id}}/action=${{github.action}}/dbt.log'
+          destination: 'calitp-ci-artifacts/${{github.workflow}}/run_id=${{github.run_id}}/job=${{github.job}}/action=${{github.action}}/dbt.log'
 
   build_push:
     name: Package docker image
