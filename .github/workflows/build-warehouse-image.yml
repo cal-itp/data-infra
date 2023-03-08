@@ -67,7 +67,7 @@ jobs:
         run: |
           cd warehouse
           gsutil cp -r gs://calitp-dbt-artifacts/latest/ .
-          echo "# Changed models\n" > report.md
+          echo "# Changed models" > report.md
           poetry run dbt ls --select state:modified --state ./latest >> report.md
           cml comment update report.md
 

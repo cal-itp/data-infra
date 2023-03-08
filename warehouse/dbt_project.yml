@@ -34,11 +34,6 @@ models:
       relation: true
       columns: true
 
-    gtfs_schedule_latest_only:
-      +enabled: false
-      +materialized: table
-      schema: gtfs_schedule
-
     gtfs_views:
       +enabled: false
       +materialized: table
@@ -68,19 +63,10 @@ models:
       +materialized: view
       schema: staging
 
-      # legacy guidelines
-      gtfs_guidelines:
-        +enabled: false
 
     mart:
       transit_database:
         schema: mart_transit_database
-
-      # legacy guidelines
-      gtfs_guidelines:
-        +enabled: false
-        schema: mart_gtfs_guidelines
-
       gtfs_quality:
         schema: mart_gtfs_quality
       gtfs:
