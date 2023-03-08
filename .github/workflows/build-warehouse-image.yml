@@ -45,7 +45,7 @@ jobs:
           python-version: '3.9'
       - run: curl -sSL https://install.python-poetry.org | python -
       - uses: iterative/setup-cml@v1
-      - uses: google-github-actions/setup-gcloud@v1
+      - uses: google-github-actions/setup-gcloud@v0
         with:
           export_default_credentials: true
           service_account_key: ${{ secrets.GCP_SA_KEY }}
