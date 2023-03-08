@@ -26,7 +26,7 @@ def read_artifact(path: Path, artifact_type: Type, verbose: bool = False) -> Any
 
 def read_artifacts_folder(
     artifacts_path: Path, verbose: bool = False
-) -> Tuple[Manifest, Catalog, Optional[RunResults]]:
+) -> Tuple[Manifest, Catalog, RunResults]:
     manifest: Manifest = read_artifact(
         artifacts_path / Path("manifest.json"), Manifest, verbose=verbose
     )
