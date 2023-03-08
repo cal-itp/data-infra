@@ -71,12 +71,13 @@ jobs:
         run: |
           cd warehouse
           gsutil cp -r gs://calitp-dbt-artifacts/latest/ .
-          echo "# Warehouse report" >> report.md
-          echo "## New models" >> report.md
+          echo "# Warehouse report 📦" >> report.md
+          echo "## New models 🆕" >> report.md
           poetry run dbt --no-use-colors ls --resource-type model --select state:new --state ./latest | sed "s/calitp_warehouse\.//g" >> report.md
-          echo "## Changed models" >> report.md
+          echo "## Changed models 🛠️" >> report.md
           poetry run dbt --no-use-colors ls --resource-type model --select state:modified --state ./latest | sed "s/calitp_warehouse\.//g" >> report.md
           poetry run dbt --no-use-colors ls --resource-type model --select state:modified --state ./latest | sed 's/^/--include /g' | xargs poetry run python scripts/visualize.py viz man --output=target/dag.png
+          echo "" >> report.md
           echo '![](./target/dag.png "Changed models")' >> report.md
           cml comment update report.md
 
