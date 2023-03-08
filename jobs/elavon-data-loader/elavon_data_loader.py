@@ -30,6 +30,7 @@ def fetch_and_clean_from_elavon(target_date):
 
     all_rows = pd.DataFrame()
 
+    # Establish connection to SFTP server
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     client.connect(
@@ -38,15 +39,21 @@ def fetch_and_clean_from_elavon(target_date):
         username="elavon",
         password=CALITP__ELAVON_SFTP_PASSWORD,
     )
+
+    # Create SFTP client and navigate to data directory
     sftp_client = client.open_sftp()
     sftp_client.chdir("/data")
+
+    # Only fetch zip files that were modified on the logical run date
     for file in [x for x in sftp_client.listdir() if "zip" in x]:
-        if (
+        if (  # paramiko client stat mimics os.stat, returning second-valued unix times
             pendulum.from_format(str(sftp_client.stat(file).st_mtime), "X").date()
             == target_date
         ):
             print(f"Processing file {file}")
-            sftp_client.get(file, f"{file}")
+            sftp_client.get(  # Save locally because Pandas doesn't play nice with paramiko
+                file, f"{file}"
+            )
             if all_rows.empty:
                 all_rows = pd.read_csv(f"{file}", delimiter="|")
             else:
