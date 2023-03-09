@@ -18,16 +18,10 @@ CALITP_BUCKET__ELAVON = os.environ["CALITP_BUCKET__ELAVON"]
 CALITP__ELAVON_SFTP_PASSWORD = os.environ["CALITP__ELAVON_SFTP_PASSWORD"]
 
 
-def fetch_and_clean_from_elavon(target_date):
+def fetch_and_clean_from_elavon(target_date: pendulum.Date):
     """
     Download Elavon transaction records from SFTP as a DataFrame.
     """
-
-    extract = ElavonExtract(
-        dt=target_date,
-        execution_ts=pendulum.now(),
-        filename="transactions.jsonl.gz",
-    )
 
     all_rows = pd.DataFrame()
 
@@ -48,8 +42,8 @@ def fetch_and_clean_from_elavon(target_date):
     # Only fetch zip files that were modified on the logical run date
     for file in [x for x in sftp_client.listdir() if "zip" in x]:
         if (  # paramiko client stat mimics os.stat, returning second-valued unix times
-            pendulum.from_format(str(sftp_client.stat(file).st_mtime), "X").date()
-            == target_date
+            str(pendulum.from_format(str(sftp_client.stat(file).st_mtime), "X").date())
+            == str(target_date)
         ):
             print(f"Processing file {file}")
             sftp_client.get(  # Save locally because Pandas doesn't play nice with paramiko
@@ -59,6 +53,12 @@ def fetch_and_clean_from_elavon(target_date):
                 all_rows = pd.read_csv(f"{file}", delimiter="|")
             else:
                 all_rows = pd.concat(all_rows, pd.read_csv(f"{file}", delimiter="|"))
+
+    extract = ElavonExtract(
+        filename="transactions.jsonl.gz",
+        dt=target_date,
+        execution_ts=pendulum.now(),
+    )
 
     if all_rows.empty:
         return extract
@@ -104,7 +104,7 @@ class ElavonToGCSOperator(BaseOperator):
         ),
         **kwargs,
     ):
-        self.logical_date = pendulum.from_format(logical_date, "%Y-%m-%d").date()
+        self.logical_date = logical_date
         super().__init__(**kwargs)
 
     def execute(self, **kwargs):
