@@ -1,6 +1,5 @@
 import gzip
 import os
-from datetime import datetime
 from typing import ClassVar, List, Optional
 
 import pandas as pd
@@ -98,18 +97,18 @@ class ElavonToGCSOperator(BaseOperator):
 
     def __init__(
         self,
-        logical_date: datetime = typer.Argument(
+        logical_date: pendulum.Date = typer.Argument(
             ...,
             help="The date on which the file was added to the SFTP server.",
             formats=["%Y-%m-%d"],
         ),
         **kwargs,
     ):
-        self.logcial_date = logical_date
+        self.logical_date = pendulum.from_format(logical_date, "%Y-%m-%d").date()
         super().__init__(**kwargs)
 
     def execute(self, **kwargs):
-        target_date = pendulum.instance(self.logical_date).date()
+        target_date = self.logical_date
         extract = fetch_and_clean_from_elavon(target_date)
 
         if extract.data is None:
