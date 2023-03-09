@@ -96,17 +96,17 @@ join_orgs AS (
         ntd_certified,
         product_component_valid,
         notes,
-        (join_products._is_current AND dim_organizations._is_current) AS _is_current,
-        GREATEST(join_products._valid_from, dim_organizations._valid_from) AS _valid_from,
-        LEAST(join_products._valid_to, dim_organizations._valid_to) AS _valid_to
+        (join_products._is_current AND COALESCE(dim_organizations._is_current, TRUE)) AS _is_current,
+        GREATEST(join_products._valid_from, COALESCE(dim_organizations._valid_from, "1900-01-01")) AS _valid_from,
+        LEAST(join_products._valid_to, COALESCE(dim_organizations._valid_to, "2099-01-01")) AS _valid_to
     FROM join_products
-    INNER JOIN dim_organizations
+    LEFT JOIN dim_organizations
         ON join_products.vendor_organization_source_record_id = dim_organizations.source_record_id
         AND join_products._valid_from < dim_organizations._valid_to
         AND join_products._valid_to > dim_organizations._valid_from
 ),
 
-dim_service_components AS (
+int_transit_database__service_components_dim AS (
     SELECT
         {{ dbt_utils.surrogate_key(['join_orgs.source_record_id',
             'service_key',
@@ -148,4 +148,4 @@ dim_service_components AS (
         dim_components.key  ORDER BY join_orgs.name) = 1
 )
 
-SELECT * FROM dim_service_components
+SELECT * FROM int_transit_database__service_components_dim
