@@ -4,21 +4,6 @@ models:
 
   # Schedule feed checks
 
-  - name: int_gtfs_quality__no_schedule_validation_errors
-    tests: &stg_gtfs_guideline_tests_schedule
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - date
-            - feed_key
-      - dbt_utils.equal_rowcount:
-          compare_model: ref('int_gtfs_quality__schedule_feed_guideline_index')
-      - extreme_results
-    columns: &stg_gtfs_guideline_columns
-      - name: status
-        tests:
-          - dbt_utils.not_null_proportion:
-              at_least: 0.99
-
   - name: int_gtfs_quality__shapes_valid
     tests: *stg_gtfs_guideline_tests_schedule
     columns: *stg_gtfs_guideline_columns
@@ -104,6 +89,11 @@ models:
 # TODO: what kind of yaml do we want for these? specifically what tests
 
   - name: int_gtfs_quality__schedule_url_download_success
+
+# Schedule feed checks reindexed
+# TODO: what kind of yaml do we want for these? specifically what tests
+
+  - name: int_gtfs_quality__no_schedule_validation_errors
 
 # Schedule + RT combined URL checks reindexed
 # TODO: what kind of yaml do we want for these? specifically what tests
