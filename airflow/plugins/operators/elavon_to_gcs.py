@@ -42,10 +42,13 @@ def fetch_and_clean_from_elavon():
 
     for file in [x for x in sftp_client.listdir() if "zip" in x]:
         print(f"Processing file {file}")
+
+        # Save locally because Pandas doesn't play nice with paramiko
+        if not os.path.exists("transferred_files"):
+            os.mkdir("transferred_files")
         local_path = f"transferred_files/{file}"
-        sftp_client.get(
-            file, local_path
-        )  # Save locally because Pandas doesn't play nice with paramiko
+        sftp_client.get(file, local_path)
+
         if all_rows.empty:
             all_rows = pd.read_csv(local_path, delimiter="|")  # Read from local version
         else:
