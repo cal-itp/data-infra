@@ -5,7 +5,6 @@ from typing import ClassVar, List, Optional
 import pandas as pd
 import paramiko
 import pendulum
-import typer
 from calitp_data_infra.storage import (  # type: ignore
     PartitionedGCSArtifact,
     get_fs,
@@ -18,7 +17,7 @@ CALITP_BUCKET__ELAVON = os.environ["CALITP_BUCKET__ELAVON"]
 CALITP__ELAVON_SFTP_PASSWORD = os.environ["CALITP__ELAVON_SFTP_PASSWORD"]
 
 
-def fetch_and_clean_from_elavon(target_date: pendulum.Date):
+def fetch_and_clean_from_elavon():
     """
     Download Elavon transaction records from SFTP as a DataFrame.
     """
@@ -39,25 +38,18 @@ def fetch_and_clean_from_elavon(target_date: pendulum.Date):
     sftp_client = client.open_sftp()
     sftp_client.chdir("/data")
 
-    # Only fetch zip files that were modified on the logical run date
     for file in [x for x in sftp_client.listdir() if "zip" in x]:
-        if (  # paramiko client stat mimics os.stat, returning second-valued unix times
-            str(pendulum.from_format(str(sftp_client.stat(file).st_mtime), "X").date())
-            == str(target_date)
-        ):
-            print(f"Processing file {file}")
-            sftp_client.get(  # Save locally because Pandas doesn't play nice with paramiko
-                file, f"{file}"
-            )
-            if all_rows.empty:
-                all_rows = pd.read_csv(f"{file}", delimiter="|")
-            else:
-                all_rows = pd.concat(all_rows, pd.read_csv(f"{file}", delimiter="|"))
+        print(f"Processing file {file}")
+        sftp_client.get(  # Save locally because Pandas doesn't play nice with paramiko
+            file, f"{file}"
+        )
+        if all_rows.empty:
+            all_rows = pd.read_csv(f"{file}", delimiter="|")
+        else:
+            all_rows = pd.concat([all_rows, pd.read_csv(f"{file}", delimiter="|")])
 
     extract = ElavonExtract(
         filename="transactions.jsonl.gz",
-        dt=target_date,
-        execution_ts=pendulum.now(),
     )
 
     if all_rows.empty:
@@ -72,8 +64,8 @@ def fetch_and_clean_from_elavon(target_date: pendulum.Date):
 class ElavonExtract(PartitionedGCSArtifact):
     bucket: ClassVar[str] = CALITP_BUCKET__ELAVON
     table: ClassVar[str] = "transactions"
-    dt: pendulum.Date
-    execution_ts: pendulum.DateTime
+    execution_ts: pendulum.DateTime = pendulum.now()
+    dt: pendulum.Date = execution_ts.date()
     partition_names: ClassVar[List[str]] = ["dt", "execution_ts"]
     data: Optional[pd.DataFrame]
 
@@ -93,29 +85,20 @@ class ElavonExtract(PartitionedGCSArtifact):
 
 
 class ElavonToGCSOperator(BaseOperator):
-    template_fields = ("logical_date",)
-
     def __init__(
         self,
-        logical_date: pendulum.Date = typer.Argument(
-            ...,
-            help="The date on which the file was added to the SFTP server.",
-            formats=["%Y-%m-%d"],
-        ),
         **kwargs,
     ):
-        self.logical_date = logical_date
         super().__init__(**kwargs)
 
     def execute(self, **kwargs):
-        target_date = self.logical_date
-        extract = fetch_and_clean_from_elavon(target_date)
+        extract = fetch_and_clean_from_elavon()
 
         if extract.data is None:
-            print(f"No new extract was found for date {target_date}")
+            print("No extracts were found")
             return
         if extract.data.empty:
-            print(f"Empty extract for date {target_date}")
+            print("All extracts found were empty")
             return
 
         fs = get_fs()

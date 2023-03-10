@@ -1,3 +1,1 @@
 operator: operators.ElavonToGCSOperator
-
-logical_date: "{{ ds }}"
