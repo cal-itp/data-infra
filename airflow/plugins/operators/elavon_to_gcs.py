@@ -2,6 +2,7 @@ import gzip
 import os
 from typing import ClassVar, List, Optional
 
+import gcsfs
 import pandas as pd
 import paramiko
 import pendulum
@@ -15,6 +16,7 @@ from airflow.models import BaseOperator
 
 CALITP_BUCKET__ELAVON = os.environ["CALITP_BUCKET__ELAVON"]
 CALITP__ELAVON_SFTP_PASSWORD = os.environ["CALITP__ELAVON_SFTP_PASSWORD"]
+BIGQUERY_KEYFILE_LOCATION = os.environ["BIGQUERY_KEYFILE_LOCATION"]
 
 
 def fetch_and_clean_from_elavon():
@@ -40,13 +42,21 @@ def fetch_and_clean_from_elavon():
 
     for file in [x for x in sftp_client.listdir() if "zip" in x]:
         print(f"Processing file {file}")
+        local_path = f"transferred_files/{file}"
         sftp_client.get(
-            file, file
+            file, local_path
         )  # Save locally because Pandas doesn't play nice with paramiko
         if all_rows.empty:
-            all_rows = pd.read_csv(file, delimiter="|")  # Read from local version
+            all_rows = pd.read_csv(local_path, delimiter="|")  # Read from local version
         else:
-            all_rows = pd.concat([all_rows, pd.read_csv(file, delimiter="|")])
+            all_rows = pd.concat([all_rows, pd.read_csv(local_path, delimiter="|")])
+
+    # Save raw files to GCS
+    gfs = gcsfs.GCSFileSystem(
+        project="cal-itp-data-infra",
+        token=BIGQUERY_KEYFILE_LOCATION,
+    )
+    gfs.put(lpath="transferred_files/", rpath="test-calitp-elavon-raw/", recursive=True)
 
     extract = ElavonExtract(
         filename="transactions.jsonl.gz",
