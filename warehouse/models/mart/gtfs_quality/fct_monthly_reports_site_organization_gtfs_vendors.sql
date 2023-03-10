@@ -24,7 +24,7 @@ dim_orgs AS (
 
 entities_components_joined AS (
     SELECT DISTINCT
-        assessed_entities.organization_name, assessed_entities.organization_key,
+        assessed_entities.organization_name, assessed_entities.organization_source_record_id,
         assessed_entities.organization_itp_id,
         DATE_TRUNC(assessed_entities.date, MONTH) AS date_start,
         gtfs_generation_components.component_name, gtfs_generation_components.product_name,
@@ -65,16 +65,40 @@ to_aggregate AS (
     FROM orgs_joined
 ),
 
-fct_monthly_reports_site_organization_gtfs_vendors AS (
+vendor_type_agged AS (
     SELECT
-    organization_name, organization_key, organization_itp_id,
+    organization_name, organization_source_record_id, organization_itp_id,
     date_start, reports_vendor_type,
     ARRAY_AGG(DISTINCT reports_vendor_name) AS vendor_names
     FROM to_aggregate
     WHERE reports_vendor_name IS NOT NULL
     GROUP BY 1, 2, 3, 4, 5
+),
+
+-- is there a more elegant way to do this?
+filter_schedule AS (
+    SELECT
+    organization_name, organization_source_record_id, organization_itp_id,
+    date_start, vendor_names AS schedule_vendors
+    FROM vendor_type_agged
+    WHERE reports_vendor_type = 'schedule_vendors'
+),
+
+filter_rt AS (
+    SELECT
+    organization_name, organization_source_record_id, organization_itp_id,
+    date_start, vendor_names AS rt_vendors
+    FROM vendor_type_agged
+    WHERE reports_vendor_type = 'rt_vendors'
+),
+
+fct_monthly_reports_site_organization_gtfs_vendors AS (
+    SELECT *
+    FROM
+    filter_schedule
+    LEFT JOIN filter_rt
+        USING (organization_name, organization_source_record_id, organization_itp_id,
+        date_start)
 )
 
 SELECT * FROM fct_monthly_reports_site_organization_gtfs_vendors
-
---transform to have arrays of "schedule vendors" and "rt vendors" that can be joined to idx??
