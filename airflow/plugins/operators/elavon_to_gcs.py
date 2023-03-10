@@ -40,13 +40,13 @@ def fetch_and_clean_from_elavon():
 
     for file in [x for x in sftp_client.listdir() if "zip" in x]:
         print(f"Processing file {file}")
-        sftp_client.get(  # Save locally because Pandas doesn't play nice with paramiko
-            file, f"{file}"
-        )
+        sftp_client.get(
+            file, file
+        )  # Save locally because Pandas doesn't play nice with paramiko
         if all_rows.empty:
-            all_rows = pd.read_csv(f"{file}", delimiter="|")
+            all_rows = pd.read_csv(file, delimiter="|")  # Read from local version
         else:
-            all_rows = pd.concat([all_rows, pd.read_csv(f"{file}", delimiter="|")])
+            all_rows = pd.concat([all_rows, pd.read_csv(file, delimiter="|")])
 
     extract = ElavonExtract(
         filename="transactions.jsonl.gz",
