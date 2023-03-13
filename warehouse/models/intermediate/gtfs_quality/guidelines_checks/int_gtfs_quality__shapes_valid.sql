@@ -4,6 +4,7 @@ WITH guideline_index AS (
     WHERE check = {{ shapes_valid() }}
 ),
 
+-- For this check we are only looking for errors related to shapes
 shape_validation_notices AS (
     SELECT *
     FROM {{ ref('fct_daily_schedule_feed_validation_notices') }}
@@ -15,18 +16,11 @@ shape_validation_notices AS (
             )
 ),
 
--- For this check we are only looking for errors related to shapes
 feed_shape_validation_notices AS (
     SELECT
         feed_key,
         SUM(total_notices) AS validation_notices
     FROM {{ ref('fct_daily_schedule_feed_validation_notices') }}
-    WHERE code IN (
-            'decreasing_shape_distance',
-            'equal_shape_distance_diff_coordinates',
-            'equal_shape_distance_same_coordinates',
-            'decreasing_or_equal_shape_distance'
-            )
     GROUP BY feed_key
 ),
 
