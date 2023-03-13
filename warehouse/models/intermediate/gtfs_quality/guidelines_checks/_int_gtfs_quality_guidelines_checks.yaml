@@ -11,6 +11,7 @@ models:
 
   - name: int_gtfs_quality__no_schedule_validation_errors
   - name: int_gtfs_quality__shapes_file_present
+  - name: int_gtfs_quality__complete_wheelchair_accessibility_data
 
 # Schedule + RT combined URL checks reindexed
 # TODO: what kind of yaml do we want for these? specifically what tests

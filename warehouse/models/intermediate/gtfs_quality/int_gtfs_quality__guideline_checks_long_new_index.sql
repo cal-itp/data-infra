@@ -12,7 +12,8 @@ WITH unioned AS (
             ref('int_gtfs_quality__scheduled_trips_in_tu_feed'),
             ref('int_gtfs_quality__trip_planners'),
             ref('int_gtfs_quality__no_schedule_validation_errors'),
-            ref('int_gtfs_quality__shapes_file_present')
+            ref('int_gtfs_quality__shapes_file_present'),
+            ref('int_gtfs_quality__complete_wheelchair_accessibility_data')
         ],
     ) }}
 ),
