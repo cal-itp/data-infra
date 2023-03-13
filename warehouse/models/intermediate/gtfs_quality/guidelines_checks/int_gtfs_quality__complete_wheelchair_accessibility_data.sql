@@ -45,6 +45,8 @@ int_gtfs_quality__complete_wheelchair_accessibility_data AS (
                         WHEN trips.ct_trips_accessibility_info = trips.ct_trips
                             AND stops.ct_stops_accessibility_info = stops.ct_stops
                             THEN {{ guidelines_pass_status() }}
+                        -- TODO: we might be able to handle these if we wanted to shift to noon or similar -- only "too early" are on April 21, 2021 specifically
+                        -- but impact is small (many checks not assessessed this far back) so probably not worth it right now
                         WHEN CAST(idx.date AS TIMESTAMP) < first_check_date THEN {{ guidelines_na_too_early_status() }}
                         ELSE {{ guidelines_fail_status() }}
                     END
