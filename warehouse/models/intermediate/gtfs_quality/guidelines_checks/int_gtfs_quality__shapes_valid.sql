@@ -33,7 +33,6 @@ int_gtfs_quality__shapes_valid AS (
                 THEN
                     CASE
                         WHEN validation_notices = 0 THEN {{ guidelines_pass_status() }}
-                        -- TODO: could add special handling for April 16, 2021 (start of checks)
                         WHEN idx.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
                         WHEN feed_key IS NULL THEN {{ guidelines_na_check_status() }}
                         WHEN validation_notices > 0 THEN {{ guidelines_fail_status() }}
