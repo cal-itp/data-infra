@@ -145,7 +145,7 @@
 {% endmacro %}
 
 {% macro pathways_valid() %}
-"No pathways-related errors appear in the MobilityData GTFS Schedule Validator"
+"Feed has pathways.txt file and no pathways-related errors appear in the MobilityData GTFS Schedule Validator"
 {% endmacro %}
 
 {% macro schedule_feed_on_transitland() %}
