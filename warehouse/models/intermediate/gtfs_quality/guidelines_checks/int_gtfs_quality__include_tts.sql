@@ -1,5 +1,7 @@
-WITH feed_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_quality__schedule_feed_guideline_index') }}
+WITH guideline_index AS (
+    SELECT *
+    FROM {{ ref('int_gtfs_quality__guideline_checks_index') }}
+    WHERE check = {{ include_tts() }}
 ),
 
 dim_stops AS (
@@ -9,10 +11,9 @@ dim_stops AS (
 -- All feeds missing at least one tts_stop_name value
 tts_issue_feeds AS (
    SELECT
-       feed_key
-    FROM dim_stops
-    -- When there is no tts_stop_name field for a given stop_name, or tts_stop_name is identical to stop_name, we proceed to run a few tests
-    WHERE (tts_stop_name IS null OR tts_stop_name = stop_name)
+       feed_key,
+           -- When there is no tts_stop_name field for a given stop_name, or tts_stop_name is identical to stop_name, we proceed to run a few tests
+        COUNTIF((tts_stop_name IS null OR tts_stop_name = stop_name)
          AND (
             -- Test 1: check for abbreviations that need to be spelled out, including directions (n, sb) and ROW types (st, rd)
             ---- EXISTS function returns true if the stop_name contains any of the listed "no-no words", and false if not
@@ -36,23 +37,35 @@ tts_issue_feeds AS (
             -- ie "pine/baker" should read "pine and baker"
             -- Note that the brackets are part of regex, and aren't on the "no-no character list"
             OR REGEXP_CONTAINS(stop_name, r'[/()]')
-        )
-   GROUP BY feed_key
+        )) AS ct_issues
+    FROM dim_stops
+    GROUP BY feed_key
+),
+
+check_start AS (
+    SELECT MIN(_feed_valid_from) AS first_check_date
+    FROM dim_stops
 ),
 
 int_gtfs_quality__include_tts AS (
     SELECT
-        t1.date,
-        t1.feed_key,
-        {{ include_tts() }} AS check,
-        {{ accurate_accessibility_data() }} AS feature,
+        idx.* EXCEPT(status),
         CASE
-            WHEN t2.feed_key IS NOT null THEN {{ guidelines_fail_status() }}
-            ELSE {{ guidelines_pass_status() }}
-        END AS status,
-      FROM feed_guideline_index t1
-      LEFT JOIN tts_issue_feeds AS t2
-        ON t1.feed_key = t2.feed_key
+            WHEN has_schedule_feed
+                THEN
+                    CASE
+                        WHEN ct_issues = 0 THEN {{ guidelines_pass_status() }}
+                        -- TODO: could add special handling for April 16, 2021 (start of checks)
+                        WHEN CAST(idx.date AS TIMESTAMP) < first_check_date THEN {{ guidelines_na_too_early_status() }}
+                        WHEN feed_key IS NULL THEN {{ guidelines_na_check_status() }}
+                        WHEN ct_issues > 0 THEN {{ guidelines_fail_status() }}
+                    END
+            ELSE idx.status
+        END AS status
+    FROM guideline_index idx
+    CROSS JOIN check_start
+    LEFT JOIN tts_issue_feeds
+      ON idx.schedule_feed_key = tts_issue_feeds.feed_key
 )
 
 SELECT * FROM int_gtfs_quality__include_tts
