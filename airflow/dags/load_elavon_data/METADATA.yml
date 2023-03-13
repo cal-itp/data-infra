@@ -1,4 +1,4 @@
-description: "Load data from Elavon"
+description: "Load data from Elavon in two stages"
 schedule_interval: "0 2 * * *"
 tags:
   - all_gusty_features

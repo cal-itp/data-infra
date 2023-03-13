@@ -4,7 +4,6 @@ from typing import ClassVar, List, Optional
 
 import gcsfs
 import pandas as pd
-import paramiko
 import pendulum
 from calitp_data_infra.storage import (  # type: ignore
     PartitionedGCSArtifact,
@@ -15,51 +14,36 @@ from calitp_data_infra.storage import (  # type: ignore
 from airflow.models import BaseOperator
 
 CALITP_BUCKET__ELAVON = os.environ["CALITP_BUCKET__ELAVON"]
-CALITP__ELAVON_SFTP_PASSWORD = os.environ["CALITP__ELAVON_SFTP_PASSWORD"]
 BIGQUERY_KEYFILE_LOCATION = os.environ["BIGQUERY_KEYFILE_LOCATION"]
 
 
-def fetch_and_clean_from_elavon():
+def fetch_and_clean_from_gcs():
     """
-    Download Elavon transaction records from SFTP as a DataFrame.
+    Download raw Elavon transaction records from GCS as a DataFrame and write out
+    in BigQuery-ready JSONL format after cleaning
     """
 
     all_rows = pd.DataFrame()
 
-    # Establish connection to SFTP server
-    client = paramiko.SSHClient()
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client.connect(
-        hostname="34.145.56.125",
-        port=2200,
-        username="elavon",
-        password=CALITP__ELAVON_SFTP_PASSWORD,
+    # List raw files available from GCS
+    gfs = gcsfs.GCSFileSystem(
+        project="cal-itp-data-infra",
+        token=BIGQUERY_KEYFILE_LOCATION,
     )
-
-    # Create SFTP client and navigate to data directory
-    sftp_client = client.open_sftp()
-    sftp_client.chdir("/data")
-
-    for file in [x for x in sftp_client.listdir() if "zip" in x]:
+    file_list = gfs.ls("test-calitp-elavon-raw/", detail=False)
+    for file in file_list:
         print(f"Processing file {file}")
 
-        # Save locally because Pandas doesn't play nice with paramiko
+        # Save each file locally to read into Pandas
         if not os.path.exists("transferred_files"):
             os.mkdir("transferred_files")
         local_path = f"transferred_files/{file}"
-        sftp_client.get(file, local_path)
+        gfs.get(file, local_path)
 
         if all_rows.empty:
             all_rows = pd.read_csv(local_path, delimiter="|")  # Read from local version
         else:
             all_rows = pd.concat([all_rows, pd.read_csv(local_path, delimiter="|")])
-
-    # Save raw files to GCS
-    gfs = gcsfs.GCSFileSystem(
-        project="cal-itp-data-infra",
-        token=BIGQUERY_KEYFILE_LOCATION,
-    )
-    gfs.put(lpath="transferred_files/", rpath="test-calitp-elavon-raw/", recursive=True)
 
     extract = ElavonExtract(
         filename="transactions.jsonl.gz",
@@ -97,7 +81,7 @@ class ElavonExtract(PartitionedGCSArtifact):
         )
 
 
-class ElavonToGCSOperator(BaseOperator):
+class ElavonToGCSJSONLOperator(BaseOperator):
     def __init__(
         self,
         **kwargs,
@@ -105,13 +89,13 @@ class ElavonToGCSOperator(BaseOperator):
         super().__init__(**kwargs)
 
     def execute(self, **kwargs):
-        extract = fetch_and_clean_from_elavon()
+        extract = fetch_and_clean_from_gcs()
 
         if extract.data is None:
-            print("No extracts were found")
+            print("No extracts were found in GCS")
             return
         if extract.data.empty:
-            print("All extracts found were empty")
+            print("All extracts found in GCS were empty")
             return
 
         fs = get_fs()
