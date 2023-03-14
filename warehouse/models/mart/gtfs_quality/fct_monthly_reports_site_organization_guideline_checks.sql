@@ -26,7 +26,7 @@ generate_biweekly_dates AS (
 
 checks AS (
     SELECT date,
-           organization_name,
+           organization_key,
            feature,
            check,
            status
@@ -53,7 +53,7 @@ fct_monthly_reports_site_organization_guideline_checks AS (
     LEFT JOIN generate_biweekly_dates AS dates
         USING (publish_date)
     LEFT JOIN checks
-        ON idx.organization_name = checks.organization_name
+        ON idx.organization_key = checks.organization_key
         AND dates.sample_dates = checks.date
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
 )
