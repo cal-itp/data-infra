@@ -33,6 +33,7 @@ dim_organizations AS (
         assessment_status,
         manual_check__contact_on_website,
         alias,
+        dim.hq_county_geography,
         dim._is_current,
         dim._valid_from,
         dim._valid_to

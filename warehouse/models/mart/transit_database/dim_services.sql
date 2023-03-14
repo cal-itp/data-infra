@@ -19,6 +19,8 @@ dim_services AS (
         assessment_status,
         manual_check__gtfs_realtime_data_ingested_in_trip_planner,
         manual_check__gtfs_schedule_data_ingested_in_trip_planner,
+        deprecated_date,
+        operating_county_geographies,
         _valid_from,
         _valid_to,
         _is_current
