@@ -31,6 +31,7 @@ checks AS (
            check,
            status
     FROM {{ ref('fct_daily_organization_combined_guideline_checks') }}
+    -- This filtering is temporary, and could also be done further downstream:
     WHERE feature = {{ compliance_schedule() }}
 ),
 
