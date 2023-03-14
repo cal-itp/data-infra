@@ -101,7 +101,7 @@
 {% endmacro %}
 
 {% macro technical_contact_listed() %}
-"Technical contact is listed in feed_contact_email field within the feed_info.txt file"
+"Feed has feed_info.txt file and technical contact is listed in feed_contact_email field within the feed_info.txt file"
 {% endmacro %}
 
 {% macro no_rt_validation_errors_vp() %}

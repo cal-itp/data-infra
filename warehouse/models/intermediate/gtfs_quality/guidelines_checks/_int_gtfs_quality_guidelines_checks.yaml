@@ -16,6 +16,7 @@ models:
   - name: int_gtfs_quality__include_tts
   - name: int_gtfs_quality__shapes_valid
   - name: int_gtfs_quality__pathways_valid
+  - name: int_gtfs_quality__technical_contact_listed
 
 # Schedule + RT combined URL checks reindexed
 # TODO: what kind of yaml do we want for these? specifically what tests
