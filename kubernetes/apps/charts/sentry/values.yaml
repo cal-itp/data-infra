@@ -36,3 +36,7 @@ sentry:
     port: 587
     host: "smtp.postmarkapp.com"
     from: "bot@calitp.org"
+filestore:
+  filesystem:
+    persistence:
+      size: 40Gi
