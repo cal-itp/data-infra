@@ -21,6 +21,7 @@ WITH unioned AS (
             ref('int_gtfs_quality__technical_contact_listed')
             ref('int_gtfs_quality__rt_feeds_present')
             ref('int_gtfs_quality__rt_https')
+            ref('int_gtfs_quality__no_rt_validation_errors')
         ],
     ) }}
 ),

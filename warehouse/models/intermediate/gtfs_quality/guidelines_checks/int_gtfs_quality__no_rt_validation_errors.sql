@@ -1,57 +1,54 @@
-WITH feed_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_quality__rt_feed_guideline_index') }}
-),
-
-fct_daily_rt_feed_files AS (
-    SELECT * FROM {{ ref('fct_daily_rt_feed_files') }}
+WITH guideline_index AS (
+    SELECT
+        *
+    FROM {{ ref('int_gtfs_quality__guideline_checks_index') }}
+    WHERE check IN ({{ no_rt_validation_errors_vp() }},
+        {{ no_rt_validation_errors_tu() }},
+        {{ no_rt_validation_errors_sa() }})
 ),
 
 fct_daily_rt_feed_validation_notices AS (
     SELECT * FROM {{ ref('fct_daily_rt_feed_validation_notices') }}
 ),
 
-count_files AS (
-    SELECT
-        base64_url,
-        date,
-        SUM(parse_success_file_count) AS rt_files
-    FROM fct_daily_rt_feed_files
-    GROUP BY 1, 2
-),
-
 errors AS (
     SELECT
         date,
         base64_url,
-        SUM(total_notices) AS total_errors,
+        -- All error codes start with the letter E (warnings start with W)
+        COUNTIF(code LIKE "E%" and total_notices > 0) > 0 AS had_errors
     FROM fct_daily_rt_feed_validation_notices
-    -- All error codes start with the letter E (warnings start with W)
-    WHERE code LIKE "E%"
     GROUP BY 1, 2
+),
+
+check_start AS (
+    SELECT MIN(date) AS first_check_date
+    FROM errors
 ),
 
 int_gtfs_quality__no_rt_validation_errors AS (
     SELECT
-        idx.date,
-        idx.base64_url,
-        idx.feed_type,
-        CASE WHEN idx.feed_type = 'service_alerts' THEN {{ no_rt_validation_errors_sa() }}
-             WHEN idx.feed_type = 'trip_updates' THEN {{ no_rt_validation_errors_tu() }}
-             WHEN idx.feed_type = 'vehicle_positions' THEN {{ no_rt_validation_errors_vp() }}
-        END AS check,
-        {{ compliance_rt() }} AS feature,
-        rt_files,
-        total_errors,
+        idx.* EXCEPT(status),
+        first_check_date,
+        had_errors,
         CASE
-            WHEN rt_files IS NOT NULL AND COALESCE(total_errors, 0) = 0 THEN {{ guidelines_pass_status() }} -- files present and no errors
-            WHEN rt_files IS NOT NULL AND total_errors > 0 THEN {{ guidelines_fail_status() }} -- files present and there are errors
+        -- check that the row has the right entity + check combo, then assign statuses
+            WHEN (idx.has_rt_feed_tu AND check = {{ no_rt_validation_errors_tu() }})
+                OR (idx.has_rt_feed_vp AND check = {{ no_rt_validation_errors_vp() }})
+                OR (idx.has_rt_feed_sa AND check = {{ no_rt_validation_errors_sa() }})
+                   THEN
+                    CASE
+                        WHEN idx.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
+                        WHEN had_errors IS NULL THEN {{ guidelines_na_check_status() }}
+                        WHEN NOT had_errors THEN {{ guidelines_pass_status() }}
+                        WHEN had_errors THEN {{ guidelines_fail_status() }}
+                    END
+            ELSE idx.status
         END AS status,
-    FROM feed_guideline_index AS idx
-    LEFT JOIN count_files AS files
-    ON idx.date = files.date
-        AND idx.base64_url = files.base64_url
-    LEFT JOIN errors
-    ON idx.date = errors.date
+      FROM guideline_index AS idx
+      CROSS JOIN check_start
+      LEFT JOIN errors
+        ON idx.date = errors.date
         AND idx.base64_url = errors.base64_url
 )
 
