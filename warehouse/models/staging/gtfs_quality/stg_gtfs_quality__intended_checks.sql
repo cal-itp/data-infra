@@ -34,11 +34,11 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ feed_present_service_alerts() }}, {{ compliance_rt() }}, {{ rt_url_sa() }}
     UNION ALL
-    SELECT {{ rt_https_trip_updates() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
+    SELECT {{ rt_https_trip_updates() }}, {{ best_practices_alignment_rt() }}, {{ rt_url_tu() }}
     UNION ALL
-    SELECT {{ rt_https_vehicle_positions() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
+    SELECT {{ rt_https_vehicle_positions() }}, {{ best_practices_alignment_rt() }}, {{ rt_url_vp() }}
     UNION ALL
-    SELECT {{ rt_https_service_alerts() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
+    SELECT {{ rt_https_service_alerts() }}, {{ best_practices_alignment_rt() }}, {{ rt_url_sa() }}
     UNION ALL
     SELECT {{ no_pb_error_tu() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
     UNION ALL
