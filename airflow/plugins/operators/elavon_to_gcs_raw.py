@@ -29,6 +29,12 @@ def mirror_raw_files_from_elavon():
     sftp_client = client.open_sftp()
     sftp_client.chdir("/data")
 
+    # Initialize GCS connection
+    gfs = gcsfs.GCSFileSystem(
+        project="cal-itp-data-infra",
+        token=BIGQUERY_KEYFILE_LOCATION,
+    )
+
     for file in [x for x in sftp_client.listdir() if "zip" in x]:
         print(f"Processing file {file}")
 
@@ -38,12 +44,9 @@ def mirror_raw_files_from_elavon():
         local_path = f"transferred_files/{file}"
         sftp_client.get(file, local_path)
 
-    # Save raw files to GCS
-    gfs = gcsfs.GCSFileSystem(
-        project="cal-itp-data-infra",
-        token=BIGQUERY_KEYFILE_LOCATION,
-    )
-    gfs.put(lpath="transferred_files/", rpath="test-calitp-elavon-raw/", recursive=True)
+        # We put file by file because recursively putting the directory causes relative
+        # filepath issues
+        gfs.put(lpath=f"transferred_files/{file}", rpath="gs://test-calitp-elavon-raw/")
 
 
 class ElavonToGCSRawOperator(BaseOperator):

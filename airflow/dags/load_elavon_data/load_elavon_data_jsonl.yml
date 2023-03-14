@@ -1,1 +1,4 @@
 operator: operators.ElavonToGCSJSONLOperator
+
+dependencies:
+  - load_elavon_data_raw
