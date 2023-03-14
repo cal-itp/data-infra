@@ -28,11 +28,11 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ trip_id_alignment() }}, {{ fixed_route_completeness() }}, {{ rt_feed() }}
     UNION ALL
-    SELECT {{ feed_present_vehicle_positions() }}, {{ compliance_rt() }}, {{ rt_url() }}
+    SELECT {{ feed_present_vehicle_positions() }}, {{ compliance_rt() }}, {{ rt_url_vp() }}
     UNION ALL
-    SELECT {{ feed_present_trip_updates() }}, {{ compliance_rt() }}, {{ rt_url() }}
+    SELECT {{ feed_present_trip_updates() }}, {{ compliance_rt() }}, {{ rt_url_tu() }}
     UNION ALL
-    SELECT {{ feed_present_service_alerts() }}, {{ compliance_rt() }}, {{ rt_url() }}
+    SELECT {{ feed_present_service_alerts() }}, {{ compliance_rt() }}, {{ rt_url_sa() }}
     UNION ALL
     SELECT {{ rt_https_trip_updates() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
     UNION ALL
