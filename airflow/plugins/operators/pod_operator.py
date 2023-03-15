@@ -16,6 +16,9 @@ def PodOperator(*args, **kwargs):
     # TODO: tune this, and add resource limits
     namespace = kwargs.pop("namespace", "default")
 
+    if "startup_timeout_seconds" not in kwargs:
+        kwargs["startup_timeout_seconds"] = 300
+
     is_gke = kwargs.pop("is_gke", False)  # we want to always pop()
 
     if "secrets" in kwargs:
