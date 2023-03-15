@@ -1,0 +1,10 @@
+version: 1
+
+sources:
+  - name: elavon_external_tables
+    description: Hive-partitioned external tables reading Elavon transactions from GCS.
+    database: "{{ var('SOURCE_DATABASE') }}"
+    schema: external_elavon
+    tables:
+      - name: transactions
+        description: Transactions processed by Elavon
