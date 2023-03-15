@@ -15,7 +15,8 @@ jupyterhub:
       # Very roughly I have seen most usage in the 2-3GB range
       guarantee: 3G
     cpu:
-      guarantee: 0.5
+      # this is to put 2 pods per e2-highmem-2 which has 1.93 allocatable
+      guarantee: 0.7
     lifecycleHooks:
       postStart:
         exec:
