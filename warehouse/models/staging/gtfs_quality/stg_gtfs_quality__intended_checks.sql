@@ -40,11 +40,11 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ rt_https_service_alerts() }}, {{ best_practices_alignment_rt() }}, {{ rt_url_sa() }}
     UNION ALL
-    SELECT {{ no_pb_error_tu() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
+    SELECT {{ no_pb_error_tu() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_tu() }}
     UNION ALL
-    SELECT {{ no_pb_error_vp() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
+    SELECT {{ no_pb_error_vp() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_vp() }}
     UNION ALL
-    SELECT {{ no_pb_error_sa() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
+    SELECT {{ no_pb_error_sa() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_sa() }}
     UNION ALL
     SELECT {{ no_7_day_feed_expiration() }}, {{ best_practices_alignment_schedule() }}, {{ schedule_feed() }}
     UNION ALL
