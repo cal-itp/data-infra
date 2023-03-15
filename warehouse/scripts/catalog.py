@@ -5,10 +5,9 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Union
+from typing import Dict, List, Optional, Union
 
 from pydantic import BaseModel, Extra, Field
-from pydantic.class_validators import validator
 
 
 class CatalogMetadata(BaseModel):
@@ -64,21 +63,16 @@ class CatalogTable(BaseModel):
     stats: Dict[str, StatsItem]
     unique_id: Optional[str] = None
 
-    @validator("stats")
-    def coerce_stats_types(self, v) -> Dict[str, Any]:
-        if "num_bytes" in v:
-            value = v["num_bytes"].value
-            # for some reason, 0 gets parsed as bool by pydantic
-            if isinstance(value, bool):
-                value = 0
-            assert isinstance(value, (float, str))
-            v["num_bytes"] = int(float(value))
-        return v
-
     @property
     def num_bytes(self) -> Optional[int]:
         if "num_bytes" in self.stats:
-            return self.stats["num_bytes"].value
+            value = self.stats["num_bytes"].value
+            # for some reason, 0 gets parsed as bool by pydantic
+            # maybe because it's first in the union?
+            if isinstance(value, bool):
+                return 0
+            assert isinstance(value, (float, str))
+            return int(float(value))
         return None
 
 
