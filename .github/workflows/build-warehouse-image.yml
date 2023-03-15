@@ -34,8 +34,8 @@ jobs:
       - run: curl -sSL https://install.python-poetry.org | python -
       - run: cd warehouse && poetry install && poetry run mypy scripts
 
-  visualize:
-    name: Visualize DAG
+  compile:
+    name: Compile dbt project
     runs-on: ubuntu-latest
     steps:
       - run: sudo apt-get install -y libgraphviz-dev graphviz graphviz-dev
@@ -64,22 +64,6 @@ jobs:
           path: './warehouse/target/'
           glob: '*.json'
           destination: 'calitp-ci-artifacts/${{github.workflow}}/run_id=${{github.run_id}}/job=${{github.job}}/target/'
-      - uses: iterative/setup-cml@v1
-      - name: GitHub comment
-        env:
-          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          cd warehouse
-          gsutil cp -r gs://calitp-dbt-artifacts/latest/ .
-          echo "# Warehouse report 📦" >> report.md
-          echo "## New models 🆕" >> report.md
-          poetry run dbt --no-use-colors ls --resource-type model --select state:new --state ./latest | sed "s/calitp_warehouse\.//g" >> report.md
-          echo "## Changed models 🛠️" >> report.md
-          poetry run dbt --no-use-colors ls --resource-type model --select state:modified --state ./latest | sed "s/calitp_warehouse\.//g" >> report.md
-          poetry run dbt --no-use-colors ls --resource-type model --select state:modified --state ./latest | sed 's/^/--include /g' | xargs poetry run python scripts/visualize.py viz man --output=target/dag.png
-          echo "" >> report.md
-          echo '![](./target/dag.png "Changed models")' >> report.md
-          cml comment update report.md
 
   build_push:
     name: Package docker image
