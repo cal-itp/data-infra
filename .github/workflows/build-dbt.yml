@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   check:
-    name: Python static checks
+    name: check python
     runs-on: ubuntu-latest
     steps:
       - run: sudo apt-get install -y libgraphviz-dev graphviz-dev
@@ -30,7 +30,7 @@ jobs:
       - run: cd warehouse && poetry install && poetry run mypy scripts
 
   compile:
-    name: compile/visualize dbt
+    name: check dbt
     runs-on: ubuntu-latest
     steps:
       - run: sudo apt-get install -y libgraphviz-dev graphviz graphviz-dev
