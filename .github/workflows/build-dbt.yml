@@ -1,4 +1,4 @@
-name: build dbt
+name: Test, visualize, and build dbt project
 
 on:
   push:
@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   check:
-    name: Run Python static checks
+    name: Python static checks
     runs-on: ubuntu-latest
     steps:
       - run: sudo apt-get install -y libgraphviz-dev graphviz-dev
@@ -30,7 +30,7 @@ jobs:
       - run: cd warehouse && poetry install && poetry run mypy scripts
 
   compile:
-    name: Compile dbt and visualize any changed models
+    name: compile/visualize dbt
     runs-on: ubuntu-latest
     steps:
       - run: sudo apt-get install -y libgraphviz-dev graphviz graphviz-dev
@@ -83,7 +83,7 @@ jobs:
           cml comment update report.md
 
   build_push:
-    name: Package warehouse image
+    name: package warehouse image
     runs-on: ubuntu-latest
     needs: [check]
     steps:
