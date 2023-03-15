@@ -6,20 +6,18 @@ on:
       - 'main'
     paths:
       - '.github/workflows/visualize-warehouse-changes.yml'
-      - 'warehouse/**'
+      - 'warehouse/analyses/**'
+      - 'warehouse/models/**'
+      - 'warehouse/seeds/**'
+      - 'warehouse/snapshots/**'
+      - 'warehouse/tests/**'
   pull_request:
     paths:
       - '.github/workflows/visualize-warehouse-changes.yml'
       - 'warehouse/analyses/**'
       - 'warehouse/models/**'
-      - 'warehouse/packages.yml'
-      - 'warehouse/poetry.lock'
-      - 'warehouse/pyproject.yml'
-      - 'warehouse/requirements.txt'
-      - 'warehouse/scripts/visualize.py'
       - 'warehouse/seeds/**'
       - 'warehouse/snapshots/**'
-      - 'warehouse/tests/**'
       - 'warehouse/tests/**'
 
 concurrency:
