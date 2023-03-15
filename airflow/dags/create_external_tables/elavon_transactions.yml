@@ -13,7 +13,7 @@ schema_fields:
   - name: payment_reference
     type: STRING
   - name: payment_date
-    type: DATE
+    type: STRING
   - name: account_number
     type: STRING
   - name: routing_number
@@ -59,9 +59,9 @@ schema_fields:
     mode: NULLABLE
     type: STRING
   - name: transaction_date
-    type: DATE
+    type: STRING
   - name: settlement_date
-    type: DATE
+    type: STRING
   - name: authorization_code
     type: STRING
   - name: chargeback_control_no
