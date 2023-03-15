@@ -1,0 +1,105 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__ELAVON') }}"
+suffix_bucket: true
+source_objects:
+  - "transactions/*.jsonl.gz"
+destination_project_dataset_table: "external_elavon.transactions"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  source_uri_prefix: "transactions/{dt:DATE}/{execution_ts:TIMESTAMP}/"
+schema_fields:
+  - name: payment_reference
+    type: STRING
+  - name: payment_date
+    type: DATE
+  - name: account_number
+    type: STRING
+  - name: routing_number
+    type: STRING
+  - name: fund_amt
+    type: STRING
+  - name: batch_reference
+    type: STRING
+  - name: batch_type
+    type: STRING
+  - name: customer_batch_reference
+    type: STRING
+  - name: customer_name
+    type: STRING
+  - name: merchant_number
+    type: STRING
+  - name: external_mid
+    type: INTEGER
+  - name: store_number
+    mode: NULLABLE
+    type: STRING
+  - name: chain
+    type: STRING
+  - name: batch_amt
+    type: STRING
+  - name: amount
+    type: STRING
+  - name: surchg_amount
+    type: STRING
+  - name: convnce_amt
+    type: STRING
+  - name: card_type
+    type: STRING
+  - name: charge_type
+    type: STRING
+  - name: charge_type_description
+    type: STRING
+  - name: card_plan
+    type: STRING
+  - name: card_no
+    type: STRING
+  - name: chk_num
+    mode: NULLABLE
+    type: STRING
+  - name: transaction_date
+    type: DATE
+  - name: settlement_date
+    type: DATE
+  - name: authorization_code
+    type: STRING
+  - name: chargeback_control_no
+    mode: NULLABLE
+    type: STRING
+  - name: roc_text
+    mode: NULLABLE
+    type: STRING
+  - name: trn_aci
+    mode: NULLABLE
+    type: STRING
+  - name: card_scheme_ref
+    type: STRING
+  - name: trn_ref_num
+    type: STRING
+  - name: settlement_method
+    type: STRING
+  - name: currency_code
+    type: STRING
+  - name: cb_acq_ref_id
+    mode: NULLABLE
+    type: STRING
+  - name: chgbk_rsn_code
+    mode: NULLABLE
+    type: STRING
+  - name: chgbk_rsn_desc
+    mode: NULLABLE
+    type: STRING
+  - name: mer_ref
+    mode: NULLABLE
+    type: STRING
+  - name: purch_id
+    type: STRING
+  - name: cust_cod
+    type: STRING
+  - name: trn_arn
+    type: STRING
+  - name: term_id
+    type: STRING
+  - name: ent_num
+    type: STRING
