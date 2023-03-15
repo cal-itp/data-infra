@@ -241,4 +241,4 @@ schema_fields:
     mode: NULLABLE
   - name: hq_county_geography
     type: STRING
-    mode: NULLABLE
+    mode: REPEATED

@@ -269,4 +269,4 @@ schema_fields:
     mode: NULLABLE
   - name: operating_county_geographies
     type: STRING
-    mode: NULLABLE
+    mode: REPEATED
