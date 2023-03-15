@@ -54,7 +54,7 @@ jobs:
           poetry install
           poetry run dbt deps
           poetry run dbt compile --target prod
-          poetry run dbt docs generate
+          poetry run dbt docs generate --target prod
       - uses: 'google-github-actions/upload-cloud-storage@v1'
         with:
           path: './warehouse/logs/'
