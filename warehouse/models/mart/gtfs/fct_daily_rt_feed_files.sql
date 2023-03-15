@@ -33,7 +33,7 @@ parse_outcomes AS (
     {% if is_incremental() %}
     WHERE dt >= DATE '{{ max_date }}'
     {% else %}
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('RT_LOOKBACK_DAYS') }} DAY)
+    WHERE dt >= {{ var('GTFS_RT_START') }}
     {% endif %}
 ),
 

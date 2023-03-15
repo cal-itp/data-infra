@@ -21,7 +21,7 @@ WITH stop_time_updates AS (
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('TRIP_UPDATES_LOOKBACK_DAYS') }} DAY)
+    WHERE dt >= {{ var('GTFS_RT_START') }}
     {% endif %}
 ),
 
@@ -53,7 +53,7 @@ int_gtfs_rt__trip_updates_summaries AS (
         MAX(trip_update_timestamp) AS max_trip_update_timestamp,
         MAX(trip_update_delay) AS max_delay,
         COUNT(DISTINCT CASE WHEN schedule_relationship = 'SKIPPED' THEN stop_id END) AS num_skipped_stops,
-        COUNT(DISTINCT CASE WHEN schedule_relationship IN ('SCHEDULED', 'CANCELED' ,'ADDED') THEN stop_id END) AS num_scheduled_canceled_added_stops,
+        COUNT(DISTINCT CASE WHEN schedule_relationship IN ('SCHEDULED', 'CANCELED', 'ADDED') THEN stop_id END) AS num_scheduled_canceled_added_stops,
     FROM stop_time_updates
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
 )
