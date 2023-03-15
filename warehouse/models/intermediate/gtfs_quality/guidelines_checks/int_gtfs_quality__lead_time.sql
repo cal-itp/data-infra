@@ -54,8 +54,7 @@ trips_expanded AS (
         ON t3.stop_id = t2.stop_id
        AND t3.feed_key = t2.feed_key
    -- SQLFluff doesn't like numeric aliasing here alongside explicit naming in window functions
-   GROUP BY 1, 2, 3 -- noqa: disable=L054
-   -- noqa: enable=L054
+   GROUP BY 1, 2, 3 -- noqa: L054
 ),
 
 scheduled_trips_version_history AS (
@@ -132,8 +131,7 @@ daily_improper_trips_updates AS (
          -- Service date is between 0 and 7 days from now
          days_until_service_date > 0 AND days_until_service_date <= 7
    -- SQLFluff doesn't like numeric aliasing here alongside explicit naming in window functions
-   GROUP BY 1, 2, 3 -- noqa: disable=L054
-   -- noqa: enable=L054
+   GROUP BY 1, 2, 3 -- noqa: L054
 ),
 
 feed_update_count AS (

@@ -170,18 +170,10 @@ class BaseNode(BaseModel):
         return select(columns=columns)
 
     @property
-    def num_bytes(self) -> Optional[int]:
-        if self.catalog_entry and "num_bytes" in self.catalog_entry.stats:
-            value = self.catalog_entry.stats["num_bytes"].value
-            # for some reason, 0 gets parsed as bool by pydantic
-            if isinstance(value, bool):
-                return 0
-            assert isinstance(value, (float, str))
-            return int(float(value))
-        return None
-
-    @property
     def gvrepr(self) -> str:
+        """
+        Returns a string representation intended for graphviz labels
+        """
         return "\n".join(
             [
                 self.config.materialized or self.resource_type.value,
@@ -191,6 +183,9 @@ class BaseNode(BaseModel):
 
     @property
     def gvattrs(self) -> Dict[str, Any]:
+        """
+        Return a dictionary of graphviz attrs for DAG visualization
+        """
         return {
             "fillcolor": "black",
         }
@@ -238,12 +233,13 @@ class Model(BaseNode):
         if (
             self.config.materialized
             in (DbtMaterializationType.table, DbtMaterializationType.incremental)
-            and self.num_bytes
+            and self.catalog_entry
+            and self.catalog_entry.num_bytes
         ):
             return "\n".join(
                 [
                     super(Model, self).gvrepr,
-                    f"Storage: {humanize.naturalsize(self.num_bytes)}",
+                    f"Storage: {humanize.naturalsize(self.catalog_entry.num_bytes)}",
                 ]
             )
         return super(Model, self).gvrepr
@@ -259,9 +255,9 @@ class Model(BaseNode):
             fillcolor = "aquamarine"
 
         if (
-            self.num_bytes
-            and self.num_bytes > 100_000_000_000
-            and self.catalog_entry
+            self.catalog_entry
+            and self.catalog_entry.num_bytes
+            and self.catalog_entry.num_bytes > 100_000_000_000
             and "clustering_fields" not in self.catalog_entry.stats
             and "partitioning_type" not in self.catalog_entry.stats
         ):
@@ -492,6 +488,9 @@ class RunResult(BaseModel):
 
     @property
     def gvattrs(self) -> Dict[str, Any]:
+        """
+        Returns a string representation intended for graphviz labels
+        """
         if self.bytes_processed > 300_000_000_000:
             color = "red"
         elif self.bytes_processed > 100_000_000_000:
