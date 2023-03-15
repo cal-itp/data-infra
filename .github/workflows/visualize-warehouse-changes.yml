@@ -46,7 +46,7 @@ jobs:
           cd warehouse
           poetry install
           poetry run dbt deps
-          poetry run dbt compile
+          poetry run dbt compile --target prod
       - uses: iterative/setup-cml@v1
       - name: GitHub comment
         env:
