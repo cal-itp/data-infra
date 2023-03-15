@@ -6,19 +6,11 @@ on:
       - 'main'
     paths:
       - '.github/workflows/visualize-warehouse-changes.yml'
-      - 'warehouse/analyses/**'
       - 'warehouse/models/**'
-      - 'warehouse/seeds/**'
-      - 'warehouse/snapshots/**'
-      - 'warehouse/tests/**'
   pull_request:
     paths:
       - '.github/workflows/visualize-warehouse-changes.yml'
-      - 'warehouse/analyses/**'
       - 'warehouse/models/**'
-      - 'warehouse/seeds/**'
-      - 'warehouse/snapshots/**'
-      - 'warehouse/tests/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
