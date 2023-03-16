@@ -9,7 +9,16 @@ WITH unioned AS (
             ref('int_gtfs_quality__schedule_download_success'),
             ref('int_gtfs_quality__feed_aggregator'),
             ref('int_gtfs_quality__trip_id_alignment'),
-            ref('int_gtfs_quality__scheduled_trips_in_tu_feed')
+            ref('int_gtfs_quality__scheduled_trips_in_tu_feed'),
+            ref('int_gtfs_quality__trip_planners'),
+            ref('int_gtfs_quality__no_schedule_validation_errors'),
+            ref('int_gtfs_quality__shapes_file_present'),
+            ref('int_gtfs_quality__complete_wheelchair_accessibility_data'),
+            ref('int_gtfs_quality__shapes_for_all_trips'),
+            ref('int_gtfs_quality__include_tts'),
+            ref('int_gtfs_quality__shapes_valid'),
+            ref('int_gtfs_quality__pathways_valid'),
+            ref('int_gtfs_quality__technical_contact_listed')
         ],
     ) }}
 ),
