@@ -128,4 +128,18 @@ Some additional helpful commands:
 * `poetry run dbt docs generate` -- will generate the dbt documentation
 * `poetry run dbt docs serve` -- will "serve" the dbt docs locally so you can access them via `http://localhost:8080`; note that you must `docs generate` before you can `docs serve`
 
+## Troubleshooting
+
+### Upgrading Poetry from legacy installer
+
+If you installed Poetry using their legacy `get-poetry.py` script, you may run into issues upgrading to versions past [1.2.0](https://python-poetry.org/blog/announcing-poetry-1.2.0/). Here is a workflow that has worked:
+
+1. Uninstall legacy installer: Run `rm -rf "${POETRY_HOME:-~/.poetry}"` (per [this Poetry docs page](https://python-poetry.org/docs/#installing-with-the-official-installer)).
+2. Remove legacy path from shell profile: as noted above, shell configuration will vary by operating system and setup -- this may be `~/.zshrc` or similar. If you have a line like `export PATH="$HOME/.poetry/bin:$PATH"`, remove it.
+3. Re-install Poetry via the new installer: `curl -sSL https://install.python-poetry.org | python3 -` (per their [1.2.0 upgrade docs](https://python-poetry.org/blog/announcing-poetry-1.2.0/))
+4. Re-add new path to $PATH following the instructions that Poetry prints in the terminal upon installation.
+5. Restart terminal.
+6. Try running `poetry --version` to confirm installation has worked. If you get a warning about the location of your TOML configuration files, proceed to next step.
+7. Double check what paths are listed in the warning message and run `mkdir <directory listed in "consider moving files to" section of warning> && mv <directory listed in "configuration exists at" section of warning>/config.toml ~/Library/Preferences/pypoetry/` to move the Poetry config TOML file from legacy location to new location. For example, this may be: `mkdir ~/Library/Preferences/pypoetry/ && mv ~/Library/Application\ Support/pypoetry/config.toml ~/Library/Preferences/pypoetry/`.
+
 TODO: project standards and organization
