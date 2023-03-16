@@ -135,7 +135,6 @@ idx_pending_urls AS (
         assessed_orgs.organization_itp_id,
         assessed_orgs.organization_name,
         assessed_orgs.organization_source_record_id,
-        assessed_orgs.organization_key,
         COALESCE(check_rt.has_rt, FALSE) AS has_rt,
         route_count.route_ct,
         stop_count.stop_ct,

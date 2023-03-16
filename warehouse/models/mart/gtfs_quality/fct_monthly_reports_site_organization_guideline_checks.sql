@@ -5,12 +5,6 @@ WITH idx_monthly_reports_site AS (
     FROM {{ ref('idx_monthly_reports_site') }}
 ),
 
-int_gtfs__organization_dataset_map AS (
-    SELECT *
-    FROM {{ ref('int_gtfs_quality__organization_dataset_map') }}
-    WHERE gtfs_dataset_type = "schedule"
-),
-
 generate_biweekly_dates AS (
     SELECT DISTINCT
         publish_date,
@@ -26,7 +20,7 @@ generate_biweekly_dates AS (
 
 checks AS (
     SELECT date,
-           organization_key,
+           organization_source_record_id,
            feature,
            check,
            status
@@ -53,9 +47,8 @@ fct_monthly_reports_site_organization_guideline_checks AS (
     LEFT JOIN generate_biweekly_dates AS dates
         USING (publish_date)
     LEFT JOIN checks
-        ON idx.organization_key = checks.organization_key
+        ON idx.organization_source_record_id = checks.organization_source_record_id
         AND dates.sample_dates = checks.date
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
 )
 
 SELECT * FROM fct_monthly_reports_site_organization_guideline_checks

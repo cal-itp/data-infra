@@ -73,6 +73,7 @@ int_gtfs_quality__guideline_checks_long AS (
         idx.gtfs_dataset_type,
         idx.base64_url,
         idx.organization_key,
+        idx.organization_source_record_id,
         idx.service_key,
         idx.gtfs_service_data_key,
         idx.gtfs_dataset_key,
