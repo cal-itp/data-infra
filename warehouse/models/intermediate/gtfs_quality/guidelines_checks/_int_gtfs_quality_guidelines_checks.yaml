@@ -1,7 +1,6 @@
 version: 2
 
 models:
-<<<<<<< HEAD
 # Schedule URL checks reindexed
 # TODO: what kind of yaml do we want for these? specifically what tests
 
@@ -18,13 +17,6 @@ models:
   - name: int_gtfs_quality__shapes_valid
   - name: int_gtfs_quality__pathways_valid
   - name: int_gtfs_quality__technical_contact_listed
-
-=======
->>>>>>> 392e819b (delete extra yaml, this may cause merge conflicts later)
-# Schedule URL checks reindexed
-# TODO: what kind of yaml do we want for these? specifically what tests
-
-  - name: int_gtfs_quality__schedule_url_download_success
 
 # Schedule + RT combined URL checks reindexed
 # TODO: what kind of yaml do we want for these? specifically what tests
