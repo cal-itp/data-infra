@@ -5,6 +5,17 @@ WITH idx_monthly_reports_site AS (
     FROM {{ ref('idx_monthly_reports_site') }}
 ),
 
+checks AS (
+    SELECT date,
+           organization_source_record_id,
+           feature,
+           check,
+           status
+    FROM {{ ref('fct_daily_organization_combined_guideline_checks') }}
+    -- This filtering is temporary, and could also be done further downstream:
+    WHERE feature = {{ compliance_schedule() }}
+),
+
 generate_biweekly_dates AS (
     SELECT DISTINCT
         publish_date,
@@ -16,17 +27,6 @@ generate_biweekly_dates AS (
             -- which may be disproportionately likely to have new feed published and thus issues
             DATE_ADD(CAST(date_start AS DATE), INTERVAL 3 DAY),
             CAST(date_end AS DATE), INTERVAL 2 WEEK)) AS sample_dates
-),
-
-checks AS (
-    SELECT date,
-           organization_source_record_id,
-           feature,
-           check,
-           status
-    FROM {{ ref('fct_daily_organization_combined_guideline_checks') }}
-    -- This filtering is temporary, and could also be done further downstream:
-    WHERE feature = {{ compliance_schedule() }}
 ),
 
 fct_monthly_reports_site_organization_guideline_checks AS (
