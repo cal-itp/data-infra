@@ -4,7 +4,7 @@ LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
 
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 RUN apt-get update \
-  && apt-get install -y nodejs libgdal-dev
+  && apt-get install -y nodejs libgdal-dev libgraphviz-dev graphviz-dev
 
 RUN npm install -g --unsafe-perm=true --allow-root netlify-cli
 

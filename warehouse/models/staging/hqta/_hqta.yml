@@ -2,7 +2,7 @@ version: 2
 
 sources:
   - name: hqta_external_tables
-    database: "{{ target.database }}" # TODO: change me back when deployed
+    database: "{{ var('SOURCE_DATABASE') }}"
     schema: external_hqta
     tables:
       - name: areas

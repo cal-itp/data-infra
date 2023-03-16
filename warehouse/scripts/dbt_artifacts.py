@@ -9,8 +9,10 @@ from enum import Enum
 from pathlib import Path
 from typing import Annotated, Any, ClassVar, Dict, List, Literal, Optional, Union
 
+import humanize
 import pendulum
 import yaml
+from catalog import Catalog, CatalogTable
 from pydantic import BaseModel, Field, constr, validator
 from slugify import slugify
 from sqlalchemy import MetaData, Table, create_engine, select
@@ -63,11 +65,11 @@ class DbtMaterializationType(str, Enum):
 
 class NodeDeps(BaseModel):
     macros: List[str]
-    nodes: List[str]
+    nodes: Optional[List[str]]  # does not exist on seeds
 
     @property
     def resolved_nodes(self) -> List["BaseNode"]:
-        return [BaseNode._instances[node] for node in self.nodes]
+        return [BaseNode._instances[node] for node in self.nodes] if self.nodes else []
 
 
 class NodeConfig(BaseModel):
@@ -97,6 +99,7 @@ class Column(BaseModel):
             if node.resource_type == DbtResourceType.test
             and isinstance(node, Test)
             and node.depends_on
+            and node.depends_on.nodes is not None
             and self.parent
             and self.parent.unique_id in node.depends_on.nodes
             and node.test_metadata
@@ -122,6 +125,7 @@ class Column(BaseModel):
 class BaseNode(BaseModel):
     _instances: ClassVar[Dict[str, "BaseNode"]] = {}
     unique_id: str
+    fqn: List[str]
     path: Path
     database: str
     schema_: str = Field(None, alias="schema")
@@ -132,12 +136,17 @@ class BaseNode(BaseModel):
     config: NodeConfig
     columns: Dict[str, Column]
     meta: Dict = {}
+    catalog_entry: Optional[CatalogTable]
 
     def __init__(self, **kwargs):
         super(BaseNode, self).__init__(**kwargs)
         self._instances[self.unique_id] = self
         for column in self.columns.values():
             column.parent = self
+
+    @property
+    def strfqn(self) -> str:
+        return ".".join(self.fqn)
 
     @property
     def table_name(self):
@@ -160,17 +169,109 @@ class BaseNode(BaseModel):
         ]
         return select(columns=columns)
 
+    @property
+    def gvrepr(self) -> str:
+        """
+        Returns a string representation intended for graphviz labels
+        """
+        return "\n".join(
+            [
+                self.config.materialized or self.resource_type.value,
+                self.name,
+            ]
+        )
+
+    @property
+    def gvattrs(self) -> Dict[str, Any]:
+        """
+        Return a dictionary of graphviz attrs for DAG visualization
+        """
+        return {
+            "fillcolor": "black",
+        }
+
 
 class Seed(BaseNode):
     resource_type: Literal[DbtResourceType.seed]
+
+    @property
+    def gvattrs(self) -> Dict[str, Any]:
+        return {
+            "fillcolor": "green",
+        }
 
 
 class Source(BaseNode):
     resource_type: Literal[DbtResourceType.source]
 
+    @property
+    def gvattrs(self) -> Dict[str, Any]:
+        return {
+            "fillcolor": "blue",
+        }
 
+
+# TODO: this should be a discriminated type based on materialization
 class Model(BaseNode):
     resource_type: Literal[DbtResourceType.model]
+    depends_on: NodeDeps
+
+    @property
+    def children(self) -> List["Model"]:
+        children = []
+        for unique_id, node in BaseNode._instances.items():
+            if (
+                isinstance(node, Model)
+                and node.depends_on.nodes
+                and self.unique_id in node.depends_on.nodes
+            ):
+                children.append(node)
+        return children
+
+    @property
+    def gvrepr(self) -> str:
+        if (
+            self.config.materialized
+            in (DbtMaterializationType.table, DbtMaterializationType.incremental)
+            and self.catalog_entry
+            and self.catalog_entry.num_bytes
+        ):
+            return "\n".join(
+                [
+                    super(Model, self).gvrepr,
+                    f"Storage: {humanize.naturalsize(self.catalog_entry.num_bytes)}",
+                ]
+            )
+        return super(Model, self).gvrepr
+
+    @property
+    def gvattrs(self) -> Dict[str, Any]:
+        fillcolor = "white"
+
+        if self.config.materialized in (
+            DbtMaterializationType.table,
+            DbtMaterializationType.incremental,
+        ):
+            fillcolor = "aquamarine"
+
+        if (
+            self.catalog_entry
+            and self.catalog_entry.num_bytes
+            and self.catalog_entry.num_bytes > 100_000_000_000
+            and "clustering_fields" not in self.catalog_entry.stats
+            and "partitioning_type" not in self.catalog_entry.stats
+        ):
+            fillcolor = "red"
+
+        if (
+            self.config.materialized == DbtMaterializationType.view
+            and len(self.children) > 1
+        ):
+            fillcolor = "pink"
+
+        return {
+            "fillcolor": fillcolor,
+        }
 
 
 class TestMetadata(BaseModel):
@@ -324,9 +425,21 @@ class Exposure(BaseModel):
 class Manifest(BaseModel):
     nodes: Dict[str, Node]
     sources: Dict[str, Source]
+    metrics: Dict
+    exposures: Dict[str, Exposure]
     macros: Dict
     docs: Dict
-    exposures: Dict[str, Exposure]
+    parent_map: Dict[str, List[str]]
+    child_map: Dict[str, List[str]]
+    selectors: Dict
+    disabled: Dict  # should be Dict[str, Node] but they lack the resource_type
+
+    # https://github.com/pydantic/pydantic/issues/1577#issuecomment-803171322
+    def set_catalog(self, c: Catalog):
+        for node in self.nodes.values():
+            node.catalog_entry = c.nodes.get(
+                node.unique_id, c.sources.get(node.unique_id)
+            )
 
 
 class TimingInfo(BaseModel):
@@ -355,11 +468,58 @@ class RunResult(BaseModel):
     message: Optional[str]
     failures: Optional[int]
     unique_id: str
+    manifest: Optional[Manifest]
+
+    @property
+    def node(self) -> Node:
+        if not self.manifest:
+            raise ValueError("must set manifest before calling node")
+        return self.manifest.nodes[self.unique_id]
+
+    @property
+    def bytes_processed(self):
+        return self.adapter_response.get(
+            "bytes_processed", 0
+        )  # tests do bill bytes but set to 0
+
+    @property
+    def gvrepr(self) -> str:
+        return self.node.gvrepr
+
+    @property
+    def gvattrs(self) -> Dict[str, Any]:
+        """
+        Returns a string representation intended for graphviz labels
+        """
+        if self.bytes_processed > 300_000_000_000:
+            color = "red"
+        elif self.bytes_processed > 100_000_000_000:
+            color = "yellow"
+        else:
+            color = "white"
+
+        return {
+            **self.node.gvattrs,
+            "fillcolor": color,
+            "label": "\n".join(
+                [
+                    self.node.gvrepr,
+                    f"Billed: {humanize.naturalsize(self.bytes_processed)}",
+                ]
+            ),
+        }
 
 
 class RunResults(BaseModel):
     metadata: Dict
     results: List[RunResult]
+    manifest: Optional[Manifest]
+
+    # https://github.com/pydantic/pydantic/issues/1577#issuecomment-803171322
+    def set_manifest(self, m: Manifest):
+        self.manifest = m
+        for result in self.results:
+            result.manifest = m
 
 
 # mainly just to test that these models work
