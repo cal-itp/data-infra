@@ -365,18 +365,10 @@ def validate_and_upload(
 ) -> List[RTFileProcessingOutcome]:
     first_extract = hour.extracts[0]
     try:
-        # two levels of tries - the inner catches unavailability of current-day schedule during early
-        # morning hours UTC, and the outer catches a broader set of errors for the one-day fallback
-        try:
-            schedule_extract = get_schedule_extracts_for_day(first_extract.dt)[
-                first_extract.config.base64_validation_url
-            ]
-        except (
-            KeyError
-        ):  # Attempt a one-day fallback in case of delayed schedule processing
-            schedule_extract = get_schedule_extracts_for_day(
-                first_extract.dt - datetime.timedelta(days=1)
-            )[first_extract.config.base64_validation_url]
+        # TODO: this does not work if we didn't download a schedule zip for that day
+        schedule_extract = get_schedule_extracts_for_day(first_extract.dt)[
+            first_extract.config.base64_validation_url
+        ]
         gtfs_zip = download_gtfs_schedule_zip(
             fs,
             schedule_extract=schedule_extract,
