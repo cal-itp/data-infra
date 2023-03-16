@@ -1,5 +1,7 @@
-WITH feed_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_quality__schedule_feed_guideline_index') }}
+WITH guideline_index AS (
+    SELECT *
+    FROM {{ ref('int_gtfs_quality__guideline_checks_index') }}
+    WHERE check = {{ shapes_file_present() }}
 ),
 
 keyed_parse_outcomes AS (
@@ -14,19 +16,28 @@ daily_feed_shapes_present AS (
        AND feed_key IS NOT null
 ),
 
+check_start AS (
+    SELECT MIN(dt) AS first_check_date
+    FROM keyed_parse_outcomes
+),
+
 int_gtfs_quality__shapes_file_present AS (
     SELECT
-        idx.date,
-        idx.feed_key,
-        {{ shapes_file_present() }} AS check,
-        {{ accurate_service_data() }} AS feature,
+        idx.* EXCEPT(status),
         CASE
-            WHEN s.feed_key IS NOT null THEN {{ guidelines_pass_status() }}
-            ELSE {{ guidelines_fail_status() }}
+            WHEN has_schedule_feed
+                THEN
+                    CASE
+                        WHEN s.feed_key IS NOT null THEN {{ guidelines_pass_status() }}
+                        WHEN idx.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
+                        ELSE {{ guidelines_fail_status() }}
+                    END
+            ELSE idx.status
         END AS status
-    FROM feed_guideline_index idx
+    FROM guideline_index idx
+    CROSS JOIN check_start
     LEFT JOIN daily_feed_shapes_present s
-      ON idx.feed_key = s.feed_key
+      ON idx.schedule_feed_key = s.feed_key
 )
 
 SELECT * FROM int_gtfs_quality__shapes_file_present
