@@ -1,7 +1,7 @@
 WITH source AS (
     SELECT * FROM {{ source('elavon_external_tables', 'transactions') }}
     WHERE dt IS NOT NULL
-    AND project_slug IS NOT NULL
+    AND execution_ts IS NOT NULL
 ),
 
 stg_payments__elavon_transactions AS (
