@@ -25,6 +25,13 @@ dbt-bigquery = "^1.3.0"
 typer = "^0.7.0"
 gcsfs = "^2023.1.0"
 dbt-metabase = "^0.9.14"
+networkx = {version = "<3", extras = ["default"]}
+networkx-viewer = "^0.3.0"
+# from https://github.com/pygraphviz/pygraphviz/issues/398#issuecomment-1450367670
+# May need to run these after `brew install graphviz` when installing on macOS
+# export CFLAGS="-I $(brew --prefix graphviz)/include"
+# export LDFLAGS="-L $(brew --prefix graphviz)/lib"
+pygraphviz = "^1.10"
 
 [tool.poetry.dev-dependencies]
 sqlfluff = "^1.4.5"
@@ -37,6 +44,9 @@ types-python-slugify = "^8.0.0"
 types-PyYAML = "^6.0.12"
 pandas-stubs = "^1.5.2"
 sqlalchemy-stubs = "^0.4"
+
+[tool.poetry.group.dev.dependencies]
+datamodel-code-generator = "^0.17.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

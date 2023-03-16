@@ -32,6 +32,7 @@ initial_assessed AS (
         {{ dbt_utils.surrogate_key([
             'organization_key',
             'service_key',
+            'base64_url',
             'gtfs_service_data_key',
             'gtfs_dataset_key',
             'schedule_feed_key']) }} AS key,
