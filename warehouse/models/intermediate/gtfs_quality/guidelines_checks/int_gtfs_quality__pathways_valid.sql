@@ -33,6 +33,7 @@ pathways_notices AS (
 feed_has_rail AS (
     SELECT
         feed_key,
+        -- see: https://gtfs.org/schedule/reference/#routestxt for route type definitions
         LOGICAL_OR(route_type = "2") AS has_rail
     FROM dim_routes
     GROUP BY 1
@@ -42,6 +43,8 @@ feed_has_stations AS (
     SELECT
         feed_key,
         LOGICAL_OR(parent_station IS NOT NULL) AS has_parent_station,
+        -- keywords associated with stops of interest were identified through discussion with team
+        -- may be iterated on in future
         LOGICAL_OR(LOWER(stop_name) LIKE '%station%' OR LOWER(stop_name) LIKE '%transit center%') AS has_station_name
     FROM dim_stops
     GROUP BY 1
@@ -97,10 +100,10 @@ int_gtfs_quality__pathways_valid AS (
             WHEN has_schedule_feed
                 THEN
                     CASE
-                        WHEN has_pathways AND validation_notices = 0 AND is_pathways_eligible THEN {{ guidelines_pass_status() }}
+                        WHEN is_pathways_eligible AND has_pathways AND validation_notices = 0 THEN {{ guidelines_pass_status() }}
                         WHEN idx.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
                         WHEN NOT COALESCE(is_pathways_eligible, FALSE) OR (feed_pathways_notices.feed_key IS NULL) THEN {{ guidelines_na_check_status() }}
-                        WHEN (validation_notices > 0 OR NOT has_pathways) AND is_pathways_eligible THEN {{ guidelines_fail_status() }}
+                        WHEN is_pathways_eligible AND (validation_notices > 0 OR NOT has_pathways) THEN {{ guidelines_fail_status() }}
                     END
             ELSE idx.status
         END AS status
