@@ -17,7 +17,7 @@ historical AS (
     FROM latest_county_geography
 ),
 
-int_transit_database__county_geography AS (
+int_transit_database__county_geography_dim AS (
     SELECT
         {{ dbt_utils.surrogate_key(['id', '_valid_from']) }} AS key,
         id AS source_record_id,
@@ -31,11 +31,11 @@ int_transit_database__county_geography AS (
         mpo,
         place_geography,
         organizations AS organization_key,
-        services AS service_key,
+        --services AS service_key,
         _is_current,
         _valid_from,
         _valid_to
     FROM historical
 )
 
-SELECT * FROM int_transit_database__county_geography
+SELECT * FROM int_transit_database__county_geography_dim
