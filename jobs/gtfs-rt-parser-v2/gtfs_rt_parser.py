@@ -374,7 +374,7 @@ def validate_and_upload(
         fallback_days < 7
     ):  # Fall back to most recent available schedule within 7 days
         try:
-            target_date = first_extract.dt - datetime.timedelta(days=1)
+            target_date = first_extract.dt - datetime.timedelta(days=fallback_days)
             schedule_extract = get_schedule_extracts_for_day(target_date)[
                 first_extract.config.base64_validation_url
             ]
