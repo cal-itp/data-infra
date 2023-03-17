@@ -368,10 +368,9 @@ def validate_and_upload(
     pbar=None,
 ) -> List[RTFileProcessingOutcome]:
     first_extract = hour.extracts[0]
-    gtfs_zip = None
     fallback_days = 0
-    while (
-        fallback_days < 7
+    for fallback_days in range(
+        0, 8
     ):  # Fall back to most recent available schedule within 7 days
         try:
             target_date = first_extract.dt - datetime.timedelta(days=fallback_days)
@@ -391,9 +390,7 @@ def validate_and_upload(
             print(
                 f"no schedule data found for {first_extract.path} and day {target_date}"
             )
-            fallback_days += 1
-
-    if gtfs_zip is None:
+    else:
         raise ScheduleDataNotFound(
             f"no recent schedule data found for {first_extract.path}"
         )
