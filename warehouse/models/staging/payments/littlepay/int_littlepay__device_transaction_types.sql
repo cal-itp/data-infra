@@ -1,21 +1,13 @@
-{{ config(materialized='table') }}
-
 WITH stg_littlepay__micropayments AS (
-
     SELECT * FROM {{ ref('stg_littlepay__micropayments') }}
-
 ),
 
 stg_littlepay__micropayment_device_transactions AS (
-
-    SELECT * FROM {{ ref('stg_littlepay__micropayment_device_transactions') }}
-
+    SELECT * FROM {{ ref('int_littlepay__cleaned_micropayment_device_transactions') }}
 ),
 
 stg_littlepay__device_transactions AS (
-
     SELECT * FROM {{ ref('stg_littlepay__device_transactions') }}
-
 ),
 
 single_device_transaction_ids AS (

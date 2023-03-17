@@ -17,15 +17,18 @@ stg_littlepay__device_transactions AS (
         DATETIME(
             TIMESTAMP(transaction_date_time_utc), "America/Los_Angeles"
         ) AS transaction_date_time_pacific,
-        location_id,
+         -- trim to align with gtfs cleaning steps
+         -- since these fields are used to join with gtfs data
+        TRIM(location_id) AS location_id,
+        TRIM(route_id) AS route_id,
         location_scheme,
         location_name,
         zone_id,
-        route_id,
         mode,
         direction,
-        latitude,
-        longitude,
+        CAST(latitude AS FLOAT64) AS latitude,
+        CAST(longitude AS FLOAT64) AS longitude,
+        ST_GEOGPOINT(CAST(longitude AS FLOAT64), CAST(latitude AS FLOAT64)) AS geography,
         vehicle_id,
         granted_zone_ids,
         onward_zone_ids,
@@ -34,6 +37,7 @@ stg_littlepay__device_transactions AS (
         extract_filename,
         ts,
     FROM source
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY littlepay_transaction_id ORDER BY ts DESC, transaction_date_time_utc DESC) = 1
 )
 
 SELECT * FROM stg_littlepay__device_transactions

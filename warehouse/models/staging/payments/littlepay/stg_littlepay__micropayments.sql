@@ -21,6 +21,7 @@ stg_littlepay__micropayments AS (
         extract_filename,
         ts,
     FROM source
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY micropayment_id ORDER BY ts DESC, transaction_time DESC) = 1
 )
 
 SELECT * FROM stg_littlepay__micropayments

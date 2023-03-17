@@ -18,6 +18,15 @@ stg_littlepay__customer_funding_source AS (
         `instance`,
         extract_filename,
         ts,
+        DENSE_RANK() OVER (
+            PARTITION BY funding_source_id
+            ORDER BY ts DESC) AS calitp_funding_source_id_rank,
+        DENSE_RANK() OVER (
+            PARTITION BY funding_source_vault_id
+            ORDER BY ts DESC) AS calitp_funding_source_vault_id_rank,
+        DENSE_RANK() OVER (
+            PARTITION BY customer_id
+            ORDER BY ts DESC) AS calitp_customer_id_rank,
     FROM source
 )
 

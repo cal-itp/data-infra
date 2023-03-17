@@ -20,6 +20,10 @@ sources:
 models:
   - name: int_littlepay__customer_funding_source_vaults
     columns:
+      - name: funding_source_id
+        tests:
+          - not_null
+          - unique
       - name: customer_id
         description: '{{ doc("customer_funding_source_customer_id") }}'
       - name: funding_source_vault_id
@@ -61,6 +65,7 @@ models:
       - name: littlepay_transaction_id
         description: '{{ doc("device_transactions_littlepay_transaction_id") }}'
         tests:
+          - not_null
           - unique
       - name: transaction_type
       - name: pending
