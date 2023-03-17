@@ -1,4 +1,5 @@
 {{ config(materialized='ephemeral') }}
+
 WITH stg_gtfs_quality__intended_checks AS (
     SELECT {{ static_feed_downloaded_successfully() }} AS check, {{ compliance_schedule() }} AS feature, {{ schedule_url() }} AS entity
     UNION ALL
@@ -60,7 +61,7 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ lead_time() }}, {{ up_to_dateness() }}, {{ schedule_feed() }}
     UNION ALL
-    SELECT {{ no_stale_vehicle_positions() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
+    SELECT {{ no_stale_vehicle_positions() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_vp() }}
     UNION ALL
     SELECT {{ no_stale_trip_updates() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
     UNION ALL
