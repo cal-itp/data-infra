@@ -159,6 +159,10 @@ def get_schedule_extracts_for_day(
         },
     )
 
+    # Explicitly put extracts in timestamp order so dict construction below sets
+    # values to the most recent extract for a given base64_url
+    extracts.sort(key=lambda extract: extract.ts)
+
     return {extract.base64_url: extract for extract in extracts}
 
 
@@ -364,29 +368,35 @@ def validate_and_upload(
     pbar=None,
 ) -> List[RTFileProcessingOutcome]:
     first_extract = hour.extracts[0]
-    try:
-        # two levels of tries - the inner catches unavailability of current-day schedule during early
-        # morning hours UTC, and the outer catches a broader set of errors for the one-day fallback
+    gtfs_zip = None
+    fallback_days = 0
+    while (
+        fallback_days < 7
+    ):  # Fall back to most recent available schedule within 7 days
         try:
-            schedule_extract = get_schedule_extracts_for_day(first_extract.dt)[
+            target_date = first_extract.dt - datetime.timedelta(days=1)
+            schedule_extract = get_schedule_extracts_for_day(target_date)[
                 first_extract.config.base64_validation_url
             ]
-        except (
-            KeyError
-        ):  # Attempt a one-day fallback in case of delayed schedule processing
-            schedule_extract = get_schedule_extracts_for_day(
-                first_extract.dt - datetime.timedelta(days=1)
-            )[first_extract.config.base64_validation_url]
-        gtfs_zip = download_gtfs_schedule_zip(
-            fs,
-            schedule_extract=schedule_extract,
-            dst_dir=tmp_dir,
-            pbar=pbar,
-        )
-    except (KeyError, FileNotFoundError) as e:
+
+            gtfs_zip = download_gtfs_schedule_zip(
+                fs,
+                schedule_extract=schedule_extract,
+                dst_dir=tmp_dir,
+                pbar=pbar,
+            )
+
+            break
+        except (KeyError, FileNotFoundError):
+            print(
+                f"no schedule data found for {first_extract.path} and day {target_date}"
+            )
+            fallback_days += 1
+
+    if gtfs_zip is None:
         raise ScheduleDataNotFound(
-            f"no schedule data found for {first_extract.path}"
-        ) from e
+            f"no recent schedule data found for {first_extract.path}"
+        )
 
     execute_rt_validator(
         gtfs_zip,
