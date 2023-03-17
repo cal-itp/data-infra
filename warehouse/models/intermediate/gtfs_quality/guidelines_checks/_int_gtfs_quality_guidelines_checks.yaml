@@ -25,6 +25,8 @@ models:
 # RT feed checks reindexed
 # TODO: what kind of yaml do we want for these? specifically what tests
   - name: int_gtfs_quality__trip_id_alignment
+  - name: int_gtfs_quality__rt_20sec_vp
+  - name: int_gtfs_quality__no_rt_validation_errors
 
 # Service checks reindexed
 # TODO: what kind of yaml do we want for these? specifically what tests
@@ -35,5 +37,4 @@ models:
 # TODO: what kind of yaml do we want for these? specifically what tests
   - name: int_gtfs_quality__rt_feeds_present
   - name: int_gtfs_quality__rt_https
-  - name: int_gtfs_quality__no_rt_validation_errors
   - name: int_gtfs_quality__rt_protobuf_error

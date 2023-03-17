@@ -52,7 +52,7 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ passes_fares_validator() }}, {{ fare_completeness() }}, {{ schedule_feed() }}
     UNION ALL
-    SELECT {{ rt_20sec_vp() }}, {{ accurate_service_data() }}, {{ rt_feed() }}
+    SELECT {{ rt_20sec_vp() }}, {{ accurate_service_data() }}, {{ rt_feed_vp() }}
     UNION ALL
     SELECT {{ rt_20sec_tu() }}, {{ accurate_service_data() }}, {{ rt_feed() }}
     UNION ALL
