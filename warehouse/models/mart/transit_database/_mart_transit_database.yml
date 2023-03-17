@@ -819,3 +819,4 @@ models:
              to: ref('dim_modes')
              field: key
   - name: bridge_organizations_x_county_geography
+  - name: bridge_services_x_county_geography

@@ -31,6 +31,7 @@ int_transit_database__county_geography AS (
         mpo,
         place_geography,
         organizations AS organization_key,
+        services AS service_key,
         _is_current,
         _valid_from,
         _valid_to
