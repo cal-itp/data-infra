@@ -107,34 +107,6 @@ summarize_vehicle_ages AS (
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
 ),
 
--- intra_message_age_percentiles AS (
---     SELECT
---         *,
---         -- calculate median: https://stackoverflow.com/a/66213692
---         PERCENTILE_CONT(_vehicle_message_age_vs_header, .5) OVER(PARTITION BY dt, base64_url) AS median_vehicle_message_age_vs_header,
---         PERCENTILE_CONT(_vehicle_message_age_vs_header, .25) OVER(PARTITION BY dt, base64_url) AS p25_vehicle_message_age_vs_header,
---         PERCENTILE_CONT(_vehicle_message_age_vs_header, .75) OVER(PARTITION BY dt, base64_url) AS p75_vehicle_message_age_vs_header,
---         PERCENTILE_CONT(_vehicle_message_age_vs_header, .90) OVER(PARTITION BY dt, base64_url) AS p90_vehicle_message_age_vs_header,
---         PERCENTILE_CONT(_vehicle_message_age_vs_header, .99) OVER(PARTITION BY dt, base64_url) AS p99_quartile_vehicle_message_age_vs_header
---     FROM vehicle_positions_ages
--- ),
-
--- summarize_intra_message_ages AS (
---     SELECT
---         dt,
---         base64_url,
---         median_vehicle_message_age_vs_header,
---         p25_vehicle_message_age_vs_header,
---         p75_vehicle_message_age_vs_header,
---         p90_vehicle_message_age_vs_header,
---         p99_quartile_vehicle_message_age_vs_header,
---         MAX(_vehicle_message_age_vs_header) AS max_vehicle_message_age_vs_header,
---         MIN(_vehicle_message_age_vs_header) AS min_vehicle_message_age_vs_header,
---         AVG(_vehicle_message_age_vs_header) AS avg_vehicle_message_age_vs_header,
---     FROM intra_message_age_percentiles
---     GROUP BY 1, 2, 3, 4, 5, 6, 7
--- ),
-
 fct_daily_vehicle_positions_message_age_summary AS (
     SELECT
         {{ dbt_utils.surrogate_key(['dt', 'base64_url']) }} AS key,
@@ -167,8 +139,6 @@ fct_daily_vehicle_positions_message_age_summary AS (
     FROM summarize_header_ages
     LEFT JOIN summarize_vehicle_ages
         USING (dt, base64_url)
-    -- LEFT JOIN summarize_intra_message_ages
-    --     USING (dt, base64_url)
 )
 
 SELECT * FROM fct_daily_vehicle_positions_message_age_summary

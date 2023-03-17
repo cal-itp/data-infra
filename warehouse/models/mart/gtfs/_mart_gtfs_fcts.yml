@@ -218,21 +218,23 @@ models:
       - name: _header_message_age
         description: |
           Difference between `_extract_ts` (time at which we scraped the message) and `header_timestamp` (timestamp
-          of overall message from producer). Because of delay in the request process, the actual scrape request may occur up to a few
+          of overall message from producer; see https://gtfs.org/realtime/reference/#message-feedheader).
+          Because of delay in the request process, the actual scrape request may occur up to a few
           seconds after `_extract_ts`, and it may take time for the producer to respond to the request, so
-          this field should only be interpreted as accurate within about 5 seconds (do not try to do extremely precise
+          this field should only be interpreted as accurate within 3-4 seconds (do not try to do extremely precise
           measurements below that level.)
       - name: _vehicle_message_age
         description: |
           Difference between `_extract_ts` (time at which we scraped the message) and `vehicle_timestamp` (timestamp
-          of individual vehicle message from producer). Because of delay in the request process, the actual scrape request may occur up to a few
+          of individual vehicle message from producer; see https://gtfs.org/realtime/reference/#message-vehicleposition).
+          Because of delay in the request process, the actual scrape request may occur up to a few
           seconds after `_extract_ts`, and it may take time for the producer to respond to the request, so
-          this field should only be interpreted as accurate within about 5 seconds (do not try to do extremely precise
+          this field should only be interpreted as accurate within 3-4 seconds (do not try to do extremely precise
           measurements below that level.)
       - name: _vehicle_message_age_vs_header
         description: |
-          Difference between `header_timestamp` (timestamp of overall message from producer) and `vehicle_timestamp`
-          (timestamp of individual vehicle message from producer).
+          Difference between `header_timestamp` (timestamp of overall message from producer; see https://gtfs.org/realtime/reference/#message-feedheader)
+          and `vehicle_timestamp` (timestamp of individual vehicle message from producer; see https://gtfs.org/realtime/reference/#message-vehicleposition).
       - name: _gtfs_dataset_name
         description: |
           String name of the GTFS dataset of which this message is a part.
