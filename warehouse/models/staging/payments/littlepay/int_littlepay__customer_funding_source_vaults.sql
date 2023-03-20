@@ -1,7 +1,7 @@
 WITH deduped AS (
     SELECT *
     FROM {{ ref('stg_littlepay__customer_funding_source') }}
-    QUALIFY ROW_NUMBER() OVER (PARTITION BY funding_source_id ORDER BY ts DESC) = 1
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY funding_source_id ORDER BY littlepay_export_ts DESC) = 1
 ),
 
 int_littlepay__customer_funding_source_vaults AS (
@@ -22,16 +22,16 @@ int_littlepay__customer_funding_source_vaults AS (
         -- there is a previous record, assume this record is valid since the time
         -- the file was exported.
         CASE
-            WHEN LEAD(ts) OVER unique_ids IS NULL
-                THEN TIMESTAMP('1899-01-01 00:00:00+00:00')
-            ELSE ts END AS calitp_valid_at,
+            WHEN LEAD(littlepay_export_ts) OVER unique_ids IS NULL
+                THEN DATETIME('1899-01-01 00:00:00')
+            ELSE littlepay_export_ts END AS calitp_valid_at,
 
         -- If there is no record lagging this one over the specified window, then
         -- assume that this record will be valid forever. Otherwise assume it is
         -- invalid at the time that the next record was exported.
         COALESCE(
-            LAG(ts) OVER unique_ids,
-            TIMESTAMP('2099-01-01 00:00:00+00:00')) AS calitp_invalid_at
+            LAG(littlepay_export_ts) OVER unique_ids,
+            DATETIME('2099-01-01 00:00:00')) AS calitp_invalid_at
 
     FROM deduped
     WINDOW unique_ids AS (

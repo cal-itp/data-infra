@@ -1,5 +1,5 @@
 WITH source AS (
-    SELECT * FROM {{ source('external_littlepay', 'micropayments') }}
+    SELECT * FROM {{ littlepay_source('external_littlepay', 'micropayments') }}
 ),
 
 stg_littlepay__micropayments AS (
@@ -20,8 +20,9 @@ stg_littlepay__micropayments AS (
         `instance`,
         extract_filename,
         ts,
+        littlepay_export_ts,
     FROM source
-    QUALIFY ROW_NUMBER() OVER (PARTITION BY micropayment_id ORDER BY ts DESC, transaction_time DESC) = 1
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY micropayment_id ORDER BY littlepay_export_ts DESC, transaction_time DESC) = 1
 )
 
 SELECT * FROM stg_littlepay__micropayments

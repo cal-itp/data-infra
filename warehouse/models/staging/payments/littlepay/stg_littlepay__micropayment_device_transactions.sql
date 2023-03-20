@@ -1,5 +1,5 @@
 WITH source AS (
-    SELECT * FROM {{ source('external_littlepay', 'micropayment_device_transactions') }}
+    SELECT * FROM {{ littlepay_source('external_littlepay', 'micropayment_device_transactions') }}
 ),
 
 stg_littlepay__micropayment_device_transactions AS (
@@ -12,8 +12,9 @@ stg_littlepay__micropayment_device_transactions AS (
         ts,
     FROM source
     QUALIFY ROW_NUMBER() OVER (
-        PARTITION BY littlepay_transaction_id, micropayment_id, ts
-        ORDER BY ts DESC
+        -- could this be a distinct?
+        PARTITION BY littlepay_transaction_id, micropayment_id
+        ORDER BY littlepay_export_ts DESC
     ) = 1
 )
 

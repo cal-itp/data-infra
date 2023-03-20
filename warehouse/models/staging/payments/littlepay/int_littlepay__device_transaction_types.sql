@@ -2,7 +2,7 @@ WITH stg_littlepay__micropayments AS (
     SELECT * FROM {{ ref('stg_littlepay__micropayments') }}
 ),
 
-stg_littlepay__micropayment_device_transactions AS (
+int_littlepay__cleaned_micropayment_device_transactions AS (
     SELECT * FROM {{ ref('int_littlepay__cleaned_micropayment_device_transactions') }}
 ),
 
@@ -13,7 +13,7 @@ stg_littlepay__device_transactions AS (
 single_device_transaction_ids AS (
     SELECT littlepay_transaction_id
     FROM stg_littlepay__micropayments AS m
-    INNER JOIN stg_littlepay__micropayment_device_transactions USING (micropayment_id)
+    INNER JOIN int_littlepay__cleaned_micropayment_device_transactions USING (micropayment_id)
     INNER JOIN stg_littlepay__device_transactions USING (littlepay_transaction_id)
     WHERE m.charge_type = 'flat_fare'
 ),
@@ -21,7 +21,7 @@ single_device_transaction_ids AS (
 pending_device_transaction_ids AS (
     SELECT littlepay_transaction_id
     FROM stg_littlepay__micropayments AS m
-    INNER JOIN stg_littlepay__micropayment_device_transactions USING (micropayment_id)
+    INNER JOIN int_littlepay__cleaned_micropayment_device_transactions USING (micropayment_id)
     INNER JOIN stg_littlepay__device_transactions USING (littlepay_transaction_id)
     WHERE m.charge_type = 'pending_charge_fare'
 ),
@@ -32,7 +32,7 @@ potential_tap_on_or_off_micropayment_device_transaction_ids AS (
         littlepay_transaction_id,
         transaction_date_time_utc
     FROM stg_littlepay__micropayments AS m
-    INNER JOIN stg_littlepay__micropayment_device_transactions USING (micropayment_id)
+    INNER JOIN int_littlepay__cleaned_micropayment_device_transactions USING (micropayment_id)
     INNER JOIN stg_littlepay__device_transactions USING (littlepay_transaction_id)
     WHERE m.charge_type = 'complete_variable_fare'
 ),

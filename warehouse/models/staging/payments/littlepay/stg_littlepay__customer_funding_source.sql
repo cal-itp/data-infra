@@ -1,16 +1,5 @@
 WITH source AS (
-    SELECT * FROM {{ source('external_littlepay', 'customer_funding_source') }}
-),
-
-export_timestamped AS (
-    SELECT
-        *,
-        -- have to parse the filename since there are no other timestamps seemingly
-        PARSE_DATETIME(
-            '%Y%m%d%H%M',
-            REGEXP_EXTRACT(extract_filename, '([0-9]{12})_.*')
-        ) AS littlepay_export_ts
-    FROM source
+    SELECT * FROM {{ littlepay_source('external_littlepay', 'customer_funding_source') }}
 ),
 
 stg_littlepay__customer_funding_source AS (
@@ -40,7 +29,7 @@ stg_littlepay__customer_funding_source AS (
         DENSE_RANK() OVER (
             PARTITION BY customer_id
             ORDER BY littlepay_export_ts DESC) AS calitp_customer_id_rank,
-    FROM export_timestamped
+    FROM source
 )
 
 SELECT * FROM stg_littlepay__customer_funding_source

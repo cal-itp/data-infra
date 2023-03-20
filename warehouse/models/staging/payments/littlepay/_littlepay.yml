@@ -18,6 +18,13 @@ sources:
       - name: settlements
 
 models:
+  - name: int_littlepay__cleaned_micropayment_device_transactions
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - micropayment_id
+            - littlepay_transaction_id
+
   - name: int_littlepay__customer_funding_source_vaults
     description: |
       Derived from customer_funding_source records.
@@ -193,6 +200,9 @@ models:
           If the device does not support GPS, then this field will not be included.
       - name: littlepay_transaction_id
         description: '{{ doc("device_transactions_littlepay_transaction_id") }}'
+        tests:
+          - not_null
+          - unique
       - name: location_id
         description: The identifier of the location where the transaction occurred.
       - name: location_name
@@ -306,6 +316,9 @@ models:
     columns:
       - name: micropayment_id
         description: '{{ doc("micropayments_micropayment_id") }}'
+        tests:
+          - not_null
+          - unique
       - name: aggregation_id
         description: Identifies the aggregation that the micropayment belongs to.
       - name: participant_id

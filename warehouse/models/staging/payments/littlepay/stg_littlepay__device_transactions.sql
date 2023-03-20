@@ -1,5 +1,5 @@
 WITH source AS (
-    SELECT * FROM {{ source('external_littlepay', 'device_transactions') }}
+    SELECT * FROM {{ littlepay_source('external_littlepay', 'device_transactions') }}
 ),
 
 stg_littlepay__device_transactions AS (
@@ -36,8 +36,9 @@ stg_littlepay__device_transactions AS (
         `instance`,
         extract_filename,
         ts,
+        littlepay_export_ts,
     FROM source
-    QUALIFY ROW_NUMBER() OVER (PARTITION BY littlepay_transaction_id ORDER BY ts DESC, transaction_date_time_utc DESC) = 1
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY littlepay_transaction_id ORDER BY littlepay_export_ts DESC, transaction_date_time_utc DESC) = 1
 )
 
 SELECT * FROM stg_littlepay__device_transactions
