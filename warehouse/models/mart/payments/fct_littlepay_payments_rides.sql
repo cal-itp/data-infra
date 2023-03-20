@@ -78,12 +78,12 @@ int_littlepay__device_transaction_types AS (
     FROM {{ ref('int_littlepay__device_transaction_types') }}
 ),
 
-stg_littlepay__customers AS (
+int_littlepay__customers AS (
     SELECT *
     FROM {{ ref('int_littlepay__customers') }}
 ),
 
-stg_littlepay__customer_funding_source_vaults AS (
+int_littlepay__customer_funding_source_vaults AS (
     SELECT *
     FROM {{ ref('int_littlepay__customer_funding_source_vaults') }}
 ),
@@ -299,9 +299,9 @@ join_table AS (
     FROM debited_micropayments AS m
     LEFT JOIN refunded_micropayments AS mr
         ON m.micropayment_id = mr.micropayment_id
-    INNER JOIN stg_littlepay__customers AS c
+    INNER JOIN int_littlepay__customers AS c
         ON m.customer_id = c.customer_id
-    LEFT JOIN stg_littlepay__customer_funding_source_vaults AS v
+    LEFT JOIN int_littlepay__customer_funding_source_vaults AS v
         ON m.funding_source_vault_id = v.funding_source_vault_id
             AND m.transaction_time >= v.calitp_valid_at
             AND m.transaction_time < v.calitp_invalid_at

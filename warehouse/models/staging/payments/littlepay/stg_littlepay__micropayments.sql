@@ -9,7 +9,7 @@ stg_littlepay__micropayments AS (
         participant_id,
         customer_id,
         funding_source_vault_id,
-        transaction_time,
+        TIMESTAMP(transaction_time) AS transaction_time,
         payment_liability,
         charge_amount,
         nominal_amount,

@@ -28,6 +28,12 @@ models:
   - name: int_littlepay__customer_funding_source_vaults
     description: |
       Derived from customer_funding_source records.
+    tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: calitp_valid_at
+          upper_bound_column: calitp_invalid_at
+          partition_by: funding_source_vault_id
+#          gaps: required
     columns:
       - name: funding_source_id
         tests:

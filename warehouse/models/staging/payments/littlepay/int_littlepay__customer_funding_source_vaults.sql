@@ -23,7 +23,7 @@ int_littlepay__customer_funding_source_vaults AS (
         -- the file was exported.
         CASE
             WHEN LEAD(littlepay_export_ts) OVER unique_ids IS NULL
-                THEN DATETIME('1899-01-01 00:00:00')
+                THEN TIMESTAMP('1899-01-01 00:00:00')
             ELSE littlepay_export_ts END AS calitp_valid_at,
 
         -- If there is no record lagging this one over the specified window, then
@@ -31,7 +31,7 @@ int_littlepay__customer_funding_source_vaults AS (
         -- invalid at the time that the next record was exported.
         COALESCE(
             LAG(littlepay_export_ts) OVER unique_ids,
-            DATETIME('2099-01-01 00:00:00')) AS calitp_invalid_at
+            TIMESTAMP('2099-01-01 00:00:00')) AS calitp_invalid_at
 
     FROM deduped
     WINDOW unique_ids AS (
