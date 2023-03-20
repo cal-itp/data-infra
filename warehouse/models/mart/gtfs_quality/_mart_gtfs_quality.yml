@@ -581,6 +581,26 @@ models:
         description: |
           Boolean for whether this file was present for all feeds for this organization
           on `date_checked`.
+  - name: fct_monthly_reports_site_organization_guideline_checks
+    description: |
+      Two checks per month on whether each of the Compliance (Schedule) guideline checks passed for each organization.
+      Table is intended to be consumed specifically by reports.calitp.org.
+    columns:
+      - *key
+      - *publish_date_fk
+      - name: organization_name
+      - name: organization_source_record_id
+      - name: organization_itp_id
+      - name: date_checked
+        description: |
+          Date on which file presence was checked. (Will be the 4th and 18th of each month.)
+      - name: feature
+      - name: check
+      - name: status
+        description: |
+          The status of this check for this organization.
+          Note that this is an aggregation of the status of this check for all services under this organization,
+          so if any service fails, it will appear as FAIL.
 
   - name: fct_monthly_route_id_changes
     description: |
@@ -618,6 +638,7 @@ exposures:
      - ref("fct_daily_reports_site_organization_scheduled_service_summary")
      - ref("idx_monthly_reports_site")
      - ref("fct_monthly_reports_site_organization_file_checks")
+     - ref("fct_monthly_reports_site_organization_guideline_checks")
      - ref("fct_monthly_reports_site_organization_validation_codes")
      - ref("fct_monthly_route_id_changes")
      - ref("fct_monthly_stop_id_changes")
