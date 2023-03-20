@@ -1,10 +1,16 @@
-WITH select_first_rank AS (
+WITH stg_littlepay__customer_funding_source AS (
+    SELECT *
+    FROM {{ ref('stg_littlepay__customer_funding_source') }}
+),
+
+-- We want the last occurrence by funding_source_id and customer_id
+select_first_rank AS (
     SELECT DISTINCT
         customer_id,
         principal_customer_id
-    FROM {{ ref('stg_littlepay__customer_funding_source') }}
---     WHERE calitp_dupe_number = 1
---         AND calitp_customer_id_rank = 1
+    FROM stg_littlepay__customer_funding_source
+    WHERE calitp_customer_id_rank = 1
+        AND calitp_funding_source_id_rank = 1
 ),
 
 find_earliest_tap AS (

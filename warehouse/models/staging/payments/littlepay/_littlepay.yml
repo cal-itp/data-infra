@@ -19,6 +19,8 @@ sources:
 
 models:
   - name: int_littlepay__customer_funding_source_vaults
+    description: |
+      Derived from customer_funding_source records.
     columns:
       - name: funding_source_id
         tests:
@@ -45,6 +47,7 @@ models:
 
   - name: int_littlepay__customers
     description: |
+      Derived from customer_funding_source records.
       This table most importantly serves as a mapping from each customer_id to a
       principal or canonical customer_id. Each customer_id with the same
       principal_customer_id should be assumed to be the same person. A customer_id
@@ -103,6 +106,10 @@ models:
     tests:
       - *littlepay_uniqueness
     columns:
+      - name: littlepay_export_ts
+        description: Export timestamp parsed from filename.
+        tests:
+          - not_null
       - name: masked_pan
         description: First six and last four numbers of the PAN.
       - name: issuer_country
