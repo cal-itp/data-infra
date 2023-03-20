@@ -20,14 +20,22 @@ models:
 
 # Schedule + RT combined URL checks reindexed
 # TODO: what kind of yaml do we want for these? specifically what tests
-
   - name: int_gtfs_quality__feed_aggregator
 
 # RT feed checks reindexed
 # TODO: what kind of yaml do we want for these? specifically what tests
   - name: int_gtfs_quality__trip_id_alignment
+  - name: int_gtfs_quality__rt_20sec_vp
+  - name: int_gtfs_quality__no_rt_validation_errors
+  - name: int_gtfs_quality__no_stale_vehicle_positions
 
 # Service checks reindexed
 # TODO: what kind of yaml do we want for these? specifically what tests
   - name: int_gtfs_quality__scheduled_trips_in_tu_feed
   - name: int_gtfs_quality__trip_planners
+
+# RT URL checks reindexed
+# TODO: what kind of yaml do we want for these? specifically what tests
+  - name: int_gtfs_quality__rt_feeds_present
+  - name: int_gtfs_quality__rt_https
+  - name: int_gtfs_quality__rt_protobuf_error
