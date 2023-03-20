@@ -368,12 +368,11 @@ def validate_and_upload(
     pbar=None,
 ) -> List[RTFileProcessingOutcome]:
     first_extract = hour.extracts[0]
-    fallback_days = 0
-    for fallback_days in range(
-        0, 8
+    today = pendulum.today()
+    for target_date in reversed(
+        list(today - today.subtract(days=7))
     ):  # Fall back to most recent available schedule within 7 days
         try:
-            target_date = first_extract.dt - datetime.timedelta(days=fallback_days)
             schedule_extract = get_schedule_extracts_for_day(target_date)[
                 first_extract.config.base64_validation_url
             ]
