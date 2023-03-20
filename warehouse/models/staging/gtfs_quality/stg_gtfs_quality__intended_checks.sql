@@ -1,4 +1,5 @@
 {{ config(materialized='ephemeral') }}
+
 WITH stg_gtfs_quality__intended_checks AS (
     SELECT {{ static_feed_downloaded_successfully() }} AS check, {{ compliance_schedule() }} AS feature, {{ schedule_url() }} AS entity
     UNION ALL
@@ -20,31 +21,31 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ no_expired_services() }}, {{ best_practices_alignment_schedule() }}, {{ schedule_feed() }}
     UNION ALL
-    SELECT {{ no_rt_validation_errors_vp() }}, {{ compliance_rt() }}, {{ rt_feed() }}
+    SELECT {{ no_rt_validation_errors_vp() }}, {{ compliance_rt() }}, {{ rt_feed_vp() }}
     UNION ALL
-    SELECT {{ no_rt_validation_errors_tu() }}, {{ compliance_rt() }}, {{ rt_feed() }}
+    SELECT {{ no_rt_validation_errors_tu() }}, {{ compliance_rt() }}, {{ rt_feed_tu() }}
     UNION ALL
-    SELECT {{ no_rt_validation_errors_sa() }}, {{ compliance_rt() }}, {{ rt_feed() }}
+    SELECT {{ no_rt_validation_errors_sa() }}, {{ compliance_rt() }}, {{ rt_feed_sa() }}
     UNION ALL
     SELECT {{ trip_id_alignment() }}, {{ fixed_route_completeness() }}, {{ rt_feed() }}
     UNION ALL
-    SELECT {{ feed_present_vehicle_positions() }}, {{ compliance_rt() }}, {{ rt_url() }}
+    SELECT {{ feed_present_vehicle_positions() }}, {{ compliance_rt() }}, {{ rt_url_vp() }}
     UNION ALL
-    SELECT {{ feed_present_trip_updates() }}, {{ compliance_rt() }}, {{ rt_url() }}
+    SELECT {{ feed_present_trip_updates() }}, {{ compliance_rt() }}, {{ rt_url_tu() }}
     UNION ALL
-    SELECT {{ feed_present_service_alerts() }}, {{ compliance_rt() }}, {{ rt_url() }}
+    SELECT {{ feed_present_service_alerts() }}, {{ compliance_rt() }}, {{ rt_url_sa() }}
     UNION ALL
-    SELECT {{ rt_https_trip_updates() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
+    SELECT {{ rt_https_trip_updates() }}, {{ best_practices_alignment_rt() }}, {{ rt_url_tu() }}
     UNION ALL
-    SELECT {{ rt_https_vehicle_positions() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
+    SELECT {{ rt_https_vehicle_positions() }}, {{ best_practices_alignment_rt() }}, {{ rt_url_vp() }}
     UNION ALL
-    SELECT {{ rt_https_service_alerts() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
+    SELECT {{ rt_https_service_alerts() }}, {{ best_practices_alignment_rt() }}, {{ rt_url_sa() }}
     UNION ALL
-    SELECT {{ no_pb_error_tu() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
+    SELECT {{ no_pb_error_tu() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_tu() }}
     UNION ALL
-    SELECT {{ no_pb_error_vp() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
+    SELECT {{ no_pb_error_vp() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_vp() }}
     UNION ALL
-    SELECT {{ no_pb_error_sa() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
+    SELECT {{ no_pb_error_sa() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_sa() }}
     UNION ALL
     SELECT {{ no_7_day_feed_expiration() }}, {{ best_practices_alignment_schedule() }}, {{ schedule_feed() }}
     UNION ALL
@@ -52,7 +53,7 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ passes_fares_validator() }}, {{ fare_completeness() }}, {{ schedule_feed() }}
     UNION ALL
-    SELECT {{ rt_20sec_vp() }}, {{ accurate_service_data() }}, {{ rt_feed() }}
+    SELECT {{ rt_20sec_vp() }}, {{ accurate_service_data() }}, {{ rt_feed_vp() }}
     UNION ALL
     SELECT {{ rt_20sec_tu() }}, {{ accurate_service_data() }}, {{ rt_feed() }}
     UNION ALL
@@ -60,7 +61,7 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ lead_time() }}, {{ up_to_dateness() }}, {{ schedule_feed() }}
     UNION ALL
-    SELECT {{ no_stale_vehicle_positions() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
+    SELECT {{ no_stale_vehicle_positions() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_vp() }}
     UNION ALL
     SELECT {{ no_stale_trip_updates() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
     UNION ALL

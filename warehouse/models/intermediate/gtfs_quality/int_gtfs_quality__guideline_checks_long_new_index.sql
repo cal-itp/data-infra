@@ -18,7 +18,13 @@ WITH unioned AS (
             ref('int_gtfs_quality__include_tts'),
             ref('int_gtfs_quality__shapes_valid'),
             ref('int_gtfs_quality__pathways_valid'),
-            ref('int_gtfs_quality__technical_contact_listed')
+            ref('int_gtfs_quality__technical_contact_listed'),
+            ref('int_gtfs_quality__rt_feeds_present'),
+            ref('int_gtfs_quality__rt_https'),
+            ref('int_gtfs_quality__no_rt_validation_errors'),
+            ref('int_gtfs_quality__rt_protobuf_error'),
+            ref('int_gtfs_quality__rt_20sec_vp'),
+            ref('int_gtfs_quality__no_stale_vehicle_positions')
         ],
     ) }}
 ),

@@ -1,41 +1,37 @@
-WITH feed_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_quality__rt_url_guideline_index') }}
-),
-
-fct_daily_rt_feed_files AS (
-    SELECT * FROM {{ ref('fct_daily_rt_feed_files') }}
-),
-
-count_files AS (
+WITH guideline_index AS (
     SELECT
-        base64_url,
-        date,
-        feed_type,
-        SUM(parse_success_file_count) AS rt_files
-    FROM fct_daily_rt_feed_files
-   GROUP BY 1, 2, 3
+        *
+    FROM {{ ref('int_gtfs_quality__guideline_checks_index') }}
+    WHERE check IN ({{ feed_present_trip_updates() }},
+        {{ feed_present_vehicle_positions() }},
+        {{ feed_present_service_alerts() }})
+),
+
+check_start AS (
+    SELECT MIN(date) AS first_check_date
+    FROM guideline_index
+    WHERE had_rt_files
 ),
 
 int_gtfs_quality__rt_feeds_present AS (
     SELECT
-        idx.date,
-        idx.base64_url,
-        idx.feed_type,
-        CASE WHEN idx.feed_type = 'service_alerts' THEN {{ feed_present_service_alerts() }}
-             WHEN idx.feed_type = 'trip_updates' THEN {{ feed_present_trip_updates() }}
-             WHEN idx.feed_type = 'vehicle_positions' THEN {{ feed_present_vehicle_positions() }}
-        END AS check,
-        {{ compliance_rt() }} AS feature,
-        rt_files,
+        idx.* EXCEPT(status),
+        first_check_date,
         CASE
-            WHEN rt_files > 0 THEN {{ guidelines_pass_status() }}
-            WHEN COALESCE(rt_files, 0) = 0 THEN {{ guidelines_fail_status() }}
+        -- check that the row has the right entity + check combo, then assign statuses
+            WHEN (idx.has_rt_url_tu AND check = {{ feed_present_trip_updates() }})
+                OR (idx.has_rt_url_vp AND check = {{ feed_present_vehicle_positions() }})
+                OR (idx.has_rt_url_sa AND check = {{ feed_present_service_alerts() }})
+                   THEN
+                    CASE
+                        WHEN idx.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
+                        WHEN had_rt_files THEN {{ guidelines_pass_status() }}
+                        WHEN NOT had_rt_files THEN {{ guidelines_fail_status() }}
+                    END
+            ELSE idx.status
         END AS status,
-    FROM feed_guideline_index AS idx
-    LEFT JOIN count_files AS files
-           ON idx.date = files.date
-          AND idx.base64_url = files.base64_url
-          AND idx.feed_type = files.feed_type
+      FROM guideline_index AS idx
+      CROSS JOIN check_start
 )
 
 SELECT * FROM int_gtfs_quality__rt_feeds_present
