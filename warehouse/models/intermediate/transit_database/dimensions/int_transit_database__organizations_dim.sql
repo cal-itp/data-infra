@@ -6,7 +6,7 @@ WITH dim AS (
         date_col = 'dt',
         record_id_col = 'id',
         array_cols = ['roles', 'alias', 'mobility_services_managed', 'parent_organization',
-            'funding_programs', 'gtfs_datasets_produced']
+            'funding_programs', 'gtfs_datasets_produced', 'hq_county_geography']
         ) }}
 ),
 
@@ -33,6 +33,7 @@ int_transit_database__organizations_dim AS (
         gtfs_realtime_status,
         assessment_status,
         manual_check__contact_on_website,
+        hq_county_geography,
         _is_current,
         _valid_from,
         _valid_to
