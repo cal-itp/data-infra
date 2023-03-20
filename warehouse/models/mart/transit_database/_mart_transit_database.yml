@@ -468,7 +468,6 @@ models:
       - name: organization_hubspot_company_record_id
         description: |
           Hubspot CRM record ID for this organization.
-
   - name: dim_ntd_agency_info
     description: '{{ doc("ntd_agency_info_table") }}'
     columns:
@@ -511,6 +510,24 @@ models:
       - name: total_voms
       - name: volunteer_drivers
       - name: personal_vehicles
+  - name: dim_county_geography
+    description: '{{ doc("county_geography_table") }}'
+    columns:
+      - *key
+      - name: source_record_id
+      - name: name
+      - name: fips
+      - name: msa
+      - name: caltrans_district
+      - name: caltrans_district_name
+      - name: rtpa
+      - name: mpo
+      - name: place_geography
+      - name: organization_key
+      - name: service_key
+      - name: _is_current
+      - name: _valid_from
+      - name: _valid_to
   - name: bridge_components_x_properties_and_features
     description: |
       Mapping table between components and properties_and_features.

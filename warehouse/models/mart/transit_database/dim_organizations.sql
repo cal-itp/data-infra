@@ -12,10 +12,6 @@ dim_annual_database_agency_information AS (
     SELECT * FROM {{ ref('dim_annual_database_agency_information') }}
 ),
 
-bridge_organizations_x_county_geography AS (
-    SELECT * FROM {{ ref('bridge_organizations_x_county_geography') }}
-),
-
 dim_organizations AS (
     SELECT
 
@@ -41,8 +37,6 @@ dim_organizations AS (
         dim.manual_check__contact_on_website,
         dim.alias,
 
-        geography_bridge.name AS hq_county_geography,
-
         dim._is_current,
         dim._valid_from,
         dim._valid_to
@@ -55,8 +49,6 @@ dim_organizations AS (
         ON ntd_to_org.ntd_id = ntd.ntd_id
         AND ntd._is_current
         AND ntd.year = 2021
-    LEFT JOIN bridge_organizations_x_county_geography AS geography_bridge
-        ON dim.source_record_id = geography_bridge.source_record_id
 )
 
 SELECT * FROM dim_organizations

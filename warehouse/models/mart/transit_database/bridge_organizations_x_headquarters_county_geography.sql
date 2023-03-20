@@ -12,7 +12,7 @@ geography AS ( -- noqa
 
 bridge_organizations_x_county_geography AS (
     SELECT
-        orgs.source_record_id AS source_record_id,
+        orgs.key AS organization_key,
         orgs.name AS organization_name,
         geography.key AS county_geography_key,
         geography.name,
