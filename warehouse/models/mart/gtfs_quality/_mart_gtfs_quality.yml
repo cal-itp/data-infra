@@ -630,7 +630,7 @@ models:
 
   - name: fct_daily_vehicle_positions_message_age_summary
     description: |
-      Table summarizing the age of various message components by RT URL by date.
+      Table summarizing the age in seconds of various message components by RT URL by date.
       Terms:
       - For definitions of the underlying `header_message_age`, `vehicle_message_age`, and `vehice_message_age_vs_header`
         values, see `fct_vehicle_positions_messages`. In particular, note that a negative value indicates that the
