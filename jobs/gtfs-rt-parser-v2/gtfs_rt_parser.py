@@ -368,9 +368,9 @@ def validate_and_upload(
     pbar=None,
 ) -> List[RTFileProcessingOutcome]:
     first_extract = hour.extracts[0]
-    today = first_extract.dt
+    extract_day = first_extract.dt
     for target_date in reversed(
-        list(today - today.subtract(days=7))
+        list(extract_day - extract_day.subtract(days=7))
     ):  # Fall back to most recent available schedule within 7 days
         try:
             schedule_extract = get_schedule_extracts_for_day(target_date)[
