@@ -7,6 +7,7 @@ WITH dim AS (
 
 dim_services AS (
     SELECT
+
         key,
         source_record_id,
         name,
@@ -19,9 +20,11 @@ dim_services AS (
         assessment_status,
         manual_check__gtfs_realtime_data_ingested_in_trip_planner,
         manual_check__gtfs_schedule_data_ingested_in_trip_planner,
+        deprecated_date,
         _valid_from,
         _valid_to,
         _is_current
+
     FROM dim
 )
 

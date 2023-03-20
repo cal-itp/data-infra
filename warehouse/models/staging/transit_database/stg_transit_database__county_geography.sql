@@ -18,6 +18,8 @@ stg_transit_database__county_geography AS (
         rtpa,
         mpo,
         place_geography,
+        organizations,
+        services,
         dt
     FROM once_daily_county_geography
 )

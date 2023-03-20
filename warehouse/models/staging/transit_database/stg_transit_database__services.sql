@@ -26,6 +26,8 @@ stg_transit_database__services AS (
         manual_check__gtfs_realtime_data_ingested_in_trip_planner,
         manual_check__gtfs_schedule_data_ingested_in_trip_planner,
         primary_mode,
+        deprecated_date,
+        operating_county_geographies,
         dt
     FROM once_daily_services
 )
