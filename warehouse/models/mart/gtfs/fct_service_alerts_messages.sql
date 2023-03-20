@@ -35,6 +35,7 @@ fct_service_alerts_messages AS (
         _extract_ts,
         _config_extract_ts,
         _gtfs_dataset_name,
+        TIMESTAMP_DIFF(_extract_ts, header_timestamp, SECOND) AS _header_message_age,
         header_timestamp,
         header_version,
         header_incrementality,

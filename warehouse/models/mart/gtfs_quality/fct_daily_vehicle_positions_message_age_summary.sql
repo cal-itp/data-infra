@@ -46,7 +46,7 @@ header_age_percentiles AS (
         PERCENTILE_CONT(_header_message_age, .25) OVER(PARTITION BY dt, base64_url) AS p25_header_message_age,
         PERCENTILE_CONT(_header_message_age, .75) OVER(PARTITION BY dt, base64_url) AS p75_header_message_age,
         PERCENTILE_CONT(_header_message_age, .90) OVER(PARTITION BY dt, base64_url) AS p90_header_message_age,
-        PERCENTILE_CONT(_header_message_age, .99) OVER(PARTITION BY dt, base64_url) AS p99_quartile_header_message_age
+        PERCENTILE_CONT(_header_message_age, .99) OVER(PARTITION BY dt, base64_url) AS p99_header_message_age
     FROM distinct_headers
 ),
 
@@ -58,7 +58,7 @@ summarize_header_ages AS (
         p25_header_message_age,
         p75_header_message_age,
         p90_header_message_age,
-        p99_quartile_header_message_age,
+        p99_header_message_age,
         MAX(_header_message_age) AS max_header_message_age,
         MIN(_header_message_age) AS min_header_message_age,
         AVG(_header_message_age) AS avg_header_message_age,
@@ -74,12 +74,12 @@ vehicle_age_percentiles AS (
         PERCENTILE_CONT(_vehicle_message_age, .25) OVER(PARTITION BY dt, base64_url) AS p25_vehicle_message_age,
         PERCENTILE_CONT(_vehicle_message_age, .75) OVER(PARTITION BY dt, base64_url) AS p75_vehicle_message_age,
         PERCENTILE_CONT(_vehicle_message_age, .90) OVER(PARTITION BY dt, base64_url) AS p90_vehicle_message_age,
-        PERCENTILE_CONT(_vehicle_message_age, .99) OVER(PARTITION BY dt, base64_url) AS p99_quartile_vehicle_message_age,
+        PERCENTILE_CONT(_vehicle_message_age, .99) OVER(PARTITION BY dt, base64_url) AS p99_vehicle_message_age,
         PERCENTILE_CONT(_vehicle_message_age_vs_header, .5) OVER(PARTITION BY dt, base64_url) AS median_vehicle_message_age_vs_header,
         PERCENTILE_CONT(_vehicle_message_age_vs_header, .25) OVER(PARTITION BY dt, base64_url) AS p25_vehicle_message_age_vs_header,
         PERCENTILE_CONT(_vehicle_message_age_vs_header, .75) OVER(PARTITION BY dt, base64_url) AS p75_vehicle_message_age_vs_header,
         PERCENTILE_CONT(_vehicle_message_age_vs_header, .90) OVER(PARTITION BY dt, base64_url) AS p90_vehicle_message_age_vs_header,
-        PERCENTILE_CONT(_vehicle_message_age_vs_header, .99) OVER(PARTITION BY dt, base64_url) AS p99_quartile_vehicle_message_age_vs_header
+        PERCENTILE_CONT(_vehicle_message_age_vs_header, .99) OVER(PARTITION BY dt, base64_url) AS p99_vehicle_message_age_vs_header
     FROM vehicle_positions_ages
 ),
 
@@ -91,12 +91,12 @@ summarize_vehicle_ages AS (
         p25_vehicle_message_age,
         p75_vehicle_message_age,
         p90_vehicle_message_age,
-        p99_quartile_vehicle_message_age,
+        p99_vehicle_message_age,
         median_vehicle_message_age_vs_header,
         p25_vehicle_message_age_vs_header,
         p75_vehicle_message_age_vs_header,
         p90_vehicle_message_age_vs_header,
-        p99_quartile_vehicle_message_age_vs_header,
+        p99_vehicle_message_age_vs_header,
         MAX(_vehicle_message_age) AS max_vehicle_message_age,
         MIN(_vehicle_message_age) AS min_vehicle_message_age,
         AVG(_vehicle_message_age) AS avg_vehicle_message_age,
@@ -116,7 +116,7 @@ fct_daily_vehicle_positions_message_age_summary AS (
         p25_header_message_age,
         p75_header_message_age,
         p90_header_message_age,
-        p99_quartile_header_message_age,
+        p99_header_message_age,
         max_header_message_age,
         min_header_message_age,
         avg_header_message_age,
@@ -124,7 +124,7 @@ fct_daily_vehicle_positions_message_age_summary AS (
         p25_vehicle_message_age,
         p75_vehicle_message_age,
         p90_vehicle_message_age,
-        p99_quartile_vehicle_message_age,
+        p99_vehicle_message_age,
         max_vehicle_message_age,
         min_vehicle_message_age,
         avg_vehicle_message_age,
@@ -132,7 +132,7 @@ fct_daily_vehicle_positions_message_age_summary AS (
         p25_vehicle_message_age_vs_header,
         p75_vehicle_message_age_vs_header,
         p90_vehicle_message_age_vs_header,
-        p99_quartile_vehicle_message_age_vs_header,
+        p99_vehicle_message_age_vs_header,
         max_vehicle_message_age_vs_header,
         min_vehicle_message_age_vs_header,
         avg_vehicle_message_age_vs_header
