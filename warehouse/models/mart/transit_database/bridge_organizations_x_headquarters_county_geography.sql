@@ -10,7 +10,7 @@ geography AS ( -- noqa
     FROM {{ ref('int_transit_database__county_geography_dim') }}
 ),
 
-bridge_organizations_x_county_geography AS (
+bridge_organizations_x_headquarters_county_geography AS (
     SELECT
         orgs.key AS organization_key,
         orgs.name AS organization_name,
@@ -26,4 +26,4 @@ bridge_organizations_x_county_geography AS (
         AND orgs._valid_to > geography._valid_from
 )
 
-SELECT * FROM bridge_organizations_x_county_geography
+SELECT * FROM bridge_organizations_x_headquarters_county_geography

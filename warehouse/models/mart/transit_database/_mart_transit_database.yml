@@ -520,8 +520,6 @@ models:
       - name: msa
       - name: caltrans_district
       - name: caltrans_district_name
-      - name: rtpa
-      - name: mpo
       - name: place_geography
       - name: organization_key
       - name: service_key
@@ -835,5 +833,21 @@ models:
           - relationships:
              to: ref('dim_modes')
              field: key
-  - name: bridge_organizations_x_county_geography
-  - name: bridge_services_x_county_geography
+  - name: bridge_organizations_x_headquarters_county_geography
+    description: |
+      Mapping table between organizations and associated
+      headquarters county geography records.
+      This is a partially versioned relationship.
+      Because organization records are versioned and headquarters county geography records
+      are current-only this represents relationships between versioned organization
+      records and unversioned headquarters county geography records.
+      Joins via this table can result in fanout.
+  - name: bridge_services_x_operating_county_geographies
+    description: |
+      Mapping table between services and associated
+      operating county geography records.
+      This is a partially versioned relationship.
+      Because services records are versioned and operating county geography records
+      are current-only this represents relationships between versioned service
+      records and unversioned operating county geography records.
+      Joins via this table can result in fanout.

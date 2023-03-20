@@ -18,11 +18,10 @@ stg_transit_database__county_geography AS (
         rtpa,
         mpo,
         place_geography,
-        unnested_organizations AS organizations,
+        organizations,
         services,
         dt
     FROM once_daily_county_geography
-    LEFT JOIN UNNEST(once_daily_county_geography.organizations) AS unnested_organizations
 )
 
 SELECT * FROM stg_transit_database__county_geography

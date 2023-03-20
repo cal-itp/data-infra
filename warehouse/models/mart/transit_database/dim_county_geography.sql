@@ -15,9 +15,6 @@ dim_county_geography AS (
         msa,
         caltrans_district,
         caltrans_district_name,
-        -- rtpa is not a one-to-one relationship
-        rtpa,
-        mpo,
         place_geography,
         organization_key,
         service_key,

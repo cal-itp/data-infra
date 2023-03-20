@@ -10,7 +10,7 @@ county_geography AS ( -- noqa
     FROM {{ ref('int_transit_database__county_geography_dim') }}
 ),
 
-bridge_services_x_county_geography AS (
+bridge_services_x_operating_county_geographies AS (
  {{ transit_database_many_to_many_versioned(
     shared_start_date_name = '_valid_from',
     shared_end_date_name = '_valid_to',
@@ -37,4 +37,4 @@ bridge_services_x_county_geography AS (
     ) }}
 )
 
-SELECT * FROM bridge_services_x_county_geography
+SELECT * FROM bridge_services_x_operating_county_geographies
