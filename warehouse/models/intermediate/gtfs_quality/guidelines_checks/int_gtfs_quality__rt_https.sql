@@ -31,7 +31,7 @@ int_gtfs_quality__rt_https AS (
                 OR (idx.has_rt_url_sa AND check = {{ rt_https_service_alerts() }})
                    THEN
                     CASE
-                        WHEN string_url LIKE 'https%' THEN {{ guidelines_pass_status() }}
+                        WHEN LOWER(string_url) LIKE 'https%' THEN {{ guidelines_pass_status() }}
                         WHEN idx.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
                         WHEN string_url IS NULL THEN {{ guidelines_na_check_status() }}
                         WHEN string_url NOT LIKE 'https%' THEN {{ guidelines_fail_status() }}

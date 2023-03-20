@@ -16,7 +16,7 @@ errors AS (
         date,
         base64_url,
         -- All error codes start with the letter E (warnings start with W)
-        COUNTIF(code LIKE "E%" and total_notices > 0) > 0 AS had_errors
+        COUNTIF(UPPER(code) LIKE "E%" and total_notices > 0) > 0 AS had_errors
     FROM fct_daily_rt_feed_validation_notices
     GROUP BY 1, 2
 ),
