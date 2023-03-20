@@ -368,7 +368,7 @@ def validate_and_upload(
     pbar=None,
 ) -> List[RTFileProcessingOutcome]:
     first_extract = hour.extracts[0]
-    today = pendulum.today()
+    today = first_extract.dt
     for target_date in reversed(
         list(today - today.subtract(days=7))
     ):  # Fall back to most recent available schedule within 7 days
