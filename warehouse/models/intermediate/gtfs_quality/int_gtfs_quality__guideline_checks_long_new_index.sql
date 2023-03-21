@@ -26,7 +26,8 @@ WITH unioned AS (
             ref('int_gtfs_quality__rt_20sec_vp'),
             ref('int_gtfs_quality__no_stale_vehicle_positions'),
             ref('int_gtfs_quality__rt_20sec_tu'),
-            ref('int_gtfs_quality__no_stale_trip_updates')
+            ref('int_gtfs_quality__no_stale_trip_updates'),
+            ref('int_gtfs_quality__no_stale_service_alerts')
         ],
     ) }}
 ),
