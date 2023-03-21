@@ -33,7 +33,8 @@ models:
           lower_bound_column: calitp_valid_at
           upper_bound_column: calitp_invalid_at
           partition_by: funding_source_vault_id
-#          gaps: required
+          gaps: not_allowed
+          zero_length_range_allowed: true
     columns:
       - name: funding_source_id
         tests:
