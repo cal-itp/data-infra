@@ -63,9 +63,9 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ no_stale_vehicle_positions() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_vp() }}
     UNION ALL
-    SELECT {{ no_stale_trip_updates() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
+    SELECT {{ no_stale_trip_updates() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_tu() }}
     UNION ALL
-    SELECT {{ no_stale_service_alerts() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed() }}
+    SELECT {{ no_stale_service_alerts() }}, {{ best_practices_alignment_rt() }}, {{ rt_feed_sa() }}
     UNION ALL
     SELECT {{ modification_date_present() }}, {{ best_practices_alignment_schedule() }}, {{ schedule_feed() }}
     UNION ALL

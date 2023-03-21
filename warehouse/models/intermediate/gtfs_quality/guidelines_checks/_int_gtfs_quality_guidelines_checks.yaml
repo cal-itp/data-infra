@@ -29,6 +29,7 @@ models:
   - name: int_gtfs_quality__no_rt_validation_errors
   - name: int_gtfs_quality__no_stale_vehicle_positions
   - name: int_gtfs_quality__rt_20sec_tu
+  - name: int_gtfs_quality__no_stale_trip_updates
 
 # Service checks reindexed
 # TODO: what kind of yaml do we want for these? specifically what tests
