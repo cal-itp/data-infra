@@ -58,9 +58,9 @@ stg_littlepay__micropayments AS (
     FROM {{ ref('stg_littlepay__micropayments') }}
 ),
 
-stg_littlepay__micropayment_device_transactions AS (
+int_littlepay__cleaned_micropayment_device_transactions AS (
     SELECT *
-    FROM {{ ref('stg_littlepay__micropayment_device_transactions') }}
+    FROM {{ ref('int_littlepay__cleaned_micropayment_device_transactions') }}
 ),
 
 stg_littlepay__micropayment_adjustments AS (
@@ -122,9 +122,9 @@ refunded_micropayments AS (
         m_credit.charge_amount AS refund_amount
 
     FROM debited_micropayments AS m_debit
-    INNER JOIN stg_littlepay__micropayment_device_transactions AS mds
+    INNER JOIN int_littlepay__cleaned_micropayment_device_transactions AS mds
         ON m_debit.micropayment_id = mds.micropayment_id
-    INNER JOIN stg_littlepay__micropayment_device_transactions AS dt_credit
+    INNER JOIN int_littlepay__cleaned_micropayment_device_transactions AS dt_credit
         ON mds.littlepay_transaction_id = dt_credit.littlepay_transaction_id
     INNER JOIN stg_littlepay__micropayments AS m_credit
         ON dt_credit.micropayment_id = m_credit.micropayment_id
@@ -179,7 +179,7 @@ initial_transactions AS (
         dtt.transaction_type,
         dtt.pending
 
-    FROM stg_littlepay__micropayment_device_transactions AS mdt
+    FROM int_littlepay__cleaned_micropayment_device_transactions AS mdt
     INNER JOIN stg_littlepay__device_transactions AS dt
         ON mdt.littlepay_transaction_id = dt.littlepay_transaction_id
     INNER JOIN int_littlepay__device_transaction_types AS dtt
@@ -218,7 +218,7 @@ second_transactions AS (
         dtt.transaction_type,
         dtt.pending
 
-    FROM stg_littlepay__micropayment_device_transactions AS mdt
+    FROM int_littlepay__cleaned_micropayment_device_transactions AS mdt
     INNER JOIN stg_littlepay__device_transactions AS dt
         ON mdt.littlepay_transaction_id = dt.littlepay_transaction_id
     INNER JOIN int_littlepay__device_transaction_types AS dtt
@@ -258,14 +258,14 @@ join_table AS (
         p.product_description,
         p.product_type,
 
-        -- Common transaction info
+--         Common transaction info
         r.route_long_name,
         r.route_short_name,
         t1.direction,
         t1.vehicle_id,
         t1.littlepay_transaction_id,
 
-        -- Tap on or single transaction info
+--         Tap on or single transaction info
         t1.device_id,
         t1.transaction_type,
         t1.transaction_outcome,

@@ -268,6 +268,19 @@ models:
   - name: stg_littlepay__micropayment_adjustments
     tests:
       - *littlepay_uniqueness
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - micropayment_id
+            - adjustment_id
+            - participant_id
+            - customer_id
+            - product_id
+            - type
+            - description
+            - amount
+            - time_period_type
+            - applied
+            - zone_ids_us
     columns:
       - name: adjustment_id
         description: '{{ doc("micropayment_adjustments_adjustment_id") }}'
@@ -375,6 +388,9 @@ models:
         description: Identifies the participant that the micropayment belongs to.
       - name: product_id
         description: '{{ doc("product_data_product_id") }}'
+        tests:
+          - not_null
+          - unique
       - name: previous_version_id
         description: Refers to the previous version ID of the product
       - name: original_version_id

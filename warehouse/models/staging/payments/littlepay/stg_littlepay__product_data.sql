@@ -1,5 +1,5 @@
 WITH source AS (
-    SELECT * FROM {{ source('external_littlepay', 'product_data') }}
+    SELECT * FROM {{ littlepay_source('external_littlepay', 'product_data') }}
 ),
 
 stg_littlepay__product_data AS (
@@ -34,6 +34,7 @@ stg_littlepay__product_data AS (
         extract_filename,
         ts,
     FROM source
+    QUALIFY ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY littlepay_export_ts DESC) = 1
 )
 
 SELECT * FROM stg_littlepay__product_data
