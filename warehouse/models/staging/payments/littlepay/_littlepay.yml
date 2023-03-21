@@ -286,6 +286,9 @@ models:
         description: '{{ doc("micropayment_adjustments_adjustment_id") }}'
       - name: micropayment_id
         description: '{{ doc("micropayment_adjustments_micropayment_id") }}'
+        tests:
+          - unique:
+              where: applied
       - name: participant_id
         description: Identifies the participant that the adjustment belongs to.
       - name: customer_id
