@@ -34,7 +34,7 @@ RUN pip install -r /reqs/requirements.txt
 # we do this manually (i.e. not in poetry) so we can avoid fetching LFS
 RUN git config --global filter.lfs.smudge "git-lfs smudge --skip -- %f"
 RUN git config --global filter.lfs.process "git-lfs filter-process --skip"
-RUN git clone -–depth 0 https://github.com/cal-itp/data-analyses.git
+RUN git clone --depth 1 https://github.com/cal-itp/data-analyses.git
 RUN git config --global filter.lfs.smudge "git-lfs smudge -- %f"
 RUN git config --global filter.lfs.process "git-lfs filter-process"
 RUN cd data-analyses && pip install -e _shared_utils
