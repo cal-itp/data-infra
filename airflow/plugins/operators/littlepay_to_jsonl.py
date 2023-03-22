@@ -89,6 +89,7 @@ class LittlepayToJSONL(BaseOperator):
 
         fs = get_fs()
 
+        # TODO: this could be worth splitting into separate tasks
         entities = [
             "authorisations",
             "customer-funding-source",
