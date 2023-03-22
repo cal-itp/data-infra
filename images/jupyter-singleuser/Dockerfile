@@ -12,16 +12,11 @@ RUN apt update \
 USER $NB_UID
 RUN npm install -g --unsafe-perm=true --allow-root netlify-cli
 
-# gcloud CLI https://cloud.google.com/sdk/docs/install#deb
-RUN curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-423.0.0-linux-x86_64.tar.gz \
-    && tar -zxvf google-cloud-cli-423.0.0-linux-x86_64.tar.gz \
-    && ./google-cloud-sdk/install.sh
+# could we install these via npm instead?
+RUN conda install --yes -c conda-forge vega-cli vega-lite-cli
 
 RUN curl -sSL https://install.python-poetry.org | python3 -
 ENV PATH="$HOME/.local/bin:$PATH"
-
-# could we install these via npm instead?
-RUN conda install --yes -c conda-forge vega-cli vega-lite-cli
 
 # TODO: move back to poetry once we shrink the dependencies...
 #COPY ./pyproject.toml /reqs/pyproject.toml
@@ -31,13 +26,22 @@ RUN conda install --yes -c conda-forge vega-cli vega-lite-cli
 COPY ./requirements.txt /reqs/requirements.txt
 RUN pip install -r /reqs/requirements.txt
 
+
+# Folder for installations
+RUN mkdir installed
+# gcloud CLI https://cloud.google.com/sdk/docs/install#deb
+RUN cd installed \
+    && curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-423.0.0-linux-x86_64.tar.gz \
+    && tar -zxvf google-cloud-cli-423.0.0-linux-x86_64.tar.gz \
+    && ./google-cloud-sdk/install.sh
+
 # we do this manually (i.e. not in poetry) so we can avoid fetching LFS
 RUN git config --global filter.lfs.smudge "git-lfs smudge --skip -- %f"
 RUN git config --global filter.lfs.process "git-lfs filter-process --skip"
-RUN git clone --depth 1 https://github.com/cal-itp/data-analyses.git
+RUN cd installed && git clone --depth 1 https://github.com/cal-itp/data-analyses.git
 RUN git config --global filter.lfs.smudge "git-lfs smudge -- %f"
 RUN git config --global filter.lfs.process "git-lfs filter-process"
-RUN cd data-analyses && pip install -e _shared_utils
+#RUN cd data-analyses && pip install -e _shared_utils
 
 RUN mkdir /opt/conda/share/jupyter/lab/settings/
 COPY ./overrides.json /opt/conda/share/jupyter/lab/settings/overrides.json
