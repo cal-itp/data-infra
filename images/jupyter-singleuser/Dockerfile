@@ -1,14 +1,16 @@
-FROM jupyter/datascience-notebook:python-3.9
+FROM jupyter/scipy-notebook:python-3.9
 
 LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
 
 USER root
+RUN apt update \
+    && apt install -y curl keychain nodejs git-lfs libspatialindex-dev graphviz
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 # GitHub CLI https://github.com/cli/cli/blob/trunk/docs/install_linux.md
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
 RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
 RUN apt update \
-    && apt install -y keychain nodejs git-lfs gh libspatialindex-dev graphviz
+    && apt install -y gh
 USER $NB_UID
 RUN npm install -g --unsafe-perm=true --allow-root netlify-cli
 
@@ -26,7 +28,6 @@ ENV PATH="$HOME/.local/bin:$PATH"
 COPY ./requirements.txt /reqs/requirements.txt
 RUN pip install -r /reqs/requirements.txt
 
-
 # Folder for installations
 RUN mkdir installed
 # gcloud CLI https://cloud.google.com/sdk/docs/install#deb
@@ -41,7 +42,7 @@ RUN git config --global filter.lfs.process "git-lfs filter-process --skip"
 RUN cd installed && git clone --depth 1 https://github.com/cal-itp/data-analyses.git
 RUN git config --global filter.lfs.smudge "git-lfs smudge -- %f"
 RUN git config --global filter.lfs.process "git-lfs filter-process"
-#RUN cd data-analyses && pip install -e _shared_utils
+RUN cd installed/data-analyses && pip install -e _shared_utils
 
 RUN mkdir /opt/conda/share/jupyter/lab/settings/
 COPY ./overrides.json /opt/conda/share/jupyter/lab/settings/overrides.json
