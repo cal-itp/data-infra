@@ -5,25 +5,36 @@ WITH orgs AS ( -- noqa
     FROM {{ ref('int_transit_database__organizations_dim') }}
 ),
 
-geography AS ( -- noqa
+county_geography AS ( -- noqa
     SELECT *
     FROM {{ ref('int_transit_database__county_geography_dim') }}
 ),
 
 bridge_organizations_x_headquarters_county_geography AS (
-    SELECT
-        orgs.key AS organization_key,
-        orgs.name AS organization_name,
-        geography.key AS county_geography_key,
-        geography.name,
-        (orgs._is_current AND geography._is_current) AS _is_current,
-        GREATEST(orgs._valid_from, geography._valid_from) AS _valid_from,
-        LEAST(orgs._valid_to, geography._valid_to) AS _valid_to
-    FROM orgs
-    INNER JOIN geography
-        ON orgs.source_record_id = geography.organization_key
-        AND orgs._valid_from < geography._valid_to
-        AND orgs._valid_to > geography._valid_from
+ {{ transit_database_many_to_many_versioned(
+    shared_start_date_name = '_valid_from',
+    shared_end_date_name = '_valid_to',
+    shared_current_name = '_is_current',
+    table_a = {'name': 'orgs',
+        'unversioned_key_col': 'source_record_id',
+        'versioned_key_col': 'key',
+        'key_col_name': 'organization_key',
+        'name_col': 'name',
+        'name_col_name': 'organization_name',
+        'unversioned_join_col': 'hq_county_geography',
+        'start_date_col': '_valid_from',
+        'end_date_col': '_valid_to'},
+
+    table_b = {'name': 'county_geography',
+        'unversioned_key_col': 'source_record_id',
+        'versioned_key_col': 'key',
+        'key_col_name': 'county_geography_key',
+        'name_col': 'name',
+        'name_col_name': 'county_geography_name',
+        'unversioned_join_col': 'organization_key',
+        'start_date_col': '_valid_from',
+        'end_date_col': '_valid_to'}
+    ) }}
 )
 
 SELECT * FROM bridge_organizations_x_headquarters_county_geography
