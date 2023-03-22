@@ -119,7 +119,7 @@ FROM dataset_map
 ),
 
 month_reports_urls AS (
-    SELECT date_start, organization_itp_id, ARRAY_AGG(STRUCT(gtfs_dataset_name, string_url)) AS feeds
+    SELECT date_start, organization_itp_id, TO_JSON_STRING(ARRAY_AGG(STRUCT(gtfs_dataset_name, string_url))) AS feeds
     FROM make_distinct
     GROUP BY 1, 2
 ),
