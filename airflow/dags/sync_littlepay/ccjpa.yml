@@ -1,0 +1,4 @@
+operator: operators.LittlepayRawSync
+instance: ccjpa
+access_key_id_secret: LITTLEPAY_CCJPA_ACCESS_KEY_ID
+secret_access_key_secret: LITTLEPAY_CCJPA_SECRET_ACCESS_KEY
