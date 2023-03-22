@@ -39,3 +39,7 @@ sentry:
   snuba:
     subscriptionConsumerEvents:
       replicas: 2
+
+zookeeper:
+  persistence:
+    size: 16Gi
