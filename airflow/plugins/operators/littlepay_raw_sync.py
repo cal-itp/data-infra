@@ -244,7 +244,9 @@ class LittlepayRawSync(BaseOperator):
             instance=self.instance,
             ts=start,
             filename="results.jsonl",
-        ).save_content(content="\n".join(e.json() for e in extracted_files).encode())
+        ).save_content(
+            content="\n".join(e.json() for e in extracted_files).encode(), fs=fs
+        )
 
         if failures:
             raise RuntimeError(str(failures))
