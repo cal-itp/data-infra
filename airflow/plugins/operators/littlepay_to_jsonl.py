@@ -12,6 +12,7 @@ from calitp_data_infra.storage import (
     get_fs,
 )
 from operators.littlepay_raw_sync import RawLittlepayFileExtract
+from pydantic.main import BaseModel
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
 
@@ -25,7 +26,6 @@ class LittlepayFileJSONL(PartitionedGCSArtifact):
     bucket: ClassVar[str] = LITTLEPAY_PARSED_BUCKET
     partition_names: ClassVar[List[str]] = ["instance", "extract_filename", "ts"]
     extract: RawLittlepayFileExtract
-    filename: str
 
     @property
     def table(self) -> str:
@@ -45,9 +45,20 @@ class LittlepayFileJSONL(PartitionedGCSArtifact):
 
 
 # TODO: outcome type; track unknown file types
+class LittlepayFileParsingOutcome(BaseModel):
+    raw_file: RawLittlepayFileExtract
+    parsed_file: LittlepayFileJSONL
 
 
-def parse_raw_file(file: RawLittlepayFileExtract, fs):
+class LittlepayParsingJobResult(PartitionedGCSArtifact):
+    bucket: ClassVar[str] = LITTLEPAY_PARSED_BUCKET
+    table: ClassVar[str] = "parse_littlepay_job_result"
+    partition_names: ClassVar[List[str]] = ["instance", "dt"]
+    instance: str
+    dt: pendulum.Date
+
+
+def parse_raw_file(file: RawLittlepayFileExtract, fs) -> LittlepayFileParsingOutcome:
     # mostly stolen from the Schedule job, we could probably abstract this
     # assume this is PSV for now, but we could sniff the delimiter
     filename, extension = os.path.splitext(file.filename)
@@ -70,6 +81,10 @@ def parse_raw_file(file: RawLittlepayFileExtract, fs):
         content=gzip.compress("\n".join(json.dumps(line) for line in lines).encode()),
         fs=fs,
     )
+    return LittlepayFileParsingOutcome(
+        raw_file=file,
+        parsed_file=jsonl_file,
+    )
 
 
 class LittlepayToJSONL(BaseOperator):
@@ -88,6 +103,7 @@ class LittlepayToJSONL(BaseOperator):
         assert LITTLEPAY_RAW_BUCKET is not None and LITTLEPAY_PARSED_BUCKET is not None
 
         fs = get_fs()
+        outcomes: List[LittlepayFileParsingOutcome] = []
 
         # TODO: this could be worth splitting into separate tasks
         entities = [
@@ -130,4 +146,10 @@ class LittlepayToJSONL(BaseOperator):
 
                 file: RawLittlepayFileExtract
                 for file in tqdm(files_to_process, desc=entity):
-                    parse_raw_file(file, fs=fs)
+                    outcomes.append(parse_raw_file(file, fs=fs))
+
+        LittlepayParsingJobResult(
+            instance=self.instance,
+            dt=dt,
+            filename="results.jsonl",
+        ).save_content("\n".join(o.json() for o in outcomes).encode(), fs=fs)
