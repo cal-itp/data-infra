@@ -4,7 +4,7 @@ import os
 import traceback
 from concurrent.futures import Future, ThreadPoolExecutor
 from datetime import datetime
-from typing import ClassVar, Dict, List
+from typing import ClassVar, Dict, List, Optional
 
 import boto3
 import pendulum
@@ -82,7 +82,25 @@ class RawLittlepayFileExtract(PartitionedGCSArtifact):
     #     return self.s3object.Key.filename
 
 
-def sync_file(src_bucket: str, file: RawLittlepayFileExtract, s3client, fs):
+# We shouldn't save files that we skip since that's an unbounded, increasing list.
+class RawLittlepayFileOutcome(BaseModel):
+    extract: RawLittlepayFileExtract
+    prior: Optional[
+        RawLittlepayFileExtract
+    ]  # prior existing implies an update to an existing file
+
+
+class RawLittlepaySyncJobResult(PartitionedGCSArtifact):
+    bucket: ClassVar[str] = LITTLEPAY_RAW_BUCKET
+    table: ClassVar[str] = "raw_littlepay_sync_job_result"
+    partition_names: ClassVar[List[str]] = ["instance", "ts"]
+    instance: str
+    ts: pendulum.DateTime
+
+
+def sync_file(
+    src_bucket: str, file: RawLittlepayFileExtract, s3client, fs
+) -> Optional[RawLittlepayFileOutcome]:
     try:
         # TODO: this kinda overlaps with get_latest()
         fileinfo = get_latest_file(
@@ -110,12 +128,18 @@ def sync_file(src_bucket: str, file: RawLittlepayFileExtract, s3client, fs):
         )
     except FileNotFoundError:
         save = True
+        prior = None
 
     if save:
         content = s3client.get_object(Bucket=src_bucket, Key=file.s3object.Key)[
             "Body"
         ].read()
         file.save_content(content=content, fs=fs)
+        return RawLittlepayFileOutcome(
+            extract=file,
+            prior=prior,
+        )
+    return None
 
 
 class LittlepayRawSync(BaseOperator):
@@ -185,6 +209,7 @@ class LittlepayRawSync(BaseOperator):
         )
 
         fs = get_fs()
+        extracted_files: List[RawLittlepayFileExtract] = []
         failures = []
         with logging_redirect_tqdm():
             pbar = tqdm(total=len(files))
@@ -202,7 +227,9 @@ class LittlepayRawSync(BaseOperator):
                 for future in concurrent.futures.as_completed(futures):
                     pbar.update(1)
                     try:
-                        future.result()
+                        ret = future.result()
+                        if ret:
+                            extracted_files.append(ret)
                     except KeyboardInterrupt:
                         raise
                     except Exception as e:
@@ -212,6 +239,12 @@ class LittlepayRawSync(BaseOperator):
                         traceback.print_exc()
                         failures.append(e)
             del pbar
+
+        RawLittlepaySyncJobResult(
+            instance=self.instance,
+            ts=start,
+            filename="results.jsonl",
+        ).save_content(content="\n".join(e.json() for e in extracted_files).encode())
 
         if failures:
             raise RuntimeError(str(failures))
