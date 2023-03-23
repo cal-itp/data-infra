@@ -5,14 +5,18 @@ models:
     description: |
       Littlepay micropayments.
     columns:
-      - name: participant_id
-        description: Littlepay-assigned Participant ID
       - name: micropayment_id
         description: From payments.micropayments.micropayment_id
         tests:
-          - unique:
-              config:
-                store_failures: true
+          - not_null
+          - unique
+      - name: littlepay_transaction_id
+        description: The littlepay_transaction_id of the first tap transaction
+        tests:
+          - not_null
+          - unique
+      - name: participant_id
+        description: Littlepay-assigned Participant ID
       - name: funding_source_vault_id
         description: From payments.micropayments.funding_source_vault_id
       - name: customer_id
@@ -67,12 +71,6 @@ models:
         description: The direction of the first tap transaction
       - name: vehicle_id
         description: The vehicle_id of the first tap transaction
-      - name: littlepay_transaction_id
-        description: The littlepay_transaction_id of the first tap transaction
-        tests:
-          - unique:
-              config:
-                store_failures: true
       - name: device_id
         description: The device_id of the first tap transaction
       - name: transaction_type
