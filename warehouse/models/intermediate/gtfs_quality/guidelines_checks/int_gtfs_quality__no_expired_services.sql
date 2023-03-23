@@ -1,5 +1,7 @@
-WITH feed_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_quality__schedule_feed_guideline_index') }}
+WITH guideline_index AS (
+    SELECT *
+    FROM {{ ref('int_gtfs_quality__guideline_checks_index') }}
+    WHERE check = {{ no_expired_services() }}
 ),
 
 dim_calendar AS (
@@ -47,21 +49,31 @@ daily_earliest_service_expiration AS (
   GROUP BY 1
 ),
 
+-- semi-arbitrarily just using calendar here because it's more common
+check_start AS (
+    SELECT MIN(_feed_valid_from) AS first_check_date
+    FROM dim_calendar
+),
+
 int_gtfs_quality__no_expired_services AS (
     SELECT
-        t1.date,
-        t1.feed_key,
-        {{ no_expired_services() }} AS check,
-        {{ best_practices_alignment_schedule() }} AS feature,
-        t2.earliest_service_end_date,
+        idx.* EXCEPT(status),
         CASE
-            WHEN t2.earliest_service_end_date < date THEN {{ guidelines_fail_status() }}
-            WHEN t2.earliest_service_end_date >= date THEN {{ guidelines_pass_status() }}
-            ELSE {{ guidelines_na_check_status() }}
+            WHEN has_schedule_feed
+                THEN
+                    CASE
+                        WHEN exp.earliest_service_end_date >= date THEN {{ guidelines_pass_status() }}
+                        -- TODO: could add special handling for April 16, 2021 (start of checks)
+                        WHEN CAST(idx.date AS TIMESTAMP) < first_check_date THEN {{ guidelines_na_too_early_status() }}
+                        WHEN exp.earliest_service_end_date IS NULL THEN {{ guidelines_na_check_status() }}
+                        WHEN exp.earliest_service_end_date < date THEN {{ guidelines_fail_status() }}
+                    END
+            ELSE idx.status
         END AS status
-      FROM feed_guideline_index AS t1
-      LEFT JOIN daily_earliest_service_expiration AS t2
-        ON t1.feed_key = t2.feed_key
+    FROM guideline_index idx
+    CROSS JOIN check_start
+    LEFT JOIN daily_earliest_service_expiration AS exp
+        ON idx.schedule_feed_key = exp.feed_key
 )
 
 SELECT * FROM int_gtfs_quality__no_expired_services
