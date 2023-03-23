@@ -49,8 +49,8 @@
 'service'
 {% endmacro %}
 
-{% macro gtfs_service_data() -%}
-'gtfs_service_data'
+{% macro gtfs_service_data_schedule() -%}
+'gtfs_service_data_schedule'
 {% endmacro %}
 
 {% macro gtfs_dataset() -%}
@@ -341,11 +341,11 @@
 {% endmacro %}
 
 {% macro fixed_routes_match() %}
-"Static and RT feeds are representative of all fixed-route transit services under the transit providers’ purview"
+"Static feeds are representative of all fixed-route transit services under the transit providers’ purview"
 {% endmacro %}
 
 {% macro demand_responsive_routes_match() %}
-"Static and RT feeds are representative of all demand-responsive transit services under the transit providers’ purview"
+"Static feeds are representative of all demand-responsive transit services under the transit providers’ purview"
 {% endmacro %}
 
 {% macro scheduled_trips_in_tu_feed() %}

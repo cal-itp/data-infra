@@ -74,7 +74,7 @@ cross_join AS (
 
         organization_key IS NOT NULL AS has_organization,
         service_key IS NOT NULL AS has_service,
-        gtfs_service_data_key IS NOT NULL AS has_gtfs_service_data
+        COALESCE((gtfs_service_data_key IS NOT NULL AND gtfs_dataset_type = "schedule"), FALSE) AS has_gtfs_service_data_schedule
 
     FROM assessment_candidates
     CROSS JOIN checks
@@ -137,7 +137,7 @@ int_gtfs_quality__guideline_checks_index AS (
 
         has_organization,
         has_service,
-        has_gtfs_service_data,
+        has_gtfs_service_data_schedule,
 
         CASE
             WHEN (entity = {{ gtfs_dataset_schedule() }} AND NOT has_gtfs_dataset_schedule)
@@ -155,7 +155,7 @@ int_gtfs_quality__guideline_checks_index AS (
                 OR (entity = {{ rt_feed() }} AND NOT has_rt_feed)
                 OR (entity = {{ organization() }} AND NOT has_organization)
                 OR (entity = {{ service() }} AND NOT has_service)
-                OR (entity = {{ gtfs_service_data() }} AND NOT has_gtfs_service_data)
+                OR (entity = {{ gtfs_service_data_schedule() }} AND NOT has_gtfs_service_data_schedule)
                 THEN {{ guidelines_na_entity_status() }}
             ELSE {{ guidelines_to_be_assessed_status() }}
         END AS status,

@@ -146,9 +146,9 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ trip_planner_rt() }}, {{ compliance_rt() }}, {{ service() }}
     UNION ALL
-    SELECT {{ fixed_routes_match() }}, {{ fixed_route_completeness() }}, {{ gtfs_service_data() }}
+    SELECT {{ fixed_routes_match() }}, {{ fixed_route_completeness() }}, {{ gtfs_service_data_schedule() }}
     UNION ALL
-    SELECT {{ demand_responsive_routes_match() }}, {{ demand_responsive_completeness() }}, {{ gtfs_service_data() }}
+    SELECT {{ demand_responsive_routes_match() }}, {{ demand_responsive_completeness() }}, {{ gtfs_service_data_schedule() }}
 )
 
 SELECT * FROM stg_gtfs_quality__intended_checks
