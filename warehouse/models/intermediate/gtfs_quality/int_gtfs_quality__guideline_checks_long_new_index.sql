@@ -30,7 +30,8 @@ WITH unioned AS (
             ref('int_gtfs_quality__no_stale_service_alerts'),
             ref('int_gtfs_quality__modification_date_present_rt'),
             ref('int_gtfs_quality__contact_on_website'),
-            ref('int_gtfs_quality__fixed_routes_match')
+            ref('int_gtfs_quality__fixed_routes_match'),
+            ref('int_gtfs_quality__demand_responsive_routes_match')
         ],
     ) }}
 ),

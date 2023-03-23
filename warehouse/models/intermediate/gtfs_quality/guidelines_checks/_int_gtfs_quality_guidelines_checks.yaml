@@ -47,3 +47,8 @@ models:
 # organization checks reindexed
 # TODO: what kind of yaml do we want for these? specifically what tests
   - name: int_gtfs_quality__contact_on_website
+
+# GTFS service data (schedule only) checks reindexed
+# TODO: what kind of yaml do we want for these? specifically what tests
+  - name: int_gtfs_quality__fixed_routes_match
+  - name: int_gtfs_quality__demand_responsive_routes_match
