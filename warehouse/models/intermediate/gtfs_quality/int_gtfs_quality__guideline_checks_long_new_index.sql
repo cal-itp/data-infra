@@ -32,7 +32,8 @@ WITH unioned AS (
             ref('int_gtfs_quality__contact_on_website'),
             ref('int_gtfs_quality__fixed_routes_match'),
             ref('int_gtfs_quality__demand_responsive_routes_match'),
-            ref('int_gtfs_quality__data_license')
+            ref('int_gtfs_quality__data_license'),
+            ref('int_gtfs_quality__authentication_acceptable')
         ],
     ) }}
 ),

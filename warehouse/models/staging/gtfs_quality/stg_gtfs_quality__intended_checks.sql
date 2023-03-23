@@ -116,13 +116,13 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ data_license_sa() }}, {{ compliance_rt() }}, {{ gtfs_dataset_sa() }}
     UNION ALL
-    SELECT {{ authentication_acceptable_schedule() }}, {{ availability_on_website() }}, {{ gtfs_dataset() }}
+    SELECT {{ authentication_acceptable_schedule() }}, {{ availability_on_website() }}, {{ gtfs_dataset_schedule() }}
     UNION ALL
-    SELECT {{ authentication_acceptable_vp() }}, {{ availability_on_website() }}, {{ gtfs_dataset() }}
+    SELECT {{ authentication_acceptable_vp() }}, {{ availability_on_website() }}, {{ gtfs_dataset_vp() }}
     UNION ALL
-    SELECT {{ authentication_acceptable_tu() }}, {{ availability_on_website() }}, {{ gtfs_dataset() }}
+    SELECT {{ authentication_acceptable_tu() }}, {{ availability_on_website() }}, {{ gtfs_dataset_tu() }}
     UNION ALL
-    SELECT {{ authentication_acceptable_sa() }}, {{ availability_on_website() }}, {{ gtfs_dataset() }}
+    SELECT {{ authentication_acceptable_sa() }}, {{ availability_on_website() }}, {{ gtfs_dataset_sa() }}
     UNION ALL
     SELECT {{ stable_url_schedule() }}, {{ compliance_schedule() }}, {{ gtfs_dataset() }}
     UNION ALL
