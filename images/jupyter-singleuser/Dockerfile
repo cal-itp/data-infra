@@ -18,13 +18,10 @@ ENV PATH="$HOME/.local/bin:$PATH"
 
 RUN npm install -g --unsafe-perm=true --allow-root netlify-cli vega-cli vega-lite
 
-# TODO: move back to poetry once we shrink the dependencies...
-#COPY ./pyproject.toml /reqs/pyproject.toml
-#COPY ./poetry.lock /reqs/poetry.lock
-#RUN poetry config virtualenvs.create false
-#RUN cd /reqs && poetry install
-COPY ./requirements.txt /reqs/requirements.txt
-RUN pip install -r /reqs/requirements.txt
+COPY ./pyproject.toml /reqs/pyproject.toml
+COPY ./poetry.lock /reqs/poetry.lock
+RUN poetry config virtualenvs.create false
+RUN cd /reqs && poetry install --with portfolio
 
 # gcloud CLI https://cloud.google.com/sdk/docs/install#deb
 RUN curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-423.0.0-linux-x86_64.tar.gz \
