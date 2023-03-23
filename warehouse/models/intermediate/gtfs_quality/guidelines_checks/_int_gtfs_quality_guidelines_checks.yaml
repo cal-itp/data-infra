@@ -28,6 +28,10 @@ models:
   - name: int_gtfs_quality__rt_20sec_vp
   - name: int_gtfs_quality__no_rt_validation_errors
   - name: int_gtfs_quality__no_stale_vehicle_positions
+  - name: int_gtfs_quality__rt_20sec_tu
+  - name: int_gtfs_quality__no_stale_trip_updates
+  - name: int_gtfs_quality__no_stale_service_alerts
+  - name: int_gtfs_quality__modification_date_present_rt
 
 # Service checks reindexed
 # TODO: what kind of yaml do we want for these? specifically what tests
@@ -39,3 +43,18 @@ models:
   - name: int_gtfs_quality__rt_feeds_present
   - name: int_gtfs_quality__rt_https
   - name: int_gtfs_quality__rt_protobuf_error
+
+# organization checks reindexed
+# TODO: what kind of yaml do we want for these? specifically what tests
+  - name: int_gtfs_quality__contact_on_website
+
+# GTFS service data (schedule only) checks reindexed
+# TODO: what kind of yaml do we want for these? specifically what tests
+  - name: int_gtfs_quality__fixed_routes_match
+  - name: int_gtfs_quality__demand_responsive_routes_match
+
+
+# GTFS dataset checks reindexed
+# TODO: what kind of yaml do we want for these? specifically what tests
+  - name: int_gtfs_quality__data_license
+  - name: int_gtfs_quality__authentication_acceptable

@@ -24,8 +24,18 @@ WITH unioned AS (
             ref('int_gtfs_quality__no_rt_validation_errors'),
             ref('int_gtfs_quality__rt_protobuf_error'),
             ref('int_gtfs_quality__rt_20sec_vp'),
-            ref('int_gtfs_quality__no_stale_vehicle_positions')
+            ref('int_gtfs_quality__no_stale_vehicle_positions'),
+            ref('int_gtfs_quality__rt_20sec_tu'),
+            ref('int_gtfs_quality__no_stale_trip_updates'),
+            ref('int_gtfs_quality__no_stale_service_alerts'),
+            ref('int_gtfs_quality__modification_date_present_rt'),
+            ref('int_gtfs_quality__contact_on_website'),
+            ref('int_gtfs_quality__fixed_routes_match'),
+            ref('int_gtfs_quality__demand_responsive_routes_match'),
+            ref('int_gtfs_quality__data_license'),
+            ref('int_gtfs_quality__authentication_acceptable')
         ],
+        include = dbt_utils.get_filtered_columns_in_relation(from=ref('int_gtfs_quality__guideline_checks_index'))
     ) }}
 ),
 
