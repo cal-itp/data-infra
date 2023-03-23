@@ -43,3 +43,7 @@ models:
   - name: int_gtfs_quality__rt_feeds_present
   - name: int_gtfs_quality__rt_https
   - name: int_gtfs_quality__rt_protobuf_error
+
+# organization checks reindexed
+# TODO: what kind of yaml do we want for these? specifically what tests
+  - name: int_gtfs_quality__contact_on_website
