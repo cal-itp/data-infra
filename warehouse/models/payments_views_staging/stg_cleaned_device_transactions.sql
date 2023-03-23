@@ -15,6 +15,8 @@ WITH stg_cleaned_device_transactions AS (
         CAST(longitude AS FLOAT64) AS longitude,
         CAST(latitude AS FLOAT64) AS latitude,
 
+        -- trim to align with gtfs cleaning steps
+        -- since these fields are used to join with gtfs data
         TRIM(route_id) AS route_id,
         TRIM(location_id) AS location_id
     FROM {{ ref('stg_enriched_device_transactions') }}
