@@ -34,7 +34,9 @@ WITH unioned AS (
             ref('int_gtfs_quality__demand_responsive_routes_match'),
             ref('int_gtfs_quality__data_license'),
             ref('int_gtfs_quality__authentication_acceptable'),
-            ref('int_gtfs_quality__no_expired_services')
+            ref('int_gtfs_quality__no_expired_services'),
+            ref('int_gtfs_quality__no_30_day_feed_expiration'),
+            ref('int_gtfs_quality__no_7_day_feed_expiration')
         ],
         include = dbt_utils.get_filtered_columns_in_relation(from=ref('int_gtfs_quality__guideline_checks_index'))
     ) }}

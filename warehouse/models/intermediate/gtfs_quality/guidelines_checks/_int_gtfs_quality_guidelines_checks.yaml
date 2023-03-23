@@ -18,6 +18,8 @@ models:
   - name: int_gtfs_quality__pathways_valid
   - name: int_gtfs_quality__technical_contact_listed
   - name: int_gtfs_quality__no_expired_services
+  - name: int_gtfs_quality__no_30_day_feed_expiration
+  - name: int_gtfs_quality__no_7_day_feed_expiration
 
 # Schedule + RT combined URL checks reindexed
 # TODO: what kind of yaml do we want for these? specifically what tests
