@@ -39,3 +39,10 @@ sentry:
   snuba:
     subscriptionConsumerEvents:
       replicas: 2
+
+  zookeeper:
+    persistence:
+      size: 32Gi
+    autopurge:
+      snapRetainCount: 10
+      purgeInterval: 1
