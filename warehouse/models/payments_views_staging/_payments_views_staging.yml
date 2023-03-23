@@ -765,7 +765,6 @@ models:
           lower_bound_column: calitp_valid_at
           upper_bound_column: calitp_invalid_at
           partition_by: funding_source_vault_id
-#          gaps: required
     columns:
       - name: customer_id
         description: '{{ doc("customer_funding_source_customer_id") }}'
