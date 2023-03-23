@@ -8,11 +8,11 @@ from typing import ClassVar, List
 import pendulum
 from calitp_data_infra.storage import (
     PartitionedGCSArtifact,
+    ProcessingOutcome,
     fetch_all_in_partition,
     get_fs,
 )
 from operators.littlepay_raw_sync import RawLittlepayFileExtract
-from pydantic.main import BaseModel
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
 
@@ -44,8 +44,7 @@ class LittlepayFileJSONL(PartitionedGCSArtifact):
         return self.extract.ts
 
 
-# TODO: outcome type; track unknown file types
-class LittlepayFileParsingOutcome(BaseModel):
+class LittlepayFileParsingOutcome(ProcessingOutcome):
     raw_file: RawLittlepayFileExtract
     parsed_file: LittlepayFileJSONL
 
@@ -82,6 +81,7 @@ def parse_raw_file(file: RawLittlepayFileExtract, fs) -> LittlepayFileParsingOut
         fs=fs,
     )
     return LittlepayFileParsingOutcome(
+        success=True,
         raw_file=file,
         parsed_file=jsonl_file,
     )

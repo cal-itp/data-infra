@@ -12,6 +12,7 @@ from calitp_data_infra.auth import get_secret_by_name
 from calitp_data_infra.storage import (
     PARTITIONED_ARTIFACT_METADATA_KEY,
     PartitionedGCSArtifact,
+    ProcessingOutcome,
     get_fs,
     get_latest_file,
 )
@@ -83,7 +84,7 @@ class RawLittlepayFileExtract(PartitionedGCSArtifact):
 
 
 # We shouldn't save files that we skip since that's an unbounded, increasing list.
-class RawLittlepayFileOutcome(BaseModel):
+class RawLittlepayFileOutcome(ProcessingOutcome):
     extract: RawLittlepayFileExtract
     prior: Optional[
         RawLittlepayFileExtract
@@ -136,6 +137,7 @@ def sync_file(
         ].read()
         file.save_content(content=content, fs=fs)
         return RawLittlepayFileOutcome(
+            success=True,
             extract=file,
             prior=prior,
         )
