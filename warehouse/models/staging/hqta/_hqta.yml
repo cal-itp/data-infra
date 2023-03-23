@@ -2,7 +2,7 @@ version: 2
 
 sources:
   - name: hqta_external_tables
-    database: "{{ var('SOURCE_DATABASE') }}"
+    database: "{{ env_var('CALITP_DBT_SOURCE_DATABASE', var('DEFAULT_SOURCE_DATABASE')) }}"
     schema: external_hqta
     tables:
       - name: areas

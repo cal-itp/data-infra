@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: external_gtfs_rt
     description: Hive-partitioned external tables reading GTFS RT data and validation errors from GCS.
-    database: "{{ var('SOURCE_DATABASE') }}"
+    database: "{{ env_var('CALITP_DBT_SOURCE_DATABASE', var('DEFAULT_SOURCE_DATABASE')) }}"
     schema: external_gtfs_rt_v2
     tables:
       - name: service_alerts
