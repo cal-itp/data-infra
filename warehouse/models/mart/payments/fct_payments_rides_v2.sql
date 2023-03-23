@@ -325,7 +325,7 @@ join_table AS (
             AND r.route_id = COALESCE(t1.route_id, t2.route_id)
 ),
 
-fct_littlepay_payments_rides AS (
+fct_payments_rides_v2 AS (
     SELECT
 
         *,
@@ -341,4 +341,4 @@ fct_littlepay_payments_rides AS (
     FROM join_table
 )
 
-SELECT * FROM fct_littlepay_payments_rides
+SELECT * FROM fct_payments_rides_v2

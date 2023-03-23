@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: fct_littlepay_payments_rides
+  - name: fct_payments_rides_v2
     description: |
       Littlepay micropayments.
     columns:
