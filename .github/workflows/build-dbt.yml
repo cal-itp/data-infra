@@ -61,7 +61,7 @@ jobs:
           destination: 'calitp-ci-artifacts/${{github.workflow}}/run_id=${{github.run_id}}/job=${{github.job}}/target/'
       # Only do visualization if we actually changed models and we are merging against main
       - uses: tj-actions/changed-files@v35
-        if: github.event.pull_request.branch == 'main'
+        if: github.event.pull_request.base.ref == 'main'
         id: changed-files-warehouse
         with:
           files: 'warehouse/models/**/*.sql'
