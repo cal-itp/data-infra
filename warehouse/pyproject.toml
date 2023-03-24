@@ -30,7 +30,6 @@ networkx-viewer = "^0.3.0"
 # export CFLAGS="-I $(brew --prefix graphviz)/include"
 # export LDFLAGS="-L $(brew --prefix graphviz)/lib"
 pygraphviz = "^1.10"
-dbt-core = "^1.4.5"
 dbt-bigquery = "^1.4.3"
 
 [tool.poetry.group.dev.dependencies]
@@ -46,6 +45,7 @@ sqlalchemy-stubs = "^0.4"
 datamodel-code-generator = "^0.17.1"
 sqlfluff = "^2.0.2"
 sqlfluff-templater-dbt = "^2.0.2"
+ipdb = "^0.13.13"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
