@@ -1,3 +1,18 @@
+-- {{ config(
+--     materialized='incremental',
+--     incremental_strategy='insert_overwrite',
+--     partition_by = {
+--         'field': 'dt',
+--         'data_type': 'date',
+--         'granularity': 'day',
+--     },
+-- ) }}
+
+-- {% if is_incremental() %}
+--     {% set dates = dbt_utils.get_column_values(table=this, column='dt', order_by = 'dt DESC', max_records = 1) %}
+--     {% set max_dt = dates[0] %}
+-- {% endif %}
+
 WITH
 rt_trips AS (
   SELECT
