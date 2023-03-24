@@ -106,7 +106,7 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ organization_has_contact_info() }}, {{ technical_contact_availability() }}, {{ organization() }}
     UNION ALL
-    SELECT {{ shapes_accurate() }}, {{ accurate_service_data() }}, {{ gtfs_dataset() }}
+    SELECT {{ shapes_accurate() }}, {{ accurate_service_data() }}, {{ gtfs_dataset_schedule() }}
     UNION ALL
     SELECT {{ data_license_schedule() }}, {{ compliance_schedule() }}, {{ gtfs_dataset_schedule() }}
     UNION ALL
