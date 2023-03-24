@@ -1,5 +1,10 @@
-WITH feed_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_quality__schedule_feed_guideline_index') }}
+{{ config(materialized = 'table') }}
+
+WITH guideline_index AS (
+    SELECT
+        *
+    FROM {{ ref('int_gtfs_quality__guideline_checks_index') }}
+    WHERE check = {{ lead_time() }}
 ),
 
 all_scheduled_service AS (
@@ -112,10 +117,9 @@ trips_version_compare AS (
 
 -- We count each "infraction" type seperately, mostly for QA purposes
 ----  Note that this query will count each "infraction" once per day it's in effect
-daily_improper_trips_updates AS (
+improper_trips_updates AS (
   SELECT base64_url,
          feed_key,
-         valid_from AS date,
           -- A new trip is being added
          COUNT(CASE WHEN prev_trip_id IS null THEN 1 END) AS trip_added,
           -- An existing trip is being removed
@@ -131,32 +135,48 @@ daily_improper_trips_updates AS (
          -- Service date is between 0 and 7 days from now
          days_until_service_date > 0 AND days_until_service_date <= 7
    -- SQLFluff doesn't like numeric aliasing here alongside explicit naming in window functions
-   GROUP BY 1, 2, 3 -- noqa: L054
+   GROUP BY 1, 2 -- noqa: L054
 ),
 
 feed_update_count AS (
-    SELECT t1.date,
-           t1.feed_key,
-           SUM(t2.trip_added + t2.trip_removed + t2.stop_times_changed + t2.stop_location_changed)
-               OVER (
-                   PARTITION BY t2.feed_key
-                   ORDER BY t2.date
-                   ROWS BETWEEN 30 PRECEDING AND CURRENT ROW
-                ) AS trips_updates_last_30_days
-      FROM feed_guideline_index AS t1
-      LEFT JOIN daily_improper_trips_updates AS t2
-        ON t1.feed_key = t2.feed_key
+    SELECT
+      hist.feed_key,
+      hist.valid_from,
+      SUM(trip_added + trip_removed + stop_times_changed + stop_location_changed) AS invalid_changes,
+      DATE_ADD(hist.valid_from, INTERVAL 30 DAY) AS int_30_days
+    FROM feed_version_history AS hist
+    LEFT JOIN improper_trips_updates AS trips
+      ON hist.feed_key = trips.feed_key
+    -- SQLFluff doesn't like numeric aliasing here alongside explicit naming in window functions
+    GROUP BY 1, 2 -- noqa: L054
+),
+
+check_start AS (
+    SELECT MIN(valid_from) AS first_check_date
+    FROM feed_version_history
+    WHERE prev_feed_key IS NOT NULL
 ),
 
 int_gtfs_quality__lead_time AS (
-    SELECT date,
-           feed_key,
-           {{ lead_time() }} AS check,
-           {{ up_to_dateness() }} AS feature,
-           CASE WHEN trips_updates_last_30_days > 0 THEN {{ guidelines_fail_status() }}
-                ELSE {{ guidelines_pass_status() }}
-           END AS status
-      FROM feed_update_count
+    SELECT
+        idx.* EXCEPT(status),
+        first_check_date,
+        invalid_changes,
+        CASE
+            WHEN has_schedule_feed
+                THEN
+                    CASE
+                        WHEN idx.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
+                        WHEN invalid_changes = 0 OR idx.date > int_30_days THEN {{ guidelines_pass_status() }}
+                        WHEN invalid_changes > 0 AND idx.date <= int_30_days THEN {{ guidelines_fail_status() }}
+                        WHEN invalid_changes IS NULL THEN {{ guidelines_na_check_status() }}
+                    END
+            ELSE idx.status
+        END AS status
+    FROM guideline_index idx
+    CROSS JOIN check_start
+    LEFT JOIN feed_update_count
+        ON idx.schedule_feed_key = feed_update_count.feed_key
 )
 
 SELECT * FROM int_gtfs_quality__lead_time
