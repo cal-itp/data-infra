@@ -15,7 +15,7 @@ fct_service_alert_translations AS (
         ),
         key AS service_alert_message_key,
 
-        {{ dbt_utils.surrogate_key(['key',
+        {{ dbt_utils.generate_surrogate_key(['key',
             'unnested_header_text_translation.text',
             'unnested_header_text_translation.language']) }} AS key,
 

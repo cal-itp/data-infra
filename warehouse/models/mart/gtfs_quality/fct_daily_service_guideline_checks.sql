@@ -19,7 +19,7 @@ unioned AS (
 
 fct_daily_service_guideline_checks AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['date', 'service_key', 'check']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['date', 'service_key', 'check']) }} AS key,
         *
     FROM unioned
 )

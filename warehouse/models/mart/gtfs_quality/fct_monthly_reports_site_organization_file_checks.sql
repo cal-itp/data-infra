@@ -58,7 +58,7 @@ generate_biweekly_dates AS (
 
 fct_monthly_reports_site_organization_file_checks AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['idx.publish_date',
+        {{ dbt_utils.generate_surrogate_key(['idx.publish_date',
             'idx.organization_source_record_id',
             'dates.sample_dates',
             'files_of_interest.filename']) }} AS key,

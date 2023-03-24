@@ -20,8 +20,8 @@ coalesced_and_filtered AS (
 
 deduped AS (
     SELECT *,
-        {{ dbt_utils.surrogate_key(['dt', 'base64_url', 'location_timestamp', 'vehicle_id', 'vehicle_label', 'trip_id']) }} AS key,
-        {{ dbt_utils.surrogate_key(['dt', 'base64_url', 'vehicle_id', 'vehicle_label', 'trip_id']) }} AS vehicle_trip_key
+        {{ dbt_utils.generate_surrogate_key(['dt', 'base64_url', 'location_timestamp', 'vehicle_id', 'vehicle_label', 'trip_id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['dt', 'base64_url', 'vehicle_id', 'vehicle_label', 'trip_id']) }} AS vehicle_trip_key
     FROM coalesced_and_filtered
     QUALIFY ROW_NUMBER() OVER (
         -- the dt is necessary to preserve partition elimination in downstream queries

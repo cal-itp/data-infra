@@ -32,7 +32,7 @@ hashed AS (
         zipfile_extract_md5hash,
         CAST(download_success AS INTEGER) as int_download_success,
         MAX(ts) OVER(PARTITION BY base64_url ORDER BY ts DESC) AS latest_extract,
-        {{ dbt_utils.surrogate_key(['download_success', 'unzip_success',
+        {{ dbt_utils.generate_surrogate_key(['download_success', 'unzip_success',
          'zipfile_extract_md5hash']) }} AS content_hash
     FROM data_available
 ),
@@ -124,7 +124,7 @@ actual_data_only AS (
 
 dim_schedule_feeds AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['base64_url', '_valid_from']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['base64_url', '_valid_from']) }} AS key,
         base64_url,
         download_success,
         unzip_success,

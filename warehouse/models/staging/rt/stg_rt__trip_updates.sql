@@ -27,7 +27,7 @@ stg_rt__trip_updates AS (
 
         tripUpdate.stopTimeUpdate AS stop_time_updates,
 
-        {{ dbt_utils.surrogate_key(['metadata.path',
+        {{ dbt_utils.generate_surrogate_key(['metadata.path',
                                     'id',
                                     'tripUpdate.timestamp',
                                     'tripUpdate.vehicle.id',

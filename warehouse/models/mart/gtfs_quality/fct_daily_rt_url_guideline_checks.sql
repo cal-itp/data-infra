@@ -12,7 +12,7 @@ unioned AS (
 
 fct_daily_rt_url_guideline_checks AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['date', 'base64_url', 'check']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['date', 'base64_url', 'check']) }} AS key,
         *
     FROM unioned
 )

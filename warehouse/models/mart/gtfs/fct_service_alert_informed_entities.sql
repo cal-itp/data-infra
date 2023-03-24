@@ -11,7 +11,7 @@ fct_service_alerts_informed_entities AS (
         ),
         key AS service_alert_message_key,
 
-        {{ dbt_utils.surrogate_key(['key', 'unnested_informed_entity.agencyId',
+        {{ dbt_utils.generate_surrogate_key(['key', 'unnested_informed_entity.agencyId',
             'unnested_informed_entity.routeId', 'unnested_informed_entity.trip.tripId',
             'unnested_informed_entity.stopId']) }} AS key,
 

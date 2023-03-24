@@ -38,7 +38,7 @@ stop_times_grouped AS (
 
 gtfs_joins AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['service_index.service_date', 'trips.key']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['service_index.service_date', 'trips.key']) }} AS key,
 
         service_index.service_date,
         service_index.feed_key,

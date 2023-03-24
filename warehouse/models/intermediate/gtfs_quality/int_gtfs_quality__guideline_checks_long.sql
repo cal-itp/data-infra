@@ -58,7 +58,7 @@ idx AS (
 
 int_gtfs_quality__guideline_checks_long AS (
     SELECT
-        {{ dbt_utils.surrogate_key([
+        {{ dbt_utils.generate_surrogate_key([
             'idx.date',
             'idx.organization_key',
             'idx.service_key',

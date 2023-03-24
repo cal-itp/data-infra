@@ -30,7 +30,7 @@ dim_gtfs_datasets AS (
 
 fct_schedule_files_parsed AS (
     SELECT
-        {{ dbt_utils.surrogate_key([
+        {{ dbt_utils.generate_surrogate_key([
             'unzip.ts',
             'unzip.base64_url',
             'unzip.feed_file']) }} as key,

@@ -72,7 +72,7 @@ pivoted_parse_outcomes AS (
 fct_daily_rt_feed_files AS (
     SELECT
         parse.dt as date,
-        {{ dbt_utils.surrogate_key(['parse.dt', 'parse.base64_url']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['parse.dt', 'parse.base64_url']) }} AS key,
         parse.base64_url,
         parse.feed_type,
         parse.parse_success_file_count,
