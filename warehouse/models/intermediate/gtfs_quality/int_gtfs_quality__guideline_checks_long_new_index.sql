@@ -39,7 +39,8 @@ WITH unioned AS (
             ref('int_gtfs_quality__no_7_day_feed_expiration'),
             ref('int_gtfs_quality__passes_fares_validator'),
             ref('int_gtfs_quality__persistent_ids_schedule'),
-            ref('int_gtfs_quality__stable_url')
+            ref('int_gtfs_quality__stable_url'),
+            ref('int_gtfs_quality__link_to_dataset_on_website')
         ],
         include = dbt_utils.get_filtered_columns_in_relation(from=ref('int_gtfs_quality__guideline_checks_index'))
     ) }}

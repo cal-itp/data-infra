@@ -64,3 +64,4 @@ models:
   - name: int_gtfs_quality__data_license
   - name: int_gtfs_quality__authentication_acceptable
   - name: int_gtfs_quality__stable_url
+  - name: int_gtfs_quality__link_to_dataset_on_website
