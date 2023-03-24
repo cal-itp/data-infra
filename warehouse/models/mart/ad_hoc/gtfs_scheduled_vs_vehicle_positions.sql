@@ -21,10 +21,9 @@ rt_trips AS (
       dt AS service_date,
       schedule_to_use_for_rt_validation_gtfs_dataset_key,
       trip_route_id,
-      trip_id AS vp_trip_id,
-      -- sum(vp_num_distinct_message_ids) AS sum_vp_num_dist_message_ids,
+      trip_id AS vp_trip_id
   FROM {{ ref('fct_observed_trips') }}
-  WHERE dt = '2023-02-08'
+  WHERE (dt = '2023-02-08' AND vp_num_distinct_message_ids > 0)
 ),
 
 sched_trips AS(
