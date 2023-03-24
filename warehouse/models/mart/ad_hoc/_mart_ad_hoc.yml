@@ -42,3 +42,18 @@ models:
       - name: year
       - name: day_type
       - name: n_trips
+  - name: gtfs_scheduled_vs_vehicle_positions
+    description: |
+      Table showing the number of unique trips in an organization's 
+      GTFS Scheduled and RealTime Vehicle Positions data. This table 
+      is set for February 8, 2023 at the moment.
+    columns:
+      - name: sched_gtfs_dataset_key
+      - name: service_date
+      - name: organization_name
+      - name: route_id
+      - name: route_short_name
+      - name: sched_gtfs_dataset_name
+      - name: num_sched_trip_ids
+      - name: num_vp_trip_ids
+      - name: pct_trips_w_vp
