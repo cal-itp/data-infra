@@ -63,3 +63,4 @@ models:
 # TODO: what kind of yaml do we want for these? specifically what tests
   - name: int_gtfs_quality__data_license
   - name: int_gtfs_quality__authentication_acceptable
+  - name: int_gtfs_quality__stable_url

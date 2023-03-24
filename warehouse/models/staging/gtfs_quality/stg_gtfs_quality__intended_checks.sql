@@ -124,13 +124,13 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ authentication_acceptable_sa() }}, {{ availability_on_website() }}, {{ gtfs_dataset_sa() }}
     UNION ALL
-    SELECT {{ stable_url_schedule() }}, {{ compliance_schedule() }}, {{ gtfs_dataset() }}
+    SELECT {{ stable_url_schedule() }}, {{ compliance_schedule() }}, {{ gtfs_dataset_schedule() }}
     UNION ALL
-    SELECT {{ stable_url_vp() }}, {{ compliance_rt() }}, {{ gtfs_dataset() }}
+    SELECT {{ stable_url_vp() }}, {{ compliance_rt() }}, {{ gtfs_dataset_vp() }}
     UNION ALL
-    SELECT {{ stable_url_tu() }}, {{ compliance_rt() }}, {{ gtfs_dataset() }}
+    SELECT {{ stable_url_tu() }}, {{ compliance_rt() }}, {{ gtfs_dataset_tu() }}
     UNION ALL
-    SELECT {{ stable_url_sa() }}, {{ compliance_rt() }}, {{ gtfs_dataset() }}
+    SELECT {{ stable_url_sa() }}, {{ compliance_rt() }}, {{ gtfs_dataset_sa() }}
     UNION ALL
     SELECT {{ grading_scheme_v1() }}, {{ accurate_service_data() }}, {{ gtfs_dataset() }}
     UNION ALL
