@@ -170,6 +170,7 @@ def viz(
     verbose: bool = False,
     output: Optional[Path] = None,
     display: bool = False,
+    ratio: float = 0.3,
 ):
     manifest, catalog, run_results = read_artifacts_folder(
         artifacts_path, verbose=verbose
@@ -202,7 +203,7 @@ def viz(
     A = nx.nx_agraph.to_agraph(G)
     if verbose:
         print(f"Writing DAG to {output}")
-    A.draw(output, prog="dot")
+    A.draw(output, args=f"-Gratio={ratio}", prog="dot")
     if display:
         url = f"file://{output.resolve()}"
         webbrowser.open(url, new=2)  # open in new tab
