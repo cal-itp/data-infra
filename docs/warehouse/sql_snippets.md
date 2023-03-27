@@ -31,9 +31,9 @@ In order to get the data for a given day, you need to filter to keep data where.
 
 ```{code-cell}
 :tags: [remove-input]
-from calitp.tables import tbls
+from calitp_data_analysis.tables import tbls
 from myst_nb import glue
-from calitp import query_sql
+from calitp_data_analysis.sql import query_sql
 from siuba import *
 import pandas as pd
 import calitp.magics

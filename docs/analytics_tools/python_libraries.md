@@ -63,12 +63,12 @@ See [data-analyses/example_reports](https://github.com/cal-itp/data-analyses/tre
 Most notably, you can include `import tbls` at the top of your notebook to import a table from the warehouse in the form of a `tbls`:
 
 ```python
-from calitp.tables import tbls
+from calitp_data_analysis.tables import tbls
 ```
 
 Example:
 ```{code-cell}
-from calitp.tables import tbls
+from calitp_data_analysis.tables import tbls
 
 tbls.views.gtfs_schedule_fact_daily_feed_routes()
 ```
@@ -79,7 +79,7 @@ tbls.views.gtfs_schedule_fact_daily_feed_routes()
 
 As an example, in a notebook:
 ```{code-cell}
-from calitp import query_sql
+from calitp_data_analysis.sql import query_sql
 ```
 
 ```{code-cell}
@@ -105,7 +105,7 @@ and showing SQL test queries that siuba code generates.
 ### Basic query
 ```{code-cell}
 from myst_nb import glue
-from calitp.tables import tbls
+from calitp_data_analysis.tables import tbls
 from siuba import _, filter, count, collect, show_query
 
 # query lastest validation notices, then filter for a single gtfs feed,

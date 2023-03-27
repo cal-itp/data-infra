@@ -40,10 +40,10 @@ The tools that we can use to answer them are:
 ```{code-cell}
 :tags: [remove-cell]
 from myst_nb import glue
-from calitp.tables import tbls
+from calitp_data_analysis.tables import tbls
 from siuba import *
-import calitp.magics
-from calitp import query_sql
+import calitp_data_analysis.magics
+from calitp_data_analysis.sql import query_sql
 ```
 
 ### Relevant Tables
@@ -161,7 +161,7 @@ LIMIT 10
 ````{tabbed} siuba
 ```python
 # Allows us to query tables in the warehouse
-from calitp.tables import tbls
+from calitp_data_analysis.tables import tbls
 
 # The data analysis library used
 from siuba import *
@@ -276,7 +276,7 @@ LIMIT 10
 ````{tabbed} siuba
 ```python
 # Allows us to query tables in the warehouse
-from calitp.tables import tbls
+from calitp_data_analysis.tables import tbls
 
 # The data analysis library used
 from siuba import *
@@ -381,7 +381,7 @@ LIMIT 10
 ````{tabbed} siuba
 ```python
 # Allows us to query tables in the warehouse
-from calitp.tables import tbls
+from calitp_data_analysis.tables import tbls
 
 # The data analysis library used
 from siuba import *
@@ -500,7 +500,7 @@ LIMIT 10
 ````{tabbed} siuba
 ```python
 # Allows us to query tables in the warehouse
-from calitp.tables import tbls
+from calitp_data_analysis.tables import tbls
 
 # The data analysis library used
 from siuba import *
@@ -635,7 +635,7 @@ LIMIT 10
 ````{tabbed} siuba
 ```python
 # Allows us to query tables in the warehouse
-from calitp.tables import tbls
+from calitp_data_analysis.tables import tbls
 
 # The data analysis library used
 from siuba import *

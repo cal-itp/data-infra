@@ -30,7 +30,7 @@ import pandas as pd
 os.environ["CALITP_BQ_MAX_BYTES"] = str(50_000_000_000)
 
 import calitp
-from calitp.tables import tbls
+from calitp_data_analysis.tables import tbls
 from siuba import *
 
 pd.set_option("display.max_rows", 10)
