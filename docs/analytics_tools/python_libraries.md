@@ -104,7 +104,6 @@ and showing SQL test queries that siuba code generates.
 
 ### Basic query
 ```{code-cell}
-from myst_nb import glue
 from calitp_data_analysis.tables import tbls
 from siuba import _, filter, count, collect, show_query
 
