@@ -11,7 +11,6 @@ import networkx as nx  # type: ignore
 import typer
 from catalog import Catalog
 from dbt_artifacts import BaseNode, Manifest, RunResult, RunResults, Seed, Source, Test
-from networkx_viewer import Viewer  # type: ignore
 
 app = typer.Typer(pretty_exceptions_enable=False)
 
@@ -207,15 +206,6 @@ def viz(
     if display:
         url = f"file://{output.resolve()}"
         webbrowser.open(url, new=2)  # open in new tab
-
-
-@app.command()
-def guiviz(
-    graph_path: Path = Path("./target/graph.gpickle"),
-):
-    G = nx.read_gpickle(graph_path)
-    app = Viewer(G)
-    app.mainloop()
 
 
 if __name__ == "__main__":

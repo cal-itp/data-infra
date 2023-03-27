@@ -2521,21 +2521,6 @@ extra = ["lxml (>=4.6)", "pydot (>=1.4.2)", "pygraphviz (>=1.9)", "sympy (>=1.10
 test = ["codecov (>=2.1)", "pytest (>=7.2)", "pytest-cov (>=4.0)"]
 
 [[package]]
-name = "networkx-viewer"
-version = "0.3.0"
-description = "Interactive viewer for networkx graphs."
-category = "main"
-optional = false
-python-versions = ">3.5"
-files = [
-    {file = "networkx_viewer-0.3.0-py3-none-any.whl", hash = "sha256:0964de7cf1e9135ae64cef3a74ab6c0c59c3e471a3c612afb6530854a3feb4bc"},
-    {file = "networkx_viewer-0.3.0.tar.gz", hash = "sha256:519d11aebfc29a66cb143429fff44b7e3107b99d1411a719338cda57b8387fc8"},
-]
-
-[package.dependencies]
-networkx = ">=2.2"
-
-[[package]]
 name = "numpy"
 version = "1.24.2"
 description = "Fundamental package for array computing in Python"
@@ -2641,6 +2626,18 @@ python-versions = ">=3.7"
 files = [
     {file = "packaging-23.0-py3-none-any.whl", hash = "sha256:714ac14496c3e68c99c29b00845f7a2b85f3bb6f1078fd9f72fd20f0570002b2"},
     {file = "packaging-23.0.tar.gz", hash = "sha256:b6ad297f8907de0fa2fe1ccbd26fdaf387f5f47c7275fedf8cce89f99446cf97"},
+]
+
+[[package]]
+name = "palettable"
+version = "3.3.0"
+description = "Color palettes for Python"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "palettable-3.3.0-py2.py3-none-any.whl", hash = "sha256:c3bf3f548fc228e86bd3d16928bbf8d621c1d1098791ceab446d0e3a5e1298d1"},
+    {file = "palettable-3.3.0.tar.gz", hash = "sha256:72feca71cf7d79830cd6d9181b02edf227b867d503bec953cf9fa91bf44896bd"},
 ]
 
 [[package]]
@@ -4468,4 +4465,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.9"
-content-hash = "073a5bfb56435f421c666081d427b6c7d04c702c559128ea589dfdf8613f754a"
+content-hash = "36177951daad9a87cde34c0ee0eebd2ee5efe59b59c477b2d170246257e7ad8b"
