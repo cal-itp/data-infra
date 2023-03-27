@@ -50,7 +50,7 @@ header_age_percentiles AS (
 
 fct_daily_service_alerts_message_age_summary AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['dt', 'base64_url']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['dt', 'base64_url']) }} AS key,
         dt,
         base64_url,
         median_header_message_age,
