@@ -16,13 +16,13 @@ fct_daily_scheduled_shapes_monthly_aggregations AS (
         shape_id,
         route_id,
         route_short_name,
-        month,
-        year,
-        n_trips,
-        n_days
+        EXTRACT(month FROM activity_date) AS month,
+        EXTRACT(year FROM activity_date) AS year,
+        SUM(n_trips) AS n_trips,
+        COUNT(*) AS n_days
 
     FROM fct_daily_scheduled_shapes
-    --GROUP BY BY 1,2,3,4
+    GROUP BY 1, 2, 3, 4, 5, 6, 7
 
 )
 
