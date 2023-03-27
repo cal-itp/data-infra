@@ -42,3 +42,6 @@ models:
       - name: year
       - name: day_type
       - name: n_trips
+
+  - name: fct_observed_trips_summaries
+  - name: fct_daily_scheduled_shapes_monthly_aggregations
