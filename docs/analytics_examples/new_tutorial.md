@@ -29,7 +29,6 @@ import pandas as pd
 
 os.environ["CALITP_BQ_MAX_BYTES"] = str(50_000_000_000)
 
-import calitp
 from calitp_data_analysis.tables import tbls
 from siuba import *
 

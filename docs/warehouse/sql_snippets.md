@@ -35,7 +35,7 @@ from calitp_data_analysis.tables import tbls
 from calitp_data_analysis.sql import query_sql
 from siuba import *
 import pandas as pd
-import calitp.magics
+import calitp_data_analysis.magics
 ```
 
 ```{code-cell}
