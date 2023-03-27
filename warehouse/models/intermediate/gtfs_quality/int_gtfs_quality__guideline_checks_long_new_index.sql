@@ -48,17 +48,17 @@ unioned AS (
             ref('int_gtfs_quality__link_to_dataset_on_website'),
             ref('int_gtfs_quality__shapes_accurate')
         ],
-        include = ['date', 'key', 'status']
+        include = ['date', 'key', 'check', 'status']
     ) }}
 ),
 
 int_gtfs_quality__guideline_checks_long_new_index AS (
     SELECT
         unioned.*,
-        idx.* EXCEPT(status, date, key)
+        idx.* EXCEPT(status, date, key, check)
     FROM unioned
     LEFT JOIN idx
-    USING (date, key)
+    USING (date, key, check)
 )
 
 SELECT * FROM int_gtfs_quality__guideline_checks_long_new_index
