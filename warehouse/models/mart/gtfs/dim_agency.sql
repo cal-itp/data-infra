@@ -7,7 +7,7 @@ WITH make_dim AS (
 
 dim_agency AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['feed_key', 'agency_id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'agency_id']) }} AS key,
         feed_key,
         agency_id,
         agency_name,

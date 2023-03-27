@@ -36,7 +36,7 @@ stg_rt__vehicle_positions AS (
         vehicle.position.odometer AS odometer,
         vehicle.position.speed AS speed,
 
-        {{ dbt_utils.surrogate_key(['metadata.path',
+        {{ dbt_utils.generate_surrogate_key(['metadata.path',
                                     'id',
                                     'vehicle.timestamp',
                                     'vehicle.vehicle.id',

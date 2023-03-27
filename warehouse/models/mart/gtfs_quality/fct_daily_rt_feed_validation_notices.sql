@@ -26,7 +26,7 @@ notices AS (
 -- we assume the feeds passed the code 100% of the time
 fct_daily_rt_feed_validation_notices AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['daily_feeds.date', 'daily_feeds.base64_url', 'codes.code', 'codes.is_critical']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['daily_feeds.date', 'daily_feeds.base64_url', 'codes.code', 'codes.is_critical']) }} AS key,
         daily_feeds.date,
         daily_feeds.base64_url,
         codes.code,

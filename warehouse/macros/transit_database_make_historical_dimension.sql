@@ -44,7 +44,7 @@ hashed AS (
         -- hash all the content columns so we can efficiently compare over time
         -- note that even though it references the original table,
         -- it is selecting from safe data to get the safe versions of the arrays
-        {{ dbt_utils.surrogate_key(
+        {{ dbt_utils.generate_surrogate_key(
             dbt_utils.get_filtered_columns_in_relation(
                 from=ref(once_daily_staging_table),
                 except=[date_col] + ignore_cols

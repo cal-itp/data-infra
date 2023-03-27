@@ -27,7 +27,7 @@ keying AS (
 
 fct_service_alerts_messages AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['_extract_ts', 'base64_url', 'id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['_extract_ts', 'base64_url', 'id']) }} AS key,
         gtfs_dataset_key,
         dt,
         hour,

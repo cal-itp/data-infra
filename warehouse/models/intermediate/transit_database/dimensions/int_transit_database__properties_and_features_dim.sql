@@ -19,7 +19,7 @@ historical AS (
 
 int_transit_database__properties_and_features_dim AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['id', '_valid_from']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['id', '_valid_from']) }} AS key,
         id AS source_record_id,
         name,
         recommended_value,

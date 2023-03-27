@@ -13,7 +13,7 @@ int_gtfs_schedule__long_calendar AS (
 boolean_calendar_dates AS (
     SELECT
         -- at time of writing, this will be identical to `calendar_dates_key`, but just in case?
-        {{ dbt_utils.surrogate_key(['feed_key', 'service_id', 'date']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'service_id', 'date']) }} AS key,
         date AS service_date,
         feed_key,
         key AS calendar_dates_key,

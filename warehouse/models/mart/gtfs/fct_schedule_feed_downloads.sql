@@ -16,7 +16,7 @@ urls_to_gtfs_datasets AS (
 
 fct_schedule_feed_downloads AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['j.base64_url', 'j.ts']) }} as key,
+        {{ dbt_utils.generate_surrogate_key(['j.base64_url', 'j.ts']) }} as key,
         f.key AS feed_key,
         u.gtfs_dataset_key,
         j.ts,

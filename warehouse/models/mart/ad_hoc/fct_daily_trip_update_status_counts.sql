@@ -24,7 +24,7 @@ WITH fct_stop_time_updates AS (
 
 fct_daily_trip_update_status_counts AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['dt', 'base64_url', 'trip_schedule_relationship']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['dt', 'base64_url', 'trip_schedule_relationship']) }} AS key,
         dt,
         base64_url,
         trip_schedule_relationship,

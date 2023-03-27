@@ -29,7 +29,7 @@ WITH full_join AS (
 
 initial_assessed AS (
     SELECT
-        {{ dbt_utils.surrogate_key([
+        {{ dbt_utils.generate_surrogate_key([
             'organization_key',
             'service_key',
             'base64_url',

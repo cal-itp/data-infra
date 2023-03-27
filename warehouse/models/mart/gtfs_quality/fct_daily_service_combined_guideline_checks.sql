@@ -7,7 +7,7 @@ WITH int_gtfs_quality__guideline_checks_long AS (
 
 fct_daily_service_combined_guideline_checks AS (
     SELECT
-        {{ dbt_utils.surrogate_key([
+        {{ dbt_utils.generate_surrogate_key([
             'date',
             'service_key',
             'check']) }} AS key,

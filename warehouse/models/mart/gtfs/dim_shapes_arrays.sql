@@ -49,7 +49,7 @@ initial_pt_array AS (
 
 dim_shapes_arrays AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['feed_key', 'shape_id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'shape_id']) }} AS key,
         feed_key,
         shape_id,
         pt_array,

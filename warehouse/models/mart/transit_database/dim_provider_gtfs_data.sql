@@ -77,7 +77,7 @@ disambiguate_dups AS (
 pivoted AS (
     SELECT
         *,
-        {{ dbt_utils.surrogate_key([
+        {{ dbt_utils.generate_surrogate_key([
             'organization_key',
             'service_key',
             'associated_schedule_gtfs_dataset_key',
@@ -87,7 +87,7 @@ pivoted AS (
             'gtfs_dataset_key_vehicle_positions',
             'gtfs_service_data_customer_facing',
             'regional_feed_type']) }} AS key,
-        MAX(date) OVER(PARTITION BY {{ dbt_utils.surrogate_key([
+        MAX(date) OVER(PARTITION BY {{ dbt_utils.generate_surrogate_key([
             'organization_key',
             'service_key',
             'associated_schedule_gtfs_dataset_key',
@@ -143,7 +143,7 @@ all_versioned AS (
 
 dim_provider_gtfs_data AS (
     SELECT
-        {{ dbt_utils.surrogate_key([
+        {{ dbt_utils.generate_surrogate_key([
             'organization_key',
             'service_key',
             'associated_schedule_gtfs_dataset_key',
