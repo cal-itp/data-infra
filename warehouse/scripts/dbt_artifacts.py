@@ -13,7 +13,7 @@ import humanize
 import pendulum
 import yaml
 from catalog import Catalog, CatalogTable
-from palettable.scientific.sequential import LaJolla_6
+from palettable.scientific.sequential import LaJolla_6  # type: ignore
 from pydantic import BaseModel, Field, constr, validator
 from slugify import slugify
 from sqlalchemy import MetaData, Table, create_engine, select
