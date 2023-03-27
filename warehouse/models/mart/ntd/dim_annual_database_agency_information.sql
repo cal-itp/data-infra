@@ -8,7 +8,7 @@ WITH stg_ntd__annual_database_agency_information AS (
 
 dim_annual_database_agency_information AS (
     SELECT
-       {{ dbt_utils.surrogate_key(['year', 'ntd_id', 'ts']) }} as key,
+       {{ dbt_utils.generate_surrogate_key(['year', 'ntd_id', 'ts']) }} as key,
         year,
         ntd_id,
         number_of_state_counties,

@@ -13,7 +13,7 @@ fct_trip_updates_messages AS (
 
 fct_stop_time_updates AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['base64_url',
+        {{ dbt_utils.generate_surrogate_key(['base64_url',
                                     '_extract_ts',
                                     'trip_id',
                                     'trip_update_timestamp',

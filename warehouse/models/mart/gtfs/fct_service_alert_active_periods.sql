@@ -10,7 +10,7 @@ fct_service_alerts_active_periods AS (
             active_period
         ),
         key AS service_alert_message_key,
-        {{ dbt_utils.surrogate_key(['key', 'unnested_active_period.start', 'unnested_active_period.end']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['key', 'unnested_active_period.start', 'unnested_active_period.end']) }} AS key,
         unnested_active_period.start AS active_period_start,
         unnested_active_period.end AS active_period_end,
     FROM messages
