@@ -53,7 +53,7 @@
         const thebe_selector_output = ".output"
     </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true});</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -841,22 +841,13 @@
 
 <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CALITP_BQ_MAX_BYTES&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="mi">50_000_000_000</span><span class="p">)</span>
 
-<span class="kn">import</span> <span class="nn">calitp</span>
-<span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbls</span>
+<span class="kn">from</span> <span class="nn">calitp_data_analysis.tables</span> <span class="kn">import</span> <span class="n">tbls</span>
 <span class="kn">from</span> <span class="nn">siuba</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;display.max_rows&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
 
 <span class="n">SELECTED_DATE</span> <span class="o">=</span> <span class="s2">&quot;2021-09-01&quot;</span>
 <span class="n">ITP_ID</span> <span class="o">=</span> <span class="mi">208</span> <span class="c1"># Monterey-Salinas Transit</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.8.15/x64/lib/python3.8/site-packages/pkg_resources/__init__.py:2456: UserWarning: Obsolete pybigquery is installed, which is likely to
-interfere with sqlalchemy_bigquery.
-pybigquery should be uninstalled.
-  module = __import__(self.module_name, fromlist=[&#39;__name__&#39;], level=0)
 </pre></div>
 </div>
 </div>
@@ -944,61 +935,61 @@ pybigquery should be uninstalled.
       <th>0</th>
       <td>208</td>
       <td>2021-09-01</td>
-      <td>3813374101025042453</td>
-      <td>4130058</td>
-      <td>6079</td>
-      <td>14:33:00</td>
-      <td>36.673823</td>
-      <td>-121.653981</td>
-      <td>E Alisal /  Monterey</td>
+      <td>5616410489469970450</td>
+      <td>90130034</td>
+      <td>1052</td>
+      <td>15:52:00</td>
+      <td>36.609278</td>
+      <td>-121.837766</td>
+      <td>Noche Buena / Broadway</td>
     </tr>
     <tr>
       <th>1</th>
       <td>208</td>
       <td>2021-09-01</td>
-      <td>3813374101025042453</td>
-      <td>4130058</td>
-      <td>6079</td>
-      <td>14:33:00</td>
-      <td>36.673823</td>
-      <td>-121.653981</td>
-      <td>E Alisal /  Monterey</td>
+      <td>5616410489469970450</td>
+      <td>90130034</td>
+      <td>1052</td>
+      <td>15:52:00</td>
+      <td>36.609278</td>
+      <td>-121.837766</td>
+      <td>Noche Buena / Broadway</td>
     </tr>
     <tr>
       <th>2</th>
       <td>208</td>
       <td>2021-09-01</td>
-      <td>3813374101025042453</td>
-      <td>4130058</td>
-      <td>6079</td>
-      <td>14:33:00</td>
-      <td>36.673823</td>
-      <td>-121.653981</td>
-      <td>E Alisal /  Monterey</td>
+      <td>5616410489469970450</td>
+      <td>90130034</td>
+      <td>1052</td>
+      <td>15:52:00</td>
+      <td>36.609304</td>
+      <td>-121.837763</td>
+      <td>Noche Buena / Broadway</td>
     </tr>
     <tr>
       <th>3</th>
       <td>208</td>
       <td>2021-09-01</td>
-      <td>3813374101025042453</td>
-      <td>4130058</td>
-      <td>6079</td>
-      <td>14:33:00</td>
-      <td>36.673884</td>
-      <td>-121.653997</td>
-      <td>E Alisal /  Monterey</td>
+      <td>5616410489469970450</td>
+      <td>90130034</td>
+      <td>1052</td>
+      <td>15:52:00</td>
+      <td>36.609278</td>
+      <td>-121.837766</td>
+      <td>Noche Buena / Broadway</td>
     </tr>
     <tr>
       <th>4</th>
       <td>208</td>
       <td>2021-09-01</td>
-      <td>3813374101025042453</td>
-      <td>4130058</td>
-      <td>6079</td>
-      <td>14:33:00</td>
-      <td>36.673884</td>
-      <td>-121.653997</td>
-      <td>E Alisal /  Monterey</td>
+      <td>5616410489469970450</td>
+      <td>90130034</td>
+      <td>1052</td>
+      <td>15:52:00</td>
+      <td>36.609304</td>
+      <td>-121.837763</td>
+      <td>Noche Buena / Broadway</td>
     </tr>
   </tbody>
 </table>
@@ -1240,9 +1231,9 @@ pybigquery should be uninstalled.
       <th>stop_key</th>
       <th>date</th>
       <th>stop_id</th>
-      <th>stop_lat</th>
-      <th>calitp_itp_id</th>
       <th>stop_lon</th>
+      <th>calitp_itp_id</th>
+      <th>stop_lat</th>
     </tr>
   </thead>
   <tbody>
@@ -1251,45 +1242,45 @@ pybigquery should be uninstalled.
       <td>-3465164382055991093</td>
       <td>2021-09-01</td>
       <td>2619783</td>
-      <td>34.079011</td>
-      <td>6</td>
       <td>-118.117346</td>
+      <td>6</td>
+      <td>34.079011</td>
     </tr>
     <tr>
       <th>1</th>
       <td>-4388330883484799862</td>
       <td>2021-09-01</td>
       <td>2619784</td>
-      <td>34.079282</td>
-      <td>6</td>
       <td>-118.111602</td>
+      <td>6</td>
+      <td>34.079282</td>
     </tr>
     <tr>
       <th>2</th>
       <td>-3890148245714116244</td>
       <td>2021-09-01</td>
       <td>2619785</td>
-      <td>34.080835</td>
-      <td>6</td>
       <td>-118.114294</td>
+      <td>6</td>
+      <td>34.080835</td>
     </tr>
     <tr>
       <th>3</th>
       <td>3725728967761887153</td>
       <td>2021-09-01</td>
       <td>2619787</td>
-      <td>34.085540</td>
-      <td>6</td>
       <td>-118.116863</td>
+      <td>6</td>
+      <td>34.085540</td>
     </tr>
     <tr>
       <th>4</th>
       <td>-6069710332211186970</td>
       <td>2021-09-01</td>
       <td>2619788</td>
-      <td>34.085874</td>
-      <td>6</td>
       <td>-118.117052</td>
+      <td>6</td>
+      <td>34.085874</td>
     </tr>
   </tbody>
 </table>

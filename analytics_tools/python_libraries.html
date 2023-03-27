@@ -53,7 +53,7 @@
         const thebe_selector_output = ".output"
     </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true});</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -987,25 +987,19 @@
 <div class="section" id="import-tbls">
 <h3>import tbls<a class="headerlink" href="#import-tbls" title="Permalink to this headline">¶</a></h3>
 <p>Most notably, you can include <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">tbls</span></code> at the top of your notebook to import a table from the warehouse in the form of a <code class="docutils literal notranslate"><span class="pre">tbls</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbls</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp_data_analysis.tables</span> <span class="kn">import</span> <span class="n">tbls</span>
 </pre></div>
 </div>
 <p>Example:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbls</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp_data_analysis.tables</span> <span class="kn">import</span> <span class="n">tbls</span>
 
 <span class="n">tbls</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">gtfs_schedule_fact_daily_feed_routes</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.8.15/x64/lib/python3.8/site-packages/pkg_resources/__init__.py:2456: UserWarning: Obsolete pybigquery is installed, which is likely to
-interfere with sqlalchemy_bigquery.
-pybigquery should be uninstalled.
-  module = __import__(self.module_name, fromlist=[&#39;__name__&#39;], level=0)
-</pre></div>
-</div>
 <div class="output text_html"><div><pre># Source: lazy query
 # DB Conn: Engine(bigquery://cal-itp-data-infra/?maximum_bytes_billed=5000000000)
 # Preview:
@@ -1037,43 +1031,43 @@ pybigquery should be uninstalled.
   <tbody>
     <tr>
       <th>0</th>
-      <td>-3445676008391086366</td>
-      <td>7429981907618192904</td>
-      <td>2022-06-17</td>
-      <td>2022-06-07</td>
-      <td>2022-06-23</td>
+      <td>2830641244896201423</td>
+      <td>-1195686209074309801</td>
+      <td>2021-10-25</td>
+      <td>2021-09-06</td>
+      <td>2021-10-27</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-2005915690304585357</td>
-      <td>-8610096403337935715</td>
-      <td>2022-10-04</td>
-      <td>2022-09-29</td>
-      <td>2022-10-06</td>
+      <td>-3313272383092544529</td>
+      <td>3151363844570513554</td>
+      <td>2021-08-29</td>
+      <td>2021-06-27</td>
+      <td>2021-09-11</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>5269300786637141580</td>
-      <td>-2223890583357961918</td>
-      <td>2022-08-29</td>
-      <td>2022-05-31</td>
-      <td>2022-09-02</td>
+      <td>-5733704886496791540</td>
+      <td>-2609389342486491447</td>
+      <td>2022-07-24</td>
+      <td>2022-07-07</td>
+      <td>2022-08-01</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>1241904485335520202</td>
-      <td>-5719196614435984215</td>
-      <td>2022-02-22</td>
-      <td>2022-02-10</td>
-      <td>2022-03-11</td>
+      <td>1043903650796920080</td>
+      <td>3627770924270891240</td>
+      <td>2022-01-21</td>
+      <td>2021-12-29</td>
+      <td>2022-01-27</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-2182360661535769667</td>
-      <td>-1427432846547064731</td>
-      <td>2021-12-02</td>
-      <td>2021-11-22</td>
-      <td>2021-12-04</td>
+      <td>-4088050027624896437</td>
+      <td>5720816555867075687</td>
+      <td>2022-04-14</td>
+      <td>2022-04-14</td>
+      <td>2022-05-05</td>
     </tr>
   </tbody>
 </table>
@@ -1086,7 +1080,7 @@ pybigquery should be uninstalled.
 <p>As an example, in a notebook:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp</span> <span class="kn">import</span> <span class="n">query_sql</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp_data_analysis.sql</span> <span class="kn">import</span> <span class="n">query_sql</span>
 </pre></div>
 </div>
 </div>
@@ -1289,8 +1283,7 @@ and showing SQL test queries that siuba code generates.</p>
 <h3>Basic query<a class="headerlink" href="#basic-query" title="Permalink to this headline">¶</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
-<span class="kn">from</span> <span class="nn">calitp.tables</span> <span class="kn">import</span> <span class="n">tbls</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calitp_data_analysis.tables</span> <span class="kn">import</span> <span class="n">tbls</span>
 <span class="kn">from</span> <span class="nn">siuba</span> <span class="kn">import</span> <span class="n">_</span><span class="p">,</span> <span class="nb">filter</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">collect</span><span class="p">,</span> <span class="n">show_query</span>
 
 <span class="c1"># query lastest validation notices, then filter for a single gtfs feed,</span>
@@ -1331,27 +1324,27 @@ and showing SQL test queries that siuba code generates.</p>
   <tbody>
     <tr>
       <th>0</th>
-      <td>2200762960394821566</td>
+      <td>4353298498747921001</td>
       <td>1</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-8979759065771846304</td>
+      <td>-5768367084319898193</td>
       <td>1</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>-1803822485067769256</td>
+      <td>2200762960394821566</td>
       <td>1</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>-74403229883010320</td>
+      <td>-5013919702465349414</td>
       <td>1</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>-5768367084319898193</td>
+      <td>2570854701378106641</td>
       <td>1</td>
     </tr>
   </tbody>
@@ -1554,10 +1547,9 @@ In order to fetch the results of the query as a pandas DataFrame, run <code clas
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SELECT `anon_1`.`feed_key`, `anon_1`.`calitp_itp_id`, `anon_1`.`calitp_url_number`, `anon_1`.`calitp_agency_name`, `anon_1`.`raw_gtfs_schedule_url`, `anon_1`.`calitp_id_in_latest`, `anon_1`.`calitp_feed_id`, `anon_1`.`calitp_feed_name`, `anon_1`.`feed_publisher_name`, `anon_1`.`feed_publisher_url`, `anon_1`.`feed_lang`, `anon_1`.`default_lang`, `anon_1`.`feed_version`, `anon_1`.`feed_contact_email`, `anon_1`.`feed_contact_url`, `anon_1`.`feed_start_date`, `anon_1`.`feed_end_date`, `anon_1`.`rank`, `anon_1`.`is_composite_feed`, `anon_1`.`calitp_extracted_at`, `anon_1`.`calitp_deleted_at` 
-FROM (SELECT feed_key, calitp_itp_id, calitp_url_number, calitp_agency_name, raw_gtfs_schedule_url, calitp_id_in_latest, calitp_feed_id, calitp_feed_name, feed_publisher_name, feed_publisher_url, feed_lang, default_lang, feed_version, feed_contact_email, feed_contact_url, feed_start_date, feed_end_date, rank, is_composite_feed, calitp_extracted_at, calitp_deleted_at 
-FROM `views.gtfs_schedule_dim_feeds`) AS `anon_1` 
-WHERE regexp_contains(`anon_1`.`calitp_agency_name`, &#39;Metro&#39;)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SELECT * 
+FROM `views.gtfs_schedule_dim_feeds` AS `views.gtfs_schedule_dim_feeds_1` 
+WHERE regexp_contains(`views.gtfs_schedule_dim_feeds_1`.`calitp_agency_name`, &#39;Metro&#39;)
 </pre></div>
 </div>
 <div class="output text_html"><div><pre># Source: lazy query
@@ -1607,7 +1599,7 @@ WHERE regexp_contains(`anon_1`.`calitp_agency_name`, &#39;Metro&#39;)
   <tbody>
     <tr>
       <th>0</th>
-      <td>8344144664609790510</td>
+      <td>8654575366107518227</td>
       <td>278</td>
       <td>0</td>
       <td>San Diego Metropolitan Transit System</td>
@@ -1619,19 +1611,19 @@ WHERE regexp_contains(`anon_1`.`calitp_agency_name`, &#39;Metro&#39;)
       <td>http://www.sdmts.com</td>
       <td>...</td>
       <td>None</td>
-      <td>v1.5 Sept 5. 2021 svc change merged file new o...</td>
+      <td>v1 - Nov 21 2021 svc change merged Sept 5 2021 v4</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>1</td>
       <td>False</td>
-      <td>2021-08-28</td>
-      <td>2021-09-05</td>
+      <td>2021-11-03</td>
+      <td>2021-11-21</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>-5144776693092683578</td>
+      <td>8795779120208877258</td>
       <td>278</td>
       <td>0</td>
       <td>San Diego Metropolitan Transit System</td>
@@ -1643,19 +1635,19 @@ WHERE regexp_contains(`anon_1`.`calitp_agency_name`, &#39;Metro&#39;)
       <td>http://www.sdmts.com</td>
       <td>...</td>
       <td>None</td>
-      <td>v3 - Sept 5. 2021 svc change unmerged file + 9...</td>
+      <td>v1 merged - 2206v2 &amp; 2209v1.2</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>1</td>
       <td>False</td>
-      <td>2021-09-05</td>
-      <td>2021-10-21</td>
+      <td>2022-08-16</td>
+      <td>2022-08-25</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>-2403866816282273791</td>
+      <td>-5216492229531861956</td>
       <td>278</td>
       <td>0</td>
       <td>San Diego Metropolitan Transit System</td>
@@ -1667,19 +1659,19 @@ WHERE regexp_contains(`anon_1`.`calitp_agency_name`, &#39;Metro&#39;)
       <td>http://www.sdmts.com</td>
       <td>...</td>
       <td>None</td>
-      <td>v1.1 - Nov 21 2021 svc change unmerged + remov...</td>
+      <td>v1 merged 2201 &amp; 2111(v5)</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>1</td>
       <td>False</td>
-      <td>2021-11-21</td>
-      <td>2021-11-23</td>
+      <td>2022-01-13</td>
+      <td>2022-01-30</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>2579053550214098649</td>
+      <td>6592067446191147968</td>
       <td>278</td>
       <td>0</td>
       <td>San Diego Metropolitan Transit System</td>
@@ -1691,19 +1683,19 @@ WHERE regexp_contains(`anon_1`.`calitp_agency_name`, &#39;Metro&#39;)
       <td>http://www.sdmts.com</td>
       <td>...</td>
       <td>None</td>
-      <td>v3 - Add ComicCon Trolley Service + remove can...</td>
+      <td>v1.1 Effective Jan 30 2022</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>1</td>
       <td>False</td>
-      <td>2021-11-24</td>
-      <td>2021-12-23</td>
+      <td>2022-01-30</td>
+      <td>2022-02-08</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>7778135995060058061</td>
+      <td>3077664894694920933</td>
       <td>278</td>
       <td>0</td>
       <td>San Diego Metropolitan Transit System</td>
@@ -1715,15 +1707,15 @@ WHERE regexp_contains(`anon_1`.`calitp_agency_name`, &#39;Metro&#39;)
       <td>http://www.sdmts.com</td>
       <td>...</td>
       <td>None</td>
-      <td>v5 - from v4 + Monster Jam Trolley Svc + UTC 2...</td>
+      <td>v1.3.1: 1.2 pathways + GTFS Fares v2 rev 1</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
       <td>1</td>
       <td>False</td>
-      <td>2022-01-11</td>
-      <td>2022-01-13</td>
+      <td>2022-07-25</td>
+      <td>2022-08-15</td>
     </tr>
   </tbody>
 </table>
