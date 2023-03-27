@@ -3,7 +3,12 @@
 {{ config(materialized='table', persist_docs={"relation": false, "columns": true}) }}
 
 
-WITH unioned AS (
+WITH idx AS (
+    SELECT *
+    FROM {{ ref('int_gtfs_quality__guideline_checks_index') }}
+),
+
+unioned AS (
     {{ dbt_utils.union_relations(
         relations=[
             ref('int_gtfs_quality__schedule_download_success'),
@@ -43,13 +48,17 @@ WITH unioned AS (
             ref('int_gtfs_quality__link_to_dataset_on_website'),
             ref('int_gtfs_quality__shapes_accurate')
         ],
-        include = dbt_utils.get_filtered_columns_in_relation(from=ref('int_gtfs_quality__guideline_checks_index'))
+        include = ['date', 'key', 'status']
     ) }}
 ),
 
 int_gtfs_quality__guideline_checks_long_new_index AS (
-    SELECT *
+    SELECT
+        unioned.*,
+        idx.* EXCEPT(status, date, key)
     FROM unioned
+    LEFT JOIN idx
+    USING (date, key)
 )
 
 SELECT * FROM int_gtfs_quality__guideline_checks_long_new_index
