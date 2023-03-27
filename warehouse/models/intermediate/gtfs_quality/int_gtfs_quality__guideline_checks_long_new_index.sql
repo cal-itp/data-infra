@@ -47,6 +47,7 @@ unioned AS (
             ref('int_gtfs_quality__stable_url'),
             ref('int_gtfs_quality__link_to_dataset_on_website'),
             ref('int_gtfs_quality__shapes_accurate')
+            red('int_gtfs_quality__all_tu_in_vp')
         ],
         include = ['date', 'key', 'check', 'status']
     ) }}
