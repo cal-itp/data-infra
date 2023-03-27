@@ -25,26 +25,15 @@ compare_trips AS (
         scheduled_trips.service_date AS date,
         scheduled_trips.gtfs_dataset_key AS schedule_gtfs_dataset_key,
         scheduled_trips.feed_key AS schedule_feed_key,
-<<<<<<< HEAD
         COUNT(DISTINCT scheduled_trips.trip_id) AS scheduled_trips,
         COUNT(DISTINCT observed_trips.trip_id) AS observed_trips,
-=======
-        observed_trips.tu_gtfs_dataset_key,
-        observed_trips.tu_base64_url,
-        COUNT(DISTINCT scheduled_trips.trip_id) AS scheduled_trips,
-        COUNTIF(observed_trips.trip_id IS NOT NULL) AS observed_trips,
->>>>>>> 9300de57 (Migrate first batch of guideline checks to use new indices (#2340))
     FROM fct_daily_scheduled_trips AS scheduled_trips
     LEFT JOIN fct_observed_trips AS observed_trips
       -- should this be activity date or service date? will depend on fix for https://github.com/cal-itp/data-infra/issues/2347
       ON scheduled_trips.service_date = observed_trips.dt
       AND scheduled_trips.gtfs_dataset_key = observed_trips.schedule_to_use_for_rt_validation_gtfs_dataset_key
       AND scheduled_trips.trip_id = observed_trips.trip_id
-<<<<<<< HEAD
     GROUP BY 1, 2, 3
-=======
-    GROUP BY 1, 2, 3, 4, 5
->>>>>>> 9300de57 (Migrate first batch of guideline checks to use new indices (#2340))
 ),
 
 check_start AS (
@@ -52,11 +41,7 @@ check_start AS (
     FROM fct_observed_trips
 ),
 
-<<<<<<< HEAD
 -- take the individual schedule/TU comparison and roll them up to the service level
-=======
--- take the individual schedule/TU feed comparisons and roll them up to the service level
->>>>>>> 9300de57 (Migrate first batch of guideline checks to use new indices (#2340))
 map_trips_to_services AS (
     SELECT
         idx.date,
@@ -77,10 +62,6 @@ map_trips_to_services AS (
     LEFT JOIN compare_trips
         ON idx.date = compare_trips.date
         AND quartet.schedule_gtfs_dataset_key = compare_trips.schedule_gtfs_dataset_key
-<<<<<<< HEAD
-=======
-        AND quartet.trip_updates_gtfs_dataset_key = compare_trips.tu_gtfs_dataset_key
->>>>>>> 9300de57 (Migrate first batch of guideline checks to use new indices (#2340))
     WHERE idx.service_key IS NOT NULL
     GROUP BY 1, 2, 3
 ),
