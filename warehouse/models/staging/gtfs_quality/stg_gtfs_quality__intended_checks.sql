@@ -132,7 +132,7 @@ WITH stg_gtfs_quality__intended_checks AS (
     UNION ALL
     SELECT {{ stable_url_sa() }}, {{ compliance_rt() }}, {{ gtfs_dataset_sa() }}
     UNION ALL
-    SELECT {{ grading_scheme_v1() }}, {{ accurate_service_data() }}, {{ gtfs_dataset() }}
+    SELECT {{ grading_scheme_v1() }}, {{ accurate_service_data() }}, {{ gtfs_dataset_schedule() }}
     UNION ALL
     SELECT {{ link_to_dataset_on_website_schedule() }}, {{ availability_on_website() }}, {{ gtfs_dataset_schedule() }}
     UNION ALL
