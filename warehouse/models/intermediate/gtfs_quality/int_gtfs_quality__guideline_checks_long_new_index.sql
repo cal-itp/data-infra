@@ -49,7 +49,8 @@ unioned AS (
             ref('int_gtfs_quality__shapes_accurate'),
             red('int_gtfs_quality__all_tu_in_vp'),
             ref('int_gtfs_quality__modification_date_present'),
-            ref('int_gtfs_quality__grading_scheme_v1')
+            ref('int_gtfs_quality__grading_scheme_v1'),
+            ref('int_gtfs_quality__feed_listed')
         ],
         include = ['date', 'key', 'check', 'status']
     ) }}
