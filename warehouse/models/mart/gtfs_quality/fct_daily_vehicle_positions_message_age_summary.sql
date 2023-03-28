@@ -109,7 +109,7 @@ summarize_vehicle_ages AS (
 
 fct_daily_vehicle_positions_message_age_summary AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['dt', 'base64_url']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['dt', 'base64_url']) }} AS key,
         dt,
         base64_url,
         median_header_message_age,
