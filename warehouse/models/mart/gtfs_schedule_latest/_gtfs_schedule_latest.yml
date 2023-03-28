@@ -322,6 +322,44 @@ models:
         description: '{{ doc("gtfs_frequencies__exact_times") }}'
 
 
+  - name: dim_gtfs_datasets_latest
+    description: |
+      This table is a cut of the cleaned metadata representing GTFS datasets currently
+      active within the Cal-ITP ecosystem. Each record represents a GTFS dataset (feed)
+      that is either a type of GTFS Schedule, Trip Updates, Vehicle Locations or Alerts,
+      and provides base64-encoded URLs used to access that feed.
+    columns:
+      - name: name
+        description: |
+          An arbitrary human-readable title for the GTFS feed in question, usually
+          referencing the corresponding agency transit agency and feed type.
+      - name: type
+        description: |
+          GTFS data type ("schedule", "trip_updates",
+          "vehicle_positions", or "service_alerts")
+      - name: regional_feed_type
+        description: |
+          Describes whether this feed is a combined regional feed or has a relation
+          to a combined regional feed in some manner.
+          For example for MTC 511, the combined regional feed has type "Combined
+          Regional Feed", and the MTC-published subfeeds have type "Regional Subfeed".
+          If you are performing an analysis where using a regional combined feed is
+          inappropriate (even though that is the customer-facing data), this field can
+          help you assess other alternative feeds for the same services and organizations.
+          Not specified (null) for feeds with no relationship to regional feeds.
+      - name: uri
+        description: |
+          Plaintext URI of the GTFS feed referenced by the row, including templated
+          URL parameters for access, if relevant.
+      - name: base64_url
+        description: |
+          Base64-encoded URL of the GTFS feed referenced by the row
+      - name: schedule_to_use_for_rt_validation_base64_url
+        description: |
+          Base64-encoded URL of the GTFS schedule feed associated with the row, only
+          filled with a value for rows representing non-schedule-type feeds
+
+
   - name: dim_levels_latest
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
@@ -769,6 +807,7 @@ exposures:
       - ref("dim_fare_rules_latest")
       - ref("dim_feed_info_latest")
       - ref("dim_frequencies_latest")
+      - ref("dim_gtfs_datasets_latest")
       - ref("dim_levels_latest")
       - ref("dim_pathways_latest")
       - ref("dim_routes_latest")
@@ -841,6 +880,11 @@ exposures:
                 Each row is a cleaned row from a frequencies.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#frequenciestxt.
+            dim_gtfs_datasets_latest:
+              id: TODO
+              description: |
+                Each record represents a GTFS dataset (feed), and provides
+                base64-encoded URLs used to access that feed.
             dim_levels_latest:
               id: 288a08cd-7929-479e-aa88-08b677a08510
               description: |
