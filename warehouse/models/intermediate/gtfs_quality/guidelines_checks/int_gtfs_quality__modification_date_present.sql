@@ -1,5 +1,3 @@
-{{ config(materialized="table") }}
-
 WITH guideline_index AS (
     SELECT *
     FROM {{ ref('int_gtfs_quality__guideline_checks_index') }}
