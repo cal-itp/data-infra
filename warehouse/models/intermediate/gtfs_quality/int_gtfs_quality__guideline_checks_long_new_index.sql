@@ -46,8 +46,9 @@ unioned AS (
             ref('int_gtfs_quality__persistent_ids_schedule'),
             ref('int_gtfs_quality__stable_url'),
             ref('int_gtfs_quality__link_to_dataset_on_website'),
-            ref('int_gtfs_quality__shapes_accurate')
-            red('int_gtfs_quality__all_tu_in_vp')
+            ref('int_gtfs_quality__shapes_accurate'),
+            red('int_gtfs_quality__all_tu_in_vp'),
+            ref('int_gtfs_quality__modification_date_present')
         ],
         include = ['date', 'key', 'check', 'status']
     ) }}
