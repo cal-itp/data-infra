@@ -30,7 +30,7 @@ schema_fields:
   - name: merchant_number
     type: STRING
   - name: external_mid
-    type: INTEGER
+    type: STRING
   - name: store_number
     mode: NULLABLE
     type: STRING
