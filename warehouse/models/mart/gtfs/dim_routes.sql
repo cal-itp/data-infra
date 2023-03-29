@@ -7,7 +7,7 @@ WITH make_dim AS (
 
 dim_routes AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['feed_key', 'route_id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'route_id']) }} AS key,
         feed_key,
         route_id,
         route_type,

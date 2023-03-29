@@ -28,7 +28,7 @@ WITH vehicle_positions AS (
 int_gtfs_rt__vehicle_positions_trip_summaries AS (
     SELECT
         -- https://gtfs.org/realtime/reference/#message-tripdescriptor
-        {{ dbt_utils.surrogate_key([
+        {{ dbt_utils.generate_surrogate_key([
             'dt',
             'base64_url',
             'trip_id',

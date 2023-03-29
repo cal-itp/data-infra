@@ -13,6 +13,7 @@ import humanize
 import pendulum
 import yaml
 from catalog import Catalog, CatalogTable
+from palettable.scientific.sequential import LaJolla_6  # type: ignore
 from pydantic import BaseModel, Field, constr, validator
 from slugify import slugify
 from sqlalchemy import MetaData, Table, create_engine, select
@@ -491,12 +492,17 @@ class RunResult(BaseModel):
         """
         Returns a string representation intended for graphviz labels
         """
-        if self.bytes_processed > 300_000_000_000:
-            color = "red"
+        # TODO: do an actual linear transform on this
+        # the top colors are too dark to use as a background
+        white, yellow, orange, red, _, _ = LaJolla_6.hex_colors
+        if self.bytes_processed > 500_000_000_000:
+            color = red
+        elif self.bytes_processed > 300_000_000_000:
+            color = orange
         elif self.bytes_processed > 100_000_000_000:
-            color = "yellow"
+            color = yellow
         else:
-            color = "white"
+            color = white
 
         return {
             **self.node.gvattrs,

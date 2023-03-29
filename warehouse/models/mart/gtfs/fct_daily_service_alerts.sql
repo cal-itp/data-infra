@@ -33,7 +33,7 @@ select_english AS (
 
 fct_daily_service_alerts AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['dt', 'base64_url', 'id', 'header_text_text']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['dt', 'base64_url', 'id', 'header_text_text']) }} AS key,
         dt,
         gtfs_dataset_key,
         base64_url,

@@ -1,6 +1,6 @@
 {% macro create_row_access_policy(filter_column,filter_value, principals) %}
 create or replace row access policy
-    {{ this.schema }}_{{ this.identifier }}_{{ filter_column }}_{{ dbt_utils.slugify(filter_value) }}
+    {{ this.schema }}_{{ this.identifier }}_{{ filter_column }}_{% if filter_value %}{{ dbt_utils.slugify(filter_value) }}{% endif %}
 on
     {{ this }}
 grant to (

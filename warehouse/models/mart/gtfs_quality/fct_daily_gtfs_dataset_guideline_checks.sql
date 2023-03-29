@@ -17,7 +17,7 @@ unioned AS (
 
 fct_daily_gtfs_dataset_guideline_checks AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['date', 'gtfs_dataset_key', 'check']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['date', 'gtfs_dataset_key', 'check']) }} AS key,
         *
     FROM unioned
 )

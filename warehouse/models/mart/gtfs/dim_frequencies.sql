@@ -7,7 +7,7 @@ WITH make_dim AS (
 
 dim_frequencies AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['feed_key', 'trip_id', 'start_time']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'trip_id', 'start_time']) }} AS key,
         feed_key,
         trip_id,
         start_time,

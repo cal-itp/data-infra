@@ -98,7 +98,7 @@ pivot_to_route_type AS (
 fct_daily_scheduled_stops AS (
     SELECT
 
-        {{ dbt_utils.surrogate_key(['pivoted.activity_date', 'stops.key']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['pivoted.activity_date', 'stops.key']) }} AS key,
 
         pivoted.activity_date,
         pivoted.feed_key,

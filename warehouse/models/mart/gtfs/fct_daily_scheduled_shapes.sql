@@ -36,7 +36,7 @@ fct_daily_scheduled_shapes AS (
 
     SELECT
 
-        {{ dbt_utils.surrogate_key(['trips_counted.activity_date', 'trips_counted.shape_id', 'trips_counted.shape_array_key']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['trips_counted.activity_date', 'trips_counted.shape_id', 'trips_counted.shape_array_key']) }} AS key,
 
         trips_counted.n_trips,
         trips_counted.feed_key,

@@ -59,8 +59,9 @@ jobs:
           path: './warehouse/target/'
           glob: '*.json'
           destination: 'calitp-ci-artifacts/${{github.workflow}}/run_id=${{github.run_id}}/job=${{github.job}}/target/'
-      # Only do visualization if we actually changed models
+      # Only do visualization if we actually changed models and we are merging against main
       - uses: tj-actions/changed-files@v35
+        if: github.event.pull_request.base.ref == 'main'
         id: changed-files-warehouse
         with:
           files: 'warehouse/models/**/*.sql'
@@ -79,7 +80,7 @@ jobs:
           echo "### Changed models 🔀" >> report.md
           poetry run dbt --no-use-colors ls --resource-type model --select state:modified --exclude state:new --state ./latest | grep "^calitp_warehouse\." | sed "s/calitp_warehouse\.//g" >> report.md
           echo "### DAG" >> report.md
-          poetry run dbt --no-use-colors ls --resource-type model --select state:modified --state ./latest | grep "^calitp_warehouse\." | sed 's/^/--include /g' | xargs poetry run python scripts/visualize.py viz man --output=target/dag.png
+          poetry run dbt --no-use-colors ls --resource-type model --select state:modified --state ./latest | grep "^calitp_warehouse\." | sed 's/^/--include /g' | xargs poetry run python scripts/visualize.py man --output=target/dag.png
           echo "" >> report.md
           echo '![](./target/dag.png "Changed models")' >> report.md
           cml comment update report.md

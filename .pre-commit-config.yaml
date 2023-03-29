@@ -8,6 +8,7 @@ repos:
         args: ["--unsafe"]
         exclude: 'kubernetes/apps/charts/.*'
       - id: check-added-large-files
+    # TODO: could we use ruff to replace flake8/isort and maybe black?
   - repo: https://github.com/pycqa/flake8
     rev: 6.0.0
     hooks:
@@ -25,16 +26,16 @@ repos:
       - id: isort
         name: isort (python)
   - repo: https://github.com/pycqa/bandit
-    rev: 1.7.4
+    rev: 1.7.5
     hooks:
       - id: bandit
-        args: ["-ll", "--skip=B108,B608,B310,B303,B324"]
+        args: ["-ll", "--skip=B108,B608,B310,B303,B324,B113"]
         files: .py$
   - repo: https://github.com/sqlfluff/sqlfluff
-    rev: 1.4.1
+    rev: 2.0.2
     hooks:
       - id: sqlfluff-lint
-        additional_dependencies: ['dbt-bigquery==1.3.0', 'sqlfluff-templater-dbt']
+        additional_dependencies: ['dbt-bigquery', 'sqlfluff-templater-dbt']
         # skip: L003 indentation stuff -- TODO
         # skip: L010 uppercase keywords -- TODO
         # skip: L011 implicit/explicit aliasing of tables? -- TODO
@@ -52,7 +53,7 @@ repos:
         # skip: use left join instead of right join -- TODO
         # skip: use single quotes instead of double -- TODO
         args: [--dialect, "bigquery", --ignore, "parsing,templating",--exclude-rules, "L003,L010,L011,L022,L036,L038,L039,L059,L016,L029,L027,L032,L034,L014,L042,L055,L064"]
-        files: "warehouse/"
+        files: "warehouse/models" # TODO: should also lint tests etc. but we want to skip packages at least
   - repo: https://github.com/kynan/nbstripout
     rev: 0.6.1
     hooks:

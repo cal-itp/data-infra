@@ -107,4 +107,4 @@ models:
     tests: *mutually_exclusive_ranges
     columns:
       - *key
-  - name: int_transit_database__county_geography
+  - name: int_transit_database__county_geography_dim

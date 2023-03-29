@@ -51,7 +51,7 @@ outcomes_with_end_dt AS (
 
 fct_daily_schedule_feed_validation_notices AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['daily_feeds.date',
+        {{ dbt_utils.generate_surrogate_key(['daily_feeds.date',
                                     'daily_feeds.feed_key',
                                     'outcomes.validation_validator_version',
                                     'codes.code',

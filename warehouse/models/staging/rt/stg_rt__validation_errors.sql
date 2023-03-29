@@ -43,7 +43,7 @@ stg_rt__validation_errors as (
         occurrence.prefix as occurrence_prefix,
         offset as nth_occurrence,
 
-        {{ dbt_utils.surrogate_key(['metadata.path', 'errorMessage.validationRule.errorId', 'offset']) }} as key
+        {{ dbt_utils.generate_surrogate_key(['metadata.path', 'errorMessage.validationRule.errorId', 'offset']) }} as key
     FROM unioned, unnest(occurrenceList) as occurrence WITH OFFSET
 )
 

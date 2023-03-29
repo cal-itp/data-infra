@@ -13,7 +13,7 @@ unioned AS (
 
 fct_daily_gtfs_service_data_guideline_checks AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['date', 'gtfs_service_data_key', 'check']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['date', 'gtfs_service_data_key', 'check']) }} AS key,
         *
     FROM unioned
 )
