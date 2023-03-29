@@ -5,11 +5,6 @@ models:
   # "Final" combined guideline checks table
   - name: int_gtfs_quality__guideline_checks_long
     description: '{{ doc("int_gtfs_quality__guideline_checks_long") }}'
-    tests:
-      - dbt_utils.expression_is_true:
-          expression: "num_check_sources IS NULL OR num_check_sources <= 1"
-      - dbt_utils.expression_is_true:
-          expression: "matches_entity IS NULL OR matches_entity"
     columns:
     #TODO: use these anchors below
       - &key
@@ -67,11 +62,9 @@ models:
 #              to: ref('stg_gtfs_quality__intended_checks')
 #              field: check
       - name: status
+        tests:
+          - not_null
       - name: feature
-      - name: matches_entity
-        description: Used for testing purposes only.
-      - name: num_check_sources
-        description: Used for testing purposes only.
 
   # Index tables
 
