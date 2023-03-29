@@ -1,9 +1,12 @@
-WITH feed_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_quality__schedule_feed_guideline_index') }}
+WITH guideline_index AS (
+    SELECT
+        *
+    FROM {{ ref('int_gtfs_quality__guideline_checks_index') }}
+    WHERE check = {{ passes_fares_validator() }}
 ),
 
-keyed_parse_outcomes AS (
-    SELECT * FROM {{ ref('int_gtfs_schedule__keyed_parse_outcomes') }}
+files AS (
+    SELECT * FROM {{ ref('fct_schedule_feed_files') }}
 ),
 
 validation_fact_daily_feed_codes_fares_related AS (
@@ -17,47 +20,56 @@ validation_fact_daily_feed_codes_fares_related AS (
                     )
 ),
 
-daily_feed_fare_files AS (
+feed_has_fares AS (
     SELECT feed_key,
-           COUNT(*) AS ct_files
-      FROM keyed_parse_outcomes
-     WHERE parse_success
-       AND gtfs_filename IN ('fare_leg_rules',
+           LOGICAL_OR(gtfs_filename IN ('fare_leg_rules',
                              'rider_categories',
                              'fare_containers',
                              'fare_products',
                              'fare_transfer_rules'
-                             )
+                             )) AS has_fares
+      FROM files
+     WHERE parse_success
        AND feed_key IS NOT null
      GROUP BY feed_key
 ),
 
-validation_notices_by_day AS (
+tot_validation_notices AS (
     SELECT
         feed_key,
-        date,
         SUM(total_notices) as validation_notices
     FROM validation_fact_daily_feed_codes_fares_related
-    GROUP BY feed_key, date
+    GROUP BY feed_key
+),
+
+check_start AS (
+    SELECT MIN(date) AS first_check_date
+    FROM validation_fact_daily_feed_codes_fares_related
 ),
 
 int_gtfs_quality__passes_fares_validator AS (
     SELECT
-        idx.date,
-        idx.feed_key,
-        {{ passes_fares_validator() }} AS check,
-        {{ fare_completeness() }} AS feature,
+        idx.* EXCEPT(status),
+        first_check_date,
+        validation_notices,
+        has_fares,
         CASE
-            WHEN files.feed_key IS null THEN {{ guidelines_na_check_status() }}
-            WHEN notices.validation_notices = 0 THEN {{ guidelines_pass_status() }}
-            WHEN notices.validation_notices > 0 THEN {{ guidelines_fail_status() }}
+            WHEN has_schedule_feed
+                THEN
+                    CASE
+                        WHEN idx.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
+                        WHEN has_fares AND validation_notices = 0 THEN {{ guidelines_pass_status() }}
+                        WHEN tot_validation_notices.feed_key IS NULL OR NOT has_fares THEN {{ guidelines_na_check_status() }}
+                        WHEN has_fares AND validation_notices > 0 THEN {{ guidelines_fail_status() }}
+                    END
+            ELSE idx.status
         END AS status
-    FROM feed_guideline_index idx
-    LEFT JOIN validation_notices_by_day notices
-        ON idx.feed_key = notices.feed_key
-            AND idx.date = notices.date
-    LEFT JOIN daily_feed_fare_files files
-        ON idx.feed_key = files.feed_key
+    FROM guideline_index idx
+    CROSS JOIN check_start
+    LEFT JOIN feed_has_fares
+        ON idx.schedule_feed_key = feed_has_fares.feed_key
+    LEFT JOIN tot_validation_notices
+      ON idx.schedule_feed_key = tot_validation_notices.feed_key
 )
 
 SELECT * FROM int_gtfs_quality__passes_fares_validator

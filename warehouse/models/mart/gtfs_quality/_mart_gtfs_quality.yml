@@ -1,11 +1,16 @@
 version: 2
 
 models:
-  # TODO: once we have checks that occur above the feed level (e.g. organization)
-  #   we will need to create additional daily check fact tables at the
-  #   appropriate grain
-  - name: fct_daily_schedule_feed_guideline_checks
-    description: '{{ doc("fct_daily_schedule_feed_guideline_checks") }}'
+
+  - name: fct_daily_rt_feed_validation_notices
+    description: |
+      A daily model of validation notices found per feed. Data
+      is filled in so there is always a count of notices per day
+      per feed, even if that count is zero; null counts indicate
+      a lack of validation for that feed on that day.
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: 'validated_extracts = validation_successes + validation_exceptions'
     columns:
       - &key
         name: key
@@ -18,77 +23,6 @@ models:
         name: date
         tests:
           - not_null
-      - &schedule_feed_key
-        name: feed_key
-        tests:
-          - not_null
-          - relationships:
-              to: ref('dim_schedule_feeds')
-              field: key
-      - name: status
-      - &check
-        name: check
-        tests:
-          - not_null
-          # This is a useful test but dbt-metabase fails since
-          # Metabase does not sync the staging schema
-#          - relationships:
-#              to: ref('stg_gtfs_quality__intended_checks')
-#              field: check
-        meta:
-          metabase.semantic_type: type/Title
-      - &status
-        name: status
-        tests:
-          - dbt_utils.not_null_proportion:
-              at_least: 0.99
-
-  - name: fct_daily_rt_feed_guideline_checks
-    description: '{{ doc("fct_daily_rt_feed_guideline_checks") }}'
-    tests:
-    columns:
-      - *key
-      - *date
-      - &base64_url
-        name: base64_url
-        tests:
-          - not_null
-      - *check
-      # Reducing null_proportion minimum due to missing rows in rt_https check, due to missing data before Nov 22
-      # This floor can be raised over time, as more data populates
-      - name: status
-        tests:
-          - dbt_utils.not_null_proportion:
-              at_least: 0.90
-
-  - name: fct_daily_schedule_url_guideline_checks
-    description: '{{ doc("fct_daily_schedule_url_guideline_checks") }}'
-    columns:
-      - *key
-      - *date
-      - *base64_url
-      - *check
-
-  - name: fct_daily_rt_url_guideline_checks
-    description: '{{ doc("fct_daily_rt_url_guideline_checks") }}'
-    columns:
-      - *key
-      - *date
-      - *base64_url
-      - *check
-
-  - name: fct_daily_rt_feed_validation_notices
-    description: |
-      A daily model of validation notices found per feed. Data
-      is filled in so there is always a count of notices per day
-      per feed, even if that count is zero; null counts indicate
-      a lack of validation for that feed on that day.
-    tests:
-      - dbt_utils.expression_is_true:
-          expression: 'validated_extracts = validation_successes + validation_exceptions'
-    columns:
-      - *key
-      - *date
       - name: code
         tests:
           - not_null
@@ -145,8 +79,17 @@ models:
           - dbt_utils.accepted_range:
               min_value: "DATE'2022-11-16'"
               where: validation_validator_version = 'v4.0.0'
-      - *schedule_feed_key
-      - *base64_url
+      - &schedule_feed_key
+        name: feed_key
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_schedule_feeds')
+              field: key
+      - &base64_url
+        name: base64_url
+        tests:
+          - not_null
       - name: outcome_extract_dt
         tests:
           - dbt_utils.expression_is_true:
@@ -233,8 +176,14 @@ models:
       - name: schedule_feed_keys_included_array
         description: |
           Array of schedule_feed_key values for schedule feed versions included in this organization's assessment.
-      - *check
-      - name: status
+      - &check
+        name: check
+        tests:
+          - not_null
+      - &status
+        name: status
+        tests:
+          - not_null
       - name: feature
   - name: fct_daily_service_combined_guideline_checks
     description: |
@@ -271,7 +220,7 @@ models:
         description: |
           Array of schedule_feed_key values for schedule feed versions included in this service's assessment.
       - *check
-      - name: status
+      - *status
       - name: feature
   - name: fct_schedule_feed_files
     description: |
@@ -627,6 +576,54 @@ models:
       - name: publish_date
       - name: change_status
       - name: n
+
+  - name: fct_daily_vehicle_positions_message_age_summary
+    description: |
+      Table summarizing the age in seconds of various message components by RT URL by date.
+      Terms:
+      - For definitions of the underlying `header_message_age`, `vehicle_message_age`, and `vehice_message_age_vs_header`
+        values, see `fct_vehicle_positions_messages`. In particular, note that a negative value indicates that the
+        referenced item happened *after* the item it's being compared to; i.e., a negative `header_message_age` indicates
+        that the `header_timestamp` was later than `_extract_ts`.
+      - `pX` refers to a percentile, so `p25` refers to 25th percentile.
+      - `avg` refers to the mean.
+    tests: &message_age_summary_tests
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - dt
+            - base64_url
+    columns: &message_age_summary_cols
+      - name: dt
+        tests:
+          - not_null
+      - name: base64_url
+        tests:
+          - not_null
+
+  - name: fct_daily_trip_updates_message_age_summary
+    description: |
+      Table summarizing the age in seconds of various message components by RT URL by date.
+      Terms:
+      - For definitions of the underlying `header_message_age`, `trip_update_message_age`, and `trip_update_message_age_vs_header`
+        values, see `fct_trip_updates_messages`. In particular, note that a negative value indicates that the
+        referenced item happened *after* the item it's being compared to; i.e., a negative `header_message_age` indicates
+        that the `header_timestamp` was later than `_extract_ts`.
+      - `pX` refers to a percentile, so `p25` refers to 25th percentile.
+      - `avg` refers to the mean.
+    tests: *message_age_summary_tests
+    columns: *message_age_summary_cols
+
+  - name: fct_daily_service_alerts_message_age_summary
+    description: |
+      Table summarizing the age in seconds of various message components by RT URL by date.
+      Terms:
+      - For definitions of the underlying `header_message_age` see `fct_service_alerts_messages`. In particular, note that a negative value indicates that the
+        referenced item happened *after* the item it's being compared to; i.e., a negative `header_message_age` indicates
+        that the `header_timestamp` was later than `_extract_ts`.
+      - `pX` refers to a percentile, so `p25` refers to 25th percentile.
+      - `avg` refers to the mean.
+    tests: *message_age_summary_tests
+    columns: *message_age_summary_cols
 
 exposures:
  - name: calitp_reports_site

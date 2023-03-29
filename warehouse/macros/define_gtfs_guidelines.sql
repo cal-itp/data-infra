@@ -25,10 +25,6 @@
 'rt_feed_sa'
 {% endmacro %}
 
-{% macro rt_url() %}
-'rt_url'
-{% endmacro %}
-
 {% macro rt_url_vp() %}
 'rt_url_vp'
 {% endmacro %}
@@ -49,12 +45,8 @@
 'service'
 {% endmacro %}
 
-{% macro gtfs_service_data() -%}
-'gtfs_service_data'
-{% endmacro %}
-
-{% macro gtfs_dataset() -%}
-'gtfs_dataset'
+{% macro gtfs_service_data_schedule() -%}
+'gtfs_service_data_schedule'
 {% endmacro %}
 
 {% macro gtfs_dataset_schedule() -%}
@@ -101,7 +93,7 @@
 {% endmacro %}
 
 {% macro technical_contact_listed() %}
-"Technical contact is listed in feed_contact_email field within the feed_info.txt file"
+"Feed has feed_info.txt file and technical contact is listed in feed_contact_email field within the feed_info.txt file"
 {% endmacro %}
 
 {% macro no_rt_validation_errors_vp() %}
@@ -145,7 +137,7 @@
 {% endmacro %}
 
 {% macro pathways_valid() %}
-"No pathways-related errors appear in the MobilityData GTFS Schedule Validator"
+"Feed has pathways.txt file and no pathways-related errors appear in the MobilityData GTFS Schedule Validator"
 {% endmacro %}
 
 {% macro schedule_feed_on_transitland() %}
@@ -341,11 +333,11 @@
 {% endmacro %}
 
 {% macro fixed_routes_match() %}
-"Static and RT feeds are representative of all fixed-route transit services under the transit providers’ purview"
+"Static feeds are representative of all fixed-route transit services under the transit providers’ purview"
 {% endmacro %}
 
 {% macro demand_responsive_routes_match() %}
-"Static and RT feeds are representative of all demand-responsive transit services under the transit providers’ purview"
+"Static feeds are representative of all demand-responsive transit services under the transit providers’ purview"
 {% endmacro %}
 
 {% macro scheduled_trips_in_tu_feed() %}
@@ -430,20 +422,6 @@
 
 {% macro availability_on_website() %}
 "Availability on Website"
-{% endmacro %}
-
---
--- COLUMNS
---
-
-{% macro gtfs_guidelines_columns() %}
-date,
-calitp_itp_id,
-calitp_url_number,
-calitp_agency_name,
-check,
-status,
-feature
 {% endmacro %}
 
 --
@@ -547,6 +525,10 @@ feature
 "N/A - CHECK-SPECIFIC LOGIC"
 {% endmacro %}
 
+{% macro guidelines_na_too_early_status() %}
+"N/A - BEFORE CHECK ASSESSED"
+{% endmacro %}
+
 {% macro guidelines_na_entity_status() %}
 "N/A - NO APPLICABLE ENTITY"
 {% endmacro %}
@@ -569,12 +551,14 @@ CASE
     -- order of evaluation matters here!
     -- fail trumps everything
     WHEN LOGICAL_OR(status = {{ guidelines_fail_status() }}) THEN {{ guidelines_fail_status() }}
-    -- if at least one check passes and the rest are manual check needed; NA; or null, then let it pass
-    WHEN LOGICAL_OR(status = {{ guidelines_pass_status() }}) THEN {{ guidelines_pass_status() }}
-    -- if at least one check is manual check needed and the rest are NA or null, then manual check needed
+    -- if at least one check is manual check needed, then manual check needed
     WHEN LOGICAL_OR(status = {{ guidelines_manual_check_needed_status() }}) THEN {{ guidelines_manual_check_needed_status() }}
-    -- if at least one check is NA because of specific check logic and the rest are NA-no entity or null, then use NA-specific check
+    -- if at least one check passes and the rest are NA; or null, then let it pass
+    WHEN LOGICAL_OR(status = {{ guidelines_pass_status() }}) THEN {{ guidelines_pass_status() }}
+    -- if at least one check is NA because of specific check logic and the rest are NA too early, NA-no entity, or null, then use NA-specific check
     WHEN LOGICAL_OR(status = {{ guidelines_na_check_status() }}) THEN {{ guidelines_na_check_status() }}
+    -- if at least one check is NA because too early and the rest are NA-no entity or null then use NA-specific check
+    WHEN LOGICAL_OR(status = {{ guidelines_na_too_early_status() }}) THEN {{ guidelines_na_too_early_status() }}
     -- if all remaining checks are NA because no entity and the rest are null, then use NA no entity
     -- note that this one is AND because we want to confirm that this is all that's left at this point
     WHEN LOGICAL_AND(status = {{ guidelines_na_entity_status() }}) THEN {{ guidelines_na_entity_status() }}

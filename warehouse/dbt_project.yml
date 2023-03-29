@@ -64,6 +64,10 @@ models:
       +materialized: view
       schema: staging
 
+    intermediate:
+      gtfs_quality:
+        guidelines_checks:
+          +materialized: table
 
     mart:
       transit_database:
