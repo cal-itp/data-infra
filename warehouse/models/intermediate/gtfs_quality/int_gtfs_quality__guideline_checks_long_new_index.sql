@@ -50,7 +50,8 @@ unioned AS (
             red('int_gtfs_quality__all_tu_in_vp'),
             ref('int_gtfs_quality__modification_date_present'),
             ref('int_gtfs_quality__grading_scheme_v1'),
-            ref('int_gtfs_quality__feed_listed')
+            ref('int_gtfs_quality__feed_listed'),
+            ref('int_gtfs_quality__lead_time')
         ],
         include = ['date', 'key', 'check', 'status']
     ) }}

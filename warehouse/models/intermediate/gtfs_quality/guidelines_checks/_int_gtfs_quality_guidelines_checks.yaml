@@ -23,6 +23,7 @@ models:
   - name: int_gtfs_quality__passes_fares_validator
   - name: int_gtfs_quality__persistent_ids_schedule
   - name: int_gtfs_quality__modification_date_present
+  - name: int_gtfs_quality__lead_time
 
 # Schedule + RT combined URL checks reindexed
 # TODO: what kind of yaml do we want for these? specifically what tests
