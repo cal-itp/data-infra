@@ -2,7 +2,7 @@
 
 WITH int_gtfs_quality__guideline_checks_long AS (
     SELECT *
-    FROM {{ ref('int_gtfs_quality__guideline_checks_long_new_index') }}
+    FROM {{ ref('int_gtfs_quality__guideline_checks_long') }}
 ),
 
 fct_daily_service_combined_guideline_checks AS (
