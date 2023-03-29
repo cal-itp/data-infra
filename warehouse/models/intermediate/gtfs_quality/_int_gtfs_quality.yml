@@ -5,6 +5,9 @@ models:
   # "Final" combined guideline checks table
   - name: int_gtfs_quality__guideline_checks_long
     description: '{{ doc("int_gtfs_quality__guideline_checks_long") }}'
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: 'status != {{ guidelines_to_be_assessed_status() }}'
     columns:
     #TODO: use these anchors below
       - &key

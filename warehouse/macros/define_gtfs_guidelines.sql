@@ -25,10 +25,6 @@
 'rt_feed_sa'
 {% endmacro %}
 
-{% macro rt_url() %}
-'rt_url'
-{% endmacro %}
-
 {% macro rt_url_vp() %}
 'rt_url_vp'
 {% endmacro %}
@@ -51,10 +47,6 @@
 
 {% macro gtfs_service_data_schedule() -%}
 'gtfs_service_data_schedule'
-{% endmacro %}
-
-{% macro gtfs_dataset() -%}
-'gtfs_dataset'
 {% endmacro %}
 
 {% macro gtfs_dataset_schedule() -%}
@@ -430,20 +422,6 @@
 
 {% macro availability_on_website() %}
 "Availability on Website"
-{% endmacro %}
-
---
--- COLUMNS
---
-
-{% macro gtfs_guidelines_columns() %}
-date,
-calitp_itp_id,
-calitp_url_number,
-calitp_agency_name,
-check,
-status,
-feature
 {% endmacro %}
 
 --
