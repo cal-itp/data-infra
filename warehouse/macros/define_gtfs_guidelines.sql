@@ -555,8 +555,10 @@ CASE
     WHEN LOGICAL_OR(status = {{ guidelines_manual_check_needed_status() }}) THEN {{ guidelines_manual_check_needed_status() }}
     -- if at least one check passes and the rest are NA; or null, then let it pass
     WHEN LOGICAL_OR(status = {{ guidelines_pass_status() }}) THEN {{ guidelines_pass_status() }}
-    -- if at least one check is NA because of specific check logic and the rest are NA-no entity or null, then use NA-specific check
+    -- if at least one check is NA because of specific check logic and the rest are NA too early, NA-no entity, or null, then use NA-specific check
     WHEN LOGICAL_OR(status = {{ guidelines_na_check_status() }}) THEN {{ guidelines_na_check_status() }}
+    -- if at least one check is NA because too early and the rest are NA-no entity or null then use NA-specific check
+    WHEN LOGICAL_OR(status = {{ guidelines_na_too_early_status() }}) THEN {{ guidelines_na_too_early_status() }}
     -- if all remaining checks are NA because no entity and the rest are null, then use NA no entity
     -- note that this one is AND because we want to confirm that this is all that's left at this point
     WHEN LOGICAL_AND(status = {{ guidelines_na_entity_status() }}) THEN {{ guidelines_na_entity_status() }}

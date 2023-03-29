@@ -180,7 +180,10 @@ models:
         name: check
         tests:
           - not_null
-      - name: status
+      - &status
+        name: status
+        tests:
+          - not_null
       - name: feature
   - name: fct_daily_service_combined_guideline_checks
     description: |
@@ -217,7 +220,7 @@ models:
         description: |
           Array of schedule_feed_key values for schedule feed versions included in this service's assessment.
       - *check
-      - name: status
+      - *status
       - name: feature
   - name: fct_schedule_feed_files
     description: |
