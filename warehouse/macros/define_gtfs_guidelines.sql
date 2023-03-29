@@ -573,10 +573,10 @@ CASE
     -- order of evaluation matters here!
     -- fail trumps everything
     WHEN LOGICAL_OR(status = {{ guidelines_fail_status() }}) THEN {{ guidelines_fail_status() }}
-    -- if at least one check passes and the rest are manual check needed; NA; or null, then let it pass
-    WHEN LOGICAL_OR(status = {{ guidelines_pass_status() }}) THEN {{ guidelines_pass_status() }}
-    -- if at least one check is manual check needed and the rest are NA or null, then manual check needed
+    -- if at least one check is manual check needed, then manual check needed
     WHEN LOGICAL_OR(status = {{ guidelines_manual_check_needed_status() }}) THEN {{ guidelines_manual_check_needed_status() }}
+    -- if at least one check passes and the rest are NA; or null, then let it pass
+    WHEN LOGICAL_OR(status = {{ guidelines_pass_status() }}) THEN {{ guidelines_pass_status() }}
     -- if at least one check is NA because of specific check logic and the rest are NA-no entity or null, then use NA-specific check
     WHEN LOGICAL_OR(status = {{ guidelines_na_check_status() }}) THEN {{ guidelines_na_check_status() }}
     -- if all remaining checks are NA because no entity and the rest are null, then use NA no entity
