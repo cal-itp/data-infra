@@ -63,6 +63,9 @@ models:
           - not_null
       - name: feed_key
         description: Foreign key for `dim_schedule_feeds`.
+      - name: _feed_valid_from
+        tests:
+          - not_null
       - name: service_id
         description: '{{ doc("gtfs_calendar__service_id") }}'
       - name: service_date
@@ -302,6 +305,9 @@ models:
       - *schedule_key
       - name: feed_key
         description: Foreign key for `dim_schedule_feeds`.
+        tests:
+          - not_null
+      - name: _feed_valid_from
         tests:
           - not_null
       - name: calendar_key

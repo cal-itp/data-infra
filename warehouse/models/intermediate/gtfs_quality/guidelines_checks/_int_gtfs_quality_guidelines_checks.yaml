@@ -22,6 +22,8 @@ models:
   - name: int_gtfs_quality__no_7_day_feed_expiration
   - name: int_gtfs_quality__passes_fares_validator
   - name: int_gtfs_quality__persistent_ids_schedule
+  - name: int_gtfs_quality__modification_date_present
+  - name: int_gtfs_quality__lead_time
 
 # Schedule + RT combined URL checks reindexed
 # TODO: what kind of yaml do we want for these? specifically what tests
@@ -42,6 +44,8 @@ models:
 # TODO: what kind of yaml do we want for these? specifically what tests
   - name: int_gtfs_quality__scheduled_trips_in_tu_feed
   - name: int_gtfs_quality__trip_planners
+  - name: int_gtfs_quality__all_tu_in_vp
+  - name: int_gtfs_quality__feed_listed
 
 # RT URL checks reindexed
 # TODO: what kind of yaml do we want for these? specifically what tests
@@ -58,7 +62,6 @@ models:
   - name: int_gtfs_quality__fixed_routes_match
   - name: int_gtfs_quality__demand_responsive_routes_match
 
-
 # GTFS dataset checks reindexed
 # TODO: what kind of yaml do we want for these? specifically what tests
   - name: int_gtfs_quality__data_license
@@ -66,3 +69,4 @@ models:
   - name: int_gtfs_quality__stable_url
   - name: int_gtfs_quality__link_to_dataset_on_website
   - name: int_gtfs_quality__shapes_accurate
+  - name: int_gtfs_quality__grading_scheme_v1

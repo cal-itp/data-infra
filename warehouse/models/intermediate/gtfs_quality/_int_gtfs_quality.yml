@@ -7,9 +7,7 @@ models:
     description: '{{ doc("int_gtfs_quality__guideline_checks_long") }}'
     tests:
       - dbt_utils.expression_is_true:
-          expression: "num_check_sources IS NULL OR num_check_sources <= 1"
-      - dbt_utils.expression_is_true:
-          expression: "matches_entity IS NULL OR matches_entity"
+          expression: 'status != {{ guidelines_to_be_assessed_status() }}'
     columns:
     #TODO: use these anchors below
       - &key
@@ -67,11 +65,9 @@ models:
 #              to: ref('stg_gtfs_quality__intended_checks')
 #              field: check
       - name: status
+        tests:
+          - not_null
       - name: feature
-      - name: matches_entity
-        description: Used for testing purposes only.
-      - name: num_check_sources
-        description: Used for testing purposes only.
 
   # Index tables
 
@@ -369,3 +365,13 @@ models:
           - base64_url
           - ts
           - gtfs_validator_version
+  - name: int_gtfs_quality__scheduled_trip_version_summary
+    description: |
+      Summary of a schedule feed's stops and stop times by trip and (calendar) service, to support the GTFS guideline
+      check about sufficient lead time for schedule updates.
+    tests:
+    - dbt_utils.unique_combination_of_columns:
+        combination_of_columns:
+          - feed_key
+          - trip_id
+          - service_id

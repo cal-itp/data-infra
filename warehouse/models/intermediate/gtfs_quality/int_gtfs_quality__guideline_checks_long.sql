@@ -46,19 +46,26 @@ unioned AS (
             ref('int_gtfs_quality__persistent_ids_schedule'),
             ref('int_gtfs_quality__stable_url'),
             ref('int_gtfs_quality__link_to_dataset_on_website'),
-            ref('int_gtfs_quality__shapes_accurate')
+            ref('int_gtfs_quality__shapes_accurate'),
+            ref('int_gtfs_quality__all_tu_in_vp'),
+            ref('int_gtfs_quality__modification_date_present'),
+            ref('int_gtfs_quality__grading_scheme_v1'),
+            ref('int_gtfs_quality__feed_listed'),
+            ref('int_gtfs_quality__lead_time')
         ],
         include = ['date', 'key', 'check', 'status']
     ) }}
 ),
 
-int_gtfs_quality__guideline_checks_long_new_index AS (
+int_gtfs_quality__guideline_checks_long AS (
     SELECT
-        unioned.*,
+        {{ dbt_utils.generate_surrogate_key(['unioned.key', 'date', 'check']) }} AS key,
+        unioned.* EXCEPT(key),
+        unioned.key AS assessed_entity_key,
         idx.* EXCEPT(status, date, key, check)
     FROM unioned
     LEFT JOIN idx
     USING (date, key, check)
 )
 
-SELECT * FROM int_gtfs_quality__guideline_checks_long_new_index
+SELECT * FROM int_gtfs_quality__guideline_checks_long
