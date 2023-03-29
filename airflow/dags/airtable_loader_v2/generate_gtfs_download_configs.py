@@ -25,13 +25,17 @@ from pydantic import ValidationError
 def gtfs_datasets_to_extract_configs(
     extract: AirtableGTFSDataExtract,
 ) -> Tuple[
-    List[GTFSDownloadConfig], List[Tuple[AirtableGTFSDataRecord, ValidationError]]
+    List[GTFSDownloadConfig],
+    List[Tuple[AirtableGTFSDataRecord, ValidationError]],
+    List[GTFSDownloadConfig],
 ]:
     valid = {}
     invalid = []
+    skipped = []
 
     for record in extract.records:
         if not record.data_quality_pipeline:
+            skipped.append(record)
             continue
         with sentry_sdk.push_scope() as scope:
             scope.set_tag("record_id", record.id)
@@ -61,8 +65,9 @@ def gtfs_datasets_to_extract_configs(
                 )
             except ValidationError as e:
                 scope.fingerprint = [record.id, record.name, str(e)]
-                logging.exception(
-                    f'exception occurred while validating record id="{record.id}" name="{record.name}": {e}'
+                sentry_sdk.capture_exception(e, scope=scope)
+                logging.warning(
+                    f'validation error for record id="{record.id}" name="{record.name}": {e}'
                 )
                 invalid.append((record, e))
 
@@ -73,7 +78,7 @@ def gtfs_datasets_to_extract_configs(
             if first in valid:
                 config.schedule_url_for_validation = valid[first][1].url
 
-    return list(valid[1] for valid in valid.values()), invalid
+    return list(valid[1] for valid in valid.values()), invalid, skipped
 
 
 def convert_gtfs_datasets_to_download_configs(task_instance, execution_date, **kwargs):
@@ -97,15 +102,27 @@ def convert_gtfs_datasets_to_download_configs(task_instance, execution_date, **k
         ],
     )
 
-    valid, invalid = gtfs_datasets_to_extract_configs(extract)
+    valid, invalid, skipped = gtfs_datasets_to_extract_configs(extract)
 
-    msg = f"got {len(valid)} configs out of {len(extract.records)} total records"
+    msg = f"got {len(valid)} valid configs out of {len(extract.records)} total records; skipped {len(skipped)}"
     print(msg)
 
+    print("Invalid records:")
     for record, error in invalid:
         print(record.name, record.pipeline_url, error)
 
-    if len(valid) / len(extract.records) < 0.95:
+    print("Skipped records:")
+    for record in skipped:
+        print(record.name, record.pipeline_url)
+
+    # TODO: we should probably be configuring these alerts via Grafana but we need Pushgateway for that
+
+    # skipped are OK but we want to alert on a high number of invalid records
+    if len(invalid) / len(extract.records) > 0.05:
+        raise RuntimeError()
+
+    # sanity check, should update this if we end up with lots of historical records
+    if len(valid) / len(extract.records) < 0.1:
         raise RuntimeError(msg)
 
     jsonl_content = gzip.compress("\n".join(record.json() for record in valid).encode())
