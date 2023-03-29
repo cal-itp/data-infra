@@ -27,7 +27,7 @@ def gtfs_datasets_to_extract_configs(
 ) -> Tuple[
     List[GTFSDownloadConfig],
     List[Tuple[AirtableGTFSDataRecord, ValidationError]],
-    List[GTFSDownloadConfig],
+    List[AirtableGTFSDataRecord],
 ]:
     valid = {}
     invalid = []
@@ -104,7 +104,7 @@ def convert_gtfs_datasets_to_download_configs(task_instance, execution_date, **k
 
     valid, invalid, skipped = gtfs_datasets_to_extract_configs(extract)
 
-    msg = f"got {len(valid)} valid configs out of {len(extract.records)} total records; skipped {len(skipped)}"
+    msg = f"{len(extract.records)=} {len(valid)=} {len(skipped)=} {len(invalid)=}"
     print(msg)
 
     print("Invalid records:")
@@ -117,13 +117,15 @@ def convert_gtfs_datasets_to_download_configs(task_instance, execution_date, **k
 
     # TODO: we should probably be configuring these alerts via Grafana but we need Pushgateway for that
 
-    # skipped are OK but we want to alert on a high number of invalid records
-    if len(invalid) / len(extract.records) > 0.05:
-        raise RuntimeError()
+    invalid_threshold_pct = 0.05
+    if len(invalid) / len(extract.records) > invalid_threshold_pct:
+        raise RuntimeError(f"more than {invalid_threshold_pct}% invalid records")
 
-    # sanity check, should update this if we end up with lots of historical records
-    if len(valid) / len(extract.records) < 0.1:
-        raise RuntimeError(msg)
+    # should update this if we end up with lots of historical records
+    # as of 2023-03-29 we're at 5%
+    skipped_threshold_pct = 0.15
+    if len(skipped) / len(extract.records) > skipped_threshold_pct:
+        raise RuntimeError(f"more than {skipped_threshold_pct}% skipped records")
 
     jsonl_content = gzip.compress("\n".join(record.json() for record in valid).encode())
     GTFSDownloadConfigExtract(
