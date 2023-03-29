@@ -328,6 +328,8 @@ models:
       active within the Cal-ITP ecosystem. Each record represents a GTFS dataset (feed)
       that is either a type of GTFS Schedule, Trip Updates, Vehicle Locations or Alerts,
       and provides base64-encoded URLs used to access that feed.
+    meta:
+      ckan.authority: https://calitp.org/
     columns:
       - name: name
         description: |
