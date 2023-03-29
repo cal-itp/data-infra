@@ -1,54 +1,75 @@
 {{ config(materialized='table') }}
 
 WITH fct_observed_trips AS (
-    SELECT * FROM {{ ref('fct_observed_trips') }}
+    SELECT
+
+        tu_gtfs_dataset_key AS gtfs_dataset_key,
+        --name,
+        trip_id,
+        dt,
+        tu_num_distinct_message_ids,
+
+        -- do all of these need to be converted from UTC ??
+        tu_min_extract_ts,
+        tu_max_extract_ts,
+        trip_start_time,
+
+        -- Cast to interval because it's a string, with <24hr values, so cast to time breaks
+        CAST(trip_start_time AS INTERVAL) AS interval_trip_start_time,
+        CAST(tu_min_extract_ts AS TIME) AS tu_min_extract_time
+
+    FROM {{ ref('fct_observed_trips') }}
+    WHERE dt >= '2022-12-01' AND dt < '2022-12-08'
 ),
 
-select_time_of_day AS (
+select_event_time AS (
+
+    SELECT
+        *,
+        -- Weird double cast here because of the weird casting behavior in the first CTE
+        COALESCE(interval_trip_start_time, CAST(CAST(tu_min_extract_time AS STRING) AS INTERVAL)) AS event_time
+
+    FROM fct_observed_trips
+
+),
+
+create_time_of_day AS (
 
     SELECT
 
-        fct_observed_trips.*,
+        *,
         CASE
-            WHEN schedule.trip_id IS NOT NULL AND rt.trip_id IS NOT NULL THEN schedule.trip_id
-            ELSE tu_min_extract_ts
-        END
-        AS time_of_day
-
-    FROM fct_daily_scheduled_trips
-    fct_observed_trips
-
-),
-
-label_day_part AS (
-
-        CASE
-            WHEN EXTRACT(hour FROM time_of_day) < 4 THEN "OWL"
-            WHEN EXTRACT(hour FROM time_of_day) < 7 THEN "Early AM"
-            WHEN EXTRACT(hour FROM time_of_day) < 10 THEN "AM Peak"
-            WHEN EXTRACT(hour FROM time_of_day) < 15 THEN "Midday"
-            WHEN EXTRACT(hour FROM time_of_day) < 20 THEN "PM Peak"
+            WHEN EXTRACT(hour FROM event_time) < 4 THEN "OWL"
+            WHEN EXTRACT(hour FROM event_time) < 7 THEN "Early AM"
+            WHEN EXTRACT(hour FROM event_time) < 10 THEN "AM Peak"
+            WHEN EXTRACT(hour FROM event_time) < 15 THEN "Midday"
+            WHEN EXTRACT(hour FROM event_time) < 20 THEN "PM Peak"
             ELSE "Evening"
         END
-        AS day_part,
+        AS time_of_day,
 
-)
+    FROM select_event_time
+
+),
 
 fct_observed_trips_summaries AS (
 
     SELECT
 
         gtfs_dataset_key,
-        name,
+        --name,
         trip_id,
-        activity_date,
-
+        dt,
         tu_num_distinct_message_ids,
         tu_min_extract_ts,
         tu_max_extract_ts,
+        trip_start_time,
+        time_of_day,
 
-    FROM fct_observed_trips
-    --GROUP BY BY 1,2,3,4
+        -- need more clarity from Tiffany on how to deduce the column below
+        --number_of_distinct_minutes_with_vp,
+
+    FROM create_time_of_day
 
 )
 
