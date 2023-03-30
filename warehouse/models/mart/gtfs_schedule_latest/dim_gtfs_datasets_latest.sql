@@ -14,9 +14,10 @@ dim_gtfs_datasets_latest AS (
         unfiltered_entries_latest.name,
         unfiltered_entries_latest.type,
         unfiltered_entries_latest.regional_feed_type,
-        unfiltered_entries_latest.uri,
-        unfiltered_entries_latest.base64_url,
-        validation_schedule.base64_url AS schedule_to_use_for_rt_validation_base64_url
+        unfiltered_entries_latest.base64_url as base64url_url,
+        CAST(FROM_BASE64(REPLACE(REPLACE(unfiltered_entries_latest.base64_url, '-', '+'), '_', '/')) as STRING) AS string_url,
+        validation_schedule.base64_url AS schedule_to_use_for_rt_validation_base64url_url,
+        CAST(FROM_BASE64(REPLACE(REPLACE(validation_schedule.base64_url, '-', '+'), '_', '/')) as STRING) AS schedule_to_use_for_rt_validation_string_url
     FROM unfiltered_entries_latest
     LEFT JOIN bridge_schedule_dataset_for_validation
         ON unfiltered_entries_latest.key = bridge_schedule_dataset_for_validation.gtfs_dataset_key
