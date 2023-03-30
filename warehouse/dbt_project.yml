@@ -72,6 +72,8 @@ models:
     mart:
       transit_database:
         schema: mart_transit_database
+      transit_database_latest:
+        schema: mart_transit_database_latest
       gtfs_quality:
         schema: mart_gtfs_quality
       gtfs:
