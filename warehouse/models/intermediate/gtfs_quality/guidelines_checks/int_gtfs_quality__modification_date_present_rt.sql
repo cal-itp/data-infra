@@ -32,9 +32,9 @@ int_gtfs_quality__modification_date_present_rt AS (
         has_last_modified_string,
         CASE
         -- check that the row has the right entity + check combo, then assign statuses
-            WHEN (idx.has_rt_url_tu AND check = {{ modification_date_present_trip_updates() }})
-                OR (idx.has_rt_url_vp AND check = {{ modification_date_present_vehicle_positions() }})
-                OR (idx.has_rt_url_sa AND check = {{ modification_date_present_service_alerts() }})
+            WHEN (idx.has_rt_feed_tu AND check = {{ modification_date_present_trip_updates() }})
+                OR (idx.has_rt_feed_vp AND check = {{ modification_date_present_vehicle_positions() }})
+                OR (idx.has_rt_feed_sa AND check = {{ modification_date_present_service_alerts() }})
                    THEN
                     CASE
                         WHEN has_last_modified_string THEN {{ guidelines_pass_status() }}
