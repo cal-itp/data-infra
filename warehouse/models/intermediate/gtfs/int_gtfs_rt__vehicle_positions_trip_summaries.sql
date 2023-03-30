@@ -17,7 +17,10 @@
 {% endif %}
 
 WITH vehicle_positions AS (
-    SELECT * FROM {{ ref('fct_vehicle_positions_messages') }}
+    SELECT
+        *,
+        FORMAT_TIMESTAMP("%R", vehicle_timestamp) AS vehicle_position_in_hour_minute
+    FROM {{ ref('fct_vehicle_positions_messages') }}
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
@@ -44,6 +47,7 @@ int_gtfs_rt__vehicle_positions_trip_summaries AS (
         trip_direction_id,
         trip_start_time,
         trip_start_date,
+        COUNT(DISTINCT vehicle_position_in_hour_minute) AS num_distinct_minutes_of_trip_with_vehicle_positions,
         COUNT(DISTINCT id) AS num_distinct_message_ids,
         MIN(_extract_ts) AS min_extract_ts,
         MAX(_extract_ts) AS max_extract_ts,

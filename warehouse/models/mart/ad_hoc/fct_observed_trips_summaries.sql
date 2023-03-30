@@ -13,8 +13,10 @@ WITH fct_observed_trips AS (
         tu_min_extract_ts,
         tu_max_extract_ts,
         trip_start_time,
+        vp_num_distinct_minutes_of_trip_with_vehicle_positions,
 
         -- Cast to interval because it's a string, with <24hr values, so cast to time breaks
+        --does this need the activity date treatment?
         CAST(trip_start_time AS INTERVAL) AS interval_trip_start_time,
         CAST(tu_min_extract_ts AS TIME) AS tu_min_extract_time
 
@@ -64,10 +66,8 @@ fct_observed_trips_summaries AS (
         tu_min_extract_ts,
         tu_max_extract_ts,
         trip_start_time,
+        vp_num_distinct_minutes_of_trip_with_vehicle_positions,
         time_of_day,
-
-        -- need more clarity from Tiffany on how to deduce the column below
-        --number_of_distinct_minutes_with_vp,
 
     FROM create_time_of_day
 

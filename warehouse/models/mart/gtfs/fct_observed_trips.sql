@@ -133,6 +133,7 @@ fct_observed_trips AS (
         tu.num_scheduled_canceled_added_stops AS tu_num_scheduled_canceled_added_stops,
 
         -- vehicle positions facts
+        vp.num_distinct_minutes_of_trip_with_vehicle_positions AS vp_num_distinct_minutes_of_trip_with_vehicle_positions,
         vp.num_distinct_message_ids AS vp_num_distinct_message_ids,
         vp.min_extract_ts AS vp_min_extract_ts,
         vp.max_extract_ts AS vp_max_extract_ts,
