@@ -1,5 +1,5 @@
 ---
-name: User Story
+name: User story / feature request
 about: Submit a user story
 title: 'User Story:'
 labels: ''
@@ -15,9 +15,9 @@ _Please describe your need, outlining the key users, the feature that is needed,
 
 ### Acceptance Criteria
 
-_Please enter something that can be verified to show that this user story is satisfied. For example: **If I do A, B should happen.**_
+_Please enter something that can be verified to show that this user story is satisfied. For example:  **I can join table X with table Y.** or **Column A appears in table Z in Metabase.**_
 
 
 
 ### Notes
-_Please enter any additional information that will facilitate the completion of this ticket, for example any constraints not mentioned above._
+_Please enter any additional information that will facilitate the completion of this ticket. For example: Are there any constraints not mentioned above? Are there any alternatives you have considered?_
