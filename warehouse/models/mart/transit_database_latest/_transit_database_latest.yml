@@ -22,7 +22,7 @@ models:
           - accepted_values:
               values: ["trip_updates", "vehicle_positions", "service_alerts"]
               config:
-                where: "schedule_to_use_for_rt_validation_base64url_url IS NOT NULL"
+                where: "schedule_to_use_for_rt_validation_base64_url IS NOT NULL"
       - name: regional_feed_type
         description: |
           Describes whether this feed is a combined regional feed or has a relation
@@ -33,16 +33,16 @@ models:
           inappropriate (even though that is the customer-facing data), this field can
           help you assess other alternative feeds for the same services and organizations.
           Not specified (null) for feeds with no relationship to regional feeds.
-      - name: base64url_url
+      - name: base64_url
         description: |
-          Base64URL-encoded URL of the GTFS feed referenced by the row, using
+          Base64-encoded URL of the GTFS feed referenced by the row, using
           URL-safe base64 as described in
           https://cloud.google.com/bigquery/docs/reference/standard-sql/string_functions#to_base64
-      - name: string_url
+      - name: url
         description: |
           Plaintext URL of the GTFS feed referenced by the row, unencoded for
-          convenience directly from the value of base64url_url.
-      - name: schedule_to_use_for_rt_validation_base64url_url
+          convenience directly from the value of base64_url.
+      - name: schedule_to_use_for_rt_validation_base64_url
         description: |
           Base64-encoded URL of the GTFS schedule feed associated with the row, only
           filled with a value for rows representing non-schedule-type feeds
@@ -51,9 +51,9 @@ models:
               values: [NULL]
               config:
                 where: "type like 'schedule'"
-      - name: schedule_to_use_for_rt_validation_string_url
+      - name: schedule_to_use_for_rt_validation_url
         description: |
           Plaintext URL of the GTFS schedule feed associated with the row, only
           filled with a value for rows representing non-schedule-type feeds,
           unencoded for convenience directly from the value of
-          schedule_to_use_for_rt_validation_base64url_url.
+          schedule_to_use_for_rt_validation_base64_url.
