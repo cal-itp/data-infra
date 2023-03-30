@@ -18,6 +18,11 @@ models:
         description: |
           GTFS data type ("schedule", "trip_updates",
           "vehicle_positions", or "service_alerts")
+        tests:
+          - accepted_values:
+              values: ["trip_updates", "vehicle_positions", "service_alerts"]
+              config:
+                where: "schedule_to_use_for_rt_validation_base64url_url IS NOT NULL"
       - name: regional_feed_type
         description: |
           Describes whether this feed is a combined regional feed or has a relation
@@ -41,39 +46,14 @@ models:
         description: |
           Base64-encoded URL of the GTFS schedule feed associated with the row, only
           filled with a value for rows representing non-schedule-type feeds
-      - name: schedule_to_use_for_rt_validation_string_url.
+        tests:
+          - accepted_values:
+              values: [NULL]
+              config:
+                where: "type like 'schedule'"
+      - name: schedule_to_use_for_rt_validation_string_url
         description: |
           Plaintext URL of the GTFS schedule feed associated with the row, only
           filled with a value for rows representing non-schedule-type feeds,
           unencoded for convenience directly from the value of
           schedule_to_use_for_rt_validation_base64url_url.
-
-exposures:
-  - name: california_open_data
-    type: application
-    maturity: low
-    url: https://data.ca.gov/dataset/cal-itp-gtfs-ingest-pipeline-dataset
-    description: Latest-only GTFS Schedule data published to Caltrans CKAN instance.
-
-    depends_on:
-      - ref("dim_gtfs_datasets_latest")
-
-    owner:
-      email: soren.s@jarv.us
-
-    meta:
-      methodology: |
-        Cal-ITP collects the GTFS feeds from a statewide list every night and aggegrates it into a statewide table
-        for analysis purposes only. Do not use for trip planner ingestion, rather is meant to be used for statewide
-        analytics and other use cases. Note: These data may or may or may not have passed GTFS-Validation.
-      coordinate_system_epsg: "4326"
-      destinations:
-        - type: ckan
-          format: csv
-          url: https://data.ca.gov
-          resources:
-            dim_gtfs_datasets_latest:
-              id: TODO
-              description: |
-                Each record represents a GTFS dataset (feed), and provides
-                base64-encoded URLs used to access that feed.

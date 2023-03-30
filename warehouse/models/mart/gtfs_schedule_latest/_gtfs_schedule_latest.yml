@@ -769,6 +769,7 @@ exposures:
       - ref("dim_fare_rules_latest")
       - ref("dim_feed_info_latest")
       - ref("dim_frequencies_latest")
+      - ref("dim_gtfs_datasets_latest")
       - ref("dim_levels_latest")
       - ref("dim_pathways_latest")
       - ref("dim_routes_latest")
@@ -841,6 +842,11 @@ exposures:
                 Each row is a cleaned row from a frequencies.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#frequenciestxt.
+            dim_gtfs_datasets_latest:
+              id: TODO
+              description: |
+                Each record represents a GTFS dataset (feed), and provides
+                base64-encoded URLs used to access that feed.
             dim_levels_latest:
               id: 288a08cd-7929-479e-aa88-08b677a08510
               description: |
