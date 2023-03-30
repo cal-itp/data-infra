@@ -1,9 +1,7 @@
 WITH
 unfiltered_entries_latest AS (
-    {{ get_latest_schedule_data(
-    table_name = ref('dim_gtfs_datasets'),
-    clean_table_name = 'dim_gtfs_datasets'
-    ) }}
+    SELECT * FROM {{ ref('dim_gtfs_datasets') }}
+    WHERE _is_current
 ),
 
 bridge_schedule_dataset_for_validation AS (
