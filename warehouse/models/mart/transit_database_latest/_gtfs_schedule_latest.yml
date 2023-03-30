@@ -1,0 +1,79 @@
+version: 2
+
+models:
+  - name: dim_gtfs_datasets_latest
+    description: |
+      This table is a cut of the cleaned metadata representing GTFS datasets currently
+      active within the Cal-ITP ecosystem. Each record represents a GTFS dataset (feed)
+      that is either a type of GTFS Schedule, Trip Updates, Vehicle Locations or Alerts,
+      and provides base64-encoded URLs used to access that feed.
+    meta:
+      ckan.authority: https://calitp.org/
+    columns:
+      - name: name
+        description: |
+          An arbitrary human-readable title for the GTFS feed in question, usually
+          referencing the corresponding agency transit agency and feed type.
+      - name: type
+        description: |
+          GTFS data type ("schedule", "trip_updates",
+          "vehicle_positions", or "service_alerts")
+      - name: regional_feed_type
+        description: |
+          Describes whether this feed is a combined regional feed or has a relation
+          to a combined regional feed in some manner.
+          For example for MTC 511, the combined regional feed has type "Combined
+          Regional Feed", and the MTC-published subfeeds have type "Regional Subfeed".
+          If you are performing an analysis where using a regional combined feed is
+          inappropriate (even though that is the customer-facing data), this field can
+          help you assess other alternative feeds for the same services and organizations.
+          Not specified (null) for feeds with no relationship to regional feeds.
+      - name: base64url_url
+        description: |
+          Base64URL-encoded URL of the GTFS feed referenced by the row, using
+          URL-safe base64 as described in
+          https://cloud.google.com/bigquery/docs/reference/standard-sql/string_functions#to_base64
+      - name: string_url
+        description: |
+          Plaintext URL of the GTFS feed referenced by the row, unencoded for
+          convenience directly from the value of base64url_url.
+      - name: schedule_to_use_for_rt_validation_base64url_url
+        description: |
+          Base64-encoded URL of the GTFS schedule feed associated with the row, only
+          filled with a value for rows representing non-schedule-type feeds
+      - name: schedule_to_use_for_rt_validation_string_url.
+        description: |
+          Plaintext URL of the GTFS schedule feed associated with the row, only
+          filled with a value for rows representing non-schedule-type feeds,
+          unencoded for convenience directly from the value of
+          schedule_to_use_for_rt_validation_base64url_url.
+
+exposures:
+  - name: california_open_data
+    type: application
+    maturity: low
+    url: https://data.ca.gov/dataset/cal-itp-gtfs-ingest-pipeline-dataset
+    description: Latest-only GTFS Schedule data published to Caltrans CKAN instance.
+
+    depends_on:
+      - ref("dim_gtfs_datasets_latest")
+
+    owner:
+      email: soren.s@jarv.us
+
+    meta:
+      methodology: |
+        Cal-ITP collects the GTFS feeds from a statewide list every night and aggegrates it into a statewide table
+        for analysis purposes only. Do not use for trip planner ingestion, rather is meant to be used for statewide
+        analytics and other use cases. Note: These data may or may or may not have passed GTFS-Validation.
+      coordinate_system_epsg: "4326"
+      destinations:
+        - type: ckan
+          format: csv
+          url: https://data.ca.gov
+          resources:
+            dim_gtfs_datasets_latest:
+              id: TODO
+              description: |
+                Each record represents a GTFS dataset (feed), and provides
+                base64-encoded URLs used to access that feed.
