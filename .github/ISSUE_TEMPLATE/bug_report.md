@@ -8,17 +8,13 @@ assignees: ''
 ---
 
 **Describe the bug**
-A clear and concise description of what the bug is.
+_Please enter a clear and concise description of the bug._
 
 **To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+_Please enter step by step instructions to reproduce the behavior. For example: Query column A for organization Y on date Z._
 
 **Expected behavior**
-A clear and concise description of what you expected to happen.
+_Please enter a clear and concise description of what you expected to happen._
 
 **Additional context**
-Add any other context about the problem here.
+_Please enter any other context about the problem here._
