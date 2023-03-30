@@ -349,17 +349,25 @@ models:
           inappropriate (even though that is the customer-facing data), this field can
           help you assess other alternative feeds for the same services and organizations.
           Not specified (null) for feeds with no relationship to regional feeds.
-      - name: uri
+      - name: base64url_url
         description: |
-          Plaintext URI of the GTFS feed referenced by the row, including templated
-          URL parameters for access, if relevant.
-      - name: base64_url
+          Base64URL-encoded URL of the GTFS feed referenced by the row, using
+          URL-safe base64 as described in
+          https://cloud.google.com/bigquery/docs/reference/standard-sql/string_functions#to_base64
+      - name: string_url
         description: |
-          Base64-encoded URL of the GTFS feed referenced by the row
-      - name: schedule_to_use_for_rt_validation_base64_url
+          Plaintext URL of the GTFS feed referenced by the row, unencoded for
+          convenience directly from the value of base64url_url.
+      - name: schedule_to_use_for_rt_validation_base64url_url
         description: |
           Base64-encoded URL of the GTFS schedule feed associated with the row, only
           filled with a value for rows representing non-schedule-type feeds
+      - name: schedule_to_use_for_rt_validation_string_url.
+        description: |
+          Plaintext URL of the GTFS schedule feed associated with the row, only
+          filled with a value for rows representing non-schedule-type feeds,
+          unencoded for convenience directly from the value of
+          schedule_to_use_for_rt_validation_base64url_url.
 
 
   - name: dim_levels_latest
