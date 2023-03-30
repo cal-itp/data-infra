@@ -1,15 +1,15 @@
 ---
 name: User story / feature request
-about: Submit a user story
-title: 'User Story:'
+about: Submit a user story or feature request
+title: ''
 labels: ''
 assignees: ''
 
 ---
 
-## User story
+## User story / feature request
 
-_Please describe your need, outlining the key users, the feature that is needed, and the goal that that the feature will facilitate. For example: **As a [user or stakeholder type], I want [software feature] so that [some business value]**_
+_Please describe your need, outlining the key users, the feature being requested, and the goal that that the feature will facilitate. For example: **As a [user or stakeholder type], I want [software feature] so that [some business value]**_
 
 
 
