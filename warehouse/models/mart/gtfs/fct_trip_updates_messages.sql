@@ -37,6 +37,10 @@ fct_trip_updates_messages AS (
         _config_extract_ts,
         _gtfs_dataset_name,
 
+        TIMESTAMP_DIFF(_extract_ts, header_timestamp, SECOND) AS _header_message_age,
+        TIMESTAMP_DIFF(_extract_ts, trip_update_timestamp, SECOND) AS _trip_update_message_age,
+        TIMESTAMP_DIFF(header_timestamp, trip_update_timestamp, SECOND) AS _trip_update_message_age_vs_header,
+
         header_timestamp,
         header_version,
         header_incrementality,

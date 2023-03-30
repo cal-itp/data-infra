@@ -1,9 +1,12 @@
-WITH feed_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_quality__schedule_feed_guideline_index') }}
+WITH guideline_index AS (
+    SELECT
+        *
+    FROM {{ ref('int_gtfs_quality__guideline_checks_index') }}
+    WHERE check = {{ no_7_day_feed_expiration() }}
 ),
 
 -- For this check we are only looking for the 7-day feed expiration warning
-validation_fact_daily_feed_codes_expiration_related AS (
+validation_notices AS (
     SELECT * FROM {{ ref('fct_daily_schedule_feed_validation_notices') }}
      WHERE code = 'feed_expiration_date7_days'
 ),
@@ -12,25 +15,36 @@ validation_notices_by_day AS (
     SELECT
         feed_key,
         date,
-        SUM(total_notices) as validation_notices
-    FROM validation_fact_daily_feed_codes_expiration_related
+        SUM(total_notices) AS sum_total_notices
+    FROM validation_notices
     GROUP BY feed_key, date
+),
+
+check_start AS (
+    SELECT MIN(date) AS first_check_date
+    FROM validation_notices
 ),
 
 int_gtfs_quality__no_7_day_feed_expiration AS (
     SELECT
-        idx.date,
-        idx.feed_key,
-        {{ no_7_day_feed_expiration() }} AS check,
-        {{ best_practices_alignment_schedule() }} AS feature,
+        idx.* EXCEPT(status),
+        sum_total_notices,
         CASE
-            WHEN notices.validation_notices = 0 THEN {{ guidelines_pass_status() }}
-            WHEN notices.validation_notices > 0 THEN {{ guidelines_fail_status() }}
+            WHEN has_schedule_feed
+                THEN
+                    CASE
+                        WHEN sum_total_notices > 0 THEN {{ guidelines_fail_status() }}
+                        WHEN sum_total_notices = 0 THEN {{ guidelines_pass_status() }}
+                        WHEN idx.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
+                        WHEN sum_total_notices IS NULL THEN {{ guidelines_na_check_status() }}
+                    END
+            ELSE idx.status
         END AS status
-    FROM feed_guideline_index idx
-    LEFT JOIN validation_notices_by_day notices
-        ON idx.feed_key = notices.feed_key
-            AND idx.date = notices.date
+    FROM guideline_index idx
+    CROSS JOIN check_start
+    LEFT JOIN validation_notices_by_day
+        ON idx.schedule_feed_key = validation_notices_by_day.feed_key
+            AND idx.date = validation_notices_by_day.date
 )
 
 SELECT * FROM int_gtfs_quality__no_7_day_feed_expiration

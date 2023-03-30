@@ -1,148 +1,71 @@
+-- TODO: this will replace int_gtfs_quality__guideline_checks once ready
 -- description for this table got too long, don't persist to BQ
 {{ config(materialized='table', persist_docs={"relation": false, "columns": true}) }}
 
-WITH implemented_checks AS (
+
+WITH idx AS (
     SELECT *
-    FROM {{ ref('fct_implemented_checks') }}
+    FROM {{ ref('int_gtfs_quality__guideline_checks_index') }}
 ),
 
-assessed_entities AS (
-    SELECT *
-    FROM {{ ref('int_gtfs_quality__daily_assessment_candidate_entities') }}
-    WHERE guidelines_assessed
-),
-
-schedule_feed_checks AS (
-    SELECT *
-    FROM {{ ref('fct_daily_schedule_feed_guideline_checks') }}
-),
-
-rt_feed_checks AS (
-    SELECT *
-    FROM {{ ref('fct_daily_rt_feed_guideline_checks') }}
-),
-
-schedule_url_checks AS (
-    SELECT *
-    FROM {{ ref('fct_daily_schedule_url_guideline_checks') }}
-),
-
-rt_url_checks AS (
-    SELECT *
-    FROM {{ ref('fct_daily_rt_url_guideline_checks') }}
-),
-
-organization_checks AS (
-    SELECT * FROM {{ ref('fct_daily_organization_guideline_checks') }}
-),
-
-gtfs_dataset_checks AS (
-    SELECT * FROM {{ ref('fct_daily_gtfs_dataset_guideline_checks') }}
-),
-
-service_checks AS (
-    SELECT * FROM {{ ref('fct_daily_service_guideline_checks') }}
-),
-
-gtfs_service_data_checks AS (
-    SELECT * FROM {{ ref('fct_daily_gtfs_service_data_guideline_checks') }}
-),
-
-idx AS (
-    SELECT
-        implemented_checks.*,
-        assessed_entities.*
-    FROM implemented_checks
-    CROSS JOIN assessed_entities
+unioned AS (
+    {{ dbt_utils.union_relations(
+        relations=[
+            ref('int_gtfs_quality__schedule_download_success'),
+            ref('int_gtfs_quality__feed_aggregator'),
+            ref('int_gtfs_quality__trip_id_alignment'),
+            ref('int_gtfs_quality__scheduled_trips_in_tu_feed'),
+            ref('int_gtfs_quality__trip_planners'),
+            ref('int_gtfs_quality__no_schedule_validation_errors'),
+            ref('int_gtfs_quality__shapes_file_present'),
+            ref('int_gtfs_quality__complete_wheelchair_accessibility_data'),
+            ref('int_gtfs_quality__shapes_for_all_trips'),
+            ref('int_gtfs_quality__include_tts'),
+            ref('int_gtfs_quality__shapes_valid'),
+            ref('int_gtfs_quality__pathways_valid'),
+            ref('int_gtfs_quality__technical_contact_listed'),
+            ref('int_gtfs_quality__rt_feeds_present'),
+            ref('int_gtfs_quality__rt_https'),
+            ref('int_gtfs_quality__no_rt_validation_errors'),
+            ref('int_gtfs_quality__rt_protobuf_error'),
+            ref('int_gtfs_quality__rt_20sec_vp'),
+            ref('int_gtfs_quality__no_stale_vehicle_positions'),
+            ref('int_gtfs_quality__rt_20sec_tu'),
+            ref('int_gtfs_quality__no_stale_trip_updates'),
+            ref('int_gtfs_quality__no_stale_service_alerts'),
+            ref('int_gtfs_quality__modification_date_present_rt'),
+            ref('int_gtfs_quality__contact_on_website'),
+            ref('int_gtfs_quality__fixed_routes_match'),
+            ref('int_gtfs_quality__demand_responsive_routes_match'),
+            ref('int_gtfs_quality__data_license'),
+            ref('int_gtfs_quality__authentication_acceptable'),
+            ref('int_gtfs_quality__no_expired_services'),
+            ref('int_gtfs_quality__no_30_day_feed_expiration'),
+            ref('int_gtfs_quality__no_7_day_feed_expiration'),
+            ref('int_gtfs_quality__passes_fares_validator'),
+            ref('int_gtfs_quality__persistent_ids_schedule'),
+            ref('int_gtfs_quality__stable_url'),
+            ref('int_gtfs_quality__link_to_dataset_on_website'),
+            ref('int_gtfs_quality__shapes_accurate'),
+            ref('int_gtfs_quality__all_tu_in_vp'),
+            ref('int_gtfs_quality__modification_date_present'),
+            ref('int_gtfs_quality__grading_scheme_v1'),
+            ref('int_gtfs_quality__feed_listed'),
+            ref('int_gtfs_quality__lead_time')
+        ],
+        include = ['date', 'key', 'check', 'status']
+    ) }}
 ),
 
 int_gtfs_quality__guideline_checks_long AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key([
-            'idx.date',
-            'idx.organization_key',
-            'idx.service_key',
-            'idx.gtfs_service_data_key',
-            'idx.gtfs_dataset_key',
-            'idx.schedule_feed_key',
-            'idx.check']) }} AS key,
-        idx.date,
-        idx.organization_name,
-        idx.service_name,
-        idx.gtfs_dataset_name,
-        idx.gtfs_dataset_type,
-        idx.base64_url,
-        idx.organization_key,
-        idx.organization_source_record_id,
-        idx.service_key,
-        idx.gtfs_service_data_key,
-        idx.gtfs_dataset_key,
-        idx.schedule_feed_key,
-        idx.feature,
-        idx.check,
-        idx.entity,
-        COALESCE(
-            schedule_feed_checks.status,
-            rt_feed_checks.status,
-            schedule_url_checks.status,
-            rt_url_checks.status,
-            organization_checks.status,
-            gtfs_dataset_checks.status,
-            service_checks.status,
-            gtfs_service_data_checks.status
-        ) AS status,
-        CASE
-            WHEN schedule_feed_checks.status IS NOT NULL THEN idx.entity = {{ schedule_feed() }}
-            WHEN rt_feed_checks.status IS NOT NULL THEN idx.entity = {{ rt_feed() }}
-            WHEN schedule_url_checks.status IS NOT NULL THEN idx.entity = {{ schedule_url() }}
-            WHEN rt_url_checks.status IS NOT NULL THEN idx.entity = {{ rt_url() }}
-            WHEN organization_checks.status IS NOT NULL THEN idx.entity = {{ organization() }}
-            WHEN gtfs_dataset_checks.status IS NOT NULL THEN idx.entity = {{ gtfs_dataset() }}
-            WHEN service_checks.status IS NOT NULL THEN idx.entity = {{ service() }}
-            WHEN gtfs_service_data_checks.status IS NOT NULL THEN idx.entity = {{ gtfs_service_data() }}
-        END AS matches_entity,
-        CASE WHEN schedule_feed_checks.status IS NOT NULL THEN 1 ELSE 0 END
-        + CASE WHEN rt_feed_checks.status IS NOT NULL THEN 1 ELSE 0 END
-        + CASE WHEN schedule_url_checks.status IS NOT NULL THEN 1 ELSE 0 END
-        + CASE WHEN rt_url_checks.status IS NOT NULL THEN 1 ELSE 0 END
-        + CASE WHEN organization_checks.status IS NOT NULL THEN 1 ELSE 0 END
-        + CASE WHEN gtfs_dataset_checks.status IS NOT NULL THEN 1 ELSE 0 END
-        + CASE WHEN service_checks.status IS NOT NULL THEN 1 ELSE 0 END
-        + CASE WHEN gtfs_service_data_checks.status IS NOT NULL THEN 1 ELSE 0 END
-        AS num_check_sources,
-    FROM idx
-    LEFT JOIN schedule_feed_checks
-        ON idx.date = schedule_feed_checks.date
-        AND idx.schedule_feed_key = schedule_feed_checks.feed_key
-        AND idx.check = schedule_feed_checks.check
-    LEFT JOIN rt_feed_checks
-        ON idx.date = rt_feed_checks.date
-        AND idx.base64_url = rt_feed_checks.base64_url
-        AND idx.check = rt_feed_checks.check
-    LEFT JOIN schedule_url_checks
-        ON idx.date = schedule_url_checks.date
-        AND idx.base64_url = schedule_url_checks.base64_url
-        AND idx.check = schedule_url_checks.check
-    LEFT JOIN rt_url_checks
-        ON idx.date = rt_url_checks.date
-        AND idx.base64_url = rt_url_checks.base64_url
-        AND idx.check = rt_url_checks.check
-    LEFT JOIN organization_checks
-        ON idx.date = organization_checks.date
-        AND idx.organization_key = organization_checks.organization_key
-        AND idx.check = organization_checks.check
-    LEFT JOIN gtfs_dataset_checks
-        ON idx.date = gtfs_dataset_checks.date
-        AND idx.gtfs_dataset_key = gtfs_dataset_checks.gtfs_dataset_key
-        AND idx.check = gtfs_dataset_checks.check
-    LEFT JOIN service_checks
-        ON idx.date = service_checks.date
-        AND idx.service_key = service_checks.service_key
-        AND idx.check = service_checks.check
-    LEFT JOIN gtfs_service_data_checks
-        ON idx.date = gtfs_service_data_checks.date
-        AND idx.gtfs_service_data_key = gtfs_service_data_checks.gtfs_service_data_key
-        AND idx.check = gtfs_service_data_checks.check
+        {{ dbt_utils.generate_surrogate_key(['unioned.key', 'date', 'check']) }} AS key,
+        unioned.* EXCEPT(key),
+        unioned.key AS assessed_entity_key,
+        idx.* EXCEPT(status, date, key, check)
+    FROM unioned
+    LEFT JOIN idx
+    USING (date, key, check)
 )
 
 SELECT * FROM int_gtfs_quality__guideline_checks_long

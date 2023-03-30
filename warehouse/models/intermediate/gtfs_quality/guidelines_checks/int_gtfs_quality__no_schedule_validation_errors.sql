@@ -1,5 +1,7 @@
-WITH feed_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_quality__schedule_feed_guideline_index') }}
+WITH guideline_index AS (
+    SELECT *
+    FROM {{ ref('int_gtfs_quality__guideline_checks_index') }}
+    WHERE check = {{ no_validation_errors() }}
 ),
 
 validation_notices AS (
@@ -16,19 +18,30 @@ validation_errors_by_day AS (
     GROUP BY 1, 2
 ),
 
+check_start AS (
+    SELECT MIN(date) AS first_check_date
+    FROM validation_notices
+),
+
 int_gtfs_quality__no_schedule_validation_errors AS (
     SELECT
-        idx.date,
-        idx.feed_key,
-        {{ no_validation_errors() }} AS check,
-        {{ compliance_schedule() }} AS feature,
+        idx.* EXCEPT(status),
+        sum_total_notices,
         CASE
-            WHEN sum_total_notices > 0 THEN {{ guidelines_fail_status() }}
-            WHEN sum_total_notices = 0 THEN {{ guidelines_pass_status() }}
+            WHEN has_schedule_feed
+                THEN
+                    CASE
+                        WHEN sum_total_notices > 0 THEN {{ guidelines_fail_status() }}
+                        WHEN sum_total_notices = 0 THEN {{ guidelines_pass_status() }}
+                        WHEN idx.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
+                        WHEN sum_total_notices IS NULL THEN {{ guidelines_na_check_status() }}
+                    END
+            ELSE idx.status
         END AS status
-    FROM feed_guideline_index idx
+    FROM guideline_index idx
+    CROSS JOIN check_start
     LEFT JOIN validation_errors_by_day
-        ON idx.feed_key = validation_errors_by_day.feed_key
+        ON idx.schedule_feed_key = validation_errors_by_day.feed_key
             AND idx.date = validation_errors_by_day.date
 )
 
