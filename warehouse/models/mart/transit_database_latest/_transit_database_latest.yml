@@ -50,7 +50,7 @@ models:
           - accepted_values:
               values: [NULL]
               config:
-                where: "type like 'schedule'"
+                where: "type = 'schedule'"
       - name: schedule_to_use_for_rt_validation_url
         description: |
           Plaintext URL of the GTFS schedule feed associated with the row, only
