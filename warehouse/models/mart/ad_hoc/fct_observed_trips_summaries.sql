@@ -1,22 +1,25 @@
 {{ config(materialized='table') }}
 
-WITH fct_observed_trips AS (
+WITH dim_gtfs_datasets AS (
+    SELECT * FROM {{ ref('dim_gtfs_datasets') }}
+),
+
+fct_observed_trips AS (
     SELECT
 
         tu_gtfs_dataset_key AS gtfs_dataset_key,
-        --name,
         trip_id,
         dt,
         tu_num_distinct_message_ids,
 
-        -- do all of these need to be converted from UTC ??
+        -- are these time zones correct??
         tu_min_extract_ts,
         tu_max_extract_ts,
         trip_start_time,
         vp_num_distinct_minutes_of_trip_with_vehicle_positions,
 
         -- Cast to interval because it's a string, with <24hr values, so cast to time breaks
-        --does this need the activity date treatment?
+        -- does this need the activity date treatment?
         CAST(trip_start_time AS INTERVAL) AS interval_trip_start_time,
         CAST(tu_min_extract_ts AS TIME) AS tu_min_extract_time
 
@@ -27,11 +30,14 @@ WITH fct_observed_trips AS (
 select_event_time AS (
 
     SELECT
-        *,
+        fct_observed_trips.*,
+        dim_gtfs_datasets.name,
         -- Weird double cast here because of the weird casting behavior in the first CTE
         COALESCE(interval_trip_start_time, CAST(CAST(tu_min_extract_time AS STRING) AS INTERVAL)) AS event_time
 
     FROM fct_observed_trips
+    LEFT JOIN dim_gtfs_datasets
+        ON (fct_observed_trips.gtfs_dataset_key = dim_gtfs_datasets.key)
 
 ),
 
