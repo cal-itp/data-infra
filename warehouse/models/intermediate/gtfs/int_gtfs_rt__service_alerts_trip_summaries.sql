@@ -21,14 +21,14 @@ WITH service_alerts AS (
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('TRIP_UPDATES_LOOKBACK_DAYS') }} DAY)
+    WHERE dt >= {{ var('GTFS_RT_START') }}
     {% endif %}
 ),
 
 int_gtfs_rt__service_alerts_trip_summaries AS (
     SELECT
         -- https://gtfs.org/realtime/reference/#message-tripdescriptor
-        {{ dbt_utils.surrogate_key([
+        {{ dbt_utils.generate_surrogate_key([
             'dt',
             'base64_url',
             'trip_id',

@@ -18,7 +18,7 @@ bad_rows AS (
 
 dim_stops AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['feed_key', 'stop_id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'stop_id']) }} AS key,
         base64_url,
         feed_key,
         stop_id,

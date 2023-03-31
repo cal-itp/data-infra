@@ -7,7 +7,7 @@ WITH make_dim AS (
 
 dim_shapes AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['feed_key', 'shape_id', 'shape_pt_sequence']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'shape_id', 'shape_pt_sequence']) }} AS key,
         feed_key,
         shape_id,
         shape_pt_lat,

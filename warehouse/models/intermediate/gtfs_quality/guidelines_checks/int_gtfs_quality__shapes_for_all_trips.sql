@@ -1,5 +1,7 @@
-WITH feed_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_quality__schedule_feed_guideline_index') }}
+WITH guideline_index AS (
+    SELECT *
+    FROM {{ ref('int_gtfs_quality__guideline_checks_index') }}
+    WHERE check = {{ shapes_for_all_trips() }}
 ),
 
 dim_trips AS (
@@ -15,31 +17,30 @@ summarize_trips AS (
    GROUP BY 1
 ),
 
-daily_trips AS (
-  SELECT
-    t1.date,
-    t1.feed_key,
-    SUM(t2.ct_shape_trips) AS tot_shape_trips,
-    SUM(t2.ct_trips) AS tot_trips
-  FROM feed_guideline_index AS t1
-  LEFT JOIN summarize_trips AS t2
-       ON t1.feed_key = t2.feed_key
- GROUP BY 1, 2
+check_start AS (
+    SELECT MIN(_feed_valid_from) AS first_check_date
+    FROM dim_trips
 ),
 
 int_gtfs_quality__shapes_for_all_trips AS (
     SELECT
-        date,
-        feed_key,
-        {{ shapes_for_all_trips() }} AS check,
-        {{ accurate_service_data() }} AS feature,
-        tot_shape_trips,
-        tot_trips,
+        idx.* EXCEPT(status),
         CASE
-            WHEN tot_shape_trips = tot_trips THEN {{ guidelines_pass_status() }}
-        ELSE {{ guidelines_fail_status() }}
-        END AS status,
-      FROM daily_trips
+            WHEN has_schedule_feed
+                THEN
+                    CASE
+                        WHEN ct_shape_trips = ct_trips THEN {{ guidelines_pass_status() }}
+                        -- TODO: we might be able to handle these if we wanted to shift to noon or similar -- only "too early" are on April 21, 2021 specifically
+                        -- but impact is small (many checks not assessessed this far back) so probably not worth it right now
+                        WHEN CAST(idx.date AS TIMESTAMP) < first_check_date THEN {{ guidelines_na_too_early_status() }}
+                        ELSE {{ guidelines_fail_status() }}
+                    END
+            ELSE idx.status
+        END AS status
+    FROM guideline_index idx
+    CROSS JOIN check_start
+    LEFT JOIN summarize_trips
+      ON idx.schedule_feed_key = summarize_trips.feed_key
 )
 
 SELECT * FROM int_gtfs_quality__shapes_for_all_trips

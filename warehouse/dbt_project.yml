@@ -22,11 +22,11 @@ clean-targets:         # directories to be removed by `dbt clean`
   - "dbt_packages"
 
 vars:
+  surrogate_key_treat_nulls_as_empty_strings: true # enable legacy behavior for dbt_utils surrogate keys, i.e. coalesce nulls to empty strings
   GTFS_SCHEDULE_START: '2021-04-16'
-  RT_LOOKBACK_DAYS: 30
-  TRIP_UPDATES_LOOKBACK_DAYS: 7
+  GTFS_RT_START: "{% if target.name.startswith('prod') %}'2022-09-15'{% else %}{{ dbt_date.n_days_ago(7) }}{% endif %}"
   'dbt_date:time_zone': 'America/Los_Angeles'
-  SOURCE_DATABASE: cal-itp-data-infra
+  DEFAULT_SOURCE_DATABASE: cal-itp-data-infra
 
 models:
   calitp_warehouse:
@@ -34,11 +34,6 @@ models:
     +persist_docs:
       relation: true
       columns: true
-
-    gtfs_schedule_latest_only:
-      +enabled: false
-      +materialized: table
-      schema: gtfs_schedule
 
     gtfs_views:
       +enabled: false
@@ -69,19 +64,14 @@ models:
       +materialized: view
       schema: staging
 
-      # legacy guidelines
-      gtfs_guidelines:
-        +enabled: false
+    intermediate:
+      gtfs_quality:
+        guidelines_checks:
+          +materialized: table
 
     mart:
       transit_database:
         schema: mart_transit_database
-
-      # legacy guidelines
-      gtfs_guidelines:
-        +enabled: false
-        schema: mart_gtfs_guidelines
-
       gtfs_quality:
         schema: mart_gtfs_quality
       gtfs:
@@ -94,3 +84,6 @@ models:
         schema: mart_audit
       ntd:
         schema: mart_ntd
+      payments:
+        +materialized: table
+        schema: mart_payments

@@ -52,7 +52,7 @@ services_join AS (
 
 int_transit_database__gtfs_service_data_dim AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['services_join.source_record_id', 'GREATEST(services_join._valid_from, datasets._valid_from)']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['services_join.source_record_id', 'GREATEST(services_join._valid_from, datasets._valid_from)']) }} AS key,
         services_join.name,
         service_key,
         service_name,

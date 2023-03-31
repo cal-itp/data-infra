@@ -1,0 +1,4 @@
+operator: operators.LittlepayRawSync
+instance: sbmtd
+access_key_id_secret: LITTLEPAY_SBMTD_ACCESS_KEY_ID
+secret_access_key_secret: LITTLEPAY_SBMTD_SECRET_ACCESS_KEY

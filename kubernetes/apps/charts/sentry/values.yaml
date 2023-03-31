@@ -36,3 +36,13 @@ sentry:
     port: 587
     host: "smtp.postmarkapp.com"
     from: "bot@calitp.org"
+  snuba:
+    subscriptionConsumerEvents:
+      replicas: 2
+
+  zookeeper:
+    persistence:
+      size: 32Gi
+    autopurge:
+      snapRetainCount: 10
+      purgeInterval: 1

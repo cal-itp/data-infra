@@ -33,7 +33,7 @@ parse_outcomes AS (
     {% if is_incremental() %}
     WHERE dt >= DATE '{{ max_date }}'
     {% else %}
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('RT_LOOKBACK_DAYS') }} DAY)
+    WHERE dt >= {{ var('GTFS_RT_START') }}
     {% endif %}
 ),
 
@@ -72,7 +72,7 @@ pivoted_parse_outcomes AS (
 fct_daily_rt_feed_files AS (
     SELECT
         parse.dt as date,
-        {{ dbt_utils.surrogate_key(['parse.dt', 'parse.base64_url']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['parse.dt', 'parse.base64_url']) }} AS key,
         parse.base64_url,
         parse.feed_type,
         parse.parse_success_file_count,

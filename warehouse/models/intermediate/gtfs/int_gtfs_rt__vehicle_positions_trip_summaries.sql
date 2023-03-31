@@ -21,14 +21,14 @@ WITH vehicle_positions AS (
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('TRIP_UPDATES_LOOKBACK_DAYS') }} DAY)
+    WHERE dt >= {{ var('GTFS_RT_START') }}
     {% endif %}
 ),
 
 int_gtfs_rt__vehicle_positions_trip_summaries AS (
     SELECT
         -- https://gtfs.org/realtime/reference/#message-tripdescriptor
-        {{ dbt_utils.surrogate_key([
+        {{ dbt_utils.generate_surrogate_key([
             'dt',
             'base64_url',
             'trip_id',
@@ -56,7 +56,7 @@ int_gtfs_rt__vehicle_positions_trip_summaries AS (
         ARRAY_AGG(position_latitude ORDER BY _extract_ts DESC)[OFFSET(0)] AS last_position_latitude,
         ARRAY_AGG(position_longitude ORDER BY _extract_ts DESC)[OFFSET(0)] AS last_position_longitude,
     FROM vehicle_positions
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8 --noqa: L054
 )
 
 SELECT * FROM int_gtfs_rt__vehicle_positions_trip_summaries

@@ -9,7 +9,7 @@ WITH raw_outcomes AS (
 
 stg_gtfs_rt__agg_outcomes AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['`extract`.ts', 'base64_url']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['`extract`.ts', 'base64_url']) }} AS key,
         dt,
         hour,
         `extract`.config.name AS name,

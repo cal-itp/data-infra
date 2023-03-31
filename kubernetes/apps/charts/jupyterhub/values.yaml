@@ -8,14 +8,15 @@ jupyterhub:
     defaultUrl: "/lab"
     image:
       name: ghcr.io/cal-itp/data-infra/jupyter-singleuser
-      tag: 2023.2.21
+      tag: 2023.3.21
     memory:
       # Much more than 10 and we risk bumping up against the actual capacity of e2-highmem-2
       limit: 10G
       # Very roughly I have seen most usage in the 2-3GB range
       guarantee: 3G
     cpu:
-      guarantee: 0.5
+      # this is to put 2 pods per e2-highmem-2 which has 1.93 allocatable
+      guarantee: 0.7
     lifecycleHooks:
       postStart:
         exec:

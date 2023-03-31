@@ -109,14 +109,37 @@ This dbt project is intended to be the source of truth for the cal-itp-data-infr
 ## Running the project locally
 
 Once you have performed the setup above, you are good to go run
-[dbt commands](https://docs.getdbt.com/reference/dbt-commands) locally!
+[dbt commands](https://docs.getdbt.com/reference/dbt-commands) locally! Run the following commands in order.
 
-Some especially helpful commands:
+1. `poetry run dbt seed`
+   1. Will create tables in your personally-named schema from the CSV files present in [./seeds](./seeds), which can then be referenced by dbt models.
+   2. You will need to re-run seeds if new seeds are added, or existing ones are changed.
+2. `poetry run dbt run`
+   1. Wll run all the models, i.e. execute SQL in the warehouse.
+   2. In the future, you can specify [selections](https://docs.getdbt.com/reference/node-selection/syntax) to run only a subset of models, otherwise this will run *all* the tables).
+   3. By default, your very first `run` is a [full refresh](https://docs.getdbt.com/reference/commands/run#refresh-incremental-models) but you'll need to pass the `--full-refresh` flag in the future if you want to change the schema of incremental tables, or "backfill" existing rows with new logic.
 
-* `poetry run dbt compile` -- will compile all the models (generate SQL, with references resolved) but won't execute anything in the warehouse
-* `poetry run dbt run` -- will run all the models -- this will execute SQL in the warehouse (specify [selections](https://docs.getdbt.com/reference/node-selection/syntax) to run only a subset of models, otherwise this will run *all* the tables)
+> In general, it's a good idea to run `seed` and `run --full-refresh` if you think your local environment is substantially outdated (for example, if you haven't worked on dbt models in a few weeks but want to create or modify a model). We have macros in the project that prevent a non-production "full refresh" from actually processing all possible data.
+
+Some additional helpful commands:
+
 * `poetry run dbt test` -- will test all the models (this executes SQL in the warehouse to check tables); for this to work, you first need to `dbt run` to generate all the tables to be tested
+* `poetry run dbt compile` -- will compile all the models (generate SQL, with references resolved) but won't execute anything in the warehouse; useful for visualizing what dbt will actually execute
 * `poetry run dbt docs generate` -- will generate the dbt documentation
 * `poetry run dbt docs serve` -- will "serve" the dbt docs locally so you can access them via `http://localhost:8080`; note that you must `docs generate` before you can `docs serve`
+
+## Troubleshooting
+
+### Upgrading Poetry from legacy installer
+
+If you installed Poetry using their legacy `get-poetry.py` script, you may run into issues upgrading to versions past [1.2.0](https://python-poetry.org/blog/announcing-poetry-1.2.0/). Here is a workflow that has worked:
+
+1. Uninstall legacy installer: Run `rm -rf "${POETRY_HOME:-~/.poetry}"` (per [this Poetry docs page](https://python-poetry.org/docs/#installing-with-the-official-installer)).
+2. Remove legacy path from shell profile: as noted above, shell configuration will vary by operating system and setup -- this may be `~/.zshrc` or similar. If you have a line like `export PATH="$HOME/.poetry/bin:$PATH"`, remove it.
+3. Re-install Poetry via the new installer: `curl -sSL https://install.python-poetry.org | python3 -` (per their [1.2.0 upgrade docs](https://python-poetry.org/blog/announcing-poetry-1.2.0/))
+4. Re-add new path to $PATH following the instructions that Poetry prints in the terminal upon installation.
+5. Restart terminal.
+6. Try running `poetry --version` to confirm installation has worked. If you get a warning about the location of your TOML configuration files, proceed to next step.
+7. Double check what paths are listed in the warning message and run `mkdir <directory listed in "consider moving files to" section of warning> && mv <directory listed in "configuration exists at" section of warning>/config.toml ~/Library/Preferences/pypoetry/` to move the Poetry config TOML file from legacy location to new location. For example, this may be: `mkdir ~/Library/Preferences/pypoetry/ && mv ~/Library/Application\ Support/pypoetry/config.toml ~/Library/Preferences/pypoetry/`.
 
 TODO: project standards and organization

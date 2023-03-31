@@ -1,53 +1,26 @@
-WITH feed_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_quality__schedule_feed_guideline_index') }}
+WITH guideline_index AS (
+    SELECT *
+    FROM {{ ref('int_gtfs_quality__guideline_checks_index') }}
+    WHERE check = {{ pathways_valid() }}
 ),
 
-unique_trip_stops AS (
-    SELECT
-      feed_key,
-      stop_id,
-      trip_id,
-      COUNT(*) AS ct
-    FROM {{ ref('dim_stop_times') }}
-   GROUP BY 1, 2, 3
+dim_stops AS (
+    SELECT * FROM {{ ref('dim_stops') }}
 ),
 
-stops_joined AS (
-    SELECT
-        t1.stop_id,
-        t1.trip_id,
-        t1.feed_key,
-        t4.stop_name,
-        t4.parent_station,
-        t3.route_type,
-        LOWER(t4.stop_name) LIKE '%station%' OR LOWER(t4.stop_name) LIKE '%transit center%' AS keyword_match
-    FROM unique_trip_stops t1
-    INNER JOIN {{ ref('dim_trips') }} t2
-      ON t1.trip_id = t2.trip_id
-     AND t1.feed_key = t2.feed_key
-    INNER JOIN {{ ref('dim_routes') }} t3
-      ON t2.route_id = t3.route_id
-     AND t2.feed_key = t3.feed_key
-    INNER JOIN {{ ref('dim_stops') }} t4
-      ON t1.stop_id = t4.stop_id
-     AND t1.feed_key = t4.feed_key
+dim_routes AS (
+    SELECT * FROM {{ ref('dim_routes') }}
 ),
 
-pathways_eligibile AS (
-    SELECT
-        feed_key,
-        COUNT(*) AS ct
-    FROM stops_joined
-   WHERE route_type = "2" --  Route type 2 is Rail
-      OR keyword_match IS true
-      OR parent_station IS NOT null
-   GROUP BY 1
+files AS (
+    SELECT * FROM {{ ref('fct_schedule_feed_files') }}
 ),
 
 -- For this check we are only looking for errors related to pathways
-validation_fact_daily_feed_codes_pathway_related AS (
-    SELECT * FROM {{ ref('fct_daily_schedule_feed_validation_notices') }}
-     WHERE code IN (
+pathways_notices AS (
+    SELECT *
+    FROM {{ ref('fct_daily_schedule_feed_validation_notices') }}
+    WHERE code IN (
                 'pathway_to_platform_with_boarding_areas',
                 'pathway_to_wrong_location_type',
                 'pathway_unreachable_location',
@@ -57,30 +30,91 @@ validation_fact_daily_feed_codes_pathway_related AS (
             )
 ),
 
-pathway_validation_notices_by_day AS (
+feed_has_rail AS (
     SELECT
         feed_key,
-        SUM(total_notices) as validation_notices
-    FROM validation_fact_daily_feed_codes_pathway_related
+        -- see: https://gtfs.org/schedule/reference/#routestxt for route type definitions
+        LOGICAL_OR(route_type = "2") AS has_rail
+    FROM dim_routes
     GROUP BY 1
+),
+
+feed_has_stations AS (
+    SELECT
+        feed_key,
+        LOGICAL_OR(parent_station IS NOT NULL) AS has_parent_station,
+        -- keywords associated with stops of interest were identified through discussion with team
+        -- may be iterated on in future
+        LOGICAL_OR(LOWER(stop_name) LIKE '%station%' OR LOWER(stop_name) LIKE '%transit center%') AS has_station_name
+    FROM dim_stops
+    GROUP BY 1
+),
+
+feed_has_pathways AS (
+    SELECT
+        feed_key,
+        LOGICAL_OR(gtfs_filename = "pathways") AS has_pathways
+    FROM files
+    GROUP BY 1
+),
+
+pathways_eligibile AS (
+    SELECT
+        COALESCE(rail.feed_key, stations.feed_key) AS feed_key,
+        COALESCE(has_parent_station, FALSE)
+            OR COALESCE(has_station_name, FALSE)
+            OR COALESCE(has_rail, FALSE)
+            AS is_pathways_eligible,
+        has_parent_station,
+        has_rail,
+        has_station_name
+    FROM feed_has_rail AS rail
+    FULL OUTER JOIN feed_has_stations AS stations
+        ON rail.feed_key = stations.feed_key
+),
+
+feed_pathways_notices AS (
+    SELECT
+        feed_key,
+        SUM(total_notices) AS validation_notices
+    FROM pathways_notices
+    GROUP BY 1
+),
+
+check_start AS (
+    SELECT MIN(date) AS first_check_date
+    FROM pathways_notices
 ),
 
 int_gtfs_quality__pathways_valid AS (
     SELECT
-        t1.date,
-        {{ pathways_valid() }} AS check,
-        {{ accurate_accessibility_data() }} AS feature,
-        t1.feed_key,
+        idx.* EXCEPT(status),
+
+        is_pathways_eligible,
+        has_parent_station,
+        has_rail,
+        has_pathways,
+        has_station_name,
+        validation_notices,
         CASE
-            WHEN t2.feed_key IS null THEN {{ guidelines_na_check_status() }}
-            WHEN t3.validation_notices = 0 THEN {{ guidelines_pass_status() }}
-            WHEN t3.validation_notices > 0 THEN {{ guidelines_fail_status() }}
+            WHEN has_schedule_feed
+                THEN
+                    CASE
+                        WHEN is_pathways_eligible AND has_pathways AND validation_notices = 0 THEN {{ guidelines_pass_status() }}
+                        WHEN idx.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
+                        WHEN NOT COALESCE(is_pathways_eligible, FALSE) OR (feed_pathways_notices.feed_key IS NULL) THEN {{ guidelines_na_check_status() }}
+                        WHEN is_pathways_eligible AND (validation_notices > 0 OR NOT has_pathways) THEN {{ guidelines_fail_status() }}
+                    END
+            ELSE idx.status
         END AS status
-      FROM feed_guideline_index t1
-      LEFT JOIN pathways_eligibile t2
-             ON t1.feed_key = t2.feed_key
-      LEFT JOIN pathway_validation_notices_by_day t3
-             ON t1.feed_key = t3.feed_key
+    FROM guideline_index idx
+    CROSS JOIN check_start
+    LEFT JOIN feed_has_pathways
+        ON idx.schedule_feed_key = feed_has_pathways.feed_key
+    LEFT JOIN feed_pathways_notices
+        ON idx.schedule_feed_key = feed_pathways_notices.feed_key
+    LEFT JOIN pathways_eligibile
+        ON idx.schedule_feed_key = pathways_eligibile.feed_key
 )
 
 SELECT * FROM int_gtfs_quality__pathways_valid

@@ -17,7 +17,7 @@ int_gtfs__organization_dataset_map AS (
 
 fct_daily_reports_site_organization_scheduled_service_summary AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['activity_date', 'organization_key']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['activity_date', 'organization_key']) }} AS key,
         activity_date,
         CASE
             WHEN EXTRACT(DAYOFWEEK FROM activity_date) = 1 THEN "Sunday"

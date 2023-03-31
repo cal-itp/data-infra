@@ -1,65 +1,98 @@
-WITH
-
-services_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_quality__services_guideline_index') }}
-),
-
-fct_observed_trips AS (
-    SELECT * FROM {{ ref('fct_observed_trips') }}
+WITH guideline_index AS (
+    SELECT *
+    FROM {{ ref('int_gtfs_quality__guideline_checks_index') }}
+    WHERE check = {{ all_tu_in_vp() }}
 ),
 
 dim_provider_gtfs_data AS (
     SELECT * FROM {{ ref('dim_provider_gtfs_data') }}
 ),
 
-joined AS (
+-- condense large trip table to the feed/day level for more performant joins
+observed_trips AS (
     SELECT
-       idx.date,
-       idx.service_key,
-       COUNT(
-        CASE WHEN
-            f.tu_num_distinct_message_ids IS NOT NULL
-            AND
-            f.vp_num_distinct_message_ids IS NOT NULL
-        THEN 1 END ) AS vp_and_tu_present,
-       COUNT(
-        CASE WHEN
-            f.tu_num_distinct_message_ids IS NOT NULL
-        THEN 1 END) AS tu_present
-    FROM services_guideline_index AS idx
-
-    -- Since one service can have multiple quartets, this isn't an ideal join
-    -- For now we are filtering on quartet.guidelines.assessed
-    -- TODO: use more specific indices
-    LEFT JOIN dim_provider_gtfs_data AS quartet
-    ON idx.service_key = quartet.service_key
-    AND TIMESTAMP(idx.date) BETWEEN quartet._valid_from AND quartet._valid_to
-    AND quartet.guidelines_assessed
-
-    LEFT JOIN fct_observed_trips AS f
-    ON idx.date = f.dt
-    AND quartet.trip_updates_gtfs_dataset_key = f.tu_gtfs_dataset_key
-    -- Joining on vp_gtfs_dataset_key would ensure that vp_num_distinct_message_ids was never null
-    -- The below join condition may be unnecessary, though it could rule out potential cases where one TU feed is mapped to multiple schedule feeds
-    AND quartet.associated_schedule_gtfs_dataset_key = f.schedule_to_use_for_rt_validation_gtfs_dataset_key
-    AND f.tu_num_scheduled_canceled_added_stops > 0
+        dt AS date,
+        tu_gtfs_dataset_key,
+        COUNTIF(tu_num_distinct_message_ids IS NOT NULL
+            AND vp_num_distinct_message_ids IS NOT NULL) AS vp_and_tu_present,
+        COUNTIF(tu_num_distinct_message_ids IS NOT NULL
+            AND vp_num_distinct_message_ids IS NULL) AS tu_missing_vp,
+    FROM {{ ref('fct_observed_trips') }}
+    -- TODO: you can have a trip-level schedule relationship of scheduled, canceled, or added without having stop-level updates of those types
+    -- we would need a trip level schedule_relationship on fct_observed_trips to make this more robust
+    WHERE tu_num_scheduled_canceled_added_stops > 0
     GROUP BY 1, 2
+),
+
+check_start AS (
+    SELECT MIN(date) AS first_check_date
+    FROM observed_trips
+),
+
+-- take the individual VP/TU comparison and roll them up to the service level
+map_trips_to_services AS (
+    SELECT
+        idx.date,
+        idx.service_key,
+        idx.gtfs_dataset_key,
+        LOGICAL_OR(quartet.vehicle_positions_gtfs_dataset_key IS NOT NULL) AS quartet_has_vp,
+        LOGICAL_OR(quartet.trip_updates_gtfs_dataset_key IS NOT NULL) AS quartet_has_tu,
+        SUM(observed_trips.vp_and_tu_present) AS vp_and_tu_present,
+        SUM(observed_trips.tu_missing_vp) AS tu_missing_vp,
+    FROM guideline_index AS idx
+    LEFT JOIN dim_provider_gtfs_data AS quartet
+        ON CAST(idx.date AS TIMESTAMP) BETWEEN quartet._valid_from AND quartet._valid_to
+        AND quartet.service_key = idx.service_key
+        AND (idx.gtfs_dataset_key = quartet.schedule_gtfs_dataset_key
+            OR idx.gtfs_dataset_key = quartet.trip_updates_gtfs_dataset_key
+            OR idx.gtfs_dataset_key = quartet.vehicle_positions_gtfs_dataset_key
+            OR idx.gtfs_dataset_key = quartet.service_alerts_gtfs_dataset_key)
+    LEFT JOIN observed_trips
+        ON idx.date = observed_trips.date
+        AND quartet.trip_updates_gtfs_dataset_key = observed_trips.tu_gtfs_dataset_key
+    WHERE idx.service_key IS NOT NULL
+    GROUP BY 1, 2, 3
 ),
 
 int_gtfs_quality__all_tu_in_vp AS (
     SELECT
-        service_key,
-        date,
-        {{ all_tu_in_vp() }} AS check,
-        {{ fixed_route_completeness() }} AS feature,
-        vp_and_tu_present,
-        tu_present,
+        idx.* EXCEPT(status),
+        map_trips_to_services.quartet_has_tu,
+        map_trips_to_services.quartet_has_vp,
+        map_trips_to_services.tu_missing_vp,
+        map_trips_to_services.vp_and_tu_present,
+        first_check_date,
         CASE
-            WHEN tu_present = 0 OR tu_present IS null THEN {{ guidelines_na_check_status() }}
-            WHEN vp_and_tu_present = tu_present THEN {{ guidelines_pass_status() }}
-            ELSE {{ guidelines_fail_status() }}
+            -- we only want to assign a substantive status on rows that have both a TU and a VP feed
+            WHEN has_service AND has_rt_feed_tu
+                THEN
+                    CASE
+                        WHEN tu_missing_vp = 0 THEN {{ guidelines_pass_status() }}
+                        WHEN idx.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
+                        -- if we don't have a vehicle positions feed, say we don't have all the necessary entities
+                        WHEN NOT quartet_has_vp THEN {{ guidelines_na_entity_status() }}
+                        WHEN tu_missing_vp IS NULL THEN {{ guidelines_na_check_status() }}
+                        WHEN tu_missing_vp > 0 THEN {{ guidelines_fail_status() }}
+                    END
+            WHEN has_service AND has_rt_feed_vp
+                THEN
+                    CASE
+                        WHEN tu_missing_vp = 0 THEN {{ guidelines_pass_status() }}
+                        WHEN idx.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
+                        -- if we don't have a trip updates feed, say we don't have all the necessary entities
+                        WHEN NOT quartet_has_tu THEN {{ guidelines_na_entity_status() }}
+                        WHEN tu_missing_vp IS NULL THEN {{ guidelines_na_check_status() }}
+                        WHEN tu_missing_vp > 0 THEN {{ guidelines_fail_status() }}
+                    END
+            WHEN has_service AND NOT has_rt_feed_tu AND NOT has_rt_feed_vp THEN {{ guidelines_na_entity_status() }}
+            ELSE idx.status
         END AS status,
-    FROM joined
+    FROM guideline_index AS idx
+    CROSS JOIN check_start
+    LEFT JOIN map_trips_to_services
+        ON idx.date = map_trips_to_services.date
+        AND idx.service_key = map_trips_to_services.service_key
+        AND idx.gtfs_dataset_key = map_trips_to_services.gtfs_dataset_key
 )
 
 SELECT * FROM int_gtfs_quality__all_tu_in_vp

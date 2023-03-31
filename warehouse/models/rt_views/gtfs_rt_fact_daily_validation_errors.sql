@@ -37,7 +37,7 @@ error_counts AS (
 gtfs_rt_fact_daily_validation_errors AS (
     SELECT
         t1.*,
-        {{ dbt_utils.surrogate_key(['t1.calitp_itp_id',
+        {{ dbt_utils.generate_surrogate_key(['t1.calitp_itp_id',
                                     't1.calitp_url_number',
                                     't1.rt_feed_type',
                                     't1.error_id',

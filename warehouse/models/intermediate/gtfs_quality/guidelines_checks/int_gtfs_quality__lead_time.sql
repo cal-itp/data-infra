@@ -1,61 +1,32 @@
-WITH feed_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_quality__schedule_feed_guideline_index') }}
+WITH guideline_index AS (
+    SELECT
+        *
+    FROM {{ ref('int_gtfs_quality__guideline_checks_index') }}
+    WHERE check = {{ lead_time() }}
 ),
 
-all_scheduled_service AS (
+scheduled_service_within_update_window AS (
     SELECT *
-      FROM {{ ref('int_gtfs_schedule__all_scheduled_service') }}
+    FROM {{ ref('int_gtfs_schedule__all_scheduled_service') }}
+    WHERE DATE_DIFF(service_date, EXTRACT(DATE FROM _feed_valid_from), DAY) BETWEEN 0 AND 7
 ),
 
-dim_stop_times AS (
-    SELECT  *,
-            CONCAT(arrival_time, departure_time) AS time_pair,
-      FROM {{ ref('dim_stop_times') }}
-),
-
-dim_stops AS (
-    SELECT  *,
-            CONCAT(stop_lat, stop_lon) AS stop_location
-      FROM {{ ref('dim_stops') }}
-),
-
-dim_trips AS (
-    SELECT  *
-      FROM {{ ref('dim_trips') }}
+trip_summaries AS (
+    SELECT *
+    FROM {{ ref('int_gtfs_quality__scheduled_trip_version_summary') }}
 ),
 
 feed_version_history AS (
     SELECT *
-      FROM {{ ref('int_gtfs_quality__feed_version_history') }}
+    FROM {{ ref('int_gtfs_quality__feed_version_history') }}
 ),
 
--- Aggregate information about each trip, including stops & stop times
-trips_expanded AS (
-    SELECT t1.feed_key,
-           t1.trip_id,
-           t1.service_id,
-           -- Creates a hash for a single field summarizing all stop_times this trip
-           MD5(
-                STRING_AGG(
-                    t2.time_pair ORDER BY t2.stop_sequence ASC
-                )
-            ) AS trip_stop_times_hash,
-           -- Creates a hash for a single field summarizing all stop locations for this trip
-           MD5(
-                STRING_AGG(
-                    t3.stop_location ORDER BY t2.stop_sequence ASC
-                )
-            ) AS trip_stop_locations_hash
-      FROM dim_trips t1
-      LEFT JOIN dim_stop_times t2
-        ON t2.trip_id = t1.trip_id
-       AND t2.feed_key = t1.feed_key
-      LEFT JOIN dim_stops t3
-        ON t3.stop_id = t2.stop_id
-       AND t3.feed_key = t2.feed_key
-   -- SQLFluff doesn't like numeric aliasing here alongside explicit naming in window functions
-   GROUP BY 1, 2, 3 -- noqa: disable=L054
-   -- noqa: enable=L054
+url_date_spine AS (
+    SELECT DISTINCT
+        date,
+        base64_url
+    FROM guideline_index
+    WHERE has_schedule_url
 ),
 
 scheduled_trips_version_history AS (
@@ -69,8 +40,8 @@ scheduled_trips_version_history AS (
            t3.next_feed_key,
            t3.next_feed_valid_from,
            t3.valid_from
-      FROM all_scheduled_service t1
-      LEFT JOIN trips_expanded t2
+      FROM scheduled_service_within_update_window t1
+      LEFT JOIN trip_summaries t2
         ON t2.service_id = t1.service_id
        AND t2.feed_key = t1.feed_key
       INNER JOIN feed_version_history t3
@@ -93,11 +64,6 @@ trips_version_compare AS (
          COALESCE(trips.prev_feed_key, prev_trips.feed_key) AS prev_feed_key,
          -- we need to know the next feed's valid_from date, in cases where a trip is removed since the previous feed
          COALESCE(trips.valid_from, prev_trips.next_feed_valid_from) AS valid_from,
-         DATE_DIFF(
-                     COALESCE(trips.service_date, prev_trips.service_date),
-                     COALESCE(trips.valid_from, prev_trips.next_feed_valid_from),
-                     DAY
-         ) AS days_until_service_date,
          trips.trip_id,
          trips.trip_stop_times_hash,
          trips.trip_stop_locations_hash,
@@ -113,10 +79,9 @@ trips_version_compare AS (
 
 -- We count each "infraction" type seperately, mostly for QA purposes
 ----  Note that this query will count each "infraction" once per day it's in effect
-daily_improper_trips_updates AS (
+improper_trips_updates AS (
   SELECT base64_url,
          feed_key,
-         valid_from AS date,
           -- A new trip is being added
          COUNT(CASE WHEN prev_trip_id IS null THEN 1 END) AS trip_added,
           -- An existing trip is being removed
@@ -128,37 +93,70 @@ daily_improper_trips_updates AS (
           ---- ...consider calculating distance and setting a minimum allowable change
          COUNT(CASE WHEN trip_stop_locations_hash != prev_trip_stop_locations_hash THEN 1 END) AS stop_location_changed,
     FROM trips_version_compare
-   WHERE
-         -- Service date is between 0 and 7 days from now
-         days_until_service_date > 0 AND days_until_service_date <= 7
    -- SQLFluff doesn't like numeric aliasing here alongside explicit naming in window functions
-   GROUP BY 1, 2, 3 -- noqa: disable=L054
-   -- noqa: enable=L054
+   GROUP BY 1, 2 -- noqa: L054
 ),
 
 feed_update_count AS (
-    SELECT t1.date,
-           t1.feed_key,
-           SUM(t2.trip_added + t2.trip_removed + t2.stop_times_changed + t2.stop_location_changed)
-               OVER (
-                   PARTITION BY t2.feed_key
-                   ORDER BY t2.date
-                   ROWS BETWEEN 30 PRECEDING AND CURRENT ROW
-                ) AS trips_updates_last_30_days
-      FROM feed_guideline_index AS t1
-      LEFT JOIN daily_improper_trips_updates AS t2
-        ON t1.feed_key = t2.feed_key
+    SELECT
+        hist.base64_url,
+        hist.feed_key,
+        hist.valid_from,
+        hist.feed_version_number,
+        SUM(trip_added + trip_removed + stop_times_changed + stop_location_changed) AS invalid_changes,
+        DATE_ADD(hist.valid_from, INTERVAL 30 DAY) AS int_30_days
+    FROM feed_version_history AS hist
+    LEFT JOIN improper_trips_updates AS trips
+      ON hist.feed_key = trips.feed_key
+    -- SQLFluff doesn't like numeric aliasing here alongside explicit naming in window functions
+    GROUP BY 1, 2, 3, 4 -- noqa: L054
+),
+
+-- check for ALL feed changes within 30 days
+url_feed_hist AS (
+    SELECT
+        url_date_spine.date,
+        url_date_spine.base64_url,
+        SUM(CASE WHEN feed_version_number > 1 THEN invalid_changes ELSE 0 END) AS url_invalid_changes,
+    FROM url_date_spine
+    LEFT JOIN feed_update_count
+        ON url_date_spine.base64_url = feed_update_count.base64_url
+        AND url_date_spine.date BETWEEN feed_update_count.valid_from AND feed_update_count.int_30_days
+    GROUP BY 1, 2
+),
+
+check_start AS (
+    SELECT MIN(valid_from) AS first_check_date
+    FROM feed_version_history
+    WHERE prev_feed_key IS NOT NULL
 ),
 
 int_gtfs_quality__lead_time AS (
-    SELECT date,
-           feed_key,
-           {{ lead_time() }} AS check,
-           {{ up_to_dateness() }} AS feature,
-           CASE WHEN trips_updates_last_30_days > 0 THEN {{ guidelines_fail_status() }}
-                ELSE {{ guidelines_pass_status() }}
-           END AS status
-      FROM feed_update_count
+    SELECT
+        idx.* EXCEPT(status),
+        first_check_date,
+        url_invalid_changes,
+        invalid_changes,
+        int_30_days,
+        feed_version_number,
+        CASE
+            WHEN has_schedule_feed
+                THEN
+                    CASE
+                        WHEN idx.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
+                        WHEN (url_invalid_changes IS NULL AND idx.date < int_30_days) OR (feed_version_number = 1 AND idx.date < int_30_days) THEN {{ guidelines_na_check_status() }}
+                        WHEN url_invalid_changes = 0 OR idx.date >= int_30_days THEN {{ guidelines_pass_status() }}
+                        WHEN url_invalid_changes > 0 THEN {{ guidelines_fail_status() }}
+                    END
+            ELSE idx.status
+        END AS status
+    FROM guideline_index idx
+    CROSS JOIN check_start
+    LEFT JOIN feed_update_count
+        ON idx.schedule_feed_key = feed_update_count.feed_key
+    LEFT JOIN url_feed_hist
+        ON idx.base64_url = url_feed_hist.base64_url
+        AND idx.date  = url_feed_hist.date
 )
 
 SELECT * FROM int_gtfs_quality__lead_time

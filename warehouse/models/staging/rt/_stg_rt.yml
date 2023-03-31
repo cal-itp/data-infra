@@ -25,7 +25,7 @@ models:
     columns:
       - *rt_key
   - name: stg_rt__feed_fetch_errors
-    description: Event logs from Sentry corresponding to RTFetchException errors
+    description: Events from Sentry corresponding to logged errors
     columns:
       - name: project_id
       - name: timestamp

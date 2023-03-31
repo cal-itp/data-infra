@@ -3,7 +3,7 @@
 WITH hashed AS (
     SELECT
         {{ util_list(all_columns) }},
-        {{ dbt_utils.surrogate_key(all_columns) }} AS key
+        {{ dbt_utils.generate_surrogate_key(all_columns) }} AS key
     FROM {{ table_name }}
 ),
 

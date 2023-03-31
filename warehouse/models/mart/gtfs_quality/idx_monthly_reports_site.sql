@@ -1,12 +1,18 @@
 {{ config(materialized='table') }}
 
-WITH assessed_entities AS (
-    SELECT *
+WITH dataset_map AS (
+    SELECT *,
+    DATE_TRUNC(date, MONTH) AS date_start
     FROM {{ ref('int_gtfs_quality__organization_dataset_map') }}
     -- filter to only organizations that are supposed to be assessed
     WHERE reports_site_assessed
-        -- pull the list of organizations on the *last* day of each month to get final snapshot
-        AND LAST_DAY(date, MONTH) = date
+),
+
+assessed_entities AS (
+    SELECT *
+    FROM dataset_map
+    -- pull the list of organizations on the *last* day of each month to get final snapshot
+    WHERE LAST_DAY(date, MONTH) = date
 ),
 
 dim_organizations AS (
@@ -104,7 +110,21 @@ summarize_feed_info AS (
     GROUP BY 1, 2
 ),
 
-idx_monthly_reports_site AS (
+make_distinct AS (SELECT DISTINCT
+    date_start,
+    organization_itp_id,
+    gtfs_dataset_name,
+    {{ from_url_safe_base64('base64_url') }} AS string_url
+FROM dataset_map
+),
+
+month_reports_urls AS (
+    SELECT date_start, organization_itp_id, TO_JSON_STRING(ARRAY_AGG(STRUCT(gtfs_dataset_name, string_url))) AS feeds
+    FROM make_distinct
+    GROUP BY 1, 2
+),
+
+idx_pending_urls AS (
     -- select distinct to drop services feeds etc., we only want organizations
     SELECT DISTINCT
         -- day after the last of the month is the first of the following month
@@ -137,6 +157,14 @@ idx_monthly_reports_site AS (
     -- don't add rows until the month in which the report will be generated
     -- i.e., do not add January rows until February has started
     WHERE date < CURRENT_DATE()
+),
+
+idx_monthly_reports_site AS (
+    -- split out since it's impossible to select distinct an array
+    SELECT idx_pending_urls.*, month_reports_urls.feeds
+    FROM idx_pending_urls
+    LEFT JOIN month_reports_urls
+        USING (date_start, organization_itp_id)
 )
 
 SELECT * FROM idx_monthly_reports_site

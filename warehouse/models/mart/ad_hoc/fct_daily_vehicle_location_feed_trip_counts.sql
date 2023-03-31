@@ -18,13 +18,13 @@ WITH fct_vehicle_locations AS (
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_dt }}'))
     {% else %}
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('RT_LOOKBACK_DAYS') }} DAY)
+    WHERE dt >= {{ var('GTFS_RT_START') }}
     {% endif %}
 ),
 
 fct_daily_vehicle_location_trip_counts AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['dt', 'base64_url']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['dt', 'base64_url']) }} AS key,
         dt,
         gtfs_dataset_key,
         base64_url,

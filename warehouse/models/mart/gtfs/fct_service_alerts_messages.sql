@@ -27,7 +27,7 @@ keying AS (
 
 fct_service_alerts_messages AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['_extract_ts', 'base64_url', 'id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['_extract_ts', 'base64_url', 'id']) }} AS key,
         gtfs_dataset_key,
         dt,
         hour,
@@ -35,6 +35,7 @@ fct_service_alerts_messages AS (
         _extract_ts,
         _config_extract_ts,
         _gtfs_dataset_name,
+        TIMESTAMP_DIFF(_extract_ts, header_timestamp, SECOND) AS _header_message_age,
         header_timestamp,
         header_version,
         header_incrementality,

@@ -18,13 +18,13 @@ WITH fct_stop_time_updates AS (
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_dt }}'))
     {% else %}
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('TRIP_UPDATES_LOOKBACK_DAYS') }} DAY)
+    WHERE dt >= {{ var('GTFS_RT_START') }}
     {% endif %}
 ),
 
 fct_daily_trip_update_status_counts AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['dt', 'base64_url', 'trip_schedule_relationship']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['dt', 'base64_url', 'trip_schedule_relationship']) }} AS key,
         dt,
         base64_url,
         trip_schedule_relationship,

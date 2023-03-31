@@ -264,3 +264,9 @@ schema_fields:
   - name: manual_check__gtfs_schedule_data_ingested_in_trip_planner
     type: STRING
     mode: NULLABLE
+  - name: deprecated_date
+    type: STRING
+    mode: NULLABLE
+  - name: operating_county_geographies
+    type: STRING
+    mode: REPEATED

@@ -18,7 +18,7 @@ WITH fct_service_alert_translations AS (
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_dt }}'))
     {% else %}
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('RT_LOOKBACK_DAYS') }} DAY)
+    WHERE dt >= {{ var('GTFS_RT_START') }}
     {% endif %}
 ),
 
@@ -33,7 +33,7 @@ select_english AS (
 
 fct_daily_service_alerts AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['dt', 'base64_url', 'id', 'header_text_text']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['dt', 'base64_url', 'id', 'header_text_text']) }} AS key,
         dt,
         gtfs_dataset_key,
         base64_url,

@@ -1,53 +1,50 @@
-WITH feed_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_quality__rt_feed_guideline_index') }}
+{% set min_date_array = dbt_utils.get_column_values(table=ref('fct_daily_rt_feed_validation_notices'), column='date', order_by = 'date', max_records = 1) %}
+{% set first_check_date = min_date_array[0] %}
+
+WITH guideline_index AS (
+    SELECT *
+    FROM {{ ref('int_gtfs_quality__guideline_checks_index') }}
+    WHERE check = {{ trip_id_alignment() }}
 ),
 
-fct_daily_rt_feed_files AS (
-    SELECT * FROM {{ ref('fct_daily_rt_feed_files') }}
-),
-
-fct_daily_rt_feed_validation_notices AS (
+validation_notices AS (
     SELECT * FROM {{ ref('fct_daily_rt_feed_validation_notices') }}
-),
-
-count_files AS (
-    SELECT
-        base64_url,
-        date,
-        SUM(parse_success_file_count) AS rt_files
-    FROM fct_daily_rt_feed_files
-    GROUP BY 1, 2
 ),
 
 critical_notices AS (
     SELECT
         date,
         base64_url,
-        SUM(total_notices) AS errors,
-    FROM fct_daily_rt_feed_validation_notices
+        COALESCE(SUM(total_notices), 0) AS errors,
+    FROM validation_notices
     -- Description for code E003:
     ---- "All trip_ids provided in the GTFS-rt feed must exist in the GTFS data, unless the schedule_relationship is ADDED"
     WHERE code = "E003"
     GROUP BY 1, 2
 ),
 
+check_start AS (
+    SELECT MIN(date) AS first_check_date
+    FROM validation_notices
+),
+
 int_gtfs_quality__trip_id_alignment AS (
     SELECT
-        idx.date,
-        idx.base64_url,
-        idx.feed_type,
-        {{ trip_id_alignment() }} AS check,
-        {{ fixed_route_completeness() }} AS feature,
-        rt_files,
-        errors,
+        idx.* EXCEPT(status),
+        first_check_date,
         CASE
-            WHEN rt_files IS NOT NULL AND COALESCE(errors, 0) = 0 THEN {{ guidelines_pass_status() }} -- files present and no errors
-            WHEN rt_files IS NOT NULL AND errors > 0 THEN {{ guidelines_fail_status() }} -- files present and there are errors
-        END AS status,
-    FROM feed_guideline_index AS idx
-    LEFT JOIN count_files AS files
-    ON idx.date = files.date
-        AND idx.base64_url = files.base64_url
+            WHEN has_rt_feed
+                THEN
+                    CASE
+                        WHEN errors = 0 THEN {{ guidelines_pass_status() }}
+                        WHEN errors > 0 THEN {{ guidelines_fail_status() }}
+                        WHEN idx.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
+                        WHEN errors IS NULL THEN {{ guidelines_na_check_status() }}
+                    END
+            ELSE idx.status
+        END AS status
+    FROM guideline_index AS idx
+    CROSS JOIN check_start
     LEFT JOIN critical_notices AS notices
     ON idx.date = notices.date
         AND idx.base64_url = notices.base64_url

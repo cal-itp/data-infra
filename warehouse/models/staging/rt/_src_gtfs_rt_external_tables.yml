@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: gtfs_rt_external_tables
     description: Hive-partitioned external tables reading GTFS RT data and validation errors from GCS.
-    database: "{{ var('SOURCE_DATABASE') }}"
+    database: "{{ env_var('CALITP_DBT_SOURCE_DATABASE', var('DEFAULT_SOURCE_DATABASE')) }}"
     schema: external_gtfs_rt
     tables:
       - name: service_alerts
@@ -22,9 +22,9 @@ sources:
       - name: vehicle_positions_validations
       - name: vehicle_positions_validations_outcomes
   - name: sentry_external_tables
-    description: Hive-partitioned external tables reading Sentry feed fetch errors from GCS.
-    database: "{{ var('SOURCE_DATABASE') }}"
+    description: Hive-partitioned external tables reading Sentry events from GCS.
+    database: "{{ env_var('CALITP_DBT_SOURCE_DATABASE', var('DEFAULT_SOURCE_DATABASE')) }}"
     schema: external_sentry
     tables:
       - name: events
-        description: Event logs from Sentry corresponding to RTFetchException errors
+        description: Events from Sentry corresponding to logged errors
