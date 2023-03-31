@@ -1,10 +1,8 @@
 WITH source AS (
     SELECT * FROM {{ source('elavon_external_tables', 'transactions') }}
-    WHERE dt IS NOT NULL
-    AND execution_ts IS NOT NULL
 ),
 
-stg_payments__elavon_transactions AS (
+stg_elavon__transactions AS (
     SELECT
         payment_reference,
         payment_date,
@@ -53,4 +51,4 @@ stg_payments__elavon_transactions AS (
     FROM source
 )
 
-SELECT * FROM stg_payments__elavon_transactions
+SELECT * FROM stg_elavon__transactions

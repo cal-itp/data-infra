@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: stg_payments__elavon_transactions
+  - name: stg_elavon__transactions
     description: Transactions processed by Elavon
     columns:
       - name: payment_reference
