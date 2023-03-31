@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "jupyter-singleuser"
-version = "2023.3.23"
+version = "2023.3.31"
 description = ""
 authors = ["Andrew Vaccaro <atvaccaro@gmail.com>"]
 
@@ -49,18 +49,6 @@ numba = "^0.56.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.2.0"
-
-[tool.poetry.group.portfolio.dependencies]
-pydantic = ">=1.9.1"
-humanize = "^4.6.0"
-typer = "^0.7.0"
-nbformat = "^5.8.0"
-papermill = "^2.4.0"
-python-slugify = "^6.1.1"
-pyaml = "^21.10.1"
-# must wait on https://github.com/pydata/pydata-sphinx-theme/issues/1253 to upgrade
-jupyter-book = "^0.12.2"
-
 
 [tool.poetry.group.shared_utils.dependencies]
 cpi = "^1.0.17"
