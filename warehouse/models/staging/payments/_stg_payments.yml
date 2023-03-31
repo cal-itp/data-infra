@@ -35,6 +35,8 @@ models:
       - name: trn_aci
       - name: card_scheme_ref
       - name: trn_ref_num
+        tests:
+          - unique
       - name: settlement_method
       - name: currency_code
       - name: cb_acq_ref_id
