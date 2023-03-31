@@ -65,7 +65,7 @@ fct_observed_trips_summaries AS (
     SELECT
 
         gtfs_dataset_key,
-        --name,
+        name,
         trip_id,
         dt,
         tu_num_distinct_message_ids,
