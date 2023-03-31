@@ -17,6 +17,7 @@ Analyses on JupyterHub are accomplished using notebooks, which allow users to mi
 1. [Saving Code to Github](saving-code-jupyter)
 1. [Environment Variables](#environment-variables)
 1. [Jupyter Notebook Best Practices](notebook-shortcuts)
+1. [Developing warehouse models in Jupyter](jupyterhub-warehouse)
 
 ## Using JupyterHub
 For Python users, we have deployed a cloud-based instance of JupyterHub to make creating, using, and sharing notebooks easy.
@@ -140,3 +141,7 @@ GITHUB_API_KEY = os.environ["GITHUB_API_KEY"]
 External resources:
 * [Cheat Sheet - Jupyter Notebook ](https://defkey.com/jupyter-notebook-shortcuts?pdf=true&modifiedDate=20200909T053706)
 * [Using Markdown in Jupyter Notebook](https://www.datacamp.com/community/tutorials/markdown-in-jupyter-notebook)
+
+(jupyterhub-warehouse)=
+### Developing warehouse models in JupyterHub
+See the [warehouse README](https://github.com/cal-itp/data-infra/tree/main/warehouse#readme) for warehouse project setup instructions.
