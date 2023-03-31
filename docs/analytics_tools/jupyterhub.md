@@ -1,5 +1,5 @@
-(jupyterhub)=
-# Notebooks
+(jupyterhub-intro)=
+# JupyterHub
 
 ## Introduction to JupyterHub
 Jupyterhub is a web application that allows users to analyze and create reports on warehouse data (or a number of data sources).
@@ -41,27 +41,16 @@ See the screencast below for a full walkthrough.
 
 
 The commands required:
-```python
-# in the main directory (outside of data-analyses and data-infra)
+```bash
+# init will both authenticate and do basic configuration
+gcloud init
 
-# initial setup (in terminal) ----
-curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-396.0.0-linux-x86_64.tar.gz
-tar -zxvf google-cloud-sdk-396.0.0-linux-x86_64.tar.gz
-./google-cloud-sdk/install.sh
-./google-cloud-sdk/bin/gcloud init
-
-# log in to project ----
+# Optionally, you can auth and set the project separately
 gcloud auth login
-
-# Authenticate ---- paste URL into browser, copy/paste the authorization code
-
-gcloud auth application-default login
-
-# When it asks for the path:
-/home/jovyan/.bash_profile
-
-# If the default project ID is None, change it
 gcloud config set project cal-itp-data-infra
+
+# Regardless, set up application default credentials
+gcloud auth application-default login
 ```
 
 ### Increasing the Query Limit
