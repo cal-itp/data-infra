@@ -1,3 +1,7 @@
+# ---
+# python_callable: process_elavon_data_to_jsonl
+# provide_context: true
+# ---
 import gzip
 import os
 from typing import ClassVar, List, Optional
@@ -10,8 +14,6 @@ from calitp_data_infra.storage import (  # type: ignore
     get_fs,
     make_name_bq_safe,
 )
-
-from airflow.models import BaseOperator
 
 CALITP_BUCKET__ELAVON = os.environ["CALITP_BUCKET__ELAVON"]
 BIGQUERY_KEYFILE_LOCATION = os.environ["BIGQUERY_KEYFILE_LOCATION"]
@@ -81,22 +83,19 @@ class ElavonExtract(PartitionedGCSArtifact):
         )
 
 
-class ElavonToGCSJSONLOperator(BaseOperator):
-    def __init__(
-        self,
-        **kwargs,
-    ):
-        super().__init__(**kwargs)
+def process_elavon_data_to_jsonl(**kwargs):
+    extract = fetch_and_clean_from_gcs()
 
-    def execute(self, **kwargs):
-        extract = fetch_and_clean_from_gcs()
+    if extract.data is None:
+        print("No extracts were found in GCS")
+        return
+    if extract.data.empty:
+        print("All extracts found in GCS were empty")
+        return
 
-        if extract.data is None:
-            print("No extracts were found in GCS")
-            return
-        if extract.data.empty:
-            print("All extracts found in GCS were empty")
-            return
+    fs = get_fs()
+    extract.save_to_gcs(fs=fs)
 
-        fs = get_fs()
-        extract.save_to_gcs(fs=fs)
+
+if __name__ == "__main__":
+    process_elavon_data_to_jsonl()

@@ -1,9 +1,11 @@
+# ---
+# python_callable: mirror_raw_files_from_elavon
+# provide_context: true
+# ---
 import os
 
 import gcsfs
 import paramiko
-
-from airflow.models import BaseOperator
 
 CALITP__ELAVON_SFTP_PASSWORD = os.environ["CALITP__ELAVON_SFTP_PASSWORD"]
 BIGQUERY_KEYFILE_LOCATION = os.environ["BIGQUERY_KEYFILE_LOCATION"]
@@ -49,12 +51,5 @@ def mirror_raw_files_from_elavon():
         gfs.put(lpath=f"transferred_files/{file}", rpath="gs://test-calitp-elavon-raw/")
 
 
-class ElavonToGCSRawOperator(BaseOperator):
-    def __init__(
-        self,
-        **kwargs,
-    ):
-        super().__init__(**kwargs)
-
-    def execute(self, **kwargs):
-        mirror_raw_files_from_elavon()
+if __name__ == "__main__":
+    mirror_raw_files_from_elavon()
