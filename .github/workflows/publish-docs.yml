@@ -13,12 +13,10 @@ jobs:
   build-docs:
     runs-on: ubuntu-latest
     steps:
-    - name: Check out repo
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    - name: Set up Python
-      uses: actions/setup-python@v1
+    - uses: actions/setup-python@v1
       with:
         python-version: 3.9
     - name: Install python packages
@@ -31,17 +29,19 @@ jobs:
         export_default_credentials: true
 
     - name: Build docs
-      run: jb build docs --warningiserror --keep-going
-      # set doc to fail on any sphinx warning
+      run: jb build docs --warningiserror --keep-going # set doc to fail on any sphinx warning
 
-    - name: Save docs as artifact
-      uses: actions/upload-artifact@v2
+    # Production
+    - name: Deploy docs to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      if: ${{ github.ref == 'refs/heads/main' }}
       with:
-        name: docs-build
-        path: docs/_build/html
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: docs/_build/html
+        publish_branch: gh-pages
 
-    # docs preview ----
-    - name: Netlify docs preview
+    # Preview on PRs
+    - name: Deploy docs preview to Netlify
       if: ${{ github.ref != 'refs/heads/main' }}
       run: |
         npm install -g netlify-cli
@@ -51,28 +51,18 @@ jobs:
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         PR_NUMBER: ${{ github.event.number }}
 
-    - name: Add netlify link PR comment
-      uses: actions/github-script@v3
+    - uses: peter-evans/find-comment@v2
+      if: ${{ github.event_name == 'pull_request' }}
+      id: fc
+      with:
+        issue-number: ${{ github.event.number }}
+        comment-author: 'github-actions[bot]'
+        body-includes: --cal-itp-previews.netlify.app
+
+    - uses: peter-evans/create-or-update-comment@v2
       if: ${{ github.event_name == 'pull_request' }}
       with:
-        github-token: ${{secrets.GITHUB_TOKEN}}
-        script: |
-          const suffix = "--cal-itp-previews.netlify.app"
-          github.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: "Preview url: https://" + context.repo.repo + "-" + process.env.PR_NUMBER + suffix
-          })
-      env:
-        PR_NUMBER: ${{ github.event.number }}
-
-
-    # docs deploy ----
-    - name: Deploy docs
-      uses: peaceiris/actions-gh-pages@v3
-      if: ${{ github.ref == 'refs/heads/main' }}
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: docs/_build/html
-        publish_branch: gh-pages
+        comment-id: ${{ steps.fc.outputs.comment-id }}
+        issue-number: ${{ github.event.number }}
+        body: "Preview url: https://${{github.event.repository.name}}-${{ github.event.number }}--cal-itp-previews.netlify.app"
+        edit-mode: replace
