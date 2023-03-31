@@ -1,11 +1,11 @@
-description: "Load data from Elavon in two stages"
+description: "Process raw files from Elavon into a BQ-ready JSONL form"
 schedule_interval: "0 2 * * *"
 tags:
   - all_gusty_features
 default_args:
     owner: airflow
     depends_on_past: False
-    start_date: "2023-03-15"
+    start_date: "2023-03-22"
     catchup: False
     email:
       - "soren.s@jarv.us"
