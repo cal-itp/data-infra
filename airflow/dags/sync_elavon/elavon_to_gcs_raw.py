@@ -34,6 +34,9 @@ def mirror_raw_files_from_elavon():
     # Initialize GCS connection
     fs = get_fs()
 
+    # Initiailize extract time used by all files
+    ts = str(pendulum.now())
+
     for file in [x for x in sftp_client.listdir() if x.endswith(".zip")]:
         print(f"Processing file {file}")
 
@@ -42,8 +45,6 @@ def mirror_raw_files_from_elavon():
             os.mkdir("transferred_files")
         local_path = f"transferred_files/{file}"
         sftp_client.get(file, local_path)
-
-        ts = str(pendulum.now())
 
         # We put file by file because recursively putting the directory causes relative
         # filepath issues

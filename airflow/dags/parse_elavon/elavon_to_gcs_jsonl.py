@@ -26,7 +26,12 @@ def fetch_and_clean_from_gcs(fs):
     all_rows = pd.DataFrame()
 
     # List raw files available from GCS
-    file_list = fs.ls("test-calitp-elavon-raw/", detail=False)
+    file_and_dir_list = fs.ls("test-calitp-elavon-raw/", detail=False)
+    dir_list = [x for x in file_and_dir_list if fs.isdir(x)]
+    target_dir = max(dir_list)
+    file_list = fs.ls(f"{target_dir}/", detail=False)
+
+    file_list = [x for x in file_list if fs.isfile(x)]
     for file in file_list:
         print(f"Processing file {file}")
 
