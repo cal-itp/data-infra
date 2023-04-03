@@ -33,7 +33,7 @@ def mirror_raw_files_from_elavon():
     # Initialize GCS connection
     fs = get_fs()
 
-    for file in [x for x in sftp_client.listdir() if "zip" in x]:
+    for file in [x for x in sftp_client.listdir() if x.endswith(".zip")]:
         print(f"Processing file {file}")
 
         # Save to local directory for mirrored transfer to GCS
