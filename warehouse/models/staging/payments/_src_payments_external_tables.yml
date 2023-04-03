@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: elavon_external_tables
     description: Hive-partitioned external tables reading Elavon transactions from GCS.
-    database: "{{ var('SOURCE_DATABASE') }}"
+    database: "{{ env_var('CALITP_DBT_SOURCE_DATABASE', var('DEFAULT_SOURCE_DATABASE')) }}"
     schema: external_elavon
     tables:
       - name: transactions
