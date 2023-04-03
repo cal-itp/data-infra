@@ -1,0 +1,26 @@
+fixed:
+  fixed_retries: 1
+  location: us-west2
+  method: oauth
+  priority: interactive
+  project: cal-itp-data-infra-staging
+  threads: 8
+  # currently slowest model is int_gtfs_rt__trip_updates_no_stop_times
+  # which takes ~2700 seconds to full refresh
+  timeout_seconds: 3000
+  type: bigquery
+  gcs_bucket: test-calitp-dbt-python-models
+  dataproc_region: us-west2
+  submission_method: serverless
+  dataproc_batch:
+    runtime_config:
+      container_image: gcr.io/cal-itp-data-infra/dbt-spark:2023.3.28
+      properties:
+        spark.executor.cores: "4" # this is the default but put it here for clarity
+        spark.executor.instances: "4" # dbt defaults to 2
+        spark.executor.memory: 4g
+        spark.dynamicAllocation.maxExecutors: "16"
+prompts:
+  schema:
+    type: string
+    hint: usually your name; will be added as a prefix to schemas e.g. <schema>_mart_gtfs

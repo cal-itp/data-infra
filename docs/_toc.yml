@@ -16,7 +16,7 @@ parts:
         - file: analytics_tools/github_setup
         - file: analytics_tools/tools_quick_links
         - file: analytics_tools/bi_dashboards
-        - file: analytics_tools/notebooks
+        - file: analytics_tools/jupyterhub
         - file: analytics_tools/python_libraries
         - file: analytics_tools/rt_analysis
         - file: analytics_tools/saving_code
