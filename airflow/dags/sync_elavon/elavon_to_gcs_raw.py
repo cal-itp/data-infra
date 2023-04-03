@@ -4,11 +4,10 @@
 # ---
 import os
 
-import gcsfs
 import paramiko
+from calitp_data_infra.storage import get_fs
 
 CALITP__ELAVON_SFTP_PASSWORD = os.environ["CALITP__ELAVON_SFTP_PASSWORD"]
-BIGQUERY_KEYFILE_LOCATION = os.environ["BIGQUERY_KEYFILE_LOCATION"]
 
 
 def mirror_raw_files_from_elavon():
@@ -32,10 +31,7 @@ def mirror_raw_files_from_elavon():
     sftp_client.chdir("/data")
 
     # Initialize GCS connection
-    gfs = gcsfs.GCSFileSystem(
-        project="cal-itp-data-infra",
-        token=BIGQUERY_KEYFILE_LOCATION,
-    )
+    fs = get_fs()
 
     for file in [x for x in sftp_client.listdir() if "zip" in x]:
         print(f"Processing file {file}")
@@ -48,7 +44,7 @@ def mirror_raw_files_from_elavon():
 
         # We put file by file because recursively putting the directory causes relative
         # filepath issues
-        gfs.put(lpath=f"transferred_files/{file}", rpath="gs://test-calitp-elavon-raw/")
+        fs.put(lpath=f"transferred_files/{file}", rpath="gs://test-calitp-elavon-raw/")
 
 
 if __name__ == "__main__":
