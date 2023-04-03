@@ -9,12 +9,13 @@ are already configured/installed.
 * The `gcloud` CLI
 * `poetry`
 
-You may have already authenticated gcloud if you followed the
-[JupyterHub setup docs](https://docs.calitp.org/data-infra/analytics_tools/jupyterhub.html). If not, follow those instructions to set up your application default credentials.
+> You may have already authenticated gcloud and the GitHub CLI (gh) if you followed the
+[JupyterHub setup docs](https://docs.calitp.org/data-infra/analytics_tools/jupyterhub.html). If not, follow those instructions before proceeding.
 
 ### Clone and install the warehouse project
 1. [Clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
    the `data-infra` repo via `git clone git@github.com:cal-itp/data-infra.git` if you haven't already. Use [SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account), not HTTPS. If you haven't made a folder/directory for your git repos yet, you can create one with `mkdir git` (within your home directory, usually).
+   1. You may be prompted to accept GitHub key's fingerprint if you are cloning a repository for the first time.
 2. The rest of these instructions assume you are in the `warehouse/` directory of the repository.
    1. You will need to `cd` to it via `cd <git-repos-path>/data-infra/warehouse/` or similar; for example, if you had created your directory with `mkdir git`, you will navigate to the warehouse directory with `cd git/data-infra/warehouse/`.
 3. Execute `poetry install` to create a virtual environment and install requirements.
