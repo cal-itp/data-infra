@@ -19,10 +19,7 @@ jobs:
     - uses: actions/setup-python@v1
       with:
         python-version: 3.9
-    - name: Install python packages
-      run: |
-        pip install -r airflow/requirements.txt
-        pip install -r docs/requirements.txt
+    - run: pip install -r docs/requirements.txt
     - uses: google-github-actions/setup-gcloud@v0
       with:
         service_account_key: ${{ secrets.GCP_SA_KEY }}
@@ -30,7 +27,6 @@ jobs:
 
     - name: Build jupyter book
       run: jb build docs --warningiserror --keep-going # set doc to fail on any sphinx warning
-
     - uses: actions/upload-artifact@v2
       if: always()
       with:

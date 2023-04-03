@@ -44,6 +44,7 @@ See the screencast below for a full walkthrough.
 The commands required:
 ```bash
 # init will both authenticate and do basic configuration
+# You do not have to set a default compute region/zone
 gcloud init
 
 # Optionally, you can auth and set the project separately
