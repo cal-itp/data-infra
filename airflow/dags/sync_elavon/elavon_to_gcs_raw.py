@@ -5,6 +5,7 @@
 import os
 
 import paramiko
+import pendulum
 from calitp_data_infra.storage import get_fs
 
 CALITP__ELAVON_SFTP_PASSWORD = os.environ["CALITP__ELAVON_SFTP_PASSWORD"]
@@ -42,9 +43,14 @@ def mirror_raw_files_from_elavon():
         local_path = f"transferred_files/{file}"
         sftp_client.get(file, local_path)
 
+        ts = str(pendulum.now())
+
         # We put file by file because recursively putting the directory causes relative
         # filepath issues
-        fs.put(lpath=f"transferred_files/{file}", rpath="gs://test-calitp-elavon-raw/")
+        fs.put(
+            lpath=f"transferred_files/ts={ts}/{file}",
+            rpath="gs://test-calitp-elavon-raw/",
+        )
 
 
 if __name__ == "__main__":
