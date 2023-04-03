@@ -56,6 +56,17 @@ xmltodict = "^0.13.0"
 loguru = "^0.6.0"
 mapclassify = "^2.5.0"
 
+[tool.poetry.group.portfolio.dependencies]
+pydantic = ">=1.9.1"
+humanize = "^4.6.0"
+typer = "^0.7.0"
+nbformat = "^5.8.0"
+papermill = "^2.4.0"
+python-slugify = "^6.1.1"
+pyaml = "^21.10.1"
+# must wait on https://github.com/pydata/pydata-sphinx-theme/issues/1253 to upgrade
+jupyter-book = "^0.12.2"
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"

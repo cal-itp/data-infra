@@ -38,7 +38,7 @@ ENV PATH="$GCLOUD_HOME/google-cloud-sdk/bin:$PATH"
 COPY ./pyproject.toml /reqs/pyproject.toml
 COPY ./poetry.lock /reqs/poetry.lock
 RUN poetry config virtualenvs.create false
-RUN cd /reqs && poetry install --with=shared_utils
+RUN cd /reqs && poetry install --with=shared_utils --with=portfolio
 RUN poetry config virtualenvs.create true
 
 ENV DBT_PROFILES_DIR=/home/jovyan/.dbt/
