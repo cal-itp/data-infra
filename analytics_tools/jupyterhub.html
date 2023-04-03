@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Notebooks &#8212; Cal-ITP Data Services</title>
+    <title>JupyterHub &#8212; Cal-ITP Data Services</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -170,7 +170,7 @@
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     Notebooks
+     JupyterHub
     </a>
    </li>
    <li class="toctree-l2">
@@ -681,7 +681,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/analytics_tools/notebooks.md"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/analytics_tools/jupyterhub.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -701,10 +701,10 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fanalytics_tools/notebooks.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fanalytics_tools/jupyterhub.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/analytics_tools/notebooks.md"><button
+        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/analytics_tools/jupyterhub.md"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -779,6 +779,11 @@
      Jupyter Notebook Best Practices
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#developing-warehouse-models-in-jupyterhub">
+     Developing warehouse models in JupyterHub
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -791,7 +796,7 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Notebooks</h1>
+                <h1>JupyterHub</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -851,6 +856,11 @@
      Jupyter Notebook Best Practices
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#developing-warehouse-models-in-jupyterhub">
+     Developing warehouse models in JupyterHub
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -862,8 +872,8 @@
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="notebooks">
-<span id="jupyterhub"></span><h1>Notebooks<a class="headerlink" href="#notebooks" title="Permalink to this headline">¶</a></h1>
+  <div class="tex2jax_ignore mathjax_ignore section" id="jupyterhub">
+<span id="jupyterhub-intro"></span><h1>JupyterHub<a class="headerlink" href="#jupyterhub" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction-to-jupyterhub">
 <h2>Introduction to JupyterHub<a class="headerlink" href="#introduction-to-jupyterhub" title="Permalink to this headline">¶</a></h2>
 <p>Jupyterhub is a web application that allows users to analyze and create reports on warehouse data (or a number of data sources).</p>
@@ -881,6 +891,7 @@
 <li><p><a class="reference internal" href="#saving-code-jupyter"><span class="std std-ref">Saving Code to Github</span></a></p></li>
 <li><p><a class="reference external" href="#environment-variables">Environment Variables</a></p></li>
 <li><p><a class="reference internal" href="#notebook-shortcuts"><span class="std std-ref">Jupyter Notebook Best Practices</span></a></p></li>
+<li><p><a class="reference internal" href="#jupyterhub-warehouse"><span class="std std-ref">Developing warehouse models in Jupyter</span></a></p></li>
 </ol>
 </div>
 <div class="section" id="using-jupyterhub">
@@ -899,26 +910,16 @@ To do this, you will need to download and install the gcloud commandline tool fr
 <p>See the screencast below for a full walkthrough.</p>
 <div style="position: relative; padding-bottom: 62.5%; height: 0;"><iframe src="https://www.loom.com/embed/6883b0bf9c8b4547a93d00bc6ba45b6d" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
 <p>The commands required:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># in the main directory (outside of data-analyses and data-infra)</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># init will both authenticate and do basic configuration</span>
+<span class="c1"># You do not have to set a default compute region/zone</span>
+gcloud<span class="w"> </span>init
 
-<span class="c1"># initial setup (in terminal) ----</span>
-<span class="n">curl</span> <span class="o">-</span><span class="n">O</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">dl</span><span class="o">.</span><span class="n">google</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">dl</span><span class="o">/</span><span class="n">cloudsdk</span><span class="o">/</span><span class="n">channels</span><span class="o">/</span><span class="n">rapid</span><span class="o">/</span><span class="n">downloads</span><span class="o">/</span><span class="n">google</span><span class="o">-</span><span class="n">cloud</span><span class="o">-</span><span class="n">sdk</span><span class="o">-</span><span class="mf">396.0.0</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
-<span class="n">tar</span> <span class="o">-</span><span class="n">zxvf</span> <span class="n">google</span><span class="o">-</span><span class="n">cloud</span><span class="o">-</span><span class="n">sdk</span><span class="o">-</span><span class="mf">396.0.0</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
-<span class="o">./</span><span class="n">google</span><span class="o">-</span><span class="n">cloud</span><span class="o">-</span><span class="n">sdk</span><span class="o">/</span><span class="n">install</span><span class="o">.</span><span class="n">sh</span>
-<span class="o">./</span><span class="n">google</span><span class="o">-</span><span class="n">cloud</span><span class="o">-</span><span class="n">sdk</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">gcloud</span> <span class="n">init</span>
+<span class="c1"># Optionally, you can auth and set the project separately</span>
+gcloud<span class="w"> </span>auth<span class="w"> </span>login
+gcloud<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>project<span class="w"> </span>cal-itp-data-infra
 
-<span class="c1"># log in to project ----</span>
-<span class="n">gcloud</span> <span class="n">auth</span> <span class="n">login</span>
-
-<span class="c1"># Authenticate ---- paste URL into browser, copy/paste the authorization code</span>
-
-<span class="n">gcloud</span> <span class="n">auth</span> <span class="n">application</span><span class="o">-</span><span class="n">default</span> <span class="n">login</span>
-
-<span class="c1"># When it asks for the path:</span>
-<span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">jovyan</span><span class="o">/.</span><span class="n">bash_profile</span>
-
-<span class="c1"># If the default project ID is None, change it</span>
-<span class="n">gcloud</span> <span class="n">config</span> <span class="nb">set</span> <span class="n">project</span> <span class="n">cal</span><span class="o">-</span><span class="n">itp</span><span class="o">-</span><span class="n">data</span><span class="o">-</span><span class="n">infra</span>
+<span class="c1"># Regardless, set up application default credentials</span>
+gcloud<span class="w"> </span>auth<span class="w"> </span>application-default<span class="w"> </span>login
 </pre></div>
 </div>
 </div>
@@ -964,7 +965,7 @@ To do this, you will need to download and install the gcloud commandline tool fr
 <span id="saving-code-jupyter"></span><h3>Saving Code to Github<a class="headerlink" href="#saving-code-to-github" title="Permalink to this headline">¶</a></h3>
 <p>Use <a class="reference internal" href="saving_code.html#committing-from-jupyterhub"><span class="std std-ref">this link</span></a> to navigate to the <code class="docutils literal notranslate"><span class="pre">Saving</span> <span class="pre">Code</span></code> section of the docs to learn how to commit code to GitHub from the Jupyter terminal. Once there, you will need to complete the instructions in the following sections:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="github_setup.html#adding-ssh-to-jupyter"><span class="std std-ref">Adding a GitHub SSH Key to Jupyter</span></a></p></li>
+<li><p><a class="reference internal" href="github_setup.html#authenticating-github-jupyter"><span class="std std-ref">Adding a GitHub SSH Key to Jupyter</span></a></p></li>
 <li><p><a class="reference internal" href="github_setup.html#persisting-ssh-and-extensions"><span class="std std-ref">Persisting your SSH Key and Enabling Extensions</span></a></p></li>
 <li><p><a class="reference internal" href="github_setup.html#cloning-a-repository"><span class="std std-ref">Cloning a Repository</span></a></p></li>
 </ul>
@@ -1000,6 +1001,10 @@ To do this, you will need to download and install the gcloud commandline tool fr
 <li><p><a class="reference external" href="https://defkey.com/jupyter-notebook-shortcuts?pdf=true&amp;modifiedDate=20200909T053706">Cheat Sheet - Jupyter Notebook </a></p></li>
 <li><p><a class="reference external" href="https://www.datacamp.com/community/tutorials/markdown-in-jupyter-notebook">Using Markdown in Jupyter Notebook</a></p></li>
 </ul>
+</div>
+<div class="section" id="developing-warehouse-models-in-jupyterhub">
+<span id="jupyterhub-warehouse"></span><h3>Developing warehouse models in JupyterHub<a class="headerlink" href="#developing-warehouse-models-in-jupyterhub" title="Permalink to this headline">¶</a></h3>
+<p>See the <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/warehouse#readme">warehouse README</a> for warehouse project setup instructions.</p>
 </div>
 </div>
 </div>

@@ -5,7 +5,7 @@ Welcome to the Analytics Tools section! If you're here, you're ready to begin co
 **What you should know after reading**:
 * [Where to easily acccess links to team tools](tools-quick-links)
 * [How to use our BI & dashboarding tool](metabase)
-* [How to use our cloud notebook](jupyterhub)
+* [How to use our cloud notebook](jupyterhub-intro)
 * [How to query the warehouse with SQL](querying-sql-jupyterhub)
 * [What Python libraries are suggested](python-libraries)
 * [Where code is kept](saving-code)

@@ -3,7 +3,7 @@
 
 ## Table of Contents
 1. [Onboarding Setup](#onboarding-setup)
-    * [Adding a GitHub SSH Key to Jupyter](adding-ssh-to-jupyter)
+    * [Adding a GitHub SSH Key to Jupyter](authenticating-github-jupyter)
     * [Persisting your SSH Key and Enabling Extensions](persisting-ssh-and-extensions)
     * [Cloning a Repository](cloning-a-repository)
 
@@ -11,38 +11,39 @@
 
 We'll work through getting set up with SSH and GitHub on JupyterHub and cloning one GitHub repo. This is the first task you'll need to complete before contributing code. Repeat the steps in [Cloning a Repository](cloning-a-repository) for other repos.
 
-(adding-ssh-to-jupyter)=
-### Adding a GitHub SSH Key to Jupyter
+(authenticating-github-jupyter)=
+### Authenticating to GitHub via the gh CLI
 
-Generating and adding an SSH key authenticates your local environment with our GitHub organization. For more information on what's below, you can navigate to the [GitHub directions](https://docs.github.com/en/authentication/connecting-to-github-with-ssh) and follow the Linux instructions for each step.
+> This section describes using the GitHub CLI to set up SSH access, but the generic instructions can be found [here](https://docs.github.com/en/authentication/connecting-to-github-with-ssh).
+
 1. Create a GitHub username if necessary and ensure you're added to the appropriate Cal-ITP teams on GitHub. You'll be committing directly into the Cal-ITP repos!
-1. Open a terminal in JupyterHub. All of our commands will be typed in this terminal.
-1. Set up SSH by following these directions:
-    * Run the following command in the terminal, replacing what's inside the quotes with the email address your GitHub account is associated with:
-        * `ssh-keygen -t ed25519 -C "your_email@example.com"`
-    * After that, select `enter` to store it in the default location, and select `enter` twice more to bypass creating a passphrase
-    * Run the following command to "start" ssh key in the background, which should return a response similar to `Agent pid 258`
-        * `eval "$(ssh-agent -s)"`
-    * Add the ssh key to the ssh agent with this command
-        * `ssh-add ~/.ssh/id_ed25519`
-    * From here we will copy the contents of your public ssh file, which we will first do by viewing it's contents.
-        * To view:
-            * `cat ~/.ssh/id_ed25519.pub`
-        * Then, select and copy the entire contents of the file that display
-            * The text should begin with `ssh-ed25519` and end with your GitHub email address
-            * Beware of copying white spaces, which may cause errors in the following steps
+2. Open a terminal in JupyterHub. All of our commands will be typed in this terminal.
+3. `gh auth login` and select the following options
+```
+(base) jovyan@f4b18b106c18:~$ gh auth login
+? What account do you want to log into? GitHub.com
+? What is your preferred protocol for Git operations? SSH
+? Generate a new SSH key to add to your GitHub account? Yes
+? Enter a passphrase for your new SSH key (Optional)
+? Title for your SSH key: GitHub CLI
+? How would you like to authenticate GitHub CLI? Login with a web browser
+```
+You can press `Enter` to leave the passphrase empty, or you may provide a password; in the future, you will need to enter this password when your server starts. If you've already created an SSH key, you will be prompted to select the existing key rather than creating a new one.
 
-
-    * Once copied, navigate to GitHub
-    * In the top right corner, select `Settings` and then select `SSH and GPC Keys` in the left sidebar
-    * Select `New SSH Key`
-        * For the title add something like ‘JupyterHub’
-        * Paste the key that you copied into key field
-    * Click `Add SSH Key`, and, if necessary, enter password
-
-
-    * After you've added your SSH key to your GitHub account, open a new Jupyter terminal window and you'll be able to test your connection with:
-        * `ssh -T git@github.com`
+4. You will then be given a one-time code and instructed to press `Enter` to open a web browser, which will fail if you are using JupyterHub. However, you can manually open the link in a browser and enter the code. You will end up with output similar to the following.
+```
+! First copy your one-time code: ABCD-1234
+Press Enter to open github.com in your browser...
+...
+! Failed opening a web browser at https://github.com/login/device
+  exit status 3
+  Please try entering the URL in your browser manually
+✓ Authentication complete.
+- gh config set -h github.com git_protocol ssh
+✓ Configured git protocol
+✓ Uploaded the SSH key to your GitHub account: /home/jovyan/.ssh/id_ed25519.pub
+✓ Logged in as atvaccaro
+```
 
 After completing the steps above be sure to complete the section below to persist your SSH key between sessions and enable extensions.
 
@@ -77,7 +78,8 @@ After completing this section, you will also enjoy various extensions in Jupyter
 (cloning-a-repository)=
 ### Cloning a Repository
 1. Navigate to the GitHub repository to clone. We'll work our way through the `data-analyses` [repo here](https://github.com/cal-itp/data-analyses). Click on the green `Code` button, select "SSH" and copy the URL.
-1. Clone the Git repo: `git clone git@github.com:cal-itp/data-analyses.git`
-1. Double check  with `ls` to list and see that the remote repo was successfully cloned into your "local" (cloud-based) filesystem.
-1. Change into the `data-analyses` directory: `cd data-analyses`
-1. Pull from the `main` branch and sync your remote and local repos: `git pull origin main`
+   1. You may be prompted to accept GitHub key's fingerprint if you are cloning a repository for the first time.
+2. Clone the Git repo: `git clone git@github.com:cal-itp/data-analyses.git`
+3. Double check  with `ls` to list and see that the remote repo was successfully cloned into your "local" (cloud-based) filesystem.
+4. Change into the `data-analyses` directory: `cd data-analyses`
+5. Pull from the `main` branch and sync your remote and local repos: `git pull origin main`

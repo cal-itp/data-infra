@@ -169,8 +169,8 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="notebooks.html">
-     Notebooks
+    <a class="reference internal" href="jupyterhub.html">
+     JupyterHub
     </a>
    </li>
    <li class="toctree-l2">
@@ -740,8 +740,8 @@
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#adding-a-github-ssh-key-to-jupyter">
-     Adding a GitHub SSH Key to Jupyter
+    <a class="reference internal nav-link" href="#authenticating-to-github-via-the-gh-cli">
+     Authenticating to GitHub via the gh CLI
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
@@ -787,8 +787,8 @@
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#adding-a-github-ssh-key-to-jupyter">
-     Adding a GitHub SSH Key to Jupyter
+    <a class="reference internal nav-link" href="#authenticating-to-github-via-the-gh-cli">
+     Authenticating to GitHub via the gh CLI
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
@@ -819,7 +819,7 @@
 <ol class="simple">
 <li><p><a class="reference external" href="#onboarding-setup">Onboarding Setup</a></p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#adding-ssh-to-jupyter"><span class="std std-ref">Adding a GitHub SSH Key to Jupyter</span></a></p></li>
+<li><p><a class="reference internal" href="#authenticating-github-jupyter"><span class="std std-ref">Adding a GitHub SSH Key to Jupyter</span></a></p></li>
 <li><p><a class="reference internal" href="#persisting-ssh-and-extensions"><span class="std std-ref">Persisting your SSH Key and Enabling Extensions</span></a></p></li>
 <li><p><a class="reference internal" href="#cloning-a-repository"><span class="std std-ref">Cloning a Repository</span></a></p></li>
 </ul>
@@ -829,62 +829,42 @@
 <div class="section" id="onboarding-setup">
 <h2>Onboarding Setup<a class="headerlink" href="#onboarding-setup" title="Permalink to this headline">¶</a></h2>
 <p>We’ll work through getting set up with SSH and GitHub on JupyterHub and cloning one GitHub repo. This is the first task you’ll need to complete before contributing code. Repeat the steps in <a class="reference internal" href="#cloning-a-repository"><span class="std std-ref">Cloning a Repository</span></a> for other repos.</p>
-<div class="section" id="adding-a-github-ssh-key-to-jupyter">
-<span id="adding-ssh-to-jupyter"></span><h3>Adding a GitHub SSH Key to Jupyter<a class="headerlink" href="#adding-a-github-ssh-key-to-jupyter" title="Permalink to this headline">¶</a></h3>
-<p>Generating and adding an SSH key authenticates your local environment with our GitHub organization. For more information on what’s below, you can navigate to the <a class="reference external" href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh">GitHub directions</a> and follow the Linux instructions for each step.</p>
+<div class="section" id="authenticating-to-github-via-the-gh-cli">
+<span id="authenticating-github-jupyter"></span><h3>Authenticating to GitHub via the gh CLI<a class="headerlink" href="#authenticating-to-github-via-the-gh-cli" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>This section describes using the GitHub CLI to set up SSH access, but the generic instructions can be found <a class="reference external" href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh">here</a>.</p>
+</div></blockquote>
 <ol class="simple">
 <li><p>Create a GitHub username if necessary and ensure you’re added to the appropriate Cal-ITP teams on GitHub. You’ll be committing directly into the Cal-ITP repos!</p></li>
 <li><p>Open a terminal in JupyterHub. All of our commands will be typed in this terminal.</p></li>
-<li><p>Set up SSH by following these directions:</p>
-<ul class="simple">
-<li><p>Run the following command in the terminal, replacing what’s inside the quotes with the email address your GitHub account is associated with:</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">ssh-keygen</span> <span class="pre">-t</span> <span class="pre">ed25519</span> <span class="pre">-C</span> <span class="pre">&quot;your_email&#64;example.com&quot;</span></code></p></li>
-</ul>
-</li>
-<li><p>After that, select <code class="docutils literal notranslate"><span class="pre">enter</span></code> to store it in the default location, and select <code class="docutils literal notranslate"><span class="pre">enter</span></code> twice more to bypass creating a passphrase</p></li>
-<li><p>Run the following command to “start” ssh key in the background, which should return a response similar to <code class="docutils literal notranslate"><span class="pre">Agent</span> <span class="pre">pid</span> <span class="pre">258</span></code></p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">eval</span> <span class="pre">&quot;$(ssh-agent</span> <span class="pre">-s)&quot;</span></code></p></li>
-</ul>
-</li>
-<li><p>Add the ssh key to the ssh agent with this command</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">ssh-add</span> <span class="pre">~/.ssh/id_ed25519</span></code></p></li>
-</ul>
-</li>
-<li><p>From here we will copy the contents of your public ssh file, which we will first do by viewing it’s contents.</p>
-<ul>
-<li><p>To view:</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">~/.ssh/id_ed25519.pub</span></code></p></li>
-</ul>
-</li>
-<li><p>Then, select and copy the entire contents of the file that display</p>
-<ul>
-<li><p>The text should begin with <code class="docutils literal notranslate"><span class="pre">ssh-ed25519</span></code> and end with your GitHub email address</p></li>
-<li><p>Beware of copying white spaces, which may cause errors in the following steps</p></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>Once copied, navigate to GitHub</p></li>
-<li><p>In the top right corner, select <code class="docutils literal notranslate"><span class="pre">Settings</span></code> and then select <code class="docutils literal notranslate"><span class="pre">SSH</span> <span class="pre">and</span> <span class="pre">GPC</span> <span class="pre">Keys</span></code> in the left sidebar</p></li>
-<li><p>Select <code class="docutils literal notranslate"><span class="pre">New</span> <span class="pre">SSH</span> <span class="pre">Key</span></code></p>
-<ul>
-<li><p>For the title add something like ‘JupyterHub’</p></li>
-<li><p>Paste the key that you copied into key field</p></li>
-</ul>
-</li>
-<li><p>Click <code class="docutils literal notranslate"><span class="pre">Add</span> <span class="pre">SSH</span> <span class="pre">Key</span></code>, and, if necessary, enter password</p></li>
-<li><p>After you’ve added your SSH key to your GitHub account, open a new Jupyter terminal window and you’ll be able to test your connection with:</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">ssh</span> <span class="pre">-T</span> <span class="pre">git&#64;github.com</span></code></p></li>
-</ul>
-</li>
-</ul>
-</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">gh</span> <span class="pre">auth</span> <span class="pre">login</span></code> and select the following options</p></li>
 </ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(base) jovyan@f4b18b106c18:~$ gh auth login
+? What account do you want to log into? GitHub.com
+? What is your preferred protocol for Git operations? SSH
+? Generate a new SSH key to add to your GitHub account? Yes
+? Enter a passphrase for your new SSH key (Optional)
+? Title for your SSH key: GitHub CLI
+? How would you like to authenticate GitHub CLI? Login with a web browser
+</pre></div>
+</div>
+<p>You can press <code class="docutils literal notranslate"><span class="pre">Enter</span></code> to leave the passphrase empty, or you may provide a password; in the future, you will need to enter this password when your server starts. If you’ve already created an SSH key, you will be prompted to select the existing key rather than creating a new one.</p>
+<ol class="simple">
+<li><p>You will then be given a one-time code and instructed to press <code class="docutils literal notranslate"><span class="pre">Enter</span></code> to open a web browser, which will fail if you are using JupyterHub. However, you can manually open the link in a browser and enter the code. You will end up with output similar to the following.</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>! First copy your one-time code: ABCD-1234
+Press Enter to open github.com in your browser...
+...
+! Failed opening a web browser at https://github.com/login/device
+  exit status 3
+  Please try entering the URL in your browser manually
+✓ Authentication complete.
+- gh config set -h github.com git_protocol ssh
+✓ Configured git protocol
+✓ Uploaded the SSH key to your GitHub account: /home/jovyan/.ssh/id_ed25519.pub
+✓ Logged in as atvaccaro
+</pre></div>
+</div>
 <p>After completing the steps above be sure to complete the section below to persist your SSH key between sessions and enable extensions.</p>
 </div>
 <div class="section" id="persisting-your-ssh-key-and-enabling-extensions">
@@ -925,7 +905,11 @@
 <div class="section" id="cloning-a-repository">
 <span id="id2"></span><h3>Cloning a Repository<a class="headerlink" href="#cloning-a-repository" title="Permalink to this headline">¶</a></h3>
 <ol class="simple">
-<li><p>Navigate to the GitHub repository to clone. We’ll work our way through the <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code> <a class="reference external" href="https://github.com/cal-itp/data-analyses">repo here</a>. Click on the green <code class="docutils literal notranslate"><span class="pre">Code</span></code> button, select “SSH” and copy the URL.</p></li>
+<li><p>Navigate to the GitHub repository to clone. We’ll work our way through the <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code> <a class="reference external" href="https://github.com/cal-itp/data-analyses">repo here</a>. Click on the green <code class="docutils literal notranslate"><span class="pre">Code</span></code> button, select “SSH” and copy the URL.</p>
+<ol class="simple">
+<li><p>You may be prompted to accept GitHub key’s fingerprint if you are cloning a repository for the first time.</p></li>
+</ol>
+</li>
 <li><p>Clone the Git repo: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">git&#64;github.com:cal-itp/data-analyses.git</span></code></p></li>
 <li><p>Double check  with <code class="docutils literal notranslate"><span class="pre">ls</span></code> to list and see that the remote repo was successfully cloned into your “local” (cloud-based) filesystem.</p></li>
 <li><p>Change into the <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code> directory: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">data-analyses</span></code></p></li>
