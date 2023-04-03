@@ -25,7 +25,7 @@ daily_scraped_urls AS (
     FROM {{ ref('stg_gtfs_quality__scraped_urls') }}
 ),
 
-get_start AS (
+check_start AS (
     SELECT MIN(date) AS first_check_date
     FROM daily_scraped_urls
 ),
@@ -75,7 +75,7 @@ int_gtfs_quality__feed_aggregator AS (
         guideline_index.aggregator AS test_aggregator,
         daily_scraped_urls.aggregator
       FROM guideline_index
-      CROSS JOIN get_start
+      CROSS JOIN check_start
       LEFT JOIN daily_scraped_urls
         ON guideline_index.no_scheme_url = daily_scraped_urls.no_scheme_url
         AND guideline_index.date = daily_scraped_urls.date

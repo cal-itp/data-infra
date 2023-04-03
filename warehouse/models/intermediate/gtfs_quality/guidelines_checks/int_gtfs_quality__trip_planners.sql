@@ -18,20 +18,16 @@ service_checks AS (
 
 check_start_schedule AS (
     SELECT
-        source_record_id AS service_source_record_id,
         CAST(MIN(_valid_from) AS DATETIME) AS first_check_date_schedule
     FROM service_checks
     WHERE schedule_in_trip_planner IS NOT NULL AND schedule_in_trip_planner != "Unknown"
-    GROUP BY 1
 ),
 
 check_start_rt AS (
     SELECT
-        source_record_id AS service_source_record_id,
         CAST(MIN(_valid_from) AS DATETIME) AS first_check_date_rt
     FROM service_checks
     WHERE rt_in_trip_planner IS NOT NULL AND rt_in_trip_planner != "Unknown"
-    GROUP BY 1
 ),
 
 int_gtfs_quality__trip_planners AS (
@@ -63,10 +59,8 @@ int_gtfs_quality__trip_planners AS (
             ELSE idx.status
         END AS status,
     FROM idx
-    LEFT JOIN check_start_schedule
-        USING (service_source_record_id)
-    LEFT JOIN check_start_rt
-        USING (service_source_record_id)
+    CROSS JOIN check_start_schedule
+    CROSS JOIN check_start_rt
     LEFT JOIN service_checks
         ON idx.service_key = service_checks.key
 )

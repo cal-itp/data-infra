@@ -28,7 +28,7 @@ check_feeds AS (
     GROUP BY 1, 2
 ),
 
-get_start AS (
+check_start AS (
     SELECT MIN(_valid_from) AS first_check_date
     FROM dim_provider_gtfs_data
 ),
@@ -70,7 +70,7 @@ int_gtfs_quality__feed_listed AS (
             ELSE idx.status
         END AS status,
       FROM idx
-      CROSS JOIN get_start
+      CROSS JOIN check_start
       LEFT JOIN check_feeds
         ON idx.service_key = check_feeds.service_key
         AND idx.date = check_feeds.date
