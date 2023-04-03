@@ -48,8 +48,8 @@ def mirror_raw_files_from_elavon():
         # We put file by file because recursively putting the directory causes relative
         # filepath issues
         fs.put(
-            lpath=f"transferred_files/ts={ts}/{file}",
-            rpath="gs://test-calitp-elavon-raw/",
+            lpath=f"transferred_files/{file}",
+            rpath=f"gs://test-calitp-elavon-raw/ts={ts}/",
         )
 
 
