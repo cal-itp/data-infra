@@ -19,12 +19,18 @@ daily_feed_download_unzip_status AS (
       GROUP BY 1, 2
 ),
 
+check_start AS (
+    SELECT MIN(date) AS first_check_date
+    FROM daily_feed_download_unzip_status
+),
+
 int_gtfs_quality__schedule_url_download_success AS (
     SELECT
         idx.* EXCEPT(status),
         CASE
             -- only pass if both download and unzip succeeded
             WHEN download_success AND unzip_success THEN {{ guidelines_pass_status() }}
+            WHEN idx.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
             -- if d.base_url is not null, that means we did attempt download on this day but either download or unzip did not succeed
             WHEN idx.has_schedule_url AND d.base64_url IS NOT NULL THEN {{ guidelines_fail_status() }}
             -- if d.base_url is null, means we did not attempt to download on this day for whatever reason (this URL is not present on right side of join)
@@ -33,6 +39,7 @@ int_gtfs_quality__schedule_url_download_success AS (
             ELSE idx.status
         END AS status
     FROM guideline_index idx
+    CROSS JOIN check_start
     LEFT JOIN daily_feed_download_unzip_status d
       ON idx.base64_url = d.base64_url
      AND idx.date = d.date
