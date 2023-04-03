@@ -16,7 +16,7 @@
 WITH dim_stop_times AS (
     SELECT
         *,
-        CONCAT(arrival_time, departure_time) AS time_pair,
+        CONCAT(arrival_time, "-", departure_time) AS time_pair,
     FROM {{ ref('dim_stop_times') }}
     {% if is_incremental() %}
     WHERE _feed_valid_from >= '{{ max_ts }}'
@@ -28,7 +28,7 @@ WITH dim_stop_times AS (
 dim_stops AS (
     SELECT
         *,
-        CONCAT(stop_lat, stop_lon) AS stop_location
+        CONCAT(stop_lat, "-", stop_lon) AS stop_location
     FROM {{ ref('dim_stops') }}
     {% if is_incremental() %}
     WHERE _feed_valid_from >= '{{ max_ts }}'
@@ -57,13 +57,13 @@ int_gtfs_quality__scheduled_trip_version_summary AS (
         -- Creates a hash for a single field summarizing all stop_times this trip
         MD5(
             STRING_AGG(
-                t2.time_pair ORDER BY t2.stop_sequence ASC
+                t2.time_pair ORDER BY t2.stop_sequence ASC, "-"
             )
         ) AS trip_stop_times_hash,
         -- Creates a hash for a single field summarizing all stop locations for this trip
         MD5(
             STRING_AGG(
-                t3.stop_location ORDER BY t2.stop_sequence ASC
+                t3.stop_location ORDER BY t2.stop_sequence ASC, "-"
             )
         ) AS trip_stop_locations_hash
     FROM dim_trips t1
