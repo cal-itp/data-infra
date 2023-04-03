@@ -1,4 +1,4 @@
-name: Publish docs to gh-pages
+name: Build and publish docs
 
 on:
   push:
@@ -28,8 +28,14 @@ jobs:
         service_account_key: ${{ secrets.GCP_SA_KEY }}
         export_default_credentials: true
 
-    - name: Build docs
+    - name: Build jupyter book
       run: jb build docs --warningiserror --keep-going # set doc to fail on any sphinx warning
+
+    - uses: actions/upload-artifact@v2
+      if: always()
+      with:
+        name: docs-build
+        path: docs/_build/html
 
     # Production
     - name: Deploy docs to GitHub Pages
