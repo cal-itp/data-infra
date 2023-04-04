@@ -13,6 +13,11 @@ WITH int_gtfs_schedule__joined_feed_outcomes AS (
     WHERE EXTRACT(DATE FROM ts) <= EXTRACT(DATE FROM TIMESTAMP '{{ latest_processed_timestamp }}')
 ),
 
+agencies AS (
+    SELECT *
+    FROM {{ ref('stg_gtfs_schedule__agency') }}
+),
+
 data_available AS (
     SELECT *
     FROM int_gtfs_schedule__joined_feed_outcomes
@@ -118,17 +123,36 @@ actual_data_only AS (
     FROM all_versioned
 ),
 
+-- make sure we get only one time zone per feed
+-- per spec there should only be one but this guarantees it
+get_feed_time_zone AS (
+    SELECT
+        ts,
+        base64_url,
+        agency_timezone,
+        agency_timezone_valid_tz AS feed_timezone,
+        COUNT(*) AS ct
+    FROM agencies
+    -- SQLFluff doesn't like number column references here with column names in window function
+    GROUP BY 1, 2, 3, 4 --noqa: AM06
+    QUALIFY RANK() OVER (PARTITION BY ts, base64_url ORDER BY ct DESC, agency_timezone_valid_tz ASC) = 1
+),
+
 dim_schedule_feeds AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['base64_url', '_valid_from']) }} AS key,
-        base64_url,
+        {{ dbt_utils.generate_surrogate_key(['actual_data_only.base64_url', '_valid_from']) }} AS key,
+        actual_data_only.base64_url,
         download_success,
         unzip_success,
         zipfile_extract_md5hash,
+        feed_timezone,
         _valid_from,
         _valid_to,
         _is_current
     FROM actual_data_only
+    LEFT JOIN get_feed_time_zone
+        ON actual_data_only._valid_from = get_feed_time_zone.ts
+        AND actual_data_only.base64_url = get_feed_time_zone.base64_url
 )
 
 SELECT * FROM dim_schedule_feeds
