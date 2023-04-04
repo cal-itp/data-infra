@@ -29,3 +29,11 @@ Hashed value of all GTFS columns plus calitp_itp_id, calitp_url_number, and cali
 GTFS file name (like "agency.txt")
 
 {% enddocs %}
+
+{% docs gtfs_schedule_feed_timezone %}
+
+Timezone value for this feed (most common `agency_timestamp` value from `agency.txt`).
+This will be a string value that can be passed to the TIMESTAMP function as a valid
+timezone, for example 'America/Los_Angeles' or 'US/Pacific'.
+
+{% enddocs %}

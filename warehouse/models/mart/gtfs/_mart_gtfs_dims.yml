@@ -40,10 +40,7 @@ models:
       - name: _is_current
         description: '{{ doc("column_is_current") }}'
       - name: feed_timezone
-        description: |
-          Timezone value for this feed (most common `agency_timestamp` value from `agency.txt`).
-          This will be a string value that can be passed to the TIMESTAMP function as a valid
-          timezone.
+        description: '{{ doc("gtfs_schedule_feed_timezone") }}'
         tests:
           - not_null
   - name: dim_agency
