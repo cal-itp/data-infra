@@ -37,6 +37,7 @@ WITH dim_schedule_feeds AS (
 SELECT
     t2.key AS feed_key,
     t2._valid_from AS _feed_valid_from,
+    t2.feed_timezone,
     t1.*,
 FROM {{ gtfs_file_table.identifier }} AS t1
 INNER JOIN dim_schedule_feeds AS t2

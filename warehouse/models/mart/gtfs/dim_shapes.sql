@@ -16,6 +16,7 @@ dim_shapes AS (
         shape_dist_traveled,
         base64_url,
         _feed_valid_from,
+        feed_timezone,
     FROM make_dim
 )
 

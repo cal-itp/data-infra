@@ -18,6 +18,7 @@ dim_fare_attributes AS (
         transfer_duration,
         base64_url,
         _feed_valid_from,
+        feed_timezone,
     FROM make_dim
 )
 

@@ -67,6 +67,7 @@ dim_stop_times AS (
         ) > 1 AS warning_duplicate_primary_key,
         stop_id IS NULL AS warning_missing_foreign_key_stop_id,
         _feed_valid_from,
+        feed_timezone,
         part_arr[
             OFFSET(0)
         ] * 3600 + part_arr[

@@ -55,6 +55,7 @@ dim_shapes_arrays AS (
         pt_array,
         base64_url,
         _feed_valid_from,
+        feed_timezone,
     FROM initial_pt_array
     -- drop shapes that had nulls
     WHERE ARRAY_LENGTH(pt_array) = ct

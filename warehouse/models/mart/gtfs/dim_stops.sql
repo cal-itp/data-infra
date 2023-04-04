@@ -42,6 +42,7 @@ dim_stops AS (
         platform_code,
         COALESCE(warning_duplicate_primary_key, FALSE) AS warning_duplicate_primary_key,
         _feed_valid_from,
+        feed_timezone,
     FROM make_dim
     LEFT JOIN bad_rows
         USING (base64_url, ts, stop_id)
