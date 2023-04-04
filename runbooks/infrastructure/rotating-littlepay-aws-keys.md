@@ -19,6 +19,10 @@ Secret Manager allows multiple versions of secrets, so create a new version of e
 
 `aws iam create-access-key --user-name <username> --profile <profile>`
 
+You could also use the CLI to create new versions of secrets, but the web UI is very easy to use.
+
+`gcloud secrets versions add ...`
+
 ## Disable old credentials and test new credentials
 Disable (*do not destroy*) the old versions in Secret Manager and test the `sync_littlepay` Airflow DAG, which is the primary integration with Littlepay in the v2 pipeline.
 
