@@ -843,7 +843,7 @@ exposures:
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#frequenciestxt.
             dim_gtfs_datasets_latest:
-              id: TODO
+              id: e4ca5bd4-e9ce-40aa-a58a-3a6d78b042bd
               description: |
                 Each record represents a GTFS dataset (feed), and provides
                 base64-encoded URLs used to access that feed.
