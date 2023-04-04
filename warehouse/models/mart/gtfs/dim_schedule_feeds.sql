@@ -1,15 +1,11 @@
 {{ config(materialized='table') }}
 
--- TODO: when we have dbt-utils version 0.8.5 or higher, could just use get_column_values with a where clause
--- we can have a lag where download success is populated but unzip success is not
-{% set get_max_ts_sql %}
-    SELECT MAX(ts) AS max_ts
-    FROM {{ ref('int_gtfs_schedule__joined_feed_outcomes') }}
-    WHERE unzip_success IS NOT NULL
-{% endset %}
-
-{%- set timestamps = dbt_utils.get_query_results_as_dict(get_max_ts_sql) -%}
-{%- set latest_processed_timestamp = timestamps['max_ts'][0] -%}
+{%- set timestamps = dbt_utils.get_column_values(
+        table = ref('int_gtfs_schedule__joined_feed_outcomes'),
+        column = 'ts',
+        order_by = 'ts DESC',
+        where = 'unzip_success IS NOT NULL') -%}
+{%- set latest_processed_timestamp = timestamps[0] -%}
 
 WITH int_gtfs_schedule__joined_feed_outcomes AS (
     SELECT *
