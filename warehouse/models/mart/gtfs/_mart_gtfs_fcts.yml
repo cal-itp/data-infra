@@ -55,6 +55,10 @@ models:
           Boolean indicating whether this date is in the future relative to the last time that the table
           was run. If this is a future date (if is_future is true), any coverage is prospective and
           subject to change.
+      - &feed_timezone_no_tests
+        name: feed_timezone
+        description: '{{ doc("gtfs_schedule_feed_timezone") }}'
+
   - name: fct_schedule_feed_downloads
     description: |
       Each row is an instance of a download attempt, uniquely identified by base64_url and
@@ -472,6 +476,7 @@ models:
       - name: activity_last_arrival
         description: |
           The time of day of the trip's last arrival.
+      - *feed_timezone_no_tests
 
   - name: fct_daily_rt_feed_files
     description: |

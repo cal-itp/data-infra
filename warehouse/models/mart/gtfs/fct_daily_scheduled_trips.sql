@@ -43,6 +43,7 @@ gtfs_joins AS (
         service_index.service_date,
         service_index.feed_key,
         service_index.service_id,
+        service_index.feed_timezone,
 
         trips.key AS trip_key,
         trips.trip_id AS trip_id,

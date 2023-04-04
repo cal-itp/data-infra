@@ -89,6 +89,10 @@ models:
           - relationships:
               to: ref('dim_calendar')
               field: key
+      - &feed_timezone_no_tests
+        name: feed_timezone
+        description: '{{ doc("gtfs_schedule_feed_timezone") }}'
+
   - name: int_gtfs_schedule__daily_scheduled_service_index
     description: |
       An index listing date, feed, and `service_id` combinations for which service was scheduled (i.e.,
@@ -142,6 +146,7 @@ models:
         description: Service identifier from calendar and/or calendar_dates.
         tests:
           - not_null
+      - *feed_timezone_no_tests
 
   - name: int_gtfs_rt__unioned_parse_outcomes
     description: |
@@ -336,3 +341,4 @@ models:
         description: Service identifier from calendar and/or calendar_dates.
         tests:
           - not_null
+      - *feed_timezone_no_tests
