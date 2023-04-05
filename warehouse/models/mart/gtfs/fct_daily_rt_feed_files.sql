@@ -23,7 +23,7 @@ validation_map AS (
 parse_outcomes AS (
     SELECT *
     FROM {{ ref('int_gtfs_rt__unioned_parse_outcomes') }}
-    WHERE {{ gtfs_rt_dt_where() }}
+    WHERE {{ gtfs_rt_dt_where(this_dt_column = 'date') }}
 ),
 
 grouped_parse_outcomes AS (
