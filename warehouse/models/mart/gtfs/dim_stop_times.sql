@@ -29,7 +29,8 @@ dim_stop_times AS (
         stop_sequence,
         arrival_time,
         departure_time,
-        -- TODO: test that extract days = 0... if they start justifying days we will have problems
+        -- we could test that extract days from these intervals is 0 but it shouldn't be necessary
+        -- BQ does not automatically justify hours to days because # hours per day varies based on daylight savings
         arrival_time_interval,
         departure_time_interval,
         stop_headsign,

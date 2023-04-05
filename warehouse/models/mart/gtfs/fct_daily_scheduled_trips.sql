@@ -73,12 +73,17 @@ gtfs_joins AS (
         stop_times_grouped.contains_warning_duplicate_primary_key AS contains_warning_duplicate_stop_times_primary_key,
         stop_times_grouped.contains_warning_missing_foreign_key_stop_id,
 
-        DATE_ADD(service_index.service_date,
-            INTERVAL CAST((TRUNC(SAFE_DIVIDE(stop_times_grouped.trip_first_departure_sec, 86400))) AS INT64) DAY) AS activity_date,
 
-        TIME(TIMESTAMP_SECONDS(MOD(stop_times_grouped.trip_first_departure_sec, 86400))) AS activity_first_departure,
+        -- TODO: make datetimes and check in Metabase -- we don't want additional localization (should be fixed Pacific)
+        TIMESTAMP_ADD(
+            TIMESTAMP(service_date, service_index.feed_timezone),
+            INTERVAL stop_times_grouped.trip_first_departure_sec SECOND
+            ) AS activity_first_departure_ts,
 
-        TIME(TIMESTAMP_SECONDS(MOD(stop_times_grouped.trip_last_arrival_sec, 86400))) AS activity_last_arrival
+        TIMESTAMP_ADD(
+            TIMESTAMP(service_date, service_index.feed_timezone),
+            INTERVAL stop_times_grouped.trip_last_arrival_sec SECOND
+            ) AS activity_last_arrival_ts,
 
     FROM int_gtfs_schedule__daily_scheduled_service_index AS service_index
     INNER JOIN dim_trips AS trips
@@ -98,6 +103,7 @@ gtfs_joins AS (
 fct_daily_scheduled_trips AS (
     SELECT
         gtfs_joins.key,
+        gtfs_joins.feed_timezone,
 
         dim_gtfs_datasets.name,
         dim_gtfs_datasets.regional_feed_type,
@@ -130,16 +136,20 @@ fct_daily_scheduled_trips AS (
         gtfs_joins.service_hours,
         gtfs_joins.contains_warning_duplicate_stop_times_primary_key,
         gtfs_joins.contains_warning_missing_foreign_key_stop_id,
-        gtfs_joins.activity_date,
-        gtfs_joins.activity_first_departure,
-        gtfs_joins.activity_last_arrival
-
+        gtfs_joins.activity_first_departure_ts,
+        gtfs_joins.activity_last_arrival_ts,
+        DATE(activity_first_departure_ts, "America/Los_Angeles") AS activity_date_pacific,
+        DATE(activity_first_departure_ts, gtfs_joins.feed_timezone) AS activity_date_feed_tz,
+        DATETIME(activity_first_departure_ts, "America/Los_Angeles") AS activity_first_departure_pacific,
+        DATETIME(activity_first_departure_ts, gtfs_joins.feed_timezone) AS activity_first_departure_feed_tz,
+        DATETIME(activity_last_arrival_ts, "America/Los_Angeles") AS activity_last_arrival_pacific,
+        DATETIME(activity_last_arrival_ts, gtfs_joins.feed_timezone) AS activity_last_arrival_feed_tz,
     FROM gtfs_joins
     LEFT JOIN dim_schedule_feeds AS feeds
         ON gtfs_joins.feed_key = feeds.key
     LEFT JOIN urls_to_gtfs_datasets
         ON feeds.base64_url = urls_to_gtfs_datasets.base64_url
-        AND CAST(gtfs_joins.activity_date AS TIMESTAMP) BETWEEN urls_to_gtfs_datasets._valid_from AND urls_to_gtfs_datasets._valid_to
+        AND gtfs_joins.activity_last_arrival_ts BETWEEN urls_to_gtfs_datasets._valid_from AND urls_to_gtfs_datasets._valid_to
     LEFT JOIN dim_gtfs_datasets
         ON urls_to_gtfs_datasets.gtfs_dataset_key = dim_gtfs_datasets.key
 )
