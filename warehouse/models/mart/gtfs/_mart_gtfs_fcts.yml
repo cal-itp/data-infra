@@ -1165,19 +1165,54 @@ models:
         description: Timestamp of last service alert header referencing this trip.
 
 
-  - name: fct_trip_updates_no_stop_times
+  - name: fct_service_alerts_trip_summaries
     description: |
-      This is really intended to be a temporary table until
-      this work is done at the Airflow level, most likely.
-      Incrementally materialized trip updates data for use
-      downstream to minimize amount of raw data read from
-      GCS.
+      Summarizes trips observed in service alert messages.
     columns:
       - name: key
         tests:
           - not_null:
               config:
-                where: '__rt_sampled__'
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
           - unique:
               config:
-                where: '__rt_sampled__'
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+
+  - name: fct_trip_updates_no_stop_times
+    description: |
+      Incrementally trip update messages without stop times; this reduces the data size by about 90%.
+    columns:
+      - name: key
+        tests:
+          - not_null:
+              config:
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+          - unique:
+              config:
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+
+  - name: fct_trip_updates_summaries
+    description: |
+      Summarizes trips observed in trip update messages.
+    columns:
+      - name: key
+        tests:
+          - not_null:
+              config:
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+          - unique:
+              config:
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+
+  - name: fct_vehicle_positions_trip_summaries
+    description: |
+      Summarizes trips observed in vehicle position messages.
+    columns:
+      - name: key
+        tests:
+          - not_null:
+              config:
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+          - unique:
+              config:
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
