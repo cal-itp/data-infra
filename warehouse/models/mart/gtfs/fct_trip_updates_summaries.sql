@@ -25,7 +25,7 @@ WITH stop_time_updates AS (
     {% endif %}
 ),
 
-int_gtfs_rt__trip_updates_summaries AS (
+fct_trip_updates_summaries AS (
     SELECT
         -- https://gtfs.org/realtime/reference/#message-tripdescriptor
         {{ dbt_utils.generate_surrogate_key([
@@ -58,4 +58,4 @@ int_gtfs_rt__trip_updates_summaries AS (
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
 )
 
-SELECT * FROM int_gtfs_rt__trip_updates_summaries
+SELECT * FROM fct_trip_updates_summaries

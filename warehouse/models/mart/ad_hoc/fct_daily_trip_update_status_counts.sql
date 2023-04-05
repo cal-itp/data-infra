@@ -14,7 +14,7 @@
 {% endif %}
 
 WITH fct_stop_time_updates AS (
-    SELECT * FROM {{ ref('int_gtfs_rt__trip_updates_no_stop_times') }}
+    SELECT * FROM {{ ref('fct_trip_updates_no_stop_times') }}
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_dt }}'))
     {% else %}

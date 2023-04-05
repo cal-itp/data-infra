@@ -28,9 +28,9 @@ trip_updates AS (
     {% endif %}
 ),
 
-int_gtfs_rt__trip_updates_no_stop_times AS (
+fct_trip_updates_no_stop_times AS (
     SELECT * EXCEPT (stop_time_updates)
     FROM trip_updates
 )
 
-SELECT * FROM int_gtfs_rt__trip_updates_no_stop_times
+SELECT * FROM fct_trip_updates_no_stop_times

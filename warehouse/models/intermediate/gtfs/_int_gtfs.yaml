@@ -334,11 +334,3 @@ models:
         description: Service identifier from calendar and/or calendar_dates.
         tests:
           - not_null
-
-  - name: int_gtfs_rt__trip_updates_no_stop_times
-    description: |
-      This is really intended to be a temporary table until
-      this work is done at the Airflow level, most likely.
-      Incrementally materialized trip updates data for use
-      downstream to minimize amount of raw data read from
-      GCS.

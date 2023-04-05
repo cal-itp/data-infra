@@ -20,7 +20,7 @@ WITH trip_updates_ages AS (
         _header_message_age,
         _trip_update_message_age,
         _trip_update_message_age_vs_header,
-    FROM {{ ref('int_gtfs_rt__trip_updates_no_stop_times') }}
+    FROM {{ ref('fct_trip_updates_no_stop_times') }}
     {% if is_incremental() %}
     WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
     {% else %}

@@ -1163,3 +1163,21 @@ models:
         description: Timestamp of first service alert header referencing this trip.
       - name: sa_max_header_timestamp
         description: Timestamp of last service alert header referencing this trip.
+
+
+  - name: fct_trip_updates_no_stop_times
+    description: |
+      This is really intended to be a temporary table until
+      this work is done at the Airflow level, most likely.
+      Incrementally materialized trip updates data for use
+      downstream to minimize amount of raw data read from
+      GCS.
+    columns:
+      - name: key
+        tests:
+          - not_null:
+              config:
+                where: '__rt_sampled__'
+          - unique:
+              config:
+                where: '__rt_sampled__'
