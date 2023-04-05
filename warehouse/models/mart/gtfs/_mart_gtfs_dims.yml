@@ -788,6 +788,13 @@ models:
     description: |
       Cleaned GTFS schedule stop_times data.
       See https://gtfs.org/schedule/reference/#calendar_datestxt for specification.
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "EXTRACT(DAY FROM arrival_time_interval) = 0"
+          where: "TIMESTAMP_DIFF(CURRENT_TIMESTAMP(), _feed_valid_from, DAY) <= 3"
+      - dbt_utils.expression_is_true:
+          expression: "EXTRACT(DAY FROM departure_time_interval) = 0"
+          where: "TIMESTAMP_DIFF(CURRENT_TIMESTAMP(), _feed_valid_from, DAY) <= 3"
     columns:
       - *feed_key
       - *base64_url
@@ -835,20 +842,38 @@ models:
           This means they will fail to join with `stop` related information.
       - name: arrival_sec
         description: |
-          This is a calculated field that does not come from GTFS - it is not a timestamp and can't be treated as such.
+          This is a calculated field that does not appear directly in GTFS - it is not a timestamp and can't be treated as such.
 
           Represents `arrival_time` as a total number of seconds after midnight of the first day of the given trip.
           For example, `arrival_time = 21:30:45` would lead to `arrival_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
           This allows us to perform duration calculations and handle timestamps that wrap past midnight like
           `25:40:00`, which are allowed in GTFS.
+
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
       - name: departure_sec
         description: |
-          This is a calculated field that does not come from GTFS - it is not a timestamp and can't be treated as such.
+          This is a calculated field that does not appear directly in GTFS - it is not a timestamp and can't be treated as such.
 
           Represents `departure_time` as a total number of seconds after midnight of the first day of the given trip.
           For example, `departure_time = 21:30:45` would lead to `departure_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
           This allows us to perform duration calculations and handle timestamps that wrap past midnight like
           `25:40:00`, which are allowed in GTFS.
+
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+      - name: arrival_time_interval
+        description: |
+          This is a calculated field that does not appear directly in GTFS. It converts `arrival_time`
+          to a BigQuery INTERVAL type, which allows us to treat the field as a duration after midnight
+          and thus handle times past the following midnight (like `25:40:00`).
+
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+      - name: departure_time_interval
+        description: |
+          This is a calculated field that does not appear directly in GTFS. It converts `arrival_time`
+          to a BigQuery INTERVAL type, which allows us to treat the field as a duration after midnight
+          and thus handle times past the following midnight (like `25:40:00`).
+
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
       - *_feed_valid_from
       - *feed_timezone_no_tests
     meta:

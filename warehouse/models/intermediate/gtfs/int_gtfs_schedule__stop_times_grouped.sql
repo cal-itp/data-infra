@@ -16,6 +16,7 @@ int_gtfs_schedule__stop_times_grouped AS (
         feed_key,
         COUNT(DISTINCT stop_id) AS n_stops,
         COUNT(*) AS n_stop_times,
+        -- note: not using the interval columns here because the interval type doesn't support aggregation so we'd probably have to lean on seconds/window functions anyway
         MIN(departure_sec) AS trip_first_departure_sec,
         MAX(arrival_sec) AS trip_last_arrival_sec,
         (MAX(arrival_sec) - MIN(departure_sec)) / 3600 AS service_hours,
