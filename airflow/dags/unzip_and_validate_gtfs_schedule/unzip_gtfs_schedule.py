@@ -52,9 +52,13 @@ class GTFSScheduleFeedExtractUnzipOutcome(ProcessingOutcome):
 class ScheduleUnzipResult(PartitionedGCSArtifact):
     bucket: ClassVar[str] = SCHEDULE_UNZIPPED_BUCKET
     table: ClassVar[str] = "unzipping_results"
-    partition_names: ClassVar[List[str]] = ["dt"]
-    dt: pendulum.Date
+    partition_names: ClassVar[List[str]] = ["dt", "ts"]
+    ts: pendulum.DateTime
     outcomes: List[GTFSScheduleFeedExtractUnzipOutcome]
+
+    @property
+    def dt(self):
+        return self.ts.date()
 
     @property
     def successes(self) -> List[GTFSScheduleFeedExtractUnzipOutcome]:
@@ -217,45 +221,60 @@ def unzip_extracts(
             fg=typer.colors.YELLOW,
         )
         return
+
+    extract_map = {
+        ts: [e for e in extracts if e.ts == ts] for ts in set(e.ts for e in extracts)
+    }
+
     typer.secho(
         f"found {len(extracts)} to process for {day}",
         fg=typer.colors.MAGENTA,
     )
+    assert len(extracts) == sum(len(val) for val in extract_map.values())
+    del extracts
 
-    outcomes = []
-    pbar = tqdm(total=len(extracts)) if progress else None
+    for ts, extracts_in_extract in extract_map.items():
+        typer.secho(
+            f"processing extract {ts}",
+            fg=typer.colors.MAGENTA,
+        )
+        outcomes = []
+        pbar = tqdm(total=len(extracts_in_extract)) if progress else None
 
-    with ThreadPoolExecutor(max_workers=threads) as pool:
-        futures: Dict[Future, GTFSScheduleFeedExtract] = {
-            pool.submit(unzip_individual_feed, i=i, extract=extract, pbar=pbar): extract
-            for i, extract in enumerate(extracts)
-        }
+        with ThreadPoolExecutor(max_workers=threads) as pool:
+            futures: Dict[Future, GTFSScheduleFeedExtract] = {
+                pool.submit(
+                    unzip_individual_feed, i=i, extract=extract, pbar=pbar
+                ): extract
+                for i, extract in enumerate(extracts_in_extract)
+            }
 
-        for future in concurrent.futures.as_completed(futures):
-            if pbar:
-                pbar.update(1)
-            # TODO: could consider letting errors bubble up and handling here
-            outcomes.append(future.result())
+            for future in concurrent.futures.as_completed(futures):
+                if pbar:
+                    pbar.update(1)
+                # TODO: could consider letting errors bubble up and handling here
+                outcomes.append(future.result())
 
-    if pbar:
-        del pbar
+        if pbar:
+            del pbar
 
-    result = ScheduleUnzipResult(filename="results.jsonl", dt=day, outcomes=outcomes)
-    result.save(fs)
+        result = ScheduleUnzipResult(filename="results.jsonl", ts=ts, outcomes=outcomes)
+        result.save(fs)
 
-    assert len(extracts) == len(
-        result.outcomes
-    ), f"ended up with {len(outcomes)} outcomes from {len(extracts)} extracts"
+        assert len(extracts_in_extract) == len(
+            result.outcomes
+        ), f"ended up with {len(outcomes)} outcomes from {len(extracts_in_extract)} extracts"
 
-    success_rate = len(result.successes) / len(extracts)
-    exceptions = [
-        (failure.exception, failure.extract.config.url) for failure in result.failures
-    ]
-    exc_str = "\n".join(str(tup) for tup in exceptions)
-    msg = f"got {len(exceptions)} exceptions from validating {len(extracts)} extracts:\n{exc_str}"
-    typer.secho(msg, err=True, fg=typer.colors.RED)
-    if success_rate < GTFS_UNZIP_LIST_ERROR_THRESHOLD:
-        raise RuntimeError(msg)
+        success_rate = len(result.successes) / len(extracts_in_extract)
+        exceptions = [
+            (failure.exception, failure.extract.config.url)
+            for failure in result.failures
+        ]
+        exc_str = "\n".join(str(tup) for tup in exceptions)
+        msg = f"got {len(exceptions)} exceptions from validating {len(extracts_in_extract)} extracts:\n{exc_str}"
+        typer.secho(msg, err=True, fg=typer.colors.RED)
+        if success_rate < GTFS_UNZIP_LIST_ERROR_THRESHOLD:
+            raise RuntimeError(msg)
 
 
 def airflow_unzip_extracts(task_instance, execution_date, **kwargs):
