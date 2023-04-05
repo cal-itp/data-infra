@@ -28,6 +28,8 @@ def fetch_and_clean_from_gcs(fs):
     # List raw files available from GCS
     file_and_dir_list = fs.ls("test-calitp-elavon-raw/", detail=False)
     dir_list = [x for x in file_and_dir_list if fs.isdir(x)]
+
+    # Drill down to the latest export (folders are "ts=" format)
     target_dir = max(dir_list)
     file_list = fs.ls(f"{target_dir}/", detail=False)
 
