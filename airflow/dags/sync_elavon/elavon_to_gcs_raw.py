@@ -6,9 +6,13 @@ import os
 
 import paramiko
 import pendulum
+from calitp_data_infra.auth import get_secret_by_name
 from calitp_data_infra.storage import get_fs
 
-CALITP__ELAVON_SFTP_PASSWORD = os.environ["CALITP__ELAVON_SFTP_PASSWORD"]
+CALITP__ELAVON_SFTP_HOSTNAME = os.environ["CALITP__ELAVON_SFTP_HOSTNAME"]
+CALITP__ELAVON_SFTP_PORT = os.environ["CALITP__ELAVON_SFTP_PORT"]
+CALITP__ELAVON_SFTP_USERNAME = os.environ["CALITP__ELAVON_SFTP_USERNAME"]
+CALITP__ELAVON_SFTP_PASSWORD = get_secret_by_name("CALITP__ELAVON_SFTP_PASSWORD")
 
 
 def mirror_raw_files_from_elavon():
@@ -21,9 +25,9 @@ def mirror_raw_files_from_elavon():
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     client.connect(
-        hostname="34.145.56.125",
-        port=2200,
-        username="elavon",
+        hostname=CALITP__ELAVON_SFTP_HOSTNAME,
+        port=CALITP__ELAVON_SFTP_PORT,
+        username=CALITP__ELAVON_SFTP_USERNAME,
         password=CALITP__ELAVON_SFTP_PASSWORD,
     )
 
