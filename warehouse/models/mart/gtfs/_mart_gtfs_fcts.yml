@@ -1164,12 +1164,26 @@ models:
       - name: sa_max_header_timestamp
         description: Timestamp of last service alert header referencing this trip.
 
+  - name: fct_trip_updates_no_stop_times
+    description: |
+      Incrementally materialize trip update messages without stop times; this reduces the data size by about 90%.
+    columns:
+      - name: key
+        tests:
+          - not_null:
+              config:
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+          - unique:
+              config:
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
 
   - name: fct_service_alerts_trip_summaries
     description: |
       Summarizes trips observed in service alert messages.
     columns:
-      - name: key
+      - &rt_trip_summary_key
+        name: key
+        description: Date, URL, and trip_descriptor.
         tests:
           - not_null:
               config:
@@ -1177,42 +1191,37 @@ models:
           - unique:
               config:
                 where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
-
-  - name: fct_trip_updates_no_stop_times
-    description: |
-      Incrementally trip update messages without stop times; this reduces the data size by about 90%.
-    columns:
-      - name: key
-        tests:
-          - not_null:
-              config:
-                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
-          - unique:
-              config:
-                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+      - &num_distinct_message_ids
+        name: num_distinct_message_ids
+        description: Distinct count of top-level ids.
+      - &num_distinct_header_timestamps
+        name: num_distinct_header_timestamps
+        description: Distinct count of header timestamps.
+      - &min_extract_ts
+        name: min_extract_ts
+        description: Distinct count of header timestamps.
+      - &max_extract_ts
+        name: max_extract_ts
+        description: Distinct count of header timestamps.
+      - &min_header_timestamp
+        name: min_header_timestamp
+        description: Distinct count of header timestamps.
+      - &max_header_timestamp
+        name: max_header_timestamp
+        description: Distinct count of header timestamps.
 
   - name: fct_trip_updates_summaries
     description: |
       Summarizes trips observed in trip update messages.
     columns:
-      - name: key
-        tests:
-          - not_null:
-              config:
-                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
-          - unique:
-              config:
-                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+      - *rt_trip_summary_key
+      - *num_distinct_message_ids
+      - *num_distinct_header_timestamps
 
   - name: fct_vehicle_positions_trip_summaries
     description: |
       Summarizes trips observed in vehicle position messages.
     columns:
-      - name: key
-        tests:
-          - not_null:
-              config:
-                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
-          - unique:
-              config:
-                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+      - *rt_trip_summary_key
+      - *num_distinct_message_ids
+      - *num_distinct_header_timestamps

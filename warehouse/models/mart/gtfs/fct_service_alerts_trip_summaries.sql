@@ -36,6 +36,7 @@ fct_service_alerts_trip_summaries AS (
         trip_start_time,
         trip_start_date,
         COUNT(DISTINCT id) AS num_distinct_message_ids,
+        COUNT(DISTINCT header_timestamp) AS num_distinct_header_timestamps,
         ARRAY_AGG(DISTINCT service_alert_message_key) AS service_alert_message_keys,
         MIN(_extract_ts) AS min_extract_ts,
         MAX(_extract_ts) AS max_extract_ts,
