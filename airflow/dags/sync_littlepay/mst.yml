@@ -1,4 +1,3 @@
 operator: operators.LittlepayRawSync
 instance: mst
-access_key_id_secret: LITTLEPAY_MST_ACCESS_KEY_ID
-secret_access_key_secret: LITTLEPAY_MST_SECRET_ACCESS_KEY
+access_key_secret_name: LITTLEPAY_AWS_IAM_MST_ACCESS_KEY

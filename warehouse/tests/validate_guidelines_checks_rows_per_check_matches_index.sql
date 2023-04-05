@@ -15,6 +15,6 @@ SELECT
     actual_checks,
     idx_checks
 FROM check_cts
-LEFT JOIN idx_check_cts
+FULL OUTER JOIN idx_check_cts
 USING (check)
 WHERE actual_checks != idx_checks

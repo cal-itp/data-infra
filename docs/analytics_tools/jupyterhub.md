@@ -1,5 +1,5 @@
-(jupyterhub)=
-# Notebooks
+(jupyterhub-intro)=
+# JupyterHub
 
 ## Introduction to JupyterHub
 Jupyterhub is a web application that allows users to analyze and create reports on warehouse data (or a number of data sources).
@@ -17,6 +17,7 @@ Analyses on JupyterHub are accomplished using notebooks, which allow users to mi
 1. [Saving Code to Github](saving-code-jupyter)
 1. [Environment Variables](#environment-variables)
 1. [Jupyter Notebook Best Practices](notebook-shortcuts)
+1. [Developing warehouse models in Jupyter](jupyterhub-warehouse)
 
 ## Using JupyterHub
 For Python users, we have deployed a cloud-based instance of JupyterHub to make creating, using, and sharing notebooks easy.
@@ -41,27 +42,17 @@ See the screencast below for a full walkthrough.
 
 
 The commands required:
-```python
-# in the main directory (outside of data-analyses and data-infra)
+```bash
+# init will both authenticate and do basic configuration
+# You do not have to set a default compute region/zone
+gcloud init
 
-# initial setup (in terminal) ----
-curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-396.0.0-linux-x86_64.tar.gz
-tar -zxvf google-cloud-sdk-396.0.0-linux-x86_64.tar.gz
-./google-cloud-sdk/install.sh
-./google-cloud-sdk/bin/gcloud init
-
-# log in to project ----
+# Optionally, you can auth and set the project separately
 gcloud auth login
-
-# Authenticate ---- paste URL into browser, copy/paste the authorization code
-
-gcloud auth application-default login
-
-# When it asks for the path:
-/home/jovyan/.bash_profile
-
-# If the default project ID is None, change it
 gcloud config set project cal-itp-data-infra
+
+# Regardless, set up application default credentials
+gcloud auth application-default login
 ```
 
 ### Increasing the Query Limit
@@ -111,7 +102,7 @@ LIMIT 10
 (saving-code-jupyter)=
 ### Saving Code to Github
 Use [this link](committing-from-jupyterhub) to navigate to the `Saving Code` section of the docs to learn how to commit code to GitHub from the Jupyter terminal. Once there, you will need to complete the instructions in the following sections:
-* [Adding a GitHub SSH Key to Jupyter](adding-ssh-to-jupyter)
+* [Adding a GitHub SSH Key to Jupyter](authenticating-github-jupyter)
 * [Persisting your SSH Key and Enabling Extensions](persisting-ssh-and-extensions)
 * [Cloning a Repository](cloning-a-repository)
 
@@ -151,3 +142,7 @@ GITHUB_API_KEY = os.environ["GITHUB_API_KEY"]
 External resources:
 * [Cheat Sheet - Jupyter Notebook ](https://defkey.com/jupyter-notebook-shortcuts?pdf=true&modifiedDate=20200909T053706)
 * [Using Markdown in Jupyter Notebook](https://www.datacamp.com/community/tutorials/markdown-in-jupyter-notebook)
+
+(jupyterhub-warehouse)=
+### Developing warehouse models in JupyterHub
+See the [warehouse README](https://github.com/cal-itp/data-infra/tree/main/warehouse#readme) for warehouse project setup instructions.

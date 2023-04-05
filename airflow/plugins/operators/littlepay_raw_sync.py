@@ -151,24 +151,24 @@ class LittlepayRawSync(BaseOperator):
         self,
         *args,
         instance: str,
-        access_key_id_secret: str,
-        secret_access_key_secret: str,
+        access_key_secret_name: str,
         **kwargs,
     ):
         self.instance = instance
         self.src_bucket = f"littlepay-prod-{instance}-datafeed"
-        self.access_key_id_secret = access_key_id_secret
-        self.secret_access_key_secret = secret_access_key_secret
+        self.access_key_secret_name = access_key_secret_name
         super().__init__(**kwargs)
 
     def execute(self, context):
         assert LITTLEPAY_RAW_BUCKET is not None
 
         start = pendulum.now()
+        access_key = json.loads(get_secret_by_name(self.access_key_secret_name))
+        print(f"Successfully loaded secret {self.access_key_secret_name}")
         s3client = boto3.client(
             "s3",
-            aws_access_key_id=get_secret_by_name(self.access_key_id_secret),
-            aws_secret_access_key=get_secret_by_name(self.secret_access_key_secret),
+            aws_access_key_id=access_key["AccessKey"]["AccessKeyId"],
+            aws_secret_access_key=access_key["AccessKey"]["SecretAccessKey"],
         )
 
         list_kwargs = {
