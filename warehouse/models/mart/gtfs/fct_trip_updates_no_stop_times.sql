@@ -12,20 +12,11 @@
     )
 }}
 
-{% if is_incremental() %}
-    {% set dates = dbt_utils.get_column_values(table=this, column='dt', order_by = 'dt DESC', max_records = 1) %}
-    {% set max_dt = dates[0] %}
-{% endif %}
-
 WITH
 
 trip_updates AS (
     SELECT * FROM {{ ref('fct_trip_updates_messages') }}
-    {% if is_incremental() %}
-    WHERE dt >= '{{ max_dt }}'
-    {% else %}
-    WHERE dt >= {{ var('GTFS_RT_START') }}
-    {% endif %}
+    WHERE {{ gtfs_rt_dt_where() }}
 ),
 
 fct_trip_updates_no_stop_times AS (

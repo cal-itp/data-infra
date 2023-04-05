@@ -8,18 +8,9 @@
     },
 ) }}
 
-{% if is_incremental() %}
-    {% set dates = dbt_utils.get_column_values(table=this, column='dt', order_by = 'dt DESC', max_records = 1) %}
-    {% set max_dt = dates[0] %}
-{% endif %}
-
 WITH fct_service_alert_translations AS (
     SELECT * FROM {{ ref('fct_service_alert_translations') }}
-    {% if is_incremental() %}
-    WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_dt }}'))
-    {% else %}
-    WHERE dt >= {{ var('GTFS_RT_START') }}
-    {% endif %}
+    WHERE {{ gtfs_rt_dt_where() }}
 ),
 
 select_english AS (

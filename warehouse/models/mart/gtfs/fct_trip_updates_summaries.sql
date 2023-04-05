@@ -11,18 +11,9 @@
     )
 }}
 
-{% if is_incremental() %}
-    {% set timestamps = dbt_utils.get_column_values(table=this, column='dt', order_by = 'dt DESC', max_records = 1) %}
-    {% set max_ts = timestamps[0] %}
-{% endif %}
-
 WITH stop_time_updates AS (
     SELECT * FROM {{ ref('fct_stop_time_updates') }}
-    {% if is_incremental() %}
-    WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
-    {% else %}
-    WHERE dt >= {{ var('GTFS_RT_START') }}
-    {% endif %}
+    WHERE {{ gtfs_rt_dt_where() }}
 ),
 
 fct_trip_updates_summaries AS (

@@ -8,11 +8,6 @@
     },
 ) }}
 
-{% if is_incremental() %}
-    {% set timestamps = dbt_utils.get_column_values(table=this, column='dt', order_by = 'dt DESC', max_records = 1) %}
-    {% set max_ts = timestamps[0] %}
-{% endif %}
-
 WITH vehicle_positions_ages AS (
     SELECT DISTINCT
         dt,
@@ -21,11 +16,7 @@ WITH vehicle_positions_ages AS (
         _vehicle_message_age,
         _vehicle_message_age_vs_header,
     FROM {{ ref('fct_vehicle_positions_messages') }}
-    {% if is_incremental() %}
-    WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
-    {% else %}
-    WHERE dt >=  {{ var('GTFS_RT_START') }}
-    {% endif %}
+    WHERE {{ gtfs_rt_dt_where() }}
 ),
 
 -- these values are repeated because one row in the source table is one vehicle message so the header is identical for all messages on a given request

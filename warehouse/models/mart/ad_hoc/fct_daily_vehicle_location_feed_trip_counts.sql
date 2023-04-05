@@ -8,18 +8,9 @@
     },
 ) }}
 
-{% if is_incremental() %}
-    {% set dates = dbt_utils.get_column_values(table=this, column='dt', order_by = 'dt DESC', max_records = 1) %}
-    {% set max_dt = dates[0] %}
-{% endif %}
-
 WITH fct_vehicle_locations AS (
     SELECT * FROM {{ ref('fct_vehicle_locations') }}
-    {% if is_incremental() %}
-    WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_dt }}'))
-    {% else %}
-    WHERE dt >= {{ var('GTFS_RT_START') }}
-    {% endif %}
+    WHERE {{ gtfs_rt_dt_where() }}
 ),
 
 fct_daily_vehicle_location_trip_counts AS (
