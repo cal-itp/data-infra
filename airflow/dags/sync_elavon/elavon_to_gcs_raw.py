@@ -39,7 +39,7 @@ def mirror_raw_files_from_elavon():
     fs = get_fs()
 
     # Initiailize extract time used by all files
-    ts = str(pendulum.now())
+    ts = pendulum.now().to_iso8601_string()
 
     for file in [x for x in sftp_client.listdir() if x.endswith(".zip")]:
         print(f"Processing file {file}")
