@@ -1183,7 +1183,7 @@ models:
     columns:
       - &rt_trip_summary_key
         name: key
-        description: Date, URL, and trip_descriptor.
+        description: Date, URL, and trip descriptor (https://gtfs.org/realtime/reference/#message-tripdescriptor).
         tests:
           - not_null:
               config:
@@ -1199,16 +1199,22 @@ models:
         description: Distinct count of header timestamps.
       - &min_extract_ts
         name: min_extract_ts
-        description: Distinct count of header timestamps.
+        description: Timestamp of the first extract on this day referencing this trip.
       - &max_extract_ts
         name: max_extract_ts
-        description: Distinct count of header timestamps.
+        description: Timestamp of the last extract on this day referencing this trip.
       - &min_header_timestamp
         name: min_header_timestamp
-        description: Distinct count of header timestamps.
+        description: Earliest header timestamp of a message referencing this trip.
       - &max_header_timestamp
         name: max_header_timestamp
-        description: Distinct count of header timestamps.
+        description: Latest header timestamp of a message referencing this trip.
+      - name: service_alert_message_keys
+        description: Keys of the service alert messages that referenced this trip.
+        tests:
+          - relationships:
+              to: ref('fct_service_alerts_messages')
+              field: key
 
   - name: fct_trip_updates_summaries
     description: |
@@ -1217,6 +1223,20 @@ models:
       - *rt_trip_summary_key
       - *num_distinct_message_ids
       - *num_distinct_header_timestamps
+      - *min_extract_ts
+      - *max_extract_ts
+      - *min_header_timestamp
+      - *max_header_timestamp
+      - name: min_trip_update_timestamp
+        description: Earliest trip update timestamp of a message referencing this trip.
+      - name: max_trip_update_timestamp
+        description: Latest trip update timestamp of a message referencing this trip.
+      - name: max_delay
+        description: Maximium observed delay for this trip during this day.
+      - name: num_skipped_stops
+        description: Distinct count of stop_ids in messages where schedule_relationship was SKIPPED.
+      - name: num_scheduled_canceled_added_stops
+        description: Distinct count of stop_ids in messages where schedule_relationship was SCHEDULED, CANCELED, or ADDED.
 
   - name: fct_vehicle_positions_trip_summaries
     description: |
@@ -1225,3 +1245,19 @@ models:
       - *rt_trip_summary_key
       - *num_distinct_message_ids
       - *num_distinct_header_timestamps
+      - *min_extract_ts
+      - *max_extract_ts
+      - *min_header_timestamp
+      - *max_header_timestamp
+      - name: min_vehicle_timestamp
+        description: Earliest vehicle timestamp of a message referencing this trip.
+      - name: max_vehicle_timestamp
+        description: Latest vehicle timestamp of a message referencing this trip.
+      - name: first_position_latitude
+        description: Position latitude of the first extract referencing this trip.
+      - name: first_position_longitude
+        description: Position longitude of the first extract referencing this trip.
+      - name: last_position_latitude
+        description: Position latitude of the last extract referencing this trip.
+      - name: last_position_longitude
+        description: Position longitude of the last extract referencing this trip.
