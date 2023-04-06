@@ -8,10 +8,11 @@ import os
 import subprocess
 import tempfile
 import traceback
+from collections import defaultdict
 from concurrent.futures import Future, ThreadPoolExecutor
 from datetime import datetime
 from pathlib import Path
-from typing import ClassVar, Dict, List, Optional, Tuple, Union
+from typing import ClassVar, Dict, List, Optional, Tuple, Type, Union
 
 import pendulum
 import sentry_sdk
@@ -95,9 +96,13 @@ class GTFSScheduleFeedExtractValidationOutcome(ProcessingOutcome):
 class ScheduleValidationJobResult(PartitionedGCSArtifact):
     bucket: ClassVar[str] = SCHEDULE_VALIDATION_BUCKET
     table: ClassVar[str] = "validation_job_results"
-    partition_names: ClassVar[List[str]] = ["dt"]
-    dt: pendulum.Date
+    partition_names: ClassVar[List[str]] = ["dt", "ts"]
+    ts: pendulum.DateTime
     outcomes: List[GTFSScheduleFeedExtractValidationOutcome]
+
+    @property
+    def dt(self) -> pendulum.Date:
+        return self.ts
 
     @validator("filename", allow_reuse=True)
     def is_jsonl(cls, v):
@@ -258,134 +263,175 @@ def validate_extract(
     )
 
 
+# This is currently copy-pasted from Airflow utils
+def get_schedule_files_in_hour(
+    cls: Type[GTFSScheduleFeedExtract],
+    bucket: str,
+    table: str,
+    period: pendulum.Period,
+) -> Dict[pendulum.DateTime, List[GTFSScheduleFeedExtract]]:
+    # __contains__ is defined as inclusive for pendulum.Period but we want to ignore the next hour
+    # see https://github.com/apache/airflow/issues/25383#issuecomment-1198975178 for data_interval_end clarification
+    assert (
+        period.start.replace(minute=0, second=0, microsecond=0)
+        == period.end.replace(minute=0, second=0, microsecond=0)
+        and period.seconds == 3600 - 1
+    ), f"{period} is not exactly 1 hour exclusive of end"
+    day = pendulum.instance(period.start).date()
+    files: List[GTFSScheduleFeedExtract]
+    files, missing, invalid = fetch_all_in_partition(
+        cls=cls,
+        bucket=bucket,
+        table=table,
+        partitions={
+            "dt": day,
+        },
+        verbose=True,
+    )
+
+    if missing or invalid:
+        typer.secho(f"missing: {missing}")
+        typer.secho(f"invalid: {invalid}")
+        raise RuntimeError("found files with missing or invalid metadata; failing job")
+
+    # Note: this is currently copy-pasted to the gtfs schedule validator
+    files_in_hour = [f for f in files if f.ts in period]
+
+    extract_map = defaultdict(list)
+    for f in files_in_hour:
+        extract_map[f.ts].append(f)
+
+    typer.secho(
+        f"found {len(files_in_hour)=} in {period=} ({len(extract_map.keys())} extracts)",
+        fg=typer.colors.MAGENTA,
+    )
+
+    return extract_map
+
+
 @app.command()
-def validate_day(
-    day: datetime = typer.Argument(
+def validate_hour(
+    hour: datetime = typer.Argument(
         ...,
-        help="The date of data to validate.",
-        formats=["%Y-%m-%d"],
+        help="The start of the hour to validate.",
+        formats=["%Y-%m-%dT%H"],
     ),
     verbose: bool = False,
     threads: int = 4,
     progress: bool = False,
 ) -> None:
-    day = pendulum.instance(day).date()
+    period = pendulum.instance(hour).add(hours=1, microseconds=-1) - pendulum.instance(
+        hour
+    )
 
     extracts: List[GTFSScheduleFeedExtract]
-    extracts, missing, invalid = fetch_all_in_partition(
+    extract_map = get_schedule_files_in_hour(
         cls=GTFSScheduleFeedExtract,
         bucket=SCHEDULE_RAW_BUCKET,
         table=GTFSFeedType.schedule,
-        partitions={
-            "dt": day,
-        },
-        verbose=verbose,
+        period=period,
     )
 
-    if missing or invalid:
-        typer.secho(f"valid: {len(extracts)}")
-        typer.secho(f"missing: {missing}")
-        typer.secho(f"invalid: {invalid}")
-        raise RuntimeError("found files with missing or invalid metadata; failing job")
-
-    if not extracts:
+    if not extract_map:
         typer.secho(
             "WARNING: found 0 extracts to process, exiting",
             fg=typer.colors.YELLOW,
         )
         return
-    typer.secho(
-        f"found {len(extracts)} to process for {day}",
-        fg=typer.colors.MAGENTA,
-    )
 
-    pbar = tqdm(total=len(extracts)) if progress else None
-    exceptions = []
-    outcomes = []
-    fs = get_fs()
+    for ts, extracts in extract_map.items():
+        typer.secho(
+            f"found {len(extracts)} to process for {ts}",
+            fg=typer.colors.MAGENTA,
+        )
 
-    with ThreadPoolExecutor(max_workers=threads) as pool:
-        futures: Dict[Future, GTFSScheduleFeedExtract] = {
-            pool.submit(
-                download_and_validate_extract,
-                extract=extract,
-                pbar=pbar,
-            ): extract
-            for i, extract in enumerate(extracts)
-        }
+        pbar = tqdm(total=len(extracts)) if progress else None
+        exceptions = []
+        outcomes = []
+        fs = get_fs()
 
-        for future in concurrent.futures.as_completed(futures):
-            extract = futures[future]
-            if pbar:
-                pbar.update(1)
-
-            try:
-                outcomes.append(future.result())
-            except KeyboardInterrupt:
-                raise
-            except Exception as e:
-                with sentry_sdk.push_scope() as scope:
-                    if isinstance(e, subprocess.CalledProcessError):
-                        # This is inefficient (we already downloaded in the thread)
-                        # but is relatively rare for Schedule data
-                        extract_hash = fs.stat(extract.path)["md5Hash"]
-                        scope.fingerprint = [type(e), e.returncode, extract_hash]
-                        # try to get the top of the stacktrace since this will be truncated; 1500 is just an estimate
-                        scope.set_context(
-                            "process", {"stderr": e.stderr.decode("utf-8")[-1500:]}
-                        )
-                    scope.set_context("extract", json.loads(extract.json()))
-                    sentry_sdk.capture_exception(e, scope=scope)
-                log(
-                    f"encountered exception on extract {extract.path}: {e}\n{traceback.format_exc()}",
-                    fg=typer.colors.RED,
+        with ThreadPoolExecutor(max_workers=threads) as pool:
+            futures: Dict[Future, GTFSScheduleFeedExtract] = {
+                pool.submit(
+                    download_and_validate_extract,
+                    extract=extract,
                     pbar=pbar,
-                )
-                if verbose and isinstance(e, subprocess.CalledProcessError):
+                ): extract
+                for i, extract in enumerate(extracts)
+            }
+
+            for future in concurrent.futures.as_completed(futures):
+                extract = futures[future]
+                if pbar:
+                    pbar.update(1)
+
+                try:
+                    outcomes.append(future.result())
+                except KeyboardInterrupt:
+                    raise
+                except Exception as e:
+                    with sentry_sdk.push_scope() as scope:
+                        if isinstance(e, subprocess.CalledProcessError):
+                            # This is inefficient (we already downloaded in the thread)
+                            # but is relatively rare for Schedule data
+                            extract_hash = fs.stat(extract.path)["md5Hash"]
+                            scope.fingerprint = [type(e), e.returncode, extract_hash]
+                            # try to get the top of the stacktrace since this will be truncated; 1500 is just an estimate
+                            scope.set_context(
+                                "process", {"stderr": e.stderr.decode("utf-8")[-1500:]}
+                            )
+                        scope.set_context("extract", json.loads(extract.json()))
+                        sentry_sdk.capture_exception(e, scope=scope)
                     log(
-                        e.stderr.decode("utf-8"),
+                        f"encountered exception on extract {extract.path}: {e}\n{traceback.format_exc()}",
                         fg=typer.colors.RED,
                         pbar=pbar,
                     )
+                    if verbose and isinstance(e, subprocess.CalledProcessError):
+                        log(
+                            e.stderr.decode("utf-8"),
+                            fg=typer.colors.RED,
+                            pbar=pbar,
+                        )
 
-                exceptions.append(e)
-                outcomes.append(
-                    GTFSScheduleFeedExtractValidationOutcome(
-                        success=False,
-                        extract=extract,
-                        exception=e,
+                    exceptions.append(e)
+                    outcomes.append(
+                        GTFSScheduleFeedExtractValidationOutcome(
+                            success=False,
+                            extract=extract,
+                            exception=e,
+                        )
                     )
-                )
 
-    if pbar:
-        del pbar
+        if pbar:
+            del pbar
 
-    result = ScheduleValidationJobResult(
-        filename="results.jsonl",
-        dt=day,
-        outcomes=outcomes,
-    )
-    typer.secho(
-        f"got {len(result.successes)} successes and {len(result.failures)} failures",
-        fg=typer.colors.MAGENTA,
-    )
+        result = ScheduleValidationJobResult(
+            filename="results.jsonl",
+            ts=ts,
+            outcomes=outcomes,
+        )
+        typer.secho(
+            f"got {len(result.successes)} successes and {len(result.failures)} failures",
+            fg=typer.colors.MAGENTA,
+        )
 
-    typer.secho(
-        f"saving {len(outcomes)} to {result.path}",
-        fg=typer.colors.GREEN,
-    )
-    result.save(get_fs())
+        typer.secho(
+            f"saving {len(outcomes)} to {result.path}",
+            fg=typer.colors.GREEN,
+        )
+        result.save(get_fs())
 
-    assert len(extracts) == len(
-        result.outcomes
-    ), f"ended up with {len(outcomes)} outcomes from {len(extracts)} extracts"
+        assert len(extracts) == len(
+            result.outcomes
+        ), f"ended up with {len(outcomes)} outcomes from {len(extracts)} extracts"
 
-    success_rate = len(result.successes) / len(extracts)
-    if success_rate < GTFS_VALIDATE_LIST_ERROR_THRESHOLD:
-        exc_str = "\n".join(str(tup) for tup in exceptions)
-        msg = f"got {len(exceptions)} exceptions from validating {len(extracts)} extracts:\n{exc_str}"
-        typer.secho(msg, err=True, fg=typer.colors.RED)
-        raise RuntimeError(msg)
+        success_rate = len(result.successes) / len(extracts)
+        if success_rate < GTFS_VALIDATE_LIST_ERROR_THRESHOLD:
+            exc_str = "\n".join(str(tup) for tup in exceptions)
+            msg = f"got {len(exceptions)} exceptions from validating {len(extracts)} extracts:\n{exc_str}"
+            typer.secho(msg, err=True, fg=typer.colors.RED)
+            raise RuntimeError(msg)
 
 
 if __name__ == "__main__":

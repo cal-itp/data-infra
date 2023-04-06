@@ -9,8 +9,8 @@ cmds:
 arguments:
   - "-m"
   - "gtfs_schedule_validator"
-  - "validate-day"
-  - "{{ ds }}"
+  - "validate-hour"
+  - "{{ data_interval_start.strftime('%Y-%m-%dT%H') }}"
   - "--verbose"
 
 is_delete_operator_pod: true
