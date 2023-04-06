@@ -44,7 +44,9 @@ def fetch_and_clean_from_gcs(fs):
         fs.get(file, local_path)
 
         if all_rows.empty:
-            all_rows = pd.read_csv(local_path, delimiter="|")  # Read from local version
+            all_rows = pd.read_csv(
+                local_path, delimiter="|", dtype=str
+            )  # Read from local version
         else:
             all_rows = pd.concat([all_rows, pd.read_csv(local_path, delimiter="|")])
 
