@@ -1,13 +1,16 @@
 import datetime
 import os
-from typing import ClassVar, List
+from collections import defaultdict
+from typing import ClassVar, Dict, List, Type, Union
 
 import pandas as pd
 import pendulum
+import typer
 from calitp_data_infra.storage import (
     GTFSDownloadConfig,
     GTFSScheduleFeedExtract,
     PartitionedGCSArtifact,
+    fetch_all_in_partition,
     read_gcfs,
     save_to_gcfs,
 )
@@ -115,3 +118,49 @@ class GTFSScheduleFeedFile(PartitionedGCSArtifact):
         if isinstance(v, datetime.datetime):
             v = pendulum.instance(v)
         return v
+
+
+# This is currently copy-pasted into the GTFS schedule validator code
+def get_schedule_files_in_hour(
+    cls: Type[Union[GTFSScheduleFeedExtract, GTFSScheduleFeedFile]],
+    bucket: str,
+    table: str,
+    period: pendulum.Period,
+) -> Dict[pendulum.DateTime, List[PartitionedGCSArtifact]]:
+    # __contains__ is defined as inclusive for pendulum.Period but we want to ignore the next hour
+    # see https://github.com/apache/airflow/issues/25383#issuecomment-1198975178 for data_interval_end clarification
+    assert (
+        period.start.replace(minute=0, second=0, microsecond=0)
+        == period.end.replace(minute=0, second=0, microsecond=0)
+        and period.seconds == 3600 - 1
+    ), f"{period} is not exactly 1 hour exclusive of end"
+    day = pendulum.instance(period.start).date()
+    files: List[Union[GTFSScheduleFeedExtract, GTFSScheduleFeedFile]]
+    files, missing, invalid = fetch_all_in_partition(
+        cls=cls,
+        bucket=bucket,
+        table=table,
+        partitions={
+            "dt": day,
+        },
+        verbose=True,
+    )
+
+    if missing or invalid:
+        typer.secho(f"missing: {missing}")
+        typer.secho(f"invalid: {invalid}")
+        raise RuntimeError("found files with missing or invalid metadata; failing job")
+
+    # Note: this is currently copy-pasted to the gtfs schedule validator
+    files_in_hour = [f for f in files if f.ts in period]
+
+    extract_map = defaultdict(list)
+    for f in files_in_hour:
+        extract_map[f.ts].append(f)
+
+    typer.secho(
+        f"found {len(files_in_hour)=} in {period=} ({len(extract_map.keys())} extracts)",
+        fg=typer.colors.MAGENTA,
+    )
+
+    return extract_map

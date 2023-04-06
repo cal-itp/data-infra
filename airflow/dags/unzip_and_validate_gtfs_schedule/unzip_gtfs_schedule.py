@@ -19,11 +19,10 @@ from calitp_data_infra.storage import (
     GTFSScheduleFeedExtract,
     PartitionedGCSArtifact,
     ProcessingOutcome,
-    fetch_all_in_partition,
     get_fs,
 )
 from tqdm import tqdm
-from utils import GTFSScheduleFeedFile
+from utils import GTFSScheduleFeedFile, get_schedule_files_in_hour
 
 SCHEDULE_UNZIPPED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED"]
 SCHEDULE_RAW_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_RAW"]
@@ -194,44 +193,29 @@ def unzip_individual_feed(
 
 
 def unzip_extracts(
-    day: pendulum.datetime,
+    data_interval_start: pendulum.DateTime,
+    data_interval_end: pendulum.DateTime,
     threads: int = 4,
     progress: bool = False,
 ):
+    period = data_interval_end.subtract(microseconds=1) - data_interval_start
+    typer.secho(f"unzipping extracts in period {period}", fg=typer.colors.MAGENTA)
+
     fs = get_fs()
-    day = pendulum.instance(day).date()
-    extracts, missing, invalid = fetch_all_in_partition(
+
+    extract_map = get_schedule_files_in_hour(
         cls=GTFSScheduleFeedExtract,
         bucket=SCHEDULE_RAW_BUCKET,
         table=GTFSFeedType.schedule,
-        partitions={
-            "dt": day,
-        },
-        verbose=True,
+        period=period,
     )
 
-    if missing or invalid:
-        typer.secho(f"missing: {missing}")
-        typer.secho(f"invalid: {invalid}")
-        raise RuntimeError("found files with missing or invalid metadata; failing job")
-
-    if not extracts:
+    if not extract_map:
         typer.secho(
             "WARNING: found 0 extracts to process, exiting",
             fg=typer.colors.YELLOW,
         )
         return
-
-    extract_map = {
-        ts: [e for e in extracts if e.ts == ts] for ts in set(e.ts for e in extracts)
-    }
-
-    typer.secho(
-        f"found {len(extracts)} to process for {day}",
-        fg=typer.colors.MAGENTA,
-    )
-    assert len(extracts) == sum(len(val) for val in extract_map.values())
-    del extracts
 
     for ts, extracts_in_extract in extract_map.items():
         typer.secho(
@@ -277,9 +261,18 @@ def unzip_extracts(
             raise RuntimeError(msg)
 
 
-def airflow_unzip_extracts(task_instance, execution_date, **kwargs):
+def airflow_unzip_extracts(
+    data_interval_start: pendulum.DateTime,
+    data_interval_end: pendulum.DateTime,
+    **kwargs,
+):
     sentry_sdk.init()
-    unzip_extracts(execution_date, threads=2, progress=True)
+    unzip_extracts(
+        data_interval_start,
+        data_interval_end,
+        threads=2,
+        progress=True,
+    )
 
 
 if __name__ == "__main__":
