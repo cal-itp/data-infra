@@ -19,12 +19,6 @@ stg_gtfs_schedule__agency AS (
         {{ trim_make_empty_string_null('agency_phone') }} AS agency_phone,
         {{ trim_make_empty_string_null('agency_fare_url') }} AS agency_fare_url,
         {{ trim_make_empty_string_null('agency_email') }} AS agency_email,
-        -- enumerate the values that we have encountered in this field
-        -- confirm that they work in BigQuery, i.e., they can be passed to the TIMESTAMP function and do not return an error
-        CASE
-            WHEN {{ trim_make_empty_string_null('agency_timezone') }} IN ('America/Los_Angeles', 'US/Pacific', 'America/Vancouver',
-                'America/New_York', 'Canada/Pacific', 'America/Phoenix', 'PST8PDT') THEN agency_timezone
-        END AS agency_timezone_valid_tz
     FROM external_agency
 )
 

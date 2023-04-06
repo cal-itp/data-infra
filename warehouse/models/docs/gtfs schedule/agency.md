@@ -31,13 +31,3 @@ URL of a web page that allows a rider to purchase tickets or other fare instrume
 {% docs gtfs_agency__agency_email %}
 Email address actively monitored by the agency's customer service department. This email address should be a direct contact point where transit riders can reach a customer service representative at the agency.
 {% enddocs %}
-
-
-The following are computed fields added by us that are not part of the GTFS spec:
-
-{% docs gtfs_agency_timezone_valid_tz %}
-Agency timezone mapped to a valid [tz database]('http://www.iana.org/time-zones') code
-recognized by BigQuery. If the original `agency_timezone` value was valid,
-this will just be the same. If the original value was not in a valid format,
-we will attempt to manually map it to a valid value in this field.
-{% enddocs %}

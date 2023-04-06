@@ -129,8 +129,7 @@ get_feed_time_zone AS (
     SELECT
         ts,
         base64_url,
-        agency_timezone,
-        agency_timezone_valid_tz AS feed_timezone,
+        agency_timezone AS feed_timezone,
         COUNT(*) AS ct
     FROM agencies
     -- SQLFluff doesn't like number column references here with column names in window function

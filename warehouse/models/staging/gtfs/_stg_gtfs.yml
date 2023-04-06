@@ -158,8 +158,6 @@ models:
         description: '{{ doc("gtfs_agency__agency_fare_url") }}'
       - name: agency_email
         description: '{{ doc("gtfs_agency__agency_email") }}'
-      - name: agency_timezone_valid_tz
-        description: '{{ doc("gtfs_agency_timezone_valid_tz") }}'
   - name: stg_gtfs_schedule__areas
     description: |
       Cleaned GTFS schedule area data.
