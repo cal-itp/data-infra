@@ -1193,16 +1193,22 @@ models:
                 where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
       - &num_distinct_message_ids
         name: num_distinct_message_ids
-        description: Distinct count of top-level ids.
+        description: Distinct count of top-level ids (https://gtfs.org/realtime/reference/#message-feedentity).
       - &num_distinct_header_timestamps
         name: num_distinct_header_timestamps
-        description: Distinct count of header timestamps.
+        description: Distinct count of header timestamps from the feed (https://gtfs.org/realtime/reference/#message-feedheader).
       - &min_extract_ts
         name: min_extract_ts
-        description: Timestamp of the first extract on this day referencing this trip.
+        description: |
+          Timestamp of the first extract (i.e. the time at which
+          we downloaded this feed extract) on this day referencing this trip.
+          For RT, our extracts are pinned to 20 second intervals, i.e. :00, :20, :40.
       - &max_extract_ts
         name: max_extract_ts
-        description: Timestamp of the last extract on this day referencing this trip.
+        description: |
+          Timestamp of the last extract (i.e. the time at which
+          we downloaded this feed extract) on this day referencing this trip.
+          For RT, our extracts are pinned to 20 second intervals, i.e. :00, :20, :40.
       - &min_header_timestamp
         name: min_header_timestamp
         description: Earliest header timestamp of a message referencing this trip.
@@ -1223,6 +1229,8 @@ models:
       - *rt_trip_summary_key
       - *num_distinct_message_ids
       - *num_distinct_header_timestamps
+      - name: num_distinct_trip_update_timestamps
+        description: Distinct count of trip update timestamps from the feed (https://gtfs.org/realtime/reference/#message-tripupdate).
       - *min_extract_ts
       - *max_extract_ts
       - *min_header_timestamp
@@ -1245,6 +1253,8 @@ models:
       - *rt_trip_summary_key
       - *num_distinct_message_ids
       - *num_distinct_header_timestamps
+      - name: num_distinct_vehicle_timestamps
+        description: Distinct count of vehicle timestamps from the feed (https://gtfs.org/realtime/reference/#message-vehicleposition).
       - *min_extract_ts
       - *max_extract_ts
       - *min_header_timestamp
