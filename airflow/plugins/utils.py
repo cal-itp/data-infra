@@ -126,7 +126,9 @@ def get_schedule_files_in_hour(
     bucket: str,
     table: str,
     period: pendulum.Period,
-) -> Dict[pendulum.DateTime, List[PartitionedGCSArtifact]]:
+) -> Dict[
+    pendulum.DateTime, List[Union[GTFSScheduleFeedExtract, GTFSScheduleFeedFile]]
+]:
     # __contains__ is defined as inclusive for pendulum.Period but we want to ignore the next hour
     # see https://github.com/apache/airflow/issues/25383#issuecomment-1198975178 for data_interval_end clarification
     assert (

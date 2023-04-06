@@ -217,20 +217,20 @@ def unzip_extracts(
         )
         return
 
-    for ts, extracts_in_extract in extract_map.items():
+    for ts, extracts in extract_map.items():
         typer.secho(
             f"processing extract {ts}",
             fg=typer.colors.MAGENTA,
         )
         outcomes = []
-        pbar = tqdm(total=len(extracts_in_extract)) if progress else None
+        pbar = tqdm(total=len(extracts)) if progress else None
 
         with ThreadPoolExecutor(max_workers=threads) as pool:
             futures: Dict[Future, GTFSScheduleFeedExtract] = {
                 pool.submit(
                     unzip_individual_feed, i=i, extract=extract, pbar=pbar
                 ): extract
-                for i, extract in enumerate(extracts_in_extract)
+                for i, extract in enumerate(extracts)
             }
 
             for future in concurrent.futures.as_completed(futures):
@@ -245,17 +245,17 @@ def unzip_extracts(
         result = ScheduleUnzipResult(filename="results.jsonl", ts=ts, outcomes=outcomes)
         result.save(fs)
 
-        assert len(extracts_in_extract) == len(
+        assert len(extracts) == len(
             result.outcomes
-        ), f"ended up with {len(outcomes)} outcomes from {len(extracts_in_extract)} extracts"
+        ), f"ended up with {len(outcomes)} outcomes from {len(extracts)} extracts"
 
-        success_rate = len(result.successes) / len(extracts_in_extract)
+        success_rate = len(result.successes) / len(extracts)
         exceptions = [
             (failure.exception, failure.extract.config.url)
             for failure in result.failures
         ]
         exc_str = "\n".join(str(tup) for tup in exceptions)
-        msg = f"got {len(exceptions)} exceptions from validating {len(extracts_in_extract)} extracts:\n{exc_str}"
+        msg = f"got {len(exceptions)} exceptions from validating {len(extracts)} extracts:\n{exc_str}"
         typer.secho(msg, err=True, fg=typer.colors.RED)
         if success_rate < GTFS_UNZIP_LIST_ERROR_THRESHOLD:
             raise RuntimeError(msg)

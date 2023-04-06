@@ -10,10 +10,9 @@ from calitp_data_infra.storage import (
     GTFSDownloadConfig,
     PartitionedGCSArtifact,
     ProcessingOutcome,
-    fetch_all_in_partition,
     get_fs,
 )
-from utils import GTFSScheduleFeedFile
+from utils import GTFSScheduleFeedFile, get_schedule_files_in_hour
 
 from airflow.models import BaseOperator
 
@@ -53,9 +52,13 @@ class GTFSScheduleParseOutcome(ProcessingOutcome):
 
 class ScheduleParseResult(PartitionedGCSArtifact):
     bucket: ClassVar[str] = SCHEDULE_PARSED_BUCKET
-    partition_names: ClassVar[List[str]] = ["dt"]
-    dt: pendulum.Date
+    partition_names: ClassVar[List[str]] = ["dt", "ts"]
+    ts: pendulum.DateTime
     outcomes: List[GTFSScheduleParseOutcome]
+
+    @property
+    def dt(self):
+        return self.ts.date()
 
     @property
     def successes(self) -> List[GTFSScheduleParseOutcome]:
@@ -139,51 +142,43 @@ def parse_individual_file(
     )
 
 
-def parse_files(day: pendulum.datetime, input_table_name: str, gtfs_filename: str):
+def parse_files(period: pendulum.Period, input_table_name: str, gtfs_filename: str):
     fs = get_fs()
-    day = pendulum.instance(day).date()
-    files, missing, invalid = fetch_all_in_partition(
+    extract_map = get_schedule_files_in_hour(
         cls=GTFSScheduleFeedFile,
         bucket=SCHEDULE_UNZIPPED_BUCKET,
         table=input_table_name,
-        partitions={
-            "dt": day,
-        },
-        verbose=True,
+        period=period,
     )
 
-    if missing or invalid:
-        logging.error(f"missing: {missing}")
-        logging.error(f"invalid: {invalid}")
-        raise RuntimeError("found files with missing or invalid metadata; failing job")
-
-    if not files:
-        logging.warn(f"No files found for {input_table_name} for {day}")
+    if not extract_map:
+        logging.warn(f"No files found for {input_table_name} for {period}")
         return
 
-    logging.info(f"Processing {len(files)} {input_table_name} records for {day}")
+    for ts, files in extract_map.items():
+        logging.info(f"Processing {len(files)} {input_table_name} records for {ts}")
 
-    outcomes = []
-    for file in files:
-        outcome = parse_individual_file(fs, file, gtfs_filename)
-        outcomes.append(outcome)
+        outcomes = []
+        for file in files:
+            outcome = parse_individual_file(fs, file, gtfs_filename)
+            outcomes.append(outcome)
 
-    assert (
-        len({outcome.feed_file.table for outcome in outcomes}) == 1
-    ), "somehow you're processing multiple input tables"
+        assert (
+            len({outcome.feed_file.table for outcome in outcomes}) == 1
+        ), "somehow you're processing multiple input tables"
 
-    result = ScheduleParseResult(filename="results.jsonl", dt=day, outcomes=outcomes)
-    result.save(fs)
+        result = ScheduleParseResult(filename="results.jsonl", ts=ts, outcomes=outcomes)
+        result.save(fs)
 
-    assert len(files) == len(
-        result.outcomes
-    ), f"ended up with {len(outcomes)} outcomes from {len(files)} files"
+        assert len(files) == len(
+            result.outcomes
+        ), f"ended up with {len(outcomes)} outcomes from {len(files)} files"
 
-    success_rate = len(result.successes) / len(files)
-    if success_rate < GTFS_PARSE_ERROR_THRESHOLD:
-        raise RuntimeError(
-            f"Success rate: {success_rate:.3f} was below error threshold: {GTFS_PARSE_ERROR_THRESHOLD}"
-        )
+        success_rate = len(result.successes) / len(files)
+        if success_rate < GTFS_PARSE_ERROR_THRESHOLD:
+            raise RuntimeError(
+                f"Success rate: {success_rate:.3f} was below error threshold: {GTFS_PARSE_ERROR_THRESHOLD}"
+            )
 
 
 class GtfsGcsToJsonlOperator(BaseOperator):
@@ -196,9 +191,15 @@ class GtfsGcsToJsonlOperator(BaseOperator):
         super().__init__(*args, **kwargs)
 
     def execute(self, context):
-        print(f"Processing {context['execution_date']}")
+        period = (
+            context["data_interval_end"].subtract(microseconds=1)
+            - context["data_interval_start"]
+        )
+        print(f"Processing {period=}")
         parse_files(
-            context["execution_date"], self.input_table_name, self.gtfs_filename
+            period,
+            self.input_table_name,
+            self.gtfs_filename,
         )
 
 
