@@ -256,7 +256,8 @@ def unzip_extracts(
         ]
         exc_str = "\n".join(str(tup) for tup in exceptions)
         msg = f"got {len(exceptions)} exceptions from validating {len(extracts)} extracts:\n{exc_str}"
-        typer.secho(msg, err=True, fg=typer.colors.RED)
+        if exceptions:
+            typer.secho(msg, err=True, fg=typer.colors.RED)
         if success_rate < GTFS_UNZIP_LIST_ERROR_THRESHOLD:
             raise RuntimeError(msg)
 

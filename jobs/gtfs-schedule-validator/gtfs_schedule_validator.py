@@ -430,7 +430,8 @@ def validate_hour(
         if success_rate < GTFS_VALIDATE_LIST_ERROR_THRESHOLD:
             exc_str = "\n".join(str(tup) for tup in exceptions)
             msg = f"got {len(exceptions)} exceptions from validating {len(extracts)} extracts:\n{exc_str}"
-            typer.secho(msg, err=True, fg=typer.colors.RED)
+            if exceptions:
+                typer.secho(msg, err=True, fg=typer.colors.RED)
             raise RuntimeError(msg)
 
 
