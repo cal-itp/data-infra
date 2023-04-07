@@ -23,6 +23,8 @@ stg_gtfs_schedule__stops AS (
         {{ trim_make_empty_string_null('stop_desc') }} AS stop_desc,
         {{ trim_make_empty_string_null('stop_url') }} AS stop_url,
         SAFE_CAST({{ trim_make_empty_string_null('location_type') }} AS INTEGER) AS location_type,
+        -- timezone is passed directly to BigQuery date/time functions later so we may need to add validation
+        -- if we ever encounter an invalid value here
         {{ trim_make_empty_string_null('stop_timezone') }} AS stop_timezone,
         SAFE_CAST({{ trim_make_empty_string_null('wheelchair_boarding') }} AS INTEGER) AS wheelchair_boarding,
         {{ trim_make_empty_string_null('level_id') }} AS level_id,
