@@ -13,6 +13,7 @@ CALITP__ELAVON_SFTP_HOSTNAME = os.environ["CALITP__ELAVON_SFTP_HOSTNAME"]
 CALITP__ELAVON_SFTP_PORT = os.environ["CALITP__ELAVON_SFTP_PORT"]
 CALITP__ELAVON_SFTP_USERNAME = os.environ["CALITP__ELAVON_SFTP_USERNAME"]
 CALITP__ELAVON_SFTP_PASSWORD = get_secret_by_name("CALITP__ELAVON_SFTP_PASSWORD")
+CALITP_BUCKET__ELAVON_RAW = os.environ["CALITP_BUCKET__ELAVON_RAW"]
 
 
 def mirror_raw_files_from_elavon():
@@ -54,7 +55,7 @@ def mirror_raw_files_from_elavon():
         # filepath issues
         fs.put(
             lpath=f"transferred_files/{file}",
-            rpath=f"gs://test-calitp-elavon-raw/ts={ts}/",
+            rpath=f"gs://{CALITP_BUCKET__ELAVON_RAW}/ts={ts}/",
         )
 
 

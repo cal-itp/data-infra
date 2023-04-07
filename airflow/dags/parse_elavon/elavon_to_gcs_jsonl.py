@@ -14,7 +14,8 @@ from calitp_data_infra.storage import (  # type: ignore
     make_name_bq_safe,
 )
 
-CALITP_BUCKET__ELAVON = os.environ["CALITP_BUCKET__ELAVON"]
+CALITP_BUCKET__ELAVON_RAW = os.environ["CALITP_BUCKET__ELAVON_RAW"]
+CALITP_BUCKET__ELAVON_PROCESSED = os.environ["CALITP_BUCKET__ELAVON_PROCESSED"]
 
 
 def fetch_and_clean_from_gcs(fs):
@@ -26,7 +27,7 @@ def fetch_and_clean_from_gcs(fs):
     all_rows = pd.DataFrame()
 
     # List raw files available from GCS
-    file_and_dir_list = fs.ls("test-calitp-elavon-raw/", detail=False)
+    file_and_dir_list = fs.ls(f"{CALITP_BUCKET__ELAVON_RAW}/", detail=False)
     dir_list = [x for x in file_and_dir_list if fs.isdir(x)]
 
     # Drill down to the latest export (folders are "ts=" format)
@@ -64,7 +65,7 @@ def fetch_and_clean_from_gcs(fs):
 
 
 class ElavonExtract(PartitionedGCSArtifact):
-    bucket: ClassVar[str] = CALITP_BUCKET__ELAVON
+    bucket: ClassVar[str] = CALITP_BUCKET__ELAVON_PROCESSED
     table: ClassVar[str] = "transactions"
     execution_ts: pendulum.DateTime = pendulum.now()
     dt: pendulum.Date = execution_ts.date()
