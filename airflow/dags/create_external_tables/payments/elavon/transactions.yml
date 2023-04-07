@@ -1,5 +1,5 @@
 operator: operators.ExternalTable
-bucket: "{{ env_var('CALITP_BUCKET__ELAVON') }}"
+bucket: "{{ env_var('CALITP_BUCKET__ELAVON_PARSED') }}"
 source_objects:
   - "transactions/*.jsonl.gz"
 destination_project_dataset_table: "external_elavon.transactions"
