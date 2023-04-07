@@ -15,7 +15,7 @@ from calitp_data_infra.storage import (  # type: ignore
 )
 
 CALITP_BUCKET__ELAVON_RAW = os.environ["CALITP_BUCKET__ELAVON_RAW"]
-CALITP_BUCKET__ELAVON_PROCESSED = os.environ["CALITP_BUCKET__ELAVON_PROCESSED"]
+CALITP_BUCKET__ELAVON_PARSED = os.environ["CALITP_BUCKET__ELAVON_PARSED"]
 
 
 def fetch_and_clean_from_gcs(fs):
@@ -65,7 +65,7 @@ def fetch_and_clean_from_gcs(fs):
 
 
 class ElavonExtract(PartitionedGCSArtifact):
-    bucket: ClassVar[str] = CALITP_BUCKET__ELAVON_PROCESSED
+    bucket: ClassVar[str] = CALITP_BUCKET__ELAVON_PARSED
     table: ClassVar[str] = "transactions"
     execution_ts: pendulum.DateTime = pendulum.now()
     dt: pendulum.Date = execution_ts.date()

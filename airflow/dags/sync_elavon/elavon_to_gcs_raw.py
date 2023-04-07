@@ -55,7 +55,7 @@ def mirror_raw_files_from_elavon():
         # filepath issues
         fs.put(
             lpath=f"transferred_files/{file}",
-            rpath=f"gs://{CALITP_BUCKET__ELAVON_RAW}/ts={ts}/",
+            rpath=f"{CALITP_BUCKET__ELAVON_RAW}/ts={ts}/",
         )
 
 
