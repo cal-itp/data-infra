@@ -1,11 +1,11 @@
 # gtfs-rt-archiver-v3
 
-This is the third iteration of our GTFS RT downloader aka archiver.
+This is the third iteration of our [GTFS Realtime (RT)](https://gtfs.org/realtime/) downloader aka archiver.
 
 ## Architecture and frameworks/tools
 
 ### Huey
-[huey](https://github.com/coleifer/huey) is a minimal/lightweight task queue library that we use to enqueue tasks for asynchronous/parallel execution by workers.
+[huey](https://github.com/coleifer/huey) is a minimal/lightweight task queue library that we use to enqueue tasks for asynchronous/parallel execution by workers. The [ticker](./gtfs_rt_archiver_v3/ticker.py) enqueues Huey tasks for processing, which are picked up by the [consumer](./gtfs_rt_archiver_v3/consumer.py) for processing.
 
 ### Redis
 Currently we use [Redis](https://github.com/redis/redis) as the storage backend
@@ -15,21 +15,20 @@ In addition, the RT archiver relies on having low I/O latency with Redis to
 minimize the latency of fetch starts. Due to these considerations, these Redis
 instances should **NOT** be used for any other applications.
 
-
 ### Deployed pods
-The actual archiver application is composed of three pieces.
-* A ticker pod that creates fetch tasks every 20 seconds, based on the latest download configurations artifact present in GCS
-  * Checks for new configurations every 5 minutes
-  * Fetches are enqueued as Huey tasks
-* A redis instance tasks are enqueued to and dequeued from
-* 1-N consumer pods that executed enqueued fetch tasks, making HTTP requests and saving the raw responses (and metadata such as headers) to GCS
-  * Each consumer pod runs some number of worker threads
-  * As of 2023-04-10, the production archiver has 6 consumer pods each managing 24 worker threads
+The full archiver application is composed of three pieces:
+1. A ticker pod that creates fetch tasks every 20 seconds, based on the latest download configurations artifact present in GCS
+    * Checks for new configurations every 5 minutes
+    * Fetches are enqueued as Huey tasks
+2. A redis instance backing the Huey queue
+3. 1-N consumer pods that executed enqueued fetch tasks, making HTTP requests and saving the raw responses (and metadata such as headers) to GCS
+    * Each consumer pod runs some number of worker threads
+    * As of 2023-04-10, the production archiver has 6 consumer pods each managing 24 worker threads
 
-## Operations/maintenance
+## Observability
 
 ### Metrics
-We've created a [Grafana dashboard](https://monitoring.calitp.org/d/AqZT_PA4k/gtfs-rt-archiver) to display the [metrics](https://github.com/cal-itp/data-infra/blob/main/services/gtfs-rt-archiver-v3/gtfs_rt_archiver_v3/metrics.py) for this application, based on our desired goals of
+We've created a [Grafana dashboard](https://monitoring.calitp.org/d/AqZT_PA4k/gtfs-rt-archiver) to display the [metrics](./gtfs_rt_archiver_v3/metrics.py) for this application, based on our desired goals of
 
 There are two important alerts defined in Grafana based on these metrics.
 * [Minimum task successes](https://monitoring.calitp.org/alerting/grafana/nrbFSw0Vz/view)
@@ -45,8 +44,15 @@ We log errors and exceptions (both caught and uncaught) to our [Sentry instance]
   * Changed URLs (404)
   * Intermittent outages/errors (may be a ConnectionError or a 500 response)
 
+
+## Operations/maintenance
+
+> You must have [installed and authenticated kubectl](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl) before executing commands. It's also useful to set your default cluser to our data-infra-apps cluster.
+>
+> These `kubectl` commands assume your shell is in the `kubernetes` directory, but you could run them from root and just prepend `kubernetes/` to the file paths.
+
 ### Restarting the archiver
-Rolling restarts with kubectl use the following syntax.
+Rolling restarts with `kubectl` use the following syntax.
 ```shell
 kubectl rollout restart deployment.apps/<deployment> -n <namespace>
 ```
@@ -59,13 +65,27 @@ kubectl rollout restart deployment.apps/gtfs-rt-archiver-consumer -n gtfs-rt-v3-
 ```
 
 ### Deploying configuration changes
-Change app vars or channel vars
-`kubectl apply -k apps/overlays/gtfs-rt-archiver-v3-<env>`
+Environment-agnostic configurations live in [app vars](../../kubernetes/apps/manifests/gtfs-rt-archiver-v3/archiver-app-vars.yaml) while environment-specific configurations live in [channel vars](../../kubernetes/apps/overlays/gtfs-rt-archiver-v3-test/archiver-channel-vars.yaml). You can edit these files and deploy the changes with `kubectl`.
+```
+kubectl apply -k apps/overlays/gtfs-rt-archiver-v3-<env>
+```
+
+For example, you can changes in [test](../../kubernetes/apps/overlays/gtfs-rt-archiver-v3-test/archiver-channel-vars.yaml) with the following.
+```
+kubectl apply -k apps/overlays/gtfs-rt-archiver-v3-test
+```
 
 ### Deploying code changes
-Change image tag version in kustomize
-`docker push ...` or wait for github action to run in production
-`kubectl apply -k apps/overlays/gtfs-rt-archiver-v3-<env>`
+Code changes required building and pushing a new Docker image, as well as applying `kubectl` changes to point the deployment at the new image.
+1. Make code changes and increment version in `pyproject.toml`
+   1. Ex. `poetry version 2023.4.10`
+2. Change image tag version in the environments `kustomization.yaml`.
+   1. Ex. change the value of `newTag` to '`2023.4.10'`
+3. `docker build ... & docker push ...` (*from within the archiver directory*) or wait for [build-gtfs-rt-archiver-v3-image](../../.github/workflows/build-gtfs-rt-archiver-v3-image.yml) GitHub Action to run after merge to main
+   1. Ex. `docker build -t ghcr.io/cal-itp/data-infra/gtfs-rt-archiver:2023.4.10 . && docker push ghcr.io/cal-itp/data-infra/gtfs-rt-archiver:2023.4.10`
+   2. To push from your local machine, you must have [authenticated to ghcr.io](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-to-the-container-registry)
+4. Finally, apply changes using `kubectl` as described above.
+   1. Currently, the image is built/pushed on merges to main but the Kubernetes manifests are not applied.
 
 ### Fixing download configurations
 GTFS download configurations (for both Schedule and RT) are sourced from the [GTFS Dataset table](https://airtable.com/appPnJWrQ7ui4UmIl/tbl5V6Vjs4mNQgYbc) in the California Transit Airtable base. You may need to make URL or authentication adjustments in this table. This data is downloaded daily into our infrastructure and will propagate to the GTFS Schedule and RT downloads; you may execute the [Airtable download job](https://o1d2fa0877cf3fb10p-tp.appspot.com/dags/airtable_loader_v2/grid) manually after making edits to "deploy" the changes more quickly.
