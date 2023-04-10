@@ -11,21 +11,12 @@
     )
 }}
 
-{% if is_incremental() %}
-    {% set timestamps = dbt_utils.get_column_values(table=this, column='dt', order_by = 'dt DESC', max_records = 1) %}
-    {% set max_ts = timestamps[0] %}
-{% endif %}
-
 WITH service_alerts AS (
     SELECT * FROM {{ ref('fct_service_alert_informed_entities') }}
-    {% if is_incremental() %}
-    WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_ts }}'))
-    {% else %}
-    WHERE dt >= {{ var('GTFS_RT_START') }}
-    {% endif %}
+    WHERE {{ gtfs_rt_dt_where() }}
 ),
 
-int_gtfs_rt__service_alerts_trip_summaries AS (
+fct_service_alerts_trip_summaries AS (
     SELECT
         -- https://gtfs.org/realtime/reference/#message-tripdescriptor
         {{ dbt_utils.generate_surrogate_key([
@@ -45,6 +36,7 @@ int_gtfs_rt__service_alerts_trip_summaries AS (
         trip_start_time,
         trip_start_date,
         COUNT(DISTINCT id) AS num_distinct_message_ids,
+        COUNT(DISTINCT header_timestamp) AS num_distinct_header_timestamps,
         ARRAY_AGG(DISTINCT service_alert_message_key) AS service_alert_message_keys,
         MIN(_extract_ts) AS min_extract_ts,
         MAX(_extract_ts) AS max_extract_ts,
@@ -54,4 +46,4 @@ int_gtfs_rt__service_alerts_trip_summaries AS (
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
 )
 
-SELECT * FROM int_gtfs_rt__service_alerts_trip_summaries
+SELECT * FROM fct_service_alerts_trip_summaries

@@ -116,6 +116,13 @@ Some additional helpful commands:
 * `poetry run dbt docs generate` -- will generate the dbt documentation
 * `poetry run dbt docs serve` -- will "serve" the dbt docs locally so you can access them via `http://localhost:8080`; note that you must `docs generate` before you can `docs serve`
 
+### Incremental model considerations
+We make heavy use of [incremental models](https://docs.getdbt.com/docs/build/incremental-models) in the Cal-ITP warehouse since we have large data volumes, but that data arrives in a relatively consistent pattern (i.e. temporal).
+
+**In development**, there is a maximum lookback defined for incremental runs. The purpose of this is to handle situations where a developer may not have executed a model for a period of time. It's easy to handle full refreshes with a maximum lookback; we simply template in `N days ago` rather than the "true" start of the data for full refreshes. However, we also template in `MAX(N days ago, max DT of existing table)` for developer incremental runs; otherwise, going a month without executing a model would mean that a naive incremental implementation would then read in that full month of data. This means that your development environment can end up with gaps of data; if you've gone a month without executing a model, and then you execute a regular `run` that reads in the past `N` (7 currently) days of data, you will have a ~23 day gap. If this gap is unacceptable, you can resolve this in one of two ways.
+* If you are able to develop and test with only recent data, execute a `--full-refresh` on your model(s) and all parents. This will drop the existing tables and re-build them with the last 7 days of data.
+* If you need historical data for your analysis, copy the production table with `CREATE TABLE <your_schema>.<tablename> COPY <production_schema>.<tablename`; copies are free in BigQuery so this is substantially cheaper than fully building the model yourself.
+
 ## Setting up the project on your local machine
 
 If you prefer to install dbt locally and use your own development environment, you may follow these instructions to install the same tools already installed in the JupyterHub environment.

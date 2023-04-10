@@ -24,7 +24,7 @@ clean-targets:         # directories to be removed by `dbt clean`
 vars:
   surrogate_key_treat_nulls_as_empty_strings: true # enable legacy behavior for dbt_utils surrogate keys, i.e. coalesce nulls to empty strings
   GTFS_SCHEDULE_START: '2021-04-16'
-  GTFS_RT_START: "{% if target.name.startswith('prod') %}'2022-09-15'{% else %}{{ dbt_date.n_days_ago(7) }}{% endif %}"
+  PROD_GTFS_RT_START: '2022-09-15'
   'dbt_date:time_zone': 'America/Los_Angeles'
   DEFAULT_SOURCE_DATABASE: cal-itp-data-infra
 

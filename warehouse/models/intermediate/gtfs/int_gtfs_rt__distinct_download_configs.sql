@@ -8,11 +8,6 @@
     },
 ) }}
 
-{% if is_incremental() %}
-    {% set dates = dbt_utils.get_column_values(table=this, column='dt', order_by = 'dt DESC', max_records = 1) %}
-    {% set max_dt = dates[0] %}
-{% endif %}
-
 WITH
 
 int_gtfs_rt__distinct_download_configs AS (
@@ -21,11 +16,7 @@ int_gtfs_rt__distinct_download_configs AS (
         dt,
         _config_extract_ts
     FROM {{ ref('stg_gtfs_rt__service_alerts_outcomes') }}
-    {% if is_incremental() %}
-    WHERE dt >= '{{ max_dt }}'
-    {% else %}
-    WHERE dt >= {{ var('GTFS_RT_START') }}
-    {% endif %}
+    WHERE {{ gtfs_rt_dt_where() }}
 )
 
 SELECT * FROM int_gtfs_rt__distinct_download_configs

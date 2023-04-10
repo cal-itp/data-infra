@@ -13,13 +13,13 @@ assessment_entities AS (
     SELECT * FROM {{ ref('int_gtfs_quality__daily_assessment_candidate_entities') }}
 ),
 trip_updates AS (
-    SELECT * FROM {{ ref('int_gtfs_rt__trip_updates_summaries') }}
+    SELECT * FROM {{ ref('fct_trip_updates_summaries') }}
 ),
 vehicle_positions AS (
-    SELECT * FROM {{ ref('int_gtfs_rt__vehicle_positions_trip_summaries') }}
+    SELECT * FROM {{ ref('fct_vehicle_positions_trip_summaries') }}
 ),
 service_alerts AS (
-    SELECT * FROM {{ ref('int_gtfs_rt__service_alerts_trip_summaries') }}
+    SELECT * FROM {{ ref('fct_service_alerts_trip_summaries') }}
 ),
 
 -- get each of these distinct
