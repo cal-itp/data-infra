@@ -42,6 +42,7 @@ gtfs_joins AS (
 
         service_index.service_date,
         service_index.feed_key,
+        trips.base64_url,
         service_index.service_id,
         service_index.feed_timezone,
 
@@ -72,9 +73,11 @@ gtfs_joins AS (
         stop_times_grouped.service_hours,
         stop_times_grouped.contains_warning_duplicate_primary_key AS contains_warning_duplicate_stop_times_primary_key,
         stop_times_grouped.contains_warning_missing_foreign_key_stop_id,
-
-
-        -- TODO: make datetimes and check in Metabase -- we don't want additional localization (should be fixed Pacific)
+        stop_times_grouped.trip_start_timezone,
+        stop_times_grouped.trip_end_timezone,
+        -- spec is explicit: all stop times are relative to midnight in the feed time zone (from agency.txt)
+        -- see: https://gtfs.org/schedule/reference/#stopstxt
+        -- so to make a timestamp, we use the feed timezone from agency.txt
         TIMESTAMP_ADD(
             TIMESTAMP(service_date, service_index.feed_timezone),
             INTERVAL stop_times_grouped.trip_first_departure_sec SECOND
@@ -104,6 +107,7 @@ fct_daily_scheduled_trips AS (
     SELECT
         gtfs_joins.key,
         gtfs_joins.feed_timezone,
+        gtfs_joins.base64_url,
 
         dim_gtfs_datasets.name,
         dim_gtfs_datasets.regional_feed_type,
@@ -133,17 +137,16 @@ fct_daily_scheduled_trips AS (
         gtfs_joins.n_stop_times,
         gtfs_joins.trip_first_departure_sec,
         gtfs_joins.trip_last_arrival_sec,
+        gtfs_joins.trip_start_timezone,
+        gtfs_joins.trip_end_timezone,
         gtfs_joins.service_hours,
         gtfs_joins.contains_warning_duplicate_stop_times_primary_key,
         gtfs_joins.contains_warning_missing_foreign_key_stop_id,
         gtfs_joins.activity_first_departure_ts,
         gtfs_joins.activity_last_arrival_ts,
-        DATE(activity_first_departure_ts, "America/Los_Angeles") AS activity_date_pacific,
-        DATE(activity_first_departure_ts, gtfs_joins.feed_timezone) AS activity_date_feed_tz,
-        DATETIME(activity_first_departure_ts, "America/Los_Angeles") AS activity_first_departure_pacific,
-        DATETIME(activity_first_departure_ts, gtfs_joins.feed_timezone) AS activity_first_departure_feed_tz,
-        DATETIME(activity_last_arrival_ts, "America/Los_Angeles") AS activity_last_arrival_pacific,
-        DATETIME(activity_last_arrival_ts, gtfs_joins.feed_timezone) AS activity_last_arrival_feed_tz,
+        DATE(activity_first_departure_ts, trip_start_timezone) AS activity_date_local_tz,
+        DATETIME(activity_first_departure_ts, trip_start_timezone) AS activity_first_departure_local_tz,
+        DATETIME(activity_last_arrival_ts, trip_start_timezone) AS activity_last_arrival_local_tz,
     FROM gtfs_joins
     LEFT JOIN dim_schedule_feeds AS feeds
         ON gtfs_joins.feed_key = feeds.key
