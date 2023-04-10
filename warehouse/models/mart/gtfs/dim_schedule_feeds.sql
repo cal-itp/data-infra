@@ -133,8 +133,8 @@ get_feed_time_zone AS (
         COUNT(*) AS ct
     FROM agencies
     -- SQLFluff doesn't like number column references here with column names in window function
-    GROUP BY 1, 2, 3, 4 --noqa: AM06
-    QUALIFY RANK() OVER (PARTITION BY ts, base64_url ORDER BY ct DESC, agency_timezone_valid_tz ASC) = 1
+    GROUP BY 1, 2, 3 --noqa: AM06
+    QUALIFY RANK() OVER (PARTITION BY ts, base64_url ORDER BY ct DESC, agency_timezone ASC) = 1
 ),
 
 dim_schedule_feeds AS (

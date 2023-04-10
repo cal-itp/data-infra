@@ -242,6 +242,16 @@ models:
           I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
           in the input data. This indicates that data quality issues were present in the stop times data
           that is being summarized here, and the count of distinct `stop_id`s at the trip level may be incorrect.
+      - name: trip_start_timezone
+        description: |
+          The time zone of the first stop in this trip, pulled from dim_stops.
+          For time of day categorization purposes, it is recommended to use this time zone to
+          categorize the trip.
+      - name: trip_end_timezone
+        description: |
+          The time zone of the final stop in this trip, pulled from dim_stops.
+          For time of day categorization purposes, it is recommended to use `trip_start_timezone`
+          rather than this.
   - name: int_gtfs_rt__distinct_download_configs
     description: |
       Distinct `dt`, `_config_extract_ts` pairs indicating

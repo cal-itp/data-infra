@@ -31,7 +31,7 @@ fill_in_tz AS (
         stops.feed_key,
         stops.stop_id,
         stops.non_null_stop_id,
-        COALESCE(parents.stop_timezone_valid_tz, stops.stop_timezone_valid_tz, stops.feed_timezone) AS stop_timezone_coalesced
+        COALESCE(parents.stop_timezone, stops.stop_timezone, stops.feed_timezone) AS stop_timezone_coalesced
     FROM coalesce_missing_ids AS stops
     LEFT JOIN coalesce_missing_ids AS parents
         ON stops.parent_station = parents.stop_id

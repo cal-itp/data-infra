@@ -464,12 +464,23 @@ models:
           I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
           in the input data. This indicates that data quality issues were present in the stop times data
           that is being summarized here, and the count of distinct `stop_id`s at the trip level may be incorrect.
-      - name: activity_date
+      - name: activity_date_pacific
         description: |
-          The GTFS standard allows for a trip's `trip_first_departure_sec` to be greater than one day (86,400 seconds).
-          In that case, the date of the activity is later than the `service_date`, so we capture that in this `activity_date` column.
+          The GTFS standard allows for a trip's scheduled stop activity to occur more than 24 hours after the beginning of the
+          associated `service_date`. Additionally, different feeds use different time zones (see: https://gtfs.org/schedule/reference/#agencytxt;
+          even agencies whose service physically occurs across multiple time zones must pick a single
+          time zone in which to list their stop times).
 
-          Because of this, `activity_date` is used instead of `service_date` for analysis purposes.
+          This field handles both of these issues by normalizing to the Pacific Time ("America/Los_Angeles") date on which
+          the trip actually began. So if there is a trip with feed time zone "America/New_York", `service_date` of January 10,
+          and first departure scheduled for `26:30:00`, that corresponds to January 11 at 2:30am Eastern
+          which is January 10 at 11:30pm Pacific. `activity_date_pacific` will therefore be listed as January 10 for this trip.
+
+          By contrast, if there is another trip with feed time zone "America/Los_Angeles", `service_date` of January 10,
+          and first departure scheduled for `26:30:00`, then that corresponds to January 11 at 2:30am Pacific.
+          `activity_date_pacific` will therefore be listed as January 11 for this trip.
+
+          `activity_date_pacific` is recommended over `service_date` for analysis purposes to handle time zone issues.
       - name: activity_first_departure
         description: |
           The time of day of the trip's first departure.
