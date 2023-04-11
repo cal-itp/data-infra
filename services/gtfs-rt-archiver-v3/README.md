@@ -21,14 +21,14 @@ The full archiver application is composed of three pieces:
     * Checks for new configurations every 5 minutes
     * Fetches are enqueued as Huey tasks
 2. A redis instance backing the Huey queue
-3. 1-N consumer pods that executed enqueued fetch tasks, making HTTP requests and saving the raw responses (and metadata such as headers) to GCS
+3. 1-N consumer pods that execute enqueued fetch tasks, making HTTP requests and saving the raw responses (and metadata such as headers) to GCS
     * Each consumer pod runs some number of worker threads
     * As of 2023-04-10, the production archiver has 6 consumer pods each managing 24 worker threads
 
 ## Observability
 
 ### Metrics
-We've created a [Grafana dashboard](https://monitoring.calitp.org/d/AqZT_PA4k/gtfs-rt-archiver) to display the [metrics](./gtfs_rt_archiver_v3/metrics.py) for this application, based on our desired goals of
+We've created a [Grafana dashboard](https://monitoring.calitp.org/d/AqZT_PA4k/gtfs-rt-archiver) to display the [metrics](./gtfs_rt_archiver_v3/metrics.py) for this application, based on our desired goals of capturing data to the fullest extent possible and being able to track 20-second update frequencies in the feeds.
 
 There are two important alerts defined in Grafana based on these metrics.
 * [Minimum task successes](https://monitoring.calitp.org/alerting/grafana/nrbFSw0Vz/view)
@@ -38,7 +38,7 @@ Both of these tasks can fire if the archiver is only partially degraded, but the
 
 ### Error reporting
 We log errors and exceptions (both caught and uncaught) to our [Sentry instance](https://sentry.calitp.org/) via the [Python SDK for Sentry](https://github.com/getsentry/sentry-python). Common problems include:
-* Failure to connect to redis following a node upgrade; this is typicall fixed by [restarting the archiver](#restarting-the-archiver).
+* Failure to connect to redis following a node upgrade; this is typically fixed by [restarting the archiver](#restarting-the-archiver).
 * RTFetchException, a custom class specific to failures during feed download; these can be provider-side (i.e. the agency/vendor) or consumer-side (i.e. us) and are usually fixed (if possible) by [changing download configurations](#fixing-download-configurations). Common examples (and HTTP error code if relevant) include:
   * Missing or invalid authentication (401/403)
   * Changed URLs (404)
@@ -47,7 +47,7 @@ We log errors and exceptions (both caught and uncaught) to our [Sentry instance]
 
 ## Operations/maintenance
 
-> You must have [installed and authenticated kubectl](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl) before executing commands. It's also useful to set your default cluser to our data-infra-apps cluster.
+> You must have [installed and authenticated kubectl](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl) before executing commands (you will need GKE permissions in GCP for this). It's also useful to set your default cluster to our data-infra-apps cluster.
 >
 > These `kubectl` commands assume your shell is in the `kubernetes` directory, but you could run them from root and just prepend `kubernetes/` to the file paths.
 
@@ -70,13 +70,13 @@ Environment-agnostic configurations live in [app vars](../../kubernetes/apps/man
 kubectl apply -k apps/overlays/gtfs-rt-archiver-v3-<env>
 ```
 
-For example, you can changes in [test](../../kubernetes/apps/overlays/gtfs-rt-archiver-v3-test/archiver-channel-vars.yaml) with the following.
+For example, you can change the environment variables in [test](../../kubernetes/apps/overlays/gtfs-rt-archiver-v3-test/archiver-channel-vars.yaml) with the following.
 ```
 kubectl apply -k apps/overlays/gtfs-rt-archiver-v3-test
 ```
 
 ### Deploying code changes
-Code changes required building and pushing a new Docker image, as well as applying `kubectl` changes to point the deployment at the new image.
+Code changes require building and pushing a new Docker image, as well as applying `kubectl` changes to point the deployment at the new image.
 1. Make code changes and increment version in `pyproject.toml`
    1. Ex. `poetry version 2023.4.10`
 2. Change image tag version in the environments `kustomization.yaml`.
@@ -88,6 +88,6 @@ Code changes required building and pushing a new Docker image, as well as applyi
    1. Currently, the image is built/pushed on merges to main but the Kubernetes manifests are not applied.
 
 ### Fixing download configurations
-GTFS download configurations (for both Schedule and RT) are sourced from the [GTFS Dataset table](https://airtable.com/appPnJWrQ7ui4UmIl/tbl5V6Vjs4mNQgYbc) in the California Transit Airtable base. You may need to make URL or authentication adjustments in this table. This data is downloaded daily into our infrastructure and will propagate to the GTFS Schedule and RT downloads; you may execute the [Airtable download job](https://o1d2fa0877cf3fb10p-tp.appspot.com/dags/airtable_loader_v2/grid) manually after making edits to "deploy" the changes more quickly.
+GTFS download configurations (for both Schedule and RT) are sourced from the [GTFS Dataset table](https://airtable.com/appPnJWrQ7ui4UmIl/tbl5V6Vjs4mNQgYbc) in the California Transit Airtable base, and we have [specific documentation](https://docs.google.com/document/d/1IO8x9-31LjwmlBDH0Jri-uWI7Zygi_IPc9nqd7FPEQM/edit#heading=h.b2yta6yeugar) for modifying the table. (Both of these Airtable links require authentication/access to Airtable.) You may need to make URL or authentication adjustments in this table. This data is downloaded daily into our infrastructure and will propagate to the GTFS Schedule and RT downloads; you may execute the [Airtable download job](https://o1d2fa0877cf3fb10p-tp.appspot.com/dags/airtable_loader_v2/grid) manually after making edits to "deploy" the changes more quickly.
 
-Another possible intervention is updating or adding authentication information in [Secret Manager](). You may create new versions . **As of 2023-04-10 the archiver does not automatically pick up new/modified secrets; you must restart the archiver for changes to take effect.**
+Another possible intervention is updating or adding authentication information in [Secret Manager](https://console.cloud.google.com/security/secret-manager). You may create new versions . **As of 2023-04-10 the archiver does not automatically pick up new/modified secrets; you must restart the archiver for changes to take effect.**
