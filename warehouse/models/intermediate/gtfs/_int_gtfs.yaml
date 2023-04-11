@@ -79,7 +79,9 @@ models:
         description: |
           Boolean indicating whether there is service for this `service_id` / `date` pair.
         tests:
-          - not_null
+          - not_null:
+              # TODO: remove this once we deal with Auburn feed that has tab-delimited files
+              where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
       - name: calendar_key
         description: |
           Foreign key to dim_calendar.
