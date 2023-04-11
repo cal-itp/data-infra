@@ -12,7 +12,7 @@ Welcome to the Analytics Tools section! If you're here, you're ready to begin co
 * [How to store new data](storing-new-data), and [best practices](data-catalogs).
 * [Useful Python resources compiled by our team](knowledge-sharing)
 
-When used in combination with the [Introduction to the Warehouse](intro-warehouse), [Datasets & Tables](datasets-tables), and [How to Publish Analyses](publish-analyses) sections you should be prepared to conduct an analysis from end-to-end.
+When used in combination with the [Introduction to the Warehouse](intro-warehouse) and [How to Publish Analyses](publish-analyses) sections you should be prepared to conduct an analysis from end-to-end.
 
 &nbsp;
 :::{seealso} Missing something?
