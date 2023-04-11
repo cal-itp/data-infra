@@ -6,13 +6,13 @@ Documentation for this codebase lives at [docs.calitp.org/data-infra](https://do
 
 ## Repository Structure
 
-* `airflow` contains the local dev setup and source code for Airflow DAGs (ie, ETLs)
-* `airflow/data/agencies.yml` contains catalogs for all transit agencies in CA's GTFS data.
-* `ci` contains continious integration and deployment scripts using GH actions.
-* `docs` builds the docs site.
-* `kubernetes` contain helm charts, scripts and more for deploying apps and such on our kubernetes cluster.
-* `script` contains associated scripts (mostly python) that are ad hoc.
-* `services` contain apps that we write and deploy to kubernetes.
+* [./airflow](./airflow) contains the local dev setup and source code for Airflow DAGs (i.e. ETL)
+* [./ci](./ci) contains continuous integration and deployment scripts using GitHub actions.
+* [./docs](./docs) builds the docs site.
+* [./kubernetes](./kubernetes) contains helm charts, scripts and more for deploying apps/services (e.g. Metabase, JupyterHub) on our kubernetes cluster.
+* [./images](./images) contains images we build and deploy for use by services such as JupyterHub.
+* [./services](./services) contains apps that we write and deploy to kubernetes.
+* [./warehouse](./warehouse) contains our dbt project that builds and tests models in the BigQuery warehouse.
 
 ## Contributing
 
