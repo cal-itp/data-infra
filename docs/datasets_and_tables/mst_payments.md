@@ -17,4 +17,4 @@ The table best used for caculating ridership is `mst_ridership_materialized` tab
 
 ## DAGs Maintenance
 
-You can find further information on DAGs maintenance for MST Payments data [on this page](mst-payments-dags).
+You can find further information on DAGs maintenance for MST Payments data [on this page](dags-maintenance).
