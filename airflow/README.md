@@ -61,18 +61,4 @@ Additional reading about this setup can be found on the [Airflow Docs](https://a
 
 ## Deploying to production
 
-We have a [GitHub Action](../.github/workflows/deploy_airflow_dags.yml) defined that updates requirements and syncs the [dags](./airflow/dags) and [plugins](./airflow/plugins) directories to the bucket which Composer watches for code/data to parse. As of 2023-04-11, this bucket is `us-west2-calitp-airflow2-pr-171e4e47-bucket`. Our production Composer instance is called [calitp-airflow2-prod](https://console.cloud.google.com/composer/environments/detail/us-west2/calitp-airflow2-prod/monitoring); its configuration (including worker count, Airflow config overrides, and environment variables) is managed through the web console.
-
-Currently, the project is automatically deploy to a cloud composer managed airflow service named `calitp-airflow-prod`. Cloud Composer excepts a GCS bucket full of DAGs, so we use Github Actions to automatically sync the `dags` folder to the production bucket and update the python dependencies in `requirements.txt`. There is a service user setup using Github Actions Secrets to handle auth.
-
-Many environment variables are configured in Composer; these are maintained manually right now.
-
-Note that the following variables were set manually in cloud composer:
-
-* `AIRFLOW_VAR_EXTRACT_BUCKET` - gcs bucket for data (e.g. `gs://gtfs-data`)
-* `SENDGRID_API_KEY`
-* `SENDGRID_MAIL_FROM`
-* `POD_CLUSTER_NAME` - name of the kubernetes cluster
-* `POD_LOCATION` - location of cluster (e.g. us-west-2a)
-* `CALITP_SLACK_URL` - slack webhook api url, for posting errors to a channel.
-  This variable can be set in your .env file when developing locally.
+We have a [GitHub Action](../.github/workflows/deploy_airflow_dags.yml) defined that updates requirements and syncs the [dags](./airflow/dags) and [plugins](./airflow/plugins) directories to the bucket which Composer watches for code/data to parse. As of 2023-04-11, this bucket is `us-west2-calitp-airflow2-pr-171e4e47-bucket`. Our production Composer instance is called [calitp-airflow2-prod](https://console.cloud.google.com/composer/environments/detail/us-west2/calitp-airflow2-prod/monitoring); its configuration (including worker count, Airflow config overrides, and environment variables) is manually managed through the web console.
