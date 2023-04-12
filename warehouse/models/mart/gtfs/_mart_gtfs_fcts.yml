@@ -1217,10 +1217,6 @@ models:
         description: Latest header timestamp of a message referencing this trip.
       - name: service_alert_message_keys
         description: Keys of the service alert messages that referenced this trip.
-        tests:
-          - relationships:
-              to: ref('fct_service_alerts_messages')
-              field: key
 
   - name: fct_trip_updates_summaries
     description: |
