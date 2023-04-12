@@ -252,7 +252,7 @@ join_table AS (
         a.type AS adjustment_type,
         a.time_period_type AS adjustment_time_period_type,
         a.description AS adjustment_description,
-        a.amount AS adjustment_amount,
+        CAST(a.amount AS FLOAT64) AS adjustment_amount,
         p.product_id,
         p.product_code,
         p.product_description,
@@ -335,7 +335,7 @@ fct_payments_rides_v2 AS (
             MINUTE
         ) AS duration,
         ST_DISTANCE(on_geography, off_geography) AS distance_meters,
-        CAST(transaction_date_time_pacific AS date) AS transaction_date_pacific,
+        SAFE_CAST(transaction_date_time_pacific AS DATE) AS transaction_date_pacific,
         EXTRACT(DAYOFWEEK FROM transaction_date_time_pacific) AS day_of_week
 
     FROM join_table
