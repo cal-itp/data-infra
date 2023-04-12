@@ -15,7 +15,7 @@ server:
   resources:
     requests:
       cpu: 500m
-      memory: 3Gb
+      memory: 3Gi
 
 alertmanager:
   strategy:
