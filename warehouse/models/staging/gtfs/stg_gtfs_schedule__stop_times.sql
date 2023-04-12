@@ -22,7 +22,7 @@ stg_gtfs_schedule__stop_times AS (
         SAFE_CAST({{ trim_make_empty_string_null('drop_off_type') }} AS INTEGER) AS drop_off_type,
         SAFE_CAST({{ trim_make_empty_string_null('continuous_pickup') }} AS INTEGER) AS continuous_pickup,
         SAFE_CAST({{ trim_make_empty_string_null('continuous_drop_off') }} AS INTEGER) AS continuous_drop_off,
-        SAFE_CAST({{ trim_make_empty_string_null('shape_dist_traveled') }} AS FLOAT64) AS shape_dist_traveled,
+        SAFE_CAST({{ trim_make_empty_string_null('shape_dist_traveled') }} AS NUMERIC) AS shape_dist_traveled,
         SAFE_CAST({{ trim_make_empty_string_null('timepoint') }} AS INTEGER) AS timepoint
     FROM external_stop_times
 )

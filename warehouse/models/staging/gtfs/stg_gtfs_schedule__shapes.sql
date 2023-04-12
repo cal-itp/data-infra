@@ -13,10 +13,10 @@ stg_gtfs_schedule__shapes AS (
         ts,
         dt AS _dt,
         {{ trim_make_empty_string_null('shape_id') }} AS shape_id,
-        SAFE_CAST({{ trim_make_empty_string_null('shape_pt_lat') }} AS FLOAT64) AS shape_pt_lat,
-        SAFE_CAST({{ trim_make_empty_string_null('shape_pt_lon') }} AS FLOAT64) AS shape_pt_lon,
+        SAFE_CAST({{ trim_make_empty_string_null('shape_pt_lat') }} AS NUMERIC) AS shape_pt_lat,
+        SAFE_CAST({{ trim_make_empty_string_null('shape_pt_lon') }} AS NUMERIC) AS shape_pt_lon,
         SAFE_CAST({{ trim_make_empty_string_null('shape_pt_sequence') }} AS INT64) AS shape_pt_sequence,
-        SAFE_CAST({{ trim_make_empty_string_null('shape_dist_traveled') }} AS FLOAT64) AS shape_dist_traveled
+        SAFE_CAST({{ trim_make_empty_string_null('shape_dist_traveled') }} AS NUMERIC) AS shape_dist_traveled
     FROM external_shapes
 )
 
