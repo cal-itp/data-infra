@@ -252,7 +252,7 @@ join_table AS (
         a.type AS adjustment_type,
         a.time_period_type AS adjustment_time_period_type,
         a.description AS adjustment_description,
-        CAST(a.amount AS FLOAT64) AS adjustment_amount,
+        CAST(a.amount AS NUMERIC) AS adjustment_amount,
         p.product_id,
         p.product_code,
         p.product_description,
