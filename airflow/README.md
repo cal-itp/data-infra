@@ -1,6 +1,6 @@
 # Airflow
 
-The following folder contains the project level directory for all our apache airflow ETLs, which are deployed automatically to Google Cloud Composer from the `main` branch.
+The following folder contains the project level directory for all our Apache Airflow DAGs, which are deployed automatically to Google Cloud Composer from the `main` branch.
 
 ## Structure
 
@@ -8,7 +8,7 @@ The DAGs for this project are stored and version controlled in the `dags` folder
 
 The logs are stored locally in the `logs` folder. You should be unable to add files here but it is gitkeep'ed so that it is avaliable when testing and debugging.
 
-Finally, Airflow plugins can be found in `plugins`.
+Finally, Airflow plugins can be found in `plugins`; this includes general utility functions as well as custom operator definitions.
 
 ## Developing Locally
 

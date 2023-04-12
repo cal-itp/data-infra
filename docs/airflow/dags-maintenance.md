@@ -30,8 +30,8 @@ DAGs are listed in alphabetical order (like in the Airflow UI) and are labeled b
 | `deploy_dbt_docs`                  | Yes   | Manual job to deploy dbt docs to Metabase and Netlify                                                     |
 | `download_gtfs_schedule_v2`        | Yes   | Don't need to rerun more than once if multiple failures; scraped data is labeled by actual execution time |
 | `parse_and_validate_rt_v2`         | No    |                                                                                                           |
-| `payments_loader`                  | Yes   | This is deprecated, pending data consumers switching to v2 models. See below for maintenance.                                       |
-| `scrape_feed_aggregators`          | Yes   |                                                                                                           |
+| `payments_loader`                  | Yes   | This is deprecated, pending data consumers switching to v2 models. See below for maintenance.             |
+| `scrape_feed_aggregators`          | Yes   | Scraped data is labeled by actual execution time                                                          |
 | `transform_warehouse`              | Yes   | Outputs timestamped artifacts                                                                             |
 | `transform_warehouse_full_refresh` | Yes   | Manual job to execute a full-refresh dbt job; should be used sparingly; outputs timestamped artifacts     |
 | `unzip_and_validate_gtfs_schedule` | No    |                                                                                                           |
@@ -65,11 +65,9 @@ Subject to the considerations outlined abov, backfilling can be performed by cle
 gcloud composer environments run calitp-airflow-prod --location=us-west2 backfill -- --start_date 2021-04-18 --end_date 2021-11-03 -x --reset_dagruns -y -t "gtfs_schedule_history_load" -i gtfs_loader
 ```
 
-## MST Payments - DAGs Maintenance
+## Legacy Payments
 
-The ETL is currently a scheduled Google Data Transfer job that transfers all files to `gcs://littlepay-data-extract-prod`
-
-From there, tables are loaded into BigQuery as external tables in the `transaction_data` buclet.
+The ETL is currently a scheduled Google Data Transfer job that transfers all files to `gcs://littlepay-data-extract-prod`, and parse jobs that transfer those files into the location read by BigQuery's external tables (only keeping relevant columns).
 
 ### DAGs Overview
 

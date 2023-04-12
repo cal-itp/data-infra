@@ -55,4 +55,3 @@ In general, the dbt docs should be the main source of all documentation for ware
 | page | description | datasets |
 | ---- | ----------- | -------- |
 | [Transit Database](./transitdatabase.md) | A representation of Cal-ITP's internal knowledge about our Transit Operators in CA and various pieces of National Transit Database statistics for ease of use | `airtable.*`, `staging.transit_database__*`, `transitstacks.*` |
-| [MST Payments](./mst_payments.md) | To-do | To-do |

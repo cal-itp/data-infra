@@ -8,7 +8,7 @@ Documentation for this codebase lives at [docs.calitp.org/data-infra](https://do
 
 * [./airflow](./airflow) contains the local dev setup and source code for Airflow DAGs (i.e. ETL)
 * [./ci](./ci) contains continuous integration and deployment scripts using GitHub actions.
-* [./docs](./docs) builds the docs site.
+* [./docs](./docs) builds the [docs site](https://docs.calitp.org/data-infra).
 * [./kubernetes](./kubernetes) contains helm charts, scripts and more for deploying apps/services (e.g. Metabase, JupyterHub) on our kubernetes cluster.
 * [./images](./images) contains images we build and deploy for use by services such as JupyterHub.
 * [./services](./services) contains apps that we write and deploy to kubernetes.
