@@ -46,3 +46,6 @@ sentry:
     autopurge:
       snapRetainCount: 10
       purgeInterval: 1
+
+  kafka:
+    logRetentionHours: 120 # 5 days
