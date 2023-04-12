@@ -346,6 +346,17 @@ models:
       Specifically, it means that the associated `service_id` was active and had service
       scheduled. Dates where a `service_id` was active but not scheduled (for example,
       weekend dates within a weekday service's effective dates) are not listed in this table.
+
+      The GTFS standard allows for a trip's scheduled stop activity to occur more than 24 hours after the beginning of the
+      associated `service_date`. See https://gtfs.org/schedule/reference/#field-types for the GTFS definitions of times and dates.
+
+      Additionally, different feeds use different time zones (see: https://gtfs.org/schedule/reference/#agencytxt
+      and https://gtfs.org/schedule/reference/#stopstxt).
+
+      For this reason, this table contains multiple date and time labels associated with a given trip.
+      Please consult each individual column's definition for guidance on which field is
+      most appropriate for your use case.
+
     columns:
       - name: key
         tests:
@@ -365,7 +376,18 @@ models:
           help you assess other alternative feeds for the same services and organizations.
           Not specified (null) for feeds with no relationship to regional feeds.
       - name: service_date
-        description: Date on which this trip was active.
+        description: |
+          Agency's service date for which this trip was active.
+          See https://gtfs.org/schedule/reference/#field-types
+          for the GTFS definitions of times and dates.
+          This date is defined with respect to `feed_timezone`.
+
+          This field should be used to:
+          * Identify the service date that the agency assigns to this trip
+          * Join with other internal-to-GTFS data that is keyed by service date
+
+          This field should not be used to:
+          * Filter trip activity by date (because this does not necessarily reflect the local date on which the trip activity actually occurred)
       - name: service_id
         description: |
           Service ID from calendar or calendar_dates that determines that this trip
@@ -438,14 +460,26 @@ models:
           A count of stop events by trip
       - name: trip_first_departure_sec
         description: |
-          A trip's earliest departure, calculated in seconds of the day
+          The number of seconds after midnight on `service_day` in `feed_timezone` at
+          which this trip's first stop departure occurred.
+
+          This field is used upstream of this table to make generic service determinations
+          in tables where we don't have a specific date assigned yet (for example, within
+          stop_times.) Downstream of this table, now that specific dates are associated
+          with the trips, this field should not be used.
       - name: trip_last_arrival_sec
         description: |
-          A trip's last arrival, calculated in seconds of the day
+          The number of seconds after midnight on `service_day` in `feed_timezone` at
+          which this trip's last stop arrival occurred.
+
+          This field is used upstream of this table to make generic service determinations
+          in tables where we don't have a specific date assigned yet (for example, within
+          stop_times.) Downstream of this table, now that specific dates are associated
+          with the trips, this field should not be used.
       - name: service_hours
         description: |
           A trip's total hours of service, calculated by subtracting `trip_last_arrival_sec` from
-          `trip_first_departure_sec` and converting to hours
+          `trip_first_departure_sec` and converting to hours.
       - name: contains_warning_duplicate_stop_times_primary_key
         description: |
           Rows with `true` in this column indicate that the columns in this table that are aggregated from
@@ -464,29 +498,71 @@ models:
           I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
           in the input data. This indicates that data quality issues were present in the stop times data
           that is being summarized here, and the count of distinct `stop_id`s at the trip level may be incorrect.
-      - name: activity_date_pacific
+      - name: trip_start_timezone
         description: |
-          The GTFS standard allows for a trip's scheduled stop activity to occur more than 24 hours after the beginning of the
-          associated `service_date`. Additionally, different feeds use different time zones (see: https://gtfs.org/schedule/reference/#agencytxt;
-          even agencies whose service physically occurs across multiple time zones must pick a single
-          time zone in which to list their stop times).
-
-          This field handles both of these issues by normalizing to the Pacific Time ("America/Los_Angeles") date on which
-          the trip actually began. So if there is a trip with feed time zone "America/New_York", `service_date` of January 10,
-          and first departure scheduled for `26:30:00`, that corresponds to January 11 at 2:30am Eastern
-          which is January 10 at 11:30pm Pacific. `activity_date_pacific` will therefore be listed as January 10 for this trip.
-
-          By contrast, if there is another trip with feed time zone "America/Los_Angeles", `service_date` of January 10,
-          and first departure scheduled for `26:30:00`, then that corresponds to January 11 at 2:30am Pacific.
-          `activity_date_pacific` will therefore be listed as January 11 for this trip.
-
-          `activity_date_pacific` is recommended over `service_date` for analysis purposes to handle time zone issues.
-      - name: activity_first_departure
+          The time zone of the first stop in this trip.
+      - name: trip_end_timezone
         description: |
-          The time of day of the trip's first departure.
-      - name: activity_last_arrival
+          The time zone of the final stop in this trip.
+      - name: trip_first_departure_ts
         description: |
-          The time of day of the trip's last arrival.
+          The timestamp (non-localized, absolute) at which this trip's first departure occurred.
+
+          This field should be used to:
+          * Identify all activity that was happening at a specific instant in time
+          * Calculate durations or identify relative ordering of events
+
+          This field should not be used to:
+          * Bucket events by time of day (because this does not reflect the time zone in which the trip activity actually occurred)
+          * Filter activity by date (because this does not necessarily reflect the local date on which the trip activity actually occurred)
+      - name: trip_last_arrival_ts
+        description: |
+          The timestamp (non-localized, absolute) at which this trip's last stop arrival occurred.
+
+          This field should be used to:
+          * Identify all activity that was happening at a specific instant in time
+          * Calculate durations or identify relative ordering of events
+
+          This field should not be used to:
+          * Bucket events by time of day (because this does not reflect the time zone in which the trip activity actually occurred)
+          * Filter activity by date (because this does not necessarily reflect the local date on which the trip activity actually occurred)
+      - name: trip_start_local_date
+        description: |
+          The local (`trip_start_timezone`) date on which this trip began.
+
+          This field should be used to:
+          * Filter trip activity by date
+
+          This field should not be used to:
+          * Calculate durations or identify relative ordering of events
+          * Identify the service date that the agency assigns to this trip
+          * Join with internal-to-GTFS data that is keyed by service date
+      - name: trip_first_departure_local_datetime
+        description: |
+          The local (`trip_start_timezone`) date and time of this trip's first departure.
+
+          This field should be used to:
+          * Filter trip activity by date and time
+          * Bucket trips by time of day
+
+          This field should not be used to:
+          * Calculate durations or identify relative ordering of events
+          * Identify the service date that the agency assigns to this trip
+          * Join with internal-to-GTFS data that is keyed by service date
+
+      - name: trip_last_arrival_local_datetime
+        description: |
+          The local (`trip_end_timezone`) date and time of this trip's last arrival.
+          In general, when assigning a trip to a given day and time (for example,
+          to identify AM peak trips), we would use the `trip_first_departure_local_datetime`.
+
+          This field is provided for reference but should only be used for analysis of
+          trip **end** times in particular.
+
+          This field should not be used to:
+          * Calculate durations or identify relative ordering of events
+          * Identify the service date that the agency assigns to this trip
+          * Join with internal-to-GTFS data that is keyed by service date
       - *feed_timezone_no_tests
 
   - name: fct_daily_rt_feed_files
@@ -916,7 +992,7 @@ models:
         description: |
           100 if English language, 1 if null (null can mean no internationalization),
           0 for other languages.
-  - name: fct_daily_service_alerts
+  - name: 1ervice_alerts
     description: |
       Each row is a daily summary of a service alert.
       See https://gtfs.org/realtime/reference/#message-alert for information

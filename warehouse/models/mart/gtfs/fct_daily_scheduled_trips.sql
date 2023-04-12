@@ -81,12 +81,12 @@ gtfs_joins AS (
         TIMESTAMP_ADD(
             TIMESTAMP(service_date, service_index.feed_timezone),
             INTERVAL stop_times_grouped.trip_first_departure_sec SECOND
-            ) AS activity_first_departure_ts,
+            ) AS trip_first_departure_ts,
 
         TIMESTAMP_ADD(
             TIMESTAMP(service_date, service_index.feed_timezone),
             INTERVAL stop_times_grouped.trip_last_arrival_sec SECOND
-            ) AS activity_last_arrival_ts,
+            ) AS trip_last_arrival_ts,
 
     FROM int_gtfs_schedule__daily_scheduled_service_index AS service_index
     INNER JOIN dim_trips AS trips
@@ -142,17 +142,17 @@ fct_daily_scheduled_trips AS (
         gtfs_joins.service_hours,
         gtfs_joins.contains_warning_duplicate_stop_times_primary_key,
         gtfs_joins.contains_warning_missing_foreign_key_stop_id,
-        gtfs_joins.activity_first_departure_ts,
-        gtfs_joins.activity_last_arrival_ts,
-        DATE(activity_first_departure_ts, trip_start_timezone) AS activity_date_local_tz,
-        DATETIME(activity_first_departure_ts, trip_start_timezone) AS activity_first_departure_local_tz,
-        DATETIME(activity_last_arrival_ts, trip_start_timezone) AS activity_last_arrival_local_tz,
+        gtfs_joins.trip_first_departure_ts,
+        gtfs_joins.trip_last_arrival_ts,
+        DATE(trip_first_departure_ts, trip_start_timezone) AS trip_start_local_date,
+        DATETIME(trip_first_departure_ts, trip_start_timezone) AS trip_first_departure_local_datetime,
+        DATETIME(trip_last_arrival_ts, trip_end_timezone) AS trip_last_arrival_local_datetime,
     FROM gtfs_joins
     LEFT JOIN dim_schedule_feeds AS feeds
         ON gtfs_joins.feed_key = feeds.key
     LEFT JOIN urls_to_gtfs_datasets
         ON feeds.base64_url = urls_to_gtfs_datasets.base64_url
-        AND gtfs_joins.activity_last_arrival_ts BETWEEN urls_to_gtfs_datasets._valid_from AND urls_to_gtfs_datasets._valid_to
+        AND gtfs_joins.trip_first_departure_ts BETWEEN urls_to_gtfs_datasets._valid_from AND urls_to_gtfs_datasets._valid_to
     LEFT JOIN dim_gtfs_datasets
         ON urls_to_gtfs_datasets.gtfs_dataset_key = dim_gtfs_datasets.key
 )
