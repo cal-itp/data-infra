@@ -3,10 +3,15 @@
 sentry:
   existingSecret: sentry-secrets
   existingSecretKey: session-secret
+
   postgresql:
     global:
       postgresql:
         existingSecret: sentry-sentry-postgresql
+    resources:
+      requests:
+        memory: 3Gi
+
   user:
     create: true
     email: general+cal-itp@jarv.us
@@ -36,6 +41,17 @@ sentry:
     port: 587
     host: "smtp.postmarkapp.com"
     from: "bot@calitp.org"
+
+  sentry:
+    web:
+      resources:
+        requests:
+          memory: 1Gi
+    worker:
+      resources:
+        requests:
+          memory: 1Gi
+
   snuba:
     subscriptionConsumerEvents:
       replicas: 2
