@@ -75,6 +75,8 @@ For example, you can change the environment variables in [test](../../kubernetes
 kubectl apply -k apps/overlays/gtfs-rt-archiver-v3-test
 ```
 
+These commands will also re-deploy the archiver from scratch if needed, as long as the proper namespace exists.
+
 ### Deploying code changes
 Code changes require building and pushing a new Docker image, as well as applying `kubectl` changes to point the deployment at the new image.
 1. Make code changes and increment version in `pyproject.toml`
