@@ -64,4 +64,4 @@ sentry:
       purgeInterval: 1
 
   kafka:
-    logRetentionHours: 120 # 5 days, the default is 7
+    logRetentionHours: 72 # 3 days, the default is 7
