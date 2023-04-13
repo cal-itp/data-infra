@@ -51,8 +51,12 @@ sentry:
       resources:
         requests:
           memory: 1Gi
+    ingestConsumer:
+      replicas: 2
 
   snuba:
+    subscriptionConsumerTransactions:
+      replicas: 3
     subscriptionConsumerEvents:
       replicas: 2
 
@@ -65,3 +69,4 @@ sentry:
 
   kafka:
     logRetentionHours: 72 # 3 days, the default is 7
+    numPartitions: 12
