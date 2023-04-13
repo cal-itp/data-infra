@@ -21,6 +21,16 @@ jobs:
           export_default_credentials: true
           service_account_key: ${{ secrets.GCP_SA_KEY }}
 
+      # Only update requirements if they have changed; Composer throws an error if there are no changes to apply
+      - uses: tj-actions/changed-files@v35
+        if: github.event.pull_request.base.ref == 'main'
+        id: changed-requirements
+        with:
+          files: 'airflow/requirements.txt'
+      - id: install-python-dependencies
+        if: steps.changed-requirements.outputs.any_changed == 'true'
+        run: gcloud composer environments update calitp-airflow2-prod --update-pypi-packages-from-file airflow/requirements.txt --location us-west2 --project cal-itp-data-infra
+
       - name: Push Airflow code to GCS
         run: |
           gsutil -m rsync -d -c -r airflow/dags gs://$AIRFLOW_BUCKET/dags

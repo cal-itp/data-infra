@@ -36,19 +36,11 @@ parts:
       - file: warehouse/overview
         sections:
         - file: warehouse/what_is_agency
-        - file: warehouse/table_naming
         - file: warehouse/adding_oneoff_data
-        - file: warehouse/metrics
         - file: warehouse/sql_snippets
       - file: datasets_and_tables/overview
         sections:
-        - file: datasets_and_tables/navigating_dbt_docs
-        - file: datasets_and_tables/views
-        - file: datasets_and_tables/amplitude
-        - file: datasets_and_tables/gtfs_schedule
-        - file: datasets_and_tables/gtfs_realtime
         - file: datasets_and_tables/transitdatabase
-        - file: datasets_and_tables/mst_payments
       - file: analytics_examples/overview
         sections:
         - file: analytics_examples/warehouse_tutorial
@@ -62,12 +54,7 @@ parts:
       - file: architecture/architecture_overview
       - file: airflow/overview
         sections:
-        - file: airflow/local-setup
-        - file: airflow/static-schedule-pipeline
-        - file: airflow/production-maintenance
         - file: airflow/dags-maintenance
-        - file: airflow/agencies
-        - file: airflow/views
       - file: kubernetes/README
         sections:
         - file: kubernetes/JupyterHub
