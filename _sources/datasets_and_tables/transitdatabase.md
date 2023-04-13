@@ -24,15 +24,6 @@ For the sake of this documentation, we've noted the [`Primary Field`](https://su
 
 AirTable does not currently have an effective mechanism to programmaticaly download your data schema (they have currently paused issuing keys to their metadata API). Rather than manually type-out and export each individual field definition from AirTable, please see the [AirTable-based documentation of fields](https://airtable.com/appPnJWrQ7ui4UmIl/api/docs) which is produced as a part of their API documentation. Note that you must be authenticated with access to the base to reach this link.
 
-## Related Data
-
-The data in the Airtable Transit Database is distinct but related to the following data:
-
-- [GTFS Schedule Quality Assessment Airflow pipelines](/airflow/static-schedule-pipeline) results in the [warehouse](/warehouse/overview)
-- [GTFS Schedules Datasets](gtfs_schedule)
-
-Currently neither of the above processes or datasets either rely on or contribute back to the Airflow Transit Database – this is a work in progress.  Rather, they rely on the list of transit datasets in the file [`agencies.yml`](https://github.com/cal-itp/data-infra/tree/main/airflow/data/agencies.yml) to dictate what datasets to download and assess.
-
 ## California Transit
 
 | **Name**<br>*Key(s)*| **Description** |
@@ -137,4 +128,4 @@ Navigate to the record for ths dataset in `California Transit.gtfs datasets` and
 
 ## DAGs Maintenance
 
-You can find further information on DAGs maintenance for Transit Database data [on this page](transit-database-dags).
+You can find further information on DAGs maintenance for Transit Database data [on this page](dags-maintenance).

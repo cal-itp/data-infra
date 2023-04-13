@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DAGs Maintenance &#8212; Cal-ITP Data Services</title>
+    <title>Production DAGs Maintenance &#8212; Cal-ITP Data Services</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -57,8 +57,8 @@
     <script>mermaid.initialize({startOnLoad:true});</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Agency GTFS Feeds" href="agencies.html" />
-    <link rel="prev" title="Production Maintenance" href="production-maintenance.html" />
+    <link rel="next" title="Kubernetes" href="../kubernetes/README.html" />
+    <link rel="prev" title="Airflow" href="overview.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -279,18 +279,8 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/table_naming.html">
-     Table Naming
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="../warehouse/adding_oneoff_data.html">
      Adding Data to the Warehouse
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../warehouse/metrics.html">
-     Metric Views
     </a>
    </li>
    <li class="toctree-l2">
@@ -300,59 +290,17 @@
    </li>
   </ul>
  </li>
- <li class="toctree-l1 has-children">
+ <li class="toctree-l1">
   <a class="reference internal" href="../datasets_and_tables/overview.html">
-   Datasets &amp; Tables
+   Navigating the dbt Docs
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
-  <label for="toctree-checkbox-5">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../datasets_and_tables/navigating_dbt_docs.html">
-     Navigating the dbt Docs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../datasets_and_tables/views.html">
-     Views
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../datasets_and_tables/amplitude.html">
-     Amplitude
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../datasets_and_tables/gtfs_schedule.html">
-     GTFS Schedule
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../datasets_and_tables/gtfs_realtime.html">
-     GTFS Realtime
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../datasets_and_tables/transitdatabase.html">
-     Transit Database
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../datasets_and_tables/mst_payments.html">
-     MST Payments (WIP)
-    </a>
-   </li>
-  </ul>
  </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../analytics_examples/overview.html">
    Analysis Tutorials
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
-  <label for="toctree-checkbox-6">
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -378,8 +326,8 @@
   <a class="reference internal" href="../publishing/overview.html">
    Where can I publish data?
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
-  <label for="toctree-checkbox-7">
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -447,40 +395,15 @@
   <a class="reference internal" href="overview.html">
    Airflow
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
-  <label for="toctree-checkbox-8">
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
    <i class="fas fa-chevron-down">
    </i>
   </label>
   <ul class="current">
-   <li class="toctree-l2">
-    <a class="reference internal" href="local-setup.html">
-     Local Airflow
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="static-schedule-pipeline.html">
-     Static Schedule Pipeline
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="production-maintenance.html">
-     Production Maintenance
-    </a>
-   </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     DAGs Maintenance
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="agencies.html">
-     Agency GTFS Feeds
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="views.html">
-     Creating New Tables (Views)
+     Production DAGs Maintenance
     </a>
    </li>
   </ul>
@@ -489,8 +412,8 @@
   <a class="reference internal" href="../kubernetes/README.html">
    Kubernetes
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
-  <label for="toctree-checkbox-9">
+  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <label for="toctree-checkbox-8">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -516,8 +439,8 @@
   <a class="reference internal" href="../ci/README.html">
    CI
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
-  <label for="toctree-checkbox-10">
+  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -588,8 +511,8 @@
   <a class="reference internal" href="../services/overview.html">
    Services
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
-  <label for="toctree-checkbox-11">
+  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+  <label for="toctree-checkbox-10">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -617,8 +540,8 @@
   <a class="reference internal" href="../contribute/overview.html">
    Getting Started
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/>
-  <label for="toctree-checkbox-12">
+  <input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
+  <label for="toctree-checkbox-11">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -730,90 +653,39 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#gtfs-schedule-dags-maintenance">
-   GTFS Schedule - DAGs Maintenance
+  <a class="reference internal nav-link" href="#re-running-or-clearing-dags">
+   Re-running or clearing DAGs
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#gtfs-realtime-parsing-and-validation">
+     GTFS Realtime parsing and validation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deprecated-dags">
+     Deprecated DAGs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#task-level-considerations">
+   Task-level considerations
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#backfilling-from-the-command-line">
+   Backfilling from the command line
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#legacy-payments">
+   Legacy Payments
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#dags-overview">
-     DAGs Overview
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#common-issues">
-     Common Issues
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#backfilling">
-     Backfilling
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#gtfs-realtime-dags-maintenance">
-   GTFS Realtime - DAGs Maintenance
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id1">
-     DAGs Overview
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id2">
-     Backfilling
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#mst-payments-dags-maintenance">
-   MST Payments - DAGs Maintenance
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id3">
-     DAGs Overview
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#adding-new-tables-in-payments-loader">
-     Adding New Tables in payments_loader
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#adding-a-new-table-to-payments-views">
-     Adding a New Table to payments_views
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id4">
-     Backfilling
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#transit-database-dags-maintenance">
-   Transit Database - DAGs Maintenance
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id5">
-     DAGs Overview
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#views-dags-maintenance">
-   Views - DAGs Maintenance
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id6">
      DAGs Overview
     </a>
    </li>
@@ -829,7 +701,7 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>DAGs Maintenance</h1>
+                <h1>Production DAGs Maintenance</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -840,90 +712,39 @@
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#gtfs-schedule-dags-maintenance">
-   GTFS Schedule - DAGs Maintenance
+  <a class="reference internal nav-link" href="#re-running-or-clearing-dags">
+   Re-running or clearing DAGs
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#gtfs-realtime-parsing-and-validation">
+     GTFS Realtime parsing and validation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deprecated-dags">
+     Deprecated DAGs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#task-level-considerations">
+   Task-level considerations
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#backfilling-from-the-command-line">
+   Backfilling from the command line
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#legacy-payments">
+   Legacy Payments
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#dags-overview">
-     DAGs Overview
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#common-issues">
-     Common Issues
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#backfilling">
-     Backfilling
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#gtfs-realtime-dags-maintenance">
-   GTFS Realtime - DAGs Maintenance
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id1">
-     DAGs Overview
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id2">
-     Backfilling
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#mst-payments-dags-maintenance">
-   MST Payments - DAGs Maintenance
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id3">
-     DAGs Overview
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#adding-new-tables-in-payments-loader">
-     Adding New Tables in payments_loader
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#adding-a-new-table-to-payments-views">
-     Adding a New Table to payments_views
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id4">
-     Backfilling
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#transit-database-dags-maintenance">
-   Transit Database - DAGs Maintenance
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id5">
-     DAGs Overview
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#views-dags-maintenance">
-   Views - DAGs Maintenance
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id6">
      DAGs Overview
     </a>
    </li>
@@ -938,51 +759,124 @@
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="dags-maintenance">
-<h1>DAGs Maintenance<a class="headerlink" href="#dags-maintenance" title="Permalink to this headline">¶</a></h1>
-<p>Use this page to find information on maintenance of the DAGs that support our data pipelines.</p>
-<ol class="simple">
-<li><p><a class="reference internal" href="#gtfs-schedule-dags"><span class="std std-ref">GTFS Schedule DAGs</span></a></p></li>
-<li><p><a class="reference internal" href="#gtfs-realtime-dags"><span class="std std-ref">GTFS Realtime DAGs</span></a></p></li>
-<li><p><a class="reference internal" href="#mst-payments-dags"><span class="std std-ref">MST Payments DAGs</span></a></p></li>
-<li><p><a class="reference internal" href="#transit-database-dags"><span class="std std-ref">Transit Database DAGs</span></a></p></li>
-<li><p><a class="reference internal" href="#views-dags"><span class="std std-ref">Views DAGs</span></a></p></li>
-</ol>
-<div class="section" id="gtfs-schedule-dags-maintenance">
-<span id="gtfs-schedule-dags"></span><h2>GTFS Schedule - DAGs Maintenance<a class="headerlink" href="#gtfs-schedule-dags-maintenance" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="dags-overview">
-<h3>DAGs Overview<a class="headerlink" href="#dags-overview" title="Permalink to this headline">¶</a></h3>
-</div>
-<div class="section" id="common-issues">
-<h3>Common Issues<a class="headerlink" href="#common-issues" title="Permalink to this headline">¶</a></h3>
-</div>
-<div class="section" id="backfilling">
-<h3>Backfilling<a class="headerlink" href="#backfilling" title="Permalink to this headline">¶</a></h3>
-</div>
-</div>
-<div class="section" id="gtfs-realtime-dags-maintenance">
-<span id="gtfs-realtime-dags"></span><h2>GTFS Realtime - DAGs Maintenance<a class="headerlink" href="#gtfs-realtime-dags-maintenance" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id1">
-<h3>DAGs Overview<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+  <div class="tex2jax_ignore mathjax_ignore section" id="production-dags-maintenance">
+<span id="dags-maintenance"></span><h1>Production DAGs Maintenance<a class="headerlink" href="#production-dags-maintenance" title="Permalink to this headline">¶</a></h1>
+<p><em>Last edited: May 5, 2022</em></p>
+<div class="section" id="re-running-or-clearing-dags">
+<h2>Re-running or clearing DAGs<a class="headerlink" href="#re-running-or-clearing-dags" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes DAGs will fail in production. Below are considerations to take into account when re-running or clearing DAGs to address failures.</p>
+<p>There are roughly two categories of Airflow DAGs in our system.</p>
+<ul class="simple">
+<li><p>“Now” DAGs - mostly for executing code on a schedule (often scraping current data, or a fancy cron job), NOT orchestrating distributed processing of existing data</p>
+<ul>
+<li><p><strong>When these DAGs fail, and you’d like to re-run them, you should execute a new manual run rather than clearing a historical run.</strong></p></li>
+<li><p>Only the actual execution time matters if relevant (usually for timestamping data or artifacts)</p></li>
+<li><p>Generally safe but not useful to execute multiple times simultaneously</p></li>
+<li><p>There is no concept of backfilling via these DAGs; they may output data/artifacts that require “backfilling” (i.e. modifying existing data) via a script or notebook</p></li>
+</ul>
+</li>
+<li><p>“Data interval processing” DAGs - orchestrates processing of previously-captured data, or data than can be retrieved in a timestamped manner (e.g. Amplitude)</p>
+<ul>
+<li><p><strong>When these DAGs fail, you should clear the historical task instances that failed.</strong> (Generally, these DAGs are expected to be 100% successful.)</p></li>
+<li><p>Relies heavily on the <code class="docutils literal notranslate"><span class="pre">execution_date</span></code> or <code class="docutils literal notranslate"><span class="pre">data_interval_start/end</span></code> concepts</p></li>
+<li><p>May not be entirely idempotent though we try; for example, validating RT data depends on Schedule data which may be late-arriving</p></li>
+<li><p>Backfilling can generally be performed by clearing past task instances and letting them re-run</p></li>
+<li><p>We try to avoid <code class="docutils literal notranslate"><span class="pre">depends_on_past</span></code> DAGs, so parallelization is possible during backfills</p></li>
+</ul>
+</li>
+</ul>
+<p>DAGs are listed in alphabetical order (like in the Airflow UI) and are labeled by</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>DAG</p></th>
+<th class="head"><p>“Now”</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">airtable_loader_v2</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>Don’t need to rerun more than once if multiple failures; scraped data is labeled by actual execution time</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">amplitude_benefits</span></code></p></td>
+<td><p>No</p></td>
+<td><p>This will be replaced soon by an Amplitude-to-GCS export.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">create_external_tables</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>Generally only fails due to GCP issues or definition problems; individual tasks can be cleared once fixed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">deploy_dbt_docs</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>Manual job to deploy dbt docs to Metabase and Netlify</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">download_gtfs_schedule_v2</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>Don’t need to rerun more than once if multiple failures; scraped data is labeled by actual execution time</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">parse_and_validate_rt_v2</span></code></p></td>
+<td><p>No</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">payments_loader</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>This is deprecated, pending data consumers switching to v2 models. See below for maintenance.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">scrape_feed_aggregators</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>Scraped data is labeled by actual execution time</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">transform_warehouse</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>Outputs timestamped artifacts</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">transform_warehouse_full_refresh</span></code></p></td>
+<td><p>Yes</p></td>
+<td><p>Manual job to execute a full-refresh dbt job; should be used sparingly; outputs timestamped artifacts</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">unzip_and_validate_gtfs_schedule</span></code></p></td>
+<td><p>No</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="gtfs-realtime-parsing-and-validation">
+<h3>GTFS Realtime parsing and validation<a class="headerlink" href="#gtfs-realtime-parsing-and-validation" title="Permalink to this headline">¶</a></h3>
 <p>The primary DAG relevant to GTFS Realtime data is <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/airflow/dags/parse_and_validate_rt_v2">parse_and_validate_rt_v2</a>.
 This DAG parses RT files into JSONL and writes them to GCS for querying via BigQuery external tables.
 It also executes the <a class="reference external" href="https://github.com/MobilityData/gtfs-realtime-validator">realtime validator</a>
 against the RT files and writes the validation notices as JSONL to GCS for querying.</p>
 <p>The raw proto files themselves are fetched via <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archiver-v3">the archiver</a>.</p>
 </div>
-<div class="section" id="id2">
-<h3>Backfilling<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<p>This DAG does not have any tasks that <code class="docutils literal notranslate"><span class="pre">depends_on_past</span></code>, so you should be able to
-clear and re-run tasks as needed.</p>
+<div class="section" id="deprecated-dags">
+<h3>Deprecated DAGs<a class="headerlink" href="#deprecated-dags" title="Permalink to this headline">¶</a></h3>
+<p>The following DAGs are still listed in the Airflow UI even though they are <strong>deprecated or indefinitely paused</strong>. They never need to be re-run.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">check_data_freshness</span></code></p></li>
+</ul>
 </div>
 </div>
-<div class="section" id="mst-payments-dags-maintenance">
-<span id="mst-payments-dags"></span><h2>MST Payments - DAGs Maintenance<a class="headerlink" href="#mst-payments-dags-maintenance" title="Permalink to this headline">¶</a></h2>
-<p>The ETL is currently a scheduled Google Data Transfer job that transfers all files to <code class="docutils literal notranslate"><span class="pre">gcs://littlepay-data-extract-prod</span></code></p>
-<p>From there, tables are loaded into BigQuery as external tables in the <code class="docutils literal notranslate"><span class="pre">transaction_data</span></code> buclet.</p>
-<div class="section" id="id3">
-<h3>DAGs Overview<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
-<p>The payments data is loaded and transformed in the payments_loader and payments_views dags.</p>
+<div class="section" id="task-level-considerations">
+<h2>Task-level considerations<a class="headerlink" href="#task-level-considerations" title="Permalink to this headline">¶</a></h2>
+<p>Some tasks have unique considerations, beyond the requirements of their overall DAG.</p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">PodOperators</span></code></strong>: When restarting a failed <code class="docutils literal notranslate"><span class="pre">PodOperator</span></code> run, check the logs before restarting. If the logs show any indication that the prior run’s pod was not killed (for example, if the logs cut off abruptly without showing an explicit task failure), you should check that the pod associated with the failed run task has in fact been killed before clearing or restarting the Airflow task. If you don’t know how to check a pod status, please ask in the <code class="docutils literal notranslate"><span class="pre">#data-infra</span></code> channel on Slack before proceeding.</p></li>
+</ul>
+</div>
+<div class="section" id="backfilling-from-the-command-line">
+<h2>Backfilling from the command line<a class="headerlink" href="#backfilling-from-the-command-line" title="Permalink to this headline">¶</a></h2>
+<p>From time-to-time some DAGs may need to be re-ran in order to populate new data.</p>
+<p>Subject to the considerations outlined abov, backfilling can be performed by clearing historical runs in the web interface, or via the CLI:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>gcloud<span class="w"> </span>composer<span class="w"> </span>environments<span class="w"> </span>run<span class="w"> </span>calitp-airflow-prod<span class="w"> </span>--location<span class="o">=</span>us-west2<span class="w"> </span>backfill<span class="w"> </span>--<span class="w"> </span>--start_date<span class="w"> </span><span class="m">2021</span>-04-18<span class="w"> </span>--end_date<span class="w"> </span><span class="m">2021</span>-11-03<span class="w"> </span>-x<span class="w"> </span>--reset_dagruns<span class="w"> </span>-y<span class="w"> </span>-t<span class="w"> </span><span class="s2">&quot;gtfs_schedule_history_load&quot;</span><span class="w"> </span>-i<span class="w"> </span>gtfs_loader
+</pre></div>
+</div>
+</div>
+<div class="section" id="legacy-payments">
+<h2>Legacy Payments<a class="headerlink" href="#legacy-payments" title="Permalink to this headline">¶</a></h2>
+<p>The ETL is currently a scheduled Google Data Transfer job that transfers all files to <code class="docutils literal notranslate"><span class="pre">gcs://littlepay-data-extract-prod</span></code>, and parse jobs that transfer those files into the location read by BigQuery’s external tables (only keeping relevant columns).</p>
+<div class="section" id="dags-overview">
+<h3>DAGs Overview<a class="headerlink" href="#dags-overview" title="Permalink to this headline">¶</a></h3>
+<p>The payments data is loaded and transformed in the payments_loader DAG.</p>
 <p>The payments_loader dag has three kinds of tasks:</p>
 <ul class="simple">
 <li><p>ExternalTable operator tasks (e.g. <code class="docutils literal notranslate"><span class="pre">customer_funding_source</span></code>). These define the underlying data.</p></li>
@@ -990,49 +884,6 @@ clear and re-run tasks as needed.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">preprocessing_columns</span></code> - move data from <code class="docutils literal notranslate"><span class="pre">gs://littlepay-data-extract-prod</span></code> to <code class="docutils literal notranslate"><span class="pre">gs://gtfs-data</span></code>,
 then process to keep only columns defined in external tables.</p></li>
 </ul>
-<p>The payments_views is made of SQL queries that transform the loaded tables above.</p>
-</div>
-<div class="section" id="adding-new-tables-in-payments-loader">
-<h3>Adding New Tables in payments_loader<a class="headerlink" href="#adding-new-tables-in-payments-loader" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li><p>Copy the <code class="docutils literal notranslate"><span class="pre">customer_funding_source</span></code> task. The new task name should match the table it creates.</p></li>
-<li><p>Alter <code class="docutils literal notranslate"><span class="pre">destination_project_dataset_table</span></code> and <code class="docutils literal notranslate"><span class="pre">source_objects</span></code> to match the new table name.</p></li>
-<li><p>Edit <code class="docutils literal notranslate"><span class="pre">schema_fields</span></code> to be the columns in the new table. If you are unsure of a column type,
-specify it as “STRING”.</p>
-<ul>
-<li><p>Keep a <code class="docutils literal notranslate"><span class="pre">calitp_extracted_at</span></code> column at the end of the table. This column contains the execution date of the load task, and is added automatically by the <code class="docutils literal notranslate"><span class="pre">preprocess_columns</span></code> task.</p></li>
-</ul>
-</li>
-<li><p>In the <code class="docutils literal notranslate"><span class="pre">calitp_included_payments_data</span></code> task,</p>
-<ul>
-<li><p>add a row for this new table.</p></li>
-<li><p>add a depedency in yaml header to this new table.</p></li>
-</ul>
-</li>
-<li><p>In the <code class="docutils literal notranslate"><span class="pre">docs/datasets/mst_payments.md</span></code> file, add an entry into the <code class="docutils literal notranslate"><span class="pre">Tables</span></code> table describing the new data set.</p></li>
-</ul>
-</div>
-<div class="section" id="adding-a-new-table-to-payments-views">
-<h3>Adding a New Table to payments_views<a class="headerlink" href="#adding-a-new-table-to-payments-views" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li><p>Ensure your task is given the same name as the table it creates.</p></li>
-<li><p>Be sure to include an <code class="docutils literal notranslate"><span class="pre">external_dependency</span></code> on payments_loader (see other views in payments_views).</p></li>
-</ul>
-</div>
-<div class="section" id="id4">
-<h3>Backfilling<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
-</div>
-</div>
-<div class="section" id="transit-database-dags-maintenance">
-<span id="transit-database-dags"></span><h2>Transit Database - DAGs Maintenance<a class="headerlink" href="#transit-database-dags-maintenance" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id5">
-<h3>DAGs Overview<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
-</div>
-</div>
-<div class="section" id="views-dags-maintenance">
-<span id="views-dags"></span><h2>Views - DAGs Maintenance<a class="headerlink" href="#views-dags-maintenance" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id6">
-<h3>DAGs Overview<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
 </div>
@@ -1062,17 +913,17 @@ specify it as “STRING”.</p>
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="production-maintenance.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="overview.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Production Maintenance</p>
+            <p class="prev-next-title">Airflow</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="agencies.html" title="next page">
+    <a class='right-next' id="next-link" href="../kubernetes/README.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Agency GTFS Feeds</p>
+        <p class="prev-next-title">Kubernetes</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
