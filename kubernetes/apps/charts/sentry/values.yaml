@@ -3,10 +3,15 @@
 sentry:
   existingSecret: sentry-secrets
   existingSecretKey: session-secret
+
   postgresql:
     global:
       postgresql:
         existingSecret: sentry-sentry-postgresql
+    resources:
+      requests:
+        memory: 3Gi
+
   user:
     create: true
     email: general+cal-itp@jarv.us
@@ -36,7 +41,24 @@ sentry:
     port: 587
     host: "smtp.postmarkapp.com"
     from: "bot@calitp.org"
+
+  sentry:
+    web:
+      resources:
+        requests:
+          memory: 1Gi
+    worker:
+      resources:
+        requests:
+          memory: 1Gi
+    ingestConsumer:
+      replicas: 2
+
   snuba:
+    postProcessForwardTransactions:
+      replicas: 2
+    subscriptionConsumerTransactions:
+      replicas: 3
     subscriptionConsumerEvents:
       replicas: 2
 
@@ -46,3 +68,7 @@ sentry:
     autopurge:
       snapRetainCount: 10
       purgeInterval: 1
+
+  kafka:
+    logRetentionHours: 72 # 3 days, the default is 7
+    numPartitions: 12
