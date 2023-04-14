@@ -22,6 +22,12 @@ schema_fields:
     type: STRING
   - name: transaction_amount
     type: STRING
+  - name: retrieval_reference_number
+    type: STRING
+  - name: littlepay_reference_number
+    type: STRING
+  - name: external_reference_number
+    type: STRING
   - name: settlement_requested_date_time_utc
     type: STRING
   - name: acquirer
