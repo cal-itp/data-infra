@@ -15,7 +15,9 @@ Additional sections may be added to this runbook over time.
 ## Kafka (also failing consumers)
 The [Kafka](https://kafka.apache.org/) pods themselves can also have unbound disk space usage if they are not properly configured to drop old data quickly enough. This can cascade into a variety of issues, as well as [snuba](https://getsentry.github.io/snuba/architecture/overview.html) workers being unable to actually pull events from Kafka, leading to a scenario that cannot recover without intervention. This list of steps is for resetting one particular consumer group for one particular topic, so it may need to be performed multiple times.
 
-0. As a temporary measure, you can increase the capacity of the persistent volume of the pod having issues. You can either edit the persistent volume YAML directly, or `helm upgrade` after setting a larger volume size in `values.yaml`. Either way, you will likely have to restart the pod to let the change take effect.
+> The sensitive values referenced here are stored in Vaultwarden; the Helm chart does not yet support using only Secrets.
+
+0. As a temporary measure, you can increase the capacity of the persistent volume of the pod having issues. You can either edit the persistent volume YAML directly, or `helm upgrade sentry apps/charts/sentry -n sentry -f apps/values/sentry_sensitive.yaml -f apps/charts/sentry/values.yaml --debug` after setting a larger volume size in `values.yaml`. Either way, you will likely have to restart the pod to let the change take effect.
 1. Check if there are any failing consumer pods in [Workloads](https://console.cloud.google.com/kubernetes/workload?project=cal-itp-data-infra); you can use the logs to identify the topic and potentially the consumer group.
 2. Check the consumer groups and/or topics, and reset the offsets to the latest as appropriate. This [GitHub issue](https://github.com/getsentry/self-hosted/issues/478#issuecomment-666254392) contains very helpful information. For example, to reset the `snuba-events-subscriptions-consumers` consumer that is failing to handle the `snuba-commit-log` topic:
    * `kubectl exec --stdin --tty sentry-kafka-0 -n sentry -- bash`
