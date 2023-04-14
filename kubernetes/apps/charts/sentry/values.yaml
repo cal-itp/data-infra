@@ -55,6 +55,8 @@ sentry:
       replicas: 2
 
   snuba:
+    postProcessForwardTransactions:
+      replicas: 2
     subscriptionConsumerTransactions:
       replicas: 3
     subscriptionConsumerEvents:
