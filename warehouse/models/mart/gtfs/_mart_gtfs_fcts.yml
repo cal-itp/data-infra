@@ -526,9 +526,11 @@ models:
           This field should not be used to:
           * Bucket events by time of day (because this does not reflect the time zone in which the trip activity actually occurred)
           * Filter activity by date (because this does not necessarily reflect the local date on which the trip activity actually occurred)
-      - name: trip_start_local_date
+      - name: trip_start_date_pacific
         description: |
-          The local (`trip_start_timezone`) date on which this trip began.
+          The "America/Los_Angeles" time zone date on which this trip began.
+          There are some feeds with activity that does not occur within this time zone,
+          but we assume that for analysis purposes it is preferable to standardize to California's time zone.
 
           This field should be used to:
           * Filter trip activity by date
@@ -537,6 +539,37 @@ models:
           * Calculate durations or identify relative ordering of events
           * Identify the service date that the agency assigns to this trip
           * Join with internal-to-GTFS data that is keyed by service date
+
+      - name: trip_first_departure_datetime_pacific
+        description: |
+          The "America/Los_Angeles" time zone date and time of this trip's first departure.
+          There are some feeds with activity that does not occur within this time zone,
+          but we assume that for analysis purposes it is preferable to standardize to California's time zone.
+
+          This field should be used to:
+          * Filter trip activity by date and time
+          * Bucket trips by time of day
+
+          This field should not be used to:
+          * Calculate durations or identify relative ordering of events
+          * Identify the service date that the agency assigns to this trip
+          * Join with internal-to-GTFS data that is keyed by service date
+
+      - name: trip_last_arrival_datetime_pacific
+        description: |
+          The "America/Los_Angeles" time zone date and time of this trip's last arrival.
+          There are some feeds with activity that does not occur within this time zone,
+          but we assume that for analysis purposes it is preferable to standardize to California's time zone.
+
+          This field should not be used to:
+          * Calculate durations or identify relative ordering of events
+          * Identify the service date that the agency assigns to this trip
+          * Join with internal-to-GTFS data that is keyed by service date
+      - name: trip_start_date_local_tz
+        description: |
+          The local (`trip_start_timezone`) date on which this trip began.
+          If you are specifically concerned with activity outside of California,
+          it may be preferable to use this rather than rip_start_date_pacific.
       - name: trip_first_departure_local_datetime
         description: |
           The local (`trip_start_timezone`) date and time of this trip's first departure.

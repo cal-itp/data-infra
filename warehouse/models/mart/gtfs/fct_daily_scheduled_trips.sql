@@ -144,9 +144,12 @@ fct_daily_scheduled_trips AS (
         gtfs_joins.contains_warning_missing_foreign_key_stop_id,
         gtfs_joins.trip_first_departure_ts,
         gtfs_joins.trip_last_arrival_ts,
-        DATE(trip_first_departure_ts, trip_start_timezone) AS trip_start_local_date,
-        DATETIME(trip_first_departure_ts, trip_start_timezone) AS trip_first_departure_local_datetime,
-        DATETIME(trip_last_arrival_ts, trip_end_timezone) AS trip_last_arrival_local_datetime,
+        DATE(trip_first_departure_ts, "America/Los_Angeles") AS trip_start_date_pacific,
+        DATETIME(trip_first_departure_ts, "America/Los_Angeles") AS trip_first_departure_datetime_pacific,
+        DATETIME(trip_last_arrival_ts, "America/Los_Angeles") AS trip_last_arrival_datetime_pacific,
+        DATE(trip_first_departure_ts, trip_start_timezone) AS trip_start_date_local_tz,
+        DATETIME(trip_first_departure_ts, trip_start_timezone) AS trip_first_departure_datetime_local_tz,
+        DATETIME(trip_last_arrival_ts, trip_end_timezone) AS trip_last_arrival_datetime_local_tz,
     FROM gtfs_joins
     LEFT JOIN dim_schedule_feeds AS feeds
         ON gtfs_joins.feed_key = feeds.key
