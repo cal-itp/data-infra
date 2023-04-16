@@ -24,6 +24,10 @@ schema_fields:
      type: STRING  # ISO 4217 Numeric Code
    - name: retrieval_reference_number
      type: STRING
+   - name: littlepay_reference_number
+     type: STRING
+   - name: external_reference_number
+     type: STRING
    - name: response_code
      type: STRING
    - name: status

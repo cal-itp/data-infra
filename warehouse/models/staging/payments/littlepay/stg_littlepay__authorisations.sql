@@ -11,6 +11,8 @@ stg_littlepay__authorisations AS (
         {{ safe_cast('transaction_amount', type_numeric()) }} AS transaction_amount,
         {{ safe_cast('currency_code', type_int()) }} AS currency_code,
         retrieval_reference_number,
+        littlepay_reference_number,
+        external_reference_number,
         response_code,
         status,
         {{ safe_cast('authorisation_date_time_utc', type_timestamp()) }} AS authorisation_date_time_utc,

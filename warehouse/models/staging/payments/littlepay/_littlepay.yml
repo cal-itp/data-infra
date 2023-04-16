@@ -110,6 +110,8 @@ models:
       - name: currency_code
         description: The ISO 4217 numeric currency code for the amount to authorise
       - name: retrieval_reference_number
+      - name: littlepay_reference_number
+      - name: external_reference_number
       - name: response_code
         description: Response code - varies based on acquirer and scheme. Generally `00` if successful.
       - name: status
