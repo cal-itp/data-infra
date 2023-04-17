@@ -17,7 +17,7 @@ remove_date_special_characters AS (
     FROM {{ ref('stg_elavon__transactions') }}
 ),
 
-add_date_leading_zero AS (
+add_date_leading_zeros AS (
     SELECT
 
         * EXCEPT (payment_date, transaction_date, settlement_date),
@@ -52,7 +52,7 @@ fct_elavon__transactions AS (
         PARSE_DATE('%m%d%Y',  transaction_date) AS transaction_date,
         PARSE_DATE('%m%d%Y',  settlement_date) AS settlement_date
 
-    FROM add_date_leading_zero
+    FROM add_date_leading_zeros
 )
 
 SELECT
