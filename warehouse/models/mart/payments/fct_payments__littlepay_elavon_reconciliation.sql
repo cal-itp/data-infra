@@ -55,9 +55,9 @@ fct_payments__littlepay_elavon_reconciliation AS (
     FROM stg_littlepay__settlements AS t1
     INNER JOIN fct_elavon__transactions AS t2
         ON t1.retrieval_reference_number = t2.PURCH_ID
-    WHERE t2.batch_type = 'D'
-        AND t2.customer_name = 'MST TAP TO RIDE'
-        AND t1.participant_id = 'mst'
+    --WHERE t2.batch_type = 'D'
+        --AND t2.customer_name = 'MST TAP TO RIDE'
+        --AND t1.participant_id = 'mst'
 )
 
 SELECT * FROM fct_payments__littlepay_elavon_reconciliation
