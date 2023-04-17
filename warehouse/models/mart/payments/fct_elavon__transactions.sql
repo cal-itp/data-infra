@@ -1,8 +1,7 @@
 {{ config(materialized='table') }}
 
 WITH stg_elavon__transactions AS (
-    SELECT *
-    FROM {{ ref('stg_elavon__transactions') }}
+    SELECT * FROM {{ ref('stg_elavon__transactions') }}
 ),
 
 remove_special_characters AS (
@@ -10,15 +9,15 @@ remove_special_characters AS (
 
         * EXCEPT (fund_amt, batch_amt, amount, surchg_amount, convnce_amt, payment_date, transaction_date, settlement_date),
 
-        CAST(REGEXP_REPLACE(fund_amt, r'\$|,', '') as NUMERIC) fund_amt,
-        CAST(REGEXP_REPLACE(batch_amt, r'\$|,', '') as NUMERIC) batch_amt,
-        CAST(REGEXP_REPLACE(amount, r'\$|,', '') as NUMERIC) amount,
-        CAST(REGEXP_REPLACE(surchg_amount, r'\$|,', '') as NUMERIC) surchg_amount,
-        CAST(REGEXP_REPLACE(convnce_amt, r'\$|,', '') as NUMERIC) convnce_amt,
+        CAST(REGEXP_REPLACE(fund_amt, r'\$|,', '') as NUMERIC) AS fund_amt,
+        CAST(REGEXP_REPLACE(batch_amt, r'\$|,', '') as NUMERIC) AS batch_amt,
+        CAST(REGEXP_REPLACE(amount, r'\$|,', '') as NUMERIC) AS amount,
+        CAST(REGEXP_REPLACE(surchg_amount, r'\$|,', '') as NUMERIC) AS surchg_amount,
+        CAST(REGEXP_REPLACE(convnce_amt, r'\$|,', '') as NUMERIC) AS convnce_amt,
 
-        regexp_extract(payment_date, r'[^@\.]+') AS payment_date,
-        regexp_extract(transaction_date, r'[^@\.]+') AS transaction_date,
-        regexp_extract(settlement_date, r'[^@\.]+') AS settlement_date
+        REGEXP_EXTRACT(payment_date, r'[^@\.]+') AS payment_date,
+        REGEXP_EXTRACT(transaction_date, r'[^@\.]+') AS transaction_date,
+        REGEXP_EXTRACT(settlement_date, r'[^@\.]+') AS settlement_date
 
     FROM {{ ref('stg_elavon__transactions') }}
 ),

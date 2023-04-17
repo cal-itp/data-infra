@@ -18,7 +18,7 @@ stg_littlepay__settlements AS (
         _line_number,
         `instance`,
         extract_filename,
-        ts,
+        ts
     FROM source
 )
 
