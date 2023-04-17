@@ -5,10 +5,16 @@ WITH stg_elavon__transactions AS (
     FROM {{ ref('stg_elavon__transactions') }}
 ),
 
-remove_date_special_characters AS (
+remove_special_characters AS (
     SELECT
 
-        * EXCEPT (payment_date, transaction_date, settlement_date),
+        * EXCEPT (fund_amt, batch_amt, amount, surchg_amount, convnce_amt, payment_date, transaction_date, settlement_date),
+
+        CAST(REGEXP_REPLACE(fund_amt, r'\$|,', '') as NUMERIC) fund_amt,
+        CAST(REGEXP_REPLACE(batch_amt, r'\$|,', '') as NUMERIC) batch_amt,
+        CAST(REGEXP_REPLACE(amount, r'\$|,', '') as NUMERIC) amount,
+        CAST(REGEXP_REPLACE(surchg_amount, r'\$|,', '') as NUMERIC) surchg_amount,
+        CAST(REGEXP_REPLACE(convnce_amt, r'\$|,', '') as NUMERIC) convnce_amt,
 
         regexp_extract(payment_date, r'[^@\.]+') AS payment_date,
         regexp_extract(transaction_date, r'[^@\.]+') AS transaction_date,
@@ -17,42 +23,30 @@ remove_date_special_characters AS (
     FROM {{ ref('stg_elavon__transactions') }}
 ),
 
-add_date_leading_zero AS (
+fct_elavon__transactions AS (
     SELECT
 
         * EXCEPT (payment_date, transaction_date, settlement_date),
 
         CASE WHEN
             LENGTH(payment_date) < 8
-            THEN CONCAT(0, payment_date)
-        ELSE payment_date
+            THEN PARSE_DATE('%m%d%Y',  CONCAT(0, payment_date))
+        ELSE PARSE_DATE('%m%d%Y',  payment_date)
         END AS payment_date,
 
         CASE WHEN
             LENGTH(transaction_date) < 8
-            THEN CONCAT(0, transaction_date)
-        ELSE transaction_date
+            THEN PARSE_DATE('%m%d%Y',  CONCAT(0, transaction_date))
+        ELSE PARSE_DATE('%m%d%Y',  transaction_date)
         END AS transaction_date,
 
         CASE WHEN
             LENGTH(settlement_date) < 8
-            THEN CONCAT(0, settlement_date)
-        ELSE settlement_date
-        END AS settlement_date,
+            THEN PARSE_DATE('%m%d%Y',  CONCAT(0, settlement_date))
+        ELSE PARSE_DATE('%m%d%Y',  settlement_date)
+        END AS settlement_date
 
-    FROM remove_date_special_characters
-),
-
-fct_elavon__transactions AS (
-    SELECT
-
-        * EXCEPT (payment_date, transaction_date, settlement_date),
-
-        PARSE_DATE('%m%d%Y',  payment_date) AS payment_date,
-        PARSE_DATE('%m%d%Y',  transaction_date) AS transaction_date,
-        PARSE_DATE('%m%d%Y',  settlement_date) AS settlement_date
-
-    FROM add_date_leading_zero
+    FROM remove_special_characters
 )
 
 SELECT
@@ -61,7 +55,7 @@ SELECT
     payment_date,
     account_number,
     routing_number,
-    {{ safe_cast('fund_amt', type_numeric()) }} AS fund_amt,
+    fund_amt,
     batch_reference,
     batch_type,
     customer_batch_reference,
@@ -70,8 +64,8 @@ SELECT
     external_mid,
     store_number,
     chain,
-    {{ safe_cast('batch_amt', type_numeric()) }} AS batch_amt,
-    {{ safe_cast('amount', type_numeric()) }} AS amount,
+    batch_amt,
+    amount,
     surchg_amount,
     convnce_amt,
     card_type,
