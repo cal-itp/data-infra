@@ -119,8 +119,6 @@ models:
       - name: transaction_date_pacific
       - name: day_of_week
         description: Day of week value of the transaction in the range [1,7] with Sunday as the first day of the week.
-
-models:
   - name: fct_elavon__transactions
     description: Transactions processed by Elavon
     columns:
@@ -170,3 +168,5 @@ models:
       - name: ent_num
       - name: dt
       - name: execution_ts
+  - name: fct_payments__littlepay_elavon_reconciliation
+    description: Wide table of joined Littlepay // Elavon data (Work in progress - add columns below)
