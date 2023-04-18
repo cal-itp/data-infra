@@ -288,7 +288,7 @@ The `map_variance` method, currently under development, offers a spatial view of
 
 #### `stop_segment_speed_view`
 
-After generating a speed map, the underlying data is available at OperatorDayAnalysis.stop_segment_speed_view, a geodataframe. This data can be easily exported into a geoparquet, geojson, shapefile, or spreadsheet with the appropriate geopandas method.
+After generating a speed map, the underlying data is available at RtFilterMapper.stop_segment_speed_view, a geodataframe. This data can be easily exported into a geoparquet, geojson, shapefile, or spreadsheet with the appropriate geopandas method.
 
 ||||
 |--- |--- |--- |
