@@ -79,12 +79,12 @@ gtfs_joins AS (
         -- see: https://gtfs.org/schedule/reference/#stopstxt
         -- so to make a timestamp, we use the feed timezone from agency.txt
         TIMESTAMP_ADD(
-            TIMESTAMP(service_date, service_index.feed_timezone),
+            {{ gtfs_noon_minus_twelve_hours('service_date', 'service_index.feed_timezone') }},
             INTERVAL stop_times_grouped.trip_first_departure_sec SECOND
             ) AS trip_first_departure_ts,
 
         TIMESTAMP_ADD(
-            TIMESTAMP(service_date, service_index.feed_timezone),
+            {{ gtfs_noon_minus_twelve_hours('service_date', 'service_index.feed_timezone') }},
             INTERVAL stop_times_grouped.trip_last_arrival_sec SECOND
             ) AS trip_last_arrival_ts,
 
