@@ -1,0 +1,62 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__LITTLEPAY_PARSED') }}"
+source_objects:
+  - "refunds/*.jsonl.gz"
+destination_project_dataset_table: "external_littlepay.refunds"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "refunds/{instance:STRING}/{extract_filename:STRING}/{ts:TIMESTAMP}/"
+schema_fields:
+  - name: refund_id
+    type: STRING
+  - name: participant_id
+    type: STRING
+  - name: customer_id
+    type: STRING
+  - name: micropayment_id
+    type: STRING
+  - name: aggregation_id
+    type: STRING
+  - name: settlement_id
+    type: STRING
+  - name: retrieval_reference_number
+    type: STRING
+  - name: transaction_date
+    type: STRING
+  - name: transaction_amount
+    type: STRING
+  - name: proposed_amount
+    type: STRING
+  - name: refund_amount
+    type: STRING
+  - name: currency_code
+    type: STRING  # ISO 4217 Numeric Code
+  - name: status
+    type: STRING  # (Created, Sent_for_settlement, Settled, Rejected, Sent_for_adjustment, Adjusted)
+  - name: initiator
+    type: STRING  # (Merchant, Customer)
+  - name: reason
+    type: STRING
+  - name: approval_status
+    type: STRING  # (Awaiting, Approved, Refused)
+  - name: issuer
+    type: STRING
+  - name: issuer_comment
+    type: STRING
+  - name: created_time
+    type: STRING
+  - name: approved_time
+    type: STRING
+  - name: settlement_status
+    type: STRING  # (Accepted, Rejected)
+  - name: settlement_status_time
+    type: STRING
+  - name: settlement_reason_code
+    type: STRING
+  - name: settlement_response_text
+    type: STRING
+  - name: _line_number
+    type: STRING

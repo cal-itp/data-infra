@@ -1,0 +1,112 @@
+name: Test, visualize, and build dbt project
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - '.github/workflows/build-dbt.yml'
+      - 'warehouse/**'
+  pull_request:
+    paths:
+      - '.github/workflows/build-dbt.yml'
+      - 'warehouse/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: check python
+    runs-on: ubuntu-latest
+    steps:
+      - run: sudo apt-get install -y libgraphviz-dev graphviz-dev
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - run: curl -sSL https://install.python-poetry.org | python -
+      - run: cd warehouse && poetry install && poetry run mypy scripts
+
+  compile:
+    name: check dbt
+    runs-on: ubuntu-latest
+    steps:
+      - run: sudo apt-get install -y libgraphviz-dev graphviz graphviz-dev
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - run: curl -sSL https://install.python-poetry.org | python -
+      - uses: google-github-actions/setup-gcloud@v0
+        with:
+          export_default_credentials: true
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+      - name: Compile dbt project
+        run: |
+          cd warehouse
+          poetry install
+          poetry run dbt deps
+          poetry run dbt compile --target prod
+          poetry run dbt docs generate --target prod
+      - uses: 'google-github-actions/upload-cloud-storage@v1'
+        with:
+          path: './warehouse/logs/'
+          destination: 'calitp-ci-artifacts/${{github.workflow}}/run_id=${{github.run_id}}/job=${{github.job}}/logs/'
+      - uses: 'google-github-actions/upload-cloud-storage@v1'
+        with:
+          path: './warehouse/target/'
+          glob: '*.json'
+          destination: 'calitp-ci-artifacts/${{github.workflow}}/run_id=${{github.run_id}}/job=${{github.job}}/target/'
+      # Only do visualization if we actually changed models and we are merging against main
+      - uses: tj-actions/changed-files@v35
+        if: github.event.pull_request.base.ref == 'main'
+        id: changed-files-warehouse
+        with:
+          files: 'warehouse/models/**/*.sql'
+      - uses: iterative/setup-cml@v1
+        if: steps.changed-files-warehouse.outputs.any_changed == 'true'
+      - name: Create GitHub comment
+        if: steps.changed-files-warehouse.outputs.any_changed == 'true'
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd warehouse
+          gsutil cp -r gs://calitp-dbt-artifacts/latest/ .
+          echo "Warehouse report 📦" >> report.md
+          echo "### New models 🌱" >> report.md
+          poetry run dbt --no-use-colors ls --resource-type model --select state:new --state ./latest | grep "^calitp_warehouse\." | sed "s/calitp_warehouse\.//g" >> report.md
+          echo "### Changed models 🔀" >> report.md
+          poetry run dbt --no-use-colors ls --resource-type model --select state:modified --exclude state:new --state ./latest | grep "^calitp_warehouse\." | sed "s/calitp_warehouse\.//g" >> report.md
+          echo "### DAG" >> report.md
+          poetry run dbt --no-use-colors ls --resource-type model --select state:modified --state ./latest | grep "^calitp_warehouse\." | sed 's/^/--include /g' | xargs poetry run python scripts/visualize.py man --output=target/dag.png
+          echo "" >> report.md
+          echo '![](./target/dag.png "Changed models")' >> report.md
+          cml comment update report.md
+
+  build_push:
+    name: package warehouse image
+    runs-on: ubuntu-latest
+    needs: [check]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: tj-actions/changed-files@v35
+        with:
+          files: |
+            warehouse/Dockerfile
+            warehouse/packages.yml
+            warehouse/poetry.lock
+            warehouse/pyproject.yml
+            warehouse/requirements.txt
+      - uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v4
+        if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main') || steps.changed-files-specific.outputs.any_changed == 'true' }}
+        with:
+          context: warehouse
+          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+          tags: ghcr.io/${{github.repository}}/warehouse:latest

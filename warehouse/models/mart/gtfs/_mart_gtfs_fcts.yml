@@ -164,6 +164,27 @@ models:
       - name: trip_start_date
       - name: trip_schedule_relationship
       - name: stop_time_updates
+      - &_header_message_age
+        name: _header_message_age
+        description: |
+          Difference between `_extract_ts` (time at which we scraped the message) and `header_timestamp` (timestamp
+          of overall message from producer; see https://gtfs.org/realtime/reference/#message-feedheader).
+          Because of delay in the request process, the actual scrape request may occur up to a few
+          seconds after `_extract_ts`, and it may take time for the producer to respond to the request, so
+          this field should only be interpreted as accurate within 3-4 seconds (do not try to do extremely precise
+          measurements below that level.)
+      - name: _trip_update_message_age
+        description: |
+          Difference between `_extract_ts` (time at which we scraped the message) and `trip_update_timestamp` (timestamp
+          of individual trip update message from producer; see https://gtfs.org/realtime/reference/#message-tripupdate).
+          Because of delay in the request process, the actual scrape request may occur up to a few
+          seconds after `_extract_ts`, and it may take time for the producer to respond to the request, so
+          this field should only be interpreted as accurate within 3-4 seconds (do not try to do extremely precise
+          measurements below that level.)
+      - name: _trip_update_message_age_vs_header
+        description: |
+          Difference between `header_timestamp` (timestamp of overall message from producer; see https://gtfs.org/realtime/reference/#message-feedheader)
+          and `trip_update_timestamp` (timestamp of individual trip_update message from producer; see https://gtfs.org/realtime/reference/#message-tripupdate).
 
   - name: fct_vehicle_locations
     description: |
@@ -215,6 +236,19 @@ models:
       - name: _extract_ts
         description: |
           Time at which this message was scraped.
+      - *_header_message_age
+      - name: _vehicle_message_age
+        description: |
+          Difference in seconds between `_extract_ts` (time at which we scraped the message) and `vehicle_timestamp` (timestamp
+          of individual vehicle message from producer; see https://gtfs.org/realtime/reference/#message-vehicleposition).
+          Because of delay in the request process, the actual scrape request may occur up to a few
+          seconds after `_extract_ts`, and it may take time for the producer to respond to the request, so
+          this field should only be interpreted as accurate within 3-4 seconds (do not try to do extremely precise
+          measurements below that level.)
+      - name: _vehicle_message_age_vs_header
+        description: |
+          Difference in seconds between `header_timestamp` (timestamp of overall message from producer; see https://gtfs.org/realtime/reference/#message-feedheader)
+          and `vehicle_timestamp` (timestamp of individual vehicle message from producer; see https://gtfs.org/realtime/reference/#message-vehicleposition).
       - name: _gtfs_dataset_name
         description: |
           String name of the GTFS dataset of which this message is a part.
@@ -733,6 +767,7 @@ models:
       - name: severity_level
         description: |
           See: https://gtfs.org/realtime/reference/#message-alert.
+      - *_header_message_age
   - name: fct_service_alert_active_periods
     description: |
       Each row is an active period for a service alerts message.
@@ -1128,3 +1163,107 @@ models:
         description: Timestamp of first service alert header referencing this trip.
       - name: sa_max_header_timestamp
         description: Timestamp of last service alert header referencing this trip.
+
+  - name: fct_trip_updates_no_stop_times
+    description: |
+      Incrementally materialize trip update messages without stop times; this reduces the data size by about 90%.
+    columns:
+      - name: key
+        tests:
+          - not_null:
+              config:
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+          - unique:
+              config:
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+
+  - name: fct_service_alerts_trip_summaries
+    description: |
+      Summarizes trips observed in service alert messages.
+    columns:
+      - &rt_trip_summary_key
+        name: key
+        description: Date, URL, and trip descriptor (https://gtfs.org/realtime/reference/#message-tripdescriptor).
+        tests:
+          - not_null:
+              config:
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+          - unique:
+              config:
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+      - &num_distinct_message_ids
+        name: num_distinct_message_ids
+        description: Distinct count of top-level ids (https://gtfs.org/realtime/reference/#message-feedentity).
+      - &num_distinct_header_timestamps
+        name: num_distinct_header_timestamps
+        description: Distinct count of header timestamps from the feed (https://gtfs.org/realtime/reference/#message-feedheader).
+      - &min_extract_ts
+        name: min_extract_ts
+        description: |
+          Timestamp of the first extract (i.e. the time at which
+          we downloaded this feed extract) on this day referencing this trip.
+          For RT, our extracts are pinned to 20 second intervals, i.e. :00, :20, :40.
+      - &max_extract_ts
+        name: max_extract_ts
+        description: |
+          Timestamp of the last extract (i.e. the time at which
+          we downloaded this feed extract) on this day referencing this trip.
+          For RT, our extracts are pinned to 20 second intervals, i.e. :00, :20, :40.
+      - &min_header_timestamp
+        name: min_header_timestamp
+        description: Earliest header timestamp of a message referencing this trip.
+      - &max_header_timestamp
+        name: max_header_timestamp
+        description: Latest header timestamp of a message referencing this trip.
+      - name: service_alert_message_keys
+        description: Keys of the service alert messages that referenced this trip.
+
+  - name: fct_trip_updates_summaries
+    description: |
+      Summarizes trips observed in trip update messages.
+    columns:
+      - *rt_trip_summary_key
+      - *num_distinct_message_ids
+      - *num_distinct_header_timestamps
+      - name: num_distinct_trip_update_timestamps
+        description: Distinct count of trip update timestamps from the feed (https://gtfs.org/realtime/reference/#message-tripupdate).
+      - *min_extract_ts
+      - *max_extract_ts
+      - *min_header_timestamp
+      - *max_header_timestamp
+      - name: min_trip_update_timestamp
+        description: Earliest trip update timestamp of a message referencing this trip.
+      - name: max_trip_update_timestamp
+        description: Latest trip update timestamp of a message referencing this trip.
+      - name: max_delay
+        description: Maximium observed delay for this trip during this day.
+      - name: num_skipped_stops
+        description: Distinct count of stop_ids in messages where schedule_relationship was SKIPPED.
+      - name: num_scheduled_canceled_added_stops
+        description: Distinct count of stop_ids in messages where schedule_relationship was SCHEDULED, CANCELED, or ADDED.
+
+  - name: fct_vehicle_positions_trip_summaries
+    description: |
+      Summarizes trips observed in vehicle position messages.
+    columns:
+      - *rt_trip_summary_key
+      - *num_distinct_message_ids
+      - *num_distinct_header_timestamps
+      - name: num_distinct_vehicle_timestamps
+        description: Distinct count of vehicle timestamps from the feed (https://gtfs.org/realtime/reference/#message-vehicleposition).
+      - *min_extract_ts
+      - *max_extract_ts
+      - *min_header_timestamp
+      - *max_header_timestamp
+      - name: min_vehicle_timestamp
+        description: Earliest vehicle timestamp of a message referencing this trip.
+      - name: max_vehicle_timestamp
+        description: Latest vehicle timestamp of a message referencing this trip.
+      - name: first_position_latitude
+        description: Position latitude of the first extract referencing this trip.
+      - name: first_position_longitude
+        description: Position longitude of the first extract referencing this trip.
+      - name: last_position_latitude
+        description: Position latitude of the last extract referencing this trip.
+      - name: last_position_longitude
+        description: Position longitude of the last extract referencing this trip.

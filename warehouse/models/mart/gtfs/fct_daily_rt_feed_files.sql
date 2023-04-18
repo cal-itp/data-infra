@@ -1,12 +1,5 @@
 {{ config(materialized='incremental', unique_key = 'key') }}
 
--- BigQuery does not do partition elimination when using a subquery: https://stackoverflow.com/questions/54135893/using-subquery-for-partitiontime-in-bigquery-does-not-limit-cost
--- save max date in a variable instead so it can be referenced in incremental logic and still use partition elimination
-{% if is_incremental() %}
-    {% set dates = dbt_utils.get_column_values(table=this, column='date', order_by = 'date DESC', max_records = 1) %}
-    {% set max_date = dates[0] %}
-{% endif %}
-
 WITH int_transit_database__urls_to_gtfs_datasets AS (
     SELECT *
     FROM {{ ref('int_transit_database__urls_to_gtfs_datasets') }}
@@ -30,11 +23,7 @@ validation_map AS (
 parse_outcomes AS (
     SELECT *
     FROM {{ ref('int_gtfs_rt__unioned_parse_outcomes') }}
-    {% if is_incremental() %}
-    WHERE dt >= DATE '{{ max_date }}'
-    {% else %}
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('RT_LOOKBACK_DAYS') }} DAY)
-    {% endif %}
+    WHERE {{ gtfs_rt_dt_where(this_dt_column = 'date') }}
 ),
 
 grouped_parse_outcomes AS (
@@ -72,7 +61,7 @@ pivoted_parse_outcomes AS (
 fct_daily_rt_feed_files AS (
     SELECT
         parse.dt as date,
-        {{ dbt_utils.surrogate_key(['parse.dt', 'parse.base64_url']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['parse.dt', 'parse.base64_url']) }} AS key,
         parse.base64_url,
         parse.feed_type,
         parse.parse_success_file_count,

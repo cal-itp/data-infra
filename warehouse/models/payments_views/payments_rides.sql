@@ -21,8 +21,14 @@
     principals = ['serviceAccount:clean-air-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
 ) }}",
 " {{ create_row_access_policy(
+    filter_column = 'participant_id',
+    filter_value = 'ccjpa',
+    principals = ['serviceAccount:ccjpa-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }}",
+" {{ create_row_access_policy(
     principals = ['serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com',
                   'serviceAccount:bq-transform-svcacct@cal-itp-data-infra.iam.gserviceaccount.com',
+                  'serviceAccount:github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com',
                   'group:cal-itp@jarv.us',
                   'domain:calitp.org',
                   'user:angela@compiler.la',

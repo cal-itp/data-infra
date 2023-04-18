@@ -1,0 +1,64 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__LITTLEPAY_PARSED') }}"
+source_objects:
+  - "product-data/*.jsonl.gz"
+destination_project_dataset_table: "external_littlepay.product_data"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "product-data/{instance:STRING}/{extract_filename:STRING}/{ts:TIMESTAMP}/"
+schema_fields:
+  - name: participant_id
+    type: STRING
+  - name: product_id
+    type: STRING
+  - name: product_code
+    type: STRING
+  - name: product_description
+    type: STRING
+  - name: product_type
+    type: STRING  # (Capping, Discount)
+  - name: activation_type
+    type: STRING  # (Customer, Card)
+  - name: product_status
+    type: STRING  # (Active, Inactive)
+  - name: created_date
+    type: STRING
+  - name: capping_type
+    type: STRING  # (Daily_cap, Weekly_cap, Multiday_cap, Timebased_cap)
+  - name: multi_operator
+    type: STRING
+  - name: capping_start_time
+    type: STRING
+  - name: capping_end_time
+    type: STRING
+  - name: rules_transaction_types
+    type: STRING  # (Autoscan, Flat, Variable)
+  - name: rules_default_limit
+    type: STRING
+  - name: rules_max_fare_value
+    type: STRING
+  - name: scheduled_start_date_time
+    type: STRING
+  - name: scheduled_end_date_time
+    type: STRING
+  - name: all_day
+    type: STRING
+  - name: weekly_cap_start_day
+    type: STRING  # (Monday, Sunday)
+  - name: number_of_days_in_cap_window
+    type: STRING
+  - name: capping_duration
+    type: STRING
+  - name: number_of_transfer
+    type: STRING
+  - name: capping_time_zone
+    type: STRING
+  - name: capping_overlap
+    type: STRING
+  - name: capping_application_level
+    type: STRING  # (Customer, Card)
+  - name: _line_number
+    type: STRING

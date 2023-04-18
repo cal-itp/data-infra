@@ -9,7 +9,8 @@ WITH dim_calendar AS (
 int_gtfs_schedule__long_calendar AS (
     SELECT
         feed_key,
-        {{ dbt_utils.surrogate_key(['feed_key', 'service_id', 'dt']) }} AS key,
+        _feed_valid_from,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'service_id', 'dt']) }} AS key,
         service_id,
         dt AS service_date,
         EXTRACT(DAYOFWEEK FROM dt) AS day_num,

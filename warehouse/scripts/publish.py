@@ -375,7 +375,7 @@ def _publish_exposure(
     bucket: str, exposure: Exposure, publish: bool, model: Optional[str] = None
 ):
     ts = pendulum.now()
-    assert exposure.meta is not None
+    assert exposure.meta is not None and exposure.depends_on.nodes is not None
     for destination in exposure.meta.destinations:
         with tempfile.TemporaryDirectory() as tmpdir:
             if isinstance(destination, CkanDestination):

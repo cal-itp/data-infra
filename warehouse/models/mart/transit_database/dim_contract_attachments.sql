@@ -7,7 +7,7 @@ WITH contracts AS (
 
 dim_contract_attachments AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['unnested_attachments.id', '_valid_from']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['unnested_attachments.id', '_valid_from']) }} AS key,
         contracts.key AS contract_key,
         contracts.name AS contract_name,
         unnested_attachments.url AS attachment_url,

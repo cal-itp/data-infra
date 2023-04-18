@@ -1,5 +1,8 @@
-WITH feed_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_quality__schedule_feed_guideline_index') }}
+WITH guideline_index AS (
+    SELECT
+        *
+    FROM {{ ref('int_gtfs_quality__guideline_checks_index') }}
+    WHERE check = {{ persistent_ids_schedule() }}
 ),
 
 dim_stops AS (
@@ -14,69 +17,72 @@ dim_agency AS (
     SELECT  * FROM {{ ref('dim_agency') }}
 ),
 
--- SQLFluff thinks this CTE isn't used, but it is required for the ids_version_compare_aggregate macro
-feed_version_history AS ( -- noqa: disable=L045
+feed_version_history AS (
     SELECT * FROM {{ ref('int_gtfs_quality__feed_version_history') }}
 ),
 
--- noqa: enable=L045
 stop_id_comparison AS (
-    SELECT * FROM {{ ids_version_compare_aggregate("stop_id", "dim_stops") }}
+    SELECT base64_url, feed_key, id_added * 100 / ids_current_feed AS pct_added
+    FROM {{ ids_version_compare_aggregate("stop_id", "dim_stops") }}
 ),
 
 route_id_comparison AS (
-    SELECT * FROM {{ ids_version_compare_aggregate("route_id", "dim_routes") }}
+    SELECT base64_url, feed_key, id_added * 100 / ids_current_feed AS pct_added
+    FROM {{ ids_version_compare_aggregate("route_id", "dim_routes") }}
 ),
 
 agency_id_comparison AS (
-    SELECT * FROM {{ ids_version_compare_aggregate("agency_id", "dim_agency") }}
+    SELECT base64_url, feed_key, id_added * 100 / ids_current_feed AS pct_added
+    FROM {{ ids_version_compare_aggregate("agency_id", "dim_agency") }}
 ),
 
 id_change_count AS (
-    SELECT t1.date,
-           t1.feed_key,
-           MAX(t2.id_added * 100 / t2.ids_current_feed )
-               OVER (
-                   PARTITION BY t1.feed_key
-                   ORDER BY t1.date
-                   ROWS BETWEEN 30 PRECEDING AND CURRENT ROW
-                    )
-                AS max_percent_stop_ids_new,
-           MAX(t3.id_added * 100 / t3.ids_current_feed )
-               OVER (
-                   PARTITION BY t1.feed_key
-                   ORDER BY t1.date
-                   ROWS BETWEEN 30 PRECEDING AND CURRENT ROW
-                    )
-                AS max_percent_route_ids_new,
-           MAX(t4.id_added * 100 / t4.ids_current_feed )
-               OVER (
-                   PARTITION BY t1.feed_key
-                   ORDER BY t1.date
-                   ROWS BETWEEN 30 PRECEDING AND CURRENT ROW
-                    )
-                AS max_percent_agency_ids_new
-      FROM feed_guideline_index AS t1
-      LEFT JOIN stop_id_comparison AS t2
-        ON t2.feed_key = t1.feed_key
-      LEFT JOIN route_id_comparison AS t3
-        ON t3.feed_key = t1.feed_key
-      LEFT JOIN agency_id_comparison AS t4
-        ON t4.feed_key = t1.feed_key
+    SELECT hist.feed_key,
+        stops.pct_added AS stops_pct_added,
+        routes.pct_added AS routes_pct_added,
+        agency.pct_added AS agency_pct_added,
+        GREATEST(stops.pct_added, routes.pct_added, agency.pct_added) AS max_change_pct,
+        hist.valid_from,
+        DATE_ADD(valid_from, INTERVAL 30 DAY) AS int_30_days
+      FROM feed_version_history AS hist
+      LEFT JOIN stop_id_comparison AS stops
+        ON hist.feed_key = stops.feed_key
+      LEFT JOIN route_id_comparison AS routes
+        ON hist.feed_key = routes.feed_key
+      LEFT JOIN agency_id_comparison AS agency
+        ON hist.feed_key = agency.feed_key
+),
+
+check_start AS (
+    SELECT MIN(valid_from) AS first_check_date
+    FROM feed_version_history
+    WHERE prev_feed_key IS NOT NULL
 ),
 
 int_gtfs_quality__persistent_ids_schedule AS (
-    SELECT date,
-           feed_key,
-           {{ persistent_ids_schedule() }} AS check,
-           {{ best_practices_alignment_schedule() }} AS feature,
-           CASE WHEN max_percent_stop_ids_new > 50
-                     OR max_percent_route_ids_new > 50
-                     OR max_percent_agency_ids_new > 50
-                THEN {{ guidelines_fail_status() }}
-                ELSE {{ guidelines_pass_status() }}
-           END AS status
-      FROM id_change_count
+    SELECT
+        idx.* EXCEPT(status),
+        first_check_date,
+        stops_pct_added,
+        routes_pct_added,
+        agency_pct_added,
+        max_change_pct,
+        CASE
+            WHEN has_schedule_feed
+                THEN
+                    CASE
+                        WHEN idx.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
+                        WHEN max_change_pct <= 50 OR idx.date > int_30_days THEN {{ guidelines_pass_status() }}
+                        WHEN (stops_pct_added > 50 OR routes_pct_added > 50 OR agency_pct_added > 50) AND idx.date <= int_30_days THEN {{ guidelines_fail_status() }}
+                        -- order matters -- this has to come after the fail line in case any are missing but another is > 50
+                        WHEN max_change_pct IS NULL THEN {{ guidelines_na_check_status() }}
+                    END
+            ELSE idx.status
+        END AS status
+    FROM guideline_index idx
+    CROSS JOIN check_start
+    LEFT JOIN id_change_count
+        ON idx.schedule_feed_key = id_change_count.feed_key
 )
 
 SELECT * FROM int_gtfs_quality__persistent_ids_schedule

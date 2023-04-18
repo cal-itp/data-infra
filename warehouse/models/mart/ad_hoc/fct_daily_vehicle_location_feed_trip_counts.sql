@@ -8,23 +8,14 @@
     },
 ) }}
 
-{% if is_incremental() %}
-    {% set dates = dbt_utils.get_column_values(table=this, column='dt', order_by = 'dt DESC', max_records = 1) %}
-    {% set max_dt = dates[0] %}
-{% endif %}
-
 WITH fct_vehicle_locations AS (
     SELECT * FROM {{ ref('fct_vehicle_locations') }}
-    {% if is_incremental() %}
-    WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_dt }}'))
-    {% else %}
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('RT_LOOKBACK_DAYS') }} DAY)
-    {% endif %}
+    WHERE {{ gtfs_rt_dt_where() }}
 ),
 
 fct_daily_vehicle_location_trip_counts AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['dt', 'base64_url']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['dt', 'base64_url']) }} AS key,
         dt,
         gtfs_dataset_key,
         base64_url,

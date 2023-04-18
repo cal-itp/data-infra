@@ -1,5 +1,10 @@
-WITH feed_guideline_index AS (
-    SELECT * FROM {{ ref('int_gtfs_quality__rt_feed_guideline_index') }}
+WITH guideline_index AS (
+    SELECT
+        *
+    FROM {{ ref('int_gtfs_quality__guideline_checks_index') }}
+    WHERE check IN ({{ no_pb_error_vp() }},
+        {{ no_pb_error_tu() }},
+        {{ no_pb_error_sa() }})
 ),
 
 fct_daily_rt_feed_files AS (
@@ -16,25 +21,35 @@ daily_success_percent AS (
    GROUP BY 1, 2, 3
 ),
 
+check_start AS (
+    SELECT MIN(date) AS first_check_date
+    FROM daily_success_percent
+),
+
 int_gtfs_quality__rt_protobuf_error AS (
     SELECT
-        idx.date,
-        idx.base64_url,
-        idx.feed_type,
-        CASE WHEN idx.feed_type = 'service_alerts' THEN {{ no_pb_error_sa() }}
-             WHEN idx.feed_type = 'trip_updates' THEN {{ no_pb_error_tu() }}
-             WHEN idx.feed_type = 'vehicle_positions' THEN {{ no_pb_error_vp() }}
-        END AS check,
-        {{ best_practices_alignment_rt() }} AS feature,
+        idx.* EXCEPT(status),
+        first_check_date,
+        percent_success,
         CASE
-            WHEN s.percent_success >= 99 THEN {{ guidelines_pass_status() }}
-            WHEN s.percent_success < 99 THEN {{ guidelines_fail_status() }}
+        -- check that the row has the right entity + check combo, then assign statuses
+            WHEN (idx.has_rt_feed_tu AND check = {{ no_pb_error_tu() }})
+                OR (idx.has_rt_feed_vp AND check = {{ no_pb_error_vp() }})
+                OR (idx.has_rt_feed_sa AND check = {{ no_pb_error_sa() }})
+                   THEN
+                    CASE
+                        WHEN percent_success >= 99 THEN {{ guidelines_pass_status() }}
+                        WHEN idx.date < first_check_date THEN {{ guidelines_na_too_early_status() }}
+                        WHEN percent_success IS NULL THEN {{ guidelines_na_check_status() }}
+                        WHEN percent_success < 99 THEN {{ guidelines_fail_status() }}
+                    END
+            ELSE idx.status
         END AS status,
-    FROM feed_guideline_index AS idx
-    LEFT JOIN daily_success_percent AS s
-    ON idx.date = s.date
-   AND idx.base64_url = s.base64_url
-   AND idx.feed_type = s.feed_type
+      FROM guideline_index AS idx
+      CROSS JOIN check_start
+      LEFT JOIN daily_success_percent
+        ON idx.date = daily_success_percent.date
+        AND idx.base64_url = daily_success_percent.base64_url
 )
 
 SELECT * FROM int_gtfs_quality__rt_protobuf_error

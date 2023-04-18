@@ -29,7 +29,7 @@ fct_vehicle_positions_messages AS (
     SELECT
         -- ideally this would not include vehicle_id / trip_id, but using it for now because
         -- MTC 511 regional feed does not have feed-unique entity ids
-        {{ dbt_utils.surrogate_key(['base64_url', '_extract_ts', 'id', 'position_latitude', 'position_longitude']) }} as key,
+        {{ dbt_utils.generate_surrogate_key(['base64_url', '_extract_ts', 'id', 'position_latitude', 'position_longitude']) }} as key,
         gtfs_dataset_key,
         dt,
         hour,
@@ -37,6 +37,11 @@ fct_vehicle_positions_messages AS (
         _extract_ts,
         _config_extract_ts,
         _gtfs_dataset_name,
+
+        TIMESTAMP_DIFF(_extract_ts, header_timestamp, SECOND) AS _header_message_age,
+        TIMESTAMP_DIFF(_extract_ts, vehicle_timestamp, SECOND) AS _vehicle_message_age,
+        TIMESTAMP_DIFF(header_timestamp, vehicle_timestamp, SECOND) AS _vehicle_message_age_vs_header,
+
 
         header_timestamp,
         header_version,

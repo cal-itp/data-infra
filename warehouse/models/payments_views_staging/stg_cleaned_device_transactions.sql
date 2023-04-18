@@ -12,8 +12,8 @@ WITH stg_cleaned_device_transactions AS (
             latitude),
 
         -- cast lng/lat to float fields
-        CAST(longitude AS FLOAT64) AS longitude,
-        CAST(latitude AS FLOAT64) AS latitude,
+        CAST(longitude AS NUMERIC) AS longitude,
+        CAST(latitude AS NUMERIC) AS latitude,
 
         -- trim to align with gtfs cleaning steps
         -- since these fields are used to join with gtfs data

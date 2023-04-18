@@ -15,7 +15,9 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `agency_id`.
         tests: &primary_key_tests
-          - unique
+          - unique:
+              # TODO: remove this once we deal with Auburn feed that has tab-delimited files
+              where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
           - not_null
         meta: &pk_meta
           publish.ignore: true
@@ -49,6 +51,8 @@ models:
         description: '{{ doc("gtfs_agency__agency_timezone") }}'
         tests: &not_null_warn
         - not_null:
+            # TODO: remove this once we deal with Auburn feed that has tab-delimited files
+            where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
             config:
               severity: warn
       - name: agency_lang
@@ -123,7 +127,9 @@ models:
       - name: service_id
         description: '{{ doc("gtfs_calendar__service_id") }}'
         tests: &not_null_error
-        - not_null
+        - not_null:
+            # TODO: remove this once we deal with Auburn feed that has tab-delimited files
+            where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
       - name: monday
         description: '{{ doc("gtfs_calendar__monday") }}'
         tests: *not_null_warn
@@ -769,6 +775,7 @@ exposures:
       - ref("dim_fare_rules_latest")
       - ref("dim_feed_info_latest")
       - ref("dim_frequencies_latest")
+      - ref("dim_gtfs_datasets_latest")
       - ref("dim_levels_latest")
       - ref("dim_pathways_latest")
       - ref("dim_routes_latest")
@@ -841,6 +848,11 @@ exposures:
                 Each row is a cleaned row from a frequencies.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#frequenciestxt.
+            dim_gtfs_datasets_latest:
+              id: e4ca5bd4-e9ce-40aa-a58a-3a6d78b042bd
+              description: |
+                Each record represents a GTFS dataset (feed), and provides
+                base64-encoded URLs used to access that feed.
             dim_levels_latest:
               id: 288a08cd-7929-479e-aa88-08b677a08510
               description: |

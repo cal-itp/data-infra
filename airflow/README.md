@@ -1,6 +1,6 @@
-# Airflow / ETL
+# Airflow
 
-The following folder contains the project level directory for all our apache airflow ETLs, which are deployed automatically to Google Cloud Composer from the `main` branch.
+The following folder contains the project level directory for all our Apache Airflow DAGs, which are deployed automatically to Google Cloud Composer from the `main` branch.
 
 ## Structure
 
@@ -8,7 +8,7 @@ The DAGs for this project are stored and version controlled in the `dags` folder
 
 The logs are stored locally in the `logs` folder. You should be unable to add files here but it is gitkeep'ed so that it is avaliable when testing and debugging.
 
-Finally, Airflow plugins can be found in `plugins`.
+Finally, Airflow plugins can be found in `plugins`; this includes general utility functions as well as custom operator definitions.
 
 ## Developing Locally
 
@@ -34,23 +34,12 @@ gcloud init
 # gcloud auth application-default login
 ```
 
-To run the gtfs_downloader dags, it is required to generate a yml file of the agencies with various
-secrets filled in. To run this, do the following:
-
-1. Setup a virtual environment within the `script` folder by running `python -m venv .venv` in the `script` folder.
-2. Install the needed requirements via `pip install -r requirements.txt` (the requirements in `script`)
-3. Copy `airflow/data/example-secrets.csv` to `airflow/data/secrets.csv` and fill in the secret keys as needed
-4. run `python yml_convert.py ../airflow/data/agencies.yml ../airflow/data/agencies.filled.yml ../airflow/data/secrets.csv`
-5. Copy `/airflow/data/agencies.yml` to `/airflow/data/agencies_raw.yml`
-
-Next, run the initial database migration and create an `airflow / airflow` user to debug with:
-
-```console
+Next, run the initial database migration which also creates a default user named `airflow.
+```shell
 docker-compose run airflow db init
 ```
 
-Next, start all services with:
-
+Next, start all services including the Airflow web server.
 ```console
 docker-compose up
 ```
@@ -58,10 +47,10 @@ docker-compose up
 To access the web UI, visit `http://localhost:8080`.
 The default login and password for airflow's image are both "airflow".
 
-To run a DAG, you can either test it via the web UI or run a one-off with:
+You may execute DAGs via the web UI, or just specific individual tasks via the CLI.
 
 ```console
-docker-compose run airflow dags trigger <dag_id>
+docker-compose run airflow tasks test download_gtfs_schedule_v2 download_schedule_feeds 2022-04-01T00:00:00
 ```
 
 Additional reading about this setup can be found on the [Airflow Docs](https://airflow.apache.org/docs/apache-airflow/stable/start/docker.html)
@@ -72,18 +61,4 @@ Additional reading about this setup can be found on the [Airflow Docs](https://a
 
 ## Deploying to production
 
-All gcs assets are under the project `cal-itp-data-infra`. All assets should be using the `us-west-2` region.
-
-Currently, the project is automatically deploy to a cloud composer managed airflow service named `calitp-airflow-prod`. Cloud Composer excepts a GCS bucket full of DAGs, so we use Github Actions to automatically sync the `dags` folder to the production bucket and update the python dependencies in `requirements.txt`. There is a service user setup using Github Actions Secrets to handle auth.
-
-To view the prod webserver or logs, login to the cloud composer console.
-
-Note that the following variables were set manually in cloud composer:
-
-* `AIRFLOW_VAR_EXTRACT_BUCKET` - gcs bucket for data (e.g. `gs://gtfs-data`)
-* `SENDGRID_API_KEY`
-* `SENDGRID_MAIL_FROM`
-* `POD_CLUSTER_NAME` - name of the kubernetes cluster
-* `POD_LOCATION` - location of cluster (e.g. us-west-2a)
-* `CALITP_SLACK_URL` - slack webhook api url, for posting errors to a channel.
-  This variable can be set in your .env file when developing locally.
+We have a [GitHub Action](../.github/workflows/deploy_airflow_dags.yml) defined that updates requirements and syncs the [dags](./airflow/dags) and [plugins](./airflow/plugins) directories to the bucket which Composer watches for code/data to parse. As of 2023-04-11, this bucket is `us-west2-calitp-airflow2-pr-171e4e47-bucket`. Our production Composer instance is called [calitp-airflow2-prod](https://console.cloud.google.com/composer/environments/detail/us-west2/calitp-airflow2-prod/monitoring); its configuration (including worker count, Airflow config overrides, and environment variables) is manually managed through the web console.

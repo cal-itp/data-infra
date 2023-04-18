@@ -1,23 +1,12 @@
 {{ config(materialized='incremental', unique_key = 'key') }}
 
--- BigQuery does not do partition elimination when using a subquery: https://stackoverflow.com/questions/54135893/using-subquery-for-partitiontime-in-bigquery-does-not-limit-cost
--- save max date in a variable instead so it can be referenced in incremental logic and still use partition elimination
-{% if is_incremental() %}
-    {% set dates = dbt_utils.get_column_values(table=this, column='dt', order_by = 'dt DESC', max_records = 1) %}
-    {% set max_date = dates[0] %}
-{% endif %}
-
 WITH
 
 int_gtfs_rt__daily_url_index AS (
     SELECT *
     FROM {{ ref('int_gtfs_rt__daily_url_index') }}
     WHERE data_quality_pipeline
-    {% if is_incremental() %}
-    AND dt >= DATE '{{ max_date }}'
-    {% else %}
-    AND dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('RT_LOOKBACK_DAYS') }} DAY)
-    {% endif %}
+    AND {{ gtfs_rt_dt_where() }}
 ),
 
 fct_daily_rt_feed_files AS (
@@ -28,11 +17,7 @@ fct_daily_rt_feed_files AS (
 parse_outcomes AS (
     SELECT *
     FROM {{ ref('int_gtfs_rt__unioned_parse_outcomes') }}
-    {% if is_incremental() %}
-    WHERE dt >= DATE '{{ max_date }}'
-    {% else %}
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('RT_LOOKBACK_DAYS') }} DAY)
-    {% endif %}
+    WHERE {{ gtfs_rt_dt_where() }}
 ),
 
 daily_totals AS (

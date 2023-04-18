@@ -10,8 +10,10 @@ calitp_warehouse:
       location: us-west2
       method: oauth
       priority: interactive
-      threads: 4
-      timeout_seconds: 1800
+      threads: 8
+      # currently slowest model is int_gtfs_rt__trip_updates_no_stop_times
+      # which takes ~2700 seconds to full refresh
+      timeout_seconds: 3000
       type: bigquery
     prod_service_account:
       <<: *prod

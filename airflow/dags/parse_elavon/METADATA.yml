@@ -1,0 +1,16 @@
+description: "Process raw files from Elavon into a BQ-ready JSONL form"
+schedule_interval: "0 2 * * *"
+tags:
+  - all_gusty_features
+default_args:
+    owner: airflow
+    depends_on_past: False
+    start_date: "2023-03-22"
+    catchup: False
+    email:
+      - "soren.s@jarv.us"
+    email_on_failure: True
+    pool: default_pool
+    concurrency: 50
+wait_for_defaults:
+    timeout: 3600

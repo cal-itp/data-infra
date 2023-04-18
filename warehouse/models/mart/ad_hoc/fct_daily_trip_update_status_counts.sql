@@ -8,23 +8,14 @@
     },
 ) }}
 
-{% if is_incremental() %}
-    {% set dates = dbt_utils.get_column_values(table=this, column='dt', order_by = 'dt DESC', max_records = 1) %}
-    {% set max_dt = dates[0] %}
-{% endif %}
-
 WITH fct_stop_time_updates AS (
-    SELECT * FROM {{ ref('int_gtfs_rt__trip_updates_no_stop_times') }}
-    {% if is_incremental() %}
-    WHERE dt >= EXTRACT(DATE FROM TIMESTAMP('{{ max_dt }}'))
-    {% else %}
-    WHERE dt >= DATE_SUB(CURRENT_DATE(), INTERVAL {{ var('TRIP_UPDATES_LOOKBACK_DAYS') }} DAY)
-    {% endif %}
+    SELECT * FROM {{ ref('fct_trip_updates_no_stop_times') }}
+    WHERE {{ gtfs_rt_dt_where() }}
 ),
 
 fct_daily_trip_update_status_counts AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['dt', 'base64_url', 'trip_schedule_relationship']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['dt', 'base64_url', 'trip_schedule_relationship']) }} AS key,
         dt,
         base64_url,
         trip_schedule_relationship,

@@ -7,3 +7,6 @@ models:
         description: Unversioned key to dim_gtfs_datasets natural key from Airtable.
       - name: participant_id
         description: Littlepay-assigned Participant ID.
+        tests:
+          - not_null
+          - unique

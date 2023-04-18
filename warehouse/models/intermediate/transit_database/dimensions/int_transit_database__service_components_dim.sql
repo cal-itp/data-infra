@@ -108,7 +108,7 @@ join_orgs AS (
 
 int_transit_database__service_components_dim AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['join_orgs.source_record_id',
+        {{ dbt_utils.generate_surrogate_key(['join_orgs.source_record_id',
             'service_key',
             'product_key',
             'product_vendor_organization_key',

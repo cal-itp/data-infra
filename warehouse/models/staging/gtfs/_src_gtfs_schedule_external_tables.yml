@@ -4,14 +4,14 @@ sources:
   - name: feed_aggregator_scrapes
     description: |
       URLs scraped at moments in time from various feed aggregators.
-    database: "{{ var('SOURCE_DATABASE') }}"
+    database: "{{ env_var('CALITP_DBT_SOURCE_DATABASE', var('DEFAULT_SOURCE_DATABASE')) }}"
     schema: external_feed_aggregator
     tables:
       - name: scraped_urls
 
   - name: external_gtfs_schedule
     description: Hive-partitioned external tables reading GTFS schedule data and validation errors from GCS.
-    database: "{{ var('SOURCE_DATABASE') }}"
+    database: "{{ env_var('CALITP_DBT_SOURCE_DATABASE', var('DEFAULT_SOURCE_DATABASE')) }}"
     schema: external_gtfs_schedule
     tables:
       - name: download_outcomes
