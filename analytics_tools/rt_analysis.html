@@ -788,6 +788,15 @@
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#stop-segment-speed-view">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         stop_segment_speed_view
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
       <a class="reference internal nav-link" href="#other-charts-and-metrics">
        Other Charts and Metrics
       </a>
@@ -967,6 +976,15 @@
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#stop-segment-speed-view">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         stop_segment_speed_view
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
       <a class="reference internal nav-link" href="#other-charts-and-metrics">
        Other Charts and Metrics
       </a>
@@ -1028,8 +1046,8 @@
 <li><p>GTFS Schedule Stop Times</p></li>
 <li><p>GTFS Schedule Shapes</p></li>
 </ul>
-<p>All of the above are sourced from the warehouse*. Note that all components must be present and consistently keyed in order to successfully analyze. The current version merges all calitp_url_numbers for the broadest possible match, we expect to optimize this in the improved warehouse.
-<em>*currently the v1 warehouse, but we’ll be converting to v2 ASAP</em></p>
+<p>All of the above are sourced from the v2 warehouse. Note that all components must be present and consistently keyed in order to successfully analyze. This module works at the organization level in order to match the reports site and maintain the structure of the speedmap site.</p>
+<p>For each organization, this module will combine and analyze all related GTFS Schedule and GTFS Realtime datasets that are <code class="docutils literal notranslate"><span class="pre">reports_site_assessed</span></code> in <a class="reference external" href="https://dbt-docs.calitp.org/#%21/model/model.calitp_warehouse.dim_provider_gtfs_data"><code class="docutils literal notranslate"><span class="pre">dim_provider_gtfs_data</span></code></a>. Some organizations share GTFS datasets (Sacramento RT and City of Rancho Cordova, San Diego Airport and San Diego MTS…), in those cases the module can generate seperate analysis for each organization but they might duplicate each other. These are based on the underlying organization/dataset relationships in the Transit Database (Airtable).</p>
 </div>
 <div class="section" id="how-is-it-structured">
 <h3>How is it structured?<a class="headerlink" href="#how-is-it-structured" title="Permalink to this headline">¶</a></h3>
@@ -1076,8 +1094,8 @@
     warehouse --&gt;|single day of data| op_day
         </div><div class="section" id="what-happens-at-the-operatordayanalysis-stage">
 <h4><strong>What happens at the OperatorDayAnalysis stage?</strong><a class="headerlink" href="#what-happens-at-the-operatordayanalysis-stage" title="Permalink to this headline">¶</a></h4>
-<p>The OperatorDayAnalysis class is the top-level class for processing a day’s worth of data and outputting intermediate data to be used later for mapping and analysis through the RtFilterMapper interface. It’s useful to understand how it works when analyzing a feed on a date for the first time, though once this is accomplished nearly any analysis need can be fulfilled without regenerating OperatorDayAnalysis.</p>
-<p>An OperatorDayAnalysis is generated for a specific feed on a specific date.</p>
+<p>The OperatorDayAnalysis class is the top-level class for processing a day’s worth of data and outputting intermediate data to be used later for mapping and analysis through the RtFilterMapper interface. It’s useful to understand how it works when analyzing an organization’s RT data on a date for the first time, though once this is accomplished nearly any analysis need can be fulfilled without regenerating OperatorDayAnalysis.</p>
+<p>An OperatorDayAnalysis is generated for a specific organization on a specific date.</p>
 </div>
 <div class="section" id="gathering-data">
 <h4>Gathering Data<a class="headerlink" href="#gathering-data" title="Permalink to this headline">¶</a></h4>
@@ -1093,7 +1111,7 @@
 </div>
 <div class="section" id="generate-stop-delay-view">
 <h4>Generate Stop Delay View<a class="headerlink" href="#generate-stop-delay-view" title="Permalink to this headline">¶</a></h4>
-<p>This step uses the generated interpolator objects to estimate and store speed and delay information for every trip along every segment. Segments are generally from transit stop to transit stop, but where stops are less frequent we add segments every kilometer to support granular analysis of express and rural transit routes.</p>
+<p>This step uses the generated interpolator objects to estimate and store speed and delay information for every trip at each stop. Where stops are less frequent we add “virtual stops” every kilometer to support granular analysis of express and rural transit routes.</p>
 <p>The results of this step are saved in OperatorDayAnalysis.stop_delay_view, a geodataframe.</p>
 <table class="colwidths-auto table">
 <thead>
@@ -1127,39 +1145,35 @@
 <td><p>GTFS Schedule</p></td>
 <td><p>string</p></td>
 </tr>
-<tr class="row-even"><td><p>trip_key</p></td>
-<td><p>Key from v1 warehouse</p></td>
-<td><p>float64*</p></td>
-</tr>
-<tr class="row-odd"><td><p>trip_id</p></td>
+<tr class="row-even"><td><p>trip_id</p></td>
 <td><p>GTFS Schedule</p></td>
 <td><p>string</p></td>
 </tr>
-<tr class="row-even"><td><p>stop_sequence</p></td>
+<tr class="row-odd"><td><p>stop_sequence</p></td>
 <td><p>GTFS Schedule</p></td>
 <td><p>float64**</p></td>
 </tr>
-<tr class="row-odd"><td><p>arrival_time</p></td>
+<tr class="row-even"><td><p>arrival_time</p></td>
 <td><p>GTFS Schedule</p></td>
 <td><p>np.datetime64[ns]*</p></td>
 </tr>
-<tr class="row-even"><td><p>route_id</p></td>
+<tr class="row-odd"><td><p>route_id</p></td>
 <td><p>GTFS Schedule</p></td>
 <td><p>string</p></td>
 </tr>
-<tr class="row-odd"><td><p>route_short_name</p></td>
+<tr class="row-even"><td><p>route_short_name</p></td>
 <td><p>GTFS Schedule</p></td>
 <td><p>string</p></td>
 </tr>
-<tr class="row-even"><td><p>direction_id</p></td>
+<tr class="row-odd"><td><p>direction_id</p></td>
 <td><p>GTFS Schedule</p></td>
-<td><p>string</p></td>
+<td><p>float64</p></td>
 </tr>
-<tr class="row-odd"><td><p>actual_time</p></td>
+<tr class="row-even"><td><p>actual_time</p></td>
 <td><p>VehiclePositionInterpolator</p></td>
 <td><p>np.datetime64[ns]</p></td>
 </tr>
-<tr class="row-even"><td><p>delay_seconds</p></td>
+<tr class="row-odd"><td><p>delay_seconds</p></td>
 <td><p>Calculated here (actual_time-arrival_time)***</p></td>
 <td><p>float64*</p></td>
 </tr>
@@ -1208,21 +1222,21 @@
 <td><p>Source</p></td>
 <td><p>Type</p></td>
 </tr>
-<tr class="row-odd"><td><p>calitp_itp_id</p></td>
-<td><p>v1 warehouse / agencies.yml</p></td>
-<td><p>int64</p></td>
-</tr>
-<tr class="row-even"><td><p>calitp_url_number</p></td>
-<td><p>v1 warehouse / agencies.yml</p></td>
-<td><p>int64</p></td>
-</tr>
-<tr class="row-odd"><td><p>service_date</p></td>
-<td><p>v1 warehouse</p></td>
-<td><p>datetime.date</p></td>
+<tr class="row-odd"><td><p>feed_key*</p></td>
+<td><p>v2 warehouse (gtfs mart)</p></td>
+<td><p>string</p></td>
 </tr>
 <tr class="row-even"><td><p>trip_key</p></td>
-<td><p>Key from v1 warehouse</p></td>
-<td><p>int64</p></td>
+<td><p>Key from v2 warehouse</p></td>
+<td><p>string</p></td>
+</tr>
+<tr class="row-odd"><td><p>gtfs_dataset_key*</p></td>
+<td><p>v2 warehouse (gtfs mart)</p></td>
+<td><p>string</p></td>
+</tr>
+<tr class="row-even"><td><p>activity_date</p></td>
+<td><p>v2 warehouse</p></td>
+<td><p>datetime.date</p></td>
 </tr>
 <tr class="row-odd"><td><p>trip_id</p></td>
 <td><p>GTFS Schedule</p></td>
@@ -1232,7 +1246,7 @@
 <td><p>GTFS Schedule</p></td>
 <td><p>string</p></td>
 </tr>
-<tr class="row-odd"><td><p>direction_id</p></td>
+<tr class="row-odd"><td><p>route_short_name</p></td>
 <td><p>GTFS Schedule</p></td>
 <td><p>string</p></td>
 </tr>
@@ -1240,19 +1254,11 @@
 <td><p>GTFS Schedule</p></td>
 <td><p>string</p></td>
 </tr>
-<tr class="row-odd"><td><p>calitp_extracted_at</p></td>
-<td><p>v1 warehouse</p></td>
-<td><p>datetime.date</p></td>
-</tr>
-<tr class="row-even"><td><p>calitp_deleted_at</p></td>
-<td><p>v1 warehouse</p></td>
-<td><p>datetime.date</p></td>
-</tr>
-<tr class="row-odd"><td><p>route_type</p></td>
+<tr class="row-odd"><td><p>direction_id</p></td>
 <td><p>GTFS Schedule</p></td>
 <td><p>string</p></td>
 </tr>
-<tr class="row-even"><td><p>route_short_name</p></td>
+<tr class="row-even"><td><p>route_type</p></td>
 <td><p>GTFS Schedule</p></td>
 <td><p>string</p></td>
 </tr>
@@ -1268,24 +1274,31 @@
 <td><p>GTFS Schedule</p></td>
 <td><p>string</p></td>
 </tr>
-<tr class="row-even"><td><p>median_time</p></td>
+<tr class="row-even"><td><p>calitp_itp_id</p></td>
+<td><p>v2 warehouse (transit database)</p></td>
+<td><p>int64</p></td>
+</tr>
+<tr class="row-odd"><td><p>median_time</p></td>
 <td><p>VehiclePositionsInterpolator</p></td>
 <td><p>datetime.time</p></td>
 </tr>
-<tr class="row-odd"><td><p>direction</p></td>
+<tr class="row-even"><td><p>direction</p></td>
 <td><p>VehiclePositionsInterpolator</p></td>
 <td><p>string</p></td>
 </tr>
-<tr class="row-even"><td><p>mean_speed_mph</p></td>
+<tr class="row-odd"><td><p>mean_speed_mph</p></td>
 <td><p>VehiclePositionsInterpolator</p></td>
 <td><p>float64</p></td>
 </tr>
-<tr class="row-odd"><td><p>calitp_agency_name</p></td>
-<td><p>v1 warehouse (GTFS Schedule dim feeds)</p></td>
+<tr class="row-even"><td><p>organization_name</p></td>
+<td><p>v2 warehouse (transit database)</p></td>
 <td><p>string</p></td>
 </tr>
 </tbody>
 </table>
+<ul class="simple">
+<li><p>keys and IDs in this table refer to GTFS Schedule datasets</p></li>
+</ul>
 </div>
 </div>
 </div>
@@ -1293,15 +1306,16 @@
 <h2>How do I use it?<a class="headerlink" href="#how-do-i-use-it" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="viewing-data-availability-or-starting-from-scratch">
 <h3>Viewing Data Availability (or starting from scratch)<a class="headerlink" href="#viewing-data-availability-or-starting-from-scratch" title="Permalink to this headline">¶</a></h3>
-<p>Use shared_utils.rt_utils.get_operators to see dates and feeds with the core analysis already run and intermediate data available.</p>
-<p>If not already ran, use the OperatorDayAnalysis constructor to generate the core analysis and save intermediate data for the dates and feeds of interest. Note that this process can be time-consuming, especially for larger feeds like LA Metro.</p>
+<p>Use shared_utils.rt_utils.get_operators to see dates and feeds with the core analysis already run and intermediate data available. With the v2 warehouse transition, this module is currently set to only generate new data from Jan 1, 2023 onward. If necessary, we can run older dates from v2 data after confirming that the organization/dataset mapping is as-desired. Intermediate data available from this utility from before 2023 is currently based off of prior v1 warehouse results, which may include different underlying datasets from current results.</p>
+<p>To support commonality with other analyses, this module now generates the core analysis for dates recorded in <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/_shared_utils/shared_utils/rt_dates.py">data_analyses/shared_utils/rt_dates.py</a>.</p>
+<p>Intermediate data for those selected dates will usually be already generated as part of the speedmap deployment process. For reference, if not already ran, use the OperatorDayAnalysis constructor to generate the core analysis and save intermediate data for the dates and feeds of interest. Note that this process can be time-consuming, especially for larger feeds like LA Metro.</p>
 <p>This function supports an optional progress bar argument to show analysis progress. First make sure tqdm is installed, then create a blank progress bar and provide that as an argument to the function (see example notebook). Note that you may have to <a class="reference external" href="https://github.com/tqdm/tqdm/issues/394#issuecomment-384743637">enable the jupyter extension</a>.</p>
-<p>For example, to generate data for Big Blue Bus on October 12, 2022:</p>
+<p>For example, to generate data for Big Blue Bus on April 12, 2023:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rt_analysis</span> <span class="kn">import</span> <span class="n">rt_parser</span>
 <span class="kn">from</span> <span class="nn">tqdm.notebook</span> <span class="kn">import</span> <span class="n">tqdm</span>
 
 <span class="n">pbar</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">()</span>
-<span class="n">rt_day</span> <span class="o">=</span> <span class="n">rt_parser</span><span class="o">.</span><span class="n">OperatorDayAnalysis</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">dt</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">2022</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span> <span class="n">pbar</span><span class="p">)</span>
+<span class="n">rt_day</span> <span class="o">=</span> <span class="n">rt_parser</span><span class="o">.</span><span class="n">OperatorDayAnalysis</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="n">dt</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">2023</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span> <span class="n">pbar</span><span class="p">)</span>
 <span class="n">rt_day</span><span class="o">.</span><span class="n">export_views_gcs</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1409,6 +1423,114 @@
 <p>Use the <code class="docutils literal notranslate"><span class="pre">segment_speed_map</span></code> method to generate a speed map. Depending on parameters, the speeds visualized will either be the 20th percentile or average speeds for all trips in each segment matching the current filter, if any. See function docstring for additional information.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">map_variance</span></code> method, currently under development, offers a spatial view of relative variance in speeds for all trips in each segment matching the current filter, if any.</p>
 </div>
+<div class="section" id="stop-segment-speed-view">
+<h4><code class="docutils literal notranslate"><span class="pre">stop_segment_speed_view</span></code><a class="headerlink" href="#stop-segment-speed-view" title="Permalink to this headline">¶</a></h4>
+<p>After generating a speed map, the underlying data is available at RtFilterMapper.stop_segment_speed_view, a geodataframe. This data can be easily exported into a geoparquet, geojson, shapefile, or spreadsheet with the appropriate geopandas method.</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p></p></th>
+<th class="head"><p></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Column</p></td>
+<td><p>Source</p></td>
+<td><p>Type</p></td>
+</tr>
+<tr class="row-odd"><td><p>shape_meters</p></td>
+<td><p>Projection of GTFS Stop along GTFS Shape (with 0 being start of shape), additionally 1km segments generated where stops are infrequent</p></td>
+<td><p>float64</p></td>
+</tr>
+<tr class="row-even"><td><p>stop_id</p></td>
+<td><p>GTFS Schedule</p></td>
+<td><p>string*</p></td>
+</tr>
+<tr class="row-odd"><td><p>stop_name</p></td>
+<td><p>GTFS Schedule</p></td>
+<td><p>string*</p></td>
+</tr>
+<tr class="row-even"><td><p>geometry</p></td>
+<td><p>GTFS Schedule</p></td>
+<td><p>geometry</p></td>
+</tr>
+<tr class="row-odd"><td><p>shape_id</p></td>
+<td><p>GTFS Schedule</p></td>
+<td><p>string</p></td>
+</tr>
+<tr class="row-even"><td><p>trip_id</p></td>
+<td><p>GTFS Schedule</p></td>
+<td><p>string</p></td>
+</tr>
+<tr class="row-odd"><td><p>stop_sequence</p></td>
+<td><p>GTFS Schedule</p></td>
+<td><p>float64**</p></td>
+</tr>
+<tr class="row-even"><td><p>route_id</p></td>
+<td><p>GTFS Schedule</p></td>
+<td><p>string</p></td>
+</tr>
+<tr class="row-odd"><td><p>route_short_name</p></td>
+<td><p>GTFS Schedule</p></td>
+<td><p>string</p></td>
+</tr>
+<tr class="row-even"><td><p>direction_id</p></td>
+<td><p>GTFS Schedule</p></td>
+<td><p>float64</p></td>
+</tr>
+<tr class="row-odd"><td><p>delay_seconds*</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">stop_delay_view</span></code></p></td>
+<td><p>np.datetime64[ns]</p></td>
+</tr>
+<tr class="row-even"><td><p>seconds_from_last*</p></td>
+<td><p>time for trip to travel to this stop from last stop</p></td>
+<td><p>float64</p></td>
+</tr>
+<tr class="row-odd"><td><p>last_loc*</p></td>
+<td><p>previous stop <code class="docutils literal notranslate"><span class="pre">shape_meters</span></code></p></td>
+<td><p>float64</p></td>
+</tr>
+<tr class="row-even"><td><p>meters_from_last*</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">shape_meters</span></code> - <code class="docutils literal notranslate"><span class="pre">last_loc</span></code></p></td>
+<td><p>float64</p></td>
+</tr>
+<tr class="row-odd"><td><p>speed_from_last*</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">meters_from_last</span></code> / <code class="docutils literal notranslate"><span class="pre">seconds_from_last</span></code></p></td>
+<td><p>float64</p></td>
+</tr>
+<tr class="row-even"><td><p>delay_chg_sec*</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">delay_seconds</span></code> - delay at last stop</p></td>
+<td><p>float64</p></td>
+</tr>
+<tr class="row-odd"><td><p>speed_mph*</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">speed_from_last</span></code> converted to miles per hour</p></td>
+<td><p>float64</p></td>
+</tr>
+<tr class="row-even"><td><p>n_trips_shp**</p></td>
+<td><p>number of unique trips on this GTFS shape in filter</p></td>
+<td><p>int64</p></td>
+</tr>
+<tr class="row-odd"><td><p>avg_mph**</p></td>
+<td><p>average speed for all trips on this segment</p></td>
+<td><p>float64</p></td>
+</tr>
+<tr class="row-even"><td><p>_20p_mph**</p></td>
+<td><p>20th percentile speed for all trips on this segment</p></td>
+<td><p>float64</p></td>
+</tr>
+<tr class="row-odd"><td><p>var_mph**</p></td>
+<td><p>statistical variance in speed for all trips on this segment</p></td>
+<td><p>float64</p></td>
+</tr>
+<tr class="row-even"><td><p>trips_per_hour</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">n_trips_shp</span></code> / hours in filter</p></td>
+<td><p>float64</p></td>
+</tr>
+</tbody>
+</table>
+<p>*disaggregate value – applies to this trip only</p>
+<p>**aggregated value – based on all trips in filter</p>
+</div>
 <div class="section" id="other-charts-and-metrics">
 <h4>Other Charts and Metrics<a class="headerlink" href="#other-charts-and-metrics" title="Permalink to this headline">¶</a></h4>
 <p>The <code class="docutils literal notranslate"><span class="pre">chart_variability</span></code> method provides a descriptitive view of the speeds experienced by each trip in each segments. It requires that a filter first be set to only one shape_id.</p>
@@ -1431,7 +1553,7 @@
 </div>
 <div class="section" id="example-workflow-california-transit-speed-maps">
 <h2>Example Workflow: California Transit Speed Maps<a class="headerlink" href="#example-workflow-california-transit-speed-maps" title="Permalink to this headline">¶</a></h2>
-<p>Section to come after warehouse v2 migration</p>
+<p>See <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/ca_transit_speed_maps/technical_notes.md"><code class="docutils literal notranslate"><span class="pre">data_analyses/ca_transit_speed_maps/technical_notes.md</span></code></a> !</p>
 </div>
 <div class="section" id="example-workflow-sccp">
 <h2>Example Workflow: SCCP<a class="headerlink" href="#example-workflow-sccp" title="Permalink to this headline">¶</a></h2>
