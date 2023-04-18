@@ -26,8 +26,9 @@ This section includes detailed information about the data model and processing s
 * GTFS Schedule Stop Times
 * GTFS Schedule Shapes
 
-All of the above are sourced from the warehouse*. Note that all components must be present and consistently keyed in order to successfully analyze. The current version merges all calitp_url_numbers for the broadest possible match, we expect to optimize this in the improved warehouse.
-_*currently the v1 warehouse, but we'll be converting to v2 ASAP_
+All of the above are sourced from the v2 warehouse. Note that all components must be present and consistently keyed in order to successfully analyze. This module works at the organization level in order to match the reports site and maintain the structure of the speedmap site.
+
+For each organization, this module will combine and analyze all related GTFS Schedule and GTFS Realtime datasets that are `reports_site_assessed` in [`dim_provider_gtfs_data`](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.dim_provider_gtfs_data). Some organizations share GTFS datasets (Sacramento RT and City of Rancho Cordova, San Diego Airport and San Diego MTS...), in those cases the module can generate seperate analysis for each organization but they might duplicate each other. These are based on the underlying organization/dataset relationships in the Transit Database (Airtable).
 
 ### How is it structured?
 
@@ -76,9 +77,9 @@ flowchart TD
 
 #### __What happens at the OperatorDayAnalysis stage?__
 
-The OperatorDayAnalysis class is the top-level class for processing a day’s worth of data and outputting intermediate data to be used later for mapping and analysis through the RtFilterMapper interface. It’s useful to understand how it works when analyzing a feed on a date for the first time, though once this is accomplished nearly any analysis need can be fulfilled without regenerating OperatorDayAnalysis.
+The OperatorDayAnalysis class is the top-level class for processing a day’s worth of data and outputting intermediate data to be used later for mapping and analysis through the RtFilterMapper interface. It’s useful to understand how it works when analyzing an organization's RT data on a date for the first time, though once this is accomplished nearly any analysis need can be fulfilled without regenerating OperatorDayAnalysis.
 
-An OperatorDayAnalysis is generated for a specific feed on a specific date.
+An OperatorDayAnalysis is generated for a specific organization on a specific date.
 
 #### Gathering Data
 
@@ -94,7 +95,7 @@ This step attempts to generate VehiclePositionInterpolator objects for all trips
 
 #### Generate Stop Delay View
 
-This step uses the generated interpolator objects to estimate and store speed and delay information for every trip along every segment. Segments are generally from transit stop to transit stop, but where stops are less frequent we add segments every kilometer to support granular analysis of express and rural transit routes.
+This step uses the generated interpolator objects to estimate and store speed and delay information for every trip at each stop. Where stops are less frequent we add "virtual stops" every kilometer to support granular analysis of express and rural transit routes.
 
 The results of this step are saved in OperatorDayAnalysis.stop_delay_view, a geodataframe.
 
@@ -106,13 +107,12 @@ The results of this step are saved in OperatorDayAnalysis.stop_delay_view, a geo
 |stop_name|GTFS Schedule|string*|
 |geometry|GTFS Schedule|geometry|
 |shape_id|GTFS Schedule|string|
-|trip_key|Key from v1 warehouse|float64*|
 |trip_id|GTFS Schedule|string|
 |stop_sequence|GTFS Schedule|float64**|
 |arrival_time|GTFS Schedule|np.datetime64[ns]*|
 |route_id|GTFS Schedule|string|
 |route_short_name|GTFS Schedule|string|
-|direction_id|GTFS Schedule|string|
+|direction_id|GTFS Schedule|float64|
 |actual_time|VehiclePositionInterpolator|np.datetime64[ns]|
 |delay_seconds|Calculated here (actual_time-arrival_time)***|float64*|
 
@@ -157,44 +157,47 @@ rt_trips is a dataframe of trip-level information for every trip for which a Veh
 ||||
 |--- |--- |--- |
 |Column|Source|Type|
-|calitp_itp_id|v1 warehouse / agencies.yml|int64|
-|calitp_url_number|v1 warehouse / agencies.yml|int64|
-|service_date|v1 warehouse|datetime.date|
-|trip_key|Key from v1 warehouse|int64|
+|feed_key*|v2 warehouse (gtfs mart)|string|
+|trip_key|Key from v2 warehouse|string|
+|gtfs_dataset_key*|v2 warehouse (gtfs mart)|string|
+|activity_date|v2 warehouse|datetime.date|
 |trip_id|GTFS Schedule|string|
 |route_id|GTFS Schedule|string|
-|direction_id|GTFS Schedule|string|
-|shape_id|GTFS Schedule|string|
-|calitp_extracted_at|v1 warehouse|datetime.date|
-|calitp_deleted_at|v1 warehouse|datetime.date|
-|route_type|GTFS Schedule|string|
 |route_short_name|GTFS Schedule|string|
+|shape_id|GTFS Schedule|string|
+|direction_id|GTFS Schedule|string|
+|route_type|GTFS Schedule|string|
 |route_long_name|GTFS Schedule|string|
 |route_desc|GTFS Schedule|string|
 |route_long_name|GTFS Schedule|string|
+|calitp_itp_id|v2 warehouse (transit database)|int64|
 |median_time|VehiclePositionsInterpolator|datetime.time|
 |direction|VehiclePositionsInterpolator|string|
 |mean_speed_mph|VehiclePositionsInterpolator|float64|
-|calitp_agency_name|v1 warehouse (GTFS Schedule dim feeds)|string|
+|organization_name|v2 warehouse (transit database)|string|
+
+* keys and IDs in this table refer to GTFS Schedule datasets
 
 ## How do I use it?
 
 ### Viewing Data Availability (or starting from scratch)
 
-Use shared_utils.rt_utils.get_operators to see dates and feeds with the core analysis already run and intermediate data available.
+Use shared_utils.rt_utils.get_operators to see dates and feeds with the core analysis already run and intermediate data available. With the v2 warehouse transition, this module is currently set to only generate new data from Jan 1, 2023 onward. If necessary, we can run older dates from v2 data after confirming that the organization/dataset mapping is as-desired. Intermediate data available from this utility from before 2023 is currently based off of prior v1 warehouse results, which may include different underlying datasets from current results.
 
-If not already ran, use the OperatorDayAnalysis constructor to generate the core analysis and save intermediate data for the dates and feeds of interest. Note that this process can be time-consuming, especially for larger feeds like LA Metro.
+To support commonality with other analyses, this module now generates the core analysis for dates recorded in [data_analyses/shared_utils/rt_dates.py](https://github.com/cal-itp/data-analyses/blob/main/_shared_utils/shared_utils/rt_dates.py).
+
+Intermediate data for those selected dates will usually be already generated as part of the speedmap deployment process. For reference, if not already ran, use the OperatorDayAnalysis constructor to generate the core analysis and save intermediate data for the dates and feeds of interest. Note that this process can be time-consuming, especially for larger feeds like LA Metro.
 
 This function supports an optional progress bar argument to show analysis progress. First make sure tqdm is installed, then create a blank progress bar and provide that as an argument to the function (see example notebook). Note that you may have to [enable the jupyter extension](https://github.com/tqdm/tqdm/issues/394#issuecomment-384743637).
 
-For example, to generate data for Big Blue Bus on October 12, 2022:
+For example, to generate data for Big Blue Bus on April 12, 2023:
 
 ```python
 from rt_analysis import rt_parser
 from tqdm.notebook import tqdm
 
 pbar = tqdm()
-rt_day = rt_parser.OperatorDayAnalysis(300, dt.date(2022, 10, 12), pbar)
+rt_day = rt_parser.OperatorDayAnalysis(300, dt.date(2023, 4, 12), pbar)
 rt_day.export_views_gcs()
 ```
 
@@ -283,6 +286,40 @@ Use the `segment_speed_map` method to generate a speed map. Depending on paramet
 
 The `map_variance` method, currently under development, offers a spatial view of relative variance in speeds for all trips in each segment matching the current filter, if any.
 
+#### `stop_segment_speed_view`
+
+After generating a speed map, the underlying data is available at RtFilterMapper.stop_segment_speed_view, a geodataframe. This data can be easily exported into a geoparquet, geojson, shapefile, or spreadsheet with the appropriate geopandas method.
+
+||||
+|--- |--- |--- |
+|Column|Source|Type|
+|shape_meters|Projection of GTFS Stop along GTFS Shape (with 0 being start of shape), additionally 1km segments generated where stops are infrequent|float64|
+|stop_id|GTFS Schedule|string*|
+|stop_name|GTFS Schedule|string*|
+|geometry|GTFS Schedule|geometry|
+|shape_id|GTFS Schedule|string|
+|trip_id|GTFS Schedule|string|
+|stop_sequence|GTFS Schedule|float64**|
+|route_id|GTFS Schedule|string|
+|route_short_name|GTFS Schedule|string|
+|direction_id|GTFS Schedule|float64|
+|delay_seconds*|`stop_delay_view`|np.datetime64[ns]|
+|seconds_from_last*|time for trip to travel to this stop from last stop|float64|
+|last_loc*|previous stop `shape_meters`|float64|
+|meters_from_last*|`shape_meters` - `last_loc`|float64|
+|speed_from_last*|`meters_from_last` / `seconds_from_last`|float64|
+|delay_chg_sec*|`delay_seconds` - delay at last stop|float64|
+|speed_mph*|`speed_from_last` converted to miles per hour|float64|
+|n_trips_shp**|number of unique trips on this GTFS shape in filter|int64|
+|avg_mph**|average speed for all trips on this segment|float64|
+|_20p_mph**|20th percentile speed for all trips on this segment|float64|
+|var_mph**|statistical variance in speed for all trips on this segment|float64|
+|trips_per_hour|`n_trips_shp` / hours in filter|float64|
+
+*disaggregate value -- applies to this trip only
+
+**aggregated value -- based on all trips in filter
+
 #### Other Charts and Metrics
 
 The `chart_variability` method provides a descriptitive view of the speeds experienced by each trip in each segments. It requires that a filter first be set to only one shape_id.
@@ -313,7 +350,7 @@ While all of these methods respect any filter you may have set with `set_filter`
 
 ## Example Workflow: California Transit Speed Maps
 
-Section to come after warehouse v2 migration
+See [`data_analyses/ca_transit_speed_maps/technical_notes.md`](https://github.com/cal-itp/data-analyses/blob/main/ca_transit_speed_maps/technical_notes.md) !
 
 ## Example Workflow: SCCP
 
