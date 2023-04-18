@@ -13,6 +13,7 @@ stg_gtfs_schedule__routes AS (
         ts,
         dt AS _dt,
         {{ trim_make_empty_string_null('route_id') }} AS route_id,
+        -- TODO: cast route_type to integer for consistency with other enum types
         {{ trim_make_empty_string_null('route_type') }} AS route_type,
         {{ trim_make_empty_string_null('agency_id') }} AS agency_id,
         {{ trim_make_empty_string_null('route_short_name') }} AS route_short_name,
