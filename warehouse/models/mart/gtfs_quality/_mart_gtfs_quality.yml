@@ -371,9 +371,17 @@ models:
       manages the service represented in the dataset/feed.
     columns:
       - *key
-      - name: activity_date
+      - name: service_date
         description: |
-          Date on which this organization had some scheduled service.
+          Agency service date on which this service level was present.
+          This respect's the agency's definition of a service day, which may not correspond to
+          a calendar date. See https://gtfs.org/schedule/reference/#field-types for the GTFS
+          Schedule definition of a "date" data type or `fct_daily_scheduled_trips` for
+          more dates that can be associated with trip activity.
+          This date is used so that this table's service summaries correspond to the
+          service levels that an agency might describe on a given date, even
+          if that does not correspond to the actual calendar date on which the
+          given trip activity occurred.
       - name: service_day_type
         description: |
           Day type for reports site service hours visualization: "Weekday", "Saturday", or "Sunday".
