@@ -1004,7 +1004,7 @@ models:
         description: |
           100 if English language, 1 if null (null can mean no internationalization),
           0 for other languages.
-  - name: 1ervice_alerts
+  - name: fct_daily_service_alerts
     description: |
       Each row is a daily summary of a service alert.
       See https://gtfs.org/realtime/reference/#message-alert for information
@@ -1066,13 +1066,16 @@ models:
     columns:
       - name: key
         description: |
-          Synthetic primary key constructed from `activity_date` and `stop_key`.
+          Synthetic primary key constructed from `stop_arrival_date_pacific` and `stop_key`.
         tests:
           - unique:
               where: "not contains_warning_duplicate_trip_primary_key AND not contains_warning_duplicate_stop_times_primary_key AND not contains_warning_duplicate_stop_primary_key"
           - not_null
-      - name: activity_date
-        description: Date on which this stop was active.
+      - name: stop_arrival_date_pacific
+        description: |
+          The date, in the "America/Los_Angeles" time zone, on which the summarized trips
+          had arrivals at this stop. Note that even if the stop is not in the
+          "America/Los_Angeles" time zone, that is the date definition that is used here.
       - *feed_key
       - name: stop_id
         description: '{{ doc("gtfs_stops__stop_id") }}'
@@ -1156,8 +1159,8 @@ models:
         description: '{{ doc("gtfs_stops__stop_desc") }}'
       - name: location_type
         description: '{{ doc("gtfs_stops__location_type") }}'
-      - name: stop_timezone
-        description: '{{ doc("gtfs_stops__stop_timezone") }}'
+      - name: stop_timezone_coalesced
+        description: '{{ doc("gtfs_schedule_stop_timezone_coalesced") }}'
       - name: wheelchair_boarding
         description: '{{ doc("gtfs_stops__wheelchair_boarding") }}'
 

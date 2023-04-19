@@ -24,11 +24,12 @@ dim_routes AS (
 stops_by_day_by_route AS (
 
     SELECT
-
-        trips.activity_date,
+        DATE(TIMESTAMP_ADD(
+            {{ gtfs_noon_minus_twelve_hours('trips.service_date', 'trips.feed_timezone') }},
+            INTERVAL stop_times.arrival_sec SECOND
+            ), "America/Los_Angeles") AS stop_arrival_date_pacific,
         trips.feed_key,
         COALESCE(CAST(trips.route_type AS INT), 1000) AS route_type,
-
         stop_times.stop_id,
 
         COUNT(*) AS stop_events_count_by_route,
@@ -47,7 +48,7 @@ stops_by_day_by_route AS (
     LEFT JOIN fct_daily_scheduled_trips AS trips
         ON trips.feed_key = stop_times.feed_key
             AND trips.trip_id = stop_times.trip_id
-    GROUP BY activity_date, feed_key, route_type, stop_id
+    GROUP BY 1, 2, 3, 4
 
 ),
 
@@ -55,7 +56,7 @@ stops_by_day AS (
 
     SELECT
 
-        activity_date,
+        stop_arrival_date_pacific,
         feed_key,
         stop_id,
 
@@ -72,7 +73,7 @@ stops_by_day AS (
         ) AS contains_warning_missing_foreign_key_stop_id
 
     FROM stops_by_day_by_route
-    GROUP BY activity_date, feed_key, stop_id
+    GROUP BY 1, 2, 3
 ),
 
 pivot_to_route_type AS (
@@ -81,7 +82,7 @@ pivot_to_route_type AS (
     FROM
         (SELECT
 
-            activity_date,
+            stop_arrival_date_pacific,
             feed_key,
             route_type,
             stop_id,
@@ -98,9 +99,9 @@ pivot_to_route_type AS (
 fct_daily_scheduled_stops AS (
     SELECT
 
-        {{ dbt_utils.generate_surrogate_key(['pivoted.activity_date', 'stops.key']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['pivoted.stop_arrival_date_pacific', 'stops.key']) }} AS key,
 
-        pivoted.activity_date,
+        pivoted.stop_arrival_date_pacific,
         pivoted.feed_key,
         pivoted.stop_id,
 
@@ -131,7 +132,7 @@ fct_daily_scheduled_stops AS (
         stops.stop_name,
         stops.stop_desc,
         stops.location_type,
-        stops.stop_timezone,
+        stops.stop_timezone_coalesced,
         stops.wheelchair_boarding
 
     FROM dim_stops AS stops
@@ -140,7 +141,7 @@ fct_daily_scheduled_stops AS (
         AND pivoted.feed_key = stops.feed_key
     LEFT JOIN stops_by_day
         ON pivoted.stop_id = stops_by_day.stop_id
-        AND pivoted.activity_date = stops_by_day.activity_date
+        AND pivoted.stop_arrival_date_pacific = stops_by_day.stop_arrival_date_pacific
         AND pivoted.feed_key = stops_by_day.feed_key
 )
 
