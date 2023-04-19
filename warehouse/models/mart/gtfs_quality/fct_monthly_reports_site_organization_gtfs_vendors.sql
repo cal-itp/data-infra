@@ -8,7 +8,23 @@ WITH assessed_entities AS (
 ),
 
 gtfs_generation_components AS (
-    SELECT *
+    SELECT *,
+    CASE
+        -- manually coded to relevance to GTFS Schedule and RT
+        WHEN component_name IN ('GTFS generation', 'Scheduling (Fixed-route)')
+            THEN 'schedule_vendors'
+        WHEN component_name IN ('Real-time info', 'Arrival predictions',
+         'GTFS-rt vehicles/trips', 'GTFS Alerts Publication')
+            THEN 'rt_vendors'
+    END AS reports_vendor_type,
+    CASE
+        WHEN product_vendor_organization_name IS NOT NULL
+            -- generally surface vendor_name of vendor, not product
+            THEN product_vendor_organization_name 
+        WHEN product_name IN ('TO CONFIRM', 'In house activity')
+        -- no vendor per se, but arguably useful info to surface on reports site
+            THEN product_name
+    END AS reports_vendor_name
     FROM {{ ref('dim_service_components') }}
     WHERE component_name IN
         ('GTFS generation', 'Scheduling (Fixed-route)', 'Real-time info',
@@ -25,9 +41,11 @@ dim_orgs AS (
 entities_components_joined AS (
     SELECT DISTINCT
         assessed_entities.organization_name, assessed_entities.organization_source_record_id,
-        assessed_entities.organization_itp_id,
+        assessed_entities.organization_itp_id, 
         DATE_TRUNC(assessed_entities.date, MONTH) AS date_start,
         gtfs_generation_components.component_name, gtfs_generation_components.product_name,
+        gtfs_generation_components.reports_vendor_name,
+        gtfs_generation_components.reports_vendor_type,
         gtfs_generation_components.product_vendor_organization_source_record_id
     FROM assessed_entities
     LEFT JOIN gtfs_generation_components
@@ -37,32 +55,11 @@ entities_components_joined AS (
 orgs_joined AS (
     SELECT
         entities_components_joined.*,
-        dim_orgs.name, dim_orgs.organization_type
+        dim_orgs.name AS vendor_name,
+        dim_orgs.organization_type AS vendor_organization_type
     FROM entities_components_joined
     LEFT JOIN dim_orgs
         ON entities_components_joined.product_vendor_organization_source_record_id = dim_orgs.source_record_id
-),
-
-to_aggregate AS (
-    SELECT
-        *,
-        CASE
-            -- manually coded to relevance to GTFS Schedule and RT
-            WHEN component_name IN ('GTFS generation', 'Scheduling (Fixed-route)')
-                THEN 'schedule_vendors'
-            WHEN component_name IN ('Real-time info', 'Arrival predictions',
-             'GTFS-rt vehicles/trips', 'GTFS Alerts Publication')
-                THEN 'rt_vendors'
-        END AS reports_vendor_type,
-        CASE
-            WHEN name IS NOT NULL
-                -- generally surface name of vendor, not product
-                THEN name
-            WHEN product_name IN ('TO CONFIRM', 'In house activity')
-            -- no vendor per se, but arguably useful info to surface on reports site
-                THEN product_name
-        END AS reports_vendor_name
-    FROM orgs_joined
 ),
 
 vendor_type_agged AS (
@@ -70,7 +67,7 @@ vendor_type_agged AS (
     organization_name, organization_source_record_id, organization_itp_id,
     date_start, reports_vendor_type,
     ARRAY_AGG(DISTINCT reports_vendor_name) AS vendor_names
-    FROM to_aggregate
+    FROM orgs_joined
     WHERE reports_vendor_name IS NOT NULL
     GROUP BY 1, 2, 3, 4, 5
 ),
