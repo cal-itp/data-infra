@@ -577,6 +577,12 @@ models:
           This allows us to perform duration calculations and handle timestamps that wrap past midnight like
           `25:40:00`, which are allowed in GTFS.
       - *feed_timezone
+      - name: arrival_time_interval
+        meta:
+          publish.ignore: true
+      - name: departure_time_interval
+        meta:
+          publish.ignore: true
 
   - name: dim_stops_latest
     description: |
@@ -639,6 +645,13 @@ models:
       - name: platform_code
         description: '{{ doc("gtfs_stops__platform_code") }}'
       - *feed_timezone
+        # TODO: would be good to actually publish this, with appropriate documentation, next time we are ready to make a round of updates
+      - name: warning_missing_primary_key
+        meta:
+          publish.ignore: true
+      - name: stop_timezone_coalesced
+        meta:
+          publish.ignore: true
 
   - name: dim_transfers_latest
     description: |
