@@ -40,6 +40,13 @@ fct_trip_updates_messages AS (
         TIMESTAMP_DIFF(_extract_ts, header_timestamp, SECOND) AS _header_message_age,
         TIMESTAMP_DIFF(_extract_ts, trip_update_timestamp, SECOND) AS _trip_update_message_age,
         TIMESTAMP_DIFF(header_timestamp, trip_update_timestamp, SECOND) AS _trip_update_message_age_vs_header,
+        -- TODO: once #2457 merges, we should use the schedule feed timezone rather than just Pacific
+        -- we need to get individual trip instances that can be merged with schedule feed trip instances
+        COALESCE(
+            PARSE_DATE("%Y%m%d",trip_start_date),
+            DATE(trip_update_timestamp, "America/Los_Angeles"),
+            DATE(header_timestamp, "America/Los_Angeles"),
+            DATE(_extract_ts)) AS calculated_service_date_pacific,
 
         header_timestamp,
         header_version,

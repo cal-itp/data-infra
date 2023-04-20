@@ -3,7 +3,7 @@
         materialized='incremental',
         incremental_strategy='insert_overwrite',
         partition_by={
-            'field': 'dt',
+            'field': 'calculated_service_date_pacific',
             'data_type': 'date',
             'granularity': 'day',
         },
@@ -12,15 +12,16 @@
 }}
 
 WITH stop_time_updates AS (
-    SELECT * FROM {{ ref('fct_stop_time_updates') }}
-    WHERE {{ gtfs_rt_dt_where() }}
+    SELECT *
+    FROM {{ ref('fct_stop_time_updates') }}
+    WHERE {{ gtfs_rt_dt_where(this_dt_column = 'calculated_service_date_pacific') }}
 ),
 
 fct_trip_updates_summaries AS (
     SELECT
         -- https://gtfs.org/realtime/reference/#message-tripdescriptor
         {{ dbt_utils.generate_surrogate_key([
-            'dt',
+            'calculated_service_date_pacific',
             'base64_url',
             'trip_id',
             'trip_route_id',
@@ -28,7 +29,8 @@ fct_trip_updates_summaries AS (
             'trip_start_time',
             'trip_start_date',
         ]) }} as key,
-        dt,
+
+        calculated_service_date_pacific,
         base64_url,
         trip_id,
         trip_route_id,
