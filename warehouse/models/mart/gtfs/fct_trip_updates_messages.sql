@@ -46,7 +46,7 @@ fct_trip_updates_messages AS (
             PARSE_DATE("%Y%m%d",trip_start_date),
             DATE(trip_update_timestamp, "America/Los_Angeles"),
             DATE(header_timestamp, "America/Los_Angeles"),
-            DATE(_extract_ts)) AS calculated_service_date_pacific,
+            DATE(_extract_ts, "America/Los_Angeles")) AS calculated_service_date_pacific,
 
         header_timestamp,
         header_version,
