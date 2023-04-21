@@ -294,12 +294,12 @@ After generating a speed map, the underlying data is available at RtFilterMapper
 |--- |--- |--- |
 |Column|Source|Type|
 |shape_meters|Projection of GTFS Stop along GTFS Shape (with 0 being start of shape), additionally 1km segments generated where stops are infrequent|float64|
-|stop_id|GTFS Schedule|string*|
-|stop_name|GTFS Schedule|string*|
+|stop_id|GTFS Schedule|string|
+|stop_name|GTFS Schedule|string|
 |geometry|GTFS Schedule|geometry|
 |shape_id|GTFS Schedule|string|
 |trip_id|GTFS Schedule|string|
-|stop_sequence|GTFS Schedule|float64**|
+|stop_sequence|GTFS Schedule|float64|
 |route_id|GTFS Schedule|string|
 |route_short_name|GTFS Schedule|string|
 |direction_id|GTFS Schedule|float64|
