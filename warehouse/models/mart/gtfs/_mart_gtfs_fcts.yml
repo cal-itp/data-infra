@@ -387,7 +387,7 @@ models:
           * Join with other internal-to-GTFS data that is keyed by service date
 
           This field should not be used to:
-          * Filter trip activity by date (because this does not necessarily reflect the local date on which the trip activity actually occurred)
+          * Filter trip activity by calendar date (because this does not necessarily reflect the local date on which the trip activity actually occurred)
       - name: service_id
         description: |
           Service ID from calendar or calendar_dates that determines that this trip
@@ -654,15 +654,18 @@ models:
       - dbt_utils.expression_is_true:
           expression: "ttl_service_hours >= 0"
     columns:
-      - name: service_date
+      - &service_date_for_summaries
+        name: service_date
         description: |
-          Agency service date on which this service level was present.
+          Agency-defined service date on which this service level was present.
           This respect's the agency's definition of a service day, which may not correspond to
-          a calendar date. See https://gtfs.org/schedule/reference/#field-types for the GTFS
+          a calendar date or even a 24-hour period.
+          See https://gtfs.org/schedule/reference/#field-types for the GTFS
           Schedule definition of a "date" data type or `fct_daily_scheduled_trips` for
           more dates that can be associated with trip activity.
+
           This date is used so that this table's service summaries correspond to the
-          service levels that an agency might describe on a given date, even
+          service levels that an agency might describe on a given (service) date, even
           if that does not correspond to the actual calendar date on which the
           given trip activity occurred.
         tests:
@@ -1080,12 +1083,9 @@ models:
           - unique:
               where: "not contains_warning_duplicate_trip_primary_key AND not contains_warning_duplicate_stop_times_primary_key AND not contains_warning_duplicate_stop_primary_key"
           - not_null
-      - name: stop_arrival_date_pacific
-        description: |
-          The date, in the "America/Los_Angeles" time zone, on which the summarized trips
-          had arrivals at this stop. Note that even if the stop is not in the
-          "America/Los_Angeles" time zone, that is the date definition that is used here.
+      - *service_date_for_summaries
       - *feed_key
+      - *feed_timezone_no_tests
       - name: stop_id
         description: '{{ doc("gtfs_stops__stop_id") }}'
       - name: stop_event_count
@@ -1123,6 +1123,22 @@ models:
       - name: missing_route_type
         description: |
           The count of stop events associated with a `stop_id` that had a null `route_type` value in `dim_routes`
+      - name: first_stop_arrival_datetime_pacific
+        description: |
+          The datetime, in the "America/Los_Angeles" time zone, of the first arrival at this stop on this `service_date`.
+          This field can help contextualize the actual trip activity times that are grouped under this `service_date`.
+          The date portion of this datetime may not correspond to the `service_date` and the gap
+          between `first_stop_arrival_datetime_pacific` and `last_stop_departure_datetime_pacific`
+          could potentially be greater than 24 hours; see `service_date` for more documentation on how
+          `service_date` is defined and why it does not necessarily correspond to a calendar date or 24 hour period.
+      - name: last_stop_departure_datetime_pacific
+        description: |
+          The datetime, in the "America/Los_Angeles" time zone, of the last departure from this stop on this `service_date`.
+          This field can help contextualize the actual trip activity times that are grouped under this `service_date`.
+          The date portion of this datetime may not correspond to the `service_date` and the gap
+          between `first_stop_arrival_datetime_pacific` and `last_stop_departure_datetime_pacific`
+          could potentially be greater than 24 hours; see `service_date` for more documentation on how
+          `service_date` is defined and why it does not necessarily correspond to a calendar date or 24 hour period.
       - name: contains_warning_duplicate_stop_times_primary_key
         description: |
           Rows with `true` in this column indicate that the columns in this table that are aggregated from
