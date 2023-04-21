@@ -12,8 +12,17 @@
 }}
 
 WITH service_alerts AS (
-    SELECT * FROM {{ ref('fct_service_alerts_messages_unnested') }}
+    SELECT 
+        *,
+        -- per spec, start/end is +/- infinity if null: https://gtfs.org/realtime/reference/#message-timerange
+        -- use placeholders instead
+        COALESCE(TIMESTAMP_SECONDS(unnested_active_period.start), TIMESTAMP(DATE(1900,1,1))) AS active_period_start_ts,
+        COALESCE(TIMESTAMP_SECONDS(unnested_active_period.end), TIMESTAMP(DATE(2099,1,1))) AS active_period_end_ts
+    FROM {{ ref('fct_service_alerts_messages_unnested') }}
     WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
+        -- TODO: support route_id/direction_id/start_time as a trip identifier
+        -- as of 2023-04-20, there are no cases of service alert messages where trip ID is not populated and trip.route ID is populated
+        AND trip_id IS NOT NULL
 ),
 
 fct_service_alerts_trip_summaries AS (
@@ -28,7 +37,12 @@ fct_service_alerts_trip_summaries AS (
             'trip_start_time',
             'trip_start_date',
         ]) }} as key,
-        dt,
+        -- TODO: once #2457 merges, we should use the schedule feed timezone rather than just Pacific
+        -- we need to get individual trip instances that can be merged with schedule feed trip instances
+        COALESCE(
+            PARSE_DATE("%Y%m%d",trip_start_date),
+            DATE(header_timestamp, "America/Los_Angeles"),
+            DATE(_extract_ts, "America/Los_Angeles")) AS calculated_service_date_pacific,
         base64_url,
         trip_id,
         trip_route_id,
