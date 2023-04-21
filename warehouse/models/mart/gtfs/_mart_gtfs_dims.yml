@@ -24,10 +24,12 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `base64_url` and `_valid_from`.
-        tests: &primary_key_tests
+        tests:
           - unique:
               # TODO: remove this once we deal with Auburn feed that has tab-delimited files
-              where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
+              # and at that point can move the &primary_key_tests anchor up to here
+              # (until exclusion is dropped, this exclusion condition is different because it's for key instead of feed_key)
+              where: "key != '6368fe701bdd68c4f521751a9a222a10'"
           - not_null
       - &base64_url
         name: base64_url
@@ -52,7 +54,11 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key` and `agency_id`.
-        tests: *primary_key_tests
+        tests: &primary_key_tests
+          - unique:
+              # TODO: remove this once we deal with Auburn feed that has tab-delimited files
+              where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
+          - not_null
       - &feed_key
         name: feed_key
         description: |
