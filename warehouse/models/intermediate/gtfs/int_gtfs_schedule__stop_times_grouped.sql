@@ -16,7 +16,7 @@ stops AS (
     WHERE stop_id IS NOT NULL
     GROUP BY 1, 2, 3
     -- we can have duplicate stop IDs within a given feed (this is not valid, but happens)
-    -- just feep the most common time zone (very unlikely to have same stop ID but different time zone)
+    -- just keep the most common time zone (very unlikely to have same stop ID but different time zone)
     QUALIFY RANK() OVER (PARTITION BY feed_key, stop_id ORDER BY ct DESC) = 1
 ),
 
