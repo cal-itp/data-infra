@@ -22,6 +22,7 @@ WITH service_alerts AS (
     WHERE {{ gtfs_rt_dt_where() }}
         -- TODO: support route_id/direction_id/start_time as a trip identifier
         -- as of 2023-04-20, there are no cases of service alert messages where trip ID is not populated and trip.route ID is populated
+        -- so if trip_id is not populated we assume it's not a trip-level alert
         AND trip_id IS NOT NULL
 ),
 
@@ -57,6 +58,8 @@ fct_service_alerts_trip_summaries AS (
         MIN(header_timestamp) AS min_header_timestamp,
         MAX(header_timestamp) AS max_header_timestamp,
     FROM service_alerts
+    -- we only want to use alerts that were actually *active*
+    WHERE header_timestamp BETWEEN active_period_start_ts AND active_period_end_ts
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
 )
 
