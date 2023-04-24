@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import json
 import os
+import re
 import shutil
 import subprocess
 from pathlib import Path
@@ -288,14 +289,31 @@ def run(
                     "--dbt_docs_url",
                     "https://dbt-docs.calitp.org",
                     "--metabase_database",
-                    "Data Marts (formerly Warehouse Views)",
+                    # TODO: change me back when done testing
+                    "(Internal) Staging Warehouse Views",
+                    # "Data Marts (formerly Warehouse Views)",
                     "--dbt_schema_excludes",
                     "staging",
                     "payments",
                 ],
+                env={
+                    **os.environ,
+                    "COLUMNS": "300",  # we have to make this wide enough to avoid splitting log lines
+                },
                 capture_output=True,
             )
-            sync_stdout = p.stdout.decode()
+
+            models_with_problems = set()
+            for line in p.stdout.decode().splitlines():
+                pat = None
+                if line.startswith("WARNING  Model"):
+                    pat = r"Model\s(?P<dbt_schema>\w+)\.(?P<model>\w+)\snot\sfound\sin\s(?P<db_schema>\w+)"
+                elif line.startswith("WARNING Column"):
+                    pat = r"Column\s(?P<column>\w+)\snot\sfound\sin\s(?P<db_schema>\w+)\.(?P<model>\w+)"
+                if pat:
+                    models_with_problems.add(re.search(pat, line).group("model"))
+            for model in models_with_problems:
+                pass  # TODO: actually log to sentry
         else:
             typer.secho(
                 f"WARNING: running with non-prod target {target} so skipping metabase sync",
