@@ -65,12 +65,8 @@ jobs:
         id: changed-files-warehouse
         with:
           files: 'warehouse/models/**/*.sql'
-      - uses: iterative/setup-cml@v1
+      - name: Create report.md
         if: steps.changed-files-warehouse.outputs.any_changed == 'true'
-      - name: Create GitHub comment
-        if: steps.changed-files-warehouse.outputs.any_changed == 'true'
-        env:
-          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd warehouse
           gsutil cp -r gs://calitp-dbt-artifacts/latest/ .
@@ -83,7 +79,20 @@ jobs:
           poetry run dbt --no-use-colors ls --resource-type model --select state:modified --state ./latest | grep "^calitp_warehouse\." | sed 's/^/--include /g' | xargs poetry run python scripts/visualize.py man --output=target/dag.png
           echo "" >> report.md
           echo '![](./target/dag.png "Changed models")' >> report.md
-          cml comment update report.md
+      - uses: peter-evans/find-comment@v2
+        if: steps.changed-files-warehouse.outputs.any_changed == 'true'
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: Warehouse report
+      - uses: peter-evans/create-or-update-comment@v3
+        if: steps.changed-files-warehouse.outputs.any_changed == 'true'
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body-path: warehouse/report.md
+          edit-mode: replace
 
   build_push:
     name: package warehouse image
