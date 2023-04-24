@@ -908,7 +908,7 @@ models:
         description: |
           This is a calculated field that does not appear directly in GTFS - it is not a timestamp and can't be treated as such.
 
-          Represents `arrival_time` as a total number of seconds after midnight of the first day of the given trip.
+          Represents `arrival_time` as a total number of seconds after twelve hours before noon (usually midnight) on the first day of the given trip.
           For example, `arrival_time = 21:30:45` would lead to `arrival_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
           This allows us to perform duration calculations and handle timestamps that wrap past midnight like
           `25:40:00`, which are allowed in GTFS.
@@ -918,7 +918,7 @@ models:
         description: |
           This is a calculated field that does not appear directly in GTFS - it is not a timestamp and can't be treated as such.
 
-          Represents `departure_time` as a total number of seconds after midnight of the first day of the given trip.
+          Represents `departure_time` as a total number of seconds after twelve hours before noon (usually midnight) on the first day of the given trip.
           For example, `departure_time = 21:30:45` would lead to `departure_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
           This allows us to perform duration calculations and handle timestamps that wrap past midnight like
           `25:40:00`, which are allowed in GTFS.
@@ -927,14 +927,14 @@ models:
       - name: arrival_time_interval
         description: |
           This is a calculated field that does not appear directly in GTFS. It converts `arrival_time`
-          to a BigQuery INTERVAL type, which allows us to treat the field as a duration after midnight
+          to a BigQuery INTERVAL type, which allows us to treat the field as a duration after twelve hours before noon (usually midnight)
           and thus handle times past the following midnight (like `25:40:00`).
 
           See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
       - name: departure_time_interval
         description: |
           This is a calculated field that does not appear directly in GTFS. It converts `arrival_time`
-          to a BigQuery INTERVAL type, which allows us to treat the field as a duration after midnight
+          to a BigQuery INTERVAL type, which allows us to treat the field as a duration after twelve hours before noon (usually midnight)
           and thus handle times past the following midnight (like `25:40:00`).
 
           See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.

@@ -8,14 +8,8 @@ WITH make_dim AS (
 make_intervals AS (
     SELECT
         *,
-        -- INTERVAL type allows us to handle times past midnight (ex. 26:30:30)
-        -- see: https://gtfs.org/schedule/reference/#field-types for how GTFS defines a "Time"
-        CASE
-            WHEN REGEXP_CONTAINS(arrival_time, "^[0-9]+:[0-5][0-9]:[0-5][0-9]$") THEN CAST(arrival_time AS INTERVAL)
-        END AS arrival_time_interval,
-        CASE
-            WHEN REGEXP_CONTAINS(departure_time, "^[0-9]+:[0-5][0-9]:[0-5][0-9]$") THEN CAST(departure_time AS INTERVAL)
-        END AS departure_time_interval
+        {{ gtfs_time_string_to_interval('arrival_time') }} AS arrival_time_interval,
+        {{ gtfs_time_string_to_interval('departure_time') }} AS departure_time_interval
     FROM make_dim
 ),
 
@@ -48,12 +42,8 @@ dim_stop_times AS (
         stop_id IS NULL AS warning_missing_foreign_key_stop_id,
         _feed_valid_from,
         feed_timezone,
-        EXTRACT(HOUR FROM arrival_time_interval) * 3600
-            + EXTRACT(MINUTE FROM arrival_time_interval) * 60
-            + EXTRACT(SECOND FROM arrival_time_interval) AS arrival_sec,
-        EXTRACT(HOUR FROM departure_time_interval) * 3600
-            + EXTRACT(MINUTE FROM departure_time_interval) * 60
-            + EXTRACT(SECOND FROM departure_time_interval) AS departure_sec,
+        {{ gtfs_interval_to_seconds('arrival_time_interval') }} AS arrival_sec,
+        {{ gtfs_interval_to_seconds('departure_time_interval') }} AS departure_sec,
     FROM make_intervals
 )
 
