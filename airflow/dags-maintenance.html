@@ -828,11 +828,11 @@
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">transform_warehouse</span></code></p></td>
 <td><p>Yes</p></td>
-<td><p>Outputs timestamped artifacts</p></td>
+<td><p>Configurable via JSON task parameters to run a portion of the DAG (<code class="docutils literal notranslate"><span class="pre">dbt_select_statement</span></code> key); outputs timestamped artifacts</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">transform_warehouse_full_refresh</span></code></p></td>
 <td><p>Yes</p></td>
-<td><p>Manual job to execute a full-refresh dbt job; should be used sparingly; outputs timestamped artifacts</p></td>
+<td><p>Manual job to execute a full-refresh dbt job; should be used sparingly; configurable via JSON task parameters to run a portion of the DAG (<code class="docutils literal notranslate"><span class="pre">dbt_select_statement</span></code> key); outputs timestamped artifacts</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">unzip_and_validate_gtfs_schedule</span></code></p></td>
 <td><p>No</p></td>
