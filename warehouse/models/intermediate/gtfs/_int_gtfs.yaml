@@ -352,3 +352,43 @@ models:
         tests:
           - not_null
       - *feed_timezone_no_tests
+  - name: int_gtfs_schedule__frequencies_stop_times
+    description: |
+      Expands out frequency-based trips' stop times by combining dim_frequencies and dim_stop_times
+      to list each scheduled iteration of a trip.
+      See https://gtfs.org/schedule/reference/#frequenciestxt for interpretation of frequency-based trips.
+    columns:
+      - name: feed_key
+      - name: trip_id
+      - name: stop_id
+      - name: iteration_num
+      - name: trip_start_time_sec
+      - name: trip_stop_arrival_time_sec
+      - name: trip_start_time_interval
+      - name: trip_stop_arrival_time_interval
+      - name: stop_sequence
+      - name: frequency_start_time
+      - name: frequency_end_time
+      - name: start_time_interval
+      - name: end_time_interval
+      - name: frequency_start_time_sec
+      - name: frequency_end_time_sec
+      - name: headway_secs
+      - name: exact_times
+      - name: first_trip_departure_sec
+      - name: stop_times_arrival_sec
+      - name: stop_times_departure_sec
+      - name: stop_times_arrival_time_interval
+      - name: stop_times_departure_time_interval
+      - name: stop_times_arrival_time
+      - name: stop_times_departure_time
+      - name: sec_to_stop
+      - name: stop_headsign
+      - name: pickup_type
+      - name: drop_off_type
+      - name: shape_dist_traveled
+      - name: timepoint
+      - name: warning_duplicate_stop_times_primary_key
+      - name: warning_missing_foreign_key_stop_id
+      - name: base64_url
+      - name: _feed_valid_from
