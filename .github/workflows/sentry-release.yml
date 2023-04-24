@@ -1,0 +1,29 @@
+name: Notify Sentry of releases
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: google-github-actions/setup-gcloud@v0
+        with:
+          export_default_credentials: true
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+      - uses: 'google-github-actions/get-secretmanager-secrets@v1'
+        id: secrets
+        with:
+          secrets: |-
+            GITHUB_SENTRY_AUTH_TOKEN:cal-itp-data-infra/GITHUB_SENTRY_AUTH_TOKEN
+      - uses: actions/checkout@v2
+      - uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: sentry
+          SENTRY_PROJECT: cal-itp-data-infra
+          SENTRY_URL: https://sentry.calitp.org
+        with:
+          environment: cal-itp-data-infra
