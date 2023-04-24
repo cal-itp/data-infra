@@ -5,42 +5,18 @@ WITH make_dim AS (
     ) }}
 ),
 
-raw_time_parts AS (
+make_intervals AS (
     SELECT
         *,
-        REGEXP_EXTRACT_ALL(arrival_time, "([0-9]+)") AS part_arr,
-        REGEXP_EXTRACT_ALL(departure_time, "([0-9]+)") AS part_dep
+        -- INTERVAL type allows us to handle times past midnight (ex. 26:30:30)
+        -- see: https://gtfs.org/schedule/reference/#field-types for how GTFS defines a "Time"
+        CASE
+            WHEN REGEXP_CONTAINS(arrival_time, "^[0-9]+:[0-5][0-9]:[0-5][0-9]$") THEN CAST(arrival_time AS INTERVAL)
+        END AS arrival_time_interval,
+        CASE
+            WHEN REGEXP_CONTAINS(departure_time, "^[0-9]+:[0-5][0-9]:[0-5][0-9]$") THEN CAST(departure_time AS INTERVAL)
+        END AS departure_time_interval
     FROM make_dim
-),
-
-int_time_parts AS (
-    SELECT
-        * EXCEPT (part_arr, part_dep),
-        ARRAY(
-            SELECT CAST(num AS INT64)
-            FROM UNNEST(raw_time_parts.part_arr) AS num
-        ) AS part_arr,
-        ARRAY(
-            SELECT CAST(num AS INT64)
-            FROM UNNEST(raw_time_parts.part_dep) AS num
-        ) AS part_dep
-    FROM raw_time_parts
-),
-
-array_len_fix AS (
-    SELECT
-        * EXCEPT(part_arr, part_dep),
-        CASE
-            WHEN
-                ARRAY_LENGTH(part_arr) = 0 THEN [NULL, NULL, NULL]
-            ELSE part_arr
-        END AS part_arr,
-        CASE
-            WHEN
-                ARRAY_LENGTH(part_dep) = 0 THEN [NULL, NULL, NULL]
-            ELSE part_dep
-        END AS part_dep
-    FROM int_time_parts
 ),
 
 dim_stop_times AS (
@@ -53,6 +29,10 @@ dim_stop_times AS (
         stop_sequence,
         arrival_time,
         departure_time,
+        -- we could test that extract days from these intervals is 0 but it shouldn't be necessary
+        -- BQ does not automatically justify hours to days because # hours per day varies based on daylight savings
+        arrival_time_interval,
+        departure_time_interval,
         stop_headsign,
         pickup_type,
         drop_off_type,
@@ -67,17 +47,14 @@ dim_stop_times AS (
         ) > 1 AS warning_duplicate_primary_key,
         stop_id IS NULL AS warning_missing_foreign_key_stop_id,
         _feed_valid_from,
-        part_arr[
-            OFFSET(0)
-        ] * 3600 + part_arr[
-            OFFSET(1)
-        ] * 60 + part_arr[OFFSET(2)] AS arrival_sec,
-        part_dep[
-            OFFSET(0)
-        ] * 3600 + part_dep[
-            OFFSET(1)
-        ] * 60 + part_dep[OFFSET(2)] AS departure_sec
-    FROM array_len_fix
+        feed_timezone,
+        EXTRACT(HOUR FROM arrival_time_interval) * 3600
+            + EXTRACT(MINUTE FROM arrival_time_interval) * 60
+            + EXTRACT(SECOND FROM arrival_time_interval) AS arrival_sec,
+        EXTRACT(HOUR FROM departure_time_interval) * 3600
+            + EXTRACT(MINUTE FROM departure_time_interval) * 60
+            + EXTRACT(SECOND FROM departure_time_interval) AS departure_sec,
+    FROM make_intervals
 )
 
 SELECT * FROM dim_stop_times

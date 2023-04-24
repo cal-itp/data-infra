@@ -5,23 +5,43 @@ WITH make_dim AS (
     ) }}
 ),
 
+-- there are some feeds with missing stop_id which breaks everything
+coalesce_missing_ids AS (
+    SELECT
+        *,
+        COALESCE(stop_id, "") AS non_null_stop_id
+    FROM make_dim
+),
+
 bad_rows AS (
     SELECT
+        -- TODO: this could use feed_key instead of URL + ts (equivalent but maybe cleaner)
         base64_url,
         ts,
         stop_id,
+        non_null_stop_id,
         TRUE AS warning_duplicate_primary_key
-    FROM make_dim
-    GROUP BY base64_url, ts, stop_id
+    FROM coalesce_missing_ids
+    GROUP BY base64_url, ts, stop_id, non_null_stop_id
     HAVING COUNT(*) > 1
+),
+
+fill_in_tz AS (
+    SELECT
+        stops.*,
+        COALESCE(parents.stop_timezone, stops.stop_timezone, stops.feed_timezone) AS stop_timezone_coalesced
+    FROM coalesce_missing_ids AS stops
+    LEFT JOIN coalesce_missing_ids AS parents
+        ON stops.parent_station = parents.stop_id
+        AND stops.feed_key = parents.feed_key
 ),
 
 dim_stops AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['feed_key', 'stop_id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['fill_in_tz.feed_key', 'fill_in_tz.stop_id']) }} AS key,
         base64_url,
-        feed_key,
-        stop_id,
+        fill_in_tz.feed_key,
+        fill_in_tz.stop_id,
         tts_stop_name,
         stop_lat,
         stop_lon,
@@ -41,10 +61,13 @@ dim_stops AS (
         level_id,
         platform_code,
         COALESCE(warning_duplicate_primary_key, FALSE) AS warning_duplicate_primary_key,
+        fill_in_tz.stop_id IS NULL AS warning_missing_primary_key,
+        stop_timezone_coalesced,
         _feed_valid_from,
-    FROM make_dim
+        feed_timezone,
+    FROM fill_in_tz
     LEFT JOIN bad_rows
-        USING (base64_url, ts, stop_id)
+        USING (base64_url, ts, non_null_stop_id)
 )
 
 SELECT * FROM dim_stops

@@ -15,20 +15,22 @@ dim_shapes_arrays AS (
 trips_counted AS (
 
     SELECT
-
-        COUNT(DISTINCT trip_key) AS n_trips,
         feed_key,
-        activity_date,
+        service_date,
         shape_id,
         shape_array_key,
+        feed_timezone,
 
+        COUNT(DISTINCT trip_key) AS n_trips,
+        MIN(trip_first_departure_datetime_pacific) AS shape_first_departure_datetime_pacific,
+        MAX(trip_last_arrival_datetime_pacific) AS shape_last_arrival_datetime_pacific,
         LOGICAL_OR(
             contains_warning_duplicate_trip_primary_key
         ) AS contains_warning_duplicate_trip_primary_key
 
     FROM fct_daily_scheduled_trips
     WHERE shape_id IS NOT NULL
-    GROUP BY feed_key, activity_date, shape_id, shape_array_key
+    GROUP BY 1, 2, 3, 4, 5
 
 ),
 
@@ -36,21 +38,24 @@ fct_daily_scheduled_shapes AS (
 
     SELECT
 
-        {{ dbt_utils.generate_surrogate_key(['trips_counted.activity_date', 'trips_counted.shape_id', 'trips_counted.shape_array_key']) }} AS key,
-
-        trips_counted.n_trips,
+        {{ dbt_utils.generate_surrogate_key(['trips_counted.service_date', 'trips_counted.shape_id', 'trips_counted.shape_array_key']) }} AS key,
         trips_counted.feed_key,
-        trips_counted.activity_date,
+        trips_counted.service_date,
         trips_counted.shape_id,
         trips_counted.shape_array_key,
+        trips_counted.feed_timezone,
 
+        trips_counted.n_trips,
+        trips_counted.shape_first_departure_datetime_pacific,
+        trips_counted.shape_last_arrival_datetime_pacific,
         trips_counted.contains_warning_duplicate_trip_primary_key,
 
         dim_shapes_arrays.pt_array
 
     FROM trips_counted
     LEFT JOIN dim_shapes_arrays
-        ON trips_counted.shape_array_key = dim_shapes_arrays.key
+        -- because dim shapes is clustered by feed key including it makes the join more performant
+        ON shape_array_key = dim_shapes_arrays.key
 )
 
 SELECT * FROM fct_daily_scheduled_shapes

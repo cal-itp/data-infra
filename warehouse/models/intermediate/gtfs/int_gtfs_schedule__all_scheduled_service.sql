@@ -17,6 +17,7 @@ boolean_calendar_dates AS (
         date AS service_date,
         feed_key,
         _feed_valid_from,
+        feed_timezone,
         key AS calendar_dates_key,
         service_id,
         CASE
@@ -32,6 +33,7 @@ daily_services AS (
         COALESCE(long_cal.key, cal_dates.key) AS key,
         COALESCE(long_cal.service_date, cal_dates.service_date) AS service_date,
         COALESCE(long_cal.feed_key, cal_dates.feed_key) AS feed_key,
+        COALESCE(long_cal.feed_timezone, cal_dates.feed_timezone) AS feed_timezone,
         COALESCE(long_cal._feed_valid_from, cal_dates._feed_valid_from) AS _feed_valid_from,
         COALESCE(long_cal.service_id, cal_dates.service_id) AS service_id,
         -- calendar_dates takes precedence if present: it can modify calendar
@@ -51,6 +53,7 @@ int_gtfs_schedule__all_scheduled_service AS (
         service_date,
         feed_key,
         _feed_valid_from,
+        feed_timezone,
         calendar_key,
         calendar_dates_key,
         service_id

@@ -38,6 +38,7 @@ dim_feed_info AS (
         base64_url,
         COALESCE(warning_duplicate_primary_key, FALSE) AS warning_duplicate_primary_key,
         _feed_valid_from,
+        feed_timezone,
     FROM with_identifier
     LEFT JOIN bad_rows
         USING (base64_url, ts, feed_info_identifier)

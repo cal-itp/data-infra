@@ -15,6 +15,7 @@ dim_calendar_dates AS (
         exception_type,
         base64_url,
         _feed_valid_from,
+        feed_timezone,
     FROM make_dim
 )
 
