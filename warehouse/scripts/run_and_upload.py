@@ -216,7 +216,10 @@ def run(
     if dbt_docs:
         subprocess.run(get_command("docs", "generate")).check_returncode()
 
-        os.mkdir("docs/")
+        try:
+            os.mkdir("target/docs_site/")
+        except FileExistsError:
+            pass
 
         fs = gcsfs.GCSFileSystem(
             project="cal-itp-data-infra",
@@ -253,13 +256,13 @@ def run(
             # avoid copying run_results is unnecessary for the docs site
             # so just skip to avoid any potential information leakage
             if "run_results" not in str(artifact):
-                shutil.copy(_from, "docs/")
+                shutil.copy(_from, "target/docs_site/")
 
         if deploy_docs:
             args = [
                 "netlify",
                 "deploy",
-                "--dir=docs/",
+                "--dir=target/docs_site/",
             ]
 
             if target and target.startswith("prod"):
@@ -272,9 +275,10 @@ def run(
     # use the pre-prod Metabase right now; we could theoretically test with that if it
     # synced schemas created by the staging dbt target.
     if sync_metabase:
-        if target and target.startswith("prod"):
+        # if target and target.startswith("prod"):
+        if True:
             # TODO: we should be logging each misaligned model to Sentry
-            subprocess.run(
+            p = subprocess.run(
                 [
                     "dbt-metabase",
                     "models",
@@ -288,8 +292,10 @@ def run(
                     "--dbt_schema_excludes",
                     "staging",
                     "payments",
-                ]
+                ],
+                capture_output=True,
             )
+            sync_stdout = p.stdout.decode()
         else:
             typer.secho(
                 f"WARNING: running with non-prod target {target} so skipping metabase sync",
