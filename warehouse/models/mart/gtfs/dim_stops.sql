@@ -28,9 +28,7 @@ bad_rows AS (
 
 fill_in_tz AS (
     SELECT
-        stops.feed_key,
-        stops.stop_id,
-        stops.non_null_stop_id,
+        stops.*,
         COALESCE(parents.stop_timezone, stops.stop_timezone, stops.feed_timezone) AS stop_timezone_coalesced
     FROM coalesce_missing_ids AS stops
     LEFT JOIN coalesce_missing_ids AS parents
@@ -40,10 +38,10 @@ fill_in_tz AS (
 
 dim_stops AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['coalesce_missing_ids.feed_key', 'coalesce_missing_ids.stop_id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['fill_in_tz.feed_key', 'fill_in_tz.stop_id']) }} AS key,
         base64_url,
-        coalesce_missing_ids.feed_key,
-        coalesce_missing_ids.stop_id,
+        fill_in_tz.feed_key,
+        fill_in_tz.stop_id,
         tts_stop_name,
         stop_lat,
         stop_lon,
@@ -63,15 +61,13 @@ dim_stops AS (
         level_id,
         platform_code,
         COALESCE(warning_duplicate_primary_key, FALSE) AS warning_duplicate_primary_key,
-        coalesce_missing_ids.stop_id IS NULL AS warning_missing_primary_key,
+        fill_in_tz.stop_id IS NULL AS warning_missing_primary_key,
         stop_timezone_coalesced,
         _feed_valid_from,
         feed_timezone,
-    FROM coalesce_missing_ids
+    FROM fill_in_tz
     LEFT JOIN bad_rows
         USING (base64_url, ts, non_null_stop_id)
-    LEFT JOIN fill_in_tz
-        USING(feed_key, non_null_stop_id)
 )
 
 SELECT * FROM dim_stops
