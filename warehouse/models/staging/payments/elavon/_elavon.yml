@@ -59,3 +59,4 @@ models:
       - name: ent_num
       - name: dt
       - name: execution_ts
+  - name: stg_elavon__billing

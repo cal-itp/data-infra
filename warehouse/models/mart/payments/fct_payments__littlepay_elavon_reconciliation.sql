@@ -5,8 +5,8 @@ WITH stg_littlepay__settlements AS (
 ),
 
 
-fct_elavon__transactions AS (
-    SELECT * FROM {{ ref('fct_elavon__transactions') }}
+fct_elavon__deposits AS (
+    SELECT * FROM {{ ref('fct_elavon__deposits') }}
 ),
 
 fct_payments__littlepay_elavon_reconciliation AS (
@@ -53,11 +53,8 @@ fct_payments__littlepay_elavon_reconciliation AS (
         t2.chk_num AS elavon_chk_num
 
     FROM stg_littlepay__settlements AS t1
-    INNER JOIN fct_elavon__transactions AS t2
+    INNER JOIN fct_elavon__deposits AS t2
         ON t1.retrieval_reference_number = t2.PURCH_ID
-    --WHERE t2.batch_type = 'D'
-        --AND t2.customer_name = 'MST TAP TO RIDE'
-        --AND t1.participant_id = 'mst'
 )
 
 SELECT * FROM fct_payments__littlepay_elavon_reconciliation
