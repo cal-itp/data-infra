@@ -11,6 +11,8 @@ arguments:
   - '--save-artifacts'
   - '--deploy-docs'
   - '--sync-metabase'
+  - '--select'
+  - "{{ dag_run.conf.get('DBT_SELECT', '') }}"
 
 is_delete_operator_pod: true
 get_logs: true
