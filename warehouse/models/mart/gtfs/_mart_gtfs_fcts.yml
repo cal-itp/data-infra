@@ -658,7 +658,7 @@ models:
         name: service_date
         description: |
           Agency-defined service date on which this service level was present.
-          This respect's the agency's definition of a service day, which may not correspond to
+          This respects the agency's definition of a service day, which may not correspond to
           a calendar date or even a 24-hour period.
           See https://gtfs.org/schedule/reference/#field-types for the GTFS
           Schedule definition of a "date" data type or `fct_daily_scheduled_trips` for
@@ -1093,8 +1093,9 @@ models:
     description: |
       Each row is a summary of trip activity by stop for a given feed on a given agency-defined `service_date`.
 
-      A stop here is defined within an individual feed so, even if a given stop is served by multiple
-      agencies, the stop will have one row per feed in which it appears.
+      A stop here is defined within an individual feed so each real-world stop will have one row
+      per feed in which it appears. This means an individual real-world stop location may appear in this table multiple times
+      if it is served by multiple agencies or served by an agency with multiple feeds.
     columns:
       - name: key
         description: |
