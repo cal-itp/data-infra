@@ -22,19 +22,19 @@ There are roughly two categories of Airflow DAGs in our system.
 
 DAGs are listed in alphabetical order (like in the Airflow UI) and are labeled by
 
-| DAG                                | "Now" | Notes                                                                                                     |
-|------------------------------------|-------|-----------------------------------------------------------------------------------------------------------|
-| `airtable_loader_v2`               | Yes   | Don't need to rerun more than once if multiple failures; scraped data is labeled by actual execution time |
-| `amplitude_benefits`               | No    | This will be replaced soon by an Amplitude-to-GCS export.                                                 |
-| `create_external_tables`           | Yes   | Generally only fails due to GCP issues or definition problems; individual tasks can be cleared once fixed |
-| `deploy_dbt_docs`                  | Yes   | Manual job to deploy dbt docs to Metabase and Netlify                                                     |
-| `download_gtfs_schedule_v2`        | Yes   | Don't need to rerun more than once if multiple failures; scraped data is labeled by actual execution time |
-| `parse_and_validate_rt_v2`         | No    |                                                                                                           |
-| `payments_loader`                  | Yes   | This is deprecated, pending data consumers switching to v2 models. See below for maintenance.             |
-| `scrape_feed_aggregators`          | Yes   | Scraped data is labeled by actual execution time                                                          |
-| `transform_warehouse`              | Yes   | Outputs timestamped artifacts                                                                             |
-| `transform_warehouse_full_refresh` | Yes   | Manual job to execute a full-refresh dbt job; should be used sparingly; outputs timestamped artifacts     |
-| `unzip_and_validate_gtfs_schedule` | No    |                                                                                                           |
+| DAG                                | "Now" | Notes                                                                                                                                                                                                 |
+|------------------------------------|-------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `airtable_loader_v2`               | Yes   | Don't need to rerun more than once if multiple failures; scraped data is labeled by actual execution time                                                                                             |
+| `amplitude_benefits`               | No    | This will be replaced soon by an Amplitude-to-GCS export.                                                                                                                                             |
+| `create_external_tables`           | Yes   | Generally only fails due to GCP issues or definition problems; individual tasks can be cleared once fixed                                                                                             |
+| `deploy_dbt_docs`                  | Yes   | Manual job to deploy dbt docs to Metabase and Netlify                                                                                                                                                 |
+| `download_gtfs_schedule_v2`        | Yes   | Don't need to rerun more than once if multiple failures; scraped data is labeled by actual execution time                                                                                             |
+| `parse_and_validate_rt_v2`         | No    |                                                                                                                                                                                                       |
+| `payments_loader`                  | Yes   | This is deprecated, pending data consumers switching to v2 models. See below for maintenance.                                                                                                         |
+| `scrape_feed_aggregators`          | Yes   | Scraped data is labeled by actual execution time                                                                                                                                                      |
+| `transform_warehouse`              | Yes   | Configurable via JSON task parameters to run a portion of the DAG (`dbt_select_statement` key); outputs timestamped artifacts                                                                         |
+| `transform_warehouse_full_refresh` | Yes   | Manual job to execute a full-refresh dbt job; should be used sparingly; configurable via JSON task parameters to run a portion of the DAG (`dbt_select_statement` key); outputs timestamped artifacts |
+| `unzip_and_validate_gtfs_schedule` | No    |                                                                                                                                                                                                       |
 
 ### GTFS Realtime parsing and validation
 The primary DAG relevant to GTFS Realtime data is [parse_and_validate_rt_v2](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/parse_and_validate_rt_v2).
