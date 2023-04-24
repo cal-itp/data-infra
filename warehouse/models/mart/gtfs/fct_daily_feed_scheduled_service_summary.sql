@@ -38,8 +38,8 @@ summarize_service AS (
         ) AS contains_warning_missing_foreign_key_stop_id
 
     FROM fct_daily_scheduled_trips
-    WHERE activity_date < CURRENT_DATE()
-    GROUP BY activity_date, feed_key, gtfs_dataset_key
+    WHERE service_date < CURRENT_DATE()
+    GROUP BY service_date, feed_key, gtfs_dataset_key
 ),
 
 -- left join with feeds to include information about feeds with no service scheduled
