@@ -1,6 +1,7 @@
 """
 Parses binary RT feeds and writes them back to GCS as gzipped newline-delimited JSON
 """
+import base64
 import concurrent.futures
 import copy
 import datetime
@@ -58,6 +59,8 @@ JAR_DEFAULT = typer.Option(
 RT_PARSED_BUCKET = os.environ["CALITP_BUCKET__GTFS_RT_PARSED"]
 RT_VALIDATION_BUCKET = os.environ["CALITP_BUCKET__GTFS_RT_VALIDATION"]
 GTFS_RT_VALIDATOR_VERSION = os.environ["GTFS_RT_VALIDATOR_VERSION"]
+
+app = typer.Typer(pretty_exceptions_enable=False)
 
 
 def make_dict_bq_safe(d: Dict[str, Any]) -> Dict[str, Any]:
@@ -412,6 +415,7 @@ def validate_and_upload(
             with open(results_path) as f:
                 records = json.load(f)
         except FileNotFoundError as e:
+            # TODO: does this mean no errors?
             msg = f"WARNING: no validation output file found in {results_path}"
             if verbose:
                 log(
@@ -633,7 +637,25 @@ def parse_and_validate(
                 pbar=pbar,
             )
         except (ScheduleDataNotFound, subprocess.CalledProcessError) as e:
-            sentry_sdk.capture_exception(e)
+            with sentry_sdk.push_scope() as scope:
+                # convert back to url manually, I don't want to mess around with the hourly class
+                if isinstance(e, subprocess.CalledProcessError):
+                    scope.fingerprint = [
+                        type(e),
+                        e.returncode,
+                        base64.urlsafe_b64decode(hour.base64_url.encode()).decode(),
+                    ]
+                else:
+                    scope.fingerprint = [
+                        type(e),
+                        base64.urlsafe_b64decode(hour.base64_url.encode()).decode(),
+                    ]
+                scope.set_context("hour", json.loads(hour.json()))
+                # try to get the top of the stacktrace since this will be truncated; 1800 is just an estimate
+                scope.set_context(
+                    "process", {"stderr": e.stderr.decode("utf-8")[-1800:]}
+                )
+                sentry_sdk.capture_exception(e, scope=scope)
             if verbose:
                 log(
                     f"{str(e)} thrown for {hour.path}",
@@ -670,6 +692,7 @@ def parse_and_validate(
     raise RuntimeError("we should not be here")
 
 
+@app.command()
 def main(
     step: RTProcessingStep,
     feed_type: GTFSFeedType,
@@ -840,4 +863,4 @@ def main(
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()
