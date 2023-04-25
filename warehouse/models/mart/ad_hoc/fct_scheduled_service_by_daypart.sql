@@ -15,11 +15,11 @@ extract_trip_date_types AS (
     SELECT
 
         CASE
-            WHEN EXTRACT(hour FROM activity_first_departure) < 4 THEN "OWL"
-            WHEN EXTRACT(hour FROM activity_first_departure) < 7 THEN "Early AM"
-            WHEN EXTRACT(hour FROM activity_first_departure) < 10 THEN "AM Peak"
-            WHEN EXTRACT(hour FROM activity_first_departure) < 15 THEN "Midday"
-            WHEN EXTRACT(hour FROM activity_first_departure) < 20 THEN "PM Peak"
+            WHEN EXTRACT(hour FROM trip_first_departure_datetime_pacific) < 4 THEN "OWL"
+            WHEN EXTRACT(hour FROM trip_first_departure_datetime_pacific) < 7 THEN "Early AM"
+            WHEN EXTRACT(hour FROM trip_first_departure_datetime_pacific) < 10 THEN "AM Peak"
+            WHEN EXTRACT(hour FROM trip_first_departure_datetime_pacific) < 15 THEN "Midday"
+            WHEN EXTRACT(hour FROM trip_first_departure_datetime_pacific) < 20 THEN "PM Peak"
             ELSE "Evening"
         END
         AS time_of_day,
@@ -28,7 +28,7 @@ extract_trip_date_types AS (
         shape_id,
         route_id,
         route_short_name,
-        EXTRACT(hour FROM activity_first_departure) AS hour,
+        EXTRACT(hour FROM trip_first_departure_datetime_pacific) AS hour,
         EXTRACT(month FROM service_date) AS month,
         EXTRACT(year FROM service_date) AS year,
         EXTRACT(DAYOFWEEK from service_date) AS day_type
