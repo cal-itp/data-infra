@@ -330,11 +330,11 @@ def validate_day(
                         # but is relatively rare for Schedule data
                         extract_hash = fs.stat(extract.path)["md5Hash"]
                         scope.fingerprint = [type(e), e.returncode, extract_hash]
+                        # try to get the top of the stacktrace since this will be truncated; 1500 is just an estimate
+                        scope.set_context(
+                            "process", {"stderr": e.stderr.decode("utf-8")[-1500:]}
+                        )
                     scope.set_context("extract", json.loads(extract.json()))
-                    # try to get the top of the stacktrace since this will be truncated; 1500 is just an estimate
-                    scope.set_context(
-                        "process", {"stderr": e.stderr.decode("utf-8")[-1500:]}
-                    )
                     sentry_sdk.capture_exception(e, scope=scope)
                 log(
                     f"encountered exception on extract {extract.path}: {e}\n{traceback.format_exc()}",
