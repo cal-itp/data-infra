@@ -7,7 +7,7 @@ WITH dim_gtfs_datasets AS (
 fct_daily_scheduled_trips AS (
     SELECT *
     FROM {{ ref('fct_daily_scheduled_trips') }}
-    WHERE activity_date >= '2022-12-01' AND activity_date < '2023-01-01'
+    WHERE service_date >= '2022-12-01' AND service_date < '2023-01-01'
 ),
 
 extract_trip_date_types AS (
@@ -29,9 +29,9 @@ extract_trip_date_types AS (
         route_id,
         route_short_name,
         EXTRACT(hour FROM activity_first_departure) AS hour,
-        EXTRACT(month FROM activity_date) AS month,
-        EXTRACT(year FROM activity_date) AS year,
-        EXTRACT(DAYOFWEEK from activity_date) AS day_type
+        EXTRACT(month FROM service_date) AS month,
+        EXTRACT(year FROM service_date) AS year,
+        EXTRACT(DAYOFWEEK from service_date) AS day_type
 
     FROM fct_daily_scheduled_trips
 

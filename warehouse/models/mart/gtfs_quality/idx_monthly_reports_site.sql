@@ -38,7 +38,7 @@ dim_feed_info AS (
 service_summary AS (
     SELECT
         *,
-        LAST_DAY(activity_date, MONTH) AS month_last_date
+        LAST_DAY(service_date, MONTH) AS month_last_date
     FROM {{ ref('fct_daily_reports_site_organization_scheduled_service_summary') }}
 ),
 
