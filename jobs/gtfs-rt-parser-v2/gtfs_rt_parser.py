@@ -641,7 +641,7 @@ def parse_and_validate(
         except (ScheduleDataNotFound, subprocess.CalledProcessError) as e:
             with sentry_sdk.push_scope() as scope:
                 scope.set_context("hour", json.loads(hour.json()))
-                fingerprint = [
+                fingerprint: List[Any] = [
                     type(e),
                     # convert back to url manually, I don't want to mess around with the hourly class
                     base64.urlsafe_b64decode(hour.base64_url.encode()).decode(),
