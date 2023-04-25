@@ -38,7 +38,6 @@ parts:
         - file: warehouse/what_is_agency
         - file: warehouse/developing_dbt_models
         - file: warehouse/adding_oneoff_data
-        - file: warehouse/sql_snippets
       - file: datasets_and_tables/overview
         sections:
         - file: datasets_and_tables/transitdatabase

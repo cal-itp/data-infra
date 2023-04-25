@@ -1,4 +1,4 @@
-(developing_dbt_models)=
+(developing-dbt-models)=
 # Developing models in dbt
 
 Information related to contributing to the [Cal-ITP dbt project](https://github.com/cal-itp/data-infra/tree/main/warehouse).
