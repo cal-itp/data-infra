@@ -16,7 +16,7 @@ WITH
 
 trip_updates AS (
     SELECT * FROM {{ ref('fct_trip_updates_messages') }}
-    WHERE {{ gtfs_rt_dt_where() }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
 fct_trip_updates_no_stop_times AS (

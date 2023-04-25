@@ -14,7 +14,7 @@ WITH service_alerts_ages AS (
         base64_url,
         _header_message_age,
     FROM {{ ref('fct_service_alerts_messages') }}
-    WHERE {{ gtfs_rt_dt_where() }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
 -- these values are repeated because one row in the source table is one service_alerts message so the header is identical for all messages on a given request

@@ -16,7 +16,7 @@ int_gtfs_rt__distinct_download_configs AS (
         dt,
         _config_extract_ts
     FROM {{ ref('stg_gtfs_rt__service_alerts_outcomes') }}
-    WHERE {{ gtfs_rt_dt_where() }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 )
 
 SELECT * FROM int_gtfs_rt__distinct_download_configs
