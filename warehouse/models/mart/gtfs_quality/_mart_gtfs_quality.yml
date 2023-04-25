@@ -633,6 +633,20 @@ models:
     tests: *message_age_summary_tests
     columns: *message_age_summary_cols
 
+  - name: fct_monthly_reports_site_organization_gtfs_vendors
+    description: |
+      Monthly summary of both GTFS Schedule and GTFS-RT vendors used by each organization.
+      Vendors are broadly classified as RT or Schedule based on component type.
+      Join with `idx_monthly_reports_site` to use in site and report generation.
+    columns:
+      - name: organization_name
+      - name: organization_source_record_id
+      - name: organization_itp_id
+      - name: date_start
+        description: Included to join with index table for each month.
+      - name: schedule_vendors
+      - name: rt_vendors
+
 exposures:
  - name: calitp_reports_site
    type: application
@@ -647,5 +661,6 @@ exposures:
      - ref("fct_monthly_reports_site_organization_validation_codes")
      - ref("fct_monthly_route_id_changes")
      - ref("fct_monthly_stop_id_changes")
+     - ref("fct_monthly_reports_site_organization_gtfs_vendors")
    owner:
      email: Eric.Dasmalchi@dot.ca.gov
