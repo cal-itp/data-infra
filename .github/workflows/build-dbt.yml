@@ -77,8 +77,9 @@ jobs:
           poetry run dbt --no-use-colors ls --resource-type model --select state:modified --exclude state:new --state ./latest | grep "^calitp_warehouse\." | sed "s/calitp_warehouse\.//g" >> report.md
           echo "### DAG" >> report.md
           poetry run dbt --no-use-colors ls --resource-type model --select state:modified --state ./latest | grep "^calitp_warehouse\." | sed 's/^/--include /g' | xargs poetry run python scripts/visualize.py man --output=target/dag.png
-          echo "" >> report.md
-          echo '![](./target/dag.png "Changed models")' >> report.md
+# TODO: add these back
+#          echo "" >> report.md
+#          echo '![](./target/dag.png "Changed models")' >> report.md
       - uses: peter-evans/find-comment@v2
         if: steps.changed-files-warehouse.outputs.any_changed == 'true'
         id: fc
