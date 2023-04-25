@@ -58,6 +58,7 @@ class DbtTestWarn(Exception):
 def get_failure_context(failure: RunResult, node: Node) -> Dict[str, Any]:
     context: Dict[str, Any] = {
         "unique_id": failure.unique_id,
+        "path": str(node.original_file_path),
     }
     if failure.unique_id.startswith("test"):
         if node.depends_on:

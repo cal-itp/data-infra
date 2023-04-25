@@ -128,6 +128,7 @@ class BaseNode(BaseModel):
     unique_id: str
     fqn: List[str]
     path: Path
+    original_file_path: Path
     database: str
     schema_: str = Field(None, alias="schema")
     name: str
