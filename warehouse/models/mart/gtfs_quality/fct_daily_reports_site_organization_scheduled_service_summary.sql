@@ -17,11 +17,11 @@ int_gtfs__organization_dataset_map AS (
 
 fct_daily_reports_site_organization_scheduled_service_summary AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['activity_date', 'organization_key']) }} AS key,
-        activity_date,
+        {{ dbt_utils.generate_surrogate_key(['service_date', 'organization_key']) }} AS key,
+        service_date,
         CASE
-            WHEN EXTRACT(DAYOFWEEK FROM activity_date) = 1 THEN "Sunday"
-            WHEN EXTRACT(DAYOFWEEK FROM activity_date) = 7 THEN "Saturday"
+            WHEN EXTRACT(DAYOFWEEK FROM service_date) = 1 THEN "Sunday"
+            WHEN EXTRACT(DAYOFWEEK FROM service_date) = 7 THEN "Saturday"
             ELSE "Weekday"
         END AS service_day_type,
         organization_name,
@@ -46,9 +46,9 @@ fct_daily_reports_site_organization_scheduled_service_summary AS (
         ) AS contains_warning_missing_foreign_key_stop_id
     FROM int_gtfs__organization_dataset_map
     INNER JOIN fct_daily_feed_scheduled_service_summary
-        ON int_gtfs__organization_dataset_map.date = fct_daily_feed_scheduled_service_summary.activity_date
+        ON int_gtfs__organization_dataset_map.date = fct_daily_feed_scheduled_service_summary.service_date
         AND int_gtfs__organization_dataset_map.schedule_feed_key = fct_daily_feed_scheduled_service_summary.feed_key
-    GROUP BY activity_date, organization_source_record_id, organization_name, organization_itp_id, organization_key
+    GROUP BY service_date, organization_source_record_id, organization_name, organization_itp_id, organization_key
 )
 
 SELECT * FROM fct_daily_reports_site_organization_scheduled_service_summary

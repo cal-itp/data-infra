@@ -14,7 +14,8 @@ WITH payments_feeds AS (
             ('recysP9m9kjCJwHZe', 'mst'),
             ('rectQfIeiKDBeJSAV', 'sbmtd'),
             ('recbzZQUIdMmFvm1r', 'sacrt'),
-            ('recLhUJUDjFXcmOte', 'clean-air-express')
+            ('recLhUJUDjFXcmOte', 'clean-air-express'),
+            ('recIUAJZhamq51hyM', 'ccjpa')
 
         ]
         )

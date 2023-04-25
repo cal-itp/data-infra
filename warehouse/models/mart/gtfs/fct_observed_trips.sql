@@ -13,13 +13,13 @@ assessment_entities AS (
     SELECT * FROM {{ ref('int_gtfs_quality__daily_assessment_candidate_entities') }}
 ),
 trip_updates AS (
-    SELECT * FROM {{ ref('int_gtfs_rt__trip_updates_summaries') }}
+    SELECT * FROM {{ ref('fct_trip_updates_summaries') }}
 ),
 vehicle_positions AS (
-    SELECT * FROM {{ ref('int_gtfs_rt__vehicle_positions_trip_summaries') }}
+    SELECT * FROM {{ ref('fct_vehicle_positions_trip_summaries') }}
 ),
 service_alerts AS (
-    SELECT * FROM {{ ref('int_gtfs_rt__service_alerts_trip_summaries') }}
+    SELECT * FROM {{ ref('fct_service_alerts_trip_summaries') }}
 ),
 
 -- get each of these distinct
@@ -55,7 +55,7 @@ service_alerts_to_schedule AS (
 trip_updates_with_associated_schedule AS (
     SELECT
         trip_updates.*,
-        {{ dbt_utils.surrogate_key(['trip_id', 'trip_route_id', 'trip_direction_id', 'trip_start_time', 'trip_start_date']) }} AS trip_identifier,
+        {{ dbt_utils.generate_surrogate_key(['trip_id', 'trip_route_id', 'trip_direction_id', 'trip_start_time', 'trip_start_date']) }} AS trip_identifier,
         urls_to_datasets.gtfs_dataset_key,
         trip_updates_to_schedule.schedule_to_use_for_rt_validation_gtfs_dataset_key,
     FROM trip_updates
@@ -69,7 +69,7 @@ trip_updates_with_associated_schedule AS (
 vehicle_positions_with_associated_schedule AS (
     SELECT
         vehicle_positions.*,
-        {{ dbt_utils.surrogate_key(['trip_id', 'trip_route_id', 'trip_direction_id', 'trip_start_time', 'trip_start_date']) }} AS trip_identifier,
+        {{ dbt_utils.generate_surrogate_key(['trip_id', 'trip_route_id', 'trip_direction_id', 'trip_start_time', 'trip_start_date']) }} AS trip_identifier,
         urls_to_datasets.gtfs_dataset_key,
         vehicle_positions_to_schedule.schedule_to_use_for_rt_validation_gtfs_dataset_key,
     FROM vehicle_positions
@@ -83,7 +83,7 @@ vehicle_positions_with_associated_schedule AS (
 service_alerts_with_associated_schedule AS (
     SELECT
         service_alerts.*,
-        {{ dbt_utils.surrogate_key(['trip_id', 'trip_route_id', 'trip_direction_id', 'trip_start_time', 'trip_start_date']) }} AS trip_identifier,
+        {{ dbt_utils.generate_surrogate_key(['trip_id', 'trip_route_id', 'trip_direction_id', 'trip_start_time', 'trip_start_date']) }} AS trip_identifier,
         urls_to_datasets.gtfs_dataset_key,
         service_alerts_to_schedule.schedule_to_use_for_rt_validation_gtfs_dataset_key,
     FROM service_alerts
@@ -98,7 +98,7 @@ service_alerts_with_associated_schedule AS (
 fct_observed_trips AS (
     SELECT
         -- keys/identifiers
-        {{ dbt_utils.surrogate_key([
+        {{ dbt_utils.generate_surrogate_key([
             'dt',
             'schedule_to_use_for_rt_validation_gtfs_dataset_key',
             'trip_identifier',

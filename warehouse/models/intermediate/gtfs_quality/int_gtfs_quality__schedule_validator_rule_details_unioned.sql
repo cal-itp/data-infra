@@ -10,7 +10,7 @@ WITH unioned AS (
 
 int_gtfs_quality__schedule_validator_rule_details_unioned AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['code', 'version']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['code', 'version']) }} AS key,
         * EXCEPT(_dbt_source_relation)
     FROM unioned
 )

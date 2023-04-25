@@ -27,7 +27,7 @@ artifacts = map(
 
 sentry_sdk.init(environment=os.environ["AIRFLOW_ENV"])
 
-app = typer.Typer()
+app = typer.Typer(pretty_exceptions_enable=False)
 
 
 class DbtException(Exception):
@@ -131,6 +131,7 @@ def run(
     save_artifacts: bool = False,
     deploy_docs: bool = False,
     sync_metabase: bool = False,
+    select: Optional[str] = None,
     exclude: Optional[str] = None,
 ) -> None:
     assert (
@@ -176,6 +177,8 @@ def run(
         args = ["run"]
         if full_refresh:
             args.append("--full-refresh")
+        if select:
+            args.extend(["--select", *select.split(" ")])
         if exclude:
             args.extend(["--exclude", exclude])
         results_to_check.append(subprocess.run(get_command(*args)))
@@ -222,6 +225,7 @@ def run(
 
         ts = pendulum.now()
 
+        # TODO: we need to save run_results from the run and not the docs generate
         for artifact in artifacts:
             _from = str(project_dir / Path("target") / artifact)
 

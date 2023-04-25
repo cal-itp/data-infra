@@ -18,7 +18,7 @@ bad_rows AS (
 
 dim_fare_products AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['feed_key', 'fare_product_id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'fare_product_id']) }} AS key,
         base64_url,
         feed_key,
         fare_product_id,
@@ -27,6 +27,7 @@ dim_fare_products AS (
         currency,
         COALESCE(warning_duplicate_primary_key, FALSE) AS warning_duplicate_primary_key,
         _feed_valid_from,
+        feed_timezone,
     FROM make_dim
     LEFT JOIN bad_rows
         USING (base64_url, ts, fare_product_id)

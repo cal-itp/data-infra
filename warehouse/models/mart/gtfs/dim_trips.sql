@@ -7,7 +7,7 @@ WITH make_dim AS (
 
 dim_trips AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['feed_key', 'trip_id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'trip_id']) }} AS key,
         base64_url,
         feed_key,
         route_id,
@@ -22,6 +22,7 @@ dim_trips AS (
         bikes_allowed,
         COUNT(*) OVER (PARTITION BY base64_url, ts, trip_id) > 1 AS warning_duplicate_primary_key,
         _feed_valid_from,
+        feed_timezone,
     FROM make_dim
 )
 

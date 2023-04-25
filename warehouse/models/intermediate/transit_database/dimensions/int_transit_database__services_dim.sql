@@ -6,13 +6,13 @@ WITH dim AS (
         date_col = 'dt',
         record_id_col = 'id',
         array_cols = ['service_type', 'fare_systems', 'mode', 'primary_mode', 'paratransit_for',
-            'provider', 'operator', 'funding_sources', 'operating_counties']
+            'provider', 'operator', 'funding_sources', 'operating_counties', 'operating_county_geographies']
         ) }}
 ),
 
 int_transit_database__services_dim AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['id', '_valid_from']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['id', '_valid_from']) }} AS key,
         id AS source_record_id,
         name,
         service_type,
@@ -32,6 +32,8 @@ int_transit_database__services_dim AS (
         assessment_status,
         manual_check__gtfs_realtime_data_ingested_in_trip_planner,
         manual_check__gtfs_schedule_data_ingested_in_trip_planner,
+        deprecated_date,
+        operating_county_geographies,
         _is_current,
         _valid_from,
         _valid_to

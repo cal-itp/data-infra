@@ -38,11 +38,13 @@ stop_times_grouped AS (
 
 gtfs_joins AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['service_index.service_date', 'trips.key']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['service_index.service_date', 'trips.key']) }} AS key,
 
         service_index.service_date,
         service_index.feed_key,
+        trips.base64_url,
         service_index.service_id,
+        service_index.feed_timezone,
 
         trips.key AS trip_key,
         trips.trip_id AS trip_id,
@@ -71,13 +73,20 @@ gtfs_joins AS (
         stop_times_grouped.service_hours,
         stop_times_grouped.contains_warning_duplicate_primary_key AS contains_warning_duplicate_stop_times_primary_key,
         stop_times_grouped.contains_warning_missing_foreign_key_stop_id,
+        stop_times_grouped.trip_start_timezone,
+        stop_times_grouped.trip_end_timezone,
+        -- spec is explicit: all stop times are relative to midnight in the feed time zone (from agency.txt)
+        -- see: https://gtfs.org/schedule/reference/#stopstxt
+        -- so to make a timestamp, we use the feed timezone from agency.txt
+        TIMESTAMP_ADD(
+            {{ gtfs_noon_minus_twelve_hours('service_date', 'service_index.feed_timezone') }},
+            INTERVAL stop_times_grouped.trip_first_departure_sec SECOND
+            ) AS trip_first_departure_ts,
 
-        DATE_ADD(service_index.service_date,
-            INTERVAL CAST((TRUNC(SAFE_DIVIDE(stop_times_grouped.trip_first_departure_sec, 86400))) AS INT64) DAY) AS activity_date,
-
-        TIME(TIMESTAMP_SECONDS(MOD(stop_times_grouped.trip_first_departure_sec, 86400))) AS activity_first_departure,
-
-        TIME(TIMESTAMP_SECONDS(MOD(stop_times_grouped.trip_last_arrival_sec, 86400))) AS activity_last_arrival
+        TIMESTAMP_ADD(
+            {{ gtfs_noon_minus_twelve_hours('service_date', 'service_index.feed_timezone') }},
+            INTERVAL stop_times_grouped.trip_last_arrival_sec SECOND
+            ) AS trip_last_arrival_ts,
 
     FROM int_gtfs_schedule__daily_scheduled_service_index AS service_index
     INNER JOIN dim_trips AS trips
@@ -97,6 +106,8 @@ gtfs_joins AS (
 fct_daily_scheduled_trips AS (
     SELECT
         gtfs_joins.key,
+        gtfs_joins.feed_timezone,
+        gtfs_joins.base64_url,
 
         dim_gtfs_datasets.name,
         dim_gtfs_datasets.regional_feed_type,
@@ -126,19 +137,25 @@ fct_daily_scheduled_trips AS (
         gtfs_joins.n_stop_times,
         gtfs_joins.trip_first_departure_sec,
         gtfs_joins.trip_last_arrival_sec,
+        gtfs_joins.trip_start_timezone,
+        gtfs_joins.trip_end_timezone,
         gtfs_joins.service_hours,
         gtfs_joins.contains_warning_duplicate_stop_times_primary_key,
         gtfs_joins.contains_warning_missing_foreign_key_stop_id,
-        gtfs_joins.activity_date,
-        gtfs_joins.activity_first_departure,
-        gtfs_joins.activity_last_arrival
-
+        gtfs_joins.trip_first_departure_ts,
+        gtfs_joins.trip_last_arrival_ts,
+        DATE(trip_first_departure_ts, "America/Los_Angeles") AS trip_start_date_pacific,
+        DATETIME(trip_first_departure_ts, "America/Los_Angeles") AS trip_first_departure_datetime_pacific,
+        DATETIME(trip_last_arrival_ts, "America/Los_Angeles") AS trip_last_arrival_datetime_pacific,
+        DATE(trip_first_departure_ts, trip_start_timezone) AS trip_start_date_local_tz,
+        DATETIME(trip_first_departure_ts, trip_start_timezone) AS trip_first_departure_datetime_local_tz,
+        DATETIME(trip_last_arrival_ts, trip_end_timezone) AS trip_last_arrival_datetime_local_tz,
     FROM gtfs_joins
     LEFT JOIN dim_schedule_feeds AS feeds
         ON gtfs_joins.feed_key = feeds.key
     LEFT JOIN urls_to_gtfs_datasets
         ON feeds.base64_url = urls_to_gtfs_datasets.base64_url
-        AND CAST(gtfs_joins.activity_date AS TIMESTAMP) BETWEEN urls_to_gtfs_datasets._valid_from AND urls_to_gtfs_datasets._valid_to
+        AND gtfs_joins.trip_first_departure_ts BETWEEN urls_to_gtfs_datasets._valid_from AND urls_to_gtfs_datasets._valid_to
     LEFT JOIN dim_gtfs_datasets
         ON urls_to_gtfs_datasets.gtfs_dataset_key = dim_gtfs_datasets.key
 )

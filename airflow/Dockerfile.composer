@@ -21,4 +21,5 @@ RUN pip install --no-cache-dir --user -r /tmp/requirements-composer-1.20.5-airfl
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir --user -r /tmp/requirements.txt
 
-RUN python3 -m pip check
+ENTRYPOINT ["/usr/bin/env"]
+CMD ["python3", "-m", "pip", "check"]

@@ -159,6 +159,10 @@ def get_schedule_extracts_for_day(
         },
     )
 
+    # Explicitly put extracts in timestamp order so dict construction below sets
+    # values to the most recent extract for a given base64_url
+    extracts.sort(key=lambda extract: extract.ts)
+
     return {extract.base64_url: extract for extract in extracts}
 
 
@@ -364,21 +368,31 @@ def validate_and_upload(
     pbar=None,
 ) -> List[RTFileProcessingOutcome]:
     first_extract = hour.extracts[0]
-    try:
-        # TODO: this does not work if we didn't download a schedule zip for that day
-        schedule_extract = get_schedule_extracts_for_day(first_extract.dt)[
-            first_extract.config.base64_validation_url
-        ]
-        gtfs_zip = download_gtfs_schedule_zip(
-            fs,
-            schedule_extract=schedule_extract,
-            dst_dir=tmp_dir,
-            pbar=pbar,
-        )
-    except (KeyError, FileNotFoundError) as e:
+    extract_day = first_extract.dt
+    for target_date in reversed(
+        list(extract_day - extract_day.subtract(days=7))
+    ):  # Fall back to most recent available schedule within 7 days
+        try:
+            schedule_extract = get_schedule_extracts_for_day(target_date)[
+                first_extract.config.base64_validation_url
+            ]
+
+            gtfs_zip = download_gtfs_schedule_zip(
+                fs,
+                schedule_extract=schedule_extract,
+                dst_dir=tmp_dir,
+                pbar=pbar,
+            )
+
+            break
+        except (KeyError, FileNotFoundError):
+            print(
+                f"no schedule data found for {first_extract.path} and day {target_date}"
+            )
+    else:
         raise ScheduleDataNotFound(
-            f"no schedule data found for {first_extract.path}"
-        ) from e
+            f"no recent schedule data found for {first_extract.path}"
+        )
 
     execute_rt_validator(
         gtfs_zip,

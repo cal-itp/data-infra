@@ -3,11 +3,12 @@
 WITH int_gtfs_quality__guideline_checks_long AS (
     SELECT *
     FROM {{ ref('int_gtfs_quality__guideline_checks_long') }}
+    WHERE service_key IS NOT NULL AND guidelines_assessed
 ),
 
 fct_daily_service_combined_guideline_checks AS (
     SELECT
-        {{ dbt_utils.surrogate_key([
+        {{ dbt_utils.generate_surrogate_key([
             'date',
             'service_key',
             'check']) }} AS key,

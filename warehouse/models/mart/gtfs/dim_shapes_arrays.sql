@@ -14,6 +14,7 @@ WITH dim_shapes AS (
 lat_long AS (
     SELECT
         feed_key,
+        feed_timezone,
         base64_url,
         shape_id,
         shape_pt_sequence,
@@ -32,6 +33,7 @@ initial_pt_array AS (
         base64_url,
         shape_id,
         _feed_valid_from,
+        feed_timezone,
         -- don't try to make LINESTRING because of this issue:
         -- https://stackoverflow.com/questions/58234223/st-makeline-discarding-duplicate-points-even-if-not-consecutive
         -- also: https://gis.stackexchange.com/questions/426188/can-i-represent-a-route-that-doubles-back-on-itself-in-bigquery-with-a-linestrin
@@ -44,17 +46,18 @@ initial_pt_array AS (
         -- count number of rows so we can check for nulls (drops) later
         COUNT(*) AS ct
     FROM lat_long
-    GROUP BY feed_key, base64_url, shape_id, _feed_valid_from
+    GROUP BY feed_key, base64_url, shape_id, _feed_valid_from, feed_timezone
 ),
 
 dim_shapes_arrays AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['feed_key', 'shape_id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'shape_id']) }} AS key,
         feed_key,
         shape_id,
         pt_array,
         base64_url,
         _feed_valid_from,
+        feed_timezone,
     FROM initial_pt_array
     -- drop shapes that had nulls
     WHERE ARRAY_LENGTH(pt_array) = ct

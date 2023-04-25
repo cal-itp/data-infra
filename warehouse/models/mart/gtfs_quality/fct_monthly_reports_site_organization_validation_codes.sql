@@ -22,7 +22,7 @@ validator_details AS (
 
 fct_monthly_reports_site_organization_validation_codes AS (
     SELECT DISTINCT
-        {{ dbt_utils.surrogate_key(['idx.organization_source_record_id',
+        {{ dbt_utils.generate_surrogate_key(['idx.organization_source_record_id',
                                     'idx.publish_date',
                                     'notices.code',
         ]) }} AS key,

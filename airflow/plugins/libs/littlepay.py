@@ -79,9 +79,10 @@ def preprocess_littlepay_provider_bucket(
             stg_fname = f"{stg_dir}/{aws_user}_{basename}"
             dst_fname = f"{dst_dir}/{date_string}_{aws_user}_{basename}"
 
-            print(f"copying from payments bucket: {stg_fname} -> {dst_fname}")
+            print(f"copying from payments bucket: {fname} -> {stg_fname}")
             fs.cp(fname, f"{get_bucket()}/{stg_fname}")
 
+            print(f"copying from payments bucket: {stg_fname} -> {dst_fname}")
             _keep_columns(
                 stg_fname,
                 dst_fname,

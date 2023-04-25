@@ -37,8 +37,20 @@ models:
       - name: route_short_name
       - name: shape_id
       - name: time_of_day
+        description: |
+          Categorized based on the Pacific Time departure of the trip's first departure.
       - name: hour
+        description: |
+          Hour of the Pacific Time departure of the trip's first departure.
       - name: month
+        description: |
+          Actual calendar month (Pacific Time dates) in which this service was scheduled to occur.
       - name: year
+        description: |
+          Actual calendar year (Pacific Time dates) in which this service was scheduled to occur.
       - name: day_type
+        description: |
+          Actual calendar day type (Pacific Time dates) in which this service was scheduled to occur.
+          This means that overnight service is associated with the calendar date on which it was scheduled,
+          even if it was associated with the prior `service_date` by the agency.
       - name: n_trips

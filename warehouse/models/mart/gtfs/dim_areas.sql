@@ -18,13 +18,14 @@ bad_rows AS (
 
 dim_areas AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['feed_key', 'area_id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'area_id']) }} AS key,
         feed_key,
         area_id,
         area_name,
         base64_url,
         COALESCE(warning_duplicate_primary_key, FALSE) AS warning_duplicate_primary_key,
         _feed_valid_from,
+        feed_timezone,
     FROM make_dim
     LEFT JOIN bad_rows
         USING (base64_url, ts, area_id)

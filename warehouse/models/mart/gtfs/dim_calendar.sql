@@ -7,7 +7,7 @@ WITH make_dim AS (
 
 dim_calendar AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['feed_key', 'service_id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'service_id']) }} AS key,
         feed_key,
         service_id,
         monday,
@@ -21,6 +21,7 @@ dim_calendar AS (
         end_date,
         base64_url,
         _feed_valid_from,
+        feed_timezone,
     FROM make_dim
 )
 

@@ -24,8 +24,12 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `base64_url` and `_valid_from`.
-        tests: &primary_key_tests
-          - unique
+        tests:
+          - unique:
+              # TODO: remove this once we deal with Auburn feed that has tab-delimited files
+              # and at that point can move the &primary_key_tests anchor up to here
+              # (until exclusion is dropped, this exclusion condition is different because it's for key instead of feed_key)
+              where: "key != '6368fe701bdd68c4f521751a9a222a10'"
           - not_null
       - &base64_url
         name: base64_url
@@ -37,7 +41,10 @@ models:
         description: '{{ doc("column_valid_to") }}'
       - name: _is_current
         description: '{{ doc("column_is_current") }}'
-
+      - name: feed_timezone
+        description: '{{ doc("gtfs_schedule_feed_timezone") }}'
+        tests:
+          - not_null
   - name: dim_agency
     description: |
       Each row is a cleaned row from an agency.txt file.
@@ -47,7 +54,11 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key` and `agency_id`.
-        tests: *primary_key_tests
+        tests: &primary_key_tests
+          - unique:
+              # TODO: remove this once we deal with Auburn feed that has tab-delimited files
+              where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
+          - not_null
       - &feed_key
         name: feed_key
         description: |
@@ -73,6 +84,8 @@ models:
         description: '{{ doc("gtfs_agency__agency_timezone") }}'
         tests: &not_null_warn
         - not_null:
+            # TODO: remove this once we deal with Auburn feed that has tab-delimited files
+            where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
             config:
               severity: warn
       - name: agency_lang
@@ -86,6 +99,9 @@ models:
       - &_feed_valid_from
         name: _feed_valid_from
         description: Should not be used; exists to faciliate incremental materialization.
+      - &feed_timezone_no_tests
+        name: feed_timezone
+        description: '{{ doc("gtfs_schedule_feed_timezone") }}'
 
   - name: dim_areas
     description: |
@@ -104,10 +120,14 @@ models:
       - name: area_id
         description: '{{ doc("gtfs_areas__area_id") }}'
         tests: &not_null_error
-          - not_null
+          - not_null:
+              # TODO: remove this once we deal with Auburn feed that has tab-delimited files
+              where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
       - name: area_name
         description: '{{ doc("gtfs_areas__area_name") }}'
       - *_feed_valid_from
+      - *feed_timezone_no_tests
+
   - name: dim_attributions
     description: |
       Each row is a cleaned row from an attributions.txt file.
@@ -144,6 +164,8 @@ models:
       - name: attribution_phone
         description: '{{ doc("gtfs_attributions__attribution_phone") }}'
       - *_feed_valid_from
+      - *feed_timezone_no_tests
+
   - name: dim_fare_attributes
     description: |
       Each row is a cleaned row from a fare_attributes.txt file.
@@ -176,6 +198,8 @@ models:
       - name: transfer_duration
         description: '{{ doc("gtfs_fare_attributes__transfer_duration") }}'
       - *_feed_valid_from
+      - *feed_timezone_no_tests
+
   - name: dim_fare_leg_rules
     description: |
       Each row is a cleaned row from a fare_leg_rules.txt file.
@@ -199,6 +223,7 @@ models:
       - name: fare_product_id
         description: '{{ doc("gtfs_fare_leg_rules__fare_product_id") }}'
       - *_feed_valid_from
+      - *feed_timezone_no_tests
 
   - name: dim_fare_products
     description: |
@@ -224,6 +249,7 @@ models:
         description: '{{ doc("gtfs_fare_products__currency") }}'
         tests: *not_null_warn_99_threshold
       - *_feed_valid_from
+      - *feed_timezone_no_tests
 
   - name: dim_fare_rules
     description: |
@@ -249,6 +275,8 @@ models:
       - name: contains_id
         description: '{{ doc("gtfs_fare_rules__contains_id") }}'
       - *_feed_valid_from
+      - *feed_timezone_no_tests
+
   - name: dim_fare_transfer_rules
     description: |
       Each row is a cleaned row from a fare_transfer_rules.txt file.
@@ -277,6 +305,8 @@ models:
       - name: fare_product_id
         description: '{{ doc("gtfs_fare_transfer_rules__fare_product_id") }}'
       - *_feed_valid_from
+      - *feed_timezone_no_tests
+
   - name: dim_feed_info
     description: |
       Each row is a cleaned row from a feed_info.txt file.
@@ -311,6 +341,8 @@ models:
       - name: feed_contact_url
         description: '{{ doc("gtfs_feed_info__feed_contact_url") }}'
       - *_feed_valid_from
+      - *feed_timezone_no_tests
+
   - name: dim_frequencies
     description: |
       Each row is a cleaned row from a frequencies.txt file.
@@ -338,6 +370,8 @@ models:
       - name: exact_times
         description: '{{ doc("gtfs_frequencies__exact_times") }}'
       - *_feed_valid_from
+      - *feed_timezone_no_tests
+
   - name: dim_levels
     description: |
       Each row is a cleaned row from a levels.txt file.
@@ -359,6 +393,8 @@ models:
       - name: level_name
         description: '{{ doc("gtfs_levels__level_name") }}'
       - *_feed_valid_from
+      - *feed_timezone_no_tests
+
   - name: dim_pathways
     description: |
       Each row is a cleaned row from a pathways.txt file.
@@ -401,6 +437,8 @@ models:
       - name: reversed_signposted_as
         description: '{{ doc("gtfs_pathways__reversed_signposted_as") }}'
       - *_feed_valid_from
+      - *feed_timezone_no_tests
+
   - name: dim_routes
     description: |
       Each row is a cleaned row from a routes.txt file.
@@ -442,6 +480,8 @@ models:
       - name: network_id
         description: '{{ doc("gtfs_routes__network_id") }}'
       - *_feed_valid_from
+      - *feed_timezone_no_tests
+
   - name: dim_shapes
     description: |
       Each row is a cleaned row from a shapes.txt file.
@@ -479,6 +519,8 @@ models:
       - name: shape_dist_traveled
         description: '{{ doc("gtfs_shapes__shape_dist_traveled") }}'
       - *_feed_valid_from
+      - *feed_timezone_no_tests
+
   - name: dim_stop_areas
     description: |
       Each row is a cleaned row from a stop_areas.txt file.
@@ -498,6 +540,8 @@ models:
         description: '{{ doc("gtfs_stop_areas__stop_id") }}'
         tests: *not_null_error
       - *_feed_valid_from
+      - *feed_timezone_no_tests
+
   - name: dim_stops
     description: |
       Each row is a cleaned row from a stops.txt file.
@@ -559,7 +603,17 @@ models:
         description: |
           Rows with `true` in this column have a duplicate primary key; i.e., `stop_id` is duplicated within an individual feed
           instance and `key` will also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
+      - name: warning_missing_primary_key
+        description: |
+          Rows with `true` in this column are missing a `stop_id`, the primary key for this table (i.e., `stop_id` was not provided in the raw data).
+          These rows will fail to join with other tables from their feed because they cannot be referenced by a foreign key elsewhere.
+      - name: stop_timezone_coalesced
+        description: '{{ doc("gtfs_schedule_stop_timezone_coalesced") }}'
+        tests:
+          - not_null
       - *_feed_valid_from
+      - *feed_timezone_no_tests
+
   - name: dim_transfers
     description: |
       Each row is a cleaned row from a transfers.txt file.
@@ -596,6 +650,8 @@ models:
       - name: to_trip_id
         description: '{{ doc("gtfs_transfers__to_trip_id") }}'
       - *_feed_valid_from
+      - *feed_timezone_no_tests
+
   - name: dim_translations
     description: |
       Each row is a cleaned row from a translations.txt file.
@@ -627,6 +683,8 @@ models:
       - name: field_value
         description: '{{ doc("gtfs_translations__field_value") }}'
       - *_feed_valid_from
+      - *feed_timezone_no_tests
+
   - name: dim_trips
     description: |
       Each row is a cleaned row from a trips.txt file.
@@ -665,10 +723,12 @@ models:
       - name: bikes_allowed
         description: '{{ doc("gtfs_trips__bikes_allowed") }}'
       - *_feed_valid_from
+      - *feed_timezone_no_tests
       - name: warning_duplicate_primary_key
         description: |
           Rows with `true` in this column have a duplicate primary key; i.e., `trip_id` is duplicated within an individual feed
           instance and `key` will also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
+
   - name: dim_calendar
     description: |
       Each row is a cleaned row from a calendar.txt file.
@@ -712,6 +772,8 @@ models:
         description: '{{ doc("gtfs_calendar__end_date") }}'
         tests: *not_null_warn
       - *_feed_valid_from
+      - *feed_timezone_no_tests
+
   - name: dim_calendar_dates
     description: |
       Each row is a cleaned row from a calendar_dates.txt file.
@@ -734,10 +796,19 @@ models:
         description: '{{ doc("gtfs_calendar_dates__exception_type") }}'
         tests: *not_null_warn
       - *_feed_valid_from
+      - *feed_timezone_no_tests
+
   - name: dim_stop_times
     description: |
       Cleaned GTFS schedule stop_times data.
       See https://gtfs.org/schedule/reference/#calendar_datestxt for specification.
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "EXTRACT(DAY FROM arrival_time_interval) = 0"
+          where: "TIMESTAMP_DIFF(CURRENT_TIMESTAMP(), _feed_valid_from, DAY) <= 3"
+      - dbt_utils.expression_is_true:
+          expression: "EXTRACT(DAY FROM departure_time_interval) = 0"
+          where: "TIMESTAMP_DIFF(CURRENT_TIMESTAMP(), _feed_valid_from, DAY) <= 3"
     columns:
       - *feed_key
       - *base64_url
@@ -785,23 +856,43 @@ models:
           This means they will fail to join with `stop` related information.
       - name: arrival_sec
         description: |
-          This is a calculated field that does not come from GTFS - it is not a timestamp and can't be treated as such.
+          This is a calculated field that does not appear directly in GTFS - it is not a timestamp and can't be treated as such.
 
           Represents `arrival_time` as a total number of seconds after midnight of the first day of the given trip.
           For example, `arrival_time = 21:30:45` would lead to `arrival_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
           This allows us to perform duration calculations and handle timestamps that wrap past midnight like
           `25:40:00`, which are allowed in GTFS.
+
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
       - name: departure_sec
         description: |
-          This is a calculated field that does not come from GTFS - it is not a timestamp and can't be treated as such.
+          This is a calculated field that does not appear directly in GTFS - it is not a timestamp and can't be treated as such.
 
           Represents `departure_time` as a total number of seconds after midnight of the first day of the given trip.
           For example, `departure_time = 21:30:45` would lead to `departure_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
           This allows us to perform duration calculations and handle timestamps that wrap past midnight like
           `25:40:00`, which are allowed in GTFS.
+
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+      - name: arrival_time_interval
+        description: |
+          This is a calculated field that does not appear directly in GTFS. It converts `arrival_time`
+          to a BigQuery INTERVAL type, which allows us to treat the field as a duration after midnight
+          and thus handle times past the following midnight (like `25:40:00`).
+
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+      - name: departure_time_interval
+        description: |
+          This is a calculated field that does not appear directly in GTFS. It converts `arrival_time`
+          to a BigQuery INTERVAL type, which allows us to treat the field as a duration after midnight
+          and thus handle times past the following midnight (like `25:40:00`).
+
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
       - *_feed_valid_from
+      - *feed_timezone_no_tests
     meta:
       publish.gis_coordinate_system_epsg: WGS84
+
   - name: dim_shapes_arrays
     description: |
       Each row is a shape, constructed from the points listed in
@@ -823,3 +914,4 @@ models:
         description: Ordered array of WKT points that describe this shape.
         tests: *not_null_error
       - *_feed_valid_from
+      - *feed_timezone_no_tests

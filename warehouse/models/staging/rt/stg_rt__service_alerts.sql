@@ -23,7 +23,7 @@ stg_rt__service_alerts AS (
         alert.severityLevel as severity_level,
 
 
-        {{ dbt_utils.surrogate_key(['metadata.path',
+        {{ dbt_utils.generate_surrogate_key(['metadata.path',
                                     'id']) }} AS key
 
     FROM source

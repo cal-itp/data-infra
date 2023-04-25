@@ -23,9 +23,10 @@ make_noon_pacific AS (
 
 fct_daily_schedule_feeds AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['t1.date_day', 't2.key']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['t1.date_day', 't2.key']) }} AS key,
         t1.date_day AS date,
         t2.key AS feed_key,
+        t2.feed_timezone,
         t2.base64_url,
         urls_to_gtfs_datasets.gtfs_dataset_key AS gtfs_dataset_key,
         t1.date_day > CURRENT_DATE() AS is_future

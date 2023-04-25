@@ -15,7 +15,9 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `agency_id`.
         tests: &primary_key_tests
-          - unique
+          - unique:
+              # TODO: remove this once we deal with Auburn feed that has tab-delimited files
+              where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
           - not_null
         meta: &pk_meta
           publish.ignore: true
@@ -49,6 +51,8 @@ models:
         description: '{{ doc("gtfs_agency__agency_timezone") }}'
         tests: &not_null_warn
         - not_null:
+            # TODO: remove this once we deal with Auburn feed that has tab-delimited files
+            where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
             config:
               severity: warn
       - name: agency_lang
@@ -59,6 +63,10 @@ models:
         description: '{{ doc("gtfs_agency__agency_fare_url") }}'
       - name: agency_email
         description: '{{ doc("gtfs_agency__agency_email") }}'
+      - &feed_timezone
+        name: feed_timezone
+        meta:
+          publish.ignore: true
 
 
   - name: dim_attributions_latest
@@ -101,7 +109,7 @@ models:
         description: '{{ doc("gtfs_attributions__attribution_email") }}'
       - name: attribution_phone
         description: '{{ doc("gtfs_attributions__attribution_phone") }}'
-
+      - *feed_timezone
 
   - name: dim_calendar_latest
     description: |
@@ -123,7 +131,9 @@ models:
       - name: service_id
         description: '{{ doc("gtfs_calendar__service_id") }}'
         tests: &not_null_error
-        - not_null
+        - not_null:
+            # TODO: remove this once we deal with Auburn feed that has tab-delimited files
+            where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
       - name: monday
         description: '{{ doc("gtfs_calendar__monday") }}'
         tests: *not_null_warn
@@ -151,7 +161,7 @@ models:
       - name: end_date
         description: '{{ doc("gtfs_calendar__end_date") }}'
         tests: *not_null_warn
-
+      - *feed_timezone
 
   - name: dim_calendar_dates_latest
     description: |
@@ -179,7 +189,7 @@ models:
       - name: exception_type
         description: '{{ doc("gtfs_calendar_dates__exception_type") }}'
         tests: *not_null_warn
-
+      - *feed_timezone
 
   - name: dim_fare_attributes_latest
     description: |
@@ -217,7 +227,7 @@ models:
         description: '{{ doc("gtfs_fare_attributes__agency_id") }}'
       - name: transfer_duration
         description: '{{ doc("gtfs_fare_attributes__transfer_duration") }}'
-
+      - *feed_timezone
 
   - name: dim_fare_rules_latest
     description: |
@@ -247,7 +257,7 @@ models:
         description: '{{ doc("gtfs_fare_rules__destination_id") }}'
       - name: contains_id
         description: '{{ doc("gtfs_fare_rules__contains_id") }}'
-
+      - *feed_timezone
 
   - name: dim_feed_info_latest
     description: |
@@ -287,7 +297,7 @@ models:
         description: '{{ doc("gtfs_feed_info__feed_contact_email") }}'
       - name: feed_contact_url
         description: '{{ doc("gtfs_feed_info__feed_contact_url") }}'
-
+      - *feed_timezone
 
   - name: dim_frequencies_latest
     description: |
@@ -320,7 +330,7 @@ models:
         tests: *not_null_warn
       - name: exact_times
         description: '{{ doc("gtfs_frequencies__exact_times") }}'
-
+      - *feed_timezone
 
   - name: dim_levels_latest
     description: |
@@ -347,7 +357,7 @@ models:
         tests: *not_null_warn
       - name: level_name
         description: '{{ doc("gtfs_levels__level_name") }}'
-
+      - *feed_timezone
 
   - name: dim_pathways_latest
     description: |
@@ -395,7 +405,7 @@ models:
         description: '{{ doc("gtfs_pathways__signposted_as") }}'
       - name: reversed_signposted_as
         description: '{{ doc("gtfs_pathways__reversed_signposted_as") }}'
-
+      - *feed_timezone
 
   - name: dim_routes_latest
     description: |
@@ -442,7 +452,7 @@ models:
         description: '{{ doc("gtfs_routes__continuous_drop_off") }}'
       - name: network_id
         description: '{{ doc("gtfs_routes__network_id") }}'
-
+      - *feed_timezone
 
   - name: dim_shapes_latest
     description: |
@@ -485,7 +495,7 @@ models:
         tests: *not_null_warn
       - name: shape_dist_traveled
         description: '{{ doc("gtfs_shapes__shape_dist_traveled") }}'
-
+      - *feed_timezone
 
   - name: dim_stop_times_latest
     description: |
@@ -566,7 +576,13 @@ models:
           For example, `departure_time = 21:30:45` would lead to `departure_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
           This allows us to perform duration calculations and handle timestamps that wrap past midnight like
           `25:40:00`, which are allowed in GTFS.
-
+      - *feed_timezone
+      - name: arrival_time_interval
+        meta:
+          publish.ignore: true
+      - name: departure_time_interval
+        meta:
+          publish.ignore: true
 
   - name: dim_stops_latest
     description: |
@@ -628,7 +644,14 @@ models:
         description: '{{ doc("gtfs_stops__level_id") }}'
       - name: platform_code
         description: '{{ doc("gtfs_stops__platform_code") }}'
-
+      - *feed_timezone
+        # TODO: would be good to actually publish this, with appropriate documentation, next time we are ready to make a round of updates
+      - name: warning_missing_primary_key
+        meta:
+          publish.ignore: true
+      - name: stop_timezone_coalesced
+        meta:
+          publish.ignore: true
 
   - name: dim_transfers_latest
     description: |
@@ -666,7 +689,7 @@ models:
         description: '{{ doc("gtfs_transfers__from_trip_id") }}'
       - name: to_trip_id
         description: '{{ doc("gtfs_transfers__to_trip_id") }}'
-
+      - *feed_timezone
 
   - name: dim_translations_latest
     description: |
@@ -703,7 +726,7 @@ models:
         description: '{{ doc("gtfs_translations__record_sub_id") }}'
       - name: field_value
         description: '{{ doc("gtfs_translations__field_value") }}'
-
+      - *feed_timezone
 
   - name: dim_trips_latest
     description: |
@@ -745,13 +768,13 @@ models:
         description: '{{ doc("gtfs_trips__wheelchair_accessible") }}'
       - name: bikes_allowed
         description: '{{ doc("gtfs_trips__bikes_allowed") }}'
-
       - name: warning_duplicate_primary_key
         description: |
           Rows with `true` in this column have a duplicate primary key; i.e., `trip_id` is duplicated within an individual feed
           instance and `key` will also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
         meta:
           publish.ignore: true
+      - *feed_timezone
 
 exposures:
   - name: california_open_data
@@ -769,6 +792,7 @@ exposures:
       - ref("dim_fare_rules_latest")
       - ref("dim_feed_info_latest")
       - ref("dim_frequencies_latest")
+      - ref("dim_gtfs_datasets_latest")
       - ref("dim_levels_latest")
       - ref("dim_pathways_latest")
       - ref("dim_routes_latest")
@@ -841,6 +865,11 @@ exposures:
                 Each row is a cleaned row from a frequencies.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#frequenciestxt.
+            dim_gtfs_datasets_latest:
+              id: e4ca5bd4-e9ce-40aa-a58a-3a6d78b042bd
+              description: |
+                Each record represents a GTFS dataset (feed), and provides
+                base64-encoded URLs used to access that feed.
             dim_levels_latest:
               id: 288a08cd-7929-479e-aa88-08b677a08510
               description: |

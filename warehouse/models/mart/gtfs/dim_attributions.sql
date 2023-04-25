@@ -10,7 +10,7 @@ bad_rows AS (
         base64_url,
         ts,
         attribution_id,
-        TRUE AS warning_duplicate_primary_key
+        TRUE AS warning_duplicate_primary_key,
     FROM make_dim
     GROUP BY base64_url, ts, attribution_id
     HAVING COUNT(*) > 1
@@ -18,7 +18,7 @@ bad_rows AS (
 
 dim_attributions AS (
     SELECT
-        {{ dbt_utils.surrogate_key(['feed_key', 'make_dim.attribution_id']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['feed_key', 'make_dim.attribution_id']) }} AS key,
         feed_key,
         organization_name,
         make_dim.attribution_id,
@@ -34,6 +34,7 @@ dim_attributions AS (
         make_dim.base64_url,
         COALESCE(warning_duplicate_primary_key, FALSE) AS warning_duplicate_primary_key,
         _feed_valid_from,
+        feed_timezone,
     FROM make_dim
     LEFT JOIN bad_rows
         ON make_dim.base64_url = bad_rows.base64_url

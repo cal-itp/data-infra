@@ -14,7 +14,7 @@ stg_gtfs_schedule__fare_products AS (
         dt AS _dt,
         {{ trim_make_empty_string_null('fare_product_id') }} AS fare_product_id,
         {{ trim_make_empty_string_null('fare_product_name') }} AS fare_product_name,
-        SAFE_CAST({{ trim_make_empty_string_null('amount') }} AS FLOAT64) AS amount,
+        SAFE_CAST({{ trim_make_empty_string_null('amount') }} AS NUMERIC) AS amount,
         {{ trim_make_empty_string_null('currency') }} AS currency
     FROM external_fare_products
 )

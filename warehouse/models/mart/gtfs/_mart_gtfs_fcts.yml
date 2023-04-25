@@ -55,6 +55,10 @@ models:
           Boolean indicating whether this date is in the future relative to the last time that the table
           was run. If this is a future date (if is_future is true), any coverage is prospective and
           subject to change.
+      - &feed_timezone_no_tests
+        name: feed_timezone
+        description: '{{ doc("gtfs_schedule_feed_timezone") }}'
+
   - name: fct_schedule_feed_downloads
     description: |
       Each row is an instance of a download attempt, uniquely identified by base64_url and
@@ -164,6 +168,27 @@ models:
       - name: trip_start_date
       - name: trip_schedule_relationship
       - name: stop_time_updates
+      - &_header_message_age
+        name: _header_message_age
+        description: |
+          Difference between `_extract_ts` (time at which we scraped the message) and `header_timestamp` (timestamp
+          of overall message from producer; see https://gtfs.org/realtime/reference/#message-feedheader).
+          Because of delay in the request process, the actual scrape request may occur up to a few
+          seconds after `_extract_ts`, and it may take time for the producer to respond to the request, so
+          this field should only be interpreted as accurate within 3-4 seconds (do not try to do extremely precise
+          measurements below that level.)
+      - name: _trip_update_message_age
+        description: |
+          Difference between `_extract_ts` (time at which we scraped the message) and `trip_update_timestamp` (timestamp
+          of individual trip update message from producer; see https://gtfs.org/realtime/reference/#message-tripupdate).
+          Because of delay in the request process, the actual scrape request may occur up to a few
+          seconds after `_extract_ts`, and it may take time for the producer to respond to the request, so
+          this field should only be interpreted as accurate within 3-4 seconds (do not try to do extremely precise
+          measurements below that level.)
+      - name: _trip_update_message_age_vs_header
+        description: |
+          Difference between `header_timestamp` (timestamp of overall message from producer; see https://gtfs.org/realtime/reference/#message-feedheader)
+          and `trip_update_timestamp` (timestamp of individual trip_update message from producer; see https://gtfs.org/realtime/reference/#message-tripupdate).
 
   - name: fct_vehicle_locations
     description: |
@@ -215,6 +240,19 @@ models:
       - name: _extract_ts
         description: |
           Time at which this message was scraped.
+      - *_header_message_age
+      - name: _vehicle_message_age
+        description: |
+          Difference in seconds between `_extract_ts` (time at which we scraped the message) and `vehicle_timestamp` (timestamp
+          of individual vehicle message from producer; see https://gtfs.org/realtime/reference/#message-vehicleposition).
+          Because of delay in the request process, the actual scrape request may occur up to a few
+          seconds after `_extract_ts`, and it may take time for the producer to respond to the request, so
+          this field should only be interpreted as accurate within 3-4 seconds (do not try to do extremely precise
+          measurements below that level.)
+      - name: _vehicle_message_age_vs_header
+        description: |
+          Difference in seconds between `header_timestamp` (timestamp of overall message from producer; see https://gtfs.org/realtime/reference/#message-feedheader)
+          and `vehicle_timestamp` (timestamp of individual vehicle message from producer; see https://gtfs.org/realtime/reference/#message-vehicleposition).
       - name: _gtfs_dataset_name
         description: |
           String name of the GTFS dataset of which this message is a part.
@@ -308,6 +346,17 @@ models:
       Specifically, it means that the associated `service_id` was active and had service
       scheduled. Dates where a `service_id` was active but not scheduled (for example,
       weekend dates within a weekday service's effective dates) are not listed in this table.
+
+      The GTFS standard allows for a trip's scheduled stop activity to occur more than 24 hours after the beginning of the
+      associated `service_date`. See https://gtfs.org/schedule/reference/#field-types for the GTFS definitions of times and dates.
+
+      Additionally, different feeds use different time zones (see: https://gtfs.org/schedule/reference/#agencytxt
+      and https://gtfs.org/schedule/reference/#stopstxt).
+
+      For this reason, this table contains multiple date and time labels associated with a given trip.
+      Please consult each individual column's definition for guidance on which field is
+      most appropriate for your use case.
+
     columns:
       - name: key
         tests:
@@ -327,7 +376,18 @@ models:
           help you assess other alternative feeds for the same services and organizations.
           Not specified (null) for feeds with no relationship to regional feeds.
       - name: service_date
-        description: Date on which this trip was active.
+        description: |
+          Agency's service date for which this trip was active.
+          See https://gtfs.org/schedule/reference/#field-types
+          for the GTFS definitions of times and dates.
+          This date is defined with respect to `feed_timezone`.
+
+          This field should be used to:
+          * Identify the service date that the agency assigns to this trip
+          * Join with other internal-to-GTFS data that is keyed by service date
+
+          This field should not be used to:
+          * Filter trip activity by calendar date (because this does not necessarily reflect the local date on which the trip activity actually occurred)
       - name: service_id
         description: |
           Service ID from calendar or calendar_dates that determines that this trip
@@ -400,14 +460,26 @@ models:
           A count of stop events by trip
       - name: trip_first_departure_sec
         description: |
-          A trip's earliest departure, calculated in seconds of the day
+          The number of seconds after midnight on `service_day` in `feed_timezone` at
+          which this trip's first stop departure occurred.
+
+          This field is used upstream of this table to make generic service determinations
+          in tables where we don't have a specific date assigned yet (for example, within
+          stop_times.) Downstream of this table, now that specific dates are associated
+          with the trips, this field should not be used.
       - name: trip_last_arrival_sec
         description: |
-          A trip's last arrival, calculated in seconds of the day
+          The number of seconds after midnight on `service_day` in `feed_timezone` at
+          which this trip's last stop arrival occurred.
+
+          This field is used upstream of this table to make generic service determinations
+          in tables where we don't have a specific date assigned yet (for example, within
+          stop_times.) Downstream of this table, now that specific dates are associated
+          with the trips, this field should not be used.
       - name: service_hours
         description: |
           A trip's total hours of service, calculated by subtracting `trip_last_arrival_sec` from
-          `trip_first_departure_sec` and converting to hours
+          `trip_first_departure_sec` and converting to hours.
       - name: contains_warning_duplicate_stop_times_primary_key
         description: |
           Rows with `true` in this column indicate that the columns in this table that are aggregated from
@@ -426,18 +498,84 @@ models:
           I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
           in the input data. This indicates that data quality issues were present in the stop times data
           that is being summarized here, and the count of distinct `stop_id`s at the trip level may be incorrect.
-      - name: activity_date
+      - name: trip_start_timezone
         description: |
-          The GTFS standard allows for a trip's `trip_first_departure_sec` to be greater than one day (86,400 seconds).
-          In that case, the date of the activity is later than the `service_date`, so we capture that in this `activity_date` column.
+          The time zone of the first stop in this trip.
+      - name: trip_end_timezone
+        description: |
+          The time zone of the final stop in this trip.
+      - name: trip_first_departure_ts
+        description: |
+          The timestamp (non-localized, absolute) at which this trip's first departure occurred.
 
-          Because of this, `activity_date` is used instead of `service_date` for analysis purposes.
-      - name: activity_first_departure
+          This field should be used to:
+          * Identify all activity that was happening at a specific instant in time
+          * Calculate durations or identify relative ordering of events
+
+          This field should not be used to:
+          * Bucket events by time of day (because this does not reflect the time zone in which the trip activity actually occurred)
+          * Filter activity by date (because this does not necessarily reflect the local date on which the trip activity actually occurred)
+      - name: trip_last_arrival_ts
         description: |
-          The time of day of the trip's first departure.
-      - name: activity_last_arrival
+          The timestamp (non-localized, absolute) at which this trip's last stop arrival occurred.
+
+          This field should be used to:
+          * Identify all activity that was happening at a specific instant in time
+          * Calculate durations or identify relative ordering of events
+
+          This field should not be used to:
+          * Bucket events by time of day (because this does not reflect the time zone in which the trip activity actually occurred)
+          * Filter activity by date (because this does not necessarily reflect the local date on which the trip activity actually occurred)
+      - name: trip_start_date_pacific
         description: |
-          The time of day of the trip's last arrival.
+          The "America/Los_Angeles" time zone date on which this trip began.
+          There are some feeds with activity that does not occur within this time zone,
+          but we assume that for analysis purposes it is preferable to standardize to California's time zone.
+
+          This field should be used to:
+          * Filter trip activity by date
+
+          This field should not be used to:
+          * Calculate durations or identify relative ordering of events
+          * Identify the service date that the agency assigns to this trip
+          * Join with internal-to-GTFS data that is keyed by service date
+
+      - name: trip_first_departure_datetime_pacific
+        description: |
+          The "America/Los_Angeles" time zone date and time of this trip's first departure.
+          There are some feeds with activity that does not occur within this time zone,
+          but we assume that for analysis purposes it is preferable to standardize to California's time zone.
+
+          This field should be used to:
+          * Filter trip activity by date and time
+          * Bucket trips by time of day
+
+          This field should not be used to:
+          * Calculate durations or identify relative ordering of events
+          * Identify the service date that the agency assigns to this trip
+          * Join with internal-to-GTFS data that is keyed by service date
+
+      - name: trip_last_arrival_datetime_pacific
+        description: |
+          The "America/Los_Angeles" time zone date and time of this trip's last arrival.
+          See trip_first_departure_datetime_pacific for usage notes.
+      - name: trip_start_date_local_tz
+        description: |
+          The local (`trip_start_timezone`) date on which this trip began.
+          If you are specifically concerned with activity outside of California,
+          it may be preferable to use this rather than trip_start_date_pacific.
+      - name: trip_first_departure_datetime_local_tz
+        description: |
+          The local (`trip_start_timezone`) datetime of this trip's first departure.
+          If you are specifically concerned with activity outside of California,
+          it may be preferable to use this rather than trip_first_departure_datetime_pacific.
+
+      - name: trip_last_arrival_datetime_local_tz
+        description: |
+          The local (`trip_end_timezone`) datetime of this trip's last arrival.
+          If you are specifically concerned with activity outside of California,
+          it may be preferable to use this rather than trip_last_arrival_datetime_pacific.
+      - *feed_timezone_no_tests
 
   - name: fct_daily_rt_feed_files
     description: |
@@ -516,8 +654,20 @@ models:
       - dbt_utils.expression_is_true:
           expression: "ttl_service_hours >= 0"
     columns:
-      - name: activity_date
-        description: Date on which this service level was present
+      - &service_date_for_summaries
+        name: service_date
+        description: |
+          Agency-defined service date on which this service level was present.
+          This respects the agency's definition of a service day, which may not correspond to
+          a calendar date or even a 24-hour period.
+          See https://gtfs.org/schedule/reference/#field-types for the GTFS
+          Schedule definition of a "date" data type or `fct_daily_scheduled_trips` for
+          more dates that can be associated with trip activity.
+
+          This date is used so that this table's service summaries correspond to the
+          service levels that an agency might describe on a given (service) date, even
+          if that does not correspond to the actual calendar date on which the
+          given trip activity occurred.
         tests:
           - not_null
       - *feed_key
@@ -733,6 +883,7 @@ models:
       - name: severity_level
         description: |
           See: https://gtfs.org/realtime/reference/#message-alert.
+      - *_header_message_age
   - name: fct_service_alert_active_periods
     description: |
       Each row is an active period for a service alerts message.
@@ -891,7 +1042,8 @@ models:
           Number of times that this alert appeared on this date.
   - name: fct_daily_scheduled_shapes
     description: |
-      A daily table showing shapes that had trips scheduled on a given date.
+      Each row is a summary of trip activity by shape for a given feed on a given agency-defined `service_date`.
+      For the relationship between a shape, a trip, and its stops, see: https://gtfs.org/schedule/reference/#shapestxt.
     columns:
       - name: key
         description: |
@@ -903,14 +1055,30 @@ models:
       - name: n_trips
         description: The number of trips associated with this shape on the given date.
       - *feed_key
-      - name: activity_date
-        description: Date on which this shape was active.
+      - *feed_timezone_no_tests
+      - *service_date_for_summaries
       - name: shape_id
         description: '{{ doc("gtfs_trips__shape_id") }}'
       - name: shape_array_key
         description: Foreign key to dim_shapes_arrays.
       - name: pt_array
         description: Ordered array of WKT points that describe this shape.
+      - name: shape_first_departure_datetime_pacific
+        description: |
+          The datetime, in the "America/Los_Angeles" time zone, of the first stop departure for a trip on this shape on this `service_date`.
+          This field can help contextualize the actual trip activity times that are grouped under this `service_date`.
+          The date portion of this datetime may not correspond to the `service_date` and the gap
+          between `shape_first_departure_datetime_pacific` and `shape_last_arrival_datetime_pacific`
+          could potentially be greater than 24 hours; see `service_date` for more documentation on how
+          `service_date` is defined and why it does not necessarily correspond to a calendar date or 24 hour period.
+      - name: shape_last_arrival_datetime_pacific
+        description: |
+          The datetime, in the "America/Los_Angeles" time zone, of the last stop arrival for a trip on this shape on this `service_date`.
+          This field can help contextualize the actual trip activity times that are grouped under this `service_date`.
+          The date portion of this datetime may not correspond to the `service_date` and the gap
+          between `shape_first_departure_datetime_pacific` and `shape_last_arrival_datetime_pacific`
+          could potentially be greater than 24 hours; see `service_date` for more documentation on how
+          `service_date` is defined and why it does not necessarily correspond to a calendar date or 24 hour period.
       - name: contains_warning_duplicate_trip_primary_key
         description: |
           Rows with `true` in this column indicate that the columns in this table that are aggregated from
@@ -923,18 +1091,22 @@ models:
           that is being summarized here, and counts may be inflated due to multiple rows with identical identifiers.
   - name: fct_daily_scheduled_stops
     description: |
-      A daily table showing all stops that had trip stop events scheduled on a given date.
+      Each row is a summary of trip activity by stop for a given feed on a given agency-defined `service_date`.
+
+      A stop here is defined within an individual feed so each real-world stop will have one row
+      per feed in which it appears. This means an individual real-world stop location may appear in this table multiple times
+      if it is served by multiple agencies or served by an agency with multiple feeds.
     columns:
       - name: key
         description: |
-          Synthetic primary key constructed from `activity_date` and `stop_key`.
+          Synthetic primary key constructed from `stop_arrival_date_pacific` and `stop_key`.
         tests:
           - unique:
               where: "not contains_warning_duplicate_trip_primary_key AND not contains_warning_duplicate_stop_times_primary_key AND not contains_warning_duplicate_stop_primary_key"
           - not_null
-      - name: activity_date
-        description: Date on which this stop was active.
+      - *service_date_for_summaries
       - *feed_key
+      - *feed_timezone_no_tests
       - name: stop_id
         description: '{{ doc("gtfs_stops__stop_id") }}'
       - name: stop_event_count
@@ -972,6 +1144,22 @@ models:
       - name: missing_route_type
         description: |
           The count of stop events associated with a `stop_id` that had a null `route_type` value in `dim_routes`
+      - name: first_stop_arrival_datetime_pacific
+        description: |
+          The datetime, in the "America/Los_Angeles" time zone, of the first arrival at this stop on this `service_date`.
+          This field can help contextualize the actual trip activity times that are grouped under this `service_date`.
+          The date portion of this datetime may not correspond to the `service_date` and the gap
+          between `first_stop_arrival_datetime_pacific` and `last_stop_departure_datetime_pacific`
+          could potentially be greater than 24 hours; see `service_date` for more documentation on how
+          `service_date` is defined and why it does not necessarily correspond to a calendar date or 24 hour period.
+      - name: last_stop_departure_datetime_pacific
+        description: |
+          The datetime, in the "America/Los_Angeles" time zone, of the last departure from this stop on this `service_date`.
+          This field can help contextualize the actual trip activity times that are grouped under this `service_date`.
+          The date portion of this datetime may not correspond to the `service_date` and the gap
+          between `first_stop_arrival_datetime_pacific` and `last_stop_departure_datetime_pacific`
+          could potentially be greater than 24 hours; see `service_date` for more documentation on how
+          `service_date` is defined and why it does not necessarily correspond to a calendar date or 24 hour period.
       - name: contains_warning_duplicate_stop_times_primary_key
         description: |
           Rows with `true` in this column indicate that the columns in this table that are aggregated from
@@ -1017,8 +1205,8 @@ models:
         description: '{{ doc("gtfs_stops__stop_desc") }}'
       - name: location_type
         description: '{{ doc("gtfs_stops__location_type") }}'
-      - name: stop_timezone
-        description: '{{ doc("gtfs_stops__stop_timezone") }}'
+      - name: stop_timezone_coalesced
+        description: '{{ doc("gtfs_schedule_stop_timezone_coalesced") }}'
       - name: wheelchair_boarding
         description: '{{ doc("gtfs_stops__wheelchair_boarding") }}'
 
@@ -1128,3 +1316,107 @@ models:
         description: Timestamp of first service alert header referencing this trip.
       - name: sa_max_header_timestamp
         description: Timestamp of last service alert header referencing this trip.
+
+  - name: fct_trip_updates_no_stop_times
+    description: |
+      Incrementally materialize trip update messages without stop times; this reduces the data size by about 90%.
+    columns:
+      - name: key
+        tests:
+          - not_null:
+              config:
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+          - unique:
+              config:
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+
+  - name: fct_service_alerts_trip_summaries
+    description: |
+      Summarizes trips observed in service alert messages.
+    columns:
+      - &rt_trip_summary_key
+        name: key
+        description: Date, URL, and trip descriptor (https://gtfs.org/realtime/reference/#message-tripdescriptor).
+        tests:
+          - not_null:
+              config:
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+          - unique:
+              config:
+                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+      - &num_distinct_message_ids
+        name: num_distinct_message_ids
+        description: Distinct count of top-level ids (https://gtfs.org/realtime/reference/#message-feedentity).
+      - &num_distinct_header_timestamps
+        name: num_distinct_header_timestamps
+        description: Distinct count of header timestamps from the feed (https://gtfs.org/realtime/reference/#message-feedheader).
+      - &min_extract_ts
+        name: min_extract_ts
+        description: |
+          Timestamp of the first extract (i.e. the time at which
+          we downloaded this feed extract) on this day referencing this trip.
+          For RT, our extracts are pinned to 20 second intervals, i.e. :00, :20, :40.
+      - &max_extract_ts
+        name: max_extract_ts
+        description: |
+          Timestamp of the last extract (i.e. the time at which
+          we downloaded this feed extract) on this day referencing this trip.
+          For RT, our extracts are pinned to 20 second intervals, i.e. :00, :20, :40.
+      - &min_header_timestamp
+        name: min_header_timestamp
+        description: Earliest header timestamp of a message referencing this trip.
+      - &max_header_timestamp
+        name: max_header_timestamp
+        description: Latest header timestamp of a message referencing this trip.
+      - name: service_alert_message_keys
+        description: Keys of the service alert messages that referenced this trip.
+
+  - name: fct_trip_updates_summaries
+    description: |
+      Summarizes trips observed in trip update messages.
+    columns:
+      - *rt_trip_summary_key
+      - *num_distinct_message_ids
+      - *num_distinct_header_timestamps
+      - name: num_distinct_trip_update_timestamps
+        description: Distinct count of trip update timestamps from the feed (https://gtfs.org/realtime/reference/#message-tripupdate).
+      - *min_extract_ts
+      - *max_extract_ts
+      - *min_header_timestamp
+      - *max_header_timestamp
+      - name: min_trip_update_timestamp
+        description: Earliest trip update timestamp of a message referencing this trip.
+      - name: max_trip_update_timestamp
+        description: Latest trip update timestamp of a message referencing this trip.
+      - name: max_delay
+        description: Maximium observed delay for this trip during this day.
+      - name: num_skipped_stops
+        description: Distinct count of stop_ids in messages where schedule_relationship was SKIPPED.
+      - name: num_scheduled_canceled_added_stops
+        description: Distinct count of stop_ids in messages where schedule_relationship was SCHEDULED, CANCELED, or ADDED.
+
+  - name: fct_vehicle_positions_trip_summaries
+    description: |
+      Summarizes trips observed in vehicle position messages.
+    columns:
+      - *rt_trip_summary_key
+      - *num_distinct_message_ids
+      - *num_distinct_header_timestamps
+      - name: num_distinct_vehicle_timestamps
+        description: Distinct count of vehicle timestamps from the feed (https://gtfs.org/realtime/reference/#message-vehicleposition).
+      - *min_extract_ts
+      - *max_extract_ts
+      - *min_header_timestamp
+      - *max_header_timestamp
+      - name: min_vehicle_timestamp
+        description: Earliest vehicle timestamp of a message referencing this trip.
+      - name: max_vehicle_timestamp
+        description: Latest vehicle timestamp of a message referencing this trip.
+      - name: first_position_latitude
+        description: Position latitude of the first extract referencing this trip.
+      - name: first_position_longitude
+        description: Position longitude of the first extract referencing this trip.
+      - name: last_position_latitude
+        description: Position latitude of the last extract referencing this trip.
+      - name: last_position_longitude
+        description: Position longitude of the last extract referencing this trip.
