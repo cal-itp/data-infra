@@ -231,12 +231,14 @@ models:
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/schedule/reference/#fare_mediatxt.
     columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `fare_media_id`.
+        tests: *pk_tests_with_dups
       - *feed_key
       - *base64_url
       - name: fare_media_id
         description: '{{ doc("gtfs_fare_media__fare_media_id") }}'
-        tests:
-          - unique
       - name: fare_media_name
         description: '{{ doc("gtfs_fare_media__fare_media_name") }}'
       - name: fare_media_type
