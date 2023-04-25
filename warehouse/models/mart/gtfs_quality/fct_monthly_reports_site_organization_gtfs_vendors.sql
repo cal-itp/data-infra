@@ -20,7 +20,7 @@ gtfs_generation_components AS (
     CASE
         WHEN product_vendor_organization_name IS NOT NULL
             -- generally surface vendor_name of vendor, not product
-            THEN product_vendor_organization_name 
+            THEN product_vendor_organization_name
         WHEN product_name IN ('TO CONFIRM', 'In house activity')
         -- no vendor per se, but arguably useful info to surface on reports site
             THEN product_name
@@ -41,7 +41,7 @@ dim_orgs AS (
 entities_components_joined AS (
     SELECT DISTINCT
         assessed_entities.organization_name, assessed_entities.organization_source_record_id,
-        assessed_entities.organization_itp_id, 
+        assessed_entities.organization_itp_id,
         DATE_TRUNC(assessed_entities.date, MONTH) AS date_start,
         gtfs_generation_components.component_name, gtfs_generation_components.product_name,
         gtfs_generation_components.reports_vendor_name,
