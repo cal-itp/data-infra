@@ -61,8 +61,14 @@ models:
         tests:
           - unique
           - not_null
-      - name: feed_key
+      - &feed_key
+        name: feed_key
         description: Foreign key for `dim_schedule_feeds`.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_schedule_feeds')
+              field: key
       - name: _feed_valid_from
         tests:
           - not_null
@@ -118,10 +124,7 @@ models:
             - service_date
             - service_id
     columns:
-      - name: feed_key
-        description: Foreign key for `dim_schedule_feeds`.
-        tests:
-          - not_null
+      - *feed_key
       - name: calendar_key
         description: |
           Foreign key for `dim_calendar`. If null, the service for this date was
@@ -217,7 +220,7 @@ models:
     description: |
       Stop times grouped by trip_id with trip aggregation calculations.
     columns:
-      - name: feed_key
+      - *feed_key
       - name: trip_id
       - name: n_stops
       - name: n_stop_times
@@ -320,10 +323,7 @@ models:
          If this service is defined exclusively in `calendar_dates.txt`, then `exception_type = 1` is listed for `2022-10-01` in that file.
     columns:
       - *schedule_key
-      - name: feed_key
-        description: Foreign key for `dim_schedule_feeds`.
-        tests:
-          - not_null
+      - *feed_key
       - name: _feed_valid_from
         tests:
           - not_null
@@ -358,7 +358,7 @@ models:
       to list each scheduled iteration of a trip.
       See https://gtfs.org/schedule/reference/#frequenciestxt for interpretation of frequency-based trips.
     columns:
-      - name: feed_key
+      - *feed_key
       - name: trip_id
       - name: stop_id
       - name: iteration_num
