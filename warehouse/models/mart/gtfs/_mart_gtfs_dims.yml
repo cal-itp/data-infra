@@ -225,6 +225,27 @@ models:
       - *_feed_valid_from
       - *feed_timezone_no_tests
 
+  - name: dim_fare_media
+    description: |
+      Each row is a cleaned row from a fare_media.txt file.
+      Definitions for the original GTFS fields are available at:
+      https://gtfs.org/schedule/reference/#fare_mediatxt.
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `feed_key` and `fare_media_id`.
+        tests: *pk_tests_with_dups
+      - *feed_key
+      - *base64_url
+      - name: fare_media_id
+        description: '{{ doc("gtfs_fare_media__fare_media_id") }}'
+      - name: fare_media_name
+        description: '{{ doc("gtfs_fare_media__fare_media_name") }}'
+      - name: fare_media_type
+        description: '{{ doc("gtfs_fare_media__fare_media_type") }}'
+      - *_feed_valid_from
+      - *feed_timezone_no_tests
+
   - name: dim_fare_products
     description: |
       Each row is a cleaned row from a fare_products.txt file.
