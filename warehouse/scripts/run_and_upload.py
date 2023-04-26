@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 import json
 import os
 import re
@@ -52,6 +53,10 @@ class DbtTestFail(Exception):
 
 
 class DbtTestWarn(Exception):
+    pass
+
+
+class DbtMetabaseSyncFailure(Exception):
     pass
 
 
@@ -277,9 +282,7 @@ def run(
     # use the pre-prod Metabase right now; we could theoretically test with that if it
     # synced schemas created by the staging dbt target.
     if sync_metabase:
-        # if target and target.startswith("prod"):
-        if True:
-            # TODO: we should be logging each misaligned model to Sentry
+        if target and (target.startswith("prod") or target.startswith("staging")):
             p = subprocess.run(
                 [
                     "dbt-metabase",
@@ -290,9 +293,9 @@ def run(
                     "--dbt_docs_url",
                     "https://dbt-docs.calitp.org",
                     "--metabase_database",
-                    # TODO: change me back when done testing
-                    "(Internal) Staging Warehouse Views",
-                    # "Data Marts (formerly Warehouse Views)",
+                    "Data Marts (formerly Warehouse Views)"
+                    if target.startswith("prod")
+                    else "(Internal) Staging Warehouse Views",
                     "--dbt_schema_excludes",
                     "staging",
                     "payments",
@@ -304,7 +307,7 @@ def run(
                 capture_output=True,
             )
 
-            models_with_problems = set()
+            matches = {}
             for line in p.stdout.decode().splitlines():
                 pat = None
                 if line.startswith("WARNING  Model"):
@@ -312,9 +315,24 @@ def run(
                 elif line.startswith("WARNING Column"):
                     pat = r"Column\s(?P<column>\w+)\snot\sfound\sin\s(?P<db_schema>\w+)\.(?P<model>\w+)"
                 if pat:
-                    models_with_problems.add(re.search(pat, line).group("model"))
-            for model in models_with_problems:
-                pass  # TODO: actually log to sentry
+                    match = re.search(pat, line)
+                    assert (
+                        match is not None
+                    ), f"failed to match dbt-metabase log line with regex: {line=} {pat=}"
+                    if match.group("model") not in matches:
+                        matches[match.group("model")] = (match, line)
+            for model, (first_match, line) in matches.items():
+                exc = DbtMetabaseSyncFailure(model)
+                with sentry_sdk.push_scope() as scope:
+                    scope.fingerprint = [exc, model]
+                    scope.set_context(
+                        "log",
+                        {
+                            "match": str(first_match),
+                            "line": line,
+                        },
+                    )
+                    sentry_sdk.capture_exception(exc, scope=scope)
         else:
             typer.secho(
                 f"WARNING: running with non-prod target {target} so skipping metabase sync",
