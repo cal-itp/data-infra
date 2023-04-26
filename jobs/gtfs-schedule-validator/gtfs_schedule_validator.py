@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import ClassVar, Dict, List, Optional, Tuple, Union
 
 import pendulum
+import sentry_sdk
 import typer
 from calitp_data_infra.storage import (  # type: ignore
     JSONL_EXTENSION,
@@ -49,8 +50,10 @@ GTFS_VALIDATE_LIST_ERROR_THRESHOLD = float(
     os.getenv("GTFS_VALIDATE_LIST_ERROR_THRESHOLD", 0.99)
 )
 
-app = typer.Typer()
+app = typer.Typer(pretty_exceptions_enable=False)
 logging.basicConfig()
+
+sentry_sdk.init()
 
 
 class ScheduleValidationMetadata(BaseModel):
@@ -299,6 +302,7 @@ def validate_day(
     pbar = tqdm(total=len(extracts)) if progress else None
     exceptions = []
     outcomes = []
+    fs = get_fs()
 
     with ThreadPoolExecutor(max_workers=threads) as pool:
         futures: Dict[Future, GTFSScheduleFeedExtract] = {
@@ -320,6 +324,18 @@ def validate_day(
             except KeyboardInterrupt:
                 raise
             except Exception as e:
+                with sentry_sdk.push_scope() as scope:
+                    if isinstance(e, subprocess.CalledProcessError):
+                        # This is inefficient (we already downloaded in the thread)
+                        # but is relatively rare for Schedule data
+                        extract_hash = fs.stat(extract.path)["md5Hash"]
+                        scope.fingerprint = [type(e), e.returncode, extract_hash]
+                        # try to get the top of the stacktrace since this will be truncated; 1500 is just an estimate
+                        scope.set_context(
+                            "process", {"stderr": e.stderr.decode("utf-8")[-1500:]}
+                        )
+                    scope.set_context("extract", json.loads(extract.json()))
+                    sentry_sdk.capture_exception(e, scope=scope)
                 log(
                     f"encountered exception on extract {extract.path}: {e}\n{traceback.format_exc()}",
                     fg=typer.colors.RED,
@@ -327,7 +343,7 @@ def validate_day(
                 )
                 if verbose and isinstance(e, subprocess.CalledProcessError):
                     log(
-                        e.stderr,
+                        e.stderr.decode("utf-8"),
                         fg=typer.colors.RED,
                         pbar=pbar,
                     )

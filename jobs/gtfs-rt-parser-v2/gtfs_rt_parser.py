@@ -1,6 +1,7 @@
 """
 Parses binary RT feeds and writes them back to GCS as gzipped newline-delimited JSON
 """
+import base64
 import concurrent.futures
 import copy
 import datetime
@@ -58,6 +59,8 @@ JAR_DEFAULT = typer.Option(
 RT_PARSED_BUCKET = os.environ["CALITP_BUCKET__GTFS_RT_PARSED"]
 RT_VALIDATION_BUCKET = os.environ["CALITP_BUCKET__GTFS_RT_VALIDATION"]
 GTFS_RT_VALIDATOR_VERSION = os.environ["GTFS_RT_VALIDATOR_VERSION"]
+
+app = typer.Typer(pretty_exceptions_enable=False)
 
 
 def make_dict_bq_safe(d: Dict[str, Any]) -> Dict[str, Any]:
@@ -364,36 +367,10 @@ def validate_and_upload(
     dst_path_rt: str,
     tmp_dir: str,
     hour: RTHourlyAggregation,
+    gtfs_zip: str,
     verbose: bool = False,
     pbar=None,
 ) -> List[RTFileProcessingOutcome]:
-    first_extract = hour.extracts[0]
-    extract_day = first_extract.dt
-    for target_date in reversed(
-        list(extract_day - extract_day.subtract(days=7))
-    ):  # Fall back to most recent available schedule within 7 days
-        try:
-            schedule_extract = get_schedule_extracts_for_day(target_date)[
-                first_extract.config.base64_validation_url
-            ]
-
-            gtfs_zip = download_gtfs_schedule_zip(
-                fs,
-                schedule_extract=schedule_extract,
-                dst_dir=tmp_dir,
-                pbar=pbar,
-            )
-
-            break
-        except (KeyError, FileNotFoundError):
-            print(
-                f"no schedule data found for {first_extract.path} and day {target_date}"
-            )
-    else:
-        raise ScheduleDataNotFound(
-            f"no recent schedule data found for {first_extract.path}"
-        )
-
     execute_rt_validator(
         gtfs_zip,
         dst_path_rt,
@@ -412,6 +389,7 @@ def validate_and_upload(
             with open(results_path) as f:
                 records = json.load(f)
         except FileNotFoundError as e:
+            # TODO: does this mean no errors?
             msg = f"WARNING: no validation output file found in {results_path}"
             if verbose:
                 log(
@@ -623,17 +601,62 @@ def parse_and_validate(
             ]
 
         try:
+            first_extract = hour.extracts[0]
+            extract_day = first_extract.dt
+            for target_date in reversed(
+                list(extract_day - extract_day.subtract(days=7))
+            ):  # Fall back to most recent available schedule within 7 days
+                try:
+                    schedule_extract = get_schedule_extracts_for_day(target_date)[
+                        first_extract.config.base64_validation_url
+                    ]
+
+                    gtfs_zip = download_gtfs_schedule_zip(
+                        fs,
+                        schedule_extract=schedule_extract,
+                        dst_dir=tmp_dir,
+                        pbar=pbar,
+                    )
+
+                    break
+                except (KeyError, FileNotFoundError):
+                    print(
+                        f"no schedule data found for {first_extract.path} and day {target_date}"
+                    )
+            else:
+                raise ScheduleDataNotFound(
+                    f"no recent schedule data found for {first_extract.path}"
+                )
+
             return validate_and_upload(
                 fs=fs,
                 jar_path=jar_path,
                 dst_path_rt=dst_path_rt,
                 tmp_dir=tmp_dir,
                 hour=hour,
+                gtfs_zip=gtfs_zip,
                 verbose=verbose,
                 pbar=pbar,
             )
         except (ScheduleDataNotFound, subprocess.CalledProcessError) as e:
-            sentry_sdk.capture_exception(e)
+            with sentry_sdk.push_scope() as scope:
+                scope.set_context("hour", json.loads(hour.json()))
+                fingerprint: List[Any] = [
+                    type(e),
+                    # convert back to url manually, I don't want to mess around with the hourly class
+                    base64.urlsafe_b64decode(hour.base64_url.encode()).decode(),
+                ]
+                if isinstance(e, subprocess.CalledProcessError):
+                    fingerprint.append(e.returncode)
+                    # try to get the top of the stacktrace since this will be truncated; 1800 is just an estimate
+                    scope.set_context(
+                        "schedule_extract", json.loads(schedule_extract.json())
+                    )
+                    scope.set_context(
+                        "process", {"stderr": e.stderr.decode("utf-8")[-1800:]}
+                    )
+                scope.fingerprint = fingerprint
+                sentry_sdk.capture_exception(e, scope=scope)
             if verbose:
                 log(
                     f"{str(e)} thrown for {hour.path}",
@@ -670,6 +693,7 @@ def parse_and_validate(
     raise RuntimeError("we should not be here")
 
 
+@app.command()
 def main(
     step: RTProcessingStep,
     feed_type: GTFSFeedType,
@@ -840,4 +864,4 @@ def main(
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    app()
