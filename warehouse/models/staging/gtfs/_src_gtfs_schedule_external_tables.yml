@@ -29,8 +29,9 @@ sources:
       - name: fare_attributes
       - name: fare_attributes_txt_parse_outcomes
       - name: fare_leg_rules
-      - name: fare_media
       - name: fare_leg_rules_txt_parse_outcomes
+      - name: fare_media
+      - name: fare_media_txt_parse_outcomes
       - name: fare_products
       - name: fare_products_txt_parse_outcomes
       - name: fare_rules
