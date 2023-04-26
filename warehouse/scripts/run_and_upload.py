@@ -27,7 +27,7 @@ artifacts = map(
     Path, ["index.html", "catalog.json", "manifest.json", "run_results.json"]
 )
 
-sentry_sdk.init(environment=os.environ["AIRFLOW_ENV"])
+sentry_sdk.init()
 
 app = typer.Typer(pretty_exceptions_enable=False)
 
@@ -277,12 +277,10 @@ def run(
 
             results_to_check.append(subprocess.run(args))
 
-    # There's a flag called --metabase_sync_skip but it doesn't seem to work as I assumed
-    # so we only want to sync in production. This makes it hard to test, but we don't really
-    # use the pre-prod Metabase right now; we could theoretically test with that if it
-    # synced schemas created by the staging dbt target.
     if sync_metabase:
         if target and (target.startswith("prod") or target.startswith("staging")):
+            typer.secho("syncing documentation to metabase", fg=typer.colors.MAGENTA)
+            # Use a subprocess here so we can just parse the stdout/stderr
             p = subprocess.run(
                 [
                     "dbt-metabase",
@@ -293,9 +291,11 @@ def run(
                     "--dbt_docs_url",
                     "https://dbt-docs.calitp.org",
                     "--metabase_database",
-                    "Data Marts (formerly Warehouse Views)"
-                    if target.startswith("prod")
-                    else "(Internal) Staging Warehouse Views",
+                    (
+                        "Data Marts (formerly Warehouse Views)"
+                        if target.startswith("prod")
+                        else "(Internal) Staging Warehouse Views"
+                    ),
                     "--dbt_schema_excludes",
                     "staging",
                     "payments",
@@ -309,22 +309,21 @@ def run(
 
             matches = {}
             for line in p.stdout.decode().splitlines():
-                pat = None
-                if line.startswith("WARNING  Model"):
-                    pat = r"Model\s(?P<dbt_schema>\w+)\.(?P<model>\w+)\snot\sfound\sin\s(?P<db_schema>\w+)"
-                elif line.startswith("WARNING Column"):
-                    pat = r"Column\s(?P<column>\w+)\snot\sfound\sin\s(?P<db_schema>\w+)\.(?P<model>\w+)"
-                if pat:
-                    match = re.search(pat, line)
-                    assert (
-                        match is not None
-                    ), f"failed to match dbt-metabase log line with regex: {line=} {pat=}"
-                    if match.group("model") not in matches:
+                print(line)
+                for pattern in (
+                    r"WARNING\s+Model\s(?P<dbt_schema>\w+)\.(?P<model>\w+)\snot\sfound\sin\s(?P<db_schema>\w+)",
+                    r"WARNING\s+Column\s(?P<column>\w+)\snot\sfound\sin\s(?P<db_schema>\w+)\.(?P<model>\w+)",
+                ):
+                    match = re.search(pattern, line)
+                    print(match, pattern, line)
+                    if match and match.group("model") not in matches:
                         matches[match.group("model")] = (match, line)
             for model, (first_match, line) in matches.items():
-                exc = DbtMetabaseSyncFailure(model)
+                # Just use a single exception type for now, regardless of whether the model is missing entirely
+                # or just a column
+                exc = DbtMetabaseSyncFailure(first_match.group())
                 with sentry_sdk.push_scope() as scope:
-                    scope.fingerprint = [exc, model]
+                    scope.fingerprint = [type(exc), model]
                     scope.set_context(
                         "log",
                         {
