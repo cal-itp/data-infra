@@ -307,6 +307,8 @@ def run(
                 capture_output=True,
             )
 
+            with open("./target/manifest.json") as f:
+                manifest = Manifest(**json.load(f))
             matches = {}
             for line in p.stdout.decode().splitlines():
                 print(line)
@@ -315,7 +317,6 @@ def run(
                     r"WARNING\s+Column\s(?P<column>\w+)\snot\sfound\sin\s(?P<db_schema>\w+)\.(?P<model>\w+)",
                 ):
                     match = re.search(pattern, line)
-                    print(match, pattern, line)
                     if match and match.group("model") not in matches:
                         matches[match.group("model")] = (match, line)
             for model, (first_match, line) in matches.items():
@@ -329,6 +330,17 @@ def run(
                         {
                             "match": str(first_match),
                             "line": line,
+                        },
+                    )
+                    node = next(
+                        node
+                        for node in manifest.nodes.values()
+                        if node.name == model.lower()
+                    )
+                    scope.set_context(
+                        "dbt",
+                        {
+                            "path": str(node.original_file_path),
                         },
                     )
                     sentry_sdk.capture_exception(exc, scope=scope)
