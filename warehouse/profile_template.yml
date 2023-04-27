@@ -1,4 +1,5 @@
 fixed:
+  type: bigquery
   fixed_retries: 1
   location: us-west2
   method: oauth
@@ -8,7 +9,6 @@ fixed:
   # currently slowest model is int_gtfs_rt__trip_updates_no_stop_times
   # which takes ~2700 seconds to full refresh
   timeout_seconds: 3000
-  type: bigquery
   gcs_bucket: test-calitp-dbt-python-models
   dataproc_region: us-west2
   submission_method: serverless
@@ -24,3 +24,7 @@ prompts:
   schema:
     type: string
     hint: usually your name; will be added as a prefix to schemas e.g. <schema>_mart_gtfs
+  maximum_bytes_billed:
+    type: int
+    default: 2000000000000
+    hint: the maximum number of bytes allowed per BigQuery query; default is 2 TB
