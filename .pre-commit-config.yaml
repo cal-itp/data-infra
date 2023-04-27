@@ -63,4 +63,4 @@ repos:
     rev: v1.14.8
     hooks:
       - id: typos
-        args: [] # disable writing, which is default
+        args: ["--config=_typos.toml"] # writes by default, but any args override that
