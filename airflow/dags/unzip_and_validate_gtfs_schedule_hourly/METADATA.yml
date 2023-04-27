@@ -1,5 +1,5 @@
-description: "Unzips and validates GTFS Schedule data on a daily schedule; DEPRECATED by new hourly DAG"
-schedule_interval: "0 2 * * *"
+description: "Unzips and validates GTFS Schedule data"
+schedule_interval: "0 * * * *"
 tags:
   - all_gusty_features
 default_args:
