@@ -1,8 +1,8 @@
 operator: operators.ExternalTable
-bucket: "{{'gs://ingest_amplitude_raw_dev' if is_development() else 'gs://ingest_amplitude_raw_prod'}}"
+bucket: "{{ env_var('CALITP_BUCKET__AMPLITUDE_BENEFITS_EVENTS') }}"
 source_objects:
-  - "benefits/*.jsonl"
-destination_project_dataset_table: "amplitude.benefits_events"
+  - "304109/*.json.gz" # 304109 is the project id from Amplitude
+destination_project_dataset_table: "external_amplitude.benefits_events"
 source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 schema_fields:
@@ -61,27 +61,9 @@ schema_fields:
   - name: dma
     type: STRING
   - name: event_properties
-    type: RECORD
-    fields:
-      - name: status
-        type: STRING
-      - name: provider_name
-        type: STRING
-      - name: path
-        type: STRING
-      - name: language
-        type: STRING
+    type: JSON
   - name: user_properties
-    type: RECORD
-    fields:
-      - name: provider_name
-        type: STRING
-      - name: referring_domain
-        type: STRING
-      - name: referrer
-        type: STRING
-      - name: user_agent
-        type: STRING
+    type: JSON
   - name: event_time
     type: TIMESTAMP
   - name: client_upload_time
