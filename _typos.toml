@@ -1,5 +1,6 @@
 [default.extend-identifiers]
 trn_aci = "trn_aci"
+UNIONs = "UNIONs"
 
 [type.csv]
 extend-glob = ["*.csv"]
