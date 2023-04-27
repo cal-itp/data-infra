@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Helpful SQL Snippets &#8212; Cal-ITP Data Services</title>
+    <title>Developing models in dbt &#8212; Cal-ITP Data Services</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -57,8 +57,8 @@
     <script>mermaid.initialize({startOnLoad:true});</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Navigating the dbt Docs" href="../datasets_and_tables/overview.html" />
-    <link rel="prev" title="Adding Data to the Warehouse" href="adding_oneoff_data.html" />
+    <link rel="next" title="Adding Data to the Warehouse" href="adding_oneoff_data.html" />
+    <link rel="prev" title="What is an agency?" href="what_is_agency.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -278,14 +278,14 @@
      ?
     </a>
    </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Developing models in dbt
+    </a>
+   </li>
    <li class="toctree-l2">
     <a class="reference internal" href="adding_oneoff_data.html">
      Adding Data to the Warehouse
-    </a>
-   </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Helpful SQL Snippets
     </a>
    </li>
   </ul>
@@ -602,12 +602,9 @@
 
     <div class="dropdown-buttons">
         <!-- ipynb file if we had a myst markdown file -->
-        <a class="dropdown-buttons"
-            href="../_sources/warehouse/sql_snippets.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
-                data-placement="left">.ipynb</button></a>
+        
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/warehouse/sql_snippets.md"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/warehouse/developing_dbt_models.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -627,10 +624,10 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fwarehouse/sql_snippets.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/cal-itp/data-infra//issues/new?title=Issue%20on%20page%20%2Fwarehouse/developing_dbt_models.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/warehouse/sql_snippets.md"><button
+        <a class="edit-button" href="https://github.com/cal-itp/data-infra/edit/main/docs/warehouse/developing_dbt_models.md"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -645,23 +642,6 @@
 
             <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/cal-itp/data-infra/main?urlpath=tree/docs/warehouse/sql_snippets.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="../_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
         </div>
 
         <!-- Table of contents -->
@@ -673,19 +653,60 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#fetching-historical-data-for-specific-dates">
-   Fetching historical data for specific dates
+  <a class="reference internal nav-link" href="#resources">
+   Resources
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#a-single-date">
-   A single date
+  <a class="reference internal nav-link" href="#how-to-contribute-to-the-dbt-project">
+   How to contribute to the dbt project
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#getting-started">
+     Getting started
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#developer-workflow">
+     Developer workflow
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#multiple-dates">
-   Multiple dates
+  <a class="reference internal nav-link" href="#modeling-considerations">
+   Modeling considerations
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#when-to-develop-or-update-a-model">
+     When to develop or update a model
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#materializations-performance-and-cost">
+     Materializations, performance, and cost
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#helpful-talks-and-presentations">
+   Helpful talks and presentations
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dbt-at-cal-itp-introduction">
+     dbt at Cal-ITP introduction
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#coalesce">
+     Coalesce
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -697,7 +718,7 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Helpful SQL Snippets</h1>
+                <h1>Developing models in dbt</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -708,19 +729,60 @@
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#fetching-historical-data-for-specific-dates">
-   Fetching historical data for specific dates
+  <a class="reference internal nav-link" href="#resources">
+   Resources
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#a-single-date">
-   A single date
+  <a class="reference internal nav-link" href="#how-to-contribute-to-the-dbt-project">
+   How to contribute to the dbt project
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#getting-started">
+     Getting started
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#developer-workflow">
+     Developer workflow
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#multiple-dates">
-   Multiple dates
+  <a class="reference internal nav-link" href="#modeling-considerations">
+   Modeling considerations
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#when-to-develop-or-update-a-model">
+     When to develop or update a model
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#materializations-performance-and-cost">
+     Materializations, performance, and cost
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#helpful-talks-and-presentations">
+   Helpful talks and presentations
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dbt-at-cal-itp-introduction">
+     dbt at Cal-ITP introduction
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#coalesce">
+     Coalesce
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -731,57 +793,71 @@
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="helpful-sql-snippets">
-<span id="id1"></span><h1>Helpful SQL Snippets<a class="headerlink" href="#helpful-sql-snippets" title="Permalink to this headline">¶</a></h1>
-<p>For information on how to query SQL in JupyterHub notebooks, refer to <a class="reference internal" href="../analytics_tools/jupyterhub.html#querying-sql-jupyterhub"><span class="std std-ref">this documentation</span></a>.</p>
-<div class="section" id="fetching-historical-data-for-specific-dates">
-<h2>Fetching historical data for specific dates<a class="headerlink" href="#fetching-historical-data-for-specific-dates" title="Permalink to this headline">¶</a></h2>
-<p>Some tables in the warehouse–like those in <code class="docutils literal notranslate"><span class="pre">gtfs_schedule_type2</span></code>–capture the full
-history of data, as it existed every day in the past. In order to do this, they
-don’t save copies of the full data every day, but log changes to the data using
-a <code class="docutils literal notranslate"><span class="pre">calitp_extracted_at</span></code>, and <code class="docutils literal notranslate"><span class="pre">calitp_deleted_at</span></code> column.</p>
-<p>In order to get the data for a given day, you need to filter to keep data where..</p>
+  <div class="tex2jax_ignore mathjax_ignore section" id="developing-models-in-dbt">
+<span id="developing-dbt-models"></span><h1>Developing models in dbt<a class="headerlink" href="#developing-models-in-dbt" title="Permalink to this headline">¶</a></h1>
+<p>Information related to contributing to the <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/warehouse">Cal-ITP dbt project</a>.</p>
+<div class="section" id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">calitp_extracted_at</span></code> was earlier than or on the target date.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">calitp_deleted_at</span></code> is later than the target date.</p></li>
+<li><p>If you have questions specific to our project or you encounter any issues when developing, please reach out in the <code class="docutils literal notranslate"><span class="pre">#data-warehouse-devs</span></code> or <code class="docutils literal notranslate"><span class="pre">#data-office-hours</span></code> Cal-ITP Slack channels.</p></li>
+<li><p>For Cal-ITP-speciifc data warehouse documentation, including high-level concepts and naming conventions, see <a class="reference external" href="https://dbt-docs.calitp.org/#%21/overview">our Cal-ITP dbt documentation site</a>. This documentation is automatically generated by dbt, and incorporates the table- and column-level documentation that developers enter in YAML files in the dbt project.</p></li>
+<li><p>For general dbt concepts (for example, dbt <a class="reference external" href="https://docs.getdbt.com/guides/advanced/using-jinja">Jinja</a> or <a class="reference external" href="https://docs.getdbt.com/docs/build/tests">tests</a>), see the <a class="reference external" href="https://docs.getdbt.com/docs/introduction">general dbt documentation site</a></p></li>
+<li><p>For general SQL or BigQuery concepts (for example, <a class="reference external" href="https://cloud.google.com/bigquery/docs/tables-intro">tables</a>, <a class="reference external" href="https://cloud.google.com/bigquery/docs/views-intro">views</a>, or <a class="reference external" href="https://cloud.google.com/bigquery/docs/reference/standard-sql/window-function-calls">window functions</a>), see the <a class="reference external" href="https://cloud.google.com/bigquery/docs">BigQuery docs site</a>.</p></li>
 </ul>
 </div>
-<div class="section" id="a-single-date">
-<h2>A single date<a class="headerlink" href="#a-single-date" title="Permalink to this headline">¶</a></h2>
-<div class="cell tag_remove-input docutils container">
+<div class="section" id="how-to-contribute-to-the-dbt-project">
+<h2>How to contribute to the dbt project<a class="headerlink" href="#how-to-contribute-to-the-dbt-project" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="getting-started">
+<h3>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h3>
+<p>To get set up to contribute to the dbt project via JupyterHub, follow <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/warehouse/README.md#setting-up-the-project-in-your-jupyterhub-personal-server">the README in the data-infra repo warehouse folder</a>. If you hit any trouble with setup, let folks know in the #data-warehouse-devs or #data-office-hours channel in the Cal-ITP Slack.</p>
+<p>We also recommend that everyone who does dbt development joins the <code class="docutils literal notranslate"><span class="pre">#data-warehouse-devs</span></code> channel in the Cal-ITP Slack workspace to ask questions, collaborate, and build shared knowledge.</p>
 </div>
-<div class="cell tag_remove-input docutils container">
-<div class="cell_output docutils container">
-<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
-<span class="k">FROM</span><span class="w"> </span><span class="o">`</span><span class="n">gtfs_schedule_type2</span><span class="p">.</span><span class="n">feed_info</span><span class="o">`</span>
-<span class="k">WHERE</span>
-<span class="w">    </span><span class="n">calitp_extracted_at</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="ss">&quot;2021-06-01&quot;</span>
-<span class="w">    </span><span class="k">AND</span><span class="w"> </span><span class="k">COALESCE</span><span class="p">(</span><span class="n">calitp_deleted_at</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;2099-01-01&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="ss">&quot;2021-06-01&quot;</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>Note that <code class="docutils literal notranslate"><span class="pre">COALESCE</span></code> lets us fill in NULL deleted at values to be far in the future.
-This is used because when deleted at is missing, it reflects the most recent data
-(i.e. data that hasn’t been deleted yet).
-Because <code class="docutils literal notranslate"><span class="pre">NULL</span> <span class="pre">&lt;</span> <span class="pre">&quot;2021-06-01&quot;</span></code> is <code class="docutils literal notranslate"><span class="pre">false</span></code>, we need to fill it in with a far-future date,
-so it evaluates to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
-</div>
-<div class="section" id="multiple-dates">
-<h2>Multiple dates<a class="headerlink" href="#multiple-dates" title="Permalink to this headline">¶</a></h2>
-<p>In order to do it for a range of dates, you can use a JOIN. This is shown below.</p>
-<div class="cell tag_remove-input docutils container">
-<div class="cell_output docutils container">
-<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span>
-<span class="k">FROM</span><span class="w"> </span><span class="o">`</span><span class="n">gtfs_schedule_type2</span><span class="p">.</span><span class="n">feed_info</span><span class="o">`</span><span class="w"> </span><span class="n">FI</span>
-<span class="k">JOIN</span><span class="w"> </span><span class="o">`</span><span class="n">views</span><span class="p">.</span><span class="n">dim_date</span><span class="o">`</span><span class="w"> </span><span class="n">D</span>
-<span class="w">    </span><span class="k">ON</span><span class="w"> </span><span class="n">FI</span><span class="p">.</span><span class="n">calitp_extracted_at</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">D</span><span class="p">.</span><span class="n">full_date</span>
-<span class="w">        </span><span class="k">AND</span><span class="w"> </span><span class="k">COALESCE</span><span class="p">(</span><span class="n">FI</span><span class="p">.</span><span class="n">calitp_deleted_at</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;2099-01-01&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">D</span><span class="p">.</span><span class="n">full_date</span>
-<span class="k">WHERE</span>
-<span class="w">    </span><span class="n">D</span><span class="p">.</span><span class="n">full_date</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="ss">&quot;2021-06-01&quot;</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="ss">&quot;2021-06-07&quot;</span>
-</pre></div>
+<div class="section" id="developer-workflow">
+<h3>Developer workflow<a class="headerlink" href="#developer-workflow" title="Permalink to this headline">¶</a></h3>
+<p>To test your work while developing dbt models, you can edit the <code class="docutils literal notranslate"><span class="pre">.sql</span></code> files for your models, save your changes, and then <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/warehouse#dbt-commands">run the model from the command line</a> to execute the SQL you updated.</p>
+<p>To inspect tables as you are working, the fastest method is usually to run some manual test queries or “preview” the tables in the <a class="reference external" href="https://console.cloud.google.com/bigquery?project=cal-itp-data-infra-staging">BigQuery user interface</a>. You can also use something like <a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.read_gbq.html"><code class="docutils literal notranslate"><span class="pre">pandas.read_gbq</span></code></a> to perform example queries in a notebook.</p>
+<p>When you run dbt commands locally on JupyterHub, your models will be created in the <code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra-staging.&lt;your</span> <span class="pre">name&gt;_&lt;dbt</span> <span class="pre">folder</span> <span class="pre">name,</span> <span class="pre">like</span> <span class="pre">mart_gtfs&gt;</span></code> BigQuery dataset. Note that this is in the <code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra-staging</span></code> Google Cloud Platform project, <em>not</em> the production <code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra</span></code> project.</p>
+<p>Once your models are working the way you want, please make sure to update the associated YAML files (there will generally be one or two YAML files per folder with model tests, documentation, and additional configuration.) Especially if you created a brand-new model, you will want to add tests for things like unique, non-null primary keys and valid foreign keys. The YAML is also where table- and column-level documentation is populated. <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/warehouse/models/mart/gtfs/_mart_gtfs_dims.yml">Here is an example YAML file from our project</a>, and <a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2097">here is an example PR that created a new mart table with accompanying documentation</a>.</p>
+<p>Because the warehouse is collectively maintained and changes can affect a variety of users, please open PRs against <code class="docutils literal notranslate"><span class="pre">main</span></code> when work is ready to merge and keep an eye out for comments and questions from reviewers, who might require tweaks before merging. (<a class="reference internal" href="../github/contribute_to_repos.html#contribute-to-repos"><span class="std std-ref">See our repo contribution page</span></a> for more information on GitHub practices.)</p>
 </div>
 </div>
+<div class="section" id="modeling-considerations">
+<h2>Modeling considerations<a class="headerlink" href="#modeling-considerations" title="Permalink to this headline">¶</a></h2>
+<p>When developing dbt models, there are some considerations which may differ from considerations for a notebook-based analysis.</p>
+<div class="section" id="when-to-develop-or-update-a-model">
+<h3>When to develop or update a model<a class="headerlink" href="#when-to-develop-or-update-a-model" title="Permalink to this headline">¶</a></h3>
+<p>One key question to ask is whether a given data need is best met by a new dbt model or updates to an existing model vs. some other tool or process.</p>
+<p>Changes to dbt models are likely to be appropriate, and often beneficial over other approaches, when one or more of the following is true:</p>
+<ul class="simple">
+<li><p>There is a consistent or ongoing need for the same transformations. dbt can ensure that transformations are performed consistently at scale, every day.</p></li>
+<li><p>Transformations are needed on large data. Doing transformations in BigQuery can be more performant than doing them in notebooks or any workflow where the large data must be loaded into local memory.</p></li>
+<li><p>We want to use the same model across multiple domains or tools. The BigQuery data warehouse is the easiest way to provide consistent data throughout the Cal-ITP data ecosystem (in JupyterHub, Metabase, open data publishing, the reports site, etc.)</p></li>
+</ul>
+<p>dbt model updates may not be appropriate when:</p>
+<ul class="simple">
+<li><p>There is insufficient support in dbt or BigQuery for the necessary tooling. The biggest current example is geospatial work; once we have <a class="reference external" href="https://github.com/cal-itp/data-infra/issues/2359">Python models in the dbt project</a>, there will be fewer limitations.</p></li>
+</ul>
+</div>
+<div class="section" id="materializations-performance-and-cost">
+<h3>Materializations, performance, and cost<a class="headerlink" href="#materializations-performance-and-cost" title="Permalink to this headline">¶</a></h3>
+<p>Because the dbt project is run and built every day, we want to be mindful of cost and be efficient in how we build and structure our models. The <a class="reference external" href="https://docs.getdbt.com/docs/build/materializations#overview">dbt docs materializations page</a> provides a good overview of different materialization options and associated considerations.</p>
+<p>When developing a new model, or updating an existing model, it is helpful to keep an eye on the number of bytes billed to build the model (this information is printed in the terminal output from dbt.) As a rule of thumb in our project, models that take more than 100 GB to build should probably be optimized a bit more, potentially by being made <a class="reference external" href="https://docs.getdbt.com/docs/build/materializations#incremental">incremental</a>.</p>
+<p>Performance is one of the hardest things to manage when you are new to developing in SQL, so please don’t hesitate to ask questions (the <code class="docutils literal notranslate"><span class="pre">#data-warehouse-devs</span></code> or <code class="docutils literal notranslate"><span class="pre">#data-office-hours</span></code> Cal-ITP Slack channels are good places to ask) as you get used to the options.</p>
+</div>
+</div>
+<div class="section" id="helpful-talks-and-presentations">
+<h2>Helpful talks and presentations<a class="headerlink" href="#helpful-talks-and-presentations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="dbt-at-cal-itp-introduction">
+<h3>dbt at Cal-ITP introduction<a class="headerlink" href="#dbt-at-cal-itp-introduction" title="Permalink to this headline">¶</a></h3>
+<p>In 2022, Laurie <a class="reference external" href="https://cal-itp.slack.com/archives/C02NJRV9QUB/p1651082191730229?thread_ts=1650648699.809809&amp;cid=C02NJRV9QUB">gave a lunch and learn</a> about why we are using dbt at Cal-ITP.</p>
+</div>
+<div class="section" id="coalesce">
+<h3>Coalesce<a class="headerlink" href="#coalesce" title="Permalink to this headline">¶</a></h3>
+<p>Some folks from Data Services attended Coalesce (dbt’s conference) in 2022 and thought the following talks may be of interest:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.youtube.com/watch?v=EYdb1x1cO9U&amp;list=PL0QYlrC86xQlj9UDGiEwhXQuSjuSyPJHl&amp;index=66">The accidental analytics engineer by Michael Chow</a> - this talk outlines some differences Michael has experienced between R/tidyverse and dbt/MDS (modern data stack) approaches to working with data</p></li>
+<li><p><a class="reference external" href="https://www.youtube.com/watch?v=0SDp1yTK2zc&amp;list=PL0QYlrC86xQlj9UDGiEwhXQuSjuSyPJHl&amp;index=112">dbt and MDS in small-batch academic research</a> - this talk outlines some benefits this researcher found to using dbt in an academic context; note that he uses DuckDB (instead of BigQuery)</p></li>
+</ul>
 </div>
 </div>
 </div>
@@ -811,17 +887,17 @@ so it evaluates to <code class="docutils literal notranslate"><span class="pre">
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="adding_oneoff_data.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="what_is_agency.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Adding Data to the Warehouse</p>
+            <p class="prev-next-title">What is an <code class="docutils literal notranslate"><span class="pre">agency</span></code>?</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../datasets_and_tables/overview.html" title="next page">
+    <a class='right-next' id="next-link" href="adding_oneoff_data.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Navigating the dbt Docs</p>
+        <p class="prev-next-title">Adding Data to the Warehouse</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
