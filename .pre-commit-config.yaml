@@ -59,3 +59,8 @@ repos:
     rev: 0.6.1
     hooks:
       - id: nbstripout
+  - repo: https://github.com/crate-ci/typos
+    rev: v1.14.8
+    hooks:
+      - id: typos
+        args: [] # disable writing, which is default

@@ -1,0 +1,2 @@
+[files]
+extend-exclude = ["airflow/data/agencies.yml"]
