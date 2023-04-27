@@ -12,6 +12,7 @@ fixed:
   gcs_bucket: test-calitp-dbt-python-models
   dataproc_region: us-west2
   submission_method: serverless
+  maximum_bytes_billed: 100000000000 # 100 gb
   dataproc_batch:
     runtime_config:
       container_image: gcr.io/cal-itp-data-infra/dbt-spark:2023.3.28
