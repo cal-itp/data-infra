@@ -6,10 +6,6 @@ on:
   pull_request:
     branches: [ main ]
 
-# TODO: bring me back when not flaky anymore
-env:
-  SKIP: sqlfluff-lint
-
 jobs:
   pre-commit:
     runs-on: ubuntu-latest
