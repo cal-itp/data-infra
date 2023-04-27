@@ -32,4 +32,4 @@ SELECT
   uuid,
   version_name,
 FROM
-    {{ source('amplitude', 'benefits_events') }}
+    {{ source('legacy_amplitude', 'benefits_events') }}
