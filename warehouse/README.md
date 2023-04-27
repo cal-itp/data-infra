@@ -23,13 +23,16 @@ are already configured/installed.
 5. Ensure that `DBT_PROFILES_DIR` is set to something like `~/.dbt/`; in JupyterHub, it should already be set to `/home/jovyan/.dbt/`. You can check with `echo $DBT_PROFILES_DIR`.
 6. Execute `poetry run dbt init` to create the `$DBT_PROFILES_DIR` directory and a pre-built `profiles.yml` file; you will be prompted to enter a personal `schema` which is used as a prefix for your personal development environment schemas. The output should look similar to the following:
    ```
-   (base) jovyan@44bb008ea507:~/data-infra/warehouse$ poetry run dbt init
-   15:03:12  Running with dbt=1.4.5
-   15:03:12  Setting up your profile.
-   schema (usually your name; will be added as a prefix to schemas (e.g. yourname_mart_gtfs)): andrew
-   15:03:19  Profile calitp_warehouse written to /home/jovyan/.dbt/profiles.yml using project's profile_template.yml and your supplied values. Run 'dbt debug' to validate the connection.
+   ➜ poetry run dbt init
+   19:14:32  Running with dbt=1.4.5
+   19:14:32  Setting up your profile.
+   schema (usually your name; will be added as a prefix to schemas e.g. <schema>_mart_gtfs): andrew
+   maximum_bytes_billed (the maximum number of bytes allowed per BigQuery query; default is 100 GB) [100000000000]:
+   19:14:35  Profile calitp_warehouse written to /Users/andrewvaccaro/.dbt/profiles.yml using project's profile_template.yml and your supplied values. Run 'dbt debug' to validate the connection.
    ```
    See [the dbt docs on profiles.yml](https://docs.getdbt.com/dbt-cli/configure-your-profile) for more background on this file.
+
+   > Note: This default profile template will set a maximum bytes billed of 100 GB. You can override this during the init, or change it later by calling init again and choosing to overwrite (or editing the profiles.yml directly).
 7. Check whether `~/.dbt/profiles.yml` was successfully created, e.g. `cat ~/.dbt/profiles.yml`. If you encountered an error, you may create it by hand and fill it with the same content:
    ```yaml
    calitp_warehouse:
@@ -43,6 +46,7 @@ are already configured/installed.
          schema: <yourname>
          threads: 8
          timeout_seconds: 3000
+         maximum_bytes_billed: 100000000000
          type: bigquery
          gcs_bucket: test-calitp-dbt-python-models
          dataproc_region: us-west2
