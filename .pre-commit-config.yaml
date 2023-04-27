@@ -59,9 +59,3 @@ repos:
     rev: 0.6.1
     hooks:
       - id: nbstripout
-  - repo: https://github.com/crate-ci/typos
-    rev: v1.14.8
-    hooks:
-      - id: typos
-        args: [] # writes by default, we want to override that
-        pass_filenames: false # if filenames are passed, they override excludes in the toml

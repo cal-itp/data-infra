@@ -1,5 +1,11 @@
+[default.extend-identifiers]
+trn_aci = "trn_aci"
+
+[type.csv]
+extend-glob = ["*.csv"]
+check-file = false
+
 [files]
 extend-exclude = [
     "airflow/data/agencies.yml",
-    "warehouse/seeds/ntd_agency_to_organization.csv",
 ]

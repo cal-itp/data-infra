@@ -11,13 +11,15 @@ env:
   SKIP: sqlfluff-lint
 
 jobs:
-  lint:
+  pre-commit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
       - uses: pre-commit/action@v3.0.0
-      # - uses: gaurav-nelson/github-action-markdown-link-check@v1
-      # - uses: docker://avtodev/markdown-lint:v1
-      #   with:
-      #     args: '**/*.md'
+  # We have to use the action rather than pre-commit because of https://github.com/crate-ci/typos/issues/347
+  typos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: crate-ci/typos@master
