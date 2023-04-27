@@ -58,6 +58,10 @@ models:
       - &feed_timezone_no_tests
         name: feed_timezone
         description: '{{ doc("gtfs_schedule_feed_timezone") }}'
+      - name: demo
+        description: Demo! 
+        tests:
+            - not_null 
 
   - name: fct_schedule_feed_downloads
     description: |

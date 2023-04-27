@@ -29,6 +29,7 @@ fct_daily_schedule_feeds AS (
         t2.feed_timezone,
         t2.base64_url,
         urls_to_gtfs_datasets.gtfs_dataset_key AS gtfs_dataset_key,
+        "demo" AS demo,
         t1.date_day > CURRENT_DATE() AS is_future
     FROM make_noon_pacific AS t1
     INNER JOIN dim_schedule_feeds AS t2
