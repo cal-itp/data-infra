@@ -24,7 +24,7 @@ from calitp_data_infra.storage import (
 from tqdm import tqdm
 from utils import GTFSScheduleFeedFile, get_schedule_files_in_hour
 
-SCHEDULE_UNZIPPED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED"]
+SCHEDULE_UNZIPPED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"]
 SCHEDULE_RAW_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_RAW"]
 GTFS_UNZIP_LIST_ERROR_THRESHOLD = float(
     os.getenv("GTFS_UNZIP_LIST_ERROR_THRESHOLD", 0.99)

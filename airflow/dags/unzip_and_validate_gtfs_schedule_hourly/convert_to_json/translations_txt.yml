@@ -1,4 +1,4 @@
-operator: operators.GtfsGcsToJsonlOperator
+operator: operators.GtfsGcsToJsonlOperatorHourly
 dependencies:
   - unzip_gtfs_schedule
 
