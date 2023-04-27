@@ -1,5 +1,5 @@
 operator: operators.ExternalTable
-bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_PARSED') }}"
+bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY') }}"
 source_objects:
   - "transfers.txt_parsing_results/*.jsonl"
 destination_project_dataset_table: "external_gtfs_schedule.transfers_txt_parse_outcomes"
@@ -8,7 +8,7 @@ use_bq_client: true
 hive_options:
   mode: CUSTOM
   require_partition_filter: false
-  source_uri_prefix: "transfers.txt_parsing_results/{dt:DATE}/"
+  source_uri_prefix: "transfers.txt_parsing_results/{dt:DATE}/{ts:TIMESTAMP}/"
 schema_fields:
   - name: success
     type: BOOLEAN
