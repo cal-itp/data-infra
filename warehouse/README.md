@@ -27,12 +27,12 @@ are already configured/installed.
    19:14:32  Running with dbt=1.4.5
    19:14:32  Setting up your profile.
    schema (usually your name; will be added as a prefix to schemas e.g. <schema>_mart_gtfs): andrew
-   maximum_bytes_billed (the maximum number of bytes allowed per BigQuery query; default is 100 GB) [100000000000]:
+   maximum_bytes_billed (the maximum number of bytes allowed per BigQuery query; default is 2 TB) [2000000000000]:
    19:14:35  Profile calitp_warehouse written to /Users/andrewvaccaro/.dbt/profiles.yml using project's profile_template.yml and your supplied values. Run 'dbt debug' to validate the connection.
    ```
    See [the dbt docs on profiles.yml](https://docs.getdbt.com/dbt-cli/configure-your-profile) for more background on this file.
 
-   > Note: This default profile template will set a maximum bytes billed of 100 GB. You can override this during the init, or change it later by calling init again and choosing to overwrite (or editing the profiles.yml directly).
+   > Note: This default profile template will set a maximum bytes billed of 2 TB; no models should fail with the default lookbacks in our development environment, even with a full refresh. You can override this limit during the init, or change it later by calling init again and choosing to overwrite (or editing the profiles.yml directly).
 7. Check whether `~/.dbt/profiles.yml` was successfully created, e.g. `cat ~/.dbt/profiles.yml`. If you encountered an error, you may create it by hand and fill it with the same content:
    ```yaml
    calitp_warehouse:

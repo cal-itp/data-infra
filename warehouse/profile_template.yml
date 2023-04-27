@@ -26,5 +26,5 @@ prompts:
     hint: usually your name; will be added as a prefix to schemas e.g. <schema>_mart_gtfs
   maximum_bytes_billed:
     type: int
-    default: 100000000000 # 100 gb
-    hint: the maximum number of bytes allowed per BigQuery query; default is 100 GB
+    default: 2000000000000
+    hint: the maximum number of bytes allowed per BigQuery query; default is 2 TB
