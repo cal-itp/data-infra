@@ -8,7 +8,7 @@ cmds:
 
 arguments:
   - "-m"
-  - "gtfs_schedule_validator"
+  - "gtfs_schedule_validator_hourly"
   - "validate-hour"
   - "{{ data_interval_start.strftime('%Y-%m-%dT%H') }}"
   - "--verbose"
