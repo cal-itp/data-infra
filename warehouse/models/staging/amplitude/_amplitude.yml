@@ -1,0 +1,22 @@
+version: 2
+
+sources:
+  - name: amplitude
+    description: Data exported from Amplitude, using Amplitude exporter.
+    database: "{{ env_var('CALITP_DBT_SOURCE_DATABASE', var('DEFAULT_SOURCE_DATABASE')) }}"
+    schema: external_amplitude
+    tables:
+      - name: benefits_events
+
+models:
+  - name: stg_amplitude__benefits_events
+    description: Benefits application events data from Amplitude.
+    columns:
+      - name: event_time
+        description: timestamp from event
+        tests:
+          - not_null
+      - name: event_id
+        description: integer
+        tests:
+          - not_null
