@@ -63,4 +63,5 @@ repos:
     rev: v1.14.8
     hooks:
       - id: typos
-        args: ["--config=_typos.toml"] # writes by default, but any args override that
+        args: [] # writes by default, we want to override that
+        pass_filenames: false # if filenames are passed, they override excludes in the toml
