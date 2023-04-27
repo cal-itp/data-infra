@@ -12,7 +12,7 @@ from calitp_data_infra.storage import (
     ProcessingOutcome,
     get_fs,
 )
-from utils import GTFSScheduleFeedFile, get_schedule_files_in_hour
+from utils import GTFSScheduleFeedFileHourly, get_schedule_files_in_hour
 
 from airflow.models import BaseOperator
 
@@ -23,7 +23,7 @@ GTFS_PARSE_ERROR_THRESHOLD = 0.95
 
 class GTFSScheduleFeedJSONL(PartitionedGCSArtifact):
     bucket: ClassVar[str] = SCHEDULE_PARSED_BUCKET
-    partition_names: ClassVar[List[str]] = GTFSScheduleFeedFile.partition_names
+    partition_names: ClassVar[List[str]] = GTFSScheduleFeedFileHourly.partition_names
     ts: pendulum.DateTime
     extract_config: GTFSDownloadConfig
     gtfs_filename: str
@@ -45,7 +45,7 @@ class GTFSScheduleFeedJSONL(PartitionedGCSArtifact):
 
 
 class GTFSScheduleParseOutcome(ProcessingOutcome):
-    feed_file: GTFSScheduleFeedFile
+    feed_file: GTFSScheduleFeedFileHourly
     fields: Optional[List[str]]
     parsed_file: Optional[GTFSScheduleFeedJSONL]
 
@@ -82,7 +82,7 @@ class ScheduleParseResult(PartitionedGCSArtifact):
 
 def parse_individual_file(
     fs,
-    input_file: GTFSScheduleFeedFile,
+    input_file: GTFSScheduleFeedFileHourly,
     gtfs_filename: str,
 ) -> GTFSScheduleParseOutcome:
     logging.info(f"Processing {input_file.path}")
@@ -145,7 +145,7 @@ def parse_individual_file(
 def parse_files(period: pendulum.Period, input_table_name: str, gtfs_filename: str):
     fs = get_fs()
     extract_map = get_schedule_files_in_hour(
-        cls=GTFSScheduleFeedFile,
+        cls=GTFSScheduleFeedFileHourly,
         bucket=SCHEDULE_UNZIPPED_BUCKET,
         table=input_table_name,
         period=period,
