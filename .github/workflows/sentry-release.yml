@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - 'main'
-  pull_request:
-    branches:
-      - 'main'
 
 jobs:
   release:
@@ -29,4 +26,4 @@ jobs:
           SENTRY_PROJECT: cal-itp-data-infra
           SENTRY_URL: https://sentry.calitp.org
         with:
-          environment: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main') && 'cal-itp-data-infra' || 'test'  }}
+          environment: cal-itp-data-infra
