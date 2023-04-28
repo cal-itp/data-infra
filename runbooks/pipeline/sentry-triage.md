@@ -34,5 +34,4 @@ This category includes dbt test failures, Python/SQL code bugs, or external API 
 2. In the eventual PR that should fix the issue, resolving the GitHub issue should also resolve the Sentry issue. You can also reference a Sentry issue to close directly via the PR description, e.g. `fixes CAL-ITP-DATA-INFRA-D5`.
 
 ### External, and a retry does not handle it
-> e.g. SBMTD 500s in RT
-No-op for now
+This category includes external issues that a retry cannot resolve. For example, an RT feed that intermittently throws 500s, as retrying would mean that any data we do end up downloading will be late.
