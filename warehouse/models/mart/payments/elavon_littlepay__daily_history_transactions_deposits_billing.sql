@@ -3,7 +3,7 @@
 WITH fct_elavon__transactions AS (
     SELECT
         *,
-        -- this same treatment for the other customersin the future when we expand dashboard for other customers?
+        -- this same treatment for the other customers in the future when we expand dashboard for other customers?
         IF(customer_name = 'MST TAP TO RIDE', 'mst', customer_name) AS participant_id
     FROM  {{ ref('fct_elavon__transactions') }}
 ),
