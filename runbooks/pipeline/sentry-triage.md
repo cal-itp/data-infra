@@ -10,6 +10,8 @@ Once a day, we should check Sentry issues created since the prior day, using the
 
 Categorize those issues and perform relevant steps if the issue is not already assigned.
 
+> When creating GitHub issues from Sentry, verify that no secrets or other sensitive information is contained in the generated issue body. Sentry's data masking is not perfect (and we may make a configuration mistake), so it's good to double-check.
+
 ### A fingerprinting error (i.e. too little or too much grouping)
 This category primarily includes unhandled data processing exceptions (e.g. RTFetchException, CalledProcessError) whose fingerprint results in issues being improperly grouped together (for example, the same RTFetchException occurring on different feeds) or failing to be grouped together (for example, an exception message containing a Python object hash that is different in every exception instance).
 
