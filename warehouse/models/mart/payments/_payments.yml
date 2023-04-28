@@ -168,5 +168,3 @@ models:
       - name: ent_num
       - name: dt
       - name: execution_ts
-  - name: fct_payments__littlepay_elavon_reconciliation
-    description: Wide table of joined Littlepay // Elavon data (Work in progress - add columns below)
