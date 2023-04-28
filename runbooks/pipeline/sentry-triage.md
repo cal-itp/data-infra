@@ -10,12 +10,21 @@ Once a day, we should check Sentry issues created since the prior day, using the
 
 Categorize those issues and perform relevant steps if the issue is not already assigned.
 
-### A fingerprinting error (i.e. new issue that should’ve been grouped)
-1. Merge the issues together.
-![](sentry_merging.png)
-2. Create a GitHub issue to update the fingerprint, linking to the now-merged issue.
+### A fingerprinting error (i.e. too little or too much grouping)
+This category primarily includes unhandled data processing exceptions (e.g. RTFetchException, CalledProcessError) whose fingerprint results in issues being improperly grouped together (for example, the same RTFetchException occurring on different feeds) or failing to be grouped together (for example, an exception message containing a Python object hash that is different in every exception instance).
+
+* Too little grouping (i.e. too granular fingerprint)
+    1. Merge the issues together. ![](sentry_merging.png)
+    2. Create a GitHub issue to update the fingerprint, linking to the now-merged issue.
+* Too much grouping (i.e. too vague fingerprint)
+    1. Create a GitHub issue to update the fingerprint, usually adding additional values to the fingerprint to distinguish between different errors.
+    2. For example, you may want to split up an issue by feed URL, which would mean adding the feed URL to the fingerprint.
+    3. When the new fingerprint has been deployed, _resolve_ the existing issue since it should no longer appear.
+
 
 ### Bug, or external issue handleable by retry
+This category includes dbt test failures, Python/SQL code bugs, or external API calls that we are not retrying properly.
+
 1. Create a GitHub issue to fix the bug (or add a retry) and assign if there is a clear owner.
 
 ![](create_github_issue_from_sentry.png)
