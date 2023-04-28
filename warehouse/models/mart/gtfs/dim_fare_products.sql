@@ -23,6 +23,7 @@ dim_fare_products AS (
         feed_key,
         fare_product_id,
         fare_product_name,
+        fare_media_id,
         amount,
         currency,
         COALESCE(warning_duplicate_primary_key, FALSE) AS warning_duplicate_primary_key,

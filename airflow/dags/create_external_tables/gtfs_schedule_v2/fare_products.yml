@@ -16,6 +16,8 @@ schema_fields:
     type: STRING
   - name: fare_product_name
     type: STRING
+  - name: fare_media_id
+    type: STRING
   - name: amount
     type: STRING
   - name: currency
