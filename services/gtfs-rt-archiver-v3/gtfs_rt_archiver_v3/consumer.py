@@ -25,11 +25,14 @@ def set_exception_fingerprint(event, hint):
 
     exception = hint["exc_info"][1]
     if isinstance(exception, RTFetchException):
+        # strip out 511 agency ids, since the same outage often affects all of them
         cleaned_url = re.sub(
-            r"agency=\w+$", str(exception.url), "agency=XYZ"
-        )  # strip out 511 agency ids, since the same outage often affects all of them
+            pattern=r"agency=\w+$",
+            repl="agency=XYZ",
+            string=str(exception.url),
+        )
+        # use just the type to avoid differentiating based on underlying exceptions as well as object hashes in exception strings
         event["fingerprint"] = [
-            # use just the type to avoid differentiating based on underlying exceptions as well as object hashes in exception strings
             type(exception.cause).__name__,
             cleaned_url,
         ]
