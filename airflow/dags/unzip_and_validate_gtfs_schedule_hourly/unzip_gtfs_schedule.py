@@ -123,7 +123,7 @@ def process_feed_files(
     md5hash = hashlib.md5()
     if not is_valid:
         raise ValueError(
-            "Unparseable zip: File/directory structure within zipfile cannot be unpacked"
+            "Unparsable zip: File/directory structure within zipfile cannot be unpacked"
         )
 
     # sort to make the hash deterministic
