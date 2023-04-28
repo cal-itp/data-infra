@@ -1,11 +1,11 @@
-description: "Unzips and validates GTFS Schedule data on a daily schedule; DEPRECATED by new hourly DAG"
-schedule_interval: "0 2 * * *"
+description: "Unzips and validates GTFS Schedule data"
+schedule_interval: "0 * * * *"
 tags:
   - all_gusty_features
 default_args:
     owner: airflow
     depends_on_past: False
-    start_date: "2021-04-15"
+    start_date: "2023-04-15" # TODO: change me to 2021
     email:
       - "laurie.m@jarv.us"
       - "andrew.v@jarv.us"
