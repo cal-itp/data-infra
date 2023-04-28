@@ -123,7 +123,7 @@ def process_feed_files(
             "Unparseable zip: File/directory structure within zipfile cannot be unpacked"
         )
 
-    # sorting is new here, to make the hash deterministic
+    # sort to make the hash deterministic
     for file in sorted(
         [file for file in files if not file.startswith(MACOSX_ZIP_FOLDER)]
     ):
