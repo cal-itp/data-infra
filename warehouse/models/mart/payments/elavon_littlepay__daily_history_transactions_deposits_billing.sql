@@ -40,7 +40,7 @@ littlepay_deposits_agg AS (
     GROUP BY transaction_date_pacific, participant_id
 ),
 
-elavon_littlepay__daily_history_transaction_deposits_billing AS (
+elavon_littlepay__daily_history_transactions_deposits_billing.sql AS (
 
     SELECT
 
@@ -57,4 +57,4 @@ elavon_littlepay__daily_history_transaction_deposits_billing AS (
         ON (t1.day_history = t3.payment_date) AND (t1.participant_id = t3.participant_id)
 )
 
-SELECT *  FROM elavon_littlepay__daily_history_transaction_deposits_billing
+SELECT *  FROM elavon_littlepay__daily_history_transactions_deposits_billing.sql
