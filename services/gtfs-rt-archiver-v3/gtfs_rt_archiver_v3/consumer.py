@@ -29,9 +29,8 @@ def set_exception_fingerprint(event, hint):
             r"agency=\w+$", str(exception.url), "agency=XYZ"
         )  # strip out 511 agency ids, since the same outage often affects all of them
         event["fingerprint"] = [
-            type(
-                exception
-            ),  # use just the type to avoid differentiating based on underlying exceptions as well as object hashes in exception strings
+            # use just the type to avoid differentiating based on underlying exceptions as well as object hashes in exception strings
+            type(exception.cause).__name__,
             cleaned_url,
         ]
         if exception.status_code:
