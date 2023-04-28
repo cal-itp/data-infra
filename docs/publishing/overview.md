@@ -17,7 +17,7 @@ listed in increasing order of complexity and therefore capability.
 * HTML visualizations can be rendered in [GitHub Pages](publishing-github-pages)
   and embedded as a URL into slide deck
 * More advanced HTML-based reports can be hosted in the [analytics portfolio](publishing-analytics-portfolio-site)
-  which supports interactivity and notebook paramterization.
+  which supports interactivity and notebook parameterization.
 * Interactive dashboards should be hosted in [Metabase](publishing-metabase) to
   share with external stakeholders.
 * Structured data may be published to [CKAN](publishing-ckan) to facilitate

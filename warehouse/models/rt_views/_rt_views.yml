@@ -235,9 +235,9 @@ models:
       - *calitp_itp_id
       - *calitp_url_number
       - name: route_id
-        descritpion: Route ID
+        description: Route ID
       - name: agency_name
-        descritpion: Agency Name
+        description: Agency Name
       - name: route_short_name
         description: Common route name
       - name: num_sched
