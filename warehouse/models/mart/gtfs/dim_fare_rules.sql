@@ -16,7 +16,7 @@ bad_rows AS (
         base64_url,
         ts,
         {{ dbt_utils.generate_surrogate_key(['fare_id', 'route_id', 'origin_id', 'destination_id', 'contains_id']) }} AS fare_rule_identifier,
-        TRUE AS warning_duplicate_primary_key
+        TRUE AS warning_duplicate_primary_key,
     FROM make_dim
     GROUP BY 1, 2, 3
     HAVING COUNT(*) > 1
@@ -34,6 +34,7 @@ dim_fare_rules AS (
         base64_url,
         COALESCE(warning_duplicate_primary_key, FALSE) AS warning_duplicate_primary_key,
         _feed_valid_from,
+        feed_timezone,
     FROM with_identifier
     LEFT JOIN bad_rows
         USING (base64_url, ts, fare_rule_identifier)

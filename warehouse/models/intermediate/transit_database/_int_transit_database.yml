@@ -25,8 +25,15 @@ models:
     description: |
       Creates a 1:N relationship so any given extract/URL in the
       GTFS models can identify its source gtfs_datasets record.
-      Currently this is unversioned; any historical URLs point
-      to the latest version of their gtfs_datasets record.
+      Because GTFS dataset history from Airtable starts later than GTFS schedule history (feeds downloaded by the pipeline),
+      this mapping back-dates the first appearance of a URL in a GTFS dataset record to the beginning
+      of history to allow a URL from the GTFS data to map to a dataset record even if that URL
+      was being downloaded before that dataset record was created. I.e., if URL
+      www.calitp.org/gtfs.zip was downloaded on January 1, 2022, but the first GTFS
+      dataset record with that URL is record with key `123` and `123` doesn't appear until July 1, 2022,
+      the January 1 download from www.calitp.org/gtfs.zip will still be mapped to GTFS dataset record `123`,
+      even though it was downloaded outside the record's validity window, to facilitate some assignment of the
+      GTFS feed data to organizations, services, etc.
     tests:
       - dbt_utils.mutually_exclusive_ranges:
           lower_bound_column: _valid_from

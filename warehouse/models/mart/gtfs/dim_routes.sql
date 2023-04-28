@@ -24,6 +24,7 @@ dim_routes AS (
         network_id,
         base64_url,
         _feed_valid_from,
+        feed_timezone,
     FROM make_dim
 )
 

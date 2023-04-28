@@ -28,6 +28,8 @@ env_vars:
   DBT_DATABASE: "{{ get_project_id() }}"
   DBT_TARGET: "{{ env_var('DBT_TARGET') }}"
   MB_HOST: dashboards.calitp.org
+  SENTRY_DSN: "{{ env_var('SENTRY_DSN') }}"
+  SENTRY_ENVIRONMENT: "{{ env_var('SENTRY_ENVIRONMENT') }}"
 
 secrets:
   - deploy_type: volume

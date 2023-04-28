@@ -16,6 +16,7 @@ int_gtfs_schedule__daily_scheduled_service_index AS (
     SELECT
         service_date,
         fct_daily_schedule_feeds.feed_key,
+        all_scheduled_service.feed_timezone,
         service_id,
         calendar_key,
         calendar_dates_key

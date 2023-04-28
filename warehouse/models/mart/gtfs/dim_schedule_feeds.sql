@@ -1,20 +1,21 @@
 {{ config(materialized='table') }}
 
--- TODO: when we have dbt-utils version 0.8.5 or higher, could just use get_column_values with a where clause
--- we can have a lag where download success is populated but unzip success is not
-{% set get_max_ts_sql %}
-    SELECT MAX(ts) AS max_ts
-    FROM {{ ref('int_gtfs_schedule__joined_feed_outcomes') }}
-    WHERE unzip_success IS NOT NULL
-{% endset %}
-
-{%- set timestamps = dbt_utils.get_query_results_as_dict(get_max_ts_sql) -%}
-{%- set latest_processed_timestamp = timestamps['max_ts'][0] -%}
+{%- set timestamps = dbt_utils.get_column_values(
+        table = ref('int_gtfs_schedule__joined_feed_outcomes'),
+        column = 'ts',
+        order_by = 'ts DESC',
+        where = 'unzip_success IS NOT NULL') -%}
+{%- set latest_processed_timestamp = timestamps[0] -%}
 
 WITH int_gtfs_schedule__joined_feed_outcomes AS (
     SELECT *
     FROM {{ ref('int_gtfs_schedule__joined_feed_outcomes') }}
     WHERE EXTRACT(DATE FROM ts) <= EXTRACT(DATE FROM TIMESTAMP '{{ latest_processed_timestamp }}')
+),
+
+agencies AS (
+    SELECT *
+    FROM {{ ref('stg_gtfs_schedule__agency') }}
 ),
 
 data_available AS (
@@ -122,17 +123,35 @@ actual_data_only AS (
     FROM all_versioned
 ),
 
+-- make sure we get only one time zone per feed
+-- per spec there should only be one but this guarantees it
+get_feed_time_zone AS (
+    SELECT
+        ts,
+        base64_url,
+        agency_timezone AS feed_timezone,
+        COUNT(*) AS ct
+    FROM agencies
+    -- SQLFluff doesn't like number column references here with column names in window function
+    GROUP BY 1, 2, 3 --noqa: AM06
+    QUALIFY RANK() OVER (PARTITION BY ts, base64_url ORDER BY ct DESC, agency_timezone ASC) = 1
+),
+
 dim_schedule_feeds AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['base64_url', '_valid_from']) }} AS key,
-        base64_url,
+        {{ dbt_utils.generate_surrogate_key(['actual_data_only.base64_url', '_valid_from']) }} AS key,
+        actual_data_only.base64_url,
         download_success,
         unzip_success,
         zipfile_extract_md5hash,
+        feed_timezone,
         _valid_from,
         _valid_to,
         _is_current
     FROM actual_data_only
+    LEFT JOIN get_feed_time_zone
+        ON actual_data_only._valid_from = get_feed_time_zone.ts
+        AND actual_data_only.base64_url = get_feed_time_zone.base64_url
 )
 
 SELECT * FROM dim_schedule_feeds

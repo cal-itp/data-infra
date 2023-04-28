@@ -18,6 +18,7 @@ dim_translations AS (
         field_value,
         base64_url,
         _feed_valid_from,
+        feed_timezone,
     FROM make_dim
 )
 

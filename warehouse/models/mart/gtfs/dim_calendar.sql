@@ -21,6 +21,7 @@ dim_calendar AS (
         end_date,
         base64_url,
         _feed_valid_from,
+        feed_timezone,
     FROM make_dim
 )
 

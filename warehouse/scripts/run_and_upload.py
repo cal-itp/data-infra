@@ -1,6 +1,8 @@
 #!/usr/bin/env python
+
 import json
 import os
+import re
 import shutil
 import subprocess
 from pathlib import Path
@@ -25,9 +27,9 @@ artifacts = map(
     Path, ["index.html", "catalog.json", "manifest.json", "run_results.json"]
 )
 
-sentry_sdk.init(environment=os.environ["AIRFLOW_ENV"])
+sentry_sdk.init()
 
-app = typer.Typer()
+app = typer.Typer(pretty_exceptions_enable=False)
 
 
 class DbtException(Exception):
@@ -54,9 +56,14 @@ class DbtTestWarn(Exception):
     pass
 
 
+class DbtMetabaseSyncFailure(Exception):
+    pass
+
+
 def get_failure_context(failure: RunResult, node: Node) -> Dict[str, Any]:
     context: Dict[str, Any] = {
         "unique_id": failure.unique_id,
+        "path": str(node.original_file_path),
     }
     if failure.unique_id.startswith("test"):
         if node.depends_on:
@@ -131,6 +138,7 @@ def run(
     save_artifacts: bool = False,
     deploy_docs: bool = False,
     sync_metabase: bool = False,
+    select: Optional[str] = None,
     exclude: Optional[str] = None,
 ) -> None:
     assert (
@@ -176,6 +184,8 @@ def run(
         args = ["run"]
         if full_refresh:
             args.append("--full-refresh")
+        if select:
+            args.extend(["--select", *select.split(" ")])
         if exclude:
             args.extend(["--exclude", exclude])
         results_to_check.append(subprocess.run(get_command(*args)))
@@ -213,7 +223,10 @@ def run(
     if dbt_docs:
         subprocess.run(get_command("docs", "generate")).check_returncode()
 
-        os.mkdir("docs/")
+        try:
+            os.mkdir("target/docs_site/")
+        except FileExistsError:
+            pass
 
         fs = gcsfs.GCSFileSystem(
             project="cal-itp-data-infra",
@@ -250,13 +263,13 @@ def run(
             # avoid copying run_results is unnecessary for the docs site
             # so just skip to avoid any potential information leakage
             if "run_results" not in str(artifact):
-                shutil.copy(_from, "docs/")
+                shutil.copy(_from, "target/docs_site/")
 
         if deploy_docs:
             args = [
                 "netlify",
                 "deploy",
-                "--dir=docs/",
+                "--dir=target/docs_site/",
             ]
 
             if target and target.startswith("prod"):
@@ -264,14 +277,11 @@ def run(
 
             results_to_check.append(subprocess.run(args))
 
-    # There's a flag called --metabase_sync_skip but it doesn't seem to work as I assumed
-    # so we only want to sync in production. This makes it hard to test, but we don't really
-    # use the pre-prod Metabase right now; we could theoretically test with that if it
-    # synced schemas created by the staging dbt target.
     if sync_metabase:
-        if target and target.startswith("prod"):
-            # TODO: we should be logging each misaligned model to Sentry
-            subprocess.run(
+        if target and (target.startswith("prod") or target.startswith("staging")):
+            typer.secho("syncing documentation to metabase", fg=typer.colors.MAGENTA)
+            # Use a subprocess here so we can just parse the stdout/stderr
+            p = subprocess.run(
                 [
                     "dbt-metabase",
                     "models",
@@ -281,12 +291,59 @@ def run(
                     "--dbt_docs_url",
                     "https://dbt-docs.calitp.org",
                     "--metabase_database",
-                    "Data Marts (formerly Warehouse Views)",
+                    (
+                        "Data Marts (formerly Warehouse Views)"
+                        if target.startswith("prod")
+                        else "(Internal) Staging Warehouse Views"
+                    ),
                     "--dbt_schema_excludes",
                     "staging",
                     "payments",
-                ]
+                ],
+                env={
+                    **os.environ,
+                    "COLUMNS": "300",  # we have to make this wide enough to avoid splitting log lines
+                },
+                capture_output=True,
             )
+
+            with open("./target/manifest.json") as f:
+                manifest = Manifest(**json.load(f))
+            matches = {}
+            for line in p.stdout.decode().splitlines():
+                print(line)
+                for pattern in (
+                    r"WARNING\s+Model\s(?P<dbt_schema>\w+)\.(?P<model>\w+)\snot\sfound\sin\s(?P<db_schema>\w+)",
+                    r"WARNING\s+Column\s(?P<column>\w+)\snot\sfound\sin\s(?P<db_schema>\w+)\.(?P<model>\w+)",
+                ):
+                    match = re.search(pattern, line)
+                    if match and match.group("model") not in matches:
+                        matches[match.group("model")] = (match, line)
+            for model, (first_match, line) in matches.items():
+                # Just use a single exception type for now, regardless of whether the model is missing entirely
+                # or just a column
+                exc = DbtMetabaseSyncFailure(first_match.group())
+                with sentry_sdk.push_scope() as scope:
+                    scope.fingerprint = [type(exc), model]
+                    scope.set_context(
+                        "log",
+                        {
+                            "match": str(first_match),
+                            "line": line,
+                        },
+                    )
+                    node = next(
+                        node
+                        for node in manifest.nodes.values()
+                        if node.name == model.lower()
+                    )
+                    scope.set_context(
+                        "dbt",
+                        {
+                            "path": str(node.original_file_path),
+                        },
+                    )
+                    sentry_sdk.capture_exception(exc, scope=scope)
         else:
             typer.secho(
                 f"WARNING: running with non-prod target {target} so skipping metabase sync",
