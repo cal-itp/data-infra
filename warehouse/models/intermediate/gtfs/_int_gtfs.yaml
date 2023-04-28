@@ -70,7 +70,7 @@ models:
         description: '{{ doc("gtfs_calendar__service_id") }}'
       - name: service_date
         description: |
-          Date on which this service was active (i.e., this date is betweem the
+          Date on which this service was active (i.e., this date is between the
           `start_date` and `end_date` for this service).
       - name: day_num
         description: |

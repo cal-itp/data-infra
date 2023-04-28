@@ -107,7 +107,7 @@ Once you have performed the setup above, you are good to go run
    1. Will create tables in your personally-named schema from the CSV files present in [./seeds](./seeds), which can then be referenced by dbt models.
    2. You will need to re-run seeds if new seeds are added, or existing ones are changed.
 2. `poetry run dbt run`
-   1. Wll run all the models, i.e. execute SQL in the warehouse.
+   1. Will run all the models, i.e. execute SQL in the warehouse.
    2. In the future, you can specify [selections](https://docs.getdbt.com/reference/node-selection/syntax) to run only a subset of models, otherwise this will run *all* the tables).
    3. By default, your very first `run` is a [full refresh](https://docs.getdbt.com/reference/commands/run#refresh-incremental-models) but you'll need to pass the `--full-refresh` flag in the future if you want to change the schema of incremental tables, or "backfill" existing rows with new logic.
 

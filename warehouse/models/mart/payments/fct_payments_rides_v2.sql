@@ -280,7 +280,7 @@ join_table AS (
         t1.location_name,
         t1.latitude,
 
-        -- should we remove latitute and longitude in favor
+        -- should we remove latitude and longitude in favor
         -- of on_latitude and on_longitude
         t1.longitude,
         t1.latitude AS on_latitude,
@@ -325,7 +325,7 @@ join_table AS (
     LEFT JOIN participants_to_routes AS r
         ON r.participant_id = m.participant_id
             -- here, can just use t1 because transaction date will be populated
-            -- (don't have to handle unkowns the way we do with route_id)
+            -- (don't have to handle unknowns the way we do with route_id)
             AND EXTRACT(DATE FROM TIMESTAMP(t1.transaction_date_time_utc)) = r.date
             AND r.route_id = COALESCE(t1.route_id, t2.route_id)
 ),

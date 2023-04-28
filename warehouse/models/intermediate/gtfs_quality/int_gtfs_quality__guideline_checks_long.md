@@ -24,7 +24,7 @@ table is intended to be used, the logic is:
 
 ```
 -- note that the order here matters; the conditions are meant to be applied in this order
--- so that failing takes precendence
+-- so that failing takes precedence
 CASE
     WHEN LOGICAL_OR(NULLIF(status, "N/A") = "FAIL") THEN "FAIL"
     WHEN LOGICAL_AND(NULLIF(status, "N/A") = "PASS") THEN "PASS"

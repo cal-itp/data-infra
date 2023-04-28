@@ -77,7 +77,7 @@ trips_version_compare AS (
      AND trips.service_date = prev_trips.service_date
 ),
 
--- We count each "infraction" type seperately, mostly for QA purposes
+-- We count each "infraction" type separately, mostly for QA purposes
 ----  Note that this query will count each "infraction" once per day it's in effect
 improper_trips_updates AS (
   SELECT base64_url,

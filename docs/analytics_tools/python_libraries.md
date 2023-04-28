@@ -107,7 +107,7 @@ and showing SQL test queries that siuba code generates.
 from calitp_data_analysis.tables import tbls
 from siuba import _, filter, count, collect, show_query
 
-# query lastest validation notices, then filter for a single gtfs feed,
+# query latest validation notices, then filter for a single gtfs feed,
 # and then count how often each code occurs
 (tbls.views.gtfs_schedule_dim_feeds()
     >> filter(_.calitp_itp_id == 10, _.calitp_url_number==0)

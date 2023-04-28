@@ -18,7 +18,7 @@ deduped_micropayment_device_transaction_ids as (
 -- Some transactions are associated with more than one DEBIT micropayment. This
 -- should not happen. In the query below, we identify the micropayment_id of the
 -- pending micropayment records that are no longer valid because they've been
--- superceded by a completed micropayment.
+-- superseded by a completed micropayment.
 --
 -- See https://github.com/cal-itp/data-infra/issues/647 for the explanation.
 invalid_micropayment_device_transaction_ids as (

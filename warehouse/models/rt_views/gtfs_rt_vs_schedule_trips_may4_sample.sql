@@ -1,5 +1,5 @@
 WITH
--- selecting the distinct trips from GTFS Vehicle Postions for all operators
+-- selecting the distinct trips from GTFS Vehicle Positions for all operators
 vp_trips AS (
     SELECT DISTINCT
         calitp_itp_id,
@@ -7,7 +7,7 @@ vp_trips AS (
         date AS service_date,
         trip_id AS vp_trip_id
     -- trip_route_id
-    -- note: to change when we want to include more operators. trip_route_id and trip_id aare optional
+    -- note: to change when we want to include more operators. trip_route_id and trip_id are optional
     -- https://gtfs.org/realtime/reference/#message-vehicleposition
     FROM {{ ref('stg_rt__vehicle_positions') }}
     WHERE date = '2022-05-04'

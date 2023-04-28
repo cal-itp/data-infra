@@ -1,7 +1,7 @@
 {{ config(store_failures = true) }}
 
 -- dst_table_name: "payments.invalid_cleaned_principal_customer_ids"
--- Each pricipal_customer_id should only ever have itself as a principal.
+-- Each principal_customer_id should only ever have itself as a principal.
 
 WITH principal_customer_ids AS (
 

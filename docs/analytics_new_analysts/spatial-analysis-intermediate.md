@@ -91,15 +91,15 @@ new = df.Coord.str.split(", ", expand = True)
 Then, extract our X, Y components. Put lat, lon into a Shapely object as demonstrated [in the prior section.](#create-geometry-column-from-latitude-and-longitude-coordinates)
 
 ```
-# Make sure only numbers, not parantheses, are captured. Cast it as float.
+# Make sure only numbers, not parentheses, are captured. Cast it as float.
 
 # 0 corresponds to the portion before the comma. [1:] means starting from
-# the 2nd character, right after the opening paranthesis, to the comma.
+# the 2nd character, right after the opening parenthesis, to the comma.
 df['lat'] = new[0].str[1:].astype(float)
 
 # 1 corresponds to the portion after the comma. [:-1] means starting from
 # right after the comma to the 2nd to last character from the end, which
-# is right before the closing paranthesis.
+# is right before the closing parenthesis.
 df['lon'] = new[1].str[:-1].astype(float)
 ```
 

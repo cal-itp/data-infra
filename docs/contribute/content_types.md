@@ -23,7 +23,7 @@ Below we've provided some examples of commons types of content for quick use. To
 4. [Internal References and Cross References](internal-refs)
 (executing-code)=
 ### Executing Code
-Place the following sytax at the top of a `.md` document to include code that will execute.
+Place the following syntax at the top of a `.md` document to include code that will execute.
 ```
 ---
 jupytext:

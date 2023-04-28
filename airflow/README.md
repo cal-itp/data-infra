@@ -6,7 +6,7 @@ The following folder contains the project level directory for all our Apache Air
 
 The DAGs for this project are stored and version controlled in the `dags` folder.
 
-The logs are stored locally in the `logs` folder. You should be unable to add files here but it is gitkeep'ed so that it is avaliable when testing and debugging.
+The logs are stored locally in the `logs` folder. You should be unable to add files here but it is gitkeep'ed so that it is available when testing and debugging.
 
 Finally, Airflow plugins can be found in `plugins`; this includes general utility functions as well as custom operator definitions.
 

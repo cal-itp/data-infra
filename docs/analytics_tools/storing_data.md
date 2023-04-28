@@ -68,7 +68,7 @@ While GCS can store CSVs, parquets, Excel spreadsheets, etc, parquets are the pr
 
 #### Parquet
 
-Parquet is an “open source columnar storage format for use in data analysis systems.” Columnar storage is more efficient as it is easily compressed and the data is more homogenous. CSV files utilize a row-based storage format which is harder to compress, a reason why Parquets files are preferable for larger datasets. Parquet files are faster to read than CSVs, as they have a higher querying speed and preserve datatypes (ie, Number, Timestamps, Points). They are best for intermediate data storage and large datasets (1GB+) on most any on-disk storage. This file format is also good for passing dataframes between Python and R. A similar option is feather.
+Parquet is an “open source columnar storage format for use in data analysis systems.” Columnar storage is more efficient as it is easily compressed and the data is more homogeneous. CSV files utilize a row-based storage format which is harder to compress, a reason why Parquets files are preferable for larger datasets. Parquet files are faster to read than CSVs, as they have a higher querying speed and preserve datatypes (ie, Number, Timestamps, Points). They are best for intermediate data storage and large datasets (1GB+) on most any on-disk storage. This file format is also good for passing dataframes between Python and R. A similar option is feather.
 
 One of the downsides to Parquet files is the inability to quickly look at the dataset in GUI based (Excel, QGIS, etc.) programs. Parquet files also lack built-in support for categorical data.
 

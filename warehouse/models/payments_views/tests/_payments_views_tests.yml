@@ -39,7 +39,7 @@ models:
       - name: participant_id
         description: Littlepay-assigned Participant ID
       - name: month_start
-        description: The first day of the month for which the count aggregation is being caclulated
+        description: The first day of the month for which the count aggregation is being calculated
       - name: n_route_z_rides
         description: The total number of rides labeled as `Route Z` for the given month
       - name: n_null_rides

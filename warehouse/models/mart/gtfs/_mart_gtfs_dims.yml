@@ -98,7 +98,7 @@ models:
         description: '{{ doc("gtfs_agency__agency_email") }}'
       - &_feed_valid_from
         name: _feed_valid_from
-        description: Should not be used; exists to faciliate incremental materialization.
+        description: Should not be used; exists to facilitate incremental materialization.
       - &feed_timezone_no_tests
         name: feed_timezone
         description: '{{ doc("gtfs_schedule_feed_timezone") }}'
@@ -621,7 +621,7 @@ models:
       - name: platform_code
         description: '{{ doc("gtfs_stops__platform_code") }}'
       - name: pt_geom
-        description: GEOGPOINT created by the stop latitute and longitude
+        description: GEOGPOINT created by the stop latitude and longitude
       - name: warning_duplicate_primary_key
         description: |
           Rows with `true` in this column have a duplicate primary key; i.e., `stop_id` is duplicated within an individual feed
