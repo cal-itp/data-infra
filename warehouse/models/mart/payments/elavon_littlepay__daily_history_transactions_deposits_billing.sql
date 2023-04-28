@@ -12,8 +12,8 @@ fct_payments_rides_v2 AS (
     SELECT * FROM  {{ ref('fct_payments_rides_v2') }}
 ),
 
-payments_v2_daily_date_spine AS (
-    SELECT * FROM  {{ ref('payments_v2_daily_date_spine') }}
+payments_tests_daily_date_spine AS (
+    SELECT * FROM  {{ ref('payments_tests_daily_date_spine') }}
 ),
 
 elavon_agg AS(
@@ -50,7 +50,7 @@ elavon_littlepay__daily_history_transactions_deposits_billing.sql AS (
         t3.elavon_billing_sum,
         t3.elavon_deposits_sum
 
-    FROM payments_v2_daily_date_spine AS t1
+    FROM payments_tests_daily_date_spine AS t1
     LEFT JOIN littlepay_deposits_agg AS t2
         ON (t1.day_history = t2.transaction_date_pacific) AND (t1.participant_id = t2.participant_id)
     LEFT JOIN elavon_agg as t3
