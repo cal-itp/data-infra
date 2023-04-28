@@ -10,7 +10,7 @@ elavon_deposits AS (
     WHERE batch_type = 'D'
 ),
 
-fct_payments__littlepay_elavon_reconciliation AS (
+elavon_littlepay__transaction_reconciliation AS (
     SELECT
 
         t1.settlement_id AS littlepay_settlement_id,
@@ -58,4 +58,4 @@ fct_payments__littlepay_elavon_reconciliation AS (
         ON t1.retrieval_reference_number = t2.PURCH_ID
 )
 
-SELECT * FROM fct_payments__littlepay_elavon_reconciliation
+SELECT * FROM elavon_littlepay__transaction_reconciliation
