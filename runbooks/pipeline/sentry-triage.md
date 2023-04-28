@@ -1,7 +1,7 @@
 # Sentry triage
 > Important Sentry concepts:
 > * [Issue states](https://docs.sentry.io/product/issues/states-triage/)
-> * [Fingerprintinga and grouping](https://docs.sentry.io/product/sentry-basics/grouping-and-fingerprints/)
+> * [Fingerprinting and grouping](https://docs.sentry.io/product/sentry-basics/grouping-and-fingerprints/)
 > * [Merging issues](https://docs.sentry.io/product/data-management-settings/event-grouping/merging-issues/)
 
 Once a day, we should check Sentry issues created since the prior day, using the following query.
