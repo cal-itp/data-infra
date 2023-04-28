@@ -236,6 +236,19 @@ models:
         description: '{{ doc("gtfs_fare_leg_rules__to_area_id") }}'
       - name: fare_product_id
         description: '{{ doc("gtfs_fare_leg_rules__fare_product_id") }}'
+  - name: stg_gtfs_schedule_fare_media
+    description: |
+      Cleaned GTFS schedule fare media data.
+      See https://gtfs.org/schedule/reference/#fare_mediatxt for specification.
+    columns:
+      - name: base64_url
+      - name: ts
+      - name: fare_media_id
+        description: '{{ doc("gtfs_fare_media__fare_media_id") }}'
+      - name: fare_media_name
+        description: '{{ doc("gtfs_fare_media__fare_media_name") }}'
+      - name: fare_media_type
+        description: '{{ doc("gtfs_fare_media__fare_media_type") }}'
   - name: stg_gtfs_schedule__fare_products
     description: |
       Cleaned GTFS schedule fare products data.
@@ -247,6 +260,8 @@ models:
         description: '{{ doc("gtfs_fare_products__fare_product_id") }}'
       - name: fare_product_name
         description: '{{ doc("gtfs_fare_products__fare_product_name") }}'
+      - name: fare_media_id
+        description: '{{ doc("gtfs_fare_products__fare_media_id") }}'
       - name: amount
         description: '{{ doc("gtfs_fare_products__amount") }}'
       - name: currency

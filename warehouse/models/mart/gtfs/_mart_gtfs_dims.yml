@@ -263,6 +263,8 @@ models:
         tests: *not_null_error
       - name: fare_product_name
         description: '{{ doc("gtfs_fare_products__fare_product_name") }}'
+      - name: fare_media_id
+        description: '{{ doc("gtfs_fare_products__fare_media_id") }}'
       - name: amount
         description: '{{ doc("gtfs_fare_products__amount") }}'
         tests: *not_null_warn_99_threshold
