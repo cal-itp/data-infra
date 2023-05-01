@@ -43,5 +43,7 @@ RUN poetry config virtualenvs.create true
 
 ENV DBT_PROFILES_DIR=/home/jovyan/.dbt/
 COPY ./overrides.json /opt/conda/share/jupyter/lab/settings/overrides.json
-COPY ./profile.sh /tmp/profile.sh
 COPY ./dask_config.yml /opt/conda/etc/dask/dask_config.yml
+# These are in /tmp because we will copy in postStart hook
+COPY ./profile.sh /tmp/profile.sh
+COPY ./jupyter_notebook_config.py /tmp/jupyter_notebook_config.py
