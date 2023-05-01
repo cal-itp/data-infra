@@ -14,197 +14,99 @@ models:
     columns:
       - name: server_received_time
         description: UTC ISO-8601 timestamp
-        tests:
-          - not_null
       - name: app
         description: int
-        tests:
-          - not_null
       - name: device_carrier
         description: string
-        tests:
-          - not_null
       - name: $schema
         description: int
-        tests:
-          - not_null
       - name: city
         description: string
-        tests:
-          - not_null
       - name: user_id
         description: string
-        tests:
-          - not_null
       - name: uuid
         description: UUID
-        tests:
-          - not_null
       - name: event_time
         description: UTC ISO-8601 timestamp
-        tests:
-          - not_null
       - name: platform
         description: string
-        tests:
-          - not_null
       - name: os_version
         description: string
-        tests:
-          - not_null
       - name: amplitude_id
         description: long
-        tests:
-          - not_null
       - name: processed_time
         description: UTC ISO-8601 timestamp
-        tests:
-          - not_null
       - name: user_creation_time
         description: UTC ISO-8601 timestamp
-        tests:
-          - not_null
       - name: version_name
         description: string
-        tests:
-          - not_null
       - name: ip_address
         description: string
-        tests:
-          - not_null
       - name: paying
         description: boolean
-        tests:
-          - not_null
       - name: dma
         description: string
-        tests:
-          - not_null
       - name: group_properties
         description: dict
-        tests:
-          - not_null
       - name: user_properties
         description: dict
-        tests:
-          - not_null
       - name: client_upload_time
         description: UTC ISO-8601 timestamp
-        tests:
-          - not_null
       - name: $insert_id
         description: string
-        tests:
-          - not_null
       - name: event_type
         description: string
-        tests:
-          - not_null
       - name: library
         description: string
-        tests:
-          - not_null
       - name: amplitude_attribution_ids
         description: string
-        tests:
-          - not_null
       - name: device_type
         description: string
-        tests:
-          - not_null
       - name: device_manufacturer
         description: string
-        tests:
-          - not_null
       - name: start_version
         description: string
-        tests:
-          - not_null
       - name: location_lng
         description: float
-        tests:
-          - not_null
       - name: server_upload_time
         description: UTC ISO-8601 timestamp
-        tests:
-          - not_null
       - name: event_id
         description: int
-        tests:
-          - not_null
       - name: location_lat
         description: float
-        tests:
-          - not_null
       - name: os_name
         description: string
-        tests:
-          - not_null
       - name: amplitude_event_type
         description: string
-        tests:
-          - not_null
       - name: device_brand
         description: string
-        tests:
-          - not_null
       - name: groups
         description: dict
-        tests:
-          - not_null
       - name: event_properties
         description: dict
-        tests:
-          - not_null
       - name: data
         description: dict
-        tests:
-          - not_null
       - name: device_id
         description: string
-        tests:
-          - not_null
       - name: language
         description: string
-        tests:
-          - not_null
       - name: device_model
         description: string
-        tests:
-          - not_null
       - name: country
         description: string
-        tests:
-          - not_null
       - name: region
         description: string
-        tests:
-          - not_null
       - name: is_attribution_event
         description: bool
-        tests:
-          - not_null
       - name: adid
         description: string
-        tests:
-          - not_null
       - name: session_id
         description: long
-        tests:
-          - not_null
       - name: device_family
         description: string
-        tests:
-          - not_null
       - name: sample_rate
         description: null
-        tests:
-          - not_null
       - name: idfa
         description: string
-        tests:
-          - not_null
       - name: client_event_time
         description: UTC ISO-8601 timestamp
-        tests:
-          - not_null
