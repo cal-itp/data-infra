@@ -14,6 +14,7 @@ from calitp_data_infra.storage import GTFSDownloadConfig, download_feed  # type:
 from google.cloud import storage  # type: ignore
 from huey import RedisHuey  # type: ignore
 from huey.api import Task  # type: ignore
+from pydantic.networks import HttpUrl
 from requests import HTTPError, RequestException
 
 from .metrics import (
@@ -54,14 +55,22 @@ base_logger = structlog.get_logger()
 
 
 class RTFetchException(Exception):
-    def __init__(self, url, cause, status_code=None):
+    def __init__(
+        self, url: HttpUrl, cause: Exception, status_code: Optional[int] = None
+    ):
         self.url = url
         self.cause = cause
         self.status_code = status_code
         super().__init__(str(self.cause))
 
-    def __str__(self):
-        return f"{self.cause} ({self.url})"
+    def __str__(self) -> str:
+        return " ".join(
+            [
+                type(self.cause).__name__,
+                f"({self.status_code})" if self.status_code else "",
+                f"{self.url}",
+            ]
+        )
 
 
 @huey.signal()
