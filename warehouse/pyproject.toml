@@ -42,10 +42,10 @@ types-python-slugify = "^8.0.0"
 types-PyYAML = "^6.0.12"
 pandas-stubs = "^1.5.2"
 sqlalchemy-stubs = "^0.4"
-datamodel-code-generator = "^0.17.1"
 sqlfluff = "^2.0.2"
 sqlfluff-templater-dbt = "^2.0.2"
 ipdb = "^0.13.13"
+datamodel-code-generator = {extras = ["http"], version = "^0.18.1"}
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
