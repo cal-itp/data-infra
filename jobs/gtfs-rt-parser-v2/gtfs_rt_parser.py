@@ -62,7 +62,7 @@ GTFS_RT_VALIDATOR_VERSION = os.environ["GTFS_RT_VALIDATOR_VERSION"]
 
 app = typer.Typer(pretty_exceptions_enable=False)
 
-sentry_sdk.utils.MAX_STRING_LENGTH = 2048
+sentry_sdk.utils.MAX_STRING_LENGTH = 2048  # default is 512 which will cut off validator stderr stacktrace; see https://stackoverflow.com/a/58124859
 sentry_sdk.init()
 
 
