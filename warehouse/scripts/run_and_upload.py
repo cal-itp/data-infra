@@ -206,6 +206,8 @@ def run(
         args = ["test"]
         if exclude:
             args.extend(["--exclude", exclude])
+        if select:
+            args.extend(["--select", *select.split(" ")])
         subprocess.run(get_command(*args))
 
         with open("./target/run_results.json") as f:
