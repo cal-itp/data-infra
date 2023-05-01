@@ -411,10 +411,10 @@ models:
             relationships:
               to: ref('dim_gtfs_datasets')
               field: key
-      - name: guidelines_assessed
+      - name: public_customer_facing
         description: |
           If "Yes", this service should be considered "assessed" by Cal-ITP for guideline/quality purposes.
-      - name: reports_site_assessed
+      - name: public_customer_facing_or_regional_subfeed
         description: |
           If "Yes", this service should be considered "assessed" by Cal-ITP for the reports site.
       - name: service_alerts_gtfs_dataset_key

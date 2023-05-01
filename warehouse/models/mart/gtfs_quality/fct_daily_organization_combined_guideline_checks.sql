@@ -3,7 +3,7 @@
 WITH int_gtfs_quality__guideline_checks_long AS (
     SELECT *
     FROM {{ ref('int_gtfs_quality__guideline_checks_long') }}
-    WHERE organization_key IS NOT NULL AND guidelines_assessed
+    WHERE organization_key IS NOT NULL AND public_customer_facing
 ),
 
 fct_daily_organization_combined_guideline_checks AS (

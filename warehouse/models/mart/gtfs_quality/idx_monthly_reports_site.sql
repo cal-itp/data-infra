@@ -5,7 +5,7 @@ WITH dataset_map AS (
     DATE_TRUNC(date, MONTH) AS date_start
     FROM {{ ref('int_gtfs_quality__organization_dataset_map') }}
     -- filter to only organizations that are supposed to be assessed
-    WHERE reports_site_assessed
+    WHERE public_customer_facing_or_regional_subfeed
 ),
 
 assessed_entities AS (

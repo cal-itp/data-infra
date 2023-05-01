@@ -27,8 +27,8 @@ cross_join AS (
         gtfs_service_data_source_record_id,
         gtfs_dataset_source_record_id,
 
-        guidelines_assessed,
-        reports_site_assessed,
+        public_customer_facing,
+        public_customer_facing_or_regional_subfeed,
         organization_assessed,
         service_assessed,
         gtfs_service_data_assessed,
@@ -97,8 +97,8 @@ int_gtfs_quality__guideline_checks_index AS (
         gtfs_service_data_source_record_id,
         gtfs_dataset_source_record_id,
 
-        guidelines_assessed,
-        reports_site_assessed,
+        public_customer_facing,
+        public_customer_facing_or_regional_subfeed,
         organization_assessed,
         service_assessed,
         gtfs_service_data_assessed,

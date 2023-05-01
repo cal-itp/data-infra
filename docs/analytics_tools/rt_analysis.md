@@ -28,7 +28,7 @@ This section includes detailed information about the data model and processing s
 
 All of the above are sourced from the v2 warehouse. Note that all components must be present and consistently keyed in order to successfully analyze. This module works at the organization level in order to match the reports site and maintain the structure of the speedmap site.
 
-For each organization, this module will combine and analyze all related GTFS Schedule and GTFS Realtime datasets that are `reports_site_assessed` in [`dim_provider_gtfs_data`](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.dim_provider_gtfs_data). Some organizations share GTFS datasets (Sacramento RT and City of Rancho Cordova, San Diego Airport and San Diego MTS...), in those cases the module can generate seperate analysis for each organization but they might duplicate each other. These are based on the underlying organization/dataset relationships in the Transit Database (Airtable).
+For each organization, this module will combine and analyze all related GTFS Schedule and GTFS Realtime datasets that are `public_customer_facing_or_regional_subfeed` in [`dim_provider_gtfs_data`](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.dim_provider_gtfs_data). Some organizations share GTFS datasets (Sacramento RT and City of Rancho Cordova, San Diego Airport and San Diego MTS...), in those cases the module can generate seperate analysis for each organization but they might duplicate each other. These are based on the underlying organization/dataset relationships in the Transit Database (Airtable).
 
 ### How is it structured?
 

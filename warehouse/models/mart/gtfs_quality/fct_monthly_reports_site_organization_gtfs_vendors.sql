@@ -4,7 +4,7 @@ WITH assessed_entities AS (
     SELECT *
     FROM {{ ref('int_gtfs_quality__daily_assessment_candidate_entities') }}
     -- filter to only organizations that are supposed to be assessed
-    WHERE reports_site_assessed
+    WHERE public_customer_facing_or_regional_subfeed
 ),
 
 gtfs_generation_components AS (

@@ -12,7 +12,7 @@ idx_monthly_reports_site AS (
 int_gtfs__organization_dataset_map AS (
     SELECT *
     FROM {{ ref('int_gtfs_quality__organization_dataset_map') }}
-    WHERE reports_site_assessed
+    WHERE public_customer_facing_or_regional_subfeed
 ),
 
 validator_details AS (
