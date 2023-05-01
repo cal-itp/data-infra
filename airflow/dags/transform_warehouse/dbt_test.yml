@@ -7,6 +7,7 @@ cmds:
 arguments:
   - '/app/scripts/run_and_upload.py'
   - 'run'
+  - '--no-dbt-seed'
   - '--no-dbt-run'
   - '--dbt-test'
 
