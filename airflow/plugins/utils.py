@@ -18,6 +18,9 @@ from pandas.errors import EmptyDataError
 from pydantic import validator
 
 SCHEDULE_UNZIPPED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED"]
+SCHEDULE_UNZIPPED_BUCKET_HOURLY = os.environ[
+    "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
+]
 
 CALITP_BQ_LOCATION = os.environ.get("CALITP_BQ_LOCATION", "us-west2")
 
@@ -120,14 +123,19 @@ class GTFSScheduleFeedFile(PartitionedGCSArtifact):
         return v
 
 
+# Exists for the hourly parse transition; only difference is the bucket
+class GTFSScheduleFeedFileHourly(GTFSScheduleFeedFile):
+    bucket: ClassVar[str] = SCHEDULE_UNZIPPED_BUCKET_HOURLY
+
+
 # This is currently copy-pasted into the GTFS schedule validator code
 def get_schedule_files_in_hour(
-    cls: Type[Union[GTFSScheduleFeedExtract, GTFSScheduleFeedFile]],
+    cls: Type[Union[GTFSScheduleFeedExtract, GTFSScheduleFeedFileHourly]],
     bucket: str,
     table: str,
     period: pendulum.Period,
 ) -> Dict[
-    pendulum.DateTime, List[Union[GTFSScheduleFeedExtract, GTFSScheduleFeedFile]]
+    pendulum.DateTime, List[Union[GTFSScheduleFeedExtract, GTFSScheduleFeedFileHourly]]
 ]:
     # __contains__ is defined as inclusive for pendulum.Period but we want to ignore the next hour
     # see https://github.com/apache/airflow/issues/25383#issuecomment-1198975178 for data_interval_end clarification
@@ -137,7 +145,7 @@ def get_schedule_files_in_hour(
         and period.seconds == 3600 - 1
     ), f"{period} is not exactly 1 hour exclusive of end"
     day = pendulum.instance(period.start).date()
-    files: List[Union[GTFSScheduleFeedExtract, GTFSScheduleFeedFile]]
+    files: List[Union[GTFSScheduleFeedExtract, GTFSScheduleFeedFileHourly]]
     files, missing, invalid = fetch_all_in_partition(
         cls=cls,
         bucket=bucket,

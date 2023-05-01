@@ -22,9 +22,12 @@ from calitp_data_infra.storage import (
     get_fs,
 )
 from tqdm import tqdm
-from utils import GTFSScheduleFeedFile, get_schedule_files_in_hour
+from utils import (
+    SCHEDULE_UNZIPPED_BUCKET_HOURLY,
+    GTFSScheduleFeedFileHourly,
+    get_schedule_files_in_hour,
+)
 
-SCHEDULE_UNZIPPED_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"]
 SCHEDULE_RAW_BUCKET = os.environ["CALITP_BUCKET__GTFS_SCHEDULE_RAW"]
 GTFS_UNZIP_LIST_ERROR_THRESHOLD = float(
     os.getenv("GTFS_UNZIP_LIST_ERROR_THRESHOLD", 0.99)
@@ -45,11 +48,11 @@ class GTFSScheduleFeedExtractUnzipOutcome(ProcessingOutcome):
     zipfile_extract_md5hash: Optional[str]
     zipfile_files: Optional[List[str]]
     zipfile_dirs: Optional[List[str]]
-    extracted_files: Optional[List[GTFSScheduleFeedFile]]
+    extracted_files: Optional[List[GTFSScheduleFeedFileHourly]]
 
 
 class ScheduleUnzipResult(PartitionedGCSArtifact):
-    bucket: ClassVar[str] = SCHEDULE_UNZIPPED_BUCKET
+    bucket: ClassVar[str] = SCHEDULE_UNZIPPED_BUCKET_HOURLY
     table: ClassVar[str] = "unzipping_results"
     partition_names: ClassVar[List[str]] = ["dt", "ts"]
     ts: pendulum.DateTime
@@ -115,7 +118,7 @@ def process_feed_files(
     directories: List[str],
     is_valid: bool,
     pbar=None,
-) -> Tuple[List[GTFSScheduleFeedFile], str]:
+) -> Tuple[List[GTFSScheduleFeedFileHourly], str]:
     zipfile_files = []
     md5hash = hashlib.md5()
     if not is_valid:
@@ -131,7 +134,7 @@ def process_feed_files(
         file_path = zipfile.Path(zip, at=file)
         with zip.open(file) as f:
             file_content = f.read()
-        file_extract = GTFSScheduleFeedFile(
+        file_extract = GTFSScheduleFeedFileHourly(
             ts=extract.ts,
             extract_config=extract.config,
             original_filename=file,
