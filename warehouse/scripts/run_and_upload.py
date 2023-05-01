@@ -166,6 +166,7 @@ def run(
                     target,
                 ]
             )
+        typer.secho(f"generated dbt command: {cmd}", fg=typer.colors.MAGENTA)
         return cmd
 
     results_to_check = []
