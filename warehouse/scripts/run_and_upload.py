@@ -138,6 +138,7 @@ def run(
     save_artifacts: bool = False,
     deploy_docs: bool = False,
     sync_metabase: bool = False,
+    check_sync_metabase: bool = False,
     select: Optional[str] = None,
     exclude: Optional[str] = None,
 ) -> None:
@@ -299,6 +300,7 @@ def run(
                     "--dbt_schema_excludes",
                     "staging",
                     "payments",
+                    "--metabase_sync_skip",
                 ],
                 env={
                     **os.environ,
@@ -306,6 +308,9 @@ def run(
                 },
                 capture_output=True,
             )
+
+            if check_sync_metabase:
+                results_to_check.append(p)
 
             with open("./target/manifest.json") as f:
                 manifest = Manifest(**json.load(f))
