@@ -10,6 +10,8 @@ arguments:
   - '--no-dbt-seed'
   - '--no-dbt-run'
   - '--dbt-test'
+  - '--select'
+  - "{{ dag_run.conf.get('dbt_select_statement', '') }}"
 
 dependencies:
   - dbt_run_and_upload_artifacts
