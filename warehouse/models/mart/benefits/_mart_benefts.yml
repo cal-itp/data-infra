@@ -1,0 +1,105 @@
+version: 2
+
+models:
+  - name: fct_benefits_events
+    description: |
+      Events from the Benefits application, from Amplitude. Parsed.
+    columns:
+      - name: server_received_time
+        description: UTC ISO-8601 timestamp
+      - name: app
+        description: int
+      - name: device_carrier
+        description: string
+      - name: $schema
+        description: int
+      - name: city
+        description: string
+      - name: user_id
+        description: string
+      - name: uuid
+        description: UUID
+      - name: event_time
+        description: UTC ISO-8601 timestamp
+      - name: platform
+        description: string
+      - name: os_version
+        description: string
+      - name: amplitude_id
+        description: long
+      - name: processed_time
+        description: UTC ISO-8601 timestamp
+      - name: user_creation_time
+        description: UTC ISO-8601 timestamp
+      - name: version_name
+        description: string
+      - name: ip_address
+        description: string
+      - name: paying
+        description: boolean
+      - name: dma
+        description: string
+      - name: group_properties
+        description: dict
+      - name: user_properties
+        description: dict
+      - name: client_upload_time
+        description: UTC ISO-8601 timestamp
+      - name: $insert_id
+        description: string
+      - name: event_type
+        description: string
+      - name: library
+        description: string
+      - name: amplitude_attribution_ids
+        description: string
+      - name: device_type
+        description: string
+      - name: device_manufacturer
+        description: string
+      - name: start_version
+        description: string
+      - name: location_lng
+        description: float
+      - name: server_upload_time
+        description: UTC ISO-8601 timestamp
+      - name: event_id
+        description: int
+      - name: location_lat
+        description: float
+      - name: os_name
+        description: string
+      - name: amplitude_event_type
+        description: string
+      - name: device_brand
+        description: string
+      - name: groups
+        description: dict
+      - name: event_properties
+        description: dict
+      - name: data
+        description: dict
+      - name: device_id
+        description: string
+      - name: language
+        description: string
+      - name: device_model
+        description: string
+      - name: country
+        description: string
+      - name: region
+        description: string
+      - name: is_attribution_event
+        description: bool
+      - name: adid
+        description: string
+      - name: session_id
+        description: long
+      - name: device_family
+        description: string
+      - name: sample_rate
+        description: null
+      - name: idfa
+        description: string
+      - name: client_event_time
+        description: UTC ISO-8601 timestamp
