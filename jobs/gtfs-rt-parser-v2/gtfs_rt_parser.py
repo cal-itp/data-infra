@@ -62,6 +62,9 @@ GTFS_RT_VALIDATOR_VERSION = os.environ["GTFS_RT_VALIDATOR_VERSION"]
 
 app = typer.Typer(pretty_exceptions_enable=False)
 
+sentry_sdk.utils.MAX_STRING_LENGTH = 2048
+sentry_sdk.init()
+
 
 def make_dict_bq_safe(d: Dict[str, Any]) -> Dict[str, Any]:
     return {
@@ -652,8 +655,9 @@ def parse_and_validate(
                     scope.set_context(
                         "schedule_extract", json.loads(schedule_extract.json())
                     )
+                    # get the end of stderr, just enough to fit in MAX_STRING_LENGTH defined above
                     scope.set_context(
-                        "process", {"stderr": e.stderr.decode("utf-8")[-1800:]}
+                        "process", {"stderr": e.stderr.decode("utf-8")[-2000:]}
                     )
                 scope.fingerprint = fingerprint
                 sentry_sdk.capture_exception(e, scope=scope)
@@ -708,7 +712,6 @@ def main(
     verbose: bool = False,
     base64url: str = None,
 ):
-    sentry_sdk.init()
     pendulum_hour = pendulum.instance(hour, tz="Etc/UTC")
     files: List[GTFSRTFeedExtract]
     files_missing_metadata: List[Blob]
