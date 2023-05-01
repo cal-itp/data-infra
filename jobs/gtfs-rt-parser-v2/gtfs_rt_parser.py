@@ -643,7 +643,7 @@ def parse_and_validate(
             )
         except (ScheduleDataNotFound, subprocess.CalledProcessError) as e:
             with sentry_sdk.push_scope() as scope:
-                scope.set_context("hour", json.loads(hour.json()))
+                scope.set_context("RT Hourly Aggregation", json.loads(hour.json()))
                 fingerprint: List[Any] = [
                     type(e),
                     # convert back to url manually, I don't want to mess around with the hourly class
@@ -651,13 +651,15 @@ def parse_and_validate(
                 ]
                 if isinstance(e, subprocess.CalledProcessError):
                     fingerprint.append(e.returncode)
-                    # try to get the top of the stacktrace since this will be truncated; 1800 is just an estimate
                     scope.set_context(
-                        "schedule_extract", json.loads(schedule_extract.json())
+                        "First RT Extract in Hour", json.loads(hour.extracts[0].json())
+                    )
+                    scope.set_context(
+                        "Schedule Extract", json.loads(schedule_extract.json())
                     )
                     # get the end of stderr, just enough to fit in MAX_STRING_LENGTH defined above
                     scope.set_context(
-                        "process", {"stderr": e.stderr.decode("utf-8")[-2000:]}
+                        "Process", {"stderr": e.stderr.decode("utf-8")[-2000:]}
                     )
                 scope.fingerprint = fingerprint
                 sentry_sdk.capture_exception(e, scope=scope)
