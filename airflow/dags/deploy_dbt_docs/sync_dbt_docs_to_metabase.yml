@@ -11,6 +11,7 @@ arguments:
   - '--no-dbt-run'
   - '--dbt-docs'
   - '--sync-metabase'
+  - '--check-sync-metabase'
 
 is_delete_operator_pod: true
 get_logs: true
