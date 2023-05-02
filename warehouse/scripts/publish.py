@@ -266,7 +266,11 @@ def upload_to_ckan(
 def _generate_exposure_documentation(
     exposure: Exposure,
 ) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
-    assert exposure.meta and exposure.meta.destinations is not None
+    assert (
+        exposure.meta
+        and exposure.meta.destinations is not None
+        and exposure.depends_on is not None
+    )
     try:
         resources = next(
             dest
@@ -281,7 +285,7 @@ def _generate_exposure_documentation(
     metadata_rows: List[Dict[str, Any]] = []
     dictionary_rows: List[Dict[str, Any]] = []
 
-    for node in exposure.depends_on.resolved_nodes:
+    for node in exposure.depends_on.resolved_nodes:  # type: ignore[attr-defined]
         assert exposure.meta is not None
 
         name = strip_modelname(node.name)
@@ -375,7 +379,11 @@ def _publish_exposure(
     bucket: str, exposure: Exposure, publish: bool, model: Optional[str] = None
 ):
     ts = pendulum.now()
-    assert exposure.meta is not None and exposure.depends_on.nodes is not None
+    assert (
+        exposure.meta is not None
+        and exposure.depends_on is not None
+        and exposure.depends_on.nodes is not None
+    )
     for destination in exposure.meta.destinations:
         with tempfile.TemporaryDirectory() as tmpdir:
             if isinstance(destination, CkanDestination):
@@ -402,7 +410,7 @@ def _publish_exposure(
                     )
                     with fs.open(hive_path, "w", newline="") as f:
                         writer = csv.DictWriter(
-                            f, fieldnames=[key.upper() for key in cls.__fields__.keys()]
+                            f, fieldnames=[key.upper() for key in cls.__fields__.keys()]  # type: ignore[attr-defined]
                         )
                         writer.writeheader()
                         for row in rows:
@@ -436,7 +444,9 @@ def _publish_exposure(
 
                     precisions = {}
 
+                    assert node.columns is not None
                     for name, column in node.columns.items():
+                        assert column.meta is not None
                         ckan_precision = column.meta.get("ckan.precision")
                         if ckan_precision:
                             assert isinstance(ckan_precision, (str, int))
@@ -596,7 +606,7 @@ def document_exposure(
     ):
         with opener(file, "w", newline="") as f:
             writer = csv.DictWriter(
-                f, fieldnames=[key.upper() for key in cls.__fields__.keys()]
+                f, fieldnames=[key.upper() for key in cls.__fields__.keys()]  # type: ignore[attr-defined]
             )
             writer.writeheader()
             for row in rows:
