@@ -383,11 +383,7 @@ models:
           This is a calculated field that does not come directly from GTFS - it is not a timestamp and can't be treated as such.
 
           Represents this trip iteration's `arrival_time` at the given stop as a total number of seconds after twelve hours before noon (usually midnight) of the first day of the given trip.
-          For example, `frequencies.start_time = 21:30:45` with `frequencies.headway_secs = 600` (ten minute headways)
-          would lead to `frequency_start_time_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
-          There will then be `trip_start_time_sec` of `77,445` (the same as the frequency start time),
-          `78,045 = 77,445 + 600`, and so on, adding `headway_secs` again and again until we reach `frequency_end_time_sec - 1`.
-          We then calculate the individual stop's arrival time for this iteration based on the duration between it and the first stop
+          Say `trip_start_time_sec` = `78,045`. We then calculate the individual stop's arrival time for this iteration based on the duration between it and the first stop
           in `stop_times`.
 
           So if the `stop_times.departure_time` for the trip's first stop was `00:00:00 = 0 seconds` and
@@ -479,7 +475,7 @@ models:
       - name: pickup_type
         description: '{{ doc("gtfs_stop_times__pickup_type") }}'
       - name: drop_off_type
-        description: '{{ doc("gtfs_stop_times__drop_off_typee") }}'
+        description: '{{ doc("gtfs_stop_times__drop_off_type") }}'
       - name: shape_dist_traveled
         description: '{{ doc("gtfs_stop_times__shape_dist_traveled") }}'
       - name: timepoint

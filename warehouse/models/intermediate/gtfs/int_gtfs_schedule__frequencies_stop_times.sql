@@ -24,7 +24,7 @@ frequencies_stop_times AS (
 ),
 
 
-expand_frequency_instances AS (
+int_gtfs_schedule__frequencies_stop_times AS (
     SELECT
         feed_key,
         trip_id,
@@ -68,4 +68,4 @@ expand_frequency_instances AS (
     WHERE start_time_sec + iteration_num * headway_secs < end_time_sec
 )
 
-SELECT * FROM expand_frequency_instances
+SELECT * FROM int_gtfs_schedule__frequencies_stop_times
