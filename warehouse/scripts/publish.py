@@ -535,7 +535,7 @@ def _publish_exposure(
                         fg=typer.colors.GREEN,
                     )
                     fs = gcsfs.GCSFileSystem(token="google_default")
-                    fs.put(geojsonl_fpath, hive_path)
+                    fs.put(str(geojsonl_fpath), hive_path)
 
                 if destination.tile_format == TileFormat.mbtiles:
                     mbtiles_path = os.path.join(tmpdir, "tiles.mbtiles")
