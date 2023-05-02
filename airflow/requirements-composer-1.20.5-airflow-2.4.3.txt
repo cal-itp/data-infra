@@ -74,7 +74,7 @@ fastavro==1.7.0
 fasteners==0.18
 filelock==3.8.0
 firebase-admin==6.0.1
-Flask==2.2.2
+Flask==2.3.2
 Flask-AppBuilder==4.1.4
 Flask-Babel==2.0.0
 Flask-Bcrypt==1.0.1
