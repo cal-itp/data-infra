@@ -25,10 +25,10 @@ import shapely.geometry  # type: ignore
 import shapely.wkt  # type: ignore
 import typer
 from dbt_artifacts import (
-    BaseNode,
     CkanDestination,
     Exposure,
     Manifest,
+    NodeModelMixin,
     TileFormat,
     TilesDestination,
 )
@@ -45,7 +45,7 @@ DBT_ARTIFACTS_BUCKET = os.environ["CALITP_BUCKET__DBT_ARTIFACTS"]
 MANIFEST_DEFAULT = f"{DBT_ARTIFACTS_BUCKET}/latest/manifest.json"
 PUBLISH_BUCKET = os.environ["CALITP_BUCKET__PUBLISH"]
 
-app = typer.Typer()
+app = typer.Typer(pretty_exceptions_enable=False)
 
 WGS84 = "EPSG:4326"  # "standard" lat/lon coordinate system
 CHUNK_SIZE = (
@@ -420,7 +420,9 @@ def _publish_exposure(
                     typer.secho(
                         f"handling {model_name} {resource.id}", fg=typer.colors.MAGENTA
                     )
-                    node = BaseNode._instances[f"model.calitp_warehouse.{model_name}"]
+                    node = NodeModelMixin._instances[
+                        f"model.calitp_warehouse.{model_name}"
+                    ]
 
                     fpath = strip_modelname(
                         os.path.join(tmpdir, destination.filename(model_name))
@@ -482,7 +484,7 @@ def _publish_exposure(
             elif isinstance(destination, TilesDestination):
                 layer_geojson_paths: Dict[str, Path] = {}
                 for model in exposure.depends_on.nodes:
-                    node = BaseNode._instances[model]
+                    node = NodeModelMixin._instances[model]
 
                     geojsonl_fpath = Path(
                         os.path.join(tmpdir, f"{strip_modelname(node.name)}.geojsonl")

@@ -2,36 +2,35 @@
 Built off the starting point of https://guitton.co/posts/dbt-artifacts
 """
 import abc
-import json
 import os
-from datetime import datetime
 from enum import Enum
-from pathlib import Path
 from typing import Annotated, Any, ClassVar, Dict, List, Literal, Optional, Union
 
 import humanize
 import pendulum
-import yaml
 from palettable.scientific.sequential import LaJolla_6  # type: ignore
-from pydantic import BaseModel, Field, constr, validator
+from pydantic import BaseModel, Field, constr, root_validator
 from slugify import slugify
 from sqlalchemy import MetaData, Table, create_engine, select
 from sqlalchemy.sql import Select
 
-from .catalog import Model as Catalog, CatalogTable
-from .manifest import (
-    Model as BaseManifest, Exposure as BaseExposure, ColumnInfo as BaseColumn,
-    AnalysisNode as BaseAnalysisNode,
-    SingularTestNode as BaseSingularTestNode,
-    HookNode as BaseHookNode,
-    ModelNode as BaseModelNode,
-    RPCNode as BaseRPCNode,
-    SqlNode as BaseSqlNode,
-    GenericTestNode as BaseGenericTestNode,
-    SnapshotNode as BaseSnapshotNode,
-    SeedNode, as BaseSeedNode, SourceDefinition,
-)
-from .run_results import Model as BaseRunResults, RunResultOutput as BaseRunResultOutput
+from .catalog import CatalogTable
+from .catalog import Model as Catalog
+from .manifest import AnalysisNode as BaseAnalysisNode
+from .manifest import ColumnInfo, DependsOn
+from .manifest import Exposure as BaseExposure
+from .manifest import GenericTestNode as BaseGenericTestNode
+from .manifest import HookNode as BaseHookNode
+from .manifest import Model as BaseManifest
+from .manifest import ModelNode as BaseModelNode
+from .manifest import RPCNode as BaseRPCNode
+from .manifest import SeedNode as BaseSeedNode
+from .manifest import SingularTestNode as BaseSingularTestNode
+from .manifest import SnapshotNode as BaseSnapshotNode
+from .manifest import SourceDefinition
+from .manifest import SqlNode as BaseSqlNode
+from .run_results import Model as BaseRunResults
+from .run_results import RunResultOutput as BaseRunResultOutput
 from .sources import Model as Sources
 
 
@@ -48,13 +47,18 @@ def get_engine(project, max_bytes=None):
     )
 
 
-### Monkey patches
-SeedNode.gvattrs = property(lambda self: {
+# Monkey patches
+BaseSeedNode.gvattrs = property(
+    lambda self: {
         "fillcolor": "green",
-    })
-SourceDefinition.gvattrs = property(lambda self: {
-    "fillcolor": "blue",
-})
+    }
+)
+SourceDefinition.gvattrs = property(
+    lambda self: {
+        "fillcolor": "blue",
+    }
+)
+
 
 def num_bytes(self) -> Optional[int]:
     if "num_bytes" in self.stats:
@@ -66,10 +70,45 @@ def num_bytes(self) -> Optional[int]:
         assert isinstance(value, (float, str))
         return int(float(value))
     return None
-CatalogTable.num_bytes = property(num_bytes)
-###
 
-class NodeModelMixin:
+
+CatalogTable.num_bytes = property(num_bytes)
+DependsOn.resolved_nodes = property(
+    lambda self: [NodeModelMixin._instances[node] for node in self.nodes]
+    if self.nodes
+    else []
+)
+ColumnInfo.publish = property(lambda self: not self.meta.get("publish.ignore", False))
+
+# End monkey patches
+
+
+class NodeModelMixin(BaseModel):
+    _instances: ClassVar[Dict[str, "NodeModelMixin"]] = {}
+    catalog_entry: Optional[CatalogTable]
+
+    def __init__(self, **kwargs):
+        super(NodeModelMixin, self).__init__(**kwargs)
+        self._instances[self.unique_id] = self
+        # for column in self.columns.values():
+        #     column.parent = self
+
+    @property
+    def strfqn(self) -> str:
+        return ".".join(self.fqn)
+
+    @property
+    def table_name(self):
+        return self.config.alias or self.name
+
+    @property
+    def schema_table(self):
+        return f"{str(self.schema_)}.{self.table_name}"
+
+    def sqlalchemy_table(self, engine):
+        return Table(self.schema_table, MetaData(bind=engine), autoload=True)
+
+    @property
     def select(self) -> Select:
         engine = get_engine(self.database)
         columns = [
@@ -80,41 +119,111 @@ class NodeModelMixin:
         return select(columns=columns)
 
     @property
-    def strfqn(self):
-        return ".".join(self.fqn)
-    
-    kls.table_name = property(lambda self: self.config.alias or self.name)
-    kls.schema_table = property(lambda self: f"{str(self.schema_)}.{self.table_name}")
-    kls.sqlalchemy_table = lambda self, engine: Table(self.schema_table, MetaData(bind=engine), autoload=True)
-    kls.select = property(select)
-    kls.gvrepr = property(lambda self: "\n".join(
+    def gvrepr(self) -> str:
+        """
+        Returns a string representation intended for graphviz labels
+        """
+        return "\n".join(
             [
                 self.config.materialized or self.resource_type.value,
                 self.name,
             ]
-        ))
-    kls.gvattrs = property(lambda self: {
-        "fillcolor": "black",
-    })
+        )
+
+    @property
+    def gvattrs(self) -> Dict[str, Any]:
+        """
+        Return a dictionary of graphviz attrs for DAG visualization
+        """
+        return {
+            "fillcolor": "black",
+        }
+
 
 class AnalysisNode(BaseAnalysisNode, NodeModelMixin):
     pass
+
+
 class SingularTestNode(BaseSingularTestNode, NodeModelMixin):
     pass
+
+
 class HookNode(BaseHookNode, NodeModelMixin):
     pass
+
+
 class ModelNode(BaseModelNode, NodeModelMixin):
-    pass
+    @property
+    def gvrepr(self) -> str:
+        if (
+            self.config.materialized in ("table", "incremental")
+            and self.catalog_entry
+            and self.catalog_entry.num_bytes
+        ):
+            return "\n".join(
+                [
+                    super(ModelNode, self).gvrepr,
+                    f"Storage: {humanize.naturalsize(self.catalog_entry.num_bytes)}",
+                ]
+            )
+        return super(ModelNode, self).gvrepr
+
+    @property
+    def gvattrs(self) -> Dict[str, Any]:
+        fillcolor = "white"
+
+        if self.config.materialized in ("table", "incremental"):
+            fillcolor = "aquamarine"
+
+        if (
+            self.catalog_entry
+            and self.catalog_entry.num_bytes
+            and self.catalog_entry.num_bytes > 100_000_000_000
+            and "clustering_fields" not in self.catalog_entry.stats
+            and "partitioning_type" not in self.catalog_entry.stats
+        ):
+            fillcolor = "red"
+
+        if self.config.materialized == "view" and len(self.children) > 1:
+            fillcolor = "pink"
+
+        return {
+            "fillcolor": fillcolor,
+        }
+
+
 class RPCNode(BaseRPCNode, NodeModelMixin):
     pass
+
+
 class SqlNode(BaseSqlNode, NodeModelMixin):
     pass
+
+
 class GenericTestNode(BaseGenericTestNode, NodeModelMixin):
     pass
+
+
 class SnapshotNode(BaseSnapshotNode, NodeModelMixin):
     pass
+
+
 class SeedNode(BaseSeedNode, NodeModelMixin):
     pass
+
+
+DbtNode = Union[
+    AnalysisNode,
+    SingularTestNode,
+    HookNode,
+    ModelNode,
+    RPCNode,
+    SqlNode,
+    GenericTestNode,
+    SnapshotNode,
+    SeedNode,
+]
+
 
 class FileFormat(str, Enum):
     csv = "csv"
@@ -129,30 +238,30 @@ class TileFormat(str, Enum):
     pbf = "pbf"
 
 
-class Column(BaseColumn):
-    parent: Optional[
-        "BaseNode"
-    ] = None  # this is set after the fact; it's Optional to make mypy happy
+# class Column(BaseColumn):
+#     parent: Optional[
+#         "BaseNode"
+#     ] = None  # this is set after the fact; it's Optional to make mypy happy
+#
+#     @property
+#     def publish(self) -> bool:
+#         return
 
-    @property
-    def publish(self) -> bool:
-        return not self.meta.get("publish.ignore", False)
-
-    # @property
-    # def tests(self) -> List[str]:
-    #     # this has a lot of stuff to make mypy happy
-    #     return [
-    #         node.name
-    #         for name, node in BaseNode._instances.items()
-    #         if node.resource_type == DbtResourceType.test
-    #         and isinstance(node, Test)
-    #         and node.depends_on
-    #         and node.depends_on.nodes is not None
-    #         and self.parent
-    #         and self.parent.unique_id in node.depends_on.nodes
-    #         and node.test_metadata
-    #         and self.name == node.test_metadata.kwargs.get("column_name")
-    #     ]
+# @property
+# def tests(self) -> List[str]:
+#     # this has a lot of stuff to make mypy happy
+#     return [
+#         node.name
+#         for name, node in BaseNode._instances.items()
+#         if node.resource_type == DbtResourceType.test
+#         and isinstance(node, Test)
+#         and node.depends_on
+#         and node.depends_on.nodes is not None
+#         and self.parent
+#         and self.parent.unique_id in node.depends_on.nodes
+#         and node.test_metadata
+#         and self.name == node.test_metadata.kwargs.get("column_name")
+#     ]
 
 #     def docblock(self, prefix="") -> str:
 #         return f"""
@@ -168,79 +277,6 @@ class Column(BaseColumn):
 #         if include_description:
 #             include.add("description")
 #         return yaml.dump([{**self.dict(include=include), **extras}], sort_keys=False)
-
-
-class BaseNode(BaseModel):
-    _instances: ClassVar[Dict[str, "BaseNode"]] = {}
-
-    def __init__(self, **kwargs):
-        super(BaseNode, self).__init__(**kwargs)
-        self._instances[self.unique_id] = self
-        for column in self.columns.values():
-            column.parent = self
-
-
-# class Model(BaseNode):
-#     depends_on: NodeDeps
-
-    # @property
-    # def children(self) -> List["Model"]:
-    #     children = []
-    #     for unique_id, node in BaseNode._instances.items():
-    #         if (
-    #             isinstance(node, Model)
-    #             and node.depends_on.nodes
-    #             and self.unique_id in node.depends_on.nodes
-    #         ):
-    #             children.append(node)
-    #     return children
-
-    # TODO: bring me back
-    # @property
-    # def gvrepr(self) -> str:
-    #     if (
-    #         self.config.materialized
-    #         in (DbtMaterializationType.table, DbtMaterializationType.incremental)
-    #         and self.catalog_entry
-    #         and self.catalog_entry.num_bytes
-    #     ):
-    #         return "\n".join(
-    #             [
-    #                 super(Model, self).gvrepr,
-    #                 f"Storage: {humanize.naturalsize(self.catalog_entry.num_bytes)}",
-    #             ]
-    #         )
-    #     return super(Model, self).gvrepr
-
-    # TODO: bring me back
-    # @property
-    # def gvattrs(self) -> Dict[str, Any]:
-    #     fillcolor = "white"
-    #
-    #     if self.config.materialized in (
-    #         DbtMaterializationType.table,
-    #         DbtMaterializationType.incremental,
-    #     ):
-    #         fillcolor = "aquamarine"
-    #
-    #     if (
-    #         self.catalog_entry
-    #         and self.catalog_entry.num_bytes
-    #         and self.catalog_entry.num_bytes > 100_000_000_000
-    #         and "clustering_fields" not in self.catalog_entry.stats
-    #         and "partitioning_type" not in self.catalog_entry.stats
-    #     ):
-    #         fillcolor = "red"
-    #
-    #     if (
-    #         self.config.materialized == DbtMaterializationType.view
-    #         and len(self.children) > 1
-    #     ):
-    #         fillcolor = "pink"
-    #
-    #     return {
-    #         "fillcolor": fillcolor,
-    #     }
 
 
 class BaseDestination(BaseModel, abc.ABC):
@@ -339,33 +375,26 @@ class Exposure(BaseExposure):
     #  file format names since they are used as entity names in hive partitions
     meta: Optional[ExposureMeta]
 
-    @validator("meta")
-    def must_provide_layer_names_if_tiles(cls, v, values):
-        if v:
-            for dest in v.destinations:
+    @root_validator
+    def must_provide_layer_names_if_tiles(cls, values):
+        if values["meta"]:
+            for dest in values["meta"].destinations:
                 if isinstance(dest, TilesDestination):
                     assert len(dest.layer_names) == len(
                         values["depends_on"].nodes
                     ), "must provide one layer name per depends_on"
-        return v
+        return values
 
 
 class Manifest(BaseManifest):
     nodes: Dict[
         str,
-        Union[
-            AnalysisNode,
-            SingularTestNode,
-            HookNode,
-            ModelNode,
-            RPCNode,
-            SqlNode,
-            GenericTestNode,
-            SnapshotNode,
-            SeedNode,
-        ],
+        DbtNode,
     ] = Field(
         ..., description="The nodes defined in the dbt project and its dependencies"
+    )
+    exposures: Dict[str, Exposure] = Field(
+        ..., description="The exposures defined in the dbt project and its dependencies"
     )
 
     # https://github.com/pydantic/pydantic/issues/1577#issuecomment-803171322
@@ -377,14 +406,15 @@ class Manifest(BaseManifest):
 
 
 class RunResultOutput(BaseRunResultOutput):
+    node: Optional[DbtNode]
     manifest: Optional[Manifest]
 
     # TODO: bring me back
-    # @property
-    # def node(self) -> Node:
-    #     if not self.manifest:
-    #         raise ValueError("must set manifest before calling node")
-    #     return self.manifest.nodes[self.unique_id]
+    @property
+    def node(self) -> DbtNode:
+        if not self.manifest:
+            raise ValueError("must set manifest before calling node")
+        return self.manifest.nodes[self.unique_id]
 
     @property
     def bytes_processed(self):
@@ -436,4 +466,19 @@ class RunResults(BaseRunResults):
             result.manifest = m
 
 
-__all__ = ['Catalog', 'Manifest', 'RunResults', 'Sources']
+__all__ = [
+    "Catalog",
+    "DbtNode",
+    "GenericTestNode",
+    "Manifest",
+    "RunResultOutput",
+    "RunResults",
+    "SeedNode",
+    "SourceDefinition",
+    "Sources",
+    "Exposure",
+    "CkanDestination",
+    "NodeModelMixin",
+    "TilesDestination",
+    "TileFormat",
+]
