@@ -122,7 +122,7 @@ int_gtfs_quality__daily_assessment_candidate_entities AS (
         gtfs_service_data_source_record_id,
         gtfs_dataset_source_record_id,
 
-        assessed AS public_customer_facing,
+        assessed AS public_customer_facing_fixed_route,
         CASE
             -- can only generate reports if ITP ID is present
             WHEN organization_itp_id IS NULL THEN FALSE
@@ -139,7 +139,7 @@ int_gtfs_quality__daily_assessment_candidate_entities AS (
                 AND assessed
                 AND gtfs_dataset_source_record_id NOT IN
                 ('rec9AyXUSMUHFnLsH', 'recAQiomSPtajnjLy', 'rec2jN0CkL8noOYIr', 'rec2jN0CkL8noOYIr', 'recAfxxeJWxHexo6e')
-        END AS public_customer_facing_or_regional_subfeed,
+        END AS public_customer_facing_or_regional_subfeed_fixed_route,
         organization_assessed,
         service_assessed,
         gtfs_service_data_assessed,

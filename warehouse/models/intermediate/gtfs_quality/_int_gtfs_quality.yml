@@ -269,14 +269,14 @@ models:
       - name: service_name
       - name: gtfs_dataset_name
       - name: gtfs_dataset_type
-      - name: public_customer_facing
+      - name: public_customer_facing_fixed_route
         description: |
           Boolean indicator for whether this combined entity met the criteria to be "assessed"
           against the GTFS guidelines on the given date. Applies "and" logic to `organization_assessed`, `service_assessed`,
           and `gtfs_service_data_assessed`.
-      - name: public_customer_facing_or_regional_subfeed
+      - name: public_customer_facing_or_regional_subfeed_fixed_route
         description: |
-          Similar to `public_customer_facing` except:
+          Similar to `public_customer_facing_fixed_route` except:
           * For entities associated with MTC 511, use the regional subfeed instead of the combined regional feed;
             i.e., for organization/services where the MTC combined regional feed is the customer-facing feed and
             "assessed" for guideline purposes, this feed will mark the associated regional subfeed (rather than the combined feed)

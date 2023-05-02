@@ -11,7 +11,7 @@ int_gtfs__organization_dataset_map AS (
 
     SELECT *
     FROM {{ ref('int_gtfs_quality__organization_dataset_map') }}
-    WHERE public_customer_facing_or_regional_subfeed
+    WHERE public_customer_facing_or_regional_subfeed_fixed_route
 
 ),
 
