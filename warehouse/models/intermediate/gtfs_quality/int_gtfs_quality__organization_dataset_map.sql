@@ -21,8 +21,8 @@ int_gtfs_quality__organization_dataset_map AS (
         base64_url,
         schedule_feed_key,
         LOGICAL_OR(gtfs_service_data_customer_facing) AS gtfs_service_data_customer_facing,
-        LOGICAL_OR(guidelines_assessed) AS guidelines_assessed,
-        LOGICAL_OR(reports_site_assessed) AS reports_site_assessed
+        LOGICAL_OR(public_customer_facing_fixed_route) AS public_customer_facing_fixed_route,
+        LOGICAL_OR(public_customer_facing_or_regional_subfeed_fixed_route) AS public_customer_facing_or_regional_subfeed_fixed_route
     FROM int_gtfs_quality__daily_assessment_candidate_entities
     -- TODO: maybe we can/should make this an AND? not sure if having rows where one is null is useful
     WHERE COALESCE(organization_key, gtfs_dataset_key) IS NOT NULL

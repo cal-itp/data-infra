@@ -3,7 +3,7 @@
 WITH int_gtfs_quality__guideline_checks_long AS (
     SELECT *
     FROM {{ ref('int_gtfs_quality__guideline_checks_long') }}
-    WHERE service_key IS NOT NULL AND guidelines_assessed
+    WHERE service_key IS NOT NULL AND public_customer_facing_fixed_route
 ),
 
 fct_daily_service_combined_guideline_checks AS (
