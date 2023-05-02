@@ -137,8 +137,8 @@ def build_graph(
             if verbose:
                 typer.secho(f"skipping {node.name}")
             continue
-        if node.depends_on and node.depends_on.nodes:
-            for dep in node.depends_on.resolved_nodes:
+        if node.depends_on and node.depends_on.nodes:  # type: ignore[union-attr]
+            for dep in node.depends_on.resolved_nodes:  # type: ignore[union-attr]
                 if not should_display(
                     dep,
                     analyses,

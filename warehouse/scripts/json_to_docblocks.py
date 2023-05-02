@@ -1,3 +1,4 @@
+# type: ignore
 """
 Super useful with https://www.convertjson.com/html-table-to-json.htm
 

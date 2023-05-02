@@ -27,7 +27,7 @@ from .manifest import RPCNode as BaseRPCNode
 from .manifest import SeedNode as BaseSeedNode
 from .manifest import SingularTestNode as BaseSingularTestNode
 from .manifest import SnapshotNode as BaseSnapshotNode
-from .manifest import SourceDefinition
+from .manifest import SourceDefinition as BaseSourceDefinition
 from .manifest import SqlNode as BaseSqlNode
 from .run_results import Model as BaseRunResults
 from .run_results import RunResultOutput as BaseRunResultOutput
@@ -48,16 +48,6 @@ def get_engine(project, max_bytes=None):
 
 
 # Monkey patches
-BaseSeedNode.gvattrs = property(
-    lambda self: {
-        "fillcolor": "green",
-    }
-)
-SourceDefinition.gvattrs = property(
-    lambda self: {
-        "fillcolor": "blue",
-    }
-)
 
 
 def num_bytes(self) -> Optional[int]:
@@ -72,13 +62,14 @@ def num_bytes(self) -> Optional[int]:
     return None
 
 
-CatalogTable.num_bytes = property(num_bytes)
-DependsOn.resolved_nodes = property(
+CatalogTable.num_bytes = property(num_bytes)  # type: ignore[attr-defined]
+
+DependsOn.resolved_nodes = property(  # type: ignore[attr-defined]
     lambda self: [NodeModelMixin._instances[node] for node in self.nodes]
     if self.nodes
     else []
 )
-ColumnInfo.publish = property(lambda self: not self.meta.get("publish.ignore", False))
+ColumnInfo.publish = property(lambda self: not self.meta.get("publish.ignore", False))  # type: ignore[attr-defined]
 
 # End monkey patches
 
@@ -107,7 +98,7 @@ class NodeModelMixin(BaseModel):
 
     @property
     def table_name(self):
-        return self.config.alias or self.name
+        return self.config.alias or self.name  # type: ignore[attr-defined]
 
     @property
     def schema_table(self):
@@ -122,7 +113,7 @@ class NodeModelMixin(BaseModel):
         columns = [
             c
             for c in self.sqlalchemy_table(engine).columns
-            if c.name not in self.columns or self.columns[c.name].publish
+            if not self.columns or c.name not in self.columns or self.columns[c.name].publish  # type: ignore[attr-defined]
         ]
         return select(columns=columns)
 
@@ -133,7 +124,7 @@ class NodeModelMixin(BaseModel):
         """
         return "\n".join(
             [
-                self.config.materialized or self.resource_type.value,
+                self.config.materialized or self.resource_type.value,  # type: ignore[attr-defined]
                 self.name,
             ]
         )
@@ -164,14 +155,15 @@ class ModelNode(BaseModelNode, NodeModelMixin):
     @property
     def gvrepr(self) -> str:
         if (
-            self.config.materialized in ("table", "incremental")
+            self.config
+            and self.config.materialized in ("table", "incremental")
             and self.catalog_entry
-            and self.catalog_entry.num_bytes
+            and self.catalog_entry.num_bytes  # type: ignore[attr-defined]
         ):
             return "\n".join(
                 [
                     super(ModelNode, self).gvrepr,
-                    f"Storage: {humanize.naturalsize(self.catalog_entry.num_bytes)}",
+                    f"Storage: {humanize.naturalsize(self.catalog_entry.num_bytes)}",  # type: ignore[attr-defined]
                 ]
             )
         return super(ModelNode, self).gvrepr
@@ -180,20 +172,21 @@ class ModelNode(BaseModelNode, NodeModelMixin):
     def gvattrs(self) -> Dict[str, Any]:
         fillcolor = "white"
 
-        if self.config.materialized in ("table", "incremental"):
+        if self.config and self.config.materialized in ("table", "incremental"):
             fillcolor = "aquamarine"
 
         if (
             self.catalog_entry
-            and self.catalog_entry.num_bytes
-            and self.catalog_entry.num_bytes > 100_000_000_000
+            and self.catalog_entry.num_bytes  # type: ignore[attr-defined]
+            and self.catalog_entry.num_bytes > 100_000_000_000  # type: ignore[attr-defined]
             and "clustering_fields" not in self.catalog_entry.stats
             and "partitioning_type" not in self.catalog_entry.stats
         ):
             fillcolor = "red"
 
-        if self.config.materialized == "view" and len(self.children) > 1:
-            fillcolor = "pink"
+        # TODO: bring me back
+        # if self.config.materialized == "view" and len(self.children) > 1:
+        #     fillcolor = "pink"
 
         return {
             "fillcolor": fillcolor,
@@ -217,7 +210,11 @@ class SnapshotNode(BaseSnapshotNode, NodeModelMixin):
 
 
 class SeedNode(BaseSeedNode, NodeModelMixin):
-    pass
+    @property
+    def gvattrs(self):
+        return {
+            "fillcolor": "green",
+        }
 
 
 DbtNode = Union[
@@ -231,6 +228,16 @@ DbtNode = Union[
     SnapshotNode,
     SeedNode,
 ]
+
+
+class SourceDefinition(BaseSourceDefinition, NodeModelMixin):
+    @property
+    def gvattrs(self) -> Dict:
+        return {
+            "fillcolor": "blue",
+        }
+
+    pass
 
 
 class FileFormat(str, Enum):
@@ -404,6 +411,9 @@ class Manifest(BaseManifest):
     exposures: Dict[str, Exposure] = Field(
         ..., description="The exposures defined in the dbt project and its dependencies"
     )
+    sources: Dict[str, SourceDefinition] = Field(
+        ..., description="The sources defined in the dbt project and its dependencies"
+    )
 
     # https://github.com/pydantic/pydantic/issues/1577#issuecomment-803171322
     def set_catalog(self, c: Catalog):
@@ -413,8 +423,18 @@ class Manifest(BaseManifest):
             )
 
 
+class RunResultStatus(Enum):
+    success = "success"
+    error = "error"
+    skipped = "skipped"
+    pass_ = "pass"
+    fail = "fail"
+    warn = "warn"
+    runtime_error = "runtime error"
+
+
 class RunResultOutput(BaseRunResultOutput):
-    node: Optional[DbtNode]
+    status: RunResultStatus
     manifest: Optional[Manifest]
 
     # TODO: bring me back
@@ -439,6 +459,7 @@ class RunResultOutput(BaseRunResultOutput):
         """
         Returns a string representation intended for graphviz labels
         """
+        assert self.node is not None
         # TODO: do an actual linear transform on this
         # the top colors are too dark to use as a background
         white, yellow, orange, red, _, _ = LaJolla_6.hex_colors
@@ -464,7 +485,7 @@ class RunResultOutput(BaseRunResultOutput):
 
 
 class RunResults(BaseRunResults):
-    results: List[RunResultOutput]
+    results: List[RunResultOutput]  # type: ignore[assignment]
     manifest: Optional[Manifest]
 
     # https://github.com/pydantic/pydantic/issues/1577#issuecomment-803171322
