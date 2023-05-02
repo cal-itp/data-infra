@@ -4,10 +4,10 @@
 *                                       @atvaccaro
 
 # infra components
-/.github/workflows                      @atvaccaro @lottspot @SorenSpicknall
-/ci                                     @atvaccaro @lottspot @SorenSpicknall
-/iac                                    @atvaccaro @lottspot
-/kubernetes                             @atvaccaro @lottspot
+/.github/workflows                      @atvaccaro @SorenSpicknall
+/ci                                     @atvaccaro @SorenSpicknall
+/iac                                    @atvaccaro
+/kubernetes                             @atvaccaro
 
 # jupyter service, e.g. updating the image
 /kubernetes/apps/charts/jupyterhub      @atvaccaro @charlie-costanzo @SorenSpicknall
