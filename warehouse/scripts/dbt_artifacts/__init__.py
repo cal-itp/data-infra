@@ -1,0 +1,439 @@
+"""
+Built off the starting point of https://guitton.co/posts/dbt-artifacts
+"""
+import abc
+import json
+import os
+from datetime import datetime
+from enum import Enum
+from pathlib import Path
+from typing import Annotated, Any, ClassVar, Dict, List, Literal, Optional, Union
+
+import humanize
+import pendulum
+import yaml
+from palettable.scientific.sequential import LaJolla_6  # type: ignore
+from pydantic import BaseModel, Field, constr, validator
+from slugify import slugify
+from sqlalchemy import MetaData, Table, create_engine, select
+from sqlalchemy.sql import Select
+
+from .catalog import Model as Catalog, CatalogTable
+from .manifest import (
+    Model as BaseManifest, Exposure as BaseExposure, ColumnInfo as BaseColumn,
+    AnalysisNode as BaseAnalysisNode,
+    SingularTestNode as BaseSingularTestNode,
+    HookNode as BaseHookNode,
+    ModelNode as BaseModelNode,
+    RPCNode as BaseRPCNode,
+    SqlNode as BaseSqlNode,
+    GenericTestNode as BaseGenericTestNode,
+    SnapshotNode as BaseSnapshotNode,
+    SeedNode, as BaseSeedNode, SourceDefinition,
+)
+from .run_results import Model as BaseRunResults, RunResultOutput as BaseRunResultOutput
+from .sources import Model as Sources
+
+
+# Taken from the calitp repo which we can't install because of deps issue
+def get_engine(project, max_bytes=None):
+    max_bytes = 5_000_000_000 if max_bytes is None else max_bytes
+
+    # Note that we should be able to add location as a uri parameter, but
+    # it is not being picked up, so passing as a separate argument for now.
+    return create_engine(
+        f"bigquery://{project}/?maximum_bytes_billed={max_bytes}",
+        location="us-west2",
+        credentials_path=os.environ.get("BIGQUERY_KEYFILE_LOCATION"),
+    )
+
+
+### Monkey patches
+SeedNode.gvattrs = property(lambda self: {
+        "fillcolor": "green",
+    })
+SourceDefinition.gvattrs = property(lambda self: {
+    "fillcolor": "blue",
+})
+
+def num_bytes(self) -> Optional[int]:
+    if "num_bytes" in self.stats:
+        value = self.stats["num_bytes"].value
+        # for some reason, 0 gets parsed as bool by pydantic
+        # maybe because it's first in the union?
+        if isinstance(value, bool):
+            return 0
+        assert isinstance(value, (float, str))
+        return int(float(value))
+    return None
+CatalogTable.num_bytes = property(num_bytes)
+###
+
+class NodeModelMixin:
+    def select(self) -> Select:
+        engine = get_engine(self.database)
+        columns = [
+            c
+            for c in self.sqlalchemy_table(engine).columns
+            if c.name not in self.columns or self.columns[c.name].publish
+        ]
+        return select(columns=columns)
+
+    @property
+    def strfqn(self):
+        return ".".join(self.fqn)
+    
+    kls.table_name = property(lambda self: self.config.alias or self.name)
+    kls.schema_table = property(lambda self: f"{str(self.schema_)}.{self.table_name}")
+    kls.sqlalchemy_table = lambda self, engine: Table(self.schema_table, MetaData(bind=engine), autoload=True)
+    kls.select = property(select)
+    kls.gvrepr = property(lambda self: "\n".join(
+            [
+                self.config.materialized or self.resource_type.value,
+                self.name,
+            ]
+        ))
+    kls.gvattrs = property(lambda self: {
+        "fillcolor": "black",
+    })
+
+class AnalysisNode(BaseAnalysisNode, NodeModelMixin):
+    pass
+class SingularTestNode(BaseSingularTestNode, NodeModelMixin):
+    pass
+class HookNode(BaseHookNode, NodeModelMixin):
+    pass
+class ModelNode(BaseModelNode, NodeModelMixin):
+    pass
+class RPCNode(BaseRPCNode, NodeModelMixin):
+    pass
+class SqlNode(BaseSqlNode, NodeModelMixin):
+    pass
+class GenericTestNode(BaseGenericTestNode, NodeModelMixin):
+    pass
+class SnapshotNode(BaseSnapshotNode, NodeModelMixin):
+    pass
+class SeedNode(BaseSeedNode, NodeModelMixin):
+    pass
+
+class FileFormat(str, Enum):
+    csv = "csv"
+    geojson = "geojson"
+    geojsonl = "geojsonl"
+    json = "json"
+    jsonl = "jsonl"
+
+
+class TileFormat(str, Enum):
+    mbtiles = "mbtiles"
+    pbf = "pbf"
+
+
+class Column(BaseColumn):
+    parent: Optional[
+        "BaseNode"
+    ] = None  # this is set after the fact; it's Optional to make mypy happy
+
+    @property
+    def publish(self) -> bool:
+        return not self.meta.get("publish.ignore", False)
+
+    # @property
+    # def tests(self) -> List[str]:
+    #     # this has a lot of stuff to make mypy happy
+    #     return [
+    #         node.name
+    #         for name, node in BaseNode._instances.items()
+    #         if node.resource_type == DbtResourceType.test
+    #         and isinstance(node, Test)
+    #         and node.depends_on
+    #         and node.depends_on.nodes is not None
+    #         and self.parent
+    #         and self.parent.unique_id in node.depends_on.nodes
+    #         and node.test_metadata
+    #         and self.name == node.test_metadata.kwargs.get("column_name")
+    #     ]
+
+#     def docblock(self, prefix="") -> str:
+#         return f"""
+# {{% docs {prefix}{self.name} %}}
+# {self.description}
+# {{% enddocs %}}
+# """
+#
+#     def yaml(self, include_description=True, extras={}) -> str:
+#         include = {
+#             "name",
+#         }
+#         if include_description:
+#             include.add("description")
+#         return yaml.dump([{**self.dict(include=include), **extras}], sort_keys=False)
+
+
+class BaseNode(BaseModel):
+    _instances: ClassVar[Dict[str, "BaseNode"]] = {}
+
+    def __init__(self, **kwargs):
+        super(BaseNode, self).__init__(**kwargs)
+        self._instances[self.unique_id] = self
+        for column in self.columns.values():
+            column.parent = self
+
+
+# class Model(BaseNode):
+#     depends_on: NodeDeps
+
+    # @property
+    # def children(self) -> List["Model"]:
+    #     children = []
+    #     for unique_id, node in BaseNode._instances.items():
+    #         if (
+    #             isinstance(node, Model)
+    #             and node.depends_on.nodes
+    #             and self.unique_id in node.depends_on.nodes
+    #         ):
+    #             children.append(node)
+    #     return children
+
+    # TODO: bring me back
+    # @property
+    # def gvrepr(self) -> str:
+    #     if (
+    #         self.config.materialized
+    #         in (DbtMaterializationType.table, DbtMaterializationType.incremental)
+    #         and self.catalog_entry
+    #         and self.catalog_entry.num_bytes
+    #     ):
+    #         return "\n".join(
+    #             [
+    #                 super(Model, self).gvrepr,
+    #                 f"Storage: {humanize.naturalsize(self.catalog_entry.num_bytes)}",
+    #             ]
+    #         )
+    #     return super(Model, self).gvrepr
+
+    # TODO: bring me back
+    # @property
+    # def gvattrs(self) -> Dict[str, Any]:
+    #     fillcolor = "white"
+    #
+    #     if self.config.materialized in (
+    #         DbtMaterializationType.table,
+    #         DbtMaterializationType.incremental,
+    #     ):
+    #         fillcolor = "aquamarine"
+    #
+    #     if (
+    #         self.catalog_entry
+    #         and self.catalog_entry.num_bytes
+    #         and self.catalog_entry.num_bytes > 100_000_000_000
+    #         and "clustering_fields" not in self.catalog_entry.stats
+    #         and "partitioning_type" not in self.catalog_entry.stats
+    #     ):
+    #         fillcolor = "red"
+    #
+    #     if (
+    #         self.config.materialized == DbtMaterializationType.view
+    #         and len(self.children) > 1
+    #     ):
+    #         fillcolor = "pink"
+    #
+    #     return {
+    #         "fillcolor": fillcolor,
+    #     }
+
+
+class BaseDestination(BaseModel, abc.ABC):
+    format: FileFormat
+
+    def filename(self, model: str):
+        return f"{model}.{self.format.value}"
+
+    def hive_path(
+        self,
+        exposure: "Exposure",
+        model: str,
+        bucket: str,
+        dt: pendulum.DateTime,
+    ):
+        entity_name_parts = [
+            slugify(exposure.name, separator="_"),
+            model,
+        ]
+        return os.path.join(
+            bucket,
+            "__".join(entity_name_parts),
+            f"dt={dt.in_tz('utc').to_date_string()}",
+            f"ts={dt.in_tz('utc').to_iso8601_string()}",
+            self.filename(model),
+        )
+
+
+# mypy will not let subclasses override literals, so we have to have the ABC rather than inheriting from GcsDestination
+class GcsDestination(BaseDestination):
+    type: Literal["gcs"]
+
+
+class TilesDestination(BaseDestination):
+    """
+    For tile server destinations, each depends_on becomes
+    a tile layer.
+    """
+
+    type: Literal["tiles"]
+    bucket: str
+    tile_format: TileFormat
+    geo_column: str
+    metadata_columns: Optional[List[str]]
+    layer_names: List[str]
+
+    def tile_filename(self, model):
+        return f"{model}.{self.tile_format.value}"
+
+    def tiles_hive_path(
+        self,
+        exposure: "Exposure",
+        model: str,
+        bucket: str,
+        dt: pendulum.DateTime,
+    ):
+        return os.path.join(
+            bucket,
+            f'{slugify(exposure.name, separator="_")}__{self.tile_format.value}',
+            f"dt={dt.in_tz('utc').to_date_string()}",
+            f"ts={dt.in_tz('utc').to_iso8601_string()}",
+            self.tile_filename(model),
+        )
+
+
+class CkanResourceMeta(BaseModel):
+    id: str
+    description: Optional[str]
+
+
+class CkanDestination(BaseDestination):
+    _instances: ClassVar[List["CkanDestination"]] = []
+    type: Literal["ckan"]
+    url: str
+    resources: Dict[str, CkanResourceMeta]
+
+    def __init__(self, **kwargs):
+        super(CkanDestination, self).__init__(**kwargs)
+        self._instances.append(self)
+
+
+Destination = Annotated[
+    Union[CkanDestination, TilesDestination, GcsDestination],
+    Field(discriminator="type"),
+]
+
+
+class ExposureMeta(BaseModel):
+    methodology: Optional[str]
+    coordinate_system_epsg: Optional[constr(regex=r"\d+")]  # type: ignore # noqa: F722
+    destinations: List[Destination] = []
+
+
+class Exposure(BaseExposure):
+    # TODO: we should validate that model names do not conflict with
+    #  file format names since they are used as entity names in hive partitions
+    meta: Optional[ExposureMeta]
+
+    @validator("meta")
+    def must_provide_layer_names_if_tiles(cls, v, values):
+        if v:
+            for dest in v.destinations:
+                if isinstance(dest, TilesDestination):
+                    assert len(dest.layer_names) == len(
+                        values["depends_on"].nodes
+                    ), "must provide one layer name per depends_on"
+        return v
+
+
+class Manifest(BaseManifest):
+    nodes: Dict[
+        str,
+        Union[
+            AnalysisNode,
+            SingularTestNode,
+            HookNode,
+            ModelNode,
+            RPCNode,
+            SqlNode,
+            GenericTestNode,
+            SnapshotNode,
+            SeedNode,
+        ],
+    ] = Field(
+        ..., description="The nodes defined in the dbt project and its dependencies"
+    )
+
+    # https://github.com/pydantic/pydantic/issues/1577#issuecomment-803171322
+    def set_catalog(self, c: Catalog):
+        for node in self.nodes.values():
+            node.catalog_entry = c.nodes.get(
+                node.unique_id, c.sources.get(node.unique_id)
+            )
+
+
+class RunResultOutput(BaseRunResultOutput):
+    manifest: Optional[Manifest]
+
+    # TODO: bring me back
+    # @property
+    # def node(self) -> Node:
+    #     if not self.manifest:
+    #         raise ValueError("must set manifest before calling node")
+    #     return self.manifest.nodes[self.unique_id]
+
+    @property
+    def bytes_processed(self):
+        return self.adapter_response.get(
+            "bytes_processed", 0
+        )  # tests do bill bytes but set to 0
+
+    @property
+    def gvrepr(self) -> str:
+        return self.node.gvrepr
+
+    @property
+    def gvattrs(self) -> Dict[str, Any]:
+        """
+        Returns a string representation intended for graphviz labels
+        """
+        # TODO: do an actual linear transform on this
+        # the top colors are too dark to use as a background
+        white, yellow, orange, red, _, _ = LaJolla_6.hex_colors
+        if self.bytes_processed > 500_000_000_000:
+            color = red
+        elif self.bytes_processed > 300_000_000_000:
+            color = orange
+        elif self.bytes_processed > 100_000_000_000:
+            color = yellow
+        else:
+            color = white
+
+        return {
+            **self.node.gvattrs,
+            "fillcolor": color,
+            "label": "\n".join(
+                [
+                    self.node.gvrepr,
+                    f"Billed: {humanize.naturalsize(self.bytes_processed)}",
+                ]
+            ),
+        }
+
+
+class RunResults(BaseRunResults):
+    results: List[RunResultOutput]
+    manifest: Optional[Manifest]
+
+    # https://github.com/pydantic/pydantic/issues/1577#issuecomment-803171322
+    def set_manifest(self, m: Manifest):
+        self.manifest = m
+        for result in self.results:
+            result.manifest = m
+
+
+__all__ = ['Catalog', 'Manifest', 'RunResults', 'Sources']

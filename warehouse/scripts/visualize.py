@@ -9,7 +9,7 @@ from typing import Any, List, Optional, Tuple, Type, Union
 import gcsfs  # type: ignore
 import networkx as nx  # type: ignore
 import typer
-from catalog import Catalog
+from dbt_artifacts.catalog import Model as Catalog
 from dbt_artifacts import BaseNode, Manifest, RunResult, RunResults, Seed, Source, Test
 
 app = typer.Typer(pretty_exceptions_enable=False)
