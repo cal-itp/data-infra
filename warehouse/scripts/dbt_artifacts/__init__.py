@@ -87,6 +87,14 @@ class NodeModelMixin(BaseModel):
     _instances: ClassVar[Dict[str, "NodeModelMixin"]] = {}
     catalog_entry: Optional[CatalogTable]
 
+    # TODO: can we avoid re-defining these here?
+    unique_id: str
+    fqn: List[str]
+    name: str
+    schema_: str
+    database: Optional[str]
+    columns: Optional[Dict[str, ColumnInfo]] = {}
+
     def __init__(self, **kwargs):
         super(NodeModelMixin, self).__init__(**kwargs)
         self._instances[self.unique_id] = self
