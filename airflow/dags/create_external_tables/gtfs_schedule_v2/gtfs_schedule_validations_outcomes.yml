@@ -1,5 +1,5 @@
 operator: operators.ExternalTable
-bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION') }}"
+bucket: "{{ env_var('CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY') }}"
 source_objects:
   - "validation_job_results/*.jsonl"
 destination_project_dataset_table: "external_gtfs_schedule.validations_outcomes"
