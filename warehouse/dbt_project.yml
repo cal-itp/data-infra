@@ -89,3 +89,5 @@ models:
       payments:
         +materialized: table
         schema: mart_payments
+      benefits:
+        schema: mart_benefits
