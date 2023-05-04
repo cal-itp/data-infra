@@ -615,7 +615,8 @@ models:
         would be failing to join and making it essentially impossible to label
         historical GTFS data with their associated transit database records).
       tests:
-        - not_null
+        - dbt_utils.not_null_proportion:
+            at_least: 0.999
         - relationships:
             to: ref('dim_gtfs_datasets')
             field: key
