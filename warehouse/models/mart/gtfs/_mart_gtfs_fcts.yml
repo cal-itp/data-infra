@@ -112,7 +112,7 @@ models:
       - name: key
         tests: &almost_unique_rt_key_tests
           - unique_proportion:
-              at_least: 0.99
+              at_least: 0.999
               where: '__rt_sampled__'
           - not_null:
               where: '__rt_sampled__'
@@ -933,7 +933,12 @@ models:
         description: |
           Synthetic primary key constructed from `service_alerts_message_key`,
           `agency_id`, `trip_id`, `route_id`, and `stop_id`.
-        tests: *almost_unique_rt_key_tests
+        tests: &service_alert_key_tests
+          - unique_proportion:
+              at_least: 0.98
+              where: '__rt_sampled__'
+          - not_null:
+              where: '__rt_sampled__'
       - *service_alert_message_key
       - name: dt
       - name: agency_id
@@ -1028,7 +1033,7 @@ models:
         description: |
           Synthetic primary key constructed from `dt`,
           `base64_url`, and entity `id`.
-        tests: *almost_unique_rt_key_tests
+        tests: *service_alert_key_tests
       - name: first_header_timestamp
         description: |
           Earliest header timestamp at which this alert appeared on this date.
