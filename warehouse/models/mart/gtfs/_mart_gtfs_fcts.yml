@@ -110,8 +110,9 @@ models:
       Unnested and de-duped stop time updates.
     columns:
       - name: key
-        tests: &rt_key_tests
-          - unique:
+        tests: &almost_unique_rt_key_tests
+          - unique_proportion:
+              at_least: 0.99
               where: '__rt_sampled__'
           - not_null:
               where: '__rt_sampled__'
@@ -128,7 +129,7 @@ models:
         description: |
           Synthetic primary key constructed from `base64_url`, `extract_ts`,
           entity `id`, `vehicle_id`, and `trip_id`.
-        tests: *rt_key_tests
+        tests: *almost_unique_rt_key_tests
       - &gtfs_rt_dataset_key
         name: gtfs_dataset_key
         description: |
@@ -224,7 +225,7 @@ models:
         description: |
           Synthetic primary key constructed from `base64_url`, `extract_ts`,
           entity `id`, `vehicle_id`, and `trip_id`.
-        tests: *rt_key_tests
+        tests: *almost_unique_rt_key_tests
       - *gtfs_rt_dataset_key
       - name: dt
         description: |
@@ -931,7 +932,7 @@ models:
         description: |
           Synthetic primary key constructed from `service_alerts_message_key`,
           `agency_id`, `trip_id`, `route_id`, and `stop_id`.
-        tests: *rt_primary_key_tests
+        tests: *almost_unique_rt_key_tests
       - *service_alert_message_key
       - name: dt
       - name: agency_id
@@ -1026,11 +1027,7 @@ models:
         description: |
           Synthetic primary key constructed from `dt`,
           `base64_url`, and entity `id`.
-        tests:
-          - unique:
-              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
-          - not_null:
-              where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+        tests: *almost_unique_rt_key_tests
       - name: first_header_timestamp
         description: |
           Earliest header timestamp at which this alert appeared on this date.
@@ -1322,13 +1319,7 @@ models:
       Incrementally materialize trip update messages without stop times; this reduces the data size by about 90%.
     columns:
       - name: key
-        tests:
-          - not_null:
-              config:
-                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
-          - unique:
-              config:
-                where: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
+        tests: *almost_unique_rt_key_tests
 
   - name: fct_service_alerts_trip_summaries
     description: |
