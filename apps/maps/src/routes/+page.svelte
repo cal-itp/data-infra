@@ -2,9 +2,8 @@
 <script>
     import {onMount, onDestroy} from 'svelte';
     import L from 'leaflet';
-    import {leafletLayer, LineSymbolizer} from 'protomaps';
+    import {LineSymbolizer} from 'protomaps';
     import colormap from 'colormap';
-    import {inflate} from 'pako';
 
     let mapElement;
     let map;

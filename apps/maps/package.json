@@ -24,6 +24,7 @@
 		"@types/leaflet": "^1.9.3",
 		"colormap": "^2.3.2",
 		"leaflet": "^1.9.3",
+		"maplibre-gl": "^2.4.0",
 		"protomaps": "^1.23.1"
 	}
 }
