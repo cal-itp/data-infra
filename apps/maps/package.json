@@ -22,6 +22,7 @@
 	"type": "module",
 	"dependencies": {
 		"@types/leaflet": "^1.9.3",
+		"colormap": "^2.3.2",
 		"leaflet": "^1.9.3",
 		"protomaps": "^1.23.1"
 	}
