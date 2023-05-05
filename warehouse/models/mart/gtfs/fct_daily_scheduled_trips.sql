@@ -38,7 +38,7 @@ stop_times_grouped AS (
 
 gtfs_joins AS (
     SELECT
-        {{ dbt_utils.generate_surrogate_key(['service_index.service_date', 'trips.key']) }} AS key,
+        {{ dbt_utils.generate_surrogate_key(['service_index.service_date', 'trips.key', 'stop_times_grouped.iteration_num']) }} AS key,
 
         service_index.service_date,
         service_index.feed_key,
@@ -51,6 +51,8 @@ gtfs_joins AS (
         trips.trip_short_name,
         trips.direction_id,
         trips.block_id,
+        stop_times_grouped.iteration_num,
+        stop_times_grouped.frequencies_defined_trip,
 
         routes.key AS route_key,
         routes.route_id AS route_id,
@@ -119,6 +121,8 @@ fct_daily_scheduled_trips AS (
         gtfs_joins.service_id,
         gtfs_joins.trip_key,
         gtfs_joins.trip_id,
+        gtfs_joins.iteration_num,
+        gtfs_joins.frequencies_defined_trip,
         gtfs_joins.trip_short_name,
         gtfs_joins.direction_id,
         gtfs_joins.block_id,

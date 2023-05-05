@@ -576,6 +576,20 @@ models:
           If you are specifically concerned with activity outside of California,
           it may be preferable to use this rather than trip_last_arrival_datetime_pacific.
       - *feed_timezone_no_tests
+      - name: frequencies_defined_trip
+        description: |
+          Rows with `true` are trips defined in `frequencies.txt`, where they are defined as a
+          repeating trip. This means the underlying data structure is different for these trips;
+          see https://gtfs.org/schedule/reference/#frequenciestxt for more information.
+      - name: iteration_num
+        description: |
+          For frequencies-defined trips, the iteration number (starting from 0) for this trip within its
+          defined window. So the first iteration of the trip will have `iteration_num = 0`, and the next
+          trip will have `iteration_num = 1`, and so on.
+        tests:
+          - not_null:
+              config:
+                where: "frequencies_defined_trip"
 
   - name: fct_daily_rt_feed_files
     description: |

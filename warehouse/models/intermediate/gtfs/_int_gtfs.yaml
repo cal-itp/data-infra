@@ -257,8 +257,13 @@ models:
           repeating trip. This means the underlying data structure is different for these trips;
           see https://gtfs.org/schedule/reference/#frequenciestxt for more information.
       - name: exact_times
-        descriptions: |
+        description: |
           Only populated for frequencies-defined trips; see dim_frequencies.exact_times.
+      - name: iteration_num
+        description: |
+          For frequencies-defined trips, the iteration number (starting from 0) for this trip within its
+          defined window. So the first iteration of the trip will have `iteration_num = 0`, and the next
+          trip will have `iteration_num = 1`, and so on.
       - name: trip_start_timezone
         description: |
           The time zone of the first stop in this trip, pulled from dim_stops.
