@@ -54,7 +54,6 @@ fct_daily_scheduled_shapes AS (
 
     FROM trips_counted
     LEFT JOIN dim_shapes_arrays
-        -- because dim shapes is clustered by feed key including it makes the join more performant
         ON shape_array_key = dim_shapes_arrays.key
 )
 
