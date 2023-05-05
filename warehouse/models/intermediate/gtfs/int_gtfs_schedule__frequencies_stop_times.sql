@@ -32,6 +32,7 @@ int_gtfs_schedule__frequencies_stop_times AS (
         iteration_num,
         start_time_sec + iteration_num * headway_secs AS trip_start_time_sec,
         start_time_sec + iteration_num * headway_secs + (arrival_sec -first_trip_departure_sec) AS trip_stop_arrival_time_sec,
+        start_time_sec + iteration_num * headway_secs + (departure_sec -first_trip_departure_sec) AS trip_stop_departure_time_sec,
         MAKE_INTERVAL(second => (start_time_sec + iteration_num * headway_secs)) AS trip_start_time_interval,
         MAKE_INTERVAL(second => start_time_sec + iteration_num * headway_secs + (arrival_sec -first_trip_departure_sec)) AS trip_stop_arrival_time_interval,
         stop_sequence,

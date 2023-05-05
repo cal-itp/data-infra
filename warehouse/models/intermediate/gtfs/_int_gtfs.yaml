@@ -411,6 +411,20 @@ models:
 
           Using a count of seconds allows us to perform duration calculations and handle timestamps that wrap past midnight like
           `25:40:00`, which are allowed in GTFS. See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+      - name: trip_stop_departure_time_sec
+        description: |
+          This is a calculated field that does not come directly from GTFS - it is not a timestamp and can't be treated as such.
+
+          Represents this trip iteration's `departure_time` at the given stop as a total number of seconds after twelve hours before noon (usually midnight) of the first day of the given trip.
+          Say `trip_start_time_sec` = `78,045`. We then calculate the individual stop's departure time for this iteration based on the duration between it and the first stop
+          in `stop_times`.
+
+          So if the `stop_times.departure_time` for the trip's first stop was `00:00:00 = 0 seconds` and
+          the `stop_times.departure_time` at a given stop was `00:05:00 = 300 seconds` then the `trip_stop_departure_time_sec`
+          would be `78,045 + 300 = 81,045`.
+
+          Using a count of seconds allows us to perform duration calculations and handle timestamps that wrap past midnight like
+          `25:40:00`, which are allowed in GTFS. See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
       - name: trip_start_time_interval
         description: |
           This is a calculated field that does not appear directly in GTFS. It contains the same data as `trip_start_time_sec`

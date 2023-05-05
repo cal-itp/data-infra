@@ -21,6 +21,11 @@ dim_routes AS (
     FROM {{ ref('dim_routes') }}
 ),
 
+int_gtfs_schedule__frequencies_stop_times AS (
+    SELECT *
+    FROM {{ ref('int_gtfs_schedule__frequencies_stop_times') }}
+),
+
 stops_by_day_by_route AS (
 
     SELECT
@@ -34,12 +39,12 @@ stops_by_day_by_route AS (
 
         MIN(DATETIME(TIMESTAMP_ADD(
             {{ gtfs_noon_minus_twelve_hours('trips.service_date', 'trips.feed_timezone') }},
-            INTERVAL stop_times.arrival_sec SECOND
+            INTERVAL COALESCE(freq.trip_stop_arrival_time_sec, stop_times.arrival_sec) SECOND
             ), "America/Los_Angeles")) AS first_stop_arrival_datetime_pacific,
 
         MAX(DATETIME(TIMESTAMP_ADD(
             {{ gtfs_noon_minus_twelve_hours('trips.service_date', 'trips.feed_timezone') }},
-            INTERVAL stop_times.departure_sec SECOND
+            INTERVAL COALESCE(freq.trip_stop_departure_time_sec, stop_times.departure_sec) SECOND
             ), "America/Los_Angeles")) AS last_stop_departure_datetime_pacific,
 
         LOGICAL_OR(
@@ -53,6 +58,10 @@ stops_by_day_by_route AS (
         ) AS contains_warning_missing_foreign_key_stop_id
 
     FROM dim_stop_times AS stop_times
+    LEFT JOIN int_gtfs_schedule__frequencies_stop_times freq
+        ON stop_times.feed_key = freq.feed_key
+        AND stop_times.trip_id = freq.trip_id
+        AND stop_times.stop_id = freq.stop_id
     LEFT JOIN fct_daily_scheduled_trips AS trips
         ON trips.feed_key = stop_times.feed_key
             AND trips.trip_id = stop_times.trip_id
