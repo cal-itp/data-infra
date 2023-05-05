@@ -219,6 +219,12 @@ models:
   - name: int_gtfs_schedule__stop_times_grouped
     description: |
       Stop times grouped by trip_id with trip aggregation calculations.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - trip_id
+            - iteration_num
     columns:
       - *feed_key
       - name: trip_id
@@ -245,6 +251,14 @@ models:
           I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
           in the input data. This indicates that data quality issues were present in the stop times data
           that is being summarized here, and the count of distinct `stop_id`s at the trip level may be incorrect.
+      - name: frequencies_defined_trip
+        description: |
+          Rows with `true` are trips defined in `frequencies.txt`, where they are defined as a
+          repeating trip. This means the underlying data structure is different for these trips;
+          see https://gtfs.org/schedule/reference/#frequenciestxt for more information.
+      - name: exact_times
+        descriptions: |
+          Only populated for frequencies-defined trips; see dim_frequencies.exact_times.
       - name: trip_start_timezone
         description: |
           The time zone of the first stop in this trip, pulled from dim_stops.

@@ -64,7 +64,7 @@ int_gtfs_schedule__frequencies_stop_times AS (
     LEFT JOIN UNNEST(GENERATE_ARRAY(start_time_sec, end_time_sec, headway_secs))
         AS iterations
         WITH OFFSET AS iteration_num
-    -- if end time_sec = headway_secs * X + start_time_sec, then we're not actually supposed to have a trip that starts at end_time_sec
+    -- if end time_sec = headway_secs * [some integer] + start_time_sec, then we're not actually supposed to have a trip that starts at end_time_sec
     WHERE start_time_sec + iteration_num * headway_secs < end_time_sec
 )
 
