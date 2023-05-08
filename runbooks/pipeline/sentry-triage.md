@@ -6,7 +6,7 @@
 
 Once a day, we should check Sentry issues created since the prior day, using the following query.
 
-`is:unresolved firstSeen:-24h ` ([saved search link](https://sentry.calitp.org/organizations/sentry/issues/searches/3/?environment=cal-itp-data-infra&project=2&referrer=issue-list&sort=date&statsPeriod=24h))
+`is:unresolved firstSeen:-24h ` ([saved search link](https://sentry.calitp.org/organizations/sentry/issues/searches/5/?environment=cal-itp-data-infra&project=2))
 
 Categorize those issues and perform relevant steps if the issue is not already assigned.
 
