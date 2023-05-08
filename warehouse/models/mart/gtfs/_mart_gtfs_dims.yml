@@ -55,9 +55,7 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `agency_id`.
         tests: &primary_key_tests
-          - unique:
-              # TODO: remove this once we deal with Auburn feed that has tab-delimited files
-              where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
+          - unique
           - not_null
       - &feed_key
         name: feed_key
@@ -84,8 +82,6 @@ models:
         description: '{{ doc("gtfs_agency__agency_timezone") }}'
         tests: &not_null_warn
         - not_null:
-            # TODO: remove this once we deal with Auburn feed that has tab-delimited files
-            where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
             config:
               severity: warn
       - name: agency_lang
@@ -120,9 +116,7 @@ models:
       - name: area_id
         description: '{{ doc("gtfs_areas__area_id") }}'
         tests: &not_null_error
-          - not_null:
-              # TODO: remove this once we deal with Auburn feed that has tab-delimited files
-              where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
+          - not_null
       - name: area_name
         description: '{{ doc("gtfs_areas__area_name") }}'
       - *_feed_valid_from
