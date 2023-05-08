@@ -61,8 +61,14 @@ models:
         tests:
           - unique
           - not_null
-      - name: feed_key
+      - &feed_key
+        name: feed_key
         description: Foreign key for `dim_schedule_feeds`.
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_schedule_feeds')
+              field: key
       - name: _feed_valid_from
         tests:
           - not_null
@@ -118,10 +124,7 @@ models:
             - service_date
             - service_id
     columns:
-      - name: feed_key
-        description: Foreign key for `dim_schedule_feeds`.
-        tests:
-          - not_null
+      - *feed_key
       - name: calendar_key
         description: |
           Foreign key for `dim_calendar`. If null, the service for this date was
@@ -216,8 +219,14 @@ models:
   - name: int_gtfs_schedule__stop_times_grouped
     description: |
       Stop times grouped by trip_id with trip aggregation calculations.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - feed_key
+            - trip_id
+            - iteration_num
     columns:
-      - name: feed_key
+      - *feed_key
       - name: trip_id
       - name: n_stops
       - name: n_stop_times
@@ -242,6 +251,19 @@ models:
           I.e., at least one row being aggregated had a `stop_id` foreign key that was missing
           in the input data. This indicates that data quality issues were present in the stop times data
           that is being summarized here, and the count of distinct `stop_id`s at the trip level may be incorrect.
+      - name: frequencies_defined_trip
+        description: |
+          Rows with `true` are trips defined in `frequencies.txt`, where they are defined as a
+          repeating trip. This means the underlying data structure is different for these trips;
+          see https://gtfs.org/schedule/reference/#frequenciestxt for more information.
+      - name: exact_times
+        description: |
+          Only populated for frequencies-defined trips; see dim_frequencies.exact_times.
+      - name: iteration_num
+        description: |
+          For frequencies-defined trips, the iteration number (starting from 0) for this trip within its
+          defined window. So the first iteration of the trip will have `iteration_num = 0`, and the next
+          trip will have `iteration_num = 1`, and so on.
       - name: trip_start_timezone
         description: |
           The time zone of the first stop in this trip, pulled from dim_stops.
@@ -320,10 +342,7 @@ models:
          If this service is defined exclusively in `calendar_dates.txt`, then `exception_type = 1` is listed for `2022-10-01` in that file.
     columns:
       - *schedule_key
-      - name: feed_key
-        description: Foreign key for `dim_schedule_feeds`.
-        tests:
-          - not_null
+      - *feed_key
       - name: _feed_valid_from
         tests:
           - not_null
@@ -352,3 +371,156 @@ models:
         tests:
           - not_null
       - *feed_timezone_no_tests
+  - name: int_gtfs_schedule__frequencies_stop_times
+    description: |
+      Expands out frequency-based trips' stop times by combining dim_frequencies and dim_stop_times
+      to list each scheduled iteration of a trip.
+      See https://gtfs.org/schedule/reference/#frequenciestxt for interpretation of frequency-based trips.
+    columns:
+      - *feed_key
+      - name: trip_id
+      - name: stop_id
+      - name: iteration_num
+        description: |
+          For a frequency-based trip, there will be ((`end_time_sec` - 1) - `start_time_sec`) / `headway_secs`
+          iterations of a given trip. This field gives a zero-based index for what instance number this is.
+          So, `trip_start_time_sec = frequency_start_time_sec + iteration_num * headway_secs`.
+      - name: trip_start_time_sec
+        description: |
+          This is a calculated field that does not come directly from GTFS - it is not a timestamp and can't be treated as such.
+
+          Represents this trip iteration's `start_time` as a total number of seconds after twelve hours before noon (usually midnight) of the first day of the given trip.
+          For example, `frequencies.start_time = 21:30:45` with `frequencies.headway_secs = 600` (ten minute headways)
+          would lead to `frequency_start_time_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
+          There will then be `trip_start_time_sec` of `77,445` (the same as the frequency start time),
+          `78,045 = 77,445 + 600`, and so on, adding `headway_secs` again and again until we reach `frequency_end_time_sec - 1`.
+
+          Using a count of seconds allows us to perform duration calculations and handle timestamps that wrap past midnight like
+          `25:40:00`, which are allowed in GTFS. See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+      - name: trip_stop_arrival_time_sec
+        description: |
+          This is a calculated field that does not come directly from GTFS - it is not a timestamp and can't be treated as such.
+
+          Represents this trip iteration's `arrival_time` at the given stop as a total number of seconds after twelve hours before noon (usually midnight) of the first day of the given trip.
+          Say `trip_start_time_sec` = `78,045`. We then calculate the individual stop's arrival time for this iteration based on the duration between it and the first stop
+          in `stop_times`.
+
+          So if the `stop_times.departure_time` for the trip's first stop was `00:00:00 = 0 seconds` and
+          the `stop_times.arrival_time` at a given stop was `00:05:00 = 300 seconds` then the `trip_stop_arrival_time_sec`
+          would be `78,045 + 300 = 81,045`.
+
+          Using a count of seconds allows us to perform duration calculations and handle timestamps that wrap past midnight like
+          `25:40:00`, which are allowed in GTFS. See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+      - name: trip_stop_departure_time_sec
+        description: |
+          This is a calculated field that does not come directly from GTFS - it is not a timestamp and can't be treated as such.
+
+          Represents this trip iteration's `departure_time` at the given stop as a total number of seconds after twelve hours before noon (usually midnight) of the first day of the given trip.
+          Say `trip_start_time_sec` = `78,045`. We then calculate the individual stop's departure time for this iteration based on the duration between it and the first stop
+          in `stop_times`.
+
+          So if the `stop_times.departure_time` for the trip's first stop was `00:00:00 = 0 seconds` and
+          the `stop_times.departure_time` at a given stop was `00:05:00 = 300 seconds` then the `trip_stop_departure_time_sec`
+          would be `78,045 + 300 = 81,045`.
+
+          Using a count of seconds allows us to perform duration calculations and handle timestamps that wrap past midnight like
+          `25:40:00`, which are allowed in GTFS. See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+      - name: trip_start_time_interval
+        description: |
+          This is a calculated field that does not appear directly in GTFS. It contains the same data as `trip_start_time_sec`
+          as a BigQuery INTERVAL type, which allows us to treat the field as a duration after twelve hours before noon (usually midnight)
+          and thus handle times past the following midnight (like `25:40:00`).
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+      - name: trip_stop_arrival_time_interval
+        description: |
+          This is a calculated field that does not appear directly in GTFS. It contains the same data as `trip_stop_arrival_time_sec`
+          as a BigQuery INTERVAL type, which allows us to treat the field as a duration after twelve hours before noon (usually midnight)
+          and thus handle times past the following midnight (like `25:40:00`).
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+      - name: stop_sequence
+        description: |
+          '{{ doc("gtfs_stop_times__stop_sequence") }}'
+      - name: frequency_start_time
+        description: |
+          '{{ doc("gtfs_frequencies__start_time") }}'
+      - name: frequency_end_time
+        description: |
+          '{{ doc("gtfs_frequencies__end_time") }}'
+      - name: frequency_start_time_interval
+        description: |
+          This is a calculated field that does not appear directly in GTFS. It contains the same data as `frequency_start_time`
+          as a BigQuery INTERVAL type, which allows us to treat the field as a duration after twelve hours before noon (usually midnight)
+          and thus handle times past the following midnight (like `25:40:00`).
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+      - name: frequency_end_time_interval
+        description: |
+          This is a calculated field that does not appear directly in GTFS. It contains the same data as `frequency_end_time`
+          as a BigQuery INTERVAL type, which allows us to treat the field as a duration after twelve hours before noon (usually midnight)
+          and thus handle times past the following midnight (like `25:40:00`).
+          See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+      - name: frequency_start_time_sec
+        description: |
+          This is a calculated field that does not come directly from GTFS - it is not a timestamp and can't be treated as such.
+
+          Represents this `frequency_start_time` as a total number of seconds after twelve hours before noon (usually midnight) of the first day of the given trip.
+          For example, `frequencies.start_time = 21:30:45` would lead to `frequency_start_time_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
+
+          Using a count of seconds allows us to perform duration calculations and handle timestamps that wrap past midnight like
+          `25:40:00`, which are allowed in GTFS. See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+      - name: frequency_end_time_sec
+        description: |
+          This is a calculated field that does not come directly from GTFS - it is not a timestamp and can't be treated as such.
+
+          Represents this `frequency_end_time` as a total number of seconds after twelve hours before noon (usually midnight) of the first day of the given trip.
+          For example, `frequencies.end_time = 21:30:45` would lead to `frequency_end_time_sec = 21 * 3,600 + 30 * 60 + 45 * 1 = 77,445`.
+
+          Using a count of seconds allows us to perform duration calculations and handle timestamps that wrap past midnight like
+          `25:40:00`, which are allowed in GTFS. See: https://gtfs.org/schedule/reference/#field-types for how GTFS defines its "Time" type.
+      - name: headway_secs
+        description: '{{ doc("gtfs_frequencies__headway_secs") }}'
+      - name: exact_times
+        description: '{{ doc("gtfs_frequencies__exact_times") }}'
+      - name: first_trip_departure_sec
+        description: |
+          The `stop_times_departure_sec` of the first stop (lowest `stop_sequence` value) on this trip.
+      - name: stop_times_arrival_sec
+        description: |
+          See `dim_stop_times.arrival_sec`.
+      - name: stop_times_departure_sec
+        description: |
+          See `dim_stop_times.departure_sec`.
+      - name: stop_times_arrival_time_interval
+        description: |
+          See `dim_stop_times.arrival_time_interval`.
+      - name: stop_times_departure_time_interval
+        description: |
+          See `dim_stop_times.departure_time_interval`.
+      - name: stop_times_arrival_time
+        description: '{{ doc("gtfs_stop_times__arrival_time") }}'
+      - name: stop_times_departure_time
+        description: '{{ doc("gtfs_stop_times__departure_time") }}'
+      - name: sec_to_stop
+        description: |
+          Number of seconds it takes on a given trip instance to get from the first stop to the current stop
+          (calculated from `stop_times_arrival_sec - first_trip_departure_sec`).
+      - name: stop_headsign
+        description: '{{ doc("gtfs_stop_times__stop_headsign") }}'
+      - name: pickup_type
+        description: '{{ doc("gtfs_stop_times__pickup_type") }}'
+      - name: drop_off_type
+        description: '{{ doc("gtfs_stop_times__drop_off_type") }}'
+      - name: shape_dist_traveled
+        description: '{{ doc("gtfs_stop_times__shape_dist_traveled") }}'
+      - name: timepoint
+        description: '{{ doc("gtfs_stop_times__timepoint") }}'
+      - name: warning_duplicate_primary_key
+        description: |
+          Rows with `true` in this column have a duplicate primary key; i.e., the given `trip_id`
+          / `stop_sequence` pair is duplicated within an individual feed instance and `key` will
+          also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
+      - name: warning_missing_foreign_key_stop_id
+        description: |
+          Rows with `true` in this column are missing the required `stop_id` value.
+          This means they will fail to join with `stop` related information.
+      - name: base64_url
+      - name: _feed_valid_from

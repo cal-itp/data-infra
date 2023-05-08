@@ -331,6 +331,18 @@ models:
       - name: exact_times
         description: '{{ doc("gtfs_frequencies__exact_times") }}'
       - *feed_timezone
+      - name: start_time_interval
+        meta:
+          publish.ignore: true
+      - name: end_time_interval
+        meta:
+          publish.ignore: true
+      - name: start_time_sec
+        meta:
+          publish.ignore: true
+      - name: end_time_sec
+        meta:
+          publish.ignore: true
 
   - name: dim_levels_latest
     description: |
