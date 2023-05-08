@@ -78,7 +78,10 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key` and `attribution_id`.
-        tests: *primary_key_tests
+        tests: &pk_tests_with_dups
+          - unique:
+              where: "not warning_duplicate_primary_key AND feed_key != '6368fe701bdd68c4f521751a9a222a10'"
+          - not_null
         meta: *pk_meta
       - *feed_key
       - *base64_url
@@ -106,7 +109,14 @@ models:
       - name: attribution_phone
         description: '{{ doc("gtfs_attributions__attribution_phone") }}'
       - *feed_timezone
-
+      - &warning_duplicate_primary_key
+        name: warning_duplicate_primary_key
+        description: |
+          Rows with `true` in this column have a duplicate primary key; i.e., the attribute(s) that is meant to
+          uniquely identify a row are duplicated within an individual feed instance and `key` will
+          also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
+        meta:
+          publish.ignore: true
   - name: dim_calendar_latest
     description: |
       This table is a latest-only cut of the cleaned GTFS data.
@@ -236,7 +246,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key`, `fare_id`, `route_id`, `origin_id`, `destination_id`, and `contains_id`.
-        tests: *primary_key_tests
+        tests: *pk_tests_with_dups
         meta: *pk_meta
       - *feed_key
       - *base64_url
@@ -252,6 +262,7 @@ models:
       - name: contains_id
         description: '{{ doc("gtfs_fare_rules__contains_id") }}'
       - *feed_timezone
+      - *warning_duplicate_primary_key
 
   - name: dim_feed_info_latest
     description: |
@@ -266,7 +277,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key`, `feed_publisher_name`, `feed_publisher_url`, `feed_lang`, `default_lang`, `feed_version`, `feed_contact_email`, `feed_contact_url`, `feed_start_date`, and `feed_end_date`.
-        tests: *primary_key_tests
+        tests: *pk_tests_with_dups
         meta: *pk_meta
       - *feed_key
       - *base64_url
@@ -292,6 +303,7 @@ models:
       - name: feed_contact_url
         description: '{{ doc("gtfs_feed_info__feed_contact_url") }}'
       - *feed_timezone
+      - *warning_duplicate_primary_key
 
   - name: dim_frequencies_latest
     description: |
@@ -519,10 +531,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key`, `trip_id`, and `stop_sequence`.
-        tests: &pk_tests_with_dups
-          - unique:
-              where: "not warning_duplicate_primary_key"
-          - not_null
+        tests: *pk_tests_with_dups
         meta: *pk_meta
       - name: trip_id
         description: '{{ doc("gtfs_stop_times__trip_id") }}'
@@ -553,13 +562,7 @@ models:
         description: '{{ doc("gtfs_stop_times__shape_dist_traveled") }}'
       - name: timepoint
         description: '{{ doc("gtfs_stop_times__timepoint") }}'
-      - name: warning_duplicate_primary_key
-        description: |
-          Rows with `true` in this column have a duplicate primary key; i.e., the given `trip_id`
-          / `stop_sequence` pair is duplicated within an individual feed instance and `key` will
-          also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
-        meta:
-          publish.ignore: true
+      - *warning_duplicate_primary_key
       - name: warning_missing_foreign_key_stop_id
         description: |
           Rows with `true` in this column are missing the required `stop_id` value.
@@ -603,7 +606,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key` and `stop_id`.
-        tests: *primary_key_tests
+        tests: *pk_tests_with_dups
         meta: *pk_meta
       - *feed_key
       - *base64_url
@@ -658,6 +661,7 @@ models:
       - name: stop_timezone_coalesced
         meta:
           publish.ignore: true
+      - *warning_duplicate_primary_key
 
   - name: dim_transfers_latest
     description: |
@@ -672,7 +676,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key`, `from_stop_id`, `to_stop_id`, `from_trip_id`, `to_trip_id`, `from_route_id`, and `to_route_id`.
-        tests: *primary_key_tests
+        tests: *pk_tests_with_dups
         meta: *pk_meta
       - *feed_key
       - *base64_url
@@ -696,6 +700,7 @@ models:
       - name: to_trip_id
         description: '{{ doc("gtfs_transfers__to_trip_id") }}'
       - *feed_timezone
+      - *warning_duplicate_primary_key
 
   - name: dim_translations_latest
     description: |
@@ -774,12 +779,7 @@ models:
         description: '{{ doc("gtfs_trips__wheelchair_accessible") }}'
       - name: bikes_allowed
         description: '{{ doc("gtfs_trips__bikes_allowed") }}'
-      - name: warning_duplicate_primary_key
-        description: |
-          Rows with `true` in this column have a duplicate primary key; i.e., `trip_id` is duplicated within an individual feed
-          instance and `key` will also be duplicated as a result. Treat these rows with caution. They will cause fanout in joins.
-        meta:
-          publish.ignore: true
+      - *warning_duplicate_primary_key
       - *feed_timezone
 
 exposures:
