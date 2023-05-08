@@ -89,8 +89,6 @@ class NodeModelMixin(BaseModel):
     def __init__(self, **kwargs):
         super(NodeModelMixin, self).__init__(**kwargs)
         self._instances[self.unique_id] = self
-        # for column in self.columns.values():
-        #     column.parent = self
 
     @property
     def strfqn(self) -> str:
@@ -251,47 +249,6 @@ class FileFormat(str, Enum):
 class TileFormat(str, Enum):
     mbtiles = "mbtiles"
     pbf = "pbf"
-
-
-# class Column(BaseColumn):
-#     parent: Optional[
-#         "BaseNode"
-#     ] = None  # this is set after the fact; it's Optional to make mypy happy
-#
-#     @property
-#     def publish(self) -> bool:
-#         return
-
-# @property
-# def tests(self) -> List[str]:
-#     # this has a lot of stuff to make mypy happy
-#     return [
-#         node.name
-#         for name, node in BaseNode._instances.items()
-#         if node.resource_type == DbtResourceType.test
-#         and isinstance(node, Test)
-#         and node.depends_on
-#         and node.depends_on.nodes is not None
-#         and self.parent
-#         and self.parent.unique_id in node.depends_on.nodes
-#         and node.test_metadata
-#         and self.name == node.test_metadata.kwargs.get("column_name")
-#     ]
-
-#     def docblock(self, prefix="") -> str:
-#         return f"""
-# {{% docs {prefix}{self.name} %}}
-# {self.description}
-# {{% enddocs %}}
-# """
-#
-#     def yaml(self, include_description=True, extras={}) -> str:
-#         include = {
-#             "name",
-#         }
-#         if include_description:
-#             include.add("description")
-#         return yaml.dump([{**self.dict(include=include), **extras}], sort_keys=False)
 
 
 class BaseDestination(BaseModel, abc.ABC):
