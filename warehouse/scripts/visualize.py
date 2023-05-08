@@ -9,8 +9,16 @@ from typing import Any, List, Optional, Tuple, Type, Union
 import gcsfs  # type: ignore
 import networkx as nx  # type: ignore
 import typer
-from catalog import Catalog
-from dbt_artifacts import BaseNode, Manifest, RunResult, RunResults, Seed, Source, Test
+from dbt_artifacts import (
+    Catalog,
+    DbtNode,
+    GenericTestNode,
+    Manifest,
+    RunResultOutput,
+    RunResults,
+    SeedNode,
+    SourceDefinition,
+)
 
 app = typer.Typer(pretty_exceptions_enable=False)
 
@@ -41,7 +49,7 @@ def read_artifacts_folder(
 
 
 def should_display(
-    node: BaseNode,
+    node: DbtNode,
     analyses: bool = False,
     models: bool = True,
     seeds: bool = False,
@@ -51,11 +59,11 @@ def should_display(
     include: Optional[List[str]] = None,
     exclude: Optional[List[str]] = None,
 ) -> bool:
-    if isinstance(node, Seed) and not seeds:
+    if isinstance(node, SeedNode) and not seeds:
         return False
-    if isinstance(node, Test) and not tests:
+    if isinstance(node, GenericTestNode) and not tests:
         return False
-    if isinstance(node, Source) and not sources:
+    if isinstance(node, SourceDefinition) and not sources:
         return False
     if include:
         return any(
@@ -88,11 +96,11 @@ def build_graph(
     # Add all nodes first in case we're visualizing RunResults
     # We want to be able to add immediate parents of RunResult
     # nodes as dashed
-    node_or_result: Union[BaseNode, RunResult]
+    node_or_result: Union[DbtNode, RunResultOutput]
     for node_or_result in nodes:
-        node: BaseNode = (
+        node: DbtNode = (
             node_or_result.node
-            if isinstance(node_or_result, RunResult)
+            if isinstance(node_or_result, RunResultOutput)
             else node_or_result
         )
 
@@ -114,7 +122,7 @@ def build_graph(
         G.add_node(node_or_result.gvrepr, **node_or_result.gvattrs, style="filled")
 
     for node_or_result in nodes:
-        node: BaseNode = node_or_result.node if isinstance(node_or_result, RunResult) else node_or_result  # type: ignore[no-redef]
+        node: DbtNode = node_or_result.node if isinstance(node_or_result, RunResultOutput) else node_or_result  # type: ignore[no-redef]
         if not should_display(
             node,
             analyses,
@@ -129,8 +137,8 @@ def build_graph(
             if verbose:
                 typer.secho(f"skipping {node.name}")
             continue
-        if node.depends_on and node.depends_on.nodes:
-            for dep in node.depends_on.resolved_nodes:
+        if node.depends_on and node.depends_on.nodes:  # type: ignore[union-attr]
+            for dep in node.depends_on.resolved_nodes:  # type: ignore[union-attr]
                 if not should_display(
                     dep,
                     analyses,

@@ -2,22 +2,36 @@
 Built off the starting point of https://guitton.co/posts/dbt-artifacts
 """
 import abc
-import json
 import os
-from datetime import datetime
 from enum import Enum
-from pathlib import Path
 from typing import Annotated, Any, ClassVar, Dict, List, Literal, Optional, Union
 
 import humanize
 import pendulum
-import yaml
-from catalog import Catalog, CatalogTable
 from palettable.scientific.sequential import LaJolla_6  # type: ignore
-from pydantic import BaseModel, Field, constr, validator
+from pydantic import BaseModel, Field, constr, root_validator
 from slugify import slugify
 from sqlalchemy import MetaData, Table, create_engine, select
 from sqlalchemy.sql import Select
+
+from .catalog import CatalogTable
+from .catalog import Model as Catalog
+from .manifest import AnalysisNode as BaseAnalysisNode
+from .manifest import ColumnInfo, DependsOn
+from .manifest import Exposure as BaseExposure
+from .manifest import GenericTestNode as BaseGenericTestNode
+from .manifest import HookNode as BaseHookNode
+from .manifest import Model as BaseManifest
+from .manifest import ModelNode as BaseModelNode
+from .manifest import RPCNode as BaseRPCNode
+from .manifest import SeedNode as BaseSeedNode
+from .manifest import SingularTestNode as BaseSingularTestNode
+from .manifest import SnapshotNode as BaseSnapshotNode
+from .manifest import SourceDefinition as BaseSourceDefinition
+from .manifest import SqlNode as BaseSqlNode
+from .run_results import Model as BaseRunResults
+from .run_results import RunResultOutput as BaseRunResultOutput
+from .sources import Model as Sources
 
 
 # Taken from the calitp repo which we can't install because of deps issue
@@ -33,118 +47,48 @@ def get_engine(project, max_bytes=None):
     )
 
 
-class FileFormat(str, Enum):
-    csv = "csv"
-    geojson = "geojson"
-    geojsonl = "geojsonl"
-    json = "json"
-    jsonl = "jsonl"
+# Monkey patches
 
 
-class TileFormat(str, Enum):
-    mbtiles = "mbtiles"
-    pbf = "pbf"
+def num_bytes(self) -> Optional[int]:
+    if "num_bytes" in self.stats:
+        value = self.stats["num_bytes"].value
+        # for some reason, 0 gets parsed as bool by pydantic
+        # maybe because it's first in the union?
+        if isinstance(value, bool):
+            return 0
+        assert isinstance(value, (float, str))
+        return int(float(value))
+    return None
 
 
-class DbtResourceType(str, Enum):
-    model = "model"
-    analysis = "analysis"
-    test = "test"
-    operation = "operation"
-    seed = "seed"
-    source = "source"
+CatalogTable.num_bytes = property(num_bytes)  # type: ignore[attr-defined]
+
+DependsOn.resolved_nodes = property(  # type: ignore[attr-defined]
+    lambda self: [NodeModelMixin._instances[node] for node in self.nodes]
+    if self.nodes
+    else []
+)
+ColumnInfo.publish = property(lambda self: not self.meta.get("publish.ignore", False))  # type: ignore[attr-defined]
+
+# End monkey patches
 
 
-class DbtMaterializationType(str, Enum):
-    table = "table"
-    view = "view"
-    incremental = "incremental"
-    ephemeral = "ephemeral"
-    seed = "seed"
-    test = "test"
-
-
-class NodeDeps(BaseModel):
-    macros: List[str]
-    nodes: Optional[List[str]]  # does not exist on seeds
-
-    @property
-    def resolved_nodes(self) -> List["BaseNode"]:
-        return [BaseNode._instances[node] for node in self.nodes] if self.nodes else []
-
-
-class NodeConfig(BaseModel):
-    alias: Optional[str]
-    schema_: str = Field(None, alias="schema")
-    materialized: Optional[DbtMaterializationType]
-
-
-class Column(BaseModel):
-    name: str
-    description: Optional[str]
-    meta: Dict[str, Any] = {}
-    parent: Optional[
-        "BaseNode"
-    ] = None  # this is set after the fact; it's Optional to make mypy happy
-
-    @property
-    def publish(self) -> bool:
-        return not self.meta.get("publish.ignore", False)
-
-    @property
-    def tests(self) -> List[str]:
-        # this has a lot of stuff to make mypy happy
-        return [
-            node.name
-            for name, node in BaseNode._instances.items()
-            if node.resource_type == DbtResourceType.test
-            and isinstance(node, Test)
-            and node.depends_on
-            and node.depends_on.nodes is not None
-            and self.parent
-            and self.parent.unique_id in node.depends_on.nodes
-            and node.test_metadata
-            and self.name == node.test_metadata.kwargs.get("column_name")
-        ]
-
-    def docblock(self, prefix="") -> str:
-        return f"""
-{{% docs {prefix}{self.name} %}}
-{self.description}
-{{% enddocs %}}
-"""
-
-    def yaml(self, include_description=True, extras={}) -> str:
-        include = {
-            "name",
-        }
-        if include_description:
-            include.add("description")
-        return yaml.dump([{**self.dict(include=include), **extras}], sort_keys=False)
-
-
-class BaseNode(BaseModel):
-    _instances: ClassVar[Dict[str, "BaseNode"]] = {}
-    unique_id: str
-    fqn: List[str]
-    path: Path
-    original_file_path: Path
-    database: str
-    schema_: str = Field(None, alias="schema")
-    name: str
-    resource_type: DbtResourceType
-    description: str
-    depends_on: Optional[NodeDeps]
-    config: NodeConfig
-    columns: Dict[str, Column]
-    meta: Dict = {}
+class NodeModelMixin(BaseModel):
+    _instances: ClassVar[Dict[str, "NodeModelMixin"]] = {}
     catalog_entry: Optional[CatalogTable]
 
+    # TODO: can we avoid re-defining these here?
+    unique_id: str
+    fqn: List[str]
+    name: str
+    schema_: str
+    database: Optional[str]
+    columns: Optional[Dict[str, ColumnInfo]] = {}
+
     def __init__(self, **kwargs):
-        super(BaseNode, self).__init__(**kwargs)
+        super(NodeModelMixin, self).__init__(**kwargs)
         self._instances[self.unique_id] = self
-        for column in self.columns.values():
-            column.parent = self
 
     @property
     def strfqn(self) -> str:
@@ -152,7 +96,7 @@ class BaseNode(BaseModel):
 
     @property
     def table_name(self):
-        return self.config.alias or self.name
+        return self.config.alias or self.name  # type: ignore[attr-defined]
 
     @property
     def schema_table(self):
@@ -167,7 +111,7 @@ class BaseNode(BaseModel):
         columns = [
             c
             for c in self.sqlalchemy_table(engine).columns
-            if c.name not in self.columns or self.columns[c.name].publish
+            if not self.columns or c.name not in self.columns or self.columns[c.name].publish  # type: ignore[attr-defined]
         ]
         return select(columns=columns)
 
@@ -178,7 +122,7 @@ class BaseNode(BaseModel):
         """
         return "\n".join(
             [
-                self.config.materialized or self.resource_type.value,
+                self.config.materialized or self.resource_type.value,  # type: ignore[attr-defined]
                 self.name,
             ]
         )
@@ -193,119 +137,118 @@ class BaseNode(BaseModel):
         }
 
 
-class Seed(BaseNode):
-    resource_type: Literal[DbtResourceType.seed]
-
-    @property
-    def gvattrs(self) -> Dict[str, Any]:
-        return {
-            "fillcolor": "green",
-        }
+class AnalysisNode(BaseAnalysisNode, NodeModelMixin):
+    pass
 
 
-class Source(BaseNode):
-    resource_type: Literal[DbtResourceType.source]
-
-    @property
-    def gvattrs(self) -> Dict[str, Any]:
-        return {
-            "fillcolor": "blue",
-        }
+class SingularTestNode(BaseSingularTestNode, NodeModelMixin):
+    pass
 
 
-# TODO: this should be a discriminated type based on materialization
-class Model(BaseNode):
-    resource_type: Literal[DbtResourceType.model]
-    depends_on: NodeDeps
+class HookNode(BaseHookNode, NodeModelMixin):
+    pass
 
-    @property
-    def children(self) -> List["Model"]:
-        children = []
-        for unique_id, node in BaseNode._instances.items():
-            if (
-                isinstance(node, Model)
-                and node.depends_on.nodes
-                and self.unique_id in node.depends_on.nodes
-            ):
-                children.append(node)
-        return children
 
+class ModelNode(BaseModelNode, NodeModelMixin):
     @property
     def gvrepr(self) -> str:
         if (
-            self.config.materialized
-            in (DbtMaterializationType.table, DbtMaterializationType.incremental)
+            self.config
+            and self.config.materialized in ("table", "incremental")
             and self.catalog_entry
-            and self.catalog_entry.num_bytes
+            and self.catalog_entry.num_bytes  # type: ignore[attr-defined]
         ):
             return "\n".join(
                 [
-                    super(Model, self).gvrepr,
-                    f"Storage: {humanize.naturalsize(self.catalog_entry.num_bytes)}",
+                    super(ModelNode, self).gvrepr,
+                    f"Storage: {humanize.naturalsize(self.catalog_entry.num_bytes)}",  # type: ignore[attr-defined]
                 ]
             )
-        return super(Model, self).gvrepr
+        return super(ModelNode, self).gvrepr
 
     @property
     def gvattrs(self) -> Dict[str, Any]:
         fillcolor = "white"
 
-        if self.config.materialized in (
-            DbtMaterializationType.table,
-            DbtMaterializationType.incremental,
-        ):
+        if self.config and self.config.materialized in ("table", "incremental"):
             fillcolor = "aquamarine"
 
         if (
             self.catalog_entry
-            and self.catalog_entry.num_bytes
-            and self.catalog_entry.num_bytes > 100_000_000_000
+            and self.catalog_entry.num_bytes  # type: ignore[attr-defined]
+            and self.catalog_entry.num_bytes > 100_000_000_000  # type: ignore[attr-defined]
             and "clustering_fields" not in self.catalog_entry.stats
             and "partitioning_type" not in self.catalog_entry.stats
         ):
             fillcolor = "red"
 
-        if (
-            self.config.materialized == DbtMaterializationType.view
-            and len(self.children) > 1
-        ):
-            fillcolor = "pink"
+        # TODO: bring me back
+        # if self.config.materialized == "view" and len(self.children) > 1:
+        #     fillcolor = "pink"
 
         return {
             "fillcolor": fillcolor,
         }
 
 
-class TestMetadata(BaseModel):
-    name: str
-    kwargs: Dict[str, Union[str, List, Dict]]
+class RPCNode(BaseRPCNode, NodeModelMixin):
+    pass
 
 
-class Test(BaseNode):
-    resource_type: Literal[DbtResourceType.test]
-    # test_metadata is optional because singular tests (custom defined) do not have test_metadata attribute
-    # for example: https://github.com/dbt-labs/dbt-docs/blob/main/src/app/services/graph.service.js#L355
-    # ^ singular test is specifically identified by not having the test_metadata attribute
-    test_metadata: Optional[TestMetadata]
+class SqlNode(BaseSqlNode, NodeModelMixin):
+    pass
 
 
-Node = Annotated[
-    Union[Seed, Source, Model, Test],
-    Field(discriminator="resource_type"),
+class GenericTestNode(BaseGenericTestNode, NodeModelMixin):
+    pass
+
+
+class SnapshotNode(BaseSnapshotNode, NodeModelMixin):
+    pass
+
+
+class SeedNode(BaseSeedNode, NodeModelMixin):
+    @property
+    def gvattrs(self):
+        return {
+            "fillcolor": "green",
+        }
+
+
+DbtNode = Union[
+    AnalysisNode,
+    SingularTestNode,
+    HookNode,
+    ModelNode,
+    RPCNode,
+    SqlNode,
+    GenericTestNode,
+    SnapshotNode,
+    SeedNode,
 ]
 
 
-class ExposureType(str, Enum):
-    dashboard = "dashboard"
-    notebook = "notebook"
-    analysis = "analysis"
-    ml = "ml"
-    application = "application"
+class SourceDefinition(BaseSourceDefinition, NodeModelMixin):
+    @property
+    def gvattrs(self) -> Dict:
+        return {
+            "fillcolor": "blue",
+        }
+
+    pass
 
 
-class Owner(BaseModel):
-    name: Optional[str]
-    email: str
+class FileFormat(str, Enum):
+    csv = "csv"
+    geojson = "geojson"
+    geojsonl = "geojsonl"
+    json = "json"
+    jsonl = "jsonl"
+
+
+class TileFormat(str, Enum):
+    mbtiles = "mbtiles"
+    pbf = "pbf"
 
 
 class BaseDestination(BaseModel, abc.ABC):
@@ -399,42 +342,35 @@ class ExposureMeta(BaseModel):
     destinations: List[Destination] = []
 
 
-class Exposure(BaseModel):
-    fqn: List[str]
-    unique_id: str
-    package_name: str
-    path: Path
-    name: str
-    description: str
-    type: ExposureType
-    url: Optional[str]
+class Exposure(BaseExposure):
     # TODO: we should validate that model names do not conflict with
     #  file format names since they are used as entity names in hive partitions
-    depends_on: NodeDeps
     meta: Optional[ExposureMeta]
 
-    @validator("meta")
-    def must_provide_layer_names_if_tiles(cls, v, values):
-        if v:
-            for dest in v.destinations:
+    @root_validator
+    def must_provide_layer_names_if_tiles(cls, values):
+        if values["meta"]:
+            for dest in values["meta"].destinations:
                 if isinstance(dest, TilesDestination):
                     assert len(dest.layer_names) == len(
                         values["depends_on"].nodes
                     ), "must provide one layer name per depends_on"
-        return v
+        return values
 
 
-class Manifest(BaseModel):
-    nodes: Dict[str, Node]
-    sources: Dict[str, Source]
-    metrics: Dict
-    exposures: Dict[str, Exposure]
-    macros: Dict
-    docs: Dict
-    parent_map: Dict[str, List[str]]
-    child_map: Dict[str, List[str]]
-    selectors: Dict
-    disabled: Dict  # should be Dict[str, Node] but they lack the resource_type
+class Manifest(BaseManifest):
+    nodes: Dict[
+        str,
+        DbtNode,
+    ] = Field(
+        ..., description="The nodes defined in the dbt project and its dependencies"
+    )
+    exposures: Dict[str, Exposure] = Field(
+        ..., description="The exposures defined in the dbt project and its dependencies"
+    )
+    sources: Dict[str, SourceDefinition] = Field(
+        ..., description="The sources defined in the dbt project and its dependencies"
+    )
 
     # https://github.com/pydantic/pydantic/issues/1577#issuecomment-803171322
     def set_catalog(self, c: Catalog):
@@ -444,36 +380,23 @@ class Manifest(BaseModel):
             )
 
 
-class TimingInfo(BaseModel):
-    name: str
-    started_at: Optional[datetime]
-    completed_at: Optional[datetime]
-
-
-# TODO: it'd be nice to be able to distinguish between models, tests, and freshness checks
-class RunResultStatus(str, Enum):
-    _pass = "pass"
+class RunResultStatus(Enum):
     success = "success"
     error = "error"
+    skipped = "skipped"
+    pass_ = "pass"
     fail = "fail"
     warn = "warn"
-    skipped = "skipped"
     runtime_error = "runtime error"
 
 
-class RunResult(BaseModel):
+class RunResultOutput(BaseRunResultOutput):
     status: RunResultStatus
-    timing: List[TimingInfo]
-    thread_id: str
-    execution_time: int  # seconds
-    adapter_response: Dict
-    message: Optional[str]
-    failures: Optional[int]
-    unique_id: str
     manifest: Optional[Manifest]
 
+    # TODO: bring me back
     @property
-    def node(self) -> Node:
+    def node(self) -> DbtNode:
         if not self.manifest:
             raise ValueError("must set manifest before calling node")
         return self.manifest.nodes[self.unique_id]
@@ -493,6 +416,7 @@ class RunResult(BaseModel):
         """
         Returns a string representation intended for graphviz labels
         """
+        assert self.node is not None
         # TODO: do an actual linear transform on this
         # the top colors are too dark to use as a background
         white, yellow, orange, red, _, _ = LaJolla_6.hex_colors
@@ -517,9 +441,8 @@ class RunResult(BaseModel):
         }
 
 
-class RunResults(BaseModel):
-    metadata: Dict
-    results: List[RunResult]
+class RunResults(BaseRunResults):
+    results: List[RunResultOutput]  # type: ignore[assignment]
     manifest: Optional[Manifest]
 
     # https://github.com/pydantic/pydantic/issues/1577#issuecomment-803171322
@@ -529,14 +452,19 @@ class RunResults(BaseModel):
             result.manifest = m
 
 
-# mainly just to test that these models work
-if __name__ == "__main__":
-    paths = [
-        ("./target/manifest.json", Manifest),
-        ("./target/run_results.json", RunResults),
-    ]
-
-    for path, model in paths:
-        with open(path) as f:
-            model(**json.load(f))
-            print(f"{path} is a valid {model.__name__}!", flush=True)
+__all__ = [
+    "Catalog",
+    "DbtNode",
+    "GenericTestNode",
+    "Manifest",
+    "RunResultOutput",
+    "RunResults",
+    "SeedNode",
+    "SourceDefinition",
+    "Sources",
+    "Exposure",
+    "CkanDestination",
+    "NodeModelMixin",
+    "TilesDestination",
+    "TileFormat",
+]

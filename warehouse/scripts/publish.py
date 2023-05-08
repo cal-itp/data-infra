@@ -25,10 +25,10 @@ import shapely.geometry  # type: ignore
 import shapely.wkt  # type: ignore
 import typer
 from dbt_artifacts import (
-    BaseNode,
     CkanDestination,
     Exposure,
     Manifest,
+    NodeModelMixin,
     TileFormat,
     TilesDestination,
 )
@@ -45,7 +45,7 @@ DBT_ARTIFACTS_BUCKET = os.environ["CALITP_BUCKET__DBT_ARTIFACTS"]
 MANIFEST_DEFAULT = f"{DBT_ARTIFACTS_BUCKET}/latest/manifest.json"
 PUBLISH_BUCKET = os.environ["CALITP_BUCKET__PUBLISH"]
 
-app = typer.Typer()
+app = typer.Typer(pretty_exceptions_enable=False)
 
 WGS84 = "EPSG:4326"  # "standard" lat/lon coordinate system
 CHUNK_SIZE = (
@@ -266,7 +266,11 @@ def upload_to_ckan(
 def _generate_exposure_documentation(
     exposure: Exposure,
 ) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
-    assert exposure.meta and exposure.meta.destinations is not None
+    assert (
+        exposure.meta
+        and exposure.meta.destinations is not None
+        and exposure.depends_on is not None
+    )
     try:
         resources = next(
             dest
@@ -281,7 +285,7 @@ def _generate_exposure_documentation(
     metadata_rows: List[Dict[str, Any]] = []
     dictionary_rows: List[Dict[str, Any]] = []
 
-    for node in exposure.depends_on.resolved_nodes:
+    for node in exposure.depends_on.resolved_nodes:  # type: ignore[attr-defined]
         assert exposure.meta is not None
 
         name = strip_modelname(node.name)
@@ -375,7 +379,11 @@ def _publish_exposure(
     bucket: str, exposure: Exposure, publish: bool, model: Optional[str] = None
 ):
     ts = pendulum.now()
-    assert exposure.meta is not None and exposure.depends_on.nodes is not None
+    assert (
+        exposure.meta is not None
+        and exposure.depends_on is not None
+        and exposure.depends_on.nodes is not None
+    )
     for destination in exposure.meta.destinations:
         with tempfile.TemporaryDirectory() as tmpdir:
             if isinstance(destination, CkanDestination):
@@ -402,7 +410,7 @@ def _publish_exposure(
                     )
                     with fs.open(hive_path, "w", newline="") as f:
                         writer = csv.DictWriter(
-                            f, fieldnames=[key.upper() for key in cls.__fields__.keys()]
+                            f, fieldnames=[key.upper() for key in cls.__fields__.keys()]  # type: ignore[attr-defined]
                         )
                         writer.writeheader()
                         for row in rows:
@@ -420,7 +428,9 @@ def _publish_exposure(
                     typer.secho(
                         f"handling {model_name} {resource.id}", fg=typer.colors.MAGENTA
                     )
-                    node = BaseNode._instances[f"model.calitp_warehouse.{model_name}"]
+                    node = NodeModelMixin._instances[
+                        f"model.calitp_warehouse.{model_name}"
+                    ]
 
                     fpath = strip_modelname(
                         os.path.join(tmpdir, destination.filename(model_name))
@@ -434,7 +444,9 @@ def _publish_exposure(
 
                     precisions = {}
 
+                    assert node.columns is not None
                     for name, column in node.columns.items():
+                        assert column.meta is not None
                         ckan_precision = column.meta.get("ckan.precision")
                         if ckan_precision:
                             assert isinstance(ckan_precision, (str, int))
@@ -482,7 +494,7 @@ def _publish_exposure(
             elif isinstance(destination, TilesDestination):
                 layer_geojson_paths: Dict[str, Path] = {}
                 for model in exposure.depends_on.nodes:
-                    node = BaseNode._instances[model]
+                    node = NodeModelMixin._instances[model]
 
                     geojsonl_fpath = Path(
                         os.path.join(tmpdir, f"{strip_modelname(node.name)}.geojsonl")
@@ -523,7 +535,7 @@ def _publish_exposure(
                         fg=typer.colors.GREEN,
                     )
                     fs = gcsfs.GCSFileSystem(token="google_default")
-                    fs.put(geojsonl_fpath, hive_path)
+                    fs.put(str(geojsonl_fpath), hive_path)
 
                 if destination.tile_format == TileFormat.mbtiles:
                     mbtiles_path = os.path.join(tmpdir, "tiles.mbtiles")
@@ -594,7 +606,7 @@ def document_exposure(
     ):
         with opener(file, "w", newline="") as f:
             writer = csv.DictWriter(
-                f, fieldnames=[key.upper() for key in cls.__fields__.keys()]
+                f, fieldnames=[key.upper() for key in cls.__fields__.keys()]  # type: ignore[attr-defined]
             )
             writer.writeheader()
             for row in rows:
