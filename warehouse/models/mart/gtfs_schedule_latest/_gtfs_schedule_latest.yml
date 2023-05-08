@@ -15,7 +15,9 @@ models:
         description: |
           Synthetic primary key constructed from `feed_key` and `agency_id`.
         tests: &primary_key_tests
-          - unique
+          - unique:
+              # TODO: remove this once we deal with Auburn feed that has tab-delimited files
+              where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
           - not_null
         meta: &pk_meta
           publish.ignore: true
@@ -49,6 +51,8 @@ models:
         description: '{{ doc("gtfs_agency__agency_timezone") }}'
         tests: &not_null_warn
         - not_null:
+            # TODO: remove this once we deal with Auburn feed that has tab-delimited files
+            where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
             config:
               severity: warn
       - name: agency_lang
@@ -80,7 +84,7 @@ models:
           Synthetic primary key constructed from `feed_key` and `attribution_id`.
         tests: &pk_tests_with_dups
           - unique:
-              where: "not warning_duplicate_primary_key"
+              where: "not warning_duplicate_primary_key AND feed_key != '6368fe701bdd68c4f521751a9a222a10'"
           - not_null
         meta: *pk_meta
       - *feed_key
@@ -137,7 +141,9 @@ models:
       - name: service_id
         description: '{{ doc("gtfs_calendar__service_id") }}'
         tests: &not_null_error
-        - not_null
+        - not_null:
+            # TODO: remove this once we deal with Auburn feed that has tab-delimited files
+            where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
       - name: monday
         description: '{{ doc("gtfs_calendar__monday") }}'
         tests: *not_null_warn
