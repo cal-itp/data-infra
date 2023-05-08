@@ -3,7 +3,7 @@ import gzip
 import json
 import logging
 import os
-from typing import ClassVar, Dict, List, Optional
+from typing import ClassVar, List, Optional
 
 import pendulum
 from calitp_data_infra.storage import (
@@ -27,7 +27,6 @@ class GTFSScheduleFeedJSONL(PartitionedGCSArtifact):
     ts: pendulum.DateTime
     extract_config: GTFSDownloadConfig
     gtfs_filename: str
-    dialect: Dict[str, Optional[str]]
 
     # if you try to set table directly, you get an error because it "shadows a BaseModel attribute"
     # so set as a property instead
@@ -90,25 +89,10 @@ def parse_individual_file(
     lines = []
     try:
         with fs.open(input_file.path, newline="", mode="r", encoding="utf-8-sig") as f:
-            dialect = csv.Sniffer().sniff(f.readline())
-            dialect_dict = {
-                field: getattr(dialect, field)
-                for field in [
-                    "delimiter",
-                    "doublequote",
-                    "escapechar",
-                    "lineterminator",
-                    "quotechar",
-                    "quoting",
-                    "skipinitialspace",
-                ]
-            }
-            f.seek(0)
-            reader = csv.DictReader(f, restkey="calitp_unknown_fields", dialect=dialect)
+            reader = csv.DictReader(f, restkey="calitp_unknown_fields")
             field_names = reader.fieldnames
             for line_number, row in enumerate(reader, start=1):
                 row["_line_number"] = line_number
-                row["_dialect"] = dialect_dict
                 lines.append(row)
 
         jsonl_content = gzip.compress(
@@ -122,7 +106,6 @@ def parse_individual_file(
             extract_config=input_file.extract_config,
             filename=gtfs_filename + ".jsonl.gz",
             gtfs_filename=gtfs_filename,
-            dialect=dialect_dict,
         )
 
         jsonl_file.save_content(content=jsonl_content, fs=fs)
