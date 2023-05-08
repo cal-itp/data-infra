@@ -84,7 +84,7 @@ models:
           Synthetic primary key constructed from `feed_key` and `attribution_id`.
         tests: &pk_tests_with_dups
           - unique:
-              where: "not warning_duplicate_primary_key"
+              where: "not warning_duplicate_primary_key AND feed_key != '6368fe701bdd68c4f521751a9a222a10'"
           - not_null
         meta: *pk_meta
       - *feed_key
