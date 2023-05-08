@@ -90,8 +90,7 @@ def parse_individual_file(
     lines = []
     try:
         with fs.open(input_file.path, newline="", mode="r", encoding="utf-8-sig") as f:
-            # read the whole file so we see any doublequote usage, mainly
-            dialect = csv.Sniffer().sniff(f.read())
+            dialect = csv.Sniffer().sniff(f.readline())
             dialect_dict = {
                 field: getattr(dialect, field)
                 for field in [
