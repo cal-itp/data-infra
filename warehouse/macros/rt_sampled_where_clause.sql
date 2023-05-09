@@ -5,18 +5,29 @@
         {% set today = modules.datetime.date.today() %}
         {% set yesterday = today - modules.datetime.timedelta(days=1) %}
         {% set zero_utc = modules.datetime.time(hour=0) %}
+        {% set columns = adapter.get_columns_in_relation(relation) %}
 
-        {% set where %}
-        dt in (
-            '{{ today }}',
-            '{{ yesterday }}'
+        {# If we still have the hour, it means we are probably on top of raw data via views and should eliminate more #}
+        {% if 'hour' in (columns | map(attribute='name')) %}
+            {% set where %}
+            dt in (
+                '{{ today }}',
+                '{{ yesterday }}'
+                )
+            {# test hour = 0 UTC because 5pm Pacific = PM peak, good sample of data #}
+            AND hour in (
+                '{{ modules.datetime.datetime.combine(today, zero_utc) }}',
+                '{{ modules.datetime.datetime.combine(yesterday, zero_utc) }}'
             )
-        {# test hour = 0 UTC because 5pm Pacific = PM peak, good sample of data #}
-        AND hour in (
-            '{{ modules.datetime.datetime.combine(today, zero_utc) }}',
-            '{{ modules.datetime.datetime.combine(yesterday, zero_utc) }}'
-        )
-        {% endset %}
+            {% endset %}
+        {% else %}
+            {% set where %}
+            dt in (
+                '{{ today }}',
+                '{{ yesterday }}'
+                )
+            {% endset %}
+        {% endif %}
     {% endif %}
     {% if where %}
         {%- set filtered -%}
