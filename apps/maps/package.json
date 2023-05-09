@@ -21,12 +21,14 @@
 		"protomaps": "^1.23.1",
 		"svelte": "^3.54.0",
 		"svelte-check": "^3.0.1",
+		"svelte-loading-spinners": "^0.3.4",
 		"tslib": "^2.4.1",
 		"typescript": "^5.0.0",
 		"vite": "^4.3.0"
 	},
 	"type": "module",
 	"dependencies": {
-		"fflate": "^0.7.4"
+		"fflate": "^0.7.4",
+		"svelte-select": "^5.6.0"
 	}
 }

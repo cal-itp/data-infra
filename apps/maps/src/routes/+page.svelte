@@ -7,6 +7,7 @@
     import {inflate} from 'pako';
     import {strFromU8, decompress} from 'fflate';
     import M from 'maplibre-gl';
+    import {Circle} from 'svelte-loading-spinners';
 
     const USE_LEAFLET = true;
     const SOURCE = "https://storage.googleapis.com/calitp-map-tiles/metro_am.geojson.gz";
@@ -17,6 +18,7 @@
     let selected;
     let options = [];
     let leafletGeoJSONLayer;
+    let loading = false;
 
     const NSHADES = 10;
     const MAX_MPH = 50;
@@ -53,28 +55,31 @@
             leafletGeoJSONLayer.clearLayers();
             return
         }
-            const url = selected.url;
-            fetch(url).then((response) => {
-                if (response.headers.get("content-type") === "application/x-gzip") {
-                    console.log("decompressing gzipped data");
-                    response.arrayBuffer().then((raw) => {
-                        // const json = JSON.parse(inflate(raw, {to: 'string'}));
-                        // leafletGeoJSONLayer.addData(json);
-                        decompress(new Uint8Array(raw), (err, data) => {
-                                if (err) {
-                                    console.error(err);
-                                } else {
-                                    leafletGeoJSONLayer.addData(JSON.parse(strFromU8(data)));
-                                }
+        loading = true;
+        const url = selected.url;
+        fetch(url).then((response) => {
+            if (response.headers.get("content-type") === "application/x-gzip") {
+                console.log("decompressing gzipped data");
+                response.arrayBuffer().then((raw) => {
+                    // const json = JSON.parse(inflate(raw, {to: 'string'}));
+                    // leafletGeoJSONLayer.addData(json);
+                    decompress(new Uint8Array(raw), (err, data) => {
+                            if (err) {
+                                console.error(err);
+                            } else {
+                                leafletGeoJSONLayer.addData(JSON.parse(strFromU8(data)));
+                                loading = false;
                             }
-                        )
-                    });
-                } else {
-                    jsonData = response.json().then((json) => {
-                        leafletGeoJSONLayer.addData(json);
-                    });
-                }
-            })
+                        }
+                    )
+                });
+            } else {
+                jsonData = response.json().then((json) => {
+                    leafletGeoJSONLayer.addData(json);
+                    loading = false;
+                });
+            }
+        })
     }
 
     onMount(async () => {
@@ -269,11 +274,22 @@
 <!--<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"-->
 <!--      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="-->
 <!--      crossorigin=""/>-->
-<select bind:value={selected} on:change="{updateMap}">
-    {#each options as option}
-        <option value={option}>
-            {option.name}
-        </option>
-    {/each}
-</select>
+<div style="width: 100%; overflow: hidden;">
+    <div style="width: 300px; float: left;">
+        <select bind:value={selected} on:change="{updateMap}">
+            {#each options as option}
+                <option value={option}>
+                    {option.name}
+                </option>
+            {/each}
+        </select>
+    </div>
+    <div style="margin-left: 320px;">
+        {#if loading}
+            <Circle size="20" color="#FF3E00" unit="px" duration="1s"/>
+        {:else if (selected && selected.url)}
+            {selected.url}
+        {/if}
+    </div>
+</div>
 <div id="map" class="map" bind:this={mapElement}></div>
