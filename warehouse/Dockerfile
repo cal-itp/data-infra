@@ -21,7 +21,6 @@ RUN poetry export -f requirements.txt --without-hashes --output requirements.txt
 
 COPY ./dbt_project.yml /app/dbt_project.yml
 COPY ./packages.yml /app/packages.yml
-COPY ./profiles.yml /app/profiles.yml
 RUN dbt deps
 
 COPY . /app

@@ -13,15 +13,12 @@ import pendulum
 import sentry_sdk
 import typer
 from dbt_artifacts import (
-    DbtNode,
-    DependsOn,
-    GenericTestNode,
+    DbtResourceType,
     Manifest,
-    ModelNode,
-    RunResultOutput,
+    Node,
+    RunResult,
     RunResults,
     RunResultStatus,
-    SeedNode,
 )
 
 CALITP_BUCKET__DBT_ARTIFACTS = os.getenv("CALITP_BUCKET__DBT_ARTIFACTS")
@@ -63,14 +60,14 @@ class DbtMetabaseSyncFailure(Exception):
     pass
 
 
-def get_failure_context(failure: RunResultOutput, node: DbtNode) -> Dict[str, Any]:
+def get_failure_context(failure: RunResult, node: Node) -> Dict[str, Any]:
     context: Dict[str, Any] = {
         "unique_id": failure.unique_id,
         "path": str(node.original_file_path),
     }
     if failure.unique_id.startswith("test"):
-        assert isinstance(node.depends_on, DependsOn)
-        context["models"] = node.depends_on.nodes
+        if node.depends_on:
+            context["models"] = node.depends_on.nodes
     return context
 
 
@@ -94,13 +91,13 @@ def report_failures_to_sentry(
         fingerprint = [failure.status, failure.unique_id]
         # this is awkward and manual; maybe could do dynamically
         exc_types = {
-            (SeedNode, RunResultStatus.error): DbtSeedError,
-            (ModelNode, RunResultStatus.error): DbtModelError,
-            (GenericTestNode, RunResultStatus.error): DbtTestError,
-            (GenericTestNode, RunResultStatus.fail): DbtTestFail,
-            (GenericTestNode, RunResultStatus.warn): DbtTestWarn,
+            (DbtResourceType.seed, RunResultStatus.error): DbtSeedError,
+            (DbtResourceType.model, RunResultStatus.error): DbtModelError,
+            (DbtResourceType.test, RunResultStatus.error): DbtTestError,
+            (DbtResourceType.test, RunResultStatus.fail): DbtTestFail,
+            (DbtResourceType.test, RunResultStatus.warn): DbtTestWarn,
         }
-        exc_type = exc_types.get((type(node), failure.status), DbtException)
+        exc_type = exc_types.get((node.resource_type, failure.status), DbtException)
         if verbose:
             typer.secho(
                 f"reporting failure of {node.resource_type} with fingerprint {fingerprint}",
