@@ -236,7 +236,7 @@ models:
         description: '{{ doc("gtfs_fare_leg_rules__to_area_id") }}'
       - name: fare_product_id
         description: '{{ doc("gtfs_fare_leg_rules__fare_product_id") }}'
-  - name: stg_gtfs_schedule_fare_media
+  - name: stg_gtfs_schedule__fare_media
     description: |
       Cleaned GTFS schedule fare media data.
       See https://gtfs.org/schedule/reference/#fare_mediatxt for specification.
