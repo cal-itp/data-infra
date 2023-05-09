@@ -2,8 +2,9 @@
 <script>
     import {onMount, onDestroy} from 'svelte';
     import L from 'leaflet';
-    import {LineSymbolizer} from 'protomaps';
     import colormap from 'colormap';
+    import {leafletLayer, LineSymbolizer} from 'protomaps';
+    import {inflate} from 'pako';
 
     let mapElement;
     let map;
@@ -23,15 +24,17 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
+        console.log("fetching data");
         // leafletLayer({
         //     url: "https://storage.googleapis.com/calitp-map-tiles/shapes.pmtiles",
         //     paint_rules: PAINT_RULES,
-        //     label_rules: LABEL_RULES
+        // label_rules: LABEL_RULES
         // }).addTo(map)
-        console.log("fetching data");
-        // TODO: figure out getting the gzipped file
-        const response = await fetch("https://storage.googleapis.com/calitp-map-tiles/metro_am.geojson")
-        const jsonData = await response.json();
+        const response = await fetch("https://storage.googleapis.com/calitp-map-tiles/metro_am.geojson.gz")
+        const raw = await response.arrayBuffer();
+        console.log(raw);
+        // const jsonData = await response.json();
+        const jsonData = JSON.parse(inflate(raw, {to: 'string'}));
         // const max = Math.max(...jsonData.features.map(feature => feature.properties.avg_mph));
         // const min = Math.min(...jsonData.features.map(feature => feature.properties.avg_mph));
 
