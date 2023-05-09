@@ -17,7 +17,7 @@
     let jsonData;
     let selected;
     let options = [];
-    let leafletGeoJSONLayer;
+    let layer;
     let loading = false;
 
     const NSHADES = 10;
@@ -29,6 +29,18 @@
         format: 'hex',
         alpha: 0.8,
     }).reverse();
+
+    let PAINT_RULES = [
+        {
+            dataLayer: "BusSpeeds",
+            symbolizer: new LineSymbolizer({
+                // https://gist.github.com/makella/950a7baee78157bf1c315a7c2ea191e7
+                color: (p) => {
+                    return "black"
+                }
+            })
+        }
+    ];
 
     function speedFeatureColor(feature) {
         let avg_mph = feature.properties.avg_mph;
@@ -52,63 +64,19 @@
     async function updateMap() {
         console.log(selected);
         if (!selected.url) {
-            leafletGeoJSONLayer.clearLayers();
+            layer.clearLayers();
             return
         }
         loading = true;
         const url = selected.url;
-        fetch(url).then((response) => {
-            if (response.headers.get("content-type") === "application/x-gzip") {
-                console.log("decompressing gzipped data");
-                response.arrayBuffer().then((raw) => {
-                    // const json = JSON.parse(inflate(raw, {to: 'string'}));
-                    // leafletGeoJSONLayer.addData(json);
-                    decompress(new Uint8Array(raw), (err, data) => {
-                            if (err) {
-                                console.error(err);
-                            } else {
-                                leafletGeoJSONLayer.addData(JSON.parse(strFromU8(data)));
-                                loading = false;
-                            }
-                        }
-                    )
-                });
-            } else {
-                jsonData = response.json().then((json) => {
-                    leafletGeoJSONLayer.addData(json);
-                    loading = false;
-                });
-            }
-        })
-    }
 
-    onMount(async () => {
-        console.log("Loading map.");
-
-        if (USE_LEAFLET) {
-            map = L.map(mapElement).setView(START_LAT_LON, 11);
-
-            // let PAINT_RULES = [
-            //     {
-            //         dataLayer: "Shapes_Arrays",
-            //         symbolizer: new LineSymbolizer({"color": "black"})
-            //     }
-            // ];
-
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        if (url.endsWith(".pmtiles")) {
+            layer = leafletLayer({
+                url: url,
+                paint_rules: PAINT_RULES,
             }).addTo(map);
-
-
-            // leafletLayer({
-            //     url: "https://storage.googleapis.com/calitp-map-tiles/shapes.pmtiles",
-            //     paint_rules: PAINT_RULES,
-            // label_rules: LABEL_RULES
-            // }).addTo(map)
-            // const max = Math.max(...jsonData.features.map(feature => feature.properties.avg_mph));
-            // const min = Math.min(...jsonData.features.map(feature => feature.properties.avg_mph));
-
-            leafletGeoJSONLayer = L.geoJSON(false, {
+        } else {
+            layer = L.geoJSON(false, {
                 style: (feature) => {
                     return {
                         color: speedFeatureColor(feature),
@@ -120,6 +88,45 @@
                         layer.bindTooltip(speedFeatureHTML(feature));
                     }
                 }
+            }).addTo(map);
+            fetch(url).then((response) => {
+                if (url.endsWith(".gz") || response.headers.get("content-type") === "application/x-gzip") {
+                    console.log("decompressing gzipped data");
+                    response.arrayBuffer().then((raw) => {
+                        // const json = JSON.parse(inflate(raw, {to: 'string'}));
+                        // layer.addData(json);
+                        decompress(new Uint8Array(raw), (err, data) => {
+                                if (err) {
+                                    console.error(err);
+                                } else {
+                                    console.log("adding data to layer");
+                                    layer.addData(JSON.parse(strFromU8(data)));
+                                    loading = false;
+                                }
+                            }
+                        )
+                    });
+                } else {
+                    jsonData = response.json().then((json) => {
+                        console.log("adding data to layer");
+                        layer.addData(json);
+                        loading = false;
+                    });
+                }
+            })
+        }
+    }
+
+    onMount(async () => {
+        console.log("Loading map.");
+
+        if (USE_LEAFLET) {
+            map = L.map(mapElement, {
+                preferCanvas: true
+            }).setView(START_LAT_LON, 11);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
         } else {
             map = new M.Map({
@@ -275,7 +282,7 @@
 <!--      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="-->
 <!--      crossorigin=""/>-->
 <div style="width: 100%; overflow: hidden;">
-    <div style="width: 300px; float: left;">
+    <div style="width: 400px; float: left;">
         <select bind:value={selected} on:change="{updateMap}">
             {#each options as option}
                 <option value={option}>
@@ -284,7 +291,7 @@
             {/each}
         </select>
     </div>
-    <div style="margin-left: 320px;">
+    <div style="margin-left: 430px;">
         {#if loading}
             <Circle size="20" color="#FF3E00" unit="px" duration="1s"/>
         {:else if (selected && selected.url)}
