@@ -468,48 +468,6 @@ models:
       - name: organization_hubspot_company_record_id
         description: |
           Hubspot CRM record ID for this organization.
-  - name: dim_ntd_agency_info
-    description: '{{ doc("ntd_agency_info_table") }}'
-    columns:
-      - *key
-      - name: ntd_id
-      - name: legacy_ntd_id
-      - name: ntd_agency_name
-      - name: reporter_acronym
-      - name: doing_business_as
-      - name: reporter_status
-      - name: reporter_type
-      - name: reporting_module
-      - name: organization_type
-      - name: reported_by_ntd_id
-      - name: reported_by_name
-      - name: subrecipient_type
-      - name: fy_end_date
-      - name: original_due_date
-      - name: address_line_1
-      - name: address_line_2
-      - name: p_o__box
-      - name: city
-      - name: state
-      - name: zip_code
-      - name: zip_code_ext
-      - name: region
-      - name: url
-      - name: fta_recipient_id
-      - name: duns_number
-      - name: service_area_sq_miles
-      - name: service_area_pop
-      - name: primary_uza
-      - name: uza_name
-      - name: tribal_area_name
-      - name: population
-      - name: density
-      - name: sq_miles
-      - name: voms_do
-      - name: voms_pt
-      - name: total_voms
-      - name: volunteer_drivers
-      - name: personal_vehicles
   - name: dim_county_geography
     description: '{{ doc("county_geography_table") }}'
     columns:
@@ -809,7 +767,7 @@ models:
       - name: ntd_agency_info_key
         tests:
           - relationships:
-             to: ref('dim_ntd_agency_info')
+             to: ref('dim_annual_database_agency_information')
              field: key
   - name: bridge_services_x_modes
     description: |
