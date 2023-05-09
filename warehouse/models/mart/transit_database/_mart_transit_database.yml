@@ -393,6 +393,7 @@ models:
       For best results, join with reference to a specific date, and make sure to choose a specific
       output grain (organizations, services, customer-facing vs. not); you will likely need to filter
       or group to get the desired output.
+    tests:
     columns:
       - *key
       - name: service_key

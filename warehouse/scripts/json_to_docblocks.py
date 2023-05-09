@@ -1,10 +1,7 @@
-# type: ignore
 """
 Super useful with https://www.convertjson.com/html-table-to-json.htm
 
 Originally used to produce dbt docs from https://gtfs.org/reference/static#field-definitions
-
-This won't work without updates as the artifacts have changed.
 """
 import json
 import sys
