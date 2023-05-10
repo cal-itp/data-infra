@@ -15,16 +15,12 @@ dim_routes AS (
     FROM {{ ref('dim_routes') }}
 ),
 
-dim_schedule_feeds AS (
-    SELECT * FROM {{ ref('dim_schedule_feeds') }}
+fct_daily_schedule_feeds AS (
+    SELECT * FROM {{ ref('fct_daily_schedule_feeds') }}
 ),
 
 dim_shapes_arrays AS (
     SELECT * FROM {{ ref('dim_shapes_arrays') }}
-),
-
-urls_to_gtfs_datasets AS (
-    SELECT * FROM {{ ref('int_transit_database__urls_to_gtfs_datasets') }}
 ),
 
 dim_gtfs_datasets AS (
@@ -103,6 +99,8 @@ gtfs_joins AS (
     LEFT JOIN stop_times_grouped
         ON service_index.feed_key = stop_times_grouped.feed_key
             AND trips.trip_id = stop_times_grouped.trip_id
+    -- drop trips with no stops
+    WHERE stop_times_grouped.feed_key IS NOT NULL
 ),
 
 fct_daily_scheduled_trips AS (
@@ -114,7 +112,7 @@ fct_daily_scheduled_trips AS (
         dim_gtfs_datasets.name,
         dim_gtfs_datasets.regional_feed_type,
 
-        urls_to_gtfs_datasets.gtfs_dataset_key AS gtfs_dataset_key,
+        daily_feeds.gtfs_dataset_key AS gtfs_dataset_key,
 
         gtfs_joins.service_date,
         gtfs_joins.feed_key,
@@ -155,13 +153,11 @@ fct_daily_scheduled_trips AS (
         DATETIME(trip_first_departure_ts, trip_start_timezone) AS trip_first_departure_datetime_local_tz,
         DATETIME(trip_last_arrival_ts, trip_end_timezone) AS trip_last_arrival_datetime_local_tz,
     FROM gtfs_joins
-    LEFT JOIN dim_schedule_feeds AS feeds
-        ON gtfs_joins.feed_key = feeds.key
-    LEFT JOIN urls_to_gtfs_datasets
-        ON feeds.base64_url = urls_to_gtfs_datasets.base64_url
-        AND gtfs_joins.trip_first_departure_ts BETWEEN urls_to_gtfs_datasets._valid_from AND urls_to_gtfs_datasets._valid_to
+    LEFT JOIN fct_daily_schedule_feeds AS daily_feeds
+        ON gtfs_joins.feed_key = daily_feeds.feed_key
+        AND gtfs_joins.service_date = daily_feeds.date
     LEFT JOIN dim_gtfs_datasets
-        ON urls_to_gtfs_datasets.gtfs_dataset_key = dim_gtfs_datasets.key
+        ON daily_feeds.gtfs_dataset_key = dim_gtfs_datasets.key
 )
 
 SELECT * FROM fct_daily_scheduled_trips
