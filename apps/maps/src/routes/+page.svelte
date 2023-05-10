@@ -8,8 +8,12 @@
     import {strFromU8, decompress} from 'fflate';
     import M from 'maplibre-gl';
     import {Circle} from 'svelte-loading-spinners';
+    import {LeafletLayer} from 'deck.gl-leaflet';
+    import {MapView} from '@deck.gl/core';
+    import {GeoJsonLayer} from '@deck.gl/layers';
 
     const USE_LEAFLET = true;
+    const USE_LEAFLET_DECKGL = true;
     const SOURCE = "https://storage.googleapis.com/calitp-map-tiles/metro_am.geojson.gz";
     const START_LAT_LON = [34, -118];
     let mapElement;
@@ -23,11 +27,16 @@
     const NSHADES = 10;
     const MAX_MPH = 50;
 
-    let colorMap = colormap({
+    const hexColorMap = colormap({
         colormap: 'RdBu',
         nshades: NSHADES,
         format: 'hex',
-        alpha: 0.8,
+    }).reverse();
+
+    const rgbaColorMap = colormap({
+        colormap: 'RdBu',
+        nshades: NSHADES,
+        format: 'rgba',
     }).reverse();
 
     let PAINT_RULES = [
@@ -42,13 +51,14 @@
         }
     ];
 
-    function speedFeatureColor(feature) {
+    function speedFeatureColor(feature, colorMap) {
         let avg_mph = feature.properties.avg_mph;
 
         if (avg_mph > MAX_MPH) {
             avg_mph = MAX_MPH;
         }
         let idx = Math.floor(avg_mph / (MAX_MPH / NSHADES));
+        console.log(colorMap[idx]);
         return colorMap[idx];
     }
 
@@ -59,6 +69,32 @@
             `Route ID: ${feature.properties.route_id}`,
             `Average MPH: ${feature.properties.avg_mph}`,
         ].join("<br>");
+    }
+
+    function fetchGeoJSON(url, callback) {
+        fetch(url).then((response) => {
+            if (url.endsWith(".gz") || response.headers.get("content-type") === "application/x-gzip") {
+                console.log("decompressing gzipped data");
+                response.arrayBuffer().then((raw) => {
+                    // const json = JSON.parse(inflate(raw, {to: 'string'}));
+                    // layer.addData(json);
+                    decompress(new Uint8Array(raw), (err, data) => {
+                            if (err) {
+                                console.error(err);
+                            } else {
+                                console.log("adding data to layer");
+                                callback(JSON.parse(strFromU8(data)));
+                            }
+                        }
+                    )
+                });
+            } else {
+                jsonData = response.json().then((json) => {
+                    console.log("adding data to layer");
+                    callback(json);
+                });
+            }
+        })
     }
 
     async function updateMap() {
@@ -75,11 +111,37 @@
                 url: url,
                 paint_rules: PAINT_RULES,
             }).addTo(map);
+        } else if (USE_LEAFLET_DECKGL) {
+            fetchGeoJSON(url, (json) => {
+                layer = new LeafletLayer({
+                    views: [
+                        new MapView({
+                            repeat: true
+                        })
+                    ],
+                    layers: [
+                        new GeoJsonLayer({
+                            // id: ,
+                            data: json,
+                            // Styles
+                            // filled: true,
+                            // pointRadiusMinPixels: 2,
+                            // pointRadiusScale: 2000,
+                            // getPointRadius: f => 11 - f.properties.scalerank,
+                            // getFillColor: [200, 0, 80, 180]
+                            // getFillColor: (feature) => speedFeatureColor(feature, rgbaColorMap).slice(0, 3),
+                            getFillColor: 'black',
+                        }),
+                    ]
+                });
+                // layer._deck.getTooltip = (object) => object;
+                map.addLayer(layer);
+            })
         } else {
             layer = L.geoJSON(false, {
                 style: (feature) => {
                     return {
-                        color: speedFeatureColor(feature),
+                        color: speedFeatureColor(feature, hexColorMap),
                         opacity: 0.8,
                     }
                 },
@@ -89,29 +151,7 @@
                     }
                 }
             }).addTo(map);
-            fetch(url).then((response) => {
-                if (url.endsWith(".gz") || response.headers.get("content-type") === "application/x-gzip") {
-                    console.log("decompressing gzipped data");
-                    response.arrayBuffer().then((raw) => {
-                        // const json = JSON.parse(inflate(raw, {to: 'string'}));
-                        // layer.addData(json);
-                        decompress(new Uint8Array(raw), (err, data) => {
-                                if (err) {
-                                    console.error(err);
-                                } else {
-                                    console.log("adding data to layer");
-                                    layer.addData(JSON.parse(strFromU8(data)));
-                                }
-                            }
-                        )
-                    });
-                } else {
-                    jsonData = response.json().then((json) => {
-                        console.log("adding data to layer");
-                        layer.addData(json);
-                    });
-                }
-            })
+            fetchGeoJSON(url, (json) => layer.addData(json));
         }
         loading = false;
     }
@@ -162,7 +202,7 @@
             if (jsonData) {
                 // https://maplibre.org/maplibre-gl-js-docs/example/data-driven-lines/
                 jsonData.features.forEach((feature) => {
-                    feature.properties.color = speedFeatureColor(feature);
+                    feature.properties.color = speedFeatureColor(feature, hexColorMap);
                 });
 
                 map.on('load', () => {
