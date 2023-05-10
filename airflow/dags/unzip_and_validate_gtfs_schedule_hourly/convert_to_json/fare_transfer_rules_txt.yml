@@ -1,4 +1,5 @@
 operator: operators.GtfsGcsToJsonlOperatorHourly
+pool: schedule_parse_pool
 dependencies:
   - unzip_gtfs_schedule
 
