@@ -101,7 +101,6 @@
                                 } else {
                                     console.log("adding data to layer");
                                     layer.addData(JSON.parse(strFromU8(data)));
-                                    loading = false;
                                 }
                             }
                         )
@@ -110,11 +109,11 @@
                     jsonData = response.json().then((json) => {
                         console.log("adding data to layer");
                         layer.addData(json);
-                        loading = false;
                     });
                 }
             })
         }
+        loading = false;
     }
 
     onMount(async () => {
