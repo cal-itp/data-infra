@@ -160,7 +160,7 @@ int_gtfs_quality__naive_organization_service_dataset_full_join AS (
         ON datasets.date = rt_feeds.date
         AND datasets.base64_url = rt_feeds.base64_url
     LEFT JOIN ntd_bridge
-        ON orgs.key = ntd_bridge.organization_key
+        ON orgs.source_record_id = ntd_bridge.source_record_id
         AND orgs.date = ntd_bridge.date
     -- just to be on the safe side, double check that we aren't including current date
     WHERE COALESCE(orgs.date,
