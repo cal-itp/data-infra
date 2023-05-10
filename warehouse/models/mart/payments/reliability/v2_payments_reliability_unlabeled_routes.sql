@@ -13,6 +13,7 @@ count_rides AS (
         spine.month_start,
         COUNTIF(route_id = 'Route Z') AS n_route_z_rides,
         COUNTIF(route_id IS NULL) AS n_null_rides,
+        COUNTIF(route_id = '') AS n_empty_string_rides,
         COUNT(*) AS n_all_rides
 
     FROM payments_tests_monthly_date_spine AS spine
@@ -28,11 +29,12 @@ aggregations_and_date_spine AS (
         date_spine.month_start,
         count_rides.n_route_z_rides,
         count_rides.n_null_rides,
+        count_rides.n_empty_string_rides,
         count_rides.n_all_rides,
 
-        (count_rides.n_route_z_rides + count_rides.n_null_rides) AS total_unlabeled_rides,
+        (count_rides.n_route_z_rides + count_rides.n_null_rides + count_rides.n_empty_string_rides) AS total_unlabeled_rides,
 
-        SAFE_DIVIDE((count_rides.n_route_z_rides + count_rides.n_null_rides), count_rides.n_all_rides) * 100 AS pct_unlabeled_rides_to_total_rides
+        SAFE_DIVIDE((count_rides.n_route_z_rides + count_rides.n_null_rides + count_rides.n_empty_string_rides), count_rides.n_all_rides) * 100 AS pct_unlabeled_rides_to_total_rides
 
     FROM payments_tests_monthly_date_spine AS date_spine
     LEFT JOIN count_rides
@@ -47,6 +49,7 @@ v2_payments_reliability_unlabeled_routes AS (
         n_route_z_rides,
         n_null_rides,
         total_unlabeled_rides,
+        n_empty_string_rides,
         n_all_rides,
         pct_unlabeled_rides_to_total_rides,
         RANK() OVER (PARTITION BY participant_id ORDER BY month_start DESC) AS recency_rank
