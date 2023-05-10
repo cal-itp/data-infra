@@ -26,6 +26,6 @@ ORDER BY timestamp DESC
     * [Copy the model(s)](https://cloud.google.com/bigquery/docs/managing-tables#copying_a_single_source_table) to `<original model name>_deprecated`. You can leave the `_deprecated` copy in its current location (same dataset.) [Delete the original (non-`_deprecated`) model](https://cloud.google.com/bigquery/docs/managing-tables#deleting_a_table).
     * If you are deprecating an entire dataset/schema, remove it from Metabase at this point.
 
-4. Wait again. If the model(s) had been recently accessed according to the query in step 1, wait 2 weeks; otherwise wait only 1 week. If during this second waiting period someone objects or identifies a problem, revert the soft deletion from step 3 and stop the deprecation process until that need is resolved.
+4. Wait again. If the model(s) had been recently accessed according to the query in step 1, wait 2 weeks; otherwise wait only 1 week. If during this second waiting period someone objects or identifies a problem, work with them to identify a path forward. This may involve helping them use the `_deprecated` copy while they make a longer-term plan and delaying hard deletion until they have migrated to something else.
 
 5. [Hard delete the `_deprecated` copy of the model(s)](https://cloud.google.com/bigquery/docs/managing-tables#deleting_a_table).
