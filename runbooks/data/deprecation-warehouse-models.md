@@ -16,7 +16,7 @@ WHERE
 ORDER BY timestamp DESC
 ```
 
-2. Post a warning in `#data-warehouse-devs` and any other relevant channels in Slack (this may vary by domain; for example, if deprecating a model related to GTFS quality, you may post in `#gtfs-quality`). Add the model to the deprecation tracking spreadsheet (link TK).
+2. Post a warning in `#data-warehouse-devs` and any other relevant channels in Slack (this may vary by domain; for example, if deprecating a model related to GTFS quality, you may post in `#gtfs-quality`). Add the model to the [deprecation tracking spreadsheet](https://docs.google.com/spreadsheets/d/1jRK-hI1t2akEFA_eiUo8WfLFdYV3VJGLWtXczRRG8r0/edit#gid=0).
     * If the model had been recently accessed according to the query in step 1, give a 2-week warning and post suggestions for alternative similar models.
     * If the model had not been recently accessed, a 1-week warning, without suggested alternatives, is sufficient.
 
