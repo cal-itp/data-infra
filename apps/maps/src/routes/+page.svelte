@@ -75,8 +75,6 @@
             if (url.endsWith(".gz") || response.headers.get("content-type") === "application/x-gzip") {
                 console.log("decompressing gzipped data");
                 response.arrayBuffer().then((raw) => {
-                    // const json = JSON.parse(inflate(raw, {to: 'string'}));
-                    // layer.addData(json);
                     decompress(new Uint8Array(raw), (err, data) => {
                             if (err) {
                                 console.error(err);
@@ -328,18 +326,9 @@
 <style>
     @import 'leaflet/dist/leaflet.css';
 
-    /*body {*/
-    /*    margin: 0;*/
-    /*    padding: 0;*/
-    /*}*/
-
     #map {
         margin: 10px;
         height: 800px;
-        /*position: absolute;*/
-        /*top: 0;*/
-        /*bottom: 0;*/
-        /*width: 100%;*/
     }
 
     :global(.maplibregl-popup) {
@@ -348,28 +337,9 @@
     }
 </style>
 
-<!--<script src="https://unpkg.com/protomaps@1.22.0/dist/protomaps.min.js"></script>-->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
       integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
       crossorigin=""/>
-<!--<div style="width: 100%; overflow: hidden; display: flex; align-items: flex-start;">-->
-<!--&lt;!&ndash;    <span style="margin-right: 10px;"></span>&ndash;&gt;-->
-<!--    <span style="margin-right: 10px;"><label for="select">Select data:</label></span>-->
-<!--    <div id="select" class="select">-->
-<!--        <select bind:value={selected} on:change="{updateMap}" style="margin-right: 10px;">-->
-<!--            {#each options as option}-->
-<!--                <option value={option}>-->
-<!--                    {option.name}-->
-<!--                </option>-->
-<!--            {/each}-->
-<!--        </select>-->
-<!--    </div>-->
-<!--    {#if loading}-->
-<!--        <Circle size="20" color="#FF3E00" unit="px" duration="1s"/>-->
-<!--    {:else if (selected && selected.url)}-->
-<!--        <span>Viewing {selected.url}</span>-->
-<!--    {/if}-->
-<!--</div>-->
 <nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <a class="navbar-item" href="https://www.calitp.org/">
