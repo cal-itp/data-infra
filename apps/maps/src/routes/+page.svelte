@@ -141,12 +141,14 @@
                                 return converted;
                             },
                             getFillColor: (feature) => {
-                              if (feature) {
+                              if (feature && feature.properties.avg_mph) {
                                 const rgba = speedFeatureColor(feature, rgbaColorMap);
                                 const converted = rgba.slice(0, -1);
                                 converted.push(rgba[3] * 127);
                                 return converted;
                               }
+
+                              return "black";
                             },
                         }),
                     ],
