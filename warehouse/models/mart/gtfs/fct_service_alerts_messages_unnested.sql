@@ -59,12 +59,14 @@ fct_service_alerts_messages_unnested AS (
         header_version,
         header_incrementality,
         id,
+        cause,
+        effect,
 
         -- active periods
         active_period_start,
         active_period_end,
 
-        -- informted entities
+        -- informed entities
         agency_id,
         route_id,
         route_type,

@@ -18,6 +18,8 @@ int_gtfs_rt__service_alerts_fully_unnested AS (
         header_version,
         header_incrementality,
         id,
+        cause,
+        effect,
 
         -- active periods
         unnested_active_period.start AS active_period_start,

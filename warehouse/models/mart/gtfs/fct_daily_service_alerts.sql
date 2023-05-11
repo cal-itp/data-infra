@@ -8,18 +8,9 @@
     },
 ) }}
 
-WITH fct_service_alert_translations AS (
-    SELECT * FROM {{ ref('fct_service_alert_translations') }}
+WITH fct_service_alerts_messages_unnested AS (
+    SELECT * FROM {{ ref('fct_service_alerts_messages_unnested') }}
     WHERE {{ gtfs_rt_dt_where() }}
-),
-
-select_english AS (
-    SELECT
-        *,
-        ROW_NUMBER() OVER (PARTITION BY service_alert_message_key
-            ORDER BY english_likelihood DESC, header_text_language ASC) AS english_rank
-    FROM fct_service_alert_translations
-    QUALIFY english_rank = 1
 ),
 
 fct_daily_service_alerts AS (
@@ -35,8 +26,8 @@ fct_daily_service_alerts AS (
         description_text_text,
         MIN(header_timestamp) AS first_header_timestamp,
         MAX(header_timestamp) AS last_header_timestamp,
-        COUNT(*) AS num_appearances
-    FROM select_english
+        COUNT(DISTINCT service_alert_message_key) AS num_appearances
+    FROM fct_service_alerts_messages_unnested
     GROUP BY dt, gtfs_dataset_key, base64_url, id, cause, effect, header_text_text,
         description_text_text
 )
