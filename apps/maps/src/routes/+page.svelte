@@ -99,10 +99,15 @@
 
     async function updateMap() {
         console.log(selected);
+        if (layer) {
+            map.removeLayer(layer);
+            layer = null;
+        }
+
         if (!selected.url) {
-            layer.clearLayers();
             return
         }
+
         loading = true;
         const url = selected.url;
 
@@ -297,17 +302,18 @@
 <style>
     @import 'leaflet/dist/leaflet.css';
 
-    body {
-        margin: 0;
-        padding: 0;
-    }
+    /*body {*/
+    /*    margin: 0;*/
+    /*    padding: 0;*/
+    /*}*/
 
     #map {
+        margin: 10px;
         height: 800px;
         /*position: absolute;*/
         /*top: 0;*/
         /*bottom: 0;*/
-        width: 100%;
+        /*width: 100%;*/
     }
 
     :global(.maplibregl-popup) {
@@ -317,25 +323,24 @@
 </style>
 
 <!--<script src="https://unpkg.com/protomaps@1.22.0/dist/protomaps.min.js"></script>-->
-<!--<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"-->
-<!--      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="-->
-<!--      crossorigin=""/>-->
-<div style="width: 100%; overflow: hidden;">
-    <div style="width: 400px; float: left;">
-        <select bind:value={selected} on:change="{updateMap}">
-            {#each options as option}
-                <option value={option}>
-                    {option.name}
-                </option>
-            {/each}
-        </select>
-    </div>
-    <div style="margin-left: 430px;">
-        {#if loading}
-            <Circle size="20" color="#FF3E00" unit="px" duration="1s"/>
-        {:else if (selected && selected.url)}
-            {selected.url}
-        {/if}
-    </div>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+      crossorigin=""/>
+<div style="width: 100%; overflow: hidden; display: flex; align-items: flex-start;">
+    <span style="margin-right: 10px;">Select data:</span>
+    <select bind:value={selected} on:change="{updateMap}" style="margin-right: 10px;">
+        {#each options as option}
+            <option value={option}>
+                {option.name}
+            </option>
+        {/each}
+    </select>
+    {#if (selected && selected.url)}
+    {/if}
+    {#if loading}
+        <Circle size="20" color="#FF3E00" unit="px" duration="1s"/>
+    {:else if (selected && selected.url)}
+        <span>Viewing {selected.url}</span>
+    {/if}
 </div>
 <div id="map" class="map" bind:this={mapElement}></div>
