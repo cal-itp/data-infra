@@ -4,7 +4,7 @@ models:
 # Schedule URL checks reindexed
 # TODO: what kind of yaml do we want for these? specifically what tests
 
-  - name: int_gtfs_quality__schedule_url_download_success
+  - name: int_gtfs_quality__schedule_download_success
 
 # Schedule feed checks reindexed
 # TODO: what kind of yaml do we want for these? specifically what tests

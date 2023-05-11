@@ -234,7 +234,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `feed_key` and `fare_media_id`.
-        tests: *pk_tests_with_dups
+        tests: *primary_key_tests
       - *feed_key
       - *base64_url
       - name: fare_media_id

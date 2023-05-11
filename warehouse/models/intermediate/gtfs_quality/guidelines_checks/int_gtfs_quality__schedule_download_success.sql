@@ -24,7 +24,7 @@ check_start AS (
     FROM daily_feed_download_unzip_status
 ),
 
-int_gtfs_quality__schedule_url_download_success AS (
+int_gtfs_quality__schedule_download_success AS (
     SELECT
         idx.* EXCEPT(status),
         CASE
@@ -45,4 +45,4 @@ int_gtfs_quality__schedule_url_download_success AS (
      AND idx.date = d.date
 )
 
-SELECT * FROM int_gtfs_quality__schedule_url_download_success
+SELECT * FROM int_gtfs_quality__schedule_download_success
