@@ -1,20 +1,6 @@
-{{
-    config(
-        materialized='incremental',
-        incremental_strategy='insert_overwrite',
-        partition_by={
-            'field': 'dt',
-            'data_type': 'date',
-            'granularity': 'day',
-        },
-        cluster_by='base64_url',
-    )
-}}
-
 WITH messages AS (
     SELECT *
     FROM {{ ref('fct_service_alerts_messages') }}
-    WHERE {{ gtfs_rt_dt_where() }}
 ),
 
 int_gtfs_rt__service_alerts_fully_unnested AS (

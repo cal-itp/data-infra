@@ -1033,10 +1033,123 @@ models:
       - name: tts_description_text_language
         description: |
           See: https://gtfs.org/realtime/reference/#message-translation.
-      - name: english_likelihood
+  - name: fct_service_alerts_messages_unnested
+    description: |
+      This table contains GTFS RT service alerts messages with all elements (informed entities,
+      active periods, and translations) unnested, so each row is a message / entity / active period /
+      translation combination. It has been filtered so that only one translation (the one with highest likelihood
+      of being in English) appears per message.
+      Therefore one row here should correspond to one actual "alert" (counting alerts
+      that apply to different entities or different time periods as distinct.)
+      See: https://gtfs.org/realtime/reference/#message-alert for field definitions.
+    columns:
+      - name: key
         description: |
-          100 if English language, 1 if null (null can mean no internationalization),
-          0 for other languages.
+          Synthetic primary key constructed from `service_alerts_message_key` along with the active period
+          and informed entities.
+        tests: *rt_primary_key_tests
+      - name: service_alert_message_key
+        description: |
+          The primary key for the message in `fct_service_alerts_messages`.
+        tests:
+          - not_null:
+              config:
+                where: '__rt_sampled__'
+      - name: gtfs_dataset_key
+        description: |
+          The primary key for the record in `dim_gtfs_datasets` associated with this message.
+        columns:
+          - <<: *gtfs_dataset_key
+            config:
+              where: '__rt_sampled__'
+      - name: dt
+        description: |
+          Date on which we scraped this message.
+          A date filter *must* be provided when querying this table, because of the size of the data.
+      - name: hour
+        description: |
+          Timestamp of the beginning of the hour in which this message was scraped,
+          ex. "2022-09-01T00:00:00+00".
+      - name: base64_url
+        description: |
+          URL-safe base64 encoding of the URL from which this message was scraped.
+      - name: _extract_ts
+        description: |
+          Time at which this message was scraped.
+      - name: _gtfs_dataset_name
+        description: |
+          String name of the GTFS dataset of which this message is a part.
+          This field is provided for human readability and should not be used as a join key.
+      - name: url_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: url_language
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: header_text_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: header_text_language
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: description_text_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: description_text_language
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: tts_header_text_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: tts_header_text_language
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: tts_description_text_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: tts_description_text_language
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: agency_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-entityselector.
+      - name: route_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-entityselector.
+      - name: route_type
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-entityselector.
+      - name: direction_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-entityselector.
+      - name: trip_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-entityselector.
+      - name: route_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: trip_direction_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: trip_start_time
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: trip_start_date
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: trip_schedule_relationship
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-tripdescriptor.
+      - name: stop_id
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-entityselector.
+      - name: active_period_start
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-timerange.
+      - name: active_period_end
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-timerange.
+      - *_header_message_age
   - name: fct_daily_service_alerts
     description: |
       Each row is a daily summary of a service alert.

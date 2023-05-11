@@ -1,7 +1,17 @@
-{{ config(materialized = 'table') }}
+{{ config(
+    materialized='incremental',
+    incremental_strategy='insert_overwrite',
+    partition_by = {
+        'field': 'dt',
+        'data_type': 'date',
+        'granularity': 'day',
+    },
+    cluster_by = 'base64_url'
+) }}
 
 WITH int_gtfs_rt__service_alerts_fully_unnested AS (
     SELECT * FROM {{ ref('int_gtfs_rt__service_alerts_fully_unnested') }}
+    WHERE {{ gtfs_rt_dt_where() }}
 ),
 
 select_english AS (
@@ -25,6 +35,17 @@ select_english AS (
 
 fct_service_alerts_messages_unnested AS (
     SELECT
+        {{ dbt_utils.generate_surrogate_key([
+            'service_alert_message_key',
+            'active_period_start',
+            'active_period_end',
+            'agency_id',
+            'route_id',
+            'direction_id',
+            'trip_id',
+            'trip_start_date',
+            'trip_start_time',
+            'stop_id']) }} AS key,
         service_alert_message_key,
         gtfs_dataset_key,
         dt,
