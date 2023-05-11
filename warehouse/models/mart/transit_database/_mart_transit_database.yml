@@ -74,14 +74,6 @@ models:
     tests: *mutually_exclusive_ranges
     columns:
       - *key
-      - name: annual_database_agency_information_2021_key
-        tests:
-          # we have entries for about 20% right now
-          - dbt_utils.not_null_proportion:
-              at_least: 0.2
-          - relationships:
-              to: ref('dim_annual_ntd_agency_information')
-              field: key
       - name: ntd_id
         description: |
           The organization's ID in the National Transit Database
