@@ -116,6 +116,7 @@
                 url: url,
                 paint_rules: PAINT_RULES,
             }).addTo(map);
+            loading = false;
         } else if (USE_LEAFLET_DECKGL) {
             fetchGeoJSON(url, (json) => {
                 layer = new LeafletLayer({
@@ -141,6 +142,7 @@
                 });
                 // layer._deck.getTooltip = (object) => object;
                 map.addLayer(layer);
+                loading = false;
             })
         } else {
             layer = L.geoJSON(false, {
@@ -156,9 +158,11 @@
                     }
                 }
             }).addTo(map);
-            fetchGeoJSON(url, (json) => layer.addData(json));
+            fetchGeoJSON(url, (json) => {
+                layer.addData(json);
+                loading = false;
+            });
         }
-        loading = false;
     }
 
     onMount(async () => {
@@ -335,8 +339,6 @@
             </option>
         {/each}
     </select>
-    {#if (selected && selected.url)}
-    {/if}
     {#if loading}
         <Circle size="20" color="#FF3E00" unit="px" duration="1s"/>
     {:else if (selected && selected.url)}
