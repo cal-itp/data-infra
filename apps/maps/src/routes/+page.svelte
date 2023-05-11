@@ -11,6 +11,7 @@
     import {LeafletLayer} from 'deck.gl-leaflet';
     import {MapView} from '@deck.gl/core';
     import {GeoJsonLayer} from '@deck.gl/layers';
+    import '@fortawesome/fontawesome-free/css/all.css'
 
     const USE_LEAFLET = true;
     const USE_LEAFLET_DECKGL = true;
@@ -330,19 +331,77 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
       integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
       crossorigin=""/>
-<div style="width: 100%; overflow: hidden; display: flex; align-items: flex-start;">
-    <span style="margin-right: 10px;">Select data:</span>
-    <select bind:value={selected} on:change="{updateMap}" style="margin-right: 10px;">
-        {#each options as option}
-            <option value={option}>
+<!--<div style="width: 100%; overflow: hidden; display: flex; align-items: flex-start;">-->
+<!--&lt;!&ndash;    <span style="margin-right: 10px;"></span>&ndash;&gt;-->
+<!--    <span style="margin-right: 10px;"><label for="select">Select data:</label></span>-->
+<!--    <div id="select" class="select">-->
+<!--        <select bind:value={selected} on:change="{updateMap}" style="margin-right: 10px;">-->
+<!--            {#each options as option}-->
+<!--                <option value={option}>-->
+<!--                    {option.name}-->
+<!--                </option>-->
+<!--            {/each}-->
+<!--        </select>-->
+<!--    </div>-->
+<!--    {#if loading}-->
+<!--        <Circle size="20" color="#FF3E00" unit="px" duration="1s"/>-->
+<!--    {:else if (selected && selected.url)}-->
+<!--        <span>Viewing {selected.url}</span>-->
+<!--    {/if}-->
+<!--</div>-->
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="https://www.calitp.org/">
+      <img src="https://reports.calitp.org/images/calitp-logo.svg" alt="Cal-ITP logo">
+    </a>
+    <div class="navbar-item">
+      California Transit Speed Maps
+    </div>
+    <button class="button navbar-burger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+
+  <div class="navbar-menu">
+    <div class="navbar-start">
+      <div class="navbar-item">
+        <label for="select">Select data:</label>
+      </div>
+      <div class="navbar-item">
+        <div class="select">
+          <select id="select" bind:value={selected} on:change="{updateMap}">
+            {#each options as option}
+              <option value={option}>
                 {option.name}
-            </option>
-        {/each}
-    </select>
-    {#if loading}
-        <Circle size="20" color="#FF3E00" unit="px" duration="1s"/>
-    {:else if (selected && selected.url)}
-        <span>Viewing {selected.url}</span>
-    {/if}
-</div>
+              </option>
+            {/each}
+          </select>
+        </div>
+      </div>
+      <div class="navbar-item">
+        {#if loading}
+          <div class="icon-text">
+            <span class="icon">
+              <i class="fas fa-circle-notch fa-spin"></i>
+            </span>
+            <span>Loading...</span>
+          </div>
+        {:else if (selected && selected.url)}
+          <span>Viewing {selected.url}</span>
+        {/if}
+      </div>
+    </div>
+  </div>
+</nav>
+
 <div id="map" class="map" bind:this={mapElement}></div>
+
+<footer>
+  <div class="content has-text-centered">
+    <p>
+      &copy; Cal-ITP 2023. All rights reserved.
+    </p>
+  </div>
+</footer>
