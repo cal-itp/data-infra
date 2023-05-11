@@ -55,7 +55,7 @@
         let avg_mph = feature.properties.avg_mph;
 
         if (avg_mph > MAX_MPH) {
-          return colorMap.slice(-1);
+          return colorMap[colorMap.length - 1];
         }
 
         return colorMap[Math.floor(avg_mph / (MAX_MPH / NSHADES))];
