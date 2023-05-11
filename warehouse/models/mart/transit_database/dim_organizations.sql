@@ -20,6 +20,7 @@ dim_organizations AS (
         dim.source_record_id,
 
         ntd.key AS annual_database_agency_information_2021_key,
+        ntd.ntd_id,
 
         -- attributes
         name,

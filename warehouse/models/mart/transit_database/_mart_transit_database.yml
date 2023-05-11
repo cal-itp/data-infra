@@ -82,6 +82,9 @@ models:
           - relationships:
               to: ref('dim_annual_ntd_agency_information')
               field: key
+      - name: ntd_id
+        description: |
+          The organization's ID in the National Transit Database
       - name: name
         description: Organization name
       - name: organization_type
