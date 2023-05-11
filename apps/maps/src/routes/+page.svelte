@@ -4,14 +4,13 @@
     import L from 'leaflet';
     import colormap from 'colormap';
     import {leafletLayer, LineSymbolizer} from 'protomaps';
-    import {inflate} from 'pako';
     import {strFromU8, decompress} from 'fflate';
     import M from 'maplibre-gl';
-    import {Circle} from 'svelte-loading-spinners';
     import {LeafletLayer} from 'deck.gl-leaflet';
     import {MapView} from '@deck.gl/core';
     import {GeoJsonLayer} from '@deck.gl/layers';
     import '@fortawesome/fontawesome-free/css/all.css'
+    import { dev } from '$app/environment';
 
     const USE_LEAFLET = true;
     const USE_LEAFLET_DECKGL = true;
@@ -56,11 +55,10 @@
         let avg_mph = feature.properties.avg_mph;
 
         if (avg_mph > MAX_MPH) {
-            avg_mph = MAX_MPH;
+          return colorMap.slice(-1);
         }
-        let idx = Math.floor(avg_mph / (MAX_MPH / NSHADES));
-        console.log(colorMap[idx]);
-        return colorMap[idx];
+
+        return colorMap[Math.floor(avg_mph / (MAX_MPH / NSHADES))];
     }
 
     function speedFeatureHTML(feature) {
@@ -119,6 +117,7 @@
             }).addTo(map);
             loading = false;
         } else if (USE_LEAFLET_DECKGL) {
+            // NOTE: When defining interaction callbacks, I think they use https://deck.gl/docs/developer-guide/interactivity#the-picking-info-object
             fetchGeoJSON(url, (json) => {
                 layer = new LeafletLayer({
                     views: [
@@ -130,18 +129,36 @@
                         new GeoJsonLayer({
                             // id: ,
                             data: json,
-                            // Styles
-                            // filled: true,
-                            // pointRadiusMinPixels: 2,
-                            // pointRadiusScale: 2000,
-                            // getPointRadius: f => 11 - f.properties.scalerank,
-                            // getFillColor: [200, 0, 80, 180]
-                            // getFillColor: (feature) => speedFeatureColor(feature, rgbaColorMap).slice(0, 3),
-                            getFillColor: 'black',
+                            pickable: true,
+                            autoHighlight: true,
+                            highlightColor: ({ object }) => {
+                                const rgba = speedFeatureColor(object, rgbaColorMap);
+                                const converted = rgba.slice(0, -1);
+                                // have to convert from 0-1 alpha to 0-255
+                                converted.push(rgba[3] * 255);
+                                return converted;
+                            },
+                            getFillColor: (feature) => {
+                              if (feature) {
+                                const rgba = speedFeatureColor(feature, rgbaColorMap);
+                                const converted = rgba.slice(0, -1);
+                                converted.push(rgba[3] * 127);
+                                return converted;
+                              }
+                            },
                         }),
-                    ]
+                    ],
+                    // these have to be called object if destructured like this
+                    // onHover: ({ object }) => object && console.log(object),
+                    getTooltip: ({ object }) => object && {
+                      html: speedFeatureHTML(object),
+                      style: {
+                        backgroundColor: "white",
+                        color: "black",
+                        fontSize: '1.2em',
+                      }
+                    },
                 });
-                // layer._deck.getTooltip = (object) => object;
                 map.addLayer(layer);
                 loading = false;
             })
@@ -293,6 +310,10 @@
         const layersResponse = await fetch("layers.json");
         const json = await layersResponse.json();
         options = [{"name": "", "url": ""}].concat(json);
+        if (dev) {
+          selected = options[2];
+          await updateMap();
+        }
     })
     ;
 
