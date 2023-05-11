@@ -56,6 +56,11 @@ int_gtfs_rt__service_alerts_trip_day_map_grouping AS (
         trip_start_date,
         trip_schedule_relationship,
         schedule_feeds.feed_timezone,
+        ARRAY_AGG(DISTINCT
+            TO_JSON_STRING(
+                STRUCT<cause string, effect string, header string, description string >
+                (cause, effect, header_text_text, description_text_text)
+                )) AS alert_content_array,
         ARRAY_AGG(DISTINCT id) AS message_ids_array,
         ARRAY_AGG(DISTINCT header_timestamp) AS header_timestamps_array,
         ARRAY_AGG(DISTINCT service_alert_message_key) AS message_keys_array,
