@@ -1,6 +1,8 @@
 <!-- from https://dev.to/khromov/using-leaflet-with-sveltekit-3jn1 -->
 <script>
     import {onMount, onDestroy} from 'svelte';
+    import { goto } from '$app/navigation'
+    import { page } from '$app/stores';
     import L from 'leaflet';
     import colormap from 'colormap';
     import {leafletLayer, LineSymbolizer} from 'protomaps';
@@ -106,6 +108,8 @@
         }
 
         loading = true;
+        $page.url.searchParams.set("selected", selected.name);
+        goto(`?${$page.url.searchParams.toString()}`);
         const url = selected.url;
 
         if (url.endsWith(".pmtiles")) {
@@ -308,7 +312,14 @@
         const layersResponse = await fetch("layers.json");
         const json = await layersResponse.json();
         options = [{"name": "", "url": ""}].concat(json);
-        if (dev) {
+        const selectedName = $page.url.searchParams.get("selected");
+        if (selectedName) {
+          const possible = options.find(option => option.name === selectedName);
+          if (possible) {
+            selected = possible;
+            updateMap()
+          }
+        } else if (dev) {
           selected = options[2];
           await updateMap();
         }
