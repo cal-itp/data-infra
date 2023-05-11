@@ -80,7 +80,7 @@ models:
           - dbt_utils.not_null_proportion:
               at_least: 0.2
           - relationships:
-              to: ref('dim_annual_database_agency_information')
+              to: ref('dim_annual_ntd_agency_information')
               field: key
       - name: name
         description: Organization name

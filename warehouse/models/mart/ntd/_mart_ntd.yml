@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: dim_annual_database_agency_information
+  - name: dim_annual_ntd_agency_information
     description: |
       Versioned extracts of the NTD Annual Database Agency Information.
       For example, the 2021 dataset is found at https://www.transit.dot.gov/ntd/data-product/2021-annual-database-agency-information.
