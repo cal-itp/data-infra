@@ -17,7 +17,8 @@
     const USE_LEAFLET = true;
     const USE_LEAFLET_DECKGL = true;
     const SOURCE = "https://storage.googleapis.com/calitp-map-tiles/metro_am.geojson.gz";
-    const START_LAT_LON = [34, -118];
+    const START_LAT_LON = [34.05, -118.25];
+    const LEAFLET_START_ZOOM = 12;
     let mapElement;
     let map;
     let jsonData;
@@ -53,25 +54,6 @@
         }
     ];
 
-    function speedFeatureColor(feature, colorMap) {
-        let avg_mph = feature.properties.avg_mph;
-
-        if (avg_mph > MAX_MPH) {
-          return colorMap[colorMap.length - 1];
-        }
-
-        return colorMap[Math.floor(avg_mph / (MAX_MPH / NSHADES))];
-    }
-
-    function speedFeatureHTML(feature) {
-        return [
-            `Stop name: ${feature.properties.stop_name}`,
-            `Stop ID: ${feature.properties.stop_id}`,
-            `Route ID: ${feature.properties.route_id}`,
-            `Average MPH: ${feature.properties.avg_mph}`,
-        ].join("<br>");
-    }
-
     function fetchGeoJSON(url, callback) {
         fetch(url).then((response) => {
             if (url.endsWith(".gz") || response.headers.get("content-type") === "application/x-gzip") {
@@ -94,6 +76,60 @@
                 });
             }
         })
+    }
+
+    function speedFeatureColor(feature, colorMap) {
+        let avg_mph = feature.properties.avg_mph;
+
+        if (avg_mph > MAX_MPH) {
+          return colorMap[colorMap.length - 1];
+        }
+
+        return colorMap[Math.floor(avg_mph / (MAX_MPH / NSHADES))];
+    }
+
+    function getColor(feature, colorMap, alpha = 255) {
+        if (feature && feature.properties.avg_mph) {
+          const rgba = speedFeatureColor(feature, rgbaColorMap);
+          const converted = rgba.slice(0, -1);
+          converted.push(alpha);
+          return converted;
+        }
+
+        // everything but speedmaps
+        return [93, 106, 166, alpha];
+    }
+
+    function getTooltip(feature) {
+      let html;
+      if (feature.properties.hqta_type) {
+        let lines = [
+            `Agency (Primary): ${feature.properties.agency_name_primary}`,
+            `Agency (Secondary): ${feature.properties.agency_name_secondary}`,
+            `HQTA Type: ${feature.properties.hqta_type}`,
+        ];
+        if (feature.properties.stop_id) {
+          lines.push(`Stop ID: ${feature.properties.stop_id}`);
+        }
+          html = lines.join("<br>");
+      } else {
+        // hopefully a speedmap
+        html = [
+            `Stop name: ${feature.properties.stop_name}`,
+            `Stop ID: ${feature.properties.stop_id}`,
+            `Route ID: ${feature.properties.route_id}`,
+            `Average MPH: ${feature.properties.avg_mph}`,
+        ].join("<br>");
+      }
+
+      return {
+        html: html,
+        style: {
+          backgroundColor: "white",
+          color: "black",
+          fontSize: '1.2em',
+        }
+      }
     }
 
     async function updateMap() {
@@ -133,35 +169,14 @@
                             data: json,
                             pickable: true,
                             autoHighlight: true,
-                            highlightColor: ({ object }) => {
-                                const rgba = speedFeatureColor(object, rgbaColorMap);
-                                const converted = rgba.slice(0, -1);
-                                // have to convert from 0-1 alpha to 0-255
-                                converted.push(rgba[3] * 255);
-                                return converted;
-                            },
-                            getFillColor: (feature) => {
-                              if (feature && feature.properties.avg_mph) {
-                                const rgba = speedFeatureColor(feature, rgbaColorMap);
-                                const converted = rgba.slice(0, -1);
-                                converted.push(rgba[3] * 127);
-                                return converted;
-                              }
-
-                              return "black";
-                            },
+                            getPointRadius: 10,
+                            getFillColor: (feature) => getColor(feature, rgbaColorMap, 127),
+                            highlightColor: ({ object }) => getColor(object, rgbaColorMap, 255),
                         }),
                     ],
                     // these have to be called object if destructured like this
                     // onHover: ({ object }) => object && console.log(object),
-                    getTooltip: ({ object }) => object && {
-                      html: speedFeatureHTML(object),
-                      style: {
-                        backgroundColor: "white",
-                        color: "black",
-                        fontSize: '1.2em',
-                      }
-                    },
+                    getTooltip: ({ object }) => object && getTooltip(object),
                 });
                 map.addLayer(layer);
                 loading = false;
@@ -193,7 +208,7 @@
         if (USE_LEAFLET) {
             map = L.map(mapElement, {
                 preferCanvas: true
-            }).setView(START_LAT_LON, 11);
+            }).setView(START_LAT_LON, LEAFLET_START_ZOOM);
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
