@@ -12,7 +12,7 @@
     import {MapView} from '@deck.gl/core';
     import {GeoJsonLayer} from '@deck.gl/layers';
     import '@fortawesome/fontawesome-free/css/all.css'
-    import { dev } from '$app/environment';
+    import * as turf from '@turf/turf'
 
     const USE_LEAFLET = true;
     const USE_LEAFLET_DECKGL = true;
@@ -26,6 +26,7 @@
     let options = [];
     let layer;
     let loading = false;
+    let zoomOnSelect = true;
 
     const NSHADES = 10;
     const MAX_MPH = 50;
@@ -168,7 +169,7 @@
                     ],
                     layers: [
                         new GeoJsonLayer({
-                            // id: ,
+                            id: "geojson",
                             data: json,
                             pickable: true,
                             autoHighlight: true,
@@ -182,6 +183,12 @@
                     getTooltip: ({ object }) => object && getTooltip(object),
                 });
                 map.addLayer(layer);
+                if (zoomOnSelect) {
+                  const bbox = turf.bbox(json);
+                  const latLngLike = [[bbox[1], bbox[0]], [bbox[3], bbox[2]]];
+                  console.log("zooming to", latLngLike);
+                  map.flyToBounds(latLngLike, {maxZoom: 20});
+                }
                 loading = false;
             })
         } else {
@@ -386,7 +393,13 @@
   <div class="navbar-menu">
     <div class="navbar-start">
       <div class="navbar-item">
-        <label for="select">Select data:</label>
+        <label>
+          <input type=checkbox bind:checked={zoomOnSelect}>
+          Zoom when selected
+        </label>
+      </div>
+      <div class="navbar-item">
+        <label for="select">Dataset:</label>
       </div>
       <div class="navbar-item">
         <div class="select">
