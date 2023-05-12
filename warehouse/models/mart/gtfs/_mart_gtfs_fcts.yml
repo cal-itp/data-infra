@@ -900,19 +900,6 @@ models:
         description: |
           See: https://gtfs.org/realtime/reference/#message-alert.
       - *_header_message_age
-  - name: fct_service_alert_active_periods
-    description: |
-      Each row is an active period for a service alerts message.
-      See https://gtfs.org/realtime/reference/#message-alert for information
-      about message structure.
-      Due to data size, this table **must** be queried with a date filter (like `WHERE dt = 'YYYY-MM-DD'`).
-      Hour filters will also further improve performance.
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `service_alerts_message_key`,
-          `active_period_start`, and `active_period_end`.
-        tests: *rt_primary_key_tests
   - name: fct_service_alerts_messages_unnested
     description: |
       This table contains GTFS RT service alerts messages with all elements (informed entities,
@@ -922,6 +909,10 @@ models:
       Therefore one row here should correspond to one actual "alert" (counting alerts
       that apply to different entities or different time periods as distinct.)
       See: https://gtfs.org/realtime/reference/#message-alert for field definitions.
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "active_period_start <= active_period_end"
+          where: '__rt_sampled__'
     columns:
       - name: key
         description: |
@@ -1036,6 +1027,14 @@ models:
       - name: active_period_end
         description: |
           See: https://gtfs.org/realtime/reference/#message-timerange.
+      - name: active_period_start_ts
+        description: |
+          `active_period_start` converted to a TIMESTAMP data type.
+          If `active_period_start` is null, will be midnight on January 1, 1900.
+      - name: active_period_end_ts
+        description: |
+          `active_period_end` converted to a TIMESTAMP data type.
+          If `active_period_end` is null, will be midnight on January 1, 2099.
       - *_header_message_age
   - name: fct_daily_service_alerts
     description: |
