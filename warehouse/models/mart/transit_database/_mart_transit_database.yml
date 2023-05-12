@@ -74,14 +74,9 @@ models:
     tests: *mutually_exclusive_ranges
     columns:
       - *key
-      - name: annual_database_agency_information_2021_key
-        tests:
-          # we have entries for about 20% right now
-          - dbt_utils.not_null_proportion:
-              at_least: 0.2
-          - relationships:
-              to: ref('dim_annual_database_agency_information')
-              field: key
+      - name: ntd_id
+        description: |
+          The organization's ID in the National Transit Database
       - name: name
         description: Organization name
       - name: organization_type
@@ -468,48 +463,6 @@ models:
       - name: organization_hubspot_company_record_id
         description: |
           Hubspot CRM record ID for this organization.
-  - name: dim_ntd_agency_info
-    description: '{{ doc("ntd_agency_info_table") }}'
-    columns:
-      - *key
-      - name: ntd_id
-      - name: legacy_ntd_id
-      - name: ntd_agency_name
-      - name: reporter_acronym
-      - name: doing_business_as
-      - name: reporter_status
-      - name: reporter_type
-      - name: reporting_module
-      - name: organization_type
-      - name: reported_by_ntd_id
-      - name: reported_by_name
-      - name: subrecipient_type
-      - name: fy_end_date
-      - name: original_due_date
-      - name: address_line_1
-      - name: address_line_2
-      - name: p_o__box
-      - name: city
-      - name: state
-      - name: zip_code
-      - name: zip_code_ext
-      - name: region
-      - name: url
-      - name: fta_recipient_id
-      - name: duns_number
-      - name: service_area_sq_miles
-      - name: service_area_pop
-      - name: primary_uza
-      - name: uza_name
-      - name: tribal_area_name
-      - name: population
-      - name: density
-      - name: sq_miles
-      - name: voms_do
-      - name: voms_pt
-      - name: total_voms
-      - name: volunteer_drivers
-      - name: personal_vehicles
   - name: dim_county_geography
     description: '{{ doc("county_geography_table") }}'
     columns:
@@ -786,31 +739,6 @@ models:
              to: ref('dim_gtfs_datasets')
              field: key
              to_condition: "type = 'schedule'"
-  - name: bridge_organizations_x_ntd_agency_info
-    description: |
-      Mapping table between organizations and associated
-      NTD agency info records.
-      This is a partially versioned relationship.
-      Because organization records are versioned and NTD agency info records
-      are current-only this represents relationships between versioned organization
-      records and unversioned NTD agency info records.
-      Joins via this table can result in fanout.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - organization_key
-            - ntd_agency_info_key
-    columns:
-      - name: organization_key
-        tests:
-          - relationships:
-             to: ref('dim_organizations')
-             field: key
-      - name: ntd_agency_info_key
-        tests:
-          - relationships:
-             to: ref('dim_ntd_agency_info')
-             field: key
   - name: bridge_services_x_modes
     description: |
       Mapping table between services and associated

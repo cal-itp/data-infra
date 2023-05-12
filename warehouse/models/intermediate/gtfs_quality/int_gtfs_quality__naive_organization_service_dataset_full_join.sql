@@ -60,13 +60,6 @@ validation_bridge AS (
         ON CAST(date_spine.date AS TIMESTAMP) BETWEEN dim._valid_from AND dim._valid_to
 ),
 
-ntd_bridge AS (
-    SELECT *
-    FROM date_spine
-    LEFT JOIN {{ ref('bridge_organizations_x_ntd_agency_info') }} AS dim
-    ON CAST(date_spine.date AS TIMESTAMP) BETWEEN dim._valid_from AND dim._valid_to
-),
-
 -- for history before Airtable, there are URLs that we were attempting to download
 schedule_urls AS (
     SELECT DISTINCT
@@ -112,7 +105,7 @@ int_gtfs_quality__naive_organization_service_dataset_full_join AS (
         orgs.itp_id AS organization_itp_id,
         orgs.source_record_id AS organization_source_record_id,
         orgs.hubspot_company_record_id AS organization_hubspot_company_record_id,
-        ntd_bridge.ntd_id AS organization_ntd_id,
+        orgs.ntd_id AS organization_ntd_id,
         services.name AS service_name,
         services.assessment_status AS services_raw_assessment_status,
         services.currently_operating AS service_currently_operating,
@@ -159,9 +152,6 @@ int_gtfs_quality__naive_organization_service_dataset_full_join AS (
     FULL OUTER JOIN rt_feeds
         ON datasets.date = rt_feeds.date
         AND datasets.base64_url = rt_feeds.base64_url
-    LEFT JOIN ntd_bridge
-        ON orgs.key = ntd_bridge.organization_key
-        AND orgs.date = ntd_bridge.date
     -- just to be on the safe side, double check that we aren't including current date
     WHERE COALESCE(orgs.date,
             services.date,
