@@ -134,12 +134,15 @@
 
     async function updateMap() {
         console.log(selected);
+
         if (layer) {
             map.removeLayer(layer);
             layer = null;
         }
 
         if (!selected.url) {
+            $page.url.searchParams.delete("selected");
+            goto(`?${$page.url.searchParams.toString()}`);
             return
         }
 
@@ -334,11 +337,8 @@
           const possible = options.find(option => option.name === selectedName);
           if (possible) {
             selected = possible;
-            updateMap()
+            updateMap();
           }
-        } else if (dev) {
-          selected = options[2];
-          await updateMap();
         }
     })
     ;
