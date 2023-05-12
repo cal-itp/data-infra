@@ -1,4 +1,5 @@
-{{ config(materialized='table') }}
+{{ config(materialized='incremental',
+   unique_key = dbt_utils.generate_surrogate_key(['feed_key', 'trip_id', 'trip_first_departure_sec'])) }}
 
 WITH
 
