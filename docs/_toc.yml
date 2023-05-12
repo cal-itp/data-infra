@@ -29,6 +29,7 @@ parts:
         - glob: analytics_new_analysts/*
       - file: warehouse/overview
         sections:
+        - file: warehouse/warehouse_starter_kit
         - file: warehouse/what_is_agency
         - file: warehouse/developing_dbt_models
         - file: warehouse/adding_oneoff_data
