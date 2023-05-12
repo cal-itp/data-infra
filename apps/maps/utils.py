@@ -1,13 +1,14 @@
+import gzip
 import json
 from enum import Enum
 from pathlib import Path
-from typing import Annotated, List, Optional
+from typing import Annotated, List, Optional, Union
 
 import typer
 import urllib3
 import yaml
 from calitp_data.storage import get_fs
-from geojson_pydantic import Feature, FeatureCollection, Polygon
+from geojson_pydantic import Feature, FeatureCollection, MultiPolygon, Point, Polygon
 from pydantic import BaseModel, HttpUrl, ValidationError, root_validator
 from tqdm import tqdm
 
@@ -34,12 +35,23 @@ class Speedmap(BaseModel):
         return values
 
 
+class HQTA(BaseModel):
+    hqta_type: str
+    agency_name_primary: str
+    agency_name_secondary: Optional[str]
+
+
 class Analysis(str, Enum):
-    speedmap = "speedmap"
+    speedmaps = "speedmap"
+    hqta_areas = "hqta_areas"
+    hqta_stops = "hqta_stops"
 
 
-ANALYSIS_MAP = {
-    Analysis.speedmap: Feature[Polygon, Speedmap],
+# Dict Props just mean properties are an arbitrary dictionary
+ANALYSIS_FEATURE_TYPES = {
+    Analysis.speedmaps: Feature[Polygon, Speedmap],
+    Analysis.hqta_areas: Feature[Union[Polygon, MultiPolygon], HQTA],
+    Analysis.hqta_stops: Feature[Point, HQTA],
 }
 
 
@@ -48,12 +60,15 @@ def validate_geojson(path: str, analysis: Optional[Analysis] = None):
     typer.secho(f"Validating {path}...", fg=typer.colors.MAGENTA)
     fs = get_fs()
     openf = fs.open if path.startswith("gs://") else open
+    is_compressed = path.endswith(".gz")
 
-    with openf(path) as f:
+    with openf(path, "rb" if is_compressed else "r") as f:
+        if is_compressed:
+            f = gzip.GzipFile(fileobj=f)
         collection = FeatureCollection(**json.load(f))
 
     if analysis:
-        analysis_class = ANALYSIS_MAP[analysis]
+        analysis_class = ANALYSIS_FEATURE_TYPES[analysis]
         typer.secho(f"Validating that features are {analysis_class}...")
         for feature in tqdm(collection.features):
             try:
