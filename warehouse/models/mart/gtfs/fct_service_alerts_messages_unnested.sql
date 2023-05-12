@@ -65,6 +65,10 @@ fct_service_alerts_messages_unnested AS (
         -- active periods
         active_period_start,
         active_period_end,
+        -- per spec, start/end is +/- infinity if null: https://gtfs.org/realtime/reference/#message-timerange
+        -- use placeholders instead
+        COALESCE(TIMESTAMP_SECONDS(active_period_start), TIMESTAMP(DATE(1900,1,1))) AS active_period_start_ts,
+        COALESCE(TIMESTAMP_SECONDS(active_period_end), TIMESTAMP(DATE(2099,1,1))) AS active_period_end_ts,
 
         -- informed entities
         agency_id,
