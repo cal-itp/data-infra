@@ -14,6 +14,8 @@ requests = "^2.30.0"
 tqdm = "^4.65.0"
 pycurl = "^7.45.2"
 urllib3 = "^2.0.2"
+geojson-pydantic = "^0.6.1"
+calitp-data = "2023.2.15.1"
 
 
 [build-system]
