@@ -12,7 +12,7 @@
 }}
 
 WITH service_alerts AS (
-    SELECT * FROM {{ ref('fct_service_alert_informed_entities') }}
+    SELECT * FROM {{ ref('fct_service_alerts_messages_unnested') }}
     WHERE {{ gtfs_rt_dt_where() }}
 ),
 

@@ -913,48 +913,90 @@ models:
           Synthetic primary key constructed from `service_alerts_message_key`,
           `active_period_start`, and `active_period_end`.
         tests: *rt_primary_key_tests
-      - &service_alert_message_key
-        name: service_alert_message_key
+  - name: fct_service_alerts_messages_unnested
+    description: |
+      This table contains GTFS RT service alerts messages with all elements (informed entities,
+      active periods, and translations) unnested, so each row is a message / entity / active period /
+      translation combination. It has been filtered so that only one translation (the one with highest likelihood
+      of being in English) appears per message.
+      Therefore one row here should correspond to one actual "alert" (counting alerts
+      that apply to different entities or different time periods as distinct.)
+      See: https://gtfs.org/realtime/reference/#message-alert for field definitions.
+    columns:
+      - name: key
         description: |
-          The primary key for the record in `dim_gtfs_datasets` associated with this message.
+          Synthetic primary key constructed from `service_alerts_message_key` along with the active period
+          and informed entities.
+        tests: *rt_primary_key_tests
+      - name: service_alert_message_key
+        description: |
+          The primary key for the message in `fct_service_alerts_messages`.
         tests:
           - not_null:
               config:
                 where: '__rt_sampled__'
-          # todo: figure out how to get this to work; it's erroring on the partition elimination
-          # - dbt_utils.relationships_where:
+          # this doesn't work because we would need to do partition elimination on fct_service_alerts_messages
+          # TODO: create a custom relationships_where to handle the partition elimination
+          # - relationships:
           #     to: ref('fct_service_alerts_messages')
           #     field: key
           #     config:
-          #       to_condition: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
-          #       from_condition: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)
-      - name: dt
-      - name: active_period_start
+          #       where: '__rt_sampled__'
+      - name: gtfs_dataset_key
         description: |
-          See: https://gtfs.org/realtime/reference/#message-timerange.
-      - name: active_period_end
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-timerange.
-  - name: fct_service_alert_informed_entities
-    description: |
-      Each row is an informed entity for a service alerts message.
-      See https://gtfs.org/realtime/reference/#message-alert for information
-      about message structure.
-      Due to data size, this table **must** be queried with a date filter (like `WHERE dt = 'YYYY-MM-DD'`).
-      Hour filters will also further improve performance.
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `service_alerts_message_key`,
-          `agency_id`, `trip_id`, `route_id`, and `stop_id`.
-        tests: &service_alert_key_tests
-          - unique_proportion:
-              at_least: 0.98
+          The primary key for the record in `dim_gtfs_datasets` associated with this message.
+        columns:
+          - <<: *gtfs_dataset_key
+            config:
               where: '__rt_sampled__'
-          - not_null:
-              where: '__rt_sampled__'
-      - *service_alert_message_key
       - name: dt
+        description: |
+          Date on which we scraped this message.
+          A date filter *must* be provided when querying this table, because of the size of the data.
+      - name: hour
+        description: |
+          Timestamp of the beginning of the hour in which this message was scraped,
+          ex. "2022-09-01T00:00:00+00".
+      - name: base64_url
+        description: |
+          URL-safe base64 encoding of the URL from which this message was scraped.
+      - name: _extract_ts
+        description: |
+          Time at which this message was scraped.
+      - name: _gtfs_dataset_name
+        description: |
+          String name of the GTFS dataset of which this message is a part.
+          This field is provided for human readability and should not be used as a join key.
+      - name: url_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: url_language
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: header_text_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: header_text_language
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: description_text_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: description_text_language
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: tts_header_text_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: tts_header_text_language
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: tts_description_text_text
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
+      - name: tts_description_text_language
+        description: |
+          See: https://gtfs.org/realtime/reference/#message-translation.
       - name: agency_id
         description: |
           See: https://gtfs.org/realtime/reference/#message-entityselector.
@@ -988,55 +1030,13 @@ models:
       - name: stop_id
         description: |
           See: https://gtfs.org/realtime/reference/#message-entityselector.
-  - name: fct_service_alert_translations
-    description: |
-      Each row is a translation for a service alerts message in a given language.
-      See https://gtfs.org/realtime/reference/#message-alert for information
-      about message structure.
-      Due to data size, this table **must** be queried with a date filter (like `WHERE dt = 'YYYY-MM-DD'`).
-      Hour filters will also further improve performance.
-    columns:
-      - name: key
+      - name: active_period_start
         description: |
-          Synthetic primary key constructed from `service_alerts_message_key`,
-          `header_text_text`, and `header_text_language`.
-        tests: *rt_primary_key_tests
-      - *service_alert_message_key
-      - name: dt
-      - name: url_text
+          See: https://gtfs.org/realtime/reference/#message-timerange.
+      - name: active_period_end
         description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
-      - name: url_language
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
-      - name: header_text_text
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
-      - name: header_text_language
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
-      - name: description_text_text
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
-      - name: description_text_language
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
-      - name: tts_header_text_text
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
-      - name: tts_header_text_language
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
-      - name: tts_description_text_text
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
-      - name: tts_description_text_language
-        description: |
-          See: https://gtfs.org/realtime/reference/#message-translation.
-      - name: english_likelihood
-        description: |
-          100 if English language, 1 if null (null can mean no internationalization),
-          0 for other languages.
+          See: https://gtfs.org/realtime/reference/#message-timerange.
+      - *_header_message_age
   - name: fct_daily_service_alerts
     description: |
       Each row is a daily summary of a service alert.
@@ -1047,7 +1047,12 @@ models:
         description: |
           Synthetic primary key constructed from `dt`,
           `base64_url`, and entity `id`.
-        tests: *service_alert_key_tests
+        tests:
+          - unique_proportion:
+              at_least: 0.98
+              where: '__rt_sampled__'
+          - not_null:
+              where: '__rt_sampled__'
       - name: first_header_timestamp
         description: |
           Earliest header timestamp at which this alert appeared on this date.

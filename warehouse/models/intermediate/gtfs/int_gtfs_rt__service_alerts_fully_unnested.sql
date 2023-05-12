@@ -3,22 +3,42 @@ WITH messages AS (
     FROM {{ ref('fct_service_alerts_messages') }}
 ),
 
-fct_service_alert_translations AS (
+int_gtfs_rt__service_alerts_fully_unnested AS (
     SELECT
-        messages.* EXCEPT(
-            key,
-            header_text,
-            description_text,
-            tts_header_text,
-            tts_description_text,
-            url
-        ),
         key AS service_alert_message_key,
+        gtfs_dataset_key,
+        dt,
+        hour,
+        _extract_ts,
+        header_timestamp,
+        base64_url,
+        _config_extract_ts,
+        _gtfs_dataset_name,
+        _header_message_age,
+        header_version,
+        header_incrementality,
+        id,
+        cause,
+        effect,
 
-        {{ dbt_utils.generate_surrogate_key(['key',
-            'unnested_header_text_translation.text',
-            'unnested_header_text_translation.language']) }} AS key,
+        -- active periods
+        unnested_active_period.start AS active_period_start,
+        unnested_active_period.end AS active_period_end,
 
+        -- informted entities
+        unnested_informed_entity.agencyId AS agency_id,
+        unnested_informed_entity.routeId AS route_id,
+        unnested_informed_entity.routeType AS route_type,
+        unnested_informed_entity.directionId AS direction_id,
+        unnested_informed_entity.trip.tripId AS trip_id,
+        unnested_informed_entity.trip.routeId AS trip_route_id,
+        unnested_informed_entity.trip.directionId AS trip_direction_id,
+        unnested_informed_entity.trip.startTime AS trip_start_time,
+        unnested_informed_entity.trip.startDate AS trip_start_date,
+        unnested_informed_entity.trip.scheduleRelationship AS trip_schedule_relationship,
+        unnested_informed_entity.stopId AS stop_id,
+
+        -- text (translations)
         unnested_header_text_translation.text AS header_text_text,
         unnested_header_text_translation.language AS header_text_language,
 
@@ -34,12 +54,16 @@ fct_service_alert_translations AS (
         unnested_url_translation.text AS url_text,
         unnested_url_translation.language AS url_language,
 
+        -- try to assess which rows are English versions (if available);
+        -- we don't want to double count alerts when multiple lanugages are present
         CASE
             WHEN unnested_header_text_translation.language LIKE "%en%" THEN 100
             WHEN unnested_header_text_translation.language IS NULL THEN 1
             ELSE 0
         END AS english_likelihood
     FROM messages
+    LEFT JOIN UNNEST(messages.informed_entity) AS unnested_informed_entity
+    LEFT JOIN UNNEST(messages.active_period) AS unnested_active_period
     -- https://stackoverflow.com/questions/44918108/google-bigquery-i-lost-null-row-when-using-unnest-function
     -- these arrays may have nulls
     LEFT JOIN UNNEST(messages.header_text.translation) AS unnested_header_text_translation
@@ -54,4 +78,4 @@ fct_service_alert_translations AS (
        AND COALESCE(unnested_url_translation.language, unnested_header_text_translation.language, 'language') = COALESCE(unnested_header_text_translation.language, 'language')
 )
 
-SELECT * FROM fct_service_alert_translations
+SELECT * FROM int_gtfs_rt__service_alerts_fully_unnested
