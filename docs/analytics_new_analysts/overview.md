@@ -13,6 +13,7 @@ This section is geared towards data analysts who are new to Python. The followin
 * [Working with Geospatial Data: Advanced](geo-advanced)
 
 ## Additional Resources:
+* If you are new to Python, take a look at [all the Python tutorials](https://www.linkedin.com/learning/search?keywords=python&u=36029164) available through Caltrans. There are many introductory Python courses [such as this one.](https://www.linkedin.com/learning/python-essential-training-18764650/getting-started-with-python?autoplay=true&u=36029164)
 * [Joris van den Bossche's Geopandas Tutorial](https://github.com/jorisvandenbossche/geopandas-tutorial)
 * [Practical Python for Data Science by Jill Cates](https://www.practicalpythonfordatascience.com/intro.html)
 * [Ben-Gurion University of the Negev - Geometric operations](https://geobgu.xyz/py/geopandas2.html)

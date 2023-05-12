@@ -1,6 +1,6 @@
 (warehouse-starter-kit-page)=
 # Warehouse: Where to Begin
-[There is a large selection of data available in the warehouse.](https://console.cloud.google.com/bigquery?project=cal-itp-data-infra&ws=!1m0) Consider this page a short guide to the most commonly used tables in our analyses.
+[There is a large selection of data available in the warehouse.](https://console.cloud.google.com/bigquery?project=cal-itp-data-infra&ws=!1m0) Consider this page a short guide to the most commonly used tables in our work.
 
 * [Important Links](#links)
 * [Trips](#trips)
@@ -26,7 +26,7 @@ On a given day:
 ## Shapes
 * [fct_daily_scheduled_shapes](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_daily_scheduled_shapes)
     * Use `gtfs_utils_v2.get_shapes()`.
-    * Contains `point` geometry, so you can see the length and location of a route for all the routes an operator can run on a given date.
+    * Contains `point` geometry, so you can see the length and location of a route an operator can run on a given date.
     * Find out how many trips did an operator make for a particular route.
     * Each shape has its own `shape_id` and `array_key`.
     * An express version and the regular version of a route are considered two different shapes.
@@ -37,8 +37,8 @@ For a given day:
     * Use `gtfs_utils_v2.get_stops()`.
     * Contains `point` geometry.
     * How many stops did an operator make? Where did they stop?
-    * How many stops did a particular transit type (streetcar, rail, ferry, etc)?
-    * Detailed information such as how passengers embark/disembark (ex: on a stop/at a station) onto a vehicle and whether or not there is wheelchair boarding.
+    * How many stops did a particular transit type (streetcar, rail, ferry...)?
+    * Detailed information such as how passengers embark/disembark (ex: on a stop/at a station) onto a vehicle.
 
 * [fct_daily_schedule_feeds](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_daily_schedule_feeds)
     * Use `gtfs_utils_v2.schedule_daily_feed_to_organization()`.
@@ -47,12 +47,12 @@ For a given day:
     * Is the URL to an operator's GTFS feed stable or not?
 
 ### Other
-* [dim_annual_database_agency_information](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.dim_annual_database_agency_information) TRANSIT_DATABASE
-    * Data via the National Transit Database.
+* [dim_annual_database_agency_information](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.dim_annual_database_agency_information)
+    * View some of the data produced by the [US Department of Transportation](https://www.transit.dot.gov/ntd) for the National Transit Database.
     * Information from 2018-2021 are available.
     * Includes information such as reporter type, organization type, website, and address.
-    * Not every operator is required to report their data to the NTD, so this could be an incomplete dataset.
+    * Not every operator is required to report their data to the NTD, so this is not a comprehensive dataset.
 
-* [fct_daily_organization_combined_guideline_checks](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_daily_organization_combined_guideline_checks) GTFS_QUALITY
-    * Understand how well GTFS data conforms to [California's Transit Data Guidelines](https://dot.ca.gov/cal-itp/california-transit-data-guidelines).
+* [fct_daily_organization_combined_guideline_checks](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_daily_organization_combined_guideline_checks)
+    * Understand GTFS quality - how well an operator's GTFS data conforms to [California's Transit Data Guidelines](https://dot.ca.gov/cal-itp/california-transit-data-guidelines).
     * Each operator has 14 rows. Each row details how well an operator's GTFS data conforms to a certain guideline (availability on website, accurate accessibility data, etc).

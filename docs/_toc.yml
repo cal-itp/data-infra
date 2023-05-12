@@ -35,6 +35,7 @@ parts:
         - file: analytics_new_analysts/spatial-analysis-advanced
       - file: warehouse/overview
         sections:
+        - file: warehouse/warehouse_starter_kit
         - file: warehouse/what_is_agency
         - file: warehouse/table_naming
         - file: warehouse/adding_oneoff_data
