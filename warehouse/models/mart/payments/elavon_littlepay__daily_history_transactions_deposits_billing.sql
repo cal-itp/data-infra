@@ -2,9 +2,15 @@
 
 WITH fct_elavon__transactions AS (
     SELECT
+
         *,
         -- this same treatment for the other customers in the future when we expand dashboard for other customers?
-        IF(customer_name = 'MST TAP TO RIDE', 'mst', customer_name) AS participant_id
+        CASE
+          WHEN customer_name = 'MST TAP TO RIDE' THEN 'mst'
+          WHEN customer_name = 'CAPITOL CORRIDOR TAP2RIDE' THEN 'ccjpa'
+        ELSE customer_name
+        END AS participant_id
+
     FROM  {{ ref('fct_elavon__transactions') }}
 ),
 
