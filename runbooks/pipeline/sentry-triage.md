@@ -9,9 +9,10 @@ Once a day, the person responsible for triage should check Sentry for new and cu
 * All **new issues** from the past 24 hours. An issue is a top-level error/failure/warning, and a new issue represents something we have't seen before (as opposed to a new event instance of an issue that's been occurring for a while). These should be top priority to investigate since they represent net-new problems.
    * To identify: use the ["Daily Triage (new issues)" Issues search](https://sentry.calitp.org/organizations/sentry/issues/searches/5/?environment=cal-itp-data-infra&project=2)
    * The search criteria is: `is:unresolved firstSeen:-24h` on the [`Issues` page](https://sentry.calitp.org/organizations/sentry/issues/)
+   * Note that this search will not identify regressions that are reappearing as "new"; regressions should appear on the observed events search noted below. You can also use the [`For Review` Issue search tab](https://sentry.calitp.org/organizations/sentry/issues/?environment=cal-itp-data-infra&project=2&query=is%3Aunresolved+is%3Afor_review) to check for regressions.
 
 * All **observed events** from the past 24 hours. An event is an instance of an issue, so these may not be *new* but we want to monitor all currently-active errors. For this monitoring we suppress some of the noisy `RTFetchException` and `CalledProcessError` events that tend to happen intermittently most days.
-   * To identify: use the ["Daily triage" Discover search](https://sentry.calitp.org/organizations/sentry/discover/results/?environment=cal-itp-data-infra&id=1&project=2&statsPeriod=24h)
+   * To identify: use the ["Daily triage (all events)" Discover search](https://sentry.calitp.org/organizations/sentry/discover/results/?environment=cal-itp-data-infra&id=1&project=2&statsPeriod=24h)
    * The search criteria is: `event.type:error (!message:RTFetchException OR count > 15) (!message:CalledProcessError OR count > 1) (!message:DbtTestWarn)` on the [`Discover` page](https://sentry.calitp.org/organizations/sentry/discover/queries/)
 
 Categorize the issues/events identified and perform relevant steps if the issue is not already assigned (particularly for the second search, existing issues may already be assigned so you may not need to do anything new).
