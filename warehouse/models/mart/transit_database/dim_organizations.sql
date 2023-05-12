@@ -40,5 +40,6 @@ dim_organizations AS (
     FROM dim
     LEFT JOIN ntd_agency_to_organization ntd_to_org
         ON dim.source_record_id = ntd_to_org.organization_record_id
+)
 
 SELECT * FROM dim_organizations
