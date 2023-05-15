@@ -134,7 +134,6 @@ models:
         description: |
           Flag indicating whether this is the most recent version of
           this record.
-      - name: hq_county_geography
   - name: dim_services
     description: '{{ doc("services_table") }}'
     tests: *mutually_exclusive_ranges
@@ -186,7 +185,6 @@ models:
           Is either "Yes" or "No" and indicates whether this Service qualifies as
           being an assessed service
       - name: deprecated_date
-      - name: operating_county_geographies
       - *valid_from_actual
       - *valid_to_actual
       - *is_current_actual
