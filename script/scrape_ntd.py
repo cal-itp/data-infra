@@ -18,7 +18,7 @@ import pandas as pd  # type: ignore
 import pendulum
 import requests
 import typer
-from calitp.storage import (  # type: ignore
+from calitp_data_infra.storage import (  # type: ignore
     PartitionedGCSArtifact,
     get_fs,
     make_name_bq_safe,

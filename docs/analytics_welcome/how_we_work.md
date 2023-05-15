@@ -19,6 +19,7 @@ The section below outlines our team's primary meetings and their purposes, as we
 | -------- | -------- | -------- |
 | #**data-analysis** | Discussion | For sharing and collaborating on Cal-ITP data analyses. |
 | #**data-office-hours** | Discussion | A place to bring questions, issues, and observations for team discussion. |
+| #**data-warehouse-devs** | Discussion | For people building dbt models - focused on data warehouse performance considerations, etc. |
 | #**lunch-n-learn** | Discussion | A channel for discussions around our weekly Lunch n' Learns. |
 
 ## Collaboration Tools

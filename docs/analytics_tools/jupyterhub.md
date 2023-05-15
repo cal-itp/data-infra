@@ -60,7 +60,7 @@ gcloud auth application-default login
 By default, there is a query limit set within the Jupyter Notebook. Most queries should be within that limit, and running into `DatabaseError: 500 Query exceeded limit for bytes billed` should be a red flag to investigate whether such a large query is needed for the analysis. To increase the query limit, add and execute the following in your notebook:
 
 ```python
-from calitp.tables import tbls
+from calitp_data_analysis.tables import tbls
 
 import os
 os.environ["CALITP_BQ_MAX_BYTES"] = str(20_000_000_000)
@@ -76,7 +76,7 @@ JupyterHub makes it easy to query SQL in the notebooks.
 To query SQL, simply import the below at the top of your notebook:
 
 ```python
-import calitp.magics
+import calitp_data_analysis.magics
 ```
 And add the following to the top of any cell block that you would like to query SQL in:
 
@@ -87,7 +87,7 @@ And add the following to the top of any cell block that you would like to query 
 Example:
 
 ```python
-import calitp.magics
+import calitp_data_analysis.magics
 ```
 ```sql
 %%sql
