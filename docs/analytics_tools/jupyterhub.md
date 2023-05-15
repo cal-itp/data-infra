@@ -94,9 +94,9 @@ import calitp_data_analysis.magics
 
 SELECT
     COUNT(*)
-FROM `views.gtfs_schedule_dim_feeds`
+FROM `mart_gtfs.dim_schedule_feeds`
 WHERE
-    calitp_feed_name = "AC Transit (0)"
+    key = "db58891de4281f965b4e7745675415ab"
 LIMIT 10
 ```
 (saving-code-jupyter)=

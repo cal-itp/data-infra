@@ -70,7 +70,7 @@ Example:
 ```{code-cell}
 from calitp_data_analysis.tables import tbls
 
-tbls.views.gtfs_schedule_fact_daily_feed_routes()
+tbls.mart_gtfs.dim_agency()
 ```
 
 ### query_sql
@@ -86,7 +86,7 @@ from calitp_data_analysis.sql import query_sql
 df_dim_feeds = query_sql("""
 SELECT
     *
-FROM `views.gtfs_schedule_dim_feeds`
+FROM `mart_gtfs.dim_agency`
 LIMIT 10""", as_df=True)
 ```
 
@@ -109,8 +109,8 @@ from siuba import _, filter, count, collect, show_query
 
 # query lastest validation notices, then filter for a single gtfs feed,
 # and then count how often each code occurs
-(tbls.views.gtfs_schedule_dim_feeds()
-    >> filter(_.calitp_itp_id == 10, _.calitp_url_number==0)
+(tbls.mart_gtfs.dim_agency()
+    >> filter(_.agency_id == 'BA', _.base64_url == 'aHR0cHM6Ly9hcGkuNTExLm9yZy90cmFuc2l0L2RhdGFmZWVkcz9vcGVyYXRvcl9pZD1SRw==')
     >> count(_.feed_key)
 )
 ```
@@ -122,7 +122,7 @@ Note that siuba by default prints out a preview of the SQL query results.
 In order to fetch the results of the query as a pandas DataFrame, run `collect()`.
 
 ```{code-cell}
-tbl_agency_names = tbls.views.gtfs_schedule_dim_feeds() >> collect()
+tbl_agency_names = tbls.mart_gtfs.dim_agency() >> collect()
 
 # Use pandas .head() method to show first 5 rows of data
 tbl_agency_names.head()
@@ -136,8 +136,8 @@ tbl_agency_names.head()
 While `collect()` fetches query results, `show_query()` prints out the SQL code that siuba generates.
 
 ```{code-cell}
-(tbls.views.gtfs_schedule_dim_feeds()
-  >> filter(_.calitp_agency_name.str.contains("Metro"))
+(tbls.mart_gtfs.dim_agency()
+  >> filter(_.agency_name.str.contains("Metro"))
   >> show_query(simplify=True)
 )
 
