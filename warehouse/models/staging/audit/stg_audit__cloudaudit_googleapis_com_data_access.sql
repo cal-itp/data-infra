@@ -7,7 +7,6 @@
             'data_type': 'date',
             'granularity': 'day',
         },
-        partitions=['current_date()'],
         cluster_by='job_type',
     )
 }}
