@@ -1,6 +1,6 @@
 (warehouse-starter-kit-page)=
 # Warehouse: Where to Begin
-[There is a large selection of data available in the warehouse.](https://console.cloud.google.com/bigquery?project=cal-itp-data-infra&ws=!1m0) Consider this page a short guide to the most commonly used tables in our work.
+[There is a large selection of data available in the warehouse.](https://console.cloud.google.com/bigquery?project=cal-itp-data-infra&ws=!1m0) Consider  a short guide to the most commonly used tables in our work.
 
 * [Important Links](#links)
 * [Trips](#trips)
@@ -20,15 +20,14 @@ On a given day:
     * Answer how many trips is an operator scheduled to run? How many trips did a particular route make?
 
 * [fct_observed_trips](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_observed_trips)
-    * Realtime observations of trips combined with scheduled data to get a full picture of what occurred.
+    * Realtime observations of trips to get a full picture of what occurred.
     * Find a trip's start time, where it went, and which route it is associated with.
 
 ## Shapes
 * [fct_daily_scheduled_shapes](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_daily_scheduled_shapes)
     * Use `gtfs_utils_v2.get_shapes()`.
     * Contains `point` geometry, so you can see the length and location of a route an operator can run on a given date.
-    * Find out how many trips did an operator make for a particular route.
-    * Each shape has its own `shape_id` and `array_key`.
+    * Each shape has its own `shape_id` and `shape_array_key`.
     * An express version and the regular version of a route are considered two different shapes.
 
 ## Daily
@@ -47,7 +46,7 @@ For a given day:
     * Is the URL to an operator's GTFS feed stable or not?
 
 ### Other
-* [dim_annual_database_agency_information](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.dim_annual_database_agency_information)
+* [dim_annual_ntd_agency_information](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.dim_annual_database_agency_information)
     * View some of the data produced by the [US Department of Transportation](https://www.transit.dot.gov/ntd) for the National Transit Database.
     * Information from 2018-2021 are available.
     * Includes information such as reporter type, organization type, website, and address.
@@ -55,4 +54,4 @@ For a given day:
 
 * [fct_daily_organization_combined_guideline_checks](https://dbt-docs.calitp.org/#!/model/model.calitp_warehouse.fct_daily_organization_combined_guideline_checks)
     * Understand GTFS quality - how well an operator's GTFS data conforms to [California's Transit Data Guidelines](https://dot.ca.gov/cal-itp/california-transit-data-guidelines).
-    * Each operator has 14 rows. Each row details how well an operator's GTFS data conforms to a certain guideline (availability on website, accurate accessibility data, etc).
+    * Each operator has 74 rows. Each row details how well an operator's GTFS data conforms to a certain guideline (availability on website, accurate accessibility data, etc).
