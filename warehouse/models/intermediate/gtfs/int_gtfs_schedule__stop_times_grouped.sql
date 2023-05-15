@@ -59,8 +59,8 @@ int_gtfs_schedule__stop_times_grouped AS (
         trip_end_timezone,
         iteration_num,
         exact_times,
-        COUNT(DISTINCT stop_id) AS n_stops,
-        COUNT(*) AS n_stop_times,
+        COUNT(DISTINCT stop_id) AS num_distinct_stops_served,
+        COUNT(*) AS num_stop_events,
         -- note: not using the interval columns here because the interval type doesn't support aggregation
         -- so we'd probably have to lean on seconds/window functions anyway
         -- for frequency based trips, we have trip_start_time_sec, else just use departure sec
@@ -79,34 +79,34 @@ int_gtfs_schedule__stop_times_grouped AS (
 
         -- see: https://gtfs.org/schedule/reference/#stop_timestxt for the enum definitions on the following fields
         -- including default value definitions
-        {{ countif_enum_with_default('pickup_type', value_to_check = 0, default_value = 0) }} AS ct_regularly_scheduled_pickup_stops,
-        {{ countif_enum_with_default('pickup_type', value_to_check = 1, default_value = 0) }} AS ct_no_pickup_stops,
-        {{ countif_enum_with_default('pickup_type', value_to_check = 2, default_value = 0) }} AS ct_phone_call_required_for_pickup_stops,
-        {{ countif_enum_with_default('pickup_type', value_to_check = 3, default_value = 0) }} AS ct_coordinate_pickup_with_driver_stops,
-        {{ countif_enum_with_default('drop_off_type', value_to_check = 0, default_value = 0) }} AS ct_regularly_scheduled_drop_off_stops,
-        {{ countif_enum_with_default('drop_off_type', value_to_check = 1, default_value = 0) }} AS ct_no_drop_off_stops,
-        {{ countif_enum_with_default('drop_off_type', value_to_check = 2, default_value = 0) }} AS ct_phone_call_required_for_drop_off_stops,
-        {{ countif_enum_with_default('drop_off_type', value_to_check = 3, default_value = 0) }} AS ct_coordinate_drop_off_with_driver_stops,
+        {{ countif_enum_with_default('pickup_type', value_to_check = 0, default_value = 0) }} AS num_regularly_scheduled_pickup_stop_events,
+        {{ countif_enum_with_default('pickup_type', value_to_check = 1, default_value = 0) }} AS num_no_pickup_stop_events,
+        {{ countif_enum_with_default('pickup_type', value_to_check = 2, default_value = 0) }} AS num_phone_call_required_for_pickup_stop_events,
+        {{ countif_enum_with_default('pickup_type', value_to_check = 3, default_value = 0) }} AS num_coordinate_pickup_with_driver_stop_events,
+        {{ countif_enum_with_default('drop_off_type', value_to_check = 0, default_value = 0) }} AS num_regularly_scheduled_drop_off_stop_events,
+        {{ countif_enum_with_default('drop_off_type', value_to_check = 1, default_value = 0) }} AS num_no_drop_off_stop_events,
+        {{ countif_enum_with_default('drop_off_type', value_to_check = 2, default_value = 0) }} AS num_phone_call_required_for_drop_off_stop_events,
+        {{ countif_enum_with_default('drop_off_type', value_to_check = 3, default_value = 0) }} AS num_coordinate_drop_off_with_driver_stop_events,
 
-        {{ countif_enum_with_default('continuous_pickup', value_to_check = 0, default_value = 1) }} AS ct_continuous_pickup_stops,
-        {{ countif_enum_with_default('continuous_pickup', value_to_check = 1, default_value = 1) }} AS ct_no_continuous_pickup_stops,
-        {{ countif_enum_with_default('continuous_pickup', value_to_check = 2, default_value = 1) }} AS ct_phone_call_required_for_continuous_pickup_stops,
-        {{ countif_enum_with_default('continuous_pickup', value_to_check = 3, default_value = 1) }} AS ct_coordinate_continuous_pickup_with_driver_stops,
-        {{ countif_enum_with_default('continuous_drop_off', value_to_check = 0, default_value = 1) }} AS ct_continuous_drop_off_stops,
-        {{ countif_enum_with_default('continuous_drop_off', value_to_check = 1, default_value = 1) }}  AS ct_no_continuous_drop_off_stops,
-        {{ countif_enum_with_default('continuous_drop_off', value_to_check = 2, default_value = 1) }}  AS ct_phone_call_required_for_continuous_drop_off_stops,
-        {{ countif_enum_with_default('continuous_drop_off', value_to_check = 3, default_value = 1) }}  AS ct_coordinate_continuous_drop_off_with_driver_stops,
+        {{ countif_enum_with_default('continuous_pickup', value_to_check = 0, default_value = 1) }} AS num_continuous_pickup_stop_events,
+        {{ countif_enum_with_default('continuous_pickup', value_to_check = 1, default_value = 1) }} AS num_no_continuous_pickup_stop_events,
+        {{ countif_enum_with_default('continuous_pickup', value_to_check = 2, default_value = 1) }} AS num_phone_call_required_for_continuous_pickup_stop_events,
+        {{ countif_enum_with_default('continuous_pickup', value_to_check = 3, default_value = 1) }} AS num_coordinate_continuous_pickup_with_driver_stop_events,
+        {{ countif_enum_with_default('continuous_drop_off', value_to_check = 0, default_value = 1) }} AS num_continuous_drop_off_stop_events,
+        {{ countif_enum_with_default('continuous_drop_off', value_to_check = 1, default_value = 1) }}  AS num_no_continuous_drop_off_stop_events,
+        {{ countif_enum_with_default('continuous_drop_off', value_to_check = 2, default_value = 1) }}  AS num_phone_call_required_for_continuous_drop_off_stop_events,
+        {{ countif_enum_with_default('continuous_drop_off', value_to_check = 3, default_value = 1) }}  AS num_coordinate_continuous_drop_off_with_driver_stop_events,
 
-        {{ countif_enum_with_default('timepoint', value_to_check = 0, default_value = 1) }}  AS ct_approximate_timepoint_stops,
-        {{ countif_enum_with_default('timepoint', value_to_check = 1, default_value = 1) }} AS ct_exact_timepoint_stops,
+        {{ countif_enum_with_default('timepoint', value_to_check = 0, default_value = 1) }}  AS num_approximate_timepoint_stop_events,
+        {{ countif_enum_with_default('timepoint', value_to_check = 1, default_value = 1) }} AS num_exact_timepoint_stop_events,
 
         COUNTIF(
             arrival_time IS NOT NULL
-        ) AS ct_arrival_times_populated,
+        ) AS num_arrival_times_populated_stop_events,
 
         COUNTIF(
             departure_time IS NOT NULL
-        ) AS ct_departure_times_populated,
+        ) AS num_departure_times_populated_stop_events,
 
     FROM stops_times_with_tz
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
