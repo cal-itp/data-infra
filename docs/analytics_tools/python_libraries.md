@@ -18,7 +18,7 @@ The following libraries are available and recommended for use by Cal-ITP data an
 
 ## Table of Contents
 1. [shared utils](#shared-utils)
-1. [calitp](#calitp)
+1. [calitp-data-analysis](#calitp-data-analysis)
 1. [siuba](#siuba)
 <br> - [Basic Query](#basic-query)
 <br> - [Collect Query Results](#collect-query-results)
@@ -55,8 +55,8 @@ shared_utils.geography_utils.WGS84
 See [data-analyses/example_reports](https://github.com/cal-itp/data-analyses/tree/main/example_report) for examples on how to use `shared_utils` for general functions, charts, and maps.
 
 (calitp)=
-## calitp
-`calitp` is an internal library of utility functions used to access our warehouse data.
+## calitp-data-analysis
+`calitp-data-analysis` is an internal library of utility functions used to access our warehouse data for analysis purposes.
 
 ### import tbls
 

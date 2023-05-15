@@ -35,7 +35,8 @@ The tools that we can use to answer them are:
 * [**SQL**](querying-sql-jupyterhub) - using JupyterHub cloud notebooks
 * [**Python**](jupyterhub-intro) - using JupyterHub cloud notebooks
     * *siuba* - a Cal-ITP recommended data analysis library in Python
-    * *calitp* - Cal-ITP's internal Python library
+    * *calitp-data-analysis* - Cal-ITP's internal Python library for analysis
+        * Two other Cal-ITP packages (calitp-data and calitp-data-infra) exist for other purposes
 
 ```{code-cell}
 :tags: [remove-cell]
