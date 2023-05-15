@@ -30,7 +30,7 @@ networkx = {version = "<3", extras = ["default"]}
 # export LDFLAGS="-L $(brew --prefix graphviz)/lib"
 pygraphviz = "^1.10"
 palettable = "^3.3.0"
-dbt-bigquery = "^1.5.0"
+dbt-bigquery = "1.6.0b1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.12.0"
