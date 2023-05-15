@@ -199,7 +199,7 @@ class ResourceType6(Enum):
     test = "test"
 
 
-class TestMetadata(BaseModel):
+class TestMetadata(BaseModel):  # type: ignore[no-redef]
     class Config:
         extra = Extra.allow
 
