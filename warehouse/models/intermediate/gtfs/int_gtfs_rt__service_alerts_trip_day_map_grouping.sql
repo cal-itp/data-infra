@@ -12,14 +12,8 @@
 }}
 
 WITH service_alerts AS (
-    SELECT
-        entities.*,
-        -- per spec, start/end is +/- infinity if null: https://gtfs.org/realtime/reference/#message-timerange
-        -- use placeholders instead
-        COALESCE(TIMESTAMP_SECONDS(unnested_active_period.start), TIMESTAMP(DATE(1900,1,1))) AS active_period_start_ts,
-        COALESCE(TIMESTAMP_SECONDS(unnested_active_period.end), TIMESTAMP(DATE(2099,1,1))) AS active_period_end_ts
-    FROM {{ ref('fct_service_alert_informed_entities') }} entities
-    LEFT JOIN UNNEST(active_period) AS unnested_active_period
+    SELECT *
+    FROM {{ ref('fct_service_alerts_messages_unnested') }}
     WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
         -- TODO: support route_id/direction_id/start_time as a trip identifier
         -- as of 2023-04-20, there are no cases of service alert messages where trip ID is not populated and trip.route ID is populated
@@ -58,8 +52,8 @@ int_gtfs_rt__service_alerts_trip_day_map_grouping AS (
         schedule_feeds.feed_timezone,
         ARRAY_AGG(DISTINCT
             TO_JSON_STRING(
-                STRUCT<cause string, effect string, header string, description string >
-                (cause, effect, header_text_text, description_text_text)
+                STRUCT<message_id string, cause string, effect string, header string, description string >
+                (id, cause, effect, header_text_text, description_text_text)
                 )) AS alert_content_array,
         ARRAY_AGG(DISTINCT id) AS message_ids_array,
         ARRAY_AGG(DISTINCT header_timestamp) AS header_timestamps_array,
