@@ -225,6 +225,16 @@ models:
             - feed_key
             - trip_id
             - iteration_num
+      - dbt_utils.expression_is_true:
+          expression: "ct_regularly_scheduled_pickup_stops + ct_no_pickup_stops + ct_phone_call_required_for_pickup_stops + ct_coordinate_pickup_with_driver_stops = n_stop_times"
+      - dbt_utils.expression_is_true:
+          expression: "ct_regularly_scheduled_drop_off_stops + ct_no_drop_off_stops + ct_phone_call_required_for_drop_off_stops + ct_coordinate_drop_off_with_driver_stops = n_stop_times"
+      - dbt_utils.expression_is_true:
+          expression: "ct_continuous_pickup_stops + ct_no_continuous_pickup_stops + ct_phone_call_required_for_continuous_pickup_stops + ct_coordinate_continuous_pickup_with_driver_stops = n_stop_times"
+      - dbt_utils.expression_is_true:
+          expression: "ct_continuous_drop_off_stops + ct_no_continuous_drop_off_stops + ct_phone_call_required_for_continuous_drop_off_stops + ct_coordinate_continuous_drop_off_with_driver_stops = n_stop_times"
+      - dbt_utils.expression_is_true:
+          expression: "ct_approximate_timepoint_stops + ct_exact_timepoint_stops = n_stop_times"
     columns:
       - *feed_key
       - name: trip_id
