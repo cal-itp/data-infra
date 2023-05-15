@@ -75,7 +75,89 @@ int_gtfs_schedule__stop_times_grouped AS (
         ) AS contains_warning_missing_foreign_key_stop_id,
         LOGICAL_OR(
             frequencies_defined_trip
-        ) AS frequencies_defined_trip
+        ) AS frequencies_defined_trip,
+
+        -- see: https://gtfs.org/schedule/reference/#stop_timestxt for the enum definitions on the following fields
+
+        COUNTIF(
+            COALESCE(pickup_type, 0) = 0
+        ) AS ct_regularly_scheduled_pickup_stops,
+
+        COUNTIF(
+            COALESCE(pickup_type, 0) = 1
+        ) AS ct_no_pickup_stops,
+
+        COUNTIF(
+            COALESCE(pickup_type, 0) = 2
+        ) AS ct_phone_call_required_for_pickup_stops,
+
+        COUNTIF(
+            COALESCE(pickup_type, 0) = 3
+        ) AS ct_coordinate_pickup_with_driver_stops,
+
+        COUNTIF(
+            COALESCE(drop_off_type, 0) = 0
+        ) AS ct_regularly_scheduled_drop_off_stops,
+
+        COUNTIF(
+            COALESCE(drop_off_type, 0) = 1
+        ) AS ct_no_drop_off_stops,
+
+        COUNTIF(
+            COALESCE(drop_off_type, 0) = 2
+        ) AS ct_phone_call_required_for_drop_off_stops,
+
+        COUNTIF(
+            COALESCE(drop_off_type, 0) = 3
+        ) AS ct_coordinate_drop_off_with_driver_stops,
+
+        COUNTIF(
+            COALESCE(continuous_pickup, 1) = 0
+        ) AS ct_continuous_pickup_stops,
+
+        COUNTIF(
+            COALESCE(continuous_pickup, 1) = 1
+        ) AS ct_no_continuous_pickup_stops,
+
+        COUNTIF(
+            COALESCE(continuous_pickup, 1) = 2
+        ) AS ct_phone_call_required_for_continuous_pickup_stops,
+
+        COUNTIF(
+            COALESCE(continuous_pickup, 1) = 3
+        ) AS ct_coordinate_continuous_pickup_with_driver_stops,
+
+        COUNTIF(
+            COALESCE(continuous_drop_off, 1) = 0
+        ) AS ct_continuous_drop_off_stops,
+
+        COUNTIF(
+            COALESCE(continuous_drop_off, 1) = 1
+        ) AS ct_no_continuous_drop_off_stops,
+
+        COUNTIF(
+            COALESCE(continuous_drop_off, 1) = 2
+        ) AS ct_phone_call_required_for_continuous_drop_off_stops,
+
+        COUNTIF(
+            COALESCE(continuous_drop_off, 1) = 3
+        ) AS ct_coordinate_continuous_drop_off_with_driver_stops,
+
+        COUNTIF(
+            COALESCE(timepoint, 1) = 0
+        ) AS ct_approximate_timepoint_stops,
+
+        COUNTIF(
+            COALESCE(timepoint, 1) = 1
+        ) AS ct_exact_timepoint_stops,
+
+        COUNTIF(
+            arrival_time IS NOT NULL
+        ) AS ct_arrival_times_populated,
+
+        COUNTIF(
+            departure_time IS NOT NULL
+        ) AS ct_departure_times_populated,
 
     FROM stops_times_with_tz
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
