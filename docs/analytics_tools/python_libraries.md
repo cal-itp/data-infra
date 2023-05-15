@@ -54,7 +54,7 @@ shared_utils.geography_utils.WGS84
 
 See [data-analyses/example_reports](https://github.com/cal-itp/data-analyses/tree/main/example_report) for examples on how to use `shared_utils` for general functions, charts, and maps.
 
-(calitp)=
+(calitp-data-analysis)=
 ## calitp-data-analysis
 `calitp-data-analysis` is an internal library of utility functions used to access our warehouse data for analysis purposes.
 
