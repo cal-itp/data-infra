@@ -2,6 +2,7 @@
 Provide more visualizations than what dbt provides.
 """
 import json
+import os
 import webbrowser
 from pathlib import Path
 from typing import Any, List, Optional, Tuple, Type, Union
@@ -9,6 +10,7 @@ from typing import Any, List, Optional, Tuple, Type, Union
 import gcsfs  # type: ignore
 import networkx as nx  # type: ignore
 import typer
+from dbt.cli.main import dbtRunner
 from dbt_artifacts import (
     Catalog,
     DbtNode,
@@ -19,6 +21,7 @@ from dbt_artifacts import (
     SeedNode,
     SourceDefinition,
 )
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 app = typer.Typer(pretty_exceptions_enable=False)
 
@@ -122,7 +125,11 @@ def build_graph(
         G.add_node(node_or_result.gvrepr, **node_or_result.gvattrs, style="filled")
 
     for node_or_result in nodes:
-        node: DbtNode = node_or_result.node if isinstance(node_or_result, RunResultOutput) else node_or_result  # type: ignore[no-redef]
+        node = (
+            node_or_result.node
+            if isinstance(node_or_result, RunResultOutput)
+            else node_or_result
+        )
         if not should_display(
             node,
             analyses,
@@ -214,6 +221,72 @@ def viz(
     if display:
         url = f"file://{output.resolve()}"
         webbrowser.open(url, new=2)  # open in new tab
+
+
+@app.command()
+def ci_report(
+    latest_dir: str = "./latest",
+    output: str = "target/report.md",
+):
+    dbt = dbtRunner()
+    new_models = dbt.invoke(
+        [
+            "ls",
+            "--resource-type",
+            "model",
+            "--select",
+            "state:new",
+            "--state",
+            latest_dir,
+        ]
+    ).result
+
+    changed_incremental_models = dbt.invoke(
+        [
+            "ls",
+            "--resource-type",
+            "model",
+            "--select",
+            "state:modified,config.materialized:incremental",
+            "--exclude",
+            "state:new",
+            "--state",
+            latest_dir,
+        ]
+    ).result
+
+    modified_models = dbt.invoke(
+        [
+            "ls",
+            "--resource-type",
+            "model",
+            "--select",
+            "state:modified",
+            "--exclude",
+            "state:new",
+            "--state",
+            latest_dir,
+        ]
+    ).result
+    viz(
+        "man",
+        include=modified_models,
+        output=Path("./target/dag.png"),
+    )
+
+    print(os.path.join(__file__, "templates"))
+    env = Environment(
+        loader=FileSystemLoader(os.path.join(os.path.dirname(__file__), "templates")),
+        autoescape=select_autoescape(),
+    )
+    template = env.get_template("ci_report.md")
+    report = template.render(
+        new_models=new_models,
+        changed_incremental_models=changed_incremental_models,
+    )
+    typer.secho(f"Writing to {output}", fg=typer.colors.GREEN)
+    with open(output, "w") as f:
+        f.write(report)
 
 
 if __name__ == "__main__":

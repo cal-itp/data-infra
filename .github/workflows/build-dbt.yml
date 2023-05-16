@@ -78,16 +78,7 @@ jobs:
         run: |
           cd warehouse
           gsutil cp -r gs://calitp-dbt-artifacts/latest/ .
-          echo "Warehouse report 📦" >> report.md
-          echo "### New models 🌱" >> report.md
-          poetry run dbt --no-use-colors ls --resource-type model --select state:new --state ./latest | grep "^calitp_warehouse\." | sed "s/calitp_warehouse\.//g" >> report.md
-          echo "### Changed incremental models 🔀" >> report.md
-          poetry run dbt --no-use-colors ls --resource-type model --select state:modified,config.materialized:incremental --exclude state:new --state ./latest | grep "^calitp_warehouse\." | sed "s/calitp_warehouse\.//g" >> report.md
-          echo "### DAG" >> report.md
-          poetry run dbt --no-use-colors ls --resource-type model --select state:modified --state ./latest | grep "^calitp_warehouse\." | sed 's/^/--include /g' | xargs poetry run python scripts/visualize.py man --output=target/dag.png
-          echo "" >> report.md
-          echo '![](./target/dag.png "Changed models")' >> report.md
-          echo "> Note: if you have changed any incremental models, you will need to run a full refresh on them at some point, regardless of how `on_schema_change` is configured." >> report.md
+          poetry run python scripts/visualize.py ci-report
           cml comment update report.md
 
   build_push:
